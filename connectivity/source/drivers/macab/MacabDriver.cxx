@@ -38,6 +38,32 @@ using namespace com::sun::star::sdb;
 using namespace com::sun::star::frame;
 using namespace connectivity::macab;
 
+namespace {
+
+/** throws a generic SQL exception with SQLState S1000 and error code 0
+ */
+void throwGenericSQLException( const OUString& _rMessage )
+{
+    SQLException aError;
+    aError.Message = _rMessage;
+    aError.SQLState = "S1000";
+    aError.ErrorCode = 0;
+    throw aError;
+}
+
+/** throws an SQLException saying than no Mac OS installation was found
+ */
+void throwNoMacOSException()
+{
+    ::connectivity::SharedResources aResources;
+    const OUString sError( aResources.getResourceString(
+            STR_NO_MAC_OS_FOUND
+         ) );
+    throwGenericSQLException( sError );
+}
+
+
+}
 
 // = MacabImplModule
 
@@ -122,28 +148,8 @@ void MacabImplModule::impl_unloadModule()
 void MacabImplModule::init()
 {
     if ( !impl_loadModule() )
-        impl_throwNoMacOSException();
+        throwNoMacOSException();
 
-}
-
-
-void MacabImplModule::impl_throwNoMacOSException()
-{
-    ::connectivity::SharedResources aResources;
-    const OUString sError( aResources.getResourceString(
-            STR_NO_MAC_OS_FOUND
-         ) );
-    impl_throwGenericSQLException( sError );
-}
-
-
-void MacabImplModule::impl_throwGenericSQLException( const OUString& _rMessage )
-{
-    SQLException aError;
-    aError.Message = _rMessage;
-    aError.SQLState = "S1000";
-    aError.ErrorCode = 0;
-    throw aError;
 }
 
 

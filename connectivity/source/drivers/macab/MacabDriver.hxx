@@ -99,15 +99,6 @@ namespace connectivity
                 @precond m_hConnectorModule is not <NULL/>
             */
             void    impl_unloadModule();
-
-            /** throws an SQLException saying than no Mac OS installation was found
-            */
-            void    impl_throwNoMacOSException();
-
-            /** throws a generic SQL exception with SQLState S1000 and error code 0
-            */
-            void    impl_throwGenericSQLException( const OUString& _rMessage );
-
         };
 
 

@@ -33,6 +33,49 @@
 using namespace connectivity::macab;
 using namespace ::com::sun::star::uno;
 
+namespace {
+
+void manageDuplicateGroups(::std::vector<MacabGroup *> _xGroups)
+{
+    /* If we have two cases of groups, say, family, this makes it:
+     * family
+     * family (2)
+     */
+    ::std::vector<MacabGroup *>::reverse_iterator iter1, iter2;
+    sal_Int32 count;
+
+    for(iter1 = _xGroups.rbegin(); iter1 != _xGroups.rend(); ++iter1)
+    {
+        /* If the name matches the default table name, there is already
+         * (obviously) a conflict. So, start the count of groups with this
+         * name at 2 instead of 1.
+         */
+        if( (*iter1)->getName() == MacabAddressBook::getDefaultTableName() )
+            count = 2;
+        else
+            count = 1;
+
+        iter2 = iter1;
+        for( ++iter2; iter2 != _xGroups.rend(); ++iter2)
+        {
+            if( (*iter1)->getName() == (*iter2)->getName() )
+            {
+                count++;
+            }
+        }
+
+        // duplicate!
+        if(count != 1)
+        {
+            OUString sName = (*iter1)->getName() + " (" +
+                OUString::number(count) +
+                ")";
+            (*iter1)->setName(sName);
+        }
+    }
+}
+
+}
 
 MacabAddressBook::MacabAddressBook( )
 {
@@ -200,47 +243,6 @@ MacabGroup *MacabAddressBook::getMacabGroupMatch(OUString const & _groupName)
     }
 
     return NULL;
-}
-
-
-void MacabAddressBook::manageDuplicateGroups(::std::vector<MacabGroup *> _xGroups) const
-{
-    /* If we have two cases of groups, say, family, this makes it:
-     * family
-     * family (2)
-     */
-    ::std::vector<MacabGroup *>::reverse_iterator iter1, iter2;
-    sal_Int32 count;
-
-    for(iter1 = _xGroups.rbegin(); iter1 != _xGroups.rend(); ++iter1)
-    {
-        /* If the name matches the default table name, there is already
-         * (obviously) a conflict. So, start the count of groups with this
-         * name at 2 instead of 1.
-         */
-        if( (*iter1)->getName() == getDefaultTableName() )
-            count = 2;
-        else
-            count = 1;
-
-        iter2 = iter1;
-        for( ++iter2; iter2 != _xGroups.rend(); ++iter2)
-        {
-            if( (*iter1)->getName() == (*iter2)->getName() )
-            {
-                count++;
-            }
-        }
-
-        // duplicate!
-        if(count != 1)
-        {
-            OUString sName = (*iter1)->getName() + " (" +
-                OUString::number(count) +
-                ")";
-            (*iter1)->setName(sName);
-        }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

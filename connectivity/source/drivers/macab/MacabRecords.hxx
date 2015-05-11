@@ -73,7 +73,6 @@ namespace connectivity
                 void bootstrap_requiredProperties();
                 MacabHeader *createHeaderForProperty(const ABRecordRef _record, const CFStringRef _propertyName, const CFStringRef _recordType, const bool _isPropertyRequired) const;
                 MacabHeader *createHeaderForProperty(const ABPropertyType _propertyType, const CFTypeRef _propertyValue, const CFStringRef _propertyName) const;
-                void manageDuplicateHeaders(macabfield **_headerNames, const sal_Int32 _length) const;
                 ABPropertyType getABTypeFromCFType(const CFTypeID cf_type ) const;
                 void insertPropertyIntoMacabRecord(MacabRecord *_abrecord, const MacabHeader *_header, const OUString& _propertyName, const CFTypeRef _propertyValue) const;
                 void insertPropertyIntoMacabRecord(const ABPropertyType _propertyType, MacabRecord *_abrecord, const MacabHeader *_header, const OUString& _propertyName, const CFTypeRef _propertyValue) const;

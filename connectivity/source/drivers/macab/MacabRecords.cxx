@@ -32,6 +32,40 @@
 using namespace connectivity::macab;
 using namespace com::sun::star::util;
 
+namespace {
+
+void manageDuplicateHeaders(macabfield **_headerNames, const sal_Int32 _length)
+{
+    /* If we have two cases of, say, phone: home, this makes it:
+     * phone: home (1)
+     * phone: home (2)
+     */
+    sal_Int32 i, j;
+    sal_Int32 count;
+    for(i = _length-1; i >= 0; i--)
+    {
+        count = 1;
+        for( j = i-1; j >= 0; j--)
+        {
+            if(CFEqual(_headerNames[i]->value, _headerNames[j]->value))
+            {
+                count++;
+            }
+        }
+
+        // duplicate!
+        if(count != 1)
+        {
+            // There is probably a better way to do this...
+            OUString newName = CFStringToOUString(static_cast<CFStringRef>(_headerNames[i]->value));
+            CFRelease(_headerNames[i]->value);
+            newName += " (" + OUString::number(count) + ")";
+            _headerNames[i]->value = OUStringToCFString(newName);
+        }
+    }
+}
+
+}
 
 MacabRecords::MacabRecords(const ABAddressBookRef _addressBook, MacabHeader *_header, MacabRecord **_records, sal_Int32 _numRecords)
 {
@@ -808,38 +842,6 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
     }
     else
         return NULL;
-}
-
-
-void MacabRecords::manageDuplicateHeaders(macabfield **_headerNames, const sal_Int32 _length) const
-{
-    /* If we have two cases of, say, phone: home, this makes it:
-     * phone: home (1)
-     * phone: home (2)
-     */
-    sal_Int32 i, j;
-    sal_Int32 count;
-    for(i = _length-1; i >= 0; i--)
-    {
-        count = 1;
-        for( j = i-1; j >= 0; j--)
-        {
-            if(CFEqual(_headerNames[i]->value, _headerNames[j]->value))
-            {
-                count++;
-            }
-        }
-
-        // duplicate!
-        if(count != 1)
-        {
-            // There is probably a better way to do this...
-            OUString newName = CFStringToOUString(static_cast<CFStringRef>(_headerNames[i]->value));
-            CFRelease(_headerNames[i]->value);
-            newName += " (" + OUString::number(count) + ")";
-            _headerNames[i]->value = OUStringToCFString(newName);
-        }
-    }
 }
 
 

@@ -41,8 +41,7 @@ namespace connectivity
                 MacabRecords *m_xMacabRecords;
                 ::std::vector<MacabGroup *> m_xMacabGroups;
                 bool m_bRetrievedGroups;
-            private:
-                void manageDuplicateGroups(::std::vector<MacabGroup *> _xGroups) const;
+
             public:
                 MacabAddressBook();
                 ~MacabAddressBook();
