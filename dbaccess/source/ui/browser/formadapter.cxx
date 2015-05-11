@@ -1213,7 +1213,7 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter:
         {
             if (pProps->Name == PROPERTY_NAME)
             {
-                ((SbaXFormAdapter*)this)->m_nNamePropHandle = pProps->Handle;
+                m_nNamePropHandle = pProps->Handle;
                 break;
             }
         }
