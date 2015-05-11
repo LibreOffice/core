@@ -81,7 +81,7 @@ UnoControlContainerModel::getSupportedServiceNames()
 
 ::cppu::IPropertyArrayHelper& UnoControlContainerModel::getInfoHelper()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( ((UnoControlContainerModel*)this)->GetMutex() );
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     static UnoPropertyArrayHelper* pHelper = NULL;
     if ( !pHelper )
