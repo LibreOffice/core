@@ -464,7 +464,7 @@ bool SvTreeListBox::IsEntryMnemonicsEnabled() const
 
 IMPL_LINK( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry )
 {
-    return reinterpret_cast<sal_IntPtr>(CloneEntry((SvTreeListEntry*)pEntry));
+    return reinterpret_cast<sal_IntPtr>(CloneEntry(pEntry));
 }
 
 sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uLong nPos )
@@ -931,7 +931,7 @@ SvViewDataItem* SvTreeListBox::GetViewDataItem(SvTreeListEntry* pEntry, SvLBoxIt
 
 const SvViewDataItem* SvTreeListBox::GetViewDataItem(const SvTreeListEntry* pEntry, const SvLBoxItem* pItem) const
 {
-    const SvViewDataEntry* pEntryData = (const SvViewDataEntry*)SvListView::GetViewData(pEntry);
+    const SvViewDataEntry* pEntryData = SvListView::GetViewData(pEntry);
     DBG_ASSERT(pEntryData,"Entry not in View");
     sal_uInt16 nItemPos = pEntry->GetPos(pItem);
     return pEntryData->GetItem(nItemPos);
@@ -940,13 +940,13 @@ const SvViewDataItem* SvTreeListBox::GetViewDataItem(const SvTreeListEntry* pEnt
 SvViewDataEntry* SvTreeListBox::CreateViewData( SvTreeListEntry* )
 {
     SvViewDataEntry* pEntryData = new SvViewDataEntry;
-    return (SvViewDataEntry*)pEntryData;
+    return pEntryData;
 }
 
 void SvTreeListBox::InitViewData( SvViewDataEntry* pData, SvTreeListEntry* pEntry )
 {
-    SvTreeListEntry* pInhEntry = (SvTreeListEntry*)pEntry;
-    SvViewDataEntry* pEntryData = (SvViewDataEntry*)pData;
+    SvTreeListEntry* pInhEntry = pEntry;
+    SvViewDataEntry* pEntryData = pData;
 
     pEntryData->Init(pInhEntry->ItemCount());
     sal_uInt16 nCount = pInhEntry->ItemCount();
@@ -1934,7 +1934,7 @@ void SvTreeListBox::SetCollapsedEntryBmp(SvTreeListEntry* pEntry,const Image& aB
 void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
 {
 
-    SvTreeListEntry* pParent = (SvTreeListEntry*)pModel->GetParent( pEntry );
+    SvTreeListEntry* pParent = pModel->GetParent( pEntry );
     if( pParent )
     {
         SvTLEntryFlags nFlags = pParent->GetFlags();
@@ -1959,7 +1959,7 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
             nTreeFlags |= SvTreeFlags::RECALCTABS;
         }
     }
-    SetEntryHeight( (SvTreeListEntry*)pEntry );
+    SetEntryHeight( pEntry );
 
     if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
@@ -2485,32 +2485,32 @@ void SvTreeListBox::SelectAll( bool bSelect, bool )
 
 void SvTreeListBox::ModelHasInsertedTree( SvTreeListEntry* pEntry )
 {
-    sal_uInt16 nRefDepth = pModel->GetDepth( (SvTreeListEntry*)pEntry );
-    SvTreeListEntry* pTmp = (SvTreeListEntry*)pEntry;
+    sal_uInt16 nRefDepth = pModel->GetDepth( pEntry );
+    SvTreeListEntry* pTmp = pEntry;
     do
     {
         ImpEntryInserted( pTmp );
         pTmp = Next( pTmp );
     } while( pTmp && nRefDepth < pModel->GetDepth( pTmp ) );
-    pImp->TreeInserted( (SvTreeListEntry*)pEntry );
+    pImp->TreeInserted( pEntry );
 }
 
 void SvTreeListBox::ModelHasInserted( SvTreeListEntry* pEntry )
 {
-    ImpEntryInserted( (SvTreeListEntry*)pEntry );
-    pImp->EntryInserted( (SvTreeListEntry*)pEntry );
+    ImpEntryInserted( pEntry );
+    pImp->EntryInserted( pEntry );
 }
 
 void SvTreeListBox::ModelIsMoving(SvTreeListEntry* pSource,
                                         SvTreeListEntry* /* pTargetParent */,
                                         sal_uLong /* nChildPos */ )
 {
-    pImp->MovingEntry( (SvTreeListEntry*)pSource );
+    pImp->MovingEntry( pSource );
 }
 
 void SvTreeListBox::ModelHasMoved( SvTreeListEntry* pSource )
 {
-    pImp->EntryMoved( (SvTreeListEntry*)pSource );
+    pImp->EntryMoved( pSource );
 }
 
 void SvTreeListBox::ModelIsRemoving( SvTreeListEntry* pEntry )
@@ -2518,7 +2518,7 @@ void SvTreeListBox::ModelIsRemoving( SvTreeListEntry* pEntry )
     if(pEdEntry == pEntry)
         pEdEntry = NULL;
 
-    pImp->RemovingEntry( (SvTreeListEntry*)pEntry );
+    pImp->RemovingEntry( pEntry );
 }
 
 void SvTreeListBox::ModelHasRemoved( SvTreeListEntry* pEntry  )
@@ -2662,15 +2662,15 @@ void SvTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* pEntry )
 {
 
     // reinitialize the separate items of the entries
-    sal_uInt16 nCount = ((SvTreeListEntry*)pEntry)->ItemCount();
+    sal_uInt16 nCount = pEntry->ItemCount();
     for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++ )
     {
-        SvLBoxItem* pItem = ((SvTreeListEntry*)pEntry)->GetItem( nIdx );
-        pItem->InitViewData( this, (SvTreeListEntry*)pEntry, 0 );
+        SvLBoxItem* pItem = pEntry->GetItem( nIdx );
+        pItem->InitViewData( this, pEntry, 0 );
     }
 
     // repaint
-    pImp->InvalidateEntry( (SvTreeListEntry*)pEntry );
+    pImp->InvalidateEntry( pEntry );
 }
 
 void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, const Selection& rSelection)
@@ -2814,7 +2814,7 @@ SvTreeListEntry* SvTreeListBox::GetDropTarget( const Point& rPos )
     SvTreeListEntry* pTarget = pImp->GetEntry( rPos );
     // when dropping in a vacant space, use the last entry
     if( !pTarget )
-        return (SvTreeListEntry*)LastVisible();
+        return LastVisible();
     else if( (GetDragDropMode() & DragDropMode::ENABLE_TOP) &&
              pTarget == First() && rPos.Y() < 6 )
         return 0;
@@ -3681,7 +3681,7 @@ void SvTreeListBox::ModelNotification( SvListAction nActionId, SvTreeListEntry* 
 
         case SvListAction::RESORTED:
             // after a selection: show first entry and also keep the selection
-            MakeVisible( (SvTreeListEntry*)pModel->First(), true );
+            MakeVisible( pModel->First(), true );
             SetUpdateMode( true );
             break;
 
@@ -3722,7 +3722,7 @@ SvTreeListEntry* SvTreeListBox::GetFirstEntryInView() const
 
 SvTreeListEntry* SvTreeListBox::GetNextEntryInView(SvTreeListEntry* pEntry ) const
 {
-    SvTreeListEntry* pNext = (SvTreeListEntry*)NextVisible( pEntry );
+    SvTreeListEntry* pNext = NextVisible( pEntry );
     if( pNext )
     {
         Point aPos( GetEntryPosition(pNext) );
@@ -3739,7 +3739,7 @@ SvTreeListEntry* SvTreeListBox::GetLastEntryInView() const
     SvTreeListEntry* pNext = 0;
     while( pEntry )
     {
-        pNext = (SvTreeListEntry*)NextVisible( pEntry );
+        pNext = NextVisible( pEntry );
         if( pNext )
         {
           Point aPos( GetEntryPosition(pNext) );

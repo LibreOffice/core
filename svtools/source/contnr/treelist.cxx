@@ -617,8 +617,8 @@ sal_uLong SvTreeList::GetVisibleCount( SvListView* pView ) const
         OSL_FAIL("nVisibleCount bad");
     }
 #endif
-    ((SvListView*)pView)->nVisibleCount = nPos;
-    ((SvListView*)pView)->bVisPositionsValid = true;
+    pView->nVisibleCount = nPos;
+    pView->bVisPositionsValid = true;
     return nPos;
 }
 

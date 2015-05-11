@@ -651,7 +651,7 @@ namespace svt
 
                         case KEY_RETURN:
                             // save the cell content (if necessary)
-                            if (IsEditing() && aController->IsModified() && !((EditBrowseBox *) this)->SaveModified())
+                            if (IsEditing() && aController->IsModified() && !SaveModified())
                             {
                                 // maybe we're not visible ...
                                 EnableAndShow();
@@ -712,7 +712,7 @@ namespace svt
                     if (nId == BROWSER_SELECT || BROWSER_SELECTCOLUMN == nId )
                     {
                         // save the cell content (if necessary)
-                        if (IsEditing() && aController->IsModified() && !((EditBrowseBox *) this)->SaveModified())
+                        if (IsEditing() && aController->IsModified() && !SaveModified())
                         {
                             // maybe we're not visible ...
                             EnableAndShow();
@@ -977,7 +977,7 @@ namespace svt
 
     bool EditBrowseBox::CursorMoving(long, sal_uInt16)
     {
-        ((EditBrowseBox *) this)->DeactivateCell(false);
+        DeactivateCell(false);
         return true;
     }
 

@@ -491,7 +491,7 @@ void SvTabListBox::SetTabJustify( sal_uInt16 nTab, SvTabJustify eJustify)
 long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
 {
     if( SvTreeListBox::nTreeFlags & SvTreeFlags::RECALCTABS )
-        ((SvTabListBox*)this)->SetTabs();
+        SetTabs();
 
     DBG_ASSERT(nTab<nTabCount,"GetTabPos:Invalid Tab");
     return aTabs[ nTab ]->GetPos();

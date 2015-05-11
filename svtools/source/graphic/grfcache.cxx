@@ -505,8 +505,8 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
 
         sal_uInt32  nCurPos;
         MetaAction* pAct;
-        for( nCurPos = 0, pAct = (MetaAction*)rOutMtf.FirstAction(); pAct;
-             pAct = (MetaAction*)rOutMtf.NextAction(), nCurPos++ )
+        for( nCurPos = 0, pAct = rOutMtf.FirstAction(); pAct;
+             pAct = rOutMtf.NextAction(), nCurPos++ )
         {
             switch( pAct->GetType() )
             {

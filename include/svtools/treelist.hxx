@@ -265,13 +265,13 @@ protected:
     SvTreeList* pModel;
 
     void                ExpandListEntry( SvTreeListEntry* pParent )
-    { SvTreeList::Expand((SvListView*)this,pParent); }
+    { SvTreeList::Expand(this,pParent); }
 
     void                CollapseListEntry( SvTreeListEntry* pParent )
-    { SvTreeList::Collapse((SvListView*)this,pParent); }
+    { SvTreeList::Collapse(this,pParent); }
 
     bool                SelectListEntry( SvTreeListEntry* pEntry, bool bSelect )
-    { return SvTreeList::Select((SvListView*)this,pEntry,bSelect); }
+    { return SvTreeList::Select(this,pEntry,bSelect); }
 
 public:
                         SvListView();   // Sets the Model to 0
@@ -340,7 +340,7 @@ public:
 
     // Does not call the Select Handler
     virtual void        SelectAll( bool bSelect, bool )
-    { pModel->SelectAll((SvListView*)this, bSelect); }
+    { pModel->SelectAll(this, bSelect); }
 
     bool               IsEntryVisible( SvTreeListEntry* pEntry ) const
     { return pModel->IsEntryVisible(this,pEntry); }

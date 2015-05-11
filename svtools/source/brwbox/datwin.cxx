@@ -328,7 +328,7 @@ void BrowserDataWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& 
             return;
         }
         bInPaint = true;
-        ((BrowseBox*) GetParent())->PaintData(*this, rRenderContext, rRect);
+        GetParent()->PaintData(*this, rRenderContext, rRect);
         bInPaint = false;
         DoOutstandingInvalidations();
     }

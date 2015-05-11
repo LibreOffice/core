@@ -1018,7 +1018,7 @@ void SvImpLBox::ScrollToAbsPos( long nPos )
     else if( nPos > nLastEntryPos )
         nPos = nLastEntryPos;
 
-    SvTreeListEntry* pEntry = (SvTreeListEntry*)pView->GetEntryAtAbsPos( nPos );
+    SvTreeListEntry* pEntry = pView->GetEntryAtAbsPos( nPos );
     if( !pEntry || pEntry == pStartEntry )
         return;
 
@@ -1708,7 +1708,7 @@ void SvImpLBox::RemovingEntry( SvTreeListEntry* pEntry )
     {
         // if it is the last one, we have to invalidate it, so the lines are
         // drawn correctly (in this case they're deleted)
-        if( pStartEntry && (pStartEntry != pOldStartEntry || pEntry == (SvTreeListEntry*)pView->GetModel()->Last()) )
+        if( pStartEntry && (pStartEntry != pOldStartEntry || pEntry == pView->GetModel()->Last()) )
         {
             aVerSBar->SetThumbPos( pView->GetVisiblePos( pStartEntry ));
             pView->Invalidate( GetVisibleArea() );
@@ -1749,9 +1749,9 @@ void SvImpLBox::EntryRemoved()
             if( pView->GetSelectionCount() )
             {
                 // is a neighboring entry selected?
-                SvTreeListEntry* pNextCursor = (SvTreeListEntry*)pView->PrevVisible( pCursor );
+                SvTreeListEntry* pNextCursor = pView->PrevVisible( pCursor );
                 if( !pNextCursor || !pView->IsSelected( pNextCursor ))
-                    pNextCursor = (SvTreeListEntry*)pView->NextVisible( pCursor );
+                    pNextCursor = pView->NextVisible( pCursor );
                 if( !pNextCursor || !pView->IsSelected( pNextCursor ))
                     // no neighbor selected: use first selected
                     pNextCursor = pView->FirstSelected();
@@ -1837,7 +1837,7 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
 {
     if( GetUpdateMode() )
     {
-        SvTreeListEntry* pParent = (SvTreeListEntry*)pTree->GetParent(pEntry);
+        SvTreeListEntry* pParent = pTree->GetParent(pEntry);
         if (pParent && pTree->GetChildList(pParent).size() == 1)
             // draw plus sign
             pTree->InvalidateEntry( pParent );
@@ -2474,7 +2474,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 if( bMod1 )
                 {
                     // collapse all parents until we get to the root
-                    SvTreeListEntry* pParentToCollapse = (SvTreeListEntry*)pTree->GetRootLevelParent(pCursor);
+                    SvTreeListEntry* pParentToCollapse = pTree->GetRootLevelParent(pCursor);
                     if( pParentToCollapse )
                     {
                         sal_uInt16 nRefDepth;
@@ -3296,12 +3296,12 @@ void SvImpLBox::FindMostRight( SvTreeListEntry* pEntryToIgnore )
     if( !pView->GetModel() )
         return;
 
-    SvTreeListEntry* pEntry = (SvTreeListEntry*)pView->FirstVisible();
+    SvTreeListEntry* pEntry = pView->FirstVisible();
     while( pEntry )
     {
         if( pEntry != pEntryToIgnore )
             SetMostRight( pEntry );
-        pEntry = (SvTreeListEntry*)pView->NextVisible( pEntry );
+        pEntry = pView->NextVisible( pEntry );
     }
 }
 
