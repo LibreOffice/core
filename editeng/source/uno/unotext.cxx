@@ -1973,7 +1973,7 @@ uno::Reference< text::XText > SAL_CALL SvxUnoTextBase::getText()
     {
         ESelection aSelection;
         ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-        ((SvxUnoTextBase*)this)->SetSelection( aSelection );
+        SetSelection( aSelection );
     }
 
     return (text::XText*)this;

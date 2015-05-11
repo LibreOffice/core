@@ -2307,7 +2307,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rS
     aPositions.insert( pNode->Len() );
 
     if ( pParaPortion->aScriptInfos.empty() )
-        ((ImpEditEngine*)this)->InitScriptTypes( GetParaPortions().GetPos( pParaPortion ) );
+        InitScriptTypes( GetParaPortions().GetPos( pParaPortion ) );
 
     const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
     for ( size_t nT = 0; nT < rTypes.size(); nT++ )

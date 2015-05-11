@@ -3441,7 +3441,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     pDataObj->GetStream().Seek( 0 );
     SvxFontItem::EnableStoreUnicodeNames( false );
 
-    ((ImpEditEngine*)this)->WriteRTF( pDataObj->GetRTFStream(), aSelection );
+    WriteRTF( pDataObj->GetRTFStream(), aSelection );
     pDataObj->GetRTFStream().Seek( 0 );
 
     if ( ( aSelection.Min().GetNode() == aSelection.Max().GetNode() )
