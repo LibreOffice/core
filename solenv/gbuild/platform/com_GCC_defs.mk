@@ -72,6 +72,14 @@ gb_CXXFLAGS_COMMON := \
 	-fno-common \
 	-pipe \
 
+# VCL_BUILDER_DECL_FACTORY (include/vcl/builderfactory.hxx) routinely causes
+# "'make...' has C-linkage specified, but returns user-defined type
+# 'VclPtr<vcl::Window>' which is incompatible with C
+# [-Werror,-Wreturn-type-c-linkage]":
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+gb_CXXFLAGS_COMMON += -Wno-return-type-c-linkage
+endif
+
 gb_CXXFLAGS_Wundef = -Wno-undef
 
 ifneq ($(HAVE_THREADSAFE_STATICS),TRUE)
