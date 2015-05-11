@@ -313,7 +313,7 @@ OUString UnitsImpl::extractUnitStringForCell(const ScAddress& rAddress, ScDocume
     return extractUnitStringFromFormat(rFormatString);
 }
 
-bool UnitsImpl::findUnitInStandardHeader(const OUString& rsHeader, UtUnit& aUnit, OUString& sUnitString) {
+HeaderUnitDescriptor UnitsImpl::findUnitInStandardHeader(const OUString& rsHeader) {
     // TODO: we should do a sanity check that there's only one such unit though (and fail if there are multiple).
     //       Since otherwise there's no way for us to know which unit is the intended one, hence we need to get
     //       the user to deconfuse us by correcting their header to only contain the intended unit.
@@ -347,21 +347,23 @@ bool UnitsImpl::findUnitInStandardHeader(const OUString& rsHeader, UtUnit& aUnit
             // i.e. startOffset is the last character of the intended substring, endOffset the first character.
             // We specifically grab the offsets for the first actual regex group, which are stored in [1], the indexes
             // at [0] represent the whole matched string (i.e. including square brackets).
-            sUnitString = rsHeader.copy(aResult.endOffset[1], aResult.startOffset[1] - aResult.endOffset[1]);
+            UtUnit aUnit;
+            sal_Int32 nBegin = aResult.endOffset[1];
+            sal_Int32 nEnd = aResult.startOffset[1] - aResult.endOffset[1];
+            OUString sUnitString = rsHeader.copy( nBegin, nEnd);
 
             if (UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
-                return true;
+                return { true, aUnit, boost::optional< ScAddress >(), sUnitString, nBegin };
             }
 
             nStartPosition = aResult.endOffset[0];
         }
     }
-    sUnitString.clear();
-    return false;
+
+    return { false, UtUnit(), boost::optional< ScAddress >(), "", -1 };
 }
 
-
-bool UnitsImpl::findFreestandingUnitInHeader(const OUString& rsHeader, UtUnit& aUnit, OUString& sUnitString) {
+HeaderUnitDescriptor UnitsImpl::findFreestandingUnitInHeader(const OUString& rsHeader) {
     // We just split the string and test whether each token is either a valid unit in its own right,
     // or is an operator that could glue together multiple units (i.e. multiplication/division).
     // This is sufficient for when there are spaces between elements composing the unit, and none
@@ -373,50 +375,69 @@ bool UnitsImpl::findFreestandingUnitInHeader(const OUString& rsHeader, UtUnit& a
 
     const sal_Int32 nTokenCount = comphelper::string::getTokenCount(rsHeader, ' ');
     const OUString sOperators = "/*"; // valid
-    sUnitString.clear();
+
+    OUStringBuffer sUnitStringBuf;
+
+    sal_Int32 nStartPos = -1;
+    sal_Int32 nTokenPos = 0;
     for (sal_Int32 nToken = 0; nToken < nTokenCount; nToken++) {
-        OUString sToken = rsHeader.getToken(nToken, ' ');
+        OUString sToken = rsHeader.getToken( 0,' ', nTokenPos);
         UtUnit aTestUnit;
+
+        // Only test for a separator character if we have already got something in our string, as
+        // some of the operators could be used as separators from description to unit
+        // (e.g. "a description / kg").
         if (UtUnit::createUnit(sToken, aTestUnit, mpUnitSystem) ||
-            // Only test for a separator character if we have already got something in our string, as
-            // some of the operators could be used as separators from description to unit
-            // (e.g. "a description / kg").
-            ((sUnitString.getLength() > 0) && (sToken.getLength() == 1) && (sOperators.indexOf(sToken[0]) != -1))) {
-                // we're repeatedly testing the string hence using an OUStringBuffer isn't of much use since there's
-                // no simple/efficient way of repeatedly getting a testable OUString from the buffer.
-                sUnitString += sToken;
-        } else if (sUnitString.getLength() > 0) {
+            ((sUnitStringBuf.getLength() > 0) && (sToken.getLength() == 1) && (sOperators.indexOf(sToken[0]) != -1))) {
+
+            if (nStartPos == -1) {
+                // getToken sets nTokenPos to the first position after
+                // the current token (or -1 if the token is at the end
+                // the string).
+                if (nTokenPos == -1) {
+                    nStartPos = rsHeader.getLength() - sToken.getLength();
+                } else {
+                    nStartPos = nTokenPos - sToken.getLength() - 1;
+                }
+            }
+
+            sUnitStringBuf.append(" ").append(sToken);
+        } else if (sUnitStringBuf.getLength() > 0) {
             // If we have units, followed by text, followed by units, we should still flag an error since
             // that's ambiguous (unless the desired units are enclose in [] in which case we've
             // already extracted these desired units in step 1 above.
             break;
         }
     }
+    // Remove the leading space, it doesn't count as part of the unit string.
+    // (We reinsert spaces above as the HeaderUnitDescriptor must have the
+    //  the original string as found in the header, i.e. we can't remove the
+    //  spaces.)
+    sUnitStringBuf.remove(0, 1);
 
     // We test the length to make sure we don't return the dimensionless unit 1 if we haven't found any units
     // in the header.
+    UtUnit aUnit;
+    OUString sUnitString = sUnitStringBuf.makeStringAndClear();
     if (sUnitString.getLength() && UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
-        return true;
+        return { true, aUnit, boost::optional< ScAddress >(), sUnitString, nStartPos };
     }
-    sUnitString.clear();
-    return false;
+
+    return { false, UtUnit(), boost::optional< ScAddress >(), "", -1 };
 }
 
-bool UnitsImpl::extractUnitFromHeaderString(const OUString& rsHeader, UtUnit& aUnit, OUString& sUnitString) {
+HeaderUnitDescriptor UnitsImpl::extractUnitFromHeaderString(const OUString& rsHeader) {
     // 1. Ideally we have units in a 'standard' format, i.e. enclose in square brackets:
-    if (findUnitInStandardHeader(rsHeader, aUnit, sUnitString)) {
-        return true;
+    HeaderUnitDescriptor aHeader = findUnitInStandardHeader(rsHeader);
+    if (aHeader.valid) {
+        return aHeader;
     }
 
     // 2. But if not we check for free-standing units
-    if (findFreestandingUnitInHeader(rsHeader, aUnit, sUnitString)) {
-        return true;
-    }
-
-    // 3. Give up
-    aUnit = UtUnit(); // assign invalid
-    sUnitString.clear();
-    return false;
+    aHeader = findFreestandingUnitInHeader(rsHeader);
+    // We return the result either way (it's either a valid unit,
+    // or invalid).
+    return aHeader;
 }
 
 UtUnit UnitsImpl::getUnitForCell(const ScAddress& rCellAddress, ScDocument* pDoc) {
@@ -428,11 +449,11 @@ UtUnit UnitsImpl::getUnitForCell(const ScAddress& rCellAddress, ScDocument* pDoc
         return aUnit;
     }
 
-    OUString aHeaderUnitString; // Unused -- passed by reference below
-    ScAddress aHeaderAddress; // Unused too
-    UtUnit aHeaderUnit = findHeaderUnitForCell(rCellAddress, pDoc, aHeaderUnitString, aHeaderAddress);
-    if (aHeaderUnit.isValid())
-        return aHeaderUnit;
+    HeaderUnitDescriptor aHeader = findHeaderUnitForCell(rCellAddress, pDoc);
+
+    if (aHeader.valid) {
+        return aHeader.unit;
+    }
 
     SAL_INFO("sc.units", "no unit obtained for token at cell " << rCellAddress.GetColRowString());
 
@@ -457,23 +478,27 @@ UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaA
     return getUnitForCell(aCellAddress, pDoc);
 }
 
-UtUnit UnitsImpl::findHeaderUnitForCell(const ScAddress& rCellAddress,
-                                        ScDocument* pDoc,
-                                        OUString& rsHeaderUnitString,
-                                        ScAddress& rHeaderAddress) {
+HeaderUnitDescriptor UnitsImpl::findHeaderUnitForCell(const ScAddress& rCellAddress,
+                                        ScDocument* pDoc) {
     // Scan UPwards from the current cell to find a header. This is since we could potentially
     // have two different sets of data sharing a column, hence finding the closest header is necessary.
-    rHeaderAddress = rCellAddress;
-    while (rHeaderAddress.Row() > 0) {
-        rHeaderAddress.IncRow(-1);
+    ScAddress address = rCellAddress;
+
+    while (address.Row() > 0) {
+        address.IncRow(-1);
 
         // We specifically test for string cells as intervening data cells could have
         // differently defined units of their own. (However as these intervening cells
         // will have the unit stored in the number format it would be ignored when
         // checking the cell's string anyway.)
         UtUnit aUnit;
-        if (pDoc->GetCellType(rHeaderAddress) == CELLTYPE_STRING &&
-            extractUnitFromHeaderString(pDoc->GetString(rHeaderAddress), aUnit, rsHeaderUnitString)) {
+        if (pDoc->GetCellType(address) == CELLTYPE_STRING) {
+            HeaderUnitDescriptor aHeader = extractUnitFromHeaderString(pDoc->GetString(address));
+
+            if (aHeader.valid) {
+                aHeader.address = address;
+                return aHeader;
+            }
             // TODO: one potential problem is that we could have a text only "united" data cell
             // (where the unit wasn't automatically extracted due to being entered via
             // a different spreadsheet program).
@@ -482,12 +507,10 @@ UtUnit UnitsImpl::findHeaderUnitForCell(const ScAddress& rCellAddress,
             //
             // TODO: and what if there are multiple units in the header (for whatever reason?)?
             // We can probably just warn the user that we'll be giving them garbage in that case?
-            return aUnit;
         }
     }
-    rHeaderAddress.SetInvalid();
-    rsHeaderUnitString.clear();
-    return UtUnit();
+
+    return { false, UtUnit(), boost::optional< ScAddress >(), "", -1 };
 }
 
 // getUnitForRef: check format -> if not in format, use more complicated method? (Format overrides header definition)
@@ -575,13 +598,10 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
         return false;
     }
 
-    OUString sUnitString;
-    ScAddress aAddress;
-
-    UtUnit aHeaderUnit = findHeaderUnitForCell(rFormulaAddress, pDoc, sUnitString, aAddress);
+    HeaderUnitDescriptor aHeader = findHeaderUnitForCell(rFormulaAddress, pDoc);
     UtUnit aResultUnit = boost::get< UtUnit>(aStack.top().item);
 
-    if (aHeaderUnit.isValid() && aHeaderUnit != aResultUnit) {
+    if (aHeader.valid && aHeader.unit != aResultUnit) {
         return false;
     }
 
@@ -635,11 +655,12 @@ bool UnitsImpl::isCellConversionRecommended(const ScAddress& rCellAddress,
     rsCellUnit = extractUnitStringForCell(rCellAddress, pDoc);
 
     if (!rsCellUnit.isEmpty() && UtUnit::createUnit(rsCellUnit, aCellUnit, mpUnitSystem)) {
-        UtUnit aHeaderUnit = findHeaderUnitForCell(rCellAddress, pDoc, rsHeaderUnit, rHeaderCellAddress);
-        if (rHeaderCellAddress.IsValid()) {
-            if (aHeaderUnit.areConvertibleTo(aCellUnit)) {
-                return true;
-            }
+        HeaderUnitDescriptor aHeader = findHeaderUnitForCell(rCellAddress, pDoc);
+        if (aHeader.valid && aHeader.unit.areConvertibleTo(aCellUnit)) {
+            rsHeaderUnit = aHeader.unitString;
+            assert(aHeader.address);
+            rHeaderCellAddress = *aHeader.address;
+            return true;
         }
     }
 
@@ -659,9 +680,8 @@ bool UnitsImpl::convertCellToHeaderUnit(const ScAddress& rCellAddress,
     UtUnit aOldUnit;
     UtUnit::createUnit(sCellUnit, aOldUnit, mpUnitSystem);
 
-    OUString sHeaderUnitFound;
-    ScAddress aHeaderAddress; // Unused, but passed by reference
-    UtUnit aNewUnit = findHeaderUnitForCell(rCellAddress, pDoc, sHeaderUnitFound, aHeaderAddress);
+    HeaderUnitDescriptor aHeader = findHeaderUnitForCell(rCellAddress, pDoc);
+    assert(aHeader.valid);
 
     // We test that we still have all data in the same format as expected.
     // This is maybe a tad defensive, but this call is most likely to be delayed
@@ -671,11 +691,11 @@ bool UnitsImpl::convertCellToHeaderUnit(const ScAddress& rCellAddress,
     // called afterwards (especially for non-modal interactions, e.g.
     // with an infobar which can remain open whilst the document is edited).
     if ((sCellUnit == rsOldUnit) &&
-        (sHeaderUnitFound == rsNewUnit) &&
+        (aHeader.unitString == rsNewUnit) &&
         (pDoc->GetCellType(rCellAddress) == CELLTYPE_VALUE)) {
-        assert(aOldUnit.areConvertibleTo(aNewUnit));
+        assert(aOldUnit.areConvertibleTo(aHeader.unit));
         double nOldValue = pDoc->GetValue(rCellAddress);
-        double nNewValue = aOldUnit.convertValueTo(nOldValue, aNewUnit);
+        double nNewValue = aOldUnit.convertValueTo(nOldValue, aHeader.unit);
 
         pDoc->SetValue(rCellAddress, nNewValue);
         pDoc->SetNumberFormat(rCellAddress, 0); // 0 == no number format?
@@ -712,37 +732,33 @@ bool UnitsImpl::convertCellUnits(const ScRange& rRange,
 
     // Each column is independent hence we are able to handle each separately.
     for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++) {
-        ScAddress aCurrentHeaderAddress(ScAddress::INITIALIZE_INVALID);
-        UtUnit aCurrentHeaderUnit;
-        OUString sHeaderUnitString;
+        HeaderUnitDescriptor aHeader = { false, UtUnit(), boost::optional< ScAddress >(), "", -1 };
 
         for (SCROW nRow = nEndRow; nRow >= nStartRow; nRow--) {
             ScAddress aCurrent(nCol, nRow, nStartTab);
 
-            if (aCurrent == aCurrentHeaderAddress) {
-                // TODO: rewrite this to use HeaderUnitDescriptor once implemented.
-                // We can't do a dumb replace since that might overwrite other characters
-                // (many units are just single characters).
+            if (aCurrent == aHeader.address) {
                 OUString sHeader = pDoc->GetString(aCurrent);
-                sHeader = sHeader.replaceAll(sHeaderUnitString, rsOutputUnit);
+                sHeader = sHeader.replaceAt(aHeader.unitStringPosition, aHeader.unitString.getLength(), rsOutputUnit);
                 pDoc->SetString(aCurrent, sHeader);
 
-                aCurrentHeaderAddress.SetInvalid();
+                aHeader.valid = false;
             } else if (pDoc->GetCellType(aCurrent) != CELLTYPE_STRING) {
-                if (!aCurrentHeaderUnit.isValid()) {
-                    aCurrentHeaderUnit = findHeaderUnitForCell(aCurrent, pDoc, sHeaderUnitString, aCurrentHeaderAddress);
+                if (!aHeader.valid) {
+                    aHeader = findHeaderUnitForCell(aCurrent, pDoc);
 
                     // If there is no header we get an invalid unit returned from findHeaderUnitForCell,
                     // and therfore assume the dimensionless unit 1.
-                    if (!aCurrentHeaderUnit.isValid()) {
-                        UtUnit::createUnit("", aCurrentHeaderUnit, mpUnitSystem);
+                    if (!aHeader.valid) {
+                        UtUnit::createUnit("", aHeader.unit, mpUnitSystem);
+                        aHeader.valid = true;
                     }
                 }
 
                 OUString sLocalUnit(extractUnitStringForCell(aCurrent, pDoc));
                 UtUnit aLocalUnit;
                 if (sLocalUnit.isEmpty()) {
-                    aLocalUnit = aCurrentHeaderUnit;
+                    aLocalUnit = aHeader.unit;
                 } else { // override header unit with annotation unit
                     if (!UtUnit::createUnit(sLocalUnit, aLocalUnit, mpUnitSystem)) {
                         // but assume dimensionless if invalid
@@ -750,8 +766,8 @@ bool UnitsImpl::convertCellUnits(const ScRange& rRange,
                     }
                 }
 
-                bool bLocalAnnotationRequired = (!aRange.In(aCurrentHeaderAddress)) &&
-                                                (aOutputUnit != aCurrentHeaderUnit);
+                bool bLocalAnnotationRequired = (!aRange.In(*aHeader.address)) &&
+                                                (aOutputUnit != aHeader.unit);
                 double nValue = pDoc->GetValue(aCurrent);
 
                 if (!aLocalUnit.areConvertibleTo(aOutputUnit)) {
