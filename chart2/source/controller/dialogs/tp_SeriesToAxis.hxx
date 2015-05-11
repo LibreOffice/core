@@ -54,7 +54,7 @@ private: //member
     VclPtr<CheckBox>    m_pCBConnect;
     VclPtr<CheckBox>    m_pCBAxisSideBySide;
 
-    VclPtr<VclGrid>     m_pGrpPlotOptions;
+    VclPtr<VclFrame>    m_pGrpPlotOptions;
     VclPtr<VclGrid>     m_pGridPlotOptions;
     VclPtr<RadioButton> m_pRB_DontPaint;
     VclPtr<RadioButton> m_pRB_AssumeZero;
