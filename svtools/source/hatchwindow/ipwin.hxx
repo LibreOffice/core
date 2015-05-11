@@ -33,31 +33,46 @@ class SvResizeHelper
     Point       aSelPos;
     bool        bResizeable;
 public:
-                SvResizeHelper();
+    SvResizeHelper();
 
-    void        SetResizeable( bool b ) { bResizeable = b; }
-    short       GetGrab() const { return nGrab; }
-    void        SetBorderPixel( const Size & rBorderP )
-                { aBorder = rBorderP; }
-    const Size & GetBorderPixel() const { return aBorder; }
-    const Rectangle & GetOuterRectPixel() const
-                { return aOuter; }
-    void        SetOuterRectPixel( const Rectangle & rRect )
-                { aOuter = rRect; }
-    Rectangle   GetInnerRectPixel() const
-                {
-                    Rectangle aRect( aOuter );
-                    aRect.Top()    += aBorder.Height();
-                    aRect.Left()   += aBorder.Width();
-                    aRect.Bottom() -= aBorder.Height();
-                    aRect.Right()  -= aBorder.Width();
-                    return aRect;
-                }
+    void SetResizeable(bool b)
+    {
+        bResizeable = b;
+    }
+    short GetGrab() const
+    {
+        return nGrab;
+    }
+    void SetBorderPixel(const Size & rBorderP)
+    {
+        aBorder = rBorderP;
+    }
+    const Size& GetBorderPixel() const
+    {
+        return aBorder;
+    }
+    const Rectangle& GetOuterRectPixel() const
+    {
+        return aOuter;
+    }
+    void SetOuterRectPixel(const Rectangle& rRect)
+    {
+        aOuter = rRect;
+    }
+    Rectangle GetInnerRectPixel() const
+    {
+        Rectangle aRect( aOuter );
+        aRect.Top()    += aBorder.Height();
+        aRect.Left()   += aBorder.Width();
+        aRect.Bottom() -= aBorder.Height();
+        aRect.Right()  -= aBorder.Width();
+        return aRect;
+    }
                 // Clockwise, start at upper left
 
     void        FillHandleRectsPixel( Rectangle aRects[ 8 ] ) const;
     void        FillMoveRectsPixel( Rectangle aRects[ 4 ] ) const;
-    void        Draw( OutputDevice * );
+    void        Draw(vcl::RenderContext& rRenderContext);
     void        InvalidateBorder( vcl::Window * );
     bool        SelectBegin( vcl::Window *, const Point & rPos );
     short       SelectMove( vcl::Window * pWin, const Point & rPos );

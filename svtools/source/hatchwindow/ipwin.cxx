@@ -106,31 +106,31 @@ void SvResizeHelper::FillMoveRectsPixel( Rectangle aRects[ 4 ] ) const
 |*
 |*    Description
 *************************************************************************/
-void SvResizeHelper::Draw( OutputDevice * pDev )
+void SvResizeHelper::Draw(vcl::RenderContext& rRenderContext)
 {
-    pDev->Push();
-    pDev->SetMapMode( MapMode() );
+    rRenderContext.Push();
+    rRenderContext.SetMapMode( MapMode() );
     Color aColBlack;
     Color aFillColor( COL_LIGHTGRAY );
 
-    pDev->SetFillColor( aFillColor );
-    pDev->SetLineColor();
+    rRenderContext.SetFillColor( aFillColor );
+    rRenderContext.SetLineColor();
 
-    Rectangle   aMoveRects[ 4 ];
+    Rectangle aMoveRects[ 4 ];
     FillMoveRectsPixel( aMoveRects );
     sal_uInt16 i;
-    for( i = 0; i < 4; i++ )
-        pDev->DrawRect( aMoveRects[ i ] );
-    if( bResizeable )
+    for (i = 0; i < 4; i++)
+        rRenderContext.DrawRect(aMoveRects[i]);
+    if (bResizeable)
     {
         // draw handles
-        pDev->SetFillColor( aColBlack );
-        Rectangle   aRects[ 8 ];
-        FillHandleRectsPixel( aRects );
-        for( i = 0; i < 8; i++ )
-            pDev->DrawRect( aRects[ i ] );
+        rRenderContext.SetFillColor(aColBlack);
+        Rectangle aRects[ 8 ];
+        FillHandleRectsPixel(aRects);
+        for (i = 0; i < 8; i++)
+            rRenderContext.DrawRect( aRects[ i ] );
     }
-    pDev->Pop();
+    rRenderContext.Pop();
 }
 
 /*************************************************************************
@@ -612,9 +612,9 @@ void SvResizeWindow::Resize()
 |*
 |*    Description
 *************************************************************************/
-void SvResizeWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle & /*rRect*/ )
+void SvResizeWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle & /*rRect*/ )
 {
-    m_aResizer.Draw( this );
+    m_aResizer.Draw(rRenderContext);
 }
 
 bool SvResizeWindow::PreNotify( NotifyEvent& rEvt )
