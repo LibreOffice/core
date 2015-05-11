@@ -358,8 +358,9 @@ private:
     using Window::ImplInit;
     SVT_DLLPRIVATE void            ImplInit( WinBits nWinStyle );
     SVT_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bBackground );
-    SVT_DLLPRIVATE void            ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
-                                   Color& rSelectColor, Color& rSelectTextColor );
+    SVT_DLLPRIVATE void            ImplGetColors(const StyleSettings& rStyleSettings,
+                                                 Color& rFaceColor, Color& rFaceTextColor,
+                                                 Color& rSelectColor, Color& rSelectTextColor);
     SVT_DLLPRIVATE void            ImplShowPage( sal_uInt16 nPos );
     SVT_DLLPRIVATE bool            ImplCalcWidth();
     SVT_DLLPRIVATE void            ImplFormat();
@@ -369,7 +370,7 @@ private:
     SVT_DLLPRIVATE void            ImplSelect();
     SVT_DLLPRIVATE void            ImplActivatePage();
     SVT_DLLPRIVATE bool            ImplDeactivatePage();
-    SVT_DLLPRIVATE void            ImplPrePaint();
+    SVT_DLLPRIVATE void            ImplPrePaint(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( sal_uInt16 nItemCount );
     SVT_DLLPRIVATE Rectangle       ImplGetInsertTabRect(ImplTabBarItem* pItem) const;
 

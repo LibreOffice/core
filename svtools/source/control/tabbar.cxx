@@ -36,13 +36,190 @@
 #include <limits>
 #include <utility>
 
-namespace {
+namespace
+{
+
 #define TABBAR_DRAG_SCROLLOFF   5
 #define TABBAR_MINSIZE          5
 
 const sal_uInt16 ADDNEWPAGE_AREAWIDTH = 10;
 const sal_uInt16 INSERT_TAB_WIDTH = 32;
 const sal_uInt16 BUTTON_MARGIN = 6;
+
+class TabDrawer
+{
+private:
+    TabBar& mrParent;
+    vcl::RenderContext& mrRenderContext;
+    const StyleSettings&  mrStyleSettings;
+
+    Rectangle maRect;
+
+    Color maSelectedColor;
+    Color maCustomColor;
+    Color maUnselectedColor;
+
+    bool mbSelected:1;
+    bool mbCustomColored:1;
+    bool mbSpecialTab:1;
+    bool mbEnabled:1;
+
+public:
+    explicit TabDrawer(TabBar& rParent, vcl::RenderContext& rRenderContext)
+        : mrParent(rParent)
+        , mrRenderContext(rRenderContext)
+        , mrStyleSettings(rRenderContext.GetSettings().GetStyleSettings())
+        , mbSelected(false)
+        , mbCustomColored(false)
+        , mbSpecialTab(false)
+        , mbEnabled(false)
+    {
+    }
+
+    void drawOutputAreaBorder()
+    {
+        WinBits nWinStyle = mrParent.GetStyle();
+
+        // draw extra line if above and below border
+        if ((nWinStyle & WB_BORDER) || (nWinStyle & WB_TOPBORDER))
+        {
+            Size aOutputSize = mrRenderContext.GetOutputSizePixel();
+            Rectangle aOutRect = mrParent.GetPageArea();
+
+            // also draw border in 3D for 3D-tabs
+            if (nWinStyle & WB_3DTAB)
+            {
+                mrRenderContext.SetLineColor(mrStyleSettings.GetShadowColor());
+                mrRenderContext.DrawLine(Point(aOutRect.Left(), 0), Point(aOutputSize.Width(), 0));
+            }
+
+            // draw border (line above and line below)
+            mrRenderContext.SetLineColor(mrStyleSettings.GetDarkShadowColor());
+            mrRenderContext.DrawLine(aOutRect.TopLeft(), Point(aOutputSize.Width() - 1, aOutRect.Top()));
+        }
+    }
+
+    void drawOuterFrame()
+    {
+        mrRenderContext.SetLineColor(mrStyleSettings.GetDarkShadowColor());
+
+        // set correct FillInBrush depending on status
+        if (mbSelected)
+        {
+            // Currently selected Tab
+            mrRenderContext.SetFillColor(maSelectedColor);
+        }
+        else if (mbCustomColored)
+        {
+            mrRenderContext.SetFillColor(maCustomColor);
+        }
+        else
+        {
+            mrRenderContext.SetFillColor(maUnselectedColor);
+        }
+
+        mrRenderContext.DrawRect(maRect);
+    }
+
+    void drawText(const OUString& aText)
+    {
+        Rectangle aRect = maRect;
+        long nTextWidth = mrRenderContext.GetTextWidth(aText);
+        long nTextHeight = mrRenderContext.GetTextHeight();
+        Point aPos = aRect.TopLeft();
+        aPos.X() += (aRect.getWidth()  - nTextWidth) / 2;
+        aPos.Y() += (aRect.getHeight() - nTextHeight) / 2;
+
+        if (mbEnabled)
+            mrRenderContext.DrawText(aPos, aText);
+        else
+            mrRenderContext.DrawCtrlText(aPos, aText, 0, aText.getLength(), (TEXT_DRAW_DISABLE | TEXT_DRAW_MNEMONIC));
+    }
+
+    void drawOverTopBorder()
+    {
+        Point aTopLeft  = maRect.TopLeft()  + Point(1, 0);
+        Point aTopRight = maRect.TopRight() + Point(-1, 0);
+
+        Rectangle aDelRect(aTopLeft, aTopRight);
+        mrRenderContext.DrawRect(aDelRect);
+    }
+
+    void drawColorLine()
+    {
+        mrRenderContext.SetFillColor(maCustomColor);
+        mrRenderContext.SetLineColor(maCustomColor);
+
+        Rectangle aLineRect(maRect.BottomLeft(), maRect.BottomRight());
+        aLineRect.Top() -= 3;
+
+        mrRenderContext.DrawRect(aLineRect);
+    }
+
+    void drawTab()
+    {
+        drawOuterFrame();
+
+        if (mbCustomColored && mbSelected)
+        {
+            drawColorLine();
+        }
+    }
+
+    void drawPlusImage()
+    {
+        DecorationView aDecorationView(&mrRenderContext);
+        sal_Int32 aScaleFactor = mrRenderContext.GetDPIScaleFactor();
+        Size aSize(12 * aScaleFactor, 12 * aScaleFactor);
+
+        Point aPosition = maRect.TopLeft();
+        long nXOffSet = (maRect.GetWidth() - aSize.Width()) / 2;
+        long nYOffset = (maRect.GetHeight() - aSize.Height()) / 2;
+        aPosition += Point(nXOffSet, nYOffset);
+
+        aDecorationView.DrawSymbol(Rectangle(aPosition, aSize), SymbolType::PLUS, mrStyleSettings.GetDarkShadowColor());
+    }
+
+    void setRect(const Rectangle& rRect)
+    {
+        maRect = rRect;
+    }
+
+    void setSelected(bool bSelected)
+    {
+        mbSelected = bSelected;
+    }
+
+    void setCustomColored(bool bCustomColored)
+    {
+        mbCustomColored = bCustomColored;
+    }
+
+    void setSpecialTab(bool bSpecialTab)
+    {
+        mbSpecialTab = bSpecialTab;
+    }
+
+    void setEnabled(bool bEnabled)
+    {
+        mbEnabled = bEnabled;
+    }
+
+    void setSelectedFillColor(const Color& rColor)
+    {
+        maSelectedColor = rColor;
+    }
+
+    void setUnselectedFillColor(const Color& rColor)
+    {
+        maUnselectedColor = rColor;
+    }
+
+    void setCustomColor(const Color& rColor)
+    {
+        maCustomColor = rColor;
+    }
+};
 
 } // anonymous namespace
 
@@ -221,10 +398,10 @@ void ImplTabSizer::Tracking( const TrackingEvent& rTEvt )
         ImplTrack( OutputToScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
 }
 
-void ImplTabSizer::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void ImplTabSizer::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
-    DecorationView aDecoView(this);
-    Rectangle aOutputRect(Point(0, 0), GetOutputSizePixel());
+    DecorationView aDecoView(&rRenderContext);
+    Rectangle aOutputRect(Point(0, 0), rRenderContext.GetOutputSizePixel());
     aDecoView.DrawHandle(aOutputRect, true);
 }
 
@@ -494,31 +671,30 @@ void TabBar::ImplInitSettings( bool bFont, bool bBackground )
     }
 }
 
-void TabBar::ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
-                            Color& rSelectColor, Color& rSelectTextColor )
+void TabBar::ImplGetColors(const StyleSettings& rStyleSettings,
+                           Color& rFaceColor, Color& rFaceTextColor,
+                           Color& rSelectColor, Color& rSelectTextColor)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if ( IsControlBackground() )
+    if (IsControlBackground())
         rFaceColor = GetControlBackground();
     else
         rFaceColor = rStyleSettings.GetInactiveTabColor();
-    if ( IsControlForeground() )
+    if (IsControlForeground())
         rFaceTextColor = GetControlForeground();
     else
         rFaceTextColor = rStyleSettings.GetButtonTextColor();
-    if ( mbSelColor )
+    if (mbSelColor)
         rSelectColor = maSelColor;
     else
         rSelectColor = rStyleSettings.GetActiveTabColor();
-    if ( mbSelTextColor )
+    if (mbSelTextColor)
         rSelectTextColor = maSelTextColor;
     else
         rSelectTextColor = rStyleSettings.GetWindowTextColor();
 
     // For 3D-tabs the selection- and face-colours are swapped,
     // as the selected tabs should appear in 3D
-    if ( mnWinStyle & WB_3DTAB )
+    if (mnWinStyle & WB_3DTAB)
     {
         using std::swap;
         swap(rFaceColor, rSelectColor);
@@ -1017,233 +1193,33 @@ void TabBar::MouseButtonUp( const MouseEvent& rMEvt )
     Window::MouseButtonUp( rMEvt );
 }
 
-namespace {
-
-class TabBarPaintGuard
+void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
 {
-public:
-    explicit TabBarPaintGuard(TabBar& rParent) :
-        mrParent(rParent),
-        maFont(rParent.GetFont())
+    if (rRenderContext.IsNativeControlSupported(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL))
     {
-        // #i36013# exclude push buttons from painting area
-        mrParent.SetClipRegion( vcl::Region(mrParent.GetPageArea()) );
+        rRenderContext.DrawNativeControl(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL,rect,
+                                         ControlState::ENABLED,ImplControlValue(0),OUString());
     }
-
-    ~TabBarPaintGuard()
-    {
-        // Restore original font.
-        mrParent.SetFont(maFont);
-        // remove clip region
-        mrParent.SetClipRegion();
-    }
-private:
-    TabBar&   mrParent;
-    vcl::Font maFont;
-};
-
-class TabDrawer
-{
-public:
-
-    explicit TabDrawer(TabBar& rParent) :
-        mrParent(rParent),
-        mpStyleSettings(&mrParent.GetSettings().GetStyleSettings()),
-        mbSelected(false),
-        mbCustomColored(false),
-        mbSpecialTab(false),
-        mbEnabled(false)
-    {
-    }
-
-    void drawOutputAreaBorder()
-    {
-        WinBits nWinStyle = mrParent.GetStyle();
-
-        // draw extra line if above and below border
-        if ((nWinStyle & WB_BORDER) || (nWinStyle & WB_TOPBORDER))
-        {
-            Size aOutputSize = mrParent.GetOutputSizePixel();
-            Rectangle aOutRect = mrParent.GetPageArea();
-
-            // also draw border in 3D for 3D-tabs
-            if (nWinStyle & WB_3DTAB)
-            {
-                mrParent.SetLineColor(mpStyleSettings->GetShadowColor());
-                mrParent.DrawLine(Point(aOutRect.Left(), 0), Point(aOutputSize.Width(), 0));
-            }
-
-            // draw border (line above and line below)
-            mrParent.SetLineColor(mpStyleSettings->GetDarkShadowColor());
-            mrParent.DrawLine(aOutRect.TopLeft(), Point(aOutputSize.Width() - 1, aOutRect.Top()));
-        }
-    }
-
-    void drawOuterFrame()
-    {
-        mrParent.SetLineColor(mpStyleSettings->GetDarkShadowColor());
-
-        // set correct FillInBrush depending on status
-        if (mbSelected)
-        {
-            // Currently selected Tab
-            mrParent.SetFillColor(maSelectedColor);
-        }
-        else if (mbCustomColored)
-        {
-            mrParent.SetFillColor(maCustomColor);
-        }
-        else
-        {
-            mrParent.SetFillColor(maUnselectedColor);
-        }
-
-        mrParent.DrawRect(maRect);
-    }
-
-    void drawText(const OUString& aText)
-    {
-        Rectangle aRect = maRect;
-        long nTextWidth = mrParent.GetTextWidth(aText);
-        long nTextHeight = mrParent.GetTextHeight();
-        Point aPos = aRect.TopLeft();
-        aPos.X() += (aRect.getWidth()  - nTextWidth) / 2;
-        aPos.Y() += (aRect.getHeight() - nTextHeight) / 2;
-
-        if (mbEnabled)
-            mrParent.DrawText(aPos, aText);
-        else
-            mrParent.DrawCtrlText(aPos, aText, 0, aText.getLength(),
-                                    (TEXT_DRAW_DISABLE | TEXT_DRAW_MNEMONIC));
-    }
-
-    void drawOverTopBorder()
-    {
-        Point aTopLeft  = maRect.TopLeft()  + Point(1, 0);
-        Point aTopRight = maRect.TopRight() + Point(-1, 0);
-
-        Rectangle aDelRect(aTopLeft, aTopRight);
-        mrParent.DrawRect(aDelRect);
-    }
-
-    void drawColorLine()
-    {
-        mrParent.SetFillColor(maCustomColor);
-        mrParent.SetLineColor(maCustomColor);
-
-        Rectangle aLineRect(maRect.BottomLeft(), maRect.BottomRight());
-        aLineRect.Top() -= 3;
-
-        mrParent.DrawRect(aLineRect);
-    }
-
-    void drawTab()
-    {
-        drawOuterFrame();
-
-        if (mbCustomColored && mbSelected)
-        {
-            drawColorLine();
-        }
-    }
-
-    void drawPlusImage()
-    {
-        const StyleSettings& rStyleSettings = mrParent.GetSettings().GetStyleSettings();
-
-        DecorationView aDecorationView(&mrParent);
-        sal_Int32 aScaleFactor = mrParent.GetDPIScaleFactor();
-        Size aSize(12 * aScaleFactor, 12 * aScaleFactor);
-
-        Point aPosition = maRect.TopLeft();
-        long nXOffSet = (maRect.GetWidth() - aSize.Width()) / 2;
-        long nYOffset = (maRect.GetHeight() - aSize.Height()) / 2;
-        aPosition += Point(nXOffSet, nYOffset);
-
-        aDecorationView.DrawSymbol(Rectangle(aPosition, aSize), SymbolType::PLUS, rStyleSettings.GetDarkShadowColor());
-    }
-
-    void setRect(const Rectangle& rRect)
-    {
-        maRect = rRect;
-    }
-
-    void setSelected(bool bSelected)
-    {
-        mbSelected = bSelected;
-    }
-
-    void setCustomColored(bool bCustomColored)
-    {
-        mbCustomColored = bCustomColored;
-    }
-
-    void setSpecialTab(bool bSpecialTab)
-    {
-        mbSpecialTab = bSpecialTab;
-    }
-
-    void setEnabled(bool bEnabled)
-    {
-        mbEnabled = bEnabled;
-    }
-
-    void setSelectedFillColor(const Color& rColor)
-    {
-        maSelectedColor = rColor;
-    }
-
-    void setUnselectedFillColor(const Color& rColor)
-    {
-        maUnselectedColor = rColor;
-    }
-
-    void setCustomColor(const Color& rColor)
-    {
-        maCustomColor = rColor;
-    }
-
-private:
-    TabBar&         mrParent;
-    const StyleSettings*  mpStyleSettings;
-
-    Rectangle       maRect;
-
-    Color       maSelectedColor;
-    Color       maCustomColor;
-    Color       maUnselectedColor;
-
-    bool        mbSelected:1;
-    bool        mbCustomColored:1;
-    bool        mbSpecialTab:1;
-    bool        mbEnabled:1;
-};
-
-} // anonymous namespace
-
-void TabBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rect )
-{
-    if(IsNativeControlSupported(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL))
-        DrawNativeControl(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL,rect,
-                ControlState::ENABLED,ImplControlValue(0),OUString());
-
     // calculate items and emit
     sal_uInt16 nItemCount = mpImpl->getItemSize();
     if (!nItemCount)
         return;
 
-    ImplPrePaint();
+    ImplPrePaint(rRenderContext);
 
     Color aFaceColor, aSelectColor, aFaceTextColor, aSelectTextColor;
-    ImplGetColors( aFaceColor, aFaceTextColor, aSelectColor, aSelectTextColor );
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    ImplGetColors(rStyleSettings, aFaceColor, aFaceTextColor, aSelectColor, aSelectTextColor);
+
+    rRenderContext.Push(PushFlags::FONT | PushFlags::CLIPREGION);
+    rRenderContext.SetClipRegion(vcl::Region(GetPageArea()));
 
     // select font
-    vcl::Font aFont = GetFont();
+    vcl::Font aFont = rRenderContext.GetFont();
     vcl::Font aLightFont = aFont;
-    aLightFont.SetWeight( WEIGHT_NORMAL );
+    aLightFont.SetWeight(WEIGHT_NORMAL);
 
-    TabBarPaintGuard aGuard(*this);
-    TabDrawer aDrawer(*this);
+    TabDrawer aDrawer(*this, rRenderContext);
 
     aDrawer.setSelectedFillColor(aSelectColor);
     aDrawer.setUnselectedFillColor(aFaceColor);
@@ -1262,23 +1238,22 @@ void TabBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rec
         aDrawer.drawPlusImage();
     }
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     ImplTabBarItem* pCurItem = NULL;
-    while ( pItem )
+    while (pItem)
     {
         // emit CurrentItem last, as it covers all others
-        if ( !pCurItem && (pItem->mnId == mnCurPageId) )
+        if (!pCurItem && (pItem->mnId == mnCurPageId))
         {
             pCurItem = pItem;
             pItem = prev();
-            if ( !pItem )
+            if (!pItem)
                 pItem = pCurItem;
             continue;
         }
 
         bool bCurrent = pItem == pCurItem;
 
-        if ( !pItem->maRect.IsEmpty() )
+        if (!pItem->maRect.IsEmpty())
         {
             Rectangle aRect = pItem->maRect;
             bool bSelected = pItem->IsSelected(pCurItem);
@@ -1286,8 +1261,7 @@ void TabBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rec
             bool bCustomBgColor = !pItem->IsDefaultTabBgColor() && !rStyleSettings.GetHighContrastMode();
             bool bSpecialTab = (pItem->mnBits & TPB_SPECIAL);
             bool bEnabled = pItem->mbEnable;
-            OUString aText = pItem->mbShort ?
-                GetEllipsisString(pItem->maText, mnCurMaxWidth, TEXT_DRAW_ENDELLIPSIS) : pItem->maText;
+            OUString aText = pItem->mbShort ? rRenderContext.GetEllipsisString(pItem->maText, mnCurMaxWidth, TEXT_DRAW_ENDELLIPSIS) : pItem->maText;
 
             aDrawer.setRect(aRect);
             aDrawer.setSelected(bSelected);
@@ -1298,30 +1272,30 @@ void TabBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rec
             aDrawer.drawTab();
 
             // actual page is drawn using a bold font
-            if ( bCurrent )
-                SetFont( aFont );
+            if (bCurrent)
+                rRenderContext.SetFont(aFont);
             else
-                SetFont( aLightFont );
+                rRenderContext.SetFont(aLightFont);
 
             // Set the correct FillInBrush depending on status
 
-            if ( bSelected )
-                SetTextColor( aSelectTextColor );
-            else if ( bCustomBgColor )
-                SetTextColor( pItem->maTabTextColor );
+            if (bSelected)
+                rRenderContext.SetTextColor(aSelectTextColor);
+            else if (bCustomBgColor)
+                rRenderContext.SetTextColor(pItem->maTabTextColor);
             else
-                SetTextColor( aFaceTextColor );
+                rRenderContext.SetTextColor(aFaceTextColor);
 
             // This tab is "special", and a special tab needs a blue text.
             if (bSpecialTab)
-                SetTextColor(Color(COL_LIGHTBLUE));
+                rRenderContext.SetTextColor(Color(COL_LIGHTBLUE));
 
             aDrawer.drawText(aText);
 
-            if ( bCurrent )
+            if (bCurrent)
             {
-                SetLineColor();
-                SetFillColor(aSelectColor);
+                rRenderContext.SetLineColor();
+                rRenderContext.SetFillColor(aSelectColor);
                 aDrawer.drawOverTopBorder();
                 return;
             }
@@ -1330,13 +1304,13 @@ void TabBar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rec
         }
         else
         {
-            if ( bCurrent )
+            if (bCurrent)
                 return;
 
             pItem = NULL;
         }
 
-        if ( !pItem )
+        if (!pItem)
             pItem = pCurItem;
     }
 }
@@ -1624,7 +1598,7 @@ bool TabBar::ImplDeactivatePage()
     return nRet;
 }
 
-void TabBar::ImplPrePaint()
+void TabBar::ImplPrePaint(vcl::RenderContext& /*rRenderContext*/)
 {
     sal_uInt16 nItemCount = mpImpl->getItemSize();
     if (!nItemCount)
@@ -1635,20 +1609,20 @@ void TabBar::ImplPrePaint()
     ImplFormat();
 
     // assure the actual tabpage becomes visible at first format
-    if ( mbFirstFormat )
+    if (mbFirstFormat)
     {
         mbFirstFormat = false;
 
-        if ( mnCurPageId && (mnFirstPos == 0) && !mbDropPos )
+        if (mnCurPageId && (mnFirstPos == 0) && !mbDropPos)
         {
             ImplTabBarItem* pItem = mpImpl->mpItemList[GetPagePos(mnCurPageId)];
-            if ( pItem->maRect.IsEmpty() )
+            if (pItem->maRect.IsEmpty())
             {
                 // set mbDropPos (or misuse) to prevent Invalidate()
                 mbDropPos = true;
-                SetFirstPageId( mnCurPageId );
+                SetFirstPageId(mnCurPageId);
                 mbDropPos = false;
-                if ( mnFirstPos != 0 )
+                if (mnFirstPos != 0)
                     ImplFormat();
             }
         }
@@ -2164,16 +2138,16 @@ bool TabBar::IsPageSelected( sal_uInt16 nPageId ) const
         return false;
 }
 
-bool TabBar::StartEditMode( sal_uInt16 nPageId )
+bool TabBar::StartEditMode(sal_uInt16 nPageId)
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
     if (mpImpl->mpEdit || (nPos == PAGE_NOT_FOUND) || (mnLastOffX < 8))
         return false;
 
     mnEditId = nPageId;
-    if ( StartRenaming() )
+    if (StartRenaming())
     {
-        ImplShowPage( nPos );
+        ImplShowPage(nPos);
         ImplFormat();
         Update();
 
@@ -2181,11 +2155,11 @@ bool TabBar::StartEditMode( sal_uInt16 nPageId )
         Rectangle aRect = GetPageRect( mnEditId );
         long nX = aRect.Left();
         long nWidth = aRect.GetWidth();
-        if ( mnEditId != GetCurPageId() )
+        if (mnEditId != GetCurPageId())
             nX += 1;
-        if ( nX+nWidth > mnLastOffX )
+        if (nX + nWidth > mnLastOffX)
             nWidth = mnLastOffX-nX;
-        if ( nWidth < 3 )
+        if (nWidth < 3)
         {
             nX = aRect.Left();
             nWidth = aRect.GetWidth();
@@ -2193,16 +2167,21 @@ bool TabBar::StartEditMode( sal_uInt16 nPageId )
         mpImpl->mpEdit->SetText(GetPageText(mnEditId));
         mpImpl->mpEdit->setPosSizePixel(nX, aRect.Top() + mnOffY + 1, nWidth, aRect.GetHeight() - 3);
         vcl::Font aFont = GetPointFont();
+
         Color   aForegroundColor;
         Color   aBackgroundColor;
         Color   aFaceColor;
         Color   aSelectColor;
         Color   aFaceTextColor;
         Color   aSelectTextColor;
-        ImplGetColors( aFaceColor, aFaceTextColor, aSelectColor, aSelectTextColor );
-        if ( mnEditId != GetCurPageId() )
-            aFont.SetWeight( WEIGHT_LIGHT );
-        if ( IsPageSelected( mnEditId ) || (mnEditId == GetCurPageId()) )
+
+        ImplGetColors(Application::GetSettings().GetStyleSettings(), aFaceColor, aFaceTextColor, aSelectColor, aSelectTextColor);
+
+        if (mnEditId != GetCurPageId())
+        {
+            aFont.SetWeight(WEIGHT_LIGHT);
+        }
+        if (IsPageSelected(mnEditId) || mnEditId == GetCurPageId())
         {
             aForegroundColor = aSelectTextColor;
             aBackgroundColor = aSelectColor;
@@ -2212,8 +2191,10 @@ bool TabBar::StartEditMode( sal_uInt16 nPageId )
             aForegroundColor = aFaceTextColor;
             aBackgroundColor = aFaceColor;
         }
-        if ( GetPageBits( mnEditId ) & TPB_SPECIAL )
-            aForegroundColor = Color( COL_LIGHTBLUE );
+        if (GetPageBits( mnEditId ) & TPB_SPECIAL)
+        {
+            aForegroundColor = Color(COL_LIGHTBLUE);
+        }
         mpImpl->mpEdit->SetControlFont(aFont);
         mpImpl->mpEdit->SetControlForeground(aForegroundColor);
         mpImpl->mpEdit->SetControlBackground(aBackgroundColor);
