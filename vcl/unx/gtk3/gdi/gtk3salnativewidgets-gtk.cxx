@@ -1350,7 +1350,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_NOTEBOOK);
         gtk_widget_path_iter_add_region(pCPath, pos, GTK_STYLE_REGION_TAB, static_cast<GtkRegionFlags>(GTK_REGION_EVEN | GTK_REGION_FIRST));
         pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
+#if GTK_CHECK_VERSION(3,16,0)
         gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
+#else
+        gtk_widget_path_iter_set_name(pCPath, pos, "first tab label");
+#endif
         pCStyle = gtk_style_context_new();
         gtk_style_context_set_path(pCStyle, pCPath);
         gtk_widget_path_free(pCPath);
