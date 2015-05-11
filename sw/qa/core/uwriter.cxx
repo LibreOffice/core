@@ -36,6 +36,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
+#include "cellfml.hxx"
 #include "docsh.hxx"
 #include "docstat.hxx"
 #include "docufld.hxx"
@@ -105,6 +106,7 @@ public:
     void testGraphicAnchorDeletion();
     void testTransliterate();
     void testMarkMove();
+    void testFormulas();
     void testIntrusiveRing();
     void testClientModify();
 
@@ -136,6 +138,7 @@ public:
     CPPUNIT_TEST(testMergePortionsDeleteNotSorted);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
     CPPUNIT_TEST(testMarkMove);
+    CPPUNIT_TEST(testFormulas);
     CPPUNIT_TEST(testIntrusiveRing);
     CPPUNIT_TEST(testClientModify);
     CPPUNIT_TEST_SUITE_END();
@@ -1171,6 +1174,41 @@ void SwDocTest::testTransliterate()
     CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
             translitTest(*m_pDoc, aPaM,
                 i18n::TransliterationModules_HIRAGANA_KATAKANA));
+}
+
+namespace
+{
+    class SwTableFormulaTest : public SwTableFormula
+    {
+        SwTableNode *m_pNode;
+    public:
+        SwTableFormulaTest(const OUString &rStr, SwTableNode *pNode)
+            : SwTableFormula(rStr)
+            , m_pNode(pNode)
+        {
+            m_eNmType = INTRNL_NAME;
+        }
+        virtual const SwNode* GetNodeOfFormula() const SAL_OVERRIDE
+        {
+            return m_pNode;
+        }
+    };
+}
+
+//tdf#66353 Expression is faulty
+void SwDocTest::testFormulas()
+{
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPosition aPos(aIdx);
+
+    const SwTable *pTable = m_pDoc->InsertTable(
+        SwInsertTableOptions(tabopts::HEADLINE_NO_BORDER, 0), aPos, 1, 3, 0);
+    SwTableNode* pTableNode = pTable->GetTableNode();
+    SwTableFormulaTest aFormula("<\x12-1,0>+<Table1.A1>", pTableNode);
+
+    aFormula.PtrToBoxNm(pTable);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("<?>+<Table1.?>"), aFormula.GetFormula());
 }
 
 void SwDocTest::testMarkMove()
