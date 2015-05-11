@@ -63,8 +63,8 @@ private:
 };
 
 void DeviceCopy (
-    OutputDevice& rTargetDevice,
-    OutputDevice& rSourceDevice,
+    vcl::RenderContext& rTargetDevice,
+    vcl::RenderContext& rSourceDevice,
     const Rectangle& rBox)
 {
     rTargetDevice.DrawOutDev(

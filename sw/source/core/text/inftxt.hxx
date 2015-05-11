@@ -274,12 +274,12 @@ public:
     inline SwViewShell *GetVsh() { return m_pVsh; }
     inline const SwViewShell *GetVsh() const { return m_pVsh; }
 
-    inline OutputDevice *GetOut() { return m_pOut; }
-    inline const OutputDevice *GetOut() const { return m_pOut; }
+    inline vcl::RenderContext *GetOut() { return m_pOut; }
+    inline const vcl::RenderContext *GetOut() const { return m_pOut; }
     inline void SetOut( OutputDevice* pNewOut ) { m_pOut = pNewOut; }
 
-    inline OutputDevice *GetRefDev() { return m_pRef; }
-    inline const OutputDevice *GetRefDev() const { return m_pRef; }
+    inline vcl::RenderContext *GetRefDev() { return m_pRef; }
+    inline const vcl::RenderContext *GetRefDev() const { return m_pRef; }
 
     inline SwFont *GetFont() { return m_pFnt; }
     inline const SwFont *GetFont() const { return m_pFnt; }

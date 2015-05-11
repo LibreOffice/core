@@ -177,7 +177,7 @@ void SetOutDev( SwViewShell *pSh, OutputDevice *pOut )
 }
 
 static void lcl_ClearArea( const SwFrm &rFrm,
-                    OutputDevice &rOut, const SwRect& rPtArea,
+                    vcl::RenderContext &rOut, const SwRect& rPtArea,
                     const SwRect &rGrfArea )
 {
     SwRegionRects aRegion( rPtArea, 4 );
@@ -676,7 +676,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 }
 
-static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, OutputDevice* pOut )
+static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, vcl::RenderContext* pOut )
 {
 
     if(!pOut)
@@ -706,7 +706,7 @@ static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInAr
 }
 
 bool paintUsingPrimitivesHelper(
-    OutputDevice& rOutputDevice,
+    vcl::RenderContext& rOutputDevice,
     const drawinglayer::primitive2d::Primitive2DSequence& rSequence,
     const basegfx::B2DRange& rSourceRange,
     const basegfx::B2DRange& rTargetRange)
@@ -753,7 +753,7 @@ bool paintUsingPrimitivesHelper(
     return false;
 }
 
-void paintGraphicUsingPrimitivesHelper(OutputDevice & rOutputDevice,
+void paintGraphicUsingPrimitivesHelper(vcl::RenderContext & rOutputDevice,
          GraphicObject const& rGrfObj, GraphicAttr const& rGraphicAttr,
          SwRect const& rAlignedGrfArea)
 {
@@ -832,7 +832,7 @@ void paintGraphicUsingPrimitivesHelper(OutputDevice & rOutputDevice,
 
     @todo use aligned rectangle for drawing graphic.
     @todo pixel-align coordinations for drawing graphic. */
-void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
+void SwNoTxtFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea ) const
 {
     SwViewShell* pShell = getRootFrm()->GetCurrShell();
 

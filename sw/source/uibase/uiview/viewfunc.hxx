@@ -37,7 +37,7 @@ VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window*, const SfxItemSet& );
 void SetAppPrintOptions( SwViewShell* pSh, bool bWeb );
 
 // The following functions are available in viewport.cxx
-void ViewResizePixel( const vcl::Window &rRef,
+void ViewResizePixel( const vcl::RenderContext &rRef,
                     const Point &rOfst,
                     const Size &rSize,
                     const Size &rEditSz,

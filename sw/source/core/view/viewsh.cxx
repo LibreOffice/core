@@ -146,7 +146,7 @@ lcl_PaintTransparentFormControls(SwViewShell & rShell, SwRect const& rRect)
     if (rShell.GetWin())
     {
         vcl::Window& rWindow = *(rShell.GetWin());
-        const Rectangle aRectanglePixel(rWindow.LogicToPixel(rRect.SVRect()));
+        const Rectangle aRectanglePixel(rShell.GetOut()->LogicToPixel(rRect.SVRect()));
         PaintTransparentChildren(rWindow, aRectanglePixel);
     }
 }

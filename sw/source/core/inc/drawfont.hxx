@@ -35,6 +35,7 @@ class SwFont;
 namespace vcl {
     class Font;
     class TextLayoutCache;
+    typedef OutputDevice RenderContext;
 }
 class SwUnderlineFont;
 
@@ -176,12 +177,12 @@ public:
         return pSh;
     }
 
-    OutputDevice& GetOut() const
+    vcl::RenderContext& GetOut() const
     {
         return *pOut;
     }
 
-    OutputDevice *GetpOut() const
+    vcl::RenderContext *GetpOut() const
     {
         return pOut;
     }

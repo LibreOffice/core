@@ -100,8 +100,8 @@ bool SwRootFrm::HasSameRect( const SwRect& rRect )
 // an virtual output device is used.
 void SetMappingForVirtDev(  const Point&    _rNewOrigin,
                             MapMode*        ,
-                            const OutputDevice* _pOrgOutDev,
-                            VirtualDevice*  _pVirDev )
+                            const vcl::RenderContext* _pOrgOutDev,
+                            vcl::RenderContext*  _pVirDev )
 {
         // new solution: set pixel offset at virtual output device
         Point aPixelOffset = _pOrgOutDev->LogicToPixel( _rNewOrigin );

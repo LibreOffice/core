@@ -16,7 +16,8 @@
 
 // Check for calls to OutputDevice methods that are not passing through RenderContext
 
-namespace {
+namespace
+{
 
 class RenderContext:
     public RecursiveASTVisitor<RenderContext>, public loplugin::Plugin
@@ -24,7 +25,9 @@ class RenderContext:
 public:
     explicit RenderContext(InstantiationData const & data): Plugin(data) {}
 
-    virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    virtual void run() override {
+        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    }
 
     bool TraverseFunctionDecl(const FunctionDecl * decl);
 
@@ -34,7 +37,8 @@ private:
     bool        mbChecking = false;
 };
 
-bool RenderContext::TraverseFunctionDecl(const FunctionDecl * pFunctionDecl) {
+bool RenderContext::TraverseFunctionDecl(const FunctionDecl * pFunctionDecl)
+{
     if (ignoreLocation(pFunctionDecl)) {
         return true;
     }
@@ -67,22 +71,56 @@ bool RenderContext::VisitCXXMemberCallExpr(const CXXMemberCallExpr* pCXXMemberCa
     if (pCXXRecordDecl->getQualifiedNameAsString() != "OutputDevice") {
         return true;
     }
+    // ignore a handful of methods. They will most probably still be present in Window for use during processing outside of the Paint()
+    // method lifecycle
+    const CXXMethodDecl *pCXXMethodDecl = pCXXMemberCallExpr->getMethodDecl();
+    if (pCXXMethodDecl->isInstance()) {
+        StringRef name = pCXXMethodDecl->getName();
+        if (name == "LogicToPixel" || name == "GetMapMode" || name == "GetFontMetric" || name == "LogicToLogic"
+            || name == "PixelToLogic" || name == "SetDigitLanguage")
+        {
+            return true;
+        }
+    }
+    // for calling through a pointer
     const ImplicitCastExpr *pImplicitCastExpr = dyn_cast<ImplicitCastExpr>(pCXXMemberCallExpr->getImplicitObjectArgument());
-    std::string t2 = "0";
+    std::string x = "0"; // for debugging
     if (pImplicitCastExpr) {
-        t2 = "2";
+        x += "1";
         QualType aType = pImplicitCastExpr->getSubExpr()->getType();
         if (aType->isPointerType())
             aType = aType->getPointeeType();
-        t2 = aType.getAsString();
-        if (t2 == "vcl::RenderContext")
+        std::string t2 = aType.getAsString();
+        if (t2 == "vcl::RenderContext" || t2 == "const vcl::RenderContext")
+            return true;
+    }
+    // for calling through a reference
+    const DeclRefExpr *pDeclRefExpr = dyn_cast<DeclRefExpr>(pCXXMemberCallExpr->getImplicitObjectArgument());
+    if (pDeclRefExpr) {
+        x += "2";
+        QualType aType = pDeclRefExpr->getType();
+        std::string t2 = aType.getAsString();
+        if (t2 == "vcl::RenderContext" || t2 == "const vcl::RenderContext")
+            return true;
+    }
+    // for calling through a chain of methods
+    const CXXMemberCallExpr *pMemberExpr = dyn_cast<CXXMemberCallExpr>(pCXXMemberCallExpr->getImplicitObjectArgument());
+    if (pMemberExpr) {
+        x += "3";
+        QualType aType = pMemberExpr->getType();
+        if (aType->isPointerType())
+            aType = aType->getPointeeType();
+        std::string t2 = aType.getAsString();
+        x += t2;
+        if (t2 == "vcl::RenderContext" || t2 == "const vcl::RenderContext")
             return true;
     }
     report(
         DiagnosticsEngine::Warning,
+        //  + x + pCXXMemberCallExpr->getImplicitObjectArgument()->getStmtClassName()
         "Should be calling OutputDevice method through RenderContext.",
         pCXXMemberCallExpr->getLocStart())
-      << pCXXMemberCallExpr->getSourceRange();
+            << pCXXMemberCallExpr->getSourceRange();
     return true;
 }
 

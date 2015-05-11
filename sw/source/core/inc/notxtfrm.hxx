@@ -35,8 +35,7 @@ class SwNoTxtFrm: public SwCntntFrm
     void InitCtor();
 
     void Format ( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
-    void PaintCntnt  ( OutputDevice*, const SwRect&, const SwRect& ) const;
-    void PaintPicture( OutputDevice*, const SwRect& ) const;
+    void PaintPicture( vcl::RenderContext*, const SwRect& ) const;
 
     virtual void DestroyImpl() SAL_OVERRIDE;
     virtual ~SwNoTxtFrm();

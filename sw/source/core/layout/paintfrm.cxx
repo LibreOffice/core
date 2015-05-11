@@ -333,7 +333,7 @@ bool isTableBoundariesEnabled()
  * For 'small' twip-to-pixel relations (less then 2:1)
  * values of <gProp.nSHalfPixelSzW> and <gProp.nSHalfPixelSzH> are set to ZERO
  */
-void SwCalcPixStatics( OutputDevice *pOut )
+void SwCalcPixStatics( vcl::RenderContext *pOut )
 {
     // determine 'small' twip-to-pixel relation
     bool bSmallTwipToPxRelW = false;
@@ -1247,7 +1247,7 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh )
         return;
     }
 
-    const OutputDevice *pOut = gProp.bSFlyMetafile ?
+    const vcl::RenderContext *pOut = gProp.bSFlyMetafile ?
                         gProp.pSFlyMetafileOut.get() : pSh->GetOut();
 
     // Hold original rectangle in pixel
@@ -1332,7 +1332,7 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh )
  * If the x-/y-pixel positions are the same, the x-/y-pixel position of
  * the second twip point is adjusted by a given amount of pixels
 */
-static void lcl_CompPxPosAndAdjustPos( const OutputDevice&  _rOut,
+static void lcl_CompPxPosAndAdjustPos( const vcl::RenderContext&  _rOut,
                                 const Point&         _rRefPt,
                                 Point&               _rCompPt,
                                 const bool          _bChkXPos,
@@ -1376,7 +1376,7 @@ static void lcl_CompPxPosAndAdjustPos( const OutputDevice&  _rOut,
  *
  * NOTE: Call this method before each <GraphicObject.Draw(...)>
 */
-void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut )
+void SwAlignGrfRect( SwRect *pGrfRect, const vcl::RenderContext &rOut )
 {
     Rectangle aPxRect = rOut.LogicToPixel( pGrfRect->SVRect() );
     pGrfRect->Pos( rOut.PixelToLogic( aPxRect.TopLeft() ) );
@@ -1697,7 +1697,7 @@ static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
 }
 
 static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
-                                 OutputDevice* _pOut,
+                                 vcl::RenderContext* _pOut,
                                  const SwRect& _rAlignedPaintRect,
                                  const GraphicObject& _rGraphicObj,
                                  SwPaintProperties& properties)
@@ -1814,7 +1814,7 @@ static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
  *
  * Also, change type of <bGrfNum> and <bClip> from <bool> to <bool>
  */
-static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
+static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOut,
                       SwViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       bool bClip, bool bGrfNum,
                       SwPaintProperties& properties,
@@ -1857,7 +1857,7 @@ bool DrawFillAttributes(
     const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SwRect& rOriginalLayoutRect,
     const SwRegionRects& rPaintRegion,
-    OutputDevice& rOut)
+    vcl::RenderContext& rOut)
 {
     if(rFillAttributes.get() && rFillAttributes->isUsed())
     {
@@ -1961,7 +1961,7 @@ bool DrawFillAttributes(
 
 void DrawGraphic(
     const SvxBrushItem *pBrush,
-    OutputDevice *pOutDev,
+    vcl::RenderContext *pOutDev,
     const SwRect &rOrg,
     const SwRect &rOut,
     const sal_uInt8 nGrfNum,
@@ -2316,7 +2316,7 @@ void DrawGraphic(
  * and other changes to the to be painted rectangle, this method is called for the
  * rectangle to be painted in order to adjust it to the pixel it is overlapping
 */
-static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
+static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const vcl::RenderContext &aOut )
 {
     // local constant object of class <Size> to determine number of Twips
     // representing a pixel.
@@ -4585,7 +4585,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             break;
     }
 
-    OutputDevice *pOut = properties.pSGlobalShell->GetOut();
+    vcl::RenderContext *pOut = properties.pSGlobalShell->GetOut();
 
     sal_uLong nOldDrawMode = pOut->GetDrawMode();
     Color aShadowColor( rShadow.GetColor().GetRGBColor() );
@@ -6062,7 +6062,7 @@ bool SwPageFrm::IsLeftShadowNeeded() const
 enum PaintArea {LEFT, RIGHT, TOP, BOTTOM};
 
 /// Wrapper around pOut->DrawBitmapEx.
-static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, const Size& aSize, const BitmapEx& rBitmapEx, PaintArea eArea)
+static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoint, const Size& aSize, const BitmapEx& rBitmapEx, PaintArea eArea)
 {
     // The problem is that if we get called multiple times and the color is
     // partly transparent, then the result will get darker and darker. To avoid

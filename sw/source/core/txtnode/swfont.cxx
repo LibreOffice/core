@@ -1521,7 +1521,7 @@ SwUnderlineFont::~SwUnderlineFont()
 /// Helper for filters to find true lineheight of a font
 long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
                           const SwAttrSet &rSet,
-                          const OutputDevice &rOut, sal_Int16 nScript)
+                          const vcl::RenderContext &rOut, sal_Int16 nScript)
 {
     SwFont aFont(&rSet, &rIDocumentSettingAccess);
     sal_uInt8 nActual;
@@ -1540,7 +1540,7 @@ long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
     }
     aFont.SetActual(nActual);
 
-    OutputDevice &rMutableOut = const_cast<OutputDevice &>(rOut);
+    vcl::RenderContext &rMutableOut = const_cast<vcl::RenderContext &>(rOut);
     const vcl::Font aOldFont(rMutableOut.GetFont());
 
     rMutableOut.SetFont(aFont.GetActualFont());

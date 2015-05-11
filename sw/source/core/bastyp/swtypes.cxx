@@ -78,7 +78,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwTableLineFmt )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableBoxFmt )
 IMPL_FIXEDMEMPOOL_NEWDEL( _SwCursor_SavePos )
 
-Size GetGraphicSizeTwip( const Graphic& rGraphic, OutputDevice* pOutDev )
+Size GetGraphicSizeTwip( const Graphic& rGraphic, vcl::RenderContext* pOutDev )
 {
     const MapMode aMapTwip( MAP_TWIP );
     Size aSize( rGraphic.GetPrefSize() );

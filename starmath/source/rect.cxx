@@ -593,7 +593,7 @@ SmRect SmRect::AsGlyphRect() const
     return aRect;
 }
 
-bool SmGetGlyphBoundRect(const OutputDevice &rDev,
+bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
                          const OUString &rText, Rectangle &rRect)
     // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
     // but with a string as argument.

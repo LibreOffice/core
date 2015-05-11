@@ -1006,6 +1006,11 @@ OutputDevice* Application::GetDefaultDevice()
     return ImplGetDefaultWindow();
 }
 
+vcl::RenderContext* Application::GetDefaultRenderContext()
+{
+    return ImplGetDefaultWindow();
+}
+
 vcl::Window* Application::GetFirstTopLevelWindow()
 {
     ImplSVData* pSVData = ImplGetSVData();

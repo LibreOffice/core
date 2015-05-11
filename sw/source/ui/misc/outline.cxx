@@ -879,7 +879,7 @@ void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType
         m_pStartEdit->GetModifyHdl().Call(m_pStartEdit);
 }
 
-static long lcl_DrawBullet(VirtualDevice* pVDev,
+static long lcl_DrawBullet(vcl::RenderContext* pVDev,
             const SwNumFmt& rFmt, long nXStart,
             long nYStart, const Size& rSize)
 {
@@ -897,7 +897,7 @@ static long lcl_DrawBullet(VirtualDevice* pVDev,
     return nRet;
 }
 
-static long lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, long nXStart,
+static long lcl_DrawGraphic(vcl::RenderContext* pVDev, const SwNumFmt &rFmt, long nXStart,
                         long nYStart, long nDivision)
 {
     const SvxBrushItem* pBrushItem = rFmt.GetBrush();

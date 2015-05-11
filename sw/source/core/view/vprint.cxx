@@ -188,7 +188,7 @@ void SetSwVisArea( SwViewShell *pSh, const SwRect &rRect )
     // at the same position
     aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
 
-    OutputDevice *pOut = pSh->GetOut();
+    vcl::RenderContext *pOut = pSh->GetOut();
 
     MapMode aMapMode( pOut->GetMapMode() );
     aMapMode.SetOrigin( aPt );

@@ -398,7 +398,7 @@ void SmFontDialog::dispose()
 
 namespace
 {
-    void getColors(vcl::Window &rRef, ColorData &rBgCol, ColorData &rTxtCol)
+    void getColors(vcl::RenderContext &rRef, ColorData &rBgCol, ColorData &rTxtCol)
     {
         const StyleSettings &rS = rRef.GetSettings().GetStyleSettings();
         if (rS.GetHighContrastMode())

@@ -832,7 +832,7 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, bool /*bInner*/ )
     SetBorderPixel( rToFill );
 }
 
-void ViewResizePixel( const vcl::Window &rRef,
+void ViewResizePixel( const vcl::RenderContext &rRef,
                     const Point &rOfst,
                     const Size &rSize,
                     const Size &rEditSz,

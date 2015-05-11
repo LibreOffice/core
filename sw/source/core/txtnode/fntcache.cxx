@@ -167,8 +167,8 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
  *  2. PDF export from online layout
  *  3. Prospect/PagePreview pringing
  */
-static bool lcl_IsFontAdjustNecessary( const OutputDevice& rOutDev,
-                                const OutputDevice& rRefDev )
+static bool lcl_IsFontAdjustNecessary( const vcl::RenderContext& rOutDev,
+                                const vcl::RenderContext& rRefDev )
 {
     return &rRefDev != &rOutDev &&
            OUTDEV_WINDOW != rRefDev.GetOutDevType() &&
@@ -619,7 +619,7 @@ static sal_uInt8 lcl_WhichPunctuation( sal_Unicode cChar )
     return SwScriptInfo::SPECIAL_LEFT;
 }
 
-static bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
+static bool lcl_IsMonoSpaceFont( const vcl::RenderContext& rOut )
 {
     const OUString aStr1( sal_Unicode( 0x3008 ) );
     const OUString aStr2( sal_Unicode( 0x307C ) );

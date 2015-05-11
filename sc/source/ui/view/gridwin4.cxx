@@ -76,7 +76,7 @@ static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
     // Wenn's weit daneben liegt, wird lcl_DrawOneFrame erst gar nicht gerufen.
 }
 
-static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
+static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const Rectangle& rInnerPixel,
                         const OUString& rTitle, const Color& rColor, bool bTextBelow,
                         double nPPTX, double nPPTY, const Fraction& rZoomY,
                         ScDocument* pDoc, ScViewData* pButtonViewData, bool bLayoutRTL )

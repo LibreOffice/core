@@ -81,6 +81,7 @@ class SwAccessibleMap;
 
 namespace vcl
 {
+    typedef OutputDevice RenderContext;
     class OldStylePrintAdaptor;
 }
 
@@ -348,9 +349,9 @@ public:
     // 1. GetRefDev:   Either the printer or the virtual device from the doc
     // 2. GetWin:      Available if we not printing
     // 3. GetOut:      Printer, Window or Virtual device
-    OutputDevice& GetRefDev() const;
+    vcl::RenderContext& GetRefDev() const;
     inline vcl::Window* GetWin()    const { return mpWin; }
-    inline OutputDevice* GetOut()     const { return mpOut; }
+    inline vcl::RenderContext* GetOut()     const { return mpOut; }
 
     void SetWin(vcl::Window* win) { mpWin = win; }
     static inline bool IsLstEndAction() { return SwViewShell::mbLstAct; }

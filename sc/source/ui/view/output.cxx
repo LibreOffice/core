@@ -780,7 +780,7 @@ namespace {
 
 static const double lclCornerRectTransparency = 40.0;
 
-void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, OutputDevice* pDev, const Rectangle& rRect)
+void drawDataBars( const ScDataBarInfo* pOldDataBarInfo, vcl::RenderContext* pDev, const Rectangle& rRect)
 {
     long nPosZero = 0;
     Rectangle aPaintRect = rRect;
@@ -856,7 +856,7 @@ BitmapEx& getIcon( ScIconSetType eType, sal_Int32 nIndex )
     return ScIconSetFormat::getBitmap( eType, nIndex );
 }
 
-void drawIconSets( const ScIconSetInfo* pOldIconSetInfo, OutputDevice* pDev, const Rectangle& rRect )
+void drawIconSets( const ScIconSetInfo* pOldIconSetInfo, vcl::RenderContext* pDev, const Rectangle& rRect )
 {
     //long nSize = 16;
     ScIconSetType eType = pOldIconSetInfo->eIconSetType;
@@ -867,7 +867,7 @@ void drawIconSets( const ScIconSetInfo* pOldIconSetInfo, OutputDevice* pDev, con
 }
 
 void drawCells(const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
-        Rectangle& rRect, long nPosX, long nSignedOneX, OutputDevice* pDev, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
+        Rectangle& rRect, long nPosX, long nSignedOneX, vcl::RenderContext* pDev, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
         const ScIconSetInfo* pIconSetInfo, const ScIconSetInfo*& pOldIconSetInfo)
 {
 
