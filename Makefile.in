@@ -297,14 +297,13 @@ ifeq ($(OS_FOR_BUILD),WNT)
 else
 	@ooinstall $(TESTINSTALLDIR)
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
-# Unzip bin/InfoPlist_*.zip files into corresponding Resources/*.lproj directories.
-	set -x; for F in $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app/Contents/bin/InfoPlist_*.zip; do \
-		bn=`basename $$F .zip`; \
-		lang=$${bn#InfoPlist_}; \
+#
+# Create Resources/*.lproj directories for languages supported by OS X
+	set -x; for lang in ca cs da de el en es fi fr hr hu id it ja ko ms nl no pl pt pt_PT ro ru sk sv th tr uk vi zh_CN zh_TW; do \
 		lproj=$(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app/Contents/Resources/$$lang.lproj; \
 		mkdir $$lproj; \
-		(cd $$lproj; unzip $$F); \
 	done
+#
 # And remove the "bin" folder which should not be there
 	rm -rf $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app/Contents/bin
 #
