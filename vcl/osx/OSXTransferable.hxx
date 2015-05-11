@@ -67,9 +67,6 @@ public:
   bool compareDataFlavors( const com::sun::star::datatransfer::DataFlavor& lhs,
                            const com::sun::star::datatransfer::DataFlavor& rhs );
 
-  bool cmpAllContentTypeParameter( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType > xLhs,
-                                   const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType > xRhs ) const;
-
 private:
   com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor > mFlavorList;
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;

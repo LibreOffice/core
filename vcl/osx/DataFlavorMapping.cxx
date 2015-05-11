@@ -531,7 +531,7 @@ const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oO
     return sysFlavor;
 }
 
-NSString* DataFlavorMapper::openOfficeImageToSystemFlavor(NSPasteboard* pPasteboard) const
+NSString* DataFlavorMapper::openOfficeImageToSystemFlavor(NSPasteboard* pPasteboard)
 {
     NSArray *supportedTypes = [NSArray arrayWithObjects: NSTIFFPboardType, nil];
     NSString *sysFlavor = [pPasteboard availableTypeFromArray:supportedTypes];
@@ -592,12 +592,12 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
   return dp;
 }
 
-DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* /*systemFlavor*/, NSArray* systemData) const
+DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* /*systemFlavor*/, NSArray* systemData)
 {
   return DataProviderPtr_t(new FileListDataProvider(systemData));
 }
 
-DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavor, NSData* systemData) const
+DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavor, NSData* systemData)
 {
   DataProviderPtr_t dp;
 
@@ -697,7 +697,7 @@ com::sun::star::uno::Sequence<com::sun::star::datatransfer::DataFlavor> DataFlav
   return flavors;
 }
 
-NSArray* DataFlavorMapper::getAllSupportedPboardTypes() const
+NSArray* DataFlavorMapper::getAllSupportedPboardTypes()
 {
   NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: SIZE_FLAVOR_MAP];
 

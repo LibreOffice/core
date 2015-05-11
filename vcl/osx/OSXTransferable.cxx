@@ -42,6 +42,40 @@ namespace // private
       return ((len > 0) && ((dtype == cppu::UnoType<Sequence<sal_Int8>>::get()) || (dtype == cppu::UnoType<OUString>::get())));
     }
 
+bool cmpAllContentTypeParameter(const Reference<XMimeContentType> xLhs,
+                                               const Reference<XMimeContentType> xRhs)
+{
+  Sequence<OUString> xLhsFlavors = xLhs->getParameters();
+  Sequence<OUString> xRhsFlavors = xRhs->getParameters();
+
+  // Stop here if the number of parameters is different already
+  if (xLhsFlavors.getLength() != xRhsFlavors.getLength())
+    return false;
+
+  try
+    {
+      OUString pLhs;
+      OUString pRhs;
+
+      for (sal_Int32 i = 0; i < xLhsFlavors.getLength(); i++)
+        {
+          pLhs = xLhs->getParameterValue(xLhsFlavors[i]);
+          pRhs = xRhs->getParameterValue(xLhsFlavors[i]);
+
+          if (!pLhs.equalsIgnoreAsciiCase(pRhs))
+            {
+              return false;
+            }
+        }
+    }
+  catch(IllegalArgumentException&)
+    {
+      return false;
+    }
+
+  return true;
+}
+
 } // namespace private
 
 OSXTransferable::OSXTransferable(const Reference<XMimeContentTypeFactory> rXMimeCntFactory,
@@ -73,19 +107,19 @@ Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
   bool bInternal(false);
   NSString* sysFormat =
       (aFlavor.MimeType.startsWith("image/png"))
-      ? mDataFlavorMapper->openOfficeImageToSystemFlavor( mPasteboard )
+      ? DataFlavorMapper::openOfficeImageToSystemFlavor( mPasteboard )
       : mDataFlavorMapper->openOfficeToSystemFlavor(aFlavor, bInternal);
   DataProviderPtr_t dp;
 
   if ([sysFormat caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
     {
       NSArray* sysData = [mPasteboard propertyListForType: sysFormat];
-      dp = mDataFlavorMapper->getDataProvider(sysFormat, sysData);
+      dp = DataFlavorMapper::getDataProvider(sysFormat, sysData);
     }
   else
     {
       NSData* sysData = [mPasteboard dataForType: sysFormat];
-      dp = mDataFlavorMapper->getDataProvider(sysFormat, sysData);
+      dp = DataFlavorMapper::getDataProvider(sysFormat, sysData);
     }
 
   if (dp.get() == NULL)
@@ -150,40 +184,6 @@ bool OSXTransferable::compareDataFlavors(const DataFlavor& lhs, const DataFlavor
     }
 
     return true;
-}
-
-bool OSXTransferable::cmpAllContentTypeParameter(const Reference<XMimeContentType> xLhs,
-                                               const Reference<XMimeContentType> xRhs) const
-{
-  Sequence<OUString> xLhsFlavors = xLhs->getParameters();
-  Sequence<OUString> xRhsFlavors = xRhs->getParameters();
-
-  // Stop here if the number of parameters is different already
-  if (xLhsFlavors.getLength() != xRhsFlavors.getLength())
-    return false;
-
-  try
-    {
-      OUString pLhs;
-      OUString pRhs;
-
-      for (sal_Int32 i = 0; i < xLhsFlavors.getLength(); i++)
-        {
-          pLhs = xLhs->getParameterValue(xLhsFlavors[i]);
-          pRhs = xRhs->getParameterValue(xLhsFlavors[i]);
-
-          if (!pLhs.equalsIgnoreAsciiCase(pRhs))
-            {
-              return false;
-            }
-        }
-    }
-  catch(IllegalArgumentException&)
-    {
-      return false;
-    }
-
-  return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -80,7 +80,7 @@ public:
      If there is no suitable mapping available NULL will
      be returned.
   */
-  NSString* openOfficeImageToSystemFlavor(NSPasteboard* pPasteboard) const;
+  static NSString* openOfficeImageToSystemFlavor(NSPasteboard* pPasteboard);
 
   /* Get a data provider which is able to provide the data 'rTransferable' offers in a format that can
      be put on to the system clipboard.
@@ -90,11 +90,11 @@ public:
 
   /* Get a data provider which is able to provide 'systemData' in the OOo expected format.
    */
-  DataProviderPtr_t getDataProvider( const NSString* systemFlavor, NSArray* systemData) const;
+  static DataProviderPtr_t getDataProvider( const NSString* systemFlavor, NSArray* systemData);
 
   /* Get a data provider which is able to provide 'systemData' in the OOo expected format.
    */
-  DataProviderPtr_t getDataProvider( const NSString* systemFlavor, NSData* systemData) const;
+  static DataProviderPtr_t getDataProvider( const NSString* systemFlavor, NSData* systemData);
 
   /* Translate a sequence of DataFlavors into a NSArray of system types.
      Only those DataFlavors for which a suitable mapping to a system
@@ -110,7 +110,7 @@ public:
 
   /* Returns an NSArray containing all pasteboard types supported by OOo
    */
-  NSArray* getAllSupportedPboardTypes() const;
+  static NSArray* getAllSupportedPboardTypes();
 
 private:
   /* Determines if the provided Mime content type is valid.

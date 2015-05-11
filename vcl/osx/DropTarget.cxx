@@ -369,7 +369,7 @@ void SAL_CALL DropTarget::initialize(const Sequence< Any >& aArguments)
     mDropTargetHelper = [[DropTargetHelper alloc] initWithDropTarget: this];
 
     [(id <DraggingDestinationHandler>)mView registerDraggingDestinationHandler:mDropTargetHelper];
-    [mView registerForDraggedTypes: mDataFlavorMapper->getAllSupportedPboardTypes()];
+    [mView registerForDraggedTypes: DataFlavorMapper::getAllSupportedPboardTypes()];
 
     id wnd = [mView window];
     NSWindow* parentWnd = [wnd parentWindow];
