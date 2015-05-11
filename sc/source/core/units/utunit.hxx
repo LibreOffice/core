@@ -119,6 +119,9 @@ public:
     }
 
     double convertValueTo(double nOriginalValue, const UtUnit& rUnit) {
+        assert(isValid());
+        assert(rUnit.isValid());
+
         // We could write our own cv_converter wrapper too, but that
         // seems unnecessary given the limited selection of
         // operations (convert float/double, either individually
