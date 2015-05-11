@@ -329,7 +329,8 @@ public:
                     css::uno::Reference<css::io::XInputStream> const& xInputStream,
                     css::uno::Reference<css::lang::XComponent> const& xDstDoc,
                     css::uno::Reference<css::frame::XFrame> const& xFrame,
-                    css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator);
+                    css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
+                    bool bIsNewDoc);
     virtual ~RTFDocumentImpl();
 
     // RTFDocument
@@ -587,6 +588,9 @@ private:
     int m_nCellxMax;
     /// ID of the next \listlevel picture.
     int m_nListPictureId;
+
+    /// New document means not pasting into an existing one.
+    bool m_bIsNewDoc;
 };
 } // namespace rtftok
 } // namespace writerfilter
