@@ -2329,7 +2329,7 @@ void SAL_CALL StarBasicAccess_Impl::addDialog
 uno::Reference< script::XStarBasicAccess > getStarBasicAccess( BasicManager* pMgr )
 {
     uno::Reference< script::XStarBasicAccess > xRet =
-        new StarBasicAccess_Impl( (BasicManager*)pMgr );
+        new StarBasicAccess_Impl( pMgr );
     return xRet;
 }
 

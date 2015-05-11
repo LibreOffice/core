@@ -580,7 +580,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     {
         return false;
     }
-    ((SbxVariable*) this)->Broadcast( SBX_HINT_DATACHANGED );
+    Broadcast( SBX_HINT_DATACHANGED );
     nHash =  MakeHashCode( maName );
     SetModified( true );
     return true;

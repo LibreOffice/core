@@ -3733,7 +3733,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                 else if( bVBAEnabled && p->GetType() == SbxOBJECT && (!p->ISA(SbxMethod) || !p->IsBroadcaster()) )
                 {
                     // Check for default method with named parameters
-                    SbxBaseRef pObj = (SbxBase*)p->GetObject();
+                    SbxBaseRef pObj = p->GetObject();
                     if( pObj && pObj->ISA(SbUnoObject) )
                     {
                         SbUnoObject* pUnoObj = static_cast<SbUnoObject*>((SbxBase*)pObj);
@@ -3859,7 +3859,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
         if ( pPar )
         {
             // is it an uno-object?
-            SbxBaseRef pObj = (SbxBase*)pElem->GetObject();
+            SbxBaseRef pObj = pElem->GetObject();
             if( pObj )
             {
                 if( pObj->ISA(SbUnoObject) )
@@ -3930,7 +3930,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             if ( pDflt )
                             {
                                 pDflt->Broadcast( SBX_HINT_DATAWANTED );
-                                SbxBaseRef pDfltObj = (SbxBase*)pDflt->GetObject();
+                                SbxBaseRef pDfltObj = pDflt->GetObject();
                                 if( pDfltObj )
                                 {
                                     if( pDfltObj->ISA(SbUnoObject) )
@@ -4384,7 +4384,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     DimImpl( refVar );
 
     // fill the array with instances of the requested class
-    SbxBaseRef xObj = (SbxBase*)refVar->GetObject();
+    SbxBaseRef xObj = refVar->GetObject();
     if( !xObj )
     {
         StarBASIC::Error( SbERR_INVALID_OBJECT );

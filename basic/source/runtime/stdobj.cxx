@@ -838,7 +838,7 @@ void SbiStdObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     bWrite = true;
                 if( t == SBX_HINT_DATAWANTED || bWrite )
                 {
-                    RtlCall p = (RtlCall) aMethods[ nCallId-1 ].pFunc;
+                    RtlCall p = aMethods[ nCallId-1 ].pFunc;
                     SbxArrayRef rPar( pPar_ );
                     if( !pPar_ )
                     {

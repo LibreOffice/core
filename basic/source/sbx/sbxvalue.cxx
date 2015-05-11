@@ -596,7 +596,7 @@ bool SbxValue::PutStringExt( const OUString& r )
     // otherwise take the original (Unicode remains)
     bool bRet;
     if( ImpConvStringExt( aStr, eTargetType ) )
-        aRes.pOUString = (OUString*)&aStr;
+        aRes.pOUString = &aStr;
     else
         aRes.pOUString = const_cast<OUString*>(&r);
 

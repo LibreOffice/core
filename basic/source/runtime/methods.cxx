@@ -2533,7 +2533,7 @@ RTLFUNC(IsObject)
     else
     {
         SbxVariable* pVar = rPar.Get(1);
-        SbxBase* pObj = (SbxBase*)pVar->GetObject();
+        SbxBase* pObj = pVar->GetObject();
 
         // #100385: GetObject can result in an error, so reset it
         SbxBase::ResetError();
