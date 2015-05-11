@@ -52,7 +52,7 @@ VCL_BUILDER_DECL_FACTORY(SvxXConnectionPreview)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new SvxXConnectionPreview(pParent, nWinStyle);
+    rRet = VclPtr<SvxXConnectionPreview>::Create(pParent, nWinStyle);
 }
 
 SvxXConnectionPreview::~SvxXConnectionPreview()

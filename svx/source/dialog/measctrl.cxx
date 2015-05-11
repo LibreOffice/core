@@ -68,7 +68,7 @@ VCL_BUILDER_DECL_FACTORY(SvxXMeasurePreview)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new SvxXMeasurePreview(pParent, nWinStyle);
+    rRet = VclPtr<SvxXMeasurePreview>::Create(pParent, nWinStyle);
 }
 
 Size SvxXMeasurePreview::GetOptimalSize() const

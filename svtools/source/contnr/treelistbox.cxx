@@ -440,7 +440,7 @@ VCL_BUILDER_DECL_FACTORY(SvTreeListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new SvTreeListBox(pParent, nWinStyle);
+    rRet = VclPtr<SvTreeListBox>::Create(pParent, nWinStyle);
 }
 
 void SvTreeListBox::Clear()

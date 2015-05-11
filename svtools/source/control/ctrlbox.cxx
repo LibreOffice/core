@@ -110,10 +110,10 @@ VCL_BUILDER_DECL_FACTORY(ColorListBox)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    ColorListBox *pListBox = new ColorListBox(pParent, nWinBits);
+    VclPtrInstance<ColorListBox> pListBox(pParent, nWinBits);
     if (bDropdown)
         pListBox->EnableAutoSize(true);
-    return pListBox;
+    rRet = pListBox;
 }
 
 ColorListBox::~ColorListBox()
@@ -742,10 +742,10 @@ VCL_BUILDER_DECL_FACTORY(LineListBox)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    LineListBox *pListBox = new LineListBox(pParent, nWinBits);
+    VclPtrInstance<LineListBox> pListBox(pParent, nWinBits);
     if (bDropdown)
         pListBox->EnableAutoSize(true);
-    return pListBox;
+    rRet = pListBox;
 }
 
 LineListBox::~LineListBox()
@@ -945,10 +945,10 @@ VCL_BUILDER_DECL_FACTORY(FontNameBox)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    FontNameBox *pListBox = new FontNameBox(pParent, nWinBits);
+    VclPtrInstance<FontNameBox> pListBox(pParent, nWinBits);
     if (bDropdown)
         pListBox->EnableAutoSize(true);
-    return pListBox;
+    rRet = pListBox;
 }
 
 FontNameBox::~FontNameBox()
@@ -1333,10 +1333,10 @@ VCL_BUILDER_DECL_FACTORY(FontStyleBox)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    FontStyleBox *pListBox = new FontStyleBox(pParent, nWinBits);
+    VclPtrInstance<FontStyleBox> pListBox(pParent, nWinBits);
     if (bDropdown)
         pListBox->EnableAutoSize(true);
-    return pListBox;
+    rRet = pListBox;
 }
 
 void FontStyleBox::Select()
@@ -1529,10 +1529,10 @@ VCL_BUILDER_DECL_FACTORY(FontSizeBox)
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    FontSizeBox* pListBox = new FontSizeBox(pParent, nWinBits);
+    VclPtrInstance<FontSizeBox> pListBox(pParent, nWinBits);
     if (bDropdown)
         pListBox->EnableAutoSize(true);
-    return pListBox;
+    rRet = pListBox;
 }
 
 void FontSizeBox::ImplInit()

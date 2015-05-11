@@ -115,7 +115,7 @@ VCL_BUILDER_DECL_FACTORY(ClientBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new ClientBox(pParent, nWinStyle);
+    rRet = VclPtr<ClientBox>::Create(pParent, nWinStyle);
 }
 
 Size ClientBox::GetOptimalSize() const

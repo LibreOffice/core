@@ -833,7 +833,7 @@ Size ExtensionBox_Impl::GetOptimalSize() const
 VCL_BUILDER_DECL_FACTORY(ExtensionBox)
 {
     (void)rMap;
-    return new ExtensionBox_Impl(pParent);
+    rRet = VclPtr<ExtensionBox_Impl>::Create(pParent);
 }
 
 long ExtensionBox_Impl::PointToPos( const Point& rPos )

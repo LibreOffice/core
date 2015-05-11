@@ -372,7 +372,7 @@ VCL_BUILDER_DECL_FACTORY(TableValueSet)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new TableValueSet(pParent, nWinStyle);
+    rRet = VclPtr<TableValueSet>::Create(pParent, nWinStyle);
 }
 
 void TableDesignWidget::updateControls()

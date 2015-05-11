@@ -195,13 +195,11 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
     SetScrollHdl( LINK( this, ExtBoxWithBtns_Impl, ScrollHdl ) );
 }
 
-
 VCL_BUILDER_DECL_FACTORY(ExtBoxWithBtns)
 {
     (void)rMap;
-    return new ExtBoxWithBtns_Impl(pParent);
+    rRet = VclPtr<ExtBoxWithBtns_Impl>::Create(pParent);
 }
-
 
 ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 {

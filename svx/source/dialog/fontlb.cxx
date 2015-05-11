@@ -95,7 +95,7 @@ VCL_BUILDER_DECL_FACTORY(SvxFontListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new SvxFontListBox(pParent, nWinStyle);
+    rRet = VclPtr<SvxFontListBox>::Create(pParent, nWinStyle);
 }
 
 void SvxFontListBox::InsertFontEntry( const OUString& rString, const vcl::Font& rFont, const Color* pColor )
