@@ -3537,7 +3537,6 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                     OUString aText;
                     aData >>= aText;
                     aNewSelection = ImpInsertText( rPaM, aText );
-                       bDone = true;
                 }
                 catch( ... )
                 {

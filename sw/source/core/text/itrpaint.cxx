@@ -515,7 +515,6 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     }
 
     const sal_Int32 nIndx = GetInfo().GetIdx();
-    long nUnderStart = 0;
     long nUnderEnd = 0;
     const size_t nCnt = aUnderMulti.GetRangeCount();
 
@@ -527,16 +526,11 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
             nUnderEnd = rRange.Max();
         else if( nIndx >= rRange.Min() )
         {
-            nUnderStart = rRange.Min();
             nUnderEnd = rRange.Max();
         }
         else
             break;
     }
-
-    // restrict start and end to current line
-    if ( GetStart() > nUnderStart )
-        nUnderStart = GetStart();
 
     if ( GetEnd() && GetEnd() <= nUnderEnd )
         nUnderEnd = GetEnd() - 1;
