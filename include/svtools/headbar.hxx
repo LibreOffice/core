@@ -271,14 +271,10 @@ private:
     using Window::ImplHitTest;
     SVT_DLLPRIVATE sal_uInt16               ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
     SVT_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
-    SVT_DLLPRIVATE void             ImplDrawItem( OutputDevice* pDev,
-                                      sal_uInt16 nPos, bool bHigh, bool bDrag,
-                                      const Rectangle& rItemRect,
-                                      const Rectangle* pRect,
-                                      sal_uLong nFlags );
-    SVT_DLLPRIVATE void             ImplDrawItem( sal_uInt16 nPos, bool bHigh = false,
-                                      bool bDrag = false,
-                                      const Rectangle* pRect = NULL );
+    SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh, bool bDrag,
+                                                 const Rectangle& rItemRect, const Rectangle* pRect, sal_uLong nFlags);
+    SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh = false,
+                                                 bool bDrag = false, const Rectangle* pRect = NULL);
     SVT_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
                                        bool bEnd = false, bool bDirect = false );
     SVT_DLLPRIVATE void             ImplStartDrag( const Point& rPos, bool bCommand );
@@ -293,7 +289,7 @@ public:
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;
     virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
