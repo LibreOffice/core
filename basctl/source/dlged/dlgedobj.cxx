@@ -1347,7 +1347,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 
     bool bAdjustedPageSize = rEditor.AdjustPageSize();
     SetRectFromProps();
-    std::vector<DlgEdObj*> const& aChildList = ((DlgEdForm*)this)->GetChildren();
+    std::vector<DlgEdObj*> const& aChildList = GetChildren();
     std::vector<DlgEdObj*>::const_iterator aIter;
 
     if ( bAdjustedPageSize )
