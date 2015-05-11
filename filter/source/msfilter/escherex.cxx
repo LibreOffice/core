@@ -2151,8 +2151,8 @@ bool EscherPropertyContainer::CreatePolygonProperties(
             AddOpt( ESCHER_Prop_geoBottom, rGeoRect.Height );
 
             AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-            AddOpt( ESCHER_Prop_pVertices, true, nVerticesBufSize - 6, (sal_uInt8*)pVerticesBuf, nVerticesBufSize );
-            AddOpt( ESCHER_Prop_pSegmentInfo, true, nSegmentBufSize, (sal_uInt8*)pSegmentBuf, nSegmentBufSize );
+            AddOpt( ESCHER_Prop_pVertices, true, nVerticesBufSize - 6, pVerticesBuf, nVerticesBufSize );
+            AddOpt( ESCHER_Prop_pSegmentInfo, true, nSegmentBufSize, pSegmentBuf, nSegmentBufSize );
         }
     }
     return bRetValue;

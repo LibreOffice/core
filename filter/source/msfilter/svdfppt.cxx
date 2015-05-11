@@ -444,7 +444,7 @@ SvStream& ReadPptFontEntityAtom( SvStream& rIn, PptFontEntityAtom& rAtom )
 #endif
     }
     rAtom.aName = OUString(cData, i);
-    OutputDevice* pDev = (OutputDevice*)Application::GetDefaultDevice();
+    OutputDevice* pDev = Application::GetDefaultDevice();
     rAtom.bAvailable = pDev->IsFontAvailable( rAtom.aName );
     aHd.SeekToEndOfRecord( rIn );
     return rIn;
@@ -1048,7 +1048,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     pTObj->SetModel( pSdrModel );
                     SfxItemSet aSet( pSdrModel->GetItemPool() );
                     if ( !pRet )
-                        ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, rObjData );
+                        ApplyAttributes( rSt, aSet, rObjData );
                     pTObj->SetMergedItemSet( aSet );
                     if ( pRet )
                     {
