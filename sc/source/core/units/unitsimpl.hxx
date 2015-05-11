@@ -58,6 +58,17 @@ struct UnitsResult {
     boost::optional<UtUnit> units;
 };
 
+struct HeaderUnitDescriptor {
+    bool valid;
+    UtUnit unit;
+    boost::optional< ScAddress > address;
+    // This must be the unit string copied verbatim from the header
+    // (i.e. including spaces)
+    OUString unitString;
+    // Position of unitString within the cell contents
+    sal_Int32 unitStringPosition;
+};
+
 class UnitsImpl: public Units {
     friend class test::UnitsTest;
 
@@ -103,9 +114,9 @@ private:
      * Find and extract a Unit in the standard header notation,
      * i.e. a unit enclose within square brackets (e.g. "length [cm]".
      *
-     * @return true if such a unit is found.
+     * @return The HeaderUnitDescriptor, with valid set to true if a unit was found.
      */
-    bool findUnitInStandardHeader(const OUString& rHeader, UtUnit& aUnit, OUString& sUnitString);
+    HeaderUnitDescriptor findUnitInStandardHeader(const OUString& rHeader);
     /**
      * Find and extract a freestanding Unit from a header string.
      * This includes strings such as "speed m/s", "speed m / s",
@@ -117,11 +128,11 @@ private:
      * more permutations of the same unit, but this should at least cover the most
      * obvious cases.
      *
-     * @ return true if a unit is found.
+     * @ return The HeaderUnitDescriptor, with valid set to true if a unit was found.
      */
-    bool findFreestandingUnitInHeader(const OUString& rHeader, UtUnit& aUnit, OUString& sUnitString);
+    HeaderUnitDescriptor findFreestandingUnitInHeader(const OUString& rHeader);
 
-    bool extractUnitFromHeaderString(const OUString& rHeader, UtUnit& aUnit, OUString& sUnitString);
+    HeaderUnitDescriptor extractUnitFromHeaderString(const OUString& rHeader);
 
     static OUString extractUnitStringFromFormat(const OUString& rFormatString);
     static OUString extractUnitStringForCell(const ScAddress& rAddress, ScDocument* pDoc);
@@ -142,10 +153,8 @@ private:
      * that there is a valid unit), but we might also need the original
      * String (which can't necessarily be regenerated from the UtUnit).
      */
-    UtUnit findHeaderUnitForCell(const ScAddress& rCellAddress,
-                                 ScDocument* pDoc,
-                                 OUString& rsHeaderUnitString,
-                                 ScAddress& rHeaderAddress);
+    HeaderUnitDescriptor findHeaderUnitForCell(const ScAddress& rCellAddress,
+                                               ScDocument* pDoc);
 };
 
 }} // namespace sc::units
