@@ -2297,8 +2297,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         //  Abfrage auf Undo schon oben
 
-        ScStyleSheetPool* pStylePool = (ScStyleSheetPool*)
-                                       (pViewData->GetDocument()->
+        ScStyleSheetPool* pStylePool = (pViewData->GetDocument()->
                                             GetStyleSheetPool());
         if ( pStylePool )
         {

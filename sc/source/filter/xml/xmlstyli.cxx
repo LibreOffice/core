@@ -478,7 +478,7 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
         IsXMLToken(rLocalName, XML_TABLE_CELL_PROPERTIES ) )
     {
         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
-            ((SvXMLStylesContext *)GetStyles())->GetImportPropertyMapper(
+            GetStyles()->GetImportPropertyMapper(
                 GetFamily() );
         if( xImpPrMap.is() )
             pContext = new XMLTableCellPropsContext( GetImport(), nPrefix,

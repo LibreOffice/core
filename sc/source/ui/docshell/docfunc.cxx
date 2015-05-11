@@ -3840,7 +3840,7 @@ bool ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, b
 
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( &rDoc, nStartTab, nEndTab );
-        rDoc.CopyToDocument( aMarkRange, IDF_ATTRIB, true, pUndoDoc, (ScMarkData*)&aMultiMark );
+        rDoc.CopyToDocument( aMarkRange, IDF_ATTRIB, true, pUndoDoc, &aMultiMark );
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoClearItems( &rDocShell, aMultiMark, pUndoDoc, pWhich ) );

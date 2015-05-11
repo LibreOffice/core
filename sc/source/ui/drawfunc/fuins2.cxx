@@ -401,7 +401,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
                 }
                 else
                 {
-                    pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
+                    pViewShell->ActivateObject( pObj, SVVERB_SHOW );
                 }
             }
 
@@ -645,7 +645,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
         //the controller will be unlocked by the dialog when the dialog is told to do so
 
         // only activate object if not called via API (e.g. macro)
-        pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
+        pViewShell->ActivateObject( pObj, SVVERB_SHOW );
 
         //open wizard
         //@todo get context from calc if that has one
@@ -805,7 +805,7 @@ FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Wind
     pView->UnmarkAllObj();
     pView->MarkObj( pObj, pPV );
 
-    pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
+    pViewShell->ActivateObject( pObj, SVVERB_SHOW );
 }
 
 void FuInsertChartFromFile::Activate()

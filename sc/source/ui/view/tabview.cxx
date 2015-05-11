@@ -1935,7 +1935,7 @@ sal_uInt16 ScTabView::GetLockedModifiers() const
 Point ScTabView::GetMousePosPixel()
 {
     Point aPos;
-    ScGridWindow* pWin = (ScGridWindow*)GetActiveWin();
+    ScGridWindow* pWin = GetActiveWin();
 
     if ( pWin )
         aPos = pWin->GetMousePosPixel();

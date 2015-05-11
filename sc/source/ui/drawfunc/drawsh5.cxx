@@ -465,7 +465,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 if( pItem )
                 {
                     SfxItemSet aSet( GetPool(), EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
-                    bool bValue = ( (const SfxBoolItem*) pItem)->GetValue();
+                    bool bValue = pItem->GetValue();
                     aSet.Put( SfxBoolItem( EE_PARA_HYPHENATE, bValue ) );
                     pView->SetAttributes( aSet );
                 }
