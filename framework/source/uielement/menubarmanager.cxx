@@ -1792,7 +1792,7 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
         sal_uInt16          nId = 1;
 
         // Fill menu bar with container contents
-        FillMenuWithConfiguration( nId, (Menu *)m_pVCLMenu, m_aModuleIdentifier, rItemContainer, m_xURLTransformer );
+        FillMenuWithConfiguration( nId, m_pVCLMenu, m_aModuleIdentifier, rItemContainer, m_xURLTransformer );
 
         // Refill menu manager again
         Reference< XDispatchProvider > xDispatchProvider;
