@@ -59,9 +59,6 @@ public:
 
     /** Returns the 32-bit signed integer value from the passed string (hexadecimal). */
     static sal_Int32    decodeIntegerHex( const OUString& rValue );
-
-    /** Returns the 32-bit unsigned integer value from the passed string (hexadecimal). */
-    static sal_uInt32    decodeUnsignedHex( const OUString& rValue );
 };
 
 

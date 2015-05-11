@@ -105,11 +105,6 @@ sal_Int32 AttributeConversion::decodeIntegerHex( const OUString& rValue )
         // cast, but that will have a ripple effect
 }
 
-sal_uInt32 AttributeConversion::decodeUnsignedHex( const OUString& rValue )
-{
-    return rValue.toUInt32( 16 );
-}
-
 AttributeList::AttributeList( const Reference< XFastAttributeList >& rxAttribs ) :
     mxAttribs( rxAttribs ),
     mpAttribList( NULL )
