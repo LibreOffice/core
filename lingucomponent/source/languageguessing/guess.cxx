@@ -61,9 +61,9 @@ Guess::Guess(const char * guess_str)
     string enc;
 
     //if the guess is not like "UNKNOWN" or "SHORT", go into the brackets
-    if(strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_UNKNOWN_STR) != 0
+    if(strcmp(guess_str + 1, TEXTCAT_RESULT_UNKNOWN_STR) != 0
        &&
-       strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_SHORT_STR) != 0)
+       strcmp(guess_str + 1, TEXTCAT_RESULT_SHORT_STR) != 0)
     {
 
         int current_pointer = 0;
