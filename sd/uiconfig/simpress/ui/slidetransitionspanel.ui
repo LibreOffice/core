@@ -29,7 +29,7 @@
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkTreeView" id="transitions_list">
+                  <object class="GtkTreeView" id="transitions_list:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="vexpand">True</property>
