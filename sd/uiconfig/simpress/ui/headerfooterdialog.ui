@@ -73,6 +73,7 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">3</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
