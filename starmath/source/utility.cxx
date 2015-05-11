@@ -19,6 +19,7 @@
 
 #include <sfx2/app.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/builderfactory.hxx>
 #include <tools/tenccvt.hxx>
 #include <osl/thread.h>
 
@@ -147,10 +148,7 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 
 /**************************************************************************/
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmFontPickListBox(vcl::Window* pParent, VclBuilder::stringmap &)
-{
-    return new SmFontPickListBox(pParent, WB_DROPDOWN);
-}
+VCL_BUILDER_FACTORY_ARGS(SmFontPickListBox, WB_DROPDOWN)
 
 SmFontPickListBox::SmFontPickListBox (vcl::Window* pParent, WinBits nBits) :
     SmFontPickList(4),

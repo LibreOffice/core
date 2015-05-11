@@ -18,7 +18,7 @@
  */
 
 #include <tools/debug.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
@@ -103,7 +103,7 @@ ValueSet::ValueSet( vcl::Window* pParent, WinBits nWinStyle, bool bDisableTransi
     mbIsTransientChildrenDisabled = bDisableTransientChildren;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeValueSet(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ValueSet)
 {
     WinBits nWinBits = WB_TABSTOP;
 

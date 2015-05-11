@@ -29,6 +29,7 @@
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/DeploymentException.hpp"
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include "glob.hrc"
 
@@ -108,7 +109,7 @@ ClientBox::ClientBox( vcl::Window* pParent, WinBits nStyle ) :
     Show();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeClientBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ClientBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

@@ -23,7 +23,7 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/treelistentry.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include "svtaccessiblefactory.hxx"
@@ -98,8 +98,7 @@ SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     SetHighlightRange();    // select full width
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvTabListBox(vcl::Window *pParent,
-    VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvTabListBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

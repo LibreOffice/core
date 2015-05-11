@@ -21,7 +21,7 @@
 #include <svtools/simptabl.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -42,11 +42,8 @@ void SvSimpleTableContainer::dispose()
     Control::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvSimpleTableContainer(vcl::Window *pParent,
-    VclBuilder::stringmap &)
-{
-    return new SvSimpleTableContainer(pParent, WB_TABSTOP | WB_DIALOGCONTROL | WB_BORDER);
-}
+VCL_BUILDER_FACTORY_ARGS(SvSimpleTableContainer,
+                         WB_TABSTOP | WB_DIALOGCONTROL | WB_BORDER)
 
 void SvSimpleTableContainer::SetTable(SvSimpleTable* pTable)
 {

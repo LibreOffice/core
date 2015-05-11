@@ -10,17 +10,14 @@
 #include "templatesearchview.hxx"
 #include "templatesearchviewitem.hxx"
 
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 TemplateSearchView::TemplateSearchView (vcl::Window *pParent, WinBits nWinStyle)
     : ThumbnailView(pParent,nWinStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTemplateSearchView(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new TemplateSearchView(pParent);
-}
+VCL_BUILDER_FACTORY(TemplateSearchView)
 
 void TemplateSearchView::setOpenTemplateHdl(const Link<> &rLink)
 {

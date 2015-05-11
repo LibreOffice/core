@@ -16,7 +16,7 @@
 #include <svl/inettype.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/pngread.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -38,10 +38,7 @@ TemplateLocalView::TemplateLocalView ( vcl::Window* pParent)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTemplateLocalView(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new TemplateLocalView(pParent);
-}
+VCL_BUILDER_FACTORY(TemplateLocalView)
 
 TemplateLocalView::~TemplateLocalView()
 {

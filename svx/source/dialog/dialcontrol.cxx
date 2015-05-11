@@ -28,7 +28,7 @@
 #include <vcl/field.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 namespace svx {
 
@@ -267,10 +267,7 @@ DialControl::DialControl( vcl::Window* pParent, WinBits nBits ) :
     Init( GetOutputSizePixel() );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDialControl(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new DialControl(pParent, WB_TABSTOP);
-}
+VCL_BUILDER_FACTORY_ARGS(DialControl, WB_TABSTOP)
 
 void DialControl::Resize()
 {

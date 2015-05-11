@@ -41,6 +41,7 @@
 #include "sdpage.hxx"
 #include "sfx2/viewfrm.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/builderfactory.hxx>
 
 using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::animations::XAnimationNode;
@@ -61,7 +62,7 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
     updateViewSettings();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSdDocPreviewWin(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SdDocPreviewWin)
 {
     WinBits nWinStyle = 0;
 

@@ -16,7 +16,7 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -54,8 +54,9 @@ TemplateRemoteView::TemplateRemoteView (vcl::Window *pParent, WinBits nWinStyle,
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTemplateRemoteView(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(TemplateRemoteView)
 {
+    (void)rMap;
     return new TemplateRemoteView(pParent, WB_VSCROLL, false);
 }
 

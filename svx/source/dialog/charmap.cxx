@@ -21,6 +21,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <rtl/textenc.h>
@@ -82,12 +83,7 @@ void SvxShowCharSet::Resize()
     SetFont(GetFont()); //force recalculation of correct fontsize
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxShowCharSet(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxShowCharSet(pParent);
-}
-
-
+VCL_BUILDER_FACTORY(SvxShowCharSet)
 
 void SvxShowCharSet::GetFocus()
 {

@@ -28,7 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <sot/formats.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -434,7 +434,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, const ResId& rResId) :
     SetSublistOpenWithLeftRight();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvTreeListBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

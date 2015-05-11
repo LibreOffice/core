@@ -9,13 +9,10 @@
 
 #include <sfx2/templatedefaultview.hxx>
 #include <sfx2/thumbnailview.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <sfx2/app.hxx>
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTemplateDefaultView(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new TemplateDefaultView(pParent);
-}
+VCL_BUILDER_FACTORY(TemplateDefaultView)
 
 TemplateDefaultView::TemplateDefaultView( Window* pParent)
     : TemplateLocalView(pParent)

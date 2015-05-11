@@ -32,6 +32,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
@@ -65,10 +66,7 @@ void ODocumentInfoPreview::dispose()
     Window::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeODocumentInfoPreview(vcl::Window *pParent, VclBuilder::stringmap&)
-{
-    return new ODocumentInfoPreview(pParent, WB_BORDER | WB_READONLY);
-}
+VCL_BUILDER_FACTORY_ARGS(ODocumentInfoPreview, WB_BORDER | WB_READONLY)
 
 void ODocumentInfoPreview::Resize() {
     m_pEditWin->SetPosSizePixel(Point(0, 0), GetOutputSize());

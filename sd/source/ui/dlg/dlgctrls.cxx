@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include "strings.hrc"
 #include "dlgctrls.hxx"
@@ -72,7 +72,7 @@ void FadeEffectLB::Fill()
     SelectEntryPos(0);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFadeEffectLB(vcl::Window* pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(FadeEffectLB)
 {
     WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
 
