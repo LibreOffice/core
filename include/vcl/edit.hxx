@@ -138,7 +138,8 @@ protected:
     SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, bool bPaint = true );
     SAL_DLLPRIVATE int         ImplGetNativeControlType() const;
-    SAL_DLLPRIVATE long        ImplGetExtraOffset() const;
+    SAL_DLLPRIVATE long        ImplGetExtraXOffset() const;
+    SAL_DLLPRIVATE long        ImplGetExtraYOffset() const;
     static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( vcl::Window* pWin );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;

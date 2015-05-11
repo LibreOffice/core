@@ -1041,7 +1041,7 @@ Size ComboBox::CalcMinimumSize() const
         Size(0xFFFF, 0xFFFF), Size(0xFFFF, 0xFFFF)));
     aSz.Width() += aBounds.aSubEditPos.X()*2;
 
-    aSz.Width() += ImplGetExtraOffset() * 2;
+    aSz.Width() += ImplGetExtraXOffset() * 2;
 
     aSz = CalcWindowSize( aSz );
     return aSz;
@@ -1106,7 +1106,7 @@ Size ComboBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
             aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
     }
 
-    aSz.Width() += ImplGetExtraOffset() * 2;
+    aSz.Width() += ImplGetExtraXOffset() * 2;
 
     aSz = CalcWindowSize( aSz );
     return aSz;

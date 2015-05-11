@@ -436,7 +436,7 @@ void Edit::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
     }
 }
 
-long Edit::ImplGetExtraOffset() const
+long Edit::ImplGetExtraXOffset() const
 {
     // MT 09/2002: nExtraOffsetX should become a member, instead of checking every time,
     // but I need an incompatible update for this...
@@ -445,6 +445,18 @@ long Edit::ImplGetExtraOffset() const
     if( ( GetStyle() & WB_BORDER ) || ( mbIsSubEdit && ( GetParent()->GetStyle() & WB_BORDER ) ) )
         nExtraOffset = 2;
 
+    return nExtraOffset;
+}
+
+long Edit::ImplGetExtraYOffset() const
+{
+    long nExtraOffset = 0;
+    int eCtrlType = ImplGetNativeControlType();
+    if (eCtrlType != CTRL_EDITBOX_NOBORDER)
+    {
+        // add some space between text entry and border
+        nExtraOffset = 2;
+    }
     return nExtraOffset;
 }
 
@@ -481,9 +493,9 @@ void Edit::ImplInvalidateOrRepaint()
 long Edit::ImplGetTextYPosition() const
 {
     if ( GetStyle() & WB_TOP )
-        return ImplGetExtraOffset();
+        return ImplGetExtraXOffset();
     else if ( GetStyle() & WB_BOTTOM )
-        return GetOutputSizePixel().Height() - GetTextHeight() - ImplGetExtraOffset();
+        return GetOutputSizePixel().Height() - GetTextHeight() - ImplGetExtraXOffset();
     return ( GetOutputSizePixel().Height() - GetTextHeight() ) / 2;
 }
 
@@ -515,7 +527,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
 
     if (bLayout)
     {
-        aPos.X() = mnXOffset + ImplGetExtraOffset();
+        aPos.X() = mnXOffset + ImplGetExtraXOffset();
 
         MetricVector* pVector = &mpControlData->mpLayoutData->m_aUnicodeBoundRects;
         OUString* pDisplayText = &mpControlData->mpLayoutData->m_aDisplayText;
@@ -560,7 +572,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
 
     bool bDrawSelection = maSelection.Len() && (HasFocus() || (GetStyle() & WB_NOHIDESELECTION) || mbActivePopup);
 
-    aPos.X() = mnXOffset + ImplGetExtraOffset();
+    aPos.X() = mnXOffset + ImplGetExtraXOffset();
     if (bPaintPlaceholderText)
     {
         rRenderContext.DrawText(aPos, maPlaceholderText);
@@ -583,8 +595,8 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
         for(i = 0; i < aText.getLength(); i++)
         {
             Rectangle aRect(aPos, Size(10, nTH));
-            aRect.Left() = pDX[2 * i] + mnXOffset + ImplGetExtraOffset();
-            aRect.Right() = pDX[2 * i + 1] + mnXOffset + ImplGetExtraOffset();
+            aRect.Left() = pDX[2 * i] + mnXOffset + ImplGetExtraXOffset();
+            aRect.Right() = pDX[2 * i + 1] + mnXOffset + ImplGetExtraXOffset();
             aRect.Justify();
             bool bHighlight = false;
             if (i >= aTmpSel.Min() && i < aTmpSel.Max())
@@ -661,8 +673,8 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
                     while (nIndex < mpIMEInfos->nLen && mpIMEInfos->pAttribs[nIndex] == nAttr)  // #112631# check nIndex before using it
                     {
                         Rectangle aRect( aPos, Size( 10, nTH ) );
-                        aRect.Left() = pDX[2 * (nIndex + mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraOffset();
-                        aRect.Right() = pDX[2 * (nIndex + mpIMEInfos->nPos) + 1] + mnXOffset + ImplGetExtraOffset();
+                        aRect.Left() = pDX[2 * (nIndex + mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset();
+                        aRect.Right() = pDX[2 * (nIndex + mpIMEInfos->nPos) + 1] + mnXOffset + ImplGetExtraXOffset();
                         aRect.Justify();
                         aClip.Union(aRect);
                         nIndex++;
@@ -1120,7 +1132,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
     long nCursorWidth = 0;
     if ( !mbInsertMode && !maSelection.Len() && (maSelection.Max() < aText.getLength()) )
         nCursorWidth = GetTextWidth(aText, maSelection.Max(), 1);
-    long nCursorPosX = nTextPos + mnXOffset + ImplGetExtraOffset();
+    long nCursorPosX = nTextPos + mnXOffset + ImplGetExtraXOffset();
 
     // cursor should land in visible area
     const Size aOutSize = GetOutputSizePixel();
@@ -1138,18 +1150,18 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
         }
         else
         {
-            mnXOffset = (aOutSize.Width()-ImplGetExtraOffset()) - nTextPos;
+            mnXOffset = (aOutSize.Width()-ImplGetExtraXOffset()) - nTextPos;
             // Etwas mehr?
-            if ( (aOutSize.Width()-ImplGetExtraOffset()) < nTextPos )
+            if ( (aOutSize.Width()-ImplGetExtraXOffset()) < nTextPos )
             {
-                long nMaxNegX = (aOutSize.Width()-ImplGetExtraOffset()) - GetTextWidth( aText );
+                long nMaxNegX = (aOutSize.Width()-ImplGetExtraXOffset()) - GetTextWidth( aText );
                 mnXOffset -= aOutSize.Width() / 5;
                 if ( mnXOffset < nMaxNegX )  // beides negativ...
                     mnXOffset = nMaxNegX;
             }
         }
 
-        nCursorPosX = nTextPos + mnXOffset + ImplGetExtraOffset();
+        nCursorPosX = nTextPos + mnXOffset + ImplGetExtraXOffset();
         if ( nCursorPosX == aOutSize.Width() )  // dann nicht sichtbar...
             nCursorPosX--;
 
@@ -1177,7 +1189,7 @@ void Edit::ImplAlign()
     }
     else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
-        long nMinXOffset = nOutWidth - nTextWidth - 1 - ImplGetExtraOffset();
+        long nMinXOffset = nOutWidth - nTextWidth - 1 - ImplGetExtraXOffset();
         bool bRTL = IsRTLEnabled();
         if( mbIsSubEdit && GetParent() )
             bRTL = GetParent()->IsRTLEnabled();
@@ -1223,7 +1235,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     }
 
     GetCaretPositions( aText, pDX, 0, aText.getLength() );
-    long nX = rWindowPos.X() - mnXOffset - ImplGetExtraOffset();
+    long nX = rWindowPos.X() - mnXOffset - ImplGetExtraXOffset();
     for( sal_Int32 i = 0; i < aText.getLength(); i++ )
     {
         if( (pDX[2*i] >= nX && pDX[2*i+1] <= nX) ||
@@ -2199,7 +2211,7 @@ void Edit::Command( const CommandEvent& rCEvt )
             for ( int nIndex = 0; nIndex < mpIMEInfos->nLen; ++nIndex )
             {
                 Rectangle aRect( aPos, Size( 10, nTH ) );
-                aRect.Left() = pDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraOffset();
+                aRect.Left() = pDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset();
                 aRects[ nIndex ] = aRect;
             }
             SetCompositionCharRect( aRects.get(), mpIMEInfos->nLen );
@@ -2746,7 +2758,7 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
 
         aSize.Height() = nTextHeight;
         aSize.Width() = GetTextWidth(aString);
-        aSize.Width() += ImplGetExtraOffset() * 2;
+        aSize.Width() += ImplGetExtraXOffset() * 2;
 
         // do not create edit fields in which one cannot enter anything
         // a default minimum width should exist for at least 3 characters
@@ -2758,11 +2770,7 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
             aSize.Width() = aMinSize.Width();
     }
 
-    if (eCtrlType != CTRL_EDITBOX_NOBORDER)
-    {
-        // add some space between text entry and border
-        aSize.Height() += 4;
-    }
+    aSize.Height() += ImplGetExtraYOffset() * 2;
 
     aSize = CalcWindowSize( aSize );
 
@@ -2804,7 +2812,7 @@ Size Edit::CalcSize(sal_Int32 nChars) const
     // works only correct for fixed fonts, average otherwise
     Size aSz( GetTextWidth( OUString('x') ), GetTextHeight() );
     aSz.Width() *= nChars;
-    aSz.Width() += ImplGetExtraOffset() * 2;
+    aSz.Width() += ImplGetExtraXOffset() * 2;
     aSz = CalcWindowSize( aSz );
     return aSz;
 }
