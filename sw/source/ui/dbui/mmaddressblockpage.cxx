@@ -1293,7 +1293,7 @@ VCL_BUILDER_DECL_FACTORY(DDListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new DDListBox(pParent, nWinStyle);
+    rRet = VclPtr<DDListBox>::Create(pParent, nWinStyle);
 }
 
 void DDListBox::SetAddressDialog(SwCustomizeAddressBlockDialog *pParent)
@@ -1355,7 +1355,7 @@ VCL_BUILDER_DECL_FACTORY(AddressMultiLineEdit)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new AddressMultiLineEdit(pParent, nWinStyle);
+    rRet = VclPtr<AddressMultiLineEdit>::Create(pParent, nWinStyle);
 }
 
 void AddressMultiLineEdit::SetAddressDialog(SwCustomizeAddressBlockDialog *pParent)

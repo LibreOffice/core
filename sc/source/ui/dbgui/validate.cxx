@@ -940,7 +940,7 @@ bool ScValidationDlg::RemoveRefDlg( bool bRestoreModal /* = true */ )
 VCL_BUILDER_DECL_FACTORY(ScRefButtonEx)
 {
     (void)rMap;
-    return new ScTPValidationValue::ScRefButtonEx(pParent, 0);
+    rRet = VclPtr<ScTPValidationValue::ScRefButtonEx>::Create(pParent, 0);
 }
 
 void ScTPValidationValue::ScRefButtonEx::Click()

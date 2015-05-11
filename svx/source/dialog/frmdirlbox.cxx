@@ -45,9 +45,9 @@ FrameDirectionListBox::FrameDirectionListBox( vcl::Window* pParent, WinBits nBit
 VCL_BUILDER_DECL_FACTORY(FrameDirectionListBox)
 {
     (void)rMap;
-    FrameDirectionListBox* pListBox = new FrameDirectionListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
+    VclPtrInstance<FrameDirectionListBox> pListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
     pListBox->EnableAutoSize(true);
-    return pListBox;
+    rRet = pListBox;
 }
 
 void FrameDirectionListBox::InsertEntryValue( const OUString& rString, SvxFrameDirection eDirection, sal_Int32 nPos )

@@ -90,7 +90,7 @@ VCL_BUILDER_DECL_FACTORY(SvxHlmarkTreeLBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new SvxHlmarkTreeLBox(pParent, nWinStyle);
+    rRet = VclPtr<SvxHlmarkTreeLBox>::Create(pParent, nWinStyle);
 }
 
 Size SvxHlmarkTreeLBox::GetOptimalSize() const

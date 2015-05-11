@@ -81,7 +81,7 @@ VCL_BUILDER_DECL_FACTORY(FadeEffectLB)
     if (bDropdown)
         nBits |= WB_DROPDOWN;
 
-    return new FadeEffectLB(pParent, nBits);
+    rRet = VclPtr<FadeEffectLB>::Create(pParent, nBits);
 }
 
 void FadeEffectLB::applySelected( SdPage* pSlide ) const

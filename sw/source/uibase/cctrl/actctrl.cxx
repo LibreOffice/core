@@ -65,7 +65,7 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
 VCL_BUILDER_DECL_FACTORY(ReturnActionEdit)
 {
     VclBuilder::ensureDefaultWidthChars(rMap);
-    return new ReturnActionEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
+    rRet = VclPtr<ReturnActionEdit>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -796,7 +796,7 @@ VCL_BUILDER_DECL_FACTORY(SvxCropExample)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new SvxCropExample(pParent, nWinStyle);
+    rRet = VclPtr<SvxCropExample>::Create(pParent, nWinStyle);
 }
 
 void SvxCropExample::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )

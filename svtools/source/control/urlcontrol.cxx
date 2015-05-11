@@ -36,9 +36,9 @@ namespace svt
         (void)rMap;
         WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
                            WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
-        OFileURLControl* pListBox = new OFileURLControl(pParent, nWinBits);
+        VclPtrInstance<OFileURLControl> pListBox(pParent, nWinBits);
         pListBox->EnableAutoSize(true);
-        return pListBox;
+        rRet = pListBox;
     }
 
     bool OFileURLControl::PreNotify( NotifyEvent& _rNEvt )

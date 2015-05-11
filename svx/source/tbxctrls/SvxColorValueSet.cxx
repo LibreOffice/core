@@ -37,7 +37,7 @@ VCL_BUILDER_DECL_FACTORY(SvxColorValueSet)
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 
-    return new SvxColorValueSet(pParent, nWinBits);
+    rRet = VclPtr<SvxColorValueSet>::Create(pParent, nWinBits);
 }
 
 sal_uInt32 SvxColorValueSet::getMaxRowCount()

@@ -661,7 +661,7 @@ VCL_BUILDER_DECL_FACTORY(SfxAccCfgTabListBox)
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 
-    return new SfxAccCfgTabListBox_Impl(pParent, nWinBits);
+    rRet = VclPtr<SfxAccCfgTabListBox_Impl>::Create(pParent, nWinBits);
 }
 
 void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,

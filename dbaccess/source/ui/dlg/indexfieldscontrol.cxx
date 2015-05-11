@@ -106,7 +106,7 @@ namespace dbaui
     VCL_BUILDER_DECL_FACTORY(DbaIndexFieldsControl)
     {
         (void)rMap;
-        return new IndexFieldsControl (pParent, WB_BORDER | WB_NOTABSTOP);
+        rRet = VclPtr<IndexFieldsControl>::Create(pParent, WB_BORDER | WB_NOTABSTOP);
     }
 
     IndexFieldsControl::~IndexFieldsControl()

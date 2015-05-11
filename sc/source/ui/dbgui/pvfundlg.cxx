@@ -163,7 +163,7 @@ VCL_BUILDER_DECL_FACTORY(ScDPFunctionListBox)
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    return new ScDPFunctionListBox(pParent, nWinStyle);
+    rRet = VclPtr<ScDPFunctionListBox>::Create(pParent, nWinStyle);
 }
 
 void ScDPFunctionListBox::SetSelection( sal_uInt16 nFuncMask )

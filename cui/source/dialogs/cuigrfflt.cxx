@@ -45,15 +45,13 @@ VCL_BUILDER_DECL_FACTORY(GraphicPreviewWindow)
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 
-    return new GraphicPreviewWindow(pParent, nWinBits);
+    rRet = VclPtr<GraphicPreviewWindow>::Create(pParent, nWinBits);
 }
 
 Size GraphicPreviewWindow::GetOptimalSize() const
 {
     return LogicToPixel(Size(81, 73), MAP_APPFONT);
 }
-
-
 
 void GraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {

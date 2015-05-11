@@ -219,7 +219,7 @@ BackgroundPreviewImpl::BackgroundPreviewImpl(vcl::Window* pParent)
 VCL_BUILDER_DECL_FACTORY(BackgroundPreview)
 {
     (void)rMap;
-    return new BackgroundPreviewImpl(pParent);
+    rRet = VclPtr<BackgroundPreviewImpl>::Create(pParent);
 }
 
 void BackgroundPreviewImpl::setBmp(bool bBmp)

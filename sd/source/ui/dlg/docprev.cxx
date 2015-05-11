@@ -70,7 +70,7 @@ VCL_BUILDER_DECL_FACTORY(SdDocPreviewWin)
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
 
-    return new SdDocPreviewWin(pParent, nWinStyle);
+    rRet = VclPtr<SdDocPreviewWin>::Create(pParent, nWinStyle);
 }
 
 SdDocPreviewWin::SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle )

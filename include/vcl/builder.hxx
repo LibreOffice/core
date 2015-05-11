@@ -46,8 +46,8 @@ class VCL_DLLPUBLIC VclBuilder
 {
 public:
     typedef std::map<OString, OString> stringmap;
-    /// These functions return a vcl::Window with a reference count of one.
-    typedef vcl::Window* (*customMakeWidget)(vcl::Window *pParent, stringmap &rVec);
+    /// These functions create a new widget with parent @pParent and return it in @rRet
+    typedef void (*customMakeWidget)(VclPtr<vcl::Window> &rRet, VclPtr<vcl::Window> &pParent, stringmap &rVec);
 
 public:
                     VclBuilder(
