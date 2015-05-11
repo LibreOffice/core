@@ -1662,39 +1662,90 @@ void ChartExport::exportDoughnutChart( Reference< chart2::XChartType > xChartTyp
     pFS->endElement( FSNS( XML_c, XML_doughnutChart ) );
 }
 
+namespace {
+
+std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(Reference< chart2::XChartType > xChartType)
+{
+    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitSeries;
+    std::map<sal_Int32, size_t> aMapAxisToIndex;
+
+    Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
+    if(xDSCnt.is())
+    {
+        Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
+        for (sal_Int32 nIndex = 0, nEnd = aSeriesSeq.getLength(); nIndex < nEnd; ++nIndex)
+        {
+            uno::Reference<chart2::XDataSeries> xSeries = aSeriesSeq[nIndex];
+            Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY);
+            if (!xPropSet.is())
+                continue;
+
+            sal_Int32 nAxisIndex = -1;
+            uno::Any aAny = xPropSet->getPropertyValue("AttachedAxisIndex");
+            aAny >>= nAxisIndex;
+            size_t nVectorPos = 0;
+
+            auto it = aMapAxisToIndex.find(nAxisIndex);
+            if (it == aMapAxisToIndex.end())
+            {
+                aSplitSeries.push_back(Sequence<Reference<chart2::XDataSeries> >());
+                nVectorPos = aSplitSeries.size() - 1;
+                aMapAxisToIndex.insert(std::pair<sal_Int32, size_t>(nAxisIndex, nVectorPos));
+            }
+
+            uno::Sequence<Reference<chart2::XDataSeries> >& rAxisSeriesSeq = aSplitSeries[nVectorPos];
+            sal_Int32 nLength = rAxisSeriesSeq.getLength();
+            rAxisSeriesSeq.realloc(nLength + 1);
+            rAxisSeriesSeq[nLength] = xSeries;
+        }
+    }
+
+    return aSplitSeries;
+}
+
+}
+
 void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    sal_Int32 nTypeId = XML_lineChart;
-    if( mbIs3DChart )
-        nTypeId = XML_line3DChart;
-    pFS->startElement( FSNS( XML_c, nTypeId ),
-            FSEND );
-
-    exportGrouping( );
-    // TODO: show marker symbol in series?
-    sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportAllSeries( xChartType, nAttachedAxis );
-
-    // show marker?
-    sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
-    Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
-    if( GetProperty( xPropSet, "SymbolType" ) )
-        mAny >>= nSymbolType;
-
-    if( !mbIs3DChart )
+    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    for (auto itr = aSplitDataSeries.begin(), itrEnd = aSplitDataSeries.end();
+            itr != itrEnd; ++itr)
     {
-        exportHiLowLines();
-        exportUpDownBars(xChartType);
-        const char* marker = nSymbolType == css::chart::ChartSymbolType::NONE? "0":"1";
-        pFS->singleElement( FSNS( XML_c, XML_marker ),
-                XML_val, marker,
+        if (itr->getLength() == 0)
+            continue;
+
+        sal_Int32 nTypeId = XML_lineChart;
+        if( mbIs3DChart )
+            nTypeId = XML_line3DChart;
+        pFS->startElement( FSNS( XML_c, nTypeId ),
                 FSEND );
+
+        exportGrouping( );
+        // TODO: show marker symbol in series?
+        sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+        exportSeries( xChartType, *itr, nAttachedAxis );
+
+        // show marker?
+        sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
+        Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
+        if( GetProperty( xPropSet, "SymbolType" ) )
+            mAny >>= nSymbolType;
+
+        if( !mbIs3DChart )
+        {
+            exportHiLowLines();
+            exportUpDownBars(xChartType);
+            const char* marker = nSymbolType == css::chart::ChartSymbolType::NONE? "0":"1";
+            pFS->singleElement( FSNS( XML_c, XML_marker ),
+                    XML_val, marker,
+                    FSEND );
+        }
+
+        exportAxesId( nAttachedAxis );
+
+        pFS->endElement( FSNS( XML_c, nTypeId ) );
     }
-
-    exportAxesId( nAttachedAxis );
-
-    pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
 
 void ChartExport::exportPieChart( Reference< chart2::XChartType > xChartType )
@@ -1755,35 +1806,43 @@ void ChartExport::exportRadarChart( Reference< chart2::XChartType > xChartType)
 void ChartExport::exportScatterChart( Reference< chart2::XChartType > xChartType )
 {
     FSHelperPtr pFS = GetFS();
-    pFS->startElement( FSNS( XML_c, XML_scatterChart ),
-            FSEND );
-    // TODO:scatterStyle
-
-    sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
-    Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
-    if( GetProperty( xPropSet, "SymbolType" ) )
-        mAny >>= nSymbolType;
-
-    const char* scatterStyle = "lineMarker";
-    if (nSymbolType == css::chart::ChartSymbolType::NONE)
+    std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
+    for (auto itr = aSplitDataSeries.begin(), itrEnd = aSplitDataSeries.end();
+            itr != itrEnd; ++itr)
     {
-        scatterStyle = "line";
+        if (itr->getLength() == 0)
+            continue;
+
+        pFS->startElement( FSNS( XML_c, XML_scatterChart ),
+                FSEND );
+        // TODO:scatterStyle
+
+        sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
+        Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY);
+        if( GetProperty( xPropSet, "SymbolType" ) )
+            mAny >>= nSymbolType;
+
+        const char* scatterStyle = "lineMarker";
+        if (nSymbolType == css::chart::ChartSymbolType::NONE)
+        {
+            scatterStyle = "line";
+        }
+
+        pFS->singleElement( FSNS( XML_c, XML_scatterStyle ),
+                XML_val, scatterStyle,
+                FSEND );
+
+        pFS->singleElement( FSNS( XML_c, XML_varyColors ),
+                XML_val, "0",
+                FSEND );
+
+        // FIXME: should export xVal and yVal
+        sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+        exportSeries( xChartType, *itr, nAttachedAxis );
+        exportAxesId( nAttachedAxis );
+
+        pFS->endElement( FSNS( XML_c, XML_scatterChart ) );
     }
-
-    pFS->singleElement( FSNS( XML_c, XML_scatterStyle ),
-            XML_val, scatterStyle,
-            FSEND );
-
-    pFS->singleElement( FSNS( XML_c, XML_varyColors ),
-            XML_val, "0",
-            FSEND );
-
-    // FIXME: should export xVal and yVal
-    sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
-    exportAllSeries( xChartType, nAttachedAxis );
-    exportAxesId( nAttachedAxis );
-
-    pFS->endElement( FSNS( XML_c, XML_scatterChart ) );
 }
 
 void ChartExport::exportStockChart( Reference< chart2::XChartType > xChartType )
