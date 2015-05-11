@@ -68,10 +68,11 @@ namespace o3tl
 }
 
 // Flags for DrawHighlightFrame()
-#define FRAME_HIGHLIGHT_IN                  ((sal_uInt16)0x0001)
-#define FRAME_HIGHLIGHT_OUT                 ((sal_uInt16)0x0002)
-#define FRAME_HIGHLIGHT_TESTBACKGROUND      ((sal_uInt16)0x4000)
-#define FRAME_HIGHLIGHT_STYLE               ((sal_uInt16)0x000F)
+enum class DrawHighlightFrameStyle
+{
+    In                  = 1,
+    Out                 = 2,
+};
 
 // Flags for DrawButton()
 #define BUTTON_DRAW_DEFAULT                 ((sal_uInt16)0x0001)
@@ -102,7 +103,7 @@ public:
                                    const Color& rLeftTopColor,
                                    const Color& rRightBottomColor );
     void                DrawHighlightFrame( const Rectangle& rRect,
-                                            sal_uInt16 nStyle = FRAME_HIGHLIGHT_OUT );
+                                            DrawHighlightFrameStyle nStyle = DrawHighlightFrameStyle::Out, bool bTestBackground = false );
     Rectangle           DrawFrame( const Rectangle& rRect, DrawFrameStyle nStyle = DrawFrameStyle::Out, DrawFrameFlags nFlags = DrawFrameFlags::NONE );
     Rectangle           DrawButton( const Rectangle& rRect, sal_uInt16 nStyle );
     void                DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical = true );

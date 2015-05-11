@@ -3574,12 +3574,12 @@ void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderConte
     else
     {
         DecorationView aDecoView(&rRenderContext);
-        sal_uInt16 nDecoFlags;
+        DrawHighlightFrameStyle nDecoFlags;
         if (bHighlightFramePressed)
-            nDecoFlags = FRAME_HIGHLIGHT_TESTBACKGROUND | FRAME_HIGHLIGHT_IN;
+            nDecoFlags = DrawHighlightFrameStyle::In;
         else
-            nDecoFlags = FRAME_HIGHLIGHT_TESTBACKGROUND | FRAME_HIGHLIGHT_OUT;
-        aDecoView.DrawHighlightFrame(aBmpRect, nDecoFlags);
+            nDecoFlags = DrawHighlightFrameStyle::Out;
+        aDecoView.DrawHighlightFrame(aBmpRect, nDecoFlags, true/*bTestBackground*/);
     }
 }
 

@@ -889,7 +889,7 @@ void DecorationView::DrawFrame( const Rectangle& rRect,
 }
 
 void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
-                                         sal_uInt16 nStyle )
+                                         DrawHighlightFrameStyle nStyle, bool bTestBackground )
 {
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
     Color aLightColor = rStyleSettings.GetLightColor();
@@ -901,7 +901,7 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
         aLightColor = Color( COL_BLACK );
         aShadowColor = Color( COL_BLACK );
     }
-    else if ( nStyle & FRAME_HIGHLIGHT_TESTBACKGROUND )
+    else if ( bTestBackground )
     {
         Wallpaper aBackground = mpOutDev->GetBackground();
         if ( aBackground.IsBitmap() || aBackground.IsGradient() )
@@ -926,7 +926,7 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
         }
     }
 
-    if ( (nStyle & FRAME_HIGHLIGHT_STYLE) == FRAME_HIGHLIGHT_IN )
+    if ( nStyle == DrawHighlightFrameStyle::In )
     {
         Color aTempColor = aLightColor;
         aLightColor = aShadowColor;
