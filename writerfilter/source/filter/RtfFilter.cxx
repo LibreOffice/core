@@ -115,7 +115,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         writerfilter::Stream::Pointer_t pStream(
             new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, writerfilter::dmapper::DOCUMENT_RTF, xInsertTextRange, bIsNewDoc));
         writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
-            writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator));
+            writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator, bIsNewDoc));
         pDocument->resolve(*pStream);
         bResult = true;
 #ifdef DEBUG_WRITERFILTER
