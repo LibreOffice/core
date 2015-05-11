@@ -16,6 +16,7 @@
 
 class ScAddress;
 class ScDocument;
+class ScRange;
 class ScTokenArray;
 
 namespace sc {
@@ -75,6 +76,27 @@ public:
                                          const OUString& rsNewUnit,
                                          const OUString& rsOldUnit) = 0;
 
+    /**
+     * Convert cells from one unit to another.
+     *
+     * If possible the input unit will be determined automatically (using local
+     * and header units).
+     *
+     * Returns false if input units are not compatible with the desired output units,
+     * (including the case where some of the input units are compatibles but others
+     *  aren't).
+     *
+     * Local and header unit annotations are modified as appropriate such that the output
+     * remains unambiguous. Hence, if the header cell is included in rRange, its unit
+     * annotation is also updated as appropriate. If instead the header is excluded,
+     * but all other cells are selected in a column, then local annotations are added.
+     *
+     * rsInputUnit overrides the automatic determination of input units, i.e. disables
+     * input unit detection.
+     */
+    virtual bool convertCellUnits(const ScRange& rRange,
+                                  ScDocument* pDoc,
+                                  const OUString& rsOutputUnit) = 0;
 
     virtual ~Units() {}
 };

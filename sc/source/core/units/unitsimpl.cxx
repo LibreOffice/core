@@ -690,4 +690,99 @@ bool UnitsImpl::convertCellToHeaderUnit(const ScAddress& rCellAddress,
     return false;
 }
 
+bool UnitsImpl::convertCellUnits(const ScRange& rRange,
+                                 ScDocument* pDoc,
+                                 const OUString& rsOutputUnit) {
+    UtUnit aOutputUnit;
+    if (!UtUnit::createUnit(rsOutputUnit, aOutputUnit, mpUnitSystem)) {
+        return false;
+    }
+
+    ScRange aRange(rRange);
+    aRange.PutInOrder();
+
+    SCCOL nStartCol, nEndCol;
+    SCROW nStartRow, nEndRow;
+    SCTAB nStartTab, nEndTab;
+    aRange.GetVars(nStartCol, nStartRow, nStartTab,
+                   nEndCol, nEndRow, nEndTab);
+
+    // Can only handle ranges in a single sheet for now
+    assert(nStartTab == nEndTab);
+
+    // Each column is independent hence we are able to handle each separately.
+    for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++) {
+        ScAddress aCurrentHeaderAddress(ScAddress::INITIALIZE_INVALID);
+        UtUnit aCurrentHeaderUnit;
+        OUString sHeaderUnitString;
+
+        for (SCROW nRow = nEndRow; nRow >= nStartRow; nRow--) {
+            ScAddress aCurrent(nCol, nRow, nStartTab);
+
+            if (aCurrent == aCurrentHeaderAddress) {
+                // TODO: rewrite this to use HeaderUnitDescriptor once implemented.
+                // We can't do a dumb replace since that might overwrite other characters
+                // (many units are just single characters).
+                OUString sHeader = pDoc->GetString(aCurrent);
+                sHeader = sHeader.replaceAll(sHeaderUnitString, rsOutputUnit);
+                pDoc->SetString(aCurrent, sHeader);
+
+                aCurrentHeaderAddress.SetInvalid();
+            } else if (pDoc->GetCellType(aCurrent) != CELLTYPE_STRING) {
+                if (!aCurrentHeaderUnit.isValid()) {
+                    aCurrentHeaderUnit = findHeaderUnitForCell(aCurrent, pDoc, sHeaderUnitString, aCurrentHeaderAddress);
+
+                    // If there is no header we get an invalid unit returned from findHeaderUnitForCell,
+                    // and therfore assume the dimensionless unit 1.
+                    if (!aCurrentHeaderUnit.isValid()) {
+                        UtUnit::createUnit("", aCurrentHeaderUnit, mpUnitSystem);
+                    }
+                }
+
+                OUString sLocalUnit(extractUnitStringForCell(aCurrent, pDoc));
+                UtUnit aLocalUnit;
+                if (sLocalUnit.isEmpty()) {
+                    aLocalUnit = aCurrentHeaderUnit;
+                } else { // override header unit with annotation unit
+                    if (!UtUnit::createUnit(sLocalUnit, aLocalUnit, mpUnitSystem)) {
+                        // but assume dimensionless if invalid
+                        UtUnit::createUnit("", aLocalUnit, mpUnitSystem);
+                    }
+                }
+
+                bool bLocalAnnotationRequired = (!aRange.In(aCurrentHeaderAddress)) &&
+                                                (aOutputUnit != aCurrentHeaderUnit);
+                double nValue = pDoc->GetValue(aCurrent);
+
+                if (!aLocalUnit.areConvertibleTo(aOutputUnit)) {
+                    // TODO: in future we should undo all our changes here.
+                    return false;
+                }
+
+                double nNewValue = aLocalUnit.convertValueTo(nValue, aOutputUnit);
+                pDoc->SetValue(aCurrent, nNewValue);
+
+                if (bLocalAnnotationRequired) {
+                    // All a local dirty hack too - needs to be refactored and improved.
+                    // And ideally we should reuse the existing format.
+                    OUString sNewFormat = "General\"" + rsOutputUnit + "\"";
+                    sal_uInt32 nFormatKey;
+                    short nType = css::util::NumberFormat::DEFINED;
+                    sal_Int32 nErrorPosition; // Unused, because we should be creating working number formats.
+
+                    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                    pFormatter->PutEntry(sNewFormat, nErrorPosition, nType, nFormatKey);
+                    pDoc->SetNumberFormat(aCurrent, nFormatKey);
+                } else {
+                    // The number formats will by definition be wrong once we've converted, so just reset completely.
+                    pDoc->SetNumberFormat(aCurrent, 0);
+                }
+            }
+
+        }
+    }
+
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

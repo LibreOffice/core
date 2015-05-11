@@ -92,6 +92,10 @@ public:
                                          const OUString& rsNewUnit,
                                          const OUString& rsOldUnit) SAL_OVERRIDE;
 
+    virtual bool convertCellUnits(const ScRange& rRange,
+                                  ScDocument* pDoc,
+                                  const OUString& rsOutputUnit) SAL_OVERRIDE;
+
 private:
     UnitsResult getOutputUnitsForOpCode(std::stack< RAUSItem >& rStack, const formula::FormulaToken* pToken, ScDocument* pDoc);
 
