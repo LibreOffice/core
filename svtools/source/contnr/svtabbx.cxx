@@ -87,8 +87,6 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
         pEntry->AddItem( pStr );
     }
 }
-
-
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits )
 {
@@ -496,8 +494,6 @@ long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
     return aTabs[ nTab ]->GetPos();
 }
 
-// class SvHeaderTabListBoxImpl ------------------------------------------
-
 namespace svt
 {
     struct SvHeaderTabListBoxImpl
@@ -509,19 +505,13 @@ namespace svt
     };
 }
 
-// class SvHeaderTabListBox ----------------------------------------------
-
-SvHeaderTabListBox::SvHeaderTabListBox( vcl::Window* pParent, WinBits nWinStyle ) :
-
-    SvTabListBox( pParent, nWinStyle ),
-
-    m_bFirstPaint   ( true ),
-    m_pImpl         ( new ::svt::SvHeaderTabListBoxImpl ),
-    m_pAccessible   ( NULL )
+SvHeaderTabListBox::SvHeaderTabListBox( vcl::Window* pParent, WinBits nWinStyle )
+    : SvTabListBox(pParent, nWinStyle)
+    , m_bFirstPaint(true)
+    , m_pImpl(new ::svt::SvHeaderTabListBoxImpl)
+    , m_pAccessible(NULL)
 {
 }
-
-
 
 SvHeaderTabListBox::~SvHeaderTabListBox()
 {
@@ -534,18 +524,14 @@ void SvHeaderTabListBox::dispose()
     SvTabListBox::dispose();
 }
 
-
-
 void SvHeaderTabListBox::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
-    if ( m_bFirstPaint )
+    if (m_bFirstPaint)
     {
         m_bFirstPaint = false;
     }
     SvTabListBox::Paint(rRenderContext, rRect);
 }
-
-
 
 void SvHeaderTabListBox::InitHeaderBar( HeaderBar* pHeaderBar )
 {
@@ -555,8 +541,6 @@ void SvHeaderTabListBox::InitHeaderBar( HeaderBar* pHeaderBar )
     SetScrolledHdl( LINK( this, SvHeaderTabListBox, ScrollHdl_Impl ) );
     m_pImpl->m_pHeaderBar->SetCreateAccessibleHdl( LINK( this, SvHeaderTabListBox, CreateAccessibleHdl_Impl ) );
 }
-
-
 
 bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
@@ -572,8 +556,6 @@ bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol
     return ( eState == SV_BUTTON_CHECKED );
 }
 
-
-
 SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
     const OUString& rStr, sal_uLong nPos, sal_uInt16 nCol, void* pUserData )
 {
@@ -582,8 +564,6 @@ SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
     return pEntry;
 }
 
-
-
 SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
     const OUString& rStr, SvTreeListEntry* pParent, sal_uLong nPos, sal_uInt16 nCol, void* pUserData )
 {
@@ -591,8 +571,6 @@ SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
     RecalculateAccessibleChildren();
     return pEntry;
 }
-
-
 
 SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
     const OUString& rStr, const Image& rExpandedEntryBmp, const Image& rCollapsedEntryBmp,
@@ -604,8 +582,6 @@ SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
     return pEntry;
 }
 
-
-
 sal_uLong SvHeaderTabListBox::Insert(
     SvTreeListEntry* pEnt, SvTreeListEntry* pPar, sal_uLong nPos )
 {
@@ -614,8 +590,6 @@ sal_uLong SvHeaderTabListBox::Insert(
     return n;
 }
 
-
-
 sal_uLong SvHeaderTabListBox::Insert( SvTreeListEntry* pEntry, sal_uLong nRootPos )
 {
     sal_uLong nPos = SvTabListBox::Insert( pEntry, nRootPos );
@@ -623,15 +597,11 @@ sal_uLong SvHeaderTabListBox::Insert( SvTreeListEntry* pEntry, sal_uLong nRootPo
     return nPos;
 }
 
-
-
 void SvHeaderTabListBox::RemoveEntry( SvTreeListEntry* _pEntry )
 {
     GetModel()->Remove( _pEntry );
     m_aAccessibleChildren.clear();
 }
-
-
 
 void SvHeaderTabListBox::Clear()
 {
@@ -639,15 +609,11 @@ void SvHeaderTabListBox::Clear()
     m_aAccessibleChildren.clear();
 }
 
-
-
 IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl)
 {
     m_pImpl->m_pHeaderBar->SetOffset( -GetXOffset() );
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl)
 {
@@ -666,8 +632,6 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl)
     return 0;
 }
 
-
-
 void SvHeaderTabListBox::RecalculateAccessibleChildren()
 {
     if ( !m_aAccessibleChildren.empty() )
@@ -681,8 +645,6 @@ void SvHeaderTabListBox::RecalculateAccessibleChildren()
         }
     }
 }
-
-
 
 bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState )
 {
@@ -708,8 +670,6 @@ bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriSta
     }
     return bRet;
 }
-
-
 long SvHeaderTabListBox::GetRowCount() const
 {
     return GetEntryCount();
@@ -794,8 +754,6 @@ void SvHeaderTabListBox::SelectAll( bool bSelect, bool bPaint )
     // overwritten just to disambiguate the SelectAll() from the base' class SelectAll( bool, bool )
     SvTabListBox::SelectAll( bSelect, bPaint );
 }
-
-
 void SvHeaderTabListBox::SelectRow( long _nRow, bool _bSelect, bool )
 {
     Select( GetEntry( _nRow ), _bSelect );
@@ -1230,7 +1188,5 @@ sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nC
 
     return -1;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
