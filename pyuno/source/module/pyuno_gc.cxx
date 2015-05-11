@@ -69,7 +69,7 @@ void GCThread::execute()
         return;
     try
     {
-        PyThreadAttach g( (PyInterpreterState*)mPyInterpreter );
+        PyThreadAttach g( mPyInterpreter );
         {
             Runtime runtime;
 
