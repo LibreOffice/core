@@ -75,6 +75,7 @@ enum {
     RENDER_SCROLLBAR = 8,
     RENDER_SPINBUTTON = 9,
     RENDER_COMBOBOX = 10,
+    RENDER_EXTENSION = 11,
 };
 
 static void PrepareComboboxStyle( GtkStyleContext *context,
@@ -940,6 +941,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         context = mpNoteBookStyle;
         if (nState & ControlState::SELECTED)
             flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_ACTIVE);
+
         break;
     case CTRL_WINDOW_BACKGROUND:
         context = gtk_widget_get_style_context(mpWindow);
@@ -951,6 +953,11 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     cairo_t *cr = getCairoContext();
     clipRegion(cr);
     cairo_translate(cr, rControlRegion.Left(), rControlRegion.Top());
+
+    long nX = 0;
+    long nY = 0;
+    long nWidth = rControlRegion.GetWidth();
+    long nHeight = rControlRegion.GetHeight();
 
     gtk_style_context_save(context);
     gtk_style_context_set_state(context, flags);
@@ -969,6 +976,14 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 
         gtk_style_context_add_region(mpNoteBookStyle, GTK_STYLE_REGION_TAB, eFlags);
         gtk_style_context_add_class(context, GTK_STYLE_CLASS_TOP);
+
+        gint initial_gap(0);
+        gtk_style_context_get_style(mpNoteBookStyle,
+                                "initial-gap", &initial_gap,
+                                NULL);
+
+        nX += initial_gap/2;
+        nWidth -= initial_gap;
     }
     if (styleClass)
     {
@@ -983,15 +998,14 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     {
     case RENDER_BACKGROUND:
     case RENDER_BACKGROUND_AND_FRAME:
-        gtk_render_background(context, cr,
-                              0, 0,
-                              rControlRegion.GetWidth(), rControlRegion.GetHeight());
+        gtk_render_background(context, cr, nX, nY, nWidth, nHeight);
         if (renderType == RENDER_BACKGROUND_AND_FRAME)
         {
-            gtk_render_frame(context, cr,
-                             0, 0,
-                             rControlRegion.GetWidth(), rControlRegion.GetHeight());
+            gtk_render_frame(context, cr, nX, nY, nWidth, nHeight);
         }
+        break;
+    case RENDER_EXTENSION:
+        gtk_render_extension(context, cr, nX, nY, nWidth, nHeight, GTK_POS_BOTTOM);
         break;
     case RENDER_CHECK:
     case RENDER_RADIO:
