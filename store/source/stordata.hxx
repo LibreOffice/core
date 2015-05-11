@@ -87,6 +87,16 @@ struct OStoreDataPageData : public store::OStorePageData
         if (capacity()) memset (m_pData, 0, capacity());
     }
 
+    /** guard (external representation).
+    */
+    void guard() { (void) this; /* loplugin:staticmethods */ }
+
+    /** verify (external representation).
+    */
+    storeError verify() const {
+        (void) this; // loplugin:staticmethods
+        return store_E_None;
+    }
 };
 
 /*========================================================================
