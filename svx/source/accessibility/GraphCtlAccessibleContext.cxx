@@ -80,7 +80,7 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     {
         mpModel = mpControl->GetSdrModel();
         if (mpModel != NULL)
-            mpPage = (SdrPage*)mpModel->GetPage( 0 );
+            mpPage = mpModel->GetPage( 0 );
         mpView = mpControl->GetSdrView();
 
         if( mpModel == NULL || mpPage == NULL || mpView == NULL )
@@ -665,7 +665,7 @@ void SvxGraphCtrlAccessibleContext::setModelAndView (
 
     mpModel = pModel;
     if (mpModel != NULL)
-        mpPage = (SdrPage*)mpModel->GetPage( 0 );
+        mpPage = mpModel->GetPage( 0 );
     mpView = pView;
 
     if (mpModel == NULL || mpPage == NULL || mpView == NULL)

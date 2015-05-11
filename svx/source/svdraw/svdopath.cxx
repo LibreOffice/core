@@ -2718,7 +2718,7 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
                         basegfx::B2DPolygon aSplitPolyA(aCandidate, 0L, nPnt + 1L);
                         SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyA));
 
-                        pNewObj = (SdrPathObj*)Clone();
+                        pNewObj = Clone();
                         basegfx::B2DPolygon aSplitPolyB(aCandidate, nPnt, nPointCount - nPnt);
                         pNewObj->SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyB));
                     }

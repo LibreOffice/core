@@ -919,7 +919,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 
             pTEObj->EndTextEdit(*pTEOutliner);
 
-            if( (pTEObj->GetRotateAngle() != 0) || (pTEObj && pTEObj->ISA(SdrTextObj) && ((SdrTextObj*)pTEObj)->IsFontwork())  )
+            if( (pTEObj->GetRotateAngle() != 0) || (pTEObj && pTEObj->ISA(SdrTextObj) && pTEObj->IsFontwork())  )
             {
                 pTEObj->ActionChanged();
             }
@@ -989,7 +989,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             // Switch on any TextAnimation again after TextEdit
             if(pTEObj->ISA(SdrTextObj))
             {
-                ((SdrTextObj*)pTEObj)->SetTextAnimationAllowed(true);
+                pTEObj->SetTextAnimationAllowed(true);
             }
 
             // #i72757#

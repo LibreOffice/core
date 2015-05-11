@@ -401,7 +401,7 @@ SdrGrafObj* CompressGraphicsDialog::GetCompressedSdrGrafObj()
 {
     if ( m_dResolution > 0.0  )
     {
-        SdrGrafObj* pNewObject = (SdrGrafObj*) m_pGraphicObj->Clone();
+        SdrGrafObj* pNewObject = m_pGraphicObj->Clone();
 
         if ( m_pReduceResolutionCB->IsChecked() )
         {

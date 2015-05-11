@@ -1585,7 +1585,7 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
     SdrTextObj::Notify(rBC,rHint);
     if (nNotifyingCount==0) { // a locking flag
-        ((SdrEdgeObj*)this)->nNotifyingCount++;
+        nNotifyingCount++;
         const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
         if (bDataChg) { // StyleSheet changed
             ImpSetAttrToEdgeInfo(); // when changing templates, copy values from Pool to aEdgeInfo
@@ -1604,7 +1604,7 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
             SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
         }
-        ((SdrEdgeObj*)this)->nNotifyingCount--;
+        nNotifyingCount--;
     }
 }
 
@@ -1819,7 +1819,7 @@ bool SdrEdgeObj::hasSpecialDrag() const
 SdrObject* SdrEdgeObj::getFullDragClone() const
 {
     // use Clone operator
-    SdrEdgeObj* pRetval = (SdrEdgeObj*)Clone();
+    SdrEdgeObj* pRetval = Clone();
 
     // copy connections for clone, SdrEdgeObj::operator= does not do this
     pRetval->ConnectToNode(true, GetConnectedNode(true));

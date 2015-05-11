@@ -45,7 +45,7 @@ ContourWindow::ContourWindow( vcl::Window* pParent, WinBits nBits ) :
 
 void ContourWindow::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
-    SdrPage*        pPage = (SdrPage*) pModel->GetPage( 0 );
+    SdrPage*        pPage = pModel->GetPage( 0 );
     const sal_uInt16    nPolyCount = rPolyPoly.Count();
 
     // First delete all drawing objects
@@ -87,7 +87,7 @@ const tools::PolyPolygon& ContourWindow::GetPolyPolygon()
 {
     if ( pModel->IsChanged() )
     {
-        SdrPage* pPage = (SdrPage*) pModel->GetPage( 0 );
+        SdrPage* pPage = pModel->GetPage( 0 );
 
         aPolyPoly = tools::PolyPolygon();
 
@@ -126,7 +126,7 @@ void ContourWindow::SdrObjCreated( const SdrObject&  )
 
 bool ContourWindow::IsContourChanged() const
 {
-    SdrPage*    pPage = (SdrPage*) pModel->GetPage( 0 );
+    SdrPage*    pPage = pModel->GetPage( 0 );
     bool        bRet = false;
 
     if ( pPage && pPage->GetObjCount() )

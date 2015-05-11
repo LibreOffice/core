@@ -311,7 +311,7 @@ void SdrPageWindow::RedrawAll( sdr::contact::ViewObjectContactRedirector* pRedir
 
     // set PaintingPageView
     const SdrView& rView = mpImpl->mrPageView.GetView();
-    SdrModel& rModel = *((SdrModel*)rView.GetModel());
+    SdrModel& rModel = *(rView.GetModel());
 
     // get to be processed layers
     const bool bPrinter(GetPaintWindow().OutputToPrinter());
@@ -363,7 +363,7 @@ void SdrPageWindow::RedrawLayer( const SdrLayerID* pId, sdr::contact::ViewObject
 
     // set PaintingPageView
     const SdrView& rView = mpImpl->mrPageView.GetView();
-    SdrModel& rModel = *((SdrModel*)rView.GetModel());
+    SdrModel& rModel = *(rView.GetModel());
 
     // get the layers to process
     const bool bPrinter(GetPaintWindow().OutputToPrinter());

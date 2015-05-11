@@ -166,7 +166,7 @@ void SvxXConnectionPreview::Construct()
             {
                 bFound = true;
                 const SdrEdgeObj* pTmpEdgeObj = static_cast<const SdrEdgeObj*>(pObj);
-                pEdgeObj = (SdrEdgeObj*) pTmpEdgeObj->Clone();
+                pEdgeObj = pTmpEdgeObj->Clone();
 
                 SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection( true );
                 SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection( false );

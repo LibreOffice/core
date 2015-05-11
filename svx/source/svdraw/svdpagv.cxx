@@ -292,7 +292,7 @@ void SdrPageView::CompleteRedraw(
         if(!pPageWindow)
         {
             // create temp PageWindow
-            pPageWindow = new SdrPageWindow(*((SdrPageView*)this), rPaintWindow);
+            pPageWindow = new SdrPageWindow(*this, rPaintWindow);
             bIsTempTarget = true;
         }
 
@@ -376,7 +376,7 @@ void SdrPageView::DrawLayer( SdrLayerID nID, OutputDevice* pGivenTarget, sdr::co
                     // None of the known OutputDevices is the target of this paint, use
                     // a temporary SdrPageWindow for this Redraw.
                     SdrPaintWindow aTemporaryPaintWindow(mrView, *pGivenTarget);
-                    SdrPageWindow aTemporaryPageWindow(*((SdrPageView*)this), aTemporaryPaintWindow);
+                    SdrPageWindow aTemporaryPageWindow(*this, aTemporaryPaintWindow);
 
                     // #i72752#
                     // Copy existing paint region if other PageWindows exist, this was created by

@@ -153,7 +153,7 @@ const ImageMap& IMapWindow::GetImageMap()
 {
     if ( pModel->IsChanged() )
     {
-        SdrPage* pPage = (SdrPage*) pModel->GetPage( 0 );
+        SdrPage* pPage = pModel->GetPage( 0 );
 
         if ( pPage )
         {
@@ -434,7 +434,7 @@ SdrObject* IMapWindow::GetHitSdrObj( const Point& rPosPixel ) const
 
     if ( Rectangle( Point(), GetGraphicSize() ).IsInside( aPt ) )
     {
-        SdrPage* pPage = (SdrPage*) pModel->GetPage( 0 );
+        SdrPage* pPage = pModel->GetPage( 0 );
         if ( pPage )
         {
             for ( size_t i = pPage->GetObjCount(); i > 0; )
@@ -826,7 +826,7 @@ void IMapWindow::KeyInput( const KeyEvent& rKEvt )
 
 void IMapWindow::SelectFirstObject()
 {
-    SdrPage*    pPage = (SdrPage*) pModel->GetPage( 0 );
+    SdrPage*    pPage = pModel->GetPage( 0 );
     if( pPage->GetObjCount() != 0 )
     {
         GrabFocus();
