@@ -3475,7 +3475,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             {
                 sal_uInt16 nStyle = bRTL ? i|RULER_TAB_RTL : i;
                 nStyle |= static_cast<sal_uInt16>(bHorz ? WB_HORZ : WB_VERT);
-                DrawTab(pDev, aFillColor, aPt, nStyle);
+                DrawTab(*pDev, aFillColor, aPt, nStyle);
                 aMenu.InsertItem(i + 1,
                                  ResId(RID_SVXSTR_RULER_START + i, DIALOG_MGR()).toString(),
                                  Image(pDev->GetBitmap(Point(), aSz), Color(COL_WHITE)));

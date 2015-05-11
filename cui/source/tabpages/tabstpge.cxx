@@ -85,14 +85,14 @@ void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
 
 // class TabWin_Impl -----------------------------------------------------
 
-void TabWin_Impl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     // Paint tabulators
-    Point aPnt;
-    Size aSize = GetOutputSizePixel();
-    aPnt.X() = aSize.Width() / 2;
-    aPnt.Y() = aSize.Height() / 2;
-    Ruler::DrawTab( this, GetSettings().GetStyleSettings().GetFontColor(), aPnt, nTabStyle );
+    Point aPoint;
+    Size aSize = rRenderContext.GetOutputSizePixel();
+    aPoint.X() = aSize.Width() / 2;
+    aPoint.Y() = aSize.Height() / 2;
+    Ruler::DrawTab(rRenderContext, rRenderContext.GetSettings().GetStyleSettings().GetFontColor(), aPoint, nTabStyle);
 }
 
 // class SvxTabulatorTabPage ---------------------------------------------

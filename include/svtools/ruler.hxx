@@ -667,22 +667,27 @@ private:
     SVT_DLLPRIVATE void ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void ImplVDrawText( long nX, long nY, const OUString& rText, long nMin = LONG_MIN, long nMax = LONG_MAX );
 
-    SVT_DLLPRIVATE void ImplDrawTicks( long nMin, long nMax, long nStart, long nVirTop, long nVirBottom );
-    SVT_DLLPRIVATE void ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom );
-    SVT_DLLPRIVATE void ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit = false );
-    SVT_DLLPRIVATE void ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom );
-    SVT_DLLPRIVATE void ImplDrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nStyle );
-    SVT_DLLPRIVATE void ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom );
+    SVT_DLLPRIVATE void ImplDrawTicks(vcl::RenderContext& rRenderContext,
+                                      long nMin, long nMax, long nStart, long nVirTop, long nVirBottom);
+    SVT_DLLPRIVATE void ImplDrawBorders(vcl::RenderContext& rRenderContext,
+                                        long nMin, long nMax, long nVirTop, long nVirBottom);
+    SVT_DLLPRIVATE void ImplDrawIndent(vcl::RenderContext& rRenderContext,
+                                       const Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit = false);
+    SVT_DLLPRIVATE void ImplDrawIndents(vcl::RenderContext& rRenderContext,
+                                        long nMin, long nMax, long nVirTop, long nVirBottom);
+    SVT_DLLPRIVATE void ImplDrawTab(vcl::RenderContext& rRenderContext, const Point& rPos, sal_uInt16 nStyle);
+    SVT_DLLPRIVATE void ImplDrawTabs(vcl::RenderContext& rRenderContext,
+                                     long nMin, long nMax, long nVirTop, long nVirBottom);
 
     using Window::ImplInit;
     SVT_DLLPRIVATE void ImplInit( WinBits nWinBits );
     SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE void ImplCalc();
-    SVT_DLLPRIVATE void ImplFormat();
+    SVT_DLLPRIVATE void ImplFormat(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void ImplInitExtraField( bool bUpdate );
-    SVT_DLLPRIVATE void ImplInvertLines( bool bErase = false );
-    SVT_DLLPRIVATE void ImplDraw();
-    SVT_DLLPRIVATE void ImplDrawExtra( bool bPaint = false );
+    SVT_DLLPRIVATE void ImplInvertLines(vcl::RenderContext& rRenderContext, bool bErase = false);
+    SVT_DLLPRIVATE void ImplDraw(vcl::RenderContext& rRenderContext);
+    SVT_DLLPRIVATE void ImplDrawExtra(vcl::RenderContext& rRenderContext, bool bPaint = false);
     SVT_DLLPRIVATE void ImplUpdate( bool bMustCalc = false );
 
     using Window::ImplHitTest;
@@ -713,7 +718,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -791,8 +796,8 @@ public:
     sal_uInt32      GetTabCount() const;
     const RulerTab* GetTabs() const;
 
-    static void     DrawTab( OutputDevice* pDevice, const Color &rFillColor,
-                             const Point& rPos, sal_uInt16 nStyle );
+    static void     DrawTab(vcl::RenderContext& rRenderContext, const Color &rFillColor,
+                            const Point& rPos, sal_uInt16 nStyle);
 
     void            SetStyle( WinBits nStyle );
     WinBits         GetStyle() const { return mnWinStyle; }
