@@ -690,7 +690,7 @@ void Printer::ReleaseGraphics( bool bRelease )
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    Printer* pPrinter = (Printer*)this;
+    Printer* pPrinter = this;
 
     if ( !pPrinter->mpJobGraphics )
     {

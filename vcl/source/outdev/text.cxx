@@ -307,7 +307,7 @@ bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
            rSalLayout.DrawBase().X() = w - 1 - x;
         if( !IsRTLEnabled() )
         {
-            OutputDevice *pOutDevRef = (OutputDevice *)this;
+            OutputDevice *pOutDevRef = this;
             // mirror this window back
             long devX = w-pOutDevRef->mnOutWidth-pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
             rSalLayout.DrawBase().X() = devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) ) ;
@@ -315,7 +315,7 @@ bool OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
     }
     else if( IsRTLEnabled() )
     {
-        OutputDevice *pOutDevRef = (OutputDevice *)this;
+        OutputDevice *pOutDevRef = this;
 
         // mirror this window back
         long devX = pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX

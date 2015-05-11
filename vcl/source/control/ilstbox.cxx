@@ -187,7 +187,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
             else
             {
                 nLow  = mnMRUCount;
-                pTemp = (ImplEntryType*)GetEntry( (sal_Int32)nLow );
+                pTemp = GetEntry( (sal_Int32)nLow );
 
                 nComp = rSorter.compare(rStr, pTemp->maStr);
                 if ( nComp <= 0 )
@@ -202,7 +202,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
                     do
                     {
                         nMid = (nLow + nHigh) / 2;
-                        pTemp = (ImplEntryType*)GetEntry( nMid );
+                        pTemp = GetEntry( nMid );
 
                         nComp = rSorter.compare(rStr, pTemp->maStr);
 

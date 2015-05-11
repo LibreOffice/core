@@ -793,7 +793,7 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
                 break;
             case CHARNAME:
                 if ((keyword = token(fp,tokenlen)) != NULL)
-                    temp->name = (char *)strdup(keyword);
+                    temp->name = strdup(keyword);
                 break;
             case CHARBBOX:
                 if ((keyword = token(fp,tokenlen)) != NULL)
@@ -818,9 +818,9 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
 
                 *tail = static_cast<Ligature *>(calloc(1, sizeof(Ligature)));
                 if ((keyword = token(fp,tokenlen)) != NULL)
-                    (*tail)->succ = (char *)strdup(keyword);
+                    (*tail)->succ = strdup(keyword);
                 if ((keyword = token(fp,tokenlen)) != NULL)
-                    (*tail)->lig = (char *)strdup(keyword);
+                    (*tail)->lig = strdup(keyword);
                 break; }
             case ENDCHARMETRICS:
                 cont = false;

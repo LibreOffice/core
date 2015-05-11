@@ -1253,7 +1253,7 @@ if( mbSawError) {
     int nRDCryptR = 4330; // TODO: mnRDCryptSeed;
     for( U8* p = pT1Ops; p < mpWritePtr; ++p) {
         *p ^= (nRDCryptR >> 8);
-        nRDCryptR = (*(U8*)p + nRDCryptR) * 52845 + 22719;
+        nRDCryptR = (*p + nRDCryptR) * 52845 + 22719;
     }
 
     return nType1Len;

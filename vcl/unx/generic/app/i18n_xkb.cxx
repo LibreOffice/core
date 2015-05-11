@@ -57,7 +57,7 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
         int nExtMinorVersion = XkbMinorVersion;
 
         mbUseExtension = XkbQueryExtension( mpDisplay,
-            &nMajorExtOpcode, (int*)&mnEventBase, (int*)&mnErrorBase,
+            &nMajorExtOpcode, &mnEventBase, &mnErrorBase,
             &nExtMajorVersion, &nExtMinorVersion ) != 0;
     }
 

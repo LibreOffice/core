@@ -160,7 +160,7 @@ bool GtkSalMenu::PrepUpdate()
     if (pFrame)
     {
         GtkSalFrame* pNonConstFrame = const_cast<GtkSalFrame*>(pFrame);
-        GtkSalMenu* pSalMenu = ((GtkSalMenu*) this);
+        GtkSalMenu* pSalMenu = this;
 
         if ( !pNonConstFrame->GetMenu() )
             pNonConstFrame->SetMenu( pSalMenu );

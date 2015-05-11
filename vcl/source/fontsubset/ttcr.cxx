@@ -782,7 +782,7 @@ static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     qsort(nr, n, sizeof(NameRecord), NameRecordCompareF);
 
     int nameLen = stringLen + 12 * n + 6;
-    sal_uInt8* name = (sal_uInt8*)ttmalloc(nameLen);
+    sal_uInt8* name = ttmalloc(nameLen);
 
     PutUInt16(0, name, 0, 1);
     PutUInt16(n, name, 2, 1);
@@ -911,7 +911,7 @@ TrueTypeTable *TrueTypeTableNew_head(sal_uInt32 fontRevision,
     assert(created != 0);
 
     TrueTypeTable* table  = static_cast<TrueTypeTable*>(smalloc(sizeof(TrueTypeTable)));
-    sal_uInt8* ptr = (sal_uInt8*)ttmalloc(TABLESIZE_head);
+    sal_uInt8* ptr = ttmalloc(TABLESIZE_head);
 
     PutUInt32(0x00010000, ptr, 0, 1);             /* version */
     PutUInt32(fontRevision, ptr, 4, 1);
@@ -939,7 +939,7 @@ TrueTypeTable *TrueTypeTableNew_hhea(sal_Int16  ascender,
                                      sal_Int16  caretSlopeRun)
 {
     TrueTypeTable* table = static_cast<TrueTypeTable*>(smalloc(sizeof(TrueTypeTable)));
-    sal_uInt8* ptr = (sal_uInt8*)ttmalloc(TABLESIZE_hhea);
+    sal_uInt8* ptr = ttmalloc(TABLESIZE_hhea);
 
     PutUInt32(0x00010000, ptr, 0, 1);             /* version */
     PutUInt16(ascender, ptr, 4, 1);
@@ -1016,7 +1016,7 @@ TrueTypeTable *TrueTypeTableNew_cmap()
     cmap->s = static_cast<CmapSubTable *>(scalloc(CMAP_SUBTABLE_INIT, sizeof(CmapSubTable)));
     memset(cmap->s, 0, sizeof(CmapSubTable) * CMAP_SUBTABLE_INIT);
 
-    table->data = (table_cmap *) cmap;
+    table->data = cmap;
 
     table->rawdata = 0;
     table->tag = T_cmap;

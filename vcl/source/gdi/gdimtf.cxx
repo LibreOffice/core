@@ -2875,11 +2875,11 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
 
     aWriteData.meActualCharSet = rOStm.GetStreamCharSet();
 
-    MetaAction* pAct = (MetaAction*)FirstAction();
+    MetaAction* pAct = FirstAction();
     while ( pAct )
     {
         pAct->Write( rOStm, &aWriteData );
-        pAct = (MetaAction*)NextAction();
+        pAct = NextAction();
     }
 
     rOStm.SetEndian( nOldFormat );

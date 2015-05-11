@@ -105,7 +105,7 @@ void VirtualDevice::ReleaseGraphics( bool bRelease )
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    VirtualDevice* pVirDev = (VirtualDevice*)this;
+    VirtualDevice* pVirDev = this;
 
     if ( bRelease )
         pVirDev->mpVirDev->ReleaseGraphics( mpGraphics );
