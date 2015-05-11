@@ -115,6 +115,7 @@ public:
             ::std::vector<SwNodeRange> & rRowNodes,
             ::std::unique_ptr< SwPaM > & rpFirstPaM,
             SwPaM & rLastPaM,
+            SwNodeRange *const pLastCell,
             bool & rbExcept);
 
 };
@@ -1821,6 +1822,7 @@ void SwXText::Impl::ConvertCell(
     ::std::vector<SwNodeRange> & rRowNodes,
     ::std::unique_ptr< SwPaM > & rpFirstPaM,
     SwPaM & rLastPaM,
+    SwNodeRange *const pLastCell,
     bool & rbExcept)
 {
     if (rCell.getLength() != 2)
@@ -1929,7 +1931,23 @@ void SwXText::Impl::ConvertCell(
             }
             else
             {
+                // note: this may modify rLastPaM too!
                 m_pDoc->getIDocumentContentOperations().SplitNode(*aStartCellPam.Start(), false);
+                sal_uLong const nNewIndex(aStartCellPam.Start()->nNode.GetIndex());
+                if (nNewIndex != nStartCellNodeIndex)
+                {
+                    // aStartCellPam now points to the 2nd node
+                    // the last cell may *also* point to 2nd node now - fix it!
+                    assert(nNewIndex == nStartCellNodeIndex + 1);
+                    if (pLastCell->aEnd.GetIndex() == nNewIndex)
+                    {
+                        --pLastCell->aEnd;
+                        if (pLastCell->aStart.GetIndex() == nNewIndex)
+                        {
+                            --pLastCell->aStart;
+                        }
+                    }
+                }
             }
         }
         else if (nStartCellNodeIndex == (nLastNodeEndIndex + 1))
@@ -1974,7 +1992,7 @@ void SwXText::Impl::ConvertCell(
 
     SwNodeRange aCellRange(aStartCellPam.Start()->nNode,
             aEndCellPam.End()->nNode);
-    rRowNodes.push_back(aCellRange);
+    rRowNodes.push_back(aCellRange); // note: invalidates pLastCell!
     if (bFirstCell)
     {
         rpFirstPaM.reset(new SwPaM(*aStartCellPam.Start()));
@@ -2242,8 +2260,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
         for (sal_Int32 nCell = 0; nCell < nCells; ++nCell)
         {
+            SwNodeRange *const pLastCell(
+                (nCell == 0)
+                    ? ((nRow == 0) ? nullptr : &*aTableNodes.rbegin()->rbegin())
+                    : &*aRowNodes.rbegin());
             m_pImpl->ConvertCell((nCell == 0) && (nRow == 0), pRow[nCell],
-                aRowNodes, pFirstPaM, aLastPaM, bExcept);
+                aRowNodes, pFirstPaM, aLastPaM, pLastCell, bExcept);
         }
         aTableNodes.push_back(aRowNodes);
     }
