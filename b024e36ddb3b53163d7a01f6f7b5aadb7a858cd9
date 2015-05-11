@@ -16,6 +16,24 @@
       "revId": "b024e36ddb3b53163d7a01f6f7b5aadb7a858cd9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_8457e6c9",
+        "filename": "sc/source/core/tool/odffmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-05-11T09:24:01Z",
+      "side": 0,
+      "message": "Yes, I see that now. I removed this line to get rid of GDC_ADD in the UI, but that is not the right way.",
+      "parentUuid": "7a5de9d1_261ab66f",
+      "revId": "b024e36ddb3b53163d7a01f6f7b5aadb7a858cd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

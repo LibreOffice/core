@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a57f1b5_c45ddeed",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-05-11T09:24:01Z",
+      "side": 1,
+      "message": "I misread the comment. Changed the text a bit now, hoping that it will not misread again ;)",
+      "parentUuid": "7a5de9d1_061d3a66",
+      "revId": "d4711386ddd796395df4a0265c883d2268c55f46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a5de9d1_6610ae4f",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "3a57f1b5_e4625aad",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2504,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-05-11T09:24:01Z",
+      "side": 1,
+      "message": "You\u0027re right. I overlooked the line in sc/source/filter/excel/xlformula.cxx that does just this (the true flag is gone, now).",
+      "parentUuid": "7a5de9d1_6610ae4f",
+      "revId": "d4711386ddd796395df4a0265c883d2268c55f46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a5de9d1_c625e2ae",
         "filename": "scaddins/source/analysis/analysishelper.cxx",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2015-04-30T14:01:07Z",
       "side": 1,
       "message": "What is this about? I didn\u0027t look it up.",
+      "revId": "d4711386ddd796395df4a0265c883d2268c55f46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_a45c62ee",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-05-11T09:24:01Z",
+      "side": 1,
+      "message": "It was about having the function name in Calc too (DOUBLE), or not (UNIQUE). change reverted because of the other changes.",
+      "parentUuid": "7a5de9d1_c625e2ae",
       "revId": "d4711386ddd796395df4a0265c883d2268c55f46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
