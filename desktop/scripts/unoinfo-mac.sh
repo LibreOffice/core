@@ -20,7 +20,7 @@
 set -e
 
 # resolve installation directory
-sd_res=$0
+sd_res="$0"
 while [ -h "$sd_res" ] ; do
     cd "`dirname "$sd_res"`"
     sd_basename=`basename "$sd_res"`
@@ -29,7 +29,7 @@ done
 cd "`dirname "$sd_res"`"
 sd_prog=`pwd`
 
-case $1 in
+case "$1" in
 c++)
     printf '%s' "$sd_prog/../Frameworks"
     ;;

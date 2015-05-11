@@ -18,7 +18,7 @@
 #
 
 # use POSIX locale for well-defined tool output
-LO_SAVE_LC_ALL=$LC_ALL
+LO_SAVE_LC_ALL="$LC_ALL"
 LC_ALL=C
 export LC_ALL
 
@@ -45,7 +45,7 @@ export SAL_ENABLE_FILE_LOCKING
 
 # resolve installation directory
 sd_cwd=`pwd`
-sd_res=$0
+sd_res="$0"
 while [ -h "$sd_res" ] ; do
     cd "`dirname "$sd_res"`"
     sd_basename=`basename "$sd_res"`
@@ -56,8 +56,8 @@ sd_prog=`pwd`
 cd "$sd_cwd"
 
 # linked build needs additional settings
-if [ -e $sd_prog/ooenv ] ; then
-    . $sd_prog/ooenv
+if [ -e "${sd_prog}/ooenv" ] ; then
+    . "${sd_prog}/ooenv}"
 fi
 
 # try to get some debug output?
@@ -107,7 +107,7 @@ for arg in $@ $VALGRINDOPT ; do
                 VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes $valgrind_skip --num-callers=50 --error-limit=no"
                 echo "use kill -SIGUSR2 pid to dump traces of active allocations"
                 checks="c$checks"
-                case $VALGRIND in
+                case "$VALGRIND" in
                 helgrind|memcheck)
                     export G_SLICE=always-malloc
                     export GLIBCXX_FORCE_NEW=1
@@ -130,7 +130,7 @@ fi
 case "`uname -s`" in
 NetBSD|OpenBSD|FreeBSD|DragonFly)
 # this is a temporary hack until we can live with the default search paths
-    LD_LIBRARY_PATH=$sd_prog${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+    LD_LIBRARY_PATH="$sd_prog${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
     JAVA_HOME=$(javaPathHelper -h libreoffice-java 2> /dev/null)
     export LD_LIBRARY_PATH
     if [ -n "${JAVA_HOME}" ]; then
@@ -138,7 +138,7 @@ NetBSD|OpenBSD|FreeBSD|DragonFly)
     fi
     ;;
 AIX)
-    LIBPATH=$sd_prog${LIBPATH:+:$LIBPATH}
+    LIBPATH="$sd_prog${LIBPATH:+:$LIBPATH}"
     export LIBPATH
     ;;
 esac
