@@ -303,7 +303,7 @@ void SAXHelper::endElement( const OUString& aName )
 
     if( fullname != NULL )
     {
-        xmlFree( ( xmlChar* )fullname ) ;
+        xmlFree( fullname ) ;
         fullname = NULL ;
     }
 }
@@ -362,13 +362,13 @@ void SAXHelper::processingInstruction(
 
     if( target != NULL )
     {
-        xmlFree( ( xmlChar* )target ) ;
+        xmlFree( target ) ;
         target = NULL ;
     }
 
     if( data != NULL )
     {
-        xmlFree( ( xmlChar* )data ) ;
+        xmlFree( data ) ;
         data = NULL ;
     }
 }
