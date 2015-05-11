@@ -32,7 +32,7 @@ static const unsigned char librvng_utf8_skip_data[256] =
     3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,1,1
 };
 
-#define librvng_utf8_next_char(p) (char const *)((p) + librvng_utf8_skip_data[*reinterpret_cast<unsigned char const *>(p)])
+#define librvng_utf8_next_char(p) ((p) + librvng_utf8_skip_data[*reinterpret_cast<unsigned char const *>(p)])
 
 static void unescapeXML(const char *s, const unsigned long sz, librevenge::RVNGString &res)
 {
