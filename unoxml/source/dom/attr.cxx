@@ -192,7 +192,7 @@ namespace DOM
             xmlStringGetNodeList(m_aAttrPtr->doc, buffer.get());
         xmlNodePtr tmp = m_aAttrPtr->children;
         while (tmp != NULL) {
-            tmp->parent = (xmlNodePtr) m_aNodePtr;
+            tmp->parent = m_aNodePtr;
             tmp->doc = m_aAttrPtr->doc;
             if (tmp->next == NULL)
                 m_aNodePtr->last = tmp;
