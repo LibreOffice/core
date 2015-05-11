@@ -53,7 +53,6 @@ private:
 
 static const char * recommendedFix(clang::CastKind ck) {
     switch(ck) {
-        case CK_NoOp: return "const_cast";
         case CK_IntegralToPointer: return "reinterpret_cast";
         case CK_PointerToIntegral: return "reinterpret_cast";
         case CK_BaseToDerived: return "static_cast";
@@ -101,9 +100,11 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         } else {
             return true;
         }
-        if (!t1.isMoreQualifiedThan(t2)
-            || (t1.getUnqualifiedType().getCanonicalType().getTypePtr()
-                != t2.getUnqualifiedType().getCanonicalType().getTypePtr()))
+        if (expr->getSubExprAsWritten()->getType() != expr->getType()
+            && (!t1.isMoreQualifiedThan(t2)
+                || (t1.getUnqualifiedType().getCanonicalType().getTypePtr()
+                    != (t2.getUnqualifiedType().getCanonicalType()
+                        .getTypePtr()))))
         {
             return true;
         }
