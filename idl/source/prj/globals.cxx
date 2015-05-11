@@ -48,7 +48,7 @@ inline SvStringHashEntry * INS( const OString& rName )
 {
     sal_uInt32  nIdx;
     IDLAPP->pHashTable->Insert( rName, &nIdx );
-    return (SvStringHashEntry * )IDLAPP->pHashTable->Get( nIdx );
+    return IDLAPP->pHashTable->Get( nIdx );
 }
 #define A_ENTRY( Name ) , MM_##Name( INS( #Name ) )
 
