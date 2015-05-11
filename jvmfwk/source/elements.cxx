@@ -894,7 +894,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
     //Set xsi:nil in javaInfo element to false
     //the xmlNs pointer must not be destroyed
-    xmlNs* nsXsi = xmlSearchNsByHref((xmlDoc*) pDoc,
+    xmlNs* nsXsi = xmlSearchNsByHref(pDoc,
                              pJavaInfoNode,
                              reinterpret_cast<xmlChar const *>(NS_SCHEMA_INSTANCE));
 
