@@ -2033,11 +2033,11 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
                         exportSeriesText( xLabelSeq );
 
                     // export shape properties
-                    Reference< XPropertySet > xPropSet = SchXMLSeriesHelper::createOldAPISeriesPropertySet(
+                    Reference< XPropertySet > xOldPropSet = SchXMLSeriesHelper::createOldAPISeriesPropertySet(
                         rSeriesSeq[nSeriesIdx], getModel() );
-                    if( xPropSet.is() )
+                    if( xOldPropSet.is() )
                     {
-                        if( GetProperty( xPropSet, "Axis") )
+                        if( GetProperty( xOldPropSet, "Axis") )
                         {
                             mAny >>= nAttachedAxis;
                             if( nAttachedAxis == css::chart::ChartAxisAssign::SECONDARY_Y )
@@ -2045,7 +2045,7 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
                             else
                                 nAttachedAxis = AXIS_PRIMARY_Y;
                         }
-                        exportShapeProps( xPropSet );
+                        exportShapeProps( xOldPropSet );
                     }
 
                     switch( eChartType )
@@ -2067,7 +2067,7 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
                         case chart::TYPEID_PIE:
                         case chart::TYPEID_DOUGHNUT:
                         {
-                            if( xPropSet.is() && GetProperty( xPropSet, "SegmentOffset") )
+                            if( xOldPropSet.is() && GetProperty( xOldPropSet, "SegmentOffset") )
                             {
                                 sal_Int32 nOffset = 0;
                                 mAny >>= nOffset;
