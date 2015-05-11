@@ -65,6 +65,7 @@
 #include <svx/strarray.hxx>
 
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -1614,10 +1615,7 @@ SwMarkPreview::SwMarkPreview( vcl::Window *pParent, WinBits nWinBits ) :
     SetMapMode(MAP_PIXEL);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwMarkPreview(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SwMarkPreview(pParent, 0);
-}
+VCL_BUILDER_FACTORY_ARGS(SwMarkPreview, 0)
 
 SwMarkPreview::~SwMarkPreview()
 {

@@ -21,6 +21,7 @@
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include "view.hxx"
 #include "basesh.hxx"
@@ -238,9 +239,6 @@ bool BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBookmarkCombo(vcl::Window* pParent, VclBuilder::stringmap &)
-{
-    return new BookmarkCombo(pParent, 0);
-}
+VCL_BUILDER_FACTORY_ARGS(BookmarkCombo, 0)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

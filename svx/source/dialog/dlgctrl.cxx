@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/dialoghelper.hxx>
@@ -97,12 +97,7 @@ Size SvxRectCtl::GetOptimalSize() const
     return LogicToPixel(Size(78, 39), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxRectCtl(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxRectCtl(pParent);
-}
-
-
+VCL_BUILDER_FACTORY(SvxRectCtl)
 
 SvxRectCtl::~SvxRectCtl()
 {
@@ -839,11 +834,7 @@ Size SvxPixelCtl::GetOptimalSize() const
     return LogicToPixel(Size(72, 72), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPixelCtl(vcl::Window *pParent, VclBuilder::stringmap&)
-{
-    return new SvxPixelCtl(pParent, 8);
-}
-// Destructor dealocating the dynamic array
+VCL_BUILDER_FACTORY_ARGS(SvxPixelCtl, 8)
 
 SvxPixelCtl::~SvxPixelCtl( )
 {
@@ -1141,7 +1132,7 @@ BitmapEx SvxBitmapCtl::GetBitmapEx()
     return BitmapEx(aRetval);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ColorLB)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
@@ -1196,7 +1187,7 @@ HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeHatchingLB(vcl::Window *pParent, VclBuilder::stringmap& rMap)
+VCL_BUILDER_DECL_FACTORY(HatchingLB)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1289,7 +1280,7 @@ GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeGradientLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(GradientLB)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1405,7 +1396,7 @@ BitmapLB::BitmapLB( vcl::Window* pParent, WinBits aWB)
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBitmapLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(BitmapLB)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1575,7 +1566,7 @@ LineLB::LineLB(vcl::Window* pParent, WinBits aWB)
     // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(LineLB)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
@@ -1673,7 +1664,7 @@ LineEndLB::LineEndLB( vcl::Window* pParent, WinBits aWB )
     // No EdgeBlending for LineEnds SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineEndLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(LineEndLB)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
@@ -1969,10 +1960,7 @@ SvxXLinePreview::SvxXLinePreview(vcl::Window* pParent)
     mpLineObjC->SetModel(&getModel());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXLinePreview(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxXLinePreview(pParent);
-}
+VCL_BUILDER_FACTORY(SvxXLinePreview)
 
 Size SvxXLinePreview::GetOptimalSize() const
 {
@@ -2086,10 +2074,7 @@ void SvxXRectPreview::Resize()
     SvxPreviewBase::Resize();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXRectPreview(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxXRectPreview(pParent);
-}
+VCL_BUILDER_FACTORY(SvxXRectPreview)
 
 SvxXRectPreview::~SvxXRectPreview()
 {
@@ -2147,10 +2132,7 @@ SvxXShadowPreview::SvxXShadowPreview( vcl::Window* pParent )
     mpRectangleShadow->SetModel(&getModel());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXShadowPreview (vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxXShadowPreview(pParent);
-}
+VCL_BUILDER_FACTORY(SvxXShadowPreview)
 
 SvxXShadowPreview::~SvxXShadowPreview()
 {

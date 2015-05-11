@@ -18,7 +18,7 @@
  */
 #include <svx/sidebar/SidebarDialControl.hxx>
 
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -30,10 +30,7 @@ SidebarDialControl::SidebarDialControl (vcl::Window* pParent, WinBits nBits)
     Init(GetOutputSizePixel());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSidebarDialControl(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SidebarDialControl(pParent, WB_TABSTOP);
-}
+VCL_BUILDER_FACTORY_ARGS(SidebarDialControl, WB_TABSTOP)
 
 Size SidebarDialControl::GetOptimalSize() const
 {

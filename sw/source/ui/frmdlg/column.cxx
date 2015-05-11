@@ -36,6 +36,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <swmodule.hxx>
 #include <sal/macros.h>
@@ -1425,9 +1426,6 @@ void ColumnValueSet::DataChanged( const DataChangedEvent& rDCEvt )
     ValueSet::DataChanged( rDCEvt );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColumnValueSet(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new ColumnValueSet(pParent);
-}
+VCL_BUILDER_FACTORY(ColumnValueSet)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

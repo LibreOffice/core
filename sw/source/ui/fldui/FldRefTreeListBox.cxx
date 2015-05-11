@@ -20,7 +20,7 @@
 #include <FldRefTreeListBox.hxx>
 
 #include <helpid.h>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/help.hxx>
 
 SwFldRefTreeListBox::SwFldRefTreeListBox(vcl::Window* pParent, WinBits nStyle)
@@ -28,7 +28,7 @@ SwFldRefTreeListBox::SwFldRefTreeListBox(vcl::Window* pParent, WinBits nStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwFldRefTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SwFldRefTreeListBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

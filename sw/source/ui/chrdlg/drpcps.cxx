@@ -36,6 +36,7 @@
 #include <sfx2/objsh.hxx>
 #include <editeng/svxfont.hxx>
 #include <vcl/print.hxx>
+#include <vcl/builderfactory.hxx>
 #include <sfx2/printer.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/scripttypeitem.hxx>
@@ -132,10 +133,7 @@ public:
     void        DrawPrev( const Point& rPt );
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwDropCapsPict(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SwDropCapsPict(pParent, WB_BORDER);
-}
+VCL_BUILDER_FACTORY_ARGS(SwDropCapsPict, WB_BORDER)
 
 void SwDropCapsPict::SetText( const OUString& rT )
 {

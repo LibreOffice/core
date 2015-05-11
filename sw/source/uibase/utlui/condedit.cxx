@@ -21,7 +21,7 @@
 
 #include <condedit.hxx>
 #include <svx/dbaexchange.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 using namespace ::svx;
 using namespace ::com::sun::star::uno;
@@ -34,7 +34,7 @@ ConditionEdit::ConditionEdit(vcl::Window* pParent, WinBits nStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeConditionEdit(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ConditionEdit)
 {
     VclBuilder::ensureDefaultWidthChars(rMap);
     return new ConditionEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);

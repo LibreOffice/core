@@ -28,7 +28,7 @@
 #include <svx/sphere3d.hxx>
 #include <svx/cube3d.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <svx/helperhittest3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <svx/polygn3d.hxx>
@@ -62,10 +62,7 @@ Size Svx3DPreviewControl::GetOptimalSize() const
     return LogicToPixel(Size(80, 100), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvx3DPreviewControl(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new Svx3DPreviewControl(pParent);
-}
+VCL_BUILDER_FACTORY(Svx3DPreviewControl)
 
 Svx3DPreviewControl::~Svx3DPreviewControl()
 {
@@ -962,10 +959,7 @@ Size SvxLightCtl3D::GetOptimalSize() const
     return LogicToPixel(Size(80, 100), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxLightCtl3D(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxLightCtl3D(pParent);
-}
+VCL_BUILDER_FACTORY(SvxLightCtl3D)
 
 void SvxLightCtl3D::Init()
 {

@@ -19,6 +19,7 @@
 
 #include <swtypes.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <vcl/builderfactory.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <usrfld.hxx>
 #include <docufld.hxx>
@@ -1262,7 +1263,7 @@ SelectionListBox::SelectionListBox(vcl::Window* pParent, WinBits nStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSelectionListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SelectionListBox)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
 

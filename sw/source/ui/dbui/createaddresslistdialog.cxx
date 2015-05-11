@@ -24,6 +24,7 @@
 #include <comphelper/string.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/builderfactory.hxx>
 #include <svtools/controldims.hrc>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -107,8 +108,9 @@ SwAddressControl_Impl::SwAddressControl_Impl(vcl::Window* pParent, WinBits nBits
     m_pScrollBar->EnableDrag();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAddressControlImpl(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(SwAddressControlImpl)
 {
+    (void)rMap;
     return new SwAddressControl_Impl(pParent, WB_BORDER | WB_DIALOGCONTROL);
 }
 

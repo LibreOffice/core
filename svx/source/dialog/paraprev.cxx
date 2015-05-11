@@ -19,7 +19,7 @@
 
 #include <sfx2/dialoghelper.hxx>
 #include <svx/paraprev.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 
 SvxParaPrevWindow::SvxParaPrevWindow( vcl::Window* pParent,  WinBits nBits) :
@@ -45,10 +45,7 @@ SvxParaPrevWindow::SvxParaPrevWindow( vcl::Window* pParent,  WinBits nBits) :
     SetBorderStyle( WindowBorderStyle::MONO );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxParaPrevWindow(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxParaPrevWindow(pParent, WB_BORDER);
-}
+VCL_BUILDER_FACTORY_ARGS(SvxParaPrevWindow, WB_BORDER)
 
 Size SvxParaPrevWindow::GetOptimalSize() const
 {

@@ -34,6 +34,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/xtable.hxx>
@@ -396,10 +397,7 @@ SvxNumValueSet::SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxNumValueSet(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxNumValueSet(pParent, WB_TABSTOP);
-}
+VCL_BUILDER_FACTORY_ARGS(SvxNumValueSet, WB_TABSTOP)
 
 void SvxNumValueSet::init(sal_uInt16 nType)
 {
@@ -474,10 +472,7 @@ SvxBmpNumValueSet::SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits)
     init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxBmpNumValueSet(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxBmpNumValueSet(pParent, WB_TABSTOP);
-}
+VCL_BUILDER_FACTORY_ARGS(SvxBmpNumValueSet, WB_TABSTOP)
 
 void SvxBmpNumValueSet::init()
 {

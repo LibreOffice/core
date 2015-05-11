@@ -43,7 +43,7 @@
 
 #include <svtools/insdlg.hxx>
 #include <svtools/treelistentry.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 
 #include <comphelper/classids.hxx>
@@ -388,7 +388,7 @@ SwCaptionPreview::SwCaptionPreview( vcl::Window* pParent, WinBits nStyle )
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwCaptionPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SwCaptionPreview)
 {
     WinBits nBits = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -934,7 +934,7 @@ void CaptionComboBox::KeyInput(const KeyEvent& rEvt)
         SwComboBox::KeyInput(rEvt);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCaptionComboBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(CaptionComboBox)
 {
     WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
     bool bDropdown = VclBuilder::extractDropdown(rMap);

@@ -23,7 +23,7 @@
 #include "svx/measctrl.hxx"
 #include <svx/dialmgr.hxx>
 #include "svx/dlgutil.hxx"
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <boost/scoped_ptr.hpp>
 
@@ -62,7 +62,7 @@ void SvxXMeasurePreview::Resize()
     pMeasureObj->SetPoint(aPt2, 1);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXMeasurePreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvxXMeasurePreview)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

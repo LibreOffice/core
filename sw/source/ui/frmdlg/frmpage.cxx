@@ -68,6 +68,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/builderfactory.hxx>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -2660,10 +2661,7 @@ Size BmpWindow::GetOptimalSize() const
     return LogicToPixel(Size(127 , 66), MapMode(MAP_APPFONT));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBmpWindow(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new BmpWindow(pParent, 0);
-}
+VCL_BUILDER_FACTORY_ARGS(BmpWindow, 0)
 
 void BmpWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
 {

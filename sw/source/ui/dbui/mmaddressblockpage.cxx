@@ -24,6 +24,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/xtextedt.hxx>
+#include <vcl/builderfactory.hxx>
 #include <mmconfigitem.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -845,10 +846,7 @@ public:
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAssignFieldsControl(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SwAssignFieldsControl(pParent, WB_BORDER);
-}
+VCL_BUILDER_FACTORY_ARGS(SwAssignFieldsControl, WB_BORDER)
 
 SwAssignFieldsControl::SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits) :
     Control(pParent, nBits | WB_DIALOGCONTROL | WB_TABSTOP | WB_DIALOGCONTROL),
@@ -1288,8 +1286,7 @@ void DDListBox::dispose()
     SvTreeListBox::dispose();
 }
 
-
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDDListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(DDListBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1351,7 +1348,7 @@ Size AddressMultiLineEdit::GetOptimalSize() const
     return LogicToPixel(Size(160, 60), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeAddressMultiLineEdit(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(AddressMultiLineEdit)
 {
     WinBits nWinStyle = WB_LEFT|WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

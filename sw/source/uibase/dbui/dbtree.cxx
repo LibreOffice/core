@@ -41,7 +41,7 @@
 #include <wrtsh.hxx>
 #include <dbtree.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/treelistentry.hxx>
 
@@ -180,7 +180,7 @@ SwDBTreeList::SwDBTreeList(vcl::Window *pParent, WinBits nStyle)
         InitTreeList();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwDBTreeList(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SwDBTreeList)
 {
     WinBits nStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

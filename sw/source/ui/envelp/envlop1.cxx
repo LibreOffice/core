@@ -19,7 +19,7 @@
 
 #include "dbmgr.hxx"
 #include <sfx2/app.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
@@ -57,10 +57,7 @@ Size SwEnvPreview::GetOptimalSize() const
     return LogicToPixel(Size(84 , 63), MAP_APPFONT);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwEnvPreview(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SwEnvPreview(pParent, 0);
-}
+VCL_BUILDER_FACTORY_ARGS(SwEnvPreview, 0)
 
 void SwEnvPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {

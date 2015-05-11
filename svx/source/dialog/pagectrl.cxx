@@ -18,7 +18,7 @@
  */
 
 #include <vcl/bitmap.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <tools/fract.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -100,12 +100,7 @@ void SvxPageWindow::dispose()
     vcl::Window::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPageWindow(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxPageWindow(pParent);
-}
-
-
+VCL_BUILDER_FACTORY(SvxPageWindow)
 
 void SvxPageWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {

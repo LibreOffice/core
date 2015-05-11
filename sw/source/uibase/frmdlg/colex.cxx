@@ -32,6 +32,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include <tgrditem.hxx>
 #include <viewopt.hxx>
 #include "colex.hxx"
@@ -314,10 +315,7 @@ void SwColExample::DrawPage( const Point& rOrg,
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwColExample(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SwColExample(pParent);
-}
+VCL_BUILDER_FACTORY(SwColExample)
 
 SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
     : Window(pParent)
@@ -343,10 +341,7 @@ SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
     SetMapMode( aMapMode );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwColumnOnlyExample(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SwColumnOnlyExample(pParent);
-}
+VCL_BUILDER_FACTORY(SwColumnOnlyExample)
 
 void SwColumnOnlyExample::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
 {
@@ -613,9 +608,6 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     SwPageExample::UpdateExample(rSet);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwPageGridExample(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SwPageGridExample(pParent);
-}
+VCL_BUILDER_FACTORY(SwPageGridExample)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

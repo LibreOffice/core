@@ -18,11 +18,9 @@
  */
 
 #include <svx/frmdirlbox.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 namespace svx {
-
-
 
 namespace {
 
@@ -44,13 +42,13 @@ FrameDirectionListBox::FrameDirectionListBox( vcl::Window* pParent, WinBits nBit
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFrameDirectionListBox(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(FrameDirectionListBox)
 {
+    (void)rMap;
     FrameDirectionListBox* pListBox = new FrameDirectionListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }
-
 
 void FrameDirectionListBox::InsertEntryValue( const OUString& rString, SvxFrameDirection eDirection, sal_Int32 nPos )
 {
