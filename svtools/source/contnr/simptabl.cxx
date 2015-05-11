@@ -187,29 +187,29 @@ void SvSimpleTable::SetTabs(const long* pTabs, MapUnit eMapUnit)
     SvHeaderTabListBox::SetTabs(pTabs,eMapUnit);
 }
 
-void SvSimpleTable::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void SvSimpleTable::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     SvHeaderTabListBox::Paint(rRenderContext, rRect);
 
     sal_uInt16 nPrivTabCount = TabCount();
 
-    long nOffset=-GetXOffset();
-    nOldPos=nOffset;
+    long nOffset =- GetXOffset();
+    nOldPos = nOffset;
 
     aHeaderBar->SetOffset(nOffset);
     aHeaderBar->Invalidate();
 
-    if(nPrivTabCount && bPaintFlag)
+    if (nPrivTabCount && bPaintFlag)
     {
-        if(nPrivTabCount>aHeaderBar->GetItemCount())
-                nPrivTabCount=aHeaderBar->GetItemCount();
+        if (nPrivTabCount>aHeaderBar->GetItemCount())
+            nPrivTabCount=aHeaderBar->GetItemCount();
 
         sal_uInt16 nPos = 0;
-        for(sal_uInt16 i=1;i<nPrivTabCount;i++)
+        for (sal_uInt16 i = 1; i < nPrivTabCount; i++)
         {
-            sal_uInt16 nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
-            aHeaderBar->SetItemSize( i, nNewSize );
-            nPos= static_cast< sal_uInt16 >( GetTab(i) );
+            sal_uInt16 nNewSize = static_cast<sal_uInt16>(GetTab(i)) - nPos;
+            aHeaderBar->SetItemSize(i, nNewSize);
+            nPos = static_cast<sal_uInt16>(GetTab(i));
         }
     }
     bPaintFlag = true;
