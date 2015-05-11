@@ -266,7 +266,9 @@ DomainMapper_Impl::DomainMapper_Impl(
 DomainMapper_Impl::~DomainMapper_Impl()
 {
     ChainTextFrames();
-    RemoveLastParagraph( );
+    // Don't remove last paragraph when pasting, sw expects that empty paragraph.
+    if (m_bIsNewDoc)
+        RemoveLastParagraph();
     getTableManager( ).endLevel();
     popTableManager( );
 }

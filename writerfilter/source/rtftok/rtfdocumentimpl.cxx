@@ -211,7 +211,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
                                  uno::Reference<io::XInputStream> const& xInputStream,
                                  uno::Reference<lang::XComponent> const& xDstDoc,
                                  uno::Reference<frame::XFrame> const& xFrame,
-                                 uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
+                                 uno::Reference<task::XStatusIndicator> const& xStatusIndicator,
+                                 bool bIsNewDoc)
     : m_xContext(xContext),
       m_xInputStream(xInputStream),
       m_xDstDoc(xDstDoc),
@@ -271,7 +272,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_bHadPicture(false),
       m_bHadSect(false),
       m_nCellxMax(0),
-      m_nListPictureId(0)
+      m_nListPictureId(0),
+      m_bIsNewDoc(bIsNewDoc)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, true));
@@ -342,7 +344,7 @@ void RTFDocumentImpl::resolveSubstream(sal_Size nPos, Id nId, OUString& rIgnoreF
 {
     sal_Size nCurrent = Strm().Tell();
     // Seek to header position, parse, then seek back.
-    auto pImpl = std::make_shared<RTFDocumentImpl>(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator);
+    auto pImpl = std::make_shared<RTFDocumentImpl>(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator, m_bIsNewDoc);
     pImpl->setSuperstream(this);
     pImpl->setStreamType(nId);
     pImpl->setIgnoreFirst(rIgnoreFirst);
@@ -570,7 +572,8 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     bool bContinuous = pBreak.get() && pBreak->getInt() == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous);
     // If there is no paragraph in this section, then insert a dummy one, as required by Writer,
     // unless this is the end of the doc, we had nothing since the last section break and this is not a continuous one.
-    if (m_bNeedPar && !(bFinal && !m_bNeedSect && !bContinuous) && !isSubstream())
+    // Also, when pasting, it's fine to not have any paragraph inside the document at all.
+    if (m_bNeedPar && !(bFinal && !m_bNeedSect && !bContinuous) && !isSubstream() && m_bIsNewDoc)
         dispatchSymbol(RTF_PAR);
     // It's allowed to not have a non-table paragraph at the end of an RTF doc, add it now if required.
     if (m_bNeedFinalPar && bFinal)
@@ -5765,7 +5768,7 @@ RTFError RTFDocumentImpl::popState()
     {
         // \par means an empty paragraph at the end of footnotes/endnotes, but
         // not in case of other substreams, like headers.
-        if (m_bNeedCr && !(m_nStreamType == NS_ooxml::LN_footnote || m_nStreamType == NS_ooxml::LN_endnote))
+        if (m_bNeedCr && !(m_nStreamType == NS_ooxml::LN_footnote || m_nStreamType == NS_ooxml::LN_endnote) && m_bIsNewDoc)
             dispatchSymbol(RTF_PAR);
         if (m_bNeedSect) // may be set by dispatchSymbol above!
             sectBreak(true);

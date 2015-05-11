@@ -43,7 +43,8 @@ public:
                    css::uno::Reference<css::io::XInputStream> const& xInputStream,
                    css::uno::Reference<css::lang::XComponent> const& xDstDoc,
                    css::uno::Reference<css::frame::XFrame> const& xFrame,
-                   css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator);
+                   css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
+                   bool bIsNewDoc);
 };
 } // namespace rtftok
 } // namespace writerfilter

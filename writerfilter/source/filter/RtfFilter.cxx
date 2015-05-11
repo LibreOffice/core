@@ -147,7 +147,8 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         writerfilter::dmapper::SourceDocumentType eType = writerfilter::dmapper::SourceDocumentType::RTF;
         writerfilter::Stream::Pointer_t pStream(
             writerfilter::dmapper::DomainMapperFactory::createMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, xInsertTextRange, aMediaDesc));
-        writerfilter::rtftok::RTFDocument::Pointer_t pDocument(writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator));
+        writerfilter::rtftok::RTFDocument::Pointer_t pDocument(
+            writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator, bIsNewDoc));
         pDocument->resolve(*pStream);
         bResult = true;
         sal_uInt32 nEndTime = osl_getGlobalTimer();
