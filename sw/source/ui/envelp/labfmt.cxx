@@ -20,6 +20,7 @@
 #include <tools/poly.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <viewopt.hxx>
 
@@ -84,10 +85,7 @@ Size SwLabPreview::GetOptimalSize() const
     return LogicToPixel(Size(146 , 161), MapMode(MAP_APPFONT));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwLabPreview(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SwLabPreview(pParent);
-}
+VCL_BUILDER_FACTORY(SwLabPreview)
 
 void SwLabPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &)
 {

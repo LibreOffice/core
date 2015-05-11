@@ -18,7 +18,7 @@
  */
 
 #include "svx/fontlb.hxx"
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include "svtools/treelistentry.hxx"
@@ -90,7 +90,7 @@ SvxFontListBox::SvxFontListBox(vcl::Window* pParent, WinBits nStyle)
     maEntryFont = maStdFont;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFontListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvxFontListBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

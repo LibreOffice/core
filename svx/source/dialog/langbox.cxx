@@ -31,7 +31,7 @@
 #include <svx/langbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/i18nhelp.hxx>
 
 using namespace ::com::sun::star::util;
@@ -103,8 +103,7 @@ static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nL
     return i >= 0  &&  i < nLen;
 }
 
-
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxLanguageBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvxLanguageBox)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     bool bDropdown = VclBuilder::extractDropdown(rMap);
@@ -117,7 +116,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxLanguageBox(vcl::Wi
     return pLanguageBox;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxLanguageComboBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvxLanguageComboBox)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     bool bDropdown = VclBuilder::extractDropdown(rMap);
@@ -129,7 +128,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxLanguageComboBox(vc
     pLanguageBox->EnableAutoSize(true);
     return pLanguageBox;
 }
-
 
 SvxLanguageBoxBase::SvxLanguageBoxBase( bool bCheck )
     : m_pSpellUsedLang(NULL)

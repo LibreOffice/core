@@ -25,6 +25,7 @@
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
+#include <vcl/builderfactory.hxx>
 
 #include <unomid.h>
 
@@ -54,8 +55,9 @@ bool SwNumberingTypeListBox::set_property(const OString &rKey, const OString &rV
     return true;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwNumberingTypeListBox(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(SwNumberingTypeListBox)
 {
+    (void)rMap;
     SwNumberingTypeListBox *pListBox = new SwNumberingTypeListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
     pListBox->EnableAutoSize(true);
     return pListBox;

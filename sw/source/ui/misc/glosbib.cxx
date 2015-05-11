@@ -21,6 +21,7 @@
 #include <tools/stream.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
+#include <vcl/builderfactory.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
@@ -407,12 +408,9 @@ void FEdit::KeyInput( const KeyEvent& rKEvent )
         Edit::KeyInput( rKEvent );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFEdit(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new FEdit(pParent);
-}
+VCL_BUILDER_FACTORY(FEdit)
 
-void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
+void SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
 {
     Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
     SvTreeListEntry* pEntry = GetEntry( aPos );
@@ -441,9 +439,6 @@ void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwGlossaryGroupTLB(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SwGlossaryGroupTLB(pParent);
-}
+VCL_BUILDER_FACTORY(SwGlossaryGroupTLB)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

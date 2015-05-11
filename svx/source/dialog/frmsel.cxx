@@ -18,7 +18,7 @@
  */
 
 #include <svx/frmsel.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <algorithm>
 #include <math.h>
@@ -796,8 +796,9 @@ FrameSelector::~FrameSelector()
     disposeOnce();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFrameSelector(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(SvxFrameSelector)
 {
+    (void)rMap;
     return new FrameSelector(pParent);
 }
 

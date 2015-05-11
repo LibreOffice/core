@@ -21,6 +21,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <sfx2/tabdlg.hxx>
 #include <editeng/brushitem.hxx>
@@ -918,10 +919,7 @@ static long lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, long nXS
     return nRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeNumberingPreview(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new NumberingPreview(pParent);
-}
+VCL_BUILDER_FACTORY(NumberingPreview)
 
 // paint numbering's preview
 void NumberingPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )

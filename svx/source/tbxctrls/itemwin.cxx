@@ -27,6 +27,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <svx/dialogs.hrc>
 
@@ -412,12 +413,7 @@ SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent, WinBits nBits ) :
     Show();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFillTypeBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxFillTypeBox(pParent);
-}
-
-
+VCL_BUILDER_FACTORY(SvxFillTypeBox)
 
 bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -493,12 +489,7 @@ SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent, WinBits nBits ) :
     Show();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFillAttrBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxFillAttrBox(pParent);
-}
-
-
+VCL_BUILDER_FACTORY(SvxFillAttrBox)
 
 bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 {

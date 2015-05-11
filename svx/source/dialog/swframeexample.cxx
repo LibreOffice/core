@@ -18,7 +18,7 @@
  */
 
 #include <tools/poly.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -52,10 +52,7 @@ SvxSwFrameExample::SvxSwFrameExample( vcl::Window *pParent, WinBits nStyle ) :
     SetMapMode(MAP_PIXEL);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxSwFrameExample(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SvxSwFrameExample(pParent, 0);
-}
+VCL_BUILDER_FACTORY_ARGS(SvxSwFrameExample, 0)
 
 Size SvxSwFrameExample::GetOptimalSize() const
 {

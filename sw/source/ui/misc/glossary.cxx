@@ -22,6 +22,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/help.hxx>
+#include <vcl/builderfactory.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
@@ -852,10 +853,7 @@ Size SwGlTreeListBox::GetOptimalSize() const
     return LogicToPixel(Size(212, 84), MapMode(MAP_APPFONT));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwGlTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SwGlTreeListBox(pParent, WB_BORDER | WB_TABSTOP);
-}
+VCL_BUILDER_FACTORY_ARGS(SwGlTreeListBox, WB_BORDER | WB_TABSTOP)
 
 void SwGlTreeListBox::Clear()
 {

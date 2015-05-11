@@ -34,6 +34,7 @@
 #include "gallery.hrc"
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #define GALLERY_BRWBOX_TITLE    1
 
@@ -47,8 +48,7 @@ GalleryPreview::GalleryPreview(vcl::Window* pParent, WinBits nStyle, GalleryThem
     InitSettings();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeGalleryPreview(vcl::Window *pParent,
-    VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(GalleryPreview)
 {
     WinBits nWinBits = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

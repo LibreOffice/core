@@ -52,6 +52,7 @@
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 #include "dlgunit.hxx"
 #include <boost/scoped_ptr.hpp>
 
@@ -114,10 +115,7 @@ void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageM
         pDlg->UpdateLink(rGraphic, pImageMap, pTargetList, pEditingObj);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeStatusBar(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new StatusBar(pParent);
-}
+VCL_BUILDER_FACTORY(StatusBar)
 
 SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window* _pParent)
     : SfxModelessDialog(_pBindings, pCW, _pParent, "ImapDialog", "svx/ui/imapdialog.ui")

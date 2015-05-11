@@ -28,6 +28,7 @@
 #include <svx/svxids.hrc>
 #include <svx/numinf.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/builderfactory.hxx>
 #include <svx/flagsdef.hxx>
 #include <svl/itemset.hxx>
 #include <docsh.hxx>
@@ -68,7 +69,7 @@ NumFormatListBox::NumFormatListBox(vcl::Window* pWin, WinBits nStyle) :
     Init(css::util::NumberFormat::NUMBER, true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeNumFormatListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(NumFormatListBox)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
 

@@ -23,6 +23,7 @@
 #include <rsc/rscsfx.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
+#include <vcl/builderfactory.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
@@ -1758,7 +1759,7 @@ void SwIdxTreeListBox::dispose()
     SvTreeListBox::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwIdxTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SwIdxTreeListBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -2736,10 +2737,7 @@ SwTokenWindow::SwTokenWindow(vcl::Window* pParent)
     m_pRightScrollWin->SetClickHdl(aLink);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwTokenWindow(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SwTokenWindow(pParent);
-}
+VCL_BUILDER_FACTORY(SwTokenWindow)
 
 void SwTokenWindow::setAllocation(const Size &rAllocation)
 {

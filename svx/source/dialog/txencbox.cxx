@@ -25,7 +25,7 @@
 #if HAVE_FEATURE_DBCONNECTIVITY
 #include "svx/dbcharsethelper.hxx"
 #endif
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/tencinfo.h>
@@ -39,7 +39,7 @@ SvxTextEncodingBox::SvxTextEncodingBox( vcl::Window* pParent, WinBits nBits )
     m_pEncTable = new SvxTextEncodingTable;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxTextEncodingBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvxTextEncodingBox)
 {
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     bool bDropdown = VclBuilder::extractDropdown(rMap);

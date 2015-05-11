@@ -39,6 +39,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
@@ -799,10 +800,7 @@ void RubyPreview::dispose()
     vcl::Window::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRubyPreview(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new RubyPreview(pParent);
-}
+VCL_BUILDER_FACTORY(RubyPreview)
 
 void RubyPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /* rRect */ )
 {
@@ -952,9 +950,6 @@ bool RubyEdit::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRubyEdit(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new RubyEdit(pParent);
-}
+VCL_BUILDER_FACTORY(RubyEdit)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

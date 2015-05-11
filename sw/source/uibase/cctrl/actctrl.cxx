@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include "actctrl.hxx"
 
 void NumEditAction::Action()
@@ -62,7 +62,7 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
         Edit::KeyInput(rEvt);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeReturnActionEdit(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ReturnActionEdit)
 {
     VclBuilder::ensureDefaultWidthChars(rMap);
     return new ReturnActionEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);

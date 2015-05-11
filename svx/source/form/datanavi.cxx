@@ -42,6 +42,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/builderfactory.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -296,10 +297,7 @@ namespace svxform
 
     // class XFormsPage
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDataTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &)
-    {
-        return new DataTreeListBox(static_cast<XFormsPage*>(pParent), WB_BORDER);
-    }
+    VCL_BUILDER_FACTORY_ARGS(DataTreeListBox, WB_BORDER)
 
     XFormsPage::XFormsPage( vcl::Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup ) :
 
