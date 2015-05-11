@@ -2241,10 +2241,10 @@ void ImplListBox::SetNoSelection()
 
 void ImplListBox::GetFocus()
 {
-    if (!maLBWindow || maLBWindow->IsDisposed())
-        return;
-
-    maLBWindow->GrabFocus();
+    if (maLBWindow)
+        maLBWindow->GrabFocus();
+    else
+        Control::GetFocus();
 }
 
 vcl::Window* ImplListBox::GetPreferredKeyInputWindow()
