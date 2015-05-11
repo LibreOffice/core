@@ -108,6 +108,10 @@ private:
 
     VclPtr<formula::RefEdit> mpLastEdit;
 
+    OUString msBaseTitle;
+
+    void updateTitle();
+
     DECL_LINK( EdRangeModifyHdl, Edit* );
 protected:
 
