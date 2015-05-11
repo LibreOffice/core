@@ -97,6 +97,7 @@ public:
     void testTitleCharacterPropertiesXLSX();
     void testPlotVisOnlyXLSX();
     void testBarChartVaryColorsXLSX();
+    void testMultipleAxisXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -158,6 +159,7 @@ public:
     CPPUNIT_TEST(testTitleCharacterPropertiesXLSX);
     CPPUNIT_TEST(testPlotVisOnlyXLSX);
     CPPUNIT_TEST(testBarChartVaryColorsXLSX);
+    CPPUNIT_TEST(testMultipleAxisXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1443,6 +1445,18 @@ void Chart2ExportTest::testBarChartVaryColorsXLSX()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:varyColors", "val", "0");
+}
+
+void Chart2ExportTest::testMultipleAxisXLSX()
+{
+    load("/chart2/qa/extras/data/ods/", "multiple_axis.ods");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart", 2);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart[1]/c:ser", 1);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart[2]/c:ser", 1);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx", 4);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
