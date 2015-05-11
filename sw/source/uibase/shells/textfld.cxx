@@ -855,7 +855,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
 IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
 {
     SwWrtShell* pSh = GetShellPtr();
-    AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
+    AbstractSvxPostItDialog *pDlg = pBtn;
 
     // Insert or change a comment.
     pSh->SetRedlineComment(pDlg->GetNote());
@@ -905,7 +905,7 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
 IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
 {
     SwWrtShell* pSh = GetShellPtr();
-    AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
+    AbstractSvxPostItDialog *pDlg = pBtn;
 
     // Insert or change a comment.
     pSh->SetRedlineComment(pDlg->GetNote());

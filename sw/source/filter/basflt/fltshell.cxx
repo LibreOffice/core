@@ -722,7 +722,7 @@ SfxPoolItem* SwFltControlStack::GetFmtStackAttr(sal_uInt16 nWhich, sal_uInt16 * 
         {
             if (pPos)
                 *pPos = nSize;
-            return (SfxPoolItem*)rEntry.pAttr;      // Ok, so stop
+            return rEntry.pAttr;      // Ok, so stop
         }
     }
     return 0;
@@ -739,7 +739,7 @@ const SfxPoolItem* SwFltControlStack::GetOpenStackAttr(const SwPosition& rPos, s
         SwFltStackEntry &rEntry = maEntries[--nSize];
         if (rEntry.bOpen && rEntry.pAttr->Which() == nWhich && rEntry.m_aMkPos == aFltPos)
         {
-            return (SfxPoolItem*)rEntry.pAttr;
+            return rEntry.pAttr;
         }
     }
     return 0;

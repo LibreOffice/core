@@ -609,7 +609,7 @@ bool SwCntntFrm::LeftMargin(SwPaM *pPam) const
     if( &pPam->GetNode() != GetNode() )
         return false;
     const_cast<SwCntntNode*>(GetNode())->
-        MakeStartIndex((SwIndex *) &pPam->GetPoint()->nContent);
+        MakeStartIndex(&pPam->GetPoint()->nContent);
     return true;
 }
 
@@ -618,7 +618,7 @@ bool SwCntntFrm::RightMargin(SwPaM *pPam, bool) const
     if( &pPam->GetNode() != GetNode() )
         return false;
     const_cast<SwCntntNode*>(GetNode())->
-        MakeEndIndex((SwIndex *) &pPam->GetPoint()->nContent);
+        MakeEndIndex(&pPam->GetPoint()->nContent);
     return true;
 }
 
@@ -933,9 +933,9 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         SwCntntNode *pCNd = const_cast<SwCntntNode*>(pCnt->GetNode());
         pPam->GetPoint()->nNode = *pCNd;
         if ( fnNxtPrv == lcl_GetPrvCnt )
-            pCNd->MakeEndIndex( (SwIndex*)&pPam->GetPoint()->nContent );
+            pCNd->MakeEndIndex( &pPam->GetPoint()->nContent );
         else
-            pCNd->MakeStartIndex( (SwIndex*)&pPam->GetPoint()->nContent );
+            pCNd->MakeStartIndex( &pPam->GetPoint()->nContent );
         return true;
     }
     return false;
@@ -1012,7 +1012,7 @@ sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
     {
         SwCntntNode* pCNd = const_cast<SwCntntNode*>(pCntnt->GetNode());
         pToSet->GetPoint()->nNode = *pCNd;
-        pCNd->MakeStartIndex( (SwIndex*)&pToSet->GetPoint()->nContent );
+        pCNd->MakeStartIndex( &pToSet->GetPoint()->nContent );
         pToSet->GetPoint()->nContent = static_cast<const SwTxtFrm*>(pCntnt)->GetOfst();
 
         SwShellCrsr* pSCrsr = dynamic_cast<SwShellCrsr*>(pToSet);

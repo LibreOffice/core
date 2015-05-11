@@ -93,7 +93,7 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
             SwFmtCharFmt *pCharFmt = 0;
             if(pStyle)
             {
-                rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
+                rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *pStyle ) );
                 if (RES_PARATR_DROP == pMap->nWID)
                 {
                     pDrop = static_cast<SwFmtDrop*>(rItem.Clone());   // because rItem is const...

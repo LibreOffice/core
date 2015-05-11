@@ -97,7 +97,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
         pClpDoc->GetNodes().Delete( aSttIdx,
             pClpDoc->GetNodes().GetEndOfContent().GetIndex() - aSttIdx.GetIndex() );
         pTxtNd = pClpDoc->GetNodes().MakeTxtNode( aSttIdx,
-                            (SwTxtFmtColl*)pClpDoc->GetDfltTxtFmtColl() );
+                            pClpDoc->GetDfltTxtFmtColl() );
         --aSttIdx;
     }
 
@@ -146,7 +146,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
 
        // assure the "RootFmt" is the first element in Spz-Array
         // (if necessary Flys were copied in Flys)
-        SwFrmFmts& rSpzFrmFmts = *(SwFrmFmts*)pClpDoc->GetSpzFrmFmts();
+        SwFrmFmts& rSpzFrmFmts = *pClpDoc->GetSpzFrmFmts();
         if( rSpzFrmFmts[ 0 ] != pFlyFmt )
         {
             SwFrmFmts::iterator it = std::find( rSpzFrmFmts.begin(), rSpzFrmFmts.end(), pFlyFmt );

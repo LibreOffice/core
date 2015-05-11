@@ -38,7 +38,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     bSttWasTxtNd( true ), nNdDiff( 0 ), nSetPos( 0 )
 {
     pHistory = new SwHistory;
-    SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
+    SwDoc* pDoc = rPam.GetDoc();
 
     SwTxtNode* pTxtNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
     if( pTxtNd )
@@ -103,7 +103,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
     if( bScanFlys && !nSttCntnt )
     {
         // than collect all new Flys
-        SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
+        SwDoc* pDoc = rPam.GetDoc();
         const size_t nArrLen = pDoc->GetSpzFrmFmts()->size();
         for( size_t n = 0; n < nArrLen; ++n )
         {

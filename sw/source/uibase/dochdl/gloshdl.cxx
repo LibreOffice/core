@@ -437,7 +437,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
             if(1 == aFoundArr.size())
             {
                 TextBlockInfo_Impl* pData = &aFoundArr.front();
-                pGlossary = (SwTextBlocks *)pGlossaries->GetGroupDoc(pData->sGroupName);
+                pGlossary = pGlossaries->GetGroupDoc(pData->sGroupName);
                 nFound = pGlossary->GetIndex( aShortName );
             }
             else
@@ -460,7 +460,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 if(LISTBOX_ENTRY_NOTFOUND != nRet)
                 {
                     TextBlockInfo_Impl* pData = &aFoundArr[nRet];
-                    pGlossary = (SwTextBlocks *)pGlossaries->GetGroupDoc(pData->sGroupName);
+                    pGlossary = pGlossaries->GetGroupDoc(pData->sGroupName);
                     nFound = pGlossary->GetIndex( aShortName );
                 }
                 else

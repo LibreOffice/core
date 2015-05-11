@@ -1128,7 +1128,7 @@ bool WW8_WrFkp::Combine()
         memcpy( pFkp + ( nIMax + 1 ) * 4, pOfs, nIMax * nItemSize );
     delete[] pOfs;
     pOfs = 0;
-    ((sal_uInt8*)pFkp)[511] = nIMax;
+    pFkp[511] = nIMax;
     bCombined = true;
 
 #if defined OSL_BIGENDIAN           // only the FCs will be rotated here

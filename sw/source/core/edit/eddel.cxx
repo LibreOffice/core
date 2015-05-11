@@ -167,7 +167,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
                 {
                     // First cursor represents the target position!!
                     rPaM.DeleteMark();
-                    pPos = (SwPosition*)rPaM.GetPoint();
+                    pPos = rPaM.GetPoint();
                     continue;
                 }
                 else
@@ -215,7 +215,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
             {
                 // First cursor represents the target position!!
                 rPaM.DeleteMark();
-                pPos = (SwPosition*)rPaM.GetPoint();
+                pPos = rPaM.GetPoint();
                 continue;
             }
             else

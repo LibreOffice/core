@@ -153,7 +153,7 @@ void SwFlyInCntFrm::MakeObjPos()
     if ( !mbValidPos )
     {
         mbValidPos = true;
-        SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+        SwFlyFrmFmt *pFmt = GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
         //Update the current values in the format if needed, during this we of
         //course must not send any Modify.

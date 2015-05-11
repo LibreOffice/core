@@ -705,7 +705,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                 pCurrPageCol = pCurrPageCol->GetUpper();
             }
 
-            SwLayoutFrm* pParent = (SwLayoutFrm*)(pCurrPageCol->GetUpper());
+            SwLayoutFrm* pParent = pCurrPageCol->GetUpper();
 
             if(pParent!=NULL)
             {

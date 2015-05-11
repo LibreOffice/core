@@ -1343,7 +1343,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
     }
 
-    SwDoc* pDoc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
+    SwDoc* pDoc = pRange ? pRange->GetDoc() : pCursor ? pCursor->GetDoc() : 0;
     // if a FieldMaster was attached, then the document is already fixed!
     // NOTE: sw.SwXAutoTextEntry unoapi test depends on m_pDoc = 0 being valid
     if (!pDoc || (m_pImpl->m_pDoc && m_pImpl->m_pDoc != pDoc))

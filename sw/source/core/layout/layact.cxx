@@ -1618,7 +1618,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
         SwLayoutFrm *pLow = static_cast<SwLayoutFrm*>(pTab->Lower());
         while ( pLow )
         {
-            bChanged |= FormatLayout( (SwLayoutFrm*)pLow, bAddRect );
+            bChanged |= FormatLayout( pLow, bAddRect );
             if ( IsAgain() )
                 return false;
             pLow = static_cast<SwLayoutFrm*>(pLow->GetNext());

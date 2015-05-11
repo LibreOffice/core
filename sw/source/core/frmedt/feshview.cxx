@@ -2597,14 +2597,14 @@ SwChainRet SwFEShell::Chain( SwFrmFmt &rSource, const Point &rPt )
         StartAllAction();
         SdrObject* pObj;
         SdrPageView* pPView;
-        SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
+        SwDrawView *pDView = Imp()->GetDrawView();
         const auto nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
         pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SdrSearchOptions::PICKMARKABLE );
         pDView->SetHitTolerancePixel( nOld );
         SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
 
-        SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)pFly->GetFmt();
+        SwFlyFrmFmt *pFmt = pFly->GetFmt();
         GetDoc()->Chain(rSource, *pFmt);
         EndAllAction();
         SetChainMarker();

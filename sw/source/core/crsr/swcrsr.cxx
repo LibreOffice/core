@@ -74,7 +74,7 @@ struct _PercentHdl
     }
 
     _PercentHdl( const SwPaM& rPam )
-        : pDSh( (SwDocShell*)rPam.GetDoc()->GetDocShell() )
+        : pDSh( rPam.GetDoc()->GetDocShell() )
     {
         sal_uLong nStt, nEnd;
         if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )

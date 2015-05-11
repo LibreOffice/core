@@ -1340,7 +1340,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         rSh.ToggleHeaderFooterEdit();
     }
 
-    SfxObjectShell *pObjSh = (SfxObjectShell*)m_rView.GetViewFrame()->GetObjectShell();
+    SfxObjectShell *pObjSh = m_rView.GetViewFrame()->GetObjectShell();
     if ( m_bLockInput || (pObjSh && pObjSh->GetProgress()) )
         // When the progress bar is active or a progress is
         // running on a document, no order is being taken

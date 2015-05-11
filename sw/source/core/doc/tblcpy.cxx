@@ -535,7 +535,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
     if( pRg.get() )
         pCpyDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( *pRg, 0, aInsIdx, NULL, false );
     else
-        pDoc->GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
+        pDoc->GetNodes().MakeTxtNode( aInsIdx, pDoc->GetDfltTxtFmtColl() );
     ++aSavePos;
 
     SwTableLine* pLine = pDstBox->GetUpper();
@@ -729,7 +729,7 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
     SwTableNode* pTblNd = pDoc->IsIdxInTbl( rSttBox );
 
     // Find the Box, to which should be copied:
-    SwTableBox* pMyBox = (SwTableBox*)GetTblBox(
+    SwTableBox* pMyBox = GetTblBox(
             rSttBox.GetNode().FindTableBoxStartNode()->GetIndex() );
 
     OSL_ENSURE( pMyBox, "Index is not in a Box in this Table" );

@@ -420,7 +420,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
                     pColl = rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( nId );
                 else
                     pColl = rDoc.MakeTxtFmtColl( rColl,
-                                (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl() );
+                                rDoc.GetDfltTxtFmtColl() );
             }
             if( pColl )
                 pColl->SetFmtAttr( SwRegisterItem ( true ));

@@ -2128,7 +2128,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
     pGetFld->SetText( OUString() );
 
     // then search the correct RefPageSet field
-    SwTxtNode* pTxtNode = (SwTxtNode*)&pTxtFld->GetTxtNode();
+    SwTxtNode* pTxtNode = &pTxtFld->GetTxtNode();
     if( pTxtNode->StartOfSectionIndex() >
         pDoc->GetNodes().GetEndOfExtras().GetIndex() )
     {

@@ -306,7 +306,7 @@ void SwUndoInsTbl::RedoImpl(::sw::UndoRedoContext & rContext)
                                             nAdjust,
                                             pAutoFmt, pColWidth );
     ((SwFrmFmt*)pTbl->GetFrmFmt())->SetName( sTblNm );
-    SwTableNode* pTblNode = (SwTableNode*)rDoc.GetNodes()[nSttNode]->GetTableNode();
+    SwTableNode* pTblNode = rDoc.GetNodes()[nSttNode]->GetTableNode();
 
     if( pDDEFldType )
     {
@@ -2439,7 +2439,7 @@ void SwUndoTblCpyTbl::UndoImpl(::sw::UndoRedoContext & rContext)
         SwTableBox& rBox = *pTblNd->GetTable().GetTblBox( nSttPos );
 
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
-        rDoc.GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl() );
+        rDoc.GetNodes().MakeTxtNode( aInsIdx, rDoc.GetDfltTxtFmtColl() );
 
         // b62341295: Redline for copying tables
         const SwNode *pEndNode = rBox.GetSttNd()->EndOfSectionNode();
@@ -2592,7 +2592,7 @@ void SwUndoTblCpyTbl::RedoImpl(::sw::UndoRedoContext & rContext)
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
 
         // b62341295: Redline for copying tables - Start.
-        rDoc.GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl() );
+        rDoc.GetNodes().MakeTxtNode( aInsIdx, rDoc.GetDfltTxtFmtColl() );
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode());
         SwUndo* pUndo = IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) ? 0 : new SwUndoDelete( aPam, true );
         if( pEntry->pUndo )
@@ -2667,7 +2667,7 @@ void SwUndoTblCpyTbl::AddBoxBefore( const SwTableBox& rBox, bool bDelCntnt )
     if( bDelCntnt )
     {
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
-        pDoc->GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
+        pDoc->GetNodes().MakeTxtNode( aInsIdx, pDoc->GetDfltTxtFmtColl() );
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode() );
 
         if( !pDoc->getIDocumentRedlineAccess().IsRedlineOn() )

@@ -161,7 +161,7 @@ void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
 {
     GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bSet );
     UpdateFontList();
-    SwView* pTempView = _pView ? _pView : (SwView*)GetView();
+    SwView* pTempView = _pView ? _pView : GetView();
     if( pTempView )
     {
         pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);

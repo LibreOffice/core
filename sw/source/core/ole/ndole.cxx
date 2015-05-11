@@ -443,7 +443,7 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         OUString());
 
     SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName, GetAspect(),
-                                    (SwGrfFmtColl*)pDoc->GetDfltGrfFmtColl(),
+                                    pDoc->GetDfltGrfFmtColl(),
                                     const_cast<SwAttrSet*>(GetpSwAttrSet()) );
 
     pOLENd->SetChartTblName( GetChartTblName() );

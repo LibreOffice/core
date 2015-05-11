@@ -99,7 +99,7 @@ static void SetTxtFmtCollNext( SwTxtFmtColl* pTxtColl, const SwTxtFmtColl* pDel 
 static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     const sw::DocumentContentOperationsManager::ParaRstFmt* pPara = static_cast<sw::DocumentContentOperationsManager::ParaRstFmt*>(pArgs);
-    SwCntntNode* pNode = (SwCntntNode*)rpNd->GetCntntNode();
+    SwCntntNode* pNode = rpNd->GetCntntNode();
     if( pNode && pNode->HasSwAttrSet() )
     {
         const bool bLocked = pNode->IsModifyLocked();
@@ -1115,7 +1115,7 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
         {
             // Does the Doc already contain the template?
             if( rFmtArr.GetFmt(n)->GetName()==rFmt.GetName() )
-                return (SwFmt*)rFmtArr.GetFmt(n);
+                return rFmtArr.GetFmt(n);
         }
 
     // Search for the "parent" first
@@ -1258,7 +1258,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
     // 1st step: Create all formats (skip the 0th - it's the default one)
     for( size_t nSrc = rSourceArr.GetFmtCount(); nSrc > 1; )
     {
-        pSrc = (SwFmt*)rSourceArr.GetFmt( --nSrc );
+        pSrc = rSourceArr.GetFmt( --nSrc );
         if( pSrc->IsDefault() || pSrc->IsAuto() )
             continue;
 
@@ -1275,7 +1275,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
     // 2nd step: Copy all attributes, set the right parents
     for( size_t nSrc = rSourceArr.GetFmtCount(); nSrc > 1; )
     {
-        pSrc = (SwFmt*)rSourceArr.GetFmt( --nSrc );
+        pSrc = rSourceArr.GetFmt( --nSrc );
         if( pSrc->IsDefault() || pSrc->IsAuto() )
             continue;
 
@@ -1606,7 +1606,7 @@ SwFmt* SwDoc::FindFmtByName( const SwFmtsBase& rFmtArr,
         // Does the Doc already contain the template?
         if( rFmtArr.GetFmt(n)->GetName() == rName )
         {
-            pFnd = (SwFmt*)rFmtArr.GetFmt(n);
+            pFnd = rFmtArr.GetFmt(n);
             break;
         }
     }

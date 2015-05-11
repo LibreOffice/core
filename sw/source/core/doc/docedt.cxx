@@ -750,7 +750,7 @@ static bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
                 }
                 long nStat = nPageNr >= *pPageSt ? nPageNr - *pPageSt + 1
                                          : nPageNr + *pPageCnt - *pPageSt + 1;
-                ::SetProgressState( nStat, (SwDocShell*)pNode->GetDoc()->GetDocShell() );
+                ::SetProgressState( nStat, pNode->GetDoc()->GetDocShell() );
             }
             pHyphArgs->SetRange( rpNd );
             if( pNode->Hyphenate( *pHyphArgs ) )

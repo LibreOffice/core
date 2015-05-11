@@ -789,7 +789,7 @@ bool SwCrsrShell::GotoFld( const SwFmtFld& rFld )
         SwCursor* pCrsr = getShellCrsr( true );
         SwCrsrSaveState aSaveState( *pCrsr );
 
-        SwTxtNode* pTNd = (SwTxtNode*)rFld.GetTxtFld()->GetpTxtNode();
+        SwTxtNode* pTNd = rFld.GetTxtFld()->GetpTxtNode();
         pCrsr->GetPoint()->nNode = *pTNd;
         pCrsr->GetPoint()->nContent.Assign( pTNd, rFld.GetTxtFld()->GetStart() );
 
@@ -916,7 +916,7 @@ void SwCrsrShell::GotoOutline( sal_uInt16 nIdx )
     SwCrsrSaveState aSaveState( *pCrsr );
 
     const SwNodes& rNds = GetDoc()->GetNodes();
-    SwTxtNode* pTxtNd = (SwTxtNode*)rNds.GetOutLineNds()[ nIdx ]->GetTxtNode();
+    SwTxtNode* pTxtNd = rNds.GetOutLineNds()[ nIdx ]->GetTxtNode();
     pCrsr->GetPoint()->nNode = *pTxtNd;
     pCrsr->GetPoint()->nContent.Assign( pTxtNd, 0 );
 

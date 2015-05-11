@@ -213,7 +213,7 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
         if( !pObj->ISA(SwVirtFlyDrawObj) )
         {
             // Objects not anchored to the frame, do not need to be adjusted
-            const SwContact *pCont = (SwContact*)GetUserCall(pObj);
+            const SwContact *pCont = GetUserCall(pObj);
             // this function might be called by the InsertDocument, when
             // a PageDesc-Attribute is set on a node. Then the SdrObject
             // must not have an UserCall.

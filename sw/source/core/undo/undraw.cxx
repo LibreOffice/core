@@ -226,7 +226,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
 
     // remove from array
     SwDoc* pDoc = pFmt->GetDoc();
-    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    SwFrmFmts& rFlyFmts = *pDoc->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 
     for( sal_uInt16 n = 1; n < nSize; ++n )
@@ -258,7 +258,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
 
     // remove from array
     SwDoc* pDoc = pObjArr->pFmt->GetDoc();
-    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    SwFrmFmts& rFlyFmts = *pDoc->GetSpzFrmFmts();
 
     for( sal_uInt16 n = 1; n < nSize; ++n )
     {
@@ -309,7 +309,7 @@ void SwUndoDrawGroup::AddObj( sal_uInt16 nPos, SwDrawFrmFmt* pFmt, SdrObject* pO
     ::lcl_SendRemoveToUno( *pFmt );
 
     // remove from array
-    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pFmt->GetDoc()->GetSpzFrmFmts();
+    SwFrmFmts& rFlyFmts = *pFmt->GetDoc()->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 }
 
@@ -341,7 +341,7 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj )
     ::lcl_SendRemoveToUno( *pFmt );
 
     // remove from array
-    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pFmt->GetDoc()->GetSpzFrmFmts();
+    SwFrmFmts& rFlyFmts = *pFmt->GetDoc()->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 }
 
@@ -364,7 +364,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     bDelFmt = true;
 
     SwDoc *const pDoc = & rContext.GetDoc();
-    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    SwFrmFmts& rFlyFmts = *pDoc->GetSpzFrmFmts();
 
     // remove from array
     for( sal_uInt16 n = 1; n < nSize; ++n )
@@ -416,7 +416,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
 
     // remove from array
     SwDoc* pDoc = pFmt->GetDoc();
-    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    SwFrmFmts& rFlyFmts = *pDoc->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 
     for( sal_uInt16 n = 1; n < nSize; ++n )
@@ -573,7 +573,7 @@ void SwUndoDrawDelete::AddObj( sal_uInt16 , SwDrawFrmFmt* pFmt,
 
     // remove from array
     SwDoc* pDoc = pFmt->GetDoc();
-    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    SwFrmFmts& rFlyFmts = *pDoc->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFmt ));
 
     pMarkLst->InsertEntry( rMark );

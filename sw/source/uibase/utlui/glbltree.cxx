@@ -197,7 +197,7 @@ void SwGlobalTree::dispose()
 sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
-    SvTreeListEntry* pLast = (SvTreeListEntry*)LastVisible();
+    SvTreeListEntry* pLast = LastVisible();
     if(pEmphasisEntry)
     {
         ImplShowTargetEmphasis( Prev(pEmphasisEntry), false );
@@ -278,7 +278,7 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
 
     //initiate scrolling
     GetDropTarget( rEvt.maPosPixel );
-    SvTreeListEntry* pLast = (SvTreeListEntry*)LastVisible();
+    SvTreeListEntry* pLast = LastVisible();
     if( rEvt.mbLeaving )
     {
         if( pEmphasisEntry )
@@ -1277,7 +1277,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
         bool bMove = false;
         if ( !_pContent )
         {
-            SvTreeListEntry* pLast = (SvTreeListEntry*)LastVisible();
+            SvTreeListEntry* pLast = LastVisible();
             _pContent = static_cast<SwGlblDocContent*>(pLast->GetUserData());
             bMove = true;
         }

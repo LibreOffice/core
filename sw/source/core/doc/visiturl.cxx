@@ -116,7 +116,7 @@ bool SwDoc::IsVisitedURL( const OUString& rURL )
         // We also want to be informed about status updates in the History
         if( !mpURLStateChgd )
         {
-            SwDoc* pD = (SwDoc*)this;
+            SwDoc* pD = this;
             pD->mpURLStateChgd = new SwURLStateChanged( this );
         }
     }

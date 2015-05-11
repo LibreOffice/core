@@ -154,7 +154,7 @@ void SwCache::Flush( const sal_uInt8 )
         else
 #endif
         {
-            pTmp = (SwCacheObj*)pObj;
+            pTmp = pObj;
             pObj = pTmp->GetNext();
             aFreePositions.push_back( pTmp->GetCachePos() );
             m_aCacheObjects[pTmp->GetCachePos()] = NULL;

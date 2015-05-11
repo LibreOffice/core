@@ -3434,7 +3434,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
 bool DocumentContentOperationsManager::lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     ParaRstFmt* pPara = static_cast<ParaRstFmt*>(pArgs);
-    SwTxtNode * pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
+    SwTxtNode * pTxtNode = rpNd->GetTxtNode();
     if( pTxtNode && pTxtNode->GetpSwpHints() )
     {
         SwIndex aSt( pTxtNode, 0 );
@@ -3568,7 +3568,7 @@ bool DocumentContentOperationsManager::DeleteRangeImpl(SwPaM & rPam, const bool)
 
 bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
 {
-    SwPosition *pStt = (SwPosition*)rPam.Start(), *pEnd = (SwPosition*)rPam.End();
+    SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
     if( !rPam.HasMark() || *pStt >= *pEnd )
         return false;
@@ -3764,8 +3764,8 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
         SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
         ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
 
-        SwPosition *pStt = (SwPosition*)aDelPam.Start(),
-                   *pEnd = (SwPosition*)aDelPam.End();
+        SwPosition *pStt = aDelPam.Start(),
+                   *pEnd = aDelPam.End();
         OSL_ENSURE( pStt->nNode == pEnd->nNode ||
                 ( pStt->nNode.GetIndex() + 1 == pEnd->nNode.GetIndex() &&
                     !pEnd->nContent.GetIndex() ),

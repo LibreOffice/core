@@ -399,7 +399,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
             if( pObj->ISA(SwVirtFlyDrawObj) )
             {
-                SwFlyFrmFmt* pFrmFmt = (SwFlyFrmFmt*)
+                SwFlyFrmFmt* pFrmFmt =
                     static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetFmt();
                 if( pFrmFmt )
                 {

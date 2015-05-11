@@ -403,7 +403,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                      static_cast<SwCntntFrm*>(Lower())->GetNode()->GetOLENode() &&
                      ( bWidthClipped || bHeightClipped ) )
                 {
-                    SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+                    SwFlyFrmFmt *pFmt = GetFmt();
                     pFmt->LockModify();
                     SwFmtFrmSize aFrmSize( rSz );
                     aFrmSize.SetWidth( aFrmRect.Width() );
@@ -886,7 +886,7 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
         else
         {
             OSL_ENSURE( pFmt, ":-( No Format given for Fly." );
-            pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, this, this );
+            pFly = new SwFlyLayFrm( pFmt, this, this );
             AppendFly( pFly );
             ::RegistFlys( this, pFly );
         }
@@ -1173,7 +1173,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
     else
     {
         const SwDrawContact *pC = static_cast<const SwDrawContact*>(GetUserCall(pSdrObj));
-        const SwFrmFmt  *pFmt = (const SwFrmFmt*)pC->GetFmt();
+        const SwFrmFmt  *pFmt = pC->GetFmt();
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
         if ( FLY_AS_CHAR == rAnch.GetAnchorId() )
         {

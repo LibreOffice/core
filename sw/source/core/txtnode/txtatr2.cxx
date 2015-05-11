@@ -145,17 +145,17 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
         if ( bResetMod )
         {
             aOle2Lnk = pDoc->GetOle2Link();
-            ( (SwDoc*) pDoc )->SetOle2Link( Link<>() );
+            pDoc->SetOle2Link( Link<>() );
         }
 
         pRet = IsPoolUserFmt( nId )
-               ? ( (SwDoc*) pDoc )->FindCharFmtByName( rStr )
-               : ( (SwDoc*) pDoc )->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId );
+               ? pDoc->FindCharFmtByName( rStr )
+               : pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId );
 
         if ( bResetMod )
         {
-            ( (SwDoc*) pDoc )->getIDocumentState().ResetModified();
-            ( (SwDoc*) pDoc )->SetOle2Link( aOle2Lnk );
+            pDoc->getIDocumentState().ResetModified();
+            pDoc->SetOle2Link( aOle2Lnk );
         }
     }
 

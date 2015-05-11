@@ -1092,7 +1092,7 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
 
 static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 {
-    SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
+    SwTxtNode *pTxtNode = rpNd->GetTxtNode();
     bool bOnlyWrong = *static_cast<sal_Bool*>(pArgs);
     if( pTxtNode )
     {
@@ -1120,7 +1120,7 @@ static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 
 static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
 {
-    SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
+    SwTxtNode *pTxtNode = rpNd->GetTxtNode();
     if( pTxtNode )
     {
         pTxtNode->SetSmartTagDirty( true );
@@ -1279,7 +1279,7 @@ bool SwDoc::RemoveInvisibleContent()
         for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
         {
             if( pFmtFld->GetTxtFld() &&
-                0 != ( pTxtNd = (SwTxtNode*)pFmtFld->GetTxtFld()->GetpTxtNode() ) &&
+                0 != ( pTxtNd = pFmtFld->GetTxtFld()->GetpTxtNode() ) &&
                 pTxtNd->GetpSwpHints() && pTxtNd->HasHiddenParaField() &&
                 &pTxtNd->GetNodes() == &GetNodes() )
             {

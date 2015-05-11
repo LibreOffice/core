@@ -228,7 +228,7 @@ void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
     }
     else
         pDoc->GetNodes().InsBoxen( pTblNd, pLine, pBoxFrmFmt,
-                (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl(), 0,
+                pDoc->GetDfltTxtFmtColl(), 0,
                 nInsPos, nCnt );
 
     long nRowSpan = pBox->getRowSpan();

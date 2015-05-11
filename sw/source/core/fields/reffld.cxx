@@ -847,7 +847,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                         static_cast<SwSetExpField*>(pFmtFld->GetField())->GetSeqNumber() )
                     {
                         SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-                        pTxtNd = (SwTxtNode*)pTxtFld->GetpTxtNode();
+                        pTxtNd = pTxtFld->GetpTxtNode();
                         *pStt = pTxtFld->GetStart();
                         if( pEnd )
                             *pEnd = (*pStt) + 1;

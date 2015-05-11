@@ -885,7 +885,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             pCpyTNd->MakeFrms( *pTNd );
         }
         else
-            new SwTxtNode( aInsPos, (SwTxtFmtColl*)GetDoc()->GetDfltTxtFmtColl() );
+            new SwTxtNode( aInsPos, GetDoc()->GetDfltTxtFmtColl() );
     }
     new SwEndNode( aInsPos, *pSectNd );
 

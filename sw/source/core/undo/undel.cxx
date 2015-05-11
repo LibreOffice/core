@@ -762,7 +762,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pInsNd->IsTableNode() )
             {
                 pInsNd = pDoc->GetNodes().MakeTxtNode( aIdx,
-                        (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
+                        pDoc->GetDfltTxtFmtColl() );
                 --aIdx;
                 aPos.nNode = aIdx;
                 aPos.nContent.Assign( pInsNd->GetCntntNode(), nSttCntnt );

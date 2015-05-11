@@ -1632,7 +1632,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
                                     pLayLeaf->FindFtnBossFrm( true ), false );
                     }
                 }
-                ((SwFlowFrm*)pNxt)->MoveSubTree( pLayLeaf, pNew->GetNext() );
+                pNxt->MoveSubTree( pLayLeaf, pNew->GetNext() );
             }
             if( pNew->GetFollow() )
                 pNew->SimpleFormat();

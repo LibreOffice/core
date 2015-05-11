@@ -434,7 +434,7 @@ static void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
         }
         else
         {
-            SwFrm *pTmp = ::SaveCntnt( (SwCellFrm*)pCurrSourceCell );
+            SwFrm *pTmp = ::SaveCntnt( pCurrSourceCell );
             if ( pTmp )
             {
                 // NEW TABLES
@@ -640,7 +640,7 @@ static bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
     // Lock this tab frame and its follow
     bool bUnlockMaster = false;
     bool bUnlockFollow = false;
-    SwTabFrm* pMaster = rTab.IsFollow() ? (SwTabFrm*)rTab.FindMaster() : 0;
+    SwTabFrm* pMaster = rTab.IsFollow() ? rTab.FindMaster() : 0;
     if ( pMaster && !pMaster->IsJoinLocked() )
     {
         bUnlockMaster = true;
@@ -1696,7 +1696,7 @@ void SwTabFrm::MakeAll()
 
     if ( HasFollow() )
     {
-        SwTabFrm* pFollowFrm = (SwTabFrm*)GetFollow();
+        SwTabFrm* pFollowFrm = GetFollow();
         OSL_ENSURE( !pFollowFrm->IsJoinLocked() || !pFollowFrm->IsRebuildLastLine(),
                 "SwTabFrm::MakeAll for master while follow is in RebuildLastLine()" );
         if ( pFollowFrm->IsJoinLocked() && pFollowFrm->IsRebuildLastLine() )
@@ -1929,7 +1929,7 @@ void SwTabFrm::MakeAll()
                 SwFrm *pFrm = GetFirstNonHeadlineRow();
                 if( pFrm && n1StLineHeight >(pFrm->Frm().*fnRect->fnGetHeight )() )
                 {
-                    SwTabFrm *pMaster = (SwTabFrm*)FindMaster();
+                    SwTabFrm *pMaster = FindMaster();
                     bool bDummy;
                     if ( ShouldBwdMoved( pMaster->GetUpper(), false, bDummy ) )
                         pMaster->InvalidatePos();
@@ -2378,7 +2378,7 @@ void SwTabFrm::MakeAll()
                             pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                             pAttrs = pAccess->Get();
 
-                            ((SwTabFrm*)GetFollow())->SetLowersFormatted(false);
+                            GetFollow()->SetLowersFormatted(false);
                             // #i43913# - lock follow table
                             // to avoid its formatting during the format of
                             // its content.
@@ -2420,7 +2420,7 @@ void SwTabFrm::MakeAll()
                             --nStack;
                         }
                         else if ( GetFollow() == GetNext() )
-                            ((SwTabFrm*)GetFollow())->MoveFwd( true, false );
+                            GetFollow()->MoveFwd( true, false );
                     }
                     continue;
                 }
@@ -5340,7 +5340,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
         {
             const bool bOldJoinLock = IsJoinLocked();
             const_cast<SwTabFrm*>(this)->LockJoin();
-            const SwTwips nHeightOfFirstContentLine = lcl_CalcHeightOfFirstContentLine( *(SwRowFrm*)pFirstRow );
+            const SwTwips nHeightOfFirstContentLine = lcl_CalcHeightOfFirstContentLine( *pFirstRow );
 
             // Consider minimum row height:
             const SwFmtFrmSize &rSz = static_cast<const SwRowFrm*>(pFirstRow)->GetFmt()->GetFrmSize();

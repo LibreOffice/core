@@ -534,7 +534,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
                             //needs cast - no non-const method available
                             SwFlyFrmFmt* pFlyFmt =
-                                (SwFlyFrmFmt*)rChain.GetPrev();
+                                rChain.GetPrev();
                             if(pFlyFmt)
                             {
                                 if (pFlyFmt->GetName() != sPrevName)
@@ -568,7 +568,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
                             //needs cast - no non-const method available
                             SwFlyFrmFmt* pFlyFmt =
-                                (SwFlyFrmFmt*)rChain.GetNext();
+                                rChain.GetNext();
                             if(pFlyFmt)
                             {
                                 if (pFlyFmt->GetName() != sNextName)

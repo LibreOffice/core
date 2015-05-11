@@ -356,7 +356,7 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
         else
         {
             aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ];
-            pBox->ChgFrmFmt( (SwTableBoxFmt*)aFindFrm.pNewFrmFmt );
+            pBox->ChgFrmFmt( aFindFrm.pNewFrmFmt );
         }
     }
     else
@@ -1251,7 +1251,7 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
         else
         {
             aFindFrm = aFrmArr[ nFndPos ];
-            pSelBox->ChgFrmFmt( (SwTableBoxFmt*)aFindFrm.pNewFrmFmt );
+            pSelBox->ChgFrmFmt( aFindFrm.pNewFrmFmt );
             pLastBoxFmt = aLastBoxArr[ nFndPos ];
         }
 
@@ -1456,7 +1456,7 @@ static void lcl_Merge_MoveLine(_FndLine& rFndLine, _InsULPara *const pULPara)
     if( pULPara->bUL_LR )   // UpperLower ?
     {
         sal_uInt16 nPos;
-        SwTableLine* pFndLn = (SwTableLine*)rFndLine.GetLine();
+        SwTableLine* pFndLn = rFndLine.GetLine();
         pLines = pFndLn->GetUpper() ?
                         &pFndLn->GetUpper()->GetTabLines() :
                         &pULPara->pTblNd->GetTable().GetTabLines();
@@ -1880,7 +1880,7 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
             // Create an empty Box
             pCpyPara->pDoc->GetNodes().InsBoxen( pCpyPara->pTblNd, pCpyPara->pInsLine,
                             aFindFrm.pNewFrmFmt,
-                            (SwTxtFmtColl*)pCpyPara->pDoc->GetDfltTxtFmtColl(),
+                            pCpyPara->pDoc->GetDfltTxtFmtColl(),
                             0, pCpyPara->nInsPos );
             pBox = pCpyPara->pInsLine->GetTabBoxes()[ pCpyPara->nInsPos ];
             if( bDummy )

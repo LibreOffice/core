@@ -1458,7 +1458,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
                 aBreak.SetValue( SVX_BREAK_NONE );
         }
 
-        if ( !pBreak || !( *(const SvxFmtBreakItem*)pBreak == aBreak ) )
+        if ( !pBreak || !( *pBreak == aBreak ) )
         {
             bModified |= 0 != rSet->Put( aBreak );
         }

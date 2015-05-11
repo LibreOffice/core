@@ -261,7 +261,7 @@ void SwDBTreeList::ShowColumns(bool bShowCol)
 
         while (pEntry)
         {
-            pEntry = (SvTreeListEntry*)GetRootLevelParent( pEntry );
+            pEntry = GetRootLevelParent( pEntry );
             Collapse(pEntry);       // zuklappen
 
             SvTreeListEntry* pChild;

@@ -495,7 +495,7 @@ void SwFtnFrm::Cut()
     SwLayoutFrm *pUp = GetUpper();
 
     // correct chaining
-    SwFtnFrm *pFtn = (SwFtnFrm*)this;
+    SwFtnFrm *pFtn = this;
     if ( pFtn->GetFollow() )
         pFtn->GetFollow()->SetMaster( pFtn->GetMaster() );
     if ( pFtn->GetMaster() )
@@ -732,7 +732,7 @@ SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
                     }
                     else
                     {
-                        pSect = (SwSectionFrm*)pSect->FindMaster();
+                        pSect = pSect->FindMaster();
                         if( !pSect || !pSect->Lower() )
                             return 0;
                         OSL_ENSURE( pSect->Lower()->IsColumnFrm(),
@@ -1586,7 +1586,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
                         continue;
                     }
                 }
-                pCnt = (SwCntntFrm*)pCnt->FindNextCnt();
+                pCnt = pCnt->FindNextCnt();
             }
             // #i49383#
             if ( !bOldFtnFrmLocked )
@@ -1667,7 +1667,7 @@ void SwFtnBossFrm::RemoveFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr,
         if( bPrep && pRef->IsFollow() )
         {
             OSL_ENSURE( pRef->IsTxtFrm(), "NoTxtFrm has Footnote?" );
-            SwTxtFrm* pMaster = (SwTxtFrm*)pRef->FindMaster();
+            SwTxtFrm* pMaster = pRef->FindMaster();
             if( !pMaster->IsLocked() )
                 pMaster->Prepare( PREP_FTN_GONE );
         }
@@ -2596,7 +2596,7 @@ bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
         {
             if ( static_cast<SwTxtFrm*>(pStart)->HasFtn() )
                 static_cast<SwFtnBossFrm*>(pNewChief)->CollectFtns( pStart,
-                                        (SwFtnBossFrm*)pOldBoss, *pFtnArr );
+                                        pOldBoss, *pFtnArr );
             pStart = pStart->GetNextCntntFrm();
         }
         if( pFtnArr->empty() )

@@ -3913,7 +3913,7 @@ void SwXLinkNameAccessWrapper::removeVetoableChangeListener(
 Reference< XNameAccess >  SwXLinkNameAccessWrapper::getLinks()
                                     throw( RuntimeException, std::exception )
 {
-    return (SwXLinkNameAccessWrapper*)this;
+    return this;
 }
 
 OUString SwXLinkNameAccessWrapper::getImplementationName() throw( RuntimeException, std::exception )

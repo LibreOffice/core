@@ -227,7 +227,7 @@ SwNumFmt::~SwNumFmt()
 void SwNumFmt::NotifyGraphicArrived()
 {
     if( GetCharFmt() )
-        UpdateNumNodes( (SwDoc*)GetCharFmt()->GetDoc() );
+        UpdateNumNodes( GetCharFmt()->GetDoc() );
 }
 
 // #i22362#

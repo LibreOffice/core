@@ -291,7 +291,7 @@ void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem 
     case RES_REMOVE_UNO_OBJECT:
     case RES_OBJECTDYING:
         if( (void*)pClient->GetRegisteredIn() == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
-            ((SwModify*)pClient->GetRegisteredIn())->Remove(pClient);
+            pClient->GetRegisteredIn()->Remove(pClient);
         break;
 
     case RES_FMT_CHG:

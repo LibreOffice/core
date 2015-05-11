@@ -1344,7 +1344,7 @@ void SwCntntNode::DelFrms( bool bIsDisposeAccTable )
 
         if( pFrm->IsFollow() )
         {
-            SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
+            SwCntntFrm* pMaster = pFrm->FindMaster();
             pMaster->SetFollow( pFrm->GetFollow() );
         }
         pFrm->SetFollow( 0 );//So it doesn't get funny ideas.

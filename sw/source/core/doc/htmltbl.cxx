@@ -1733,7 +1733,7 @@ void SwHTMLTableLayout::_Resize( sal_uInt16 nAbsAvail, bool bRecalc )
     if( bRecalc )
         AutoLayoutPass1();
 
-    SwRootFrm *pRoot = (SwRootFrm*)GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout();
+    SwRootFrm *pRoot = GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout();
     if ( pRoot && pRoot->IsCallbackActionEnabled() )
         pRoot->StartAllAction();
 

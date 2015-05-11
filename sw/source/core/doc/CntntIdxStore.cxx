@@ -162,7 +162,7 @@ namespace
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
         {
-            SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
+            SwCntntNode* pCNd = rNd.GetCntntNode();
             SwDoc* pDoc = rNd.GetDoc();
             updater_t aUpdater = LimitUpdater(pCNd, nLen, nCorrLen);
             RestoreBkmks(pDoc, aUpdater);
@@ -296,9 +296,9 @@ void CntntIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater)
     const SwRedlineTbl& rRedlTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
     for (const MarkEntry& aEntry : m_aRedlineEntries)
     {
-        SwPosition* const pPos = (SwPosition*)( aEntry.m_bOther
+        SwPosition* const pPos = aEntry.m_bOther
             ? rRedlTbl[ aEntry.m_nIdx ]->GetMark()
-            : rRedlTbl[ aEntry.m_nIdx ]->GetPoint());
+            : rRedlTbl[ aEntry.m_nIdx ]->GetPoint();
         rUpdater(*pPos, aEntry.m_nCntnt);
     }
 }

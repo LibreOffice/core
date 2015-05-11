@@ -806,7 +806,7 @@ SwCntntNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
                             pNd = 0;
                             continue;
                         }
-                        *(SwPosition*)rPam.GetPoint() = aPos;
+                        *rPam.GetPoint() = aPos;
                     }
                     else
                         pNd = 0; // no valid node
@@ -874,7 +874,7 @@ bool GoInDoc( SwPaM & rPam, SwMoveFn fnMove )
 
 bool GoInSection( SwPaM & rPam, SwMoveFn fnMove )
 {
-    (*fnMove->fnSections)( (SwPosition*)rPam.GetPoint() );
+    (*fnMove->fnSections)( rPam.GetPoint() );
     return true;
 }
 

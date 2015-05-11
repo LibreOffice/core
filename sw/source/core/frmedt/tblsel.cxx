@@ -860,7 +860,7 @@ static void lcl_InsTblBox( SwTableNode* pTblNd, SwDoc* pDoc, SwTableBox* pBox,
     else
         pDoc->GetNodes().InsBoxen( pTblNd, pBox->GetUpper(),
                 static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt()),
-                (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl(), 0,
+                pDoc->GetDfltTxtFmtColl(), 0,
                 nInsPos, nCnt );
 }
 

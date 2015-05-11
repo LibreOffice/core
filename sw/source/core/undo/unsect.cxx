@@ -76,7 +76,7 @@ SwUndoInsSection::SwUndoInsSection(
     , m_bSplitAtEnd(false)
     , m_bUpdateFtn(false)
 {
-    SwDoc& rDoc = *(SwDoc*)rPam.GetDoc();
+    SwDoc& rDoc = *rPam.GetDoc();
     if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         m_pRedlData.reset(new SwRedlineData( nsRedlineType_t::REDLINE_INSERT,

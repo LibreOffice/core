@@ -408,7 +408,7 @@ void SwFlyFrm::InitDrawObj( bool bNotify )
     if ( !pContact )
     {
         // #i52858# - method name changed
-        pContact = new SwFlyDrawContact( (SwFlyFrmFmt*)GetFmt(),
+        pContact = new SwFlyDrawContact( GetFmt(),
                                           pIDDMA->GetOrCreateDrawModel() );
     }
     OSL_ENSURE( pContact, "InitDrawObj failed" );

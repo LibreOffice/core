@@ -993,7 +993,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                                 sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_INDENT :
                                 sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_PAGE);
         sw::ToxTextGenerator ttgn(GetTOXForm(), tabStopTokenHandler);
-        ttgn.GenerateText((SwDoc*) GetFmt()->GetDoc(), aSortArr, nCnt, nRange);
+        ttgn.GenerateText(GetFmt()->GetDoc(), aSortArr, nCnt, nRange);
         nCnt += nRange - 1;
     }
 
@@ -1038,7 +1038,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
 void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 {
-    SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
+    SwDoc* pDoc = GetFmt()->GetDoc();
     OUString sLastDeli;
     SwTOXSortTabBases::size_type i = 0;
     while( i < aSortArr.size() )
@@ -1079,7 +1079,7 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 /// Evaluate Template
 SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( sal_uInt16 nLevel )
 {
-    SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
+    SwDoc* pDoc = GetFmt()->GetDoc();
     const OUString& rName = GetTOXForm().GetTemplate( nLevel );
     SwTxtFmtColl* pColl = !rName.isEmpty() ? pDoc->FindTxtFmtCollByName(rName) :0;
     if( !pColl )
@@ -1134,7 +1134,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
     if( !pType->HasWriterListeners() )
         return;
 
-    SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
+    SwDoc* pDoc = GetFmt()->GetDoc();
     TOXTypes eTOXTyp = GetTOXType()->GetType();
     SwIterator<SwTOXMark,SwTOXType> aIter( *pType );
 
@@ -1202,7 +1202,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
 /// Generate table of contents from outline
 void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
 {
-    SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
+    SwDoc* pDoc = GetFmt()->GetDoc();
     SwNodes& rNds = pDoc->GetNodes();
 
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
@@ -1227,7 +1227,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
 /// Generate table of contents from template areas
 void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
 {
-    SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
+    SwDoc* pDoc = GetFmt()->GetDoc();
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
         const OUString sTmpStyleNames = GetStyleNames(i);
@@ -1268,7 +1268,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
 /// Generate content from sequence fields
 void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
 {
-    SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
+    SwDoc* pDoc = GetFmt()->GetDoc();
     SwFieldType* pSeqFld = pDoc->getIDocumentFieldsAccess().GetFldType(RES_SETEXPFLD, GetSequenceName(), false);
     if(!pSeqFld)
         return;
@@ -1310,7 +1310,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
 
 void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
 {
-    SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
+    SwDoc* pDoc = GetFmt()->GetDoc();
     SwFieldType* pAuthFld = pDoc->getIDocumentFieldsAccess().GetFldType(RES_AUTHORITY, OUString(), false);
     if(!pAuthFld)
         return;
@@ -1396,7 +1396,7 @@ static long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
 void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                                     const SwTxtNode* pOwnChapterNode )
 {
-    SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
+    SwDoc* pDoc = GetFmt()->GetDoc();
     SwNodes& rNds = pDoc->GetNodes();
     // on the 1st Node of the 1st Section
     sal_uLong nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 2,
@@ -1496,7 +1496,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
 /// Collect table entries
 void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
 {
-    SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
+    SwDoc* pDoc = GetFmt()->GetDoc();
     SwNodes& rNds = pDoc->GetNodes();
     const SwFrmFmts& rArr = *pDoc->GetTblFrmFmts();
 
@@ -1550,7 +1550,7 @@ void SwTOXBaseSection::UpdatePageNum()
     // Insert the current PageNumber into the TOC
     SwPageFrm*  pAktPage    = 0;
     sal_uInt16      nPage       = 0;
-    SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
+    SwDoc* pDoc = GetFmt()->GetDoc();
 
     SwTOXInternational aIntl( GetLanguage(),
                               TOX_INDEX == GetTOXType()->GetType() ?

@@ -622,7 +622,7 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
 
         if( pS != pT )
         {
-            SwFrmFmt* pTFmt = (SwFrmFmt*)pT->GetFrmFmt();
+            SwFrmFmt* pTFmt = pT->GetFrmFmt();
             const SfxItemSet* pSSet = rBox.GetItemSet( i, nS );
 
             if( pSSet ||
@@ -666,7 +666,7 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
 
         if( pS != pT )
         {
-            SwFrmFmt* pTFmt = (SwFrmFmt*)pT->GetFrmFmt();
+            SwFrmFmt* pTFmt = pT->GetFrmFmt();
             const SfxItemSet* pSSet = rBox.GetItemSet( nS, i );
 
             if( pSSet ||
@@ -708,7 +708,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     // points to the first ContentNode
     if( pNd->StartOfSectionNode() == pSource->GetSttNd() )
         pNd = pDoc->GetNodes().MakeTxtNode( aRg.aStart,
-                (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
+                pDoc->GetDfltTxtFmtColl() );
     aRg.aEnd = *pNd->EndOfSectionNode();
 
     // If the Target is empty (there is one empty Node)

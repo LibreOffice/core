@@ -537,7 +537,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                                       false );
         rHWrt.aTxtCollInfos.insert( pFmtInfo );
         if( rHWrt.aScriptParaStyles.count( rFmt.GetName() ) )
-            ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = true;
+            pFmtInfo->bScriptDependent = true;
     }
 
     // Jetzt wird festgelegt, was aufgrund des Tokens so moeglich ist
@@ -1627,7 +1627,7 @@ const SwHTMLFmtInfo *HTMLEndPosLst::GetFmtInfo( const SwFmt& rFmt,
                                       bOutStyles );
         rFmtInfos.insert( pFmtInfo );
         if ( rScriptTxtStyles.count( rFmt.GetName() ) )
-            ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = true;
+            pFmtInfo->bScriptDependent = true;
     }
 
     return pFmtInfo;
@@ -1905,7 +1905,7 @@ void HTMLEndPosLst::Insert( const SfxItemSet& rItemSet,
 void HTMLEndPosLst::Insert( const SwDrawFrmFmt& rFmt, sal_Int32 nPos,
                             SwHTMLFmtInfos& rFmtInfos )
 {
-    const SdrObject* pTextObj = (const SdrObject*) SwHTMLWriter::GetMarqueeTextObj( rFmt );
+    const SdrObject* pTextObj = SwHTMLWriter::GetMarqueeTextObj( rFmt );
 
     if( pTextObj )
     {

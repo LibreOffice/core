@@ -245,7 +245,7 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if( pNew && pNew->Which() == RES_OBJECTDYING )
         return;
 
-    SwTxtNode* pTxtNd = (SwTxtNode*)&mpTxtFld->GetTxtNode();
+    SwTxtNode* pTxtNd = &mpTxtFld->GetTxtNode();
     OSL_ENSURE( pTxtNd, "wo ist denn mein Node?" );
     if( pNew )
     {

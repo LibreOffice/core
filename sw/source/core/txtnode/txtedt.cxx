@@ -1615,7 +1615,7 @@ bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
             pFrm->SetCompletePaint();
             return true;
         }
-        pFrm = (SwTxtFrm*)(pFrm->GetFollow());
+        pFrm = pFrm->GetFollow();
         if( pFrm )
         {
             rHyphInf.nEnd = rHyphInf.nEnd - (pFrm->GetOfst() - rHyphInf.nStart);

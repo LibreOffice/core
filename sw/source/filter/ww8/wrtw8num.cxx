@@ -618,7 +618,7 @@ void WW8Export::OutputOlst( const SwNumRule& rRule )
     WW8_OLST aOlst;
     memset( &aOlst, 0, sizeof(aOlst) );
     sal_uInt8* pC = aOlst.rgch;
-    sal_uInt8* pChars = (sal_uInt8*)pC;
+    sal_uInt8* pChars = pC;
     sal_uInt16 nCharLen = 64;
 
     for (sal_uInt16 j = 0; j < WW8ListManager::nMaxLevel; j++ ) // 9 variable ANLVs

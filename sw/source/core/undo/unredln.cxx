@@ -355,7 +355,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
     : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRg ), pRedlData( 0 ),
     pUnDel( 0 ), pUnDel2( 0 ), pRedlSaveData( 0 ), bInsert( bIns )
 {
-    SwDoc* pDoc = (SwDoc*)rRg.GetDoc();
+    SwDoc* pDoc = rRg.GetDoc();
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
         RedlineType_t eTyp = bInsert ? nsRedlineType_t::REDLINE_INSERT : nsRedlineType_t::REDLINE_DELETE;
@@ -370,7 +370,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
     // for MergeDoc the corresponding inverse is needed
     bInsert( nsRedlineType_t::REDLINE_DELETE == rRedl.GetType() )
 {
-    SwDoc* pDoc = (SwDoc*)rRedl.GetDoc();
+    SwDoc* pDoc = rRedl.GetDoc();
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
         pRedlData = new SwRedlineData( rRedl.GetRedlineData() );

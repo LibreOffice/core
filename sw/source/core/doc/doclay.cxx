@@ -402,7 +402,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                     // So that this FlyFrame is preserved.
                     if( aRg.aEnd.GetNode().IsEndNode() )
                         GetNodes().MakeTxtNode( aRg.aStart,
-                                    (SwTxtFmtColl*)GetDfltTxtFmtColl() );
+                                    GetDfltTxtFmtColl() );
 
                     getIDocumentContentOperations().MoveNodeRange( aRg, aPos.nNode, SwMoveFlags::DEFAULT );
                 }

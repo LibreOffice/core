@@ -128,7 +128,7 @@ static SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
                                                 RES_POOLCOLL_TEXT_BEGIN ] )
         {
             // Standard-Character template
-            pFmt = (SwCharFmt*)rDoc.GetDfltCharFmt();
+            pFmt = rDoc.GetDfltCharFmt();
         }
 
         if( !pFmt && bCreate )

@@ -236,7 +236,7 @@ long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTxtNode& rNd, sal_Int32
     if ( pFrm && !pFrm->IsHiddenNow() )
     {
         if( pFrm->HasFollow() )
-            while( 0 != ( pNext = (SwTxtFrm*)pFrm->GetFollow() ) &&
+            while( 0 != ( pNext = pFrm->GetFollow() ) &&
                     nCntPos >= pNext->GetOfst() )
                 pFrm = pNext;
 

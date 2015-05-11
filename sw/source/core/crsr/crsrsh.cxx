@@ -979,7 +979,7 @@ bool SwCrsrShell::ChgCurrPam(
         return false;
 
     // search in all selections for this position
-    SwShellCrsr* pCmp = (SwShellCrsr*)m_pCurCrsr; // keep the pointer on cursor
+    SwShellCrsr* pCmp = m_pCurCrsr; // keep the pointer on cursor
     do {
         if( pCmp && pCmp->HasMark() &&
             *pCmp->Start() <= aPtPos && *pCmp->End() > aPtPos )

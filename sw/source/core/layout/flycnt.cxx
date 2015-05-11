@@ -343,7 +343,7 @@ void SwFlyAtCntFrm::MakeAll()
         {
             bSetCompletePaintOnInvalidate = true;
             {
-                SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+                SwFlyFrmFmt *pFmt = GetFmt();
                 const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
                 if( rFrmSz.GetHeightPercent() != 0xFF &&
                     rFrmSz.GetHeightPercent() >= 100 )
@@ -1284,7 +1284,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         }
     }
 
-    SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+    SwFlyFrmFmt *pFmt = GetFmt();
 
     if( bVert )
     {

@@ -316,7 +316,7 @@ bool SwNodes::InsBoxen( SwTableNode* pTblNd,
             // Handle Outline numbering correctly!
             SwTxtNode* pTNd = new SwTxtNode(
                             SwNodeIndex( *pSttNd->EndOfSectionNode() ),
-                            (SwTxtFmtColl*)GetDoc()->GetDfltTxtFmtColl(),
+                            GetDoc()->GetDfltTxtFmtColl(),
                             pAutoAttr );
             pTNd->ChgFmtColl( pTxtColl );
         }
@@ -2416,7 +2416,7 @@ void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
                             dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
             }
         }
-        ((SwTabFrm*)pNew)->RegistFlys();
+        pNew->RegistFlys();
     }
 }
 
@@ -3393,7 +3393,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
     // Insert an EndNode and TableNode into the Nodes Array
     SwTableNode * pNewTblNd;
     {
-        SwEndNode* pOldTblEndNd = (SwEndNode*)pTNd->EndOfSectionNode()->GetEndNode();
+        SwEndNode* pOldTblEndNd = pTNd->EndOfSectionNode()->GetEndNode();
         OSL_ENSURE( pOldTblEndNd, "Where is the EndNode?" );
 
         SwNodeIndex aIdx( *pBox->GetSttNd() );

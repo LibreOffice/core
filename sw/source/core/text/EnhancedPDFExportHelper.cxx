@@ -1571,7 +1571,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             {
                 if( pFirst->GetTxtFld() && pFirst->IsFldInDoc() )
                 {
-                    const SwTxtNode* pTNd = (SwTxtNode*)pFirst->GetTxtFld()->GetpTxtNode();
+                    const SwTxtNode* pTNd = pFirst->GetTxtFld()->GetpTxtNode();
                     OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
 
                     // 1. Check if the whole paragraph is hidden
@@ -1822,7 +1822,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         {
             if( pFirst->GetTxtFld() && pFirst->IsFldInDoc() )
             {
-                const SwTxtNode* pTNd = (SwTxtNode*)pFirst->GetTxtFld()->GetpTxtNode();
+                const SwTxtNode* pTNd = pFirst->GetTxtFld()->GetpTxtNode();
                OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
 
                 // 1. Check if the whole paragraph is hidden

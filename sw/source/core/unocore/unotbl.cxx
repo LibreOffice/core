@@ -3065,7 +3065,7 @@ void SwXTextTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     if(pOld && pOld->Which() == RES_REMOVE_UNO_OBJECT &&
         (void*)GetRegisteredIn() == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
-            ((SwModify*)GetRegisteredIn())->Remove(this);
+            GetRegisteredIn()->Remove(this);
     else
         ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())

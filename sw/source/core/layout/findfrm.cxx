@@ -751,7 +751,7 @@ SwFrm *SwFrm::_FindNext()
                        )
                     {
                         pRet = pNxtCnt->IsInTab() ? pNxtCnt->FindTabFrm()
-                                                    : (SwFrm*)pNxtCnt;
+                                                    : pNxtCnt;
                         break;
                     }
                     pNxtCnt = lcl_NextFrm( pNxtCnt );
@@ -760,7 +760,7 @@ SwFrm *SwFrm::_FindNext()
             else if ( pThis->IsInFly() )
             {
                 pRet = pNxtCnt->IsInTab() ? pNxtCnt->FindTabFrm()
-                                            : (SwFrm*)pNxtCnt;
+                                            : pNxtCnt;
             }
             else    //footer-/or header section
             {
@@ -775,7 +775,7 @@ SwFrm *SwFrm::_FindNext()
                 if ( pCntUp == pUp )
                 {
                     pRet = pNxtCnt->IsInTab() ? pNxtCnt->FindTabFrm()
-                                                : (SwFrm*)pNxtCnt;
+                                                : pNxtCnt;
                 }
             }
         }
@@ -1531,7 +1531,7 @@ SwCellFrm* SwCellFrm::GetPreviousCell() const
 
         if ( bIsInFirstLine )
         {
-            SwTabFrm *pMaster = (SwTabFrm*)pTab->FindMaster();
+            SwTabFrm *pMaster = pTab->FindMaster();
             if ( pMaster && pMaster->HasFollowFlowLine() )
             {
                 SwRowFrm* pMasterRow = static_cast<SwRowFrm*>(pMaster->GetLastLower());

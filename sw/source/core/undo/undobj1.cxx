@@ -60,7 +60,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
     SwDoc *const pDoc = & rContext.GetDoc();
 
     // add again into array
-    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    SwFrmFmts& rFlyFmts = *pDoc->GetSpzFrmFmts();
     rFlyFmts.push_back( pFrmFmt );
 
     // OD 26.06.2003 #108784# - insert 'master' drawing object into drawing page
@@ -219,7 +219,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     pFrmFmt->ResetFmtAttr( RES_ANCHOR );        // delete anchor
 
     // delete from array
-    SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
+    SwFrmFmts& rFlyFmts = *pDoc->GetSpzFrmFmts();
     rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFrmFmt ));
 }
 

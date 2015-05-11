@@ -2536,8 +2536,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     }
     else
     {
-        pLineFmt = (SwTableLineFmt*)pTopTable->pLineFmt;
-        pBoxFmt = (SwTableBoxFmt*)pTopTable->pBoxFmt;
+        pLineFmt = pTopTable->pLineFmt;
+        pBoxFmt = pTopTable->pBoxFmt;
     }
 
     // ggf. muessen fuer Tabellen in Tabellen "Filler"-Zellen eingefuegt

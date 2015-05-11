@@ -2506,7 +2506,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
                 {
                     // First page could get empty for example by disabling
                     // a section
-                    SwFrm::CheckPageDescs( (SwPageFrm*)pNewPage, false);
+                    SwFrm::CheckPageDescs( pNewPage, false);
                 }
             }
         }

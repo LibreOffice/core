@@ -1040,7 +1040,7 @@ bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
 
             if( SfxItemState::SET == rSet.GetItemState( RES_ANCHOR, false ))
                 sw_ChkAndSetNewAnchor( *pFly, rSet );
-            SwFlyFrmFmt* pFlyFmt = (SwFlyFrmFmt*)pFly->GetFmt();
+            SwFlyFrmFmt* pFlyFmt = pFly->GetFmt();
 
             if( GetDoc()->SetFlyFrmAttr( *pFlyFmt, rSet ))
             {
@@ -1171,7 +1171,7 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, bool bKeepOrient, Point* pDocPos )
         StartAllAction();
         SET_CURR_SHELL( this );
 
-        SwFlyFrmFmt* pFlyFmt = (SwFlyFrmFmt*)pFly->GetFmt();
+        SwFlyFrmFmt* pFlyFmt = pFly->GetFmt();
         const Point aPt( pFly->Frm().Pos() );
 
         SfxItemSet* pSet = 0;

@@ -3323,7 +3323,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     SwPaM aRegion(*m_pPaM, m_pPaM);
 
     OSL_ENSURE(SwDoc::GetCurTOX(*aRegion.GetPoint()), "Misunderstood how toc works");
-    if (SwTOXBase* pBase2 = (SwTOXBase*)SwDoc::GetCurTOX(*aRegion.GetPoint()))
+    if (SwTOXBase* pBase2 = SwDoc::GetCurTOX(*aRegion.GetPoint()))
     {
         pBase2->SetMSTOCExpression(rStr);
 
