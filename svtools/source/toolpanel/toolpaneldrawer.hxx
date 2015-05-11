@@ -24,14 +24,9 @@
 #include <vcl/virdev.hxx>
 #include <vcl/vclptr.hxx>
 
-
 namespace svt
 {
-
-
     class ToolPanelDrawer;
-
-    //= DrawerVisualization
 
     /** serves a single purpose - let ZoomText read the drawers ...
 
@@ -45,32 +40,31 @@ namespace svt
     class DrawerVisualization : public vcl::Window
     {
     public:
-        DrawerVisualization( ToolPanelDrawer& i_rParent );
+        DrawerVisualization(ToolPanelDrawer& i_rParent);
 
     protected:
         // Window overridables
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& i_rBoundingBox ) SAL_OVERRIDE;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rBoundingBox) SAL_OVERRIDE;
 
     private:
-        ToolPanelDrawer&    m_rDrawer;
+        ToolPanelDrawer& m_rDrawer;
     };
-
-
-    //= ToolPanelDrawer
-
 
     class ToolPanelDrawer : public vcl::Window
     {
     public:
-        ToolPanelDrawer( vcl::Window& i_rParent, const OUString& i_rTitle );
+        ToolPanelDrawer(vcl::Window& i_rParent, const OUString& i_rTitle);
         virtual ~ToolPanelDrawer();
         virtual void dispose() SAL_OVERRIDE;
 
-        long    GetPreferredHeightPixel() const;
-        void    SetExpanded( const bool i_bExpanded );
-        bool    IsExpanded() const { return m_bExpanded; }
+        long GetPreferredHeightPixel() const;
+        void SetExpanded(const bool i_bExpanded);
+        bool IsExpanded() const
+        {
+                return m_bExpanded;
+        }
 
-        void    Paint();
+        void    Paint(vcl::RenderContext& rRenderContext);
 
     protected:
         // Window overridables
@@ -97,15 +91,12 @@ namespace svt
         using Window::Paint;
 
     private:
-        ScopedVclPtr< VirtualDevice >       m_pPaintDevice;
-        VclPtr<DrawerVisualization>         m_aVisualization;
-        bool                                m_bFocused;
-        bool                                m_bExpanded;
+        ScopedVclPtr<VirtualDevice> m_pPaintDevice;
+        VclPtr<DrawerVisualization> m_aVisualization;
+        bool m_bFocused : 1;
+        bool m_bExpanded : 1;
     };
-
-
 } // namespace svt
-
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELDRAWER_HXX
 

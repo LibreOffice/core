@@ -56,10 +56,10 @@ namespace svt
     }
 
 
-    void DrawerVisualization::Paint( vcl::RenderContext& rRenderContext, const Rectangle& i_rBoundingBox )
+    void DrawerVisualization::Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rBoundingBox)
     {
         Window::Paint(rRenderContext, i_rBoundingBox);
-        m_rDrawer.Paint();
+        m_rDrawer.Paint(rRenderContext);
     }
 
 
@@ -105,29 +105,25 @@ namespace svt
     }
 
 
-    void ToolPanelDrawer::Paint()
+    void ToolPanelDrawer::Paint(vcl::RenderContext& rRenderContext)
     {
-        m_pPaintDevice->SetMapMode( GetMapMode() );
-        m_pPaintDevice->SetOutputSize( GetOutputSizePixel() );
-        m_pPaintDevice->SetSettings( GetSettings() );
-        m_pPaintDevice->SetDrawMode( GetDrawMode() );
+        m_pPaintDevice->SetMapMode(rRenderContext.GetMapMode());
+        m_pPaintDevice->SetOutputSize(rRenderContext.GetOutputSizePixel());
+        m_pPaintDevice->SetSettings(rRenderContext.GetSettings());
+        m_pPaintDevice->SetDrawMode(rRenderContext.GetDrawMode());
 
-        const Rectangle aTextBox( impl_calcTextBoundingBox() );
-        impl_paintBackground( impl_calcTitleBarBox( aTextBox ) );
+        const Rectangle aTextBox(impl_calcTextBoundingBox());
+        impl_paintBackground(impl_calcTitleBarBox(aTextBox));
 
-        Rectangle aFocusBox( impl_paintExpansionIndicator( aTextBox ) );
+        Rectangle aFocusBox(impl_paintExpansionIndicator(aTextBox));
 
-        m_pPaintDevice->DrawText( aTextBox, GetText(), impl_getTextStyle() );
+        m_pPaintDevice->DrawText(aTextBox, GetText(), impl_getTextStyle());
 
-        aFocusBox.Union( aTextBox );
+        aFocusBox.Union(aTextBox);
         aFocusBox.Left() += 2;
-        impl_paintFocusIndicator( aFocusBox );
+        impl_paintFocusIndicator(aFocusBox);
 
-        m_aVisualization->DrawOutDev(
-            Point(), GetOutputSizePixel(),
-            Point(), GetOutputSizePixel(),
-            *m_pPaintDevice
-        );
+        rRenderContext.DrawOutDev(Point(), GetOutputSizePixel(), Point(), GetOutputSizePixel(), *m_pPaintDevice);
     }
 
 
