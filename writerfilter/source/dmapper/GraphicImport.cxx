@@ -1220,126 +1220,125 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SIZE_PROTECTED ),
                     uno::makeAny(true));
 
-            if (m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
-            {
-                sal_Int32 nWidth = m_pImpl->nRightPosition - m_pImpl->nLeftPosition;
-                //adjust margins
-                if( (m_pImpl->nHoriOrient == text::HoriOrientation::LEFT &&
+            sal_Int32 nWidth = m_pImpl->nRightPosition - m_pImpl->nLeftPosition;
+            //adjust margins
+            if( (m_pImpl->nHoriOrient == text::HoriOrientation::LEFT &&
+                (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
+                    m_pImpl->nHoriRelation == text::RelOrientation::FRAME) ) ||
+                (m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
+                    m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
+                m_pImpl->nLeftMargin = 0;
+            if((m_pImpl->nHoriOrient == text::HoriOrientation::RIGHT &&
                     (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
                         m_pImpl->nHoriRelation == text::RelOrientation::FRAME) ) ||
-                     (m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
-                       m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
-                    m_pImpl->nLeftMargin = 0;
-                if((m_pImpl->nHoriOrient == text::HoriOrientation::RIGHT &&
-                        (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
-                            m_pImpl->nHoriRelation == text::RelOrientation::FRAME) ) ||
-                    (m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
-                        m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
-                    m_pImpl->nRightMargin = 0;
-                // adjust top/bottom margins
-                if( m_pImpl->nVertOrient == text::VertOrientation::TOP &&
-                        ( m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
-                            m_pImpl->nVertRelation == text::RelOrientation::PAGE_FRAME))
-                    m_pImpl->nTopMargin = 0;
-                if( m_pImpl->nVertOrient == text::VertOrientation::BOTTOM &&
-                        ( m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
-                            m_pImpl->nVertRelation == text::RelOrientation::PAGE_FRAME))
-                    m_pImpl->nBottomMargin = 0;
-                if( m_pImpl->nVertOrient == text::VertOrientation::BOTTOM &&
-                        m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA )
-                    m_pImpl->nBottomMargin = 0;
+                (m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
+                    m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
+                m_pImpl->nRightMargin = 0;
+            // adjust top/bottom margins
+            if( m_pImpl->nVertOrient == text::VertOrientation::TOP &&
+                    ( m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
+                        m_pImpl->nVertRelation == text::RelOrientation::PAGE_FRAME))
+                m_pImpl->nTopMargin = 0;
+            if( m_pImpl->nVertOrient == text::VertOrientation::BOTTOM &&
+                    ( m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
+                        m_pImpl->nVertRelation == text::RelOrientation::PAGE_FRAME))
+                m_pImpl->nBottomMargin = 0;
+            if( m_pImpl->nVertOrient == text::VertOrientation::BOTTOM &&
+                    m_pImpl->nVertRelation == text::RelOrientation::PAGE_PRINT_AREA )
+                m_pImpl->nBottomMargin = 0;
 
-                //adjust alignment
-                if( m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
-                        m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME )
-                {
-                    // convert 'left to page' to 'from left -<width> to page text area'
-                    m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
-                    m_pImpl->nHoriRelation = text::RelOrientation::PAGE_PRINT_AREA;
-                    m_pImpl->nLeftPosition = - nWidth;
-                }
-                else if( m_pImpl->nHoriOrient == text::HoriOrientation::OUTSIDE &&
-                        m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME )
-                {
-                    // convert 'right to page' to 'from left 0 to right page border'
-                    m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
-                    m_pImpl->nHoriRelation = text::RelOrientation::PAGE_RIGHT;
-                    m_pImpl->nLeftPosition = 0;
-                }
-
-                m_pImpl->applyPosition(xGraphicObjectProperties);
-                m_pImpl->applyRelativePosition(xGraphicObjectProperties);
-                bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter( );
-                if( !bOpaque )
-                {
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ),
-                        uno::makeAny(bOpaque));
-                }
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND ),
-                        uno::makeAny(m_pImpl->nWrap));
-                if( m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGHT )
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_FOLLOW_TEXT_FLOW ),
-                            uno::makeAny(true));
-
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND_CONTOUR ),
-                    uno::makeAny(m_pImpl->bContour));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_OUTSIDE ),
-                    uno::makeAny(m_pImpl->bContourOutside));
-                m_pImpl->applyMargins(xGraphicObjectProperties);
-
-                if( m_pImpl->eColorMode == drawing::ColorMode_STANDARD &&
-                    m_pImpl->nContrast == -70 &&
-                    m_pImpl->nBrightness == 70 )
-                {
-                    // strange definition of WATERMARK!
-                    m_pImpl->nContrast = 0;
-                    m_pImpl->nBrightness = 0;
-                    m_pImpl->eColorMode = drawing::ColorMode_WATERMARK;
-                }
-
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_ADJUST_CONTRAST ),
-                    uno::makeAny((sal_Int16)m_pImpl->nContrast));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_ADJUST_LUMINANCE ),
-                    uno::makeAny((sal_Int16)m_pImpl->nBrightness));
-                if(m_pImpl->eColorMode != drawing::ColorMode_STANDARD)
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GRAPHIC_COLOR_MODE ),
-                        uno::makeAny(m_pImpl->eColorMode));
-                if(m_pImpl->fGamma > 0. )
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GAMMA ),
-                        uno::makeAny(m_pImpl->fGamma ));
-                if(m_pImpl->bHoriFlip)
-                {
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_MIRRORED_ON_EVEN_PAGES ),
-                        uno::makeAny( m_pImpl->bHoriFlip ));
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_MIRRORED_ON_ODD_PAGES ),
-                        uno::makeAny( m_pImpl->bHoriFlip ));
-                }
-
-                if( m_pImpl->bVertFlip )
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_MIRRORED ),
-                        uno::makeAny( m_pImpl->bVertFlip ));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BACK_COLOR ),
-                    uno::makeAny( m_pImpl->nFillColor ));
-
-                m_pImpl->applyZOrder(xGraphicObjectProperties);
-
-                //there seems to be no way to detect the original size via _real_ API
-                uno::Reference< beans::XPropertySet > xGraphicProperties( xGraphic, uno::UNO_QUERY_THROW );
-                awt::Size aGraphicSize, aGraphicSizePixel;
-                xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE100th_M_M )) >>= aGraphicSize;
-                xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE_PIXEL )) >>= aGraphicSizePixel;
-
-                uno::Any aContourPolyPolygon;
-                if( aGraphicSize.Width && aGraphicSize.Height &&
-                    m_pImpl->mpWrapPolygon.get() != nullptr)
-                {
-                    WrapPolygon::Pointer_t pCorrected = m_pImpl->mpWrapPolygon->correctWordWrapPolygon(aGraphicSize);
-                    aContourPolyPolygon <<= pCorrected->getPointSequenceSequence();
-                }
-
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
-                                                           aContourPolyPolygon);
+            //adjust alignment
+            if( m_pImpl->nHoriOrient == text::HoriOrientation::INSIDE &&
+                    m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME )
+            {
+                // convert 'left to page' to 'from left -<width> to page text area'
+                m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
+                m_pImpl->nHoriRelation = text::RelOrientation::PAGE_PRINT_AREA;
+                m_pImpl->nLeftPosition = - nWidth;
             }
+            else if( m_pImpl->nHoriOrient == text::HoriOrientation::OUTSIDE &&
+                    m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME )
+            {
+                // convert 'right to page' to 'from left 0 to right page border'
+                m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
+                m_pImpl->nHoriRelation = text::RelOrientation::PAGE_RIGHT;
+                m_pImpl->nLeftPosition = 0;
+            }
+
+            m_pImpl->applyPosition(xGraphicObjectProperties);
+            m_pImpl->applyRelativePosition(xGraphicObjectProperties);
+            bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter( );
+            if( !bOpaque )
+            {
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ),
+                    uno::makeAny(bOpaque));
+            }
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND ),
+                    uno::makeAny(m_pImpl->nWrap));
+            if( m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGHT )
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_FOLLOW_TEXT_FLOW ),
+                        uno::makeAny(true));
+
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND_CONTOUR ),
+                uno::makeAny(m_pImpl->bContour));
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_OUTSIDE ),
+                uno::makeAny(m_pImpl->bContourOutside));
+            m_pImpl->applyMargins(xGraphicObjectProperties);
+
+            if( m_pImpl->eColorMode == drawing::ColorMode_STANDARD &&
+                m_pImpl->nContrast == -70 &&
+                m_pImpl->nBrightness == 70 )
+            {
+                // strange definition of WATERMARK!
+                m_pImpl->nContrast = 0;
+                m_pImpl->nBrightness = 0;
+                m_pImpl->eColorMode = drawing::ColorMode_WATERMARK;
+            }
+
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_ADJUST_CONTRAST ),
+                uno::makeAny((sal_Int16)m_pImpl->nContrast));
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_ADJUST_LUMINANCE ),
+                uno::makeAny((sal_Int16)m_pImpl->nBrightness));
+            if(m_pImpl->eColorMode != drawing::ColorMode_STANDARD)
+            {
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GRAPHIC_COLOR_MODE ),
+                    uno::makeAny(m_pImpl->eColorMode));
+            }
+            if(m_pImpl->fGamma > 0. )
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GAMMA ),
+                    uno::makeAny(m_pImpl->fGamma ));
+            if(m_pImpl->bHoriFlip)
+            {
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_MIRRORED_ON_EVEN_PAGES ),
+                uno::makeAny( m_pImpl->bHoriFlip ));
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_MIRRORED_ON_ODD_PAGES ),
+                uno::makeAny( m_pImpl->bHoriFlip ));
+            }
+
+            if( m_pImpl->bVertFlip )
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_MIRRORED ),
+                    uno::makeAny( m_pImpl->bVertFlip ));
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BACK_COLOR ),
+                uno::makeAny( m_pImpl->nFillColor ));
+
+            m_pImpl->applyZOrder(xGraphicObjectProperties);
+
+            //there seems to be no way to detect the original size via _real_ API
+            uno::Reference< beans::XPropertySet > xGraphicProperties( xGraphic, uno::UNO_QUERY_THROW );
+            awt::Size aGraphicSize, aGraphicSizePixel;
+            xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE100th_M_M )) >>= aGraphicSize;
+            xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE_PIXEL )) >>= aGraphicSizePixel;
+
+            uno::Any aContourPolyPolygon;
+            if( aGraphicSize.Width && aGraphicSize.Height &&
+                m_pImpl->mpWrapPolygon.get() != nullptr)
+            {
+                WrapPolygon::Pointer_t pCorrected = m_pImpl->mpWrapPolygon->correctWordWrapPolygon(aGraphicSize);
+                aContourPolyPolygon <<= pCorrected->getPointSequenceSequence();
+            }
+
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
+                                                           aContourPolyPolygon);
 
             if(m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
