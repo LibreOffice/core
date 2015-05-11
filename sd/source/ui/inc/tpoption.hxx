@@ -148,7 +148,7 @@ public:
         and arrange the visible controls.  Do not call this method or the
         <member>SetDrawMode()</member> method more than once.
     */
-    static void SetImpressMode();
+    void SetImpressMode();
     virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 
     using TabPage::ActivatePage;
