@@ -1347,10 +1347,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
         GtkWidgetPath *pCPath = gtk_widget_path_new();
         guint pos = gtk_widget_path_append_type(pCPath, GTK_TYPE_NOTEBOOK);
-        gtk_widget_path_iter_add_class(pCPath, 0, GTK_STYLE_CLASS_NOTEBOOK);
-        gtk_widget_path_iter_add_region(pCPath, pos, "tab", static_cast<GtkRegionFlags>(GTK_REGION_EVEN | GTK_REGION_FIRST));
+        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_NOTEBOOK);
+        gtk_widget_path_iter_add_region(pCPath, pos, GTK_STYLE_REGION_TAB, static_cast<GtkRegionFlags>(GTK_REGION_EVEN | GTK_REGION_FIRST));
         pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
-        gtk_widget_path_iter_set_name(pCPath, pos, "first tab label");
+        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
         pCStyle = gtk_style_context_new();
         gtk_style_context_set_path(pCStyle, pCPath);
         gtk_widget_path_free(pCPath);
