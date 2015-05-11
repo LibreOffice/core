@@ -2211,7 +2211,7 @@ void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
 void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
 {
     {
-#if OSL_DEBUG_LEVEL > 0
+#ifndef NDEBUG
         SwNode *const pFirst((*this)[nDelPos]);
 #endif
         for (sal_uLong nCnt = 0; nCnt < nSz; nCnt++)
