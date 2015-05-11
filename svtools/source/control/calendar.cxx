@@ -603,35 +603,37 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
     return 0;
 }
 
-static void ImplDrawSpinArrow( OutputDevice* pDev, const Rectangle& rRect,
-                               bool bPrev )
+namespace
 {
-    long    i;
-    long    n;
-    long    nLines;
-    long    nHeight = rRect.GetHeight();
-    long    nWidth = rRect.GetWidth();
-    if ( nWidth < nHeight )
+
+static void ImplDrawSpinArrow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bPrev)
+{
+    long i;
+    long n;
+    long nLines;
+    long nHeight = rRect.GetHeight();
+    long nWidth = rRect.GetWidth();
+    if (nWidth < nHeight)
         n = nWidth;
     else
         n = nHeight;
-    if ( !(n & 0x01) )
+    if (!(n & 0x01))
         n--;
     nLines = n/2;
 
-    Rectangle aRect( Point( rRect.Left()+(nWidth/2)-(nLines/2),
-                            rRect.Top()+(nHeight/2) ),
-                     Size( 1, 1 ) );
-    if ( !bPrev )
+    Rectangle aRect(Point( rRect.Left() + (nWidth / 2) - (nLines / 2),
+                            rRect.Top() + (nHeight / 2) ),
+                     Size(1, 1));
+    if (!bPrev)
     {
         aRect.Left()  += nLines;
         aRect.Right() += nLines;
     }
 
-    pDev->DrawRect( aRect );
-    for ( i = 0; i < nLines; i++ )
+    rRenderContext.DrawRect(aRect);
+    for (i = 0; i < nLines; i++)
     {
-        if ( bPrev )
+        if (bPrev)
         {
             aRect.Left()++;
             aRect.Right()++;
@@ -643,324 +645,332 @@ static void ImplDrawSpinArrow( OutputDevice* pDev, const Rectangle& rRect,
         }
         aRect.Top()--;
         aRect.Bottom()++;
-        pDev->DrawRect( aRect );
+        rRenderContext.DrawRect(aRect);
     }
 }
 
-void Calendar::ImplDrawSpin( bool bDrawPrev, bool bDrawNext )
+} //end anonymous namespace
+
+void Calendar::ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bDrawPrev, bool bDrawNext )
 {
-    if ( !bDrawPrev && !bDrawNext )
+    if (!bDrawPrev && !bDrawNext)
         return;
 
-    SetLineColor();
-    SetFillColor( GetSettings().GetStyleSettings().GetButtonTextColor() );
-    if ( bDrawPrev )
+    rRenderContext.SetLineColor();
+    rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor());
+    if (bDrawPrev)
     {
         Rectangle aOutRect = maPrevRect;
         aOutRect.Left()   += 3;
         aOutRect.Top()    += 3;
         aOutRect.Right()  -= 3;
         aOutRect.Bottom() -= 3;
-        ImplDrawSpinArrow( this, aOutRect, true );
+        ImplDrawSpinArrow(rRenderContext, aOutRect, true);
     }
-    if ( bDrawNext )
+    if (bDrawNext)
     {
         Rectangle aOutRect = maNextRect;
         aOutRect.Left()   += 3;
         aOutRect.Top()    += 3;
         aOutRect.Right()  -= 3;
         aOutRect.Bottom() -= 3;
-        ImplDrawSpinArrow( this, aOutRect, false );
+        ImplDrawSpinArrow(rRenderContext, aOutRect, false);
     }
 }
 
-void Calendar::ImplDrawDate( long nX, long nY,
-                             sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
-                             DayOfWeek eDayOfWeek,
-                             bool bBack, bool bOther, sal_uLong nToday )
+void Calendar::ImplDrawDate(vcl::RenderContext& rRenderContext,
+                            long nX, long nY,
+                            sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
+                            DayOfWeek eDayOfWeek,
+                            bool bBack, bool bOther, sal_uLong nToday )
 {
-    Color*          pTextColor = NULL;
-    const OUString& rDay = maDayTexts[nDay-1];
-    Rectangle       aDateRect( nX, nY, nX+mnDayWidth-1, nY+mnDayHeight-1 );
+    Color* pTextColor = NULL;
+    const OUString& rDay = maDayTexts[nDay - 1];
+    Rectangle aDateRect(nX, nY, nX + mnDayWidth - 1, nY + mnDayHeight - 1);
 
     bool bSel = false;
     bool bFocus = false;
     // actual day
-    if ( (nDay   == maCurDate.GetDay()) &&
-         (nMonth == maCurDate.GetMonth()) &&
-         (nYear  == maCurDate.GetYear()) )
-        bFocus = true;
-    if ( mpSelectTable )
+    if ((nDay   == maCurDate.GetDay()) &&
+        (nMonth == maCurDate.GetMonth()) &&
+        (nYear  == maCurDate.GetYear()))
     {
-        if ( mpSelectTable->find( Date( nDay, nMonth, nYear ).GetDate() ) != mpSelectTable->end() )
+        bFocus = true;
+    }
+    if (mpSelectTable)
+    {
+        if (mpSelectTable->find(Date(nDay, nMonth, nYear).GetDate()) != mpSelectTable->end())
             bSel = true;
     }
 
     // get textcolour
-    if ( bSel )
+    if (bSel)
         pTextColor = &maSelColor;
-    else if ( bOther )
+    else if (bOther)
         pTextColor = &maOtherColor;
     else
     {
-        if ( eDayOfWeek == SATURDAY )
+        if (eDayOfWeek == SATURDAY)
             pTextColor = mpSaturdayColor;
-        else if ( eDayOfWeek == SUNDAY )
+        else if (eDayOfWeek == SUNDAY)
             pTextColor = mpSundayColor;
-        if ( !pTextColor )
+        if (!pTextColor)
             pTextColor = mpStandardColor;
     }
 
-    if ( bFocus )
+    if (bFocus)
         HideFocus();
 
     // display background
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if ( bSel || bBack )
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    if (bSel || bBack)
     {
-        if ( bSel )
+        if (bSel)
         {
-            SetLineColor();
-            SetFillColor( rStyleSettings.GetHighlightColor() );
-            DrawRect( aDateRect );
+            rRenderContext.SetLineColor();
+            rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
+            rRenderContext.DrawRect(aDateRect);
         }
         else
-            Erase( aDateRect );
+            rRenderContext.Erase(aDateRect);
     }
 
     // display text
-    long nTextX = nX+(mnDayWidth-GetTextWidth( rDay ))-(DAY_OFFX/2);
-    long nTextY = nY+(mnDayHeight-GetTextHeight())/2;
-    if ( pTextColor )
+    long nTextX = nX + (mnDayWidth - GetTextWidth(rDay)) - (DAY_OFFX / 2);
+    long nTextY = nY + (mnDayHeight - GetTextHeight()) / 2;
+    if (pTextColor)
     {
-        Color aOldColor = GetTextColor();
-        SetTextColor( *pTextColor );
-        DrawText( Point( nTextX, nTextY ), rDay );
-        SetTextColor( aOldColor );
+        Color aOldColor = rRenderContext.GetTextColor();
+        rRenderContext.SetTextColor(*pTextColor);
+        rRenderContext.DrawText(Point(nTextX, nTextY), rDay);
+        rRenderContext.SetTextColor(aOldColor);
     }
     else
-        DrawText( Point( nTextX, nTextY ), rDay );
+        rRenderContext.DrawText(Point(nTextX, nTextY), rDay);
 
     // today
-    Date aTodayDate( maCurDate );
-    if ( nToday )
-        aTodayDate.SetDate( nToday );
+    Date aTodayDate(maCurDate);
+    if (nToday)
+        aTodayDate.SetDate(nToday);
     else
-        aTodayDate = Date( Date::SYSTEM );
-    if ( (nDay   == aTodayDate.GetDay()) &&
-         (nMonth == aTodayDate.GetMonth()) &&
-         (nYear  == aTodayDate.GetYear()) )
+        aTodayDate = Date(Date::SYSTEM);
+    if ((nDay   == aTodayDate.GetDay()) &&
+        (nMonth == aTodayDate.GetMonth()) &&
+        (nYear  == aTodayDate.GetYear()))
     {
-        SetLineColor( rStyleSettings.GetWindowTextColor() );
-        SetFillColor();
-        DrawRect( aDateRect );
+        rRenderContext.SetLineColor(rStyleSettings.GetWindowTextColor());
+        rRenderContext.SetFillColor();
+        rRenderContext.DrawRect(aDateRect);
     }
 
     // if needed do FocusRect
-    if ( bFocus && HasFocus() )
-        ShowFocus( aDateRect );
+    if (bFocus && HasFocus())
+        ShowFocus(aDateRect);
 
-    if( mbDropPos && maDropDate == Date( nDay, nMonth, nYear ) )
+    if (mbDropPos && maDropDate == Date(nDay, nMonth, nYear))
         ImplInvertDropPos();
 }
 
-void Calendar::ImplDraw( bool bPaint )
+void Calendar::ImplDraw(vcl::RenderContext& rRenderContext, bool bPaint)
 {
     ImplFormat();
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    Size        aOutSize = GetOutputSizePixel();
-    long        i;
-    long        j;
-    long        nY;
-    long        nDeltaX;
-    long        nDeltaY;
-    long        nDayX;
-    long        nDayY;
-    sal_uLong       nToday = Date( Date::SYSTEM ).GetDate();
-    sal_uInt16      nDay;
-    sal_uInt16      nMonth;
-    sal_uInt16      nYear;
-    Date        aDate = GetFirstMonth();
-    DayOfWeek   eStartDay = ImplGetWeekStart();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    Size aOutSize = rRenderContext.GetOutputSizePixel();
+    long i;
+    long j;
+    long nY;
+    long nDeltaX;
+    long nDeltaY;
+    long nDayX;
+    long nDayY;
+    sal_uLong nToday = Date(Date::SYSTEM).GetDate();
+    sal_uInt16 nDay;
+    sal_uInt16 nMonth;
+    sal_uInt16 nYear;
+    Date aDate = GetFirstMonth();
+    DayOfWeek eStartDay = ImplGetWeekStart();
 
     HideFocus();
 
     nY = 0;
-    for ( i = 0; i < mnLines; i++ )
+    for (i = 0; i < mnLines; i++)
     {
         // display title bar
-        SetLineColor();
-        SetFillColor( rStyleSettings.GetFaceColor() );
-        Rectangle aTitleRect( 0, nY, aOutSize.Width()-1, nY+mnDayHeight-DAY_OFFY+TITLE_BORDERY*2 );
-        if ( !bPaint )
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
+        Rectangle aTitleRect(0, nY, aOutSize.Width() - 1, nY + mnDayHeight - DAY_OFFY + TITLE_BORDERY * 2);
+        if (!bPaint)
         {
-            Rectangle aTempRect( 1, aTitleRect.Top()+TITLE_BORDERY,
-                                 aOutSize.Width()-2,
-                                 aTitleRect.Bottom()-TITLE_BORDERY );
-            if ( !i )
+            Rectangle aTempRect(1, aTitleRect.Top() + TITLE_BORDERY,
+                                aOutSize.Width() - 2,
+                                aTitleRect.Bottom() - TITLE_BORDERY);
+            if (!i)
             {
-                aTempRect.Left()  = maPrevRect.Right()+1;
-                aTempRect.Right() = maNextRect.Left()-1;
+                aTempRect.Left()  = maPrevRect.Right() + 1;
+                aTempRect.Right() = maNextRect.Left() - 1;
             }
-            DrawRect( aTempRect );
+            rRenderContext.DrawRect(aTempRect);
         }
         else
         {
-            DrawRect( aTitleRect );
-            Point aTopLeft1( aTitleRect.Left(), aTitleRect.Top() );
-            Point aTopLeft2( aTitleRect.Left(), aTitleRect.Top()+1 );
-            Point aBottomRight1( aTitleRect.Right(), aTitleRect.Bottom() );
-            Point aBottomRight2( aTitleRect.Right(), aTitleRect.Bottom()-1 );
-            SetLineColor( rStyleSettings.GetDarkShadowColor() );
-            DrawLine( aTopLeft1, Point( aBottomRight1.X(), aTopLeft1.Y() ) );
-            SetLineColor( rStyleSettings.GetLightColor() );
-            DrawLine( aTopLeft2, Point( aBottomRight2.X(), aTopLeft2.Y() ) );
-            DrawLine( aTopLeft2, Point( aTopLeft2.X(), aBottomRight2.Y() ) );
-            SetLineColor( rStyleSettings.GetShadowColor() );
-            DrawLine( Point( aTopLeft2.X(), aBottomRight2.Y() ), aBottomRight2 );
-            DrawLine( Point( aBottomRight2.X(), aTopLeft2.Y() ), aBottomRight2 );
-            SetLineColor( rStyleSettings.GetDarkShadowColor() );
-            DrawLine( Point( aTopLeft1.X(), aBottomRight1.Y() ), aBottomRight1 );
+            rRenderContext.DrawRect(aTitleRect);
+            Point aTopLeft1(aTitleRect.Left(), aTitleRect.Top());
+            Point aTopLeft2(aTitleRect.Left(), aTitleRect.Top() + 1);
+            Point aBottomRight1(aTitleRect.Right(), aTitleRect.Bottom());
+            Point aBottomRight2(aTitleRect.Right(), aTitleRect.Bottom() - 1);
+            rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+            rRenderContext.DrawLine(aTopLeft1, Point(aBottomRight1.X(), aTopLeft1.Y()));
+            rRenderContext.SetLineColor(rStyleSettings.GetLightColor() );
+            rRenderContext.DrawLine(aTopLeft2, Point(aBottomRight2.X(), aTopLeft2.Y()));
+            rRenderContext.DrawLine(aTopLeft2, Point(aTopLeft2.X(), aBottomRight2.Y()));
+            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor() );
+            rRenderContext.DrawLine(Point(aTopLeft2.X(), aBottomRight2.Y()), aBottomRight2);
+            rRenderContext.DrawLine(Point(aBottomRight2.X(), aTopLeft2.Y()), aBottomRight2);
+            rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+            rRenderContext.DrawLine(Point(aTopLeft1.X(), aBottomRight1.Y()), aBottomRight1);
         }
-        Point aSepPos1( 0, aTitleRect.Top()+TITLE_BORDERY );
-        Point aSepPos2( 0, aTitleRect.Bottom()-TITLE_BORDERY );
-        for ( j = 0; j < mnMonthPerLine-1; j++ )
+        Point aSepPos1(0, aTitleRect.Top() + TITLE_BORDERY);
+        Point aSepPos2(0, aTitleRect.Bottom() - TITLE_BORDERY);
+        for (j = 0; j < mnMonthPerLine-1; j++)
         {
             aSepPos1.X() += mnMonthWidth-1;
             aSepPos2.X() = aSepPos1.X();
-            SetLineColor( rStyleSettings.GetShadowColor() );
-            DrawLine( aSepPos1, aSepPos2 );
+            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+            rRenderContext.DrawLine(aSepPos1, aSepPos2);
             aSepPos1.X()++;
             aSepPos2.X() = aSepPos1.X();
-            SetLineColor( rStyleSettings.GetLightColor() );
-            DrawLine( aSepPos1, aSepPos2 );
+            rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+            rRenderContext.DrawLine(aSepPos1, aSepPos2);
         }
 
         long nX = 0;
-        for ( j = 0; j < mnMonthPerLine; j++ )
+        for (j = 0; j < mnMonthPerLine; j++)
         {
             nMonth  = aDate.GetMonth();
             nYear   = aDate.GetYear();
 
             // display month in title bar
             nDeltaX = nX;
-            nDeltaY = nY+TITLE_BORDERY;
-            OUString aMonthText( maCalendarWrapper.getDisplayName(
-                        i18n::CalendarDisplayIndex::MONTH, nMonth-1, 1));
+            nDeltaY = nY + TITLE_BORDERY;
+            OUString aMonthText(maCalendarWrapper.getDisplayName(i18n::CalendarDisplayIndex::MONTH, nMonth - 1, 1));
             aMonthText += " ";
             aMonthText += OUString::number(nYear);
-            long nMonthTextWidth = GetTextWidth( aMonthText );
+            long nMonthTextWidth = rRenderContext.GetTextWidth(aMonthText);
             long nMonthOffX1 = 0;
             long nMonthOffX2 = 0;
-            if ( i == 0 )
+            if (i == 0)
             {
-                if ( j == 0 )
-                    nMonthOffX1 = maPrevRect.Right()+1;
-                if ( j == mnMonthPerLine-1 )
-                    nMonthOffX2 = aOutSize.Width()-maNextRect.Left()+1;
+                if (j == 0)
+                    nMonthOffX1 = maPrevRect.Right() + 1;
+                if (j == mnMonthPerLine - 1)
+                    nMonthOffX2 = aOutSize.Width() - maNextRect.Left() + 1;
             }
-            long nMaxMonthWidth = mnMonthWidth-nMonthOffX1-nMonthOffX2-4;
-            if ( nMonthTextWidth > nMaxMonthWidth )
+            long nMaxMonthWidth = mnMonthWidth - nMonthOffX1 - nMonthOffX2 - 4;
+            if (nMonthTextWidth > nMaxMonthWidth)
             {
                 // Abbreviated month name.
-                aMonthText  = maCalendarWrapper.getDisplayName(
-                        i18n::CalendarDisplayIndex::MONTH, nMonth-1, 0);
+                aMonthText  = maCalendarWrapper.getDisplayName(i18n::CalendarDisplayIndex::MONTH, nMonth - 1, 0);
                 aMonthText += " ";
                 aMonthText += OUString::number(nYear);
-                nMonthTextWidth = GetTextWidth( aMonthText );
+                nMonthTextWidth = rRenderContext.GetTextWidth(aMonthText);
             }
-            long nTempOff = (mnMonthWidth-nMonthTextWidth+1)/2;
-            if ( nTempOff < nMonthOffX1 )
-                nDeltaX += nMonthOffX1+1;
+            long nTempOff = (mnMonthWidth - nMonthTextWidth + 1) / 2;
+            if (nTempOff < nMonthOffX1)
+                nDeltaX += nMonthOffX1 + 1;
             else
             {
-                if ( nTempOff+nMonthTextWidth > mnMonthWidth-nMonthOffX2 )
-                    nDeltaX += mnMonthWidth-nMonthOffX2-nMonthTextWidth;
+                if (nTempOff + nMonthTextWidth > mnMonthWidth - nMonthOffX2)
+                    nDeltaX += mnMonthWidth - nMonthOffX2 - nMonthTextWidth;
                 else
                     nDeltaX += nTempOff;
             }
-            SetTextColor( rStyleSettings.GetButtonTextColor() );
-            DrawText( Point( nDeltaX, nDeltaY ), aMonthText );
-            SetTextColor( rStyleSettings.GetWindowTextColor() );
+            rRenderContext.SetTextColor(rStyleSettings.GetButtonTextColor());
+            rRenderContext.DrawText(Point(nDeltaX, nDeltaY), aMonthText);
+            rRenderContext.SetTextColor(rStyleSettings.GetWindowTextColor());
 
             // display week bar
-            if ( bPaint )
+            if (bPaint)
             {
-                nDayX = nX+mnDaysOffX;
-                nDayY = nY+mnWeekDayOffY;
+                nDayX = nX + mnDaysOffX;
+                nDayY = nY + mnWeekDayOffY;
                 nDeltaY = nDayY + mnDayHeight;
-                SetLineColor( rStyleSettings.GetWindowTextColor() );
-                Point aStartPos( nDayX, nDeltaY );
-                if ( mnWinStyle & WB_WEEKNUMBER )
-                    aStartPos.X() -= WEEKNUMBER_OFFX-2;
-                DrawLine( aStartPos, Point( nDayX+(7*mnDayWidth), nDeltaY ) );
-                DrawTextArray( Point( nDayX+mnDayOfWeekAry[0], nDayY ), maDayOfWeekText, &(mnDayOfWeekAry[1]) );
+                rRenderContext.SetLineColor(rStyleSettings.GetWindowTextColor());
+                Point aStartPos(nDayX, nDeltaY);
+                if (mnWinStyle & WB_WEEKNUMBER)
+                    aStartPos.X() -= WEEKNUMBER_OFFX - 2;
+                rRenderContext.DrawLine(aStartPos, Point(nDayX + (7 * mnDayWidth), nDeltaY));
+                rRenderContext.DrawTextArray(Point(nDayX + mnDayOfWeekAry[0], nDayY), maDayOfWeekText, &(mnDayOfWeekAry[1]));
             }
 
             // display weeknumbers
-            if ( mnWinStyle & WB_WEEKNUMBER )
+            if (mnWinStyle & WB_WEEKNUMBER)
             {
-                nDayX = nX+mnDaysOffX;
-                nDayY = nY+mnWeekDayOffY;
+                nDayX = nX + mnDaysOffX;
+                nDayY = nY + mnWeekDayOffY;
                 nDeltaY = nDayY + mnDayHeight;
-                long nMonthHeight = mnDayHeight*6;
-                if ( bPaint )
-                    DrawLine( Point( nDayX-WEEKNUMBER_OFFX+2, nDeltaY ), Point( nDayX-WEEKNUMBER_OFFX+2, nDeltaY+nMonthHeight ) );
-                else
-                    Erase( Rectangle( nDayX-mnWeekWidth-WEEKNUMBER_OFFX, nDeltaY, nDayX-WEEKNUMBER_OFFX-1, nDeltaY+nMonthHeight ) );
-
-                vcl::Font aOldFont = GetFont();
-                vcl::Font aTempFont = aOldFont;
-                ImplGetWeekFont( aTempFont );
-                SetFont( aTempFont );
-                nDayX -= mnWeekWidth;
-                nDayY = nY+mnDaysOffY;
-                maCalendarWrapper.setGregorianDateTime( aDate);
-                for ( sal_uInt16 nWeekCount = 0; nWeekCount < 6; nWeekCount++ )
+                long nMonthHeight = mnDayHeight * 6;
+                if (bPaint)
                 {
-                    sal_Int32 nWeek = maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
-                    OUString aWeekText(OUString::number(nWeek));
-                    long    nOffX = (mnWeekWidth-WEEKNUMBER_OFFX)-GetTextWidth( aWeekText );
-                    long    nOffY = (mnDayHeight-GetTextHeight())/2;
-                    DrawText( Point( nDayX+nOffX, nDayY+nOffY ), aWeekText );
-                    nDayY += mnDayHeight;
-                    maCalendarWrapper.addValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, 7);
+                    rRenderContext.DrawLine(Point(nDayX - WEEKNUMBER_OFFX + 2, nDeltaY),
+                                            Point(nDayX - WEEKNUMBER_OFFX + 2, nDeltaY + nMonthHeight));
                 }
-                SetFont( aOldFont );
+                else
+                {
+                    rRenderContext.Erase(Rectangle(nDayX - mnWeekWidth - WEEKNUMBER_OFFX, nDeltaY,
+                                                   nDayX - WEEKNUMBER_OFFX - 1, nDeltaY + nMonthHeight));
+                }
+                vcl::Font aOldFont = rRenderContext.GetFont();
+                vcl::Font aTempFont = aOldFont;
+                ImplGetWeekFont(aTempFont);
+                rRenderContext.SetFont(aTempFont);
+                nDayX -= mnWeekWidth;
+                nDayY = nY + mnDaysOffY;
+                maCalendarWrapper.setGregorianDateTime(aDate);
+                for (sal_uInt16 nWeekCount = 0; nWeekCount < 6; ++nWeekCount)
+                {
+                    sal_Int32 nWeek = maCalendarWrapper.getValue(i18n::CalendarFieldIndex::WEEK_OF_YEAR);
+                    OUString aWeekText(OUString::number(nWeek));
+                    long nOffX = (mnWeekWidth - WEEKNUMBER_OFFX) - rRenderContext.GetTextWidth(aWeekText);
+                    long nOffY = (mnDayHeight - GetTextHeight()) / 2;
+                    rRenderContext.DrawText(Point(nDayX + nOffX, nDayY + nOffY), aWeekText);
+                    nDayY += mnDayHeight;
+                    maCalendarWrapper.addValue(i18n::CalendarFieldIndex::DAY_OF_MONTH, 7);
+                }
+                rRenderContext.SetFont(aOldFont);
             }
 
             // display days
             sal_uInt16 nDaysInMonth = aDate.GetDaysInMonth();
-            nDayX = nX+mnDaysOffX;
-            nDayY = nY+mnDaysOffY;
-            if ( !bPaint )
+            nDayX = nX + mnDaysOffX;
+            nDayY = nY + mnDaysOffY;
+            if (!bPaint)
             {
-                Rectangle aClearRect( nDayX, nDayY,
-                                      nDayX+(7*mnDayWidth)-1, nDayY+(6*mnDayHeight)-1 );
-                Erase( aClearRect );
+                Rectangle aClearRect(nDayX, nDayY,
+                                     nDayX + (7 * mnDayWidth) - 1, nDayY + (6 * mnDayHeight) - 1);
+                rRenderContext.Erase(aClearRect);
             }
-            sal_uInt16 nDayIndex = (sal_uInt16)aDate.GetDayOfWeek();
-            nDayIndex = (nDayIndex+(7-(sal_uInt16)eStartDay)) % 7;
-            if ( (i == 0) && (j == 0) )
+            sal_uInt16 nDayIndex = (sal_uInt16) aDate.GetDayOfWeek();
+            nDayIndex = (nDayIndex + (7 - (sal_uInt16)eStartDay)) % 7;
+            if (i == 0 && j == 0)
             {
                 Date aTempDate = aDate;
                 aTempDate -= nDayIndex;
-                for ( nDay = 0; nDay < nDayIndex; nDay++ )
+                for (nDay = 0; nDay < nDayIndex; ++nDay)
                 {
-                    nDeltaX = nDayX + (nDay*mnDayWidth);
-                    ImplDrawDate( nDeltaX, nDayY, nDay+aTempDate.GetDay(),
-                                  aTempDate.GetMonth(), aTempDate.GetYear(),
-                                  (DayOfWeek)((nDay+(sal_uInt16)eStartDay)%7), false, true, nToday );
+                    nDeltaX = nDayX + (nDay * mnDayWidth);
+                    ImplDrawDate(rRenderContext, nDeltaX, nDayY, nDay + aTempDate.GetDay(),
+                                 aTempDate.GetMonth(), aTempDate.GetYear(),
+                                 (DayOfWeek)((nDay + (sal_uInt16)eStartDay) % 7), false, true, nToday);
                 }
             }
-            for ( nDay = 1; nDay <= nDaysInMonth; nDay++ )
+            for (nDay = 1; nDay <= nDaysInMonth; nDay++)
             {
-                nDeltaX = nDayX + (nDayIndex*mnDayWidth);
-                ImplDrawDate( nDeltaX, nDayY, nDay, nMonth, nYear,
-                              (DayOfWeek)((nDayIndex+(sal_uInt16)eStartDay)%7),
-                              false, false, nToday );
-                if ( nDayIndex == 6 )
+                nDeltaX = nDayX + (nDayIndex * mnDayWidth);
+                ImplDrawDate(rRenderContext, nDeltaX, nDayY, nDay, nMonth, nYear,
+                             (DayOfWeek)((nDayIndex + (sal_uInt16)eStartDay) % 7),
+                             false, false, nToday);
+                if (nDayIndex == 6)
                 {
                     nDayIndex = 0;
                     nDayY += mnDayHeight;
@@ -968,21 +978,21 @@ void Calendar::ImplDraw( bool bPaint )
                 else
                     nDayIndex++;
             }
-            if ( (i == mnLines-1) && (j == mnMonthPerLine-1) )
+            if ((i == mnLines - 1) && (j == mnMonthPerLine - 1))
             {
                 sal_uInt16 nWeekDay = (sal_uInt16)aDate.GetDayOfWeek();
-                nWeekDay = (nWeekDay+(7-(sal_uInt16)eStartDay)) % 7;
-                sal_uInt16 nDayCount = 42-nDaysInMonth-nWeekDay;
+                nWeekDay = (nWeekDay + (7 - (sal_uInt16)eStartDay)) % 7;
+                sal_uInt16 nDayCount = 42 - nDaysInMonth - nWeekDay;
                 Date aTempDate = aDate;
                 aTempDate += nDaysInMonth;
-                for ( nDay = 1; nDay <= nDayCount; nDay++ )
+                for (nDay = 1; nDay <= nDayCount; ++nDay)
                 {
-                    nDeltaX = nDayX + (nDayIndex*mnDayWidth);
-                    ImplDrawDate( nDeltaX, nDayY, nDay,
-                                  aTempDate.GetMonth(), aTempDate.GetYear(),
-                                  (DayOfWeek)((nDayIndex+(sal_uInt16)eStartDay)%7),
-                                  false, true, nToday );
-                    if ( nDayIndex == 6 )
+                    nDeltaX = nDayX + (nDayIndex * mnDayWidth);
+                    ImplDrawDate(rRenderContext, nDeltaX, nDayY, nDay,
+                                 aTempDate.GetMonth(), aTempDate.GetYear(),
+                                 (DayOfWeek)((nDayIndex + (sal_uInt16)eStartDay) % 7),
+                                 false, true, nToday);
+                    if (nDayIndex == 6)
                     {
                         nDayIndex = 0;
                         nDayY += mnDayHeight;
@@ -1000,21 +1010,18 @@ void Calendar::ImplDraw( bool bPaint )
     }
 
     // draw spin buttons
-    if ( bPaint )
-        ImplDrawSpin();
+    if (bPaint)
+        ImplDrawSpin(rRenderContext);
 }
 
 void Calendar::ImplUpdateDate( const Date& rDate )
 {
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible() && IsUpdateMode())
     {
-        Rectangle aDateRect( GetDateRect( rDate ) );
-        if ( !aDateRect.IsEmpty() )
+        Rectangle aDateRect(GetDateRect(rDate));
+        if (!aDateRect.IsEmpty())
         {
-            bool bOther = (rDate < GetFirstMonth()) || (rDate > GetLastMonth());
-            ImplDrawDate( aDateRect.Left(), aDateRect.Top(),
-                          rDate.GetDay(), rDate.GetMonth(), rDate.GetYear(),
-                          rDate.GetDayOfWeek(), true, bOther );
+            Invalidate(aDateRect);
         }
     }
 }
@@ -1156,24 +1163,19 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
 
 void Calendar::ImplUpdate( bool bCalcNew )
 {
-    if ( IsReallyVisible() && IsUpdateMode() )
+    if (IsReallyVisible() && IsUpdateMode())
     {
-        if ( bCalcNew && !mbCalc )
-            Invalidate();
-        else if ( !mbFormat && !mbCalc )
+        if (bCalcNew && !mbCalc)
         {
-            if ( mbDirect )
-            {
-                mbFormat = true;
-                ImplDraw( false );
-                return;
-            }
-            else
-                Invalidate();
+            Invalidate();
+        }
+        else if (!mbFormat && !mbCalc)
+        {
+            Invalidate();
         }
     }
 
-    if ( bCalcNew )
+    if (bCalcNew)
         mbCalc = true;
     mbFormat = true;
 }
@@ -1564,9 +1566,9 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void Calendar::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void Calendar::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
-    ImplDraw( true );
+    ImplDraw(rRenderContext, true);
 }
 
 void Calendar::GetFocus()

@@ -232,13 +232,12 @@ private:
     SVT_DLLPRIVATE void         ImplFormat();
     using Window::ImplHitTest;
     SVT_DLLPRIVATE sal_uInt16           ImplHitTest( const Point& rPos, Date& rDate ) const;
-    SVT_DLLPRIVATE void         ImplDrawSpin( bool bDrawPrev = true, bool bDrawNext = true );
-    SVT_DLLPRIVATE void         ImplDrawDate( long nX, long nY,
-                                  sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
-                                  DayOfWeek eDayOfWeek,
-                                  bool bBack = true, bool bOther = false,
-                                  sal_uLong nToday = 0 );
-    SVT_DLLPRIVATE void         ImplDraw( bool bPaint = false );
+    SVT_DLLPRIVATE void         ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bDrawPrev = true, bool bDrawNext = true);
+    SVT_DLLPRIVATE void         ImplDrawDate(vcl::RenderContext& rRenderContext, long nX, long nY,
+                                             sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
+                                             DayOfWeek eDayOfWeek, bool bBack = true,
+                                             bool bOther = false, sal_uLong nToday = 0);
+    SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext, bool bPaint = false);
     SVT_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
     SVT_DLLPRIVATE void         ImplUpdateSelection( IntDateSet* pOld );
     SVT_DLLPRIVATE void         ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
