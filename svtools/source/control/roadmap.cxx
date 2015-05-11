@@ -83,7 +83,6 @@ private:
     void                    ImplUpdatePosSize();
 };
 
-
 //= RoadmapImpl
 
 class RoadmapImpl : public RoadmapTypes
@@ -94,9 +93,11 @@ protected:
     BitmapEx            m_aPicture;
     HL_Vector           m_aRoadmapSteps;
     ItemId              m_iCurItemID;
-    bool                m_bInteractive;
-    bool                m_bComplete;
+    bool                m_bInteractive : 1;
+    bool                m_bComplete : 1;
     Size                m_aItemSizePixel;
+public:
+    bool                m_bPaintInitialized : 1;
 
 public:
     RoadmapImpl(const ORoadmap& rAntiImpl)
@@ -104,6 +105,7 @@ public:
         , m_iCurItemID(-1)
         , m_bInteractive(true)
         , m_bComplete(true)
+        , m_bPaintInitialized(false)
         , InCompleteHyperLabel(NULL)
     {}
 
@@ -198,25 +200,23 @@ void RoadmapImpl::initItemSize()
 ORoadmap::ORoadmap(vcl::Window* _pParent, WinBits _nWinStyle)
     : Control(_pParent, _nWinStyle)
     , m_pImpl(new RoadmapImpl(*this))
-
 {
-    implInit();
 }
 
-
-void ORoadmap::implInit()
+void ORoadmap::implInit(vcl::RenderContext& rRenderContext)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     Color aTextColor = rStyleSettings.GetFieldTextColor();
-    vcl::Font aFont = GetFont( );
-    aFont.SetColor( aTextColor );
-    aFont.SetWeight( WEIGHT_BOLD );
-    aFont.SetUnderline( UNDERLINE_SINGLE );
-    SetFont( aFont );
-    SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
+    vcl::Font aFont = rRenderContext.GetFont();
+    aFont.SetColor(aTextColor);
+    aFont.SetWeight(WEIGHT_BOLD);
+    aFont.SetUnderline(UNDERLINE_SINGLE);
+    rRenderContext.SetFont(aFont);
+    rRenderContext.SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
     m_pImpl->InCompleteHyperLabel = NULL;
-    m_pImpl->setCurItemID(-1 );
-    m_pImpl->setComplete( true );
+    m_pImpl->setCurItemID(-1);
+    m_pImpl->setComplete(true);
+    m_pImpl->m_bPaintInitialized = true;
 
     // Roadmap control should be reachable as one unit with a Tab key
     // the next Tab key should spring out of the control.
@@ -232,7 +232,7 @@ void ORoadmap::implInit()
 // on this with calculating a new bold font.
 // Unfortunately, the OutputDevice does not offer a notify mechanism for a changed font.
 // So settings the font from outside is simply a forbidded scenario at the moment
-    EnableMapMode(false);
+    rRenderContext.EnableMapMode(false);
 }
 
 ORoadmap::~ORoadmap()
@@ -561,36 +561,39 @@ bool ORoadmap::SelectRoadmapItemByID( ItemId _nNewID )
 
 void ORoadmap::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect)
 {
+    if (!m_pImpl->m_bPaintInitialized)
+        implInit(rRenderContext);
     Control::Paint(rRenderContext, _rRect);
 
     // draw the bitmap
-    if ( !!m_pImpl->getPicture() )
+    if (!!m_pImpl->getPicture())
     {
         Size aBitmapSize = m_pImpl->getPicture().GetSizePixel();
-        Size aMySize = GetOutputSizePixel();
+        Size aMySize = rRenderContext.GetOutputSizePixel();
 
-        Point aBitmapPos( aMySize.Width() - aBitmapSize.Width(),  aMySize.Height() - aBitmapSize.Height() );
+        Point aBitmapPos(aMySize.Width() - aBitmapSize.Width(),  aMySize.Height() - aBitmapSize.Height());
 
         // draw it
-        DrawBitmapEx( aBitmapPos, m_pImpl->getPicture() );
+        rRenderContext.DrawBitmapEx( aBitmapPos, m_pImpl->getPicture() );
     }
 
     // draw the headline
-    DrawHeadline();
+    DrawHeadline(rRenderContext);
 }
 
-void ORoadmap::DrawHeadline()
+void ORoadmap::DrawHeadline(vcl::RenderContext& rRenderContext)
 {
-    Point aTextPos = LogicToPixel( Point( ROADMAP_INDENT_X, 8 ), MAP_APPFONT );
+    Point aTextPos = LogicToPixel(Point(ROADMAP_INDENT_X, 8), MAP_APPFONT);
 
-    Size aOutputSize( GetOutputSizePixel() );
+    Size aOutputSize(rRenderContext.GetOutputSizePixel());
 
     // draw it
-    DrawText( Rectangle( aTextPos, aOutputSize ), GetText(), TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-    DrawTextLine( aTextPos, aOutputSize.Width(), STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE, false );
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    SetLineColor( rStyleSettings.GetFieldTextColor());
-    SetTextColor(rStyleSettings.GetFieldTextColor());
+    rRenderContext.DrawText(Rectangle(aTextPos, aOutputSize), GetText(),
+                            TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK);
+    rRenderContext.DrawTextLine(aTextPos, aOutputSize.Width(), STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE, false);
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    rRenderContext.SetLineColor(rStyleSettings.GetFieldTextColor());
+    rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
 }
 
 RoadmapItem* ORoadmap::GetByPointer(vcl::Window* pWindow)

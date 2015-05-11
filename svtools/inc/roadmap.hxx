@@ -25,99 +25,89 @@
 
 #include <svtools/hyperlabel.hxx>
 
-
-
-
 class Bitmap;
 
 namespace svt
 {
 
+struct RoadmapTypes
+{
+public:
+    typedef sal_Int16 ItemId;
+    typedef sal_Int32 ItemIndex;
+};
 
-    struct RoadmapTypes
-    {
-    public:
-        typedef sal_Int16 ItemId;
-        typedef sal_Int32 ItemIndex;
-    };
+class RoadmapImpl;
+class RoadmapItem;
 
-    class RoadmapImpl;
-    class RoadmapItem;
+class SVT_DLLPUBLIC ORoadmap : public Control, public RoadmapTypes
+{
+protected:
+    RoadmapImpl*    m_pImpl;
+    // Window overridables
+    void            Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect) SAL_OVERRIDE;
+    void            implInit(vcl::RenderContext& rRenderContext);
 
+public:
+    ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
+    virtual ~ORoadmap( );
+    virtual void dispose() SAL_OVERRIDE;
 
-    //= Roadmap
+    void            SetRoadmapBitmap( const BitmapEx& maBitmap, bool _bInvalidate = true );
 
-    class SVT_DLLPUBLIC ORoadmap : public Control, public RoadmapTypes
-    {
-    protected:
-        RoadmapImpl*    m_pImpl;
-        // Window overridables
-        void            Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect ) SAL_OVERRIDE;
-        void            implInit();
+    void            EnableRoadmapItem( ItemId _nItemId, bool _bEnable, ItemIndex _nStartIndex = 0  );
 
-    public:
-        ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
-        virtual ~ORoadmap( );
-        virtual void dispose() SAL_OVERRIDE;
+    void            ChangeRoadmapItemLabel( ItemId _nID, const OUString& sLabel, ItemIndex _nStartIndex = 0 );
+    void            ChangeRoadmapItemID( ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex = 0  );
 
-        void            SetRoadmapBitmap( const BitmapEx& maBitmap, bool _bInvalidate = true );
+    void            SetRoadmapInteractive( bool _bInteractive );
+    bool            IsRoadmapInteractive();
 
-        void            EnableRoadmapItem( ItemId _nItemId, bool _bEnable, ItemIndex _nStartIndex = 0  );
+    void            SetRoadmapComplete( bool _bComplete );
+    bool            IsRoadmapComplete() const;
 
-        void            ChangeRoadmapItemLabel( ItemId _nID, const OUString& sLabel, ItemIndex _nStartIndex = 0 );
-        void            ChangeRoadmapItemID( ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex = 0  );
+    ItemIndex       GetItemCount() const;
+    ItemId          GetItemID( ItemIndex _nIndex ) const;
 
-        void            SetRoadmapInteractive( bool _bInteractive );
-        bool            IsRoadmapInteractive();
+    void            InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, bool _bEnabled = true );
+    void            ReplaceRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, bool _bEnabled );
+    void            DeleteRoadmapItem( ItemIndex _nIndex );
 
-        void            SetRoadmapComplete( bool _bComplete );
-        bool            IsRoadmapComplete() const;
+    ItemId          GetCurrentRoadmapItemID() const;
+    bool            SelectRoadmapItemByID( ItemId _nItemID );
 
-        ItemIndex       GetItemCount() const;
-        ItemId          GetItemID( ItemIndex _nIndex ) const;
+    void            SetItemSelectHdl( const Link<>& _rHdl );
+    Link<>          GetItemSelectHdl( ) const;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void    GetFocus() SAL_OVERRIDE;
 
-        void            InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, bool _bEnabled = true );
-        void            ReplaceRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, bool _bEnabled );
-        void            DeleteRoadmapItem( ItemIndex _nIndex );
+protected:
+    bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-        ItemId          GetCurrentRoadmapItemID() const;
-        bool            SelectRoadmapItemByID( ItemId _nItemID );
+protected:
+    /// called when an item has been selected by any means
+    void    Select();
 
-        void            SetItemSelectHdl( const Link<>& _rHdl );
-        Link<>          GetItemSelectHdl( ) const;
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-        virtual void    GetFocus() SAL_OVERRIDE;
+private:
+    DECL_LINK(ImplClickHdl, HyperLabel*);
 
+    RoadmapItem*         GetByIndex( ItemIndex _nItemIndex );
+    const RoadmapItem*   GetByIndex( ItemIndex _nItemIndex ) const;
 
-    protected:
-        bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    RoadmapItem*         GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  );
+    const RoadmapItem*   GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  ) const;
+    RoadmapItem*         GetPreviousHyperLabel( ItemIndex _Index);
 
-    protected:
-        /// called when an item has been selected by any means
-        void    Select();
-
-    private:
-        DECL_LINK(ImplClickHdl, HyperLabel*);
-
-        RoadmapItem*         GetByIndex( ItemIndex _nItemIndex );
-        const RoadmapItem*   GetByIndex( ItemIndex _nItemIndex ) const;
-
-        RoadmapItem*         GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  );
-        const RoadmapItem*   GetByID( ItemId _nID, ItemIndex _nStartIndex = 0  ) const;
-        RoadmapItem*            GetPreviousHyperLabel( ItemIndex _Index);
-
-        void                        DrawHeadline();
-        void                        DeselectOldRoadmapItems();
-        ItemId                      GetNextAvailableItemId( ItemIndex _NewIndex );
-        ItemId                      GetPreviousAvailableItemId( ItemIndex _NewIndex );
-        RoadmapItem*                GetByPointer(vcl::Window* pWindow);
-        RoadmapItem*                InsertHyperLabel( ItemIndex _Index, const OUString& _aStr, ItemId _RMID, bool _bEnabled, bool _bIncomplete  );
-        void                        UpdatefollowingHyperLabels( ItemIndex _Index );
-    };
-
+    void                 DrawHeadline(vcl::RenderContext& rRenderContext);
+    void                 DeselectOldRoadmapItems();
+    ItemId               GetNextAvailableItemId( ItemIndex _NewIndex );
+    ItemId               GetPreviousAvailableItemId( ItemIndex _NewIndex );
+    RoadmapItem*         GetByPointer(vcl::Window* pWindow);
+    RoadmapItem*         InsertHyperLabel( ItemIndex _Index, const OUString& _aStr, ItemId _RMID, bool _bEnabled, bool _bIncomplete  );
+    void                 UpdatefollowingHyperLabels( ItemIndex _Index );
+};
 
 }   // namespace svt
-
 
 #endif
 
