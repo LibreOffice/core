@@ -274,21 +274,6 @@ Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_TEMPLATE)
     File = "mainapp_16_8.png" ;
 };
 
-Bitmap (SV_ICON_SIZE48_START + SV_ICON_ID_PRINTERADMIN)
-{
-    File = "printeradmin_48_8.png" ;
-};
-
-Bitmap (SV_ICON_SIZE32_START + SV_ICON_ID_PRINTERADMIN)
-{
-    File = "printeradmin_32_8.png" ;
-};
-
-Bitmap (SV_ICON_SIZE16_START + SV_ICON_ID_PRINTERADMIN)
-{
-    File = "printeradmin_16_8.png" ;
-};
-
 Bitmap (SV_ICON_LARGE_START)
 {
     File = "mainapp_32.png" ;
@@ -407,16 +392,6 @@ Bitmap (SV_ICON_LARGE_START + SV_ICON_ID_TEMPLATE)
 Bitmap (SV_ICON_SMALL_START + SV_ICON_ID_TEMPLATE)
 {
     File = "sx03242.png" ;
-};
-
-Bitmap (SV_ICON_LARGE_START + SV_ICON_ID_PRINTERADMIN)
-{
-    File = "printeradmin_32.png" ;
-};
-
-Bitmap (SV_ICON_SMALL_START + SV_ICON_ID_PRINTERADMIN)
-{
-    File = "printeradmin_16.png" ;
 };
 
 Bitmap SV_DISCLOSURE_PLUS

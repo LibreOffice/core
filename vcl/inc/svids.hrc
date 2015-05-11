@@ -195,7 +195,6 @@
 #define SV_ICON_ID_TEMPLATE                    11
 #define SV_ICON_ID_DATABASE                    12
 #define SV_ICON_ID_FORMULA                     13
-#define SV_ICON_ID_PRINTERADMIN               501
 
 #endif // INCLUDED_VCL_INC_SVIDS_HRC
 
