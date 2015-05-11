@@ -128,6 +128,31 @@ void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> const& xPrope
     pHelper->addItem(xPropertySet, nZOrder);
 }
 
+void RTFSdrImport::resolveLineColorAndWidth(bool bTextFrame, const uno::Reference<beans::XPropertySet>& xPropertySet, uno::Any& rLineColor, uno::Any& rLineWidth)
+{
+    if (!bTextFrame)
+    {
+        xPropertySet->setPropertyValue("LineColor", rLineColor);
+        xPropertySet->setPropertyValue("LineWidth", rLineWidth);
+    }
+    else
+    {
+        static const char* aBorders[] =
+        {
+            "TopBorder", "LeftBorder", "BottomBorder", "RightBorder"
+        };
+        for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
+        {
+            table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(OUString::createFromAscii(aBorders[i])).get<table::BorderLine2>();
+            if (rLineColor.hasValue())
+                aBorderLine.Color = rLineColor.get<sal_Int32>();
+            if (rLineWidth.hasValue())
+                aBorderLine.LineWidth = rLineWidth.get<sal_Int32>();
+            xPropertySet->setPropertyValue(OUString::createFromAscii(aBorders[i]), uno::makeAny(aBorderLine));
+        }
+    }
+}
+
 void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> const& xPropertySet,
                                 sal_Int32 const nFLine)
 {
@@ -752,25 +777,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 
     if (xPropertySet.is())
     {
-        if (!m_bTextFrame)
-        {
-            xPropertySet->setPropertyValue("LineColor", aLineColor);
-            xPropertySet->setPropertyValue("LineWidth", aLineWidth);
-        }
-        else
-        {
-            static const OUString aBorders[] =
-            {
-                OUString("TopBorder"), OUString("LeftBorder"), OUString("BottomBorder"), OUString("RightBorder")
-            };
-            for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
-            {
-                table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(aBorders[i]).get<table::BorderLine2>();
-                aBorderLine.Color = aLineColor.get<sal_Int32>();
-                aBorderLine.LineWidth = aLineWidth.get<sal_Int32>();
-                xPropertySet->setPropertyValue(aBorders[i], uno::makeAny(aBorderLine));
-            }
-        }
+        resolveLineColorAndWidth(m_bTextFrame, xPropertySet, aLineColor, aLineWidth);
         if (rShape.oZ)
             resolveDhgt(xPropertySet, *rShape.oZ, /*bOldStyle=*/false);
         if (m_bTextFrame)

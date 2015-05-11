@@ -2265,6 +2265,13 @@ DECLARE_RTFIMPORT_TEST(testTdf86182, "tdf86182.rtf")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>(getParagraph(1), "WritingMode"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf91074, "tdf91074.rtf")
+{
+    // The file failed to load, as the border color was imported using the LineColor UNO property.
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_LIGHTRED), getProperty<table::BorderLine2>(xShape, "TopBorder").Color);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -5541,7 +5541,11 @@ int RTFDocumentImpl::popState()
             xShape->setSize(awt::Size(rDrawing.nRight, rDrawing.nBottom));
 
             if (rDrawing.bHasLineColor)
-                xPropertySet->setPropertyValue("LineColor", uno::makeAny(sal_uInt32((rDrawing.nLineColorR<<16) + (rDrawing.nLineColorG<<8) + rDrawing.nLineColorB)));
+            {
+                uno::Any aLineColor = uno::makeAny(sal_uInt32((rDrawing.nLineColorR<<16) + (rDrawing.nLineColorG<<8) + rDrawing.nLineColorB));
+                uno::Any aLineWidth;
+                RTFSdrImport::resolveLineColorAndWidth(bTextFrame, xPropertySet, aLineColor, aLineWidth);
+            }
             if (rDrawing.bHasFillColor)
                 xPropertySet->setPropertyValue("FillColor", uno::makeAny(sal_uInt32((rDrawing.nFillColorR<<16) + (rDrawing.nFillColorG<<8) + rDrawing.nFillColorB)));
             else if (!bTextFrame)
