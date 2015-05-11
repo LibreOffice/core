@@ -26,14 +26,8 @@
 
 namespace svt { namespace table
 {
-
-
     class TableControl_Impl;
     class TableFunctionSet;
-
-
-
-    //= TableDataWindow
 
     /** the window containing the content area (including headers) of
         a table control
@@ -51,11 +45,17 @@ namespace svt { namespace table
         virtual ~TableDataWindow();
         virtual void dispose() SAL_OVERRIDE;
 
-        inline void         SetSelectHdl( const Link<>& rLink ) { m_aSelectHdl = rLink; }
-        inline const Link<>& GetSelectHdl() const               { return m_aSelectHdl; }
+        inline void SetSelectHdl(const Link<>& rLink)
+        {
+            m_aSelectHdl = rLink;
+        }
+        inline const Link<>& GetSelectHdl() const
+        {
+            return m_aSelectHdl;
+        }
 
         // Window overridables
-        virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
         virtual void        MouseMove( const MouseEvent& rMEvt) SAL_OVERRIDE;
         virtual void        MouseButtonDown( const MouseEvent& rMEvt) SAL_OVERRIDE;
         virtual void        MouseButtonUp( const MouseEvent& rMEvt) SAL_OVERRIDE;

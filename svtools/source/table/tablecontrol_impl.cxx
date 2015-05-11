@@ -1197,124 +1197,103 @@ namespace svt { namespace table
     }
 
 
-    void TableControl_Impl::doPaintContent( const Rectangle& _rUpdateRect )
+    void TableControl_Impl::doPaintContent(vcl::RenderContext& rRenderContext, const Rectangle& _rUpdateRect)
     {
-        if ( !getModel() )
+        if (!getModel())
             return;
         PTableRenderer pRenderer = getModel()->getRenderer();
-        DBG_ASSERT( !!pRenderer, "TableDataWindow::doPaintContent: invalid renderer!" );
-        if ( !pRenderer )
+        DBG_ASSERT(!!pRenderer, "TableDataWindow::doPaintContent: invalid renderer!");
+        if (!pRenderer)
             return;
 
         // our current style settings, to be passed to the renderer
-        const StyleSettings& rStyle = m_rAntiImpl.GetSettings().GetStyleSettings();
+        const StyleSettings& rStyle = rRenderContext.GetSettings().GetStyleSettings();
         m_nRowCount = m_pModel->getRowCount();
         // the area occupied by all (at least partially) visible cells, including
         // headers
         Rectangle const aAllCellsWithHeaders( impl_getAllVisibleCellsArea() );
 
-
         // draw the header column area
-        if ( m_pModel->hasColumnHeaders() )
+        if (m_pModel->hasColumnHeaders())
         {
-            TableRowGeometry const aHeaderRow( *this, Rectangle( Point( 0, 0 ),
-                aAllCellsWithHeaders.BottomRight() ), ROW_COL_HEADERS );
+            TableRowGeometry const aHeaderRow(*this, Rectangle(Point(0, 0), aAllCellsWithHeaders.BottomRight()), ROW_COL_HEADERS);
             Rectangle const aColRect(aHeaderRow.getRect());
-            pRenderer->PaintHeaderArea(
-                *m_pDataWindow, aColRect, true, false, rStyle
-            );
+            pRenderer->PaintHeaderArea(rRenderContext, aColRect, true, false, rStyle);
             // Note that strictly, aHeaderRow.getRect() also contains the intersection between column
             // and row header area. However, below we go to paint this intersection, again,
             // so this hopefully doesn't hurt if we already paint it here.
 
-            for ( TableCellGeometry aCell( aHeaderRow, m_nLeftColumn );
-                  aCell.isValid();
-                  aCell.moveRight()
-                )
+            for (TableCellGeometry aCell(aHeaderRow, m_nLeftColumn); aCell.isValid(); aCell.moveRight())
             {
-                if ( _rUpdateRect.GetIntersection( aCell.getRect() ).IsEmpty() )
+                if (_rUpdateRect.GetIntersection(aCell.getRect()).IsEmpty())
                     continue;
 
-                bool isActiveColumn = ( aCell.getColumn() == getCurrentColumn() );
+                bool isActiveColumn = (aCell.getColumn() == getCurrentColumn());
                 bool isSelectedColumn = false;
-                pRenderer->PaintColumnHeader( aCell.getColumn(), isActiveColumn, isSelectedColumn,
-                    *m_pDataWindow, aCell.getRect(), rStyle );
+                pRenderer->PaintColumnHeader(aCell.getColumn(), isActiveColumn, isSelectedColumn, rRenderContext, aCell.getRect(), rStyle);
             }
         }
         // the area occupied by the row header, if any
         Rectangle aRowHeaderArea;
-        if ( m_pModel->hasRowHeaders() )
+        if (m_pModel->hasRowHeaders())
         {
             aRowHeaderArea = aAllCellsWithHeaders;
             aRowHeaderArea.Right() = m_nRowHeaderWidthPixel - 1;
 
-            TableSize const nVisibleRows = impl_getVisibleRows( true );
+            TableSize const nVisibleRows = impl_getVisibleRows(true);
             TableSize nActualRows = nVisibleRows;
-            if ( m_nTopRow + nActualRows > m_nRowCount )
+            if (m_nTopRow + nActualRows > m_nRowCount)
                 nActualRows = m_nRowCount - m_nTopRow;
             aRowHeaderArea.Bottom() = m_nColHeaderHeightPixel + m_nRowHeightPixel * nActualRows - 1;
 
-            pRenderer->PaintHeaderArea( *m_pDataWindow, aRowHeaderArea, false, true, rStyle );
+            pRenderer->PaintHeaderArea(rRenderContext, aRowHeaderArea, false, true, rStyle);
             // Note that strictly, aRowHeaderArea also contains the intersection between column
             // and row header area. However, below we go to paint this intersection, again,
             // so this hopefully doesn't hurt if we already paint it here.
 
-            if ( m_pModel->hasColumnHeaders() )
+            if (m_pModel->hasColumnHeaders())
             {
-                TableCellGeometry const aIntersection( *this, Rectangle( Point( 0, 0 ),
-                    aAllCellsWithHeaders.BottomRight() ), COL_ROW_HEADERS, ROW_COL_HEADERS );
-                Rectangle const aInters( aIntersection.getRect() );
-                pRenderer->PaintHeaderArea(
-                    *m_pDataWindow, aInters, true, true, rStyle
-                );
+                TableCellGeometry const aIntersection(*this, Rectangle(Point(0, 0), aAllCellsWithHeaders.BottomRight()),
+                                                      COL_ROW_HEADERS, ROW_COL_HEADERS);
+                Rectangle const aInters(aIntersection.getRect());
+                pRenderer->PaintHeaderArea(rRenderContext, aInters, true, true, rStyle);
             }
         }
 
-
         // draw the table content row by row
-
         TableSize colCount = getModel()->getColumnCount();
 
         // paint all rows
-        Rectangle const aAllDataCellsArea( impl_getAllVisibleDataCellArea() );
-        for ( TableRowGeometry aRowIterator( *this, aAllCellsWithHeaders, getTopRow() );
-              aRowIterator.isValid();
-              aRowIterator.moveDown() )
+        Rectangle const aAllDataCellsArea(impl_getAllVisibleDataCellArea());
+        for (TableRowGeometry aRowIterator(*this, aAllCellsWithHeaders, getTopRow()); aRowIterator.isValid(); aRowIterator.moveDown())
         {
-            if ( _rUpdateRect.GetIntersection( aRowIterator.getRect() ).IsEmpty() )
+            if (_rUpdateRect.GetIntersection(aRowIterator.getRect() ).IsEmpty())
                 continue;
 
             bool const isControlFocused = m_rAntiImpl.HasControlFocus();
-            bool const isSelectedRow = isRowSelected( aRowIterator.getRow() );
+            bool const isSelectedRow = isRowSelected(aRowIterator.getRow());
 
-            Rectangle const aRect = aRowIterator.getRect().GetIntersection( aAllDataCellsArea );
+            Rectangle const aRect = aRowIterator.getRect().GetIntersection(aAllDataCellsArea);
 
             // give the redenderer a chance to prepare the row
-            pRenderer->PrepareRow(
-                aRowIterator.getRow(), isControlFocused, isSelectedRow,
-                *m_pDataWindow, aRect, rStyle
-            );
+            pRenderer->PrepareRow(aRowIterator.getRow(), isControlFocused, isSelectedRow, rRenderContext, aRect, rStyle);
 
             // paint the row header
-            if ( m_pModel->hasRowHeaders() )
+            if (m_pModel->hasRowHeaders())
             {
-                const Rectangle aCurrentRowHeader( aRowHeaderArea.GetIntersection( aRowIterator.getRect() ) );
-                pRenderer->PaintRowHeader( isControlFocused, isSelectedRow, *m_pDataWindow, aCurrentRowHeader,
-                    rStyle );
+                const Rectangle aCurrentRowHeader(aRowHeaderArea.GetIntersection(aRowIterator.getRect()));
+                pRenderer->PaintRowHeader(isControlFocused, isSelectedRow, rRenderContext, aCurrentRowHeader, rStyle);
             }
 
-            if ( !colCount )
+            if (!colCount)
                 continue;
 
             // paint all cells in this row
-            for ( TableCellGeometry aCell( aRowIterator, m_nLeftColumn );
-                  aCell.isValid();
-                  aCell.moveRight()
-                )
+            for (TableCellGeometry aCell(aRowIterator, m_nLeftColumn); aCell.isValid(); aCell.moveRight())
             {
                 bool isSelectedColumn = false;
-                pRenderer->PaintCell( aCell.getColumn(), isSelectedRow || isSelectedColumn, isControlFocused,
-                                *m_pDataWindow, aCell.getRect(), rStyle );
+                pRenderer->PaintCell(aCell.getColumn(), isSelectedRow || isSelectedColumn, isControlFocused,
+                                     rRenderContext, aCell.getRect(), rStyle);
             }
         }
     }

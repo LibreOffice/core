@@ -36,22 +36,20 @@
 
 namespace svt { namespace table
 {
-
-
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::TypeClass_INTERFACE;
-    using ::com::sun::star::graphic::XGraphic;
-    using ::com::sun::star::style::HorizontalAlignment;
-    using ::com::sun::star::style::HorizontalAlignment_LEFT;
-    using ::com::sun::star::style::HorizontalAlignment_CENTER;
-    using ::com::sun::star::style::HorizontalAlignment_RIGHT;
-    using ::com::sun::star::style::VerticalAlignment;
-    using ::com::sun::star::style::VerticalAlignment_TOP;
-    using ::com::sun::star::style::VerticalAlignment_MIDDLE;
-    using ::com::sun::star::style::VerticalAlignment_BOTTOM;
+    using ::css::uno::Any;
+    using ::css::uno::Reference;
+    using ::css::uno::UNO_QUERY;
+    using ::css::uno::XInterface;
+    using ::css::uno::TypeClass_INTERFACE;
+    using ::css::graphic::XGraphic;
+    using ::css::style::HorizontalAlignment;
+    using ::css::style::HorizontalAlignment_LEFT;
+    using ::css::style::HorizontalAlignment_CENTER;
+    using ::css::style::HorizontalAlignment_RIGHT;
+    using ::css::style::VerticalAlignment;
+    using ::css::style::VerticalAlignment_TOP;
+    using ::css::style::VerticalAlignment_MIDDLE;
+    using ::css::style::VerticalAlignment_BOTTOM;
 
 
     //= CachedSortIndicator
@@ -60,26 +58,26 @@ namespace svt { namespace table
     {
     public:
         CachedSortIndicator()
-            :m_lastHeaderHeight( 0 )
-            ,m_lastArrowColor( COL_TRANSPARENT )
+            : m_lastHeaderHeight( 0 )
+            , m_lastArrowColor( COL_TRANSPARENT )
         {
         }
 
-        BitmapEx const & getBitmapFor( OutputDevice const & i_device, long const i_headerHeight, StyleSettings const & i_style, bool const i_sortAscending );
+        BitmapEx const & getBitmapFor(OutputDevice const & i_device, long const i_headerHeight,
+                                      StyleSettings const & i_style, bool const i_sortAscending);
 
     private:
-        long        m_lastHeaderHeight;
-        Color       m_lastArrowColor;
-        BitmapEx    m_sortAscending;
-        BitmapEx    m_sortDescending;
+        long m_lastHeaderHeight;
+        Color m_lastArrowColor;
+        BitmapEx m_sortAscending;
+        BitmapEx m_sortDescending;
     };
 
-
-    BitmapEx const & CachedSortIndicator::getBitmapFor( OutputDevice const & i_device, long const i_headerHeight,
+    BitmapEx const & CachedSortIndicator::getBitmapFor(vcl::RenderContext const& i_device, long const i_headerHeight,
         StyleSettings const & i_style, bool const i_sortAscending )
     {
-        BitmapEx & rBitmap( i_sortAscending ? m_sortAscending : m_sortDescending );
-        if ( !rBitmap || ( i_headerHeight != m_lastHeaderHeight ) || ( i_style.GetActiveColor() != m_lastArrowColor ) )
+        BitmapEx& rBitmap(i_sortAscending ? m_sortAscending : m_sortDescending);
+        if (!rBitmap || (i_headerHeight != m_lastHeaderHeight) || (i_style.GetActiveColor() != m_lastArrowColor))
         {
             long const nSortIndicatorWidth = 2 * i_headerHeight / 3;
             long const nSortIndicatorHeight = 2 * nSortIndicatorWidth / 3;
@@ -89,14 +87,12 @@ namespace svt { namespace table
             ScopedVclPtrInstance< VirtualDevice > aDevice( i_device, 0, 0 );
             aDevice->SetOutputSizePixel( aBitmapSize );
 
-            DecorationView aDecoView( aDevice.get() );
-            aDecoView.DrawSymbol(
-                Rectangle( aBitmapPos, aBitmapSize ),
-                i_sortAscending ? SymbolType::SPIN_UP : SymbolType::SPIN_DOWN,
-                i_style.GetActiveColor()
-            );
+            DecorationView aDecoView(aDevice.get());
+            aDecoView.DrawSymbol(Rectangle(aBitmapPos, aBitmapSize),
+                                 i_sortAscending ? SymbolType::SPIN_UP : SymbolType::SPIN_DOWN,
+                                 i_style.GetActiveColor());
 
-            rBitmap = aDevice->GetBitmapEx( aBitmapPos, aBitmapSize );
+            rBitmap = aDevice->GetBitmapEx(aBitmapPos, aBitmapSize);
             m_lastHeaderHeight = i_headerHeight;
             m_lastArrowColor = i_style.GetActiveColor();
         }
@@ -115,11 +111,11 @@ namespace svt { namespace table
         CellValueConversion aStringConverter;
 
         GridTableRenderer_Impl( ITableModel& _rModel )
-            :rModel( _rModel )
-            ,nCurrentRow( ROW_INVALID )
-            ,bUseGridLines( true )
-            ,aSortIndicator( )
-            ,aStringConverter()
+            : rModel( _rModel )
+            , nCurrentRow( ROW_INVALID )
+            , bUseGridLines( true )
+            , aSortIndicator( )
+            , aStringConverter()
         {
         }
     };
@@ -205,51 +201,48 @@ namespace svt { namespace table
 
     namespace
     {
-        Color lcl_getEffectiveColor(
-            ::boost::optional< ::Color > const & i_modelColor,
-            StyleSettings const & i_styleSettings,
-            ::Color const & ( StyleSettings::*i_getDefaultColor ) () const
-        )
+        Color lcl_getEffectiveColor(boost::optional<Color> const& i_modelColor,
+                                    StyleSettings const& i_styleSettings,
+                                    Color const& (StyleSettings::*i_getDefaultColor) () const)
         {
-            if ( !!i_modelColor )
+            if (!!i_modelColor)
                 return *i_modelColor;
-            return ( i_styleSettings.*i_getDefaultColor )();
+            return (i_styleSettings.*i_getDefaultColor)();
         }
     }
 
 
-    void GridTableRenderer::PaintHeaderArea(
-        OutputDevice& _rDevice, const Rectangle& _rArea, bool _bIsColHeaderArea, bool _bIsRowHeaderArea,
-        const StyleSettings& _rStyle )
+    void GridTableRenderer::PaintHeaderArea(vcl::RenderContext& rRenderContext, const Rectangle& _rArea,
+                                            bool _bIsColHeaderArea, bool _bIsRowHeaderArea, const StyleSettings& _rStyle)
     {
-        OSL_PRECOND( _bIsColHeaderArea || _bIsRowHeaderArea,
-            "GridTableRenderer::PaintHeaderArea: invalid area flags!" );
+        OSL_PRECOND(_bIsColHeaderArea || _bIsRowHeaderArea, "GridTableRenderer::PaintHeaderArea: invalid area flags!");
 
-        _rDevice.Push( PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
+        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
 
-        Color const background = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderBackgroundColor(), _rStyle, &StyleSettings::GetDialogColor );
-        _rDevice.SetFillColor( background );
+        Color const background = lcl_getEffectiveColor(m_pImpl->rModel.getHeaderBackgroundColor(),
+                                                       _rStyle, &StyleSettings::GetDialogColor);
+        rRenderContext.SetFillColor(background);
 
-        _rDevice.SetLineColor();
-        _rDevice.DrawRect( _rArea );
+        rRenderContext.SetLineColor();
+        rRenderContext.DrawRect(_rArea);
 
         // delimiter lines at bottom/right
-        ::boost::optional< ::Color > aLineColor( m_pImpl->rModel.getLineColor() );
-        ::Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
-        _rDevice.SetLineColor( lineColor );
-        _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
-        _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
+        boost::optional<Color> aLineColor(m_pImpl->rModel.getLineColor());
+        Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
+        rRenderContext.SetLineColor(lineColor);
+        rRenderContext.DrawLine(_rArea.BottomLeft(), _rArea.BottomRight());
+        rRenderContext.DrawLine(_rArea.BottomRight(), _rArea.TopRight());
 
-        _rDevice.Pop();
+        rRenderContext.Pop();
         (void)_bIsColHeaderArea;
         (void)_bIsRowHeaderArea;
     }
 
 
-    void GridTableRenderer::PaintColumnHeader( ColPos _nCol, bool _bActive, bool _bSelected,
-        OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
+    void GridTableRenderer::PaintColumnHeader(ColPos _nCol, bool _bActive, bool _bSelected, vcl::RenderContext& rRenderContext,
+                                              const Rectangle& _rArea, const StyleSettings& _rStyle)
     {
-        _rDevice.Push( PushFlags::LINECOLOR);
+        rRenderContext.Push(PushFlags::LINECOLOR);
 
         OUString sHeaderText;
         PColumnModel const pColumn = m_pImpl->rModel.getColumnModel( _nCol );
@@ -257,20 +250,20 @@ namespace svt { namespace table
         if ( !!pColumn )
             sHeaderText = pColumn->getName();
 
-        ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
-        _rDevice.SetTextColor( textColor );
+        Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
+        rRenderContext.SetTextColor(textColor);
 
         Rectangle const aTextRect( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, _rArea ) ) );
         sal_uLong nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, _nCol ) | TEXT_DRAW_CLIP;
-        if ( !m_pImpl->rModel.isEnabled() )
+        if (!m_pImpl->rModel.isEnabled())
             nDrawTextFlags |= TEXT_DRAW_DISABLE;
-        _rDevice.DrawText( aTextRect, sHeaderText, nDrawTextFlags );
+        rRenderContext.DrawText( aTextRect, sHeaderText, nDrawTextFlags );
 
-        ::boost::optional< ::Color > const aLineColor( m_pImpl->rModel.getLineColor() );
-        ::Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
-        _rDevice.SetLineColor( lineColor );
-        _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight());
-        _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
+        boost::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
+        Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
+        rRenderContext.SetLineColor( lineColor );
+        rRenderContext.DrawLine( _rArea.BottomRight(), _rArea.TopRight());
+        rRenderContext.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
 
         // draw sort indicator if the model data is sorted by the given column
         ITableDataSort const * pSortAdapter = m_pImpl->rModel.getSortAdapter();
@@ -280,8 +273,8 @@ namespace svt { namespace table
         if ( aCurrentSortOrder.nColumnPos == _nCol )
         {
             long const nHeaderHeight( _rArea.GetHeight() );
-            BitmapEx const aIndicatorBitmap = m_pImpl->aSortIndicator.getBitmapFor( _rDevice, nHeaderHeight, _rStyle,
-                aCurrentSortOrder.eSortDirection == ColumnSortAscending );
+            BitmapEx const aIndicatorBitmap = m_pImpl->aSortIndicator.getBitmapFor(rRenderContext, nHeaderHeight, _rStyle,
+                                                                                   aCurrentSortOrder.eSortDirection == ColumnSortAscending);
             Size const aBitmapSize( aIndicatorBitmap.GetSizePixel() );
             long const nSortIndicatorPaddingX = 2;
             long const nSortIndicatorPaddingY = ( nHeaderHeight - aBitmapSize.Height() ) / 2;
@@ -289,22 +282,18 @@ namespace svt { namespace table
             if ( ( nDrawTextFlags & TEXT_DRAW_RIGHT ) != 0 )
             {
                 // text is right aligned => draw the sort indicator at the left hand side
-                _rDevice.DrawBitmapEx(
-                    Point( _rArea.Left() + nSortIndicatorPaddingX, _rArea.Top() + nSortIndicatorPaddingY ),
-                    aIndicatorBitmap
-                );
+                rRenderContext.DrawBitmapEx(Point(_rArea.Left() + nSortIndicatorPaddingX, _rArea.Top() + nSortIndicatorPaddingY),
+                                            aIndicatorBitmap);
             }
             else
             {
                 // text is left-aligned or centered => draw the sort indicator at the right hand side
-                _rDevice.DrawBitmapEx(
-                    Point( _rArea.Right() - nSortIndicatorPaddingX - aBitmapSize.Width(), nSortIndicatorPaddingY ),
-                    aIndicatorBitmap
-                );
+                rRenderContext.DrawBitmapEx(Point(_rArea.Right() - nSortIndicatorPaddingX - aBitmapSize.Width(), nSortIndicatorPaddingY),
+                                            aIndicatorBitmap);
             }
         }
 
-        _rDevice.Pop();
+        rRenderContext.Pop();
 
         (void)_bActive;
         // no special painting for the active column at the moment
@@ -314,38 +303,38 @@ namespace svt { namespace table
     }
 
 
-    void GridTableRenderer::PrepareRow( RowPos _nRow, bool i_hasControlFocus, bool _bSelected,
-        OutputDevice& _rDevice, const Rectangle& _rRowArea, const StyleSettings& _rStyle )
+    void GridTableRenderer::PrepareRow(RowPos _nRow, bool i_hasControlFocus, bool _bSelected, vcl::RenderContext& rRenderContext,
+                                       const Rectangle& _rRowArea, const StyleSettings& _rStyle)
     {
         // remember the row for subsequent calls to the other ->ITableRenderer methods
         m_pImpl->nCurrentRow = _nRow;
 
-        _rDevice.Push( PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
 
-        ::Color backgroundColor = _rStyle.GetFieldColor();
+        Color backgroundColor = _rStyle.GetFieldColor();
 
-        ::boost::optional< ::Color > const aLineColor( m_pImpl->rModel.getLineColor() );
-        ::Color lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
+        boost::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
+        Color lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
 
-        ::Color const activeSelectionBackColor =
-            lcl_getEffectiveColor( m_pImpl->rModel.getActiveSelectionBackColor(), _rStyle, &StyleSettings::GetHighlightColor );
-        if ( _bSelected )
+        Color const activeSelectionBackColor = lcl_getEffectiveColor(m_pImpl->rModel.getActiveSelectionBackColor(),
+                                                                     _rStyle, &StyleSettings::GetHighlightColor);
+        if (_bSelected)
         {
             // selected rows use the background color from the style
             backgroundColor = i_hasControlFocus
-                ?   activeSelectionBackColor
-                :   lcl_getEffectiveColor( m_pImpl->rModel.getInactiveSelectionBackColor(), _rStyle, &StyleSettings::GetDeactiveColor );
-            if ( !aLineColor )
+                ? activeSelectionBackColor
+                : lcl_getEffectiveColor(m_pImpl->rModel.getInactiveSelectionBackColor(), _rStyle, &StyleSettings::GetDeactiveColor);
+            if (!aLineColor)
                 lineColor = backgroundColor;
         }
         else
         {
-            ::boost::optional< ::std::vector< ::Color > > aRowColors = m_pImpl->rModel.getRowBackgroundColors();
-            if ( !aRowColors )
+            boost::optional< std::vector<Color> > aRowColors = m_pImpl->rModel.getRowBackgroundColors();
+            if (!aRowColors)
             {
                 // use alternating default colors
                 Color const fieldColor = _rStyle.GetFieldColor();
-                if ( _rStyle.GetHighContrastMode() || ( ( m_pImpl->nCurrentRow % 2 ) == 0 ) )
+                if (_rStyle.GetHighContrastMode() || ((m_pImpl->nCurrentRow % 2) == 0))
                 {
                     backgroundColor = fieldColor;
                 }
@@ -360,55 +349,53 @@ namespace svt { namespace table
             }
             else
             {
-                if ( aRowColors->empty() )
+                if (aRowColors->empty())
                 {
                     // all colors have the same background color
                     backgroundColor = _rStyle.GetFieldColor();
                 }
                 else
                 {
-                    backgroundColor = aRowColors->at( m_pImpl->nCurrentRow % aRowColors->size() );
+                    backgroundColor = aRowColors->at(m_pImpl->nCurrentRow % aRowColors->size());
                 }
             }
         }
 
-        //m_pImpl->bUseGridLines ? _rDevice.SetLineColor( lineColor ) : _rDevice.SetLineColor();
-        _rDevice.SetLineColor();
-        _rDevice.SetFillColor( backgroundColor );
-        _rDevice.DrawRect( _rRowArea );
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(backgroundColor);
+        rRenderContext.DrawRect(_rRowArea);
 
-        _rDevice.Pop();
+        rRenderContext.Pop();
     }
 
 
-    void GridTableRenderer::PaintRowHeader( bool i_hasControlFocus, bool _bSelected, OutputDevice& _rDevice, const Rectangle& _rArea,
-        const StyleSettings& _rStyle )
+    void GridTableRenderer::PaintRowHeader(bool /*i_hasControlFocus*/, bool /*_bSelected*/, vcl::RenderContext& rRenderContext,
+                                           const Rectangle& _rArea, const StyleSettings& _rStyle)
     {
-        _rDevice.Push( PushFlags::LINECOLOR | PushFlags::TEXTCOLOR );
+        rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::TEXTCOLOR );
 
-        ::boost::optional< ::Color > const aLineColor( m_pImpl->rModel.getLineColor() );
-        ::Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
-        _rDevice.SetLineColor( lineColor );
-        _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
+        boost::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
+        Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
+        rRenderContext.SetLineColor(lineColor);
+        rRenderContext.DrawLine(_rArea.BottomLeft(), _rArea.BottomRight());
 
         Any const rowHeading( m_pImpl->rModel.getRowHeading( m_pImpl->nCurrentRow ) );
         OUString const rowTitle( m_pImpl->aStringConverter.convertToString( rowHeading ) );
-        if ( !rowTitle.isEmpty() )
+        if (!rowTitle.isEmpty())
         {
-            ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
-            _rDevice.SetTextColor( textColor );
+            Color const textColor = lcl_getEffectiveColor(m_pImpl->rModel.getHeaderTextColor(),
+                                                          _rStyle, &StyleSettings::GetFieldTextColor);
+            rRenderContext.SetTextColor(textColor);
 
-            Rectangle const aTextRect( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, _rArea ) ) );
-            sal_uLong nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, 0 ) | TEXT_DRAW_CLIP;
-            if ( !m_pImpl->rModel.isEnabled() )
+            Rectangle const aTextRect(lcl_getTextRenderingArea(lcl_getContentArea(*m_pImpl, _rArea)));
+            sal_uLong nDrawTextFlags = lcl_getAlignmentTextDrawFlags(*m_pImpl, 0) | TEXT_DRAW_CLIP;
+            if (!m_pImpl->rModel.isEnabled())
                 nDrawTextFlags |= TEXT_DRAW_DISABLE;
                 // TODO: is using the horizontal alignment of the 0'th column a good idea here? This is pretty ... arbitray ..
-            _rDevice.DrawText( aTextRect, rowTitle, nDrawTextFlags );
+            rRenderContext.DrawText(aTextRect, rowTitle, nDrawTextFlags);
         }
 
-        (void)i_hasControlFocus;
-        (void)_bSelected;
-        _rDevice.Pop();
+        rRenderContext.Pop();
     }
 
 
@@ -434,14 +421,14 @@ namespace svt { namespace table
     };
 
 
-    void GridTableRenderer::PaintCell( ColPos const i_column, bool _bSelected, bool i_hasControlFocus,
-        OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle )
+    void GridTableRenderer::PaintCell(ColPos const i_column, bool _bSelected, bool i_hasControlFocus,
+                                      vcl::RenderContext& rRenderContext, const Rectangle& _rArea, const StyleSettings& _rStyle)
     {
-        _rDevice.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+        rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
 
-        Rectangle const aContentArea( lcl_getContentArea( *m_pImpl, _rArea ) );
-        CellRenderContext const aRenderContext( _rDevice, aContentArea, _rStyle, i_column, _bSelected, i_hasControlFocus );
-        impl_paintCellContent( aRenderContext );
+        Rectangle const aContentArea(lcl_getContentArea(*m_pImpl, _rArea));
+        CellRenderContext const aCellRenderContext(rRenderContext, aContentArea, _rStyle, i_column, _bSelected, i_hasControlFocus);
+        impl_paintCellContent(aCellRenderContext);
 
         if ( m_pImpl->bUseGridLines )
         {
@@ -456,12 +443,12 @@ namespace svt { namespace table
                     :   lcl_getEffectiveColor( m_pImpl->rModel.getInactiveSelectionBackColor(), _rStyle, &StyleSettings::GetDeactiveColor );
             }
 
-            _rDevice.SetLineColor( lineColor );
-            _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
-            _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
+            rRenderContext.SetLineColor( lineColor );
+            rRenderContext.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
+            rRenderContext.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
         }
 
-        _rDevice.Pop();
+        rRenderContext.Pop();
     }
 
 

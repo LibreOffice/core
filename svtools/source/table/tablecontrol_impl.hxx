@@ -34,11 +34,8 @@
 class ScrollBar;
 class ScrollBarBox;
 
-
 namespace svt { namespace table
 {
-
-
     struct MutableColumnMetrics : protected ColumnMetrics
     {
         MutableColumnMetrics()
@@ -170,7 +167,7 @@ namespace svt { namespace table
 
         /** paints the table control content which intersects with the given rectangle
         */
-        void    doPaintContent( const Rectangle& _rUpdateRect );
+        void    doPaintContent(vcl::RenderContext& rRenderContext, const Rectangle& _rUpdateRect);
 
         /** moves the cursor to the cell with the given coordinates
 

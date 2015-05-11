@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "table/tablecontrol.hxx"
 
 #include "tabledatawindow.hxx"
@@ -27,16 +26,9 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 
-
 namespace svt { namespace table
 {
-
-
-    using ::com::sun::star::uno::Any;
-
-
-    //= TableDataWindow
-
+    using css::uno::Any;
 
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )
@@ -60,9 +52,9 @@ namespace svt { namespace table
         Window::dispose();
     }
 
-    void TableDataWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateRect )
+    void TableDataWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rUpdateRect )
     {
-        m_rTableControl.doPaintContent( rUpdateRect );
+        m_rTableControl.doPaintContent(rRenderContext, rUpdateRect);
     }
 
     void TableDataWindow::SetBackground( const Wallpaper& rColor )
@@ -221,7 +213,7 @@ namespace svt { namespace table
         return nDone || Window::Notify( rNEvt );
     }
 
-} } // namespace svt::table
+}} // namespace svt::table
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
