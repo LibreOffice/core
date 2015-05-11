@@ -184,18 +184,18 @@ NameNode* NameNode::SearchParent( const NameNode * pSearch ) const
     {
         if( Left() )
         {
-            if( ((NameNode *)Left())->Compare( pSearch ) == EQUAL )
+            if( Left()->Compare( pSearch ) == EQUAL )
                 return const_cast<NameNode *>(this);
-            return ((NameNode *)Left())->SearchParent( pSearch );
+            return Left()->SearchParent( pSearch );
         }
     }
     else if( nCmp == LESS )
     {
         if( Right() )
         {
-            if( ((NameNode *)Right())->Compare( pSearch ) == EQUAL )
+            if( Right()->Compare( pSearch ) == EQUAL )
                 return const_cast<NameNode *>(this);
-            return ((NameNode *)Right())->SearchParent( pSearch );
+            return Right()->SearchParent( pSearch );
         }
     }
     return (NameNode *)NULL;
@@ -211,12 +211,12 @@ NameNode* NameNode::Search( const NameNode * pSearch ) const
     if( nCmp == GREATER )
     {
         if( Left() )
-            return ((NameNode *)Left())->Search( pSearch );
+            return Left()->Search( pSearch );
     }
     else if( nCmp == LESS )
     {
         if( Right() )
-            return ((NameNode *)Right())->Search( pSearch );
+            return Right()->Search( pSearch );
     }
     else
         return const_cast<NameNode *>(this);
@@ -234,12 +234,12 @@ NameNode* NameNode::Search( const void * pSearch ) const
     if( nCmp == GREATER )
     {
         if( Left() )
-            return ((NameNode *)Left())->Search( pSearch );
+            return Left()->Search( pSearch );
     }
     else if( nCmp == LESS )
     {
         if( Right() )
-            return ((NameNode *)Right())->Search( pSearch );
+            return Right()->Search( pSearch );
     }
     else
         return const_cast<NameNode *>(this);
@@ -260,14 +260,14 @@ bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth )
     if( nCmp == GREATER )
     {
         if( Left() )
-            bRet =  ((NameNode *)Left())->Insert( pTN, pnDepth );
+            bRet =  Left()->Insert( pTN, pnDepth );
         else
             pLeft = pTN;
     }
     else
     {
         if( Right() )
-            bRet = ((NameNode *)Right())->Insert( pTN, pnDepth );
+            bRet = Right()->Insert( pTN, pnDepth );
         else
             pRight = pTN;
 
