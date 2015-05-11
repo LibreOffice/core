@@ -358,7 +358,7 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
     do
     {
 
-        const sal_uInt8* pElements = (const sal_uInt8*)&pStyle->mpFormat[0];
+        const sal_uInt8* pElements = &pStyle->mpFormat[0];
 
         while( *pElements )
         {
