@@ -840,7 +840,8 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
     else
     {
         m_pExamplesVS->Show();
-        m_pExamplesVS->Format();
+        m_pExamplesVS->SetFormat();
+        m_pExamplesVS->Invalidate();
     }
 }
 

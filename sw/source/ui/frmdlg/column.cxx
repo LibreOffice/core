@@ -1349,9 +1349,9 @@ void SwColumnPage::SetInSection(bool bSet)
     m_pTextDirectionLB->Show(bSet);
 }
 
-void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
+void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
 {
-    OutputDevice*  pDev = rUDEvt.GetDevice();
+    OutputDevice* pDev = rUDEvt.GetDevice();
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     Rectangle aRect = rUDEvt.GetRect();
@@ -1419,7 +1419,8 @@ void ColumnValueSet::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        Format();
+        SetFormat();
+        Invalidate();
     }
     ValueSet::DataChanged( rDCEvt );
 }

@@ -55,7 +55,8 @@ PageOrientationControl::PageOrientationControl(
     mpOrientationValueSet->Show();
     mpOrientationValueSet->SelectItem( mbLandscape ? 2 : 1 );
     mpOrientationValueSet->GrabFocus();
-    mpOrientationValueSet->Format();
+    mpOrientationValueSet->SetFormat();
+    mpOrientationValueSet->Invalidate();
     mpOrientationValueSet->StartSelection();
 
     FreeResource();

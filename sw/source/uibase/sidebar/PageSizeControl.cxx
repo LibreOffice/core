@@ -132,7 +132,8 @@ PageSizeControl::PageSizeControl(
     mpSizeValueSet->Show();
 
     mpSizeValueSet->SelectItem( nSelectedItem );
-    mpSizeValueSet->Format();
+    mpSizeValueSet->SetFormat();
+    mpSizeValueSet->Invalidate();
     mpSizeValueSet->StartSelection();
 
     maMoreButton->SetClickHdl( LINK( this, PageSizeControl, MoreButtonClickHdl_Impl ) );

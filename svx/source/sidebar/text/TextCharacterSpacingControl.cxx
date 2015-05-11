@@ -300,7 +300,8 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
         maFTBy->Disable();
     }
     GetFocus();
-    maVSSpacing->Format();
+    maVSSpacing->SetFormat();
+    maVSSpacing->Invalidate();
     maVSSpacing->StartSelection();
 }
 IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
@@ -365,7 +366,8 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
             else
             {
                 maVSSpacing->SetNoSelection();       //add , set no selection and keep the last select item
-                maVSSpacing->Format();
+                maVSSpacing->SetFormat();
+                maVSSpacing->Invalidate();
                 Invalidate();
                 maVSSpacing->StartSelection();
             }
@@ -399,7 +401,8 @@ IMPL_LINK(TextCharacterSpacingControl, KerningSelectHdl, ListBox*,)
     {
         maVSSpacing->SetNoSelection();
         maVSSpacing->SelectItem(0);
-        maVSSpacing->Format();
+        maVSSpacing->SetFormat();
+        maVSSpacing->Invalidate();
         Invalidate();
         maVSSpacing->StartSelection();
     }
@@ -412,7 +415,8 @@ IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*,)
     {
         maVSSpacing->SetNoSelection();
         maVSSpacing->SelectItem(0);
-        maVSSpacing->Format();
+        maVSSpacing->SetFormat();
+        maVSSpacing->Invalidate();
         Invalidate();
         maVSSpacing->StartSelection();
     }

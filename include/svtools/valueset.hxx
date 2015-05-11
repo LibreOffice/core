@@ -197,7 +197,7 @@ class SVT_DLLPUBLIC ValueSet : public Control
 {
 private:
 
-    ScopedVclPtr<VirtualDevice>   maVirDev;
+    ScopedVclPtr<VirtualDevice> maVirDev;
     Timer           maTimer;
     ValueItemList   mItemList;
     ValueSetItemPtr mpNoneItem;
@@ -248,13 +248,13 @@ private:
     SVT_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE void         ImplInitScrollBar();
     SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplFormatItem( ValueSetItem* pItem, Rectangle aRect );
-    SVT_DLLPRIVATE void         ImplDrawItemText(const OUString& rStr);
-    SVT_DLLPRIVATE void         ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel );
-    SVT_DLLPRIVATE void         ImplDrawSelect();
-    SVT_DLLPRIVATE void         ImplHideSelect( sal_uInt16 nItemId );
-    SVT_DLLPRIVATE void         ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection = true );
-    SVT_DLLPRIVATE void         ImplDraw();
+    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* pItem, Rectangle aRect);
+    SVT_DLLPRIVATE void         ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rStr);
+    SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
+    SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
+    SVT_DLLPRIVATE void         ImplHideSelect(sal_uInt16 nItemId);
+    SVT_DLLPRIVATE void         ImplHighlightItem(sal_uInt16 nItemId, bool bIsSelection = true);
+    SVT_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     using Window::ImplScroll;
     SVT_DLLPRIVATE bool         ImplScroll( const Point& rPos );
     SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint, bool bMove = false ) const;
@@ -274,10 +274,7 @@ private:
     ValueSet & operator= (const ValueSet &) SAL_DELETED_FUNCTION;
 
 protected:
-
-    bool            StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion );
-
-protected:
+    bool StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion );
 
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
@@ -293,7 +290,7 @@ public:
     virtual void    Tracking( const TrackingEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
@@ -306,19 +303,14 @@ public:
     void            DoubleClick();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
-    void            InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                                size_t nPos = VALUESET_APPEND );
-    void            InsertItem( sal_uInt16 nItemId,
-                                const Image& rImage, const OUString& rStr,
-                                size_t nPos = VALUESET_APPEND );
-    void            InsertItem( sal_uInt16 nItemId,
-                                const Color& rColor, const OUString& rStr,
-                                size_t nPos = VALUESET_APPEND );
-    void            InsertItem( sal_uInt16 nItemId,
-                                size_t nPos = VALUESET_APPEND );
-    void            InsertItem( sal_uInt16 nItemId, const OUString& rStr,
-                                size_t nPos = VALUESET_APPEND );
-    void            RemoveItem( sal_uInt16 nItemId );
+    void            InsertItem(sal_uInt16 nItemId, const Image& rImage, size_t nPos = VALUESET_APPEND);
+    void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
+                               const OUString& rStr, size_t nPos = VALUESET_APPEND);
+    void            InsertItem(sal_uInt16 nItemId, const Color& rColor,
+                               const OUString& rStr, size_t nPos = VALUESET_APPEND);
+    void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
+    void            InsertItem(sal_uInt16 nItemId, const OUString& rStr, size_t nPos = VALUESET_APPEND);
+    void            RemoveItem(sal_uInt16 nItemId);
 
     void            Clear();
 
@@ -329,23 +321,49 @@ public:
     Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
 
     void            EnableFullItemMode( bool bFullMode = true );
-    bool            IsFullItemModeEnabled() const { return mbFullMode; }
+    bool IsFullItemModeEnabled() const
+    {
+        return mbFullMode;
+    }
     void            SetColCount( sal_uInt16 nNewCols = 1 );
-    sal_uInt16          GetColCount() const { return mnUserCols; }
+    sal_uInt16 GetColCount() const
+    {
+        return mnUserCols;
+    }
     void            SetLineCount( sal_uInt16 nNewLines = 0 );
-    sal_uInt16          GetLineCount() const { return mnUserVisLines; }
-    void            SetItemWidth( long nItemWidth = 0 );
-    long            GetItemWidth() const { return mnUserItemWidth; }
-    void            SetItemHeight( long nLineHeight = 0 );
-    long            GetItemHeight() const { return mnUserItemHeight; }
-    sal_uInt16          GetFirstLine() const { return mnFirstLine; }
+    sal_uInt16 GetLineCount() const
+    {
+        return mnUserVisLines;
+    }
+    void SetItemWidth( long nItemWidth = 0 );
+    long GetItemWidth() const
+    {
+        return mnUserItemWidth;
+    }
+    void SetItemHeight( long nLineHeight = 0 );
+    long GetItemHeight() const
+    {
+        return mnUserItemHeight;
+    }
+    sal_uInt16          GetFirstLine() const
+    {
+        return mnFirstLine;
+    }
 
-    void            SelectItem( sal_uInt16 nItemId );
-    sal_uInt16          GetSelectItemId() const { return mnSelItemId; }
-    bool            IsItemSelected( sal_uInt16 nItemId ) const
-                        { return !mbNoSelection && (nItemId == mnSelItemId); }
-    void            SetNoSelection();
-    bool            IsNoSelection() const { return mbNoSelection; }
+    void SelectItem( sal_uInt16 nItemId );
+    sal_uInt16 GetSelectItemId() const
+    {
+        return mnSelItemId;
+    }
+    bool IsItemSelected( sal_uInt16 nItemId ) const
+    {
+        return !mbNoSelection && (nItemId == mnSelItemId);
+    }
+    void SetNoSelection();
+    bool IsNoSelection() const
+    {
+        return mbNoSelection;
+    }
 
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image           GetItemImage( sal_uInt16 nItemId ) const;
@@ -356,32 +374,60 @@ public:
     void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString        GetItemText( sal_uInt16 nItemId ) const;
     void            SetColor( const Color& rColor );
-    void            SetColor() { SetColor( Color( COL_TRANSPARENT ) ); }
-    Color           GetColor() const { return maColor; }
-    bool            IsColor() const { return maColor.GetTransparency() == 0; }
+    void            SetColor()
+    {
+        SetColor(Color(COL_TRANSPARENT));
+    }
+    Color           GetColor() const
+    {
+        return maColor;
+    }
+    bool            IsColor() const
+    {
+        return maColor.GetTransparency() == 0;
+    }
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
-    sal_uInt16      GetExtraSpacing() { return mnSpacing; }
+    sal_uInt16      GetExtraSpacing()
+    {
+        return mnSpacing;
+    }
 
-    void            Format();
+    void            Format(vcl::RenderContext& rRenderContext);
+    void            SetFormat(bool bFormat = true);
 
     void            StartSelection();
     void            EndSelection();
 
-    Size            CalcWindowSizePixel( const Size& rItemSize,
-                                         sal_uInt16 nCalcCols = 0,
-                                         sal_uInt16 nCalcLines = 0 ) const;
-    Size            CalcItemSizePixel( const Size& rSize, bool bOut = true ) const;
+    Size            CalcWindowSizePixel(const Size& rItemSize,
+                                        sal_uInt16 nCalcCols = 0,
+                                        sal_uInt16 nCalcLines = 0) const;
+    Size            CalcItemSizePixel(const Size& rSize, bool bOut = true) const;
     long            GetScrollWidth() const;
 
-    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
-    const Link<>&   GetSelectHdl() const { return maSelectHdl; }
-    void            SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
-    const Link<>&   GetDoubleClickHdl() const { return maDoubleClickHdl; }
+    void            SetSelectHdl(const Link<>& rLink)
+    {
+        maSelectHdl = rLink;
+    }
+    const Link<>&   GetSelectHdl() const
+    {
+        return maSelectHdl;
+    }
+    void            SetDoubleClickHdl(const Link<>& rLink)
+    {
+        maDoubleClickHdl = rLink;
+    }
+    const Link<>&   GetDoubleClickHdl() const
+    {
+        return maDoubleClickHdl;
+    }
 
-    void            SetHighlightHdl( const Link<>& rLink );
+    void            SetHighlightHdl(const Link<>& rLink);
 
-    bool GetEdgeBlending() const { return mbEdgeBlending; }
+    bool GetEdgeBlending() const
+    {
+        return mbEdgeBlending;
+    }
     void SetEdgeBlending(bool bNew);
 };
 

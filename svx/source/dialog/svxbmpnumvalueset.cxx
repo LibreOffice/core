@@ -503,7 +503,7 @@ void SvxBmpNumValueSet::dispose()
     SvxNumValueSet::dispose();
 }
 
-void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
+void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
 {
     SvxNumValueSet::UserDraw(rUDEvt);
 
@@ -536,10 +536,10 @@ void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 IMPL_LINK_NOARG_TYPED(SvxBmpNumValueSet, FormatHdl_Impl, Idle *, void)
 {
     // only when a graphics was not there, it needs to be formatted
-    if(bGrfNotFound)
+    if (bGrfNotFound)
     {
+        SetFormat();
         bGrfNotFound = false;
-        Format();
     }
     Invalidate();
 }

@@ -318,8 +318,8 @@ void PageMarginControl::SelectValueSetItem()
     {
         mpMarginValueSet->SelectItem(0);
     }
-
-    mpMarginValueSet->Format();
+    mpMarginValueSet->SetFormat();
+    mpMarginValueSet->Invalidate();
     mpMarginValueSet->StartSelection();
 };
 
@@ -405,7 +405,8 @@ IMPL_LINK( PageMarginControl, ModifyLRMarginHdl, MetricField *, )
 {
     mpMarginValueSet->SetNoSelection();
     mpMarginValueSet->SelectItem(0);
-    mpMarginValueSet->Format();
+    mpMarginValueSet->SetFormat();
+    mpMarginValueSet->Invalidate();
     mpMarginValueSet->StartSelection();
 
     mnPageLeftMargin = GetCoreValue( *maLeftMarginEdit.get(), meUnit );
@@ -419,7 +420,8 @@ IMPL_LINK( PageMarginControl, ModifyULMarginHdl, MetricField *, )
 {
     mpMarginValueSet->SetNoSelection();
     mpMarginValueSet->SelectItem(0);
-    mpMarginValueSet->Format();
+    mpMarginValueSet->SetFormat();
+    mpMarginValueSet->Invalidate();
     mpMarginValueSet->StartSelection();
 
     mnPageTopMargin = GetCoreValue( *maTopMarginEdit.get(), meUnit );

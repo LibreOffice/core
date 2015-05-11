@@ -110,7 +110,8 @@ void CellLineStyleControl::SetAllNoSel()
 {
     maCellLineStyleValueSet->SelectItem(0);
     maCellLineStyleValueSet->SetNoSelection();
-    maCellLineStyleValueSet->Format();
+    maCellLineStyleValueSet->SetFormat();
+    maCellLineStyleValueSet->Invalidate();
     Invalidate();
     maCellLineStyleValueSet->StartSelection();
 }
@@ -251,8 +252,8 @@ void CellLineStyleControl::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal
         maCellLineStyleValueSet->SetSelItem(0);
         mbVSfocus = false;
     }
-
-    maCellLineStyleValueSet->Format();
+    maCellLineStyleValueSet->SetFormat();
+    maCellLineStyleValueSet->Invalidate();
     maCellLineStyleValueSet->StartSelection();
 }
 

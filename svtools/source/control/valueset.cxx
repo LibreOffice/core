@@ -202,33 +202,33 @@ void ValueSet::ImplInitSettings( bool bFont, bool bForeground, bool bBackground 
 
 void ValueSet::ImplInitScrollBar()
 {
-    if ( GetStyle() & WB_VSCROLL )
+    if (GetStyle() & WB_VSCROLL)
     {
-        if ( !mxScrollBar.get() )
+        if (!mxScrollBar.get())
         {
-            mxScrollBar.reset(VclPtr<ScrollBar>::Create( this, WB_VSCROLL | WB_DRAG ));
-            mxScrollBar->SetScrollHdl( LINK( this, ValueSet, ImplScrollHdl ) );
+            mxScrollBar.reset(VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_DRAG));
+            mxScrollBar->SetScrollHdl(LINK(this, ValueSet, ImplScrollHdl));
         }
         else
         {
             // adapt the width because of the changed settings
-            long nScrBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-            mxScrollBar->setPosSizePixel( 0, 0, nScrBarWidth, 0, WINDOW_POSSIZE_WIDTH );
+            long nScrBarWidth = Application::GetSettings().GetStyleSettings().GetScrollBarSize();
+            mxScrollBar->setPosSizePixel(0, 0, nScrBarWidth, 0, WINDOW_POSSIZE_WIDTH);
         }
     }
 }
 
-void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
+void ValueSet::ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* pItem, Rectangle aRect)
 {
     WinBits nStyle = GetStyle();
-    if ( nStyle & WB_ITEMBORDER )
+    if (nStyle & WB_ITEMBORDER)
     {
         aRect.Left()   += 1;
         aRect.Top()    += 1;
         aRect.Right()  -= 1;
         aRect.Bottom() -= 1;
 
-        if ( nStyle & WB_FLATVALUESET )
+        if (nStyle & WB_FLATVALUESET)
         {
             sal_Int32 nBorder = (nStyle & WB_DOUBLEBORDER) ? 2 : 1;
 
@@ -239,97 +239,97 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
         }
         else
         {
-            DecorationView aView( maVirDev.get() );
-            aRect = aView.DrawFrame( aRect, mnFrameStyle );
+            DecorationView aView(maVirDev.get());
+            aRect = aView.DrawFrame(aRect, mnFrameStyle);
         }
     }
 
-    if ( pItem == mpNoneItem.get() )
+    if (pItem == mpNoneItem.get())
         pItem->maText = GetText();
 
-    if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
+    if ((aRect.GetHeight() > 0) && (aRect.GetWidth() > 0))
     {
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-        if ( pItem == mpNoneItem.get() )
+        if (pItem == mpNoneItem.get())
         {
-            maVirDev->SetFont( GetFont() );
-            maVirDev->SetTextColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor() );
+            maVirDev->SetFont(rRenderContext.GetFont());
+            maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
             maVirDev->SetTextFillColor();
-            maVirDev->SetFillColor( ( nStyle & WB_MENUSTYLEVALUESET ) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor() );
-            maVirDev->DrawRect( aRect );
-            Point   aTxtPos( aRect.Left() + 2, aRect.Top() );
-            long    nTxtWidth = GetTextWidth( pItem->maText );
-            if ( nStyle & WB_RADIOSEL )
+            maVirDev->SetFillColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor());
+            maVirDev->DrawRect(aRect);
+            Point aTxtPos(aRect.Left() + 2, aRect.Top());
+            long nTxtWidth = rRenderContext.GetTextWidth(pItem->maText);
+            if (nStyle & WB_RADIOSEL)
             {
                 aTxtPos.X() += 4;
                 aTxtPos.Y() += 4;
             }
-            if ( (aTxtPos.X()+nTxtWidth) > aRect.Right() )
+            if ((aTxtPos.X() + nTxtWidth) > aRect.Right())
             {
-                maVirDev->SetClipRegion( vcl::Region( aRect ) );
-                maVirDev->DrawText( aTxtPos, pItem->maText );
+                maVirDev->SetClipRegion(vcl::Region(aRect));
+                maVirDev->DrawText(aTxtPos, pItem->maText);
                 maVirDev->SetClipRegion();
             }
             else
-                maVirDev->DrawText( aTxtPos, pItem->maText );
+                maVirDev->DrawText(aTxtPos, pItem->maText);
         }
-        else if ( pItem->meType == VALUESETITEM_COLOR )
+        else if (pItem->meType == VALUESETITEM_COLOR)
         {
-            maVirDev->SetFillColor( pItem->maColor );
-            maVirDev->DrawRect( aRect );
+            maVirDev->SetFillColor(pItem->maColor);
+            maVirDev->DrawRect(aRect);
         }
         else
         {
-            if ( IsColor() )
-                maVirDev->SetFillColor( maColor );
-            else if ( nStyle & WB_MENUSTYLEVALUESET )
-                maVirDev->SetFillColor( rStyleSettings.GetMenuColor() );
-            else if ( IsEnabled() )
-                maVirDev->SetFillColor( rStyleSettings.GetWindowColor() );
+            if (IsColor())
+                maVirDev->SetFillColor(maColor);
+            else if (nStyle & WB_MENUSTYLEVALUESET)
+                maVirDev->SetFillColor(rStyleSettings.GetMenuColor());
+            else if (IsEnabled())
+                maVirDev->SetFillColor(rStyleSettings.GetWindowColor());
             else
-                maVirDev->SetFillColor( rStyleSettings.GetFaceColor() );
-            maVirDev->DrawRect( aRect );
+                maVirDev->SetFillColor(rStyleSettings.GetFaceColor());
+            maVirDev->DrawRect(aRect);
 
-            if ( pItem->meType == VALUESETITEM_USERDRAW )
+            if (pItem->meType == VALUESETITEM_USERDRAW)
             {
-                UserDrawEvent aUDEvt( maVirDev.get(), aRect, pItem->mnId );
-                UserDraw( aUDEvt );
+                UserDrawEvent aUDEvt(maVirDev.get(), aRect, pItem->mnId);
+                UserDraw(aUDEvt);
             }
             else
             {
-                Size    aImageSize = pItem->maImage.GetSizePixel();
-                Size    aRectSize = aRect.GetSize();
-                Point   aPos( aRect.Left(), aRect.Top() );
+                Size aImageSize = pItem->maImage.GetSizePixel();
+                Size  aRectSize = aRect.GetSize();
+                Point aPos(aRect.Left(), aRect.Top());
                 aPos.X() += (aRectSize.Width() - aImageSize.Width()) / 2;
                 aPos.Y() += (aRectSize.Height() - aImageSize.Height()) / 2;
 
                 sal_uInt16  nImageStyle  = 0;
-                if( !IsEnabled() )
+                if (!IsEnabled())
                     nImageStyle  |= IMAGE_DRAW_DISABLE;
 
-                if ( aImageSize.Width()  > aRectSize.Width() ||
-                     aImageSize.Height() > aRectSize.Height() )
+                if (aImageSize.Width()  > aRectSize.Width() ||
+                    aImageSize.Height() > aRectSize.Height())
                 {
-                    maVirDev->SetClipRegion( vcl::Region( aRect ) );
-                    maVirDev->DrawImage( aPos, pItem->maImage, nImageStyle);
+                    maVirDev->SetClipRegion(vcl::Region(aRect));
+                    maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
                     maVirDev->SetClipRegion();
                 }
                 else
-                    maVirDev->DrawImage( aPos, pItem->maImage, nImageStyle );
+                    maVirDev->DrawImage(aPos, pItem->maImage, nImageStyle);
             }
         }
 
         const sal_uInt16 nEdgeBlendingPercent(GetEdgeBlending() ? rStyleSettings.GetEdgeBlending() : 0);
 
-        if(nEdgeBlendingPercent)
+        if (nEdgeBlendingPercent)
         {
             const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
             const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
             const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
             const BitmapEx aBlendFrame(createBlendFrame(aRect.GetSize(), nAlpha, rTopLeft, rBottomRight));
 
-            if(!aBlendFrame.IsEmpty())
+            if (!aBlendFrame.IsEmpty())
             {
                 maVirDev->DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
             }
@@ -342,19 +342,19 @@ Reference<XAccessible> ValueSet::CreateAccessible()
     return new ValueSetAcc( this, mbIsTransientChildrenDisabled );
 }
 
-void ValueSet::Format()
+void ValueSet::Format(vcl::RenderContext& rRenderContext)
 {
-    Size        aWinSize = GetOutputSizePixel();
-    size_t      nItemCount = mItemList.size();
-    WinBits     nStyle = GetStyle();
-    long        nTxtHeight = GetTextHeight();
-    long        nOff;
-    long        nNoneHeight;
-    long        nNoneSpace;
+    Size aWinSize = rRenderContext.GetOutputSizePixel();
+    size_t nItemCount = mItemList.size();
+    WinBits nStyle = GetStyle();
+    long nTxtHeight = rRenderContext.GetTextHeight();
+    long nOff;
+    long nNoneHeight;
+    long nNoneSpace;
     VclPtr<ScrollBar> xDeletedScrollBar;
 
     // consider the scrolling
-    if ( nStyle & WB_VSCROLL )
+    if (nStyle & WB_VSCROLL)
         ImplInitScrollBar();
     else
     {
@@ -363,9 +363,9 @@ void ValueSet::Format()
     }
 
     // calculate item offset
-    if ( nStyle & WB_ITEMBORDER )
+    if (nStyle & WB_ITEMBORDER)
     {
-        if ( nStyle & WB_DOUBLEBORDER )
+        if (nStyle & WB_DOUBLEBORDER)
             nOff = ITEM_OFFSET_DOUBLE;
         else
             nOff = ITEM_OFFSET;
@@ -389,11 +389,11 @@ void ValueSet::Format()
         mnTextOffset = 0;
 
     // consider offset and size, if NoneField does exist
-    if ( nStyle & WB_NONEFIELD )
+    if (nStyle & WB_NONEFIELD)
     {
         nNoneHeight = nTxtHeight + nOff;
         nNoneSpace = mnSpacing;
-        if ( nStyle & WB_RADIOSEL )
+        if (nStyle & WB_RADIOSEL)
             nNoneHeight += 8;
     }
     else
@@ -408,14 +408,14 @@ void ValueSet::Format()
     // calculate ScrollBar width
     long nScrBarWidth = 0;
     if (mxScrollBar.get())
-        nScrBarWidth = mxScrollBar->GetSizePixel().Width()+SCRBAR_OFFSET;
+        nScrBarWidth = mxScrollBar->GetSizePixel().Width() + SCRBAR_OFFSET;
 
     // calculate number of columns
     if (!mnUserCols)
     {
         if (mnUserItemWidth)
         {
-            mnCols = (sal_uInt16) ((aWinSize.Width() - nScrBarWidth + mnSpacing) / (mnUserItemWidth + mnSpacing));
+            mnCols = static_cast<sal_uInt16>((aWinSize.Width() - nScrBarWidth + mnSpacing) / (mnUserItemWidth + mnSpacing));
             if (mnCols <= 0)
                 mnCols = 1;
         }
@@ -445,7 +445,7 @@ void ValueSet::Format()
     else if (mnUserItemHeight)
     {
         mnVisLines = (nCalcHeight - nNoneSpace + mnSpacing) / (mnUserItemHeight + mnSpacing);
-        if ( !mnVisLines )
+        if (!mnVisLines)
             mnVisLines = 1;
     }
     else
@@ -453,34 +453,34 @@ void ValueSet::Format()
         mnVisLines = mnLines;
     }
 
-    if ( mnLines > mnVisLines )
+    if (mnLines > mnVisLines)
         mbScroll = true;
 
-    if ( mnLines <= mnVisLines )
+    if (mnLines <= mnVisLines)
     {
         mnFirstLine = 0;
     }
     else
     {
-        if ( mnFirstLine > (sal_uInt16)(mnLines - mnVisLines) )
-            mnFirstLine = (sal_uInt16)(mnLines - mnVisLines);
+        if (mnFirstLine > static_cast<sal_uInt16>(mnLines - mnVisLines))
+            mnFirstLine = static_cast<sal_uInt16>(mnLines - mnVisLines);
     }
 
     // calculate item size
     const long nColSpace  = (mnCols - 1) * static_cast<long>(mnSpacing);
     const long nLineSpace = ((mnVisLines - 1) * mnSpacing) + nNoneSpace;
-    if ( mnUserItemWidth && !mnUserCols )
+    if (mnUserItemWidth && !mnUserCols)
     {
         mnItemWidth = mnUserItemWidth;
-        if ( mnItemWidth > aWinSize.Width() - nScrBarWidth-nColSpace )
-            mnItemWidth = aWinSize.Width() - nScrBarWidth-nColSpace;
+        if (mnItemWidth > aWinSize.Width() - nScrBarWidth - nColSpace)
+            mnItemWidth = aWinSize.Width() - nScrBarWidth - nColSpace;
     }
     else
         mnItemWidth = (aWinSize.Width() - nScrBarWidth-nColSpace) / mnCols;
-    if ( mnUserItemHeight && !mnUserVisLines )
+    if (mnUserItemHeight && !mnUserVisLines)
     {
         mnItemHeight = mnUserItemHeight;
-        if ( mnItemHeight > nCalcHeight - nNoneSpace )
+        if (mnItemHeight > nCalcHeight - nNoneSpace)
             mnItemHeight = nCalcHeight - nNoneSpace;
     }
     else
@@ -490,18 +490,18 @@ void ValueSet::Format()
     }
 
     // Init VirDev
-    maVirDev->SetSettings( GetSettings() );
-    maVirDev->SetBackground( GetBackground() );
-    maVirDev->SetOutputSizePixel( aWinSize, true );
+    maVirDev->SetSettings(rRenderContext.GetSettings());
+    maVirDev->SetBackground(rRenderContext.GetBackground());
+    maVirDev->SetOutputSizePixel(aWinSize, true);
 
     // nothing is changed in case of too small items
-    if ( (mnItemWidth <= 0) ||
-         (mnItemHeight <= (( nStyle & WB_ITEMBORDER ) ? 4 : 2)) ||
-         !nItemCount )
+    if ((mnItemWidth <= 0) ||
+        (mnItemHeight <= ((nStyle & WB_ITEMBORDER) ? 4 : 2)) ||
+        !nItemCount)
     {
         mbHasVisibleItems = false;
 
-        if ( nStyle & WB_NONEFIELD )
+        if (nStyle & WB_NONEFIELD)
         {
             if (mpNoneItem.get())
             {
@@ -510,12 +510,12 @@ void ValueSet::Format()
             }
         }
 
-        for ( size_t i = 0; i < nItemCount; i++ )
+        for (size_t i = 0; i < nItemCount; i++)
         {
             mItemList[i]->mbVisible = false;
         }
 
-        if ( mxScrollBar.get() )
+        if (mxScrollBar.get())
             mxScrollBar->Hide();
     }
     else
@@ -523,7 +523,7 @@ void ValueSet::Format()
         mbHasVisibleItems = true;
 
         // determine Frame-Style
-        if ( nStyle & WB_DOUBLEBORDER )
+        if (nStyle & WB_DOUBLEBORDER)
             mnFrameStyle = FRAME_DRAW_DOUBLEIN;
         else
             mnFrameStyle = FRAME_DRAW_IN;
@@ -531,27 +531,34 @@ void ValueSet::Format()
         // determine selected color and width
         // if necessary change the colors, to make the selection
         // better detectable
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        Color aHighColor( rStyleSettings.GetHighlightColor() );
-        if ( ((aHighColor.GetRed() > 0x80) || (aHighColor.GetGreen() > 0x80) ||
-              (aHighColor.GetBlue() > 0x80)) ||
-             ((aHighColor.GetRed() == 0x80) && (aHighColor.GetGreen() == 0x80) &&
-              (aHighColor.GetBlue() == 0x80)) )
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        Color aHighColor(rStyleSettings.GetHighlightColor());
+        if (((aHighColor.GetRed() > 0x80) || (aHighColor.GetGreen() > 0x80) ||
+             (aHighColor.GetBlue() > 0x80)) ||
+            ((aHighColor.GetRed() == 0x80) && (aHighColor.GetGreen() == 0x80) &&
+             (aHighColor.GetBlue() == 0x80)))
+        {
             mbBlackSel = true;
+        }
         else
+        {
             mbBlackSel = false;
-
+        }
         // draw the selection with double width if the items are bigger
-        if ( (nStyle & WB_DOUBLEBORDER) &&
-             ((mnItemWidth >= 25) && (mnItemHeight >= 20)) )
+        if ((nStyle & WB_DOUBLEBORDER) &&
+            ((mnItemWidth >= 25) && (mnItemHeight >= 20)))
+        {
             mbDoubleSel = true;
+        }
         else
+        {
             mbDoubleSel = false;
+        }
 
         // calculate offsets
         long nStartX;
         long nStartY;
-        if ( mbFullMode )
+        if (mbFullMode)
         {
             long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
             long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
@@ -575,17 +582,17 @@ void ValueSet::Format()
             if (mpNoneItem.get() == NULL)
                 mpNoneItem.reset(new ValueSetItem(*this));
 
-            mpNoneItem->mnId            = 0;
-            mpNoneItem->meType          = VALUESETITEM_NONE;
-            mpNoneItem->mbVisible       = true;
-            maNoneItemRect.Left()       = x;
-            maNoneItemRect.Top()        = y;
-            maNoneItemRect.Right()      = maNoneItemRect.Left() + aWinSize.Width() - x - 1;
-            maNoneItemRect.Bottom()     = y+nNoneHeight - 1;
+            mpNoneItem->mnId = 0;
+            mpNoneItem->meType = VALUESETITEM_NONE;
+            mpNoneItem->mbVisible = true;
+            maNoneItemRect.Left() = x;
+            maNoneItemRect.Top()  = y;
+            maNoneItemRect.Right() = maNoneItemRect.Left() + aWinSize.Width() - x - 1;
+            maNoneItemRect.Bottom() = y + nNoneHeight - 1;
 
-            ImplFormatItem(mpNoneItem.get(), maNoneItemRect);
+            ImplFormatItem(rRenderContext, mpNoneItem.get(), maNoneItemRect);
 
-            y += nNoneHeight+nNoneSpace;
+            y += nNoneHeight + nNoneSpace;
         }
 
         // draw items
@@ -597,49 +604,49 @@ void ValueSet::Format()
         maItemListRect.Right() = x + mnCols * (mnItemWidth + mnSpacing) - mnSpacing - 1;
         maItemListRect.Bottom() = y + mnVisLines * (mnItemHeight + mnSpacing) - mnSpacing - 1;
 
-        if ( !mbFullMode )
+        if (!mbFullMode)
         {
             // If want also draw parts of items in the last line,
             // then we add one more line if parts of these line are
             // visible
-            if ( y + (mnVisLines * (mnItemHeight + mnSpacing)) < aWinSize.Height() )
+            if (y + (mnVisLines * (mnItemHeight + mnSpacing)) < aWinSize.Height())
                 nLastItem += mnCols;
             maItemListRect.Bottom() = aWinSize.Height() - y;
         }
-        for ( size_t i = 0; i < nItemCount; i++ )
+        for (size_t i = 0; i < nItemCount; i++)
         {
             ValueSetItem* pItem = mItemList[i];
 
-            if ( (i >= nFirstItem) && (i < nLastItem) )
+            if (i >= nFirstItem && i < nLastItem)
             {
-                if( !pItem->mbVisible && ImplHasAccessibleListeners() )
+                if (!pItem->mbVisible && ImplHasAccessibleListeners())
                 {
                     Any aOldAny;
                     Any aNewAny;
 
-                    aNewAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                    aNewAny <<= pItem->GetAccessible(mbIsTransientChildrenDisabled);
                     ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
                 }
 
                 pItem->mbVisible = true;
-                ImplFormatItem( pItem, Rectangle( Point(x, y), Size(mnItemWidth, mnItemHeight) ) );
+                ImplFormatItem(rRenderContext, pItem, Rectangle(Point(x, y), Size(mnItemWidth, mnItemHeight)));
 
-                if ( !((i + 1) % mnCols) )
+                if (!((i + 1) % mnCols))
                 {
                     x = nStartX;
-                    y += mnItemHeight+mnSpacing;
+                    y += mnItemHeight + mnSpacing;
                 }
                 else
-                    x += mnItemWidth+mnSpacing;
+                    x += mnItemWidth + mnSpacing;
             }
             else
             {
-                if( pItem->mbVisible && ImplHasAccessibleListeners() )
+                if (pItem->mbVisible && ImplHasAccessibleListeners())
                 {
                     Any aOldAny;
                     Any aNewAny;
 
-                    aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                    aOldAny <<= pItem->GetAccessible(mbIsTransientChildrenDisabled);
                     ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
                 }
 
@@ -648,24 +655,24 @@ void ValueSet::Format()
         }
 
         // arrange ScrollBar, set values and show it
-        if ( mxScrollBar.get() )
+        if (mxScrollBar.get())
         {
-            Point   aPos( aWinSize.Width() - nScrBarWidth + SCRBAR_OFFSET, 0 );
-            Size    aSize( nScrBarWidth - SCRBAR_OFFSET, aWinSize.Height() );
+            Point   aPos(aWinSize.Width() - nScrBarWidth + SCRBAR_OFFSET, 0);
+            Size    aSize(nScrBarWidth - SCRBAR_OFFSET, aWinSize.Height());
             // If a none field is visible, then we center the scrollbar
-            if ( nStyle & WB_NONEFIELD )
+            if (nStyle & WB_NONEFIELD)
             {
                 aPos.Y() = nStartY + nNoneHeight + 1;
                 aSize.Height() = ((mnItemHeight + mnSpacing) * mnVisLines) - 2 - mnSpacing;
             }
-            mxScrollBar->SetPosSizePixel( aPos, aSize );
-            mxScrollBar->SetRangeMax( mnLines );
-            mxScrollBar->SetVisibleSize( mnVisLines );
-            mxScrollBar->SetThumbPos( (long)mnFirstLine );
+            mxScrollBar->SetPosSizePixel(aPos, aSize);
+            mxScrollBar->SetRangeMax(mnLines);
+            mxScrollBar->SetVisibleSize(mnVisLines);
+            mxScrollBar->SetThumbPos((long)mnFirstLine);
             long nPageSize = mnVisLines;
-            if ( nPageSize < 1 )
+            if (nPageSize < 1)
                 nPageSize = 1;
-            mxScrollBar->SetPageSize( nPageSize );
+            mxScrollBar->SetPageSize(nPageSize);
             mxScrollBar->Show();
         }
     }
@@ -676,54 +683,54 @@ void ValueSet::Format()
     xDeletedScrollBar.disposeAndClear();
 }
 
-void ValueSet::ImplDrawItemText(const OUString& rText)
+void ValueSet::ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rText)
 {
-    if ( !(GetStyle() & WB_NAMEFIELD) )
+    if (!(GetStyle() & WB_NAMEFIELD))
         return;
 
-    Size    aWinSize = GetOutputSizePixel();
-    long    nTxtWidth = GetTextWidth(rText);
-    long    nTxtOffset = mnTextOffset;
+    Size aWinSize = rRenderContext.GetOutputSizePixel();
+    long nTxtWidth = rRenderContext.GetTextWidth(rText);
+    long nTxtOffset = mnTextOffset;
 
     // delete rectangle and show text
-    if ( GetStyle() & WB_FLATVALUESET )
+    if (GetStyle() & WB_FLATVALUESET)
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        SetLineColor();
-        SetFillColor( rStyleSettings.GetFaceColor() );
-        DrawRect( Rectangle( Point( 0, nTxtOffset ), Point( aWinSize.Width(), aWinSize.Height() ) ) );
-        SetTextColor( rStyleSettings.GetButtonTextColor() );
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
+        rRenderContext.DrawRect(Rectangle(Point(0, nTxtOffset), Point(aWinSize.Width(), aWinSize.Height())));
+        rRenderContext.SetTextColor(rStyleSettings.GetButtonTextColor());
     }
     else
     {
         nTxtOffset += NAME_LINE_HEIGHT+NAME_LINE_OFF_Y;
-        Erase( Rectangle( Point( 0, nTxtOffset ), Point( aWinSize.Width(), aWinSize.Height() ) ) );
+        rRenderContext.Erase(Rectangle(Point(0, nTxtOffset), Point(aWinSize.Width(), aWinSize.Height())));
     }
-    DrawText( Point( (aWinSize.Width() - nTxtWidth) / 2, nTxtOffset + (NAME_OFFSET / 2) ), rText );
+    rRenderContext.DrawText(Point((aWinSize.Width() - nTxtWidth) / 2, nTxtOffset + (NAME_OFFSET / 2)), rText);
 }
 
-void ValueSet::ImplDrawSelect()
+void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
 {
-    if ( !IsReallyVisible() )
+    if (!IsReallyVisible())
         return;
 
     const bool bFocus = HasFocus();
-    const bool bDrawSel = !( (mbNoSelection && !mbHighlight) || (!mbDrawSelection && mbHighlight) );
+    const bool bDrawSel = !((mbNoSelection && !mbHighlight) || (!mbDrawSelection && mbHighlight));
 
-    if ( !bFocus && !bDrawSel )
+    if (!bFocus && !bDrawSel)
     {
-        ImplDrawItemText(OUString());
+        ImplDrawItemText(rRenderContext, OUString());
         return;
     }
 
-    ImplDrawSelect( mnSelItemId, bFocus, bDrawSel );
+    ImplDrawSelect(rRenderContext, mnSelItemId, bFocus, bDrawSel);
     if (mbHighlight)
     {
-        ImplDrawSelect( mnHighItemId, bFocus, bDrawSel );
+        ImplDrawSelect(rRenderContext, mnHighItemId, bFocus, bDrawSel);
     }
 }
 
-void ValueSet::ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
+void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel )
 {
     ValueSetItem* pItem;
     Rectangle aRect;
@@ -750,53 +757,53 @@ void ValueSet::ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool
     if (pItem->mbVisible)
     {
         // draw selection
-        const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-        Control::SetFillColor();
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        rRenderContext.SetFillColor();
 
-        Color aDoubleColor( rStyleSettings.GetHighlightColor() );
-        Color aSingleColor( rStyleSettings.GetHighlightTextColor() );
-        if( !mbDoubleSel )
+        Color aDoubleColor(rStyleSettings.GetHighlightColor());
+        Color aSingleColor(rStyleSettings.GetHighlightTextColor());
+        if (!mbDoubleSel)
         {
             /*
             *  #99777# contrast enhancement for thin mode
             */
             const Wallpaper& rWall = GetDisplayBackground();
-            if( ! rWall.IsBitmap() && ! rWall.IsGradient() )
+            if (!rWall.IsBitmap() && ! rWall.IsGradient())
             {
                 const Color& rBack = rWall.GetColor();
-                if( rBack.IsDark() && ! aDoubleColor.IsBright() )
+                if (rBack.IsDark() && ! aDoubleColor.IsBright())
                 {
-                    aDoubleColor = Color( COL_WHITE );
-                    aSingleColor = Color( COL_BLACK );
+                    aDoubleColor = Color(COL_WHITE);
+                    aSingleColor = Color(COL_BLACK);
                 }
-                else if( rBack.IsBright() && ! aDoubleColor.IsDark() )
+                else if (rBack.IsBright() && ! aDoubleColor.IsDark())
                 {
-                    aDoubleColor = Color( COL_BLACK );
-                    aSingleColor = Color( COL_WHITE );
+                    aDoubleColor = Color(COL_BLACK);
+                    aSingleColor = Color(COL_WHITE);
                 }
             }
         }
 
         // specify selection output
         WinBits nStyle = GetStyle();
-        if ( nStyle & WB_MENUSTYLEVALUESET )
+        if (nStyle & WB_MENUSTYLEVALUESET)
         {
-            if ( bFocus )
-                ShowFocus( aRect );
+            if (bFocus)
+                ShowFocus(aRect);
 
-            if ( bDrawSel )
+            if (bDrawSel)
             {
-                SetLineColor( mbBlackSel ? Color( COL_BLACK ) : aDoubleColor );
-                DrawRect( aRect );
+                rRenderContext.SetLineColor(mbBlackSel ? Color(COL_BLACK) : aDoubleColor);
+                rRenderContext.DrawRect(aRect);
             }
         }
-        else if ( nStyle & WB_RADIOSEL )
+        else if (nStyle & WB_RADIOSEL)
         {
             aRect.Left()   += 3;
             aRect.Top()    += 3;
             aRect.Right()  -= 3;
             aRect.Bottom() -= 3;
-            if ( nStyle & WB_DOUBLEBORDER )
+            if (nStyle & WB_DOUBLEBORDER)
             {
                 aRect.Left()++;
                 aRect.Top()++;
@@ -804,44 +811,44 @@ void ValueSet::ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool
                 aRect.Bottom()--;
             }
 
-            if ( bFocus )
-                ShowFocus( aRect );
+            if (bFocus)
+                ShowFocus(aRect);
 
             aRect.Left()++;
             aRect.Top()++;
             aRect.Right()--;
             aRect.Bottom()--;
 
-            if ( bDrawSel )
+            if (bDrawSel)
             {
-                SetLineColor( aDoubleColor );
+                rRenderContext.SetLineColor(aDoubleColor);
                 aRect.Left()++;
                 aRect.Top()++;
                 aRect.Right()--;
                 aRect.Bottom()--;
-                DrawRect( aRect );
+                rRenderContext.DrawRect(aRect);
                 aRect.Left()++;
                 aRect.Top()++;
                 aRect.Right()--;
                 aRect.Bottom()--;
-                DrawRect( aRect );
+                rRenderContext.DrawRect(aRect);
             }
         }
         else
         {
-            if ( bDrawSel )
+            if (bDrawSel)
             {
-                SetLineColor( mbBlackSel ? Color( COL_BLACK ) : aDoubleColor );
-                DrawRect( aRect );
+                rRenderContext.SetLineColor(mbBlackSel ? Color(COL_BLACK) : aDoubleColor);
+                rRenderContext.DrawRect(aRect);
             }
-            if ( mbDoubleSel )
+            if (mbDoubleSel)
             {
                 aRect.Left()++;
                 aRect.Top()++;
                 aRect.Right()--;
                 aRect.Bottom()--;
-                if ( bDrawSel )
-                    DrawRect( aRect );
+                if (bDrawSel)
+                    rRenderContext.DrawRect(aRect);
             }
             aRect.Left()++;
             aRect.Top()++;
@@ -852,33 +859,33 @@ void ValueSet::ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool
             aRect.Top()++;
             aRect.Right()--;
             aRect.Bottom()--;
-            if ( bDrawSel )
-                DrawRect( aRect );
-            if ( mbDoubleSel )
+            if (bDrawSel)
+                rRenderContext.DrawRect(aRect);
+            if (mbDoubleSel)
             {
                 aRect.Left()++;
                 aRect.Top()++;
                 aRect.Right()--;
                 aRect.Bottom()--;
-                if ( bDrawSel )
-                    DrawRect( aRect );
+                if (bDrawSel)
+                    rRenderContext.DrawRect(aRect);
             }
 
-            if ( bDrawSel )
+            if (bDrawSel)
             {
-                SetLineColor( mbBlackSel ? Color( COL_WHITE ) : aSingleColor );
+                rRenderContext.SetLineColor(mbBlackSel ? Color(COL_WHITE) : aSingleColor);
             }
             else
             {
-                SetLineColor( Color( COL_LIGHTGRAY ) );
+                rRenderContext.SetLineColor(Color(COL_LIGHTGRAY));
             }
-            DrawRect( aRect2 );
+            rRenderContext.DrawRect(aRect2);
 
-            if ( bFocus )
-                ShowFocus( aRect2 );
+            if (bFocus)
+                ShowFocus(aRect2);
         }
 
-        ImplDrawItemText(pItem->maText);
+        ImplDrawItemText(rRenderContext, pItem->maText);
     }
 }
 
@@ -924,96 +931,96 @@ void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, bool bIsSelection )
 
         // remove the old selection and draw the new one
         ImplHideSelect( nOldItem );
-        ImplDrawSelect();
+        Invalidate();
         mbDrawSelection = true;
     }
 }
 
-void ValueSet::ImplDraw()
+void ValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
 {
-    if ( mbFormat )
-        Format();
+    if (mbFormat)
+        Format(rRenderContext);
 
     HideFocus();
 
-    Point   aDefPos;
-    Size    aSize = maVirDev->GetOutputSizePixel();
+    Point aDefPos;
+    Size aSize = maVirDev->GetOutputSizePixel();
 
-    if ( mxScrollBar.get() && mxScrollBar->IsVisible() )
+    if (mxScrollBar.get() && mxScrollBar->IsVisible())
     {
-        Point   aScrPos = mxScrollBar->GetPosPixel();
-        Size    aScrSize = mxScrollBar->GetSizePixel();
-        Point   aTempPos( 0, aScrPos.Y() );
-        Size    aTempSize( aSize.Width(), aScrPos.Y() );
+        Point aScrPos = mxScrollBar->GetPosPixel();
+        Size aScrSize = mxScrollBar->GetSizePixel();
+        Point aTempPos(0, aScrPos.Y());
+        Size aTempSize(aSize.Width(), aScrPos.Y());
 
-        DrawOutDev( aDefPos, aTempSize, aDefPos, aTempSize, *maVirDev.get() );
+        rRenderContext.DrawOutDev(aDefPos, aTempSize, aDefPos, aTempSize, *maVirDev.get());
         aTempSize.Width()   = aScrPos.X() - 1;
         aTempSize.Height()  = aScrSize.Height();
-        DrawOutDev( aTempPos, aTempSize, aTempPos, aTempSize, *maVirDev.get() );
+        rRenderContext.DrawOutDev(aTempPos, aTempSize, aTempPos, aTempSize, *maVirDev.get());
         aTempPos.Y()        = aScrPos.Y() + aScrSize.Height();
         aTempSize.Width()   = aSize.Width();
         aTempSize.Height()  = aSize.Height() - aTempPos.Y();
-        DrawOutDev( aTempPos, aTempSize, aTempPos, aTempSize, *maVirDev.get() );
+        rRenderContext.DrawOutDev(aTempPos, aTempSize, aTempPos, aTempSize, *maVirDev.get());
     }
     else
-        DrawOutDev( aDefPos, aSize, aDefPos, aSize, *maVirDev.get() );
+        rRenderContext.DrawOutDev(aDefPos, aSize, aDefPos, aSize, *maVirDev.get());
 
     // draw parting line to the Namefield
-    if ( GetStyle() & WB_NAMEFIELD )
+    if (GetStyle() & WB_NAMEFIELD)
     {
-        if ( !(GetStyle() & WB_FLATVALUESET) )
+        if (!(GetStyle() & WB_FLATVALUESET))
         {
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            Size aWinSize = GetOutputSizePixel();
-            Point aPos1( NAME_LINE_OFF_X, mnTextOffset+NAME_LINE_OFF_Y );
-            Point aPos2( aWinSize.Width() - (NAME_LINE_OFF_X * 2), mnTextOffset + NAME_LINE_OFF_Y );
-            if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+            const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+            Size aWinSize = rRenderContext.GetOutputSizePixel();
+            Point aPos1(NAME_LINE_OFF_X, mnTextOffset + NAME_LINE_OFF_Y);
+            Point aPos2(aWinSize.Width() - (NAME_LINE_OFF_X * 2), mnTextOffset + NAME_LINE_OFF_Y);
+            if (!(rStyleSettings.GetOptions() & STYLE_OPTION_MONO))
             {
-                SetLineColor( rStyleSettings.GetShadowColor() );
-                DrawLine( aPos1, aPos2 );
+                rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+                rRenderContext.DrawLine(aPos1, aPos2);
                 aPos1.Y()++;
                 aPos2.Y()++;
-                SetLineColor( rStyleSettings.GetLightColor() );
+                rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
             }
             else
-                SetLineColor( rStyleSettings.GetWindowTextColor() );
-            DrawLine( aPos1, aPos2 );
+                rRenderContext.SetLineColor(rStyleSettings.GetWindowTextColor());
+            rRenderContext.DrawLine(aPos1, aPos2);
         }
     }
 
-    ImplDrawSelect();
+    ImplDrawSelect(rRenderContext);
 }
 
-bool ValueSet::ImplScroll( const Point& rPos )
+bool ValueSet::ImplScroll(const Point& rPos)
 {
-    if ( !mbScroll || !maItemListRect.IsInside(rPos) )
+    if (!mbScroll || !maItemListRect.IsInside(rPos))
         return false;
 
-    const long nScrollOffset = (mnItemHeight <= 16) ? SCROLL_OFFSET/2 : SCROLL_OFFSET;
+    const long nScrollOffset = (mnItemHeight <= 16) ? SCROLL_OFFSET / 2 : SCROLL_OFFSET;
     bool bScroll = false;
 
-    if ( rPos.Y() <= maItemListRect.Top()+nScrollOffset )
+    if (rPos.Y() <= maItemListRect.Top() + nScrollOffset)
     {
-        if ( mnFirstLine > 0 )
+        if (mnFirstLine > 0)
         {
             --mnFirstLine;
             bScroll = true;
         }
     }
-    else if ( rPos.Y() >= maItemListRect.Bottom()-nScrollOffset )
+    else if (rPos.Y() >= maItemListRect.Bottom() - nScrollOffset)
     {
-        if ( mnFirstLine < static_cast<sal_uInt16>(mnLines-mnVisLines) )
+        if (mnFirstLine < static_cast<sal_uInt16>(mnLines - mnVisLines))
         {
             ++mnFirstLine;
             bScroll = true;
         }
     }
 
-    if ( !bScroll )
+    if (!bScroll)
         return false;
 
     mbFormat = true;
-    ImplDraw();
+    Invalidate();
     return true;
 }
 
@@ -1109,7 +1116,7 @@ IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar )
     {
         mnFirstLine = nNewFirstLine;
         mbFormat = true;
-        ImplDraw();
+        Invalidate();
     }
     return 0;
 }
@@ -1253,8 +1260,8 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
         return;
     }
 
-    if ( mbFormat )
-        Format();
+    if (mbFormat)
+        Invalidate();
 
     --nLastItem;
 
@@ -1414,30 +1421,30 @@ void ValueSet::Command( const CommandEvent& rCommandEvent )
     Control::Command( rCommandEvent );
 }
 
-void ValueSet::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void ValueSet::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    if ( GetStyle() & WB_FLATVALUESET )
+    if (GetStyle() & WB_FLATVALUESET)
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        SetLineColor();
-        SetFillColor( rStyleSettings.GetFaceColor() );
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
         long nOffY = maVirDev->GetOutputSizePixel().Height();
-        Size aWinSize = GetOutputSizePixel();
-        DrawRect( Rectangle( Point( 0, nOffY ), Point( aWinSize.Width(), aWinSize.Height() ) ) );
+        Size aWinSize = rRenderContext.GetOutputSizePixel();
+        rRenderContext.DrawRect(Rectangle(Point(0, nOffY ), Point( aWinSize.Width(), aWinSize.Height())));
     }
 
-    ImplDraw();
+    ImplDraw(rRenderContext);
 }
 
 void ValueSet::GetFocus()
 {
     OSL_TRACE ("value set getting focus");
-    ImplDrawSelect();
+    Invalidate();
     Control::GetFocus();
 
     // Tell the accessible object that we got the focus.
-    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( false ) );
-    if( pAcc )
+    ValueSetAcc* pAcc = ValueSetAcc::getImplementation(GetAccessible(false));
+    if (pAcc)
         pAcc->GetFocus();
 }
 
@@ -1487,48 +1494,47 @@ void ValueSet::RequestHelp( const HelpEvent& rHelpEvent )
     Control::RequestHelp( rHelpEvent );
 }
 
-void ValueSet::StateChanged( StateChangedType nType )
+void ValueSet::StateChanged(StateChangedType nType)
 {
-    Control::StateChanged( nType );
+    Control::StateChanged(nType);
 
-    if ( nType == StateChangedType::InitShow )
+    if (nType == StateChangedType::InitShow)
     {
-        if ( mbFormat )
-            Format();
-    }
-    else if ( nType == StateChangedType::UpdateMode )
-    {
-        if ( IsReallyVisible() && IsUpdateMode() )
+        if (mbFormat)
             Invalidate();
     }
-    else if ( nType == StateChangedType::Text )
+    else if (nType == StateChangedType::UpdateMode)
     {
-        if ( mpNoneItem.get() && !mbFormat && IsReallyVisible() && IsUpdateMode() )
+        if (IsReallyVisible() && IsUpdateMode())
+            Invalidate();
+    }
+    else if (nType == StateChangedType::Text)
+    {
+        if (mpNoneItem.get() && !mbFormat && IsReallyVisible() && IsUpdateMode())
         {
-            ImplFormatItem(mpNoneItem.get(), maNoneItemRect);
-            Invalidate( maNoneItemRect );
+            Invalidate(maNoneItemRect);
         }
     }
-    else if ( (nType == StateChangedType::Zoom) ||
-              (nType == StateChangedType::ControlFont) )
+    else if ((nType == StateChangedType::Zoom) ||
+             (nType == StateChangedType::ControlFont))
     {
-        ImplInitSettings( true, false, false );
+        ImplInitSettings(true, false, false);
         Invalidate();
     }
-    else if ( nType == StateChangedType::ControlForeground )
+    else if (nType == StateChangedType::ControlForeground)
     {
-        ImplInitSettings( false, true, false );
+        ImplInitSettings(false, true, false);
         Invalidate();
     }
-    else if ( nType == StateChangedType::ControlBackground )
+    else if (nType == StateChangedType::ControlBackground)
     {
-        ImplInitSettings( false, false, true );
+        ImplInitSettings(false, false, true);
         Invalidate();
     }
-    else if ( (nType == StateChangedType::Style) || (nType == StateChangedType::Enable) )
+    else if ((nType == StateChangedType::Style) || (nType == StateChangedType::Enable))
     {
         mbFormat = true;
-        ImplInitSettings( false, false, true );
+        ImplInitSettings(false, false, true);
         Invalidate();
     }
 }
@@ -1836,13 +1842,13 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             {
                 // redraw everything if the visible area has changed
                 mbFormat = true;
-                ImplDraw();
+                Invalidate();
             }
             else
             {
                 // remove old selection and draw the new one
                 ImplHideSelect( nOldItem );
-                ImplDrawSelect();
+                Invalidate();
             }
         }
 
@@ -1920,8 +1926,8 @@ void ValueSet::SetNoSelection()
     mbHighlight     = false;
     mbSelection     = false;
 
-    if ( IsReallyVisible() && IsUpdateMode() )
-        ImplDraw();
+    if (IsReallyVisible() && IsUpdateMode())
+        Invalidate();
 }
 
 void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
@@ -1938,8 +1944,7 @@ void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
     {
         const Rectangle aRect = ImplGetItemRect(nPos);
-        ImplFormatItem( pItem, aRect );
-        Invalidate( aRect );
+        Invalidate(aRect);
     }
     else
         mbFormat = true;
@@ -1969,7 +1974,6 @@ void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
     if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
     {
         const Rectangle aRect = ImplGetItemRect(nPos);
-        ImplFormatItem( pItem, aRect );
         Invalidate( aRect );
     }
     else
@@ -2001,8 +2005,7 @@ void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
         if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
         {
             const Rectangle aRect = ImplGetItemRect(nPos);
-            ImplFormatItem( pItem, aRect );
-            Invalidate( aRect );
+            Invalidate(aRect);
         }
         else
             mbFormat = true;
@@ -2039,15 +2042,15 @@ void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
 
     pItem->maText = rText;
 
-    if ( !mbFormat && IsReallyVisible() && IsUpdateMode() )
+    if (!mbFormat && IsReallyVisible() && IsUpdateMode())
     {
         sal_uInt16 nTempId = mnSelItemId;
 
-        if ( mbHighlight )
+        if (mbHighlight)
             nTempId = mnHighItemId;
 
-        if ( nTempId == nItemId )
-            ImplDrawItemText(pItem->maText);
+        if (nTempId == nItemId)
+            Invalidate();
     }
 
     if (ImplHasAccessibleListeners())
@@ -2072,8 +2075,8 @@ void ValueSet::SetColor( const Color& rColor )
 {
     maColor  = rColor;
     mbFormat = true;
-    if ( IsReallyVisible() && IsUpdateMode() )
-        ImplDraw();
+    if (IsReallyVisible() && IsUpdateMode())
+        Invalidate();
 }
 
 void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
@@ -2107,6 +2110,11 @@ void ValueSet::EndSelection()
         mbHighlight = false;
     }
     mbSelection = false;
+}
+
+void ValueSet::SetFormat(bool bFormat)
+{
+    mbFormat = bFormat;
 }
 
 bool ValueSet::StartDrag( const CommandEvent& rEvent, vcl::Region& rRegion )
@@ -2254,9 +2262,9 @@ Size ValueSet::CalcItemSizePixel( const Size& rItemSize, bool bOut ) const
 
 long ValueSet::GetScrollWidth() const
 {
-    if ( GetStyle() & WB_VSCROLL )
+    if (GetStyle() & WB_VSCROLL)
     {
-        const_cast<ValueSet*>(this)->ImplInitScrollBar();
+        const_cast<ValueSet*>(this)->Invalidate();
         return mxScrollBar->GetSizePixel().Width() + SCRBAR_OFFSET;
     }
     else

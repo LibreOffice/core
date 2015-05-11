@@ -66,7 +66,8 @@ PageColumnControl::PageColumnControl(
     mpColumnValueSet->SetSelectHdl( LINK(this, PageColumnControl,ImplColumnHdl ) );
     mpColumnValueSet->Show();
     mpColumnValueSet->SelectItem( mnColumnType );
-    mpColumnValueSet->Format();
+    mpColumnValueSet->SetFormat();
+    mpColumnValueSet->Invalidate();
     mpColumnValueSet->StartSelection();
 
     maMoreButton->SetClickHdl( LINK( this, PageColumnControl, MoreButtonClickHdl_Impl ) );

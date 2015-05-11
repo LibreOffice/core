@@ -265,7 +265,8 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
         mbVSFocus = false;
         maVSWidth->SetSelItem(0);
     }
-    maVSWidth->Format();
+    maVSWidth->SetFormat();
+    maVSWidth->Invalidate();
     maVSWidth->StartSelection();
 }
 
@@ -304,7 +305,8 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             else
             {
                 maVSWidth->SetNoSelection();     //add , set no selection and keep the last select item
-                maVSWidth->Format();
+                maVSWidth->SetFormat();
+                maVSWidth->Invalidate();
                 Invalidate();
                 maVSWidth->StartSelection();
             }
@@ -326,7 +328,8 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
         if(maVSWidth->GetSelItem())
         {
             maVSWidth->SetSelItem(0);
-            maVSWidth->Format();
+            maVSWidth->SetFormat();
+            maVSWidth->Invalidate();
             Invalidate();
             maVSWidth->StartSelection();
         }
