@@ -485,7 +485,7 @@ inline uno_Sequence * icopyConstructSequence(
                     for ( sal_Int32 nPos = nElements; nPos--; )
                     {
                         reinterpret_cast<void **>(pElements)[nPos] = 0;
-                        if (((void **)pSourceElements)[nPos])
+                        if (pSourceElements[nPos])
                         {
                             (*mapping->mapInterface)(
                                 mapping, reinterpret_cast<void **>(pElements) + nPos,
