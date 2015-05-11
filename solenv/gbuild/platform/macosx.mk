@@ -44,18 +44,18 @@ gb_CFLAGS := \
 	$(gb_CFLAGS_COMMON) \
 	-fPIC \
 	-fno-strict-aliasing \
-    #-Wshadow \ break in compiler headers already
+	-Wshadow
 
 gb_CXXFLAGS := \
 	$(gb_CXXFLAGS_COMMON) \
 	-fPIC \
 	-Woverloaded-virtual \
+	-Wshadow \
 	-Wno-ctor-dtor-privacy \
 	-fno-strict-aliasing \
 	-fsigned-char \
 	$(CXXFLAGS_CXX11)
 
-	#-Wshadow \ break in compiler headers already
 	#-fsigned-char \ might be removed?
 
 # these are to get g++ to switch to Objective-C++ mode
