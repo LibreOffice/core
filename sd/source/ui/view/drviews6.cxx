@@ -289,7 +289,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
             if ( pObj && !mpDrawView->IsTextEdit() )
             {
-                SdrGrafObj* pNewObj = (SdrGrafObj*) pObj->Clone();
+                SdrGrafObj* pNewObj = pObj->Clone();
                 bool bCont = true;
 
                 if( pNewObj->IsLinkedGraphic() )

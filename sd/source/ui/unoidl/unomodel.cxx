@@ -1082,7 +1082,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     if (pShape)
     {
         xRet.clear();
-        new SdXShape( pShape, (SdXImpressDocument*)this );
+        new SdXShape( pShape, this );
         xRet = xShape;
         xShape.clear();
     }

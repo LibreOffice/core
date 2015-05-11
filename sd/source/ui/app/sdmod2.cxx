@@ -554,7 +554,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     SdOptions* pOptions = GetSdOptions(eDocType);
     // Grid
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS ,
-                            false, (const SfxPoolItem**) &pItem ))
+                            false, &pItem ))
     {
         const SdOptionsGridItem* pGridItem = static_cast<const SdOptionsGridItem*>(pItem);
         pGridItem->SetOptions( pOptions );

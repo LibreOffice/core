@@ -454,7 +454,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
         SdDrawDocument* pDoc = pDocShell->GetDoc();
         if( !maTlbObjects->IsEqualToDoc( pDoc ) )
         {
-            SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc; // const as const can...
+            SdDrawDocument* pNonConstDoc = pDoc; // const as const can...
             ::sd::DrawDocShell* pNCDocShell = pNonConstDoc->GetDocSh();
             OUString aDocName = pNCDocShell->GetMedium()->GetName();
             maTlbObjects->Clear();

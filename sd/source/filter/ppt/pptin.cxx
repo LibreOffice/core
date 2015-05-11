@@ -2248,7 +2248,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 if ( pTextObj->GetInstance() == TSS_TYPE_NOTES )
                     pOutl = GetDrawOutliner( pText );
                 if ( !aPresentationText.isEmpty() )
-                    pPage->SetObjText( (SdrTextObj*)pText, pOutl, ePresKind, aPresentationText );
+                    pPage->SetObjText( pText, pOutl, ePresKind, aPresentationText );
 
                 if ( pPage->GetPageKind() != PK_NOTES && pPage->GetPageKind() != PK_HANDOUT)
                 {

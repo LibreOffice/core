@@ -802,7 +802,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
                 for( size_t nObject = 0; nObject < pObjList->GetObjCount(); ++nObject )
                 {
-                    SdrObject* pSnapShot = (SdrObject*) pObjList->GetObj( nObject );
+                    SdrObject* pSnapShot = pObjList->GetObj( nObject );
 
                     BitmapEx *const pBitmapEx = new BitmapEx(
                         SdrExchangeView::GetObjGraphic(

@@ -214,9 +214,9 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             while( !bDifferent )
             {
                 bDifferent = true;
-                for( pCustomShow = (SdCustomShow*) pCustomShowList->First();
+                for( pCustomShow = pCustomShowList->First();
                      pCustomShow != NULL && bDifferent;
-                     pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
+                     pCustomShow = pCustomShowList->Next() )
                 {
                     if( aStr == pCustomShow->GetName() )
                         bDifferent = false;

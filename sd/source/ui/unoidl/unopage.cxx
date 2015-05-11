@@ -1519,7 +1519,7 @@ Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
 Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
     throw(uno::RuntimeException, std::exception)
 {
-    return new SdPageLinkTargets( (SdGenericDrawPage*)this );
+    return new SdPageLinkTargets( this );
 }
 
 void SdGenericDrawPage::setBackground( const Any& ) throw(lang::IllegalArgumentException)
@@ -2393,7 +2393,7 @@ void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& 
 
             SvxFmDrawPage::mpPage->SetSize( pSdPage->GetSize() );
             SvxFmDrawPage::mpPage->SetOrientation( pSdPage->GetOrientation() );
-            static_cast<SdPage*>(SvxFmDrawPage::mpPage)->SetLayoutName( ( (SdPage*)pSdPage )->GetLayoutName() );
+            static_cast<SdPage*>(SvxFmDrawPage::mpPage)->SetLayoutName( pSdPage->GetLayoutName() );
 
             // set notes master also
             SdPage* pNotesPage = GetModel()->GetDoc()->GetSdPage( (SvxFmDrawPage::mpPage->GetPageNum()-1)>>1, PK_NOTES );
@@ -2401,7 +2401,7 @@ void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& 
             pNotesPage->TRG_ClearMasterPage();
             sal_uInt16 nNum = (SvxFmDrawPage::mpPage->TRG_GetMasterPage()).GetPageNum() + 1;
             pNotesPage->TRG_SetMasterPage(*SvxFmDrawPage::mpPage->GetModel()->GetMasterPage(nNum));
-            pNotesPage->SetLayoutName( ( (SdPage*)pSdPage )->GetLayoutName() );
+            pNotesPage->SetLayoutName( pSdPage->GetLayoutName() );
 
             GetModel()->SetModified();
         }
@@ -2925,7 +2925,7 @@ void SdMasterPage::setBackground( const Any& rValue )
 
             // if we find the background style, copy the set to the background
             SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(SvxFmDrawPage::mpPage->GetModel());
-            SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
+            SfxStyleSheetBasePool* pSSPool = pDoc->GetStyleSheetPool();
             if(pSSPool)
             {
                 OUString aLayoutName( static_cast< SdPage* >( SvxFmDrawPage::mpPage )->GetLayoutName() );
@@ -2969,7 +2969,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
         else
         {
             SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(SvxFmDrawPage::mpPage->GetModel());
-            SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
+            SfxStyleSheetBasePool* pSSPool = pDoc->GetStyleSheetPool();
             if(pSSPool)
             {
                 OUString aLayoutName( static_cast< SdPage* >(SvxFmDrawPage::mpPage)->GetLayoutName() );

@@ -185,7 +185,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
                     }
                     else
                     {
-                        OutlinerParaObject* pOPO = ((SdrTextObj*)pObj)->GetOutlinerParaObject();
+                        OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
 
                         if( pOPO )
                             pOPO->SetStyleSheets( i,  aFullName, SD_STYLE_FAMILY_MASTERPAGE );
@@ -217,7 +217,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
                 ++iterOldOut;
             }
 
-            OutlinerParaObject* pOPO = ((SdrTextObj*)pObj)->GetOutlinerParaObject();
+            OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
             if ( bReplaceStyleSheets && pOPO )
             {
                 boost::ptr_vector<StyleReplaceData>::const_iterator it = aReplList.begin();

@@ -1065,7 +1065,7 @@ registerBluez5Profile(DBusConnection* pConnection, std::vector<Communicator*>* p
         bSuccess = false;
         SAL_WARN("sdremote.bluetooth",
                  "Failed to register our Profile1 with bluez ProfileManager "
-                 << (const char *)(aError.message ? aError.message : "<null>"));
+                 << (aError.message ? aError.message : "<null>"));
     }
 
     dbus_error_free(&aError);

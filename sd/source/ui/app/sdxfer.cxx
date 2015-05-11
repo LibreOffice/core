@@ -723,7 +723,7 @@ void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmar
 
             if( pPage )
             {
-                ( (SdrMarkView*) mpSdViewIntern )->MarkAllObj( (SdrPageView*) mpSdViewIntern->ShowSdrPage( pPage ) );
+                ( (SdrMarkView*) mpSdViewIntern )->MarkAllObj( mpSdViewIntern->ShowSdrPage( pPage ) );
             }
         }
 

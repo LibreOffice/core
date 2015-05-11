@@ -805,7 +805,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         ::sd::PresentationViewShell* pPresViewSh = static_cast< ::sd::PresentationViewShell*>(mpViewShell);
         SdPage* pCurrPge = pPresViewSh->getCurrentPage();
         SdDrawDocument* pDoc = pPresViewSh->GetDoc();
-        SdPage* pNotesPge = (SdPage*)pDoc->GetSdPage((pCurrPge->GetPageNum()-1)>>1, PK_NOTES);
+        SdPage* pNotesPge = pDoc->GetSdPage((pCurrPge->GetPageNum()-1)>>1, PK_NOTES);
         if (pNotesPge)
         {
             SdrObject* pNotesObj = pNotesPge->GetPresObj(PRESOBJ_NOTES);

@@ -301,11 +301,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     // try to get own transfer data
     if( pImplementation )
     {
-        if( SD_MOD()->pTransferClip == (SdTransferable*) pImplementation )
+        if( SD_MOD()->pTransferClip == pImplementation )
             pOwnData = SD_MOD()->pTransferClip;
-        else if( SD_MOD()->pTransferDrag == (SdTransferable*) pImplementation )
+        else if( SD_MOD()->pTransferDrag == pImplementation )
             pOwnData = SD_MOD()->pTransferDrag;
-        else if( SD_MOD()->pTransferSelection == (SdTransferable*) pImplementation )
+        else if( SD_MOD()->pTransferSelection == pImplementation )
             pOwnData = SD_MOD()->pTransferSelection;
     }
 
@@ -625,7 +625,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         else
         {
             SdDrawDocument* pWorkModel = const_cast<SdDrawDocument*>(pOwnData->GetWorkDocument());
-            SdPage*         pWorkPage = (SdPage*) pWorkModel->GetSdPage( 0, PK_STANDARD );
+            SdPage*         pWorkPage = pWorkModel->GetSdPage( 0, PK_STANDARD );
 
             pWorkPage->SetRectsDirty();
 
@@ -863,8 +863,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 SfxMedium *pMedium = new SfxMedium( xStore, OUString() );
                 if( xDocShRef->DoLoad( pMedium ) )
                 {
-                    SdDrawDocument* pModel = (SdDrawDocument*) xDocShRef->GetDoc();
-                    SdPage*         pWorkPage = (SdPage*) pModel->GetSdPage( 0, PK_STANDARD );
+                    SdDrawDocument* pModel = xDocShRef->GetDoc();
+                    SdPage*         pWorkPage = pModel->GetSdPage( 0, PK_STANDARD );
 
                     pWorkPage->SetRectsDirty();
 

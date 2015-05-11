@@ -659,7 +659,7 @@ void SdPageObjsTLB::AddShapeList (
                     if( pSdNavigatorWin )
                         pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
                     if(pSdDrawDocShell)
-                        bMarked = pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                        bMarked = pSdDrawDocShell->IsMarked(pObj);
                     if(pNewEntry)
                     {
                         if(bMarked)
@@ -693,7 +693,7 @@ void SdPageObjsTLB::AddShapeList (
                     if( pSdNavigatorWin )
                         pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
                     if(pSdDrawDocShell)
-                        bMarked = pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                        bMarked = pSdDrawDocShell->IsMarked(pObj);
                     if(pNewEntry)
                     {
                         if(bMarked)
@@ -742,7 +742,7 @@ void SdPageObjsTLB::AddShapeList (
                     if( pSdNavigatorWin )
                         pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
                     if(pSdDrawDocShell)
-                        bMarked = pSdDrawDocShell->IsMarked((SdrObject*)pObj);
+                        bMarked = pSdDrawDocShell->IsMarked(pObj);
                     if(pNewEntry)
                     {
                         if(bMarked)

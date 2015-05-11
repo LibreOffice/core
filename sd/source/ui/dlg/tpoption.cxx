@@ -329,7 +329,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     // the metric is set)
     const SfxPoolItem* pAttr = NULL;
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC , false,
-                                    (const SfxPoolItem**)&pAttr ))
+                                    &pAttr ))
     {
         const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 

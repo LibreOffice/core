@@ -95,9 +95,9 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
         sal_uInt16 nPosToSelect = (sal_uInt16) pCustomShowList->GetCurPos();
         SdCustomShow* pCustomShow;
         // fill Listbox with CustomShows
-        for( pCustomShow = (SdCustomShow*) pCustomShowList->First();
+        for( pCustomShow = pCustomShowList->First();
              pCustomShow != NULL;
-             pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
+             pCustomShow = pCustomShowList->Next() )
         {
             aLbCustomshow->InsertEntry( pCustomShow->GetName() );
         }

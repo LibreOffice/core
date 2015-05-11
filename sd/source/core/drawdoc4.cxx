@@ -887,15 +887,15 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 
         sal_uInt16 nOldOutlMode = pOutl->GetMode();
         sal_uInt16 nOutlMode = OUTLINERMODE_TEXTOBJECT;
-        if (((SdrTextObj*) pObj)->GetObjInventor() == SdrInventor &&
-            ((SdrTextObj*) pObj)->GetObjIdentifier() == OBJ_OUTLINETEXT)
+        if (pObj->GetObjInventor() == SdrInventor &&
+            pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
         {
             nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
         }
         pOutl->Init( nOutlMode );
 
         // Put text into the outliner
-        pOutl->SetText(*((SdrTextObj*) pObj)->GetOutlinerParaObject());
+        pOutl->SetText(*pObj->GetOutlinerParaObject());
 
         if (!mpOnlineSearchItem || pOutl->HasText(*mpOnlineSearchItem))
         {
@@ -913,7 +913,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
                     pModel->setLock(true);
                 }
                 // taking text from the outliner
-                ((SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );
+                pObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
 
                 pObj->BroadcastObjectChange();
                 if ( pModel )

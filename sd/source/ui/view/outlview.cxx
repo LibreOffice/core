@@ -436,7 +436,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     **********************************************************************/
 
     // this page is exemplary
-    SdPage* pExample = (SdPage*)mrDoc.GetSdPage((sal_uInt16)nExample, PK_STANDARD);
+    SdPage* pExample = mrDoc.GetSdPage((sal_uInt16)nExample, PK_STANDARD);
     SdPage* pPage = mrDoc.AllocSdPage(false);
 
     pPage->SetLayoutName(pExample->GetLayoutName());
@@ -473,7 +473,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     /**********************************************************************
     |* now the notes page
     \*********************************************************************/
-    pExample = (SdPage*)mrDoc.GetSdPage((sal_uInt16)nExample, PK_NOTES);
+    pExample = mrDoc.GetSdPage((sal_uInt16)nExample, PK_NOTES);
     SdPage* pNotesPage = mrDoc.AllocSdPage(false);
 
     pNotesPage->SetLayoutName(pExample->GetLayoutName());
@@ -708,7 +708,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 
         if(nPos >= 0)
         {
-            SdPage*pPage = (SdPage*)mrDoc.GetSdPage( (sal_uInt16) nPos, PK_STANDARD);
+            SdPage*pPage = mrDoc.GetSdPage( (sal_uInt16) nPos, PK_STANDARD);
 
             if(pPage && pPage->GetPresObj(PRESOBJ_TEXT))
                 pOutliner->SetDepth( pPara, 0 );
@@ -728,7 +728,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 
     if( nPos >= 0 )
     {
-        SdPage* pPage = (SdPage*) mrDoc.GetSdPage( (sal_uInt16) nPos, PK_STANDARD );
+        SdPage* pPage = mrDoc.GetSdPage( (sal_uInt16) nPos, PK_STANDARD );
 
         if( pPage )
         {
@@ -1091,7 +1091,7 @@ void OutlineView::FillOutliner()
     // fill outliner with paragraphs from slides title & (outlines|subtitles)
     for (sal_uInt16 nPage = 0; nPage < nPageCount; nPage++)
     {
-        SdPage*     pPage = (SdPage*)mrDoc.GetSdPage(nPage, PK_STANDARD);
+        SdPage*     pPage = mrDoc.GetSdPage(nPage, PK_STANDARD);
         Paragraph * pPara = NULL;
 
         // take text from title shape

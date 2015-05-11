@@ -2491,7 +2491,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         if( !aString.isEmpty() )
             pOutl->SetText( aString, pOutl->GetParagraph( 0 ) );
 
-        ( (SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );
+        pObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
 
         if (!pOutliner)
         {
