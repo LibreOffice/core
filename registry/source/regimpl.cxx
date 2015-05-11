@@ -1055,7 +1055,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
     }
 
     RegError _ret = RegError::NO_ERROR;
-    sal_uInt8   type = *((sal_uInt8*)pBuffer);
+    sal_uInt8   type = *pBuffer;
     valueType = (RegValueType)type;
     readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
     rtl_freeMemory(pBuffer);
@@ -1148,7 +1148,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
     if (!rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, rwBytes) &&
         (rwBytes == VALUE_HEADERSIZE))
     {
-        sal_uInt8 type = *((sal_uInt8*)pBuffer);
+        sal_uInt8 type = *pBuffer;
         valueType = (RegValueType)type;
         readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
         rtl_freeMemory(pBuffer);
@@ -1490,7 +1490,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
         return RegError::INVALID_VALUE;
     }
 
-    sal_uInt8 type = *((sal_uInt8*)pBuffer);
+    sal_uInt8 type = *pBuffer;
     valueType = (RegValueType)type;
     readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
 

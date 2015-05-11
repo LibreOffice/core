@@ -259,7 +259,7 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
     }
 
     sal_uInt32  size;
-    sal_uInt8   type = *((sal_uInt8*)pBuffer);
+    sal_uInt8   type = *pBuffer;
     readUINT32(pBuffer+VALUE_TYPEOFFSET, size);
 
     *pValueType = (RegValueType)type;
@@ -595,7 +595,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
         return RegError::INVALID_VALUE;
     }
 
-    sal_uInt8   type = *((sal_uInt8*)pBuffer);
+    sal_uInt8   type = *pBuffer;
     valueType = (RegValueType)type;
     readUINT32(pBuffer+VALUE_TYPEOFFSET, valueSize);
 
@@ -695,7 +695,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
         return RegError::INVALID_VALUE;
     }
 
-    sal_uInt8   type = *((sal_uInt8*)pBuffer);
+    sal_uInt8   type = *pBuffer;
     valueType = (RegValueType)type;
 
     if (valueType != RegValueType::LONGLIST)
@@ -809,7 +809,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
         return RegError::INVALID_VALUE;
     }
 
-    sal_uInt8   type = *((sal_uInt8*)pBuffer);
+    sal_uInt8   type = *pBuffer;
     valueType = (RegValueType)type;
 
     if (valueType != RegValueType::STRINGLIST)
@@ -915,7 +915,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
         return RegError::INVALID_VALUE;
     }
 
-    sal_uInt8   type = *((sal_uInt8*)pBuffer);
+    sal_uInt8   type = *pBuffer;
     valueType = (RegValueType)type;
 
     if (valueType != RegValueType::UNICODELIST)
