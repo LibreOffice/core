@@ -44,8 +44,8 @@ using ::com::sun::star::accessibility::XAccessibleSelection;
 using namespace ::sw::access;
 
 SwAccessibleSelectionHelper::SwAccessibleSelectionHelper(
-    SwAccessibleContext& rCtxt ) :
-        rContext( rCtxt )
+    SwAccessibleContext& rContext ) :
+        m_rContext( rContext )
 {
 }
 
@@ -55,8 +55,8 @@ SwAccessibleSelectionHelper::~SwAccessibleSelectionHelper()
 
 SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
 {
-    OSL_ENSURE( rContext.GetMap() != NULL, "no map?" );
-    SwViewShell* pViewShell = rContext.GetMap()->GetShell();
+    OSL_ENSURE( m_rContext.GetMap() != NULL, "no map?" );
+    SwViewShell* pViewShell = m_rContext.GetMap()->GetShell();
     OSL_ENSURE( pViewShell != NULL,
                 "No view shell? Then what are you looking at?" );
 
@@ -72,7 +72,7 @@ SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
 void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
         throw ( lang::IndexOutOfBoundsException )
 {
-    Reference < XAccessibleContext > xThis( &rContext );
+    Reference < XAccessibleContext > xThis( &m_rContext );
     Reference < XAccessibleSelection >xSelThis( xThis, UNO_QUERY );
     lang::IndexOutOfBoundsException aExcept(
                 OUString( "index out of bounds" ),
@@ -89,7 +89,7 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
     SolarMutexGuard aGuard;
 
     // Get the respective child as SwFrm (also do index checking), ...
-    const SwAccessibleChild aChild = rContext.GetChild( *(rContext.GetMap()),
+    const SwAccessibleChild aChild = m_rContext.GetChild( *(m_rContext.GetMap()),
                                                         nChildIndex );
     if( !aChild.IsValid() )
         throwIndexOutOfBoundsException();
@@ -101,7 +101,7 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
     {
         const SdrObject *pObj = aChild.GetDrawObject();
         if( pObj )
-            rContext.Select( const_cast< SdrObject *>( pObj ), 0==aChild.GetSwFrm());
+            m_rContext.Select( const_cast< SdrObject *>( pObj ), 0==aChild.GetSwFrm());
     }
     // no frame shell, or no frame, or no fly frame -> can't select
 }
@@ -149,7 +149,7 @@ bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     SolarMutexGuard aGuard;
 
     // Get the respective child as SwFrm (also do index checking), ...
-    const SwAccessibleChild aChild = rContext.GetChild( *(rContext.GetMap()),
+    const SwAccessibleChild aChild = m_rContext.GetChild( *(m_rContext.GetMap()),
                                                         nChildIndex );
     if( !aChild.IsValid() )
         throwIndexOutOfBoundsException();
@@ -170,7 +170,7 @@ bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
         //If the SwFrmOrObj is not selected directly in the UI, we should check whether it is selected in the selection cursor.
         if( !bRet )
         {
-            if( lcl_getSelectedState( aChild, &rContext, rContext.GetMap() ) )
+            if( lcl_getSelectedState( aChild, &m_rContext, m_rContext.GetMap() ) )
                 bRet = true;
         }
     }
@@ -190,7 +190,7 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     if( pFEShell )
     {
         ::std::list< SwAccessibleChild > aChildren;
-        rContext.GetChildren( *(rContext.GetMap()), aChildren );
+        m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
 
         ::std::list< SwAccessibleChild >::const_iterator aIter = aChildren.begin();
         ::std::list< SwAccessibleChild >::const_iterator aEndIter = aChildren.end();
@@ -201,7 +201,7 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
             const SwFrm* pFrm = rChild.GetSwFrm();
             if( pObj && !(pFrm != 0 && pFEShell->IsObjSelected()) )
             {
-                rContext.Select( const_cast< SdrObject *>( pObj ), 0==pFrm );
+                m_rContext.Select( const_cast< SdrObject *>( pObj ), 0==pFrm );
                 if( pFrm )
                     break;
             }
@@ -232,7 +232,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
             if( nSelObjs > 0 )
             {
                 ::std::list< SwAccessibleChild > aChildren;
-                rContext.GetChildren( *(rContext.GetMap()), aChildren );
+                m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
 
                 ::std::list< SwAccessibleChild >::const_iterator aIter =
                     aChildren.begin();
@@ -242,8 +242,8 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                 {
                     const SwAccessibleChild& rChild = *aIter;
                     if( rChild.GetDrawObject() && !rChild.GetSwFrm() &&
-                        SwAccessibleFrame::GetParent(rChild, rContext.IsInPagePreview())
-                           == rContext.GetFrm() &&
+                        SwAccessibleFrame::GetParent(rChild, m_rContext.IsInPagePreview())
+                           == m_rContext.GetFrm() &&
                         pFEShell->IsObjSelected( *rChild.GetDrawObject() ) )
                     {
                         nCount++;
@@ -257,7 +257,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
         if( nCount == 0 )
         {
             ::std::list< SwAccessibleChild > aChildren;
-            rContext.GetChildren( *(rContext.GetMap()), aChildren );
+            m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
             ::std::list< SwAccessibleChild >::const_iterator aIter =
                 aChildren.begin();
             ::std::list< SwAccessibleChild >::const_iterator aEndIter =
@@ -265,7 +265,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
             while( aIter != aEndIter )
             {
                 const SwAccessibleChild& aChild = *aIter;
-                if( lcl_getSelectedState( aChild, &rContext, rContext.GetMap() ) )
+                if( lcl_getSelectedState( aChild, &m_rContext, m_rContext.GetMap() ) )
                     nCount++;
                 ++aIter;
             }
@@ -295,7 +295,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     {
         if( 0 == nSelectedChildIndex )
         {
-            if(SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrm), rContext.IsInPagePreview()) == rContext.GetFrm() )
+            if(SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrm), m_rContext.IsInPagePreview()) == m_rContext.GetFrm() )
             {
                 aChild = pFlyFrm;
             }
@@ -307,7 +307,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
                     const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
                     if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
                     {
-                        const SwFrm  *pParaFrm =  SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrm), rContext.IsInPagePreview() );
+                        const SwFrm  *pParaFrm =  SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrm), m_rContext.IsInPagePreview() );
                         aChild  = pParaFrm;
                     }
                 }
@@ -321,7 +321,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
             throwIndexOutOfBoundsException();
 
         ::std::list< SwAccessibleChild > aChildren;
-        rContext.GetChildren( *(rContext.GetMap()), aChildren );
+        m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
 
         ::std::list< SwAccessibleChild >::const_iterator aIter = aChildren.begin();
         ::std::list< SwAccessibleChild >::const_iterator aEndIter = aChildren.end();
@@ -329,8 +329,8 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
         {
             const SwAccessibleChild& rChild = *aIter;
             if( rChild.GetDrawObject() && !rChild.GetSwFrm() &&
-                SwAccessibleFrame::GetParent(rChild, rContext.IsInPagePreview()) ==
-                    rContext.GetFrm() &&
+                SwAccessibleFrame::GetParent(rChild, m_rContext.IsInPagePreview()) ==
+                    m_rContext.GetFrm() &&
                 pFEShell->IsObjSelected( *rChild.GetDrawObject() ) )
             {
                 if( 0 == nSelectedChildIndex )
@@ -345,24 +345,24 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     if( !aChild.IsValid() )
         throwIndexOutOfBoundsException();
 
-    OSL_ENSURE( rContext.GetMap() != NULL, "We need the map." );
+    OSL_ENSURE( m_rContext.GetMap() != NULL, "We need the map." );
     Reference< XAccessible > xChild;
     if( aChild.GetSwFrm() )
     {
         ::rtl::Reference < SwAccessibleContext > xChildImpl(
-                rContext.GetMap()->GetContextImpl( aChild.GetSwFrm(),
+                m_rContext.GetMap()->GetContextImpl( aChild.GetSwFrm(),
                 true ) );
         if( xChildImpl.is() )
         {
-            xChildImpl->SetParent( &rContext );
+            xChildImpl->SetParent( &m_rContext );
             xChild = xChildImpl.get();
         }
     }
     else if ( aChild.GetDrawObject() )
     {
         ::rtl::Reference < ::accessibility::AccessibleShape > xChildImpl(
-                rContext.GetMap()->GetContextImpl( aChild.GetDrawObject(),
-                                          &rContext, true )  );
+                m_rContext.GetMap()->GetContextImpl( aChild.GetDrawObject(),
+                                          &m_rContext, true )  );
         if( xChildImpl.is() )
             xChild = xChildImpl.get();
     }
@@ -378,7 +378,7 @@ void SwAccessibleSelectionHelper::deselectAccessibleChild(
     SolarMutexGuard g;
 
     if( nChildIndex < 0 ||
-        nChildIndex >= rContext.GetChildCount( *(rContext.GetMap()) ) )
+        nChildIndex >= m_rContext.GetChildCount( *(m_rContext.GetMap()) ) )
         throwIndexOutOfBoundsException();
 }
 

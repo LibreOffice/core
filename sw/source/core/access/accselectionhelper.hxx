@@ -28,7 +28,7 @@ class SwFEShell;
 class SwAccessibleSelectionHelper
 {
     /// the context on which this helper works
-    SwAccessibleContext& rContext;
+    SwAccessibleContext& m_rContext;
 
     /// get FE-Shell
     SwFEShell* GetFEShell();
