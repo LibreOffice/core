@@ -50,6 +50,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
@@ -2282,10 +2283,7 @@ PropertyControl::PropertyControl( vcl::Window* pParent )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makePropertyControl( vcl::Window *pParent )
-{
-    return new PropertyControl( pParent );
-}
+VCL_BUILDER_FACTORY(PropertyControl)
 
 PropertyControl::~PropertyControl()
 {

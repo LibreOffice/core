@@ -25,7 +25,7 @@
 #include "res_bmp.hrc"
 
 #include <vcl/svapp.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include "svtools/svlbitm.hxx"
 #include "svtools/treelistentry.hxx"
 
@@ -49,7 +49,7 @@ SdPageListControl::SdPageListControl(
     SetCheckButtonHdl( LINK(this,SdPageListControl,CheckButtonClickHdl) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSdPageListControl(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SdPageListControl)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

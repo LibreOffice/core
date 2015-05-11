@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/filenotation.hxx>
 #include <svtools/urlcontrol.hxx>
 #include <vcl/layout.hxx>
-
+#include <vcl/builderfactory.hxx>
 
 namespace svt
 {
@@ -32,8 +31,9 @@ namespace svt
         DisableHistory();
     }
 
-    extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeOFileURLControl(vcl::Window *pParent, VclBuilder::stringmap &)
+    VCL_BUILDER_DECL_FACTORY(OFileURLControl)
     {
+        (void)rMap;
         WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
                            WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
         OFileURLControl* pListBox = new OFileURLControl(pParent, nWinBits);

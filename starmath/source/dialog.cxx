@@ -23,7 +23,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/ctrltool.hxx>
@@ -256,7 +256,7 @@ void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
                    (GetOutputSize().Height() - TextSize.Height()) / 2), Text);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmShowFont(vcl::Window* pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SmShowFont)
 {
     WinBits nWinStyle = 0;
 
@@ -1311,10 +1311,7 @@ void SmShowSymbolSet::dispose()
     VclHBox::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmShowSymbolSet(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SmShowSymbolSet(pParent);
-}
+VCL_BUILDER_FACTORY(SmShowSymbolSet)
 
 void SmShowSymbolSetWindow::calccols()
 {
@@ -1400,7 +1397,7 @@ IMPL_LINK( SmShowSymbolSetWindow, ScrollHdl, ScrollBar*, /*pScrollBar*/)
     return 0;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmShowSymbol(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SmShowSymbol)
 {
     WinBits nWinStyle = 0;
 
@@ -1694,8 +1691,7 @@ const SmSym * SmSymbolDialog::GetSymbol() const
 }
 
 
-
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmShowChar(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SmShowChar)
 {
     WinBits nWinStyle = 0;
 

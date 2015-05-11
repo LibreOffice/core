@@ -51,6 +51,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include "undoheaderfooter.hxx"
 #include "sdundogr.hxx"
@@ -711,10 +712,7 @@ PresLayoutPreview::PresLayoutPreview( vcl::Window* pParent )
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makePresLayoutPreview( vcl::Window *pParent, VclBuilder::stringmap & )
-{
-    return new PresLayoutPreview( pParent );
-}
+VCL_BUILDER_FACTORY(PresLayoutPreview)
 
 PresLayoutPreview::~PresLayoutPreview()
 {

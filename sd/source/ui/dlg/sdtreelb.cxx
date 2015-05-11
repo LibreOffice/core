@@ -26,6 +26,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/builderfactory.hxx>
 #include "cusshow.hxx"
 #include <sfx2/childwin.hxx>
 
@@ -97,7 +98,7 @@ SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSdPageObjsTLB(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SdPageObjsTLB)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

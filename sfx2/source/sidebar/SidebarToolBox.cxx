@@ -22,7 +22,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/gradient.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/miscopt.hxx>
@@ -50,10 +50,7 @@ SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
 #endif
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSidebarToolBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new SidebarToolBox(pParent);
-}
+VCL_BUILDER_FACTORY(SidebarToolBox)
 
 SidebarToolBox::~SidebarToolBox()
 {

@@ -91,7 +91,7 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/i18nhelp.hxx>
@@ -291,8 +291,7 @@ ContentListBox_Impl::ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle)
     InitRoot();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeContentListBox(vcl::Window *pParent,
-    VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ContentListBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -485,8 +484,7 @@ IndexBox_Impl::IndexBox_Impl(vcl::Window* pParent, WinBits nStyle)
     EnableUserDraw(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeIndexBox(vcl::Window *pParent,
-    VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(IndexBox)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -873,9 +871,9 @@ void IndexTabPage_Impl::OpenKeyword()
 
 // class SearchBox_Impl --------------------------------------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSearchBox(vcl::Window *pParent,
-    VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(SearchBox)
 {
+    (void)rMap;
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_DROPDOWN;
     SearchBox_Impl* pComboBox = new SearchBox_Impl(pParent, nWinBits);
     pComboBox->EnableAutoSize(true);
@@ -906,8 +904,7 @@ void SearchBox_Impl::Select()
 
 // class SearchResultsBox_Impl -------------------------------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSearchResultsBox(vcl::Window *pParent,
-    VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SearchResultsBox)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1174,8 +1171,7 @@ BookmarksBox_Impl::BookmarksBox_Impl(vcl::Window* pParent, WinBits nStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBookmarksBox(vcl::Window *pParent,
-    VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(BookmarksBox)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

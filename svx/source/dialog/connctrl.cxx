@@ -32,7 +32,7 @@
 #include <svx/sxelditm.hxx>
 #include <sxmkitm.hxx>
 
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <boost/scoped_ptr.hpp>
 
@@ -46,7 +46,7 @@ SvxXConnectionPreview::SvxXConnectionPreview( vcl::Window* pParent, WinBits nSty
     SetStyles();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXConnectionPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvxXConnectionPreview)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

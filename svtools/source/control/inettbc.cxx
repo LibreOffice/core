@@ -43,7 +43,7 @@
 #include <rtl/instance.hxx>
 #include <salhelper/thread.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <unotools/historyoptions.hxx>
@@ -863,8 +863,9 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart
     Init(bSetDefaultHelpID);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtURLBox(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(SvtURLBox)
 {
+    (void)rMap;
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
                        WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
     SvtURLBox* pListBox = new SvtURLBox(pParent, nWinBits, INetProtocol::NotValid, false);

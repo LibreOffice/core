@@ -70,6 +70,7 @@
 #include "sfxlocal.hrc"
 #include <dialog.hrc>
 #include <vcl/help.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <algorithm>
 #include <boost/scoped_ptr.hpp>
@@ -2125,11 +2126,7 @@ void CustomPropertiesControl::Resize()
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCustomPropertiesControl(vcl::Window *pParent,
-    VclBuilder::stringmap &)
-{
-    return new CustomPropertiesControl(pParent);
-}
+VCL_BUILDER_FACTORY(CustomPropertiesControl)
 
 CustomPropertiesControl::~CustomPropertiesControl()
 {

@@ -66,6 +66,7 @@
 #include <osl/conditn.hxx>
 #include <salhelper/timer.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/builderfactory.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
@@ -1120,8 +1121,7 @@ void SvtFileView::dispose()
     Control::dispose();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtFileView(vcl::Window *pParent,
-VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvtFileView)
 {
     WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
 

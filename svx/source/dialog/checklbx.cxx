@@ -18,13 +18,10 @@
  */
 
 #include <svtools/treelistentry.hxx>
-
 #include <svx/checklbx.hxx>
 #include <svx/dialmgr.hxx>
-
 #include <svx/dialogs.hrc>
-
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 
 SvxCheckListBox::SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
@@ -34,7 +31,7 @@ SvxCheckListBox::SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     Init_Impl();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxCheckListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(SvxCheckListBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

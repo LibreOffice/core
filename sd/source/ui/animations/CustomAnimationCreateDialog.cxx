@@ -24,7 +24,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
@@ -90,10 +90,7 @@ CategoryListBox::CategoryListBox( vcl::Window* pParent )
     SetDoubleClickHdl( LINK( this, CategoryListBox, implDoubleClickHdl ) );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCategoryListBox(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new CategoryListBox( pParent );
-}
+VCL_BUILDER_FACTORY(CategoryListBox)
 
 CategoryListBox::~CategoryListBox()
 {

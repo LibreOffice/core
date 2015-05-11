@@ -19,7 +19,7 @@
 
 #include <comphelper/string.hxx>
 #include <sfx2/new.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/idle.hxx>
@@ -116,8 +116,9 @@ void SfxPreviewWin_Impl::Paint( vcl::RenderContext& /*rRenderContext*/, const Re
     ImpPaint( rRect, xMetaFile.get(), this );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxPreviewWin(vcl::Window *pParent, VclBuilder::stringmap &)
+VCL_BUILDER_DECL_FACTORY(SfxPreviewWin)
 {
+    (void)rMap;
     return new SfxPreviewWin_Impl(pParent, 0);
 }
 

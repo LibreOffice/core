@@ -21,7 +21,7 @@
 
 #include <i18nutil/unicode.hxx>
 #include <tools/stream.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
 #include <vcl/helper.hxx>
@@ -104,7 +104,7 @@ ColorListBox::ColorListBox( vcl::Window* pParent, const ResId& rResId ) :
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(ColorListBox)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
@@ -736,7 +736,7 @@ LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ImplInit();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(LineListBox)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
@@ -939,7 +939,7 @@ FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
     InitFontMRUEntriesFile();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFontNameBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(FontNameBox)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
@@ -1327,7 +1327,7 @@ Size FontStyleBox::GetOptimalSize() const
     return ComboBox::GetOptimalSize();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFontStyleBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(FontStyleBox)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
@@ -1523,7 +1523,7 @@ FontSizeBox::FontSizeBox( vcl::Window* pParent, WinBits nWinSize ) :
     ImplInit();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFontSizeBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(FontSizeBox)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;

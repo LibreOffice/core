@@ -30,6 +30,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include <svl/style.hxx>
 #include <sfx2/bindings.hxx>
@@ -365,7 +366,7 @@ void TableValueSet::updateSettings()
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTableValueSet(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+VCL_BUILDER_DECL_FACTORY(TableValueSet)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);

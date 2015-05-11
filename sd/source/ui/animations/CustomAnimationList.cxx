@@ -34,6 +34,7 @@
 #include "CustomAnimationPreset.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/builderfactory.hxx>
 
 #include "sdresid.hxx"
 
@@ -433,10 +434,7 @@ CustomAnimationList::CustomAnimationList( vcl::Window* pParent )
     SetNodeDefaultImages();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCustomAnimationList( vcl::Window *pParent )
-{
-    return new CustomAnimationList( pParent );
-}
+VCL_BUILDER_FACTORY(CustomAnimationList)
 
 const Image&  CustomAnimationList::getImage( sal_uInt16 nId )
 {

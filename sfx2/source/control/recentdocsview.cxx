@@ -24,7 +24,7 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <unotools/historyoptions.hxx>
-#include <vcl/builder.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/pngread.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -57,10 +57,7 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRecentDocsView(vcl::Window *pParent, VclBuilder::stringmap &)
-{
-    return new RecentDocsView(pParent);
-}
+VCL_BUILDER_FACTORY(RecentDocsView)
 
 bool RecentDocsView::typeMatchesExtension(ApplicationType type, const OUString &rExt)
 {
