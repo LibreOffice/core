@@ -107,34 +107,29 @@ public:
     LibLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
-void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
+                          const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     // Change text color if library is read only:
     bool bReadOnly = false;
     if (pEntry && pEntry->GetUserData())
     {
-        ScriptDocument aDocument(
-            static_cast<LibUserData*>(pEntry->GetUserData())->
-            GetDocument() );
+        ScriptDocument aDocument(static_cast<LibUserData*>(pEntry->GetUserData())->GetDocument());
 
         OUString aLibName = static_cast<const SvLBoxString*>(pEntry->GetItem(1))->GetText();
-        Reference< script::XLibraryContainer2 > xModLibContainer(
-            aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY);
-        Reference< script::XLibraryContainer2 > xDlgLibContainer(
-            aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY);
-        bReadOnly
-            = (xModLibContainer.is() && xModLibContainer->hasByName(aLibName)
-               && xModLibContainer->isLibraryReadOnly(aLibName))
-            || (xDlgLibContainer.is() && xDlgLibContainer->hasByName(aLibName)
-                && xDlgLibContainer->isLibraryReadOnly(aLibName));
+        Reference<script::XLibraryContainer2> xModLibContainer(aDocument.getLibraryContainer(E_SCRIPTS), UNO_QUERY);
+        Reference<script::XLibraryContainer2 > xDlgLibContainer(aDocument.getLibraryContainer(E_DIALOGS), UNO_QUERY);
+        bReadOnly = (xModLibContainer.is() && xModLibContainer->hasByName(aLibName) && xModLibContainer->isLibraryReadOnly(aLibName))
+                 || (xDlgLibContainer.is() && xDlgLibContainer->hasByName(aLibName) && xDlgLibContainer->isLibraryReadOnly(aLibName));
     }
     if (bReadOnly)
-        rDev.DrawCtrlText(rPos, GetText(), 0, -1, TEXT_DRAW_DISABLE);
+        rRenderContext.DrawCtrlText(rPos, GetText(), 0, -1, TEXT_DRAW_DISABLE);
     else
-        rDev.DrawText(rPos, GetText());
+        rRenderContext.DrawText(rPos, GetText());
 }
 
 } // namespace

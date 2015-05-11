@@ -263,28 +263,27 @@ public:
     BrwStringDic_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
         const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
-void BrwStringDic_Impl::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
-    const SvTreeListEntry* pEntry)
+void BrwStringDic_Impl::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
+                              const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
     Point aPos(rPos);
-    vcl::Font aOldFont( rDev.GetFont());
-    if(pData->IsParent())
+    rRenderContext.Push(PushFlags::FONT);
+    if (pData->IsParent())
     {
-        vcl::Font aFont( aOldFont );
-        aFont.SetWeight( WEIGHT_BOLD );
-        rDev.SetFont( aFont );
+        vcl::Font aFont(rRenderContext.GetFont());
+        aFont.SetWeight(WEIGHT_BOLD);
+        rRenderContext.SetFont(aFont);
         aPos.X() = 0;
     }
     else
         aPos.X() += 5;
-    rDev.DrawText( aPos, GetText() );
-    rDev.SetFont( aOldFont );
+    rRenderContext.DrawText(aPos, GetText());
+    rRenderContext.Pop();
 }
 
 /*--------------------------------------------------
@@ -441,36 +440,35 @@ public:
     BrwString_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
         const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
-void BrwString_Impl::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
-    const SvTreeListEntry* pEntry)
+void BrwString_Impl::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
+                           const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     Point aPos(rPos);
     aPos.X() += 20;
-    rDev.DrawText( aPos, GetText() );
-    if(pEntry->GetUserData())
+    rRenderContext.DrawText(aPos, GetText());
+    if (pEntry->GetUserData())
     {
         Point aNewPos(aPos);
-        aNewPos.X() += rDev.GetTextWidth(GetText());
-        vcl::Font aOldFont( rDev.GetFont());
-        vcl::Font aFont( aOldFont );
-        aFont.SetWeight( WEIGHT_BOLD );
+        aNewPos.X() += rRenderContext.GetTextWidth(GetText());
+        rRenderContext.Push(PushFlags::FONT);
+        vcl::Font aFont(rRenderContext.GetFont());
+        aFont.SetWeight(WEIGHT_BOLD);
 
         //??? convert the lower byte from the user date into a string
-        OptionsUserData aData( reinterpret_cast<sal_uLong>( pEntry->GetUserData() ) );
-        if(aData.HasNumericValue())
+        OptionsUserData aData(reinterpret_cast<sal_uLong>(pEntry->GetUserData()));
+        if (aData.HasNumericValue())
         {
             OUStringBuffer sTxt;
             sTxt.append(' ').append(static_cast<sal_Int32>(aData.GetNumericValue()));
-            rDev.SetFont( aFont );
-            rDev.DrawText( aNewPos, sTxt.makeStringAndClear() );
+            rRenderContext.SetFont(aFont);
+            rRenderContext.DrawText(aNewPos, sTxt.makeStringAndClear());
         }
 
-        rDev.SetFont( aOldFont );
+        rRenderContext.Pop();
     }
 }
 

@@ -167,16 +167,15 @@ public:
     const Size&         GetSize(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
     static const Size&  GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
 
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) = 0;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) = 0;
 
-    virtual void        InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry,
+    virtual void InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry,
                             // If != 0: this Pointer must be used!
                             // If == 0: it needs to be retrieved via the View
                             SvViewDataItem* pViewData = 0) = 0;
     virtual SvLBoxItem* Create() const = 0;
     // View-dependent data is not cloned
-    virtual void        Clone( SvLBoxItem* pSource ) = 0;
+    virtual void        Clone(SvLBoxItem* pSource) = 0;
 };
 
 inline SvLBoxItem* new_clone(const SvLBoxItem& rSrc)
@@ -577,7 +576,7 @@ protected:
     SVT_DLLPRIVATE void         AdjustEntryHeight( const vcl::Font& rFont );
 
     SVT_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
-    SVT_DLLPRIVATE long         PaintEntry1( SvTreeListEntry*, long nLine,
+    SVT_DLLPRIVATE long         PaintEntry1( SvTreeListEntry*, long nLine, vcl::RenderContext& rRenderContext,
                                              SvLBoxTabFlags nTabFlagMask = SvLBoxTabFlags::ALL,
                                              bool bHasClipRegion=false );
 
@@ -754,9 +753,9 @@ public:
 
     SvTreeListEntry*    GetEntry( const Point& rPos, bool bHit = false ) const;
 
-    void            PaintEntry( SvTreeListEntry* );
-    long            PaintEntry( SvTreeListEntry*, long nLine,
-                                SvLBoxTabFlags nTabFlagMask=SvLBoxTabFlags::ALL );
+    void            PaintEntry(SvTreeListEntry* pEntry, vcl::RenderContext& rRenderContext);
+    long            PaintEntry(SvTreeListEntry* pEntry, long nLine, vcl::RenderContext& rRenderContext,
+                                SvLBoxTabFlags nTabFlagMask = SvLBoxTabFlags::ALL);
     virtual Rectangle GetFocusRect( SvTreeListEntry*, long nLine );
     // Respects indentation
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );

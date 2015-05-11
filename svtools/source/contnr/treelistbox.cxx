@@ -45,7 +45,7 @@
 #include <string.h>
 #include <vector>
 
-using namespace ::com::sun::star::accessibility;
+using namespace css::accessibility;
 
 // Drag&Drop
 static SvTreeListBox* pDDSource = NULL;
@@ -2567,20 +2567,21 @@ void SvTreeListBox::AdjustEntryHeightAndRecalc( const vcl::Font& rFont )
     RecalcViewData();
 }
 
-void SvTreeListBox::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void SvTreeListBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     Control::Paint(rRenderContext, rRect);
-    if( nTreeFlags & SvTreeFlags::RECALCTABS )
+    if(nTreeFlags & SvTreeFlags::RECALCTABS)
         SetTabs();
-    pImp->Paint( rRect );
+    pImp->Paint(rRenderContext, rRect);
+
     //Add visual focus draw
-    if( !First() )
+    if (!First())
     {
-        if( HasFocus() )
+        if (HasFocus())
         {
-            long tempHeight = GetTextHeight();
-            Rectangle tempRect(Point(0, 0), Size(GetSizePixel().Width(), tempHeight));
-            ShowFocus(tempRect);
+            long nHeight = rRenderContext.GetTextHeight();
+            Rectangle aRect(Point(0, 0), Size(GetSizePixel().Width(), nHeight));
+            ShowFocus(aRect);
         }
         else
         {
@@ -2672,15 +2673,14 @@ void SvTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* pEntry )
     pImp->InvalidateEntry( (SvTreeListEntry*)pEntry );
 }
 
-void SvTreeListBox::EditItemText( SvTreeListEntry* pEntry, SvLBoxString* pItem,
-    const Selection& rSelection )
+void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, const Selection& rSelection)
 {
     DBG_ASSERT(pEntry&&pItem,"EditItemText: Bad params");
     if( IsSelected( pEntry ))
     {
         pImp->ShowCursor( false );
         SelectListEntry( pEntry, false );
-        PaintEntry( pEntry );
+        Invalidate();
         SelectListEntry( pEntry, true );
         pImp->ShowCursor( true );
     }
@@ -2861,39 +2861,39 @@ void SvTreeListBox::ImplInitStyle()
     Invalidate();
 }
 
-void SvTreeListBox::PaintEntry( SvTreeListEntry* pEntry )
+void SvTreeListBox::PaintEntry(SvTreeListEntry* pEntry, vcl::RenderContext& rRenderContext)
 {
     DBG_ASSERT(pEntry,"PaintEntry:No Entry");
-    if( pEntry )
-        pImp->PaintEntry( pEntry );
+    if (pEntry)
+        pImp->PaintEntry(pEntry, rRenderContext);
 }
 
-void SvTreeListBox::InvalidateEntry( SvTreeListEntry* pEntry )
+void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
 {
     DBG_ASSERT(pEntry,"InvalidateEntry:No Entry");
-    if( pEntry )
+    if (pEntry)
     {
-        GetModel()->InvalidateEntry( pEntry );
+        GetModel()->InvalidateEntry(pEntry);
     }
 }
 
-long SvTreeListBox::PaintEntry(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFlags nTabFlags)
+long SvTreeListBox::PaintEntry(SvTreeListEntry* pEntry, long nLine, vcl::RenderContext& rRenderContext, SvLBoxTabFlags nTabFlags)
 {
-    return PaintEntry1(pEntry,nLine,nTabFlags);
+    return PaintEntry1(pEntry, nLine, rRenderContext, nTabFlags);
 }
 
-long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFlags nTabFlags,
-    bool bHasClipRegion )
+long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::RenderContext& rRenderContext,
+                                SvLBoxTabFlags nTabFlags, bool bHasClipRegion)
 {
 
     Rectangle aRect; // multi purpose
 
     bool bHorSBar = pImp->HasHorScrollBar();
-    PreparePaint( pEntry );
+    PreparePaint(pEntry);
 
-    pImp->UpdateContextBmpWidthMax( pEntry );
+    pImp->UpdateContextBmpWidthMax(pEntry);
 
-    if( nTreeFlags & SvTreeFlags::RECALCTABS )
+    if (nTreeFlags & SvTreeFlags::RECALCTABS)
         SetTabs();
 
     short nTempEntryHeight = GetEntryHeight();
@@ -2901,16 +2901,16 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
 
     // Did we turn on the scrollbar within PreparePaints? If yes, we have to set
     // the ClipRegion anew.
-    if( !bHorSBar && pImp->HasHorScrollBar() )
-        SetClipRegion( vcl::Region(pImp->GetClipRegionRect()) );
+    if (!bHorSBar && pImp->HasHorScrollBar())
+        rRenderContext.SetClipRegion(vcl::Region(pImp->GetClipRegionRect()));
 
-    Point aEntryPos( GetMapMode().GetOrigin() );
+    Point aEntryPos(rRenderContext.GetMapMode().GetOrigin());
     aEntryPos.X() *= -1; // conversion document coordinates
     long nMaxRight = nWidth + aEntryPos.X() - 1;
 
-    Color aBackupTextColor( GetTextColor() );
-    vcl::Font aBackupFont( GetFont() );
-    Color aBackupColor = GetFillColor();
+    Color aBackupTextColor(rRenderContext.GetTextColor());
+    vcl::Font aBackupFont(rRenderContext.GetFont());
+    Color aBackupColor = rRenderContext.GetFillColor();
 
     bool bCurFontIsSel = false;
     bool bInUse = pEntry->HasInUseEmphasis();
@@ -2918,17 +2918,17 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
     const WinBits nWindowStyle = GetStyle();
     const bool bResetClipRegion = !bHasClipRegion;
     const bool bHideSelection = (nWindowStyle & WB_HIDESELECTION) !=0 && !HasFocus();
-    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    vcl::Font aHighlightFont( GetFont() );
-    const Color aHighlightTextColor( rSettings.GetHighlightTextColor() );
-    aHighlightFont.SetColor( aHighlightTextColor );
+    vcl::Font aHighlightFont(rRenderContext.GetFont());
+    const Color aHighlightTextColor(rSettings.GetHighlightTextColor());
+    aHighlightFont.SetColor(aHighlightTextColor);
 
-    Size aRectSize( 0, nTempEntryHeight );
+    Size aRectSize(0, nTempEntryHeight);
 
-    if( !bHasClipRegion && nWindowStyle & WB_HSCROLL )
+    if (!bHasClipRegion && nWindowStyle & WB_HSCROLL)
     {
-        SetClipRegion( vcl::Region(pImp->GetClipRegionRect()) );
+        rRenderContext.SetClipRegion(vcl::Region(pImp->GetClipRegionRect()));
         bHasClipRegion = true;
     }
 
@@ -2939,39 +2939,39 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
     sal_uInt16 nCurTab = 0;
     sal_uInt16 nCurItem = 0;
 
-    while( nCurTab < nTabCount && nCurItem < nItemCount )
+    while (nCurTab < nTabCount && nCurItem < nItemCount)
     {
-        SvLBoxTab* pTab = aTabs[ nCurTab ];
+        SvLBoxTab* pTab = aTabs[nCurTab];
         sal_uInt16 nNextTab = nCurTab + 1;
         SvLBoxTab* pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : 0;
         SvLBoxItem* pItem = nCurItem < nItemCount ? pEntry->GetItem(nCurItem) : 0;
 
         SvLBoxTabFlags nFlags = pTab->nFlags;
-        Size aSize( SvLBoxItem::GetSize( pViewDataEntry, nCurItem ));
-        long nTabPos = GetTabPos( pEntry, pTab );
+        Size aSize(SvLBoxItem::GetSize(pViewDataEntry, nCurItem));
+        long nTabPos = GetTabPos(pEntry, pTab);
 
         long nNextTabPos;
-        if( pNextTab )
-            nNextTabPos = GetTabPos( pEntry, pNextTab );
+        if (pNextTab)
+            nNextTabPos = GetTabPos(pEntry, pNextTab);
         else
         {
             nNextTabPos = nMaxRight;
-            if( nTabPos > nMaxRight )
+            if (nTabPos > nMaxRight)
                 nNextTabPos += 50;
         }
 
         long nX;
         if( pTab->nFlags & SvLBoxTabFlags::ADJUST_RIGHT )
             // avoid cutting the right edge off the tab separation
-            nX = nTabPos + pTab->CalcOffset(aSize.Width(), (nNextTabPos-SV_TAB_BORDER-1) -nTabPos);
+            nX = nTabPos + pTab->CalcOffset(aSize.Width(), (nNextTabPos - SV_TAB_BORDER - 1) - nTabPos);
         else
-            nX = nTabPos + pTab->CalcOffset(aSize.Width(), nNextTabPos-nTabPos);
+            nX = nTabPos + pTab->CalcOffset(aSize.Width(), nNextTabPos - nTabPos);
 
-        if( nFlags & nTabFlags )
+        if (nFlags & nTabFlags)
         {
-            if( !bHasClipRegion && nX + aSize.Width() >= nMaxRight )
+            if (!bHasClipRegion && nX + aSize.Width() >= nMaxRight)
             {
-                SetClipRegion( vcl::Region(pImp->GetClipRegionRect()) );
+                rRenderContext.SetClipRegion(vcl::Region(pImp->GetClipRegionRect()));
                 bHasClipRegion = true;
             }
             aEntryPos.X() = nX;
@@ -2979,7 +2979,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
 
             // set background pattern/color
 
-            Wallpaper aWallpaper = GetBackground();
+            Wallpaper aWallpaper = rRenderContext.GetBackground();
 
             bool bSelTab = bool(nFlags & SvLBoxTabFlags::SHOW_SELECTION);
             sal_uInt16 nItemType = pItem->GetType();
@@ -2987,49 +2987,55 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
             if (pViewDataEntry->IsHighlighted() && bSelTab && !pViewDataEntry->IsCursored())
             {
                 Color aNewWallColor = rSettings.GetHighlightColor();
-                if ( !bInUse || nItemType != SV_ITEM_ID_LBOXCONTEXTBMP )
+                if (!bInUse || nItemType != SV_ITEM_ID_LBOXCONTEXTBMP)
                 {
                     // if the face color is bright then the deactive color is also bright
                     // -> so you can't see any deactive selection
-                    if ( bHideSelection && !rSettings.GetFaceColor().IsBright() &&
-                         aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright() )
-                        aNewWallColor = rSettings.GetDeactiveColor();
-                    // set font color to highlight
-                    if ( !bCurFontIsSel )
+                    if (  bHideSelection && !rSettings.GetFaceColor().IsBright()
+                       && aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright())
                     {
-                        SetTextColor( aHighlightTextColor );
-                        Control::SetFont( aHighlightFont );
+                        aNewWallColor = rSettings.GetDeactiveColor();
+                    }
+                    // set font color to highlight
+                    if (!bCurFontIsSel)
+                    {
+                        rRenderContext.SetTextColor(aHighlightTextColor);
+                        rRenderContext.SetFont(aHighlightFont);
                         bCurFontIsSel = true;
                     }
                 }
-                aWallpaper.SetColor( aNewWallColor );
+                aWallpaper.SetColor(aNewWallColor);
             }
             else  // no selection
             {
-                if( bInUse && nItemType == SV_ITEM_ID_LBOXCONTEXTBMP )
-                    aWallpaper.SetColor( rSettings.GetFieldColor() );
-                else if( bCurFontIsSel )
+                if (bInUse && nItemType == SV_ITEM_ID_LBOXCONTEXTBMP)
+                {
+                    aWallpaper.SetColor(rSettings.GetFieldColor());
+                }
+                else if (bCurFontIsSel)
                 {
                     bCurFontIsSel = false;
-                    SetTextColor( aBackupTextColor );
-                    Control::SetFont( aBackupFont );
+                    rRenderContext.SetTextColor(aBackupTextColor);
+                    rRenderContext.SetFont(aBackupFont);
                 }
                 else
-                    aWallpaper.SetColor( pEntry->GetBackColor() );
+                {
+                    aWallpaper.SetColor(pEntry->GetBackColor());
+                }
             }
 
             // draw background
-            if( !(nTreeFlags & SvTreeFlags::USESEL))
+            if (!(nTreeFlags & SvTreeFlags::USESEL))
             {
                 // only draw the area that is used by the item
                 aRectSize.Width() = aSize.Width();
-                aRect.SetPos( aEntryPos );
-                aRect.SetSize( aRectSize );
+                aRect.SetPos(aEntryPos);
+                aRect.SetSize(aRectSize);
             }
             else
             {
                 // draw from the current to the next tab
-                if( nCurTab != 0 )
+                if (nCurTab != 0)
                     aRect.Left() = nTabPos;
                 else
                     // if we're in the 0th tab, always draw from column 0 --
@@ -3037,33 +3043,35 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
                     aRect.Left() = 0;
                 aRect.Top() = nLine;
                 aRect.Bottom() = nLine + nTempEntryHeight - 1;
-                if( pNextTab )
+                if (pNextTab)
                 {
                     long nRight;
-                    nRight = GetTabPos(pEntry,pNextTab)-1;
-                    if( nRight > nMaxRight )
+                    nRight = GetTabPos(pEntry, pNextTab) - 1;
+                    if (nRight > nMaxRight)
                         nRight = nMaxRight;
                     aRect.Right() = nRight;
                 }
                 else
+                {
                     aRect.Right() = nMaxRight;
+                }
             }
             // A custom selection that starts at a tab position > 0, do not fill
             // the background of the 0th item, else e.g. we might not be able to
             // realize tab listboxes with lines.
-            if( !(nCurTab==0 && (nTreeFlags & SvTreeFlags::USESEL) && nFirstSelTab) )
+            if (!(nCurTab==0 && (nTreeFlags & SvTreeFlags::USESEL) && nFirstSelTab))
             {
-                SetFillColor( aWallpaper.GetColor() );
+                rRenderContext.SetFillColor(aWallpaper.GetColor());
                 // this case may occur for smaller horizontal resizes
-                if( aRect.Left() < aRect.Right() )
-                    DrawRect( aRect );
+                if (aRect.Left() < aRect.Right())
+                    rRenderContext.DrawRect(aRect);
             }
             // draw item
             // center vertically
-            aEntryPos.Y() += ( nTempEntryHeight - aSize.Height() ) / 2;
+            aEntryPos.Y() += (nTempEntryHeight - aSize.Height()) / 2;
             pViewDataEntry->SetPaintRectangle(aRect);
 
-            pItem->Paint(aEntryPos, *this, pViewDataEntry, pEntry);
+            pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, pEntry);
 
             // division line between tabs
             if (pNextTab && pItem->GetType() == SV_ITEM_ID_LBOXSTRING &&
@@ -3071,37 +3079,37 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
                 aRect.Right() < nMaxRight)
             {
                 aRect.Left() = aRect.Right() - SV_TAB_BORDER;
-                DrawRect( aRect );
+                rRenderContext.DrawRect(aRect);
             }
 
-            SetFillColor( aBackupColor );
+            rRenderContext.SetFillColor(aBackupColor);
         }
         nCurItem++;
         nCurTab++;
     }
-    if( pViewDataEntry->IsCursored() && !HasFocus() )
+    if (pViewDataEntry->IsCursored() && !HasFocus())
     {
         // cursor emphasis
-        SetFillColor();
-        Color aOldLineColor = GetLineColor();
-        SetLineColor( Color( COL_BLACK ) );
-        aRect = GetFocusRect( pEntry, nLine );
+        rRenderContext.SetFillColor();
+        Color aOldLineColor = rRenderContext.GetLineColor();
+        SetLineColor(Color(COL_BLACK));
+        aRect = GetFocusRect(pEntry, nLine);
         aRect.Top()++;
         aRect.Bottom()--;
-        DrawRect( aRect );
-        SetLineColor( aOldLineColor );
-        SetFillColor( aBackupColor );
+        rRenderContext.DrawRect(aRect);
+        rRenderContext.SetLineColor(aOldLineColor);
+        rRenderContext.SetFillColor(aBackupColor);
     }
 
-    if( bCurFontIsSel )
+    if (bCurFontIsSel)
     {
-        SetTextColor( aBackupTextColor );
-        Control::SetFont( aBackupFont );
+        rRenderContext.SetTextColor(aBackupTextColor);
+        rRenderContext.SetFont(aBackupFont);
     }
 
     sal_uInt16 nFirstDynTabPos;
-    SvLBoxTab* pFirstDynamicTab = GetFirstDynamicTab( nFirstDynTabPos );
-    long nDynTabPos = GetTabPos( pEntry, pFirstDynamicTab );
+    SvLBoxTab* pFirstDynamicTab = GetFirstDynamicTab(nFirstDynTabPos);
+    long nDynTabPos = GetTabPos(pEntry, pFirstDynamicTab);
     nDynTabPos += pImp->nNodeBmpTabDistance;
     nDynTabPos += pImp->nNodeBmpWidth / 2;
     nDynTabPos += 4; // 4 pixels of buffer, so the node bitmap is not too close
@@ -3109,7 +3117,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
 
     if( (!(pEntry->GetFlags() & SvTLEntryFlags::NO_NODEBMP)) &&
         (nWindowStyle & WB_HASBUTTONS) && pFirstDynamicTab &&
-        ( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() ) )
+        (pEntry->HasChildren() || pEntry->HasChildrenOnDemand()))
     {
         // find first tab and check if the node bitmap extends into it
         sal_uInt16 nNextTab = nFirstDynTabPos;
@@ -3118,72 +3126,79 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, SvLBoxTabFl
         {
             nNextTab++;
             pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : 0;
-        } while( pNextTab && pNextTab->IsDynamic() );
+        } while (pNextTab && pNextTab->IsDynamic());
 
-        if( !pNextTab || (GetTabPos( pEntry, pNextTab ) > nDynTabPos) )
+        if (!pNextTab || (GetTabPos( pEntry, pNextTab ) > nDynTabPos))
         {
-            if((nWindowStyle & WB_HASBUTTONSATROOT) || pModel->GetDepth(pEntry) > 0)
+            if ((nWindowStyle & WB_HASBUTTONSATROOT) || pModel->GetDepth(pEntry) > 0)
             {
-                Point aPos( GetTabPos(pEntry,pFirstDynamicTab), nLine );
+                Point aPos(GetTabPos(pEntry, pFirstDynamicTab), nLine);
                 aPos.X() += pImp->nNodeBmpTabDistance;
 
                 const Image* pImg = 0;
 
-                if( IsExpanded(pEntry) )
-                    pImg = &pImp->GetExpandedNodeBmp( );
+                if (IsExpanded(pEntry))
+                    pImg = &pImp->GetExpandedNodeBmp();
                 else
                 {
-                    if( (!pEntry->HasChildren()) && pEntry->HasChildrenOnDemand() &&
+                    if ((!pEntry->HasChildren()) && pEntry->HasChildrenOnDemand() &&
                         (!(pEntry->GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
-                        pImp->GetDontKnowNodeBmp().GetSizePixel().Width() )
+                        pImp->GetDontKnowNodeBmp().GetSizePixel().Width())
+                    {
                         pImg = &pImp->GetDontKnowNodeBmp( );
+                    }
                     else
+                    {
                         pImg = &pImp->GetCollapsedNodeBmp( );
+                    }
                 }
                 aPos.Y() += (nTempEntryHeight - pImg->GetSizePixel().Height()) / 2;
 
                 sal_uInt16 nStyle = 0;
-                if ( !IsEnabled() )
+                if (!IsEnabled())
                     nStyle |= IMAGE_DRAW_DISABLE;
 
                 //native
                 bool bNativeOK = false;
-                if ( IsNativeControlSupported( CTRL_LISTNODE, PART_ENTIRE_CONTROL) )
+                if (rRenderContext.IsNativeControlSupported(CTRL_LISTNODE, PART_ENTIRE_CONTROL))
                 {
-                    ImplControlValue    aControlValue;
-                    Rectangle           aCtrlRegion( aPos,  pImg->GetSizePixel() );
-                    ControlState        nState = ControlState::NONE;
+                    ImplControlValue aControlValue;
+                    Rectangle aCtrlRegion(aPos,  pImg->GetSizePixel());
+                    ControlState nState = ControlState::NONE;
 
-                    if ( IsEnabled() )  nState |= ControlState::ENABLED;
+                    if (IsEnabled())
+                        nState |= ControlState::ENABLED;
 
-                    if ( IsExpanded(pEntry) )
-                        aControlValue.setTristateVal( BUTTONVALUE_ON );//expanded node
+                    if (IsExpanded(pEntry))
+                        aControlValue.setTristateVal(BUTTONVALUE_ON); //expanded node
                     else
                     {
-                        if( (!pEntry->HasChildren() )                              &&
-                              pEntry->HasChildrenOnDemand()                        &&
-                             (!(pEntry->GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
-                            pImp->GetDontKnowNodeBmp().GetSizePixel().Width()
-                        )
+                        if ((!pEntry->HasChildren()) && pEntry->HasChildrenOnDemand() &&
+                            (!(pEntry->GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
+                            pImp->GetDontKnowNodeBmp().GetSizePixel().Width())
+                        {
                             aControlValue.setTristateVal( BUTTONVALUE_DONTKNOW ); //dont know
+                        }
                         else
+                        {
                             aControlValue.setTristateVal( BUTTONVALUE_OFF ); //collapsed node
+                        }
                     }
 
-                    bNativeOK = DrawNativeControl( CTRL_LISTNODE, PART_ENTIRE_CONTROL,
-                                            aCtrlRegion, nState, aControlValue, OUString() );
+                    bNativeOK = rRenderContext.DrawNativeControl(CTRL_LISTNODE, PART_ENTIRE_CONTROL, aCtrlRegion, nState, aControlValue, OUString());
                 }
 
-                if( !bNativeOK) {
-                    DrawImage( aPos, *pImg ,nStyle);
+                if (!bNativeOK)
+                {
+                    rRenderContext.DrawImage(aPos, *pImg ,nStyle);
                 }
             }
         }
     }
 
+    if (bHasClipRegion && bResetClipRegion)
+        rRenderContext.SetClipRegion();
 
-    if( bHasClipRegion && bResetClipRegion )
-        SetClipRegion();
     return 0; // nRowLen;
 }
 

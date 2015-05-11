@@ -1238,24 +1238,24 @@ void SwGlobalTree::InitEntry(SvTreeListEntry* pEntry,
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
 
-void SwLBoxString::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
-    const SvTreeListEntry* pEntry)
+void SwLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                         const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
 {
     SwGlblDocContent* pCont = static_cast<SwGlblDocContent*>(pEntry->GetUserData());
-    if(pCont->GetType() == GLBLDOC_SECTION &&
-        !(pCont->GetSection())->IsConnectFlag() )
+    if (pCont->GetType() == GLBLDOC_SECTION &&
+      !(pCont->GetSection())->IsConnectFlag())
     {
-        vcl::Font aOldFont( rDev.GetFont());
-        vcl::Font aFont(aOldFont);
-        Color aCol( COL_LIGHTRED );
-        aFont.SetColor( aCol );
-        rDev.SetFont( aFont );
-        rDev.DrawText( rPos, GetText() );
-        rDev.SetFont( aOldFont );
+        rRenderContext.Push(PushFlags::FONT);
+        vcl::Font aOldFont(rRenderContext.GetFont());
+        vcl::Font aFont(rRenderContext.GetFont());
+        Color aCol(COL_LIGHTRED);
+        aFont.SetColor(aCol);
+        rRenderContext.SetFont(aFont);
+        rRenderContext.DrawText(rPos, GetText());
+        rRenderContext.Pop();
     }
     else
-        SvLBoxString::Paint( rPos, rDev, pView, pEntry);
+        SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, pEntry);
 }
 
 void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )

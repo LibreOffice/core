@@ -216,9 +216,8 @@ public:
     {
     }
 
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
-        const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 namespace sfx2 { class DocumentInserter; }

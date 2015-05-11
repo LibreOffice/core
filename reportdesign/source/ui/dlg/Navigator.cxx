@@ -713,11 +713,10 @@ void NavigatorTree::_elementRemoved( const container::ContainerEvent& _rEvent )
     SvTreeListEntry* pEntry = find(xProp);
     OSL_ENSURE(pEntry,"NavigatorTree::_elementRemoved: No Entry found!");
 
-    if ( pEntry )
+    if (pEntry)
     {
-        SvTreeListEntry* pParent = GetParent(pEntry);
         removeEntry(pEntry);
-        PaintEntry(pParent);
+        Invalidate();
     }
 }
 

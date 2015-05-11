@@ -91,6 +91,7 @@ public:
 
     virtual void Paint(const Point& aPos,
                        SvTreeListBox& rDevice,
+                       vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,
                        const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 
@@ -143,7 +144,7 @@ void StyleLBoxString::InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry
 }
 
 void StyleLBoxString::Paint(
-    const Point& aPos, SvTreeListBox& rDevice,
+    const Point& aPos, SvTreeListBox& /*rDevice*/, vcl::RenderContext& rRenderContext,
     const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
 {
     if (!pEntry)
@@ -159,7 +160,7 @@ void StyleLBoxString::Paint(
 
     if (!bResult)
     {
-        rDevice.DrawText(aPos, GetText());
+        rRenderContext.DrawText(aPos, GetText());
     }
 }
 

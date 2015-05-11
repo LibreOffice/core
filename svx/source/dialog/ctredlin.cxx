@@ -79,18 +79,16 @@ SvLBoxItem* SvLBoxColorString::Create() const
     return new SvLBoxColorString;
 }
 
-void SvLBoxColorString::Paint(
-    const Point& rPos, SvTreeListBox& rDev,
-    const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
+void SvLBoxColorString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                              const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
 {
-    Color aColor=rDev.GetTextColor();
-    Color a2Color=aColor;
+    Color aColor = rRenderContext.GetTextColor();
     if (!pView->IsSelected())
     {
-        rDev.SetTextColor(aPrivColor);
+        rRenderContext.SetTextColor(aPrivColor);
     }
-    SvLBoxString::Paint(rPos, rDev, pView, pEntry);
-    rDev.SetTextColor(a2Color);
+    SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, pEntry);
+    rRenderContext.SetTextColor(aColor);
 }
 
 SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits)

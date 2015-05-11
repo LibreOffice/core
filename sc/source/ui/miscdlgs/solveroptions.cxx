@@ -72,33 +72,35 @@ public:
     void      SetDoubleValue( double fNew ) { mbIsDouble = true; mfDoubleValue = fNew; }
     void      SetIntValue( sal_Int32 nNew ) { mbIsDouble = false; mnIntValue = nNew; }
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
-void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
+void ScSolverOptionsString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
+                                  const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
     //! move position? (SvxLinguTabPage: aPos.X() += 20)
-    OUString aNormalStr( GetText() );
+    OUString aNormalStr(GetText());
     aNormalStr += ":";
-    rDev.DrawText( rPos, aNormalStr );
+    rRenderContext.DrawText(rPos, aNormalStr);
 
-    Point aNewPos( rPos );
-    aNewPos.X() += rDev.GetTextWidth( aNormalStr );
-    vcl::Font aOldFont( rDev.GetFont() );
-    vcl::Font aFont( aOldFont );
-    aFont.SetWeight( WEIGHT_BOLD );
+    Point aNewPos(rPos);
+    aNewPos.X() += rRenderContext.GetTextWidth(aNormalStr);
+    vcl::Font aOldFont(rRenderContext.GetFont());
+    vcl::Font aFont(aOldFont);
+    aFont.SetWeight(WEIGHT_BOLD);
 
-    OUString sTxt( ' ' );
-    if ( mbIsDouble )
-        sTxt += rtl::math::doubleToUString( mfDoubleValue,
+    OUString sTxt(' ');
+    if (mbIsDouble)
+        sTxt += rtl::math::doubleToUString(mfDoubleValue,
             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
             ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
     else
         sTxt += OUString::number(mnIntValue);
-    rDev.SetFont( aFont );
-    rDev.DrawText( aNewPos, sTxt );
+    rRenderContext.SetFont(aFont);
+    rRenderContext.DrawText(aNewPos, sTxt);
 
-    rDev.SetFont( aOldFont );
+    rRenderContext.SetFont(aOldFont);
 }
 
 ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,

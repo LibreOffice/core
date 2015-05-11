@@ -183,7 +183,7 @@ private:
 
     void                SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect = false );
 
-    void                DrawNet();
+    void                DrawNet(vcl::RenderContext& rRenderContext);
 
     // ScrollBar-Handler
     DECL_LINK( ScrollUpDownHdl, ScrollBar * );
@@ -263,7 +263,7 @@ public:
     void                CollapsingEntry( SvTreeListEntry* pEntry );
     void                EntrySelected( SvTreeListEntry* pEntry, bool bSelect );
 
-    void                Paint( const Rectangle& rRect );
+    void                Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     void                MouseButtonDown( const MouseEvent& );
     void                MouseButtonUp( const MouseEvent& );
     void                MouseMove( const MouseEvent&);
@@ -273,7 +273,7 @@ public:
     void                LoseFocus();
     void UpdateAll( bool bInvalidateCompleteView= true, bool bUpdateVerSBar = true );
     void                SetEntryHeight( short nHeight );
-    void                PaintEntry( SvTreeListEntry* pEntry );
+    void                PaintEntry(SvTreeListEntry* pEntry, vcl::RenderContext& rRenderContext);
     void                InvalidateEntry( SvTreeListEntry* );
     void                RecalcFocusRect();
 
@@ -403,10 +403,10 @@ inline Point SvImpLBox::GetEntryPosition( SvTreeListEntry* pEntry ) const
     return Point( 0, GetEntryLine( pEntry ) );
 }
 
-inline void SvImpLBox::PaintEntry( SvTreeListEntry* pEntry )
+inline void SvImpLBox::PaintEntry(SvTreeListEntry* pEntry, vcl::RenderContext& rRenderContext)
 {
-    long nY = GetEntryLine( pEntry );
-    pView->PaintEntry( pEntry, nY );
+    long nY = GetEntryLine(pEntry);
+    pView->PaintEntry(pEntry, nY, rRenderContext);
 }
 
 inline bool SvImpLBox::IsLineVisible( long nY ) const

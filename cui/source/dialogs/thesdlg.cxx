@@ -146,24 +146,23 @@ AlternativesString::AlternativesString(
 {
 }
 
-void AlternativesString::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
-    const SvTreeListEntry* pEntry)
+void AlternativesString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
+                               const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
-    AlternativesExtraData* pData = m_rControlImpl.GetExtraData( pEntry );
-    Point aPos( rPos );
-    vcl::Font aOldFont( rDev.GetFont());
+    AlternativesExtraData* pData = m_rControlImpl.GetExtraData(pEntry);
+    Point aPos(rPos);
+    rRenderContext.Push(PushFlags::FONT);
     if (pData && pData->IsHeader())
     {
-        vcl::Font aFont( aOldFont );
-        aFont.SetWeight( WEIGHT_BOLD );
-        rDev.SetFont( aFont );
+        vcl::Font aFont(rRenderContext.GetFont());
+        aFont.SetWeight(WEIGHT_BOLD);
+        rRenderContext.SetFont(aFont);
         aPos.X() = 0;
     }
     else
         aPos.X() += 5;
-    rDev.DrawText( aPos, GetText() );
-    rDev.SetFont( aOldFont );
+    rRenderContext.DrawText(aPos, GetText());
+    rRenderContext.Pop();
 }
 
 ThesaurusAlternativesCtrl::ThesaurusAlternativesCtrl(vcl::Window* pParent)

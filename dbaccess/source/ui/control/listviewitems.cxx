@@ -44,22 +44,23 @@ namespace dbaui
         return SV_ITEM_ID_BOLDLBSTRING;
     }
 
-    void OBoldListboxString::Paint(
-        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
-        const SvTreeListEntry* pEntry)
+    void OBoldListboxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                                   const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
     {
         if (m_bEmphasized)
         {
-            rDev.Push(PushFlags::ALL);
-            vcl::Font aFont( rDev.GetFont());
+            rRenderContext.Push(PushFlags::ALL);
+            vcl::Font aFont(rRenderContext.GetFont());
             aFont.SetWeight(WEIGHT_BOLD);
-            rDev.SetFont( aFont );
+            rRenderContext.SetFont(aFont);
             Point aPos(rPos);
-            rDev.DrawText( aPos, GetText() );
-            rDev.Pop();
+            rRenderContext.DrawText(aPos, GetText());
+            rRenderContext.Pop();
         }
         else
-            SvLBoxString::Paint(rPos, rDev, pView, pEntry);
+        {
+            SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, pEntry);
+        }
     }
 
 }   // namespace dbaui

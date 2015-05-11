@@ -193,18 +193,18 @@ sal_uInt16 SvLBoxString::GetType() const
 }
 
 void SvLBoxString::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
-    const SvTreeListEntry* pEntry)
+    const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+    const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     if (pEntry)
     {
         sal_uInt16 nStyle = rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE;
-        if ( rDev.IsEntryMnemonicsEnabled() )
+        if (rDev.IsEntryMnemonicsEnabled())
             nStyle |= TEXT_DRAW_MNEMONIC;
-        rDev.DrawText(Rectangle(rPos, GetSize(&rDev, pEntry)), maText, nStyle);
+        rRenderContext.DrawText(Rectangle(rPos, GetSize(&rDev, pEntry)), maText, nStyle);
     }
     else
-        rDev.DrawText(rPos, maText);
+        rRenderContext.DrawText(rPos, maText);
 
 }
 
@@ -270,12 +270,11 @@ void SvLBoxBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     pViewData->maSize = aBmp.GetSizePixel();
 }
 
-void SvLBoxBmp::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
-    const SvTreeListEntry* /*pEntry*/)
+void SvLBoxBmp::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                      const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
     sal_uInt16 nStyle = rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
-    rDev.DrawImage( rPos, aBmp ,nStyle);
+    rRenderContext.DrawImage(rPos, aBmp ,nStyle);
 }
 
 SvLBoxItem* SvLBoxBmp::Create() const
@@ -338,44 +337,43 @@ bool SvLBoxButton::ClickHdl( SvTreeListBox*, SvTreeListEntry* pEntry )
 }
 
 void SvLBoxButton::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
-    const SvTreeListEntry* /*pEntry*/)
+    const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+    const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
-    SvBmp nIndex = eKind == SvLBoxButtonKind_staticImage
-        ? SvBmp::STATICIMAGE : SvLBoxButtonData::GetIndex( nItemFlags );
-    sal_uInt16 nStyle = eKind != SvLBoxButtonKind_disabledCheckbox &&
-        rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+    SvBmp nIndex = eKind == SvLBoxButtonKind_staticImage ? SvBmp::STATICIMAGE : SvLBoxButtonData::GetIndex(nItemFlags);
+    sal_uInt16 nStyle = eKind != SvLBoxButtonKind_disabledCheckbox && rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
 
     //Native drawing
     bool bNativeOK = false;
     ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
-    if ( nIndex != SvBmp::STATICIMAGE && rDev.IsNativeControlSupported( eCtrlType, PART_ENTIRE_CONTROL) )
+    if ( nIndex != SvBmp::STATICIMAGE && rRenderContext.IsNativeControlSupported( eCtrlType, PART_ENTIRE_CONTROL) )
 
     {
         Size aSize(pData->Width(), pData->Height());
-        ImplAdjustBoxSize( aSize, eCtrlType, &rDev );
-        ImplControlValue    aControlValue;
-        Rectangle           aCtrlRegion( rPos, aSize );
-        ControlState        nState = ControlState::NONE;
+        ImplAdjustBoxSize(aSize, eCtrlType, rRenderContext);
+        ImplControlValue aControlValue;
+        Rectangle aCtrlRegion( rPos, aSize );
+        ControlState nState = ControlState::NONE;
 
         //states ControlState::DEFAULT, ControlState::PRESSED and ControlState::ROLLOVER are not implemented
-        if ( IsStateHilighted() )                   nState |= ControlState::FOCUSED;
-        if ( nStyle != IMAGE_DRAW_DISABLE )         nState |= ControlState::ENABLED;
-
-        if ( IsStateChecked() )
-            aControlValue.setTristateVal( BUTTONVALUE_ON );
-        else if ( IsStateUnchecked() )
-            aControlValue.setTristateVal( BUTTONVALUE_OFF );
-        else if ( IsStateTristate() )
+        if (IsStateHilighted())
+            nState |= ControlState::FOCUSED;
+        if (nStyle != IMAGE_DRAW_DISABLE)
+            nState |= ControlState::ENABLED;
+        if (IsStateChecked())
+            aControlValue.setTristateVal(BUTTONVALUE_ON);
+        else if (IsStateUnchecked())
+            aControlValue.setTristateVal(BUTTONVALUE_OFF);
+        else if (IsStateTristate())
             aControlValue.setTristateVal( BUTTONVALUE_MIXED );
 
-        if( isVis)
-            bNativeOK = rDev.DrawNativeControl( eCtrlType, PART_ENTIRE_CONTROL,
-                                aCtrlRegion, nState, aControlValue, OUString() );
+        if (isVis)
+            bNativeOK = rRenderContext.DrawNativeControl(eCtrlType, PART_ENTIRE_CONTROL,
+                                                         aCtrlRegion, nState, aControlValue, OUString());
     }
 
-    if( !bNativeOK && isVis )
-        rDev.DrawImage( rPos, pData->GetImage(nIndex), nStyle);
+    if (!bNativeOK && isVis)
+        rRenderContext.DrawImage(rPos, pData->GetImage(nIndex), nStyle);
 }
 
 SvLBoxItem* SvLBoxButton::Create() const
@@ -388,9 +386,9 @@ void SvLBoxButton::Clone( SvLBoxItem* pSource )
     pData = static_cast<SvLBoxButton*>(pSource)->pData;
 }
 
-void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, vcl::Window* i_pParent )
+void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::RenderContext& rRenderContext)
 {
-    if ( i_pParent->IsNativeControlSupported( i_eType, PART_ENTIRE_CONTROL) )
+    if (rRenderContext.IsNativeControlSupported( i_eType, PART_ENTIRE_CONTROL) )
     {
         ImplControlValue    aControlValue;
         Rectangle           aCtrlRegion( Point( 0, 0 ), io_rSize );
@@ -399,7 +397,7 @@ void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, vcl::
         aControlValue.setTristateVal( BUTTONVALUE_ON );
 
         Rectangle aNativeBounds, aNativeContent;
-        bool bNativeOK = i_pParent->GetNativeControlRegion( i_eType,
+        bool bNativeOK = rRenderContext.GetNativeControlRegion( i_eType,
                                                             PART_ENTIRE_CONTROL,
                                                             aCtrlRegion,
                                                             nState,
@@ -419,8 +417,7 @@ void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, vcl::
     }
 }
 
-void SvLBoxButton::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
-    SvViewDataItem* pViewData )
+void SvLBoxButton::InitViewData(SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
@@ -428,7 +425,7 @@ void SvLBoxButton::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
 
     ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
     if ( eKind != SvLBoxButtonKind_staticImage && pView )
-        ImplAdjustBoxSize( aSize, eCtrlType, pView );
+        ImplAdjustBoxSize(aSize, eCtrlType, *pView);
     pViewData->maSize = aSize;
 }
 
@@ -508,7 +505,7 @@ void SvLBoxContextBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntr
 }
 
 void SvLBoxContextBmp::Paint(
-    const Point& _rPos, SvTreeListBox& _rDev,
+    const Point& _rPos, SvTreeListBox& _rDev, vcl::RenderContext& rRenderContext,
     const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
 {
 
@@ -518,9 +515,9 @@ void SvLBoxContextBmp::Paint(
     bool _bSemiTransparent = pEntry && bool( SvTLEntryFlags::SEMITRANSPARENT  & pEntry->GetFlags( ) );
     // draw
     sal_uInt16 nStyle = _rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
-    if ( _bSemiTransparent )
+    if (_bSemiTransparent)
         nStyle |= IMAGE_DRAW_SEMITRANSPARENT;
-    _rDev.DrawImage( _rPos, rImage, nStyle);
+    rRenderContext.DrawImage(_rPos, rImage, nStyle);
 }
 
 SvLBoxItem* SvLBoxContextBmp::Create() const

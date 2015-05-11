@@ -767,45 +767,45 @@ RecovDocListEntry::RecovDocListEntry(      SvTreeListEntry* pEntry,
 }
 
 
-void RecovDocListEntry::Paint(
-    const Point& aPos, SvTreeListBox& aDevice, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+void RecovDocListEntry::Paint(const Point& aPos, SvTreeListBox& aDevice, vcl::RenderContext& rRenderContext,
+                              const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
-    const Image*        pImg  = 0;
-    const OUString*     pTxt  = 0;
-          RecovDocList* pList = static_cast< RecovDocList* >(&aDevice);
+    const Image* pImg = 0;
+    const OUString* pTxt = 0;
+    RecovDocList* pList = static_cast<RecovDocList*>(&aDevice);
 
-    TURLInfo* pInfo  = static_cast<TURLInfo*>(pEntry->GetUserData());
-    switch(pInfo->RecoveryState)
+    TURLInfo* pInfo = static_cast<TURLInfo*>(pEntry->GetUserData());
+    switch (pInfo->RecoveryState)
     {
-        case E_SUCCESSFULLY_RECOVERED :
+        case E_SUCCESSFULLY_RECOVERED:
         {
             pImg = &pList->m_aGreenCheckImg;
             pTxt = &pList->m_aSuccessRecovStr;
         }
         break;
 
-        case E_ORIGINAL_DOCUMENT_RECOVERED : // TODO must be renamed into ORIGINAL DOCUMENT recovered! Because its marked as yellow
+        case E_ORIGINAL_DOCUMENT_RECOVERED: // TODO must be renamed into ORIGINAL DOCUMENT recovered! Because its marked as yellow
         {
             pImg = &pList->m_aYellowCheckImg;
             pTxt = &pList->m_aOrigDocRecovStr;
         }
         break;
 
-        case E_RECOVERY_FAILED :
+        case E_RECOVERY_FAILED:
         {
             pImg = &pList->m_aRedCrossImg;
             pTxt = &pList->m_aRecovFailedStr;
         }
         break;
 
-        case E_RECOVERY_IS_IN_PROGRESS :
+        case E_RECOVERY_IS_IN_PROGRESS:
         {
             pImg = 0;
             pTxt = &pList->m_aRecovInProgrStr;
         }
         break;
 
-        case E_NOT_RECOVERED_YET :
+        case E_NOT_RECOVERED_YET:
         {
             pImg = 0;
             pTxt = &pList->m_aNotRecovYetStr;
@@ -814,14 +814,14 @@ void RecovDocListEntry::Paint(
     }
 
     if (pImg)
-        aDevice.DrawImage(aPos, *pImg);
+        rRenderContext.DrawImage(aPos, *pImg);
 
     if (pTxt)
     {
         Point aPnt(aPos);
         aPnt.X() += pList->m_aGreenCheckImg.GetSizePixel().Width();
         aPnt.X() += 10;
-        aDevice.DrawText(aPnt, *pTxt);
+        rRenderContext.DrawText(aPnt, *pTxt);
     }
 }
 

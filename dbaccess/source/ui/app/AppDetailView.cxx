@@ -85,7 +85,7 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
     EnableEntryMnemonics();
 }
 
-void OCreationList::Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect )
+void OCreationList::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect )
 {
     if ( m_pMouseDownEntry )
         m_aOriginalFont = GetFont();

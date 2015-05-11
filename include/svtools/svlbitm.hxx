@@ -128,8 +128,8 @@ public:
         maText = rText;
     }
 
-    virtual void Paint(const Point& rPos,
-                       SvTreeListBox& rOutDev,
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev,
+                       vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,
                        const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 
@@ -141,14 +141,14 @@ class SvLBoxBmp : public SvLBoxItem
 {
     Image aBmp;
 public:
-                    SvLBoxBmp();
-    virtual         ~SvLBoxBmp();
+    SvLBoxBmp();
+    virtual ~SvLBoxBmp();
     virtual sal_uInt16 GetType() const SAL_OVERRIDE;
-    virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev,  vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
     virtual SvLBoxItem* Create() const SAL_OVERRIDE;
-    virtual void    Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
+    virtual void Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
 };
 
 
@@ -159,7 +159,7 @@ class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
     SvLBoxButtonKind eKind;
     SvItemStateFlags nItemFlags;
 
-    static void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, vcl::Window* pParent );
+    static void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, vcl::RenderContext& pRenderContext);
 public:
     // An SvLBoxButton can be of three different kinds: an
     // enabled checkbox (the normal kind), a disabled checkbox
@@ -180,6 +180,7 @@ public:
 
     virtual void Paint(const Point& rPos,
                        SvTreeListBox& rOutDev,
+                       vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,
                        const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 
@@ -266,6 +267,7 @@ public:
                               SvViewDataItem* pViewData) SAL_OVERRIDE;
     virtual void Paint(const Point& rPos,
                        SvTreeListBox& rOutDev,
+                       vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,
                        const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 

@@ -1327,18 +1327,18 @@ public:
 
     virtual ~PopupPainter() { }
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rOutDev,
-        const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE
     {
-        SvLBoxString::Paint(rPos, rOutDev, pView, pEntry);
+        SvLBoxString::Paint(rPos, rOutDev, rRenderContext, pView, pEntry);
 
-        Color aOldFillColor = rOutDev.GetFillColor();
+        rRenderContext.Push(PushFlags::FILLCOLOR);
 
-        SvTreeListBox* pTreeBox = static_cast< SvTreeListBox* >( &rOutDev );
+        SvTreeListBox* pTreeBox = static_cast< SvTreeListBox* >(&rOutDev);
         long nX = pTreeBox->GetSizePixel().Width();
 
         ScrollBar* pVScroll = pTreeBox->GetVScroll();
-        if ( pVScroll->IsVisible() )
+        if (pVScroll->IsVisible())
         {
             nX -= pVScroll->GetSizePixel().Width();
         }
@@ -1350,23 +1350,23 @@ public:
         long nHalfSize = nSize / 2;
         long nY = rPos.Y() + nHalfSize;
 
-        if ( aOldFillColor == COL_WHITE )
+        if (rRenderContext.GetFillColor() == COL_WHITE)
         {
-            rOutDev.SetFillColor( Color( COL_BLACK ) );
+            rRenderContext.SetFillColor(Color(COL_BLACK));
         }
         else
         {
-            rOutDev.SetFillColor( Color( COL_WHITE ) );
+            rRenderContext.SetFillColor(Color(COL_WHITE));
         }
 
         long n = 0;
-        while ( n <= nHalfSize )
+        while (n <= nHalfSize)
         {
-            rOutDev.DrawRect( Rectangle( nX+n, nY+n, nX+n, nY+nSize-n ) );
+            rRenderContext.DrawRect(Rectangle(nX + n, nY + n, nX + n, nY + nSize - n));
             ++n;
         }
 
-        rOutDev.SetFillColor( aOldFillColor );
+        rRenderContext.Pop();
     }
 };
 

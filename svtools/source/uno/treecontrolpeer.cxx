@@ -115,8 +115,8 @@ public:
     void            SetImage( const Image& rImage );
     OUString        GetGraphicURL() const { return maGraphicURL;}
     void            SetGraphicURL( const OUString& rGraphicURL );
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void    Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
+                          const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
     SvLBoxItem*     Create() const SAL_OVERRIDE;
     void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
 
@@ -1593,29 +1593,29 @@ UnoTreeListItem::~UnoTreeListItem()
 
 
 void UnoTreeListItem::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+    const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
-    Point aPos( rPos );
+    Point aPos(rPos);
     if (pEntry)
     {
-        Size aSize( GetSize(&rDev, pEntry) );
-        if( !!maImage )
+        Size aSize(GetSize(&rDev, pEntry));
+        if (!!maImage)
         {
-            rDev.DrawImage( aPos, maImage, rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE );
+            rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE);
             int nWidth = maImage.GetSizePixel().Width() + 6;
             aPos.X() += nWidth;
             aSize.Width() -= nWidth;
         }
-        rDev.DrawText( Rectangle(aPos,aSize),maText, rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE );
+        rRenderContext.DrawText(Rectangle(aPos,aSize),maText, rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE);
     }
     else
     {
-        if( !!maImage )
+        if (!!maImage)
         {
-            rDev.DrawImage( aPos, maImage, rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE);
+            rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE);
             aPos.X() += maImage.GetSizePixel().Width() + 6;
         }
-        rDev.DrawText( aPos, maText);
+        rRenderContext.DrawText(aPos, maText);
     }
 }
 

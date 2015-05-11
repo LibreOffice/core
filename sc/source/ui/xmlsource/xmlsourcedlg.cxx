@@ -251,7 +251,7 @@ public:
             return;
 
         pView->SetHighlighted(false);
-        mrTree.PaintEntry(p);
+        mrTree.Invalidate();
     }
 };
 
@@ -395,7 +395,7 @@ void ScXMLSourceDlg::RepeatElementSelected(SvTreeListEntry& rEntry)
         // Highlight the entry if not highlighted already.  This can happen
         // when the current entry is a child entry of a repeat element entry.
         p->SetHighlighted(true);
-        mpLbTree->PaintEntry(&rEntry);
+        mpLbTree->Invalidate();
         maHighlightedEntries.push_back(&rEntry);
     }
 
@@ -455,7 +455,7 @@ void ScXMLSourceDlg::SelectAllChildEntries(SvTreeListEntry& rEntry)
         SelectAllChildEntries(r); // select recursively.
         SvViewDataEntry* p = mpLbTree->GetViewDataEntry(&r);
         p->SetHighlighted(true);
-        mpLbTree->PaintEntry(&r);
+        mpLbTree->Invalidate();
         maHighlightedEntries.push_back(&r);
     }
 }

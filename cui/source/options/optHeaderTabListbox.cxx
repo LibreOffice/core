@@ -34,23 +34,23 @@ public:
     OptLBoxString_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 
 
-void OptLBoxString_Impl::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+void OptLBoxString_Impl::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
+                               const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
-    vcl::Font aOldFont( rDev.GetFont() );
-    vcl::Font aFont( aOldFont );
+    rRenderContext.Push(PushFlags::FONT);
+    vcl::Font aFont(rRenderContext.GetFont());
     //detect readonly state by asking for a valid Image
-    if(pEntry && !(!SvTreeListBox::GetCollapsedEntryBmp(pEntry)))
-        aFont.SetColor( Application::GetSettings().GetStyleSettings().GetDeactiveTextColor() );
-    rDev.SetFont( aFont );
-    rDev.DrawText( rPos, GetText() );
-    rDev.SetFont( aOldFont );
+    if (pEntry && !(!SvTreeListBox::GetCollapsedEntryBmp(pEntry)))
+        aFont.SetColor(Application::GetSettings().GetStyleSettings().GetDeactiveTextColor());
+    rRenderContext.SetFont(aFont);
+    rRenderContext.DrawText(rPos, GetText());
+    rRenderContext.Pop();
 }
 
 

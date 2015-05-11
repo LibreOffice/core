@@ -1014,43 +1014,42 @@ public:
     FmFilterItemsString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr )
         :SvLBoxString(pEntry,nFlags,rStr){}
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
     virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData) SAL_OVERRIDE;
 };
 
 const int nxDBmp = 12;
 
-void FmFilterItemsString::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                                const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     FmFilterItems* pRow = static_cast<FmFilterItems*>(pEntry->GetUserData());
     FmFormItem* pForm = static_cast<FmFormItem*>(pRow->GetParent());
 
     // current filter is significant painted
     const bool bIsCurrentFilter = pForm->GetChildren()[ pForm->GetFilterController()->getActiveTerm() ] == pRow;
-    if ( bIsCurrentFilter )
+    if (bIsCurrentFilter)
     {
-        rDev.Push( PushFlags::LINECOLOR );
+        rRenderContext.Push(PushFlags::LINECOLOR);
+        rRenderContext.SetLineColor(rRenderContext.GetTextColor());
 
-        rDev.SetLineColor( rDev.GetTextColor() );
+        Rectangle aRect(rPos, GetSize(&rDev, pEntry));
+        Point aFirst(rPos.X(), aRect.Bottom() - 6);
+        Point aSecond(aFirst .X() + 2, aFirst.Y() + 3);
 
-        Rectangle aRect( rPos, GetSize( &rDev, pEntry ) );
-        Point aFirst( rPos.X(), aRect.Bottom() - 6 );
-        Point aSecond(aFirst .X() + 2, aFirst.Y() + 3 );
-
-        rDev.DrawLine( aFirst, aSecond );
+        rRenderContext.DrawLine(aFirst, aSecond);
 
         aFirst = aSecond;
         aFirst.X() += 1;
         aSecond.X() += 6;
         aSecond.Y() -= 5;
 
-        rDev.DrawLine( aFirst, aSecond );
-
-        rDev.Pop();
+        rRenderContext.DrawLine(aFirst, aSecond);
+        rRenderContext.Pop();
     }
 
-    rDev.DrawText( Point(rPos.X() + nxDBmp, rPos.Y()), GetText() );
+    rRenderContext.DrawText(Point(rPos.X() + nxDBmp, rPos.Y()), GetText());
 }
 
 
@@ -1070,13 +1069,14 @@ class FmFilterString : public SvLBoxString
 
 public:
     FmFilterString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr, const OUString& aName)
-        :SvLBoxString(pEntry,nFlags,rStr)
-        ,m_aName(aName)
+        : SvLBoxString(pEntry,nFlags,rStr)
+        , m_aName(aName)
     {
         m_aName += ": ";
     }
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
     virtual void InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry, SvViewDataItem* pViewData) SAL_OVERRIDE;
 };
 
@@ -1100,21 +1100,21 @@ void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
 }
 
 
-void FmFilterString::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
+void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                           const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
-    vcl::Font aOldFont( rDev.GetFont());
-    vcl::Font aFont( aOldFont );
+    rRenderContext.Push(PushFlags::FONT);
+    vcl::Font aFont(rRenderContext.GetFont());
     aFont.SetWeight(WEIGHT_BOLD);
-    rDev.SetFont( aFont );
+    rRenderContext.SetFont(aFont);
 
     Point aPos(rPos);
-    rDev.DrawText( aPos, m_aName );
+    rRenderContext.DrawText(aPos, m_aName);
 
     // position for the second text
     aPos.X() += rDev.GetTextWidth(m_aName) + nxD;
-    rDev.SetFont( aOldFont );
-    rDev.DrawText( aPos, GetText() );
+    rRenderContext.Pop();
+    rDev.DrawText(aPos, GetText());
 }
 
 FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )

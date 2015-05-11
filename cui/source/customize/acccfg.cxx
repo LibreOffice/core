@@ -624,8 +624,8 @@ public:
 
     virtual ~SfxAccCfgLBoxString_Impl();
 
-    virtual void Paint(
-        const Point& aPos, SvTreeListBox& rDevice, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& aPos, SvTreeListBox& rDevice, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 
@@ -636,8 +636,8 @@ SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(SvTreeListEntry* pEntry, sal_
 SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
 {}
 
-void SfxAccCfgLBoxString_Impl::Paint(
-    const Point& aPos, SvTreeListBox& rDevice, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+void SfxAccCfgLBoxString_Impl::Paint(const Point& aPos, SvTreeListBox& /*rDevice*/, vcl::RenderContext& rRenderContext,
+                                     const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     if (!pEntry)
         return;
@@ -647,9 +647,9 @@ void SfxAccCfgLBoxString_Impl::Paint(
         return;
 
     if (pUserData->m_bIsConfigurable)
-        rDevice.DrawText(aPos, GetText());
+        rRenderContext.DrawText(aPos, GetText());
     else
-        rDevice.DrawCtrlText(aPos, GetText(), 0, -1, TEXT_DRAW_DISABLE);
+        rRenderContext.DrawCtrlText(aPos, GetText(), 0, -1, TEXT_DRAW_DISABLE);
 
 }
 

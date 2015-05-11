@@ -67,10 +67,10 @@ _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
 
 // attention, this array is indexed directly (0, 1, ...) in the code
 static long nTabs[] =
-    {
-        2, // Number of Tabs
-        0, 90
-    };
+{
+    2, // Number of Tabs
+    0, 90
+};
 
 #define TAB_WIDTH_MIN        10
 
@@ -450,8 +450,8 @@ class IconLBoxString : public SvLBoxString
 public:
     IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText,
         Image* pMacroImg, Image* pComponentImg );
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 
@@ -465,34 +465,33 @@ IconLBoxString::IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, cons
 }
 
 
-void IconLBoxString::Paint(
-    const Point& aPos, SvTreeListBox& aDevice, const SvViewDataEntry* /*pView*/,
-    const SvTreeListEntry* /*pEntry*/)
+void IconLBoxString::Paint(const Point& aPos, SvTreeListBox& /*aDevice*/, vcl::RenderContext& rRenderContext,
+                           const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
-    OUString aTxt( GetText() );
-    if( !aTxt.isEmpty() )
+    OUString aTxt(GetText());
+    if (!aTxt.isEmpty())
     {
-        OUString aURL( aTxt );
-        sal_Int32 nIndex = aURL.indexOf( aVndSunStarUNO );
+        OUString aURL(aTxt);
+        sal_Int32 nIndex = aURL.indexOf(aVndSunStarUNO);
         bool bUNO = nIndex == 0;
 
         const Image* pImg = bUNO ? m_pComponentImg : m_pMacroImg;
-        aDevice.DrawImage( aPos, *pImg );
+        rRenderContext.DrawImage(aPos, *pImg);
 
         OUString aPureMethod;
-        if( bUNO )
+        if (bUNO)
         {
-            aPureMethod = aURL.copy( strlen(aVndSunStarUNO) );
+            aPureMethod = aURL.copy(strlen(aVndSunStarUNO));
         }
         else
         {
-            aPureMethod = aURL.copy( strlen(aVndSunStarScript) );
+            aPureMethod = aURL.copy(strlen(aVndSunStarScript));
             aPureMethod = aPureMethod.copy( 0, aPureMethod.indexOf( '?' ) );
         }
 
         Point aPnt(aPos);
         aPnt.X() += m_nxImageOffset;
-        aDevice.DrawText( aPnt, aPureMethod );
+        rRenderContext.DrawText(aPnt, aPureMethod);
     }
 }
 

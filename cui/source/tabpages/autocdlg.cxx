@@ -334,49 +334,47 @@ public:
     OfaImpBrwString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
         const OUString& rStr ) : SvLBoxString(pEntry,nFlags,rStr){}
 
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
-        const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
-void OfaImpBrwString::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
-    const SvTreeListEntry* pEntry)
+void OfaImpBrwString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
+                            const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
-    rDev.DrawText( rPos, GetText() );
-    if(pEntry->GetUserData())
+    rRenderContext.DrawText(rPos, GetText());
+    if (pEntry->GetUserData())
     {
         ImpUserData* pUserData = static_cast<ImpUserData*>(pEntry->GetUserData());
         Point aNewPos(rPos);
-        aNewPos.X() += rDev.GetTextWidth(GetText());
-        vcl::Font aOldFont( rDev.GetFont());
-        vcl::Font aFont( aOldFont );
-        if(pUserData->pFont)
+        aNewPos.X() += rRenderContext.GetTextWidth(GetText());
+        vcl::Font aOldFont(rRenderContext.GetFont());
+        vcl::Font aFont(aOldFont);
+        if (pUserData->pFont)
         {
             aFont = *pUserData->pFont;
             aFont.SetColor(aOldFont.GetColor());
             aFont.SetSize(aOldFont.GetSize());
         }
-        aFont.SetWeight( WEIGHT_BOLD );
+        aFont.SetWeight(WEIGHT_BOLD);
 
         bool bFett = true;
         sal_Int32 nPos = 0;
         do {
-            OUString sTxt( pUserData->pString->getToken( 0, 1, nPos ));
+            OUString sTxt(pUserData->pString->getToken(0, 1, nPos));
 
-            if( bFett )
-                rDev.SetFont( aFont );
+            if (bFett)
+                rRenderContext.SetFont(aFont);
 
-            rDev.DrawText( aNewPos, sTxt );
+            rRenderContext.DrawText(aNewPos, sTxt);
 
-            if( -1 != nPos )
-                aNewPos.X() += rDev.GetTextWidth( sTxt );
+            if (-1 != nPos)
+                aNewPos.X() += rRenderContext.GetTextWidth(sTxt);
 
-            if( bFett )
-                rDev.SetFont( aOldFont );
+            if (bFett)
+                rRenderContext.SetFont(aOldFont);
 
             bFett = !bFett;
-        } while( -1 != nPos );
+        } while(-1 != nPos);
     }
 }
 

@@ -207,8 +207,8 @@ public:
     SvLBoxItem*     Create() const SAL_OVERRIDE;
     void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
 
-    virtual void Paint(
-        const Point&, SvTreeListBox& rDev, const SvViewDataEntry* pView,const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point&, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView,const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 private:
     VclPtr<CustomAnimationList> mpParent;
     OUString        maDescription;
@@ -238,59 +238,68 @@ void CustomAnimationListEntryItem::InitViewData( SvTreeListBox* pView, SvTreeLis
     pViewData->maSize = aSize;
 }
 
-void CustomAnimationListEntryItem::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
+void CustomAnimationListEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                                         const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
 
-    const SvViewDataItem* pViewData = mpParent->GetViewDataItem( pEntry, this );
+    const SvViewDataItem* pViewData = mpParent->GetViewDataItem(pEntry, this);
 
-    Point aPos( rPos );
-    Size aSize( pViewData->maSize );
+    Point aPos(rPos);
+    Size aSize(pViewData->maSize);
 
     sal_Int16 nNodeType = mpEffect->getNodeType();
-    if( nNodeType == EffectNodeType::ON_CLICK )
+    if (nNodeType == EffectNodeType::ON_CLICK )
     {
-        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_ON_CLICK ) );
+        rRenderContext.DrawImage( aPos, mpParent->getImage(IMG_CUSTOMANIMATION_ON_CLICK));
     }
-    else if( nNodeType == EffectNodeType::AFTER_PREVIOUS )
+    else if (nNodeType == EffectNodeType::AFTER_PREVIOUS)
     {
-        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_AFTER_PREVIOUS ) );
+        rRenderContext.DrawImage(aPos, mpParent->getImage(IMG_CUSTOMANIMATION_AFTER_PREVIOUS));
     }
 
     aPos.X() += 19;
 
     sal_uInt16 nImage;
-    switch( mpEffect->getPresetClass() )
+    switch (mpEffect->getPresetClass())
     {
-    case EffectPresetClass::ENTRANCE:   nImage = IMG_CUSTOMANIMATION_ENTRANCE_EFFECT; break;
-    case EffectPresetClass::EXIT:       nImage =  IMG_CUSTOMANIMATION_EXIT_EFFECT; break;
-    case EffectPresetClass::EMPHASIS:   nImage =  IMG_CUSTOMANIMATION_EMPHASIS_EFFECT; break;
-    case EffectPresetClass::MOTIONPATH: nImage = IMG_CUSTOMANIMATION_MOTION_PATH; break;
-    case EffectPresetClass::OLEACTION:  nImage = IMG_CUSTOMANIMATION_OLE; break;
+    case EffectPresetClass::ENTRANCE:
+        nImage = IMG_CUSTOMANIMATION_ENTRANCE_EFFECT; break;
+    case EffectPresetClass::EXIT:
+        nImage =  IMG_CUSTOMANIMATION_EXIT_EFFECT; break;
+    case EffectPresetClass::EMPHASIS:
+        nImage =  IMG_CUSTOMANIMATION_EMPHASIS_EFFECT; break;
+    case EffectPresetClass::MOTIONPATH:
+        nImage = IMG_CUSTOMANIMATION_MOTION_PATH; break;
+    case EffectPresetClass::OLEACTION:
+        nImage = IMG_CUSTOMANIMATION_OLE; break;
     case EffectPresetClass::MEDIACALL:
-        switch( mpEffect->getCommand() )
+        switch (mpEffect->getCommand())
         {
-        case EffectCommands::TOGGLEPAUSE:   nImage = IMG_CUSTOMANIMATION_MEDIA_PAUSE; break;
-        case EffectCommands::STOP:          nImage = IMG_CUSTOMANIMATION_MEDIA_STOP; break;
+        case EffectCommands::TOGGLEPAUSE:
+            nImage = IMG_CUSTOMANIMATION_MEDIA_PAUSE; break;
+        case EffectCommands::STOP:
+            nImage = IMG_CUSTOMANIMATION_MEDIA_STOP; break;
         case EffectCommands::PLAY:
-        default:                            nImage = IMG_CUSTOMANIMATION_MEDIA_PLAY; break;
+        default:
+            nImage = IMG_CUSTOMANIMATION_MEDIA_PLAY; break;
         }
         break;
-    default:                            nImage = 0xffff;
+    default:
+        nImage = 0xffff;
     }
 
-    if( nImage != 0xffff )
+    if (nImage != 0xffff)
     {
-        const Image& rImage = mpParent->getImage( nImage );
-        Point aImagePos( aPos );
-        aImagePos.Y() += ( aSize.Height() - rImage.GetSizePixel().Height() ) >> 1;
-        rDev.DrawImage( aImagePos, rImage );
+        const Image& rImage = mpParent->getImage(nImage);
+        Point aImagePos(aPos);
+        aImagePos.Y() += (aSize.Height() - rImage.GetSizePixel().Height()) >> 1;
+        rRenderContext.DrawImage(aImagePos, rImage);
     }
 
     aPos.X() += 19;
-    aPos.Y() += ( aSize.Height() - rDev.GetTextHeight()) >> 1;
+    aPos.Y() += (aSize.Height() - rDev.GetTextHeight()) >> 1;
 
-    rDev.DrawText( aPos, rDev.GetEllipsisString( maDescription, rDev.GetOutputSizePixel().Width() - aPos.X() ) );
+    rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(maDescription, rDev.GetOutputSizePixel().Width() - aPos.X()));
 }
 
 SvLBoxItem* CustomAnimationListEntryItem::Create() const
@@ -336,8 +345,8 @@ public:
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
     SvLBoxItem*     Create() const SAL_OVERRIDE;
     void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 
 private:
     OUString        maDescription;
@@ -363,42 +372,42 @@ void CustomAnimationTriggerEntryItem::InitViewData( SvTreeListBox* pView, SvTree
     pViewData->maSize = aSize;
 }
 
-void CustomAnimationTriggerEntryItem::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
+void CustomAnimationTriggerEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                                            const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
-    Size aSize( rDev.GetOutputSizePixel().Width(), static_cast< SvTreeListBox* >(&rDev)->GetEntryHeight() );
+    Size aSize(rRenderContext.GetOutputSizePixel().Width(), static_cast<SvTreeListBox*>(&rDev)->GetEntryHeight());
 
-    Point aPos( 0, rPos.Y() );
+    Point aPos(0, rPos.Y());
 
-    Rectangle aOutRect( aPos, aSize );
+    Rectangle aOutRect(aPos, aSize);
 
     // fill the background
-    Color aColor (rDev.GetSettings().GetStyleSettings().GetDialogColor());
+    Color aColor(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
 
-    rDev.Push();
-    rDev.SetFillColor (aColor);
-    rDev.SetLineColor ();
-    rDev.DrawRect(aOutRect);
+    rRenderContext.Push();
+    rRenderContext.SetFillColor(aColor);
+    rRenderContext.SetLineColor();
+    rRenderContext.DrawRect(aOutRect);
 
     // Erase the four corner pixels to make the rectangle appear rounded.
-    rDev.SetLineColor( rDev.GetSettings().GetStyleSettings().GetWindowColor());
-    rDev.DrawPixel( aOutRect.TopLeft());
-    rDev.DrawPixel( Point(aOutRect.Right(), aOutRect.Top()));
-    rDev.DrawPixel( Point(aOutRect.Left(), aOutRect.Bottom()));
-    rDev.DrawPixel( Point(aOutRect.Right(), aOutRect.Bottom()));
+    rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
+    rRenderContext.DrawPixel(aOutRect.TopLeft());
+    rRenderContext.DrawPixel(Point(aOutRect.Right(), aOutRect.Top()));
+    rRenderContext.DrawPixel(Point(aOutRect.Left(), aOutRect.Bottom()));
+    rRenderContext.DrawPixel(Point(aOutRect.Right(), aOutRect.Bottom()));
 
     // draw the category title
 
-    int nVertBorder = (( aSize.Height() - rDev.GetTextHeight()) >> 1);
-    int nHorzBorder = rDev.LogicToPixel( Size( 3, 3 ), MAP_APPFONT ).Width();
+    int nVertBorder = ((aSize.Height() - rDev.GetTextHeight()) >> 1);
+    int nHorzBorder = rRenderContext.LogicToPixel(Size(3, 3), MAP_APPFONT).Width();
 
     aOutRect.Left() += nHorzBorder;
     aOutRect.Right() -= nHorzBorder;
     aOutRect.Top() += nVertBorder;
     aOutRect.Bottom() -= nVertBorder;
 
-    rDev.DrawText (aOutRect, rDev.GetEllipsisString( maDescription, aOutRect.GetWidth() ) );
-    rDev.Pop();
+    rRenderContext.DrawText(aOutRect, rRenderContext.GetEllipsisString(maDescription, aOutRect.GetWidth()));
+    rRenderContext.Pop();
 }
 
 SvLBoxItem* CustomAnimationTriggerEntryItem::Create() const

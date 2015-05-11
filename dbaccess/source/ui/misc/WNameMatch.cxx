@@ -349,18 +349,22 @@ public:
     {
     }
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
-void OColumnString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
+void OColumnString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                          const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
+    rRenderContext.Push(PushFlags::TEXTCOLOR | PushFlags::TEXTFILLCOLOR);
     if(m_bReadOnly)
     {
-        const StyleSettings& rStyleSettings = rDev.GetSettings().GetStyleSettings();
-        rDev.SetTextColor( rStyleSettings.GetDisableColor() );
-        rDev.SetTextFillColor( rStyleSettings.GetFieldColor() );
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+        rRenderContext.SetTextFillColor(rStyleSettings.GetFieldColor());
     }
-    rDev.DrawText( rPos, GetText() );
+    rRenderContext.DrawText(rPos, GetText());
+    rRenderContext.Pop();
 }
 
 OColumnTreeBox::OColumnTreeBox( vcl::Window* pParent, WinBits nBits )

@@ -3463,9 +3463,8 @@ public:
     SwContentLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
         const OUString& rStr ) : SvLBoxString(pEntry,nFlags,rStr) {}
 
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
-        const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
@@ -3479,20 +3478,18 @@ void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
 
-void SwContentLBoxString::Paint(
-    const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
-    const SvTreeListEntry* pEntry)
+void SwContentLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                                const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
 {
-    if(lcl_IsContent(pEntry) &&
-            static_cast<SwContent *>(pEntry->GetUserData())->IsInvisible())
+    if (lcl_IsContent(pEntry) && static_cast<SwContent *>(pEntry->GetUserData())->IsInvisible())
     {
-        vcl::Font aOldFont( rDev.GetFont());
+        vcl::Font aOldFont(rRenderContext.GetFont());
         vcl::Font aFont(aOldFont);
-        Color aCol( COL_LIGHTGRAY );
-        aFont.SetColor( aCol );
-        rDev.SetFont( aFont );
-        rDev.DrawText( rPos, GetText() );
-        rDev.SetFont( aOldFont );
+        Color aCol(COL_LIGHTGRAY);
+        aFont.SetColor(aCol);
+        rRenderContext.SetFont(aFont );
+        rRenderContext.DrawText(rPos, GetText());
+        rRenderContext.SetFont(aOldFont);
     }
     // IA2 CWS. MT: Removed for now (also in SvLBoxEntry) - only used in Sw/Sd/ScContentLBoxString, they should decide if they need this
     /*
@@ -3513,10 +3510,10 @@ void SwContentLBoxString::Paint(
     }
     */
     else
-        SvLBoxString::Paint( rPos, rDev, pView, pEntry);
+        SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, pEntry);
 }
 
-void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
+void SwContentTree::DataChanged(const DataChangedEvent& rDCEvt)
 {
   if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )

@@ -51,8 +51,8 @@ public:
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
 
     /** Paints this entry to the specified position, using the own font settings. */
-    virtual void Paint(
-        const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext,
+                       const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 };
 
 
@@ -82,7 +82,7 @@ public:
     /** Removes a selection. */
     void                        SetNoSelection();
 
-    /** Returns the position of the entry currently selected or TREELIST_APPEND. 
+    /** Returns the position of the entry currently selected or TREELIST_APPEND.
     */
     sal_uLong                   GetSelectEntryPos() const;
 
