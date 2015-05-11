@@ -140,12 +140,11 @@ actual value to `bool` as well before comparing.
 === Running only a single test
 
 If you want to run only a single test to allow quick development iteration,
-then you need to do two things:
+then use `CPPUNIT_TEST_NAME` to specify the name of the single test:
 
-- change the `#if 1` in `inc/swmodeltestbase.hxx` to `#if 0` to define the test
-  macro with the `_ONLY` suffix
-- change the used macro for the test you want to run, i.e.
-  `DECLARE_OOXMLEXPORT_TEST` -> `DECLARE_OOXMLEXPORT_TEST_ONLY`
+----
+CPPUNIT_TEST_NAME="testTdf91074" make -sr CppunitTest_sw_rtfimport
+----
 
 == UNO, in more details, various tips:
 

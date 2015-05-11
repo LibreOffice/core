@@ -85,7 +85,6 @@ using namespace css;
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
-#if 1
 #define DECLARE_OOXMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
 #define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 #define DECLARE_RTFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
@@ -93,28 +92,6 @@ using namespace css;
 #define DECLARE_ODFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
 #define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 #define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
-
-// For testing during development of a test, you want to use
-// DECLARE_OOXMLEXPORT_TEST_ONLY, and change the above to #if 0
-// Of course, don't forget to set back to #if 1 when you are done :-)
-#else
-#define DECLARE_OOXMLIMPORT_TEST_ONLY(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
-#define DECLARE_OOXMLEXPORT_TEST_ONLY(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
-#define DECLARE_RTFIMPORT_TEST_ONLY(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
-#define DECLARE_RTFEXPORT_TEST_ONLY(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
-#define DECLARE_ODFIMPORT_TEST_ONLY(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
-#define DECLARE_ODFEXPORT_TEST_ONLY(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
-#define DECLARE_WW8EXPORT_TEST_ONLY(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
-
-#undef DECLARE_OOXMLEXPORT_TEST
-#define DECLARE_OOXMLIMPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
-#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
-#define DECLARE_RTFIMPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
-#define DECLARE_RTFEXPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
-#define DECLARE_ODFIMPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
-#define DECLARE_ODFEXPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
-#define DECLARE_WW8EXPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
-#endif
 
 #define DECLARE_SW_IMPORT_TEST(TestName, filename, BaseClass) \
     class TestName : public BaseClass { \
