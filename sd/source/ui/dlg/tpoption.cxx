@@ -554,6 +554,8 @@ void SdTpOptionsMisc::SetImpressMode()
 {
 #ifndef ENABLE_SDREMOTE_BLUETOOTH
     m_pCbxEnableSdremote->Hide();
+#else
+    (void) this; // loplugin:staticmethods
 #endif
 }
 
