@@ -97,11 +97,6 @@ Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
   return dp->getOOoData();
 }
 
-bool OSXTransferable::isUnicodeText(const DataFlavor& flavor)
-{
-  return (flavor.DataType == cppu::UnoType<OUString>::get());
-}
-
 Sequence< DataFlavor > SAL_CALL OSXTransferable::getTransferDataFlavors(  )
     throw( RuntimeException, std::exception )
 {

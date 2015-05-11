@@ -64,8 +64,6 @@ public:
 
   //com::sun::star::uno::Any getClipboardItemData(ClipboardItemPtr_t clipboardItem);
 
-  bool isUnicodeText(const com::sun::star::datatransfer::DataFlavor& flavor);
-
   bool compareDataFlavors( const com::sun::star::datatransfer::DataFlavor& lhs,
                            const com::sun::star::datatransfer::DataFlavor& rhs );
 
