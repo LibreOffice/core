@@ -1150,7 +1150,7 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
         aSize.Height = 1000;
     if (!bSuppressRotation)
     {
-        SdrObject* pShape = (SdrObject*) GetSdrObjectFromXShape( rXShape );
+        SdrObject* pShape = GetSdrObjectFromXShape( rXShape );
         nRotation = pShape ? pShape->GetRotateAngle() : 0;
         if (nRotation != 0 && nRotation != 18000)
         {
