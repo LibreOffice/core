@@ -69,7 +69,7 @@ public:
 
     OUString getString() const;
 
-    bool isValid() {
+    bool isValid() const {
         // We use a null pointer/empty unit to indicate an invalid unit.
         return mpUnit.get() != 0;
     }
