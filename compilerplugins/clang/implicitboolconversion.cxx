@@ -951,11 +951,13 @@ void ImplicitBoolConversion::checkCXXConstructExpr(
 }
 
 void ImplicitBoolConversion::reportWarning(ImplicitCastExpr const * expr) {
-    report(
-        DiagnosticsEngine::Warning,
-        "implicit conversion (%0) from %1 to %2", expr->getLocStart())
-        << expr->getCastKindName() << expr->getSubExprAsWritten()->getType()
-        << expr->getType() << expr->getSourceRange();
+    if (!compiler.getLangOpts().ObjC2 || compiler.getLangOpts().CPlusPlus) {
+        report(
+            DiagnosticsEngine::Warning,
+            "implicit conversion (%0) from %1 to %2", expr->getLocStart())
+            << expr->getCastKindName() << expr->getSubExprAsWritten()->getType()
+            << expr->getType() << expr->getSourceRange();
+    }
 }
 
 loplugin::Plugin::Registration<ImplicitBoolConversion> X(
