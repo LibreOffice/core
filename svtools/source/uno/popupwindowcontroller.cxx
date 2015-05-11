@@ -42,9 +42,7 @@ public:
     ~PopupWindowControllerImpl();
 
     void SetPopupWindow( vcl::Window* pPopupWindow, ToolBox* pToolBox );
-
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
-    DECL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, vcl::Window* );
 
 private:
     VclPtr<vcl::Window> mpPopupWindow;
@@ -68,7 +66,7 @@ void PopupWindowControllerImpl::SetPopupWindow( vcl::Window* pPopupWindow, ToolB
     if( mpPopupWindow )
     {
         mpPopupWindow->RemoveEventListener( LINK( this, PopupWindowControllerImpl, WindowEventListener ) );
-        Application::PostUserEvent( LINK( this, PopupWindowControllerImpl, AsyncDeleteWindowHdl ), mpPopupWindow );
+        mpPopupWindow.disposeAndClear();
     }
     mpPopupWindow = pPopupWindow;
     mpToolBox = pToolBox;
@@ -119,14 +117,6 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclSimpleEvent*, pEve
         }
     }
     return 1;
-}
-
-
-
-IMPL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, vcl::Window*, pWindow )
-{
-    pWindow->disposeOnce();
-    return 0;
 }
 
 
