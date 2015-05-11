@@ -1033,7 +1033,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     return true;
 }
 
-Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nTextHeight, const Rectangle& rControlRegion)
+Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContentHeight, const Rectangle& rControlRegion)
 {
     gtk_style_context_save(pStyle);
 
@@ -1043,11 +1043,34 @@ Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nTextHei
     GtkBorder padding;
     gtk_style_context_get_padding(pStyle, GTK_STATE_FLAG_NORMAL, &padding);
 
-    gint nWidgetHeight = nTextHeight + padding.top + padding.bottom + border.top + border.bottom;
+    gint nWidgetHeight = nContentHeight + padding.top + padding.bottom + border.top + border.bottom;
 
     nWidgetHeight = std::max<gint>(nWidgetHeight, rControlRegion.GetHeight());
 
     Rectangle aEditRect(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nWidgetHeight));
+
+    gtk_style_context_restore(pStyle);
+
+    return aEditRect;
+}
+
+Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContentWidth, long nContentHeight, const Rectangle& rControlRegion)
+{
+    gtk_style_context_save(pStyle);
+
+    GtkBorder border;
+    gtk_style_context_get_border(pStyle, GTK_STATE_FLAG_NORMAL, &border);
+
+    GtkBorder padding;
+    gtk_style_context_get_padding(pStyle, GTK_STATE_FLAG_NORMAL, &padding);
+
+    gint nWidgetHeight = nContentHeight + padding.top + padding.bottom + border.top + border.bottom;
+    nWidgetHeight = std::max<gint>(nWidgetHeight, rControlRegion.GetHeight());
+
+    gint nWidgetWidth = nContentWidth + padding.left + padding.right + border.left + border.right;
+    nWidgetWidth = std::max<gint>(nWidgetWidth, rControlRegion.GetWidth());
+
+    Rectangle aEditRect(rControlRegion.TopLeft(), Size(nWidgetWidth, nWidgetHeight));
 
     gtk_style_context_restore(pStyle);
 
@@ -1168,7 +1191,11 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         gtk_style_context_add_region(mpNoteBookStyle, GTK_STYLE_REGION_TAB, GTK_REGION_ONLY);
         gtk_style_context_add_class(mpNoteBookStyle, GTK_STYLE_CLASS_TOP);
 
-        aEditRect = AdjustRectForTextBordersPadding(mpSpinStyle, rValue.getNumericVal(), rControlRegion);
+        const TabitemValue& rTabitemValue = static_cast<const TabitemValue&>(rValue);
+        const Rectangle& rTabitemRect = rTabitemValue.getContentRect();
+
+        aEditRect = AdjustRectForTextBordersPadding(mpNoteBookStyle, rTabitemRect.GetWidth(),
+                                                    rTabitemRect.GetHeight(), rControlRegion);
 
         gtk_style_context_restore(mpNoteBookStyle);
     }

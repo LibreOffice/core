@@ -243,7 +243,9 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
 
     Rectangle aCtrlRegion( Point( 0, 0 ), aSize );
     Rectangle aBoundingRgn, aContentRgn;
-    const EditBoxValue aControlValue(GetTextHeight());
+    const TabitemValue aControlValue(Rectangle(TAB_TABOFFSET_X, TAB_TABOFFSET_Y,
+                                               aSize.Width() - TAB_TABOFFSET_X * 2,
+                                               aSize.Height() - TAB_TABOFFSET_Y * 2));
     if(GetNativeControlRegion( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion,
                                            ControlState::ENABLED, aControlValue, OUString(),
                                            aBoundingRgn, aContentRgn ) )
@@ -853,17 +855,20 @@ void TabControl::ImplDrawItem(vcl::RenderContext& /*rRenderContext*/, ImplTabIte
 
     if( !bLayout && (bNativeOK = IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)) )
     {
-        TabitemValue tiValue;
-        if(pItem->maRect.Left() < 5)
+        TabitemValue tiValue(Rectangle(pItem->maRect.Left() + TAB_TABOFFSET_X,
+                                       pItem->maRect.Right() - TAB_TABOFFSET_X,
+                                       pItem->maRect.Top() + TAB_TABOFFSET_Y,
+                                       pItem->maRect.Bottom() - TAB_TABOFFSET_Y));
+        if (pItem->maRect.Left() < 5)
             tiValue.mnAlignment |= TABITEM_LEFTALIGNED;
-        if(pItem->maRect.Right() > mnLastWidth - 5)
+        if (pItem->maRect.Right() > mnLastWidth - 5)
             tiValue.mnAlignment |= TABITEM_RIGHTALIGNED;
-        if ( bFirstInGroup )
+        if (bFirstInGroup)
             tiValue.mnAlignment |= TABITEM_FIRST_IN_GROUP;
-        if ( bLastInGroup )
+        if (bLastInGroup)
             tiValue.mnAlignment |= TABITEM_LAST_IN_GROUP;
 
-        Rectangle           aCtrlRegion( pItem->maRect );
+        Rectangle aCtrlRegion( pItem->maRect );
         bNativeOK = DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
                     tiValue, OUString() );
     }

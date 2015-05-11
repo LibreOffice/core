@@ -236,6 +236,7 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
         {
             const TabitemValue* pTIVal = static_cast<const TabitemValue*>(&rVal);
             TabitemValue* pNew = new TabitemValue( *pTIVal );
+            pNew->maContentRect = rDev.ImplLogicToDevicePixel(pTIVal->maContentRect);
             aResult.reset( pNew );
         }
         break;

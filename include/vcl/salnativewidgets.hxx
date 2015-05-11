@@ -367,12 +367,14 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
 {
     public:
         unsigned int    mnAlignment;
+        Rectangle       maContentRect;
 
-        inline TabitemValue()
-        : ImplControlValue( CTRL_TAB_ITEM, BUTTONVALUE_DONTKNOW, 0 )
+        TabitemValue(const Rectangle &rContentRect)
+            : ImplControlValue( CTRL_TAB_ITEM, BUTTONVALUE_DONTKNOW, 0 )
+            , mnAlignment(0)
+            , maContentRect(rContentRect)
         {
-            mnAlignment = 0;
-        };
+        }
         virtual ~TabitemValue();
         virtual TabitemValue* clone() const SAL_OVERRIDE;
 
@@ -382,6 +384,7 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
         bool isNotAligned() const   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
         bool isFirst() const        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
         bool isLast() const         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
+        const Rectangle& getContentRect() const { return maContentRect; }
 };
 
 /* SpinbuttonValue:
