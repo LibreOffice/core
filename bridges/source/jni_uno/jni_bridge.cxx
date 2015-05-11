@@ -71,7 +71,7 @@ void SAL_CALL Mapping_map_to_uno(
     {
         if (0 != *ppUnoI)
         {
-            uno_Interface * p = *(uno_Interface **)ppUnoI;
+            uno_Interface * p = *ppUnoI;
             (*p->release)( p );
             *ppUnoI = 0;
         }
@@ -95,7 +95,7 @@ void SAL_CALL Mapping_map_to_uno(
             uno_Interface * pUnoI = bridge->map_to_uno( jni, javaI, info );
             if (0 != *ppUnoI)
             {
-                uno_Interface * p = *(uno_Interface **)ppUnoI;
+                uno_Interface * p = *ppUnoI;
                 (*p->release)( p );
             }
             *ppUnoI = pUnoI;
