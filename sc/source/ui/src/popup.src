@@ -150,6 +150,12 @@ Menu RID_POPUP_CELLS
         };
         MenuItem
         {
+            Identifier = SID_EDIT_POSTIT ;
+            HelpId = CMD_SID_EDIT_POSTIT ;
+            Text [ en-US ] = "Edit Co~mment" ;
+        };
+        MenuItem
+        {
             Identifier = SID_DELETE_NOTE ;
             HelpId = CMD_SID_DELETE_NOTE ;
             Text [ en-US ] = "D~elete Comment" ;

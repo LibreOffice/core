@@ -2173,6 +2173,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case SID_INSERT_POSTIT:
+        case SID_EDIT_POSTIT:
             if ( pReqArgs )
             {
                 const SvxPostItAuthorItem&  rAuthorItem = static_cast<const SvxPostItAuthorItem&>(pReqArgs->Get( SID_ATTR_POSTIT_AUTHOR ));

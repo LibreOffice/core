@@ -326,7 +326,29 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                 break;
             case SID_INSERT_POSTIT:
                 {
-                    if ( pDocShell && pDocShell->IsDocShared() )
+                    ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                    if( rDoc.GetNote(aPos) )
+                    {
+                        bDisable = true;
+                    }
+                    else
+                    {
+                        bDisable = false;
+                        if ( pDocShell && pDocShell->IsDocShared() )
+                        {
+                            bDisable = true;
+                        }
+                    }
+                }
+                break;
+            case SID_EDIT_POSTIT:
+                {
+                    ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                    if( rDoc.GetNote(aPos) )
+                    {
+                        bDisable = false;
+                    }
+                    else
                     {
                         bDisable = true;
                     }
