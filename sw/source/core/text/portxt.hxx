@@ -34,7 +34,7 @@ class SwTxtPortion : public SwLinePortion
 
 public:
     inline SwTxtPortion(){ SetWhichPor( POR_TXT ); }
-    SwTxtPortion( const SwLinePortion &rPortion );
+    static SwTxtPortion * CopyLinePortion(const SwLinePortion &rPortion);
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;

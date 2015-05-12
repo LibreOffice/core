@@ -208,10 +208,12 @@ static sal_Int32 lcl_AddSpace( const SwTxtSizeInfo &rInf, const OUString* pStr,
     return nCnt;
 }
 
-SwTxtPortion::SwTxtPortion( const SwLinePortion &rPortion )
-  : SwLinePortion( rPortion )
+SwTxtPortion * SwTxtPortion::CopyLinePortion(const SwLinePortion &rPortion)
 {
-    SetWhichPor( POR_TXT );
+    SwTxtPortion *const pNew(new SwTxtPortion);
+    static_cast<SwLinePortion&>(*pNew) = rPortion;
+    pNew->SetWhichPor( POR_TXT ); // overwrite that!
+    return pNew;
 }
 
 void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )

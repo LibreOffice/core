@@ -139,7 +139,7 @@ SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
     {
         if( GetLen() )
         {
-            pPortion = new SwTxtPortion(*static_cast<SwLinePortion*>(this));
+            pPortion = SwTxtPortion::CopyLinePortion(*this);
             if( IsBlinking() && pBlink )
             {
                 SetBlinking( false );
@@ -161,7 +161,7 @@ SwLinePortion *SwLineLayout::Append( SwLinePortion *pIns )
     // First attribute change: copy mass and length from *pIns into the first
     // text portion
     if( !pPortion )
-        pPortion = new SwTxtPortion(*static_cast<SwLinePortion*>(this));
+        pPortion = SwTxtPortion::CopyLinePortion(*this);
     // Call with scope or we'll end up with recursion!
     return pPortion->SwLinePortion::Append( pIns );
 }
@@ -184,7 +184,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
     SwMarginPortion *pLeft = (GetPortion() && GetPortion()->IsMarginPortion()) ?
         static_cast<SwMarginPortion *>(GetPortion()) : 0;
     if( !GetPortion() )
-         SetPortion(new SwTxtPortion(*static_cast<SwLinePortion*>(this)));
+         SetPortion(SwTxtPortion::CopyLinePortion(*this));
     if( !pLeft )
     {
         pLeft = new SwMarginPortion( 0 );
