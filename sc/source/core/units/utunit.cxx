@@ -18,7 +18,8 @@ bool UtUnit::createUnit(const OUString& rUnitString, UtUnit& rUnitOut, const boo
     // simplest just to do this during conversion:
     OString sUnitStringUTF8 = OUStringToOString(rUnitString.trim(), RTL_TEXTENCODING_UTF8);
 
-    UtUnit pParsedUnit(ut_parse(pUTSystem.get(), sUnitStringUTF8.getStr(), UT_UTF8));
+    UtUnit pParsedUnit(ut_parse(pUTSystem.get(), sUnitStringUTF8.getStr(), UT_UTF8),
+                       rUnitString);
 
     if (pParsedUnit.isValid()) {
         rUnitOut = pParsedUnit;
