@@ -168,7 +168,7 @@ SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
 typedef SwHTMLTableLayoutColumn *SwHTMLTableLayoutColumnPtr;
 typedef SwHTMLTableLayoutCell *SwHTMLTableLayoutCellPtr;
 
-SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pSwTbl,
+SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
                                       sal_uInt16 nRws, sal_uInt16 nCls,
                                       bool bColsOpt, bool bColTgs,
                                       sal_uInt16 nWdth, bool bPrcWdth,
@@ -181,7 +181,7 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pSwTbl,
                                       sal_uInt16 nInhRightBWidth )
     : aColumns( new SwHTMLTableLayoutColumnPtr[nCls] )
     , aCells( new SwHTMLTableLayoutCellPtr[static_cast<size_t>(nRws)*nCls] )
-    , pSwTable( pSwTbl )
+    , pSwTable( pTable )
     , pLeftFillerBox( 0 )
     , pRightFillerBox( 0 )
     , nMin( 0 )
