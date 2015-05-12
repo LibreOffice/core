@@ -929,13 +929,13 @@ bool PlcDrawObj::Append( WW8Export& rWrt, WW8_CP nCp, const sw::Frame& rFmt,
     const Point& rNdTopLeft )
 {
     bool bRet = false;
-    const SwFrmFmt &rFormat = rFmt.GetFrmFmt();
+    const SwFrmFmt &rFrameFormat = rFmt.GetFrmFmt();
     if (TXT_HDFT == rWrt.m_nTxtTyp || TXT_MAINTEXT == rWrt.m_nTxtTyp)
     {
-        if (RES_FLYFRMFMT == rFormat.Which())
+        if (RES_FLYFRMFMT == rFrameFormat.Which())
         {
             // check for textflyframe and if it is the first in a Chain
-            if (rFormat.GetCntnt().GetCntntIdx())
+            if (rFrameFormat.GetCntnt().GetCntntIdx())
                 bRet = true;
         }
         else
@@ -944,7 +944,7 @@ bool PlcDrawObj::Append( WW8Export& rWrt, WW8_CP nCp, const sw::Frame& rFmt,
 
     if (bRet)
     {
-        DrawObj aObj(rFmt, nCp, rNdTopLeft, rWrt.TrueFrameDirection(rFormat),
+        DrawObj aObj(rFmt, nCp, rNdTopLeft, rWrt.TrueFrameDirection(rFrameFormat),
             rWrt.GetHdFtIndex());
         maDrawObjs.push_back(aObj);
     }
