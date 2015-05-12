@@ -112,7 +112,6 @@ public:
     void ConvertCell(
             const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
             ::std::vector<SwNodeRange> & rRowNodes,
-            ::std::unique_ptr< SwPaM > & rpFirstPaM,
             SwNodeRange *const pLastCell,
             bool & rbExcept);
 
@@ -1817,7 +1816,6 @@ static bool lcl_SimilarPosition( const sal_Int32 nPos1, const sal_Int32 nPos2 )
 void SwXText::Impl::ConvertCell(
     const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
     ::std::vector<SwNodeRange> & rRowNodes,
-    ::std::unique_ptr< SwPaM > & rpFirstPaM,
     SwNodeRange *const pLastCell,
     bool & rbExcept)
 {
@@ -1978,11 +1976,6 @@ void SwXText::Impl::ConvertCell(
     SwNodeRange aCellRange(aStartCellPam.Start()->nNode,
             aEndCellPam.End()->nNode);
     rRowNodes.push_back(aCellRange); // note: invalidates pLastCell!
-    if (!pLastCell)
-    {
-        assert(!rpFirstPaM);
-        rpFirstPaM.reset(new SwPaM(*aStartCellPam.Start()));
-    }
 }
 
 typedef uno::Sequence< text::TableColumnSeparator > TableColumnSeparators;
@@ -2232,7 +2225,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     //at first collect the text ranges as SwPaMs
     const uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > >*
         pTableRanges = rTableRanges.getConstArray();
-    std::unique_ptr < SwPaM > pFirstPaM;
     std::vector< std::vector<SwNodeRange> > aTableNodes;
     bool bExcept = false;
     for (sal_Int32 nRow = 0; !bExcept && (nRow < rTableRanges.getLength());
@@ -2250,7 +2242,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                     ? ((nRow == 0) ? nullptr : &*aTableNodes.rbegin()->rbegin())
                     : &*aRowNodes.rbegin());
             m_pImpl->ConvertCell(pRow[nCell],
-                aRowNodes, pFirstPaM, pLastCell, bExcept);
+                aRowNodes, pLastCell, bExcept);
         }
         aTableNodes.push_back(aRowNodes);
     }
