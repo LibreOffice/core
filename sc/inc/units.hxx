@@ -96,9 +96,8 @@ public:
      * If possible the input unit will be determined automatically (using local
      * and header units).
      *
-     * Returns false if input units are not compatible with the desired output units,
-     * (including the case where some of the input units are compatibles but others
-     *  aren't).
+     * Returns false if not input units are not compatible with the desired output units,
+     * however this method still converts all cells containing compatible units.
      *
      * Local and header unit annotations are modified as appropriate such that the output
      * remains unambiguous. Hence, if the header cell is included in rRange, its unit
