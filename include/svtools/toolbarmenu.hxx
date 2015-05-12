@@ -46,9 +46,9 @@ class SVT_DLLPUBLIC ToolbarMenu : public DockingWindow
     friend class ToolbarMenuStatusListener;
     friend struct ToolbarMenu_Impl;
 public:
-    ToolbarMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                 vcl::Window* pParentWindow,
-                 WinBits nBits );
+    ToolbarMenu(const css::uno::Reference<css::frame::XFrame>& rFrame,
+                vcl::Window* pParentWindow,
+                WinBits nBits );
 
     virtual ~ToolbarMenu();
     virtual void dispose() SAL_OVERRIDE;
@@ -89,7 +89,7 @@ public:
     void            highlightFirstEntry();
 
 protected:
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
     // todo: move to new base class that will replace SfxPopupWindow
     void AddStatusListener( const OUString& rCommandURL );
@@ -99,7 +99,7 @@ protected:
 
     // Forwared from XStatusListener (subclasses must override this one to get
     // the status updates):
-    virtual void statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void statusChanged(const css::frame::FeatureStateEvent& Event ) throw (css::uno::RuntimeException);
 
     void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
@@ -109,17 +109,17 @@ private:
 
     void initStatusListener();
 
-    void            implInit( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    void            implInit(const css::uno::Reference<css::frame::XFrame>& rFrame);
     void            initWindow();
 
     Size            implCalcSize();
 
-    void            appendEntry( ToolbarMenuEntry* pEntry );
+    void            appendEntry(ToolbarMenuEntry* pEntry);
 
-    void            implPaint( ToolbarMenuEntry* pThisOnly = NULL, bool bHighlight = false );
+    void            implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry* pThisOnly = NULL, bool bHighlight = false);
 
-    void            implHighlightEntry( int nHighlightEntry, bool bHighlight );
-    void            implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown );
+    void            implHighlightEntry(vcl::RenderContext& rRenderContext, int nHighlightEntry, bool bHighlight);
+    void            implHighlightAtPosition(const MouseEvent& rMEvt, bool bMBDown);
 
     void            implChangeHighlightEntry( int nEntry );
     void            implSelectEntry( int nSelectedEntry );

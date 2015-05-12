@@ -39,8 +39,6 @@ using namespace ::com::sun::star::accessibility;
 
 namespace svtools {
 
-
-
 static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
 {
     OSL_ASSERT( pWindow );
@@ -372,7 +370,7 @@ void ToolbarMenu_Impl::clearAccessibleSelection()
 {
     if( mnHighlightedEntry != -1 )
     {
-        mrMenu.implHighlightEntry( mnHighlightedEntry, false );
+        mrMenu.Invalidate();
         mnHighlightedEntry = -1;
     }
 }
@@ -580,7 +578,7 @@ void ToolbarMenu::initWindow()
 
 
 
-static long ImplGetNativeCheckAndRadioSize( vcl::Window* pWin, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
+static long ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
 {
     rMaxWidth = rCheckHeight = rRadioHeight = 0;
 
@@ -589,32 +587,22 @@ static long ImplGetNativeCheckAndRadioSize( vcl::Window* pWin, long& rCheckHeigh
     Rectangle aNativeContent;
     Point tmp( 0, 0 );
     Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
-    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK ) )
+    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK))
     {
-        if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
-                                          ControlPart(PART_MENU_ITEM_CHECK_MARK),
-                                          aCtrlRegion,
-                                          ControlState(ControlState::ENABLED),
-                                          aVal,
-                                          OUString(),
-                                          aNativeBounds,
-                                          aNativeContent )
+        if (rRenderContext.GetNativeControlRegion(ControlType(CTRL_MENU_POPUP), ControlPart(PART_MENU_ITEM_CHECK_MARK),
+                                                  aCtrlRegion, ControlState(ControlState::ENABLED), aVal, OUString(),
+                                                  aNativeBounds, aNativeContent)
         )
         {
             rCheckHeight = aNativeBounds.GetHeight();
             rMaxWidth = aNativeContent.GetWidth();
         }
     }
-    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
+    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK))
     {
-        if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
-                                          ControlPart(PART_MENU_ITEM_RADIO_MARK),
-                                          aCtrlRegion,
-                                          ControlState(ControlState::ENABLED),
-                                          aVal,
-                                          OUString(),
-                                          aNativeBounds,
-                                          aNativeContent )
+        if (rRenderContext.GetNativeControlRegion(ControlType(CTRL_MENU_POPUP), ControlPart(PART_MENU_ITEM_RADIO_MARK),
+                                          aCtrlRegion, ControlState(ControlState::ENABLED), aVal, OUString(),
+                                          aNativeBounds, aNativeContent)
         )
         {
             rRadioHeight = aNativeBounds.GetHeight();
@@ -693,13 +681,12 @@ Size ToolbarMenu::implCalcSize()
 
             if( pEntry->HasCheck() && !pEntry->mbHasImage )
             {
-                if( this->IsNativeControlSupported( CTRL_MENU_POPUP,
-                                                     (pEntry->mnBits & MenuItemBits::RADIOCHECK)
+                if (IsNativeControlSupported(CTRL_MENU_POPUP, (pEntry->mnBits & MenuItemBits::RADIOCHECK)
                                                      ? PART_MENU_ITEM_CHECK_MARK
                                                      : PART_MENU_ITEM_RADIO_MARK ) )
                 {
                     long nCheckHeight = 0, nRadioHeight = 0, nMaxCheckWidth = 0;
-                    ImplGetNativeCheckAndRadioSize( this, nCheckHeight, nRadioHeight, nMaxCheckWidth );
+                    ImplGetNativeCheckAndRadioSize(*this, nCheckHeight, nRadioHeight, nMaxCheckWidth);
 
                     long nCtrlHeight = (pEntry->mnBits & MenuItemBits::RADIOCHECK) ? nCheckHeight : nRadioHeight;
                     nMaxTextWidth += nCtrlHeight + gfxExtra;
@@ -724,7 +711,7 @@ Size ToolbarMenu::implCalcSize()
     {
         ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
 
-        if( pEntry )
+        if (pEntry)
         {
             pEntry->maSize.Width() = nMaxTextWidth;
 
@@ -807,9 +794,9 @@ void ToolbarMenu::appendEntry( int nEntryId, Control* pControl, MenuItemBits nIt
 
 void ToolbarMenu::appendEntry( ToolbarMenuEntry* pEntry )
 {
-    mpImpl->maEntryVector.push_back( pEntry );
+    mpImpl->maEntryVector.push_back(pEntry);
     mpImpl->maSize = implCalcSize();
-    if( IsVisible() )
+    if (IsVisible())
         Invalidate();
 }
 
@@ -859,25 +846,26 @@ ToolbarMenuEntry* ToolbarMenu::implSearchEntry( int nEntryId ) const
 
 
 
-void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
+void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHighlightEntry, bool bHighlight)
 {
-    Size    aSz( GetOutputSizePixel() );
-    long    nX = 0, nY = 0;
+    Size aSz(rRenderContext.GetOutputSizePixel());
+    long nX = 0;
+    long nY = 0;
 
     const int nEntryCount = mpImpl->maEntryVector.size();
-    int nEntry;
-    for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
+
+    for (int nEntry = 0; nEntry < nEntryCount; nEntry++)
     {
         ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
-        if( pEntry && (nEntry == nHighlightEntry) )
+        if (pEntry && (nEntry == nHighlightEntry))
         {
             // no highlights for controls only items
-            if( pEntry->mpControl )
+            if (pEntry->mpControl)
             {
-                if( !bHighlight )
+                if (!bHighlight)
                 {
-                    ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl.get() );
-                    if( pValueSet )
+                    ValueSet* pValueSet = dynamic_cast<ValueSet*>(pEntry->mpControl.get());
+                    if (pValueSet)
                     {
                         pValueSet->SetNoSelection();
                     }
@@ -889,62 +877,62 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
             Color oldLineColor;
             bool bDrawItemRect = true;
 
-            Rectangle aItemRect( Point( nX, nY ), Size( aSz.Width(), pEntry->maSize.Height() ) );
-            if ( pEntry->mnBits & MenuItemBits::POPUPSELECT )
+            Rectangle aItemRect(Point(nX, nY), Size(aSz.Width(), pEntry->maSize.Height()));
+            if (pEntry->mnBits & MenuItemBits::POPUPSELECT)
             {
                 long nFontHeight = GetTextHeight();
-                aItemRect.Right() -= nFontHeight + nFontHeight/4;
+                aItemRect.Right() -= nFontHeight + nFontHeight / 4;
             }
 
-            if( IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
+            if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
             {
-                Size aPxSize( GetOutputSizePixel() );
-                Push( PushFlags::CLIPREGION );
-                IntersectClipRegion( Rectangle( Point( nX, nY ), Size( aSz.Width(), pEntry->maSize.Height() ) ) );
-                Rectangle aCtrlRect( Point( nX, 0 ), Size( aPxSize.Width()-nX, aPxSize.Height() ) );
-                DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
-                                   aCtrlRect,
-                                   ControlState::ENABLED,
-                                   ImplControlValue(),
-                                   OUString() );
-                if( bHighlight && IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM ) )
+                Size aPxSize(rRenderContext.GetOutputSizePixel());
+                rRenderContext.Push(PushFlags::CLIPREGION);
+                rRenderContext.IntersectClipRegion(Rectangle(Point(nX, nY), Size(aSz.Width(), pEntry->maSize.Height())));
+                Rectangle aCtrlRect(Point(nX, 0), Size(aPxSize.Width() - nX, aPxSize.Height()));
+                rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect,
+                                                 ControlState::ENABLED, ImplControlValue(), OUString());
+                if (bHighlight && rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM))
                 {
                     bDrawItemRect = false;
-                    if( !DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
-                                                    aItemRect,
-                                                    ControlState::SELECTED | ( pEntry->mbEnabled ? ControlState::ENABLED : ControlState::NONE ),
-                                                    ImplControlValue(),
-                                                    OUString() ) )
+                    ControlState eState = ControlState::SELECTED | (pEntry->mbEnabled ? ControlState::ENABLED : ControlState::NONE);
+                    if (!rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_ITEM, aItemRect,
+                                                          eState, ImplControlValue(), OUString()))
                     {
                         bDrawItemRect = bHighlight;
                     }
                 }
                 else
-                    bDrawItemRect = bHighlight;
-                Pop();
-            }
-            if( bDrawItemRect )
-            {
-                if ( bHighlight )
                 {
-                    if( pEntry->mbEnabled )
-                        SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                    bDrawItemRect = bHighlight;
+                }
+                rRenderContext.Pop();
+            }
+            if (bDrawItemRect)
+            {
+                if (bHighlight)
+                {
+                    if (pEntry->mbEnabled)
+                    {
+                        rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
+                    }
                     else
                     {
-                        SetFillColor();
-                        oldLineColor = GetLineColor();
-                        SetLineColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                        rRenderContext.SetFillColor();
+                        oldLineColor = rRenderContext.GetLineColor();
+                        rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuHighlightColor());
                         bRestoreLineColor = true;
                     }
                 }
                 else
-                    SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
-
-                DrawRect( aItemRect );
+                {
+                    rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuColor());
+                }
+                rRenderContext.DrawRect(aItemRect);
             }
-            implPaint( pEntry, bHighlight );
-            if( bRestoreLineColor )
-                SetLineColor( oldLineColor );
+            implPaint(rRenderContext, pEntry, bHighlight);
+            if (bRestoreLineColor)
+                rRenderContext.SetLineColor(oldLineColor);
             break;
         }
 
@@ -970,9 +958,8 @@ void ToolbarMenu::implSelectEntry( int nSelectedEntry )
 
 void ToolbarMenu::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    implHighlightEntry( rMEvt, true );
-
-    implSelectEntry( mpImpl->mnHighlightedEntry );
+    implHighlightAtPosition(rMEvt, true);
+    implSelectEntry(mpImpl->mnHighlightedEntry);
 }
 
 
@@ -985,15 +972,15 @@ void ToolbarMenu::MouseButtonUp( const MouseEvent& )
 
 void ToolbarMenu::MouseMove( const MouseEvent& rMEvt )
 {
-    if ( !IsVisible() )
+    if (!IsVisible())
         return;
 
-    implHighlightEntry( rMEvt, false );
+    implHighlightAtPosition(rMEvt, false);
 }
 
 
 
-void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool /*bMBDown*/ )
+void ToolbarMenu::implHighlightAtPosition(const MouseEvent& rMEvt, bool /*bMBDown*/)
 {
     long nMouseY = rMEvt.GetPosPixel().Y();
     Size aOutSz = GetOutputSizePixel();
@@ -1040,20 +1027,10 @@ void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool /*bMBDown*/ 
 
 
 
-void ToolbarMenu::implChangeHighlightEntry( int nEntry )
+void ToolbarMenu::implChangeHighlightEntry(int nEntry)
 {
-    if( mpImpl->mnHighlightedEntry != -1 )
-    {
-        implHighlightEntry( mpImpl->mnHighlightedEntry, false );
-    }
-
     mpImpl->mnHighlightedEntry = nEntry;
     Invalidate();
-
-    if( mpImpl->mnHighlightedEntry != -1 )
-    {
-        implHighlightEntry( mpImpl->mnHighlightedEntry, true );
-    }
 
     mpImpl->notifyHighlightedEntry();
 }
@@ -1279,113 +1256,111 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
 }
 
 
-static void ImplPaintCheckBackground( vcl::Window* i_pWindow, const Rectangle& i_rRect, bool i_bHighlight )
+static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Window& rWindow, const Rectangle& i_rRect, bool i_bHighlight )
 {
     bool bNativeOk = false;
-    if( i_pWindow->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
+    if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_BUTTON))
     {
-        ImplControlValue    aControlValue;
-        ControlState        nState = ControlState::PRESSED | ControlState::ENABLED;
+        ImplControlValue aControlValue;
+        ControlState nState = ControlState::PRESSED | ControlState::ENABLED;
 
-        aControlValue.setTristateVal( BUTTONVALUE_ON );
+        aControlValue.setTristateVal(BUTTONVALUE_ON);
 
-        bNativeOk = i_pWindow->DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON,
-                                                  i_rRect, nState, aControlValue,
-                                                  OUString() );
+        bNativeOk = rRenderContext.DrawNativeControl(CTRL_TOOLBAR, PART_BUTTON,
+                                                     i_rRect, nState, aControlValue, OUString());
     }
 
-    if( ! bNativeOk )
+    if (!bNativeOk)
     {
-        const StyleSettings& rSettings = i_pWindow->GetSettings().GetStyleSettings();
-        Color aColor( i_bHighlight ? rSettings.GetMenuHighlightTextColor() : rSettings.GetHighlightColor() );
-        i_pWindow->DrawSelectionBackground( i_rRect, 0, i_bHighlight, true, false, 2, NULL, &aColor );
+        const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
+        Color aColor(i_bHighlight ? rSettings.GetMenuHighlightTextColor() : rSettings.GetHighlightColor());
+        vcl::RenderTools::DrawSelectionBackground(rRenderContext, rWindow, i_rRect, 0, i_bHighlight, true, false, NULL, 2, &aColor);
     }
 }
 
-void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
+void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry* pThisOnly, bool bHighlighted)
 {
     sal_uInt16 nBorder = 0; long nStartY = 0; // from Menu implementations, needed when we support native menu background & scrollable menu
 
     long nFontHeight = GetTextHeight();
-//    long nExtra = nFontHeight/4;
 
     long nCheckHeight = 0, nRadioHeight = 0, nMaxCheckWidth = 0;
-    ImplGetNativeCheckAndRadioSize( this, nCheckHeight, nRadioHeight, nMaxCheckWidth );
+    ImplGetNativeCheckAndRadioSize(rRenderContext, nCheckHeight, nRadioHeight, nMaxCheckWidth);
 
-    DecorationView aDecoView( this );
-    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    DecorationView aDecoView(&rRenderContext);
+    const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     const bool bUseImages = rSettings.GetUseImagesInMenus();
 
     int nOuterSpace = 0; // ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
-    Point aTopLeft( nOuterSpace, nOuterSpace ), aTmpPos;
+    Point aTopLeft(nOuterSpace, nOuterSpace), aTmpPos;
 
-    Size aOutSz( GetOutputSizePixel() );
+    Size aOutSz(rRenderContext.GetOutputSizePixel());
     const int nEntryCount = mpImpl->maEntryVector.size();
     int nEntry;
-    for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
+    for (nEntry = 0; nEntry < nEntryCount; nEntry++)
     {
         ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
 
-        Point aPos( aTopLeft );
+        Point aPos(aTopLeft);
         aPos.Y() += nBorder;
         aPos.Y() += nStartY;
 
-
-        if( (pEntry == 0) && !pThisOnly )
+        if ((pEntry == 0) && !pThisOnly)
         {
             // Separator
-            aTmpPos.Y() = aPos.Y() + ((SEPARATOR_HEIGHT-2)/2);
+            aTmpPos.Y() = aPos.Y() + ((SEPARATOR_HEIGHT - 2) / 2);
             aTmpPos.X() = aPos.X() + 2 + nOuterSpace;
-            SetLineColor( rSettings.GetShadowColor() );
-            DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
+            rRenderContext.SetLineColor(rSettings.GetShadowColor());
+            rRenderContext.DrawLine(aTmpPos, Point(aOutSz.Width() - 3 - 2 * nOuterSpace, aTmpPos.Y()));
             aTmpPos.Y()++;
-            SetLineColor( rSettings.GetLightColor() );
-            DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
-            SetLineColor();
+            rRenderContext.SetLineColor(rSettings.GetLightColor());
+            rRenderContext.DrawLine(aTmpPos, Point( aOutSz.Width() - 3 - 2 * nOuterSpace, aTmpPos.Y()));
+            rRenderContext.SetLineColor();
         }
-        else if( !pThisOnly || ( pEntry == pThisOnly ) )
+        else if (!pThisOnly || (pEntry == pThisOnly))
         {
             const bool bTitle = pEntry->mnEntryId == TITLE_ID;
 
-            if ( pThisOnly && bHighlighted )
-                SetTextColor( rSettings.GetMenuHighlightTextColor() );
+            if (pThisOnly && bHighlighted)
+                rRenderContext.SetTextColor(rSettings.GetMenuHighlightTextColor());
 
             if( aPos.Y() >= 0 )
             {
-                long nTextOffsetY = ((pEntry->maSize.Height()-nFontHeight)/2);
+                long nTextOffsetY = ((pEntry->maSize.Height() - nFontHeight) / 2);
 
                 sal_uInt16  nTextStyle   = 0;
                 DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
                 sal_uInt16  nImageStyle  = 0;
 
-                if( !pEntry->mbEnabled )
+                if (!pEntry->mbEnabled)
                 {
                     nTextStyle   |= TEXT_DRAW_DISABLE;
                     nSymbolStyle |= DrawSymbolFlags::Disable;
                     nImageStyle  |= IMAGE_DRAW_DISABLE;
                 }
 
-                Rectangle aOuterCheckRect( Point( aPos.X()+mpImpl->mnCheckPos, aPos.Y() ), Size( pEntry->maSize.Height(), pEntry->maSize.Height() ) );
-                aOuterCheckRect.Left()      += 1;
-                aOuterCheckRect.Right()     -= 1;
-                aOuterCheckRect.Top()       += 1;
-                aOuterCheckRect.Bottom()    -= 1;
+                Rectangle aOuterCheckRect(Point(aPos.X() + mpImpl->mnCheckPos, aPos.Y()),
+                                          Size(pEntry->maSize.Height(), pEntry->maSize.Height()));
+                aOuterCheckRect.Left()   += 1;
+                aOuterCheckRect.Right()  -= 1;
+                aOuterCheckRect.Top()    += 1;
+                aOuterCheckRect.Bottom() -= 1;
 
-                if( bTitle )
+                if (bTitle)
                 {
                     // fill the background
-                    Rectangle aRect( aTopLeft, Size( aOutSz.Width(), pEntry->maSize.Height() ) );
-                    SetFillColor(rSettings.GetDialogColor());
-                    SetLineColor();
-                    DrawRect(aRect);
-                    SetLineColor( rSettings.GetLightColor() );
-                    DrawLine( aRect.TopLeft(), aRect.TopRight() );
-                    SetLineColor( rSettings.GetShadowColor() );
-                    DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+                    Rectangle aRect(aTopLeft, Size(aOutSz.Width(), pEntry->maSize.Height()));
+                    rRenderContext.SetFillColor(rSettings.GetDialogColor());
+                    rRenderContext.SetLineColor();
+                    rRenderContext.DrawRect(aRect);
+                    rRenderContext.SetLineColor(rSettings.GetLightColor());
+                    rRenderContext.DrawLine(aRect.TopLeft(), aRect.TopRight());
+                    rRenderContext.SetLineColor(rSettings.GetShadowColor());
+                    rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
                 }
 
                 // CheckMark
-                if ( pEntry->HasCheck() )
+                if (pEntry->HasCheck())
                 {
                     // draw selection transparent marker if checked
                     // onto that either a checkmark or the item image
@@ -1393,12 +1368,12 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                     // however do not do this if native checks will be painted since
                     // the selection color too often does not fit the theme's check and/or radio
 
-                    if( !pEntry->mbHasImage )
+                    if (!pEntry->mbHasImage)
                     {
-                        if( this->IsNativeControlSupported( CTRL_MENU_POPUP,
+                        if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP,
                                                              (pEntry->mnBits & MenuItemBits::RADIOCHECK)
                                                              ? PART_MENU_ITEM_CHECK_MARK
-                                                             : PART_MENU_ITEM_RADIO_MARK ) )
+                                                             : PART_MENU_ITEM_RADIO_MARK))
                         {
                             ControlPart nPart = ((pEntry->mnBits & MenuItemBits::RADIOCHECK)
                                                  ? PART_MENU_ITEM_RADIO_MARK
@@ -1406,75 +1381,76 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
                             ControlState nState = ControlState::NONE;
 
-                            if ( pEntry->mbChecked )
+                            if (pEntry->mbChecked)
                                 nState |= ControlState::PRESSED;
 
-                            if ( pEntry->mbEnabled )
+                            if (pEntry->mbEnabled)
                                 nState |= ControlState::ENABLED;
 
                             if ( bHighlighted )
                                 nState |= ControlState::SELECTED;
 
                             long nCtrlHeight = (pEntry->mnBits & MenuItemBits::RADIOCHECK) ? nCheckHeight : nRadioHeight;
-                            aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight)/2;
-                            aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight)/2;
+                            aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight) / 2;
+                            aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight) / 2;
 
-                            Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
-                            DrawNativeControl( CTRL_MENU_POPUP, nPart, aCheckRect, nState, ImplControlValue(), OUString() );
-                            aPos.setX( aPos.getX() + nCtrlHeight + gfxExtra );
+                            Rectangle aCheckRect(aTmpPos, Size(nCtrlHeight, nCtrlHeight));
+                            rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, nPart, aCheckRect,
+                                                             nState, ImplControlValue(), OUString());
+                            aPos.setX(aPos.getX() + nCtrlHeight + gfxExtra);
                         }
-                        else if ( pEntry->mbChecked ) // by default do nothing for unchecked items
+                        else if (pEntry->mbChecked) // by default do nothing for unchecked items
                         {
-                            ImplPaintCheckBackground( this, aOuterCheckRect, pThisOnly && bHighlighted );
+                            ImplPaintCheckBackground(rRenderContext, *this, aOuterCheckRect, pThisOnly && bHighlighted);
 
                             SymbolType eSymbol;
                             Size aSymbolSize;
-                            if ( pEntry->mnBits & MenuItemBits::RADIOCHECK )
+                            if (pEntry->mnBits & MenuItemBits::RADIOCHECK)
                             {
                                 eSymbol = SymbolType::RADIOCHECKMARK;
-                                aSymbolSize = Size( nFontHeight/2, nFontHeight/2 );
+                                aSymbolSize = Size(nFontHeight / 2, nFontHeight / 2);
                             }
                             else
                             {
                                 eSymbol = SymbolType::CHECKMARK;
-                                aSymbolSize = Size( (nFontHeight*25)/40, nFontHeight/2 );
+                                aSymbolSize = Size((nFontHeight * 25) / 40, nFontHeight / 2);
                             }
                             aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - aSymbolSize.Width())/2;
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - aSymbolSize.Height())/2;
                             Rectangle aRect( aTmpPos, aSymbolSize );
-                            aDecoView.DrawSymbol( aRect, eSymbol, GetTextColor(), nSymbolStyle );
-                            aPos.setX( aPos.getX() + aSymbolSize.getWidth( ) + gfxExtra );
+                            aDecoView.DrawSymbol(aRect, eSymbol, GetTextColor(), nSymbolStyle);
+                            aPos.setX(aPos.getX() + aSymbolSize.getWidth( ) + gfxExtra);
                         }
                     }
                 }
 
                 // Image:
-                if( pEntry->mbHasImage && bUseImages )
+                if (pEntry->mbHasImage && bUseImages)
                 {
-                    if( pEntry->mbChecked )
-                        ImplPaintCheckBackground( this, aOuterCheckRect, pThisOnly && bHighlighted );
+                    if (pEntry->mbChecked)
+                        ImplPaintCheckBackground(rRenderContext, *this, aOuterCheckRect, pThisOnly && bHighlighted);
                     aTmpPos = aOuterCheckRect.TopLeft();
                     aTmpPos.X() += (aOuterCheckRect.GetWidth()-pEntry->maImage.GetSizePixel().Width())/2;
                     aTmpPos.Y() += (aOuterCheckRect.GetHeight()-pEntry->maImage.GetSizePixel().Height())/2;
-                    DrawImage( aTmpPos, pEntry->maImage, nImageStyle );
+                    rRenderContext.DrawImage( aTmpPos, pEntry->maImage, nImageStyle );
                 }
 
                 // Text:
-                if( pEntry->mbHasText )
+                if (pEntry->mbHasText)
                 {
                     aTmpPos.X() = aPos.X() + (bTitle ? 4 : mpImpl->mnTextPos);
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
                     sal_uInt16 nStyle = nTextStyle|TEXT_DRAW_MNEMONIC;
 
-                    DrawCtrlText( aTmpPos, pEntry->maText, 0, pEntry->maText.getLength(), nStyle, NULL, NULL ); // pVector, pDisplayText );
+                    rRenderContext.DrawCtrlText(aTmpPos, pEntry->maText, 0, pEntry->maText.getLength(), nStyle, NULL, NULL);
                 }
 
-                if ( pThisOnly && bHighlighted )
+                if (pThisOnly && bHighlighted)
                 {
                     // This restores the normal menu or menu bar text
                     // color for when it is no longer highlighted.
-                    SetTextColor( rSettings.GetMenuTextColor() );
+                    rRenderContext.SetTextColor(rSettings.GetMenuTextColor());
                  }
             }
         }
@@ -1483,16 +1459,14 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
     }
 }
 
-
-
-void ToolbarMenu::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void ToolbarMenu::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
+    rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuColor());
 
-    implPaint();
+    implPaint(rRenderContext);
 
-    if( mpImpl->mnHighlightedEntry != -1 )
-        implHighlightEntry( mpImpl->mnHighlightedEntry, true );
+    if (mpImpl->mnHighlightedEntry != -1)
+        implHighlightEntry(rRenderContext, mpImpl->mnHighlightedEntry, true);
 }
 
 
