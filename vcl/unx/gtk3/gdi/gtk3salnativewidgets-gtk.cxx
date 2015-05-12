@@ -32,7 +32,10 @@ GtkStyleContext* GtkSalGraphics::mpMenuStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpSpinStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpComboboxStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpComboboxEntryStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpComboboxButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpListboxStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpListboxButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpNoteBookStyle = NULL;
 
 bool GtkSalGraphics::style_loaded = false;
@@ -77,37 +80,6 @@ enum {
     RENDER_COMBOBOX = 10,
     RENDER_EXTENSION = 11,
 };
-
-static void PrepareComboboxStyle( GtkStyleContext *context,
-                                  gboolean forEntry)
-{
-    GtkWidgetPath *path, *siblingsPath;
-
-    path = gtk_widget_path_new();
-    siblingsPath = gtk_widget_path_new();
-    gtk_widget_path_append_type(path, GTK_TYPE_COMBO_BOX);
-    gtk_widget_path_iter_add_class(path, 0, GTK_STYLE_CLASS_COMBOBOX_ENTRY);
-
-    gtk_widget_path_append_type(siblingsPath, GTK_TYPE_ENTRY);
-    gtk_widget_path_append_type(siblingsPath, GTK_TYPE_BUTTON);
-    gtk_widget_path_iter_add_class(siblingsPath, 0, GTK_STYLE_CLASS_ENTRY);
-    gtk_widget_path_iter_add_class(siblingsPath, 1, GTK_STYLE_CLASS_BUTTON);
-
-    if (forEntry)
-    {
-        gtk_widget_path_append_with_siblings(path, siblingsPath, 1);
-        gtk_widget_path_append_with_siblings(path, siblingsPath, 0);
-    }
-    else
-    {
-        gtk_widget_path_append_with_siblings(path, siblingsPath, 0);
-        gtk_widget_path_append_with_siblings(path, siblingsPath, 1);
-    }
-
-    gtk_style_context_set_path(context, path);
-    gtk_widget_path_free(path);
-    gtk_widget_path_free(siblingsPath);
-}
 
 static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
 {
@@ -698,8 +670,7 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     return aButtonRect;
 }
 
-void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
-                                    cairo_t *cr,
+void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
                                     const Rectangle& rControlRectangle,
                                     ControlType nType,
                                     ControlPart nPart,
@@ -721,28 +692,49 @@ void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
     Rectangle        aEditBoxRect( areaRect );
     aEditBoxRect.SetSize( Size( areaRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
 
+    arrowRect.SetSize( Size( (gint)(ARROW_SIZE),
+                             (gint)(ARROW_SIZE) ) );
+    arrowRect.SetPos( Point( buttonRect.Left() + (gint)((buttonRect.GetWidth() - arrowRect.GetWidth()) / 2),
+                             buttonRect.Top() + (gint)((buttonRect.GetHeight() - arrowRect.GetHeight()) / 2) ) );
+
+
     if ( nType == CTRL_COMBOBOX )
     {
+        gtk_style_context_save(mpComboboxButtonStyle);
+        gtk_style_context_set_state(mpComboboxButtonStyle, flags);
+
         if( nPart == PART_ENTIRE_CONTROL )
         {
-            PrepareComboboxStyle(context, true);
-            gtk_render_background(context, cr,
+            gtk_render_background(mpComboboxStyle, cr,
+                                  0, 0,
+                                  areaRect.GetWidth(), areaRect.GetHeight());
+            gtk_render_frame(mpComboboxStyle, cr,
+                             0, 0,
+                             areaRect.GetWidth(), areaRect.GetHeight());
+
+            gtk_render_background(mpComboboxEntryStyle, cr,
                                   0, 0,
                                   aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
-            gtk_render_frame(context, cr,
+            gtk_render_frame(mpComboboxEntryStyle, cr,
                              0, 0,
                              aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
         }
 
-        PrepareComboboxStyle(context, false);
-        gtk_render_background(context, cr,
+        gtk_render_background(mpComboboxButtonStyle, cr,
                               (buttonRect.Left() - areaRect.Left()),
                               (buttonRect.Top() - areaRect.Top()),
                               buttonRect.GetWidth(), buttonRect.GetHeight() );
-        gtk_render_frame(context, cr,
+        gtk_render_frame(mpComboboxButtonStyle, cr,
                          (buttonRect.Left() - areaRect.Left()),
                          (buttonRect.Top() - areaRect.Top()),
                          buttonRect.GetWidth(), buttonRect.GetHeight() );
+
+        gtk_render_arrow(mpComboboxStyle, cr,
+                         G_PI,
+                         (arrowRect.Left() - areaRect.Left()), (arrowRect.Top() - areaRect.Top()),
+                         arrowRect.GetWidth() );
+
+        gtk_style_context_restore(mpComboboxButtonStyle);
     }
     else if (nType == CTRL_LISTBOX)
     {
@@ -755,23 +747,31 @@ void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
         }
         else
         {
-            gtk_render_background(context, cr,
+            gtk_style_context_save(mpListboxButtonStyle);
+            gtk_style_context_set_state(mpListboxButtonStyle, flags);
+
+            gtk_render_background(mpListboxStyle, cr,
                                   0, 0,
                                   areaRect.GetWidth(), areaRect.GetHeight());
-            gtk_render_frame(context, cr,
+            gtk_render_frame(mpListboxStyle, cr,
                              0, 0,
                              areaRect.GetWidth(), areaRect.GetHeight());
+
+            gtk_render_background(mpListboxButtonStyle, cr,
+                                  0, 0,
+                                  areaRect.GetWidth(), areaRect.GetHeight());
+            gtk_render_frame(mpListboxButtonStyle, cr,
+                             0, 0,
+                             areaRect.GetWidth(), areaRect.GetHeight());
+
+            gtk_render_arrow(mpListboxStyle, cr,
+                             G_PI,
+                             (arrowRect.Left() - areaRect.Left()), (arrowRect.Top() - areaRect.Top()),
+                             arrowRect.GetWidth() );
+
+            gtk_style_context_restore(mpListboxButtonStyle);
         }
     }
-
-    arrowRect.SetSize( Size( (gint)(ARROW_SIZE),
-                             (gint)(ARROW_SIZE) ) );
-    arrowRect.SetPos( Point( buttonRect.Left() + (gint)((buttonRect.GetWidth() - arrowRect.GetWidth()) / 2),
-                             buttonRect.Top() + (gint)((buttonRect.GetHeight() - arrowRect.GetHeight()) / 2) ) );
-    gtk_render_arrow(context, cr,
-                     G_PI,
-                     (arrowRect.Left() - areaRect.Left()), (arrowRect.Top() - areaRect.Top()),
-                     arrowRect.GetWidth() );
 }
 
 void GtkSalGraphics::PaintCheckOrRadio(GtkStyleContext *context,
@@ -829,15 +829,8 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         renderType = RENDER_COMBOBOX;
         break;
     case CTRL_LISTBOX:
-        switch (nPart)
-        {
-        case PART_ENTIRE_CONTROL:
-            context = mpListboxStyle;
-            renderType = RENDER_COMBOBOX;
-            break;
-        default:
-            return false;
-        }
+        context = mpListboxStyle;
+        renderType = RENDER_COMBOBOX;
         break;
     case CTRL_MENU_POPUP:
 
@@ -1033,7 +1026,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         PaintSpinButton(context, cr, rControlRegion, nType, nPart, aValue);
         break;
     case RENDER_COMBOBOX:
-        PaintCombobox(context, cr, rControlRegion, nType, nPart, aValue);
+        PaintCombobox(flags, cr, rControlRegion, nType, nPart, aValue);
         break;
     default:
         break;
@@ -1090,6 +1083,14 @@ Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContent
 
     return aEditRect;
 }
+
+static GtkWidget* gCacheWindow;
+static GtkWidget* gDumbContainer;
+static GtkWidget* gComboBox;
+static GtkWidget* gComboBoxButtonWidget;
+static GtkWidget* gComboBoxEntryWidget;
+static GtkWidget* gListBox;
+static GtkWidget* gListBoxButtonWidget;
 
 bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
                                                 const ImplControlValue& rValue, const OUString&,
@@ -1188,11 +1189,17 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     }
     else if (nType == CTRL_LISTBOX && nPart == PART_ENTIRE_CONTROL)
     {
-        aEditRect = AdjustRectForTextBordersPadding(mpListboxStyle, rValue.getNumericVal(), rControlRegion);
+        GtkRequisition aReq;
+        gtk_widget_get_preferred_size(gComboBox, NULL, &aReq);
+        long nHeight = (rControlRegion.GetHeight() > aReq.height) ? rControlRegion.GetHeight() : aReq.height;
+        aEditRect = Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nHeight));
     }
     else if (nType == CTRL_COMBOBOX && nPart == PART_ENTIRE_CONTROL)
     {
-        aEditRect = AdjustRectForTextBordersPadding(mpComboboxStyle, rValue.getNumericVal(), rControlRegion);
+        GtkRequisition aReq;
+        gtk_widget_get_preferred_size(gComboBox, NULL, &aReq);
+        long nHeight = (rControlRegion.GetHeight() > aReq.height) ? rControlRegion.GetHeight() : aReq.height;
+        aEditRect = Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nHeight));
     }
     else if (nType == CTRL_SPINBOX && nPart == PART_ENTIRE_CONTROL)
     {
@@ -1639,7 +1646,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             break;
 
         case CTRL_LISTBOX:
-            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_WINDOW || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_BUTTON_DOWN)
+            if (nPart==PART_ENTIRE_CONTROL || nPart==PART_WINDOW || nPart==HAS_BACKGROUND_TEXTURE)
                 return true;
             break;
 
@@ -1715,9 +1722,6 @@ void GtkSalGraphics::WidgetQueueDraw() const
     gtk_widget_queue_draw(mpWindow);
 }
 
-static GtkWidget* gCacheWindow;
-static GtkWidget* gDumbContainer;
-
 namespace {
 
 void getStyleContext(GtkStyleContext** style, GtkWidget* widget)
@@ -1742,6 +1746,26 @@ void GtkData::deInitNWF()
 {
     if (gCacheWindow)
         gtk_widget_destroy(gCacheWindow);
+}
+
+static void get_combo_box_entry_inner_widgets(GtkWidget *widget, gpointer)
+{
+    if (GTK_IS_TOGGLE_BUTTON(widget))
+    {
+        gComboBoxButtonWidget = widget;
+    }
+    else if (GTK_IS_ENTRY(widget))
+    {
+        gComboBoxEntryWidget = widget;
+    }
+}
+
+void get_combo_box_inner_button(GtkWidget *widget, gpointer)
+{
+    if (GTK_IS_TOGGLE_BUTTON(widget))
+    {
+        gListBoxButtonWidget = widget;
+    }
 }
 
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
@@ -1822,17 +1846,25 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     getStyleContext(&mpNoteBookStyle, gtk_notebook_new());
 
     /* Combobox */
-    mpComboboxStyle = gtk_style_context_new();
-    PrepareComboboxStyle(mpComboboxStyle, true);
+    gComboBox = gtk_combo_box_text_new_with_entry();
+    getStyleContext(&mpComboboxStyle, gComboBox);
+    /* Get ComboBox Entry and Button */
+    gtk_container_forall(GTK_CONTAINER(gComboBox),
+                         get_combo_box_entry_inner_widgets,
+                         NULL);
+    mpComboboxEntryStyle = gtk_widget_get_style_context(gComboBoxEntryWidget);
+    mpComboboxButtonStyle = gtk_widget_get_style_context(gComboBoxButtonWidget);
 
     /* Listbox */
-    mpListboxStyle = gtk_style_context_new();
-    path = gtk_widget_path_new();
-    gtk_widget_path_append_type(path, GTK_TYPE_COMBO_BOX);
-    gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
-    gtk_widget_path_iter_add_class(path, 1, GTK_STYLE_CLASS_BUTTON);
-    gtk_style_context_set_path(mpListboxStyle, path);
-    gtk_widget_path_free(path);
+    gListBox = gtk_combo_box_text_new();
+    getStyleContext(&mpListboxStyle, gListBox);
+    /* Get ComboBox Button */
+    gtk_container_forall(GTK_CONTAINER(gListBox),
+                         get_combo_box_inner_button,
+                         NULL);
+    mpListboxButtonStyle = gtk_widget_get_style_context(gListBoxButtonWidget);
+
+    gtk_widget_show_all(gDumbContainer);
 }
 
 cairo_t* GtkSalGraphics::getCairoContext() const

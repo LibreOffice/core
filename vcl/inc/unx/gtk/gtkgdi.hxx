@@ -77,7 +77,10 @@ private:
     static GtkStyleContext *mpMenuItemStyle;
     static GtkStyleContext *mpSpinStyle;
     static GtkStyleContext *mpComboboxStyle;
+    static GtkStyleContext *mpComboboxEntryStyle;
+    static GtkStyleContext *mpComboboxButtonStyle;
     static GtkStyleContext *mpListboxStyle;
+    static GtkStyleContext *mpListboxButtonStyle;
     static GtkStyleContext *mpNoteBookStyle;
 
     static Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
@@ -101,13 +104,13 @@ private:
                          const Rectangle& rControlRectangle,
                          ControlType nType,
                          ControlPart nPart,
-                         const ImplControlValue& aValue );
-    static void PaintCombobox( GtkStyleContext *context,
+                         const ImplControlValue& aValue);
+    static void PaintCombobox(GtkStateFlags flags,
                         cairo_t *cr,
                         const Rectangle& rControlRectangle,
                         ControlType nType,
                         ControlPart nPart,
-                        const ImplControlValue& aValue );
+                        const ImplControlValue& aValue);
     static void PaintCheckOrRadio(GtkStyleContext *context,
                            cairo_t *cr,
                            const Rectangle& rControlRectangle,
