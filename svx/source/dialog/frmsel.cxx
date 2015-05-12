@@ -22,8 +22,8 @@
 
 #include <algorithm>
 #include <math.h>
-#include "frmselimpl.hxx"
-#include "AccessibleFrameSelector.hxx"
+#include <frmselimpl.hxx>
+#include <AccessibleFrameSelector.hxx>
 #include <svx/dialmgr.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -60,9 +60,8 @@ size_t GetIndexFromFrameBorderType( FrameBorderType eBorder )
     return static_cast< size_t >( eBorder ) - 1;
 }
 
-
-
-namespace {
+namespace
+{
 
 /** Space between outer control border and any graphical element of the control. */
 const long FRAMESEL_GEOM_OUTER    = 2;
@@ -78,7 +77,6 @@ const long FRAMESEL_GEOM_ADD_CLICK_OUTER = 5;
 
 /** Additional margin for click area of inner lines. */
 const long FRAMESEL_GEOM_ADD_CLICK_INNER = 2;
-
 
 
 /** Returns the corresponding flag for a frame border. */
@@ -301,12 +299,12 @@ void FrameSelectorImpl::Initialize( FrameSelFlags nFlags )
 
 void FrameSelectorImpl::InitColors()
 {
-    const StyleSettings& rSett = mrFrameSel.GetSettings().GetStyleSettings();
-    maBackCol = rSett.GetFieldColor();
-    mbHCMode = rSett.GetHighContrastMode();
-    maArrowCol = rSett.GetFieldTextColor();
-    maMarkCol.operator=( maBackCol ).Merge( maArrowCol, mbHCMode ? 0x80 : 0xC0 );
-    maHCLineCol = rSett.GetLabelTextColor();
+    const StyleSettings& rSettings = mrFrameSel.GetSettings().GetStyleSettings();
+    maBackCol = rSettings.GetFieldColor();
+    mbHCMode = rSettings.GetHighContrastMode();
+    maArrowCol = rSettings.GetFieldTextColor();
+    maMarkCol.operator=(maBackCol).Merge(maArrowCol, mbHCMode ? 0x80 : 0xC0);
+    maHCLineCol = rSettings.GetLabelTextColor();
 }
 
 void FrameSelectorImpl::InitArrowImageList()
@@ -595,8 +593,8 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
 
 void FrameSelectorImpl::DrawAllArrows()
 {
-    for( FrameBorderCIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
-        DrawArrows( **aIt );
+    for(FrameBorderCIter aIt(maEnabBorders); aIt.Is(); ++aIt)
+        DrawArrows(**aIt);
 }
 
 Color FrameSelectorImpl::GetDrawLineColor( const Color& rColor ) const
@@ -669,29 +667,29 @@ void FrameSelectorImpl::DrawVirtualDevice()
     mbFullRepaint = false;
 }
 
-void FrameSelectorImpl::CopyVirDevToControl()
+void FrameSelectorImpl::CopyVirDevToControl(vcl::RenderContext& rRenderContext)
 {
-    if( mbFullRepaint )
+    if (mbFullRepaint)
         DrawVirtualDevice();
-    mrFrameSel.DrawBitmap( maVirDevPos, mpVirDev->GetBitmap( Point( 0, 0 ), mpVirDev->GetOutputSizePixel() ) );
+    rRenderContext.DrawBitmap(maVirDevPos, mpVirDev->GetBitmap(Point(0, 0), mpVirDev->GetOutputSizePixel()));
 }
 
 void FrameSelectorImpl::DrawAllTrackingRects()
 {
     tools::PolyPolygon aPPoly;
-    if( mrFrameSel.IsAnyBorderSelected() )
+    if (mrFrameSel.IsAnyBorderSelected())
     {
-        for( SelFrameBorderCIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
-            (*aIt)->MergeFocusToPolyPolygon( aPPoly );
-        aPPoly.Move( maVirDevPos.X(), maVirDevPos.Y() );
+        for(SelFrameBorderCIter aIt( maEnabBorders ); aIt.Is(); ++aIt)
+            (*aIt)->MergeFocusToPolyPolygon(aPPoly);
+        aPPoly.Move(maVirDevPos.X(), maVirDevPos.Y());
     }
     else
         // no frame border selected -> draw tracking rectangle around entire control
-        aPPoly.Insert( Polygon( Rectangle( maVirDevPos, mpVirDev->GetOutputSizePixel() ) ) );
+        aPPoly.Insert(Polygon(Rectangle(maVirDevPos, mpVirDev->GetOutputSizePixel())));
 
-    aPPoly.Optimize( PolyOptimizeFlags::CLOSE );
-    for( sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx )
-        mrFrameSel.InvertTracking( aPPoly.GetObject( nIdx ), SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
+    aPPoly.Optimize(PolyOptimizeFlags::CLOSE);
+    for(sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx)
+        mrFrameSel.InvertTracking(aPPoly.GetObject(nIdx), SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
 }
 
 Point FrameSelectorImpl::GetDevPosFromMousePos( const Point& rMousePos ) const
@@ -1044,10 +1042,10 @@ Rectangle FrameSelector::GetClickBoundRect( FrameBorderType eBorder ) const
 }
 
 // virtual functions from base class
-void FrameSelector::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void FrameSelector::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    mxImpl->CopyVirDevToControl();
-    if( HasFocus() )
+    mxImpl->CopyVirDevToControl(rRenderContext);
+    if (HasFocus())
         mxImpl->DrawAllTrackingRects();
 }
 

@@ -28,73 +28,80 @@
 
 namespace svx {
 
-namespace a11y { class AccFrameSelector; }
-
-
+namespace a11y {
+    class AccFrameSelector;
+}
 
 class FrameBorder
 {
 public:
-    explicit            FrameBorder( FrameBorderType eType );
+    explicit FrameBorder(FrameBorderType eType);
 
-    inline FrameBorderType GetType() const { return meType; }
+    inline FrameBorderType GetType() const
+    {
+        return meType;
+    }
 
-    inline bool         IsEnabled() const { return mbEnabled; }
-    void                Enable( FrameSelFlags nFlags );
+    inline bool IsEnabled() const
+    {
+        return mbEnabled;
+    }
+    void Enable(FrameSelFlags nFlags);
 
-    inline FrameBorderState GetState() const { return meState; }
-    void                SetState( FrameBorderState eState );
+    inline FrameBorderState GetState() const
+    {
+        return meState;
+    }
+    void SetState(FrameBorderState eState);
 
-    inline bool         IsSelected() const { return mbSelected; }
-    inline void         Select( bool bSelect ) { mbSelected = bSelect; }
+    inline bool IsSelected() const { return mbSelected; }
+    inline void Select( bool bSelect ) { mbSelected = bSelect; }
 
     const editeng::SvxBorderLine& GetCoreStyle() const { return maCoreStyle; }
-    void                SetCoreStyle( const editeng::SvxBorderLine* pStyle );
+    void SetCoreStyle( const editeng::SvxBorderLine* pStyle );
 
-    inline void         SetUIColorPrim( const Color& rColor ) {maUIStyle.SetColorPrim( rColor ); }
-    inline void         SetUIColorSecn( const Color& rColor ) {maUIStyle.SetColorSecn( rColor ); }
-    inline void         SetUIColorGap( bool bUseIt, const Color& rColor ) {maUIStyle.SetColorGap(bUseIt, rColor);}
+    inline void SetUIColorPrim( const Color& rColor ) {maUIStyle.SetColorPrim( rColor ); }
+    inline void SetUIColorSecn( const Color& rColor ) {maUIStyle.SetColorSecn( rColor ); }
+    inline void SetUIColorGap( bool bUseIt, const Color& rColor ) {maUIStyle.SetColorGap(bUseIt, rColor);}
     inline const frame::Style& GetUIStyle() const { return maUIStyle; }
 
-    inline void         ClearFocusArea() { maFocusArea.Clear(); }
-    void                AddFocusPolygon( const Polygon& rFocus );
-    void                MergeFocusToPolyPolygon( tools::PolyPolygon& rPPoly ) const;
+    inline void ClearFocusArea() { maFocusArea.Clear(); }
+    void AddFocusPolygon( const Polygon& rFocus );
+    void MergeFocusToPolyPolygon( tools::PolyPolygon& rPPoly ) const;
 
-    inline void         ClearClickArea() { maClickArea.Clear(); }
-    void                AddClickRect( const Rectangle& rRect );
-    bool                ContainsClickPoint( const Point& rPos ) const;
-    Rectangle           GetClickBoundRect() const;
+    inline void ClearClickArea() { maClickArea.Clear(); }
+    void AddClickRect( const Rectangle& rRect );
+    bool ContainsClickPoint( const Point& rPos ) const;
+    Rectangle GetClickBoundRect() const;
 
-    void                SetKeyboardNeighbors(
-                            FrameBorderType eLeft, FrameBorderType eRight,
-                            FrameBorderType eTop, FrameBorderType eBottom );
-    FrameBorderType     GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const;
+    void SetKeyboardNeighbors(FrameBorderType eLeft, FrameBorderType eRight,
+                              FrameBorderType eTop, FrameBorderType eBottom);
+    FrameBorderType GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const;
 
 private:
-    const FrameBorderType meType;       /// Frame border type (position in control).
-    FrameBorderState    meState;        /// Frame border state (on/off/don't care).
-    editeng::SvxBorderLine       maCoreStyle;    /// Core style from application.
-    frame::Style        maUIStyle;      /// Internal style to draw lines.
-    FrameBorderType     meKeyLeft;      /// Left neighbor for keyboard control.
-    FrameBorderType     meKeyRight;     /// Right neighbor for keyboard control.
-    FrameBorderType     meKeyTop;       /// Upper neighbor for keyboard control.
-    FrameBorderType     meKeyBottom;    /// Lower neighbor for keyboard control.
-    tools::PolyPolygon         maFocusArea;    /// Focus drawing areas.
-    tools::PolyPolygon         maClickArea;    /// Mouse click areas.
-    bool                mbEnabled;      /// true = Border enabled in control.
-    bool                mbSelected;     /// true = Border selected in control.
+    const FrameBorderType meType; /// Frame border type (position in control).
+    FrameBorderState meState; /// Frame border state (on/off/don't care).
+    editeng::SvxBorderLine maCoreStyle; /// Core style from application.
+    frame::Style maUIStyle; /// Internal style to draw lines.
+    FrameBorderType meKeyLeft; /// Left neighbor for keyboard control.
+    FrameBorderType meKeyRight; /// Right neighbor for keyboard control.
+    FrameBorderType meKeyTop; /// Upper neighbor for keyboard control.
+    FrameBorderType meKeyBottom;    /// Lower neighbor for keyboard control.
+    tools::PolyPolygon maFocusArea;    /// Focus drawing areas.
+    tools::PolyPolygon maClickArea;    /// Mouse click areas.
+    bool mbEnabled : 1; /// true = Border enabled in control.
+    bool mbSelected : 1; /// true = Border selected in control.
 };
 
 
 
-typedef std::vector< FrameBorder* >     FrameBorderPtrVec;
+typedef std::vector< FrameBorder* > FrameBorderPtrVec;
 
 struct FrameSelectorImpl : public Resource
 {
-    typedef ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >  XAccessibleRef;
-    typedef std::vector< a11y::AccFrameSelector* >      AccessibleImplVec;
-    typedef std::vector< XAccessibleRef >               XAccessibleRefVec;
+    typedef css::uno::Reference<css::accessibility::XAccessible> XAccessibleRef;
+    typedef std::vector<a11y::AccFrameSelector*> AccessibleImplVec;
+    typedef std::vector<XAccessibleRef> XAccessibleRefVec;
 
     FrameSelector&      mrFrameSel;     /// The control itself.
     ScopedVclPtr<VirtualDevice> mpVirDev; /// For all buffered drawing operations.
@@ -114,7 +121,7 @@ struct FrameSelectorImpl : public Resource
     FrameBorder         maVer;          /// All data of inner vertical frame border.
     FrameBorder         maTLBR;         /// All data of top-left to bottom-right frame border.
     FrameBorder         maBLTR;         /// All data of bottom-left to top-right frame border.
-    editeng::SvxBorderLine       maCurrStyle;    /// Current style and color for new borders.
+    editeng::SvxBorderLine maCurrStyle;    /// Current style and color for new borders.
     frame::Array        maArray;        /// Frame link array to draw an array of frame borders.
 
     FrameSelFlags       mnFlags;        /// Flags for enabled frame borders.
@@ -188,7 +195,7 @@ struct FrameSelectorImpl : public Resource
     /** Draws all contents of the control. */
     void                DrawVirtualDevice();
     /** Copies contents of the virtual device to the control. */
-    void                CopyVirDevToControl();
+    void                CopyVirDevToControl(vcl::RenderContext& rRenderContext);
 
     /** Draws tracking rectangles for all selected frame borders. */
     void                DrawAllTrackingRects();
@@ -244,11 +251,11 @@ template< typename Cont, typename Iter, typename Pred >
 class FrameBorderIterBase
 {
 public:
-    typedef Cont                                        container_type;
-    typedef Iter                                        iterator_type;
-    typedef Pred                                        predicate_type;
-    typedef typename Cont::value_type                   value_type;
-    typedef FrameBorderIterBase< Cont, Iter, Pred >    this_type;
+    typedef Cont container_type;
+    typedef Iter iterator_type;
+    typedef Pred predicate_type;
+    typedef typename Cont::value_type value_type;
+    typedef FrameBorderIterBase<Cont, Iter, Pred> this_type;
 
     explicit            FrameBorderIterBase( container_type& rCont );
     inline bool         Is() const { return maIt != maEnd; }
@@ -284,8 +291,6 @@ typedef FrameBorderIterBase< const FrameBorderPtrVec, FrameBorderPtrVec::const_i
 /** Iterator for mutable svx::FrameBorder containers, iterates over selected borders. */
 typedef FrameBorderIterBase< FrameBorderPtrVec, FrameBorderPtrVec::iterator, FrameBorderSelected_Pred >
     SelFrameBorderIter;
-
-
 
 } // namespace svx
 
