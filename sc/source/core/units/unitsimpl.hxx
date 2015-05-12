@@ -107,6 +107,9 @@ public:
                                   ScDocument* pDoc,
                                   const OUString& rsOutputUnit) SAL_OVERRIDE;
 
+    virtual bool areUnitsCompatible(const OUString& rsUnit1,
+                                    const OUString& rsUnit2) SAL_OVERRIDE;
+
 private:
     UnitsResult getOutputUnitsForOpCode(std::stack< RAUSItem >& rStack, const formula::FormulaToken* pToken, ScDocument* pDoc);
 
