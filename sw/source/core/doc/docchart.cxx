@@ -43,10 +43,10 @@
 
 void SwTable::UpdateCharts() const
 {
-    GetFrmFmt()->GetDoc()->UpdateCharts( GetFrmFmt()->GetName() );
+    GetFrameFormat()->GetDoc()->UpdateCharts( GetFrameFormat()->GetName() );
 }
 
-bool SwTable::IsTblComplexForChart( const OUString& rSelection ) const
+bool SwTable::IsTableComplexForChart( const OUString& rSelection ) const
 {
     const SwTableBox* pSttBox, *pEndBox;
     if( 2 < rSelection.getLength() )
@@ -59,8 +59,8 @@ bool SwTable::IsTblComplexForChart( const OUString& rSelection ) const
         const sal_Int32 nLength {'>' == rSelection[ rSelection.getLength()-1 ]
             ? rSelection.getLength()-1 : rSelection.getLength()};
 
-        pSttBox = GetTblBox(rSelection.copy( nOffset, nSeparator - nOffset ));
-        pEndBox = GetTblBox(rSelection.copy( nSeparator+1, nLength - (nSeparator+1) ));
+        pSttBox = GetTableBox(rSelection.copy( nOffset, nSeparator - nOffset ));
+        pEndBox = GetTableBox(rSelection.copy( nSeparator+1, nLength - (nSeparator+1) ));
     }
     else
     {
@@ -90,26 +90,26 @@ void SwDoc::DoUpdateAllCharts()
     SwViewShell* pVSh = getIDocumentLayoutAccess().GetCurrentViewShell();
     if( pVSh )
     {
-        const SwFrmFmts& rTblFmts = *GetTblFrmFmts();
-        for( size_t n = 0; n < rTblFmts.size(); ++n )
+        const SwFrameFormats& rTableFormats = *GetTableFrameFormats();
+        for( size_t n = 0; n < rTableFormats.size(); ++n )
         {
-            SwTable* pTmpTbl;
-            const SwTableNode* pTblNd;
-            const SwFrmFmt* pFmt = rTblFmts[ n ];
+            SwTable* pTmpTable;
+            const SwTableNode* pTableNd;
+            const SwFrameFormat* pFormat = rTableFormats[ n ];
 
-            if( 0 != ( pTmpTbl = SwTable::FindTable( pFmt ) ) &&
-                0 != ( pTblNd = pTmpTbl->GetTableNode() ) &&
-                pTblNd->GetNodes().IsDocNodes() )
+            if( 0 != ( pTmpTable = SwTable::FindTable( pFormat ) ) &&
+                0 != ( pTableNd = pTmpTable->GetTableNode() ) &&
+                pTableNd->GetNodes().IsDocNodes() )
             {
-                _UpdateCharts( *pTmpTbl, *pVSh );
+                _UpdateCharts( *pTmpTable, *pVSh );
             }
         }
     }
 }
 
-void SwDoc::_UpdateCharts( const SwTable& rTbl, SwViewShell const & rVSh ) const
+void SwDoc::_UpdateCharts( const SwTable& rTable, SwViewShell const & rVSh ) const
 {
-    OUString aName( rTbl.GetFrmFmt()->GetName() );
+    OUString aName( rTable.GetFrameFormat()->GetName() );
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
     while( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
@@ -117,12 +117,12 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, SwViewShell const & rVSh ) const
         ++aIdx;
         SwOLENode *pONd;
         if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
-            aName == pONd->GetChartTblName() &&
+            aName == pONd->GetChartTableName() &&
             pONd->getLayoutFrm( rVSh.GetLayout() ) )
         {
             SwChartDataProvider *pPCD = getIDocumentChartDataProviderAccess().GetChartDataProvider();
             if (pPCD)
-                pPCD->InvalidateTable( &rTbl );
+                pPCD->InvalidateTable( &rTable );
             // following this the framework will now take care of repainting
             // the chart or it's replacement image...
         }
@@ -132,29 +132,29 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, SwViewShell const & rVSh ) const
 
 void SwDoc::UpdateCharts( const OUString &rName ) const
 {
-    SwTable* pTmpTbl = SwTable::FindTable( FindTblFmtByName( rName ) );
-    if( pTmpTbl )
+    SwTable* pTmpTable = SwTable::FindTable( FindTableFormatByName( rName ) );
+    if( pTmpTable )
     {
         SwViewShell const * pVSh = getIDocumentLayoutAccess().GetCurrentViewShell();
 
         if( pVSh )
-            _UpdateCharts( *pTmpTbl, *pVSh );
+            _UpdateCharts( *pTmpTable, *pVSh );
     }
 }
 
-void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
+void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName )
 {
-    const OUString aOldName( rTblFmt.GetName() );
+    const OUString aOldName( rTableFormat.GetName() );
 
     bool bNameFound = rNewName.isEmpty();
     if( !bNameFound )
     {
-        const SwFrmFmts& rTbl = *GetTblFrmFmts();
-        for( size_t i = rTbl.size(); i; )
+        const SwFrameFormats& rTable = *GetTableFrameFormats();
+        for( size_t i = rTable.size(); i; )
         {
-            const SwFrmFmt* pFmt;
-            if( !( pFmt = rTbl[ --i ] )->IsDefault() &&
-                pFmt->GetName() == rNewName && IsUsed( *pFmt ) )
+            const SwFrameFormat* pFormat;
+            if( !( pFormat = rTable[ --i ] )->IsDefault() &&
+                pFormat->GetName() == rNewName && IsUsed( *pFormat ) )
             {
                 bNameFound = true;
                 break;
@@ -163,9 +163,9 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
     }
 
     if( !bNameFound )
-        rTblFmt.SetName( rNewName, true );
+        rTableFormat.SetName( rNewName, true );
     else
-        rTblFmt.SetName( GetUniqueTblName(), true );
+        rTableFormat.SetName( GetUniqueTableName(), true );
 
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -173,11 +173,11 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
     {
         ++aIdx;
         SwOLENode *pNd = aIdx.GetNode().GetOLENode();
-        if( pNd && aOldName == pNd->GetChartTblName() )
+        if( pNd && aOldName == pNd->GetChartTableName() )
         {
-            pNd->SetChartTblName( rNewName );
+            pNd->SetChartTableName( rNewName );
 
-            SwTable* pTable = SwTable::FindTable( &rTblFmt );
+            SwTable* pTable = SwTable::FindTable( &rTableFormat );
             SwChartDataProvider *pPCD = getIDocumentChartDataProviderAccess().GetChartDataProvider();
             if (pPCD)
                 pPCD->InvalidateTable( pTable );

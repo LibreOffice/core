@@ -24,12 +24,12 @@
 #include <ndtxt.hxx>
 #include <swtypes.hxx>
 
-SwFmtChg::SwFmtChg( SwFmt* pFmt )
-    : SwMsgPoolItem( RES_FMT_CHG ), pChangedFmt( pFmt )
+SwFormatChg::SwFormatChg( SwFormat* pFormat )
+    : SwMsgPoolItem( RES_FMT_CHG ), pChangedFormat( pFormat )
 {
 }
 
-SwInsTxt::SwInsTxt( sal_Int32 nP, sal_Int32 nL )
+SwInsText::SwInsText( sal_Int32 nP, sal_Int32 nL )
     : SwMsgPoolItem( RES_INS_TXT ), nPos( nP ), nLen( nL )
 {
 }
@@ -39,17 +39,17 @@ SwDelChr::SwDelChr( sal_Int32 nP )
 {
 }
 
-SwDelTxt::SwDelTxt( sal_Int32 nS, sal_Int32 nL )
+SwDelText::SwDelText( sal_Int32 nS, sal_Int32 nL )
     : SwMsgPoolItem( RES_DEL_TXT ), nStart( nS ), nLen( nL )
 {
 }
 
 SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW )
-    : SwMsgPoolItem( RES_UPDATE_ATTR ), nStart( nS ), nEnd( nE ), nWhichAttr( nW ), aWhichFmtAttr()
+    : SwMsgPoolItem( RES_UPDATE_ATTR ), nStart( nS ), nEnd( nE ), nWhichAttr( nW ), aWhichFormatAttr()
 {
 }
 
-SwRefMarkFldUpdate::SwRefMarkFldUpdate( OutputDevice* pOutput )
+SwRefMarkFieldUpdate::SwRefMarkFieldUpdate( OutputDevice* pOutput )
     : SwMsgPoolItem( RES_REFMARKFLD_UPDATE ),
     pOut( pOutput )
 {
@@ -61,18 +61,18 @@ SwDocPosUpdate::SwDocPosUpdate( const SwTwips nDcPos )
 {
 }
 
-SwTableFmlUpdate::SwTableFmlUpdate( const SwTable* pNewTbl )
+SwTableFormulaUpdate::SwTableFormulaUpdate( const SwTable* pNewTable )
     : SwMsgPoolItem( RES_TABLEFML_UPDATE ),
-    pTbl( pNewTbl ), pHistory( 0 ), nSplitLine( USHRT_MAX ),
+    pTable( pNewTable ), pHistory( 0 ), nSplitLine( USHRT_MAX ),
     eFlags( TBL_CALC )
 {
-    DATA.pDelTbl = 0;
+    DATA.pDelTable = 0;
     bModified = bBehindSplitLine = false;
-    OSL_ENSURE( pTbl, "No Table pointer" );
+    OSL_ENSURE( pTable, "No Table pointer" );
 }
 
-SwAutoFmtGetDocNode::SwAutoFmtGetDocNode( const SwNodes* pNds )
-    : SwMsgPoolItem( RES_AUTOFMT_DOCNODE ), pCntntNode( 0 ), pNodes( pNds )
+SwAutoFormatGetDocNode::SwAutoFormatGetDocNode( const SwNodes* pNds )
+    : SwMsgPoolItem( RES_AUTOFMT_DOCNODE ), pContentNode( 0 ), pNodes( pNds )
 {
 }
 
@@ -129,7 +129,7 @@ const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
     OSL_ASSERT( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN );
 
     SfxPoolItem *pHt = aAttrTab[ nWhich - POOLATTR_BEGIN ];
-    OSL_ENSURE( pHt, "GetDfltFmtAttr(): Dflt == 0" );
+    OSL_ENSURE( pHt, "GetDfltFormatAttr(): Dflt == 0" );
     return pHt;
 }
 #else
@@ -139,8 +139,8 @@ const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 }
 #endif
 
-SwCondCollCondChg::SwCondCollCondChg( SwFmt *pFmt )
-    : SwMsgPoolItem( RES_CONDCOLL_CONDCHG ), pChangedFmt( pFmt )
+SwCondCollCondChg::SwCondCollCondChg( SwFormat *pFormat )
+    : SwMsgPoolItem( RES_CONDCOLL_CONDCHG ), pChangedFormat( pFormat )
 {
 }
 

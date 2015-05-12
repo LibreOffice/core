@@ -91,7 +91,7 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
                                 SW_EVENT_OBJECT_SELECT );
         }
         // no break;
-    case MACASSGN_INETFMT:          // INetFmt-Attributes
+    case MACASSGN_INETFMT:          // INetFormat-Attributes
         {
             aItem.AddEvent( OUString( SW_RES(STR_EVENT_MOUSEOVER_OBJECT) ), OUString(),
                                 SFX_EVENT_MOUSEOVER_OBJECT );
@@ -106,7 +106,7 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
     return aItem;
 }
 
-bool SwMacroAssignDlg::INetFmtDlg( vcl::Window* pParent, SwWrtShell& rSh,
+bool SwMacroAssignDlg::INetFormatDlg( vcl::Window* pParent, SwWrtShell& rSh,
                                     SvxMacroItem*& rpINetItem )
 {
     bool bRet = false;

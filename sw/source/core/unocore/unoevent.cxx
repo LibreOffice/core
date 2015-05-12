@@ -116,20 +116,20 @@ OUString SwHyperlinkEventDescriptor::getImplementationName()
     return sImplName;
 }
 
-void SwHyperlinkEventDescriptor::copyMacrosFromINetFmt(
-    const SwFmtINetFmt& aFmt)
+void SwHyperlinkEventDescriptor::copyMacrosFromINetFormat(
+    const SwFormatINetFormat& aFormat)
 {
     for(sal_uInt16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; ++i)
     {
         const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
-        const SvxMacro* aMacro = aFmt.GetMacro(nEvent);
+        const SvxMacro* aMacro = aFormat.GetMacro(nEvent);
         if (NULL != aMacro)
             replaceByName(nEvent, *aMacro);
     }
 }
 
-void SwHyperlinkEventDescriptor::copyMacrosIntoINetFmt(
-    SwFmtINetFmt& aFmt)
+void SwHyperlinkEventDescriptor::copyMacrosIntoINetFormat(
+    SwFormatINetFormat& aFormat)
 {
     for(sal_uInt16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; ++i)
     {
@@ -138,7 +138,7 @@ void SwHyperlinkEventDescriptor::copyMacrosIntoINetFmt(
         {
             SvxMacro aMacro(sEmpty, sEmpty);
             getByName(aMacro, nEvent);
-            aFmt.SetMacro(nEvent, aMacro);
+            aFormat.SetMacro(nEvent, aMacro);
         }
     }
 }
@@ -191,12 +191,12 @@ SwFrameEventDescriptor::~SwFrameEventDescriptor()
 
 void SwFrameEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
 {
-    rFrame.GetFrmFmt()->SetFmtAttr(rItem);
+    rFrame.GetFrameFormat()->SetFormatAttr(rItem);
 }
 
 const SvxMacroItem& SwFrameEventDescriptor::getMacroItem()
 {
-    return static_cast<const SvxMacroItem&>(rFrame.GetFrmFmt()->GetFmtAttr(RES_FRMMACRO));
+    return static_cast<const SvxMacroItem&>(rFrame.GetFrameFormat()->GetFormatAttr(RES_FRMMACRO));
 }
 
 sal_uInt16 SwFrameEventDescriptor::getMacroItemWhich() const

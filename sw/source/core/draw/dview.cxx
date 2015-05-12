@@ -145,9 +145,9 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
 
         if(pSwVirtFlyDrawObj)
         {
-            if(pSwVirtFlyDrawObj->GetFlyFrm()->Lower() && pSwVirtFlyDrawObj->GetFlyFrm()->Lower()->IsNoTxtFrm())
+            if(pSwVirtFlyDrawObj->GetFlyFrm()->Lower() && pSwVirtFlyDrawObj->GetFlyFrm()->Lower()->IsNoTextFrm())
             {
-                // the old method used IsNoTxtFrm (should be for SW's own OLE and
+                // the old method used IsNoTextFrm (should be for SW's own OLE and
                 // graphic's) to accept hit only based on outer bounds; nothing to do
             }
             else
@@ -209,13 +209,13 @@ void SwDrawView::AddCustomHdl()
 
     SdrObject *pObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
     // make code robust
-    SwFrmFmt* pFrmFmt( ::FindFrmFmt( pObj ) );
-    if ( !pFrmFmt )
+    SwFrameFormat* pFrameFormat( ::FindFrameFormat( pObj ) );
+    if ( !pFrameFormat )
     {
         OSL_FAIL( "<SwDrawView::AddCustomHdl()> - missing frame format!" );
         return;
     }
-    const SwFmtAnchor &rAnchor = pFrmFmt->GetAnchor();
+    const SwFormatAnchor &rAnchor = pFrameFormat->GetAnchor();
 
     if (FLY_AS_CHAR == rAnchor.GetAnchorId())
         return;
@@ -536,8 +536,8 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
          ( !bMovedForward && nNewPos > 0 ) )
     {
         size_t nTmpNewPos( nNewPos );
-        const SwFrmFmt* pParentFrmFmt =
-                pParentAnchoredObj ? &(pParentAnchoredObj->GetFrmFmt()) : 0L;
+        const SwFrameFormat* pParentFrameFormat =
+                pParentAnchoredObj ? &(pParentAnchoredObj->GetFrameFormat()) : 0L;
         const SdrObject* pTmpObj = pDrawPage->GetObj( nNewPos + 1 );
         while ( pTmpObj )
         {
@@ -549,7 +549,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
             const SwFlyFrm* pTmpParentObj = pTmpAnchorFrm
                                             ? pTmpAnchorFrm->FindFlyFrm() : 0L;
             if ( pTmpParentObj &&
-                 &(pTmpParentObj->GetFrmFmt()) != pParentFrmFmt )
+                 &(pTmpParentObj->GetFrameFormat()) != pParentFrameFormat )
             {
                 if ( bMovedForward )
                 {
@@ -717,12 +717,12 @@ const SwFrm* SwDrawView::CalcAnchor()
 
     if ( aPt != aMyPt )
     {
-        if ( pAnch && pAnch->IsCntntFrm() )
+        if ( pAnch && pAnch->IsContentFrm() )
         {
             // allow drawing objects in header/footer,
             // but exclude control objects.
             bool bBodyOnly = CheckControlLayer( pObj );
-            pAnch = ::FindAnchor( static_cast<const SwCntntFrm*>(pAnch), aPt, bBodyOnly );
+            pAnch = ::FindAnchor( static_cast<const SwContentFrm*>(pAnch), aPt, bBodyOnly );
         }
         else if ( !bFly )
         {
@@ -825,9 +825,9 @@ void SwDrawView::CheckPossibilities()
             if ( pFly  )
             {
                 pFrm = pFly->GetAnchorFrm();
-                if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
+                if ( pFly->Lower() && pFly->Lower()->IsNoTextFrm() )
                 {
-                    SwOLENode *pNd = const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(pFly->Lower()))->GetNode()->GetOLENode();
+                    SwOLENode *pNd = const_cast<SwContentFrm*>(static_cast<const SwContentFrm*>(pFly->Lower()))->GetNode()->GetOLENode();
                     if ( pNd )
                     {
                         uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
@@ -842,7 +842,7 @@ void SwDrawView::CheckPossibilities()
                             // #i972: protect position if it is a Math object anchored 'as char' and baseline alignment is activated
                             SwDoc* pDoc = Imp().GetShell()->GetDoc();
                             const bool bProtectMathPos = SotExchange::IsMath( xObj->getClassID() )
-                                    && FLY_AS_CHAR == pFly->GetFmt()->GetAnchor().GetAnchorId()
+                                    && FLY_AS_CHAR == pFly->GetFormat()->GetAnchor().GetAnchorId()
                                     && pDoc->GetDocumentSettingManager().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
                             if (bProtectMathPos)
                                 bMoveProtect = true;
@@ -860,13 +860,13 @@ void SwDrawView::CheckPossibilities()
         if ( pFrm )
             bProtect = pFrm->IsProtected(); //Frames, areas etc.
         {
-            SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
-            if ( !pFrmFmt )
+            SwFrameFormat* pFrameFormat( ::FindFrameFormat( const_cast<SdrObject*>(pObj) ) );
+            if ( !pFrameFormat )
             {
                 OSL_FAIL( "<SwDrawView::CheckPossibilities()> - missing frame format" );
                 bProtect = true;
             }
-            else if ((FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId()) &&
+            else if ((FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId()) &&
                       rMrkList.GetMarkCount() > 1 )
             {
                 bProtect = true;
@@ -941,13 +941,13 @@ void SwDrawView::DeleteMarked()
 
     // Check what textboxes have to be deleted afterwards.
     const SdrMarkList& rMarkList = GetMarkedObjectList();
-    std::vector<SwFrmFmt*> aTextBoxesToDelete;
+    std::vector<SwFrameFormat*> aTextBoxesToDelete;
     for (size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
     {
         SdrObject *pObject = rMarkList.GetMark(i)->GetMarkedSdrObj();
         SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pObject));
-        SwFrmFmt* pFmt = pDrawContact->GetFmt();
-        if (SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(pFmt))
+        SwFrameFormat* pFormat = pDrawContact->GetFormat();
+        if (SwFrameFormat* pTextBox = SwTextBoxHelper::findTextBox(pFormat))
             aTextBoxesToDelete.push_back(pTextBox);
     }
 
@@ -957,8 +957,8 @@ void SwDrawView::DeleteMarked()
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
 
         // Only delete these now: earlier deletion would clear the mark list as well.
-        for (std::vector<SwFrmFmt*>::iterator i = aTextBoxesToDelete.begin(); i != aTextBoxesToDelete.end(); ++i)
-            pDoc->getIDocumentLayoutAccess().DelLayoutFmt(*i);
+        for (std::vector<SwFrameFormat*>::iterator i = aTextBoxesToDelete.begin(); i != aTextBoxesToDelete.end(); ++i)
+            pDoc->getIDocumentLayoutAccess().DelLayoutFormat(*i);
     }
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
     if( pTmpRoot )

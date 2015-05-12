@@ -36,7 +36,7 @@ extern bool bObjsDirect;    //frmtool.cxx
 
 static SwTwips lcl_GetFrmMinHeight(const SwLayoutFrm & rFrm)
 {
-    const SwFmtFrmSize &rSz = rFrm.GetFmt()->GetFrmSize();
+    const SwFormatFrmSize &rSz = rFrm.GetFormat()->GetFrmSize();
     SwTwips nMinHeight;
 
     switch (rSz.GetHeightSizeType())
@@ -64,11 +64,11 @@ static SwTwips lcl_CalcContentHeight(SwLayoutFrm & frm)
 
         nTmp = pFrm->Frm().Height();
         nRemaining += nTmp;
-        if( pFrm->IsTxtFrm() && static_cast<SwTxtFrm*>(pFrm)->IsUndersized() )
+        if( pFrm->IsTextFrm() && static_cast<SwTextFrm*>(pFrm)->IsUndersized() )
         {
-            nTmp = static_cast<SwTxtFrm*>(pFrm)->GetParHeight()
+            nTmp = static_cast<SwTextFrm*>(pFrm)->GetParHeight()
                 - pFrm->Prt().Height();
-            // This TxtFrm would like to be a bit bigger
+            // This TextFrm would like to be a bit bigger
             nRemaining += nTmp;
         }
         else if( pFrm->IsSctFrm() && static_cast<SwSectionFrm*>(pFrm)->IsUndersized() )
@@ -93,21 +93,21 @@ static void lcl_LayoutFrmEnsureMinHeight(SwLayoutFrm & rFrm,
     }
 }
 
-SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, SwFrm* pSib, sal_uInt16 nTypeIn)
-    : SwLayoutFrm( pFmt, pSib )
+SwHeadFootFrm::SwHeadFootFrm( SwFrameFormat * pFormat, SwFrm* pSib, sal_uInt16 nTypeIn)
+    : SwLayoutFrm( pFormat, pSib )
 {
     mnFrmType = nTypeIn;
     SetDerivedVert( false );
 
-    const SwFmtCntnt &rCnt = pFmt->GetCntnt();
+    const SwFormatContent &rCnt = pFormat->GetContent();
 
-    OSL_ENSURE( rCnt.GetCntntIdx(), "No content for Header." );
+    OSL_ENSURE( rCnt.GetContentIdx(), "No content for Header." );
 
     // Have the objects created right now for header and footer
     bool bOld = bObjsDirect;
     bObjsDirect = true;
-    sal_uLong nIndex = rCnt.GetCntntIdx()->GetIndex();
-    ::_InsertCnt( this, pFmt->GetDoc(), ++nIndex );
+    sal_uLong nIndex = rCnt.GetContentIdx()->GetIndex();
+    ::_InsertCnt( this, pFormat->GetDoc(), ++nIndex );
     bObjsDirect = bOld;
 }
 
@@ -254,11 +254,11 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     // #i46941# - frame has to be valid.
                     // Note: frame could be invalid after calling its format,
                     //       if it's locked
-                    OSL_ENSURE( StackHack::IsLocked() || !pFrm->IsTxtFrm() ||
+                    OSL_ENSURE( StackHack::IsLocked() || !pFrm->IsTextFrm() ||
                             pFrm->IsValid() ||
-                            static_cast<SwTxtFrm*>(pFrm)->IsJoinLocked(),
+                            static_cast<SwTextFrm*>(pFrm)->IsJoinLocked(),
                             "<SwHeadFootFrm::FormatSize(..)> - text frame invalid and not locked." );
-                    if ( pFrm->IsTxtFrm() && pFrm->IsValid() )
+                    if ( pFrm->IsTextFrm() && pFrm->IsValid() )
                     {
                         if ( !SwObjectFormatter::FormatObjsAtFrm( *pFrm,
                                                                   *(pFrm->FindPageFrm()) ) )
@@ -277,10 +277,10 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                 {
                     nRemaining += pFrm->Frm().Height();
 
-                    if( pFrm->IsTxtFrm() &&
-                        static_cast<SwTxtFrm*>(pFrm)->IsUndersized() )
-                        // This TxtFrm would like to be a bit bigger
-                        nRemaining += static_cast<SwTxtFrm*>(pFrm)->GetParHeight()
+                    if( pFrm->IsTextFrm() &&
+                        static_cast<SwTextFrm*>(pFrm)->IsUndersized() )
+                        // This TextFrm would like to be a bit bigger
+                        nRemaining += static_cast<SwTextFrm*>(pFrm)->GetParHeight()
                             - pFrm->Prt().Height();
                     else if( pFrm->IsSctFrm() &&
                              static_cast<SwSectionFrm*>(pFrm)->IsUndersized() )
@@ -323,9 +323,9 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
                             while ( pFrm )
                             {
-                                if( pFrm->IsTxtFrm())
+                                if( pFrm->IsTextFrm())
                                 {
-                                    SwTxtFrm * pTmpFrm = static_cast<SwTxtFrm*>(pFrm);
+                                    SwTextFrm * pTmpFrm = static_cast<SwTextFrm*>(pFrm);
                                     if (pTmpFrm->IsUndersized() )
                                     {
                                         pTmpFrm->InvalidateSize();
@@ -632,10 +632,10 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
 
 bool SwHeadFootFrm::GetEatSpacing() const
 {
-    const SwFrmFmt * pFmt = GetFmt();
-    OSL_ENSURE(pFmt, "SwHeadFootFrm: no format?");
+    const SwFrameFormat * pFormat = GetFormat();
+    OSL_ENSURE(pFormat, "SwHeadFootFrm: no format?");
 
-    if (pFmt->GetHeaderAndFooterEatSpacing().GetValue())
+    if (pFormat->GetHeaderAndFooterEatSpacing().GetValue())
         return true;
 
     return false;
@@ -670,16 +670,16 @@ void SwPageFrm::PrepareHeader()
     if ( !pLay )
         return;
 
-    const SwFmtHeader &rH = static_cast<SwFrmFmt*>(GetRegisteredIn())->GetHeader();
+    const SwFormatHeader &rH = static_cast<SwFrameFormat*>(GetRegisteredIn())->GetHeader();
 
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rH.IsActive() )
     {   //Implant header, but remove first, if already present
-        OSL_ENSURE( rH.GetHeaderFmt(), "FrmFmt for Header not found." );
+        OSL_ENSURE( rH.GetHeaderFormat(), "FrameFormat for Header not found." );
 
-        if ( pLay->GetFmt() == rH.GetHeaderFmt() )
+        if ( pLay->GetFormat() == rH.GetHeaderFormat() )
             return; // Header is already the correct one.
 
         if ( pLay->IsHeaderFrm() )
@@ -690,7 +690,7 @@ void SwPageFrm::PrepareHeader()
             SwFrm::DestroyFrm(pDel);
         }
         OSL_ENSURE( pLay, "Where to with the Header?" );
-        SwHeaderFrm *pH = new SwHeaderFrm( const_cast<SwFrmFmt*>(rH.GetHeaderFmt()), this );
+        SwHeaderFrm *pH = new SwHeaderFrm( const_cast<SwFrameFormat*>(rH.GetHeaderFormat()), this );
         pH->Paste( this, pLay );
         if ( GetUpper() )
             ::RegistFlys( this, pH );
@@ -710,7 +710,7 @@ void SwPageFrm::PrepareFooter()
     if ( !pLay )
         return;
 
-    const SwFmtFooter &rF = static_cast<SwFrmFmt*>(GetRegisteredIn())->GetFooter();
+    const SwFormatFooter &rF = static_cast<SwFrameFormat*>(GetRegisteredIn())->GetFooter();
     while ( pLay->GetNext() )
         pLay = static_cast<SwLayoutFrm*>(pLay->GetNext());
 
@@ -719,9 +719,9 @@ void SwPageFrm::PrepareFooter()
 
     if ( bOn && rF.IsActive() )
     {   //Implant footer, but remove first, if already present
-        OSL_ENSURE( rF.GetFooterFmt(), "FrmFmt for Footer not found." );
+        OSL_ENSURE( rF.GetFooterFormat(), "FrameFormat for Footer not found." );
 
-        if ( pLay->GetFmt() == rF.GetFooterFmt() )
+        if ( pLay->GetFormat() == rF.GetFooterFormat() )
             return;  // Footer is already the correct one.
 
         if ( pLay->IsFooterFrm() )
@@ -730,7 +730,7 @@ void SwPageFrm::PrepareFooter()
             pLay->Cut();
             SwFrm::DestroyFrm(pLay);
         }
-        SwFooterFrm *pF = new SwFooterFrm( const_cast<SwFrmFmt*>(rF.GetFooterFmt()), this );
+        SwFooterFrm *pF = new SwFooterFrm( const_cast<SwFrameFormat*>(rF.GetFooterFormat()), this );
         pF->Paste( this );
         if ( GetUpper() )
             ::RegistFlys( this, pF );

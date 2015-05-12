@@ -78,7 +78,7 @@ protected:
 
     const _SwCursor_SavePos* GetSavePos() const { return m_pSavePos; }
 
-    virtual const SwCntntFrm* DoSetBidiLevelLeftRight(
+    virtual const SwContentFrm* DoSetBidiLevelLeftRight(
         bool & io_rbLeft, bool bVisualAllowed, bool bInsertCrsr);
     virtual void DoSetBidiLevelUpDown();
     virtual bool IsSelOvrCheck(int eFlags);
@@ -97,7 +97,7 @@ public:
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
 
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
+    virtual void SaveTableBoxContent( const SwPosition* pPos = 0 );
 
     void FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const;
     SwMoveFnCollection* MakeFindRange( SwDocPositions, SwDocPositions,
@@ -109,11 +109,11 @@ public:
                 bool& bCancel,
                 FindRanges = FND_IN_BODY,
                 bool bReplace = false );
-    sal_uLong Find( const SwTxtFmtColl& rFmtColl,
+    sal_uLong Find( const SwTextFormatColl& rFormatColl,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges = FND_IN_BODY,
-                const SwTxtFmtColl* pReplFmt = 0 );
+                const SwTextFormatColl* pReplFormat = 0 );
     sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
@@ -172,14 +172,14 @@ public:
     bool GoNextCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( true, nCnt ); }
     bool GoPrevCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( false, nCnt ); }
     virtual bool GotoTable( const OUString& rName );
-    bool GotoTblBox( const OUString& rName );
+    bool GotoTableBox( const OUString& rName );
     bool GotoRegion( const OUString& rName );
-    bool GotoFtnAnchor();
-    bool GotoFtnTxt();
-    bool GotoNextFtnAnchor();
-    bool GotoPrevFtnAnchor();
-    bool GotoNextFtnCntnt();
-    bool GotoPrevFtnCntnt();
+    bool GotoFootnoteAnchor();
+    bool GotoFootnoteText();
+    bool GotoNextFootnoteAnchor();
+    bool GotoPrevFootnoteAnchor();
+    bool GotoNextFootnoteContent();
+    bool GotoPrevFootnoteContent();
 
     bool MovePara( SwWhichPara, SwPosPara );
     bool MoveSection( SwWhichSection, SwPosSection );
@@ -194,7 +194,7 @@ public:
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
     bool IsInProtectTable( bool bMove = false,
                                    bool bChgCrsr = true );
-    bool IsNoCntnt() const;
+    bool IsNoContent() const;
 
     /** Restore cursor state to the one saved by SwCrsrSaveState **/
     void RestoreSavePos();
@@ -240,12 +240,12 @@ public:
 struct _SwCursor_SavePos
 {
     sal_uLong nNode;
-    sal_Int32 nCntnt;
+    sal_Int32 nContent;
     _SwCursor_SavePos* pNext;
 
     _SwCursor_SavePos( const SwCursor& rCrsr )
         : nNode( rCrsr.GetPoint()->nNode.GetIndex() ),
-        nCntnt( rCrsr.GetPoint()->nContent.GetIndex() ),
+        nContent( rCrsr.GetPoint()->nContent.GetIndex() ),
         pNext( 0 )
     {}
     virtual ~_SwCursor_SavePos() {}
@@ -257,10 +257,10 @@ class SwTableCursor : public virtual SwCursor
 {
 
 protected:
-    sal_uLong m_nTblPtNd;
-    sal_uLong m_nTblMkNd;
-    sal_Int32 m_nTblPtCnt;
-    sal_Int32 m_nTblMkCnt;
+    sal_uLong m_nTablePtNd;
+    sal_uLong m_nTableMkNd;
+    sal_Int32 m_nTablePtCnt;
+    sal_Int32 m_nTableMkCnt;
     SwSelBoxes m_SelectedBoxes;
     bool m_bChanged : 1;
     bool m_bParked : 1;       // Table-cursor was parked.
@@ -276,7 +276,7 @@ public:
         bool bAllowVisual, bool bSkipHidden, bool bInsertCrsr ) SAL_OVERRIDE;
     virtual bool GotoTable( const OUString& rName ) SAL_OVERRIDE;
 
-    void InsertBox( const SwTableBox& rTblBox );
+    void InsertBox( const SwTableBox& rTableBox );
     void DeleteBox(size_t nPos);
     size_t GetSelectedBoxesCount() const { return m_SelectedBoxes.size(); }
     const SwSelBoxes& GetSelectedBoxes() const { return m_SelectedBoxes; }
@@ -287,14 +287,14 @@ public:
     bool HasReadOnlyBoxSel() const;
 
     // Has table cursor been changed? If so, save new values immediately.
-    bool IsCrsrMovedUpdt();
+    bool IsCrsrMovedUpdate();
     // Has table cursor been changed?
     bool IsCrsrMoved() const
     {
-        return  m_nTblMkNd != GetMark()->nNode.GetIndex() ||
-                m_nTblPtNd != GetPoint()->nNode.GetIndex() ||
-                m_nTblMkCnt != GetMark()->nContent.GetIndex() ||
-                m_nTblPtCnt != GetPoint()->nContent.GetIndex();
+        return  m_nTableMkNd != GetMark()->nNode.GetIndex() ||
+                m_nTablePtNd != GetPoint()->nNode.GetIndex() ||
+                m_nTableMkCnt != GetMark()->nContent.GetIndex() ||
+                m_nTablePtCnt != GetPoint()->nContent.GetIndex();
     }
 
     bool IsChgd() const { return m_bChanged; }

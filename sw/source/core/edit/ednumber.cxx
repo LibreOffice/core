@@ -100,10 +100,10 @@ SwPaM& SwPamRanges::SetPam( size_type nArrPos, SwPaM& rPam )
     OSL_ASSERT( nArrPos < Count() );
     const SwPamRange& rTmp = (*this)[ nArrPos ];
     rPam.GetPoint()->nNode = rTmp.nStart;
-    rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), 0 );
+    rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), 0 );
     rPam.SetMark();
     rPam.GetPoint()->nNode = rTmp.nEnd;
-    rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), 0 );
+    rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), 0 );
     return rPam;
 }
 
@@ -150,9 +150,9 @@ bool SwEditShell::NoNum()
 bool SwEditShell::SelectionHasNumber() const
 {
     bool bResult = HasNumber();
-    const SwTxtNode * pTxtNd =
-        GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
-    if (!bResult && pTxtNd && pTxtNd->Len()==0 && !pTxtNd->GetNumRule()) {
+    const SwTextNode * pTextNd =
+        GetCrsr()->GetPoint()->nNode.GetNode().GetTextNode();
+    if (!bResult && pTextNd && pTextNd->Len()==0 && !pTextNd->GetNumRule()) {
         SwPamRanges aRangeArr( *GetCrsr() );
         SwPaM aPam( *GetCrsr()->GetPoint() );
         for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
@@ -167,15 +167,15 @@ bool SwEditShell::SelectionHasNumber() const
                 }
                 for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
                 {
-                    pTxtNd = mpDoc->GetNodes()[nPos]->GetTxtNode();
-                    if (pTxtNd && pTxtNd->Len()!=0)
+                    pTextNd = mpDoc->GetNodes()[nPos]->GetTextNode();
+                    if (pTextNd && pTextNd->Len()!=0)
                     {
-                        bResult = pTxtNd->HasNumber();
+                        bResult = pTextNd->HasNumber();
 
                         // #b6340308# special case: outline numbered, not counted paragraph
                         if ( bResult &&
-                            pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
-                            !pTxtNd->IsCountedInList() )
+                            pTextNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
+                            !pTextNd->IsCountedInList() )
                         {
                             bResult = false;
                         }
@@ -196,9 +196,9 @@ bool SwEditShell::SelectionHasNumber() const
 bool SwEditShell::SelectionHasBullet() const
 {
     bool bResult = HasBullet();
-    const SwTxtNode * pTxtNd =
-        GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
-    if (!bResult && pTxtNd && pTxtNd->Len()==0 && !pTxtNd->GetNumRule()) {
+    const SwTextNode * pTextNd =
+        GetCrsr()->GetPoint()->nNode.GetNode().GetTextNode();
+    if (!bResult && pTextNd && pTextNd->Len()==0 && !pTextNd->GetNumRule()) {
         SwPamRanges aRangeArr( *GetCrsr() );
         SwPaM aPam( *GetCrsr()->GetPoint() );
         for( SwPamRanges::size_type n = 0; n < aRangeArr.Count(); ++n )
@@ -213,10 +213,10 @@ bool SwEditShell::SelectionHasBullet() const
                 }
                 for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
                 {
-                    pTxtNd = mpDoc->GetNodes()[nPos]->GetTxtNode();
-                    if (pTxtNd && pTxtNd->Len()!=0)
+                    pTextNd = mpDoc->GetNodes()[nPos]->GetTextNode();
+                    if (pTextNd && pTextNd->Len()!=0)
                     {
-                        bResult = pTxtNd->HasBullet();
+                        bResult = pTextNd->HasBullet();
 
                         if (!bResult) {
                             break;
@@ -235,17 +235,17 @@ bool SwEditShell::HasNumber() const
 {
     bool bResult = false;
 
-    const SwTxtNode * pTxtNd =
-        GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+    const SwTextNode * pTextNd =
+        GetCrsr()->GetPoint()->nNode.GetNode().GetTextNode();
 
-    if (pTxtNd)
+    if (pTextNd)
     {
-        bResult = pTxtNd->HasNumber();
+        bResult = pTextNd->HasNumber();
 
         // special case: outline numbered, not counted paragraph
         if ( bResult &&
-             pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
-             !pTxtNd->IsCountedInList() )
+             pTextNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
+             !pTextNd->IsCountedInList() )
         {
             bResult = false;
         }
@@ -258,12 +258,12 @@ bool SwEditShell::HasBullet() const
 {
     bool bResult = false;
 
-    const SwTxtNode * pTxtNd =
-        GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+    const SwTextNode * pTextNd =
+        GetCrsr()->GetPoint()->nNode.GetNode().GetTextNode();
 
-    if (pTxtNd)
+    if (pTextNd)
     {
-        bResult = pTxtNd->HasBullet();
+        bResult = pTextNd->HasBullet();
     }
 
     return bResult;
@@ -344,8 +344,8 @@ void SwEditShell::ChangeIndentOfAllListLevels( const short nDiff )
     if ( pCurNumRule != NULL )
     {
         SwNumRule aRule(*pCurNumRule);
-        const SwNumFmt& aRootNumFmt(aRule.Get(0));
-        if( nDiff > 0 || aRootNumFmt.GetIndentAt() + nDiff > 0) // fdo#42708
+        const SwNumFormat& aRootNumFormat(aRule.Get(0));
+        if( nDiff > 0 || aRootNumFormat.GetIndentAt() + nDiff > 0) // fdo#42708
         {
             // #i90078#
             aRule.ChangeIndent( nDiff );
@@ -373,11 +373,11 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         }
         else
         {
-            const SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-            if ( pTxtNode != NULL
-                 && pTxtNode->GetActualListLevel() >= 0 )
+            const SwTextNode* pTextNode = rPos.nNode.GetNode().GetTextNode();
+            if ( pTextNode != NULL
+                 && pTextNode->GetActualListLevel() >= 0 )
             {
-                aRule.SetIndent( nIndent, static_cast< sal_uInt16 >( pTxtNode->GetActualListLevel() ) );
+                aRule.SetIndent( nIndent, static_cast< sal_uInt16 >( pTextNode->GetActualListLevel() ) );
             }
         }
 
@@ -413,9 +413,9 @@ int SwEditShell::GetCurrentParaOutlineLevel( ) const
     int nLevel = 0;
 
     SwPaM* pCrsr = GetCrsr();
-    const SwTxtNode* pTxtNd = pCrsr->GetNode().GetTxtNode();
-    if( pTxtNd )
-        nLevel = pTxtNd->GetAttrOutlineLevel();
+    const SwTextNode* pTextNd = pCrsr->GetNode().GetTextNode();
+    if( pTextNd )
+        nLevel = pTextNd->GetAttrOutlineLevel();
     return nLevel;
 }
 
@@ -465,15 +465,15 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                         ( pNd = GetDoc()->GetNodes()[ nIdx ])->IsSectionNode() ||
                         ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode())))
                         --nIdx;
-                    if( GetDoc()->GetNodes()[ nIdx ]->IsTxtNode() )
+                    if( GetDoc()->GetNodes()[ nIdx ]->IsTextNode() )
                         nOffset = nIdx - nStt;
                 }
             }
             else             // move down
             {
-                const SwNumRule* pOrig = aCrsr.GetNode(false).GetTxtNode()->GetNumRule();
-                if( aCrsr.GetNode().IsTxtNode() &&
-                    pOrig == aCrsr.GetNode().GetTxtNode()->GetNumRule() )
+                const SwNumRule* pOrig = aCrsr.GetNode(false).GetTextNode()->GetNumRule();
+                if( aCrsr.GetNode().IsTextNode() &&
+                    pOrig == aCrsr.GetNode().GetTextNode()->GetNumRule() )
                 {
                     sal_uLong nStt = aCrsr.GetPoint()->nNode.GetIndex(), nIdx = nStt+1;
 
@@ -483,8 +483,8 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
 
                         if (pNd->IsSectionNode() ||
                             ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode()) ||
-                            ( pNd->IsTxtNode() && pOrig == static_cast<const SwTxtNode*>(pNd)->GetNumRule() &&
-                              static_cast<const SwTxtNode*>(pNd)->GetActualListLevel() > nUpperLevel ))
+                            ( pNd->IsTextNode() && pOrig == static_cast<const SwTextNode*>(pNd)->GetNumRule() &&
+                              static_cast<const SwTextNode*>(pNd)->GetActualListLevel() > nUpperLevel ))
                         {
                             ++nIdx;
                         }
@@ -495,7 +495,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                         }
                     }
 
-                    if( nStt == nIdx || !GetDoc()->GetNodes()[ nIdx ]->IsTxtNode() )
+                    if( nStt == nIdx || !GetDoc()->GetNodes()[ nIdx ]->IsTextNode() )
                         nOffset = 1;
                     else
                         nOffset = nIdx - nStt;
@@ -558,7 +558,7 @@ bool SwEditShell::IsProtectedOutlinePara() const
 {
     bool bRet = false;
     const SwNode& rNd = GetCrsr()->Start()->nNode.GetNode();
-    if( rNd.IsTxtNode() )
+    if( rNd.IsTextNode() )
     {
         const SwOutlineNodes& rOutlNd = GetDoc()->GetNodes().GetOutLineNds();
         SwNodePtr pNd = const_cast<SwNodePtr>(&rNd);
@@ -572,7 +572,7 @@ bool SwEditShell::IsProtectedOutlinePara() const
         {
             SwNodePtr pTmpNd = rOutlNd[ nPos ];
 
-            int nTmpLvl = pTmpNd->GetTxtNode()->GetAttrOutlineLevel();
+            int nTmpLvl = pTmpNd->GetTextNode()->GetAttrOutlineLevel();
 
             OSL_ENSURE( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,
                     "<SwEditShell::IsProtectedOutlinePara()>" );
@@ -653,10 +653,10 @@ bool SwEditShell::IsNoNum( bool bChkStart ) const
          && !HasSelection()
          && ( !bChkStart || IsSttPara() ) )
     {
-        const SwTxtNode* pTxtNd = GetCrsr()->GetNode().GetTxtNode();
-        if ( pTxtNd != NULL )
+        const SwTextNode* pTextNd = GetCrsr()->GetNode().GetTextNode();
+        if ( pTextNd != NULL )
         {
-            bResult =  !pTxtNd->IsCountedInList();
+            bResult =  !pTextNd->IsCountedInList();
         }
     }
 
@@ -669,19 +669,19 @@ sal_uInt8 SwEditShell::GetNumLevel() const
     sal_uInt8 nLevel = MAXLEVEL;
 
     SwPaM* pCrsr = GetCrsr();
-    const SwTxtNode* pTxtNd = pCrsr->GetNode().GetTxtNode();
+    const SwTextNode* pTextNd = pCrsr->GetNode().GetTextNode();
 
-    OSL_ENSURE( pTxtNd, "GetNumLevel() without text node" );
-    if ( pTxtNd == NULL )
+    OSL_ENSURE( pTextNd, "GetNumLevel() without text node" );
+    if ( pTextNd == NULL )
         return nLevel;
 
-    const SwNumRule* pRule = pTxtNd->GetNumRule();
+    const SwNumRule* pRule = pTextNd->GetNumRule();
     if ( pRule != NULL )
     {
-        const int nListLevelOfTxtNode( pTxtNd->GetActualListLevel() );
-        if ( nListLevelOfTxtNode >= 0 )
+        const int nListLevelOfTextNode( pTextNd->GetActualListLevel() );
+        if ( nListLevelOfTextNode >= 0 )
         {
-            nLevel = static_cast<sal_uInt8>( nListLevelOfTxtNode );
+            nLevel = static_cast<sal_uInt8>( nListLevelOfTextNode );
         }
     }
 
@@ -780,10 +780,10 @@ OUString SwEditShell::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoN
     return GetDoc()->GetUniqueNumRuleName( pChkStr, bAutoNum );
 }
 
-void SwEditShell::ChgNumRuleFmts( const SwNumRule& rRule )
+void SwEditShell::ChgNumRuleFormats( const SwNumRule& rRule )
 {
     StartAllAction();
-    GetDoc()->ChgNumRuleFmts( rRule );
+    GetDoc()->ChgNumRuleFormats( rRule );
     EndAllAction();
 }
 
@@ -817,8 +817,8 @@ void SwEditShell::SetNumRuleStart( bool bFlag, SwPaM* pPaM )
 bool SwEditShell::IsNumRuleStart( SwPaM* pPaM ) const
 {
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr( );
-    const SwTxtNode* pTxtNd = pCrsr->GetNode().GetTxtNode();
-    return pTxtNd && pTxtNd->IsListRestart();
+    const SwTextNode* pTextNd = pCrsr->GetNode().GetTextNode();
+    return pTextNd && pTextNd->IsListRestart();
 }
 
 void SwEditShell::SetNodeNumStart( sal_uInt16 nStt, SwPaM* pPaM )
@@ -844,13 +844,13 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt, SwPaM* pPaM )
 sal_uInt16 SwEditShell::GetNodeNumStart( SwPaM* pPaM ) const
 {
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
-    const SwTxtNode* pTxtNd = pCrsr->GetNode().GetTxtNode();
+    const SwTextNode* pTextNd = pCrsr->GetNode().GetTextNode();
     // correction: check, if list restart value is set at text node and
-    // use new method <SwTxtNode::GetAttrListRestartValue()>.
+    // use new method <SwTextNode::GetAttrListRestartValue()>.
     // return USHRT_MAX, if no list restart value is found.
-    if ( pTxtNd && pTxtNd->HasAttrListRestartValue() )
+    if ( pTextNd && pTextNd->HasAttrListRestartValue() )
     {
-        return static_cast<sal_uInt16>(pTxtNd->GetAttrListRestartValue());
+        return static_cast<sal_uInt16>(pTextNd->GetAttrListRestartValue());
     }
     return USHRT_MAX;
 }

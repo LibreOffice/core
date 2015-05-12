@@ -22,22 +22,22 @@
 
 #include <SwNumberTree.hxx>
 
-class SwTxtNode;
+class SwTextNode;
 struct SwPosition;
 class SwNumRule;
-class SwNumFmt;
+class SwNumFormat;
 
 class SW_DLLPUBLIC SwNodeNum : public SwNumberTreeNode
 {
 public:
 
-    explicit SwNodeNum( SwTxtNode* pTxtNode );
+    explicit SwNodeNum( SwTextNode* pTextNode );
     explicit SwNodeNum( SwNumRule* pNumRule );
     virtual ~SwNodeNum();
 
     SwNumRule* GetNumRule() const { return mpNumRule;}
     void ChangeNumRule( SwNumRule& rNumRule );
-    SwTxtNode* GetTxtNode() const { return mpTxtNode;}
+    SwTextNode* GetTextNode() const { return mpTextNode;}
 
     virtual bool IsNotificationEnabled() const SAL_OVERRIDE;
 
@@ -68,7 +68,7 @@ public:
 
         @author OD
     */
-    const SwNodeNum* GetPrecedingNodeNumOf( const SwTxtNode& rTxtNode ) const;
+    const SwNodeNum* GetPrecedingNodeNumOf( const SwTextNode& rTextNode ) const;
 
 protected:
     virtual SwNumberTreeNode * Create() const SAL_OVERRIDE;
@@ -82,7 +82,7 @@ protected:
     // method called at a child after this child has been removed from the list tree
     virtual void PostRemove() SAL_OVERRIDE;
 private:
-    SwTxtNode * mpTxtNode;
+    SwTextNode * mpTextNode;
     SwNumRule * mpNumRule;
 
     static void _UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum );

@@ -53,7 +53,7 @@ using namespace css;
 
 namespace myImplHelpers
 {
-    SwTwips CalcHdFtDist(const SwFrmFmt& rFmt, sal_uInt16 nSpacing)
+    SwTwips CalcHdFtDist(const SwFrameFormat& rFormat, sal_uInt16 nSpacing)
     {
         /*
         The normal case for reexporting word docs is to have dynamic spacing,
@@ -66,21 +66,21 @@ namespace myImplHelpers
         height, which is totally nonoptimum, but the best we can do.
         */
         long nDist=0;
-        const SwFmtFrmSize& rSz = rFmt.GetFrmSize();
+        const SwFormatFrmSize& rSz = rFormat.GetFrmSize();
 
         const SwHeaderAndFooterEatSpacingItem &rSpacingCtrl =
             sw::util::ItemGet<SwHeaderAndFooterEatSpacingItem>
-            (rFmt, RES_HEADER_FOOTER_EAT_SPACING);
+            (rFormat, RES_HEADER_FOOTER_EAT_SPACING);
         if (rSpacingCtrl.GetValue())
             nDist += rSz.GetHeight();
         else
         {
-            SwRect aRect(rFmt.FindLayoutRect(false));
+            SwRect aRect(rFormat.FindLayoutRect(false));
             if (aRect.Height())
                 nDist += aRect.Height();
             else
             {
-                const SwFmtFrmSize& rSize = rFmt.GetFrmSize();
+                const SwFormatFrmSize& rSize = rFormat.GetFrmSize();
                 if (ATT_VAR_SIZE != rSize.GetHeightSizeType())
                     nDist += rSize.GetHeight();
                 else
@@ -93,18 +93,18 @@ namespace myImplHelpers
         return nDist;
     }
 
-    SwTwips CalcHdDist(const SwFrmFmt& rFmt)
+    SwTwips CalcHdDist(const SwFrameFormat& rFormat)
     {
-        return CalcHdFtDist(rFmt, rFmt.GetULSpace().GetUpper());
+        return CalcHdFtDist(rFormat, rFormat.GetULSpace().GetUpper());
     }
 
-    SwTwips CalcFtDist(const SwFrmFmt& rFmt)
+    SwTwips CalcFtDist(const SwFrameFormat& rFormat)
     {
-        return CalcHdFtDist(rFmt, rFmt.GetULSpace().GetLower());
+        return CalcHdFtDist(rFormat, rFormat.GetULSpace().GetLower());
     }
 
     /*
-     SwTxtFmtColl and SwCharFmt are quite distinct types and how they are
+     SwTextFormatColl and SwCharFormat are quite distinct types and how they are
      gotten is also distinct, but the algorithm to match word's eqivalents into
      them is the same, so we put the different stuff into two separate helper
      implementations and a core template that uses the helpers that uses the
@@ -113,18 +113,18 @@ namespace myImplHelpers
      to use from a simple argument to the algorithm class
     */
     template <class C> class MapperImpl;
-    template<> class MapperImpl<SwTxtFmtColl>
+    template<> class MapperImpl<SwTextFormatColl>
     {
     private:
         SwDoc &mrDoc;
     public:
         MapperImpl(SwDoc &rDoc) : mrDoc(rDoc) {}
-        SwTxtFmtColl* GetBuiltInStyle(ww::sti eSti);
-        SwTxtFmtColl* GetStyle(const OUString &rName);
-        SwTxtFmtColl* MakeStyle(const OUString &rName);
+        SwTextFormatColl* GetBuiltInStyle(ww::sti eSti);
+        SwTextFormatColl* GetStyle(const OUString &rName);
+        SwTextFormatColl* MakeStyle(const OUString &rName);
     };
 
-    SwTxtFmtColl* MapperImpl<SwTxtFmtColl>::GetBuiltInStyle(ww::sti eSti)
+    SwTextFormatColl* MapperImpl<SwTextFormatColl>::GetBuiltInStyle(ww::sti eSti)
     {
         const RES_POOL_COLLFMT_TYPE RES_NONE  = RES_POOLCOLL_DOC_END;
         static const RES_POOL_COLLFMT_TYPE aArr[]=
@@ -156,43 +156,43 @@ namespace myImplHelpers
 
         OSL_ENSURE(SAL_N_ELEMENTS(aArr) == 75, "Style Array has false size");
 
-        SwTxtFmtColl* pRet = 0;
+        SwTextFormatColl* pRet = 0;
         //If this is a built-in word style that has a built-in writer
         //equivalent, then map it to one of our built in styles regardless
         //of its name
         if (sal::static_int_cast< size_t >(eSti) < SAL_N_ELEMENTS(aArr) && aArr[eSti] != RES_NONE)
-            pRet = mrDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( static_cast< sal_uInt16 >(aArr[eSti]), false);
+            pRet = mrDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( static_cast< sal_uInt16 >(aArr[eSti]), false);
         return pRet;
     }
 
-    SwTxtFmtColl* MapperImpl<SwTxtFmtColl>::GetStyle(const OUString &rName)
+    SwTextFormatColl* MapperImpl<SwTextFormatColl>::GetStyle(const OUString &rName)
     {
         return sw::util::GetParaStyle(mrDoc, rName);
     }
 
-    SwTxtFmtColl* MapperImpl<SwTxtFmtColl>::MakeStyle(const OUString &rName)
+    SwTextFormatColl* MapperImpl<SwTextFormatColl>::MakeStyle(const OUString &rName)
     {
-        return mrDoc.MakeTxtFmtColl(rName,
-            const_cast<SwTxtFmtColl *>(mrDoc.GetDfltTxtFmtColl()));
+        return mrDoc.MakeTextFormatColl(rName,
+            const_cast<SwTextFormatColl *>(mrDoc.GetDfltTextFormatColl()));
     }
 
-    template<> class MapperImpl<SwCharFmt>
+    template<> class MapperImpl<SwCharFormat>
     {
     private:
         SwDoc &mrDoc;
     public:
         MapperImpl(SwDoc &rDoc) : mrDoc(rDoc) {}
-        SwCharFmt* GetBuiltInStyle(ww::sti eSti);
-        SwCharFmt* GetStyle(const OUString &rName);
-        SwCharFmt* MakeStyle(const OUString &rName);
+        SwCharFormat* GetBuiltInStyle(ww::sti eSti);
+        SwCharFormat* GetStyle(const OUString &rName);
+        SwCharFormat* MakeStyle(const OUString &rName);
     };
 
-    SwCharFmt* MapperImpl<SwCharFmt>::GetBuiltInStyle(ww::sti eSti)
+    SwCharFormat* MapperImpl<SwCharFormat>::GetBuiltInStyle(ww::sti eSti)
     {
         RES_POOL_CHRFMT_TYPE eLookup = RES_POOLCHR_NORMAL_END;
         switch (eSti)
         {
-            case ww::stiFtnRef:
+            case ww::stiFootnoteRef:
                 eLookup = RES_POOLCHR_FOOTNOTE;
                 break;
             case ww::stiLnn:
@@ -220,20 +220,20 @@ namespace myImplHelpers
                 eLookup = RES_POOLCHR_NORMAL_END;
                 break;
         }
-        SwCharFmt *pRet = 0;
+        SwCharFormat *pRet = 0;
         if (eLookup != RES_POOLCHR_NORMAL_END)
-            pRet = mrDoc.getIDocumentStylePoolAccess().GetCharFmtFromPool( static_cast< sal_uInt16 >(eLookup) );
+            pRet = mrDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( static_cast< sal_uInt16 >(eLookup) );
         return pRet;
     }
 
-    SwCharFmt* MapperImpl<SwCharFmt>::GetStyle(const OUString &rName)
+    SwCharFormat* MapperImpl<SwCharFormat>::GetStyle(const OUString &rName)
     {
         return sw::util::GetCharStyle(mrDoc, rName);
     }
 
-    SwCharFmt* MapperImpl<SwCharFmt>::MakeStyle(const OUString &rName)
+    SwCharFormat* MapperImpl<SwCharFormat>::MakeStyle(const OUString &rName)
     {
-        return mrDoc.MakeCharFmt(rName, mrDoc.GetDfltCharFmt());
+        return mrDoc.MakeCharFormat(rName, mrDoc.GetDfltCharFormat());
     }
 
     template<class C> class StyleMapperImpl
@@ -336,10 +336,10 @@ namespace myImplHelpers
 }
 
 /// Count what Word calls left/right margin from a format's LRSpace + Box.
-static SvxLRSpaceItem lcl_getWordLRSpace(const SwFrmFmt& rFmt)
+static SvxLRSpaceItem lcl_getWordLRSpace(const SwFrameFormat& rFormat)
 {
-    SvxLRSpaceItem aLR(rFmt.GetLRSpace());
-    const SvxBoxItem& rBox = rFmt.GetBox();
+    SvxLRSpaceItem aLR(rFormat.GetLRSpace());
+    const SvxBoxItem& rBox = rFormat.GetBox();
 
     aLR.SetLeft(aLR.GetLeft() + rBox.GetDistance(SvxBoxItemLine::LEFT));
     if (const editeng::SvxBorderLine* pLeft = rBox.GetLeft())
@@ -357,18 +357,18 @@ namespace sw
     namespace util
     {
 
-        bool IsPlausableSingleWordSection(const SwFrmFmt &rTitleFmt, const SwFrmFmt &rFollowFmt)
+        bool IsPlausableSingleWordSection(const SwFrameFormat &rTitleFormat, const SwFrameFormat &rFollowFormat)
         {
             bool bPlausableSingleWordSection = true;
 
-            const SwFmtCol& rFirstCols = rTitleFmt.GetCol();
-            const SwFmtCol& rFollowCols = rFollowFmt.GetCol();
+            const SwFormatCol& rFirstCols = rTitleFormat.GetCol();
+            const SwFormatCol& rFollowCols = rFollowFormat.GetCol();
             const SwColumns& rFirstColumns = rFirstCols.GetColumns();
             const SwColumns& rFollowColumns = rFollowCols.GetColumns();
-            SvxLRSpaceItem aOneLR = lcl_getWordLRSpace(rTitleFmt);
-            SvxLRSpaceItem aTwoLR = lcl_getWordLRSpace(rFollowFmt);
-            const SwFmtFrmSize& rFirstFrmSize = rTitleFmt.GetFrmSize();
-            const SwFmtFrmSize& rFollowFrmSize = rFollowFmt.GetFrmSize();
+            SvxLRSpaceItem aOneLR = lcl_getWordLRSpace(rTitleFormat);
+            SvxLRSpaceItem aTwoLR = lcl_getWordLRSpace(rFollowFormat);
+            const SwFormatFrmSize& rFirstFrmSize = rTitleFormat.GetFrmSize();
+            const SwFormatFrmSize& rFollowFrmSize = rFollowFormat.GetFrmSize();
 
             if (rFirstColumns.size() != rFollowColumns.size())
             {
@@ -381,8 +381,8 @@ namespace sw
                 bPlausableSingleWordSection = false;
             else
             {
-                HdFtDistanceGlue aOne(rTitleFmt.GetAttrSet());
-                HdFtDistanceGlue aTwo(rFollowFmt.GetAttrSet());
+                HdFtDistanceGlue aOne(rTitleFormat.GetAttrSet());
+                HdFtDistanceGlue aTwo(rFollowFormat.GetAttrSet());
                 //e.g. #i14509#
                 if (!aOne.StrictEqualTopBottom(aTwo))
                     bPlausableSingleWordSection = false;
@@ -410,20 +410,20 @@ namespace sw
             dyaTop = dyaHdrTop;
             dyaBottom = dyaHdrBottom;
 
-            const SwFmtHeader *pHd = HasItem<SwFmtHeader>(rPage, RES_HEADER);
-            if (pHd && pHd->IsActive() && pHd->GetHeaderFmt())
+            const SwFormatHeader *pHd = HasItem<SwFormatHeader>(rPage, RES_HEADER);
+            if (pHd && pHd->IsActive() && pHd->GetHeaderFormat())
             {
                 mbHasHeader = true;
-                dyaTop = dyaTop + static_cast< sal_uInt16 >( (myImplHelpers::CalcHdDist(*(pHd->GetHeaderFmt()))) );
+                dyaTop = dyaTop + static_cast< sal_uInt16 >( (myImplHelpers::CalcHdDist(*(pHd->GetHeaderFormat()))) );
             }
             else
                 mbHasHeader = false;
 
-            const SwFmtFooter *pFt = HasItem<SwFmtFooter>(rPage, RES_FOOTER);
-            if (pFt && pFt->IsActive() && pFt->GetFooterFmt())
+            const SwFormatFooter *pFt = HasItem<SwFormatFooter>(rPage, RES_FOOTER);
+            if (pFt && pFt->IsActive() && pFt->GetFooterFormat())
             {
                 mbHasFooter = true;
-                dyaBottom = dyaBottom + static_cast< sal_uInt16 >( (myImplHelpers::CalcFtDist(*(pFt->GetFooterFmt()))) );
+                dyaBottom = dyaBottom + static_cast< sal_uInt16 >( (myImplHelpers::CalcFtDist(*(pFt->GetFooterFormat()))) );
             }
             else
                 mbHasFooter = false;
@@ -454,7 +454,7 @@ namespace sw
         }
 
         ParaStyleMapper::ParaStyleMapper(SwDoc &rDoc)
-            : mpImpl(new myImplHelpers::StyleMapperImpl<SwTxtFmtColl>(rDoc))
+            : mpImpl(new myImplHelpers::StyleMapperImpl<SwTextFormatColl>(rDoc))
         {
         }
 
@@ -470,7 +470,7 @@ namespace sw
         }
 
         CharStyleMapper::CharStyleMapper(SwDoc &rDoc)
-            : mpImpl(new myImplHelpers::StyleMapperImpl<SwCharFmt>(rDoc))
+            : mpImpl(new myImplHelpers::StyleMapperImpl<SwCharFormat>(rDoc))
         {
         }
 
@@ -517,17 +517,17 @@ namespace sw
             return nA < nB;
         }
 
-        CharRuns GetPseudoCharRuns(const SwTxtNode& rTxtNd,
-            sal_Int32 nTxtStart, bool bSplitOnCharSet)
+        CharRuns GetPseudoCharRuns(const SwTextNode& rTextNd,
+            sal_Int32 nTextStart, bool bSplitOnCharSet)
         {
-            const OUString &rTxt = rTxtNd.GetTxt();
+            const OUString &rText = rTextNd.GetText();
 
             bool bParaIsRTL = false;
-            OSL_ENSURE(rTxtNd.GetDoc(), "No document for node?, suspicious");
-            if (rTxtNd.GetDoc())
+            OSL_ENSURE(rTextNd.GetDoc(), "No document for node?, suspicious");
+            if (rTextNd.GetDoc())
             {
                 if (FRMDIR_HORI_RIGHT_TOP ==
-                    rTxtNd.GetDoc()->GetTextDirection(SwPosition(rTxtNd)))
+                    rTextNd.GetDoc()->GetTextDirection(SwPosition(rTextNd)))
                 {
                     bParaIsRTL = true;
                 }
@@ -536,16 +536,16 @@ namespace sw
             using namespace ::com::sun::star::i18n;
 
             sal_uInt16 nScript = i18n::ScriptType::LATIN;
-            if (!rTxt.isEmpty() && g_pBreakIt && g_pBreakIt->GetBreakIter().is())
-                nScript = g_pBreakIt->GetBreakIter()->getScriptType(rTxt, 0);
+            if (!rText.isEmpty() && g_pBreakIt && g_pBreakIt->GetBreakIter().is())
+                nScript = g_pBreakIt->GetBreakIter()->getScriptType(rText, 0);
 
-            rtl_TextEncoding eChrSet = ItemGet<SvxFontItem>(rTxtNd,
+            rtl_TextEncoding eChrSet = ItemGet<SvxFontItem>(rTextNd,
                 GetWhichOfScript(RES_CHRATR_FONT, nScript)).GetCharSet();
             eChrSet = GetExtendedTextEncoding(eChrSet);
 
             CharRuns aRunChanges;
 
-            if (rTxt.isEmpty())
+            if (rText.isEmpty())
             {
                 aRunChanges.push_back(CharRunEntry(0, nScript, eChrSet,
                     bParaIsRTL));
@@ -570,8 +570,8 @@ namespace sw
 
             UBiDiDirection eDefaultDir = bParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
             UErrorCode nError = U_ZERO_ERROR;
-            UBiDi* pBidi = ubidi_openSized(rTxt.getLength(), 0, &nError);
-            ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(rTxt.getStr()), rTxt.getLength(),
+            UBiDi* pBidi = ubidi_openSized(rText.getLength(), 0, &nError);
+            ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength(),
                     static_cast< UBiDiLevel >(eDefaultDir), 0, &nError);
 
             sal_Int32 nCount = ubidi_countRuns(pBidi, &nError);
@@ -603,15 +603,15 @@ namespace sw
             {
                 //Split unicode text into plausible 8bit ranges for export to
                 //older non unicode aware format
-                sal_Int32 nLen = rTxt.getLength();
+                sal_Int32 nLen = rText.getLength();
                 sal_Int32 nPos = 0;
                 while (nPos != nLen)
                 {
                     rtl_TextEncoding ScriptType =
-                        getBestMSEncodingByChar(rTxt[nPos++]);
+                        getBestMSEncodingByChar(rText[nPos++]);
                     while (
                             (nPos != nLen) &&
-                            (ScriptType == getBestMSEncodingByChar(rTxt[nPos]))
+                            (ScriptType == getBestMSEncodingByChar(rText[nPos]))
                           )
                     {
                         ++nPos;
@@ -625,17 +625,17 @@ namespace sw
 
             if (g_pBreakIt && g_pBreakIt->GetBreakIter().is())
             {
-                sal_Int32 nLen = rTxt.getLength();
+                sal_Int32 nLen = rText.getLength();
                 sal_Int32 nPos = 0;
                 while (nPos < nLen)
                 {
-                    sal_Int32 nEnd2 = g_pBreakIt->GetBreakIter()->endOfScript(rTxt, nPos,
+                    sal_Int32 nEnd2 = g_pBreakIt->GetBreakIter()->endOfScript(rText, nPos,
                         nScript);
                     if (nEnd2 < 0)
                         break;
                     nPos = nEnd2;
                     aScripts.push_back(ScriptEntry(nPos, nScript));
-                    nScript = g_pBreakIt->GetBreakIter()->getScriptType(rTxt, nPos);
+                    nScript = g_pBreakIt->GetBreakIter()->getScriptType(rText, nPos);
                 }
             }
 
@@ -655,7 +655,7 @@ namespace sw
                     aScriptIter != aScriptEnd
                   )
             {
-                sal_Int32 nMinPos = rTxt.getLength();
+                sal_Int32 nMinPos = rText.getLength();
 
                 if (aBiDiIter != aBiDiEnd)
                 {
@@ -701,7 +701,7 @@ namespace sw
             }
 
             aRunChanges.erase(std::remove_if(aRunChanges.begin(),
-                aRunChanges.end(), myImplHelpers::IfBeforeStart(nTxtStart)), aRunChanges.end());
+                aRunChanges.end(), myImplHelpers::IfBeforeStart(nTextStart)), aRunChanges.end());
 
             return aRunChanges;
         }
@@ -1123,18 +1123,18 @@ namespace sw
             return nPos>=rParams.getLength() || (rParams[nPos]!='M' && rParams[nPos]!='m');
         }
 
-        void SwapQuotesInField(OUString &rFmt)
+        void SwapQuotesInField(OUString &rFormat)
         {
             //Swap unescaped " and ' with ' and "
-            const sal_Int32 nLen = rFmt.getLength();
+            const sal_Int32 nLen = rFormat.getLength();
             for (sal_Int32 nI = 0; nI < nLen; ++nI)
             {
-                if (!nI || rFmt[nI-1]!='\\')
+                if (!nI || rFormat[nI-1]!='\\')
                 {
-                    if (rFmt[nI]=='\"')
-                        rFmt = rFmt.replaceAt(nI, 1, "\'");
-                    else if (rFmt[nI]=='\'')
-                        rFmt = rFmt.replaceAt(nI, 1, "\"");
+                    if (rFormat[nI]=='\"')
+                        rFormat = rFormat.replaceAt(nI, 1, "\'");
+                    else if (rFormat[nI]=='\'')
+                        rFormat = rFormat.replaceAt(nI, 1, "\"");
                 }
             }
         }

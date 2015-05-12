@@ -53,221 +53,221 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1_AUTOFACTORY(SwFmtINetFmt, SfxPoolItem);
-TYPEINIT1_AUTOFACTORY(SwFmtAutoFmt, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SwFormatINetFormat, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SwFormatAutoFormat, SfxPoolItem);
 
-SwFmtCharFmt::SwFmtCharFmt( SwCharFmt *pFmt )
+SwFormatCharFormat::SwFormatCharFormat( SwCharFormat *pFormat )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
-    SwClient(pFmt),
-    pTxtAttr( 0 )
+    SwClient(pFormat),
+    pTextAttr( 0 )
 {
 }
 
-SwFmtCharFmt::SwFmtCharFmt( const SwFmtCharFmt& rAttr )
+SwFormatCharFormat::SwFormatCharFormat( const SwFormatCharFormat& rAttr )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
-    SwClient( rAttr.GetCharFmt() ),
-    pTxtAttr( 0 )
+    SwClient( rAttr.GetCharFormat() ),
+    pTextAttr( 0 )
 {
 }
 
-SwFmtCharFmt::~SwFmtCharFmt() {}
+SwFormatCharFormat::~SwFormatCharFormat() {}
 
-bool SwFmtCharFmt::operator==( const SfxPoolItem& rAttr ) const
+bool SwFormatCharFormat::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return GetCharFmt() == static_cast<const SwFmtCharFmt&>(rAttr).GetCharFmt();
+    return GetCharFormat() == static_cast<const SwFormatCharFormat&>(rAttr).GetCharFormat();
 }
 
-SfxPoolItem* SwFmtCharFmt::Clone( SfxItemPool* ) const
+SfxPoolItem* SwFormatCharFormat::Clone( SfxItemPool* ) const
 {
-    return new SwFmtCharFmt( *this );
-}
-
-// weiterleiten an das TextAttribut
-void SwFmtCharFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
-{
-    if( pTxtAttr )
-        pTxtAttr->ModifyNotification( pOld, pNew );
+    return new SwFormatCharFormat( *this );
 }
 
 // weiterleiten an das TextAttribut
-bool SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
+void SwFormatCharFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    return pTxtAttr && pTxtAttr->GetInfo( rInfo );
+    if( pTextAttr )
+        pTextAttr->ModifyNotification( pOld, pNew );
 }
-bool SwFmtCharFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+
+// weiterleiten an das TextAttribut
+bool SwFormatCharFormat::GetInfo( SfxPoolItem& rInfo ) const
 {
-    OUString sCharFmtName;
-    if(GetCharFmt())
-        SwStyleNameMapper::FillProgName(GetCharFmt()->GetName(), sCharFmtName,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-    rVal <<= sCharFmtName;
+    return pTextAttr && pTextAttr->GetInfo( rInfo );
+}
+bool SwFormatCharFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+{
+    OUString sCharFormatName;
+    if(GetCharFormat())
+        SwStyleNameMapper::FillProgName(GetCharFormat()->GetName(), sCharFormatName,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
+    rVal <<= sCharFormatName;
     return true;
 }
-bool SwFmtCharFmt::PutValue( const uno::Any& , sal_uInt8   )
+bool SwFormatCharFormat::PutValue( const uno::Any& , sal_uInt8   )
 {
     OSL_FAIL("Zeichenvorlage kann mit PutValue nicht gesetzt werden!");
     return false;
 }
 
-SwFmtAutoFmt::SwFmtAutoFmt( sal_uInt16 nInitWhich )
+SwFormatAutoFormat::SwFormatAutoFormat( sal_uInt16 nInitWhich )
     : SfxPoolItem( nInitWhich )
 {
 }
 
-SwFmtAutoFmt::SwFmtAutoFmt( const SwFmtAutoFmt& rAttr )
+SwFormatAutoFormat::SwFormatAutoFormat( const SwFormatAutoFormat& rAttr )
     : SfxPoolItem( rAttr.Which() ), mpHandle( rAttr.mpHandle )
 {
 }
 
-SwFmtAutoFmt::~SwFmtAutoFmt()
+SwFormatAutoFormat::~SwFormatAutoFormat()
 {
 }
 
-bool SwFmtAutoFmt::operator==( const SfxPoolItem& rAttr ) const
+bool SwFormatAutoFormat::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return mpHandle == static_cast<const SwFmtAutoFmt&>(rAttr).mpHandle;
+    return mpHandle == static_cast<const SwFormatAutoFormat&>(rAttr).mpHandle;
 }
 
-SfxPoolItem* SwFmtAutoFmt::Clone( SfxItemPool* ) const
+SfxPoolItem* SwFormatAutoFormat::Clone( SfxItemPool* ) const
 {
-    return new SwFmtAutoFmt( *this );
+    return new SwFormatAutoFormat( *this );
 }
 
-bool SwFmtAutoFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SwFormatAutoFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    OUString sCharFmtName = StylePool::nameOf( mpHandle );
-    rVal <<= OUString( sCharFmtName );
+    OUString sCharFormatName = StylePool::nameOf( mpHandle );
+    rVal <<= OUString( sCharFormatName );
     return true;
 }
 
-bool SwFmtAutoFmt::PutValue( const uno::Any& , sal_uInt8 )
+bool SwFormatAutoFormat::PutValue( const uno::Any& , sal_uInt8 )
 {
     //the format is not renameable via API
     return false;
 }
 
-void SwFmtAutoFmt::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwFormatAutoFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtAutoFmt"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatAutoFormat"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     mpHandle->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
 
-SwFmtINetFmt::SwFmtINetFmt()
+SwFormatINetFormat::SwFormatINetFormat()
     : SfxPoolItem( RES_TXTATR_INETFMT )
     , msURL()
     , msTargetFrame()
-    , msINetFmtName()
-    , msVisitedFmtName()
+    , msINetFormatName()
+    , msVisitedFormatName()
     , msHyperlinkName()
-    , mpMacroTbl( 0 )
-    , mpTxtAttr( 0 )
-    , mnINetFmtId( 0 )
-    , mnVisitedFmtId( 0 )
+    , mpMacroTable( 0 )
+    , mpTextAttr( 0 )
+    , mnINetFormatId( 0 )
+    , mnVisitedFormatId( 0 )
 {}
 
-SwFmtINetFmt::SwFmtINetFmt( const OUString& rURL, const OUString& rTarget )
+SwFormatINetFormat::SwFormatINetFormat( const OUString& rURL, const OUString& rTarget )
     : SfxPoolItem( RES_TXTATR_INETFMT )
     , msURL( rURL )
     , msTargetFrame( rTarget )
-    , msINetFmtName()
-    , msVisitedFmtName()
+    , msINetFormatName()
+    , msVisitedFormatName()
     , msHyperlinkName()
-    , mpMacroTbl( 0 )
-    , mpTxtAttr( 0 )
-    , mnINetFmtId( RES_POOLCHR_INET_NORMAL )
-    , mnVisitedFmtId( RES_POOLCHR_INET_VISIT )
+    , mpMacroTable( 0 )
+    , mpTextAttr( 0 )
+    , mnINetFormatId( RES_POOLCHR_INET_NORMAL )
+    , mnVisitedFormatId( RES_POOLCHR_INET_VISIT )
 {
-    SwStyleNameMapper::FillUIName( mnINetFmtId, msINetFmtName );
-    SwStyleNameMapper::FillUIName( mnVisitedFmtId, msVisitedFmtName );
+    SwStyleNameMapper::FillUIName( mnINetFormatId, msINetFormatName );
+    SwStyleNameMapper::FillUIName( mnVisitedFormatId, msVisitedFormatName );
 }
 
-SwFmtINetFmt::SwFmtINetFmt( const SwFmtINetFmt& rAttr )
+SwFormatINetFormat::SwFormatINetFormat( const SwFormatINetFormat& rAttr )
     : SfxPoolItem( RES_TXTATR_INETFMT )
     , msURL( rAttr.GetValue() )
     , msTargetFrame( rAttr.msTargetFrame )
-    , msINetFmtName( rAttr.msINetFmtName )
-    , msVisitedFmtName( rAttr.msVisitedFmtName )
+    , msINetFormatName( rAttr.msINetFormatName )
+    , msVisitedFormatName( rAttr.msVisitedFormatName )
     , msHyperlinkName( rAttr.msHyperlinkName )
-    , mpMacroTbl( 0 )
-    , mpTxtAttr( 0 )
-    , mnINetFmtId( rAttr.mnINetFmtId )
-    , mnVisitedFmtId( rAttr.mnVisitedFmtId )
+    , mpMacroTable( 0 )
+    , mpTextAttr( 0 )
+    , mnINetFormatId( rAttr.mnINetFormatId )
+    , mnVisitedFormatId( rAttr.mnVisitedFormatId )
 {
-    if ( rAttr.GetMacroTbl() )
-        mpMacroTbl = new SvxMacroTableDtor( *rAttr.GetMacroTbl() );
+    if ( rAttr.GetMacroTable() )
+        mpMacroTable = new SvxMacroTableDtor( *rAttr.GetMacroTable() );
 }
 
-SwFmtINetFmt::~SwFmtINetFmt()
+SwFormatINetFormat::~SwFormatINetFormat()
 {
-    delete mpMacroTbl;
+    delete mpMacroTable;
 }
 
-bool SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
+bool SwFormatINetFormat::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     bool bRet = SfxPoolItem::operator==( (SfxPoolItem&) rAttr )
-                && msURL == static_cast<const SwFmtINetFmt&>(rAttr).msURL
-                && msHyperlinkName == static_cast<const SwFmtINetFmt&>(rAttr).msHyperlinkName
-                && msTargetFrame == static_cast<const SwFmtINetFmt&>(rAttr).msTargetFrame
-                && msINetFmtName == static_cast<const SwFmtINetFmt&>(rAttr).msINetFmtName
-                && msVisitedFmtName == static_cast<const SwFmtINetFmt&>(rAttr).msVisitedFmtName
-                && mnINetFmtId == static_cast<const SwFmtINetFmt&>(rAttr).mnINetFmtId
-                && mnVisitedFmtId == static_cast<const SwFmtINetFmt&>(rAttr).mnVisitedFmtId;
+                && msURL == static_cast<const SwFormatINetFormat&>(rAttr).msURL
+                && msHyperlinkName == static_cast<const SwFormatINetFormat&>(rAttr).msHyperlinkName
+                && msTargetFrame == static_cast<const SwFormatINetFormat&>(rAttr).msTargetFrame
+                && msINetFormatName == static_cast<const SwFormatINetFormat&>(rAttr).msINetFormatName
+                && msVisitedFormatName == static_cast<const SwFormatINetFormat&>(rAttr).msVisitedFormatName
+                && mnINetFormatId == static_cast<const SwFormatINetFormat&>(rAttr).mnINetFormatId
+                && mnVisitedFormatId == static_cast<const SwFormatINetFormat&>(rAttr).mnVisitedFormatId;
 
     if( !bRet )
         return false;
 
-    const SvxMacroTableDtor* pOther = static_cast<const SwFmtINetFmt&>(rAttr).mpMacroTbl;
-    if( !mpMacroTbl )
+    const SvxMacroTableDtor* pOther = static_cast<const SwFormatINetFormat&>(rAttr).mpMacroTable;
+    if( !mpMacroTable )
         return ( !pOther || pOther->empty() );
     if( !pOther )
-        return mpMacroTbl->empty();
+        return mpMacroTable->empty();
 
-    const SvxMacroTableDtor& rOwn = *mpMacroTbl;
+    const SvxMacroTableDtor& rOwn = *mpMacroTable;
     const SvxMacroTableDtor& rOther = *pOther;
 
     return rOwn == rOther;
 }
 
-SfxPoolItem* SwFmtINetFmt::Clone( SfxItemPool* ) const
+SfxPoolItem* SwFormatINetFormat::Clone( SfxItemPool* ) const
 {
-    return new SwFmtINetFmt( *this );
+    return new SwFormatINetFormat( *this );
 }
 
-void SwFmtINetFmt::SetMacroTbl( const SvxMacroTableDtor* pNewTbl )
+void SwFormatINetFormat::SetMacroTable( const SvxMacroTableDtor* pNewTable )
 {
-    if( pNewTbl )
+    if( pNewTable )
     {
-        if( mpMacroTbl )
-            *mpMacroTbl = *pNewTbl;
+        if( mpMacroTable )
+            *mpMacroTable = *pNewTable;
         else
-            mpMacroTbl = new SvxMacroTableDtor( *pNewTbl );
+            mpMacroTable = new SvxMacroTableDtor( *pNewTable );
     }
     else
-        delete mpMacroTbl, mpMacroTbl = 0;
+        delete mpMacroTable, mpMacroTable = 0;
 }
 
-void SwFmtINetFmt::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
+void SwFormatINetFormat::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
-    if( !mpMacroTbl )
-        mpMacroTbl = new SvxMacroTableDtor;
+    if( !mpMacroTable )
+        mpMacroTable = new SvxMacroTableDtor;
 
-    mpMacroTbl->Insert( nEvent, rMacro );
+    mpMacroTable->Insert( nEvent, rMacro );
 }
 
-const SvxMacro* SwFmtINetFmt::GetMacro( sal_uInt16 nEvent ) const
+const SvxMacro* SwFormatINetFormat::GetMacro( sal_uInt16 nEvent ) const
 {
     const SvxMacro* pRet = 0;
-    if( mpMacroTbl && mpMacroTbl->IsKeyValid( nEvent ) )
-        pRet = mpMacroTbl->Get( nEvent );
+    if( mpMacroTable && mpMacroTable->IsKeyValid( nEvent ) )
+        pRet = mpMacroTable->Get( nEvent );
     return pRet;
 }
 
-bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -283,9 +283,9 @@ bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_URL_VISITED_FMT:
         {
-            OUString sVal = msVisitedFmtName;
-            if (sVal.isEmpty() && mnVisitedFmtId != 0)
-                SwStyleNameMapper::FillUIName(mnVisitedFmtId, sVal);
+            OUString sVal = msVisitedFormatName;
+            if (sVal.isEmpty() && mnVisitedFormatId != 0)
+                SwStyleNameMapper::FillUIName(mnVisitedFormatId, sVal);
             if (!sVal.isEmpty())
                 SwStyleNameMapper::FillProgName(sVal, sVal,
                         nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
@@ -294,9 +294,9 @@ bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_URL_UNVISITED_FMT:
         {
-            OUString sVal = msINetFmtName;
-            if (sVal.isEmpty() && mnINetFmtId != 0)
-                SwStyleNameMapper::FillUIName(mnINetFmtId, sVal);
+            OUString sVal = msINetFormatName;
+            if (sVal.isEmpty() && mnINetFormatId != 0)
+                SwStyleNameMapper::FillUIName(mnINetFormatId, sVal);
             if (!sVal.isEmpty())
                 SwStyleNameMapper::FillProgName(sVal, sVal,
                         nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
@@ -308,7 +308,7 @@ bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             // create (and return) event descriptor
             SwHyperlinkEventDescriptor* pEvents =
                 new SwHyperlinkEventDescriptor();
-            pEvents->copyMacrosFromINetFmt(*this);
+            pEvents->copyMacrosFromINetFormat(*this);
             uno::Reference<container::XNameReplace> xNameReplace(pEvents);
 
             // all others return a string; so we just set rVal here and exit
@@ -321,7 +321,7 @@ bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     }
     return true;
 }
-bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
+bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
 {
     bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
@@ -340,7 +340,7 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
             SwHyperlinkEventDescriptor* pEvents = new SwHyperlinkEventDescriptor();
             uno::Reference< lang::XServiceInfo> xHold = pEvents;
             pEvents->copyMacrosFromNameReplace(xReplace);
-            pEvents->copyMacrosIntoINetFmt(*this);
+            pEvents->copyMacrosIntoINetFormat(*this);
         }
         else
         {
@@ -371,8 +371,8 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
                 rVal >>= sVal;
                 OUString aString;
                 SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-                msVisitedFmtName = aString;
-                mnVisitedFmtId = SwStyleNameMapper::GetPoolIdFromUIName( msVisitedFmtName,
+                msVisitedFormatName = aString;
+                mnVisitedFormatId = SwStyleNameMapper::GetPoolIdFromUIName( msVisitedFormatName,
                                                nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
             break;
@@ -382,8 +382,8 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
                 rVal >>= sVal;
                 OUString aString;
                 SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-                msINetFmtName = aString;
-                mnINetFmtId = SwStyleNameMapper::GetPoolIdFromUIName( msINetFmtName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                msINetFormatName = aString;
+                mnINetFormatId = SwStyleNameMapper::GetPoolIdFromUIName( msINetFormatName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
             break;
             default:
@@ -393,70 +393,70 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
     return bRet;
 }
 
-SwFmtRuby::SwFmtRuby( const OUString& rRubyTxt )
+SwFormatRuby::SwFormatRuby( const OUString& rRubyText )
     : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
-    sRubyTxt( rRubyTxt ),
-    pTxtAttr( 0 ),
-    nCharFmtId( 0 ),
+    sRubyText( rRubyText ),
+    pTextAttr( 0 ),
+    nCharFormatId( 0 ),
     nPosition( 0 ),
     nAdjustment( 0 )
 {
 }
 
-SwFmtRuby::SwFmtRuby( const SwFmtRuby& rAttr )
+SwFormatRuby::SwFormatRuby( const SwFormatRuby& rAttr )
     : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
-    sRubyTxt( rAttr.sRubyTxt ),
-    sCharFmtName( rAttr.sCharFmtName ),
-    pTxtAttr( 0 ),
-    nCharFmtId( rAttr.nCharFmtId),
+    sRubyText( rAttr.sRubyText ),
+    sCharFormatName( rAttr.sCharFormatName ),
+    pTextAttr( 0 ),
+    nCharFormatId( rAttr.nCharFormatId),
     nPosition( rAttr.nPosition ),
     nAdjustment( rAttr.nAdjustment )
 {
 }
 
-SwFmtRuby::~SwFmtRuby()
+SwFormatRuby::~SwFormatRuby()
 {
 }
 
-SwFmtRuby& SwFmtRuby::operator=( const SwFmtRuby& rAttr )
+SwFormatRuby& SwFormatRuby::operator=( const SwFormatRuby& rAttr )
 {
-    sRubyTxt = rAttr.sRubyTxt;
-    sCharFmtName = rAttr.sCharFmtName;
-    nCharFmtId = rAttr.nCharFmtId;
+    sRubyText = rAttr.sRubyText;
+    sCharFormatName = rAttr.sCharFormatName;
+    nCharFormatId = rAttr.nCharFormatId;
     nPosition = rAttr.nPosition;
     nAdjustment = rAttr.nAdjustment;
-    pTxtAttr =  0;
+    pTextAttr =  0;
     return *this;
 }
 
-bool SwFmtRuby::operator==( const SfxPoolItem& rAttr ) const
+bool SwFormatRuby::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return sRubyTxt == static_cast<const SwFmtRuby&>(rAttr).sRubyTxt &&
-           sCharFmtName == static_cast<const SwFmtRuby&>(rAttr).sCharFmtName &&
-           nCharFmtId == static_cast<const SwFmtRuby&>(rAttr).nCharFmtId &&
-           nPosition == static_cast<const SwFmtRuby&>(rAttr).nPosition &&
-           nAdjustment == static_cast<const SwFmtRuby&>(rAttr).nAdjustment;
+    return sRubyText == static_cast<const SwFormatRuby&>(rAttr).sRubyText &&
+           sCharFormatName == static_cast<const SwFormatRuby&>(rAttr).sCharFormatName &&
+           nCharFormatId == static_cast<const SwFormatRuby&>(rAttr).nCharFormatId &&
+           nPosition == static_cast<const SwFormatRuby&>(rAttr).nPosition &&
+           nAdjustment == static_cast<const SwFormatRuby&>(rAttr).nAdjustment;
 }
 
-SfxPoolItem* SwFmtRuby::Clone( SfxItemPool* ) const
+SfxPoolItem* SwFormatRuby::Clone( SfxItemPool* ) const
 {
-    return new SwFmtRuby( *this );
+    return new SwFormatRuby( *this );
 }
 
-bool SwFmtRuby::QueryValue( uno::Any& rVal,
+bool SwFormatRuby::QueryValue( uno::Any& rVal,
                             sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
-        case MID_RUBY_TEXT: rVal <<= sRubyTxt;                    break;
+        case MID_RUBY_TEXT: rVal <<= sRubyText;                    break;
         case MID_RUBY_ADJUST:  rVal <<= (sal_Int16)nAdjustment;    break;
         case MID_RUBY_CHARSTYLE:
         {
             OUString aString;
-            SwStyleNameMapper::FillProgName(sCharFmtName, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
+            SwStyleNameMapper::FillProgName(sCharFormatName, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
             rVal <<= aString;
         }
         break;
@@ -470,7 +470,7 @@ bool SwFmtRuby::QueryValue( uno::Any& rVal,
     }
     return bRet;
 }
-bool SwFmtRuby::PutValue( const uno::Any& rVal,
+bool SwFormatRuby::PutValue( const uno::Any& rVal,
                             sal_uInt8 nMemberId  )
 {
     bool bRet = true;
@@ -481,7 +481,7 @@ bool SwFmtRuby::PutValue( const uno::Any& rVal,
         {
             OUString sTmp;
             bRet = rVal >>= sTmp;
-            sRubyTxt = sTmp;
+            sRubyText = sTmp;
         }
         break;
          case MID_RUBY_ADJUST:
@@ -509,7 +509,7 @@ bool SwFmtRuby::PutValue( const uno::Any& rVal,
             OUString sTmp;
             bRet = rVal >>= sTmp;
             if(bRet)
-                sCharFmtName = SwStyleNameMapper::GetUIName(sTmp, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                sCharFormatName = SwStyleNameMapper::GetUIName(sTmp, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
         }
         break;
         default:
@@ -518,95 +518,95 @@ bool SwFmtRuby::PutValue( const uno::Any& rVal,
     return bRet;
 }
 
-SwFmtMeta * SwFmtMeta::CreatePoolDefault(const sal_uInt16 i_nWhich)
+SwFormatMeta * SwFormatMeta::CreatePoolDefault(const sal_uInt16 i_nWhich)
 {
-    return new SwFmtMeta(i_nWhich);
+    return new SwFormatMeta(i_nWhich);
 }
 
-SwFmtMeta::SwFmtMeta(const sal_uInt16 i_nWhich)
+SwFormatMeta::SwFormatMeta(const sal_uInt16 i_nWhich)
     : SfxPoolItem( i_nWhich )
     , m_pMeta()
-    , m_pTxtAttr( 0 )
+    , m_pTextAttr( 0 )
 {
    OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
-            "ERROR: SwFmtMeta: invalid which id!");
+            "ERROR: SwFormatMeta: invalid which id!");
 }
 
-SwFmtMeta::SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
+SwFormatMeta::SwFormatMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
                         const sal_uInt16 i_nWhich )
     : SfxPoolItem( i_nWhich )
     , m_pMeta( i_pMeta )
-    , m_pTxtAttr( 0 )
+    , m_pTextAttr( 0 )
 {
    OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
-            "ERROR: SwFmtMeta: invalid which id!");
-    OSL_ENSURE(m_pMeta, "SwFmtMeta: no Meta ?");
-    // DO NOT call m_pMeta->SetFmtMeta(this) here; only from SetTxtAttr!
+            "ERROR: SwFormatMeta: invalid which id!");
+    OSL_ENSURE(m_pMeta, "SwFormatMeta: no Meta ?");
+    // DO NOT call m_pMeta->SetFormatMeta(this) here; only from SetTextAttr!
 }
 
-SwFmtMeta::~SwFmtMeta()
+SwFormatMeta::~SwFormatMeta()
 {
-    if (m_pMeta && (m_pMeta->GetFmtMeta() == this))
+    if (m_pMeta && (m_pMeta->GetFormatMeta() == this))
     {
-        NotifyChangeTxtNode(0);
-        m_pMeta->SetFmtMeta(0);
+        NotifyChangeTextNode(0);
+        m_pMeta->SetFormatMeta(0);
     }
 }
 
-bool SwFmtMeta::operator==( const SfxPoolItem & i_rOther ) const
+bool SwFormatMeta::operator==( const SfxPoolItem & i_rOther ) const
 {
     assert(SfxPoolItem::operator==(i_rOther));
     return SfxPoolItem::operator==( i_rOther )
-        && (m_pMeta == static_cast<SwFmtMeta const &>( i_rOther ).m_pMeta);
+        && (m_pMeta == static_cast<SwFormatMeta const &>( i_rOther ).m_pMeta);
 }
 
-SfxPoolItem * SwFmtMeta::Clone( SfxItemPool * /*pPool*/ ) const
+SfxPoolItem * SwFormatMeta::Clone( SfxItemPool * /*pPool*/ ) const
 {
     // if this is indeed a copy, then DoCopy must be called later!
     return (m_pMeta) // #i105148# pool default may be cloned also!
-        ? new SwFmtMeta( m_pMeta, Which() ) : new SwFmtMeta( Which() );
+        ? new SwFormatMeta( m_pMeta, Which() ) : new SwFormatMeta( Which() );
 }
 
-void SwFmtMeta::SetTxtAttr(SwTxtMeta * const i_pTxtAttr)
+void SwFormatMeta::SetTextAttr(SwTextMeta * const i_pTextAttr)
 {
-    OSL_ENSURE(!(m_pTxtAttr && i_pTxtAttr),
-        "SwFmtMeta::SetTxtAttr: already has text attribute?");
-    OSL_ENSURE(  m_pTxtAttr || i_pTxtAttr ,
-        "SwFmtMeta::SetTxtAttr: no attribute to remove?");
-    m_pTxtAttr = i_pTxtAttr;
-    OSL_ENSURE(m_pMeta, "inserted SwFmtMeta has no sw::Meta?");
+    OSL_ENSURE(!(m_pTextAttr && i_pTextAttr),
+        "SwFormatMeta::SetTextAttr: already has text attribute?");
+    OSL_ENSURE(  m_pTextAttr || i_pTextAttr ,
+        "SwFormatMeta::SetTextAttr: no attribute to remove?");
+    m_pTextAttr = i_pTextAttr;
+    OSL_ENSURE(m_pMeta, "inserted SwFormatMeta has no sw::Meta?");
     // the sw::Meta must be able to find the current text attribute!
     if (m_pMeta)
     {
-        if (i_pTxtAttr)
+        if (i_pTextAttr)
         {
-            m_pMeta->SetFmtMeta(this);
+            m_pMeta->SetFormatMeta(this);
         }
-        else if (m_pMeta->GetFmtMeta() == this)
+        else if (m_pMeta->GetFormatMeta() == this)
         {   // text attribute gone => de-register from text node!
-            NotifyChangeTxtNode(0);
-            m_pMeta->SetFmtMeta(0);
+            NotifyChangeTextNode(0);
+            m_pMeta->SetFormatMeta(0);
         }
     }
 }
 
-void SwFmtMeta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
+void SwFormatMeta::NotifyChangeTextNode(SwTextNode *const pTextNode)
 {
-    // N.B.: do not reset m_pTxtAttr here: see call in nodes.cxx,
+    // N.B.: do not reset m_pTextAttr here: see call in nodes.cxx,
     // where the hint is not deleted!
-    OSL_ENSURE(m_pMeta, "SwFmtMeta::NotifyChangeTxtNode: no Meta?");
-    if (m_pMeta && (m_pMeta->GetFmtMeta() == this))
+    OSL_ENSURE(m_pMeta, "SwFormatMeta::NotifyChangeTextNode: no Meta?");
+    if (m_pMeta && (m_pMeta->GetFormatMeta() == this))
     {   // do not call Modify, that would call SwXMeta::Modify!
-        m_pMeta->NotifyChangeTxtNode(pTxtNode);
+        m_pMeta->NotifyChangeTextNode(pTextNode);
     }
 }
 
-// this SwFmtMeta has been cloned and points at the same sw::Meta as the source
+// this SwFormatMeta has been cloned and points at the same sw::Meta as the source
 // this method copies the sw::Meta
-void SwFmtMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
-        SwTxtNode & i_rTargetTxtNode)
+void SwFormatMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
+        SwTextNode & i_rTargetTextNode)
 {
-    OSL_ENSURE(m_pMeta, "DoCopy called for SwFmtMeta with no sw::Meta?");
+    OSL_ENSURE(m_pMeta, "DoCopy called for SwFormatMeta with no sw::Meta?");
     if (m_pMeta)
     {
         const ::boost::shared_ptr< ::sw::Meta> pOriginal( m_pMeta );
@@ -622,7 +622,7 @@ void SwFmtMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
                 pMetaField->m_nNumberFormat, pMetaField->IsFixedLanguage() );
         }
         // Meta must have a text node before calling RegisterAsCopyOf
-        m_pMeta->NotifyChangeTxtNode(& i_rTargetTxtNode);
+        m_pMeta->NotifyChangeTextNode(& i_rTargetTextNode);
         // this cannot be done in Clone: a Clone is not necessarily a copy!
         m_pMeta->RegisterAsCopyOf(*pOriginal);
     }
@@ -630,11 +630,11 @@ void SwFmtMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
 
 namespace sw {
 
-Meta::Meta(SwFmtMeta * const i_pFmt)
+Meta::Meta(SwFormatMeta * const i_pFormat)
     : ::sfx2::Metadatable()
     , SwModify()
-    , m_pFmt(i_pFmt)
-    , m_pTxtNode(0)
+    , m_pFormat(i_pFormat)
+    , m_pTextNode(0)
 {
 }
 
@@ -642,29 +642,29 @@ Meta::~Meta()
 {
 }
 
-SwTxtMeta * Meta::GetTxtAttr() const
+SwTextMeta * Meta::GetTextAttr() const
 {
-    return (m_pFmt) ? m_pFmt->GetTxtAttr() : 0;
+    return (m_pFormat) ? m_pFormat->GetTextAttr() : 0;
 }
 
 
-void Meta::NotifyChangeTxtNodeImpl()
+void Meta::NotifyChangeTextNodeImpl()
 {
-    if (m_pTxtNode && (GetRegisteredIn() != m_pTxtNode))
+    if (m_pTextNode && (GetRegisteredIn() != m_pTextNode))
     {
-        m_pTxtNode->Add(this);
+        m_pTextNode->Add(this);
     }
-    else if (!m_pTxtNode && GetRegisteredIn())
+    else if (!m_pTextNode && GetRegisteredIn())
     {
         GetRegisteredInNonConst()->Remove(this);
     }
 }
 
-void Meta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
+void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
 {
-    m_pTxtNode = pTxtNode;
-    NotifyChangeTxtNodeImpl();
-    if (!pTxtNode) // text node gone? invalidate UNO object!
+    m_pTextNode = pTextNode;
+    NotifyChangeTextNodeImpl();
+    if (!pTextNode) // text node gone? invalidate UNO object!
     {
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
             &static_cast<SwModify&>(*this) ); // cast to base class!
@@ -685,34 +685,34 @@ void Meta::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
 // sfx2::Metadatable
 ::sfx2::IXmlIdRegistry& Meta::GetRegistry()
 {
-    SwTxtNode * const pTxtNode( GetTxtNode() );
+    SwTextNode * const pTextNode( GetTextNode() );
     // GetRegistry may only be called on a meta that is actually in the
     // document, which means it has a pointer to its text node
-    OSL_ENSURE(pTxtNode, "ERROR: GetRegistry: no text node?");
-    if (!pTxtNode)
+    OSL_ENSURE(pTextNode, "ERROR: GetRegistry: no text node?");
+    if (!pTextNode)
         throw uno::RuntimeException();
-    return pTxtNode->GetRegistry();
+    return pTextNode->GetRegistry();
 }
 
 bool Meta::IsInClipboard() const
 {
-    const SwTxtNode * const pTxtNode( GetTxtNode() );
-// no text node: in UNDO  OSL_ENSURE(pTxtNode, "IsInClipboard: no text node?");
-    return pTxtNode && pTxtNode->IsInClipboard();
+    const SwTextNode * const pTextNode( GetTextNode() );
+// no text node: in UNDO  OSL_ENSURE(pTextNode, "IsInClipboard: no text node?");
+    return pTextNode && pTextNode->IsInClipboard();
 }
 
 bool Meta::IsInUndo() const
 {
-    const SwTxtNode * const pTxtNode( GetTxtNode() );
-// no text node: in UNDO  OSL_ENSURE(pTxtNode, "IsInUndo: no text node?");
-    return pTxtNode == nullptr || pTxtNode->IsInUndo();
+    const SwTextNode * const pTextNode( GetTextNode() );
+// no text node: in UNDO  OSL_ENSURE(pTextNode, "IsInUndo: no text node?");
+    return pTextNode == nullptr || pTextNode->IsInUndo();
 }
 
 bool Meta::IsInContent() const
 {
-    const SwTxtNode * const pTxtNode( GetTxtNode() );
-    OSL_ENSURE(pTxtNode, "IsInContent: no text node?");
-    return pTxtNode == nullptr || pTxtNode->IsInContent();
+    const SwTextNode * const pTextNode( GetTextNode() );
+    OSL_ENSURE(pTextNode, "IsInContent: no text node?");
+    return pTextNode == nullptr || pTextNode->IsInContent();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
@@ -721,9 +721,9 @@ Meta::MakeUnoObject()
     return SwXMeta::CreateXMeta(*this);
 }
 
-MetaField::MetaField(SwFmtMeta * const i_pFmt,
+MetaField::MetaField(SwFormatMeta * const i_pFormat,
             const sal_uInt32 nNumberFormat, const bool bIsFixedLanguage)
-    : Meta(i_pFmt)
+    : Meta(i_pFormat)
     , m_nNumberFormat( nNumberFormat )
     , m_bIsFixedLanguage( bIsFixedLanguage )
 {
@@ -739,8 +739,8 @@ void MetaField::GetPrefixAndSuffix(
                 "GetPrefixAndSuffix: no SwXMetaField?");
         if (xMetaField.is())
         {
-            SwTxtNode * const pTxtNode( GetTxtNode() );
-            SwDocShell const * const pShell(pTxtNode->GetDoc()->GetDocShell());
+            SwTextNode * const pTextNode( GetTextNode() );
+            SwDocShell const * const pShell(pTextNode->GetDoc()->GetDocShell());
             const uno::Reference<frame::XModel> xModel(
                 (pShell) ? pShell->GetModel() : 0,  uno::UNO_SET_THROW);
             getPrefixAndSuffix(xModel, xMetaField, o_pPrefix, o_pSuffix);
@@ -756,11 +756,11 @@ sal_uInt32 MetaField::GetNumberFormat(OUString const & rContent) const
 {
     //TODO: this probably lacks treatment for some special cases
     sal_uInt32 nNumberFormat( m_nNumberFormat );
-    SwTxtNode * const pTxtNode( GetTxtNode() );
-    if (pTxtNode)
+    SwTextNode * const pTextNode( GetTextNode() );
+    if (pTextNode)
     {
         SvNumberFormatter *const pNumberFormatter(
-                pTxtNode->GetDoc()->GetNumberFormatter() );
+                pTextNode->GetDoc()->GetNumberFormatter() );
         double number;
         (void) pNumberFormatter->IsNumberFormat(
                 rContent, nNumberFormat, number );
@@ -780,11 +780,11 @@ MetaFieldManager::MetaFieldManager()
 }
 
 ::boost::shared_ptr<MetaField>
-MetaFieldManager::makeMetaField(SwFmtMeta * const i_pFmt,
+MetaFieldManager::makeMetaField(SwFormatMeta * const i_pFormat,
         const sal_uInt32 nNumberFormat, const bool bIsFixedLanguage)
 {
     const ::boost::shared_ptr<MetaField> pMetaField(
-        new MetaField(i_pFmt, nNumberFormat, bIsFixedLanguage) );
+        new MetaField(i_pFormat, nNumberFormat, bIsFixedLanguage) );
     m_MetaFields.push_back(pMetaField);
     return pMetaField;
 }

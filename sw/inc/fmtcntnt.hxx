@@ -26,33 +26,33 @@
 class SwNodeIndex;
 class SwStartNode;
 
-/// Cntnt, content of frame (header, footer, fly).
-class SW_DLLPUBLIC SwFmtCntnt: public SfxPoolItem
+/// Content, content of frame (header, footer, fly).
+class SW_DLLPUBLIC SwFormatContent: public SfxPoolItem
 {
     SwNodeIndex *pStartNode;
 
-    SwFmtCntnt &operator=( const SwFmtCntnt & ) SAL_DELETED_FUNCTION;
+    SwFormatContent &operator=( const SwFormatContent & ) SAL_DELETED_FUNCTION;
 
 public:
-    SwFmtCntnt( const SwStartNode* pStartNode = 0 );
-    SwFmtCntnt( const SwFmtCntnt &rCpy );
-    virtual ~SwFmtCntnt();
+    SwFormatContent( const SwStartNode* pStartNode = 0 );
+    SwFormatContent( const SwFormatContent &rCpy );
+    virtual ~SwFormatContent();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
-    const SwNodeIndex *GetCntntIdx() const { return pStartNode; }
-    void SetNewCntntIdx( const SwNodeIndex *pIdx );
+    const SwNodeIndex *GetContentIdx() const { return pStartNode; }
+    void SetNewContentIdx( const SwNodeIndex *pIdx );
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-inline const SwFmtCntnt &SwAttrSet::GetCntnt(bool bInP) const
-    { return static_cast<const SwFmtCntnt&>(Get( RES_CNTNT,bInP)); }
+inline const SwFormatContent &SwAttrSet::GetContent(bool bInP) const
+    { return static_cast<const SwFormatContent&>(Get( RES_CNTNT,bInP)); }
 
-inline const SwFmtCntnt &SwFmt::GetCntnt(bool bInP) const
-    { return m_aSet.GetCntnt(bInP); }
+inline const SwFormatContent &SwFormat::GetContent(bool bInP) const
+    { return m_aSet.GetContent(bInP); }
 
 #endif
 

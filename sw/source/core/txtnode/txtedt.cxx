@@ -90,8 +90,8 @@ using namespace ::com::sun::star::smarttags;
 
 // Wir ersparen uns in Hyphenate ein GetFrm()
 // Achtung: in edlingu.cxx stehen die Variablen!
-extern const SwTxtNode *pLinguNode;
-extern       SwTxtFrm  *pLinguFrm;
+extern const SwTextNode *pLinguNode;
+extern       SwTextFrm  *pLinguFrm;
 
 /*
  * This has basically the same function as SwScriptInfo::MaskHiddenRanges,
@@ -99,7 +99,7 @@ extern       SwTxtFrm  *pLinguFrm;
  */
 
 static sal_Int32
-lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
+lcl_MaskRedlines( const SwTextNode& rNode, OUStringBuffer& rText,
                          sal_Int32 nStt, sal_Int32 nEnd,
                          const sal_Unicode cChar )
 {
@@ -107,9 +107,9 @@ lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
 
     const SwDoc& rDoc = *rNode.GetDoc();
 
-    for ( size_t nAct = rDoc.getIDocumentRedlineAccess().GetRedlinePos( rNode, USHRT_MAX ); nAct < rDoc.getIDocumentRedlineAccess().GetRedlineTbl().size(); ++nAct )
+    for ( size_t nAct = rDoc.getIDocumentRedlineAccess().GetRedlinePos( rNode, USHRT_MAX ); nAct < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++nAct )
     {
-        const SwRangeRedline* pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTbl()[ nAct ];
+        const SwRangeRedline* pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];
 
         if ( pRed->Start()->nNode > rNode.GetIndex() )
             break;
@@ -143,7 +143,7 @@ lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
  * Used for spell checking. Deleted redlines and hidden characters are masked
  */
 static bool
-lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
+lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
                                       sal_Int32 nStt, sal_Int32 nEnd,
                                       const sal_Unicode cChar = CH_TXTATR_INWORD,
                                       bool bCheckShowHiddenChar = true )
@@ -177,21 +177,21 @@ lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
 /**
  * Used for spell checking. Calculates a rectangle for repaint.
  */
-static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, sal_Int32 nChgStart, sal_Int32 nChgEnd )
+static SwRect lcl_CalculateRepaintRect( SwTextFrm& rTextFrm, sal_Int32 nChgStart, sal_Int32 nChgEnd )
 {
     SwRect aRect;
 
-    SwTxtNode *pNode = rTxtFrm.GetTxtNode();
+    SwTextNode *pNode = rTextFrm.GetTextNode();
 
     SwNodeIndex aNdIdx( *pNode );
     SwPosition aPos( aNdIdx, SwIndex( pNode, nChgEnd ) );
     SwCrsrMoveState aTmpState( MV_NONE );
     aTmpState.b2Lines = true;
-    rTxtFrm.GetCharRect( aRect, aPos, &aTmpState );
+    rTextFrm.GetCharRect( aRect, aPos, &aTmpState );
     // information about end of repaint area
     Sw2LinesPos* pEnd2Pos = aTmpState.p2Lines;
 
-    const SwTxtFrm *pEndFrm = &rTxtFrm;
+    const SwTextFrm *pEndFrm = &rTextFrm;
 
     while( pEndFrm->HasFollow() &&
            nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
@@ -214,12 +214,12 @@ static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, sal_Int32 nChgStart, 
     aTmpState.p2Lines = NULL;
     SwRect aTmp;
     aPos = SwPosition( aNdIdx, SwIndex( pNode, nChgStart ) );
-    rTxtFrm.GetCharRect( aTmp, aPos, &aTmpState );
+    rTextFrm.GetCharRect( aTmp, aPos, &aTmpState );
 
     // i63141: GetCharRect(..) could cause a formatting,
-    // during the formatting SwTxtFrms could be joined, deleted, created...
+    // during the formatting SwTextFrms could be joined, deleted, created...
     // => we have to reinit pStartFrm and pEndFrm after the formatting
-    const SwTxtFrm* pStartFrm = &rTxtFrm;
+    const SwTextFrm* pStartFrm = &rTextFrm;
     while( pStartFrm->HasFollow() &&
            nChgStart >= pStartFrm->GetFollow()->GetOfst() )
         pStartFrm = pStartFrm->GetFollow();
@@ -246,7 +246,7 @@ static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, sal_Int32 nChgStart, 
 
     bool bSameFrame = true;
 
-    if( rTxtFrm.HasFollow() )
+    if( rTextFrm.HasFollow() )
     {
         if( pEndFrm != pStartFrm )
         {
@@ -371,7 +371,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
  * @param bInclRefToxMark ???
  */
 
-void SwTxtNode::RstTxtAttr(
+void SwTextNode::RstTextAttr(
     const SwIndex &rIdx,
     const sal_Int32 nLen,
     const sal_uInt16 nWhich,
@@ -385,20 +385,20 @@ void SwTxtNode::RstTxtAttr(
     sal_Int32 nEnd = nStt + nLen;
     {
         // enlarge range for the reset of text attributes in case of an overlapping input field
-        const SwTxtInputFld* pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtAttrAt( nStt, RES_TXTATR_INPUTFIELD, PARENT ));
-        if ( pTxtInputFld == NULL )
+        const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt( nStt, RES_TXTATR_INPUTFIELD, PARENT ));
+        if ( pTextInputField == NULL )
         {
-            pTxtInputFld = dynamic_cast<const SwTxtInputFld*>(GetTxtAttrAt(nEnd, RES_TXTATR_INPUTFIELD, PARENT ));
+            pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextAttrAt(nEnd, RES_TXTATR_INPUTFIELD, PARENT ));
         }
-        if ( pTxtInputFld != NULL )
+        if ( pTextInputField != NULL )
         {
-            if ( nStt > pTxtInputFld->GetStart() )
+            if ( nStt > pTextInputField->GetStart() )
             {
-                nStt = pTxtInputFld->GetStart();
+                nStt = pTextInputField->GetStart();
             }
-            if ( nEnd < *(pTxtInputFld->End()) )
+            if ( nEnd < *(pTextInputField->End()) )
             {
-                nEnd = *(pTxtInputFld->End());
+                nEnd = *(pTextInputField->End());
             }
         }
     }
@@ -412,13 +412,13 @@ void SwTxtNode::RstTxtAttr(
 
     // We have to remember the "new" attributes that have
     // been introduced by splitting surrounding attributes (case 2,3,4).
-    std::vector<SwTxtAttr *> newAttributes;
-    std::vector<SwTxtAttr *> delAttributes;
+    std::vector<SwTextAttr *> newAttributes;
+    std::vector<SwTextAttr *> delAttributes;
 
     // iterate over attribute array until start of attribute is behind deletion range
     size_t i = 0;
     sal_Int32 nAttrStart;
-    SwTxtAttr *pHt = NULL;
+    SwTextAttr *pHt = NULL;
     while ( (i < m_pSwpHints->Count())
             && ( ( ( nAttrStart = (*m_pSwpHints)[i]->GetStart()) < nEnd )
                  || nLen==0 ) )
@@ -461,7 +461,7 @@ void SwTxtNode::RstTxtAttr(
                 // if the current attribute is an autostyle, we have to check if the autostyle
                 // and pSet have any attributes in common. If so, pStyleHandle will contain
                 // a handle to AutoStyle / pSet:
-                bSkipAttr = !lcl_HaveCommonAttributes( getIDocumentStyleAccess(), pSet, 0, *static_cast<const SwFmtAutoFmt&>(pHt->GetAttr()).GetStyleHandle(), pStyleHandle );
+                bSkipAttr = !lcl_HaveCommonAttributes( getIDocumentStyleAccess(), pSet, 0, *static_cast<const SwFormatAutoFormat&>(pHt->GetAttr()).GetStyleHandle(), pStyleHandle );
             }
         }
         else if ( nWhich )
@@ -470,7 +470,7 @@ void SwTxtNode::RstTxtAttr(
             bSkipAttr = nWhich != pHt->Which();
             if ( bSkipAttr && RES_TXTATR_AUTOFMT == pHt->Which() )
             {
-                bSkipAttr = !lcl_HaveCommonAttributes( getIDocumentStyleAccess(), 0, nWhich, *static_cast<const SwFmtAutoFmt&>(pHt->GetAttr()).GetStyleHandle(), pStyleHandle );
+                bSkipAttr = !lcl_HaveCommonAttributes( getIDocumentStyleAccess(), 0, nWhich, *static_cast<const SwFormatAutoFormat&>(pHt->GetAttr()).GetStyleHandle(), pStyleHandle );
             }
         }
         else if ( !bInclRefToxMark )
@@ -510,7 +510,7 @@ void SwTxtNode::RstTxtAttr(
 
                     if ( pStyleHandle.get() )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                        SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
                                 *pStyleHandle, nAttrStart, nAttrEnd );
                         newAttributes.push_back(pNew);
                     }
@@ -525,7 +525,7 @@ void SwTxtNode::RstTxtAttr(
 
                     if ( pStyleHandle.get() && nAttrStart < nEnd )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                        SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
                                 *pStyleHandle, nAttrStart, nEnd );
                         newAttributes.push_back(pNew);
                     }
@@ -553,7 +553,7 @@ void SwTxtNode::RstTxtAttr(
 
                     if ( pStyleHandle.get() )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                        SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
                             *pStyleHandle, nStt, nAttrEnd );
                         newAttributes.push_back(pNew);
                     }
@@ -575,20 +575,20 @@ void SwTxtNode::RstTxtAttr(
 
                     if ( pStyleHandle.get() && nStt < nEnd )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                        SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
                             *pStyleHandle, nStt, nEnd );
                         newAttributes.push_back(pNew);
                     }
 
                     if( nEnd < nTmpEnd )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                        SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
                             pHt->GetAttr(), nEnd, nTmpEnd );
                         if ( pNew )
                         {
-                            SwTxtCharFmt* pCharFmt = dynamic_cast<SwTxtCharFmt*>(pHt);
-                            if ( pCharFmt )
-                                static_txtattr_cast<SwTxtCharFmt*>(pNew)->SetSortNumber(pCharFmt->GetSortNumber());
+                            SwTextCharFormat* pCharFormat = dynamic_cast<SwTextCharFormat*>(pHt);
+                            if ( pCharFormat )
+                                static_txtattr_cast<SwTextCharFormat*>(pNew)->SetSortNumber(pCharFormat->GetSortNumber());
 
                             newAttributes.push_back(pNew);
                         }
@@ -605,14 +605,14 @@ void SwTxtNode::RstTxtAttr(
     }
 
     // delay deleting the hints because it re-sorts the hints array
-    for (SwTxtAttr *const pDel : delAttributes)
+    for (SwTextAttr *const pDel : delAttributes)
     {
         m_pSwpHints->Delete(pDel);
         DestroyAttr(pDel);
     }
 
     // delay inserting the hints because it re-sorts the hints array
-    for (SwTxtAttr *const pNew : newAttributes)
+    for (SwTextAttr *const pNew : newAttributes)
     {
         InsertHint(pNew, SetAttrMode::NOHINTADJUST);
     }
@@ -626,14 +626,14 @@ void SwTxtNode::RstTxtAttr(
             m_pSwpHints->MergePortions(*this);
         }
 
-        // TxtFrm's respond to aHint, others to aNew
+        // TextFrm's respond to aHint, others to aNew
         SwUpdateAttr aHint(
             nMin,
             nMax,
             0);
 
         NotifyClients( 0, &aHint );
-        SwFmtChg aNew( GetFmtColl() );
+        SwFormatChg aNew( GetFormatColl() );
         NotifyClients( 0, &aNew );
     }
 }
@@ -653,7 +653,7 @@ sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
 // Absatzes, dann wird das erste Wort zurueckgeliefert.
 // Wenn dieses erste Wort nur aus Whitespaces besteht, returnen wir
 // einen leeren String.
-OUString SwTxtNode::GetCurWord( sal_Int32 nPos ) const
+OUString SwTextNode::GetCurWord( sal_Int32 nPos ) const
 {
     assert(nPos <= m_Text.getLength()); // invalid index
 
@@ -695,11 +695,11 @@ OUString SwTxtNode::GetCurWord( sal_Int32 nPos ) const
                        aBndry.endPos - aBndry.startPos);
 }
 
-SwScanner::SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
+SwScanner::SwScanner( const SwTextNode& rNd, const OUString& rText,
     const LanguageType* pLang, const ModelToViewHelper& rConvMap,
     sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, bool bClp )
     : rNode( rNd )
-    , aPreDashReplacementText(rTxt)
+    , aPreDashReplacementText(rText)
     , pLanguage( pLang )
     , m_ModelToView( rConvMap )
     , nLen( 0 )
@@ -921,13 +921,13 @@ bool SwScanner::NextWord()
     return true;
 }
 
-bool SwTxtNode::Spell(SwSpellArgs* pArgs)
+bool SwTextNode::Spell(SwSpellArgs* pArgs)
 {
-    // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
+    // Die Aehnlichkeiten zu SwTextFrm::_AutoSpell sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
 
     // modify string according to redline information and hidden text
-    const OUString aOldTxt( m_Text );
+    const OUString aOldText( m_Text );
     OUStringBuffer buf(m_Text);
     const bool bRestoreString =
         lcl_MaskRedlinesAndHiddenText(*this, buf, 0, m_Text.getLength());
@@ -977,7 +977,7 @@ bool SwTxtNode::Spell(SwSpellArgs* pArgs)
                 // reset original text
                 if ( bRestoreString )
                 {
-                    m_Text = aOldTxt;
+                    m_Text = aOldText;
                 }
                 return false;
             }
@@ -1042,13 +1042,13 @@ bool SwTxtNode::Spell(SwSpellArgs* pArgs)
     // reset original text
     if ( bRestoreString )
     {
-        m_Text = aOldTxt;
+        m_Text = aOldText;
     }
 
     return pArgs->xSpellAlt.is();
 }
 
-void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
+void SwTextNode::SetLanguageAndFont( const SwPaM &rPaM,
     LanguageType nLang, sal_uInt16 nLangWhichId,
     const vcl::Font *pFont,  sal_uInt16 nFontWhichId )
 {
@@ -1083,7 +1083,7 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
 
 }
 
-bool SwTxtNode::Convert( SwConversionArgs &rArgs )
+bool SwTextNode::Convert( SwConversionArgs &rArgs )
 {
     // get range of text within node to be converted
     // (either all the text or the text within the selection
@@ -1099,7 +1099,7 @@ bool SwTxtNode::Convert( SwConversionArgs &rArgs )
     rArgs.aConvText.clear();
 
     // modify string according to redline information and hidden text
-    const OUString aOldTxt( m_Text );
+    const OUString aOldText( m_Text );
     OUStringBuffer buf(m_Text);
     const bool bRestoreString =
         lcl_MaskRedlinesAndHiddenText(*this, buf, 0, m_Text.getLength());
@@ -1212,15 +1212,15 @@ bool SwTxtNode::Convert( SwConversionArgs &rArgs )
     // restore original text
     if ( bRestoreString )
     {
-        m_Text = aOldTxt;
+        m_Text = aOldText;
     }
 
     return !rArgs.aConvText.isEmpty();
 }
 
-// Die Aehnlichkeiten zu SwTxtNode::Spell sind beabsichtigt ...
+// Die Aehnlichkeiten zu SwTextNode::Spell sind beabsichtigt ...
 // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
-SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, sal_Int32 nActPos )
+SwRect SwTextFrm::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
 {
     SwRect aRect;
 #if OSL_DEBUG_LEVEL > 1
@@ -1228,29 +1228,29 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, sal_Int32 nActPos )
     if ( bStop )
         return aRect;
 #endif
-    // Die Aehnlichkeiten zu SwTxtNode::Spell sind beabsichtigt ...
+    // Die Aehnlichkeiten zu SwTextNode::Spell sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
-    SwTxtNode *pNode = GetTxtNode();
+    SwTextNode *pNode = GetTextNode();
     if( pNode != pActNode || !nActPos )
         nActPos = COMPLETE_STRING;
 
     SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
     // modify string according to redline information and hidden text
-    const OUString aOldTxt( pNode->GetTxt() );
+    const OUString aOldText( pNode->GetText() );
     OUStringBuffer buf(pNode->m_Text);
     const bool bRestoreString =
-        lcl_MaskRedlinesAndHiddenText(*pNode, buf, 0, pNode->GetTxt().getLength());
+        lcl_MaskRedlinesAndHiddenText(*pNode, buf, 0, pNode->GetText().getLength());
     if (bRestoreString)
     {   // ??? UGLY: is it really necessary to modify m_Text here?
         pNode->m_Text = buf.makeStringAndClear();
     }
 
     // a change of data indicates that at least one word has been modified
-    const bool bRedlineChg = (pNode->GetTxt().getStr() != aOldTxt.getStr());
+    const bool bRedlineChg = (pNode->GetText().getStr() != aOldText.getStr());
 
     sal_Int32 nBegin = 0;
-    sal_Int32 nEnd = pNode->GetTxt().getLength();
+    sal_Int32 nEnd = pNode->GetText().getLength();
     sal_Int32 nInsertPos = 0;
     sal_Int32 nChgStart = COMPLETE_STRING;
     sal_Int32 nChgEnd = 0;
@@ -1265,7 +1265,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, sal_Int32 nActPos )
         nBegin = pNode->GetWrong()->GetBeginInv();
         if( COMPLETE_STRING != nBegin )
         {
-            nEnd = std::max(pNode->GetWrong()->GetEndInv(), pNode->GetTxt().getLength());
+            nEnd = std::max(pNode->GetWrong()->GetEndInv(), pNode->GetText().getLength());
         }
 
         // get word around nBegin, we start at nBegin - 1
@@ -1276,7 +1276,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, sal_Int32 nActPos )
 
             LanguageType eActLang = pNode->GetLang( nBegin );
             Boundary aBound =
-                g_pBreakIt->GetBreakIter()->getWordBoundary( pNode->GetTxt(), nBegin,
+                g_pBreakIt->GetBreakIter()->getWordBoundary( pNode->GetText(), nBegin,
                     g_pBreakIt->GetLocale( eActLang ),
                     WordType::DICTIONARY_WORD, true );
             nBegin = aBound.startPos;
@@ -1305,7 +1305,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, sal_Int32 nActPos )
         uno::Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
         SwDoc* pDoc = pNode->GetDoc();
 
-        SwScanner aScanner( *pNode, pNode->GetTxt(), 0, ModelToViewHelper(),
+        SwScanner aScanner( *pNode, pNode->GetText(), 0, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD, nBegin, nEnd);
 
         while( aScanner.NextWord() )
@@ -1363,7 +1363,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, sal_Int32 nActPos )
     // i63141 before calling GetCharRect(..) with formatting!
     if ( bRestoreString )
     {
-        pNode->m_Text = aOldTxt;
+        pNode->m_Text = aOldText;
     }
     if( pNode->GetWrong() )
     {
@@ -1408,11 +1408,11 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, sal_Int32 nActPos )
     @param nActPos ???
     @return SwRect Repaint area
 */
-SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, sal_Int32 /*nActPos*/ )
+SwRect SwTextFrm::SmartTagScan( SwContentNode* /*pActNode*/, sal_Int32 /*nActPos*/ )
 {
     SwRect aRet;
-    SwTxtNode *pNode = GetTxtNode();
-    const OUString& rText = pNode->GetTxt();
+    SwTextNode *pNode = GetTextNode();
+    const OUString& rText = pNode->GetText();
 
     // Iterate over language portions
     SmartTagMgr& rSmartTagMgr = SwSmartTagMgr::Get();
@@ -1527,9 +1527,9 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, sal_Int32 /*nActPos*/ 
 }
 
 // Wird vom CollectAutoCmplWords gerufen
-void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, sal_Int32 nActPos )
+void SwTextFrm::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPos )
 {
-    SwTxtNode *pNode = GetTxtNode();
+    SwTextNode *pNode = GetTextNode();
     if( pNode != pActNode || !nActPos )
         nActPos = COMPLETE_STRING;
 
@@ -1537,14 +1537,14 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, sal_Int32 nActPos )
     SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
     sal_Int32  nBegin = 0;
-    sal_Int32  nEnd = pNode->GetTxt().getLength();
+    sal_Int32  nEnd = pNode->GetText().getLength();
     sal_Int32  nLen;
     bool bACWDirty = false, bAnyWrd = false;
 
     if( nBegin < nEnd )
     {
         int nCnt = 200;
-        SwScanner aScanner( *pNode, pNode->GetTxt(), 0, ModelToViewHelper(),
+        SwScanner aScanner( *pNode, pNode->GetText(), 0, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD, nBegin, nEnd );
         while( aScanner.NextWord() )
         {
@@ -1576,8 +1576,8 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, sal_Int32 nActPos )
         pNode->SetAutoCompleteWordDirty( false );
 }
 
-/** Findet den TxtFrm und sucht dessen CalcHyph */
-bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
+/** Findet den TextFrm und sucht dessen CalcHyph */
+bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     // Abkuerzung: am Absatz ist keine Sprache eingestellt:
     if ( LANGUAGE_NONE == sal_uInt16( GetSwAttrSet().GetLanguage().GetLanguage() )
@@ -1591,9 +1591,9 @@ bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( pLinguNode != this )
     {
         pLinguNode = this;
-        pLinguFrm = static_cast<SwTxtFrm*>(getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), rHyphInf.GetCrsrPos() ));
+        pLinguFrm = static_cast<SwTextFrm*>(getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), rHyphInf.GetCrsrPos() ));
     }
-    SwTxtFrm *pFrm = pLinguFrm;
+    SwTextFrm *pFrm = pLinguFrm;
     if( pFrm )
         pFrm = &(pFrm->GetFrmAtOfst( rHyphInf.nStart ));
     else
@@ -1601,7 +1601,7 @@ bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
         // 4935: Seit der Trennung ueber Sonderbereiche sind Faelle
         // moeglich, in denen kein Frame zum Node vorliegt.
         // Also keinOSL_ENSURE
-        OSL_ENSURE( pFrm, "!SwTxtNode::Hyphenate: can't find any frame" );
+        OSL_ENSURE( pFrm, "!SwTextNode::Hyphenate: can't find any frame" );
         return false;
     }
 
@@ -1637,7 +1637,7 @@ namespace
 }
 
 // change text to Upper/Lower/Hiragana/Katagana/...
-void SwTxtNode::TransliterateText(
+void SwTextNode::TransliterateText(
     utl::TransliterationWrapper& rTrans,
     sal_Int32 nStt, sal_Int32 nEnd,
     SwUndoTransliterate* pUndo )
@@ -1667,12 +1667,12 @@ void SwTxtNode::TransliterateText(
             Boundary aSttBndry;
             Boundary aEndBndry;
             aSttBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
-                        GetTxt(), nStt,
+                        GetText(), nStt,
                         g_pBreakIt->GetLocale( GetLang( nStt ) ),
                         nWordType,
                         true /*prefer forward direction*/);
             aEndBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
-                        GetTxt(), nEnd,
+                        GetText(), nEnd,
                         g_pBreakIt->GetLocale( GetLang( nEnd ) ),
                         nWordType,
                         false /*prefer backward direction*/);
@@ -1681,7 +1681,7 @@ void SwTxtNode::TransliterateText(
             if (aSttBndry.endPos <= nStt)
             {
                 aSttBndry = g_pBreakIt->GetBreakIter()->nextWord(
-                        GetTxt(), aSttBndry.endPos,
+                        GetText(), aSttBndry.endPos,
                         g_pBreakIt->GetLocale( GetLang( aSttBndry.endPos ) ),
                         nWordType);
             }
@@ -1689,7 +1689,7 @@ void SwTxtNode::TransliterateText(
             if (aEndBndry.startPos >= nEnd)
             {
                 aEndBndry = g_pBreakIt->GetBreakIter()->previousWord(
-                        GetTxt(), aEndBndry.startPos,
+                        GetText(), aEndBndry.startPos,
                         g_pBreakIt->GetLocale( GetLang( aEndBndry.startPos ) ),
                         nWordType);
             }
@@ -1704,7 +1704,7 @@ void SwTxtNode::TransliterateText(
 
                 Sequence <sal_Int32> aOffsets;
                 OUString const sChgd( rTrans.transliterate(
-                            GetTxt(), GetLang(nStt), nStt, nLen, &aOffsets) );
+                            GetText(), GetLang(nStt), nStt, nLen, &aOffsets) );
 
                 assert(nStt < m_Text.getLength());
                 if (0 != rtl_ustr_shortenedCompare_WithLength(
@@ -1719,7 +1719,7 @@ void SwTxtNode::TransliterateText(
                 }
 
                 aCurWordBndry = g_pBreakIt->GetBreakIter()->nextWord(
-                        GetTxt(), nEnd,
+                        GetText(), nEnd,
                         g_pBreakIt->GetLocale( GetLang( nEnd ) ),
                         nWordType);
             }
@@ -1729,18 +1729,18 @@ void SwTxtNode::TransliterateText(
             // for 'sentence case' we need to iterate sentence by sentence
 
             sal_Int32 nLastStart = g_pBreakIt->GetBreakIter()->beginOfSentence(
-                    GetTxt(), nEnd,
+                    GetText(), nEnd,
                     g_pBreakIt->GetLocale( GetLang( nEnd ) ) );
             sal_Int32 nLastEnd = g_pBreakIt->GetBreakIter()->endOfSentence(
-                    GetTxt(), nLastStart,
+                    GetText(), nLastStart,
                     g_pBreakIt->GetLocale( GetLang( nLastStart ) ) );
 
             // extend nStt, nEnd to the current sentence boundaries
             sal_Int32 nCurrentStart = g_pBreakIt->GetBreakIter()->beginOfSentence(
-                    GetTxt(), nStt,
+                    GetText(), nStt,
                     g_pBreakIt->GetLocale( GetLang( nStt ) ) );
             sal_Int32 nCurrentEnd = g_pBreakIt->GetBreakIter()->endOfSentence(
-                    GetTxt(), nCurrentStart,
+                    GetText(), nCurrentStart,
                     g_pBreakIt->GetLocale( GetLang( nCurrentStart ) ) );
 
             // prevent backtracking to the previous sentence if selection starts at end of a sentence
@@ -1751,16 +1751,16 @@ void SwTxtNode::TransliterateText(
                 // Thus to get the real sentence start we should locate the next real word,
                 // that is one found by DICTIONARY_WORD
                 i18n::Boundary aBndry = g_pBreakIt->GetBreakIter()->nextWord(
-                        GetTxt(), nCurrentEnd,
+                        GetText(), nCurrentEnd,
                         g_pBreakIt->GetLocale( GetLang( nCurrentEnd ) ),
                         i18n::WordType::DICTIONARY_WORD);
 
                 // now get new current sentence boundaries
                 nCurrentStart = g_pBreakIt->GetBreakIter()->beginOfSentence(
-                        GetTxt(), aBndry.startPos,
+                        GetText(), aBndry.startPos,
                         g_pBreakIt->GetLocale( GetLang( aBndry.startPos) ) );
                 nCurrentEnd = g_pBreakIt->GetBreakIter()->endOfSentence(
-                        GetTxt(), nCurrentStart,
+                        GetText(), nCurrentStart,
                         g_pBreakIt->GetLocale( GetLang( nCurrentStart) ) );
             }
             // prevent advancing to the next sentence if selection ends at start of a sentence
@@ -1771,11 +1771,11 @@ void SwTxtNode::TransliterateText(
                 // Thus to get the real sentence start we should locate the previous real word,
                 // that is one found by DICTIONARY_WORD
                 i18n::Boundary aBndry = g_pBreakIt->GetBreakIter()->previousWord(
-                        GetTxt(), nLastStart,
+                        GetText(), nLastStart,
                         g_pBreakIt->GetLocale( GetLang( nLastStart) ),
                         i18n::WordType::DICTIONARY_WORD);
                 nLastEnd = g_pBreakIt->GetBreakIter()->endOfSentence(
-                        GetTxt(), aBndry.startPos,
+                        GetText(), aBndry.startPos,
                         g_pBreakIt->GetLocale( GetLang( aBndry.startPos) ) );
                 if (nCurrentEnd > nLastEnd)
                     nCurrentEnd = nLastEnd;
@@ -1787,7 +1787,7 @@ void SwTxtNode::TransliterateText(
                 OSL_ENSURE( nLen > 0, "invalid word length of 0" );
 
                 Sequence <sal_Int32> aOffsets;
-                OUString const sChgd( rTrans.transliterate(GetTxt(),
+                OUString const sChgd( rTrans.transliterate(GetText(),
                     GetLang(nCurrentStart), nCurrentStart, nLen, &aOffsets) );
 
                 assert(nStt < m_Text.getLength());
@@ -1804,12 +1804,12 @@ void SwTxtNode::TransliterateText(
 
                 Boundary aFirstWordBndry;
                 aFirstWordBndry = g_pBreakIt->GetBreakIter()->nextWord(
-                        GetTxt(), nCurrentEnd,
+                        GetText(), nCurrentEnd,
                         g_pBreakIt->GetLocale( GetLang( nCurrentEnd ) ),
                         nWordType);
                 nCurrentStart = aFirstWordBndry.startPos;
                 nCurrentEnd = g_pBreakIt->GetBreakIter()->endOfSentence(
-                        GetTxt(), nCurrentStart,
+                        GetText(), nCurrentStart,
                         g_pBreakIt->GetLocale( GetLang( nCurrentStart ) ) );
             }
         }
@@ -1874,7 +1874,7 @@ void SwTxtNode::TransliterateText(
                 nSum += rData.sChanged.getLength() - rData.nLen;
                 if (nSum > static_cast<size_t>(GetSpaceLeft()))
                 {
-                    SAL_WARN("sw.core", "SwTxtNode::ReplaceTextOnly: "
+                    SAL_WARN("sw.core", "SwTextNode::ReplaceTextOnly: "
                             "node text with insertion > node capacity.");
                     return;
                 }
@@ -1886,7 +1886,7 @@ void SwTxtNode::TransliterateText(
     }
 }
 
-void SwTxtNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
+void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
                                 const OUString & rText,
                                 const Sequence<sal_Int32>& rOffsets )
 {
@@ -1926,16 +1926,16 @@ void SwTxtNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
         Update( SwIndex( this, nMyOff ), nLen - nMyOff, true );
 
     // notify the layout!
-    SwDelTxt aDelHint( nPos, nTLen );
+    SwDelText aDelHint( nPos, nTLen );
     NotifyClients( 0, &aDelHint );
 
-    SwInsTxt aHint( nPos, nTLen );
+    SwInsText aHint( nPos, nTLen );
     NotifyClients( 0, &aHint );
 }
 
 // the return values allows us to see if we did the heavy-
 // lifting required to actually break and count the words.
-bool SwTxtNode::CountWords( SwDocStat& rStat,
+bool SwTextNode::CountWords( SwDocStat& rStat,
                             sal_Int32 nStt, sal_Int32 nEnd ) const
 {
     if( nStt > nEnd )
@@ -1946,7 +1946,7 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
     {   //not counting txtnodes used to hold deleted redline content
         return false;
     }
-    bool bCountAll = ( (0 == nStt) && (GetTxt().getLength() == nEnd) );
+    bool bCountAll = ( (0 == nStt) && (GetText().getLength() == nEnd) );
     ++rStat.nAllPara; // #i93174#: count _all_ paragraphs
     if ( IsHidden() )
     {   // not counting hidden paras
@@ -2117,7 +2117,7 @@ struct SwParaIdleData_Impl
         bAutoComplDirty     ( true ) {};
 };
 
-void SwTxtNode::InitSwParaStatistics( bool bNew )
+void SwTextNode::InitSwParaStatistics( bool bNew )
 {
     if ( bNew )
     {
@@ -2133,7 +2133,7 @@ void SwTxtNode::InitSwParaStatistics( bool bNew )
     }
 }
 
-void SwTxtNode::SetWrong( SwWrongList* pNew, bool bDelete )
+void SwTextNode::SetWrong( SwWrongList* pNew, bool bDelete )
 {
     if ( m_pParaIdleData_Impl )
     {
@@ -2145,18 +2145,18 @@ void SwTxtNode::SetWrong( SwWrongList* pNew, bool bDelete )
     }
 }
 
-SwWrongList* SwTxtNode::GetWrong()
+SwWrongList* SwTextNode::GetWrong()
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : 0;
 }
 
 // #i71360#
-const SwWrongList* SwTxtNode::GetWrong() const
+const SwWrongList* SwTextNode::GetWrong() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : 0;
 }
 
-void SwTxtNode::SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete )
+void SwTextNode::SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete )
 {
     if ( m_pParaIdleData_Impl )
     {
@@ -2168,12 +2168,12 @@ void SwTxtNode::SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete )
     }
 }
 
-SwGrammarMarkUp* SwTxtNode::GetGrammarCheck()
+SwGrammarMarkUp* SwTextNode::GetGrammarCheck()
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pGrammarCheck : 0;
 }
 
-void SwTxtNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
+void SwTextNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
 {
     OSL_ENSURE( !pNew || SwSmartTagMgr::Get().IsSmartTagsEnabled(),
             "Weird - we have a smart tag list without any recognizers?" );
@@ -2188,12 +2188,12 @@ void SwTxtNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
     }
 }
 
-SwWrongList* SwTxtNode::GetSmartTags()
+SwWrongList* SwTextNode::GetSmartTags()
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pSmartTags : 0;
 }
 
-void SwTxtNode::SetParaNumberOfWords( sal_uLong nNew ) const
+void SwTextNode::SetParaNumberOfWords( sal_uLong nNew ) const
 {
     if ( m_pParaIdleData_Impl )
     {
@@ -2201,12 +2201,12 @@ void SwTxtNode::SetParaNumberOfWords( sal_uLong nNew ) const
     }
 }
 
-sal_uLong SwTxtNode::GetParaNumberOfWords() const
+sal_uLong SwTextNode::GetParaNumberOfWords() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfWords : 0;
 }
 
-void SwTxtNode::SetParaNumberOfAsianWords( sal_uLong nNew ) const
+void SwTextNode::SetParaNumberOfAsianWords( sal_uLong nNew ) const
 {
     if ( m_pParaIdleData_Impl )
     {
@@ -2214,12 +2214,12 @@ void SwTxtNode::SetParaNumberOfAsianWords( sal_uLong nNew ) const
     }
 }
 
-sal_uLong SwTxtNode::GetParaNumberOfAsianWords() const
+sal_uLong SwTextNode::GetParaNumberOfAsianWords() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfAsianWords : 0;
 }
 
-void SwTxtNode::SetParaNumberOfChars( sal_uLong nNew ) const
+void SwTextNode::SetParaNumberOfChars( sal_uLong nNew ) const
 {
     if ( m_pParaIdleData_Impl )
     {
@@ -2227,12 +2227,12 @@ void SwTxtNode::SetParaNumberOfChars( sal_uLong nNew ) const
     }
 }
 
-sal_uLong SwTxtNode::GetParaNumberOfChars() const
+sal_uLong SwTextNode::GetParaNumberOfChars() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfChars : 0;
 }
 
-void SwTxtNode::SetWordCountDirty( bool bNew ) const
+void SwTextNode::SetWordCountDirty( bool bNew ) const
 {
     if ( m_pParaIdleData_Impl )
     {
@@ -2240,12 +2240,12 @@ void SwTxtNode::SetWordCountDirty( bool bNew ) const
     }
 }
 
-sal_uLong SwTxtNode::GetParaNumberOfCharsExcludingSpaces() const
+sal_uLong SwTextNode::GetParaNumberOfCharsExcludingSpaces() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfCharsExcludingSpaces : 0;
 }
 
-void SwTxtNode::SetParaNumberOfCharsExcludingSpaces( sal_uLong nNew ) const
+void SwTextNode::SetParaNumberOfCharsExcludingSpaces( sal_uLong nNew ) const
 {
     if ( m_pParaIdleData_Impl )
     {
@@ -2253,12 +2253,12 @@ void SwTxtNode::SetParaNumberOfCharsExcludingSpaces( sal_uLong nNew ) const
     }
 }
 
-bool SwTxtNode::IsWordCountDirty() const
+bool SwTextNode::IsWordCountDirty() const
 {
     return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bWordCountDirty;
 }
 
-void SwTxtNode::SetWrongDirty( bool bNew ) const
+void SwTextNode::SetWrongDirty( bool bNew ) const
 {
     if ( m_pParaIdleData_Impl )
     {
@@ -2266,12 +2266,12 @@ void SwTxtNode::SetWrongDirty( bool bNew ) const
     }
 }
 
-bool SwTxtNode::IsWrongDirty() const
+bool SwTextNode::IsWrongDirty() const
 {
     return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bWrongDirty;
 }
 
-void SwTxtNode::SetGrammarCheckDirty( bool bNew ) const
+void SwTextNode::SetGrammarCheckDirty( bool bNew ) const
 {
     if ( m_pParaIdleData_Impl )
     {
@@ -2279,12 +2279,12 @@ void SwTxtNode::SetGrammarCheckDirty( bool bNew ) const
     }
 }
 
-bool SwTxtNode::IsGrammarCheckDirty() const
+bool SwTextNode::IsGrammarCheckDirty() const
 {
     return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bGrammarCheckDirty;
 }
 
-void SwTxtNode::SetSmartTagDirty( bool bNew ) const
+void SwTextNode::SetSmartTagDirty( bool bNew ) const
 {
     if ( m_pParaIdleData_Impl )
     {
@@ -2292,12 +2292,12 @@ void SwTxtNode::SetSmartTagDirty( bool bNew ) const
     }
 }
 
-bool SwTxtNode::IsSmartTagDirty() const
+bool SwTextNode::IsSmartTagDirty() const
 {
     return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bSmartTagDirty;
 }
 
-void SwTxtNode::SetAutoCompleteWordDirty( bool bNew ) const
+void SwTextNode::SetAutoCompleteWordDirty( bool bNew ) const
 {
     if ( m_pParaIdleData_Impl )
     {
@@ -2305,7 +2305,7 @@ void SwTxtNode::SetAutoCompleteWordDirty( bool bNew ) const
     }
 }
 
-bool SwTxtNode::IsAutoCompleteWordDirty() const
+bool SwTextNode::IsAutoCompleteWordDirty() const
 {
     return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bAutoComplDirty;
 }

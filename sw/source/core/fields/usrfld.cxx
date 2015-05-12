@@ -37,8 +37,8 @@ using namespace ::com::sun::star;
 
 // Userfields
 
-SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFmt)
-    : SwValueField(pTyp, nFmt),
+SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFormat)
+    : SwValueField(pTyp, nFormat),
     nSubType(nSub)
 {
 }
@@ -163,12 +163,12 @@ SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const OUString& aNam )
         EnableFormat(false);    // Do not use a Numberformatter
 }
 
-OUString SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng)
+OUString SwUserFieldType::Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, sal_uInt16 nLng)
 {
     if((nType & nsSwGetSetExpType::GSE_EXPR) && !(nSubType & nsSwExtendedSubType::SUB_CMD))
     {
         EnableFormat(true);
-        return ExpandValue(nValue, nFmt, nLng);
+        return ExpandValue(nValue, nFormat, nLng);
     }
 
     EnableFormat(false);    // Do not use a Numberformatter
@@ -203,7 +203,7 @@ void SwUserFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if ( !IsModifyLocked() )
     {
         LockModify();
-        GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_INPUTFLD )->UpdateFlds();
+        GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( RES_INPUTFLD )->UpdateFields();
         UnlockModify();
     }
 }
@@ -229,38 +229,38 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
     return nValue;
 }
 
-OUString SwUserFieldType::GetContent( sal_uInt32 nFmt )
+OUString SwUserFieldType::GetContent( sal_uInt32 nFormat )
 {
-    if (nFmt && nFmt != SAL_MAX_UINT32)
+    if (nFormat && nFormat != SAL_MAX_UINT32)
     {
         OUString sFormattedValue;
         Color* pCol = 0;
 
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
 
-        pFormatter->GetOutputString(GetValue(), nFmt, sFormattedValue, &pCol);
+        pFormatter->GetOutputString(GetValue(), nFormat, sFormattedValue, &pCol);
         return sFormattedValue;
     }
 
     return aContent;
 }
 
-void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFmt )
+void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFormat )
 {
     if( aContent != rStr )
     {
         aContent = rStr;
 
-        if (nFmt && nFmt != SAL_MAX_UINT32)
+        if (nFormat && nFormat != SAL_MAX_UINT32)
         {
             double fValue;
 
             SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
 
-            if (pFormatter->IsNumberFormat(rStr, nFmt, fValue))
+            if (pFormatter->IsNumberFormat(rStr, nFormat, fValue))
             {
                 SetValue(fValue);
-                aContent = DoubleToString(fValue, nFmt);
+                aContent = DoubleToString(fValue, nFormat);
             }
         }
 

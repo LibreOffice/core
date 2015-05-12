@@ -23,7 +23,7 @@
 #include <tools/solar.h>
 
 class SwCrsrShell;
-class SwTxtNode;
+class SwTextNode;
 class SwRootFrm;
 
 class SwCallLink
@@ -31,18 +31,18 @@ class SwCallLink
 public:
     SwCrsrShell & rShell;
     sal_uLong nNode;
-    sal_Int32 nCntnt;
+    sal_Int32 nContent;
     sal_uInt8 nNdTyp;
     long nLeftFrmPos;
     bool bHasSelection;
 
     explicit SwCallLink( SwCrsrShell & rSh );
-    SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, sal_Int32 nAktCntnt,
+    SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, sal_Int32 nAktContent,
                                     sal_uInt8 nAktNdTyp, long nLRPos,
                                     bool bAktSelection );
     ~SwCallLink();
 
-    static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, sal_Int32 nCntPos, bool bCalcFrm );
+    static long getLayoutFrm( const SwRootFrm*, SwTextNode& rNd, sal_Int32 nCntPos, bool bCalcFrm );
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_CRSR_CALLNK_HXX

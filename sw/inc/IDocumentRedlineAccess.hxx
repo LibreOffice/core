@@ -30,8 +30,8 @@
 class SwRangeRedline;
 class SwTableRowRedline;
 class SwTableCellRedline;
-class SwRedlineTbl;
-class SwExtraRedlineTbl;
+class SwRedlineTable;
+class SwExtraRedlineTable;
 class SwPaM;
 struct SwPosition;
 class SwStartNode;
@@ -126,11 +126,11 @@ public:
 
     virtual bool IsIgnoreRedline() const = 0;
 
-    virtual const SwRedlineTbl& GetRedlineTbl() const = 0;
-    virtual SwRedlineTbl& GetRedlineTbl() = 0;
-    virtual const SwExtraRedlineTbl& GetExtraRedlineTbl() const = 0;
-    virtual SwExtraRedlineTbl& GetExtraRedlineTbl() = 0;
-    virtual bool HasExtraRedlineTbl() const = 0;
+    virtual const SwRedlineTable& GetRedlineTable() const = 0;
+    virtual SwRedlineTable& GetRedlineTable() = 0;
+    virtual const SwExtraRedlineTable& GetExtraRedlineTable() const = 0;
+    virtual SwExtraRedlineTable& GetExtraRedlineTable() = 0;
+    virtual bool HasExtraRedlineTable() const = 0;
 
     virtual bool IsInRedlines(const SwNode& rNode) const = 0;
 

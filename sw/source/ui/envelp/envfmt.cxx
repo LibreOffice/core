@@ -116,7 +116,7 @@ namespace {
 static long lUserW = 5669; // 10 cm
 static long lUserH = 5669; // 10 cm
 
-SwEnvFmtPage::SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
+SwEnvFormatPage::SwEnvFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "EnvFormatPage",
         "modules/swriter/ui/envformatpage.ui", &rSet)
 {
@@ -142,7 +142,7 @@ SwEnvFmtPage::SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     SetMetric(*m_pSizeHeightField, aMetric);
 
     // Install handlers
-    Link<> aLk = LINK(this, SwEnvFmtPage, ModifyHdl);
+    Link<> aLk = LINK(this, SwEnvFormatPage, ModifyHdl);
     m_pAddrLeftField->SetUpHdl( aLk );
     m_pAddrTopField->SetUpHdl( aLk );
     m_pSendLeftField->SetUpHdl( aLk );
@@ -164,13 +164,13 @@ SwEnvFmtPage::SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pSizeWidthField->SetLoseFocusHdl( aLk );
     m_pSizeHeightField->SetLoseFocusHdl( aLk );
 
-    Link<MenuButton *, void> aLk2 = LINK(this, SwEnvFmtPage, EditHdl );
+    Link<MenuButton *, void> aLk2 = LINK(this, SwEnvFormatPage, EditHdl );
     m_pAddrEditButton->SetSelectHdl( aLk2 );
     m_pSendEditButton->SetSelectHdl( aLk2 );
 
     m_pPreview->SetBorderStyle( WindowBorderStyle::MONO );
 
-    m_pSizeFormatBox->SetSelectHdl(LINK(this, SwEnvFmtPage, FormatHdl));
+    m_pSizeFormatBox->SetSelectHdl(LINK(this, SwEnvFormatPage, FormatHdl));
 
     // m_pSizeFormatBox
     for (sal_uInt16 i = PAPER_A3; i <= PAPER_KAI32BIG; i++)
@@ -197,12 +197,12 @@ SwEnvFmtPage::SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 }
 
-SwEnvFmtPage::~SwEnvFmtPage()
+SwEnvFormatPage::~SwEnvFormatPage()
 {
     disposeOnce();
 }
 
-void SwEnvFmtPage::dispose()
+void SwEnvFormatPage::dispose()
 {
     m_pAddrLeftField.clear();
     m_pAddrTopField.clear();
@@ -218,10 +218,10 @@ void SwEnvFmtPage::dispose()
 }
 
 
-IMPL_LINK( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
+IMPL_LINK( SwEnvFormatPage, ModifyHdl, Edit *, pEdit )
 {
-    long lWVal = static_cast< long >(GetFldVal(*m_pSizeWidthField ));
-    long lHVal = static_cast< long >(GetFldVal(*m_pSizeHeightField));
+    long lWVal = static_cast< long >(GetFieldVal(*m_pSizeWidthField ));
+    long lHVal = static_cast< long >(GetFieldVal(*m_pSizeHeightField));
 
     long lWidth  = std::max(lWVal, lHVal);
     long lHeight = std::min(lWVal, lHVal);
@@ -254,7 +254,7 @@ IMPL_LINK( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK_TYPED( SwEnvFmtPage, EditHdl, MenuButton *, pButton, void )
+IMPL_LINK_TYPED( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )
 {
     SwWrtShell* pSh = GetParentSwEnvDlg()->pSh;
     OSL_ENSURE(pSh, "Shell missing");
@@ -262,7 +262,7 @@ IMPL_LINK_TYPED( SwEnvFmtPage, EditHdl, MenuButton *, pButton, void )
     // determine collection-ptr
     bool bSender = pButton != m_pAddrEditButton;
 
-    SwTxtFmtColl* pColl = pSh->GetTxtCollFromPool( static_cast< sal_uInt16 >(
+    SwTextFormatColl* pColl = pSh->GetTextCollFromPool( static_cast< sal_uInt16 >(
         bSender ? RES_POOLCOLL_SENDADRESS : RES_POOLCOLL_JAKETADRESS));
     OSL_ENSURE(pColl, "Text collection missing");
 
@@ -279,8 +279,8 @@ IMPL_LINK_TYPED( SwEnvFmtPage, EditHdl, MenuButton *, pButton, void )
         SwAbstractDialogFactory* pFact = swui::GetFactory();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        const OUString sFmtStr = pColl->GetName();
-        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_CHAR_ENV, &sFmtStr));
+        const OUString sFormatStr = pColl->GetName();
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_CHAR_ENV, &sFormatStr));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
         if (pDlg->Execute() == RET_OK)
         {
@@ -310,15 +310,15 @@ IMPL_LINK_TYPED( SwEnvFmtPage, EditHdl, MenuButton *, pButton, void )
 
         // left border as offset
         const long nOff = static_cast<const SvxLRSpaceItem&>(aTmpSet.Get( RES_LR_SPACE )).
-                                                            GetTxtLeft();
+                                                            GetTextLeft();
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aTmpSet.Put( aOff );
 
         // set BoxInfo
         ::PrepareBoxInfo( aTmpSet, *pSh );
 
-        const OUString sFmtStr = pColl->GetName();
-        VclPtrInstance< SwParaDlg > pDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFmtStr);
+        const OUString sFormatStr = pColl->GetName();
+        VclPtrInstance< SwParaDlg > pDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFormatStr);
 
         if ( pDlg->Execute() == RET_OK )
         {
@@ -345,7 +345,7 @@ IMPL_LINK_TYPED( SwEnvFmtPage, EditHdl, MenuButton *, pButton, void )
 }
 
 // A temporary Itemset that gets discarded at abort
-SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, bool bSender)
+SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl* pColl, bool bSender)
 {
     SfxItemSet *&pAddrSet = bSender ? GetParentSwEnvDlg()->pSenderSet : GetParentSwEnvDlg()->pAddresseeSet;
     if (!pAddrSet)
@@ -380,7 +380,7 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, bool bSender)
     return pAddrSet;
 }
 
-IMPL_LINK_NOARG(SwEnvFmtPage, FormatHdl)
+IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl)
 {
     long lWidth;
     long lHeight;
@@ -407,13 +407,13 @@ IMPL_LINK_NOARG(SwEnvFmtPage, FormatHdl)
     lAddrFromLeft = lWidth  / 2;
     lAddrFromTop  = lHeight / 2;
 
-    SetFldVal(*m_pAddrLeftField, lAddrFromLeft);
-    SetFldVal(*m_pAddrTopField , lAddrFromTop );
-    SetFldVal(*m_pSendLeftField, lSendFromLeft);
-    SetFldVal(*m_pSendTopField , lSendFromTop );
+    SetFieldVal(*m_pAddrLeftField, lAddrFromLeft);
+    SetFieldVal(*m_pAddrTopField , lAddrFromTop );
+    SetFieldVal(*m_pSendLeftField, lSendFromLeft);
+    SetFieldVal(*m_pSendTopField , lSendFromTop );
 
-    SetFldVal(*m_pSizeWidthField , lWidth );
-    SetFldVal(*m_pSizeHeightField, lHeight);
+    SetFieldVal(*m_pSizeWidthField , lWidth );
+    SetFieldVal(*m_pSizeHeightField, lHeight);
 
     SetMinMax();
 
@@ -422,23 +422,23 @@ IMPL_LINK_NOARG(SwEnvFmtPage, FormatHdl)
     return 0;
 }
 
-void SwEnvFmtPage::SetMinMax()
+void SwEnvFormatPage::SetMinMax()
 {
-    long lWVal = static_cast< long >(GetFldVal(*m_pSizeWidthField ));
-    long lHVal = static_cast< long >(GetFldVal(*m_pSizeHeightField));
+    long lWVal = static_cast< long >(GetFieldVal(*m_pSizeWidthField ));
+    long lHVal = static_cast< long >(GetFieldVal(*m_pSizeHeightField));
 
     long lWidth  = std::max(lWVal, lHVal),
          lHeight = std::min(lWVal, lHVal);
 
     // Min and Max
-    m_pAddrLeftField->SetMin((long) 100 * (GetFldVal(*m_pSendLeftField) + 566), FUNIT_TWIP);
+    m_pAddrLeftField->SetMin((long) 100 * (GetFieldVal(*m_pSendLeftField) + 566), FUNIT_TWIP);
     m_pAddrLeftField->SetMax((long) 100 * (lWidth  - 2 * 566), FUNIT_TWIP);
-    m_pAddrTopField->SetMin((long) 100 * (GetFldVal(*m_pSendTopField ) + 2 * 566), FUNIT_TWIP);
+    m_pAddrTopField->SetMin((long) 100 * (GetFieldVal(*m_pSendTopField ) + 2 * 566), FUNIT_TWIP);
     m_pAddrTopField->SetMax((long) 100 * (lHeight - 2 * 566), FUNIT_TWIP);
     m_pSendLeftField->SetMin((long) 100 * (566), FUNIT_TWIP);
-    m_pSendLeftField->SetMax((long) 100 * (GetFldVal(*m_pAddrLeftField) - 566), FUNIT_TWIP);
+    m_pSendLeftField->SetMax((long) 100 * (GetFieldVal(*m_pAddrLeftField) - 566), FUNIT_TWIP);
     m_pSendTopField->SetMin((long) 100 * (566), FUNIT_TWIP);
-    m_pSendTopField->SetMax((long) 100 * (GetFldVal(*m_pAddrTopField ) - 2 * 566), FUNIT_TWIP);
+    m_pSendTopField->SetMax((long) 100 * (GetFieldVal(*m_pAddrTopField ) - 2 * 566), FUNIT_TWIP);
 
     // First and last
     m_pAddrLeftField->SetFirst(m_pAddrLeftField->GetMin());
@@ -459,37 +459,37 @@ void SwEnvFmtPage::SetMinMax()
     m_pSizeHeightField->Reformat();
 }
 
-VclPtr<SfxTabPage> SwEnvFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwEnvFormatPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>(new SwEnvFmtPage(pParent, *rSet), SAL_NO_ACQUIRE);
+    return VclPtr<SfxTabPage>(new SwEnvFormatPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
-void SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
+void SwEnvFormatPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
     aSet.Put(GetParentSwEnvDlg()->aEnvItem);
     Reset(&aSet);
 }
 
-SfxTabPage::sfxpg SwEnvFmtPage::DeactivatePage(SfxItemSet* _pSet)
+SfxTabPage::sfxpg SwEnvFormatPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet(_pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
 
-void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
+void SwEnvFormatPage::FillItem(SwEnvItem& rItem)
 {
-    rItem.lAddrFromLeft = static_cast< sal_Int32 >(GetFldVal(*m_pAddrLeftField));
-    rItem.lAddrFromTop  = static_cast< sal_Int32 >(GetFldVal(*m_pAddrTopField ));
-    rItem.lSendFromLeft = static_cast< sal_Int32 >(GetFldVal(*m_pSendLeftField));
-    rItem.lSendFromTop  = static_cast< sal_Int32 >(GetFldVal(*m_pSendTopField ));
+    rItem.lAddrFromLeft = static_cast< sal_Int32 >(GetFieldVal(*m_pAddrLeftField));
+    rItem.lAddrFromTop  = static_cast< sal_Int32 >(GetFieldVal(*m_pAddrTopField ));
+    rItem.lSendFromLeft = static_cast< sal_Int32 >(GetFieldVal(*m_pSendLeftField));
+    rItem.lSendFromTop  = static_cast< sal_Int32 >(GetFieldVal(*m_pSendTopField ));
 
     const sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectEntryPos()];
     if (nPaper == (sal_uInt16)PAPER_USER)
     {
-        long lWVal = static_cast< long >(GetFldVal(*m_pSizeWidthField ));
-        long lHVal = static_cast< long >(GetFldVal(*m_pSizeHeightField));
+        long lWVal = static_cast< long >(GetFieldVal(*m_pSizeWidthField ));
+        long lHVal = static_cast< long >(GetFieldVal(*m_pSizeHeightField));
         rItem.lWidth  = std::max(lWVal, lHVal);
         rItem.lHeight = std::min(lWVal, lHVal);
     }
@@ -502,14 +502,14 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
     }
 }
 
-bool SwEnvFmtPage::FillItemSet(SfxItemSet* rSet)
+bool SwEnvFormatPage::FillItemSet(SfxItemSet* rSet)
 {
     FillItem(GetParentSwEnvDlg()->aEnvItem);
     rSet->Put(GetParentSwEnvDlg()->aEnvItem);
     return true;
 }
 
-void SwEnvFmtPage::Reset(const SfxItemSet* rSet)
+void SwEnvFormatPage::Reset(const SfxItemSet* rSet)
 {
     const SwEnvItem& rItem = static_cast<const SwEnvItem&>( rSet->Get(FN_ENVELOP));
 
@@ -521,12 +521,12 @@ void SwEnvFmtPage::Reset(const SfxItemSet* rSet)
             m_pSizeFormatBox->SelectEntryPos(static_cast<sal_Int32>(i));
 
     // Metric fields
-    SetFldVal(*m_pAddrLeftField, rItem.lAddrFromLeft);
-    SetFldVal(*m_pAddrTopField, rItem.lAddrFromTop );
-    SetFldVal(*m_pSendLeftField, rItem.lSendFromLeft);
-    SetFldVal(*m_pSendTopField, rItem.lSendFromTop );
-    SetFldVal(*m_pSizeWidthField  , std::max(rItem.lWidth, rItem.lHeight));
-    SetFldVal(*m_pSizeHeightField , std::min(rItem.lWidth, rItem.lHeight));
+    SetFieldVal(*m_pAddrLeftField, rItem.lAddrFromLeft);
+    SetFieldVal(*m_pAddrTopField, rItem.lAddrFromTop );
+    SetFieldVal(*m_pSendLeftField, rItem.lSendFromLeft);
+    SetFieldVal(*m_pSendTopField, rItem.lSendFromTop );
+    SetFieldVal(*m_pSizeWidthField  , std::max(rItem.lWidth, rItem.lHeight));
+    SetFieldVal(*m_pSizeHeightField , std::min(rItem.lWidth, rItem.lHeight));
     SetMinMax();
 
     DELETEZ(GetParentSwEnvDlg()->pSenderSet);

@@ -91,13 +91,13 @@ private:
 };
 
 // sort text
-struct SwSortTxtElement : public SwSortElement
+struct SwSortTextElement : public SwSortElement
 {
     sal_uLong   nOrg;
     SwNodeIndex aPos;
 
-    SwSortTxtElement( const SwNodeIndex& rPos );
-    virtual ~SwSortTxtElement();
+    SwSortTextElement( const SwNodeIndex& rPos );
+    virtual ~SwSortTextElement();
 
     virtual OUString GetKey( sal_uInt16 nKey ) const SAL_OVERRIDE;
 };

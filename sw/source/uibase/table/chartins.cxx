@@ -144,7 +144,7 @@ void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
     uno::Reference< frame::XModel > xChartModel;
     OUString aRangeString;
 
-    if( rWrtShell.IsCrsrInTbl())
+    if( rWrtShell.IsCrsrInTable())
     {
         if (!rWrtShell.IsTableMode())
         {
@@ -152,18 +152,18 @@ void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
             rWrtShell.GetView().GetViewFrame()->GetDispatcher()->
                 Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
         }
-        if( ! rWrtShell.IsTblComplexForChart())
+        if( ! rWrtShell.IsTableComplexForChart())
         {
-            SwFrmFmt* pTblFmt = rWrtShell.GetTableFmt();
-            aRangeString = pTblFmt->GetName() + "." + rWrtShell.GetBoxNms();
+            SwFrameFormat* pTableFormat = rWrtShell.GetTableFormat();
+            aRangeString = pTableFormat->GetName() + "." + rWrtShell.GetBoxNms();
 
             // get table data provider
             xDataProvider.set( pView->GetDocShell()->getIDocumentChartDataProviderAccess()->GetChartDataProvider( true ) );
         }
     }
 
-    SwFlyFrmFmt *pFlyFrmFmt = 0;
-    xChartModel.set( SwTableFUNC( &rWrtShell, false ).InsertChart( xDataProvider, xDataProvider.is(), aRangeString, &pFlyFrmFmt ));
+    SwFlyFrameFormat *pFlyFrameFormat = 0;
+    xChartModel.set( SwTableFUNC( &rWrtShell, false ).InsertChart( xDataProvider, xDataProvider.is(), aRangeString, &pFlyFrameFormat ));
 
     //open wizard
     //@todo get context from writer if that has one
@@ -211,8 +211,8 @@ void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
                             {
                                 //calculate and set new position
                                 SwRect aSwRect;
-                                if (pFlyFrmFmt)
-                                    aSwRect = pFlyFrmFmt->GetAnchoredObj()->GetObjRectWithSpaces();
+                                if (pFlyFrameFormat)
+                                    aSwRect = pFlyFrameFormat->GetAnchoredObj()->GetObjRectWithSpaces();
                                 Rectangle aRect( aSwRect.SVRect() );
                                 Point aDialogPos = SwGetChartDialogPos( &rWrtShell.GetView().GetEditWin(), aDialogSize, aRect );
                                 xDialogProps->setPropertyValue("Position",

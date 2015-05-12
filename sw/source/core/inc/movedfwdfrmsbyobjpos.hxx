@@ -22,13 +22,13 @@
 #include <map>
 #include <sal/types.h>
 
-class SwTxtNode;
-class SwTxtFrm;
+class SwTextNode;
+class SwTextFrm;
 // --> #i26945#
 class SwRowFrm;
 
-typedef std::map< const SwTxtNode*, const sal_uInt32 > NodeMap;
-typedef std::map< const SwTxtNode*, const sal_uInt32 >::const_iterator NodeMapIter;
+typedef std::map< const SwTextNode*, const sal_uInt32 > NodeMap;
+typedef std::map< const SwTextNode*, const sal_uInt32 >::const_iterator NodeMapIter;
 typedef NodeMap::value_type NodeMapEntry;
 
 class SwMovedFwdFrmsByObjPos
@@ -40,13 +40,13 @@ class SwMovedFwdFrmsByObjPos
         SwMovedFwdFrmsByObjPos();
         ~SwMovedFwdFrmsByObjPos();
 
-        void Insert( const SwTxtFrm& _rMovedFwdFrmByObjPos,
+        void Insert( const SwTextFrm& _rMovedFwdFrmByObjPos,
                      const sal_uInt32 _nToPageNum );
 
         // --> #i40155#
-        void Remove( const SwTxtFrm& _rTxtFrm );
+        void Remove( const SwTextFrm& _rTextFrm );
 
-        bool FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
+        bool FrmMovedFwdByObjPos( const SwTextFrm& _rTextFrm,
                                   sal_uInt32& _ornToPageNum ) const;
 
         // --> #i26945#

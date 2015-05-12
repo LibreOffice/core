@@ -25,10 +25,10 @@
 #include "swdllapi.h"
 
 /// If text in multi-column sections should be evenly distributed.
-class SW_DLLPUBLIC SwFmtNoBalancedColumns : public SfxBoolItem
+class SW_DLLPUBLIC SwFormatNoBalancedColumns : public SfxBoolItem
 {
 public:
-    SwFmtNoBalancedColumns( bool bFlag = false )
+    SwFormatNoBalancedColumns( bool bFlag = false )
         : SfxBoolItem( RES_COLUMNBALANCE, bFlag ) {}
 
     /// "pure virtual methods" of SfxPoolItem
@@ -36,10 +36,10 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-inline const SwFmtNoBalancedColumns &SwAttrSet::GetBalancedColumns(bool bInP) const
-    { return static_cast<const SwFmtNoBalancedColumns&>(Get( RES_COLUMNBALANCE, bInP )); }
+inline const SwFormatNoBalancedColumns &SwAttrSet::GetBalancedColumns(bool bInP) const
+    { return static_cast<const SwFormatNoBalancedColumns&>(Get( RES_COLUMNBALANCE, bInP )); }
 
-inline const SwFmtNoBalancedColumns &SwFmt::GetBalancedColumns(bool bInP) const
+inline const SwFormatNoBalancedColumns &SwFormat::GetBalancedColumns(bool bInP) const
     { return m_aSet.GetBalancedColumns( bInP ); }
 
 #endif

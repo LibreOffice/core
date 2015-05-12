@@ -25,7 +25,7 @@
 
 class SwXMLExport;
 class SvXMLAutoStylePoolP;
-class SwNoTxtNode;
+class SwNoTextNode;
 
 namespace com { namespace sun { namespace star { namespace style {
                 class XStyle; } } } }
@@ -41,7 +41,7 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
     const SvGlobalName aIFrameClassId;
     const SvGlobalName aOutplaceClassId;
 
-    static SwNoTxtNode *GetNoTxtNode(
+    static SwNoTextNode *GetNoTextNode(
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet >& rPropSet );
 

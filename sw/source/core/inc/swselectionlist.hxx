@@ -45,7 +45,7 @@ public:
     /** Ctor to create an empty list for a given context
 
         @param pInitCxt
-        The frame (normally a SwTxtFrm) where the block cursor selection starts,
+        The frame (normally a SwTextFrm) where the block cursor selection starts,
         it will be used to get the allowed context for the text selections.
     */
     explicit SwSelectionList( const SwFrm* pInitCxt );

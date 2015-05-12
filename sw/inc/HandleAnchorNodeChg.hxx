@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_INC_HANDLEANCHORNODECHG_HXX
 #define INCLUDED_SW_INC_HANDLEANCHORNODECHG_HXX
 
-class SwFlyFrmFmt;
-class SwFmtAnchor;
+class SwFlyFrameFormat;
+class SwFormatAnchor;
 class SwFlyFrm;
 
 // helper class to track change of anchor node of at-paragraph respectively
@@ -37,21 +37,21 @@ public:
 
         @author OD
 
-        @param _rFlyFrmFmt
+        @param _rFlyFrameFormat
         reference to the fly frame format instance, which is handled.
 
-        @param _rNewAnchorFmt
+        @param _rNewAnchorFormat
         new anchor attribute, which will be applied at the given fly frame format
 
         @param _pKeepThisFlyFrm
         optional parameter - pointer to a fly frame of the given fly frame format,
         which isn't deleted, if re-creation of fly frames is necessary.
     */
-    SwHandleAnchorNodeChg( SwFlyFrmFmt& _rFlyFrmFmt,
-                           const SwFmtAnchor& _rNewAnchorFmt,
+    SwHandleAnchorNodeChg( SwFlyFrameFormat& _rFlyFrameFormat,
+                           const SwFormatAnchor& _rNewAnchorFormat,
                            SwFlyFrm* _pKeepThisFlyFrm = 0L );
 
-    /** calls <SwFlyFrmFmt::MakeFrms>, if re-creation of fly frames is necessary.
+    /** calls <SwFlyFrameFormat::MakeFrms>, if re-creation of fly frames is necessary.
 
         @author OD
     */
@@ -59,7 +59,7 @@ public:
 
 private:
     // fly frame format, which is tracked for a anchor node change.
-    SwFlyFrmFmt& mrFlyFrmFmt;
+    SwFlyFrameFormat& mrFlyFrameFormat;
     // internal flag, which indicates that the certain anchor node change occurs
     // and that re-creation of fly frames is necessary.
     bool mbAnchorNodeChanged;

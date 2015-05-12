@@ -25,188 +25,188 @@
 #include <numrule.hxx>
 
 class SwDoc;
-class SwTxtFmtColl;
-class SwConditionTxtFmtColl;
+class SwTextFormatColl;
+class SwConditionTextFormatColl;
 class SwRewriter;
 class SfxItemSet;
 
-class SwUndoFmtCreate : public SwUndo
+class SwUndoFormatCreate : public SwUndo
 {
 protected:
-    SwFmt * pNew;
+    SwFormat * pNew;
     OUString sDerivedFrom;
     SwDoc * pDoc;
     mutable OUString sNewName;
     SfxItemSet * pNewSet;
-    sal_uInt16 nId;     // FmtId related
+    sal_uInt16 nId;     // FormatId related
     bool bAuto;
 
 public:
-    SwUndoFmtCreate(SwUndoId nUndoId, SwFmt * pNew, SwFmt * pDerivedFrom,
+    SwUndoFormatCreate(SwUndoId nUndoId, SwFormat * pNew, SwFormat * pDerivedFrom,
                     SwDoc * pDoc);
-    virtual ~SwUndoFmtCreate();
+    virtual ~SwUndoFormatCreate();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
     virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom) = 0;
+    virtual SwFormat * Create(SwFormat * pDerivedFrom) = 0;
     virtual void Delete() = 0;
-    virtual SwFmt * Find(const OUString & rName) const = 0;
+    virtual SwFormat * Find(const OUString & rName) const = 0;
 };
 
-class SwUndoFmtDelete : public SwUndo
+class SwUndoFormatDelete : public SwUndo
 {
 protected:
     OUString sDerivedFrom;
     SwDoc * pDoc;
     OUString sOldName;
     SfxItemSet aOldSet;
-    sal_uInt16 nId;     // FmtId related
+    sal_uInt16 nId;     // FormatId related
     bool bAuto;
 
 public:
-    SwUndoFmtDelete(SwUndoId nUndoId, SwFmt * pOld, SwDoc * pDoc);
-    virtual ~SwUndoFmtDelete();
+    SwUndoFormatDelete(SwUndoId nUndoId, SwFormat * pOld, SwDoc * pDoc);
+    virtual ~SwUndoFormatDelete();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
     virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom) = 0;
-    virtual void Delete(SwFmt * pFmt) = 0;
-    virtual SwFmt * Find(const OUString & rName) const = 0;
+    virtual SwFormat * Create(SwFormat * pDerivedFrom) = 0;
+    virtual void Delete(SwFormat * pFormat) = 0;
+    virtual SwFormat * Find(const OUString & rName) const = 0;
 };
 
-class SwUndoRenameFmt : public SwUndo
+class SwUndoRenameFormat : public SwUndo
 {
 protected:
     OUString sOldName, sNewName;
     SwDoc * pDoc;
 
 public:
-    SwUndoRenameFmt(SwUndoId nUndoId, const OUString & sOldName,
+    SwUndoRenameFormat(SwUndoId nUndoId, const OUString & sOldName,
                     const OUString & sNewName,
                     SwDoc * pDoc);
-    virtual ~SwUndoRenameFmt();
+    virtual ~SwUndoRenameFormat();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
     SwRewriter GetRewriter() const SAL_OVERRIDE;
 
-    virtual SwFmt * Find(const OUString & rName) const = 0;
+    virtual SwFormat * Find(const OUString & rName) const = 0;
 };
 
-class SwUndoTxtFmtCollCreate : public SwUndoFmtCreate
+class SwUndoTextFormatCollCreate : public SwUndoFormatCreate
 {
 public:
-    SwUndoTxtFmtCollCreate(SwTxtFmtColl * pNew, SwTxtFmtColl * pDerivedFrom,
+    SwUndoTextFormatCollCreate(SwTextFormatColl * pNew, SwTextFormatColl * pDerivedFrom,
                            SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+    virtual SwFormat * Create(SwFormat * pDerivedFrom) SAL_OVERRIDE;
     virtual void Delete() SAL_OVERRIDE;
-    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
+    virtual SwFormat * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
-class SwUndoTxtFmtCollDelete : public SwUndoFmtDelete
+class SwUndoTextFormatCollDelete : public SwUndoFormatDelete
 {
 public:
-    SwUndoTxtFmtCollDelete(SwTxtFmtColl * pOld, SwDoc * pDoc);
+    SwUndoTextFormatCollDelete(SwTextFormatColl * pOld, SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
-    virtual void Delete(SwFmt * pFmt) SAL_OVERRIDE;
-    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
+    virtual SwFormat * Create(SwFormat * pDerivedFrom) SAL_OVERRIDE;
+    virtual void Delete(SwFormat * pFormat) SAL_OVERRIDE;
+    virtual SwFormat * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
-class SwUndoCondTxtFmtCollCreate : public SwUndoTxtFmtCollCreate
+class SwUndoCondTextFormatCollCreate : public SwUndoTextFormatCollCreate
 {
 public:
-    SwUndoCondTxtFmtCollCreate(SwConditionTxtFmtColl * pNew, SwTxtFmtColl * pDerivedFrom, SwDoc * pDoc);
-    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+    SwUndoCondTextFormatCollCreate(SwConditionTextFormatColl * pNew, SwTextFormatColl * pDerivedFrom, SwDoc * pDoc);
+    virtual SwFormat * Create(SwFormat * pDerivedFrom) SAL_OVERRIDE;
 };
 
-class SwUndoCondTxtFmtCollDelete : public SwUndoTxtFmtCollDelete
+class SwUndoCondTextFormatCollDelete : public SwUndoTextFormatCollDelete
 {
 public:
-    SwUndoCondTxtFmtCollDelete(SwTxtFmtColl * pOld, SwDoc * pDoc);
-    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+    SwUndoCondTextFormatCollDelete(SwTextFormatColl * pOld, SwDoc * pDoc);
+    virtual SwFormat * Create(SwFormat * pDerivedFrom) SAL_OVERRIDE;
 };
 
-class SwUndoRenameFmtColl : public SwUndoRenameFmt
+class SwUndoRenameFormatColl : public SwUndoRenameFormat
 {
 public:
-    SwUndoRenameFmtColl(const OUString & sOldName,
+    SwUndoRenameFormatColl(const OUString & sOldName,
                         const OUString & sNewName,
                         SwDoc * pDoc);
 
-    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
+    virtual SwFormat * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
-class SwUndoCharFmtCreate : public SwUndoFmtCreate
+class SwUndoCharFormatCreate : public SwUndoFormatCreate
 {
 public:
-    SwUndoCharFmtCreate(SwCharFmt * pNew, SwCharFmt * pDerivedFrom,
+    SwUndoCharFormatCreate(SwCharFormat * pNew, SwCharFormat * pDerivedFrom,
                            SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+    virtual SwFormat * Create(SwFormat * pDerivedFrom) SAL_OVERRIDE;
     virtual void Delete() SAL_OVERRIDE;
-    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
+    virtual SwFormat * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
-class SwUndoCharFmtDelete : public SwUndoFmtDelete
+class SwUndoCharFormatDelete : public SwUndoFormatDelete
 {
 public:
-    SwUndoCharFmtDelete(SwCharFmt * pOld, SwDoc * pDoc);
+    SwUndoCharFormatDelete(SwCharFormat * pOld, SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
-    virtual void Delete(SwFmt * pFmt) SAL_OVERRIDE;
-    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
+    virtual SwFormat * Create(SwFormat * pDerivedFrom) SAL_OVERRIDE;
+    virtual void Delete(SwFormat * pFormat) SAL_OVERRIDE;
+    virtual SwFormat * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
-class SwUndoRenameCharFmt : public SwUndoRenameFmt
+class SwUndoRenameCharFormat : public SwUndoRenameFormat
 {
 public:
-    SwUndoRenameCharFmt(const OUString & sOldName,
+    SwUndoRenameCharFormat(const OUString & sOldName,
                         const OUString & sNewName,
                         SwDoc * pDoc);
 
-    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
+    virtual SwFormat * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
-class SwUndoFrmFmtCreate : public SwUndoFmtCreate
+class SwUndoFrameFormatCreate : public SwUndoFormatCreate
 {
     bool bAuto;
 
 public:
-    SwUndoFrmFmtCreate(SwFrmFmt * pNew, SwFrmFmt * pDerivedFrom,
+    SwUndoFrameFormatCreate(SwFrameFormat * pNew, SwFrameFormat * pDerivedFrom,
                        SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
+    virtual SwFormat * Create(SwFormat * pDerivedFrom) SAL_OVERRIDE;
     virtual void Delete() SAL_OVERRIDE;
-    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
+    virtual SwFormat * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
-class SwUndoFrmFmtDelete : public SwUndoFmtDelete
+class SwUndoFrameFormatDelete : public SwUndoFormatDelete
 {
 public:
-    SwUndoFrmFmtDelete(SwFrmFmt * pOld, SwDoc * pDoc);
+    SwUndoFrameFormatDelete(SwFrameFormat * pOld, SwDoc * pDoc);
 
-    virtual SwFmt * Create(SwFmt * pDerivedFrom) SAL_OVERRIDE;
-    virtual void Delete(SwFmt * pFmt) SAL_OVERRIDE;
-    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
+    virtual SwFormat * Create(SwFormat * pDerivedFrom) SAL_OVERRIDE;
+    virtual void Delete(SwFormat * pFormat) SAL_OVERRIDE;
+    virtual SwFormat * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
-class SwUndoRenameFrmFmt : public SwUndoRenameFmt
+class SwUndoRenameFrameFormat : public SwUndoRenameFormat
 {
 public:
-    SwUndoRenameFrmFmt(const OUString & sOldName,
+    SwUndoRenameFrameFormat(const OUString & sOldName,
                        const OUString & sNewName,
                        SwDoc * pDoc);
 
-    virtual SwFmt * Find(const OUString & rName) const SAL_OVERRIDE;
+    virtual SwFormat * Find(const OUString & rName) const SAL_OVERRIDE;
 };
 
 class SwUndoNumruleCreate : public SwUndo

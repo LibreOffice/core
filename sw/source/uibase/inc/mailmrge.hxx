@@ -79,7 +79,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     VclPtr<FixedText>       m_pFilterFT;
     VclPtr<ListBox>         m_pFilterLB;
 
-    VclPtr<ListBox>         m_pAddressFldLB;
+    VclPtr<ListBox>         m_pAddressFieldLB;
     VclPtr<FixedText>       m_pSubjectFT;
     VclPtr<Edit>            m_pSubjectED;
     VclPtr<FixedText>       m_pFormatFT;
@@ -117,7 +117,7 @@ class SwMailMergeDlg : public SvxStandardDialog
 public:
     SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rSh,
         const OUString& rSourceName,
-        const OUString& rTblName,
+        const OUString& rTableName,
         sal_Int32 nCommandType,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0);

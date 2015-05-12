@@ -47,9 +47,9 @@ public:
         {
             if (mnCurOutputType == text::MailMergeType::SHELL)
             {
-                SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
-                CPPUNIT_ASSERT(pTxtDoc);
-                pTxtDoc->GetDocShell()->DoClose();
+                SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
+                CPPUNIT_ASSERT(pTextDoc);
+                pTextDoc->GetDocShell()->DoClose();
             }
             else
                 mxMMComponent->dispose();
@@ -235,9 +235,9 @@ protected:
 
 int MMTest::documentStartPageNumber( int document ) const
 {   // See SwMailMergeOutputPage::documentStartPageNumber() .
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    SwWrtShell* shell = pTxtDoc->GetDocShell()->GetWrtShell();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* shell = pTextDoc->GetDocShell()->GetWrtShell();
     IDocumentMarkAccess* marks = shell->GetDoc()->getIDocumentMarkAccess();
     // Unfortunately, the pages are marked using UNO bookmarks, which have internals names, so they cannot be referred to by their names.
     // Assume that there are no other UNO bookmarks than the ones used by mail merge, and that they are in the sorted order.
@@ -266,9 +266,9 @@ DECLARE_SHELL_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored
 {
     executeMailMerge();
 
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    sal_uInt16 nPhysPages = pTxtDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    sal_uInt16 nPhysPages = pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), nPhysPages);
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxMMComponent, uno::UNO_QUERY);
@@ -303,8 +303,8 @@ DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
     // Lines do not have a line color.
     CPPUNIT_ASSERT( !xPropertySet->getPropertySetInfo()->hasPropertyByName( "LineColor" ));
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
     uno::Reference< lang::XMultiServiceFactory > xFact( mxComponent, uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( "com.sun.star.drawing.Defaults" ), uno::UNO_QUERY );
     CPPUNIT_ASSERT( xDefaults.is());
@@ -369,9 +369,9 @@ DECLARE_SHELL_MAILMERGE_TEST(testPageBoundariesSimpleMailMerge, "simple-mail-mer
     // SwMailMergeOutputPage::documentStartPageNumber() ).
     executeMailMerge();
     // Here getPages() works on the source document, so get pages of the resulting one.
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 19 ), pTxtDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 10 pages, but each sub-document starts on odd page number
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 19 ), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 10 pages, but each sub-document starts on odd page number
     for( int doc = 0;
          doc < 10;
          ++doc )
@@ -383,9 +383,9 @@ DECLARE_SHELL_MAILMERGE_TEST(testPageBoundariesSimpleMailMerge, "simple-mail-mer
 DECLARE_SHELL_MAILMERGE_TEST(testPageBoundaries2Pages, "simple-mail-merge-2pages.odt", "10-testing-addresses.ods", "testing-addresses")
 {
     executeMailMerge();
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 20 ), pTxtDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 20 pages, each sub-document starts on odd page number
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 20 ), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 20 pages, each sub-document starts on odd page number
     for( int doc = 0;
          doc < 10;
          ++doc )

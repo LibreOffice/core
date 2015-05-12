@@ -238,7 +238,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
     else if( m_nParaNumPara == nId)
     {
-        SwTxtFmtColl* pTmpColl = rSh.GetCurTxtFmtColl();
+        SwTextFormatColl* pTmpColl = rSh.GetCurTextFormatColl();
         if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
         {
             static_cast<SwParagraphNumTabPage&>(rPage).DisableOutline() ;

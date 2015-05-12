@@ -30,13 +30,13 @@
 #include <anchoreddrawobject.hxx>
 
 class SfxPoolItem;
-class SwFrmFmt;
-class SwFlyFrmFmt;
+class SwFrameFormat;
+class SwFlyFrameFormat;
 class SwFlyFrm;
 class SwFrm;
 class SwPageFrm;
 class SwVirtFlyDrawObj;
-class SwFmtAnchor;
+class SwFormatAnchor;
 class SwFlyDrawObj;
 class SwRect;
 class SwDrawContact;
@@ -49,9 +49,9 @@ class SdrTextObj;
  If not it is a simple DrawObject. It has a UserCall which
  is client of the format we are looking for.
  Implementation in dcontact.cxx. */
-SW_DLLPUBLIC SwFrmFmt *FindFrmFmt( SdrObject *pObj );
-inline const SwFrmFmt *FindFrmFmt( const SdrObject *pObj )
-{   return ::FindFrmFmt( const_cast<SdrObject*>(pObj) ); }
+SW_DLLPUBLIC SwFrameFormat *FindFrameFormat( SdrObject *pObj );
+inline const SwFrameFormat *FindFrameFormat( const SdrObject *pObj )
+{   return ::FindFrameFormat( const_cast<SdrObject*>(pObj) ); }
 bool HasWrap( const SdrObject* pObj );
 
 void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor );
@@ -105,7 +105,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     /// For reader. Only the connection is created.
-    SwContact( SwFrmFmt *pToRegisterIn );
+    SwContact( SwFrameFormat *pToRegisterIn );
     virtual ~SwContact();
 
     virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj ) const = 0;
@@ -115,9 +115,9 @@ public:
     virtual SdrObject *GetMaster() = 0;
     virtual void SetMaster( SdrObject* _pNewMaster ) = 0;
 
-          SwFrmFmt  *GetFmt() { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
-    const SwFrmFmt  *GetFmt() const
-        { return static_cast<const SwFrmFmt*>(GetRegisteredIn()); }
+          SwFrameFormat  *GetFormat() { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
+    const SwFrameFormat  *GetFormat() const
+        { return static_cast<const SwFrameFormat*>(GetRegisteredIn()); }
 
     bool IsInDTOR() const { return mbInDTOR;}
 
@@ -145,27 +145,27 @@ public:
 
     /** some virtual helper methods for information
      about the object (Writer fly frame resp. drawing object) */
-    const SwFmtAnchor& GetAnchorFmt() const
+    const SwFormatAnchor& GetAnchorFormat() const
     {
-        assert( GetFmt() );
+        assert( GetFormat() );
 
-        return GetFmt()->GetAnchor();
+        return GetFormat()->GetAnchor();
     }
 
-    RndStdIds GetAnchorId() const { return GetAnchorFmt().GetAnchorId(); }
+    RndStdIds GetAnchorId() const { return GetAnchorFormat().GetAnchorId(); }
     bool      ObjAnchoredAtPage() const { return GetAnchorId() == FLY_AT_PAGE; }
     bool      ObjAnchoredAtFly()  const { return GetAnchorId() == FLY_AT_FLY; }
     bool      ObjAnchoredAtPara() const { return GetAnchorId() == FLY_AT_PARA; }
     bool      ObjAnchoredAtChar() const { return GetAnchorId() == FLY_AT_CHAR; }
     bool      ObjAnchoredAsChar() const { return GetAnchorId() == FLY_AS_CHAR; }
 
-    const SwPosition&  GetCntntAnchor() const
+    const SwPosition&  GetContentAnchor() const
     {
-        assert( GetAnchorFmt().GetCntntAnchor() );
-        return *(GetAnchorFmt().GetCntntAnchor());
+        assert( GetAnchorFormat().GetContentAnchor() );
+        return *(GetAnchorFormat().GetContentAnchor());
     }
 
-    const SwIndex&     GetCntntAnchorIndex() const;
+    const SwIndex&     GetContentAnchorIndex() const;
 
     /** get data collection of anchored objects, handled by with contact
 
@@ -198,7 +198,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     /// Creates DrawObject and registers it with the Model.
-    SwFlyDrawContact( SwFlyFrmFmt* pToRegisterIn, SdrModel* pMod );
+    SwFlyDrawContact( SwFlyFrameFormat* pToRegisterIn, SdrModel* pMod );
     virtual ~SwFlyDrawContact();
 
     virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj ) const SAL_OVERRIDE;
@@ -390,7 +390,7 @@ class SwDrawContact : public SwContact
     public:
         TYPEINFO_OVERRIDE();
 
-        SwDrawContact( SwFrmFmt *pToRegisterIn, SdrObject *pObj );
+        SwDrawContact( SwFrameFormat *pToRegisterIn, SdrObject *pObj );
         virtual ~SwDrawContact();
 
         virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj ) const SAL_OVERRIDE;
@@ -419,9 +419,9 @@ class SwDrawContact : public SwContact
         SwPageFrm* FindPage( const SwRect &rRect );
 
         /** Inserts SdrObject in the arrays of the layout ((SwPageFrm and SwFrm).
-         The anchor is determined according to the attribute SwFmtAnchor.
+         The anchor is determined according to the attribute SwFormatAnchor.
          If required the object gets unregistered with the old anchor. */
-        void ConnectToLayout( const SwFmtAnchor *pAnch = 0 );
+        void ConnectToLayout( const SwFormatAnchor *pAnch = 0 );
         /** method to insert 'master' drawing object
          into drawing page */
         void InsertMasterIntoDrawPage();
@@ -459,7 +459,7 @@ class SwDrawContact : public SwContact
         /** get data collection of anchored objects, handled by with contact
         */
 
-        static void GetTextObjectsFromFmt( std::list<SdrTextObj*>&, SwDoc* );
+        static void GetTextObjectsFromFormat( std::list<SdrTextObj*>&, SwDoc* );
         virtual void GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const SAL_OVERRIDE;
 };
 

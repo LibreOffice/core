@@ -24,29 +24,29 @@
 #include <format.hxx>
 #include <charfmt.hxx>
 
-class SwTxtCharFmt;
+class SwTextCharFormat;
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFmtCharFmt: public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatCharFormat: public SfxPoolItem, public SwClient
 {
-    friend class SwTxtCharFmt;
-    SwTxtCharFmt* pTxtAttr;     ///< My text attribute.
+    friend class SwTextCharFormat;
+    SwTextCharFormat* pTextAttr;     ///< My text attribute.
 
 public:
-    SwFmtCharFmt() : pTxtAttr(0) {}
+    SwFormatCharFormat() : pTextAttr(0) {}
 
     /// single argument ctors shall be explicit.
-    explicit SwFmtCharFmt( SwCharFmt *pFmt );
-    virtual ~SwFmtCharFmt();
+    explicit SwFormatCharFormat( SwCharFormat *pFormat );
+    virtual ~SwFormatCharFormat();
 
     /// @@@ public copy ctor, but no copy assignment?
-    SwFmtCharFmt( const SwFmtCharFmt& rAttr );
+    SwFormatCharFormat( const SwFormatCharFormat& rAttr );
 protected:
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 private:
     /// @@@ public copy ctor, but no copy assignment?
-    SwFmtCharFmt & operator= (const SwFmtCharFmt &) SAL_DELETED_FUNCTION;
+    SwFormatCharFormat & operator= (const SwFormatCharFormat &) SAL_DELETED_FUNCTION;
 public:
 
     TYPEINFO_OVERRIDE();
@@ -65,8 +65,8 @@ public:
 
     virtual bool    GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
 
-    void SetCharFmt( SwFmt* pFmt ) { pFmt->Add(this); }
-    SwCharFmt* GetCharFmt() const { return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(GetRegisteredIn())); }
+    void SetCharFormat( SwFormat* pFormat ) { pFormat->Add(this); }
+    SwCharFormat* GetCharFormat() const { return const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(GetRegisteredIn())); }
 };
 #endif
 

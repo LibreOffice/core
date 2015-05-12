@@ -4176,7 +4176,7 @@ SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
     Synchron;
 
     /* status: */
-    SlotType = SvxClipboardFmtItem
+    SlotType = SvxClipboardFormatItem
 
     /* config: */
     AccelConfig = FALSE,

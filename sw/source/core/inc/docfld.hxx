@@ -25,92 +25,92 @@
 #include <IDocumentTimerAccess.hxx>
 #include <o3tl/sorted_vector.hxx>
 
-class SwTxtFld;
+class SwTextField;
 class SwIndex;
 class SwNodeIndex;
-class SwCntntFrm;
+class SwContentFrm;
 class SwSectionNode;
 class SwSection;
-class SwTxtTOXMark;
+class SwTextTOXMark;
 class SwTableBox;
-class SwTxtINetFmt;
-class SwFlyFrmFmt;
+class SwTextINetFormat;
+class SwFlyFrameFormat;
 class SwDoc;
 class SwNode;
 struct SwPosition;
 
 // Update expression fields
-class _SetGetExpFld
+class _SetGetExpField
 {
     sal_uLong nNode;
-    sal_Int32 nCntnt;
+    sal_Int32 nContent;
     union {
-        const SwTxtFld* pTxtFld;
+        const SwTextField* pTextField;
         const SwSection* pSection;
         const SwPosition* pPos;
-        const SwTxtTOXMark* pTxtTOX;
+        const SwTextTOXMark* pTextTOX;
         const SwTableBox* pTBox;
-        const SwTxtINetFmt* pTxtINet;
-        const SwFlyFrmFmt* pFlyFmt;
+        const SwTextINetFormat* pTextINet;
+        const SwFlyFrameFormat* pFlyFormat;
     } CNTNT;
-    enum _SetGetExpFldType
+    enum _SetGetExpFieldType
         {
             TEXTFIELD, TEXTTOXMARK, SECTIONNODE, CRSRPOS, TABLEBOX,
             TEXTINET, FLYFRAME
-        } eSetGetExpFldType;
+        } eSetGetExpFieldType;
 
 public:
-    _SetGetExpFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld = 0,
+    _SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextField* pField = 0,
                     const SwIndex* pIdx = 0 );
 
-    _SetGetExpFld( const SwNodeIndex& rNdIdx, const SwTxtINetFmt& rINet,
+    _SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextINetFormat& rINet,
                     const SwIndex* pIdx = 0 );
 
-    _SetGetExpFld( const SwSectionNode& rSectNode,
+    _SetGetExpField( const SwSectionNode& rSectNode,
                     const SwPosition* pPos = 0  );
 
-    _SetGetExpFld( const SwTableBox& rTableBox,
+    _SetGetExpField( const SwTableBox& rTableBox,
                     const SwPosition* pPos = 0  );
 
-    _SetGetExpFld( const SwNodeIndex& rNdIdx, const SwTxtTOXMark& rTOX,
+    _SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextTOXMark& rTOX,
                     const SwIndex* pIdx );
 
-    _SetGetExpFld( const SwPosition& rPos );
+    _SetGetExpField( const SwPosition& rPos );
 
-    _SetGetExpFld( const SwFlyFrmFmt& rFlyFmt, const SwPosition* pPos = 0 );
+    _SetGetExpField( const SwFlyFrameFormat& rFlyFormat, const SwPosition* pPos = 0 );
 
-    bool operator==( const _SetGetExpFld& rFld ) const;
-    bool operator<( const _SetGetExpFld& rFld ) const;
+    bool operator==( const _SetGetExpField& rField ) const;
+    bool operator<( const _SetGetExpField& rField ) const;
 
-    const SwTxtFld* GetTxtFld() const
-        { return TEXTFIELD == eSetGetExpFldType ? CNTNT.pTxtFld : 0; }
-    const SwTxtTOXMark* GetTOX() const
-        { return TEXTTOXMARK == eSetGetExpFldType ? CNTNT.pTxtTOX : 0; }
+    const SwTextField* GetTextField() const
+        { return TEXTFIELD == eSetGetExpFieldType ? CNTNT.pTextField : 0; }
+    const SwTextTOXMark* GetTOX() const
+        { return TEXTTOXMARK == eSetGetExpFieldType ? CNTNT.pTextTOX : 0; }
     const SwSection* GetSection() const
-        { return SECTIONNODE == eSetGetExpFldType ? CNTNT.pSection : 0; }
+        { return SECTIONNODE == eSetGetExpFieldType ? CNTNT.pSection : 0; }
     const SwTableBox* GetTableBox() const
-        { return TABLEBOX == eSetGetExpFldType ? CNTNT.pTBox : 0; }
-    const SwTxtINetFmt* GetINetFmt() const
-        { return TEXTINET == eSetGetExpFldType ? CNTNT.pTxtINet : 0; }
-    const SwFlyFrmFmt* GetFlyFmt() const
-        { return FLYFRAME == eSetGetExpFldType ? CNTNT.pFlyFmt : 0; }
+        { return TABLEBOX == eSetGetExpFieldType ? CNTNT.pTBox : 0; }
+    const SwTextINetFormat* GetINetFormat() const
+        { return TEXTINET == eSetGetExpFieldType ? CNTNT.pTextINet : 0; }
+    const SwFlyFrameFormat* GetFlyFormat() const
+        { return FLYFRAME == eSetGetExpFieldType ? CNTNT.pFlyFormat : 0; }
 
     sal_uLong GetNode() const { return nNode; }
-    sal_Int32 GetCntnt() const { return nCntnt; }
-    const void* GetPointer() const { return CNTNT.pTxtFld; }
+    sal_Int32 GetContent() const { return nContent; }
+    const void* GetPointer() const { return CNTNT.pTextField; }
 
     void GetPosOfContent( SwPosition& rPos ) const;
 
-    const SwNode* GetNodeFromCntnt() const;
-    sal_Int32 GetCntPosFromCntnt() const;
+    const SwNode* GetNodeFromContent() const;
+    sal_Int32 GetCntPosFromContent() const;
 
-    void SetBodyPos( const SwCntntFrm& rFrm );
+    void SetBodyPos( const SwContentFrm& rFrm );
 };
 
-class _SetGetExpFlds : public o3tl::sorted_vector<_SetGetExpFld*, o3tl::less_ptr_to<_SetGetExpFld> >
+class _SetGetExpFields : public o3tl::sorted_vector<_SetGetExpField*, o3tl::less_ptr_to<_SetGetExpField> >
 {
 public:
-    ~_SetGetExpFlds() { DeleteAndDestroyAll(); }
+    ~_SetGetExpFields() { DeleteAndDestroyAll(); }
 };
 
 // struct for saving strings from the SetExp's string fields
@@ -120,59 +120,59 @@ struct _HashStr : public SwHash
     _HashStr( const OUString& rName, const OUString& rText, _HashStr* = 0 );
 };
 
-struct SwCalcFldType : public SwHash
+struct SwCalcFieldType : public SwHash
 {
-    const SwFieldType* pFldType;
+    const SwFieldType* pFieldType;
 
-    SwCalcFldType( const OUString& rStr, const SwFieldType* pFldTyp )
-        : SwHash( rStr ), pFldType( pFldTyp )
+    SwCalcFieldType( const OUString& rStr, const SwFieldType* pFieldTyp )
+        : SwHash( rStr ), pFieldType( pFieldTyp )
     {}
 };
 
 // search for the string that was saved under rName in the hash table
-OUString LookString( SwHash** ppTbl, sal_uInt16 nSize, const OUString& rName,
+OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName,
                      sal_uInt16* pPos = 0 );
 
 const int GETFLD_ALL        = 3;        // combine flags via OR
 const int GETFLD_CALC       = 1;
 const int GETFLD_EXPAND     = 2;
 
-class SwDocUpdtFld
+class SwDocUpdateField
 {
-    _SetGetExpFlds* pFldSortLst;    // current field list for calculation
-    SwCalcFldType*  aFldTypeTable[ TBLSZ ];
+    _SetGetExpFields* pFieldSortLst;    // current field list for calculation
+    SwCalcFieldType*  aFieldTypeTable[ TBLSZ ];
 
     sal_uLong nNodes;               // if the node count is different
-    sal_uInt8 nFldLstGetMode;
+    sal_uInt8 nFieldLstGetMode;
     SwDoc* pDocument;
 
-    bool bInUpdateFlds : 1;     // currently there is an UpdateFlds
-    bool bFldsDirty : 1;        // some fields are invalid
+    bool bInUpdateFields : 1;     // currently there is an UpdateFields
+    bool bFieldsDirty : 1;        // some fields are invalid
 
-    void _MakeFldList( SwDoc& pDoc, int eGetMode );
-    void GetBodyNode( const SwTxtFld& , sal_uInt16 nFldWhich );
+    void _MakeFieldList( SwDoc& pDoc, int eGetMode );
+    void GetBodyNode( const SwTextField& , sal_uInt16 nFieldWhich );
     void GetBodyNode( const SwSectionNode&);
 
 public:
-    SwDocUpdtFld(SwDoc* pDocument);
-    ~SwDocUpdtFld();
+    SwDocUpdateField(SwDoc* pDocument);
+    ~SwDocUpdateField();
 
-    const _SetGetExpFlds* GetSortLst() const { return pFldSortLst; }
+    const _SetGetExpFields* GetSortLst() const { return pFieldSortLst; }
 
-    void MakeFldList( SwDoc& rDoc, bool bAll, int eGetMode );
+    void MakeFieldList( SwDoc& rDoc, bool bAll, int eGetMode );
 
-    void InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld );
+    void InsDelFieldInFieldLst( bool bIns, const SwTextField& rField );
 
-    void InsertFldType( const SwFieldType& rType );
-    void RemoveFldType( const SwFieldType& rType );
+    void InsertFieldType( const SwFieldType& rType );
+    void RemoveFieldType( const SwFieldType& rType );
 
-    bool IsInUpdateFlds() const         { return bInUpdateFlds; }
-    void SetInUpdateFlds( bool b )      { bInUpdateFlds = b; }
+    bool IsInUpdateFields() const         { return bInUpdateFields; }
+    void SetInUpdateFields( bool b )      { bInUpdateFields = b; }
 
-    bool IsFieldsDirty() const          { return bFldsDirty; }
+    bool IsFieldsDirty() const          { return bFieldsDirty; }
     void SetFieldsDirty( bool b )
     {
-        bFldsDirty = b;
+        bFieldsDirty = b;
 
         if (b)
         {
@@ -180,7 +180,7 @@ public:
         }
     }
 
-    SwHash* const * GetFldTypeTable() const { return reinterpret_cast<SwHash* const *>(aFldTypeTable); }
+    SwHash* const * GetFieldTypeTable() const { return reinterpret_cast<SwHash* const *>(aFieldTypeTable); }
 };
 
 #endif

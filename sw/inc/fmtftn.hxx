@@ -31,28 +31,28 @@ namespace com { namespace sun { namespace star {
 } } }
 
 class SwDoc;
-class SwTxtFtn;
+class SwTextFootnote;
 
 // ATT_FTN
 
-class SW_DLLPUBLIC SwFmtFtn
+class SW_DLLPUBLIC SwFormatFootnote
     : public SfxPoolItem
     , public SwModify
 {
-    friend class SwTxtFtn;
-    SwTxtFtn* m_pTxtAttr;   ///< My TextAttribute.
+    friend class SwTextFootnote;
+    SwTextFootnote* m_pTextAttr;   ///< My TextAttribute.
     OUString m_aNumber;     ///< User-defined 'Number'.
     sal_uInt16 m_nNumber;   ///< Automatische Nummerierung
     bool    m_bEndNote;     ///< Is it an End note?
 
     css::uno::WeakReference<css::text::XFootnote> m_wXFootnote;
 
-    SwFmtFtn& operator=(const SwFmtFtn& rFtn) SAL_DELETED_FUNCTION;
-    SwFmtFtn( const SwFmtFtn& ) SAL_DELETED_FUNCTION;
+    SwFormatFootnote& operator=(const SwFormatFootnote& rFootnote) SAL_DELETED_FUNCTION;
+    SwFormatFootnote( const SwFormatFootnote& ) SAL_DELETED_FUNCTION;
 
 public:
-    SwFmtFtn( bool bEndNote = false );
-    virtual ~SwFmtFtn();
+    SwFormatFootnote( bool bEndNote = false );
+    virtual ~SwFormatFootnote();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -72,16 +72,16 @@ public:
     void SetNumber( sal_uInt16 nNo )       { m_nNumber = nNo; }
     void SetEndNote( bool b );
 
-    void SetNumber( const SwFmtFtn& rFtn )
+    void SetNumber( const SwFormatFootnote& rFootnote )
     {
-        m_nNumber = rFtn.m_nNumber;
-        m_aNumber = rFtn.m_aNumber;
+        m_nNumber = rFootnote.m_nNumber;
+        m_aNumber = rFootnote.m_aNumber;
     }
 
-    const SwTxtFtn *GetTxtFtn() const   { return m_pTxtAttr; }
-          SwTxtFtn *GetTxtFtn()         { return m_pTxtAttr; }
+    const SwTextFootnote *GetTextFootnote() const   { return m_pTextAttr; }
+          SwTextFootnote *GetTextFootnote()         { return m_pTextAttr; }
 
-    void GetFtnText( OUString& rStr ) const;
+    void GetFootnoteText( OUString& rStr ) const;
 
     /// Returns string to be displayed of footnote / endnote.
     OUString GetViewNumStr( const SwDoc& rDoc, bool bInclStrs = false ) const;

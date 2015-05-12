@@ -301,11 +301,11 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                     Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
                     if(xTSupplier.is())
                     {
-                        Reference<XNameAccess> xTbls = xTSupplier->getTables();
-                        OSL_ENSURE(xTbls->hasByName(sTableName), "table not available anymore?");
+                        Reference<XNameAccess> xTables = xTSupplier->getTables();
+                        OSL_ENSURE(xTables->hasByName(sTableName), "table not available anymore?");
                         try
                         {
-                            Any aTable = xTbls->getByName(sTableName);
+                            Any aTable = xTables->getByName(sTableName);
                             Reference<XPropertySet> xPropSet;
                             aTable >>= xPropSet;
                             xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
@@ -365,15 +365,15 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                     Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
                     if(xTSupplier.is())
                     {
-                        Reference<XNameAccess> xTbls = xTSupplier->getTables();
-                        Sequence< OUString> aTblNames = xTbls->getElementNames();
+                        Reference<XNameAccess> xTables = xTSupplier->getTables();
+                        Sequence< OUString> aTableNames = xTables->getElementNames();
                         OUString sTableName;
-                        long nCount = aTblNames.getLength();
-                        const OUString* pTblNames = aTblNames.getConstArray();
+                        long nCount = aTableNames.getLength();
+                        const OUString* pTableNames = aTableNames.getConstArray();
                         Image aImg = aImageList.GetImage(IMG_DBTABLE);
                         for (long i = 0; i < nCount; i++)
                         {
-                            sTableName = pTblNames[i];
+                            sTableName = pTableNames[i];
                             SvTreeListEntry* pTableEntry = InsertEntry(sTableName, aImg, aImg, pParent, bShowColumns);
                             //to discriminate between queries and tables the user data of table entries is set
                             pTableEntry->SetUserData((void*)0);

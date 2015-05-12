@@ -27,16 +27,16 @@
 #include <fmtsrndenum.hxx>
 class IntlWrapper;
 
-// SwFmtSurround: How document content under the frame shall behave.
-class SW_DLLPUBLIC SwFmtSurround: public SfxEnumItem
+// SwFormatSurround: How document content under the frame shall behave.
+class SW_DLLPUBLIC SwFormatSurround: public SfxEnumItem
 {
     bool    bAnchorOnly :1;
     bool    bContour    :1;
     bool    bOutside    :1;
 public:
-    SwFmtSurround( SwSurround eNew = SURROUND_PARALLEL );
-    SwFmtSurround( const SwFmtSurround & );
-    inline SwFmtSurround &operator=( const SwFmtSurround &rCpy );
+    SwFormatSurround( SwSurround eNew = SURROUND_PARALLEL );
+    SwFormatSurround( const SwFormatSurround & );
+    inline SwFormatSurround &operator=( const SwFormatSurround &rCpy );
 
     // "Pure virtual Methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -62,7 +62,7 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-inline SwFmtSurround &SwFmtSurround::operator=( const SwFmtSurround &rCpy )
+inline SwFormatSurround &SwFormatSurround::operator=( const SwFormatSurround &rCpy )
 {
     bAnchorOnly = rCpy.IsAnchorOnly();
     bContour = rCpy.IsContour();
@@ -71,10 +71,10 @@ inline SwFmtSurround &SwFmtSurround::operator=( const SwFmtSurround &rCpy )
     return *this;
 }
 
-inline const SwFmtSurround &SwAttrSet::GetSurround(bool bInP) const
-    { return static_cast<const SwFmtSurround&>(Get( RES_SURROUND,bInP)); }
+inline const SwFormatSurround &SwAttrSet::GetSurround(bool bInP) const
+    { return static_cast<const SwFormatSurround&>(Get( RES_SURROUND,bInP)); }
 
-inline const SwFmtSurround &SwFmt::GetSurround(bool bInP) const
+inline const SwFormatSurround &SwFormat::GetSurround(bool bInP) const
     { return m_aSet.GetSurround(bInP); }
 
 #endif

@@ -253,7 +253,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     if( !xModelComp.is() )
         return ERR_SWG_WRITE_ERROR;
 
-    PutNumFmtFontsInAttrPool();
+    PutNumFormatFontsInAttrPool();
     PutEditEngFontsInAttrPool();
 
     // properties

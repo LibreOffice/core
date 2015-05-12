@@ -193,14 +193,14 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     SwPaM aPaM(aIdx);
 
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
-    rIDCO.AppendTxtNode(*aPaM.GetPoint());
+    rIDCO.AppendTextNode(*aPaM.GetPoint());
     rIDCO.InsertString(aPaM, OUString("A"));
-    rIDCO.AppendTxtNode(*aPaM.GetPoint());
+    rIDCO.AppendTextNode(*aPaM.GetPoint());
     rIDCO.InsertString(aPaM, OUString("A"));
-    rIDCO.AppendTxtNode(*aPaM.GetPoint());
+    rIDCO.AppendTextNode(*aPaM.GetPoint());
     aPaM.Move(fnMoveBackward, fnGoNode);
     aPaM.Move(fnMoveBackward, fnGoNode);
-    aPaM.Move(fnMoveBackward, fnGoCntnt);
+    aPaM.Move(fnMoveBackward, fnGoContent);
     aPaM.SetMark();
     aPaM.Move(fnMoveForward, fnGoDoc);
     IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
@@ -210,7 +210,7 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     // select so pMark start position is on a node that is fully deleted
     aPaM.Move(fnMoveBackward, fnGoNode);
     // must leave un-selected content in last node to get the bJoinPrev flag!
-    aPaM.Move(fnMoveBackward, fnGoCntnt);
+    aPaM.Move(fnMoveBackward, fnGoContent);
     aPaM.Exchange();
     aPaM.Move(fnMoveBackward, fnGoDoc);
     // delete
@@ -219,8 +219,8 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     for (IDocumentMarkAccess::const_iterator_t i = rIDMA.getAllMarksBegin(); i != rIDMA.getAllMarksEnd(); ++i)
     {
         // problem was that the nContent was pointing at deleted node
-        CPPUNIT_ASSERT((*i)->GetMarkStart().nNode.GetNode().GetCntntNode() ==
-            static_cast<const SwCntntNode*>((*i)->GetMarkStart().nContent.GetIdxReg()));
+        CPPUNIT_ASSERT((*i)->GetMarkStart().nNode.GetNode().GetContentNode() ==
+            static_cast<const SwContentNode*>((*i)->GetMarkStart().nContent.GetIdxReg()));
     }
 }
 
@@ -232,11 +232,11 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
     SwPaM aPaM(aIdx);
 
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
-    rIDCO.AppendTxtNode(*aPaM.GetPoint());
+    rIDCO.AppendTextNode(*aPaM.GetPoint());
     rIDCO.InsertString(aPaM, OUString("ABC"));
-    aPaM.Move(fnMoveBackward, fnGoCntnt);
+    aPaM.Move(fnMoveBackward, fnGoContent);
     aPaM.SetMark();
-    aPaM.Move(fnMoveBackward, fnGoCntnt);
+    aPaM.Move(fnMoveBackward, fnGoContent);
     IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
     sw::mark::IMark *pMark =
         rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::MarkType::BOOKMARK);
@@ -435,18 +435,18 @@ void SwMacrosTest::testFindReplace()
     // we need a full document with view and layout etc. because ::GetNode()
     Reference<lang::XComponent> const xComponent =
         loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    SwXTextDocument *const pTxtDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    SwDoc *const pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc *const pDoc = pTextDoc->GetDocShell()->GetDoc();
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     // use a UnoCrsr so it will be corrected when deleting nodes
     SwUnoCrsr *const pPaM(pDoc->CreateUnoCrsr(SwPosition(aIdx), false));
 
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     rIDCO.InsertString(*pPaM, OUString("foo"));
-    rIDCO.AppendTxtNode(*pPaM->GetPoint());
+    rIDCO.AppendTextNode(*pPaM->GetPoint());
     rIDCO.InsertString(*pPaM, OUString("bar"));
-    rIDCO.AppendTxtNode(*pPaM->GetPoint());
+    rIDCO.AppendTextNode(*pPaM->GetPoint());
     rIDCO.InsertString(*pPaM, OUString("baz"));
     pPaM->Move(fnMoveBackward, fnGoDoc);
 
@@ -467,7 +467,7 @@ void SwMacrosTest::testFindReplace()
             opts, false, DOCPOS_CURR, DOCPOS_END, bCancel, FND_IN_BODY, false);
     CPPUNIT_ASSERT(bFound);
     CPPUNIT_ASSERT(pPaM->HasMark());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), pPaM->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pPaM->GetText());
 
     // now do another Find, inside the selection from the first Find
 //    opts.searchFlags = 71680;
@@ -475,7 +475,7 @@ void SwMacrosTest::testFindReplace()
             opts, false, DOCPOS_CURR, DOCPOS_END, bCancel, FND_IN_SEL, false);
     CPPUNIT_ASSERT(bFound);
     CPPUNIT_ASSERT(pPaM->HasMark());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), pPaM->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pPaM->GetText());
 
     rIDCO.ReplaceRange(*pPaM, " ", true);
 
@@ -484,10 +484,10 @@ void SwMacrosTest::testFindReplace()
 
     // problem was that after the 2nd Find, the wrong newline was selected
     CPPUNIT_ASSERT_EQUAL(OUString("foo bar"),
-            pPaM->Start()->nNode.GetNode().GetTxtNode()->GetTxt());
+            pPaM->Start()->nNode.GetNode().GetTextNode()->GetText());
     pPaM->Move(fnMoveForward, fnGoNode);
     CPPUNIT_ASSERT_EQUAL(OUString("baz"),
-            pPaM->End()->nNode.GetNode().GetTxtNode()->GetTxt());
+            pPaM->End()->nNode.GetNode().GetTextNode()->GetText());
 }
 
 SwMacrosTest::SwMacrosTest()

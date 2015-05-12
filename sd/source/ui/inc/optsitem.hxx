@@ -456,23 +456,23 @@ public:
     void    SetDefaults();
     bool    operator==( const SdOptionsGrid& rOpt ) const;
 
-    sal_uInt32  GetFldDrawX() const { Init(); return SvxOptionsGrid::GetFldDrawX(); }
-    sal_uInt32  GetFldDivisionX() const { Init(); return SvxOptionsGrid::GetFldDivisionX(); }
-    sal_uInt32  GetFldDrawY() const { Init(); return SvxOptionsGrid::GetFldDrawY(); }
-    sal_uInt32  GetFldDivisionY() const { Init(); return SvxOptionsGrid::GetFldDivisionY(); }
-    sal_uInt32  GetFldSnapX() const { Init(); return SvxOptionsGrid::GetFldSnapX(); }
-    sal_uInt32  GetFldSnapY() const { Init(); return SvxOptionsGrid::GetFldSnapY(); }
+    sal_uInt32  GetFieldDrawX() const { Init(); return SvxOptionsGrid::GetFieldDrawX(); }
+    sal_uInt32  GetFieldDivisionX() const { Init(); return SvxOptionsGrid::GetFieldDivisionX(); }
+    sal_uInt32  GetFieldDrawY() const { Init(); return SvxOptionsGrid::GetFieldDrawY(); }
+    sal_uInt32  GetFieldDivisionY() const { Init(); return SvxOptionsGrid::GetFieldDivisionY(); }
+    sal_uInt32  GetFieldSnapX() const { Init(); return SvxOptionsGrid::GetFieldSnapX(); }
+    sal_uInt32  GetFieldSnapY() const { Init(); return SvxOptionsGrid::GetFieldSnapY(); }
     bool    IsUseGridSnap() const { Init(); return SvxOptionsGrid::GetUseGridSnap(); }
     bool    IsSynchronize() const { Init(); return SvxOptionsGrid::GetSynchronize(); }
     bool    IsGridVisible() const { Init(); return SvxOptionsGrid::GetGridVisible(); }
     bool    IsEqualGrid() const { Init(); return SvxOptionsGrid::GetEqualGrid(); }
 
-    void    SetFldDrawX( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFldDrawX() ) { OptionsChanged(); SvxOptionsGrid::SetFldDrawX( nSet ); } }
-    void    SetFldDivisionX( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFldDivisionX() ) { OptionsChanged(); SvxOptionsGrid::SetFldDivisionX( nSet ); } }
-    void    SetFldDrawY( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFldDrawY() ) { OptionsChanged(); SvxOptionsGrid::SetFldDrawY( nSet ); } }
-    void    SetFldDivisionY( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFldDivisionY() ) { OptionsChanged(); SvxOptionsGrid::SetFldDivisionY( nSet ); } }
-    void    SetFldSnapX( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFldSnapX() ) { OptionsChanged(); SvxOptionsGrid::SetFldSnapX( nSet ); } }
-    void    SetFldSnapY( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFldSnapY() ) { OptionsChanged(); SvxOptionsGrid::SetFldSnapY( nSet ); } }
+    void    SetFieldDrawX( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldDrawX() ) { OptionsChanged(); SvxOptionsGrid::SetFieldDrawX( nSet ); } }
+    void    SetFieldDivisionX( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldDivisionX() ) { OptionsChanged(); SvxOptionsGrid::SetFieldDivisionX( nSet ); } }
+    void    SetFieldDrawY( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldDrawY() ) { OptionsChanged(); SvxOptionsGrid::SetFieldDrawY( nSet ); } }
+    void    SetFieldDivisionY( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldDivisionY() ) { OptionsChanged(); SvxOptionsGrid::SetFieldDivisionY( nSet ); } }
+    void    SetFieldSnapX( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldSnapX() ) { OptionsChanged(); SvxOptionsGrid::SetFieldSnapX( nSet ); } }
+    void    SetFieldSnapY( sal_uInt32 nSet ) { if( nSet != SvxOptionsGrid::GetFieldSnapY() ) { OptionsChanged(); SvxOptionsGrid::SetFieldSnapY( nSet ); } }
     void    SetUseGridSnap( bool bSet ) { if( bSet != SvxOptionsGrid::GetUseGridSnap() ) { OptionsChanged(); SvxOptionsGrid::SetUseGridSnap( bSet ); } }
     void    SetSynchronize( bool bSet ) { if( bSet != SvxOptionsGrid::GetSynchronize() ) { OptionsChanged(); SvxOptionsGrid::SetSynchronize( bSet ); } }
     void    SetGridVisible( bool bSet ) { if( bSet != SvxOptionsGrid::GetGridVisible() ) { OptionsChanged(); SvxOptionsGrid::SetGridVisible( bSet ); } }

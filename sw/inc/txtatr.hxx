@@ -22,82 +22,82 @@
 #include <txatbase.hxx>
 #include <calbck.hxx>
 
-class SwTxtNode;
-class SwCharFmt;
+class SwTextNode;
+class SwCharFormat;
 
 namespace sw {
     class MetaFieldManager;
 }
 
-class SwTxtCharFmt : public SwTxtAttrEnd
+class SwTextCharFormat : public SwTextAttrEnd
 {
-    SwTxtNode * m_pTxtNode;
+    SwTextNode * m_pTextNode;
     sal_uInt16 m_nSortNumber;
 
 public:
-    SwTxtCharFmt( SwFmtCharFmt& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-    virtual ~SwTxtCharFmt( );
+    SwTextCharFormat( SwFormatCharFormat& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    virtual ~SwTextCharFormat( );
 
-    // Passed from SwFmtCharFmt (no derivation from SwClient!).
+    // Passed from SwFormatCharFormat (no derivation from SwClient!).
     void ModifyNotification( const SfxPoolItem*, const SfxPoolItem* );
     bool GetInfo( SfxPoolItem& rInfo ) const;
 
-    // get and set TxtNode pointer
-    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
+    // get and set TextNode pointer
+    void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }
 
     void SetSortNumber( sal_uInt16 nSortNumber ) { m_nSortNumber = nSortNumber; }
     sal_uInt16 GetSortNumber() const { return m_nSortNumber; }
 };
 
 
-class SwTxtMeta : public SwTxtAttrNesting
+class SwTextMeta : public SwTextAttrNesting
 {
 private:
-    SwTxtMeta( SwFmtMeta & i_rAttr,
+    SwTextMeta( SwFormatMeta & i_rAttr,
         const sal_Int32 i_nStart, const sal_Int32 i_nEnd );
 
 public:
-    static SwTxtMeta * CreateTxtMeta(
+    static SwTextMeta * CreateTextMeta(
         ::sw::MetaFieldManager & i_rTargetDocManager,
-        SwTxtNode *const i_pTargetTxtNode,
-        SwFmtMeta & i_rAttr,
+        SwTextNode *const i_pTargetTextNode,
+        SwFormatMeta & i_rAttr,
         sal_Int32 const i_nStart, sal_Int32 const i_nEnd,
         bool const i_bIsCopy);
 
-    virtual ~SwTxtMeta();
+    virtual ~SwTextMeta();
 
-    void ChgTxtNode(SwTxtNode * const pNode);
+    void ChgTextNode(SwTextNode * const pNode);
 };
 
 
-class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrNesting, public SwClient
+class SW_DLLPUBLIC SwTextRuby : public SwTextAttrNesting, public SwClient
 {
-    SwTxtNode* m_pTxtNode;
+    SwTextNode* m_pTextNode;
 protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 public:
-    SwTxtRuby( SwFmtRuby& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-    virtual ~SwTxtRuby();
+    SwTextRuby( SwFormatRuby& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    virtual ~SwTextRuby();
     TYPEINFO_OVERRIDE();
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
 
-    SAL_DLLPRIVATE void InitRuby(SwTxtNode & rNode);
+    SAL_DLLPRIVATE void InitRuby(SwTextNode & rNode);
 
-    /// Get and set TxtNode pointer.
-           const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }
-    inline const SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
+    /// Get and set TextNode pointer.
+           const SwTextNode* GetpTextNode() const { return m_pTextNode; }
+    inline const SwTextNode& GetTextNode() const;
+    void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }
 
-          SwCharFmt* GetCharFmt();
-    const SwCharFmt* GetCharFmt() const
-            { return (const_cast<SwTxtRuby*>(this))->GetCharFmt(); }
+          SwCharFormat* GetCharFormat();
+    const SwCharFormat* GetCharFormat() const
+            { return (const_cast<SwTextRuby*>(this))->GetCharFormat(); }
 };
 
-inline const SwTxtNode& SwTxtRuby::GetTxtNode() const
+inline const SwTextNode& SwTextRuby::GetTextNode() const
 {
-    assert( m_pTxtNode );
-    return *m_pTxtNode;
+    assert( m_pTextNode );
+    return *m_pTextNode;
 }
 
 #endif

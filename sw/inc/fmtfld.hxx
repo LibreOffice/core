@@ -31,27 +31,27 @@
 #include <calbck.hxx>
 
 class SwField;
-class SwTxtFld;
+class SwTextField;
 class SwView;
 class SwFieldType;
 
 // ATT_FLD
-class SW_DLLPUBLIC SwFmtFld
+class SW_DLLPUBLIC SwFormatField
     : public SfxPoolItem
     , public SwModify
     , public SfxBroadcaster
 {
     friend void _InitCore();
-    SwFmtFld( sal_uInt16 nWhich ); // for default-Attibute
+    SwFormatField( sal_uInt16 nWhich ); // for default-Attibute
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextField> m_wXTextField;
 
     SwField* mpField;
-    SwTxtFld* mpTxtFld; // the TextAttribute
+    SwTextField* mpTextField; // the TextAttribute
 
     // @@@ copy construction allowed, but copy assignment is not? @@@
-    SwFmtFld& operator=(const SwFmtFld& rFld) SAL_DELETED_FUNCTION;
+    SwFormatField& operator=(const SwFormatField& rField) SAL_DELETED_FUNCTION;
 
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
@@ -61,12 +61,12 @@ public:
     TYPEINFO_OVERRIDE();
 
     /// Single argument constructors shall be explicit.
-    explicit SwFmtFld( const SwField &rFld );
+    explicit SwFormatField( const SwField &rField );
 
     /// @@@ copy construction allowed, but copy assignment is not? @@@
-    SwFmtFld( const SwFmtFld& rAttr );
+    SwFormatField( const SwFormatField& rAttr );
 
-    virtual ~SwFmtFld();
+    virtual ~SwFormatField();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -94,19 +94,19 @@ public:
      */
     void SetField( SwField * pField );
 
-    const SwTxtFld* GetTxtFld() const
+    const SwTextField* GetTextField() const
     {
-        return mpTxtFld;
+        return mpTextField;
     }
-    SwTxtFld* GetTxtFld()
+    SwTextField* GetTextField()
     {
-        return mpTxtFld;
+        return mpTextField;
     }
-    void SetTxtFld( SwTxtFld& rTxtFld );
-    void ClearTxtFld();
+    void SetTextField( SwTextField& rTextField );
+    void ClearTextField();
 
     void RegisterToFieldType( SwFieldType& );
-    bool IsFldInDoc() const;
+    bool IsFieldInDoc() const;
     bool IsProtect() const;
 
     SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
@@ -117,7 +117,7 @@ public:
             { m_wXTextField = xTextField; }
 };
 
-enum class SwFmtFldHintWhich
+enum class SwFormatFieldHintWhich
 {
     INSERTED   = 1,
     REMOVED    = 2,
@@ -126,21 +126,21 @@ enum class SwFmtFldHintWhich
     LANGUAGE   = 5
 };
 
-class SW_DLLPUBLIC SwFmtFldHint : public SfxHint
+class SW_DLLPUBLIC SwFormatFieldHint : public SfxHint
 {
-    const SwFmtFld*   pFld;
-    SwFmtFldHintWhich nWhich;
+    const SwFormatField*   pField;
+    SwFormatFieldHintWhich nWhich;
     const SwView*     pView;
 
 public:
-    SwFmtFldHint( const SwFmtFld* p, SwFmtFldHintWhich n, const SwView* pV = 0)
-        : pFld(p)
+    SwFormatFieldHint( const SwFormatField* p, SwFormatFieldHintWhich n, const SwView* pV = 0)
+        : pField(p)
         , nWhich(n)
         , pView(pV)
     {}
 
-    const SwFmtFld* GetField() const { return pFld; }
-    SwFmtFldHintWhich Which() const { return nWhich; }
+    const SwFormatField* GetField() const { return pField; }
+    SwFormatFieldHintWhich Which() const { return nWhich; }
     const SwView* GetView() const { return pView; }
 };
 

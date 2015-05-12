@@ -47,7 +47,7 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
-class SwTableAutoFmt;
+class SwTableAutoFormat;
 class SwView;
 class SfxItemSet;
 class SwTableRep;
@@ -56,22 +56,22 @@ typedef boost::ptr_vector<_DB_Column> _DB_Columns;
 
 struct SwInsDBColumn
 {
-    OUString sColumn, sUsrNumFmt;
-    sal_Int32 nDBNumFmt;
-    sal_uInt32 nUsrNumFmt;
-    LanguageType eUsrNumFmtLng;
+    OUString sColumn, sUsrNumFormat;
+    sal_Int32 nDBNumFormat;
+    sal_uInt32 nUsrNumFormat;
+    LanguageType eUsrNumFormatLng;
     sal_uInt16 nCol;
-    bool bHasFmt : 1;
-    bool bIsDBFmt : 1;
+    bool bHasFormat : 1;
+    bool bIsDBFormat : 1;
 
     SwInsDBColumn( const OUString& rStr, sal_uInt16 nColumn )
         : sColumn( rStr ),
-        nDBNumFmt( 0 ),
-        nUsrNumFmt( 0 ),
-        eUsrNumFmtLng( LANGUAGE_SYSTEM ),
+        nDBNumFormat( 0 ),
+        nUsrNumFormat( 0 ),
+        eUsrNumFormatLng( LANGUAGE_SYSTEM ),
         nCol( nColumn ),
-        bHasFmt(false),
-        bIsDBFmt(true)
+        bHasFormat(false),
+        bIsDBFormat(true)
     {}
 
     bool operator==( const SwInsDBColumn& rCmp ) const
@@ -93,13 +93,13 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 
     VclPtr<VclFrame>       m_pHeadFrame;
 
-    VclPtr<ListBox>        m_pLbTblDbColumn;
-    VclPtr<ListBox>        m_pLbTxtDbColumn;
+    VclPtr<ListBox>        m_pLbTableDbColumn;
+    VclPtr<ListBox>        m_pLbTextDbColumn;
 
     VclPtr<VclFrame>       m_pFormatFrame;
-    VclPtr<RadioButton>    m_pRbDbFmtFromDb;
-    VclPtr<RadioButton>    m_pRbDbFmtFromUsr;
-    VclPtr<NumFormatListBox> m_pLbDbFmtFromUsr;
+    VclPtr<RadioButton>    m_pRbDbFormatFromDb;
+    VclPtr<RadioButton>    m_pRbDbFormatFromUsr;
+    VclPtr<NumFormatListBox> m_pLbDbFormatFromUsr;
 
     // Page Text/Field
     VclPtr<PushButton>     m_pIbDbcolToEdit;
@@ -117,32 +117,32 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     VclPtr<CheckBox>       m_pCbTableHeadon;
     VclPtr<RadioButton>    m_pRbHeadlColnms;
     VclPtr<RadioButton>    m_pRbHeadlEmpty;
-    VclPtr<PushButton>     m_pPbTblFormat;
-    VclPtr<PushButton>     m_pPbTblAutofmt;
+    VclPtr<PushButton>     m_pPbTableFormat;
+    VclPtr<PushButton>     m_pPbTableAutofmt;
 
     SwInsDBColumns  aDBColumns;
     const SwDBData  aDBData;
 
-    Link<>          aOldNumFmtLnk;
+    Link<>          aOldNumFormatLnk;
     OUString        sNoTmpl;
 
     SwView*         pView;
-    SwTableAutoFmt* pTAutoFmt;
+    SwTableAutoFormat* pTAutoFormat;
 
-    SfxItemSet*     pTblSet;
+    SfxItemSet*     pTableSet;
     SwTableRep*     pRep;
-    sal_Int32       nGBFmtLen;
+    sal_Int32       nGBFormatLen;
 
     DECL_LINK( PageHdl, Button* );
-    DECL_LINK( AutoFmtHdl, PushButton* );
-    DECL_LINK( TblFmtHdl, PushButton* );
+    DECL_LINK( AutoFormatHdl, PushButton* );
+    DECL_LINK( TableFormatHdl, PushButton* );
     DECL_LINK( DBFormatHdl, Button* );
-    DECL_LINK( TblToFromHdl, Button* );
+    DECL_LINK( TableToFromHdl, Button* );
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( DblClickHdl, ListBox* );
     DECL_LINK( HeaderHdl, Button* );
 
-    bool SplitTextToColArr( const OUString& rTxt, _DB_Columns& rColArr, bool bInsField );
+    bool SplitTextToColArr( const OUString& rText, _DB_Columns& rColArr, bool bInsField );
         using SfxModalDialog::Notify;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     virtual void            ImplCommit() SAL_OVERRIDE;

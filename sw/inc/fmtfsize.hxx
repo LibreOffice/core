@@ -38,7 +38,7 @@ enum SwFrmSize
                          (can be exceeded but not be less). */
 };
 
-class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatFrmSize: public SfxPoolItem
 {
     Size      m_aSize;
     SwFrmSize m_eFrmHeightType;
@@ -60,9 +60,9 @@ class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
     // minus borders in BrowseView if the environment is the page.
 
 public:
-    SwFmtFrmSize( SwFrmSize eSize = ATT_VAR_SIZE,
+    SwFormatFrmSize( SwFrmSize eSize = ATT_VAR_SIZE,
                   SwTwips nWidth = 0, SwTwips nHeight = 0 );
-    SwFmtFrmSize& operator=( const SwFmtFrmSize& rCpy );
+    SwFormatFrmSize& operator=( const SwFormatFrmSize& rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -101,10 +101,10 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(bool bInP) const
-    { return static_cast<const SwFmtFrmSize&>(Get( RES_FRM_SIZE,bInP)); }
+inline const SwFormatFrmSize &SwAttrSet::GetFrmSize(bool bInP) const
+    { return static_cast<const SwFormatFrmSize&>(Get( RES_FRM_SIZE,bInP)); }
 
-inline const SwFmtFrmSize &SwFmt::GetFrmSize(bool bInP) const
+inline const SwFormatFrmSize &SwFormat::GetFrmSize(bool bInP) const
     { return m_aSet.GetFrmSize(bInP); }
 
 #endif

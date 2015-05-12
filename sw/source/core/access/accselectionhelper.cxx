@@ -301,10 +301,10 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
             }
             else
             {
-                const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-                if (pFrmFmt)
+                const SwFrameFormat *pFrameFormat = pFlyFrm->GetFormat();
+                if (pFrameFormat)
                 {
-                    const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
+                    const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
                     if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
                     {
                         const SwFrm  *pParaFrm =  SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrm), m_rContext.IsInPagePreview() );

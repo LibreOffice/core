@@ -110,8 +110,8 @@ public:
         return *m_pForbidden;
     }
 
-    sal_uInt16 GetRealScriptOfText( const OUString& rTxt, sal_Int32 nPos ) const;
-    SvtScriptType GetAllScriptsOfText( const OUString& rTxt ) const;
+    sal_uInt16 GetRealScriptOfText( const OUString& rText, sal_Int32 nPos ) const;
+    SvtScriptType GetAllScriptsOfText( const OUString& rText ) const;
 
     sal_Int32 getGraphemeCount(const OUString& rStr,
         sal_Int32 nStart, sal_Int32 nEnd) const;

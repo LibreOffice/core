@@ -24,12 +24,12 @@
 #include <unotools/caserotate.hxx>
 
 class AbstractSvxPostItDialog;
-class SwFldMgr;
+class SwFieldMgr;
 class SvxHyperlinkItem;
 
 class SwTextShell: public SwBaseShell
 {
-    SwFldMgr*   pPostItFldMgr;
+    SwFieldMgr*   pPostItFieldMgr;
     RotateTransliteration m_aRotateCase;
 
     void InsertSymbol( SfxRequest& );

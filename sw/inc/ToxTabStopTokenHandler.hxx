@@ -19,7 +19,7 @@
 struct SwFormToken;
 class SwPageDesc;
 class SwRootFrm;
-class SwTxtNode;
+class SwTextNode;
 
 namespace sw {
 
@@ -45,7 +45,7 @@ public:
      *          and to provide the returned SvxTabStop to the attributes of the node.
      */
     virtual HandledTabStopToken
-    HandleTabStopToken(const SwFormToken& aToken, const SwTxtNode& targetNode,
+    HandleTabStopToken(const SwFormToken& aToken, const SwTextNode& targetNode,
             const SwRootFrm *currentLayout) const = 0;
 };
 
@@ -83,7 +83,7 @@ public:
      * method behaves differently when deriving the tab stop position.
      */
     ToxTabStopTokenHandler::HandledTabStopToken
-    HandleTabStopToken(const SwFormToken& aToken, const SwTxtNode& targetNode,
+    HandleTabStopToken(const SwFormToken& aToken, const SwTextNode& targetNode,
             const SwRootFrm *currentLayout) const SAL_OVERRIDE;
 
 private:
@@ -92,14 +92,14 @@ private:
      * Is used to determine how to find tab stop position.
      */
     static bool
-    CanUseLayoutRectangle(const SwTxtNode& targetNode, const SwRootFrm *currentLayout);
+    CanUseLayoutRectangle(const SwTextNode& targetNode, const SwRootFrm *currentLayout);
 
     /** Calculate the page margin from the page description.
      *
      * This is the fallback method to determine the position of a tab stop.
      */
     long
-    CalculatePageMarginFromPageDescription(const SwTxtNode& targetNode) const;
+    CalculatePageMarginFromPageDescription(const SwTextNode& targetNode) const;
 
     sal_uInt32 mIndexOfSectionNode;
     const SwPageDesc& mDefaultPageDescription;

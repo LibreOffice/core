@@ -21,9 +21,9 @@
 
 #include <shellio.hxx>
 
-class SwNumRuleTbl;
+class SwNumRuleTable;
 class SwDoc;
-class SwTxtNode;
+class SwTextNode;
 class SwNumRule;
 class SwNodeIndex;
 
@@ -64,7 +64,7 @@ void GetWW8Writer( const OUString&, const OUString&, WriterRef& );
 // Absatz-Einzug abgezogen werden muss.
 class SW_DLLPUBLIC SwRelNumRuleSpaces
 {
-    SwNumRuleTbl* pNumRuleTbl;  // Liste aller benannten NumRules
+    SwNumRuleTable* pNumRuleTable;  // Liste aller benannten NumRules
 
 public:
     SwRelNumRuleSpaces( SwDoc& rDoc, bool bNewDoc );

@@ -155,7 +155,7 @@ void _FinitUI()
 
     DELETEZ(pGlossaries);
 
-    delete SwFieldType::s_pFldNames;
+    delete SwFieldType::s_pFieldNames;
 
     ClearStringCache();
     delete pGlossaryList;
@@ -189,10 +189,10 @@ ShellResource::ShellResource()
     aCalc_Default( SW_RES( STR_CALC_DEFAULT ) ),
     aCalc_Error( SW_RES( STR_CALC_ERROR ) ),
 
-    aGetRefFld_Up( SW_RES( STR_GETREFFLD_UP ) ),
-    aGetRefFld_Down( SW_RES( STR_GETREFFLD_DOWN ) ),
+    aGetRefField_Up( SW_RES( STR_GETREFFLD_UP ) ),
+    aGetRefField_Down( SW_RES( STR_GETREFFLD_DOWN ) ),
     // #i81002#
-    aGetRefFld_RefItemNotFound( SW_RES( STR_GETREFFLD_REFITEMNOTFOUND ) ),
+    aGetRefField_RefItemNotFound( SW_RES( STR_GETREFFLD_REFITEMNOTFOUND ) ),
     aStrAllPageHeadFoot( SW_RES( STR_ALLPAGE_HEADFOOT ) ),
     aStrNone( SW_RES( STR_TEMPLATE_NONE )),
     aFixedStr( SW_RES( STR_FIELD_FIXED )),
@@ -208,7 +208,7 @@ ShellResource::ShellResource()
     aTOXCitationName(    SW_RES(STR_TOX_CITATION)),
     aLinkCtrlClick(SW_RESSTR(STR_LINK_CTRL_CLICK)),
     aLinkClick(SW_RESSTR(STR_LINK_CLICK)),
-    pAutoFmtNameLst(0),
+    pAutoFormatNameLst(0),
     sPageDescFirstName(     SW_RES(STR_PAGEDESC_FIRSTNAME)),
     sPageDescFollowName(    SW_RES(STR_PAGEDESC_FOLLOWNAME)),
     sPageDescName(          SW_RES(STR_PAGEDESC_NAME))
@@ -230,7 +230,7 @@ ShellResource::ShellResource()
 
 ShellResource::~ShellResource()
 {
-    delete pAutoFmtNameLst;
+    delete pAutoFormatNameLst;
 }
 
 OUString ShellResource::GetPageDescName(sal_uInt16 nNo, PageNameMode eMode)
@@ -273,20 +273,20 @@ SwGlossaryList* GetGlossaryList()
     return pGlossaryList;
 }
 
-struct ImpAutoFmtNameListLoader : public Resource
+struct ImpAutoFormatNameListLoader : public Resource
 {
-    ImpAutoFmtNameListLoader( std::vector<OUString>& rLst );
+    ImpAutoFormatNameListLoader( std::vector<OUString>& rLst );
 };
 
-void ShellResource::_GetAutoFmtNameLst() const
+void ShellResource::_GetAutoFormatNameLst() const
 {
-    assert(!pAutoFmtNameLst);
-    pAutoFmtNameLst = new std::vector<OUString>;
-    pAutoFmtNameLst->reserve(STR_AUTOFMTREDL_END);
-    ImpAutoFmtNameListLoader aTmp(*pAutoFmtNameLst);
+    assert(!pAutoFormatNameLst);
+    pAutoFormatNameLst = new std::vector<OUString>;
+    pAutoFormatNameLst->reserve(STR_AUTOFMTREDL_END);
+    ImpAutoFormatNameListLoader aTmp(*pAutoFormatNameLst);
 }
 
-ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( std::vector<OUString>& rLst )
+ImpAutoFormatNameListLoader::ImpAutoFormatNameListLoader( std::vector<OUString>& rLst )
     : Resource( ResId(RID_SHELLRES_AUTOFMTSTRS, *pSwResMgr) )
 {
     for( sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n )

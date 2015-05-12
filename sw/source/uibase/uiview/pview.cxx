@@ -1131,7 +1131,7 @@ void SwPagePreview::Init(const SwViewOption * pPrefs)
     aOpt.SetPageBreak( false );
     aOpt.SetColumnBreak( false );
     aOpt.SetSoftHyph( false );
-    aOpt.SetFldName( false );
+    aOpt.SetFieldName( false );
     aOpt.SetPostIts( false );
     aOpt.SetShowHiddenChar( false );
     aOpt.SetShowHiddenField( false );

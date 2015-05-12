@@ -42,7 +42,7 @@ sal_Int32 SwGluePortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
         return nOfst / (Width() / GetLen());
 }
 
-SwPosSize SwGluePortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
+SwPosSize SwGluePortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
     if( 1 >= GetLen() || rInf.GetLen() > GetLen() || !Width() || !GetLen() )
         return SwPosSize(*this);
@@ -50,20 +50,20 @@ SwPosSize SwGluePortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
         return SwPosSize( (Width() / GetLen()) * rInf.GetLen(), Height() );
 }
 
-bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
+bool SwGluePortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
     if( GetLen() && rInf.OnWin() &&
         rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
     {
         OUStringBuffer aBuf;
         comphelper::string::padToLength(aBuf, GetLen(), CH_BULLET);
-        rTxt = aBuf.makeStringAndClear();
+        rText = aBuf.makeStringAndClear();
         return true;
     }
     return false;
 }
 
-void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( !GetLen() )
         return;
@@ -72,9 +72,9 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
     {
         OUStringBuffer aBuf;
         comphelper::string::padToLength(aBuf, GetFixWidth() / GetLen(), ' ');
-        OUString aTxt(aBuf.makeStringAndClear());
-        SwTxtPaintInfo aInf( rInf, &aTxt );
-        aInf.DrawText( *this, aTxt.getLength(), true );
+        OUString aText(aBuf.makeStringAndClear());
+        SwTextPaintInfo aInf( rInf, &aText );
+        aInf.DrawText( *this, aText.getLength(), true );
     }
 
     if( rInf.OnWin() && rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
@@ -87,12 +87,12 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( 1 == GetLen() )
         {
             OUString aBullet( CH_BULLET );
-            SwPosSize aBulletSize( rInf.GetTxtSize( aBullet ) );
+            SwPosSize aBulletSize( rInf.GetTextSize( aBullet ) );
             Point aPos( rInf.GetPos() );
             aPos.X() += (Width()/2) - (aBulletSize.Width()/2);
-            SwTxtPaintInfo aInf( rInf, &aBullet );
+            SwTextPaintInfo aInf( rInf, &aBullet );
             aInf.SetPos( aPos );
-            SwTxtPortion aBulletPor;
+            SwTextPortion aBulletPor;
             aBulletPor.Width( aBulletSize.Width() );
             aBulletPor.Height( aBulletSize.Height() );
             aBulletPor.SetAscent( GetAscent() );
@@ -100,7 +100,7 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
         }
         else
         {
-            SwTxtSlot aSlot( &rInf, this, true, false );
+            SwTextSlot aSlot( &rInf, this, true, false );
             rInf.DrawText( *this, rInf.GetLen(), true );
         }
     }
@@ -200,12 +200,12 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 SwFlyPortion *pFly = static_cast<SwFlyPortion *>(pRight);
                 if ( pFly->GetBlankWidth() < nRightGlue )
                 {
-                    // Creating new TxtPortion, that takes over the
+                    // Creating new TextPortion, that takes over the
                     // Blank previously swallowed by the Fly.
                     nRightGlue = nRightGlue - pFly->GetBlankWidth();
                     pFly->SubPrtWidth( pFly->GetBlankWidth() );
                     pFly->SetLen( 0 );
-                    SwTxtPortion *pNewPor = new SwTxtPortion;
+                    SwTextPortion *pNewPor = new SwTextPortion;
                     pNewPor->SetLen( 1 );
                     pNewPor->Height( pFly->Height() );
                     pNewPor->Width( pFly->GetBlankWidth() );
@@ -235,7 +235,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                     pPrevPrev->SetPortion( pRight );
                     pPrev->SetPortion( pRight->GetPortion() );
                     pRight->SetPortion( pPrev );
-                    if ( pPrev->GetPortion() && pPrev->InTxtGrp()
+                    if ( pPrev->GetPortion() && pPrev->InTextGrp()
                          && pPrev->GetPortion()->IsHolePortion() )
                     {
                         SwHolePortion *pHolePor =

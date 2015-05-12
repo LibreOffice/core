@@ -225,7 +225,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     // Execute pard / plain
     void RTFPardPlain( bool bPard, SfxItemSet** ppSet );
 
-    void BuildWhichTbl();
+    void BuildWhichTable();
 
     enum RTF_CharTypeDef
     {

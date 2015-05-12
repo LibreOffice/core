@@ -626,9 +626,9 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
 
             long nIndentValue = 0.0;
             if (nIndex == INDENT_LEFT_MARGIN)
-                nIndentValue = mxParaItem->GetTxtLeft();
+                nIndentValue = mxParaItem->GetTextLeft();
             else if (nIndex == INDENT_FIRST_LINE)
-                nIndentValue = mxParaItem->GetTxtFirstLineOfst();
+                nIndentValue = mxParaItem->GetTextFirstLineOfst();
             else if (nIndex == INDENT_RIGHT_MARGIN)
                 nIndentValue = mxParaItem->GetRight();
 
@@ -908,14 +908,14 @@ void SvxRuler::UpdatePara()
 
         if(bRTLText)
         {
-            leftMargin    = nRightFrameMargin - mxParaItem->GetTxtLeft() + lAppNullOffset;
-            leftFirstLine = leftMargin - mxParaItem->GetTxtFirstLineOfst();
+            leftMargin    = nRightFrameMargin - mxParaItem->GetTextLeft() + lAppNullOffset;
+            leftFirstLine = leftMargin - mxParaItem->GetTextFirstLineOfst();
             rightMargin   = nLeftFrameMargin + mxParaItem->GetRight() + lAppNullOffset;
         }
         else
         {
-            leftMargin    = nLeftFrameMargin + mxParaItem->GetTxtLeft() + lAppNullOffset;
-            leftFirstLine = leftMargin + mxParaItem->GetTxtFirstLineOfst();
+            leftMargin    = nLeftFrameMargin + mxParaItem->GetTextLeft() + lAppNullOffset;
+            leftFirstLine = leftMargin + mxParaItem->GetTextFirstLineOfst();
             rightMargin   = nRightFrameMargin - mxParaItem->GetRight() + lAppNullOffset;
         }
 
@@ -1089,7 +1089,7 @@ void SvxRuler::UpdateTabs()
         long nRightFrameMargin = GetRightFrameMargin();
 
         //#i24363# tab stops relative to indent
-        const long nParaItemTxtLeft = mxParaItem->GetTxtLeft();
+        const long nParaItemTxtLeft = mxParaItem->GetTextLeft();
 
         const long lParaIndent = nLeftFrameMargin + nParaItemTxtLeft;
 
@@ -2218,8 +2218,8 @@ void SvxRuler::ApplyIndents()
         nNewRight           = RoundToCurrentMapMode(nNewRight);
     }
 
-    mxParaItem->SetTxtFirstLineOfst(sal::static_int_cast<short>(nNewFirstLineOffset));
-    mxParaItem->SetTxtLeft(nNewTxtLeft);
+    mxParaItem->SetTextFirstLineOfst(sal::static_int_cast<short>(nNewFirstLineOffset));
+    mxParaItem->SetTextLeft(nNewTxtLeft);
     mxParaItem->SetRight(nNewRight);
 
     sal_uInt16 nParagraphId  = bHorz ? SID_ATTR_PARA_LRSPACE : SID_ATTR_PARA_LRSPACE_VERTICAL;
@@ -2608,7 +2608,7 @@ void SvxRuler::Click()
     if(mxTabStopItem.get() &&
        (nFlags & SvxRulerSupportFlags::TABS) == SvxRulerSupportFlags::TABS)
     {
-        bool bContentProtected = mxRulerImpl->aProtectItem.IsCntntProtected();
+        bool bContentProtected = mxRulerImpl->aProtectItem.IsContentProtected();
         if( bContentProtected ) return;
         const long lPos = GetClickPos();
         if((bRTL && lPos < std::min(GetFirstLineIndent(), GetLeftIndent()) && lPos > GetRightIndent()) ||
@@ -2686,7 +2686,7 @@ void SvxRuler::CalcMinMax()
                 //top border is not moveable when table rows are displayed
                 // protection of content means the margin is not moveable
                 // - it's just a page break inside of a cell
-                if(bHorz && !mxRulerImpl->aProtectItem.IsCntntProtected())
+                if(bHorz && !mxRulerImpl->aProtectItem.IsContentProtected())
                 {
                     nMaxLeft = mpBorders[0].nMinPos + lNullPix;
                     if(nDragType & SvxRulerDragFlags::OBJECT_SIZE_PROPORTIONAL)
@@ -2777,7 +2777,7 @@ void SvxRuler::CalcMinMax()
             {
                 // get the bottom move range from the last border position - only available for rows!
                 // protection of content means the margin is not moveable - it's just a page break inside of a cell
-                if(bHorz || mxRulerImpl->aProtectItem.IsCntntProtected())
+                if(bHorz || mxRulerImpl->aProtectItem.IsContentProtected())
                 {
                     nMaxLeft = nMaxRight = mpBorders[mxColumnItem->Count() - 1].nMaxPos + lNullPix;
                 }
@@ -3196,7 +3196,7 @@ bool SvxRuler::StartDrag()
        <SvxRuler::CalcMinMax()>
        <SvxRuler::EndDrag()>
     */
-    bool bContentProtected = mxRulerImpl->aProtectItem.IsCntntProtected();
+    bool bContentProtected = mxRulerImpl->aProtectItem.IsContentProtected();
 
     if(!bValid)
         return false;

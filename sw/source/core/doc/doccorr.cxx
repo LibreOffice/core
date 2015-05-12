@@ -117,13 +117,13 @@ void PaMCorrAbs( const SwPaM& rRange,
             }
 
             if( pCrsrShell->IsTableMode() )
-                lcl_PaMCorrAbs( const_cast<SwPaM &>(*pCrsrShell->GetTblCrs()), aStart, aEnd, aNewPos );
+                lcl_PaMCorrAbs( const_cast<SwPaM &>(*pCrsrShell->GetTableCrs()), aStart, aEnd, aNewPos );
         }
     }
     {
-        SwUnoCrsrTbl& rTbl = const_cast<SwUnoCrsrTbl&>(pDoc->GetUnoCrsrTbl());
+        SwUnoCrsrTable& rTable = const_cast<SwUnoCrsrTable&>(pDoc->GetUnoCrsrTable());
 
-        for( SwUnoCrsrTbl::iterator it = rTbl.begin(); it != rTbl.end(); ++it )
+        for( SwUnoCrsrTable::iterator it = rTable.begin(); it != rTable.end(); ++it )
         {
             SwUnoCrsr *const pUnoCursor = *it;
 
@@ -142,11 +142,11 @@ void PaMCorrAbs( const SwPaM& rRange,
                 bChange |= lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
             }
 
-            SwUnoTableCrsr *const pUnoTblCrsr =
+            SwUnoTableCrsr *const pUnoTableCrsr =
                 dynamic_cast<SwUnoTableCrsr *>(*it);
-            if( pUnoTblCrsr )
+            if( pUnoTableCrsr )
             {
-                for(SwPaM& rPaM : (&pUnoTblCrsr->GetSelRing())->GetRingContainer())
+                for(SwPaM& rPaM : (&pUnoTableCrsr->GetSelRing())->GetRingContainer())
                 {
                     bChange |=
                         lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
@@ -170,27 +170,27 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     const sal_Int32 nOffset,
     bool bMoveCrsr)
 {
-    SwCntntNode *const pCntntNode( rOldNode.GetNode().GetCntntNode() );
+    SwContentNode *const pContentNode( rOldNode.GetNode().GetContentNode() );
     SwPaM const aPam(rOldNode, 0,
-                     rOldNode, (pCntntNode) ? pCntntNode->Len() : 0);
+                     rOldNode, (pContentNode) ? pContentNode->Len() : 0);
     SwPosition aNewPos(rNewPos);
     aNewPos.nContent += nOffset;
 
     getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
     // fix redlines
     {
-        SwRedlineTbl& rTbl = getIDocumentRedlineAccess().GetRedlineTbl();
-        for (SwRedlineTbl::size_type n = 0; n < rTbl.size(); )
+        SwRedlineTable& rTable = getIDocumentRedlineAccess().GetRedlineTable();
+        for (SwRedlineTable::size_type n = 0; n < rTable.size(); )
         {
             // is on position ??
-            SwRangeRedline *const pRedline( rTbl[ n ] );
+            SwRangeRedline *const pRedline( rTable[ n ] );
             bool const bChanged =
                 lcl_PaMCorrAbs(*pRedline, *aPam.Start(), *aPam.End(), aNewPos);
             // clean up empty redlines: docredln.cxx asserts these as invalid
             if (bChanged && (*pRedline->GetPoint() == *pRedline->GetMark())
                          && (pRedline->GetContentIdx() == NULL))
             {
-                rTbl.DeleteAndDestroy(n);
+                rTable.DeleteAndDestroy(n);
             }
             else
             {
@@ -198,7 +198,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
             }
         }
 
-        // To-Do - need to add here 'SwExtraRedlineTbl' also ?
+        // To-Do - need to add here 'SwExtraRedlineTable' also ?
     }
 
     if(bMoveCrsr)
@@ -232,9 +232,9 @@ void SwDoc::CorrAbs(
 
     if(bMoveCrsr)
     {
-        SwCntntNode *const pCntntNode( rEndNode.GetNode().GetCntntNode() );
+        SwContentNode *const pContentNode( rEndNode.GetNode().GetContentNode() );
         SwPaM const aPam(rStartNode, 0,
-                         rEndNode, (pCntntNode) ? pCntntNode->Len() : 0);
+                         rEndNode, (pContentNode) ? pContentNode->Len() : 0);
         ::PaMCorrAbs(aPam, rNewPos);
     }
 }
@@ -271,23 +271,23 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
             }
 
             if( pCrsrShell->IsTableMode() )
-                lcl_PaMCorrRel1( pCrsrShell->GetTblCrs(), pOldNode, aNewPos, nCntIdx );
+                lcl_PaMCorrRel1( pCrsrShell->GetTableCrs(), pOldNode, aNewPos, nCntIdx );
        }
     }
     {
-        SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
-        for( SwUnoCrsrTbl::iterator it = rTbl.begin(); it != rTbl.end(); ++it )
+        SwUnoCrsrTable& rTable = (SwUnoCrsrTable&)pDoc->GetUnoCrsrTable();
+        for( SwUnoCrsrTable::iterator it = rTable.begin(); it != rTable.end(); ++it )
         {
             for(SwPaM& rPaM : (*it)->GetRingContainer())
             {
                 lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
             }
 
-            SwUnoTableCrsr* pUnoTblCrsr =
+            SwUnoTableCrsr* pUnoTableCrsr =
                 dynamic_cast<SwUnoTableCrsr*>(*it);
-            if( pUnoTblCrsr )
+            if( pUnoTableCrsr )
             {
-                for(SwPaM& rPaM : (&pUnoTblCrsr->GetSelRing())->GetRingContainer())
+                for(SwPaM& rPaM : (&pUnoTableCrsr->GetSelRing())->GetRingContainer())
                 {
                     lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
                 }
@@ -304,15 +304,15 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
     getIDocumentMarkAccess()->correctMarksRelative(rOldNode, rNewPos, nOffset);
 
     { // fix the Redlines
-        SwRedlineTbl& rTbl = getIDocumentRedlineAccess().GetRedlineTbl();
+        SwRedlineTable& rTable = getIDocumentRedlineAccess().GetRedlineTable();
         SwPosition aNewPos(rNewPos);
-        for( SwRedlineTbl::size_type n = 0; n < rTbl.size(); ++n )
+        for( SwRedlineTable::size_type n = 0; n < rTable.size(); ++n )
         {
             // lies on the position ??
-            lcl_PaMCorrRel1( rTbl[ n ], &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );
+            lcl_PaMCorrRel1( rTable[ n ], &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );
         }
 
-        // To-Do - need to add here 'SwExtraRedlineTbl' also ?
+        // To-Do - need to add here 'SwExtraRedlineTable' also ?
     }
 
     if(bMoveCrsr)

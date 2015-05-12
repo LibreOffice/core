@@ -25,8 +25,8 @@
 #include <ndarr.hxx> //Only for lcl_RstTxtAttr
 
 class SwDoc;
-class SwNoTxtNode;
-class SwFmtColl;
+class SwNoTextNode;
+class SwFormatColl;
 class SwHistory;
 
 namespace sw
@@ -65,25 +65,25 @@ public:
 
     void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&) SAL_OVERRIDE;
 
-    SwFlyFrmFmt* Insert(const SwPaM &rRg, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic,
-                        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
+    SwFlyFrameFormat* Insert(const SwPaM &rRg, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic,
+                        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrameFormat*) SAL_OVERRIDE;
 
-    SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
-        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
+    SwFlyFrameFormat* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
+        const SfxItemSet* pGrfAttrSet, SwFrameFormat*) SAL_OVERRIDE;
 
     void ReRead(SwPaM&, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj) SAL_OVERRIDE;
 
-    SwDrawFrmFmt* InsertDrawObj( const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet& rFlyAttrSet ) SAL_OVERRIDE;
+    SwDrawFrameFormat* InsertDrawObj( const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet& rFlyAttrSet ) SAL_OVERRIDE;
 
-    SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
-        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
+    SwFlyFrameFormat* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
+        const SfxItemSet* pGrfAttrSet, SwFrameFormat*) SAL_OVERRIDE;
 
-    SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
-                           const SfxItemSet* pGrfAttrSet, SwFrmFmt*) SAL_OVERRIDE;
+    SwFlyFrameFormat* InsertOLE(const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
+                           const SfxItemSet* pGrfAttrSet, SwFrameFormat*) SAL_OVERRIDE;
 
     bool SplitNode(const SwPosition &rPos, bool bChkTableStart) SAL_OVERRIDE;
 
-    bool AppendTxtNode(SwPosition& rPos) SAL_OVERRIDE;
+    bool AppendTextNode(SwPosition& rPos) SAL_OVERRIDE;
 
     bool ReplaceRange(SwPaM& rPam, const OUString& rNewStr,
                               const bool bRegExReplace) SAL_OVERRIDE;
@@ -114,11 +114,11 @@ public:
                             const bool bCopyFlyAtFly = false,
                             const bool bMergedFirstNode = false ) const;
 
-    /// Parameters for _Rst and lcl_SetTxtFmtColl
+    /// Parameters for _Rst and lcl_SetTextFormatColl
     //originallyfrom docfmt.cxx
-    struct ParaRstFmt
+    struct ParaRstFormat
     {
-        SwFmtColl* pFmtColl;
+        SwFormatColl* pFormatColl;
         SwHistory* pHistory;
         const SwPosition *pSttNd, *pEndNd;
         const SfxItemSet* pDelSet;
@@ -128,9 +128,9 @@ public:
         bool bResetAll;
         bool bInclRefToxMark;
 
-        ParaRstFmt(const SwPosition* pStt, const SwPosition* pEnd,
+        ParaRstFormat(const SwPosition* pStt, const SwPosition* pEnd,
                    SwHistory* pHst, sal_uInt16 nWhch = 0, const SfxItemSet* pSet = 0)
-            : pFmtColl(0)
+            : pFormatColl(0)
             , pHistory(pHst)
             , pSttNd(pStt)
             , pEndNd(pEnd)
@@ -143,7 +143,7 @@ public:
         {
         }
     };
-    static bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs ); //originally from docfmt.cxx
+    static bool lcl_RstTextAttr( const SwNodePtr& rpNd, void* pArgs ); //originally from docfmt.cxx
 
 
     virtual ~DocumentContentOperationsManager();
@@ -156,10 +156,10 @@ private:
     bool DeleteRangeImpl(SwPaM&, const bool unused = false);
     bool DeleteRangeImplImpl(SwPaM &);
     bool ReplaceRangeImpl(SwPaM&, OUString const&, const bool);
-    SwFlyFrmFmt* _InsNoTxtNode( const SwPosition&rPos, SwNoTxtNode*,
+    SwFlyFrameFormat* _InsNoTextNode( const SwPosition&rPos, SwNoTextNode*,
                                 const SfxItemSet* pFlyAttrSet,
                                 const SfxItemSet* pGrfAttrSet,
-                                SwFrmFmt* = 0 );
+                                SwFrameFormat* = 0 );
     /* Copy a range within the same or to another document.
      Position may not lie within range! */
     bool CopyImpl( SwPaM&, SwPosition&, const bool MakeNewFrms /*= true */,

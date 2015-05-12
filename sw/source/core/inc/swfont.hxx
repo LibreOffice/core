@@ -33,7 +33,7 @@ class SfxItemSet;
 class SwAttrSet;
 class SwDoCapitals;     // DoCapitals
 class SwDrawTextInfo;   // _DrawText
-class SwScriptInfo;     // _GetTxtSize
+class SwScriptInfo;     // _GetTextSize
 class SwViewShell;
 class IDocumentSettingAccess;
 typedef struct _xmlTextWriter *xmlTextWriterPtr;
@@ -76,7 +76,7 @@ class SwSubFont : public SvxFont
     bool IsSymbol( SwViewShell *pSh );
     sal_uInt16 GetAscent( SwViewShell *pSh, const OutputDevice& rOut );
     sal_uInt16 GetHeight( SwViewShell *pSh, const OutputDevice& rOut );
-    Size _GetTxtSize( SwDrawTextInfo& rInf );
+    Size _GetTextSize( SwDrawTextInfo& rInf );
     Size GetCapitalSize( SwDrawTextInfo& rInf );
     void _DrawText( SwDrawTextInfo &rInf, const bool bGrey );
     void DrawCapital( SwDrawTextInfo &rInf );
@@ -161,7 +161,7 @@ class SwFont
     sal_uInt8   nActual;        // actual font (Latin, CJK or CTL)
 
     // switch for the font-extensions
-    bool bNoHyph        :1;  // SwTxtNoHyphenHere: no separator
+    bool bNoHyph        :1;  // SwTextNoHyphenHere: no separator
     bool bBlink         :1;  // blinking font
     bool bPaintBlank    :1;  // blanks not with DrawRect
     bool bFntChg        :1;
@@ -277,7 +277,7 @@ public:
     inline void SetPaintWrong( const bool bNew );
     inline bool IsPaintWrong() const { return bPaintWrong; }
 
-    // setting of the base class font for SwTxtCharFmt
+    // setting of the base class font for SwTextCharFormat
     void SetDiffFnt( const SfxItemSet* pSet,
                      const IDocumentSettingAccess* pIDocumentSettingAccess );
 
@@ -343,7 +343,7 @@ public:
         { return aSub[nActual].GetCapitalSize( rInf ); }
 
     sal_Int32 GetCapitalBreak( SwViewShell const* pSh,  const OutputDevice* pOut,
-        const SwScriptInfo* pScript, const OUString& rTxt,
+        const SwScriptInfo* pScript, const OUString& rText,
         long nTextWidth, const sal_Int32 nIdx,
         const sal_Int32 nLen );
 
@@ -359,10 +359,10 @@ public:
     void DoOnCapitals( SwDoCapitals &rDo )
         { aSub[nActual].DoOnCapitals( rDo ); }
 
-    Size _GetTxtSize( SwDrawTextInfo& rInf )
-        { rInf.SetFont( this ); return aSub[nActual]._GetTxtSize( rInf ); }
+    Size _GetTextSize( SwDrawTextInfo& rInf )
+        { rInf.SetFont( this ); return aSub[nActual]._GetTextSize( rInf ); }
 
-    sal_Int32 GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth );
+    sal_Int32 GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth );
 
     sal_Int32 _GetCrsrOfst( SwDrawTextInfo& rInf )
         { return aSub[nActual]._GetCrsrOfst( rInf ); }

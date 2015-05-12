@@ -45,7 +45,7 @@
 using namespace objectpositioning;
 using namespace ::com::sun::star;
 
-SwToCntntAnchoredObjectPosition::SwToCntntAnchoredObjectPosition( SdrObject& _rDrawObj )
+SwToContentAnchoredObjectPosition::SwToContentAnchoredObjectPosition( SdrObject& _rDrawObj )
     : SwAnchoredObjectPosition ( _rDrawObj ),
       mpVertPosOrientFrm( 0 ),
       // #i26791#
@@ -57,36 +57,36 @@ SwToCntntAnchoredObjectPosition::SwToCntntAnchoredObjectPosition( SdrObject& _rD
       mnToCharTopOfLine( 0 )
 {}
 
-SwToCntntAnchoredObjectPosition::~SwToCntntAnchoredObjectPosition()
+SwToContentAnchoredObjectPosition::~SwToContentAnchoredObjectPosition()
 {}
 
-bool SwToCntntAnchoredObjectPosition::IsAnchoredToChar() const
+bool SwToContentAnchoredObjectPosition::IsAnchoredToChar() const
 {
     return mbAnchorToChar;
 }
 
-const SwFrm* SwToCntntAnchoredObjectPosition::ToCharOrientFrm() const
+const SwFrm* SwToContentAnchoredObjectPosition::ToCharOrientFrm() const
 {
     return mpToCharOrientFrm;
 }
 
-const SwRect* SwToCntntAnchoredObjectPosition::ToCharRect() const
+const SwRect* SwToContentAnchoredObjectPosition::ToCharRect() const
 {
     return mpToCharRect;
 }
 
 // #i22341#
-SwTwips SwToCntntAnchoredObjectPosition::ToCharTopOfLine() const
+SwTwips SwToContentAnchoredObjectPosition::ToCharTopOfLine() const
 {
     return mnToCharTopOfLine;
 }
 
-SwTxtFrm& SwToCntntAnchoredObjectPosition::GetAnchorTxtFrm() const
+SwTextFrm& SwToContentAnchoredObjectPosition::GetAnchorTextFrm() const
 {
-    OSL_ENSURE( GetAnchorFrm().ISA(SwTxtFrm),
-            "SwToCntntAnchoredObjectPosition::GetAnchorTxtFrm() - wrong anchor frame type" );
+    OSL_ENSURE( GetAnchorFrm().ISA(SwTextFrm),
+            "SwToContentAnchoredObjectPosition::GetAnchorTextFrm() - wrong anchor frame type" );
 
-    return static_cast<SwTxtFrm&>(GetAnchorFrm());
+    return static_cast<SwTextFrm&>(GetAnchorFrm());
 }
 
 // #i23512#
@@ -134,10 +134,10 @@ static bool lcl_DoesVertPosFits( const SwTwips _nRelPosY,
     return bVertPosFits;
 }
 
-void SwToCntntAnchoredObjectPosition::CalcPosition()
+void SwToContentAnchoredObjectPosition::CalcPosition()
 {
     // get format of object
-    const SwFrmFmt& rFrmFmt = GetFrmFmt();
+    const SwFrameFormat& rFrameFormat = GetFrameFormat();
 
     // declare and set <pFooter> to footer frame, if object is anchored
     // at a frame belonging to the footer.
@@ -156,11 +156,11 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     }
 
     // determine left/right and its upper/lower spacing.
-    const SvxLRSpaceItem &rLR = rFrmFmt.GetLRSpace();
-    const SvxULSpaceItem &rUL = rFrmFmt.GetULSpace();
+    const SvxLRSpaceItem &rLR = rFrameFormat.GetLRSpace();
+    const SvxULSpaceItem &rUL = rFrameFormat.GetULSpace();
 
     // determine, if object has no surrounding.
-    const SwFmtSurround& rSurround = rFrmFmt.GetSurround();
+    const SwFormatSurround& rSurround = rFrameFormat.GetSurround();
     const bool bNoSurround = rSurround.GetSurround() == SURROUND_NONE;
     const bool bWrapThrough = rSurround.GetSurround() == SURROUND_THROUGHT;
 
@@ -170,11 +170,11 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     // #i18732# - grow only, if object has to follow the text flow
     const bool bGrow = DoesObjFollowsTextFlow() &&
                        ( !GetAnchorFrm().IsInTab() ||
-                         !rFrmFmt.GetFrmSize().GetHeightPercent() );
+                         !rFrameFormat.GetFrmSize().GetHeightPercent() );
 
     // get text frame the object is anchored at
-    const SwTxtFrm& rAnchorTxtFrm = GetAnchorTxtFrm();
-    SWRECTFN( (&rAnchorTxtFrm) )
+    const SwTextFrm& rAnchorTextFrm = GetAnchorTextFrm();
+    SWRECTFN( (&rAnchorTextFrm) )
 
     const SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
 
@@ -185,18 +185,18 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
 
     SwTwips nRelDiff = 0;
 
-    bool bMoveable = rAnchorTxtFrm.IsMoveable();
+    bool bMoveable = rAnchorTextFrm.IsMoveable();
 
     // determine frame the object position has to be oriented at.
-    const SwTxtFrm* pOrientFrm = &rAnchorTxtFrm;
-    const SwTxtFrm* pAnchorFrmForVertPos = &rAnchorTxtFrm;
+    const SwTextFrm* pOrientFrm = &rAnchorTextFrm;
+    const SwTextFrm* pAnchorFrmForVertPos = &rAnchorTextFrm;
     {
         // if object is at-character anchored, determine character-rectangle
         // and frame, position has to be oriented at.
-        mbAnchorToChar = (FLY_AT_CHAR == rFrmFmt.GetAnchor().GetAnchorId());
+        mbAnchorToChar = (FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId());
         if ( mbAnchorToChar )
         {
-            const SwFmtAnchor& rAnch = rFrmFmt.GetAnchor();
+            const SwFormatAnchor& rAnch = rFrameFormat.GetAnchor();
             // #i26791# - use new object instance of <SwAnchoredObject>
             // Due to table break algorithm the character
             // rectangle can have no height. Thus, check also the width
@@ -214,7 +214,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     // Get default for <mpVertPosOrientFrm>, if it's not set.
                     if ( !mpVertPosOrientFrm )
                     {
-                        mpVertPosOrientFrm = rAnchorTxtFrm.GetUpper();
+                        mpVertPosOrientFrm = rAnchorTextFrm.GetUpper();
                     }
                     return;
                 }
@@ -222,8 +222,8 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             mpToCharRect = &(GetAnchoredObj().GetLastCharRect());
             // #i22341# - get top of line, in which the anchor character is.
             mnToCharTopOfLine = GetAnchoredObj().GetLastTopOfLine();
-            pOrientFrm = &(const_cast<SwTxtFrm&>(rAnchorTxtFrm).GetFrmAtOfst(
-                                rAnch.GetCntntAnchor()->nContent.GetIndex() ) );
+            pOrientFrm = &(const_cast<SwTextFrm&>(rAnchorTextFrm).GetFrmAtOfst(
+                                rAnch.GetContentAnchor()->nContent.GetIndex() ) );
             mpToCharOrientFrm = pOrientFrm;
         }
     }
@@ -233,7 +233,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     {
 
         // determine vertical positioning and alignment attributes
-        SwFmtVertOrient aVert( rFrmFmt.GetVertOrient() );
+        SwFormatVertOrient aVert( rFrameFormat.GetVertOrient() );
 
         // #i18732# - determine layout frame for vertical
         // positions aligned to 'page areas'.
@@ -305,7 +305,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                     else
                     {
-                        OSL_FAIL( "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
+                        OSL_FAIL( "<SwToContentAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
                     }
                 }
                 break;
@@ -324,7 +324,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                     else
                     {
-                        OSL_FAIL( "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
+                        OSL_FAIL( "<SwToContentAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
                     }
                 }
                 break;
@@ -364,7 +364,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                     else
                     {
-                        OSL_FAIL( "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
+                        OSL_FAIL( "<SwToContentAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
                     }
                 }
                 break;
@@ -376,13 +376,13 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             // the frame, the object is oriented at.
             // #i28701# - correction: adjust relative position,
             // only if the floating screen object has to follow the text flow.
-            if ( DoesObjFollowsTextFlow() && pOrientFrm != &rAnchorTxtFrm )
+            if ( DoesObjFollowsTextFlow() && pOrientFrm != &rAnchorTextFrm )
             {
                 // #i11860# - use new method <_GetTopForObjPos>
                 // to get top of frame for object positioning.
                 const SwTwips nTopOfOrient = _GetTopForObjPos( *pOrientFrm, fnRect, bVert );
                 nRelPosY += (*fnRect->fnYDiff)( nTopOfOrient,
-                                      _GetTopForObjPos( rAnchorTxtFrm, fnRect, bVert ) );
+                                      _GetTopForObjPos( rAnchorTextFrm, fnRect, bVert ) );
             }
 
             // #i42124# - capture object inside vertical
@@ -409,9 +409,9 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 if ( nAttrRelPosY != aVert.GetPos() )
                 {
                     aVert.SetPos( nAttrRelPosY );
-                    const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
-                    const_cast<SwFrmFmt&>(rFrmFmt).SetFmtAttr( aVert );
-                    const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
+                    const_cast<SwFrameFormat&>(rFrameFormat).LockModify();
+                    const_cast<SwFrameFormat&>(rFrameFormat).SetFormatAttr( aVert );
+                    const_cast<SwFrameFormat&>(rFrameFormat).UnlockModify();
                 }
             }
 
@@ -433,21 +433,21 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         // Determine upper of frame vertical position is oriented at.
         // #i28701# - determine 'virtual' anchor frame.
         // This frame is used in the following instead of the 'real' anchor
-        // frame <rAnchorTxtFrm> for the 'vertical' position in all cases.
+        // frame <rAnchorTextFrm> for the 'vertical' position in all cases.
         const SwLayoutFrm* pUpperOfOrientFrm = 0L;
         {
             // #i28701# - As long as the anchor frame is on the
             // same page as <pOrientFrm> and the vertical position isn't aligned
             // automatic at the anchor character or the top of the line of the
             // anchor character, the anchor frame determines the vertical position.
-            if ( &rAnchorTxtFrm == pOrientFrm ||
-                 ( rAnchorTxtFrm.FindPageFrm() == pOrientFrm->FindPageFrm() &&
+            if ( &rAnchorTextFrm == pOrientFrm ||
+                 ( rAnchorTextFrm.FindPageFrm() == pOrientFrm->FindPageFrm() &&
                    aVert.GetVertOrient() == text::VertOrientation::NONE &&
                    aVert.GetRelationOrient() != text::RelOrientation::CHAR &&
                    aVert.GetRelationOrient() != text::RelOrientation::TEXT_LINE ) )
             {
-                pUpperOfOrientFrm = rAnchorTxtFrm.GetUpper();
-                pAnchorFrmForVertPos = &rAnchorTxtFrm;
+                pUpperOfOrientFrm = rAnchorTextFrm.GetUpper();
+                pAnchorFrmForVertPos = &rAnchorTextFrm;
             }
             else
             {
@@ -516,9 +516,9 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 {
                     // #i11860# - consider upper space amount of previous frame
                     SwTwips nTopMargin = (pAnchorFrmForVertPos->*fnRect->fnGetTopMargin)();
-                    if ( pAnchorFrmForVertPos->IsTxtFrm() )
+                    if ( pAnchorFrmForVertPos->IsTextFrm() )
                     {
-                        nTopMargin -= static_cast<const SwTxtFrm*>(pAnchorFrmForVertPos)->
+                        nTopMargin -= static_cast<const SwTextFrm*>(pAnchorFrmForVertPos)->
                             GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
                     }
                     nVertOffsetToFrmAnchorPos += nTopMargin;
@@ -588,7 +588,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 SwTwips nAvail =
                     (*fnRect->fnYDiff)( (pUpperOfOrientFrm->*fnRect->fnGetPrtBottom)(),
                                         nTopOfAnch );
-                const bool bInFtn = pAnchorFrmForVertPos->IsInFtn();
+                const bool bInFootnote = pAnchorFrmForVertPos->IsInFootnote();
                 while ( nRelPosY )
                 {
                     // #i23512# - correction:
@@ -646,20 +646,20 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                             {
                                 // follow the text flow
                                 nRelPosY -= nAvail;
-                                MakePageType eMakePage = bInFtn ? MAKEPAGE_NONE
+                                MakePageType eMakePage = bInFootnote ? MAKEPAGE_NONE
                                                                 : MAKEPAGE_APPEND;
                                 const bool bInSct = pUpperOfOrientFrm->IsInSct();
                                 if( bInSct )
                                     eMakePage = MAKEPAGE_NOSECTION;
 
                                 const SwLayoutFrm* pTmp =
-                                    pUpperOfOrientFrm->GetLeaf( eMakePage, true, &rAnchorTxtFrm );
+                                    pUpperOfOrientFrm->GetLeaf( eMakePage, true, &rAnchorTextFrm );
                                 if ( pTmp &&
                                      ( !bInSct ||
                                        pUpperOfOrientFrm->FindSctFrm()->IsAnFollow( pTmp->FindSctFrm() ) ) )
                                 {
                                     pUpperOfOrientFrm = pTmp;
-                                    bMoveable = rAnchorTxtFrm.IsMoveable( pUpperOfOrientFrm );
+                                    bMoveable = rAnchorTextFrm.IsMoveable( pUpperOfOrientFrm );
                                     SWREFRESHFN( pUpperOfOrientFrm )
                                     nAvail = (pUpperOfOrientFrm->Prt().*fnRect->fnGetHeight)();
                                 }
@@ -681,7 +681,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                     else
                                     {
 #if OSL_DEBUG_LEVEL > 1
-                                        OSL_FAIL( "<SwToCntntAnchoredObjectPosition::CalcPosition()> - code under investigation by OD, please inform OD about this assertion!" );
+                                        OSL_FAIL( "<SwToContentAnchoredObjectPosition::CalcPosition()> - code under investigation by OD, please inform OD about this assertion!" );
 #endif
                                         nRelDiff = nRelPosY;
                                         nRelPosY = 0;
@@ -760,7 +760,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             // consider section frame for grow in online layout and
             // consider page alignment for grow in table.
             SwLayoutFrm* pLayoutFrmToGrow = 0L;
-            if ( bBrowse && rAnchorTxtFrm.IsMoveable() )
+            if ( bBrowse && rAnchorTextFrm.IsMoveable() )
             {
                 if ( pUpperOfOrientFrm->IsInSct() )
                 {
@@ -779,7 +779,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                     const_cast<SwLayoutFrm*>(pUpperOfOrientFrm);
                 }
             }
-            else if ( rAnchorTxtFrm.IsInTab() && bGrow )
+            else if ( rAnchorTextFrm.IsInTab() && bGrow )
             {
                 pLayoutFrmToGrow = const_cast<SwLayoutFrm*>(pUpperOfOrientFrm);
             }
@@ -805,7 +805,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 // and has no follow, the table frame is notified,
                 // that the object doesn't fit into the table cell.
                 // Adjustment of position isn't needed in this case.
-                if ( pOrientFrm == &rAnchorTxtFrm &&
+                if ( pOrientFrm == &rAnchorTextFrm &&
                      !pOrientFrm->GetFollow() &&
                      !pOrientFrm->GetIndPrev() )
                 {
@@ -852,7 +852,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     nDist = (GetAnchoredObj().GetObjRect().*fnRect->fnBottomDist)(
                               (pUpperOfOrientFrm->*fnRect->fnGetPrtBottom)() );
                     if ( nDist < 0 &&
-                         pOrientFrm == &rAnchorTxtFrm && !pOrientFrm->GetIndPrev() )
+                         pOrientFrm == &rAnchorTextFrm && !pOrientFrm->GetIndPrev() )
                     {
                         const_cast<SwTabFrm*>(pOrientFrm->FindTabFrm())
                                                         ->SetDoesObjsFit( false );
@@ -862,7 +862,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             else
             {
                 // follow text flow
-                const bool bInFtn = rAnchorTxtFrm.IsInFtn();
+                const bool bInFootnote = rAnchorTextFrm.IsInFootnote();
                 while( bMoveable && nDist < 0 )
                 {
                     bool bInSct = pUpperOfOrientFrm->IsInSct();
@@ -890,12 +890,12 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     const SwLayoutFrm* pNextLay = pUpperOfOrientFrm->GetLeaf(
                                     ( bInSct
                                       ? MAKEPAGE_NOSECTION
-                                      : ( bInFtn ? MAKEPAGE_NONE : MAKEPAGE_APPEND ) ),
-                                    true, &rAnchorTxtFrm );
+                                      : ( bInFootnote ? MAKEPAGE_NONE : MAKEPAGE_APPEND ) ),
+                                    true, &rAnchorTextFrm );
                     // correction:
                     // If anchor is in footnote and proposed next layout environment
                     // isn't a footnote frame, object can't follow the text flow
-                    if ( bInFtn && pNextLay && !pNextLay->IsFtnFrm() )
+                    if ( bInFootnote && pNextLay && !pNextLay->IsFootnoteFrm() )
                     {
                         pNextLay = 0L;
                     }
@@ -915,7 +915,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                 aRelPos.Y() = nTmpRelPosY;
                             pUpperOfOrientFrm = pNextLay;
                             SWREFRESHFN( pUpperOfOrientFrm )
-                            bMoveable = rAnchorTxtFrm.IsMoveable( pUpperOfOrientFrm );
+                            bMoveable = rAnchorTextFrm.IsMoveable( pUpperOfOrientFrm );
                             if( bVertX )
                             {
                                 // --> OD 2009-08-31 #mongolianlayout#
@@ -975,7 +975,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     // determine 'horizontal' position
     {
         // determine horizontal positioning and alignment attributes
-        SwFmtHoriOrient aHori( rFrmFmt.GetHoriOrient() );
+        SwFormatHoriOrient aHori( rFrameFormat.GetHoriOrient() );
 
         // set calculated vertical position in order to determine correct
         // frame, the horizontal position is oriented at.
@@ -1031,9 +1031,9 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                  aHori.GetPos() != nAttrRelPosX )
             {
                 aHori.SetPos( nAttrRelPosX );
-                const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
-                const_cast<SwFrmFmt&>(rFrmFmt).SetFmtAttr( aHori );
-                const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
+                const_cast<SwFrameFormat&>(rFrameFormat).LockModify();
+                const_cast<SwFrameFormat&>(rFrameFormat).SetFormatAttr( aHori );
+                const_cast<SwFrameFormat&>(rFrameFormat).UnlockModify();
             }
         }
     }
@@ -1052,12 +1052,12 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         {
             GetAnchoredObj().SetObjLeft( nTopOfAnch + aRelPos.X() );
         }
-        GetAnchoredObj().SetObjTop( rAnchorTxtFrm.Frm().Top() +
+        GetAnchoredObj().SetObjTop( rAnchorTextFrm.Frm().Top() +
                                     aRelPos.Y() );
     }
     else
     {
-        GetAnchoredObj().SetObjLeft( rAnchorTxtFrm.Frm().Left() +
+        GetAnchoredObj().SetObjLeft( rAnchorTextFrm.Frm().Left() +
                                      aRelPos.X() );
         GetAnchoredObj().SetObjTop( nTopOfAnch + aRelPos.Y() );
     }
@@ -1069,7 +1069,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
 /**
  * Determine frame for horizontal position
  */
-const SwFrm& SwToCntntAnchoredObjectPosition::_GetHoriVirtualAnchor(
+const SwFrm& SwToContentAnchoredObjectPosition::_GetHoriVirtualAnchor(
                                         const SwLayoutFrm& _rProposedFrm ) const
 {
     const SwFrm* pHoriVirtAnchFrm = &_rProposedFrm;
@@ -1080,8 +1080,8 @@ const SwFrm& SwToCntntAnchoredObjectPosition::_GetHoriVirtualAnchor(
     const SwFrm* pFrm = _rProposedFrm.Lower();
     while ( pFrm )
     {
-        if ( pFrm->IsCntntFrm() &&
-             GetAnchorTxtFrm().IsAnFollow( static_cast<const SwCntntFrm*>(pFrm) ) )
+        if ( pFrm->IsContentFrm() &&
+             GetAnchorTextFrm().IsAnFollow( static_cast<const SwContentFrm*>(pFrm) ) )
         {
             pHoriVirtAnchFrm = pFrm;
             break;

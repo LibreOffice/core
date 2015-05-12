@@ -46,7 +46,7 @@ SwAccessibleChildSList_const_iterator::SwAccessibleChildSList_const_iterator(
                 aCurr = (*pObjs)[nNextObj++]->GetDrawObj();
             }
         }
-        else if( rFrm.IsTxtFrm() )
+        else if( rFrm.IsTextFrm() )
         {
             const SwSortedObjs *pObjs = rFrm.GetDrawObjs();
             if ( pObjs && pObjs->size() )
@@ -112,7 +112,7 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
                     ? (*pObjs)[nNextObj++]->GetDrawObj()
                     : static_cast< const SdrObject *>( 0 );
         }
-        else if( rFrm.IsTxtFrm() )
+        else if( rFrm.IsTextFrm() )
         {
             const SwSortedObjs* pObjs = rFrm.GetDrawObjs();
             const size_t nObjsCount = pObjs ? pObjs->size() : 0;

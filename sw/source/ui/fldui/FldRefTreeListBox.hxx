@@ -21,13 +21,13 @@
 
 #include <svtools/treelistbox.hxx>
 
-class SwFldRefTreeListBox : public SvTreeListBox
+class SwFieldRefTreeListBox : public SvTreeListBox
 {
 protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
 public:
-    SwFldRefTreeListBox(vcl::Window* pParent, WinBits nStyle);
+    SwFieldRefTreeListBox(vcl::Window* pParent, WinBits nStyle);
 };
 #endif
 

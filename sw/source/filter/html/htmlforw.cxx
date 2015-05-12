@@ -630,14 +630,14 @@ void SwHTMLWriter::OutHiddenControls(
 
 // hier folgen die Ausgabe-Routinen, dadurch sind die form::Forms gebuendelt:
 
-const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
+const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrameFormat& rFormat )
 {
     // es muss ein Draw-Format sein
-    OSL_ENSURE( RES_DRAWFRMFMT == rFmt.Which(),
+    OSL_ENSURE( RES_DRAWFRMFMT == rFormat.Which(),
             "GetHTMLControl nuer fuer Draw-Formate erlaubt" );
 
     // Schauen, ob es ein SdrObject dafuer gibt
-    const SdrObject *pObj = rFmt.FindSdrObject();
+    const SdrObject *pObj = rFormat.FindSdrObject();
     if( !pObj || FmFormInventor != pObj->GetObjInventor() )
         return 0;
 
@@ -687,8 +687,8 @@ static void GetControlSize(const SdrUnoObj& rFormObj, Size& rSz, SwDoc *pDoc)
     rSz.Height() = nLines;
 }
 
-Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
-                                     const SwDrawFrmFmt& rFmt,
+Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
+                                     const SwDrawFrameFormat& rFormat,
                                      const SdrUnoObj& rFormObj,
                                      bool bInCntnr )
 {
@@ -1031,7 +1031,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     }
     OString aEndTags;
     if( nFrmOpts != 0 )
-        aEndTags = rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyOUStr, nFrmOpts );
+        aEndTags = rHTMLWrt.OutFrameFormatOptions( rFormat, aEmptyOUStr, nFrmOpts );
 
     if( rHTMLWrt.bCfgOutStyles )
     {
@@ -1139,7 +1139,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             }
         }
 
-        rHTMLWrt.OutCSS1_FrmFmtOptions( rFmt, nFrmOpts, &rFormObj,
+        rHTMLWrt.OutCSS1_FrameFormatOptions( rFormat, nFrmOpts, &rFormObj,
                                         &aItemSet );
     }
 
@@ -1335,20 +1335,20 @@ void SwHTMLWriter::GetControls()
     }
 
     // und jetzt die in einem zeichengebundenen Rahmen
-    const SwFrmFmts* pSpzFrmFmts = pDoc->GetSpzFrmFmts();
-    for( size_t i=0; i<pSpzFrmFmts->size(); i++ )
+    const SwFrameFormats* pSpzFrameFormats = pDoc->GetSpzFrameFormats();
+    for( size_t i=0; i<pSpzFrameFormats->size(); i++ )
     {
-        const SwFrmFmt *pFrmFmt = (*pSpzFrmFmts)[i];
-        if( RES_DRAWFRMFMT != pFrmFmt->Which() )
+        const SwFrameFormat *pFrameFormat = (*pSpzFrameFormats)[i];
+        if( RES_DRAWFRMFMT != pFrameFormat->Which() )
             continue;
 
-        const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-        const SwPosition *pPos = rAnchor.GetCntntAnchor();
+        const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+        const SwPosition *pPos = rAnchor.GetContentAnchor();
         if ((FLY_AS_CHAR != rAnchor.GetAnchorId()) || !pPos)
             continue;
 
         const SdrObject *pSdrObj =
-            SwHTMLWriter::GetHTMLControl( *static_cast<const SwDrawFrmFmt*>(pFrmFmt) );
+            SwHTMLWriter::GetHTMLControl( *static_cast<const SwDrawFrameFormat*>(pFrameFormat) );
         if( !pSdrObj )
             continue;
 

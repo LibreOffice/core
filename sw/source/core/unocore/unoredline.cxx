@@ -119,7 +119,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
 
     // skip all tables at the beginning
     SwTableNode* pTableNode = pUnoCursor->GetNode().FindTableNode();
-    SwCntntNode* pContentNode = NULL;
+    SwContentNode* pContentNode = NULL;
     bool bTable = pTableNode != NULL;
     while( pTableNode != NULL )
     {
@@ -266,10 +266,10 @@ void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
         throw uno::RuntimeException();
     //search for the redline
     SwDoc* pDoc = pUnoCrsr->GetDoc();
-    const SwRedlineTbl& rRedTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
+    const SwRedlineTable& rRedTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     bool bFound = false;
-    for(size_t nRed = 0; nRed < rRedTbl.size() && !bFound; nRed++)
-        bFound = &m_rRedline == rRedTbl[nRed];
+    for(size_t nRed = 0; nRed < rRedTable.size() && !bFound; nRed++)
+        bFound = &m_rRedline == rRedTable[nRed];
     if(!bFound)
         throw uno::RuntimeException();
 }
@@ -443,16 +443,16 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
             {
                 SwSectionNode* pSectNode = pNode->GetSectionNode();
                 OSL_ENSURE(pSectNode, "No section node!");
-                xRet = SwXTextSections::GetObject( *pSectNode->GetSection().GetFmt() );
+                xRet = SwXTextSections::GetObject( *pSectNode->GetSection().GetFormat() );
             }
             break;
             case ND_TABLENODE :
             {
-                SwTableNode* pTblNode = pNode->GetTableNode();
-                OSL_ENSURE(pTblNode, "No table node!");
-                SwTable& rTbl = pTblNode->GetTable();
-                SwFrmFmt* pTblFmt = rTbl.GetFrmFmt();
-                xRet = SwXTextTables::GetObject( *pTblFmt );
+                SwTableNode* pTableNode = pNode->GetTableNode();
+                OSL_ENSURE(pTableNode, "No table node!");
+                SwTable& rTable = pTableNode->GetTable();
+                SwFrameFormat* pTableFormat = rTable.GetFrameFormat();
+                xRet = SwXTextTables::GetObject( *pTableFormat );
             }
             break;
             case ND_TEXTNODE :
@@ -575,13 +575,13 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor() throw( uno::
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
         // is here a table?
-        SwTableNode* pTblNode = pUnoCrsr->GetNode().FindTableNode();
-        SwCntntNode* pCont = 0;
-        while( pTblNode )
+        SwTableNode* pTableNode = pUnoCrsr->GetNode().FindTableNode();
+        SwContentNode* pCont = 0;
+        while( pTableNode )
         {
-            pUnoCrsr->GetPoint()->nNode = *pTblNode->EndOfSectionNode();
+            pUnoCrsr->GetPoint()->nNode = *pTableNode->EndOfSectionNode();
             pCont = GetDoc()->GetNodes().GoNext(&pUnoCrsr->GetPoint()->nNode);
-            pTblNode = pCont->FindTableNode();
+            pTableNode = pCont->FindTableNode();
         }
         if(pCont)
             pUnoCrsr->GetPoint()->nContent.Assign(pCont, 0);

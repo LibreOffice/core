@@ -68,26 +68,26 @@ static bool lcl_IsInBody( SwFrm *pFrm )
     }
 }
 
-SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
-                                                const SwTxtAttr *pHint ) const
+SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
+                                                const SwTextAttr *pHint ) const
 {
     SwExpandPortion *pRet = 0;
     SwFrm *pFrame = pFrm;
-    SwField *pFld = const_cast<SwField*>(pHint->GetFmtFld().GetField());
-    const bool bName = rInf.GetOpt().IsFldName();
+    SwField *pField = const_cast<SwField*>(pHint->GetFormatField().GetField());
+    const bool bName = rInf.GetOpt().IsFieldName();
 
-    SwCharFmt* pChFmt = 0;
+    SwCharFormat* pChFormat = 0;
     bool bNewFlyPor = false;
     sal_uInt16 subType = 0;
 
     // set language
-    const_cast<SwTxtFormatter*>(this)->SeekAndChg( rInf );
-    if (pFld->GetLanguage() != GetFnt()->GetLanguage())
+    const_cast<SwTextFormatter*>(this)->SeekAndChg( rInf );
+    if (pField->GetLanguage() != GetFnt()->GetLanguage())
     {
-        pFld->SetLanguage( GetFnt()->GetLanguage() );
+        pField->SetLanguage( GetFnt()->GetLanguage() );
         // let the visual note know about its new language
-        if (pFld->GetTyp()->Which()==RES_POSTITFLD)
-            const_cast<SwFmtFld*> (&pHint->GetFmtFld())->Broadcast( SwFmtFldHint( &pHint->GetFmtFld(), SwFmtFldHintWhich::LANGUAGE ) );
+        if (pField->GetTyp()->Which()==RES_POSTITFLD)
+            const_cast<SwFormatField*> (&pHint->GetFormatField())->Broadcast( SwFormatFieldHint( &pHint->GetFormatField(), SwFormatFieldHintWhich::LANGUAGE ) );
     }
 
     SwViewShell *pSh = rInf.GetVsh();
@@ -95,111 +95,111 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     bool const bInClipboard( pDoc == nullptr || pDoc->IsClipBoard() );
     bool bPlaceHolder = false;
 
-    switch( pFld->GetTyp()->Which() )
+    switch( pField->GetTyp()->Which() )
     {
         case RES_SCRIPTFLD:
         case RES_POSTITFLD:
-            pRet = new SwPostItsPortion( RES_SCRIPTFLD == pFld->GetTyp()->Which() );
+            pRet = new SwPostItsPortion( RES_SCRIPTFLD == pField->GetTyp()->Which() );
             break;
 
         case RES_COMBINED_CHARS:
             {
                 if( bName )
-                    pRet = new SwFldPortion( pFld->GetFieldName() );
+                    pRet = new SwFieldPortion( pField->GetFieldName() );
                 else
-                    pRet = new SwCombinedPortion( pFld->ExpandField(bInClipboard) );
+                    pRet = new SwCombinedPortion( pField->ExpandField(bInClipboard) );
             }
             break;
 
         case RES_HIDDENTXTFLD:
             {
                 OUString const aStr( (bName)
-                        ? pFld->GetFieldName()
-                        : pFld->ExpandField(bInClipboard) );
+                        ? pField->GetFieldName()
+                        : pField->ExpandField(bInClipboard) );
                 pRet = new SwHiddenPortion(aStr);
             }
             break;
 
         case RES_CHAPTERFLD:
-            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
+            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFields() )
             {
-                static_cast<SwChapterField*>(pFld)->ChangeExpansion( pFrame,
-                    &static_txtattr_cast<SwTxtFld const*>(pHint)->GetTxtNode());
+                static_cast<SwChapterField*>(pField)->ChangeExpansion( pFrame,
+                    &static_txtattr_cast<SwTextField const*>(pHint)->GetTextNode());
             }
             {
                 OUString const aStr( (bName)
-                        ? pFld->GetFieldName()
-                        : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion( aStr );
+                        ? pField->GetFieldName()
+                        : pField->ExpandField(bInClipboard) );
+                pRet = new SwFieldPortion( aStr );
             }
             break;
 
         case RES_DOCSTATFLD:
-            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
+            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFields() )
             {
-                static_cast<SwDocStatField*>(pFld)->ChangeExpansion( pFrame );
+                static_cast<SwDocStatField*>(pField)->ChangeExpansion( pFrame );
             }
             {
                 OUString const aStr( (bName)
-                        ? pFld->GetFieldName()
-                        : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion( aStr );
+                        ? pField->GetFieldName()
+                        : pField->ExpandField(bInClipboard) );
+                pRet = new SwFieldPortion( aStr );
             }
-            static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_PAGECOOUNTFLD;
+            static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_PAGECOOUNTFLD;
             break;
 
         case RES_PAGENUMBERFLD:
         {
-            if( !bName && pSh && pSh->GetLayout() && !pSh->Imp()->IsUpdateExpFlds() )
+            if( !bName && pSh && pSh->GetLayout() && !pSh->Imp()->IsUpdateExpFields() )
             {
-                SwPageNumberFieldType *pPageNr = static_cast<SwPageNumberFieldType *>(pFld->GetTyp());
+                SwPageNumberFieldType *pPageNr = static_cast<SwPageNumberFieldType *>(pField->GetTyp());
 
                 const SwRootFrm* pTmpRootFrm = pSh->GetLayout();
                 const bool bVirt = pTmpRootFrm->IsVirtPageNum();
 
                 sal_uInt16 nVirtNum = pFrame->GetVirtPageNum();
                 sal_uInt16 nNumPages = pTmpRootFrm->GetPageNum();
-                sal_Int16 nNumFmt = -1;
-                if(SVX_NUM_PAGEDESC == pFld->GetFormat())
-                    nNumFmt = pFrame->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType();
-                static_cast<SwPageNumberField*>(pFld)
+                sal_Int16 nNumFormat = -1;
+                if(SVX_NUM_PAGEDESC == pField->GetFormat())
+                    nNumFormat = pFrame->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType();
+                static_cast<SwPageNumberField*>(pField)
                     ->ChangeExpansion(nVirtNum, nNumPages);
                 pPageNr->ChangeExpansion(pDoc,
-                                            bVirt, nNumFmt > -1 ? &nNumFmt : 0);
+                                            bVirt, nNumFormat > -1 ? &nNumFormat : 0);
             }
             {
                 OUString const aStr( (bName)
-                        ? pFld->GetFieldName()
-                        : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion( aStr );
+                        ? pField->GetFieldName()
+                        : pField->ExpandField(bInClipboard) );
+                pRet = new SwFieldPortion( aStr );
             }
-            static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_PAGENUMBERFLD;
+            static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_PAGENUMBERFLD;
             break;
         }
         case RES_GETEXPFLD:
         {
-            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
+            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFields() )
             {
-                SwGetExpField* pExpFld = static_cast<SwGetExpField*>(pFld);
+                SwGetExpField* pExpField = static_cast<SwGetExpField*>(pField);
                 if( !::lcl_IsInBody( pFrame ) )
                 {
-                    pExpFld->ChgBodyTxtFlag( false );
-                    pExpFld->ChangeExpansion(*pFrame,
-                            *static_txtattr_cast<SwTxtFld const*>(pHint));
+                    pExpField->ChgBodyTextFlag( false );
+                    pExpField->ChangeExpansion(*pFrame,
+                            *static_txtattr_cast<SwTextField const*>(pHint));
                 }
-                else if( !pExpFld->IsInBodyTxt() )
+                else if( !pExpField->IsInBodyText() )
                 {
                     // Was something else previously, thus: expand first, then convert it!
-                    pExpFld->ChangeExpansion(*pFrame,
-                            *static_txtattr_cast<SwTxtFld const*>(pHint));
-                    pExpFld->ChgBodyTxtFlag( true );
+                    pExpField->ChangeExpansion(*pFrame,
+                            *static_txtattr_cast<SwTextField const*>(pHint));
+                    pExpField->ChgBodyTextFlag( true );
                 }
             }
             {
                 OUString const aStr( (bName)
-                        ? pFld->GetFieldName()
-                        : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion( aStr );
+                        ? pField->GetFieldName()
+                        : pField->ExpandField(bInClipboard) );
+                pRet = new SwFieldPortion( aStr );
             }
             break;
         }
@@ -207,69 +207,69 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         {
             if( !bName )
             {
-                SwDBField* pDBFld = static_cast<SwDBField*>(pFld);
-                pDBFld->ChgBodyTxtFlag( ::lcl_IsInBody( pFrame ) );
+                SwDBField* pDBField = static_cast<SwDBField*>(pField);
+                pDBField->ChgBodyTextFlag( ::lcl_IsInBody( pFrame ) );
             }
             {
                 OUString const aStr( (bName)
-                        ? pFld->GetFieldName()
-                        : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion(aStr);
+                        ? pField->GetFieldName()
+                        : pField->ExpandField(bInClipboard) );
+                pRet = new SwFieldPortion(aStr);
             }
             break;
         }
         case RES_REFPAGEGETFLD:
-            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
+            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFields() )
             {
-                static_cast<SwRefPageGetField*>(pFld)->ChangeExpansion(pFrame,
-                        static_txtattr_cast<SwTxtFld const*>(pHint));
+                static_cast<SwRefPageGetField*>(pField)->ChangeExpansion(pFrame,
+                        static_txtattr_cast<SwTextField const*>(pHint));
             }
             {
                 OUString const aStr( (bName)
-                        ? pFld->GetFieldName()
-                        : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion(aStr);
+                        ? pField->GetFieldName()
+                        : pField->ExpandField(bInClipboard) );
+                pRet = new SwFieldPortion(aStr);
             }
             break;
 
         case RES_JUMPEDITFLD:
             if( !bName )
-                pChFmt = static_cast<SwJumpEditField*>(pFld)->GetCharFmt();
+                pChFormat = static_cast<SwJumpEditField*>(pField)->GetCharFormat();
             bNewFlyPor = true;
             bPlaceHolder = true;
             break;
         case RES_GETREFFLD:
-            subType = static_cast<SwGetRefField*>(pFld)->GetSubType();
+            subType = static_cast<SwGetRefField*>(pField)->GetSubType();
             {
                 OUString const str( (bName)
-                        ? pFld->GetFieldName()
-                        : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion(str);
+                        ? pField->GetFieldName()
+                        : pField->ExpandField(bInClipboard) );
+                pRet = new SwFieldPortion(str);
             }
             if( subType == REF_BOOKMARK  )
-                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_BOOKMARKFLD;
+                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType = ATTR_BOOKMARKFLD;
             else if( subType == REF_SETREFATTR )
-                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_SETREFATTRFLD;
+                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType = ATTR_SETREFATTRFLD;
             break;
         case RES_DATETIMEFLD:
-            subType = static_cast<SwDateTimeField*>(pFld)->GetSubType();
+            subType = static_cast<SwDateTimeField*>(pField)->GetSubType();
             {
                 OUString const str( (bName)
-                        ? pFld->GetFieldName()
-                        : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion(str);
+                        ? pField->GetFieldName()
+                        : pField->ExpandField(bInClipboard) );
+                pRet = new SwFieldPortion(str);
             }
             if( subType & DATEFLD  )
-                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_DATEFLD;
+                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_DATEFLD;
             else if( subType & TIMEFLD )
-                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_TIMEFLD;
+                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType = ATTR_TIMEFLD;
             break;
         default:
             {
                 OUString const aStr( (bName)
-                        ? pFld->GetFieldName()
-                        : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion(aStr);
+                        ? pField->GetFieldName()
+                        : pField->ExpandField(bInClipboard) );
+                pRet = new SwFieldPortion(aStr);
             }
     }
 
@@ -279,23 +279,23 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         if( !bName )
         {
             pTmpFnt = new SwFont( *pFnt );
-            pTmpFnt->SetDiffFnt( &pChFmt->GetAttrSet(), pFrm->GetTxtNode()->getIDocumentSettingAccess() );
+            pTmpFnt->SetDiffFnt( &pChFormat->GetAttrSet(), pFrm->GetTextNode()->getIDocumentSettingAccess() );
         }
         {
             OUString const aStr( (bName)
-                    ? pFld->GetFieldName()
-                    : pFld->ExpandField(bInClipboard) );
-            pRet = new SwFldPortion(aStr, pTmpFnt, bPlaceHolder);
+                    ? pField->GetFieldName()
+                    : pField->ExpandField(bInClipboard) );
+            pRet = new SwFieldPortion(aStr, pTmpFnt, bPlaceHolder);
         }
     }
 
     return pRet;
 }
 
-static SwFldPortion * lcl_NewMetaPortion(SwTxtAttr & rHint, const bool bPrefix)
+static SwFieldPortion * lcl_NewMetaPortion(SwTextAttr & rHint, const bool bPrefix)
 {
     ::sw::Meta *const pMeta(
-        static_cast<SwFmtMeta &>(rHint.GetAttr()).GetMeta() );
+        static_cast<SwFormatMeta &>(rHint.GetAttr()).GetMeta() );
     OUString fix;
     ::sw::MetaField *const pField( dynamic_cast< ::sw::MetaField * >(pMeta) );
     OSL_ENSURE(pField, "lcl_NewMetaPortion: no meta field?");
@@ -303,7 +303,7 @@ static SwFldPortion * lcl_NewMetaPortion(SwTxtAttr & rHint, const bool bPrefix)
     {
         pField->GetPrefixAndSuffix((bPrefix) ? &fix : 0, (bPrefix) ? 0 : &fix);
     }
-    return new SwFldPortion( fix );
+    return new SwFieldPortion( fix );
 }
 
 /**
@@ -314,14 +314,14 @@ static SwFldPortion * lcl_NewMetaPortion(SwTxtAttr & rHint, const bool bPrefix)
  * due to Underflow. In that case, m_nHintEndIndex must be decremented,
  * so the portion will be created again on the next line.
  */
-SwExpandPortion * SwTxtFormatter::TryNewNoLengthPortion(SwTxtFormatInfo & rInfo)
+SwExpandPortion * SwTextFormatter::TryNewNoLengthPortion(SwTextFormatInfo & rInfo)
 {
     if (pHints)
     {
         const sal_Int32 nIdx(rInfo.GetIdx());
         while (m_nHintEndIndex < pHints->GetEndCount())
         {
-            SwTxtAttr & rHint( *pHints->GetEnd(m_nHintEndIndex) );
+            SwTextAttr & rHint( *pHints->GetEnd(m_nHintEndIndex) );
             sal_Int32 const nEnd( *rHint.GetAnyEnd() );
             if (nEnd > nIdx)
             {
@@ -332,7 +332,7 @@ SwExpandPortion * SwTxtFormatter::TryNewNoLengthPortion(SwTxtFormatInfo & rInfo)
             {
                 if (RES_TXTATR_METAFIELD == rHint.Which())
                 {
-                    SwFldPortion *const pPortion(
+                    SwFieldPortion *const pPortion(
                             lcl_NewMetaPortion(rHint, false));
                     pPortion->SetNoLength(); // no CH_TXTATR at hint end!
                     return pPortion;
@@ -343,13 +343,13 @@ SwExpandPortion * SwTxtFormatter::TryNewNoLengthPortion(SwTxtFormatInfo & rInfo)
     return 0;
 }
 
-SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
+SwLinePortion *SwTextFormatter::NewExtraPortion( SwTextFormatInfo &rInf )
 {
-    SwTxtAttr *pHint = GetAttr( rInf.GetIdx() );
+    SwTextAttr *pHint = GetAttr( rInf.GetIdx() );
     SwLinePortion *pRet = 0;
     if( !pHint )
     {
-        pRet = new SwTxtPortion;
+        pRet = new SwTextPortion;
         pRet->SetLen( 1 );
         rInf.SetLen( 1 );
         return pRet;
@@ -364,13 +364,13 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
         }
     case RES_TXTATR_FTN :
         {
-            pRet = NewFtnPortion( rInf, pHint );
+            pRet = NewFootnotePortion( rInf, pHint );
             break;
         }
     case RES_TXTATR_FIELD :
     case RES_TXTATR_ANNOTATION :
         {
-            pRet = NewFldPortion( rInf, pHint );
+            pRet = NewFieldPortion( rInf, pHint );
             break;
         }
     case RES_TXTATR_REFMARK :
@@ -393,7 +393,7 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
     if( !pRet )
     {
         const OUString aNothing;
-        pRet = new SwFldPortion( aNothing );
+        pRet = new SwFieldPortion( aNothing );
         rInf.SetLen( 1 );
     }
     return pRet;
@@ -404,22 +404,22 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
  * character than can be configured to be shown). However, in practice MSO also uses it as direct formatting
  * for numbering in that paragraph. I don't know if the problem is in the spec or in MSWord.
  */
-static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTxtFormatInfo& rInf, const IDocumentSettingAccess* pIDSA )
+static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFormatInfo& rInf, const IDocumentSettingAccess* pIDSA )
 {
-    SwTxtNode* node = rInf.GetTxtFrm()->GetTxtNode();
+    SwTextNode* node = rInf.GetTextFrm()->GetTextNode();
     if( !pIDSA->get(DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ))
         return;
     if( SwpHints* hints = node->GetpSwpHints())
     {
         for( size_t i = 0; i < hints->Count(); ++i )
         {
-            SwTxtAttr* hint = hints->GetTextHint( i );
+            SwTextAttr* hint = hints->GetTextHint( i );
             // Formatting for the paragraph mark is set to apply only to the (non-existent) extra character
             // the at end of the txt node.
             if( hint->Which() == RES_TXTATR_AUTOFMT && hint->GetEnd() != NULL
                 && hint->GetStart() == *hint->GetEnd() && hint->GetStart() == node->Len())
             {
-                std::shared_ptr<SfxItemSet> pSet(hint->GetAutoFmt().GetStyleHandle());
+                std::shared_ptr<SfxItemSet> pSet(hint->GetAutoFormat().GetStyleHandle());
 
                 // Check each item and in case it should be ignored, then clear it.
                 std::shared_ptr<SfxItemSet> pCleanedSet;
@@ -431,7 +431,7 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTxtForm
                     const SfxPoolItem* pItem = aIter.GetCurItem();
                     while (true)
                     {
-                        if (SwTxtNode::IsIgnoredCharFmtForNumbering(pItem->Which()))
+                        if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
                             pCleanedSet->ClearItem(pItem->Which());
 
                         if (aIter.IsAtEnd())
@@ -447,20 +447,20 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTxtForm
 }
 
 
-SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
+SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) const
 {
-    if( rInf.IsNumDone() || rInf.GetTxtStart() != nStart
-                || rInf.GetTxtStart() != rInf.GetIdx() )
+    if( rInf.IsNumDone() || rInf.GetTextStart() != nStart
+                || rInf.GetTextStart() != rInf.GetIdx() )
         return 0;
 
     SwNumberPortion *pRet = 0;
-    const SwTxtNode* pTxtNd = GetTxtFrm()->GetTxtNode();
-    const SwNumRule* pNumRule = pTxtNd->GetNumRule();
+    const SwTextNode* pTextNd = GetTextFrm()->GetTextNode();
+    const SwNumRule* pNumRule = pTextNd->GetNumRule();
 
     // Has a "valid" number?
-    if( pTxtNd->IsNumbered() && pTxtNd->IsCountedInList())
+    if( pTextNd->IsNumbered() && pTextNd->IsCountedInList())
     {
-        int nLevel = pTxtNd->GetActualListLevel();
+        int nLevel = pTextNd->GetActualListLevel();
 
         if (nLevel < 0)
             nLevel = 0;
@@ -468,21 +468,21 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
         if (nLevel >= MAXLEVEL)
             nLevel = MAXLEVEL - 1;
 
-        const SwNumFmt &rNumFmt = pNumRule->Get( nLevel );
-        const bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
-        const bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
+        const SwNumFormat &rNumFormat = pNumRule->Get( nLevel );
+        const bool bLeft = SVX_ADJUST_LEFT == rNumFormat.GetNumAdjust();
+        const bool bCenter = SVX_ADJUST_CENTER == rNumFormat.GetNumAdjust();
         const bool bLabelAlignmentPosAndSpaceModeActive(
-                rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT );
+                rNumFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT );
         const sal_uInt16 nMinDist = bLabelAlignmentPosAndSpaceModeActive
-                                ? 0 : rNumFmt.GetCharTextDistance();
+                                ? 0 : rNumFormat.GetCharTextDistance();
 
-        if( SVX_NUM_BITMAP == rNumFmt.GetNumberingType() )
+        if( SVX_NUM_BITMAP == rNumFormat.GetNumberingType() )
         {
-            pRet = new SwGrfNumPortion( const_cast<SwTxtFrm*>(GetTxtFrm()),
-                                        pTxtNd->GetLabelFollowedBy(),
-                                        rNumFmt.GetBrush(),
-                                        rNumFmt.GetGraphicOrientation(),
-                                        rNumFmt.GetGraphicSize(),
+            pRet = new SwGrfNumPortion( const_cast<SwTextFrm*>(GetTextFrm()),
+                                        pTextNd->GetLabelFollowedBy(),
+                                        rNumFormat.GetBrush(),
+                                        rNumFormat.GetGraphicOrientation(),
+                                        rNumFormat.GetGraphicSize(),
                                         bLeft, bCenter, nMinDist,
                                         bLabelAlignmentPosAndSpaceModeActive );
             long nTmpA = rInf.GetLast()->GetAscent();
@@ -493,17 +493,17 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
         else
         {
             // The SwFont is created dynamically and passed in the ctor,
-            // as the CharFmt only returns an SV-Font.
+            // as the CharFormat only returns an SV-Font.
             // In the dtor of SwNumberPortion, the SwFont is deleted.
             SwFont *pNumFnt = 0;
-            const SwAttrSet* pFmt = rNumFmt.GetCharFmt() ?
-                                    &rNumFmt.GetCharFmt()->GetAttrSet() :
+            const SwAttrSet* pFormat = rNumFormat.GetCharFormat() ?
+                                    &rNumFormat.GetCharFormat()->GetAttrSet() :
                                     NULL;
-            const IDocumentSettingAccess* pIDSA = pTxtNd->getIDocumentSettingAccess();
+            const IDocumentSettingAccess* pIDSA = pTextNd->getIDocumentSettingAccess();
 
-            if( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
+            if( SVX_NUM_CHAR_SPECIAL == rNumFormat.GetNumberingType() )
             {
-                const vcl::Font *pFmtFnt = rNumFmt.GetBulletFont();
+                const vcl::Font *pFormatFnt = rNumFormat.GetBulletFont();
 
                 // Build a new bullet font basing on the current paragraph font:
                 pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
@@ -528,19 +528,19 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 
                 // Apply the explicit attributes from the character style
                 // associated with the numering to the new bullet font.
-                if( pFmt )
-                    pNumFnt->SetDiffFnt( pFmt, pIDSA );
+                if( pFormat )
+                    pNumFnt->SetDiffFnt( pFormat, pIDSA );
 
                 checkApplyParagraphMarkFormatToNumbering( pNumFnt, rInf, pIDSA );
 
-                if ( pFmtFnt )
+                if ( pFormatFnt )
                 {
                     const sal_uInt8 nAct = pNumFnt->GetActual();
-                    pNumFnt->SetFamily( pFmtFnt->GetFamily(), nAct );
-                    pNumFnt->SetName( pFmtFnt->GetName(), nAct );
-                    pNumFnt->SetStyleName( pFmtFnt->GetStyleName(), nAct );
-                    pNumFnt->SetCharSet( pFmtFnt->GetCharSet(), nAct );
-                    pNumFnt->SetPitch( pFmtFnt->GetPitch(), nAct );
+                    pNumFnt->SetFamily( pFormatFnt->GetFamily(), nAct );
+                    pNumFnt->SetName( pFormatFnt->GetName(), nAct );
+                    pNumFnt->SetStyleName( pFormatFnt->GetStyleName(), nAct );
+                    pNumFnt->SetCharSet( pFormatFnt->GetCharSet(), nAct );
+                    pNumFnt->SetPitch( pFormatFnt->GetPitch(), nAct );
                 }
 
                 // we do not allow a vertical font
@@ -548,25 +548,25 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                                       pFrm->IsVertical() );
 
                 // --> OD 2008-01-23 #newlistelevelattrs#
-                pRet = new SwBulletPortion( rNumFmt.GetBulletChar(),
-                                            pTxtNd->GetLabelFollowedBy(),
+                pRet = new SwBulletPortion( rNumFormat.GetBulletChar(),
+                                            pTextNd->GetLabelFollowedBy(),
                                             pNumFnt,
                                             bLeft, bCenter, nMinDist,
                                             bLabelAlignmentPosAndSpaceModeActive );
             }
             else
             {
-                OUString aTxt( pTxtNd->GetNumString() );
-                if ( !aTxt.isEmpty() )
+                OUString aText( pTextNd->GetNumString() );
+                if ( !aText.isEmpty() )
                 {
-                    aTxt += pTxtNd->GetLabelFollowedBy();
+                    aText += pTextNd->GetLabelFollowedBy();
                 }
 
                 // Not just an optimization ...
                 // A number portion without text will be assigned a width of 0.
                 // The succeeding text portion will flow into the BreakCut in the BreakLine,
                 // although  we have rInf.GetLast()->GetFlyPortion()!
-                if( !aTxt.isEmpty() )
+                if( !aText.isEmpty() )
                 {
 
                     // Build a new numbering font basing on the current paragraph font:
@@ -584,15 +584,15 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 
                     // Apply the explicit attributes from the character style
                     // associated with the numering to the new bullet font.
-                    if( pFmt )
-                        pNumFnt->SetDiffFnt( pFmt, pIDSA );
+                    if( pFormat )
+                        pNumFnt->SetDiffFnt( pFormat, pIDSA );
 
                     checkApplyParagraphMarkFormatToNumbering( pNumFnt, rInf, pIDSA );
 
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
 
-                    pRet = new SwNumberPortion( aTxt, pNumFnt,
+                    pRet = new SwNumberPortion( aText, pNumFnt,
                                                 bLeft, bCenter, nMinDist,
                                                 bLabelAlignmentPosAndSpaceModeActive );
                 }

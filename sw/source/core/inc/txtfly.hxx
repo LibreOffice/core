@@ -25,15 +25,15 @@
 #include <vector>
 
 class OutputDevice;
-class SwCntntFrm;
+class SwContentFrm;
 class SwPageFrm;
-class SwTxtFly;
+class SwTextFly;
 class SdrObject;
-class SwTxtPaintInfo;
-class SwFmt;
+class SwTextPaintInfo;
+class SwFormat;
 class TextRanger;
 class SwAnchoredObject;
-class SwTxtFrm;
+class SwTextFrm;
 class SwDrawTextInfo;
 class SwContourCache;
 
@@ -59,8 +59,8 @@ class SwContourCache
     TextRanger *pTextRanger[ POLY_CNT ];
     long nPntCnt;
     sal_uInt16 nObjCnt;
-    const SwRect ContourRect( const SwFmt* pFmt, const SdrObject* pObj,
-        const SwTxtFrm* pFrm, const SwRect &rLine, const long nXPos,
+    const SwRect ContourRect( const SwFormat* pFormat, const SdrObject* pObj,
+        const SwTextFrm* pFrm, const SwRect &rLine, const long nXPos,
         const bool bRight );
 
 public:
@@ -79,7 +79,7 @@ public:
      */
     static const SwRect CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
                                        const SwRect &rLine,
-                                       const SwTxtFrm* pFrm,
+                                       const SwTextFrm* pFrm,
                                        const long nXPos,
                                        const bool bRight );
 };
@@ -87,11 +87,11 @@ public:
 /**
    The purpose of this class is to be the universal interface between
    formatting/text output and the possibly overlapping free-flying frames.
-   During formatting the formatter gets the information from SwTxtFly, whether
+   During formatting the formatter gets the information from SwTextFly, whether
    a certain area is present by the attributes of an overlapping frame.
    Such areas are represented by dummy portions.
 
-   The whole text output and touch-up is, again, forwarded to a SwTxtFly.
+   The whole text output and touch-up is, again, forwarded to a SwTextFly.
    This one decides, whether parts of the text need to be clipped and splits
    the areas for e.g. a DrawRect.
 
@@ -116,12 +116,12 @@ public:
    Every frame can push away text, with the restriction that it only has influence
    until the next frame.
  */
-class SwTxtFly
+class SwTextFly
 {
     const SwPageFrm             * pPage;
     const SwAnchoredObject      * mpCurrAnchoredObj;
-    const SwTxtFrm              * pCurrFrm;
-    const SwCntntFrm            * pMaster;
+    const SwTextFrm              * pCurrFrm;
+    const SwContentFrm            * pMaster;
     SwAnchoredObjList           * mpAnchoredObjList;
 
     long nMinBottom;
@@ -196,21 +196,21 @@ class SwTxtFly
     SwAnchoredObjList::size_type GetPos( const SwAnchoredObject* pAnchoredObj ) const;
 
     bool GetTop( const SwAnchoredObject* _pAnchoredObj,
-                 const bool bInFtn,
+                 const bool bInFootnote,
                  const bool bInFooterOrHeader );
 
     SwTwips CalcMinBottom() const;
 
-    const SwCntntFrm* _GetMaster();
+    const SwContentFrm* _GetMaster();
 
 public:
 
-    SwTxtFly();
-    SwTxtFly( const SwTxtFrm *pFrm );
-    SwTxtFly( const SwTxtFly& rTxtFly );
-    ~SwTxtFly();
+    SwTextFly();
+    SwTextFly( const SwTextFrm *pFrm );
+    SwTextFly( const SwTextFly& rTextFly );
+    ~SwTextFly();
 
-    void CtorInitTxtFly( const SwTxtFrm *pFrm );
+    void CtorInitTextFly( const SwTextFrm *pFrm );
 
     void SetTopRule();
 
@@ -227,7 +227,7 @@ public:
     bool Relax();
 
     SwTwips GetMinBottom() const;
-    const SwCntntFrm* GetMaster() const;
+    const SwContentFrm* GetMaster() const;
 
     // This temporary variable needs to be manipulated in const methods
     long GetNextTop() const;
@@ -266,10 +266,10 @@ public:
         won't be scribbled
      */
     void DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
-                      const SwTxtPaintInfo &rInf, bool bNoGraphic = false );
+                      const SwTextPaintInfo &rInf, bool bNoGraphic = false );
 
     /**
-        Used to switch off the SwTxtFly when there is no overlapping object (Relax).
+        Used to switch off the SwTextFly when there is no overlapping object (Relax).
 
         \param[in] the line area
         \return whether the line will be overlapped by a frame
@@ -299,24 +299,24 @@ public:
     void SetIgnoreObjsInHeaderFooter( const bool bNew );
 };
 
-inline SwAnchoredObjList* SwTxtFly::GetAnchoredObjList() const
+inline SwAnchoredObjList* SwTextFly::GetAnchoredObjList() const
 {
     return mpAnchoredObjList
            ? mpAnchoredObjList
-           : const_cast<SwTxtFly*>(this)->InitAnchoredObjList();
+           : const_cast<SwTextFly*>(this)->InitAnchoredObjList();
 }
 
-inline void SwTxtFly::SetTopRule()
+inline void SwTextFly::SetTopRule()
 {
     bTopRule = false;
 }
 
-inline bool SwTxtFly::IsOn() const
+inline bool SwTextFly::IsOn() const
 {
     return bOn;
 }
 
-inline bool SwTxtFly::Relax( const SwRect &rRect )
+inline bool SwTextFly::Relax( const SwRect &rRect )
 {
     if (bOn)
     {
@@ -325,7 +325,7 @@ inline bool SwTxtFly::Relax( const SwRect &rRect )
     return bOn;
 }
 
-inline bool SwTxtFly::Relax()
+inline bool SwTextFly::Relax()
 {
     if (bOn)
     {
@@ -334,42 +334,42 @@ inline bool SwTxtFly::Relax()
     return bOn;
 }
 
-inline SwTwips SwTxtFly::GetMinBottom() const
+inline SwTwips SwTextFly::GetMinBottom() const
 {
     return mpAnchoredObjList ? nMinBottom : CalcMinBottom();
 }
 
-inline const SwCntntFrm* SwTxtFly::GetMaster() const
+inline const SwContentFrm* SwTextFly::GetMaster() const
 {
-    return pMaster ? pMaster : const_cast<SwTxtFly*>(this)->_GetMaster();
+    return pMaster ? pMaster : const_cast<SwTextFly*>(this)->_GetMaster();
 }
 
-inline long SwTxtFly::GetNextTop() const
+inline long SwTextFly::GetNextTop() const
 {
     return nNextTop;
 }
 
-inline void SwTxtFly::SetNextTop( long nNew ) const
+inline void SwTextFly::SetNextTop( long nNew ) const
 {
-    const_cast<SwTxtFly*>(this)->nNextTop = nNew;
+    const_cast<SwTextFly*>(this)->nNextTop = nNew;
 }
 
-inline SwRect SwTxtFly::GetFrm( const SwRect &rRect, bool bTop ) const
+inline SwRect SwTextFly::GetFrm( const SwRect &rRect, bool bTop ) const
 {
     return bOn ? _GetFrm( rRect, bTop ) : SwRect();
 }
 
-inline void SwTxtFly::SetIgnoreCurrentFrame( bool bNew )
+inline void SwTextFly::SetIgnoreCurrentFrame( bool bNew )
 {
     mbIgnoreCurrentFrame = bNew;
 }
 
-inline void SwTxtFly::SetIgnoreContour( bool bNew )
+inline void SwTextFly::SetIgnoreContour( bool bNew )
 {
     mbIgnoreContour = bNew;
 }
 
-inline void SwTxtFly::SetIgnoreObjsInHeaderFooter( const bool bNew )
+inline void SwTextFly::SetIgnoreObjsInHeaderFooter( const bool bNew )
 {
     mbIgnoreObjsInHeaderFooter = bNew;
 }

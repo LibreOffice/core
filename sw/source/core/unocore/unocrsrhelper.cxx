@@ -191,10 +191,10 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         ::sw::UnoTunnelGetImplementation<SwXFrame>(xTunnel));
     if (pFrame)
     {
-        const SwFrmFmt *const pFrmFmt(pFrame->GetFrmFmt());
-        if (pFrmFmt && pFrmFmt->GetDoc() == &rTargetDoc)
+        const SwFrameFormat *const pFrameFormat(pFrame->GetFrameFormat());
+        if (pFrameFormat && pFrameFormat->GetDoc() == &rTargetDoc)
         {
-            o_rFrame = std::make_pair(pFrmFmt->GetName(), pFrame->GetFlyCntType());
+            o_rFrame = std::make_pair(pFrameFormat->GetName(), pFrame->GetFlyCntType());
         }
         return;
     }
@@ -203,10 +203,10 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         ::sw::UnoTunnelGetImplementation<SwXTextTable>(xTunnel));
     if (pTextTable)
     {
-        SwFrmFmt *const pFrmFmt(pTextTable->GetFrmFmt());
-        if (pFrmFmt && pFrmFmt->GetDoc() == &rTargetDoc)
+        SwFrameFormat *const pFrameFormat(pTextTable->GetFrameFormat());
+        if (pFrameFormat && pFrameFormat->GetDoc() == &rTargetDoc)
         {
-            o_rTableName = pFrmFmt->GetName();
+            o_rTableName = pFrameFormat->GetName();
         }
         return;
     }
@@ -215,11 +215,11 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         ::sw::UnoTunnelGetImplementation<SwXCell>(xTunnel));
     if (pCell)
     {
-        SwFrmFmt *const pFrmFmt(pCell->GetFrmFmt());
-        if (pFrmFmt && pFrmFmt->GetDoc() == &rTargetDoc)
+        SwFrameFormat *const pFrameFormat(pCell->GetFrameFormat());
+        if (pFrameFormat && pFrameFormat->GetDoc() == &rTargetDoc)
         {
-            SwTableBox * pBox = pCell->GetTblBox();
-            SwTable *const pTable = SwTable::FindTable(pFrmFmt);
+            SwTableBox * pBox = pCell->GetTableBox();
+            SwTable *const pTable = SwTable::FindTable(pFrameFormat);
             // ??? what's the benefit of setting pBox in this convoluted way?
             pBox = pCell->FindBox(pTable, pBox);
             if (pBox)
@@ -248,7 +248,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         ::sw::UnoTunnelGetImplementation<SwXCellRange>(xTunnel));
     if (pCellRange)
     {
-        SwUnoCrsr const*const pUnoCrsr(pCellRange->GetTblCrsr());
+        SwUnoCrsr const*const pUnoCrsr(pCellRange->GetTableCrsr());
         if (pUnoCrsr && pUnoCrsr->GetDoc() == &rTargetDoc)
         {
             // probably can't copy it to o_rpPaM for this since it's
@@ -268,29 +268,29 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
 }
 
 uno::Reference<text::XTextContent>
-GetNestedTextContent(SwTxtNode & rTextNode, sal_Int32 const nIndex,
+GetNestedTextContent(SwTextNode & rTextNode, sal_Int32 const nIndex,
         bool const bParent)
 {
     // these should be unambiguous because of the dummy character
-    SwTxtNode::GetTxtAttrMode const eMode( (bParent)
-        ? SwTxtNode::PARENT : SwTxtNode::EXPAND );
-    SwTxtAttr *const pMetaTxtAttr =
-        rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_META, eMode);
-    SwTxtAttr *const pMetaFieldTxtAttr =
-        rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_METAFIELD, eMode);
+    SwTextNode::GetTextAttrMode const eMode( (bParent)
+        ? SwTextNode::PARENT : SwTextNode::EXPAND );
+    SwTextAttr *const pMetaTextAttr =
+        rTextNode.GetTextAttrAt(nIndex, RES_TXTATR_META, eMode);
+    SwTextAttr *const pMetaFieldTextAttr =
+        rTextNode.GetTextAttrAt(nIndex, RES_TXTATR_METAFIELD, eMode);
     // which is innermost?
-    SwTxtAttr *const pTxtAttr = (pMetaTxtAttr)
-        ? ((pMetaFieldTxtAttr)
-            ? ((pMetaFieldTxtAttr->GetStart() >
-                    pMetaTxtAttr->GetStart())
-                ? pMetaFieldTxtAttr : pMetaTxtAttr)
-            : pMetaTxtAttr)
-        : pMetaFieldTxtAttr;
+    SwTextAttr *const pTextAttr = (pMetaTextAttr)
+        ? ((pMetaFieldTextAttr)
+            ? ((pMetaFieldTextAttr->GetStart() >
+                    pMetaTextAttr->GetStart())
+                ? pMetaFieldTextAttr : pMetaTextAttr)
+            : pMetaTextAttr)
+        : pMetaFieldTextAttr;
     uno::Reference<XTextContent> xRet;
-    if (pTxtAttr)
+    if (pTextAttr)
     {
         ::sw::Meta *const pMeta(
-            static_cast<SwFmtMeta &>(pTxtAttr->GetAttr()).GetMeta());
+            static_cast<SwFormatMeta &>(pTextAttr->GetAttr()).GetMeta());
         OSL_ASSERT(pMeta);
         xRet.set(pMeta->MakeUnoObject(), uno::UNO_QUERY);
     }
@@ -302,7 +302,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
                                         , Any *pAny
                                         , PropertyState& eState
-                                        , const SwTxtNode* pNode  )
+                                        , const SwTextNode* pNode  )
 {
     PropertyState eNewState = PropertyState_DIRECT_VALUE;
     bool bDone = true;
@@ -311,10 +311,10 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_PARA_CONT_PREV_SUBTREE:
             if (pAny)
             {
-                const SwTxtNode * pTmpNode = pNode;
+                const SwTextNode * pTmpNode = pNode;
 
                 if (!pTmpNode)
-                    pTmpNode = rPam.GetNode().GetTxtNode();
+                    pTmpNode = rPam.GetNode().GetTextNode();
 
                 bool bRet = false;
 
@@ -331,10 +331,10 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_PARA_NUM_STRING:
             if (pAny)
             {
-                const SwTxtNode * pTmpNode = pNode;
+                const SwTextNode * pTmpNode = pNode;
 
                 if (!pTmpNode)
-                    pTmpNode = rPam.GetNode().GetTxtNode();
+                    pTmpNode = rPam.GetNode().GetTextNode();
 
                 OUString sRet;
                 if ( pTmpNode && pTmpNode->GetNum() )
@@ -348,10 +348,10 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case RES_PARATR_OUTLINELEVEL:
             if (pAny)
             {
-                const SwTxtNode * pTmpNode = pNode;
+                const SwTextNode * pTmpNode = pNode;
 
                 if (!pTmpNode)
-                    pTmpNode = rPam.GetNode().GetTxtNode();
+                    pTmpNode = rPam.GetNode().GetTextNode();
 
                 sal_Int16 nRet = -1;
                 if ( pTmpNode )
@@ -363,21 +363,21 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
         case FN_UNO_PARA_STYLE :
         {
-            SwFmtColl* pFmt = 0;
+            SwFormatColl* pFormat = 0;
             if(pNode)
-                pFmt = FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID
-                            ? pNode->GetFmtColl() : &pNode->GetAnyFmtColl();
+                pFormat = FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID
+                            ? pNode->GetFormatColl() : &pNode->GetAnyFormatColl();
             else
             {
-                pFmt = SwUnoCursorHelper::GetCurTxtFmtColl(rPam,
+                pFormat = SwUnoCursorHelper::GetCurTextFormatColl(rPam,
                         FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID);
             }
-            if(pFmt)
+            if(pFormat)
             {
                 if( pAny )
                 {
                     OUString sVal;
-                    SwStyleNameMapper::FillProgName(pFmt->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
+                    SwStyleNameMapper::FillProgName(pFormat->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
                     *pAny <<= sVal;
                 }
             }
@@ -409,25 +409,25 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_NUMBER_NEWSTART:
         {
             // a multi selection is not considered
-            const SwTxtNode* pTxtNd = rPam.GetNode().GetTxtNode();
-            if ( pTxtNd && pTxtNd->IsInList() )
+            const SwTextNode* pTextNd = rPam.GetNode().GetTextNode();
+            if ( pTextNd && pTextNd->IsInList() )
             {
                 if( pAny )
                 {
                     if(rEntry.nWID == FN_UNO_NUM_LEVEL)
-                        *pAny <<= (sal_Int16)(pTxtNd->GetActualListLevel());
+                        *pAny <<= (sal_Int16)(pTextNd->GetActualListLevel());
                     else if(rEntry.nWID == FN_UNO_IS_NUMBER)
                     {
-                        *pAny <<= pTxtNd->IsCountedInList();
+                        *pAny <<= pTextNd->IsCountedInList();
                     }
                     // #i91601#
                     else if ( rEntry.nWID == FN_UNO_LIST_ID )
                     {
-                        *pAny <<= pTxtNd->GetListId();
+                        *pAny <<= pTextNd->GetListId();
                     }
                     else
                     {
-                        *pAny <<= pTxtNd->IsListRestart();
+                        *pAny <<= pTextNd->IsListRestart();
                     }
                 }
             }
@@ -465,10 +465,10 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             break;
         case FN_UNO_DOCUMENT_INDEX_MARK:
         {
-            ::std::vector<SwTxtAttr *> marks;
-            if (rPam.GetNode().IsTxtNode())
+            ::std::vector<SwTextAttr *> marks;
+            if (rPam.GetNode().IsTextNode())
             {
-                marks = rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
+                marks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
                     rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK);
             }
             if (marks.size())
@@ -509,18 +509,18 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_TEXT_FIELD:
         {
             const SwPosition *pPos = rPam.Start();
-            const SwTxtNode *pTxtNd =
-                rPam.GetDoc()->GetNodes()[pPos->nNode.GetIndex()]->GetTxtNode();
-            const SwTxtAttr* pTxtAttr = (pTxtNd)
-                ? pTxtNd->GetFldTxtAttrAt( pPos->nContent.GetIndex(), true )
+            const SwTextNode *pTextNd =
+                rPam.GetDoc()->GetNodes()[pPos->nNode.GetIndex()]->GetTextNode();
+            const SwTextAttr* pTextAttr = (pTextNd)
+                ? pTextNd->GetFieldTextAttrAt( pPos->nContent.GetIndex(), true )
                 : 0;
-            if ( pTxtAttr != NULL )
+            if ( pTextAttr != NULL )
             {
                 if( pAny )
                 {
                     uno::Reference<text::XTextField> const xField(
                         SwXTextField::CreateXTextField(rPam.GetDoc(),
-                           &pTxtAttr->GetFmtFld()));
+                           &pTextAttr->GetFormatField()));
                     *pAny <<= xField;
                 }
             }
@@ -537,18 +537,18 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    const SwTableNode* pTblNode = pSttNode->FindTableNode();
-                    SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
+                    const SwTableNode* pTableNode = pSttNode->FindTableNode();
+                    SwFrameFormat* pTableFormat = (SwFrameFormat*)pTableNode->GetTable().GetFrameFormat();
                     //SwTable& rTable = static_cast<SwTableNode*>(pSttNode)->GetTable();
                     if(FN_UNO_TEXT_TABLE == rEntry.nWID)
                     {
-                        uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
+                        uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFormat);
                         pAny->setValue(&xTable, cppu::UnoType<XTextTable>::get());
                     }
                     else
                     {
-                        SwTableBox* pBox = pSttNode->GetTblBox();
-                        uno::Reference< XCell >  xCell = SwXCell::CreateXCell(pTableFmt, pBox);
+                        SwTableBox* pBox = pSttNode->GetTableBox();
+                        uno::Reference< XCell >  xCell = SwXCell::CreateXCell(pTableFormat, pBox);
                         pAny->setValue(&xCell, cppu::UnoType<XCell>::get());
                     }
                 }
@@ -562,13 +562,13 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             SwStartNode* pSttNode = rPam.GetNode().StartOfSectionNode();
             SwStartNodeType eType = pSttNode->GetStartNodeType();
 
-            SwFrmFmt* pFmt;
-            if(eType == SwFlyStartNode && 0 != (pFmt = pSttNode->GetFlyFmt()))
+            SwFrameFormat* pFormat;
+            if(eType == SwFlyStartNode && 0 != (pFormat = pSttNode->GetFlyFormat()))
             {
                 if( pAny )
                 {
                     uno::Reference<XTextFrame> const xFrame(
-                        SwXTextFrame::CreateXTextFrame(*pFmt->GetDoc(), pFmt));
+                        SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat));
                     (*pAny) <<= xFrame;
                 }
             }
@@ -583,7 +583,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    uno::Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFmt() );
+                    uno::Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFormat() );
                     pAny->setValue(&xSect, cppu::UnoType<XTextSection>::get());
                 }
             }
@@ -594,19 +594,19 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_ENDNOTE:
         case FN_UNO_FOOTNOTE:
         {
-            SwTxtAttr *const pTxtAttr = rPam.GetNode().IsTxtNode() ?
-                rPam.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
+            SwTextAttr *const pTextAttr = rPam.GetNode().IsTextNode() ?
+                rPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
                     rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN) : 0;
-            if(pTxtAttr)
+            if(pTextAttr)
             {
-                const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
-                if(rFtn.IsEndNote() == (FN_UNO_ENDNOTE == rEntry.nWID))
+                const SwFormatFootnote& rFootnote = pTextAttr->GetFootnote();
+                if(rFootnote.IsEndNote() == (FN_UNO_ENDNOTE == rEntry.nWID))
                 {
                     if( pAny )
                     {
                         const uno::Reference< text::XFootnote > xFootnote =
                             SwXFootnote::CreateXFootnote(*rPam.GetDoc(),
-                                    &const_cast<SwFmtFtn&>(rFtn));
+                                    &const_cast<SwFormatFootnote&>(rFootnote));
                         *pAny <<= xFootnote;
                     }
                 }
@@ -619,21 +619,21 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_REFERENCE_MARK:
         {
-            ::std::vector<SwTxtAttr *> marks;
-            if (rPam.GetNode().IsTxtNode())
+            ::std::vector<SwTextAttr *> marks;
+            if (rPam.GetNode().IsTextNode())
             {
                 marks = (
-                rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
+                rPam.GetNode().GetTextNode()->GetTextAttrsAt(
                     rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
             }
             if (marks.size())
             {
                 if( pAny )
                 {   // hmm... can only return 1 here
-                    const SwFmtRefMark& rRef = (*marks.begin())->GetRefMark();
+                    const SwFormatRefMark& rRef = (*marks.begin())->GetRefMark();
                     uno::Reference<XTextContent> const xRef =
                         SwXReferenceMark::CreateXReferenceMark(*rPam.GetDoc(),
-                                const_cast<SwFmtRefMark*>(&rRef));
+                                const_cast<SwFormatRefMark*>(&rRef));
                     pAny->setValue(&xRef, cppu::UnoType<XTextContent>::get());
                 }
             }
@@ -643,8 +643,8 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_NESTED_TEXT_CONTENT:
         {
-            uno::Reference<XTextContent> const xRet(rPam.GetNode().IsTxtNode()
-                ? GetNestedTextContent(*rPam.GetNode().GetTxtNode(),
+            uno::Reference<XTextContent> const xRet(rPam.GetNode().IsTextNode()
+                ? GetNestedTextContent(*rPam.GetNode().GetTextNode(),
                     rPam.GetPoint()->nContent.GetIndex(), false)
                 : 0);
             if (xRet.is())
@@ -663,9 +663,9 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_CHARFMT_SEQUENCE:
         {
 
-            SwTxtNode *const pTxtNode = rPam.GetNode().GetTxtNode();
+            SwTextNode *const pTextNode = rPam.GetNode().GetTextNode();
             if (&rPam.GetNode(true) == &rPam.GetNode(false)
-                && pTxtNode && pTxtNode->GetpSwpHints())
+                && pTextNode && pTextNode->GetpSwpHints())
             {
                 sal_Int32 nPaMStart = rPam.GetPoint()->nContent.GetIndex();
                 sal_Int32 nPaMEnd = rPam.GetMark() ? rPam.GetMark()->nContent.GetIndex() : nPaMStart;
@@ -674,10 +674,10 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     std::swap(nPaMStart, nPaMEnd);
                 }
                 Sequence< OUString> aCharStyles;
-                SwpHints* pHints = pTxtNode->GetpSwpHints();
+                SwpHints* pHints = pTextNode->GetpSwpHints();
                 for( size_t nAttr = 0; nAttr < pHints->GetStartCount(); ++nAttr )
                 {
-                    SwTxtAttr* pAttr = pHints->GetStart( nAttr );
+                    SwTextAttr* pAttr = pHints->GetStart( nAttr );
                     if(pAttr->Which() != RES_TXTATR_CHARFMT)
                         continue;
                     const sal_Int32 nAttrStart = pAttr->GetStart();
@@ -702,10 +702,10 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                     "attribute overlaps or is outside");
                             //now the name of the style has to be added to the sequence
                             aCharStyles.realloc(aCharStyles.getLength() + 1);
-                            OSL_ENSURE(pAttr->GetCharFmt().GetCharFmt(), "no character format set");
+                            OSL_ENSURE(pAttr->GetCharFormat().GetCharFormat(), "no character format set");
                             aCharStyles.getArray()[aCharStyles.getLength() - 1] =
                                         SwStyleNameMapper::GetProgName(
-                                            pAttr->GetCharFmt().GetCharFmt()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+                                            pAttr->GetCharFormat().GetCharFormat()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                         }
                     }
 
@@ -731,14 +731,14 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
 
 sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
 {
-    const SwTxtNode* pTxtNd = rPam.GetNode().GetTxtNode();
+    const SwTextNode* pTextNd = rPam.GetNode().GetTextNode();
     // correction: check, if restart value is set at the text node and use
-    // new method <SwTxtNode::GetAttrListRestartValue()> to retrieve the value
-    if ( pTxtNd && pTxtNd->GetNumRule() && pTxtNd->IsListRestart() &&
-         pTxtNd->HasAttrListRestartValue() )
+    // new method <SwTextNode::GetAttrListRestartValue()> to retrieve the value
+    if ( pTextNd && pTextNd->GetNumRule() && pTextNd->IsListRestart() &&
+         pTextNd->HasAttrListRestartValue() )
     {
         eState = PropertyState_DIRECT_VALUE;
-        sal_Int16 nTmp = sal::static_int_cast< sal_Int16 >(pTxtNd->GetAttrListRestartValue());
+        sal_Int16 nTmp = sal::static_int_cast< sal_Int16 >(pTextNd->GetAttrListRestartValue());
         return nTmp;
     }
     eState = PropertyState_DEFAULT_VALUE;
@@ -769,35 +769,35 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 const OUString* pBulletFontNames = pSwNum->GetBulletFontNames();
                 for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
                 {
-                    SwNumFmt aFmt(aRule.Get( i ));
+                    SwNumFormat aFormat(aRule.Get( i ));
                     if (!pNewCharStyles[i].isEmpty() &&
                         !SwXNumberingRules::isInvalidStyle(pNewCharStyles[i]) &&
-                        (!aFmt.GetCharFmt() || pNewCharStyles[i] != aFmt.GetCharFmt()->GetName()))
+                        (!aFormat.GetCharFormat() || pNewCharStyles[i] != aFormat.GetCharFormat()->GetName()))
                     {
                         if (pNewCharStyles[i].isEmpty())
                         {
                             // FIXME
                             // Is something missing/wrong here?
                             // if condition is always false due to outer check!
-                            aFmt.SetCharFmt(0);
+                            aFormat.SetCharFormat(0);
                         }
                         else
                         {
 
                             // get CharStyle and set the rule
-                            const size_t nChCount = pDoc->GetCharFmts()->size();
-                            SwCharFmt* pCharFmt = 0;
-                            for(size_t nCharFmt = 0; nCharFmt < nChCount; ++nCharFmt)
+                            const size_t nChCount = pDoc->GetCharFormats()->size();
+                            SwCharFormat* pCharFormat = 0;
+                            for(size_t nCharFormat = 0; nCharFormat < nChCount; ++nCharFormat)
                             {
-                                SwCharFmt& rChFmt = *((*(pDoc->GetCharFmts()))[nCharFmt]);
-                                if(rChFmt.GetName() == pNewCharStyles[i])
+                                SwCharFormat& rChFormat = *((*(pDoc->GetCharFormats()))[nCharFormat]);
+                                if(rChFormat.GetName() == pNewCharStyles[i])
                                 {
-                                    pCharFmt = &rChFmt;
+                                    pCharFormat = &rChFormat;
                                     break;
                                 }
                             }
 
-                            if(!pCharFmt)
+                            if(!pCharFormat)
                             {
                                 SfxStyleSheetBasePool* pPool = pDoc->GetDocShell()->GetStyleSheetPool();
                                 SfxStyleSheetBase* pBase;
@@ -805,17 +805,17 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                             // shall it really be created?
                                 if(!pBase)
                                     pBase = &pPool->Make(pNewCharStyles[i], SFX_STYLE_FAMILY_PAGE);
-                                pCharFmt = static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt();
+                                pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
                             }
-                            if(pCharFmt)
-                                aFmt.SetCharFmt(pCharFmt);
+                            if(pCharFormat)
+                                aFormat.SetCharFormat(pCharFormat);
                         }
                     }
                     //Now again for fonts
                     if(
                        !pBulletFontNames[i].isEmpty() &&
                        !SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
-                       (!aFmt.GetBulletFont() || aFmt.GetBulletFont()->GetName() != pBulletFontNames[i])
+                       (!aFormat.GetBulletFont() || aFormat.GetBulletFont()->GetName() != pBulletFontNames[i])
                       )
                     {
                         const SvxFontListItem* pFontListItem =
@@ -826,9 +826,9 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         vcl::FontInfo aInfo = pList->Get(
                             pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE);
                         vcl::Font aFont(aInfo);
-                        aFmt.SetBulletFont(&aFont);
+                        aFormat.SetBulletFont(&aFont);
                     }
-                    aRule.Set( i, aFmt );
+                    aRule.Set( i, aFormat );
                 }
                 UnoActionContext aAction(pDoc);
 
@@ -894,9 +894,9 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 
 void GetCurPageStyle(SwPaM& rPaM, OUString &rString)
 {
-    if (!rPaM.GetCntntNode())
+    if (!rPaM.GetContentNode())
         return; // TODO: is there an easy way to get it for tables/sections?
-    SwCntntFrm* pFrame = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
+    SwContentFrm* pFrame = rPaM.GetContentNode()->getLayoutFrm(rPaM.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
     if(pFrame)
     {
         const SwPageFrm* pPage = pFrame->FindPageFrm();
@@ -1072,7 +1072,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
                 pDoc->getIDocumentContentOperations().DeleteAndJoin(*pUnoCrsr);
 
             SwNodeIndex aSave(  pUnoCrsr->GetPoint()->nNode, -1 );
-            sal_Int32 nCntnt = pUnoCrsr->GetPoint()->nContent.GetIndex();
+            sal_Int32 nContent = pUnoCrsr->GetPoint()->nContent.GetIndex();
 
             sal_uInt32 nErrno = pRdr->Read( *pRead );   // and paste the document
 
@@ -1082,10 +1082,10 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
                 pUnoCrsr->SetMark();
                 pUnoCrsr->GetMark()->nNode = aSave;
 
-                SwCntntNode* pCntNode = aSave.GetNode().GetCntntNode();
+                SwContentNode* pCntNode = aSave.GetNode().GetContentNode();
                 if( !pCntNode )
-                    nCntnt = 0;
-                pUnoCrsr->GetMark()->nContent.Assign( pCntNode, nCntnt );
+                    nContent = 0;
+                pUnoCrsr->GetMark()->nContent.Assign( pCntNode, nContent );
             }
 
             delete pRdr;
@@ -1112,16 +1112,16 @@ bool DocInsertStringSplitCR(
 
     // grouping done in InsertString is intended for typing, not API calls
     ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-    SwTxtNode* const pTxtNd =
-        rNewCursor.GetPoint()->nNode.GetNode().GetTxtNode();
-    if (!pTxtNd)
+    SwTextNode* const pTextNd =
+        rNewCursor.GetPoint()->nNode.GetNode().GetTextNode();
+    if (!pTextNd)
     {
         SAL_INFO("sw.uno", "DocInsertStringSplitCR: need a text node");
         return false;
     }
-    OUString aTxt;
+    OUString aText;
     sal_Int32 nStartIdx = 0;
-    const sal_Int32 nMaxLength = COMPLETE_STRING - pTxtNd->GetTxt().getLength();
+    const sal_Int32 nMaxLength = COMPLETE_STRING - pTextNd->GetText().getLength();
 
     sal_Int32 nIdx = rText.indexOf( '\r', nStartIdx );
     if( ( nIdx == -1 && nMaxLength < rText.getLength() ) ||
@@ -1132,9 +1132,9 @@ bool DocInsertStringSplitCR(
     while (nIdx != -1 )
     {
         OSL_ENSURE( nIdx - nStartIdx >= 0, "index negative!" );
-        aTxt = rText.copy( nStartIdx, nIdx - nStartIdx );
-        if (!aTxt.isEmpty() &&
-            !rDoc.getIDocumentContentOperations().InsertString( rNewCursor, aTxt, nInsertFlags ))
+        aText = rText.copy( nStartIdx, nIdx - nStartIdx );
+        if (!aText.isEmpty() &&
+            !rDoc.getIDocumentContentOperations().InsertString( rNewCursor, aText, nInsertFlags ))
         {
             OSL_FAIL( "Doc->Insert(Str) failed." );
             bOK = false;
@@ -1147,9 +1147,9 @@ bool DocInsertStringSplitCR(
         nStartIdx = nIdx + 1;
         nIdx = rText.indexOf( '\r', nStartIdx );
     }
-    aTxt = rText.copy( nStartIdx );
-    if (!aTxt.isEmpty() &&
-        !rDoc.getIDocumentContentOperations().InsertString( rNewCursor, aTxt, nInsertFlags ))
+    aText = rText.copy( nStartIdx );
+    if (!aText.isEmpty() &&
+        !rDoc.getIDocumentContentOperations().InsertString( rNewCursor, aText, nInsertFlags ))
     {
         OSL_FAIL( "Doc->Insert(Str) failed." );
         bOK = false;
@@ -1290,7 +1290,7 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    IDocumentRedlineAccess* pRedlineAccess = &rTableLine.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess();
+    IDocumentRedlineAccess* pRedlineAccess = &rTableLine.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess();
 
     RedlineType_t eType;
     if ( rRedlineType == "TableRowInsert" )
@@ -1347,7 +1347,7 @@ void makeTableCellRedline( SwTableBox& rTableBox,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    IDocumentRedlineAccess* pRedlineAccess = &rTableBox.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess();
+    IDocumentRedlineAccess* pRedlineAccess = &rTableBox.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess();
 
     RedlineType_t eType;
     if ( rRedlineType == "TableCellInsert" )

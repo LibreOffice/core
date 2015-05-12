@@ -168,7 +168,7 @@ void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<SwColumnPage&>(rPage).SetFrmMode(true);
         static_cast<SwColumnPage&>(rPage).SetFormatUsed(m_bFormat);
 
-        const SwFmtFrmSize& rSize = static_cast<const SwFmtFrmSize&>(
+        const SwFormatFrmSize& rSize = static_cast<const SwFormatFrmSize&>(
                                             m_rSet.Get( RES_FRM_SIZE ));
         static_cast<SwColumnPage&>(rPage).SetPageWidth( rSize.GetWidth() );
     }

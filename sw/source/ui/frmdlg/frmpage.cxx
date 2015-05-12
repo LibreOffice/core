@@ -614,7 +614,7 @@ SwFrmPage::SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet)
     nUpperBorder(0),
     nLowerBorder(0),
     fWidthHeightRatio(1.0),
-    mpToCharCntntPos( NULL ),
+    mpToCharContentPos( NULL ),
 
     nOldH(text::HoriOrientation::CENTER),
     nOldHRel(text::RelOrientation::FRAME),
@@ -901,7 +901,7 @@ void SwFrmPage::Reset( const SfxItemSet *rSet )
     SetMetric( *m_pAtVertPosED, aMetric );
 
     const SfxPoolItem* pItem = NULL;
-    const SwFmtAnchor& rAnchor = static_cast<const SwFmtAnchor&>(rSet->Get(RES_ANCHOR));
+    const SwFormatAnchor& rAnchor = static_cast<const SwFormatAnchor&>(rSet->Get(RES_ANCHOR));
 
     if (SfxItemState::SET == rSet->GetItemState(FN_OLE_IS_MATH, false, &pItem))
         m_bIsMathOLE = static_cast<const SfxBoolItem*>(pItem)->GetValue();
@@ -956,7 +956,7 @@ void SwFrmPage::Reset( const SfxItemSet *rSet )
     }
     else
     {
-        aGrfSize = static_cast<const SwFmtFrmSize&>(rSet->Get(RES_FRM_SIZE)).GetSize();
+        aGrfSize = static_cast<const SwFormatFrmSize&>(rSet->Get(RES_FRM_SIZE)).GetSize();
     }
 
     // entering procent value made possible
@@ -965,7 +965,7 @@ void SwFrmPage::Reset( const SfxItemSet *rSet )
     //the available space is not yet known so the RefValue has to be calculated from size and relative size values
     //this is needed only if relative values are already set
 
-    const SwFmtFrmSize& rFrmSize = static_cast<const SwFmtFrmSize&>(rSet->Get(RES_FRM_SIZE));
+    const SwFormatFrmSize& rFrmSize = static_cast<const SwFormatFrmSize&>(rSet->Get(RES_FRM_SIZE));
 
     m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::FRAME));
     m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::REL_PG_FRAME));
@@ -1006,12 +1006,12 @@ void SwFrmPage::Reset( const SfxItemSet *rSet )
 
     // i#22341 - determine content position of character
     // Note: content position can be NULL
-    mpToCharCntntPos = rAnchor.GetCntntAnchor();
+    mpToCharContentPos = rAnchor.GetContentAnchor();
 
     // i#18732 - init checkbox value
     {
         const bool bFollowTextFlow =
-            static_cast<const SwFmtFollowTextFlow&>(rSet->Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
+            static_cast<const SwFormatFollowTextFlow&>(rSet->Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
         m_pFollowTextFlowCB->Check( bFollowTextFlow );
     }
 
@@ -1074,16 +1074,16 @@ bool SwFrmPage::FillItemSet(SfxItemSet *rSet)
     if ( !bFormat )
     {
         pOldItem = GetOldItem(*rSet, RES_ANCHOR);
-        if (bNew || !pOldItem || eAnchorId != static_cast<const SwFmtAnchor*>(pOldItem)->GetAnchorId())
+        if (bNew || !pOldItem || eAnchorId != static_cast<const SwFormatAnchor*>(pOldItem)->GetAnchorId())
         {
-            SwFmtAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
+            SwFormatAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
             bRet = 0 != rSet->Put( aAnc );
         }
     }
 
     if ( pHMap )
     {
-        SwFmtHoriOrient aHoriOrient( static_cast<const SwFmtHoriOrient&>(
+        SwFormatHoriOrient aHoriOrient( static_cast<const SwFormatHoriOrient&>(
                                                 rOldSet.Get(RES_HORI_ORIENT)) );
 
         const sal_Int32 nMapPos = GetMapPos(pHMap, *m_pHorizontalDLB);
@@ -1108,7 +1108,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet *rSet)
         bool bSame = false;
         if ((bNew == bFormat) && pOldItem)
         {
-             bSame = aHoriOrient == static_cast<const SwFmtHoriOrient&>(*pOldItem);
+             bSame = aHoriOrient == static_cast<const SwFormatHoriOrient&>(*pOldItem);
         }
         if ((bNew && !bFormat) || ((bAtHorzPosModified || bMod) && !bSame))
         {
@@ -1119,7 +1119,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet *rSet)
     if ( pVMap )
     {
         // alignment vertical
-        SwFmtVertOrient aVertOrient( static_cast<const SwFmtVertOrient&>(
+        SwFormatVertOrient aVertOrient( static_cast<const SwFormatVertOrient&>(
                                                 rOldSet.Get(RES_VERT_ORIENT)) );
 
         const sal_Int32 nMapPos = GetMapPos(pVMap, *m_pVerticalDLB);
@@ -1148,10 +1148,10 @@ bool SwFrmPage::FillItemSet(SfxItemSet *rSet)
         if((bNew == bFormat) && pOldItem)
         {
              bSame = bFormat ?
-                      aVertOrient.GetVertOrient() == static_cast<const SwFmtVertOrient*>(pOldItem)->GetVertOrient() &&
-                      aVertOrient.GetRelationOrient() == static_cast<const SwFmtVertOrient*>(pOldItem)->GetRelationOrient() &&
-                      aVertOrient.GetPos() == static_cast<const SwFmtVertOrient*>(pOldItem)->GetPos()
-                    : aVertOrient == static_cast<const SwFmtVertOrient&>(*pOldItem);
+                      aVertOrient.GetVertOrient() == static_cast<const SwFormatVertOrient*>(pOldItem)->GetVertOrient() &&
+                      aVertOrient.GetRelationOrient() == static_cast<const SwFormatVertOrient*>(pOldItem)->GetRelationOrient() &&
+                      aVertOrient.GetPos() == static_cast<const SwFormatVertOrient*>(pOldItem)->GetPos()
+                    : aVertOrient == static_cast<const SwFormatVertOrient&>(*pOldItem);
         }
         if( ( bNew && !bFormat ) || ((bAtVertPosModified || bMod) && !bSame ))
         {
@@ -1164,8 +1164,8 @@ bool SwFrmPage::FillItemSet(SfxItemSet *rSet)
     // for a graphic that isn't even loaded, are set. Then no SetSize
     // is done here when the size settings were not changed by the
     // user.
-    const SwFmtFrmSize& rOldSize = static_cast<const SwFmtFrmSize& >(rOldSet.Get(RES_FRM_SIZE));
-    SwFmtFrmSize aSz( rOldSize );
+    const SwFormatFrmSize& rOldSize = static_cast<const SwFormatFrmSize& >(rOldSet.Get(RES_FRM_SIZE));
+    SwFormatFrmSize aSz( rOldSize );
 
     sal_Int32 nRelWidthRelation = m_pRelWidthRelationLB->GetSelectEntryPos();
     if (nRelWidthRelation != LISTBOX_ENTRY_NOTFOUND)
@@ -1250,7 +1250,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet *rSet)
     }
     if(m_pFollowTextFlowCB->IsValueChangedFromSaved())
     {
-        bRet |= 0 != rSet->Put(SwFmtFollowTextFlow(m_pFollowTextFlowCB->IsChecked()));
+        bRet |= 0 != rSet->Put(SwFormatFollowTextFlow(m_pFollowTextFlowCB->IsChecked()));
     }
     return bRet;
 }
@@ -1753,7 +1753,7 @@ SfxTabPage::sfxpg SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
         SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
                             : getFrmDlgParentShell();
         RndStdIds eAnchorId = (RndStdIds)GetAnchor();
-        SwFmtAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
+        SwFormatAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
         _pSet->Put( aAnc );
     }
 
@@ -1842,7 +1842,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     aVal.nHPos = nAtHorzPosVal;
     aVal.nVPos = nAtVertPosVal;
 
-    aMgr.ValidateMetrics(aVal, mpToCharCntntPos, true);   // one time, to get reference values for percental values
+    aMgr.ValidateMetrics(aVal, mpToCharContentPos, true);   // one time, to get reference values for percental values
 
     // set reference values for percental values (100%) ...
     m_aWidthED.SetRefValue(aVal.aPercentSize.Width());
@@ -1854,13 +1854,13 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     aVal.nWidth  = nWidth;
     aVal.nHeight = nHeight;
 
-    aMgr.ValidateMetrics(aVal, mpToCharCntntPos);    // one more time, to determine all remaining values with correct width and height.
+    aMgr.ValidateMetrics(aVal, mpToCharContentPos);    // one more time, to determine all remaining values with correct width and height.
 
     // all columns have to be correct
     if(GetTabDialog()->GetExampleSet() &&
             SfxItemState::DEFAULT <= GetTabDialog()->GetExampleSet()->GetItemState(RES_COL))
     {
-        const SwFmtCol& rCol = static_cast<const SwFmtCol&>(GetTabDialog()->GetExampleSet()->Get(RES_COL));
+        const SwFormatCol& rCol = static_cast<const SwFormatCol&>(GetTabDialog()->GetExampleSet()->Get(RES_COL));
         if ( rCol.GetColumns().size() > 1 )
         {
             for ( size_t i = 0; i < rCol.GetColumns().size(); ++i )
@@ -2207,7 +2207,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
         }
     }
 
-    const SwFmtFrmSize& rSize = static_cast<const SwFmtFrmSize&>(rSet.Get(RES_FRM_SIZE));
+    const SwFormatFrmSize& rSize = static_cast<const SwFormatFrmSize&>(rSet.Get(RES_FRM_SIZE));
     sal_Int64 nWidth  = m_aWidthED.NormalizePercent(rSize.GetWidth());
     sal_Int64 nHeight = m_aHeightED.NormalizePercent(rSize.GetHeight());
 
@@ -2254,8 +2254,8 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
         if ( !bFormat )
         {
             SwWrtShell* pSh = getFrmDlgParentShell();
-            const SwFrmFmt* pFmt = pSh->GetFlyFrmFmt();
-            if( pFmt && pFmt->GetChain().GetNext() )
+            const SwFrameFormat* pFormat = pSh->GetFlyFrameFormat();
+            if( pFormat && pFormat->GetChain().GetNext() )
                 m_pAutoHeightCB->Enable( false );
         }
     }
@@ -2274,7 +2274,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
     }
 
     // columns
-    SwFmtCol aCol( static_cast<const SwFmtCol&>(rSet.Get(RES_COL)) );
+    SwFormatCol aCol( static_cast<const SwFormatCol&>(rSet.Get(RES_COL)) );
     ::FitToActualSize( aCol, (sal_uInt16)rSize.GetWidth() );
 
     RndStdIds eAnchorId = (RndStdIds)GetAnchor();
@@ -2283,8 +2283,8 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
         InitPos(eAnchorId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);
     else
     {
-        const SwFmtHoriOrient& rHori = static_cast<const SwFmtHoriOrient&>(rSet.Get(RES_HORI_ORIENT));
-        const SwFmtVertOrient& rVert = static_cast<const SwFmtVertOrient&>(rSet.Get(RES_VERT_ORIENT));
+        const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(rSet.Get(RES_HORI_ORIENT));
+        const SwFormatVertOrient& rVert = static_cast<const SwFormatVertOrient&>(rSet.Get(RES_VERT_ORIENT));
         nOldH    = rHori.GetHoriOrient();
         nOldHRel = rHori.GetRelationOrient();
         nOldV    = rVert.GetVertOrient(),
@@ -2316,7 +2316,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
 
     // transparent for example
     // circulation for example
-    const SwFmtSurround& rSurround = static_cast<const SwFmtSurround&>(rSet.Get(RES_SURROUND));
+    const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(rSet.Get(RES_SURROUND));
     m_pExampleWN->SetWrap ( static_cast< sal_uInt16 >(rSurround.GetSurround()) );
 
     if ( rSurround.GetSurround() == SURROUND_THROUGHT )
@@ -2445,14 +2445,14 @@ void SwGrfExtPage::Reset(const SfxItemSet *rSet)
 void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
 {
     const SvxProtectItem& rProt = static_cast<const SvxProtectItem& >(rSet.Get(RES_PROTECT));
-    bool bProtCntnt = rProt.IsCntntProtected();
+    bool bProtContent = rProt.IsContentProtected();
 
     const SfxPoolItem* pItem = 0;
     bool bEnable = false;
     bool bEnableMirrorRB = false;
 
     SfxItemState eState = rSet.GetItemState(RES_GRFATR_MIRRORGRF, true, &pItem);
-    if( SfxItemState::UNKNOWN != eState && !bProtCntnt && !bHtmlMode )
+    if( SfxItemState::UNKNOWN != eState && !bProtContent && !bHtmlMode )
     {
         if( SfxItemState::SET != eState )
             pItem = &rSet.Get( RES_GRFATR_MIRRORGRF );
@@ -2786,17 +2786,17 @@ void SwFrmURLPage::Reset( const SfxItemSet *rSet )
 
     if ( SfxItemState::SET == rSet->GetItemState( RES_URL, true, &pItem ) )
     {
-        const SwFmtURL* pFmtURL = static_cast<const SwFmtURL*>(pItem);
-        pURLED->SetText( INetURLObject::decode( pFmtURL->GetURL(),
+        const SwFormatURL* pFormatURL = static_cast<const SwFormatURL*>(pItem);
+        pURLED->SetText( INetURLObject::decode( pFormatURL->GetURL(),
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
-        pNameED->SetText( pFmtURL->GetName());
+        pNameED->SetText( pFormatURL->GetName());
 
-        pClientCB->Enable( pFmtURL->GetMap() != 0 );
-        pClientCB->Check ( pFmtURL->GetMap() != 0 );
-        pServerCB->Check ( pFmtURL->IsServerMap() );
+        pClientCB->Enable( pFormatURL->GetMap() != 0 );
+        pClientCB->Check ( pFormatURL->GetMap() != 0 );
+        pServerCB->Check ( pFormatURL->IsServerMap() );
 
-        pFrameCB->SetText(pFmtURL->GetTargetFrameName());
+        pFrameCB->SetText(pFormatURL->GetTargetFrameName());
         pFrameCB->SaveValue();
     }
     else
@@ -2809,38 +2809,38 @@ void SwFrmURLPage::Reset( const SfxItemSet *rSet )
 bool SwFrmURLPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bModified = false;
-    const SwFmtURL* pOldURL = static_cast<const SwFmtURL*>(GetOldItem(*rSet, RES_URL));
-    boost::scoped_ptr<SwFmtURL> pFmtURL;
+    const SwFormatURL* pOldURL = static_cast<const SwFormatURL*>(GetOldItem(*rSet, RES_URL));
+    boost::scoped_ptr<SwFormatURL> pFormatURL;
     if(pOldURL)
-        pFmtURL.reset(static_cast<SwFmtURL*>(pOldURL->Clone()));
+        pFormatURL.reset(static_cast<SwFormatURL*>(pOldURL->Clone()));
     else
-        pFmtURL.reset(new SwFmtURL());
+        pFormatURL.reset(new SwFormatURL());
 
     {
         const OUString sText = pURLED->GetText();
 
-        if( pFmtURL->GetURL() != sText ||
-            pFmtURL->GetName() != pNameED->GetText() ||
-            pServerCB->IsChecked() != pFmtURL->IsServerMap() )
+        if( pFormatURL->GetURL() != sText ||
+            pFormatURL->GetName() != pNameED->GetText() ||
+            pServerCB->IsChecked() != pFormatURL->IsServerMap() )
         {
-            pFmtURL->SetURL( sText, pServerCB->IsChecked() );
-            pFmtURL->SetName( pNameED->GetText() );
+            pFormatURL->SetURL( sText, pServerCB->IsChecked() );
+            pFormatURL->SetName( pNameED->GetText() );
             bModified = true;
         }
     }
 
-    if(!pClientCB->IsChecked() && pFmtURL->GetMap() != 0)
+    if(!pClientCB->IsChecked() && pFormatURL->GetMap() != 0)
     {
-        pFmtURL->SetMap(0);
+        pFormatURL->SetMap(0);
         bModified = true;
     }
 
-    if(pFmtURL->GetTargetFrameName() != pFrameCB->GetText())
+    if(pFormatURL->GetTargetFrameName() != pFrameCB->GetText())
     {
-        pFmtURL->SetTargetFrameName(pFrameCB->GetText());
+        pFormatURL->SetTargetFrameName(pFrameCB->GetText());
         bModified = true;
     }
-    rSet->Put(*pFmtURL);
+    rSet->Put(*pFormatURL);
     return bModified;
 }
 
@@ -3013,28 +3013,28 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
 
     if (!bNew)
     {
-        SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
+        SwFrameFormat* pFormat = pWrtSh->GetFlyFrameFormat();
 
-        if (pFmt)
+        if (pFormat)
         {
-            const SwFmtChain &rChain = pFmt->GetChain();
-            const SwFlyFrmFmt* pFlyFmt;
+            const SwFormatChain &rChain = pFormat->GetChain();
+            const SwFlyFrameFormat* pFlyFormat;
             OUString sNextChain, sPrevChain;
-            if ((pFlyFmt = rChain.GetPrev()) != 0)
+            if ((pFlyFormat = rChain.GetPrev()) != 0)
             {
-                sPrevChain = pFlyFmt->GetName();
+                sPrevChain = pFlyFormat->GetName();
             }
 
-            if ((pFlyFmt = rChain.GetNext()) != 0)
+            if ((pFlyFormat = rChain.GetNext()) != 0)
             {
-                sNextChain = pFlyFmt->GetName();
+                sNextChain = pFlyFormat->GetName();
             }
             //determine chainable frames
             ::std::vector< OUString > aPrevPageFrames;
             ::std::vector< OUString > aThisPageFrames;
             ::std::vector< OUString > aNextPageFrames;
             ::std::vector< OUString > aRemainFrames;
-            pWrtSh->GetConnectableFrmFmts(*pFmt, sNextChain, false,
+            pWrtSh->GetConnectableFrameFormats(*pFormat, sNextChain, false,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
             lcl_InsertVectors(*pPrevLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
             if(!sPrevChain.isEmpty())
@@ -3050,7 +3050,7 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
             aThisPageFrames.erase(aThisPageFrames.begin(), aThisPageFrames.end());
             aRemainFrames.erase(aRemainFrames.begin(), aRemainFrames.end());
 
-            pWrtSh->GetConnectableFrmFmts(*pFmt, sPrevChain, true,
+            pWrtSh->GetConnectableFrameFormats(*pFormat, sPrevChain, true,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
             lcl_InsertVectors(*pNextLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
             if(!sNextChain.isEmpty())
@@ -3069,10 +3069,10 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
     // Pos Protected
     const SvxProtectItem& rProt = static_cast<const SvxProtectItem& >(rSet->Get(RES_PROTECT));
     pProtectFrameCB->Check(rProt.IsPosProtected());
-    pProtectContentCB->Check(rProt.IsCntntProtected());
+    pProtectContentCB->Check(rProt.IsContentProtected());
     pProtectSizeCB->Check(rProt.IsSizeProtected());
 
-    const SwFmtEditInReadonly& rEdit = static_cast<const SwFmtEditInReadonly& >(rSet->Get(RES_EDIT_IN_READONLY));
+    const SwFormatEditInReadonly& rEdit = static_cast<const SwFormatEditInReadonly& >(rSet->Get(RES_EDIT_IN_READONLY));
     pEditInReadonlyCB->Check(rEdit.GetValue());          pEditInReadonlyCB->SaveValue();
 
     // print
@@ -3136,7 +3136,7 @@ bool SwFrmAddPage::FillItemSet(SfxItemSet *rSet)
 
     const SfxPoolItem* pOldItem;
     SvxProtectItem aProt ( static_cast<const SvxProtectItem& >(GetItemSet().Get(RES_PROTECT)) );
-    aProt.SetCntntProtect( pProtectContentCB->IsChecked() );
+    aProt.SetContentProtect( pProtectContentCB->IsChecked() );
     aProt.SetSizeProtect ( pProtectSizeCB->IsChecked() );
     aProt.SetPosProtect  ( pProtectFrameCB->IsChecked() );
     if ( 0 == (pOldItem = GetOldItem(*rSet, FN_SET_PROTECT)) ||
@@ -3144,7 +3144,7 @@ bool SwFrmAddPage::FillItemSet(SfxItemSet *rSet)
         bRet |= 0 != rSet->Put( aProt);
 
     if ( pEditInReadonlyCB->IsValueChangedFromSaved() )
-        bRet |= 0 != rSet->Put( SwFmtEditInReadonly( RES_EDIT_IN_READONLY, pEditInReadonlyCB->IsChecked()));
+        bRet |= 0 != rSet->Put( SwFormatEditInReadonly( RES_EDIT_IN_READONLY, pEditInReadonlyCB->IsChecked()));
 
     if ( pPrintFrameCB->IsValueChangedFromSaved() )
         bRet |= 0 != rSet->Put( SvxPrintItem( RES_PRINT, pPrintFrameCB->IsChecked()));
@@ -3162,22 +3162,22 @@ bool SwFrmAddPage::FillItemSet(SfxItemSet *rSet)
     }
     if(pWrtSh)
     {
-        const SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
-        if (pFmt)
+        const SwFrameFormat* pFormat = pWrtSh->GetFlyFrameFormat();
+        if (pFormat)
         {
             OUString sCurrentPrevChain, sCurrentNextChain;
             if(pPrevLB->GetSelectEntryPos())
                 sCurrentPrevChain = pPrevLB->GetSelectEntry();
             if(pNextLB->GetSelectEntryPos())
                 sCurrentNextChain = pNextLB->GetSelectEntry();
-            const SwFmtChain &rChain = pFmt->GetChain();
-            const SwFlyFrmFmt* pFlyFmt;
+            const SwFormatChain &rChain = pFormat->GetChain();
+            const SwFlyFrameFormat* pFlyFormat;
             OUString sNextChain, sPrevChain;
-            if ((pFlyFmt = rChain.GetPrev()) != 0)
-                sPrevChain = pFlyFmt->GetName();
+            if ((pFlyFormat = rChain.GetPrev()) != 0)
+                sPrevChain = pFlyFormat->GetName();
 
-            if ((pFlyFmt = rChain.GetNext()) != 0)
-                sNextChain = pFlyFmt->GetName();
+            if ((pFlyFormat = rChain.GetNext()) != 0)
+                sNextChain = pFlyFormat->GetName();
             if(sPrevChain != sCurrentPrevChain)
                 bRet |= 0 != rSet->Put(SfxStringItem(FN_PARAM_CHAIN_PREVIOUS, sCurrentPrevChain));
             if(sNextChain != sCurrentNextChain)
@@ -3226,8 +3226,8 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
         sCurrentPrevChain = pPrevLB->GetSelectEntry();
     if(pNextLB->GetSelectEntryPos())
         sCurrentNextChain = pNextLB->GetSelectEntry();
-    SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
-    if (pFmt)
+    SwFrameFormat* pFormat = pWrtSh->GetFlyFrameFormat();
+    if (pFormat)
     {
         bool bNextBox = pNextLB == pBox;
         ListBox& rChangeLB = bNextBox ? *pPrevLB : *pNextLB;
@@ -3238,7 +3238,7 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
         ::std::vector< OUString > aThisPageFrames;
         ::std::vector< OUString > aNextPageFrames;
         ::std::vector< OUString > aRemainFrames;
-        pWrtSh->GetConnectableFrmFmts(*pFmt, bNextBox ? sCurrentNextChain : sCurrentPrevChain, !bNextBox,
+        pWrtSh->GetConnectableFrameFormats(*pFormat, bNextBox ? sCurrentNextChain : sCurrentPrevChain, !bNextBox,
                         aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
         lcl_InsertVectors(rChangeLB,
                 aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);

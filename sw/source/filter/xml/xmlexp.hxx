@@ -26,8 +26,8 @@
 #include <vector>
 
 class SwDoc;
-class SwFmt;
-class SwFrmFmt;
+class SwFormat;
+class SwFrameFormat;
 class SvXMLUnitConverter;
 class SvXMLExportItemMapper;
 class SvXMLAutoStylePoolP;
@@ -37,7 +37,7 @@ class SwTableBox;
 class SwXMLTableColumn_Impl;
 class SwXMLTableLines_Impl;
 class SwXMLTableColumnsSortByWidth_Impl;
-class SwXMLTableFrmFmtsSort_Impl;
+class SwXMLTableFrameFormatsSort_Impl;
 class SwXMLTableInfo_Impl;
 class SwTableNode;
 class XMLPropertySetMapper;
@@ -69,22 +69,22 @@ class SwXMLExport : public SvXMLExport
                                  sal_uInt32 nBaseWidth,
                                  const OUString& rNamePrefix,
                                  SwXMLTableColumnsSortByWidth_Impl& rExpCols,
-                                 SwXMLTableFrmFmtsSort_Impl& rExpRows,
-                                 SwXMLTableFrmFmtsSort_Impl& rExpCells,
-                                 SwXMLTableInfo_Impl& rTblInfo,
+                                 SwXMLTableFrameFormatsSort_Impl& rExpRows,
+                                 SwXMLTableFrameFormatsSort_Impl& rExpCells,
+                                 SwXMLTableInfo_Impl& rTableInfo,
                                  bool bTop=false );
 
-    void ExportFmt( const SwFmt& rFmt,  enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
-    void ExportTableFmt( const SwFrmFmt& rFmt, sal_uInt32 nAbsWidth );
+    void ExportFormat( const SwFormat& rFormat,  enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
+    void ExportTableFormat( const SwFrameFormat& rFormat, sal_uInt32 nAbsWidth );
 
     void ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol );
     void ExportTableBox( const SwTableBox& rBox, sal_uInt32 nColSpan, sal_uInt32 nRowSpan,
-                         SwXMLTableInfo_Impl& rTblInfo );
+                         SwXMLTableInfo_Impl& rTableInfo );
     void ExportTableLine( const SwTableLine& rLine,
                           const SwXMLTableLines_Impl& rLines,
-                          SwXMLTableInfo_Impl& rTblInfo );
+                          SwXMLTableInfo_Impl& rTableInfo );
     void ExportTableLines( const SwTableLines& rLines,
-                           SwXMLTableInfo_Impl& rTblInfo,
+                           SwXMLTableInfo_Impl& rTableInfo,
                            sal_uInt32 nHeaderRows = 0 );
 
     virtual void _ExportMeta() SAL_OVERRIDE;
@@ -125,8 +125,8 @@ public:
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
 
-    void ExportTableAutoStyles( const SwTableNode& rTblNd );
-    void ExportTable( const SwTableNode& rTblNd );
+    void ExportTableAutoStyles( const SwTableNode& rTableNd );
+    void ExportTable( const SwTableNode& rTableNd );
 
     SvXMLExportItemMapper& GetTableItemMapper() { return *pTableItemMapper; }
     const rtl::Reference < XMLPropertySetMapper >& GetParaPropMapper()

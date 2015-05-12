@@ -28,8 +28,8 @@ public:
     {
         SetWhichPor( POR_HYPH );
     }
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
@@ -47,7 +47,7 @@ public:
         SetWhichPor( POR_HYPHSTR );
     }
 
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
@@ -63,15 +63,15 @@ class SwSoftHyphPortion : public SwHyphPortion
 
 public:
     SwSoftHyphPortion();
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void FormatEOL( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
     inline void SetExpand( const bool bNew ) { bExpand = bNew; }
     bool IsExpand() const { return bExpand; }
 
-    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
@@ -83,7 +83,7 @@ class SwSoftHyphStrPortion : public SwHyphStrPortion
 {
 public:
     SwSoftHyphStrPortion( const OUString &rStr );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
 

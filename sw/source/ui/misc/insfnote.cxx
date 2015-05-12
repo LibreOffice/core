@@ -54,10 +54,10 @@ void SwInsFootNoteDlg::Apply()
         rSh.StartAction();
         rSh.Left(CRSR_SKIP_CHARS, false, 1, false );
         rSh.StartUndo( UNDO_START );
-        SwFmtFtn aNote( m_pEndNoteBtn->IsChecked() );
+        SwFormatFootnote aNote( m_pEndNoteBtn->IsChecked() );
         aNote.SetNumStr( aStr );
 
-        if( rSh.SetCurFtn( aNote ) && bExtCharAvailable )
+        if( rSh.SetCurFootnote( aNote ) && bExtCharAvailable )
         {
             rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
@@ -79,7 +79,7 @@ void SwInsFootNoteDlg::Apply()
 
     }
 
-    bFootnote = m_pFtnBtn->IsChecked();
+    bFootnote = m_pFootnoteBtn->IsChecked();
 }
 
 IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberCharHdl)
@@ -151,9 +151,9 @@ IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
     // go to the next foot/endnote here
     rSh.ResetSelect(0, false);
     if (pBtn == m_pNextBT)
-        rSh.GotoNextFtnAnchor();
+        rSh.GotoNextFootnoteAnchor();
     else
-        rSh.GotoPrevFtnAnchor();
+        rSh.GotoPrevFootnoteAnchor();
 
     Init();
 
@@ -172,7 +172,7 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(vcl::Window *pParent, SwWrtShell &rShell, boo
     get(m_pNumberCharBtn, "character");
     get(m_pNumberCharEdit, "characterentry");
     get(m_pNumberExtChar, "choosecharacter");
-    get(m_pFtnBtn, "footnote");
+    get(m_pFootnoteBtn, "footnote");
     get(m_pEndNoteBtn, "endnote");
     get(m_pOkBtn, "ok");
     get(m_pPrevBT, "prev");
@@ -216,7 +216,7 @@ void SwInsFootNoteDlg::dispose()
     m_pNumberCharBtn.clear();
     m_pNumberCharEdit.clear();
     m_pNumberExtChar.clear();
-    m_pFtnBtn.clear();
+    m_pFootnoteBtn.clear();
     m_pEndNoteBtn.clear();
     m_pOkBtn.clear();
     m_pPrevBT.clear();
@@ -226,18 +226,18 @@ void SwInsFootNoteDlg::dispose()
 
 void SwInsFootNoteDlg::Init()
 {
-    SwFmtFtn aFtnNote;
+    SwFormatFootnote aFootnoteNote;
     OUString sNumStr;
     vcl::Font aFont;
     bExtCharAvailable = false;
 
     rSh.StartAction();
 
-    if( rSh.GetCurFtn( &aFtnNote ))
+    if( rSh.GetCurFootnote( &aFootnoteNote ))
     {
-        if (!aFtnNote.GetNumStr().isEmpty())
+        if (!aFootnoteNote.GetNumStr().isEmpty())
         {
-            sNumStr = aFtnNote.GetNumStr();
+            sNumStr = aFootnoteNote.GetNumStr();
 
             rSh.Right(CRSR_SKIP_CHARS, true, 1, false );
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
@@ -252,7 +252,7 @@ void SwInsFootNoteDlg::Init()
             bExtCharAvailable = true;
             rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
         }
-        bFootnote = !aFtnNote.IsEndNote();
+        bFootnote = !aFootnoteNote.IsEndNote();
     }
     m_pNumberCharEdit->SetFont(aFont);
 
@@ -265,19 +265,19 @@ void SwInsFootNoteDlg::Init()
         m_pNumberCharEdit->GrabFocus();
 
     if (bFootnote)
-        m_pFtnBtn->Check();
+        m_pFootnoteBtn->Check();
     else
         m_pEndNoteBtn->Check();
 
-    bool bNext = rSh.GotoNextFtnAnchor();
+    bool bNext = rSh.GotoNextFootnoteAnchor();
 
     if (bNext)
-        rSh.GotoPrevFtnAnchor();
+        rSh.GotoPrevFootnoteAnchor();
 
-    bool bPrev = rSh.GotoPrevFtnAnchor();
+    bool bPrev = rSh.GotoPrevFootnoteAnchor();
 
     if (bPrev)
-        rSh.GotoNextFtnAnchor();
+        rSh.GotoNextFootnoteAnchor();
 
     m_pPrevBT->Enable(bPrev);
     m_pNextBT->Enable(bNext);

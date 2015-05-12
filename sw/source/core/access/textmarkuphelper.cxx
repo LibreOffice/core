@@ -33,7 +33,7 @@ using namespace com::sun::star;
 
 // helper functions
 namespace {
-    const SwWrongList* getTextMarkupList( const SwTxtNode& rTxtNode,
+    const SwWrongList* getTextMarkupList( const SwTextNode& rTextNode,
                                           const sal_Int32 nTextMarkupType )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException)
@@ -43,7 +43,7 @@ namespace {
         {
             case text::TextMarkupType::SPELLCHECK:
             {
-                pTextMarkupList = rTxtNode.GetWrong();
+                pTextMarkupList = rTextNode.GetWrong();
             }
             break;
             case text::TextMarkupType::PROOFREADING:
@@ -70,10 +70,10 @@ namespace {
 
 // implementation of class <SwTextMarkupoHelper>
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
-                                        const SwTxtNode& rTxtNode )
+                                        const SwTextNode& rTextNode )
     : mrPortionData( rPortionData )
     // #i108125#
-    , mpTxtNode( &rTxtNode )
+    , mpTextNode( &rTextNode )
     , mpTextMarkupList( 0 )
 {
 }
@@ -82,7 +82,7 @@ SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionD
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                                         const SwWrongList& rTextMarkupList )
     : mrPortionData( rPortionData )
-    , mpTxtNode( 0 )
+    , mpTextNode( 0 )
     , mpTextMarkupList( &rTextMarkupList )
 {
 }
@@ -97,7 +97,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
-                            : getTextMarkupList( *mpTxtNode, nTextMarkupType );
+                            : getTextMarkupList( *mpTextNode, nTextMarkupType );
     if ( pTextMarkupList )
     {
         nTextMarkupCount = pTextMarkupList->Count();
@@ -127,7 +127,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
-                            : getTextMarkupList( *mpTxtNode, nTextMarkupType );
+                            : getTextMarkupList( *mpTextNode, nTextMarkupType );
     if ( pTextMarkupList )
     {
         const SwWrongArea* pTextMarkup =
@@ -174,7 +174,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
-                            : getTextMarkupList( *mpTxtNode, nTextMarkupType );
+                            : getTextMarkupList( *mpTextNode, nTextMarkupType );
     ::std::vector< ::com::sun::star::accessibility::TextSegment > aTmpTextMarkups;
     if ( pTextMarkupList )
     {

@@ -38,7 +38,7 @@ class SwMacroAssignDlg
 {
 public:
     static SfxEventNamesItem AddEvents( DlgEventType eType );
-    static bool INetFmtDlg( vcl::Window* pParent, SwWrtShell& rSh,
+    static bool INetFormatDlg( vcl::Window* pParent, SwWrtShell& rSh,
                             SvxMacroItem*& rpINetItem );
 };
 

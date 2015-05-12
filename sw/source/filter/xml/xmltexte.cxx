@@ -65,7 +65,7 @@ enum SvEmbeddedObjectTypes
     SV_EMBEDDED_FRAME
 };
 
-SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
+SwNoTextNode *SwXMLTextParagraphExport::GetNoTextNode(
     const Reference < XPropertySet >& rPropSet )
 {
     Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
@@ -73,10 +73,10 @@ SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
     SwXFrame *pFrame = reinterpret_cast< SwXFrame * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
     assert(pFrame && "SwXFrame missing");
-    SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
-    const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
-    return  pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTxtNode();
+    SwFrameFormat *pFrameFormat = pFrame->GetFrameFormat();
+    const SwFormatContent& rContent = pFrameFormat->GetContent();
+    const SwNodeIndex *pNdIdx = rContent.GetContentIdx();
+    return  pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTextNode();
 }
 
 void SwXMLTextParagraphExport::exportStyleContent(
@@ -93,13 +93,13 @@ void SwXMLTextParagraphExport::exportStyleContent(
     if( pStyle && SFX_STYLE_FAMILY_PARA == pStyle->GetFamily() )
     {
         const SwDoc *pDoc = pStyle->GetDoc();
-        const SwTxtFmtColl *pColl =
-            pDoc->FindTxtFmtCollByName( pStyle->GetStyleName() );
+        const SwTextFormatColl *pColl =
+            pDoc->FindTextFormatCollByName( pStyle->GetStyleName() );
         OSL_ENSURE( pColl, "There is the text collection?" );
         if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
         {
-            const SwFmtCollConditions& rConditions =
-                static_cast<const SwConditionTxtFmtColl *>(pColl)->GetCondColls();
+            const SwFormatCollConditions& rConditions =
+                static_cast<const SwConditionTextFormatColl *>(pColl)->GetCondColls();
             for( size_t i=0; i < rConditions.size(); ++i )
             {
                 const SwCollCondition& rCond = rConditions[i];
@@ -142,7 +142,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
                     break;
                 }
                 OSL_ENSURE( eFunc != XML_TOKEN_INVALID,
-                            "SwXMLExport::ExportFmt: unknown condition" );
+                            "SwXMLExport::ExportFormat: unknown condition" );
                 if( eFunc != XML_TOKEN_INVALID )
                 {
                     OUString sCond = GetXMLToken(eFunc) + "()";
@@ -155,7 +155,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
                                 XML_CONDITION, sCond );
                     OUString aString;
                     SwStyleNameMapper::FillProgName(
-                                    rCond.GetTxtFmtColl()->GetName(),
+                                    rCond.GetTextFormatColl()->GetName(),
                                     aString,
                                     nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
                                     true);
@@ -324,7 +324,7 @@ static void lcl_addFrameProperties(
 void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
         const Reference < XPropertySet > & rPropSet )
 {
-    SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
+    SwOLENode *pOLENd = GetNoTextNode( rPropSet )->GetOLENode();
     svt::EmbeddedObjectRef& rObjRef = pOLENd->GetOLEObj().GetObject();
     if( !rObjRef.is() )
         return;
@@ -360,7 +360,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
-    SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
+    SwOLENode *pOLENd = GetNoTextNode( rPropSet )->GetOLENode();
     SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
     svt::EmbeddedObjectRef& rObjRef = rOLEObj.GetObject();
     if( !rObjRef.is() )
@@ -465,9 +465,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             sURL = GetExport().AddEmbeddedObject( sURL );
             lcl_addURL( rXMLExport, sURL, false );
         }
-        if( SV_EMBEDDED_OWN == nType && !pOLENd->GetChartTblName().isEmpty() )
+        if( SV_EMBEDDED_OWN == nType && !pOLENd->GetChartTableName().isEmpty() )
         {
-            OUString sRange( pOLENd->GetChartTblName() );
+            OUString sRange( pOLENd->GetChartTableName() );
             OUStringBuffer aBuffer( sRange.getLength() + 2 );
             for( sal_Int32 i=0; i < sRange.getLength(); i++ )
             {

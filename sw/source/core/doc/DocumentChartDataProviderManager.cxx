@@ -58,7 +58,7 @@ void DocumentChartDataProviderManager::CreateChartInternalDataProviders( const S
 {
     if (pTable)
     {
-        OUString aName( pTable->GetFrmFmt()->GetName() );
+        OUString aName( pTable->GetFrameFormat()->GetName() );
         SwOLENode *pONd;
         SwStartNode *pStNd;
         SwNodeIndex aIdx( *m_rDoc.GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -66,7 +66,7 @@ void DocumentChartDataProviderManager::CreateChartInternalDataProviders( const S
         {
             ++aIdx;
             if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
-                aName == pONd->GetChartTblName() /* OLE node is chart? */ &&
+                aName == pONd->GetChartTableName() /* OLE node is chart? */ &&
                 0 != (pONd->getLayoutFrm( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )) /* chart frame is not hidden */ )
             {
                 uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();

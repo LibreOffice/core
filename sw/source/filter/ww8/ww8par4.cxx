@@ -197,7 +197,7 @@ static bool SwWw6ReadMacPICTStream(Graphic& rGraph, tools::SvRef<SotStorage>& rS
     return SwWW8ImplReader::GetPictGrafFromStream(rGraph, *pStp);
 }
 
-SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
+SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     const SfxItemSet &rFlySet, const SfxItemSet &rGrfSet)
 {
     SfxObjectShell *pPersist = m_rDoc.GetPersist();
@@ -205,7 +205,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     if (!pPersist)
         return 0;
 
-    SwFlyFrmFmt *pRet = 0;
+    SwFlyFrameFormat *pRet = 0;
 
     SfxItemSet *pMathFlySet = 0;
     uno::Reference < embed::XClassifiedObject > xClass( rObject.GetObjRef(), uno::UNO_QUERY );
@@ -244,11 +244,11 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     return pRet;
 }
 
-SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
+SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     const SfxItemSet* pFlySet, const SfxItemSet *pGrfSet, const Rectangle& aVisArea )
 {
     ::SetProgressState(m_nProgress, m_pDocShell);     // Update
-    SwFrmFmt* pFmt = 0;
+    SwFrameFormat* pFormat = 0;
 
     GrafikCtor();
 
@@ -266,18 +266,18 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
 
         // Abstand/Umrandung raus
         if (!m_bNewDoc)
-            Reader::ResetFrmFmtAttrs( *pTempSet );
+            Reader::ResetFrameFormatAttrs( *pTempSet );
 
-        SwFmtAnchor aAnchor( FLY_AS_CHAR );
+        SwFormatAnchor aAnchor( FLY_AS_CHAR );
         aAnchor.SetAnchor( m_pPaM->GetPoint() );
         pTempSet->Put( aAnchor );
 
         const Size aSizeTwip = OutputDevice::LogicToLogic(
             aGraph.GetPrefSize(), aGraph.GetPrefMapMode(), MAP_TWIP );
 
-        pTempSet->Put( SwFmtFrmSize( ATT_FIX_SIZE, aSizeTwip.Width(),
+        pTempSet->Put( SwFormatFrmSize( ATT_FIX_SIZE, aSizeTwip.Width(),
             aSizeTwip.Height() ) );
-        pTempSet->Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
+        pTempSet->Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
 
         if( m_pSFlyPara )
         {
@@ -291,22 +291,22 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     {
         if (pRet->ISA(SdrOle2Obj))
         {
-            pFmt = InsertOle(*static_cast<SdrOle2Obj*>(pRet), *pFlySet, *pGrfSet);
+            pFormat = InsertOle(*static_cast<SdrOle2Obj*>(pRet), *pFlySet, *pGrfSet);
             SdrObject::Free( pRet );        // das brauchen wir nicht mehr
         }
         else
-            pFmt = m_rDoc.getIDocumentContentOperations().InsertDrawObj(*m_pPaM, *pRet, *pFlySet );
+            pFormat = m_rDoc.getIDocumentContentOperations().InsertDrawObj(*m_pPaM, *pRet, *pFlySet );
     }
     else if (
                 GRAPHIC_GDIMETAFILE == aGraph.GetType() ||
                 GRAPHIC_BITMAP == aGraph.GetType()
             )
     {
-        pFmt = m_rDoc.getIDocumentContentOperations().Insert(*m_pPaM, OUString(), OUString(), &aGraph, pFlySet,
+        pFormat = m_rDoc.getIDocumentContentOperations().Insert(*m_pPaM, OUString(), OUString(), &aGraph, pFlySet,
             pGrfSet, NULL);
     }
     delete pTempSet;
-    return pFmt;
+    return pFormat;
 }
 
 bool SwWW8ImplReader::ImportOleWMF(tools::SvRef<SotStorage> xSrc1,GDIMetaFile &rWMF,
@@ -383,8 +383,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
     if (pFlySet)
     {
-        if (const SwFmtFrmSize* pSize =
-            static_cast<const SwFmtFrmSize*>(pFlySet->GetItem(RES_FRM_SIZE, false)))
+        if (const SwFormatFrmSize* pSize =
+            static_cast<const SwFormatFrmSize*>(pFlySet->GetItem(RES_FRM_SIZE, false)))
         {
             aRect.SetSize(pSize->GetSize());
         }
@@ -446,10 +446,10 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 }
 
 void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
-    sal_Int32 nTblPos, sal_Int32 nTblSiz, SwDoc& rDocOut )
+    sal_Int32 nTablePos, sal_Int32 nTableSiz, SwDoc& rDocOut )
 {
     ::std::vector<OUString> aAuthorNames;
-    WW8ReadSTTBF( !m_bVer67, rStrm, nTblPos, nTblSiz, m_bVer67 ? 2 : 0,
+    WW8ReadSTTBF( !m_bVer67, rStrm, nTablePos, nTableSiz, m_bVer67 ? 2 : 0,
         m_eStructCharSet, aAuthorNames );
 
     sal_uInt16 nCount = static_cast< sal_uInt16 >(aAuthorNames.size());

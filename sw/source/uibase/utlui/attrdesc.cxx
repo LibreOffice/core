@@ -59,7 +59,7 @@
 
 using namespace com::sun::star;
 
-TYPEINIT2(SwFmtCharFmt,SfxPoolItem,SwClient);
+TYPEINIT2(SwFormatCharFormat,SfxPoolItem,SwClient);
 
 // query the attribute descriptions
 void SwAttrSet::GetPresentation(
@@ -92,7 +92,7 @@ void SwAttrSet::GetPresentation(
     }
 }
 
-bool SwFmtCharFmt::GetPresentation
+bool SwFormatCharFormat::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
@@ -101,12 +101,12 @@ bool SwFmtCharFmt::GetPresentation
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    const SwCharFmt *pCharFmt = GetCharFmt();
-    if ( pCharFmt )
+    const SwCharFormat *pCharFormat = GetCharFormat();
+    if ( pCharFormat )
     {
         OUString aStr;
         rText = OUString( SW_RESSTR( STR_CHARFMT ) );
-        pCharFmt->GetPresentation( ePres, eCoreUnit, ePresUnit, aStr );
+        pCharFormat->GetPresentation( ePres, eCoreUnit, ePresUnit, aStr );
         rText = rText + "(" + aStr + ")";
     }
     else
@@ -114,7 +114,7 @@ bool SwFmtCharFmt::GetPresentation
     return true;
 }
 
-bool SwFmtAutoFmt::GetPresentation
+bool SwFormatAutoFormat::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -127,7 +127,7 @@ bool SwFmtAutoFmt::GetPresentation
     return true;
 }
 
-bool SwFmtINetFmt::GetPresentation
+bool SwFormatINetFormat::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -140,7 +140,7 @@ bool SwFmtINetFmt::GetPresentation
     return true;
 }
 
-bool SwFmtRuby::GetPresentation( SfxItemPresentation /*ePres*/,
+bool SwFormatRuby::GetPresentation( SfxItemPresentation /*ePres*/,
                             SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
                             OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
@@ -148,7 +148,7 @@ bool SwFmtRuby::GetPresentation( SfxItemPresentation /*ePres*/,
     return true;
 }
 
-bool SwFmtDrop::GetPresentation
+bool SwFormatDrop::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -223,7 +223,7 @@ bool SwParaConnectBorderItem::GetPresentation
 
 // Frame attribute
 
-bool SwFmtFrmSize::GetPresentation
+bool SwFormatFrmSize::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
@@ -263,9 +263,9 @@ bool SwFmtFrmSize::GetPresentation
 }
 
 //Header for page formats.
-//Client of FrmFmt which describes the header.
+//Client of FrameFormat which describes the header.
 
-bool SwFmtHeader::GetPresentation
+bool SwFormatHeader::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -274,15 +274,15 @@ bool SwFmtHeader::GetPresentation
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    const sal_uInt16 nId = GetHeaderFmt() ? STR_HEADER : STR_NO_HEADER;
+    const sal_uInt16 nId = GetHeaderFormat() ? STR_HEADER : STR_NO_HEADER;
     rText = SW_RESSTR( nId );
     return true;
 }
 
 //Footer for page formats.
-//Client of FrmFmt which describes the footer.
+//Client of FrameFormat which describes the footer.
 
-bool SwFmtFooter::GetPresentation
+bool SwFormatFooter::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -291,12 +291,12 @@ bool SwFmtFooter::GetPresentation
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    const sal_uInt16 nId = GetFooterFmt() ? STR_FOOTER : STR_NO_FOOTER;
+    const sal_uInt16 nId = GetFooterFormat() ? STR_FOOTER : STR_NO_FOOTER;
     rText = SW_RESSTR( nId );
     return true;
 }
 
-bool SwFmtSurround::GetPresentation
+bool SwFormatSurround::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -340,7 +340,7 @@ bool SwFmtSurround::GetPresentation
 
 //VertOrientation, how and by what orientate the FlyFrm in the vertical?
 
-bool SwFmtVertOrient::GetPresentation
+bool SwFormatVertOrient::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
@@ -386,7 +386,7 @@ bool SwFmtVertOrient::GetPresentation
 
 //HoriOrientation, how and by what orientate the FlyFrm in the horizontal?
 
-bool SwFmtHoriOrient::GetPresentation
+bool SwFormatHoriOrient::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
@@ -432,7 +432,7 @@ bool SwFmtHoriOrient::GetPresentation
 
 // FlyAnchor, Anchor of the free-flying frame
 
-bool SwFmtAnchor::GetPresentation
+bool SwFormatAnchor::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -460,7 +460,7 @@ bool SwFmtAnchor::GetPresentation
     return true;
 }
 
-bool SwFmtPageDesc::GetPresentation
+bool SwFormatPageDesc::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -479,7 +479,7 @@ bool SwFmtPageDesc::GetPresentation
 
 //The ColumnDescriptor
 
-bool SwFmtCol::GetPresentation
+bool SwFormatCol::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
@@ -507,7 +507,7 @@ bool SwFmtCol::GetPresentation
 
 //URL's and maps
 
-bool SwFmtURL::GetPresentation
+bool SwFormatURL::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -534,7 +534,7 @@ bool SwFmtURL::GetPresentation
     return true;
 }
 
-bool SwFmtEditInReadonly::GetPresentation
+bool SwFormatEditInReadonly::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -549,15 +549,15 @@ bool SwFmtEditInReadonly::GetPresentation
     return true;
 }
 
-void SwFmtEditInReadonly::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwFormatEditInReadonly::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtEditInReadonly"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatEditInReadonly"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
-bool SwFmtLayoutSplit::GetPresentation
+bool SwFormatLayoutSplit::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -571,7 +571,7 @@ bool SwFmtLayoutSplit::GetPresentation
     return true;
 }
 
-bool SwFmtRowSplit::GetPresentation
+bool SwFormatRowSplit::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -583,7 +583,7 @@ bool SwFmtRowSplit::GetPresentation
     return false;
 }
 
-bool SwFmtFtnEndAtTxtEnd::GetPresentation
+bool SwFormatFootnoteEndAtTextEnd::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -595,7 +595,7 @@ bool SwFmtFtnEndAtTxtEnd::GetPresentation
     return true;
 }
 
-bool SwFmtChain::GetPresentation
+bool SwFormatChain::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -619,7 +619,7 @@ bool SwFmtChain::GetPresentation
     return true;
 }
 
-bool SwFmtLineNumber::GetPresentation
+bool SwFormatLineNumber::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -828,7 +828,7 @@ bool SwDrawModeGrf::GetPresentation(
     return true;
 }
 
-bool SwFmtFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
+bool SwFormatFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit /*eCoreMetric*/,
                                     SfxMapUnit /*ePresMetric*/,
                                     OUString &rText,
@@ -843,9 +843,9 @@ bool SwFmtFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
     return true;
 }
 
-void SwFmtFollowTextFlow::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwFormatFollowTextFlow::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtFollowTextFlow"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatFollowTextFlow"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
     xmlTextWriterEndElement(pWriter);

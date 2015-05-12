@@ -26,7 +26,7 @@
 
 struct SwSortOptions;
 class SwTableNode;
-class SwUndoAttrTbl;
+class SwUndoAttrTable;
 
 struct SwSortUndoElement
 {
@@ -61,9 +61,9 @@ class SwUndoSort : public SwUndo, private SwUndRng
 {
     SwSortOptions*  pSortOpt;
     SwSortList      aSortList;
-    SwUndoAttrTbl*  pUndoTblAttr;
+    SwUndoAttrTable*  pUndoTableAttr;
     SwRedlineData*  pRedlData;
-    sal_uLong           nTblNd;
+    sal_uLong           nTableNd;
 
 public:
     SwUndoSort( const SwPaM&, const SwSortOptions& );

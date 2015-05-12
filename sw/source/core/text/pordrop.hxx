@@ -58,7 +58,7 @@ public:
     void SetJoinBorderWithNext( const bool bJoinNext ) { m_bJoinBorderWithNext = bJoinNext; }
 };
 
-class SwDropPortion : public SwTxtPortion
+class SwDropPortion : public SwTextPortion
 {
     friend class SwDropCapCache;
     SwDropPortionPart* pPart; // due to script/attribute changes
@@ -70,8 +70,8 @@ class SwDropPortion : public SwTxtPortion
     short nX;               // X PaintOffset
     short nY;               // Y Offset
 
-    bool FormatTxt( SwTxtFormatInfo &rInf );
-    void PaintTxt( const SwTxtPaintInfo &rInf ) const;
+    bool FormatText( SwTextFormatInfo &rInf );
+    void PaintText( const SwTextPaintInfo &rInf ) const;
 
     inline void Fix( const sal_uInt16 nNew ) { nFix = nNew; }
 public:
@@ -81,10 +81,10 @@ public:
                    const sal_uInt16 nDistance );
     virtual ~SwDropPortion();
 
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-            void PaintDrop( const SwTxtPaintInfo &rInf ) const;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+            void PaintDrop( const SwTextPaintInfo &rInf ) const;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const SAL_OVERRIDE;
     virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
 
     inline sal_uInt16 GetLines() const { return nLines; }

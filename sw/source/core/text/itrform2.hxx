@@ -23,17 +23,17 @@
 class SwFlyCntPortion;
 class SwInterHyphInfo;
 class SwDropPortion;
-class SwFmtDrop;
-class SwTxtAttr;
+class SwFormatDrop;
+class SwTextAttr;
 class SwNumberPortion;
 class SwErgoSumPortion;
 class SwExpandPortion;
 class SwMultiPortion;
-class SwFtnPortion;
+class SwFootnotePortion;
 
-class SwTxtFormatter : public SwTxtPainter
+class SwTextFormatter : public SwTextPainter
 {
-    const SwFmtDrop *pDropFmt;
+    const SwFormatDrop *pDropFormat;
     SwMultiPortion* pMulti; // during formatting a multi-portion
     sal_uInt8 nCntEndHyph;  // Counts consecutive hyphens at the line end
     sal_uInt8 nCntMidHyph;  // Counts consecutive hyphens before flies
@@ -47,63 +47,63 @@ class SwTxtFormatter : public SwTxtPainter
     size_t m_nHintEndIndex; // HACK for TryNewNoLengthPortion
     SwLinePortion* m_pFirstOfBorderMerge; // The first text portion of a joined border (during portion bulding)
 
-    SwLinePortion *NewPortion( SwTxtFormatInfo &rInf );
-    SwTxtPortion  *NewTxtPortion( SwTxtFormatInfo &rInf );
-    SwLinePortion *NewExtraPortion( SwTxtFormatInfo &rInf );
-    SwTabPortion *NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto ) const;
-    SwNumberPortion *NewNumberPortion( SwTxtFormatInfo &rInf ) const;
-    SwDropPortion *NewDropPortion( SwTxtFormatInfo &rInf );
-    SwNumberPortion *NewFtnNumPortion( SwTxtFormatInfo &rInf ) const;
-    SwErgoSumPortion *NewErgoSumPortion( SwTxtFormatInfo &rInf ) const;
-    SwExpandPortion *NewFldPortion( SwTxtFormatInfo &rInf,
-                                    const SwTxtAttr *pHt ) const;
-    SwFtnPortion *NewFtnPortion( SwTxtFormatInfo &rInf, SwTxtAttr *pHt );
+    SwLinePortion *NewPortion( SwTextFormatInfo &rInf );
+    SwTextPortion  *NewTextPortion( SwTextFormatInfo &rInf );
+    SwLinePortion *NewExtraPortion( SwTextFormatInfo &rInf );
+    SwTabPortion *NewTabPortion( SwTextFormatInfo &rInf, bool bAuto ) const;
+    SwNumberPortion *NewNumberPortion( SwTextFormatInfo &rInf ) const;
+    SwDropPortion *NewDropPortion( SwTextFormatInfo &rInf );
+    SwNumberPortion *NewFootnoteNumPortion( SwTextFormatInfo &rInf ) const;
+    SwErgoSumPortion *NewErgoSumPortion( SwTextFormatInfo &rInf ) const;
+    SwExpandPortion *NewFieldPortion( SwTextFormatInfo &rInf,
+                                    const SwTextAttr *pHt ) const;
+    SwFootnotePortion *NewFootnotePortion( SwTextFormatInfo &rInf, SwTextAttr *pHt );
 
     /**
         Sets a new portion for an object anchored as character
      */
-    SwFlyCntPortion *NewFlyCntPortion( SwTxtFormatInfo &rInf,
-                                       SwTxtAttr *pHt ) const;
-    SwLinePortion *WhichFirstPortion( SwTxtFormatInfo &rInf );
-    SwTxtPortion *WhichTxtPor( SwTxtFormatInfo &rInf ) const;
-    SwExpandPortion * TryNewNoLengthPortion( SwTxtFormatInfo & rInfo );
+    SwFlyCntPortion *NewFlyCntPortion( SwTextFormatInfo &rInf,
+                                       SwTextAttr *pHt ) const;
+    SwLinePortion *WhichFirstPortion( SwTextFormatInfo &rInf );
+    SwTextPortion *WhichTextPor( SwTextFormatInfo &rInf ) const;
+    SwExpandPortion * TryNewNoLengthPortion( SwTextFormatInfo & rInfo );
 
     // The center pice of formatting
-    void BuildPortions( SwTxtFormatInfo &rInf );
+    void BuildPortions( SwTextFormatInfo &rInf );
 
-    bool BuildMultiPortion( SwTxtFormatInfo &rInf, SwMultiPortion& rMulti );
+    bool BuildMultiPortion( SwTextFormatInfo &rInf, SwMultiPortion& rMulti );
 
     /**
         Calculation of the emulated right side.
 
         Determines the next object, that reaches into the rest of the line and
         constructs the appropriate FlyPortion.
-        SwTxtFly::GetFrm(const SwRect&, bool) will be needed for this.
+        SwTextFly::GetFrm(const SwRect&, bool) will be needed for this.
 
         The right edge can be shortened by flys
      */
-    void CalcFlyWidth( SwTxtFormatInfo &rInf );
+    void CalcFlyWidth( SwTextFormatInfo &rInf );
 
-    // Is overloaded by SwTxtFormatter because of UpdatePos
+    // Is overloaded by SwTextFormatter because of UpdatePos
     void CalcAdjustLine( SwLineLayout *pCurr );
 
     // considers line spacing attributes
     void CalcRealHeight( bool bNewLine = false );
 
     // Transfers the data to rInf
-    void FeedInf( SwTxtFormatInfo &rInf ) const;
+    void FeedInf( SwTextFormatInfo &rInf ) const;
 
     // Treats underflow situations
-    SwLinePortion *Underflow( SwTxtFormatInfo &rInf );
+    SwLinePortion *Underflow( SwTextFormatInfo &rInf );
 
     // Calculates the ascent and the height from the fontmetric
-    void CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor );
+    void CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor );
 
     // determines, if a optimized repaint rectange is allowed
     bool AllowRepaintOpt() const;
 
     // Is called by FormatLine
-    void FormatReset( SwTxtFormatInfo &rInf );
+    void FormatReset( SwTextFormatInfo &rInf );
 
     /**
         The position of the portions changes with the adjustment.
@@ -128,10 +128,10 @@ class SwTxtFormatter : public SwTxtPainter
         We check this and return true, meaning that the line has to be
         formatted again.
      */
-    bool ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const;
+    bool ChkFlyUnderflow( SwTextFormatInfo &rInf ) const;
 
     // Insert portion
-    void InsertPortion( SwTxtFormatInfo &rInf, SwLinePortion *pPor ) const;
+    void InsertPortion( SwTextFormatInfo &rInf, SwLinePortion *pPor ) const;
 
     // Guess height for the DropPortion
     void GuessDropHeight( const sal_uInt16 nLines );
@@ -151,14 +151,14 @@ public:
     // Amongst others for DropCaps
     bool CalcOnceMore();
 
-    void CtorInitTxtFormatter( SwTxtFrm *pFrm, SwTxtFormatInfo *pInf );
-    SwTxtFormatter(SwTxtFrm *pTxtFrm, SwTxtFormatInfo *pTxtFmtInf)
-        : SwTxtPainter(pTxtFrm->GetTxtNode())
+    void CtorInitTextFormatter( SwTextFrm *pFrm, SwTextFormatInfo *pInf );
+    SwTextFormatter(SwTextFrm *pTextFrm, SwTextFormatInfo *pTextFormatInf)
+        : SwTextPainter(pTextFrm->GetTextNode())
         , bUnclipped(false)
     {
-        CtorInitTxtFormatter( pTxtFrm, pTxtFmtInf );
+        CtorInitTextFormatter( pTextFrm, pTextFormatInf );
     }
-    virtual ~SwTxtFormatter();
+    virtual ~SwTextFormatter();
 
     sal_Int32 FormatLine( const sal_Int32 nStart );
 
@@ -168,7 +168,7 @@ public:
     bool Hyphenate( SwInterHyphInfo &rInf );
 
     // A special method for QuoVadis texts:
-    // nErgo is the page number of the ErgoSum Ftn
+    // nErgo is the page number of the ErgoSum Footnote
     // At 0 it's still unclear
     sal_Int32 FormatQuoVadis( const sal_Int32 nStart );
 
@@ -181,10 +181,10 @@ public:
     // FormatQuick(); Refresh formatting information
     bool IsQuick() const { return GetInfo().IsQuick(); }
 
-    // Create a SwLineLayout if needed, which avoids Ftn/Fly to oscillate
+    // Create a SwLineLayout if needed, which avoids Footnote/Fly to oscillate
     void MakeDummyLine();
 
-    // SwTxtIter functionality
+    // SwTextIter functionality
     void Insert( SwLineLayout *pLine );
 
     // The remaining height to the page border
@@ -195,8 +195,8 @@ public:
 
     SwLinePortion* MakeRestPortion(const SwLineLayout* pLine, sal_Int32 nPos);
 
-    const SwFmtDrop *GetDropFmt() const { return pDropFmt; }
-    void ClearDropFmt() { pDropFmt = 0; }
+    const SwFormatDrop *GetDropFormat() const { return pDropFormat; }
+    void ClearDropFormat() { pDropFormat = 0; }
 
     SwMultiPortion *GetMulti() const { return pMulti; }
 
@@ -215,10 +215,10 @@ public:
     bool IsFlyInCntBase() const { return bFlyInCntBase; }
     void SetFlyInCntBase( bool bNew = true ) { bFlyInCntBase = bNew; }
 
-    SwTxtFormatInfo &GetInfo()
-        { return static_cast<SwTxtFormatInfo&>(SwTxtIter::GetInfo()); }
-    const SwTxtFormatInfo &GetInfo() const
-        { return static_cast<const SwTxtFormatInfo&>(SwTxtIter::GetInfo()); }
+    SwTextFormatInfo &GetInfo()
+        { return static_cast<SwTextFormatInfo&>(SwTextIter::GetInfo()); }
+    const SwTextFormatInfo &GetInfo() const
+        { return static_cast<const SwTextFormatInfo&>(SwTextIter::GetInfo()); }
 
     void InitCntHyph() { CntHyphens( nCntEndHyph, nCntMidHyph ); }
     const sal_uInt8 &CntEndHyph() const { return nCntEndHyph; }
@@ -241,7 +241,7 @@ public:
      * @param   rPortion    portion for merge
      * @param   rInf        contain information
     **/
-    void MergeCharacterBorder( SwLinePortion& rPortion, SwTxtFormatInfo& rInf );
+    void MergeCharacterBorder( SwLinePortion& rPortion, SwTextFormatInfo& rInf );
 };
 
 #endif

@@ -319,7 +319,7 @@ void SwHTMLTableLayout::AddBorderWidth( sal_uLong &rMin, sal_uLong &rMax,
 void SwHTMLTableLayout::SetBoxWidth( SwTableBox *pBox, sal_uInt16 nCol,
                              sal_uInt16 nColSpan ) const
 {
-    SwFrmFmt *pFrmFmt = pBox->GetFrmFmt();
+    SwFrameFormat *pFrameFormat = pBox->GetFrameFormat();
 
     // calculate the box's width
     SwTwips nFrmWidth = 0;
@@ -327,7 +327,7 @@ void SwHTMLTableLayout::SetBoxWidth( SwTableBox *pBox, sal_uInt16 nCol,
         nFrmWidth += GetColumn( nCol++ )->GetRelColWidth();
 
     // and reset
-    pFrmFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nFrmWidth, 0 ));
+    pFrameFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, nFrmWidth, 0 ));
 }
 
 void SwHTMLTableLayout::GetAvail( sal_uInt16 nCol, sal_uInt16 nColSpan,
@@ -385,7 +385,7 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTabFrm(
         // width is relevant not the frame's width.
         // For paragraph-bound frames we don't respect paragraph indents.
         const SwFrm *pAnchor = static_cast<const SwFlyFrm *>(pUpper)->GetAnchorFrm();
-        if( pAnchor->IsTxtFrm() )
+        if( pAnchor->IsTextFrm() )
             nWidth = pAnchor->Frm().Width();
         else
             nWidth = pAnchor->Prt().Width();
@@ -407,7 +407,7 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTabFrm(
 sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTable( const SwDoc& rDoc ) const
 {
     sal_uInt16 nBrowseWidth = 0;
-    SwTabFrm* pFrm = SwIterator<SwTabFrm,SwFmt>( *pSwTable->GetFrmFmt() ).First();
+    SwTabFrm* pFrm = SwIterator<SwTabFrm,SwFormat>( *pSwTable->GetFrameFormat() ).First();
     if( pFrm )
     {
         nBrowseWidth = GetBrowseWidthByTabFrm( *pFrm );
@@ -437,18 +437,18 @@ const SwStartNode *SwHTMLTableLayout::GetAnyBoxStartNode() const
     return pBoxSttNd;
 }
 
-SwFrmFmt *SwHTMLTableLayout::FindFlyFrmFmt() const
+SwFrameFormat *SwHTMLTableLayout::FindFlyFrameFormat() const
 {
-    const SwTableNode *pTblNd = GetAnyBoxStartNode()->FindTableNode();
-    OSL_ENSURE( pTblNd, "Kein Table-Node?" );
-    return pTblNd->GetFlyFmt();
+    const SwTableNode *pTableNd = GetAnyBoxStartNode()->FindTableNode();
+    OSL_ENSURE( pTableNd, "Kein Table-Node?" );
+    return pTableNd->GetFlyFormat();
 }
 
 static void lcl_GetMinMaxSize( sal_uLong& rMinNoAlignCnts, sal_uLong& rMaxNoAlignCnts,
                         sal_uLong& rAbsMinNoAlignCnts,
-                        SwTxtNode *pTxtNd, sal_uLong nIdx, bool bNoBreak )
+                        SwTextNode *pTextNd, sal_uLong nIdx, bool bNoBreak )
 {
-    pTxtNd->GetMinMaxSize( nIdx, rMinNoAlignCnts, rMaxNoAlignCnts,
+    pTextNd->GetMinMaxSize( nIdx, rMinNoAlignCnts, rMaxNoAlignCnts,
                            rAbsMinNoAlignCnts );
     OSL_ENSURE( rAbsMinNoAlignCnts <= rMinNoAlignCnts,
             "GetMinMaxSize: absmin > min" );
@@ -456,16 +456,16 @@ static void lcl_GetMinMaxSize( sal_uLong& rMinNoAlignCnts, sal_uLong& rMaxNoAlig
             "GetMinMaxSize: max > min" );
 
     // The maximal width for a <PRE> paragraph is the minimal width
-    const SwFmtColl *pColl = &pTxtNd->GetAnyFmtColl();
+    const SwFormatColl *pColl = &pTextNd->GetAnyFormatColl();
     while( pColl && !pColl->IsDefault() &&
-            (USER_FMT & pColl->GetPoolFmtId()) )
+            (USER_FMT & pColl->GetPoolFormatId()) )
     {
-        pColl = static_cast<const SwFmtColl *>(pColl->DerivedFrom());
+        pColl = static_cast<const SwFormatColl *>(pColl->DerivedFrom());
     }
 
     // <NOBR> in the whole cell apply to text but not to tables.
     // Netscape only considers this for graphics.
-    if( (pColl && RES_POOLCOLL_HTML_PRE==pColl->GetPoolFmtId()) || bNoBreak )
+    if( (pColl && RES_POOLCOLL_HTML_PRE==pColl->GetPoolFormatId()) || bNoBreak )
     {
         rMinNoAlignCnts = rMaxNoAlignCnts;
         rAbsMinNoAlignCnts = rMaxNoAlignCnts;
@@ -522,8 +522,8 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                         sal_uLong nIdx = pSttNd->GetIndex();
                         while( !(pDoc->GetNodes()[nIdx])->IsEndNode() )
                         {
-                            SwTxtNode *pTxtNd = (pDoc->GetNodes()[nIdx])->GetTxtNode();
-                            if( pTxtNd )
+                            SwTextNode *pTextNd = (pDoc->GetNodes()[nIdx])->GetTextNode();
+                            if( pTextNd )
                             {
                                 sal_uLong nMinNoAlignCnts = 0;
                                 sal_uLong nMaxNoAlignCnts = 0;
@@ -532,7 +532,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                                 lcl_GetMinMaxSize( nMinNoAlignCnts,
                                                    nMaxNoAlignCnts,
                                                    nAbsMinNoAlignCnts,
-                                                   pTxtNd, nIdx,
+                                                   pTextNd, nIdx,
                                                    pCnts->HasNoBreakTag() );
 
                                 if( nMinNoAlignCnts > nMinNoAlignCell )
@@ -1576,12 +1576,12 @@ static void lcl_ResizeBox( const SwTableBox* pBox, sal_uInt16* pWidth )
         sal_uInt16 nWidth = 0;
         for( const SwTableLine *pLine : pBox->GetTabLines() )
             lcl_ResizeLine( pLine, &nWidth );
-        pBox->GetFrmFmt()->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
+        pBox->GetFrameFormat()->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
         *pWidth = *pWidth + nWidth;
     }
     else
     {
-        *pWidth = *pWidth + (sal_uInt16)pBox->GetFrmFmt()->GetFrmSize().GetSize().Width();
+        *pWidth = *pWidth + (sal_uInt16)pBox->GetFrameFormat()->GetFrmSize().GetSize().Width();
     }
 }
 
@@ -1620,10 +1620,10 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
         {
             SwHTMLTableLayoutCell *pCell = GetCell( i, j );
 
-            SwHTMLTableLayoutCnts* pCntnts = pCell->GetContents();
-            while( pCntnts && !pCntnts->IsWidthSet(nWidthSet) )
+            SwHTMLTableLayoutCnts* pContents = pCell->GetContents();
+            while( pContents && !pContents->IsWidthSet(nWidthSet) )
             {
-                SwTableBox *pBox = pCntnts->GetTableBox();
+                SwTableBox *pBox = pContents->GetTableBox();
                 if( pBox )
                 {
                     SetBoxWidth( pBox, j, pCell->GetColSpan() );
@@ -1640,13 +1640,13 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
                         nRSpace = GetRightCellSpace( j, nColSpan );
                         nInhSpace = GetInhCellSpace( j, nColSpan );
                     }
-                    pCntnts->GetTable()->SetWidths( bCallPass2, nAbs, nRel,
+                    pContents->GetTable()->SetWidths( bCallPass2, nAbs, nRel,
                                                     nLSpace, nRSpace,
                                                     nInhSpace );
                 }
 
-                pCntnts->SetWidthSet( nWidthSet );
-                pCntnts = pCntnts->GetNext();
+                pContents->SetWidthSet( nWidthSet );
+                pContents = pContents->GetNext();
             }
         }
     }
@@ -1668,24 +1668,24 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
         // Lock the table format when altering it, or else the box formats
         // are altered again.
         // Also, we need to preserve a percent setting if it exists.
-        SwFrmFmt *pFrmFmt = pSwTable->GetFrmFmt();
+        SwFrameFormat *pFrameFormat = pSwTable->GetFrameFormat();
         const_cast<SwTable *>(pSwTable)->LockModify();
-        SwFmtFrmSize aFrmSize( pFrmFmt->GetFrmSize() );
+        SwFormatFrmSize aFrmSize( pFrameFormat->GetFrmSize() );
         aFrmSize.SetWidth( nRelTabWidth );
         bool bRel = bUseRelWidth &&
-                    text::HoriOrientation::FULL!=pFrmFmt->GetHoriOrient().GetHoriOrient();
+                    text::HoriOrientation::FULL!=pFrameFormat->GetHoriOrient().GetHoriOrient();
         aFrmSize.SetWidthPercent( (sal_uInt8)(bRel ? nWidthOption : 0) );
-        pFrmFmt->SetFmtAttr( aFrmSize );
+        pFrameFormat->SetFormatAttr( aFrmSize );
         const_cast<SwTable *>(pSwTable)->UnlockModify();
 
         // If the table is located in a frame, we also need to adapt the
         // frame's width.
         if( MayBeInFlyFrame() )
         {
-            SwFrmFmt *pFlyFrmFmt = FindFlyFrmFmt();
-            if( pFlyFrmFmt )
+            SwFrameFormat *pFlyFrameFormat = FindFlyFrameFormat();
+            if( pFlyFrameFormat )
             {
-                SwFmtFrmSize aFlyFrmSize( ATT_VAR_SIZE, nRelTabWidth, MINLAY );
+                SwFormatFrmSize aFlyFrmSize( ATT_VAR_SIZE, nRelTabWidth, MINLAY );
 
                 if( bUseRelWidth )
                 {
@@ -1694,14 +1694,14 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
                                                             : nMin );
                     aFlyFrmSize.SetWidthPercent( (sal_uInt8)nWidthOption );
                 }
-                pFlyFrmFmt->SetFmtAttr( aFlyFrmSize );
+                pFlyFrameFormat->SetFormatAttr( aFlyFrmSize );
             }
         }
 
 #ifdef DBG_UTIL
         {
             // check if the tables have correct widths
-            SwTwips nSize = pSwTable->GetFrmFmt()->GetFrmSize().GetWidth();
+            SwTwips nSize = pSwTable->GetFrameFormat()->GetFrmSize().GetWidth();
             const SwTableLines& rLines = pSwTable->GetTabLines();
             for (size_t n = 0; n < rLines.size(); ++n)
             {
@@ -1715,13 +1715,13 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
     {
         if( pLeftFillerBox )
         {
-            pLeftFillerBox->GetFrmFmt()->SetFmtAttr(
-                SwFmtFrmSize( ATT_VAR_SIZE, nRelLeftFill, 0 ));
+            pLeftFillerBox->GetFrameFormat()->SetFormatAttr(
+                SwFormatFrmSize( ATT_VAR_SIZE, nRelLeftFill, 0 ));
         }
         if( pRightFillerBox )
         {
-            pRightFillerBox->GetFrmFmt()->SetFmtAttr(
-                SwFmtFrmSize( ATT_VAR_SIZE, nRelRightFill, 0 ));
+            pRightFillerBox->GetFrameFormat()->SetFormatAttr(
+                SwFormatFrmSize( ATT_VAR_SIZE, nRelRightFill, 0 ));
         }
     }
 }
@@ -1774,7 +1774,7 @@ bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, bool bRecalc,
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->GetViewOptions()->getBrowseMode() )
     {
         const sal_uInt16 nVisAreaWidth = GetBrowseWidthByVisArea( *pDoc );
-        if( nVisAreaWidth < nAbsAvail && !FindFlyFrmFmt() )
+        if( nVisAreaWidth < nAbsAvail && !FindFlyFrameFormat() )
             nAbsAvail = nVisAreaWidth;
     }
 

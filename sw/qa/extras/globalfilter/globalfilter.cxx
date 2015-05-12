@@ -164,9 +164,9 @@ void Test::testLinkedGraphicRT()
         xComponent->dispose();
         mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
 
-        SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTxtDoc);
-        SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDoc);
         SwNodes& aNodes = pDoc->GetNodes();
 

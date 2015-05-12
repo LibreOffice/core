@@ -25,18 +25,18 @@
 #include <undobj.hxx>
 
 class SwRedlineSaveDatas;
-class SwTxtNode;
+class SwTextNode;
 
 namespace utl {
     class TransliterationWrapper;
 }
 
-class SwUndoOverwrite: public SwUndo, private SwUndoSaveCntnt
+class SwUndoOverwrite: public SwUndo, private SwUndoSaveContent
 {
     OUString aDelStr, aInsStr;
     SwRedlineSaveDatas* pRedlSaveData;
     sal_uLong nSttNode;
-    sal_Int32 nSttCntnt;
+    sal_Int32 nSttContent;
     bool bInsChar : 1;  // no Overwrite, but Insert
     bool bGroup : 1;    // TRUE: is already grouped; evaluated in CanGrouping()
 
@@ -83,7 +83,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
-    void AddChanges( SwTxtNode& rTNd, sal_Int32 nStart, sal_Int32 nLen,
+    void AddChanges( SwTextNode& rTNd, sal_Int32 nStart, sal_Int32 nLen,
                      ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );
     bool HasData() const { return aChanges.size() > 0; }
 };

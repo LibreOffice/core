@@ -53,14 +53,14 @@ inline const SvxProtectItem &SwAttrSet::GetProtect(bool bInP) const
     { return static_cast<const SvxProtectItem&>(Get( RES_PROTECT,bInP)); }
 inline const SvxBoxItem &SwAttrSet::GetBox(bool bInP) const
     { return static_cast<const SvxBoxItem&>(Get( RES_BOX,bInP)); }
-inline const SvxFmtKeepItem &SwAttrSet::GetKeep(bool bInP) const
-    { return static_cast<const SvxFmtKeepItem&>(Get( RES_KEEP,bInP)); }
+inline const SvxFormatKeepItem &SwAttrSet::GetKeep(bool bInP) const
+    { return static_cast<const SvxFormatKeepItem&>(Get( RES_KEEP,bInP)); }
 inline const SvxBrushItem &SwAttrSet::GetBackground(bool bInP) const
     { return static_cast<const SvxBrushItem&>(Get( RES_BACKGROUND,bInP)); }
 inline const SvxShadowItem &SwAttrSet::GetShadow(bool bInP) const
     { return static_cast<const SvxShadowItem&>(Get( RES_SHADOW,bInP)); }
-inline const SvxFmtBreakItem &SwAttrSet::GetBreak(bool bInP) const
-    { return static_cast<const SvxFmtBreakItem&>(Get( RES_BREAK,bInP)); }
+inline const SvxFormatBreakItem &SwAttrSet::GetBreak(bool bInP) const
+    { return static_cast<const SvxFormatBreakItem&>(Get( RES_BREAK,bInP)); }
 inline const SvxMacroItem &SwAttrSet::GetMacro(bool bInP) const
     { return static_cast<const SvxMacroItem&>(Get( RES_FRMMACRO,bInP)); }
 inline const SvxFrameDirectionItem &SwAttrSet::GetFrmDir(bool bInP) const
@@ -68,32 +68,32 @@ inline const SvxFrameDirectionItem &SwAttrSet::GetFrmDir(bool bInP) const
 inline const SdrTextVertAdjustItem &SwAttrSet::GetTextVertAdjust(bool bInP) const
     { return static_cast<const SdrTextVertAdjustItem&>(Get( RES_TEXT_VERT_ADJUST,bInP)); }
 
-// Implementation of FrameAttribute methods of SwFmt.
-inline const SvxPaperBinItem &SwFmt::GetPaperBin(bool bInP) const
+// Implementation of FrameAttribute methods of SwFormat.
+inline const SvxPaperBinItem &SwFormat::GetPaperBin(bool bInP) const
     { return m_aSet.GetPaperBin(bInP); }
-inline const SvxLRSpaceItem &SwFmt::GetLRSpace(bool bInP) const
+inline const SvxLRSpaceItem &SwFormat::GetLRSpace(bool bInP) const
     { return m_aSet.GetLRSpace(bInP); }
-inline const SvxULSpaceItem &SwFmt::GetULSpace(bool bInP) const
+inline const SvxULSpaceItem &SwFormat::GetULSpace(bool bInP) const
     { return m_aSet.GetULSpace(bInP); }
-inline const SvxPrintItem &SwFmt::GetPrint(bool bInP) const
+inline const SvxPrintItem &SwFormat::GetPrint(bool bInP) const
     { return m_aSet.GetPrint(bInP); }
-inline const SvxOpaqueItem &SwFmt::GetOpaque(bool bInP) const
+inline const SvxOpaqueItem &SwFormat::GetOpaque(bool bInP) const
     { return m_aSet.GetOpaque(bInP); }
-inline const SvxProtectItem &SwFmt::GetProtect(bool bInP) const
+inline const SvxProtectItem &SwFormat::GetProtect(bool bInP) const
     { return m_aSet.GetProtect(bInP); }
-inline const SvxBoxItem &SwFmt::GetBox(bool bInP) const
+inline const SvxBoxItem &SwFormat::GetBox(bool bInP) const
     { return m_aSet.GetBox(bInP); }
-inline const SvxFmtKeepItem &SwFmt::GetKeep(bool bInP) const
+inline const SvxFormatKeepItem &SwFormat::GetKeep(bool bInP) const
     { return m_aSet.GetKeep(bInP); }
-inline const SvxShadowItem &SwFmt::GetShadow(bool bInP) const
+inline const SvxShadowItem &SwFormat::GetShadow(bool bInP) const
     { return m_aSet.GetShadow(bInP); }
-inline const SvxFmtBreakItem &SwFmt::GetBreak(bool bInP) const
+inline const SvxFormatBreakItem &SwFormat::GetBreak(bool bInP) const
     { return m_aSet.GetBreak(bInP); }
-inline const SvxMacroItem &SwFmt::GetMacro(bool bInP) const
+inline const SvxMacroItem &SwFormat::GetMacro(bool bInP) const
     { return m_aSet.GetMacro(bInP); }
-inline const SvxFrameDirectionItem  &SwFmt::GetFrmDir(bool bInP) const
+inline const SvxFrameDirectionItem  &SwFormat::GetFrmDir(bool bInP) const
     { return m_aSet.GetFrmDir(bInP); }
-inline const SdrTextVertAdjustItem &SwFmt::GetTextVertAdjust(bool bInP) const
+inline const SdrTextVertAdjustItem &SwFormat::GetTextVertAdjust(bool bInP) const
     { return m_aSet.GetTextVertAdjust(bInP); }
 
 #endif // INCLUDED_SW_INC_FRMATR_HXX

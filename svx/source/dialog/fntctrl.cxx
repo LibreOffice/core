@@ -309,7 +309,7 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
     do
     {
         const SvxFont& rFnt = (nScript==com::sun::star::i18n::ScriptType::ASIAN) ? aCJKFont : ((nScript==com::sun::star::i18n::ScriptType::COMPLEX) ? aCTLFont : rFont);
-        sal_uIntPtr nWidth = rFnt.GetTxtSize( _pPrinter, aText, nStart, nEnd-nStart ).
+        sal_uIntPtr nWidth = rFnt.GetTextSize( _pPrinter, aText, nStart, nEnd-nStart ).
                        Width();
         if (nIdx >= aTextWidth.size())
             break;
@@ -761,12 +761,12 @@ void SvxFontPrevWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rec
             if(pImpl->cStartBracket)
             {
                 OUString sBracket(pImpl->cStartBracket);
-                nStartBracketWidth = rFont.GetTxtSize( pPrinter, sBracket ).Width();
+                nStartBracketWidth = rFont.GetTextSize( pPrinter, sBracket ).Width();
             }
             if(pImpl->cEndBracket)
             {
                 OUString sBracket(pImpl->cEndBracket);
-                nEndBracketWidth = rFont.GetTxtSize( pPrinter, sBracket ).Width();
+                nEndBracketWidth = rFont.GetTextSize( pPrinter, sBracket ).Width();
             }
             nTextWidth = pImpl->CalcTextSize( this, pPrinter, aSmallFont ).Width();
             long nResultWidth = nStartBracketWidth;

@@ -123,8 +123,8 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
                     m_bIsInDrag       : 1, // don't execute StartExecuteDrag twice
                     m_bOldIdle        : 1, // to stop to idle
                     m_bOldIdleSet     : 1, // during QeueryDrop
-                    m_bTblInsDelMode  : 1,
-                    m_bTblIsInsMode   : 1,
+                    m_bTableInsDelMode  : 1,
+                    m_bTableIsInsMode   : 1,
                     m_bChainMode      : 1, // connect frames
                     m_bWasShdwCrsr    : 1, // ShadowCrsr was on in MouseButtonDown
                     m_bLockInput      : 1, // lock while calc panel is active
@@ -289,7 +289,7 @@ public:
     /** fdo#55546 cut very long tooltips to 2/3 of the width of the screen
         via center ellipsis
      */
-    OUString ClipLongToolTip(const OUString& rTxt);
+    OUString ClipLongToolTip(const OUString& rText);
 
     SwFrameControlsManager& GetFrameControlsManager() { return m_aFrameControlsManager; }
 

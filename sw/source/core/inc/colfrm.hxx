@@ -23,14 +23,14 @@
 #include <tools/mempool.hxx>
 #include "ftnboss.hxx"
 
-class SwColumnFrm: public SwFtnBossFrm
+class SwColumnFrm: public SwFootnoteBossFrm
 {
 private:
     virtual void DestroyImpl() SAL_OVERRIDE;
     virtual ~SwColumnFrm();
 
 public:
-    SwColumnFrm( SwFrmFmt*, SwFrm* );
+    SwColumnFrm( SwFrameFormat*, SwFrm* );
 
     virtual void PaintBreak() const SAL_OVERRIDE;
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const SAL_OVERRIDE;

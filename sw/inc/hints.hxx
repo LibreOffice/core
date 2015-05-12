@@ -23,15 +23,15 @@
 #include <vcl/vclptr.hxx>
 #include <vector>
 
-class SwFmt;
+class SwFormat;
 class OutputDevice;
 class SwTable;
 class SwNode;
 class SwNodes;
-class SwCntntNode;
+class SwContentNode;
 class SwPageFrm;
 class SwFrm;
-class SwTxtNode;
+class SwTextNode;
 class SwHistory;
 
 // Base class for all Message-Hints:
@@ -59,23 +59,23 @@ public:
 };
 
 /*
- * SwFmtChg is sent when a format has changed to another format. 2 Hints are always sent
+ * SwFormatChg is sent when a format has changed to another format. 2 Hints are always sent
  * the old and the new format
  */
-class SwFmtChg: public SwMsgPoolItem
+class SwFormatChg: public SwMsgPoolItem
 {
 public:
-    SwFmt *pChangedFmt;
-    SwFmtChg( SwFmt *pFmt );
+    SwFormat *pChangedFormat;
+    SwFormatChg( SwFormat *pFormat );
 };
 
-class SwInsTxt: public SwMsgPoolItem
+class SwInsText: public SwMsgPoolItem
 {
 public:
     sal_Int32 nPos;
     sal_Int32 nLen;
 
-    SwInsTxt( sal_Int32 nP, sal_Int32 nL );
+    SwInsText( sal_Int32 nP, sal_Int32 nL );
 };
 
 class SwDelChr: public SwMsgPoolItem
@@ -86,13 +86,13 @@ public:
     SwDelChr( sal_Int32 nP );
 };
 
-class SwDelTxt: public SwMsgPoolItem
+class SwDelText: public SwMsgPoolItem
 {
 public:
     sal_Int32 nStart;
     sal_Int32 nLen;
 
-    SwDelTxt( sal_Int32 nS, sal_Int32 nL );
+    SwDelText( sal_Int32 nS, sal_Int32 nL );
 };
 
 class SwUpdateAttr : public SwMsgPoolItem
@@ -101,7 +101,7 @@ private:
     sal_Int32 nStart;
     sal_Int32 nEnd;
     sal_uInt16 nWhichAttr;
-    std::vector<sal_uInt16> aWhichFmtAttr; // attributes changed inside RES_TXTATR_AUTOFMT
+    std::vector<sal_uInt16> aWhichFormatAttr; // attributes changed inside RES_TXTATR_AUTOFMT
 
 public:
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW );
@@ -121,16 +121,16 @@ public:
         return nWhichAttr;
     }
 
-    const std::vector<sal_uInt16>& getFmtAttr() const
+    const std::vector<sal_uInt16>& getFormatAttr() const
     {
-        return aWhichFmtAttr;
+        return aWhichFormatAttr;
     }
 };
 
-/** SwRefMarkFldUpdate is sent when the referencemarks should be updated.
+/** SwRefMarkFieldUpdate is sent when the referencemarks should be updated.
      To determine Page- / chapternumbers the current frame has to be asked.
       For this we need the current outputdevice */
-class SwRefMarkFldUpdate : public SwMsgPoolItem
+class SwRefMarkFieldUpdate : public SwMsgPoolItem
 {
 public:
     VclPtr<OutputDevice> pOut; ///< pointer to the current output device
@@ -139,7 +139,7 @@ public:
         To get the page/chapter number, the frame has to be asked. For that we need
         the current OutputDevice.
     */
-    SwRefMarkFldUpdate( OutputDevice* );
+    SwRefMarkFieldUpdate( OutputDevice* );
 };
 
 /** SwDocPosUpdate is sent to signal that only the frames from or to a specified document-global position
@@ -151,39 +151,39 @@ public:
     SwDocPosUpdate( const long nDocPos );
 };
 
-/// SwTableFmlUpdate is sent when the table has to be newly calculated or when a table itself is merged or splitted
-enum TableFmlUpdtFlags { TBL_CALC = 0,
+/// SwTableFormulaUpdate is sent when the table has to be newly calculated or when a table itself is merged or splitted
+enum TableFormulaUpdateFlags { TBL_CALC = 0,
                          TBL_BOXNAME,
                          TBL_BOXPTR,
                          TBL_RELBOXNAME,
                          TBL_MERGETBL,
                          TBL_SPLITTBL
                        };
-class SwTableFmlUpdate : public SwMsgPoolItem
+class SwTableFormulaUpdate : public SwMsgPoolItem
 {
 public:
-    const SwTable* pTbl;         ///< Pointer to the current table
+    const SwTable* pTable;         ///< Pointer to the current table
     union {
-        const SwTable* pDelTbl;  ///< Merge: Pointer to the table to be removed
-        const OUString* pNewTblNm; ///< Split: the name of the new table
+        const SwTable* pDelTable;  ///< Merge: Pointer to the table to be removed
+        const OUString* pNewTableNm; ///< Split: the name of the new table
     } DATA;
     SwHistory* pHistory;
     sal_uInt16 nSplitLine;       ///< Split: from this BaseLine on will be splitted
-    TableFmlUpdtFlags eFlags;
+    TableFormulaUpdateFlags eFlags;
     bool bModified : 1;
     bool bBehindSplitLine : 1;
 
     /** Is sent if a table should be recalculated */
-    SwTableFmlUpdate( const SwTable* );
+    SwTableFormulaUpdate( const SwTable* );
 };
 
-class SwAutoFmtGetDocNode: public SwMsgPoolItem
+class SwAutoFormatGetDocNode: public SwMsgPoolItem
 {
 public:
-    const SwCntntNode* pCntntNode;
+    const SwContentNode* pContentNode;
     const SwNodes* pNodes;
 
-    SwAutoFmtGetDocNode( const SwNodes* pNds );
+    SwAutoFormatGetDocNode( const SwNodes* pNds );
 };
 
 /*
@@ -219,8 +219,8 @@ public:
 class SwCondCollCondChg: public SwMsgPoolItem
 {
 public:
-    SwFmt *pChangedFmt;
-    SwCondCollCondChg( SwFmt *pFmt );
+    SwFormat *pChangedFormat;
+    SwCondCollCondChg( SwFormat *pFormat );
 };
 
 class SwVirtPageNumInfo: public SwMsgPoolItem

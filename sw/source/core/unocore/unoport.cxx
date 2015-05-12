@@ -85,7 +85,7 @@ SwXTextPortion::SwXTextPortion(
             :  PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(rParent)
     , m_FrameDepend(this, 0)
-    , m_pFrameFmt(0)
+    , m_pFrameFormat(0)
     , m_ePortionType(eType)
     , m_bIsCollapsed(false)
 {
@@ -95,13 +95,13 @@ SwXTextPortion::SwXTextPortion(
 SwXTextPortion::SwXTextPortion(
     const SwUnoCrsr* pPortionCrsr,
     uno::Reference< text::XText > const& rParent,
-    SwFrmFmt& rFmt )
+    SwFrameFormat& rFormat )
     : m_pImpl(new Impl)
     , m_pPropSet(aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
     , m_xParentText(rParent)
-    , m_FrameDepend(this, &rFmt)
-    , m_pFrameFmt(&rFmt)
+    , m_FrameDepend(this, &rFormat)
+    , m_pFrameFormat(&rFormat)
     , m_ePortionType(PORTION_FRAME)
     , m_bIsCollapsed(false)
 {
@@ -110,7 +110,7 @@ SwXTextPortion::SwXTextPortion(
 
 SwXTextPortion::SwXTextPortion(
     const SwUnoCrsr* pPortionCrsr,
-    SwTxtRuby const& rAttr,
+    SwTextRuby const& rAttr,
     uno::Reference< text::XText > const& xParent,
     bool bIsEnd )
     : m_pImpl(new Impl)
@@ -122,7 +122,7 @@ SwXTextPortion::SwXTextPortion(
     , m_pRubyAdjust ( bIsEnd ? 0 : new uno::Any )
     , m_pRubyIsAbove( bIsEnd ? 0 : new uno::Any )
     , m_FrameDepend(this, 0)
-    , m_pFrameFmt(0)
+    , m_pFrameFormat(0)
     , m_ePortionType( bIsEnd ? PORTION_RUBY_END : PORTION_RUBY_START )
     , m_bIsCollapsed(false)
 {
@@ -185,20 +185,20 @@ OUString SwXTextPortion::getString()
 throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    OUString aTxt;
+    OUString aText;
     SwUnoCrsr* pUnoCrsr = GetCursor();
     if (!pUnoCrsr)
         throw uno::RuntimeException();
 
     // TextPortions are always within a paragraph
-    SwTxtNode* pTxtNd = pUnoCrsr->GetNode().GetTxtNode();
-    if ( pTxtNd )
+    SwTextNode* pTextNd = pUnoCrsr->GetNode().GetTextNode();
+    if ( pTextNd )
     {
         const sal_Int32 nStt = pUnoCrsr->Start()->nContent.GetIndex();
-        aTxt = pTxtNd->GetExpandTxt( nStt,
+        aText = pTextNd->GetExpandText( nStt,
                 pUnoCrsr->End()->nContent.GetIndex() - nStt );
     }
-    return aTxt;
+    return aText;
 }
 
 void SwXTextPortion::setString(const OUString& aString) throw( uno::RuntimeException, std::exception )
@@ -217,7 +217,7 @@ throw( uno::RuntimeException, std::exception )
     SolarMutexGuard aGuard;
     //! PropertySetInfo for text portion extensions
     static uno::Reference< beans::XPropertySetInfo >
-            xTxtPorExtRef = aSwMapProvider.GetPropertySet(
+            xTextPorExtRef = aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS)->getPropertySetInfo();
     //! PropertySetInfo for redline portions
     static uno::Reference< beans::XPropertySetInfo >
@@ -225,7 +225,7 @@ throw( uno::RuntimeException, std::exception )
                     PROPERTY_MAP_REDLINE_PORTION)->getPropertySetInfo();
 
     return (PORTION_REDLINE_START == m_ePortionType ||
-            PORTION_REDLINE_END   == m_ePortionType) ? xRedlPorRef : xTxtPorExtRef;
+            PORTION_REDLINE_END   == m_ePortionType) ? xRedlPorRef : xTextPorExtRef;
 }
 
 void SwXTextPortion::setPropertyValue(const OUString& rPropertyName,
@@ -855,7 +855,7 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
 
     uno::Reference< container::XEnumeration >  xRet =
         new SwXParaFrameEnumeration(*pUnoCrsr, PARAFRAME_PORTION_CHAR,
-                m_pFrameFmt);
+                m_pFrameFormat);
     return xRet;
 
 }
@@ -928,7 +928,7 @@ void SwXTextPortion::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     ClientModify(this, pOld, pNew);
     if (!m_FrameDepend.GetRegisteredIn())
     {
-        m_pFrameFmt = 0;
+        m_pFrameFormat = 0;
     }
 }
 

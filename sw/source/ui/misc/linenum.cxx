@@ -53,9 +53,9 @@ static void lcl_setLineNumbering(const OUString& rName, SwWrtShell* pSh, bool bL
     if(!xStyleSheet.is())
         return;
     SfxItemSet& rSet = xStyleSheet->GetItemSet();
-    SwFmtLineNumber aFmt;
-    aFmt.SetCountLines(bLineNumber);
-    rSet.Put(aFmt);
+    SwFormatLineNumber aFormat;
+    aFormat.SetCountLines(bLineNumber);
+    rSet.Put(aFormat);
     xStyleSheet->MergeIndentAttrsOfListStyle( rSet );
     xStyleSheet->SetItemSet(rSet, false);
 }
@@ -101,7 +101,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     const SwLineNumberInfo &rInf = pSh->GetLineNumberInfo();
     IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
 
-    OUString sStyleName(rInf.GetCharFmt( *pIDSPA )->GetName());
+    OUString sStyleName(rInf.GetCharFormat( *pIDSPA )->GetName());
     const sal_Int32 nPos = m_pCharStyleLB->GetEntryPos(sStyleName);
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
@@ -116,9 +116,9 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     }
 
     // format
-    sal_uInt16 nSelFmt = rInf.GetNumType().GetNumberingType();
+    sal_uInt16 nSelFormat = rInf.GetNumType().GetNumberingType();
 
-    m_pFormatLB->SelectNumberingType(nSelFmt);
+    m_pFormatLB->SelectNumberingType(nSelFormat);
 
     // position
     m_pPosLB->SelectEntryPos((sal_Int32)rInf.GetPos());
@@ -151,8 +151,8 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     if(xStyleSheet.is())
     {
         SfxItemSet& rSet = xStyleSheet->GetItemSet();
-        const SwFmtLineNumber &aFmt = static_cast<const SwFmtLineNumber&>(rSet.Get(RES_LINENUMBER));
-        if(aFmt.IsCount())
+        const SwFormatLineNumber &aFormat = static_cast<const SwFormatLineNumber&>(rSet.Get(RES_LINENUMBER));
+        if(aFormat.IsCount())
             m_pNumberingOnFooterHeader->SetState(TRISTATE_TRUE);
         else
             m_pNumberingOnFooterHeader->SetState(TRISTATE_FALSE);
@@ -198,21 +198,21 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
     // char styles
-    OUString sCharFmtName(m_pCharStyleLB->GetSelectEntry());
-    SwCharFmt *pCharFmt = pSh->FindCharFmtByName(sCharFmtName);
+    OUString sCharFormatName(m_pCharStyleLB->GetSelectEntry());
+    SwCharFormat *pCharFormat = pSh->FindCharFormatByName(sCharFormatName);
 
-    if (!pCharFmt)
+    if (!pCharFormat)
     {
         SfxStyleSheetBasePool* pPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
         SfxStyleSheetBase* pBase;
-        pBase = pPool->Find(sCharFmtName, SFX_STYLE_FAMILY_CHAR);
+        pBase = pPool->Find(sCharFormatName, SFX_STYLE_FAMILY_CHAR);
         if(!pBase)
-            pBase = &pPool->Make(sCharFmtName, SFX_STYLE_FAMILY_CHAR);
-        pCharFmt = static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt();
+            pBase = &pPool->Make(sCharFormatName, SFX_STYLE_FAMILY_CHAR);
+        pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
     }
 
-    if (pCharFmt)
-        aInf.SetCharFmt(pCharFmt);
+    if (pCharFormat)
+        aInf.SetCharFormat(pCharFormat);
 
     // format
     SvxNumberType aType;

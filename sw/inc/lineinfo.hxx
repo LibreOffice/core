@@ -23,7 +23,7 @@
 #include <editeng/numitem.hxx>
 #include "swdllapi.h"
 
-class SwCharFmt;
+class SwCharFormat;
 class IDocumentStylePoolAccess;
 
 enum LineNumberPosition
@@ -59,8 +59,8 @@ public:
     SwLineNumberInfo& operator=(const SwLineNumberInfo&);
     bool operator==( const SwLineNumberInfo& rInf ) const;
 
-    SwCharFmt *GetCharFmt( IDocumentStylePoolAccess& rIDSPA ) const;
-    void SetCharFmt( SwCharFmt* );
+    SwCharFormat *GetCharFormat( IDocumentStylePoolAccess& rIDSPA ) const;
+    void SetCharFormat( SwCharFormat* );
 
     const SvxNumberType &GetNumType() const             { return aType; }
     void                SetNumType( SvxNumberType aNew ){ aType = aNew; }

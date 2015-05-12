@@ -196,20 +196,20 @@ void SwSpellPopup::fillLangPopupMenu(
     std::set< OUString >::const_iterator it;
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
-        OUString aEntryTxt( *it );
-        if (aEntryTxt != OUString( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) )&&
-            aEntryTxt != "*" && // multiple languages in current selection
-            !aEntryTxt.isEmpty()) // 'no language found' from language guessing
+        OUString aEntryText( *it );
+        if (aEntryText != OUString( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) )&&
+            aEntryText != "*" && // multiple languages in current selection
+            !aEntryText.isEmpty()) // 'no language found' from language guessing
         {
             OSL_ENSURE( nLangItemIdStart <= nItemId && nItemId <= nLangItemIdStart + MN_MAX_NUM_LANG,
                     "nItemId outside of expected range!" );
-            pPopupMenu->InsertItem( nItemId, aEntryTxt, MenuItemBits::RADIOCHECK );
-            if (aEntryTxt == aCurLang)
+            pPopupMenu->InsertItem( nItemId, aEntryText, MenuItemBits::RADIOCHECK );
+            if (aEntryText == aCurLang)
             {
                 //make a check mark for the current language
                 pPopupMenu->CheckItem( nItemId, true );
             }
-            rLangTable[ nItemId ] = aEntryTxt;
+            rLangTable[ nItemId ] = aEntryText;
             ++nItemId;
         }
     }
@@ -824,13 +824,13 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                     RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
                     RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
                     0 );
-        OUString aNewLangTxt;
+        OUString aNewLangText;
 
         if (MN_SET_LANGUAGE_SELECTION_START <= nId && nId <= MN_SET_LANGUAGE_SELECTION_END)
         {
             //Set language for current selection
-            aNewLangTxt = m_aLangTable_Text[nId];
-            SwLangHelper::SetLanguage( *m_pSh, aNewLangTxt, true, aCoreSet );
+            aNewLangText = m_aLangTable_Text[nId];
+            SwLangHelper::SetLanguage( *m_pSh, aNewLangText, true, aCoreSet );
         }
         else if (nId == MN_SET_SELECTION_NONE)
         {
@@ -850,10 +850,10 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         else if (MN_SET_LANGUAGE_PARAGRAPH_START <= nId && nId <= MN_SET_LANGUAGE_PARAGRAPH_END)
         {
             //Set language for current paragraph
-            aNewLangTxt = m_aLangTable_Paragraph[nId];
+            aNewLangText = m_aLangTable_Paragraph[nId];
             m_pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *m_pSh );
-            SwLangHelper::SetLanguage( *m_pSh, aNewLangTxt, true, aCoreSet );
+            SwLangHelper::SetLanguage( *m_pSh, aNewLangText, true, aCoreSet );
             m_pSh->Pop( false );  // restore cursor
         }
         else if (nId == MN_SET_PARA_NONE)

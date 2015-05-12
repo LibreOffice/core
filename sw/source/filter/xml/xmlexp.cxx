@@ -220,9 +220,9 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             // The styles in pDoc also count the default style that never
             // gets exported -> subtract one.
             sal_Int32 nRef = 1; // meta.xml
-            nRef += pDoc->GetCharFmts()->size() - 1;
-            nRef += pDoc->GetFrmFmts()->size() - 1;
-            nRef += pDoc->GetTxtFmtColls()->size() - 1;
+            nRef += pDoc->GetCharFormats()->size() - 1;
+            nRef += pDoc->GetFrameFormats()->size() - 1;
+            nRef += pDoc->GetTextFormatColls()->size() - 1;
             nRef *= 2; // for the above styles, xmloff will increment by 2!
             // #i93174#: count all paragraphs for the progress bar
             nRef += pDoc->getIDocumentStatistics().GetUpdatedDocStat( false, true ).nAllPara; // 1: only content, no autostyle

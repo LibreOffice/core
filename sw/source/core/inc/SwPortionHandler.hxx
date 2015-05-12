@@ -34,10 +34,10 @@ class SwFont;
  * once at the end of every on-screen line.
  *
  * All parameters relate to the 'model string', which is the text string
- * held by the corresponding SwTxtNode.
+ * held by the corresponding SwTextNode.
  *
  * The SwPortionHandler can be used with the
- * SwTxtFrm::VisitPortions(...) method.
+ * SwTextFrm::VisitPortions(...) method.
  */
 class SwPortionHandler
 {
@@ -79,7 +79,7 @@ public:
      */
     virtual void LineBreak(sal_Int32 nWidth) = 0;
 
-    /** skip characters. The SwTxtFrame may only display partially
+    /** skip characters. The SwTextFrame may only display partially
      * display a certain paragraph (e.g. when the paragraph is split
      * across multiple pages). In this case, the Skip() method must be
      * called to inform the portion handler to ignore a certain run of

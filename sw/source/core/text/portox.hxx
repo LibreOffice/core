@@ -22,11 +22,11 @@
 
 #include "portxt.hxx"
 
-class SwToxPortion : public SwTxtPortion
+class SwToxPortion : public SwTextPortion
 {
 public:
     inline  SwToxPortion(){ SetWhichPor( POR_TOX ); }
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
 
@@ -36,10 +36,10 @@ class SwIsoToxPortion : public SwToxPortion
 
 public:
             SwIsoToxPortion();
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
-    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;

@@ -417,7 +417,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         // #i16874# enable kerning by default but only for new documents
         rSubtitleSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
-        aSvxLRSpaceItem.SetTxtLeft(0);
+        aSvxLRSpaceItem.SetTextLeft(0);
         rSubtitleSet.Put(aSvxLRSpaceItem);
 
         vcl::Font aTmpFont( GetBulletFont() );

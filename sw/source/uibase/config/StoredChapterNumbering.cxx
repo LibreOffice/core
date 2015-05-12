@@ -124,18 +124,18 @@ public:
         {
             return uno::Any();
         }
-        SwNumFmt const* pNumFmt(0);
+        SwNumFormat const* pNumFormat(0);
         OUString const* pCharStyleName(0);
-        pRules->GetNumFmt(nIndex, pNumFmt, pCharStyleName);
-        if (!pNumFmt)
+        pRules->GetNumFormat(nIndex, pNumFormat, pCharStyleName);
+        if (!pNumFormat)
         {   // the dialog only fills in those levels that are non-default
             return uno::Any(); // the export will ignore this level, yay
         }
         assert(pCharStyleName);
         OUString dummy; // pass in empty HeadingStyleName - can't import anyway
         uno::Sequence<beans::PropertyValue> const ret(
-            SwXNumberingRules::GetPropertiesForNumFmt(
-                *pNumFmt, *pCharStyleName, &dummy));
+            SwXNumberingRules::GetPropertiesForNumFormat(
+                *pNumFormat, *pCharStyleName, &dummy));
         return uno::makeAny(ret);
     }
 
@@ -154,15 +154,15 @@ public:
                     static_cast< ::cppu::OWeakObject*>(this), 1);
 
         SolarMutexGuard g;
-        SwNumFmt numFmt;
+        SwNumFormat aNumberFormat;
         OUString charStyleName;
-        SwXNumberingRules::SetPropertiesToNumFmt(
-            numFmt,
+        SwXNumberingRules::SetPropertiesToNumFormat(
+            aNumberFormat,
             charStyleName,
             0, 0, 0, 0, 0,
             props);
         SwNumRulesWithName *const pRules(GetOrCreateRules());
-        pRules->SetNumFmt(nIndex, numFmt, charStyleName);
+        pRules->SetNumFormat(nIndex, aNumberFormat, charStyleName);
     }
 };
 
@@ -438,9 +438,9 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
         {
             for (size_t j = 0; j < MAXLEVEL; ++j)
             {
-                SwNumFmt const* pDummy(0);
+                SwNumFormat const* pDummy(0);
                 OUString const* pCharStyleName(0);
-                pRule->GetNumFmt(j, pDummy, pCharStyleName);
+                pRule->GetNumFormat(j, pDummy, pCharStyleName);
                 if (pCharStyleName && !pCharStyleName->isEmpty())
                 {
                     charStyles.insert(*pCharStyleName);

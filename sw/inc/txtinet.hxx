@@ -23,12 +23,12 @@
 #include <txtatr.hxx>
 #include <calbck.hxx>
 
-class SwTxtNode;
-class SwCharFmt;
+class SwTextNode;
+class SwCharFormat;
 
-class SW_DLLPUBLIC SwTxtINetFmt : public SwTxtAttrNesting, public SwClient
+class SW_DLLPUBLIC SwTextINetFormat : public SwTextAttrNesting, public SwClient
 {
-    SwTxtNode * m_pTxtNode;
+    SwTextNode * m_pTextNode;
     bool m_bVisited         : 1; // visited link?
     bool m_bVisitedValid    : 1; // is m_bVisited valid?
 
@@ -36,23 +36,23 @@ protected:
 virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
 public:
-    SwTxtINetFmt( SwFmtINetFmt& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-    virtual ~SwTxtINetFmt();
+    SwTextINetFormat( SwFormatINetFormat& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    virtual ~SwTextINetFormat();
     TYPEINFO_OVERRIDE();
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
 
-    SAL_DLLPRIVATE void InitINetFmt(SwTxtNode & rNode);
+    SAL_DLLPRIVATE void InitINetFormat(SwTextNode & rNode);
 
-    // get and set TxtNode pointer
-    const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }
-    inline const SwTxtNode& GetTxtNode() const;
-    inline SwTxtNode& GetTxtNode();
-    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
+    // get and set TextNode pointer
+    const SwTextNode* GetpTextNode() const { return m_pTextNode; }
+    inline const SwTextNode& GetTextNode() const;
+    inline SwTextNode& GetTextNode();
+    void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }
 
-          SwCharFmt* GetCharFmt();
-    const SwCharFmt* GetCharFmt() const
-            { return const_cast<SwTxtINetFmt*>(this)->GetCharFmt(); }
+          SwCharFormat* GetCharFormat();
+    const SwCharFormat* GetCharFormat() const
+            { return const_cast<SwTextINetFormat*>(this)->GetCharFormat(); }
 
     bool IsVisited() const { return m_bVisited; }
     void SetVisited( bool bNew ) { m_bVisited = bNew; }
@@ -63,15 +63,15 @@ public:
     bool IsProtect() const;
 };
 
-inline const SwTxtNode& SwTxtINetFmt::GetTxtNode() const
+inline const SwTextNode& SwTextINetFormat::GetTextNode() const
 {
-    assert( m_pTxtNode );
-    return *m_pTxtNode;
+    assert( m_pTextNode );
+    return *m_pTextNode;
 }
 
-inline SwTxtNode& SwTxtINetFmt::GetTxtNode()
+inline SwTextNode& SwTextINetFormat::GetTextNode()
 {
-    return const_cast<SwTxtNode&>( const_cast<SwTxtINetFmt const*>(this)->GetTxtNode() );
+    return const_cast<SwTextNode&>( const_cast<SwTextINetFormat const*>(this)->GetTextNode() );
 }
 
 #endif

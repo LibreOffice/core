@@ -23,14 +23,14 @@
 #include <tox.hxx>
 #include <ndtxt.hxx>
 
-SwTxtTOXMark::SwTxtTOXMark( SwTOXMark& rAttr,
+SwTextTOXMark::SwTextTOXMark( SwTOXMark& rAttr,
             sal_Int32 const nStartPos, sal_Int32 const*const pEnd)
-    : SwTxtAttr( rAttr, nStartPos )
-    , SwTxtAttrEnd( rAttr, nStartPos, nStartPos )
-    , m_pTxtNode( 0 )
+    : SwTextAttr( rAttr, nStartPos )
+    , SwTextAttrEnd( rAttr, nStartPos, nStartPos )
+    , m_pTextNode( 0 )
     , m_pEnd( 0 )
 {
-    rAttr.pTxtAttr = this;
+    rAttr.pTextAttr = this;
     if ( rAttr.GetAlternativeText().isEmpty() )
     {
         m_nEnd = *pEnd;
@@ -44,16 +44,16 @@ SwTxtTOXMark::SwTxtTOXMark( SwTOXMark& rAttr,
     SetOverlapAllowedAttr( true );
 }
 
-SwTxtTOXMark::~SwTxtTOXMark()
+SwTextTOXMark::~SwTextTOXMark()
 {
 }
 
-sal_Int32* SwTxtTOXMark::GetEnd()
+sal_Int32* SwTextTOXMark::GetEnd()
 {
     return m_pEnd;
 }
 
-void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )
+void SwTextTOXMark::CopyTOXMark( SwDoc* pDoc )
 {
     SwTOXMark& rTOX = (SwTOXMark&)GetTOXMark();
     TOXTypes    eType   = rTOX.GetTOXType()->GetType();

@@ -200,15 +200,15 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     return new SwPrintUIOptions( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
 
-static SwTxtFmtColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc* pDoc)
+static SwTextFormatColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc* pDoc)
 {
-    SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName( rCollName );
+    SwTextFormatColl* pColl = pDoc->FindTextFormatCollByName( rCollName );
     if( !pColl )
     {
         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
             rCollName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
         if( USHRT_MAX != nId )
-            pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( nId );
+            pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
     }
     return pColl;
 }
@@ -271,9 +271,9 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
         return nRet;
 
     GetNumberFormatter();
-    if (!xNumFmtAgg.is()) // may happen if not valid or no SwDoc
+    if (!xNumFormatAgg.is()) // may happen if not valid or no SwDoc
         return 0;
-    Any aNumTunnel = xNumFmtAgg->queryAggregation(cppu::UnoType<XUnoTunnel>::get());
+    Any aNumTunnel = xNumFormatAgg->queryAggregation(cppu::UnoType<XUnoTunnel>::get());
     Reference<XUnoTunnel> xNumTunnel;
     aNumTunnel >>= xNumTunnel;
     return (xNumTunnel.is()) ? xNumTunnel->getSomething(rId) : 0;
@@ -306,8 +306,8 @@ Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(Run
         && rType != cppu::UnoType<com::sun::star::awt::XWindow>::get())
     {
         GetNumberFormatter();
-        if(xNumFmtAgg.is())
-            aRet = xNumFmtAgg->queryAggregation(rType);
+        if(xNumFormatAgg.is())
+            aRet = xNumFormatAgg->queryAggregation(rType);
     }
     return aRet;
 }
@@ -334,10 +334,10 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeExceptio
 
     Sequence< uno::Type > aNumTypes;
     GetNumberFormatter();
-    if(xNumFmtAgg.is())
+    if(xNumFormatAgg.is())
     {
         const uno::Type& rProvType = cppu::UnoType<XTypeProvider>::get();
-        Any aNumProv = xNumFmtAgg->queryAggregation(rProvType);
+        Any aNumProv = xNumFormatAgg->queryAggregation(rProvType);
         Reference<XTypeProvider> xNumProv;
         if(aNumProv >>= xNumProv)
         {
@@ -411,11 +411,11 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
 SwXTextDocument::~SwXTextDocument()
 {
     InitNewDoc();
-    if(xNumFmtAgg.is())
+    if(xNumFormatAgg.is())
     {
         Reference< XInterface >  x0;
-        xNumFmtAgg->setDelegator(x0);
-        xNumFmtAgg = 0;
+        xNumFormatAgg->setDelegator(x0);
+        xNumFormatAgg = 0;
     }
     delete m_pPrintUIOptions;
     if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
@@ -442,33 +442,33 @@ void SwXTextDocument::GetNumberFormatter()
 {
     if(IsValid())
     {
-        if(!xNumFmtAgg.is())
+        if(!xNumFormatAgg.is())
         {
             if ( pDocShell->GetDoc() )
             {
-                SvNumberFormatsSupplierObj* pNumFmt = new SvNumberFormatsSupplierObj(
+                SvNumberFormatsSupplierObj* pNumFormat = new SvNumberFormatsSupplierObj(
                                     pDocShell->GetDoc()->GetNumberFormatter( true ));
-                Reference< util::XNumberFormatsSupplier >  xTmp = pNumFmt;
-                xNumFmtAgg = Reference< XAggregation >(xTmp, UNO_QUERY);
+                Reference< util::XNumberFormatsSupplier >  xTmp = pNumFormat;
+                xNumFormatAgg = Reference< XAggregation >(xTmp, UNO_QUERY);
             }
-            if(xNumFmtAgg.is())
-                xNumFmtAgg->setDelegator((cppu::OWeakObject*)(SwXTextDocumentBaseClass*)this);
+            if(xNumFormatAgg.is())
+                xNumFormatAgg->setDelegator((cppu::OWeakObject*)(SwXTextDocumentBaseClass*)this);
         }
         else
         {
             const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
-            Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
-            SvNumberFormatsSupplierObj* pNumFmt = 0;
+            Any aNumTunnel = xNumFormatAgg->queryAggregation(rTunnelType);
+            SvNumberFormatsSupplierObj* pNumFormat = 0;
             Reference< XUnoTunnel > xNumTunnel;
             if(aNumTunnel >>= xNumTunnel)
             {
-                pNumFmt = reinterpret_cast<SvNumberFormatsSupplierObj*>(
+                pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
                         xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
 
             }
-            OSL_ENSURE(pNumFmt, "No number formatter available");
-            if (pNumFmt && !pNumFmt->GetNumberFormatter())
-                pNumFmt->SetNumberFormatter(pDocShell->GetDoc()->GetNumberFormatter( true ));
+            OSL_ENSURE(pNumFormat, "No number formatter available");
+            if (pNumFormat && !pNumFormat->GetNumberFormatter())
+                pNumFormat->SetNumberFormatter(pDocShell->GetDoc()->GetNumberFormatter( true ));
         }
     }
 }
@@ -774,8 +774,8 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     }
     else if(pSearch->bStyles)
     {
-        SwTxtFmtColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
-        SwTxtFmtColl *pReplaceColl = lcl_GetParaStyle(pSearch->sReplaceText, pUnoCrsr->GetDoc());
+        SwTextFormatColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
+        SwTextFormatColl *pReplaceColl = lcl_GetParaStyle(pSearch->sReplaceText, pUnoCrsr->GetDoc());
 
         bool bCancel;
         nResult = pUnoCrsr->Find( *pSearchColl,
@@ -904,9 +904,9 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
         }
         else if(pSearch->bStyles)
         {
-            SwTxtFmtColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
+            SwTextFormatColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
             //pSearch->sReplaceText
-            SwTxtFmtColl *pReplaceColl = 0;
+            SwTextFormatColl *pReplaceColl = 0;
             bool bCancel;
             nResult = (sal_Int32)pUnoCrsr->Find( *pSearchColl,
                         eStart, eEnd, bCancel,
@@ -1054,11 +1054,11 @@ static OUString lcl_CreateOutlineString( size_t nIndex,
             const SwOutlineNodes& rOutlineNodes, const SwNumRule* pOutlRule)
 {
     OUString sEntry;
-    const SwTxtNode * pTxtNd = rOutlineNodes[ nIndex ]->GetTxtNode();
-    SwNumberTree::tNumberVector aNumVector = pTxtNd->GetNumberVector();
-    if( pOutlRule && pTxtNd->GetNumRule())
+    const SwTextNode * pTextNd = rOutlineNodes[ nIndex ]->GetTextNode();
+    SwNumberTree::tNumberVector aNumVector = pTextNd->GetNumberVector();
+    if( pOutlRule && pTextNd->GetNumRule())
         for( sal_Int8 nLevel = 0;
-             nLevel <= pTxtNd->GetActualListLevel();
+             nLevel <= pTextNd->GetActualListLevel();
              nLevel++ )
         {
             long nVal = aNumVector[nLevel];
@@ -1068,7 +1068,7 @@ static OUString lcl_CreateOutlineString( size_t nIndex,
             sEntry += ".";
         }
     sEntry += rOutlineNodes[ nIndex ]->
-                    GetTxtNode()->GetExpandTxt( 0, -1, false );
+                    GetTextNode()->GetExpandText( 0, -1, false );
     return sEntry;
 }
 
@@ -1392,19 +1392,19 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage() throw( RuntimeEx
 void SwXTextDocument::Invalidate()
 {
     bObjectValid = false;
-    if(xNumFmtAgg.is())
+    if(xNumFormatAgg.is())
     {
         const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
-        Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
-        SvNumberFormatsSupplierObj* pNumFmt = 0;
+        Any aNumTunnel = xNumFormatAgg->queryAggregation(rTunnelType);
+        SvNumberFormatsSupplierObj* pNumFormat = 0;
         Reference< XUnoTunnel > xNumTunnel;
         if(aNumTunnel >>= xNumTunnel)
         {
-            pNumFmt = reinterpret_cast<SvNumberFormatsSupplierObj*>(
+            pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
                     xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
-            pNumFmt->SetNumberFormatter(0);
+            pNumFormat->SetNumberFormatter(0);
         }
-        OSL_ENSURE(pNumFmt, "No number formatter available");
+        OSL_ENSURE(pNumFormat, "No number formatter available");
     }
     InitNewDoc();
     pDocShell = 0;
@@ -1425,8 +1425,8 @@ void    SwXTextDocument::InitNewDoc()
     // first invalidate all collections, then delete references and Set to zero
     if(pxXTextTables)
     {
-         XNameAccess* pTbls = pxXTextTables->get();
-        static_cast<SwXTextTables*>(pTbls)->Invalidate();
+         XNameAccess* pTables = pxXTextTables->get();
+        static_cast<SwXTextTables*>(pTables)->Invalidate();
         delete pxXTextTables;
         pxXTextTables = 0;
     }
@@ -1461,21 +1461,21 @@ void    SwXTextDocument::InitNewDoc()
         pBodyText = 0;
     }
 
-    if(xNumFmtAgg.is())
+    if(xNumFormatAgg.is())
     {
         const uno::Type& rTunnelType = cppu::UnoType<XUnoTunnel>::get();
-        Any aNumTunnel = xNumFmtAgg->queryAggregation(rTunnelType);
-        SvNumberFormatsSupplierObj* pNumFmt = 0;
+        Any aNumTunnel = xNumFormatAgg->queryAggregation(rTunnelType);
+        SvNumberFormatsSupplierObj* pNumFormat = 0;
         Reference< XUnoTunnel > xNumTunnel;
         if(aNumTunnel >>= xNumTunnel)
         {
-            pNumFmt = reinterpret_cast<SvNumberFormatsSupplierObj*>(
+            pNumFormat = reinterpret_cast<SvNumberFormatsSupplierObj*>(
                     xNumTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
 
         }
-        OSL_ENSURE(pNumFmt, "No number formatter available");
-        if (pNumFmt)
-            pNumFmt->SetNumberFormatter(0);
+        OSL_ENSURE(pNumFormat, "No number formatter available");
+        if (pNumFormat)
+            pNumFormat->SetNumberFormatter(0);
     }
 
     if(pxXTextFieldTypes)
@@ -1523,16 +1523,16 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXFootnotes)
     {
-         XIndexAccess* pFtn = pxXFootnotes->get();
-        static_cast<SwXFootnotes*>(pFtn)->Invalidate();
+         XIndexAccess* pFootnote = pxXFootnotes->get();
+        static_cast<SwXFootnotes*>(pFootnote)->Invalidate();
         delete pxXFootnotes;
         pxXFootnotes = 0;
     }
 
     if(pxXEndnotes)
     {
-         XIndexAccess* pFtn = pxXEndnotes->get();
-        static_cast<SwXFootnotes*>(pFtn)->Invalidate();
+         XIndexAccess* pFootnote = pxXEndnotes->get();
+        static_cast<SwXFootnotes*>(pFootnote)->Invalidate();
         delete pxXEndnotes;
         pxXEndnotes = 0;
     }
@@ -2602,7 +2602,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             }
 
             // #122919# Force field update before PDF export
-            pViewShell->SwViewShell::UpdateFlds(true);
+            pViewShell->SwViewShell::UpdateFields(true);
             if( bStateChanged )
                 pRenderDocShell->EnableSetModified( true );
 
@@ -3339,10 +3339,10 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
 
     //USER STYLES
 
-    const SwCharFmts *pFmts = pDoc->GetCharFmts();
-    for(size_t i = 0; i < pFmts->size(); ++i)
+    const SwCharFormats *pFormats = pDoc->GetCharFormats();
+    for(size_t i = 0; i < pFormats->size(); ++i)
     {
-        const SwAttrSet &rAttrSet = (*pFmts)[i]->GetAttrSet();
+        const SwAttrSet &rAttrSet = (*pFormats)[i]->GetAttrSet();
         LanguageType nLang = LANGUAGE_DONTKNOW;
         if (bLatin)
         {
@@ -3364,7 +3364,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         }
     }
 
-    const SwTxtFmtColls *pColls = pDoc->GetTxtFmtColls();
+    const SwTextFormatColls *pColls = pDoc->GetTextFormatColls();
     for (size_t i = 0; i < pColls->size(); ++i)
     {
         const SwAttrSet &rAttrSet = (*pColls)[i]->GetAttrSet();
@@ -3530,49 +3530,49 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     {
         sSuffix += "table";
 
-        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextTables(), sToCompare, sSuffix );
-        Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
+        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sFrames)
     {
         sSuffix += "frame";
-        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextFrames(), sToCompare, sSuffix );
-        Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
+        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sSections)
     {
         sSuffix += "region";
-        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextSections(), sToCompare, sSuffix );
-        Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
+        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sGraphics)
     {
         sSuffix += "graphic";
-        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         pxDoc->getGraphicObjects(), sToCompare, sSuffix );
-        Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
+        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sOLEs)
     {
         sSuffix += "ole";
-        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         pxDoc->getEmbeddedObjects(), sToCompare, sSuffix );
-        Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
+        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sOutlines)
     {
         sSuffix += "outline";
-        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
+        Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         *pxDoc, sToCompare, sSuffix );
-        Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
+        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
         aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
     }
     else if(sToCompare == sBookmarks)
@@ -4116,12 +4116,12 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
     // to avoid unnecessary reformatting the view options related to the content
     // below should only change if necessary, that is if respective content is present
     const bool bContainsHiddenChars         = m_pShell->GetDoc()->ContainsHiddenChars();
-    const SwFieldType* pFldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD );
-    const bool bContainsHiddenFields        = pFldType && pFldType->HasWriterListeners();
-    pFldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENPARAFLD );
-    const bool bContainsHiddenParagraphs    = pFldType && pFldType->HasWriterListeners();
-    pFldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_JUMPEDITFLD );
-    const bool bContainsPlaceHolders        = pFldType && pFldType->HasWriterListeners();
+    const SwFieldType* pFieldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENTXTFLD );
+    const bool bContainsHiddenFields        = pFieldType && pFieldType->HasWriterListeners();
+    pFieldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENPARAFLD );
+    const bool bContainsHiddenParagraphs    = pFieldType && pFieldType->HasWriterListeners();
+    pFieldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( RES_JUMPEDITFLD );
+    const bool bContainsPlaceHolders        = pFieldType && pFieldType->HasWriterListeners();
     const bool bContainsFields              = m_pShell->IsAnyFieldInDoc();
 
     SwViewOption aRenderViewOptions( m_aOldViewOptions );
@@ -4153,7 +4153,7 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
     }
 
     if (bContainsFields)
-        aRenderViewOptions.SetFldName( false );
+        aRenderViewOptions.SetFieldName( false );
 
     // we need to set this flag in order to get to see the visible effect of
     // some of the above settings (needed for correct rendering)

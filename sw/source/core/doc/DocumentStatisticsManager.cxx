@@ -79,8 +79,8 @@ DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rDoc
 
 void DocumentStatisticsManager::DocInfoChgd( )
 {
-    m_rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
-    m_rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
+    m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( RES_DOCINFOFLD )->UpdateFields();
+    m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( RES_TEMPLNAMEFLD )->UpdateFields();
     m_rDoc.getIDocumentState().SetModified();
 }
 
@@ -140,14 +140,14 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
         case ND_TEXTNODE:
         {
             long const nOldChars(mpDocStat->nChar);
-            SwTxtNode *pTxt = static_cast< SwTxtNode * >( pNd );
-            if (pTxt->CountWords(*mpDocStat, 0, pTxt->GetTxt().getLength()))
+            SwTextNode *pText = static_cast< SwTextNode * >( pNd );
+            if (pText->CountWords(*mpDocStat, 0, pText->GetText().getLength()))
             {
                 nChars -= (mpDocStat->nChar - nOldChars);
             }
             break;
         }
-        case ND_TABLENODE:      ++mpDocStat->nTbl;   break;
+        case ND_TABLENODE:      ++mpDocStat->nTable;   break;
         case ND_GRFNODE:        ++mpDocStat->nGrf;   break;
         case ND_OLENODE:        ++mpDocStat->nOLE;   break;
         case ND_SECTIONNODE:    break;
@@ -156,14 +156,14 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
 
     // #i93174#: notes contain paragraphs that are not nodes
     {
-        SwFieldType * const pPostits( m_rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD) );
-        SwIterator<SwFmtFld,SwFieldType> aIter( *pPostits );
-        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
+        SwFieldType * const pPostits( m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(RES_POSTITFLD) );
+        SwIterator<SwFormatField,SwFieldType> aIter( *pPostits );
+        for( SwFormatField* pFormatField = aIter.First(); pFormatField;  pFormatField = aIter.Next() )
         {
-            if (pFmtFld->IsFldInDoc())
+            if (pFormatField->IsFieldInDoc())
             {
                 SwPostItField const * const pField(
-                    static_cast<SwPostItField const*>(pFmtFld->GetField()));
+                    static_cast<SwPostItField const*>(pFormatField->GetField()));
                 mpDocStat->nAllPara += pField->GetNumberOfParagraphs();
             }
         }
@@ -175,7 +175,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
     sal_Int32 n=0;
     aStat[n].Name = "TableCount";
-    aStat[n++].Value <<= (sal_Int32)mpDocStat->nTbl;
+    aStat[n++].Value <<= (sal_Int32)mpDocStat->nTable;
     aStat[n].Name = "ImageCount";
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nGrf;
     aStat[n].Name = "ObjectCount";
@@ -218,8 +218,8 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     // optionally update stat. fields
     if (bFields)
     {
-        SwFieldType *pType = m_rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_DOCSTATFLD);
-        pType->UpdateFlds();
+        SwFieldType *pType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(RES_DOCSTATFLD);
+        pType->UpdateFields();
     }
 
     return nChars < 0;

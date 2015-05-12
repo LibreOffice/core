@@ -81,10 +81,10 @@ void SwView::Activate(bool bMDIActivate)
 
         AttrChangedNotify(m_pWrtShell);
 
-        // Initialize Flddlg newly if necessary (e.g. for TYP_SETVAR)
-        sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
+        // Initialize Fielddlg newly if necessary (e.g. for TYP_SETVAR)
+        sal_uInt16 nId = SwFieldDlgWrapper::GetChildWindowId();
         SfxViewFrame* pVFrame = GetViewFrame();
-        SwFldDlgWrapper *pWrp = static_cast<SwFldDlgWrapper*>(pVFrame->GetChildWindow(nId));
+        SwFieldDlgWrapper *pWrp = static_cast<SwFieldDlgWrapper*>(pVFrame->GetChildWindow(nId));
         if (pWrp)
             pWrp->ReInitDlg(GetDocShell());
 

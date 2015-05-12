@@ -135,7 +135,7 @@ long SwWrtShell::SelAll()
 
         // Query these early, before we move the cursor.
         bool bHasWholeTabSelection = HasWholeTabSelection();
-        bool bIsCursorInTable = IsCrsrInTbl();
+        bool bIsCursorInTable = IsCrsrInTable();
 
         if (!bHasWholeTabSelection)
         {
@@ -173,9 +173,9 @@ long SwWrtShell::SelAll()
 
         if (bNeedsExtendedSelectAll)
         {
-            // Disable table cursor to make sure getShellCrsr() returns m_pCurCrsr, not m_pTblCrsr.
+            // Disable table cursor to make sure getShellCrsr() returns m_pCurCrsr, not m_pTableCrsr.
             if (IsTableMode())
-                TblCrsrToCursor();
+                TableCrsrToCursor();
             // Do the extended select all on m_pCurCrsr.
             ExtendedSelectAll(/*bFootnotes =*/ false);
         }
@@ -236,13 +236,13 @@ sal_uLong SwWrtShell::SearchTempl( const OUString &rTempl,
         // no enhancement of existing selections
     if(!(eFlags & FND_IN_SEL))
         ClearMark();
-    SwTxtFmtColl *pColl = GetParaStyle(rTempl, SwWrtShell::GETSTYLE_CREATESOME);
-    SwTxtFmtColl *pReplaceColl = 0;
+    SwTextFormatColl *pColl = GetParaStyle(rTempl, SwWrtShell::GETSTYLE_CREATESOME);
+    SwTextFormatColl *pReplaceColl = 0;
     if( pReplTempl )
         pReplaceColl = GetParaStyle(*pReplTempl, SwWrtShell::GETSTYLE_CREATESOME );
 
     bool bCancel = false;
-    sal_uLong nRet = Find(pColl? *pColl: GetDfltTxtFmtColl(),
+    sal_uLong nRet = Find(pColl? *pColl: GetDfltTextFormatColl(),
                                eStt,eEnd, bCancel, eFlags, pReplaceColl);
     if(bCancel)
     {
@@ -578,7 +578,7 @@ void SwWrtShell::LeaveExtMode()
 
 long SwWrtShell::SttLeaveSelect(const Point *, bool )
 {
-    if(SwCrsrShell::HasSelection() && !IsSelTblCells() && m_bClearMark) {
+    if(SwCrsrShell::HasSelection() && !IsSelTableCells() && m_bClearMark) {
         return 0;
     }
     ClearMark();
@@ -705,15 +705,15 @@ void SwWrtShell::LeaveSelFrmMode()
 
 // Description: execute framebound macro
 
-IMPL_LINK( SwWrtShell, ExecFlyMac, void *, pFlyFmt )
+IMPL_LINK( SwWrtShell, ExecFlyMac, void *, pFlyFormat )
 {
-    const SwFrmFmt *pFmt = pFlyFmt ? static_cast<SwFrmFmt*>(pFlyFmt) : GetFlyFrmFmt();
-    OSL_ENSURE(pFmt, "no frame format");
-    const SvxMacroItem &rFmtMac = pFmt->GetMacro();
+    const SwFrameFormat *pFormat = pFlyFormat ? static_cast<SwFrameFormat*>(pFlyFormat) : GetFlyFrameFormat();
+    OSL_ENSURE(pFormat, "no frame format");
+    const SvxMacroItem &rFormatMac = pFormat->GetMacro();
 
-    if(rFmtMac.HasMacro(SW_EVENT_OBJECT_SELECT))
+    if(rFormatMac.HasMacro(SW_EVENT_OBJECT_SELECT))
     {
-        const SvxMacro &rMac = rFmtMac.GetMacro(SW_EVENT_OBJECT_SELECT);
+        const SvxMacro &rMac = rFormatMac.GetMacro(SW_EVENT_OBJECT_SELECT);
         if( IsFrmSelected() )
             m_bLayoutMode = true;
         CallChgLnk();
@@ -783,8 +783,8 @@ long SwWrtShell::BeginDrag(const Point * /*pPt*/, bool )
 
 long SwWrtShell::DefaultDrag(const Point *, bool )
 {
-    if( IsSelTblCells() )
-        m_aSelTblLink.Call(this);
+    if( IsSelTableCells() )
+        m_aSelTableLink.Call(this);
 
     return 1;
 }
@@ -795,8 +795,8 @@ long SwWrtShell::DefaultEndDrag(const Point * /*pPt*/, bool )
     if( IsExtSel() )
         LeaveExtSel();
 
-    if( IsSelTblCells() )
-        m_aSelTblLink.Call(this);
+    if( IsSelTableCells() )
+        m_aSelTableLink.Call(this);
     EndSelect();
     return 1;
 }
@@ -806,7 +806,7 @@ bool SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd, bool bR
 {
     SwMvContext aMvContext(this);
     SttSelect();
-    if(SelTblRowCol( rPt, pEnd, bRowDrag ))
+    if(SelTableRowCol( rPt, pEnd, bRowDrag ))
     {
         m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
         m_fnKillSel = &SwWrtShell::ResetSelect;
@@ -819,7 +819,7 @@ bool SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd, bool bR
 
 bool SwWrtShell::SelectTableRow()
 {
-    if ( SelTblRow() )
+    if ( SelTableRow() )
     {
         m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
         m_fnKillSel = &SwWrtShell::ResetSelect;
@@ -830,7 +830,7 @@ bool SwWrtShell::SelectTableRow()
 
 bool SwWrtShell::SelectTableCol()
 {
-    if ( SelTblCol() )
+    if ( SelTableCol() )
     {
         m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
         m_fnKillSel = &SwWrtShell::ResetSelect;
@@ -841,7 +841,7 @@ bool SwWrtShell::SelectTableCol()
 
 bool SwWrtShell::SelectTableCell()
 {
-    if ( SelTblBox() )
+    if ( SelTableBox() )
     {
         m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
         m_fnKillSel = &SwWrtShell::ResetSelect;
@@ -863,7 +863,7 @@ int SwWrtShell::IntelligentCut(int nSelection, bool bCut)
     if( IsAddMode() || !(nSelection & nsSelectionType::SEL_TXT) )
         return NO_WORD;
 
-    OUString sTxt;
+    OUString sText;
     CharClass& rCC = GetAppCharClass();
 
         // If the first character is no word character,
@@ -871,8 +871,8 @@ int SwWrtShell::IntelligentCut(int nSelection, bool bCut)
     sal_Unicode cPrev = GetChar(false);
     sal_Unicode cNext = GetChar(true, -1);
     if( !cPrev || !cNext ||
-        !rCC.isLetterNumeric( ( sTxt = OUString(cPrev) ), 0 ) ||
-        !rCC.isLetterNumeric( ( sTxt = OUString(cNext) ), 0 ) )
+        !rCC.isLetterNumeric( ( sText = OUString(cPrev) ), 0 ) ||
+        !rCC.isLetterNumeric( ( sText = OUString(cNext) ), 0 ) )
         return NO_WORD;
 
     cPrev = GetChar(false, -1);
@@ -883,8 +883,8 @@ int SwWrtShell::IntelligentCut(int nSelection, bool bCut)
     if(!cWord && cPrev && cNext &&
         CH_TXTATR_BREAKWORD != cPrev && CH_TXTATR_INWORD != cPrev &&
         CH_TXTATR_BREAKWORD != cNext && CH_TXTATR_INWORD != cNext &&
-        !rCC.isLetterNumeric( ( sTxt = OUString(cPrev) ), 0 ) &&
-        !rCC.isLetterNumeric( ( sTxt = OUString(cNext) ), 0 ) )
+        !rCC.isLetterNumeric( ( sText = OUString(cPrev) ), 0 ) &&
+        !rCC.isLetterNumeric( ( sText = OUString(cNext) ), 0 ) )
        cWord = WORD_NO_SPACE;
 
     if(cWord == WORD_NO_SPACE && ' ' == cPrev )

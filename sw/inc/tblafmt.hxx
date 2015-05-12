@@ -62,7 +62,7 @@ struct SwAfVersions;
 
 class SvNumberFormatter;
 
-class SwBoxAutoFmt
+class SwBoxAutoFormat
 {
     // common attributes of Calc and Writer
     // --- from 641 on: CJK and CTL font settings
@@ -95,7 +95,7 @@ class SwBoxAutoFmt
     // Writer specific
     SvxAdjustItem       aAdjust;
     SvxFrameDirectionItem m_aTextOrientation;
-    SwFmtVertOrient m_aVerticalAlignment;
+    SwFormatVertOrient m_aVerticalAlignment;
 
     // Calc specific
     SvxHorJustifyItem   aHorJustify;
@@ -107,16 +107,16 @@ class SwBoxAutoFmt
     SvxRotateModeItem   aRotateMode;
 
     // number format
-    OUString            sNumFmtString;
-    LanguageType        eSysLanguage, eNumFmtLanguage;
+    OUString            sNumFormatString;
+    LanguageType        eSysLanguage, eNumFormatLanguage;
 
 public:
-    SwBoxAutoFmt();
-    SwBoxAutoFmt( const SwBoxAutoFmt& rNew );
-    ~SwBoxAutoFmt();
+    SwBoxAutoFormat();
+    SwBoxAutoFormat( const SwBoxAutoFormat& rNew );
+    ~SwBoxAutoFormat();
 
-    int operator==( const SwBoxAutoFmt& rCmp ) const;
-    SwBoxAutoFmt& operator=( const SwBoxAutoFmt& rNew );
+    int operator==( const SwBoxAutoFormat& rCmp ) const;
+    SwBoxAutoFormat& operator=( const SwBoxAutoFormat& rNew );
 
     // The get-methods.
     const SvxFontItem       &GetFont() const        { return aFont; }
@@ -139,13 +139,13 @@ public:
     const SvxColorItem      &GetColor() const       { return aColor; }
     const SvxAdjustItem     &GetAdjust() const      { return aAdjust; }
     const SvxFrameDirectionItem& GetTextOrientation() const { return m_aTextOrientation; }
-    const SwFmtVertOrient& GetVerticalAlignment() const { return m_aVerticalAlignment; }
+    const SwFormatVertOrient& GetVerticalAlignment() const { return m_aVerticalAlignment; }
     const SvxBoxItem        &GetBox() const         { return aBox; }
     const SvxLineItem       &GetTLBR() const        { return aTLBR; }
     const SvxLineItem       &GetBLTR() const        { return aBLTR; }
     const SvxBrushItem      &GetBackground() const  { return aBackground; }
-    void GetValueFormat( OUString& rFmt, LanguageType& rLng, LanguageType& rSys ) const
-        { rFmt = sNumFmtString; rLng = eNumFmtLanguage; rSys = eSysLanguage; }
+    void GetValueFormat( OUString& rFormat, LanguageType& rLng, LanguageType& rSys ) const
+        { rFormat = sNumFormatString; rLng = eNumFormatLanguage; rSys = eSysLanguage; }
 
     // The set-methods.
     void SetFont( const SvxFontItem& rNew )             { aFont = rNew; }
@@ -173,11 +173,11 @@ public:
             aAdjust.SetLastBlock( rNew.GetLastBlock() );
         }
     void SetTextOrientation(const SvxFrameDirectionItem& rNew) { m_aTextOrientation = rNew; }
-    void SetVerticalAlignment(const SwFmtVertOrient& rNew) { m_aVerticalAlignment = rNew; }
+    void SetVerticalAlignment(const SwFormatVertOrient& rNew) { m_aVerticalAlignment = rNew; }
     void SetBox( const SvxBoxItem& rNew )               { aBox = rNew; }
     void SetBackground( const SvxBrushItem& rNew )      { aBackground = rNew; }
-    void SetValueFormat( const OUString& rFmt, LanguageType eLng, LanguageType eSys )
-        { sNumFmtString = rFmt; eNumFmtLanguage = eLng; eSysLanguage = eSys; }
+    void SetValueFormat( const OUString& rFormat, LanguageType eLng, LanguageType eSys )
+        { sNumFormatString = rFormat; eNumFormatLanguage = eLng; eSysLanguage = eSys; }
 
     bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
@@ -228,10 +228,10 @@ The properties saved are divided into three categories:
 Character and box properties are stored per cell (and are lossy for tables larger than 4x4). Table
 properties are stored per-table, and are lossless.
 */
-class SW_DLLPUBLIC SwTableAutoFmt
+class SW_DLLPUBLIC SwTableAutoFormat
 {
     friend void _FinitCore();       // To destroy default pointer.
-    static SwBoxAutoFmt* pDfltBoxAutoFmt;
+    static SwBoxAutoFormat* pDfltBoxAutoFormat;
 
     OUString m_aName;
     sal_uInt16 nStrResId;
@@ -246,12 +246,12 @@ class SW_DLLPUBLIC SwTableAutoFmt
     // Calc specific flags.
     bool bInclWidthHeight : 1;
 
-    SwBoxAutoFmt* aBoxAutoFmt[ 16 ];
+    SwBoxAutoFormat* aBoxAutoFormat[ 16 ];
 
     // Writer-specific options
-    SvxFmtBreakItem m_aBreak;
-    SwFmtPageDesc m_aPageDesc;
-    SvxFmtKeepItem m_aKeepWithNextPara;
+    SvxFormatBreakItem m_aBreak;
+    SwFormatPageDesc m_aPageDesc;
+    SvxFormatKeepItem m_aKeepWithNextPara;
     sal_uInt16 m_aRepeatHeading;
     bool m_bLayoutSplit;
     bool m_bRowSplit;
@@ -259,14 +259,14 @@ class SW_DLLPUBLIC SwTableAutoFmt
     SvxShadowItem m_aShadow;
 
 public:
-    SwTableAutoFmt( const OUString& rName );
-    SwTableAutoFmt( const SwTableAutoFmt& rNew );
-    ~SwTableAutoFmt();
+    SwTableAutoFormat( const OUString& rName );
+    SwTableAutoFormat( const SwTableAutoFormat& rNew );
+    ~SwTableAutoFormat();
 
-    SwTableAutoFmt& operator=( const SwTableAutoFmt& rNew );
+    SwTableAutoFormat& operator=( const SwTableAutoFormat& rNew );
 
-    void SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos );
-    const SwBoxAutoFmt& GetBoxFmt( sal_uInt8 nPos ) const;
+    void SetBoxFormat( const SwBoxAutoFormat& rNew, sal_uInt8 nPos );
+    const SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos ) const;
 
     void SetName( const OUString& rNew ) { m_aName = rNew; nStrResId = USHRT_MAX; }
     OUString GetName() const { return m_aName; }
@@ -297,7 +297,7 @@ public:
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
-class SW_DLLPUBLIC SwTableAutoFmtTbl
+class SW_DLLPUBLIC SwTableAutoFormatTable
 {
     struct Impl;
     ::boost::scoped_ptr<Impl> m_pImpl;
@@ -306,15 +306,15 @@ class SW_DLLPUBLIC SwTableAutoFmtTbl
     SAL_DLLPRIVATE bool Save( SvStream& rStream ) const;
 
 public:
-    explicit SwTableAutoFmtTbl();
-    ~SwTableAutoFmtTbl();
+    explicit SwTableAutoFormatTable();
+    ~SwTableAutoFormatTable();
 
     size_t size() const;
-    SwTableAutoFmt const& operator[](size_t i) const;
-    SwTableAutoFmt      & operator[](size_t i);
-    void InsertAutoFmt(size_t i, SwTableAutoFmt * pFmt);
-    void EraseAutoFmt(size_t i);
-    SwTableAutoFmt* ReleaseAutoFmt(size_t i);
+    SwTableAutoFormat const& operator[](size_t i) const;
+    SwTableAutoFormat      & operator[](size_t i);
+    void InsertAutoFormat(size_t i, SwTableAutoFormat * pFormat);
+    void EraseAutoFormat(size_t i);
+    SwTableAutoFormat* ReleaseAutoFormat(size_t i);
 
     bool Load();
     bool Save() const;

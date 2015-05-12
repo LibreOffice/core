@@ -23,7 +23,7 @@
 #include "labimg.hxx"
 #include <vcl/msgbox.hxx>
 #include <vcl/idle.hxx>
-class SwLabFmtPage;
+class SwLabFormatPage;
 
 class SwLabPreview : public vcl::Window
 {
@@ -67,7 +67,7 @@ public:
     void UpdateItem(const SwLabItem& rItem);
 };
 
-class SwLabFmtPage : public SfxTabPage
+class SwLabFormatPage : public SfxTabPage
 {
     VclPtr<FixedText>    m_pMakeFI;
     VclPtr<FixedText>    m_pTypeFI;
@@ -100,8 +100,8 @@ class SwLabFmtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwLabFmtPage();
+    SwLabFormatPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    virtual ~SwLabFormatPage();
     virtual void dispose() SAL_OVERRIDE;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
@@ -122,14 +122,14 @@ class SwSaveLabelDlg : public ModalDialog
     VclPtr<OKButton>   m_pOKPB;
 
     bool        bSuccess;
-    VclPtr<SwLabFmtPage>   pLabPage;
+    VclPtr<SwLabFormatPage>   pLabPage;
     SwLabRec&       rLabRec;
 
     DECL_LINK(OkHdl, void *);
     DECL_LINK(ModifyHdl, void *);
 
 public:
-    SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec);
+    SwSaveLabelDlg(SwLabFormatPage* pParent, SwLabRec& rRec);
     virtual ~SwSaveLabelDlg();
     virtual void dispose() SAL_OVERRIDE;
 

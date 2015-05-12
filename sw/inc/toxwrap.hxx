@@ -45,7 +45,7 @@ public:
 
     void SetLocale( const ::com::sun::star::lang::Locale& rLocale ) { aLcl = rLocale; }
 
-    OUString GetIndexKey( const OUString& rTxt, const OUString& rTxtReading,
+    OUString GetIndexKey( const OUString& rText, const OUString& rTextReading,
                         const ::com::sun::star::lang::Locale& rLocale ) const;
 
     OUString GetFollowingText( bool bMorePages ) const;
@@ -56,9 +56,9 @@ public:
     bool LoadAlgorithm( const ::com::sun::star::lang::Locale& rLcl,
                             const OUString& sSortAlgorithm, long nOptions ) const;
 
-    sal_Int16 CompareIndexEntry( const OUString& rTxt1, const OUString& rTxtReading1,
+    sal_Int16 CompareIndexEntry( const OUString& rText1, const OUString& rTextReading1,
                                  const ::com::sun::star::lang::Locale& rLcl1,
-                                 const OUString& rTxt2, const OUString& rTxtReading2,
+                                 const OUString& rText2, const OUString& rTextReading2,
                                  const ::com::sun::star::lang::Locale& rLcl2 ) const;
 };
 

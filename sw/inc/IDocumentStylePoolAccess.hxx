@@ -22,10 +22,10 @@
 
 #include <sal/types.h>
 
-class SwTxtFmtColl;
-class SwCharFmt;
-class SwFmt;
-class SwFrmFmt;
+class SwTextFormatColl;
+class SwCharFormat;
+class SwFormat;
+class SwFrameFormat;
 class SwNumRule;
 class SwPageDesc;
 
@@ -40,17 +40,17 @@ public:
         If string pointer is defined request only description
         of attributes, do not create style sheet!
     */
-    virtual SwTxtFmtColl* GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) = 0;
+    virtual SwTextFormatColl* GetTextCollFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) = 0;
 
     /** Return required automatic format base class.
     */
-    virtual SwFmt* GetFmtFromPool( sal_uInt16 nId ) = 0;
+    virtual SwFormat* GetFormatFromPool( sal_uInt16 nId ) = 0;
 
     /** Return required automatic format.
      */
-    virtual SwFrmFmt* GetFrmFmtFromPool( sal_uInt16 nId ) = 0;
+    virtual SwFrameFormat* GetFrameFormatFromPool( sal_uInt16 nId ) = 0;
 
-    virtual SwCharFmt* GetCharFmtFromPool( sal_uInt16 nId ) = 0;
+    virtual SwCharFormat* GetCharFormatFromPool( sal_uInt16 nId ) = 0;
 
     /** Return required automatic page style.
      */
@@ -60,8 +60,8 @@ public:
 
     /** Check whether this "auto-collection" is used in document.
      */
-    virtual bool IsPoolTxtCollUsed( sal_uInt16 nId ) const = 0;
-    virtual bool IsPoolFmtUsed( sal_uInt16 nId ) const = 0;
+    virtual bool IsPoolTextCollUsed( sal_uInt16 nId ) const = 0;
+    virtual bool IsPoolFormatUsed( sal_uInt16 nId ) const = 0;
     virtual bool IsPoolPageDescUsed( sal_uInt16 nId ) const = 0;
 
 protected:

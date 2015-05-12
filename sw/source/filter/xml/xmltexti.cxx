@@ -105,10 +105,10 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         nHeight = convertMm100ToTwip( nHeight );
         if( nHeight < MINFLY )
             nHeight = MINFLY;
-        rItemSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
+        rItemSet.Put( SwFormatFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
     }
 
-    SwFmtAnchor aAnchor( FLY_AT_CHAR );
+    SwFormatAnchor aAnchor( FLY_AT_CHAR );
     rItemSet.Put( aAnchor );
 
     if( pTwipWidth )
@@ -186,21 +186,21 @@ bool SwXMLTextImportHelper::IsInHeaderFooter() const
     uno::Reference<XUnoTunnel> xCrsrTunnel(
             const_cast<SwXMLTextImportHelper *>(this)->GetCursor(), UNO_QUERY );
     assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+    OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    SAL_WARN_IF(!pTxtCrsr, "sw.uno", "SwXTextCursor missing");
-    SwDoc *pDoc = pTxtCrsr ? pTxtCrsr->GetDoc() : NULL;
+    SAL_WARN_IF(!pTextCrsr, "sw.uno", "SwXTextCursor missing");
+    SwDoc *pDoc = pTextCrsr ? pTextCrsr->GetDoc() : NULL;
 
-    return pDoc && pDoc->IsInHeaderFooter( pTxtCrsr->GetPaM()->GetPoint()->nNode );
+    return pDoc && pDoc->IsInHeaderFooter( pTextCrsr->GetPaM()->GetPoint()->nNode );
 }
 
-static SwOLENode *lcl_GetOLENode( const SwFrmFmt *pFrmFmt )
+static SwOLENode *lcl_GetOLENode( const SwFrameFormat *pFrameFormat )
 {
     SwOLENode *pOLENd = 0;
-    if( pFrmFmt )
+    if( pFrameFormat )
     {
-        const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-        const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
+        const SwFormatContent& rContent = pFrameFormat->GetContent();
+        const SwNodeIndex *pNdIdx = rContent.GetContentIdx();
         pOLENd = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetOLENode();
     }
     OSL_ENSURE( pOLENd, "Where is the OLE node" );
@@ -211,7 +211,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         SvXMLImport& rImport,
         const OUString& rHRef,
         const OUString& rStyleName,
-        const OUString& rTblName,
+        const OUString& rTableName,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex
@@ -230,9 +230,9 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+    OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    SAL_WARN_IF(!pTxtCrsr, "sw.uno", "SwXTextCursor missing");
+    SAL_WARN_IF(!pTextCrsr, "sw.uno", "SwXTextCursor missing");
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
@@ -242,7 +242,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth,
                            &aTwipSize.Height(), &aTwipSize.Width() );
 
-    SwFrmFmt *pFrmFmt = 0;
+    SwFrameFormat *pFrameFormat = 0;
     SwOLENode *pOLENd = 0;
     if( rHRef.copy( 0, nPos ) == "vnd.sun.star.ServiceName" )
     {
@@ -286,14 +286,14 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     lcl_setObjectVisualArea( xObj, nAspect, aTwipSize, MAP_TWIP );
                 }
 
-                if( pTxtCrsr )
+                if( pTextCrsr )
                 {
-                    pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
+                    pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCrsr->GetPaM(),
                                             ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                             &aItemSet,
                                             NULL,
                                             NULL );
-                    pOLENd = lcl_GetOLENode( pFrmFmt );
+                    pOLENd = lcl_GetOLENode( pFrameFormat );
                 }
 
                 if( pOLENd )
@@ -308,8 +308,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     {
         // check whether an object with this name already exists in the document
         OUString aName;
-        SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
-        for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
+        SwIterator<SwContentNode,SwFormatColl> aIter( *pDoc->GetDfltGrfFormatColl() );
+        for( SwContentNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
         {
             SwOLENode* pExistingOLENd = pNd->GetOLENode();
             if( pExistingOLENd )
@@ -342,47 +342,47 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
         // the correct aspect will be set later
         // TODO/LATER: Actually it should be set here
-        if( pTxtCrsr )
+        if( pTextCrsr )
         {
-            pFrmFmt = pDoc->getIDocumentContentOperations().InsertOLE( *pTxtCrsr->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, NULL, NULL );
-            pOLENd = lcl_GetOLENode( pFrmFmt );
+            pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( *pTextCrsr->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, NULL, NULL );
+            pOLENd = lcl_GetOLENode( pFrameFormat );
         }
         aObjName = aName;
     }
 
-    if( !pFrmFmt )
+    if( !pFrameFormat )
         return xPropSet;
 
     if( IsInsertMode() )
     {
         if( !pOLENd )
-            pOLENd = lcl_GetOLENode( pFrmFmt );
+            pOLENd = lcl_GetOLENode( pFrameFormat );
         if( pOLENd )
             pOLENd->SetOLESizeInvalid( true );
     }
 
     xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                *pDoc, pFrmFmt), uno::UNO_QUERY);
+                *pDoc, pFrameFormat), uno::UNO_QUERY);
     if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
     {
         // req for z-order
-        SwXFrame::GetOrCreateSdrObject(*static_cast<SwFlyFrmFmt*>(pFrmFmt));
+        SwXFrame::GetOrCreateSdrObject(*static_cast<SwFlyFrameFormat*>(pFrameFormat));
     }
-    if( !rTblName.isEmpty() )
+    if( !rTableName.isEmpty() )
     {
-        const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-        const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
+        const SwFormatContent& rContent = pFrameFormat->GetContent();
+        const SwNodeIndex *pNdIdx = rContent.GetContentIdx();
         SwOLENode *pOLENode = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetOLENode();
         OSL_ENSURE( pOLENode, "Where is the OLE node" );
 
-        OUStringBuffer aBuffer( rTblName.getLength() );
+        OUStringBuffer aBuffer( rTableName.getLength() );
         bool bQuoted = false;
         bool bEscape = false;
         bool bError = false;
-        for( sal_Int32 i=0; i < rTblName.getLength(); i++ )
+        for( sal_Int32 i=0; i < rTableName.getLength(); i++ )
         {
             bool bEndOfNameFound = false;
-            sal_Unicode c = rTblName[i];
+            sal_Unicode c = rTableName[i];
             switch( c )
             {
             case '\'':
@@ -439,8 +439,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         }
         if( !bError )
         {
-            OUString sTblName( aBuffer.makeStringAndClear() );
-            pOLENode->SetChartTblName( GetRenameMap().Get( XML_TEXT_RENAME_TYPE_TABLE, sTblName ) );
+            OUString sTableName( aBuffer.makeStringAndClear() );
+            pOLENode->SetChartTableName( GetRenameMap().Get( XML_TEXT_RENAME_TYPE_TABLE, sTableName ) );
         }
     }
 
@@ -534,7 +534,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         SvXMLImport& rImport,
         const OUString& rHRef,
         const OUString& /*rStyleName*/,
-        const OUString& /*rTblName*/,
+        const OUString& /*rTableName*/,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex
@@ -544,9 +544,9 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+    OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
+    OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
@@ -593,7 +593,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
             uno::UNO_QUERY_THROW );
 
         {
-            SwFrmFmt *pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
+            SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCrsr->GetPaM(),
                                             ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                             &aItemSet,
                                             NULL,
@@ -602,11 +602,11 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
             // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
 
             xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                            *pDoc, pFrmFmt), uno::UNO_QUERY);
+                            *pDoc, pFrameFormat), uno::UNO_QUERY);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
             {
                 SwXFrame::GetOrCreateSdrObject(*
-                        static_cast<SwFlyFrmFmt*>(pFrmFmt)); // req for z-order
+                        static_cast<SwFlyFrameFormat*>(pFrameFormat)); // req for z-order
             }
         }
     }
@@ -614,7 +614,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     {
     }
 
-    // TODO/LATER: should the rStyleName and rTblName be handled as for usual embedded object?
+    // TODO/LATER: should the rStyleName and rTableName be handled as for usual embedded object?
 
     return xPropSet;
 }
@@ -632,10 +632,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+    OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
-    SwDoc *pDoc = pTxtCrsr->GetDoc();
+    OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
+    SwDoc *pDoc = pTextCrsr->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
                          RES_FRMATR_END );
@@ -655,17 +655,17 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
                             Size( nWidth, nHeight ),
                             MAP_100TH_MM );
 
-    SwFrmFmt *pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
+    SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCrsr->GetPaM(),
                                        ::svt::EmbeddedObjectRef( aAppletImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT ),
                                        &aAppletImpl.GetItemSet(),
                                        NULL,
                                        NULL);
     xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                *pDoc, pFrmFmt), uno::UNO_QUERY);
+                *pDoc, pFrameFormat), uno::UNO_QUERY);
     if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
     {
         // req for z-order
-        SwXFrame::GetOrCreateSdrObject(*static_cast<SwFlyFrmFmt*>(pFrmFmt));
+        SwXFrame::GetOrCreateSdrObject(*static_cast<SwFlyFrameFormat*>(pFrameFormat));
     }
 
     return xPropSet;
@@ -679,10 +679,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+    OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper * >(
             sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
-    SwDoc *pDoc = pTxtCrsr->GetDoc();
+    OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
+    SwDoc *pDoc = pTextCrsr->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
                          RES_FRMATR_END );
@@ -730,17 +730,17 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
                         makeAny( OUString( rMimeType ) ) );
             }
 
-            SwFrmFmt *pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
+            SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCrsr->GetPaM(),
                                             ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                             &aItemSet,
                                             NULL,
                                             NULL);
             xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                            *pDoc, pFrmFmt), uno::UNO_QUERY);
+                            *pDoc, pFrameFormat), uno::UNO_QUERY);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
             {
                 SwXFrame::GetOrCreateSdrObject(*
-                        static_cast<SwFlyFrmFmt*>(pFrmFmt)); // req for z-order
+                        static_cast<SwFlyFrameFormat*>(pFrameFormat)); // req for z-order
             }
         }
     }
@@ -762,10 +762,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+    OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
-    SwDoc *pDoc = pTxtCrsr->GetDoc();
+    OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
+    SwDoc *pDoc = pTextCrsr->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
                          RES_FRMATR_END );
@@ -883,18 +883,18 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                     makeAny( sal_Int32( aMargin.Height() ) ) );
             }
 
-            SwFrmFmt *pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
+            SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCrsr->GetPaM(),
                                             ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
                                             &aItemSet,
                                             NULL,
                                             NULL);
             xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
-                            *pDoc, pFrmFmt), uno::UNO_QUERY);
+                            *pDoc, pFrameFormat), uno::UNO_QUERY);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
             {
                 // req for z-order
                 SwXFrame::GetOrCreateSdrObject(*
-                        static_cast<SwFlyFrmFmt*>(pFrmFmt));
+                        static_cast<SwFlyFrameFormat*>(pFrameFormat));
             }
         }
     }
@@ -917,10 +917,10 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
     SwXFrame *pFrame = reinterpret_cast< SwXFrame * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
     OSL_ENSURE( pFrame, "SwXFrame missing" );
-    SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
-    const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
-    SwOLENode *pOLENd = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTxtNode()->GetOLENode();
+    SwFrameFormat *pFrameFormat = pFrame->GetFrameFormat();
+    const SwFormatContent& rContent = pFrameFormat->GetContent();
+    const SwNodeIndex *pNdIdx = rContent.GetContentIdx();
+    SwOLENode *pOLENd = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTextNode()->GetOLENode();
     SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
 
     uno::Reference < embed::XEmbeddedObject > xEmbObj( rOLEObj.GetOleRef() );

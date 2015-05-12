@@ -35,7 +35,7 @@
 
 using namespace ::com::sun::star;
 
-void SwTxtAdjuster::FormatBlock( )
+void SwTextAdjuster::FormatBlock( )
 {
     // Block format does not apply to the last line.
     // And for tabs it doesn't exist out of tradition
@@ -44,7 +44,7 @@ void SwTxtAdjuster::FormatBlock( )
     const SwLinePortion *pFly = 0;
 
     bool bSkip = !IsLastBlock() &&
-        nStart + pCurr->GetLen() >= GetInfo().GetTxt().getLength();
+        nStart + pCurr->GetLen() >= GetInfo().GetText().getLength();
 
     // Multi-line fields are tricky, because we need to check whether there are
     // any other text portions in the paragraph.
@@ -56,7 +56,7 @@ void SwTxtAdjuster::FormatBlock( )
             const SwLinePortion *pPor = pCurr->GetFirstPortion();
             while( pPor && bSkip )
             {
-                if( pPor->InTxtGrp() )
+                if( pPor->InTextGrp() )
                     bSkip = false;
                 pPor = pPor->GetPortion();
             }
@@ -84,7 +84,7 @@ void SwTxtAdjuster::FormatBlock( )
                 // Look for the last Fly which has text coming after it:
                 if( pPos->IsFlyPortion() )
                     pTmpFly = pPos; // Found a Fly
-                else if ( pTmpFly && pPos->InTxtGrp() )
+                else if ( pTmpFly && pPos->InTextGrp() )
                 {
                     pFly = pTmpFly; // A Fly with follow-up text!
                     pTmpFly = NULL;
@@ -109,7 +109,7 @@ void SwTxtAdjuster::FormatBlock( )
     GetInfo().GetParaPortion()->GetRepaint().SetOfst(0);
 }
 
-static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr,
+static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwTextIter& rItr,
                                 sal_Int32& rKashidas, sal_Int32& nGluePortion )
 {
     // i60594 validate Kashida justification
@@ -157,7 +157,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
             }
 
             sal_Int32 nKashidasDropped = 0;
-            if ( !SwScriptInfo::IsArabicText( rInf.GetTxt(), nIdx, nNext - nIdx ) )
+            if ( !SwScriptInfo::IsArabicText( rInf.GetText(), nIdx, nNext - nIdx ) )
             {
                 nKashidasDropped = nKashidasInAttr;
                 rKashidas -= nKashidasDropped;
@@ -166,7 +166,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
             {
                 ComplexTextLayoutMode nOldLayout = rInf.GetOut()->GetLayoutMode();
                 rInf.GetOut()->SetLayoutMode ( nOldLayout | TEXT_LAYOUT_BIDI_RTL );
-                nKashidasDropped = rInf.GetOut()->ValidateKashidas ( rInf.GetTxt(), nIdx, nNext - nIdx,
+                nKashidasDropped = rInf.GetOut()->ValidateKashidas ( rInf.GetText(), nIdx, nNext - nIdx,
                                                nKashidasInAttr, pKashidaPos + nKashidaIdx,
                                                pKashidaPosDropped );
                 rInf.GetOut()->SetLayoutMode ( nOldLayout );
@@ -188,7 +188,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
     return (rKashidas > 0);
 }
 
-static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr, sal_Int32& rKashidas,
+static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwTextIter& rItr, sal_Int32& rKashidas,
                              sal_Int32& nGluePortion, const long nGluePortionWidth, long& nSpaceAdd )
 {
     // check kashida width
@@ -215,7 +215,7 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTx
             sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( 0, 0, nIdx, nNext - nIdx );
 
             long nFontMinKashida = rInf.GetOut()->GetMinKashida();
-            if ( nFontMinKashida && nKashidasInAttr > 0 && SwScriptInfo::IsArabicText( rInf.GetTxt(), nIdx, nNext - nIdx ) )
+            if ( nFontMinKashida && nKashidasInAttr > 0 && SwScriptInfo::IsArabicText( rInf.GetText(), nIdx, nNext - nIdx ) )
             {
                 sal_Int32 nKashidasDropped = 0;
                 while ( rKashidas && nGluePortion && nKashidasInAttr > 0 &&
@@ -247,12 +247,12 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTx
 // CalcNewBlock() must only be called _after_ CalcLine()!
 // We always span between two RandPortions or FixPortions (Tabs and Flys).
 // We count the Glues and call ExpandBlock.
-void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
+void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                                   const SwLinePortion *pStopAt, SwTwips nReal, bool bSkipKashida )
 {
     OSL_ENSURE( GetInfo().IsMulti() || SVX_ADJUST_BLOCK == GetAdjust(),
             "CalcNewBlock: Why?" );
-    OSL_ENSURE( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
+    OSL_ENSURE( pCurrent->Height(), "SwTextAdjuster::CalcBlockAdjust: missing CalcLine()" );
 
     pCurrent->InitSpaceAdd();
     sal_Int32 nGluePortion = 0;
@@ -261,8 +261,8 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 
     // i60591: hennerdrews
     SwScriptInfo& rSI = GetInfo().GetParaPortion()->GetScriptInfo();
-    SwTxtSizeInfo aInf ( GetTxtFrm() );
-    SwTxtIter aItr ( GetTxtFrm(), &aInf );
+    SwTextSizeInfo aInf ( GetTextFrm() );
+    SwTextIter aItr ( GetTextFrm(), &aInf );
 
     if ( rSI.CountKashida() )
     {
@@ -286,7 +286,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 
     // #i49277#
     const bool bDoNotJustifyLinesWithManualBreak =
-                GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
+                GetTextFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
 
     SwLinePortion *pPos = pCurrent->GetPortion();
 
@@ -299,8 +299,8 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
            break;
         }
 
-        if ( pPos->InTxtGrp() )
-            nGluePortion = nGluePortion + static_cast<SwTxtPortion*>(pPos)->GetSpaceCnt( GetInfo(), nCharCnt );
+        if ( pPos->InTextGrp() )
+            nGluePortion = nGluePortion + static_cast<SwTextPortion*>(pPos)->GetSpaceCnt( GetInfo(), nCharCnt );
         else if( pPos->IsMultiPortion() )
         {
             SwMultiPortion* pMulti = static_cast<SwMultiPortion*>(pPos);
@@ -394,9 +394,9 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
     }
 }
 
-SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
+SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 {
-    OSL_ENSURE( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
+    OSL_ENSURE( pCurrent->Height(), "SwTextAdjuster::CalcBlockAdjust: missing CalcLine()" );
     OSL_ENSURE( !pCurrent->GetpKanaComp(), "pKanaComp already exists!!" );
 
     std::deque<sal_uInt16> *pNewKana = new std::deque<sal_uInt16>();
@@ -416,7 +416,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 
     while( pPos )
     {
-        if ( pPos->InTxtGrp() )
+        if ( pPos->InTextGrp() )
         {
             // get maximum portion width from info structure, calculated
             // during text formatting
@@ -494,7 +494,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 
     while( pPos )
     {
-        if ( pPos->InTxtGrp() )
+        if ( pPos->InTextGrp() )
         {
             const sal_uInt16 nMinWidth = pPos->Width();
 
@@ -530,7 +530,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     return nRepaintOfst;
 }
 
-SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
+SwMarginPortion *SwTextAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     SwTwips nReal )
 {
     long nRealWidth;
@@ -581,7 +581,7 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     return pRight;
 }
 
-void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
+void SwTextAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 {
     // 1) We insert a left margin:
     SwMarginPortion *pLeft = pCurrent->CalcLeftMargin();
@@ -596,7 +596,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 
     // If we only have one line, the text portion is consecutive and we center, then ...
     bool bComplete = 0 == nStart;
-    const bool bTabCompat = GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
+    const bool bTabCompat = GetTextFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
     bool bMultiTab = false;
 
     while( pPos )
@@ -617,7 +617,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
                 // to left-aligned.
                 // The first text portion gets the whole Glue, but only if we have
                 // more than one line.
-                if( bComplete && GetInfo().GetTxt().getLength() == nLen )
+                if( bComplete && GetInfo().GetText().getLength() == nLen )
                     static_cast<SwGluePortion*>(pPos)->MoveHalfGlue( pGlue );
                 else
                 {
@@ -656,7 +656,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
         pLeft->AdjustRight( pCurrent );
 }
 
-void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
+void SwTextAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
 {
     OSL_ENSURE( pCurrent->IsFormatAdj(), "CalcAdjLine: Why?" );
 
@@ -686,27 +686,27 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
 // adding the word, that still fits onto the line! For this reason the FlyPortion's
 // width is still correct if we get a deadlock-situation of:
 // bFirstWord && !WORDFITS
-SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
+SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const long nRealWidth,
                                              const SwRect &rCurrRect )
 {
-    SwTxtFly aTxtFly( GetTxtFrm() );
+    SwTextFly aTextFly( GetTextFrm() );
 
     const sal_uInt16 nCurrWidth = pCurr->PrtWidth();
     SwFlyPortion *pFlyPortion = 0;
 
     SwRect aLineVert( rCurrRect );
-    if ( GetTxtFrm()->IsRightToLeft() )
-        GetTxtFrm()->SwitchLTRtoRTL( aLineVert );
-    if ( GetTxtFrm()->IsVertical() )
-        GetTxtFrm()->SwitchHorizontalToVertical( aLineVert );
+    if ( GetTextFrm()->IsRightToLeft() )
+        GetTextFrm()->SwitchLTRtoRTL( aLineVert );
+    if ( GetTextFrm()->IsVertical() )
+        GetTextFrm()->SwitchHorizontalToVertical( aLineVert );
 
     // aFlyRect is document-global!
-    SwRect aFlyRect( aTxtFly.GetFrm( aLineVert ) );
+    SwRect aFlyRect( aTextFly.GetFrm( aLineVert ) );
 
-    if ( GetTxtFrm()->IsRightToLeft() )
-        GetTxtFrm()->SwitchRTLtoLTR( aFlyRect );
-    if ( GetTxtFrm()->IsVertical() )
-        GetTxtFrm()->SwitchVerticalToHorizontal( aFlyRect );
+    if ( GetTextFrm()->IsRightToLeft() )
+        GetTextFrm()->SwitchRTLtoLTR( aFlyRect );
+    if ( GetTextFrm()->IsVertical() )
+        GetTextFrm()->SwitchVerticalToHorizontal( aFlyRect );
 
     // If a Frame overlapps we open a Portion
     if( aFlyRect.HasArea() )
@@ -731,7 +731,7 @@ SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
 }
 
 // CalcDropAdjust is called at the end by Format() if needed
-void SwTxtAdjuster::CalcDropAdjust()
+void SwTextAdjuster::CalcDropAdjust()
 {
     OSL_ENSURE( 1<GetDropLines() && SVX_ADJUST_LEFT!=GetAdjust() && SVX_ADJUST_BLOCK!=GetAdjust(),
             "CalcDropAdjust: No reason for DropAdjustment." );
@@ -814,7 +814,7 @@ void SwTxtAdjuster::CalcDropAdjust()
     }
 }
 
-void SwTxtAdjuster::CalcDropRepaint()
+void SwTextAdjuster::CalcDropRepaint()
 {
     Top();
     SwRepaint &rRepaint = GetInfo().GetParaPortion()->GetRepaint();

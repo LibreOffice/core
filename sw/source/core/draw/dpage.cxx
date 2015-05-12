@@ -111,7 +111,7 @@ SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
     OSL_ENSURE( pOld, "Oups, Object not replaced" );
     SdrObjUserCall* pContact;
     if ( 0 != ( pContact = GetUserCall(pOld) ) &&
-         RES_DRAWFRMFMT == static_cast<SwContact*>(pContact)->GetFmt()->Which())
+         RES_DRAWFRMFMT == static_cast<SwContact*>(pContact)->GetFormat()->Which())
         static_cast<SwDrawContact*>(pContact)->ChangeMasterObject( pNewObj );
     return FmFormPage::ReplaceObject( pNewObj, nObjNum );
 }
@@ -188,23 +188,23 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
              pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
-            const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
-            OUString sTxt;
+            const SwFormatURL &rURL = pFly->GetFormat()->GetURL();
+            OUString sText;
             if( rURL.GetMap() )
             {
-                IMapObject *pTmpObj = pFly->GetFmt()->GetIMapObject( aPos, pFly );
+                IMapObject *pTmpObj = pFly->GetFormat()->GetIMapObject( aPos, pFly );
                 if( pTmpObj )
                 {
-                    sTxt = pTmpObj->GetAltText();
-                    if ( sTxt.isEmpty() )
-                        sTxt = URIHelper::removePassword( pTmpObj->GetURL(),
+                    sText = pTmpObj->GetAltText();
+                    if ( sText.isEmpty() )
+                        sText = URIHelper::removePassword( pTmpObj->GetURL(),
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
                 }
             }
             else if ( !rURL.GetURL().isEmpty() )
             {
-                sTxt = URIHelper::removePassword( rURL.GetURL(),
+                sText = URIHelper::removePassword( rURL.GetURL(),
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
 
@@ -217,12 +217,12 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                     // without MapMode-Offset, without Offset, w ... !!!!!
                     aPt = pWindow->LogicToPixel(
                             aPt, MapMode( MAP_TWIP ) );
-                    sTxt += "?" + OUString::number( aPt.getX() )
+                    sText += "?" + OUString::number( aPt.getX() )
                           + "," + OUString::number( aPt.getY() );
                 }
             }
 
-            if ( !sTxt.isEmpty() )
+            if ( !sText.isEmpty() )
             {
                 // #i80029#
                 bool bExecHyperlinks = pDoc->GetDocShell()->IsReadOnly();
@@ -232,20 +232,20 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                     bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
 
                     if ( !bExecHyperlinks )
-                        sTxt = SwViewShell::GetShellRes()->aLinkCtrlClick + ": " + sTxt;
+                        sText = SwViewShell::GetShellRes()->aLinkCtrlClick + ": " + sText;
                     else
-                        sTxt = SwViewShell::GetShellRes()->aLinkClick + ": " + sTxt;
+                        sText = SwViewShell::GetShellRes()->aLinkClick + ": " + sText;
                 }
 
                 if( rEvt.GetMode() & HelpEventMode::BALLOON )
                 {
-                    Help::ShowBalloon( pWindow, rEvt.GetMousePosPixel(), sTxt );
+                    Help::ShowBalloon( pWindow, rEvt.GetMousePosPixel(), sText );
                 }
                 else
                 {
                     // then display the help:
                     Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
-                    Help::ShowQuickHelp( pWindow, aRect, sTxt );
+                    Help::ShowQuickHelp( pWindow, aRect, sText );
                 }
                 bContinue = false;
             }

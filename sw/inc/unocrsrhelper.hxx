@@ -33,11 +33,11 @@ class SfxItemSet;
 class SfxItemPropertySet;
 struct SfxItemPropertySimpleEntry;
 class SdrObject;
-class SwTxtNode;
+class SwTextNode;
 class SwCursor;
 class SwUnoCrsr;
 class SwUnoTableCrsr;
-class SwFmtColl;
+class SwFormatColl;
 struct SwSortOptions;
 class SwDoc;
 
@@ -76,22 +76,22 @@ namespace SwUnoCursorHelper
     };
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
-        GetNestedTextContent(SwTxtNode & rTextNode, sal_Int32 const nIndex,
+        GetNestedTextContent(SwTextNode & rTextNode, sal_Int32 const nIndex,
             bool const bParent);
 
     bool                    getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
                                         , com::sun::star::uno::Any *pAny
                                         , com::sun::star::beans::PropertyState& eState
-                                        , const SwTxtNode* pNode = 0 );
+                                        , const SwTextNode* pNode = 0 );
 
     void                        GetCurPageStyle(SwPaM& rPaM, OUString &rString);
 
     inline bool             IsStartOfPara(SwPaM& rUnoCrsr)
                                         { return rUnoCrsr.GetPoint()->nContent == 0;}
     inline bool             IsEndOfPara(SwPaM& rUnoCrsr)
-                                        { return rUnoCrsr.GetCntntNode() &&
-                                            rUnoCrsr.GetPoint()->nContent == rUnoCrsr.GetCntntNode()->Len();}
+                                        { return rUnoCrsr.GetContentNode() &&
+                                            rUnoCrsr.GetPoint()->nContent == rUnoCrsr.GetContentNode()->Len();}
 
     void                        resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam);
     void                        InsertFile(SwUnoCrsr* pUnoCrsr,
@@ -135,10 +135,10 @@ namespace SwUnoCursorHelper
                      const SetAttrMode nAttrMode,
                      const bool bTableMode = false);
     void GetCrsrAttr(SwPaM & rPam, SfxItemSet & rSet,
-                     const bool bOnlyTxtAttr = false,
-                     const bool bGetFromChrFmt = true);
+                     const bool bOnlyTextAttr = false,
+                     const bool bGetFromChrFormat = true);
     void GetTextFromPam(SwPaM & rPam, OUString & rBuffer);
-    SwFmtColl * GetCurTxtFmtColl(SwPaM & rPam, const bool bConditional);
+    SwFormatColl * GetCurTextFormatColl(SwPaM & rPam, const bool bConditional);
 
     void SelectPam(SwPaM & rPam, const bool bExpand);
     void SetString(SwCursor & rCursor, const OUString & rString);
@@ -216,7 +216,7 @@ namespace SwUnoCursorHelper
     bool SetPageDesc(
             const ::com::sun::star::uno::Any& rValue,
             SwDoc & rDoc, SfxItemSet & rSet);
-    void SetTxtFmtColl(const ::com::sun::star::uno::Any & rAny, SwPaM & rPaM)
+    void SetTextFormatColl(const ::com::sun::star::uno::Any & rAny, SwPaM & rPaM)
         throw (::com::sun::star::lang::IllegalArgumentException, css::uno::RuntimeException);
     bool SetCursorPropertyValue(
             SfxItemPropertySimpleEntry const& rEntry,

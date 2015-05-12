@@ -138,7 +138,7 @@
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">6</property>
                         <child>
-                          <object class="swuilo-AutoFmtPreview" id="preview">
+                          <object class="swuilo-AutoFormatPreview" id="preview">
                             <property name="width_request">200</property>
                             <property name="height_request">200</property>
                             <property name="visible">True</property>

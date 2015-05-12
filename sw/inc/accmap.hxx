@@ -38,7 +38,7 @@ class SwAccessibleParagraph;
 class SwViewShell;
 class Rectangle;
 class SwFrm;
-class SwTxtFrm;
+class SwTextFrm;
 class SwPageFrm;
 class SwAccessibleContext;
 class SwAccessibleContextMap_Impl;
@@ -203,7 +203,7 @@ public:
 
     void InvalidateContent( const SwFrm *pFrm );
 
-    void InvalidateAttr( const SwTxtFrm& rTxtFrm );
+    void InvalidateAttr( const SwTextFrm& rTextFrm );
 
     void InvalidateCursorPosition( const SwFrm *pFrm );
     void InvalidateFocus();
@@ -221,7 +221,7 @@ public:
 
         @author OD
 
-        @param _rTxtFrm
+        @param _rTextFrm
         input parameter - reference to paragraph, whose CONTENT_FLOWS_FROM/_TO
         has to be invalidated.
 
@@ -229,14 +229,14 @@ public:
         input parameter - boolean indicating, if relation CONTENT_FLOWS_FROM
         (value <true>) or CONTENT_FLOWS_TO (value <false>) has to be invalidated.
     */
-    void InvalidateParaFlowRelation( const SwTxtFrm& _rTxtFrm,
+    void InvalidateParaFlowRelation( const SwTextFrm& _rTextFrm,
                                      const bool _bFrom );
 
     /** invalidation of text selection of a paragraph
 
         @author OD
     */
-    void InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm );
+    void InvalidateParaTextSelection( const SwTextFrm& _rTextFrm );
 
     /** invalidation of text selection of all paragraphs
 

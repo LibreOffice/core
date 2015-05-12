@@ -22,21 +22,21 @@
 
 #include "layfrm.hxx"
 
-class SwFtnBossFrm;
-class SwFtnContFrm;
-class SwFtnFrm;
-class SwTxtFtn;
+class SwFootnoteBossFrm;
+class SwFootnoteContFrm;
+class SwFootnoteFrm;
+class SwTextFootnote;
 
 // Set max. footnote area.
 // Restoration of the old value in DTor. Implementation in ftnfrm.cxx
-class SwSaveFtnHeight
+class SwSaveFootnoteHeight
 {
-    SwFtnBossFrm *pBoss;
+    SwFootnoteBossFrm *pBoss;
     const SwTwips nOldHeight;
     SwTwips nNewHeight;
 public:
-    SwSaveFtnHeight( SwFtnBossFrm *pBs, const SwTwips nDeadLine );
-    ~SwSaveFtnHeight();
+    SwSaveFootnoteHeight( SwFootnoteBossFrm *pBs, const SwTwips nDeadLine );
+    ~SwSaveFootnoteHeight();
 };
 
 #define NA_ONLY_ADJUST 0
@@ -44,93 +44,93 @@ public:
 #define NA_GROW_ADJUST 2
 #define NA_ADJUST_GROW 3
 
-typedef std::vector<SwFtnFrm*> SwFtnFrms;
+typedef std::vector<SwFootnoteFrm*> SwFootnoteFrms;
 
-class SwFtnBossFrm: public SwLayoutFrm
+class SwFootnoteBossFrm: public SwLayoutFrm
 {
     // for private footnote operations
     friend class SwFrm;
-    friend class SwSaveFtnHeight;
-    friend class SwPageFrm; // for setting of MaxFtnHeight
+    friend class SwSaveFootnoteHeight;
+    friend class SwPageFrm; // for setting of MaxFootnoteHeight
 
     // max. height of the footnote container on this page
-    SwTwips nMaxFtnHeight;
+    SwTwips nMaxFootnoteHeight;
 
-    SwFtnContFrm *MakeFtnCont();
-    SwFtnFrm     *FindFirstFtn();
+    SwFootnoteContFrm *MakeFootnoteCont();
+    SwFootnoteFrm     *FindFirstFootnote();
     sal_uInt8 _NeighbourhoodAdjustment( const SwFrm* pFrm ) const;
 
 protected:
-    void          InsertFtn( SwFtnFrm * );
-    static void   ResetFtn( const SwFtnFrm *pAssumed );
+    void          InsertFootnote( SwFootnoteFrm * );
+    static void   ResetFootnote( const SwFootnoteFrm *pAssumed );
 
 public:
-    inline SwFtnBossFrm( SwFrmFmt* pFmt, SwFrm* pSib )
-        : SwLayoutFrm( pFmt, pSib )
-        , nMaxFtnHeight(0)
+    inline SwFootnoteBossFrm( SwFrameFormat* pFormat, SwFrm* pSib )
+        : SwLayoutFrm( pFormat, pSib )
+        , nMaxFootnoteHeight(0)
         {}
 
                  SwLayoutFrm *FindBodyCont();
     inline const SwLayoutFrm *FindBodyCont() const;
-    inline void SetMaxFtnHeight( const SwTwips nNewMax ) { nMaxFtnHeight = nNewMax; }
+    inline void SetMaxFootnoteHeight( const SwTwips nNewMax ) { nMaxFootnoteHeight = nNewMax; }
 
     // footnote interface
-    void AppendFtn( SwCntntFrm *, SwTxtFtn * );
-    void RemoveFtn( const SwCntntFrm *, const SwTxtFtn *, bool bPrep = true );
-    static       SwFtnFrm     *FindFtn( const SwCntntFrm *, const SwTxtFtn * );
-                 SwFtnContFrm *FindFtnCont();
-    inline const SwFtnContFrm *FindFtnCont() const;
-           const SwFtnFrm     *FindFirstFtn( SwCntntFrm* ) const;
-                 SwFtnContFrm *FindNearestFtnCont( bool bDontLeave = false );
+    void AppendFootnote( SwContentFrm *, SwTextFootnote * );
+    void RemoveFootnote( const SwContentFrm *, const SwTextFootnote *, bool bPrep = true );
+    static       SwFootnoteFrm     *FindFootnote( const SwContentFrm *, const SwTextFootnote * );
+                 SwFootnoteContFrm *FindFootnoteCont();
+    inline const SwFootnoteContFrm *FindFootnoteCont() const;
+           const SwFootnoteFrm     *FindFirstFootnote( SwContentFrm* ) const;
+                 SwFootnoteContFrm *FindNearestFootnoteCont( bool bDontLeave = false );
 
-    static void ChangeFtnRef( const SwCntntFrm *pOld, const SwTxtFtn *,
-                       SwCntntFrm *pNew );
-    void RearrangeFtns( const SwTwips nDeadLine, const bool bLock = false,
-                        const SwTxtFtn *pAttr = 0 );
+    static void ChangeFootnoteRef( const SwContentFrm *pOld, const SwTextFootnote *,
+                       SwContentFrm *pNew );
+    void RearrangeFootnotes( const SwTwips nDeadLine, const bool bLock = false,
+                        const SwTextFootnote *pAttr = 0 );
 
     // Set DeadLine (in document coordinates) so that the text formatter can
     // temporarily limit footnote height.
-    void    SetFtnDeadLine( const SwTwips nDeadLine );
-    SwTwips GetMaxFtnHeight() const { return nMaxFtnHeight; }
+    void    SetFootnoteDeadLine( const SwTwips nDeadLine );
+    SwTwips GetMaxFootnoteHeight() const { return nMaxFootnoteHeight; }
 
     // returns value for remaining space until the body reaches minimal height
     SwTwips GetVarSpace() const;
 
     // methods needed for layouting
-    // The parameters <_bCollectOnlyPreviousFtns> and <_pRefFtnBossFrm> control
+    // The parameters <_bCollectOnlyPreviousFootnotes> and <_pRefFootnoteBossFrm> control
     // if only footnotes that are positioned before the given reference
     // footnote boss-frame have to be collected.
-    // Note: if parameter <_bCollectOnlyPreviousFtns> is true, then parameter
-    // <_pRefFtnBossFrm> has to be referenced by an object.
-    static void _CollectFtns( const SwCntntFrm*   _pRef,
-                              SwFtnFrm*           _pFtn,
-                              SwFtnFrms&          _rFtnArr,
-                              const bool      _bCollectOnlyPreviousFtns = false,
-                              const SwFtnBossFrm* _pRefFtnBossFrm = NULL);
-    // The parameter <_bCollectOnlyPreviousFtns> controls if only footnotes
+    // Note: if parameter <_bCollectOnlyPreviousFootnotes> is true, then parameter
+    // <_pRefFootnoteBossFrm> has to be referenced by an object.
+    static void _CollectFootnotes( const SwContentFrm*   _pRef,
+                              SwFootnoteFrm*           _pFootnote,
+                              SwFootnoteFrms&          _rFootnoteArr,
+                              const bool      _bCollectOnlyPreviousFootnotes = false,
+                              const SwFootnoteBossFrm* _pRefFootnoteBossFrm = NULL);
+    // The parameter <_bCollectOnlyPreviousFootnotes> controls if only footnotes
     // that are positioned before the footnote boss-frame <this> have to be
     // collected.
-    void    CollectFtns( const SwCntntFrm* _pRef,
-                         SwFtnBossFrm*     _pOld,
-                         SwFtnFrms&        _rFtnArr,
-                         const bool    _bCollectOnlyPreviousFtns = false );
-    void    _MoveFtns( SwFtnFrms &rFtnArr, bool bCalc = false );
-    void    MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
-                      SwTxtFtn *pAttr );
+    void    CollectFootnotes( const SwContentFrm* _pRef,
+                         SwFootnoteBossFrm*     _pOld,
+                         SwFootnoteFrms&        _rFootnoteArr,
+                         const bool    _bCollectOnlyPreviousFootnotes = false );
+    void    _MoveFootnotes( SwFootnoteFrms &rFootnoteArr, bool bCalc = false );
+    void    MoveFootnotes( const SwContentFrm *pSrc, SwContentFrm *pDest,
+                      SwTextFootnote *pAttr );
 
     // should AdjustNeighbourhood be called (or Grow/Shrink)?
     sal_uInt8 NeighbourhoodAdjustment( const SwFrm* pFrm ) const
         { return IsPageFrm() ? NA_ONLY_ADJUST : _NeighbourhoodAdjustment( pFrm ); }
 };
 
-inline const SwLayoutFrm *SwFtnBossFrm::FindBodyCont() const
+inline const SwLayoutFrm *SwFootnoteBossFrm::FindBodyCont() const
 {
-    return const_cast<SwFtnBossFrm*>(this)->FindBodyCont();
+    return const_cast<SwFootnoteBossFrm*>(this)->FindBodyCont();
 }
 
-inline const SwFtnContFrm *SwFtnBossFrm::FindFtnCont() const
+inline const SwFootnoteContFrm *SwFootnoteBossFrm::FindFootnoteCont() const
 {
-    return const_cast<SwFtnBossFrm*>(this)->FindFtnCont();
+    return const_cast<SwFootnoteBossFrm*>(this)->FindFootnoteCont();
 }
 
 #endif

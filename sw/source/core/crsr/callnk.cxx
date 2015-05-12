@@ -36,9 +36,9 @@
 #include <breakit.hxx>
 #include <vcl/window.hxx>
 
-SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, sal_Int32 nAktCntnt,
+SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, sal_Int32 nAktContent,
                         sal_uInt8 nAktNdTyp, long nLRPos, bool bAktSelection )
-    : rShell( rSh ), nNode( nAktNode ), nCntnt( nAktCntnt ),
+    : rShell( rSh ), nNode( nAktNode ), nContent( nAktContent ),
       nNdTyp( nAktNdTyp ), nLeftFrmPos( nLRPos ),
       bHasSelection( bAktSelection )
 {
@@ -48,15 +48,15 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
     : rShell( rSh )
 {
     // remember SPoint-values of current cursor
-    SwPaM* pCrsr = rShell.IsTableMode() ? rShell.GetTblCrs() : rShell.GetCrsr();
+    SwPaM* pCrsr = rShell.IsTableMode() ? rShell.GetTableCrs() : rShell.GetCrsr();
     SwNode& rNd = pCrsr->GetPoint()->nNode.GetNode();
     nNode = rNd.GetIndex();
-    nCntnt = pCrsr->GetPoint()->nContent.GetIndex();
+    nContent = pCrsr->GetPoint()->nContent.GetIndex();
     nNdTyp = rNd.GetNodeType();
     bHasSelection = ( *pCrsr->GetPoint() != *pCrsr->GetMark() );
 
-    if( rNd.IsTxtNode() )
-        nLeftFrmPos = SwCallLink::getLayoutFrm( rShell.GetLayout(), *rNd.GetTxtNode(), nCntnt,
+    if( rNd.IsTextNode() )
+        nLeftFrmPos = SwCallLink::getLayoutFrm( rShell.GetLayout(), *rNd.GetTextNode(), nContent,
                                             !rShell.ActionPend() );
     else
     {
@@ -65,14 +65,14 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
         // A special treatment for SwFeShell:
         // When deleting the header/footer, footnotes SwFeShell sets the
         // Cursor to NULL (Node + Content).
-        // If the Cursor is not on a CntntNode (ContentNode) this fact gets
+        // If the Cursor is not on a ContentNode (ContentNode) this fact gets
         // saved in NdType.
         if( ND_CONTENTNODE & nNdTyp )
             nNdTyp = 0;
     }
 }
 
-static void lcl_notifyRow(const SwCntntNode* pNode, SwCrsrShell& rShell)
+static void lcl_notifyRow(const SwContentNode* pNode, SwCrsrShell& rShell)
 {
     if ( !pNode )
         return;
@@ -95,7 +95,7 @@ static void lcl_notifyRow(const SwCntntNode* pNode, SwCrsrShell& rShell)
         {
             if (pContent->GetType() == FRM_TAB)
             {
-                SwFmtFrmSize pSize = pLine->GetFrmFmt()->GetFrmSize();
+                SwFormatFrmSize pSize = pLine->GetFrameFormat()->GetFrmSize();
                 pRow->ModifyNotification(NULL, &pSize);
                 return;
             }
@@ -110,22 +110,22 @@ SwCallLink::~SwCallLink()
 
     // If travelling over Nodes check formats and register them anew at the
     // new Node.
-    SwPaM* pCurCrsr = rShell.IsTableMode() ? rShell.GetTblCrs() : rShell.GetCrsr();
-    SwCntntNode * pCNd = pCurCrsr->GetCntntNode();
+    SwPaM* pCurCrsr = rShell.IsTableMode() ? rShell.GetTableCrs() : rShell.GetCrsr();
+    SwContentNode * pCNd = pCurCrsr->GetContentNode();
     if( !pCNd )
         return;
 
     lcl_notifyRow(pCNd, rShell);
 
     const SwDoc *pDoc=rShell.GetDoc();
-    const SwCntntNode *pNode = NULL;
+    const SwContentNode *pNode = NULL;
     if ( ( pDoc != NULL && nNode < pDoc->GetNodes( ).Count( ) ) )
     {
-        pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
+        pNode = pDoc->GetNodes()[nNode]->GetContentNode();
     }
     lcl_notifyRow(pNode, rShell);
 
-    sal_Int32 nCmp, nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
+    sal_Int32 nCmp, nAktContent = pCurCrsr->GetPoint()->nContent.GetIndex();
     sal_uInt16 nNdWhich = pCNd->GetNodeType();
     sal_uLong nAktNode = pCurCrsr->GetPoint()->nNode.GetIndex();
 
@@ -147,32 +147,32 @@ SwCallLink::~SwCallLink()
         rShell.CallChgLnk();
     }
     else if( rShell.m_aChgLnk.IsSet() && ND_TEXTNODE == nNdWhich &&
-             nCntnt != nAktCntnt )
+             nContent != nAktContent )
     {
         // If travelling with left/right only and the frame is
         // unchanged (columns!) then check text hints.
-        if( nLeftFrmPos == SwCallLink::getLayoutFrm( rShell.GetLayout(), *pCNd->GetTxtNode(), nAktCntnt,
+        if( nLeftFrmPos == SwCallLink::getLayoutFrm( rShell.GetLayout(), *pCNd->GetTextNode(), nAktContent,
                                                     !rShell.ActionPend() ) &&
-            (( nCmp = nCntnt ) + 1 == nAktCntnt ||          // Right
-            nCntnt -1 == ( nCmp = nAktCntnt )) )            // Left
+            (( nCmp = nContent ) + 1 == nAktContent ||          // Right
+            nContent -1 == ( nCmp = nAktContent )) )            // Left
         {
-            if( nCmp == nAktCntnt && pCurCrsr->HasMark() ) // left & select
+            if( nCmp == nAktContent && pCurCrsr->HasMark() ) // left & select
                 ++nCmp;
 
-            if ( pCNd->GetTxtNode()->HasHints() )
+            if ( pCNd->GetTextNode()->HasHints() )
             {
-                const SwpHints &rHts = pCNd->GetTxtNode()->GetSwpHints();
+                const SwpHints &rHts = pCNd->GetTextNode()->GetSwpHints();
 
                 for( size_t n = 0; n < rHts.Count(); ++n )
                 {
-                    const SwTxtAttr* pHt = rHts[ n ];
+                    const SwTextAttr* pHt = rHts[ n ];
                     const sal_Int32 *pEnd = pHt->End();
                     const sal_Int32 nStart = pHt->GetStart();
 
                     // If "only start" or "start and end equal" then call on
                     // every overflow of start.
                     if( ( !pEnd || ( nStart == *pEnd ) ) &&
-                        ( nStart == nCntnt || nStart == nAktCntnt) )
+                        ( nStart == nContent || nStart == nAktContent) )
                     {
                         rShell.CallChgLnk();
                         return;
@@ -193,10 +193,10 @@ SwCallLink::~SwCallLink()
 
             if( g_pBreakIt->GetBreakIter().is() )
             {
-                const OUString rTxt = pCNd->GetTxtNode()->GetTxt();
+                const OUString rText = pCNd->GetTextNode()->GetText();
                 if( !nCmp ||
-                    g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp )
-                     != g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp - 1 ))
+                    g_pBreakIt->GetBreakIter()->getScriptType( rText, nCmp )
+                     != g_pBreakIt->GetBreakIter()->getScriptType( rText, nCmp - 1 ))
                 {
                     rShell.CallChgLnk();
                     return;
@@ -215,8 +215,8 @@ SwCallLink::~SwCallLink()
     if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->getLayoutFrm(rShell.GetLayout(), 0, 0, false) ) &&
         0 != ( pFlyFrm = pFrm->FindFlyFrm() ) && !rShell.IsTableMode() )
     {
-        const SwNodeIndex* pIndex = pFlyFrm->GetFmt()->GetCntnt().GetCntntIdx();
-        OSL_ENSURE( pIndex, "Fly without Cntnt" );
+        const SwNodeIndex* pIndex = pFlyFrm->GetFormat()->GetContent().GetContentIdx();
+        OSL_ENSURE( pIndex, "Fly without Content" );
 
         if (!pIndex)
             return;
@@ -225,14 +225,14 @@ SwCallLink::~SwCallLink()
 
         if( rStNd.EndOfSectionNode()->StartOfSectionIndex() > nNode ||
             nNode > rStNd.EndOfSectionIndex() )
-            rShell.GetFlyMacroLnk().Call( (void*)pFlyFrm->GetFmt() );
+            rShell.GetFlyMacroLnk().Call( (void*)pFlyFrm->GetFormat() );
     }
 }
 
-long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTxtNode& rNd, sal_Int32 nCntPos, bool bCalcFrm )
+long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTextNode& rNd, sal_Int32 nCntPos, bool bCalcFrm )
 {
-    SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(rNd.getLayoutFrm(pRoot,0,0,bCalcFrm));
-    SwTxtFrm* pNext;
+    SwTextFrm* pFrm = static_cast<SwTextFrm*>(rNd.getLayoutFrm(pRoot,0,0,bCalcFrm));
+    SwTextFrm* pNext;
     if ( pFrm && !pFrm->IsHiddenNow() )
     {
         if( pFrm->HasFollow() )

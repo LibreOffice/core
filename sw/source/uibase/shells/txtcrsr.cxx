@@ -355,11 +355,11 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
         break;
         case FN_NEXT_FOOTNOTE:
             rSh.MoveCrsr();
-            bRet = rSh.GotoNextFtnAnchor();
+            bRet = rSh.GotoNextFootnoteAnchor();
             break;
         case FN_PREV_FOOTNOTE:
             rSh.MoveCrsr();
-            bRet = rSh.GotoPrevFtnAnchor();
+            bRet = rSh.GotoPrevFootnoteAnchor();
             break;
         case FN_TO_HEADER:
             rSh.MoveCrsr();
@@ -367,7 +367,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
                 rSh.SttPg();
             else
             {
-                bool bMoved = rSh.GotoHeaderTxt();
+                bool bMoved = rSh.GotoHeaderText();
                 if ( !bMoved )
                     rSh.SttPg();
             }
@@ -379,7 +379,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
                 rSh.EndPg();
             else
             {
-                bool bMoved = rSh.GotoFooterTxt();
+                bool bMoved = rSh.GotoFooterText();
                 if ( !bMoved )
                     rSh.EndPg();
             }
@@ -388,13 +388,13 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
         case FN_FOOTNOTE_TO_ANCHOR:
             rSh.MoveCrsr();
             if ( FrmTypeFlags::FOOTNOTE & rSh.GetFrmType(0,false) )
-                rSh.GotoFtnAnchor();
+                rSh.GotoFootnoteAnchor();
             else
-                rSh.GotoFtnTxt();
+                rSh.GotoFootnoteText();
             bSetRetVal = false;
             break;
         case FN_TO_FOOTNOTE_AREA :
-            rSh.GotoFtnTxt();
+            rSh.GotoFootnoteText();
             break;
         case FN_PREV_TABLE:
             bRet = rSh.MoveTable( fnTablePrev, fnTableStart);
@@ -415,16 +415,16 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             bRet = rSh.GotoNxtPrvTOXMark( false );
             break;
         case FN_NEXT_TBLFML:
-            bRet = rSh.GotoNxtPrvTblFormula( true, false );
+            bRet = rSh.GotoNxtPrvTableFormula( true, false );
             break;
         case FN_PREV_TBLFML:
-            bRet = rSh.GotoNxtPrvTblFormula( false, false );
+            bRet = rSh.GotoNxtPrvTableFormula( false, false );
             break;
         case FN_NEXT_TBLFML_ERR:
-            bRet = rSh.GotoNxtPrvTblFormula( true, true );
+            bRet = rSh.GotoNxtPrvTableFormula( true, true );
             break;
         case FN_PREV_TBLFML_ERR:
-            bRet = rSh.GotoNxtPrvTblFormula( false, true );
+            bRet = rSh.GotoNxtPrvTableFormula( false, true );
             break;
         default:
             OSL_FAIL("wrong dispatcher");

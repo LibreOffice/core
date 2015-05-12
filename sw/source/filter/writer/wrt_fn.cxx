@@ -86,8 +86,8 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
 
 Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
 {
-    // It must be a CntntNode!
-    SwCntntNode * pCNd = rNode.GetCntntNode();
+    // It must be a ContentNode!
+    SwContentNode * pCNd = rNode.GetContentNode();
     if( !pCNd )
         return rWrt;
 

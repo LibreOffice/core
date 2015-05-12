@@ -32,26 +32,26 @@ SwMovedFwdFrmsByObjPos::~SwMovedFwdFrmsByObjPos()
     Clear();
 }
 
-void SwMovedFwdFrmsByObjPos::Insert( const SwTxtFrm& _rMovedFwdFrmByObjPos,
+void SwMovedFwdFrmsByObjPos::Insert( const SwTextFrm& _rMovedFwdFrmByObjPos,
                                      const sal_uInt32 _nToPageNum )
 {
     if ( maMovedFwdFrms.end() ==
-         maMovedFwdFrms.find( _rMovedFwdFrmByObjPos.GetTxtNode() ) )
+         maMovedFwdFrms.find( _rMovedFwdFrmByObjPos.GetTextNode() ) )
     {
-        const NodeMapEntry aEntry( _rMovedFwdFrmByObjPos.GetTxtNode(), _nToPageNum );
+        const NodeMapEntry aEntry( _rMovedFwdFrmByObjPos.GetTextNode(), _nToPageNum );
         maMovedFwdFrms.insert( aEntry );
     }
 }
 
-void SwMovedFwdFrmsByObjPos::Remove( const SwTxtFrm& _rTxtFrm )
+void SwMovedFwdFrmsByObjPos::Remove( const SwTextFrm& _rTextFrm )
 {
-    maMovedFwdFrms.erase( _rTxtFrm.GetTxtNode() );
+    maMovedFwdFrms.erase( _rTextFrm.GetTextNode() );
 }
 
-bool SwMovedFwdFrmsByObjPos::FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
+bool SwMovedFwdFrmsByObjPos::FrmMovedFwdByObjPos( const SwTextFrm& _rTextFrm,
                                                   sal_uInt32& _ornToPageNum ) const
 {
-    NodeMapIter aIter = maMovedFwdFrms.find( _rTxtFrm.GetTxtNode() );
+    NodeMapIter aIter = maMovedFwdFrms.find( _rTextFrm.GetTextNode() );
     if ( maMovedFwdFrms.end() != aIter )
     {
         _ornToPageNum = (*aIter).second;
@@ -74,12 +74,12 @@ bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm
         const NodeMapEntry& rEntry = *(aIter);
         if ( rEntry.second >= nPageNumOfRow )
         {
-            SwIterator<SwTxtFrm,SwTxtNode> aFrmIter( *rEntry.first );
-            for( SwTxtFrm* pTxtFrm = aFrmIter.First(); pTxtFrm; pTxtFrm = (SwTxtFrm*)aFrmIter.Next() )
+            SwIterator<SwTextFrm,SwTextNode> aFrmIter( *rEntry.first );
+            for( SwTextFrm* pTextFrm = aFrmIter.First(); pTextFrm; pTextFrm = (SwTextFrm*)aFrmIter.Next() )
             {
                 // #115759# - assure that found text frame
                 // is the first one.
-                if ( _rRowFrm.IsAnLower( pTxtFrm ) && !pTxtFrm->GetIndPrev() )
+                if ( _rRowFrm.IsAnLower( pTextFrm ) && !pTextFrm->GetIndPrev() )
                 {
                     bDoesRowContainMovedFwdFrm = true;
                     break;

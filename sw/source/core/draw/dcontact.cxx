@@ -98,20 +98,20 @@ void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor )
  * Otherwise it is just a simple drawing object. This has a
  * UserCall and is the client of the searched format.
 */
-SwFrmFmt *FindFrmFmt( SdrObject *pObj )
+SwFrameFormat *FindFrameFormat( SdrObject *pObj )
 {
-    SwFrmFmt* pRetval = 0L;
+    SwFrameFormat* pRetval = 0L;
 
     if ( pObj->ISA(SwVirtFlyDrawObj) )
     {
-       pRetval = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFmt();
+       pRetval = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFormat();
     }
     else
     {
         SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall( pObj ));
         if ( pContact )
         {
-            pRetval = pContact->GetFmt();
+            pRetval = pContact->GetFormat();
         }
     }
     return pRetval;
@@ -121,10 +121,10 @@ bool HasWrap( const SdrObject* pObj )
 {
     if ( pObj )
     {
-        const SwFrmFmt* pFmt = ::FindFrmFmt( pObj );
-        if ( pFmt )
+        const SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
+        if ( pFormat )
         {
-            return SURROUND_THROUGHT != pFmt->GetSurround().GetSurround();
+            return SURROUND_THROUGHT != pFormat->GetSurround().GetSurround();
         }
     }
 
@@ -169,7 +169,7 @@ bool IsMarqueeTextObj( const SdrObject& rObj )
          || SDRTEXTANI_ALTERNATE == eTKind || SDRTEXTANI_SLIDE == eTKind );
 }
 
-SwContact::SwContact( SwFrmFmt *pToRegisterIn ) :
+SwContact::SwContact( SwFrameFormat *pToRegisterIn ) :
     SwClient( pToRegisterIn ),
     mbInDTOR( false )
 {}
@@ -190,7 +190,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 {
     // #i46297# - notify background about the arriving of
     // the object and invalidate its position.
-    const bool bNotify( !GetFmt()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
+    const bool bNotify( !GetFormat()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
 
     _MoveObjToLayer( true, _pDrawObj );
 
@@ -220,7 +220,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 {
     // #i46297# - notify background about the leaving of the object.
-    const bool bNotify( GetFmt()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
+    const bool bNotify( GetFormat()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
 
     _MoveObjToLayer( false, _pDrawObj );
 
@@ -260,7 +260,7 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
         return;
     }
 
-    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrmFmt*>(GetRegisteredInNonConst())->getIDocumentDrawModelAccess();
+    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrameFormat*>(GetRegisteredInNonConst())->getIDocumentDrawModelAccess();
     if ( !pIDDMA )
     {
         OSL_FAIL( "SwDrawContact::_MoveObjToLayer(..) - no writer document!" );
@@ -337,9 +337,9 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
 // some virtual helper methods for information
 // about the object (Writer fly frame resp. drawing object)
 
-const SwIndex& SwContact::GetCntntAnchorIndex() const
+const SwIndex& SwContact::GetContentAnchorIndex() const
 {
-    return GetCntntAnchor().nContent;
+    return GetContentAnchor().nContent;
 }
 
 /// get minimum order number of anchored objects handled by with contact
@@ -390,7 +390,7 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
     return nMaxOrdNum;
 }
 
-SwFlyDrawContact::SwFlyDrawContact( SwFlyFrmFmt *pToRegisterIn, SdrModel * ) :
+SwFlyDrawContact::SwFlyDrawContact( SwFlyFrameFormat *pToRegisterIn, SdrModel * ) :
     SwContact( pToRegisterIn )
 {
     // #i26791# - class <SwFlyDrawContact> contains the 'master'
@@ -481,7 +481,7 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     OSL_ENSURE( _pDrawObj->ISA(SwVirtFlyDrawObj),
             "<SwFlyDrawContact::MoveObjToVisibleLayer(..)> - wrong SdrObject type -> crash" );
 
-    if ( GetFmt()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
+    if ( GetFormat()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
     {
         // nothing to do
         return;
@@ -522,7 +522,7 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     OSL_ENSURE( _pDrawObj->ISA(SwVirtFlyDrawObj),
             "<SwFlyDrawContact::MoveObjToInvisibleLayer(..)> - wrong SdrObject type -> crash" );
 
-    if ( !GetFmt()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
+    if ( !GetFormat()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
     {
         // nothing to do
         return;
@@ -550,8 +550,8 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 /// get data collection of anchored objects, handled by with contact
 void SwFlyDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const
 {
-    const SwFrmFmt* pFmt = GetFmt();
-    SwFlyFrm::GetAnchoredObjects( _roAnchoredObjs, *pFmt );
+    const SwFrameFormat* pFormat = GetFormat();
+    SwFlyFrm::GetAnchoredObjects( _roAnchoredObjs, *pFormat );
 }
 
 // SwDrawContact
@@ -575,7 +575,7 @@ bool CheckControlLayer( const SdrObject *pObj )
     return false;
 }
 
-SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
+SwDrawContact::SwDrawContact( SwFrameFormat* pToRegisterIn, SdrObject* pObj ) :
     SwContact( pToRegisterIn ),
     maAnchoredDrawObj(),
     mbMasterObjCleared( false ),
@@ -610,7 +610,7 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
 
     // if there already exists an SwXShape for the object, ensure it knows about us, and the SdrObject
     // #i99056#
-    SwXShape::AddExistingShapeToFmt( *pObj );
+    SwXShape::AddExistingShapeToFormat( *pObj );
 }
 
 SwDrawContact::~SwDrawContact()
@@ -632,14 +632,14 @@ SwDrawContact::~SwDrawContact()
     }
 }
 
-void SwDrawContact::GetTextObjectsFromFmt( std::list<SdrTextObj*>& rTextObjects, SwDoc* pDoc )
+void SwDrawContact::GetTextObjectsFromFormat( std::list<SdrTextObj*>& rTextObjects, SwDoc* pDoc )
 {
-    for( sal_Int32 n=0; n<(sal_Int32)pDoc->GetSpzFrmFmts()->size(); n++ )
+    for( sal_Int32 n=0; n<(sal_Int32)pDoc->GetSpzFrameFormats()->size(); n++ )
     {
-        const SwFrmFmt* pFly = (*pDoc->GetSpzFrmFmts())[n];
-        if( pFly->IsA( TYPE(SwDrawFrmFmt) ) )
+        const SwFrameFormat* pFly = (*pDoc->GetSpzFrameFormats())[n];
+        if( pFly->IsA( TYPE(SwDrawFrameFormat) ) )
         {
-            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFrmFmt>(*pFly).First();
+            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFrameFormat>(*pFly).First();
             if( pContact )
             {
                 SdrObject* pSdrO = pContact->GetMaster();
@@ -889,10 +889,10 @@ SwDrawContact::VirtObjAnchoredAtFrmPred::VirtObjAnchoredAtFrmPred(
                                                 const SwFrm& _rAnchorFrm )
     : mpAnchorFrm( &_rAnchorFrm )
 {
-    if ( mpAnchorFrm->IsCntntFrm() )
+    if ( mpAnchorFrm->IsContentFrm() )
     {
-        const SwCntntFrm* pTmpFrm =
-                            static_cast<const SwCntntFrm*>( mpAnchorFrm );
+        const SwContentFrm* pTmpFrm =
+                            static_cast<const SwContentFrm*>( mpAnchorFrm );
         while ( pTmpFrm->IsFollow() )
         {
             pTmpFrm = pTmpFrm->FindMaster();
@@ -905,10 +905,10 @@ SwDrawContact::VirtObjAnchoredAtFrmPred::VirtObjAnchoredAtFrmPred(
 bool SwDrawContact::VirtObjAnchoredAtFrmPred::operator() ( const SwDrawVirtObj* _pDrawVirtObj )
 {
     const SwFrm* pObjAnchorFrm = _pDrawVirtObj->GetAnchorFrm();
-    if ( pObjAnchorFrm && pObjAnchorFrm->IsCntntFrm() )
+    if ( pObjAnchorFrm && pObjAnchorFrm->IsContentFrm() )
     {
-        const SwCntntFrm* pTmpFrm =
-                            static_cast<const SwCntntFrm*>( pObjAnchorFrm );
+        const SwContentFrm* pTmpFrm =
+                            static_cast<const SwContentFrm*>( pObjAnchorFrm );
         while ( pTmpFrm->IsFollow() )
         {
             pTmpFrm = pTmpFrm->FindMaster();
@@ -926,10 +926,10 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm )
 
     // #i26791# - compare master frames instead of direct frames
     const SwFrm* pProposedAnchorFrm = &_rAnchorFrm;
-    if ( pProposedAnchorFrm->IsCntntFrm() )
+    if ( pProposedAnchorFrm->IsContentFrm() )
     {
-        const SwCntntFrm* pTmpFrm =
-                            static_cast<const SwCntntFrm*>( pProposedAnchorFrm );
+        const SwContentFrm* pTmpFrm =
+                            static_cast<const SwContentFrm*>( pProposedAnchorFrm );
         while ( pTmpFrm->IsFollow() )
         {
             pTmpFrm = pTmpFrm->FindMaster();
@@ -938,10 +938,10 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm )
     }
 
     const SwFrm* pMasterObjAnchorFrm = GetAnchorFrm();
-    if ( pMasterObjAnchorFrm && pMasterObjAnchorFrm->IsCntntFrm() )
+    if ( pMasterObjAnchorFrm && pMasterObjAnchorFrm->IsContentFrm() )
     {
-        const SwCntntFrm* pTmpFrm =
-                            static_cast<const SwCntntFrm*>( pMasterObjAnchorFrm );
+        const SwContentFrm* pTmpFrm =
+                            static_cast<const SwContentFrm*>( pMasterObjAnchorFrm );
         while ( pTmpFrm->IsFollow() )
         {
             pTmpFrm = pTmpFrm->FindMaster();
@@ -1042,7 +1042,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
 {
     // #i26791# - no event handling, if existing <SwViewShell>
     // is in construction
-    SwDoc* pDoc = GetFmt()->GetDoc();
+    SwDoc* pDoc = GetFormat()->GetDoc();
     if ( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&
          pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->IsInConstructor() )
     {
@@ -1157,15 +1157,15 @@ class NestedUserCallHdl
 };
 
 /// Notify the format's textbox that it should reconsider its position / size.
-void lcl_textBoxSizeNotify(SwFrmFmt* pFmt)
+void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
 {
-    if (SwTextBoxHelper::findTextBox(pFmt))
+    if (SwTextBoxHelper::findTextBox(pFormat))
     {
         // Just notify the textbox that the size has changed, the actual object size is not interesting.
-        SfxItemSet aResizeSet(pFmt->GetDoc()->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE, 0);
-        SwFmtFrmSize aSize;
+        SfxItemSet aResizeSet(pFormat->GetDoc()->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE, 0);
+        SwFormatFrmSize aSize;
         aResizeSet.Put(aSize);
-        SwTextBoxHelper::syncFlyFrmAttr(*pFmt, aResizeSet);
+        SwTextBoxHelper::syncFlyFrmAttr(*pFormat, aResizeSet);
     }
 }
 
@@ -1188,8 +1188,8 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
     // #i35007#
     // improvement: determine as-character anchored object flag only once.
     const bool bAnchoredAsChar = ObjAnchoredAsChar();
-    const bool bNotify = !(GetFmt()->GetDoc()->IsInDtor()) &&
-                         ( SURROUND_THROUGHT != GetFmt()->GetSurround().GetSurround() ) &&
+    const bool bNotify = !(GetFormat()->GetDoc()->IsInDtor()) &&
+                         ( SURROUND_THROUGHT != GetFormat()->GetSurround().GetSurround() ) &&
                          !bAnchoredAsChar;
     switch( eType )
     {
@@ -1243,7 +1243,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             {
                 if(::CheckControlLayer(maAnchoredDrawObj.DrawObj()))
                 {
-                    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrmFmt*>(GetRegisteredInNonConst())->getIDocumentDrawModelAccess();
+                    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrameFormat*>(GetRegisteredInNonConst())->getIDocumentDrawModelAccess();
                     const SdrLayerID aCurrentLayer(maAnchoredDrawObj.DrawObj()->GetLayer());
                     const SdrLayerID aControlLayerID(pIDDMA->GetControlsId());
                     const SdrLayerID aInvisibleControlLayerID(pIDDMA->GetInvisibleControlsId());
@@ -1308,8 +1308,8 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 }
                 // #i31698# - determine layout direction
                 // via draw frame format.
-                SwFrmFmt::tLayoutDir eLayoutDir =
-                                pAnchoredDrawObj->GetFrmFmt().GetLayoutDir();
+                SwFrameFormat::tLayoutDir eLayoutDir =
+                                pAnchoredDrawObj->GetFrameFormat().GetLayoutDir();
                 // use geometry of drawing object
                 SwRect aObjRect( rObj.GetSnapRect() );
                 // If drawing object is a member of a group, the adjustment
@@ -1329,19 +1329,19 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 SwTwips nYPosDiff(0L);
                 switch ( eLayoutDir )
                 {
-                    case SwFrmFmt::HORI_L2R:
+                    case SwFrameFormat::HORI_L2R:
                     {
                         nXPosDiff = aObjRect.Left() - aOldObjRect.Left();
                         nYPosDiff = aObjRect.Top() - aOldObjRect.Top();
                     }
                     break;
-                    case SwFrmFmt::HORI_R2L:
+                    case SwFrameFormat::HORI_R2L:
                     {
                         nXPosDiff = aOldObjRect.Right() - aObjRect.Right();
                         nYPosDiff = aObjRect.Top() - aOldObjRect.Top();
                     }
                     break;
-                    case SwFrmFmt::VERT_R2L:
+                    case SwFrameFormat::VERT_R2L:
                     {
                         nXPosDiff = aObjRect.Top() - aOldObjRect.Top();
                         nYPosDiff = aOldObjRect.Right() - aObjRect.Right();
@@ -1352,9 +1352,9 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                         OSL_FAIL( "<SwDrawContact::_Changed(..)> - unsupported layout direction" );
                     }
                 }
-                SfxItemSet aSet( GetFmt()->GetDoc()->GetAttrPool(),
+                SfxItemSet aSet( GetFormat()->GetDoc()->GetAttrPool(),
                                  RES_VERT_ORIENT, RES_HORI_ORIENT, 0 );
-                const SwFmtVertOrient& rVert = GetFmt()->GetVertOrient();
+                const SwFormatVertOrient& rVert = GetFormat()->GetVertOrient();
                 if ( nYPosDiff != 0 )
                 {
 
@@ -1363,15 +1363,15 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     {
                         nYPosDiff = -nYPosDiff;
                     }
-                    aSet.Put( SwFmtVertOrient( rVert.GetPos()+nYPosDiff,
+                    aSet.Put( SwFormatVertOrient( rVert.GetPos()+nYPosDiff,
                                                text::VertOrientation::NONE,
                                                rVert.GetRelationOrient() ) );
                 }
 
-                const SwFmtHoriOrient& rHori = GetFmt()->GetHoriOrient();
+                const SwFormatHoriOrient& rHori = GetFormat()->GetHoriOrient();
                 if ( !bAnchoredAsChar && nXPosDiff != 0 )
                 {
-                    aSet.Put( SwFmtHoriOrient( rHori.GetPos()+nXPosDiff,
+                    aSet.Put( SwFormatHoriOrient( rHori.GetPos()+nXPosDiff,
                                                text::HoriOrientation::NONE,
                                                rHori.GetRelationOrient() ) );
                 }
@@ -1379,7 +1379,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 if ( nYPosDiff ||
                      ( !bAnchoredAsChar && nXPosDiff != 0 ) )
                 {
-                    GetFmt()->GetDoc()->SetFlyFrmAttr( *(GetFmt()), aSet );
+                    GetFormat()->GetDoc()->SetFlyFrmAttr( *(GetFormat()), aSet );
                     // keep new object rectangle, to avoid multiple
                     // changes of the attributes by multiple event from
                     // the drawing layer - e.g. group objects and its members
@@ -1398,17 +1398,17 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                         SwFrm* pAnchorFrm = const_cast<SwAnchoredDrawObject*>(pAnchoredDrawObj)->AnchorFrm();
                         if(pAnchorFrm)
                         {
-                            pAnchorFrm->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
+                            pAnchorFrm->Prepare( PREP_FLY_ATTR_CHG, GetFormat() );
                         }
                     }
 
-                    lcl_textBoxSizeNotify(GetFmt());
+                    lcl_textBoxSizeNotify(GetFormat());
                 }
                 else if (eType == SDRUSERCALL_RESIZE)
                     // Even if the bounding box of the shape didn't change,
                     // notify about the size change, as an adjustment change
                     // may affect the size of the underlying textbox.
-                    lcl_textBoxSizeNotify(GetFmt());
+                    lcl_textBoxSizeNotify(GetFormat());
             }
         }
         break;
@@ -1425,20 +1425,20 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
 
 namespace
 {
-    static const SwFmtAnchor* lcl_getAnchorFmt( const SfxPoolItem& _rItem )
+    static const SwFormatAnchor* lcl_getAnchorFormat( const SfxPoolItem& _rItem )
     {
         sal_uInt16 nWhich = _rItem.Which();
-        const SwFmtAnchor* pAnchorFmt = NULL;
+        const SwFormatAnchor* pAnchorFormat = NULL;
         if ( RES_ATTRSET_CHG == nWhich )
         {
             static_cast<const SwAttrSetChg&>(_rItem).GetChgSet()->
-                GetItemState( RES_ANCHOR, false, reinterpret_cast<const SfxPoolItem**>(&pAnchorFmt) );
+                GetItemState( RES_ANCHOR, false, reinterpret_cast<const SfxPoolItem**>(&pAnchorFormat) );
         }
         else if ( RES_ANCHOR == nWhich )
         {
-            pAnchorFmt = &static_cast<const SwFmtAnchor&>(_rItem);
+            pAnchorFormat = &static_cast<const SwFormatAnchor&>(_rItem);
         }
-        return pAnchorFmt;
+        return pAnchorFormat;
     }
 }
 
@@ -1448,13 +1448,13 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             "<SwDrawContact::Modify(..)> called during disconnection.");
 
     sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
-    const SwFmtAnchor* pNewAnchorFmt = pNew ? lcl_getAnchorFmt( *pNew ) : NULL;
+    const SwFormatAnchor* pNewAnchorFormat = pNew ? lcl_getAnchorFormat( *pNew ) : NULL;
 
-    if ( pNewAnchorFmt )
+    if ( pNewAnchorFormat )
     {
         // Do not respond to a Reset Anchor !!!!!
         if ( SfxItemState::SET ==
-                GetFmt()->GetAttrSet().GetItemState( RES_ANCHOR, false ) )
+                GetFormat()->GetAttrSet().GetItemState( RES_ANCHOR, false ) )
         {
             // no connect to layout during disconnection
             if ( !mbDisconnectInProgress )
@@ -1471,13 +1471,13 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     pOldRect = &aOldRect;
                 }
                 // re-connect to layout due to anchor format change
-                ConnectToLayout( pNewAnchorFmt );
+                ConnectToLayout( pNewAnchorFormat );
                 // notify background of drawing objects
                 lcl_NotifyBackgroundOfObj( *this, *GetMaster(), pOldRect );
                 NotifyBackgrdOfAllVirtObjs( pOldRect );
 
-                const SwFmtAnchor* pOldAnchorFmt = pOld ? lcl_getAnchorFmt( *pOld ) : NULL;
-                if ( !pOldAnchorFmt || ( pOldAnchorFmt->GetAnchorId() != pNewAnchorFmt->GetAnchorId() ) )
+                const SwFormatAnchor* pOldAnchorFormat = pOld ? lcl_getAnchorFormat( *pOld ) : NULL;
+                if ( !pOldAnchorFormat || ( pOldAnchorFormat->GetAnchorId() != pNewAnchorFormat->GetAnchorId() ) )
                 {
                     OSL_ENSURE( maAnchoredDrawObj.DrawObj(), "SwDrawContact::Modify: no draw object here?" );
                     if ( maAnchoredDrawObj.DrawObj() )
@@ -1597,7 +1597,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
 
     // --> #i36181# - notify background of drawing object
     if ( _bMoveMasterToInvisibleLayer &&
-         !(GetFmt()->GetDoc()->IsInDtor()) &&
+         !(GetFormat()->GetDoc()->IsInDtor()) &&
          GetAnchorFrm() && !GetAnchorFrm()->IsInDtor() )
     {
         const Rectangle aOldRect( maAnchoredDrawObj.GetObjRectWithSpaces().SVRect() );
@@ -1633,7 +1633,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
         // Instead of removing 'master' object from drawing page, move the
         // 'master' drawing object into the corresponding invisible layer.
         {
-            //static_cast<SwFrmFmt*>(GetRegisteredIn())->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
+            //static_cast<SwFrameFormat*>(GetRegisteredIn())->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
             //                            RemoveObject( GetMaster()->GetOrdNum() );
             // #i18447# - in order to consider group object correct
             // use new method <SwDrawContact::MoveObjToInvisibleLayer(..)>
@@ -1652,7 +1652,7 @@ void SwDrawContact::RemoveMasterFromDrawPage()
         GetMaster()->SetUserCall( 0 );
         if ( GetMaster()->IsInserted() )
         {
-            static_cast<SwFrmFmt*>(GetRegisteredIn())->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
+            static_cast<SwFrameFormat*>(GetRegisteredIn())->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
                                         RemoveObject( GetMaster()->GetOrdNum() );
         }
     }
@@ -1701,21 +1701,21 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
     }
 }
 
-static SwTxtFrm* lcl_GetFlyInCntntAnchor( SwTxtFrm* _pProposedAnchorFrm,
-                                   const sal_Int32 _nTxtOfs )
+static SwTextFrm* lcl_GetFlyInContentAnchor( SwTextFrm* _pProposedAnchorFrm,
+                                   const sal_Int32 _nTextOfs )
 {
-    SwTxtFrm* pAct = _pProposedAnchorFrm;
-    SwTxtFrm* pTmp;
+    SwTextFrm* pAct = _pProposedAnchorFrm;
+    SwTextFrm* pTmp;
     do
     {
         pTmp = pAct;
         pAct = pTmp->GetFollow();
     }
-    while( pAct && _nTxtOfs >= pAct->GetOfst() );
+    while( pAct && _nTextOfs >= pAct->GetOfst() );
     return pTmp;
 }
 
-void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
+void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
 {
     // *no* connect to layout during disconnection from layout.
     if ( mbDisconnectInProgress )
@@ -1732,9 +1732,9 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
         return;
     }
 
-    SwFrmFmt* pDrawFrmFmt = static_cast<SwFrmFmt*>(GetRegisteredIn());
+    SwFrameFormat* pDrawFrameFormat = static_cast<SwFrameFormat*>(GetRegisteredIn());
 
-    if( !pDrawFrmFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )
+    if( !pDrawFrameFormat->getIDocumentLayoutAccess()->GetCurrentViewShell() )
         return;
 
     // remove 'virtual' drawing objects from writer
@@ -1744,7 +1744,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 
     if ( !pAnch )
     {
-        pAnch = &(pDrawFrmFmt->GetAnchor());
+        pAnch = &(pDrawFrameFormat->GetAnchor());
     }
 
     switch ( pAnch->GetAnchorId() )
@@ -1752,7 +1752,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
         case FLY_AT_PAGE:
                 {
                 sal_uInt16 nPgNum = pAnch->GetPageNum();
-                SwViewShell *pShell = pDrawFrmFmt->getIDocumentLayoutAccess()->GetCurrentViewShell();
+                SwViewShell *pShell = pDrawFrameFormat->getIDocumentLayoutAccess()->GetCurrentViewShell();
                 if( !pShell )
                     break;
                 SwRootFrm* pRoot = pShell->GetLayout();
@@ -1786,26 +1786,26 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                 // but not control objects:
                 // anchor at first found frame the 'master' object and
                 // at the following frames 'virtual' drawing objects.
-                // Note: method is similar to <SwFlyFrmFmt::MakeFrms(..)>
+                // Note: method is similar to <SwFlyFrameFormat::MakeFrms(..)>
                 SwModify *pModify = 0;
-                if( pAnch->GetCntntAnchor() )
+                if( pAnch->GetContentAnchor() )
                 {
                     if ( pAnch->GetAnchorId() == FLY_AT_FLY )
                     {
-                        SwNodeIndex aIdx( pAnch->GetCntntAnchor()->nNode );
-                        SwCntntNode* pCNd = pDrawFrmFmt->GetDoc()->GetNodes().GoNext( &aIdx );
-                        if ( SwIterator<SwFrm,SwCntntNode>( *pCNd ).First() )
+                        SwNodeIndex aIdx( pAnch->GetContentAnchor()->nNode );
+                        SwContentNode* pCNd = pDrawFrameFormat->GetDoc()->GetNodes().GoNext( &aIdx );
+                        if ( SwIterator<SwFrm,SwContentNode>( *pCNd ).First() )
                             pModify = pCNd;
                         else
                         {
-                            const SwNodeIndex& rIdx = pAnch->GetCntntAnchor()->nNode;
-                            SwFrmFmts& rFmts = *(pDrawFrmFmt->GetDoc()->GetSpzFrmFmts());
-                            for( auto pFlyFmt : rFmts )
+                            const SwNodeIndex& rIdx = pAnch->GetContentAnchor()->nNode;
+                            SwFrameFormats& rFormats = *(pDrawFrameFormat->GetDoc()->GetSpzFrameFormats());
+                            for( auto pFlyFormat : rFormats )
                             {
-                                if( pFlyFmt->GetCntnt().GetCntntIdx() &&
-                                    rIdx == *(pFlyFmt->GetCntnt().GetCntntIdx()) )
+                                if( pFlyFormat->GetContent().GetContentIdx() &&
+                                    rIdx == *(pFlyFormat->GetContent().GetContentIdx()) )
                                 {
-                                    pModify = pFlyFmt;
+                                    pModify = pFlyFormat;
                                     break;
                                 }
                             }
@@ -1813,7 +1813,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                     }
                     else
                     {
-                        pModify = pAnch->GetCntntAnchor()->nNode.GetNode().GetCntntNode();
+                        pModify = pAnch->GetContentAnchor()->nNode.GetNode().GetContentNode();
                     }
                 }
 
@@ -1835,8 +1835,8 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                     // (1) proposed anchor frame isn't a follow and
                     // (2) drawing object isn't a control object to be anchored
                     //     in header/footer.
-                    const bool bAdd = ( !pFrm->IsCntntFrm() ||
-                                        !static_cast<SwCntntFrm*>(pFrm)->IsFollow() ) &&
+                    const bool bAdd = ( !pFrm->IsContentFrm() ||
+                                        !static_cast<SwContentFrm*>(pFrm)->IsFollow() ) &&
                                       ( !::CheckControlLayer( GetMaster() ) ||
                                         !pFrm->FindFooterOrHeader() );
 
@@ -1851,11 +1851,11 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 
                         // find correct follow for as character anchored objects
                         if ((pAnch->GetAnchorId() == FLY_AS_CHAR) &&
-                             pFrm->IsTxtFrm() )
+                             pFrm->IsTextFrm() )
                         {
-                            pFrm = lcl_GetFlyInCntntAnchor(
-                                        static_cast<SwTxtFrm*>(pFrm),
-                                        pAnch->GetCntntAnchor()->nContent.GetIndex() );
+                            pFrm = lcl_GetFlyInContentAnchor(
+                                        static_cast<SwTextFrm*>(pFrm),
+                                        pAnch->GetContentAnchor()->nContent.GetIndex() );
                         }
 
                         if ( !pAnchorFrmOfMaster )
@@ -1902,7 +1902,7 @@ void SwDrawContact::InsertMasterIntoDrawPage()
 {
     if ( !GetMaster()->IsInserted() )
     {
-        GetFmt()->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)
+        GetFormat()->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)
                 ->InsertObject( GetMaster(), GetMaster()->GetOrdNumDirect() );
     }
     GetMaster()->SetUserCall( this );

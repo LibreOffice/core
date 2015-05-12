@@ -118,7 +118,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
 
             long nWidth = aRect.Width();
-            aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
+            aSet.Put(SwFormatFrmSize(ATT_VAR_SIZE, nWidth));
             // Height = width for a more consistent preview (analogous to edit range)
             aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
             const SwTOXBase* pCurTOX = 0;
@@ -195,7 +195,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
             rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, true));
 
     }
-    else if ( rSh.CrsrInsideInputFld() )
+    else if ( rSh.CrsrInsideInputField() )
     {
         rSet.DisableItem( FN_INSERT_IDX_ENTRY_DLG );
         rSet.DisableItem( FN_INSERT_AUTH_ENTRY_DLG );
@@ -231,7 +231,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
             rSet.Put(SfxBoolItem(FN_INSERT_IDX_ENTRY_DLG,
                                     0 != pIdxMrk));
 
-        SwField* pField = rSh.GetCurFld();
+        SwField* pField = rSh.GetCurField();
 
         if(bInReadonly)
             rSet.DisableItem(FN_INSERT_AUTH_ENTRY_DLG);

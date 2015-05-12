@@ -42,8 +42,8 @@ ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url)
 
     const OUString& characterStyle = startedLink.mCharacterStyle;
     sal_uInt16 poolId = ObtainPoolId(characterStyle);
-    closedLink->mINetFmt.SetVisitedFmtAndId(characterStyle, poolId);
-    closedLink->mINetFmt.SetINetFmtAndId(characterStyle, poolId);
+    closedLink->mINetFormat.SetVisitedFormatAndId(characterStyle, poolId);
+    closedLink->mINetFormat.SetINetFormatAndId(characterStyle, poolId);
 
     mClosedLinks.push_back(closedLink);
 }
@@ -61,10 +61,10 @@ ToxLinkProcessor::ObtainPoolId(const OUString& characterStyle) const
 
 
 void
-ToxLinkProcessor::InsertLinkAttributes(SwTxtNode& node)
+ToxLinkProcessor::InsertLinkAttributes(SwTextNode& node)
 {
     for (ClosedLink& clink : mClosedLinks) {
-        node.InsertItem(clink.mINetFmt, clink.mStartTextPos, clink.mEndTextPos);
+        node.InsertItem(clink.mINetFormat, clink.mStartTextPos, clink.mEndTextPos);
     }
 }
 

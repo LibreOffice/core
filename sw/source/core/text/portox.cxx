@@ -23,12 +23,12 @@
 #include "portox.hxx"
 #include "inftxt.hxx"
 
-void SwToxPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwToxPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
     {
         rInf.DrawViewOpt( *this, POR_TOX );
-        SwTxtPortion::Paint( rInf );
+        SwTextPortion::Paint( rInf );
     }
 }
 
@@ -40,7 +40,7 @@ SwIsoToxPortion::SwIsoToxPortion() : nViewWidth(0)
     SetWhichPor( POR_ISOTOX );
 }
 
-sal_uInt16 SwIsoToxPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwIsoToxPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
 {
     // Although we are const, nViewWidth should be calculated in the last
     // moment possible
@@ -51,19 +51,19 @@ sal_uInt16 SwIsoToxPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
             !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings()   )
     {
         if( !nViewWidth )
-            pThis->nViewWidth = rInf.GetTxtSize(OUString(' ')).Width();
+            pThis->nViewWidth = rInf.GetTextSize(OUString(' ')).Width();
     }
     else
         pThis->nViewWidth = 0;
     return nViewWidth;
 }
 
-bool SwIsoToxPortion::Format( SwTxtFormatInfo &rInf )
+bool SwIsoToxPortion::Format( SwTextFormatInfo &rInf )
 {
     return SwLinePortion::Format( rInf );
 }
 
-void SwIsoToxPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwIsoToxPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
         rInf.DrawViewOpt( *this, POR_TOX );

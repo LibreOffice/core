@@ -43,7 +43,7 @@ WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVer
     if (aWwFib.nFibBack >= 0x6A)   //Word97
     {
         xTableStream = pStg->OpenSotStream(OUString::createFromAscii(
-            aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
+            aWwFib.fWhichTableStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
 
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
         {
@@ -57,14 +57,14 @@ WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVer
 bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
 {
     bool bRet=false;
-    for( sal_uInt16 nCnt = pDoc->GetSpzFrmFmts()->size(); nCnt; )
+    for( sal_uInt16 nCnt = pDoc->GetSpzFrameFormats()->size(); nCnt; )
     {
-        const SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[ --nCnt ];
-        if ( RES_FLYFRMFMT != pFrmFmt->Which() &&
-            RES_DRAWFRMFMT != pFrmFmt->Which() )
+        const SwFrameFormat* pFrameFormat = (*pDoc->GetSpzFrameFormats())[ --nCnt ];
+        if ( RES_FLYFRMFMT != pFrameFormat->Which() &&
+            RES_DRAWFRMFMT != pFrameFormat->Which() )
                 continue;
-        const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-        SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+        const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+        SwPosition const*const pAPos = rAnchor.GetContentAnchor();
         if (pAPos &&
             ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
              (FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
@@ -106,18 +106,18 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 
     if( aStart < aDocEnd )
     {
-        SwTxtFmtColl* pColl = pD->getIDocumentStylePoolAccess().GetTxtCollFromPool
+        SwTextFormatColl* pColl = pD->getIDocumentStylePoolAccess().GetTextCollFromPool
             (RES_POOLCOLL_STANDARD, false);
         sal_uInt16 nGlosEntry = 0;
-        SwCntntNode* pCNd = 0;
+        SwContentNode* pCNd = 0;
         do {
             SwPaM aPam( aStart );
             {
                 SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
                 ++rIdx;
-                if( 0 == ( pCNd = rIdx.GetNode().GetTxtNode() ) )
+                if( 0 == ( pCNd = rIdx.GetNode().GetTextNode() ) )
                 {
-                    pCNd = pD->GetNodes().MakeTxtNode( rIdx, pColl );
+                    pCNd = pD->GetNodes().MakeTextNode( rIdx, pColl );
                     rIdx = *pCNd;
                 }
             }
@@ -126,11 +126,11 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             {
                 SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
                 rIdx = aStart.GetNode().EndOfSectionIndex() - 1;
-                if(( 0 == ( pCNd = rIdx.GetNode().GetCntntNode() ) )
+                if(( 0 == ( pCNd = rIdx.GetNode().GetContentNode() ) )
                         || HasBareGraphicEnd(pD,rIdx))
                 {
                     ++rIdx;
-                    pCNd = pD->GetNodes().MakeTxtNode( rIdx, pColl );
+                    pCNd = pD->GetNodes().MakeTextNode( rIdx, pColl );
                     rIdx = *pCNd;
                 }
             }
@@ -167,7 +167,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                     SwDoc* pGlDoc = rBlocks.GetDoc();
                     SwNodeIndex aIdx( pGlDoc->GetNodes().GetEndOfContent(),
                         -1 );
-                    pCNd = aIdx.GetNode().GetCntntNode();
+                    pCNd = aIdx.GetNode().GetContentNode();
                     SwPosition aPos(aIdx, SwIndex(pCNd, (pCNd) ? pCNd->Len() : 0));
                     pD->getIDocumentContentOperations().CopyRange( aPam, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
                     rBlocks.PutDoc();
@@ -215,13 +215,13 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 
                 SwNodeIndex aIdx(
                     *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
-                if( !aIdx.GetNode().IsTxtNode() )
+                if( !aIdx.GetNode().IsTextNode() )
                 {
                     OSL_ENSURE( false, "wo ist der TextNode?" );
                     pD->GetNodes().GoNext( &aIdx );
                 }
                 SwPaM aPamo( aIdx );
-                aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetCntntNode(),
+                aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(),
                     0);
                 pRdr->LoadDoc(aPamo,this);
 

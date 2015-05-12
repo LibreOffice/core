@@ -48,23 +48,23 @@ public:
     SvxOptionsGrid();
     ~SvxOptionsGrid();
 
-    void    SetFldDrawX(    sal_uInt32 nSet){nFldDrawX      = nSet;}
-    void    SetFldDivisionX(sal_uInt32 nSet){nFldDivisionX  = nSet;}
-    void    SetFldDrawY   ( sal_uInt32 nSet){nFldDrawY      = nSet;}
-    void    SetFldDivisionY(sal_uInt32 nSet){nFldDivisionY  = nSet;}
-    void    SetFldSnapX(    sal_uInt32 nSet){nFldSnapX      = nSet;}
-    void    SetFldSnapY   ( sal_uInt32 nSet){nFldSnapY      = nSet;}
+    void    SetFieldDrawX(    sal_uInt32 nSet){nFldDrawX      = nSet;}
+    void    SetFieldDivisionX(sal_uInt32 nSet){nFldDivisionX  = nSet;}
+    void    SetFieldDrawY   ( sal_uInt32 nSet){nFldDrawY      = nSet;}
+    void    SetFieldDivisionY(sal_uInt32 nSet){nFldDivisionY  = nSet;}
+    void    SetFieldSnapX(    sal_uInt32 nSet){nFldSnapX      = nSet;}
+    void    SetFieldSnapY   ( sal_uInt32 nSet){nFldSnapY      = nSet;}
     void    SetUseGridSnap( bool bSet ) {bUseGridsnap   = bSet;}
     void    SetSynchronize( bool bSet ) {bSynchronize   = bSet;}
     void    SetGridVisible( bool bSet ) {bGridVisible   = bSet;}
     void    SetEqualGrid( bool bSet )   {bEqualGrid     = bSet;}
 
-    sal_uInt32  GetFldDrawX(    ) const {  return nFldDrawX;    }
-    sal_uInt32  GetFldDivisionX() const {  return nFldDivisionX;}
-    sal_uInt32  GetFldDrawY   ( ) const {  return nFldDrawY;    }
-    sal_uInt32  GetFldDivisionY() const {  return nFldDivisionY;}
-    sal_uInt32  GetFldSnapX(    ) const {  return nFldSnapX;    }
-    sal_uInt32  GetFldSnapY   ( ) const {  return nFldSnapY;    }
+    sal_uInt32  GetFieldDrawX(    ) const {  return nFldDrawX;    }
+    sal_uInt32  GetFieldDivisionX() const {  return nFldDivisionX;}
+    sal_uInt32  GetFieldDrawY   ( ) const {  return nFldDrawY;    }
+    sal_uInt32  GetFieldDivisionY() const {  return nFldDivisionY;}
+    sal_uInt32  GetFieldSnapX(    ) const {  return nFldSnapX;    }
+    sal_uInt32  GetFieldSnapY   ( ) const {  return nFldSnapY;    }
     bool        GetUseGridSnap( ) const {  return bUseGridsnap; }
     bool        GetSynchronize( ) const {  return bSynchronize; }
     bool        GetGridVisible( ) const {  return bGridVisible; }

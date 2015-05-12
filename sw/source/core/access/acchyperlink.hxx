@@ -26,7 +26,7 @@
 #include <fmtinfmt.hxx>
 
 class SwAccessibleParagraph;
-class SwTxtAttr;
+class SwTextAttr;
 
 class SwAccessibleHyperlink :
         public ::cppu::WeakImplHelper<
@@ -43,7 +43,7 @@ class SwAccessibleHyperlink :
                            SwAccessibleParagraph *p,
                               sal_Int32 nStt, sal_Int32 nEnd    );
 
-    const SwTxtAttr *GetTxtAttr() const;
+    const SwTextAttr *GetTextAttr() const;
     void Invalidate();
 
 public:

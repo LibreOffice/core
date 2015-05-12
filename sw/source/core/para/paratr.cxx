@@ -43,54 +43,54 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT2_AUTOFACTORY( SwFmtDrop, SfxPoolItem, SwClient);
+TYPEINIT2_AUTOFACTORY( SwFormatDrop, SfxPoolItem, SwClient);
 TYPEINIT1_AUTOFACTORY( SwRegisterItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY( SwNumRuleItem, SfxStringItem);
 TYPEINIT1_AUTOFACTORY( SwParaConnectBorderItem, SfxBoolItem);
 
-SwFmtDrop::SwFmtDrop()
+SwFormatDrop::SwFormatDrop()
     : SfxPoolItem( RES_PARATR_DROP ),
     SwClient( 0 ),
     pDefinedIn( 0 ),
     nDistance( 0 ),
-    nReadFmt( USHRT_MAX ),
+    nReadFormat( USHRT_MAX ),
     nLines( 0 ),
     nChars( 0 ),
     bWholeWord( false )
 {
 }
 
-SwFmtDrop::SwFmtDrop( const SwFmtDrop &rCpy )
+SwFormatDrop::SwFormatDrop( const SwFormatDrop &rCpy )
     : SfxPoolItem( RES_PARATR_DROP ),
     SwClient( rCpy.GetRegisteredInNonConst() ),
     pDefinedIn( 0 ),
     nDistance( rCpy.GetDistance() ),
-    nReadFmt( rCpy.nReadFmt ),
+    nReadFormat( rCpy.nReadFormat ),
     nLines( rCpy.GetLines() ),
     nChars( rCpy.GetChars() ),
     bWholeWord( rCpy.GetWholeWord() )
 {
 }
 
-SwFmtDrop::~SwFmtDrop()
+SwFormatDrop::~SwFormatDrop()
 {
 }
 
-void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
+void SwFormatDrop::SetCharFormat( SwCharFormat *pNew )
 {
     // Rewire
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
     if(pNew)
         pNew->Add( this );
-    nReadFmt = USHRT_MAX;
+    nReadFormat = USHRT_MAX;
 }
 
-void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
+void SwFormatDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
     if( pDefinedIn )
     {
-        if( !pDefinedIn->ISA( SwFmt ))
+        if( !pDefinedIn->ISA( SwFormat ))
             pDefinedIn->ModifyNotification( this, this );
         else if( pDefinedIn->HasWriterListeners() &&
                 !pDefinedIn->IsModifyLocked() )
@@ -102,28 +102,28 @@ void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
     }
 }
 
-bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
+bool SwFormatDrop::GetInfo( SfxPoolItem& ) const
 {
     return true; // Continue
 }
 
-bool SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const
+bool SwFormatDrop::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return ( nLines == static_cast<const SwFmtDrop&>(rAttr).GetLines() &&
-             nChars == static_cast<const SwFmtDrop&>(rAttr).GetChars() &&
-             nDistance ==  static_cast<const SwFmtDrop&>(rAttr).GetDistance() &&
-             bWholeWord == static_cast<const SwFmtDrop&>(rAttr).GetWholeWord() &&
-             GetCharFmt() == static_cast<const SwFmtDrop&>(rAttr).GetCharFmt() &&
-             pDefinedIn == static_cast<const SwFmtDrop&>(rAttr).pDefinedIn );
+    return ( nLines == static_cast<const SwFormatDrop&>(rAttr).GetLines() &&
+             nChars == static_cast<const SwFormatDrop&>(rAttr).GetChars() &&
+             nDistance ==  static_cast<const SwFormatDrop&>(rAttr).GetDistance() &&
+             bWholeWord == static_cast<const SwFormatDrop&>(rAttr).GetWholeWord() &&
+             GetCharFormat() == static_cast<const SwFormatDrop&>(rAttr).GetCharFormat() &&
+             pDefinedIn == static_cast<const SwFormatDrop&>(rAttr).pDefinedIn );
 }
 
-SfxPoolItem* SwFmtDrop::Clone( SfxItemPool* ) const
+SfxPoolItem* SwFormatDrop::Clone( SfxItemPool* ) const
 {
-    return new SwFmtDrop( *this );
+    return new SwFormatDrop( *this );
 }
 
-bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFormatDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
@@ -145,9 +145,9 @@ bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_DROPCAP_CHAR_STYLE_NAME :
         {
             OUString sName;
-            if(GetCharFmt())
+            if(GetCharFormat())
                 sName = SwStyleNameMapper::GetProgName(
-                        GetCharFmt()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                        GetCharFormat()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             rVal <<= sName;
         }
         break;
@@ -155,7 +155,7 @@ bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {

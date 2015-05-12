@@ -761,8 +761,8 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
             pTargetView->GetWrtShell().StartAction();
             SwgReaderOption aOpt;
-            aOpt.SetTxtFmts( true );
-            aOpt.SetFrmFmts( true );
+            aOpt.SetTextFormats( true );
+            aOpt.SetFrameFormats( true );
             aOpt.SetPageDescs( true );
             aOpt.SetNumRules( true );
             aOpt.SetMerge( false );
@@ -1166,8 +1166,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
         pTargetView->GetWrtShell().StartAction();
         SwgReaderOption aOpt;
-        aOpt.SetTxtFmts( true );
-        aOpt.SetFrmFmts( true );
+        aOpt.SetTextFormats( true );
+        aOpt.SetFrameFormats( true );
         aOpt.SetPageDescs( true );
         aOpt.SetNumRules( true );
         aOpt.SetMerge( false );

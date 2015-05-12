@@ -2943,12 +2943,12 @@ bool ImpEditEngine::UpdateFields()
                 rField.Reset();
 
                 if ( aStatus.MarkFields() )
-                    rField.GetFldColor() = new Color( GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor );
+                    rField.GetFieldColor() = new Color( GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor );
 
                 OUString aFldValue =
                     GetEditEnginePtr()->CalcFieldValue(
                         static_cast<const SvxFieldItem&>(*rField.GetItem()),
-                        nPara, rField.GetStart(), rField.GetTxtColor(), rField.GetFldColor());
+                        nPara, rField.GetStart(), rField.GetTextColor(), rField.GetFieldColor());
 
                 rField.SetFieldValue(aFldValue);
                 if (rField != *pCurrent)
@@ -3089,10 +3089,10 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace )
                 // width, here not preferred. I general, it is best not leave it
                 // to StartPosX, also the right indents have to be taken into
                 // account!
-                nCurWidth = GetXValue( rLRItem.GetTxtLeft() + nSpaceBeforeAndMinLabelWidth );
+                nCurWidth = GetXValue( rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth );
                 if ( nLine == 0 )
                 {
-                    long nFI = GetXValue( rLRItem.GetTxtFirstLineOfst() );
+                    long nFI = GetXValue( rLRItem.GetTextFirstLineOfst() );
                     nCurWidth -= nFI;
                     if ( pPortion->GetBulletX() > nCurWidth )
                     {

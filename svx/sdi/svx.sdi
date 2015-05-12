@@ -8299,7 +8299,7 @@ SfxVoidItem OutlineUp SID_OUTLINE_UP
 ]
 
 
-SvxFmtBreakItem Pagebreak SID_ATTR_PARA_PAGEBREAK
+SvxFormatBreakItem Pagebreak SID_ATTR_PARA_PAGEBREAK
 
 [
     /* flags: */
@@ -8486,7 +8486,7 @@ SfxVoidItem ParagraphDialog SID_PARA_DLG
 ]
 
 
-SvxFmtKeepItem ParaKeepTogether SID_ATTR_PARA_KEEP
+SvxFormatKeepItem ParaKeepTogether SID_ATTR_PARA_KEEP
 
 [
     /* flags: */
@@ -8513,7 +8513,7 @@ SvxFmtKeepItem ParaKeepTogether SID_ATTR_PARA_KEEP
 ]
 
 
-SvxFmtSplitItem ParaSplit SID_ATTR_PARA_SPLIT
+SvxFormatSplitItem ParaSplit SID_ATTR_PARA_SPLIT
 
 [
     /* flags: */

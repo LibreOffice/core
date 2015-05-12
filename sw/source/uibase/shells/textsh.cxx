@@ -167,7 +167,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
             SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
             SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
-            if( pACorr && rACfg.IsAutoFmtByInput()
+            if( pACorr && rACfg.IsAutoFormatByInput()
                 && pACorr->IsAutoCorrFlag(
                     CptlSttSntnc | CptlSttWrd | AddNonBrkSpace | ChgOrdinalNumber | ChgToEnEmDash | SetINetAttr | Autocorrect ) )
             {
@@ -199,7 +199,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case FN_INSERT_BREAK:
         {
-            if( !rSh.CrsrInsideInputFld() )
+            if( !rSh.CrsrInsideInputField() )
             {
                 rSh.SplitNode();
             }
@@ -432,10 +432,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 uno::Reference< chart2::data::XDataProvider > xDataProvider;
                 bool bFillWithData = true;
                 OUString aRangeString;
-                if (!GetShell().IsTblComplexForChart())
+                if (!GetShell().IsTableComplexForChart())
                 {
-                    SwFrmFmt* pTblFmt = GetShell().GetTableFmt();
-                    aRangeString = pTblFmt->GetName();
+                    SwFrameFormat* pTableFormat = GetShell().GetTableFormat();
+                    aRangeString = pTableFormat->GetName();
                     aRangeString += OUString( '.' );
                     aRangeString += GetShell().GetBoxNms();
 
@@ -508,7 +508,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SwFlyFrmAttrMgr aMgr( true, GetShellPtr(), FRMMGR_TYPE_TEXT );
             if(nCols > 1)
             {
-                SwFmtCol aCol;
+                SwFormatCol aCol;
                 aCol.Init( nCols, aCol.GetGutterWidth(), aCol.GetWishWidth() );
                 aMgr.SetCol( aCol );
             }
@@ -554,10 +554,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 const sal_uInt16 nCols = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
                 if( !bSingleCol && 1 < nCols )
                 {
-                    SwFmtCol aFmtCol;
-                    aFmtCol.Init( nCols , (rReq.IsAPI() ? 0
+                    SwFormatCol aFormatCol;
+                    aFormatCol.Init( nCols , (rReq.IsAPI() ? 0
                                         : DEF_GUTTER_WIDTH), USHRT_MAX );
-                    aMgr.SetCol(aFmtCol);
+                    aMgr.SetCol(aFormatCol);
                 }
             }
 
@@ -585,12 +585,12 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SfxItemSet aSet(GetPool(), aFrmAttrRange );
             aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             const SwRect &rPg = GetShell().GetAnyCurRect(RECT_PAGE);
-            SwFmtFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
+            SwFormatFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
             aFrmSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
             aSet.Put(aFrmSize);
 
             const SwRect &rPr = GetShell().GetAnyCurRect(RECT_PAGE_PRT);
-            SwFmtFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
+            SwFormatFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
             aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
             aSet.Put(aPrtSize);
 
@@ -703,7 +703,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
             if ( GetShell().IsSelFrmMode()
-                 || GetShell().CrsrInsideInputFld()
+                 || GetShell().CrsrInsideInputField()
                  || SfxObjectCreateMode::EMBEDDED == eCreateMode
                  || bCrsrInHidden )
             {
@@ -713,7 +713,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
         case SID_INSERT_DIAGRAM:
             if( !aMOpt.IsChart()
-                || GetShell().CrsrInsideInputFld()
+                || GetShell().CrsrInsideInputField()
                 || eCreateMode == SfxObjectCreateMode::EMBEDDED
                 || bCrsrInHidden )
             {
@@ -725,7 +725,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 if( !aMOpt.IsMath()
                     || eCreateMode == SfxObjectCreateMode::EMBEDDED
                     || bCrsrInHidden
-                    || rSh.CrsrInsideInputFld() )
+                    || rSh.CrsrInsideInputField() )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -740,7 +740,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                         rSet.DisableItem( nWhich );
                     }
                     else if( GetShell().IsSelFrmMode()
-                             || GetShell().CrsrInsideInputFld() )
+                             || GetShell().CrsrInsideInputField() )
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -758,7 +758,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case FN_INSERT_FRAME_INTERACT:
                 {
                     if( GetShell().IsSelFrmMode()
-                        || GetShell().CrsrInsideInputFld()
+                        || GetShell().CrsrInsideInputField()
                         || bCrsrInHidden )
                         rSet.DisableItem(nWhich);
                 }
@@ -773,27 +773,27 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     const SfxPoolItem* pItem;
                     if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false, &pItem))
                     {
-                        const SwFmtINetFmt* pINetFmt = static_cast<const SwFmtINetFmt*>(pItem);
-                        aHLinkItem.SetURL(pINetFmt->GetValue());
-                        aHLinkItem.SetTargetFrame(pINetFmt->GetTargetFrame());
-                        aHLinkItem.SetIntName(pINetFmt->GetName());
-                        const SvxMacro *pMacro = pINetFmt->GetMacro( SFX_EVENT_MOUSEOVER_OBJECT );
+                        const SwFormatINetFormat* pINetFormat = static_cast<const SwFormatINetFormat*>(pItem);
+                        aHLinkItem.SetURL(pINetFormat->GetValue());
+                        aHLinkItem.SetTargetFrame(pINetFormat->GetTargetFrame());
+                        aHLinkItem.SetIntName(pINetFormat->GetName());
+                        const SvxMacro *pMacro = pINetFormat->GetMacro( SFX_EVENT_MOUSEOVER_OBJECT );
                         if( pMacro )
                             aHLinkItem.SetMacro(HYPERDLG_EVENT_MOUSEOVER_OBJECT, *pMacro);
 
-                        pMacro = pINetFmt->GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
+                        pMacro = pINetFormat->GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
                         if( pMacro )
                             aHLinkItem.SetMacro(HYPERDLG_EVENT_MOUSECLICK_OBJECT, *pMacro);
 
-                        pMacro = pINetFmt->GetMacro( SFX_EVENT_MOUSEOUT_OBJECT );
+                        pMacro = pINetFormat->GetMacro( SFX_EVENT_MOUSEOUT_OBJECT );
                         if( pMacro )
                             aHLinkItem.SetMacro(HYPERDLG_EVENT_MOUSEOUT_OBJECT, *pMacro);
 
                         // Get the text of the Link.
                         rSh.StartAction();
                         rSh.CreateCrsr();
-                        rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT,true);
-                        OUString sLinkName = rSh.GetSelTxt();
+                        rSh.SwCrsrShell::SelectTextAttr(RES_TXTATR_INETFMT,true);
+                        OUString sLinkName = rSh.GetSelText();
                         aHLinkItem.SetName(sLinkName);
                         aHLinkItem.SetInsertMode(HLINK_FIELD);
                         rSh.DestroyCrsr();
@@ -801,7 +801,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     }
                     else
                     {
-                        OUString sReturn = rSh.GetSelTxt();
+                        OUString sReturn = rSh.GetSelText();
                         sReturn = sReturn.copy(0, std::min<sal_Int32>(255, sReturn.getLength()));
                         aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
                     }
@@ -822,7 +822,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     if( ((nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE ) & nSel ) || bCrsrInHidden )
                         rSet.DisableItem(nWhich);
                 }
-                else if ( rSh.CrsrInsideInputFld() )
+                else if ( rSh.CrsrInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -832,7 +832,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             {
                 //#i80458# column dialog cannot work if the selection contains different page styles and different sections
                 bool bDisable = true;
-                if( rSh.GetFlyFrmFmt() || rSh.GetSelectedPageDescs() )
+                if( rSh.GetFlyFrameFormat() || rSh.GetSelectedPageDescs() )
                     bDisable = false;
                 if( bDisable )
                 {
@@ -952,7 +952,7 @@ void SwTextShell::ExecRotateTransliteration( SfxRequest & rReq )
 }
 
 SwTextShell::SwTextShell(SwView &_rView) :
-    SwBaseShell(_rView), pPostItFldMgr( 0 )
+    SwBaseShell(_rView), pPostItFieldMgr( 0 )
 {
     SetName(OUString("Text"));
     SetHelpId(SW_TEXTSHELL);

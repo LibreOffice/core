@@ -42,13 +42,13 @@ IndexEntrySupplierWrapper::~IndexEntrySupplierWrapper()
 {
 }
 
-OUString IndexEntrySupplierWrapper::GetIndexKey( const OUString& rTxt,
-                                                 const OUString& rTxtReading,
+OUString IndexEntrySupplierWrapper::GetIndexKey( const OUString& rText,
+                                                 const OUString& rTextReading,
                                                  const ::com::sun::star::lang::Locale& rLocale ) const
 {
     OUString sRet;
     try {
-        sRet = xIES->getIndexKey( rTxt, rTxtReading, rLocale );
+        sRet = xIES->getIndexKey( rText, rTextReading, rLocale );
     }
     catch (const uno::Exception& e)
     {
@@ -101,15 +101,15 @@ bool IndexEntrySupplierWrapper::LoadAlgorithm(
 }
 
 sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
-            const OUString& rTxt1, const OUString& rTxtReading1,
+            const OUString& rText1, const OUString& rTextReading1,
             const ::com::sun::star::lang::Locale& rLocale1,
-            const OUString& rTxt2, const OUString& rTxtReading2,
+            const OUString& rText2, const OUString& rTextReading2,
             const ::com::sun::star::lang::Locale& rLocale2 ) const
 {
     sal_Int16 nRet = 0;
     try {
-        nRet = xIES->compareIndexEntry( rTxt1, rTxtReading1, rLocale1,
-                                        rTxt2, rTxtReading2, rLocale2 );
+        nRet = xIES->compareIndexEntry( rText1, rTextReading1, rLocale1,
+                                        rText2, rTextReading2, rLocale2 );
     }
     catch (const uno::Exception& e)
     {

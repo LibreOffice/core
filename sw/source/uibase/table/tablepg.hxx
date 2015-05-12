@@ -61,7 +61,7 @@ class SwFormatTablePage : public SfxTabPage
 
     VclPtr<ListBox>        m_pTextDirectionLB;
 
-    SwTableRep*     pTblData;
+    SwTableRep*     pTableData;
     SwTwips         nSaveWidth;
     SwTwips         nMinTableWidth;
     bool            bModified;
@@ -103,7 +103,7 @@ class SwTableColumnPage : public SfxTabPage
     VclPtr<PushButton>     m_pUpBtn;
     VclPtr<PushButton>     m_pDownBtn;
 
-    SwTableRep*     pTblData;
+    SwTableRep*     pTableData;
     PercentField  m_aFieldArr[MET_FIELDS];
     VclPtr<FixedText>      m_pTextArr[MET_FIELDS];
     SwTwips         nTableWidth;
@@ -111,9 +111,9 @@ class SwTableColumnPage : public SfxTabPage
     sal_uInt16          nNoOfCols;
     sal_uInt16          nNoOfVisibleCols;
     // Remember the width, when switching to autoalign
-    sal_uInt16          aValueTbl[MET_FIELDS];// primary assignment of the MetricFields
+    sal_uInt16          aValueTable[MET_FIELDS];// primary assignment of the MetricFields
     bool            bModified:1;
-    bool            bModifyTbl:1;
+    bool            bModifyTable:1;
     bool            bPercentMode:1;
 
     void        Init(bool bWeb);

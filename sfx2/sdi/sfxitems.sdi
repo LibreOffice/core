@@ -104,7 +104,7 @@
         String Language MID_SCRIPT_ORGANIZER_LANGUAGE;
     };
     item SfxScriptOrganizer SfxScriptOrganizerItem;
-    item String     SvxClipboardFmtItem;    //! Dummy
+    item String     SvxClipboardFormatItem;    //! Dummy
 
     struct SvxZoom
     {

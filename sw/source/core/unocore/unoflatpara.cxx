@@ -62,8 +62,8 @@ CreateFlatParagraphIterator(SwDoc & rDoc, sal_Int32 const nTextMarkupType,
 
 }
 
-SwXFlatParagraph::SwXFlatParagraph( SwTxtNode& rTxtNode, const OUString& aExpandText, const ModelToViewHelper& rMap )
-    : SwXFlatParagraph_Base(& rTxtNode, rMap)
+SwXFlatParagraph::SwXFlatParagraph( SwTextNode& rTextNode, const OUString& aExpandText, const ModelToViewHelper& rMap )
+    : SwXFlatParagraph_Base(& rTextNode, rMap)
     , maExpandText(aExpandText)
 {
 }
@@ -190,17 +190,17 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal ) t
 {
     SolarMutexGuard aGuard;
 
-    if (GetTxtNode())
+    if (GetTextNode())
     {
         if ( text::TextMarkupType::SPELLCHECK == nType )
-            GetTxtNode()->SetWrongDirty( !bVal );
+            GetTextNode()->SetWrongDirty( !bVal );
         else if ( text::TextMarkupType::SMARTTAG == nType )
-            GetTxtNode()->SetSmartTagDirty( !bVal );
+            GetTextNode()->SetSmartTagDirty( !bVal );
         else if( text::TextMarkupType::PROOFREADING == nType )
         {
-            GetTxtNode()->SetGrammarCheckDirty( !bVal );
+            GetTextNode()->SetGrammarCheckDirty( !bVal );
             if( bVal )
-                ::finishGrammarCheck( *GetTxtNode() );
+                ::finishGrammarCheck( *GetTextNode() );
         }
     }
 }
@@ -209,14 +209,14 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal ) t
 sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (GetTxtNode())
+    if (GetTextNode())
     {
         if ( text::TextMarkupType::SPELLCHECK == nType )
-            return GetTxtNode()->IsWrongDirty();
+            return GetTextNode()->IsWrongDirty();
         else if ( text::TextMarkupType::PROOFREADING == nType )
-            return GetTxtNode()->IsGrammarCheckDirty();
+            return GetTextNode()->IsGrammarCheckDirty();
         else if ( text::TextMarkupType::SMARTTAG == nType )
-            return GetTxtNode()->IsSmartTagDirty();
+            return GetTextNode()->IsSmartTagDirty();
     }
 
     return sal_False;
@@ -226,7 +226,7 @@ sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::R
 sal_Bool SAL_CALL SwXFlatParagraph::isModified() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return 0 == GetTxtNode();
+    return 0 == GetTextNode();
 }
 
 // text::XFlatParagraph:
@@ -234,10 +234,10 @@ lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sa
     throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (!GetTxtNode())
+    if (!GetTextNode())
         return LanguageTag::convertToLocale( LANGUAGE_NONE );
 
-    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( GetTxtNode()->GetLang(nPos, nLen) ) );
+    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( GetTextNode()->GetLang(nPos, nLen) ) );
     return aLocale;
 }
 
@@ -247,10 +247,10 @@ lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPo
 {
     SolarMutexGuard aGuard;
 
-    if (!GetTxtNode())
+    if (!GetTextNode())
         return LanguageTag::convertToLocale( LANGUAGE_NONE );
 
-    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( GetTxtNode()->GetLang(nPos, nLen) ) );
+    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( GetTextNode()->GetLang(nPos, nLen) ) );
     return aLocale;
 }
 
@@ -259,18 +259,18 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 {
     SolarMutexGuard aGuard;
 
-    if (!GetTxtNode())
+    if (!GetTextNode())
         return;
 
-    SwTxtNode *const pOldTxtNode = GetTxtNode();
+    SwTextNode *const pOldTextNode = GetTextNode();
 
-    SwPaM aPaM( *GetTxtNode(), nPos, *GetTxtNode(), nPos+nLen );
+    SwPaM aPaM( *GetTextNode(), nPos, *GetTextNode(), nPos+nLen );
 
-    UnoActionContext aAction( GetTxtNode()->GetDoc() );
+    UnoActionContext aAction( GetTextNode()->GetDoc() );
 
     const uno::Reference< text::XTextRange > xRange =
         SwXTextRange::CreateXTextRange(
-            *GetTxtNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
+            *GetTextNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
@@ -278,10 +278,10 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
             xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
     }
 
-    IDocumentContentOperations* pIDCO = pOldTxtNode->getIDocumentContentOperations();
+    IDocumentContentOperations* pIDCO = pOldTextNode->getIDocumentContentOperations();
     pIDCO->ReplaceRange( aPaM, aNewText, false );
 
-    ClearTxtNode(); // TODO: is this really needed?
+    ClearTextNode(); // TODO: is this really needed?
 }
 
 // text::XFlatParagraph:
@@ -289,16 +289,16 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
 {
     SolarMutexGuard aGuard;
 
-    if (!GetTxtNode())
+    if (!GetTextNode())
         return;
 
-    SwPaM aPaM( *GetTxtNode(), nPos, *GetTxtNode(), nPos+nLen );
+    SwPaM aPaM( *GetTextNode(), nPos, *GetTextNode(), nPos+nLen );
 
-    UnoActionContext aAction( GetTxtNode()->GetDoc() );
+    UnoActionContext aAction( GetTextNode()->GetDoc() );
 
     const uno::Reference< text::XTextRange > xRange =
         SwXTextRange::CreateXTextRange(
-            *GetTxtNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
+            *GetTextNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
@@ -306,7 +306,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
             xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
     }
 
-    ClearTxtNode(); // TODO: is this really needed?
+    ClearTextNode(); // TODO: is this really needed?
 }
 
 // text::XFlatParagraph:
@@ -380,7 +380,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
     if (!mpDoc)
         return xRet;
 
-    SwTxtNode* pRet = 0;
+    SwTextNode* pRet = 0;
     if ( mbAutomatic )
     {
         SwViewShell* pViewShell = mpDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -399,23 +399,23 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
                     return xRet;
 
                 // search for invalid content:
-                SwCntntFrm* pCnt = pCurrentPage->ContainsCntnt();
+                SwContentFrm* pCnt = pCurrentPage->ContainsContent();
 
                 while( pCnt && pCurrentPage->IsAnLower( pCnt ) )
                 {
-                    SwTxtNode* pTxtNode = dynamic_cast<SwTxtNode*>( pCnt->GetNode()->GetTxtNode() );
+                    SwTextNode* pTextNode = dynamic_cast<SwTextNode*>( pCnt->GetNode()->GetTextNode() );
 
-                    if ( pTxtNode &&
+                    if ( pTextNode &&
                         ((mnType == text::TextMarkupType::SPELLCHECK &&
-                                pTxtNode->IsWrongDirty()) ||
+                                pTextNode->IsWrongDirty()) ||
                          (mnType == text::TextMarkupType::PROOFREADING &&
-                                pTxtNode->IsGrammarCheckDirty())) )
+                                pTextNode->IsGrammarCheckDirty())) )
                     {
-                        pRet = pTxtNode;
+                        pRet = pTextNode;
                         break;
                     }
 
-                    pCnt = pCnt->GetNextCntntFrm();
+                    pCnt = pCnt->GetNextContentFrm();
                 }
             }
 
@@ -447,7 +447,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
 
             ++mnCurrentNode;
 
-            pRet = dynamic_cast<SwTxtNode*>(pNd);
+            pRet = dynamic_cast<SwTextNode*>(pNd);
             if ( pRet )
                 break;
 
@@ -495,29 +495,29 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
     if ( !pFlatParagraph )
         return xRet;
 
-    SwTxtNode const*const pCurrentNode = pFlatParagraph->GetTxtNode();
+    SwTextNode const*const pCurrentNode = pFlatParagraph->GetTextNode();
 
     if ( !pCurrentNode )
         return xRet;
 
-    SwTxtNode* pNextTxtNode = 0;
+    SwTextNode* pNextTextNode = 0;
     const SwNodes& rNodes = pCurrentNode->GetDoc()->GetNodes();
 
     for( sal_uLong nCurrentNode = pCurrentNode->GetIndex() + 1; nCurrentNode < rNodes.Count(); ++nCurrentNode )
     {
         SwNode* pNd = rNodes[ nCurrentNode ];
-        pNextTxtNode = dynamic_cast<SwTxtNode*>(pNd);
-        if ( pNextTxtNode )
+        pNextTextNode = dynamic_cast<SwTextNode*>(pNd);
+        if ( pNextTextNode )
             break;
     }
 
-    if ( pNextTxtNode )
+    if ( pNextTextNode )
     {
         // Expand the string:
-        const ModelToViewHelper aConversionMap(*pNextTxtNode);
+        const ModelToViewHelper aConversionMap(*pNextTextNode);
         OUString aExpandText = aConversionMap.getViewText();
 
-        xRet = new SwXFlatParagraph( *pNextTxtNode, aExpandText, aConversionMap );
+        xRet = new SwXFlatParagraph( *pNextTextNode, aExpandText, aConversionMap );
         // keep hard references...
         m_aFlatParaList.insert( xRet );
     }
@@ -541,29 +541,29 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
     if ( !pFlatParagraph )
         return xRet;
 
-    SwTxtNode const*const pCurrentNode = pFlatParagraph->GetTxtNode();
+    SwTextNode const*const pCurrentNode = pFlatParagraph->GetTextNode();
 
     if ( !pCurrentNode )
         return xRet;
 
-    SwTxtNode* pPrevTxtNode = 0;
+    SwTextNode* pPrevTextNode = 0;
     const SwNodes& rNodes = pCurrentNode->GetDoc()->GetNodes();
 
     for( sal_uLong nCurrentNode = pCurrentNode->GetIndex() - 1; nCurrentNode > 0; --nCurrentNode )
     {
         SwNode* pNd = rNodes[ nCurrentNode ];
-        pPrevTxtNode = dynamic_cast<SwTxtNode*>(pNd);
-        if ( pPrevTxtNode )
+        pPrevTextNode = dynamic_cast<SwTextNode*>(pNd);
+        if ( pPrevTextNode )
             break;
     }
 
-    if ( pPrevTxtNode )
+    if ( pPrevTextNode )
     {
         // Expand the string:
-        const ModelToViewHelper aConversionMap(*pPrevTxtNode);
+        const ModelToViewHelper aConversionMap(*pPrevTextNode);
         OUString aExpandText = aConversionMap.getViewText();
 
-        xRet = new SwXFlatParagraph( *pPrevTxtNode, aExpandText, aConversionMap );
+        xRet = new SwXFlatParagraph( *pPrevTextNode, aExpandText, aConversionMap );
         // keep hard references...
         m_aFlatParaList.insert( xRet );
     }

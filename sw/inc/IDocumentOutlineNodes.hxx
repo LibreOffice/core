@@ -23,14 +23,14 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vector>
-class SwTxtNode;
+class SwTextNode;
 
 /** Provides outline nodes of a document.
 */
 class IDocumentOutlineNodes
 {
 public:
-    typedef ::std::vector< const SwTxtNode* > tSortedOutlineNodeList;
+    typedef ::std::vector< const SwTextNode* > tSortedOutlineNodeList;
 
     virtual sal_Int32 getOutlineNodesCount() const = 0;
 
@@ -38,8 +38,8 @@ public:
     virtual OUString getOutlineText( const sal_Int32 nIdx,
                                    const bool bWithNumber = true,
                                    const bool bWithSpacesForLevel = false,
-                                   const bool bWithFtn = true ) const = 0;
-    virtual SwTxtNode* getOutlineNode( const sal_Int32 nIdx ) const = 0;
+                                   const bool bWithFootnote = true ) const = 0;
+    virtual SwTextNode* getOutlineNode( const sal_Int32 nIdx ) const = 0;
 
     virtual void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const = 0;
 

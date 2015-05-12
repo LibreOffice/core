@@ -28,7 +28,7 @@
 
 class SwCrsrShell;
 class SwShellCrsr;
-class SwTxtInputFld;
+class SwTextInputField;
 
 // From here classes/methods for non-text cursor.
 
@@ -40,7 +40,7 @@ class SwVisCrsr
     bool m_bIsVisible;
     bool m_bIsDragCrsr;
 
-    vcl::Cursor m_aTxtCrsr;
+    vcl::Cursor m_aTextCrsr;
     const SwCrsrShell* m_pCrsrShell;
 
     void _SetPosAndShow();
@@ -79,10 +79,10 @@ class SwSelPaintRects : public SwRects
     void setCursorOverlay(sdr::overlay::OverlayObject* pNew) { m_pCursorOverlay = pNew; }
 #endif
 
-    bool m_bShowTxtInputFldOverlay;
-    sw::overlay::OverlayRangesOutline* m_pTxtInputFldOverlay;
+    bool m_bShowTextInputFieldOverlay;
+    sw::overlay::OverlayRangesOutline* m_pTextInputFieldOverlay;
 
-    void HighlightInputFld();
+    void HighlightInputField();
 
 public:
     SwSelPaintRects( const SwCrsrShell& rCSh );
@@ -100,9 +100,9 @@ public:
     void Hide();
     void Invalidate( const SwRect& rRect );
 
-    inline void SetShowTxtInputFldOverlay( const bool bShow )
+    inline void SetShowTextInputFieldOverlay( const bool bShow )
     {
-        m_bShowTxtInputFldOverlay = bShow;
+        m_bShowTextInputFieldOverlay = bShow;
     }
 
     const SwCrsrShell* GetShell() const { return m_pCursorShell; }
@@ -152,7 +152,7 @@ public:
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const SAL_OVERRIDE;
 
     virtual short MaxReplaceArived() SAL_OVERRIDE; //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 ) SAL_OVERRIDE;
+    virtual void SaveTableBoxContent( const SwPosition* pPos = 0 ) SAL_OVERRIDE;
 
     bool UpDown( bool bUp, sal_uInt16 nCnt = 1 );
 
@@ -192,7 +192,7 @@ public:
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const SAL_OVERRIDE;
 
     virtual short MaxReplaceArived() SAL_OVERRIDE; //returns RET_YES/RET_CANCEL/RET_NO
-    virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 ) SAL_OVERRIDE;
+    virtual void SaveTableBoxContent( const SwPosition* pPos = 0 ) SAL_OVERRIDE;
 
     // true: Cursor can be set to this position.
     virtual bool IsAtValidPos( bool bPoint = true ) const SAL_OVERRIDE;

@@ -38,8 +38,8 @@
 #define ROW_COL_PROD 16384
 
 void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTblOpts, OUString& rAutoName,
-                                SwTableAutoFmt *& prTAFmt )
+                                SwInsertTableOptions& rInsTableOpts, OUString& rAutoName,
+                                SwTableAutoFormat *& prTAFormat )
 {
     sal_uInt16 nInsMode = 0;
     rName = m_pNameEdit->GetText();
@@ -51,25 +51,25 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
     if (m_pHeaderCB->IsChecked())
         nInsMode |= tabopts::HEADLINE;
     if (m_pRepeatHeaderCB->IsEnabled() && m_pRepeatHeaderCB->IsChecked())
-        rInsTblOpts.mnRowsToRepeat = sal_uInt16( m_pRepeatHeaderNF->GetValue() );
+        rInsTableOpts.mnRowsToRepeat = sal_uInt16( m_pRepeatHeaderNF->GetValue() );
     else
-        rInsTblOpts.mnRowsToRepeat = 0;
+        rInsTableOpts.mnRowsToRepeat = 0;
     if (!m_pDontSplitCB->IsChecked())
         nInsMode |= tabopts::SPLIT_LAYOUT;
-    if( pTAutoFmt )
+    if( pTAutoFormat )
     {
-        prTAFmt = new SwTableAutoFmt( *pTAutoFmt );
-        rAutoName = prTAFmt->GetName();
+        prTAFormat = new SwTableAutoFormat( *pTAutoFormat );
+        rAutoName = prTAFormat->GetName();
     }
 
-    rInsTblOpts.mnInsMode = nInsMode;
+    rInsTableOpts.mnInsMode = nInsMode;
 }
 
 SwInsTableDlg::SwInsTableDlg( SwView& rView )
     : SfxModalDialog(rView.GetWindow(), "InsertTableDialog", "modules/swriter/ui/inserttable.ui")
     , m_aTextFilter(" .<>")
     , pShell(&rView.GetWrtShell())
-    , pTAutoFmt(0)
+    , pTAutoFormat(0)
     , nEnteredValRepeatHeaderNF(-1)
 {
     get(m_pNameEdit, "nameedit");
@@ -80,29 +80,29 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     get(m_pRepeatHeaderCB, "repeatcb");
     get(m_pDontSplitCB, "dontsplitcb");
     get(m_pBorderCB, "bordercb");
-    get(m_pAutoFmtBtn, "autoformat");
+    get(m_pAutoFormatBtn, "autoformat");
     get(m_pInsertBtn, "ok");
     get(m_pRepeatGroup, "repeatgroup");
     get(m_pRepeatHeaderNF, "repeatheaderspin");
 
-    m_pNameEdit->SetText(pShell->GetUniqueTblName());
+    m_pNameEdit->SetText(pShell->GetUniqueTableName());
     m_pNameEdit->SetModifyHdl(LINK(this, SwInsTableDlg, ModifyName));
     m_pColNF->SetModifyHdl(LINK(this, SwInsTableDlg, ModifyRowCol));
     m_pRowNF->SetModifyHdl(LINK(this, SwInsTableDlg, ModifyRowCol));
 
     m_pRowNF->SetMax(ROW_COL_PROD/m_pColNF->GetValue());
     m_pColNF->SetMax(ROW_COL_PROD/m_pRowNF->GetValue());
-    m_pAutoFmtBtn->SetClickHdl(LINK(this, SwInsTableDlg, AutoFmtHdl));
+    m_pAutoFormatBtn->SetClickHdl(LINK(this, SwInsTableDlg, AutoFormatHdl));
 
     m_pInsertBtn->SetClickHdl(LINK(this, SwInsTableDlg, OKHdl));
 
     bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
-    sal_uInt16 nInsTblFlags = aInsOpts.mnInsMode;
+    SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(bHTMLMode);
+    sal_uInt16 nInsTableFlags = aInsOpts.mnInsMode;
 
-    m_pHeaderCB->Check( 0 != (nInsTblFlags & tabopts::HEADLINE) );
+    m_pHeaderCB->Check( 0 != (nInsTableFlags & tabopts::HEADLINE) );
     m_pRepeatHeaderCB->Check(aInsOpts.mnRowsToRepeat > 0);
     if(bHTMLMode)
     {
@@ -111,9 +111,9 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     }
     else
     {
-        m_pDontSplitCB->Check( 0 == (nInsTblFlags & tabopts::SPLIT_LAYOUT) );
+        m_pDontSplitCB->Check( 0 == (nInsTableFlags & tabopts::SPLIT_LAYOUT) );
     }
-    m_pBorderCB->Check( 0 != (nInsTblFlags & tabopts::DEFAULT_BORDER) );
+    m_pBorderCB->Check( 0 != (nInsTableFlags & tabopts::DEFAULT_BORDER) );
 
     m_pRepeatHeaderNF->SetModifyHdl( LINK( this, SwInsTableDlg, ModifyRepeatHeaderNF_Hdl ) );
     m_pHeaderCB->SetClickHdl(LINK(this, SwInsTableDlg, CheckBoxHdl));
@@ -142,7 +142,7 @@ SwInsTableDlg::~SwInsTableDlg()
 
 void SwInsTableDlg::dispose()
 {
-    delete pTAutoFmt;
+    delete pTAutoFormat;
     m_pNameEdit.clear();
     m_pColNF.clear();
     m_pRowNF.clear();
@@ -153,20 +153,20 @@ void SwInsTableDlg::dispose()
     m_pDontSplitCB.clear();
     m_pBorderCB.clear();
     m_pInsertBtn.clear();
-    m_pAutoFmtBtn.clear();
+    m_pAutoFormatBtn.clear();
     SfxModalDialog::dispose();
 }
 
 IMPL_LINK( SwInsTableDlg, ModifyName, Edit *, pEdit )
 {
-    OUString sTblName = pEdit->GetText();
-    if (sTblName.indexOf(' ') != -1)
+    OUString sTableName = pEdit->GetText();
+    if (sTableName.indexOf(' ') != -1)
     {
-        sTblName = sTblName.replaceAll(" ", "");
-        pEdit->SetText(sTblName);
+        sTableName = sTableName.replaceAll(" ", "");
+        pEdit->SetText(sTableName);
     }
 
-    m_pInsertBtn->Enable(pShell->GetTblStyle( sTblName ) == 0);
+    m_pInsertBtn->Enable(pShell->GetTableStyle( sTableName ) == 0);
     return 0;
 }
 
@@ -200,15 +200,15 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
     return 0;
 }
 
-IMPL_LINK( SwInsTableDlg, AutoFmtHdl, PushButton*, pButton )
+IMPL_LINK( SwInsTableDlg, AutoFormatHdl, PushButton*, pButton )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton,pShell, false, pTAutoFmt));
+    boost::scoped_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton,pShell, false, pTAutoFormat));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
-        pDlg->FillAutoFmtOfIndex( pTAutoFmt );
+        pDlg->FillAutoFormatOfIndex( pTAutoFormat );
     return 0;
 }
 

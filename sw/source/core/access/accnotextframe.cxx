@@ -41,18 +41,18 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using utl::AccessibleRelationSetHelper;
 
-const SwNoTxtNode *SwAccessibleNoTextFrame::GetNoTxtNode() const
+const SwNoTextNode *SwAccessibleNoTextFrame::GetNoTextNode() const
 {
-    const SwNoTxtNode *pNd  = 0;
+    const SwNoTextNode *pNd  = 0;
     const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm *>( GetFrm() );
-    if( pFlyFrm->Lower() && pFlyFrm->Lower()->IsNoTxtFrm() )
+    if( pFlyFrm->Lower() && pFlyFrm->Lower()->IsNoTextFrm() )
     {
-        const SwCntntFrm *pCntFrm =
-            static_cast<const SwCntntFrm *>( pFlyFrm->Lower() );
-        const SwCntntNode* pSwCntntNode = pCntFrm->GetNode();
-        if(pSwCntntNode != NULL)
+        const SwContentFrm *pCntFrm =
+            static_cast<const SwContentFrm *>( pFlyFrm->Lower() );
+        const SwContentNode* pSwContentNode = pCntFrm->GetNode();
+        if(pSwContentNode != NULL)
         {
-            pNd = pSwCntntNode->GetNoTxtNode();
+            pNd = pSwContentNode->GetNoTextNode();
         }
     }
 
@@ -64,11 +64,11 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
         sal_Int16 nInitRole,
         const SwFlyFrm* pFlyFrm  ) :
     SwAccessibleFrameBase( pInitMap, nInitRole, pFlyFrm ),
-    aDepend( this, const_cast < SwNoTxtNode * >( GetNoTxtNode() ) ),
+    aDepend( this, const_cast < SwNoTextNode * >( GetNoTextNode() ) ),
     msTitle(),
     msDesc()
 {
-    const SwNoTxtNode* pNd = GetNoTxtNode();
+    const SwNoTextNode* pNd = GetNoTextNode();
     // #i73249#
     // consider new attributes Title and Description
     if( pNd )
@@ -102,7 +102,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
             return; // probably was deleted - avoid doing anything
     }
 
-    const SwNoTxtNode *pNd = GetNoTxtNode();
+    const SwNoTextNode *pNd = GetNoTextNode();
     OSL_ENSURE( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
     switch( nWhich )
     {
@@ -308,7 +308,7 @@ throw (uno::RuntimeException, std::exception)
     CHECK_FOR_DEFUNC( XAccessibleHypertext );
 
     sal_Int32 nCount = 0;
-    SwFmtURL aURL( static_cast<const SwLayoutFrm*>(GetFrm())->GetFmt()->GetURL() );
+    SwFormatURL aURL( static_cast<const SwLayoutFrm*>(GetFrm())->GetFormat()->GetURL() );
 
     if(aURL.GetMap() || !aURL.GetURL().isEmpty())
         nCount = 1;
@@ -325,7 +325,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 
     uno::Reference< XAccessibleHyperlink > xRet;
 
-    SwFmtURL aURL( static_cast<const SwLayoutFrm*>(GetFrm())->GetFmt()->GetURL() );
+    SwFormatURL aURL( static_cast<const SwLayoutFrm*>(GetFrm())->GetFormat()->GetURL() );
 
     if( nLinkIndex > 0 )
         throw lang::IndexOutOfBoundsException();

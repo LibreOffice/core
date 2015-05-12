@@ -111,18 +111,18 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
 
     rSet.Put( SfxUInt16Item( FN_PARAM_TABLE_HEADLINE, rSh.GetRowsToRepeat() ) );
 
-    SwFrmFmt *pFrmFmt = rSh.GetTableFmt();
-    if(pFrmFmt)
+    SwFrameFormat *pFrameFormat = rSh.GetTableFormat();
+    if(pFrameFormat)
     {
-        rSet.Put( pFrmFmt->GetShadow() );
-        rSet.Put( pFrmFmt->GetBreak() );
-        rSet.Put( pFrmFmt->GetPageDesc() );
-        rSet.Put( pFrmFmt->GetLayoutSplit() );
-        rSet.Put( pFrmFmt->GetKeep() );
-        rSet.Put( pFrmFmt->GetFrmDir() );
+        rSet.Put( pFrameFormat->GetShadow() );
+        rSet.Put( pFrameFormat->GetBreak() );
+        rSet.Put( pFrameFormat->GetPageDesc() );
+        rSet.Put( pFrameFormat->GetLayoutSplit() );
+        rSet.Put( pFrameFormat->GetKeep() );
+        rSet.Put( pFrameFormat->GetFrmDir() );
     }
 
-    SwFmtRowSplit* pSplit = 0;
+    SwFormatRowSplit* pSplit = 0;
     rSh.GetRowSplit(pSplit);
     if(pSplit)
         rSet.Put(*pSplit);
@@ -161,44 +161,44 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem) )
         rSh.SetRowsToRepeat( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
 
-    SwFrmFmt* pFrmFmt = rSh.GetTableFmt();
-    if(pFrmFmt)
+    SwFrameFormat* pFrameFormat = rSh.GetTableFormat();
+    if(pFrameFormat)
     {
         //RES_SHADOW
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_SHADOW), false, &pItem);
         if(pItem)
-            pFrmFmt->SetFmtAttr( *pItem );
+            pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_BREAK
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_BREAK), false, &pItem);
         if(pItem)
-            pFrmFmt->SetFmtAttr( *pItem );
+            pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_PAGEDESC
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_PAGEDESC), false, &pItem);
         if(pItem)
-            pFrmFmt->SetFmtAttr( *pItem );
+            pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_LAYOUT_SPLIT
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_LAYOUT_SPLIT), false, &pItem);
         if(pItem)
-            pFrmFmt->SetFmtAttr( *pItem );
+            pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_KEEP
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_KEEP), false, &pItem);
         if(pItem)
-            pFrmFmt->SetFmtAttr( *pItem );
+            pFrameFormat->SetFormatAttr( *pItem );
 
         //RES_FRAMEDIR
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_FRAMEDIR), false, &pItem);
         if(pItem)
-            pFrmFmt->SetFmtAttr( *pItem );
+            pFrameFormat->SetFormatAttr( *pItem );
     }
 
     if( SfxItemState::SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, false, &pItem) )
@@ -212,13 +212,13 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
         rSh.SetBoxAlign(static_cast<const SfxUInt16Item*>((pItem))->GetValue());
 
     if( SfxItemState::SET == rSet.GetItemState( RES_ROW_SPLIT, false, &pItem) )
-        rSh.SetRowSplit(*static_cast<const SwFmtRowSplit*>(pItem));
+        rSh.SetRowSplit(*static_cast<const SwFormatRowSplit*>(pItem));
 }
 }//end anonymous namespace
 
 SwFormatClipboard::SwFormatClipboard()
         : m_nSelectionType(0)
-        , m_pItemSet_TxtAttr(0)
+        , m_pItemSet_TextAttr(0)
         , m_pItemSet_ParAttr(0)
         , m_pTableItemSet(0)
         , m_bPersistentCopy(false)
@@ -226,14 +226,14 @@ SwFormatClipboard::SwFormatClipboard()
 }
 SwFormatClipboard::~SwFormatClipboard()
 {
-    delete m_pItemSet_TxtAttr;
+    delete m_pItemSet_TextAttr;
     delete m_pItemSet_ParAttr;
     delete m_pTableItemSet;
 }
 
 bool SwFormatClipboard::HasContent() const
 {
-    return m_pItemSet_TxtAttr!=0
+    return m_pItemSet_TextAttr!=0
         || m_pItemSet_ParAttr!=0
         || m_pTableItemSet != 0
         || !m_aCharStyle.isEmpty()
@@ -275,7 +275,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     m_bPersistentCopy = bPersistentCopy;
 
     int nSelectionType = rWrtShell.GetSelectionType();
-    SfxItemSet* pItemSet_TxtAttr = lcl_CreateEmptyItemSet( nSelectionType, rPool, true );
+    SfxItemSet* pItemSet_TextAttr = lcl_CreateEmptyItemSet( nSelectionType, rPool, true );
     SfxItemSet* pItemSet_ParAttr = lcl_CreateEmptyItemSet( nSelectionType, rPool, false );
 
     rWrtShell.StartAction();
@@ -338,14 +338,14 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             pCrsr->Move( bForwardSelection ? fnMoveBackward : fnMoveForward );
     }
 
-    if(pItemSet_TxtAttr)
+    if(pItemSet_TextAttr)
     {
         if( nSelectionType & (nsSelectionType::SEL_FRM | nsSelectionType::SEL_OLE | nsSelectionType::SEL_GRF) )
-            rWrtShell.GetFlyFrmAttr(*pItemSet_TxtAttr);
+            rWrtShell.GetFlyFrmAttr(*pItemSet_TextAttr);
         else
         {
             // get the text attributes from named and automatic formatting
-            rWrtShell.GetCurAttr(*pItemSet_TxtAttr);
+            rWrtShell.GetCurAttr(*pItemSet_TextAttr);
 
             if( nSelectionType & nsSelectionType::SEL_TXT )
             {
@@ -363,12 +363,12 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             if( pDrawView->AreObjectsMarked() )
             {
                 bool bOnlyHardAttr = true;
-                pItemSet_TxtAttr = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
+                pItemSet_TextAttr = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
                 //remove attributes defining the type/data of custom shapes
-                pItemSet_TxtAttr->ClearItem(SDRATTR_CUSTOMSHAPE_ENGINE);
-                pItemSet_TxtAttr->ClearItem(SDRATTR_CUSTOMSHAPE_DATA);
-                pItemSet_TxtAttr->ClearItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
-                pItemSet_TxtAttr->ClearItem(SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL);
+                pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_ENGINE);
+                pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_DATA);
+                pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+                pItemSet_TextAttr->ClearItem(SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL);
             }
         }
     }
@@ -393,20 +393,20 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     }
 
     m_nSelectionType = nSelectionType;
-    m_pItemSet_TxtAttr = pItemSet_TxtAttr;
+    m_pItemSet_TextAttr = pItemSet_TextAttr;
     m_pItemSet_ParAttr = pItemSet_ParAttr;
 
     if( nSelectionType & nsSelectionType::SEL_TXT )
     {
         // if text is selected save the named character format
-        SwFmt* pFmt = rWrtShell.GetCurCharFmt();
-        if( pFmt )
-            m_aCharStyle = pFmt->GetName();
+        SwFormat* pFormat = rWrtShell.GetCurCharFormat();
+        if( pFormat )
+            m_aCharStyle = pFormat->GetName();
 
         // and the named paragraph format
-        pFmt = rWrtShell.GetCurTxtFmtColl();
-        if( pFmt )
-            m_aParaStyle = pFmt->GetName();
+        pFormat = rWrtShell.GetCurTextFormatColl();
+        if( pFormat )
+            m_aParaStyle = pFormat->GetName();
     }
 
     rWrtShell.Pop(false);
@@ -479,13 +479,13 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 // if the style is found
                 if( pStyle )
                 {
-                    SwFmtCharFmt aFmt(pStyle->GetCharFmt());
+                    SwFormatCharFormat aFormat(pStyle->GetCharFormat());
                     // store the attributes from this style in aItemVector in order
                     // not to apply them as automatic formatting attributes later in the code
-                    lcl_AppendSetItems( aItemVector, aFmt.GetCharFmt()->GetAttrSet());
+                    lcl_AppendSetItems( aItemVector, aFormat.GetCharFormat()->GetAttrSet());
 
                     // apply the named format
-                    rWrtShell.SetAttrItem( aFmt );
+                    rWrtShell.SetAttrItem( aFormat );
                 }
             }
 
@@ -501,7 +501,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                     lcl_AppendSetItems( aItemVector, pStyle->GetCollection()->GetAttrSet());
 
                     // apply the named format
-                    rWrtShell.SetTxtFmtColl( pStyle->GetCollection() );
+                    rWrtShell.SetTextFormatColl( pStyle->GetCollection() );
                 }
             }
         }
@@ -529,7 +529,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
         }
     }
 
-    if(m_pItemSet_TxtAttr)
+    if(m_pItemSet_TextAttr)
     {
         if( nSelectionType & nsSelectionType::SEL_DRW )
         {
@@ -537,19 +537,19 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             if(pDrawView)
             {
                 bool bReplaceAll = true;
-                pDrawView->SetAttrToMarked(*m_pItemSet_TxtAttr, bReplaceAll);
+                pDrawView->SetAttrToMarked(*m_pItemSet_TextAttr, bReplaceAll);
             }
         }
         else
         {
             // temporary SfxItemSet
             boost::scoped_ptr<SfxItemSet> pTemplateItemSet(lcl_CreateEmptyItemSet(
-                    nSelectionType, *m_pItemSet_TxtAttr->GetPool(), true ));
+                    nSelectionType, *m_pItemSet_TextAttr->GetPool(), true ));
 
             if(pTemplateItemSet)
             {
                 // copy the stored automatic text attributes in a temporary SfxItemSet
-                pTemplateItemSet->Put( *m_pItemSet_TxtAttr );
+                pTemplateItemSet->Put( *m_pItemSet_TextAttr );
 
                 // only attributes that were not apply by named style attributes and automatic
                 // paragraph attributes should be applied
@@ -578,8 +578,8 @@ void SwFormatClipboard::Erase()
 {
     m_nSelectionType = 0;
 
-    delete m_pItemSet_TxtAttr;
-    m_pItemSet_TxtAttr = 0;
+    delete m_pItemSet_TextAttr;
+    m_pItemSet_TextAttr = 0;
 
     delete m_pItemSet_ParAttr;
     m_pItemSet_ParAttr = 0;

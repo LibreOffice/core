@@ -32,7 +32,7 @@
 class SwMarginPortion;
 class SwDropPortion;
 class SvStream;
-class SwTxtFormatter;
+class SwTextFormatter;
 
 class SwCharRange
 {
@@ -76,7 +76,7 @@ public:
 };
 
 /// Collection of SwLinePortion instances, representing one line of text
-class SwLineLayout : public SwTxtPortion
+class SwLineLayout : public SwTextPortion
 {
 private:
     SwLineLayout *pNext;                // The next Line
@@ -125,8 +125,8 @@ public:
     inline bool IsRest() const { return bRest; }
     inline void SetBlinking( const bool bNew = true ) { bBlinking = bNew; }
     inline bool IsBlinking() const { return bBlinking; }
-    inline void SetCntnt( const bool bNew = true ) { bContent = bNew; }
-    inline bool HasCntnt() const { return bContent; }
+    inline void SetContent( const bool bNew = true ) { bContent = bNew; }
+    inline bool HasContent() const { return bContent; }
     inline void SetRedline( const bool bNew = true ) { bRedline = bNew; }
     inline bool HasRedline() const { return bRedline; }
     inline void SetForcedLeftMargin( const bool bNew = true ) { bForcedLeftMargin = bNew; }
@@ -153,7 +153,7 @@ public:
     void Init( SwLinePortion *pNextPortion = NULL);
 
     // Collects the data for the line
-    void CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf );
+    void CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf );
 
     inline void SetRealHeight( sal_uInt16 nNew ) { nRealHeight = nNew; }
     inline sal_uInt16 GetRealHeight() const { return nRealHeight; }
@@ -165,7 +165,7 @@ public:
         { return _GetHangingMargin(); }
 
     // For special treatment for empty lines
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
 
     // Stuff for justified alignment
     inline bool IsSpaceAdd() { return pLLSpaceAdd != NULL; }
@@ -244,7 +244,7 @@ class SwParaPortion : public SwLineLayout
     // Fraction aZoom;
     long nDelta;
 
-    // If a SwTxtFrm is locked, no changes occur to the formatting data (under
+    // If a SwTextFrm is locked, no changes occur to the formatting data (under
     // pLine) (compare with Orphans)
     bool bFlys          : 1; // Overlapping Flys?
     bool bPrep          : 1; // PREP_*
@@ -254,7 +254,7 @@ class SwParaPortion : public SwLineLayout
     bool bFollowField   : 1; // We have a bit of field left for the Follow
 
     bool bFixLineHeight : 1; // Fixed line height
-    bool bFtnNum    : 1; // contains a footnotenumberportion
+    bool bFootnoteNum    : 1; // contains a footnotenumberportion
     bool bMargin    : 1; // contains a hanging punctuation in the margin
 
     bool bFlag00    : 1;
@@ -285,7 +285,7 @@ public:
     inline SwScriptInfo& GetScriptInfo() { return aScriptInfo; }
     inline const SwScriptInfo& GetScriptInfo() const { return aScriptInfo; }
 
-    // For SwTxtFrm::Format: returns the paragraph's current length
+    // For SwTextFrm::Format: returns the paragraph's current length
     sal_Int32 GetParLen() const;
 
     // For Prepare()
@@ -309,8 +309,8 @@ public:
     inline void SetFixLineHeight( const bool bNew = true ) { bFixLineHeight = bNew; }
     inline bool IsFixLineHeight() const { return bFixLineHeight; }
 
-    inline void SetFtnNum( const bool bNew = true ) { bFtnNum = bNew; }
-    inline bool IsFtnNum() const { return bFtnNum; }
+    inline void SetFootnoteNum( const bool bNew = true ) { bFootnoteNum = bNew; }
+    inline bool IsFootnoteNum() const { return bFootnoteNum; }
     inline void SetMargin( const bool bNew = true ) { bMargin = bNew; }
     inline bool IsMargin() const { return bMargin; }
     inline void SetFlag00( const bool bNew = true ) { bFlag00 = bNew; }
@@ -338,7 +338,7 @@ public:
     const SwDropPortion *FindDropPortion() const;
 
 #ifdef DBG_UTIL
-    void dumpAsXml( xmlTextWriter* writer, SwTxtFrm* pTxtFrm );
+    void dumpAsXml( xmlTextWriter* writer, SwTextFrm* pTextFrm );
 #endif
 
     OUTPUT_OPERATOR_OVERRIDE
@@ -369,7 +369,7 @@ inline void SwParaPortion::FormatReset()
 {
     nDelta = 0;
     aReformat = SwCharRange(0, COMPLETE_STRING);
-    // bFlys needs to be retained in SwTxtFrm::_Format() so that empty
+    // bFlys needs to be retained in SwTextFrm::_Format() so that empty
     // paragraphs that needed to avoid Frames with no flow, reformat
     // when the Frame disappears from the Area
     // bFlys = false;

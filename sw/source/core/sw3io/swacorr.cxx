@@ -95,7 +95,7 @@ bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
 SwAutoCorrect::SwAutoCorrect( const SvxAutoCorrect& rACorr )
     : SvxAutoCorrect( rACorr )
 {
-    SwEditShell::SetAutoFmtFlags(&GetSwFlags());
+    SwEditShell::SetAutoFormatFlags(&GetSwFlags());
 }
 
 SwAutoCorrect::~SwAutoCorrect()

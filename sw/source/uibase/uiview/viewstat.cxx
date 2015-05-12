@@ -87,7 +87,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
 
         case SID_INSERT_GRAPHIC:
-            if( m_pWrtShell->CrsrInsideInputFld() )
+            if( m_pWrtShell->CrsrInsideInputField() )
             {
                 rSet.DisableItem(nWhich);
             }
@@ -114,7 +114,7 @@ void SwView::GetState(SfxItemSet &rSet)
                         rSet.DisableItem(nWhich);
                     }
                     else if( m_pWrtShell->IsTableMode()
-                        || m_pWrtShell->CrsrInsideInputFld() )
+                        || m_pWrtShell->CrsrInsideInputField() )
                     {
                         rSet.DisableItem(nWhich);
                     }
@@ -123,7 +123,7 @@ void SwView::GetState(SfxItemSet &rSet)
 
             case FN_EDIT_FOOTNOTE:
             {
-                if( !m_pWrtShell->GetCurFtn() )
+                if( !m_pWrtShell->GetCurFootnote() )
                     rSet.DisableItem(nWhich);
             }
             break;
@@ -154,9 +154,9 @@ void SwView::GetState(SfxItemSet &rSet)
                 //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
                 if(!rSet.GetParent())
                 {
-                    const SwFrmFmt& rMaster = rDesc.GetMaster();
+                    const SwFrameFormat& rMaster = rDesc.GetMaster();
 
-                    rSet.SetParent(&rMaster.GetDoc()->GetDfltFrmFmt()->GetAttrSet());
+                    rSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
                 }
 
                 ::PageDescToItemSet( rDesc, rSet);
@@ -167,9 +167,9 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 const sal_uInt16 nCurIdx = m_pWrtShell->GetCurPageDesc();
                 const SwPageDesc& rDesc = m_pWrtShell->GetPageDesc( nCurIdx );
-                const SwFrmFmt& rMaster = rDesc.GetMaster();
+                const SwFrameFormat& rMaster = rDesc.GetMaster();
                 const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>(
-                                    rMaster.GetFmtAttr(RES_BACKGROUND, true));
+                                    rMaster.GetFormatAttr(RES_BACKGROUND, true));
                 rSet.Put(rBrush);
             }
             break;
@@ -209,7 +209,7 @@ void SwView::GetState(SfxItemSet &rSet)
 
             case FN_INSERT_OBJ_CTRL:
                 if( bWeb
-                    || m_pWrtShell->CrsrInsideInputFld() )
+                    || m_pWrtShell->CrsrInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -308,7 +308,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 else if (pCursor->HasMark())
                 { // If the selection does not contain redlines, disable accepting/rejecting changes.
                     sal_uInt16 index = 0;
-                    const SwRedlineTbl& table = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
+                    const SwRedlineTable& table = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
                     const SwRangeRedline* redline = table.FindAtPosition( *pCursor->Start(), index );
                     if( redline != NULL && *redline->Start() == *pCursor->End())
                         redline = NULL;

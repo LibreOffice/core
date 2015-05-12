@@ -68,10 +68,10 @@ SwNode* GoNextWithFrm(const SwNodes& rNodes, SwNodeIndex *pIdx)
     {
         pNd = &aTmp.GetNode();
         bool bFound = false;
-        if ( pNd->IsCntntNode() )
-            bFound = SwIterator<SwFrm,SwCntntNode>(*static_cast<SwCntntNode*>(pNd)).First();
+        if ( pNd->IsContentNode() )
+            bFound = SwIterator<SwFrm,SwContentNode>(*static_cast<SwContentNode*>(pNd)).First();
         else if ( pNd->IsTableNode() )
-            bFound = SwIterator<SwFrm,SwFmt>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrmFmt()).First() ;
+            bFound = SwIterator<SwFrm,SwFormat>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()).First() ;
         else if( pNd->IsEndNode() && !pNd->StartOfSectionNode()->IsSectionNode() )
         {
             pNd = 0;
@@ -100,10 +100,10 @@ SwNode* GoPreviousWithFrm(SwNodeIndex *pIdx)
     {
         pNd = &aTmp.GetNode();
         bool bFound = false;
-        if ( pNd->IsCntntNode() )
-            bFound = SwIterator<SwFrm,SwCntntNode>(*static_cast<SwCntntNode*>(pNd)).First();
+        if ( pNd->IsContentNode() )
+            bFound = SwIterator<SwFrm,SwContentNode>(*static_cast<SwContentNode*>(pNd)).First();
         else if ( pNd->IsTableNode() )
-            bFound = SwIterator<SwFrm,SwFmt>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrmFmt()).First();
+            bFound = SwIterator<SwFrm,SwFormat>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()).First();
         else if( pNd->IsStartNode() && !pNd->IsSectionNode() )
         {
             pNd = 0;
@@ -136,7 +136,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
     const SwNode* pNd;
     if( bSearch || rNode.IsSectionNode() )
     {
-        // Find the next Cntnt/TableNode that contains a Frame, so that we can add
+        // Find the next Content/TableNode that contains a Frame, so that we can add
         // ourselves before/after it
         if( !bSearch && rNode.GetIndex() < nIndex )
         {
@@ -162,12 +162,12 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
     }
     if( pNd )
     {
-        if( pNd->IsCntntNode() )
-            pMod = (SwModify*)pNd->GetCntntNode();
+        if( pNd->IsContentNode() )
+            pMod = (SwModify*)pNd->GetContentNode();
         else
         {
             OSL_ENSURE( pNd->IsTableNode(), "For Tablenodes only" );
-            pMod = pNd->GetTableNode()->GetTable().GetFrmFmt();
+            pMod = pNd->GetTableNode()->GetTable().GetFrameFormat();
         }
         pIter = new SwIterator<SwFrm,SwModify>( *pMod );
     }
@@ -207,7 +207,7 @@ SwFrm* SwNode2LayImpl::NextFrm()
     while( pRet )
     {
         SwFlowFrm* pFlow = SwFlowFrm::CastFlowFrm( pRet );
-        OSL_ENSURE( pFlow, "Cntnt or Table expected?!" );
+        OSL_ENSURE( pFlow, "Content or Table expected?!" );
         // Follows are pretty volatile, thus we ignore them.
         // Even if we insert after the Frame, we start from the Master
         // and iterate through it until the last Follow
@@ -227,14 +227,14 @@ SwFrm* SwNode2LayImpl::NextFrm()
                 // should be outside of it when looking at the Nodes.
                 // Thus, when dealing with Footnotes, we need to check whether the
                 // SectionFrm is also located within the Footnote and not outside of it.
-                if( !pRet->IsInFtn() || pSct->IsInFtn() )
+                if( !pRet->IsInFootnote() || pSct->IsInFootnote() )
                 {
                     OSL_ENSURE( pSct && pSct->GetSection(), "Where's my section?" );
-                    SwSectionNode* pNd = pSct->GetSection()->GetFmt()->GetSectionNode();
+                    SwSectionNode* pNd = pSct->GetSection()->GetFormat()->GetSectionNode();
                     OSL_ENSURE( pNd, "Lost SectionNode" );
                     // If the result Frame is located within a Section Frame
                     // whose Section does not contain the Node, we return with
-                    // the SectionFrm, else we return with the Cntnt/TabFrm
+                    // the SectionFrm, else we return with the Content/TabFrm
                     if( bMaster )
                     {
                         if( pNd->GetIndex() >= nIndex )
@@ -261,8 +261,8 @@ void SwNode2LayImpl::SaveUpperFrms()
         pFrm = pFrm->GetUpper();
         if( pFrm )
         {
-            if( pFrm->IsFtnFrm() )
-                static_cast<SwFtnFrm*>(pFrm)->ColLock();
+            if( pFrm->IsFootnoteFrm() )
+                static_cast<SwFootnoteFrm*>(pFrm)->ColLock();
             else if( pFrm->IsInSct() )
                 pFrm->FindSctFrm()->ColLock();
             if( pPrv && pPrv->IsSctFrm() )
@@ -347,7 +347,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
         SwFrm* pNew = 0;
         SwFrm* pNxt;
         SwLayoutFrm* pUp;
-        if( (pNd = rNds[nStt])->IsCntntNode() )
+        if( (pNd = rNds[nStt])->IsContentNode() )
             for( std::vector<SwFrm*>::size_type n = 0; n < pUpperFrms->size(); )
             {
                 pNxt = (*pUpperFrms)[n++];
@@ -358,7 +358,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
                     pNxt = pNxt->GetNext();
                 else
                     pNxt = pUp->Lower();
-                pNew = static_cast<SwCntntNode*>(pNd)->MakeFrm( pUp );
+                pNew = static_cast<SwContentNode*>(pNd)->MakeFrm( pUp );
                 pNew->Paste( pUp, pNxt );
                 (*pUpperFrms)[n-2] = pNew;
             }
@@ -399,8 +399,8 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
     for( std::vector<SwFrm*>::size_type x = 0; x < pUpperFrms->size(); ++x )
     {
         SwFrm* pTmp = (*pUpperFrms)[++x];
-        if( pTmp->IsFtnFrm() )
-            static_cast<SwFtnFrm*>(pTmp)->ColUnlock();
+        if( pTmp->IsFootnoteFrm() )
+            static_cast<SwFootnoteFrm*>(pTmp)->ColUnlock();
         else if ( pTmp->IsInSct() )
         {
             SwSectionFrm* pSctFrm = pTmp->FindSctFrm();

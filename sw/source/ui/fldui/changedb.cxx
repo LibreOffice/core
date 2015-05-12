@@ -56,7 +56,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)
         "modules/swriter/ui/exchangedatabases.ui")
     , aImageList(SW_RES(ILIST_DB_DLG))
     , pSh(rVw.GetWrtShellPtr())
-    , pMgr( new SwFldMgr() )
+    , pMgr( new SwFieldMgr() )
 {
     get(m_pUsedDBTLB, "inuselb");
     get(m_pAvailDBTLB, "availablelb");
@@ -181,9 +181,9 @@ void SwChangeDBDlg::dispose()
 // close
 void SwChangeDBDlg::Apply()
 {
-    UpdateFlds();
+    UpdateFields();
 }
-void SwChangeDBDlg::UpdateFlds()
+void SwChangeDBDlg::UpdateFields()
 {
     std::vector<OUString> aDBNames;
     aDBNames.reserve(m_pUsedDBTLB->GetSelectionCount());

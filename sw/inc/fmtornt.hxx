@@ -30,16 +30,16 @@
 
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatVertOrient: public SfxPoolItem
 {
     SwTwips         m_nYPos;  ///< Contains *always* the current RelPos.
     sal_Int16       m_eOrient;
     sal_Int16       m_eRelation;
 public:
     TYPEINFO_OVERRIDE();
-    SwFmtVertOrient( SwTwips nY = 0, sal_Int16 eVert = com::sun::star::text::VertOrientation::NONE,
+    SwFormatVertOrient( SwTwips nY = 0, sal_Int16 eVert = com::sun::star::text::VertOrientation::NONE,
                      sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA );
-    inline SwFmtVertOrient &operator=( const SwFmtVertOrient &rCpy );
+    inline SwFormatVertOrient &operator=( const SwFormatVertOrient &rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -66,7 +66,7 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatHoriOrient: public SfxPoolItem
 {
     SwTwips         m_nXPos;              ///< Contains *always* the current RelPos.
     sal_Int16       m_eOrient;
@@ -74,9 +74,9 @@ class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
     bool            m_bPosToggle : 1; ///< Flip position on even pages.
 public:
     TYPEINFO_OVERRIDE();
-    SwFmtHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
+    SwFormatHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
         sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, bool bPos = false );
-    inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );
+    inline SwFormatHoriOrient &operator=( const SwFormatHoriOrient &rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -103,14 +103,14 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-inline SwFmtVertOrient &SwFmtVertOrient::operator=( const SwFmtVertOrient &rCpy )
+inline SwFormatVertOrient &SwFormatVertOrient::operator=( const SwFormatVertOrient &rCpy )
 {
     m_nYPos = rCpy.GetPos();
     m_eOrient = rCpy.GetVertOrient();
     m_eRelation = rCpy.GetRelationOrient();
     return *this;
 }
-inline SwFmtHoriOrient &SwFmtHoriOrient::operator=( const SwFmtHoriOrient &rCpy )
+inline SwFormatHoriOrient &SwFormatHoriOrient::operator=( const SwFormatHoriOrient &rCpy )
 {
     m_nXPos = rCpy.GetPos();
     m_eOrient = rCpy.GetHoriOrient();
@@ -119,14 +119,14 @@ inline SwFmtHoriOrient &SwFmtHoriOrient::operator=( const SwFmtHoriOrient &rCpy 
     return *this;
 }
 
-inline const SwFmtVertOrient &SwAttrSet::GetVertOrient(bool bInP) const
-    { return static_cast<const SwFmtVertOrient&>(Get( RES_VERT_ORIENT,bInP)); }
-inline const SwFmtHoriOrient &SwAttrSet::GetHoriOrient(bool bInP) const
-    { return static_cast<const SwFmtHoriOrient&>(Get( RES_HORI_ORIENT,bInP)); }
+inline const SwFormatVertOrient &SwAttrSet::GetVertOrient(bool bInP) const
+    { return static_cast<const SwFormatVertOrient&>(Get( RES_VERT_ORIENT,bInP)); }
+inline const SwFormatHoriOrient &SwAttrSet::GetHoriOrient(bool bInP) const
+    { return static_cast<const SwFormatHoriOrient&>(Get( RES_HORI_ORIENT,bInP)); }
 
-inline const SwFmtVertOrient &SwFmt::GetVertOrient(bool bInP) const
+inline const SwFormatVertOrient &SwFormat::GetVertOrient(bool bInP) const
     { return m_aSet.GetVertOrient(bInP); }
-inline const SwFmtHoriOrient &SwFmt::GetHoriOrient(bool bInP) const
+inline const SwFormatHoriOrient &SwFormat::GetHoriOrient(bool bInP) const
     { return m_aSet.GetHoriOrient(bInP); }
 
 #endif

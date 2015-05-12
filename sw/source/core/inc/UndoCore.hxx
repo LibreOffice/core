@@ -26,11 +26,11 @@
 #include <redline.hxx>
 
 class SfxItemSet;
-class SwFmtColl;
-class SwFmtAnchor;
+class SwFormatColl;
+class SwFormatAnchor;
 class SdrMarkList;
 class SwUndoDelete;
-class SwFmt;
+class SwFormat;
 
 namespace sw {
     class UndoManager;
@@ -84,7 +84,7 @@ public:
     UndoRedoContext(SwDoc & rDoc, IShellCursorSupplier & rCursorSupplier)
         : m_rDoc(rDoc)
         , m_rCursorSupplier(rCursorSupplier)
-        , m_pSelFmt(0)
+        , m_pSelFormat(0)
         , m_pMarkList(0)
     { }
 
@@ -92,21 +92,21 @@ public:
 
     IShellCursorSupplier & GetCursorSupplier() { return m_rCursorSupplier; }
 
-    void SetSelections(SwFrmFmt *const pSelFmt, SdrMarkList *const pMarkList)
+    void SetSelections(SwFrameFormat *const pSelFormat, SdrMarkList *const pMarkList)
     {
-        m_pSelFmt = pSelFmt;
+        m_pSelFormat = pSelFormat;
         m_pMarkList = pMarkList;
     }
-    void GetSelections(SwFrmFmt *& o_rpSelFmt, SdrMarkList *& o_rpMarkList)
+    void GetSelections(SwFrameFormat *& o_rpSelFormat, SdrMarkList *& o_rpMarkList)
     {
-        o_rpSelFmt = m_pSelFmt;
+        o_rpSelFormat = m_pSelFormat;
         o_rpMarkList = m_pMarkList;
     }
 
 private:
     SwDoc & m_rDoc;
     IShellCursorSupplier & m_rCursorSupplier;
-    SwFrmFmt * m_pSelFmt;
+    SwFrameFormat * m_pSelFormat;
     SdrMarkList * m_pMarkList;
 };
 
@@ -138,11 +138,11 @@ private:
 
 } // namespace sw
 
-class SwUndoFmtColl : public SwUndo, private SwUndRng
+class SwUndoFormatColl : public SwUndo, private SwUndRng
 {
-    OUString aFmtName;
+    OUString aFormatName;
     SwHistory* pHistory;
-    SwFmtColl* pFmtColl;
+    SwFormatColl* pFormatColl;
     // for correct <ReDo(..)> and <Repeat(..)>
     // boolean, which indicates that the attributes are reseted at the nodes
     // before the format has been applied.
@@ -151,13 +151,13 @@ class SwUndoFmtColl : public SwUndo, private SwUndRng
     // the nodes before the format has been applied.
     const bool mbResetListAttrs;
 
-    void DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM);
+    void DoSetFormatColl(SwDoc & rDoc, SwPaM & rPaM);
 
 public:
-    SwUndoFmtColl( const SwPaM&, SwFmtColl*,
+    SwUndoFormatColl( const SwPaM&, SwFormatColl*,
                    const bool bReset,
                    const bool bResetListAttrs );
-    virtual ~SwUndoFmtColl();
+    virtual ~SwUndoFormatColl();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
@@ -182,30 +182,30 @@ public:
 
 };
 
-class SwUndoSetFlyFmt : public SwUndo, public SwClient
+class SwUndoSetFlyFormat : public SwUndo, public SwClient
 {
-    SwFrmFmt* pFrmFmt;                  // saved FlyFormat
-    SwFrmFmt* pOldFmt;
-    SwFrmFmt* pNewFmt;
+    SwFrameFormat* pFrameFormat;                  // saved FlyFormat
+    SwFrameFormat* pOldFormat;
+    SwFrameFormat* pNewFormat;
     SfxItemSet* pItemSet;               // the re-/ set attributes
     sal_uLong nOldNode, nNewNode;
-    sal_Int32 nOldCntnt, nNewCntnt;
+    sal_Int32 nOldContent, nNewContent;
     sal_uInt16 nOldAnchorTyp, nNewAnchorTyp;
     bool bAnchorChgd;
 
     void PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem );
     void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
-    void GetAnchor( SwFmtAnchor& rAnhor, sal_uLong nNode, sal_Int32 nCntnt );
+    void GetAnchor( SwFormatAnchor& rAnhor, sal_uLong nNode, sal_Int32 nContent );
 
 public:
-    SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt );
-    virtual ~SwUndoSetFlyFmt();
+    SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, SwFrameFormat& rNewFrameFormat );
+    virtual ~SwUndoSetFlyFormat();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
     virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
-    void DeRegisterFromFormat( SwFmt& );
+    void DeRegisterFromFormat( SwFormat& );
 };
 
 class SwUndoOutlineLeftRight : public SwUndo, private SwUndRng

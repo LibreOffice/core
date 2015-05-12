@@ -172,7 +172,7 @@
 #define MID_BACK_COLOR_TRANSPARENCY 10
 #define MID_SHADING_VALUE       11
 
-//SvxFmtBreakItem
+//SvxFormatBreakItem
 #define MID_BREAK_BEFORE        0
 #define MID_BREAK_AFTER         1
 

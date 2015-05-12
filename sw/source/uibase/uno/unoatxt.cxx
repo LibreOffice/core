@@ -307,11 +307,11 @@ static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTe
     SwNodes& rNds = pInsDoc->GetNodes();
 
     SwNodeIndex aIdx( rNds.GetEndOfContent(), -1 );
-    SwCntntNode * pNd = aIdx.GetNode().GetCntntNode();
+    SwContentNode * pNd = aIdx.GetNode().GetContentNode();
     SwPosition aPos(aIdx, SwIndex(pNd, (pNd) ? pNd->Len() : 0));
 
     bool bRet = false;
-    pInsDoc->getIDocumentFieldsAccess().LockExpFlds();
+    pInsDoc->getIDocumentFieldsAccess().LockExpFields();
     {
         SwDoc *const pDoc((pxCursor) ? pxCursor->GetDoc() : pxRange->GetDoc());
         SwPaM aPam(pDoc->GetNodes());
@@ -331,9 +331,9 @@ static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTe
         bRet = pDoc->getIDocumentContentOperations().CopyRange( *pPam, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true ) || bRet;
     }
 
-    pInsDoc->getIDocumentFieldsAccess().UnlockExpFlds();
-    if( !pInsDoc->getIDocumentFieldsAccess().IsExpFldsLocked() )
-        pInsDoc->getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
+    pInsDoc->getIDocumentFieldsAccess().UnlockExpFields();
+    if( !pInsDoc->getIDocumentFieldsAccess().IsExpFieldsLocked() )
+        pInsDoc->getIDocumentFieldsAccess().UpdateExpFields(NULL, true);
 
     return bRet;
 }
@@ -364,13 +364,13 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
                                     OTextCursorHelper::getUnoTunnelId()));
         }
 
-        OUString sOnlyTxt;
-        OUString* pOnlyTxt = 0;
+        OUString sOnlyText;
+        OUString* pOnlyText = 0;
         bool bNoAttr = !pxCursor && !pxRange;
         if(bNoAttr)
         {
-            sOnlyTxt = OUString(xTextRange->getString());
-            pOnlyTxt = &sOnlyTxt;
+            sOnlyText = OUString(xTextRange->getString());
+            pOnlyText = &sOnlyText;
         }
 
         const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
@@ -387,8 +387,8 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
             pGlosGroup->SetBaseURL( OUString() );
 
         sal_uInt16 nRet = USHRT_MAX;
-        if( pOnlyTxt )
-            nRet = pGlosGroup->PutText( sShortName, sLongName, *pOnlyTxt );
+        if( pOnlyText )
+            nRet = pGlosGroup->PutText( sShortName, sLongName, *pOnlyText );
         else
         {
             pGlosGroup->ClearDoc();

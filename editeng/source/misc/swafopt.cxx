@@ -21,7 +21,7 @@
 #include <tools/gen.hxx>
 #include <vcl/keycodes.hxx>
 
-SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
+SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
     : aBulletFont( OUString("StarSymbol"),
                     Size( 0, 14 ) )
 {
@@ -36,10 +36,10 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bChgToEnEmDash =
     bChgWeightUnderl =
     bSetINetAttr =
-    bAFmtDelSpacesAtSttEnd =
-    bAFmtDelSpacesBetweenLines =
-    bAFmtByInpDelSpacesAtSttEnd =
-    bAFmtByInpDelSpacesBetweenLines =
+    bAFormatDelSpacesAtSttEnd =
+    bAFormatDelSpacesBetweenLines =
+    bAFormatByInpDelSpacesAtSttEnd =
+    bAFormatByInpDelSpacesBetweenLines =
     bDummy = true;
 
     bReplaceStyles =
@@ -52,7 +52,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bSetBorder =
     bCreateTable =
     bSetNumRule =
-    bAFmtByInput =
+    bAFormatByInput =
     bRightMargin =
     bAutoCompleteWords =
     bAutoCmpltCollectWords =
@@ -81,7 +81,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
 }
 
 
-SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFlags )
+SvxSwAutoFormatFlags& SvxSwAutoFormatFlags::operator=( const SvxSwAutoFormatFlags& rAFFlags )
 {
     bAutoCorrect = rAFFlags.bAutoCorrect;
     bCptlSttSntnc = rAFFlags.bCptlSttSntnc;
@@ -92,7 +92,7 @@ SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFla
     bChgEnumNum = rAFFlags.bChgEnumNum;
     bDelEmptyNode = rAFFlags.bDelEmptyNode;
     bSetNumRule = rAFFlags.bSetNumRule;
-    bAFmtByInput = rAFFlags.bAFmtByInput;
+    bAFormatByInput = rAFFlags.bAFormatByInput;
 
     bAddNonBrkSpace = rAFFlags.bAddNonBrkSpace;
     bChgOrdinalNumber = rAFFlags.bChgOrdinalNumber;
@@ -102,10 +102,10 @@ SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFla
     bSetBorder = rAFFlags.bSetBorder;
     bCreateTable = rAFFlags.bCreateTable;
     bReplaceStyles = rAFFlags.bReplaceStyles;
-    bAFmtDelSpacesAtSttEnd = rAFFlags.bAFmtDelSpacesAtSttEnd;
-    bAFmtDelSpacesBetweenLines = rAFFlags.bAFmtDelSpacesBetweenLines;
-    bAFmtByInpDelSpacesAtSttEnd = rAFFlags.bAFmtByInpDelSpacesAtSttEnd;
-    bAFmtByInpDelSpacesBetweenLines = rAFFlags.bAFmtByInpDelSpacesBetweenLines;
+    bAFormatDelSpacesAtSttEnd = rAFFlags.bAFormatDelSpacesAtSttEnd;
+    bAFormatDelSpacesBetweenLines = rAFFlags.bAFormatDelSpacesBetweenLines;
+    bAFormatByInpDelSpacesAtSttEnd = rAFFlags.bAFormatByInpDelSpacesAtSttEnd;
+    bAFormatByInpDelSpacesBetweenLines = rAFFlags.bAFormatByInpDelSpacesBetweenLines;
 
     bDummy = rAFFlags.bDummy;
 

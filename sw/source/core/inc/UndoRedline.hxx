@@ -64,16 +64,16 @@ public:
 
     bool CanGrouping( const SwUndoRedlineDelete& rPrev );
 
-    // SwUndoTblCpyTbl needs this information:
+    // SwUndoTableCpyTable needs this information:
     long NodeDiff() const { return nSttNode - nEndNode; }
-    sal_Int32 ContentStart() const { return nSttCntnt; }
+    sal_Int32 ContentStart() const { return nSttContent; }
 };
 
 class SwUndoRedlineSort : public SwUndoRedline
 {
     SwSortOptions* pOpt;
     sal_uLong nSaveEndNode, nOffset;
-    sal_Int32 nSaveEndCntnt;
+    sal_Int32 nSaveEndContent;
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) SAL_OVERRIDE;
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) SAL_OVERRIDE;

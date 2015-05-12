@@ -25,9 +25,9 @@
 #include <set>
 
 class SwSection;
-class SwSectionFmt;
+class SwSectionFormat;
 class SwAttrSetChg;
-class SwFtnContFrm;
+class SwFootnoteContFrm;
 class SwLayouter;
 
 #define FINDMODE_ENDNOTE 1
@@ -37,21 +37,21 @@ class SwLayouter;
 class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
 {
     SwSection* pSection;
-    bool bFtnAtEnd; // footnotes at the end of section
+    bool bFootnoteAtEnd; // footnotes at the end of section
     bool bEndnAtEnd; // endnotes at the end of section
-    bool bCntntLock; // content locked
-    bool bOwnFtnNum; // special numbering of footnotes
-    bool bFtnLock; // ftn, don't leave this section bwd
+    bool bContentLock; // content locked
+    bool bOwnFootnoteNum; // special numbering of footnotes
+    bool bFootnoteLock; // ftn, don't leave this section bwd
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
     void _Cut( bool bRemove );
-    // Is there a FtnContainer?
-    // An empty sectionfrm without FtnCont is superfluous
-    bool IsSuperfluous() const { return !ContainsAny() && !ContainsFtnCont(); }
-    void CalcFtnAtEndFlag();
+    // Is there a FootnoteContainer?
+    // An empty sectionfrm without FootnoteCont is superfluous
+    bool IsSuperfluous() const { return !ContainsAny() && !ContainsFootnoteCont(); }
+    void CalcFootnoteAtEndFlag();
     void CalcEndAtEndFlag();
-    const SwSectionFmt* _GetEndSectFmt() const;
+    const SwSectionFormat* _GetEndSectFormat() const;
     bool IsEndnoteAtMyEnd() const;
 
     virtual void DestroyImpl() SAL_OVERRIDE;
@@ -80,16 +80,16 @@ public:
     inline       SwSectionFrm *GetFollow();
     SwSectionFrm* FindMaster() const;
 
-                 SwCntntFrm *FindLastCntnt( sal_uInt8 nMode = 0 );
-    inline const SwCntntFrm *FindLastCntnt( sal_uInt8 nMode = 0 ) const;
+                 SwContentFrm *FindLastContent( sal_uInt8 nMode = 0 );
+    inline const SwContentFrm *FindLastContent( sal_uInt8 nMode = 0 ) const;
     inline SwSection* GetSection() { return pSection; }
     inline const SwSection* GetSection() const { return pSection; }
     inline void ColLock()       { mbColLocked = true; }
     inline void ColUnlock()     { mbColLocked = false; }
 
-    void CalcFtnCntnt();
+    void CalcFootnoteContent();
     void SimpleFormat();
-    bool IsDescendantFrom( const SwSectionFmt* pSect ) const;
+    bool IsDescendantFrom( const SwSectionFormat* pSect ) const;
     bool HasToBreak( const SwFrm* pFrm ) const;
     void MergeNext( SwSectionFrm* pNxt );
 
@@ -100,8 +100,8 @@ public:
     bool SplitSect( SwFrm* pFrm, bool bApres );
     void DelEmpty( bool bRemove ); // Like Cut(), except for that Follow chaining is maintained
     bool IsToIgnore() const        // No size, no content; need to be ignored
-    { return !Frm().Height() && !ContainsCntnt(); }
-    SwFtnContFrm* ContainsFtnCont( const SwFtnContFrm* pCont = NULL ) const;
+    { return !Frm().Height() && !ContainsContent(); }
+    SwFootnoteContFrm* ContainsFootnoteCont( const SwFootnoteContFrm* pCont = NULL ) const;
     bool Growable() const;
     SwTwips _Shrink( SwTwips, bool bTst );
     SwTwips _Grow  ( SwTwips, bool bTst );
@@ -131,29 +131,29 @@ public:
     /// Adapt size to surroundings
     void _CheckClipping( bool bGrow, bool bMaximize );
 
-    void InvalidateFtnPos();
+    void InvalidateFootnotePos();
     void CollectEndnotes( SwLayouter* pLayouter );
-    const SwSectionFmt* GetEndSectFmt() const
-        { if( IsEndnAtEnd() ) return _GetEndSectFmt(); return NULL; }
+    const SwSectionFormat* GetEndSectFormat() const
+        { if( IsEndnAtEnd() ) return _GetEndSectFormat(); return NULL; }
 
-    static void MoveCntntAndDelete( SwSectionFrm* pDel, bool bSave );
+    static void MoveContentAndDelete( SwSectionFrm* pDel, bool bSave );
 
     bool IsBalancedSection() const;
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const SAL_OVERRIDE;
 
-    bool IsFtnAtEnd() const { return bFtnAtEnd; }
+    bool IsFootnoteAtEnd() const { return bFootnoteAtEnd; }
     bool IsEndnAtEnd() const { return bEndnAtEnd;   }
-    bool IsAnyNoteAtEnd() const { return bFtnAtEnd || bEndnAtEnd; }
-    bool AreNotesAtEnd() const { return bFtnAtEnd && bEndnAtEnd; }
+    bool IsAnyNoteAtEnd() const { return bFootnoteAtEnd || bEndnAtEnd; }
+    bool AreNotesAtEnd() const { return bFootnoteAtEnd && bEndnAtEnd; }
 
-    void SetCntntLock( bool bNew ) { bCntntLock = bNew; }
-    bool IsCntntLocked() const { return bCntntLock; }
+    void SetContentLock( bool bNew ) { bContentLock = bNew; }
+    bool IsContentLocked() const { return bContentLock; }
 
-    bool IsOwnFtnNum() const { return bOwnFtnNum; }
+    bool IsOwnFootnoteNum() const { return bOwnFootnoteNum; }
 
-    void SetFtnLock( bool bNew ) { bFtnLock = bNew; }
-    bool IsFtnLock() const { return bFtnLock; }
+    void SetFootnoteLock( bool bNew ) { bFootnoteLock = bNew; }
+    bool IsFootnoteLock() const { return bFootnoteLock; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwSectionFrm)
 };
@@ -168,9 +168,9 @@ inline SwSectionFrm *SwSectionFrm::GetFollow()
 {
     return static_cast<SwSectionFrm*>(SwFlowFrm::GetFollow());
 }
-inline const SwCntntFrm *SwSectionFrm::FindLastCntnt( sal_uInt8 nMode ) const
+inline const SwContentFrm *SwSectionFrm::FindLastContent( sal_uInt8 nMode ) const
 {
-    return const_cast<SwSectionFrm*>(this)->FindLastCntnt( nMode );
+    return const_cast<SwSectionFrm*>(this)->FindLastContent( nMode );
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SECTFRM_HXX

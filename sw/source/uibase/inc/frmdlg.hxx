@@ -54,9 +54,9 @@ public:
                 const SfxItemSet& rCoreSet,
                 bool bNewFrm  = false,
                 const OUString& sResType = OUString("FrameDialog"),
-                bool bFmt     = false,
+                bool bFormat     = false,
                 const OString& sDefPage = OString(),
-                const OUString* pFmtStr  = 0);
+                const OUString* pFormatStr  = 0);
 
     virtual ~SwFrmDlg();
 

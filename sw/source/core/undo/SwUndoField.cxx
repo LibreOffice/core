@@ -49,7 +49,7 @@ SwPosition SwUndoField::GetPosition()
 {
     SwNode * pNode = pDoc->GetNodes()[nNodeIndex];
     SwNodeIndex aNodeIndex(*pNode);
-    SwIndex aIndex(pNode->GetCntntNode(), nOffset);
+    SwIndex aIndex(pNode->GetContentNode(), nOffset);
     SwPosition aResult(aNodeIndex, aIndex);
 
     return aResult;
@@ -58,11 +58,11 @@ SwPosition SwUndoField::GetPosition()
 SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
                          const SwField & rOldField,
                          const SwField & rNewField,
-                         SwMsgPoolItem * _pHnt, bool _bUpdate, SwUndoId _nId)
+                         SwMsgPoolItem * _pHint, bool _bUpdate, SwUndoId _nId)
     : SwUndoField(rPos,_nId)
     , pOldField(rOldField.CopyField())
     , pNewField(rNewField.CopyField())
-    , pHnt(_pHnt)
+    , pHint(_pHint)
     , bUpdate(_bUpdate)
 {
     OSL_ENSURE(pOldField, "No old field!");
@@ -78,27 +78,27 @@ SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
 
 void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 {
-    SwTxtFld * pTxtFld = sw::DocumentFieldsManager::GetTxtFldAtPos(GetPosition());
-    const SwField * pField = pTxtFld ? pTxtFld->GetFmtFld().GetField() : NULL;
+    SwTextField * pTextField = sw::DocumentFieldsManager::GetTextFieldAtPos(GetPosition());
+    const SwField * pField = pTextField ? pTextField->GetFormatField().GetField() : NULL;
 
     if (pField)
     {
-        pDoc->getIDocumentFieldsAccess().UpdateFld(pTxtFld, *pOldField, pHnt, bUpdate);
+        pDoc->getIDocumentFieldsAccess().UpdateField(pTextField, *pOldField, pHint, bUpdate);
     }
 }
 
 void SwUndoFieldFromDoc::DoImpl()
 {
-    SwTxtFld * pTxtFld = sw::DocumentFieldsManager::GetTxtFldAtPos(GetPosition());
-    const SwField * pField = pTxtFld ? pTxtFld->GetFmtFld().GetField() : NULL;
+    SwTextField * pTextField = sw::DocumentFieldsManager::GetTextFieldAtPos(GetPosition());
+    const SwField * pField = pTextField ? pTextField->GetFormatField().GetField() : NULL;
 
     if (pField)
     {
-        pDoc->getIDocumentFieldsAccess().UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
-        SwFmtFld* pDstFmtFld = const_cast<SwFmtFld*>(&pTxtFld->GetFmtFld());
+        pDoc->getIDocumentFieldsAccess().UpdateField(pTextField, *pNewField, pHint, bUpdate);
+        SwFormatField* pDstFormatField = const_cast<SwFormatField*>(&pTextField->GetFormatField());
 
-        if ( pDoc->getIDocumentFieldsAccess().GetFldType(RES_POSTITFLD, aEmptyOUStr, false) == pDstFmtFld->GetField()->GetTyp() )
-            pDoc->GetDocShell()->Broadcast( SwFmtFldHint( pDstFmtFld, SwFmtFldHintWhich::INSERTED ) );
+        if ( pDoc->getIDocumentFieldsAccess().GetFieldType(RES_POSTITFLD, aEmptyOUStr, false) == pDstFormatField->GetField()->GetTyp() )
+            pDoc->GetDocShell()->Broadcast( SwFormatFieldHint( pDstFormatField, SwFormatFieldHintWhich::INSERTED ) );
     }
 }
 

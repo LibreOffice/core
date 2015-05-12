@@ -54,18 +54,18 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
     SWRECTFN( (&GetAnchorFrm()) );
 
-    const SwFrmFmt& rFrmFmt = GetFrmFmt();
-    const SvxLRSpaceItem &rLR = rFrmFmt.GetLRSpace();
-    const SvxULSpaceItem &rUL = rFrmFmt.GetULSpace();
+    const SwFrameFormat& rFrameFormat = GetFrameFormat();
+    const SvxLRSpaceItem &rLR = rFrameFormat.GetLRSpace();
+    const SvxULSpaceItem &rUL = rFrameFormat.GetULSpace();
 
-    const bool bFlyAtFly = FLY_AT_FLY == rFrmFmt.GetAnchor().GetAnchorId();
+    const bool bFlyAtFly = FLY_AT_FLY == rFrameFormat.GetAnchor().GetAnchorId();
 
     // determine position.
     // 'vertical' and 'horizontal' position are calculated separately
     Point aRelPos;
 
     // calculate 'vertical' position
-    SwFmtVertOrient aVert( rFrmFmt.GetVertOrient() );
+    SwFormatVertOrient aVert( rFrameFormat.GetVertOrient() );
     {
         // to-frame anchored objects are *only* vertical positioned centered or
         // bottom, if its wrap mode is 'throught' and its anchor frame has fixed
@@ -74,7 +74,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         if ( ( bFlyAtFly &&
                ( eVertOrient == text::VertOrientation::CENTER ||
                  eVertOrient == text::VertOrientation::BOTTOM ) &&
-             SURROUND_THROUGHT != rFrmFmt.GetSurround().GetSurround() &&
+             SURROUND_THROUGHT != rFrameFormat.GetSurround().GetSurround() &&
              !GetAnchorFrm().HasFixSize() ) )
         {
             eVertOrient = text::VertOrientation::TOP;
@@ -94,9 +94,9 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
                  aVert.GetPos() != nAttrRelPosY )
             {
                 aVert.SetPos( nAttrRelPosY );
-                const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
-                const_cast<SwFrmFmt&>(rFrmFmt).SetFmtAttr( aVert );
-                const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
+                const_cast<SwFrameFormat&>(rFrameFormat).LockModify();
+                const_cast<SwFrameFormat&>(rFrameFormat).SetFormatAttr( aVert );
+                const_cast<SwFrameFormat&>(rFrameFormat).UnlockModify();
             }
         }
 
@@ -137,7 +137,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
     } // end of determination of vertical position
 
     // calculate 'horizontal' position
-    SwFmtHoriOrient aHori( rFrmFmt.GetHoriOrient() );
+    SwFormatHoriOrient aHori( rFrameFormat.GetHoriOrient() );
     {
         // consider toggle of horizontal position for even pages.
         const bool bToggle = aHori.IsPosToggle() &&
@@ -215,9 +215,9 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
                  aHori.GetPos() != nAttrRelPosX )
             {
                 aHori.SetPos( nAttrRelPosX );
-                const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
-                const_cast<SwFrmFmt&>(rFrmFmt).SetFmtAttr( aHori );
-                const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
+                const_cast<SwFrameFormat&>(rFrameFormat).LockModify();
+                const_cast<SwFrameFormat&>(rFrameFormat).SetFormatAttr( aHori );
+                const_cast<SwFrameFormat&>(rFrameFormat).UnlockModify();
             }
         }
     } // end of determination of horizontal position

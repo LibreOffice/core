@@ -41,11 +41,11 @@ using namespace ::com::sun::star;
 
 class SwIntrnlRefLink : public SwBaseLink
 {
-    SwDDEFieldType& rFldType;
+    SwDDEFieldType& rFieldType;
 public:
-    SwIntrnlRefLink( SwDDEFieldType& rType, SfxLinkUpdateMode nUpdateType, SotClipboardFormatId nFmt )
-        : SwBaseLink( nUpdateType, nFmt ),
-        rFldType( rType )
+    SwIntrnlRefLink( SwDDEFieldType& rType, SfxLinkUpdateMode nUpdateType, SotClipboardFormatId nFormat )
+        : SwBaseLink( nUpdateType, nFormat ),
+        rFieldType( rType )
     {}
 
     virtual void Closed() SAL_OVERRIDE;
@@ -82,9 +82,9 @@ public:
             if( bDel )
                 sStr = sStr.copy( 0, n );
 
-            rFldType.SetExpansion( sStr );
+            rFieldType.SetExpansion( sStr );
             // set Expansion first! (otherwise this flag will be deleted)
-            rFldType.SetCRLFDelFlag( bDel );
+            rFieldType.SetCRLFDelFlag( bDel );
         }
         break;
 
@@ -93,25 +93,25 @@ public:
         return SUCCESS;
     }
 
-    OSL_ENSURE( rFldType.GetDoc(), "no pDoc" );
+    OSL_ENSURE( rFieldType.GetDoc(), "no pDoc" );
 
     // no dependencies left?
-    if( rFldType.HasWriterListeners() && !rFldType.IsModifyLocked() && !ChkNoDataFlag() )
+    if( rFieldType.HasWriterListeners() && !rFieldType.IsModifyLocked() && !ChkNoDataFlag() )
     {
-        SwViewShell* pSh = rFldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-        SwEditShell* pESh = rFldType.GetDoc()->GetEditShell();
+        SwViewShell* pSh = rFieldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+        SwEditShell* pESh = rFieldType.GetDoc()->GetEditShell();
 
         // Search for fields. If no valid found, disconnect.
         SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
         bool bCallModify = false;
-        rFldType.LockModify();
+        rFieldType.LockModify();
 
-        SwIterator<SwClient,SwFieldType> aIter(rFldType);
+        SwIterator<SwClient,SwFieldType> aIter(rFieldType);
         for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
         {
             // a DDE table or a DDE field attribute in the text
-            if( !pLast->IsA( TYPE( SwFmtFld ) ) ||
-                static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
+            if( !pLast->IsA( TYPE( SwFormatField ) ) ||
+                static_cast<SwFormatField*>(pLast)->GetTextField() )
             {
                 if( !bCallModify )
                 {
@@ -125,7 +125,7 @@ public:
             }
         }
 
-        rFldType.UnlockModify();
+        rFieldType.UnlockModify();
 
         if( bCallModify )
         {
@@ -144,15 +144,15 @@ public:
 
 void SwIntrnlRefLink::Closed()
 {
-    if( rFldType.GetDoc() && !rFldType.GetDoc()->IsInDtor() )
+    if( rFieldType.GetDoc() && !rFieldType.GetDoc()->IsInDtor() )
     {
         // advise goes, convert all fields into text?
-        SwViewShell* pSh = rFldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
-        SwEditShell* pESh = rFldType.GetDoc()->GetEditShell();
+        SwViewShell* pSh = rFieldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+        SwEditShell* pESh = rFieldType.GetDoc()->GetEditShell();
         if( pESh )
         {
             pESh->StartAllAction();
-            pESh->FieldToText( &rFldType );
+            pESh->FieldToText( &rFieldType );
             pESh->EndAllAction();
         }
         else
@@ -169,20 +169,20 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 {
     // here, any anchor of the normal NodesArray should be sufficient
     const SwNode* pNd = 0;
-    SwIterator<SwClient,SwFieldType> aIter(rFldType);
+    SwIterator<SwClient,SwFieldType> aIter(rFieldType);
     for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
     {
         // a DDE table or a DDE field attribute in the text
-        if( !pLast->IsA( TYPE( SwFmtFld ) ))
+        if( !pLast->IsA( TYPE( SwFormatField ) ))
         {
             SwDepend* pDep = static_cast<SwDepend*>(pLast);
-            SwDDETable* pDDETbl = static_cast<SwDDETable*>(pDep->GetToTell());
-            pNd = pDDETbl->GetTabSortBoxes()[0]->GetSttNd();
+            SwDDETable* pDDETable = static_cast<SwDDETable*>(pDep->GetToTell());
+            pNd = pDDETable->GetTabSortBoxes()[0]->GetSttNd();
         }
-        else if( static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
-            pNd = static_cast<SwFmtFld*>(pLast)->GetTxtFld()->GetpTxtNode();
+        else if( static_cast<SwFormatField*>(pLast)->GetTextField() )
+            pNd = static_cast<SwFormatField*>(pLast)->GetTextField()->GetpTextNode();
 
-        if( pNd && &rFldType.GetDoc()->GetNodes() == &pNd->GetNodes() )
+        if( pNd && &rFieldType.GetDoc()->GetNodes() == &pNd->GetNodes() )
             break;
         pNd = 0;
     }
@@ -193,32 +193,32 @@ bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                 sal_Int32 nStt, sal_Int32 nEnd ) const
 {
     // here, any anchor of the normal NodesArray should be sufficient
-    SwNodes* pNds = &rFldType.GetDoc()->GetNodes();
-    SwIterator<SwClient,SwFieldType> aIter(rFldType);
+    SwNodes* pNds = &rFieldType.GetDoc()->GetNodes();
+    SwIterator<SwClient,SwFieldType> aIter(rFieldType);
     for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
     {
         // a DDE table or a DDE field attribute in the text
-        if( !pLast->IsA( TYPE( SwFmtFld ) ))
+        if( !pLast->IsA( TYPE( SwFormatField ) ))
         {
             SwDepend* pDep = static_cast<SwDepend*>(pLast);
-            SwDDETable* pDDETbl = static_cast<SwDDETable*>(pDep->GetToTell());
-            const SwTableNode* pTblNd = pDDETbl->GetTabSortBoxes()[0]->
+            SwDDETable* pDDETable = static_cast<SwDDETable*>(pDep->GetToTell());
+            const SwTableNode* pTableNd = pDDETable->GetTabSortBoxes()[0]->
                             GetSttNd()->FindTableNode();
-            if( pTblNd->GetNodes().IsDocNodes() &&
-                nSttNd < pTblNd->EndOfSectionIndex() &&
-                nEndNd > pTblNd->GetIndex() )
+            if( pTableNd->GetNodes().IsDocNodes() &&
+                nSttNd < pTableNd->EndOfSectionIndex() &&
+                nEndNd > pTableNd->GetIndex() )
                 return true;
         }
-        else if( static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
+        else if( static_cast<SwFormatField*>(pLast)->GetTextField() )
         {
-            const SwTxtFld* pTFld = static_cast<SwFmtFld*>(pLast)->GetTxtFld();
-            const SwTxtNode* pNd = pTFld->GetpTxtNode();
+            const SwTextField* pTField = static_cast<SwFormatField*>(pLast)->GetTextField();
+            const SwTextNode* pNd = pTField->GetpTextNode();
             if( pNd && pNds == &pNd->GetNodes() )
             {
                 sal_uLong nNdPos = pNd->GetIndex();
                 if( nSttNd <= nNdPos && nNdPos <= nEndNd &&
-                    ( nNdPos != nSttNd || pTFld->GetStart() >= nStt ) &&
-                    ( nNdPos != nEndNd || pTFld->GetStart() < nEnd ))
+                    ( nNdPos != nSttNd || pTField->GetStart() >= nStt ) &&
+                    ( nNdPos != nEndNd || pTField->GetStart() < nEnd ))
                     return true;
             }
         }

@@ -210,8 +210,8 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
             // den Start des Attributs neu setzen
             pAttr->nSttPara = rNewSttPara;
             pAttr->nEndPara = rNewSttPara;
-            pAttr->nSttCntnt = nNewSttCnt;
-            pAttr->nEndCntnt = nNewSttCnt;
+            pAttr->nSttContent = nNewSttCnt;
+            pAttr->nEndContent = nNewSttCnt;
             pAttr->pPrev = 0;
 
             pAttr = pNext;
@@ -361,7 +361,7 @@ void SwHTMLParser::EndContext( _HTMLAttrContext *pContext )
     // Ggf. noch einen Ansatz-Umbruch einfuegen
     if( AM_NONE != pContext->GetAppendMode() &&
         pPam->GetPoint()->nContent.GetIndex() )
-        AppendTxtNode( pContext->GetAppendMode() );
+        AppendTextNode( pContext->GetAppendMode() );
 
     // PRE-/LISTING- und XMP-Umgebungen wieder starten
     if( pContext->IsFinishPREListingXMP() )
@@ -426,7 +426,7 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
         SfxItemSet aFrmItemSet( pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
         if( !IsNewDoc() )
-            Reader::ResetFrmFmtAttrs(aFrmItemSet );
+            Reader::ResetFrameFormatAttrs(aFrmItemSet );
 
         // Ausrichtung setzen
         SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE, rItemSet, rPropInfo,
@@ -439,7 +439,7 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
         SetSpace( Size(0,0), rItemSet, rPropInfo, aFrmItemSet );
 
         // Sonstige CSS1-Attribute Setzen
-        SetFrmFmtAttrs( rItemSet, rPropInfo,
+        SetFrameFormatAttrs( rItemSet, rPropInfo,
                         HTML_FF_BOX|HTML_FF_PADDING|HTML_FF_BACKGROUND|HTML_FF_DIRECTION,
                         aFrmItemSet );
 
@@ -465,7 +465,7 @@ bool SwHTMLParser::CreateContainer( const OUString& rClass,
         // Container-Klasse
         SfxItemSet *pFrmItemSet = pContext->GetFrmItemSet( pDoc );
         if( !IsNewDoc() )
-            Reader::ResetFrmFmtAttrs( *pFrmItemSet );
+            Reader::ResetFrameFormatAttrs( *pFrmItemSet );
 
         SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE,
                                 rItemSet, rPropInfo, *pFrmItemSet );
@@ -473,7 +473,7 @@ bool SwHTMLParser::CreateContainer( const OUString& rClass,
         SetFixSize( aDummy, aDummy, false, false, rItemSet, rPropInfo,
                     *pFrmItemSet );
         SetSpace( aDummy, rItemSet, rPropInfo, *pFrmItemSet );
-        SetFrmFmtAttrs( rItemSet, rPropInfo, HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_DIRECTION,
+        SetFrameFormatAttrs( rItemSet, rPropInfo, HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_DIRECTION,
                         *pFrmItemSet );
 
         bRet = true;
@@ -492,7 +492,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
     if( bCharLvl && !pPam->GetPoint()->nContent.GetIndex() &&
         SVX_ADJUST_LEFT == rPropInfo.eFloat )
     {
-        SwFmtDrop aDrop;
+        SwFormatDrop aDrop;
         aDrop.GetChars() = 1;
 
         pCSS1Parser->FillDropCap( aDrop, rItemSet );
@@ -512,7 +512,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
 
 // Feature: PrintExt
     if( !bCharLvl )
-        pCSS1Parser->SetFmtBreak( rItemSet, rPropInfo );
+        pCSS1Parser->SetFormatBreak( rItemSet, rPropInfo );
 // /Feature: PrintExt
 
     OSL_ENSURE(aContexts.size() <= nContextStAttrMin ||
@@ -532,7 +532,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             {
                 // Absatz-Einzuege muessen addiert werden und werden immer
                 // nur absatzweise gesetzt (fuer den ersten Absatz hier,
-                // fuer alle folgenden in SetTxtCollAttrs)
+                // fuer alle folgenden in SetTextCollAttrs)
 
                 const SvxLRSpaceItem *pLRItem =
                     static_cast<const SvxLRSpaceItem *>(pItem);
@@ -560,7 +560,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 if( rPropInfo.bLeftMargin )
                 {
                     OSL_ENSURE( rPropInfo.nLeftMargin < 0 ||
-                            rPropInfo.nLeftMargin == pLRItem->GetTxtLeft(),
+                            rPropInfo.nLeftMargin == pLRItem->GetTextLeft(),
                             "linker Abstand stimmt nicht mit Item ueberein" );
                     if( rPropInfo.nLeftMargin < 0 &&
                         -rPropInfo.nLeftMargin > nOldLeft )
@@ -580,15 +580,15 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                         nRight = nOldRight + static_cast< sal_uInt16 >(rPropInfo.nRightMargin);
                 }
                 if( rPropInfo.bTextIndent )
-                    nIndent = pLRItem->GetTxtFirstLineOfst();
+                    nIndent = pLRItem->GetTextFirstLineOfst();
 
                 // und die Werte fuer nachfolgende Absaetze merken
                 pContext->SetMargins( nLeft, nRight, nIndent );
 
                 // das Attribut noch am aktuellen Absatz setzen
                 SvxLRSpaceItem aLRItem( *pLRItem );
-                aLRItem.SetTxtFirstLineOfst( nIndent );
-                aLRItem.SetTxtLeft( nLeft );
+                aLRItem.SetTextFirstLineOfst( nIndent );
+                aLRItem.SetTextLeft( nLeft );
                 aLRItem.SetRight( nRight );
                 NewAttr( &aAttrTab.pLRSpace, aLRItem );
                 EndAttr( aAttrTab.pLRSpace, 0, false );

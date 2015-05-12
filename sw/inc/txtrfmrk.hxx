@@ -21,29 +21,29 @@
 
 #include <txatbase.hxx>
 
-class SwTxtNode;
+class SwTextNode;
 
 // Attribute for content-/position references in text.
-class SwTxtRefMark : public SwTxtAttrEnd
+class SwTextRefMark : public SwTextAttrEnd
 {
-    SwTxtNode * m_pTxtNode;
+    SwTextNode * m_pTextNode;
     sal_Int32 * m_pEnd; // end is optional (point reference)
 
 public:
-    SwTxtRefMark( SwFmtRefMark& rAttr,
+    SwTextRefMark( SwFormatRefMark& rAttr,
             sal_Int32 const nStart, sal_Int32 const*const pEnd = 0);
 
-    virtual sal_Int32* GetEnd() SAL_OVERRIDE;       // SwTxtAttr
+    virtual sal_Int32* GetEnd() SAL_OVERRIDE;       // SwTextAttr
 
-    // get and set TxtNode pointer
-    inline const SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
+    // get and set TextNode pointer
+    inline const SwTextNode& GetTextNode() const;
+    void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }
 };
 
-inline const SwTxtNode& SwTxtRefMark::GetTxtNode() const
+inline const SwTextNode& SwTextRefMark::GetTextNode() const
 {
-    assert( m_pTxtNode );
-    return *m_pTxtNode;
+    assert( m_pTextNode );
+    return *m_pTextNode;
 }
 
 #endif

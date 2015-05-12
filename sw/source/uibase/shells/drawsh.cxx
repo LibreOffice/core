@@ -369,9 +369,9 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         {
             if (SdrObject* pObj = IsSingleFillableNonOLESelected())
             {
-                SwFrmFmt* pFrmFmt = ::FindFrmFmt(pObj);
-                if (pFrmFmt)
-                    SwTextBoxHelper::create(pFrmFmt);
+                SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
+                if (pFrameFormat)
+                    SwTextBoxHelper::create(pFrameFormat);
             }
             break;
         }
@@ -379,9 +379,9 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         {
             if (SdrObject* pObj = IsSingleFillableNonOLESelected())
             {
-                SwFrmFmt* pFrmFmt = ::FindFrmFmt(pObj);
-                if (pFrmFmt)
-                    SwTextBoxHelper::destroy(pFrmFmt);
+                SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
+                if (pFrameFormat)
+                    SwTextBoxHelper::destroy(pFrameFormat);
             }
             break;
         }
@@ -495,9 +495,9 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 bool bDisable = true;
                 if (SdrObject* pObj = IsSingleFillableNonOLESelected())
                 {
-                    SwFrmFmt* pFrmFmt = ::FindFrmFmt(pObj);
+                    SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
                     // Allow creating a TextBox only in case this is a draw format without a TextBox so far.
-                    if (pFrmFmt && pFrmFmt->Which() == RES_DRAWFRMFMT && !SwTextBoxHelper::findTextBox(pFrmFmt))
+                    if (pFrameFormat && pFrameFormat->Which() == RES_DRAWFRMFMT && !SwTextBoxHelper::findTextBox(pFrameFormat))
                     {
                         if (SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pObj))
                         {
@@ -518,9 +518,9 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 bool bDisable = true;
                 if (SdrObject* pObj = IsSingleFillableNonOLESelected())
                 {
-                    SwFrmFmt* pFrmFmt = ::FindFrmFmt(pObj);
+                    SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
                     // Allow removing a TextBox only in case it has one.
-                    if (pFrmFmt && SwTextBoxHelper::findTextBox(pFrmFmt))
+                    if (pFrameFormat && SwTextBoxHelper::findTextBox(pFrameFormat))
                         bDisable = false;
                 }
 

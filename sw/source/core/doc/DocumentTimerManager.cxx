@@ -124,23 +124,23 @@ IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Idle*, pIdle, void )
             }
         }
 
-        SwFldUpdateFlags nFldUpdFlag = m_rDoc.GetDocumentSettingManager().getFieldUpdateFlags(true);
-        if( ( AUTOUPD_FIELD_ONLY == nFldUpdFlag
-                    || AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag ) &&
-                m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().IsFieldsDirty()
+        SwFieldUpdateFlags nFieldUpdFlag = m_rDoc.GetDocumentSettingManager().getFieldUpdateFlags(true);
+        if( ( AUTOUPD_FIELD_ONLY == nFieldUpdFlag
+                    || AUTOUPD_FIELD_AND_CHARTS == nFieldUpdFlag ) &&
+                m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().IsFieldsDirty()
                 // If we switch the field name the Fields are not updated.
                 // So the "background update" should always be carried out
-                /* && !pStartSh->GetViewOptions()->IsFldName()*/ )
+                /* && !pStartSh->GetViewOptions()->IsFieldName()*/ )
         {
-            if ( m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().IsInUpdateFlds() ||
-                 m_rDoc.getIDocumentFieldsAccess().IsExpFldsLocked() )
+            if ( m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().IsInUpdateFields() ||
+                 m_rDoc.getIDocumentFieldsAccess().IsExpFieldsLocked() )
             {
                 pIdle->Start();
                 return;
             }
 
             //  Action brackets!
-            m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().SetInUpdateFlds( true );
+            m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetInUpdateFields( true );
 
             pTmpRoot->StartAllAction();
 
@@ -148,17 +148,17 @@ IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Idle*, pIdle, void )
             const bool bOldLockView = pShell->IsViewLocked();
             pShell->LockView( true );
 
-            m_rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // ChapterField
-            m_rDoc.getIDocumentFieldsAccess().UpdateExpFlds( 0, false );      // Updates ExpressionFields
-            m_rDoc.getIDocumentFieldsAccess().UpdateTblFlds(NULL);                // Tables
-            m_rDoc.getIDocumentFieldsAccess().UpdateRefFlds(NULL);                // References
+            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // ChapterField
+            m_rDoc.getIDocumentFieldsAccess().UpdateExpFields( 0, false );      // Updates ExpressionFields
+            m_rDoc.getIDocumentFieldsAccess().UpdateTableFields(NULL);                // Tables
+            m_rDoc.getIDocumentFieldsAccess().UpdateRefFields(NULL);                // References
 
             pTmpRoot->EndAllAction();
 
             pShell->LockView( bOldLockView );
 
-            m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().SetInUpdateFlds( false );
-            m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().SetFieldsDirty( false );
+            m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetInUpdateFields( false );
+            m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty( false );
         }
     }
 #ifdef TIMELOG

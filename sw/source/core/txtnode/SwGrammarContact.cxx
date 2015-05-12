@@ -43,7 +43,7 @@ class SwGrammarContact : public IGrammarContact, public SwClient
     Timer aTimer;
     SwGrammarMarkUp *mpProxyList;
     bool mbFinished;
-    SwTxtNode* getMyTxtNode() { return static_cast<SwTxtNode*>(GetRegisteredIn()); }
+    SwTextNode* getMyTextNode() { return static_cast<SwTextNode*>(GetRegisteredIn()); }
       DECL_LINK_TYPED( TimerRepaint, Timer *, void );
 
 public:
@@ -52,8 +52,8 @@ public:
 
     // (pure) virtual functions of IGrammarContact
     virtual void updateCursorPosition( const SwPosition& rNewPos ) SAL_OVERRIDE;
-    virtual SwGrammarMarkUp* getGrammarCheck( SwTxtNode& rTxtNode, bool bCreate ) SAL_OVERRIDE;
-    virtual void finishGrammarCheck( SwTxtNode& rTxtNode ) SAL_OVERRIDE;
+    virtual SwGrammarMarkUp* getGrammarCheck( SwTextNode& rTextNode, bool bCreate ) SAL_OVERRIDE;
+    virtual void finishGrammarCheck( SwTextNode& rTextNode ) SAL_OVERRIDE;
 protected:
     // virtual function of SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
@@ -72,9 +72,9 @@ IMPL_LINK_TYPED( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
         pTimer->Stop();
         if( GetRegisteredIn() )
         {   //Replace the old wrong list by the proxy list and repaint all frames
-            getMyTxtNode()->SetGrammarCheck( mpProxyList, true );
+            getMyTextNode()->SetGrammarCheck( mpProxyList, true );
             mpProxyList = 0;
-            SwTxtFrm::repaintTextFrames( *getMyTxtNode() );
+            SwTextFrm::repaintTextFrames( *getMyTextNode() );
         }
     }
 }
@@ -82,30 +82,30 @@ IMPL_LINK_TYPED( SwGrammarContact, TimerRepaint, Timer *, pTimer, void )
 /* I'm always a client of the current paragraph */
 void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
 {
-    SwTxtNode* pTxtNode = rNewPos.nNode.GetNode().GetTxtNode();
-    if( pTxtNode != GetRegisteredIn() ) // paragraph has been changed
+    SwTextNode* pTextNode = rNewPos.nNode.GetNode().GetTextNode();
+    if( pTextNode != GetRegisteredIn() ) // paragraph has been changed
     {
         aTimer.Stop();
         if( GetRegisteredIn() ) // My last paragraph has been left
         {
             if( mpProxyList )
             {   // replace old list by the proxy list and repaint
-                getMyTxtNode()->SetGrammarCheck( mpProxyList, true );
-                SwTxtFrm::repaintTextFrames( *getMyTxtNode() );
+                getMyTextNode()->SetGrammarCheck( mpProxyList, true );
+                SwTextFrm::repaintTextFrames( *getMyTextNode() );
             }
             GetRegisteredInNonConst()->Remove( this ); // good bye old paragraph
             mpProxyList = 0;
         }
-        if( pTxtNode )
-            pTxtNode->Add( this ); // welcome new paragraph
+        if( pTextNode )
+            pTextNode->Add( this ); // welcome new paragraph
     }
 }
 
 /* deliver a grammar check list for the given text node */
-SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTxtNode& rTxtNode, bool bCreate )
+SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool bCreate )
 {
     SwGrammarMarkUp *pRet = 0;
-    if( GetRegisteredIn() == &rTxtNode ) // hey, that's my current paragraph!
+    if( GetRegisteredIn() == &rTextNode ) // hey, that's my current paragraph!
     {   // so you will get a proxy list...
         if( bCreate )
         {
@@ -116,8 +116,8 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTxtNode& rTxtNode, bool bC
             }
             if( !mpProxyList )
             {
-                if( rTxtNode.GetGrammarCheck() )
-                    mpProxyList = static_cast<SwGrammarMarkUp*>(rTxtNode.GetGrammarCheck()->Clone());
+                if( rTextNode.GetGrammarCheck() )
+                    mpProxyList = static_cast<SwGrammarMarkUp*>(rTextNode.GetGrammarCheck()->Clone());
                 else
                 {
                     mpProxyList = new SwGrammarMarkUp();
@@ -130,13 +130,13 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTxtNode& rTxtNode, bool bC
     }
     else
     {
-        pRet = rTxtNode.GetGrammarCheck(); // do you have already a list?
+        pRet = rTextNode.GetGrammarCheck(); // do you have already a list?
         if( bCreate && !pRet ) // do you want to create a list?
         {
             pRet = new SwGrammarMarkUp();
             pRet->SetInvalid( 0, COMPLETE_STRING );
-            rTxtNode.SetGrammarCheck( pRet );
-            rTxtNode.SetGrammarCheckDirty( true );
+            rTextNode.SetGrammarCheck( pRet );
+            rTextNode.SetGrammarCheckDirty( true );
         }
     }
     return pRet;
@@ -157,10 +157,10 @@ void SwGrammarContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem * )
     }
 }
 
-void SwGrammarContact::finishGrammarCheck( SwTxtNode& rTxtNode )
+void SwGrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
 {
-    if( &rTxtNode != GetRegisteredIn() ) // not my paragraph
-        SwTxtFrm::repaintTextFrames( rTxtNode ); // can be repainted directly
+    if( &rTextNode != GetRegisteredIn() ) // not my paragraph
+        SwTextFrm::repaintTextFrames( rTextNode ); // can be repainted directly
     else
     {
         if( mpProxyList )
@@ -168,10 +168,10 @@ void SwGrammarContact::finishGrammarCheck( SwTxtNode& rTxtNode )
             mbFinished = true;
             aTimer.Start(); // will replace old list and repaint with delay
         }
-        else if( getMyTxtNode()->GetGrammarCheck() )
+        else if( getMyTextNode()->GetGrammarCheck() )
         {   // all grammar problems seems to be gone, no delay needed
-            getMyTxtNode()->SetGrammarCheck( 0, true );
-            SwTxtFrm::repaintTextFrames( *getMyTxtNode() );
+            getMyTextNode()->SetGrammarCheck( 0, true );
+            SwTextFrm::repaintTextFrames( *getMyTextNode() );
         }
     }
 }
@@ -181,11 +181,11 @@ IGrammarContact* createGrammarContact()
     return new SwGrammarContact();
 }
 
-void finishGrammarCheck( SwTxtNode& rTxtNode )
+void finishGrammarCheck( SwTextNode& rTextNode )
 {
-    IGrammarContact* pGrammarContact = getGrammarContact( rTxtNode );
+    IGrammarContact* pGrammarContact = getGrammarContact( rTextNode );
     if( pGrammarContact )
-        pGrammarContact->finishGrammarCheck( rTxtNode );
+        pGrammarContact->finishGrammarCheck( rTextNode );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

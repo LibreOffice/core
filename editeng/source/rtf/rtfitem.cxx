@@ -303,14 +303,14 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_KEEP:
                 if( aPardMap.nSplit )
                 {
-                    pSet->Put( SvxFmtSplitItem( false, aPardMap.nSplit ));
+                    pSet->Put( SvxFormatSplitItem( false, aPardMap.nSplit ));
                 }
                 break;
 
             case RTF_KEEPN:
                 if( aPardMap.nKeep )
                 {
-                    pSet->Put( SvxFmtKeepItem( true, aPardMap.nKeep ));
+                    pSet->Put( SvxFormatKeepItem( true, aPardMap.nKeep ));
                 }
                 break;
 
@@ -358,7 +358,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                             CalcValue();
                         nSz = sal_uInt16(nTokenValue);
                     }
-                    aLR.SetTxtFirstLineOfst( nSz );
+                    aLR.SetTextFirstLineOfst( nSz );
                     pSet->Put( aLR );
                 }
                 break;
@@ -375,7 +375,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                             CalcValue();
                         nSz = sal_uInt16(nTokenValue);
                     }
-                    aLR.SetTxtLeft( nSz );
+                    aLR.SetTextLeft( nSz );
                     pSet->Put( aLR );
                 }
                 break;

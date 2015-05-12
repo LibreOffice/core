@@ -58,11 +58,11 @@ void SwEditShell::GCAttr()
     {
         if ( !rPaM.HasMark() )
         {
-            SwTxtNode *const pTxtNode =
-                rPaM.GetPoint()->nNode.GetNode().GetTxtNode();
-            if (pTxtNode)
+            SwTextNode *const pTextNode =
+                rPaM.GetPoint()->nNode.GetNode().GetTextNode();
+            if (pTextNode)
             {
-                pTxtNode->GCAttr();
+                pTextNode->GCAttr();
             }
         }
         else
@@ -71,8 +71,8 @@ void SwEditShell::GCAttr()
             SwNodeIndex aIdx( rPaM.Start()->nNode );
             SwNode* pNd = &aIdx.GetNode();
             do {
-                if( pNd->IsTxtNode() )
-                    static_cast<SwTxtNode*>(pNd)->GCAttr();
+                if( pNd->IsTextNode() )
+                    static_cast<SwTextNode*>(pNd)->GCAttr();
             }
             while( 0 != ( pNd = GetDoc()->GetNodes().GoNext( &aIdx )) &&
                     aIdx <= rEnd );
@@ -81,18 +81,18 @@ void SwEditShell::GCAttr()
 }
 
 /// Set the attribute as new default attribute in the document.
-void SwEditShell::SetDefault( const SfxPoolItem& rFmtHint )
+void SwEditShell::SetDefault( const SfxPoolItem& rFormatHint )
 {
     // 7502: Action-Parenthesis
     StartAllAction();
-    GetDoc()->SetDefault( rFmtHint );
+    GetDoc()->SetDefault( rFormatHint );
     EndAllAction();
 }
 
 /// request the default attribute in this document.
-const SfxPoolItem& SwEditShell::GetDefault( sal_uInt16 nFmtHint ) const
+const SfxPoolItem& SwEditShell::GetDefault( sal_uInt16 nFormatHint ) const
 {
-    return GetDoc()->GetDefault( nFmtHint );
+    return GetDoc()->GetDefault( nFormatHint );
 }
 
 void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
@@ -102,12 +102,12 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
     {
-        bool bIsTblMode = IsTableMode();
+        bool bIsTableMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
         for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
         {
-            if( rPaM.HasMark() && ( bIsTblMode ||
+            if( rPaM.HasMark() && ( bIsTableMode ||
                 *rPaM.GetPoint() != *rPaM.GetMark() ))
             {
                 GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, rHint, nFlags );
@@ -133,12 +133,12 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM*
     StartAllAction();
     if( pCrsr->GetNext() != pCrsr )     // Ring of Cursors
     {
-        bool bIsTblMode = IsTableMode();
+        bool bIsTableMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
         for(SwPaM& rTmpCrsr : pCrsr->GetRingContainer())
         {
-            if( rTmpCrsr.HasMark() && ( bIsTblMode ||
+            if( rTmpCrsr.HasMark() && ( bIsTableMode ||
                 *rTmpCrsr.GetPoint() != *rTmpCrsr.GetMark() ))
             {
                 GetDoc()->getIDocumentContentOperations().InsertItemSet(rTmpCrsr, rSet, nFlags );

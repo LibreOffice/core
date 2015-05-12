@@ -20,30 +20,30 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FLDWRAP_HXX
 
 #include "chldwrap.hxx"
-class AbstractSwFldDlg;
+class AbstractSwFieldDlg;
 
-class SwFldDlgWrapper : public SwChildWinWrapper
+class SwFieldDlgWrapper : public SwChildWinWrapper
 {
 public:
-    AbstractSwFldDlg * pDlgInterface;
-    SwFldDlgWrapper( vcl::Window* pParent, sal_uInt16 nId,
+    AbstractSwFieldDlg * pDlgInterface;
+    SwFieldDlgWrapper( vcl::Window* pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
-    SFX_DECL_CHILDWINDOW_WITHID(SwFldDlgWrapper);
+    SFX_DECL_CHILDWINDOW_WITHID(SwFieldDlgWrapper);
 
     virtual bool    ReInitDlg(SwDocShell *pDocSh) SAL_OVERRIDE;
     void ShowReferencePage();
 };
 
 // field dialog only showing database page to support mail merge
-class SwFldDataOnlyDlgWrapper : public SwChildWinWrapper
+class SwFieldDataOnlyDlgWrapper : public SwChildWinWrapper
 {
 public:
-    AbstractSwFldDlg * pDlgInterface;
-    SwFldDataOnlyDlgWrapper( vcl::Window* pParent, sal_uInt16 nId,
+    AbstractSwFieldDlg * pDlgInterface;
+    SwFieldDataOnlyDlgWrapper( vcl::Window* pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
-    SFX_DECL_CHILDWINDOW(SwFldDataOnlyDlgWrapper);
+    SFX_DECL_CHILDWINDOW(SwFieldDataOnlyDlgWrapper);
 
     virtual bool    ReInitDlg(SwDocShell *pDocSh) SAL_OVERRIDE;
 };

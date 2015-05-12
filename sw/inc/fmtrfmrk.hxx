@@ -29,26 +29,26 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextContent; }
 } } }
 
-class SwTxtRefMark;
+class SwTextRefMark;
 
 // ATT_REFMARK
 
-class SwFmtRefMark
+class SwFormatRefMark
     : public SfxPoolItem
     , public SwModify
 {
-    friend class SwTxtRefMark;
-    SwTxtRefMark* pTxtAttr;
+    friend class SwTextRefMark;
+    SwTextRefMark* pTextAttr;
 
-    SwFmtRefMark& operator=(const SwFmtRefMark& rRefMark) SAL_DELETED_FUNCTION;
+    SwFormatRefMark& operator=(const SwFormatRefMark& rRefMark) SAL_DELETED_FUNCTION;
     OUString aRefName;
 
     css::uno::WeakReference<css::text::XTextContent> m_wXReferenceMark;
 
 public:
-    SwFmtRefMark( const OUString& rTxt );
-    SwFmtRefMark( const SwFmtRefMark& rRefMark );
-    virtual ~SwFmtRefMark( );
+    SwFormatRefMark( const OUString& rText );
+    SwFormatRefMark( const SwFormatRefMark& rRefMark );
+    virtual ~SwFormatRefMark( );
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -60,8 +60,8 @@ public:
 
     void InvalidateRefMark();
 
-    const SwTxtRefMark *GetTxtRefMark() const   { return pTxtAttr; }
-    SwTxtRefMark *GetTxtRefMark()               { return pTxtAttr; }
+    const SwTextRefMark *GetTextRefMark() const   { return pTextAttr; }
+    SwTextRefMark *GetTextRefMark()               { return pTextAttr; }
 
     inline       OUString &GetRefName()       { return aRefName; }
     inline const OUString &GetRefName() const { return aRefName; }

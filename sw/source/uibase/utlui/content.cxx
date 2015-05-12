@@ -163,7 +163,7 @@ namespace
                                 pCntType,
                                 p->sText,
                                 INetURLObject::decode(
-                                    p->rINetAttr.GetINetFmt().GetValue(),
+                                    p->rINetAttr.GetINetFormat().GetValue(),
                                     INetURLObject::DECODE_UNAMBIGUOUS,
                                     RTL_TEXTENCODING_UTF8 ),
                                 &p->rINetAttr,
@@ -198,7 +198,7 @@ bool SwContent::IsProtect() const
 bool SwPostItContent::IsProtect() const
 {
     if (mbPostIt)
-        return pFld->IsProtect();
+        return pField->IsProtect();
     else
         return false;
 }
@@ -261,7 +261,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
 
         case CONTENT_TYPE_TABLE     :
             sTypeToken = "table";
-            nMemberCount = static_cast<sal_uInt16>(pWrtShell->GetTblFrmFmtCount(true));
+            nMemberCount = static_cast<sal_uInt16>(pWrtShell->GetTableFrameFormatCount(true));
             bEdit = true;
         break;
 
@@ -310,31 +310,31 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 pMember = new SwContentArr;
             }
             const Point aNullPt;
-            nMemberCount = pWrtShell->GetSectionFmtCount();
+            nMemberCount = pWrtShell->GetSectionFormatCount();
             for(sal_uInt16 i = 0; i < nMemberCount; i++)
             {
-                const SwSectionFmt* pFmt;
+                const SwSectionFormat* pFormat;
                 SectionType eTmpType;
-                if( (pFmt = &pWrtShell->GetSectionFmt(i))->IsInNodesArr() &&
-                (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
+                if( (pFormat = &pWrtShell->GetSectionFormat(i))->IsInNodesArr() &&
+                (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
                 && TOX_HEADER_SECTION != eTmpType )
                 {
                     const OUString& rSectionName =
-                        pFmt->GetSection()->GetSectionName();
+                        pFormat->GetSection()->GetSectionName();
                     sal_uInt8 nLevel = 0;
-                    SwSectionFmt* pParentFmt = pFmt->GetParent();
-                    while(pParentFmt)
+                    SwSectionFormat* pParentFormat = pFormat->GetParent();
+                    while(pParentFormat)
                     {
                         nLevel++;
-                        pParentFmt = pParentFmt->GetParent();
+                        pParentFormat = pParentFormat->GetParent();
                     }
 
                     SwContent* pCnt = new SwRegionContent(this, rSectionName,
                             nLevel,
-                            pFmt->FindLayoutRect( false, &aNullPt ).Top());
+                            pFormat->FindLayoutRect( false, &aNullPt ).Top());
 
                     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, 0 );
-                    if( !pFmt->GetInfo( aAskItem ) &&
+                    if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
                     pMember->insert(pCnt);
@@ -400,18 +400,18 @@ void SwContentType::Init(bool* pbInvalidateWindow)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    if ( (*i)->GetBroadCaster()->ISA(SwFmtFld)) // SwPostit
+                    if ( (*i)->GetBroadCaster()->ISA(SwFormatField)) // SwPostit
                     {
-                        const SwFmtFld* aFmtFld = static_cast<const SwFmtFld*>((*i)->GetBroadCaster());
-                        if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
+                        const SwFormatField* aFormatField = static_cast<const SwFormatField*>((*i)->GetBroadCaster());
+                        if (aFormatField->GetTextField() && aFormatField->IsFieldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
-                            OUString sEntry = aFmtFld->GetField()->GetPar2();
+                            OUString sEntry = aFormatField->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,
                                                 sEntry,
-                                                aFmtFld,
+                                                aFormatField,
                                                 nMemberCount);
                             pMember->insert(pCnt);
                             nMemberCount++;
@@ -531,18 +531,18 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
         case CONTENT_TYPE_TABLE     :
         {
-            OSL_ENSURE(nMemberCount == static_cast<sal_uInt16>(pWrtShell->GetTblFrmFmtCount(true)),
+            OSL_ENSURE(nMemberCount == static_cast<sal_uInt16>(pWrtShell->GetTableFrameFormatCount(true)),
                        "MemberCount differs");
             Point aNullPt;
-            nMemberCount = static_cast<sal_uInt16>(pWrtShell->GetTblFrmFmtCount(true));
+            nMemberCount = static_cast<sal_uInt16>(pWrtShell->GetTableFrameFormatCount(true));
             for(sal_uInt16 i = 0; i < nMemberCount; i++)
             {
-                const SwFrmFmt& rTblFmt = pWrtShell->GetTblFrmFmt(i, true);
-                const OUString sTblName( rTblFmt.GetName() );
+                const SwFrameFormat& rTableFormat = pWrtShell->GetTableFrameFormat(i, true);
+                const OUString sTableName( rTableFormat.GetName() );
 
-                SwContent* pCnt = new SwContent(this, sTblName,
-                        rTblFmt.FindLayoutRect(false, &aNullPt).Top() );
-                if( !rTblFmt.GetInfo( aAskItem ) &&
+                SwContent* pCnt = new SwContent(this, sTableName,
+                        rTableFormat.FindLayoutRect(false, &aNullPt).Top() );
+                if( !rTableFormat.GetInfo( aAskItem ) &&
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
 
@@ -569,26 +569,26 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             nMemberCount = pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
             for(size_t i = 0; i < nMemberCount; ++i)
             {
-                const SwFrmFmt* pFrmFmt = pWrtShell->GetFlyNum(i,eType,/*bIgnoreTextBoxes=*/true);
-                const OUString sFrmName = pFrmFmt->GetName();
+                const SwFrameFormat* pFrameFormat = pWrtShell->GetFlyNum(i,eType,/*bIgnoreTextBoxes=*/true);
+                const OUString sFrmName = pFrameFormat->GetName();
 
                 SwContent* pCnt;
                 if(CONTENT_TYPE_GRAPHIC == nContentType)
                 {
                     OUString sLink;
-                    pWrtShell->GetGrfNms( &sLink, 0, static_cast<const SwFlyFrmFmt*>( pFrmFmt));
+                    pWrtShell->GetGrfNms( &sLink, 0, static_cast<const SwFlyFrameFormat*>( pFrameFormat));
                     pCnt = new SwGraphicContent(this, sFrmName,
                                 INetURLObject::decode( sLink,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ),
-                                pFrmFmt->FindLayoutRect(false, &aNullPt).Top());
+                                pFrameFormat->FindLayoutRect(false, &aNullPt).Top());
                 }
                 else
                 {
                     pCnt = new SwContent(this, sFrmName,
-                            pFrmFmt->FindLayoutRect(false, &aNullPt).Top() );
+                            pFrameFormat->FindLayoutRect(false, &aNullPt).Top() );
                 }
-                if( !pFrmFmt->GetInfo( aAskItem ) &&
+                if( !pFrameFormat->GetInfo( aAskItem ) &&
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
                 pMember->insert(pCnt);
@@ -618,29 +618,29 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         case CONTENT_TYPE_REGION    :
         {
             const Point aNullPt;
-            nMemberCount = pWrtShell->GetSectionFmtCount();
+            nMemberCount = pWrtShell->GetSectionFormatCount();
             for(sal_uInt16 i = 0; i < nMemberCount; i++)
             {
-                const SwSectionFmt* pFmt;
+                const SwSectionFormat* pFormat;
                 SectionType eTmpType;
-                if( (pFmt = &pWrtShell->GetSectionFmt(i))->IsInNodesArr() &&
-                (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
+                if( (pFormat = &pWrtShell->GetSectionFormat(i))->IsInNodesArr() &&
+                (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
                 && TOX_HEADER_SECTION != eTmpType )
                 {
-                    OUString sSectionName = pFmt->GetSection()->GetSectionName();
+                    OUString sSectionName = pFormat->GetSection()->GetSectionName();
 
                     sal_uInt8 nLevel = 0;
-                    SwSectionFmt* pParentFmt = pFmt->GetParent();
-                    while(pParentFmt)
+                    SwSectionFormat* pParentFormat = pFormat->GetParent();
+                    while(pParentFormat)
                     {
                         nLevel++;
-                        pParentFmt = pParentFmt->GetParent();
+                        pParentFormat = pParentFormat->GetParent();
                     }
 
                     SwContent* pCnt = new SwRegionContent(this, sSectionName,
                             nLevel,
-                            pFmt->FindLayoutRect( false, &aNullPt ).Top());
-                    if( !pFmt->GetInfo( aAskItem ) &&
+                            pFormat->FindLayoutRect( false, &aNullPt ).Top());
+                    if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
                     pMember->insert(pCnt);
@@ -708,18 +708,18 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    if ( (*i)->GetBroadCaster()->ISA(SwFmtFld)) // SwPostit
+                    if ( (*i)->GetBroadCaster()->ISA(SwFormatField)) // SwPostit
                     {
-                        const SwFmtFld* aFmtFld = static_cast<const SwFmtFld*>((*i)->GetBroadCaster());
-                        if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
+                        const SwFormatField* aFormatField = static_cast<const SwFormatField*>((*i)->GetBroadCaster());
+                        if (aFormatField->GetTextField() && aFormatField->IsFieldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
-                            OUString sEntry = aFmtFld->GetField()->GetPar2();
+                            OUString sEntry = aFormatField->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,
                                                 sEntry,
-                                                aFmtFld,
+                                                aFormatField,
                                                 nMemberCount);
                             pMember->insert(pCnt);
                             nMemberCount++;
@@ -752,8 +752,8 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         SwContact* pContact = static_cast<SwContact*>(pTemp->GetUserCall());
                         long nYPos = 0;
                         const Point aNullPt;
-                        if(pContact && pContact->GetFmt())
-                            nYPos = pContact->GetFmt()->FindLayoutRect(false, &aNullPt).Top();
+                        if(pContact && pContact->GetFormat())
+                            nYPos = pContact->GetFormat()->FindLayoutRect(false, &aNullPt).Top();
                         SwContent* pCnt = new SwContent(
                                             this,
                                             pTemp->GetName(),
@@ -784,7 +784,7 @@ SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId)
     , sSpace(OUString("                    "))
     , sRemoveIdx(SW_RES(ST_REMOVE_INDEX))
     , sUpdateIdx(SW_RES(ST_UPDATE))
-    , sUnprotTbl(SW_RES(ST_REMOVE_TBL_PROTECTION))
+    , sUnprotTable(SW_RES(ST_REMOVE_TBL_PROTECTION))
     , sRename(SW_RES(ST_RENAME))
     , sReadonlyIdx(SW_RES(ST_READONLY_IDX))
     , sInvisible(SW_RES(ST_INVISIBLE))
@@ -916,14 +916,14 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
             {
                 if( pActiveShell && pActiveShell->GetDoc() )
                 {
-                    const SwFlyFrmFmt* pFrmFmt = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
-                    if( pFrmFmt )
+                    const SwFlyFrameFormat* pFrameFormat = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
+                    if( pFrameFormat )
                     {
-//                        SwNodeIndex aIdx( *(pFrmFmt->GetCntnt().GetCntntIdx()), 1 );
+//                        SwNodeIndex aIdx( *(pFrameFormat->GetContent().GetContentIdx()), 1 );
 //                        const SwGrfNode* pGrfNd = aIdx.GetNode().GetGrfNode();
 //                        if( pGrfNd )
 //                            return pGrfNd->GetAlternateText();
-                        return pFrmFmt->GetObjTitle();
+                        return pFrameFormat->GetObjTitle();
                     }
                 }
             }
@@ -932,9 +932,9 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
         case CONTENT_TYPE_FRAME     :
             {
                 //Can't find the GetAlternateText function. Need to verify again.
-                const SwFlyFrmFmt* pFlyFmt = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
-                if( pFlyFmt )
-                    return pFlyFmt->/*GetAlternateText*/GetName();
+                const SwFlyFrameFormat* pFlyFormat = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
+                if( pFlyFormat )
+                    return pFlyFormat->/*GetAlternateText*/GetName();
             }
             break;
     }
@@ -1009,9 +1009,9 @@ OUString SwContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
         case CONTENT_TYPE_FRAME     :
             {
                 //Can't find the function "GetLongDescription". Need to verify again.
-                const SwFlyFrmFmt* pFlyFmt = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
-                if( pFlyFmt )
-                    return pFlyFmt->GetDescription();
+                const SwFlyFrameFormat* pFlyFormat = pActiveShell->GetDoc()->FindFlyByName( pCnt->GetName(), 0);
+                if( pFlyFormat )
+                    return pFlyFormat->GetDescription();
             }
             break;
     }
@@ -1214,10 +1214,10 @@ PopupMenu* SwContentTree::CreateContextMenu()
             {
                 bSubPop4 = true;
                 pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
-                pSubPop4->InsertItem(404, sUnprotTbl);
+                pSubPop4->InsertItem(404, sUnprotTable);
                 bool bFull = false;
-                OUString sTblName = static_cast<SwContent*>(pEntry->GetUserData())->GetName();
-                bool bProt = pActiveShell->HasTblAnyProtection( &sTblName, &bFull );
+                OUString sTableName = static_cast<SwContent*>(pEntry->GetUserData())->GetName();
+                bool bProt = pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
                 pSubPop4->EnableItem(403, !bFull );
                 pSubPop4->EnableItem(404, bProt );
                 pSubPop4->InsertItem(501, aContextStrings[ST_DELETE_ENTRY - ST_CONTEXT_FIRST]);
@@ -1791,14 +1791,14 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
             if( pWrtShell->IsOutlineCopyable( nPos ) )
             {
                 const SwNumRule* pOutlRule = pWrtShell->GetOutlineNumRule();
-                const SwTxtNode* pTxtNd =
+                const SwTextNode* pTextNd =
                         pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(nPos);
-                if( pTxtNd && pOutlRule && pTxtNd->IsNumbered())
+                if( pTextNd && pOutlRule && pTextNd->IsNumbered())
                 {
                     SwNumberTree::tNumberVector aNumVector =
-                        pTxtNd->GetNumberVector();
+                        pTextNd->GetNumberVector();
                     for( sal_Int8 nLevel = 0;
-                         nLevel <= pTxtNd->GetActualListLevel();
+                         nLevel <= pTextNd->GetActualListLevel();
                          nLevel++ )
                     {
                         const SwNumberTree::tSwNumTreeNumber nVal = aNumVector[nLevel] + 1;
@@ -3346,7 +3346,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                             *static_cast<SwURLFieldContent*>(pCnt)->GetINetAttr() ))
             {
                 pActiveShell->Right( CRSR_SKIP_CHARS, true, 1, false);
-                pActiveShell->SwCrsrShell::SelectTxtAttr( RES_TXTATR_INETFMT, true );
+                pActiveShell->SwCrsrShell::SelectTextAttr( RES_TXTATR_INETFMT, true );
             }
 
         }
@@ -3366,7 +3366,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         case CONTENT_TYPE_POSTIT:
             pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
             if (static_cast<SwPostItContent*>(pCnt)->IsPostIt())
-                pActiveShell->GotoFld(*static_cast<SwPostItContent*>(pCnt)->GetPostIt());
+                pActiveShell->GotoFormatField(*static_cast<SwPostItContent*>(pCnt)->GetPostIt());
             else
                 pActiveShell->GetView().GetDocShell()->GetWrtShell()->GotoRedline(
                         pActiveShell->GetView().GetDocShell()->GetWrtShell()->FindRedlineOfData(static_cast<SwPostItContent*>(pCnt)->GetRedline()->GetRedlineData()));

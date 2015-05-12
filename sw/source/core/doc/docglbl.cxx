@@ -61,7 +61,7 @@ enum SwSplitDocType
 };
 
 bool SwDoc::GenerateGlobalDoc( const OUString& rPath,
-                                   const SwTxtFmtColl* pSplitColl )
+                                   const SwTextFormatColl* pSplitColl )
 {
     return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, false, pSplitColl, 0 );
 }
@@ -77,7 +77,7 @@ bool SwDoc::GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel )
 }
 
 bool SwDoc::GenerateHTMLDoc( const OUString& rPath,
-                                 const SwTxtFmtColl* pSplitColl )
+                                 const SwTextFormatColl* pSplitColl )
 {
     return SplitDoc( SPLITDOC_TO_HTML, rPath, false, pSplitColl, 0 );
 }
@@ -88,7 +88,7 @@ SwNodePtr GetStartNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16*
     SwNodePtr pNd;
 
     for( ; *nOutl < pOutlNds->size(); ++(*nOutl) )
-        if( ( pNd = (*pOutlNds)[ *nOutl ])->GetTxtNode()->GetAttrOutlineLevel() == nOutlineLevel && !pNd->FindTableNode() )
+        if( ( pNd = (*pOutlNds)[ *nOutl ])->GetTextNode()->GetAttrOutlineLevel() == nOutlineLevel && !pNd->FindTableNode() )
         {
             return pNd;
         }
@@ -104,7 +104,7 @@ SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* n
     {
         pNd = (*pOutlNds)[ *nOutl ];
 
-        const int nLevel = pNd->GetTxtNode()->GetAttrOutlineLevel();
+        const int nLevel = pNd->GetTextNode()->GetAttrOutlineLevel();
 
         if( ( 0 < nLevel && nLevel <= nOutlineLevel ) &&
             !pNd->FindTableNode() )
@@ -116,12 +116,12 @@ SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* n
 }
 
 // two helpers for collection mode
-SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSplitColl, sal_uInt16* nOutl )
+SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, sal_uInt16* nOutl )
 {
     SwNodePtr pNd;
     for( ; *nOutl < pOutlNds->size(); ++(*nOutl) )
-        if( ( pNd = (*pOutlNds)[ *nOutl ])->GetTxtNode()->
-                    GetTxtColl() == pSplitColl &&
+        if( ( pNd = (*pOutlNds)[ *nOutl ])->GetTextNode()->
+                    GetTextColl() == pSplitColl &&
             !pNd->FindTableNode() )
         {
             return pNd;
@@ -129,14 +129,14 @@ SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSpl
     return 0;
 }
 
-SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSplitColl, sal_uInt16* nOutl )
+SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, sal_uInt16* nOutl )
 {
     SwNodePtr pNd;
 
     for( ++(*nOutl); *nOutl < pOutlNds->size(); ++(*nOutl) )
     {
         pNd = (*pOutlNds)[ *nOutl ];
-        SwTxtFmtColl* pTColl = pNd->GetTxtNode()->GetTxtColl();
+        SwTextFormatColl* pTColl = pNd->GetTextNode()->GetTextColl();
 
         if( ( pTColl == pSplitColl ||
               (   pSplitColl->GetAttrOutlineLevel() > 0 &&
@@ -151,7 +151,7 @@ SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSplit
     return 0;
 }
 
-bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline, const SwTxtFmtColl* pSplitColl, int nOutlineLevel )
+bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline, const SwTextFormatColl* pSplitColl, int nOutlineLevel )
 {
     // Iterate over all the template's Nodes, creating an own
     // document for every single one and replace linked sections (GlobalDoc) for links (HTML).
@@ -173,8 +173,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
             {
                 xTmpOutlNds.reset(new SwOutlineNodes);
                 pOutlNds = xTmpOutlNds.get();
-                SwIterator<SwTxtNode,SwFmtColl> aIter( *pSplitColl );
-                for( SwTxtNode* pTNd = aIter.First(); pTNd; pTNd = aIter.Next() )
+                SwIterator<SwTextNode,SwFormatColl> aIter( *pSplitColl );
+                for( SwTextNode* pTNd = aIter.First(); pTNd; pTNd = aIter.Next() )
                     if( pTNd->GetNodes().IsDocNodes() )
                         pOutlNds->insert( pTNd );
 
@@ -185,11 +185,11 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
         else
         {
             // Look for the 1st level OutlineTemplate
-            const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
-            for( SwTxtFmtColls::size_type n = rFmtColls.size(); n; )
-                if ( rFmtColls[ --n ]->GetAttrOutlineLevel() == 1 )
+            const SwTextFormatColls& rFormatColls =*GetTextFormatColls();
+            for( SwTextFormatColls::size_type n = rFormatColls.size(); n; )
+                if ( rFormatColls[ --n ]->GetAttrOutlineLevel() == 1 )
                 {
-                    pSplitColl = rFmtColls[ n ];
+                    pSplitColl = rFormatColls[ n ];
                     break;
                 }
 
@@ -290,7 +290,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     OUString sTitle( xDocProps->getTitle() );
                     if (!sTitle.isEmpty())
                         sTitle += ": ";
-                    sTitle += pStartNd->GetTxtNode()->GetExpandTxt();
+                    sTitle += pStartNd->GetTextNode()->GetExpandText();
                     xDocProps->setTitle( sTitle );
 
                     // Replace template
@@ -325,7 +325,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     // We need to have a Layout for the HTMLFilter, so that
                     // TextFrames/Controls/OLE objects can be exported correctly as graphics.
                     if( SPLITDOC_TO_HTML == eDocType &&
-                        !pDoc->GetSpzFrmFmts()->empty() )
+                        !pDoc->GetSpzFrameFormats()->empty() )
                     {
                             SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
                     }
@@ -372,19 +372,19 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), true);
 
                             // If FlyFrames are still around, delete these too
-                            for( SwFrmFmts::size_type n = 0; n < GetSpzFrmFmts()->size(); ++n )
+                            for( SwFrameFormats::size_type n = 0; n < GetSpzFrameFormats()->size(); ++n )
                             {
-                                SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
-                                const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
+                                SwFrameFormat* pFly = (*GetSpzFrameFormats())[n];
+                                const SwFormatAnchor* pAnchor = &pFly->GetAnchor();
                                 SwPosition const*const pAPos =
-                                    pAnchor->GetCntntAnchor();
+                                    pAnchor->GetContentAnchor();
                                 if (pAPos &&
                                     ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
                                      (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                                     aSIdx <= pAPos->nNode &&
                                     pAPos->nNode < aEIdx )
                                 {
-                                    getIDocumentLayoutAccess().DelLayoutFmt( pFly );
+                                    getIDocumentLayoutAccess().DelLayoutFormat( pFly );
                                     --n;
                                 }
                             }
@@ -393,9 +393,9 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         }
 
                         // set the link in the StartNode
-                        SwFmtINetFmt aINet( sFileName , OUString() );
-                        SwTxtNode* pTNd = pStartNd->GetTxtNode();
-                        pTNd->InsertItem(aINet, 0, pTNd->GetTxt().getLength());
+                        SwFormatINetFormat aINet( sFileName , OUString() );
+                        SwTextNode* pTNd = pStartNd->GetTextNode();
+                        pTNd->InsertItem(aINet, 0, pTNd->GetText().getLength());
 
                         // If the link cannot be found anymore,
                         // it has to be a bug!
@@ -410,7 +410,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         const OUString sNm( INetURLObject( sFileName ).GetName() );
                         SwSectionData aSectData( FILE_LINK_SECTION,
                                         GetUniqueSectionName( &sNm ));
-                        SwSectionFmt* pFmt = MakeSectionFmt( 0 );
+                        SwSectionFormat* pFormat = MakeSectionFormat( 0 );
                         aSectData.SetLinkFileName(sFileName);
                         aSectData.SetProtectFlag(true);
 
@@ -429,7 +429,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                                     pStartNd->GetIndex() )
                             {
                                 bool bMvIdx = aEndIdx == *pSectEnd;
-                                DelSectionFmt( pSectNd->GetSection().GetFmt() );
+                                DelSectionFormat( pSectNd->GetSection().GetFormat() );
                                 if( bMvIdx )
                                     --aEndIdx;
                             }
@@ -465,12 +465,12 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         if (aEndIdx >= aStartIdx)
                         {
                             pSectNd = GetNodes().InsertTextSection(aStartIdx,
-                                *pFmt, aSectData, 0, &aEndIdx, false);
+                                *pFormat, aSectData, 0, &aEndIdx, false);
                         }
                         else
                         {
                             pSectNd = GetNodes().InsertTextSection(aEndIdx,
-                                *pFmt, aSectData, 0, &aStartIdx, false);
+                                *pFormat, aSectData, 0, &aStartIdx, false);
                         }
                         // <- #i26762#
 
@@ -491,7 +491,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
         {
             // save all remaining sections
             while( !GetSections().empty() )
-                DelSectionFmt( GetSections().front() );
+                DelSectionFormat( GetSections().front() );
 
             SfxFilterContainer* pFCntnr = mpDocShell->GetFactory().GetFilterContainer();
             pFilter = pFCntnr->GetFilter4EA( pFilter->GetTypeName(), SfxFilterFlags::EXPORT );

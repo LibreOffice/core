@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 SwFormatTablePage::SwFormatTablePage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "FormatTablePage", "modules/swriter/ui/formattablepage.ui", &rSet)
     , m_aTextFilter(" .<>")
-    , pTblData(0)
+    , pTableData(0)
     , nSaveWidth(0)
     , nMinTableWidth(MINLAY)
     , bModified(false)
@@ -169,7 +169,7 @@ void  SwFormatTablePage::Init()
 
 IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
 {
-    OSL_ENSURE(pTblData, "table data not available?");
+    OSL_ENSURE(pTableData, "table data not available?");
     bool bIsChecked = pBtn->IsChecked();
     sal_Int64 nLeft  = m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue(FUNIT_TWIP ));
     sal_Int64 nRight = m_aRightMF.DenormalizePercent(m_aRightMF.GetValue(FUNIT_TWIP ));
@@ -179,9 +179,9 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
 
     if (bIsChecked)
     {
-        m_aWidthMF.SetRefValue(pTblData->GetSpace());
-        m_aLeftMF.SetRefValue(pTblData->GetSpace());
-        m_aRightMF.SetRefValue(pTblData->GetSpace());
+        m_aWidthMF.SetRefValue(pTableData->GetSpace());
+        m_aLeftMF.SetRefValue(pTableData->GetSpace());
+        m_aRightMF.SetRefValue(pTableData->GetSpace());
         m_aLeftMF.SetMetricFieldMin(0); //will be overwritten by the Percentfield
         m_aRightMF.SetMetricFieldMin(0); //dito
         m_aLeftMF.SetMetricFieldMax(99);
@@ -215,7 +215,7 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, void *, pControl )
         m_aLeftMF.SetPrcntValue(0);
         m_aRightMF.SetPrcntValue(0);
         nSaveWidth = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue(FUNIT_TWIP )));
-        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(pTblData->GetSpace() ), FUNIT_TWIP );
+        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(pTableData->GetSpace() ), FUNIT_TWIP );
         bFull = true;
         bRestore = false;
     }
@@ -306,7 +306,7 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
     {
         if( nCurWidth < MINLAY )
             nCurWidth = MINLAY;
-        nDiff = nRight + nLeft + nCurWidth - pTblData->GetSpace() ;
+        nDiff = nRight + nLeft + nCurWidth - pTableData->GetSpace() ;
         //right aligned: only change the left margin
         if(m_pRightBtn->IsChecked())
             nLeft -= nDiff;
@@ -328,7 +328,7 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
                 {
                     nRight += nLeft - nDiff;
                     nLeft = 0;
-                    nCurWidth = pTblData->GetSpace();
+                    nCurWidth = pTableData->GetSpace();
                 }
 
             }
@@ -358,10 +358,10 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
     if (pEdit == m_aRightMF.get())
     {
 
-        if( nRight + nLeft > pTblData->GetSpace() - MINLAY )
-            nRight = pTblData->GetSpace() -nLeft - MINLAY;
+        if( nRight + nLeft > pTableData->GetSpace() - MINLAY )
+            nRight = pTableData->GetSpace() -nLeft - MINLAY;
 
-        nCurWidth = pTblData->GetSpace() - nLeft - nRight;
+        nCurWidth = pTableData->GetSpace() - nLeft - nRight;
     }
     if (pEdit == m_aLeftMF.get())
     {
@@ -370,22 +370,22 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
             bool bCenter = m_pCenterBtn->IsChecked();
             if( bCenter )
                 nRight = nLeft;
-            if(nRight + nLeft > pTblData->GetSpace() - MINLAY )
+            if(nRight + nLeft > pTableData->GetSpace() - MINLAY )
             {
-                nLeft  = bCenter ?  (pTblData->GetSpace() - MINLAY) /2 :
-                                    (pTblData->GetSpace() - MINLAY) - nRight;
-                nRight = bCenter ?  (pTblData->GetSpace() - MINLAY) /2 : nRight;
+                nLeft  = bCenter ?  (pTableData->GetSpace() - MINLAY) /2 :
+                                    (pTableData->GetSpace() - MINLAY) - nRight;
+                nRight = bCenter ?  (pTableData->GetSpace() - MINLAY) /2 : nRight;
             }
-            nCurWidth = pTblData->GetSpace() - nLeft - nRight;
+            nCurWidth = pTableData->GetSpace() - nLeft - nRight;
         }
         else
         {
             //Upon changes on the left side the right margin will be changed at first,
             //thereafter the width.
-            nDiff = nRight + nLeft + nCurWidth - pTblData->GetSpace() ;
+            nDiff = nRight + nLeft + nCurWidth - pTableData->GetSpace() ;
 
             nRight -= nDiff;
-            nCurWidth = pTblData->GetSpace() - nLeft - nRight;
+            nCurWidth = pTableData->GetSpace() - nLeft - nRight;
         }
     }
     if (nCurWidth != nPrevWidth )
@@ -478,14 +478,14 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
 
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
-        pTblData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
-        nMinTableWidth = pTblData->GetColCount() * MINLAY;
+        pTableData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
+        nMinTableWidth = pTableData->GetColCount() * MINLAY;
 
-        if(pTblData->GetWidthPercent())
+        if(pTableData->GetWidthPercent())
         {
             m_pRelWidthCB->Check(true);
             RelWidthClickHdl(m_pRelWidthCB);
-            m_aWidthMF.SetPrcntValue(pTblData->GetWidthPercent(), FUNIT_CUSTOM);
+            m_aWidthMF.SetPrcntValue(pTableData->GetWidthPercent(), FUNIT_CUSTOM);
 
             m_aWidthMF.SaveValue();
             nSaveWidth = static_cast< SwTwips >(m_aWidthMF.GetValue(FUNIT_CUSTOM));
@@ -493,26 +493,26 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
         else
         {
             m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(
-                    pTblData->GetWidth()), FUNIT_TWIP);
+                    pTableData->GetWidth()), FUNIT_TWIP);
             m_aWidthMF.SaveValue();
-            nSaveWidth = pTblData->GetWidth();
+            nSaveWidth = pTableData->GetWidth();
             nMinTableWidth = std::min( nSaveWidth, nMinTableWidth );
         }
 
-        m_aWidthMF.SetRefValue(pTblData->GetSpace());
-        m_aWidthMF.SetLast(m_aWidthMF.NormalizePercent( pTblData->GetSpace() ));
-        m_aLeftMF.SetLast(m_aLeftMF.NormalizePercent( pTblData->GetSpace() ));
-        m_aRightMF.SetLast(m_aRightMF.NormalizePercent( pTblData->GetSpace() ));
+        m_aWidthMF.SetRefValue(pTableData->GetSpace());
+        m_aWidthMF.SetLast(m_aWidthMF.NormalizePercent( pTableData->GetSpace() ));
+        m_aLeftMF.SetLast(m_aLeftMF.NormalizePercent( pTableData->GetSpace() ));
+        m_aRightMF.SetLast(m_aRightMF.NormalizePercent( pTableData->GetSpace() ));
 
         m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(
-                    pTblData->GetLeftSpace()), FUNIT_TWIP);
+                    pTableData->GetLeftSpace()), FUNIT_TWIP);
         m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(
-                    pTblData->GetRightSpace()), FUNIT_TWIP);
+                    pTableData->GetRightSpace()), FUNIT_TWIP);
         m_aLeftMF.SaveValue();
         m_aRightMF.SaveValue();
 
         bool bSetRight = false, bSetLeft = false;
-        switch( pTblData->GetAlign() )
+        switch( pTableData->GetAlign() )
         {
             case text::HoriOrientation::NONE:
                 m_pFreeBtn->Check();
@@ -586,22 +586,22 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
         m_pTextDirectionLB->SaveValue();
     }
 
-    m_aWidthMF.SetMax( 2*m_aWidthMF.NormalizePercent( pTblData->GetSpace() ), FUNIT_TWIP );
-    m_aRightMF.SetMax( m_aRightMF.NormalizePercent( pTblData->GetSpace() ), FUNIT_TWIP );
-    m_aLeftMF.SetMax( m_aLeftMF.NormalizePercent( pTblData->GetSpace() ), FUNIT_TWIP );
+    m_aWidthMF.SetMax( 2*m_aWidthMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
+    m_aRightMF.SetMax( m_aRightMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
+    m_aLeftMF.SetMax( m_aLeftMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
     m_aWidthMF.SetMin( m_aWidthMF.NormalizePercent( nMinTableWidth ), FUNIT_TWIP );
 
 }
 
 void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 {
-    OSL_ENSURE(pTblData, "table data not available?");
+    OSL_ENSURE(pTableData, "table data not available?");
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP ))
     {
-        SwTwips nCurWidth = text::HoriOrientation::FULL != pTblData->GetAlign() ?
-                                        pTblData->GetWidth() :
-                                            pTblData->GetSpace();
-        if(pTblData->GetWidthPercent() == 0 &&
+        SwTwips nCurWidth = text::HoriOrientation::FULL != pTableData->GetAlign() ?
+                                        pTableData->GetWidth() :
+                                            pTableData->GetSpace();
+        if(pTableData->GetWidthPercent() == 0 &&
                 nCurWidth != m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue(FUNIT_TWIP )))
         {
             m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(
@@ -609,10 +609,10 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
             m_aWidthMF.SaveValue();
             nSaveWidth = nCurWidth;
             m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(
-                            pTblData->GetLeftSpace()), FUNIT_TWIP);
+                            pTableData->GetLeftSpace()), FUNIT_TWIP);
             m_aLeftMF.SaveValue();
             m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(
-                            pTblData->GetRightSpace()), FUNIT_TWIP);
+                            pTableData->GetRightSpace()), FUNIT_TWIP);
             m_aRightMF.SaveValue();
         }
     }
@@ -625,8 +625,8 @@ SfxTabPage::sfxpg SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     //in the dialog lose the focus
     m_pNameED->GrabFocus();
     //test the table name for spaces
-    OUString sTblName = m_pNameED->GetText();
-    if(sTblName.indexOf(' ') != -1)
+    OUString sTableName = m_pNameED->GetText();
+    if(sTableName.indexOf(' ') != -1)
     {
         MessageDialog(this, SW_RES(STR_WRONG_TABLENAME), VCL_MESSAGE_INFO).Execute();
         m_pNameED->GrabFocus();
@@ -643,55 +643,55 @@ SfxTabPage::sfxpg SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             if( m_aLeftMF.GetText() != m_aLeftMF.GetSavedValue() ||
                 m_aRightMF.GetText() != m_aRightMF.GetSavedValue() )
             {
-                pTblData->SetWidthChanged();
-                pTblData->SetLeftSpace( lLeft);
-                pTblData->SetRightSpace( lRight);
+                pTableData->SetWidthChanged();
+                pTableData->SetLeftSpace( lLeft);
+                pTableData->SetRightSpace( lRight);
             }
 
             SwTwips lWidth;
             if (m_pRelWidthCB->IsChecked() && m_pRelWidthCB->IsEnabled())
             {
-                lWidth = pTblData->GetSpace() - lRight - lLeft;
+                lWidth = pTableData->GetSpace() - lRight - lLeft;
                 const sal_uInt16 nPercentWidth = m_aWidthMF.GetValue(FUNIT_CUSTOM);
-                if(pTblData->GetWidthPercent() != nPercentWidth)
+                if(pTableData->GetWidthPercent() != nPercentWidth)
                 {
-                    pTblData->SetWidthPercent(nPercentWidth);
-                    pTblData->SetWidthChanged();
+                    pTableData->SetWidthPercent(nPercentWidth);
+                    pTableData->SetWidthChanged();
                 }
             }
             else
             {
-                pTblData->SetWidthPercent(0);
+                pTableData->SetWidthPercent(0);
                 lWidth = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue( FUNIT_TWIP )));
             }
-            pTblData->SetWidth(lWidth);
+            pTableData->SetWidth(lWidth);
 
             SwTwips nColSum = 0;
 
-            for( sal_uInt16 i = 0; i < pTblData->GetColCount(); i++)
+            for( sal_uInt16 i = 0; i < pTableData->GetColCount(); i++)
             {
-                nColSum += pTblData->GetColumns()[i].nWidth;
+                nColSum += pTableData->GetColumns()[i].nWidth;
             }
-            if(nColSum != pTblData->GetWidth())
+            if(nColSum != pTableData->GetWidth())
             {
                 SwTwips nMinWidth = std::min( (long)MINLAY,
-                                    (long) (pTblData->GetWidth() /
-                                            pTblData->GetColCount() - 1));
-                SwTwips nDiff = nColSum - pTblData->GetWidth();
-                while ( std::abs(nDiff) > pTblData->GetColCount() + 1 )
+                                    (long) (pTableData->GetWidth() /
+                                            pTableData->GetColCount() - 1));
+                SwTwips nDiff = nColSum - pTableData->GetWidth();
+                while ( std::abs(nDiff) > pTableData->GetColCount() + 1 )
                 {
-                    SwTwips nSub = nDiff / pTblData->GetColCount();
-                    for( sal_uInt16 i = 0; i < pTblData->GetColCount(); i++)
+                    SwTwips nSub = nDiff / pTableData->GetColCount();
+                    for( sal_uInt16 i = 0; i < pTableData->GetColCount(); i++)
                     {
-                        if(pTblData->GetColumns()[i].nWidth - nMinWidth > nSub)
+                        if(pTableData->GetColumns()[i].nWidth - nMinWidth > nSub)
                         {
-                            pTblData->GetColumns()[i].nWidth -= nSub;
+                            pTableData->GetColumns()[i].nWidth -= nSub;
                             nDiff -= nSub;
                         }
                         else
                         {
-                            nDiff -= pTblData->GetColumns()[i].nWidth - nMinWidth;
-                            pTblData->GetColumns()[i].nWidth = nMinWidth;
+                            nDiff -= pTableData->GetColumns()[i].nWidth - nMinWidth;
+                            pTableData->GetColumns()[i].nWidth = nMinWidth;
                         }
 
                     }
@@ -714,20 +714,20 @@ SfxTabPage::sfxpg SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
                 nAlign = text::HoriOrientation::FULL;
                 lWidth = lAutoWidth;
             }
-            if(nAlign != pTblData->GetAlign())
+            if(nAlign != pTableData->GetAlign())
             {
-                pTblData->SetWidthChanged();
-                pTblData->SetAlign(nAlign);
+                pTableData->SetWidthChanged();
+                pTableData->SetAlign(nAlign);
             }
 
-            if(pTblData->GetWidth() != lWidth )
+            if(pTableData->GetWidth() != lWidth )
             {
-                pTblData->SetWidthChanged();
-                pTblData->SetWidth(
-                    nAlign == text::HoriOrientation::FULL ? pTblData->GetSpace() : lWidth );
+                pTableData->SetWidthChanged();
+                pTableData->SetWidth(
+                    nAlign == text::HoriOrientation::FULL ? pTableData->GetSpace() : lWidth );
             }
-            if(pTblData->HasWidthChanged())
-                _pSet->Put(SwPtrItem(FN_TABLE_REP, pTblData));
+            if(pTableData->HasWidthChanged())
+                _pSet->Put(SwPtrItem(FN_TABLE_REP, pTableData));
         }
     }
     return LEAVE_PAGE;
@@ -737,13 +737,13 @@ SfxTabPage::sfxpg SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "TableColumnPage",
         "modules/swriter/ui/tablecolumnpage.ui", &rSet)
-    , pTblData(0)
+    , pTableData(0)
     , nTableWidth(0)
     , nMinWidth(MINLAY)
     , nNoOfCols(0)
     , nNoOfVisibleCols(0)
     , bModified(false)
-    , bModifyTbl(false)
+    , bModifyTable(false)
     , bPercentMode(false)
 {
     get(m_pModifyTableCB, "adaptwidth");
@@ -805,17 +805,17 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
-        pTblData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
-        nNoOfVisibleCols = pTblData->GetColCount();
-        nNoOfCols = pTblData->GetAllColCount();
-        nTableWidth = pTblData->GetAlign() != text::HoriOrientation::FULL &&
-                            pTblData->GetAlign() != text::HoriOrientation::LEFT_AND_WIDTH?
-                        pTblData->GetWidth() : pTblData->GetSpace();
+        pTableData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
+        nNoOfVisibleCols = pTableData->GetColCount();
+        nNoOfCols = pTableData->GetAllColCount();
+        nTableWidth = pTableData->GetAlign() != text::HoriOrientation::FULL &&
+                            pTableData->GetAlign() != text::HoriOrientation::LEFT_AND_WIDTH?
+                        pTableData->GetWidth() : pTableData->GetSpace();
 
         for( sal_uInt16 i = 0; i < nNoOfCols; i++ )
         {
-            if( pTblData->GetColumns()[i].nWidth  < nMinWidth )
-                    nMinWidth = pTblData->GetColumns()[i].nWidth;
+            if( pTableData->GetColumns()[i].nWidth  < nMinWidth )
+                    nMinWidth = pTableData->GetColumns()[i].nWidth;
         }
         sal_Int64 nMinTwips = m_aFieldArr[0].NormalizePercent( nMinWidth );
         sal_Int64 nMaxTwips = m_aFieldArr[0].NormalizePercent( nTableWidth );
@@ -850,7 +850,7 @@ void  SwTableColumnPage::Init(bool bWeb)
     Link<> aLkLF = LINK( this, SwTableColumnPage, LoseFocusHdl );
     for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
     {
-        aValueTbl[i] = i;
+        aValueTable[i] = i;
         m_aFieldArr[i].SetMetric(aMetric);
         m_aFieldArr[i].SetUpHdl( aLkUp );
         m_aFieldArr[i].SetDownHdl( aLkDown );
@@ -872,24 +872,24 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, void *, pControl )
     //move display window
     if(pControl == m_pDownBtn.get())
     {
-        if(aValueTbl[0] > 0)
+        if(aValueTable[0] > 0)
         {
             for( sal_uInt16 i=0; i < MET_FIELDS; i++ )
-                aValueTbl[i] -= 1;
+                aValueTable[i] -= 1;
         }
     }
     if (pControl == m_pUpBtn.get())
     {
-        if( aValueTbl[ MET_FIELDS -1 ] < nNoOfVisibleCols -1  )
+        if( aValueTable[ MET_FIELDS -1 ] < nNoOfVisibleCols -1  )
         {
             for(sal_uInt16 i=0;i < MET_FIELDS;i++)
-                aValueTbl[i] += 1;
+                aValueTable[i] += 1;
         }
     }
     for( sal_uInt16 i = 0; (i < nNoOfVisibleCols ) && ( i < MET_FIELDS); i++ )
     {
         OUString sEntry('~');
-        OUString sIndex = OUString::number( aValueTbl[i] + 1 );
+        OUString sIndex = OUString::number( aValueTable[i] + 1 );
         sEntry += sIndex;
         m_pTextArr[i]->SetText( sEntry );
 
@@ -899,8 +899,8 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, void *, pControl )
         m_aFieldArr[i].SetAccessibleName( sColumnWidth );
     }
 
-    m_pDownBtn->Enable(aValueTbl[0] > 0);
-    m_pUpBtn->Enable(aValueTbl[ MET_FIELDS -1 ] < nNoOfVisibleCols -1 );
+    m_pDownBtn->Enable(aValueTable[0] > 0);
+    m_pUpBtn->Enable(aValueTable[ MET_FIELDS -1 ] < nNoOfVisibleCols -1 );
     UpdateCols(0);
     return 0;
 }
@@ -936,7 +936,7 @@ IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
     {
         if(bCheck)
             m_pModifyTableCB->Check();
-        m_pModifyTableCB->Enable(!bCheck && bModifyTbl);
+        m_pModifyTableCB->Enable(!bCheck && bModifyTable);
     }
     return 0;
 }
@@ -954,7 +954,7 @@ bool  SwTableColumnPage::FillItemSet( SfxItemSet* )
 
     if(bModified)
     {
-        pTblData->SetColsChanged();
+        pTableData->SetColsChanged();
     }
     return bModified;
 }
@@ -979,9 +979,9 @@ void   SwTableColumnPage::ModifyHdl( MetricField* pField )
             return;
         }
 
-        SetVisibleWidth(aValueTbl[i], static_cast< SwTwips >(pEdit->DenormalizePercent(pEdit->GetValue( FUNIT_TWIP ))) );
+        SetVisibleWidth(aValueTable[i], static_cast< SwTwips >(pEdit->DenormalizePercent(pEdit->GetValue( FUNIT_TWIP ))) );
 
-        UpdateCols( aValueTbl[i] );
+        UpdateCols( aValueTable[i] );
 }
 
 void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
@@ -990,7 +990,7 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 
     for( sal_uInt16 i = 0; i < nNoOfCols; i++ )
     {
-        nSum += (pTblData->GetColumns())[i].nWidth;
+        nSum += (pTableData->GetColumns())[i].nWidth;
     }
     SwTwips nDiff = nSum - nTableWidth;
 
@@ -1041,11 +1041,11 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     {
         //Difference is balanced by the width of the table,
         //other columns remain unchanged.
-        OSL_ENSURE(nDiff <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
-        SwTwips nActSpace = pTblData->GetSpace() - nTableWidth;
+        OSL_ENSURE(nDiff <= pTableData->GetSpace() - nTableWidth, "wrong maximum" );
+        SwTwips nActSpace = pTableData->GetSpace() - nTableWidth;
         if(nDiff > nActSpace)
         {
-            nTableWidth = pTblData->GetSpace();
+            nTableWidth = pTableData->GetSpace();
             SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) - nDiff + nActSpace );
         }
         else
@@ -1057,11 +1057,11 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     {
         //All columns will be changed proportionally with,
         //the table width is adjusted accordingly.
-        OSL_ENSURE(nDiff * nNoOfVisibleCols <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
+        OSL_ENSURE(nDiff * nNoOfVisibleCols <= pTableData->GetSpace() - nTableWidth, "wrong maximum" );
         long nAdd = nDiff;
-        if(nDiff * nNoOfVisibleCols > pTblData->GetSpace() - nTableWidth)
+        if(nDiff * nNoOfVisibleCols > pTableData->GetSpace() - nTableWidth)
         {
-            nAdd = (pTblData->GetSpace() - nTableWidth) / nNoOfVisibleCols;
+            nAdd = (pTableData->GetSpace() - nTableWidth) / nNoOfVisibleCols;
             SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) - nDiff + nAdd );
             nDiff = nAdd;
         }
@@ -1087,56 +1087,56 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
 
     if(!bPercentMode)
-        m_pSpaceED->SetValue(m_pSpaceED->Normalize( pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
+        m_pSpaceED->SetValue(m_pSpaceED->Normalize( pTableData->GetSpace() - nTableWidth) , FUNIT_TWIP);
 
     for( sal_uInt16 i = 0; ( i < nNoOfVisibleCols ) && ( i < MET_FIELDS ); i++)
     {
         m_aFieldArr[i].SetPrcntValue(m_aFieldArr[i].NormalizePercent(
-                        GetVisibleWidth(aValueTbl[i]) ), FUNIT_TWIP);
+                        GetVisibleWidth(aValueTable[i]) ), FUNIT_TWIP);
         m_aFieldArr[i].ClearModifyFlag();
     }
 }
 
 void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
 {
-    bPercentMode = pTblData->GetWidthPercent() != 0;
+    bPercentMode = pTableData->GetWidthPercent() != 0;
     for( sal_uInt16 i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
     {
-        m_aFieldArr[i].SetRefValue(pTblData->GetWidth());
+        m_aFieldArr[i].SetRefValue(pTableData->GetWidth());
         m_aFieldArr[i].ShowPercent( bPercentMode );
     }
 
-    const sal_uInt16 nTblAlign = pTblData->GetAlign();
-    if((text::HoriOrientation::FULL != nTblAlign && nTableWidth != pTblData->GetWidth()) ||
-    (text::HoriOrientation::FULL == nTblAlign && nTableWidth != pTblData->GetSpace()))
+    const sal_uInt16 nTableAlign = pTableData->GetAlign();
+    if((text::HoriOrientation::FULL != nTableAlign && nTableWidth != pTableData->GetWidth()) ||
+    (text::HoriOrientation::FULL == nTableAlign && nTableWidth != pTableData->GetSpace()))
     {
-        nTableWidth = text::HoriOrientation::FULL == nTblAlign ?
-                                    pTblData->GetSpace() :
-                                        pTblData->GetWidth();
+        nTableWidth = text::HoriOrientation::FULL == nTableAlign ?
+                                    pTableData->GetSpace() :
+                                        pTableData->GetWidth();
         UpdateCols(0);
     }
-    bModifyTbl = true;
-    if(pTblData->GetWidthPercent() ||
-                text::HoriOrientation::FULL == nTblAlign ||
-                        pTblData->IsLineSelected()  )
-        bModifyTbl = false;
+    bModifyTable = true;
+    if(pTableData->GetWidthPercent() ||
+                text::HoriOrientation::FULL == nTableAlign ||
+                        pTableData->IsLineSelected()  )
+        bModifyTable = false;
     if(bPercentMode)
     {
         m_pModifyTableCB->Check(false);
         m_pProportionalCB->Check(false);
     }
-    else if( !bModifyTbl )
+    else if( !bModifyTable )
     {
         m_pProportionalCB->Check(false);
         m_pModifyTableCB->Check(false);
     }
     m_pSpaceFT->Enable(!bPercentMode);
     m_pSpaceED->Enable(!bPercentMode);
-    m_pModifyTableCB->Enable( !bPercentMode && bModifyTbl );
-    m_pProportionalCB->Enable(!bPercentMode && bModifyTbl );
+    m_pModifyTableCB->Enable( !bPercentMode && bModifyTable );
+    m_pProportionalCB->Enable(!bPercentMode && bModifyTable );
 
     m_pSpaceED->SetValue(m_pSpaceED->Normalize(
-                pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
+                pTableData->GetSpace() - nTableWidth) , FUNIT_TWIP);
 
 }
 
@@ -1145,59 +1145,59 @@ SfxTabPage::sfxpg SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
     if(_pSet)
     {
         FillItemSet(_pSet);
-        if(text::HoriOrientation::FULL != pTblData->GetAlign() && pTblData->GetWidth() != nTableWidth)
+        if(text::HoriOrientation::FULL != pTableData->GetAlign() && pTableData->GetWidth() != nTableWidth)
         {
-            pTblData->SetWidth(nTableWidth);
-            SwTwips nDiff = pTblData->GetSpace() - pTblData->GetWidth() -
-                            pTblData->GetLeftSpace() - pTblData->GetRightSpace();
-            switch( pTblData->GetAlign()  )
+            pTableData->SetWidth(nTableWidth);
+            SwTwips nDiff = pTableData->GetSpace() - pTableData->GetWidth() -
+                            pTableData->GetLeftSpace() - pTableData->GetRightSpace();
+            switch( pTableData->GetAlign()  )
             {
                 case text::HoriOrientation::RIGHT:
-                    pTblData->SetLeftSpace(pTblData->GetLeftSpace() + nDiff);
+                    pTableData->SetLeftSpace(pTableData->GetLeftSpace() + nDiff);
                 break;
                 case text::HoriOrientation::LEFT:
-                    pTblData->SetRightSpace(pTblData->GetRightSpace() + nDiff);
+                    pTableData->SetRightSpace(pTableData->GetRightSpace() + nDiff);
                 break;
                 case text::HoriOrientation::NONE:
                 {
                     SwTwips nDiff2 = nDiff/2;
                     if( nDiff > 0 ||
-                        (-nDiff2 < pTblData->GetRightSpace() && - nDiff2 < pTblData->GetLeftSpace()))
+                        (-nDiff2 < pTableData->GetRightSpace() && - nDiff2 < pTableData->GetLeftSpace()))
                     {
-                        pTblData->SetRightSpace(pTblData->GetRightSpace() + nDiff2);
-                        pTblData->SetLeftSpace(pTblData->GetLeftSpace() + nDiff2);
+                        pTableData->SetRightSpace(pTableData->GetRightSpace() + nDiff2);
+                        pTableData->SetLeftSpace(pTableData->GetLeftSpace() + nDiff2);
                     }
                     else
                     {
-                        if(pTblData->GetRightSpace() > pTblData->GetLeftSpace())
+                        if(pTableData->GetRightSpace() > pTableData->GetLeftSpace())
                         {
-                            pTblData->SetLeftSpace(0);
-                            pTblData->SetRightSpace(pTblData->GetSpace() - pTblData->GetWidth());
+                            pTableData->SetLeftSpace(0);
+                            pTableData->SetRightSpace(pTableData->GetSpace() - pTableData->GetWidth());
                         }
                         else
                         {
-                            pTblData->SetRightSpace(0);
-                            pTblData->SetLeftSpace(pTblData->GetSpace() - pTblData->GetWidth());
+                            pTableData->SetRightSpace(0);
+                            pTableData->SetLeftSpace(pTableData->GetSpace() - pTableData->GetWidth());
                         }
                     }
                 }
                 break;
                 case text::HoriOrientation::CENTER:
-                    pTblData->SetRightSpace(pTblData->GetRightSpace() + nDiff/2);
-                    pTblData->SetLeftSpace(pTblData->GetLeftSpace() + nDiff/2);
+                    pTableData->SetRightSpace(pTableData->GetRightSpace() + nDiff/2);
+                    pTableData->SetLeftSpace(pTableData->GetLeftSpace() + nDiff/2);
                 break;
                 case text::HoriOrientation::LEFT_AND_WIDTH :
-                    if(nDiff > pTblData->GetRightSpace())
+                    if(nDiff > pTableData->GetRightSpace())
                     {
-                        pTblData->SetLeftSpace(pTblData->GetSpace() - pTblData->GetWidth());
+                        pTableData->SetLeftSpace(pTableData->GetSpace() - pTableData->GetWidth());
                     }
-                    pTblData->SetRightSpace(
-                        pTblData->GetSpace() - pTblData->GetWidth() - pTblData->GetLeftSpace());
+                    pTableData->SetRightSpace(
+                        pTableData->GetSpace() - pTableData->GetWidth() - pTableData->GetLeftSpace());
                 break;
             }
-            pTblData->SetWidthChanged();
+            pTableData->SetWidthChanged();
         }
-        _pSet->Put(SwPtrItem( FN_TABLE_REP, pTblData ));
+        _pSet->Put(SwPtrItem( FN_TABLE_REP, pTableData ));
     }
     return LEAVE_PAGE;
 }
@@ -1208,14 +1208,14 @@ SwTwips  SwTableColumnPage::GetVisibleWidth(sal_uInt16 nPos)
 
     while( nPos )
     {
-        if(pTblData->GetColumns()[i].bVisible && nPos)
+        if(pTableData->GetColumns()[i].bVisible && nPos)
             nPos--;
         i++;
     }
-    SwTwips nReturn = pTblData->GetColumns()[i].nWidth;
+    SwTwips nReturn = pTableData->GetColumns()[i].nWidth;
     OSL_ENSURE(i < nNoOfCols, "Array index out of range");
-    while(!pTblData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
-        nReturn += pTblData->GetColumns()[++i].nWidth;
+    while(!pTableData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
+        nReturn += pTableData->GetColumns()[++i].nWidth;
 
     return nReturn;
 }
@@ -1225,14 +1225,14 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
     sal_uInt16 i=0;
     while( nPos )
     {
-        if(pTblData->GetColumns()[i].bVisible && nPos)
+        if(pTableData->GetColumns()[i].bVisible && nPos)
             nPos--;
         i++;
     }
     OSL_ENSURE(i < nNoOfCols, "Array index out of range");
-    pTblData->GetColumns()[i].nWidth = nNewWidth;
-    while(!pTblData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
-        pTblData->GetColumns()[++i].nWidth = 0;
+    pTableData->GetColumns()[i].nWidth = nNewWidth;
+    while(!pTableData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
+        pTableData->GetColumns()[++i].nWidth = 0;
 
 }
 
@@ -1387,16 +1387,16 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
             SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, m_pHeadLineCB->IsChecked()? sal_uInt16(m_pRepeatHeaderNF->GetValue()) : 0 ));
     }
     if(m_pKeepCB->IsValueChangedFromSaved())
-        bModified |= 0 != rSet->Put( SvxFmtKeepItem( m_pKeepCB->IsChecked(), RES_KEEP));
+        bModified |= 0 != rSet->Put( SvxFormatKeepItem( m_pKeepCB->IsChecked(), RES_KEEP));
 
     if(m_pSplitCB->IsValueChangedFromSaved())
-        bModified |= 0 != rSet->Put( SwFmtLayoutSplit( m_pSplitCB->IsChecked()));
+        bModified |= 0 != rSet->Put( SwFormatLayoutSplit( m_pSplitCB->IsChecked()));
 
     if(m_pSplitRowCB->IsValueChangedFromSaved())
-        bModified |= 0 != rSet->Put( SwFmtRowSplit( m_pSplitRowCB->IsChecked()));
+        bModified |= 0 != rSet->Put( SwFormatRowSplit( m_pSplitRowCB->IsChecked()));
 
-    const SvxFmtBreakItem* pBreak = static_cast<const SvxFmtBreakItem*>(GetOldItem( *rSet, RES_BREAK ));
-    const SwFmtPageDesc* pDesc = static_cast<const SwFmtPageDesc*>(GetOldItem( *rSet, RES_PAGEDESC ));
+    const SvxFormatBreakItem* pBreak = static_cast<const SvxFormatBreakItem*>(GetOldItem( *rSet, RES_BREAK ));
+    const SwFormatPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(GetOldItem( *rSet, RES_PAGEDESC ));
 
     bool bState = m_pPageCollCB->IsChecked();
 
@@ -1418,9 +1418,9 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
             ( pDesc->GetPageDesc() && ((pDesc->GetPageDesc()->GetName() != sPage) ||
                     !comphelper::string::equals(m_pPageNoNF->GetSavedValue(), nPgNum))))
         {
-            SwFmtPageDesc aFmt( pShell->FindPageDescByName( sPage, true ) );
-            aFmt.SetNumOffset(bState ? nPgNum : 0);
-            bModified |= 0 != rSet->Put( aFmt );
+            SwFormatPageDesc aFormat( pShell->FindPageDescByName( sPage, true ) );
+            aFormat.SetNumOffset(bState ? nPgNum : 0);
+            bModified |= 0 != rSet->Put( aFormat );
             bPageItemPut = bState;
         }
     }
@@ -1431,8 +1431,8 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
             m_pPgBrkBeforeRB->IsValueChangedFromSaved()    ||
             m_pPgBrkRB->IsValueChangedFromSaved() ))
     {
-        SvxFmtBreakItem aBreak(
-            static_cast<const SvxFmtBreakItem&>(GetItemSet().Get( RES_BREAK )) );
+        SvxFormatBreakItem aBreak(
+            static_cast<const SvxFormatBreakItem&>(GetItemSet().Get( RES_BREAK )) );
 
         if(bIsChecked)
         {
@@ -1505,20 +1505,20 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
             m_pPageCollLB->InsertEntry(rPageDesc.GetName());
         }
 
-        OUString aFmtName;
+        OUString aFormatName;
         for(sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
             if( LISTBOX_ENTRY_NOTFOUND == m_pPageCollLB->GetEntryPos(
-                    aFmtName = SwStyleNameMapper::GetUIName( i, aFmtName ) ))
-                m_pPageCollLB->InsertEntry( aFmtName );
+                    aFormatName = SwStyleNameMapper::GetUIName( i, aFormatName ) ))
+                m_pPageCollLB->InsertEntry( aFormatName );
 
         if(SfxItemState::SET == rSet->GetItemState( RES_KEEP, false, &pItem ))
         {
-            m_pKeepCB->Check( static_cast<const SvxFmtKeepItem*>(pItem)->GetValue() );
+            m_pKeepCB->Check( static_cast<const SvxFormatKeepItem*>(pItem)->GetValue() );
             m_pKeepCB->SaveValue();
         }
         if(SfxItemState::SET == rSet->GetItemState( RES_LAYOUT_SPLIT, false, &pItem ))
         {
-            m_pSplitCB->Check( static_cast<const SwFmtLayoutSplit*>(pItem)->GetValue() );
+            m_pSplitCB->Check( static_cast<const SwFormatLayoutSplit*>(pItem)->GetValue() );
         }
         else
             m_pSplitCB->Check();
@@ -1528,7 +1528,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 
         if(SfxItemState::SET == rSet->GetItemState( RES_ROW_SPLIT, false, &pItem ))
         {
-            m_pSplitRowCB->Check( static_cast<const SwFmtRowSplit*>(pItem)->GetValue() );
+            m_pSplitRowCB->Check( static_cast<const SwFormatRowSplit*>(pItem)->GetValue() );
         }
         else
             m_pSplitRowCB->SetState(TRISTATE_INDET);
@@ -1539,10 +1539,10 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
             if(SfxItemState::SET == rSet->GetItemState( RES_PAGEDESC, false, &pItem ))
             {
                 OUString sPageDesc;
-                const SwPageDesc* pDesc = static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc();
+                const SwPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
 
-                //m_pPageNoNF->SetValue(static_cast<const SwFmtPageDesc*>(pItem)->GetNumOffset());
-                ::boost::optional<sal_uInt16> oNumOffset = static_cast<const SwFmtPageDesc*>(pItem)->GetNumOffset();
+                //m_pPageNoNF->SetValue(static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset());
+                ::boost::optional<sal_uInt16> oNumOffset = static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset();
                 if (oNumOffset)
                     m_pPageNoNF->SetValue(oNumOffset.get());
                 else
@@ -1578,7 +1578,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 
             if(SfxItemState::SET == rSet->GetItemState( RES_BREAK, false, &pItem ))
             {
-                const SvxFmtBreakItem* pPageBreak = static_cast<const SvxFmtBreakItem*>(pItem);
+                const SvxFormatBreakItem* pPageBreak = static_cast<const SvxFormatBreakItem*>(pItem);
                 SvxBreak eBreak = (SvxBreak)pPageBreak->GetValue();
 
                 if ( eBreak != SVX_BREAK_NONE )

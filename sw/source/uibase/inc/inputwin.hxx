@@ -25,7 +25,7 @@
 
 #include <sfx2/childwin.hxx>
 
-class SwFldMgr;
+class SwFieldMgr;
 class SwWrtShell;
 class SwView;
 class SfxDispatcher;
@@ -37,7 +37,7 @@ public:
                         Edit(pParent , nStyle){}
 
     void            UpdateRange(const OUString& aSel,
-                                const OUString& aTblName );
+                                const OUString& aTableName );
 
 protected:
     virtual void    KeyInput( const KeyEvent&  ) SAL_OVERRIDE;
@@ -50,11 +50,11 @@ friend class InputEdit;
     VclPtr<Edit>        aPos;
     VclPtr<InputEdit>   aEdit;
     PopupMenu       aPopMenu;
-    SwFldMgr*       pMgr;
+    SwFieldMgr*       pMgr;
     SwWrtShell*     pWrtShell;
     SwView*         pView;
     SfxBindings*    pBindings;
-    OUString        aAktTableName, sOldFml;
+    OUString        aAktTableName, sOldFormula;
 
     bool        bFirst : 1;  // initialisations at first call
     bool        bActive : 1; // for hide/show when switching documents
@@ -66,7 +66,7 @@ friend class InputEdit;
 
     void CleanupUglyHackWithUndo();
 
-    void DelBoxCntnt();
+    void DelBoxContent();
     DECL_LINK( ModifyHdl, void* );
 
     using Window::IsActive;
@@ -92,7 +92,7 @@ public:
 
     bool            IsActive(){ return bActive; };
 
-    DECL_LINK( SelTblCellsNotify, SwWrtShell * );
+    DECL_LINK( SelTableCellsNotify, SwWrtShell * );
 
     void            SetFormula( const OUString& rFormula, bool bDelSel = true );
     const SwView*   GetView() const{return pView;}

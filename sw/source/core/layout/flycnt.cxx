@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-static inline SwTwips lcl_GetTopForObjPos(const SwCntntFrm* pCnt, const bool bVert, const bool bVertL2R)
+static inline SwTwips lcl_GetTopForObjPos(const SwContentFrm* pCnt, const bool bVert, const bool bVertL2R)
 {
     if ( bVert )
     {
@@ -66,11 +66,11 @@ static inline SwTwips lcl_GetTopForObjPos(const SwCntntFrm* pCnt, const bool bVe
 
 }
 
-SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
-    SwFlyFreeFrm( pFmt, pSib, pAnch )
+SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrameFormat *pFormat, SwFrm* pSib, SwFrm *pAnch ) :
+    SwFlyFreeFrm( pFormat, pSib, pAnch )
 {
     bAtCnt = true;
-    bAutoPosition = (FLY_AT_CHAR == pFmt->GetAnchor().GetAnchorId());
+    bAutoPosition = (FLY_AT_CHAR == pFormat->GetAnchor().GetAnchorId());
 }
 
 // #i28701#
@@ -79,7 +79,7 @@ TYPEINIT1(SwFlyAtCntFrm,SwFlyFreeFrm);
 void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
-    const SwFmtAnchor *pAnch = 0;
+    const SwFormatAnchor *pAnch = 0;
 
     if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
         static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
@@ -91,27 +91,27 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         //Change anchor, I move myself to a new place.
         //The anchor type must not change, this is only possible using
         //SwFEShell.
-        pAnch = static_cast<const SwFmtAnchor*>(pNew);
+        pAnch = static_cast<const SwFormatAnchor*>(pNew);
     }
 
     if( pAnch )
     {
-        OSL_ENSURE( pAnch->GetAnchorId() == GetFmt()->GetAnchor().GetAnchorId(),
+        OSL_ENSURE( pAnch->GetAnchorId() == GetFormat()->GetAnchor().GetAnchorId(),
                 "Illegal change of anchor type. " );
 
         //Unregister, get hold of a new anchor and attach it
         SwRect aOld( GetObjRectWithSpaces() );
         SwPageFrm *pOldPage = FindPageFrm();
         const SwFrm *pOldAnchor = GetAnchorFrm();
-        SwCntntFrm *pCntnt = const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(GetAnchorFrm()));
+        SwContentFrm *pContent = const_cast<SwContentFrm*>(static_cast<const SwContentFrm*>(GetAnchorFrm()));
         AnchorFrm()->RemoveFly( this );
 
-        const bool bBodyFtn = (pCntnt->IsInDocBody() || pCntnt->IsInFtn());
+        const bool bBodyFootnote = (pContent->IsInDocBody() || pContent->IsInFootnote());
 
         // Search the new anchor using the NodeIdx; the relation between old
         // and new NodeIdx determines the search direction
-        const SwNodeIndex aNewIdx( pAnch->GetCntntAnchor()->nNode );
-        SwNodeIndex aOldIdx( *pCntnt->GetNode() );
+        const SwNodeIndex aNewIdx( pAnch->GetContentAnchor()->nNode );
+        SwNodeIndex aOldIdx( *pContent->GetNode() );
 
         //fix: depending on which index was smaller, searching in the do-while
         //loop previously was done forward or backwards respectively. This however
@@ -122,35 +122,35 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         const bool bNext = aOldIdx < aNewIdx;
         // consider the case that at found anchor frame candidate already a
         // fly frame of the given fly format is registered.
-        // consider, that <pCntnt> is the already
+        // consider, that <pContent> is the already
         // the new anchor frame.
         bool bFound( aOldIdx == aNewIdx );
-        while ( pCntnt && !bFound )
+        while ( pContent && !bFound )
         {
             do
             {
                 if ( bNext )
-                    pCntnt = pCntnt->GetNextCntntFrm();
+                    pContent = pContent->GetNextContentFrm();
                 else
-                    pCntnt = pCntnt->GetPrevCntntFrm();
-            } while ( pCntnt &&
-                      !( bBodyFtn == ( pCntnt->IsInDocBody() ||
-                                       pCntnt->IsInFtn() ) ) );
-            if ( pCntnt )
-                aOldIdx = *pCntnt->GetNode();
+                    pContent = pContent->GetPrevContentFrm();
+            } while ( pContent &&
+                      !( bBodyFootnote == ( pContent->IsInDocBody() ||
+                                       pContent->IsInFootnote() ) ) );
+            if ( pContent )
+                aOldIdx = *pContent->GetNode();
 
             // check, if at found anchor frame candidate already a fly frame
             // of the given fly frame format is registered.
             bFound = aOldIdx == aNewIdx;
-            if (bFound && pCntnt && pCntnt->GetDrawObjs())
+            if (bFound && pContent && pContent->GetDrawObjs())
             {
-                SwFrmFmt* pMyFlyFrmFmt( &GetFrmFmt() );
-                SwSortedObjs &rObjs = *pCntnt->GetDrawObjs();
+                SwFrameFormat* pMyFlyFrameFormat( &GetFrameFormat() );
+                SwSortedObjs &rObjs = *pContent->GetDrawObjs();
                 for( size_t i = 0; i < rObjs.size(); ++i)
                 {
                     SwFlyFrm* pFlyFrm = dynamic_cast<SwFlyFrm*>(rObjs[i]);
                     if ( pFlyFrm &&
-                         &(pFlyFrm->GetFrmFmt()) == pMyFlyFrmFmt )
+                         &(pFlyFrm->GetFrameFormat()) == pMyFlyFrameFormat )
                     {
                         bFound = false;
                         break;
@@ -158,21 +158,21 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 }
             }
         }
-        if ( !pCntnt )
+        if ( !pContent )
         {
-            SwCntntNode *pNode = aNewIdx.GetNode().GetCntntNode();
-            pCntnt = pNode->getLayoutFrm( getRootFrm(), &pOldAnchor->Frm().Pos(), 0, false );
-            OSL_ENSURE( pCntnt, "Neuen Anker nicht gefunden" );
+            SwContentNode *pNode = aNewIdx.GetNode().GetContentNode();
+            pContent = pNode->getLayoutFrm( getRootFrm(), &pOldAnchor->Frm().Pos(), 0, false );
+            OSL_ENSURE( pContent, "Neuen Anker nicht gefunden" );
         }
         //Flys are never attached to a follow, but always on the master which
         //we are going to search now.
-        SwCntntFrm* pFlow = pCntnt;
+        SwContentFrm* pFlow = pContent;
         while ( pFlow->IsFollow() )
             pFlow = pFlow->FindMaster();
-        pCntnt = pFlow;
+        pContent = pFlow;
 
         //and *puff* it's attached...
-        pCntnt->AppendFly( this );
+        pContent->AppendFly( this );
         if ( pOldPage && pOldPage != FindPageFrm() )
             NotifyBackground( pOldPage, aOld, PREP_FLY_LEAVE );
 
@@ -310,7 +310,7 @@ bool SwOszControl::ChkOsz()
 |*      the anchor reacts to changes of the fly. To this reaction the fly must
 |*      certaily react too. Sadly this can lead to oscillations; for example the
 |*      fly wants to go down therefore the content can go up - this leads to a
-|*      smaller TxtFrm thus the fly needs to go up again whereby the text will
+|*      smaller TextFrm thus the fly needs to go up again whereby the text will
 |*      get pushed down...
 |*      To avoid such oscillations, a small position stack is built. If the fly
 |*      reaches a position which it already had once, the action is stopped.
@@ -323,7 +323,7 @@ bool SwOszControl::ChkOsz()
 |*/
 void SwFlyAtCntFrm::MakeAll()
 {
-    if ( !GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
+    if ( !GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {
         return;
     }
@@ -343,19 +343,19 @@ void SwFlyAtCntFrm::MakeAll()
         {
             bSetCompletePaintOnInvalidate = true;
             {
-                SwFlyFrmFmt *pFmt = GetFmt();
-                const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
+                SwFlyFrameFormat *pFormat = GetFormat();
+                const SwFormatFrmSize &rFrmSz = GetFormat()->GetFrmSize();
                 if( rFrmSz.GetHeightPercent() != 0xFF &&
                     rFrmSz.GetHeightPercent() >= 100 )
                 {
-                    pFmt->LockModify();
-                    SwFmtSurround aMain( pFmt->GetSurround() );
+                    pFormat->LockModify();
+                    SwFormatSurround aMain( pFormat->GetSurround() );
                     if ( aMain.GetSurround() == SURROUND_NONE )
                     {
                         aMain.SetSurround( SURROUND_THROUGHT );
-                        pFmt->SetFmtAttr( aMain );
+                        pFormat->SetFormatAttr( aMain );
                     }
-                    pFmt->UnlockModify();
+                    pFormat->UnlockModify();
                 }
             }
 
@@ -366,7 +366,7 @@ void SwFlyAtCntFrm::MakeAll()
             // contains the anchor position. E.g., for at-character anchored
             // object this can be the follow frame of the anchor frame.
             const bool bFormatAnchor =
-                    !static_cast<const SwTxtFrm*>( GetAnchorFrmContainingAnchPos() )->IsAnyJoinLocked() &&
+                    !static_cast<const SwTextFrm*>( GetAnchorFrmContainingAnchPos() )->IsAnyJoinLocked() &&
                     !ConsiderObjWrapInfluenceOnObjPos() &&
                     !ConsiderObjWrapInfluenceOfOtherObjs();
 
@@ -404,10 +404,10 @@ void SwFlyAtCntFrm::MakeAll()
                 // wrapping style influence is considered on object positioning
                 if ( bFormatAnchor )
                 {
-                    SwTxtFrm& rAnchPosAnchorFrm =
-                            dynamic_cast<SwTxtFrm&>(*GetAnchorFrmContainingAnchPos());
+                    SwTextFrm& rAnchPosAnchorFrm =
+                            dynamic_cast<SwTextFrm&>(*GetAnchorFrmContainingAnchPos());
                     // #i58182# - For the usage of new method
-                    // <SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..)>
+                    // <SwObjectFormatterTextFrm::CheckMovedFwdCondition(..)>
                     // to check move forward of anchor frame due to the object
                     // positioning it's needed to know, if the object is anchored
                     // at the master frame before the anchor frame is formatted.
@@ -417,35 +417,35 @@ void SwFlyAtCntFrm::MakeAll()
                     // perform complete format of anchor text frame and its
                     // previous frames, which have become invalid due to the
                     // fly frame format.
-                    SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( rAnchPosAnchorFrm );
+                    SwObjectFormatterTextFrm::FormatAnchorFrmAndItsPrevs( rAnchPosAnchorFrm );
                     // #i35911#
                     // #i40444#
                     // #i58182# - usage of new method
-                    // <SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..)>
+                    // <SwObjectFormatterTextFrm::CheckMovedFwdCondition(..)>
                     sal_uInt32 nToPageNum( 0L );
                     bool bDummy( false );
-                    if ( SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
+                    if ( SwObjectFormatterTextFrm::CheckMovedFwdCondition(
                                         *this, GetPageFrm()->GetPhyPageNum(),
                                         bAnchoredAtMaster, nToPageNum, bDummy ) )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
                         // mark anchor text frame
                         // directly, that it is moved forward by object positioning.
-                        SwTxtFrm* pAnchorTxtFrm( static_cast<SwTxtFrm*>(AnchorFrm()) );
+                        SwTextFrm* pAnchorTextFrm( static_cast<SwTextFrm*>(AnchorFrm()) );
                         bool bInsert( true );
                         sal_uInt32 nAnchorFrmToPageNum( 0L );
-                        const SwDoc& rDoc = *(GetFrmFmt().GetDoc());
+                        const SwDoc& rDoc = *(GetFrameFormat().GetDoc());
                         if ( SwLayouter::FrmMovedFwdByObjPos(
-                                                rDoc, *pAnchorTxtFrm, nAnchorFrmToPageNum ) )
+                                                rDoc, *pAnchorTextFrm, nAnchorFrmToPageNum ) )
                         {
                             if ( nAnchorFrmToPageNum < nToPageNum )
-                                SwLayouter::RemoveMovedFwdFrm( rDoc, *pAnchorTxtFrm );
+                                SwLayouter::RemoveMovedFwdFrm( rDoc, *pAnchorTextFrm );
                             else
                                 bInsert = false;
                         }
                         if ( bInsert )
                         {
-                            SwLayouter::InsertMovedFwdFrm( rDoc, *pAnchorTxtFrm,
+                            SwLayouter::InsertMovedFwdFrm( rDoc, *pAnchorTextFrm,
                                                            nToPageNum );
                         }
                     }
@@ -462,18 +462,18 @@ void SwFlyAtCntFrm::MakeAll()
                          HasFixSize() && IsClipped() &&
                          GetAnchorFrm()->GetUpper()->IsCellFrm() )
                     {
-                        SwFrmFmt* pFmt = GetFmt();
-                        const SwFmtFrmSize& rFrmSz = pFmt->GetFrmSize();
+                        SwFrameFormat* pFormat = GetFormat();
+                        const SwFormatFrmSize& rFrmSz = pFormat->GetFrmSize();
                         if ( rFrmSz.GetWidthPercent() &&
                              rFrmSz.GetHeightPercent() == 0xFF )
                         {
-                            SwFmtSurround aSurround( pFmt->GetSurround() );
+                            SwFormatSurround aSurround( pFormat->GetSurround() );
                             if ( aSurround.GetSurround() == SURROUND_NONE )
                             {
-                                pFmt->LockModify();
+                                pFormat->LockModify();
                                 aSurround.SetSurround( SURROUND_THROUGHT );
-                                pFmt->SetFmtAttr( aSurround );
-                                pFmt->UnlockModify();
+                                pFormat->SetFormatAttr( aSurround );
+                                pFormat->UnlockModify();
                                 bOsz = false;
                                 OSL_FAIL( "<SwFlyAtCntFrm::MakeAll()> - special loop prevention for dedicated document of b6403541 applied" );
                             }
@@ -494,7 +494,7 @@ void SwFlyAtCntFrm::MakeAll()
                       !bConsiderWrapInfluenceDueToOverlapPrevCol &&
                       // #i40444#
                       !bConsiderWrapInfluenceDueToMovedFwdAnchor &&
-                      GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
+                      GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
 
             // #i3317# - instead of attribute change apply
             // temporarly the 'straightforward positioning process'.
@@ -559,10 +559,10 @@ public:
 
 static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                                          const Point &rPt,
-                                         const SwCntntFrm *pCnt )
+                                         const SwContentFrm *pCnt )
 {
     rRet.nSub = 0;
-    //If the point stays inside the Cnt everything is clear already; the Cntnt
+    //If the point stays inside the Cnt everything is clear already; the Content
     //automatically has a distance of 0.
     if ( pCnt->Frm().IsInside( rPt ) )
     {
@@ -726,7 +726,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                       ( pLay->IsInSct() &&
                       pLay->FindSctFrm()->GetUpper()->Frm().Top() <= rPt.Y())) )
             {
-                if ( pLay->IsFtnContFrm() )
+                if ( pLay->IsFootnoteContFrm() )
                 {
                     if ( !static_cast<const SwLayoutFrm*>(pLay)->Lower() )
                     {
@@ -837,7 +837,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                     else
                         rRet.nMain += nDiff;
                 }
-                if ( pLay->IsFtnContFrm() && !static_cast<const SwLayoutFrm*>(pLay)->Lower() )
+                if ( pLay->IsFootnoteContFrm() && !static_cast<const SwLayoutFrm*>(pLay)->Lower() )
                 {
                     SwFrm *pDel = const_cast<SwFrm*>(pLay);
                     pDel->Cut();
@@ -854,25 +854,25 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
 }
 
 static sal_uInt64 lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
-                          const SwCntntFrm *& rpCnt,
-                          const bool bBody, const bool bFtn )
+                          const SwContentFrm *& rpCnt,
+                          const bool bBody, const bool bFootnote )
 {
     // Searches below pLay the nearest Cnt to the point. The reference point of
-    //the Cntnts is always the left upper corner.
+    //the Contents is always the left upper corner.
     //The Cnt should preferably be above the point.
 
     rpCnt = 0;
     sal_uInt64 nDistance = SAL_MAX_UINT64;
     sal_uInt64 nNearest  = SAL_MAX_UINT64;
-    const SwCntntFrm *pCnt = pLay ? pLay->ContainsCntnt() : NULL;
+    const SwContentFrm *pCnt = pLay ? pLay->ContainsContent() : NULL;
 
-    while ( pCnt && (bBody != pCnt->IsInDocBody() || bFtn != pCnt->IsInFtn()))
+    while ( pCnt && (bBody != pCnt->IsInDocBody() || bFootnote != pCnt->IsInFootnote()))
     {
-        pCnt = pCnt->GetNextCntntFrm();
+        pCnt = pCnt->GetNextContentFrm();
         if ( !pLay->IsAnLower( pCnt ) )
             pCnt = 0;
     }
-    const SwCntntFrm *pNearest = pCnt;
+    const SwContentFrm *pNearest = pCnt;
     if ( pCnt )
     {
         do
@@ -899,10 +899,10 @@ static sal_uInt64 lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
                 nNearest = nDiff;
                 pNearest = pCnt;
             }
-            pCnt = pCnt->GetNextCntntFrm();
+            pCnt = pCnt->GetNextContentFrm();
             while ( pCnt &&
-                    (bBody != pCnt->IsInDocBody() || bFtn != pCnt->IsInFtn()))
-                pCnt = pCnt->GetNextCntntFrm();
+                    (bBody != pCnt->IsInDocBody() || bFootnote != pCnt->IsInFootnote()))
+                pCnt = pCnt->GetNextContentFrm();
 
         }  while ( pCnt && pLay->IsAnLower( pCnt ) );
     }
@@ -913,29 +913,29 @@ static sal_uInt64 lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
     return nDistance;
 }
 
-static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
-                                  const bool bBody, const bool bFtn )
+static const SwContentFrm * lcl_FindCnt( const Point &rPt, const SwContentFrm *pCnt,
+                                  const bool bBody, const bool bFootnote )
 {
-    //Starting from pCnt searches the CntntFrm whose left upper corner is the
+    //Starting from pCnt searches the ContentFrm whose left upper corner is the
     //nearest to the point.
-    //Always returns a CntntFrm.
+    //Always returns a ContentFrm.
 
-    //First the nearest Cntnt inside the page which contains the Cntnt is
+    //First the nearest Content inside the page which contains the Content is
     //searched. Starting from this page the pages in both directions need to
-    //be considered. If possible a Cntnt is returned whose Y-position is
+    //be considered. If possible a Content is returned whose Y-position is
     //above the point.
-    const SwCntntFrm  *pRet, *pNew;
+    const SwContentFrm  *pRet, *pNew;
     const SwLayoutFrm *pLay = pCnt->FindPageFrm();
     sal_uInt64 nDist; // not sure if a sal_Int32 would be enough?
 
-    nDist = ::lcl_FindCntDiff( rPt, pLay, pNew, bBody, bFtn );
+    nDist = ::lcl_FindCntDiff( rPt, pLay, pNew, bBody, bFootnote );
     if ( pNew )
         pRet = pNew;
     else
     {   pRet  = pCnt;
         nDist = SAL_MAX_UINT64;
     }
-    const SwCntntFrm *pNearest = pRet;
+    const SwContentFrm *pNearest = pRet;
     sal_uInt64 nNearest = nDist;
 
     if ( pLay )
@@ -945,7 +945,7 @@ static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
         for ( int i = 0; pPge->GetPrev() && (i < 3); ++i )
         {
             pPge = static_cast<const SwLayoutFrm*>(pPge->GetPrev());
-            const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
+            const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFootnote );
             if ( nNew < nDist )
             {
                 if ( pNew->Frm().Top() <= rPt.Y() )
@@ -970,7 +970,7 @@ static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
         for ( int j = 0; pPge->GetNext() && (j < 3); ++j )
         {
             pPge = static_cast<const SwLayoutFrm*>(pPge->GetNext());
-            const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
+            const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFootnote );
             if ( nNew < nDist )
             {
                 if ( pNew->Frm().Top() <= rPt.Y() )
@@ -1016,15 +1016,15 @@ static void lcl_PointToPrt( Point &rPoint, const SwFrm *pFrm )
  *  This is used to show anchors as well as changing anchors
  *  when dragging paragraph bound objects.
  */
-const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
+const SwContentFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
                               const bool bBodyOnly )
 {
     //Search the nearest Cnt around the given document position in the text
     //flow. The given anchor is the starting Frm.
-    const SwCntntFrm* pCnt;
-    if ( pOldAnch->IsCntntFrm() )
+    const SwContentFrm* pCnt;
+    if ( pOldAnch->IsContentFrm() )
     {
-        pCnt = static_cast<const SwCntntFrm*>(pOldAnch);
+        pCnt = static_cast<const SwContentFrm*>(pOldAnch);
     }
     else
     {
@@ -1035,13 +1035,13 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             SwRect aTmpRect( aTmp, Size(0,0) );
             pTmpLay = static_cast<const SwLayoutFrm*>(::FindPage( aTmpRect, pTmpLay->Lower() ));
         }
-        pCnt = pTmpLay->GetCntntPos( aTmp, false, bBodyOnly );
+        pCnt = pTmpLay->GetContentPos( aTmp, false, bBodyOnly );
     }
 
     //Take care to use meaningful ranges during search. This means to not enter
     //or leave header/footer in this case.
     const bool bBody = pCnt->IsInDocBody() || bBodyOnly;
-    const bool bFtn  = !bBodyOnly && pCnt->IsInFtn();
+    const bool bFootnote  = !bBodyOnly && pCnt->IsInFootnote();
 
     Point aNew( rNew );
     if ( bBody )
@@ -1061,8 +1061,8 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         // Maybe the selected anchor is on the same page as the current anchor.
         // With this we won't run into problems with the columns.
         Point aTmp( aNew );
-        const SwCntntFrm *pTmp = pCnt->FindPageFrm()->
-                                        GetCntntPos( aTmp, false, true, false );
+        const SwContentFrm *pTmp = pCnt->FindPageFrm()->
+                                        GetContentPos( aTmp, false, true, false );
         if ( pTmp && pTmp->Frm().IsInside( aNew ) )
             return pTmp;
     }
@@ -1071,8 +1071,8 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     //the nearest one respectively.
     //Not the direct distance is relevant but the distance which needs to be
     //traveled through the text flow.
-    const SwCntntFrm *pUpLst;
-    const SwCntntFrm *pUpFrm = pCnt;
+    const SwContentFrm *pUpLst;
+    const SwContentFrm *pUpFrm = pCnt;
     SwDistance nUp, nUpLst;
     ::lcl_CalcDownDist( nUp, aNew, pUpFrm );
     SwDistance nDown = nUp;
@@ -1080,10 +1080,10 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     do
     {
         pUpLst = pUpFrm; nUpLst = nUp;
-        pUpFrm = pUpLst->GetPrevCntntFrm();
+        pUpFrm = pUpLst->GetPrevContentFrm();
         while ( pUpFrm &&
-                (bBody != pUpFrm->IsInDocBody() || bFtn != pUpFrm->IsInFtn()))
-            pUpFrm = pUpFrm->GetPrevCntntFrm();
+                (bBody != pUpFrm->IsInDocBody() || bFootnote != pUpFrm->IsInFootnote()))
+            pUpFrm = pUpFrm->GetPrevContentFrm();
         if ( pUpFrm )
         {
             ::lcl_CalcDownDist( nUp, aNew, pUpFrm );
@@ -1094,7 +1094,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
                 while ( pUpFrm && ((nUpLst < nUp && pUpFrm->IsInTab()) ||
                         bBody != pUpFrm->IsInDocBody()) )
                 {
-                    pUpFrm = pUpFrm->GetPrevCntntFrm();
+                    pUpFrm = pUpFrm->GetPrevContentFrm();
                     if ( pUpFrm )
                         ::lcl_CalcDownDist( nUp, aNew, pUpFrm );
                 }
@@ -1113,18 +1113,18 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         }
     } while ( pUpFrm && ( ( bNegAllowed && nUp.nMain < 0 ) || ( nUp <= nUpLst ) ) );
 
-    const SwCntntFrm *pDownLst;
-    const SwCntntFrm *pDownFrm = pCnt;
+    const SwContentFrm *pDownLst;
+    const SwContentFrm *pDownFrm = pCnt;
     SwDistance nDownLst;
     if ( nDown.nMain < 0 )
         nDown.nMain = LONG_MAX;
     do
     {
         pDownLst = pDownFrm; nDownLst = nDown;
-        pDownFrm = pDownLst->GetNextCntntFrm();
+        pDownFrm = pDownLst->GetNextContentFrm();
         while ( pDownFrm &&
-                (bBody != pDownFrm->IsInDocBody() || bFtn != pDownFrm->IsInFtn()))
-            pDownFrm = pDownFrm->GetNextCntntFrm();
+                (bBody != pDownFrm->IsInDocBody() || bFootnote != pDownFrm->IsInFootnote()))
+            pDownFrm = pDownFrm->GetNextContentFrm();
         if ( pDownFrm )
         {
             ::lcl_CalcDownDist( nDown, aNew, pDownFrm );
@@ -1136,7 +1136,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             {
                 while ( pDownFrm && ( ( nDown.nMain != LONG_MAX && pDownFrm->IsInTab()) || bBody != pDownFrm->IsInDocBody() ) )
                 {
-                    pDownFrm = pDownFrm->GetNextCntntFrm();
+                    pDownFrm = pDownFrm->GetNextContentFrm();
                     if ( pDownFrm )
                         ::lcl_CalcDownDist( nDown, aNew, pDownFrm );
                     if ( nDown.nMain < 0 )
@@ -1150,7 +1150,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     } while ( pDownFrm && nDown <= nDownLst &&
               nDown.nMain != LONG_MAX && nDownLst.nMain != LONG_MAX );
 
-    //If we couldn't find one in both directions, we'll search the Cntnt whose
+    //If we couldn't find one in both directions, we'll search the Content whose
     //left upper corner is the nearest to the point. Such a situation may
     //happen, if the point doesn't lay in the text flow but in any margin.
     if ( nDownLst.nMain == LONG_MAX && nUpLst.nMain == LONG_MAX )
@@ -1161,7 +1161,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         if ( pCnt->IsInFly() )
             return pCnt;
 
-        return ::lcl_FindCnt( aNew, pCnt, bBody, bFtn );
+        return ::lcl_FindCnt( aNew, pCnt, bBody, bFootnote );
     }
     else
         return nDownLst < nUpLst ? pDownLst : pUpLst;
@@ -1175,9 +1175,9 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     if( ( GetAnchorFrm()->IsVertical() && !GetAnchorFrm()->IsVertLR() ) || GetAnchorFrm()->IsRightToLeft() )
         aNew.setX(aNew.getX() + Frm().Width());
-    SwCntntFrm *pCnt = const_cast<SwCntntFrm*>(::FindAnchor( GetAnchorFrm(), aNew ));
+    SwContentFrm *pCnt = const_cast<SwContentFrm*>(::FindAnchor( GetAnchorFrm(), aNew ));
     if( pCnt->IsProtected() )
-        pCnt = const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(GetAnchorFrm()));
+        pCnt = const_cast<SwContentFrm*>(static_cast<const SwContentFrm*>(GetAnchorFrm()));
 
     SwPageFrm *pTmpPage = 0;
     const bool bVert = pCnt->IsVertical();
@@ -1236,12 +1236,12 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     {
         // Flys are never attached to the follow but always to the master,
         // which we're going to search now.
-        const SwCntntFrm *pOriginal = pCnt;
-        const SwCntntFrm *pFollow = pCnt;
+        const SwContentFrm *pOriginal = pCnt;
+        const SwContentFrm *pFollow = pCnt;
         while ( pCnt->IsFollow() )
         {
             do
-            {   pCnt = pCnt->GetPrevCntntFrm();
+            {   pCnt = pCnt->GetPrevContentFrm();
             } while ( pCnt->GetFollow() != pFollow );
             pFollow = pCnt;
         }
@@ -1284,7 +1284,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         }
     }
 
-    SwFlyFrmFmt *pFmt = GetFmt();
+    SwFlyFrameFormat *pFormat = GetFormat();
 
     if( bVert )
     {
@@ -1310,34 +1310,34 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
                 nX = rNew.X() - pFrm->Frm().Left();
         }
     }
-    GetFmt()->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+    GetFormat()->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
-    if( pCnt != GetAnchorFrm() || ( IsAutoPos() && pCnt->IsTxtFrm() &&
-                                  GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE)) )
+    if( pCnt != GetAnchorFrm() || ( IsAutoPos() && pCnt->IsTextFrm() &&
+                                  GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE)) )
     {
         //Set the anchor attribute according to the new Cnt.
-        SwFmtAnchor aAnch( pFmt->GetAnchor() );
-        SwPosition pos = *aAnch.GetCntntAnchor();
-        if( IsAutoPos() && pCnt->IsTxtFrm() )
+        SwFormatAnchor aAnch( pFormat->GetAnchor() );
+        SwPosition pos = *aAnch.GetContentAnchor();
+        if( IsAutoPos() && pCnt->IsTextFrm() )
         {
             SwCrsrMoveState eTmpState( MV_SETONLYTEXT );
             Point aPt( rNew );
             if( pCnt->GetCrsrOfst( &pos, aPt, &eTmpState )
                 && pos.nNode == *pCnt->GetNode() )
             {
-                if ( pCnt->GetNode()->GetTxtNode() != NULL )
+                if ( pCnt->GetNode()->GetTextNode() != NULL )
                 {
-                    const SwTxtAttr* pTxtInputFld =
-                        pCnt->GetNode()->GetTxtNode()->GetTxtAttrAt( pos.nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTxtNode::PARENT );
-                    if ( pTxtInputFld != NULL )
+                    const SwTextAttr* pTextInputField =
+                        pCnt->GetNode()->GetTextNode()->GetTextAttrAt( pos.nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTextNode::PARENT );
+                    if ( pTextInputField != NULL )
                     {
-                        pos.nContent = pTxtInputFld->GetStart();
+                        pos.nContent = pTextInputField->GetStart();
                     }
                 }
                 ResetLastCharRectHeight();
-                if( text::RelOrientation::CHAR == pFmt->GetVertOrient().GetRelationOrient() )
+                if( text::RelOrientation::CHAR == pFormat->GetVertOrient().GetRelationOrient() )
                     nY = LONG_MAX;
-                if( text::RelOrientation::CHAR == pFmt->GetHoriOrient().GetRelationOrient() )
+                if( text::RelOrientation::CHAR == pFormat->GetHoriOrient().GetRelationOrient() )
                     nX = LONG_MAX;
             }
             else
@@ -1358,8 +1358,8 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         // re-created. Thus, delete all fly frames except the <this> before the
         // anchor attribute is change and re-create them afterwards.
         {
-            SwHandleAnchorNodeChg aHandleAnchorNodeChg( *pFmt, aAnch, this );
-            pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
+            SwHandleAnchorNodeChg aHandleAnchorNodeChg( *pFormat, aAnch, this );
+            pFormat->GetDoc()->SetAttr( aAnch, *pFormat );
         }
     }
     else if ( pTmpPage && pTmpPage != GetPageFrm() )
@@ -1369,7 +1369,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     ChgRelPos( aRelPos );
 
-    GetFmt()->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    GetFormat()->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
 
     if ( pOldPage != FindPageFrm() )
         ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE, false );
@@ -1421,7 +1421,7 @@ void SwFlyAtCntFrm::MakeObjPos()
     }
 
     // use new class to position object
-    objectpositioning::SwToCntntAnchoredObjectPosition
+    objectpositioning::SwToContentAnchoredObjectPosition
             aObjPositioning( *GetVirtDrawObj() );
     aObjPositioning.CalcPosition();
 

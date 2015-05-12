@@ -593,9 +593,9 @@ public:
     SvNumberFormatterIndexTable* MergeFormatter(SvNumberFormatter& rNewTable);
 
     /// Whether a merge table is present or not
-    bool HasMergeFmtTbl() const;
+    bool HasMergeFormatTable() const;
     /// Return the new format index for an old format index, if a merge table exists
-    sal_uInt32 GetMergeFmtIndex( sal_uInt32 nOldFmt ) const;
+    sal_uInt32 GetMergeFormatIndex( sal_uInt32 nOldFmt ) const;
 
     /** Convert the ugly old tools' Table type bloated with new'ed sal_uInt32
         entries merge table to ::std::map with old index key and new index key.

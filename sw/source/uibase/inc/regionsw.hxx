@@ -102,8 +102,8 @@ class SwEditRegionDlg : public SfxModalDialog
 
     Image  BuildBitmap(bool bProtect, bool bHidden);
 
-    void    RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pEntry);
-    size_t  FindArrPos(const SwSectionFmt* pFmt);
+    void    RecurseList( const SwSectionFormat* pFormat, SvTreeListEntry* pEntry);
+    size_t  FindArrPos(const SwSectionFormat* pFormat);
 
     DECL_LINK( GetFirstEntryHdl, SvTreeListBox * );
     DECL_LINK( DeselectHdl, SvTreeListBox * );
@@ -196,28 +196,28 @@ public:
                                 const SfxItemSet* rAttrSet);
 };
 
-class SwSectionFtnEndTabPage : public SfxTabPage
+class SwSectionFootnoteEndTabPage : public SfxTabPage
 {
-    VclPtr<CheckBox>        pFtnNtAtTextEndCB;
+    VclPtr<CheckBox>        pFootnoteNtAtTextEndCB;
 
-    VclPtr<CheckBox>        pFtnNtNumCB;
-    VclPtr<FixedText>       pFtnOffsetLbl;
-    VclPtr<NumericField>    pFtnOffsetFld;
+    VclPtr<CheckBox>        pFootnoteNtNumCB;
+    VclPtr<FixedText>       pFootnoteOffsetLbl;
+    VclPtr<NumericField>    pFootnoteOffsetField;
 
-    VclPtr<CheckBox>        pFtnNtNumFmtCB;
-    VclPtr<FixedText>       pFtnPrefixFT;
-    VclPtr<Edit>            pFtnPrefixED;
-    VclPtr<SwNumberingTypeListBox> pFtnNumViewBox;
-    VclPtr<FixedText>       pFtnSuffixFT;
-    VclPtr<Edit>            pFtnSuffixED;
+    VclPtr<CheckBox>        pFootnoteNtNumFormatCB;
+    VclPtr<FixedText>       pFootnotePrefixFT;
+    VclPtr<Edit>            pFootnotePrefixED;
+    VclPtr<SwNumberingTypeListBox> pFootnoteNumViewBox;
+    VclPtr<FixedText>       pFootnoteSuffixFT;
+    VclPtr<Edit>            pFootnoteSuffixED;
 
     VclPtr<CheckBox>        pEndNtAtTextEndCB;
 
     VclPtr<CheckBox>        pEndNtNumCB;
     VclPtr<FixedText>       pEndOffsetLbl;
-    VclPtr<NumericField>    pEndOffsetFld;
+    VclPtr<NumericField>    pEndOffsetField;
 
-    VclPtr<CheckBox>        pEndNtNumFmtCB;
+    VclPtr<CheckBox>        pEndNtNumFormatCB;
     VclPtr<FixedText>       pEndPrefixFT;
     VclPtr<Edit>            pEndPrefixED;
     VclPtr<SwNumberingTypeListBox> pEndNumViewBox;
@@ -225,11 +225,11 @@ class SwSectionFtnEndTabPage : public SfxTabPage
     VclPtr<Edit>            pEndSuffixED;
 
     DECL_LINK( FootEndHdl, CheckBox * );
-    void ResetState( bool bFtn, const SwFmtFtnEndAtTxtEnd& );
+    void ResetState( bool bFootnote, const SwFormatFootnoteEndAtTextEnd& );
 
 public:
-    SwSectionFtnEndTabPage( vcl::Window *pParent, const SfxItemSet &rAttrSet );
-    virtual ~SwSectionFtnEndTabPage();
+    SwSectionFootnoteEndTabPage( vcl::Window *pParent, const SfxItemSet &rAttrSet );
+    virtual ~SwSectionFootnoteEndTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;

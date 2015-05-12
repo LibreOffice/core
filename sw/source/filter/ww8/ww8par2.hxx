@@ -45,7 +45,7 @@ private:
 
 struct WW8SwFlyPara
 {
-    SwFlyFrmFmt* pFlyFmt;
+    SwFlyFrameFormat* pFlyFormat;
 
                 // 1. Teil: daraus abgeleitete Sw-Attribute
     sal_Int16 nXPos, nYPos;         // Position
@@ -99,7 +99,7 @@ friend class SwWW8ImplReader;
 
     sal_uInt8 nWwNumLevel;           // fuer Bullets und Aufzaehlungen in Styles
 
-    bool bTxtColChanged;
+    bool bTextColChanged;
     bool bFontChanged;      // For Simulating Default-Font
     bool bCJKFontChanged;   // For Simulating Default-CJK Font
     bool bCTLFontChanged;   // For Simulating Default-CTL Font

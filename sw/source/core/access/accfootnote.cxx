@@ -45,10 +45,10 @@ const sal_Char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccess
 SwAccessibleFootnote::SwAccessibleFootnote(
         SwAccessibleMap* pInitMap,
         bool bIsEndnote,
-        const SwFtnFrm *pFtnFrm ) :
+        const SwFootnoteFrm *pFootnoteFrm ) :
     SwAccessibleContext( pInitMap,
         bIsEndnote ? AccessibleRole::END_NOTE : AccessibleRole::FOOTNOTE,
-        pFtnFrm )
+        pFootnoteFrm )
 {
     SolarMutexGuard aGuard;
 
@@ -56,12 +56,12 @@ SwAccessibleFootnote::SwAccessibleFootnote(
                                    : STR_ACCESS_FOOTNOTE_NAME;
 
     OUString sArg;
-    const SwTxtFtn *pTxtFtn =
-        static_cast< const SwFtnFrm *>( GetFrm() )->GetAttr();
-    if( pTxtFtn )
+    const SwTextFootnote *pTextFootnote =
+        static_cast< const SwFootnoteFrm *>( GetFrm() )->GetAttr();
+    if( pTextFootnote )
     {
         const SwDoc *pDoc = GetShell()->GetDoc();
-        sArg = pTxtFtn->GetFtn().GetViewNumStr( *pDoc );
+        sArg = pTextFootnote->GetFootnote().GetViewNumStr( *pDoc );
     }
 
     SetName( GetResource( nResId, &sArg ) );
@@ -83,12 +83,12 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
         : STR_ACCESS_FOOTNOTE_DESC ;
 
     OUString sArg;
-    const SwTxtFtn *pTxtFtn =
-        static_cast< const SwFtnFrm *>( GetFrm() )->GetAttr();
-    if( pTxtFtn )
+    const SwTextFootnote *pTextFootnote =
+        static_cast< const SwFootnoteFrm *>( GetFrm() )->GetAttr();
+    if( pTextFootnote )
     {
         const SwDoc *pDoc = GetMap()->GetShell()->GetDoc();
-        sArg = pTxtFtn->GetFtn().GetViewNumStr( *pDoc );
+        sArg = pTextFootnote->GetFootnote().GetViewNumStr( *pDoc );
     }
 
     return GetResource( nResId, &sArg );
@@ -128,10 +128,10 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleFootnote::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-bool SwAccessibleFootnote::IsEndnote( const SwFtnFrm *pFtnFrm )
+bool SwAccessibleFootnote::IsEndnote( const SwFootnoteFrm *pFootnoteFrm )
 {
-    const SwTxtFtn *pTxtFtn = pFtnFrm ->GetAttr();
-    return pTxtFtn && pTxtFtn->GetFtn().IsEndNote() ;
+    const SwTextFootnote *pTextFootnote = pFootnoteFrm ->GetAttr();
+    return pTextFootnote && pTextFootnote->GetFootnote().IsEndNote() ;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

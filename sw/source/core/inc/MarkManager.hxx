@@ -44,7 +44,7 @@ namespace sw {
                 const OUString& rName,
                 const OUString& rType) SAL_OVERRIDE;
 
-            virtual ::sw::mark::IMark* getMarkForTxtNode(const SwTxtNode& rTxtNode, IDocumentMarkAccess::MarkType eMark) SAL_OVERRIDE;
+            virtual ::sw::mark::IMark* getMarkForTextNode(const SwTextNode& rTextNode, IDocumentMarkAccess::MarkType eMark) SAL_OVERRIDE;
 
             virtual sw::mark::IMark* makeAnnotationMark(
                 const SwPaM& rPaM,

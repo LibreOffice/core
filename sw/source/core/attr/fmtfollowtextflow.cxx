@@ -19,11 +19,11 @@
 
 #include <fmtfollowtextflow.hxx>
 
-TYPEINIT1(SwFmtFollowTextFlow, SfxBoolItem);
+TYPEINIT1(SwFormatFollowTextFlow, SfxBoolItem);
 
-SfxPoolItem*    SwFmtFollowTextFlow::Clone( SfxItemPool * ) const
+SfxPoolItem*    SwFormatFollowTextFlow::Clone( SfxItemPool * ) const
 {
-    return new SwFmtFollowTextFlow(*this);
+    return new SwFormatFollowTextFlow(*this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

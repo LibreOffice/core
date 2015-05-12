@@ -612,13 +612,13 @@ void ScDrawView::UpdateUserViewOptions()
         SetSnapEnabled( rGrid.GetUseGridSnap() );
         SetGridSnap( rGrid.GetUseGridSnap() );
 
-        Fraction aFractX( rGrid.GetFldDrawX(), rGrid.GetFldDivisionX() + 1 );
-        Fraction aFractY( rGrid.GetFldDrawY(), rGrid.GetFldDivisionY() + 1 );
+        Fraction aFractX( rGrid.GetFieldDrawX(), rGrid.GetFieldDivisionX() + 1 );
+        Fraction aFractY( rGrid.GetFieldDrawY(), rGrid.GetFieldDivisionY() + 1 );
         SetSnapGridWidth( aFractX, aFractY );
 
-        SetGridCoarse( Size( rGrid.GetFldDrawX(), rGrid.GetFldDrawY() ) );
-        SetGridFine( Size( rGrid.GetFldDrawX() / (rGrid.GetFldDivisionX() + 1),
-                           rGrid.GetFldDrawY() / (rGrid.GetFldDivisionY() + 1) ) );
+        SetGridCoarse( Size( rGrid.GetFieldDrawX(), rGrid.GetFieldDrawY() ) );
+        SetGridFine( Size( rGrid.GetFieldDrawX() / (rGrid.GetFieldDivisionX() + 1),
+                           rGrid.GetFieldDrawY() / (rGrid.GetFieldDivisionY() + 1) ) );
     }
 }
 
