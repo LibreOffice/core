@@ -40,7 +40,9 @@ $(eval $(call gb_Module_add_targets,scripting,\
 	Library_scriptframe \
 	Library_stringresource \
 	Library_vbaevents \
-	Pyuno_mailmerge \
+	$(if $(filter TRUE,$(DISABLE_PYTHON)),,\
+		Pyuno_mailmerge \
+	) \
 ))
 
 endif

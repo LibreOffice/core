@@ -168,7 +168,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 		scripting/source/basprov/basprov \
 		scripting/source/dlgprov/dlgprov \
 		scripting/source/protocolhandler/protocolhandler \
-		scripting/source/pyprov/mailmerge \
+		$(if $(filter TRUE,$(DISABLE_PYTHON)),,\
+			scripting/source/pyprov/mailmerge \
+		) \
 		wizards/com/sun/star/wizards/fax/fax \
 		wizards/com/sun/star/wizards/letter/letter \
 		wizards/com/sun/star/wizards/agenda/agenda \
