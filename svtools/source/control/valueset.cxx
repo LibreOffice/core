@@ -2264,8 +2264,12 @@ long ValueSet::GetScrollWidth() const
 {
     if (GetStyle() & WB_VSCROLL)
     {
-        const_cast<ValueSet*>(this)->Invalidate();
-        const_cast<ValueSet*>(this)->ImplInitScrollBar();
+        ValueSet* pValueSet = const_cast<ValueSet*>(this);
+        if (!mxScrollBar)
+        {
+            pValueSet->ImplInitScrollBar();
+        }
+        pValueSet->Invalidate();
         return mxScrollBar->GetSizePixel().Width() + SCRBAR_OFFSET;
     }
     else
