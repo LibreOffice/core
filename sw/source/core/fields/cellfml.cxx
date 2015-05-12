@@ -949,10 +949,10 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
             if( pTbl->IsHeadline( *pLine ) )
                 break;      // headline in this area!
 
-            const SwTabFrm *pTable = pStt->FindTabFrm();
+            const SwTabFrm *pStartTable = pStt->FindTabFrm();
             const SwTabFrm *pEndTable = pEnd->FindTabFrm();
 
-            if( pTable == pEndTable ) // no split table
+            if (pStartTable == pEndTable) // no split table
                 break;
 
             // then remove table headers
