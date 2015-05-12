@@ -48,9 +48,8 @@
 using namespace css::accessibility;
 
 // Drag&Drop
-static SvTreeListBox* pDDSource = NULL;
-static SvTreeListBox* pDDTarget = NULL;
-
+static VclPtr<SvTreeListBox> pDDSource;
+static VclPtr<SvTreeListBox> pDDTarget;
 
 #define SVLBOX_ACC_RETURN 1
 #define SVLBOX_ACC_ESCAPE 2
