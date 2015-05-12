@@ -34,14 +34,14 @@ namespace svx {
 
 const long DIAL_OUTER_WIDTH = 8;
 
-DialControlBmp::DialControlBmp( vcl::Window& rParent ) :
-    VirtualDevice( rParent, 0, 0 ),
-    mbEnabled( true ),
-    mrParent( rParent ),
+DialControlBmp::DialControlBmp(vcl::Window& rParent) :
+    VirtualDevice(rParent, 0, 0),
+    mbEnabled(true),
+    mrParent(rParent),
     mnCenterX(0),
     mnCenterY(0)
 {
-    EnableRTL( false );
+    EnableRTL(false);
 }
 
 void DialControlBmp::InitBitmap(const vcl::Font& rFont)
@@ -275,10 +275,10 @@ void DialControl::Resize()
     InvalidateControl();
 }
 
-void DialControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle&  )
+void DialControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     Point aPos;
-    DrawBitmapEx( aPos, mpImpl->mxBmpBuffered->GetBitmapEx( aPos, mpImpl->maWinSize ) );
+    rRenderContext.DrawBitmapEx(aPos, mpImpl->mxBmpBuffered->GetBitmapEx(aPos, mpImpl->maWinSize));
 }
 
 void DialControl::StateChanged( StateChangedType nStateChange )
