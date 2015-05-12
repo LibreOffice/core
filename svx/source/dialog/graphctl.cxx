@@ -242,19 +242,19 @@ void GraphCtrl::Resize()
     Invalidate();
 }
 
-void GraphCtrl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void GraphCtrl::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     // #i72889# used splitted repaint to be able to paint an own background
     // even to the buffered view
     const bool bGraphicValid(GRAPHIC_NONE != aGraphic.GetType());
 
-    if(bSdrMode)
+    if (bSdrMode)
     {
-        SdrPaintWindow* pPaintWindow = pView->BeginCompleteRedraw(this);
+        SdrPaintWindow* pPaintWindow = pView->BeginCompleteRedraw(&rRenderContext);
 
-        if(bGraphicValid)
+        if (bGraphicValid)
         {
-            OutputDevice& rTarget = pPaintWindow->GetTargetOutputDevice();
+            vcl::RenderContext& rTarget = pPaintWindow->GetTargetOutputDevice();
 
             rTarget.SetBackground(GetBackground());
             rTarget.Erase();
@@ -271,7 +271,7 @@ void GraphCtrl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& 
         // #i73381# in non-SdrMode, paint to local directly
         if(bGraphicValid)
         {
-            aGraphic.Draw(this, Point(), aGraphSize);
+            aGraphic.Draw(&rRenderContext, Point(), aGraphSize);
         }
     }
 }

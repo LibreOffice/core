@@ -125,37 +125,45 @@ public:
 
 class GraphCtrlUserCall : public SdrObjUserCall
 {
-    GraphCtrl&      rWin;
+    GraphCtrl& rWin;
 
 public:
 
-                    GraphCtrlUserCall( GraphCtrl& rGraphWin ) : rWin( rGraphWin ) {};
-    virtual         ~GraphCtrlUserCall() {};
+    GraphCtrlUserCall(GraphCtrl& rGraphWin)
+        : rWin(rGraphWin)
+    {}
 
-    virtual void    Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect ) SAL_OVERRIDE;
+    virtual ~GraphCtrlUserCall()
+    {}
+
+    virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect) SAL_OVERRIDE;
 };
 
-SdrObjUserCall* GraphCtrl::GetSdrUserCall() { return pUserCall; }
+SdrObjUserCall* GraphCtrl::GetSdrUserCall()
+{
+    return pUserCall;
+}
 
 class GraphCtrlView : public SdrView
 {
-    GraphCtrl&      rGraphCtrl;
+    GraphCtrl& rGraphCtrl;
 
 protected:
 
-    virtual void    MarkListHasChanged() SAL_OVERRIDE
-                    {
-                        SdrView::MarkListHasChanged();
-                        rGraphCtrl.MarkListHasChanged();
-                    }
+    virtual void MarkListHasChanged() SAL_OVERRIDE
+    {
+        SdrView::MarkListHasChanged();
+        rGraphCtrl.MarkListHasChanged();
+    }
 
 public:
+    GraphCtrlView(SdrModel* pModel, GraphCtrl* pWindow)
+        : SdrView(pModel, pWindow)
+        , rGraphCtrl(*pWindow)
+    {}
 
-                    GraphCtrlView( SdrModel* pModel, GraphCtrl* pWindow) :
-                            SdrView     ( pModel, pWindow ),
-                            rGraphCtrl  ( *pWindow ) {};
-
-    virtual         ~GraphCtrlView() {};
+    virtual ~GraphCtrlView()
+    {}
 };
 
 #endif // INCLUDED_SVX_GRAPHCTL_HXX
