@@ -1008,8 +1008,10 @@
 
 #define SID_OBJECT_CROP                                 ( SID_SVX_START + 1147 )
 
+#define SID_EDIT_POSTIT                                 ( SID_SVX_START + 1148 )
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_OBJECT_CROP + 1 )
+#define SID_SVX_FIRSTFREE                               (SID_EDIT_POSTIT + 1)
 
 // Overflow check for slot IDs
 
