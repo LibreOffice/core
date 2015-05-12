@@ -56,11 +56,13 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
 
 SvxShowCharSet::SvxShowCharSet(vcl::Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
-    , m_pAccessible(NULL)
+    , m_pAccessible(nullptr)
     , aVscrollSB( VclPtr<ScrollBar>::Create(this, WB_VERT) )
+    , mbRecalculateFont(true)
+    , mbUpdateForeground(true)
+    , mbUpdateBackground(true)
 {
     init();
-    InitSettings( true, true );
 }
 
 void SvxShowCharSet::init()
@@ -69,10 +71,10 @@ void SvxShowCharSet::init()
     m_nXGap = 0;
     m_nYGap = 0;
 
-    SetStyle( GetStyle() | WB_CLIPCHILDREN );
+    SetStyle(GetStyle() | WB_CLIPCHILDREN);
     aVscrollSB->SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
     aVscrollSB->EnableDrag( true );
-    // other settings like aVscroll depend on selected font => see SetFont
+    // other settings like aVscroll depend on selected font => see RecalculateFont
 
     bDrag = false;
 }
@@ -80,7 +82,8 @@ void SvxShowCharSet::init()
 void SvxShowCharSet::Resize()
 {
     Control::Resize();
-    SetFont(GetFont()); //force recalculation of correct fontsize
+    mbRecalculateFont = true;
+    Invalidate();
 }
 
 VCL_BUILDER_FACTORY(SvxShowCharSet)
@@ -101,12 +104,14 @@ void SvxShowCharSet::LoseFocus()
 
 
 
-void SvxShowCharSet::StateChanged( StateChangedType nType )
+void SvxShowCharSet::StateChanged(StateChangedType nType)
 {
-    if ( nType == StateChangedType::ControlForeground )
-        InitSettings( true, false );
-    else if ( nType == StateChangedType::ControlBackground )
-        InitSettings( false, true );
+    if (nType == StateChangedType::ControlForeground)
+        mbUpdateForeground = true;
+    else if (nType == StateChangedType::ControlBackground)
+        mbUpdateBackground = true;
+
+    Invalidate();
 
     Control::StateChanged( nType );
 }
@@ -115,11 +120,16 @@ void SvxShowCharSet::StateChanged( StateChangedType nType )
 
 void SvxShowCharSet::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS )
-      && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-        InitSettings( true, true );
+    if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS)
+     && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
+    {
+        mbUpdateForeground = true;
+        mbUpdateBackground = true;
+    }
     else
-        Control::DataChanged( rDCEvt );
+    {
+        Control::DataChanged(rDCEvt);
+    }
 }
 
 
@@ -209,7 +219,7 @@ sal_uInt16 SvxShowCharSet::GetColumnPos(sal_uInt16 _nPos)
 int SvxShowCharSet::FirstInView() const
 {
     int nIndex = 0;
-    if( aVscrollSB->IsVisible() )
+    if (aVscrollSB->IsVisible())
         nIndex += aVscrollSB->GetThumbPos() * COLUMN_COUNT;
     return nIndex;
 }
@@ -220,8 +230,8 @@ int SvxShowCharSet::LastInView() const
 {
     sal_uIntPtr nIndex = FirstInView();
     nIndex += ROW_COUNT * COLUMN_COUNT - 1;
-    sal_uIntPtr nCompare = sal::static_int_cast<sal_uIntPtr>( mpFontCharMap->GetCharCount() - 1 );
-    if( nIndex > nCompare )
+    sal_uIntPtr nCompare = sal::static_int_cast<sal_uIntPtr>(mpFontCharMap->GetCharCount() - 1);
+    if (nIndex > nCompare)
         nIndex = nCompare;
     return nIndex;
 }
@@ -314,14 +324,16 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
 
 
 
-void SvxShowCharSet::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SvxShowCharSet::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
-    DrawChars_Impl( FirstInView(), LastInView() );
+    InitSettings(rRenderContext);
+    RecalculateFont(rRenderContext);
+    DrawChars_Impl(rRenderContext, FirstInView(), LastInView());
 }
 
 void SvxShowCharSet::DeSelect()
 {
-    DrawChars_Impl(nSelectedIndex,nSelectedIndex);
+    Invalidate();
 }
 
 // stretch a grid rectangle if its at the edge to fill unused space
@@ -355,53 +367,57 @@ Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const Size &rO
     return Rectangle(aPointUL, aGridSize);
 }
 
-void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
+void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2)
 {
-    if( n1 > LastInView() || n2 < FirstInView() )
+    if (n1 > LastInView() || n2 < FirstInView())
         return;
 
-    Size aOutputSize = GetOutputSizePixel();
+    Size aOutputSize = rRenderContext.GetOutputSizePixel();
     if (aVscrollSB->IsVisible())
         aOutputSize.Width() -= aVscrollSB->GetOptimalSize().Width();
 
     int i;
-    for ( i = 1; i < COLUMN_COUNT; ++i )
-        DrawLine( Point( nX * i + m_nXGap, 0 ), Point( nX * i + m_nXGap, aOutputSize.Height() ) );
-    for ( i = 1; i < ROW_COUNT; ++i )
-        DrawLine( Point( 0, nY * i + m_nYGap ), Point( aOutputSize.Width(), nY * i + m_nYGap) );
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const Color aWindowTextColor( rStyleSettings.GetFieldTextColor() );
-    Color aHighlightColor( rStyleSettings.GetHighlightColor() );
-    Color aHighlightTextColor( rStyleSettings.GetHighlightTextColor() );
-    Color aFaceColor( rStyleSettings.GetFaceColor() );
-    Color aLightColor( rStyleSettings.GetLightColor() );
-    Color aShadowColor( rStyleSettings.GetShadowColor() );
-
-    int nTextHeight = GetTextHeight();
-    Rectangle aBoundRect;
-    for( i = n1; i <= n2; ++i )
+    for (i = 1; i < COLUMN_COUNT; ++i)
     {
-        Point pix = MapIndexToPixel( i );
+        rRenderContext.DrawLine(Point(nX * i + m_nXGap, 0),
+                          Point(nX * i + m_nXGap, aOutputSize.Height()));
+    }
+    for (i = 1; i < ROW_COUNT; ++i)
+    {
+        rRenderContext.DrawLine(Point(0, nY * i + m_nYGap),
+                                Point(aOutputSize.Width(), nY * i + m_nYGap));
+    }
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Color aWindowTextColor(rStyleSettings.GetFieldTextColor());
+    Color aHighlightColor(rStyleSettings.GetHighlightColor());
+    Color aHighlightTextColor(rStyleSettings.GetHighlightTextColor());
+    Color aFaceColor(rStyleSettings.GetFaceColor());
+    Color aLightColor(rStyleSettings.GetLightColor());
+    Color aShadowColor(rStyleSettings.GetShadowColor());
+
+    int nTextHeight = rRenderContext.GetTextHeight();
+    Rectangle aBoundRect;
+    for (i = n1; i <= n2; ++i)
+    {
+        Point pix = MapIndexToPixel(i);
         int x = pix.X();
         int y = pix.Y();
 
         OUStringBuffer buf;
-        buf.appendUtf32( mpFontCharMap->GetCharFromIndex( i ) );
+        buf.appendUtf32(mpFontCharMap->GetCharFromIndex(i));
         OUString aCharStr(buf.makeStringAndClear());
-        int nTextWidth = GetTextWidth(aCharStr);
+        int nTextWidth = rRenderContext.GetTextWidth(aCharStr);
         int tx = x + (nX - nTextWidth + 1) / 2;
         int ty = y + (nY - nTextHeight + 1) / 2;
-        Point aPointTxTy( tx, ty );
+        Point aPointTxTy(tx, ty);
 
         // adjust position before it gets out of bounds
-        if( GetTextBoundRect( aBoundRect, aCharStr ) && !aBoundRect.IsEmpty() )
+        if (rRenderContext.GetTextBoundRect(aBoundRect, aCharStr) && !aBoundRect.IsEmpty())
         {
             // zero advance width => use ink width to center glyph
-            if( !nTextWidth )
+            if (!nTextWidth)
             {
-                aPointTxTy.X() = x - aBoundRect.Left()
-                               + (nX - aBoundRect.GetWidth() + 1) / 2;
+                aPointTxTy.X() = x - aBoundRect.Left() + (nX - aBoundRect.GetWidth() + 1) / 2;
             }
 
             aBoundRect += aPointTxTy;
@@ -409,86 +425,87 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
             // shift back vertically if needed
             int nYLDelta = aBoundRect.Top() - y;
             int nYHDelta = (y + nY) - aBoundRect.Bottom();
-            if( nYLDelta <= 0 )
+            if (nYLDelta <= 0)
                 aPointTxTy.Y() -= nYLDelta - 1;
-            else if( nYHDelta <= 0 )
+            else if (nYHDelta <= 0)
                 aPointTxTy.Y() += nYHDelta - 1;
 
             // shift back horizontally if needed
             int nXLDelta = aBoundRect.Left() - x;
             int nXHDelta = (x + nX) - aBoundRect.Right();
-            if( nXLDelta <= 0 )
+            if (nXLDelta <= 0)
                 aPointTxTy.X() -= nXLDelta - 1;
-            else if( nXHDelta <= 0 )
+            else if (nXHDelta <= 0)
                 aPointTxTy.X() += nXHDelta - 1;
         }
 
-        Color aTextCol = GetTextColor();
-        if ( i != nSelectedIndex )
+        Color aTextCol = rRenderContext.GetTextColor();
+        if (i != nSelectedIndex)
         {
-            SetTextColor( aWindowTextColor );
-            DrawText( aPointTxTy, aCharStr );
+            rRenderContext.SetTextColor(aWindowTextColor);
+            rRenderContext.DrawText(aPointTxTy, aCharStr);
         }
         else
         {
-            Color aLineCol = GetLineColor();
-            Color aFillCol = GetFillColor();
-            SetLineColor();
-            Point aPointUL( x + 1, y + 1 );
-            if( HasFocus() )
+            Color aLineCol = rRenderContext.GetLineColor();
+            Color aFillCol = rRenderContext.GetFillColor();
+            rRenderContext.SetLineColor();
+            Point aPointUL(x + 1, y + 1);
+            if (HasFocus())
             {
-                SetFillColor( aHighlightColor );
-                DrawRect( getGridRectangle(aPointUL, aOutputSize) );
+                rRenderContext.SetFillColor(aHighlightColor);
+                rRenderContext.DrawRect(getGridRectangle(aPointUL, aOutputSize));
 
-                SetTextColor( aHighlightTextColor );
-                DrawText( aPointTxTy, aCharStr );
+                rRenderContext.SetTextColor(aHighlightTextColor);
+                rRenderContext.DrawText(aPointTxTy, aCharStr);
             }
             else
             {
-                SetFillColor( aFaceColor );
-                DrawRect( getGridRectangle(aPointUL, aOutputSize) );
+                rRenderContext.SetFillColor(aFaceColor);
+                rRenderContext.DrawRect(getGridRectangle(aPointUL, aOutputSize));
 
-                SetLineColor( aLightColor );
-                DrawLine( aPointUL, Point( x+nX-1, y+1) );
-                DrawLine( aPointUL, Point( x+1, y+nY-1) );
+                rRenderContext.SetLineColor(aLightColor);
+                rRenderContext.DrawLine(aPointUL, Point(x + nX - 1, y + 1));
+                rRenderContext.DrawLine(aPointUL, Point(x + 1, y + nY - 1));
 
-                SetLineColor( aShadowColor );
-                DrawLine( Point( x+1, y+nY-1), Point( x+nX-1, y+nY-1) );
-                DrawLine( Point( x+nX-1, y+nY-1), Point( x+nX-1, y+1) );
+                rRenderContext.SetLineColor(aShadowColor);
+                rRenderContext.DrawLine(Point(x + 1, y + nY - 1), Point(x + nX - 1, y + nY - 1));
+                rRenderContext.DrawLine(Point(x + nX - 1, y + nY - 1), Point(x + nX - 1, y + 1));
 
-                DrawText( aPointTxTy, aCharStr );
+                rRenderContext.DrawText(aPointTxTy, aCharStr);
             }
-            SetLineColor( aLineCol );
-            SetFillColor( aFillCol );
+            rRenderContext.SetLineColor(aLineCol);
+            rRenderContext.SetFillColor(aFillCol);
         }
-        SetTextColor( aTextCol );
+        rRenderContext.SetTextColor(aTextCol);
     }
 }
 
 
 
-void SvxShowCharSet::InitSettings( bool bForeground, bool bBackground )
+void SvxShowCharSet::InitSettings(vcl::RenderContext& rRenderContext)
 {
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    if ( bForeground )
+    if (mbUpdateForeground)
     {
-        Color aTextColor( rStyleSettings.GetDialogTextColor() );
+        Color aTextColor(rStyleSettings.GetDialogTextColor());
 
-        if ( IsControlForeground() )
+        if (IsControlForeground())
             aTextColor = GetControlForeground();
-        SetTextColor( aTextColor );
+        rRenderContext.SetTextColor(aTextColor);
+        mbUpdateForeground = false;
     }
 
-    if ( bBackground )
+    if (mbUpdateBackground)
     {
-        if ( IsControlBackground() )
-            SetBackground( GetControlBackground() );
+        if (IsControlBackground())
+            rRenderContext.SetBackground(GetControlBackground());
         else
-            SetBackground( rStyleSettings.GetWindowColor() );
-    }
+            rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
 
-    Invalidate();
+        mbUpdateBackground = false;
+    }
 }
 
 
@@ -502,38 +519,41 @@ sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
 
 
 
-void SvxShowCharSet::SetFont( const vcl::Font& rFont )
+void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
 {
-    // save last selected unicode
-    if( nSelectedIndex >= 0 )
-        getSelectedChar() = mpFontCharMap->GetCharFromIndex( nSelectedIndex );
+    if (!mbRecalculateFont)
+        return;
 
-    Size aSize = GetOutputSizePixel();
+    // save last selected unicode
+    if (nSelectedIndex >= 0)
+        getSelectedChar() = mpFontCharMap->GetCharFromIndex(nSelectedIndex);
+
+    Size aSize = rRenderContext.GetOutputSizePixel();
     long nSBWidth = aVscrollSB->GetOptimalSize().Width();
     aSize.Width() -= nSBWidth;
 
-    vcl::Font aFont = rFont;
-    aFont.SetWeight( WEIGHT_LIGHT );
-    aFont.SetAlign( ALIGN_TOP );
+    vcl::Font aFont = rRenderContext.GetFont();
+    aFont.SetWeight(WEIGHT_LIGHT);
+    aFont.SetAlign(ALIGN_TOP);
     int nFontHeight = (aSize.Height() - 5) * 2 / (3 * ROW_COUNT);
-    aFont.SetSize( PixelToLogic( Size( 0, nFontHeight ) ) );
-    aFont.SetTransparent( true );
-    Control::SetFont( aFont );
-    GetFontCharMap( mpFontCharMap );
+    aFont.SetSize(rRenderContext.PixelToLogic(Size(0, nFontHeight)));
+    aFont.SetTransparent(true);
+    rRenderContext.SetFont(aFont);
+    rRenderContext.GetFontCharMap(mpFontCharMap);
 
     nX = aSize.Width() / COLUMN_COUNT;
     nY = aSize.Height() / ROW_COUNT;
 
-    aVscrollSB->setPosSizePixel( aSize.Width(), 0, nSBWidth, aSize.Height() );
-    aVscrollSB->SetRangeMin( 0 );
+    aVscrollSB->setPosSizePixel(aSize.Width(), 0, nSBWidth, aSize.Height());
+    aVscrollSB->SetRangeMin(0);
     int nLastRow = (mpFontCharMap->GetCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
-    aVscrollSB->SetRangeMax( nLastRow );
-    aVscrollSB->SetPageSize( ROW_COUNT-1 );
-    aVscrollSB->SetVisibleSize( ROW_COUNT );
+    aVscrollSB->SetRangeMax(nLastRow);
+    aVscrollSB->SetPageSize(ROW_COUNT - 1);
+    aVscrollSB->SetVisibleSize(ROW_COUNT);
 
     // restore last selected unicode
-    int nMapIndex = mpFontCharMap->GetIndexFromChar( getSelectedChar() );
-    SelectIndex( nMapIndex );
+    int nMapIndex = mpFontCharMap->GetIndexFromChar(getSelectedChar());
+    SelectIndex(nMapIndex);
 
     aVscrollSB->Show();
 
@@ -542,7 +562,7 @@ void SvxShowCharSet::SetFont( const vcl::Font& rFont )
     m_nXGap = (aSize.Width() - aDrawSize.Width()) / 2;
     m_nYGap = (aSize.Height() - aDrawSize.Height()) / 2;
 
-    Invalidate();
+    mbRecalculateFont = false;
 }
 
 
@@ -590,25 +610,8 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
     }
     else
     {
-        // remove highlighted view
-        Color aLineCol = GetLineColor();
-        Color aFillCol = GetFillColor();
-        SetLineColor();
-        SetFillColor( GetBackground().GetColor() );
-
-        Point aOldPixel = MapIndexToPixel( nSelectedIndex );
-        aOldPixel.Move( +1, +1);
-        Size aOutputSize = GetOutputSizePixel();
-        if (aVscrollSB->IsVisible())
-            aOutputSize.Width() -= aVscrollSB->GetOptimalSize().Width();
-        DrawRect( getGridRectangle(aOldPixel, aOutputSize) );
-        SetLineColor( aLineCol );
-        SetFillColor( aFillCol );
-
-        int nOldIndex = nSelectedIndex;
         nSelectedIndex = nNewIndex;
-        DrawChars_Impl( nOldIndex, nOldIndex );
-        DrawChars_Impl( nNewIndex, nNewIndex );
+        Invalidate();
     }
 
     if( nSelectedIndex >= 0 )
@@ -634,8 +637,6 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
             pItem->m_pItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
     }
-
-
     aHighHdl.Call( this );
 }
 

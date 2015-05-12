@@ -28,8 +28,6 @@
 #include <memory>
 #include <svx/svxdllapi.h>
 
-// define ----------------------------------------------------------------
-
 #define COLUMN_COUNT    16
 #define ROW_COUNT        8
 
@@ -39,8 +37,6 @@ namespace svx
     class SvxShowCharSetVirtualAcc;
 }
 
-// class SvxShowCharSet --------------------------------------------------
-
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxShowCharSet : public Control
 {
 public:
@@ -48,7 +44,7 @@ public:
                     virtual ~SvxShowCharSet();
     virtual void    dispose() SAL_OVERRIDE;
 
-    void            SetFont( const vcl::Font& rFont );
+    void            RecalculateFont(vcl::RenderContext& rRenderContext);
 
     void            SelectCharacter( sal_uInt32 cNew, bool bFocus = false );
     sal_UCS4        GetSelectCharacter() const;
@@ -117,9 +113,13 @@ private:
     FontCharMapPtr  mpFontCharMap;
     VclPtr<ScrollBar>  aVscrollSB;
 
+    bool mbRecalculateFont  : 1;
+    bool mbUpdateForeground : 1;
+    bool mbUpdateBackground : 1;
+
 private:
-    void            DrawChars_Impl( int n1, int n2);
-    void            InitSettings( bool bForeground, bool bBackground);
+    void            DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2);
+    void            InitSettings(vcl::RenderContext& rRenderContext);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
     DECL_LINK(VscrollHdl, void *);
