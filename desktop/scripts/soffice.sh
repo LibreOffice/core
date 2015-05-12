@@ -57,7 +57,7 @@ cd "$sd_cwd"
 
 # linked build needs additional settings
 if [ -e "${sd_prog}/ooenv" ] ; then
-    . "${sd_prog}/ooenv}"
+    . "${sd_prog}/ooenv"
 fi
 
 # try to get some debug output?
