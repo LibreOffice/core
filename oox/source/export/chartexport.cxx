@@ -1973,7 +1973,7 @@ void ChartExport::exportSurfaceChart( Reference< chart2::XChartType > xChartType
     pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
 
-void ChartExport::exportAllSeries(Reference<chart2::XChartType> xChartType, sal_Int32& nAttachedAxis)
+void ChartExport::exportAllSeries(Reference<chart2::XChartType> xChartType, sal_Int32& rAttachedAxis)
 {
     Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
     if( ! xDSCnt.is())
@@ -1981,11 +1981,11 @@ void ChartExport::exportAllSeries(Reference<chart2::XChartType> xChartType, sal_
 
     // export dataseries for current chart-type
     Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
-    exportSeries(xChartType, aSeriesSeq, nAttachedAxis);
+    exportSeries(xChartType, aSeriesSeq, rAttachedAxis);
 }
 
 void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
-        Sequence<Reference<chart2::XDataSeries> >& rSeriesSeq, sal_Int32& nAttachedAxis )
+        Sequence<Reference<chart2::XDataSeries> >& rSeriesSeq, sal_Int32& rAttachedAxis )
 {
     OUString aLabelRole = xChartType->getRoleOfSequenceForSeriesLabel();
     OUString aChartType( xChartType->getChartType());
@@ -2053,7 +2053,7 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
                     {
                         sal_Int32 nLocalAttachedAxis;
                         mAny >>= nLocalAttachedAxis;
-                        nAttachedAxis = translateFromChart2AxisIndexToOox(nLocalAttachedAxis);
+                        rAttachedAxis = translateFromChart2AxisIndexToOox(nLocalAttachedAxis);
                     }
 
                     // export shape properties
@@ -2186,12 +2186,12 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
 void ChartExport::exportCandleStickSeries(
     const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
     bool /*bJapaneseCandleSticks*/,
-    sal_Int32& nAttachedAxis )
+    sal_Int32& rAttachedAxis )
 {
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
     {
         Reference< chart2::XDataSeries > xSeries( aSeriesSeq[nSeriesIdx] );
-        nAttachedAxis = lcl_isSeriesAttachedToFirstAxis( xSeries ) ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
+        rAttachedAxis = lcl_isSeriesAttachedToFirstAxis( xSeries ) ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
 
         Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
         if( xSource.is())
