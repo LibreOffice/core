@@ -110,7 +110,6 @@ public:
         throw (lang::IllegalArgumentException, uno::RuntimeException);
 
     void ConvertCell(
-            const bool bFirstCell,
             const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
             ::std::vector<SwNodeRange> & rRowNodes,
             ::std::unique_ptr< SwPaM > & rpFirstPaM,
@@ -1816,7 +1815,6 @@ static bool lcl_SimilarPosition( const sal_Int32 nPos1, const sal_Int32 nPos2 )
 }
 
 void SwXText::Impl::ConvertCell(
-    const bool bFirstCell,
     const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
     ::std::vector<SwNodeRange> & rRowNodes,
     ::std::unique_ptr< SwPaM > & rpFirstPaM,
@@ -1905,7 +1903,7 @@ void SwXText::Impl::ConvertCell(
         have to be aligned on paragraph borders by inserting paragraph
         breaks. Non-consecutive ranges must initiate an exception.
      */
-    if (bFirstCell)
+    if (!pLastCell) // first cell?
     {
         // align the beginning - if necessary
         if (aStartCellPam.Start()->nContent.GetIndex())
@@ -1980,8 +1978,9 @@ void SwXText::Impl::ConvertCell(
     SwNodeRange aCellRange(aStartCellPam.Start()->nNode,
             aEndCellPam.End()->nNode);
     rRowNodes.push_back(aCellRange); // note: invalidates pLastCell!
-    if (bFirstCell)
+    if (!pLastCell)
     {
+        assert(!rpFirstPaM);
         rpFirstPaM.reset(new SwPaM(*aStartCellPam.Start()));
     }
 }
@@ -2250,7 +2249,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 (nCell == 0)
                     ? ((nRow == 0) ? nullptr : &*aTableNodes.rbegin()->rbegin())
                     : &*aRowNodes.rbegin());
-            m_pImpl->ConvertCell((nCell == 0) && (nRow == 0), pRow[nCell],
+            m_pImpl->ConvertCell(pRow[nCell],
                 aRowNodes, pFirstPaM, pLastCell, bExcept);
         }
         aTableNodes.push_back(aRowNodes);
