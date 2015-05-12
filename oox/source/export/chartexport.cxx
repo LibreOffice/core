@@ -494,9 +494,11 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         {
         }
     }
+
+    SAL_WARN_IF(!xParser.is(), "oox", "creating formula parser failed");
+
     if( xParser.is() )
     {
-        OSL_TRACE("ChartExport::parseFormula, parser is valid");
         Reference< XPropertySet > xParserProps( xParser, uno::UNO_QUERY );
         if( xParserProps.is() )
         {
@@ -511,7 +513,6 @@ OUString ChartExport::parseFormula( const OUString& rRange )
     }
     else
     {
-        OSL_TRACE("ChartExport::parseFormula, parser is invalid");
         //FIXME: currently just using simple converter, e.g $Sheet1.$A$1:$C$1 -> Sheet1!$A$1:$C$1
         OUString aRange( rRange );
         if( aRange.startsWith("$") )
@@ -520,13 +521,11 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         aResult = aRange;
     }
 
-    OSL_TRACE("ChartExport::parseFormula, the originla formula is %s, the new formula is %s ", OUStringToOString( rRange, RTL_TEXTENCODING_UTF8 ).getStr(), OUStringToOString( aResult, RTL_TEXTENCODING_UTF8 ).getStr());
     return aResult;
 }
 
 ChartExport& ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nChartCount )
 {
-    OSL_TRACE("ChartExport::WriteChartObj -- writer chart object");
     FSHelperPtr pFS = GetFS();
 
     pFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
@@ -1299,7 +1298,7 @@ void ChartExport::exportPlotArea( )
                     }
                 default:
                     {
-                        OSL_TRACE("ChartExport::exportPlotArea -- not support chart type");
+                        SAL_WARN("oox", "ChartExport::exportPlotArea -- not support chart type");
                         break;
                     }
             }
@@ -3162,7 +3161,6 @@ void ChartExport::exportDataPoints(
 
             if( xPropSet.is() )
             {
-                OSL_TRACE("ChartExport::exportDataPoints -- writer data points ");
                 FSHelperPtr pFS = GetFS();
                 pFS->startElement( FSNS( XML_c, XML_dPt ),
                     FSEND );
