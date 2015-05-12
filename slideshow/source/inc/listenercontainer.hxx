@@ -89,13 +89,11 @@ template< typename ListenerT > struct ListenerOperations
     static bool notifySingleListener( ContainerT& rContainer,
                                       FuncT       func )
     {
-        const typename ContainerT::const_iterator aEnd( rContainer.end() );
-
         // true: a handler in this queue processed the event
         // false: no handler in this queue finally processed the event
-        return (std::find_if( rContainer.begin(),
-                              aEnd,
-                              func ) != aEnd);
+        return std::any_of( rContainer.begin(),
+                            rContainer.end(),
+                            func );
     }
 
     /// Notify all listeners

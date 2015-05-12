@@ -632,16 +632,14 @@ namespace slideshow
         void DrawShape::addViewLayer( const ViewLayerSharedPtr& rNewLayer,
                                       bool                      bRedrawLayer )
         {
-            ViewShapeVector::iterator aEnd( maViewShapes.end() );
-
             // already added?
-            if( ::std::find_if( maViewShapes.begin(),
-                                aEnd,
-                                ::boost::bind<bool>(
+            if( ::std::any_of( maViewShapes.begin(),
+                               maViewShapes.end(),
+                               ::boost::bind<bool>(
                                     ::std::equal_to< ViewLayerSharedPtr >(),
                                     ::boost::bind( &ViewShape::getViewLayer,
                                                    _1 ),
-                                    ::boost::cref( rNewLayer ) ) ) != aEnd )
+                                    ::boost::cref( rNewLayer ) ) ))
             {
                 // yes, nothing to do
                 return;

@@ -44,17 +44,16 @@ namespace slideshow
         bool UnoViewContainer::addView( const UnoViewSharedPtr& rView )
         {
             // check whether same view is already added
-            const UnoViewVector::iterator aEnd( maViews.end() );
 
             // already added?
-            if( ::std::find_if( maViews.begin(),
-                                aEnd,
-                                ::boost::bind(
+            if( ::std::any_of( maViews.begin(),
+                               maViews.end(),
+                               ::boost::bind(
                                     ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
                                     rView->getUnoView(),
                                     ::boost::bind(
                                         &UnoView::getUnoView,
-                                        _1 ) ) ) != aEnd )
+                                        _1 ) ) ) )
             {
                 // yes, nothing to do
                 return false;
