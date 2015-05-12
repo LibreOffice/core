@@ -6214,6 +6214,29 @@ SfxVoidItem InsertAnnotation SID_INSERT_POSTIT
     GroupId = GID_INSERT;
 ]
 
+SfxVoidItem EditAnnotation SID_EDIT_POSTIT
+(SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,SvxPostItDateItem Date SID_ATTR_POSTIT_DATE,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INSERT;
+]
 
 SfxBoolItem ShowAnnotations SID_SHOW_POSTIT
 ()
