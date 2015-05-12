@@ -288,13 +288,13 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
         return ;
     }
     // where is the category name (e.g. "Illustration")?
-    OUString const sText = pTxtNd->GetTxt();
-    const sal_Int32 nCatStart = sText.indexOf(sSetRefName);
+    const OUString aText = pTxtNd->GetTxt();
+    const sal_Int32 nCatStart = aText.indexOf(sSetRefName);
     const bool bHasCat = nCatStart>=0;
     const sal_Int32 nCatEnd = bHasCat ? nCatStart + sSetRefName.getLength() : -1;
 
     // length of the referenced text
-    const sal_Int32 nLen = sText.getLength();
+    const sal_Int32 nLen = aText.getLength();
 
     // which format?
     switch( GetFormat() )
