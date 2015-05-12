@@ -36,8 +36,9 @@ public:
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
-    ::boost::shared_ptr< UnitsImpl > mpUnitsImpl;
+    void setNumberFormatUnit(const ScAddress& rAddress, const OUString& sUnit);
 
+    ::boost::shared_ptr< UnitsImpl > mpUnitsImpl;
 
     void testUTUnit();
     void testUnitVerification();
@@ -127,85 +128,77 @@ void UnitsTest::testUTUnit() {
     CPPUNIT_ASSERT(aCM.convertValueTo(100.0, aM) == 1.0);
 }
 
+void UnitsTest::setNumberFormatUnit(const ScAddress& rAddress, const OUString& sUnit) {
+    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+
+    OUString sFormat = "#\"" + sUnit + "\"";
+    sal_uInt32 nKey;
+    sal_Int32 nCheckPos; // unused, returns the error position (shouldn't ever happen in our tests)
+    short nType = css::util::NumberFormat::DEFINED;
+
+    pFormatter->PutEntry(sFormat, nCheckPos, nType, nKey);
+    mpDoc->SetNumberFormat(rAddress, nKey);
+}
+
 void UnitsTest::testUnitVerification() {
     // Make sure we have at least one tab to work with
     mpDoc->EnsureTable(0);
 
-    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-    sal_uInt32 nKeyCM, nKeyM, nKeyKG, nKeyS, nKeyCM_S;
-
-    // Used to return position of error in input string for PutEntry
-    // -- not needed here.
-    sal_Int32 nCheckPos;
-
-    short nType = css::util::NumberFormat::DEFINED;
-
-    OUString sM = "#\"m\"";
-    pFormatter->PutEntry(sM, nCheckPos, nType, nKeyM);
-    OUString sCM = "#\"cm\"";
-    pFormatter->PutEntry(sCM, nCheckPos, nType, nKeyCM);
-    OUString sKG = "#\"kg\"";
-    pFormatter->PutEntry(sKG, nCheckPos, nType, nKeyKG);
-    OUString sS = "#\"s\"";
-    pFormatter->PutEntry(sS, nCheckPos, nType, nKeyS);
-    OUString sCM_S = "#\"cm/s\"";
-    pFormatter->PutEntry(sCM_S, nCheckPos, nType, nKeyCM_S);
-
     // 1st column: 10cm, 20cm, 30cm
     ScAddress address(0, 0, 0);
-    mpDoc->SetNumberFormat(address, nKeyCM);
+    setNumberFormatUnit(address, "cm");
     mpDoc->SetValue(address, 10);
 
     address.IncRow();
-    mpDoc->SetNumberFormat(address, nKeyCM);
+    setNumberFormatUnit(address, "cm");
     mpDoc->SetValue(address, 20);
 
     address.IncRow();
-    mpDoc->SetNumberFormat(address, nKeyCM);
+    setNumberFormatUnit(address, "cm");
     mpDoc->SetValue(address, 30);
 
     // 2nd column: 1kg, 2kg, 3kg
     address = ScAddress(1, 0, 0);
-    mpDoc->SetNumberFormat(address, nKeyKG);
+    setNumberFormatUnit(address, "kg");
     mpDoc->SetValue(address, 1);
 
     address.IncRow();
-    mpDoc->SetNumberFormat(address, nKeyKG);
+    setNumberFormatUnit(address, "kg");
     mpDoc->SetValue(address, 2);
 
     address.IncRow();
-    mpDoc->SetNumberFormat(address, nKeyKG);
+    setNumberFormatUnit(address, "kg");
     mpDoc->SetValue(address, 3);
 
     // 3rd column: 1s, 2s, 3s
     address = ScAddress(2, 0, 0);
-    mpDoc->SetNumberFormat(address, nKeyS);
+    setNumberFormatUnit(address, "s");
     mpDoc->SetValue(address, 1);
 
     address.IncRow();
-    mpDoc->SetNumberFormat(address, nKeyS);
+    setNumberFormatUnit(address, "s");
     mpDoc->SetValue(address, 2);
 
     address.IncRow();
-    mpDoc->SetNumberFormat(address, nKeyS);
+    setNumberFormatUnit(address, "s");
     mpDoc->SetValue(address, 3);
 
     // 4th column: 5cm/s, 10cm/s, 15cm/s
     address = ScAddress(3, 0, 0);
-    mpDoc->SetNumberFormat(address, nKeyCM_S);
+    setNumberFormatUnit(address, "cm/s");
     mpDoc->SetValue(address, 5);
 
     address.IncRow();
-    mpDoc->SetNumberFormat(address, nKeyCM_S);
+    setNumberFormatUnit(address, "cm/s");
     mpDoc->SetValue(address, 10);
 
     address.IncRow();
-    mpDoc->SetNumberFormat(address, nKeyCM_S);
+    setNumberFormatUnit(address, "cm/s");
     mpDoc->SetValue(address, 15);
 
     // 5th column: 1m
     address = ScAddress(4, 0, 0);
-    mpDoc->SetNumberFormat(address, nKeyM);
+    setNumberFormatUnit(address, "m");
     mpDoc->SetValue(address, 1);
 
     ScFormulaCell* pCell;
