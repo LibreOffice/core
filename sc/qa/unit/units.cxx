@@ -820,6 +820,7 @@ void UnitsTest::testRangeConversion() {
     // TODO: we need to test:
     // 1. mixture of units that can't be converted
     // 2. mixtures of local and header annotations
+    // 3. actual sensible ranges
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UnitsTest);

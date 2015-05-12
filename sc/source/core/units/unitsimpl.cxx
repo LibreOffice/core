@@ -799,7 +799,7 @@ bool UnitsImpl::convertCellUnitsForColumnRange(const ScRange& rRange,
     return bAllConverted;
 }
 
-bool UnitsImpl::convertCellUnits(const ScRange& rRange,
+bool UnitsImpl::convertCellUnits(const ScRangeList& rRangeList,
                                  ScDocument* pDoc,
                                  const OUString& rsOutputUnit) {
     UtUnit aOutputUnit;
@@ -807,26 +807,28 @@ bool UnitsImpl::convertCellUnits(const ScRange& rRange,
         return false;
     }
 
-    ScRange aRange(rRange);
-    aRange.PutInOrder();
-
-    SCCOL nStartCol, nEndCol;
-    SCROW nStartRow, nEndRow;
-    SCTAB nStartTab, nEndTab;
-    aRange.GetVars(nStartCol, nStartRow, nStartTab,
-                   nEndCol, nEndRow, nEndTab);
-
-    // Can only handle ranges in a single sheet for now
-    assert(nStartTab == nEndTab);
-
-    // Each column is independent hence we are able to handle each separately.
     bool bAllConverted = true;
-    for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++) {
-        ScRange aSubRange(ScAddress(nCol, nStartRow, nStartTab), ScAddress(nCol, nEndRow, nStartTab));
-        bAllConverted = bAllConverted &&
-                        convertCellUnitsForColumnRange(aSubRange, pDoc, aOutputUnit);
-    }
 
+    for (size_t i = 0; i < rRangeList.size(); i++) {
+        ScRange aRange(*rRangeList[i]);
+
+        aRange.PutInOrder();
+
+        SCCOL nStartCol, nEndCol;
+        SCROW nStartRow, nEndRow;
+        SCTAB nStartTab, nEndTab;
+        aRange.GetVars(nStartCol, nStartRow, nStartTab,
+                       nEndCol, nEndRow, nEndTab);
+
+        // Each column is independent hence we are able to handle each separately.
+        for (SCTAB nTab = nStartTab; nTab <= nEndTab; nTab++) {
+            for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++) {
+                ScRange aSubRange(ScAddress(nCol, nStartRow, nTab), ScAddress(nCol, nEndRow, nTab));
+                bAllConverted = bAllConverted &&
+                                convertCellUnitsForColumnRange(aSubRange, pDoc, aOutputUnit);
+            }
+        }
+    }
     return bAllConverted;
 }
 
