@@ -101,11 +101,11 @@ public:
         return ut_is_dimensionless(this->get());
     }
 
-    bool operator==(const UtUnit& rUnit) {
+    bool operator==(const UtUnit& rUnit) const {
         return ut_compare(this->get(), rUnit.get()) == 0;
     }
 
-    bool operator!=(const UtUnit& rUnit) {
+    bool operator!=(const UtUnit& rUnit) const {
         return !operator==(rUnit);
     }
 
@@ -137,11 +137,11 @@ public:
         return UtUnit(ut_divide(this->get(), rUnit.get()));
     }
 
-    bool areConvertibleTo(const UtUnit& rUnit) {
+    bool areConvertibleTo(const UtUnit& rUnit) const {
         return ut_are_convertible(this->get(), rUnit.get());
     }
 
-    double convertValueTo(double nOriginalValue, const UtUnit& rUnit) {
+    double convertValueTo(double nOriginalValue, const UtUnit& rUnit) const {
         assert(isValid());
         assert(rUnit.isValid());
 
