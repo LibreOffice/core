@@ -30,6 +30,8 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 
+#include <set>
+
 namespace com { namespace sun { namespace star {
     namespace chart {
         class XDiagram;
@@ -102,6 +104,8 @@ private:
     bool                mbIs3DChart;
     bool                mbStacked;
     bool                mbPercent;
+
+    std::set<sal_Int32> maExportedAxis;
 
 private:
     sal_Int32 getChartType();

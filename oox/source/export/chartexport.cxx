@@ -2611,6 +2611,7 @@ void ChartExport::_exportAxis(
 
     pFS->startElement( FSNS( XML_c, XML_scaling ),
             FSEND );
+
     // logBase, min, max
     if(GetProperty( xAxisProp, "Logarithmic" ) )
     {
@@ -2671,8 +2672,15 @@ void ChartExport::_exportAxis(
             OUString ("Visible")) >>=  bVisible;
     }
 
+    // only export each axis only once non-deleted
+    bool bDeleted = std::find(maExportedAxis.begin(),
+            maExportedAxis.end(), rAxisIdPair.nAxisType) != maExportedAxis.end();
+
+    if (!bDeleted)
+        maExportedAxis.insert(rAxisIdPair.nAxisType);
+
     pFS->singleElement( FSNS( XML_c, XML_delete ),
-            XML_val, bVisible ? "0" : "1",
+            XML_val, !bDeleted && bVisible ? "0" : "1",
             FSEND );
 
     // FIXME: axPos, need to check the property "ReverseDirection"
