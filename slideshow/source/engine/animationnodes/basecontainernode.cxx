@@ -94,10 +94,9 @@ bool BaseContainerNode::hasPendingAnimation() const
     // does any of our children returns "true" on
     // AnimationNode::hasPendingAnimation()?
     // If yes, we, too, return true
-    VectorOfNodes::const_iterator const iEnd( maChildren.end() );
-    return (std::find_if(
-                maChildren.begin(), iEnd,
-                boost::mem_fn(&AnimationNode::hasPendingAnimation) ) != iEnd);
+    return std::any_of(
+                maChildren.begin(), maChildren.end(),
+                boost::mem_fn(&AnimationNode::hasPendingAnimation) );
 }
 
 void BaseContainerNode::appendChildNode( AnimationNodeSharedPtr const& pNode )

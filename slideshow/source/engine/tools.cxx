@@ -439,17 +439,9 @@ namespace slideshow
             const beans::NamedValue*    pArray = rSequence.getConstArray();
             const size_t                nLen( rSequence.getLength() );
 
-            if( nLen == 0 )
-                return false;
-
-            const beans::NamedValue* pFound = ::std::find_if( pArray,
-                                                              pArray + nLen,
-                                                              NamedValueComparator( rSearchKey ) );
-
-            if( pFound == rSequence.getConstArray() + nLen )
-                return false;
-
-            return true;
+            return ::std::any_of( pArray,
+                                  pArray + nLen,
+                                  NamedValueComparator( rSearchKey ) );
         }
 
         basegfx::B2DRange calcRelativeShapeBounds( const basegfx::B2DVector& rPageSize,

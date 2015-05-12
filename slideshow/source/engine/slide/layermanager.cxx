@@ -488,13 +488,9 @@ namespace slideshow
             if( mbLayerAssociationDirty || !maUpdateShapes.empty() )
                 return true;
 
-            const LayerVector::const_iterator aEnd( maLayers.end() );
-            if( std::find_if( maLayers.begin(),
-                              aEnd,
-                              boost::mem_fn(&Layer::isUpdatePending)) != aEnd )
-                return true;
-
-            return false;
+            return std::any_of( maLayers.begin(),
+                                maLayers.end(),
+                                boost::mem_fn(&Layer::isUpdatePending) );
         }
 
         bool LayerManager::updateSprites()
@@ -552,9 +548,9 @@ namespace slideshow
             bRet = updateSprites();
 
             // any non-sprite update areas left?
-            if( std::find_if( maLayers.begin(),
+            if( std::none_of( maLayers.begin(),
                               maLayers.end(),
-                              boost::mem_fn( &Layer::isUpdatePending )) == maLayers.end() )
+                              boost::mem_fn( &Layer::isUpdatePending ) ) )
                 return bRet; // nope, done.
 
             // update each shape on each layer, that has

@@ -127,13 +127,13 @@ private:
     }
     virtual bool removeViewLayer( const target::ViewLayerSharedPtr& rNewLayer )
     {
-        if( std::find_if(
+        if( std::none_of(
                 maViewLayers.begin(),
                 maViewLayers.end(),
                 boost::bind( std::equal_to< target::ViewLayerSharedPtr >(),
                              boost::cref( rNewLayer ),
                              boost::bind( o3tl::select1st<ViewVector::value_type>(),
-                                          _1 ))) == maViewLayers.end() )
+                                          _1 ))) )
             throw std::exception();
 
         maViewLayers.erase(
