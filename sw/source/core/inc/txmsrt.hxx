@@ -63,9 +63,9 @@ struct TextAndReading
 
     TextAndReading() {}
 
-    TextAndReading(const OUString& sTxt, const OUString& sRdng)
-    : sText(sTxt)
-    , sReading(sRdng)
+    TextAndReading(const OUString& rText, const OUString& rReading)
+    : sText(rText)
+    , sReading(rReading)
     {}
 };
 
