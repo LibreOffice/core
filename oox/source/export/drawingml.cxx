@@ -1671,7 +1671,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
             }
             else if(aPropName == "BulletColor")
             {
-                nBulletColor = *( (sal_Int32*)pValue );
+                nBulletColor = *static_cast<sal_Int32 const *>(pValue);
             }
             else if ( aPropName == "BulletChar" )
             {
