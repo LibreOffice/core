@@ -319,18 +319,13 @@ IMPL_LINK_NOARG(MaskData, ExecHdl)
     return 0L;
 }
 
-void ColorWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle &/*Rect*/ )
+void ColorWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& /*Rect*/)
 {
-    const Color& rOldLineColor = GetLineColor();
-    const Color& rOldFillColor = GetFillColor();
-
-    SetLineColor( aColor );
-    SetFillColor( aColor );
-
-    DrawRect( Rectangle( Point(), GetSizePixel() ) );
-
-    SetLineColor( rOldLineColor );
-    SetFillColor( rOldFillColor );
+    rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+    rRenderContext.SetLineColor(aColor);
+    rRenderContext.SetFillColor(aColor);
+    rRenderContext.DrawRect(Rectangle(Point(), GetSizePixel()));
+    rRenderContext.Pop();
 }
 
 SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( sal_uInt16 nId_, SvxBmpMask& rMask,
