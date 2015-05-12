@@ -381,7 +381,7 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
                 const beans::PropertyValue* pKeyModifier = ::std::find_if(
                     pIter, pEnd, ::std::bind2nd( PropertyValueCompare(), boost::cref( sKeyModifier ) ) );
                 sal_Int16 nKeyModifier = 0;
-                if ( pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
+                if ( pKeyModifier != pEnd && pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
                 {
                     if ( eDrawMode == CHARTDRAW_INSERT )
                     {
