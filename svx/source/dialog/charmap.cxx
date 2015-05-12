@@ -255,19 +255,19 @@ int SvxShowCharSet::PixelToMapIndex( const Point& point) const
 
 
 
-void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
+void SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
 {
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
-    if( aCode.GetModifier() )
+    if (aCode.GetModifier())
     {
-        Control::KeyInput( rKEvt );
+        Control::KeyInput(rKEvt);
         return;
     }
 
     int tmpSelected = nSelectedIndex;
 
-    switch ( aCode.GetCode() )
+    switch (aCode.GetCode())
     {
         case KEY_SPACE:
             aSelectHdl.Call( this );
@@ -299,17 +299,17 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
         case KEY_TAB:   // some fonts have a character at these unicode control codes
         case KEY_ESCAPE:
         case KEY_RETURN:
-            Control::KeyInput( rKEvt );
+            Control::KeyInput(rKEvt);
             tmpSelected = - 1;  // mark as invalid
             break;
         default:
             {
                 sal_UCS4 cChar = rKEvt.GetCharCode();
-                sal_UCS4 cNext = mpFontCharMap->GetNextChar( cChar - 1 );
-                tmpSelected = mpFontCharMap->GetIndexFromChar( cNext );
-                if( tmpSelected < 0 || (cChar != cNext) )
+                sal_UCS4 cNext = mpFontCharMap->GetNextChar(cChar - 1);
+                tmpSelected = mpFontCharMap->GetIndexFromChar(cNext);
+                if (tmpSelected < 0 || (cChar != cNext))
                 {
-                    Control::KeyInput( rKEvt );
+                    Control::KeyInput(rKEvt);
                     tmpSelected = - 1;  // mark as invalid
                 }
             }
