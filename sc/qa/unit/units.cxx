@@ -50,6 +50,7 @@ public:
 
     void testUnitsCompatible();
     void testCellConversion();
+    void testUnitsForRange();
     void testRangeConversion();
 
     CPPUNIT_TEST_SUITE(UnitsTest);
@@ -63,6 +64,7 @@ public:
 
     CPPUNIT_TEST(testUnitsCompatible);
     CPPUNIT_TEST(testCellConversion);
+    CPPUNIT_TEST(testUnitsForRange);
     CPPUNIT_TEST(testRangeConversion);
 
     CPPUNIT_TEST_SUITE_END();
@@ -549,6 +551,193 @@ void UnitsTest::testCellConversion() {
     // We specifically don't test conversion with invalid units since that would be nonsensical
     // (i.e. would require us passing in made up arguments, where it's specifically necessary
     // to pass in the output of isCellConversionRecommended).
+}
+
+void UnitsTest::testUnitsForRange() {
+    const SCTAB nTab = 2;
+    mpDoc->EnsureTable(nTab);
+
+    // Column 1: just cm, with header annotation
+    ScAddress headerAddress1(0, 0, nTab);
+    mpDoc->SetString(headerAddress1, "length [cm]");
+
+    ScAddress address1(headerAddress1);
+
+    vector<double> values1({10, 20, 30, 40, 1, 0.5, 0.25});
+    address1.IncRow();
+    mpDoc->SetValues(address1, values1);
+
+    ScAddress endAddress1( address1.Col(), address1.Row() + values1.size() - 1, nTab);
+
+    // Column2: header of [m], with some random units mixed in (ft, km, furlongs)
+    ScAddress headerAddress2(1, 0, nTab);
+    mpDoc->SetString(headerAddress2, "distance [m]");
+
+    ScAddress address2(headerAddress2);
+
+    vector<double> values2({1, 2, 3, 4, 0.1, 0.05, 0.025});
+    address2.IncRow();
+    mpDoc->SetValues(address2, values2);
+
+    address2.IncRow();
+    setNumberFormatUnit(address2, "furlongs");
+    address2.IncRow();
+    setNumberFormatUnit(address2, "ft");
+    address2.IncRow();
+    setNumberFormatUnit(address2, "m");
+    address2.IncRow();
+    setNumberFormatUnit(address2, "km");
+    address2.IncRow();
+    setNumberFormatUnit(address2, "cm");
+    address2 = headerAddress2; // reset to start of data range
+    address2.IncRow();
+
+    ScAddress endAddress2( address2.Col(), address2.Row() + values2.size() - 1, nTab);
+
+    // Column3: no units in header, local weight annotations (kg, lb, g, tons)
+    ScAddress headerAddress3(2, 0, nTab);
+    mpDoc->SetString(headerAddress3, "weight");
+
+    ScAddress address3(headerAddress3);
+
+    vector<double> values3({100, 200, 300, 400, 10, 5, 2.5 });
+    address3.IncRow();
+    mpDoc->SetValues(address3, values3);
+
+    setNumberFormatUnit(address3, "kg");
+    address3.IncRow();
+    setNumberFormatUnit(address3, "kg");
+    address3.IncRow();
+    setNumberFormatUnit(address3, "kg");
+    address3.IncRow();
+    setNumberFormatUnit(address3, "lb");
+    address3.IncRow();
+    setNumberFormatUnit(address3, "tons");
+    address3.IncRow();
+    setNumberFormatUnit(address3, "g");
+    address3.IncRow();
+    setNumberFormatUnit(address3, "atomic_mass_unit");
+    address3.IncRow();
+    setNumberFormatUnit(address3, "kg");
+    address3 = headerAddress3; // reset to start of data range
+    address3.IncRow();
+
+    ScAddress endAddress3( address3.Col(), address3.Row() + values3.size() - 1, nTab);
+
+    // COLUMN 1
+    // Test with just the data (not including header).
+    ScRange aRange1(address1, endAddress1);
+
+    RangeUnits aUnits(mpUnitsImpl->getUnitsForRange( ScRangeList(aRange1), mpDoc));
+    CPPUNIT_ASSERT(aUnits.compatible);
+    CPPUNIT_ASSERT_EQUAL(aUnits.units.size(), static_cast<size_t>(1));
+    CPPUNIT_ASSERT(aUnits.units[0] == "cm");
+
+    // Test including header
+    aRange1 = ScRange(headerAddress1, endAddress1);
+
+    aUnits = mpUnitsImpl->getUnitsForRange( ScRangeList(aRange1), mpDoc);
+    CPPUNIT_ASSERT(aUnits.compatible);
+    CPPUNIT_ASSERT_EQUAL(aUnits.units.size(), static_cast<size_t>(1));
+    CPPUNIT_ASSERT(aUnits.units[0] == "cm");
+
+    // COLUMN 2
+    // Test with just the data (not including header).
+    ScRange aRange2(address2, endAddress2);
+
+    aUnits = mpUnitsImpl->getUnitsForRange( ScRangeList(aRange2), mpDoc);
+    CPPUNIT_ASSERT(aUnits.compatible);
+    CPPUNIT_ASSERT_EQUAL(aUnits.units.size(), static_cast<size_t>(5));
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "cm") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "ft") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "m") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "furlongs") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "km") != aUnits.units.end());
+
+    // Test including header
+    aRange2 = ScRange(headerAddress2, endAddress2);
+
+    aUnits = mpUnitsImpl->getUnitsForRange( ScRangeList(aRange2), mpDoc);
+    CPPUNIT_ASSERT(aUnits.compatible);
+    CPPUNIT_ASSERT_EQUAL(aUnits.units.size(), static_cast<size_t>(5));
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "cm") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "ft") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "m") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "furlongs") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "km") != aUnits.units.end());
+
+    // COLUMN 3
+    // Test without header
+    ScRange aRange3(address3, endAddress3);
+
+    aUnits = mpUnitsImpl->getUnitsForRange( ScRangeList(aRange3), mpDoc);
+    CPPUNIT_ASSERT(aUnits.compatible);
+    CPPUNIT_ASSERT_EQUAL(aUnits.units.size(), static_cast<size_t>(5));
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "kg") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "lb") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "tons") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "g") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "atomic_mass_unit") != aUnits.units.end());
+
+    // Test including header
+    aRange3 = ScRange(headerAddress3, endAddress3);
+
+    aUnits = mpUnitsImpl->getUnitsForRange( ScRangeList(aRange3), mpDoc);
+    CPPUNIT_ASSERT(aUnits.compatible);
+    CPPUNIT_ASSERT_EQUAL(aUnits.units.size(), static_cast<size_t>(5));
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "kg") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "lb") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "tons") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "g") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "atomic_mass_unit") != aUnits.units.end());
+
+    // ROW 2:
+    ScRange aRow2(ScAddress( 0, 1, nTab), ScAddress(2, 1, nTab));
+    aUnits = mpUnitsImpl->getUnitsForRange(ScRangeList(aRow2), mpDoc);
+    CPPUNIT_ASSERT(!aUnits.compatible);
+    CPPUNIT_ASSERT_EQUAL(aUnits.units.size(), static_cast<size_t>(3));
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "cm") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "m") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "kg") != aUnits.units.end());
+
+    // ROW 2 including a blank cell
+    aRow2 = ScRange(ScAddress( 0, 1, nTab), ScAddress(3, 1, nTab));
+    aUnits = mpUnitsImpl->getUnitsForRange(ScRangeList(aRow2), mpDoc);
+    CPPUNIT_ASSERT(!aUnits.compatible);
+    CPPUNIT_ASSERT_EQUAL(aUnits.units.size(), static_cast<size_t>(3));
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "cm") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "m") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "kg") != aUnits.units.end());
+
+    // Finally check that multiple ranges actually work
+    ScRangeList aRangeList;
+    aRangeList.Append(aRange1);
+    aRangeList.Append(aRange2);
+
+    aUnits = mpUnitsImpl->getUnitsForRange( aRangeList, mpDoc);
+    CPPUNIT_ASSERT(aUnits.compatible);
+    CPPUNIT_ASSERT_EQUAL(aUnits.units.size(), static_cast<size_t>(5));
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "cm") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "ft") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "m") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "furlongs") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "km") != aUnits.units.end());
+
+    // And add the weights range:
+    aRangeList.Append(aRange3);
+    aUnits = mpUnitsImpl->getUnitsForRange( aRangeList, mpDoc);
+    CPPUNIT_ASSERT(!aUnits.compatible);
+    CPPUNIT_ASSERT_EQUAL(aUnits.units.size(), static_cast<size_t>(10));
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "cm") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "ft") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "m") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "furlongs") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "km") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "kg") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "lb") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "tons") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "g") != aUnits.units.end());
+    CPPUNIT_ASSERT(std::find(aUnits.units.begin(), aUnits.units.end(), "atomic_mass_unit") != aUnits.units.end());
 }
 
 void UnitsTest::testRangeConversion() {

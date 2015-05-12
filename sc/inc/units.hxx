@@ -14,6 +14,8 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "rangelst.hxx"
+
 class ScAddress;
 class ScDocument;
 class ScRange;
@@ -23,6 +25,18 @@ namespace sc {
 namespace units {
 
 class UnitsImpl;
+
+/**
+ * The units used for a range of data cells.
+ */
+struct RangeUnits {
+    std::vector< OUString > units;
+    /**
+     * Whether all the units in the list are compatible (i.e. data
+     * can be converted to any of the listed units).
+     */
+    bool compatible;
+};
 
 class Units {
 public:
@@ -100,6 +114,9 @@ public:
 
     virtual bool areUnitsCompatible(const OUString& rsUnit1,
                                     const OUString& rsUnit2) = 0;
+
+    virtual RangeUnits getUnitsForRange(const ScRangeList& rRangeList,
+                                        ScDocument* pDoc) = 0;
 
     virtual ~Units() {}
 };
