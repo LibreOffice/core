@@ -1975,6 +1975,7 @@ void SwXText::Impl::ConvertCell(
             aEndCellPam.GetNode().GetTxtNode()->Len();
     }
 
+    assert(aStartCellPam.Start()->nContent.GetIndex() == 0);
     assert(aEndCellPam.End()->nContent.GetIndex() == aEndCellPam.End()->nNode.GetNode().GetTxtNode()->Len());
     SwNodeRange aCellRange(aStartCellPam.Start()->nNode,
             aEndCellPam.End()->nNode);
