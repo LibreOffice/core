@@ -89,24 +89,24 @@ public:
 
 class SwAutoCorrExceptWord
 {
-    OUString sWord;
-    sal_uLong nFlags, nNode;
-    sal_Int32 nCntnt;
-    sal_Unicode cChar;
-    LanguageType eLanguage;
-    bool bDeleted;
+    OUString m_sWord;
+    sal_uLong m_nFlags, m_nNode;
+    sal_Int32 m_nContent;
+    sal_Unicode m_cChar;
+    LanguageType m_eLanguage;
+    bool m_bDeleted;
 
 public:
-    SwAutoCorrExceptWord( sal_uLong nAFlags, sal_uLong nNd, sal_Int32 nContent,
-                                        const OUString& rWord, sal_Unicode cChr,
-                                        LanguageType eLang )
-        : sWord(rWord), nFlags(nAFlags), nNode(nNd), nCntnt(nContent),
-        cChar(cChr), eLanguage(eLang), bDeleted(false)
+    SwAutoCorrExceptWord(sal_uLong nAFlags, sal_uLong nNd, sal_Int32 nContent,
+                         const OUString& rWord, sal_Unicode cChr,
+                         LanguageType eLang)
+        : m_sWord(rWord), m_nFlags(nAFlags), m_nNode(nNd), m_nContent(nContent),
+          m_cChar(cChr), m_eLanguage(eLang), m_bDeleted(false)
     {}
 
-    bool IsDeleted() const                          { return bDeleted; }
-    void CheckChar( const SwPosition& rPos, sal_Unicode cChar );
-    bool CheckDelChar( const SwPosition& rPos );
+    bool IsDeleted() const { return m_bDeleted; }
+    void CheckChar(const SwPosition& rPos, sal_Unicode cChar);
+    bool CheckDelChar(const SwPosition& rPos);
 };
 
 #endif

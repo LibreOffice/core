@@ -432,26 +432,24 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
 {
     // test only if this is a improvement.
     // If yes, then add the word to the list.
-    if( cChar == cChr && rPos.nNode.GetIndex() == nNode &&
-        rPos.nContent.GetIndex() == nCntnt )
+    if (m_cChar == cChr && rPos.nNode.GetIndex() == m_nNode && rPos.nContent.GetIndex() == m_nContent)
     {
         // get the current autocorrection:
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
         // then add to the list:
-        if( CptlSttWrd & nFlags )
-            pACorr->AddWrtSttException( sWord, eLanguage );
-        else if( CptlSttSntnc & nFlags )
-            pACorr->AddCplSttException( sWord, eLanguage );
+        if (CptlSttWrd & m_nFlags)
+            pACorr->AddWrtSttException(m_sWord, m_eLanguage);
+        else if (CptlSttSntnc & m_nFlags)
+            pACorr->AddCplSttException(m_sWord, m_eLanguage);
     }
 }
 
 bool SwAutoCorrExceptWord::CheckDelChar( const SwPosition& rPos )
 {
     bool bRet = false;
-    if( !bDeleted && rPos.nNode.GetIndex() == nNode &&
-        rPos.nContent.GetIndex() == nCntnt )
-        bDeleted = bRet = true;
+    if (!m_bDeleted && rPos.nNode.GetIndex() == m_nNode && rPos.nContent.GetIndex() == m_nContent)
+        m_bDeleted = bRet = true;
     return bRet;
 }
 
