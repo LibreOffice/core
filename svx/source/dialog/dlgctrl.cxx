@@ -78,6 +78,8 @@ SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RECT_POINT eRpt,
     , pBitmap(NULL)
     , m_nState(CTL_STATE::NONE)
     , mbCompleteDisable(false)
+    , mbUpdateForeground(true)
+    , mbUpdateBackground(true)
 {
     SetMapMode(MAP_100TH_MM);
     Resize_Impl();
@@ -159,7 +161,8 @@ void SvxRectCtl::Resize_Impl()
         break;
     }
     Reset();
-    InitSettings( true, true );
+    MarkToResetSettings(true, true);
+    Invalidate();
 }
 
 
@@ -167,14 +170,14 @@ void SvxRectCtl::InitRectBitmap()
 {
     delete pBitmap;
 
-    const StyleSettings&    rStyles = Application::GetSettings().GetStyleSettings();
+    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
 
-    pBitmap = new Bitmap( SVX_RES( RID_SVXCTRL_RECTBTNS ) );
+    pBitmap = new Bitmap(SVX_RES(RID_SVXCTRL_RECTBTNS));
 
     // set bitmap-colors
-    Color   aColorAry1[7];
-    Color   aColorAry2[7];
+    Color aColorAry1[7];
+    Color aColorAry2[7];
     aColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );  // light-gray
     aColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );  // yellow
     aColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );  // white
@@ -211,33 +214,37 @@ void SvxRectCtl::InitRectBitmap()
 }
 
 
+void SvxRectCtl::MarkToResetSettings(bool bUpdateForeground, bool bUpdateBackground)
+{
+    mbUpdateForeground = bUpdateForeground;
+    mbUpdateBackground = bUpdateBackground;
+    delete pBitmap;
+    pBitmap = nullptr; // forces new creating of bitmap
+}
 
-void SvxRectCtl::InitSettings( bool bForeground, bool bBackground )
+void SvxRectCtl::InitSettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    if( bForeground )
+    if (mbUpdateForeground)
     {
         svtools::ColorConfig aColorConfig;
-        Color aTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+        Color aTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
 
-        if ( IsControlForeground() )
+        if (IsControlForeground())
             aTextColor = GetControlForeground();
-        SetTextColor( aTextColor );
+        rRenderContext.SetTextColor(aTextColor);
+        mbUpdateForeground = false;
     }
 
-    if( bBackground )
+    if (mbUpdateBackground)
     {
-        if ( IsControlBackground() )
-            SetBackground( GetControlBackground() );
+        if (IsControlBackground())
+            SetBackground(GetControlBackground());
         else
-            SetBackground( rStyleSettings.GetWindowColor() );
+            SetBackground(rStyleSettings.GetWindowColor());
+        mbUpdateBackground = false;
     }
-
-    delete pBitmap;
-    pBitmap = NULL;     // forces new creating of bitmap
-
-    Invalidate();
 }
 
 // The clicked rectangle (3 x 3) is determined and the parent (dialog)
@@ -364,9 +371,9 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
 void SvxRectCtl::StateChanged( StateChangedType nType )
 {
     if ( nType == StateChangedType::ControlForeground )
-        InitSettings( true, false );
+        MarkToResetSettings(true, false);
     else if ( nType == StateChangedType::ControlBackground )
-        InitSettings( false, true );
+        MarkToResetSettings(false, true);
 
     Window::StateChanged( nType );
 }
@@ -376,135 +383,135 @@ void SvxRectCtl::StateChanged( StateChangedType nType )
 void SvxRectCtl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-        InitSettings( true, true );
+        MarkToResetSettings(true, true);
     else
         Window::DataChanged( rDCEvt );
 }
 
 // the control (rectangle with 9 circles)
 
-void SvxRectCtl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    Point   aPtDiff( PixelToLogic( Point( 1, 1 ) ) );
+    InitSettings(rRenderContext);
+
+    Point aPtDiff(PixelToLogic(Point(1, 1)));
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
 
-    SetLineColor( rStyles.GetDialogColor() );
-    SetFillColor( rStyles.GetDialogColor() );
-    DrawRect( Rectangle( Point(0,0), GetOutputSize() ) );
+    rRenderContext.SetLineColor(rStyles.GetDialogColor());
+    rRenderContext.SetFillColor(rStyles.GetDialogColor());
+    rRenderContext.DrawRect(Rectangle(Point(0,0), rRenderContext.GetOutputSize()));
 
-    if( IsEnabled() )
-        SetLineColor( rStyles.GetLabelTextColor() );
+    if (IsEnabled())
+        rRenderContext.SetLineColor(rStyles.GetLabelTextColor());
     else
-        SetLineColor( rStyles.GetShadowColor() );
+        rRenderContext.SetLineColor(rStyles.GetShadowColor());
 
-    SetFillColor();
+    rRenderContext.SetFillColor();
 
-    switch( eCS )
+    switch (eCS)
     {
 
         case CS_RECT:
         case CS_SHADOW:
-            if( !IsEnabled() )
+            if (!IsEnabled())
             {
-                Color aOldCol = GetLineColor();
-                SetLineColor( rStyles.GetLightColor() );
-                DrawRect( Rectangle( aPtLT + aPtDiff, aPtRB + aPtDiff ) );
-                SetLineColor( aOldCol );
+                Color aOldCol = rRenderContext.GetLineColor();
+                rRenderContext.SetLineColor(rStyles.GetLightColor());
+                rRenderContext.DrawRect(Rectangle(aPtLT + aPtDiff, aPtRB + aPtDiff));
+                rRenderContext.SetLineColor(aOldCol);
             }
-            DrawRect( Rectangle( aPtLT, aPtRB ) );
+            rRenderContext.DrawRect(Rectangle(aPtLT, aPtRB));
         break;
 
         case CS_LINE:
-            if( !IsEnabled() )
+            if (!IsEnabled())
             {
-                Color aOldCol = GetLineColor();
-                SetLineColor( rStyles.GetLightColor() );
-                DrawLine( aPtLM - Point( 2 * nBorderWidth, 0) + aPtDiff,
-                          aPtRM + Point( 2 * nBorderWidth, 0 ) + aPtDiff );
+                Color aOldCol = rRenderContext.GetLineColor();
+                rRenderContext.SetLineColor(rStyles.GetLightColor());
+                rRenderContext. DrawLine(aPtLM - Point(2 * nBorderWidth, 0) + aPtDiff,
+                                         aPtRM + Point(2 * nBorderWidth, 0) + aPtDiff);
                 SetLineColor( aOldCol );
             }
-            DrawLine( aPtLM - Point( 2 * nBorderWidth, 0),
-                      aPtRM + Point( 2 * nBorderWidth, 0 ) );
+            rRenderContext.DrawLine(aPtLM - Point(2 * nBorderWidth, 0),
+                                    aPtRM + Point(2 * nBorderWidth, 0));
         break;
 
         case CS_ANGLE:
-            if( !IsEnabled() )
+            if (!IsEnabled())
             {
-                Color aOldCol = GetLineColor();
-                SetLineColor( rStyles.GetLightColor() );
-                DrawLine( aPtLT + aPtDiff, aPtRB + aPtDiff );
-                DrawLine( aPtLB + aPtDiff, aPtRT + aPtDiff );
-                DrawLine( aPtLM + aPtDiff, aPtRM + aPtDiff );
-                DrawLine( aPtMT + aPtDiff, aPtMB + aPtDiff );
-                SetLineColor( aOldCol );
+                Color aOldCol = rRenderContext.GetLineColor();
+                rRenderContext.SetLineColor(rStyles.GetLightColor());
+                rRenderContext.DrawLine(aPtLT + aPtDiff, aPtRB + aPtDiff);
+                rRenderContext.DrawLine(aPtLB + aPtDiff, aPtRT + aPtDiff);
+                rRenderContext.DrawLine(aPtLM + aPtDiff, aPtRM + aPtDiff);
+                rRenderContext.DrawLine(aPtMT + aPtDiff, aPtMB + aPtDiff);
+                rRenderContext.SetLineColor(aOldCol);
             }
-            DrawLine( aPtLT, aPtRB );
-            DrawLine( aPtLB, aPtRT );
-            DrawLine( aPtLM, aPtRM );
-            DrawLine( aPtMT, aPtMB );
+            rRenderContext.DrawLine(aPtLT, aPtRB);
+            rRenderContext.DrawLine(aPtLB, aPtRT);
+            rRenderContext.DrawLine(aPtLM, aPtRM);
+            rRenderContext.DrawLine(aPtMT, aPtMB);
         break;
 
         default:
             break;
     }
-    SetFillColor( GetBackground().GetColor() );
+    rRenderContext.SetFillColor(rRenderContext.GetBackground().GetColor());
 
-    Size aBtnSize( 11, 11 );
-    Size aDstBtnSize(  PixelToLogic( aBtnSize ) );
-    Point aToCenter( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1);
-    Point aBtnPnt1( IsEnabled()?0:22,0 );
-    Point aBtnPnt2( 11,0 );
-    Point aBtnPnt3( 22,0 );
+    Size aBtnSize(11, 11);
+    Size aDstBtnSize(PixelToLogic(aBtnSize));
+    Point aToCenter(aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1);
+    Point aBtnPnt1(IsEnabled() ? 0 : 22, 0);
+    Point aBtnPnt2(11, 0);
+    Point aBtnPnt3(22, 0);
 
     bool bNoHorz = bool(m_nState & CTL_STATE::NOHORZ);
     bool bNoVert = bool(m_nState & CTL_STATE::NOVERT);
 
-    Bitmap&         rBitmap = GetRectBitmap();
+    Bitmap& rBitmap = GetRectBitmap();
 
     // CompletelyDisabled() added to have a disabled state for SvxRectCtl
-    if(IsCompletelyDisabled())
+    if (IsCompletelyDisabled())
     {
-        DrawBitmap( aPtLT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
-        DrawBitmap( aPtMT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
-        DrawBitmap( aPtRT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
-        DrawBitmap( aPtLM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
-        if( eCS == CS_RECT || eCS == CS_LINE )
-            DrawBitmap( aPtMM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
-        DrawBitmap( aPtRM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
-        DrawBitmap( aPtLB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
-        DrawBitmap( aPtMB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
-        DrawBitmap( aPtRB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
+        rRenderContext.DrawBitmap(aPtLT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtMT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtRT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtLM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        if (eCS == CS_RECT || eCS == CS_LINE)
+            rRenderContext.DrawBitmap(aPtMM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtRM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtLB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtMB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtRB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
     }
     else
     {
-        DrawBitmap( aPtLT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-        DrawBitmap( aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-        DrawBitmap( aPtRT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-
-        DrawBitmap( aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        rRenderContext.DrawBitmap(aPtLT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtRT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
 
         // Center for rectangle and line
-        if( eCS == CS_RECT || eCS == CS_LINE )
-            DrawBitmap( aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap );
+        if (eCS == CS_RECT || eCS == CS_LINE)
+            rRenderContext.DrawBitmap(aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap);
 
-        DrawBitmap( aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-
-        DrawBitmap( aPtLB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-        DrawBitmap( aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-        DrawBitmap( aPtRB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        rRenderContext.DrawBitmap(aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtLB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtRB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
     }
 
     // draw active button, avoid center pos for angle
     // CompletelyDisabled() added to have a disabled state for SvxRectCtl
-    if(!IsCompletelyDisabled())
+    if (!IsCompletelyDisabled())
     {
-        if( IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM) )
+        if (IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM))
         {
-            Point       aCenterPt( aPtNew );
+            Point aCenterPt(aPtNew);
             aCenterPt -= aToCenter;
 
-            DrawBitmap( aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap );
+            rRenderContext.DrawBitmap(aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap);
         }
     }
 }
@@ -880,63 +887,63 @@ void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
 // Draws the Control (Rectangle with nine circles)
 
-void SvxPixelCtl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
     if (!aRectSize.Width() || !aRectSize.Height())
         return;
 
-    sal_uInt16  i, j, nTmp;
-    Point   aPtTl, aPtBr;
+    sal_uInt16 i, j, nTmp;
+    Point aPtTl, aPtBr;
 
-    if( bPaintable )
+    if (bPaintable)
     {
         // Draw lines
-        Control::SetLineColor( aLineColor );
-        for( i = 1; i < nLines; i++)
+        rRenderContext.SetLineColor(aLineColor);
+        for (i = 1; i < nLines; i++)
         {
             // horizontal
-            nTmp = (sal_uInt16) ( aRectSize.Height() * i / nLines );
-            DrawLine( Point( 0, nTmp ), Point( aRectSize.Width(), nTmp ) );
+            nTmp = (sal_uInt16) (aRectSize.Height() * i / nLines);
+            rRenderContext.DrawLine(Point(0, nTmp), Point(aRectSize.Width(), nTmp));
             // vertically
             nTmp = (sal_uInt16) ( aRectSize.Width() * i / nLines );
-            DrawLine( Point( nTmp, 0 ), Point( nTmp, aRectSize.Height() ) );
+            rRenderContext.DrawLine(Point(nTmp, 0), Point(nTmp, aRectSize.Height()));
         }
 
         //Draw Rectangles (squares)
-        Control::SetLineColor();
+        rRenderContext.SetLineColor();
         sal_uInt16 nLastPixel = *pPixel ? 0 : 1;
 
-        for( i = 0; i < nLines; i++)
+        for (i = 0; i < nLines; i++)
         {
             aPtTl.Y() = aRectSize.Height() * i / nLines + 1;
             aPtBr.Y() = aRectSize.Height() * (i + 1) / nLines - 1;
 
-            for( j = 0; j < nLines; j++)
+            for (j = 0; j < nLines; j++)
             {
                 aPtTl.X() = aRectSize.Width() * j / nLines + 1;
                 aPtBr.X() = aRectSize.Width() * (j + 1) / nLines - 1;
 
-                if ( *( pPixel + i * nLines + j ) != nLastPixel )
+                if (*(pPixel + i * nLines + j) != nLastPixel)
                 {
-                    nLastPixel = *( pPixel + i * nLines + j );
+                    nLastPixel = *(pPixel + i * nLines + j);
                     // Change color: 0 -> Background color
-                    SetFillColor( nLastPixel ? aPixelColor : aBackgroundColor );
+                    rRenderContext.SetFillColor(nLastPixel ? aPixelColor : aBackgroundColor);
                 }
-                DrawRect( Rectangle( aPtTl, aPtBr ) );
+                rRenderContext.DrawRect(Rectangle(aPtTl, aPtBr));
             }
         }
         //Draw visual focus when has focus
-        if( HasFocus() )
+        if (HasFocus())
         {
             ShowFocus(implCalFocusRect(aFocusPosition));
         }
-    } // bPaintable
+    }
     else
     {
-        SetBackground( Wallpaper( Color( COL_LIGHTGRAY ) ) );
-        Control::SetLineColor( Color( COL_LIGHTRED ) );
-        DrawLine( Point( 0, 0 ), Point( aRectSize.Width(), aRectSize.Height() ) );
-        DrawLine( Point( 0, aRectSize.Height() ), Point( aRectSize.Width(), 0 ) );
+        rRenderContext.SetBackground(Wallpaper(Color(COL_LIGHTGRAY)));
+        rRenderContext.SetLineColor(Color(COL_LIGHTRED));
+        rRenderContext.DrawLine(Point(0, 0), Point(aRectSize.Width(), aRectSize.Height()));
+        rRenderContext.DrawLine(Point(0, aRectSize.Height()), Point(aRectSize.Width(), 0));
     }
 }
 
@@ -1700,7 +1707,6 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
                 Image(pVD->GetBitmap(
                     (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
                     Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
-            //delete pBitmap;
         }
         else
             InsertEntry( pEntry->GetName() );
@@ -1821,21 +1827,21 @@ void SvxPreviewBase::dispose()
     Control::dispose();
 }
 
-void SvxPreviewBase::LocalPrePaint()
+void SvxPreviewBase::LocalPrePaint(vcl::RenderContext& rRenderContext)
 {
     // init BufferDevice
-    if(mpBufferDevice->GetOutputSizePixel() != GetOutputSizePixel())
+    if(mpBufferDevice->GetOutputSizePixel() != rRenderContext.GetOutputSizePixel())
     {
-        mpBufferDevice->SetDrawMode(GetDrawMode());
-        mpBufferDevice->SetSettings(GetSettings());
-        mpBufferDevice->SetAntialiasing(GetAntialiasing());
-        mpBufferDevice->SetOutputSizePixel(GetOutputSizePixel());
-        mpBufferDevice->SetMapMode(GetMapMode());
+        mpBufferDevice->SetDrawMode(rRenderContext.GetDrawMode());
+        mpBufferDevice->SetSettings(rRenderContext.GetSettings());
+        mpBufferDevice->SetAntialiasing(rRenderContext.GetAntialiasing());
+        mpBufferDevice->SetOutputSizePixel(rRenderContext.GetOutputSizePixel());
+        mpBufferDevice->SetMapMode(rRenderContext.GetMapMode());
     }
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    if(rStyleSettings.GetPreviewUsesCheckeredBackground())
+    if (rStyleSettings.GetPreviewUsesCheckeredBackground())
     {
         const Point aNull(0, 0);
         static const sal_uInt32 nLen(8);
@@ -1853,7 +1859,7 @@ void SvxPreviewBase::LocalPrePaint()
     }
 }
 
-void SvxPreviewBase::LocalPostPaint()
+void SvxPreviewBase::LocalPostPaint(vcl::RenderContext& rRenderContext)
 {
     // copy to front (in pixel mode)
     const bool bWasEnabledSrc(mpBufferDevice->IsMapModeEnabled());
@@ -1861,15 +1867,14 @@ void SvxPreviewBase::LocalPostPaint()
     const Point aEmptyPoint;
 
     mpBufferDevice->EnableMapMode(false);
-    EnableMapMode(false);
+    rRenderContext.EnableMapMode(false);
 
-    DrawOutDev(
-        aEmptyPoint, GetOutputSizePixel(),
-        aEmptyPoint, GetOutputSizePixel(),
-        *mpBufferDevice);
+    rRenderContext.DrawOutDev(aEmptyPoint, rRenderContext.GetOutputSizePixel(),
+                              aEmptyPoint, rRenderContext.GetOutputSizePixel(),
+                              *mpBufferDevice);
 
     mpBufferDevice->EnableMapMode(bWasEnabledSrc);
-    EnableMapMode(bWasEnabledDst);
+    rRenderContext.EnableMapMode(bWasEnabledDst);
 }
 
 void SvxPreviewBase::StateChanged(StateChangedType nType)
@@ -2020,9 +2025,9 @@ void SvxXLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
 
 
 
-void SvxXLinePreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    LocalPrePaint();
+    LocalPrePaint(rRenderContext);
 
     // paint objects to buffer device
     sdr::contact::SdrObjectVector aObjectVector;
@@ -2042,10 +2047,10 @@ void SvxXLinePreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Recta
         Point aPos = Point( aOutputSize.Width() / 3, aOutputSize.Height() / 2 );
         aPos.X() -= maSymbolSize.Width() / 2;
         aPos.Y() -= maSymbolSize.Height() / 2;
-        mpGraphic->Draw( &getBufferDevice(), aPos, maSymbolSize );
+        mpGraphic->Draw(&getBufferDevice(), aPos, maSymbolSize);
     }
 
-    LocalPostPaint();
+    LocalPostPaint(rRenderContext);
 }
 
 SvxXRectPreview::SvxXRectPreview(vcl::Window* pParent)
@@ -2093,9 +2098,9 @@ void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
     mpRectangleObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
 }
 
-void SvxXRectPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    LocalPrePaint();
+    LocalPrePaint(rRenderContext);
 
     sdr::contact::SdrObjectVector aObjectVector;
 
@@ -2106,7 +2111,7 @@ void SvxXRectPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Recta
 
     aPainter.ProcessDisplay(aDisplayInfo);
 
-    LocalPostPaint();
+    LocalPostPaint(rRenderContext);
 }
 
 SvxXShadowPreview::SvxXShadowPreview( vcl::Window* pParent )
@@ -2163,12 +2168,12 @@ void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
     maShadowOffset = rPos;
 }
 
-void SvxXShadowPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    LocalPrePaint();
+    LocalPrePaint(rRenderContext);
 
     // prepare size
-    Size aSize = GetOutputSize();
+    Size aSize = rRenderContext.GetOutputSize();
     aSize.Width() = aSize.Width() / 3;
     aSize.Height() = aSize.Height() / 3;
 
@@ -2187,7 +2192,7 @@ void SvxXShadowPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rec
 
     aPainter.ProcessDisplay(aDisplayInfo);
 
-    LocalPostPaint();
+    LocalPostPaint(rRenderContext);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

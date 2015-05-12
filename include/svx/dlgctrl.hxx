@@ -72,26 +72,30 @@ class SvxPixelCtlAccessible;
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxRectCtl : public Control
 {
 private:
-    SVX_DLLPRIVATE void             InitSettings( bool bForeground, bool bBackground );
+    SVX_DLLPRIVATE void             InitSettings(vcl::RenderContext& rRenderContext);
     SVX_DLLPRIVATE void             InitRectBitmap();
     SVX_DLLPRIVATE Bitmap&          GetRectBitmap();
     SVX_DLLPRIVATE void             Resize_Impl();
 
 protected:
-    SvxRectCtlAccessibleContext*    pAccContext;
-    sal_uInt16                          nBorderWidth;
-    sal_uInt16                          nRadius;
-    Size                            aSize;
-    Point                           aPtLT, aPtMT, aPtRT;
-    Point                           aPtLM, aPtMM, aPtRM;
-    Point                           aPtLB, aPtMB, aPtRB;
-    Point                           aPtNew;
-    RECT_POINT                      eRP, eDefRP;
-    CTL_STYLE                       eCS;
-    Bitmap*                         pBitmap;
-    CTL_STATE                       m_nState;
+    SvxRectCtlAccessibleContext* pAccContext;
+    sal_uInt16 nBorderWidth;
+    sal_uInt16 nRadius;
+    Size aSize;
+    Point aPtLT, aPtMT, aPtRT;
+    Point aPtLM, aPtMM, aPtRM;
+    Point aPtLB, aPtMB, aPtRB;
+    Point aPtNew;
+    RECT_POINT eRP, eDefRP;
+    CTL_STYLE eCS;
+    Bitmap* pBitmap;
+    CTL_STATE m_nState;
 
-    bool                            mbCompleteDisable;
+    bool mbCompleteDisable : 1;
+    bool mbUpdateForeground : 1;
+    bool mbUpdateBackground : 1;
+
+    void MarkToResetSettings(bool bUpdateForeground, bool bUpdateBackground);
 
     RECT_POINT          GetRPFromPoint( Point, bool bRTL = false ) const;
     Point               GetPointFromRP( RECT_POINT ) const;
@@ -371,10 +375,10 @@ protected:
     void InitSettings(bool bForeground, bool bBackground);
 
     // prepare buffered paint
-    void LocalPrePaint();
+    void LocalPrePaint(vcl::RenderContext& rRenderContext);
 
     // end and output buffered paint
-    void LocalPostPaint();
+    void LocalPostPaint(vcl::RenderContext& rRenderContext);
 
 public:
     SvxPreviewBase(vcl::Window* pParent);
@@ -386,8 +390,14 @@ public:
     virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
 
     // dada read access
-    SdrModel& getModel() const { return *mpModel; }
-    OutputDevice& getBufferDevice() const { return *mpBufferDevice; }
+    SdrModel& getModel() const
+    {
+        return *mpModel;
+    }
+    OutputDevice& getBufferDevice() const
+    {
+        return *mpBufferDevice;
+    }
 };
 
 /*************************************************************************
