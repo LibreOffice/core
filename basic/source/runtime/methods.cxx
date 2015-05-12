@@ -4649,6 +4649,7 @@ RTLFUNC(MsgBox)
         nMappedRet = nButtonMap[ nRet ];
     }
     rPar.Get(0)->PutInteger( nMappedRet );
+    pBox.disposeAndClear();
 }
 
 RTLFUNC(SetAttr)
