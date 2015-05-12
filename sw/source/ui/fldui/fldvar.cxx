@@ -574,14 +574,13 @@ IMPL_LINK( SwFieldVarPage, SubTypeHdl, ListBox *, pBox )
                     nSelPos = m_pSelectionLB->GetSelectEntryPos();
 
                     if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
-                        nSelData = static_cast<size_t>(reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nSelPos)));
-                    else
-                        nSelData = SIZE_MAX;
-
-                    if (nSelData != SIZE_MAX && pBox && !bInit)
                     {
-                        m_pValueED->ReplaceSelected(m_pSelectionLB->GetSelectEntry());
-                        ModifyHdl();
+                        nSelData = static_cast<size_t>(reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nSelPos)));
+                        if (nSelData != SIZE_MAX && pBox && !bInit)
+                        {
+                            m_pValueED->ReplaceSelected(m_pSelectionLB->GetSelectEntry());
+                            ModifyHdl();
+                        }
                     }
                 }
                 break;
