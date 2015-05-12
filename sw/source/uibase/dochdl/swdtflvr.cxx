@@ -2111,7 +2111,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
     size_t i = 1;
     size_t j;
     OUString aName;
-    bool bAlreadyThere = false, bDoublePaste = false;
+    bool bDoublePaste = false;
     const size_t nSize = rWrtShell.GetFieldTypeCount();
     const ::utl::TransliterationWrapper& rColl = ::GetAppCmpStrIgnore();
 
@@ -2136,14 +2136,10 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             }
         }
         if( j == nSize )
-            bAlreadyThere = false;
-        else
-        {
-            bAlreadyThere = true;
-            i++;
-        }
+            break;
+        ++i;
     }
-    while( bAlreadyThere && !bDoublePaste );
+    while( !bDoublePaste );
 
     if( !bDoublePaste )
     {
