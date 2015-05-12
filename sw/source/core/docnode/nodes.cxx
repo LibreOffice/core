@@ -2118,13 +2118,13 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                     // Undo when merging a table with one before, if there is also one after it.
                     // However, if the node is in a table, it needs to be returned if the
                     // SttNode is a section or a table!
-                    SwTableNode* pTblNd;
-                    if( pSttNd->IsTableNode() &&
-                        0 != ( pTblNd = pFrmNd->FindTableNode() ) &&
+                    SwTableNode* pTableNode;
+                    if (pSttNd->IsTableNode() &&
+                        0 != (pTableNode = pFrmNd->FindTableNode()) &&
                         // TABLE IN TABLE:
-                        pTblNd != pSttNd->StartOfSectionNode()->FindTableNode() )
+                        pTableNode != pSttNd->StartOfSectionNode()->FindTableNode())
                     {
-                        pFrmNd = pTblNd;
+                        pFrmNd = pTableNode;
                         rFrmIdx = *pFrmNd;
                     }
                     else

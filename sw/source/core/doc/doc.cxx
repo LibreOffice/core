@@ -1539,8 +1539,8 @@ bool SwDoc::ConvertFieldsToText()
                     aInsertPam.SetMark();
 
                     // go to the end of the field
-                    const SwTxtFld *pTxtField = sw::DocumentFieldsManager::GetTxtFldAtPos( *aInsertPam.End() );
-                    if (pTxtField && pTxtField->Which() == RES_TXTATR_INPUTFIELD)
+                    const SwTxtFld *pFieldAtEnd = sw::DocumentFieldsManager::GetTxtFldAtPos(*aInsertPam.End());
+                    if (pFieldAtEnd && pFieldAtEnd->Which() == RES_TXTATR_INPUTFIELD)
                     {
                         SwPosition &rEndPos = *aInsertPam.GetPoint();
                         rEndPos.nContent = SwCrsrShell::EndOfInputFldAtPos( *aInsertPam.End() );

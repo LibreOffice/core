@@ -1904,8 +1904,8 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
     {
         case RES_AUTOFMT_DOCNODE:
         {
-            const SwTableNode* pTblNode = GetTableNode();
-            if( pTblNode && &pTblNode->GetNodes() == static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
+            const SwTableNode* pNode = GetTableNode();
+            if (pNode && &pNode->GetNodes() == static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes)
             {
                 if (!m_TabSortContentBoxes.empty())
                 {

@@ -146,18 +146,18 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
         {
             SwFrmFmt* pFormat = new SwFrmFmt( *rNewHead.GetHeaderFmt() );
             // The Ctor of this object will remove the duplicate!
-            SwFmtHeader aFmtHeader( pFormat );
-            if( !rNewDesc.IsHeaderShared() )
+            SwFmtHeader aFormatHeader(pFormat);
+            if (!rNewDesc.IsHeaderShared())
             {
                 pFormat = new SwFrmFmt( *rNewDesc.GetLeft().GetHeader().GetHeaderFmt() );
                 // The Ctor of this object will remove the duplicate!
-                SwFmtHeader aFormatHeader( pFormat );
+                SwFmtHeader aLeftHeader(pFormat);
             }
-            if( !rNewDesc.IsFirstShared() )
+            if (!rNewDesc.IsFirstShared())
             {
                 pFormat = new SwFrmFmt( *rNewDesc.GetFirstMaster().GetHeader().GetHeaderFmt() );
                 // The Ctor of this object will remove the duplicate!
-                SwFmtHeader aFormatHeader( pFormat );
+                SwFmtHeader aFirstHeader(pFormat);
             }
         }
         // Same procedure for footers...
@@ -165,18 +165,18 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
         {
             SwFrmFmt* pFormat = new SwFrmFmt( *rNewFoot.GetFooterFmt() );
             // The Ctor of this object will remove the duplicate!
-            SwFmtFooter aFmtFooter( pFormat );
-            if( !rNewDesc.IsFooterShared() )
+            SwFmtFooter aFormatFooter(pFormat);
+            if (!rNewDesc.IsFooterShared())
             {
                 pFormat = new SwFrmFmt( *rNewDesc.GetLeft().GetFooter().GetFooterFmt() );
                 // The Ctor of this object will remove the duplicate!
-                SwFmtFooter aFormatFooter( pFormat );
+                SwFmtFooter aLeftFooter(pFormat);
             }
-            if( !rNewDesc.IsFirstShared() )
+            if (!rNewDesc.IsFirstShared())
             {
                 pFormat = new SwFrmFmt( *rNewDesc.GetFirstMaster().GetFooter().GetFooterFmt() );
                 // The Ctor of this object will remove the duplicate!
-                SwFmtFooter aFormatFooter( pFormat );
+                SwFmtFooter aFirstFooter(pFormat);
             }
         }
 

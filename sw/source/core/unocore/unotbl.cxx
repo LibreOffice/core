@@ -1440,8 +1440,8 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor*
     for(auto pBox : rBoxes)
         rTableCrsr.InsertBox(*pBox);
     pUnoCrsr->Add(&aCrsrDepend);
-    SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
-    rTblCrsr.MakeBoxSels();
+    SwUnoTableCrsr& rUnoTableCursor = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    rUnoTableCursor.MakeBoxSels();
 }
 
 SwXTextTableCursor::~SwXTextTableCursor()

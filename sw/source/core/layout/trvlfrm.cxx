@@ -231,12 +231,12 @@ bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             }
         }
 
-        SwCntntNode* pTextNd = aTextPos.nNode.GetNode( ).GetCntntNode( );
+        SwCntntNode* pContentNode = aTextPos.nNode.GetNode().GetCntntNode();
         bool bConsiderBackground = true;
         // If the text position is a clickable field, then that should have priority.
-        if (pTextNd && pTextNd->IsTxtNode())
+        if (pContentNode && pContentNode->IsTxtNode())
         {
-            SwTxtNode* pTxtNd = pTextNd->GetTxtNode();
+            SwTxtNode* pTxtNd = pContentNode->GetTxtNode();
             SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(aTextPos.nContent.GetIndex(), RES_TXTATR_FIELD);
             if (pTxtAttr)
             {
@@ -270,9 +270,9 @@ bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
              */
             double nTextDistance = 0;
             bool bValidTextDistance = false;
-            if ( pTextNd )
+            if (pContentNode)
             {
-                SwCntntFrm* pTextFrm = pTextNd->getLayoutFrm( getRootFrm( ) );
+                SwCntntFrm* pTextFrm = pContentNode->getLayoutFrm( getRootFrm( ) );
 
                 // try this again but prefer the "previous" position
                 SwCrsrMoveState aMoveState;
@@ -285,7 +285,7 @@ bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                 SwRect aTextRect;
                 pTextFrm->GetCharRect(aTextRect, prevTextPos);
 
-                if (prevTextPos.nContent < pTextNd->Len())
+                if (prevTextPos.nContent < pContentNode->Len())
                 {
                     // aRextRect is just a line on the left edge of the
                     // previous character; to get a better measure from

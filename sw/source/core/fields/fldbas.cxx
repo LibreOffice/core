@@ -617,10 +617,10 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
 
             OUString sFmt(pEntry->GetFormatstring());
 
-            sal_uInt32 nFormat = nFmt;
+            sal_uInt32 nTempFormat = nFmt;
             pFormatter->PutandConvertEntry(sFmt, nDummy, nType,
-                                           nFormat, pEntry->GetLanguage(), nLng);
-            nFmt = nFormat;
+                                           nTempFormat, pEntry->GetLanguage(), nLng);
+            nFmt = nTempFormat;
         }
         else
             nFmt = nNewFormat;
