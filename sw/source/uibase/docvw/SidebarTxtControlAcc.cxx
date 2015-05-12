@@ -43,7 +43,7 @@ class SidebarTextEditSource : public SvxEditSource,
                               public SfxBroadcaster
 {
     public:
-        SidebarTextEditSource( SidebarTxtControl& rSidebarTxtControl );
+        SidebarTextEditSource( SidebarTextControl& rSidebarTextControl );
         virtual ~SidebarTextEditSource();
 
         virtual SvxEditSource* Clone() const SAL_OVERRIDE;
@@ -58,34 +58,34 @@ class SidebarTextEditSource : public SvxEditSource,
         DECL_LINK( NotifyHdl, EENotify* );
 
     private:
-        SidebarTxtControl& mrSidebarTxtControl;
+        SidebarTextControl& mrSidebarTextControl;
         SvxOutlinerForwarder mTextForwarder;
         SvxDrawOutlinerViewForwarder mViewForwarder;
 };
 
-SidebarTextEditSource::SidebarTextEditSource( SidebarTxtControl& rSidebarTxtControl )
+SidebarTextEditSource::SidebarTextEditSource( SidebarTextControl& rSidebarTextControl )
     : SvxEditSource()
-    , mrSidebarTxtControl( rSidebarTxtControl )
-    , mTextForwarder( *(rSidebarTxtControl.GetTextView()->GetOutliner()), false )
-    , mViewForwarder( *(rSidebarTxtControl.GetTextView()) )
+    , mrSidebarTextControl( rSidebarTextControl )
+    , mTextForwarder( *(rSidebarTextControl.GetTextView()->GetOutliner()), false )
+    , mViewForwarder( *(rSidebarTextControl.GetTextView()) )
 {
-    if ( mrSidebarTxtControl.GetTextView() )
+    if ( mrSidebarTextControl.GetTextView() )
     {
-        mrSidebarTxtControl.GetTextView()->GetOutliner()->SetNotifyHdl( LINK(this, SidebarTextEditSource, NotifyHdl) );
+        mrSidebarTextControl.GetTextView()->GetOutliner()->SetNotifyHdl( LINK(this, SidebarTextEditSource, NotifyHdl) );
     }
 }
 
 SidebarTextEditSource::~SidebarTextEditSource()
 {
-    if ( mrSidebarTxtControl.GetTextView() )
+    if ( mrSidebarTextControl.GetTextView() )
     {
-        mrSidebarTxtControl.GetTextView()->GetOutliner()->SetNotifyHdl( Link<>() );
+        mrSidebarTextControl.GetTextView()->GetOutliner()->SetNotifyHdl( Link<>() );
     }
 }
 
 SvxEditSource* SidebarTextEditSource::Clone() const
 {
-    return new SidebarTextEditSource( mrSidebarTxtControl );
+    return new SidebarTextEditSource( mrSidebarTextControl );
 }
 
 SvxTextForwarder* SidebarTextEditSource::GetTextForwarder()
@@ -128,12 +128,12 @@ IMPL_LINK(SidebarTextEditSource, NotifyHdl, EENotify*, pNotify)
     return 0;
 }
 
-// declaration and implementation of accessible context for <SidebarTxtControl> instance
-class SidebarTxtControlAccessibleContext : public VCLXAccessibleComponent
+// declaration and implementation of accessible context for <SidebarTextControl> instance
+class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
 {
     public:
-        explicit SidebarTxtControlAccessibleContext( SidebarTxtControl& rSidebarTxtControl );
-        virtual ~SidebarTxtControlAccessibleContext();
+        explicit SidebarTextControlAccessibleContext( SidebarTextControl& rSidebarTextControl );
+        virtual ~SidebarTextControlAccessibleContext();
 
         virtual sal_Int32 SAL_CALL
                 getAccessibleChildCount()
@@ -157,7 +157,7 @@ class SidebarTxtControlAccessibleContext : public VCLXAccessibleComponent
         virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;
 
     private:
-        SidebarTxtControl& mrSidebarTxtControl;
+        SidebarTextControl& mrSidebarTextControl;
         ::accessibility::AccessibleTextHelper* mpAccessibleTextHelper;
 
         ::osl::Mutex maMutex;
@@ -165,30 +165,30 @@ class SidebarTxtControlAccessibleContext : public VCLXAccessibleComponent
         void defunc();
 };
 
-SidebarTxtControlAccessibleContext::SidebarTxtControlAccessibleContext( SidebarTxtControl& rSidebarTxtControl )
-    : VCLXAccessibleComponent( rSidebarTxtControl.GetWindowPeer() )
-    , mrSidebarTxtControl( rSidebarTxtControl )
+SidebarTextControlAccessibleContext::SidebarTextControlAccessibleContext( SidebarTextControl& rSidebarTextControl )
+    : VCLXAccessibleComponent( rSidebarTextControl.GetWindowPeer() )
+    , mrSidebarTextControl( rSidebarTextControl )
     , mpAccessibleTextHelper( 0 )
     , maMutex()
 {
     ::std::unique_ptr<SvxEditSource> pEditSource(
-                        new SidebarTextEditSource( mrSidebarTxtControl ) );
+                        new SidebarTextEditSource( mrSidebarTextControl ) );
     mpAccessibleTextHelper = new ::accessibility::AccessibleTextHelper( std::move(pEditSource) );
-    mpAccessibleTextHelper->SetEventSource( mrSidebarTxtControl.GetWindowPeer() );
+    mpAccessibleTextHelper->SetEventSource( mrSidebarTextControl.GetWindowPeer() );
 }
 
-SidebarTxtControlAccessibleContext::~SidebarTxtControlAccessibleContext()
+SidebarTextControlAccessibleContext::~SidebarTextControlAccessibleContext()
 {
     defunc();
 }
 
-void SidebarTxtControlAccessibleContext::defunc()
+void SidebarTextControlAccessibleContext::defunc()
 {
     delete mpAccessibleTextHelper;
     mpAccessibleTextHelper = 0;
 }
 
-sal_Int32 SAL_CALL SidebarTxtControlAccessibleContext::getAccessibleChildCount()
+sal_Int32 SAL_CALL SidebarTextControlAccessibleContext::getAccessibleChildCount()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( maMutex );
@@ -203,7 +203,7 @@ sal_Int32 SAL_CALL SidebarTxtControlAccessibleContext::getAccessibleChildCount()
     return nChildCount;
 }
 
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL SidebarTxtControlAccessibleContext::getAccessibleChild( sal_Int32 i )
+css::uno::Reference< css::accessibility::XAccessible > SAL_CALL SidebarTextControlAccessibleContext::getAccessibleChild( sal_Int32 i )
     throw ( css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard( maMutex );
@@ -218,7 +218,7 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL SidebarTxtContro
     return xChild;
 }
 
-void SAL_CALL SidebarTxtControlAccessibleContext::addAccessibleEventListener (
+void SAL_CALL SidebarTextControlAccessibleContext::addAccessibleEventListener (
     const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -230,7 +230,7 @@ void SAL_CALL SidebarTxtControlAccessibleContext::addAccessibleEventListener (
     }
 }
 
-void SAL_CALL SidebarTxtControlAccessibleContext::removeAccessibleEventListener (
+void SAL_CALL SidebarTextControlAccessibleContext::removeAccessibleEventListener (
     const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener)
     throw (css::uno::RuntimeException, std::exception)
 {
@@ -242,7 +242,7 @@ void SAL_CALL SidebarTxtControlAccessibleContext::removeAccessibleEventListener 
     }
 }
 
-void SidebarTxtControlAccessibleContext::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+void SidebarTextControlAccessibleContext::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     if ( mpAccessibleTextHelper )
     {
@@ -271,22 +271,22 @@ void SidebarTxtControlAccessibleContext::ProcessWindowEvent( const VclWindowEven
     VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
 }
 
-// implementaion of accessible for <SidebarTxtControl> instance
-SidebarTxtControlAccessible::SidebarTxtControlAccessible( SidebarTxtControl& rSidebarTxtControl )
+// implementaion of accessible for <SidebarTextControl> instance
+SidebarTextControlAccessible::SidebarTextControlAccessible( SidebarTextControl& rSidebarTextControl )
     : VCLXWindow()
-    , mrSidebarTxtControl( rSidebarTxtControl )
+    , mrSidebarTextControl( rSidebarTextControl )
 {
-    SetWindow( &mrSidebarTxtControl );
+    SetWindow( &mrSidebarTextControl );
 }
 
-SidebarTxtControlAccessible::~SidebarTxtControlAccessible()
+SidebarTextControlAccessible::~SidebarTextControlAccessible()
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > SidebarTxtControlAccessible::CreateAccessibleContext()
+css::uno::Reference< css::accessibility::XAccessibleContext > SidebarTextControlAccessible::CreateAccessibleContext()
 {
-    SidebarTxtControlAccessibleContext* pAccContext(
-                        new SidebarTxtControlAccessibleContext( mrSidebarTxtControl ) );
+    SidebarTextControlAccessibleContext* pAccContext(
+                        new SidebarTextControlAccessibleContext( mrSidebarTextControl ) );
     css::uno::Reference< css::accessibility::XAccessibleContext > xAcc( pAccContext );
     return xAcc;
 }

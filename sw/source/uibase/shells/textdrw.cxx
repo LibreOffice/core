@@ -43,7 +43,7 @@
 
 using namespace ::com::sun::star;
 
-void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget, const OUString& rTxt)
+void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget, const OUString& rText)
 {
     SwWrtShell& rSh = GetShell();
 
@@ -87,7 +87,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
 
             uno::Any aTmp;
 
-            aTmp <<= OUString(rTxt);
+            aTmp <<= OUString(rText);
             xPropSet->setPropertyValue( "Label", aTmp );
 
             SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();

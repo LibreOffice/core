@@ -35,7 +35,7 @@
 
 #include <unobaseclass.hxx>
 
-class SwSectionFmt;
+class SwSectionFormat;
 
 struct SwTextSectionProperties_Impl;
 
@@ -59,17 +59,17 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    SwXTextSection(SwSectionFmt *const pFmt, const bool bIndexHeader = false);
+    SwXTextSection(SwSectionFormat *const pFormat, const bool bIndexHeader = false);
 
     virtual ~SwXTextSection();
 
 public:
 
-    SwSectionFmt*   GetFmt() const;
+    SwSectionFormat*   GetFormat() const;
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XTextSection >
-        CreateXTextSection(SwSectionFmt *const pFmt = 0,
+        CreateXTextSection(SwSectionFormat *const pFormat = 0,
                 const bool bIndexHeader = false);
 
     // MetadatableMixin

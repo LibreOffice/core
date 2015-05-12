@@ -61,12 +61,12 @@ SwAsCharAnchoredObjectPosition::~SwAsCharAnchoredObjectPosition()
 {}
 
 /** method to cast <SwAnchoredObjectPosition::GetAnchorFrm()> to needed type */
-const SwTxtFrm& SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() const
+const SwTextFrm& SwAsCharAnchoredObjectPosition::GetAnchorTextFrm() const
 {
-    OSL_ENSURE( GetAnchorFrm().ISA(SwTxtFrm),
-            "SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() - wrong anchor frame type" );
+    OSL_ENSURE( GetAnchorFrm().ISA(SwTextFrm),
+            "SwAsCharAnchoredObjectPosition::GetAnchorTextFrm() - wrong anchor frame type" );
 
-    return static_cast<const SwTxtFrm&>(GetAnchorFrm());
+    return static_cast<const SwTextFrm&>(GetAnchorFrm());
 }
 
 /** calculate position for object
@@ -78,7 +78,7 @@ const SwTxtFrm& SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() const
 */
 void SwAsCharAnchoredObjectPosition::CalcPosition()
 {
-    const SwTxtFrm& rAnchorFrm = GetAnchorTxtFrm();
+    const SwTextFrm& rAnchorFrm = GetAnchorTextFrm();
     // swap anchor frame, if swapped. Note: destructor takes care of the 'undo'
     SwFrmSwapper aFrmSwapper( &rAnchorFrm, false );
 
@@ -86,14 +86,14 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
 
     Point aAnchorPos( mrProposedAnchorPos );
 
-    const SwFrmFmt& rFrmFmt = GetFrmFmt();
+    const SwFrameFormat& rFrameFormat = GetFrameFormat();
 
     SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
     SwTwips nObjWidth = (aObjBoundRect.*fnRect->fnGetWidth)();
 
     // determine spacing values considering layout-/text-direction
-    const SvxLRSpaceItem& rLRSpace = rFrmFmt.GetLRSpace();
-    const SvxULSpaceItem& rULSpace = rFrmFmt.GetULSpace();
+    const SvxLRSpaceItem& rLRSpace = rFrameFormat.GetLRSpace();
+    const SvxULSpaceItem& rULSpace = rFrameFormat.GetULSpace();
     SwTwips nLRSpaceLeft, nLRSpaceRight, nULSpaceUpper, nULSpaceLower;
     {
         if ( rAnchorFrm.IsVertical() )
@@ -160,7 +160,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     aObjBoundRect.Height( aObjBoundRect.Height() + nULSpaceLower );
 
     // calculate relative position to given base line.
-    const SwFmtVertOrient& rVert = rFrmFmt.GetVertOrient();
+    const SwFormatVertOrient& rVert = rFrameFormat.GetVertOrient();
     const SwTwips nObjBoundHeight = ( mnFlags & AS_CHAR_ROTATE )
                                     ? aObjBoundRect.Width()
                                     : aObjBoundRect.Height();
@@ -211,11 +211,11 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             const sal_Int16 eVertOrient = rVert.GetVertOrient();
             if( rVert.GetPos() != nRelPos && eVertOrient != text::VertOrientation::NONE )
             {
-                SwFmtVertOrient aVert( rVert );
+                SwFormatVertOrient aVert( rVert );
                 aVert.SetPos( nRelPos );
-                const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
-                const_cast<SwFrmFmt&>(rFrmFmt).SetFmtAttr( aVert );
-                const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
+                const_cast<SwFrameFormat&>(rFrameFormat).LockModify();
+                const_cast<SwFrameFormat&>(rFrameFormat).SetFormatAttr( aVert );
+                const_cast<SwFrameFormat&>(rFrameFormat).UnlockModify();
             }
 
             // determine absolute anchor position considering layout directions.
@@ -334,7 +334,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
 */
 SwTwips SwAsCharAnchoredObjectPosition::_GetRelPosToBase(
                                             const SwTwips _nObjBoundHeight,
-                                            const SwFmtVertOrient& _rVert )
+                                            const SwFormatVertOrient& _rVert )
 {
     SwTwips nRelPosToBase = 0;
 

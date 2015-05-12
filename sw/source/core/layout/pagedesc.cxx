@@ -38,13 +38,13 @@
 
 using namespace ::com::sun::star;
 
-SwPageDesc::SwPageDesc(const OUString& rName, SwFrmFmt *pFmt, SwDoc *const pDoc)
+SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *const pDoc)
     : SwModify(nullptr)
     , m_StyleName( rName )
-    , m_Master( pDoc->GetAttrPool(), rName, pFmt )
-    , m_Left( pDoc->GetAttrPool(), rName, pFmt )
-    , m_FirstMaster( pDoc->GetAttrPool(), rName, pFmt )
-    , m_FirstLeft( pDoc->GetAttrPool(), rName, pFmt )
+    , m_Master( pDoc->GetAttrPool(), rName, pFormat )
+    , m_Left( pDoc->GetAttrPool(), rName, pFormat )
+    , m_FirstMaster( pDoc->GetAttrPool(), rName, pFormat )
+    , m_FirstLeft( pDoc->GetAttrPool(), rName, pFormat )
     , m_Depend( this, 0 )
     , m_pFollow( this )
     , m_nRegHeight( 0 )
@@ -70,7 +70,7 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
     , m_eUse( rCpy.ReadUseOn() )
     , m_IsLandscape( rCpy.GetLandscape() )
     , m_IsHidden( rCpy.IsHidden() )
-    , m_IsFtnInfo( rCpy.GetFtnInfo() )
+    , m_IsFootnoteInfo( rCpy.GetFootnoteInfo() )
 {
 }
 
@@ -120,16 +120,16 @@ void SwPageDesc::Mirror()
     aSet.Put( m_Master.GetShadow() );
     aSet.Put( m_Master.GetCol() );
     aSet.Put( m_Master.GetFrmDir() );    // #112217#
-    m_Left.SetFmtAttr( aSet );
+    m_Left.SetFormatAttr( aSet );
 }
 
 void SwPageDesc::ResetAllAttr( bool bLeft )
 {
-    SwFrmFmt& rFmt = bLeft ? GetLeft() : GetMaster();
+    SwFrameFormat& rFormat = bLeft ? GetLeft() : GetMaster();
 
     // #i73790# - method renamed
-    rFmt.ResetAllFmtAttr();
-    rFmt.SetFmtAttr( SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR) );
+    rFormat.ResetAllFormatAttr();
+    rFormat.SetFormatAttr( SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR) );
 }
 
 // gets information from Modify
@@ -145,24 +145,24 @@ bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 }
 
 /// set the style for the grid alignment
-void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
+void SwPageDesc::SetRegisterFormatColl( const SwTextFormatColl* pFormat )
 {
-    if( pFmt != GetRegisterFmtColl() )
+    if( pFormat != GetRegisterFormatColl() )
     {
-        if( pFmt )
-            const_cast<SwTxtFmtColl*>(pFmt)->Add(&m_Depend);
+        if( pFormat )
+            const_cast<SwTextFormatColl*>(pFormat)->Add(&m_Depend);
         else
-            const_cast<SwTxtFmtColl*>(GetRegisterFmtColl())->Remove(&m_Depend);
+            const_cast<SwTextFormatColl*>(GetRegisterFormatColl())->Remove(&m_Depend);
 
         RegisterChange();
     }
 }
 
 /// retrieve the style for the grid alignment
-const SwTxtFmtColl* SwPageDesc::GetRegisterFmtColl() const
+const SwTextFormatColl* SwPageDesc::GetRegisterFormatColl() const
 {
     const SwModify* pReg = m_Depend.GetRegisteredIn();
-    return static_cast<const SwTxtFmtColl*>(pReg);
+    return static_cast<const SwTextFormatColl*>(pReg);
 }
 
 /// notifie all affected page frames
@@ -184,7 +184,7 @@ void SwPageDesc::RegisterChange()
 
     m_nRegHeight = 0;
     {
-        SwIterator<SwFrm,SwFmt> aIter( GetMaster() );
+        SwIterator<SwFrm,SwFormat> aIter( GetMaster() );
         for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
             if( pLast->IsPageFrm() )
@@ -192,7 +192,7 @@ void SwPageDesc::RegisterChange()
         }
     }
     {
-        SwIterator<SwFrm,SwFmt> aIter( GetLeft() );
+        SwIterator<SwFrm,SwFormat> aIter( GetLeft() );
         for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
             if( pLast->IsPageFrm() )
@@ -200,7 +200,7 @@ void SwPageDesc::RegisterChange()
         }
     }
     {
-        SwIterator<SwFrm,SwFmt> aIter( GetFirstMaster() );
+        SwIterator<SwFrm,SwFormat> aIter( GetFirstMaster() );
         for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
             if( pLast->IsPageFrm() )
@@ -208,7 +208,7 @@ void SwPageDesc::RegisterChange()
         }
     }
     {
-        SwIterator<SwFrm,SwFmt> aIter( GetFirstLeft() );
+        SwIterator<SwFrm,SwFormat> aIter( GetFirstLeft() );
         for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
             if( pLast->IsPageFrm() )
@@ -235,13 +235,13 @@ static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
     const SwModify* pMod;
     sal_uInt16 nFrmType = FRM_CNTNT;
 
-    if( rNd.IsCntntNode() )
+    if( rNd.IsContentNode() )
     {
-        pMod = &static_cast<const SwCntntNode&>(rNd);
+        pMod = &static_cast<const SwContentNode&>(rNd);
     }
     else if( rNd.IsTableNode() )
     {
-        pMod = static_cast<const SwTableNode&>(rNd).GetTable().GetFrmFmt();
+        pMod = static_cast<const SwTableNode&>(rNd).GetTable().GetFrameFormat();
         nFrmType = FRM_TAB;
     }
     else
@@ -261,11 +261,11 @@ const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
     return pRet;
 }
 
-const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
+const SwFrameFormat* SwPageDesc::GetPageFormatOfNode( const SwNode& rNd,
                                               bool bCheckForThisPgDc ) const
 {
     // which PageDescFormat is valid for this node?
-    const SwFrmFmt* pRet;
+    const SwFrameFormat* pRet;
     const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
 
     if( pChkFrm && 0 != ( pChkFrm = pChkFrm->FindPageFrm() ))
@@ -302,14 +302,14 @@ bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
     return bRet;
 }
 
-SwFrmFmt *SwPageDesc::GetLeftFmt(bool const bFirst)
+SwFrameFormat *SwPageDesc::GetLeftFormat(bool const bFirst)
 {
     return (nsUseOnPage::PD_LEFT & m_eUse)
             ? ((bFirst) ? &m_FirstLeft : &m_Left)
             : 0;
 }
 
-SwFrmFmt *SwPageDesc::GetRightFmt(bool const bFirst)
+SwFrameFormat *SwPageDesc::GetRightFormat(bool const bFirst)
 {
     return (nsUseOnPage::PD_RIGHT & m_eUse)
             ? ((bFirst) ? &m_FirstMaster : &m_Master)
@@ -354,7 +354,7 @@ SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
     return 0;
 }
 
-SwPageFtnInfo::SwPageFtnInfo()
+SwPageFootnoteInfo::SwPageFootnoteInfo()
     : m_nMaxHeight( 0 )
     , m_nLineWidth(10)
     , m_eLineStyle( table::BorderLineStyle::SOLID )
@@ -367,7 +367,7 @@ SwPageFtnInfo::SwPageFtnInfo()
            FTNADJ_LEFT;
 }
 
-SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy )
+SwPageFootnoteInfo::SwPageFootnoteInfo( const SwPageFootnoteInfo &rCpy )
     : m_nMaxHeight(rCpy.GetHeight())
     , m_nLineWidth(rCpy.m_nLineWidth)
     , m_eLineStyle(rCpy.m_eLineStyle)
@@ -379,7 +379,7 @@ SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy )
 {
 }
 
-SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
+SwPageFootnoteInfo &SwPageFootnoteInfo::operator=( const SwPageFootnoteInfo& rCpy )
 {
     m_nMaxHeight  = rCpy.GetHeight();
     m_nLineWidth  = rCpy.m_nLineWidth;
@@ -392,7 +392,7 @@ SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
     return *this;
 }
 
-bool SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
+bool SwPageFootnoteInfo::operator==( const SwPageFootnoteInfo& rCmp ) const
 {
     return m_nMaxHeight == rCmp.GetHeight()
         && m_nLineWidth == rCmp.m_nLineWidth

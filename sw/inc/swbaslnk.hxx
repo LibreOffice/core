@@ -22,7 +22,7 @@
 #include <sfx2/lnkbase.hxx>
 
 class SwNode;
-class SwCntntNode;
+class SwContentNode;
 class ReReadThread;
 long GrfNodeChanged( void* pLink, void* pCaller );
 
@@ -30,7 +30,7 @@ class SwBaseLink : public ::sfx2::SvBaseLink
 {
     friend long GrfNodeChanged( void* pLink, void* pCaller );
 
-    SwCntntNode* pCntntNode;
+    SwContentNode* pContentNode;
     bool bSwapIn : 1;
     bool bNoDataFlag : 1;
     bool bIgnoreDataChanged : 1;
@@ -42,8 +42,8 @@ protected:
 public:
     TYPEINFO_OVERRIDE();
 
-    SwBaseLink( SfxLinkUpdateMode nMode, SotClipboardFormatId nFormat, SwCntntNode* pNode = 0 )
-        : ::sfx2::SvBaseLink( nMode, nFormat ), pCntntNode( pNode ),
+    SwBaseLink( SfxLinkUpdateMode nMode, SotClipboardFormatId nFormat, SwContentNode* pNode = 0 )
+        : ::sfx2::SvBaseLink( nMode, nFormat ), pContentNode( pNode ),
         bSwapIn( false ), bNoDataFlag( false ), bIgnoreDataChanged( false ),
         m_pReReadThread(0)
     {}
@@ -56,7 +56,7 @@ public:
 
     virtual const SwNode* GetAnchor() const;
 
-    SwCntntNode *GetCntntNode() { return pCntntNode; }
+    SwContentNode *GetContentNode() { return pContentNode; }
 
     // For graphics only.
     bool SwapIn( bool bWaitForData = false, bool bNativFormat = false );

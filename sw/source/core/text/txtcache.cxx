@@ -21,67 +21,67 @@
 #include "txtfrm.hxx"
 #include "porlay.hxx"
 
-SwTxtLine::SwTxtLine( SwTxtFrm *pFrm, SwParaPortion *pNew ) :
+SwTextLine::SwTextLine( SwTextFrm *pFrm, SwParaPortion *pNew ) :
     SwCacheObj( (void*)pFrm ),
     pLine( pNew )
 {
 }
 
-SwTxtLine::~SwTxtLine()
+SwTextLine::~SwTextLine()
 {
     delete pLine;
 }
 
-SwCacheObj *SwTxtLineAccess::NewObj()
+SwCacheObj *SwTextLineAccess::NewObj()
 {
-    return new SwTxtLine( const_cast<SwTxtFrm *>(static_cast<SwTxtFrm const *>(pOwner)) );
+    return new SwTextLine( const_cast<SwTextFrm *>(static_cast<SwTextFrm const *>(pOwner)) );
 }
 
-SwParaPortion *SwTxtLineAccess::GetPara()
+SwParaPortion *SwTextLineAccess::GetPara()
 {
-    SwTxtLine *pRet;
+    SwTextLine *pRet;
     if ( pObj )
-        pRet = static_cast<SwTxtLine*>(pObj);
+        pRet = static_cast<SwTextLine*>(pObj);
     else
     {
-        pRet = static_cast<SwTxtLine*>(Get());
-        const_cast<SwTxtFrm *>(static_cast<SwTxtFrm const *>(pOwner))->SetCacheIdx( pRet->GetCachePos() );
+        pRet = static_cast<SwTextLine*>(Get());
+        const_cast<SwTextFrm *>(static_cast<SwTextFrm const *>(pOwner))->SetCacheIdx( pRet->GetCachePos() );
     }
     if ( !pRet->GetPara() )
         pRet->SetPara( new SwParaPortion );
     return pRet->GetPara();
 }
 
-SwTxtLineAccess::SwTxtLineAccess( const SwTxtFrm *pOwn ) :
-    SwCacheAccess( *SwTxtFrm::GetTxtCache(), pOwn, pOwn->GetCacheIdx() )
+SwTextLineAccess::SwTextLineAccess( const SwTextFrm *pOwn ) :
+    SwCacheAccess( *SwTextFrm::GetTextCache(), pOwn, pOwn->GetCacheIdx() )
 {
 }
 
-bool SwTxtLineAccess::IsAvailable() const
+bool SwTextLineAccess::IsAvailable() const
 {
-    return pObj && static_cast<SwTxtLine*>(pObj)->GetPara();
+    return pObj && static_cast<SwTextLine*>(pObj)->GetPara();
 }
 
-bool SwTxtFrm::_HasPara() const
+bool SwTextFrm::_HasPara() const
 {
-    SwTxtLine *pTxtLine = static_cast<SwTxtLine*>(SwTxtFrm::GetTxtCache()->
+    SwTextLine *pTextLine = static_cast<SwTextLine*>(SwTextFrm::GetTextCache()->
                                             Get( this, GetCacheIdx(), false ));
-    if ( pTxtLine )
+    if ( pTextLine )
     {
-        if ( pTxtLine->GetPara() )
+        if ( pTextLine->GetPara() )
             return true;
     }
     else
-        const_cast<SwTxtFrm*>(this)->nCacheIdx = USHRT_MAX;
+        const_cast<SwTextFrm*>(this)->nCacheIdx = USHRT_MAX;
 
     return false;
 }
 
-SwParaPortion *SwTxtFrm::GetPara()
+SwParaPortion *SwTextFrm::GetPara()
 {
     if ( GetCacheIdx() != USHRT_MAX )
     {
-        SwTxtLine *pLine = static_cast<SwTxtLine*>(SwTxtFrm::GetTxtCache()->
+        SwTextLine *pLine = static_cast<SwTextLine*>(SwTextFrm::GetTextCache()->
                                         Get( this, GetCacheIdx(), false ));
         if ( pLine )
             return pLine->GetPara();
@@ -91,35 +91,35 @@ SwParaPortion *SwTxtFrm::GetPara()
     return 0;
 }
 
-void SwTxtFrm::ClearPara()
+void SwTextFrm::ClearPara()
 {
-    OSL_ENSURE( !IsLocked(), "+SwTxtFrm::ClearPara: this is locked." );
+    OSL_ENSURE( !IsLocked(), "+SwTextFrm::ClearPara: this is locked." );
     if ( !IsLocked() && GetCacheIdx() != USHRT_MAX )
     {
-        SwTxtLine *pTxtLine = static_cast<SwTxtLine*>(SwTxtFrm::GetTxtCache()->
+        SwTextLine *pTextLine = static_cast<SwTextLine*>(SwTextFrm::GetTextCache()->
                                         Get( this, GetCacheIdx(), false ));
-        if ( pTxtLine )
+        if ( pTextLine )
         {
-            delete pTxtLine->GetPara();
-            pTxtLine->SetPara( 0 );
+            delete pTextLine->GetPara();
+            pTextLine->SetPara( 0 );
         }
         else
             nCacheIdx = USHRT_MAX;
     }
 }
 
-void SwTxtFrm::SetPara( SwParaPortion *pNew, bool bDelete )
+void SwTextFrm::SetPara( SwParaPortion *pNew, bool bDelete )
 {
     if ( GetCacheIdx() != USHRT_MAX )
     {
         // Only change the information, the CacheObj stays there
-        SwTxtLine *pTxtLine = static_cast<SwTxtLine*>(SwTxtFrm::GetTxtCache()->
+        SwTextLine *pTextLine = static_cast<SwTextLine*>(SwTextFrm::GetTextCache()->
                                         Get( this, GetCacheIdx(), false ));
-        if ( pTxtLine )
+        if ( pTextLine )
         {
             if( bDelete )
-                delete pTxtLine->GetPara();
-            pTxtLine->SetPara( pNew );
+                delete pTextLine->GetPara();
+            pTextLine->SetPara( pNew );
         }
         else
         {
@@ -129,9 +129,9 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, bool bDelete )
     }
     else if ( pNew )
     {   // Insert a new one
-        SwTxtLine *pTxtLine = new SwTxtLine( this, pNew );
-        if ( SwTxtFrm::GetTxtCache()->Insert( pTxtLine ) )
-            nCacheIdx = pTxtLine->GetCachePos();
+        SwTextLine *pTextLine = new SwTextLine( this, pNew );
+        if ( SwTextFrm::GetTextCache()->Insert( pTextLine ) )
+            nCacheIdx = pTextLine->GetCachePos();
         else
         {
             OSL_FAIL( "+SetPara: InsertCache failed." );

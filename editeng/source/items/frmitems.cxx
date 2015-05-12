@@ -149,8 +149,8 @@ TYPEINIT1_FACTORY(SvxBrushItem, SfxPoolItem, new SvxBrushItem(0));
 TYPEINIT1_FACTORY(SvxShadowItem, SfxPoolItem, new SvxShadowItem(0));
 TYPEINIT1_FACTORY(SvxBoxItem, SfxPoolItem, new SvxBoxItem(0));
 TYPEINIT1_FACTORY(SvxBoxInfoItem, SfxPoolItem, new SvxBoxInfoItem(0));
-TYPEINIT1_FACTORY(SvxFmtBreakItem, SfxEnumItem, new SvxFmtBreakItem(SVX_BREAK_NONE, 0));
-TYPEINIT1_FACTORY(SvxFmtKeepItem, SfxBoolItem, new SvxFmtKeepItem(false, 0));
+TYPEINIT1_FACTORY(SvxFormatBreakItem, SfxEnumItem, new SvxFormatBreakItem(SVX_BREAK_NONE, 0));
+TYPEINIT1_FACTORY(SvxFormatKeepItem, SfxBoolItem, new SvxFormatKeepItem(false, 0));
 TYPEINIT1_FACTORY(SvxLineItem, SfxPoolItem, new SvxLineItem(0));
 TYPEINIT1_FACTORY(SvxFrameDirectionItem, SfxUInt16Item, new SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, 0));
 
@@ -496,7 +496,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
 
         case MID_TXT_LMARGIN :
-            SetTxtLeft( bConvert ? convertMm100ToTwip(nVal) : nVal );
+            SetTextLeft( bConvert ? convertMm100ToTwip(nVal) : nVal );
         break;
 
         case MID_R_MARGIN:
@@ -518,11 +518,11 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_FIRST_LINE_INDENT     :
-            SetTxtFirstLineOfst((short)(bConvert ?  convertMm100ToTwip(nVal) : nVal));
+            SetTextFirstLineOfst((short)(bConvert ?  convertMm100ToTwip(nVal) : nVal));
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
-            SetPropTxtFirstLineOfst ( (sal_uInt16)nVal );
+            SetPropTextFirstLineOfst ( (sal_uInt16)nVal );
             break;
 
         case MID_FIRST_AUTO:
@@ -557,11 +557,11 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
     const SvxLRSpaceItem& rOther = static_cast<const SvxLRSpaceItem&>(rAttr);
 
     return (
-        nFirstLineOfst == rOther.GetTxtFirstLineOfst() &&
-        nTxtLeft == rOther.GetTxtLeft() &&
+        nFirstLineOfst == rOther.GetTextFirstLineOfst() &&
+        nTxtLeft == rOther.GetTextLeft() &&
         nLeftMargin == rOther.GetLeft()  &&
         nRightMargin == rOther.GetRight() &&
-        nPropFirstLineOfst == rOther.GetPropTxtFirstLineOfst() &&
+        nPropFirstLineOfst == rOther.GetPropTextFirstLineOfst() &&
         nPropLeftMargin == rOther.GetPropLeft()  &&
         nPropRightMargin == rOther.GetPropRight() &&
         bAutoFirst == rOther.IsAutoFirst() &&
@@ -673,7 +673,7 @@ bool SvxLRSpaceItem::GetPresentation
 SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
     short nSaveFI = nFirstLineOfst;
-    const_cast<SvxLRSpaceItem*>(this)->SetTxtFirstLineOfst( 0 );  // nLeftMargin is manipulated together with this, see Create()
+    const_cast<SvxLRSpaceItem*>(this)->SetTextFirstLineOfst( 0 );  // nLeftMargin is manipulated together with this, see Create()
 
     sal_uInt16 nMargin = 0;
     if( nLeftMargin > 0 )
@@ -713,7 +713,7 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
         }
     }
 
-    const_cast<SvxLRSpaceItem*>(this)->SetTxtFirstLineOfst( nSaveFI );
+    const_cast<SvxLRSpaceItem*>(this)->SetTextFirstLineOfst( nSaveFI );
 
     return rStrm;
 }
@@ -1268,7 +1268,7 @@ SvStream& SvxProtectItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
     sal_Int8 cProt = 0;
     if( IsPosProtected() )   cProt |= 0x01;
     if( IsSizeProtected() )  cProt |= 0x02;
-    if( IsCntntProtected() ) cProt |= 0x04;
+    if( IsContentProtected() ) cProt |= 0x04;
     rStrm.WriteSChar( cProt );
     return rStrm;
 }
@@ -1282,7 +1282,7 @@ SfxPoolItem* SvxProtectItem::Create( SvStream& rStrm, sal_uInt16 ) const
     SvxProtectItem* pAttr = new SvxProtectItem( Which() );
     pAttr->SetPosProtect( ( cFlags & 0x01 ) != 0 );
     pAttr->SetSizeProtect( ( cFlags & 0x02 ) != 0 );
-    pAttr->SetCntntProtect( ( cFlags & 0x04 ) != 0 );
+    pAttr->SetContentProtect( ( cFlags & 0x04 ) != 0 );
     return pAttr;
 }
 
@@ -2937,18 +2937,18 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-// class SvxFmtBreakItem -------------------------------------------------
+// class SvxFormatBreakItem -------------------------------------------------
 
-bool SvxFmtBreakItem::operator==( const SfxPoolItem& rAttr ) const
+bool SvxFormatBreakItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "unequal types" );
 
-    return GetValue() == static_cast<const SvxFmtBreakItem&>( rAttr ).GetValue();
+    return GetValue() == static_cast<const SvxFormatBreakItem&>( rAttr ).GetValue();
 }
 
 
 
-bool SvxFmtBreakItem::GetPresentation
+bool SvxFormatBreakItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,
@@ -2962,14 +2962,14 @@ bool SvxFmtBreakItem::GetPresentation
 
 
 
-OUString SvxFmtBreakItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxFormatBreakItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos < SVX_BREAK_END, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_BREAK_BEGIN + nPos);
 }
 
 
-bool SvxFmtBreakItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxFormatBreakItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     style::BreakType eBreak = style::BreakType_NONE;
     switch ( (SvxBreak)GetValue() )
@@ -2986,7 +2986,7 @@ bool SvxFmtBreakItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) cons
     return true;
 }
 
-bool SvxFmtBreakItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxFormatBreakItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     style::BreakType nBreak;
 
@@ -3017,14 +3017,14 @@ bool SvxFmtBreakItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 
 
 
-SfxPoolItem* SvxFmtBreakItem::Clone( SfxItemPool* ) const
+SfxPoolItem* SvxFormatBreakItem::Clone( SfxItemPool* ) const
 {
-    return new SvxFmtBreakItem( *this );
+    return new SvxFormatBreakItem( *this );
 }
 
 
 
-SvStream& SvxFmtBreakItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
+SvStream& SvxFormatBreakItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
     rStrm.WriteSChar( GetValue() );
     if( FMTBREAK_NOAUTO > nItemVersion )
@@ -3034,44 +3034,44 @@ SvStream& SvxFmtBreakItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) co
 
 
 
-sal_uInt16 SvxFmtBreakItem::GetVersion( sal_uInt16 nFFVer ) const
+sal_uInt16 SvxFormatBreakItem::GetVersion( sal_uInt16 nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
             SOFFICE_FILEFORMAT_50==nFFVer,
-            "SvxFmtBreakItem: Is there a new file format? ");
+            "SvxFormatBreakItem: Is there a new file format? ");
     return SOFFICE_FILEFORMAT_31==nFFVer ||
            SOFFICE_FILEFORMAT_40==nFFVer ? 0 : FMTBREAK_NOAUTO;
 }
 
 
 
-SfxPoolItem* SvxFmtBreakItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
+SfxPoolItem* SvxFormatBreakItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
 {
     sal_Int8 eBreak, bDummy;
     rStrm.ReadSChar( eBreak );
     if( FMTBREAK_NOAUTO > nVersion )
         rStrm.ReadSChar( bDummy );
-    return new SvxFmtBreakItem( (const SvxBreak)eBreak, Which() );
+    return new SvxFormatBreakItem( (const SvxBreak)eBreak, Which() );
 }
 
 
 
-sal_uInt16 SvxFmtBreakItem::GetValueCount() const
+sal_uInt16 SvxFormatBreakItem::GetValueCount() const
 {
     return SVX_BREAK_END;   // SVX_BREAK_PAGE_BOTH + 1
 }
 
-// class SvxFmtKeepItem -------------------------------------------------
+// class SvxFormatKeepItem -------------------------------------------------
 
-SfxPoolItem* SvxFmtKeepItem::Clone( SfxItemPool* ) const
+SfxPoolItem* SvxFormatKeepItem::Clone( SfxItemPool* ) const
 {
-    return new SvxFmtKeepItem( *this );
+    return new SvxFormatKeepItem( *this );
 }
 
 
 
-SvStream& SvxFmtKeepItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxFormatKeepItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm.WriteSChar( (sal_Int8)GetValue() );
     return rStrm;
@@ -3079,16 +3079,16 @@ SvStream& SvxFmtKeepItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
 
 
 
-SfxPoolItem* SvxFmtKeepItem::Create( SvStream& rStrm, sal_uInt16 ) const
+SfxPoolItem* SvxFormatKeepItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
     sal_Int8 bIsKeep;
     rStrm.ReadSChar( bIsKeep );
-    return new SvxFmtKeepItem( bIsKeep != 0, Which() );
+    return new SvxFormatKeepItem( bIsKeep != 0, Which() );
 }
 
 
 
-bool SvxFmtKeepItem::GetPresentation
+bool SvxFormatKeepItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,

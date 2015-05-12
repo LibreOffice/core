@@ -44,22 +44,22 @@ SwLayoutFrm* GetPrevColumn( const SwLayoutFrm* pLayFrm )
     return pActCol ? static_cast<SwLayoutFrm*>(pActCol->GetPrev()) : 0;
 }
 
-SwCntntFrm* GetColumnStt( const SwLayoutFrm* pColFrm )
+SwContentFrm* GetColumnStt( const SwLayoutFrm* pColFrm )
 {
-    return pColFrm ? const_cast<SwCntntFrm*>(pColFrm->ContainsCntnt()) : 0;
+    return pColFrm ? const_cast<SwContentFrm*>(pColFrm->ContainsContent()) : 0;
 }
 
-SwCntntFrm* GetColumnEnd( const SwLayoutFrm* pColFrm )
+SwContentFrm* GetColumnEnd( const SwLayoutFrm* pColFrm )
 {
-    SwCntntFrm *pRet = GetColumnStt( pColFrm );
+    SwContentFrm *pRet = GetColumnStt( pColFrm );
     if( !pRet )
         return 0;
 
-    SwCntntFrm *pNxt = pRet->GetNextCntntFrm();
+    SwContentFrm *pNxt = pRet->GetNextContentFrm();
     while( pNxt && pColFrm->IsAnLower( pNxt ) )
     {
         pRet = pNxt;
-        pNxt = pNxt->GetNextCntntFrm();
+        pNxt = pNxt->GetNextContentFrm();
     }
     return pRet;
 }
@@ -73,12 +73,12 @@ SwPosColumn fnColumnEnd = &GetColumnEnd;
 bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 {
     bool bRet = false;
-    if( !m_pTblCrsr )
+    if( !m_pTableCrsr )
     {
         SwLayoutFrm* pLayFrm = GetCurrFrm()->GetUpper();
         if( pLayFrm && 0 != ( pLayFrm = (*fnWhichCol)( pLayFrm )) )
         {
-            SwCntntFrm* pCnt = (*fnPosCol)( pLayFrm );
+            SwContentFrm* pCnt = (*fnPosCol)( pLayFrm );
             if( pCnt )
             {
                 SET_CURR_SHELL( this );

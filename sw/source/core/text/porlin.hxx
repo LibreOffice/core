@@ -26,9 +26,9 @@
 #include <libxml/xmlwriter.h>
 #endif
 
-class SwTxtSizeInfo;
-class SwTxtPaintInfo;
-class SwTxtFormatInfo;
+class SwTextSizeInfo;
+class SwTextPaintInfo;
+class SwTextFormatInfo;
 class SwPortionHandler;
 
 // The portions output operators are virtual methods of the portion.
@@ -107,19 +107,19 @@ public:
     inline sal_uInt16 GetWhichPor( ) const        { return nWhichPor; }
 
 // Group queries
-    inline bool InTxtGrp() const { return (nWhichPor & PORGRP_TXT) != 0; }
+    inline bool InTextGrp() const { return (nWhichPor & PORGRP_TXT) != 0; }
     inline bool InGlueGrp() const { return (nWhichPor & PORGRP_GLUE) != 0; }
     inline bool InTabGrp() const { return (nWhichPor & PORGRP_TAB) != 0; }
     inline bool InHyphGrp() const { return (nWhichPor & PORGRP_HYPH) != 0; }
     inline bool InNumberGrp() const { return (nWhichPor & PORGRP_NUMBER) != 0; }
     inline bool InFixGrp() const { return (nWhichPor & PORGRP_FIX) != 0; }
-    inline bool InFldGrp() const { return (nWhichPor & PORGRP_FLD) != 0; }
+    inline bool InFieldGrp() const { return (nWhichPor & PORGRP_FLD) != 0; }
     inline bool InToxRefGrp() const { return (nWhichPor & PORGRP_TOXREF) != 0; }
-    inline bool InToxRefOrFldGrp() const { return (nWhichPor & ( PORGRP_FLD | PORGRP_TOXREF )) != 0; }
+    inline bool InToxRefOrFieldGrp() const { return (nWhichPor & ( PORGRP_FLD | PORGRP_TOXREF )) != 0; }
     inline bool InExpGrp() const { return (nWhichPor & PORGRP_EXP) != 0; }
     inline bool InTabnLftGrp() const { return (nWhichPor & PORGRP_TABNOTLFT) != 0; }
     inline bool InFixMargGrp() const { return (nWhichPor & PORGRP_FIXMARG) != 0; }
-    inline bool InSpaceGrp() const { return InTxtGrp() || IsMultiPortion(); }
+    inline bool InSpaceGrp() const { return InTextGrp() || IsMultiPortion(); }
 // Individual queries
     inline bool IsGrfNumPortion() const { return nWhichPor == POR_GRFNUM; }
     inline bool IsFlyCntPortion() const { return nWhichPor == POR_FLYCNT; }
@@ -130,8 +130,8 @@ public:
     inline bool IsTabCntPortion() const { return nWhichPor == POR_TABCENTER; }
     inline bool IsTabDecimalPortion() const { return nWhichPor == POR_TABDECIMAL; }
     inline bool IsTabLeftPortion() const { return nWhichPor == POR_TABLEFT; }
-    inline bool IsFtnNumPortion() const { return nWhichPor == POR_FTNNUM; }
-    inline bool IsFtnPortion() const { return nWhichPor == POR_FTN; }
+    inline bool IsFootnoteNumPortion() const { return nWhichPor == POR_FTNNUM; }
+    inline bool IsFootnotePortion() const { return nWhichPor == POR_FTN; }
     inline bool IsTmpEndPortion() const { return nWhichPor == POR_TMPEND; }
     inline bool IsDropPortion() const { return nWhichPor == POR_DROP; }
     inline bool IsLayPortion() const { return nWhichPor == POR_LAY; }
@@ -156,26 +156,26 @@ public:
     SwLinePortion *FindLastPortion();
 
     virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const;
-    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
-    void CalcTxtSize( const SwTxtSizeInfo &rInfo );
+    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const;
+    void CalcTextSize( const SwTextSizeInfo &rInfo );
 
     // Output
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const = 0;
-    void PrePaint( const SwTxtPaintInfo &rInf, const SwLinePortion *pLast ) const;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const = 0;
+    void PrePaint( const SwTextPaintInfo &rInf, const SwLinePortion *pLast ) const;
 
-    virtual bool Format( SwTxtFormatInfo &rInf );
+    virtual bool Format( SwTextFormatInfo &rInf );
     // Is called for the line's last portion
-    virtual void FormatEOL( SwTxtFormatInfo &rInf );
-            void Move( SwTxtPaintInfo &rInf );
+    virtual void FormatEOL( SwTextFormatInfo &rInf );
+            void Move( SwTextPaintInfo &rInf );
 
-    // For SwTxtSlot
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
+    // For SwTextSlot
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const;
 
-    // For SwFldPortion, SwSoftHyphPortion
-    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const;
+    // For SwFieldPortion, SwSoftHyphPortion
+    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const;
 
     // for text- and multi-portions
-    virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
+    virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;

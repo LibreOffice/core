@@ -89,11 +89,11 @@ void SwDBFieldType::ReleaseRef()
 
     if (--nRefCnt <= 0)
     {
-        size_t nPos = GetDoc()->getIDocumentFieldsAccess().GetFldTypes()->GetPos(this);
+        size_t nPos = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes()->GetPos(this);
 
         if (nPos != SIZE_MAX)
         {
-            GetDoc()->getIDocumentFieldsAccess().RemoveFldType(nPos);
+            GetDoc()->getIDocumentFieldsAccess().RemoveFieldType(nPos);
             delete this;
         }
     }
@@ -138,19 +138,19 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             if( sTmp != sColumn )
             {
                 sColumn = sTmp;
-                SwIterator<SwFmtFld,SwFieldType> aIter( *this );
-                SwFmtFld* pFmtFld = aIter.First();
-                while(pFmtFld)
+                SwIterator<SwFormatField,SwFieldType> aIter( *this );
+                SwFormatField* pFormatField = aIter.First();
+                while(pFormatField)
                 {
                     // field in Undo?
-                    SwTxtFld *pTxtFld = pFmtFld->GetTxtFld();
-                    if(pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+                    SwTextField *pTextField = pFormatField->GetTextField();
+                    if(pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
                     {
-                        SwDBField* pDBField = static_cast<SwDBField*>(pFmtFld->GetField());
+                        SwDBField* pDBField = static_cast<SwDBField*>(pFormatField->GetField());
                         pDBField->ClearInitialized();
                         pDBField->InitContent();
                     }
-                    pFmtFld = aIter.Next();
+                    pFormatField = aIter.Next();
                 }
             }
         }
@@ -166,10 +166,10 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // database field
 
-SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uLong nFmt)
-    :   SwValueField(pTyp, nFmt),
+SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uLong nFormat)
+    :   SwValueField(pTyp, nFormat),
         nSubType(0),
-        bIsInBodyTxt(true),
+        bIsInBodyText(true),
         bValidValue(false),
         bInitialized(false)
 {
@@ -218,7 +218,7 @@ SwField* SwDBField::Copy() const
 {
     SwDBField *pTmp = new SwDBField(static_cast<SwDBFieldType*>(GetTyp()), GetFormat());
     pTmp->aContent      = aContent;
-    pTmp->bIsInBodyTxt  = bIsInBodyTxt;
+    pTmp->bIsInBodyText  = bIsInBodyText;
     pTmp->bValidValue   = bValidValue;
     pTmp->bInitialized  = bInitialized;
     pTmp->nSubType      = nSubType;
@@ -263,7 +263,7 @@ SwFieldType* SwDBField::ChgTyp( SwFieldType* pNewType )
     return pOld;
 }
 
-bool SwDBField::FormatValue( SvNumberFormatter* pDocFormatter, OUString &aString, sal_uInt32 nFmt,
+bool SwDBField::FormatValue( SvNumberFormatter* pDocFormatter, OUString &aString, sal_uInt32 nFormat,
                              double &aNumber, sal_Int32 nColumnType, SwDBField *pField )
 {
     bool bValidValue = false;
@@ -293,7 +293,7 @@ bool SwDBField::FormatValue( SvNumberFormatter* pDocFormatter, OUString &aString
             else
                 aNumber = aVal.GetDouble();
 
-            if (nFmt && nFmt != SAL_MAX_UINT32 && !pDocFormatter->IsTextFormat(nFmt))
+            if (nFormat && nFormat != SAL_MAX_UINT32 && !pDocFormatter->IsTextFormat(nFormat))
                 bValidValue = true; // because of bug #60339 not for all strings
         }
         else
@@ -322,7 +322,7 @@ void SwDBField::Evaluate()
     if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, true))
         return ;
 
-    sal_uInt32 nFmt = 0;
+    sal_uInt32 nFormat = 0;
 
     // search corresponding column name
     OUString aColNm( static_cast<SwDBFieldType*>(GetTyp())->GetColumnName() );
@@ -330,14 +330,14 @@ void SwDBField::Evaluate()
     SvNumberFormatter* pDocFormatter = GetDoc()->GetNumberFormatter();
     pMgr->GetMergeColumnCnt(aColNm, GetLanguage(), aContent, &nValue);
     if( !( nSubType & nsSwExtendedSubType::SUB_OWN_FMT ) )
-        SetFormat( nFmt = pMgr->GetColumnFmt( aTmpData.sDataSource, aTmpData.sCommand,
+        SetFormat( nFormat = pMgr->GetColumnFormat( aTmpData.sDataSource, aTmpData.sCommand,
                                         aColNm, pDocFormatter, GetLanguage() ));
 
     sal_Int32 nColumnType = nValue == DBL_MAX
         ? 0
         : pMgr->GetColumnType(aTmpData.sDataSource, aTmpData.sCommand, aColNm);
 
-    bValidValue = FormatValue( pDocFormatter, aContent, nFmt, nValue, nColumnType, this );
+    bValidValue = FormatValue( pDocFormatter, aContent, nFormat, nValue, nColumnType, this );
 
     if( DBL_MAX != nValue )
         aContent = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(nValue, GetFormat(), GetLanguage());
@@ -410,18 +410,18 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         //invalidate text node
         if(GetTyp())
         {
-            SwIterator<SwFmtFld,SwFieldType> aIter( *GetTyp() );
-            SwFmtFld* pFmtFld = aIter.First();
-            while(pFmtFld)
+            SwIterator<SwFormatField,SwFieldType> aIter( *GetTyp() );
+            SwFormatField* pFormatField = aIter.First();
+            while(pFormatField)
             {
-                SwTxtFld *pTxtFld = pFmtFld->GetTxtFld();
-                if(pTxtFld && static_cast<SwDBField*>(pFmtFld->GetField()) == this )
+                SwTextField *pTextField = pFormatField->GetTextField();
+                if(pTextField && static_cast<SwDBField*>(pFormatField->GetField()) == this )
                 {
                     //notify the change
-                    pTxtFld->NotifyContentChange(*pFmtFld);
+                    pTextField->NotifyContentChange(*pFormatField);
                     break;
                 }
-                pFmtFld = aIter.Next();
+                pFormatField = aIter.Next();
             }
         }
     }
@@ -447,8 +447,8 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // base class for all further database fields
 
-SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFmt) :
-    SwField(pTyp, nFmt),
+SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFormat) :
+    SwField(pTyp, nFormat),
     aDBData(rDBData),
     nSubType(0)
 {
@@ -763,8 +763,8 @@ SwFieldType* SwDBNameFieldType::Copy() const
 
 // name of the connected database
 
-SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFmt)
-    : SwDBNameInfField(pTyp, rDBData, nFmt)
+SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFormat)
+    : SwDBNameInfField(pTyp, rDBData, nFormat)
 {}
 
 OUString SwDBNameField::Expand() const
@@ -808,8 +808,8 @@ SwFieldType* SwDBSetNumberFieldType::Copy() const
 
 SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
                                        const SwDBData& rDBData,
-                                       sal_uLong nFmt)
-    : SwDBNameInfField(pTyp, rDBData, nFmt), nNumber(0)
+                                       sal_uLong nFormat)
+    : SwDBNameInfField(pTyp, rDBData, nFormat), nNumber(0)
 {}
 
 OUString SwDBSetNumberField::Expand() const

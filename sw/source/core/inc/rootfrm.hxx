@@ -24,10 +24,10 @@
 #include <doc.hxx>
 #include <IDocumentTimerAccess.hxx>
 
-class SwCntntFrm;
+class SwContentFrm;
 class SwViewShell;
 class SdrPage;
-class SwFrmFmt;
+class SwFrameFormat;
 class SwPaM;
 class SwCursor;
 class SwShellCrsr;
@@ -96,8 +96,8 @@ class SwRootFrm: public SwLayoutFrm
      */
     long    mnBrowseWidth;
 
-    /// If we only have to format one CntntFrm, its in mpTurbo
-    const SwCntntFrm *mpTurbo;
+    /// If we only have to format one ContentFrm, its in mpTurbo
+    const SwContentFrm *mpTurbo;
 
     /// We should not need to always struggle to find the last page, so store it here
     SwPageFrm *mpLastPage;
@@ -160,7 +160,7 @@ public:
     void AllCheckPageDescs() const;
     void AllInvalidateAutoCompleteWords() const;
     void AllAddPaintRect() const;
-    void AllRemoveFtns() ;
+    void AllRemoveFootnotes() ;
     void AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const;
 
     /// Output virtual Device (e.g. for animations)
@@ -169,8 +169,8 @@ public:
     /// Save Clipping if exactly the ClipRect is outputted
     static bool HasSameRect( const SwRect& rRect );
 
-    SwRootFrm( SwFrmFmt*, SwViewShell* );
-    void Init(SwFrmFmt*);
+    SwRootFrm( SwFrameFormat*, SwViewShell* );
+    void Init(SwFrameFormat*);
 
     SwViewShell *GetCurrShell() const { return mpCurrShell; }
     void DeRegisterShell( SwViewShell *pSh );
@@ -210,7 +210,7 @@ public:
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
 
-    Point  GetNextPrevCntntPos( const Point &rPoint, bool bNext ) const;
+    Point  GetNextPrevContentPos( const Point &rPoint, bool bNext ) const;
 
     virtual Size ChgSize( const Size& aNewSize ) SAL_OVERRIDE;
 
@@ -253,8 +253,8 @@ public:
      */
     static void AssertPageFlys( SwPageFrm * );
 
-    /// Invalidate all Cntnt, Size or PrtArea
-    void InvalidateAllCntnt( sal_uInt8 nInvalidate = INV_SIZE );
+    /// Invalidate all Content, Size or PrtArea
+    void InvalidateAllContent( sal_uInt8 nInvalidate = INV_SIZE );
 
     /**
      * Invalidate/re-calculate the position of all floating
@@ -299,22 +299,22 @@ public:
      * @returns false: There was no result because of an invalid layout
      * @returns true: Everything worked fine.
      */
-    bool MakeTblCrsrs( SwTableCursor& );
+    bool MakeTableCrsrs( SwTableCursor& );
 
     void DisallowTurbo()  const { const_cast<SwRootFrm*>(this)->mbTurboAllowed = false; }
     void ResetTurboFlag() const { const_cast<SwRootFrm*>(this)->mbTurboAllowed = true; }
     bool IsTurboAllowed() const { return mbTurboAllowed; }
-    void SetTurbo( const SwCntntFrm *pCntnt ) { mpTurbo = pCntnt; }
+    void SetTurbo( const SwContentFrm *pContent ) { mpTurbo = pContent; }
     void ResetTurbo() { mpTurbo = 0; }
-    const SwCntntFrm *GetTurbo() { return mpTurbo; }
+    const SwContentFrm *GetTurbo() { return mpTurbo; }
 
     /// Update the footernumbers of all Pages
-    void UpdateFtnNums(); // Only for page by page numnbering!
+    void UpdateFootnoteNums(); // Only for page by page numnbering!
 
     /// Remove all footnotes (but no references)
-    void RemoveFtns( SwPageFrm *pPage = 0, bool bPageOnly = false,
+    void RemoveFootnotes( SwPageFrm *pPage = 0, bool bPageOnly = false,
                      bool bEndNotes = false );
-    void CheckFtnPageDescs( bool bEndNote );
+    void CheckFootnotePageDescs( bool bEndNote );
 
     const SwPageFrm *GetLastPage() const { return mpLastPage; }
           SwPageFrm *GetLastPage()       { return mpLastPage; }

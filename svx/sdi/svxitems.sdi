@@ -321,9 +321,9 @@ item BOOL                   SvxBlinkItem;
 item BOOL                   SvxAutoKernItem;
 item INT32                  SvxColorItem;
 item BOOL                   SvxContourItem;
-item INT16                  SvxFmtBreakItem;  // enum
-item BOOL                   SvxFmtKeepItem;
-item BOOL                   SvxFmtSplitItem;
+item INT16                  SvxFormatBreakItem;  // enum
+item BOOL                   SvxFormatKeepItem;
+item BOOL                   SvxFormatSplitItem;
 item INT16                  SvxKerningItem;
 item INT16                  SvxLanguageItem;
 item BOOL                   SvxNoHyphenItem;

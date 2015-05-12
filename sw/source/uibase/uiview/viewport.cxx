@@ -627,7 +627,7 @@ bool SwView::PageUpCrsr( bool bSelect )
         if ( eType & FrmTypeFlags::FOOTNOTE )
         {
             m_pWrtShell->MoveCrsr();
-            m_pWrtShell->GotoFtnAnchor();
+            m_pWrtShell->GotoFootnoteAnchor();
             m_pWrtShell->Right(CRSR_SKIP_CHARS, false, 1, false );
             return true;
         }

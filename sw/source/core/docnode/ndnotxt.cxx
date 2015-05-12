@@ -36,11 +36,11 @@
 
 #include <frmfmt.hxx>
 
-SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
+SwNoTextNode::SwNoTextNode( const SwNodeIndex & rWhere,
                   const sal_uInt8 nNdType,
-                  SwGrfFmtColl *pGrfColl,
+                  SwGrfFormatColl *pGrfColl,
                   SwAttrSet* pAutoAttr ) :
-    SwCntntNode( rWhere, nNdType, pGrfColl ),
+    SwContentNode( rWhere, nNdType, pGrfColl ),
     pContour( 0 ),
     bAutomaticContour( false ),
     bContourMapModeValid( true ),
@@ -51,42 +51,42 @@ SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
         SetAttr( *pAutoAttr );
 }
 
-SwNoTxtNode::~SwNoTxtNode()
+SwNoTextNode::~SwNoTextNode()
 {
     delete pContour;
 }
 
 /// Creates an AttrSet for all derivations with ranges for frame-
 /// and graphics-attributes.
-void SwNoTxtNode::NewAttrSet( SwAttrPool& rPool )
+void SwNoTextNode::NewAttrSet( SwAttrPool& rPool )
 {
     OSL_ENSURE( !mpAttrSet.get(), "AttrSet is already set" );
-    SwAttrSet aNewAttrSet( rPool, aNoTxtNodeSetRange );
+    SwAttrSet aNewAttrSet( rPool, aNoTextNodeSetRange );
 
     // put names of parent style and conditional style:
-    const SwFmtColl* pFmtColl = GetFmtColl();
+    const SwFormatColl* pFormatColl = GetFormatColl();
     OUString sVal;
-    SwStyleNameMapper::FillProgName( pFmtColl->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
-    SfxStringItem aFmtColl( RES_FRMATR_STYLE_NAME, sVal );
-    aNewAttrSet.Put( aFmtColl );
+    SwStyleNameMapper::FillProgName( pFormatColl->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
+    SfxStringItem aFormatColl( RES_FRMATR_STYLE_NAME, sVal );
+    aNewAttrSet.Put( aFormatColl );
 
-    aNewAttrSet.SetParent( &GetFmtColl()->GetAttrSet() );
+    aNewAttrSet.SetParent( &GetFormatColl()->GetAttrSet() );
     mpAttrSet = GetDoc()->GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_NOTXT );
 }
 
 /// Dummies for loading/saving of persistent data
 /// when working with graphics and OLE objects
-bool SwNoTxtNode::RestorePersistentData()
+bool SwNoTextNode::RestorePersistentData()
 {
     return true;
 }
 
-bool SwNoTxtNode::SavePersistentData()
+bool SwNoTextNode::SavePersistentData()
 {
     return true;
 }
 
-void SwNoTxtNode::SetContour( const tools::PolyPolygon *pPoly, bool bAutomatic )
+void SwNoTextNode::SetContour( const tools::PolyPolygon *pPoly, bool bAutomatic )
 {
     delete pContour;
     if ( pPoly )
@@ -98,7 +98,7 @@ void SwNoTxtNode::SetContour( const tools::PolyPolygon *pPoly, bool bAutomatic )
     bPixelContour = false;
 }
 
-void SwNoTxtNode::CreateContour()
+void SwNoTextNode::CreateContour()
 {
     OSL_ENSURE( !pContour, "Contour available." );
     pContour = new tools::PolyPolygon(SvxContourDlg::CreateAutoContour(GetGraphic()));
@@ -107,7 +107,7 @@ void SwNoTxtNode::CreateContour()
     bPixelContour = false;
 }
 
-const tools::PolyPolygon *SwNoTxtNode::HasContour() const
+const tools::PolyPolygon *SwNoTextNode::HasContour() const
 {
     if( !bContourMapModeValid )
     {
@@ -172,20 +172,20 @@ const tools::PolyPolygon *SwNoTxtNode::HasContour() const
                 }
             }
         }
-        const_cast<SwNoTxtNode *>(this)->bContourMapModeValid = true;
-        const_cast<SwNoTxtNode *>(this)->bPixelContour = false;
+        const_cast<SwNoTextNode *>(this)->bContourMapModeValid = true;
+        const_cast<SwNoTextNode *>(this)->bPixelContour = false;
     }
 
     return pContour;
 }
 
-void SwNoTxtNode::GetContour( tools::PolyPolygon &rPoly ) const
+void SwNoTextNode::GetContour( tools::PolyPolygon &rPoly ) const
 {
     OSL_ENSURE( pContour, "Contour not available." );
     rPoly = *HasContour();
 }
 
-void SwNoTxtNode::SetContourAPI( const tools::PolyPolygon *pPoly )
+void SwNoTextNode::SetContourAPI( const tools::PolyPolygon *pPoly )
 {
     delete pContour;
     if ( pPoly )
@@ -195,7 +195,7 @@ void SwNoTxtNode::SetContourAPI( const tools::PolyPolygon *pPoly )
     bContourMapModeValid = false;
 }
 
-bool SwNoTxtNode::GetContourAPI( tools::PolyPolygon &rContour ) const
+bool SwNoTextNode::GetContourAPI( tools::PolyPolygon &rContour ) const
 {
     if( !pContour )
         return false;
@@ -231,7 +231,7 @@ bool SwNoTxtNode::GetContourAPI( tools::PolyPolygon &rContour ) const
     return true;
 }
 
-bool SwNoTxtNode::IsPixelContour() const
+bool SwNoTextNode::IsPixelContour() const
 {
     bool bRet;
     if( bContourMapModeValid )
@@ -247,7 +247,7 @@ bool SwNoTxtNode::IsPixelContour() const
     return bRet;
 }
 
-Graphic SwNoTxtNode::GetGraphic() const
+Graphic SwNoTextNode::GetGraphic() const
 {
     Graphic aRet;
     if ( GetGrfNode() )
@@ -263,53 +263,53 @@ Graphic SwNoTxtNode::GetGraphic() const
 }
 
 // #i73249#
-void SwNoTxtNode::SetTitle( const OUString& rTitle, bool bBroadcast )
+void SwNoTextNode::SetTitle( const OUString& rTitle, bool bBroadcast )
 {
     // Title attribute of <SdrObject> replaces own AlternateText attribute
-    SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(GetFlyFmt());
-    OSL_ENSURE( pFlyFmt, "<SwNoTxtNode::SetTitle(..)> - missing <SwFlyFrmFmt> instance" );
-    if ( !pFlyFmt )
+    SwFlyFrameFormat* pFlyFormat = dynamic_cast<SwFlyFrameFormat*>(GetFlyFormat());
+    OSL_ENSURE( pFlyFormat, "<SwNoTextNode::SetTitle(..)> - missing <SwFlyFrameFormat> instance" );
+    if ( !pFlyFormat )
     {
         return;
     }
 
-    pFlyFmt->SetObjTitle( rTitle, bBroadcast );
+    pFlyFormat->SetObjTitle( rTitle, bBroadcast );
 }
 
-OUString SwNoTxtNode::GetTitle() const
+OUString SwNoTextNode::GetTitle() const
 {
-    const SwFlyFrmFmt* pFlyFmt = dynamic_cast<const SwFlyFrmFmt*>(GetFlyFmt());
-    OSL_ENSURE( pFlyFmt, "<SwNoTxtNode::GetTitle(..)> - missing <SwFlyFrmFmt> instance" );
-    if ( !pFlyFmt )
+    const SwFlyFrameFormat* pFlyFormat = dynamic_cast<const SwFlyFrameFormat*>(GetFlyFormat());
+    OSL_ENSURE( pFlyFormat, "<SwNoTextNode::GetTitle(..)> - missing <SwFlyFrameFormat> instance" );
+    if ( !pFlyFormat )
     {
         return OUString();
     }
 
-    return pFlyFmt->GetObjTitle();
+    return pFlyFormat->GetObjTitle();
 }
 
-void SwNoTxtNode::SetDescription( const OUString& rDescription, bool bBroadcast )
+void SwNoTextNode::SetDescription( const OUString& rDescription, bool bBroadcast )
 {
-    SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(GetFlyFmt());
-    OSL_ENSURE( pFlyFmt, "<SwNoTxtNode::SetDescription(..)> - missing <SwFlyFrmFmt> instance" );
-    if ( !pFlyFmt )
+    SwFlyFrameFormat* pFlyFormat = dynamic_cast<SwFlyFrameFormat*>(GetFlyFormat());
+    OSL_ENSURE( pFlyFormat, "<SwNoTextNode::SetDescription(..)> - missing <SwFlyFrameFormat> instance" );
+    if ( !pFlyFormat )
     {
         return;
     }
 
-    pFlyFmt->SetObjDescription( rDescription, bBroadcast );
+    pFlyFormat->SetObjDescription( rDescription, bBroadcast );
 }
 
-OUString SwNoTxtNode::GetDescription() const
+OUString SwNoTextNode::GetDescription() const
 {
-    const SwFlyFrmFmt* pFlyFmt = dynamic_cast<const SwFlyFrmFmt*>(GetFlyFmt());
-    OSL_ENSURE( pFlyFmt, "<SwNoTxtNode::GetDescription(..)> - missing <SwFlyFrmFmt> instance" );
-    if ( !pFlyFmt )
+    const SwFlyFrameFormat* pFlyFormat = dynamic_cast<const SwFlyFrameFormat*>(GetFlyFormat());
+    OSL_ENSURE( pFlyFormat, "<SwNoTextNode::GetDescription(..)> - missing <SwFlyFrameFormat> instance" );
+    if ( !pFlyFormat )
     {
         return OUString();
     }
 
-    return pFlyFmt->GetObjDescription();
+    return pFlyFormat->GetObjDescription();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

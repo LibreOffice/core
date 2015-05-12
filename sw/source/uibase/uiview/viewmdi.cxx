@@ -381,8 +381,8 @@ IMPL_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         case NID_FTN:
             rSh.EnterStdMode();
             bNext ?
-                rSh.GotoNextFtnAnchor() :
-                    rSh.GotoPrevFtnAnchor();
+                rSh.GotoNextFootnoteAnchor() :
+                    rSh.GotoPrevFootnoteAnchor();
         break;
         case NID_MARK:
         {
@@ -426,8 +426,8 @@ IMPL_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
                 sw::sidebarwindows::SwSidebarWin* pPostIt = GetPostItMgr()->GetActiveSidebarWin();
                 if (pPostIt)
                     GetPostItMgr()->SetActiveSidebarWin(0);
-                SwFieldType* pFldType = rSh.GetFldType(0, RES_POSTITFLD);
-                if ( rSh.MoveFldType( pFldType, bNext ) )
+                SwFieldType* pFieldType = rSh.GetFieldType(0, RES_POSTITFLD);
+                if ( rSh.MoveFieldType( pFieldType, bNext ) )
                     GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
                 else
                     //first/last item
@@ -452,11 +452,11 @@ IMPL_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         break;
 
         case NID_TABLE_FORMULA:
-            rSh.GotoNxtPrvTblFormula( bNext );
+            rSh.GotoNxtPrvTableFormula( bNext );
             break;
 
         case NID_TABLE_FORMULA_ERROR:
-            rSh.GotoNxtPrvTblFormula( bNext, true );
+            rSh.GotoNxtPrvTableFormula( bNext, true );
             break;
     }
     m_pEditWin->GrabFocus();

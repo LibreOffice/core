@@ -53,15 +53,15 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
         return;
     }
 
-    SwFrmFmt * pSelFmt(0);
+    SwFrameFormat * pSelFormat(0);
     SdrMarkList * pMarkList(0);
-    rContext.GetSelections(pSelFmt, pMarkList);
+    rContext.GetSelections(pSelFormat, pMarkList);
 
-    if (pSelFmt) // select frame
+    if (pSelFormat) // select frame
     {
-        if (RES_DRAWFRMFMT == pSelFmt->Which())
+        if (RES_DRAWFRMFMT == pSelFormat->Which())
         {
-            SdrObject* pSObj = pSelFmt->FindSdrObject();
+            SdrObject* pSObj = pSelFormat->FindSdrObject();
             static_cast<SwFEShell*>(this)->SelectObj(
                     pSObj->GetCurrentBoundRect().Center() );
         }
@@ -69,14 +69,14 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
         {
             Point aPt;
             SwFlyFrm *const pFly =
-                static_cast<SwFlyFrmFmt*>(pSelFmt)->GetFrm(& aPt, false);
+                static_cast<SwFlyFrameFormat*>(pSelFormat)->GetFrm(& aPt, false);
             if (pFly)
             {
                 // fdo#36681: Invalidate the content and layout to refresh
                 // the picture anchoring properly
                 SwPageFrm* pPageFrm = pFly->FindPageFrmOfAnchor();
                 pPageFrm->InvalidateFlyLayout();
-                pPageFrm->InvalidateCntnt();
+                pPageFrm->InvalidateContent();
 
                 static_cast<SwFEShell*>(this)->SelectFlyFrm(*pFly, true);
             }
@@ -121,7 +121,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         Push();
 
         // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
-        ClearTblBoxCntnt();
+        ClearTableBoxContent();
 
         const RedlineMode_t eOld = GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
 
@@ -146,7 +146,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         GetDoc()->getIDocumentRedlineAccess().CompressRedlines();
 
         // automatic detection of the new "Box"
-        SaveTblBoxCntnt();
+        SaveTableBoxContent();
     }
     EndAllAction();
 
@@ -177,7 +177,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         Push();
 
         // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
-        ClearTblBoxCntnt();
+        ClearTableBoxContent();
 
         RedlineMode_t eOld = GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
 
@@ -198,7 +198,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         GetDoc()->getIDocumentRedlineAccess().CompressRedlines();
 
         // automatic detection of the new "Box"
-        SaveTblBoxCntnt();
+        SaveTableBoxContent();
     }
 
     EndAllAction();

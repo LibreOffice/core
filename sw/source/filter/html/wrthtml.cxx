@@ -102,7 +102,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , pDfltColor(NULL)
     , pStartNdIdx(NULL)
     , pCurrPageDesc(NULL)
-    , pFmtFtn(NULL)
+    , pFormatFootnote(NULL)
     , nWarn(0)
     , nLastLFPos(0)
     , nLastParaToken(0)
@@ -123,7 +123,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , nDefListLvl(0)
     , nDefListMargin(0)
     , nHeaderFooterSpace(0)
-    , nTxtAttrsToIgnore(0)
+    , nTextAttrsToIgnore(0)
     , nExportMode(0)
     , nCSS1OutMode(0)
     , nCSS1Script(CSS1_OUTMODE_WESTERN)
@@ -137,7 +137,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , bCfgCpyLinkedGrfs( false )
     , bFirstLine(true)
     , bTagOn( false )
-    , bTxtAttr( false )
+    , bTextAttr( false )
     , bOutOpts( false )
     , bOutTable( false )
     , bOutHeader( false )
@@ -262,7 +262,7 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     // die HTML-Vorlage holen
     bool bOldHTMLMode = false;
-    sal_uInt16 nOldTxtFmtCollCnt = 0, nOldCharFmtCnt = 0;
+    sal_uInt16 nOldTextFormatCollCnt = 0, nOldCharFormatCnt = 0;
 
     OSL_ENSURE( !pTemplate, "Wo kommt denn die HTML-Vorlage hier her?" );
     pTemplate = static_cast<HTMLReader*>(ReadHTML)->GetTemplateDoc();
@@ -272,8 +272,8 @@ sal_uLong SwHTMLWriter::WriteStream()
         bOldHTMLMode = pTemplate->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
         pTemplate->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
 
-        nOldTxtFmtCollCnt = pTemplate->GetTxtFmtColls()->size();
-        nOldCharFmtCnt = pTemplate->GetCharFmts()->size();
+        nOldTextFormatCollCnt = pTemplate->GetTextFormatColls()->size();
+        nOldCharFormatCnt = pTemplate->GetCharFormats()->size();
     }
 
     if( bShowProgress )
@@ -282,7 +282,7 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     pDfltColor = 0;
     pFootEndNotes = 0;
-    pFmtFtn = 0;
+    pFormatFootnote = 0;
     bOutTable = bOutHeader = bOutFooter = bOutFlyFrame = false;
     pxFormComps = 0;
     nFormCntrlCnt = 0;
@@ -301,10 +301,10 @@ sal_uLong SwHTMLWriter::WriteStream()
     nLastLFPos = 0;
     nDefListLvl = 0;
     nDefListMargin = ((pTemplate && !bCfgOutStyles) ? pTemplate : pDoc)
-        ->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_HTML_DD, false )
-        ->GetLRSpace().GetTxtLeft();
+        ->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_HTML_DD, false )
+        ->GetLRSpace().GetTextLeft();
     nHeaderFooterSpace = 0;
-    nTxtAttrsToIgnore = 0;
+    nTextAttrsToIgnore = 0;
     nCSS1OutMode = 0;
     SvtScriptType nScript = SvtLanguageOptions::GetScriptTypeOfLanguage( GetAppLanguage() );
     switch( nScript )
@@ -401,15 +401,15 @@ sal_uLong SwHTMLWriter::WriteStream()
           !pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)) &&
         SfxItemState::SET == rPageItemSet.GetItemState( RES_HEADER, true, &pItem) )
     {
-        const SwFrmFmt *pHeaderFmt =
-            static_cast<const SwFmtHeader *>(pItem)->GetHeaderFmt();
-        if( pHeaderFmt )
-            OutHTML_HeaderFooter( *this, *pHeaderFmt, true );
+        const SwFrameFormat *pHeaderFormat =
+            static_cast<const SwFormatHeader *>(pItem)->GetHeaderFormat();
+        if( pHeaderFormat )
+            OutHTML_HeaderFooter( *this, *pHeaderFormat, true );
     }
 
-    nTxtAttrsToIgnore = nHeaderAttrs;
+    nTextAttrsToIgnore = nHeaderAttrs;
     Out_SwDoc( pOrigPam );
-    nTxtAttrsToIgnore = 0;
+    nTextAttrsToIgnore = 0;
 
     if( pxFormComps && pxFormComps->is() )
         OutForm( false, *pxFormComps );
@@ -421,10 +421,10 @@ sal_uLong SwHTMLWriter::WriteStream()
         (!pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))  &&
         SfxItemState::SET == rPageItemSet.GetItemState( RES_FOOTER, true, &pItem) )
     {
-        const SwFrmFmt *pFooterFmt =
-            static_cast<const SwFmtFooter *>(pItem)->GetFooterFmt();
-        if( pFooterFmt )
-            OutHTML_HeaderFooter( *this, *pFooterFmt, false );
+        const SwFrameFormat *pFooterFormat =
+            static_cast<const SwFormatFooter *>(pItem)->GetFooterFormat();
+        if( pFooterFormat )
+            OutHTML_HeaderFooter( *this, *pFooterFormat, false );
     }
 
     if( bLFPossible )
@@ -448,11 +448,11 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     aHTMLControls.DeleteAndDestroyAll();
 
-    if( !aChrFmtInfos.empty() )
-        aChrFmtInfos.clear();
+    if( !aChrFormatInfos.empty() )
+        aChrFormatInfos.clear();
 
-    if( !aTxtCollInfos.empty() )
-        aTxtCollInfos.clear();
+    if( !aTextCollInfos.empty() )
+        aTextCollInfos.clear();
 
     if(!aImgMapNames.empty())
         aImgMapNames.clear();
@@ -478,7 +478,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     pxFormComps = 0;
 
     OSL_ENSURE( !pFootEndNotes,
-            "SwHTMLWriter::Write: Ftns nicht durch OutFootEndNotes geloescht" );
+            "SwHTMLWriter::Write: Footnotes nicht durch OutFootEndNotes geloescht" );
 
     pCurrPageDesc = 0;
 
@@ -496,17 +496,17 @@ sal_uLong SwHTMLWriter::WriteStream()
     {
         // Waehrend des Exports angelegte Zeichen- und Abastzvorlagen
         // loeschen
-        sal_uInt16 nTxtFmtCollCnt = pTemplate->GetTxtFmtColls()->size();
-        while( nTxtFmtCollCnt > nOldTxtFmtCollCnt )
-            pTemplate->DelTxtFmtColl( --nTxtFmtCollCnt );
-        OSL_ENSURE( pTemplate->GetTxtFmtColls()->size() == nOldTxtFmtCollCnt,
-                "falsche Anzahl TxtFmtColls geloescht" );
+        sal_uInt16 nTextFormatCollCnt = pTemplate->GetTextFormatColls()->size();
+        while( nTextFormatCollCnt > nOldTextFormatCollCnt )
+            pTemplate->DelTextFormatColl( --nTextFormatCollCnt );
+        OSL_ENSURE( pTemplate->GetTextFormatColls()->size() == nOldTextFormatCollCnt,
+                "falsche Anzahl TextFormatColls geloescht" );
 
-        sal_uInt16 nCharFmtCnt = pTemplate->GetCharFmts()->size();
-        while( nCharFmtCnt > nOldCharFmtCnt )
-            pTemplate->DelCharFmt( --nCharFmtCnt );
-        OSL_ENSURE( pTemplate->GetCharFmts()->size() == nOldCharFmtCnt,
-                "falsche Anzahl CharFmts geloescht" );
+        sal_uInt16 nCharFormatCnt = pTemplate->GetCharFormats()->size();
+        while( nCharFormatCnt > nOldCharFormatCnt )
+            pTemplate->DelCharFormat( --nCharFormatCnt );
+        OSL_ENSURE( pTemplate->GetCharFormats()->size() == nOldCharFormatCnt,
+                "falsche Anzahl CharFormats geloescht" );
 
         // HTML-Modus wieder restaurieren
         pTemplate->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, bOldHTMLMode);
@@ -520,17 +520,17 @@ sal_uLong SwHTMLWriter::WriteStream()
     return nWarn;
 }
 
-static const SwFmtCol *lcl_html_GetFmtCol( const SwSection& rSection,
-                                       const SwSectionFmt& rFmt )
+static const SwFormatCol *lcl_html_GetFormatCol( const SwSection& rSection,
+                                       const SwSectionFormat& rFormat )
 {
-    const SwFmtCol *pCol = 0;
+    const SwFormatCol *pCol = 0;
 
     const SfxPoolItem* pItem;
     if( FILE_LINK_SECTION != rSection.GetType() &&
-        SfxItemState::SET == rFmt.GetAttrSet().GetItemState(RES_COL,false,&pItem) &&
-        static_cast<const SwFmtCol *>(pItem)->GetNumCols() > 1 )
+        SfxItemState::SET == rFormat.GetAttrSet().GetItemState(RES_COL,false,&pItem) &&
+        static_cast<const SwFormatCol *>(pItem)->GetNumCols() > 1 )
     {
-        pCol = static_cast<const SwFmtCol *>(pItem);
+        pCol = static_cast<const SwFormatCol *>(pItem);
     }
 
     return pCol;
@@ -544,8 +544,8 @@ static bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nI
     if( pSectNd )
     {
         const SwSection& rSection = pSectNd->GetSection();
-        const SwSectionFmt *pFmt = rSection.GetFmt();
-        if( pFmt && lcl_html_GetFmtCol( rSection, *pFmt ) )
+        const SwSectionFormat *pFormat = rSection.GetFormat();
+        if( pFormat && lcl_html_GetFormatCol( rSection, *pFormat ) )
             bRet = true;
     }
 
@@ -565,8 +565,8 @@ static bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uLong nInd
 
 static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                                      const SwSection& rSection,
-                                     const SwSectionFmt& rFmt,
-                                  const SwFmtCol *pCol,
+                                     const SwSectionFormat& rFormat,
+                                  const SwFormatCol *pCol,
                                   bool bContinued=false )
 {
     OSL_ENSURE( pCol || !bContinued, "Continuation of DIV" );
@@ -586,7 +586,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         sOut.append('\"');
     }
 
-    sal_uInt16 nDir = rHTMLWrt.GetHTMLDirection( rFmt.GetAttrSet() );
+    sal_uInt16 nDir = rHTMLWrt.GetHTMLDirection( rFormat.GetAttrSet() );
     rHTMLWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     rHTMLWrt.OutDirection( nDir );
 
@@ -650,7 +650,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 
     rHTMLWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     if( rHTMLWrt.IsHTMLMode( rHTMLWrt.bCfgOutStyles ? HTMLMODE_ON : 0 ) )
-        rHTMLWrt.OutCSS1_SectionFmtOptions( rFmt, pCol );
+        rHTMLWrt.OutCSS1_SectionFormatOptions( rFormat, pCol );
 
     rHTMLWrt.Strm().WriteChar( '>' );
 
@@ -680,19 +680,19 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     rHTMLWrt.OutAndSetDefList( 0 );
 
     const SwSection& rSection = rSectNd.GetSection();
-    const SwSectionFmt *pFmt = rSection.GetFmt();
-    OSL_ENSURE( pFmt, "Section without a format?" );
+    const SwSectionFormat *pFormat = rSection.GetFormat();
+    OSL_ENSURE( pFormat, "Section without a format?" );
 
     bool bStartTag = true;
     bool bEndTag = true;
-    const SwSectionFmt *pSurrFmt = 0;
+    const SwSectionFormat *pSurrFormat = 0;
     const SwSectionNode *pSurrSectNd = 0;
     const SwSection *pSurrSection = 0;
-    const SwFmtCol *pSurrCol = 0;
+    const SwFormatCol *pSurrCol = 0;
 
     sal_uInt32 nSectSttIdx = rSectNd.GetIndex();
     sal_uInt32 nSectEndIdx = rSectNd.EndOfSectionIndex();
-    const SwFmtCol *pCol = lcl_html_GetFmtCol( rSection, *pFmt );
+    const SwFormatCol *pCol = lcl_html_GetFormatCol( rSection, *pFormat );
     if( pCol )
     {
         // If the next node is a columned section node, too, don't export
@@ -716,10 +716,10 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
                     pBoxSttNd->GetIndex() < pSurrSectNd->GetIndex() )
                 {
                     pSurrSection = &pSurrSectNd->GetSection();
-                    pSurrFmt = pSurrSection->GetFmt();
-                    if( pSurrFmt )
-                        pSurrCol = lcl_html_GetFmtCol( *pSurrSection,
-                                                       *pSurrFmt );
+                    pSurrFormat = pSurrSection->GetFormat();
+                    if( pSurrFormat )
+                        pSurrCol = lcl_html_GetFormatCol( *pSurrSection,
+                                                       *pSurrFormat );
                 }
             }
         }
@@ -733,13 +733,13 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
         lcl_html_OutSectionEndTag( rHTMLWrt );
 
     if( bStartTag )
-        lcl_html_OutSectionStartTag( rHTMLWrt, rSection, *pFmt, pCol );
+        lcl_html_OutSectionStartTag( rHTMLWrt, rSection, *pFormat, pCol );
 
     {
         HTMLSaveData aSaveData( rHTMLWrt,
             rHTMLWrt.pCurPam->GetPoint()->nNode.GetIndex()+1,
             rSectNd.EndOfSectionIndex(),
-            false, pFmt );
+            false, pFormat );
         rHTMLWrt.Out_SwDoc( rHTMLWrt.pCurPam );
     }
 
@@ -753,7 +753,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     if( pSurrCol &&
         pSurrSectNd->EndOfSectionIndex() - nSectEndIdx > 1 &&
         !lcl_html_IsMultiColStart( rHTMLWrt, nSectEndIdx+1 ) )
-        lcl_html_OutSectionStartTag( rHTMLWrt, *pSurrSection, *pSurrFmt,
+        lcl_html_OutSectionStartTag( rHTMLWrt, *pSurrSection, *pSurrFormat,
                                      pSurrCol, true );
 
     return rWrt;
@@ -782,18 +782,18 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 
             OSL_ENSURE( !(rNd.IsGrfNode() || rNd.IsOLENode()),
                     "Grf- oder OLE-Node hier unerwartet" );
-            if( rNd.IsTxtNode() )
+            if( rNd.IsTextNode() )
             {
-                SwTxtNode* pTxtNd = rNd.GetTxtNode();
+                SwTextNode* pTextNd = rNd.GetTextNode();
 
                 if( !bFirstLine )
-                    pCurPam->GetPoint()->nContent.Assign( pTxtNd, 0 );
+                    pCurPam->GetPoint()->nContent.Assign( pTextNd, 0 );
 
-                OutHTML_SwTxtNode( *this, *pTxtNd );
+                OutHTML_SwTextNode( *this, *pTextNd );
             }
             else if( rNd.IsTableNode() )
             {
-                OutHTML_SwTblNode( *this, *rNd.GetTableNode(), 0 );
+                OutHTML_SwTableNode( *this, *rNd.GetTableNode(), 0 );
                 nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
             }
             else if( rNd.IsSectionNode() )
@@ -831,23 +831,23 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 }
 
 // schreibe die StyleTabelle, algemeine Angaben,Header/Footer/Footnotes
-static void OutBodyColor( const sal_Char* pTag, const SwFmt *pFmt,
+static void OutBodyColor( const sal_Char* pTag, const SwFormat *pFormat,
                           SwHTMLWriter& rHWrt )
 {
-    const SwFmt *pRefFmt = 0;
+    const SwFormat *pRefFormat = 0;
 
     if( rHWrt.pTemplate )
-        pRefFmt = SwHTMLWriter::GetTemplateFmt( pFmt->GetPoolFmtId(),
+        pRefFormat = SwHTMLWriter::GetTemplateFormat( pFormat->GetPoolFormatId(),
                                                 &rHWrt.pTemplate->getIDocumentStylePoolAccess() );
 
     const SvxColorItem *pColorItem = 0;
 
-    const SfxItemSet& rItemSet = pFmt->GetAttrSet();
+    const SfxItemSet& rItemSet = pFormat->GetAttrSet();
     const SfxPoolItem *pRefItem = 0, *pItem = 0;
     bool bItemSet = SfxItemState::SET == rItemSet.GetItemState( RES_CHRATR_COLOR,
                                                            true, &pItem);
-    bool bRefItemSet = pRefFmt &&
-        SfxItemState::SET == pRefFmt->GetAttrSet().GetItemState( RES_CHRATR_COLOR,
+    bool bRefItemSet = pRefFormat &&
+        SfxItemState::SET == pRefFormat->GetAttrSet().GetItemState( RES_CHRATR_COLOR,
                                                             true, &pRefItem);
     if( bItemSet )
     {
@@ -891,7 +891,7 @@ static void OutBodyColor( const sal_Char* pTag, const SwFmt *pFmt,
         if( COL_AUTO == aColor.GetColor() )
             aColor.SetColor( COL_BLACK );
         HTMLOutFuncs::Out_Color( rHWrt.Strm(), aColor, rHWrt.eDestEnc );
-        if( RES_POOLCOLL_STANDARD==pFmt->GetPoolFmtId() )
+        if( RES_POOLCOLL_STANDARD==pFormat->GetPoolFormatId() )
             rHWrt.pDfltColor = new Color( aColor );
     }
 }
@@ -901,21 +901,21 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
     sal_uLong nIdx = pCurPam->GetPoint()->nNode.GetIndex();
     sal_uLong nEndIdx = pCurPam->GetMark()->nNode.GetIndex();
 
-    SwTxtNode *pTxtNd = 0;
+    SwTextNode *pTextNd = 0;
     while( nIdx<=nEndIdx &&
-        0==(pTxtNd=pDoc->GetNodes()[nIdx]->GetTxtNode()) )
+        0==(pTextNd=pDoc->GetNodes()[nIdx]->GetTextNode()) )
         nIdx++;
 
-    OSL_ENSURE( pTxtNd, "Kein Text-Node gefunden" );
-    if( !pTxtNd || !pTxtNd->HasHints() )
+    OSL_ENSURE( pTextNd, "Kein Text-Node gefunden" );
+    if( !pTextNd || !pTextNd->HasHints() )
         return 0;
 
     sal_uInt16 nAttrs = 0;
-    const size_t nCntAttr = pTxtNd->GetSwpHints().Count();
+    const size_t nCntAttr = pTextNd->GetSwpHints().Count();
     sal_Int32 nOldPos = 0;
     for( size_t i=0; i<nCntAttr; ++i )
     {
-        const SwTxtAttr *pHt = pTxtNd->GetSwpHints()[i];
+        const SwTextAttr *pHt = pTextNd->GetSwpHints()[i];
         if( !pHt->End() )
         {
             sal_Int32 nPos = pHt->GetStart();
@@ -924,14 +924,14 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
                      && pHt->Which() != RES_TXTATR_ANNOTATION ) )
                 break;
 
-            const sal_uInt16 nFldWhich =
-                static_cast<const SwFmtFld&>(pHt->GetAttr()).GetField()->GetTyp()->Which();
-            if( RES_POSTITFLD!=nFldWhich &&
-                RES_SCRIPTFLD!=nFldWhich )
+            const sal_uInt16 nFieldWhich =
+                static_cast<const SwFormatField&>(pHt->GetAttr()).GetField()->GetTyp()->Which();
+            if( RES_POSTITFLD!=nFieldWhich &&
+                RES_SCRIPTFLD!=nFieldWhich )
                 break;
 
             OutNewLine();
-            OutHTML_SwFmtFld( *this, pHt->GetAttr() );
+            OutHTML_SwFormatField( *this, pHt->GetAttr() );
             nOldPos = nPos;
             OSL_ENSURE( nAttrs<SAL_MAX_UINT16, "Too many attributes" );
             nAttrs++;
@@ -990,15 +990,15 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     while( nNodeIdx < pDoc->GetNodes().Count() )
     {
         SwNode *pNd = pDoc->GetNodes()[ nNodeIdx ];
-        if( pNd->IsCntntNode() )
+        if( pNd->IsContentNode() )
         {
-            pPageDesc = static_cast<const SwFmtPageDesc &>(pNd->GetCntntNode()
+            pPageDesc = static_cast<const SwFormatPageDesc &>(pNd->GetContentNode()
                 ->GetAttr(RES_PAGEDESC)).GetPageDesc();
             break;
         }
         else if( pNd->IsTableNode() )
         {
-            pPageDesc = pNd->GetTableNode()->GetTable().GetFrmFmt()
+            pPageDesc = pNd->GetTableNode()->GetTable().GetFrameFormat()
                            ->GetPageDesc().GetPageDesc();
             break;
         }
@@ -1036,15 +1036,15 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         // Textfarbe ausgeben, wenn sie an der Standard-Vorlage gesetzt ist
         // und sich geaendert hat.
         OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_text,
-                      pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false ),
+                      pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD, false ),
                       *this );
 
         // Farben fuer (un)besuchte Links
         OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_link,
-                      pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( RES_POOLCHR_INET_NORMAL ),
+                      pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_INET_NORMAL ),
                       *this );
         OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_vlink,
-                      pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( RES_POOLCHR_INET_VISIT ),
+                      pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_INET_VISIT ),
                       *this );
 
         const SfxItemSet& rItemSet = pPageDesc->GetMaster().GetAttrSet();
@@ -1403,7 +1403,7 @@ sal_Int32 SwHTMLWriter::indexOfDotLeaders( sal_uInt16 nPoolId, const OUString& r
 // einen anderen Dokument-Teil auszugeben, wie z.B. Header/Footer
 HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
                            sal_uLong nEnd, bool bSaveNum,
-                           const SwFrmFmt *pFrmFmt)
+                           const SwFrameFormat *pFrameFormat)
     : rWrt(rWriter)
     , pOldPam(rWrt.pCurPam)
     , pOldEnd(rWrt.GetEndPaM())
@@ -1414,7 +1414,7 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
     , bOldOutHeader(rWrt.bOutHeader)
     , bOldOutFooter(rWrt.bOutFooter)
     , bOldOutFlyFrame(rWrt.bOutFlyFrame)
-    , pOldFlyFmt(NULL)
+    , pOldFlyFormat(NULL)
 {
     bOldWriteAll = rWrt.bWriteAll;
 
@@ -1451,8 +1451,8 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
     // Die Numerierung wird in jedem Fall unterbrochen.
     rWrt.GetNumInfo().Clear();
 
-    if( pFrmFmt )
-        rWrt.nDirection = rWrt.GetHTMLDirection( pFrmFmt->GetAttrSet() );
+    if( pFrameFormat )
+        rWrt.nDirection = rWrt.GetHTMLDirection( pFrameFormat->GetAttrSet() );
 }
 
 HTMLSaveData::~HTMLSaveData()

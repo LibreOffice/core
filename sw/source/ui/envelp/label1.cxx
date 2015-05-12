@@ -107,7 +107,7 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
 {
     WaitObject aWait( pParent );
 
-    m_nFormatId = AddTabPage("format", SwLabFmtPage::Create, 0);
+    m_nFormatId = AddTabPage("format", SwLabFormatPage::Create, 0);
     m_nOptionsId = AddTabPage("options", SwLabPrtPage::Create, 0);
     m_nCardsId = AddTabPage("cards", SwVisitingCardPage::Create, 0);
     m_sBusinessCardDlg = GetPageText(m_nCardsId);

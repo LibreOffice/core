@@ -23,9 +23,9 @@
 
 class SwView;
 class SwWrtShell;
-class SwFldMgr;
+class SwFieldMgr;
 
-class SwFldEditDlg : public SfxSingleTabDialog
+class SwFieldEditDlg : public SfxSingleTabDialog
 {
     SwWrtShell* pSh;
     VclPtr<PushButton> m_pPrevBT;
@@ -38,11 +38,11 @@ class SwFldEditDlg : public SfxSingleTabDialog
     void            Init();
     VclPtr<SfxTabPage> CreatePage(sal_uInt16 nGroup);
 
-    void EnsureSelection(SwField *pCurFld, SwFldMgr &rMgr);
+    void EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr);
 public:
 
-    SwFldEditDlg(SwView& rVw);
-    virtual ~SwFldEditDlg();
+    SwFieldEditDlg(SwView& rVw);
+    virtual ~SwFieldEditDlg();
     virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK(OKHdl, void *);

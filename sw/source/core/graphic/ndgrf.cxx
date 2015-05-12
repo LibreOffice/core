@@ -64,9 +64,9 @@ SwGrfNode::SwGrfNode(
         const SwNodeIndex & rWhere,
         const OUString& rGrfName, const OUString& rFltName,
         const Graphic* pGraphic,
-        SwGrfFmtColl *pGrfColl,
+        SwGrfFormatColl *pGrfColl,
         SwAttrSet* pAutoAttr ) :
-    SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+    SwNoTextNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     maGrfObj(),
     mpReplacementGraphic(0),
     // #i73788#
@@ -83,8 +83,8 @@ SwGrfNode::SwGrfNode(
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                           const GraphicObject& rGrfObj,
-                      SwGrfFmtColl *pGrfColl, SwAttrSet* pAutoAttr ) :
-    SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+                      SwGrfFormatColl *pGrfColl, SwAttrSet* pAutoAttr ) :
+    SwNoTextNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     maGrfObj(rGrfObj),
     mpReplacementGraphic(0),
     // #i73788#
@@ -105,9 +105,9 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
  */
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       const OUString& rGrfName, const OUString& rFltName,
-                      SwGrfFmtColl *pGrfColl,
+                      SwGrfFormatColl *pGrfColl,
                       SwAttrSet* pAutoAttr ) :
-    SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+    SwNoTextNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     maGrfObj(),
     mpReplacementGraphic(0),
     // #i73788#
@@ -324,12 +324,12 @@ SwGrfNode::~SwGrfNode()
 /// allow reaction on change of content of GraphicObject
 void SwGrfNode::onGraphicChanged()
 {
-    // try to access SwFlyFrmFmt; since title/desc/name are set there, there is no
+    // try to access SwFlyFrameFormat; since title/desc/name are set there, there is no
     // use to continue if it is not yet set. If not yet set, call onGraphicChanged()
     // when it is set.
-    SwFlyFrmFmt* pFlyFmt = dynamic_cast< SwFlyFrmFmt* >(GetFlyFmt());
+    SwFlyFrameFormat* pFlyFormat = dynamic_cast< SwFlyFrameFormat* >(GetFlyFormat());
 
-    if(pFlyFmt)
+    if(pFlyFormat)
     {
         OUString aName;
         OUString aTitle;
@@ -407,7 +407,7 @@ const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
     return mpReplacementGraphic;
 }
 
-SwCntntNode *SwGrfNode::SplitCntntNode( const SwPosition & )
+SwContentNode *SwGrfNode::SplitContentNode( const SwPosition & )
 {
     return this;
 }
@@ -416,7 +416,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
                                 const OUString& rGrfName,
                                 const OUString& rFltName,
                                 const Graphic* pGraphic,
-                                SwGrfFmtColl* pGrfColl,
+                                SwGrfFormatColl* pGrfColl,
                                 SwAttrSet* pAutoAttr,
                                 bool bDelayed )
 {
@@ -434,7 +434,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
 
 SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
                                 const GraphicObject& rGrfObj,
-                                SwGrfFmtColl* pGrfColl,
+                                SwGrfFormatColl* pGrfColl,
                                 SwAttrSet* pAutoAttr )
 {
     OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
@@ -798,12 +798,12 @@ void SwGrfNode::ScaleImageMap()
         return;
 
     // re-scale Image-Map
-    SwFrmFmt* pFmt = GetFlyFmt();
+    SwFrameFormat* pFormat = GetFlyFormat();
 
-    if( !pFmt )
+    if( !pFormat )
         return;
 
-    SwFmtURL aURL( pFmt->GetURL() );
+    SwFormatURL aURL( pFormat->GetURL() );
     if ( !aURL.GetMap() )
         return;
 
@@ -811,8 +811,8 @@ void SwGrfNode::ScaleImageMap()
     Fraction aScaleX( 1, 1 );
     Fraction aScaleY( 1, 1 );
 
-    const SwFmtFrmSize& rFrmSize = pFmt->GetFrmSize();
-    const SvxBoxItem& rBox = pFmt->GetBox();
+    const SwFormatFrmSize& rFrmSize = pFormat->GetFrmSize();
+    const SvxBoxItem& rBox = pFormat->GetBox();
 
     if( !rFrmSize.GetWidthPercent() )
     {
@@ -848,7 +848,7 @@ void SwGrfNode::ScaleImageMap()
     if( bScale )
     {
         aURL.GetMap()->Scale( aScaleX, aScaleY );
-        pFmt->SetFmtAttr( aURL );
+        pFormat->SetFormatAttr( aURL );
     }
 }
 
@@ -926,10 +926,10 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
     return pStrm;
 }
 
-SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
+SwContentNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
     // copy formats into the other document
-    SwGrfFmtColl* pColl = pDoc->CopyGrfColl( *GetGrfColl() );
+    SwGrfFormatColl* pColl = pDoc->CopyGrfColl( *GetGrfColl() );
 
     Graphic aTmpGrf = GetGrf();
 

@@ -178,12 +178,12 @@ SvxGridItem* ScViewOptions::CreateGridItem( sal_uInt16 nId /* = SID_ATTR_GRID_OP
 {
     SvxGridItem* pItem = new SvxGridItem( nId );
 
-    pItem->SetFldDrawX      ( aGridOpt.GetFldDrawX() );
-    pItem->SetFldDivisionX  ( aGridOpt.GetFldDivisionX() );
-    pItem->SetFldDrawY      ( aGridOpt.GetFldDrawY() );
-    pItem->SetFldDivisionY  ( aGridOpt.GetFldDivisionY() );
-    pItem->SetFldSnapX      ( aGridOpt.GetFldSnapX() );
-    pItem->SetFldSnapY      ( aGridOpt.GetFldSnapY() );
+    pItem->SetFieldDrawX      ( aGridOpt.GetFieldDrawX() );
+    pItem->SetFieldDivisionX  ( aGridOpt.GetFieldDivisionX() );
+    pItem->SetFieldDrawY      ( aGridOpt.GetFieldDrawY() );
+    pItem->SetFieldDivisionY  ( aGridOpt.GetFieldDivisionY() );
+    pItem->SetFieldSnapX      ( aGridOpt.GetFieldSnapX() );
+    pItem->SetFieldSnapY      ( aGridOpt.GetFieldSnapY() );
     pItem->SetUseGridSnap   ( aGridOpt.GetUseGridSnap() );
     pItem->SetSynchronize   ( aGridOpt.GetSynchronize() );
     pItem->SetGridVisible   ( aGridOpt.GetGridVisible() );
@@ -483,22 +483,22 @@ ScViewCfg::ScViewCfg() :
                 switch(nProp)
                 {
                     case SCGRIDOPT_RESOLU_X:
-                        if (pValues[nProp] >>= nIntVal) aGrid.SetFldDrawX( nIntVal );
+                        if (pValues[nProp] >>= nIntVal) aGrid.SetFieldDrawX( nIntVal );
                         break;
                     case SCGRIDOPT_RESOLU_Y:
-                        if (pValues[nProp] >>= nIntVal) aGrid.SetFldDrawY( nIntVal );
+                        if (pValues[nProp] >>= nIntVal) aGrid.SetFieldDrawY( nIntVal );
                         break;
                     case SCGRIDOPT_SUBDIV_X:
-                        if (pValues[nProp] >>= nIntVal) aGrid.SetFldDivisionX( nIntVal );
+                        if (pValues[nProp] >>= nIntVal) aGrid.SetFieldDivisionX( nIntVal );
                         break;
                     case SCGRIDOPT_SUBDIV_Y:
-                        if (pValues[nProp] >>= nIntVal) aGrid.SetFldDivisionY( nIntVal );
+                        if (pValues[nProp] >>= nIntVal) aGrid.SetFieldDivisionY( nIntVal );
                         break;
                     case SCGRIDOPT_OPTION_X:
-                        if (pValues[nProp] >>= nIntVal) aGrid.SetFldSnapX( nIntVal );
+                        if (pValues[nProp] >>= nIntVal) aGrid.SetFieldSnapX( nIntVal );
                         break;
                     case SCGRIDOPT_OPTION_Y:
-                        if (pValues[nProp] >>= nIntVal) aGrid.SetFldSnapY( nIntVal );
+                        if (pValues[nProp] >>= nIntVal) aGrid.SetFieldSnapY( nIntVal );
                         break;
                     case SCGRIDOPT_SNAPTOGRID:
                         aGrid.SetUseGridSnap( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
@@ -624,22 +624,22 @@ IMPL_LINK_NOARG(ScViewCfg, GridCommitHdl)
         switch(nProp)
         {
             case SCGRIDOPT_RESOLU_X:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFldDrawX();
+                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldDrawX();
                 break;
             case SCGRIDOPT_RESOLU_Y:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFldDrawY();
+                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldDrawY();
                 break;
             case SCGRIDOPT_SUBDIV_X:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFldDivisionX();
+                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldDivisionX();
                 break;
             case SCGRIDOPT_SUBDIV_Y:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFldDivisionY();
+                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldDivisionY();
                 break;
             case SCGRIDOPT_OPTION_X:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFldSnapX();
+                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldSnapX();
                 break;
             case SCGRIDOPT_OPTION_Y:
-                pValues[nProp] <<= (sal_Int32) rGrid.GetFldSnapY();
+                pValues[nProp] <<= (sal_Int32) rGrid.GetFieldSnapY();
                 break;
             case SCGRIDOPT_SNAPTOGRID:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], rGrid.GetUseGridSnap() );

@@ -36,32 +36,32 @@ bool SwPosFlyFrmCmp::operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& 
     return rA->GetNdIndex() < rB->GetNdIndex();
 }
 
-SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
+SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrameFormat* pFormat,
                             sal_uInt16 nArrPos )
-    : pFrmFmt( pFmt ), pNdIdx( const_cast<SwNodeIndex*>(&rIdx) )
+    : pFrameFormat( pFormat ), pNdIdx( const_cast<SwNodeIndex*>(&rIdx) )
 {
     bool bFnd = false;
-    const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+    const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
     if (FLY_AT_PAGE == rAnchor.GetAnchorId())
     {
         pNdIdx = new SwNodeIndex( rIdx );
     }
-    else if( pFmt->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    else if( pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        if( RES_FLYFRMFMT == pFmt->Which() )
+        if( RES_FLYFRMFMT == pFormat->Which() )
         {
             // Let's see if we have an SdrObject for this
-            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>(*pFmt).First();
+            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFormat>(*pFormat).First();
             if( pFly )
             {
                 nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
                 bFnd = true;
             }
         }
-        else if( RES_DRAWFRMFMT == pFmt->Which() )
+        else if( RES_DRAWFRMFMT == pFormat->Which() )
         {
             // Let's see if we have an SdrObject for this
-            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>(*pFmt).First();
+            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFormat>(*pFormat).First();
             if( pContact )
             {
                 nOrdNum = pContact->GetMaster()->GetOrdNum();
@@ -72,14 +72,14 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
 
     if( !bFnd )
     {
-        nOrdNum = pFmt->GetDoc()->GetSpzFrmFmts()->size();
+        nOrdNum = pFormat->GetDoc()->GetSpzFrameFormats()->size();
         nOrdNum += nArrPos;
     }
 }
 
 SwPosFlyFrm::~SwPosFlyFrm()
 {
-    const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
+    const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
     if (FLY_AT_PAGE == rAnchor.GetAnchorId())
     {
         delete pNdIdx;

@@ -113,11 +113,11 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementation
     if( pFFrm )
     {
         style = "style:";
-        SwCntntFrm* pCFrm;
-        pCFrm = pFFrm->ContainsCntnt();
+        SwContentFrm* pCFrm;
+        pCFrm = pFFrm->ContainsContent();
         if( pCFrm )
         {
-            SwCntntNode* pCNode = pCFrm->GetNode();
+            SwContentNode* pCNode = pCFrm->GetNode();
             if( pCNode )
             {
                 style += static_cast<SwOLENode*>(pCNode)->GetOLEObj().GetStyleString();

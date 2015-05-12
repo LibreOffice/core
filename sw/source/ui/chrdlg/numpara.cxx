@@ -177,11 +177,11 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
        m_pRestartParaCountCB->IsValueChangedFromSaved() ||
        m_pRestartNF->IsValueChangedFromSaved() )
     {
-        SwFmtLineNumber aFmt;
-        aFmt.SetStartValue( static_cast< sal_uLong >(m_pRestartParaCountCB->GetState() == TRISTATE_TRUE ?
+        SwFormatLineNumber aFormat;
+        aFormat.SetStartValue( static_cast< sal_uLong >(m_pRestartParaCountCB->GetState() == TRISTATE_TRUE ?
                                 m_pRestartNF->GetValue() : 0 ));
-        aFmt.SetCountLines( m_pCountParaCB->IsChecked() );
-        rSet->Put(aFmt);
+        aFormat.SetCountLines( m_pCountParaCB->IsChecked() );
+        rSet->Put(aFormat);
         bModified = true;
     }
     return bModified;
@@ -264,7 +264,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     StyleHdl_Impl(m_pNumberStyleLB);
     if( SfxItemState::DEFAULT <= rSet->GetItemState(RES_LINENUMBER))
     {
-        const SwFmtLineNumber& rNum = static_cast<const SwFmtLineNumber&>(rSet->Get(RES_LINENUMBER));
+        const SwFormatLineNumber& rNum = static_cast<const SwFormatLineNumber&>(rSet->Get(RES_LINENUMBER));
         sal_uLong nStartValue = rNum.GetStartValue();
         bool bCount = rNum.IsCount();
         m_pCountParaCB->SetState( bCount ? TRISTATE_TRUE : TRISTATE_FALSE );

@@ -31,7 +31,7 @@
 #include "condedit.hxx"
 #include "numfmtlb.hxx"
 
-class SwFldVarPage;
+class SwFieldVarPage;
 
 class SelectionListBox : public ListBox
 {
@@ -47,7 +47,7 @@ public:
     void            ResetCallAddSelection() {bCallAddSelection = false;}
 };
 
-class SwFldVarPage : public SwFldPage
+class SwFieldVarPage : public SwFieldPage
 {
     friend class SelectionListBox;
 
@@ -90,9 +90,9 @@ protected:
     virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
-                        SwFldVarPage(vcl::Window* pParent, const SfxItemSet& rSet);
+                        SwFieldVarPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
-                        virtual ~SwFldVarPage();
+                        virtual ~SwFieldVarPage();
     virtual void        dispose() SAL_OVERRIDE;
 
     static VclPtr<SfxTabPage>  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);

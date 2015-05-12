@@ -29,7 +29,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 class SwMailMergeWizard;
-class SwFrmFmt;
+class SwFrameFormat;
 class SwOneExampleFrame;
 class SwWrtShell;
 class SwView;
@@ -57,7 +57,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     SwWrtShell*         m_pExampleWrtShell;
 
     OUString            m_sExampleURL;
-    SwFrmFmt*           m_pAddressBlockFormat;
+    SwFrameFormat*           m_pAddressBlockFormat;
 
     bool                m_bIsGreetingInserted;
 
@@ -71,7 +71,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     DECL_LINK(GreetingsHdl_Impl, PushButton*);
     DECL_LINK(AlignToTextHdl_Impl, CheckBox*);
 
-    static SwFrmFmt*        InsertAddressFrame(
+    static SwFrameFormat*        InsertAddressFrame(
                             SwWrtShell& rShell,
                             SwMailMergeConfigItem& rConfigItem,
                             const Point& rDestination,
@@ -86,7 +86,7 @@ public:
         virtual ~SwMailMergeLayoutPage();
     virtual void            dispose() SAL_OVERRIDE;
 
-    static SwFrmFmt*        InsertAddressAndGreeting(SwView* pView,
+    static SwFrameFormat*        InsertAddressAndGreeting(SwView* pView,
                                             SwMailMergeConfigItem& rConfigItem,
                                             const Point& rAddressPos,
                                             bool bAlignToBody);

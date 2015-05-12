@@ -22,7 +22,7 @@
 #include "rcid.hrc"
 
 /*--------------------------------------------------------------------
-    TypeId, see SwFldTypesEnum
+    TypeId, see SwFieldTypesEnum
  --------------------------------------------------------------------*/
 
 #define STR_TYPE_BEGIN      RC_FLDDLG_BEGIN

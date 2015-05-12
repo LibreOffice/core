@@ -24,7 +24,7 @@
 
 struct SW_DLLPUBLIC SwDocStat
 {
-    sal_uInt16          nTbl;
+    sal_uInt16          nTable;
     sal_uInt16          nGrf;
     sal_uInt16          nOLE;
     sal_uLong           nPage;

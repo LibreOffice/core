@@ -45,13 +45,13 @@
 class SwASC_AttrIter
 {
     SwASCWriter& rWrt;
-    const SwTxtNode& rNd;
+    const SwTextNode& rNd;
     sal_Int32 nAktSwPos;
 
     sal_Int32 SearchNext( sal_Int32 nStartPos );
 
 public:
-    SwASC_AttrIter( SwASCWriter& rWrt, const SwTxtNode& rNd, sal_Int32 nStt );
+    SwASC_AttrIter( SwASCWriter& rWrt, const SwTextNode& rNd, sal_Int32 nStt );
 
     void NextPos()
     {
@@ -68,10 +68,10 @@ public:
 
 SwASC_AttrIter::SwASC_AttrIter(
     SwASCWriter& rWr,
-    const SwTxtNode& rTxtNd,
+    const SwTextNode& rTextNd,
     sal_Int32 nStt )
     : rWrt( rWr )
-    , rNd( rTxtNd )
+    , rNd( rTextNd )
     , nAktSwPos( 0 )
 {
     nAktSwPos = SearchNext( nStt + 1 );
@@ -80,14 +80,14 @@ SwASC_AttrIter::SwASC_AttrIter(
 sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
 {
     sal_Int32 nMinPos = SAL_MAX_INT32;
-    const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
-    if( pTxtAttrs )
+    const SwpHints* pTextAttrs = rNd.GetpSwpHints();
+    if( pTextAttrs )
     {
-        // TODO: This can be optimized, if we make use of the fact that the TxtAttrs
+        // TODO: This can be optimized, if we make use of the fact that the TextAttrs
         // are sorted by starting position. We would need to remember two indices, however.
-        for ( size_t i = 0; i < pTxtAttrs->Count(); ++i )
+        for ( size_t i = 0; i < pTextAttrs->Count(); ++i )
         {
-            const SwTxtAttr* pHt = (*pTxtAttrs)[i];
+            const SwTextAttr* pHt = (*pTextAttrs)[i];
             if ( pHt->HasDummyChar() )
             {
                 sal_Int32 nPos = pHt->GetStart();
@@ -120,12 +120,12 @@ sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
 bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
 {
     bool bRet = false;
-    const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
-    if( pTxtAttrs )
+    const SwpHints* pTextAttrs = rNd.GetpSwpHints();
+    if( pTextAttrs )
     {
-        for( size_t i = 0; i < pTxtAttrs->Count(); ++i )
+        for( size_t i = 0; i < pTextAttrs->Count(); ++i )
         {
-            const SwTxtAttr* pHt = (*pTxtAttrs)[i];
+            const SwTextAttr* pHt = (*pTextAttrs)[i];
             if ( ( pHt->HasDummyChar()
                    || pHt->HasContent() )
                  && nSwPos == pHt->GetStart() )
@@ -137,21 +137,21 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
                 case RES_TXTATR_FIELD:
                 case RES_TXTATR_ANNOTATION:
                 case RES_TXTATR_INPUTFIELD:
-                    sOut = static_txtattr_cast<SwTxtFld const*>(pHt)
-                            ->GetFmtFld().GetField()->ExpandField(true);
+                    sOut = static_txtattr_cast<SwTextField const*>(pHt)
+                            ->GetFormatField().GetField()->ExpandField(true);
                     break;
 
                 case RES_TXTATR_FTN:
                     {
-                        const SwFmtFtn& rFtn = pHt->GetFtn();
-                        if( !rFtn.GetNumStr().isEmpty() )
-                            sOut = rFtn.GetNumStr();
-                        else if( rFtn.IsEndNote() )
-                            sOut = rWrt.pDoc->GetEndNoteInfo().aFmt.
-                            GetNumStr( rFtn.GetNumber() );
+                        const SwFormatFootnote& rFootnote = pHt->GetFootnote();
+                        if( !rFootnote.GetNumStr().isEmpty() )
+                            sOut = rFootnote.GetNumStr();
+                        else if( rFootnote.IsEndNote() )
+                            sOut = rWrt.pDoc->GetEndNoteInfo().aFormat.
+                            GetNumStr( rFootnote.GetNumber() );
                         else
-                            sOut = rWrt.pDoc->GetFtnInfo().aFmt.
-                            GetNumStr( rFtn.GetNumber() );
+                            sOut = rWrt.pDoc->GetFootnoteInfo().aFormat.
+                            GetNumStr( rFootnote.GetNumber() );
                     }
                     break;
                 }
@@ -167,9 +167,9 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
 
 // Output of the node
 
-static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
+static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
 {
-    const SwTxtNode& rNd = static_cast<SwTxtNode&>(rNode);
+    const SwTextNode& rNd = static_cast<SwTextNode&>(rNode);
 
     sal_Int32 nStrPos = rWrt.pCurPam->GetPoint()->nContent.GetIndex();
     const sal_Int32 nNodeEnd = rNd.Len();
@@ -190,7 +190,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         }
     }
 
-    OUString aStr( rNd.GetTxt() );
+    OUString aStr( rNd.GetText() );
     if( rWrt.bASCII_ParaAsBlanc )
         aStr = aStr.replace(0x0A, ' ');
 
@@ -231,7 +231,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
  */
 
 SwNodeFnTab aASCNodeFnTab = {
-/* RES_TXTNODE  */                   OutASC_SwTxtNode,
+/* RES_TXTNODE  */                   OutASC_SwTextNode,
 /* RES_GRFNODE  */                   0,
 /* RES_OLENODE  */                   0
 };

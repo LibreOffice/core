@@ -48,13 +48,13 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #include <numrule.hxx>
 
 /** provides some methods for generic operations on lists that contain
-SwFmt* subclasses. */
-class SwFmtsBase
+SwFormat* subclasses. */
+class SwFormatsBase
 {
 public:
-    virtual size_t GetFmtCount() const = 0;
-    virtual SwFmt* GetFmt(size_t idx) const = 0;
-    virtual ~SwFmtsBase() {};
+    virtual size_t GetFormatCount() const = 0;
+    virtual SwFormat* GetFormat(size_t idx) const = 0;
+    virtual ~SwFormatsBase() {};
 };
 
 template<typename Value>
@@ -112,86 +112,86 @@ public:
 };
 
 template<typename Value>
-class SwFmtsModifyBase : public SwVectorModifyBase<Value>, public SwFmtsBase
+class SwFormatsModifyBase : public SwVectorModifyBase<Value>, public SwFormatsBase
 {
 protected:
-    SwFmtsModifyBase(typename SwVectorModifyBase<Value>::DestructorPolicy
+    SwFormatsModifyBase(typename SwVectorModifyBase<Value>::DestructorPolicy
             policy = SwVectorModifyBase<Value>::DestructorPolicy::FreeElements)
         : SwVectorModifyBase<Value>(policy) {}
 
 public:
-    virtual size_t GetFmtCount() const SAL_OVERRIDE
+    virtual size_t GetFormatCount() const SAL_OVERRIDE
         { return std::vector<Value>::size(); }
 
-    virtual Value GetFmt(size_t idx) const SAL_OVERRIDE
+    virtual Value GetFormat(size_t idx) const SAL_OVERRIDE
         { return std::vector<Value>::operator[](idx); }
 
-    inline size_t GetPos(const SwFmt *p) const
-        { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFmt*>( p ) ) ); }
-    inline bool Contains(const SwFmt *p) const {
-        Value p2 = dynamic_cast<Value>(const_cast<SwFmt*>(p));
+    inline size_t GetPos(const SwFormat *p) const
+        { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFormat*>( p ) ) ); }
+    inline bool Contains(const SwFormat *p) const {
+        Value p2 = dynamic_cast<Value>(const_cast<SwFormat*>(p));
         return p2 != nullptr && SwVectorModifyBase<Value>::Contains(p2);
     }
 };
 
-class SwGrfFmtColls : public SwFmtsModifyBase<SwGrfFmtColl*>
+class SwGrfFormatColls : public SwFormatsModifyBase<SwGrfFormatColl*>
 {
 public:
-    SwGrfFmtColls() : SwFmtsModifyBase( DestructorPolicy::KeepElements ) {}
+    SwGrfFormatColls() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
 };
 
 /// Specific frame formats (frames, DrawObjects).
-class SW_DLLPUBLIC SwFrmFmts : public SwFmtsModifyBase<SwFrmFmt*>
+class SW_DLLPUBLIC SwFrameFormats : public SwFormatsModifyBase<SwFrameFormat*>
 {
 public:
     void dumpAsXml(struct _xmlTextWriter* pWriter, const char* pName) const;
 };
 
-class SwCharFmts : public SwFmtsModifyBase<SwCharFmt*>
+class SwCharFormats : public SwFormatsModifyBase<SwCharFormat*>
 {
 public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-class SwTxtFmtColls : public SwFmtsModifyBase<SwTxtFmtColl*>
+class SwTextFormatColls : public SwFormatsModifyBase<SwTextFormatColl*>
 {
 public:
-    SwTxtFmtColls() : SwFmtsModifyBase( DestructorPolicy::KeepElements ) {}
+    SwTextFormatColls() : SwFormatsModifyBase( DestructorPolicy::KeepElements ) {}
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 /// Array of Undo-history.
-class SW_DLLPUBLIC SwSectionFmts : public SwFmtsModifyBase<SwSectionFmt*>
+class SW_DLLPUBLIC SwSectionFormats : public SwFormatsModifyBase<SwSectionFormat*>
 {
 public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-class SwFldTypes : public SwVectorModifyBase<SwFieldType*> {
+class SwFieldTypes : public SwVectorModifyBase<SwFieldType*> {
 public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 class SwTOXTypes : public SwVectorModifyBase<SwTOXType*> {};
 
-class SW_DLLPUBLIC SwNumRuleTbl : public SwVectorModifyBase<SwNumRule*> {
+class SW_DLLPUBLIC SwNumRuleTable : public SwVectorModifyBase<SwNumRule*> {
 public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-struct CompareSwRedlineTbl
+struct CompareSwRedlineTable
 {
     bool operator()(SwRangeRedline* const &lhs, SwRangeRedline* const &rhs) const;
 };
-class _SwRedlineTbl
-    : public o3tl::sorted_vector<SwRangeRedline*, CompareSwRedlineTbl,
+class _SwRedlineTable
+    : public o3tl::sorted_vector<SwRangeRedline*, CompareSwRedlineTable,
                 o3tl::find_partialorder_ptrequals>
 {
 public:
-    ~_SwRedlineTbl();
+    ~_SwRedlineTable();
 };
 
-class SwRedlineTbl : private _SwRedlineTbl
+class SwRedlineTable : private _SwRedlineTable
 {
 public:
     bool Contains(const SwRangeRedline* p) const { return find(const_cast<SwRangeRedline* const>(p)) != end(); }
@@ -221,30 +221,30 @@ public:
     /**
      Find the redline at the given position.
 
-     @param tableIndex position in SwRedlineTbl to start searching at, will be updated with the index of the returned
+     @param tableIndex position in SwRedlineTable to start searching at, will be updated with the index of the returned
                        redline (or the next redline after the given position if not found)
      @param next true: redline starts at position and ends after, false: redline starts before position and ends at or after
     */
     const SwRangeRedline* FindAtPosition( const SwPosition& startPosition, sal_uInt16& tableIndex, bool next = true ) const;
 
-    using _SwRedlineTbl::const_iterator;
-    using _SwRedlineTbl::begin;
-    using _SwRedlineTbl::end;
-    using _SwRedlineTbl::size;
-    using _SwRedlineTbl::size_type;
-    using _SwRedlineTbl::operator[];
-    using _SwRedlineTbl::empty;
-    using _SwRedlineTbl::Resort;
+    using _SwRedlineTable::const_iterator;
+    using _SwRedlineTable::begin;
+    using _SwRedlineTable::end;
+    using _SwRedlineTable::size;
+    using _SwRedlineTable::size_type;
+    using _SwRedlineTable::operator[];
+    using _SwRedlineTable::empty;
+    using _SwRedlineTable::Resort;
 };
 
 /// Table that holds 'extra' redlines, such as 'table row insert\delete', 'paragraph moves' etc...
-class SwExtraRedlineTbl
+class SwExtraRedlineTable
 {
 private:
     std::vector<SwExtraRedline*>    m_aExtraRedlines;
 
 public:
-    ~SwExtraRedlineTbl();
+    ~SwExtraRedlineTable();
 
     bool Insert( SwExtraRedline* p );
 
@@ -262,10 +262,10 @@ public:
     bool DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& rTableBox, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete );
 };
 
-class SwUnoCrsrTbl : public std::set<SwUnoCrsr*> {
+class SwUnoCrsrTable : public std::set<SwUnoCrsr*> {
 public:
     /// the destructor will free all objects still in the set
-    ~SwUnoCrsrTbl();
+    ~SwUnoCrsrTable();
 };
 
 typedef std::vector<SwOLENode*> SwOLENodes;

@@ -28,7 +28,7 @@
 #include <svx/svxdllapi.h>
 
 class PopupMenu;
-class SvxClipboardFmtItem;
+class SvxClipboardFormatItem;
 
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxClipBoardControl : public SfxToolBoxControl
 {

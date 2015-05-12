@@ -86,7 +86,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
-        Reader::ResetFrmFmtAttrs( aFrmSet );
+        Reader::ResetFrameFormatAttrs( aFrmSet );
 
     sal_uInt16 nLeftSpace = 0, nRightSpace = 0, nUpperSpace = 0, nLowerSpace = 0;
     if( (rPixSpace.Width() || rPixSpace.Height()) && Application::GetDefaultDevice() )
@@ -106,7 +106,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         // Ggf. den Erstzeilen-Einzug noch plaetten
         const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
         SvxLRSpaceItem aLRItem( *pLRItem );
-        aLRItem.SetTxtFirstLineOfst( 0 );
+        aLRItem.SetTextFirstLineOfst( 0 );
         if( rCSS1PropInfo.bLeftMargin )
         {
             nLeftSpace = static_cast< sal_uInt16 >(aLRItem.GetLeft());
@@ -153,7 +153,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aFrmSet.Put( aULItem );
     }
 
-    SwFmtAnchor aAnchor( FLY_AS_CHAR );
+    SwFormatAnchor aAnchor( FLY_AS_CHAR );
     if( SVX_CSS1_POS_ABSOLUTE == rCSS1PropInfo.ePosition &&
         SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eLeftType &&
         SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eTopType )
@@ -174,20 +174,20 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(rCSS1PropInfo.nLeft + nLeftSpace,
                                            rCSS1PropInfo.nTop + nUpperSpace) );
-        aFrmSet.Put( SwFmtSurround(SURROUND_THROUGHT) );
+        aFrmSet.Put( SwFormatSurround(SURROUND_THROUGHT) );
     }
     else if( SVX_ADJUST_LEFT == rCSS1PropInfo.eFloat ||
              text::HoriOrientation::LEFT == eHoriOri )
     {
         aAnchor.SetType( FLY_AT_PARA );
-        aFrmSet.Put( SwFmtSurround(bHidden ? SURROUND_THROUGHT
+        aFrmSet.Put( SwFormatSurround(bHidden ? SURROUND_THROUGHT
                                              : SURROUND_RIGHT) );
         // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(nLeftSpace, nUpperSpace) );
     }
     else if( text::VertOrientation::NONE != eVertOri )
     {
-        aFrmSet.Put( SwFmtVertOrient( 0, eVertOri ) );
+        aFrmSet.Put( SwFormatVertOrient( 0, eVertOri ) );
     }
 
     if (FLY_AT_PAGE == aAnchor.GetAnchorId())
@@ -358,7 +358,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         }
     }
 
-    // Ein DrawTxtobj anlegen
+    // Ein DrawTextobj anlegen
     // #i52858# - method name changed
     SwDrawModel* pModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
     SdrPage* pPg = pModel->GetPage( 0 );
@@ -401,7 +401,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     // die Default-Farbe (aus der Standard-Vorlage) setzen, damit ueberhaupt
     // eine sinnvolle Farbe gesetzt ist.
     const Color& rDfltColor =
-        pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_STANDARD )
+        pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD )
             ->GetColor().GetValue();
     aItemSet.Put( SvxColorItem( rDfltColor, EE_CHAR_COLOR ) );
 
@@ -418,11 +418,11 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
         0
     };
-    SwTxtNode const*const pTxtNd =
-        pPam->GetPoint()->nNode.GetNode().GetTxtNode();
-    if( pTxtNd )
+    SwTextNode const*const pTextNd =
+        pPam->GetPoint()->nNode.GetNode().GetTextNode();
+    if( pTextNd )
     {
-        const SfxItemSet& rItemSet = pTxtNd->GetAnyFmtColl().GetAttrSet();
+        const SfxItemSet& rItemSet = pTextNd->GetAnyFormatColl().GetAttrSet();
         const SfxPoolItem *pItem;
         for( sal_uInt16 i=0; nWhichIds[i]; i++ )
         {

@@ -62,7 +62,7 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-static HTMLOptionEnum aHTMLTblVAlignTable[] =
+static HTMLOptionEnum aHTMLTableVAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_VA_top,         text::VertOrientation::NONE       },
     { OOO_STRING_SVTOOLS_HTML_VA_middle,      text::VertOrientation::CENTER     },
@@ -104,8 +104,8 @@ class _HTMLTableContext
 {
     SwHTMLNumRuleInfo aNumRuleInfo; // Numbering valid before the table
 
-    SwTableNode *pTblNd;            // table node
-    SwFrmFmt *pFrmFmt;              // der Fly frame::Frame, containing the table
+    SwTableNode *pTableNd;            // table node
+    SwFrameFormat *pFrameFormat;              // der Fly frame::Frame, containing the table
     SwPosition *pPos;               // position behind the table
 
     sal_uInt16 nContextStAttrMin;
@@ -121,8 +121,8 @@ public:
 
     _HTMLTableContext( SwPosition *pPs, sal_uInt16 nCntxtStMin,
                        sal_uInt16 nCntxtStAttrMin ) :
-        pTblNd( 0 ),
-        pFrmFmt( 0 ),
+        pTableNd( 0 ),
+        pFrameFormat( 0 ),
         pPos( pPs ),
         nContextStAttrMin( nCntxtStAttrMin ),
         nContextStMin( nCntxtStMin ),
@@ -143,11 +143,11 @@ public:
 
     SwPosition *GetPos() const { return pPos; }
 
-    void SetTableNode( SwTableNode *pNd ) { pTblNd = pNd; }
-    SwTableNode *GetTableNode() const { return pTblNd; }
+    void SetTableNode( SwTableNode *pNd ) { pTableNd = pNd; }
+    SwTableNode *GetTableNode() const { return pTableNd; }
 
-    void SetFrmFmt( SwFrmFmt *pFmt ) { pFrmFmt = pFmt; }
-    SwFrmFmt *GetFrmFmt() const { return pFrmFmt; }
+    void SetFrameFormat( SwFrameFormat *pFormat ) { pFrameFormat = pFormat; }
+    SwFrameFormat *GetFrameFormat() const { return pFrameFormat; }
 
     sal_uInt16 GetContextStMin() const { return nContextStMin; }
     sal_uInt16 GetContextStAttrMin() const { return nContextStAttrMin; }
@@ -206,7 +206,7 @@ class HTMLTableCell
     // !!!ATTENTION!!!!!
     ::boost::shared_ptr<SvxBoxItem> m_pBoxItem;
 
-    sal_uInt32 nNumFmt;
+    sal_uInt32 nNumFormat;
     sal_uInt16 nRowSpan;                // cell ROWSPAN
     sal_uInt16 nColSpan;                // cell COLSPAN
     sal_uInt16 nWidth;                  // cell WIDTH
@@ -214,7 +214,7 @@ class HTMLTableCell
     sal_Int16 eVertOri;         // vertical alignment of the cell
     bool bProtected : 1;            // cell must not filled
     bool bRelWidth : 1;             // nWidth is given in %
-    bool bHasNumFmt : 1;
+    bool bHasNumFormat : 1;
     bool bHasValue : 1;
     bool bNoWrap : 1;
     bool mbCovered : 1;
@@ -229,7 +229,7 @@ public:
     void Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
               sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
               ::boost::shared_ptr<SvxBoxItem> const& rBoxItem,
-              bool bHasNumFmt, sal_uInt32 nNumFmt,
+              bool bHasNumFormat, sal_uInt32 nNumFormat,
               bool bHasValue, double nValue, bool bNoWrap, bool bCovered );
 
     // Protect an empty 1x1 cell
@@ -251,7 +251,7 @@ public:
     const SvxBrushItem *GetBGBrush() const { return pBGBrush; }
     ::boost::shared_ptr<SvxBoxItem> GetBoxItem() const { return m_pBoxItem; }
 
-    inline bool GetNumFmt( sal_uInt32& rNumFmt ) const;
+    inline bool GetNumFormat( sal_uInt32& rNumFormat ) const;
     inline bool GetValue( double& rValue ) const;
 
     sal_Int16 GetVertOri() const { return eVertOri; }
@@ -326,9 +326,9 @@ class HTMLTableColumn
     SvxAdjust eAdjust;
     sal_Int16 eVertOri;
 
-    SwFrmFmt *aFrmFmts[6];
+    SwFrameFormat *aFrameFormats[6];
 
-    static inline sal_uInt16 GetFrmFmtIdx( bool bBorderLine,
+    static inline sal_uInt16 GetFrameFormatIdx( bool bBorderLine,
                                 sal_Int16 eVertOri );
 
 public:
@@ -348,9 +348,9 @@ public:
     inline void SetEndOfGroup() { bIsEndOfGroup = true; }
     inline bool IsEndOfGroup() const { return bIsEndOfGroup; }
 
-    inline void SetFrmFmt( SwFrmFmt *pFmt, bool bBorderLine,
+    inline void SetFrameFormat( SwFrameFormat *pFormat, bool bBorderLine,
                            sal_Int16 eVertOri );
-    inline SwFrmFmt *GetFrmFmt( bool bBorderLine,
+    inline SwFrameFormat *GetFrameFormat( bool bBorderLine,
                                 sal_Int16 eVertOri ) const;
 
     SwHTMLTableLayoutColumn *CreateLayoutInfo();
@@ -396,9 +396,9 @@ class HTMLTable
     const SwStartNode *pPrevStNd;   // the Table-Node or the Start-Node of the section before
     const SwTable *pSwTable;        // SW-Table (only on Top-Level)
     SwTableBox *pBox1;              // TableBox, generated when the Top-Level-Table was build
-    SwTableBoxFmt *pBoxFmt;         // frame::Frame-Format from SwTableBox
-    SwTableLineFmt *pLineFmt;       // frame::Frame-Format from SwTableLine
-    SwTableLineFmt *pLineFrmFmtNoHeight;
+    SwTableBoxFormat *pBoxFormat;         // frame::Frame-Format from SwTableBox
+    SwTableLineFormat *pLineFormat;       // frame::Frame-Format from SwTableLine
+    SwTableLineFormat *pLineFrameFormatNoHeight;
     SvxBrushItem *pBGBrush;         // background of the table
     SvxBrushItem *pInhBGBrush;      // "inherited" background of the table
     const SwStartNode *pCaptionStartNode;   // Start-Node of the table-caption
@@ -465,10 +465,10 @@ class HTMLTable
                                bool bSwBorders=true ) const;
 
     // Conforming of the frame::Frame-Format of the box
-    void FixFrameFmt( SwTableBox *pBox, sal_uInt16 nRow, sal_uInt16 nCol,
+    void FixFrameFormat( SwTableBox *pBox, sal_uInt16 nRow, sal_uInt16 nCol,
                       sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                       bool bFirstPara=true, bool bLastPara=true ) const;
-    void FixFillerFrameFmt( SwTableBox *pBox, bool bRight ) const;
+    void FixFillerFrameFormat( SwTableBox *pBox, bool bRight ) const;
 
     // Create a table with the content (lines/boxes)
     void _MakeTable( SwTableBox *pUpper=0 );
@@ -549,7 +549,7 @@ public:
                      sal_uInt16 nWidth, bool bRelWidth, sal_uInt16 nHeight,
                      sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
                      boost::shared_ptr<SvxBoxItem> const& rBoxItem,
-                     bool bHasNumFmt, sal_uInt32 nNumFmt,
+                     bool bHasNumFormat, sal_uInt32 nNumFormat,
                      bool bHasValue, double nValue, bool bNoWrap );
 
     // announce the start/end of a new row
@@ -677,7 +677,7 @@ SwHTMLTableLayoutCnts *HTMLTableCnts::CreateLayoutInfo()
 HTMLTableCell::HTMLTableCell():
     pContents(0),
     pBGBrush(0),
-    nNumFmt(0),
+    nNumFormat(0),
     nRowSpan(1),
     nColSpan(1),
     nWidth( 0 ),
@@ -685,7 +685,7 @@ HTMLTableCell::HTMLTableCell():
     eVertOri( text::VertOrientation::NONE ),
     bProtected(false),
     bRelWidth( false ),
-    bHasNumFmt(false),
+    bHasNumFormat(false),
     bHasValue(false),
     bNoWrap(false),
     mbCovered(false)
@@ -716,9 +716,9 @@ void HTMLTableCell::Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCS
     pBGBrush = pBrush;
     m_pBoxItem = rBoxItem;
 
-    bHasNumFmt = bHasNF;
+    bHasNumFormat = bHasNF;
     bHasValue = bHasV;
-    nNumFmt = nNF;
+    nNumFormat = nNF;
     nValue = nVal;
 
     bNoWrap = bNWrap;
@@ -748,10 +748,10 @@ void HTMLTableCell::SetProtected()
     bProtected = true;
 }
 
-inline bool HTMLTableCell::GetNumFmt( sal_uInt32& rNumFmt ) const
+inline bool HTMLTableCell::GetNumFormat( sal_uInt32& rNumFormat ) const
 {
-    rNumFmt = nNumFmt;
-    return bHasNumFmt;
+    rNumFormat = nNumFormat;
+    return bHasNumFormat;
 }
 
 inline bool HTMLTableCell::GetValue( double& rValue ) const
@@ -873,7 +873,7 @@ HTMLTableColumn::HTMLTableColumn():
     bLeftBorder(false)
 {
     for( sal_uInt16 i=0; i<6; i++ )
-        aFrmFmts[i] = 0;
+        aFrameFormats[i] = 0;
 }
 
 inline void HTMLTableColumn::SetWidth( sal_uInt16 nWdth, bool bRelWdth )
@@ -893,7 +893,7 @@ inline SwHTMLTableLayoutColumn *HTMLTableColumn::CreateLayoutInfo()
     return new SwHTMLTableLayoutColumn( nWidth, bRelWidth, bLeftBorder );
 }
 
-inline sal_uInt16 HTMLTableColumn::GetFrmFmtIdx( bool bBorderLine,
+inline sal_uInt16 HTMLTableColumn::GetFrameFormatIdx( bool bBorderLine,
                                              sal_Int16 eVertOrient )
 {
     OSL_ENSURE( text::VertOrientation::TOP != eVertOrient, "Top ist nicht erlaubt" );
@@ -908,16 +908,16 @@ inline sal_uInt16 HTMLTableColumn::GetFrmFmtIdx( bool bBorderLine,
     return n;
 }
 
-inline void HTMLTableColumn::SetFrmFmt( SwFrmFmt *pFmt, bool bBorderLine,
+inline void HTMLTableColumn::SetFrameFormat( SwFrameFormat *pFormat, bool bBorderLine,
                                         sal_Int16 eVertOrient )
 {
-    aFrmFmts[GetFrmFmtIdx(bBorderLine,eVertOrient)] = pFmt;
+    aFrameFormats[GetFrameFormatIdx(bBorderLine,eVertOrient)] = pFormat;
 }
 
-inline SwFrmFmt *HTMLTableColumn::GetFrmFmt( bool bBorderLine,
+inline SwFrameFormat *HTMLTableColumn::GetFrameFormat( bool bBorderLine,
                                              sal_Int16 eVertOrient ) const
 {
-    return aFrmFmts[GetFrmFmtIdx(bBorderLine,eVertOrient)];
+    return aFrameFormats[GetFrameFormatIdx(bBorderLine,eVertOrient)];
 }
 
 void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
@@ -931,8 +931,8 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     nCurRow = 0; nCurCol = 0;
 
     pBox1 = 0;
-    pBoxFmt = 0; pLineFmt = 0;
-    pLineFrmFmtNoHeight = 0;
+    pBoxFormat = 0; pLineFormat = 0;
+    pLineFrameFormatNoHeight = 0;
     pInhBGBrush = 0;
 
     pPrevStNd = 0;
@@ -1245,8 +1245,8 @@ static bool IsBoxEmpty( const SwTableBox *pBox )
     if( pSttNd &&
         pSttNd->GetIndex() + 2 == pSttNd->EndOfSectionIndex() )
     {
-        const SwCntntNode *pCNd =
-            pSttNd->GetNodes()[pSttNd->GetIndex()+1]->GetCntntNode();
+        const SwContentNode *pCNd =
+            pSttNd->GetNodes()[pSttNd->GetIndex()+1]->GetContentNode();
         if( pCNd && !pCNd->Len() )
             return true;
     }
@@ -1325,21 +1325,21 @@ sal_uInt16 HTMLTable::GetBottomCellSpace( sal_uInt16 nRow, sal_uInt16 nRowSpan,
     return nSpace;
 }
 
-void HTMLTable::FixFrameFmt( SwTableBox *pBox,
+void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                              sal_uInt16 nRow, sal_uInt16 nCol,
                              sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                              bool bFirstPara, bool bLastPara ) const
 {
-    SwFrmFmt *pFrmFmt = 0;      // frame::Frame-Format
+    SwFrameFormat *pFrameFormat = 0;      // frame::Frame-Format
     sal_Int16 eVOri = text::VertOrientation::NONE;
     const SvxBrushItem *pBGBrushItem = 0;   // Hintergrund
     boost::shared_ptr<SvxBoxItem> pBoxItem;
     bool bTopLine = false, bBottomLine = false, bLastBottomLine = false;
     bool bReUsable = false;     // Format nochmals verwendbar?
     sal_uInt16 nEmptyRows = 0;
-    bool bHasNumFmt = false;
+    bool bHasNumFormat = false;
     bool bHasValue = false;
-    sal_uInt32 nNumFmt = 0;
+    sal_uInt32 nNumFormat = 0;
     double nValue = 0.0;
 
     HTMLTableColumn *pColumn = &(*pColumns)[nCol];
@@ -1382,21 +1382,21 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
         }
 
         eVOri = pCell->GetVertOri();
-        bHasNumFmt = pCell->GetNumFmt( nNumFmt );
-        if( bHasNumFmt )
+        bHasNumFormat = pCell->GetNumFormat( nNumFormat );
+        if( bHasNumFormat )
             bHasValue = pCell->GetValue( nValue );
 
         if( nColSpan==1 && !bTopLine && !bLastBottomLine && !nEmptyRows &&
-            !pBGBrushItem && !bHasNumFmt && !pBoxItem)
+            !pBGBrushItem && !bHasNumFormat && !pBoxItem)
         {
-            pFrmFmt = pColumn->GetFrmFmt( bBottomLine, eVOri );
-            bReUsable = !pFrmFmt;
+            pFrameFormat = pColumn->GetFrameFormat( bBottomLine, eVOri );
+            bReUsable = !pFrameFormat;
         }
     }
 
-    if( !pFrmFmt )
+    if( !pFrameFormat )
     {
-        pFrmFmt = pBox->ClaimFrmFmt();
+        pFrameFormat = pBox->ClaimFrameFormat();
 
         // die Breite der Box berechnen
         SwTwips nFrmWidth = (SwTwips)pLayoutInfo->GetColumn(nCol)
@@ -1464,7 +1464,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
 
             if (pBoxItem)
             {
-                pFrmFmt->SetFmtAttr( *pBoxItem );
+                pFrameFormat->SetFormatAttr( *pBoxItem );
             }
             else if (bSet)
             {
@@ -1477,32 +1477,32 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
                 // dann gibt es eine Umrandung, und wir muessen die Distanz
                 // setzen
                 aBoxItem.SetDistance( nBDist ? nBDist : MIN_BORDER_DIST );
-                pFrmFmt->SetFmtAttr( aBoxItem );
+                pFrameFormat->SetFormatAttr( aBoxItem );
             }
             else
-                pFrmFmt->ResetFmtAttr( RES_BOX );
+                pFrameFormat->ResetFormatAttr( RES_BOX );
 
             if( pBGBrushItem )
             {
-                pFrmFmt->SetFmtAttr( *pBGBrushItem );
+                pFrameFormat->SetFormatAttr( *pBGBrushItem );
             }
             else
-                pFrmFmt->ResetFmtAttr( RES_BACKGROUND );
+                pFrameFormat->ResetFormatAttr( RES_BACKGROUND );
 
             // Format nur setzten, wenn es auch einen Value gibt oder die Box leer ist.
-            if( bHasNumFmt && (bHasValue || IsBoxEmpty(pBox)) )
+            if( bHasNumFormat && (bHasValue || IsBoxEmpty(pBox)) )
             {
-                bool bLock = pFrmFmt->GetDoc()->GetNumberFormatter()
-                                     ->IsTextFormat( nNumFmt );
-                SfxItemSet aItemSet( *pFrmFmt->GetAttrSet().GetPool(),
+                bool bLock = pFrameFormat->GetDoc()->GetNumberFormatter()
+                                     ->IsTextFormat( nNumFormat );
+                SfxItemSet aItemSet( *pFrameFormat->GetAttrSet().GetPool(),
                                      RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
                 SvxAdjust eAdjust = SVX_ADJUST_END;
-                SwCntntNode *pCNd = 0;
+                SwContentNode *pCNd = 0;
                 if( !bLock )
                 {
                     const SwStartNode *pSttNd = pBox->GetSttNd();
                     pCNd = pSttNd->GetNodes()[pSttNd->GetIndex()+1]
-                                 ->GetCntntNode();
+                                 ->GetContentNode();
                     const SfxPoolItem *pItem;
                     if( pCNd && pCNd->HasSwAttrSet() &&
                         SfxItemState::SET==pCNd->GetpSwAttrSet()->GetItemState(
@@ -1512,15 +1512,15 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
                             ->GetAdjust();
                     }
                 }
-                aItemSet.Put( SwTblBoxNumFormat(nNumFmt) );
+                aItemSet.Put( SwTableBoxNumFormat(nNumFormat) );
                 if( bHasValue )
-                    aItemSet.Put( SwTblBoxValue(nValue) );
+                    aItemSet.Put( SwTableBoxValue(nValue) );
 
                 if( bLock )
-                    pFrmFmt->LockModify();
-                pFrmFmt->SetFmtAttr( aItemSet );
+                    pFrameFormat->LockModify();
+                pFrameFormat->SetFormatAttr( aItemSet );
                 if( bLock )
-                    pFrmFmt->UnlockModify();
+                    pFrameFormat->UnlockModify();
                 else if( pCNd && SVX_ADJUST_END != eAdjust )
                 {
                     SvxAdjustItem aAdjItem( eAdjust, RES_PARATR_ADJUST );
@@ -1528,41 +1528,41 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
                 }
             }
             else
-                pFrmFmt->ResetFmtAttr( RES_BOXATR_FORMAT );
+                pFrameFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
 
             OSL_ENSURE( eVOri != text::VertOrientation::TOP, "text::VertOrientation::TOP ist nicht erlaubt!" );
             if( text::VertOrientation::NONE != eVOri )
             {
-                pFrmFmt->SetFmtAttr( SwFmtVertOrient( 0, eVOri ) );
+                pFrameFormat->SetFormatAttr( SwFormatVertOrient( 0, eVOri ) );
             }
             else
-                pFrmFmt->ResetFmtAttr( RES_VERT_ORIENT );
+                pFrameFormat->ResetFormatAttr( RES_VERT_ORIENT );
 
             if( bReUsable )
-                pColumn->SetFrmFmt( pFrmFmt, bBottomLine, eVOri );
+                pColumn->SetFrameFormat( pFrameFormat, bBottomLine, eVOri );
         }
         else
         {
-            pFrmFmt->ResetFmtAttr( RES_BOX );
-            pFrmFmt->ResetFmtAttr( RES_BACKGROUND );
-            pFrmFmt->ResetFmtAttr( RES_VERT_ORIENT );
-            pFrmFmt->ResetFmtAttr( RES_BOXATR_FORMAT );
+            pFrameFormat->ResetFormatAttr( RES_BOX );
+            pFrameFormat->ResetFormatAttr( RES_BACKGROUND );
+            pFrameFormat->ResetFormatAttr( RES_VERT_ORIENT );
+            pFrameFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
         }
     }
     else
     {
         OSL_ENSURE( pBox->GetSttNd() ||
-                SfxItemState::SET!=pFrmFmt->GetAttrSet().GetItemState(
+                SfxItemState::SET!=pFrameFormat->GetAttrSet().GetItemState(
                                     RES_VERT_ORIENT, false ),
                 "Box ohne Inhalt hat vertikale Ausrichtung" );
-        pBox->ChgFrmFmt( static_cast<SwTableBoxFmt*>(pFrmFmt) );
+        pBox->ChgFrameFormat( static_cast<SwTableBoxFormat*>(pFrameFormat) );
     }
 
 }
 
-void HTMLTable::FixFillerFrameFmt( SwTableBox *pBox, bool bRight ) const
+void HTMLTable::FixFillerFrameFormat( SwTableBox *pBox, bool bRight ) const
 {
-    SwFrmFmt *pFrmFmt = pBox->ClaimFrmFmt();
+    SwFrameFormat *pFrameFormat = pBox->ClaimFrameFormat();
 
     if( bFillerTopBorder || bFillerBottomBorder ||
         (!bRight && bInhLeftBorder) || (bRight && bInhRightBorder) )
@@ -1577,20 +1577,20 @@ void HTMLTable::FixFillerFrameFmt( SwTableBox *pBox, bool bRight ) const
         if( bRight && bInhRightBorder )
             aBoxItem.SetLine( &aInhRightBorderLine, SvxBoxItemLine::RIGHT );
         aBoxItem.SetDistance( MIN_BORDER_DIST );
-        pFrmFmt->SetFmtAttr( aBoxItem );
+        pFrameFormat->SetFormatAttr( aBoxItem );
     }
     else
     {
-        pFrmFmt->ResetFmtAttr( RES_BOX );
+        pFrameFormat->ResetFormatAttr( RES_BOX );
     }
 
     if( GetInhBGBrush() )
-        pFrmFmt->SetFmtAttr( *GetInhBGBrush() );
+        pFrameFormat->SetFormatAttr( *GetInhBGBrush() );
     else
-        pFrmFmt->ResetFmtAttr( RES_BACKGROUND );
+        pFrameFormat->ResetFormatAttr( RES_BACKGROUND );
 
-    pFrmFmt->ResetFmtAttr( RES_VERT_ORIENT );
-    pFrmFmt->ResetFmtAttr( RES_BOXATR_FORMAT );
+    pFrameFormat->ResetFormatAttr( RES_VERT_ORIENT );
+    pFrameFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
 }
 
 SwTableBox *HTMLTable::NewTableBox( const SwStartNode *pStNd,
@@ -1608,16 +1608,16 @@ SwTableBox *HTMLTable::NewTableBox( const SwStartNode *pStNd,
         pTopTable->pBox1 = 0;
     }
     else
-        pBox = new SwTableBox( pBoxFmt, *pStNd, pUpper );
+        pBox = new SwTableBox( pBoxFormat, *pStNd, pUpper );
 
     return pBox;
 }
 
-static void ResetLineFrmFmtAttrs( SwFrmFmt *pFrmFmt )
+static void ResetLineFrameFormatAttrs( SwFrameFormat *pFrameFormat )
 {
-    pFrmFmt->ResetFmtAttr( RES_FRM_SIZE );
-    pFrmFmt->ResetFmtAttr( RES_BACKGROUND );
-    OSL_ENSURE( SfxItemState::SET!=pFrmFmt->GetAttrSet().GetItemState(
+    pFrameFormat->ResetFormatAttr( RES_FRM_SIZE );
+    pFrameFormat->ResetFormatAttr( RES_BACKGROUND );
+    OSL_ENSURE( SfxItemState::SET!=pFrameFormat->GetAttrSet().GetItemState(
                                 RES_VERT_ORIENT, false ),
             "Zeile hat vertikale Ausrichtung" );
 }
@@ -1631,8 +1631,8 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     if( this==pTopTable && !pUpper && 0==nTopRow )
         pLine = (pSwTable->GetTabLines())[0];
     else
-        pLine = new SwTableLine( pLineFrmFmtNoHeight ? pLineFrmFmtNoHeight
-                                                     : pLineFmt,
+        pLine = new SwTableLine( pLineFrameFormatNoHeight ? pLineFrameFormatNoHeight
+                                                     : pLineFormat,
                                  0, pUpper );
 
     HTMLTableRow *pTopRow = &(*pRows)[nTopRow];
@@ -1657,8 +1657,8 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     }
     if( nTopRow==nBottomRow-1 && (nRowHeight || pBGBrushItem) )
     {
-        SwTableLineFmt *pFrmFmt = static_cast<SwTableLineFmt*>(pLine->ClaimFrmFmt());
-        ResetLineFrmFmtAttrs( pFrmFmt );
+        SwTableLineFormat *pFrameFormat = static_cast<SwTableLineFormat*>(pLine->ClaimFrameFormat());
+        ResetLineFrameFormatAttrs( pFrameFormat );
 
         if( nRowHeight )
         {
@@ -1669,22 +1669,22 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
             nRowHeight += GetTopCellSpace( nTopRow, 1, false ) +
                        GetBottomCellSpace( nTopRow, 1, false );
 
-            pFrmFmt->SetFmtAttr( SwFmtFrmSize( ATT_MIN_SIZE, 0, nRowHeight ) );
+            pFrameFormat->SetFormatAttr( SwFormatFrmSize( ATT_MIN_SIZE, 0, nRowHeight ) );
         }
 
         if( pBGBrushItem )
         {
-            pFrmFmt->SetFmtAttr( *pBGBrushItem );
+            pFrameFormat->SetFormatAttr( *pBGBrushItem );
         }
 
     }
-    else if( !pLineFrmFmtNoHeight )
+    else if( !pLineFrameFormatNoHeight )
     {
         // sonst muessen wir die Hoehe aus dem Attribut entfernen
         // und koennen uns das Format merken
-        pLineFrmFmtNoHeight = static_cast<SwTableLineFmt*>(pLine->ClaimFrmFmt());
+        pLineFrameFormatNoHeight = static_cast<SwTableLineFormat*>(pLine->ClaimFrameFormat());
 
-        ResetLineFrmFmtAttrs( pLineFrmFmtNoHeight );
+        ResetLineFrameFormatAttrs( pLineFrameFormatNoHeight );
     }
 
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -1789,7 +1789,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
             // und die ist eine Tabelle: dann bauen wir eine neue
             // Box und fuegen die Zeilen der Tabelle in die Zeilen
             // der Box ein
-            pBox = new SwTableBox( pBoxFmt, 0, pUpper );
+            pBox = new SwTableBox( pBoxFormat, 0, pUpper );
             sal_uInt16 nAbs, nRel;
             pLayoutInfo->GetAvail( nLeftCol, nColSpan, nAbs, nRel );
             sal_uInt16 nLSpace = pLayoutInfo->GetLeftCellSpace( nLeftCol, nColSpan );
@@ -1802,7 +1802,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
     else
     {
         // mehrere Inhalts Sections: dann brauchen wir eine Box mit Zeilen
-        pBox = new SwTableBox( pBoxFmt, 0, pUpper );
+        pBox = new SwTableBox( pBoxFormat, 0, pUpper );
         SwTableLines& rLines = pBox->GetTabLines();
         bool bFirstPara = true;
 
@@ -1812,21 +1812,21 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
             {
                 // normale Absaetze werden zu einer Box in einer Zeile
                 SwTableLine *pLine =
-                    new SwTableLine( pLineFrmFmtNoHeight ? pLineFrmFmtNoHeight
-                                                         : pLineFmt, 0, pBox );
-                if( !pLineFrmFmtNoHeight )
+                    new SwTableLine( pLineFrameFormatNoHeight ? pLineFrameFormatNoHeight
+                                                         : pLineFormat, 0, pBox );
+                if( !pLineFrameFormatNoHeight )
                 {
                     // Wenn es noch kein Line-Format ohne Hoehe gibt, koennen
                     // wir uns dieses her als soleches merken
-                    pLineFrmFmtNoHeight = static_cast<SwTableLineFmt*>(pLine->ClaimFrmFmt());
+                    pLineFrameFormatNoHeight = static_cast<SwTableLineFormat*>(pLine->ClaimFrameFormat());
 
-                    ResetLineFrmFmtAttrs( pLineFrmFmtNoHeight );
+                    ResetLineFrameFormatAttrs( pLineFrameFormatNoHeight );
                 }
 
                 SwTableBox* pCntBox = NewTableBox( pCnts->GetStartNode(),
                                                    pLine );
                 pCnts->SetTableBox( pCntBox );
-                FixFrameFmt( pCntBox, nTopRow, nLeftCol, nRowSpan, nColSpan,
+                FixFrameFormat( pCntBox, nTopRow, nLeftCol, nRowSpan, nColSpan,
                              bFirstPara, 0==pCnts->Next() );
                 pLine->GetTabBoxes().push_back( pCntBox );
 
@@ -1853,7 +1853,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
         }
     }
 
-    FixFrameFmt( pBox, nTopRow, nLeftCol, nRowSpan, nColSpan );
+    FixFrameFormat( pBox, nTopRow, nLeftCol, nRowSpan, nColSpan );
 
     return pBox;
 }
@@ -2061,7 +2061,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
                             sal_uInt16 nCellWidth, bool bRelWidth, sal_uInt16 nCellHeight,
                             sal_Int16 eVertOrient, SvxBrushItem *pBGBrushItem,
                             boost::shared_ptr<SvxBoxItem> const& rBoxItem,
-                            bool bHasNumFmt, sal_uInt32 nNumFmt,
+                            bool bHasNumFormat, sal_uInt32 nNumFormat,
                             bool bHasValue, double nValue, bool bNoWrap )
 {
     if( !nRowSpan || (sal_uInt32)nCurRow + nRowSpan > USHRT_MAX )
@@ -2140,7 +2140,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
             const bool bCovered = i != nColSpan || j != nRowSpan;
             GetCell( nRowsReq-j, nColsReq-i )
                 ->Set( pCnts, j, i, eVertOrient, pBGBrushItem, rBoxItem,
-                       bHasNumFmt, nNumFmt, bHasValue, nValue, bNoWrap, bCovered );
+                       bHasNumFormat, nNumFormat, bHasValue, nValue, bNoWrap, bCovered );
         }
     }
 
@@ -2499,27 +2499,27 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         }
 
         // das Tabellenform holen und anpassen
-        SwFrmFmt *pFrmFmt = pSwTable->GetFrmFmt();
-        pFrmFmt->SetFmtAttr( SwFmtHoriOrient(0,eHoriOri) );
+        SwFrameFormat *pFrameFormat = pSwTable->GetFrameFormat();
+        pFrameFormat->SetFormatAttr( SwFormatHoriOrient(0,eHoriOri) );
         if( text::HoriOrientation::LEFT_AND_WIDTH==eHoriOri )
         {
             OSL_ENSURE( nLeftMargin || nRightMargin,
                     "Da gibt's wohl noch Reste von relativen Breiten" );
 
             // The right margin will be ignored anyway.
-            SvxLRSpaceItem aLRItem( pSwTable->GetFrmFmt()->GetLRSpace() );
+            SvxLRSpaceItem aLRItem( pSwTable->GetFrameFormat()->GetLRSpace() );
             aLRItem.SetLeft( nLeftMargin );
             aLRItem.SetRight( nRightMargin );
-            pFrmFmt->SetFmtAttr( aLRItem );
+            pFrameFormat->SetFormatAttr( aLRItem );
         }
 
         if( bPrcWidth && text::HoriOrientation::FULL!=eHoriOri )
         {
-            pFrmFmt->LockModify();
-            SwFmtFrmSize aFrmSize( pFrmFmt->GetFrmSize() );
+            pFrameFormat->LockModify();
+            SwFormatFrmSize aFrmSize( pFrameFormat->GetFrmSize() );
             aFrmSize.SetWidthPercent( (sal_uInt8)nWidth );
-            pFrmFmt->SetFmtAttr( aFrmSize );
-            pFrmFmt->UnlockModify();
+            pFrameFormat->SetFormatAttr( aFrmSize );
+            pFrameFormat->UnlockModify();
         }
     }
 
@@ -2531,13 +2531,13 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         pBox1 = (pLine1->GetTabBoxes())[0];
         pLine1->GetTabBoxes().erase(pLine1->GetTabBoxes().begin());
 
-        pLineFmt = static_cast<SwTableLineFmt*>(pLine1->GetFrmFmt());
-        pBoxFmt = static_cast<SwTableBoxFmt*>(pBox1->GetFrmFmt());
+        pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
+        pBoxFormat = static_cast<SwTableBoxFormat*>(pBox1->GetFrameFormat());
     }
     else
     {
-        pLineFmt = pTopTable->pLineFmt;
-        pBoxFmt = pTopTable->pBoxFmt;
+        pLineFormat = pTopTable->pLineFormat;
+        pBoxFormat = pTopTable->pBoxFormat;
     }
 
     // ggf. muessen fuer Tabellen in Tabellen "Filler"-Zellen eingefuegt
@@ -2552,18 +2552,18 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
         // dazu brauchen wir erstmal ein eine neue Table-Line in der Box
         SwTableLine *pLine =
-            new SwTableLine( pLineFrmFmtNoHeight ? pLineFrmFmtNoHeight
-                                                 : pLineFmt, 0, pBox );
+            new SwTableLine( pLineFrameFormatNoHeight ? pLineFrameFormatNoHeight
+                                                 : pLineFormat, 0, pBox );
         rLines.push_back( pLine );
 
         // Sicherstellen, dass wie ein Format ohne Hoehe erwischt haben
-        if( !pLineFrmFmtNoHeight )
+        if( !pLineFrameFormatNoHeight )
         {
             // sonst muessen wir die Hoehe aus dem Attribut entfernen
             // und koennen uns das Format merken
-            pLineFrmFmtNoHeight = static_cast<SwTableLineFmt*>(pLine->ClaimFrmFmt());
+            pLineFrameFormatNoHeight = static_cast<SwTableLineFormat*>(pLine->ClaimFrameFormat());
 
-            ResetLineFrmFmtAttrs( pLineFrmFmtNoHeight );
+            ResetLineFrameFormatAttrs( pLineFrameFormatNoHeight );
         }
 
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -2578,19 +2578,19 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
             pNewBox = NewTableBox( pPrevStNd, pLine );
             rBoxes.push_back( pNewBox );
-            FixFillerFrameFmt( pNewBox, false );
+            FixFillerFrameFormat( pNewBox, false );
             pLayoutInfo->SetLeftFillerBox( pNewBox );
         }
 
         // jetzt die Tabelle bearbeiten
-        pNewBox = new SwTableBox( pBoxFmt, 0, pLine );
+        pNewBox = new SwTableBox( pBoxFormat, 0, pLine );
         rBoxes.push_back( pNewBox );
 
-        SwFrmFmt *pFrmFmt = pNewBox->ClaimFrmFmt();
-        pFrmFmt->ResetFmtAttr( RES_BOX );
-        pFrmFmt->ResetFmtAttr( RES_BACKGROUND );
-        pFrmFmt->ResetFmtAttr( RES_VERT_ORIENT );
-        pFrmFmt->ResetFmtAttr( RES_BOXATR_FORMAT );
+        SwFrameFormat *pFrameFormat = pNewBox->ClaimFrameFormat();
+        pFrameFormat->ResetFormatAttr( RES_BOX );
+        pFrameFormat->ResetFormatAttr( RES_BACKGROUND );
+        pFrameFormat->ResetFormatAttr( RES_VERT_ORIENT );
+        pFrameFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
 
         _MakeTable( pNewBox );
 
@@ -2604,7 +2604,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             pNewBox = NewTableBox( pStNd, pLine );
             rBoxes.push_back( pNewBox );
 
-            FixFillerFrameFmt( pNewBox, true );
+            FixFillerFrameFormat( pNewBox, true );
             pLayoutInfo->SetRightFillerBox( pNewBox );
         }
     }
@@ -2627,18 +2627,18 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             if( nHeight < MINLAY )
                 nHeight = MINLAY;
 
-            (pSwTable->GetTabLines())[0]->ClaimFrmFmt();
-            (pSwTable->GetTabLines())[0]->GetFrmFmt()
-                ->SetFmtAttr( SwFmtFrmSize( ATT_MIN_SIZE, 0, nHeight ) );
+            (pSwTable->GetTabLines())[0]->ClaimFrameFormat();
+            (pSwTable->GetTabLines())[0]->GetFrameFormat()
+                ->SetFormatAttr( SwFormatFrmSize( ATT_MIN_SIZE, 0, nHeight ) );
         }
 
         if( GetBGBrush() )
-            pSwTable->GetFrmFmt()->SetFmtAttr( *GetBGBrush() );
+            pSwTable->GetFrameFormat()->SetFormatAttr( *GetBGBrush() );
 
         const_cast<SwTable *>(pSwTable)->SetRowsToRepeat( static_cast< sal_uInt16 >(nHeadlineRepeat) );
         const_cast<SwTable *>(pSwTable)->GCLines();
 
-        bool bIsInFlyFrame = pContext && pContext->GetFrmFmt();
+        bool bIsInFlyFrame = pContext && pContext->GetFrameFormat();
         if( bIsInFlyFrame && !nWidth )
         {
             SvxAdjust eAdjust = GetTableAdjust(false);
@@ -2653,9 +2653,9 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
                 sal_uInt32 nMin = pLayoutInfo->GetMin();
                 if( nMin > USHRT_MAX )
                     nMin = USHRT_MAX;
-                SwFmtFrmSize aFlyFrmSize( ATT_VAR_SIZE, (SwTwips)nMin, MINLAY );
+                SwFormatFrmSize aFlyFrmSize( ATT_VAR_SIZE, (SwTwips)nMin, MINLAY );
                 aFlyFrmSize.SetWidthPercent( 100 );
-                pContext->GetFrmFmt()->SetFmtAttr( aFlyFrmSize );
+                pContext->GetFrameFormat()->SetFormatAttr( aFlyFrmSize );
                 bIsInFlyFrame = false;
             }
             else
@@ -2664,14 +2664,14 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
                 // duerfen leider nicht in der Breite angepasst werden, denn
                 // sie wuerden nur schrumpfen aber nie wachsen.
                 pLayoutInfo->SetMustNotRecalc( true );
-                if( pContext->GetFrmFmt()->GetAnchor().GetCntntAnchor()
+                if( pContext->GetFrameFormat()->GetAnchor().GetContentAnchor()
                     ->nNode.GetNode().FindTableNode() )
                 {
                     sal_uInt32 nMax = pLayoutInfo->GetMax();
                     if( nMax > USHRT_MAX )
                         nMax = USHRT_MAX;
-                    SwFmtFrmSize aFlyFrmSize( ATT_VAR_SIZE, (SwTwips)nMax, MINLAY );
-                    pContext->GetFrmFmt()->SetFmtAttr( aFlyFrmSize );
+                    SwFormatFrmSize aFlyFrmSize( ATT_VAR_SIZE, (SwTwips)nMax, MINLAY );
+                    pContext->GetFrameFormat()->SetFormatAttr( aFlyFrmSize );
                     bIsInFlyFrame = false;
                 }
                 else
@@ -2787,13 +2787,13 @@ const SwStartNode *SwHTMLParser::InsertTableSection
     OSL_ENSURE( pPrevStNd, "Start-Node ist NULL" );
 
     pCSS1Parser->SetTDTagStyles();
-    SwTxtFmtColl *pColl = pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_TABLE );
+    SwTextFormatColl *pColl = pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_TABLE );
 
     const SwStartNode *pStNd;
     if (pTable->bFirstCell )
     {
         SwNode *const pNd = & pPam->GetPoint()->nNode.GetNode();
-        pNd->GetTxtNode()->ChgFmtColl( pColl );
+        pNd->GetTextNode()->ChgFormatColl( pColl );
         pStNd = pNd->FindTableBoxStartNode();
         pTable->bFirstCell = false;
     }
@@ -2811,7 +2811,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection
     }
 
     //Added defaults to CJK and CTL
-    SwCntntNode *pCNd = pDoc->GetNodes()[pStNd->GetIndex()+1] ->GetCntntNode();
+    SwContentNode *pCNd = pDoc->GetNodes()[pStNd->GetIndex()+1] ->GetContentNode();
     SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
     pCNd->SetAttr( aFontHeight );
     SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
@@ -2834,35 +2834,35 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
         break;
     }
 
-    SwTxtFmtColl *pColl = pCSS1Parser->GetTxtCollFromPool( nPoolId );
+    SwTextFormatColl *pColl = pCSS1Parser->GetTextCollFromPool( nPoolId );
 
     SwNode *const pNd = & pPam->GetPoint()->nNode.GetNode();
     const SwStartNode *pStNd;
     if (pTable->bFirstCell)
     {
-        pNd->GetTxtNode()->ChgFmtColl( pColl );
+        pNd->GetTextNode()->ChgFormatColl( pColl );
         pTable->bFirstCell = false;
         pStNd = pNd->FindTableBoxStartNode();
     }
     else
     {
-        SwTableNode *pTblNd = pNd->FindTableNode();
-        if( pTblNd->GetTable().GetHTMLTableLayout() )
+        SwTableNode *pTableNd = pNd->FindTableNode();
+        if( pTableNd->GetTable().GetHTMLTableLayout() )
         { // if there is already a HTMTableLayout, this table is already finished
           // and we have to look for the right table in the environment
-            SwTableNode *pOutTbl = pTblNd;
+            SwTableNode *pOutTable = pTableNd;
             do {
-                pTblNd = pOutTbl;
-                pOutTbl = pOutTbl->StartOfSectionNode()->FindTableNode();
-            } while( pOutTbl && pTblNd->GetTable().GetHTMLTableLayout() );
+                pTableNd = pOutTable;
+                pOutTable = pOutTable->StartOfSectionNode()->FindTableNode();
+            } while( pOutTable && pTableNd->GetTable().GetHTMLTableLayout() );
         }
-        SwNodeIndex aIdx( *pTblNd->EndOfSectionNode() );
+        SwNodeIndex aIdx( *pTableNd->EndOfSectionNode() );
         pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                   pColl );
 
         pPam->GetPoint()->nNode = pStNd->GetIndex() + 1;
-        SwTxtNode *pTxtNd = pPam->GetPoint()->nNode.GetNode().GetTxtNode();
-        pPam->GetPoint()->nContent.Assign( pTxtNd, 0 );
+        SwTextNode *pTextNd = pPam->GetPoint()->nNode.GetNode().GetTextNode();
+        pPam->GetPoint()->nContent.Assign( pTextNd, 0 );
         pTable->IncBoxCount();
     }
 
@@ -2871,14 +2871,14 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
 
 SwStartNode *SwHTMLParser::InsertTempTableCaptionSection()
 {
-    SwTxtFmtColl *pColl = pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_TEXT );
+    SwTextFormatColl *pColl = pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_TEXT );
     SwNodeIndex& rIdx = pPam->GetPoint()->nNode;
     rIdx = pDoc->GetNodes().GetEndOfExtras();
     SwStartNode *pStNd = pDoc->GetNodes().MakeTextSection( rIdx,
                                           SwNormalStartNode, pColl );
 
     rIdx = pStNd->GetIndex() + 1;
-    pPam->GetPoint()->nContent.Assign( rIdx.GetNode().GetTxtNode(), 0 );
+    pPam->GetPoint()->nContent.Assign( rIdx.GetNode().GetTextNode(), 0 );
 
     return pStNd;
 }
@@ -2890,13 +2890,13 @@ sal_Int32 SwHTMLParser::StripTrailingLF()
     const sal_Int32 nLen = pPam->GetPoint()->nContent.GetIndex();
     if( nLen )
     {
-        SwTxtNode* pTxtNd = pPam->GetPoint()->nNode.GetNode().GetTxtNode();
+        SwTextNode* pTextNd = pPam->GetPoint()->nNode.GetNode().GetTextNode();
         // vorsicht, wenn Kommentare nicht uebrlesen werden!!!
-        if( pTxtNd )
+        if( pTextNd )
         {
             sal_Int32 nPos = nLen;
             sal_Int32 nLFCount = 0;
-            while (nPos && ('\x0a' == pTxtNd->GetTxt()[--nPos]))
+            while (nPos && ('\x0a' == pTextNd->GetText()[--nPos]))
                 nLFCount++;
 
             if( nLFCount )
@@ -2916,8 +2916,8 @@ sal_Int32 SwHTMLParser::StripTrailingLF()
                 }
 
                 nPos = nLen - nLFCount;
-                SwIndex nIdx( pTxtNd, nPos );
-                pTxtNd->EraseText( nIdx, nLFCount );
+                SwIndex nIdx( pTextNd, nPos );
+                pTextNd->EraseText( nIdx, nLFCount );
                 nStripped = nLFCount;
             }
         }
@@ -3073,17 +3073,17 @@ class _CellSaveStruct : public _SectionSaveStruct
 
     double nValue;
 
-    sal_uInt32 nNumFmt;
+    sal_uInt32 nNumFormat;
 
     sal_uInt16 nRowSpan, nColSpan, nWidth, nHeight;
-    sal_Int32 nNoBreakEndCntntPos;     // Zeichen-Index eines </NOBR>
+    sal_Int32 nNoBreakEndContentPos;     // Zeichen-Index eines </NOBR>
 
     SvxAdjust eAdjust;
     sal_Int16 eVertOri;
 
     bool bHead : 1;
     bool bPrcWidth : 1;
-    bool bHasNumFmt : 1;
+    bool bHasNumFormat : 1;
     bool bHasValue : 1;
     bool bBGColor : 1;
     bool bNoWrap : 1;       // NOWRAP-Option
@@ -3118,23 +3118,23 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
     pCurrCnts( 0 ),
     pNoBreakEndParaIdx( 0 ),
     nValue( 0.0 ),
-    nNumFmt( 0 ),
+    nNumFormat( 0 ),
     nRowSpan( 1 ),
     nColSpan( 1 ),
     nWidth( 0 ),
     nHeight( 0 ),
-    nNoBreakEndCntntPos( 0 ),
+    nNoBreakEndContentPos( 0 ),
     eAdjust( pCurTable->GetInheritedAdjust() ),
     eVertOri( pCurTable->GetInheritedVertOri() ),
     bHead( bHd ),
     bPrcWidth( false ),
-    bHasNumFmt( false ),
+    bHasNumFormat( false ),
     bHasValue( false ),
     bBGColor( false ),
     bNoWrap( false ),
     bNoBreak( false )
 {
-    OUString aNumFmt, aValue;
+    OUString aNumFormat, aValue;
 
     if( bReadOpt )
     {
@@ -3159,7 +3159,7 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
                 break;
             case HTML_O_VALIGN:
                 eVertOri = rOption.GetEnum(
-                                        aHTMLTblVAlignTable, eVertOri );
+                                        aHTMLTableVAlignTable, eVertOri );
                 break;
             case HTML_O_WIDTH:
                 nWidth = (sal_uInt16)rOption.GetNumber();   // nur fuer Netscape
@@ -3197,8 +3197,8 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
                 aDir = rOption.GetString();
                 break;
             case HTML_O_SDNUM:
-                aNumFmt = rOption.GetString();
-                bHasNumFmt = true;
+                aNumFormat = rOption.GetString();
+                bHasNumFormat = true;
                 break;
             case HTML_O_SDVAL:
                 bHasValue = true;
@@ -3214,11 +3214,11 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
             rParser.InsertBookmark( aId );
     }
 
-    if( bHasNumFmt )
+    if( bHasNumFormat )
     {
         LanguageType eLang;
         nValue = SfxHTMLParser::GetTableDataOptionsValNum(
-                            nNumFmt, eLang, aValue, aNumFmt,
+                            nNumFormat, eLang, aValue, aNumFormat,
                             *rParser.pDoc->GetNumberFormatter() );
     }
 
@@ -3252,7 +3252,7 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
         {
             SfxPoolItem const* pItem;
             if (SfxItemState::SET == aItemSet.GetItemState(RES_BOX, false, &pItem))
-            {   // fdo#41796: steal box item to set it in FixFrameFmt later!
+            {   // fdo#41796: steal box item to set it in FixFrameFormat later!
                 m_pBoxItem.reset(dynamic_cast<SvxBoxItem *>(pItem->Clone()));
                 aItemSet.ClearItem(RES_BOX);
             }
@@ -3301,12 +3301,12 @@ void _CellSaveStruct::InsertCell( SwHTMLParser& rParser,
 
     if( rParser.nContextStAttrMin == GetContextStAttrMin() )
     {
-        _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&rParser.aAttrTab);
+        _HTMLAttr** pTable = reinterpret_cast<_HTMLAttr**>(&rParser.aAttrTab);
 
         for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
-            nCnt--; ++pTbl )
+            nCnt--; ++pTable )
         {
-            OSL_ENSURE( !*pTbl, "Die Attribut-Tabelle ist nicht leer" );
+            OSL_ENSURE( !*pTable, "Die Attribut-Tabelle ist nicht leer" );
         }
     }
 #endif
@@ -3317,7 +3317,7 @@ void _CellSaveStruct::InsertCell( SwHTMLParser& rParser,
                                  aStyle, aId, aClass );
     pCurTable->InsertCell( pCnts, nRowSpan, nColSpan, nWidth,
                            bPrcWidth, nHeight, eVertOri, pBrushItem, m_pBoxItem,
-                           bHasNumFmt, nNumFmt, bHasValue, nValue,
+                           bHasNumFormat, nNumFormat, bHasValue, nValue,
                            bNoWrap );
     Restore( rParser );
 }
@@ -3340,7 +3340,7 @@ void _CellSaveStruct::EndNoBreak( const SwPosition& rPos )
     {
         delete pNoBreakEndParaIdx;
         pNoBreakEndParaIdx = new SwNodeIndex( rPos.nNode );
-        nNoBreakEndCntntPos = rPos.nContent.GetIndex();
+        nNoBreakEndContentPos = rPos.nContent.GetIndex();
         bNoBreak = false;
     }
 }
@@ -3357,18 +3357,18 @@ void _CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc * /*pDoc*/ )
         else if( pNoBreakEndParaIdx &&
                  pNoBreakEndParaIdx->GetIndex() == rPos.nNode.GetIndex() )
         {
-            if( nNoBreakEndCntntPos == rPos.nContent.GetIndex() )
+            if( nNoBreakEndContentPos == rPos.nContent.GetIndex() )
             {
                 // <NOBR> wurde unmittelbar vor dem Zellen-Ende beendet
                 pCnts->SetNoBreak();
             }
-            else if( nNoBreakEndCntntPos + 1 == rPos.nContent.GetIndex() )
+            else if( nNoBreakEndContentPos + 1 == rPos.nContent.GetIndex() )
             {
-                SwTxtNode const*const pTxtNd(rPos.nNode.GetNode().GetTxtNode());
-                if( pTxtNd )
+                SwTextNode const*const pTextNd(rPos.nNode.GetNode().GetTextNode());
+                if( pTextNd )
                 {
                     sal_Unicode const cLast =
-                            pTxtNd->GetTxt()[nNoBreakEndCntntPos];
+                            pTextNd->GetText()[nNoBreakEndContentPos];
                     if( ' '==cLast || '\x0a'==cLast )
                     {
                         // Zwischem dem </NOBR> und dem Zellen-Ende gibt es nur
@@ -3410,8 +3410,8 @@ HTMLTableCnts *SwHTMLParser::InsertTableContents(
             OSL_ENSURE( !pAttr->GetPrev(), "Attribut hat Previous-Liste" );
             pAttr->nSttPara = rSttPara;
             pAttr->nEndPara = rSttPara;
-            pAttr->nSttCntnt = nSttCnt;
-            pAttr->nEndCntnt = nSttCnt;
+            pAttr->nSttContent = nSttCnt;
+            pAttr->nEndContent = nSttCnt;
 
             pAttr = pAttr->GetNext();
         }
@@ -3502,7 +3502,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                         RES_PARATR_SPLIT, false, &pItem ) )
                 {
                     aItemSet.Put(
-                        SwFmtLayoutSplit( static_cast<const SvxFmtSplitItem *>(pItem)
+                        SwFormatLayoutSplit( static_cast<const SvxFormatSplitItem *>(pItem)
                                                 ->GetValue() ) );
                     aItemSet.ClearItem( RES_PARATR_SPLIT );
                 }
@@ -3521,13 +3521,13 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             bool bParentLFStripped = false;
             if( bTopTable )
             {
-                SvxAdjust eTblAdjust = pTable->GetTableAdjust(false);
+                SvxAdjust eTableAdjust = pTable->GetTableAdjust(false);
 
                 // Wenn die Tabelle links oder rechts ausgerivchtet ist,
                 // oder in einen Rahmen soll, dann kommt sie auch in einen
                 // solchen.
-                bForceFrame = eTblAdjust == SVX_ADJUST_LEFT ||
-                              eTblAdjust == SVX_ADJUST_RIGHT ||
+                bForceFrame = eTableAdjust == SVX_ADJUST_LEFT ||
+                              eTableAdjust == SVX_ADJUST_RIGHT ||
                               pCurTable->HasToFly();
 
                 // Entweder kommt die Tabelle in keinen Rahmen und befindet
@@ -3559,8 +3559,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     if( !pPam->GetPoint()->nContent.GetIndex() )
                     {
                         //Set default to CJK and CTL
-                        pDoc->SetTxtFmtColl( *pPam,
-                            pCSS1Parser->GetTxtCollFromPool(RES_POOLCOLL_STANDARD) );
+                        pDoc->SetTextFormatColl( *pPam,
+                            pCSS1Parser->GetTextCollFromPool(RES_POOLCOLL_STANDARD) );
                         SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
 
                         _HTMLAttr* pTmp =
@@ -3583,7 +3583,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                                         // vom Tabellenende vorher
                                                         // was gesetzt sein kann.
                     }
-                    AppendTxtNode( AM_NOSPACE );
+                    AppendTextNode( AM_NOSPACE );
                     bAppended = true;
                 }
                 else if( !aParaAttrs.empty() )
@@ -3665,7 +3665,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
                                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
                     if( !pCurTable->IsNewDoc() )
-                        Reader::ResetFrmFmtAttrs( aFrmSet );
+                        Reader::ResetFrameFormatAttrs( aFrmSet );
 
                     SwSurround eSurround = SURROUND_NONE;
                     sal_Int16 eHori;
@@ -3688,9 +3688,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     }
                     SetAnchorAndAdjustment( text::VertOrientation::NONE, eHori, aFrmSet,
                                             true );
-                    aFrmSet.Put( SwFmtSurround(eSurround) );
+                    aFrmSet.Put( SwFormatSurround(eSurround) );
 
-                    SwFmtFrmSize aFrmSize( ATT_VAR_SIZE, 20*MM50, MINLAY );
+                    SwFormatFrmSize aFrmSize( ATT_VAR_SIZE, 20*MM50, MINLAY );
                     aFrmSize.SetWidthPercent( 100 );
                     aFrmSet.Put( aFrmSize );
 
@@ -3701,16 +3701,16 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     if( nSpace )
                         aFrmSet.Put( SvxULSpaceItem(nSpace,nSpace, RES_UL_SPACE) );
 
-                    RndStdIds eAnchorId = static_cast<const SwFmtAnchor&>(aFrmSet.
+                    RndStdIds eAnchorId = static_cast<const SwFormatAnchor&>(aFrmSet.
                                                 Get( RES_ANCHOR )).
                                                 GetAnchorId();
-                    SwFrmFmt *pFrmFmt =  pDoc->MakeFlySection(
+                    SwFrameFormat *pFrameFormat =  pDoc->MakeFlySection(
                                 eAnchorId, pPam->GetPoint(), &aFrmSet );
 
-                    pTCntxt->SetFrmFmt( pFrmFmt );
-                    const SwFmtCntnt& rFlyCntnt = pFrmFmt->GetCntnt();
-                    pPam->GetPoint()->nNode = *rFlyCntnt.GetCntntIdx();
-                    SwCntntNode *pCNd =
+                    pTCntxt->SetFrameFormat( pFrameFormat );
+                    const SwFormatContent& rFlyContent = pFrameFormat->GetContent();
+                    pPam->GetPoint()->nNode = *rFlyContent.GetContentIdx();
+                    SwContentNode *pCNd =
                         pDoc->GetNodes().GoNext( &(pPam->GetPoint()->nNode) );
                     pPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
@@ -3736,8 +3736,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 {
                     if( bStyleParsed )
                     {
-                        pCSS1Parser->SetFmtBreak( aItemSet, aPropInfo );
-                        pSwTable->GetFrmFmt()->SetFmtAttr( aItemSet );
+                        pCSS1Parser->SetFormatBreak( aItemSet, aPropInfo );
+                        pSwTable->GetFrameFormat()->SetFormatAttr( aItemSet );
                     }
                     pPam->Move( fnMoveBackward );
                 }
@@ -3745,29 +3745,29 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 SwNode const*const pNd = & pPam->GetPoint()->nNode.GetNode();
                 if( !bAppended && !bForceFrame )
                 {
-                    SwTxtNode *const pOldTxtNd =
-                        pSavePos->nNode.GetNode().GetTxtNode();
-                    OSL_ENSURE( pOldTxtNd, "Wieso stehen wir in keinem Txt-Node?" );
-                    SwFrmFmt *pFrmFmt = pSwTable->GetFrmFmt();
+                    SwTextNode *const pOldTextNd =
+                        pSavePos->nNode.GetNode().GetTextNode();
+                    OSL_ENSURE( pOldTextNd, "Wieso stehen wir in keinem Text-Node?" );
+                    SwFrameFormat *pFrameFormat = pSwTable->GetFrameFormat();
 
                     const SfxPoolItem* pItem2;
-                    if( SfxItemState::SET == pOldTxtNd->GetSwAttrSet()
+                    if( SfxItemState::SET == pOldTextNd->GetSwAttrSet()
                             .GetItemState( RES_PAGEDESC, false, &pItem2 ) &&
-                        static_cast<const SwFmtPageDesc *>(pItem2)->GetPageDesc() )
+                        static_cast<const SwFormatPageDesc *>(pItem2)->GetPageDesc() )
                     {
-                        pFrmFmt->SetFmtAttr( *pItem2 );
-                        pOldTxtNd->ResetAttr( RES_PAGEDESC );
+                        pFrameFormat->SetFormatAttr( *pItem2 );
+                        pOldTextNd->ResetAttr( RES_PAGEDESC );
                     }
-                    if( SfxItemState::SET == pOldTxtNd->GetSwAttrSet()
+                    if( SfxItemState::SET == pOldTextNd->GetSwAttrSet()
                             .GetItemState( RES_BREAK, true, &pItem2 ) )
                     {
-                        switch( static_cast<const SvxFmtBreakItem *>(pItem2)->GetBreak() )
+                        switch( static_cast<const SvxFormatBreakItem *>(pItem2)->GetBreak() )
                         {
                         case SVX_BREAK_PAGE_BEFORE:
                         case SVX_BREAK_PAGE_AFTER:
                         case SVX_BREAK_PAGE_BOTH:
-                            pFrmFmt->SetFmtAttr( *pItem2 );
-                            pOldTxtNd->ResetAttr( RES_BREAK );
+                            pFrameFormat->SetFormatAttr( *pItem2 );
+                            pOldTextNd->ResetAttr( RES_BREAK );
                         default:
                             ;
                         }
@@ -3957,7 +3957,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                         if( pSubTable->GetContext() )
                         {
-                            OSL_ENSURE( !pSubTable->GetContext()->GetFrmFmt(),
+                            OSL_ENSURE( !pSubTable->GetContext()->GetFrameFormat(),
                                     "Tabelle steht im Rahmen" );
 
                             if( pCapStNd && pSubTable->IsTopCaption() )
@@ -4076,7 +4076,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                         ? RES_POOLCOLL_TABLE_HDLN
                                         : RES_POOLCOLL_TABLE ));
         const SwEndNode *pEndNd = pStNd->EndOfSectionNode();
-        SwCntntNode *pCNd = pDoc->GetNodes()[pEndNd->GetIndex()-1] ->GetCntntNode();
+        SwContentNode *pCNd = pDoc->GetNodes()[pEndNd->GetIndex()-1] ->GetContentNode();
         //Added defaults to CJK and CTL
         SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
         pCNd->SetAttr( aFontHeight );
@@ -4198,7 +4198,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
                     break;
                 case HTML_O_VALIGN:
                     eVertOri = rOption.GetEnum(
-                                    aHTMLTblVAlignTable, eVertOri );
+                                    aHTMLTableVAlignTable, eVertOri );
                     break;
                 case HTML_O_BGCOLOR:
                     // Leere BGCOLOR bei <TABLE>, <TR> und <TD>/<TH> wie Netsc.
@@ -4399,7 +4399,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
                     break;
                 case HTML_O_VALIGN:
                     pSaveStruct->eVertOri =
-                        rOption.GetEnum( aHTMLTblVAlignTable,
+                        rOption.GetEnum( aHTMLTableVAlignTable,
                                           pSaveStruct->eVertOri );
                     break;
                 }
@@ -4515,7 +4515,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
     // now we stand (perhaps) in front of <TBODY>,... or </TABLE>
 }
 
-struct _TblColGrpSaveStruct : public SwPendingStackData
+struct _TableColGrpSaveStruct : public SwPendingStackData
 {
     sal_uInt16 nColGrpSpan;
     sal_uInt16 nColGrpWidth;
@@ -4523,18 +4523,18 @@ struct _TblColGrpSaveStruct : public SwPendingStackData
     SvxAdjust eColGrpAdjust;
     sal_Int16 eColGrpVertOri;
 
-    inline _TblColGrpSaveStruct();
+    inline _TableColGrpSaveStruct();
 
     inline void CloseColGroup( HTMLTable *pTable );
 };
 
-inline _TblColGrpSaveStruct::_TblColGrpSaveStruct() :
+inline _TableColGrpSaveStruct::_TableColGrpSaveStruct() :
     nColGrpSpan( 1 ), nColGrpWidth( 0 ),
     bRelColGrpWidth( false ), eColGrpAdjust( SVX_ADJUST_END ),
     eColGrpVertOri( text::VertOrientation::TOP )
 {}
 
-inline void _TblColGrpSaveStruct::CloseColGroup( HTMLTable *pTable )
+inline void _TableColGrpSaveStruct::CloseColGroup( HTMLTable *pTable )
 {
     pTable->CloseColGroup( nColGrpSpan, nColGrpWidth,
                             bRelColGrpWidth, eColGrpAdjust, eColGrpVertOri );
@@ -4550,11 +4550,11 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
 
     int nToken = 0;
     bool bPending = false;
-    _TblColGrpSaveStruct* pSaveStruct;
+    _TableColGrpSaveStruct* pSaveStruct;
 
     if( pPendStack )
     {
-        pSaveStruct = static_cast<_TblColGrpSaveStruct*>(pPendStack->pData);
+        pSaveStruct = static_cast<_TableColGrpSaveStruct*>(pPendStack->pData);
 
         SwPendingStack* pTmp = pPendStack->pNext;
         delete pPendStack;
@@ -4567,7 +4567,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
     else
     {
 
-        pSaveStruct = new _TblColGrpSaveStruct;
+        pSaveStruct = new _TableColGrpSaveStruct;
         if( bReadOptions )
         {
             const HTMLOptions& rColGrpOptions = GetOptions();
@@ -4594,7 +4594,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                     break;
                 case HTML_O_VALIGN:
                     pSaveStruct->eColGrpVertOri =
-                        rOption.GetEnum( aHTMLTblVAlignTable,
+                        rOption.GetEnum( aHTMLTableVAlignTable,
                                                 pSaveStruct->eColGrpVertOri );
                     break;
                 }
@@ -4678,7 +4678,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                         break;
                     case HTML_O_VALIGN:
                         eColVertOri =
-                            rOption.GetEnum( aHTMLTblVAlignTable,
+                            rOption.GetEnum( aHTMLTableVAlignTable,
                                                         eColVertOri );
                         break;
                     }
@@ -4932,7 +4932,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         // Deshalb muss sich am Ende der Section immer ein leerer
         // Absatz befinden.
         if( pPam->GetPoint()->nContent.GetIndex() || bLFStripped )
-            AppendTxtNode( AM_NOSPACE );
+            AppendTextNode( AM_NOSPACE );
     }
     else
     {
@@ -4958,16 +4958,16 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     delete pSaveStruct;
 }
 
-class _TblSaveStruct : public SwPendingStackData
+class _TableSaveStruct : public SwPendingStackData
 {
 public:
     HTMLTable *m_pCurrentTable;
 
-    _TblSaveStruct( HTMLTable *pCurTbl ) :
-        m_pCurrentTable( pCurTbl )
+    _TableSaveStruct( HTMLTable *pCurTable ) :
+        m_pCurrentTable( pCurTable )
     {}
 
-    virtual ~_TblSaveStruct();
+    virtual ~_TableSaveStruct();
 
     // Aufbau der Tabelle anstossen und die Tabelle ggf. in einen
     // Rahmen packen. Wenn true zurueckgegeben wird muss noch ein
@@ -4975,37 +4975,37 @@ public:
     void MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc );
 };
 
-_TblSaveStruct::~_TblSaveStruct()
+_TableSaveStruct::~_TableSaveStruct()
 {}
 
-void _TblSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc )
+void _TableSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc )
 {
     m_pCurrentTable->MakeTable(0, nWidth);
 
     _HTMLTableContext *pTCntxt = m_pCurrentTable->GetContext();
     OSL_ENSURE( pTCntxt, "Wo ist der Tabellen-Kontext" );
 
-    SwTableNode *pTblNd = pTCntxt->GetTableNode();
-    OSL_ENSURE( pTblNd, "Wo ist der Tabellen-Node" );
+    SwTableNode *pTableNd = pTCntxt->GetTableNode();
+    OSL_ENSURE( pTableNd, "Wo ist der Tabellen-Node" );
 
-    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && pTblNd )
+    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && pTableNd )
     {
         // Existiert schon ein Layout, dann muss an dieser Tabelle die
         // BoxFrames neu erzeugt werden.
 
-        if( pTCntxt->GetFrmFmt() )
+        if( pTCntxt->GetFrameFormat() )
         {
-            pTCntxt->GetFrmFmt()->DelFrms();
-            pTblNd->DelFrms();
-            pTCntxt->GetFrmFmt()->MakeFrms();
+            pTCntxt->GetFrameFormat()->DelFrms();
+            pTableNd->DelFrms();
+            pTCntxt->GetFrameFormat()->MakeFrms();
         }
         else
         {
-            pTblNd->DelFrms();
-            SwNodeIndex aIdx( *pTblNd->EndOfSectionNode(), 1 );
+            pTableNd->DelFrms();
+            SwNodeIndex aIdx( *pTableNd->EndOfSectionNode(), 1 );
             OSL_ENSURE( aIdx.GetIndex() <= pTCntxt->GetPos()->nNode.GetIndex(),
                     "unerwarteter Node fuer das Tabellen-Layout" );
-            pTblNd->MakeFrms( &aIdx );
+            pTableNd->MakeFrms( &aIdx );
         }
     }
 
@@ -5068,7 +5068,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             }
             break;
         case HTML_O_VALIGN:
-            eVertOri = rOption.GetEnum( aHTMLTblVAlignTable, eVertOri );
+            eVertOri = rOption.GetEnum( aHTMLTableVAlignTable, eVertOri );
             break;
         case HTML_O_BORDER:
             // BORDER und BORDER=BORDER wie BORDER=1 behandeln
@@ -5157,11 +5157,11 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
 
     int nToken = 0;
     bool bPending = false;
-    _TblSaveStruct* pSaveStruct;
+    _TableSaveStruct* pSaveStruct;
 
     if( pPendStack )
     {
-        pSaveStruct = static_cast<_TblSaveStruct*>(pPendStack->pData);
+        pSaveStruct = static_cast<_TableSaveStruct*>(pPendStack->pData);
 
         SwPendingStack* pTmp = pPendStack->pNext;
         delete pPendStack;
@@ -5174,23 +5174,23 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
     else
     {
         pTable = 0;
-        HTMLTableOptions *pTblOptions =
+        HTMLTableOptions *pTableOptions =
             new HTMLTableOptions( GetOptions(), eParentAdjust );
 
-        if( !pTblOptions->aId.isEmpty() )
-            InsertBookmark( pTblOptions->aId );
+        if( !pTableOptions->aId.isEmpty() )
+            InsertBookmark( pTableOptions->aId );
 
         HTMLTable *pCurTable = new HTMLTable( this, pTable,
                                               bIsParentHead,
                                               bHasParentSection,
                                               bHasToFly,
-                                              pTblOptions );
+                                              pTableOptions );
         if( !pTable )
             pTable = pCurTable;
 
-        pSaveStruct = new _TblSaveStruct( pCurTable );
+        pSaveStruct = new _TableSaveStruct( pCurTable );
 
-        delete pTblOptions;
+        delete pTableOptions;
 
         // ist beim ersten GetNextToken schon pending, muss bei
         // wiederaufsetzen auf jedenfall neu gelesen werden!
@@ -5334,17 +5334,17 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                                     *pCapStNd->EndOfSectionNode(), -1 );
 
                     bool bTop = pTable->IsTopCaption();
-                    SwStartNode *pTblStNd = pTCntxt->GetTableNode();
+                    SwStartNode *pTableStNd = pTCntxt->GetTableNode();
 
-                    OSL_ENSURE( pTblStNd, "Wo ist der Tabellen-Node" );
-                    OSL_ENSURE( pTblStNd==pPam->GetNode().FindTableNode(),
+                    OSL_ENSURE( pTableStNd, "Wo ist der Tabellen-Node" );
+                    OSL_ENSURE( pTableStNd==pPam->GetNode().FindTableNode(),
                             "Stehen wir in der falschen Tabelle?" );
 
                     SwNode* pNd;
                     if( bTop )
-                        pNd = pTblStNd;
+                        pNd = pTableStNd;
                     else
-                        pNd = pTblStNd->EndOfSectionNode();
+                        pNd = pTableStNd->EndOfSectionNode();
                     SwNodeIndex aDstIdx( *pNd, bTop ? 0 : 1 );
 
                     pDoc->getIDocumentContentOperations().MoveNodeRange( aSrcRg, aDstIdx,
@@ -5357,7 +5357,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                     // Tabellen-Node zeigen noch verschoben werden.
                     if( bTop )
                     {
-                        MovePageDescAttrs( pTblStNd, aSrcRg.aStart.GetIndex(),
+                        MovePageDescAttrs( pTableStNd, aSrcRg.aStart.GetIndex(),
                                            false );
                     }
                 }
@@ -5382,14 +5382,14 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         {
             // oberen Absatz-Abstand einstellen
             bUpperSpace = true;
-            SetTxtCollAttrs();
+            SetTextCollAttrs();
 
             nParaCnt = nParaCnt - std::min(nParaCnt,
                 pTCntxt->GetTableNode()->GetTable().GetTabSortBoxes().size());
 
             // ggfs. eine Tabelle anspringen
             if( JUMPTO_TABLE == eJumpTo && pTable->GetSwTable() &&
-                pTable->GetSwTable()->GetFrmFmt()->GetName() == sJmpMark )
+                pTable->GetSwTable()->GetFrameFormat()->GetName() == sJmpMark )
             {
                 bChkJumpMark = true;
                 eJumpTo = JUMPTO_NONE;
@@ -5427,10 +5427,10 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         pTable = 0;
     }
 
-    HTMLTable* pRetTbl = pSaveStruct->m_pCurrentTable;
+    HTMLTable* pRetTable = pSaveStruct->m_pCurrentTable;
     delete pSaveStruct;
 
-    return pRetTbl;
+    return pRetTable;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -147,7 +147,7 @@ void SwModelessRedlineAcceptDlg::dispose()
 }
 
 SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder,
-                                       vcl::Window *pContentArea, bool bAutoFmt) :
+                                       vcl::Window *pContentArea, bool bAutoFormat) :
     pParentDlg      (pParent),
     aTabPagesCTRL   (VclPtr<SvxAcceptChgCtr>::Create(pContentArea, pBuilder)),
     aPopup          (SW_RES(MN_REDLINE_POPUP)),
@@ -155,11 +155,11 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     sDeleted        (SW_RES(STR_REDLINE_DELETED)),
     sFormated       (SW_RES(STR_REDLINE_FORMATED)),
     sTableChgd      (SW_RES(STR_REDLINE_TABLECHG)),
-    sFmtCollSet     (SW_RES(STR_REDLINE_FMTCOLLSET)),
+    sFormatCollSet     (SW_RES(STR_REDLINE_FMTCOLLSET)),
     sAutoFormat     (SW_RES(STR_REDLINE_AUTOFMT)),
     bOnlyFormatedRedlines( false ),
     bHasReadonlySel ( false ),
-    bRedlnAutoFmt   (bAutoFmt),
+    bRedlnAutoFormat   (bAutoFormat),
     bInhibitActivate( false )
 {
     aTabPagesCTRL->SetHelpId(HID_REDLINE_CTRL);
@@ -187,9 +187,9 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     pActLB->InsertEntry(sFormated);
     pActLB->InsertEntry(sTableChgd);
 
-    if (HasRedlineAutoFmt())
+    if (HasRedlineAutoFormat())
     {
-        pActLB->InsertEntry(sFmtCollSet);
+        pActLB->InsertEntry(sFormatCollSet);
         pActLB->InsertEntry(sAutoFormat);
         pTPView->ShowUndo(true);
         pTPView->DisableUndo();     // no UNDO events yet
@@ -342,7 +342,7 @@ Image SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt1
     const static Image aDeleted(SW_RES(IMG_REDLINE_DELETED));
     const static Image aFormated(SW_RES(IMG_REDLINE_FORMATED));
     const static Image aTableChgd(SW_RES(IMG_REDLINE_TABLECHG));
-    const static Image aFmtCollSet(SW_RES(IMG_REDLINE_FMTCOLLSET));
+    const static Image aFormatCollSet(SW_RES(IMG_REDLINE_FMTCOLLSET));
     const static Image aAutoFormat(SW_RES(IMG_REDLINE_AUTOFMT));
 
     switch (rRedln.GetType(nStack))
@@ -352,7 +352,7 @@ Image SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt1
         case nsRedlineType_t::REDLINE_FORMAT:  return aFormated;
         case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: return aFormated;
         case nsRedlineType_t::REDLINE_TABLE:   return aTableChgd;
-        case nsRedlineType_t::REDLINE_FMTCOLL: return aFmtCollSet;
+        case nsRedlineType_t::REDLINE_FMTCOLL: return aFormatCollSet;
     }
 
     return Image();
@@ -367,7 +367,7 @@ OUString SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uIn
         case nsRedlineType_t::REDLINE_FORMAT:   return sFormated;
         case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:   return sFormated;
         case nsRedlineType_t::REDLINE_TABLE:    return sTableChgd;
-        case nsRedlineType_t::REDLINE_FMTCOLL:  return sFmtCollSet;
+        case nsRedlineType_t::REDLINE_FMTCOLL:  return sFormatCollSet;
         default:;//prevent warning
     }
 
@@ -489,7 +489,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
     pTable->SetUpdateMode(false);
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
-    sal_uInt16 nAutoFmt = HasRedlineAutoFmt() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
+    sal_uInt16 nAutoFormat = HasRedlineAutoFormat() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
     SwRedlineDataParent *pParent = &aRedlineParents[nStart];
     const SwRangeRedline& rRedln = pSh->GetRedline(nStart);
 
@@ -517,7 +517,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
         pParent->pNext = 0;
 
         // insert new children
-        InsertChildren(pParent, rRedln, nAutoFmt);
+        InsertChildren(pParent, rRedln, nAutoFormat);
 
         pTable->SetUpdateMode(true);
         return nStart;
@@ -557,17 +557,17 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
     return USHRT_MAX;
 }
 
-void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFmt)
+void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFormat)
 {
     OUString sChild;
     SwRedlineDataChild *pLastRedlineChild = 0;
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
-    bool bAutoFmt = (rRedln.GetRealType() & nAutoFmt) != 0;
+    bool bAutoFormat = (rRedln.GetRealType() & nAutoFormat) != 0;
 
     OUString sAction = GetActionText(rRedln);
     bool bValidParent = sFilterAction.isEmpty() || sFilterAction == sAction;
     bValidParent = bValidParent && pTable->IsValidEntry(rRedln.GetAuthorString(), rRedln.GetTimeStamp(), rRedln.GetComment());
-    if (nAutoFmt)
+    if (nAutoFormat)
     {
 
         if (pParent->pData->GetSeqNo())
@@ -586,7 +586,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
                 return;
             }
         }
-        bValidParent = bValidParent && bAutoFmt;
+        bValidParent = bValidParent && bAutoFormat;
     }
     bool bValidTree = bValidParent;
 
@@ -606,8 +606,8 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
         sAction = GetActionText(rRedln, nStack);
         bool bValidChild = sFilterAction.isEmpty() || sFilterAction == sAction;
         bValidChild = bValidChild && pTable->IsValidEntry(rRedln.GetAuthorString(nStack), rRedln.GetTimeStamp(nStack), rRedln.GetComment());
-        if (nAutoFmt)
-            bValidChild = bValidChild && bAutoFmt;
+        if (nAutoFormat)
+            bValidChild = bValidChild && bAutoFormat;
         bValidTree |= bValidChild;
 
         if (bValidChild)
@@ -637,7 +637,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
     {
         pTable->RemoveEntry(pParent->pTLBParent);
         pParent->pTLBParent = 0;
-        if (nAutoFmt)
+        if (nAutoFormat)
             aUsedSeqNo.erase(pParent);
     }
 }
@@ -720,7 +720,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 {
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
-    sal_uInt16 nAutoFmt = HasRedlineAutoFmt() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
+    sal_uInt16 nAutoFormat = HasRedlineAutoFormat() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
 
     OUString sParent;
     sal_uInt16 nCount = pSh->GetRedlineCount();
@@ -773,7 +773,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
         pRedlineParent->pTLBParent = pParent;
 
-        InsertChildren(pRedlineParent, rRedln, nAutoFmt);
+        InsertChildren(pRedlineParent, rRedln, nAutoFormat);
     }
 }
 

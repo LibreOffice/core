@@ -21,7 +21,7 @@
 #include <pamtyp.hxx>
 #include <boost/scoped_ptr.hpp>
 
-bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
+bool SwPaM::Find( const SwFormat& rFormat, SwMoveFn fnMove,
                   const SwPaM *pRegion, bool bInReadOnly  )
 {
     bool bFound = false;
@@ -30,24 +30,24 @@ bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
 
     // if at beginning/end then move it out of the node
     if( bSrchForward
-        ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetCntntNode()->Len()
+        ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetContentNode()->Len()
         : !pPam->GetPoint()->nContent.GetIndex() )
     {
         if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, false ))
         {
             return false;
         }
-        SwCntntNode *pNd = pPam->GetPoint()->nNode.GetNode().GetCntntNode();
+        SwContentNode *pNd = pPam->GetPoint()->nNode.GetNode().GetContentNode();
         pPam->GetPoint()->nContent.Assign( pNd, bSrchForward ? 0 : pNd->Len() );
     }
 
     bool bFirst = true;
-    SwCntntNode* pNode;
+    SwContentNode* pNode;
     while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly )))
     {
-        if ( pNode->GetFmtColl() == &rFmt )
+        if ( pNode->GetFormatColl() == &rFormat )
         {
-            // if a FormatCollection is found then it is definitely a SwCntntNode
+            // if a FormatCollection is found then it is definitely a SwContentNode
 
             // FORWARD:  SPoint at the end, GetMark at the beginning of the node
             // BACKWARD: SPoint at the beginning, GetMark at the end of the node

@@ -35,7 +35,7 @@
 #include <globals.hrc>
 #include "swabstdlg.hxx"
 
-SFX_IMPL_CHILDWINDOW_WITHID(SwFldDlgWrapper, FN_INSERT_FIELD)
+SFX_IMPL_CHILDWINDOW_WITHID(SwFieldDlgWrapper, FN_INSERT_FIELD)
 
 SwChildWinWrapper::SwChildWinWrapper(vcl::Window *pParentWindow, sal_uInt16 nId) :
         SfxChildWindow(pParentWindow, nId),
@@ -67,21 +67,21 @@ bool SwChildWinWrapper::ReInitDlg(SwDocShell *)
     return bRet;
 }
 
-SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
+SfxChildWinInfo SwFieldDlgWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
     aInfo.aPos = GetWindow()->OutputToAbsoluteScreenPixel(aInfo.aPos);
     return aInfo;
 }
 
-SwFldDlgWrapper::SwFldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
+SwFieldDlgWrapper::SwFieldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo*  )
     : SwChildWinWrapper( _pParent, nId )
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     assert(pFact && "SwAbstractDialogFactory fail!");
-    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent);
+    AbstractSwFieldDlg* pDlg = pFact->CreateSwFieldDlg(pB, this, _pParent);
     assert(pDlg && "Dialog creation failed!");
     pDlgInterface = pDlg;
     pWindow = pDlg->GetWindow();
@@ -90,7 +90,7 @@ SwFldDlgWrapper::SwFldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
 }
 
 // newly initialise dialog after Doc switch
-bool SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
+bool SwFieldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
     bool bRet;
 
@@ -102,14 +102,14 @@ bool SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
     return bRet;
 }
 
-void SwFldDlgWrapper::ShowReferencePage()
+void SwFieldDlgWrapper::ShowReferencePage()
 {
     pDlgInterface->ShowReferencePage();
 }
 
-SFX_IMPL_CHILDWINDOW(SwFldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
+SFX_IMPL_CHILDWINDOW(SwFieldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
 
-SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
+SfxChildWinInfo SwFieldDataOnlyDlgWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
 // prevent instatiation of dialog other than by calling
@@ -118,7 +118,7 @@ SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
     return aInfo;
 }
 
-SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
+SwFieldDataOnlyDlgWrapper::SwFieldDataOnlyDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo* pInfo )
     : SwChildWinWrapper( _pParent, nId )
@@ -126,7 +126,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( vcl::Window* _pParent, sal_uIn
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent);
+    AbstractSwFieldDlg* pDlg = pFact->CreateSwFieldDlg(pB, this, _pParent);
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlgInterface = pDlg;
 
@@ -138,7 +138,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( vcl::Window* _pParent, sal_uIn
 }
 
 // re-init after doc activation
-bool SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
+bool SwFieldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
     bool bRet;
     if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)))  // update immediately, Doc switch

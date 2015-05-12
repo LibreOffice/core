@@ -36,7 +36,7 @@ public:
     virtual void EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner ) SAL_OVERRIDE;
 
     /// Called in order to output section breaks.
-    virtual void SectionBreaks(const SwTxtNode& /*rNode*/) SAL_OVERRIDE {}
+    virtual void SectionBreaks(const SwTextNode& /*rNode*/) SAL_OVERRIDE {}
 
     /// Called before we start outputting the attributes.
     virtual void StartParagraphProperties() SAL_OVERRIDE {}
@@ -71,7 +71,7 @@ public:
     virtual void RawText( const OUString& rText, bool bForceUnicode, rtl_TextEncoding eCharSet ) SAL_OVERRIDE;
 
     /// Output ruby start.
-    virtual void StartRuby( const SwTxtNode& rNode, sal_Int32 nPos, const SwFmtRuby& rRuby ) SAL_OVERRIDE;
+    virtual void StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby ) SAL_OVERRIDE;
 
     /// Output ruby end.
     virtual void EndRuby() SAL_OVERRIDE;
@@ -82,12 +82,12 @@ public:
     /// Output URL end.
     virtual bool EndURL(bool) SAL_OVERRIDE;
 
-    virtual void FieldVanish( const OUString& rTxt, ww::eField eType ) SAL_OVERRIDE;
+    virtual void FieldVanish( const OUString& rText, ww::eField eType ) SAL_OVERRIDE;
 
     /// Output redlining.
     virtual void Redline( const SwRedlineData* pRedline ) SAL_OVERRIDE;
 
-    virtual void FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rSwFmtDrop, sal_uInt16 nStyle, ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner ) SAL_OVERRIDE;
+    virtual void FormatDrop( const SwTextNode& rNode, const SwFormatDrop &rSwFormatDrop, sal_uInt16 nStyle, ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner ) SAL_OVERRIDE;
 
     /// Output FKP (Formatted disK Page) - necessary for binary formats only.
     /// FIXME having it in AttributeOutputBase is probably a hack, it
@@ -138,7 +138,7 @@ public:
     virtual void EndStyleProperties( bool bParProp ) SAL_OVERRIDE;
 
     /// Numbering rule and Id.
-    virtual void OutlineNumbering( sal_uInt8 nLvl, const SwNumFmt &rNFmt, const SwFmt &rFmt ) SAL_OVERRIDE;
+    virtual void OutlineNumbering( sal_uInt8 nLvl, const SwNumFormat &rNFormat, const SwFormat &rFormat ) SAL_OVERRIDE;
 
     /// Page break
     /// As a paragraph property - the paragraph should be on the next page.
@@ -166,7 +166,7 @@ public:
     virtual void SectionTitlePage() SAL_OVERRIDE;
 
     /// Description of the page borders.
-    virtual void SectionPageBorders( const SwFrmFmt* pFmt, const SwFrmFmt* pFirstPageFmt ) SAL_OVERRIDE;
+    virtual void SectionPageBorders( const SwFrameFormat* pFormat, const SwFrameFormat* pFirstPageFormat ) SAL_OVERRIDE;
 
     /// Columns populated from right/numbers on the right side?
     virtual void SectionBiDi( bool bBiDi ) SAL_OVERRIDE;
@@ -201,7 +201,7 @@ public:
 
 protected:
     /// Output frames - the implementation.
-    void OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point& rNdTopLeft ) SAL_OVERRIDE;
+    void OutputFlyFrame_Impl( const sw::Frame& rFormat, const Point& rNdTopLeft ) SAL_OVERRIDE;
 
     /// Sfx item Sfx item RES_CHRATR_CASEMAP
     virtual void CharCaseMap( const SvxCaseMapItem& ) SAL_OVERRIDE;
@@ -312,13 +312,13 @@ protected:
     virtual void CharHighlight( const SvxBrushItem& ) SAL_OVERRIDE;
 
     /// Sfx item RES_TXTATR_INETFMT
-    virtual void TextINetFormat( const SwFmtINetFmt& ) SAL_OVERRIDE;
+    virtual void TextINetFormat( const SwFormatINetFormat& ) SAL_OVERRIDE;
 
     /// Sfx item RES_TXTATR_CHARFMT
-    virtual void TextCharFormat( const SwFmtCharFmt& ) SAL_OVERRIDE;
+    virtual void TextCharFormat( const SwFormatCharFormat& ) SAL_OVERRIDE;
 
     /// Sfx item RES_TXTATR_FTN
-    virtual void TextFootnote_Impl( const SwFmtFtn& ) SAL_OVERRIDE;
+    virtual void TextFootnote_Impl( const SwFormatFootnote& ) SAL_OVERRIDE;
 
     /// Sfx item RES_PARATR_LINESPACING
     virtual void ParaLineSpacing_Impl( short nSpace, short nMulti ) SAL_OVERRIDE;
@@ -327,7 +327,7 @@ protected:
     virtual void ParaAdjust( const SvxAdjustItem& rHt ) SAL_OVERRIDE;
 
     /// Sfx item RES_PARATR_SPLIT
-    virtual void ParaSplit( const SvxFmtSplitItem& ) SAL_OVERRIDE;
+    virtual void ParaSplit( const SvxFormatSplitItem& ) SAL_OVERRIDE;
 
     /// Sfx item RES_PARATR_WIDOWS
     virtual void ParaWidows( const SvxWidowsItem& rHt ) SAL_OVERRIDE;
@@ -339,7 +339,7 @@ protected:
     virtual void ParaHyphenZone( const SvxHyphenZoneItem& ) SAL_OVERRIDE;
 
     /// Sfx item RES_PARATR_NUMRULE
-    virtual void ParaNumRule_Impl( const SwTxtNode *pTxtNd, sal_Int32 nLvl, sal_Int32 nNumId ) SAL_OVERRIDE;
+    virtual void ParaNumRule_Impl( const SwTextNode *pTextNd, sal_Int32 nLvl, sal_Int32 nNumId ) SAL_OVERRIDE;
 
     /// Sfx item RES_PARATR_SCRIPTSPACE
     virtual void ParaScriptSpace( const SfxBoolItem& ) SAL_OVERRIDE;
@@ -357,7 +357,7 @@ protected:
     virtual void ParaSnapToGrid( const SvxParaGridItem& ) SAL_OVERRIDE;
 
     /// Sfx item RES_FRM_SIZE
-    virtual void FormatFrameSize( const SwFmtFrmSize& ) SAL_OVERRIDE;
+    virtual void FormatFrameSize( const SwFormatFrmSize& ) SAL_OVERRIDE;
 
     /// Sfx item RES_PAPER_BIN
     virtual void FormatPaperBin( const SvxPaperBinItem& ) SAL_OVERRIDE;
@@ -369,16 +369,16 @@ protected:
     virtual void FormatULSpace( const SvxULSpaceItem& rHt ) SAL_OVERRIDE;
 
     /// Sfx item RES_SURROUND
-    virtual void FormatSurround( const SwFmtSurround& ) SAL_OVERRIDE;
+    virtual void FormatSurround( const SwFormatSurround& ) SAL_OVERRIDE;
 
     /// Sfx item RES_VERT_ORIENT
-    virtual void FormatVertOrientation( const SwFmtVertOrient& ) SAL_OVERRIDE;
+    virtual void FormatVertOrientation( const SwFormatVertOrient& ) SAL_OVERRIDE;
 
     /// Sfx item RES_HORI_ORIENT
-    virtual void FormatHorizOrientation( const SwFmtHoriOrient& ) SAL_OVERRIDE;
+    virtual void FormatHorizOrientation( const SwFormatHoriOrient& ) SAL_OVERRIDE;
 
     /// Sfx item RES_ANCHOR
-    virtual void FormatAnchor( const SwFmtAnchor& ) SAL_OVERRIDE;
+    virtual void FormatAnchor( const SwFormatAnchor& ) SAL_OVERRIDE;
 
     /// Sfx item RES_BACKGROUND
     virtual void FormatBackground( const SvxBrushItem& ) SAL_OVERRIDE;
@@ -393,16 +393,16 @@ protected:
     virtual void FormatBox( const SvxBoxItem& ) SAL_OVERRIDE;
 
     /// Sfx item RES_COL
-    virtual void FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol & rCol, bool bEven, SwTwips nPageSize ) SAL_OVERRIDE;
+    virtual void FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCol & rCol, bool bEven, SwTwips nPageSize ) SAL_OVERRIDE;
 
     /// Sfx item RES_KEEP
-    virtual void FormatKeep( const SvxFmtKeepItem& ) SAL_OVERRIDE;
+    virtual void FormatKeep( const SvxFormatKeepItem& ) SAL_OVERRIDE;
 
     /// Sfx item RES_TEXTGRID
     virtual void FormatTextGrid( const SwTextGridItem& ) SAL_OVERRIDE;
 
     /// Sfx item RES_LINENUMBER
-    virtual void FormatLineNumbering( const SwFmtLineNumber& ) SAL_OVERRIDE;
+    virtual void FormatLineNumbering( const SwFormatLineNumber& ) SAL_OVERRIDE;
 
     /// Sfx item RES_FRAMEDIR
     virtual void FormatFrameDirection( const SvxFrameDirectionItem& ) SAL_OVERRIDE;
@@ -417,14 +417,14 @@ protected:
     virtual void ParaOutlineLevel( const SfxUInt16Item& ) SAL_OVERRIDE;
 
     /// Write the expanded field
-    virtual void WriteExpand( const SwField* pFld ) SAL_OVERRIDE;
+    virtual void WriteExpand( const SwField* pField ) SAL_OVERRIDE;
 
-    virtual void RefField ( const SwField& rFld, const OUString& rRef ) SAL_OVERRIDE;
-    virtual void HiddenField( const SwField& rFld ) SAL_OVERRIDE;
-    virtual void SetField( const SwField& rFld, ww::eField eType, const OUString& rCmd ) SAL_OVERRIDE;
-    virtual void PostitField( const SwField* pFld ) SAL_OVERRIDE;
-    virtual bool DropdownField( const SwField* pFld ) SAL_OVERRIDE;
-    virtual bool PlaceholderField( const SwField* pFld ) SAL_OVERRIDE;
+    virtual void RefField ( const SwField& rField, const OUString& rRef ) SAL_OVERRIDE;
+    virtual void HiddenField( const SwField& rField ) SAL_OVERRIDE;
+    virtual void SetField( const SwField& rField, ww::eField eType, const OUString& rCmd ) SAL_OVERRIDE;
+    virtual void PostitField( const SwField* pField ) SAL_OVERRIDE;
+    virtual bool DropdownField( const SwField* pField ) SAL_OVERRIDE;
+    virtual bool PlaceholderField( const SwField* pField ) SAL_OVERRIDE;
 
     virtual bool AnalyzeURL( const OUString& rURL, const OUString& rTarget, OUString* pLinkURL, OUString* pMark ) SAL_OVERRIDE;
 

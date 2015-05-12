@@ -307,7 +307,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                     if (m_pParentFrame->IsInline())
                     {
                         const SwAttrSet& rSet =
-                            m_pParentFrame->GetFrmFmt().GetAttrSet();
+                            m_pParentFrame->GetFrameFormat().GetAttrSet();
                         bEndCR = false;
                         bGraphicNeeded = TestOleNeedsGraphic(rSet,
                             xOleStg, xObjStg, sStorageName, const_cast<SwOLENode*>(&rOLENode));
@@ -383,7 +383,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
 {
     //Added for i120568,the hyperlink info within a graphic whose anchor type is "As character"
     //will be exported to ensure the fidelity
-    const SwFmtURL& rURL = rFrame.GetFrmFmt().GetAttrSet().GetURL();
+    const SwFormatURL& rURL = rFrame.GetFrameFormat().GetAttrSet().GetURL();
     bool bURLStarted = false;
     if( !rURL.GetURL().isEmpty() && rFrame.GetWriterType() == sw::Frame::eGraphic)
     {
@@ -424,25 +424,25 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     sal_uInt8 aArr[ 18 ];
     sal_uInt8* pArr = aArr;
 
-    const SwFrmFmt &rFlyFmt = rFrame.GetFrmFmt();
-    const RndStdIds eAn = rFlyFmt.GetAttrSet().GetAnchor(false).GetAnchorId();
+    const SwFrameFormat &rFlyFormat = rFrame.GetFrameFormat();
+    const RndStdIds eAn = rFlyFormat.GetAttrSet().GetAnchor(false).GetAnchorId();
     if (eAn == FLY_AS_CHAR)
     {
-        sal_Int16 eVert = rFlyFmt.GetVertOrient().GetVertOrient();
+        sal_Int16 eVert = rFlyFormat.GetVertOrient().GetVertOrient();
         if ((eVert == text::VertOrientation::CHAR_CENTER) || (eVert == text::VertOrientation::LINE_CENTER))
         {
             bool bVert = false;
             //The default for word in vertical text mode is to center,
             //otherwise a sub/super script hack is employed
-            if (m_pOutFmtNode && m_pOutFmtNode->ISA(SwCntntNode) )
+            if (m_pOutFormatNode && m_pOutFormatNode->ISA(SwContentNode) )
             {
-                const SwTxtNode* pTxtNd = static_cast<const SwTxtNode*>(m_pOutFmtNode);
-                SwPosition aPos(*pTxtNd);
+                const SwTextNode* pTextNd = static_cast<const SwTextNode*>(m_pOutFormatNode);
+                SwPosition aPos(*pTextNd);
                 bVert = m_pDoc->IsInVerticalText(aPos);
             }
             if (!bVert)
             {
-                SwTwips nHeight = rFlyFmt.GetFrmSize().GetHeight();
+                SwTwips nHeight = rFlyFormat.GetFrmSize().GetHeight();
                 nHeight/=20; //nHeight was in twips, want it in half points, but
                              //then half of total height.
                 long nFontHeight = static_cast<const SvxFontHeightItem&>(
@@ -496,7 +496,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
         bool bOldGrf = m_bOutGrf;
         m_bOutGrf = true;
 
-        OutputFormat( rFrame.GetFrmFmt(), false, false, true ); // Fly-Attrs
+        OutputFormat( rFrame.GetFrameFormat(), false, false, true ); // Fly-Attrs
 
         m_bOutGrf = bOldGrf;
         m_pPapPlc->AppendFkpEntry( Strm().Tell(), pO->size(), pO->data() );
@@ -559,7 +559,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
 
     sal_uInt8* pArr = aArr + 0x2E;  // Do borders first
 
-    const SwAttrSet& rAttrSet = rFly.GetFrmFmt().GetAttrSet();
+    const SwAttrSet& rAttrSet = rFly.GetFrameFormat().GetAttrSet();
     if (SfxItemState::SET == rAttrSet.GetItemState(RES_BOX, false, &pItem))
     {
         const SvxBoxItem* pBox = static_cast<const SvxBoxItem*>(pItem);
@@ -713,7 +713,7 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
             WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight,
                 rGrfNd.GetpSwAttrSet());
             SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
-            aInlineEscher.WriteGrfFlyFrame(rFly.GetFrmFmt(), 0x401);
+            aInlineEscher.WriteGrfFlyFrame(rFly.GetFrameFormat(), 0x401);
             aInlineEscher.WritePictures();
         }
         else
@@ -949,7 +949,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
                     WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight,
                         pNd->GetpSwAttrSet());
                     SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
-                    aInlineEscher.WriteOLEFlyFrame(rFly.GetFrmFmt(), 0x401);
+                    aInlineEscher.WriteOLEFlyFrame(rFly.GetFrameFormat(), 0x401);
                     aInlineEscher.WritePictures();
                 }
 #else
@@ -979,7 +979,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         }
         break;
         case sw::Frame::eDrawing:
-        case sw::Frame::eTxtBox:
+        case sw::Frame::eTextBox:
         case sw::Frame::eFormControl:
             OSL_ENSURE(rWrt.bWrtWW8,
                 "You can't try and export these in WW8 format, a filter bug");
@@ -994,7 +994,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             {
                 WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight);
                 SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
-                aInlineEscher.WriteEmptyFlyFrame(rFly.GetFrmFmt(), 0x401);
+                aInlineEscher.WriteEmptyFlyFrame(rFly.GetFrameFormat(), 0x401);
             }
             break;
         default:

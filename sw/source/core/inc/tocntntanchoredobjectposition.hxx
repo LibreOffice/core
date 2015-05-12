@@ -21,13 +21,13 @@
 #include <anchoredobjectposition.hxx>
 
 class SwFrm;
-class SwTxtFrm;
+class SwTextFrm;
 class SwLayoutFrm;
 class SwRect;
 
 namespace objectpositioning
 {
-    class SwToCntntAnchoredObjectPosition : public SwAnchoredObjectPosition
+    class SwToContentAnchoredObjectPosition : public SwAnchoredObjectPosition
     {
         private:
             // calculated data for object position
@@ -51,7 +51,7 @@ namespace objectpositioning
 
             // method to cast <SwAnchoredObjectPosition::GetAnchorFrm()> to
             // the needed type
-            SwTxtFrm&       GetAnchorTxtFrm() const;
+            SwTextFrm&       GetAnchorTextFrm() const;
 
             /** determine frame for horizontal position
 
@@ -71,8 +71,8 @@ namespace objectpositioning
             const SwFrm& _GetHoriVirtualAnchor( const SwLayoutFrm& _pProposedFrm ) const;
 
         public:
-            SwToCntntAnchoredObjectPosition( SdrObject& _rDrawObj );
-            virtual ~SwToCntntAnchoredObjectPosition();
+            SwToContentAnchoredObjectPosition( SdrObject& _rDrawObj );
+            virtual ~SwToContentAnchoredObjectPosition();
 
             /** calculate position of object
             */

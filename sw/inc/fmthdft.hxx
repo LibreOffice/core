@@ -26,21 +26,21 @@
 #include <frmfmt.hxx>
 
 class IntlWrapper;
-class SwFmt;
+class SwFormat;
 
  /** Header, for PageFormats
- Client of FrmFmt describing the header. */
+ Client of FrameFormat describing the header. */
 
-class SW_DLLPUBLIC SwFmtHeader: public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatHeader: public SfxPoolItem, public SwClient
 {
     bool bActive;       ///< Only for controlling (creation of content).
 
 public:
-    SwFmtHeader( bool bOn = false );
-    SwFmtHeader( SwFrmFmt *pHeaderFmt );
-    SwFmtHeader( const SwFmtHeader &rCpy );
-    virtual ~SwFmtHeader();
-    SwFmtHeader& operator=( const SwFmtHeader &rCpy );
+    SwFormatHeader( bool bOn = false );
+    SwFormatHeader( SwFrameFormat *pHeaderFormat );
+    SwFormatHeader( const SwFormatHeader &rCpy );
+    virtual ~SwFormatHeader();
+    SwFormatHeader& operator=( const SwFormatHeader &rCpy );
 
     TYPEINFO_OVERRIDE();
 
@@ -53,27 +53,27 @@ public:
                                     OUString &rText,
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 
-    const SwFrmFmt *GetHeaderFmt() const { return static_cast<const SwFrmFmt*>(GetRegisteredIn()); }
-          SwFrmFmt *GetHeaderFmt()       { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
+    const SwFrameFormat *GetHeaderFormat() const { return static_cast<const SwFrameFormat*>(GetRegisteredIn()); }
+          SwFrameFormat *GetHeaderFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
 
-    void RegisterToFormat( SwFmt& rFmt );
+    void RegisterToFormat( SwFormat& rFormat );
     bool IsActive() const { return bActive; }
     void SetActive( bool bNew = true ) { bActive = bNew; }
 };
 
  /**Footer, for pageformats
- Client of FrmFmt describing the footer */
+ Client of FrameFormat describing the footer */
 
-class SW_DLLPUBLIC SwFmtFooter: public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatFooter: public SfxPoolItem, public SwClient
 {
     bool bActive;       // Only for controlling (creation of content).
 
 public:
-    SwFmtFooter( bool bOn = false );
-    SwFmtFooter( SwFrmFmt *pFooterFmt );
-    SwFmtFooter( const SwFmtFooter &rCpy );
-    virtual ~SwFmtFooter();
-    SwFmtFooter& operator=( const SwFmtFooter &rCpy );
+    SwFormatFooter( bool bOn = false );
+    SwFormatFooter( SwFrameFormat *pFooterFormat );
+    SwFormatFooter( const SwFormatFooter &rCpy );
+    virtual ~SwFormatFooter();
+    SwFormatFooter& operator=( const SwFormatFooter &rCpy );
 
     TYPEINFO_OVERRIDE();
 
@@ -86,22 +86,22 @@ public:
                                     OUString &rText,
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 
-    const SwFrmFmt *GetFooterFmt() const { return static_cast<const SwFrmFmt*>(GetRegisteredIn()); }
-          SwFrmFmt *GetFooterFmt()       { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
+    const SwFrameFormat *GetFooterFormat() const { return static_cast<const SwFrameFormat*>(GetRegisteredIn()); }
+          SwFrameFormat *GetFooterFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
 
-    void RegisterToFormat( SwFmt& rFmt );
+    void RegisterToFormat( SwFormat& rFormat );
     bool IsActive() const { return bActive; }
     void SetActive( bool bNew = true ) { bActive = bNew; }
 };
 
-inline const SwFmtHeader &SwAttrSet::GetHeader(bool bInP) const
-    { return static_cast<const SwFmtHeader&>(Get( RES_HEADER,bInP)); }
-inline const SwFmtFooter &SwAttrSet::GetFooter(bool bInP) const
-    { return static_cast<const SwFmtFooter&>(Get( RES_FOOTER,bInP)); }
+inline const SwFormatHeader &SwAttrSet::GetHeader(bool bInP) const
+    { return static_cast<const SwFormatHeader&>(Get( RES_HEADER,bInP)); }
+inline const SwFormatFooter &SwAttrSet::GetFooter(bool bInP) const
+    { return static_cast<const SwFormatFooter&>(Get( RES_FOOTER,bInP)); }
 
-inline const SwFmtHeader &SwFmt::GetHeader(bool bInP) const
+inline const SwFormatHeader &SwFormat::GetHeader(bool bInP) const
     { return m_aSet.GetHeader(bInP); }
-inline const SwFmtFooter &SwFmt::GetFooter(bool bInP) const
+inline const SwFormatFooter &SwFormat::GetFooter(bool bInP) const
     { return m_aSet.GetFooter(bInP); }
 
 #endif

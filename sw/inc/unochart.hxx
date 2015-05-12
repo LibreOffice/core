@@ -58,7 +58,7 @@ class SwTableBox;
 class SwUnoCrsr;
 struct SwRangeDescriptor;
 class SwSelBoxes;
-class SwFrmFmt;
+class SwFrameFormat;
 
 bool FillRangeDescriptor( SwRangeDescriptor &rDesc, const OUString &rCellRangeName );
 
@@ -190,7 +190,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    SwFrmFmt*       GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
+    SwFrameFormat*       GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
 
     void        AddDataSequence( const SwTable &rTable, ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > &rxDataSequence );
     void        RemoveDataSequence( const SwTable &rTable, ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > &rxDataSequence );
@@ -265,7 +265,7 @@ class SwChartDataSequence :
     ::com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataProvider >    xDataProvider;
     SwChartDataProvider *                   pDataProvider;
 
-    SwUnoCrsr*                  pTblCrsr;   // cursor spanned over cells to use
+    SwUnoCrsr*                  pTableCrsr;   // cursor spanned over cells to use
     SwDepend                    aCursorDepend; //the cursor is removed after the doc has been removed
 
     const SfxItemPropertySet*   _pPropSet;
@@ -281,7 +281,7 @@ protected:
 
 public:
     SwChartDataSequence( SwChartDataProvider &rProvider,
-                         SwFrmFmt   &rTblFmt,
+                         SwFrameFormat   &rTableFormat,
                          SwUnoCrsr  *pTableCursor );
     virtual ~SwChartDataSequence();
 
@@ -345,7 +345,7 @@ public:
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    SwFrmFmt*   GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
+    SwFrameFormat*   GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
     bool    DeleteBox( const SwTableBox &rBox );
 
     void        FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const;

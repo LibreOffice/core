@@ -38,9 +38,9 @@ class Graphic;
 class GraphicObject;
 class SwAttrSet;
 class SfxItemSet;
-class SwCntntNode;
+class SwContentNode;
 class SwDoc;
-class SwGrfFmtColl;
+class SwGrfFormatColl;
 class SwGrfNode;
 class SwHistory;
 class SwNode;
@@ -50,20 +50,20 @@ class SwOLENode;
 class SwOutlineNodes;
 class SwPaM;
 class SwSectionData;
-class SwSectionFmt;
+class SwSectionFormat;
 class SwTOXBase;
 class SwSectionNode;
 class SwStartNode;
-class SwTableBoxFmt;
-class SwTableFmt;
+class SwTableBoxFormat;
+class SwTableFormat;
 class SwTableLine;
-class SwTableLineFmt;
+class SwTableLineFormat;
 class SwTableNode;
-class SwTblToTxtSaves;
-class SwTxtFmtColl;
-class SwTxtNode;
-class SwUndoTblToTxt;
-class SwUndoTxtToTbl;
+class SwTableToTextSaves;
+class SwTextFormatColl;
+class SwTextNode;
+class SwUndoTableToText;
+class SwUndoTextToTable;
 struct SwPosition;
 
 namespace sw { class DocumentContentOperationsManager; }
@@ -123,10 +123,10 @@ class SW_DLLPUBLIC SwNodes
     void ChgNode( SwNodeIndex& rDelPos, sal_uLong nSize,
                   SwNodeIndex& rInsPos, bool bNewFrms );
 
-    void UpdtOutlineIdx( const SwNode& );   ///< Update all OutlineNodes starting from Node.
+    void UpdateOutlineIdx( const SwNode& );   ///< Update all OutlineNodes starting from Node.
 
     void _CopyNodes( const SwNodeRange&, const SwNodeIndex&,
-                    bool bNewFrms = true, bool bTblInsDummyNode = false ) const;
+                    bool bNewFrms = true, bool bTableInsDummyNode = false ) const;
     void _DelDummyNodes( const SwNodeRange& rRg );
 
 protected:
@@ -186,19 +186,19 @@ public:
     static void GoStartOfSection(SwNodeIndex *);
     static void GoEndOfSection(SwNodeIndex *);
 
-    SwCntntNode* GoNext(SwNodeIndex *) const;
-    static SwCntntNode* GoPrevious(SwNodeIndex *);
+    SwContentNode* GoNext(SwNodeIndex *) const;
+    static SwContentNode* GoPrevious(SwNodeIndex *);
 
-    /** Go to next/previous Cntnt/Table-node for which LayoutFrames exist.
+    /** Go to next/previous Content/Table-node for which LayoutFrames exist.
      While doing this do not leave Header/Footer/Frame etc. */
     SwNode* GoNextWithFrm(SwNodeIndex *) const;
     SwNode* GoPreviousWithFrm(SwNodeIndex *) const;
 
     /** Go to next content-node that is not protected or hidden
        (Both set FALSE ==> GoNext/GoPrevious!!!). */
-    SwCntntNode* GoNextSection( SwNodeIndex *, bool bSkipHidden  = true,
+    SwContentNode* GoNextSection( SwNodeIndex *, bool bSkipHidden  = true,
                                            bool bSkipProtect = true ) const;
-    static SwCntntNode* GoPrevSection( SwNodeIndex *, bool bSkipHidden  = true,
+    static SwContentNode* GoPrevSection( SwNodeIndex *, bool bSkipHidden  = true,
                                            bool bSkipProtect = true );
 
     /** Create an empty section of Start- and EndNote. It may be called
@@ -208,35 +208,35 @@ public:
                                     SwStartNodeType = SwNormalStartNode );
 
     /// Implementations of "Make...Node" are in the given .cxx-files.
-    SwTxtNode *MakeTxtNode( const SwNodeIndex & rWhere,
-                            SwTxtFmtColl *pColl,
+    SwTextNode *MakeTextNode( const SwNodeIndex & rWhere,
+                            SwTextFormatColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); ///< in ndtxt.cxx
     SwStartNode* MakeTextSection( const SwNodeIndex & rWhere,
                             SwStartNodeType eSttNdTyp,
-                            SwTxtFmtColl *pColl,
+                            SwTextFormatColl *pColl,
                             SwAttrSet* pAutoAttr = 0 );
 
     static SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
                             const OUString& rGrfName,
                             const OUString& rFltName,
                             const Graphic* pGraphic,
-                            SwGrfFmtColl *pColl,
+                            SwGrfFormatColl *pColl,
                             SwAttrSet* pAutoAttr = 0,
                             bool bDelayed = false );    ///< in ndgrf.cxx
 
     static SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
                             const GraphicObject& rGrfObj,
-                            SwGrfFmtColl *pColl,
+                            SwGrfFormatColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); ///< in ndgrf.cxx
 
     SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
                             const svt::EmbeddedObjectRef&,
-                            SwGrfFmtColl *pColl,
+                            SwGrfFormatColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); ///< in ndole.cxx
     SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
                             const OUString &rName,
                             sal_Int64 nAspect,
-                            SwGrfFmtColl *pColl,
+                            SwGrfFormatColl *pColl,
                             SwAttrSet* pAutoAttr ); ///< in ndole.cxx
 
     /// Array of all OutlineNodes.
@@ -250,46 +250,46 @@ public:
 
        New parameter pAttrSet: If pAttrSet is non-null and contains an
        adjust item it is propagated to the table cells. If there is an
-       adjust in pCntntTxtColl or pHeadlineTxtColl this adjust item
+       adjust in pContentTextColl or pHeadlineTextColl this adjust item
        overrides the item in pAttrSet. */
 
     static SwTableNode* InsertTable( const SwNodeIndex& rNdIdx,
-                        sal_uInt16 nBoxes, SwTxtFmtColl* pCntntTxtColl,
+                        sal_uInt16 nBoxes, SwTextFormatColl* pContentTextColl,
                         sal_uInt16 nLines = 0, sal_uInt16 nRepeat = 0,
-                        SwTxtFmtColl* pHeadlineTxtColl = 0,
+                        SwTextFormatColl* pHeadlineTextColl = 0,
                         const SwAttrSet * pAttrSet = 0);
 
     /// Create balanced table from selected range.
     SwTableNode* TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
-                                SwTableFmt* pTblFmt,
-                                SwTableLineFmt* pLineFmt,
-                                SwTableBoxFmt* pBoxFmt,
-                                SwTxtFmtColl* pTxtColl,
-                                SwUndoTxtToTbl* pUndo = 0 );
+                                SwTableFormat* pTableFormat,
+                                SwTableLineFormat* pLineFormat,
+                                SwTableBoxFormat* pBoxFormat,
+                                SwTextFormatColl* pTextColl,
+                                SwUndoTextToTable* pUndo = 0 );
 
     static SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
 
     /// create a table from a vector of NodeRanges - API support
     SwTableNode* TextToTable( const TableRanges_t& rTableNodes,
-                                SwTableFmt* pTblFmt,
-                                SwTableLineFmt* pLineFmt,
-                                SwTableBoxFmt* pBoxFmt,
-                                SwTxtFmtColl* pTxtColl
+                                SwTableFormat* pTableFormat,
+                                SwTableLineFormat* pLineFormat,
+                                SwTableBoxFormat* pBoxFormat,
+                                SwTextFormatColl* pTextColl
                                 /*, SwUndo... pUndo*/ );
 
     /// Create regular text from what was table.
     bool TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
-                        SwUndoTblToTxt* = 0 );
+                        SwUndoTableToText* = 0 );
     /// Is in untbl.cxx and may called only by Undo-object.
     SwTableNode* UndoTableToText( sal_uLong nStt, sal_uLong nEnd,
-                        const SwTblToTxtSaves& rSavedData );
+                        const SwTableToTextSaves& rSavedData );
 
     /** Insert a new box in the line before InsPos. Its format
        is taken from the following one (or from the previous one if we are
        at the end). In the line there must be a box already. */
-    bool InsBoxen( SwTableNode*, SwTableLine*, SwTableBoxFmt*,
+    bool InsBoxen( SwTableNode*, SwTableLine*, SwTableBoxFormat*,
                         /// Formats for TextNode of box.
-                        SwTxtFmtColl*, const SfxItemSet* pAutoAttr,
+                        SwTextFormatColl*, const SfxItemSet* pAutoAttr,
                         sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 );
     /** Splits a table at the base-line which contains the index.
        All base lines behind it are moved to a new table/ -node.
@@ -305,7 +305,7 @@ public:
 
     /// Insert a new SwSection.
     SwSectionNode* InsertTextSection(SwNodeIndex const& rNdIdx,
-                                SwSectionFmt& rSectionFmt,
+                                SwSectionFormat& rSectionFormat,
                                 SwSectionData const&,
                                 SwTOXBase const*const pTOXBase,
                                 SwNodeIndex const*const pEnde,

@@ -22,8 +22,8 @@
 #include "fldbas.hxx"
 
 class SwFrm;
-class SwCntntNode;
-class SwTxtNode;
+class SwContentNode;
+class SwTextNode;
 class ToxTextGeneratorTest;
 
 enum SwChapterFormat
@@ -60,13 +60,13 @@ class SW_DLLPUBLIC SwChapterField : public SwField
     virtual SwField* Copy() const SAL_OVERRIDE;
 
 public:
-    SwChapterField(SwChapterFieldType*, sal_uInt32 nFmt = 0);
+    SwChapterField(SwChapterFieldType*, sal_uInt32 nFormat = 0);
 
     // #i53420#
     void ChangeExpansion( const SwFrm*,
-                          const SwCntntNode*,
+                          const SwContentNode*,
         bool bSrchNum = false);
-    void ChangeExpansion(const SwTxtNode &rNd, bool bSrchNum);
+    void ChangeExpansion(const SwTextNode &rNd, bool bSrchNum);
 
     inline sal_uInt8 GetLevel() const;
     inline void SetLevel(sal_uInt8);

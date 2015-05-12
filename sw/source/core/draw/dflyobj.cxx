@@ -382,7 +382,7 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
     SdrVirtObj( rNew ),
     pFlyFrm( pFly )
 {
-    const SvxProtectItem &rP = pFlyFrm->GetFmt()->GetProtect();
+    const SvxProtectItem &rP = pFlyFrm->GetFormat()->GetProtect();
     bMovProt = rP.IsPosProtected();
     bSizProt = rP.IsSizeProtected();
 }
@@ -393,13 +393,13 @@ SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
         GetPage()->RemoveObject( GetOrdNum() );
 }
 
-const SwFrmFmt *SwVirtFlyDrawObj::GetFmt() const
+const SwFrameFormat *SwVirtFlyDrawObj::GetFormat() const
 {
-    return GetFlyFrm()->GetFmt();
+    return GetFlyFrm()->GetFormat();
 }
-SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
+SwFrameFormat *SwVirtFlyDrawObj::GetFormat()
 {
-    return GetFlyFrm()->GetFmt();
+    return GetFlyFrm()->GetFormat();
 }
 
 // --> OD #i102707#
@@ -596,11 +596,11 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 
     //If the Fly has a automatic align (right or top),
     //so preserve the automatic.
-    SwFrmFmt *pFmt = GetFlyFrm()->GetFmt();
-    const sal_Int16 eHori = pFmt->GetHoriOrient().GetHoriOrient();
-    const sal_Int16 eVert = pFmt->GetVertOrient().GetVertOrient();
-    const sal_Int16 eRelHori = pFmt->GetHoriOrient().GetRelationOrient();
-    const sal_Int16 eRelVert = pFmt->GetVertOrient().GetRelationOrient();
+    SwFrameFormat *pFormat = GetFlyFrm()->GetFormat();
+    const sal_Int16 eHori = pFormat->GetHoriOrient().GetHoriOrient();
+    const sal_Int16 eVert = pFormat->GetVertOrient().GetVertOrient();
+    const sal_Int16 eRelHori = pFormat->GetHoriOrient().GetRelationOrient();
+    const sal_Int16 eRelVert = pFormat->GetVertOrient().GetRelationOrient();
     //On paragraph bound Flys starting from the new position a new
     //anchor must be set. Anchor and the new RelPos is calculated and
     //placed by the Fly itself.
@@ -608,9 +608,9 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         static_cast<SwFlyAtCntFrm*>(GetFlyFrm())->SetAbsPos( aNewPos );
     else
     {
-        const SwFrmFmt *pTmpFmt = GetFmt();
-        const SwFmtVertOrient &rVert = pTmpFmt->GetVertOrient();
-        const SwFmtHoriOrient &rHori = pTmpFmt->GetHoriOrient();
+        const SwFrameFormat *pTmpFormat = GetFormat();
+        const SwFormatVertOrient &rVert = pTmpFormat->GetVertOrient();
+        const SwFormatHoriOrient &rHori = pTmpFormat->GetHoriOrient();
         long lXDiff = aNewPos.X() - aOldPos.X();
         if( rHori.IsPosToggle() && text::HoriOrientation::NONE == eHori &&
             !GetFlyFrm()->FindPageFrm()->OnRightPage() )
@@ -652,14 +652,14 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         GetFlyFrm()->ChgRelPos( aTmp );
     }
 
-    SwAttrSet aSet( pFmt->GetDoc()->GetAttrPool(),
+    SwAttrSet aSet( pFormat->GetDoc()->GetAttrPool(),
                                             RES_VERT_ORIENT, RES_HORI_ORIENT );
-    SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
-    SwFmtVertOrient aVert( pFmt->GetVertOrient() );
+    SwFormatHoriOrient aHori( pFormat->GetHoriOrient() );
+    SwFormatVertOrient aVert( pFormat->GetVertOrient() );
     bool bPut = false;
 
     if( !GetFlyFrm()->IsFlyLayFrm() &&
-        ::GetHtmlMode(pFmt->GetDoc()->GetDocShell()) )
+        ::GetHtmlMode(pFormat->GetDoc()->GetDocShell()) )
     {
         //In HTML-Mode only automatic aligns are allowed.
         //Only we can try a snap to left/right respectively left-/right border
@@ -729,7 +729,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         }
     }
     if ( bPut )
-        pFmt->SetFmtAttr( aSet );
+        pFormat->SetFormatAttr( aSet );
 }
 
 
@@ -804,11 +804,11 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     pSh->SetAttrItem(aCrop);
 
     // Set new frame size
-    SwFrmFmt *pFmt = GetFmt();
-    SwFmtFrmSize aSz( pFmt->GetFrmSize() );
+    SwFrameFormat *pFormat = GetFormat();
+    SwFormatFrmSize aSz( pFormat->GetFrmSize() );
     aSz.SetWidth(aNewRect.GetWidth());
     aSz.SetHeight(aNewRect.GetHeight());
-    pFmt->GetDoc()->SetAttr( aSz, *pFmt );
+    pFormat->GetDoc()->SetAttr( aSz, *pFormat );
 
 //    pSh->EndUndo(UNDO_END);
     pSh->EndAllAction();
@@ -843,7 +843,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             SwBorderAttrAccess aAccess( SwFrm::GetCache(), GetFlyFrm() );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
             long nMin = rAttrs.CalcLeftLine()+rAttrs.CalcRightLine();
-            const SwFmtCol& rCol = rAttrs.GetAttrSet().GetCol();
+            const SwFormatCol& rCol = rAttrs.GetAttrSet().GetCol();
             if ( rCol.GetColumns().size() > 1 )
             {
                 for ( const auto &rC : rCol.GetColumns() )
@@ -855,10 +855,10 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             aSz.Width() = std::max( aSz.Width(), nMin );
         }
 
-        SwFrmFmt *pFmt = GetFmt();
-        const SwFmtFrmSize aOldFrmSz( pFmt->GetFrmSize() );
+        SwFrameFormat *pFormat = GetFormat();
+        const SwFormatFrmSize aOldFrmSz( pFormat->GetFrmSize() );
         GetFlyFrm()->ChgSize( aSz );
-        SwFmtFrmSize aFrmSz( pFmt->GetFrmSize() );
+        SwFormatFrmSize aFrmSz( pFormat->GetFrmSize() );
         if ( aFrmSz.GetWidthPercent() || aFrmSz.GetHeightPercent() )
         {
             long nRelWidth, nRelHeight;
@@ -886,7 +886,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             if ( aFrmSz.GetHeightPercent() && aFrmSz.GetHeightPercent() != 0xFF &&
                  aOldFrmSz.GetHeight() != aFrmSz.GetHeight() )
                 aFrmSz.SetHeightPercent( sal_uInt8(aSz.Height() * 100.0 / nRelHeight + 0.5) );
-            pFmt->GetDoc()->SetAttr( aFrmSz, *pFmt );
+            pFormat->GetDoc()->SetAttr( aFrmSz, *pFormat );
         }
     }
 
@@ -922,7 +922,7 @@ void SwVirtFlyDrawObj::Move(const Size& rSiz)
 {
     NbcMove( rSiz );
     SetChanged();
-    GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+    GetFormat()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
 void SwVirtFlyDrawObj::Resize(const Point& rRef,
@@ -930,14 +930,14 @@ void SwVirtFlyDrawObj::Resize(const Point& rRef,
 {
     NbcResize( rRef, xFact, yFact );
     SetChanged();
-    GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+    GetFormat()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
 void SwVirtFlyDrawObj::Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     NbcCrop( rRef, xFact, yFact );
     SetChanged();
-    GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+    GetFormat()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
 void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
@@ -967,17 +967,17 @@ Pointer  SwVirtFlyDrawObj::GetMacroPointer(
 
 bool SwVirtFlyDrawObj::HasMacro() const
 {
-    const SwFmtURL &rURL = pFlyFrm->GetFmt()->GetURL();
+    const SwFormatURL &rURL = pFlyFrm->GetFormat()->GetURL();
     return rURL.GetMap() || !rURL.GetURL().isEmpty();
 }
 
 SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) const
 {
-    const SwFmtURL &rURL = pFlyFrm->GetFmt()->GetURL();
+    const SwFormatURL &rURL = pFlyFrm->GetFormat()->GetURL();
     if( rURL.GetMap() || !rURL.GetURL().isEmpty() )
     {
         SwRect aRect;
-        if ( pFlyFrm->Lower() && pFlyFrm->Lower()->IsNoTxtFrm() )
+        if ( pFlyFrm->Lower() && pFlyFrm->Lower()->IsNoTextFrm() )
         {
             aRect = pFlyFrm->Prt();
             aRect += pFlyFrm->Frm().Pos();
@@ -995,7 +995,7 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
             if( aRect.IsInside( rRec.aPos ) )
             {
                 if( !rURL.GetMap() ||
-                    pFlyFrm->GetFmt()->GetIMapObject( rRec.aPos, pFlyFrm ))
+                    pFlyFrm->GetFormat()->GetIMapObject( rRec.aPos, pFlyFrm ))
                     return (SdrObject*)this;
 
                 return 0;

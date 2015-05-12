@@ -29,7 +29,7 @@
 #include "formatsh.hxx"
 #include "address.hxx"
 
-class SvxClipboardFmtItem;
+class SvxClipboardFormatItem;
 class TransferableDataHelper;
 class TransferableClipboardListener;
 class AbstractScLinkedAreaDlg;
@@ -52,7 +52,7 @@ private:
     CellShell_Impl* pImpl;
     bool            bPastePossible;
 
-    void        GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats );
+    void        GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats );
     void        ExecuteExternalSource(
                     const OUString& _rFile, const OUString& _rFilter, const OUString& _rOptions,
                     const OUString& _rSource, sal_uLong _nRefresh, SfxRequest& _rRequest );

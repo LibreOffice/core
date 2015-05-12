@@ -29,15 +29,15 @@ class IntlWrapper;
 class SwPaM;
 
 // container for FootNote
-class SW_DLLPUBLIC SwPageFtnInfoItem : public SfxPoolItem
+class SW_DLLPUBLIC SwPageFootnoteInfoItem : public SfxPoolItem
 {
-    SwPageFtnInfo aFtnInfo;
+    SwPageFootnoteInfo aFootnoteInfo;
 
 public:
 
-    SwPageFtnInfoItem(const sal_uInt16 nId, SwPageFtnInfo& rInfo);
-    SwPageFtnInfoItem(const SwPageFtnInfoItem& rItem );
-    virtual ~SwPageFtnInfoItem();
+    SwPageFootnoteInfoItem(const sal_uInt16 nId, SwPageFootnoteInfo& rInfo);
+    SwPageFootnoteInfoItem(const SwPageFootnoteInfoItem& rItem );
+    virtual ~SwPageFootnoteInfoItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -50,9 +50,9 @@ public:
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    SwPageFtnInfo& GetPageFtnInfo()             { return aFtnInfo; }
-    const SwPageFtnInfo& GetPageFtnInfo() const { return aFtnInfo; }
-    void SetPageFtnInfo(SwPageFtnInfo& rInf)    { aFtnInfo = rInf; }
+    SwPageFootnoteInfo& GetPageFootnoteInfo()             { return aFootnoteInfo; }
+    const SwPageFootnoteInfo& GetPageFootnoteInfo() const { return aFootnoteInfo; }
+    void SetPageFootnoteInfo(SwPageFootnoteInfo& rInf)    { aFootnoteInfo = rInf; }
 };
 
 class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem

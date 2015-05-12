@@ -32,34 +32,34 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-SwPageFtnInfoItem::SwPageFtnInfoItem( const sal_uInt16 nId, SwPageFtnInfo& rInfo) :
+SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( const sal_uInt16 nId, SwPageFootnoteInfo& rInfo) :
     SfxPoolItem( nId ),
-    aFtnInfo(rInfo)
+    aFootnoteInfo(rInfo)
 {
 }
 
-SwPageFtnInfoItem::SwPageFtnInfoItem( const SwPageFtnInfoItem& rItem ) :
+SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( const SwPageFootnoteInfoItem& rItem ) :
     SfxPoolItem( rItem ),
-    aFtnInfo(rItem.GetPageFtnInfo())
+    aFootnoteInfo(rItem.GetPageFootnoteInfo())
 {
 }
 
- SwPageFtnInfoItem::~SwPageFtnInfoItem()
+ SwPageFootnoteInfoItem::~SwPageFootnoteInfoItem()
 {
 }
 
-SfxPoolItem*  SwPageFtnInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
+SfxPoolItem*  SwPageFootnoteInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
-    return new SwPageFtnInfoItem( *this );
+    return new SwPageFootnoteInfoItem( *this );
 }
 
-bool SwPageFtnInfoItem::operator==( const SfxPoolItem& rAttr ) const
+bool SwPageFootnoteInfoItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( Which() == rAttr.Which(), "no equal attributes" );
-    return ( aFtnInfo == static_cast<const SwPageFtnInfoItem&>(rAttr).GetPageFtnInfo());
+    return ( aFootnoteInfo == static_cast<const SwPageFootnoteInfoItem&>(rAttr).GetPageFootnoteInfo());
 }
 
-bool  SwPageFtnInfoItem::GetPresentation
+bool  SwPageFootnoteInfoItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          eCoreUnit,
@@ -68,7 +68,7 @@ bool  SwPageFtnInfoItem::GetPresentation
     const IntlWrapper*  pIntl
 )   const
 {
-    const SwTwips nHght = GetPageFtnInfo().GetHeight();
+    const SwTwips nHght = GetPageFootnoteInfo().GetHeight();
     if ( nHght )
     {
         rText = SW_RESSTR( STR_MAX_FTN_HEIGHT ) + " " +
@@ -78,27 +78,27 @@ bool  SwPageFtnInfoItem::GetPresentation
     return true;
 }
 
-bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
+bool SwPageFootnoteInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
     {
-        case MID_FTN_HEIGHT        :     rVal <<= (sal_Int32)convertTwipToMm100(aFtnInfo.GetHeight());break;
-        case MID_LINE_WEIGHT       :     rVal <<= (sal_Int16)convertTwipToMm100(aFtnInfo.GetLineWidth());break;
-        case MID_LINE_COLOR        :     rVal <<= (sal_Int32)aFtnInfo.GetLineColor().GetColor();break;
+        case MID_FTN_HEIGHT        :     rVal <<= (sal_Int32)convertTwipToMm100(aFootnoteInfo.GetHeight());break;
+        case MID_LINE_WEIGHT       :     rVal <<= (sal_Int16)convertTwipToMm100(aFootnoteInfo.GetLineWidth());break;
+        case MID_LINE_COLOR        :     rVal <<= (sal_Int32)aFootnoteInfo.GetLineColor().GetColor();break;
         case MID_LINE_RELWIDTH     :
         {
             Fraction aTmp( 100, 1 );
-            aTmp *= aFtnInfo.GetWidth();
+            aTmp *= aFootnoteInfo.GetWidth();
             rVal <<= (sal_Int8)(long)aTmp;
         }
         break;
-        case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFtnInfo.GetAdj();break;//text::HorizontalAdjust
-        case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)convertTwipToMm100(aFtnInfo.GetTopDist());break;
-        case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)convertTwipToMm100(aFtnInfo.GetBottomDist());break;
+        case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFootnoteInfo.GetAdj();break;//text::HorizontalAdjust
+        case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)convertTwipToMm100(aFootnoteInfo.GetTopDist());break;
+        case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)convertTwipToMm100(aFootnoteInfo.GetBottomDist());break;
         case MID_FTN_LINE_STYLE    :
         {
-            switch ( aFtnInfo.GetLineStyle( ) )
+            switch ( aFootnoteInfo.GetLineStyle( ) )
             {
                 default:
                 case table::BorderLineStyle::NONE : rVal <<= sal_Int8(0); break;
@@ -114,7 +114,7 @@ bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
+bool SwPageFootnoteInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
 {
     sal_Int32 nSet32 = 0;
     bool bRet = true;
@@ -122,7 +122,7 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
     {
         case MID_LINE_COLOR        :
             rVal >>= nSet32;
-            aFtnInfo.SetLineColor(nSet32);
+            aFootnoteInfo.SetLineColor(nSet32);
         break;
         case MID_FTN_HEIGHT:
         case MID_LINE_TEXT_DIST    :
@@ -135,9 +135,9 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
                     nSet32 = convertMm100ToTwip(nSet32);
                     switch(nMemberId & ~CONVERT_TWIPS)
                     {
-                        case MID_FTN_HEIGHT:            aFtnInfo.SetHeight(nSet32);    break;
-                        case MID_LINE_TEXT_DIST:        aFtnInfo.SetTopDist(nSet32);break;
-                        case MID_LINE_FOOTNOTE_DIST:    aFtnInfo.SetBottomDist(nSet32);break;
+                        case MID_FTN_HEIGHT:            aFootnoteInfo.SetHeight(nSet32);    break;
+                        case MID_LINE_TEXT_DIST:        aFootnoteInfo.SetTopDist(nSet32);break;
+                        case MID_LINE_FOOTNOTE_DIST:    aFootnoteInfo.SetBottomDist(nSet32);break;
                     }
                 }
         break;
@@ -146,7 +146,7 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0)
-                aFtnInfo.SetLineWidth(convertMm100ToTwip(nSet));
+                aFootnoteInfo.SetLineWidth(convertMm100ToTwip(nSet));
             else
                 bRet = false;
         }
@@ -158,7 +158,7 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             if(nSet < 0)
                 bRet = false;
             else
-                aFtnInfo.SetWidth(Fraction(nSet, 100));
+                aFootnoteInfo.SetWidth(Fraction(nSet, 100));
         }
         break;
         case MID_LINE_ADJUST       :
@@ -166,7 +166,7 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0 && nSet < 3) //text::HorizontalAdjust
-                aFtnInfo.SetAdj((SwFtnAdj)nSet);
+                aFootnoteInfo.SetAdj((SwFootnoteAdj)nSet);
             else
                 bRet = false;
         }
@@ -183,7 +183,7 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
                 case 3: eStyle = table::BorderLineStyle::DASHED; break;
                 default: break;
             }
-            aFtnInfo.SetLineStyle( eStyle );
+            aFootnoteInfo.SetLineStyle( eStyle );
         }
         break;
         default:

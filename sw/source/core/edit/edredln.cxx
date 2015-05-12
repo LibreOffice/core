@@ -49,12 +49,12 @@ bool SwEditShell::IsRedlineOn() const
 
 sal_uInt16 SwEditShell::GetRedlineCount() const
 {
-    return GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl().size();
+    return GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size();
 }
 
 const SwRangeRedline& SwEditShell::GetRedline( sal_uInt16 nPos ) const
 {
-    return *GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl()[ nPos ];
+    return *GetDoc()->getIDocumentRedlineAccess().GetRedlineTable()[ nPos ];
 }
 
 static void lcl_InvalidateAll( SwViewShell* pSh )
@@ -143,10 +143,10 @@ void SwEditShell::UpdateRedlineAttr()
  */
 sal_uInt16 SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
 {
-    const SwRedlineTbl& rTbl = GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl();
+    const SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
 
-    for( sal_uInt16 i = 0, nCnt = rTbl.size(); i < nCnt; ++i )
-        if( &rTbl[ i ]->GetRedlineData() == &rData )
+    for( sal_uInt16 i = 0, nCnt = rTable.size(); i < nCnt; ++i )
+        if( &rTable[ i ]->GetRedlineData() == &rData )
             return i;
     return USHRT_MAX;
 }

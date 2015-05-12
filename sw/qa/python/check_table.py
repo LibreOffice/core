@@ -246,7 +246,7 @@ class CheckTable(unittest.TestCase):
         xAnchor = xTable.getAnchor()
 
     # check all properties on the anchor - shouldn't crash despite
-    # pointing to a non-SwTxtNode
+    # pointing to a non-SwTextNode
         xPropsInfo = xAnchor.getPropertySetInfo()
         for i in xPropsInfo.getProperties():
             try:

@@ -737,10 +737,10 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         sal_Int32 nPortionStart = 0;
         sal_Int32 nPortionEnd = 0;
 
-        long nStartX = GetXValue( rLRItem.GetTxtLeft() + nSpaceBeforeAndMinLabelWidth );
+        long nStartX = GetXValue( rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth );
         if ( nIndex == 0 )
         {
-            long nFI = GetXValue( rLRItem.GetTxtFirstLineOfst() );
+            long nFI = GetXValue( rLRItem.GetTextFirstLineOfst() );
             nStartX += nFI;
 
             if ( !nLine && ( pParaPortion->GetBulletX() > nStartX ) )
@@ -907,9 +907,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         if ( aStatus.DoStretch() && ( nStretchX != 100 ) )
                             nCurPos = nCurPos*100/std::max(static_cast<sal_Int32>(nStretchX), static_cast<sal_Int32>(1));
 
-                        short nAllSpaceBeforeText = static_cast< short >(rLRItem.GetTxtLeft()/* + rLRItem.GetTxtLeft()*/ + nSpaceBeforeAndMinLabelWidth);
-                        aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTxtLeft()*/, aEditDoc.GetDefTab() );
-                        aCurrentTab.nTabPos = GetXValue( (long) ( aCurrentTab.aTabStop.GetTabPos() + nAllSpaceBeforeText /*rLRItem.GetTxtLeft()*/ ) );
+                        short nAllSpaceBeforeText = static_cast< short >(rLRItem.GetTextLeft()/* + rLRItem.GetTextLeft()*/ + nSpaceBeforeAndMinLabelWidth);
+                        aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTextLeft()*/, aEditDoc.GetDefTab() );
+                        aCurrentTab.nTabPos = GetXValue( (long) ( aCurrentTab.aTabStop.GetTabPos() + nAllSpaceBeforeText /*rLRItem.GetTextLeft()*/ ) );
                         aCurrentTab.bValid = false;
 
                         // Switch direction in R2L para...
@@ -1577,12 +1577,12 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
     sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pParaPortion->GetNode(), &nSpaceBefore );
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pParaPortion->GetNode() );
     const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pParaPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
-    short nStartX = GetXValue( (short)(rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst() + nSpaceBefore));
+    short nStartX = GetXValue( (short)(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBefore));
 
     Rectangle aBulletArea = Rectangle( Point(), Point() );
     if ( bLineBreak )
     {
-        nStartX = (short)GetXValue( rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );
+        nStartX = (short)GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );
     }
     else
     {
@@ -1593,7 +1593,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
             pParaPortion->SetBulletX( 0 ); // If Bullet set incorrectly.
         if ( pParaPortion->GetBulletX() > nStartX )
         {
-            nStartX = (short)GetXValue( rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );
+            nStartX = (short)GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );
             if ( pParaPortion->GetBulletX() > nStartX )
                 nStartX = pParaPortion->GetBulletX();
         }

@@ -434,7 +434,7 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
 }
 
 
-Size SvxFont::GetTxtSize( const OutputDevice *pOut, const OUString &rTxt,
+Size SvxFont::GetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                          const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
     sal_Int32 nTmp = nLen;

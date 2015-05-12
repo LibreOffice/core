@@ -89,7 +89,7 @@ public:
 
     Size GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt );
 
-    Size GetTxtSize( const OutputDevice *pOut, const OUString &rTxt,
+    Size GetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                       const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32 ) const;
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,

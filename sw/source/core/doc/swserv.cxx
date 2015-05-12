@@ -72,8 +72,8 @@ bool SwServerObject::GetData( uno::Any & rData,
             break;
 
         case TABLE_SERVER:
-            pPam = new SwPaM( *CNTNT_TYPE.pTblNd,
-                            *CNTNT_TYPE.pTblNd->EndOfSectionNode() );
+            pPam = new SwPaM( *CNTNT_TYPE.pTableNd,
+                            *CNTNT_TYPE.pTableNd->EndOfSectionNode() );
             break;
 
         case SECTION_SERVER:
@@ -122,7 +122,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
                 }
                 break;
 
-            case TABLE_SERVER:      pNd = CNTNT_TYPE.pTblNd;    break;
+            case TABLE_SERVER:      pNd = CNTNT_TYPE.pTableNd;    break;
             case SECTION_SERVER:    pNd = CNTNT_TYPE.pSectNd;   break;
             case NONE_SERVER: break;
         }
@@ -159,7 +159,7 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
             }
             break;
 
-        case TABLE_SERVER:      pNd = CNTNT_TYPE.pTblNd;    break;
+        case TABLE_SERVER:      pNd = CNTNT_TYPE.pTableNd;    break;
         case SECTION_SERVER:    pNd = CNTNT_TYPE.pSectNd;   break;
         case NONE_SERVER: break;
         }
@@ -203,7 +203,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
         }
         break;
 
-    case TABLE_SERVER:      pNd = CNTNT_TYPE.pTblNd;    break;
+    case TABLE_SERVER:      pNd = CNTNT_TYPE.pTableNd;    break;
     case SECTION_SERVER:    pNd = CNTNT_TYPE.pSectNd;   break;
 
     case SECTION_SERVER+1:
@@ -284,14 +284,14 @@ SwDataChanged::SwDataChanged( const SwPaM& rPam )
     : pPam( &rPam ), pPos( 0 ), pDoc( rPam.GetDoc() )
 {
     nNode = rPam.GetPoint()->nNode.GetIndex();
-    nCntnt = rPam.GetPoint()->nContent.GetIndex();
+    nContent = rPam.GetPoint()->nContent.GetIndex();
 }
 
 SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
     : pPam( 0 ), pPos( &rPos ), pDoc( pDc )
 {
     nNode = rPos.nNode.GetIndex();
-    nCntnt = rPos.nContent.GetIndex();
+    nContent = rPos.nContent.GetIndex();
 }
 
 SwDataChanged::~SwDataChanged()

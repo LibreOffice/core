@@ -146,10 +146,10 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         {
             rWrtSh.StartAction();
             rWrtSh.Push();
-            if(!rWrtSh.SelectTxtAttr( RES_TXTATR_INETFMT ))
+            if(!rWrtSh.SelectTextAttr( RES_TXTATR_INETFMT ))
                 rWrtSh.SelWrd();
         }
-        aCoreSet.Put(SfxStringItem(FN_PARAM_SELECTION, rWrtSh.GetSelTxt()));
+        aCoreSet.Put(SfxStringItem(FN_PARAM_SELECTION, rWrtSh.GetSelText()));
         bSelectionPut = true;
         if(!bSel)
         {
@@ -232,8 +232,8 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         }
         aTmpSet.ClearItem(FN_PARAM_SELECTION);
 
-        SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
-        if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateFmt())
+        SwTextFormatColl* pColl = rWrtSh.GetCurTextFormatColl();
+        if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateFormat())
         {
             rWrtSh.AutoUpdatePara(pColl, aTmpSet);
         }
@@ -249,7 +249,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
             aReq1.Done();
             rWrtSh.SwapPam();
             rWrtSh.ClearMark();
-            rWrtSh.DontExpandFmt();
+            rWrtSh.DontExpandFormat();
             rWrtSh.EndAction();
         }
     }
@@ -290,17 +290,17 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_LANGUAGE_STATUS:
         {
             // get the language
-            OUString aNewLangTxt;
+            OUString aNewLangText;
             SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_LANGUAGE_STATUS , false );
             if (pItem2)
-                aNewLangTxt = pItem2->GetValue();
+                aNewLangText = pItem2->GetValue();
 
             //!! Remember the view frame right now...
             //!! (call to GetView().GetViewFrame() will break if the
             //!! SwTextShell got destroyed meanwhile.)
             SfxViewFrame *pViewFrame = GetView().GetViewFrame();
 
-            if (aNewLangTxt == "*")
+            if (aNewLangText == "*")
             {
                 // open the dialog "Tools/Options/Language Settings - Language"
                 // to set the documents default language
@@ -321,7 +321,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.LockView( true );
 
                 // setting the new language...
-                if (!aNewLangTxt.isEmpty())
+                if (!aNewLangText.isEmpty())
                 {
                     const OUString aSelectionLangPrefix("Current_");
                     const OUString aParagraphLangPrefix("Paragraph_");
@@ -338,23 +338,23 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     sal_Int32 nPos = 0;
                     bool bForSelection = true;
                     bool bForParagraph = false;
-                    if (-1 != (nPos = aNewLangTxt.indexOf( aSelectionLangPrefix, 0 )))
+                    if (-1 != (nPos = aNewLangText.indexOf( aSelectionLangPrefix, 0 )))
                     {
                         // ... for the current selection
-                        aNewLangTxt = aNewLangTxt.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
+                        aNewLangText = aNewLangText.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
                         bForSelection = true;
                     }
-                    else if (-1 != (nPos = aNewLangTxt.indexOf(aParagraphLangPrefix, 0)))
+                    else if (-1 != (nPos = aNewLangText.indexOf(aParagraphLangPrefix, 0)))
                     {
                         // ... for the current paragraph language
-                        aNewLangTxt = aNewLangTxt.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
+                        aNewLangText = aNewLangText.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
                         bForSelection = true;
                         bForParagraph = true;
                     }
-                    else if (-1 != (nPos = aNewLangTxt.indexOf(aDocumentLangPrefix, 0)))
+                    else if (-1 != (nPos = aNewLangText.indexOf(aDocumentLangPrefix, 0)))
                     {
                         // ... as default document language
-                        aNewLangTxt = aNewLangTxt.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");
+                        aNewLangText = aNewLangText.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");
                         bForSelection = false;
                     }
 
@@ -374,12 +374,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     }
 
                     rWrtSh.StartUndo( ( !bForParagraph && !bForSelection ) ? UNDO_SETDEFTATTR : UNDO_EMPTY );
-                    if (aNewLangTxt == aStrNone)
+                    if (aNewLangText == aStrNone)
                         SwLangHelper::SetLanguage_None( rWrtSh, bForSelection, aCoreSet );
-                    else if (aNewLangTxt == aStrResetLangs)
+                    else if (aNewLangText == aStrResetLangs)
                         SwLangHelper::ResetLanguages( rWrtSh, bForSelection );
                     else
-                        SwLangHelper::SetLanguage( rWrtSh, aNewLangTxt, bForSelection, aCoreSet );
+                        SwLangHelper::SetLanguage( rWrtSh, aNewLangText, bForSelection, aCoreSet );
                     rWrtSh.EndUndo();
 
                     if (bForParagraph || !bForSelection)
@@ -443,7 +443,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
                 rWrtSh.ResetSelect(0, false);
                 rWrtSh.EndSelect();
-                rWrtSh.GotoFtnTxt();
+                rWrtSh.GotoFootnoteText();
             }
             rWrtSh.EndUndo( UNDO_UI_INSERT_FOOTNOTE );
             rReq.Done();
@@ -609,9 +609,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_AUTOFORMAT_REDLINE_APPLY:
         {
-            SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
+            SvxSwAutoFormatFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
             // This must always be false for the postprocessing.
-            aFlags.bAFmtByInput = false;
+            aFlags.bAFormatByInput = false;
             aFlags.bWithRedlining = true;
             rWrtSh.AutoFormat( &aFlags );
             aFlags.bWithRedlining = false;
@@ -652,9 +652,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case FN_AUTOFORMAT_APPLY:
         {
-            SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
+            SvxSwAutoFormatFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
             // This must always be false for the postprocessing.
-            aFlags.bAFmtByInput = false;
+            aFlags.bAFormatByInput = false;
             rWrtSh.AutoFormat( &aFlags );
             rReq.Done();
         }
@@ -662,10 +662,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_AUTOFORMAT_AUTO:
         {
             SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
-            bool bSet = pItem ? static_cast<const SfxBoolItem*>(pItem)->GetValue() : !rACfg.IsAutoFmtByInput();
-            if( bSet != rACfg.IsAutoFmtByInput() )
+            bool bSet = pItem ? static_cast<const SfxBoolItem*>(pItem)->GetValue() : !rACfg.IsAutoFormatByInput();
+            if( bSet != rACfg.IsAutoFormatByInput() )
             {
-                rACfg.SetAutoFmtByInput( bSet );
+                rACfg.SetAutoFormatByInput( bSet );
                 GetView().GetViewFrame()->GetBindings().Invalidate( nSlot );
                 if ( !pItem )
                     rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), bSet ) );
@@ -712,13 +712,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
             break;
         case FN_GOTO_REFERENCE:
         {
-            SwField *pFld = rWrtSh.GetCurFld();
-            if(pFld && pFld->GetTypeId() == TYP_GETREFFLD)
+            SwField *pField = rWrtSh.GetCurField();
+            if(pField && pField->GetTypeId() == TYP_GETREFFLD)
             {
                 rWrtSh.StartAllAction();
-                rWrtSh.SwCrsrShell::GotoRefMark( static_cast<SwGetRefField*>(pFld)->GetSetRefName(),
-                                    static_cast<SwGetRefField*>(pFld)->GetSubType(),
-                                    static_cast<SwGetRefField*>(pFld)->GetSeqNo() );
+                rWrtSh.SwCrsrShell::GotoRefMark( static_cast<SwGetRefField*>(pField)->GetSetRefName(),
+                                    static_cast<SwGetRefField*>(pField)->GetSubType(),
+                                    static_cast<SwGetRefField*>(pField)->GetSeqNo() );
                 rWrtSh.EndAllAction();
                 rReq.Done();
             }
@@ -738,7 +738,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
 
                 OUString sFormula(static_cast<const SfxStringItem*>(pItem)->GetValue());
-                SwFldMgr aFldMgr;
+                SwFieldMgr aFieldMgr;
                 rWrtSh.StartAllAction();
                 bool bDelSel;
                 if( (bDelSel = rWrtSh.HasSelection()) )
@@ -751,23 +751,23 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.EnterStdMode();
                 }
 
-                if( !bDelSel && aFldMgr.GetCurFld() && TYP_FORMELFLD == aFldMgr.GetCurTypeId() )
-                    aFldMgr.UpdateCurFld( aFldMgr.GetCurFld()->GetFormat(), OUString(), sFormula );
+                if( !bDelSel && aFieldMgr.GetCurField() && TYP_FORMELFLD == aFieldMgr.GetCurTypeId() )
+                    aFieldMgr.UpdateCurField( aFieldMgr.GetCurField()->GetFormat(), OUString(), sFormula );
                 else if( !sFormula.isEmpty() )
                 {
-                    if( rWrtSh.IsCrsrInTbl() )
+                    if( rWrtSh.IsCrsrInTable() )
                     {
                         SfxItemSet aSet( rWrtSh.GetAttrPool(), RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
-                        aSet.Put( SwTblBoxFormula( sFormula ));
-                        rWrtSh.SetTblBoxFormulaAttrs( aSet );
+                        aSet.Put( SwTableBoxFormula( sFormula ));
+                        rWrtSh.SetTableBoxFormulaAttrs( aSet );
                         rWrtSh.UpdateTable();
                     }
                     else
                     {
                         SvNumberFormatter* pFormatter = rWrtSh.GetNumberFormatter();
-                        sal_uLong nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM);
-                        SwInsertFld_Data aData(TYP_FORMELFLD, nsSwGetSetExpType::GSE_FORMULA, OUString(), sFormula, nSysNumFmt);
-                        aFldMgr.InsertFld(aData);
+                        sal_uLong nSysNumFormat = pFormatter->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM);
+                        SwInsertField_Data aData(TYP_FORMELFLD, nsSwGetSetExpType::GSE_FORMULA, OUString(), sFormula, nSysNumFormat);
+                        aFieldMgr.InsertField(aData);
                     }
                 }
 
@@ -778,7 +778,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                rWrtSh.EndAllTblBoxEdit();
+                rWrtSh.EndAllTableBoxEdit();
                 pVFrame->ToggleChildWindow( nId );
                 if( !pVFrame->HasChildWindow( nId ) )
                     pVFrame->GetBindings().InvalidateAll( true );
@@ -789,7 +789,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_TABLE_UNSET_READ_ONLY:
         {
-            rWrtSh.UnProtectTbls();
+            rWrtSh.UnProtectTables();
         }
         break;
         case FN_EDIT_HYPERLINK:
@@ -802,7 +802,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 rWrtSh.StartAction();
                 rWrtSh.Push();
-                if(!rWrtSh.SelectTxtAttr( RES_TXTATR_INETFMT ))
+                if(!rWrtSh.SelectTextAttr( RES_TXTATR_INETFMT ))
                     rWrtSh.SelWrd();
             }
             //now remove the attribute
@@ -939,7 +939,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // Left border as offset
             //#i24363# tab stops relative to indent
             const long nOff = rWrtSh.getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) ?
-                static_cast<const SvxLRSpaceItem&>(aCoreSet.Get( RES_LR_SPACE )).GetTxtLeft() : 0;
+                static_cast<const SvxLRSpaceItem&>(aCoreSet.Get( RES_LR_SPACE )).GetTextLeft() : 0;
             SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
             aCoreSet.Put( aOff );
 
@@ -1009,8 +1009,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if( SfxItemState::SET == pSet->GetItemState( RES_PARATR_DROP, false, &pItem ))
                 {
                     OUString sCharStyleName;
-                    if(static_cast<const SwFmtDrop*>(pItem)->GetCharFmt())
-                        sCharStyleName = static_cast<const SwFmtDrop*>(pItem)->GetCharFmt()->GetName();
+                    if(static_cast<const SwFormatDrop*>(pItem)->GetCharFormat())
+                        sCharStyleName = static_cast<const SwFormatDrop*>(pItem)->GetCharFormat()->GetName();
                     pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName));
                 }
             }
@@ -1035,12 +1035,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     if ( SfxItemState::SET == pSet->GetItemState(FN_DROP_TEXT, false, &pItem) )
                     {
                         if ( !static_cast<const SfxStringItem*>(pItem)->GetValue().isEmpty() )
-                            rWrtSh.ReplaceDropTxt(static_cast<const SfxStringItem*>(pItem)->GetValue(), pPaM);
+                            rWrtSh.ReplaceDropText(static_cast<const SfxStringItem*>(pItem)->GetValue(), pPaM);
                     }
                     rWrtSh.SetAttrSet( *pSet, SetAttrMode::DEFAULT, pPaM );
                     rWrtSh.EndAction();
-                    SwTxtFmtColl* pColl = rWrtSh.GetPaMTxtFmtColl( pPaM );
-                    if(pColl && pColl->IsAutoUpdateFmt())
+                    SwTextFormatColl* pColl = rWrtSh.GetPaMTextFormatColl( pPaM );
+                    if(pColl && pColl->IsAutoUpdateFormat())
                     {
                         rWrtSh.AutoUpdatePara(pColl, *pSet, pPaM);
                     }
@@ -1336,16 +1336,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
         rWrtSh.GetCurAttr(aSet);
         if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT, true ))
         {
-            const SwFmtINetFmt& rINetFmt = dynamic_cast<const SwFmtINetFmt&>( aSet.Get(RES_TXTATR_INETFMT, true) );
+            const SwFormatINetFormat& rINetFormat = dynamic_cast<const SwFormatINetFormat&>( aSet.Get(RES_TXTATR_INETFMT, true) );
             if( nSlot == FN_COPY_HYPERLINK_LOCATION )
             {
                 ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();
                 vcl::unohelper::TextDataObject::CopyStringTo(
-                        rINetFmt.GetValue(),
+                        rINetFormat.GetValue(),
                         xClipboard );
             }
             else
-                rWrtSh.ClickToINetAttr(rINetFmt, URLLOAD_NOFILTER);
+                rWrtSh.ClickToINetAttr(rINetFormat, URLLOAD_NOFILTER);
         }
     }
     break;
@@ -1437,7 +1437,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             const sal_Int16 nWordType = ::i18n::WordType::DICTIONARY_WORD;
             bool bWord = rSh.IsInWord( nWordType ) || rSh.IsStartWord( nWordType ) || rSh.IsEndWord( nWordType );
             if (bValid && bWord)
-               aText = rSh.HasSelection()? OUString(rSh.GetSelTxt()) : rSh.GetCurWord();
+               aText = rSh.HasSelection()? OUString(rSh.GetSelText()) : rSh.GetCurWord();
 
             LanguageType nLang = rSh.GetCurLang();
             LanguageTag aLanguageTag( nLang);
@@ -1476,7 +1476,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem(nWhich);
                 }
                 else if ( nWhich == FN_EDIT_FORMULA
-                          && rSh.CrsrInsideInputFld() )
+                          && rSh.CrsrInsideInputField() )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -1492,7 +1492,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 if ( rSh.GetFrmType(0,true) & nNoType )
                     rSet.DisableItem(nWhich);
 
-                if ( rSh.CrsrInsideInputFld() )
+                if ( rSh.CrsrInsideInputField() )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -1503,15 +1503,15 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case SID_INSERTDOC:
         case FN_INSERT_GLOSSARY:
         case FN_EXPAND_GLOSSARY:
-            if ( rSh.CrsrInsideInputFld() )
+            if ( rSh.CrsrInsideInputField() )
             {
                 rSet.DisableItem( nWhich );
             }
             break;
 
         case FN_INSERT_TABLE:
-            if ( rSh.CrsrInsideInputFld()
-                 || rSh.GetTableFmt()
+            if ( rSh.CrsrInsideInputField()
+                 || rSh.GetTableFormat()
                  || (rSh.GetFrmType(0,true) & FrmTypeFlags::FOOTNOTE) )
             {
                 rSet.DisableItem( nWhich );
@@ -1524,14 +1524,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
         case FN_GOTO_REFERENCE:
             {
-                SwField *pFld = rSh.GetCurFld();
-                if ( !pFld || (pFld &&  pFld->GetTypeId() != TYP_GETREFFLD) )
+                SwField *pField = rSh.GetCurField();
+                if ( !pField || (pField &&  pField->GetTypeId() != TYP_GETREFFLD) )
                     rSet.DisableItem(nWhich);
             }
             break;
         case FN_AUTOFORMAT_AUTO:
             {
-                rSet.Put( SfxBoolItem( nWhich, SvxAutoCorrCfg::Get().IsAutoFmtByInput() ));
+                rSet.Put( SfxBoolItem( nWhich, SvxAutoCorrCfg::Get().IsAutoFormatByInput() ));
             }
             break;
 
@@ -1611,7 +1611,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
         case FN_INSERT_BOOKMARK:
             if( rSh.IsTableMode()
-                || rSh.CrsrInsideInputFld() )
+                || rSh.CrsrInsideInputField() )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -1619,7 +1619,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
         case FN_INSERT_BREAK:
             if ( rSh.HasReadonlySel()
-                 && !rSh.CrsrInsideInputFld() )
+                 && !rSh.CrsrInsideInputField() )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -1628,7 +1628,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_BREAK_DLG:
         case FN_INSERT_COLUMN_BREAK:
         case FN_INSERT_PAGEBREAK:
-            if( rSh.CrsrInsideInputFld() )
+            if( rSh.CrsrInsideInputField() )
             {
                 rSet.DisableItem( nWhich );
             }
@@ -1643,7 +1643,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case FN_TABLE_SORT_DIALOG:
             case FN_SORTING_DLG:
                 if(!rSh.HasSelection() ||
-                        (FN_TABLE_SORT_DIALOG == nWhich && !rSh.GetTableFmt()))
+                        (FN_TABLE_SORT_DIALOG == nWhich && !rSh.GetTableFormat()))
                     rSet.DisableItem( nWhich );
             break;
 
@@ -1651,7 +1651,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 {
                     SvtCJKOptions aCJKOptions;
                     if( !aCJKOptions.IsRubyEnabled()
-                        || rSh.CrsrInsideInputFld() )
+                        || rSh.CrsrInsideInputField() )
                     {
                         GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
                         rSet.DisableItem(nWhich);
@@ -1665,7 +1665,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 if( GetView().GetDocShell()->IsReadOnly()
                     || ( !GetView().GetViewFrame()->HasChildWindow(nWhich)
                          && rSh.HasReadonlySel() )
-                    || rSh.CrsrInsideInputFld() )
+                    || rSh.CrsrInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }

@@ -78,7 +78,7 @@ using namespace ::com::sun::star::linguistic2;
  * Used for a newly formed group object <SwDoc::GroupSelection(..)>
  * and the members of a destroyed group <SwDoc::UnGroupSelection(..)>
  */
-static void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
+static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
                                 const SdrObject& _rSdrObj )
 {
     const SwContact* pContact = GetUserCall( &_rSdrObj );
@@ -90,8 +90,8 @@ static void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
     {
         const SwFrm* pAnchorFrm = pContact->GetAnchoredObj( &_rSdrObj )->GetAnchorFrm();
         OSL_ENSURE( !pAnchorFrm ||
-                !pAnchorFrm->IsTxtFrm() ||
-                !static_cast<const SwTxtFrm*>(pAnchorFrm)->IsFollow(),
+                !pAnchorFrm->IsTextFrm() ||
+                !static_cast<const SwTextFrm*>(pAnchorFrm)->IsFollow(),
                 "<lcl_AdjustPositioningAttr(..)> - anchor frame is a follow. Please inform OD." );
         bool bVert = false;
         bool bR2L = false;
@@ -111,7 +111,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
             // If no anchor frame exist - e.g. because no layout exists - the
             // default layout direction is taken.
             const SvxFrameDirectionItem* pDirItem =
-                static_cast<const SvxFrameDirectionItem*>(&(_pFrmFmt->GetAttrSet().GetPool()->GetDefaultItem( RES_FRAMEDIR )));
+                static_cast<const SvxFrameDirectionItem*>(&(_pFrameFormat->GetAttrSet().GetPool()->GetDefaultItem( RES_FRAMEDIR )));
             switch ( pDirItem->GetValue() )
             {
                 case FRMDIR_VERT_TOP_LEFT:
@@ -173,10 +173,10 @@ static void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
         }
     }
 
-    _pFrmFmt->SetFmtAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
-    _pFrmFmt->SetFmtAttr( SwFmtVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
+    _pFrameFormat->SetFormatAttr( SwFormatHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+    _pFrameFormat->SetFormatAttr( SwFormatVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
     // #i44334#, #i44681# - positioning attributes already set
-    _pFrmFmt->PosAttrSet();
+    _pFrameFormat->PosAttrSet();
     // #i34750# - keep current object rectangle for  drawing
     // objects. The object rectangle is used on events from the drawing layer
     // to adjust the positioning attributes - see <SwDrawContact::_Changed(..)>.
@@ -205,11 +205,11 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     SwDrawContact* pNewContact = 0;
     if( bNoGroup )
     {
-        SwDrawFrmFmt *pFmt = 0L;
+        SwDrawFrameFormat *pFormat = 0L;
 
         // Revoke anchor attribute.
         SwDrawContact *pMyContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
-        const SwFmtAnchor aAnch( pMyContact->GetFmt()->GetAnchor() );
+        const SwFormatAnchor aAnch( pMyContact->GetFormat()->GetAnchor() );
 
         SwUndoDrawGroup *const pUndo = (!GetIDocumentUndoRedo().DoesUndo())
                                  ? 0
@@ -236,15 +236,15 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
                     "<SwDoc::GroupSelection(..)> - group members have different positioning status!" );
 #endif
 
-            pFmt = static_cast<SwDrawFrmFmt*>(pContact->GetFmt());
+            pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
             // Deletes itself!
             pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
             pObj->SetUserCall( 0 );
 
             if( pUndo )
-                pUndo->AddObj( i, pFmt, pObj );
+                pUndo->AddObj( i, pFormat, pObj );
             else
-                DelFrmFmt( pFmt );
+                DelFrameFormat( pFormat );
 
             // #i45952# - re-introduce position normalization of group member
             // objects, because its anchor position is cleared, when they are
@@ -254,18 +254,18 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             pObj->NbcMove( Size( aAnchorPos.getX(), aAnchorPos.getY() ) );
         }
 
-        pFmt = MakeDrawFrmFmt( OUString("DrawObject"),
-                                GetDfltFrmFmt() );
-        pFmt->SetFmtAttr( aAnch );
+        pFormat = MakeDrawFrameFormat( OUString("DrawObject"),
+                                GetDfltFrameFormat() );
+        pFormat->SetFormatAttr( aAnch );
         // #i36010# - set layout direction of the position
-        pFmt->SetPositionLayoutDir(
+        pFormat->SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
 
         rDrawView.GroupMarked();
         OSL_ENSURE( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
 
         SdrObject* pNewGroupObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        pNewContact = new SwDrawContact( pFmt, pNewGroupObj );
+        pNewContact = new SwDrawContact( pFormat, pNewGroupObj );
         // #i35635#
         pNewContact->MoveObjToVisibleLayer( pNewGroupObj );
         pNewContact->ConnectToLayout();
@@ -274,12 +274,12 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         if ( !bGroupMembersNotPositioned )
         {
             // #i26791# - Adjust positioning and alignment attributes.
-            lcl_AdjustPositioningAttr( pFmt, *pNewGroupObj );
+            lcl_AdjustPositioningAttr( pFormat, *pNewGroupObj );
         }
 
         if( pUndo )
         {
-            pUndo->SetGroupFmt( pFmt );
+            pUndo->SetGroupFormat( pFormat );
             GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
     }
@@ -310,22 +310,22 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
-    std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >* pFmtsAndObjs( 0L );
+    std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > >* pFormatsAndObjs( 0L );
     const size_t nMarkCount( rMrkList.GetMarkCount() );
     if ( nMarkCount )
     {
-        pFmtsAndObjs = new std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >[nMarkCount];
+        pFormatsAndObjs = new std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > >[nMarkCount];
         SdrObject *pMyObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         if( !pMyObj->GetUpGroup() )
         {
-            OUString sDrwFmtNm("DrawObject");
+            OUString sDrwFormatNm("DrawObject");
             for ( size_t i = 0; i < nMarkCount; ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
                 if ( pObj->IsA( TYPE(SdrObjGroup) ) )
                 {
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
-                    SwFmtAnchor aAnch( pContact->GetFmt()->GetAnchor() );
+                    SwFormatAnchor aAnch( pContact->GetFormat()->GetAnchor() );
                     SdrObjList *pLst = static_cast<SdrObjGroup*>(pObj)->GetSubList();
 
                     SwUndoDrawUnGroup* pUndo = 0;
@@ -338,16 +338,16 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                     for ( size_t i2 = 0; i2 < pLst->GetObjCount(); ++i2 )
                     {
                         SdrObject* pSubObj = pLst->GetObj( i2 );
-                        SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( sDrwFmtNm,
-                                                            GetDfltFrmFmt() );
-                        pFmt->SetFmtAttr( aAnch );
+                        SwDrawFrameFormat *pFormat = MakeDrawFrameFormat( sDrwFormatNm,
+                                                            GetDfltFrameFormat() );
+                        pFormat->SetFormatAttr( aAnch );
                         // #i36010# - set layout direction of the position
-                        pFmt->SetPositionLayoutDir(
+                        pFormat->SetPositionLayoutDir(
                             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
-                        pFmtsAndObjs[i].push_back( std::pair< SwDrawFrmFmt*, SdrObject* >( pFmt, pSubObj ) );
+                        pFormatsAndObjs[i].push_back( std::pair< SwDrawFrameFormat*, SdrObject* >( pFormat, pSubObj ) );
 
                         if( bUndo )
-                            pUndo->AddObj( static_cast<sal_uInt16>(i2), pFmt );
+                            pUndo->AddObj( static_cast<sal_uInt16>(i2), pFormat );
                     }
                 }
             }
@@ -365,24 +365,24 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
-        while ( pFmtsAndObjs[i].size() > 0 )
+        while ( pFormatsAndObjs[i].size() > 0 )
         {
-            SwDrawFrmFmt* pFmt( pFmtsAndObjs[i].back().first );
-            SdrObject* pObj( pFmtsAndObjs[i].back().second );
-            pFmtsAndObjs[i].pop_back();
+            SwDrawFrameFormat* pFormat( pFormatsAndObjs[i].back().first );
+            SdrObject* pObj( pFormatsAndObjs[i].back().second );
+            pFormatsAndObjs[i].pop_back();
 
-            SwDrawContact* pContact = new SwDrawContact( pFmt, pObj );
+            SwDrawContact* pContact = new SwDrawContact( pFormat, pObj );
             pContact->MoveObjToVisibleLayer( pObj );
             pContact->ConnectToLayout();
-            lcl_AdjustPositioningAttr( pFmt, *pObj );
+            lcl_AdjustPositioningAttr( pFormat, *pObj );
 
             if ( bUndo )
             {
-                pUndo->AddFmtAndObj( pFmt, pObj );
+                pUndo->AddFormatAndObj( pFormat, pObj );
             }
         }
     }
-    delete [] pFmtsAndObjs;
+    delete [] pFormatsAndObjs;
 }
 
 bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
@@ -399,11 +399,11 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
             if( pObj->ISA(SwVirtFlyDrawObj) )
             {
-                SwFlyFrmFmt* pFrmFmt =
-                    static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetFmt();
-                if( pFrmFmt )
+                SwFlyFrameFormat* pFrameFormat =
+                    static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetFormat();
+                if( pFrameFormat )
                 {
-                    getIDocumentLayoutAccess().DelLayoutFmt( pFrmFmt );
+                    getIDocumentLayoutAccess().DelLayoutFormat( pFrameFormat );
                     bDelMarked = false;
                 }
             }
@@ -415,13 +415,13 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             if( !pObj->ISA(SwVirtFlyDrawObj) )
             {
                 SwDrawContact *pC = static_cast<SwDrawContact*>(GetUserCall(pObj));
-                SwDrawFrmFmt *pFrmFmt = static_cast<SwDrawFrmFmt*>(pC->GetFmt());
-                if( pFrmFmt &&
-                    FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
+                SwDrawFrameFormat *pFrameFormat = static_cast<SwDrawFrameFormat*>(pC->GetFormat());
+                if( pFrameFormat &&
+                    FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId() )
                 {
                     rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), true );
                     --i;
-                    getIDocumentLayoutAccess().DelLayoutFmt( pFrmFmt );
+                    getIDocumentLayoutAccess().DelLayoutFormat( pFrameFormat );
                 }
             }
         }
@@ -444,7 +444,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(pObj->GetUserCall());
                     if( pContact ) // of course not for grouped objects
                     {
-                        SwDrawFrmFmt *pFmt = static_cast<SwDrawFrmFmt*>(pContact->GetFmt());
+                        SwDrawFrameFormat *pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
                         // before delete of selection is performed, marked
                         // <SwDrawVirtObj>-objects have to be replaced by its
                         // reference objects.  Thus, assert, if a
@@ -458,9 +458,9 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                         pObj->SetUserCall( 0 );
 
                         if( pUndo )
-                            pUndo->AddObj( i, pFmt, rMark );
+                            pUndo->AddObj( i, pFormat, rMark );
                         else
-                            DelFrmFmt( pFmt );
+                            DelFrameFormat( pFormat );
                     }
                 }
 
@@ -479,34 +479,34 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
     return bCallBase;
 }
 
-_ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
+_ZSortFly::_ZSortFly( const SwFrameFormat* pFrameFormat, const SwFormatAnchor* pFlyAn,
                       sal_uInt32 nArrOrdNum )
-    : pFmt( pFrmFmt ), pAnchor( pFlyAn ), nOrdNum( nArrOrdNum )
+    : pFormat( pFrameFormat ), pAnchor( pFlyAn ), nOrdNum( nArrOrdNum )
 {
     // #i11176#
     // This also needs to work when no layout exists. Thus, for
     // FlyFrames an alternative method is used now in that case.
-    if( RES_FLYFRMFMT == pFmt->Which() )
+    if( RES_FLYFRMFMT == pFormat->Which() )
     {
-        if( pFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )
+        if( pFormat->getIDocumentLayoutAccess()->GetCurrentViewShell() )
         {
             // See if there is an SdrObject for it
-            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>( *pFrmFmt ).First();
+            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFormat>( *pFrameFormat ).First();
             if( pFly )
                 nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
         }
         else
         {
             // See if there is an SdrObject for it
-            SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFmt>( *pFrmFmt ).First();
+            SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFormat>( *pFrameFormat ).First();
             if( pContact )
                 nOrdNum = pContact->GetMaster()->GetOrdNum();
         }
     }
-    else if( RES_DRAWFRMFMT == pFmt->Which() )
+    else if( RES_DRAWFRMFMT == pFormat->Which() )
     {
         // See if there is an SdrObject for it
-        SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>( *pFrmFmt ).First();
+        SwDrawContact* pContact = SwIterator<SwDrawContact,SwFormat>( *pFrameFormat ).First();
         if( pContact )
             nOrdNum = pContact->GetMaster()->GetOrdNum();
     }
@@ -557,25 +557,25 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 break;
             }
 
-            sal_uInt16 nChrFmt;
+            sal_uInt16 nChrFormat;
 
             if (IsVisitedURL(static_cast<const SvxURLField*>(pField)->GetURL()))
-                nChrFmt = RES_POOLCHR_INET_VISIT;
+                nChrFormat = RES_POOLCHR_INET_VISIT;
             else
-                nChrFmt = RES_POOLCHR_INET_NORMAL;
+                nChrFormat = RES_POOLCHR_INET_NORMAL;
 
-            SwFmt *pFmt = getIDocumentStylePoolAccess().GetCharFmtFromPool(nChrFmt);
+            SwFormat *pFormat = getIDocumentStylePoolAccess().GetCharFormatFromPool(nChrFormat);
 
             Color aColor(COL_LIGHTBLUE);
-            if (pFmt)
-                aColor = pFmt->GetColor().GetValue();
+            if (pFormat)
+                aColor = pFormat->GetColor().GetValue();
 
-            pInfo->SetTxtColor(aColor);
+            pInfo->SetTextColor(aColor);
         }
         else if (pField && pField->ISA(SdrMeasureField))
         {
             // Measure field
-            pInfo->ClearFldColor();
+            pInfo->ClearFieldColor();
         }
         else if ( pField && pField->ISA(SvxExtTimeField))
         {

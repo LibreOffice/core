@@ -169,7 +169,7 @@ public:
     // build a Which-Map 'rWhichMap' from an array of WhichIds
     // 'pWhichIds'. It has the length 'nWhichIds'.
     // The WhichMap is not deleted.
-    static void BuildWhichTbl( std::vector<sal_uInt16> &rWhichMap,
+    static void BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
                                sal_uInt16 *pWhichIds,
                                sal_uInt16 nWhichIds );
 };

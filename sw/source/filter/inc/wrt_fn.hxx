@@ -22,7 +22,7 @@
 
 // einige Forward-Deklarationen
 class SwNode;
-class SwCntntNode;
+class SwContentNode;
 class Writer;
 class SfxPoolItem;
 class SfxItemSet;
@@ -46,7 +46,7 @@ RES_NODE_BEGIN = 0,
 RES_NODE_END
 };
 
-typedef Writer& (*FnNodeOut)( Writer&, SwCntntNode& );
+typedef Writer& (*FnNodeOut)( Writer&, SwContentNode& );
 typedef FnNodeOut SwNodeFnTab[ RES_NODE_END - RES_NODE_BEGIN ];
 
 SW_DLLPUBLIC Writer& Out( const SwNodeFnTab, SwNode&, Writer & rWrt );

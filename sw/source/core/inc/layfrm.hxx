@@ -22,13 +22,13 @@
 #include "frame.hxx"
 
 class SwAnchoredObject;
-class SwCntntFrm;
+class SwContentFrm;
 class SwFlowFrm;
-class SwFmtCol;
+class SwFormatCol;
 struct SwCrsrMoveState;
-class SwFrmFmt;
+class SwFrameFormat;
 class SwBorderAttrs;
-class SwFmtFrmSize;
+class SwFormatFrmSize;
 class SwCellFrm;
 
 class SwLayoutFrm: public SwFrm
@@ -38,8 +38,8 @@ class SwLayoutFrm: public SwFrm
     friend class SwFrm;
 
     // Releases the Lower while restructuring columns
-    friend SwFrm* SaveCntnt( SwLayoutFrm *, SwFrm * );
-    friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
+    friend SwFrm* SaveContent( SwLayoutFrm *, SwFrm * );
+    friend void   RestoreContent( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
 #ifdef DBG_UTIL
     //removes empty SwSectionFrms from a chain
@@ -62,7 +62,7 @@ protected:
     virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
 
-    long CalcRel( const SwFmtFrmSize &rSz, bool bWidth ) const;
+    long CalcRel( const SwFormatFrmSize &rSz, bool bWidth ) const;
 
 public:
     // --> #i28701#
@@ -75,13 +75,13 @@ public:
     /// Change size of lowers proportionally
     void ChgLowersProp( const Size& rOldSize );
 
-    void AdjustColumns( const SwFmtCol *pCol, bool bAdjustAttributes );
+    void AdjustColumns( const SwFormatCol *pCol, bool bAdjustAttributes );
 
-    void ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
-        const bool bChgFtn = false );
+    void ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew,
+        const bool bChgFootnote = false );
 
     /// Paints the column separation line for the inner columns
-    void PaintColLines( const SwRect &, const SwFmtCol &,
+    void PaintColLines( const SwRect &, const SwFormatCol &,
                         const SwPageFrm * ) const;
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
@@ -93,49 +93,49 @@ public:
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
 
     /**
-     * Finds the closest Cntnt for the SPoint
+     * Finds the closest Content for the SPoint
      * Is used for Pages, Flys and Cells if GetCrsrOfst failed
      */
-    const SwCntntFrm* GetCntntPos( Point &rPoint, const bool bDontLeave,
+    const SwContentFrm* GetContentPos( Point &rPoint, const bool bDontLeave,
                                    const bool bBodyOnly = false,
                                    const bool bCalc = false,
                                    const SwCrsrMoveState *pCMS = 0,
                                    const bool bDefaultExpand = true ) const;
 
-    SwLayoutFrm( SwFrmFmt*, SwFrm* );
+    SwLayoutFrm( SwFrameFormat*, SwFrm* );
 
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
     const SwFrm *Lower() const { return m_pLower; }
           SwFrm *Lower()       { return m_pLower; }
-    const SwCntntFrm *ContainsCntnt() const;
-    inline SwCntntFrm *ContainsCntnt();
+    const SwContentFrm *ContainsContent() const;
+    inline SwContentFrm *ContainsContent();
     const SwCellFrm *FirstCell() const;
     inline SwCellFrm *FirstCell();
 
     /**
      * Method <ContainsAny()> doesn't investigate content of footnotes by default.
      * But under certain circumstances this investigation is intended.
-     * Thus, introduce new optional parameter <_bInvestigateFtnForSections>.
+     * Thus, introduce new optional parameter <_bInvestigateFootnoteForSections>.
      * It's default is <false>, still indicating that content of footnotes isn't
      * investigated for sections.
      */
-    const SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false ) const;
-    inline SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false );
+    const SwFrm *ContainsAny( const bool _bInvestigateFootnoteForSections = false ) const;
+    inline SwFrm *ContainsAny( const bool _bInvestigateFootnoteForSections = false );
     bool IsAnLower( const SwFrm * ) const;
 
-    virtual const SwFrmFmt *GetFmt() const;
-    virtual       SwFrmFmt *GetFmt();
-    void        SetFrmFmt( SwFrmFmt* );
+    virtual const SwFrameFormat *GetFormat() const;
+    virtual       SwFrameFormat *GetFormat();
+    void        SetFrameFormat( SwFrameFormat* );
 
     /**
-     * Moving the Ftns of all Lowers - starting from StartCntnt
+     * Moving the Footnotes of all Lowers - starting from StartContent
      *
-     * @returns true if at least one Ftn was moved
-     * Calls the page number update if bFtnNums is set
+     * @returns true if at least one Footnote was moved
+     * Calls the page number update if bFootnoteNums is set
      */
-    bool MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
-                        SwFtnBossFrm *pNewBoss, const bool bFtnNums );
+    bool MoveLowerFootnotes( SwContentFrm *pStart, SwFootnoteBossFrm *pOldBoss,
+                        SwFootnoteBossFrm *pNewBoss, const bool bFootnoteNums );
 
     // --> #i28701# - change purpose of method and its name
     // --> #i44016# - add parameter <_bUnlockPosOfObjs> to
@@ -196,9 +196,9 @@ public:
  * In order to save us from duplicating implementations, we cast here
  * a little.
  */
-inline SwCntntFrm* SwLayoutFrm::ContainsCntnt()
+inline SwContentFrm* SwLayoutFrm::ContainsContent()
 {
-    return const_cast<SwCntntFrm*>(static_cast<const SwLayoutFrm*>(this)->ContainsCntnt());
+    return const_cast<SwContentFrm*>(static_cast<const SwLayoutFrm*>(this)->ContainsContent());
 }
 
 inline SwCellFrm* SwLayoutFrm::FirstCell()
@@ -206,9 +206,9 @@ inline SwCellFrm* SwLayoutFrm::FirstCell()
     return const_cast<SwCellFrm*>(static_cast<const SwLayoutFrm*>(this)->FirstCell());
 }
 
-inline SwFrm* SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections )
+inline SwFrm* SwLayoutFrm::ContainsAny( const bool _bInvestigateFootnoteForSections )
 {
-    return const_cast<SwFrm*>(static_cast<const SwLayoutFrm*>(this)->ContainsAny( _bInvestigateFtnForSections ));
+    return const_cast<SwFrm*>(static_cast<const SwLayoutFrm*>(this)->ContainsAny( _bInvestigateFootnoteForSections ));
 }
 
 /**

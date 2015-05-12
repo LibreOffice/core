@@ -2,7 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
-  <object class="GtkBox" id="FldRefPage">
+  <object class="GtkBox" id="FieldRefPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -148,7 +148,7 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="swuilo-SwFldRefTreeListBox" id="selecttip:border">
+                          <object class="swuilo-SwFieldRefTreeListBox" id="selecttip:border">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>

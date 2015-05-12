@@ -40,7 +40,7 @@ function Main() {
 	print
     print  "void main( int , char *[] ) {"
     sStr = "#define"
-    print  "    int nSize = (sizeof(ppPoolIds) / sizeof(PoolFmtIds)) - 1;"
+    print  "    int nSize = (sizeof(ppPoolIds) / sizeof(PoolFormatIds)) - 1;"
     print  "    for( int n = 0; n < nSize; n++ )"
     print  "        printf( \"" sStr " %s\\t%8d\\n\", ppPoolIds[ n ].pStr, ppPoolIds[ n ].nId );"
     print  "}"
@@ -48,8 +48,8 @@ function Main() {
 
 function TableHead() {
 	print
-    print "struct PoolFmtIds { int nId; const char* pStr; };"
-    print "static PoolFmtIds ppPoolIds[] = {"
+    print "struct PoolFormatIds { int nId; const char* pStr; };"
+    print "static PoolFormatIds ppPoolIds[] = {"
 }
 
 function TableTail() {

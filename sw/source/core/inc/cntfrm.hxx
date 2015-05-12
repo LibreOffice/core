@@ -26,15 +26,15 @@
 #include "node.hxx"
 
 class SwLayoutFrm;
-class SwCntntNode;
+class SwContentNode;
 class SwBorderAttrs;
 class SwAttrSetChg;
-class SwTxtFrm;
+class SwTextFrm;
 
 // implemented in cntfrm.cxx, used in cntfrm.cxx and crsrsh.cxx
-extern bool GetFrmInPage( const SwCntntFrm*, SwWhichPage, SwPosPage, SwPaM* );
+extern bool GetFrmInPage( const SwContentFrm*, SwWhichPage, SwPosPage, SwPaM* );
 
-class SwCntntFrm: public SwFrm, public SwFlowFrm
+class SwContentFrm: public SwFrm, public SwFlowFrm
 {
     friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );    // calls MakePrtArea
 
@@ -52,7 +52,7 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
 
     virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool& ) SAL_OVERRIDE;
 
-    const SwCntntFrm* ImplGetNextCntntFrm( bool bFwd ) const;
+    const SwContentFrm* ImplGetNextContentFrm( bool bFwd ) const;
 
 protected:
     bool MakePrtArea( const SwBorderAttrs & );
@@ -61,10 +61,10 @@ protected:
     virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
 
-    SwCntntFrm( SwCntntNode * const, SwFrm* );
+    SwContentFrm( SwContentNode * const, SwFrm* );
 
     virtual void DestroyImpl() SAL_OVERRIDE;
-    virtual ~SwCntntFrm();
+    virtual ~SwContentFrm();
 
 public:
     TYPEINFO_OVERRIDE(); // already in base class
@@ -72,15 +72,15 @@ public:
     virtual void Cut() SAL_OVERRIDE;
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) SAL_OVERRIDE;
 
-    inline const SwCntntNode *GetNode() const;
-    inline       SwCntntNode *GetNode();
+    inline const SwContentNode *GetNode() const;
+    inline       SwContentNode *GetNode();
     sal_uInt16 GetSectionLevel();
 
-    inline const SwCntntFrm *GetFollow() const;
-    inline       SwCntntFrm *GetFollow();
-    inline const SwCntntFrm *GetPrecede() const;
-    inline       SwCntntFrm *GetPrecede();
-    SwTxtFrm* FindMaster() const;
+    inline const SwContentFrm *GetFollow() const;
+    inline       SwContentFrm *GetFollow();
+    inline const SwContentFrm *GetPrecede() const;
+    inline       SwContentFrm *GetPrecede();
+    SwTextFrm* FindMaster() const;
 
     // layout dependent cursor travelling
     virtual bool LeftMargin( SwPaM * ) const;
@@ -101,55 +101,55 @@ public:
     // bTst indicates that we are currently doing a test formatting
     virtual bool WouldFit( SwTwips &nMaxHeight, bool &bSplit, bool bTst );
 
-    bool MoveFtnCntFwd( bool, SwFtnBossFrm* ); // called by MoveFwd if content
+    bool MoveFootnoteCntFwd( bool, SwFootnoteBossFrm* ); // called by MoveFwd if content
 
-    inline  SwCntntFrm* GetNextCntntFrm() const;
-    inline  SwCntntFrm* GetPrevCntntFrm() const;
+    inline  SwContentFrm* GetNextContentFrm() const;
+    inline  SwContentFrm* GetPrevContentFrm() const;
     static bool CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave, long nBottom, bool bSkipRowSpanCells );
-    void RegisterToNode( SwCntntNode& );
+    void RegisterToNode( SwContentNode& );
 };
 
-inline SwCntntFrm* SwCntntFrm::GetNextCntntFrm() const
+inline SwContentFrm* SwContentFrm::GetNextContentFrm() const
 {
-    if ( GetNext() && GetNext()->IsCntntFrm() )
-        return const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(GetNext()));
+    if ( GetNext() && GetNext()->IsContentFrm() )
+        return const_cast<SwContentFrm*>(static_cast<const SwContentFrm*>(GetNext()));
     else
-        return const_cast<SwCntntFrm*>(ImplGetNextCntntFrm( true ));
+        return const_cast<SwContentFrm*>(ImplGetNextContentFrm( true ));
 }
 
-inline SwCntntFrm* SwCntntFrm::GetPrevCntntFrm() const
+inline SwContentFrm* SwContentFrm::GetPrevContentFrm() const
 {
-    if ( GetPrev() && GetPrev()->IsCntntFrm() )
-        return const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(GetPrev()));
+    if ( GetPrev() && GetPrev()->IsContentFrm() )
+        return const_cast<SwContentFrm*>(static_cast<const SwContentFrm*>(GetPrev()));
     else
-        return const_cast<SwCntntFrm*>(ImplGetNextCntntFrm( false ));
+        return const_cast<SwContentFrm*>(ImplGetNextContentFrm( false ));
 }
 
-inline SwCntntNode *SwCntntFrm::GetNode()
+inline SwContentNode *SwContentFrm::GetNode()
 {
-    return static_cast< SwCntntNode* >( GetDep() );
+    return static_cast< SwContentNode* >( GetDep() );
 }
-inline const SwCntntNode *SwCntntFrm::GetNode() const
+inline const SwContentNode *SwContentFrm::GetNode() const
 {
-    return static_cast< const SwCntntNode* >( GetDep() );
-}
-
-inline const SwCntntFrm *SwCntntFrm::GetFollow() const
-{
-    return static_cast<const SwCntntFrm*>(SwFlowFrm::GetFollow());
-}
-inline SwCntntFrm *SwCntntFrm::GetFollow()
-{
-    return static_cast<SwCntntFrm*>(SwFlowFrm::GetFollow());
+    return static_cast< const SwContentNode* >( GetDep() );
 }
 
-inline const SwCntntFrm *SwCntntFrm::GetPrecede() const
+inline const SwContentFrm *SwContentFrm::GetFollow() const
 {
-    return static_cast<const SwCntntFrm*>(SwFlowFrm::GetPrecede());
+    return static_cast<const SwContentFrm*>(SwFlowFrm::GetFollow());
 }
-inline SwCntntFrm *SwCntntFrm::GetPrecede()
+inline SwContentFrm *SwContentFrm::GetFollow()
 {
-    return static_cast<SwCntntFrm*>(SwFlowFrm::GetPrecede());
+    return static_cast<SwContentFrm*>(SwFlowFrm::GetFollow());
+}
+
+inline const SwContentFrm *SwContentFrm::GetPrecede() const
+{
+    return static_cast<const SwContentFrm*>(SwFlowFrm::GetPrecede());
+}
+inline SwContentFrm *SwContentFrm::GetPrecede()
+{
+    return static_cast<SwContentFrm*>(SwFlowFrm::GetPrecede());
 }
 
 #endif

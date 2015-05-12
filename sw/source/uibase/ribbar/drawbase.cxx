@@ -283,13 +283,13 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 if(m_pWin->GetFrmColCount() > 1)
                 {
                     SfxItemSet aSet(m_pView->GetPool(),RES_COL,RES_COL);
-                    SwFmtCol aCol(static_cast<const SwFmtCol&>(aSet.Get(RES_COL)));
+                    SwFormatCol aCol(static_cast<const SwFormatCol&>(aSet.Get(RES_COL)));
                     aCol.Init(m_pWin->GetFrmColCount(), aCol.GetGutterWidth(), aCol.GetWishWidth());
                     aSet.Put(aCol);
                     // Template AutoUpdate
-                    SwFrmFmt* pFmt = m_pSh->GetCurFrmFmt();
-                    if(pFmt && pFmt->IsAutoUpdateFmt())
-                        m_pSh->AutoUpdateFrame(pFmt, aSet);
+                    SwFrameFormat* pFormat = m_pSh->GetCurFrameFormat();
+                    if(pFormat && pFormat->IsAutoUpdateFormat())
+                        m_pSh->AutoUpdateFrame(pFormat, aSet);
                     else
                         m_pSh->SetFlyFrmAttr( aSet );
                 }

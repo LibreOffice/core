@@ -127,7 +127,7 @@ class SwMasterUsrPref : public SwViewOption
     friend class SwCursorConfig;
     friend class SwWebColorConfig;
 
-    SwFldUpdateFlags eFldUpdateFlags;    //update of fields and charts
+    SwFieldUpdateFlags eFieldUpdateFlags;    //update of fields and charts
     sal_Int32   nLinkUpdateMode;
     FieldUnit   eUserMetric;
     FieldUnit   eHScrollMetric;
@@ -182,25 +182,25 @@ public:
 
     void SetUpdateFields(bool bSet, bool bNoModify = false)
         {
-            if(bSet && eFldUpdateFlags == AUTOUPD_OFF)
+            if(bSet && eFieldUpdateFlags == AUTOUPD_OFF)
             {
-                eFldUpdateFlags = AUTOUPD_FIELD_ONLY;
+                eFieldUpdateFlags = AUTOUPD_FIELD_ONLY;
                 if(!bNoModify)
                     aContentConfig.SetModified();
              }
             else if(!bSet)
             {
-                eFldUpdateFlags = AUTOUPD_OFF;
+                eFieldUpdateFlags = AUTOUPD_OFF;
                 if(!bNoModify)
                     aContentConfig.SetModified();
             }
         };
-    bool IsUpdateFields()const {return eFldUpdateFlags != AUTOUPD_OFF; }
+    bool IsUpdateFields()const {return eFieldUpdateFlags != AUTOUPD_OFF; }
 
-    SwFldUpdateFlags   GetFldUpdateFlags()const {return eFldUpdateFlags;}
-    void        SetFldUpdateFlags(SwFldUpdateFlags eSet, bool bNoModify = false)
+    SwFieldUpdateFlags   GetFieldUpdateFlags()const {return eFieldUpdateFlags;}
+    void        SetFieldUpdateFlags(SwFieldUpdateFlags eSet, bool bNoModify = false)
         {
-            eFldUpdateFlags = eSet;
+            eFieldUpdateFlags = eSet;
             if(!bNoModify)
                 aContentConfig.SetModified();
         }
@@ -209,18 +209,18 @@ public:
         {
             if(bSet)
             {
-                eFldUpdateFlags = AUTOUPD_FIELD_AND_CHARTS;
+                eFieldUpdateFlags = AUTOUPD_FIELD_AND_CHARTS;
                 if(!bNoModify)
                     aContentConfig.SetModified();
              }
-             else if(eFldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS)
+             else if(eFieldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS)
              {
-                eFldUpdateFlags = AUTOUPD_FIELD_ONLY;
+                eFieldUpdateFlags = AUTOUPD_FIELD_ONLY;
                 if(!bNoModify)
                     aContentConfig.SetModified();
              }
         };
-    bool IsUpdateCharts()const {return eFldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS; }
+    bool IsUpdateCharts()const {return eFieldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS; }
 
     FieldUnit   GetMetric() const { return eUserMetric;}
     void        SetMetric(FieldUnit eSet, bool bNoModify = false)

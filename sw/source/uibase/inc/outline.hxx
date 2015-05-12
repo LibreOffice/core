@@ -74,7 +74,7 @@ public:
     virtual void        dispose() SAL_OVERRIDE;
 
     SwNumRule*          GetNumRule() {return pNumRule;}
-    sal_uInt16          GetLevel(const OUString &rFmtName) const;
+    sal_uInt16          GetLevel(const OUString &rFormatName) const;
     OUString*           GetCollNames() {return aCollNames;}
 
     static sal_uInt16   GetActNumLevel() {return nNumLevel;}
@@ -87,7 +87,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
 
     VclPtr<ListBox>        m_pCollBox;
     VclPtr<SwNumberingTypeListBox> m_pNumberBox;
-    VclPtr<ListBox>        m_pCharFmtLB;
+    VclPtr<ListBox>        m_pCharFormatLB;
     VclPtr<FixedText>      m_pAllLevelFT;
     VclPtr<NumericField>   m_pAllLevelNF;
     VclPtr<Edit>           m_pPrefixED;
@@ -95,7 +95,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     VclPtr<NumericField>   m_pStartEdit;
     VclPtr<NumberingPreview> m_pPreviewWIN;
 
-    OUString            aNoFmtName;
+    OUString            aNoFormatName;
     OUString            aSaveCollNames[MAXLEVEL];
     SwWrtShell*         pSh;
     SwNumRule*          pNumRule;
@@ -109,7 +109,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     DECL_LINK( NumberSelect, SwNumberingTypeListBox * );
     DECL_LINK(DelimModify, void *);
     DECL_LINK( StartModified, NumericField * );
-    DECL_LINK(CharFmtHdl, void *);
+    DECL_LINK(CharFormatHdl, void *);
 
     void    Update();
 

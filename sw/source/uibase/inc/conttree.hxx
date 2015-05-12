@@ -57,7 +57,7 @@ class SwContentTree
     OUString            aContextStrings[CONTEXT_COUNT + 1];
     OUString            sRemoveIdx;
     OUString            sUpdateIdx;
-    OUString            sUnprotTbl;
+    OUString            sUnprotTable;
     OUString            sRename;
     OUString            sReadonlyIdx;
     OUString            sInvisible;

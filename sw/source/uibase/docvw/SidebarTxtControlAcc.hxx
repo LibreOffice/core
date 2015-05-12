@@ -24,19 +24,19 @@
 
 namespace sw { namespace sidebarwindows {
 
-class SidebarTxtControl;
+class SidebarTextControl;
 
-class SidebarTxtControlAccessible : public VCLXWindow
+class SidebarTextControlAccessible : public VCLXWindow
 {
     public:
-        explicit SidebarTxtControlAccessible( SidebarTxtControl& rSidebarTxtControl );
-        virtual ~SidebarTxtControlAccessible();
+        explicit SidebarTextControlAccessible( SidebarTextControl& rSidebarTextControl );
+        virtual ~SidebarTextControlAccessible();
 
         virtual com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessibleContext >
                 CreateAccessibleContext() SAL_OVERRIDE;
 
     private:
-        SidebarTxtControl& mrSidebarTxtControl;
+        SidebarTextControl& mrSidebarTextControl;
 };
 
 } } // end of namespace sw::sidebarwindows

@@ -35,58 +35,58 @@
 #include <IDocumentState.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 
-TYPEINIT1(SwTxtINetFmt,SwClient);
-TYPEINIT1(SwTxtRuby,SwClient);
+TYPEINIT1(SwTextINetFormat,SwClient);
+TYPEINIT1(SwTextRuby,SwClient);
 
-SwTxtCharFmt::SwTxtCharFmt( SwFmtCharFmt& rAttr,
+SwTextCharFormat::SwTextCharFormat( SwFormatCharFormat& rAttr,
                     sal_Int32 nStt, sal_Int32 nEnde )
-    : SwTxtAttr( rAttr, nStt )
-    , SwTxtAttrEnd( rAttr, nStt, nEnde )
-    , m_pTxtNode( 0 )
+    : SwTextAttr( rAttr, nStt )
+    , SwTextAttrEnd( rAttr, nStt, nEnde )
+    , m_pTextNode( 0 )
     , m_nSortNumber( 0 )
 {
-    rAttr.pTxtAttr = this;
-    SetCharFmtAttr( true );
+    rAttr.pTextAttr = this;
+    SetCharFormatAttr( true );
 }
 
-SwTxtCharFmt::~SwTxtCharFmt( )
+SwTextCharFormat::~SwTextCharFormat( )
 {
 }
 
-void SwTxtCharFmt::ModifyNotification( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwTextCharFormat::ModifyNotification( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
-        "SwTxtCharFmt::Modify(): unknown Modify");
+        "SwTextCharFormat::Modify(): unknown Modify");
 
-    if ( m_pTxtNode )
+    if ( m_pTextNode )
     {
         SwUpdateAttr aUpdateAttr(
             GetStart(),
             *GetEnd(),
             nWhich);
 
-        m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
+        m_pTextNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
-bool SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTextCharFormat::GetInfo( SfxPoolItem& rInfo ) const
 {
-    if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
-        &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
+    if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
+        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes )
     {
         return true;
     }
 
-    static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
+    static_cast<SwAutoFormatGetDocNode&>(rInfo).pContentNode = m_pTextNode;
     return false;
 }
 
-SwTxtAttrNesting::SwTxtAttrNesting( SfxPoolItem & i_rAttr,
+SwTextAttrNesting::SwTextAttrNesting( SfxPoolItem & i_rAttr,
             const sal_Int32 i_nStart, const sal_Int32 i_nEnd )
-    : SwTxtAttr( i_rAttr, i_nStart )
-    , SwTxtAttrEnd( i_rAttr, i_nStart, i_nEnd )
+    : SwTextAttr( i_rAttr, i_nStart )
+    , SwTextAttrEnd( i_rAttr, i_nStart, i_nEnd )
 {
     SetDontExpand( true );  // never expand this attribute
     // lock the expand flag: simple guarantee that nesting will not be
@@ -96,46 +96,46 @@ SwTxtAttrNesting::SwTxtAttrNesting( SfxPoolItem & i_rAttr,
     SetNesting( true );
 }
 
-SwTxtAttrNesting::~SwTxtAttrNesting()
+SwTextAttrNesting::~SwTextAttrNesting()
 {
 }
 
-SwTxtINetFmt::SwTxtINetFmt( SwFmtINetFmt& rAttr,
+SwTextINetFormat::SwTextINetFormat( SwFormatINetFormat& rAttr,
                             sal_Int32 nStart, sal_Int32 nEnd )
-    : SwTxtAttr( rAttr, nStart )
-    , SwTxtAttrNesting( rAttr, nStart, nEnd )
+    : SwTextAttr( rAttr, nStart )
+    , SwTextAttrNesting( rAttr, nStart, nEnd )
     , SwClient( 0 )
-    , m_pTxtNode( 0 )
+    , m_pTextNode( 0 )
     , m_bVisited( false )
     , m_bVisitedValid( false )
 {
-    rAttr.mpTxtAttr  = this;
-    SetCharFmtAttr( true );
+    rAttr.mpTextAttr  = this;
+    SetCharFormatAttr( true );
 }
 
-SwTxtINetFmt::~SwTxtINetFmt( )
+SwTextINetFormat::~SwTextINetFormat( )
 {
 }
 
-SwCharFmt* SwTxtINetFmt::GetCharFmt()
+SwCharFormat* SwTextINetFormat::GetCharFormat()
 {
-    const SwFmtINetFmt& rFmt = SwTxtAttrEnd::GetINetFmt();
-    SwCharFmt* pRet = NULL;
+    const SwFormatINetFormat& rFormat = SwTextAttrEnd::GetINetFormat();
+    SwCharFormat* pRet = NULL;
 
-    if (!rFmt.GetValue().isEmpty())
+    if (!rFormat.GetValue().isEmpty())
     {
-        SwDoc* pDoc = GetTxtNode().GetDoc();
+        SwDoc* pDoc = GetTextNode().GetDoc();
         if( !IsVisitedValid() )
         {
-            SetVisited( pDoc->IsVisitedURL( rFmt.GetValue() ) );
+            SetVisited( pDoc->IsVisitedURL( rFormat.GetValue() ) );
             SetVisitedValid( true );
         }
 
-        const sal_uInt16 nId = IsVisited() ? rFmt.GetVisitedFmtId() : rFmt.GetINetFmtId();
-        const OUString& rStr = IsVisited() ? rFmt.GetVisitedFmt() : rFmt.GetINetFmt();
+        const sal_uInt16 nId = IsVisited() ? rFormat.GetVisitedFormatId() : rFormat.GetINetFormatId();
+        const OUString& rStr = IsVisited() ? rFormat.GetVisitedFormat() : rFormat.GetINetFormat();
         if (rStr.isEmpty())
         {
-            OSL_ENSURE( false, "<SwTxtINetFmt::GetCharFmt()> - missing character format at hyperlink attribute");
+            OSL_ENSURE( false, "<SwTextINetFormat::GetCharFormat()> - missing character format at hyperlink attribute");
         }
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
@@ -148,9 +148,9 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
             pDoc->SetOle2Link( Link<>() );
         }
 
-        pRet = IsPoolUserFmt( nId )
-               ? pDoc->FindCharFmtByName( rStr )
-               : pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId );
+        pRet = IsPoolUserFormat( nId )
+               ? pDoc->FindCharFormatByName( rStr )
+               : pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
 
         if ( bResetMod )
         {
@@ -167,98 +167,98 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
     return pRet;
 }
 
-void SwTxtINetFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwTextINetFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
-        "SwTxtINetFmt::Modify(): unknown Modify");
+        "SwTextINetFormat::Modify(): unknown Modify");
 
-    if ( m_pTxtNode )
+    if ( m_pTextNode )
     {
         SwUpdateAttr aUpdateAttr(
             GetStart(),
             *GetEnd(),
             nWhich);
 
-        m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
+        m_pTextNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
     // erfrage vom Modify Informationen
-bool SwTxtINetFmt::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTextINetFormat::GetInfo( SfxPoolItem& rInfo ) const
 {
-    if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
-        &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
+    if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
+        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes )
     {
         return true;
     }
 
-    static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
+    static_cast<SwAutoFormatGetDocNode&>(rInfo).pContentNode = m_pTextNode;
     return false;
 }
 
-bool SwTxtINetFmt::IsProtect( ) const
+bool SwTextINetFormat::IsProtect( ) const
 {
-    return m_pTxtNode && m_pTxtNode->IsProtect();
+    return m_pTextNode && m_pTextNode->IsProtect();
 }
 
-SwTxtRuby::SwTxtRuby( SwFmtRuby& rAttr,
+SwTextRuby::SwTextRuby( SwFormatRuby& rAttr,
                       sal_Int32 nStart, sal_Int32 nEnd )
-    : SwTxtAttr( rAttr, nStart )
-    , SwTxtAttrNesting( rAttr, nStart, nEnd )
+    : SwTextAttr( rAttr, nStart )
+    , SwTextAttrNesting( rAttr, nStart, nEnd )
     , SwClient( 0 )
-    , m_pTxtNode( 0 )
+    , m_pTextNode( 0 )
 {
-    rAttr.pTxtAttr  = this;
+    rAttr.pTextAttr  = this;
 }
 
-SwTxtRuby::~SwTxtRuby()
+SwTextRuby::~SwTextRuby()
 {
 }
 
-void SwTxtRuby::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
+void SwTextRuby::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
-        "SwTxtRuby::Modify(): unknown Modify");
+        "SwTextRuby::Modify(): unknown Modify");
 
-    if ( m_pTxtNode )
+    if ( m_pTextNode )
     {
         SwUpdateAttr aUpdateAttr(
             GetStart(),
             *GetEnd(),
             nWhich);
 
-        m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
+        m_pTextNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
-bool SwTxtRuby::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTextRuby::GetInfo( SfxPoolItem& rInfo ) const
 {
-    if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
-        &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
+    if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
+        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes )
     {
         return true;
     }
 
-    static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
+    static_cast<SwAutoFormatGetDocNode&>(rInfo).pContentNode = m_pTextNode;
     return false;
 }
 
-SwCharFmt* SwTxtRuby::GetCharFmt()
+SwCharFormat* SwTextRuby::GetCharFormat()
 {
-    const SwFmtRuby& rFmt = SwTxtAttrEnd::GetRuby();
-    SwCharFmt* pRet = 0;
+    const SwFormatRuby& rFormat = SwTextAttrEnd::GetRuby();
+    SwCharFormat* pRet = 0;
 
-    if( !rFmt.GetText().isEmpty() )
+    if( !rFormat.GetText().isEmpty() )
     {
-        const SwDoc* pDoc = GetTxtNode().GetDoc();
-        const OUString rStr = rFmt.GetCharFmtName();
+        const SwDoc* pDoc = GetTextNode().GetDoc();
+        const OUString rStr = rFormat.GetCharFormatName();
         const sal_uInt16 nId = rStr.isEmpty()
                              ? static_cast<sal_uInt16>(RES_POOLCHR_RUBYTEXT)
-                             : rFmt.GetCharFmtId();
+                             : rFormat.GetCharFormatId();
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //              correct charstyle.
@@ -270,9 +270,9 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
             const_cast<SwDoc*>(pDoc)->SetOle2Link( Link<>() );
         }
 
-        pRet = IsPoolUserFmt( nId )
-                ? pDoc->FindCharFmtByName( rStr )
-                : const_cast<SwDoc*>(pDoc)->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId );
+        pRet = IsPoolUserFormat( nId )
+                ? pDoc->FindCharFormatByName( rStr )
+                : const_cast<SwDoc*>(pDoc)->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
 
         if( bResetMod )
         {
@@ -289,48 +289,48 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
     return pRet;
 }
 
-SwTxtMeta *
-SwTxtMeta::CreateTxtMeta(
+SwTextMeta *
+SwTextMeta::CreateTextMeta(
     ::sw::MetaFieldManager & i_rTargetDocManager,
-    SwTxtNode *const i_pTargetTxtNode,
-    SwFmtMeta & i_rAttr,
+    SwTextNode *const i_pTargetTextNode,
+    SwFormatMeta & i_rAttr,
     sal_Int32 const i_nStart,
     sal_Int32 const i_nEnd,
     bool const i_bIsCopy)
 {
     if (i_bIsCopy)
     {   // i_rAttr is already cloned, now call DoCopy to copy the sw::Meta
-        OSL_ENSURE(i_pTargetTxtNode, "cannot copy Meta without target node");
-        i_rAttr.DoCopy(i_rTargetDocManager, *i_pTargetTxtNode);
+        OSL_ENSURE(i_pTargetTextNode, "cannot copy Meta without target node");
+        i_rAttr.DoCopy(i_rTargetDocManager, *i_pTargetTextNode);
     }
-    SwTxtMeta *const pTxtMeta(new SwTxtMeta(i_rAttr, i_nStart, i_nEnd));
-    return pTxtMeta;
+    SwTextMeta *const pTextMeta(new SwTextMeta(i_rAttr, i_nStart, i_nEnd));
+    return pTextMeta;
 }
 
-SwTxtMeta::SwTxtMeta( SwFmtMeta & i_rAttr,
+SwTextMeta::SwTextMeta( SwFormatMeta & i_rAttr,
         const sal_Int32 i_nStart, const sal_Int32 i_nEnd )
-    : SwTxtAttr( i_rAttr, i_nStart )
-    , SwTxtAttrNesting( i_rAttr, i_nStart, i_nEnd )
+    : SwTextAttr( i_rAttr, i_nStart )
+    , SwTextAttrNesting( i_rAttr, i_nStart, i_nEnd )
 {
-    i_rAttr.SetTxtAttr( this );
+    i_rAttr.SetTextAttr( this );
     SetHasDummyChar(true);
 }
 
-SwTxtMeta::~SwTxtMeta()
+SwTextMeta::~SwTextMeta()
 {
-    SwFmtMeta & rFmtMeta( static_cast<SwFmtMeta &>(GetAttr()) );
-    if (rFmtMeta.GetTxtAttr() == this)
+    SwFormatMeta & rFormatMeta( static_cast<SwFormatMeta &>(GetAttr()) );
+    if (rFormatMeta.GetTextAttr() == this)
     {
-        rFmtMeta.SetTxtAttr(0);
+        rFormatMeta.SetTextAttr(0);
     }
 }
 
-void SwTxtMeta::ChgTxtNode(SwTxtNode * const pNode)
+void SwTextMeta::ChgTextNode(SwTextNode * const pNode)
 {
-    SwFmtMeta & rFmtMeta( static_cast<SwFmtMeta &>(GetAttr()) );
-    if (rFmtMeta.GetTxtAttr() == this)
+    SwFormatMeta & rFormatMeta( static_cast<SwFormatMeta &>(GetAttr()) );
+    if (rFormatMeta.GetTextAttr() == this)
     {
-        rFmtMeta.NotifyChangeTxtNode(pNode);
+        rFormatMeta.NotifyChangeTextNode(pNode);
     }
 }
 

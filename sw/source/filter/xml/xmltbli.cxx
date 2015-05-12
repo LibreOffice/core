@@ -643,12 +643,12 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
     {
         if( !HasContent() )
         {
-            SwXMLTableContext *pTblContext =
+            SwXMLTableContext *pTableContext =
                 new SwXMLTableContext( GetSwImport(), nPrefix, rLocalName,
                                        xAttrList, GetTable() );
-            pContext = pTblContext;
+            pContext = pTableContext;
             if( GetTable()->IsValid() )
-                InsertContent( pTblContext );
+                InsertContent( pTableContext );
 
             GetTable()->SetHasSubTables( true );
         }
@@ -683,18 +683,18 @@ void SwXMLTableCellContext_Impl::EndElement()
             {
                 // The original text is invalid after deleting the last
                 // paragraph
-                Reference < XTextCursor > xSrcTxtCursor =
+                Reference < XTextCursor > xSrcTextCursor =
                     GetImport().GetTextImport()->GetText()->createTextCursor();
-                xSrcTxtCursor->gotoEnd( sal_True );
+                xSrcTextCursor->gotoEnd( sal_True );
 
                 // Until we have an API for copying we have to use the core.
-                Reference<XUnoTunnel> xSrcCrsrTunnel( xSrcTxtCursor, UNO_QUERY);
+                Reference<XUnoTunnel> xSrcCrsrTunnel( xSrcTextCursor, UNO_QUERY);
                 assert(xSrcCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-                OTextCursorHelper *pSrcTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+                OTextCursorHelper *pSrcTextCrsr = reinterpret_cast< OTextCursorHelper * >(
                         sal::static_int_cast< sal_IntPtr >( xSrcCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-                assert(pSrcTxtCrsr && "SwXTextCursor missing");
-                SwDoc *pDoc = pSrcTxtCrsr->GetDoc();
-                const SwPaM *pSrcPaM = pSrcTxtCrsr->GetPaM();
+                assert(pSrcTextCrsr && "SwXTextCursor missing");
+                SwDoc *pDoc = pSrcTextCrsr->GetDoc();
+                const SwPaM *pSrcPaM = pSrcTextCrsr->GetPaM();
 
                 while( nColRepeat > 1 && GetTable()->IsInsertCellPossible() )
                 {
@@ -703,11 +703,11 @@ void SwXMLTableCellContext_Impl::EndElement()
                     Reference<XUnoTunnel> xDstCrsrTunnel(
                         GetImport().GetTextImport()->GetCursor(), UNO_QUERY);
                     assert(xDstCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-                    OTextCursorHelper *pDstTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+                    OTextCursorHelper *pDstTextCrsr = reinterpret_cast< OTextCursorHelper * >(
                             sal::static_int_cast< sal_IntPtr >( xDstCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )) );
-                    assert(pDstTxtCrsr && "SwXTextCursor missing");
+                    assert(pDstTextCrsr && "SwXTextCursor missing");
                     SwPaM aSrcPaM(*pSrcPaM->GetMark(), *pSrcPaM->GetPoint());
-                    SwPosition aDstPos( *pDstTxtCrsr->GetPaM()->GetPoint() );
+                    SwPosition aDstPos( *pDstTextCrsr->GetPaM()->GetPoint() );
                     pDoc->getIDocumentContentOperations().CopyRange( aSrcPaM, aDstPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
 
                     nColRepeat--;
@@ -798,7 +798,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
             SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
                                                         &pItem ) )
         {
-            const SwFmtFrmSize *pSize = static_cast<const SwFmtFrmSize *>(pItem);
+            const SwFormatFrmSize *pSize = static_cast<const SwFormatFrmSize *>(pItem);
             nWidth = pSize->GetWidth();
             bRelWidth = ATT_VAR_SIZE == pSize->GetHeightSizeType();
         }
@@ -1144,7 +1144,7 @@ void SwXMLDDETableContext_Impl::StartElement(
 }
 
 // generate a new name for DDE field type (called by lcl_GetDDEFieldType below)
-static OUString lcl_GenerateFldTypeName(const OUString& sPrefix, SwTableNode* pTableNode)
+static OUString lcl_GenerateFieldTypeName(const OUString& sPrefix, SwTableNode* pTableNode)
 {
     const OUString sPrefixStr(sPrefix.isEmpty() ? OUString("_") : sPrefix);
 
@@ -1160,7 +1160,7 @@ static OUString lcl_GenerateFldTypeName(const OUString& sPrefix, SwTableNode* pT
         ++nCount;
         sName = sPrefixStr + OUString::number(nCount);
     }
-    while (NULL != pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFldType(RES_DDEFLD, sName, false));
+    while (NULL != pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFieldType(RES_DDEFLD, sName, false));
 
     return sName;
 }
@@ -1188,13 +1188,13 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
     // valid name?
     if (sName.isEmpty())
     {
-        sName = lcl_GenerateFldTypeName(pContext->GetDDEApplication(),
+        sName = lcl_GenerateFieldTypeName(pContext->GetDDEApplication(),
                                         pTableNode);
     }
     else
     {
         // check for existing DDE field type with the same name
-        SwDDEFieldType* pOldType = static_cast<SwDDEFieldType*>(pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFldType(RES_DDEFLD, sName, false));
+        SwDDEFieldType* pOldType = static_cast<SwDDEFieldType*>(pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFieldType(RES_DDEFLD, sName, false));
         if (NULL != pOldType)
         {
             // same values -> return old type
@@ -1207,7 +1207,7 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
             else
             {
                 // same name, different values -> think of new name
-                sName = lcl_GenerateFldTypeName(pContext->GetDDEApplication(),
+                sName = lcl_GenerateFieldTypeName(pContext->GetDDEApplication(),
                                                 pTableNode);
             }
         }
@@ -1220,7 +1220,7 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
         // create new field type and return
         SwDDEFieldType aDDEFieldType(sName, sCommand, nType);
         pType = static_cast<SwDDEFieldType*>(pTableNode->
-            GetDoc()->getIDocumentFieldsAccess().InsertFldType(aDDEFieldType));
+            GetDoc()->getIDocumentFieldsAccess().InsertFieldType(aDDEFieldType));
     }
 
     OSL_ENSURE(NULL != pType, "We really want a SwDDEFieldType here!");
@@ -1284,8 +1284,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     pTableNode( 0 ),
     pBox1( 0 ),
     pSttNd1( 0 ),
-    pBoxFmt( 0 ),
-    pLineFmt( 0 ),
+    pBoxFormat( 0 ),
+    pLineFormat( 0 ),
     pSharedBoxFormats(NULL),
     pDDESource(NULL),
     bFirstSection( true ),
@@ -1330,18 +1330,18 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
 
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
-    OUString sTblName;
+    OUString sTableName;
     if( !aName.isEmpty() )
     {
-        const SwTableFmt *pTblFmt = pDoc->FindTblFmtByName( aName );
-        if( !pTblFmt )
-            sTblName = aName;
+        const SwTableFormat *pTableFormat = pDoc->FindTableFormatByName( aName );
+        if( !pTableFormat )
+            sTableName = aName;
     }
-    if( sTblName.isEmpty() )
+    if( sTableName.isEmpty() )
     {
-        sTblName = pDoc->GetUniqueTblName();
+        sTableName = pDoc->GetUniqueTableName();
         GetImport().GetTextImport()
-            ->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_TABLE, aName, sTblName );
+            ->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_TABLE, aName, sTableName );
     }
 
     Reference< XTextTable > xTable;
@@ -1398,14 +1398,14 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     }
     if( pXTable )
     {
-        SwFrmFmt *pTblFrmFmt = pXTable->GetFrmFmt();
-        OSL_ENSURE( pTblFrmFmt, "table format missing" );
-        SwTable *pTbl = SwTable::FindTable( pTblFrmFmt );
-        OSL_ENSURE( pTbl, "table missing" );
-        pTableNode = pTbl->GetTableNode();
+        SwFrameFormat *pTableFrameFormat = pXTable->GetFrameFormat();
+        OSL_ENSURE( pTableFrameFormat, "table format missing" );
+        SwTable *pTable = SwTable::FindTable( pTableFrameFormat );
+        OSL_ENSURE( pTable, "table missing" );
+        pTableNode = pTable->GetTableNode();
         OSL_ENSURE( pTableNode, "table node missing" );
 
-        pTblFrmFmt->SetName( sTblName );
+        pTableFrameFormat->SetName( sTableName );
 
         SwTableLine *pLine1 = pTableNode->GetTable().GetTabLines()[0U];
         pBox1 = pLine1->GetTabBoxes()[0U];
@@ -1424,8 +1424,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     pTableNode( pTable->pTableNode ),
     pBox1( 0 ),
     pSttNd1( 0 ),
-    pBoxFmt( 0 ),
-    pLineFmt( 0 ),
+    pBoxFormat( 0 ),
+    pLineFormat( 0 ),
     pSharedBoxFormats(NULL),
     xParentTable( pTable ),
     pDDESource(NULL),
@@ -1844,12 +1844,12 @@ SwTableBox *SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
         pBox1 = 0;
     }
     else
-        pBox = new SwTableBox( pBoxFmt, *pStNd, pUpper );
+        pBox = new SwTableBox( pBoxFormat, *pStNd, pUpper );
 
     return pBox;
 }
 
-SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
+SwTableBoxFormat* SwXMLTableContext::GetSharedBoxFormat(
     SwTableBox* pBox,
     const OUString& rStyleName,
     sal_Int32 nColumnWidth,
@@ -1859,48 +1859,48 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
     bool* pModifyLocked )
 {
     if ( pSharedBoxFormats == NULL )
-        pSharedBoxFormats = new map_BoxFmt();
+        pSharedBoxFormats = new map_BoxFormat();
 
-    SwTableBoxFmt* pBoxFmt2;
+    SwTableBoxFormat* pBoxFormat2;
 
     TableBoxIndex aKey( rStyleName, nColumnWidth, bProtected );
-    map_BoxFmt::iterator aIter = pSharedBoxFormats->find( aKey );
+    map_BoxFormat::iterator aIter = pSharedBoxFormats->find( aKey );
     if ( aIter == pSharedBoxFormats->end() )
     {
         // unknown format so far -> construct a new one
 
         // get the old format, and reset all attributes
         // (but preserve FillOrder)
-        pBoxFmt2 = static_cast<SwTableBoxFmt*>(pBox->ClaimFrmFmt());
-        SwFmtFillOrder aFillOrder( pBoxFmt2->GetFillOrder() );
-        pBoxFmt2->ResetAllFmtAttr(); // #i73790# - method renamed
-        pBoxFmt2->SetFmtAttr( aFillOrder );
+        pBoxFormat2 = static_cast<SwTableBoxFormat*>(pBox->ClaimFrameFormat());
+        SwFormatFillOrder aFillOrder( pBoxFormat2->GetFillOrder() );
+        pBoxFormat2->ResetAllFormatAttr(); // #i73790# - method renamed
+        pBoxFormat2->SetFormatAttr( aFillOrder );
         bNew = true;    // it's a new format now
 
         // share this format, if allowed
         if ( bMayShare )
-            (*pSharedBoxFormats)[ aKey ] = pBoxFmt2;
+            (*pSharedBoxFormats)[ aKey ] = pBoxFormat2;
     }
     else
     {
         // set the shared format
-        pBoxFmt2 = aIter->second;
-        pBox->ChgFrmFmt( pBoxFmt2 );
+        pBoxFormat2 = aIter->second;
+        pBox->ChgFrameFormat( pBoxFormat2 );
         bNew = false;   // copied from an existing format
 
         // claim it, if we are not allowed to share
         if ( !bMayShare )
-            pBoxFmt2 = static_cast<SwTableBoxFmt*>(pBox->ClaimFrmFmt());
+            pBoxFormat2 = static_cast<SwTableBoxFormat*>(pBox->ClaimFrameFormat());
     }
 
     // lock format (if so desired)
     if ( pModifyLocked != NULL )
     {
-        (*pModifyLocked) = pBoxFmt2->IsModifyLocked();
-        pBoxFmt2->LockModify();
+        (*pModifyLocked) = pBoxFormat2->IsModifyLocked();
+        pBoxFormat2->LockModify();
     }
 
-    return pBoxFmt2;
+    return pBoxFormat2;
 }
 
 SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
@@ -1910,18 +1910,18 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                                              sal_uInt32 nRightCol )
 {
     //FIXME: here would be a great place to handle XmlId for cell
-    SwTableBox *pBox = new SwTableBox( pBoxFmt, 0, pUpper );
+    SwTableBox *pBox = new SwTableBox( pBoxFormat, 0, pUpper );
 
     sal_uInt32 nColSpan = nRightCol - nLeftCol;
     sal_Int32 nColWidth = GetColumnWidth( nLeftCol, nColSpan );
 
     // TODO: Share formats!
-    SwFrmFmt *pFrmFmt = pBox->ClaimFrmFmt();
-    SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
-    pFrmFmt->ResetAllFmtAttr(); // #i73790# - method renamed
-    pFrmFmt->SetFmtAttr( aFillOrder );
+    SwFrameFormat *pFrameFormat = pBox->ClaimFrameFormat();
+    SwFormatFillOrder aFillOrder( pFrameFormat->GetFillOrder() );
+    pFrameFormat->ResetAllFormatAttr(); // #i73790# - method renamed
+    pFrameFormat->SetFormatAttr( aFillOrder );
 
-    pFrmFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
+    pFrameFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, nColWidth ) );
 
     SwTableLines& rLines = pBox->GetTabLines();
     bool bSplitted = false;
@@ -2018,7 +2018,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     {
         // and it is a table: therefore we build a new box and
         // put the rows of the table into the rows of the box
-        pBox = new SwTableBox( pBoxFmt, 0, pUpper );
+        pBox = new SwTableBox( pBoxFormat, 0, pUpper );
         pCell->GetSubTable()->MakeTable( pBox, nColWidth );
     }
 
@@ -2026,7 +2026,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     const OUString sStyleName = pCell->GetStyleName();
     bool bModifyLocked;
     bool bNew;
-    SwTableBoxFmt *pBoxFmt2 = GetSharedBoxFormat(
+    SwTableBoxFormat *pBoxFormat2 = GetSharedBoxFormat(
         pBox, sStyleName, nColWidth, pCell->IsProtected(),
         pCell->GetStartNode() && pCell->GetFormula().isEmpty() &&
             ! pCell->HasValue(),
@@ -2042,7 +2042,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 XML_STYLE_FAMILY_TABLE_CELL, sStyleName, &pAutoItemSet ) )
         {
             if( pAutoItemSet )
-                pBoxFmt2->SetFmtAttr( *pAutoItemSet );
+                pBoxFormat2->SetFormatAttr( *pAutoItemSet );
         }
     }
 
@@ -2051,14 +2051,14 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         if (pCell->HasStringValue())
         {
             SwNodeIndex const aNodeIndex(*(pCell->GetStartNode()), 1);
-            SwTxtNode *const pTxtNode(aNodeIndex.GetNode().GetTxtNode());
-            SAL_WARN_IF(!pTxtNode, "sw", "Should have a text node in cell?");
-            if (pTxtNode)
+            SwTextNode *const pTextNode(aNodeIndex.GetNode().GetTextNode());
+            SAL_WARN_IF(!pTextNode, "sw", "Should have a text node in cell?");
+            if (pTextNode)
             {
-                SAL_WARN_IF(!pTxtNode->GetTxt().isEmpty(), "sw",
+                SAL_WARN_IF(!pTextNode->GetText().isEmpty(), "sw",
                         "why text here?");
-                pTxtNode->InsertText(*pCell->GetStringValue(),
-                        SwIndex(pTxtNode, 0));
+                pTextNode->InsertText(*pCell->GetStringValue(),
+                        SwIndex(pTextNode, 0));
             }
         }
 
@@ -2076,11 +2076,11 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         {
             // default num format?
             const SfxPoolItem* pItem = NULL;
-            if( pBoxFmt2->GetItemState( RES_BOXATR_FORMAT, false, &pItem )
+            if( pBoxFormat2->GetItemState( RES_BOXATR_FORMAT, false, &pItem )
                             == SfxItemState::SET )
             {
-                const SwTblBoxNumFormat* pNumFormat =
-                    static_cast<const SwTblBoxNumFormat*>( pItem );
+                const SwTableBoxNumFormat* pNumFormat =
+                    static_cast<const SwTableBoxNumFormat*>( pItem );
                 if( ( pNumFormat != NULL ) && ( pNumFormat->GetValue() == 0 ) )
                 {
                     // only one text node?
@@ -2088,11 +2088,11 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                     if( ( aNodeIndex.GetNode().EndOfSectionIndex() -
                           aNodeIndex.GetNode().StartOfSectionIndex() ) == 2 )
                     {
-                        SwTxtNode* pTxtNode= aNodeIndex.GetNode().GetTxtNode();
-                        if( pTxtNode != NULL )
+                        SwTextNode* pTextNode= aNodeIndex.GetNode().GetTextNode();
+                        if( pTextNode != NULL )
                         {
                             // check text: does it look like some form of 0.0?
-                            const OUString& rText = pTxtNode->GetTxt();
+                            const OUString& rText = pTextNode->GetText();
                             if( ( rText.getLength() > 10 ) ||
                                 ( rText.indexOf( '0' ) == -1 ) )
                             {
@@ -2109,9 +2109,9 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         if( bSuppressNumericContent )
         {
             // suppress numeric content? Then reset number format!
-            pBoxFmt2->ResetFmtAttr( RES_BOXATR_FORMULA );
-            pBoxFmt2->ResetFmtAttr( RES_BOXATR_FORMAT );
-            pBoxFmt2->ResetFmtAttr( RES_BOXATR_VALUE );
+            pBoxFormat2->ResetFormatAttr( RES_BOXATR_FORMULA );
+            pBoxFormat2->ResetFormatAttr( RES_BOXATR_FORMAT );
+            pBoxFormat2->ResetFormatAttr( RES_BOXATR_VALUE );
         }
         else
         {
@@ -2121,8 +2121,8 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             if (!rFormula.isEmpty())
             {
                 // formula cell: insert formula if valid
-                SwTblBoxFormula aFormulaItem( rFormula );
-                pBoxFmt2->SetFmtAttr( aFormulaItem );
+                SwTableBoxFormula aFormulaItem( rFormula );
+                pBoxFormat2->SetFormatAttr( aFormulaItem );
             }
             else if (!pCell->HasValue() && pCell->HasStringValue())
             {
@@ -2131,24 +2131,24 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 // Solution: the number format will be removed,
                 // the cell gets the default text format.
                 const SfxPoolItem* pItem = NULL;
-                if( pBoxFmt->GetItemState( RES_BOXATR_FORMAT, false, &pItem )
+                if( pBoxFormat->GetItemState( RES_BOXATR_FORMAT, false, &pItem )
                     == SfxItemState::SET )
                 {
-                    const SwDoc* pDoc = pBoxFmt->GetDoc();
+                    const SwDoc* pDoc = pBoxFormat->GetDoc();
                     const SvNumberFormatter* pNumberFormatter = pDoc ?
                         pDoc->GetNumberFormatter() : 0;
-                    const SwTblBoxNumFormat* pNumFormat =
-                        static_cast<const SwTblBoxNumFormat*>( pItem );
+                    const SwTableBoxNumFormat* pNumFormat =
+                        static_cast<const SwTableBoxNumFormat*>( pItem );
                     if( pNumFormat != NULL && pNumberFormatter &&
                         !pNumberFormatter->GetEntry( pNumFormat->GetValue() )->IsTextFormat() )
-                        pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMAT );
+                        pBoxFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
                 }
             }
             // always insert value, even if default
             if( pCell->HasValue() )
             {
-                SwTblBoxValue aValueItem( pCell->GetValue() );
-                pBoxFmt2->SetFmtAttr( aValueItem );
+                SwTableBoxValue aValueItem( pCell->GetValue() );
+                pBoxFormat2->SetFormatAttr( aValueItem );
             }
         }
 
@@ -2160,15 +2160,15 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     if( pCell->IsProtected() )
     {
         SvxProtectItem aProtectItem( RES_PROTECT );
-        aProtectItem.SetCntntProtect( true );
-        pBoxFmt2->SetFmtAttr( aProtectItem );
+        aProtectItem.SetContentProtect( true );
+        pBoxFormat2->SetFormatAttr( aProtectItem );
     }
 
     // restore old modify-lock state
     if (! bModifyLocked)
-        pBoxFmt2->UnlockModify();
+        pBoxFormat2->UnlockModify();
 
-    pBoxFmt2->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
+    pBoxFormat2->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, nColWidth ) );
 
     return pBox;
 }
@@ -2187,14 +2187,14 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     }
     else
     {
-        pLine = new SwTableLine( pLineFmt, 0, pUpper );
+        pLine = new SwTableLine( pLineFormat, 0, pUpper );
     }
 
     // TODO: Share formats!
-    SwFrmFmt *pFrmFmt = pLine->ClaimFrmFmt();
-    SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
-    pFrmFmt->ResetAllFmtAttr(); // #i73790# - method renamed
-    pFrmFmt->SetFmtAttr( aFillOrder );
+    SwFrameFormat *pFrameFormat = pLine->ClaimFrameFormat();
+    SwFormatFillOrder aFillOrder( pFrameFormat->GetFillOrder() );
+    pFrameFormat->ResetAllFormatAttr(); // #i73790# - method renamed
+    pFrameFormat->SetFormatAttr( aFillOrder );
 
     const SfxItemSet *pAutoItemSet = 0;
     const OUString& rStyleName = (*pRows)[nTopRow].GetStyleName();
@@ -2204,7 +2204,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
             XML_STYLE_FAMILY_TABLE_ROW, rStyleName, &pAutoItemSet ) )
     {
         if( pAutoItemSet )
-            pFrmFmt->SetFmtAttr( *pAutoItemSet );
+            pFrameFormat->SetFormatAttr( *pAutoItemSet );
     }
 
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -2651,7 +2651,7 @@ void SwXMLTableContext::MakeTable()
 
     SwXMLImport& rSwImport = GetSwImport();
 
-    SwFrmFmt *pFrmFmt = pTableNode->GetTable().GetFrmFmt();
+    SwFrameFormat *pFrameFormat = pTableNode->GetTable().GetFrameFormat();
 
     sal_Int16 eHoriOrient = text::HoriOrientation::FULL;
     bool bSetHoriOrient = false;
@@ -2676,7 +2676,7 @@ void SwXMLTableContext::MakeTable()
         if( SfxItemState::SET == pAutoItemSet->GetItemState( RES_HORI_ORIENT, false,
                                                         &pItem ) )
         {
-            eHoriOrient = static_cast<const SwFmtHoriOrient *>(pItem)->GetHoriOrient();
+            eHoriOrient = static_cast<const SwFormatHoriOrient *>(pItem)->GetHoriOrient();
             switch( eHoriOrient )
             {
             case text::HoriOrientation::FULL:
@@ -2702,10 +2702,10 @@ void SwXMLTableContext::MakeTable()
             bSetHoriOrient = true;
         }
 
-        const SwFmtFrmSize *pSize = 0;
+        const SwFormatFrmSize *pSize = 0;
         if( SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
                                                         &pItem ) )
-            pSize = static_cast<const SwFmtFrmSize *>(pItem);
+            pSize = static_cast<const SwFormatFrmSize *>(pItem);
 
         switch( eHoriOrient )
         {
@@ -2751,7 +2751,7 @@ void SwXMLTableContext::MakeTable()
             break;
         }
 
-        pFrmFmt->SetFmtAttr( *pAutoItemSet );
+        pFrameFormat->SetFormatAttr( *pAutoItemSet );
     }
     else
     {
@@ -2765,21 +2765,21 @@ void SwXMLTableContext::MakeTable()
     pBox1->pSttNd = pSttNd1;
     pLine1->GetTabBoxes().erase( pLine1->GetTabBoxes().begin() );
 
-    pLineFmt = static_cast<SwTableLineFmt*>(pLine1->GetFrmFmt());
-    pBoxFmt = static_cast<SwTableBoxFmt*>(pBox1->GetFrmFmt());
+    pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
+    pBoxFormat = static_cast<SwTableBoxFormat*>(pBox1->GetFrameFormat());
 
     _MakeTable( 0 );
 
     if( bSetHoriOrient )
-        pFrmFmt->SetFmtAttr( SwFmtHoriOrient( 0, eHoriOrient ) );
+        pFrameFormat->SetFormatAttr( SwFormatHoriOrient( 0, eHoriOrient ) );
 
     // This must be after the call to _MakeTable, because nWidth might be
     // changed there.
-    pFrmFmt->LockModify();
-    SwFmtFrmSize aSize( ATT_VAR_SIZE, nWidth );
+    pFrameFormat->LockModify();
+    SwFormatFrmSize aSize( ATT_VAR_SIZE, nWidth );
     aSize.SetWidthPercent( nPrcWidth );
-    pFrmFmt->SetFmtAttr( aSize );
-    pFrmFmt->UnlockModify();
+    pFrameFormat->SetFormatAttr( aSize );
+    pFrameFormat->UnlockModify();
 
     for( size_t i=0; i<pRows->size(); i++ )
         (*pRows)[i].Dispose();
@@ -2789,7 +2789,7 @@ void SwXMLTableContext::MakeTable()
     {
         // change existing table into DDE table:
         // 1) Get DDE field type (get data from dde-source context),
-        SwDDEFieldType* pFldType = lcl_GetDDEFieldType( pDDESource,
+        SwDDEFieldType* pFieldType = lcl_GetDDEFieldType( pDDESource,
                                                         pTableNode );
 
         // 2) release the DDE source context,
@@ -2797,7 +2797,7 @@ void SwXMLTableContext::MakeTable()
 
         // 3) create new DDE table, and
         SwDDETable* pDDETable = new SwDDETable( pTableNode->GetTable(),
-                                                pFldType, false );
+                                                pFieldType, false );
 
         // 4) set new (DDE)table at node.
         pTableNode->SetNewTable(pDDETable, false);
@@ -2815,8 +2815,8 @@ void SwXMLTableContext::MakeTable()
 void SwXMLTableContext::MakeTable( SwTableBox *pBox, sal_Int32 nW )
 {
     //FIXME: here would be a great place to handle XmlId for subtable
-    pLineFmt = GetParentTable()->pLineFmt;
-    pBoxFmt = GetParentTable()->pBoxFmt;
+    pLineFormat = GetParentTable()->pLineFormat;
+    pBoxFormat = GetParentTable()->pBoxFormat;
     nWidth = nW;
     bRelWidth = GetParentTable()->bRelWidth;
 
@@ -2840,14 +2840,14 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
     Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
                                        UNO_QUERY);
     OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+    OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper * >(
             sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
+    OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
 
     if( bFirstSection )
     {
         // The Cursor already is in the first section
-        pStNd = pTxtCrsr->GetPaM()->GetNode().FindTableBoxStartNode();
+        pStNd = pTextCrsr->GetPaM()->GetNode().FindTableBoxStartNode();
         bFirstSection = false;
         GetImport().GetTextImport()->SetStyleAndAttrs( GetImport(),
             GetImport().GetTextImport()->GetCursor(), "Standard", true );
@@ -2865,8 +2865,8 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         }
         sal_uInt32 nOffset = pPrevSttNd ? 1UL : 0UL;
         SwNodeIndex aIdx( *pEndNd, nOffset );
-        SwTxtFmtColl *pColl =
-            pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
+        SwTextFormatColl *pColl =
+            pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD, false );
         pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                  pColl );
         // Consider the case that a table is defined without a row.
@@ -2874,8 +2874,8 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
 
         {
             pBox1->pSttNd = pStNd;
-            SwCntntNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]
-                                                            ->GetCntntNode();
+            SwContentNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]
+                                                            ->GetContentNode();
             SwPosition aPos( *pCNd );
             aPos.nContent.Assign( pCNd, 0U );
 

@@ -165,7 +165,7 @@ const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
         { 52, { 0, L_FIX} }, // "?sprmPRuler 52"
         { 53, { 1, L_FIX} }, // "sprmCFStrikeRM" chp.fRMarkDel 1 or 0 bit
         { 54, { 1, L_FIX} }, // "sprmCFRMark" chp.fRMark 1 or 0 bit
-        { 55, { 1, L_FIX} }, // "sprmCFFldVanish" chp.fFldVanish 1 or 0 bit
+        { 55, { 1, L_FIX} }, // "sprmCFFieldVanish" chp.fFieldVanish 1 or 0 bit
         { 57, { 0, L_VAR} }, // "sprmCDefault" whole CHP
         { 58, { 0, L_FIX} }, // "sprmCPlain" whole CHP
         { 60, { 1, L_FIX} }, // "sprmCFBold" chp.fBold 0,1, 128, or 129
@@ -317,7 +317,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         { 64, { 0, L_VAR} }, // rtl property ?
         { 65, { 1, L_FIX} }, // "sprmCFStrikeRM" chp.fRMarkDel 1 or 0 bit
         { 66, { 1, L_FIX} }, // "sprmCFRMark" chp.fRMark 1 or 0 bit
-        { 67, { 1, L_FIX} }, // "sprmCFFldVanish" chp.fFldVanish 1 or 0 bit
+        { 67, { 1, L_FIX} }, // "sprmCFFieldVanish" chp.fFieldVanish 1 or 0 bit
         { 68, { 0, L_VAR} }, // "sprmCPicLocation" chp.fcPic and chp.fSpec
         { 69, { 2, L_FIX} }, // "sprmCIbstRMark" chp.ibstRMark index into sttbRMark
         { 70, { 4, L_FIX} }, // "sprmCDttmRMark" chp.dttm DTTM long
@@ -532,7 +532,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x2448, { 1, L_FIX} }, // "sprmPFAdjustRight" pap.fAdjustRight;1 or 0;byte;
         {0x0800, { 1, L_FIX} }, // "sprmCFRMarkDel" chp.fRMarkDel;1 or 0;bit;
         {0x0801, { 1, L_FIX} }, // "sprmCFRMark" chp.fRMark;1 or 0;bit;
-        {0x0802, { 1, L_FIX} }, // "sprmCFFldVanish" chp.fFldVanish;1 or 0;bit;
+        {0x0802, { 1, L_FIX} }, // "sprmCFFieldVanish" chp.fFieldVanish;1 or 0;bit;
         {0x6A03, { 4, L_FIX} }, // "sprmCPicLocation" chp.fcPic and chp.fSpec;
         {0x4804, { 2, L_FIX} }, // "sprmCIbstRMark" chp.ibstRMark;index into
                             // sttbRMark
@@ -611,8 +611,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x485F, { 2, L_FIX} }, // "sprmCLidBi" ;;;
         {0x4A60, { 1, L_FIX} }, // "sprmCIcoBi" ;;;
         {0x4A61, { 2, L_FIX} }, // "sprmCHpsBi" ;;;
-        {0xCA62, { 0, L_VAR} }, // "sprmCDispFldRMark" chp.fDispFldRMark,
-                            // chp.ibstDispFldRMark, chp.dttmDispFldRMark ;
+        {0xCA62, { 0, L_VAR} }, // "sprmCDispFieldRMark" chp.fDispFieldRMark,
+                            // chp.ibstDispFieldRMark, chp.dttmDispFieldRMark ;
         {0x4863, { 2, L_FIX} }, // "sprmCIbstRMarkDel" chp.ibstRMarkDel;index into
                             // sttbRMark;short;
         {NS_sprm::LN_CDttmRMarkDel, { 4, L_FIX} }, // chp.dttmRMarkDel;DTTM;long;
@@ -1067,7 +1067,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                     0x2436,0x2437,0x2438,0x0000,
                     // sprmNoop, sprmPISnapBaseLine, sprmNoop, sprmNoop
                     0x0000,0x243B,0x000,0x0000,
-                    // sprmNoop, sprmCFStrikeRM, sprmCFRMark, sprmCFFldVanish
+                    // sprmNoop, sprmCFStrikeRM, sprmCFRMark, sprmCFFieldVanish
                     0x0000,0x0800,0x0801,0x0802,
                     // sprmNoop, sprmNoop, sprmNoop, sprmCFData
                     0x0000,0x0000,0x0000,0x0806,
@@ -1610,13 +1610,13 @@ void WW8ScannerBase::DeletePieceTable()
     }
 }
 
-WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
+WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
     SvStream* pDataSt, WW8Fib* pWwFib )
     : pWw8Fib(pWwFib), pMainFdoa(0), pHdFtFdoa(0), pMainTxbx(0),
     pMainTxbxBkd(0), pHdFtTxbx(0), pHdFtTxbxBkd(0), pMagicTables(0),
     pSubdocs(0), pExtendedAtrds(0), pPieceGrpprls(0)
 {
-    pPiecePLCF = OpenPieceTable( pTblSt, pWw8Fib );             // Complex
+    pPiecePLCF = OpenPieceTable( pTableSt, pWw8Fib );             // Complex
     if( pPiecePLCF )
     {
         pPieceIter = new WW8PLCFpcd_Iter( *pPiecePLCF );
@@ -1633,38 +1633,38 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
     }
 
     // pChpPLCF and pPapPLCF may NOT be created before pPLCFx_PCD !!
-    pChpPLCF = new WW8PLCFx_Cp_FKP( pSt, pTblSt, pDataSt, *this, CHP ); // CHPX
-    pPapPLCF = new WW8PLCFx_Cp_FKP( pSt, pTblSt, pDataSt, *this, PAP ); // PAPX
+    pChpPLCF = new WW8PLCFx_Cp_FKP( pSt, pTableSt, pDataSt, *this, CHP ); // CHPX
+    pPapPLCF = new WW8PLCFx_Cp_FKP( pSt, pTableSt, pDataSt, *this, PAP ); // PAPX
 
-    pSepPLCF = new WW8PLCFx_SEPX(   pSt, pTblSt, *pWwFib, 0 );          // SEPX
+    pSepPLCF = new WW8PLCFx_SEPX(   pSt, pTableSt, *pWwFib, 0 );          // SEPX
 
     // Footnotes
-    pFtnPLCF = new WW8PLCFx_SubDoc( pTblSt, pWwFib->GetFIBVersion(), 0,
-        pWwFib->fcPlcffndRef, pWwFib->lcbPlcffndRef, pWwFib->fcPlcffndTxt,
-        pWwFib->lcbPlcffndTxt, 2 );
+    pFootnotePLCF = new WW8PLCFx_SubDoc( pTableSt, pWwFib->GetFIBVersion(), 0,
+        pWwFib->fcPlcffndRef, pWwFib->lcbPlcffndRef, pWwFib->fcPlcffndText,
+        pWwFib->lcbPlcffndText, 2 );
     // Endnotes
-    pEdnPLCF = new WW8PLCFx_SubDoc( pTblSt, pWwFib->GetFIBVersion(), 0,
-        pWwFib->fcPlcfendRef, pWwFib->lcbPlcfendRef, pWwFib->fcPlcfendTxt,
-        pWwFib->lcbPlcfendTxt, 2 );
+    pEdnPLCF = new WW8PLCFx_SubDoc( pTableSt, pWwFib->GetFIBVersion(), 0,
+        pWwFib->fcPlcfendRef, pWwFib->lcbPlcfendRef, pWwFib->fcPlcfendText,
+        pWwFib->lcbPlcfendText, 2 );
     // Comments
-    pAndPLCF = new WW8PLCFx_SubDoc( pTblSt, pWwFib->GetFIBVersion(), 0,
-        pWwFib->fcPlcfandRef, pWwFib->lcbPlcfandRef, pWwFib->fcPlcfandTxt,
-        pWwFib->lcbPlcfandTxt, IsSevenMinus(pWwFib->GetFIBVersion()) ? 20 : 30);
+    pAndPLCF = new WW8PLCFx_SubDoc( pTableSt, pWwFib->GetFIBVersion(), 0,
+        pWwFib->fcPlcfandRef, pWwFib->lcbPlcfandRef, pWwFib->fcPlcfandText,
+        pWwFib->lcbPlcfandText, IsSevenMinus(pWwFib->GetFIBVersion()) ? 20 : 30);
 
     // Fields Main Text
-    pFldPLCF    = new WW8PLCFx_FLD(pTblSt, *pWwFib, MAN_MAINTEXT);
+    pFieldPLCF    = new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_MAINTEXT);
     // Fields Header / Footer
-    pFldHdFtPLCF= new WW8PLCFx_FLD(pTblSt, *pWwFib, MAN_HDFT);
+    pFieldHdFtPLCF= new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_HDFT);
     // Fields Footnote
-    pFldFtnPLCF = new WW8PLCFx_FLD(pTblSt, *pWwFib, MAN_FTN);
+    pFieldFootnotePLCF = new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_FTN);
     // Fields Endnote
-    pFldEdnPLCF = new WW8PLCFx_FLD(pTblSt, *pWwFib, MAN_EDN);
+    pFieldEdnPLCF = new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_EDN);
     // Fields Comments
-    pFldAndPLCF = new WW8PLCFx_FLD(pTblSt, *pWwFib, MAN_AND);
+    pFieldAndPLCF = new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_AND);
     // Fields in Textboxes in Main Text
-    pFldTxbxPLCF= new WW8PLCFx_FLD(pTblSt, *pWwFib, MAN_TXBX);
+    pFieldTxbxPLCF= new WW8PLCFx_FLD(pTableSt, *pWwFib, MAN_TXBX);
     // Fields in Textboxes in Header / Footer
-    pFldTxbxHdFtPLCF = new WW8PLCFx_FLD(pTblSt,*pWwFib,MAN_TXBX_HDFT);
+    pFieldTxbxHdFtPLCF = new WW8PLCFx_FLD(pTableSt,*pWwFib,MAN_TXBX_HDFT);
 
     // Note: 6 stands for "6 OR 7",  7 stands for "ONLY 7"
     switch( pWw8Fib->nVersion )
@@ -1673,62 +1673,62 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
         case 7:
             if( pWwFib->fcPlcfdoaMom && pWwFib->lcbPlcfdoaMom )
             {
-                pMainFdoa = new WW8PLCFspecial( pTblSt, pWwFib->fcPlcfdoaMom,
+                pMainFdoa = new WW8PLCFspecial( pTableSt, pWwFib->fcPlcfdoaMom,
                     pWwFib->lcbPlcfdoaMom, 6 );
             }
             if( pWwFib->fcPlcfdoaHdr && pWwFib->lcbPlcfdoaHdr )
             {
-                pHdFtFdoa = new WW8PLCFspecial( pTblSt, pWwFib->fcPlcfdoaHdr,
+                pHdFtFdoa = new WW8PLCFspecial( pTableSt, pWwFib->fcPlcfdoaHdr,
                 pWwFib->lcbPlcfdoaHdr, 6 );
             }
             break;
         case 8:
             if( pWwFib->fcPlcfspaMom && pWwFib->lcbPlcfspaMom )
             {
-                pMainFdoa = new WW8PLCFspecial( pTblSt, pWwFib->fcPlcfspaMom,
+                pMainFdoa = new WW8PLCFspecial( pTableSt, pWwFib->fcPlcfspaMom,
                     pWwFib->lcbPlcfspaMom, 26 );
             }
             if( pWwFib->fcPlcfspaHdr && pWwFib->lcbPlcfspaHdr )
             {
-                pHdFtFdoa = new WW8PLCFspecial( pTblSt, pWwFib->fcPlcfspaHdr,
+                pHdFtFdoa = new WW8PLCFspecial( pTableSt, pWwFib->fcPlcfspaHdr,
                     pWwFib->lcbPlcfspaHdr, 26 );
             }
             // PLCF for TextBox break-descriptors in the main text
             if( pWwFib->fcPlcftxbxBkd && pWwFib->lcbPlcftxbxBkd )
             {
-                pMainTxbxBkd = new WW8PLCFspecial( pTblSt,
+                pMainTxbxBkd = new WW8PLCFspecial( pTableSt,
                     pWwFib->fcPlcftxbxBkd, pWwFib->lcbPlcftxbxBkd, 0);
             }
             // PLCF for TextBox break-descriptors in Header/Footer range
             if( pWwFib->fcPlcfHdrtxbxBkd && pWwFib->lcbPlcfHdrtxbxBkd )
             {
-                pHdFtTxbxBkd = new WW8PLCFspecial( pTblSt,
+                pHdFtTxbxBkd = new WW8PLCFspecial( pTableSt,
                     pWwFib->fcPlcfHdrtxbxBkd, pWwFib->lcbPlcfHdrtxbxBkd, 0);
             }
             // Sub table cp positions
             if (pWwFib->fcPlcfTch && pWwFib->lcbPlcfTch)
             {
-                pMagicTables = new WW8PLCFspecial( pTblSt,
+                pMagicTables = new WW8PLCFspecial( pTableSt,
                     pWwFib->fcPlcfTch, pWwFib->lcbPlcfTch, 4);
             }
             // Sub document cp positions
             if (pWwFib->fcPlcfwkb && pWwFib->lcbPlcfwkb)
             {
-                pSubdocs = new WW8PLCFspecial( pTblSt,
+                pSubdocs = new WW8PLCFspecial( pTableSt,
                     pWwFib->fcPlcfwkb, pWwFib->lcbPlcfwkb, 12);
             }
             // Extended ATRD
             if (pWwFib->fcAtrdExtra && pWwFib->lcbAtrdExtra)
             {
-                sal_Size nOldPos = pTblSt->Tell();
-                if (checkSeek(*pTblSt, pWwFib->fcAtrdExtra) && (pTblSt->remainingSize() >= pWwFib->lcbAtrdExtra))
+                sal_Size nOldPos = pTableSt->Tell();
+                if (checkSeek(*pTableSt, pWwFib->fcAtrdExtra) && (pTableSt->remainingSize() >= pWwFib->lcbAtrdExtra))
                 {
                     pExtendedAtrds = new sal_uInt8[pWwFib->lcbAtrdExtra];
-                    pWwFib->lcbAtrdExtra = pTblSt->Read(pExtendedAtrds, pWwFib->lcbAtrdExtra);
+                    pWwFib->lcbAtrdExtra = pTableSt->Read(pExtendedAtrds, pWwFib->lcbAtrdExtra);
                 }
                 else
                     pWwFib->lcbAtrdExtra = 0;
-                pTblSt->Seek(nOldPos);
+                pTableSt->Seek(nOldPos);
             }
 
             break;
@@ -1739,21 +1739,21 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
 
     // PLCF for TextBox stories in main text
     sal_uInt32 nLenTxBxS = (8 > pWw8Fib->nVersion) ? 0 : 22;
-    if( pWwFib->fcPlcftxbxTxt && pWwFib->lcbPlcftxbxTxt )
+    if( pWwFib->fcPlcftxbxText && pWwFib->lcbPlcftxbxText )
     {
-        pMainTxbx = new WW8PLCFspecial( pTblSt, pWwFib->fcPlcftxbxTxt,
-            pWwFib->lcbPlcftxbxTxt, nLenTxBxS );
+        pMainTxbx = new WW8PLCFspecial( pTableSt, pWwFib->fcPlcftxbxText,
+            pWwFib->lcbPlcftxbxText, nLenTxBxS );
     }
 
     // PLCF for TextBox stories in Header/Footer range
-    if( pWwFib->fcPlcfHdrtxbxTxt && pWwFib->lcbPlcfHdrtxbxTxt )
+    if( pWwFib->fcPlcfHdrtxbxText && pWwFib->lcbPlcfHdrtxbxText )
     {
-        pHdFtTxbx = new WW8PLCFspecial( pTblSt, pWwFib->fcPlcfHdrtxbxTxt,
-            pWwFib->lcbPlcfHdrtxbxTxt, nLenTxBxS );
+        pHdFtTxbx = new WW8PLCFspecial( pTableSt, pWwFib->fcPlcfHdrtxbxText,
+            pWwFib->lcbPlcfHdrtxbxText, nLenTxBxS );
     }
 
-    pBook = new WW8PLCFx_Book(pTblSt, *pWwFib);
-    pAtnBook = new WW8PLCFx_AtnBook(pTblSt, *pWwFib);
+    pBook = new WW8PLCFx_Book(pTableSt, *pWwFib);
+    pAtnBook = new WW8PLCFx_AtnBook(pTableSt, *pWwFib);
 }
 
 WW8ScannerBase::~WW8ScannerBase()
@@ -1765,15 +1765,15 @@ WW8ScannerBase::~WW8ScannerBase()
     delete pPiecePLCF;
     delete pAtnBook;
     delete pBook;
-    delete pFldEdnPLCF;
-    delete pFldFtnPLCF;
-    delete pFldAndPLCF;
-    delete pFldHdFtPLCF;
-    delete pFldPLCF;
-    delete pFldTxbxPLCF;
-    delete pFldTxbxHdFtPLCF;
+    delete pFieldEdnPLCF;
+    delete pFieldFootnotePLCF;
+    delete pFieldAndPLCF;
+    delete pFieldHdFtPLCF;
+    delete pFieldPLCF;
+    delete pFieldTxbxPLCF;
+    delete pFieldTxbxHdFtPLCF;
     delete pEdnPLCF;
-    delete pFtnPLCF;
+    delete pFootnotePLCF;
     delete pAndPLCF;
     delete pSepPLCF;
     delete pPapPLCF;
@@ -1900,7 +1900,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     if((static_cast<sal_uInt8*>(pData)[0] & 0x1f ) == 0x15 )
     {
         // Field end ?
-        // INDEX-Fld has set Bit7?
+        // INDEX-Field has set Bit7?
         rF.nOpt = static_cast<sal_uInt8*>(pData)[1];                // yes -> copy flags
     }else{
         rF.nId = 0;                                      // no -> Field invalid
@@ -2903,7 +2903,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
     return true;
 }
 
-WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTblSt,
+WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTableSt,
     SvStream* pDataSt, const WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL)
     : WW8PLCFx(rFib.GetFIBVersion(), true), pFKPStrm(pSt), pDataStrm(pDataSt),
     pFkp(0), ePLCF(ePl), pPCDAttrs(0)
@@ -2912,12 +2912,12 @@ WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTblSt,
     long nLenStruct = (8 > rFib.nVersion) ? 2 : 4;
     if (ePl == CHP)
     {
-        pPLCF = new WW8PLCF(*pTblSt, rFib.fcPlcfbteChpx, rFib.lcbPlcfbteChpx,
+        pPLCF = new WW8PLCF(*pTableSt, rFib.fcPlcfbteChpx, rFib.lcbPlcfbteChpx,
             nLenStruct, GetStartFc(), rFib.pnChpFirst, rFib.cpnBteChp);
     }
     else
     {
-        pPLCF = new WW8PLCF(*pTblSt, rFib.fcPlcfbtePapx, rFib.lcbPlcfbtePapx,
+        pPLCF = new WW8PLCF(*pTableSt, rFib.fcPlcfbtePapx, rFib.lcbPlcfbtePapx,
             nLenStruct, GetStartFc(), rFib.pnPapFirst, rFib.cpnBtePap);
     }
 }
@@ -3115,9 +3115,9 @@ bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rR
     return !rResult.empty();
 }
 
-WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTblSt,
+WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
     SvStream* pDataSt, const WW8ScannerBase& rBase, ePLCFT ePl )
-    : WW8PLCFx_Fc_FKP(pSt, pTblSt, pDataSt, *rBase.pWw8Fib, ePl,
+    : WW8PLCFx_Fc_FKP(pSt, pTableSt, pDataSt, *rBase.pWw8Fib, ePl,
     rBase.WW8Cp2Fc(0)), rSBase(rBase), nAttrStart(-1), nAttrEnd(-1),
     bLineEnd(false),
     bComplex( (7 < rBase.pWw8Fib->nVersion) || rBase.pWw8Fib->fComplex )
@@ -3403,13 +3403,13 @@ void WW8PLCFx_Cp_FKP::advance()
     bLineEnd = (ePLCF == PAP);
 }
 
-WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTblSt,
+WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTableSt,
     const WW8Fib& rFib, WW8_CP nStartCp)
     : WW8PLCFx(rFib.GetFIBVersion(), true), maSprmParser(rFib.GetFIBVersion()),
     pStrm(pSt), nArrMax(256), nSprmSiz(0)
 {
     pPLCF =   rFib.lcbPlcfsed
-            ? new WW8PLCF(*pTblSt, rFib.fcPlcfsed, rFib.lcbPlcfsed,
+            ? new WW8PLCF(*pTableSt, rFib.fcPlcfsed, rFib.lcbPlcfsed,
               GetFIBVersion() <= ww::eWW2 ? 6 : 12, nStartCp)
             : 0;
 
@@ -3587,28 +3587,28 @@ const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
 }
 
 WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion,
-    WW8_CP nStartCp, long nFcRef, long nLenRef, long nFcTxt, long nLenTxt,
+    WW8_CP nStartCp, long nFcRef, long nLenRef, long nFcText, long nLenText,
     long nStruct)
-    : WW8PLCFx(eVersion, true), pRef(0), pTxt(0)
+    : WW8PLCFx(eVersion, true), pRef(0), pText(0)
 {
-    if( nLenRef && nLenTxt )
+    if( nLenRef && nLenText )
     {
         pRef = new WW8PLCF(*pSt, nFcRef, nLenRef, nStruct, nStartCp);
-        pTxt = new WW8PLCF(*pSt, nFcTxt, nLenTxt, 0, nStartCp);
+        pText = new WW8PLCF(*pSt, nFcText, nLenText, 0, nStartCp);
     }
 }
 
 WW8PLCFx_SubDoc::~WW8PLCFx_SubDoc()
 {
     delete pRef;
-    delete pTxt;
+    delete pText;
 }
 
 sal_uInt32 WW8PLCFx_SubDoc::GetIdx() const
 {
-    // Probably pTxt ... no need for it
+    // Probably pText ... no need for it
     if( pRef )
-        return ( pRef->GetIdx() << 16 | pTxt->GetIdx() );
+        return ( pRef->GetIdx() << 16 | pText->GetIdx() );
     return 0;
 }
 
@@ -3617,8 +3617,8 @@ void WW8PLCFx_SubDoc::SetIdx( sal_uLong nIdx )
     if( pRef )
     {
         pRef->SetIdx( nIdx >> 16 );
-        // Probably pTxt ... no need for it
-        pTxt->SetIdx( nIdx & 0xFFFF );
+        // Probably pText ... no need for it
+        pText->SetIdx( nIdx & 0xFFFF );
     }
 }
 
@@ -3654,12 +3654,12 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
 
     p->nEndPos = p->nStartPos + 1;
 
-    if (!pTxt)
+    if (!pText)
         return;
 
-    pTxt->SetIdx(nNr);
+    pText->SetIdx(nNr);
 
-    if (!pTxt->Get(p->nCp2OrIdx, p->nSprmsLen, pData))
+    if (!pText->Get(p->nCp2OrIdx, p->nSprmsLen, pData))
     {
         p->nEndPos = p->nStartPos = WW8_CP_MAX;
         p->nSprmsLen = 0;
@@ -3671,10 +3671,10 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
 
 void WW8PLCFx_SubDoc::advance()
 {
-    if (pRef && pTxt)
+    if (pRef && pText)
     {
         pRef->advance();
-        pTxt->advance();
+        pText->advance();
     }
 }
 
@@ -3691,8 +3691,8 @@ WW8PLCFx_FLD::WW8PLCFx_FLD( SvStream* pSt, const WW8Fib& rMyFib, short nType)
         nLen = rFib.lcbPlcffldHdr;
         break;
     case MAN_FTN:
-        nFc = rFib.fcPlcffldFtn;
-        nLen = rFib.lcbPlcffldFtn;
+        nFc = rFib.fcPlcffldFootnote;
+        nLen = rFib.lcbPlcffldFootnote;
         break;
     case MAN_EDN:
         nFc = rFib.fcPlcffldEdn;
@@ -3981,7 +3981,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
     rStrm.Seek(nOldPos);
 }
 
-WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
+WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTableSt, const WW8Fib& rFib)
     : WW8PLCFx(rFib.GetFIBVersion(), false), pStatus(0), nIsEnd(0), nBookmarkId(1)
 {
     if( !rFib.fcPlcfbkf || !rFib.lcbPlcfbkf || !rFib.fcPlcfbkl ||
@@ -3992,13 +3992,13 @@ WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
     }
     else
     {
-        pBook[0] = new WW8PLCFspecial(pTblSt,rFib.fcPlcfbkf,rFib.lcbPlcfbkf,4);
+        pBook[0] = new WW8PLCFspecial(pTableSt,rFib.fcPlcfbkf,rFib.lcbPlcfbkf,4);
 
-        pBook[1] = new WW8PLCFspecial(pTblSt,rFib.fcPlcfbkl,rFib.lcbPlcfbkl,0);
+        pBook[1] = new WW8PLCFspecial(pTableSt,rFib.fcPlcfbkl,rFib.lcbPlcfbkl,0);
 
         rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(rFib.chseTables, rFib.lid);
 
-        WW8ReadSTTBF( (7 < rFib.nVersion), *pTblSt, rFib.fcSttbfbkmk,
+        WW8ReadSTTBF( (7 < rFib.nVersion), *pTableSt, rFib.fcSttbfbkmk,
             rFib.lcbSttbfbkmk, 0, eStructChrSet, aBookNames );
 
         nIMax = aBookNames.size();
@@ -4246,7 +4246,7 @@ const OUString* WW8PLCFx_Book::GetName() const
     return pRet;
 }
 
-WW8PLCFx_AtnBook::WW8PLCFx_AtnBook(SvStream* pTblSt, const WW8Fib& rFib)
+WW8PLCFx_AtnBook::WW8PLCFx_AtnBook(SvStream* pTableSt, const WW8Fib& rFib)
     : WW8PLCFx(rFib.GetFIBVersion(), /*bSprm=*/false),
     m_bIsEnd(false)
 {
@@ -4257,8 +4257,8 @@ WW8PLCFx_AtnBook::WW8PLCFx_AtnBook(SvStream* pTblSt, const WW8Fib& rFib)
     }
     else
     {
-        m_pBook[0] = new WW8PLCFspecial(pTblSt, rFib.fcPlcfAtnbkf, rFib.lcbPlcfAtnbkf, 4);
-        m_pBook[1] = new WW8PLCFspecial(pTblSt, rFib.fcPlcfAtnbkl, rFib.lcbPlcfAtnbkl, 0);
+        m_pBook[0] = new WW8PLCFspecial(pTableSt, rFib.fcPlcfAtnbkf, rFib.lcbPlcfAtnbkf, 4);
+        m_pBook[1] = new WW8PLCFspecial(pTableSt, rFib.fcPlcfAtnbkl, rFib.lcbPlcfAtnbkl, 0);
 
         nIMax = m_pBook[0]->GetIMax();
         if (m_pBook[1]->GetIMax() < nIMax)
@@ -4475,9 +4475,9 @@ sal_uInt16 WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
 {
     sal_uInt16 nId = 0;        // Id = 0 for empty attributes
 
-    if (p == pFld)
+    if (p == pField)
         nId = eFLD;
-    else if (p == pFtn)
+    else if (p == pFootnote)
         nId = eFTN;
     else if (p == pEdn)
         nId = eEDN;
@@ -4505,10 +4505,10 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     {
         // Suchreihenfolge der Attribute
         nPLCF = MAN_ANZ_PLCF;
-        pFld = &aD[0];
+        pField = &aD[0];
         pBkm = &aD[1];
         pEdn = &aD[2];
-        pFtn = &aD[3];
+        pFootnote = &aD[3];
         pAnd = &aD[4];
 
         pPcd = ( pBase->pPLCFx_PCD ) ? &aD[5] : 0;
@@ -4521,7 +4521,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         pAtnBkm = &aD[10];
 
         pSep->pPLCFx = pBase->pSepPLCF;
-        pFtn->pPLCFx = pBase->pFtnPLCF;
+        pFootnote->pPLCFx = pBase->pFootnotePLCF;
         pEdn->pPLCFx = pBase->pEdnPLCF;
         pBkm->pPLCFx = pBase->pBook;
         pAnd->pPLCFx = pBase->pAndPLCF;
@@ -4532,7 +4532,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     {
         // Suchreihenfolge der Attribute
         nPLCF = 7;
-        pFld = &aD[0];
+        pField = &aD[0];
         pBkm = ( pBase->pBook ) ? &aD[1] : 0;
 
         pPcd = ( pBase->pPLCFx_PCD ) ? &aD[2] : 0;
@@ -4543,7 +4543,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         pPap = &aD[5];
         pSep = &aD[6]; // Dummy
 
-        pAnd = pAtnBkm = pFtn = pEdn = 0;     // unbenutzt bei SpezText
+        pAnd = pAtnBkm = pFootnote = pEdn = 0;     // unbenutzt bei SpezText
     }
 
     pChp->pPLCFx = pBase->pChpPLCF;
@@ -4562,37 +4562,37 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
     switch( nType )                 // Feld-Initialisierung
     {
         case MAN_HDFT:
-            pFld->pPLCFx = pBase->pFldHdFtPLCF;
+            pField->pPLCFx = pBase->pFieldHdFtPLCF;
             pFdoa = pBase->pHdFtFdoa;
             pTxbx = pBase->pHdFtTxbx;
             pTxbxBkd = pBase->pHdFtTxbxBkd;
             break;
         case MAN_FTN:
-            pFld->pPLCFx = pBase->pFldFtnPLCF;
+            pField->pPLCFx = pBase->pFieldFootnotePLCF;
             pFdoa = pTxbx = pTxbxBkd = 0;
             break;
         case MAN_EDN:
-            pFld->pPLCFx = pBase->pFldEdnPLCF;
+            pField->pPLCFx = pBase->pFieldEdnPLCF;
             pFdoa = pTxbx = pTxbxBkd = 0;
             break;
         case MAN_AND:
-            pFld->pPLCFx = pBase->pFldAndPLCF;
+            pField->pPLCFx = pBase->pFieldAndPLCF;
             pFdoa = pTxbx = pTxbxBkd = 0;
             break;
         case MAN_TXBX:
-            pFld->pPLCFx = pBase->pFldTxbxPLCF;
+            pField->pPLCFx = pBase->pFieldTxbxPLCF;
             pTxbx = pBase->pMainTxbx;
             pTxbxBkd = pBase->pMainTxbxBkd;
             pFdoa = 0;
             break;
         case MAN_TXBX_HDFT:
-            pFld->pPLCFx = pBase->pFldTxbxHdFtPLCF;
+            pField->pPLCFx = pBase->pFieldTxbxHdFtPLCF;
             pTxbx = pBase->pHdFtTxbx;
             pTxbxBkd = pBase->pHdFtTxbxBkd;
             pFdoa = 0;
             break;
         default:
-            pFld->pPLCFx = pBase->pFldPLCF;
+            pField->pPLCFx = pBase->pFieldPLCF;
             pFdoa = pBase->pMainFdoa;
             pTxbx = pBase->pMainTxbx;
             pTxbxBkd = pBase->pMainTxbxBkd;
@@ -4726,7 +4726,7 @@ void WW8PLCFMan::SeekPos( long nNewCp )
 {
     pChp->pPLCFx->SeekPos( nNewCp + nCpO ); // Attribute neu
     pPap->pPLCFx->SeekPos( nNewCp + nCpO ); // aufsetzen
-    pFld->pPLCFx->SeekPos( nNewCp );
+    pField->pPLCFx->SeekPos( nNewCp );
     if( pPcd )
         pPcd->pPLCFx->SeekPos( nNewCp + nCpO );
     if( pBkm )
@@ -4780,7 +4780,7 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     pRes->pMemPos = p->pMemPos;
     pRes->nSprmId = GetId(p);
     pRes->nCp2OrIdx = p->nCp2OrIdx;
-    if ((p == pFtn) || (p == pEdn) || (p == pAnd))
+    if ((p == pFootnote) || (p == pEdn) || (p == pAnd))
         pRes->nMemLen = p->nSprmsLen;
     else if (p->nSprmsLen >= maSprmParser.MinSprmLen()) //Normal
     {
@@ -4812,9 +4812,9 @@ void WW8PLCFMan::GetNoSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     pRes->nMemLen = p->nSprmsLen;
     pRes->nCp2OrIdx = p->nCp2OrIdx;
 
-    if( p == pFld )
+    if( p == pField )
         pRes->nSprmId = eFLD;
-    else if( p == pFtn )
+    else if( p == pFootnote )
         pRes->nSprmId = eFTN;
     else if( p == pEdn )
         pRes->nSprmId = eEDN;
@@ -5106,9 +5106,9 @@ sal_uInt16 WW8PLCFMan::GetColl() const
     }
 }
 
-WW8PLCFx_FLD* WW8PLCFMan::GetFld() const
+WW8PLCFx_FLD* WW8PLCFMan::GetField() const
 {
-    return static_cast<WW8PLCFx_FLD*>(pFld->pPLCFx);
+    return static_cast<WW8PLCFx_FLD*>(pField->pPLCFx);
 }
 
 const sal_uInt8* WW8PLCFMan::HasParaSprm( sal_uInt16 nId ) const
@@ -5252,7 +5252,7 @@ WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
             nOffset = ccpText;
             break;
         case MAN_HDFT:
-            nOffset = ccpText + ccpFtn;
+            nOffset = ccpText + ccpFootnote;
             break;
         /*
          A subdocument of this kind (MAN_MACRO) probably exists in some defunct
@@ -5260,21 +5260,21 @@ WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
          uses this comes to light, this is the likely calculation required
 
         case MAN_MACRO:
-            nOffset = ccpText + ccpFtn + ccpHdr;
+            nOffset = ccpText + ccpFootnote + ccpHdr;
             break;
 
         */
         case MAN_AND:
-            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr;
+            nOffset = ccpText + ccpFootnote + ccpHdr + ccpMcr;
             break;
         case MAN_EDN:
-            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn;
+            nOffset = ccpText + ccpFootnote + ccpHdr + ccpMcr + ccpAtn;
             break;
         case MAN_TXBX:
-            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn + ccpEdn;
+            nOffset = ccpText + ccpFootnote + ccpHdr + ccpMcr + ccpAtn + ccpEdn;
             break;
         case MAN_TXBX_HDFT:
-            nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr + ccpAtn + ccpEdn +
+            nOffset = ccpText + ccpFootnote + ccpHdr + ccpMcr + ccpAtn + ccpEdn +
                 ccpTxbx;
             break;
     }
@@ -5450,7 +5450,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt.SeekRel( 2 * sizeof( sal_Int32) );
 
     rSt.ReadInt32( ccpText );
-    rSt.ReadInt32( ccpFtn );
+    rSt.ReadInt32( ccpFootnote );
     rSt.ReadInt32( ccpHdr );
     rSt.ReadInt32( ccpMcr );
     rSt.ReadInt32( ccpAtn );
@@ -5487,12 +5487,12 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     lcbStshf = Readcb(rSt, eVer);
     rSt.ReadInt32( fcPlcffndRef );
     lcbPlcffndRef = Readcb(rSt, eVer);
-    rSt.ReadInt32( fcPlcffndTxt );
-    lcbPlcffndTxt = Readcb(rSt, eVer);
+    rSt.ReadInt32( fcPlcffndText );
+    lcbPlcffndText = Readcb(rSt, eVer);
     rSt.ReadInt32( fcPlcfandRef );
     lcbPlcfandRef = Readcb(rSt, eVer);
-    rSt.ReadInt32( fcPlcfandTxt );
-    lcbPlcfandTxt = Readcb(rSt, eVer);
+    rSt.ReadInt32( fcPlcfandText );
+    lcbPlcfandText = Readcb(rSt, eVer);
     rSt.ReadInt32( fcPlcfsed );
     lcbPlcfsed = Readcb(rSt, eVer);
     rSt.ReadInt32( fcPlcfpad );
@@ -5517,8 +5517,8 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     lcbPlcffldMom = Readcb(rSt, eVer);
     rSt.ReadInt32( fcPlcffldHdr );
     lcbPlcffldHdr = Readcb(rSt, eVer);
-    rSt.ReadInt32( fcPlcffldFtn );
-    lcbPlcffldFtn = Readcb(rSt, eVer);
+    rSt.ReadInt32( fcPlcffldFootnote );
+    lcbPlcffldFootnote = Readcb(rSt, eVer);
     rSt.ReadInt32( fcPlcffldAtn );
     lcbPlcffldAtn = Readcb(rSt, eVer);
     rSt.ReadInt32( fcPlcffldMcr );
@@ -5557,8 +5557,8 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     lcbSttbfAssoc = Readcb(rSt, eVer);
     rSt.ReadInt32( fcClx );
     lcbClx = Readcb(rSt, eVer);
-    rSt.ReadInt32( fcPlcfpgdFtn );
-    lcbPlcfpgdFtn = Readcb(rSt, eVer);
+    rSt.ReadInt32( fcPlcfpgdFootnote );
+    lcbPlcfpgdFootnote = Readcb(rSt, eVer);
     rSt.ReadInt32( fcAutosaveSource );
     lcbAutosaveSource = Readcb(rSt, eVer);
     rSt.ReadInt32( fcGrpStAtnOwners );
@@ -5599,12 +5599,12 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt.ReadInt32( lcbPlcfAtnbkl );
         rSt.ReadInt32( fcPms );
         rSt.ReadInt32( lcbPMS );
-        rSt.ReadInt32( fcFormFldSttbf );
-        rSt.ReadInt32( lcbFormFldSttbf );
+        rSt.ReadInt32( fcFormFieldSttbf );
+        rSt.ReadInt32( lcbFormFieldSttbf );
         rSt.ReadInt32( fcPlcfendRef );
         rSt.ReadInt32( lcbPlcfendRef );
-        rSt.ReadInt32( fcPlcfendTxt );
-        rSt.ReadInt32( lcbPlcfendTxt );
+        rSt.ReadInt32( fcPlcfendText );
+        rSt.ReadInt32( lcbPlcfendText );
         rSt.ReadInt32( fcPlcffldEdn );
         rSt.ReadInt32( lcbPlcffldEdn );
         rSt.ReadInt32( fcPlcfpgdEdn );
@@ -5621,12 +5621,12 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt.ReadInt32( lcbPlcfwkb );
         rSt.ReadInt32( fcPlcfspl );
         rSt.ReadInt32( lcbPlcfspl );
-        rSt.ReadInt32( fcPlcftxbxTxt );
-        rSt.ReadInt32( lcbPlcftxbxTxt );
+        rSt.ReadInt32( fcPlcftxbxText );
+        rSt.ReadInt32( lcbPlcftxbxText );
         rSt.ReadInt32( fcPlcffldTxbx );
         rSt.ReadInt32( lcbPlcffldTxbx );
-        rSt.ReadInt32( fcPlcfHdrtxbxTxt );
-        rSt.ReadInt32( lcbPlcfHdrtxbxTxt );
+        rSt.ReadInt32( fcPlcfHdrtxbxText );
+        rSt.ReadInt32( lcbPlcfHdrtxbxText );
         rSt.ReadInt32( fcPlcffldHdrTxbx );
         rSt.ReadInt32( lcbPlcffldHdrTxbx );
         rSt.ReadInt32( fcStwUser );
@@ -5644,7 +5644,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         fHasPic     = ( aBits1 & 0x08 ) >> 3;
         cQuickSaves = ( aBits1 & 0xf0 ) >> 4;
         fEncrypted  =   aBits2 & 0x01       ;
-        fWhichTblStm= ( aBits2 & 0x02 ) >> 1;
+        fWhichTableStm= ( aBits2 & 0x02 ) >> 1;
         fReadOnlyRecommended = (aBits2 & 0x4) >> 2;
         fWriteReservation = (aBits2 & 0x8) >> 3;
         fExtChar    = ( aBits2 & 0x10 ) >> 4;
@@ -5806,7 +5806,7 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
     if( fHasPic )       nBits16 |= 0x0008;
     nBits16 |= (0xf0 & ( cQuickSaves << 4 ));
     if( fEncrypted )    nBits16 |= 0x0100;
-    if( fWhichTblStm )  nBits16 |= 0x0200;
+    if( fWhichTableStm )  nBits16 |= 0x0200;
 
     if (fReadOnlyRecommended)
         nBits16 |= 0x0400;
@@ -5890,7 +5890,7 @@ bool WW8Fib::Write(SvStream& rStrm)
         pData += 2 * sizeof( sal_Int32);
 
     Set_UInt32( pData, ccpText );
-    Set_UInt32( pData, ccpFtn );
+    Set_UInt32( pData, ccpFootnote );
     Set_UInt32( pData, ccpHdr );
     Set_UInt32( pData, ccpMcr );
     Set_UInt32( pData, ccpAtn );
@@ -5927,12 +5927,12 @@ bool WW8Fib::Write(SvStream& rStrm)
     Set_UInt32( pData, lcbStshf );
     Set_UInt32( pData, fcPlcffndRef );
     Set_UInt32( pData, lcbPlcffndRef );
-    Set_UInt32( pData, fcPlcffndTxt );
-    Set_UInt32( pData, lcbPlcffndTxt );
+    Set_UInt32( pData, fcPlcffndText );
+    Set_UInt32( pData, lcbPlcffndText );
     Set_UInt32( pData, fcPlcfandRef );
     Set_UInt32( pData, lcbPlcfandRef );
-    Set_UInt32( pData, fcPlcfandTxt );
-    Set_UInt32( pData, lcbPlcfandTxt );
+    Set_UInt32( pData, fcPlcfandText );
+    Set_UInt32( pData, lcbPlcfandText );
     Set_UInt32( pData, fcPlcfsed );
     Set_UInt32( pData, lcbPlcfsed );
     Set_UInt32( pData, fcPlcfpad );
@@ -5957,8 +5957,8 @@ bool WW8Fib::Write(SvStream& rStrm)
     Set_UInt32( pData, lcbPlcffldMom );
     Set_UInt32( pData, fcPlcffldHdr );
     Set_UInt32( pData, lcbPlcffldHdr );
-    Set_UInt32( pData, fcPlcffldFtn );
-    Set_UInt32( pData, lcbPlcffldFtn );
+    Set_UInt32( pData, fcPlcffldFootnote );
+    Set_UInt32( pData, lcbPlcffldFootnote );
     Set_UInt32( pData, fcPlcffldAtn );
     Set_UInt32( pData, lcbPlcffldAtn );
     Set_UInt32( pData, fcPlcffldMcr );
@@ -5989,8 +5989,8 @@ bool WW8Fib::Write(SvStream& rStrm)
     Set_UInt32( pData, lcbSttbfAssoc );
     Set_UInt32( pData, fcClx );
     Set_UInt32( pData, lcbClx );
-    Set_UInt32( pData, fcPlcfpgdFtn );
-    Set_UInt32( pData, lcbPlcfpgdFtn );
+    Set_UInt32( pData, fcPlcfpgdFootnote );
+    Set_UInt32( pData, lcbPlcfpgdFootnote );
     Set_UInt32( pData, fcAutosaveSource );
     Set_UInt32( pData, lcbAutosaveSource );
     Set_UInt32( pData, fcGrpStAtnOwners );
@@ -6024,12 +6024,12 @@ bool WW8Fib::Write(SvStream& rStrm)
     Set_UInt32( pData, lcbPlcfAtnbkl );
     Set_UInt32( pData, fcPms );
     Set_UInt32( pData, lcbPMS );
-    Set_UInt32( pData, fcFormFldSttbf );
-    Set_UInt32( pData, lcbFormFldSttbf );
+    Set_UInt32( pData, fcFormFieldSttbf );
+    Set_UInt32( pData, lcbFormFieldSttbf );
     Set_UInt32( pData, fcPlcfendRef );
     Set_UInt32( pData, lcbPlcfendRef );
-    Set_UInt32( pData, fcPlcfendTxt );
-    Set_UInt32( pData, lcbPlcfendTxt );
+    Set_UInt32( pData, fcPlcfendText );
+    Set_UInt32( pData, lcbPlcfendText );
     Set_UInt32( pData, fcPlcffldEdn );
     Set_UInt32( pData, lcbPlcffldEdn );
     Set_UInt32( pData, fcPlcfpgdEdn );
@@ -6046,12 +6046,12 @@ bool WW8Fib::Write(SvStream& rStrm)
     Set_UInt32( pData, lcbPlcfwkb );
     Set_UInt32( pData, fcPlcfspl ); // in Ver67 leere Reserve
     Set_UInt32( pData, lcbPlcfspl ); // in Ver67 leere Reserve
-    Set_UInt32( pData, fcPlcftxbxTxt );
-    Set_UInt32( pData, lcbPlcftxbxTxt );
+    Set_UInt32( pData, fcPlcftxbxText );
+    Set_UInt32( pData, lcbPlcftxbxText );
     Set_UInt32( pData, fcPlcffldTxbx );
     Set_UInt32( pData, lcbPlcffldTxbx );
-    Set_UInt32( pData, fcPlcfHdrtxbxTxt );
-    Set_UInt32( pData, lcbPlcfHdrtxbxTxt );
+    Set_UInt32( pData, fcPlcfHdrtxbxText );
+    Set_UInt32( pData, lcbPlcfHdrtxbxText );
     Set_UInt32( pData, fcPlcffldHdrTxbx );
     Set_UInt32( pData, lcbPlcffldHdrTxbx );
 
@@ -6670,7 +6670,7 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
         if( nI & rDop.grpfIhdt )                // Bit gesetzt ?
             nIdxOffset++;
 
-    nTextOfs = rFib.ccpText + rFib.ccpFtn;  // Groesse des Haupttextes
+    nTextOfs = rFib.ccpText + rFib.ccpFootnote;  // Groesse des Haupttextes
                                             // und der Fussnoten
 }
 
@@ -6752,8 +6752,8 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
         grpfIhdt            =      ( a16Bit  &  0xff00 ) >> 8;
 
         a16Bit = Get_UShort( pData );        // 2 0x02
-        rncFtn              =   a16Bit  &  0x0003        ;
-        nFtn                = ( a16Bit  & ~0x0003 ) >> 2 ;
+        rncFootnote              =   a16Bit  &  0x0003        ;
+        nFootnote                = ( a16Bit  & ~0x0003 ) >> 2 ;
 
         a8Bit = Get_Byte( pData );           // 4 0x04
         fOutlineDirtySave      = 0 != ( a8Bit  &  0x01   );
@@ -6781,7 +6781,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
         a8Bit = Get_Byte( pData );           // 7 0x07
         fPagSuppressTopSpacing = 0 != ( a8Bit  &  0x01   );
         fProtEnabled           = 0 != ( a8Bit  &  0x02   );
-        fDispFormFldSel        = 0 != ( a8Bit  &  0x04   );
+        fDispFormFieldSel        = 0 != ( a8Bit  &  0x04   );
         fRMView                = 0 != ( a8Bit  &  0x08   );
         fRMPrint               = 0 != ( a8Bit  &  0x10   );
         fWriteReservation      = 0 != ( a8Bit  &  0x20   );
@@ -6826,19 +6826,19 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
 
         a16Bit = Get_UShort( pData );        // 54 0x36
         epc            =   a16Bit &  0x0003       ;
-        nfcFtnRef      = ( a16Bit &  0x003c ) >> 2;
+        nfcFootnoteRef      = ( a16Bit &  0x003c ) >> 2;
         nfcEdnRef      = ( a16Bit &  0x03c0 ) >> 6;
         fPrintFormData = 0 != ( a16Bit &  0x0400 );
         fSaveFormData  = 0 != ( a16Bit &  0x0800 );
         fShadeFormData = 0 != ( a16Bit &  0x1000 );
-        fWCFtnEdn      = 0 != ( a16Bit &  0x8000 );
+        fWCFootnoteEdn      = 0 != ( a16Bit &  0x8000 );
 
         cLines = Get_Long( pData );          // 56 0x38
-        cWordsFtnEnd = Get_Long( pData );    // 60 0x3c
-        cChFtnEdn = Get_Long( pData );       // 64 0x40
-        cPgFtnEdn = Get_Short( pData );      // 68 0x44
-        cParasFtnEdn = Get_Long( pData );    // 70 0x46
-        cLinesFtnEdn = Get_Long( pData );    // 74 0x4a
+        cWordsFootnoteEnd = Get_Long( pData );    // 60 0x3c
+        cChFootnoteEdn = Get_Long( pData );       // 64 0x40
+        cPgFootnoteEdn = Get_Short( pData );      // 68 0x44
+        cParasFootnoteEdn = Get_Long( pData );    // 70 0x46
+        cLinesFootnoteEdn = Get_Long( pData );    // 74 0x4a
         lKeyProtDoc = Get_Long( pData );     // 78 0x4e
 
         a16Bit = Get_UShort( pData );        // 82 0x52
@@ -6888,17 +6888,17 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
             pData += 12;                         // 414 0x19e
 
             cChWS = Get_Long( pData );           // 426 0x1aa
-            cChWSFtnEdn = Get_Long( pData );     // 430 0x1ae
+            cChWSFootnoteEdn = Get_Long( pData );     // 430 0x1ae
             grfDocEvents = Get_Long( pData );    // 434 0x1b2
 
             pData += 4+30+8;  // 438 0x1b6; 442 0x1ba; 472 0x1d8; 476 0x1dc
 
             cDBC = Get_Long( pData );            // 480 0x1e0
-            cDBCFtnEdn = Get_Long( pData );      // 484 0x1e4
+            cDBCFootnoteEdn = Get_Long( pData );      // 484 0x1e4
 
             pData += 1 * sizeof( sal_Int32);         // 488 0x1e8
 
-            nfcFtnRef = Get_Short( pData );      // 492 0x1ec
+            nfcFootnoteRef = Get_Short( pData );      // 492 0x1ec
             nfcEdnRef = Get_Short( pData );      // 494 0x1ee
             hpsZoonFontPag = Get_Short( pData ); // 496 0x1f0
             dywDispPag = Get_Short( pData );     // 498 0x1f2
@@ -6951,7 +6951,7 @@ WW8Dop::WW8Dop()
 
     fWidowControl = true;
     fpc = 1;
-    nFtn = 1;
+    nFootnote = 1;
     fOutlineDirtySave = true;
     fHyphCapitals = true;
     fBackup = true;
@@ -6987,10 +6987,10 @@ WW8Dop::WW8Dop()
     fIncludeFooter = true;
 
     cChWS = /**!!**/ 0;
-    cChWSFtnEdn = /**!!**/ 0;
+    cChWSFootnoteEdn = /**!!**/ 0;
 
     cDBC = /**!!**/ 0;
-    cDBCFtnEdn = /**!!**/ 0;
+    cDBCFootnoteEdn = /**!!**/ 0;
 
     fAcetateShowAtn = true;
 }
@@ -7177,8 +7177,8 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     Set_UInt16( pData, a16Bit );
 
     a16Bit = 0;                         // 2 0x02
-    a16Bit |= ( 0x0003 & rncFtn );
-    a16Bit |= ( ~0x0003 & (nFtn << 2));
+    a16Bit |= ( 0x0003 & rncFootnote );
+    a16Bit |= ( ~0x0003 & (nFootnote << 2));
     Set_UInt16( pData, a16Bit );
 
     a8Bit = 0;                          // 4 0x04
@@ -7210,7 +7210,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     a8Bit = 0;                          // 7 0x07
     if( fPagSuppressTopSpacing )    a8Bit |= 0x01;
     if( fProtEnabled )              a8Bit |= 0x02;
-    if( fDispFormFldSel )           a8Bit |= 0x04;
+    if( fDispFormFieldSel )           a8Bit |= 0x04;
     if( fRMView )                   a8Bit |= 0x08;
     if( fRMPrint )                  a8Bit |= 0x10;
     if( fWriteReservation )         a8Bit |= 0x20;
@@ -7259,20 +7259,20 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
 
     a16Bit = 0;                         // 54 0x36
     a16Bit |= (0x0003 & epc );
-    a16Bit |= (0x003c & (nfcFtnRef << 2));
+    a16Bit |= (0x003c & (nfcFootnoteRef << 2));
     a16Bit |= (0x03c0 & (nfcEdnRef << 6));
     if( fPrintFormData )    a16Bit |= 0x0400;
     if( fSaveFormData )     a16Bit |= 0x0800;
     if( fShadeFormData )    a16Bit |= 0x1000;
-    if( fWCFtnEdn )         a16Bit |= 0x8000;
+    if( fWCFootnoteEdn )         a16Bit |= 0x8000;
     Set_UInt16( pData, a16Bit );
 
     Set_UInt32( pData, cLines );        // 56 0x38
-    Set_UInt32( pData, cWordsFtnEnd );  // 60 0x3c
-    Set_UInt32( pData, cChFtnEdn );     // 64 0x40
-    Set_UInt16( pData, cPgFtnEdn );     // 68 0x44
-    Set_UInt32( pData, cParasFtnEdn );  // 70 0x46
-    Set_UInt32( pData, cLinesFtnEdn );  // 74 0x4a
+    Set_UInt32( pData, cWordsFootnoteEnd );  // 60 0x3c
+    Set_UInt32( pData, cChFootnoteEdn );     // 64 0x40
+    Set_UInt16( pData, cPgFootnoteEdn );     // 68 0x44
+    Set_UInt32( pData, cParasFootnoteEdn );  // 70 0x46
+    Set_UInt32( pData, cLinesFootnoteEdn );  // 74 0x4a
     Set_UInt32( pData, lKeyProtDoc );   // 78 0x4e
 
     a16Bit = 0;                         // 82 0x52
@@ -7310,17 +7310,17 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         pData += 12;                                   // 414 0x19e
 
         Set_UInt32( pData, cChWS );                    // 426 0x1aa
-        Set_UInt32( pData, cChWSFtnEdn );              // 430 0x1ae
+        Set_UInt32( pData, cChWSFootnoteEdn );              // 430 0x1ae
         Set_UInt32( pData, grfDocEvents );             // 434 0x1b2
 
         pData += 4+30+8;  // 438 0x1b6; 442 0x1ba; 472 0x1d8; 476 0x1dc
 
         Set_UInt32( pData, cDBC );                     // 480 0x1e0
-        Set_UInt32( pData, cDBCFtnEdn );               // 484 0x1e4
+        Set_UInt32( pData, cDBCFootnoteEdn );               // 484 0x1e4
 
         pData += 1 * sizeof( sal_Int32);                   // 488 0x1e8
 
-        Set_UInt16( pData, nfcFtnRef );                // 492 0x1ec
+        Set_UInt16( pData, nfcFootnoteRef );                // 492 0x1ec
         Set_UInt16( pData, nfcEdnRef );                // 494 0x1ee
         Set_UInt16( pData, hpsZoonFontPag );           // 496 0x1f0
         Set_UInt16( pData, dywDispPag );               // 498 0x1f2

@@ -59,7 +59,7 @@ public:
 } // namespace editeng
 
 // Class of options for AutoFormat
-struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
+struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
 {
     vcl::Font aBulletFont;
     vcl::Font aByInputBulletFont;
@@ -83,7 +83,7 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
     bool bChgUserColl : 1;
     bool bChgEnumNum : 1;
 
-    bool bAFmtByInput : 1;
+    bool bAFormatByInput : 1;
     bool bDelEmptyNode : 1;
     bool bSetNumRule : 1;
 
@@ -109,10 +109,10 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
     bool bAutoCmpltAppendBlanc : 1;
     bool bAutoCmpltShowAsTip : 1;
 
-    bool bAFmtDelSpacesAtSttEnd : 1;
-    bool bAFmtDelSpacesBetweenLines : 1;
-    bool bAFmtByInpDelSpacesAtSttEnd : 1;
-    bool bAFmtByInpDelSpacesBetweenLines : 1;
+    bool bAFormatDelSpacesAtSttEnd : 1;
+    bool bAFormatDelSpacesBetweenLines : 1;
+    bool bAFormatByInpDelSpacesAtSttEnd : 1;
+    bool bAFormatByInpDelSpacesBetweenLines : 1;
 
     bool bAutoCmpltKeepList : 1;
 
@@ -122,9 +122,9 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
          bDummy8 : 1
          ;
 
-    SvxSwAutoFmtFlags();
-    SvxSwAutoFmtFlags( const SvxSwAutoFmtFlags& rAFFlags ) { *this = rAFFlags; }
-    SvxSwAutoFmtFlags& operator=( const SvxSwAutoFmtFlags& );
+    SvxSwAutoFormatFlags();
+    SvxSwAutoFormatFlags( const SvxSwAutoFormatFlags& rAFFlags ) { *this = rAFFlags; }
+    SvxSwAutoFormatFlags& operator=( const SvxSwAutoFormatFlags& );
 };
 
 #endif

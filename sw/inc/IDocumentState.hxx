@@ -44,7 +44,7 @@ public:
     */
     virtual bool IsLoaded() const = 0;
 
-    virtual bool IsUpdateExpFld() const  = 0;
+    virtual bool IsUpdateExpField() const  = 0;
 
     virtual bool IsNewDoc() const = 0;
 
@@ -54,7 +54,7 @@ public:
 
     virtual void SetNewDoc(bool b) = 0;
 
-    virtual void SetUpdateExpFldStat(bool b) = 0;
+    virtual void SetUpdateExpFieldStat(bool b) = 0;
 
     virtual void SetLoaded(bool b = true) = 0;
 

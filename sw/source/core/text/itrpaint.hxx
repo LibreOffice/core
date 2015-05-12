@@ -20,10 +20,10 @@
 #define INCLUDED_SW_SOURCE_CORE_TEXT_ITRPAINT_HXX
 #include "itrtxt.hxx"
 
-class SwSaveClip;          // SwTxtPainter
+class SwSaveClip;          // SwTextPainter
 class SwMultiPortion;
 
-class SwTxtPainter : public SwTxtCursor
+class SwTextPainter : public SwTextCursor
 {
     bool bPaintDrop;
 
@@ -31,18 +31,18 @@ class SwTxtPainter : public SwTxtCursor
     void CheckSpecialUnderline( const SwLinePortion* pPor,
                                 long nAdjustBaseLine = 0 );
 protected:
-    void CtorInitTxtPainter( SwTxtFrm *pFrm, SwTxtPaintInfo *pInf );
-    SwTxtPainter(SwTxtNode* pTxtNode)
-        : SwTxtCursor(pTxtNode)
+    void CtorInitTextPainter( SwTextFrm *pFrm, SwTextPaintInfo *pInf );
+    SwTextPainter(SwTextNode* pTextNode)
+        : SwTextCursor(pTextNode)
         , bPaintDrop(false)
     {
     }
 
 public:
-    SwTxtPainter(SwTxtFrm *pTxtFrm, SwTxtPaintInfo *pTxtPaintInf)
-        : SwTxtCursor(pTxtFrm->GetTxtNode())
+    SwTextPainter(SwTextFrm *pTextFrm, SwTextPaintInfo *pTextPaintInf)
+        : SwTextCursor(pTextFrm->GetTextNode())
     {
-        CtorInitTxtPainter( pTxtFrm, pTxtPaintInf );
+        CtorInitTextPainter( pTextFrm, pTextPaintInf );
     }
     void DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                        const bool bUnderSz );
@@ -53,10 +53,10 @@ public:
                             const SwMultiPortion* pEnvPor = 0 );
     inline void SetPaintDrop( const bool bNew ) { bPaintDrop = bNew; }
     inline bool IsPaintDrop() const { return bPaintDrop; }
-    inline SwTxtPaintInfo &GetInfo()
-        { return static_cast<SwTxtPaintInfo&>(SwTxtIter::GetInfo()); }
-    inline const SwTxtPaintInfo &GetInfo() const
-        { return static_cast<const SwTxtPaintInfo&>(SwTxtIter::GetInfo()); }
+    inline SwTextPaintInfo &GetInfo()
+        { return static_cast<SwTextPaintInfo&>(SwTextIter::GetInfo()); }
+    inline const SwTextPaintInfo &GetInfo() const
+        { return static_cast<const SwTextPaintInfo&>(SwTextIter::GetInfo()); }
 };
 
 bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );

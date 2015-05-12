@@ -119,7 +119,7 @@ public:
     void    InvalidateSwDoc(); // {pDoc = 0;}
     SwDoc* GetDoc();
     /// Same as getByIndex(nIndex), except that it also takes a set of formats to ignore, so the method itself doesn't have to generate such a list.
-    css::uno::Any getByIndex(sal_Int32 nIndex, std::set<const SwFrmFmt*>* pTextBoxes) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
+    css::uno::Any getByIndex(sal_Int32 nIndex, std::set<const SwFrameFormat*>* pTextBoxes) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 };
 
 class SwShapeDescriptor_Impl;
@@ -273,11 +273,11 @@ public:
     virtual OUString SAL_CALL getShapeType(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl;}
-    SwFrmFmt*               GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
+    SwFrameFormat*               GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >                 GetAggregationInterface() {return xShapeAgg;}
 
     // helper
-    static void AddExistingShapeToFmt( SdrObject& _rObj );
+    static void AddExistingShapeToFormat( SdrObject& _rObj );
 };
 
 class SwXGroupShape :

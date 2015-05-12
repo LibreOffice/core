@@ -37,12 +37,12 @@ sal_Int16 SwWriteTableCell::GetVertOri() const
     sal_Int16 eCellVertOri = text::VertOrientation::TOP;
     if( pBox->GetSttNd() )
     {
-        const SfxItemSet& rItemSet = pBox->GetFrmFmt()->GetAttrSet();
+        const SfxItemSet& rItemSet = pBox->GetFrameFormat()->GetAttrSet();
         const SfxPoolItem *pItem;
         if( SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, false, &pItem ) )
         {
             sal_Int16 eBoxVertOri =
-                static_cast<const SwFmtVertOrient *>(pItem)->GetVertOrient();
+                static_cast<const SwFormatVertOrient *>(pItem)->GetVertOrient();
             if( text::VertOrientation::CENTER==eBoxVertOri || text::VertOrientation::BOTTOM==eBoxVertOri)
                 eCellVertOri = eBoxVertOri;
         }
@@ -80,9 +80,9 @@ SwWriteTableCol::SwWriteTableCol(sal_uInt32 nPosition)
 
 sal_uInt32 SwWriteTable::GetBoxWidth( const SwTableBox *pBox )
 {
-    const SwFrmFmt *pFmt = pBox->GetFrmFmt();
-    const SwFmtFrmSize& aFrmSize=
-        static_cast<const SwFmtFrmSize&>(pFmt->GetFmtAttr( RES_FRM_SIZE ));
+    const SwFrameFormat *pFormat = pBox->GetFrameFormat();
+    const SwFormatFrmSize& aFrmSize=
+        static_cast<const SwFormatFrmSize&>(pFormat->GetFormatAttr( RES_FRM_SIZE ));
 
     return sal::static_int_cast<sal_uInt32>(aFrmSize.GetSize().Width());
 }
@@ -148,13 +148,13 @@ long SwWriteTable::GetLineHeight( const SwTableBox *pBox )
     if( !pLine )
         return 0;
 
-    const SwFrmFmt *pLineFrmFmt = pLine->GetFrmFmt();
+    const SwFrameFormat *pLineFrameFormat = pLine->GetFrameFormat();
     const SfxPoolItem* pItem;
-    const SfxItemSet& rItemSet = pLineFrmFmt->GetAttrSet();
+    const SfxItemSet& rItemSet = pLineFrameFormat->GetAttrSet();
 
     long nHeight = 0;
     if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
-        nHeight = static_cast<const SwFmtFrmSize*>(pItem)->GetHeight();
+        nHeight = static_cast<const SwFormatFrmSize*>(pItem)->GetHeight();
 
     return nHeight;
 }
@@ -166,9 +166,9 @@ const SvxBrushItem *SwWriteTable::GetLineBrush( const SwTableBox *pBox,
 
     while( pLine )
     {
-        const SwFrmFmt *pLineFrmFmt = pLine->GetFrmFmt();
+        const SwFrameFormat *pLineFrameFormat = pLine->GetFrameFormat();
         const SfxPoolItem* pItem;
-        const SfxItemSet& rItemSet = pLineFrmFmt->GetAttrSet();
+        const SfxItemSet& rItemSet = pLineFrameFormat->GetAttrSet();
 
         if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
@@ -229,8 +229,8 @@ sal_uInt16 SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
 {
     sal_uInt16 nBorderMask = 0;
 
-    const SwFrmFmt *pFrmFmt = pBox->GetFrmFmt();
-    const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(pFrmFmt->GetFmtAttr( RES_BOX ));
+    const SwFrameFormat *pFrameFormat = pBox->GetFrameFormat();
+    const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(pFrameFormat->GetFormatAttr( RES_BOX ));
 
     if( rBoxItem.GetTop() )
     {
@@ -584,13 +584,13 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
 
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
 
-        const SwFrmFmt *pLineFrmFmt = pLine->GetFrmFmt();
+        const SwFrameFormat *pLineFrameFormat = pLine->GetFrameFormat();
         const SfxPoolItem* pItem;
-        const SfxItemSet& rItemSet = pLineFrmFmt->GetAttrSet();
+        const SfxItemSet& rItemSet = pLineFrameFormat->GetAttrSet();
 
         long nHeight = 0;
         if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
-            nHeight = static_cast<const SwFmtFrmSize*>(pItem)->GetHeight();
+            nHeight = static_cast<const SwFormatFrmSize*>(pItem)->GetHeight();
 
         const SvxBrushItem *pBrushItem, *pLineBrush = pParentBrush;
         if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,

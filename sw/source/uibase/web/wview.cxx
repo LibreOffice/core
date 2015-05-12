@@ -102,12 +102,12 @@ void SwWebView::SelectShell()
 #if HAVE_FEATURE_DESKTOP
     // Decision whether UpdateTable must be called
     bool bUpdateTable = false;
-    const SwFrmFmt* pCurTableFmt = GetWrtShell().GetTableFmt();
-    if(pCurTableFmt && pCurTableFmt != GetLastTblFrmFmt())
+    const SwFrameFormat* pCurTableFormat = GetWrtShell().GetTableFormat();
+    if(pCurTableFormat && pCurTableFormat != GetLastTableFrameFormat())
     {
         bUpdateTable = true; // can only be executed later
     }
-    SetLastTblFrmFmt(pCurTableFmt);
+    SetLastTableFrameFormat(pCurTableFormat);
     //SEL_TBL and SEL_TBL_CELLS can be ored!
     int nNewSelectionType = (GetWrtShell().GetSelectionType()
                                 & ~nsSelectionType::SEL_TBL_CELLS);

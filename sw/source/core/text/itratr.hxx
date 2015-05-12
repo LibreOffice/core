@@ -27,12 +27,12 @@
 class OutputDevice;
 class SwFont;
 class SwpHints;
-class SwTxtAttr;
+class SwTextAttr;
 class SwAttrSet;
-class SwTxtNode;
+class SwTextNode;
 class SwRedlineItr;
 class SwViewShell;
-class SwTxtFrm;
+class SwTextFrm;
 
 class SwAttrIter
 {
@@ -56,16 +56,16 @@ private:
     sal_uInt8 nPropFont;
     const void* aMagicNo[ SW_SCRIPTS ];
     sal_uInt16 aFntIdx[ SW_SCRIPTS ];
-    const SwTxtNode* m_pTxtNode;
+    const SwTextNode* m_pTextNode;
 
     void SeekFwd( const sal_Int32 nPos );
     void SetFnt( SwFont* pNew ) { pFnt = pNew; }
 
 protected:
-    void Chg( SwTxtAttr *pHt );
-    void Rst( SwTxtAttr *pHt );
-    void CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm = 0 );
-    SwAttrIter(SwTxtNode* pTxtNode)
+    void Chg( SwTextAttr *pHt );
+    void Rst( SwTextAttr *pHt );
+    void CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrm* pFrm = 0 );
+    SwAttrIter(SwTextNode* pTextNode)
         : pShell(0)
         , pFnt(0)
         , pHints(0)
@@ -78,16 +78,16 @@ protected:
         , nEndIndex(0)
         , nPos(0)
         , nPropFont(0)
-        , m_pTxtNode(pTxtNode)
+        , m_pTextNode(pTextNode)
         {
             aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
         }
 
 public:
     // Constructor, destructor
-    SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
-        : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0), m_pTxtNode(&rTxtNode)
-        { CtorInitAttrIter( rTxtNode, rScrInf ); }
+    SwAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf )
+        : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0), m_pTextNode(&rTextNode)
+        { CtorInitAttrIter( rTextNode, rScrInf ); }
 
     virtual ~SwAttrIter();
 
@@ -111,7 +111,7 @@ public:
     bool HasHints() const { return 0 != pHints; }
 
     // Returns the attribute for a position
-    SwTxtAttr *GetAttr( const sal_Int32 nPos ) const;
+    SwTextAttr *GetAttr( const sal_Int32 nPos ) const;
 
     const SwAttrSet* GetAttrSet() const { return pAttrSet; }
 

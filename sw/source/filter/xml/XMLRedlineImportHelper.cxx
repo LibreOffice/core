@@ -172,7 +172,7 @@ XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
     {
         rPos.nNode = *pIndex;
         rPos.nNode++;           // pIndex points to previous index !!!
-        rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), 0 );
+        rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(), 0 );
     }
 }
 
@@ -467,7 +467,7 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
         }
 
         // create text section for redline
-        SwTxtFmtColl *pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool
+        SwTextFormatColl *pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool
             (RES_POOLCOLL_STANDARD, false );
         SwStartNode* pRedlineNode = pDoc->GetNodes().MakeTextSection(
             pDoc->GetNodes().GetEndOfRedlines(),

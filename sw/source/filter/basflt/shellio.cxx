@@ -137,9 +137,9 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     RedlineMode_t ePostReadRedlineMode( nsRedlineMode_t::REDLINE_IGNORE );
 
     // Array of FlyFormats
-    SwFrmFmts aFlyFrmArr;
+    SwFrameFormats aFlyFrmArr;
     // only read templates? then ignore multi selection!
-    bool bFmtsOnly = po->aOpt.IsFmtsOnly();
+    bool bFormatsOnly = po->aOpt.IsFormatsOnly();
 
     while( true )
     {
@@ -159,15 +159,15 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         // store for now all Fly's
         if( pCrsr )
         {
-            std::copy(pDoc->GetSpzFrmFmts()->begin(),
-                pDoc->GetSpzFrmFmts()->end(), std::back_inserter(aFlyFrmArr));
+            std::copy(pDoc->GetSpzFrameFormats()->begin(),
+                pDoc->GetSpzFrameFormats()->end(), std::back_inserter(aFlyFrmArr));
         }
 
-        const sal_Int32 nSttCntnt = pPam->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nSttContent = pPam->GetPoint()->nContent.GetIndex();
 
         // make sure the End position is correct for all Readers
-        SwCntntNode* pCNd = pPam->GetCntntNode();
-        sal_Int32 nEndCntnt = pCNd ? pCNd->Len() - nSttCntnt : 0;
+        SwContentNode* pCNd = pPam->GetContentNode();
+        sal_Int32 nEndContent = pCNd ? pCNd->Len() - nSttContent : 0;
         SwNodeIndex aEndPos( pPam->GetPoint()->nNode, 1 );
 
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
@@ -182,25 +182,25 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         if( !IsError( nError ))     // set the End position already
         {
             --aEndPos;
-            pCNd = aEndPos.GetNode().GetCntntNode();
+            pCNd = aEndPos.GetNode().GetContentNode();
             if( !pCNd && 0 == ( pCNd = SwNodes::GoPrevious( &aEndPos ) ))
                 pCNd = pDoc->GetNodes().GoNext( &aEndPos );
 
             pPam->GetPoint()->nNode = aEndPos;
             const sal_Int32 nLen = pCNd->Len();
-            if( nLen < nEndCntnt )
-                nEndCntnt = 0;
+            if( nLen < nEndContent )
+                nEndContent = 0;
             else
-                nEndCntnt = nLen - nEndCntnt;
-            pPam->GetPoint()->nContent.Assign( pCNd, nEndCntnt );
+                nEndContent = nLen - nEndContent;
+            pPam->GetPoint()->nContent.Assign( pCNd, nEndContent );
 
-            const SwStartNode* pTblBoxStart = pCNd->FindTableBoxStartNode();
-            if ( pTblBoxStart )
+            const SwStartNode* pTableBoxStart = pCNd->FindTableBoxStartNode();
+            if ( pTableBoxStart )
             {
-                SwTableBox* pBox = pTblBoxStart->GetTblBox();
+                SwTableBox* pBox = pTableBoxStart->GetTableBox();
                 if ( pBox )
                 {
-                    pDoc->ChkBoxNumFmt( *pBox, true );
+                    pDoc->ChkBoxNumFormat( *pBox, true );
                 }
             }
         }
@@ -210,9 +210,9 @@ sal_uLong SwReader::Read( const Reader& rOptions )
             *pUndoPam->GetMark() = *pPam->GetPoint();
             ++pUndoPam->GetPoint()->nNode;
             SwNode& rNd = pUndoPam->GetNode();
-            if( rNd.IsCntntNode() )
+            if( rNd.IsContentNode() )
                 pUndoPam->GetPoint()->nContent.Assign(
-                                    static_cast<SwCntntNode*>(&rNd), nSttCntnt );
+                                    static_cast<SwContentNode*>(&rNd), nSttContent );
             else
                 pUndoPam->GetPoint()->nContent.Assign( 0, 0 );
 
@@ -220,14 +220,14 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                    rNd.FindFooterStartNode();
 
             // search all new Fly's, and store them as individual Undo Objects
-            for( SwFrmFmts::size_type n = 0; n < pDoc->GetSpzFrmFmts()->size(); ++n )
+            for( SwFrameFormats::size_type n = 0; n < pDoc->GetSpzFrameFormats()->size(); ++n )
             {
-                SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[ n ];
-                const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-                if( !aFlyFrmArr.Contains( pFrmFmt) )
+                SwFrameFormat* pFrameFormat = (*pDoc->GetSpzFrameFormats())[ n ];
+                const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+                if( !aFlyFrmArr.Contains( pFrameFormat) )
                 {
                     SwPosition const*const pFrameAnchor(
-                            rAnchor.GetCntntAnchor());
+                            rAnchor.GetContentAnchor());
                     if  (   (FLY_AT_PAGE == rAnchor.GetAnchorId())
                         ||  (   pFrameAnchor
                             &&  (   (   (FLY_AT_PARA == rAnchor.GetAnchorId())
@@ -251,11 +251,11 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                     {
                         if( bChkHeaderFooter &&
                             (FLY_AT_PARA == rAnchor.GetAnchorId()) &&
-                            RES_DRAWFRMFMT == pFrmFmt->Which() )
+                            RES_DRAWFRMFMT == pFrameFormat->Which() )
                         {
                             // DrawObjects are not allowed in Headers/Footers!
-                            pFrmFmt->DelFrms();
-                            pDoc->DelFrmFmt( pFrmFmt );
+                            pFrameFormat->DelFrms();
+                            pDoc->DelFrameFormat( pFrameFormat );
                             --n;
                         }
                         else
@@ -266,21 +266,21 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                 // UGLY: temp. enable undo
                                 pDoc->GetIDocumentUndoRedo().DoUndo(true);
                                 pDoc->GetIDocumentUndoRedo().AppendUndo(
-                                    new SwUndoInsLayFmt( pFrmFmt,0,0 ) );
+                                    new SwUndoInsLayFormat( pFrameFormat,0,0 ) );
                                 pDoc->GetIDocumentUndoRedo().DoUndo(false);
                                 pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
                             }
-                            if( pFrmFmt->HasWriterListeners() )
+                            if( pFrameFormat->HasWriterListeners() )
                             {
                                 // Draw-Objects create a Frame when being inserted; thus delete them
-                                pFrmFmt->DelFrms();
+                                pFrameFormat->DelFrms();
                             }
 
                             if (FLY_AT_PAGE == rAnchor.GetAnchorId())
                             {
-                                if( !rAnchor.GetCntntAnchor() )
+                                if( !rAnchor.GetContentAnchor() )
                                 {
-                                    pFrmFmt->MakeFrms();
+                                    pFrameFormat->MakeFrms();
                                 }
                                 else if( pCrsr )
                                 {
@@ -288,7 +288,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                 }
                             }
                             else
-                                pFrmFmt->MakeFrms();
+                                pFrameFormat->MakeFrms();
                         }
                     }
                 }
@@ -321,7 +321,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
             break;
 
         // only read templates? then ignore multi selection! Bug 68593
-        if( bFmtsOnly )
+        if( bFormatsOnly )
             break;
 
         /*
@@ -507,7 +507,7 @@ SwDoc* Reader::GetTemplateDoc()
                         // always FALSE
                         pTemplate->GetIDocumentUndoRedo().DoUndo( false );
                         pTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
-                        pTemplate->RemoveAllFmtLanguageDependencies();
+                        pTemplate->RemoveAllFormatLanguageDependencies();
 
                         ReadXML->SetOrganizerMode( true );
                         SfxMedium aMedium( aFileName, StreamMode::NONE );
@@ -534,7 +534,7 @@ bool Reader::SetTemplate( SwDoc& rDoc )
     GetTemplateDoc();
     if( pTemplate )
     {
-        rDoc.RemoveAllFmtLanguageDependencies();
+        rDoc.RemoveAllFormatLanguageDependencies();
         rDoc.ReplaceStyles( *pTemplate );
         rDoc.getIDocumentFieldsAccess().SetFixFields(false, NULL);
         bRet = true;
@@ -569,7 +569,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
     pTemplate->acquire();
     pTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
     pTemplate->getIDocumentDeviceAccess().getPrinter( true );
-    pTemplate->RemoveAllFmtLanguageDependencies();
+    pTemplate->RemoveAllFormatLanguageDependencies();
     aChkDateTime = Date( 1, 1, 2300 );  // year 2300 should be sufficient
     aTemplateNm = "$$Dummy$$";
 }
@@ -616,25 +616,25 @@ void Reader::SetFltName( const OUString& )
 {
 }
 
-void Reader::ResetFrmFmtAttrs( SfxItemSet &rFrmSet )
+void Reader::ResetFrameFormatAttrs( SfxItemSet &rFrmSet )
 {
     rFrmSet.Put( SvxLRSpaceItem(RES_LR_SPACE) );
     rFrmSet.Put( SvxULSpaceItem(RES_UL_SPACE) );
     rFrmSet.Put( SvxBoxItem(RES_BOX) );
 }
 
-void Reader::ResetFrmFmts( SwDoc& rDoc )
+void Reader::ResetFrameFormats( SwDoc& rDoc )
 {
     sal_uInt16 const s_ids[3] = {
         RES_POOLFRM_FRAME, RES_POOLFRM_GRAPHIC, RES_POOLFRM_OLE
     };
     for (size_t i = 0; i < SAL_N_ELEMENTS(s_ids); ++i)
     {
-        SwFrmFmt *const pFrmFmt = rDoc.getIDocumentStylePoolAccess().GetFrmFmtFromPool( s_ids[i] );
+        SwFrameFormat *const pFrameFormat = rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( s_ids[i] );
 
-        pFrmFmt->ResetFmtAttr( RES_LR_SPACE );
-        pFrmFmt->ResetFmtAttr( RES_UL_SPACE );
-        pFrmFmt->ResetFmtAttr( RES_BOX );
+        pFrameFormat->ResetFormatAttr( RES_LR_SPACE );
+        pFrameFormat->ResetFormatAttr( RES_UL_SPACE );
+        pFrameFormat->ResetFormatAttr( RES_BOX );
     }
 }
 
@@ -756,13 +756,13 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
 
         // search the layout for cells
         SwSelBoxes aBoxes;
-        GetTblSel( *pShell, aBoxes );
-        const SwTableNode* pTblNd = static_cast<const SwTableNode*>(aBoxes[0]->GetSttNd()->StartOfSectionNode());
+        GetTableSel( *pShell, aBoxes );
+        const SwTableNode* pTableNd = static_cast<const SwTableNode*>(aBoxes[0]->GetSttNd()->StartOfSectionNode());
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
-        SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
+        SwContentNode *pNd = aIdx.GetNode().GetContentNode();
         OSL_ENSURE( pNd, "Node not found" );
         SwPosition aPos( aIdx, SwIndex( pNd ) );
-        pTblNd->GetTable().MakeCopy( pDoc, aPos, aBoxes );
+        pTableNd->GetTable().MakeCopy( pDoc, aPos, aBoxes );
     }
 
     if( !bWriteAll && ( pShell || pOutPam ))
@@ -832,17 +832,17 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     {
         const SwPageDesc& rPgDsc = pOutDoc->GetPageDesc( 0 );
         //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
-        const SwFmtFrmSize& rSz = rPgDsc.GetMaster().GetFrmSize();
+        const SwFormatFrmSize& rSz = rPgDsc.GetMaster().GetFrmSize();
         // Clipboard-Document is always created w/o printer; thus the
         // default PageDesc is always aug LONG_MAX !! Set then to DIN A4
         if( LONG_MAX == rSz.GetHeight() || LONG_MAX == rSz.GetWidth() )
         {
             SwPageDesc aNew( rPgDsc );
-            SwFmtFrmSize aNewSz( rSz );
+            SwFormatFrmSize aNewSz( rSz );
             Size a4(SvxPaperInfo::GetPaperSize( PAPER_A4 ));
             aNewSz.SetHeight( a4.Width() );
             aNewSz.SetWidth( a4.Height() );
-            aNew.GetMaster().SetFmtAttr( aNewSz );
+            aNew.GetMaster().SetFormatAttr( aNewSz );
             pOutDoc->ChgPageDesc( 0, aNew );
         }
     }
@@ -923,12 +923,12 @@ bool SetHTMLTemplate( SwDoc & rDoc )
 
     SwNodes& rNds = rDoc.GetNodes();
     SwNodeIndex aIdx( rNds.GetEndOfExtras(), 1 );
-    SwCntntNode* pCNd = rNds.GoNext( &aIdx );
+    SwContentNode* pCNd = rNds.GoNext( &aIdx );
     if( pCNd )
     {
         pCNd->SetAttr
-            ( SwFmtPageDesc(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_HTML, false) ) );
-        pCNd->ChgFmtColl( rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT, false ));
+            ( SwFormatPageDesc(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_HTML, false) ) );
+        pCNd->ChgFormatColl( rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT, false ));
     }
 
     return bRet;

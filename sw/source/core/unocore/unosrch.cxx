@@ -143,7 +143,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
     *pWeightItem  = 0,
     *pULineItem  = 0,
     *pOLineItem  = 0,
-    *pCharFmtItem  = 0,
+    *pCharFormatItem  = 0,
     *pShadItem  = 0,
     *pPostItem  = 0,
     *pNHyphItem  = 0,
@@ -269,9 +269,9 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
                     pTempItem = pShadItem;
                 break;
                 case  RES_TXTATR_CHARFMT:
-                    if(!pCharFmtItem)
-                        pCharFmtItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
-                    pTempItem = pCharFmtItem;
+                    if(!pCharFormatItem)
+                        pCharFormatItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pCharFormatItem;
                 break;
                 case  RES_CHRATR_UNDERLINE:
                     if(!pULineItem)
@@ -447,7 +447,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
     delete pWeightItem;
     delete pULineItem;
     delete pOLineItem;
-    delete pCharFmtItem  ;
+    delete pCharFormatItem  ;
     delete pShadItem;
     delete pPostItem;
     delete pNHyphItem;

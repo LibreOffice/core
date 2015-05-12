@@ -5460,7 +5460,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
                                       sal_uLong         nTxBx,
                                       SdrObject*    pObject,
-                                      SwFlyFrmFmt*  pFly,
+                                      SwFlyFrameFormat*  pFly,
                                       short         nHdFtSection) const
 {
     sal_uInt16 nShpCnt = pShapeOrders->size();
@@ -5481,7 +5481,7 @@ void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
 
 void SvxMSDffManager::ExchangeInShapeOrder( SdrObject*   pOldObject,
                                             sal_uLong        nTxBx,
-                                            SwFlyFrmFmt* pFly,
+                                            SwFlyFrameFormat* pFly,
                                             SdrObject*   pObject) const
 {
     sal_uInt16 nShpCnt = pShapeOrders->size();

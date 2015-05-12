@@ -38,7 +38,7 @@ namespace com { namespace sun { namespace star {
 
 class SwTOXType;
 class SwTOXMark;
-class SwTxtTOXMark;
+class SwTextTOXMark;
 class SwDoc;
 
 typedef std::vector<SwTOXMark*> SwTOXMarks;
@@ -54,7 +54,7 @@ class SW_DLLPUBLIC SwTOXMark
     , public SwModify
 {
     friend void _InitCore();
-    friend class SwTxtTOXMark;
+    friend class SwTextTOXMark;
 
     OUString aAltText;    // Text of caption is different.
     OUString aPrimaryKey;
@@ -66,7 +66,7 @@ class SW_DLLPUBLIC SwTOXMark
     OUString aPrimaryKeyReading;
     OUString aSecondaryKeyReading;
 
-    SwTxtTOXMark* pTxtAttr;
+    SwTextTOXMark* pTextAttr;
 
     sal_uInt16  nLevel;
     OUString    m_aBookmarkName;
@@ -137,8 +137,8 @@ public:
 
     inline const SwTOXType*    GetTOXType() const;
 
-    const SwTxtTOXMark* GetTxtTOXMark() const   { return pTxtAttr; }
-          SwTxtTOXMark* GetTxtTOXMark()         { return pTxtAttr; }
+    const SwTextTOXMark* GetTextTOXMark() const   { return pTextAttr; }
+          SwTextTOXMark* GetTextTOXMark()         { return pTextAttr; }
 
     SAL_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XDocumentIndexMark> const& GetXTOXMark() const
@@ -332,7 +332,7 @@ public:
     static OUString GetFormLinkStt();
     static OUString GetFormLinkEnd();
     static OUString GetFormEntryNum();
-    static OUString GetFormEntryTxt();
+    static OUString GetFormEntryText();
     static OUString GetFormChapterMark();
     static OUString GetFormText();
     static OUString GetFormAuth();
@@ -585,10 +585,10 @@ inline void SwTOXMark::SetSecondaryKey( const OUString& rKey )
     aSecondaryKey = rKey;
 }
 
-inline void SwTOXMark::SetTextReading( const OUString& rTxt )
+inline void SwTOXMark::SetTextReading( const OUString& rText )
 {
     SAL_WARN_IF(GetTOXType()->GetType() != TOX_INDEX, "sw", "Wrong type");
-    aTextReading = rTxt;
+    aTextReading = rText;
 }
 
 inline void SwTOXMark::SetPrimaryKeyReading( const OUString& rKey )

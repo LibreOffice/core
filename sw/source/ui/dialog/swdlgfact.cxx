@@ -108,11 +108,11 @@ IMPL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwLabDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSwFldDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSwFieldDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractFldInputDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractFieldInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsFootNoteDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsTableDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl);
@@ -224,10 +224,10 @@ sal_uInt16 AbstractSwBreakDlg_Impl:: GetKind()
     return pDlg->GetPageNumber();
 }
 
-void AbstractSwConvertTableDlg_Impl::GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTblFlags,
-                                                SwTableAutoFmt const*& prTAFmt)
+void AbstractSwConvertTableDlg_Impl::GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTableFlags,
+                                                SwTableAutoFormat const*& prTAFormat)
 {
-    pDlg->GetValues(rDelim,rInsTblFlags, prTAFmt);
+    pDlg->GetValues(rDelim,rInsTableFlags, prTAFormat);
 }
 
 void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::Any >& rSelection,
@@ -308,72 +308,72 @@ void AbstractSwSelGlossaryDlg_Impl::SelectEntryPos(sal_Int32 nIdx)
     pDlg->SelectEntryPos( nIdx );
 }
 
-void AbstractSwAutoFormatDlg_Impl::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
+void AbstractSwAutoFormatDlg_Impl::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
 {
-    pDlg->FillAutoFmtOfIndex(rToFill);
+    pDlg->FillAutoFormatOfIndex(rToFill);
 }
 
-void AbstractSwFldDlg_Impl::SetCurPageId( sal_uInt16 nId )
+void AbstractSwFieldDlg_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
 }
 
-void AbstractSwFldDlg_Impl::SetCurPageId( const OString &rName )
+void AbstractSwFieldDlg_Impl::SetCurPageId( const OString &rName )
 {
     pDlg->SetCurPageId( rName );
 }
 
-const SfxItemSet* AbstractSwFldDlg_Impl::GetOutputItemSet() const
+const SfxItemSet* AbstractSwFieldDlg_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* AbstractSwFldDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
+const sal_uInt16* AbstractSwFieldDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
 
-void AbstractSwFldDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
+void AbstractSwFieldDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
 }
 
-void AbstractSwFldDlg_Impl::SetText( const OUString& rStr )
+void AbstractSwFieldDlg_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
 
-OUString AbstractSwFldDlg_Impl::GetText() const
+OUString AbstractSwFieldDlg_Impl::GetText() const
 {
     return pDlg->GetText();
 }
 
-void AbstractSwFldDlg_Impl::Start( bool bShowl )
+void AbstractSwFieldDlg_Impl::Start( bool bShowl )
 {
     pDlg->Start( bShowl );
 }
 
-void AbstractSwFldDlg_Impl::Initialize(SfxChildWinInfo *pInfo)
+void AbstractSwFieldDlg_Impl::Initialize(SfxChildWinInfo *pInfo)
 {
     pDlg->Initialize( pInfo );
 }
 
-void AbstractSwFldDlg_Impl::ReInitDlg()
+void AbstractSwFieldDlg_Impl::ReInitDlg()
 {
     pDlg->ReInitDlg();
 }
 
-void AbstractSwFldDlg_Impl::ActivateDatabasePage()
+void AbstractSwFieldDlg_Impl::ActivateDatabasePage()
 {
     pDlg->ActivateDatabasePage();
 }
 
-vcl::Window* AbstractSwFldDlg_Impl::GetWindow()
+vcl::Window* AbstractSwFieldDlg_Impl::GetWindow()
 {
     return (vcl::Window*)pDlg;
 }
 
-void AbstractSwFldDlg_Impl::ShowReferencePage()
+void AbstractSwFieldDlg_Impl::ShowReferencePage()
 {
     pDlg->ShowReferencePage();
 }
@@ -405,17 +405,17 @@ OUString AbstractGlossaryDlg_Impl::GetCurrShortName() const
     return pDlg->GetCurrShortName();
 }
 
-void AbstractFldInputDlg_Impl::SetWindowState( const OString& rStr )
+void AbstractFieldInputDlg_Impl::SetWindowState( const OString& rStr )
 {
     pDlg->SetWindowState( rStr );
 }
 
-OString AbstractFldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
+OString AbstractFieldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
 {
     return pDlg->GetWindowState( nMask );
 }
 
-void AbstractFldInputDlg_Impl::EndDialog(long n)
+void AbstractFieldInputDlg_Impl::EndDialog(long n)
 {
     pDlg->EndDialog(n);
 }
@@ -446,10 +446,10 @@ void AbstractInsFootNoteDlg_Impl::SetText( const OUString& rStr )
 }
 
 void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTblFlags, OUString& rTableAutoFmtName,
-                                SwTableAutoFmt *& prTAFmt )
+                                SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
+                                SwTableAutoFormat *& prTAFormat )
 {
-    pDlg->GetValues( rName, rRow, rCol, rInsTblFlags, rTableAutoFmtName, prTAFmt);
+    pDlg->GetValues( rName, rRow, rCol, rInsTableFlags, rTableAutoFormatName, prTAFormat);
 }
 
 OUString AbstractJavaEditDialog_Impl::GetScriptText() const
@@ -666,7 +666,7 @@ SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* p
             pDlg = VclPtr<SwBackgroundDlg>::Create( pParent, rSet );
             break;
         case RC_DLG_SWNUMFMTDLG :
-            pDlg = VclPtr<SwNumFmtDlg>::Create( pParent, rSet );
+            pDlg = VclPtr<SwNumFormatDlg>::Create( pParent, rSet );
             break;
         default:
             break;
@@ -720,9 +720,9 @@ VclAbstractDialog   * SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& 
 }
 
 SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwCharDlg(vcl::Window* pParent, SwView& pVw,
-    const SfxItemSet& rCoreSet, sal_uInt8 nDialogMode, const OUString* pFmtStr)
+    const SfxItemSet& rCoreSet, sal_uInt8 nDialogMode, const OUString* pFormatStr)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwCharDlg>::Create(pParent, pVw, rCoreSet, nDialogMode, pFmtStr);
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwCharDlg>::Create(pParent, pVw, rCoreSet, nDialogMode, pFormatStr);
     return new AbstractTabDialog_Impl(pDlg);
 }
 
@@ -829,9 +829,9 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclAbstractDialog ( vcl:
     return 0;
 }
 
-AbstractSplitTableDialog * SwAbstractDialogFactory_Impl::CreateSplitTblDialog ( vcl::Window *pParent, SwWrtShell &rSh )
+AbstractSplitTableDialog * SwAbstractDialogFactory_Impl::CreateSplitTableDialog ( vcl::Window *pParent, SwWrtShell &rSh )
 {
-    return new AbstractSplitTableDialog_Impl( VclPtr<SwSplitTblDlg>::Create( pParent, rSh) );
+    return new AbstractSplitTableDialog_Impl( VclPtr<SwSplitTableDlg>::Create( pParent, rSh) );
 }
 
 AbstractSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName)
@@ -841,9 +841,9 @@ AbstractSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg(
 }
 
 AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(vcl::Window* pParent,
-    SwWrtShell* pShell, bool bSetAutoFmt, const SwTableAutoFmt* pSelFmt)
+    SwWrtShell* pShell, bool bSetAutoFormat, const SwTableAutoFormat* pSelFormat)
 {
-    VclPtr<SwAutoFormatDlg> pDlg = VclPtr<SwAutoFormatDlg>::Create(pParent, pShell, bSetAutoFmt, pSelFmt);
+    VclPtr<SwAutoFormatDlg> pDlg = VclPtr<SwAutoFormatDlg>::Create(pParent, pShell, bSetAutoFormat, pSelFormat);
     return new AbstractSwAutoFormatDlg_Impl(pDlg);
 }
 
@@ -894,19 +894,19 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(vcl::Win
     return new AbstractTabDialog_Impl(pDlg);
 }
 
-AbstractSwFldDlg * SwAbstractDialogFactory_Impl::CreateSwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent)
+AbstractSwFieldDlg * SwAbstractDialogFactory_Impl::CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent)
 {
-    VclPtr<SwFldDlg> pDlg = VclPtr<SwFldDlg>::Create(pB, pCW, pParent);
-    return new AbstractSwFldDlg_Impl(pDlg);
+    VclPtr<SwFieldDlg> pDlg = VclPtr<SwFieldDlg>::Create(pB, pCW, pParent);
+    return new AbstractSwFieldDlg_Impl(pDlg);
 }
 
-SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFldEditDlg ( SwView& rVw, int nResId )
+SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFieldEditDlg ( SwView& rVw, int nResId )
 {
     VclPtr<SfxModalDialog> pDlg;
     switch ( nResId )
     {
         case RC_DLG_SWFLDEDITDLG :
-            pDlg = VclPtr<SwFldEditDlg>::Create( rVw );
+            pDlg = VclPtr<SwFieldEditDlg>::Create( rVw );
             break;
         default:
             break;
@@ -931,9 +931,9 @@ AbstractSwModalRedlineAcceptDlg * SwAbstractDialogFactory_Impl::CreateSwModalRed
     return new AbstractSwModalRedlineAcceptDlg_Impl( pDlg );
 }
 
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateTblMergeDialog(vcl::Window* pParent, bool& rWithPrev)
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateTableMergeDialog(vcl::Window* pParent, bool& rWithPrev)
 {
-    VclPtr<Dialog> pDlg = VclPtr<SwMergeTblDlg>::Create( pParent, rWithPrev );
+    VclPtr<Dialog> pDlg = VclPtr<SwMergeTableDlg>::Create( pParent, rWithPrev );
     return new VclAbstractDialog_Impl( pDlg );
 }
 
@@ -941,11 +941,11 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog(const OUS
                                                 SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool        bNewFrm,
-                                                bool        bFmt,
+                                                bool        bFormat,
                                                 const OString&  sDefPage,
-                                                const OUString* pFmtStr )
+                                                const OUString* pFormatStr )
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwFrmDlg>::Create(pFrame, pParent, rCoreSet, bNewFrm, rDialogType, bFmt, sDefPage, pFmtStr);
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwFrmDlg>::Create(pFrame, pParent, rCoreSet, bNewFrm, rDialogType, bFormat, sDefPage, pFormatStr);
     return new AbstractTabDialog_Impl(pDlg);
 }
 
@@ -969,11 +969,11 @@ AbstractGlossaryDlg* SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxViewFram
     return new AbstractGlossaryDlg_Impl( pDlg );
 }
 
-AbstractFldInputDlg* SwAbstractDialogFactory_Impl::CreateFldInputDlg(vcl::Window *pParent,
+AbstractFieldInputDlg* SwAbstractDialogFactory_Impl::CreateFieldInputDlg(vcl::Window *pParent,
     SwWrtShell &rSh, SwField* pField, bool bNextButton)
 {
-    VclPtr<SwFldInputDlg> pDlg = VclPtr<SwFldInputDlg>::Create( pParent, rSh, pField, bNextButton );
-    return new AbstractFldInputDlg_Impl( pDlg );
+    VclPtr<SwFieldInputDlg> pDlg = VclPtr<SwFieldInputDlg>::Create( pParent, rSh, pField, bNextButton );
+    return new AbstractFieldInputDlg_Impl( pDlg );
 }
 
 AbstractInsFootNoteDlg* SwAbstractDialogFactory_Impl::CreateInsFootNoteDlg(
@@ -1011,7 +1011,7 @@ AbstractJavaEditDialog * SwAbstractDialogFactory_Impl::CreateJavaEditDialog(
 AbstractMailMergeDlg * SwAbstractDialogFactory_Impl::CreateMailMergeDlg( int nResId,
                                                 vcl::Window* pParent, SwWrtShell& rSh,
                                                 const OUString& rSourceName,
-                                                const OUString& rTblName,
+                                                const OUString& rTableName,
                                                 sal_Int32 nCommandType,
                                                 const uno::Reference< sdbc::XConnection>& xConnection,
                                                 uno::Sequence< uno::Any >* pSelection )
@@ -1020,7 +1020,7 @@ AbstractMailMergeDlg * SwAbstractDialogFactory_Impl::CreateMailMergeDlg( int nRe
     switch ( nResId )
     {
         case DLG_MAILMERGE :
-            pDlg = VclPtr<SwMailMergeDlg>::Create( pParent, rSh, rSourceName, rTblName, nCommandType, xConnection, pSelection );
+            pDlg = VclPtr<SwMailMergeDlg>::Create( pParent, rSh, rSourceName, rTableName, nCommandType, xConnection, pSelection );
             break;
         default:
             break;

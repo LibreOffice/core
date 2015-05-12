@@ -97,44 +97,44 @@ void SwBreakIt::_GetForbidden( const LanguageType aLang )
     m_pForbidden = new i18n::ForbiddenCharacters( aWrap.getForbiddenCharacters() );
 }
 
-sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rTxt, sal_Int32 nPos ) const
+sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rText, sal_Int32 nPos ) const
 {
     createBreakIterator();
     sal_uInt16 nScript = i18n::ScriptType::WEAK;
-    if( xBreak.is() && !rTxt.isEmpty() )
+    if( xBreak.is() && !rText.isEmpty() )
     {
-        if( nPos && nPos == rTxt.getLength() )
+        if( nPos && nPos == rText.getLength() )
             --nPos;
         else if( nPos < 0)
             nPos = 0;
 
-        nScript = xBreak->getScriptType( rTxt, nPos );
+        nScript = xBreak->getScriptType( rText, nPos );
         sal_Int32 nChgPos = 0;
-        if (i18n::ScriptType::WEAK == nScript && nPos >= 0 && nPos + 1 < rTxt.getLength())
+        if (i18n::ScriptType::WEAK == nScript && nPos >= 0 && nPos + 1 < rText.getLength())
         {
             // A weak character followed by a mark may be meant to combine with
             // the mark, so prefer the following character's script
-            switch (u_charType(rTxt[nPos + 1]))
+            switch (u_charType(rText[nPos + 1]))
             {
                 case U_NON_SPACING_MARK:
                 case U_ENCLOSING_MARK:
                 case U_COMBINING_SPACING_MARK:
-                    nScript = xBreak->getScriptType( rTxt, nPos+1 );
+                    nScript = xBreak->getScriptType( rText, nPos+1 );
                     break;
             }
         }
         if( i18n::ScriptType::WEAK == nScript &&
             nPos &&
-            0 < ( nChgPos = xBreak->beginOfScript( rTxt, nPos, nScript ) ) )
+            0 < ( nChgPos = xBreak->beginOfScript( rText, nPos, nScript ) ) )
         {
-            nScript = xBreak->getScriptType( rTxt, nChgPos-1 );
+            nScript = xBreak->getScriptType( rText, nChgPos-1 );
         }
 
         if( i18n::ScriptType::WEAK == nScript &&
-            rTxt.getLength() > ( nChgPos = xBreak->endOfScript( rTxt, nPos, nScript ) ) &&
+            rText.getLength() > ( nChgPos = xBreak->endOfScript( rText, nPos, nScript ) ) &&
             0 <= nChgPos )
         {
-            nScript = xBreak->getScriptType( rTxt, nChgPos );
+            nScript = xBreak->getScriptType( rText, nChgPos );
         }
     }
     if( i18n::ScriptType::WEAK == nScript )
@@ -142,7 +142,7 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rTxt, sal_Int32 nPos 
     return nScript;
 }
 
-SvtScriptType SwBreakIt::GetAllScriptsOfText( const OUString& rTxt ) const
+SvtScriptType SwBreakIt::GetAllScriptsOfText( const OUString& rText ) const
 {
     const SvtScriptType coAllScripts = ( SvtScriptType::LATIN |
                                       SvtScriptType::ASIAN |
@@ -154,12 +154,12 @@ SvtScriptType SwBreakIt::GetAllScriptsOfText( const OUString& rTxt ) const
     {
         nRet = coAllScripts;
     }
-    else if( !rTxt.isEmpty() )
+    else if( !rText.isEmpty() )
     {
-        for( sal_Int32 n = 0, nEnd = rTxt.getLength(); n < nEnd;
-                n = xBreak->endOfScript(rTxt, n, nScript) )
+        for( sal_Int32 n = 0, nEnd = rText.getLength(); n < nEnd;
+                n = xBreak->endOfScript(rText, n, nScript) )
         {
-            switch( nScript = xBreak->getScriptType( rTxt, n ) )
+            switch( nScript = xBreak->getScriptType( rText, n ) )
             {
             case i18n::ScriptType::LATIN:   nRet |= SvtScriptType::LATIN;   break;
             case i18n::ScriptType::ASIAN:   nRet |= SvtScriptType::ASIAN;   break;

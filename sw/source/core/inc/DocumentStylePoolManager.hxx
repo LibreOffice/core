@@ -35,14 +35,14 @@ public:
 
     DocumentStylePoolManager( SwDoc& i_rSwdoc );
 
-    virtual SwTxtFmtColl* GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) SAL_OVERRIDE;
-    virtual SwFmt* GetFmtFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual SwFrmFmt* GetFrmFmtFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual SwCharFmt* GetCharFmtFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
+    virtual SwTextFormatColl* GetTextCollFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) SAL_OVERRIDE;
+    virtual SwFormat* GetFormatFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
+    virtual SwFrameFormat* GetFrameFormatFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
+    virtual SwCharFormat* GetCharFormatFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual SwPageDesc* GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage = true ) SAL_OVERRIDE;
     virtual SwNumRule* GetNumRuleFromPool( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual bool IsPoolTxtCollUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
-    virtual bool IsPoolFmtUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
+    virtual bool IsPoolTextCollUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
+    virtual bool IsPoolFormatUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
     virtual bool IsPoolPageDescUsed( sal_uInt16 nId ) const SAL_OVERRIDE;
 
     virtual ~DocumentStylePoolManager();

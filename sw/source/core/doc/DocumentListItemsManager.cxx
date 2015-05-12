@@ -70,8 +70,8 @@ OUString DocumentListItemsManager::getListItemText( const SwNodeNum& rNodeNum,
                                const bool bWithNumber,
                                const bool bWithSpacesForLevel ) const
 {
-    return rNodeNum.GetTxtNode()
-           ? rNodeNum.GetTxtNode()->GetExpandTxt( 0, -1, bWithNumber,
+    return rNodeNum.GetTextNode()
+           ? rNodeNum.GetTextNode()->GetExpandText( 0, -1, bWithNumber,
                                                   bWithNumber, bWithSpacesForLevel )
            : OUString();
 }
@@ -100,7 +100,7 @@ void DocumentListItemsManager::getNumItems( tSortedNodeNumList& orNodeNumList ) 
     {
         const SwNodeNum* pNodeNum = (*aIter);
         if ( pNodeNum->IsCounted() &&
-             pNodeNum->GetTxtNode() && pNodeNum->GetTxtNode()->HasNumber() )
+             pNodeNum->GetTextNode() && pNodeNum->GetTextNode()->HasNumber() )
         {
             orNodeNumList.push_back( pNodeNum );
         }

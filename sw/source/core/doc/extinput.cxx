@@ -51,7 +51,7 @@ SwExtTextInput::~SwExtTextInput()
     SwDoc *const pDoc = GetDoc();
     if (pDoc->IsInDtor()) { return; /* #i58606# */ }
 
-    SwTxtNode* pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
+    SwTextNode* pTNd = GetPoint()->nNode.GetNode().GetTextNode();
     if( pTNd )
     {
         SwIndex& rIdx = GetPoint()->nContent;
@@ -85,10 +85,10 @@ SwExtTextInput::~SwExtTextInput()
                 }
             }
             rIdx = nSttCnt;
-            const OUString sTxt( pTNd->GetTxt().copy(nSttCnt, nEndCnt - nSttCnt));
+            const OUString sText( pTNd->GetText().copy(nSttCnt, nEndCnt - nSttCnt));
             if( bIsOverwriteCursor && !sOverwriteText.isEmpty() )
             {
-                const sal_Int32 nLen = sTxt.getLength();
+                const sal_Int32 nLen = sText.getLength();
                 const sal_Int32 nOWLen = sOverwriteText.getLength();
                 if( nLen > nOWLen )
                 {
@@ -100,8 +100,8 @@ SwExtTextInput::~SwExtTextInput()
                     {
                         rIdx = nSttCnt;
                         pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_OVERWRITE, NULL );
-                        pDoc->getIDocumentContentOperations().Overwrite( *this, sTxt.copy( 0, nOWLen ) );
-                        pDoc->getIDocumentContentOperations().InsertString( *this, sTxt.copy( nOWLen ) );
+                        pDoc->getIDocumentContentOperations().Overwrite( *this, sText.copy( 0, nOWLen ) );
+                        pDoc->getIDocumentContentOperations().InsertString( *this, sText.copy( nOWLen ) );
                         pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_OVERWRITE, NULL );
                     }
                 }
@@ -111,7 +111,7 @@ SwExtTextInput::~SwExtTextInput()
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
-                        pDoc->getIDocumentContentOperations().Overwrite( *this, sTxt );
+                        pDoc->getIDocumentContentOperations().Overwrite( *this, sText );
                     }
                 }
             }
@@ -121,7 +121,7 @@ SwExtTextInput::~SwExtTextInput()
 
                 if( bInsText )
                 {
-                    pDoc->getIDocumentContentOperations().InsertString( *this, sTxt );
+                    pDoc->getIDocumentContentOperations().InsertString( *this, sText );
                 }
             }
         }
@@ -130,7 +130,7 @@ SwExtTextInput::~SwExtTextInput()
 
 void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
 {
-    SwTxtNode* pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
+    SwTextNode* pTNd = GetPoint()->nNode.GetNode().GetTextNode();
     if( pTNd )
     {
         sal_Int32 nSttCnt = GetPoint()->nContent.GetIndex();
@@ -208,12 +208,12 @@ void SwExtTextInput::SetOverwriteCursor( bool bFlag )
     if (!bIsOverwriteCursor)
         return;
 
-    const SwTxtNode *const pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
+    const SwTextNode *const pTNd = GetPoint()->nNode.GetNode().GetTextNode();
     if (pTNd)
     {
         const sal_Int32 nSttCnt = GetPoint()->nContent.GetIndex();
         const sal_Int32 nEndCnt = GetMark()->nContent.GetIndex();
-        sOverwriteText = pTNd->GetTxt().copy( std::min(nSttCnt, nEndCnt) );
+        sOverwriteText = pTNd->GetText().copy( std::min(nSttCnt, nEndCnt) );
         if( !sOverwriteText.isEmpty() )
         {
             const sal_Int32 nInPos = sOverwriteText.indexOf( CH_TXTATR_INWORD );
@@ -257,7 +257,7 @@ void SwDoc::DeleteExtTextInput( SwExtTextInput* pDel )
 }
 
 SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
-                                        sal_Int32 nCntntPos ) const
+                                        sal_Int32 nContentPos ) const
 {
     SwExtTextInput* pRet = 0;
     if( mpExtInputRing )
@@ -277,8 +277,8 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
             }
 
             if( nMk <= nNdIdx && nNdIdx <= nPt &&
-                ( nCntntPos<0 ||
-                    ( nMkCnt <= nCntntPos && nCntntPos <= nPtCnt )))
+                ( nContentPos<0 ||
+                    ( nMkCnt <= nContentPos && nContentPos <= nPtCnt )))
             {
                 pRet = pTmp;
                 break;

@@ -75,7 +75,7 @@
 #define ENV_INSERT      RET_USER
 
 // Function used for labels and envelopes in applab.cxx and appenv.cxx
-OUString InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const OUString& rText )
+OUString InsertLabEnvText( SwWrtShell& rSh, SwFieldMgr& rFieldMgr, const OUString& rText )
 {
     OUString sRet;
     OUString aText(comphelper::string::remove(rText, '\r'));
@@ -115,8 +115,8 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const OUString& r
                     if (nCnt >= 3)
                     {
                         sDBName = ::ReplacePoint(sDBName, true);
-                        SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyOUStr, 0, &rSh );
-                        rFldMgr.InsertFld( aData );
+                        SwInsertField_Data aData(TYP_DBFLD, 0, sDBName, aEmptyOUStr, 0, &rSh );
+                        rFieldMgr.InsertField( aData );
                         sRet = sDBName;
                         bField = true;
                     }
@@ -134,12 +134,12 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const OUString& r
 
 static void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, sal_uInt16 nCollId)
 {
-    sal_uInt16 nCollCnt = pOldSh->GetTxtFmtCollCount();
+    sal_uInt16 nCollCnt = pOldSh->GetTextFormatCollCount();
     for( sal_uInt16 nCnt = 0; nCnt < nCollCnt; ++nCnt )
     {
-        SwTxtFmtColl* pColl = &pOldSh->GetTxtFmtColl(nCnt);
-        if(nCollId == pColl->GetPoolFmtId())
-            pNewSh->GetTxtCollFromPool(nCollId)->SetFmtAttr(pColl->GetAttrSet());
+        SwTextFormatColl* pColl = &pOldSh->GetTextFormatColl(nCnt);
+        if(nCollId == pColl->GetPoolFormatId())
+            pNewSh->GetTextCollFromPool(nCollId)->SetFormatAttr(pColl->GetAttrSet());
     }
 }
 
@@ -245,13 +245,13 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             OSL_ENSURE(pOldSh, "No document - wasn't 'Insert' disabled???");
             SvxPaperBinItem aItem( RES_PAPER_BIN );
             aItem.SetValue((sal_uInt8)pSh->getIDocumentDeviceAccess()->getPrinter(true)->GetPaperBin());
-            pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetFmtAttr(aItem);
+            pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetFormatAttr(aItem);
         }
 
         SwWrtShell *pTmp = nMode == ENV_INSERT ? pOldSh : pSh;
         const SwPageDesc* pFollow = 0;
-        SwTxtFmtColl *pSend = pTmp->GetTxtCollFromPool( RES_POOLCOLL_SENDADRESS ),
-                     *pAddr = pTmp->GetTxtCollFromPool( RES_POOLCOLL_JAKETADRESS);
+        SwTextFormatColl *pSend = pTmp->GetTextCollFromPool( RES_POOLCOLL_SENDADRESS ),
+                     *pAddr = pTmp->GetTextCollFromPool( RES_POOLCOLL_JAKETADRESS);
         const OUString sSendMark = pSend->GetName();
         const OUString sAddrMark = pAddr->GetName();
 
@@ -298,13 +298,13 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                 pFollow = &pSh->GetPageDesc(pSh->GetCurPageDesc());
 
             // Insert page break
-            if ( pSh->IsCrsrInTbl() )
+            if ( pSh->IsCrsrInTable() )
             {
                 pSh->SplitNode();
                 pSh->Right( CRSR_SKIP_CHARS, false, 1, false );
                 SfxItemSet aBreakSet( pSh->GetAttrPool(), RES_BREAK, RES_BREAK, 0 );
-                aBreakSet.Put( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
-                pSh->SetTblAttr( aBreakSet );
+                aBreakSet.Put( SvxFormatBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
+                pSh->SetTableAttr( aBreakSet );
             }
             else
                 pSh->InsertPageBreak(0, boost::none);
@@ -330,13 +330,13 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->SetNewDoc();   // Avoid performance problems
 
         // Remember Flys of this site
-        std::vector<SwFrmFmt*> aFlyArr;
+        std::vector<SwFrameFormat*> aFlyArr;
         if( ENV_NEWDOC != nMode && !bEnvChange )
             pSh->GetPageObjs( aFlyArr );
 
         // Get page description
         SwPageDesc* pDesc = pSh->GetPageDescFromPool(RES_POOLPAGE_JAKET);
-        SwFrmFmt&   rFmt  = pDesc->GetMaster();
+        SwFrameFormat&   rFormat  = pDesc->GetMaster();
 
         Printer *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( true );
 
@@ -373,20 +373,20 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         aULMargin.SetUpper((sal_uInt16) lUpper);
         aLRMargin.SetRight(0);
         aULMargin.SetLower(0);
-        rFmt.SetFmtAttr(aLRMargin);
-        rFmt.SetFmtAttr(aULMargin);
+        rFormat.SetFormatAttr(aLRMargin);
+        rFormat.SetFormatAttr(aULMargin);
 
         // Header and footer
-        rFmt.SetFmtAttr(SwFmtHeader(false));
+        rFormat.SetFormatAttr(SwFormatHeader(false));
         pDesc->ChgHeaderShare(false);
-        rFmt.SetFmtAttr(SwFmtFooter(false));
+        rFormat.SetFormatAttr(SwFormatFooter(false));
         pDesc->ChgFooterShare(false);
 
         // Page numbering
         pDesc->SetUseOn(nsUseOnPage::PD_ALL);
 
         // Page size
-        rFmt.SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE,
+        rFormat.SetFormatAttr(SwFormatFrmSize(ATT_FIX_SIZE,
                                             nPageW + lLeft, nPageH + lUpper));
 
         // Set type of page numbering
@@ -414,7 +414,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
         // Insert Frame
         SwFlyFrmAttrMgr aMgr(false, pSh, FRMMGR_TYPE_ENVELP);
-        SwFldMgr aFldMgr;
+        SwFieldMgr aFieldMgr;
         aMgr.SetHeightSizeType(ATT_VAR_SIZE);
 
         // Overwrite defaults!
@@ -434,8 +434,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
             pSh->SetFlyName(sSendMark);
             pSh->UnSelectFrm();
             pSh->LeaveSelFrmMode();
-            pSh->SetTxtFmtColl( pSend );
-            InsertLabEnvText( *pSh, aFldMgr, rItem.aSendText );
+            pSh->SetTextFormatColl( pSend );
+            InsertLabEnvText( *pSh, aFieldMgr, rItem.aSendText );
             aMgr.UpdateAttrMgr();
         }
 
@@ -449,8 +449,8 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         pSh->SetFlyName(sAddrMark);
         pSh->UnSelectFrm();
         pSh->LeaveSelFrmMode();
-        pSh->SetTxtFmtColl( pAddr );
-        InsertLabEnvText(*pSh, aFldMgr, rItem.aAddrText);
+        pSh->SetTextFormatColl( pAddr );
+        InsertLabEnvText(*pSh, aFieldMgr, rItem.aAddrText);
 
         // Move Flys to the "old" pages
         if (!aFlyArr.empty())

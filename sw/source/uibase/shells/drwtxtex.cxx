@@ -415,8 +415,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aDlgAttr.Put(aEditAttr);
 
                 aDlgAttr.Put( SvxHyphenZoneItem( false, RES_PARATR_HYPHENZONE) );
-                aDlgAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
-                aDlgAttr.Put( SvxFmtSplitItem( true, RES_PARATR_SPLIT ) );
+                aDlgAttr.Put( SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
+                aDlgAttr.Put( SvxFormatSplitItem( true, RES_PARATR_SPLIT ) );
                 aDlgAttr.Put( SvxWidowsItem( 0, RES_PARATR_WIDOWS ) );
                 aDlgAttr.Put( SvxOrphansItem( 0, RES_PARATR_ORPHANS ) );
 
@@ -465,8 +465,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             if(pItem)
             {
                 const SvxHyperlinkItem& rHLinkItem = *static_cast<const SvxHyperlinkItem *>(pItem);
-                SvxURLField aFld(rHLinkItem.GetURL(), rHLinkItem.GetName(), SVXURLFORMAT_APPDEFAULT);
-                aFld.SetTargetFrame(rHLinkItem.GetTargetFrame());
+                SvxURLField aField(rHLinkItem.GetURL(), rHLinkItem.GetName(), SVXURLFORMAT_APPDEFAULT);
+                aField.SetTargetFrame(rHLinkItem.GetTargetFrame());
 
                 const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
 
@@ -477,7 +477,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     aSel.nEndPos++;
                     pOLV->SetSelection(aSel);
                 }
-                pOLV->InsertField(SvxFieldItem(aFld, EE_FEATURE_FIELD));
+                pOLV->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
             }
         }
         break;
@@ -878,7 +878,7 @@ ASK_ESCAPE:
     }
 }
 
-void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
+void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
 {
     if (!IsTextEdit())  // Otherwise crash!
         return;

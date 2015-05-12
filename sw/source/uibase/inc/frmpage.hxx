@@ -112,7 +112,7 @@ class SwFrmPage: public SfxTabPage
 
     // OD 12.11.2003 #i22341# - keep content position of character for
     // to character anchored objects.
-    const SwPosition* mpToCharCntntPos;
+    const SwPosition* mpToCharContentPos;
 
     // old alignment
     sal_Int16 nOldH;
@@ -193,7 +193,7 @@ public:
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
 
     void            SetNewFrame(bool bNewFrame) { bNew      = bNewFrame; }
-    void            SetFormatUsed(bool bFmt);
+    void            SetFormatUsed(bool bFormat);
     void            SetFrmType(const OUString &rType) { sDlgType  = rType; }
     inline bool     IsInGraficMode() { return sDlgType == "PictureDialog" || sDlgType == "ObjectDialog"; }
     void            EnableVerticalPositioning( bool bEnable );
@@ -318,7 +318,7 @@ public:
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
 
-    void            SetFormatUsed(bool bFmt);
+    void            SetFormatUsed(bool bFormat);
     void            SetFrmType(const OUString &rType) { sDlgType = rType; }
     void            SetNewFrame(bool bNewFrame) { bNew  = bNewFrame; }
     void            SetShell(SwWrtShell* pSh) { pWrtSh  = pSh; }

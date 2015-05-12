@@ -34,7 +34,7 @@ namespace com{namespace sun{ namespace star{ namespace beans{
     class XPropertySet;
 }}}}
 
-class SwFldDokInfPage : public SwFldPage
+class SwFieldDokInfPage : public SwFieldPage
 {
     VclPtr<SvTreeListBox>      m_pTypeTLB;
     VclPtr<VclContainer>       m_pSelection;
@@ -59,9 +59,9 @@ protected:
     virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
-                        SwFldDokInfPage(vcl::Window* pWindow, const SfxItemSet& rSet);
+                        SwFieldDokInfPage(vcl::Window* pWindow, const SfxItemSet& rSet);
 
-                        virtual ~SwFldDokInfPage();
+                        virtual ~SwFieldDokInfPage();
     virtual void        dispose() SAL_OVERRIDE;
 
     static VclPtr<SfxTabPage>  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);

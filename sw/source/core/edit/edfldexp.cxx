@@ -37,25 +37,25 @@ using namespace com::sun::star;
 
 bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
 {
-    const SwFldTypes * pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
+    const SwFieldTypes * pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
     uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
-    for(const auto pFldType : *pFldTypes)
+    for(const auto pFieldType : *pFieldTypes)
     {
-        if(IsUsed(*pFldType))
+        if(IsUsed(*pFieldType))
         {
-            switch(pFldType->Which())
+            switch(pFieldType->Which())
             {
                 case RES_DBFLD:
                 {
-                    SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-                    SwFmtFld* pFmtFld = aIter.First();
-                    while(pFmtFld)
+                    SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
+                    SwFormatField* pFormatField = aIter.First();
+                    while(pFormatField)
                     {
-                        if(pFmtFld->IsFldInDoc())
+                        if(pFormatField->IsFieldInDoc())
                         {
                             const SwDBData& rData =
-                                    static_cast<SwDBFieldType*>(pFmtFld->GetField()->GetTyp())->GetDBData();
+                                    static_cast<SwDBFieldType*>(pFormatField->GetField()->GetTyp())->GetDBData();
                             try
                             {
                                 return xDBContext->getByName(rData.sDataSource).hasValue();
@@ -66,7 +66,7 @@ bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
                                 return false;
                             }
                         }
-                        pFmtFld = aIter.Next();
+                        pFormatField = aIter.Next();
                     }
                 }
                 break;

@@ -127,12 +127,12 @@ OUString SwTOXInternational::GetFollowingText( bool bMorePages ) const
 }
 
 // SortElement for TOX entries
-SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
-                                    const SwTxtTOXMark* pMark,
+SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
+                                    const SwTextTOXMark* pMark,
                                     const SwTOXInternational* pInter,
                                     const lang::Locale* pLocale )
-    : pTOXNd( 0 ), pTxtMark( pMark ), pTOXIntl( pInter ),
-    nPos( 0 ), nCntPos( 0 ), nType( static_cast<sal_uInt16>(nTyp) ), bValidTxt( false )
+    : pTOXNd( 0 ), pTextMark( pMark ), pTOXIntl( pInter ),
+    nPos( 0 ), nCntPos( 0 ), nType( static_cast<sal_uInt16>(nTyp) ), bValidText( false )
 {
     if ( pLocale )
         aLocale = *pLocale;
@@ -140,9 +140,9 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
     if( pNd )
     {
         sal_Int32 n = 0;
-        if( pTxtMark )
-            n = pTxtMark->GetStart();
-        SwTOXSource aTmp( pNd, n, pTxtMark && pTxtMark->GetTOXMark().IsMainEntry() );
+        if( pTextMark )
+            n = pTextMark->GetStart();
+        SwTOXSource aTmp( pNd, n, pTextMark && pTextMark->GetTOXMark().IsMainEntry() );
         aTOXSources.push_back(aTmp);
 
         nPos = pNd->GetIndex();
@@ -158,12 +158,12 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
             {
                 // Then get the 'anchor' (body) position
                 Point aPt;
-                const SwCntntFrm* pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
+                const SwContentFrm* pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
                 if( pFrm )
                 {
                     SwPosition aPos( *pNd );
                     const SwDoc& rDoc = *pNd->GetDoc();
-                    bool const bResult = GetBodyTxtNode( rDoc, aPos, *pFrm );
+                    bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrm );
                     OSL_ENSURE(bResult, "where is the text node");
                     (void) bResult; // unused in non-debug
                     nPos = aPos.nNode.GetIndex();
@@ -183,10 +183,10 @@ OUString SwTOXSortTabBase::GetURL() const
     return OUString();
 }
 
-void SwTOXSortTabBase::FillText( SwTxtNode& rNd, const SwIndex& rInsPos,
+void SwTOXSortTabBase::FillText( SwTextNode& rNd, const SwIndex& rInsPos,
                                     sal_uInt16 ) const
 {
-    rNd.InsertText( GetTxt().sText, rInsPos );
+    rNd.InsertText( GetText().sText, rInsPos );
 }
 
 bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
@@ -197,19 +197,19 @@ bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
 
     if( TOX_SORT_CONTENT == nType )
     {
-        bRet = bRet && pTxtMark && rCmp.pTxtMark &&
-                pTxtMark->GetStart() == rCmp.pTxtMark->GetStart();
+        bRet = bRet && pTextMark && rCmp.pTextMark &&
+                pTextMark->GetStart() == rCmp.pTextMark->GetStart();
 
         if( bRet )
         {
             // Both pointers exist -> compare text
             // else -> compare AlternativeText
-            const sal_Int32 *pEnd  = pTxtMark->End();
-            const sal_Int32 *pEndCmp = rCmp.pTxtMark->End();
+            const sal_Int32 *pEnd  = pTextMark->End();
+            const sal_Int32 *pEndCmp = rCmp.pTextMark->End();
 
             bRet = ( ( pEnd && pEndCmp ) || ( !pEnd && !pEndCmp ) ) &&
-                    pTOXIntl->IsEqual( GetTxt(), GetLocale(),
-                                       rCmp.GetTxt(), rCmp.GetLocale() );
+                    pTOXIntl->IsEqual( GetText(), GetLocale(),
+                                       rCmp.GetText(), rCmp.GetLocale() );
         }
     }
     return bRet;
@@ -232,40 +232,40 @@ bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
 
             if( pFirst && pFirst == pNext )
             {
-                if( TOX_SORT_CONTENT == nType && pTxtMark && rCmp.pTxtMark )
+                if( TOX_SORT_CONTENT == nType && pTextMark && rCmp.pTextMark )
                 {
-                    if( pTxtMark->GetStart() < rCmp.pTxtMark->GetStart() )
+                    if( pTextMark->GetStart() < rCmp.pTextMark->GetStart() )
                         return true;
 
-                    if( pTxtMark->GetStart() == rCmp.pTxtMark->GetStart() )
+                    if( pTextMark->GetStart() == rCmp.pTextMark->GetStart() )
                     {
-                        const sal_Int32 *pEnd = pTxtMark->End();
-                        const sal_Int32 *pEndCmp = rCmp.pTxtMark->End();
+                        const sal_Int32 *pEnd = pTextMark->End();
+                        const sal_Int32 *pEndCmp = rCmp.pTextMark->End();
 
                         // Both pointers exist -> compare text
                         // else -> compare AlternativeText
                         if( ( pEnd && pEndCmp ) || ( !pEnd && !pEndCmp ) )
                         {
-                            return pTOXIntl->IsLess( GetTxt(), GetLocale(),
-                                                      rCmp.GetTxt(), rCmp.GetLocale() );
+                            return pTOXIntl->IsLess( GetText(), GetLocale(),
+                                                      rCmp.GetText(), rCmp.GetLocale() );
                         }
                         if( pEnd && !pEndCmp )
                             return true;
                     }
                 }
             }
-            else if( pFirst && pFirst->IsTxtNode() &&
-                     pNext && pNext->IsTxtNode() )
-                    return ::IsFrameBehind( *static_cast<const SwTxtNode*>(pNext), nCntPos,
-                                            *static_cast<const SwTxtNode*>(pFirst), nCntPos );
+            else if( pFirst && pFirst->IsTextNode() &&
+                     pNext && pNext->IsTextNode() )
+                    return ::IsFrameBehind( *static_cast<const SwTextNode*>(pNext), nCntPos,
+                                            *static_cast<const SwTextNode*>(pFirst), nCntPos );
         }
     }
     return false;
 }
 
 // Sorted keyword entry
-SwTOXIndex::SwTOXIndex( const SwTxtNode& rNd,
-                        const SwTxtTOXMark* pMark, sal_uInt16 nOptions,
+SwTOXIndex::SwTOXIndex( const SwTextNode& rNd,
+                        const SwTextTOXMark* pMark, sal_uInt16 nOptions,
                         sal_uInt8 nKyLevel,
                         const SwTOXInternational& rIntl,
                         const lang::Locale& rLocale )
@@ -286,10 +286,10 @@ bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
     if(GetLevel() != rCmp.GetLevel() || nKeyLevel != rCmp.nKeyLevel)
         return false;
 
-    OSL_ENSURE(pTxtMark, "pTxtMark == 0, No keyword");
+    OSL_ENSURE(pTextMark, "pTextMark == 0, No keyword");
 
-    bool bRet = pTOXIntl->IsEqual( GetTxt(), GetLocale(),
-                                   rCmp.GetTxt(), rCmp.GetLocale() );
+    bool bRet = pTOXIntl->IsEqual( GetText(), GetLocale(),
+                                   rCmp.GetText(), rCmp.GetLocale() );
 
     // If we don't summarize we need to evaluate the Pos
     if(bRet && !(GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY))
@@ -304,10 +304,10 @@ bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 {
     const SwTOXIndex& rCmp = static_cast<const SwTOXIndex&>(rCmpBase);
 
-    OSL_ENSURE(pTxtMark, "pTxtMark == 0, No keyword");
+    OSL_ENSURE(pTextMark, "pTextMark == 0, No keyword");
 
-    const TextAndReading aMyTaR(GetTxt());
-    const TextAndReading aOtherTaR(rCmp.GetTxt());
+    const TextAndReading aMyTaR(GetText());
+    const TextAndReading aOtherTaR(rCmp.GetText());
 
     bool bRet = GetLevel() == rCmp.GetLevel() &&
                 pTOXIntl->IsLess( aMyTaR, GetLocale(),
@@ -328,8 +328,8 @@ bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 
 TextAndReading SwTOXIndex::GetText_Impl() const
 {
-    OSL_ENSURE(pTxtMark, "pTxtMark == 0, No keyword");
-    const SwTOXMark& rTOXMark = pTxtMark->GetTOXMark();
+    OSL_ENSURE(pTextMark, "pTextMark == 0, No keyword");
+    const SwTOXMark& rTOXMark = pTextMark->GetTOXMark();
 
     TextAndReading aRet;
     switch(nKeyLevel)
@@ -362,39 +362,39 @@ TextAndReading SwTOXIndex::GetText_Impl() const
     return aRet;
 }
 
-void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) const
+void SwTOXIndex::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) const
 {
-    const sal_Int32* pEnd = pTxtMark->End();
+    const sal_Int32* pEnd = pTextMark->End();
 
     TextAndReading aRet;
-    if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() &&
+    if( pEnd && !pTextMark->GetTOXMark().IsAlternativeText() &&
             0 == (GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY))
     {
-        aRet.sText = static_cast<const SwTxtNode*>(aTOXSources[0].pNd)->GetExpandTxt(
-                            pTxtMark->GetStart(),
-                            *pEnd - pTxtMark->GetStart());
+        aRet.sText = static_cast<const SwTextNode*>(aTOXSources[0].pNd)->GetExpandText(
+                            pTextMark->GetStart(),
+                            *pEnd - pTextMark->GetStart());
         if(nsSwTOIOptions::TOI_INITIAL_CAPS & nOpt && pTOXIntl && !aRet.sText.isEmpty())
         {
             aRet.sText = pTOXIntl->ToUpper( aRet.sText, 0 ) + aRet.sText.copy(1);
         }
     }
     else
-        aRet = GetTxt();
+        aRet = GetText();
 
     rNd.InsertText( aRet.sText, rInsPos );
 }
 
 sal_uInt16 SwTOXIndex::GetLevel() const
 {
-    OSL_ENSURE(pTxtMark, "pTxtMark == 0, No keyword");
+    OSL_ENSURE(pTextMark, "pTextMark == 0, No keyword");
 
     sal_uInt16 nForm = FORM_PRIMARY_KEY;
 
     if( 0 == (GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY)&&
-        !pTxtMark->GetTOXMark().GetPrimaryKey().isEmpty() )
+        !pTextMark->GetTOXMark().GetPrimaryKey().isEmpty() )
     {
         nForm = FORM_SECONDARY_KEY;
-        if( !pTxtMark->GetTOXMark().GetSecondaryKey().isEmpty() )
+        if( !pTextMark->GetTOXMark().GetSecondaryKey().isEmpty() )
             nForm = FORM_ENTRY;
     }
     return nForm;
@@ -413,15 +413,15 @@ SwTOXCustom::SwTOXCustom(const TextAndReading& rKey,
 bool SwTOXCustom::operator==(const SwTOXSortTabBase& rCmpBase)
 {
     return GetLevel() == rCmpBase.GetLevel() &&
-           pTOXIntl->IsEqual( GetTxt(), GetLocale(),
-                              rCmpBase.GetTxt(), rCmpBase.GetLocale() );
+           pTOXIntl->IsEqual( GetText(), GetLocale(),
+                              rCmpBase.GetText(), rCmpBase.GetLocale() );
 }
 
 bool SwTOXCustom::operator < (const SwTOXSortTabBase& rCmpBase)
 {
     return  GetLevel() <= rCmpBase.GetLevel() &&
-            pTOXIntl->IsLess( GetTxt(), GetLocale(),
-                              rCmpBase.GetTxt(), rCmpBase.GetLocale() );
+            pTOXIntl->IsLess( GetText(), GetLocale(),
+                              rCmpBase.GetText(), rCmpBase.GetLocale() );
 }
 
 sal_uInt16 SwTOXCustom::GetLevel() const
@@ -435,7 +435,7 @@ TextAndReading SwTOXCustom::GetText_Impl() const
 }
 
 // Sorts the TOX entries
-SwTOXContent::SwTOXContent( const SwTxtNode& rNd, const SwTxtTOXMark* pMark,
+SwTOXContent::SwTOXContent( const SwTextNode& rNd, const SwTextTOXMark* pMark,
                         const SwTOXInternational& rIntl)
     : SwTOXSortTabBase( TOX_SORT_CONTENT, &rNd, pMark, &rIntl )
 {
@@ -445,29 +445,29 @@ SwTOXContent::SwTOXContent( const SwTxtNode& rNd, const SwTxtTOXMark* pMark,
 
 TextAndReading SwTOXContent::GetText_Impl() const
 {
-    const sal_Int32* pEnd = pTxtMark->End();
-    if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() )
+    const sal_Int32* pEnd = pTextMark->End();
+    if( pEnd && !pTextMark->GetTOXMark().IsAlternativeText() )
     {
         return TextAndReading(
-            static_cast<const SwTxtNode*>(aTOXSources[0].pNd)->GetExpandTxt(
-                                     pTxtMark->GetStart(),
-                                     *pEnd - pTxtMark->GetStart() ),
-            pTxtMark->GetTOXMark().GetTextReading());
+            static_cast<const SwTextNode*>(aTOXSources[0].pNd)->GetExpandText(
+                                     pTextMark->GetStart(),
+                                     *pEnd - pTextMark->GetStart() ),
+            pTextMark->GetTOXMark().GetTextReading());
     }
 
-    return TextAndReading(pTxtMark->GetTOXMark().GetAlternativeText(), OUString());
+    return TextAndReading(pTextMark->GetTOXMark().GetAlternativeText(), OUString());
 }
 
-void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) const
+void SwTOXContent::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) const
 {
-    const sal_Int32* pEnd = pTxtMark->End();
-    if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() )
-        static_cast<const SwTxtNode*>(aTOXSources[0].pNd)->GetExpandTxt( rNd, &rInsPos,
-                                    pTxtMark->GetStart(),
-                                    *pEnd - pTxtMark->GetStart() );
+    const sal_Int32* pEnd = pTextMark->End();
+    if( pEnd && !pTextMark->GetTOXMark().IsAlternativeText() )
+        static_cast<const SwTextNode*>(aTOXSources[0].pNd)->GetExpandText( rNd, &rInsPos,
+                                    pTextMark->GetStart(),
+                                    *pEnd - pTextMark->GetStart() );
     else
     {
-        rNd.InsertText( GetTxt().sText, rInsPos );
+        rNd.InsertText( GetText().sText, rInsPos );
     }
 }
 
@@ -475,13 +475,13 @@ void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 
 
 sal_uInt16 SwTOXContent::GetLevel() const
 {
-    return pTxtMark->GetTOXMark().GetLevel();
+    return pTextMark->GetTOXMark().GetLevel();
 }
 
 // TOX assembled from paragraphs
 // Watch out for OLE/graphics when sorting!
 // The position must not come from the document, but from the "anchor"!
-SwTOXPara::SwTOXPara( const SwCntntNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, const OUString& sSeqName )
+SwTOXPara::SwTOXPara( const SwContentNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, const OUString& sSeqName )
     : SwTOXSortTabBase( TOX_SORT_PARA, &rNd, 0, 0 ),
     eType( eT ),
     m_nLevel(nLevel),
@@ -493,14 +493,14 @@ SwTOXPara::SwTOXPara( const SwCntntNode& rNd, SwTOXElement eT, sal_uInt16 nLevel
 
 TextAndReading SwTOXPara::GetText_Impl() const
 {
-    const SwCntntNode* pNd = aTOXSources[0].pNd;
+    const SwContentNode* pNd = aTOXSources[0].pNd;
     switch( eType )
     {
     case nsSwTOXElement::TOX_SEQUENCE:
     case nsSwTOXElement::TOX_TEMPLATE:
     case nsSwTOXElement::TOX_OUTLINELEVEL:
         {
-            return TextAndReading(static_cast<const SwTxtNode*>(pNd)->GetExpandTxt(
+            return TextAndReading(static_cast<const SwTextNode*>(pNd)->GetExpandText(
                     nStartIndex,
                     nEndIndex == -1 ? -1 : nEndIndex - nStartIndex),
                     OUString());
@@ -512,7 +512,7 @@ TextAndReading SwTOXPara::GetText_Impl() const
     case nsSwTOXElement::TOX_FRAME:
         {
             // Find the FlyFormat; the object/graphic name is there
-            SwFrmFmt* pFly = pNd->GetFlyFmt();
+            SwFrameFormat* pFly = pNd->GetFlyFormat();
             if( pFly )
                 return TextAndReading(pFly->GetName(), OUString());
 
@@ -530,29 +530,29 @@ TextAndReading SwTOXPara::GetText_Impl() const
     return TextAndReading();
 }
 
-void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) const
+void SwTOXPara::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) const
 {
     if( nsSwTOXElement::TOX_TEMPLATE == eType || nsSwTOXElement::TOX_SEQUENCE == eType  || nsSwTOXElement::TOX_OUTLINELEVEL == eType)
     {
-        const SwTxtNode* pSrc = static_cast<const SwTxtNode*>(aTOXSources[0].pNd);
-        pSrc->GetExpandTxt( rNd, &rInsPos, nStartIndex,
+        const SwTextNode* pSrc = static_cast<const SwTextNode*>(aTOXSources[0].pNd);
+        pSrc->GetExpandText( rNd, &rInsPos, nStartIndex,
                 nEndIndex == -1 ? -1 : nEndIndex - nStartIndex,
                 false, false, true );
     }
     else
     {
-        rNd.InsertText( GetTxt().sText.replace('\t', ' '), rInsPos );
+        rNd.InsertText( GetText().sText.replace('\t', ' '), rInsPos );
     }
 }
 
 sal_uInt16 SwTOXPara::GetLevel() const
 {
     sal_uInt16 nRet = m_nLevel;
-    const SwCntntNode*  pNd = aTOXSources[0].pNd;
+    const SwContentNode*  pNd = aTOXSources[0].pNd;
 
-    if( nsSwTOXElement::TOX_OUTLINELEVEL == eType && pNd->GetTxtNode() )
+    if( nsSwTOXElement::TOX_OUTLINELEVEL == eType && pNd->GetTextNode() )
     {
-        const int nTmp = static_cast<const SwTxtNode*>(pNd)->GetAttrOutlineLevel();
+        const int nTmp = static_cast<const SwTextNode*>(pNd)->GetAttrOutlineLevel();
         if(nTmp != 0 )
             nRet = static_cast<sal_uInt16>(nTmp);
     }
@@ -561,20 +561,20 @@ sal_uInt16 SwTOXPara::GetLevel() const
 
 OUString SwTOXPara::GetURL() const
 {
-    OUString aTxt;
-    const SwCntntNode* pNd = aTOXSources[0].pNd;
+    OUString aText;
+    const SwContentNode* pNd = aTOXSources[0].pNd;
     switch( eType )
     {
     case nsSwTOXElement::TOX_TEMPLATE:
     case nsSwTOXElement::TOX_OUTLINELEVEL:
         {
-            const SwTxtNode * pTxtNd = pNd->GetTxtNode();
+            const SwTextNode * pTextNd = pNd->GetTextNode();
 
-            SwDoc* pDoc = const_cast<SwDoc*>( pTxtNd->GetDoc() );
-            ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTxtNode(
-                                *(pTxtNd),
+            SwDoc* pDoc = const_cast<SwDoc*>( pTextNd->GetDoc() );
+            ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTextNode(
+                                *(pTextNd),
                                 IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
-            aTxt = "#" + pMark->GetName();
+            aText = "#" + pMark->GetName();
         }
         break;
 
@@ -583,10 +583,10 @@ OUString SwTOXPara::GetURL() const
     case nsSwTOXElement::TOX_FRAME:
         {
             // Find the FlyFormat; the object/graphic name is there
-            SwFrmFmt* pFly = pNd->GetFlyFmt();
+            SwFrameFormat* pFly = pNd->GetFlyFormat();
             if( pFly )
             {
-                aTxt = "#" + pFly->GetName() + OUStringLiteral1<cMarkSeparator>();
+                aText = "#" + pFly->GetName() + OUStringLiteral1<cMarkSeparator>();
                 const sal_Char* pStr;
                 switch( eType )
                 {
@@ -596,23 +596,23 @@ OUString SwTOXPara::GetURL() const
                 default:            pStr = 0;
                 }
                 if( pStr )
-                    aTxt += OUString::createFromAscii( pStr );
+                    aText += OUString::createFromAscii( pStr );
             }
         }
         break;
     case nsSwTOXElement::TOX_SEQUENCE:
         {
-            aTxt = "#" + m_sSequenceName + OUStringLiteral1<cMarkSeparator>()
+            aText = "#" + m_sSequenceName + OUStringLiteral1<cMarkSeparator>()
                  + "sequence";
         }
         break;
     default: break;
     }
-    return aTxt;
+    return aText;
 }
 
 // Table
-SwTOXTable::SwTOXTable( const SwCntntNode& rNd )
+SwTOXTable::SwTOXTable( const SwContentNode& rNd )
     : SwTOXSortTabBase( TOX_SORT_TABLE, &rNd, 0, 0 ),
     nLevel(FORM_ALPHA_DELIMITTER)
 {
@@ -627,7 +627,7 @@ TextAndReading SwTOXTable::GetText_Impl() const
             reinterpret_cast<const SwTableNode*>(pNd->FindTableNode());
         if (pTableNd)
         {
-            return TextAndReading(pTableNd->GetTable().GetFrmFmt()->GetName(), OUString());
+            return TextAndReading(pTableNd->GetTable().GetFrameFormat()->GetName(), OUString());
         }
     }
 
@@ -650,20 +650,20 @@ OUString SwTOXTable::GetURL() const
     if (!pNd)
         return OUString();
 
-    const OUString sName = static_cast<const SwTableNode*>(pNd)->GetTable().GetFrmFmt()->GetName();
+    const OUString sName = static_cast<const SwTableNode*>(pNd)->GetTable().GetFrameFormat()->GetName();
     if ( sName.isEmpty() )
         return OUString();
 
     return "#" + sName + OUStringLiteral1<cMarkSeparator>() + "table";
 }
 
-SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
-                SwFmtFld& rField, const SwTOXInternational& rIntl ) :
+SwTOXAuthority::SwTOXAuthority( const SwContentNode& rNd,
+                SwFormatField& rField, const SwTOXInternational& rIntl ) :
     SwTOXSortTabBase( TOX_SORT_AUTHORITY, &rNd, 0, &rIntl ),
     m_rField(rField)
 {
-    if(rField.GetTxtFld())
-        nCntPos = rField.GetTxtFld()->GetStart();
+    if(rField.GetTextField())
+        nCntPos = rField.GetTextField()->GetStart();
 }
 
 sal_uInt16 SwTOXAuthority::GetLevel() const
@@ -682,7 +682,7 @@ sal_uInt16 SwTOXAuthority::GetLevel() const
     return nRet;
 }
 
-static OUString lcl_GetText(SwFmtFld const& rField)
+static OUString lcl_GetText(SwFormatField const& rField)
 {
     return rField.GetField()->ExpandField(true);
 }
@@ -692,7 +692,7 @@ TextAndReading SwTOXAuthority::GetText_Impl() const
     return TextAndReading(lcl_GetText(m_rField), OUString());
 }
 
-void    SwTOXAuthority::FillText( SwTxtNode& rNd,
+void    SwTOXAuthority::FillText( SwTextNode& rNd,
                         const SwIndex& rInsPos, sal_uInt16 nAuthField ) const
 {
     SwAuthorityField* pField = static_cast<SwAuthorityField*>(m_rField.GetField());

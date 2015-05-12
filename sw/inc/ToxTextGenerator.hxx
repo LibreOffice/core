@@ -29,18 +29,18 @@
 
 class SfxItemSet;
 class SwAttrPool;
-class SwFmtAutoFmt;
+class SwFormatAutoFormat;
 class SwChapterField;
 class SwChapterFieldType;
-class SwCntntFrm;
-class SwCntntNode;
+class SwContentFrm;
+class SwContentNode;
 class SwDoc;
 class SwForm;
 struct SwFormToken;
 class SwPageDesc;
 class SwRootFrm;
-class SwTxtAttr;
-class SwTxtNode;
+class SwTextAttr;
+class SwTextNode;
 struct SwTOXSortTabBase;
 class SvxTabStop;
 class ToxTextGeneratorTest;
@@ -80,7 +80,7 @@ private:
      */
     struct HandledTextToken {
         OUString text;
-        std::vector<SwFmtAutoFmt*> autoFormats;
+        std::vector<SwFormatAutoFormat*> autoFormats;
         std::vector<sal_Int32> startPositions;
         std::vector<sal_Int32> endPositions;
     };
@@ -94,7 +94,7 @@ private:
 
     /** Applies the result of a handled text token to a target node. */
     static void
-    ApplyHandledTextToken(const HandledTextToken& htt, SwTxtNode& targetNode);
+    ApplyHandledTextToken(const HandledTextToken& htt, SwTextNode& targetNode);
 
     /** Handle a page number token.
      *
@@ -117,11 +117,11 @@ private:
      * @param pool The attribute pool for the new items
      */
     static std::shared_ptr<SfxItemSet>
-    CollectAttributesForTox(const SwTxtAttr& hint, SwAttrPool& pool);
+    CollectAttributesForTox(const SwTextAttr& hint, SwAttrPool& pool);
 
     /** This method will call GetNumStringOfFirstNode() of the first node in the provided SwTOXSortTabBase.
      *
-     * The parameters @p bUsePrefix and @p nLevel are passed to SwTxtNode::GetNumString()
+     * The parameters @p bUsePrefix and @p nLevel are passed to SwTextNode::GetNumString()
      *
      * @internal
      * The method is only called if several preconditions for @p rBase are true. Check the implementation
@@ -138,8 +138,8 @@ private:
     /** Generate the text for a chapter token.
      */
     OUString
-    GenerateTextForChapterToken(const SwFormToken& chapterToken, const SwCntntFrm* contentFrame,
-            const SwCntntNode *contentNode) const;
+    GenerateTextForChapterToken(const SwFormToken& chapterToken, const SwContentFrm* contentFrame,
+            const SwContentNode *contentNode) const;
 
     /** Obtain a ChapterField to use for the text generation.
      * @internal
@@ -147,7 +147,7 @@ private:
      */
     virtual SwChapterField
     ObtainChapterField(SwChapterFieldType* chapterFieldType, const SwFormToken* chapterToken,
-            const SwCntntFrm* contentFrame, const SwCntntNode *contentNode) const;
+            const SwContentFrm* contentFrame, const SwContentNode *contentNode) const;
 
     friend class ::ToxTextGeneratorTest;
 };

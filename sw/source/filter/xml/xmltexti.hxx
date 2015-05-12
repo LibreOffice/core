@@ -52,14 +52,14 @@ public:
             createAndInsertOLEObject( SvXMLImport& rImport,
                                       const OUString& rHRef,
                                       const OUString& rStyleName,
-                                      const OUString& rTblName,
+                                      const OUString& rTableName,
                                          sal_Int32 nWidth, sal_Int32 nHeight ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
             createAndInsertOOoLink( SvXMLImport& rImport,
                                       const OUString& rHRef,
                                       const OUString& rStyleName,
-                                      const OUString& rTblName,
+                                      const OUString& rTableName,
                                          sal_Int32 nWidth, sal_Int32 nHeight ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>

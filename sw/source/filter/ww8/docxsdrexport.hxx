@@ -33,7 +33,7 @@ namespace sw
 {
 class Frame;
 }
-class SwFrmFmt;
+class SwFrameFormat;
 class SwNode;
 
 class DocxExport;
@@ -83,18 +83,18 @@ public:
     sax_fastparser::FastAttributeList* getBodyPrAttrList();
     std::unique_ptr<sax_fastparser::FastAttributeList>& getDashLineStyle();
 
-    void startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rSize);
-    void endDMLAnchorInline(const SwFrmFmt* pFrmFmt);
+    void startDMLAnchorInline(const SwFrameFormat* pFrameFormat, const Size& rSize);
+    void endDMLAnchorInline(const SwFrameFormat* pFrameFormat);
     /// Writes a drawing as VML data.
-    void writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft);
+    void writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft);
     /// Writes a drawing as DML.
-    void writeDMLDrawing(const SdrObject* pSdrObj, const SwFrmFmt* pFrmFmt, int nAnchorId);
+    void writeDMLDrawing(const SdrObject* pSdrObj, const SwFrameFormat* pFrameFormat, int nAnchorId);
     /// Writes shape in both DML and VML format.
-    void writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft, int nAnchorId);
+    void writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft, int nAnchorId);
     /// Write <a:effectLst>, the effect list.
-    void writeDMLEffectLst(const SwFrmFmt& rFrmFmt);
+    void writeDMLEffectLst(const SwFrameFormat& rFrameFormat);
     /// Writes a diagram (smartart).
-    void writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFrmFmt, int nAnchorId);
+    void writeDiagram(const SdrObject* sdrObject, const SwFrameFormat& rFrameFormat, int nAnchorId);
     void writeDiagramRels(css::uno::Reference<css::xml::dom::XDocument> xDom,
                           const css::uno::Sequence< css::uno::Sequence<css::uno::Any> >& xRelSeq,
                           css::uno::Reference<css::io::XOutputStream> xOutStream, const OUString& sGrabBagProperyName,
@@ -104,7 +104,7 @@ public:
     /// Writes text frame in VML format.
     void writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly = false);
     /// Is this a standalone TextFrame, or used as a TextBox of a shape?
-    bool isTextBox(const SwFrmFmt& rFrmFmt);
+    bool isTextBox(const SwFrameFormat& rFrameFormat);
     /// Writes text from Textbox for <w:framePr>
     void writeOnlyTextOfFrame(sw::Frame* pParentFrame);
     /// Writes the drawingML <a:ln> markup of a box item.

@@ -129,13 +129,13 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
              // so that this family is being showed
                 if(pShell->IsFrmSelected())
                 {
-                    SwFrmFmt* pFmt = pShell->GetCurFrmFmt();
-                    if( pFmt )
-                        aName = pFmt->GetName();
+                    SwFrameFormat* pFormat = pShell->GetCurFrameFormat();
+                    if( pFormat )
+                        aName = pFormat->GetName();
                 }
                 else
                 {
-                    SwTxtFmtColl* pColl = pShell->GetCurTxtFmtColl();
+                    SwTextFormatColl* pColl = pShell->GetCurTextFormatColl();
                     if(pColl)
                         aName = pColl->GetName();
                 }
@@ -145,9 +145,9 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_FAMILY1:
                 if( !pShell->IsFrmSelected() )
                 {
-                    SwCharFmt* pFmt = pShell->GetCurCharFmt();
-                    if(pFmt)
-                        aName = pFmt->GetName();
+                    SwCharFormat* pFormat = pShell->GetCurCharFormat();
+                    if(pFormat)
+                        aName = pFormat->GetName();
                     else
                         aName = SwStyleNameMapper::GetTextUINameArray()[
                             RES_POOLCOLL_STANDARD - RES_POOLCOLL_TEXT_BEGIN ];
@@ -158,7 +158,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_FAMILY2:
                 if(!pShell->IsFrmSelected())
                 {
-                    SwTxtFmtColl* pColl = pShell->GetCurTxtFmtColl();
+                    SwTextFormatColl* pColl = pShell->GetCurTextFormatColl();
                     if(pColl)
                         aName = pColl->GetName();
 
@@ -195,10 +195,10 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    SwFrmFmt* pFmt = pShell->GetCurFrmFmt();
-                    if(pFmt && pShell->IsFrmSelected())
+                    SwFrameFormat* pFormat = pShell->GetCurFrameFormat();
+                    if(pFormat && pShell->IsFrmSelected())
                     {
-                        aName = pFmt->GetName();
+                        aName = pFormat->GetName();
                         rSet.Put(SfxTemplateItem(nWhich, aName));
                     }
                 }
@@ -368,7 +368,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     case SID_STYLE_UPDATE_BY_EXAMPLE:
                     case SID_STYLE_EDIT:
                     {
-                        SwTxtFmtColl* pColl = GetWrtShell()->GetCurTxtFmtColl();
+                        SwTextFormatColl* pColl = GetWrtShell()->GetCurTextFormatColl();
                         if(pColl)
                         {
                             aParam = pColl->GetName();
@@ -422,21 +422,21 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     {
                         case SFX_STYLE_FAMILY_PARA:
                         {
-                            SwTxtFmtColl* pColl = pShell->GetCurTxtFmtColl();
+                            SwTextFormatColl* pColl = pShell->GetCurTextFormatColl();
                             if(pColl)
                                 aParam = pColl->GetName();
                         }
                         break;
                         case SFX_STYLE_FAMILY_FRAME:
                         {
-                            SwFrmFmt* pFrm = m_pWrtShell->GetCurFrmFmt();
+                            SwFrameFormat* pFrm = m_pWrtShell->GetCurFrameFormat();
                             if( pFrm )
                                 aParam = pFrm->GetName();
                         }
                         break;
                         case SFX_STYLE_FAMILY_CHAR:
                         {
-                            SwCharFmt* pChar = m_pWrtShell->GetCurCharFmt();
+                            SwCharFormat* pChar = m_pWrtShell->GetCurCharFormat();
                             if( pChar )
                                 aParam = pChar->GetName();
                         }
@@ -657,12 +657,12 @@ sal_uInt16 SwDocShell::Edit(
             {
                 if(!rParent.isEmpty())
                 {
-                    SwTxtFmtColl* pColl = m_pWrtShell->FindTxtFmtCollByName( rParent );
+                    SwTextFormatColl* pColl = m_pWrtShell->FindTextFormatCollByName( rParent );
                     if(!pColl)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
                         if(USHRT_MAX != nId)
-                            pColl = m_pWrtShell->GetTxtCollFromPool( nId );
+                            pColl = m_pWrtShell->GetTextCollFromPool( nId );
                     }
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
                     pDStyle->PresetParent( rParent );
@@ -674,13 +674,13 @@ sal_uInt16 SwDocShell::Edit(
                     if (pColl && pColl->IsAssignedToListLevelOfOutlineStyle())
                     {
                         SwNumRuleItem aItem(aEmptyOUStr);
-                        pDStyle->GetCollection()->SetFmtAttr( aItem );
+                        pDStyle->GetCollection()->SetFormatAttr( aItem );
                         pDStyle->GetCollection()->SetAttrOutlineLevel( 0 );
                     }
                 }
                 else
                 {
-                    SwTxtFmtColl* pColl = m_pWrtShell->GetCurTxtFmtColl();
+                    SwTextFormatColl* pColl = m_pWrtShell->GetCurTextFormatColl();
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
                     if( pColl )
                         pDStyle->PresetParent( pColl->GetName() );
@@ -691,23 +691,23 @@ sal_uInt16 SwDocShell::Edit(
             {
                 if(!rParent.isEmpty())
                 {
-                    SwCharFmt* pCFmt = m_pWrtShell->FindCharFmtByName(rParent);
-                    if(!pCFmt)
+                    SwCharFormat* pCFormat = m_pWrtShell->FindCharFormatByName(rParent);
+                    if(!pCFormat)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                         if(USHRT_MAX != nId)
-                            pCFmt = m_pWrtShell->GetCharFmtFromPool( nId );
+                            pCFormat = m_pWrtShell->GetCharFormatFromPool( nId );
                     }
 
-                    pDStyle->GetCharFmt()->SetDerivedFrom( pCFmt );
+                    pDStyle->GetCharFormat()->SetDerivedFrom( pCFormat );
                     pDStyle->PresetParent( rParent );
                 }
                 else
                 {
-                    SwCharFmt* pCFmt = m_pWrtShell->GetCurCharFmt();
-                    pDStyle->GetCharFmt()->SetDerivedFrom( pCFmt );
-                        if( pCFmt )
-                            pDStyle->PresetParent( pCFmt->GetName() );
+                    SwCharFormat* pCFormat = m_pWrtShell->GetCurCharFormat();
+                    pDStyle->GetCharFormat()->SetDerivedFrom( pCFormat );
+                        if( pCFormat )
+                            pDStyle->PresetParent( pCFormat->GetName() );
                 }
             }
             break;
@@ -715,14 +715,14 @@ sal_uInt16 SwDocShell::Edit(
             {
                 if(!rParent.isEmpty())
                 {
-                    SwFrmFmt* pFFmt = m_pWrtShell->GetDoc()->FindFrmFmtByName( rParent );
-                    if(!pFFmt)
+                    SwFrameFormat* pFFormat = m_pWrtShell->GetDoc()->FindFrameFormatByName( rParent );
+                    if(!pFFormat)
                     {
                         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT);
                         if(USHRT_MAX != nId)
-                            pFFmt = m_pWrtShell->GetFrmFmtFromPool( nId );
+                            pFFormat = m_pWrtShell->GetFrameFormatFromPool( nId );
                     }
-                    pDStyle->GetFrmFmt()->SetDerivedFrom( pFFmt );
+                    pDStyle->GetFrameFormat()->SetDerivedFrom( pFFormat );
                     pDStyle->PresetParent( rParent );
                 }
             }
@@ -925,8 +925,8 @@ sal_uInt16 SwDocShell::ApplyStyles(const OUString &rName, sal_uInt16 nFamily,
     {
         case SFX_STYLE_FAMILY_CHAR:
         {
-            SwFmtCharFmt aFmt(pStyle->GetCharFmt());
-            pSh->SetAttrItem( aFmt, (nMode & KEY_SHIFT) ?
+            SwFormatCharFormat aFormat(pStyle->GetCharFormat());
+            pSh->SetAttrItem( aFormat, (nMode & KEY_SHIFT) ?
                 SetAttrMode::DONTREPLACE : SetAttrMode::DEFAULT );
             break;
         }
@@ -935,13 +935,13 @@ sal_uInt16 SwDocShell::ApplyStyles(const OUString &rName, sal_uInt16 nFamily,
             // #i62675#
             // clear also list attributes at affected text nodes, if paragraph
             // style has the list style attribute set.
-            pSh->SetTxtFmtColl( pStyle->GetCollection(), true );
+            pSh->SetTextFormatColl( pStyle->GetCollection(), true );
             break;
         }
         case SFX_STYLE_FAMILY_FRAME:
         {
             if ( pSh->IsFrmSelected() )
-                pSh->SetFrmFmt( pStyle->GetFrmFmt() );
+                pSh->SetFrameFormat( pStyle->GetFrameFormat() );
             break;
         }
         case SFX_STYLE_FAMILY_PAGE:
@@ -993,13 +993,13 @@ sal_uInt16 SwDocShell::DoWaterCan(const OUString &rName, sal_uInt16 nFamily)
         switch(nFamily)
         {
             case SFX_STYLE_FAMILY_CHAR:
-                aTemplate.aColl.pCharFmt = pStyle->GetCharFmt();
+                aTemplate.aColl.pCharFormat = pStyle->GetCharFormat();
                 break;
             case SFX_STYLE_FAMILY_PARA:
-                aTemplate.aColl.pTxtColl = pStyle->GetCollection();
+                aTemplate.aColl.pTextColl = pStyle->GetCollection();
                 break;
             case SFX_STYLE_FAMILY_FRAME:
-                aTemplate.aColl.pFrmFmt = pStyle->GetFrmFmt();
+                aTemplate.aColl.pFrameFormat = pStyle->GetFrameFormat();
                 break;
             case SFX_STYLE_FAMILY_PAGE:
                 aTemplate.aColl.pPageDesc = const_cast<SwPageDesc*>(pStyle->GetPageDesc());
@@ -1036,7 +1036,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
     {
         case SFX_STYLE_FAMILY_PARA:
         {
-            SwTxtFmtColl* pColl = pStyle->GetCollection();
+            SwTextFormatColl* pColl = pStyle->GetCollection();
             if(pColl && !pColl->IsDefault())
             {
                 GetWrtShell()->StartAllAction();
@@ -1047,7 +1047,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
                 GetWrtShell()->StartUndo(UNDO_INSFMTATTR, &aRewriter);
                 GetWrtShell()->FillByEx(pColl);
                     // also apply template to remove hard set attributes
-                GetWrtShell()->SetTxtFmtColl( pColl );
+                GetWrtShell()->SetTextFormatColl( pColl );
                 GetWrtShell()->EndUndo();
                 GetWrtShell()->EndAllAction();
             }
@@ -1055,10 +1055,10 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
         }
         case SFX_STYLE_FAMILY_FRAME:
         {
-            SwFrmFmt* pFrm = pStyle->GetFrmFmt();
+            SwFrameFormat* pFrm = pStyle->GetFrameFormat();
             if( pCurrWrtShell->IsFrmSelected() && pFrm && !pFrm->IsDefault() )
             {
-                SfxItemSet aSet( GetPool(), aFrmFmtSetRange );
+                SfxItemSet aSet( GetPool(), aFrameFormatSetRange );
                 pCurrWrtShell->StartAllAction();
                 pCurrWrtShell->GetFlyFrmAttr( aSet );
 
@@ -1066,17 +1066,17 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
                 // no update of anchor attribute
                 aSet.ClearItem( RES_ANCHOR );
 
-                pFrm->SetFmtAttr( aSet );
+                pFrm->SetFormatAttr( aSet );
 
                     // also apply template to remove hard set attributes
-                pCurrWrtShell->SetFrmFmt( pFrm, true );
+                pCurrWrtShell->SetFrameFormat( pFrm, true );
                 pCurrWrtShell->EndAllAction();
             }
         }
         break;
         case SFX_STYLE_FAMILY_CHAR:
         {
-            SwCharFmt* pChar = pStyle->GetCharFmt();
+            SwCharFormat* pChar = pStyle->GetCharFormat();
             if( pChar && !pChar->IsDefault() )
             {
                 pCurrWrtShell->StartAllAction();
@@ -1097,7 +1097,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
                 // #i91400#
                 aRule.SetName( pStyle->GetNumRule()->GetName(),
                                pCurrWrtShell->GetDoc()->getIDocumentListsAccess() );
-                pCurrWrtShell->ChgNumRuleFmts( aRule );
+                pCurrWrtShell->ChgNumRuleFormats( aRule );
             }
         }
         break;
@@ -1129,16 +1129,16 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
     {
         case  SFX_STYLE_FAMILY_PARA:
         {
-            SwTxtFmtColl* pColl = pStyle->GetCollection();
+            SwTextFormatColl* pColl = pStyle->GetCollection();
             if(pColl && !pColl->IsDefault())
             {
                 pCurrWrtShell->StartAllAction();
                 pCurrWrtShell->FillByEx(pColl);
                     // also apply template to remove hard set attributes
-                pColl->SetDerivedFrom(pCurrWrtShell->GetCurTxtFmtColl());
+                pColl->SetDerivedFrom(pCurrWrtShell->GetCurTextFormatColl());
 
                     // set the mask at the Collection:
-                sal_uInt16 nId = pColl->GetPoolFmtId() & 0x87ff;
+                sal_uInt16 nId = pColl->GetPoolFormatId() & 0x87ff;
                 switch( nMask & 0x0fff )
                 {
                     case SWSTYLEBIT_TEXT:
@@ -1160,43 +1160,43 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
                         nId |= COLL_HTML_BITS;
                         break;
                 }
-                pColl->SetPoolFmtId(nId);
+                pColl->SetPoolFormatId(nId);
 
-                pCurrWrtShell->SetTxtFmtColl(pColl);
+                pCurrWrtShell->SetTextFormatColl(pColl);
                 pCurrWrtShell->EndAllAction();
             }
         }
         break;
         case SFX_STYLE_FAMILY_FRAME:
         {
-            SwFrmFmt* pFrm = pStyle->GetFrmFmt();
+            SwFrameFormat* pFrm = pStyle->GetFrameFormat();
             if(pCurrWrtShell->IsFrmSelected() && pFrm && !pFrm->IsDefault())
             {
                 pCurrWrtShell->StartAllAction();
 
-                SfxItemSet aSet(GetPool(), aFrmFmtSetRange );
+                SfxItemSet aSet(GetPool(), aFrameFormatSetRange );
                 pCurrWrtShell->GetFlyFrmAttr( aSet );
 
-                SwFrmFmt* pFFmt = pCurrWrtShell->GetCurFrmFmt();
-                pFrm->SetDerivedFrom( pFFmt );
+                SwFrameFormat* pFFormat = pCurrWrtShell->GetCurFrameFormat();
+                pFrm->SetDerivedFrom( pFFormat );
 
-                pFrm->SetFmtAttr( aSet );
+                pFrm->SetFormatAttr( aSet );
                     // also apply template to remove hard set attributes
-                pCurrWrtShell->SetFrmFmt( pFrm );
+                pCurrWrtShell->SetFrameFormat( pFrm );
                 pCurrWrtShell->EndAllAction();
             }
         }
         break;
         case SFX_STYLE_FAMILY_CHAR:
         {
-            SwCharFmt* pChar = pStyle->GetCharFmt();
+            SwCharFormat* pChar = pStyle->GetCharFormat();
             if(pChar && !pChar->IsDefault())
             {
                 pCurrWrtShell->StartAllAction();
                 pCurrWrtShell->FillByEx( pChar );
-                pChar->SetDerivedFrom( pCurrWrtShell->GetCurCharFmt() );
-                SwFmtCharFmt aFmt( pChar );
-                pCurrWrtShell->SetAttrItem( aFmt );
+                pChar->SetDerivedFrom( pCurrWrtShell->GetCurCharFormat() );
+                SwFormatCharFormat aFormat( pChar );
+                pCurrWrtShell->SetAttrItem( aFormat );
                 pCurrWrtShell->EndAllAction();
             }
         }
@@ -1209,14 +1209,14 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
             SwPageDesc& rSrc = (SwPageDesc&)pCurrWrtShell->GetPageDesc( nPgDsc );
             SwPageDesc& rDest = *const_cast<SwPageDesc*>(pStyle->GetPageDesc());
 
-            sal_uInt16 nPoolId = rDest.GetPoolFmtId();
+            sal_uInt16 nPoolId = rDest.GetPoolFormatId();
             sal_uInt16 nHId = rDest.GetPoolHelpId();
             sal_uInt8 nHFId = rDest.GetPoolHlpFileId();
 
             pCurrWrtShell->GetDoc()->CopyPageDesc( rSrc, rDest );
 
             // PoolId must NEVER be copied!
-            rDest.SetPoolFmtId( nPoolId );
+            rDest.SetPoolFormatId( nPoolId );
             rDest.SetPoolHelpId( nHId );
             rDest.SetPoolHlpFileId( nHFId );
 
@@ -1240,7 +1240,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
                 // #i91400#
                 aRule.SetName( pStyle->GetNumRule()->GetName(),
                                pCurrWrtShell->GetDoc()->getIDocumentListsAccess() );
-                pCurrWrtShell->ChgNumRuleFmts( aRule );
+                pCurrWrtShell->ChgNumRuleFormats( aRule );
 
                 pCurrWrtShell->ReplaceNumRule( sOrigRule, aRule.GetName() );
 

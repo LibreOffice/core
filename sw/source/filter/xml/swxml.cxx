@@ -85,18 +85,18 @@ using namespace ::com::sun::star::lang;
 
 static void lcl_EnsureValidPam( SwPaM& rPam )
 {
-    if( rPam.GetCntntNode() != NULL )
+    if( rPam.GetContentNode() != NULL )
     {
         // set proper point content
-        if( rPam.GetCntntNode() != rPam.GetPoint()->nContent.GetIdxReg() )
+        if( rPam.GetContentNode() != rPam.GetPoint()->nContent.GetIdxReg() )
         {
-            rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), 0 );
+            rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), 0 );
         }
         // else: point was already valid
 
         // if mark is invalid, we delete it
-        if( ( rPam.GetCntntNode( false ) == NULL ) ||
-            ( rPam.GetCntntNode( false ) != rPam.GetMark()->nContent.GetIdxReg() ) )
+        if( ( rPam.GetContentNode( false ) == NULL ) ||
+            ( rPam.GetContentNode( false ) != rPam.GetMark()->nContent.GetIdxReg() ) )
         {
             rPam.DeleteMark();
         }
@@ -108,7 +108,7 @@ static void lcl_EnsureValidPam( SwPaM& rPam )
         rPam.GetPoint()->nNode =
             *rPam.GetDoc()->GetNodes().GetEndOfContent().StartOfSectionNode();
         ++ rPam.GetPoint()->nNode;
-        rPam.Move( fnMoveForward, fnGoCntnt ); // go into content
+        rPam.Move( fnMoveForward, fnGoContent ); // go into content
     }
 }
 
@@ -392,7 +392,7 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
     // array indicating, which outline level already has a style assigned.
     bool aOutlineLevelAssigned[ MAXLEVEL ];
     // array of the default outline styles, which are created for the document.
-    SwTxtFmtColl* aCreatedDefaultOutlineStyles[ MAXLEVEL ];
+    SwTextFormatColl* aCreatedDefaultOutlineStyles[ MAXLEVEL ];
 
     {
         for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
@@ -404,10 +404,10 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
 
     // determine, which outline level has already a style assigned and
     // which of the default outline styles is created.
-    const SwTxtFmtColls& rColls = *(_rDoc.GetTxtFmtColls());
+    const SwTextFormatColls& rColls = *(_rDoc.GetTextFormatColls());
     for ( size_t n = 1; n < rColls.size(); ++n )
     {
-        SwTxtFmtColl* pColl = rColls[ n ];
+        SwTextFormatColl* pColl = rColls[ n ];
         if ( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
             aOutlineLevelAssigned[ pColl->GetAssignedOutlineStyleLevel() ] = true;
@@ -441,11 +441,11 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
 
             // apply outline numbering rule, if none is set.
             const SfxPoolItem& rItem =
-                aCreatedDefaultOutlineStyles[ i ]->GetFmtAttr( RES_PARATR_NUMRULE, false );
+                aCreatedDefaultOutlineStyles[ i ]->GetFormatAttr( RES_PARATR_NUMRULE, false );
             if ( static_cast<const SwNumRuleItem&>(rItem).GetValue().isEmpty() )
             {
                 SwNumRuleItem aItem( pOutlineRule->GetName() );
-                aCreatedDefaultOutlineStyles[ i ]->SetFmtAttr( aItem );
+                aCreatedDefaultOutlineStyles[ i ]->SetFormatAttr( aItem );
             }
         }
     }
@@ -687,23 +687,23 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     *pArgs++ <<= xStatusIndicator;
 
     // prepare for special modes
-    if( aOpt.IsFmtsOnly() )
+    if( aOpt.IsFormatsOnly() )
     {
         sal_Int32 nCount =
-            (aOpt.IsFrmFmts() ? 1 : 0) +
+            (aOpt.IsFrameFormats() ? 1 : 0) +
             (aOpt.IsPageDescs() ? 1 : 0) +
-            (aOpt.IsTxtFmts() ? 2 : 0) +
+            (aOpt.IsTextFormats() ? 2 : 0) +
             (aOpt.IsNumRules() ? 1 : 0);
 
         Sequence< OUString> aFamiliesSeq( nCount );
         OUString *pSeq = aFamiliesSeq.getArray();
-        if( aOpt.IsFrmFmts() )
+        if( aOpt.IsFrameFormats() )
             // SFX_STYLE_FAMILY_FRAME;
             *pSeq++ = "FrameStyles";
         if( aOpt.IsPageDescs() )
             // SFX_STYLE_FAMILY_PAGE;
             *pSeq++ = "PageStyles";
-        if( aOpt.IsTxtFmts() )
+        if( aOpt.IsTextFormats() )
         {
             // (SFX_STYLE_FAMILY_CHAR|SFX_STYLE_FAMILY_PARA);
             *pSeq++ = "CharacterStyles";
@@ -803,7 +803,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     }
 
     sal_uInt32 nWarnRDF = 0;
-    if ( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
+    if ( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFormatsOnly() ||
            bInsertMode) )
     {
         // RDF metadata - must be read before styles/content
@@ -847,7 +847,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         aEmptyArgs, rName, false );
 
     sal_uInt32 nWarn2 = 0;
-    if( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
+    if( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFormatsOnly() ||
           bInsertMode) )
     {
         nWarn2 = ReadThroughComponent(
@@ -863,7 +863,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
                 : "com.sun.star.comp.Writer.XMLStylesImporter"),
         aFilterArgs, rName, true );
 
-    if( !nRet && !(IsOrganizerMode() || aOpt.IsFmtsOnly()) )
+    if( !nRet && !(IsOrganizerMode() || aOpt.IsFormatsOnly()) )
         nRet = ReadThroughComponent(
            xStorage, xModelComp, "content.xml", "Content.xml", xContext,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisContentImporter"
@@ -871,7 +871,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
            aFilterArgs, rName, true );
 
     if( !(IsOrganizerMode() || IsBlockMode() || bInsertMode ||
-          aOpt.IsFmtsOnly() ) )
+          aOpt.IsFormatsOnly() ) )
     {
         try
         {
@@ -894,7 +894,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
 
     nRet = nRet ? nRet : (nWarn ? nWarn : (nWarn2 ? nWarn2 : nWarnRDF ) );
 
-    aOpt.ResetAllFmtsOnly();
+    aOpt.ResetAllFormatsOnly();
 
     // redline password
     Any aAny = xInfoSet->getPropertyValue( sRedlineProtectionKey );

@@ -61,8 +61,8 @@ public:
 
     void                        AddEvent( const OUString & rEventName, sal_uInt16 nEventId );
 
-    const SvxMacroTableDtor&    GetMacroTbl() const;
-    void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );
+    const SvxMacroTableDtor&    GetMacroTable() const;
+    void                        SetMacroTable( const SvxMacroTableDtor& rTbl );
 
     void                        ScriptChanged();
     virtual void                PageCreated (const SfxAllItemSet& aSet) SAL_OVERRIDE;
@@ -77,12 +77,12 @@ public:
     bool                        IsReadOnly() const SAL_OVERRIDE;
 };
 
-inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTbl() const
+inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTable() const
 {
     return aTbl;
 }
 
-inline void _SfxMacroTabPage::SetMacroTbl( const SvxMacroTableDtor& rTbl )
+inline void _SfxMacroTabPage::SetMacroTable( const SvxMacroTableDtor& rTbl )
 {
     aTbl = rTbl;
 }

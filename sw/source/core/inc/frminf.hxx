@@ -22,19 +22,19 @@
 
 #include "swtypes.hxx"
 
-class SwTxtFrm;
+class SwTextFrm;
 class SwPaM;
-class SwTxtCursor;
+class SwTextCursor;
 
-class SwTxtFrmInfo
+class SwTextFrmInfo
 {
-    const SwTxtFrm *pFrm;
+    const SwTextFrm *pFrm;
 
     // Where does the text (w/o whitespaces) start (document is global!)?
-    static SwTwips GetLineStart( const SwTxtCursor &rLine );
+    static SwTwips GetLineStart( const SwTextCursor &rLine );
 
 public:
-    inline SwTxtFrmInfo( const SwTxtFrm *pTxtFrm ) : pFrm(pTxtFrm) { }
+    inline SwTextFrmInfo( const SwTextFrm *pTextFrm ) : pFrm(pTextFrm) { }
 
     // Does the paragraph fit into a single line?
     bool IsOneLine() const;
@@ -52,18 +52,18 @@ public:
     void GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const;
 
     // Is a bullet point/symbol/etc. at the first text position?
-    bool IsBullet( sal_Int32 nTxtPos ) const;
+    bool IsBullet( sal_Int32 nTextPos ) const;
 
     // determine intentation for first line
     SwTwips GetFirstIndent() const;
 
-    const SwTxtFrm* GetFrm() const { return pFrm; }
-    SwTxtFrmInfo& SetFrm( const SwTxtFrm* pNew )
+    const SwTextFrm* GetFrm() const { return pFrm; }
+    SwTextFrmInfo& SetFrm( const SwTextFrm* pNew )
         { pFrm = pNew; return *this; }
 
     // Is it a comparison? Returns position in frame.
     sal_Int32 GetBigIndent( sal_Int32& rFndPos,
-                        const SwTxtFrm *pNextFrm = 0 ) const;
+                        const SwTextFrm *pNextFrm = 0 ) const;
 };
 
 #endif

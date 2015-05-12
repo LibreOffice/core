@@ -90,7 +90,7 @@
 #define MID_COLUMNS                             0
 #define MID_COLUMN_SEPARATOR_LINE               1
 
-//SwFmtFtnAtTxtEnd
+//SwFormatFootnoteAtTextEnd
 #define MID_COLLECT                             0
 #define MID_RESTART_NUM                         1
 #define MID_NUM_START_AT                        2
@@ -109,7 +109,7 @@
 #define MID_LINE_FOOTNOTE_DIST                  6
 #define MID_FTN_LINE_STYLE                      7
 
-//SwFmtRuby
+//SwFormatRuby
 #define MID_RUBY_TEXT           0
 #define MID_RUBY_ADJUST         1
 #define MID_RUBY_CHARSTYLE      2
@@ -143,7 +143,7 @@
 #define MID_ENV_SHIFT_RIGHT     12
 #define MID_ENV_SHIFT_DOWN      13
 
-// SwFmtWrapInfluenceOnObjPos
+// SwFormatWrapInfluenceOnObjPos
 #define MID_WRAP_INFLUENCE      0
 
 #endif

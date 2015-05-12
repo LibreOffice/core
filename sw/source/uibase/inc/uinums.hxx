@@ -31,38 +31,38 @@ namespace sw { class StoredChapterNumberingRules; }
 
 #define MAX_NUM_RULES 9
 
-typedef boost::ptr_vector<SfxPoolItem> _SwNumFmtsAttrs;
+typedef boost::ptr_vector<SfxPoolItem> _SwNumFormatsAttrs;
 
 class SW_DLLPUBLIC SwNumRulesWithName
 {
     OUString maName;
     // the NumRule's formats _have_ to be independent of a document
     // (They should always be there!)
-    class SAL_DLLPRIVATE _SwNumFmtGlobal
+    class SAL_DLLPRIVATE _SwNumFormatGlobal
     {
         friend class SwNumRulesWithName;
-        SwNumFmt aFmt;
-        OUString sCharFmtName;
+        SwNumFormat aFormat;
+        OUString sCharFormatName;
         sal_uInt16 nCharPoolId;
-        _SwNumFmtsAttrs aItems;
+        _SwNumFormatsAttrs aItems;
 
-        _SwNumFmtGlobal& operator=( const _SwNumFmtGlobal& ) SAL_DELETED_FUNCTION;
+        _SwNumFormatGlobal& operator=( const _SwNumFormatGlobal& ) SAL_DELETED_FUNCTION;
 
     public:
-        _SwNumFmtGlobal( const SwNumFmt& rFmt );
-        _SwNumFmtGlobal( const _SwNumFmtGlobal& );
-        ~_SwNumFmtGlobal();
+        _SwNumFormatGlobal( const SwNumFormat& rFormat );
+        _SwNumFormatGlobal( const _SwNumFormatGlobal& );
+        ~_SwNumFormatGlobal();
 
-        void ChgNumFmt( SwWrtShell& rSh, SwNumFmt& rChg ) const;
+        void ChgNumFormat( SwWrtShell& rSh, SwNumFormat& rChg ) const;
     };
 
-    _SwNumFmtGlobal* aFmts[ MAXLEVEL ];
+    _SwNumFormatGlobal* aFormats[ MAXLEVEL ];
 
 protected:
     friend class sw::StoredChapterNumberingRules;
     friend class SwChapterNumRules;
     void SetName(const OUString& rSet) {maName = rSet;}
-    void SetNumFmt(size_t, SwNumFmt const&, OUString const&);
+    void SetNumFormat(size_t, SwNumFormat const&, OUString const&);
     SwNumRulesWithName();
 
 public:
@@ -76,7 +76,7 @@ public:
     void MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const;
 
 
-    void GetNumFmt(size_t, SwNumFmt const*&, OUString const*&) const;
+    void GetNumFormat(size_t, SwNumFormat const*&, OUString const*&) const;
 };
 
 class SW_DLLPUBLIC SwChapterNumRules

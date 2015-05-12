@@ -25,15 +25,15 @@
 
 class SwDoc;
 
-class SwTxtAnnotationFld : public SwTxtFld
+class SwTextAnnotationField : public SwTextField
 {
 public:
-    SwTxtAnnotationFld(
-        SwFmtFld & rAttr,
+    SwTextAnnotationField(
+        SwFormatField & rAttr,
         sal_Int32 const nStart,
         bool const bInClipboard );
 
-    virtual ~SwTxtAnnotationFld();
+    virtual ~SwTextAnnotationField();
 
     ::sw::mark::IMark* GetAnnotationMark(
         SwDoc* pDoc = NULL ) const;

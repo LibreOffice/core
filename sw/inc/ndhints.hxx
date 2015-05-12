@@ -24,10 +24,10 @@
 
 #include "swtypes.hxx"
 
-class SwTxtNode;
+class SwTextNode;
 class SwRegHistory;                 // Is in RolBck.hxx.
-class SwTxtAttr;
-class SwTxtAttrNesting;
+class SwTextAttr;
+class SwTextAttrNesting;
 
 class SfxPoolItem;
 class SfxItemSet;
@@ -38,28 +38,28 @@ typedef enum {
     NEW  = int(false),
 } CopyOrNew_t;
 
-/// if COPY then pTxtNode must be given!
-SwTxtAttr * MakeTxtAttr(
+/// if COPY then pTextNode must be given!
+SwTextAttr * MakeTextAttr(
     SwDoc & rDoc,
     SfxPoolItem & rNew,
     sal_Int32 const nStt,
     sal_Int32 const nEnd,
     CopyOrNew_t const bIsCopy = NEW,
-    SwTxtNode *const pTxtNode = 0 );
+    SwTextNode *const pTextNode = 0 );
 
-SwTxtAttr * MakeTxtAttr(
+SwTextAttr * MakeTextAttr(
     SwDoc & rDoc,
     const SfxItemSet & rSet,
     sal_Int32 nStt,
     sal_Int32 nEnd );
 
 /// create redline dummy text hint that must not be inserted into hints array
-SwTxtAttr* MakeRedlineTxtAttr(
+SwTextAttr* MakeRedlineTextAttr(
     SwDoc & rDoc,
     SfxPoolItem& rAttr );
 
 /** Class SwpHints is derived indirectly via SwpHts, because only the
-   class SwTxtNode should be allowed to insert and remove attributes.
+   class SwTextNode should be allowed to insert and remove attributes.
    Other classes like the Frames are given only reading access via
    the index-operator.
    Size when created is 1 because an array is created only if
@@ -69,16 +69,16 @@ SwTxtAttr* MakeRedlineTxtAttr(
 
 struct CompareSwpHtStart
 {
-    bool operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const;
+    bool operator()(SwTextAttr* const lhs, SwTextAttr* const rhs) const;
 };
-class SwpHtStart : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtStart,
+class SwpHtStart : public o3tl::sorted_vector<SwTextAttr*, CompareSwpHtStart,
     o3tl::find_partialorder_ptrequals> {};
 
 struct CompareSwpHtEnd
 {
-    bool operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const;
+    bool operator()(SwTextAttr* const lhs, SwTextAttr* const rhs) const;
 };
-class SwpHtEnd : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtEnd,
+class SwpHtEnd : public o3tl::sorted_vector<SwTextAttr*, CompareSwpHtEnd,
     o3tl::find_partialorder_ptrequals> {};
 
 /// Class SwpHintsArr
@@ -97,31 +97,31 @@ protected:
 
     //FIXME: why are the non-const methods public?
 public:
-    void Insert( const SwTxtAttr *pHt );
+    void Insert( const SwTextAttr *pHt );
     void DeleteAtPos( const size_t nPosInStart );
     void Resort();
-    SwTxtAttr * Cut( const size_t nPosInStart )
+    SwTextAttr * Cut( const size_t nPosInStart )
     {
-        SwTxtAttr *pHt = GetTextHint(nPosInStart);
+        SwTextAttr *pHt = GetTextHint(nPosInStart);
         DeleteAtPos( nPosInStart );
         return pHt;
     }
-    const SwTxtAttr * GetStart( const size_t nPos ) const
+    const SwTextAttr * GetStart( const size_t nPos ) const
     {
         assert(nPos < m_HintStarts.size());
         return m_HintStarts[nPos];
     }
-    const SwTxtAttr * GetEnd( const size_t nPos ) const
+    const SwTextAttr * GetEnd( const size_t nPos ) const
     {
         assert(nPos < m_HintEnds.size());
         return m_HintEnds[nPos];
     }
-    SwTxtAttr * GetStart( const size_t nPos )
+    SwTextAttr * GetStart( const size_t nPos )
     {
         assert(nPos < m_HintStarts.size());
         return m_HintStarts[nPos];
     }
-    SwTxtAttr * GetEnd( const size_t nPos )
+    SwTextAttr * GetEnd( const size_t nPos )
     {
         assert(nPos < m_HintEnds.size());
         return m_HintEnds[nPos];
@@ -130,10 +130,10 @@ public:
     size_t GetEndCount()   const { return m_HintEnds.size(); }
     size_t GetStartCount() const { return m_HintStarts.size(); }
 
-    size_t GetStartOf( const SwTxtAttr *pHt ) const
+    size_t GetStartOf( const SwTextAttr *pHt ) const
     {
         SwpHtStart::const_iterator const it =
-            m_HintStarts.find(const_cast<SwTxtAttr*>(pHt));
+            m_HintStarts.find(const_cast<SwTextAttr*>(pHt));
         if ( it == m_HintStarts.end() )
         {
             return SAL_MAX_SIZE;
@@ -141,13 +141,13 @@ public:
         return it - m_HintStarts.begin();
     }
 
-    bool Contains( const SwTxtAttr *pHt ) const;
+    bool Contains( const SwTextAttr *pHt ) const;
 
-    const SwTxtAttr * GetTextHint( const size_t nIdx ) const
+    const SwTextAttr * GetTextHint( const size_t nIdx ) const
         { return GetStart(nIdx); }
-    SwTxtAttr * GetTextHint( const size_t nIdx )
+    SwTextAttr * GetTextHint( const size_t nIdx )
         { return GetStart(nIdx); }
-    const SwTxtAttr * operator[]( const size_t nIdx ) const
+    const SwTextAttr * operator[]( const size_t nIdx ) const
         { return GetStart(nIdx); }
     size_t Count() const { return GetStartCount(); }
 
@@ -169,22 +169,22 @@ private:
     bool m_bInSplitNode         : 1;
     /// m_bHasHiddenParaField is invalid, call CalcHiddenParaField()
     bool m_bCalcHiddenParaField : 1;
-    bool m_bHasHiddenParaField  : 1;   ///< HiddenParaFld
+    bool m_bHasHiddenParaField  : 1;   ///< HiddenParaField
     bool m_bFootnote            : 1;   ///< footnotes
     bool m_bDDEFields           : 1;   ///< the TextNode has DDE fields
 
     /// records a new attibute in m_pHistory.
-    void NoteInHistory( SwTxtAttr *pAttr, const bool bNew = false );
+    void NoteInHistory( SwTextAttr *pAttr, const bool bNew = false );
 
     void CalcFlags( );
 
     /** Delete methods may only be called by the TextNode!
        Because the TextNode also guarantees removal of the Character for
        attributes without an end. */
-    friend class SwTxtNode;
+    friend class SwTextNode;
     void DeleteAtPos( const size_t nPos );
     /// Delete the given Hint. The Hint must actually be in the array!
-    void Delete( SwTxtAttr* pTxtHt );
+    void Delete( SwTextAttr* pTextHt );
 
     void SetInSplitNode(bool bInSplit) { m_bInSplitNode = bInSplit; }
     void SetCalcHiddenParaField() { m_bCalcHiddenParaField = true; }
@@ -198,11 +198,11 @@ private:
         return m_bHasHiddenParaField;
     }
 
-    void InsertNesting(SwTxtAttrNesting & rNewHint);
-    bool TryInsertNesting(SwTxtNode & rNode, SwTxtAttrNesting & rNewHint);
-    void BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
+    void InsertNesting(SwTextAttrNesting & rNewHint);
+    bool TryInsertNesting(SwTextNode & rNode, SwTextAttrNesting & rNewHint);
+    void BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
             const SetAttrMode nMode );
-    bool MergePortions( SwTxtNode& rNode );
+    bool MergePortions( SwTextNode& rNode );
 
 public:
     SwpHints();
@@ -217,10 +217,10 @@ public:
 
     /// try to insert the hint
     /// @return true iff hint successfully inserted
-    bool TryInsertHint( SwTxtAttr * const pHint, SwTxtNode & rNode,
+    bool TryInsertHint( SwTextAttr * const pHint, SwTextNode & rNode,
             const SetAttrMode nMode = SetAttrMode::DEFAULT );
 
-    bool HasFtn() const          { return m_bFootnote; }
+    bool HasFootnote() const          { return m_bFootnote; }
     bool IsInSplitNode() const   { return m_bInSplitNode; }
 
     /// calc current value of m_bHasHiddenParaField, returns true iff changed

@@ -331,9 +331,9 @@ DECLARE_ODFIMPORT_TEST(testFdo56272, "fdo56272.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); // Was -2371
 }
 
-DECLARE_ODFIMPORT_TEST(testCalcFtnCntnt, "ooo32780-1.odt")
+DECLARE_ODFIMPORT_TEST(testCalcFootnoteContent, "ooo32780-1.odt")
 {
-    //this was a CalcFtnCntnt crash
+    //this was a CalcFootnoteContent crash
 }
 
 DECLARE_ODFIMPORT_TEST(testMoveSubTree, "ooo77837-1.odt")
@@ -431,36 +431,36 @@ DECLARE_ODFIMPORT_TEST(testTdf89802, "tdf89802.fodt")
 
 DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
 {
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
 
     {
         pWrtShell->SelAll(); // Selects A1.
-        SwTxtNode& rCellEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
+        SwTextNode& rCellEnd = dynamic_cast<SwTextNode&>(pShellCrsr->End()->nNode.GetNode());
         // fdo#72486 This was "Hello.", i.e. a single select-all selected the whole document, not just the cell only.
-        CPPUNIT_ASSERT_EQUAL(OUString("A1"), rCellEnd.GetTxt());
+        CPPUNIT_ASSERT_EQUAL(OUString("A1"), rCellEnd.GetText());
 
         pWrtShell->SelAll(); // Selects the whole table.
         pWrtShell->SelAll(); // Selects the whole document.
-        SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
-        CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
+        SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCrsr->Start()->nNode.GetNode());
+        CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetText());
 
-        SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
+        SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCrsr->End()->nNode.GetNode());
         // This was "A1", i.e. Ctrl-A only selected the A1 cell of the table, not the whole document.
-        CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetTxt());
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetText());
     }
 
     {
         pWrtShell->SttEndDoc(false); // Go to the end of the doc.
         pWrtShell->SelAll(); // And now that we're outside of the table, try Ctrl-A again.
-        SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
+        SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCrsr->Start()->nNode.GetNode());
         // This was "Hello", i.e. Ctrl-A did not select the starting table.
-        CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
+        CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetText());
 
-        SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
-        CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetTxt());
+        SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCrsr->End()->nNode.GetNode());
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetText());
     }
 
     {
@@ -468,17 +468,17 @@ DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
         // And make sure the table got deleted as well.
         SwNodes& rNodes = pWrtShell->GetDoc()->GetNodes();
         SwNodeIndex nNode(rNodes.GetEndOfExtras());
-        SwCntntNode* pCntntNode = rNodes.GoNext(&nNode);
+        SwContentNode* pContentNode = rNodes.GoNext(&nNode);
         // First content node was in a table -> table wasn't deleted.
-        CPPUNIT_ASSERT(!pCntntNode->FindTableNode());
+        CPPUNIT_ASSERT(!pContentNode->FindTableNode());
     }
 }
 
 DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
 {
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     // Ctrl-A
     pWrtShell->SelAll(); // Selects A1.
     pWrtShell->SelAll(); // Selects the whole table.
@@ -506,46 +506,46 @@ DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
 DECLARE_ODFIMPORT_TEST(testFdo69862, "fdo69862.odt")
 {
     // The test doc is special in that it starts with a table and it also has a footnote.
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
 
     pWrtShell->SelAll(); // Selects A1.
     pWrtShell->SelAll(); // Selects the whole table.
     pWrtShell->SelAll(); // Selects the whole document.
-    SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
+    SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCrsr->Start()->nNode.GetNode());
     // This was "Footnote.", as Ctrl-A also selected footnotes, but it should not.
-    CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetText());
 
-    SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
-    CPPUNIT_ASSERT_EQUAL(OUString("H" "\x01" "ello."), rEnd.GetTxt());
+    SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCrsr->End()->nNode.GetNode());
+    CPPUNIT_ASSERT_EQUAL(OUString("H" "\x01" "ello."), rEnd.GetText());
 }
 
 DECLARE_ODFIMPORT_TEST(testFdo69979, "fdo69979.odt")
 {
     // The test doc is special in that it starts with a table and it also has a header.
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
 
     pWrtShell->SelAll(); // Selects A1.
     pWrtShell->SelAll(); // Selects the whole table.
     pWrtShell->SelAll(); // Selects the whole document.
-    SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
+    SwTextNode& rStart = dynamic_cast<SwTextNode&>(pShellCrsr->Start()->nNode.GetNode());
     // This was "", as Ctrl-A also selected headers, but it should not.
-    CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetText());
 
-    SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
-    CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetTxt());
+    SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCrsr->End()->nNode.GetNode());
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetText());
 }
 
 DECLARE_ODFIMPORT_TEST(testSpellmenuRedline, "spellmenu-redline.odt")
 {
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     OUString aParaText;
     uno::Reference<linguistic2::XSpellAlternatives> xAlt;
     SwSpellPopup aPopup(pWrtShell, xAlt, aParaText);

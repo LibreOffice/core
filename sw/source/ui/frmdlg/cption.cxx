@@ -61,11 +61,11 @@ class SwSequenceOptionDialog : public SvxStandardDialog
     VclPtr<ListBox>        m_pLbCaptionOrder;
 
     SwView&         rView;
-    OUString        aFldTypeName;
+    OUString        aFieldTypeName;
 
 public:
     SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV,
-                            const OUString& rSeqFldType );
+                            const OUString& rSeqFieldType );
     virtual ~SwSequenceOptionDialog();
     virtual void dispose() SAL_OVERRIDE;
     virtual void Apply() SAL_OVERRIDE;
@@ -97,7 +97,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     m_sNone( SW_RESSTR(SW_STR_NONE) ),
     m_aTextFilter(m_sNone),
     rView( rV ),
-    pMgr( new SwFldMgr(rView.GetWrtShellPtr()) ),
+    pMgr( new SwFieldMgr(rView.GetWrtShellPtr()) ),
     bCopyAttributes( false ),
     bOrderNumberingFirst( SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst() )
 {
@@ -143,10 +143,10 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     m_pAutoCaptionButton->SetClickHdl(LINK(this, SwCaptionDialog, CaptionHdl));
 
     m_pCategoryBox->InsertEntry( m_sNone );
-    sal_uInt16 nCount = pMgr->GetFldTypeCount();
+    sal_uInt16 nCount = pMgr->GetFieldTypeCount();
     for (sal_uInt16 i = 0; i < nCount; i++)
     {
-        SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
+        SwFieldType *pType = pMgr->GetFieldType( USHRT_MAX, i );
         if( pType->Which() == RES_SETEXPFLD &&
             static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
             m_pCategoryBox->InsertEntry(pType->GetName());
@@ -174,7 +174,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         sString = ::GetOldTabCat();
         uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
         xNameAccess = xTables->getTextTables();
-        sObjectName = rSh.GetTableFmt()->GetName();
+        sObjectName = rSh.GetTableFormat()->GetName();
     }
     else if( eType & nsSelectionType::SEL_FRM )
     {
@@ -204,14 +204,14 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     }
 
     // aFormatBox
-    sal_uInt16 nSelFmt = SVX_NUM_ARABIC;
-    nCount = pMgr->GetFldTypeCount();
+    sal_uInt16 nSelFormat = SVX_NUM_ARABIC;
+    nCount = pMgr->GetFieldTypeCount();
     for ( sal_uInt16 i = nCount; i; )
     {
-        SwFieldType* pFldType = pMgr->GetFldType(USHRT_MAX, --i);
-        if( pFldType->GetName().equals(m_pCategoryBox->GetText()) )
+        SwFieldType* pFieldType = pMgr->GetFieldType(USHRT_MAX, --i);
+        if( pFieldType->GetName().equals(m_pCategoryBox->GetText()) )
         {
-            nSelFmt = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFldType)->GetSeqFormat();
+            nSelFormat = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat();
             break;
         }
     }
@@ -220,9 +220,9 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         m_pFormatBox->InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
-        const sal_uInt16 nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
-        m_pFormatBox->SetEntryData( i, reinterpret_cast<void*>( nFmtId ) );
-        if( nFmtId == nSelFmt )
+        const sal_uInt16 nFormatId = pMgr->GetFormatId(TYP_SEQFLD, i);
+        m_pFormatBox->SetEntryData( i, reinterpret_cast<void*>( nFormatId ) );
+        if( nFormatId == nSelFormat )
             m_pFormatBox->SelectEntryPos( i );
     }
 
@@ -282,10 +282,10 @@ void SwCaptionDialog::Apply()
 
 IMPL_LINK( SwCaptionDialog, OptionHdl, Button*, pButton )
 {
-    OUString sFldTypeName = m_pCategoryBox->GetText();
-    if(sFldTypeName == m_sNone)
-        sFldTypeName.clear();
-    ScopedVclPtrInstance< SwSequenceOptionDialog > aDlg( pButton, rView, sFldTypeName );
+    OUString sFieldTypeName = m_pCategoryBox->GetText();
+    if(sFieldTypeName == m_sNone)
+        sFieldTypeName.clear();
+    ScopedVclPtrInstance< SwSequenceOptionDialog > aDlg( pButton, rView, sFieldTypeName );
     aDlg->SetApplyBorderAndShadow(bCopyAttributes);
     aDlg->SetCharacterStyle( sCharacterStyle );
     aDlg->SetOrderNumberingFirst( bOrderNumberingFirst );
@@ -312,15 +312,15 @@ IMPL_LINK_NOARG(SwCaptionDialog, SelectHdl)
 IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
-    OUString sFldTypeName = m_pCategoryBox->GetText();
-    bool bCorrectFldName = !sFldTypeName.isEmpty();
-    bool bNone = sFldTypeName == m_sNone;
-    SwFieldType* pType = (bCorrectFldName && !bNone)
-                    ? rSh.GetFldType( RES_SETEXPFLD, sFldTypeName )
+    OUString sFieldTypeName = m_pCategoryBox->GetText();
+    bool bCorrectFieldName = !sFieldTypeName.isEmpty();
+    bool bNone = sFieldTypeName == m_sNone;
+    SwFieldType* pType = (bCorrectFieldName && !bNone)
+                    ? rSh.GetFieldType( RES_SETEXPFLD, sFieldTypeName )
                     : 0;
     fprintf(stderr, "pType is %p\n", pType);
-    fprintf(stderr, "bCorrectFldName is %d\n", bCorrectFldName);
-    m_pOKButton->Enable( bCorrectFldName &&
+    fprintf(stderr, "bCorrectFieldName is %d\n", bCorrectFieldName);
+    m_pOKButton->Enable( bCorrectFieldName &&
                         (!pType ||
                             static_cast<SwSetExpFieldType*>(pType)->GetType() == nsSwGetSetExpType::GSE_SEQ) );
     m_pOptionButton->Enable( m_pOKButton->IsEnabled() && !bNone );
@@ -349,28 +349,28 @@ void SwCaptionDialog::DrawSample()
     OUString sCaption = m_pTextEdit->GetText();
 
     // number
-    OUString sFldTypeName = m_pCategoryBox->GetText();
-    bool bNone = sFldTypeName == m_sNone;
+    OUString sFieldTypeName = m_pCategoryBox->GetText();
+    bool bNone = sFieldTypeName == m_sNone;
     if( !bNone )
     {
-        const sal_uInt16 nNumFmt = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetSelectEntryData());
-        if( SVX_NUM_NUMBER_NONE != nNumFmt )
+        const sal_uInt16 nNumFormat = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetSelectEntryData());
+        if( SVX_NUM_NUMBER_NONE != nNumFormat )
         {
             // category
             //#i61007# order of captions
             if( !bOrderNumberingFirst )
             {
-                aStr = sFldTypeName;
+                aStr = sFieldTypeName;
                 if ( !aStr.isEmpty() )
                     aStr += " ";
             }
 
             SwWrtShell &rSh = rView.GetWrtShell();
-            SwSetExpFieldType* pFldType = static_cast<SwSetExpFieldType*>(rSh.GetFldType(
-                                            RES_SETEXPFLD, sFldTypeName ));
-            if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
+            SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(rSh.GetFieldType(
+                                            RES_SETEXPFLD, sFieldTypeName ));
+            if( pFieldType && pFieldType->GetOutlineLvl() < MAXLEVEL )
             {
-                sal_Int8 nLvl = pFldType->GetOutlineLvl();
+                sal_Int8 nLvl = pFieldType->GetOutlineLvl();
                 SwNumberTree::tNumberVector aNumVector;
                 for( sal_Int8 i = 0; i <= nLvl; ++i )
                     aNumVector.push_back(1);
@@ -378,10 +378,10 @@ void SwCaptionDialog::DrawSample()
                 OUString sNumber( rSh.GetOutlineNumRule()->
                                 MakeNumString(aNumVector, false ));
                 if( !sNumber.isEmpty() )
-                    aStr += sNumber + pFldType->GetDelimiter();
+                    aStr += sNumber + pFieldType->GetDelimiter();
             }
 
-            switch( nNumFmt )
+            switch( nNumFormat )
             {
             case SVX_NUM_CHARS_UPPER_LETTER:    aStr += "A"; break;
             case SVX_NUM_CHARS_UPPER_LETTER_N:  aStr += "A"; break;
@@ -394,7 +394,7 @@ void SwCaptionDialog::DrawSample()
             //#i61007# order of captions
             if( bOrderNumberingFirst )
             {
-                aStr += m_pNumberingSeparatorED->GetText() + sFldTypeName;
+                aStr += m_pNumberingSeparatorED->GetText() + sFieldTypeName;
             }
 
         }
@@ -434,10 +434,10 @@ void SwCaptionDialog::dispose()
 }
 
 SwSequenceOptionDialog::SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV,
-                                            const OUString& rSeqFldType )
+                                            const OUString& rSeqFieldType )
     : SvxStandardDialog( pParent, "CaptionOptionsDialog", "modules/swriter/ui/captionoptions.ui" ),
     rView( rV ),
-    aFldTypeName( rSeqFldType )
+    aFieldTypeName( rSeqFieldType )
 {
     get(m_pLbLevel, "level");
     get(m_pEdDelim, "separator");
@@ -453,15 +453,15 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
         m_pLbLevel->InsertEntry( OUString::number(n+1) );
 
-    SwSetExpFieldType* pFldType = static_cast<SwSetExpFieldType*>(rSh.GetFldType(
-                                        RES_SETEXPFLD, aFldTypeName ));
+    SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(rSh.GetFieldType(
+                                        RES_SETEXPFLD, aFieldTypeName ));
 
     sal_Unicode nLvl = MAXLEVEL;
     OUString sDelim(": ");
-    if( pFldType )
+    if( pFieldType )
     {
-        sDelim = pFldType->GetDelimiter();
-        nLvl = pFldType->GetOutlineLvl();
+        sDelim = pFieldType->GetDelimiter();
+        nLvl = pFieldType->GetOutlineLvl();
     }
 
     m_pLbLevel->SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
@@ -491,31 +491,31 @@ void SwSequenceOptionDialog::dispose()
 void SwSequenceOptionDialog::Apply()
 {
     SwWrtShell &rSh = rView.GetWrtShell();
-    SwSetExpFieldType* pFldType = static_cast<SwSetExpFieldType*>(rSh.GetFldType(
-                                        RES_SETEXPFLD, aFldTypeName ));
+    SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(rSh.GetFieldType(
+                                        RES_SETEXPFLD, aFieldTypeName ));
 
     sal_Int8 nLvl = (sal_Int8)( m_pLbLevel->GetSelectEntryPos() - 1);
     sal_Unicode cDelim = m_pEdDelim->GetText()[0];
 
     bool bUpdate = true;
-    if( pFldType )
+    if( pFieldType )
     {
-        pFldType->SetDelimiter( OUString(cDelim) );
-        pFldType->SetOutlineLvl( nLvl );
+        pFieldType->SetDelimiter( OUString(cDelim) );
+        pFieldType->SetOutlineLvl( nLvl );
     }
-    else if( !aFldTypeName.isEmpty() && nLvl < MAXLEVEL )
+    else if( !aFieldTypeName.isEmpty() && nLvl < MAXLEVEL )
     {
         // then we have to insert that
-        SwSetExpFieldType aFldType( rSh.GetDoc(), aFldTypeName, nsSwGetSetExpType::GSE_SEQ );
-        aFldType.SetDelimiter( OUString(cDelim) );
-        aFldType.SetOutlineLvl( nLvl );
-        rSh.InsertFldType( aFldType );
+        SwSetExpFieldType aFieldType( rSh.GetDoc(), aFieldTypeName, nsSwGetSetExpType::GSE_SEQ );
+        aFieldType.SetDelimiter( OUString(cDelim) );
+        aFieldType.SetOutlineLvl( nLvl );
+        rSh.InsertFieldType( aFieldType );
     }
     else
         bUpdate = false;
 
     if( bUpdate )
-        rSh.UpdateExpFlds();
+        rSh.UpdateExpFields();
 }
 
 OUString  SwSequenceOptionDialog::GetCharacterStyle() const

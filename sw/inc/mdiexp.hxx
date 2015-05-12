@@ -54,7 +54,7 @@ void EnableCmdInterface(bool bEnable = true);
 void RepaintPagePreview( SwViewShell* pVwSh, const SwRect& rRect );
 
 // Read ChgMode for tables from configuration.
-TblChgMode GetTblChgDefaultMode();
+TableChgMode GetTableChgDefaultMode();
 
 bool JumpToSwMark( SwViewShell* pVwSh, const OUString& rMark );
 

@@ -21,12 +21,12 @@
 #include <frmfmt.hxx>
 
 
-SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
+SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrameFormat& rFlyFrameFormat,
                                     const SwUndoId eUndoId,
                                     const OUString& sOldStr,
                                     const OUString& sNewStr )
     : SwUndo( eUndoId ),
-      mrFlyFrmFmt( rFlyFrmFmt ),
+      mrFlyFrameFormat( rFlyFrameFormat ),
       msOldStr( sOldStr ),
       msNewStr( sNewStr )
 {
@@ -44,12 +44,12 @@ void SwUndoFlyStrAttr::UndoImpl(::sw::UndoRedoContext &)
     {
         case UNDO_FLYFRMFMT_TITLE:
         {
-            mrFlyFrmFmt.SetObjTitle( msOldStr, true );
+            mrFlyFrameFormat.SetObjTitle( msOldStr, true );
         }
         break;
         case UNDO_FLYFRMFMT_DESCRIPTION:
         {
-            mrFlyFrmFmt.SetObjDescription( msOldStr, true );
+            mrFlyFrameFormat.SetObjDescription( msOldStr, true );
         }
         break;
         default:
@@ -64,12 +64,12 @@ void SwUndoFlyStrAttr::RedoImpl(::sw::UndoRedoContext &)
     {
         case UNDO_FLYFRMFMT_TITLE:
         {
-            mrFlyFrmFmt.SetObjTitle( msNewStr, true );
+            mrFlyFrameFormat.SetObjTitle( msNewStr, true );
         }
         break;
         case UNDO_FLYFRMFMT_DESCRIPTION:
         {
-            mrFlyFrmFmt.SetObjDescription( msNewStr, true );
+            mrFlyFrameFormat.SetObjDescription( msNewStr, true );
         }
         break;
         default:
@@ -82,7 +82,7 @@ SwRewriter SwUndoFlyStrAttr::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule( UndoArg1, mrFlyFrmFmt.GetName() );
+    aResult.AddRule( UndoArg1, mrFlyFrameFormat.GetName() );
 
     return aResult;
 }

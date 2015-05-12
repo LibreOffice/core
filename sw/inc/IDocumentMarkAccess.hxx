@@ -26,7 +26,7 @@
 
 class SwPaM;
 struct SwPosition;
-class SwTxtNode;
+class SwTextNode;
 
 namespace sw { namespace mark {
     class SaveBookmark; // FIXME: Ugly: SaveBookmark is a core-internal class, and should not be used in the interface
@@ -93,7 +93,7 @@ class IDocumentMarkAccess
         /** Returns a mark in the document for a paragraph.
             If there is none, a mark will be created.
 
-           @param rTxtNode
+           @param rTextNode
            [in] the paragraph being marked (a selection over the paragraph is marked)
 
            @param eMark
@@ -102,7 +102,7 @@ class IDocumentMarkAccess
            @returns
            a pointer to the new mark (name might have changed).
         */
-        virtual ::sw::mark::IMark* getMarkForTxtNode(const SwTxtNode& rTxtNode,
+        virtual ::sw::mark::IMark* getMarkForTextNode(const SwTextNode& rTextNode,
             MarkType eMark) =0;
 
         /** Moves an existing mark to a new selection and performs needed updates.

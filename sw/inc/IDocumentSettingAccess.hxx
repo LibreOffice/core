@@ -186,14 +186,14 @@ enum class DocumentSettingId
        @returns
        the current field update mode.
     */
-    virtual SwFldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const = 0;
+    virtual SwFieldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const = 0;
 
     /** Set the current field update mode.
 
        @param nMode
        [in] the new field update mode.
     */
-    virtual void setFieldUpdateFlags( /*[in]*/ SwFldUpdateFlags nMode )  = 0;
+    virtual void setFieldUpdateFlags( /*[in]*/ SwFieldUpdateFlags nMode )  = 0;
 
     /** Get the character compression type for Asian characters.
 

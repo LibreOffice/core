@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star { namespace text {
     class XTextRange;
 } } } }
 
-class SwTxtNode;
+class SwTextNode;
 class ModelToViewHelper;
 class SfxPoolItem;
 
@@ -50,7 +50,7 @@ class SwXTextMarkup
         >
 {
 public:
-    SwXTextMarkup(SwTxtNode *const rTxtNode,
+    SwXTextMarkup(SwTextNode *const rTextNode,
             const ModelToViewHelper& rConversionMap);
     virtual ~SwXTextMarkup();
 
@@ -74,8 +74,8 @@ private:
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
 protected:
-    SwTxtNode* GetTxtNode();
-    void ClearTxtNode();
+    SwTextNode* GetTextNode();
+    void ClearTextNode();
     const ModelToViewHelper& GetConversionMap();
 };
 

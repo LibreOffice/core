@@ -26,10 +26,10 @@
 
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFmtLayoutSplit : public SfxBoolItem
+class SW_DLLPUBLIC SwFormatLayoutSplit : public SfxBoolItem
 {
 public:
-    SwFmtLayoutSplit( bool bSplit = true ) : SfxBoolItem( RES_LAYOUT_SPLIT, bSplit ) {}
+    SwFormatLayoutSplit( bool bSplit = true ) : SfxBoolItem( RES_LAYOUT_SPLIT, bSplit ) {}
 
     /// "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
@@ -40,10 +40,10 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 };
 
-inline const SwFmtLayoutSplit &SwAttrSet::GetLayoutSplit(bool bInP) const
-    { return static_cast<const SwFmtLayoutSplit&>(Get( RES_LAYOUT_SPLIT,bInP)); }
+inline const SwFormatLayoutSplit &SwAttrSet::GetLayoutSplit(bool bInP) const
+    { return static_cast<const SwFormatLayoutSplit&>(Get( RES_LAYOUT_SPLIT,bInP)); }
 
-inline const SwFmtLayoutSplit &SwFmt::GetLayoutSplit(bool bInP) const
+inline const SwFormatLayoutSplit &SwFormat::GetLayoutSplit(bool bInP) const
     { return m_aSet.GetLayoutSplit(bInP); }
 
 #endif

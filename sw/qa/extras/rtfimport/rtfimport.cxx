@@ -976,7 +976,7 @@ DECLARE_RTFIMPORT_TEST(testFdo54473, "fdo54473.rtf")
 {
     // The problem was that character styles were not imported due to a typo.
     CPPUNIT_ASSERT_EQUAL(OUString("Anot"), getProperty<OUString>(getRun(getParagraph(1), 1, "Text "), "CharStyleName"));
-    CPPUNIT_ASSERT_EQUAL(OUString("ForeignTxt"), getProperty<OUString>(getRun(getParagraph(1), 3, "character "), "CharStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("ForeignText"), getProperty<OUString>(getRun(getParagraph(1), 3, "character "), "CharStyleName"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo49934, "fdo49934.rtf")

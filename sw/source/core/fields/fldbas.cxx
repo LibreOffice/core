@@ -51,13 +51,13 @@
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
 
-static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
+static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFormat,
                                 const SvNumberFormatter& rFormatter )
 {
     if( nLng == LANGUAGE_NONE ) // Bug #60010
         nLng = LANGUAGE_SYSTEM;
     else if( nLng == ::GetAppLanguage() )
-        switch( rFormatter.GetIndexTableOffset( nFmt ))
+        switch( rFormatter.GetIndexTableOffset( nFormat ))
         {
         case NF_NUMBER_SYSTEM:
         case NF_DATE_SYSTEM_SHORT:
@@ -73,7 +73,7 @@ static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
 // Globals
 
 /// field names
-std::vector<OUString>* SwFieldType::s_pFldNames = nullptr;
+std::vector<OUString>* SwFieldType::s_pFieldNames = nullptr;
 
 namespace
 {
@@ -125,11 +125,11 @@ namespace
 
 OUString SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
 {
-    if (!s_pFldNames)
-        _GetFldName();
+    if (!s_pFieldNames)
+        _GetFieldName();
 
-    if (nTypeId < SwFieldType::s_pFldNames->size())
-        return (*SwFieldType::s_pFldNames)[nTypeId];
+    if (nTypeId < SwFieldType::s_pFieldNames->size())
+        return (*SwFieldType::s_pFieldNames)[nTypeId];
     return OUString();
 }
 
@@ -154,26 +154,26 @@ bool SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
     return false;
 }
 
-void SwFldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swFldTypes"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFieldTypes"));
     sal_uInt16 nCount = size();
     for (sal_uInt16 nType = 0; nType < nCount; ++nType)
     {
         const SwFieldType *pCurType = (*this)[nType];
-        SwIterator<SwFmtFld, SwFieldType> aIter(*pCurType);
-        for (const SwFmtFld* pCurFldFmt = aIter.First(); pCurFldFmt; pCurFldFmt = aIter.Next())
+        SwIterator<SwFormatField, SwFieldType> aIter(*pCurType);
+        for (const SwFormatField* pCurFieldFormat = aIter.First(); pCurFieldFormat; pCurFieldFormat = aIter.Next())
         {
-            xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtFld"));
-            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pCurFldFmt);
-            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("txtFld"), "%p", pCurFldFmt->GetTxtFld());
+            xmlTextWriterStartElement(pWriter, BAD_CAST("swFormatField"));
+            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pCurFieldFormat);
+            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("txtField"), "%p", pCurFieldFormat->GetTextField());
 
             xmlTextWriterStartElement(pWriter, BAD_CAST("swField"));
-            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*pCurFldFmt->GetField()).name()));
-            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pCurFldFmt->GetField());
-            if (pCurFldFmt->GetField()->GetTyp()->Which() == RES_POSTITFLD)
+            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*pCurFieldFormat->GetField()).name()));
+            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pCurFieldFormat->GetField());
+            if (pCurFieldFormat->GetField()->GetTyp()->Which() == RES_POSTITFLD)
             {
-                const SwPostItField* pField = static_cast<const SwPostItField*>(pCurFldFmt->GetField());
+                const SwPostItField* pField = static_cast<const SwPostItField*>(pCurFieldFormat->GetField());
                 xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(pField->GetName().toUtf8().getStr()));
             }
             xmlTextWriterEndElement(pWriter);
@@ -481,7 +481,7 @@ SwValueFieldType::SwValueFieldType( const SwValueFieldType& rTyp )
 
 /// return value formatted as string
 OUString SwValueFieldType::ExpandValue( const double& rVal,
-                                        sal_uInt32 nFmt, sal_uInt16 nLng) const
+                                        sal_uInt32 nFormat, sal_uInt16 nLng) const
 {
     if (rVal >= DBL_MAX) // error string for calculator
         return SwViewShell::GetShellRes()->aCalc_Error;
@@ -491,51 +491,51 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
     Color* pCol = 0;
 
     // Bug #60010
-    sal_uInt16 nFmtLng = ::lcl_GetLanguageOfFormat( nLng, nFmt, *pFormatter );
+    sal_uInt16 nFormatLng = ::lcl_GetLanguageOfFormat( nLng, nFormat, *pFormatter );
 
-    if( nFmt < SV_COUNTRY_LANGUAGE_OFFSET && LANGUAGE_SYSTEM != nFmtLng )
+    if( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && LANGUAGE_SYSTEM != nFormatLng )
     {
         short nType = css::util::NumberFormat::DEFINED;
         sal_Int32 nDummy;
 
-        const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
+        const SvNumberformat* pEntry = pFormatter->GetEntry(nFormat);
 
         if (pEntry && nLng != pEntry->GetLanguage())
         {
-            sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nFmt,
-                                                    (LanguageType)nFmtLng);
+            sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nFormat,
+                                                    (LanguageType)nFormatLng);
 
-            if (nNewFormat == nFmt)
+            if (nNewFormat == nFormat)
             {
                 // probably user-defined format
-                OUString sFmt(pEntry->GetFormatstring());
+                OUString sFormat(pEntry->GetFormatstring());
 
-                pFormatter->PutandConvertEntry(sFmt, nDummy, nType, nFmt,
-                                        pEntry->GetLanguage(), nFmtLng );
+                pFormatter->PutandConvertEntry(sFormat, nDummy, nType, nFormat,
+                                        pEntry->GetLanguage(), nFormatLng );
             }
             else
-                nFmt = nNewFormat;
+                nFormat = nNewFormat;
         }
         OSL_ENSURE(pEntry, "unknown number format!");
     }
 
-    if( pFormatter->IsTextFormat( nFmt ) )
+    if( pFormatter->IsTextFormat( nFormat ) )
     {
-        pFormatter->GetOutputString(DoubleToString(rVal, nFmtLng), nFmt,
+        pFormatter->GetOutputString(DoubleToString(rVal, nFormatLng), nFormat,
                                     sExpand, &pCol);
     }
     else
     {
-        pFormatter->GetOutputString(rVal, nFmt, sExpand, &pCol);
+        pFormatter->GetOutputString(rVal, nFormat, sExpand, &pCol);
     }
     return sExpand;
 }
 
 OUString SwValueFieldType::DoubleToString(const double &rVal,
-                                        sal_uInt32 nFmt) const
+                                        sal_uInt32 nFormat) const
 {
     SvNumberFormatter* pFormatter = m_pDoc->GetNumberFormatter();
-    const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
+    const SvNumberformat* pEntry = pFormatter->GetEntry(nFormat);
 
     if (!pEntry)
         return OUString();
@@ -557,16 +557,16 @@ OUString SwValueFieldType::DoubleToString( const double &rVal,
                                     pFormatter->GetDecSep(), true );
 }
 
-SwValueField::SwValueField( SwValueFieldType* pFldType, sal_uInt32 nFmt,
+SwValueField::SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat,
                             sal_uInt16 nLng, const double fVal )
-    : SwField(pFldType, nFmt, nLng)
+    : SwField(pFieldType, nFormat, nLng)
     , m_fValue(fVal)
 {
 }
 
-SwValueField::SwValueField( const SwValueField& rFld )
-    : SwField(rFld)
-    , m_fValue(rFld.GetValue())
+SwValueField::SwValueField( const SwValueField& rField )
+    : SwField(rField)
+    , m_fValue(rField.GetValue())
 {
 }
 
@@ -590,43 +590,43 @@ SwFieldType* SwValueField::ChgTyp( SwFieldType* pNewType )
     {
         SvNumberFormatter* pFormatter = pNewDoc->GetNumberFormatter();
 
-        if( pFormatter && pFormatter->HasMergeFmtTbl() &&
+        if( pFormatter && pFormatter->HasMergeFormatTable() &&
             static_cast<SwValueFieldType *>(GetTyp())->UseFormat() )
-            SetFormat(pFormatter->GetMergeFmtIndex( GetFormat() ));
+            SetFormat(pFormatter->GetMergeFormatIndex( GetFormat() ));
     }
 
     return SwField::ChgTyp(pNewType);
 }
 
 /// get format in office language
-sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFmt)
+sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFormat)
 {
-    const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
+    const SvNumberformat* pEntry = pFormatter->GetEntry(nFormat);
     sal_uInt16 nLng = SvtSysLocale().GetLanguageTag().getLanguageType();
 
     if (pEntry && nLng != pEntry->GetLanguage())
     {
-        sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nFmt,
+        sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nFormat,
                                                         (LanguageType)nLng);
 
-        if (nNewFormat == nFmt)
+        if (nNewFormat == nFormat)
         {
             // probably user-defined format
             short nType = css::util::NumberFormat::DEFINED;
             sal_Int32 nDummy;
 
-            OUString sFmt(pEntry->GetFormatstring());
+            OUString sFormat(pEntry->GetFormatstring());
 
-            sal_uInt32 nTempFormat = nFmt;
-            pFormatter->PutandConvertEntry(sFmt, nDummy, nType,
+            sal_uInt32 nTempFormat = nFormat;
+            pFormatter->PutandConvertEntry(sFormat, nDummy, nType,
                                            nTempFormat, pEntry->GetLanguage(), nLng);
-            nFmt = nTempFormat;
+            nFormat = nTempFormat;
         }
         else
-            nFmt = nNewFormat;
+            nFormat = nNewFormat;
     }
 
-    return nFmt;
+    return nFormat;
 }
 
 /// set language of the format
@@ -638,30 +638,30 @@ void SwValueField::SetLanguage( sal_uInt16 nLng )
     {
         // Bug #60010
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
-        sal_uInt16 nFmtLng = ::lcl_GetLanguageOfFormat( nLng, GetFormat(),
+        sal_uInt16 nFormatLng = ::lcl_GetLanguageOfFormat( nLng, GetFormat(),
                                                     *pFormatter );
 
         if( (GetFormat() >= SV_COUNTRY_LANGUAGE_OFFSET ||
-             LANGUAGE_SYSTEM != nFmtLng ) &&
+             LANGUAGE_SYSTEM != nFormatLng ) &&
             !(Which() == RES_USERFLD && (GetSubType()&nsSwExtendedSubType::SUB_CMD) ) )
         {
             const SvNumberformat* pEntry = pFormatter->GetEntry(GetFormat());
 
-            if( pEntry && nFmtLng != pEntry->GetLanguage() )
+            if( pEntry && nFormatLng != pEntry->GetLanguage() )
             {
                 sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(
-                                        GetFormat(), (LanguageType)nFmtLng );
+                                        GetFormat(), (LanguageType)nFormatLng );
 
                 if( nNewFormat == GetFormat() )
                 {
                     // probably user-defined format
                     short nType = css::util::NumberFormat::DEFINED;
                     sal_Int32 nDummy;
-                    OUString sFmt( pEntry->GetFormatstring() );
-                    pFormatter->PutandConvertEntry( sFmt, nDummy, nType,
+                    OUString sFormat( pEntry->GetFormatstring() );
+                    pFormatter->PutandConvertEntry( sFormat, nDummy, nType,
                                                     nNewFormat,
                                                     pEntry->GetLanguage(),
-                                                    nFmtLng );
+                                                    nFormatLng );
                 }
                 SetFormat( nNewFormat );
             }
@@ -682,14 +682,14 @@ void SwValueField::SetValue( const double& rVal )
     m_fValue = rVal;
 }
 
-SwFormulaField::SwFormulaField( SwValueFieldType* pFldType, sal_uInt32 nFmt, const double fVal)
-    : SwValueField(pFldType, nFmt, LANGUAGE_SYSTEM, fVal)
+SwFormulaField::SwFormulaField( SwValueFieldType* pFieldType, sal_uInt32 nFormat, const double fVal)
+    : SwValueField(pFieldType, nFormat, LANGUAGE_SYSTEM, fVal)
 {
 }
 
-SwFormulaField::SwFormulaField( const SwFormulaField& rFld )
-    : SwValueField(static_cast<SwValueFieldType *>(rFld.GetTyp()), rFld.GetFormat(),
-                    rFld.GetLanguage(), rFld.GetValue())
+SwFormulaField::SwFormulaField( const SwFormulaField& rField )
+    : SwValueField(static_cast<SwValueFieldType *>(rField.GetTyp()), rField.GetFormat(),
+                    rField.GetLanguage(), rField.GetValue())
 {
 }
 
@@ -702,9 +702,9 @@ void SwFormulaField::SetFormula(const OUString& rStr)
 {
     m_sFormula = rStr;
 
-    sal_uLong nFmt(GetFormat());
+    sal_uLong nFormat(GetFormat());
 
-    if( nFmt && SAL_MAX_UINT32 != nFmt )
+    if( nFormat && SAL_MAX_UINT32 != nFormat )
     {
         sal_Int32 nPos = 0;
         double fTmpValue;
@@ -715,19 +715,19 @@ void SwFormulaField::SetFormula(const OUString& rStr)
 
 void SwFormulaField::SetExpandedFormula( const OUString& rStr )
 {
-    sal_uInt32 nFmt(GetFormat());
+    sal_uInt32 nFormat(GetFormat());
 
-    if (nFmt && nFmt != SAL_MAX_UINT32 && static_cast<SwValueFieldType *>(GetTyp())->UseFormat())
+    if (nFormat && nFormat != SAL_MAX_UINT32 && static_cast<SwValueFieldType *>(GetTyp())->UseFormat())
     {
         double fTmpValue;
 
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
 
-        if (pFormatter->IsNumberFormat(rStr, nFmt, fTmpValue))
+        if (pFormatter->IsNumberFormat(rStr, nFormat, fTmpValue))
         {
             SwValueField::SetValue(fTmpValue);
 
-            m_sFormula = static_cast<SwValueFieldType *>(GetTyp())->DoubleToString(fTmpValue, nFmt);
+            m_sFormula = static_cast<SwValueFieldType *>(GetTyp())->DoubleToString(fTmpValue, nFormat);
             return;
         }
     }
@@ -736,23 +736,23 @@ void SwFormulaField::SetExpandedFormula( const OUString& rStr )
 
 OUString SwFormulaField::GetExpandedFormula() const
 {
-    sal_uInt32 nFmt(GetFormat());
+    sal_uInt32 nFormat(GetFormat());
 
-    if (nFmt && nFmt != SAL_MAX_UINT32 && static_cast<SwValueFieldType *>(GetTyp())->UseFormat())
+    if (nFormat && nFormat != SAL_MAX_UINT32 && static_cast<SwValueFieldType *>(GetTyp())->UseFormat())
     {
         OUString sFormattedValue;
         Color* pCol = 0;
 
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
 
-        if (pFormatter->IsTextFormat(nFmt))
+        if (pFormatter->IsTextFormat(nFormat))
         {
-            OUString sTempIn(static_cast<SwValueFieldType *>(GetTyp())->DoubleToString(GetValue(), nFmt));
-            pFormatter->GetOutputString(sTempIn, nFmt, sFormattedValue, &pCol);
+            OUString sTempIn(static_cast<SwValueFieldType *>(GetTyp())->DoubleToString(GetValue(), nFormat));
+            pFormatter->GetOutputString(sTempIn, nFormat, sFormattedValue, &pCol);
         }
         else
         {
-            pFormatter->GetOutputString(GetValue(), nFmt, sFormattedValue, &pCol);
+            pFormatter->GetOutputString(GetValue(), nFormat, sFormattedValue, &pCol);
         }
         return sFormattedValue;
     }

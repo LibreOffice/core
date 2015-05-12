@@ -27,7 +27,7 @@
 class SwFlyAtCntFrm;
 
 // Base class for those Flys that can "move freely" or better that are not
-// bound in Cntnt.
+// bound in Content.
 class SwFlyFreeFrm : public SwFlyFrm
 {
     SwPageFrm *pPage;   // page where the Fly is registered
@@ -42,7 +42,7 @@ class SwFlyFreeFrm : public SwFlyFrm
 
     SwRect maUnclippedFrm;
 
-    void CheckClip( const SwFmtFrmSize &rSz );  //'Emergency' Clipping.
+    void CheckClip( const SwFormatFrmSize &rSz );  //'Emergency' Clipping.
 
     /** determines, if direct environment of fly frame has 'auto' size
 
@@ -62,7 +62,7 @@ protected:
     friend class SwFlyNotify;
     virtual void NotifyBackground( SwPageFrm *pPage,
                                    const SwRect& rRect, PrepareHint eHint) SAL_OVERRIDE;
-    SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
+    SwFlyFreeFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 
     virtual void DestroyImpl() SAL_OVERRIDE;
     virtual ~SwFlyFreeFrm();
@@ -121,20 +121,20 @@ public:
     virtual bool IsFormatPossible() const SAL_OVERRIDE;
 };
 
-// Flys that are bound to LayoutFrms and not to Cntnt
+// Flys that are bound to LayoutFrms and not to Content
 class SwFlyLayFrm : public SwFlyFreeFrm
 {
 public:
     // #i28701#
     TYPEINFO_OVERRIDE();
 
-    SwFlyLayFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
+    SwFlyLayFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 
 protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 };
 
-// Flys that are bound to Cntnt but not in Cntnt
+// Flys that are bound to Content but not in Content
 class SwFlyAtCntFrm : public SwFlyFreeFrm
 {
 protected:
@@ -155,7 +155,7 @@ public:
     // #i28701#
     TYPEINFO_OVERRIDE();
 
-    SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
+    SwFlyAtCntFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 
     void SetAbsPos( const Point &rNew );
 
@@ -172,13 +172,13 @@ public:
     virtual bool IsFormatPossible() const SAL_OVERRIDE;
 };
 
-// Flys that are bound to a character in Cntnt
+// Flys that are bound to a character in Content
 class SwFlyInCntFrm : public SwFlyFrm
 {
     Point aRef;  // relative to this point AbsPos is being calculated
 
     bool bInvalidLayout :1;
-    bool bInvalidCntnt  :1;
+    bool bInvalidContent  :1;
 
     virtual void DestroyImpl() SAL_OVERRIDE;
     virtual ~SwFlyInCntFrm();
@@ -193,7 +193,7 @@ public:
     // #i28701#
     TYPEINFO_OVERRIDE();
 
-    SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
+    SwFlyInCntFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 
     virtual void  Format(  const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
 
@@ -203,12 +203,12 @@ public:
     const Point GetRelPos() const;
 
     inline void InvalidateLayout() const;
-    inline void InvalidateCntnt() const;
+    inline void InvalidateContent() const;
     inline void ValidateLayout() const;
-    inline void ValidateCntnt() const;
-    bool IsInvalid() const { return (bInvalidLayout || bInvalidCntnt); }
+    inline void ValidateContent() const;
+    bool IsInvalid() const { return (bInvalidLayout || bInvalidContent); }
     bool IsInvalidLayout() const { return bInvalidLayout; }
-    bool IsInvalidCntnt() const { return bInvalidCntnt; }
+    bool IsInvalidContent() const { return bInvalidContent; }
 
     // (26.11.93, see tabfrm.hxx, but might also be valid for others)
     // For creation of a Fly after a FlyCnt was created _and_ inserted.
@@ -232,18 +232,18 @@ inline void SwFlyInCntFrm::InvalidateLayout() const
 {
     const_cast<SwFlyInCntFrm*>(this)->bInvalidLayout = true;
 }
-inline void SwFlyInCntFrm::InvalidateCntnt() const
+inline void SwFlyInCntFrm::InvalidateContent() const
 {
-    const_cast<SwFlyInCntFrm*>(this)->bInvalidCntnt = true;
+    const_cast<SwFlyInCntFrm*>(this)->bInvalidContent = true;
 }
 
 inline void SwFlyInCntFrm::ValidateLayout() const
 {
     const_cast<SwFlyInCntFrm*>(this)->bInvalidLayout = false;
 }
-inline void SwFlyInCntFrm::ValidateCntnt() const
+inline void SwFlyInCntFrm::ValidateContent() const
 {
-    const_cast<SwFlyInCntFrm*>(this)->bInvalidCntnt = false;
+    const_cast<SwFlyInCntFrm*>(this)->bInvalidContent = false;
 }
 
 #endif

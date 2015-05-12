@@ -224,7 +224,7 @@ StyleSet setupThemes()
     return aSet;
 }
 
-void changeFont(SwFmt* pFormat, SwDocStyleSheet* pStyle, FontSet& rFontSet)
+void changeFont(SwFormat* pFormat, SwDocStyleSheet* pStyle, FontSet& rFontSet)
 {
     bool bChanged = false;
 
@@ -258,11 +258,11 @@ void changeFont(SwFmt* pFormat, SwDocStyleSheet* pStyle, FontSet& rFontSet)
 
     if (bChanged)
     {
-        pFormat->SetFmtAttr(aFontItem);
+        pFormat->SetFormatAttr(aFontItem);
     }
 }
 
-/*void changeBorder(SwTxtFmtColl* pCollection, SwDocStyleSheet* pStyle, StyleSet& rStyleSet)
+/*void changeBorder(SwTextFormatColl* pCollection, SwDocStyleSheet* pStyle, StyleSet& rStyleSet)
 {
     if (pStyle->GetName() == "Heading")
     {
@@ -272,17 +272,17 @@ void changeFont(SwFmt* pFormat, SwDocStyleSheet* pStyle, FontSet& rFontSet)
         aBorderLine.SetColor(rColorSet.mBaseColors[0]);
         aBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
 
-        pCollection->SetFmtAttr(aBoxItem);
+        pCollection->SetFormatAttr(aBoxItem);
     }
 }*/
 
-void changeColor(SwTxtFmtColl* pCollection, ColorSet& rColorSet, StyleRedefinition* pRedefinition)
+void changeColor(SwTextFormatColl* pCollection, ColorSet& rColorSet, StyleRedefinition* pRedefinition)
 {
     Color aColor = pRedefinition->getColor(rColorSet);
 
     SvxColorItem aColorItem(pCollection->GetColor());
     aColorItem.SetValue(aColor);
-    pCollection->SetFmtAttr(aColorItem);
+    pCollection->SetFormatAttr(aColorItem);
 }
 
 std::vector<FontSet> initFontSets()
@@ -435,7 +435,7 @@ void applyTheme(SfxStyleSheetBasePool* pPool, const OUString& sFontSetName, cons
 
     while (pStyle)
     {
-        SwTxtFmtColl* pCollection = pStyle->GetCollection();
+        SwTextFormatColl* pCollection = pStyle->GetCollection();
 
         changeFont(pCollection, pStyle, aFontSet);
 
@@ -454,9 +454,9 @@ void applyTheme(SfxStyleSheetBasePool* pPool, const OUString& sFontSetName, cons
 
     while (pStyle)
     {
-        SwCharFmt* pCharFormat = pStyle->GetCharFmt();
+        SwCharFormat* pCharFormat = pStyle->GetCharFormat();
 
-        changeFont(static_cast<SwFmt*>(pCharFormat), pStyle, aFontSet);
+        changeFont(static_cast<SwFormat*>(pCharFormat), pStyle, aFontSet);
 
         pStyle = static_cast<SwDocStyleSheet*>(pPool->Next());
     }

@@ -92,7 +92,7 @@ private:
     Size        m_aWinSize;
 
     Size        m_aFrmSize;
-    SwFmtCol    m_aCols;
+    SwFormatCol    m_aCols;
 
 protected:
     virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
@@ -100,7 +100,7 @@ protected:
 public:
     SwColumnOnlyExample(vcl::Window*);
 
-    void        SetColumns(const SwFmtCol& rCol);
+    void        SetColumns(const SwFormatCol& rCol);
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };

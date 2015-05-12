@@ -41,7 +41,7 @@ class SwInputFieldList;
 class SwSectionData;
 class Timer;
 class SvxMacro;
-class SwFmtINetFmt;
+class SwFormatINetFormat;
 class SvxAutoCorrect;
 class NaviContentBookmark;
 struct SwCallMouseEvent;
@@ -86,7 +86,7 @@ private:
     using SwCrsrShell::Down;
     using SwCrsrShell::LeftMargin;
     using SwCrsrShell::RightMargin;
-    using SwCrsrShell::SelectTxtAttr;
+    using SwCrsrShell::SelectTextAttr;
     using SwCrsrShell::GotoPage;
     using SwFEShell::InsertObject;
     using SwEditShell::AutoCorrect;
@@ -160,8 +160,8 @@ public:
     void    Invalidate();
 
     // select table cells for editing of formulas in the ribbonbar
-    inline void SelTblCells( const Link<> &rLink, bool bMark = true );
-    inline void EndSelTblCells();
+    inline void SelTableCells( const Link<> &rLink, bool bMark = true );
+    inline void EndSelTableCells();
 
     // leave per word or per line selection mode. Is usually called in MB-Up.
     bool    IsExtSel() const { return m_bSelWrd || m_bSelLn; }
@@ -227,7 +227,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool SelectTableCol();
     bool SelectTableCell();
 
-    bool SelectTxtAttr( sal_uInt16 nWhich, const SwTxtAttr* pAttr = 0 );
+    bool SelectTextAttr( sal_uInt16 nWhich, const SwTextAttr* pAttr = 0 );
 
     // per column jumps
     bool StartOfColumn      ( bool bSelect = false );
@@ -249,7 +249,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool    PageCrsr(SwTwips lOffset, bool bSelect);
 
     // update fields
-    void    UpdateInputFlds( SwInputFieldList* pLst = 0 );
+    void    UpdateInputFields( SwInputFieldList* pLst = 0 );
 
     void    NoEdit(bool bHideCrsr = true);
     void    Edit();
@@ -326,13 +326,13 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
                           bool bActivate = true,
                           sal_uInt16 nSlotId = 0);       // SlotId for dialog
 
-    bool    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrmFmt **pFlyFrmFmt = 0 );
+    bool    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrameFormat **pFlyFrameFormat = 0 );
     void    LaunchOLEObj( long nVerb = 0 );             // start server
     virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset ) SAL_OVERRIDE;
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
                                   const SwRect *pFlyFrmRect = 0,
-                                  const bool bNoTxtFrmPrtAreaChanged = false ) SAL_OVERRIDE;
+                                  const bool bNoTextFrmPrtAreaChanged = false ) SAL_OVERRIDE;
     virtual void ConnectObj( svt::EmbeddedObjectRef&  xIPObj, const SwRect &rPrt,
                              const SwRect &rFrm ) SAL_OVERRIDE;
 
@@ -343,11 +343,11 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
                     GETSTYLE_CREATESOME,        // if on PoolId create mapt
                     GETSTYLE_CREATEANY };       // return standard if applicable
 
-    SwTxtFmtColl*   GetParaStyle(const OUString &rCollName,
+    SwTextFormatColl*   GetParaStyle(const OUString &rCollName,
                                     GetStyle eCreate = GETSTYLE_NOCREATE);
-    SwCharFmt*      GetCharStyle(const OUString &rFmtName,
+    SwCharFormat*      GetCharStyle(const OUString &rFormatName,
                                     GetStyle eCreate = GETSTYLE_NOCREATE);
-    SwFrmFmt*       GetTblStyle(const OUString &rFmtName);
+    SwFrameFormat*       GetTableStyle(const OUString &rFormatName);
 
     void            SetPageStyle(const OUString &rCollName);
 
@@ -389,9 +389,9 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    MoveCrsr( bool bWithSelect = false );
 
     // update input fields
-    bool    StartInputFldDlg(SwField*, bool bNextButton, vcl::Window* pParentWin = 0, OString* pWindowState = 0);
+    bool    StartInputFieldDlg(SwField*, bool bNextButton, vcl::Window* pParentWin = 0, OString* pWindowState = 0);
     // update DropDown fields
-    bool    StartDropDownFldDlg(SwField*, bool bNextButton, OString* pWindowState = 0);
+    bool    StartDropDownFieldDlg(SwField*, bool bNextButton, OString* pWindowState = 0);
 
     //"Handler" for changes at DrawView - for controls.
     virtual void DrawSelChanged( ) SAL_OVERRIDE;
@@ -405,7 +405,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     bool GotoFieldmark(::sw::mark::IFieldmark const * const pMark);
 
-    bool GotoField( const SwFmtFld& rFld );
+    bool GotoField( const SwFormatField& rField );
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
@@ -424,8 +424,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     // a click at the given field. the cursor is on it.
     // execute the predefined actions.
-    void ClickToField( const SwField& rFld );
-    void ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter = URLLOAD_NOFILTER );
+    void ClickToField( const SwField& rField );
+    void ClickToINetAttr( const SwFormatINetFormat& rItem, sal_uInt16 nFilter = URLLOAD_NOFILTER );
     bool ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter = URLLOAD_NOFILTER );
     inline bool IsInClickToEdit() const ;
 
@@ -439,8 +439,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     virtual void SetReadonlyOption( bool bSet ) SAL_OVERRIDE;
 
     // automatic update of styles
-    void AutoUpdateFrame(SwFrmFmt* pFmt, const SfxItemSet& rStyleSet);
-    void AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM = NULL );
+    void AutoUpdateFrame(SwFrameFormat* pFormat, const SfxItemSet& rStyleSet);
+    void AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM = NULL );
 
     // link for inserting ranges via Drag&Drop/Clipboard
     DECL_LINK( InsertRegionDialog, SwSectionData* );
@@ -460,7 +460,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void addCurrentPosition();
     bool GotoFly( const OUString& rName, FlyCntType eType = FLYCNTTYPE_ALL,
          bool bSelFrame = true );
-    bool GotoINetAttr( const SwTxtINetFmt& rAttr );
+    bool GotoINetAttr( const SwTextINetFormat& rAttr );
     void GotoOutline( sal_uInt16 nIdx );
     bool GotoOutline( const OUString& rName );
     bool GotoRegion( const OUString& rName );
@@ -468,7 +468,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
         sal_uInt16 nSeqNo = 0 );
     bool GotoNextTOXBase( const OUString* pName = 0);
     bool GotoTable( const OUString& rName );
-    bool GotoFld( const SwFmtFld& rFld );
+    bool GotoFormatField( const SwFormatField& rField );
     const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, bool bSelect = false);
 
     void ChangeHeaderOrFooter(const OUString& rStyleName, bool bHeader, bool bOn, bool bShowWarning);
@@ -561,7 +561,7 @@ private:
     bool    m_bRetainSelection :1; // Do not remove selections
 
     Point   m_aStart;
-    Link<>  m_aSelTblLink;
+    Link<>  m_aSelTableLink;
 
     // resets the cursor stack after movement by PageUp/-Down
     SAL_DLLPRIVATE void  _ResetCursorStack();
@@ -616,15 +616,15 @@ inline void SwWrtShell::ResetCursorStack()
         _ResetCursorStack();
 }
 
-inline void SwWrtShell::SelTblCells(const Link<> &rLink, bool bMark )
+inline void SwWrtShell::SelTableCells(const Link<> &rLink, bool bMark )
 {
-    SetSelTblCells( true );
+    SetSelTableCells( true );
     m_bClearMark = bMark;
-    m_aSelTblLink = rLink;
+    m_aSelTableLink = rLink;
 }
-inline void SwWrtShell::EndSelTblCells()
+inline void SwWrtShell::EndSelTableCells()
 {
-    SetSelTblCells( false );
+    SetSelTableCells( false );
     m_bClearMark = true;
 }
 

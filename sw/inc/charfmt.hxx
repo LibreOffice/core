@@ -21,18 +21,18 @@
 
 #include <format.hxx>
 
-class SW_DLLPUBLIC SwCharFmt : public SwFmt
+class SW_DLLPUBLIC SwCharFormat : public SwFormat
 {
     friend class SwDoc;
-    friend class SwTxtFmtColl;
+    friend class SwTextFormatColl;
 
-    SwCharFmt( SwAttrPool& rPool, const sal_Char* pFmtName,
-                SwCharFmt *pDerivedFrom )
-          : SwFmt( rPool, pFmtName, aCharFmtSetRange, pDerivedFrom, RES_CHRFMT )
+    SwCharFormat( SwAttrPool& rPool, const sal_Char* pFormatName,
+                SwCharFormat *pDerivedFrom )
+          : SwFormat( rPool, pFormatName, aCharFormatSetRange, pDerivedFrom, RES_CHRFMT )
     {}
-    SwCharFmt( SwAttrPool& rPool, const OUString &rFmtName,
-                SwCharFmt *pDerivedFrom )
-          : SwFmt( rPool, rFmtName, aCharFmtSetRange, pDerivedFrom, RES_CHRFMT )
+    SwCharFormat( SwAttrPool& rPool, const OUString &rFormatName,
+                SwCharFormat *pDerivedFrom )
+          : SwFormat( rPool, rFormatName, aCharFormatSetRange, pDerivedFrom, RES_CHRFMT )
     {}
 
 public:
@@ -41,11 +41,11 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-namespace CharFmt
+namespace CharFormat
 {
     SW_DLLPUBLIC extern const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr );
-    extern const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich );
-    extern bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr );
+    extern const SfxPoolItem* GetItem( const SwTextAttr& rAttr, sal_uInt16 nWhich );
+    extern bool IsItemIncluded( const sal_uInt16 nWhich, const SwTextAttr *pAttr );
 }
 
 #endif

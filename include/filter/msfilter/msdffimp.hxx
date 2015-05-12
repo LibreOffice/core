@@ -55,7 +55,7 @@ class Polygon;
 namespace tools { class PolyPolygon; }
 class FmFormModel;
 class SdrModel;
-class SwFlyFrmFmt;
+class SwFlyFrameFormat;
 
 struct SvxMSDffBLIPInfo;
 struct SvxMSDffShapeInfo;
@@ -695,12 +695,12 @@ public:
     void StoreShapeOrder(sal_uLong      nId,
                          sal_uLong      nTxBx,
                          SdrObject*     pObject,
-                         SwFlyFrmFmt*   pFly = 0,
+                         SwFlyFrameFormat*   pFly = 0,
                          short          nHdFtSection = 0) const;
 
     void ExchangeInShapeOrder(SdrObject*    pOldObject,
                               sal_uLong     nTxBx,
-                              SwFlyFrmFmt*  pFly,
+                              SwFlyFrameFormat*  pFly,
                               SdrObject*    pObject) const;
 
     void RemoveFromShapeOrder( SdrObject* pObject ) const;
@@ -778,7 +778,7 @@ struct SvxMSDffShapeOrder
 {
     sal_uLong nShapeId;  ///< shape id used in PLCF SPA and in mso_fbtSp (FSP)
     sal_uLong nTxBxComp; ///< chain or box number in the Text-Box-Story (or NULL)
-    SwFlyFrmFmt* pFly;   ///< format of frame that was inserted as a replacement
+    SwFlyFrameFormat* pFly;   ///< format of frame that was inserted as a replacement
                          ///< for a Sdr-Text object in Writer - needed for
                          ///< chaining!
     short nHdFtSection;  ///< used by Writer to find out if linked frames are in

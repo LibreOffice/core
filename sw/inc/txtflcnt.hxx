@@ -23,34 +23,34 @@
 
 class SwFlyInCntFrm;
 class SwFrm;
-class SwTxtNode;
+class SwTextNode;
 class SwDoc;
 
 // Attribute for line-bound frames (without end index).
-class SwTxtFlyCnt : public SwTxtAttr
+class SwTextFlyCnt : public SwTextAttr
 {
     SwFlyInCntFrm  *_GetFlyFrm( const SwFrm *pCurrFrm );
 public:
-    SwTxtFlyCnt( SwFmtFlyCnt& rAttr, sal_Int32 nStart );
+    SwTextFlyCnt( SwFormatFlyCnt& rAttr, sal_Int32 nStart );
 
-    // Sets anchor in pFmt and
-    void    SetAnchor( const SwTxtNode *pNode );
+    // Sets anchor in pFormat and
+    void    SetAnchor( const SwTextNode *pNode );
 
     inline        SwFlyInCntFrm  *GetFlyFrm( const SwFrm *pCurrFrm );
     inline const  SwFlyInCntFrm  *GetFlyFrm( const SwFrm *pCurrFrm ) const;
 
     // creates for itself a new FlyFrameFormat.
-    void CopyFlyFmt( SwDoc* pDoc );
+    void CopyFlyFormat( SwDoc* pDoc );
 };
 
-inline SwFlyInCntFrm *SwTxtFlyCnt::GetFlyFrm( const SwFrm *pCurrFrm )
+inline SwFlyInCntFrm *SwTextFlyCnt::GetFlyFrm( const SwFrm *pCurrFrm )
 {
     return _GetFlyFrm( pCurrFrm );
 }
 
-inline const SwFlyInCntFrm *SwTxtFlyCnt::GetFlyFrm( const SwFrm *pCurrFrm ) const
+inline const SwFlyInCntFrm *SwTextFlyCnt::GetFlyFrm( const SwFrm *pCurrFrm ) const
 {
-    return (const_cast<SwTxtFlyCnt*>(this))->_GetFlyFrm( pCurrFrm );
+    return (const_cast<SwTextFlyCnt*>(this))->_GetFlyFrm( pCurrFrm );
 }
 
 #endif

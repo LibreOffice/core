@@ -32,7 +32,7 @@
 
 class SwDoc;
 class SwModify;
-class SwFmtRefMark;
+class SwFormatRefMark;
 
 typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::lang::XUnoTunnel
@@ -53,12 +53,12 @@ private:
 
     virtual ~SwXReferenceMark();
 
-    SwXReferenceMark(SwDoc *const pDoc, SwFmtRefMark *const pMark);
+    SwXReferenceMark(SwDoc *const pDoc, SwFormatRefMark *const pMark);
 
 public:
 
     static css::uno::Reference<css::text::XTextContent>
-        CreateXReferenceMark(SwDoc & rDoc, SwFmtRefMark * pMarkFmt);
+        CreateXReferenceMark(SwDoc & rDoc, SwFormatRefMark * pMarkFormat);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

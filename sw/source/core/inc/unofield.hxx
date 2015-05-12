@@ -32,7 +32,7 @@
 
 class SwFieldType;
 class SwDoc;
-class SwFmtFld;
+class SwFormatField;
 class SwField;
 class SwSetExpField;
 class SwTextAPIObject;
@@ -67,9 +67,9 @@ public:
                 sal_uInt16 nResId = 0xFFFF);
 
     static OUString GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc);
-    static OUString LocalizeFormula(const SwSetExpField& rFld, const OUString& rFormula, bool bQuery);
+    static OUString LocalizeFormula(const SwSetExpField& rField, const OUString& rFormula, bool bQuery);
 
-    SwFieldType* GetFldType(bool bDontCreate = false) const;
+    SwFieldType* GetFieldType(bool bDontCreate = false) const;
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -167,7 +167,7 @@ private:
 
     virtual ~SwXTextField();
 
-    SwXTextField(SwFmtFld& rFmt, SwDoc & rDoc);
+    SwXTextField(SwFormatField& rFormat, SwDoc & rDoc);
 
     /// descriptor
     SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc=0);
@@ -177,7 +177,7 @@ public:
 
     /// @return an SwXTextField, either an already existing one or a new one
     static ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField>
-        CreateXTextField(SwDoc * pDoc, SwFmtFld const* pFmt,
+        CreateXTextField(SwDoc * pDoc, SwFormatField const* pFormat,
                 sal_uInt16 nServiceId = 0xFFFF);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();

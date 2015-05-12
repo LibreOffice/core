@@ -32,14 +32,14 @@ class SwField;
 class SwWrtShell;
 
 // insert fields
-class SwFldInputDlg: public SvxStandardDialog
+class SwFieldInputDlg: public SvxStandardDialog
 {
     virtual void    Apply() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType ) SAL_OVERRIDE;
 
     SwWrtShell&       rSh;
-    SwInputField*     pInpFld;
-    SwSetExpField*    pSetFld;
+    SwInputField*     pInpField;
+    SwSetExpField*    pSetField;
     SwUserFieldType*  pUsrType;
 
     VclPtr<Edit>             m_pLabelED;
@@ -51,9 +51,9 @@ class SwFldInputDlg: public SvxStandardDialog
 
     DECL_LINK(NextHdl, void *);
 public:
-    SwFldInputDlg(  vcl::Window *pParent, SwWrtShell &rSh,
+    SwFieldInputDlg(  vcl::Window *pParent, SwWrtShell &rSh,
                     SwField* pField, bool bNextButton = false );
-    virtual ~SwFldInputDlg();
+    virtual ~SwFieldInputDlg();
     virtual void dispose() SAL_OVERRIDE;
 };
 

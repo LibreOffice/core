@@ -373,9 +373,9 @@ void SwTemplateDlg::RefreshInputSet()
 void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     // set style's and metric's names
-    OUString sNumCharFmt, sBulletCharFmt;
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
+    OUString sNumCharFormat, sBulletCharFormat;
+    SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFormat);
+    SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFormat);
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
     if (nId == m_nFontId)
@@ -431,7 +431,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     else if (nId == m_nOutlineId)
     {
         //  handle if the current paragraph style is assigned to a list level of outline style,
-        SwTxtFmtColl* pTmpColl = pWrtShell->FindTxtFmtCollByName( GetStyleSheet().GetName() );
+        SwTextFormatColl* pTmpColl = pWrtShell->FindTextFormatCollByName( GetStyleSheet().GetName() );
         if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
         {
             static_cast<SwParagraphNumTabPage&>(rPage).DisableOutline() ;
@@ -530,25 +530,25 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nNumId)
     {
-        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nNumOptId)
     {
 
-        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
         // collect character styles
-        ScopedVclPtrInstance< ListBox > rCharFmtLB(this);
-        rCharFmtLB->Clear();
-        rCharFmtLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
+        ScopedVclPtrInstance< ListBox > rCharFormatLB(this);
+        rCharFormatLB->Clear();
+        rCharFormatLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
         SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
-        ::FillCharStyleListBox(*rCharFmtLB.get(),  pDocShell);
+        ::FillCharStyleListBox(*rCharFormatLB.get(),  pDocShell);
 
         std::vector<OUString> aList;
-        for(sal_Int32 j = 0; j < rCharFmtLB->GetEntryCount(); j++)
-             aList.push_back( rCharFmtLB->GetEntry(j) );
+        for(sal_Int32 j = 0; j < rCharFormatLB->GetEntryCount(); j++)
+             aList.push_back( rCharFormatLB->GetEntry(j) );
 
         aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
         FieldUnit eMetric = ::GetDfltMetric(pDocShell->ISA(SwWebDocShell));
@@ -565,7 +565,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nBulletId)
     {
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nHeaderId)

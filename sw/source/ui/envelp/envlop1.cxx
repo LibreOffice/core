@@ -144,7 +144,7 @@ SwEnvDlg::SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet,
     }
 
     AddTabPage("envelope", SwEnvPage   ::Create, 0);
-    AddTabPage("format", SwEnvFmtPage::Create, 0);
+    AddTabPage("format", SwEnvFormatPage::Create, 0);
     m_nEnvPrintId = AddTabPage("printer", SwEnvPrtPage::Create, 0);
 }
 
@@ -176,13 +176,13 @@ short SwEnvDlg::Ok()
     {
         if (pAddresseeSet)
         {
-            SwTxtFmtColl* pColl = pSh->GetTxtCollFromPool(RES_POOLCOLL_JAKETADRESS);
-            pColl->SetFmtAttr(*pAddresseeSet);
+            SwTextFormatColl* pColl = pSh->GetTextCollFromPool(RES_POOLCOLL_JAKETADRESS);
+            pColl->SetFormatAttr(*pAddresseeSet);
         }
         if (pSenderSet)
         {
-            SwTxtFmtColl* pColl = pSh->GetTxtCollFromPool(RES_POOLCOLL_SENDADRESS);
-            pColl->SetFmtAttr(*pSenderSet);
+            SwTextFormatColl* pColl = pSh->GetTextCollFromPool(RES_POOLCOLL_SENDADRESS);
+            pColl->SetFormatAttr(*pSenderSet);
         }
     }
 

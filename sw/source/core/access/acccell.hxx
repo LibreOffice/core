@@ -26,7 +26,7 @@
 
 class SwCellFrm;
 class SwAccessibleTable;
-class SwFrmFmt;
+class SwFrameFormat;
 
 class SwAccessibleCell : public SwAccessibleContext,
                   ::com::sun::star::accessibility::XAccessibleValue,
@@ -113,7 +113,7 @@ public:
     ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 private:
-    SwFrmFmt* GetTblBoxFormat() const;
+    SwFrameFormat* GetTableBoxFormat() const;
 
 public:
     virtual ::com::sun::star::uno::Any SAL_CALL getCurrentValue( )

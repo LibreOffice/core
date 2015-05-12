@@ -142,7 +142,7 @@ void SwInputWindow::dispose()
     }
     delete pMgr;
     if(pWrtShell)
-        pWrtShell->EndSelTblCells();
+        pWrtShell->EndSelTableCells();
 
     CleanupUglyHackWithUndo();
 
@@ -157,7 +157,7 @@ void SwInputWindow::CleanupUglyHackWithUndo()
     {
         if (pWrtShell)
         {
-            DelBoxCntnt();
+            DelBoxContent();
             pWrtShell->DoUndo(m_bDoesUndo);
             if (m_bCallUndo)
             {
@@ -207,11 +207,11 @@ void SwInputWindow::ShowWin()
 
         OSL_ENSURE(pWrtShell, "no WrtShell!");
         // Cursor in table
-        bIsTable = pWrtShell->IsCrsrInTbl();
+        bIsTable = pWrtShell->IsCrsrInTable();
 
         if( bFirst )
-            pWrtShell->SelTblCells( LINK( this, SwInputWindow,
-                                                SelTblCellsNotify) );
+            pWrtShell->SelTableCells( LINK( this, SwInputWindow,
+                                                SelTableCellsNotify) );
         if( bIsTable )
         {
             const OUString& rPos = pWrtShell->GetBoxNms();
@@ -220,20 +220,20 @@ void SwInputWindow::ShowWin()
             while( (nPos = rPos.indexOf( ':',nPos + 1 ) ) != -1 )
                 nSrch = (short) nPos;
             aPos->SetText( rPos.copy( ++nSrch ) );
-            aAktTableName = pWrtShell->GetTableFmt()->GetName();
+            aAktTableName = pWrtShell->GetTableFormat()->GetName();
         }
         else
             aPos->SetText(SW_RESSTR(STR_TBL_FORMULA));
 
         // Edit current field
         OSL_ENSURE(pMgr == 0, "FieldManager not deleted");
-        pMgr = new SwFldMgr;
+        pMgr = new SwFieldMgr;
 
         // Formular should always begin with "=" , so set here
         OUString sEdit('=');
-        if( pMgr->GetCurFld() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
+        if( pMgr->GetCurField() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
         {
-            sEdit += pMgr->GetCurFldPar2();
+            sEdit += pMgr->GetCurFieldPar2();
         }
         else if( bFirst )
         {
@@ -268,8 +268,8 @@ void SwInputWindow::ShowWin()
                 pWrtShell->DoUndo(false);
 
                 SfxItemSet aSet( pWrtShell->GetAttrPool(), RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
-                if( pWrtShell->GetTblBoxFormulaAttrs( aSet ))
-                    sEdit += static_cast<const SwTblBoxFormula&>(aSet.Get( RES_BOXATR_FORMULA )).GetFormula();
+                if( pWrtShell->GetTableBoxFormulaAttrs( aSet ))
+                    sEdit += static_cast<const SwTableBoxFormula&>(aSet.Get( RES_BOXATR_FORMULA )).GetFormula();
             }
         }
 
@@ -286,7 +286,7 @@ void SwInputWindow::ShowWin()
 
         aEdit->SetText( sEdit );
         aEdit->SetSelection( Selection( sEdit.getLength(), sEdit.getLength() ) );
-        sOldFml = sEdit;
+        sOldFormula = sEdit;
 
         aEdit->Invalidate();
         aEdit->Update();
@@ -388,7 +388,7 @@ void  SwInputWindow::ApplyFormula()
         sEdit = sEdit.copy( 1 );
     SfxStringItem aParam(FN_EDIT_FORMULA, sEdit);
 
-    pWrtShell->EndSelTblCells();
+    pWrtShell->EndSelTableCells();
     pView->GetEditWin().GrabFocus();
     const SfxPoolItem* aArgs[2];
     aArgs[0] = &aParam;
@@ -408,7 +408,7 @@ void  SwInputWindow::CancelFormula()
         if( bDelSel )
             pWrtShell->EnterStdMode();
 
-        pWrtShell->EndSelTblCells();
+        pWrtShell->EndSelTableCells();
 
         pView->GetEditWin().GrabFocus();
 
@@ -419,24 +419,24 @@ void  SwInputWindow::CancelFormula()
 const sal_Unicode CH_LRE = 0x202a;
 const sal_Unicode CH_PDF = 0x202c;
 
-IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
+IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell *, pCaller )
 {
     if(bIsTable)
     {
-        SwFrmFmt* pTblFmt = pCaller->GetTableFmt();
+        SwFrameFormat* pTableFormat = pCaller->GetTableFormat();
         OUString sBoxNms( pCaller->GetBoxNms() );
-        OUString sTblNm;
-        if( pTblFmt && aAktTableName != pTblFmt->GetName() )
-            sTblNm = pTblFmt->GetName();
+        OUString sTableNm;
+        if( pTableFormat && aAktTableName != pTableFormat->GetName() )
+            sTableNm = pTableFormat->GetName();
 
-        aEdit->UpdateRange( sBoxNms, sTblNm );
+        aEdit->UpdateRange( sBoxNms, sTableNm );
 
         OUString sNew;
         sNew += OUString(CH_LRE);
         sNew += aEdit->GetText();
         sNew += OUString(CH_PDF);
 
-        if( sNew != sOldFml )
+        if( sNew != sOldFormula )
         {
             // The WrtShell is in the table selection,
             // then cancel the table selection otherwise, the cursor is
@@ -452,7 +452,7 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
             pIDCO->DeleteRange( aPam );
             pIDCO->InsertString( aPam, sNew );
             pWrtShell->EndAllAction();
-            sOldFml = sNew;
+            sOldFormula = sNew;
         }
     }
     else
@@ -481,19 +481,19 @@ IMPL_LINK_NOARG(SwInputWindow, ModifyHdl)
     if (bIsTable && m_bResetUndo)
     {
         pWrtShell->StartAllAction();
-        DelBoxCntnt();
+        DelBoxContent();
         OUString sNew;
         sNew += OUString(CH_LRE);
         sNew += aEdit->GetText();
         sNew += OUString(CH_PDF);
         pWrtShell->SwEditShell::Insert2( sNew );
         pWrtShell->EndAllAction();
-        sOldFml = sNew;
+        sOldFormula = sNew;
     }
     return 0;
 }
 
-void SwInputWindow::DelBoxCntnt()
+void SwInputWindow::DelBoxContent()
 {
     if( bIsTable )
     {

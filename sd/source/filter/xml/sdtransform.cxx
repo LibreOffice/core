@@ -299,10 +299,10 @@ bool SdTransformOOo2xDocument::transformItemSet( SfxItemSet& rSet, bool bNumberi
     if( bNumbering )
     {
         SvxLRSpaceItem aItem( *static_cast<const SvxLRSpaceItem*>(rSet.GetItem( EE_PARA_LRSPACE )) );
-        if( (aItem.GetLeft() != 0) || (aItem.GetTxtFirstLineOfst() != 0) )
+        if( (aItem.GetLeft() != 0) || (aItem.GetTextFirstLineOfst() != 0) )
         {
             aItem.SetLeftValue( 0 );
-            aItem.SetTxtFirstLineOfst( 0 );
+            aItem.SetTextFirstLineOfst( 0 );
             rSet.Put( aItem );
             bRet = true;
         }

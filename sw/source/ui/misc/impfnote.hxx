@@ -32,7 +32,7 @@ class SwEndNoteOptionPage : public SfxTabPage
 {
     VclPtr<SwNumberingTypeListBox> m_pNumViewBox;
     VclPtr<FixedText> m_pOffsetLbl;
-    VclPtr<NumericField> m_pOffsetFld;
+    VclPtr<NumericField> m_pOffsetField;
     VclPtr<ListBox> m_pNumCountBox;
     VclPtr<Edit> m_pPrefixED;
     VclPtr<Edit> m_pSuffixED;
@@ -46,8 +46,8 @@ class SwEndNoteOptionPage : public SfxTabPage
     VclPtr<FixedText> m_pPageTemplLbl;
     VclPtr<ListBox> m_pPageTemplBox;
 
-    VclPtr<ListBox> m_pFtnCharAnchorTemplBox;
-    VclPtr<ListBox> m_pFtnCharTextTemplBox;
+    VclPtr<ListBox> m_pFootnoteCharAnchorTemplBox;
+    VclPtr<ListBox> m_pFootnoteCharTextTemplBox;
 
     VclPtr<Edit> m_pContEdit;
     VclPtr<Edit> m_pContFromEdit;

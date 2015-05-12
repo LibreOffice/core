@@ -96,8 +96,8 @@ public:
     // the pointer is transferred to the possession of the ConfigItems!
     void SetAutoCorrect( SvxAutoCorrect* );
 
-    bool IsAutoFmtByInput() const       { return bAutoFmtByInput; }
-    void SetAutoFmtByInput( bool bSet ) { bAutoFmtByInput = bSet;aSwConfig.SetModified();}
+    bool IsAutoFormatByInput() const       { return bAutoFmtByInput; }
+    void SetAutoFormatByInput( bool bSet ) { bAutoFmtByInput = bSet;aSwConfig.SetModified();}
 
     bool IsSaveRelFile() const          { return bFileRel; }
     void SetSaveRelFile( bool bSet )    { bFileRel = bSet; aSwConfig.SetModified(); }

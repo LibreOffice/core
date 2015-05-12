@@ -28,7 +28,7 @@ static SwMoveFnCollection aFwrd = {
     /* fnDoc        */  &GoEndDoc,
     /* fnSections   */  &GoEndSection,
     /* fnCmpOp      */  &SwPosition::operator<,
-    /* fnGetHint    */  &GetFrwrdTxtHint,
+    /* fnGetHint    */  &GetFrwrdTextHint,
     /* fnSearch     */  &utl::TextSearch::SearchForward,
     /* fnSection    */  &SwNodes::GoStartOfSection
 };
@@ -39,7 +39,7 @@ static SwMoveFnCollection aBwrd = {
     /* fnDoc        */  &GoStartDoc,
     /* fnSections   */  &GoStartSection,
     /* fnCmpOp      */  &SwPosition::operator>,
-    /* fnGetHint    */  &GetBkwrdTxtHint,
+    /* fnGetHint    */  &GetBkwrdTextHint,
     /* fnSearch     */  &utl::TextSearch::SearchBackward,
     /* fnSection    */  &SwNodes::GoEndOfSection
 };
@@ -47,10 +47,10 @@ static SwMoveFnCollection aBwrd = {
 SwGoInDoc fnGoDoc       = &GoInDoc;
 SwGoInDoc fnGoSection   = &GoInSection;
 SwGoInDoc fnGoNode      = &GoInNode;
-SwGoInDoc fnGoCntnt     = &GoInCntnt;
-SwGoInDoc fnGoCntntCells = &GoInCntntCells;
-SwGoInDoc fnGoCntntSkipHidden      = &GoInCntntSkipHidden;
-SwGoInDoc fnGoCntntCellsSkipHidden = &GoInCntntCellsSkipHidden;
+SwGoInDoc fnGoContent     = &GoInContent;
+SwGoInDoc fnGoContentCells = &GoInContentCells;
+SwGoInDoc fnGoContentSkipHidden      = &GoInContentSkipHidden;
+SwGoInDoc fnGoContentCellsSkipHidden = &GoInContentCellsSkipHidden;
 
 SwWhichPara fnParaPrev  = &GoPrevPara;
 SwWhichPara fnParaCurr  = &GoCurrPara;

@@ -298,10 +298,10 @@ void FrameView::Update(SdOptions* pOptions)
 
         SetSolidDragging( pOptions->IsSolidDragging() );
 
-        SetGridCoarse( Size( pOptions->GetFldDrawX(), pOptions->GetFldDrawY() ) );
-        SetGridFine( Size( pOptions->GetFldDivisionX(), pOptions->GetFldDivisionY() ) );
-        Fraction aFractX(pOptions->GetFldDrawX(), pOptions->GetFldDrawX() / ( pOptions->GetFldDivisionX() ? pOptions->GetFldDivisionX() : 1 ));
-        Fraction aFractY(pOptions->GetFldDrawY(), pOptions->GetFldDrawY() / ( pOptions->GetFldDivisionY() ? pOptions->GetFldDivisionY() : 1 ));
+        SetGridCoarse( Size( pOptions->GetFieldDrawX(), pOptions->GetFieldDrawY() ) );
+        SetGridFine( Size( pOptions->GetFieldDivisionX(), pOptions->GetFieldDivisionY() ) );
+        Fraction aFractX(pOptions->GetFieldDrawX(), pOptions->GetFieldDrawX() / ( pOptions->GetFieldDivisionX() ? pOptions->GetFieldDivisionX() : 1 ));
+        Fraction aFractY(pOptions->GetFieldDrawY(), pOptions->GetFieldDrawY() / ( pOptions->GetFieldDivisionY() ? pOptions->GetFieldDivisionY() : 1 ));
         SetSnapGridWidth(aFractX, aFractY);
         SetQuickEdit(pOptions->IsQuickEdit());
 

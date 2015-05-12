@@ -386,7 +386,7 @@ void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
 
     const SwDoc *pDoc = pStyle->GetDoc();
 
-    SwTxtFmtColl *pColl = pDoc->FindTxtFmtCollByName( pStyle->GetStyleName() );
+    SwTextFormatColl *pColl = pDoc->FindTextFormatCollByName( pStyle->GetStyleName() );
     OSL_ENSURE( pColl, "Text collection not found" );
     if( !pColl || RES_CONDTXTFMTCOLL != pColl->Which() )
         return;
@@ -403,14 +403,14 @@ void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
                                       sName,
                                       nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
                                       true);
-        SwTxtFmtColl* pCondColl = pDoc->FindTxtFmtCollByName( sName );
+        SwTextFormatColl* pCondColl = pDoc->FindTextFormatCollByName( sName );
         OSL_ENSURE( pCondColl,
             "SwXMLItemSetStyleContext_Impl::ConnectConditions: cond coll missing" );
         if( pCondColl )
         {
             SwCollCondition aCond( pCondColl, pCond->GetCondition(),
                                               pCond->GetSubCondition() );
-            static_cast<SwConditionTxtFmtColl*>(pColl)->InsertCondition( aCond );
+            static_cast<SwConditionTextFormatColl*>(pColl)->InsertCondition( aCond );
         }
     }
 }
@@ -653,21 +653,21 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     }
 
     const SfxPoolItem *pItem;
-    SwFmtPageDesc *pFmtPageDesc = 0;
+    SwFormatPageDesc *pFormatPageDesc = 0;
     if( SfxItemState::SET == pItemSet->GetItemState( RES_PAGEDESC, false,
                                                 &pItem ) )
     {
-         if( static_cast<const SwFmtPageDesc *>(pItem)->GetPageDesc() != pPageDesc )
-            pFmtPageDesc = new SwFmtPageDesc( *static_cast<const SwFmtPageDesc *>(pItem) );
+         if( static_cast<const SwFormatPageDesc *>(pItem)->GetPageDesc() != pPageDesc )
+            pFormatPageDesc = new SwFormatPageDesc( *static_cast<const SwFormatPageDesc *>(pItem) );
     }
     else
-        pFmtPageDesc = new SwFmtPageDesc();
+        pFormatPageDesc = new SwFormatPageDesc();
 
-    if( pFmtPageDesc )
+    if( pFormatPageDesc )
     {
-        pFmtPageDesc->RegisterToPageDesc( *pPageDesc );
-        pItemSet->Put( *pFmtPageDesc );
-        delete pFmtPageDesc;
+        pFormatPageDesc->RegisterToPageDesc( *pPageDesc );
+        pItemSet->Put( *pFormatPageDesc );
+        delete pFormatPageDesc;
     }
 }
 
@@ -690,7 +690,7 @@ bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
                 SfxItemPool& rItemPool = pDoc->GetAttrPool();
                 pItemSet = new SfxItemSet( rItemPool, aTableBoxSetRange );
             }
-            SwTblBoxNumFormat aNumFormatItem(nFormat);
+            SwTableBoxNumFormat aNumFormatItem(nFormat);
             pItemSet->Put(aNumFormatItem);
         }
 
@@ -998,20 +998,20 @@ void SwXMLImport::FinishStyles()
         GetStyles()->FinishStyles( !IsInsertMode() );
 }
 
-void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
+void SwXMLImport::UpdateTextCollConditions( SwDoc *pDoc )
 {
     if( !pDoc )
         pDoc = SwImport::GetDocFromXMLImport( *this );
 
-    const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
+    const SwTextFormatColls& rColls = *pDoc->GetTextFormatColls();
     const size_t nCount = rColls.size();
     for( size_t i=0; i < nCount; ++i )
     {
-        SwTxtFmtColl *pColl = rColls[i];
+        SwTextFormatColl *pColl = rColls[i];
         if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
         {
-            const SwFmtCollConditions& rConditions =
-                static_cast<const SwConditionTxtFmtColl *>(pColl)->GetCondColls();
+            const SwFormatCollConditions& rConditions =
+                static_cast<const SwConditionTextFormatColl *>(pColl)->GetCondColls();
             bool bSendModify = false;
             for( size_t j=0; j < rConditions.size() && !bSendModify; ++j )
             {

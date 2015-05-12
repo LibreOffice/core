@@ -25,15 +25,15 @@
 #include <editeng/numitem.hxx>
 #include <fmtcol.hxx>
 
-class SwTxtFmtColl;
+class SwTextFormatColl;
 class SwPageDesc;
-class SwCharFmt;
+class SwCharFormat;
 class SwDoc;
 
 class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
 {
     SwDepend    aPageDescDep;
-    SwDepend    aCharFmtDep, aAnchorCharFmtDep;
+    SwDepend    aCharFormatDep, aAnchorCharFormatDep;
     OUString sPrefix;
     OUString sSuffix;
 protected:
@@ -41,29 +41,29 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
 
 public:
-    SvxNumberType aFmt;
-    sal_uInt16    nFtnOffset;
+    SvxNumberType aFormat;
+    sal_uInt16    nFootnoteOffset;
 
     void        ChgPageDesc( SwPageDesc *pDesc );
     SwPageDesc* GetPageDesc( SwDoc &rDoc ) const;
     bool        KnowsPageDesc() const;
     bool        DependsOn( const SwPageDesc* ) const;
 
-    void SetFtnTxtColl(SwTxtFmtColl& rColl);
-    SwTxtFmtColl* GetFtnTxtColl() const { return const_cast<SwTxtFmtColl*>(static_cast<const SwTxtFmtColl*>(GetRegisteredIn())); } // can be 0.
+    void SetFootnoteTextColl(SwTextFormatColl& rColl);
+    SwTextFormatColl* GetFootnoteTextColl() const { return const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(GetRegisteredIn())); } // can be 0.
 
-    SwCharFmt* GetCharFmt(SwDoc &rDoc) const;
-    void SetCharFmt( SwCharFmt* );
-    SwClient   *GetCharFmtDep() const { return (SwClient*)&aCharFmtDep; }
+    SwCharFormat* GetCharFormat(SwDoc &rDoc) const;
+    void SetCharFormat( SwCharFormat* );
+    SwClient   *GetCharFormatDep() const { return (SwClient*)&aCharFormatDep; }
 
-    SwCharFmt* GetAnchorCharFmt(SwDoc &rDoc) const;
-    void SetAnchorCharFmt( SwCharFmt* );
-    SwClient   *GetAnchorCharFmtDep() const { return (SwClient*)&aAnchorCharFmtDep; }
+    SwCharFormat* GetAnchorCharFormat(SwDoc &rDoc) const;
+    void SetAnchorCharFormat( SwCharFormat* );
+    SwClient   *GetAnchorCharFormatDep() const { return (SwClient*)&aAnchorCharFormatDep; }
 
     SwEndNoteInfo & operator=(const SwEndNoteInfo&);
     bool operator==( const SwEndNoteInfo &rInf ) const;
 
-    SwEndNoteInfo( SwTxtFmtColl *pTxtColl = 0);
+    SwEndNoteInfo( SwTextFormatColl *pTextColl = 0);
     SwEndNoteInfo(const SwEndNoteInfo&);
 
     const OUString& GetPrefix() const  { return sPrefix; }
@@ -74,34 +74,34 @@ public:
     void ReleaseCollection() { if ( GetRegisteredInNonConst() ) GetRegisteredInNonConst()->Remove( this ); }
 };
 
-enum SwFtnPos
+enum SwFootnotePos
 {
     // Momentarily only PAGE and CHAPTER. CHAPTER == document-endnotes.
     FTNPOS_PAGE = 1,
     FTNPOS_CHAPTER = 8
 };
 
-enum SwFtnNum
+enum SwFootnoteNum
 {
     FTNNUM_PAGE, FTNNUM_CHAPTER, FTNNUM_DOC
 };
 
-class SW_DLLPUBLIC SwFtnInfo: public SwEndNoteInfo
+class SW_DLLPUBLIC SwFootnoteInfo: public SwEndNoteInfo
 {
     using SwEndNoteInfo::operator ==;
 
 public:
     OUString  aQuoVadis;
     OUString  aErgoSum;
-    SwFtnPos  ePos;
-    SwFtnNum  eNum;
+    SwFootnotePos  ePos;
+    SwFootnoteNum  eNum;
 
-    SwFtnInfo& operator=(const SwFtnInfo&);
+    SwFootnoteInfo& operator=(const SwFootnoteInfo&);
 
-    bool operator==( const SwFtnInfo &rInf ) const;
+    bool operator==( const SwFootnoteInfo &rInf ) const;
 
-    SwFtnInfo(SwTxtFmtColl* pTxtColl = 0);
-    SwFtnInfo(const SwFtnInfo&);
+    SwFootnoteInfo(SwTextFormatColl* pTextColl = 0);
+    SwFootnoteInfo(const SwFootnoteInfo&);
 };
 
 #endif

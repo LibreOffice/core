@@ -135,8 +135,8 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         }
 
         // accessors to the format
-        virtual SwFrmFmt& GetFrmFmt() SAL_OVERRIDE;
-        virtual const SwFrmFmt& GetFrmFmt() const SAL_OVERRIDE;
+        virtual SwFrameFormat& GetFrameFormat() SAL_OVERRIDE;
+        virtual const SwFrameFormat& GetFrameFormat() const SAL_OVERRIDE;
 
         // accessors to the object area and its position
         virtual const SwRect GetObjRect() const SAL_OVERRIDE;

@@ -24,9 +24,9 @@ struct SwLineNumber
     BOOL    CountLines          MID_LINENUMBER_COUNT;
     INT32   StartValue          MID_LINENUMBER_STARTVALUE;
 };
-item SwLineNumber SwFmtLineNumber;
+item SwLineNumber SwFormatLineNumber;
 
-struct INetFmt
+struct INetFormat
 {
     String      URL             MID_URL_URL;
     String      Target          MID_URL_TARGET;
@@ -34,7 +34,7 @@ struct INetFmt
     String      VisitedFormat   MID_URL_VISITED_FMT;
     String      UnvisitedFormat MID_URL_UNVISITED_FMT;
 };
-item INetFmt SwFmtINetFmt;
+item INetFormat SwFormatINetFormat;
 
 struct Drop
 {
@@ -44,7 +44,7 @@ struct Drop
     BOOL    WholeWord   MID_DROPCAP_WHOLE_WORD;
 //    String  Style       MID_DROPCAP_CHAR_STYLE_NAME;
 };
-item Drop SwFmtDrop;
+item Drop SwFormatDrop;
 
 struct Envelope
 {

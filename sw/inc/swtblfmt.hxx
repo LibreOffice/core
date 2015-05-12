@@ -23,62 +23,62 @@
 
 class SwDoc;
 
-class SW_DLLPUBLIC SwTableFmt : public SwFrmFmt
+class SW_DLLPUBLIC SwTableFormat : public SwFrameFormat
 {
     friend class SwDoc;
 
 protected:
-    SwTableFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
+    SwTableFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
+                    SwFrameFormat *pDrvdFrm )
+        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
     {}
-    SwTableFmt( SwAttrPool& rPool, const OUString &rFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
+    SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
+                    SwFrameFormat *pDrvdFrm )
+        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
     {}
 
 public:
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTableFmt)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwTableFormat)
 
     virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
 };
 
-class SwTableLineFmt : public SwFrmFmt
+class SwTableLineFormat : public SwFrameFormat
 {
     friend class SwDoc;
 
 protected:
-    SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
+    SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
+                    SwFrameFormat *pDrvdFrm )
+        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
     {}
-    SwTableLineFmt( SwAttrPool& rPool, const OUString &rFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
+    SwTableLineFormat( SwAttrPool& rPool, const OUString &rFormatNm,
+                    SwFrameFormat *pDrvdFrm )
+        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
     {}
 
 public:
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFmt)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFormat)
 
     virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
 };
 
-class SW_DLLPUBLIC SwTableBoxFmt : public SwFrmFmt
+class SW_DLLPUBLIC SwTableBoxFormat : public SwFrameFormat
 {
     friend class SwDoc;
 
 protected:
-    SwTableBoxFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
+    SwTableBoxFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
+                    SwFrameFormat *pDrvdFrm )
+        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
     {}
-    SwTableBoxFmt( SwAttrPool& rPool, const OUString &rFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
+    SwTableBoxFormat( SwAttrPool& rPool, const OUString &rFormatNm,
+                    SwFrameFormat *pDrvdFrm )
+        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
     {}
 
    // For recognition of changes (especially TableBoxAttribute).
@@ -87,7 +87,7 @@ protected:
 public:
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTableBoxFmt)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwTableBoxFormat)
 
     virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
 };

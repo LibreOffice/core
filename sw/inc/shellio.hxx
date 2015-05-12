@@ -47,7 +47,7 @@ class SfxMedium;
 class SvStream;
 class SvxFontItem;
 class SvxMacroTableDtor;
-class SwCntntNode;
+class SwContentNode;
 class SwCrsrShell;
 class SwDoc;
 class SwPaM;
@@ -106,42 +106,42 @@ class SwgReaderOption
     SwAsciiOptions aASCIIOpts;
     union
     {
-        bool bFmtsOnly;
+        bool bFormatsOnly;
         struct
         {
-            bool bFrmFmts: 1;
+            bool bFrameFormats: 1;
             bool bPageDescs: 1;
-            bool bTxtFmts: 1;
+            bool bTextFormats: 1;
             bool bNumRules: 1;
             bool bMerge:1;
-        }  Fmts;
+        }  Formats;
     } What;
 
 public:
-    void ResetAllFmtsOnly() { What.bFmtsOnly = false; }
-    bool IsFmtsOnly() const { return What.bFmtsOnly; }
+    void ResetAllFormatsOnly() { What.bFormatsOnly = false; }
+    bool IsFormatsOnly() const { return What.bFormatsOnly; }
 
-    bool IsFrmFmts() const { return What.Fmts.bFrmFmts; }
-    void SetFrmFmts( const bool bNew) { What.Fmts.bFrmFmts = bNew; }
+    bool IsFrameFormats() const { return What.Formats.bFrameFormats; }
+    void SetFrameFormats( const bool bNew) { What.Formats.bFrameFormats = bNew; }
 
-    bool IsPageDescs() const { return What.Fmts.bPageDescs; }
-    void SetPageDescs( const bool bNew) { What.Fmts.bPageDescs = bNew; }
+    bool IsPageDescs() const { return What.Formats.bPageDescs; }
+    void SetPageDescs( const bool bNew) { What.Formats.bPageDescs = bNew; }
 
-    bool IsTxtFmts() const { return What.Fmts.bTxtFmts; }
-    void SetTxtFmts( const bool bNew) { What.Fmts.bTxtFmts = bNew; }
+    bool IsTextFormats() const { return What.Formats.bTextFormats; }
+    void SetTextFormats( const bool bNew) { What.Formats.bTextFormats = bNew; }
 
-    bool IsNumRules() const { return What.Fmts.bNumRules; }
-    void SetNumRules( const bool bNew) { What.Fmts.bNumRules = bNew; }
+    bool IsNumRules() const { return What.Formats.bNumRules; }
+    void SetNumRules( const bool bNew) { What.Formats.bNumRules = bNew; }
 
-    bool IsMerge() const { return What.Fmts.bMerge; }
-    void SetMerge( const bool bNew ) { What.Fmts.bMerge = bNew; }
+    bool IsMerge() const { return What.Formats.bMerge; }
+    void SetMerge( const bool bNew ) { What.Formats.bMerge = bNew; }
 
     const SwAsciiOptions& GetASCIIOpts() const { return aASCIIOpts; }
     void SetASCIIOpts( const SwAsciiOptions& rOpts ) { aASCIIOpts = rOpts; }
     void ResetASCIIOpts() { aASCIIOpts.Reset(); }
 
     SwgReaderOption()
-    {   ResetAllFmtsOnly(); aASCIIOpts.Reset(); }
+    {   ResetAllFormatsOnly(); aASCIIOpts.Reset(); }
 };
 
 class SW_DLLPUBLIC SwReader: public SwDocFac
@@ -225,11 +225,11 @@ public:
     virtual void SetFltName( const OUString& rFltNm );
 
     // Adapt item-set of a Frm-Format to the old format.
-    static void ResetFrmFmtAttrs( SfxItemSet &rFrmSet );
+    static void ResetFrameFormatAttrs( SfxItemSet &rFrmSet );
 
     // Adapt Frame-/Graphics-/OLE- styles to the old format
     // (without borders etc.).
-    static void ResetFrmFmts( SwDoc& rDoc );
+    static void ResetFrameFormats( SwDoc& rDoc );
 
     // Load filter template, set it and release it again.
     SwDoc* GetTemplateDoc();
@@ -339,8 +339,8 @@ public:
     OUString GetFileName() const;           // Filename of pImp.
     bool IsReadOnly() const;            // ReadOnly-flag of pImp.
 
-    bool GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTbl );
-    bool SetMacroTable( sal_uInt16 nIdx, const SvxMacroTableDtor& rMacroTbl );
+    bool GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTable );
+    bool SetMacroTable( sal_uInt16 nIdx, const SvxMacroTableDtor& rMacroTable );
 
     bool StartPutMuchBlockEntries();
     void EndPutMuchBlockEntries();
@@ -381,7 +381,7 @@ protected:
     void ResetWriter();
     bool CopyNextPam( SwPaM ** );
 
-    void PutNumFmtFontsInAttrPool();
+    void PutNumFormatFontsInAttrPool();
     void PutEditEngFontsInAttrPool( bool bIncl_CJK_CTL = true );
 
     virtual sal_uLong WriteStream() = 0;
@@ -434,9 +434,9 @@ public:
     sal_Int32 FindPos_Bkmk( const SwPosition& rPos ) const;
     // Build a bookmark table, which is sort by the node position. The
     // OtherPos of the bookmarks also inserted.
-    void CreateBookmarkTbl();
+    void CreateBookmarkTable();
     // Search alle Bookmarks in the range and return it in the Array.
-    bool GetBookmarks( const SwCntntNode& rNd,
+    bool GetBookmarks( const SwContentNode& rNd,
                         sal_Int32 nStt, sal_Int32 nEnd,
                         std::vector< const ::sw::mark::IMark* >& rArr );
 

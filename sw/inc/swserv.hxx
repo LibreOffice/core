@@ -36,7 +36,7 @@ protected:
     enum ServerModes { BOOKMARK_SERVER, TABLE_SERVER, SECTION_SERVER, NONE_SERVER } eType;
     union {
         ::sw::mark::IMark* pBkmk;
-        SwTableNode* pTblNd;
+        SwTableNode* pTableNd;
         SwSectionNode* pSectNd;
     } CNTNT_TYPE;
 
@@ -51,7 +51,7 @@ public:
     SwServerObject( SwTableNode& rTableNd )
         : eType( TABLE_SERVER )
     {
-        CNTNT_TYPE.pTblNd = &rTableNd;
+        CNTNT_TYPE.pTableNd = &rTableNd;
     }
     SwServerObject( SwSectionNode& rSectNd )
         : eType( SECTION_SERVER )

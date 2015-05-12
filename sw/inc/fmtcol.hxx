@@ -28,33 +28,33 @@
 class SwDoc;
 namespace sw{ class DocumentStylePoolManager; }
 
-class SwFmtColl : public SwFmt
+class SwFormatColl : public SwFormat
 {
 protected:
-    SwFmtColl( SwAttrPool& rPool, const sal_Char* pFmtName,
-                const sal_uInt16* pWhichRanges, SwFmtColl* pDerFrom,
-                sal_uInt16 nFmtWhich )
-          : SwFmt( rPool, pFmtName, pWhichRanges, pDerFrom, nFmtWhich )
+    SwFormatColl( SwAttrPool& rPool, const sal_Char* pFormatName,
+                const sal_uInt16* pWhichRanges, SwFormatColl* pDerFrom,
+                sal_uInt16 nFormatWhich )
+          : SwFormat( rPool, pFormatName, pWhichRanges, pDerFrom, nFormatWhich )
     { SetAuto( false ); }
 
-    SwFmtColl( SwAttrPool& rPool, const OUString &rFmtName,
-                const sal_uInt16* pWhichRanges, SwFmtColl* pDerFrom,
-                sal_uInt16 nFmtWhich )
-          : SwFmt( rPool, rFmtName, pWhichRanges, pDerFrom, nFmtWhich )
+    SwFormatColl( SwAttrPool& rPool, const OUString &rFormatName,
+                const sal_uInt16* pWhichRanges, SwFormatColl* pDerFrom,
+                sal_uInt16 nFormatWhich )
+          : SwFormat( rPool, rFormatName, pWhichRanges, pDerFrom, nFormatWhich )
     { SetAuto( false ); }
 
 private:
-    SwFmtColl(const SwFmtColl & ) SAL_DELETED_FUNCTION;
-    const SwFmtColl &operator=(const SwFmtColl &) SAL_DELETED_FUNCTION;
+    SwFormatColl(const SwFormatColl & ) SAL_DELETED_FUNCTION;
+    const SwFormatColl &operator=(const SwFormatColl &) SAL_DELETED_FUNCTION;
 };
 
 /// Represents the style of a paragraph.
-class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
+class SW_DLLPUBLIC SwTextFormatColl: public SwFormatColl
 {
     friend class SwDoc;
     friend class ::sw::DocumentStylePoolManager;
 
-    SwTxtFmtColl(const SwTxtFmtColl & rRef) SAL_DELETED_FUNCTION;
+    SwTextFormatColl(const SwTextFormatColl & rRef) SAL_DELETED_FUNCTION;
 
     bool mbStayAssignedToListLevelOfOutlineStyle;
 
@@ -62,26 +62,26 @@ protected:
 
     bool mbAssignedToOutlineStyle;
 
-    SwTxtFmtColl *pNextTxtFmtColl;
+    SwTextFormatColl *pNextTextFormatColl;
 
-    SwTxtFmtColl( SwAttrPool& rPool, const sal_Char* pFmtCollName,
-                    SwTxtFmtColl* pDerFrom = 0,
-                    sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
-        : SwFmtColl(rPool, pFmtCollName, aTxtFmtCollSetRange, pDerFrom, nFmtWh)
+    SwTextFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
+                    SwTextFormatColl* pDerFrom = 0,
+                    sal_uInt16 nFormatWh = RES_TXTFMTCOLL )
+        : SwFormatColl(rPool, pFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
         , mbStayAssignedToListLevelOfOutlineStyle(false)
         , mbAssignedToOutlineStyle(false)
     {
-        pNextTxtFmtColl = this;
+        pNextTextFormatColl = this;
     }
 
-    SwTxtFmtColl( SwAttrPool& rPool, const OUString &rFmtCollName,
-                    SwTxtFmtColl* pDerFrom = 0,
-                    sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
-        : SwFmtColl(rPool, rFmtCollName, aTxtFmtCollSetRange, pDerFrom, nFmtWh)
+    SwTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
+                    SwTextFormatColl* pDerFrom = 0,
+                    sal_uInt16 nFormatWh = RES_TXTFMTCOLL )
+        : SwFormatColl(rPool, rFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
         , mbStayAssignedToListLevelOfOutlineStyle(false)
         , mbAssignedToOutlineStyle(false)
     {
-        pNextTxtFmtColl = this;
+        pNextTextFormatColl = this;
     }
 
     /// To get UL- / LR- / FontHeight-changes.
@@ -91,8 +91,8 @@ public:
 
     TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 
-    inline void SetNextTxtFmtColl(SwTxtFmtColl& rNext);
-    SwTxtFmtColl& GetNextTxtFmtColl() const { return *pNextTxtFmtColl; }
+    inline void SetNextTextFormatColl(SwTextFormatColl& rNext);
+    SwTextFormatColl& GetNextTextFormatColl() const { return *pNextTextFormatColl; }
 
     bool IsAtDocNodeSet() const;
 
@@ -117,12 +117,12 @@ public:
 
     /** Override to recognize changes on the <SwNumRuleItem> and register/unregister
      the paragragh style at the corresponding <SwNumRule> instance. */
-    virtual bool SetFmtAttr( const SfxPoolItem& rAttr ) SAL_OVERRIDE;
-    virtual bool SetFmtAttr( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 ) SAL_OVERRIDE;
+    virtual bool SetFormatAttr( const SfxPoolItem& rAttr ) SAL_OVERRIDE;
+    virtual bool SetFormatAttr( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool ResetFormatAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 ) SAL_OVERRIDE;
 
-    /// Override <ResetAllFmtAttr()> to stay assigned to list level of outline style.
-    virtual sal_uInt16 ResetAllFmtAttr() SAL_OVERRIDE;
+    /// Override <ResetAllFormatAttr()> to stay assigned to list level of outline style.
+    virtual sal_uInt16 ResetAllFormatAttr() SAL_OVERRIDE;
 
     inline bool StayAssignedToListLevelOfOutlineStyle() const
     {
@@ -134,19 +134,19 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-class SwGrfFmtColl: public SwFmtColl
+class SwGrfFormatColl: public SwFormatColl
 {
     friend class SwDoc;
 protected:
-    SwGrfFmtColl( SwAttrPool& rPool, const sal_Char* pFmtCollName,
-                    SwGrfFmtColl* pDerFrom = 0 )
-        : SwFmtColl( rPool, pFmtCollName, aGrfFmtCollSetRange,
+    SwGrfFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
+                    SwGrfFormatColl* pDerFrom = 0 )
+        : SwFormatColl( rPool, pFormatCollName, aGrfFormatCollSetRange,
                     pDerFrom, RES_GRFFMTCOLL )
     {}
 
-    SwGrfFmtColl( SwAttrPool& rPool, const OUString &rFmtCollName,
-                    SwGrfFmtColl* pDerFrom = 0 )
-        : SwFmtColl( rPool, rFmtCollName, aGrfFmtCollSetRange,
+    SwGrfFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
+                    SwGrfFormatColl* pDerFrom = 0 )
+        : SwFormatColl( rPool, rFormatCollName, aGrfFormatCollSetRange,
                     pDerFrom, RES_GRFFMTCOLL )
     {}
 
@@ -178,15 +178,15 @@ class SW_DLLPUBLIC SwCollCondition : public SwClient
     union
     {
         sal_uLong nSubCondition;
-        OUString* pFldExpression;
+        OUString* pFieldExpression;
     } aSubCondition;
 
 public:
     TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 
-    SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
+    SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
                     sal_uLong nSubCond = 0 );
-    SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
+    SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
                     const OUString& rSubExp );
     virtual ~SwCollCondition();
 
@@ -203,50 +203,50 @@ public:
 
     sal_uLong GetCondition() const      { return nCondition; }
     sal_uLong GetSubCondition() const   { return aSubCondition.nSubCondition; }
-    const OUString* GetFldExpression() const
-                                    { return aSubCondition.pFldExpression; }
+    const OUString* GetFieldExpression() const
+                                    { return aSubCondition.pFieldExpression; }
 
     void SetCondition( sal_uLong nCond, sal_uLong nSubCond );
-    SwTxtFmtColl* GetTxtFmtColl() const     { return const_cast<SwTxtFmtColl*>(static_cast<const SwTxtFmtColl*>(GetRegisteredIn())); }
-    void RegisterToFormat( SwFmt& );
+    SwTextFormatColl* GetTextFormatColl() const     { return const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(GetRegisteredIn())); }
+    void RegisterToFormat( SwFormat& );
 };
 
-class SwFmtCollConditions : public boost::ptr_vector<SwCollCondition> {};
+class SwFormatCollConditions : public boost::ptr_vector<SwCollCondition> {};
 
-class SW_DLLPUBLIC SwConditionTxtFmtColl : public SwTxtFmtColl
+class SW_DLLPUBLIC SwConditionTextFormatColl : public SwTextFormatColl
 {
     friend class SwDoc;
     friend class ::sw::DocumentStylePoolManager;
 protected:
-    SwFmtCollConditions aCondColls;
+    SwFormatCollConditions aCondColls;
 
-    SwConditionTxtFmtColl( SwAttrPool& rPool, const sal_Char* pFmtCollName,
-                            SwTxtFmtColl* pDerFrom = 0 )
-        : SwTxtFmtColl( rPool, pFmtCollName, pDerFrom, RES_CONDTXTFMTCOLL )
+    SwConditionTextFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
+                            SwTextFormatColl* pDerFrom = 0 )
+        : SwTextFormatColl( rPool, pFormatCollName, pDerFrom, RES_CONDTXTFMTCOLL )
     {}
-    SwConditionTxtFmtColl( SwAttrPool& rPool, const OUString &rFmtCollName,
-                            SwTxtFmtColl* pDerFrom = 0 )
-        : SwTxtFmtColl( rPool, rFmtCollName, pDerFrom, RES_CONDTXTFMTCOLL )
+    SwConditionTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
+                            SwTextFormatColl* pDerFrom = 0 )
+        : SwTextFormatColl( rPool, rFormatCollName, pDerFrom, RES_CONDTXTFMTCOLL )
     {}
 
 public:
     TYPEINFO_OVERRIDE(); ///< Already in base class Client.
 
-    virtual ~SwConditionTxtFmtColl();
+    virtual ~SwConditionTextFormatColl();
 
     const SwCollCondition* HasCondition( const SwCollCondition& rCond ) const;
-    const SwFmtCollConditions& GetCondColls() const     { return aCondColls; }
+    const SwFormatCollConditions& GetCondColls() const     { return aCondColls; }
     void InsertCondition( const SwCollCondition& rCond );
     bool RemoveCondition( const SwCollCondition& rCond );
 
-    void SetConditions( const SwFmtCollConditions& );
+    void SetConditions( const SwFormatCollConditions& );
 };
 
 // FEATURE::CONDCOLL
 /// Inline implementations.
-inline void SwTxtFmtColl::SetNextTxtFmtColl( SwTxtFmtColl& rNext )
+inline void SwTextFormatColl::SetNextTextFormatColl( SwTextFormatColl& rNext )
 {
-    pNextTxtFmtColl = &rNext;
+    pNextTextFormatColl = &rNext;
 }
 #endif
 

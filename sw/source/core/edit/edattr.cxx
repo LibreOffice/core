@@ -78,15 +78,15 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
         // the attributes to get are those from the numbering format.
         if (rCurrentPaM.IsInFrontOfLabel())
         {
-            SwTxtNode * pTxtNd = rCurrentPaM.GetPoint()->nNode.GetNode().GetTxtNode();
+            SwTextNode * pTextNd = rCurrentPaM.GetPoint()->nNode.GetNode().GetTextNode();
 
-            if (pTxtNd)
+            if (pTextNd)
             {
-                SwNumRule * pNumRule = pTxtNd->GetNumRule();
+                SwNumRule * pNumRule = pTextNd->GetNumRule();
 
                 if (pNumRule)
                 {
-                    int nListLevel = pTxtNd->GetActualListLevel();
+                    int nListLevel = pTextNd->GetActualListLevel();
 
                     if (nListLevel < 0)
                         nListLevel = 0;
@@ -94,13 +94,13 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                     if (nListLevel >= MAXLEVEL)
                         nListLevel = MAXLEVEL - 1;
 
-                    const OUString & aCharFmtName =
-                        pNumRule->Get(static_cast<sal_uInt16>(nListLevel)).GetCharFmtName();
-                    SwCharFmt * pCharFmt =
-                        GetDoc()->FindCharFmtByName(aCharFmtName);
+                    const OUString & aCharFormatName =
+                        pNumRule->Get(static_cast<sal_uInt16>(nListLevel)).GetCharFormatName();
+                    SwCharFormat * pCharFormat =
+                        GetDoc()->FindCharFormatByName(aCharFormatName);
 
-                    if (pCharFmt)
-                        rSet.Put(pCharFmt->GetAttrSet());
+                    if (pCharFormat)
+                        rSet.Put(pCharFormat->GetAttrSet());
                 }
             }
 
@@ -137,16 +137,16 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                     const sal_Int32 nStt = (n == nSttNd) ? nSttCnt : 0;
                     const sal_Int32 nEnd = (n == nEndNd)
                         ? nEndCnt
-                        : pNd->GetTxtNode()->GetTxt().getLength();
+                        : pNd->GetTextNode()->GetText().getLength();
 
-                    static_cast<SwTxtNode*>(pNd)->GetAttr( *pSet, nStt, nEnd,
+                    static_cast<SwTextNode*>(pNd)->GetAttr( *pSet, nStt, nEnd,
                                                 false, true,
                                                 bMergeIndentValuesOfNumRule );
                 }
                 break;
             case ND_GRFNODE:
             case ND_OLENODE:
-                static_cast<SwCntntNode*>(pNd)->GetAttr( *pSet );
+                static_cast<SwContentNode*>(pNd)->GetAttr( *pSet );
                 break;
 
             default:
@@ -207,10 +207,10 @@ bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
             // get the node
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
 
-            if( pNd->IsTxtNode() )
+            if( pNd->IsTextNode() )
             {
                 // get the node (paragraph) attributes
-                static_cast<SwCntntNode*>(pNd)->GetAttr(*pSet);
+                static_cast<SwContentNode*>(pNd)->GetAttr(*pSet);
 
                 if( pSet != &rSet && aSet.Count() )
                 {
@@ -232,12 +232,12 @@ bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
     return true;
 }
 
-SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl( ) const
+SwTextFormatColl* SwEditShell::GetCurTextFormatColl( ) const
 {
-    return GetPaMTxtFmtColl( GetCrsr() );
+    return GetPaMTextFormatColl( GetCrsr() );
 }
 
-SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
+SwTextFormatColl* SwEditShell::GetPaMTextFormatColl( SwPaM* pPaM ) const
 {
     // number of nodes the function have explored so far
     sal_uInt16 numberOfLookup = 0;
@@ -265,14 +265,14 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
             if (numberOfLookup >= getMaxLookup())
                 return NULL;
 
-            if( pNd->IsTxtNode() )
+            if( pNd->IsTextNode() )
             {
                 // if it's a text node get its named paragraph format
-                SwTxtFmtColl* pFmt = pNd->GetTxtNode()->GetTxtColl();
+                SwTextFormatColl* pFormat = pNd->GetTextNode()->GetTextColl();
 
                 // if the paragraph format exist stop here and return it
-                if( pFmt != NULL )
-                    return pFmt;
+                if( pFormat != NULL )
+                    return pFormat;
             }
         }
     }
@@ -300,32 +300,32 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
         for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
         {
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
-            if( pNd->IsTxtNode() )
+            if( pNd->IsTextNode() )
             {
-                SwTxtNode* pTxtNd = static_cast< SwTxtNode* >( pNd );
+                SwTextNode* pTextNd = static_cast< SwTextNode* >( pNd );
                 const sal_Int32 nStt = (n == nSttNd) ? nSttCnt : 0;
                 const sal_Int32 nEnd = (n == nEndNd)
-                    ? nEndCnt : pTxtNd->GetTxt().getLength();
-                const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( *pTxtNd );
+                    ? nEndCnt : pTextNd->GetText().getLength();
+                const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( *pTextNd );
                 sal_uInt8 nScript = pScriptInfo ? pScriptInfo->ScriptType( nStt ) : css::i18n::ScriptType::WEAK;
                 nWhich = GetWhichOfScript( nWhich, nScript );
 
                 // item from attribute set
-                if( pTxtNd->HasSwAttrSet() )
+                if( pTextNd->HasSwAttrSet() )
                 {
                     pNewPaM = new SwPaM(*pNd, nStt, *pNd, nEnd);
-                    pItem = pTxtNd->GetSwAttrSet().GetItem( nWhich );
+                    pItem = pTextNd->GetSwAttrSet().GetItem( nWhich );
                     vItem.push_back( std::make_pair( pItem, std::unique_ptr<SwPaM>(pNewPaM) ) );
                 }
 
-                if( !pTxtNd->HasHints() )
+                if( !pTextNd->HasHints() )
                     continue;
 
                 // items with limited range
-                const size_t nSize = pTxtNd->GetpSwpHints()->Count();
+                const size_t nSize = pTextNd->GetpSwpHints()->Count();
                 for( size_t m = 0; m < nSize; m++ )
                 {
-                    const SwTxtAttr* pHt = (*pTxtNd->GetpSwpHints())[m];
+                    const SwTextAttr* pHt = (*pTextNd->GetpSwpHints())[m];
                     if( pHt->Which() == RES_TXTATR_AUTOFMT ||
                         pHt->Which() == RES_TXTATR_CHARFMT ||
                         pHt->Which() == RES_TXTATR_INETFMT )
@@ -341,7 +341,7 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
 
                         nScript = pScriptInfo ? pScriptInfo->ScriptType( nStt ) : css::i18n::ScriptType::WEAK;
                         nWhich = GetWhichOfScript( nWhich, nScript );
-                        const SfxItemSet* pAutoSet = CharFmt::GetItemSet( pHt->GetAttr() );
+                        const SfxItemSet* pAutoSet = CharFormat::GetItemSet( pHt->GetAttr() );
                         if( pAutoSet )
                         {
                             SfxItemIter aItemIter( *pAutoSet );
@@ -366,7 +366,7 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                                 pItem = aItemIter.NextItem();
                             }
                             // default item
-                            if( !pItem && !pTxtNd->HasSwAttrSet() )
+                            if( !pItem && !pTextNd->HasSwAttrSet() )
                             {
                                 pNewPaM = new SwPaM(*pNd, nStt, *pNd, nEnd);
                                 pItem = pAutoSet->GetPool()->GetPoolDefaultItem( nWhich );
@@ -381,27 +381,27 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
     return vItem;
 }
 
-bool SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
+bool SwEditShell::GetCurFootnote( SwFormatFootnote* pFillFootnote )
 {
     // The cursor must be positioned on the current footnotes anchor:
     SwPaM* pCrsr = GetCrsr();
-    SwTxtNode* pTxtNd = pCrsr->GetNode().GetTxtNode();
-    if( !pTxtNd )
+    SwTextNode* pTextNd = pCrsr->GetNode().GetTextNode();
+    if( !pTextNd )
         return false;
 
-    SwTxtAttr *const pFtn = pTxtNd->GetTxtAttrForCharAt(
+    SwTextAttr *const pFootnote = pTextNd->GetTextAttrForCharAt(
         pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
-    if( pFtn && pFillFtn )
+    if( pFootnote && pFillFootnote )
     {
         // Transfer data from the attribute
-        const SwFmtFtn &rFtn = static_cast<SwTxtFtn*>(pFtn)->GetFtn();
-        pFillFtn->SetNumber( rFtn );
-        pFillFtn->SetEndNote( rFtn.IsEndNote() );
+        const SwFormatFootnote &rFootnote = static_cast<SwTextFootnote*>(pFootnote)->GetFootnote();
+        pFillFootnote->SetNumber( rFootnote );
+        pFillFootnote->SetEndNote( rFootnote.IsEndNote() );
     }
-    return 0 != pFtn;
+    return 0 != pFootnote;
 }
 
-bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
+bool SwEditShell::SetCurFootnote( const SwFormatFootnote& rFillFootnote )
 {
     bool bChgd = false;
     StartAllAction();
@@ -409,7 +409,7 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
     for(SwPaM& rCrsr : GetCrsr()->GetRingContainer())
     {
         bChgd |=
-            mpDoc->SetCurFtn( rCrsr, rFillFtn.GetNumStr(), rFillFtn.GetNumber(), rFillFtn.IsEndNote() );
+            mpDoc->SetCurFootnote( rCrsr, rFillFootnote.GetNumStr(), rFillFootnote.GetNumber(), rFillFootnote.IsEndNote() );
 
     }
 
@@ -417,49 +417,49 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
     return bChgd;
 }
 
-bool SwEditShell::HasFtns( bool bEndNotes ) const
+bool SwEditShell::HasFootnotes( bool bEndNotes ) const
 {
-    const SwFtnIdxs &rIdxs = mpDoc->GetFtnIdxs();
+    const SwFootnoteIdxs &rIdxs = mpDoc->GetFootnoteIdxs();
     for ( auto pIdx : rIdxs )
     {
-        const SwFmtFtn &rFtn = pIdx->GetFtn();
-        if ( bEndNotes == rFtn.IsEndNote() )
+        const SwFormatFootnote &rFootnote = pIdx->GetFootnote();
+        if ( bEndNotes == rFootnote.IsEndNote() )
             return true;
     }
     return false;
 }
 
 /// Give a List of all footnotes and their beginning texts
-size_t SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
+size_t SwEditShell::GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes )
 {
     rList.Clear();
 
-    const size_t nFtnCnt = mpDoc->GetFtnIdxs().size();
-    SwTxtFtn* pTxtFtn;
-    for( size_t n = 0; n < nFtnCnt; ++n )
+    const size_t nFootnoteCnt = mpDoc->GetFootnoteIdxs().size();
+    SwTextFootnote* pTextFootnote;
+    for( size_t n = 0; n < nFootnoteCnt; ++n )
     {
-        pTxtFtn = mpDoc->GetFtnIdxs()[ n ];
-        const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-        if ( rFtn.IsEndNote() != bEndNotes )
+        pTextFootnote = mpDoc->GetFootnoteIdxs()[ n ];
+        const SwFormatFootnote& rFootnote = pTextFootnote->GetFootnote();
+        if ( rFootnote.IsEndNote() != bEndNotes )
             continue;
 
-        SwNodeIndex* pIdx = pTxtFtn->GetStartNode();
+        SwNodeIndex* pIdx = pTextFootnote->GetStartNode();
         if( pIdx )
         {
             SwNodeIndex aIdx( *pIdx, 1 );
-            SwTxtNode* pTxtNd = aIdx.GetNode().GetTxtNode();
-            if( !pTxtNd )
-                pTxtNd = static_cast<SwTxtNode*>(mpDoc->GetNodes().GoNext( &aIdx ));
+            SwTextNode* pTextNd = aIdx.GetNode().GetTextNode();
+            if( !pTextNd )
+                pTextNd = static_cast<SwTextNode*>(mpDoc->GetNodes().GoNext( &aIdx ));
 
-            if( pTxtNd )
+            if( pTextNd )
             {
-                OUString sTxt( rFtn.GetViewNumStr( *mpDoc ));
-                if( !sTxt.isEmpty() )
-                    sTxt += " ";
-                sTxt += pTxtNd->GetExpandTxt( 0, -1 );
+                OUString sText( rFootnote.GetViewNumStr( *mpDoc ));
+                if( !sText.isEmpty() )
+                    sText += " ";
+                sText += pTextNd->GetExpandText( 0, -1 );
 
-                _SeqFldLstElem* pNew = new _SeqFldLstElem( sTxt,
-                                            pTxtFtn->GetSeqRefNo() );
+                _SeqFieldLstElem* pNew = new _SeqFieldLstElem( sText,
+                                            pTextFootnote->GetSeqRefNo() );
                 while( rList.InsertSort( pNew ) )
                     pNew->sDlgEntry += " ";
             }
@@ -488,15 +488,15 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
         if( nSttNd > nEndNd )
             std::swap(nSttNd, nEndNd);
 
-        SwCntntNode* pCNd;
+        SwContentNode* pCNd;
         for( sal_uLong n = nSttNd; bRet && n <= nEndNd; ++n )
-            if( 0 != ( pCNd = GetDoc()->GetNodes()[ n ]->GetTxtNode() ))
+            if( 0 != ( pCNd = GetDoc()->GetNodes()[ n ]->GetTextNode() ))
             {
                 const SvxLRSpaceItem& rLS = static_cast<const SvxLRSpaceItem&>(
                                             pCNd->GetAttr( RES_LR_SPACE ));
                 if( bRight )
                 {
-                    long nNext = rLS.GetTxtLeft() + nDefDist;
+                    long nNext = rLS.GetTextLeft() + nDefDist;
                     if( bModulus )
                         nNext = ( nNext / nDefDist ) * nDefDist;
                     SwFrm* pFrm = pCNd->getLayoutFrm( GetLayout() );
@@ -555,7 +555,7 @@ static inline SvtScriptType lcl_SetScriptFlags( sal_uInt16 nType )
     }
 }
 
-static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, sal_Int32 nPos,
+static bool lcl_IsNoEndTextAttrAtPos( const SwTextNode& rTNd, sal_Int32 nPos,
                             SvtScriptType &rScrpt, bool bInSelection, bool bNum )
 {
     bool bRet = false;
@@ -569,7 +569,7 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, sal_Int32 nPos,
         if ( rTNd.IsInList() )
         {
             OSL_ENSURE( rTNd.GetNumRule(),
-                    "<lcl_IsNoEndTxtAttrAtPos(..)> - no list style found at text node. Serious defect -> please inform OD." );
+                    "<lcl_IsNoEndTextAttrAtPos(..)> - no list style found at text node. Serious defect -> please inform OD." );
             const SwNumRule* pNumRule = rTNd.GetNumRule();
             if(pNumRule)
             {
@@ -581,11 +581,11 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, sal_Int32 nPos,
                 if (nListLevel >= MAXLEVEL)
                     nListLevel = MAXLEVEL - 1;
 
-                const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(nListLevel) );
-                if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
+                const SwNumFormat &rNumFormat = pNumRule->Get( static_cast<sal_uInt16>(nListLevel) );
+                if( SVX_NUM_BITMAP != rNumFormat.GetNumberingType() )
                 {
-                    if ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
-                        sExp = OUString(rNumFmt.GetBulletChar());
+                    if ( SVX_NUM_CHAR_SPECIAL == rNumFormat.GetNumberingType() )
+                        sExp = OUString(rNumFormat.GetBulletChar());
                     else
                         sExp = rTNd.GetNumString();
                 }
@@ -594,19 +594,19 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, sal_Int32 nPos,
     }
 
     // and fields
-    if (nPos < rTNd.GetTxt().getLength() && CH_TXTATR_BREAKWORD == rTNd.GetTxt()[nPos])
+    if (nPos < rTNd.GetText().getLength() && CH_TXTATR_BREAKWORD == rTNd.GetText()[nPos])
     {
-        const SwTxtAttr* const pAttr = rTNd.GetTxtAttrForCharAt( nPos );
+        const SwTextAttr* const pAttr = rTNd.GetTextAttrForCharAt( nPos );
         if (pAttr)
         {
             bRet = true; // all other than fields can be
                          // defined as weak-script ?
             if ( RES_TXTATR_FIELD == pAttr->Which() )
             {
-                const SwField* const pFld = pAttr->GetFmtFld().GetField();
-                if (pFld)
+                const SwField* const pField = pAttr->GetFormatField().GetField();
+                if (pField)
                 {
-                    sExp += pFld->ExpandField(true);
+                    sExp += pField->ExpandField(true);
                 }
             }
         }
@@ -647,7 +647,7 @@ SvtScriptType SwEditShell::GetScriptType() const
                                     : rPaM.GetMark();
             if( pStt == pEnd || *pStt == *pEnd )
             {
-                const SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
+                const SwTextNode* pTNd = pStt->nNode.GetNode().GetTextNode();
                 if( pTNd )
                 {
                     // try to get SwScriptInfo
@@ -665,16 +665,16 @@ SvtScriptType SwEditShell::GetScriptType() const
 
                     sal_uInt16 nScript;
 
-                    if (!pTNd->GetTxt().isEmpty())
+                    if (!pTNd->GetText().isEmpty())
                     {
                         nScript = pScriptInfo ?
                                   pScriptInfo->ScriptType( nPos ) :
-                                  g_pBreakIt->GetBreakIter()->getScriptType( pTNd->GetTxt(), nPos );
+                                  g_pBreakIt->GetBreakIter()->getScriptType( pTNd->GetText(), nPos );
                     }
                     else
                         nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
 
-                    if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, false, false ))
+                    if( !lcl_IsNoEndTextAttrAtPos( *pTNd, nPos, nRet, false, false ))
                         nRet |= lcl_SetScriptFlags( nScript );
                 }
             }
@@ -683,10 +683,10 @@ SvtScriptType SwEditShell::GetScriptType() const
                 sal_uLong nEndIdx = pEnd->nNode.GetIndex();
                 SwNodeIndex aIdx( pStt->nNode );
                 for( ; aIdx.GetIndex() <= nEndIdx; ++aIdx )
-                    if( aIdx.GetNode().IsTxtNode() )
+                    if( aIdx.GetNode().IsTextNode() )
                     {
-                        const SwTxtNode* pTNd = aIdx.GetNode().GetTxtNode();
-                        const OUString& rTxt = pTNd->GetTxt();
+                        const SwTextNode* pTNd = aIdx.GetNode().GetTextNode();
+                        const OUString& rText = pTNd->GetText();
 
                         // try to get SwScriptInfo
                         const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( *pTNd );
@@ -696,12 +696,12 @@ SvtScriptType SwEditShell::GetScriptType() const
                                                 : 0;
                         sal_Int32 nEndPos = aIdx == nEndIdx
                                                 ? pEnd->nContent.GetIndex()
-                                                : rTxt.getLength();
+                                                : rText.getLength();
 
-                        OSL_ENSURE( nEndPos <= rTxt.getLength(),
+                        OSL_ENSURE( nEndPos <= rText.getLength(),
                                 "Index outside the range - endless loop!" );
-                        if (nEndPos > rTxt.getLength())
-                            nEndPos = rTxt.getLength();
+                        if (nEndPos > rText.getLength())
+                            nEndPos = rText.getLength();
 
                         sal_uInt16 nScript;
                         while( nChg < nEndPos )
@@ -709,27 +709,27 @@ SvtScriptType SwEditShell::GetScriptType() const
                             nScript = pScriptInfo ?
                                       pScriptInfo->ScriptType( nChg ) :
                                       g_pBreakIt->GetBreakIter()->getScriptType(
-                                                                rTxt, nChg );
+                                                                rText, nChg );
 
-                            if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, true,
-                                      0 == nChg && rTxt.getLength() == nEndPos))
+                            if( !lcl_IsNoEndTextAttrAtPos( *pTNd, nChg, nRet, true,
+                                      0 == nChg && rText.getLength() == nEndPos))
                                 nRet |= lcl_SetScriptFlags( nScript );
 
                             if( (SvtScriptType::LATIN | SvtScriptType::ASIAN |
                                 SvtScriptType::COMPLEX) == nRet )
                                 break;
 
-                            sal_Int32 nFldPos = nChg+1;
+                            sal_Int32 nFieldPos = nChg+1;
 
                             nChg = pScriptInfo ?
                                    pScriptInfo->NextScriptChg( nChg ) :
                                    g_pBreakIt->GetBreakIter()->endOfScript(
-                                                    rTxt, nChg, nScript );
+                                                    rText, nChg, nScript );
 
-                            nFldPos = rTxt.indexOf(
-                                            CH_TXTATR_BREAKWORD, nFldPos);
-                            if ((-1 != nFldPos) && (nFldPos < nChg))
-                                nChg = nFldPos;
+                            nFieldPos = rText.indexOf(
+                                            CH_TXTATR_BREAKWORD, nFieldPos);
+                            if ((-1 != nFieldPos) && (nFieldPos < nChg))
+                                nChg = nFieldPos;
                         }
                         if( (SvtScriptType::LATIN | SvtScriptType::ASIAN |
                                 SvtScriptType::COMPLEX) == nRet )
@@ -751,7 +751,7 @@ sal_uInt16 SwEditShell::GetCurLang() const
 {
     const SwPaM* pCrsr = GetCrsr();
     const SwPosition& rPos = *pCrsr->GetPoint();
-    const SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
+    const SwTextNode* pTNd = rPos.nNode.GetNode().GetTextNode();
     sal_uInt16 nLang;
     if( pTNd )
     {
@@ -771,7 +771,7 @@ sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
 {
     const SwPaM* pCrsr = GetCrsr();
     const SwPosition* pStt = pCrsr->Start();
-    const SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
+    const SwTextNode* pTNd = pStt->nNode.GetNode().GetTextNode();
     OSL_ENSURE( pTNd, "no textnode available" );
 
     sal_uInt16 nScaleWidth;
@@ -783,7 +783,7 @@ sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
         const sal_Int32 nStt = pStt->nContent.GetIndex();
         const sal_Int32 nEnd = pStt->nNode == pEnd->nNode
             ? pEnd->nContent.GetIndex()
-            : pTNd->GetTxt().getLength();
+            : pTNd->GetText().getLength();
         nScaleWidth = pTNd->GetScalingOfSelectedText( nStt, nEnd );
     }
     else

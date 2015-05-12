@@ -26,70 +26,70 @@
 #include <boost/shared_ptr.hpp>
 
 class SwPaM;
-class SwTxtNode;
+class SwTextNode;
 
-class SwTxtFld : public virtual SwTxtAttr
+class SwTextField : public virtual SwTextAttr
 {
-    mutable OUString m_aExpand; // only used to determine, if field content is changing in <ExpandTxtFld()>
-    SwTxtNode * m_pTxtNode;
+    mutable OUString m_aExpand; // only used to determine, if field content is changing in <ExpandTextField()>
+    SwTextNode * m_pTextNode;
 
 public:
-    SwTxtFld(
-        SwFmtFld & rAttr,
+    SwTextField(
+        SwFormatField & rAttr,
         sal_Int32 const nStart,
         bool const bInClipboard );
 
-    virtual ~SwTxtFld();
+    virtual ~SwTextField();
 
-    void CopyTxtFld( SwTxtFld *pDest ) const;
+    void CopyTextField( SwTextField *pDest ) const;
 
-    void ExpandTxtFld( const bool bForceNotify = false ) const;
+    void ExpandTextField( const bool bForceNotify = false ) const;
 
-    // get and set TxtNode pointer
-    SwTxtNode* GetpTxtNode() const
+    // get and set TextNode pointer
+    SwTextNode* GetpTextNode() const
     {
-        return m_pTxtNode;
+        return m_pTextNode;
     }
-    SwTxtNode& GetTxtNode() const
+    SwTextNode& GetTextNode() const
     {
-        OSL_ENSURE( m_pTxtNode, "SwTxtFld:: where is my TxtNode?" );
-        return *m_pTxtNode;
+        OSL_ENSURE( m_pTextNode, "SwTextField:: where is my TextNode?" );
+        return *m_pTextNode;
     }
-    void ChgTxtNode( SwTxtNode* pNew )
+    void ChgTextNode( SwTextNode* pNew )
     {
-        m_pTxtNode = pNew;
+        m_pTextNode = pNew;
     }
 
-    bool IsFldInDoc() const;
+    bool IsFieldInDoc() const;
 
     // enable notification that field content has changed and needs reformatting
-    virtual void NotifyContentChange( SwFmtFld& rFmtFld );
+    virtual void NotifyContentChange( SwFormatField& rFormatField );
 
     // deletes the given field via removing the corresponding text selection from the document's content
-    static void DeleteTxtFld( const SwTxtFld& rTxtFld );
+    static void DeleteTextField( const SwTextField& rTextField );
 
     // return text selection for the given field
-    static void GetPamForTxtFld( const SwTxtFld& rTxtFld,
-                                 boost::shared_ptr< SwPaM >& rPamForTxtFld );
+    static void GetPamForTextField( const SwTextField& rTextField,
+                                 boost::shared_ptr< SwPaM >& rPamForTextField );
 
 };
 
-class SwTxtInputFld
-    : public SwTxtAttrNesting
-    , public SwTxtFld
+class SwTextInputField
+    : public SwTextAttrNesting
+    , public SwTextField
 {
 public:
-    SwTxtInputFld(
-        SwFmtFld & rAttr,
+    SwTextInputField(
+        SwFormatField & rAttr,
         sal_Int32 const nStart,
         sal_Int32 const nEnd,
         bool const bInClipboard );
 
-    virtual ~SwTxtInputFld();
+    virtual ~SwTextInputField();
 
     void LockNotifyContentChange();
     void UnlockNotifyContentChange();
-    virtual void NotifyContentChange( SwFmtFld& rFmtFld ) SAL_OVERRIDE;
+    virtual void NotifyContentChange( SwFormatField& rFormatField ) SAL_OVERRIDE;
 
     void UpdateTextNodeContent( const OUString& rNewContent );
 

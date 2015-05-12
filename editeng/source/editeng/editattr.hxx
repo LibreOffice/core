@@ -375,8 +375,8 @@ public:
                                     { return !(operator == ( rAttr ) ); }
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
-    Color*&         GetTxtColor()           { return pTxtColor; }
-    Color*&         GetFldColor()           { return pFldColor; }
+    Color*&         GetTextColor()           { return pTxtColor; }
+    Color*&         GetFieldColor()           { return pFldColor; }
 
     const OUString& GetFieldValue() const { return aFieldValue;}
     void SetFieldValue(const OUString& rVal);

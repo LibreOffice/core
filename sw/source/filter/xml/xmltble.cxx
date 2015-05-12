@@ -175,33 +175,33 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
     }
 }
 
-typedef vector< SwFrmFmt* > SwXMLFrmFmts_Impl;
+typedef vector< SwFrameFormat* > SwXMLFrameFormats_Impl;
 
-class SwXMLTableFrmFmtsSort_Impl
+class SwXMLTableFrameFormatsSort_Impl
 {
 private:
-    SwXMLFrmFmts_Impl aFormatList;
+    SwXMLFrameFormats_Impl aFormatList;
 public:
-    bool AddRow( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix, sal_uInt32 nLine );
-    bool AddCell( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix,
+    bool AddRow( SwFrameFormat& rFrameFormat, const OUString& rNamePrefix, sal_uInt32 nLine );
+    bool AddCell( SwFrameFormat& rFrameFormat, const OUString& rNamePrefix,
                   sal_uInt32 nCol, sal_uInt32 nRow, bool bTop );
 };
 
-bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
+bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
                                          const OUString& rNamePrefix,
                                             sal_uInt32 nLine )
 {
-    const SwFmtFrmSize *pFrmSize = 0;
-    const SwFmtRowSplit* pRowSplit = 0;
+    const SwFormatFrmSize *pFrmSize = 0;
+    const SwFormatRowSplit* pRowSplit = 0;
     const SvxBrushItem *pBrush = 0;
 
-    const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
+    const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     const SfxPoolItem *pItem;
     if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, false, &pItem ) )
-        pFrmSize = static_cast<const SwFmtFrmSize *>(pItem);
+        pFrmSize = static_cast<const SwFormatFrmSize *>(pItem);
 
     if( SfxItemState::SET == rItemSet.GetItemState( RES_ROW_SPLIT, false, &pItem ) )
-        pRowSplit = static_cast<const SwFmtRowSplit *>(pItem);
+        pRowSplit = static_cast<const SwFormatRowSplit *>(pItem);
 
     if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
         pBrush = static_cast<const SvxBrushItem *>(pItem);
@@ -212,21 +212,21 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
 
     // order is: -/brush, size/-, size/brush
     bool bInsert = true;
-    SwXMLFrmFmts_Impl::iterator i;
+    SwXMLFrameFormats_Impl::iterator i;
     for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
     {
-        const SwFmtFrmSize *pTestFrmSize = 0;
-        const SwFmtRowSplit* pTestRowSplit = 0;
+        const SwFormatFrmSize *pTestFrmSize = 0;
+        const SwFormatRowSplit* pTestRowSplit = 0;
         const SvxBrushItem *pTestBrush = 0;
-        const SwFrmFmt *pTestFmt = *i;
-        const SfxItemSet& rTestSet = pTestFmt->GetAttrSet();
+        const SwFrameFormat *pTestFormat = *i;
+        const SfxItemSet& rTestSet = pTestFormat->GetAttrSet();
         if( SfxItemState::SET == rTestSet.GetItemState( RES_FRM_SIZE, false,
                                                   &pItem ) )
         {
             if( !pFrmSize )
                 break;
 
-            pTestFrmSize = static_cast<const SwFmtFrmSize *>(pItem);
+            pTestFrmSize = static_cast<const SwFormatFrmSize *>(pItem);
         }
         else
         {
@@ -254,7 +254,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
             if( !pRowSplit )
                 break;
 
-            pTestRowSplit = static_cast<const SwFmtRowSplit *>(pItem);
+            pTestRowSplit = static_cast<const SwFormatRowSplit *>(pItem);
         }
         else
         {
@@ -274,16 +274,16 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
             continue;
 
         // found!
-        rFrmFmt.SetName( pTestFmt->GetName() );
+        rFrameFormat.SetName( pTestFormat->GetName() );
         bInsert = false;
         break;
     }
 
     if( bInsert )
     {
-        rFrmFmt.SetName( rNamePrefix + "." + OUString::number(nLine+1UL) );
+        rFrameFormat.SetName( rNamePrefix + "." + OUString::number(nLine+1UL) );
         if ( i != aFormatList.end() ) ++i;
-        aFormatList.insert( i, &rFrmFmt );
+        aFormatList.insert( i, &rFrameFormat );
     }
 
     return bInsert;
@@ -295,7 +295,7 @@ static OUString lcl_xmltble_appendBoxPrefix(const OUString& rNamePrefix,
     if( bTop )
     {
         OUString sTmp;
-        sw_GetTblBoxColStr( (sal_uInt16)nCol, sTmp );
+        sw_GetTableBoxColStr( (sal_uInt16)nCol, sTmp );
         return rNamePrefix + "." + sTmp + OUString::number(nRow + 1);
     }
     return rNamePrefix
@@ -303,21 +303,21 @@ static OUString lcl_xmltble_appendBoxPrefix(const OUString& rNamePrefix,
         + "." + OUString::number(nRow + 1);
 }
 
-bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
+bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
                                          const OUString& rNamePrefix,
                                             sal_uInt32 nCol, sal_uInt32 nRow, bool bTop )
 {
-    const SwFmtVertOrient *pVertOrient = 0;
+    const SwFormatVertOrient *pVertOrient = 0;
     const SvxBrushItem *pBrush = 0;
     const SvxBoxItem *pBox = 0;
-    const SwTblBoxNumFormat *pNumFmt = 0;
+    const SwTableBoxNumFormat *pNumFormat = 0;
     const SvxFrameDirectionItem *pFrameDir = 0;
 
-    const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
+    const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     const SfxPoolItem *pItem;
     if( SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, false,
                                                &pItem ) )
-        pVertOrient = static_cast<const SwFmtVertOrient *>(pItem);
+        pVertOrient = static_cast<const SwFormatVertOrient *>(pItem);
 
     if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
         pBrush = static_cast<const SvxBrushItem *>(pItem);
@@ -327,13 +327,13 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
     if ( SfxItemState::SET == rItemSet.GetItemState( RES_BOXATR_FORMAT,
                                                 false, &pItem ) )
-        pNumFmt = static_cast<const SwTblBoxNumFormat *>(pItem);
+        pNumFormat = static_cast<const SwTableBoxNumFormat *>(pItem);
     if ( SfxItemState::SET == rItemSet.GetItemState( RES_FRAMEDIR,
                                                 false, &pItem ) )
         pFrameDir = static_cast<const SvxFrameDirectionItem *>(pItem);
 
     // empty styles have not to be exported
-    if( !pVertOrient && !pBrush && !pBox && !pNumFmt && !pFrameDir )
+    if( !pVertOrient && !pBrush && !pBox && !pNumFormat && !pFrameDir )
         return false;
 
     // order is: -/-/-/num,
@@ -343,23 +343,23 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
     //           vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,
     //           vert/brush/box/num
     bool bInsert = true;
-    SwXMLFrmFmts_Impl::iterator i;
+    SwXMLFrameFormats_Impl::iterator i;
     for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
     {
-        const SwFmtVertOrient *pTestVertOrient = 0;
+        const SwFormatVertOrient *pTestVertOrient = 0;
         const SvxBrushItem *pTestBrush = 0;
         const SvxBoxItem *pTestBox = 0;
-        const SwTblBoxNumFormat *pTestNumFmt = 0;
+        const SwTableBoxNumFormat *pTestNumFormat = 0;
         const SvxFrameDirectionItem *pTestFrameDir = 0;
-        const SwFrmFmt* pTestFmt = *i;
-        const SfxItemSet& rTestSet = pTestFmt->GetAttrSet();
+        const SwFrameFormat* pTestFormat = *i;
+        const SfxItemSet& rTestSet = pTestFormat->GetAttrSet();
         if( SfxItemState::SET == rTestSet.GetItemState( RES_VERT_ORIENT, false,
                                                   &pItem ) )
         {
             if( !pVertOrient )
                 break;
 
-            pTestVertOrient = static_cast<const SwFmtVertOrient *>(pItem);
+            pTestVertOrient = static_cast<const SwFormatVertOrient *>(pItem);
         }
         else
         {
@@ -397,14 +397,14 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         if ( SfxItemState::SET == rTestSet.GetItemState( RES_BOXATR_FORMAT,
                                                 false, &pItem ) )
         {
-            if( !pNumFmt )
+            if( !pNumFormat )
                 break;
 
-            pTestNumFmt = static_cast<const SwTblBoxNumFormat *>(pItem);
+            pTestNumFormat = static_cast<const SwTableBoxNumFormat *>(pItem);
         }
         else
         {
-            if( pNumFmt )
+            if( pNumFormat )
                 continue;
 
         }
@@ -434,23 +434,23 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         if( pBox && ( *pBox != *pTestBox ) )
             continue;
 
-        if( pNumFmt && pNumFmt->GetValue() != pTestNumFmt->GetValue() )
+        if( pNumFormat && pNumFormat->GetValue() != pTestNumFormat->GetValue() )
             continue;
 
         if( pFrameDir && pFrameDir->GetValue() != pTestFrameDir->GetValue() )
             continue;
 
         // found!
-        rFrmFmt.SetName( pTestFmt->GetName() );
+        rFrameFormat.SetName( pTestFormat->GetName() );
         bInsert = false;
         break;
     }
 
     if( bInsert )
     {
-        rFrmFmt.SetName( lcl_xmltble_appendBoxPrefix( rNamePrefix, nCol, nRow, bTop ) );
+        rFrameFormat.SetName( lcl_xmltble_appendBoxPrefix( rNamePrefix, nCol, nRow, bTop ) );
         if ( i != aFormatList.end() ) ++i;
-        aFormatList.insert( i, &rFrmFmt );
+        aFormatList.insert( i, &rFrameFormat );
     }
 
     return bInsert;
@@ -465,10 +465,10 @@ class SwXMLTableInfo_Impl
 
 public:
 
-    inline SwXMLTableInfo_Impl( const SwTable *pTbl, sal_uInt16 nPrefix );
+    inline SwXMLTableInfo_Impl( const SwTable *pTable, sal_uInt16 nPrefix );
 
     const SwTable *GetTable() const { return m_pTable; }
-    const SwFrmFmt *GetTblFmt() const { return m_pTable->GetFrmFmt(); }
+    const SwFrameFormat *GetTableFormat() const { return m_pTable->GetFrameFormat(); }
 
     bool IsBaseSectionValid() const { return m_bBaseSectionValid; }
     const Reference<XTextSection>& GetBaseSection() const { return m_xBaseSection; }
@@ -537,9 +537,9 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                     sal_uInt32 nAbsWidth, sal_uInt32 nBaseWidth,
                                     const OUString& rNamePrefix,
                                     SwXMLTableColumnsSortByWidth_Impl& rExpCols,
-                                    SwXMLTableFrmFmtsSort_Impl& rExpRows,
-                                    SwXMLTableFrmFmtsSort_Impl& rExpCells,
-                                    SwXMLTableInfo_Impl& rTblInfo,
+                                    SwXMLTableFrameFormatsSort_Impl& rExpRows,
+                                    SwXMLTableFrameFormatsSort_Impl& rExpCells,
+                                    SwXMLTableInfo_Impl& rTableInfo,
                                     bool bTop )
 {
     // pass 1: calculate columns
@@ -597,7 +597,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 if( bTop )
                 {
                     OUString sTmp;
-                    sw_GetTblBoxColStr( nColumn, sTmp );
+                    sw_GetTableBoxColStr( nColumn, sTmp );
                     pColumn->SetStyleName( rNamePrefix + "." + sTmp );
                 }
                 else
@@ -616,9 +616,9 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
     {
         SwTableLine *pLine = rLines[nLine];
 
-        SwFrmFmt *pFrmFmt = pLine->GetFrmFmt();
-        if( rExpRows.AddRow( *pFrmFmt, rNamePrefix, nLine ) )
-            ExportFmt( *pFrmFmt, XML_TABLE_ROW );
+        SwFrameFormat *pFrameFormat = pLine->GetFrameFormat();
+        if( rExpRows.AddRow( *pFrameFormat, rNamePrefix, nLine ) )
+            ExportFormat( *pFrameFormat, XML_TABLE_ROW );
 
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         const size_t nBoxes = rBoxes.size();
@@ -644,26 +644,26 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             const SwStartNode *pBoxSttNd = pBox->GetSttNd();
             if( pBoxSttNd )
             {
-                SwFrmFmt *pFrmFmt2 = pBox->GetFrmFmt();
-                if( rExpCells.AddCell( *pFrmFmt2, rNamePrefix, nOldCol, nLine,
+                SwFrameFormat *pFrameFormat2 = pBox->GetFrameFormat();
+                if( rExpCells.AddCell( *pFrameFormat2, rNamePrefix, nOldCol, nLine,
                                        bTop) )
-                    ExportFmt( *pFrmFmt2, XML_TABLE_CELL );
+                    ExportFormat( *pFrameFormat2, XML_TABLE_CELL );
 
                 Reference < XCell > xCell = SwXCell::CreateXCell(
-                                                const_cast<SwFrmFmt *>(rTblInfo.GetTblFmt()),
+                                                const_cast<SwFrameFormat *>(rTableInfo.GetTableFormat()),
                                                   pBox,
-                                                 const_cast<SwTable *>(rTblInfo.GetTable()) );
+                                                 const_cast<SwTable *>(rTableInfo.GetTable()) );
                 if (xCell.is())
                 {
                     Reference < XText > xText( xCell, UNO_QUERY );
-                    if( !rTblInfo.IsBaseSectionValid() )
+                    if( !rTableInfo.IsBaseSectionValid() )
                     {
                         Reference<XPropertySet> xCellPropertySet( xCell,
                                                                  UNO_QUERY );
                         Any aAny = xCellPropertySet->getPropertyValue("TextSection");
                         Reference < XTextSection > xTextSection;
                         aAny >>= xTextSection;
-                        rTblInfo.SetBaseSection( xTextSection );
+                        rTableInfo.SetBaseSection( xTextSection );
                     }
 
                     const bool bExportContent = bool(getExportFlags() & SvXMLExportFlags::CONTENT );
@@ -671,7 +671,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     {
                         // AUTOSTYLES - not needed anymore if we are currently exporting content.xml
                         GetTextParagraphExport()->collectTextAutoStyles(
-                            xText, rTblInfo.GetBaseSection(), IsShowProgress() );
+                            xText, rTableInfo.GetBaseSection(), IsShowProgress() );
                     }
                 }
                 else {
@@ -685,7 +685,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                             lcl_xmltble_appendBoxPrefix( rNamePrefix,
                                                                          nOldCol, nLine, bTop ),
                                             rExpCols, rExpRows, rExpCells,
-                                            rTblInfo );
+                                            rTableInfo );
             }
 
             nCol++;
@@ -693,15 +693,15 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
     }
 }
 
-void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
+void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTableNd )
 {
-    const SwTable& rTbl = rTblNd.GetTable();
-    const SwFrmFmt *pTblFmt = rTbl.GetFrmFmt();
+    const SwTable& rTable = rTableNd.GetTable();
+    const SwFrameFormat *pTableFormat = rTable.GetFrameFormat();
 
-    if( pTblFmt )
+    if( pTableFormat )
     {
-        sal_Int16 eTabHoriOri = pTblFmt->GetHoriOrient().GetHoriOrient();
-        const SwFmtFrmSize& rFrmSize = pTblFmt->GetFrmSize();
+        sal_Int16 eTabHoriOri = pTableFormat->GetHoriOrient().GetHoriOrient();
+        const SwFormatFrmSize& rFrmSize = pTableFormat->GetFrmSize();
 
         sal_uInt32 nAbsWidth = rFrmSize.GetSize().Width();
         sal_uInt32 nBaseWidth = 0UL;
@@ -712,36 +712,36 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
         if( bFixAbsWidth )
         {
             nBaseWidth = nAbsWidth;
-            nAbsWidth = pTblFmt->FindLayoutRect(true).Width();
+            nAbsWidth = pTableFormat->FindLayoutRect(true).Width();
             if( !nAbsWidth )
             {
                 // TODO?
             }
         }
-        ExportTableFmt( *pTblFmt, nAbsWidth );
+        ExportTableFormat( *pTableFormat, nAbsWidth );
 
         SwXMLTableColumnsSortByWidth_Impl aExpCols;
-        SwXMLTableFrmFmtsSort_Impl aExpRows;
-        SwXMLTableFrmFmtsSort_Impl aExpCells;
-        SwXMLTableInfo_Impl aTblInfo( &rTbl, XML_NAMESPACE_TABLE );
-        ExportTableLinesAutoStyles( rTbl.GetTabLines(), nAbsWidth, nBaseWidth,
-                                    pTblFmt->GetName(), aExpCols, aExpRows, aExpCells,
-                                    aTblInfo, true);
+        SwXMLTableFrameFormatsSort_Impl aExpRows;
+        SwXMLTableFrameFormatsSort_Impl aExpCells;
+        SwXMLTableInfo_Impl aTableInfo( &rTable, XML_NAMESPACE_TABLE );
+        ExportTableLinesAutoStyles( rTable.GetTabLines(), nAbsWidth, nBaseWidth,
+                                    pTableFormat->GetName(), aExpCols, aExpRows, aExpCells,
+                                    aTableInfo, true);
     }
 }
 
 void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                                   sal_uInt32 nColSpan,
                                   sal_uInt32 nRowSpan,
-                                  SwXMLTableInfo_Impl& rTblInfo )
+                                  SwXMLTableInfo_Impl& rTableInfo )
 {
     const SwStartNode *pBoxSttNd = rBox.GetSttNd();
     if( pBoxSttNd )
     {
-        const SwFrmFmt *pFrmFmt = rBox.GetFrmFmt();
-        if( pFrmFmt )
+        const SwFrameFormat *pFrameFormat = rBox.GetFrameFormat();
+        if( pFrameFormat )
         {
-            const OUString sName = pFrmFmt->GetName();
+            const OUString sName = pFrameFormat->GetName();
             if( !sName.isEmpty() )
             {
                 AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(sName) );
@@ -766,9 +766,9 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
         {
             // start node -> normal cell
             // get cell range for table
-            Reference<XCell> xCell = SwXCell::CreateXCell( const_cast<SwFrmFmt *>(rTblInfo.GetTblFmt()),
+            Reference<XCell> xCell = SwXCell::CreateXCell( const_cast<SwFrameFormat *>(rTableInfo.GetTableFormat()),
                                                             const_cast<SwTableBox *>(&rBox),
-                                                            const_cast<SwTable *>(rTblInfo.GetTable()) );
+                                                            const_cast<SwTable *>(rTableInfo.GetTable()) );
 
             if (xCell.is())
             {
@@ -822,22 +822,22 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                                         XML_TRUE );
                     }
 
-                    if( !rTblInfo.IsBaseSectionValid() )
+                    if( !rTableInfo.IsBaseSectionValid() )
                     {
                         aAny = xCellPropertySet->getPropertyValue("TextSection");
                         Reference < XTextSection > xTextSection;
                         aAny >>= xTextSection;
-                        rTblInfo.SetBaseSection( xTextSection );
+                        rTableInfo.SetBaseSection( xTextSection );
                     }
                 }
 
                 // export cell element
-                SvXMLElementExport aElem( *this, rTblInfo.GetPrefix(),
+                SvXMLElementExport aElem( *this, rTableInfo.GetPrefix(),
                                         XML_TABLE_CELL, true, true );
 
                 // export cell content
                 GetTextParagraphExport()->exportText( xText,
-                                                    rTblInfo.GetBaseSection(),
+                                                    rTableInfo.GetBaseSection(),
                                                     IsShowProgress() );
             }
             else
@@ -857,7 +857,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
 
                 SvXMLElementExport aElemExport( *this, XML_NAMESPACE_TABLE,
                                           XML_TABLE, true, true );
-                ExportTableLines( rBox.GetTabLines(), rTblInfo );
+                ExportTableLines( rBox.GetTabLines(), rTableInfo );
             }
         }
     }
@@ -865,17 +865,17 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
 
 void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
                                    const SwXMLTableLines_Impl& rLines,
-                                   SwXMLTableInfo_Impl& rTblInfo )
+                                   SwXMLTableInfo_Impl& rTableInfo )
 {
     if( rLine.hasSoftPageBreak() )
     {
         SvXMLElementExport aElem( *this, XML_NAMESPACE_TEXT,
                                   XML_SOFT_PAGE_BREAK, true, true );
     }
-    const SwFrmFmt *pFrmFmt = rLine.GetFrmFmt();
-    if( pFrmFmt )
+    const SwFrameFormat *pFrameFormat = rLine.GetFrameFormat();
+    if( pFrameFormat )
     {
-        const OUString sName = pFrmFmt->GetName();
+        const OUString sName = pFrameFormat->GetName();
         if( !sName.isEmpty() )
         {
             AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(sName) );
@@ -883,7 +883,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
     }
 
     {
-        SvXMLElementExport aElem( *this, rTblInfo.GetPrefix(), XML_TABLE_ROW, true, true );
+        SvXMLElementExport aElem( *this, rTableInfo.GetPrefix(), XML_TABLE_ROW, true, true );
         const SwTableBoxes& rBoxes = rLine.GetTabBoxes();
         const size_t nBoxes = rBoxes.size();
 
@@ -897,7 +897,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             const long nRowSpan = pBox->getRowSpan();
             if( nRowSpan < 1 )
             {
-                SvXMLElementExport aElem2( *this, rTblInfo.GetPrefix(),
+                SvXMLElementExport aElem2( *this, rTableInfo.GetPrefix(),
                                           XML_COVERED_TABLE_CELL, true,
                                           false );
             }
@@ -926,11 +926,11 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             const sal_uInt32 nColSpan = nCol - nOldCol + 1U;
 
             if ( nRowSpan >= 1 )
-                ExportTableBox( *pBox, nColSpan, static_cast< sal_uInt32 >(nRowSpan), rTblInfo );
+                ExportTableBox( *pBox, nColSpan, static_cast< sal_uInt32 >(nRowSpan), rTableInfo );
 
             for( size_t i=nOldCol; i<nCol; ++i )
             {
-                SvXMLElementExport aElemExport( *this, rTblInfo.GetPrefix(),
+                SvXMLElementExport aElemExport( *this, rTableInfo.GetPrefix(),
                                           XML_COVERED_TABLE_CELL, true,
                                           false );
             }
@@ -941,7 +941,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
 }
 
 void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
-                                    SwXMLTableInfo_Impl& rTblInfo,
+                                    SwXMLTableInfo_Impl& rTableInfo,
                                     sal_uInt32 nHeaderRows )
 {
     OSL_ENSURE( pTableLines && !pTableLines->empty(),
@@ -1004,7 +1004,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
             }
 
             {
-                SvXMLElementExport aElem( *this, rTblInfo.GetPrefix(), XML_TABLE_COLUMN, true, true );
+                SvXMLElementExport aElem( *this, rTableInfo.GetPrefix(), XML_TABLE_COLUMN, true, true );
             }
 
             nColRep = 1;
@@ -1022,12 +1022,12 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
 
         OSL_ENSURE( nHeaderRows <= nLines, "more headers then lines?" );
         for( size_t nLine = 0U; nLine < nHeaderRows; ++nLine )
-            ExportTableLine( *(rLines[nLine]), *pLines, rTblInfo );
+            ExportTableLine( *(rLines[nLine]), *pLines, rTableInfo );
     }
     // export remaining rows
     for( size_t nLine = nHeaderRows; nLine < nLines; ++nLine )
     {
-        ExportTableLine( *(rLines[nLine]), *pLines, rTblInfo );
+        ExportTableLine( *(rLines[nLine]), *pLines, rTableInfo );
     }
 
     delete pLines;
@@ -1044,9 +1044,9 @@ static void lcl_xmltble_ClearName_Box( SwTableBox* pBox )
     }
     else
     {
-        SwFrmFmt *pFrmFmt = pBox->GetFrmFmt();
-        if( pFrmFmt && !pFrmFmt->GetName().isEmpty() )
-            pFrmFmt->SetName( OUString() );
+        SwFrameFormat *pFrameFormat = pBox->GetFrameFormat();
+        if( pFrameFormat && !pFrameFormat->GetName().isEmpty() )
+            pFrameFormat->SetName( OUString() );
     }
 }
 
@@ -1056,21 +1056,21 @@ void lcl_xmltble_ClearName_Line( SwTableLine* pLine )
         lcl_xmltble_ClearName_Box( pBox );
 }
 
-void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
+void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
 {
-    const SwTable& rTbl = rTblNd.GetTable();
-    const SwFrmFmt *pTblFmt = rTbl.GetFrmFmt();
-    if( pTblFmt && !pTblFmt->GetName().isEmpty() )
+    const SwTable& rTable = rTableNd.GetTable();
+    const SwFrameFormat *pTableFormat = rTable.GetFrameFormat();
+    if( pTableFormat && !pTableFormat->GetName().isEmpty() )
     {
-        AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, pTblFmt->GetName() );
+        AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, pTableFormat->GetName() );
         AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME,
-                      EncodeStyleName( pTblFmt->GetName() ) );
+                      EncodeStyleName( pTableFormat->GetName() ) );
     }
 
     sal_uInt16 nPrefix = XML_NAMESPACE_TABLE;
-    if (const SwFrmFmt* pFlyFormat = rTblNd.GetFlyFmt())
+    if (const SwFrameFormat* pFlyFormat = rTableNd.GetFlyFormat())
     {
-        std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(rTblNd.GetDoc());
+        std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(rTableNd.GetDoc());
         if (aTextBoxes.find(pFlyFormat) != aTextBoxes.end())
             nPrefix = XML_NAMESPACE_LO_EXT;
     }
@@ -1079,18 +1079,18 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
         SvXMLElementExport aElem( *this, nPrefix, XML_TABLE, true, true );
 
         // export DDE source (if this is a DDE table)
-        if ( rTbl.ISA(SwDDETable) )
+        if ( rTable.ISA(SwDDETable) )
         {
             // get DDE Field Type (contains the DDE connection)
-            const SwDDEFieldType* pDDEFldType =
-                static_cast<const SwDDETable&>(rTbl).GetDDEFldType();
+            const SwDDEFieldType* pDDEFieldType =
+                static_cast<const SwDDETable&>(rTable).GetDDEFieldType();
 
             // connection name
             AddAttribute( XML_NAMESPACE_OFFICE, XML_NAME,
-                          pDDEFldType->GetName() );
+                          pDDEFieldType->GetName() );
 
             // DDE command
-            const OUString sCmd = pDDEFldType->GetCmd();
+            const OUString sCmd = pDDEFieldType->GetCmd();
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
                           sCmd.getToken(0, sfx2::cTokenSeparator) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_ITEM,
@@ -1099,7 +1099,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
                           sCmd.getToken(2, sfx2::cTokenSeparator) );
 
             // auto update
-            if (pDDEFldType->GetType() == SfxLinkUpdateMode::ALWAYS)
+            if (pDDEFieldType->GetType() == SfxLinkUpdateMode::ALWAYS)
             {
                 AddAttribute( XML_NAMESPACE_OFFICE,
                               XML_AUTOMATIC_UPDATE, XML_TRUE );
@@ -1110,10 +1110,10 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
                                        XML_DDE_SOURCE, true, false);
         }
 
-        SwXMLTableInfo_Impl aTblInfo( &rTbl, nPrefix );
-        ExportTableLines( rTbl.GetTabLines(), aTblInfo, rTbl.GetRowsToRepeat() );
+        SwXMLTableInfo_Impl aTableInfo( &rTable, nPrefix );
+        ExportTableLines( rTable.GetTabLines(), aTableInfo, rTable.GetRowsToRepeat() );
 
-        for( SwTableLine *pLine : ((SwTable &)rTbl).GetTabLines() )
+        for( SwTableLine *pLine : ((SwTable &)rTable).GetTabLines() )
             lcl_xmltble_ClearName_Line( pLine );
     }
 }
@@ -1125,9 +1125,9 @@ void SwXMLTextParagraphExport::exportTable(
     bool bOldShowProgress = static_cast<SwXMLExport&>(GetExport()).IsShowProgress();
     static_cast<SwXMLExport&>(GetExport()).SetShowProgress( _bProgress );
 
-    Reference < XTextTable > xTxtTbl( rTextContent, UNO_QUERY );
-    OSL_ENSURE( xTxtTbl.is(), "text table missing" );
-    if( xTxtTbl.is() )
+    Reference < XTextTable > xTextTable( rTextContent, UNO_QUERY );
+    OSL_ENSURE( xTextTable.is(), "text table missing" );
+    if( xTextTable.is() )
     {
         const SwXTextTable *pXTable = 0;
         Reference<XUnoTunnel> xTableTunnel( rTextContent, UNO_QUERY);
@@ -1139,27 +1139,27 @@ void SwXMLTextParagraphExport::exportTable(
         }
         if( pXTable )
         {
-            SwFrmFmt *pFmt = pXTable->GetFrmFmt();
-            OSL_ENSURE( pFmt, "table format missing" );
-            const SwTable *pTbl = SwTable::FindTable( pFmt );
-            OSL_ENSURE( pTbl, "table missing" );
-            const SwTableNode *pTblNd = pTbl->GetTableNode();
-            OSL_ENSURE( pTblNd, "table node missing" );
+            SwFrameFormat *pFormat = pXTable->GetFrameFormat();
+            OSL_ENSURE( pFormat, "table format missing" );
+            const SwTable *pTable = SwTable::FindTable( pFormat );
+            OSL_ENSURE( pTable, "table missing" );
+            const SwTableNode *pTableNd = pTable->GetTableNode();
+            OSL_ENSURE( pTableNd, "table node missing" );
             if( bAutoStyles )
             {
-                SwNodeIndex aIdx( *pTblNd );
+                SwNodeIndex aIdx( *pTableNd );
                 // AUTOSTYLES: Optimization: Do not export table autostyle if
                 // we are currently exporting the content.xml stuff and
                 // the table is located in header/footer:
                 // During the flat XML export (used e.g. by .sdw-export)
                 // ALL flags are set at the same time.
                 const bool bExportStyles = bool( GetExport().getExportFlags() & SvXMLExportFlags::STYLES );
-                if ( bExportStyles || !pFmt->GetDoc()->IsInHeaderFooter( aIdx ) )
-                    static_cast<SwXMLExport&>(GetExport()).ExportTableAutoStyles( *pTblNd );
+                if ( bExportStyles || !pFormat->GetDoc()->IsInHeaderFooter( aIdx ) )
+                    static_cast<SwXMLExport&>(GetExport()).ExportTableAutoStyles( *pTableNd );
             }
             else
             {
-                static_cast<SwXMLExport&>(GetExport()).ExportTable( *pTblNd );
+                static_cast<SwXMLExport&>(GetExport()).ExportTable( *pTableNd );
             }
         }
     }

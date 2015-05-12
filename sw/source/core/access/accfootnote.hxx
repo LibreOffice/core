@@ -24,7 +24,7 @@
 #include <acccontext.hxx>
 
 class SwAccessibleMap;
-class SwFtnFrm;
+class SwFootnoteFrm;
 
 class SwAccessibleFootnote : public SwAccessibleContext
 {
@@ -34,7 +34,7 @@ protected:
 public:
     SwAccessibleFootnote( SwAccessibleMap* pInitMap,
                           bool bIsEndnote,
-                          const SwFtnFrm *pFtnFrm );
+                          const SwFootnoteFrm *pFootnoteFrm );
 
     // XAccessibleContext
 
@@ -64,7 +64,7 @@ public:
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static bool IsEndnote( const SwFtnFrm *pFrm );
+    static bool IsEndnote( const SwFootnoteFrm *pFrm );
 };
 
 #endif

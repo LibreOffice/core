@@ -30,7 +30,7 @@
 // Sortierreihenfolge: Start, Ende (umgekehrt!), Which-Wert (umgekehrt!),
 //                     als letztes die Adresse selbst
 
-static bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+static bool lcl_IsLessStart( const SwTextAttr &rHt1, const SwTextAttr &rHt2 )
 {
     if ( rHt1.GetStart() == rHt2.GetStart() )
     {
@@ -45,9 +45,9 @@ static bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                 if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
                     const sal_uInt16 nS1 =
-                        static_txtattr_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
+                        static_txtattr_cast<const SwTextCharFormat&>(rHt1).GetSortNumber();
                     const sal_uInt16 nS2 =
-                        static_txtattr_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
+                        static_txtattr_cast<const SwTextCharFormat&>(rHt2).GetSortNumber();
                     if ( nS1 != nS2 ) // robust
                         return nS1 < nS2;
                 }
@@ -63,7 +63,7 @@ static bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 }
 
 // Zuerst nach Ende danach nach Ptr
-static bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+static bool lcl_IsLessEnd( const SwTextAttr &rHt1, const SwTextAttr &rHt2 )
 {
     const sal_Int32 nHt1 = *rHt1.GetAnyEnd();
     const sal_Int32 nHt2 = *rHt2.GetAnyEnd();
@@ -78,9 +78,9 @@ static bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                 if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
                     const sal_uInt16 nS1 =
-                        static_txtattr_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
+                        static_txtattr_cast<const SwTextCharFormat&>(rHt1).GetSortNumber();
                     const sal_uInt16 nS2 =
-                        static_txtattr_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
+                        static_txtattr_cast<const SwTextCharFormat&>(rHt2).GetSortNumber();
                     if ( nS1 != nS2 ) // robust
                         return nS1 > nS2;
                 }
@@ -96,31 +96,31 @@ static bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
     return ( nHt1 < nHt2 );
 }
 
-bool CompareSwpHtStart::operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const
+bool CompareSwpHtStart::operator()(SwTextAttr* const lhs, SwTextAttr* const rhs) const
 {
   return lcl_IsLessStart( *lhs, *rhs );
 }
 
-bool CompareSwpHtEnd::operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const
+bool CompareSwpHtEnd::operator()(SwTextAttr* const lhs, SwTextAttr* const rhs) const
 {
   return lcl_IsLessEnd( *lhs, *rhs );
 }
 
-void SwpHintsArray::Insert( const SwTxtAttr *pHt )
+void SwpHintsArray::Insert( const SwTextAttr *pHt )
 {
     Resort();
-    assert(m_HintStarts.find(const_cast<SwTxtAttr*>(pHt))
+    assert(m_HintStarts.find(const_cast<SwTextAttr*>(pHt))
             == m_HintStarts.end()); // "Insert: hint already in HtStart"
-    assert(m_HintEnds.find(const_cast<SwTxtAttr*>(pHt))
+    assert(m_HintEnds.find(const_cast<SwTextAttr*>(pHt))
             == m_HintEnds.end());   // "Insert: hint already in HtEnd"
-    m_HintStarts.insert( const_cast<SwTxtAttr*>(pHt) );
-    m_HintEnds  .insert( const_cast<SwTxtAttr*>(pHt) );
+    m_HintStarts.insert( const_cast<SwTextAttr*>(pHt) );
+    m_HintEnds  .insert( const_cast<SwTextAttr*>(pHt) );
 }
 
 void SwpHintsArray::DeleteAtPos( const size_t nPos )
 {
     // optimization: nPos is the position in the Starts array
-    SwTxtAttr *pHt = m_HintStarts[ nPos ];
+    SwTextAttr *pHt = m_HintStarts[ nPos ];
     m_HintStarts.erase( m_HintStarts.begin() + nPos );
 
     Resort();
@@ -130,10 +130,10 @@ void SwpHintsArray::DeleteAtPos( const size_t nPos )
     (void) done; // unused in NDEBUG
 }
 
-bool SwpHintsArray::Contains( const SwTxtAttr *pHt ) const
+bool SwpHintsArray::Contains( const SwTextAttr *pHt ) const
 {
     // DO NOT use find() or CHECK here!
-    // if called from SwTxtNode::InsertItem, pHt has already been deleted,
+    // if called from SwTextNode::InsertItem, pHt has already been deleted,
     // so it cannot be dereferenced
     for (size_t i = 0; i < m_HintStarts.size(); ++i)
     {
@@ -163,21 +163,21 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
     sal_Int32 nLastStart = 0;
     sal_Int32 nLastEnd   = 0;
 
-    const SwTxtAttr *pLastStart = 0;
-    const SwTxtAttr *pLastEnd = 0;
-    std::set<SwTxtAttr const*> RsidOnlyAutoFmts;
+    const SwTextAttr *pLastStart = 0;
+    const SwTextAttr *pLastEnd = 0;
+    std::set<SwTextAttr const*> RsidOnlyAutoFormats;
     if (bPortionsMerged)
     {
         for (size_t i = 0; i < Count(); ++i)
         {
-            SwTxtAttr const*const pHint(m_HintStarts[i]);
+            SwTextAttr const*const pHint(m_HintStarts[i]);
             if (RES_TXTATR_AUTOFMT == pHint->Which())
             {
                 std::shared_ptr<SfxItemSet> const pSet(
-                        pHint->GetAutoFmt().GetStyleHandle());
+                        pHint->GetAutoFormat().GetStyleHandle());
                 if (pSet->Count() == 1 && pSet->GetItem(RES_CHRATR_RSID, false))
                 {
-                    RsidOnlyAutoFmts.insert(pHint);
+                    RsidOnlyAutoFormats.insert(pHint);
                 }
             }
         }
@@ -188,7 +188,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         // --- Start-Kontrolle ---
 
         // 2a) gueltiger Pointer? vgl. DELETEFF
-        const SwTxtAttr *pHt = m_HintStarts[i];
+        const SwTextAttr *pHt = m_HintStarts[i];
         CHECK_ERR( 0xFF != *reinterpret_cast<unsigned char const *>(pHt), "HintsCheck: start ptr was deleted" );
 
         // 3a) Stimmt die Start-Sortierung?
@@ -205,7 +205,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         // --- End-Kontrolle ---
 
         // 2b) gueltiger Pointer? vgl. DELETEFF
-        const SwTxtAttr *pHtEnd = m_HintEnds[i];
+        const SwTextAttr *pHtEnd = m_HintEnds[i];
         CHECK_ERR( 0xFF != *reinterpret_cast<unsigned char const *>(pHtEnd), "HintsCheck: end ptr was deleted" );
 
         // 3b) Stimmt die End-Sortierung?
@@ -223,13 +223,13 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         // --- Ueberkreuzungen ---
 
         // 5) gleiche Pointer in beiden Arrays
-        if (m_HintStarts.find(const_cast<SwTxtAttr*>(pHt)) == m_HintStarts.end())
+        if (m_HintStarts.find(const_cast<SwTextAttr*>(pHt)) == m_HintStarts.end())
             nIdx = COMPLETE_STRING;
 
         CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetStartOf" );
 
         // 6) gleiche Pointer in beiden Arrays
-        if (m_HintEnds.find(const_cast<SwTxtAttr*>(pHt)) == m_HintEnds.end())
+        if (m_HintEnds.find(const_cast<SwTextAttr*>(pHt)) == m_HintEnds.end())
             nIdx = COMPLETE_STRING;
 
         CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetEndOf" );
@@ -245,8 +245,8 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                    "HintsCheck: Character attribute in end array" );
 
         // 8) style portion check
-        const SwTxtAttr* pHtThis = m_HintStarts[i];
-        const SwTxtAttr* pHtLast = i > 0 ? m_HintStarts[i-1] : 0;
+        const SwTextAttr* pHtThis = m_HintStarts[i];
+        const SwTextAttr* pHtLast = i > 0 ? m_HintStarts[i-1] : 0;
         CHECK_ERR( (0 == i)
             ||  (   (RES_TXTATR_CHARFMT != pHtLast->Which())
                 &&  (RES_TXTATR_AUTOFMT != pHtLast->Which()))
@@ -261,9 +261,9 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                     ) // never two AUTOFMT on same range
                 &&  (   (pHtThis->Which() != RES_TXTATR_CHARFMT)
                     ||  (pHtLast->Which() != RES_TXTATR_CHARFMT)
-                    ||  (static_txtattr_cast<const SwTxtCharFmt *>(pHtThis)
+                    ||  (static_txtattr_cast<const SwTextCharFormat *>(pHtThis)
                                 ->GetSortNumber() !=
-                         static_txtattr_cast<const SwTxtCharFmt *>(pHtLast)
+                         static_txtattr_cast<const SwTextCharFormat *>(pHtLast)
                                 ->GetSortNumber())
                     ) // multiple CHARFMT on same range need distinct sortnr
                 )
@@ -285,7 +285,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                 bool bForbidContinuation(!bNoLength && !bNeedContinuation);
                 if (RES_TXTATR_AUTOFMT == pHt->Which())
                 {
-                    if (RsidOnlyAutoFmts.find(pHt) != RsidOnlyAutoFmts.end())
+                    if (RsidOnlyAutoFormats.find(pHt) != RsidOnlyAutoFormats.end())
                     {
                         assert(pHt->IsFormatIgnoreStart());
                         bNeedContinuation = false;
@@ -297,7 +297,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                     bool bFound(false);
                     for (size_t j = i + 1; j < Count(); ++j)
                     {
-                        SwTxtAttr *const pOther(m_HintStarts[j]);
+                        SwTextAttr *const pOther(m_HintStarts[j]);
                         if (pOther->GetStart() > *pHt->End())
                         {
                             break; // done
@@ -317,8 +317,8 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                                     bFound = true;
                                 }
                                 else if (bForbidContinuation &&
-                                         (RsidOnlyAutoFmts.find(pOther) ==
-                                          RsidOnlyAutoFmts.end()))
+                                         (RsidOnlyAutoFormats.find(pOther) ==
+                                          RsidOnlyAutoFormats.end()))
                                 {
                                     assert(!pOther->IsFormatIgnoreStart());
                                 }
@@ -343,7 +343,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         {
             for ( size_t j = 0; j < Count(); ++j )
             {
-                SwTxtAttr const * const pOther( m_HintStarts[j] );
+                SwTextAttr const * const pOther( m_HintStarts[j] );
                 if ( pOther->IsNesting() &&  (i != j) )
                 {
                     SwComparePosition cmp = ComparePosition(
@@ -356,12 +356,12 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
             }
         }
 
-        // 10) dummy char check (unfortunately cannot check SwTxtNode::m_Text)
+        // 10) dummy char check (unfortunately cannot check SwTextNode::m_Text)
         if (pHtThis->HasDummyChar())
         {
             for ( sal_uInt16 j = 0; j < i; ++j )
             {
-                SwTxtAttr const * const pOther( m_HintStarts[j] );
+                SwTextAttr const * const pOther( m_HintStarts[j] );
                 if (pOther->HasDummyChar())
                 {
                     CHECK_ERR( (pOther->GetStart() != pHtThis->GetStart()),
@@ -376,7 +376,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
 #endif      /* DBG_UTIL */
 
 // Resort() is called before every Insert and Delete.
-// Various SwTxtNode methods modify hints in a way that violates the
+// Various SwTextNode methods modify hints in a way that violates the
 // sort order of the m_HintStarts, m_HintEnds arrays, so this method is needed
 // to restore the order.
 

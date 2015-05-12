@@ -159,49 +159,49 @@ interface TextDrawText
     SID_ATTR_CHAR_WEIGHT // api:
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_CHAR_POSTURE // api:
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_CHAR_UNDERLINE // api:
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_CHAR_OVERLINE // api:
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_CHAR_CONTOUR
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_CHAR_SHADOWED
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_CHAR_STRIKEOUT
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -473,7 +473,7 @@ interface TextDrawText
     SID_AUTOSPELL_CHECK
     [
         ExecMethod = Execute;
-        StateMethod = GetDrawTxtCtrlState
+        StateMethod = GetDrawTextCtrlState
     ]
 
     SID_SEARCH_DLG
@@ -622,13 +622,13 @@ interface TextDrawText
     FN_GROW_FONT_SIZE
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_SHRINK_FONT_SIZE
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 }
@@ -639,57 +639,57 @@ interface TextDrawFont
     SID_ATTR_CHAR_FONT // status()
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_CHAR_FONTHEIGHT // status()
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_CHAR_COLOR // api:
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_WORDLINEMODE // status(final|play)
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_RELIEF
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_LANGUAGE // status(final|play)
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_KERNING // status(final|play)
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_AUTOKERN // // status(final|play)
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_ESCAPEMENT // status(final|play)
     [
         ExecMethod = Execute ;
-        StateMethod = GetDrawTxtCtrlState ;
+        StateMethod = GetDrawTextCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
