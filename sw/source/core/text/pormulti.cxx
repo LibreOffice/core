@@ -678,7 +678,7 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
     if( nLeft || nRight )
     {
         if( !pCurr->GetPortion() )
-            pCurr->SetPortion( new SwTxtPortion( *pCurr ) );
+            pCurr->SetPortion(new SwTxtPortion(*static_cast<SwLinePortion*>(pCurr)));
         if( nLeft )
         {
             SwMarginPortion *pMarg = new SwMarginPortion( 0 );
