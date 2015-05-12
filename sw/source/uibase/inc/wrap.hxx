@@ -107,8 +107,7 @@ public:
 
     static const sal_uInt16* GetRanges() { return aWrapPageRg; }
     inline void     SetNewFrame(bool bNewFrame) { bNew = bNewFrame; }
-    inline void     SetFormatUsed(bool bFmt, bool bDrw) { bFormat = bFmt;
-                                                            bDrawMode = bDrw; }
+    inline void     SetFormatUsed(bool bFormatUsed, bool bDrw) { bFormat = bFormatUsed; bDrawMode = bDrw; }
     inline void     SetShell(SwWrtShell* pSh) { pWrtSh = pSh; }
 };
 

@@ -184,9 +184,9 @@ public:
     void SetFrmMode(bool bMod);
     void SetPageWidth(long nPageWidth);
 
-    void SetFormatUsed(bool bFmt)
+    void SetFormatUsed(bool bFormatUsed)
     {
-        bFormat = bFmt;
+        bFormat = bFormatUsed;
     }
 
     void ShowBalance(bool bShow)
