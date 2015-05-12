@@ -114,15 +114,15 @@ class _SaveTable
 {
     friend class _SaveBox;
     friend class _SaveLine;
-    SfxItemSet aTblSet;
-    _SaveLine* pLine;
-    const SwTable* pSwTable;
-    SfxItemSets aSets;
-    SwFrmFmts aFrmFmts;
-    sal_uInt16 nLineCount;
-    bool bModifyBox : 1;
-    bool bSaveFormula : 1;
-    bool bNewModel : 1;
+    SfxItemSet m_aTblSet;
+    _SaveLine* m_pLine;
+    const SwTable* m_pSwTable;
+    SfxItemSets m_aSets;
+    SwFrmFmts m_aFrmFmts;
+    sal_uInt16 m_nLineCount;
+    bool m_bModifyBox : 1;
+    bool m_bSaveFormula : 1;
+    bool m_bNewModel : 1;
 
 public:
     _SaveTable( const SwTable& rTbl, sal_uInt16 nLnCnt = USHRT_MAX,
@@ -137,7 +137,7 @@ public:
     void SaveCntntAttrs( SwDoc* pDoc );
     void CreateNew( SwTable& rTbl, bool bCreateFrms = true,
                     bool bRestoreChart = true );
-    bool IsNewModel() const { return bNewModel; }
+    bool IsNewModel() const { return m_bNewModel; }
 };
 
 class _SaveLine
@@ -864,32 +864,32 @@ void SwUndoTblHeadline::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 _SaveTable::_SaveTable( const SwTable& rTbl, sal_uInt16 nLnCnt, bool bSaveFml )
-    : aTblSet( *rTbl.GetFrmFmt()->GetAttrSet().GetPool(), aTableSetRange ),
-    pSwTable( &rTbl ), nLineCount( nLnCnt ), bSaveFormula( bSaveFml )
+    : m_aTblSet(*rTbl.GetFrmFmt()->GetAttrSet().GetPool(), aTableSetRange),
+      m_pSwTable(&rTbl), m_nLineCount(nLnCnt), m_bSaveFormula(bSaveFml)
 {
-    bModifyBox = false;
-    bNewModel = rTbl.IsNewModel();
-    aTblSet.Put( rTbl.GetFrmFmt()->GetAttrSet() );
-    pLine = new _SaveLine( 0, *rTbl.GetTabLines()[ 0 ], *this );
+    m_bModifyBox = false;
+    m_bNewModel = rTbl.IsNewModel();
+    m_aTblSet.Put(rTbl.GetFrmFmt()->GetAttrSet());
+    m_pLine = new _SaveLine( 0, *rTbl.GetTabLines()[ 0 ], *this );
 
-    _SaveLine* pLn = pLine;
+    _SaveLine* pLn = m_pLine;
     if( USHRT_MAX == nLnCnt )
         nLnCnt = rTbl.GetTabLines().size();
     for( sal_uInt16 n = 1; n < nLnCnt; ++n )
         pLn = new _SaveLine( pLn, *rTbl.GetTabLines()[ n ], *this );
 
-    aFrmFmts.clear();
-    pSwTable = 0;
+    m_aFrmFmts.clear();
+    m_pSwTable = 0;
 }
 
 _SaveTable::~_SaveTable()
 {
-    delete pLine;
+    delete m_pLine;
 }
 
 sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
 {
-    size_t nRet = aFrmFmts.GetPos( pFmt );
+    size_t nRet = m_aFrmFmts.GetPos(pFmt);
     if( SIZE_MAX == nRet )
     {
         // Create copy of ItemSet
@@ -903,9 +903,9 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
         if( SfxItemState::SET == pSet->GetItemState( RES_BOXATR_FORMULA, true, &pItem ))
         {
             pSet->ClearItem( RES_BOXATR_VALUE );
-            if( pSwTable && bSaveFormula )
+            if (m_pSwTable && m_bSaveFormula)
             {
-                SwTableFmlUpdate aMsgHnt( pSwTable );
+                SwTableFmlUpdate aMsgHnt(m_pSwTable);
                 aMsgHnt.eFlags = TBL_BOXNAME;
                 SwTblBoxFormula* pFormulaItem = const_cast<SwTblBoxFormula*>(static_cast<const SwTblBoxFormula*>(pItem));
                 pFormulaItem->ChgDefinedIn( pFmt );
@@ -913,22 +913,22 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
                 pFormulaItem->ChgDefinedIn( 0 );
             }
         }
-        nRet = aSets.size();
-        aSets.push_back( pSet );
-        aFrmFmts.insert( aFrmFmts.begin() + nRet, pFmt );
+        nRet = m_aSets.size();
+        m_aSets.push_back(pSet);
+        m_aFrmFmts.insert(m_aFrmFmts.begin() + nRet, pFmt);
     }
     return static_cast<sal_uInt16>(nRet);
 }
 
 void _SaveTable::RestoreAttr( SwTable& rTbl, bool bMdfyBox )
 {
-    bModifyBox = bMdfyBox;
+    m_bModifyBox = bMdfyBox;
 
     // first, get back attributes of TableFrmFormat
     SwFrmFmt* pFmt = rTbl.GetFrmFmt();
     SfxItemSet& rFmtSet  = (SfxItemSet&)pFmt->GetAttrSet();
     rFmtSet.ClearItem();
-    rFmtSet.Put( aTblSet );
+    rFmtSet.Put(m_aTblSet);
 
     if( pFmt->IsInCache() )
     {
@@ -947,14 +947,14 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, bool bMdfyBox )
 
     // fill FrmFmts with defaults (0)
     pFmt = 0;
-    for( size_t n = aSets.size(); n; --n )
-        aFrmFmts.push_back( pFmt );
+    for (size_t n = m_aSets.size(); n; --n)
+        m_aFrmFmts.push_back(pFmt);
 
-    const size_t nLnCnt = ( USHRT_MAX == nLineCount )
+    const size_t nLnCnt = (USHRT_MAX == m_nLineCount)
         ? rTbl.GetTabLines().size()
-        : nLineCount;
+        : m_nLineCount;
 
-    _SaveLine* pLn = pLine;
+    _SaveLine* pLn = m_pLine;
     for( size_t n = 0; n < nLnCnt; ++n, pLn = pLn->pNext )
     {
         if( !pLn )
@@ -966,13 +966,13 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, bool bMdfyBox )
         pLn->RestoreAttr( *rTbl.GetTabLines()[ n ], *this );
     }
 
-    aFrmFmts.clear();
-    bModifyBox = false;
+    m_aFrmFmts.clear();
+    m_bModifyBox = false;
 }
 
 void _SaveTable::SaveCntntAttrs( SwDoc* pDoc )
 {
-    pLine->SaveCntntAttrs( pDoc );
+    m_pLine->SaveCntntAttrs(pDoc);
 }
 
 void _SaveTable::CreateNew( SwTable& rTbl, bool bCreateFrms,
@@ -985,7 +985,7 @@ void _SaveTable::CreateNew( SwTable& rTbl, bool bCreateFrms,
     SwFrmFmt* pFmt = rTbl.GetFrmFmt();
     SfxItemSet& rFmtSet  = (SfxItemSet&)pFmt->GetAttrSet();
     rFmtSet.ClearItem();
-    rFmtSet.Put( aTblSet );
+    rFmtSet.Put(m_aTblSet);
 
     if( pFmt->IsInCache() )
     {
@@ -998,16 +998,16 @@ void _SaveTable::CreateNew( SwTable& rTbl, bool bCreateFrms,
 
     // fill FrmFmts with defaults (0)
     pFmt = 0;
-    for( size_t n = aSets.size(); n; --n )
-        aFrmFmts.push_back( pFmt );
+    for( size_t n = m_aSets.size(); n; --n )
+        m_aFrmFmts.push_back(pFmt);
 
-    pLine->CreateNew( rTbl, aParent, *this );
-    aFrmFmts.clear();
+    m_pLine->CreateNew(rTbl, aParent, *this);
+    m_aFrmFmts.clear();
 
     // add new lines, delete old ones
-    const size_t nOldLines = ( USHRT_MAX == nLineCount )
+    const size_t nOldLines = (USHRT_MAX == m_nLineCount)
         ? rTbl.GetTabLines().size()
-        : nLineCount;
+        : m_nLineCount;
 
     SwDoc *pDoc = rTbl.GetFrmFmt()->GetDoc();
     SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
@@ -1083,15 +1083,15 @@ void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
 {
     SwDoc* pDoc = pOldFmt->GetDoc();
 
-    SwFrmFmt* pFmt = aFrmFmts[ nFmtPos ];
+    SwFrmFmt* pFmt = m_aFrmFmts[ nFmtPos ];
     if( !pFmt )
     {
         if( pTblLn )
             pFmt = pDoc->MakeTableLineFmt();
         else
             pFmt = pDoc->MakeTableBoxFmt();
-        pFmt->SetFmtAttr( *aSets[ nFmtPos ] );
-        aFrmFmts[nFmtPos] = pFmt;
+        pFmt->SetFmtAttr(*m_aSets[nFmtPos]);
+        m_aFrmFmts[nFmtPos] = pFmt;
     }
 
     // first re-assign Frms
@@ -1118,7 +1118,7 @@ void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
     else if ( pTblBx )
         const_cast<SwTableBox*>(pTblBx)->RegisterToFormat( *pFmt );
 
-    if( bModifyBox && !pTblLn )
+    if (m_bModifyBox && !pTblLn)
     {
         const SfxPoolItem& rOld = pOldFmt->GetFmtAttr( RES_BOXATR_FORMAT ),
                          & rNew = pFmt->GetFmtAttr( RES_BOXATR_FORMAT );
@@ -1175,13 +1175,13 @@ void _SaveLine::SaveCntntAttrs( SwDoc* pDoc )
 
 void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl )
 {
-    SwTableLineFmt* pFmt = static_cast<SwTableLineFmt*>(rSTbl.aFrmFmts[ nItemSet ]);
+    SwTableLineFmt* pFmt = static_cast<SwTableLineFmt*>(rSTbl.m_aFrmFmts[ nItemSet ]);
     if( !pFmt )
     {
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
         pFmt = pDoc->MakeTableLineFmt();
-        pFmt->SetFmtAttr( *rSTbl.aSets[ nItemSet ] );
-        rSTbl.aFrmFmts[ nItemSet ] = pFmt;
+        pFmt->SetFmtAttr(*rSTbl.m_aSets[nItemSet]);
+        rSTbl.m_aFrmFmts[nItemSet] = pFmt;
     }
     SwTableLine* pNew = new SwTableLine( pFmt, 1, &rParent );
 
@@ -1321,13 +1321,13 @@ void _SaveBox::SaveCntntAttrs( SwDoc* pDoc )
 
 void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl )
 {
-    SwTableBoxFmt* pFmt = static_cast<SwTableBoxFmt*>(rSTbl.aFrmFmts[ nItemSet ]);
+    SwTableBoxFmt* pFmt = static_cast<SwTableBoxFmt*>(rSTbl.m_aFrmFmts[ nItemSet ]);
     if( !pFmt )
     {
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
         pFmt = pDoc->MakeTableBoxFmt();
-        pFmt->SetFmtAttr( *rSTbl.aSets[ nItemSet ] );
-        rSTbl.aFrmFmts[nItemSet] = pFmt;
+        pFmt->SetFmtAttr(*rSTbl.m_aSets[nItemSet]);
+        rSTbl.m_aFrmFmts[nItemSet] = pFmt;
     }
 
     if( ULONG_MAX == nSttNode )     // no EndBox
