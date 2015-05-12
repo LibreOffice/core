@@ -228,23 +228,10 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
     if (ignoreLocation(pVarDecl)) {
         return true;
     }
-    const RecordType *recordType = pVarDecl->getType()->getAs<RecordType>();
-    if (recordType == nullptr) {
-        return true;
-    }
-    const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
-    if (recordDecl == nullptr) {
+    if (  isa<ParmVarDecl>(pVarDecl) || pVarDecl->isLocalVarDecl() ) {
         return true;
     }
 
-    // check if this field is derived from Window
-    if (isDerivedFromWindow(recordDecl)) {
-        report(
-            DiagnosticsEngine::Warning,
-            "OutputDevice subclass allocated on stack, should be allocated via VclPtr or via *.",
-            pVarDecl->getLocation())
-          << pVarDecl->getSourceRange();
-    }
     if (   !startsWith(pVarDecl->getType().getAsString(), "std::vector<vcl::Window *>")
         && !startsWith(pVarDecl->getType().getAsString(), "std::map<vcl::Window *, Size>")
         && !startsWith(pVarDecl->getType().getAsString(), "std::map<vcl::Window *, class Size>")
@@ -268,6 +255,24 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
         report(
             DiagnosticsEngine::Warning,
             "OutputDevice subclass should be wrapped in VclPtr. " + pVarDecl->getType().getAsString(),
+            pVarDecl->getLocation())
+          << pVarDecl->getSourceRange();
+        return true;
+    }
+
+    const RecordType *recordType = pVarDecl->getType()->getAs<RecordType>();
+    if (recordType == nullptr) {
+        return true;
+    }
+    const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
+    if (recordDecl == nullptr) {
+        return true;
+    }
+    // check if this field is derived from Window
+    if (isDerivedFromWindow(recordDecl)) {
+        report(
+            DiagnosticsEngine::Warning,
+            "OutputDevice subclass allocated on stack, should be allocated via VclPtr or via *.",
             pVarDecl->getLocation())
           << pVarDecl->getSourceRange();
     }
