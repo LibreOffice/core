@@ -2988,10 +2988,10 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException, 
     if(pFmt)
     {
         const OUString aOldName( pFmt->GetName() );
-        const SwFrmFmts* pTbl = pFmt->GetDoc()->GetTblFrmFmts();
-        for( size_t i = pTbl->size(); i; )
+        const SwFrmFmts* pFrameFormats = pFmt->GetDoc()->GetTblFrmFmts();
+        for (size_t i = pFrameFormats->size(); i;)
         {
-            const SwFrmFmt* pTmpFmt = (*pTbl)[ --i ] ;
+            const SwFrmFmt* pTmpFmt = (*pFrameFormats)[--i];
             if( !pTmpFmt->IsDefault() &&
                 pTmpFmt->GetName() == rName &&
                             pFmt->GetDoc()->IsUsed( *pTmpFmt ))

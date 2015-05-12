@@ -142,11 +142,10 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
 
     // alle noch offenen Attribute beenden und hinter der Tabelle
     // neu aufspannen
-    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
-    for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
-            nCnt--; ++pTbl )
+    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
+    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
-        _HTMLAttr *pAttr = *pTbl;
+        _HTMLAttr *pAttr = *pHTMLAttributes;
         while( pAttr )
         {
             _HTMLAttr *pNext = pAttr->GetNext();

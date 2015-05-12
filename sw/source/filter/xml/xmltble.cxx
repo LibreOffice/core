@@ -458,28 +458,28 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
 class SwXMLTableInfo_Impl
 {
-    const SwTable *pTable;
-    Reference < XTextSection > xBaseSection;
-    bool bBaseSectionValid;
+    const SwTable *m_pTable;
+    Reference<XTextSection> m_xBaseSection;
+    bool m_bBaseSectionValid;
     sal_uInt32 m_nPrefix;
 
 public:
 
     inline SwXMLTableInfo_Impl( const SwTable *pTbl, sal_uInt16 nPrefix );
 
-    const SwTable *GetTable() const { return pTable; }
-    const SwFrmFmt *GetTblFmt() const { return pTable->GetFrmFmt(); }
+    const SwTable *GetTable() const { return m_pTable; }
+    const SwFrmFmt *GetTblFmt() const { return m_pTable->GetFrmFmt(); }
 
-    bool IsBaseSectionValid() const { return bBaseSectionValid; }
-    const Reference < XTextSection >& GetBaseSection() const { return xBaseSection; }
+    bool IsBaseSectionValid() const { return m_bBaseSectionValid; }
+    const Reference<XTextSection>& GetBaseSection() const { return m_xBaseSection; }
     inline void SetBaseSection( const Reference < XTextSection >& rBase );
     /// The namespace (table or loext) that should be used for the elements.
     sal_uInt16 GetPrefix() const { return m_nPrefix; }
 };
 
-inline SwXMLTableInfo_Impl::SwXMLTableInfo_Impl( const SwTable *pTbl, sal_uInt16 nPrefix ) :
-    pTable( pTbl ),
-    bBaseSectionValid( false ),
+inline SwXMLTableInfo_Impl::SwXMLTableInfo_Impl(const SwTable *pTable, sal_uInt16 nPrefix) :
+    m_pTable(pTable),
+    m_bBaseSectionValid(false),
     m_nPrefix(nPrefix)
 {
 }
@@ -487,8 +487,8 @@ inline SwXMLTableInfo_Impl::SwXMLTableInfo_Impl( const SwTable *pTbl, sal_uInt16
 inline void SwXMLTableInfo_Impl::SetBaseSection(
         const Reference < XTextSection >& rBaseSection )
 {
-    xBaseSection = rBaseSection;
-    bBaseSectionValid = true;
+    m_xBaseSection = rBaseSection;
+    m_bBaseSectionValid = true;
 }
 
 void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )

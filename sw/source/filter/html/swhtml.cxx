@@ -2142,11 +2142,10 @@ bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, bool bUpdateNum )
     const sal_Int32 nEndCnt = aOldPos.nContent.GetIndex();
     const SwPosition& rPos = *pPam->GetPoint();
 
-    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
-    for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
-         nCnt--; ++pTbl )
+    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
+    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
-        _HTMLAttr *pAttr = *pTbl;
+        _HTMLAttr *pAttr = *pHTMLAttributes;
         if( pAttr && pAttr->GetItem().Which() < RES_PARATR_BEGIN )
         {
             bool bWholePara = false;
@@ -3229,22 +3228,21 @@ void SwHTMLParser::SaveAttrTab( _HTMLAttrTable& rNewAttrTab )
     if( !aParaAttrs.empty() )
         aParaAttrs.clear();
 
-    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
-    _HTMLAttr** pSaveTbl = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
+    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
+    _HTMLAttr** pSaveAttributes = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
 
-    for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
-         nCnt--; (++pTbl, ++pSaveTbl) )
+    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; (++pHTMLAttributes, ++pSaveAttributes))
     {
-        *pSaveTbl = *pTbl;
+        *pSaveAttributes = *pHTMLAttributes;
 
-        _HTMLAttr *pAttr = *pSaveTbl;
-        while( pAttr )
+        _HTMLAttr *pAttr = *pSaveAttributes;
+        while (pAttr)
         {
-            pAttr->SetHead( pSaveTbl );
+            pAttr->SetHead(pSaveAttributes);
             pAttr = pAttr->GetNext();
         }
 
-        *pTbl = 0;
+        *pHTMLAttributes = 0;
     }
 }
 
@@ -3263,8 +3261,8 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
 
     // alle noch offenen Attribute beenden und hinter der Tabelle
     // neu aufspannen
-    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
-    _HTMLAttr** pSaveTbl = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
+    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
+    _HTMLAttr** pSaveAttributes = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
     bool bSetAttr = true;
     const sal_Int32 nSttCnt = pPam->GetPoint()->nContent.GetIndex();
     sal_Int32 nEndCnt = nSttCnt;
@@ -3286,11 +3284,10 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
 
         nEndCnt = (bSetAttr ? pCNd->Len() : 0);
     }
-    for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
-         nCnt--; (++pTbl, ++pSaveTbl) )
+    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; (++pHTMLAttributes, ++pSaveAttributes))
     {
-        _HTMLAttr *pAttr = *pTbl;
-        *pSaveTbl = 0;
+        _HTMLAttr *pAttr = *pHTMLAttributes;
+        *pSaveAttributes = 0;
         while( pAttr )
         {
             _HTMLAttr *pNext = pAttr->GetNext();
@@ -3336,22 +3333,22 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
 
             // den Start des Attributs neu setzen und die Verkettungen
             // aufbrechen
-            pAttr->Reset( nSttIdx, nSttCnt, pSaveTbl );
+            pAttr->Reset(nSttIdx, nSttCnt, pSaveAttributes);
 
-            if( *pSaveTbl )
+            if (*pSaveAttributes)
             {
-                _HTMLAttr *pSAttr = *pSaveTbl;
+                _HTMLAttr *pSAttr = *pSaveAttributes;
                 while( pSAttr->GetNext() )
                     pSAttr = pSAttr->GetNext();
                 pSAttr->InsertNext( pAttr );
             }
             else
-                *pSaveTbl = pAttr;
+                *pSaveAttributes = pAttr;
 
             pAttr = pNext;
         }
 
-        *pTbl = 0;
+        *pHTMLAttributes = 0;
     }
 }
 
@@ -3365,26 +3362,25 @@ void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab,
     if( !aParaAttrs.empty() )
         aParaAttrs.clear();
 
-    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
-    _HTMLAttr** pSaveTbl = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
+    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
+    _HTMLAttr** pSaveAttributes = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
 
-    for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
-        nCnt--; (++pTbl, ++pSaveTbl) )
+    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; (++pHTMLAttributes, ++pSaveAttributes))
     {
-        OSL_ENSURE( !*pTbl, "Die Attribut-Tabelle ist nicht leer!" );
+        OSL_ENSURE(!*pHTMLAttributes, "Die Attribut-Tabelle ist nicht leer!");
 
         const SwPosition *pPos = pPam->GetPoint();
         const SwNodeIndex& rSttPara = pPos->nNode;
         const sal_Int32 nSttCnt = pPos->nContent.GetIndex();
 
-        *pTbl = *pSaveTbl;
+        *pHTMLAttributes = *pSaveAttributes;
 
-        _HTMLAttr *pAttr = *pTbl;
-        while( pAttr )
+        _HTMLAttr *pAttr = *pHTMLAttributes;
+        while (pAttr)
         {
             OSL_ENSURE( !pAttr->GetPrev() || !pAttr->GetPrev()->ppHead,
                     "Previous-Attribut hat noch einen Header" );
-            pAttr->SetHead( pTbl );
+            pAttr->SetHead(pHTMLAttributes);
             if( bSetNewStart )
             {
                 pAttr->nSttPara = rSttPara;
@@ -3395,7 +3391,7 @@ void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab,
             pAttr = pAttr->GetNext();
         }
 
-        *pSaveTbl = 0;
+        *pSaveAttributes = 0;
     }
 }
 

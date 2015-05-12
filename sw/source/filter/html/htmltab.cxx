@@ -2641,9 +2641,9 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         bool bIsInFlyFrame = pContext && pContext->GetFrmFmt();
         if( bIsInFlyFrame && !nWidth )
         {
-            SvxAdjust eTblAdjust = GetTableAdjust(false);
-            if( eTblAdjust != SVX_ADJUST_LEFT &&
-                eTblAdjust != SVX_ADJUST_RIGHT )
+            SvxAdjust eAdjust = GetTableAdjust(false);
+            if (eAdjust != SVX_ADJUST_LEFT &&
+                eAdjust != SVX_ADJUST_RIGHT)
             {
                 // Wenn eine Tabelle ohne Breitenangabe nicht links oder
                 // rechts umflossen werden soll, dann stacken wir sie
@@ -3401,12 +3401,10 @@ HTMLTableCnts *SwHTMLParser::InsertTableContents(
     const SwNodeIndex& rSttPara = pPam->GetPoint()->nNode;
     sal_Int32 nSttCnt = pPam->GetPoint()->nContent.GetIndex();
 
-    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
-    for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
-        nCnt--; ++pTbl )
+    _HTMLAttr** pHTMLAttributes = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
+    for (sal_uInt16 nCnt = sizeof(_HTMLAttrTable) / sizeof(_HTMLAttr*); nCnt--; ++pHTMLAttributes)
     {
-
-        _HTMLAttr *pAttr = *pTbl;
+        _HTMLAttr *pAttr = *pHTMLAttributes;
         while( pAttr )
         {
             OSL_ENSURE( !pAttr->GetPrev(), "Attribut hat Previous-Liste" );
@@ -4963,10 +4961,10 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 class _TblSaveStruct : public SwPendingStackData
 {
 public:
-    HTMLTable *pCurTable;
+    HTMLTable *m_pCurrentTable;
 
     _TblSaveStruct( HTMLTable *pCurTbl ) :
-        pCurTable( pCurTbl )
+        m_pCurrentTable( pCurTbl )
     {}
 
     virtual ~_TblSaveStruct();
@@ -4982,9 +4980,9 @@ _TblSaveStruct::~_TblSaveStruct()
 
 void _TblSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc )
 {
-    pCurTable->MakeTable( 0, nWidth );
+    m_pCurrentTable->MakeTable(0, nWidth);
 
-    _HTMLTableContext *pTCntxt = pCurTable->GetContext();
+    _HTMLTableContext *pTCntxt = m_pCurrentTable->GetContext();
     OSL_ENSURE( pTCntxt, "Wo ist der Tabellen-Kontext" );
 
     SwTableNode *pTblNd = pTCntxt->GetTableNode();
@@ -5199,7 +5197,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         SaveState( 0 );
     }
 
-    HTMLTable *pCurTable = pSaveStruct->pCurTable;
+    HTMLTable *pCurTable = pSaveStruct->m_pCurrentTable;
 
     // </TABLE> wird laut DTD benoetigt
     if( !nToken )
@@ -5424,12 +5422,12 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
 
     if( pTable == pCurTable  )
     {
-        delete pSaveStruct->pCurTable;
-        pSaveStruct->pCurTable = 0;
+        delete pSaveStruct->m_pCurrentTable;
+        pSaveStruct->m_pCurrentTable = 0;
         pTable = 0;
     }
 
-    HTMLTable* pRetTbl = pSaveStruct->pCurTable;
+    HTMLTable* pRetTbl = pSaveStruct->m_pCurrentTable;
     delete pSaveStruct;
 
     return pRetTbl;
