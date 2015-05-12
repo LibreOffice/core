@@ -6997,8 +6997,11 @@ then
         powerpc)
             my_java_arch=ppc
             ;;
-        powerpc64*)
+        powerpc64)
             my_java_arch=ppc64
+            ;;
+        powerpc64le)
+            AS_IF([test -d "$JAVA_HOME/jre/lib/ppc64le"], [my_java_arch=ppc64le], [my_java_arch=ppc64])
             ;;
         x86_64)
             my_java_arch=amd64
