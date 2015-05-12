@@ -23,8 +23,6 @@
 #include <editeng/svxenum.hxx>
 #include <svx/svxdllapi.h>
 
-// enum ------------------------------------------------------------------
-
 enum SvxPrevLineSpace
 {
     SVX_PREV_LINESPACE_1 = 0,
@@ -34,8 +32,6 @@ enum SvxPrevLineSpace
     SVX_PREV_LINESPACE_MIN,
     SVX_PREV_LINESPACE_DURCH
 };
-
-// class SvxParaPrevWindow -----------------------------------------------
 
 class SVX_DLLPUBLIC SvxParaPrevWindow : public vcl::Window
 {
@@ -62,39 +58,100 @@ private:
     Rectangle           Lines[9];
 
 protected:
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
-    void DrawParagraph( bool bAll );
+    void DrawParagraph(vcl::RenderContext& rRenderContext, bool bAll);
 
 public:
     SvxParaPrevWindow( vcl::Window* pParent, WinBits nBits);
 
-    void        SetFirstLineOfst( short nNew )  { nFirstLineOfst = nNew; }
-    void        SetLeftMargin( long nNew )      { nLeftMargin = nNew; }
-    void        SetRightMargin( long nNew )     { nRightMargin = nNew; }
-    void        SetUpper( sal_uInt16 nNew )     { nUpper = nNew; }
-    void        SetLower( sal_uInt16 nNew )     { nLower = nNew; }
-    void        SetAdjust( SvxAdjust eNew )     { eAdjust = eNew; }
-    void        SetLastLine( SvxAdjust eNew )   { eLastLine = eNew; }
-    void        SetLineSpace( SvxPrevLineSpace eNew, sal_uInt16 nNew = 0 )
-                    {   eLine = eNew; nLineVal = nNew; }
-    void        SetText( const OUString& rStr ) SAL_OVERRIDE { aText = rStr; }
-    void        SetSize( Size aNew )            { aSize = aNew; }
+    void SetFirstLineOfst( short nNew )
+    {
+        nFirstLineOfst = nNew;
+    }
+    void SetLeftMargin( long nNew )
+    {
+        nLeftMargin = nNew;
+    }
+    void SetRightMargin( long nNew )
+    {
+        nRightMargin = nNew;
+    }
+    void SetUpper( sal_uInt16 nNew )
+    {
+        nUpper = nNew;
+    }
+    void SetLower( sal_uInt16 nNew )
+    {
+        nLower = nNew;
+    }
+    void SetAdjust( SvxAdjust eNew )
+    {
+        eAdjust = eNew;
+    }
+    void SetLastLine( SvxAdjust eNew )
+    {
+        eLastLine = eNew;
+    }
+    void SetLineSpace( SvxPrevLineSpace eNew, sal_uInt16 nNew = 0 )
+    {
+        eLine = eNew; nLineVal = nNew;
+    }
+    void SetText( const OUString& rStr ) SAL_OVERRIDE
+    {
+        aText = rStr;
+    }
+    void SetSize( Size aNew )
+    {
+        aSize = aNew;
+    }
 
-    short       GetFirstLineOfst() const        { return nFirstLineOfst; }
-    long        GetLeftMargin() const           { return nLeftMargin; }
-    long        GetRightMargin() const          { return nRightMargin; }
-    sal_uInt16  GetUpper() const                { return nUpper; }
-    sal_uInt16  GetLower() const                { return nLower; }
-    SvxAdjust   GetAdjust() const               { return eAdjust; }
+    short GetFirstLineOfst() const
+    {
+        return nFirstLineOfst;
+    }
+    long GetLeftMargin() const
+    {
+        return nLeftMargin;
+    }
+    long GetRightMargin() const
+    {
+        return nRightMargin;
+    }
+    sal_uInt16 GetUpper() const
+    {
+        return nUpper;
+    }
+    sal_uInt16 GetLower() const
+    {
+        return nLower;
+    }
+    SvxAdjust GetAdjust() const
+    {
+        return eAdjust;
+    }
+    SvxPrevLineSpace GetLineEnum() const
+    {
+        return eLine;
+    }
+    sal_uInt16 GetLineValue() const
+    {
+        return nLineVal;
+    }
+    OUString GetText() const SAL_OVERRIDE
+    {
+        return aText;
+    }
+    Size GetSize() const
+    {
+        return aSize;
+    }
 
-    SvxPrevLineSpace    GetLineEnum() const     { return eLine; }
-    sal_uInt16          GetLineValue() const    { return nLineVal; }
-    OUString            GetText() const SAL_OVERRIDE         { return aText; }
-    Size                GetSize() const         { return aSize; }
-
-    void        Draw( bool bAll )               { DrawParagraph( bAll ); }
+    void Draw(vcl::RenderContext& rRenderContext, bool bAll)
+    {
+        DrawParagraph(rRenderContext, bAll);
+    }
 };
 
 #endif

@@ -23,9 +23,7 @@
 #include <vcl/settings.hxx>
 
 SvxParaPrevWindow::SvxParaPrevWindow( vcl::Window* pParent,  WinBits nBits) :
-
     Window( pParent, nBits),
-
     nLeftMargin     ( 0 ),
     nRightMargin    ( 0 ),
     nFirstLineOfst  ( 0 ),
@@ -38,11 +36,11 @@ SvxParaPrevWindow::SvxParaPrevWindow( vcl::Window* pParent,  WinBits nBits) :
 
 {
     // Count in Twips by default
-    SetMapMode( MapMode( MAP_TWIP ) );
+    SetMapMode(MapMode(MAP_TWIP));
 
-    aSize = Size( 11905, 16837 );
+    aSize = Size(11905, 16837);
 
-    SetBorderStyle( WindowBorderStyle::MONO );
+    SetBorderStyle(WindowBorderStyle::MONO);
 }
 
 VCL_BUILDER_FACTORY_ARGS(SvxParaPrevWindow, WB_BORDER)
@@ -52,62 +50,58 @@ Size SvxParaPrevWindow::GetOptimalSize() const
     return getParagraphPreviewOptimalSize(this);
 }
 
-
-
-void SvxParaPrevWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SvxParaPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    DrawParagraph( true );
+    DrawParagraph(rRenderContext, true);
 }
-
-
 
 #define DEF_MARGIN  120
 
-void SvxParaPrevWindow::DrawParagraph( bool bAll )
+void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext, bool bAll)
 {
-    Size aWinSize = GetOutputSizePixel();
-    aWinSize = PixelToLogic( aWinSize );
+    Size aWinSize = rRenderContext.GetOutputSizePixel();
+    aWinSize = rRenderContext.PixelToLogic(aWinSize);
     Size aTmp(1, 1);
     aTmp = PixelToLogic(aTmp);
     aWinSize.Width() -= aTmp.Width() /2;
     aWinSize.Height() -= aTmp.Height() /2;
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
     Color aGrayColor(COL_LIGHTGRAY);
 
-    SetFillColor( Color( rWinColor ) );
-    if( bAll )
-        DrawRect( Rectangle( Point(), aWinSize ) );
+    rRenderContext.SetFillColor(Color(rWinColor));
+    if (bAll)
+        rRenderContext.DrawRect(Rectangle(Point(), aWinSize));
 
-    SetLineColor();
+    rRenderContext.SetLineColor();
 
     long nH = aWinSize.Height() / 19;
-    Size aLineSiz( aWinSize.Width() - DEF_MARGIN, nH ),
-         aSiz = aLineSiz;
+    Size aLineSiz(aWinSize.Width() - DEF_MARGIN, nH);
+    Size aSiz = aLineSiz;
     Point aPnt;
     aPnt.X() = DEF_MARGIN / 2;
-    SetFillColor( aGrayColor );
+    rRenderContext.SetFillColor(aGrayColor);
 
-    for ( sal_uInt16 i = 0; i < 9; ++i )
+    for (sal_uInt16 i = 0; i < 9; ++i)
     {
-        if ( 3 == i )
+        if (i == 3)
         {
-            SetFillColor( Color( COL_GRAY ) );
+            rRenderContext.SetFillColor(Color(COL_GRAY));
             long nTop = nUpper * aLineSiz.Height() / aSize.Height();
             aPnt.Y() += nTop * 2;
         }
 
-        if ( 6 == i )
-            SetFillColor( aGrayColor );
+        if (i == 6 )
+            rRenderContext.SetFillColor(aGrayColor);
 
-        if ( 3 <= i && 6 > i )
+        if (3 <= i && 6 > i)
         {
             long nLeft = nLeftMargin * aLineSiz.Width() / aSize.Width();
             long nFirst = nFirstLineOfst * aLineSiz.Width() / aSize.Width();
             long nTmp = nLeft + nFirst;
 
-            if ( 3 == i )
+            if (i == 3)
             {
                 aPnt.X() += nTmp;
                 aSiz.Width() -= nTmp;
@@ -121,36 +115,47 @@ void SvxParaPrevWindow::DrawParagraph( bool bAll )
             aSiz.Width() -= nRight;
         }
 
-        if ( 4 == i || 5 == i || 6 == i )
+        if (4 == i || 5 == i || 6 == i)
         {
-            switch ( eLine )
+            switch (eLine)
             {
-                case SVX_PREV_LINESPACE_1:                      break;
-                case SVX_PREV_LINESPACE_15: aPnt.Y() += nH / 2; break;
-                case SVX_PREV_LINESPACE_2:  aPnt.Y() += nH;     break;
-
+                case SVX_PREV_LINESPACE_1:
+                    break;
+                case SVX_PREV_LINESPACE_15:
+                    aPnt.Y() += nH / 2;
+                    break;
+                case SVX_PREV_LINESPACE_2:
+                    aPnt.Y() += nH;
+                    break;
                 case SVX_PREV_LINESPACE_PROP:
                 case SVX_PREV_LINESPACE_MIN:
-                case SVX_PREV_LINESPACE_DURCH:                  break;
+                case SVX_PREV_LINESPACE_DURCH:
+                    break;
             }
         }
 
         aPnt.Y() += nH;
 
-        if ( (3 <= i) && (5 >= i) )
+        if (3 <= i && 5 >= i)
         {
             long nLW = long();
-            switch( i )
+            switch (i)
             {
-                case 3: nLW = aLineSiz.Width() * 8 / 10;    break;
-                case 4: nLW = aLineSiz.Width() * 9 / 10;    break;
-                case 5: nLW = aLineSiz.Width() / 2;         break;
+                case 3:
+                    nLW = aLineSiz.Width() * 8 / 10;
+                    break;
+                case 4:
+                    nLW = aLineSiz.Width() * 9 / 10;
+                    break;
+                case 5:
+                    nLW = aLineSiz.Width() / 2;
+                    break;
             }
 
-            if ( nLW > aSiz.Width() )
+            if (nLW > aSiz.Width())
                 nLW = aSiz.Width();
 
-            switch ( eAdjust )
+            switch (eAdjust)
             {
                 case SVX_ADJUST_LEFT:
                     break;
@@ -162,9 +167,9 @@ void SvxParaPrevWindow::DrawParagraph( bool bAll )
                     break;
                 default: ; //prevent warning
             }
-            if( SVX_ADJUST_BLOCK == eAdjust )
+            if (SVX_ADJUST_BLOCK == eAdjust)
             {
-                if( 5 == i )
+                if(5 == i)
                 {
                     switch( eLastLine )
                     {
@@ -188,22 +193,22 @@ void SvxParaPrevWindow::DrawParagraph( bool bAll )
             aSiz.Width() = nLW;
         }
 
-        Rectangle aRect( aPnt, aSiz );
+        Rectangle aRect(aPnt, aSiz);
 
-        if ( Lines[i] != aRect || bAll )
+        if (Lines[i] != aRect || bAll)
         {
-            if ( !bAll )
+            if (!bAll)
             {
-                Color aFillCol = GetFillColor();
-                SetFillColor( rWinColor );
-                DrawRect( Lines[i] );
-                SetFillColor( aFillCol );
+                Color aFillCol = rRenderContext.GetFillColor();
+                rRenderContext.SetFillColor(rWinColor);
+                rRenderContext.DrawRect(Lines[i]);
+                rRenderContext.SetFillColor(aFillCol);
             }
             DrawRect( aRect );
             Lines[i] = aRect;
         }
 
-        if ( 5 == i )
+        if (5 == i)
         {
             long nBottom = nLower * aLineSiz.Height() / aSize.Height();
             aPnt.Y() += nBottom * 2;
