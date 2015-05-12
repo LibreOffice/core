@@ -164,12 +164,12 @@ static bool lcl_IsAnLower( const SwTableLine *pLine, const SwTableLine *pAssumed
 
 struct LinesAndTable
 {
-    std::vector<SwTableLine*> &rLines;
-    const SwTable             &rTable;
-    bool                      bInsertLines;
+    std::vector<SwTableLine*> &m_rLines;
+    const SwTable             &m_rTable;
+    bool                      m_bInsertLines;
 
-    LinesAndTable( std::vector<SwTableLine*> &rL, const SwTable &rTbl ) :
-          rLines( rL ), rTable( rTbl ), bInsertLines( true ) {}
+    LinesAndTable(std::vector<SwTableLine*> &rL, const SwTable &rTbl) :
+          m_rLines(rL), m_rTable(rTbl), m_bInsertLines(true) {}
 };
 
 bool _FindLine( _FndLine & rLine, LinesAndTable* pPara );
@@ -178,27 +178,27 @@ bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
 {
     if (!rBox.GetLines().empty())
     {
-        pPara->bInsertLines = true;
-        for( _FndLine & rFndLine : rBox.GetLines() )
-            _FindLine( rFndLine, pPara );
-        if ( pPara->bInsertLines )
+        pPara->m_bInsertLines = true;
+        for (_FndLine & rFndLine : rBox.GetLines())
+            _FindLine(rFndLine, pPara);
+
+        if (pPara->m_bInsertLines)
         {
             const SwTableLines &rLines = (rBox.GetBox())
                                     ? rBox.GetBox()->GetTabLines()
-                                    : pPara->rTable.GetTabLines();
+                                    : pPara->m_rTable.GetTabLines();
             if (rBox.GetLines().size() == rLines.size())
             {
                 for ( auto pLine : rLines )
-                    ::InsertLine( pPara->rLines, pLine );
+                    ::InsertLine(pPara->m_rLines, pLine);
             }
             else
-                pPara->bInsertLines = false;
+                pPara->m_bInsertLines = false;
         }
     }
     else if (rBox.GetBox())
     {
-        ::InsertLine( pPara->rLines,
-                      static_cast<SwTableLine*>(rBox.GetBox()->GetUpper()));
+        ::InsertLine(pPara->m_rLines, static_cast<SwTableLine*>(rBox.GetBox()->GetUpper()));
     }
     return true;
 }
