@@ -17,7 +17,7 @@ do
     S="${I%/*}"
     # change all except the filenames (in the .mk and in #include)
     # also avoid XML_numFmt, that's a token name
-    git grep -l "$S" sw/ | grep -v '\.mk' | xargs sed -i '/\(#include\|XML_numFmt\)/ !{ s/'"$I"'/g }'
+    git grep -l "$S" sw/ | grep -v -e '\.mk' -e '/data/' | xargs sed -i '/\(#include\|XML_numFmt\)/ !{ s/'"$I"'/g }'
 done
 
 # global:
