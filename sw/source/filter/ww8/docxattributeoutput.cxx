@@ -3224,22 +3224,22 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             uno::Sequence<beans::PropertyValue> aTablePosition = aGrabBagElement->second.get<uno::Sequence<beans::PropertyValue> >();
             for (sal_Int32 i = 0; i < aTablePosition.getLength(); ++i)
             {
-                if (aTablePosition[i].Name == "vertAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                if (aTablePosition[i].Name == "vertAnchor")
                 {
                     OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
                     attrListTablePos->add( FSNS( XML_w, XML_vertAnchor ), strTemp.getStr() );
                 }
-                else if (aTablePosition[i].Name == "tblpYSpec" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                else if (aTablePosition[i].Name == "tblpYSpec")
                 {
                     OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
                     attrListTablePos->add( FSNS( XML_w, XML_tblpYSpec ), strTemp.getStr() );
                 }
-                else if (aTablePosition[i].Name == "horzAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                else if (aTablePosition[i].Name == "horzAnchor")
                 {
                     OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
                     attrListTablePos->add( FSNS( XML_w, XML_horzAnchor ), strTemp.getStr() );
                 }
-                else if (aTablePosition[i].Name == "tblpXSpec" && !aTablePosition[i].Value.get<OUString>().isEmpty())
+                else if (aTablePosition[i].Name == "tblpXSpec")
                 {
                     OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
                     attrListTablePos->add( FSNS( XML_w, XML_tblpXSpec ), strTemp.getStr() );
@@ -4192,6 +4192,14 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         m_pSerializer->singleElementNS( XML_a, XML_blip,
             FSNS( XML_r, nImageType ), aRelId.getStr(),
             FSEND );
+
+    const SfxPoolItem* pItemm;
+    if (SfxItemState::SET == pOLENode->GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE, true, &pItemm))
+    {
+        const SfxEnumItem* nMode = static_cast<const SfxEnumItem*>(pItemm);
+        if (nMode && nMode->GetValue() == GRAPHICDRAWMODE_GREYS )
+            m_pSerializer->singleElementNS (XML_a, XML_grayscl, FSEND);
+    }
 
     if (pSdrObj){
         WriteSrcRect(pSdrObj);
