@@ -163,9 +163,9 @@ void Svx3DPreviewControl::Resize()
     mpScene->SetSnapRect( aRect );
 }
 
-void Svx3DPreviewControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void Svx3DPreviewControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    mp3DView->CompleteRedraw(this, vcl::Region(rRect));
+    mp3DView->CompleteRedraw(&rRenderContext, vcl::Region(rRect));
 }
 
 void Svx3DPreviewControl::MouseButtonDown(const MouseEvent& rMEvt)
