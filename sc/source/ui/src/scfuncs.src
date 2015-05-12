@@ -12231,7 +12231,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "A string to be URL encoded";
+            Text [ en-US ] = "A string to be URL-encoded";
         };
     };
     Resource SC_OPCODE_ERF_MS
