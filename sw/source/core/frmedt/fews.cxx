@@ -67,11 +67,11 @@ void SwFEShell::EndAllActionAndCall()
     }
 }
 
-// Determine the Cntnt's nearest to the point
-Point SwFEShell::GetCntntPos( const Point& rPoint, bool bNext ) const
+// Determine the Content's nearest to the point
+Point SwFEShell::GetContentPos( const Point& rPoint, bool bNext ) const
 {
     SET_CURR_SHELL( (SwViewShell*)this );
-    return GetLayout()->GetNextPrevCntntPos( rPoint, bNext );
+    return GetLayout()->GetNextPrevContentPos( rPoint, bNext );
 }
 
 const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
@@ -89,7 +89,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
             SwPosition aPos( *GetCrsr()->GetPoint() );
             Point aPt( *pPt );
             GetLayout()->GetCrsrOfst( &aPos, aPt );
-            SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
+            SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
             pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
         }
         else
@@ -217,7 +217,7 @@ FrmTypeFlags SwFEShell::GetFrmType( const Point *pPt, bool bStopAtFly ) const
         SwPosition aPos( *GetCrsr()->GetPoint() );
         Point aPt( *pPt );
         GetLayout()->GetCrsrOfst( &aPos, aPt );
-        SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
+        SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
         pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
     }
     else
@@ -239,7 +239,7 @@ FrmTypeFlags SwFEShell::GetFrmType( const Point *pPt, bool bStopAtFly ) const
                                     nReturn |= FrmTypeFlags::COLUMN;
                                 break;
             case FRM_PAGE:      nReturn |= FrmTypeFlags::PAGE;
-                                if( static_cast<const SwPageFrm*>(pFrm)->IsFtnPage() )
+                                if( static_cast<const SwPageFrm*>(pFrm)->IsFootnotePage() )
                                     nReturn |= FrmTypeFlags::FTNPAGE;
                                 break;
             case FRM_HEADER:    nReturn |= FrmTypeFlags::HEADER;      break;
@@ -318,15 +318,15 @@ sal_uInt16 SwFEShell::GetVirtPageNum( const bool bCalcFrm )
 static void lcl_SetAPageOffset( sal_uInt16 nOffset, SwPageFrm* pPage, SwFEShell* pThis )
 {
     pThis->StartAllAction();
-    OSL_ENSURE( pPage->FindFirstBodyCntnt(),
-            "SwFEShell _SetAPageOffset() without CntntFrm" );
+    OSL_ENSURE( pPage->FindFirstBodyContent(),
+            "SwFEShell _SetAPageOffset() without ContentFrm" );
 
-    SwFmtPageDesc aDesc( pPage->GetPageDesc() );
+    SwFormatPageDesc aDesc( pPage->GetPageDesc() );
     aDesc.SetNumOffset( nOffset );
 
     SwFrm *pFrm = pThis->GetCurrFrm( false );
     if ( pFrm->IsInTab() )
-        pThis->GetDoc()->SetAttr( aDesc, *pFrm->FindTabFrm()->GetFmt() );
+        pThis->GetDoc()->SetAttr( aDesc, *pFrm->FindTabFrm()->GetFormat() );
     else
     {
         pThis->GetDoc()->getIDocumentContentOperations().InsertPoolItem( *pThis->GetCrsr(), aDesc );
@@ -348,12 +348,12 @@ void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
     const SwRootFrm* pDocLayout = GetLayout();
     while ( pPage )
     {
-        const SwFrm *pFlow = pPage->FindFirstBodyCntnt();
+        const SwFrm *pFlow = pPage->FindFirstBodyContent();
         if ( pFlow )
         {
             if ( pFlow->IsInTab() )
                 pFlow = pFlow->FindTabFrm();
-            const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
+            const SwFormatPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
             if ( rPgDesc.GetNumOffset() )
             {
                 pDocLayout->SetVirtPageNum( true );
@@ -370,7 +370,7 @@ sal_uInt16 SwFEShell::GetPageOffset() const
     const SwPageFrm *pPage = GetCurrFrm()->FindPageFrm();
     while ( pPage )
     {
-        const SwFrm *pFlow = pPage->FindFirstBodyCntnt();
+        const SwFrm *pFlow = pPage->FindFirstBodyContent();
         if ( pFlow )
         {
             if ( pFlow->IsInTab() )
@@ -384,20 +384,20 @@ sal_uInt16 SwFEShell::GetPageOffset() const
     return 0;
 }
 
-void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, const OUString& rSeparator,
+void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, const OUString& rSeparator,
                              const OUString& rNumberSeparator,
                              const bool bBefore, const sal_uInt16 nId,
                              const OUString& rCharacterStyle,
                              const bool bCpyBrd )
 {
     // get node index of cursor position, SwDoc can do everything else itself
-    SwCntntFrm *pCnt = LTYPE_DRAW==eType ? 0 : GetCurrFrm( false );
+    SwContentFrm *pCnt = LTYPE_DRAW==eType ? 0 : GetCurrFrm( false );
     if( LTYPE_DRAW==eType || pCnt )
     {
         StartAllAction();
 
         sal_uLong nIdx = 0;
-        SwFlyFrmFmt* pFlyFmt = 0;
+        SwFlyFrameFormat* pFlyFormat = 0;
         switch( eType )
         {
         case LTYPE_OBJECT:
@@ -406,15 +406,15 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, cons
             {
                 // pass down index to the startnode for flys
                 nIdx = pCnt->FindFlyFrm()->
-                            GetFmt()->GetCntnt().GetCntntIdx()->GetIndex();
+                            GetFormat()->GetContent().GetContentIdx()->GetIndex();
             }
             break;
         case LTYPE_TABLE:
             if( pCnt->IsInTab() )
             {
-                // pass down index to the TblNode for tables
-                const SwTable& rTbl = *pCnt->FindTabFrm()->GetTable();
-                nIdx = rTbl.GetTabSortBoxes()[ 0 ]
+                // pass down index to the TableNode for tables
+                const SwTable& rTable = *pCnt->FindTabFrm()->GetTable();
+                nIdx = rTable.GetTabSortBoxes()[ 0 ]
                             ->GetSttNd()->FindTableNode()->GetIndex();
             }
             break;
@@ -443,10 +443,10 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, cons
                     if ( !pDrawObj->ISA(SwVirtFlyDrawObj) &&
                          !pDrawObj->ISA(SwFlyDrawObj) )
                     {
-                        SwFlyFrmFmt *pFmt =
-                            GetDoc()->InsertDrawLabel( rTxt, rSeparator, rNumberSeparator, nId, rCharacterStyle, *pDrawObj );
-                        if( !pFlyFmt )
-                            pFlyFmt = pFmt;
+                        SwFlyFrameFormat *pFormat =
+                            GetDoc()->InsertDrawLabel( rText, rSeparator, rNumberSeparator, nId, rCharacterStyle, *pDrawObj );
+                        if( !pFlyFormat )
+                            pFlyFormat = pFormat;
                     }
 
                     aDrawObjs.pop_back();
@@ -460,12 +460,12 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, cons
         }
 
         if( nIdx )
-            pFlyFmt = GetDoc()->InsertLabel( eType, rTxt, rSeparator, rNumberSeparator, bBefore, nId,
+            pFlyFormat = GetDoc()->InsertLabel( eType, rText, rSeparator, rNumberSeparator, bBefore, nId,
                                              nIdx, rCharacterStyle, bCpyBrd );
 
         SwFlyFrm* pFrm;
         const Point aPt( GetCrsrDocPos() );
-        if( pFlyFmt && 0 != ( pFrm = pFlyFmt->GetFrm( &aPt )))
+        if( pFlyFormat && 0 != ( pFrm = pFlyFormat->GetFrm( &aPt )))
             SelectFlyFrm( *pFrm, true );
 
         EndAllActionAndCall();
@@ -489,7 +489,7 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
 
         // search boxes via the layout
         SwSelBoxes  aBoxes;
-        GetTblSel(*this, aBoxes);
+        GetTableSel(*this, aBoxes);
 
         // The Crsr should be removed from the deletion area.
         // Always put them behind/on the table; via the
@@ -502,7 +502,7 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
         }
 
         // call sorting on document
-        bRet = mpDoc->SortTbl(aBoxes, rOpt);
+        bRet = mpDoc->SortTable(aBoxes, rOpt);
     }
     else
     {
@@ -524,7 +524,7 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
             // put selection again
             pPam->DeleteMark();
             pPam->GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
-            SwCntntNode* pCNd = pPam->GetCntntNode();
+            SwContentNode* pCNd = pPam->GetContentNode();
             sal_Int32 nLen = pCNd->Len();
             if( nLen > nCntStt )
                 nLen = nCntStt;
@@ -532,7 +532,7 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
             pPam->SetMark();
 
             pPam->GetPoint()->nNode += nOffset;
-            pCNd = pPam->GetCntntNode();
+            pCNd = pPam->GetContentNode();
             pPam->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
         }
     }
@@ -564,7 +564,7 @@ sal_uInt16 SwFEShell::_GetCurColNum( const SwFrm *pFrm,
                 {
                     if( ( FRM_PAGE | FRM_FLY | FRM_SECTION ) & pFrm->GetType() )
                     {
-                        pPara->pFrmFmt = static_cast<const SwLayoutFrm*>(pFrm)->GetFmt();
+                        pPara->pFrameFormat = static_cast<const SwLayoutFrm*>(pFrm)->GetFormat();
                         pPara->pPrtRect = &pFrm->Prt();
                         pPara->pFrmRect = &pFrm->Frm();
                         break;
@@ -573,7 +573,7 @@ sal_uInt16 SwFEShell::_GetCurColNum( const SwFrm *pFrm,
                 }
                 if( !pFrm )
                 {
-                    pPara->pFrmFmt = 0;
+                    pPara->pFrameFormat = 0;
                     pPara->pPrtRect = 0;
                     pPara->pFrmRect = 0;
                 }
@@ -632,12 +632,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                const RndStdIds _nAnchorId,
                                const sal_Int16 _eHoriRelOrient,
                                const sal_Int16 _eVertRelOrient,
-                               const SwPosition* _pToCharCntntPos,
+                               const SwPosition* _pToCharContentPos,
                                const bool _bFollowTextFlow,
                                bool _bMirror,
                                Point* _opRef,
                                Size* _opPercent,
-                               const SwFmtFrmSize* pFmtFrmSize) const
+                               const SwFormatFrmSize* pFormatFrmSize) const
 {
     const SwFrm* pFrm;
     const SwFlyFrm* pFly;
@@ -656,8 +656,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     bool bWrapThrough = false;
     if ( pFly )
     {
-        SwFlyFrmFmt* pFmt = const_cast<SwFlyFrmFmt*>(pFly->GetFmt());
-        const SwFmtSurround& rSurround = pFmt->GetSurround();
+        SwFlyFrameFormat* pFormat = const_cast<SwFlyFrameFormat*>(pFly->GetFormat());
+        const SwFormatSurround& rSurround = pFormat->GetSurround();
         bWrapThrough = rSurround.GetSurround() == SURROUND_THROUGHT;
     }
 
@@ -800,12 +800,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         if ( _opPercent )
         {
             // If the size is relative from page, then full size should be counted from the page frame.
-            if (pFmtFrmSize && pFmtFrmSize->GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME)
+            if (pFormatFrmSize && pFormatFrmSize->GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME)
                 _opPercent->setWidth(pPage->Frm().Width());
             else
                 _opPercent->setWidth(pUpper->Prt().Width());
 
-            if (pFmtFrmSize && pFmtFrmSize->GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME)
+            if (pFormatFrmSize && pFormatFrmSize->GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME)
                 // If the size is relative from page, then full size should be counted from the page frame.
                 _opPercent->setHeight(pPage->Frm().Height());
             else
@@ -907,8 +907,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // <pFrm>, which is the anchor frame or the proposed anchor frame,
             // doesn't have to be a text frame (e.g. edit a to-page anchored
             // fly frame). Thus, assure this.
-            const SwTxtFrm* pTxtFrm( dynamic_cast<const SwTxtFrm*>(pFrm) );
-            if ( pTxtFrm &&
+            const SwTextFrm* pTextFrm( dynamic_cast<const SwTextFrm*>(pFrm) );
+            if ( pTextFrm &&
                  (_nAnchorId == FLY_AT_CHAR) &&
                  ( _eVertRelOrient == text::RelOrientation::CHAR ||
                    _eVertRelOrient == text::RelOrientation::TEXT_LINE ) )
@@ -917,29 +917,29 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 if ( _eVertRelOrient == text::RelOrientation::CHAR )
                 {
                     SwRect aChRect;
-                    if ( _pToCharCntntPos )
+                    if ( _pToCharContentPos )
                     {
-                        pTxtFrm->GetAutoPos( aChRect, *_pToCharCntntPos );
+                        pTextFrm->GetAutoPos( aChRect, *_pToCharContentPos );
                     }
                     else
                     {
                         // No content position provided. Thus, use a default one.
-                        SwPosition aDefaultCntntPos( *(pTxtFrm->GetTxtNode()) );
-                        pTxtFrm->GetAutoPos( aChRect, aDefaultCntntPos );
+                        SwPosition aDefaultContentPos( *(pTextFrm->GetTextNode()) );
+                        pTextFrm->GetAutoPos( aChRect, aDefaultContentPos );
                     }
                     nTop = (aChRect.*fnRect->fnGetBottom)();
                 }
                 else
                 {
-                    if ( _pToCharCntntPos )
+                    if ( _pToCharContentPos )
                     {
-                        pTxtFrm->GetTopOfLine( nTop, *_pToCharCntntPos );
+                        pTextFrm->GetTopOfLine( nTop, *_pToCharContentPos );
                     }
                     else
                     {
                         // No content position provided. Thus, use a default one.
-                        SwPosition aDefaultCntntPos( *(pTxtFrm->GetTxtNode()) );
-                        pTxtFrm->GetTopOfLine( nTop, aDefaultCntntPos );
+                        SwPosition aDefaultContentPos( *(pTextFrm->GetTextNode()) );
+                        pTextFrm->GetTopOfLine( nTop, aDefaultContentPos );
                     }
                 }
                 if ( bVert || bVertL2R )
@@ -955,21 +955,21 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // #i26945# - adjust horizontal 'virtual' anchor
             // position (<aPos.X()> respectively <aPos.Y()>), if object is
             // anchored to character and horizontal aligned at character.
-            if ( pTxtFrm &&
+            if ( pTextFrm &&
                  (_nAnchorId == FLY_AT_CHAR) &&
                  _eHoriRelOrient == text::RelOrientation::CHAR )
             {
                 SwTwips nLeft = 0L;
                 SwRect aChRect;
-                if ( _pToCharCntntPos )
+                if ( _pToCharContentPos )
                 {
-                    pTxtFrm->GetAutoPos( aChRect, *_pToCharCntntPos );
+                    pTextFrm->GetAutoPos( aChRect, *_pToCharContentPos );
                 }
                 else
                 {
                     // No content position provided. Thus, use a default one.
-                    SwPosition aDefaultCntntPos( *(pTxtFrm->GetTxtNode()) );
-                    pTxtFrm->GetAutoPos( aChRect, aDefaultCntntPos );
+                    SwPosition aDefaultContentPos( *(pTextFrm->GetTextNode()) );
+                    pTextFrm->GetAutoPos( aChRect, aDefaultContentPos );
                 }
                 nLeft = (aChRect.*fnRect->fnGetLeft)();
                 if ( bVert || bVertL2R )
@@ -1022,8 +1022,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
         }
 
-        const SwTwips nBaseOfstForFly = ( pFrm->IsTxtFrm() && pFly ) ?
-                                        static_cast<const SwTxtFrm*>(pFrm)->GetBaseOfstForFly( !bWrapThrough ) :
+        const SwTwips nBaseOfstForFly = ( pFrm->IsTextFrm() && pFly ) ?
+                                        static_cast<const SwTextFrm*>(pFrm)->GetBaseOfstForFly( !bWrapThrough ) :
                                          0;
         if( bVert || bVertL2R )
         {
@@ -1185,7 +1185,7 @@ Size SwFEShell::GetGraphicDefaultSize() const
         }
 
         SwRect aBound;
-        CalcBoundRect( aBound, pFly->GetFmt()->GetAnchor().GetAnchorId());
+        CalcBoundRect( aBound, pFly->GetFormat()->GetAnchor().GetAnchorId());
         if ( pFly->GetAnchorFrm()->IsVertical() )
             aRet.Width() = aBound.Width();
         else

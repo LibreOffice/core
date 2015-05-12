@@ -591,7 +591,7 @@ SwInsertConfig::SwInsertConfig(bool bWeb) :
     pOLEMiscOpt(0),
     bInsWithCaption( false ),
     bCaptionOrderNumberingFirst( false ),
-    aInsTblOpts(0,0),
+    aInsTableOpts(0,0),
     bIsWeb(bWeb)
 {
     aGlobalNames[GLOB_NAME_CALC   ] = SvGlobalName(SO3_SC_CLASSID);
@@ -660,16 +660,16 @@ void SwInsertConfig::ImplCommit()
         switch(nProp)
         {
             case INS_PROP_TABLE_HEADER:
-                pValues[nProp] <<= 0 != (aInsTblOpts.mnInsMode & tabopts::HEADLINE);
+                pValues[nProp] <<= 0 != (aInsTableOpts.mnInsMode & tabopts::HEADLINE);
             break;//"Table/Header",
             case INS_PROP_TABLE_REPEATHEADER:
-                pValues[nProp] <<= aInsTblOpts.mnRowsToRepeat > 0;
+                pValues[nProp] <<= aInsTableOpts.mnRowsToRepeat > 0;
             break;//"Table/RepeatHeader",
             case INS_PROP_TABLE_BORDER:
-                pValues[nProp] <<= 0 != (aInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER );
+                pValues[nProp] <<= 0 != (aInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER );
             break;//"Table/Border",
             case INS_PROP_TABLE_SPLIT:
-                pValues[nProp] <<= 0 != (aInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT);
+                pValues[nProp] <<= 0 != (aInsTableOpts.mnInsMode & tabopts::SPLIT_LAYOUT);
             break;//"Table/Split",
             case INS_PROP_CAP_AUTOMATIC:
                 pValues[nProp] <<= bInsWithCaption;
@@ -894,7 +894,7 @@ void SwInsertConfig::Load()
     else if (!bIsWeb)
         return;
 
-    sal_uInt16 nInsTblFlags = 0;
+    sal_uInt16 nInsTableFlags = 0;
     for (sal_Int32 nProp = 0; nProp < aNames.getLength(); ++nProp)
     {
         if (pValues[nProp].hasValue())
@@ -905,25 +905,25 @@ void SwInsertConfig::Load()
                 case INS_PROP_TABLE_HEADER:
                 {
                     if(bBool)
-                        nInsTblFlags|= tabopts::HEADLINE;
+                        nInsTableFlags|= tabopts::HEADLINE;
                 }
                 break;//"Table/Header",
                 case INS_PROP_TABLE_REPEATHEADER:
                 {
-                    aInsTblOpts.mnRowsToRepeat = bBool? 1 : 0;
+                    aInsTableOpts.mnRowsToRepeat = bBool? 1 : 0;
 
                 }
                 break;//"Table/RepeatHeader",
                 case INS_PROP_TABLE_BORDER:
                 {
                     if(bBool)
-                        nInsTblFlags|= tabopts::DEFAULT_BORDER;
+                        nInsTableFlags|= tabopts::DEFAULT_BORDER;
                 }
                 break;//"Table/Border",
                 case INS_PROP_TABLE_SPLIT:
                 {
                     if(bBool)
-                        nInsTblFlags|= tabopts::SPLIT_LAYOUT;
+                        nInsTableFlags|= tabopts::SPLIT_LAYOUT;
                 }
                 break;//"Table/Split",
                 case INS_PROP_CAP_AUTOMATIC:
@@ -1091,7 +1091,7 @@ void SwInsertConfig::Load()
         }
 
     }
-    aInsTblOpts.mnInsMode = nInsTblFlags;
+    aInsTableOpts.mnInsMode = nInsTableFlags;
 }
 
 const Sequence<OUString>& SwTableConfig::GetPropertyNames()
@@ -1138,14 +1138,14 @@ void SwTableConfig::ImplCommit()
     {
         switch(nProp)
         {
-            case 0 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblHMove); break;   //"Shift/Row",
-            case 1 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblVMove); break;     //"Shift/Column",
-            case 2 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblHInsert); break;   //"Insert/Row",
-            case 3 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblVInsert); break;   //"Insert/Column",
-            case 4 : pValues[nProp] <<= (sal_Int32)eTblChgMode; break;   //"Change/Effect",
-            case 5 : pValues[nProp] <<= bInsTblFormatNum; break;  //"Input/NumberRecognition",
-            case 6 : pValues[nProp] <<= bInsTblChangeNumFormat; break;  //"Input/NumberFormatRecognition",
-            case 7 : pValues[nProp] <<= bInsTblAlignNum; break;  //"Input/Alignment"
+            case 0 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTableHMove); break;   //"Shift/Row",
+            case 1 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTableVMove); break;     //"Shift/Column",
+            case 2 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTableHInsert); break;   //"Insert/Row",
+            case 3 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTableVInsert); break;   //"Insert/Column",
+            case 4 : pValues[nProp] <<= (sal_Int32)eTableChgMode; break;   //"Change/Effect",
+            case 5 : pValues[nProp] <<= bInsTableFormatNum; break;  //"Input/NumberRecognition",
+            case 6 : pValues[nProp] <<= bInsTableChangeNumFormat; break;  //"Input/NumberFormatRecognition",
+            case 7 : pValues[nProp] <<= bInsTableAlignNum; break;  //"Input/Alignment"
         }
     }
     PutProperties(aNames, aValues);
@@ -1164,14 +1164,14 @@ void SwTableConfig::Load()
             sal_Int32 nTemp = 0;
             switch (nProp)
             {
-                case 0 : pValues[nProp] >>= nTemp; nTblHMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;  //"Shift/Row",
-                case 1 : pValues[nProp] >>= nTemp; nTblVMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;     //"Shift/Column",
-                case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Row",
-                case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Column",
-                case 4 : pValues[nProp] >>= nTemp; eTblChgMode = (TblChgMode)nTemp; break;   //"Change/Effect",
-                case 5 : bInsTblFormatNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;  //"Input/NumberRecognition",
-                case 6 : bInsTblChangeNumFormat = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/NumberFormatRecognition",
-                case 7 : bInsTblAlignNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/Alignment"
+                case 0 : pValues[nProp] >>= nTemp; nTableHMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;  //"Shift/Row",
+                case 1 : pValues[nProp] >>= nTemp; nTableVMove = (sal_uInt16)convertMm100ToTwip(nTemp); break;     //"Shift/Column",
+                case 2 : pValues[nProp] >>= nTemp; nTableHInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Row",
+                case 3 : pValues[nProp] >>= nTemp; nTableVInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Column",
+                case 4 : pValues[nProp] >>= nTemp; eTableChgMode = (TableChgMode)nTemp; break;   //"Change/Effect",
+                case 5 : bInsTableFormatNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;  //"Input/NumberRecognition",
+                case 6 : bInsTableChangeNumFormat = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/NumberFormatRecognition",
+                case 7 : bInsTableAlignNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/Alignment"
             }
         }
     }
@@ -1187,7 +1187,7 @@ SwMiscConfig::SwMiscConfig() :
     bSinglePrintJob(false),
     bIsNameFromColumn(true),
     bAskForMailMergeInPrint(true),
-    nMailingFormats(MailTxtFormats::NONE)
+    nMailingFormats(MailTextFormats::NONE)
 {
     Load();
 }
@@ -1278,7 +1278,7 @@ void SwMiscConfig::Load()
                 case 3 : bGrfToGalleryAsLnk = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
                 case 4 : bNumAlignSize = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
                 case 5 : bSinglePrintJob = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                case 6 : nMailingFormats = static_cast<MailTxtFormats>(*static_cast<sal_uInt8 const *>(pValues[nProp].getValue())); break;
+                case 6 : nMailingFormats = static_cast<MailTextFormats>(*static_cast<sal_uInt8 const *>(pValues[nProp].getValue())); break;
                 case 7 : pValues[nProp] >>= sTmp; sNameFromColumn = sTmp; break;
                 case 8 : pValues[nProp] >>= sTmp; sMailingPath = sTmp;  break;
                 case 9 : pValues[nProp] >>= sTmp; sMailName = sTmp;     break;

@@ -492,10 +492,10 @@ static OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCurso
     OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( !xCrsrTunnel.is() )
         return 0;
-    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper *>(
+    OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper *>(
             sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething(  OTextCursorHelper::getUnoTunnelId() )));
-    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
-    return pTxtCrsr;
+    OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
+    return pTextCrsr;
 }
 
 void SwXMLImport::startDocument()
@@ -596,7 +596,7 @@ void SwXMLImport::startDocument()
     // We also might change into the insert mode later, so we have to make
     // sure to first set the insert mode and then create the text import
     // helper. Otherwise it won't have the insert flag set!
-    OTextCursorHelper *pTxtCrsr = 0;
+    OTextCursorHelper *pTextCrsr = 0;
     Reference < XTextCursor > xTextCursor;
     if( HasTextImport() )
            xTextCursor = GetTextImport()->GetCursor();
@@ -609,12 +609,12 @@ void SwXMLImport::startDocument()
         SwDoc *pDoc = 0;
         if( SvXMLImportFlags::ALL == getImportFlags() )
         {
-            pTxtCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
-            OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
-            if( !pTxtCrsr )
+            pTextCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
+            OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
+            if( !pTextCrsr )
                 return;
 
-            pDoc = pTxtCrsr->GetDoc();
+            pDoc = pTextCrsr->GetDoc();
             OSL_ENSURE( pDoc, "SwDoc missing" );
             if( !pDoc )
                 return;
@@ -632,7 +632,7 @@ void SwXMLImport::startDocument()
                     *pDoc, *pCrsrSh->GetCrsr()->GetPoint(), 0 ) );
             setTextInsertMode( xInsertTextRange );
             xTextCursor = GetTextImport()->GetCursor();
-            pTxtCrsr = 0;
+            pTextCrsr = 0;
         }
         else
             GetTextImport()->SetCursor( xTextCursor );
@@ -641,13 +641,13 @@ void SwXMLImport::startDocument()
     if( (!(getImportFlags() & (SvXMLImportFlags::CONTENT|SvXMLImportFlags::MASTERSTYLES))))
         return;
 
-    if( !pTxtCrsr  )
-        pTxtCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
-    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
-    if( !pTxtCrsr )
+    if( !pTextCrsr  )
+        pTextCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
+    OSL_ENSURE( pTextCrsr, "SwXTextCursor missing" );
+    if( !pTextCrsr )
         return;
 
-    SwDoc *pDoc = pTxtCrsr->GetDoc();
+    SwDoc *pDoc = pTextCrsr->GetDoc();
     OSL_ENSURE( pDoc, "SwDoc missing" );
     if( !pDoc )
         return;
@@ -657,7 +657,7 @@ void SwXMLImport::startDocument()
         pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
         if( IsInsertMode() )
         {
-            SwPaM *pPaM = pTxtCrsr->GetPaM();
+            SwPaM *pPaM = pTextCrsr->GetPaM();
             const SwPosition* pPos = pPaM->GetPoint();
 
             // Split once and remember the node that has been splitted.
@@ -669,8 +669,8 @@ void SwXMLImport::startDocument()
 
             // Insert all content into the new node
             pPaM->Move( fnMoveBackward );
-            pDoc->SetTxtFmtColl
-                ( *pPaM, pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ) );
+            pDoc->SetTextFormatColl
+                ( *pPaM, pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false ) );
         }
     }
 
@@ -729,18 +729,18 @@ void SwXMLImport::endDocument()
         Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
                                               UNO_QUERY);
         assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
-        OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper *>(
+        OTextCursorHelper *pTextCrsr = reinterpret_cast< OTextCursorHelper *>(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-        assert(pTxtCrsr && "SwXTextCursor missing");
-        SwPaM *pPaM = pTxtCrsr->GetPaM();
+        assert(pTextCrsr && "SwXTextCursor missing");
+        SwPaM *pPaM = pTextCrsr->GetPaM();
         if( IsInsertMode() && pSttNdIdx->GetIndex() )
         {
             // If we are in insert mode, join the splitted node that is in front
             // of the new content with the first new node. Or in other words:
             // Revert the first split node.
-            SwTxtNode* pTxtNode = pSttNdIdx->GetNode().GetTxtNode();
+            SwTextNode* pTextNode = pSttNdIdx->GetNode().GetTextNode();
             SwNodeIndex aNxtIdx( *pSttNdIdx );
-            if( pTxtNode && pTxtNode->CanJoinNext( &aNxtIdx ) &&
+            if( pTextNode && pTextNode->CanJoinNext( &aNxtIdx ) &&
                 pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
             {
                 // If the PaM points to the first new node, move the PaM to the
@@ -748,8 +748,8 @@ void SwXMLImport::endDocument()
                 if( pPaM->GetPoint()->nNode == aNxtIdx )
                 {
                     pPaM->GetPoint()->nNode = *pSttNdIdx;
-                    pPaM->GetPoint()->nContent.Assign( pTxtNode,
-                                            pTxtNode->GetTxt().getLength());
+                    pPaM->GetPoint()->nContent.Assign( pTextNode,
+                                            pTextNode->GetText().getLength());
                 }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -766,27 +766,27 @@ void SwXMLImport::endDocument()
                 {
                     const sal_Int32 nCntPos =
                             pPaM->GetBound( true ).nContent.GetIndex();
-                    pPaM->GetBound( true ).nContent.Assign( pTxtNode,
-                            pTxtNode->GetTxt().getLength() + nCntPos );
+                    pPaM->GetBound( true ).nContent.Assign( pTextNode,
+                            pTextNode->GetText().getLength() + nCntPos );
                 }
                 if( pSttNdIdx->GetIndex()+1 ==
                                 pPaM->GetBound( false ).nNode.GetIndex() )
                 {
                     const sal_Int32 nCntPos =
                             pPaM->GetBound( false ).nContent.GetIndex();
-                    pPaM->GetBound( false ).nContent.Assign( pTxtNode,
-                            pTxtNode->GetTxt().getLength() + nCntPos );
+                    pPaM->GetBound( false ).nContent.Assign( pTextNode,
+                            pTextNode->GetText().getLength() + nCntPos );
                 }
 #endif
                 // If the first new node isn't empty, convert  the node's text
                 // attributes into hints. Otherwise, set the new node's
                 // paragraph style at the previous (empty) node.
-                SwTxtNode* pDelNd = aNxtIdx.GetNode().GetTxtNode();
-                if (!pTxtNode->GetTxt().isEmpty())
-                    pDelNd->FmtToTxtAttr( pTxtNode );
+                SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
+                if (!pTextNode->GetText().isEmpty())
+                    pDelNd->FormatToTextAttr( pTextNode );
                 else
-                    pTxtNode->ChgFmtColl( pDelNd->GetTxtColl() );
-                pTxtNode->JoinNext();
+                    pTextNode->ChgFormatColl( pDelNd->GetTextColl() );
+                pTextNode->JoinNext();
             }
         }
 
@@ -794,21 +794,21 @@ void SwXMLImport::endDocument()
         OSL_ENSURE( !pPos->nContent.GetIndex(), "last paragraph isn't empty" );
         if( !pPos->nContent.GetIndex() )
         {
-            SwTxtNode* pCurrNd;
+            SwTextNode* pCurrNd;
             sal_uLong nNodeIdx = pPos->nNode.GetIndex();
             pDoc = pPaM->GetDoc();
 
-            OSL_ENSURE( pPos->nNode.GetNode().IsCntntNode(),
+            OSL_ENSURE( pPos->nNode.GetNode().IsContentNode(),
                         "insert position is not a content node" );
             if( !IsInsertMode() )
             {
                 // If we're not in insert mode, the last node is deleted.
                 const SwNode *pPrev = pDoc->GetNodes()[nNodeIdx -1];
-                if( pPrev->IsCntntNode() ||
+                if( pPrev->IsContentNode() ||
                      ( pPrev->IsEndNode() &&
                       pPrev->StartOfSectionNode()->IsSectionNode() ) )
                 {
-                    SwCntntNode* pCNd = pPaM->GetCntntNode();
+                    SwContentNode* pCNd = pPaM->GetContentNode();
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
                         pCNd->EndOfSectionIndex() )
                     {
@@ -818,13 +818,13 @@ void SwXMLImport::endDocument()
                     }
                 }
             }
-            else if( 0 != (pCurrNd = pDoc->GetNodes()[nNodeIdx]->GetTxtNode()) )
+            else if( 0 != (pCurrNd = pDoc->GetNodes()[nNodeIdx]->GetTextNode()) )
             {
                 // Id we're in insert mode, the empty node is joined with
                 // the next and the previous one.
                 if( pCurrNd->CanJoinNext( &pPos->nNode ))
                 {
-                    SwTxtNode* pNextNd = pPos->nNode.GetNode().GetTxtNode();
+                    SwTextNode* pNextNd = pPos->nNode.GetNode().GetTextNode();
                     pPos->nContent.Assign( pNextNd, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();
                     pNextNd->JoinPrev();
@@ -837,7 +837,7 @@ void SwXMLImport::endDocument()
                         pNextNd->JoinPrev();
                     }
                 }
-                else if (pCurrNd->GetTxt().isEmpty())
+                else if (pCurrNd->GetText().isEmpty())
                 {
                     pPos->nContent.Assign( 0, 0 );
                     pPaM->SetMark(); pPaM->DeleteMark();
@@ -855,9 +855,9 @@ void SwXMLImport::endDocument()
     if( (getImportFlags() & SvXMLImportFlags::CONTENT) ||
         ((getImportFlags() & SvXMLImportFlags::MASTERSTYLES) && IsStylesOnlyMode()) )
     {
-        // pDoc might be 0. In this case UpdateTxtCollCondition is looking
+        // pDoc might be 0. In this case UpdateTextCollCondition is looking
         // for it itself.
-        UpdateTxtCollConditions( pDoc );
+        UpdateTextCollConditions( pDoc );
     }
 
     GetTextImport()->ResetCursor();
@@ -1503,11 +1503,11 @@ void SwXMLImport::initialize(
 SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport& rImport )
 {
     uno::Reference<lang::XUnoTunnel> xModelTunnel( rImport.GetModel(), uno::UNO_QUERY );
-    SwXTextDocument *pTxtDoc = reinterpret_cast< SwXTextDocument *>(
+    SwXTextDocument *pTextDoc = reinterpret_cast< SwXTextDocument *>(
             sal::static_int_cast< sal_IntPtr >(  xModelTunnel->getSomething(SwXTextDocument::getUnoTunnelId() )));
-    assert( pTxtDoc );
-    assert( pTxtDoc->GetDocShell() );
-    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    assert( pTextDoc );
+    assert( pTextDoc->GetDocShell() );
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     OSL_ENSURE( pDoc, "Where is my document?" );
     return pDoc;
 }

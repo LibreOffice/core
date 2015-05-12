@@ -144,7 +144,7 @@ namespace ww
     {
         switch (eSti)
         {
-            case stiFtnRef:
+            case stiFootnoteRef:
             case stiAtnRef:
             case stiLnn:
             case stiPgn:
@@ -170,7 +170,7 @@ namespace ww
                 stiToc5, stiToc4, stiToc3, stiToc2, stiToc1, stiIndex7,
                 stiIndex6, stiIndex5, stiIndex4, stiIndex3, stiIndex2,
                 stiIndex1, stiLnn, stiIndexHeading, stiFooter, stiHeader,
-                stiFtnRef, stiFtnText, stiLev9, stiLev8, stiLev7, stiLev6,
+                stiFootnoteRef, stiFootnoteText, stiLev9, stiLev8, stiLev7, stiLev6,
                 stiLev5, stiLev4, stiLev3, stiLev2, stiLev1, stiNormIndent
             };
             return aMapping[stc-222];

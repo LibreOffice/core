@@ -24,9 +24,9 @@
 #include "breakit.hxx"
 #include "porrst.hxx"
 
-class SwTxtFormatInfo;
+class SwTextFormatInfo;
 
-class SwTxtGuess
+class SwTextGuess
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord >  xHyphWord;
     SwHangingPortion *pHanging; // for hanging punctuation
@@ -37,15 +37,15 @@ class SwTxtGuess
                                // a field in the text has been expanded
     sal_uInt16 nBreakWidth;    // width of the broken portion
 public:
-    inline SwTxtGuess(): pHanging( NULL ), nCutPos(0), nBreakStart(0),
+    inline SwTextGuess(): pHanging( NULL ), nCutPos(0), nBreakStart(0),
                         nBreakPos(0), nFieldDiff(0), nBreakWidth(0)
         { }
-    ~SwTxtGuess() { delete pHanging; }
+    ~SwTextGuess() { delete pHanging; }
 
     // true, if current portion still fits to current line
-    bool Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
+    bool Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                     const sal_uInt16 nHeight );
-    bool AlternativeSpelling( const SwTxtFormatInfo &rInf, const sal_Int32 nPos );
+    bool AlternativeSpelling( const SwTextFormatInfo &rInf, const sal_Int32 nPos );
 
     inline SwHangingPortion* GetHangingPortion() const { return pHanging; }
     inline void ClearHangingPortion() { pHanging = NULL; }

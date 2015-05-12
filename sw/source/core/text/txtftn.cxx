@@ -55,24 +55,24 @@
 
 using namespace ::com::sun::star;
 
-bool SwTxtFrm::_IsFtnNumFrm() const
+bool SwTextFrm::_IsFootnoteNumFrm() const
 {
-    const SwFtnFrm* pFtn = FindFtnFrm()->GetMaster();
-    while( pFtn && !pFtn->ContainsCntnt() )
-        pFtn = pFtn->GetMaster();
-    return !pFtn;
+    const SwFootnoteFrm* pFootnote = FindFootnoteFrm()->GetMaster();
+    while( pFootnote && !pFootnote->ContainsContent() )
+        pFootnote = pFootnote->GetMaster();
+    return !pFootnote;
 }
 
 /**
- * Looks for the TxtFrm matching the SwTxtFtn within a master-follow chain
+ * Looks for the TextFrm matching the SwTextFootnote within a master-follow chain
  */
-SwTxtFrm *SwTxtFrm::FindFtnRef( const SwTxtFtn *pFtn )
+SwTextFrm *SwTextFrm::FindFootnoteRef( const SwTextFootnote *pFootnote )
 {
-    SwTxtFrm *pFrm = this;
-    const bool bFwd = pFtn->GetStart() >= GetOfst();
+    SwTextFrm *pFrm = this;
+    const bool bFwd = pFootnote->GetStart() >= GetOfst();
     while( pFrm )
     {
-        if( SwFtnBossFrm::FindFtn( pFrm, pFtn ) )
+        if( SwFootnoteBossFrm::FindFootnote( pFrm, pFootnote ) )
             return pFrm;
         pFrm = bFwd ? pFrm->GetFollow() :
                       pFrm->IsFollow() ? pFrm->FindMaster() : 0;
@@ -81,14 +81,14 @@ SwTxtFrm *SwTxtFrm::FindFtnRef( const SwTxtFtn *pFtn )
 }
 
 #ifdef DBG_UTIL
-void SwTxtFrm::CalcFtnFlag( sal_Int32 nStop )// For testing the SplitFrm
+void SwTextFrm::CalcFootnoteFlag( sal_Int32 nStop )// For testing the SplitFrm
 #else
-void SwTxtFrm::CalcFtnFlag()
+void SwTextFrm::CalcFootnoteFlag()
 #endif
 {
-    bFtn = false;
+    bFootnote = false;
 
-    const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
+    const SwpHints *pHints = GetTextNode()->GetpSwpHints();
     if( !pHints )
         return;
 
@@ -103,7 +103,7 @@ void SwTxtFrm::CalcFtnFlag()
 
     for ( size_t i = 0; i < nSize; ++i )
     {
-        const SwTxtAttr *pHt = (*pHints)[i];
+        const SwTextAttr *pHt = (*pHints)[i];
         if ( pHt->Which() == RES_TXTATR_FTN )
         {
             const sal_Int32 nIdx = pHt->GetStart();
@@ -111,41 +111,41 @@ void SwTxtFrm::CalcFtnFlag()
                 break;
             if( GetOfst() <= nIdx )
             {
-                bFtn = true;
+                bFootnote = true;
                 break;
             }
         }
     }
 }
 
-bool SwTxtFrm::CalcPrepFtnAdjust()
+bool SwTextFrm::CalcPrepFootnoteAdjust()
 {
-    OSL_ENSURE( HasFtn(), "Who´s calling me?" );
-    SwFtnBossFrm *pBoss = FindFtnBossFrm( true );
-    const SwFtnFrm *pFtn = pBoss->FindFirstFtn( this );
-    if( pFtn && FTNPOS_CHAPTER != GetNode()->GetDoc()->GetFtnInfo().ePos &&
+    OSL_ENSURE( HasFootnote(), "Who´s calling me?" );
+    SwFootnoteBossFrm *pBoss = FindFootnoteBossFrm( true );
+    const SwFootnoteFrm *pFootnote = pBoss->FindFirstFootnote( this );
+    if( pFootnote && FTNPOS_CHAPTER != GetNode()->GetDoc()->GetFootnoteInfo().ePos &&
         ( !pBoss->GetUpper()->IsSctFrm() ||
-        !static_cast<SwSectionFrm*>(pBoss->GetUpper())->IsFtnAtEnd() ) )
+        !static_cast<SwSectionFrm*>(pBoss->GetUpper())->IsFootnoteAtEnd() ) )
     {
-        const SwFtnContFrm *pCont = pBoss->FindFtnCont();
+        const SwFootnoteContFrm *pCont = pBoss->FindFootnoteCont();
         bool bReArrange = true;
 
         SWRECTFN( this )
         if ( pCont && (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(),
                                           (Frm().*fnRect->fnGetBottom)() ) > 0 )
         {
-            pBoss->RearrangeFtns( (Frm().*fnRect->fnGetBottom)(), false,
-                                  pFtn->GetAttr() );
+            pBoss->RearrangeFootnotes( (Frm().*fnRect->fnGetBottom)(), false,
+                                  pFootnote->GetAttr() );
             ValidateBodyFrm();
             ValidateFrm();
-            pFtn = pBoss->FindFirstFtn( this );
+            pFootnote = pBoss->FindFirstFootnote( this );
         }
         else
             bReArrange = false;
-        if( !pCont || !pFtn || bReArrange != (pFtn->FindFtnBossFrm() == pBoss) )
+        if( !pCont || !pFootnote || bReArrange != (pFootnote->FindFootnoteBossFrm() == pBoss) )
         {
-            SwTxtFormatInfo aInf( this );
-            SwTxtFormatter aLine( this, &aInf );
+            SwTextFormatInfo aInf( this );
+            SwTextFormatter aLine( this, &aInf );
             aLine.TruncLines();
             SetPara( 0 ); // May be deleted!
             ResetPreps();
@@ -159,14 +159,14 @@ bool SwTxtFrm::CalcPrepFtnAdjust()
  * Local helper function. Checks if nLower should be taken as the boundary
  * for the footnote.
  */
-static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
+static SwTwips lcl_GetFootnoteLower( const SwTextFrm* pFrm, SwTwips nLower )
 {
     // nLower is an absolute value. It denotes the bottom of the line
     // containing the footnote.
     SWRECTFN( pFrm )
 
     OSL_ENSURE( !pFrm->IsVertical() || !pFrm->IsSwapped(),
-            "lcl_GetFtnLower with swapped frame" );
+            "lcl_GetFootnoteLower with swapped frame" );
 
     SwTwips nAdd;
     SwTwips nRet = nLower;
@@ -179,7 +179,7 @@ static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
         // b) The table row is not allowed to split
 
         // Inside a table, there are no footnotes,
-        // see SwFrm::FindFtnBossFrm. So we don't have to check
+        // see SwFrm::FindFootnoteBossFrm. So we don't have to check
         // the case that pFrm is inside a (footnote collecting) section
         // within the table.
         const SwFrm* pRow = pFrm;
@@ -252,27 +252,27 @@ static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
     return nRet;
 }
 
-SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
+SwTwips SwTextFrm::GetFootnoteLine( const SwTextFootnote *pFootnote ) const
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
-            "SwTxtFrm::GetFtnLine with swapped frame" );
+            "SwTextFrm::GetFootnoteLine with swapped frame" );
 
-    SwTxtFrm *pThis = const_cast<SwTxtFrm*>(this);
+    SwTextFrm *pThis = const_cast<SwTextFrm*>(this);
 
     if( !HasPara() )
     {
         // #109071# GetFormatted() does not work here, bacause most probably
         // the frame is currently locked. We return the previous value.
-        return pThis->mnFtnLine > 0 ?
-               pThis->mnFtnLine :
+        return pThis->mnFootnoteLine > 0 ?
+               pThis->mnFootnoteLine :
                IsVertical() ? Frm().Left() : Frm().Bottom();
     }
 
     SWAP_IF_NOT_SWAPPED( this )
 
-    SwTxtInfo aInf( pThis );
-    SwTxtIter aLine( pThis, &aInf );
-    const sal_Int32 nPos = pFtn->GetStart();
+    SwTextInfo aInf( pThis );
+    SwTextIter aLine( pThis, &aInf );
+    const sal_Int32 nPos = pFootnote->GetStart();
     aLine.CharToLine( nPos );
 
     SwTwips nRet = aLine.Y() + SwTwips(aLine.GetLineHeight());
@@ -281,36 +281,36 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
 
     UNDO_SWAP( this )
 
-    nRet = lcl_GetFtnLower( pThis, nRet );
+    nRet = lcl_GetFootnoteLower( pThis, nRet );
 
-    pThis->mnFtnLine = nRet;
+    pThis->mnFootnoteLine = nRet;
     return nRet;
 }
 
 /**
- * Calculates the maximum reachable height for the TxtFrm in the Ftn Area.
- * The cell's bottom margin with the Ftn Reference limit's this height.
+ * Calculates the maximum reachable height for the TextFrm in the Footnote Area.
+ * The cell's bottom margin with the Footnote Reference limit's this height.
  */
-SwTwips SwTxtFrm::_GetFtnFrmHeight() const
+SwTwips SwTextFrm::_GetFootnoteFrmHeight() const
 {
-    OSL_ENSURE( !IsFollow() && IsInFtn(), "SwTxtFrm::SetFtnLine: moon walk" );
+    OSL_ENSURE( !IsFollow() && IsInFootnote(), "SwTextFrm::SetFootnoteLine: moon walk" );
 
-    const SwFtnFrm *pFtnFrm = FindFtnFrm();
-    const SwTxtFrm *pRef = static_cast<const SwTxtFrm *>(pFtnFrm->GetRef());
-    const SwFtnBossFrm *pBoss = FindFtnBossFrm();
-    if( pBoss != pRef->FindFtnBossFrm( !pFtnFrm->GetAttr()->
-                                        GetFtn().IsEndNote() ) )
+    const SwFootnoteFrm *pFootnoteFrm = FindFootnoteFrm();
+    const SwTextFrm *pRef = static_cast<const SwTextFrm *>(pFootnoteFrm->GetRef());
+    const SwFootnoteBossFrm *pBoss = FindFootnoteBossFrm();
+    if( pBoss != pRef->FindFootnoteBossFrm( !pFootnoteFrm->GetAttr()->
+                                        GetFootnote().IsEndNote() ) )
         return 0;
 
     SWAP_IF_SWAPPED( this )
 
-    SwTwips nHeight = pRef->IsInFtnConnect() ?
-                            1 : pRef->GetFtnLine( pFtnFrm->GetAttr() );
+    SwTwips nHeight = pRef->IsInFootnoteConnect() ?
+                            1 : pRef->GetFootnoteLine( pFootnoteFrm->GetAttr() );
     if( nHeight )
     {
-        // As odd as it may seem: the first Ftn on the page may not touch the
-        // Ftn Reference, when entering text in the Ftn Area.
-        const SwFrm *pCont = pFtnFrm->GetUpper();
+        // As odd as it may seem: the first Footnote on the page may not touch the
+        // Footnote Reference, when entering text in the Footnote Area.
+        const SwFrm *pCont = pFootnoteFrm->GetUpper();
 
         // Height within the Container which we're allowed to consume anyways
         SWRECTFN( pCont )
@@ -330,20 +330,20 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
                     break;
                 pTmp = pTmp->GetUpper();
             }
-            OSL_ENSURE( bInvalidPos, "Hanging below FtnCont" );
+            OSL_ENSURE( bInvalidPos, "Hanging below FootnoteCont" );
         }
 #endif
 
         if ( (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(), nHeight) > 0 )
         {
             // Growth potential of the container
-            if ( !pRef->IsInFtnConnect() )
+            if ( !pRef->IsInFootnoteConnect() )
             {
-                SwSaveFtnHeight aSave( const_cast<SwFtnBossFrm*>(pBoss), nHeight  );
-                nHeight = const_cast<SwFtnContFrm*>(static_cast<const SwFtnContFrm*>(pCont))->Grow( LONG_MAX, true );
+                SwSaveFootnoteHeight aSave( const_cast<SwFootnoteBossFrm*>(pBoss), nHeight  );
+                nHeight = const_cast<SwFootnoteContFrm*>(static_cast<const SwFootnoteContFrm*>(pCont))->Grow( LONG_MAX, true );
             }
             else
-                nHeight = const_cast<SwFtnContFrm*>(static_cast<const SwFtnContFrm*>(pCont))->Grow( LONG_MAX, true );
+                nHeight = const_cast<SwFootnoteContFrm*>(static_cast<const SwFootnoteContFrm*>(pCont))->Grow( LONG_MAX, true );
 
             nHeight += nTmp;
             if( nHeight < 0 )
@@ -364,42 +364,42 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
     return nHeight;
 }
 
-SwTxtFrm *SwTxtFrm::FindQuoVadisFrm()
+SwTextFrm *SwTextFrm::FindQuoVadisFrm()
 {
-    // Check whether we're in a FtnFrm
-    if( GetIndPrev() || !IsInFtn() )
+    // Check whether we're in a FootnoteFrm
+    if( GetIndPrev() || !IsInFootnote() )
         return 0;
 
-    // To the preceding FtnFrm
-    SwFtnFrm *pFtnFrm = FindFtnFrm()->GetMaster();
-    if( !pFtnFrm )
+    // To the preceding FootnoteFrm
+    SwFootnoteFrm *pFootnoteFrm = FindFootnoteFrm()->GetMaster();
+    if( !pFootnoteFrm )
         return 0;
 
-    // Now the last Cntnt
-    SwCntntFrm *pCnt = pFtnFrm->ContainsCntnt();
+    // Now the last Content
+    SwContentFrm *pCnt = pFootnoteFrm->ContainsContent();
     if( !pCnt )
         return NULL;
-    SwCntntFrm *pLast;
+    SwContentFrm *pLast;
     do
     {   pLast = pCnt;
-        pCnt = pCnt->GetNextCntntFrm();
-    } while( pCnt && pFtnFrm->IsAnLower( pCnt ) );
-    return static_cast<SwTxtFrm*>(pLast);
+        pCnt = pCnt->GetNextContentFrm();
+    } while( pCnt && pFootnoteFrm->IsAnLower( pCnt ) );
+    return static_cast<SwTextFrm*>(pLast);
 }
 
-void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
+void SwTextFrm::RemoveFootnote( const sal_Int32 nStart, const sal_Int32 nLen )
 {
-    if ( !IsFtnAllowed() )
+    if ( !IsFootnoteAllowed() )
         return;
 
-    SwpHints *pHints = GetTxtNode()->GetpSwpHints();
+    SwpHints *pHints = GetTextNode()->GetpSwpHints();
     if( !pHints )
         return;
 
     bool bRollBack = nLen != COMPLETE_STRING;
     const size_t nSize = pHints->Count();
     sal_Int32 nEnd;
-    SwTxtFrm* pSource;
+    SwTextFrm* pSource;
     if( bRollBack )
     {
         nEnd = nStart + nLen;
@@ -417,13 +417,13 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
     {
         SwPageFrm* pUpdate = NULL;
         bool bRemove = false;
-        SwFtnBossFrm *pFtnBoss = 0;
-        SwFtnBossFrm *pEndBoss = 0;
-        bool bFtnEndDoc
-            = FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFtnInfo().ePos;
+        SwFootnoteBossFrm *pFootnoteBoss = 0;
+        SwFootnoteBossFrm *pEndBoss = 0;
+        bool bFootnoteEndDoc
+            = FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFootnoteInfo().ePos;
         for ( size_t i = nSize; i; )
         {
-            SwTxtAttr *pHt = pHints->GetTextHint(--i);
+            SwTextAttr *pHt = pHints->GetTextHint(--i);
             if ( RES_TXTATR_FTN != pHt->Which() )
                 continue;
 
@@ -433,25 +433,25 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
 
             if( nEnd >= nIdx )
             {
-                SwTxtFtn *pFtn = static_cast<SwTxtFtn*>(pHt);
-                const bool bEndn = pFtn->GetFtn().IsEndNote();
+                SwTextFootnote *pFootnote = static_cast<SwTextFootnote*>(pHt);
+                const bool bEndn = pFootnote->GetFootnote().IsEndNote();
 
                 if( bEndn )
                 {
                     if( !pEndBoss )
-                        pEndBoss = pSource->FindFtnBossFrm();
+                        pEndBoss = pSource->FindFootnoteBossFrm();
                 }
                 else
                 {
-                    if( !pFtnBoss )
+                    if( !pFootnoteBoss )
                     {
-                        pFtnBoss = pSource->FindFtnBossFrm( true );
-                        if( pFtnBoss->GetUpper()->IsSctFrm() )
+                        pFootnoteBoss = pSource->FindFootnoteBossFrm( true );
+                        if( pFootnoteBoss->GetUpper()->IsSctFrm() )
                         {
                             SwSectionFrm* pSect = static_cast<SwSectionFrm*>(
-                                                  pFtnBoss->GetUpper());
-                            if( pSect->IsFtnAtEnd() )
-                                bFtnEndDoc = false;
+                                                  pFootnoteBoss->GetUpper());
+                            if( pSect->IsFootnoteAtEnd() )
+                                bFootnoteEndDoc = false;
                         }
                     }
                 }
@@ -459,62 +459,62 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                 // We don't delete, but move instead.
                 // Three cases are to be considered:
                 // 1) There's neither Follow nor PrevFollow:
-                //    -> RemoveFtn() (maybe even a OSL_ENSURE(value))
+                //    -> RemoveFootnote() (maybe even a OSL_ENSURE(value))
                 //
                 // 2) nStart > GetOfst, I have a Follow
-                //    -> Ftn moves into Follow
+                //    -> Footnote moves into Follow
                 //
                 // 3) nStart < GetOfst, I am a Follow
-                //    -> Ftn moves into the PrevFollow
+                //    -> Footnote moves into the PrevFollow
                 //
                 // Both need to be on one Page/in one Column
-                SwFtnFrm *pFtnFrm = SwFtnBossFrm::FindFtn(pSource, pFtn);
+                SwFootnoteFrm *pFootnoteFrm = SwFootnoteBossFrm::FindFootnote(pSource, pFootnote);
 
-                if( pFtnFrm )
+                if( pFootnoteFrm )
                 {
-                    const bool bEndDoc = bEndn || bFtnEndDoc;
+                    const bool bEndDoc = bEndn || bFootnoteEndDoc;
                     if( bRollBack )
                     {
-                        while ( pFtnFrm )
+                        while ( pFootnoteFrm )
                         {
-                            pFtnFrm->SetRef( this );
-                            pFtnFrm = pFtnFrm->GetFollow();
-                            SetFtn( true );
+                            pFootnoteFrm->SetRef( this );
+                            pFootnoteFrm = pFootnoteFrm->GetFollow();
+                            SetFootnote( true );
                         }
                     }
                     else if( GetFollow() )
                     {
-                        SwCntntFrm *pDest = GetFollow();
-                        while( pDest->GetFollow() && static_cast<SwTxtFrm*>(pDest->
+                        SwContentFrm *pDest = GetFollow();
+                        while( pDest->GetFollow() && static_cast<SwTextFrm*>(pDest->
                                GetFollow())->GetOfst() <= nIdx )
                             pDest = pDest->GetFollow();
-                        OSL_ENSURE( !SwFtnBossFrm::FindFtn(
-                            pDest,pFtn),"SwTxtFrm::RemoveFtn: footnote exists");
+                        OSL_ENSURE( !SwFootnoteBossFrm::FindFootnote(
+                            pDest,pFootnote),"SwTextFrm::RemoveFootnote: footnote exists");
 
                         // Never deregister; always move
                         if ( bEndDoc ||
-                             !pFtnFrm->FindFtnBossFrm()->IsBefore( pDest->FindFtnBossFrm( !bEndn ) )
+                             !pFootnoteFrm->FindFootnoteBossFrm()->IsBefore( pDest->FindFootnoteBossFrm( !bEndn ) )
                            )
                         {
-                            SwPageFrm* pTmp = pFtnFrm->FindPageFrm();
+                            SwPageFrm* pTmp = pFootnoteFrm->FindPageFrm();
                             if( pUpdate && pUpdate != pTmp )
-                                pUpdate->UpdateFtnNum();
+                                pUpdate->UpdateFootnoteNum();
                             pUpdate = pTmp;
-                            while ( pFtnFrm )
+                            while ( pFootnoteFrm )
                             {
-                                pFtnFrm->SetRef( pDest );
-                                pFtnFrm = pFtnFrm->GetFollow();
+                                pFootnoteFrm->SetRef( pDest );
+                                pFootnoteFrm = pFootnoteFrm->GetFollow();
                             }
                         }
                         else
                         {
-                            pFtnBoss->MoveFtns( this, pDest, pFtn );
+                            pFootnoteBoss->MoveFootnotes( this, pDest, pFootnote );
                             bRemove = true;
                         }
-                        static_cast<SwTxtFrm*>(pDest)->SetFtn( true );
+                        static_cast<SwTextFrm*>(pDest)->SetFootnote( true );
 
-                        OSL_ENSURE( SwFtnBossFrm::FindFtn( pDest,
-                           pFtn),"SwTxtFrm::RemoveFtn: footnote ChgRef failed");
+                        OSL_ENSURE( SwFootnoteBossFrm::FindFootnote( pDest,
+                           pFootnote),"SwTextFrm::RemoveFootnote: footnote ChgRef failed");
                     }
                     else
                     {
@@ -523,29 +523,29 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                             pEndBoss->FindSctFrm(), NULL ) ) )
                         {
                             if( bEndn )
-                                pEndBoss->RemoveFtn( this, pFtn );
+                                pEndBoss->RemoveFootnote( this, pFootnote );
                             else
-                                pFtnBoss->RemoveFtn( this, pFtn );
+                                pFootnoteBoss->RemoveFootnote( this, pFootnote );
                             bRemove = bRemove || !bEndDoc;
-                            OSL_ENSURE( !SwFtnBossFrm::FindFtn( this, pFtn ),
-                            "SwTxtFrm::RemoveFtn: can't get off that footnote" );
+                            OSL_ENSURE( !SwFootnoteBossFrm::FindFootnote( this, pFootnote ),
+                            "SwTextFrm::RemoveFootnote: can't get off that footnote" );
                         }
                     }
                 }
             }
         }
         if( pUpdate )
-            pUpdate->UpdateFtnNum();
+            pUpdate->UpdateFootnoteNum();
 
         // We brake the oscillation
-        if( bRemove && !bFtnEndDoc && HasPara() )
+        if( bRemove && !bFootnoteEndDoc && HasPara() )
         {
             ValidateBodyFrm();
             ValidateFrm();
         }
     }
 
-    // We call the RemoveFtn from within the FindBreak, because the last line is
+    // We call the RemoveFootnote from within the FindBreak, because the last line is
     // to be passed to the Follow. The Offset of the Follow is, however, outdated;
     // it'll be set soon. CalcFntFlag depends on a correctly set Follow Offset.
     // Therefore we temporarily calculate the Follow Offset here
@@ -555,7 +555,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
         nOldOfst = GetFollow()->GetOfst();
         GetFollow()->ManipOfst( nStart + ( bRollBack ? nLen : 0 ) );
     }
-    pSource->CalcFtnFlag();
+    pSource->CalcFootnoteFlag();
     if( nOldOfst < COMPLETE_STRING )
         GetFollow()->ManipOfst( nOldOfst );
 }
@@ -564,48 +564,48 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
 /**
  * We basically only have two possibilities:
  *
- * a) The Ftn is already present
+ * a) The Footnote is already present
  *    => we move it, if another pSrcFrm has been found
  *
- * b) The Ftn is not present
+ * b) The Footnote is not present
  *    => we have it created for us
  *
- * Whether the Ftn ends up on our Page/Column, doesn't matter in this
+ * Whether the Footnote ends up on our Page/Column, doesn't matter in this
  * context.
  *
  * Optimization for Endnotes.
  *
- * Another problem: if the Deadline falls within the Ftn Area, we need
- * to move the Ftn.
+ * Another problem: if the Deadline falls within the Footnote Area, we need
+ * to move the Footnote.
  *
  * @returns false on any type of error
  */
-void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
+void SwTextFrm::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDeadLine )
 {
     OSL_ENSURE( !IsVertical() || !IsSwapped(),
-            "SwTxtFrm::ConnectFtn with swapped frame" );
+            "SwTextFrm::ConnectFootnote with swapped frame" );
 
-    bFtn = true;
-    bInFtnConnect = true; // Just reset!
-    const bool bEnd = pFtn->GetFtn().IsEndNote();
+    bFootnote = true;
+    bInFootnoteConnect = true; // Just reset!
+    const bool bEnd = pFootnote->GetFootnote().IsEndNote();
 
     // We want to store this value, because it is needed as a fallback
-    // in GetFtnLine(), if there is no paragraph information available
-    mnFtnLine = nDeadLine;
+    // in GetFootnoteLine(), if there is no paragraph information available
+    mnFootnoteLine = nDeadLine;
 
     // We always need a parent (Page/Column)
     SwSectionFrm *pSect;
-    SwCntntFrm *pCntnt = this;
+    SwContentFrm *pContent = this;
     if( bEnd && IsInSct() )
     {
         pSect = FindSctFrm();
         if( pSect->IsEndnAtEnd() )
-            pCntnt = pSect->FindLastCntnt( FINDMODE_ENDNOTE );
-        if( !pCntnt )
-            pCntnt = this;
+            pContent = pSect->FindLastContent( FINDMODE_ENDNOTE );
+        if( !pContent )
+            pContent = this;
     }
 
-    SwFtnBossFrm *pBoss = pCntnt->FindFtnBossFrm( !bEnd );
+    SwFootnoteBossFrm *pBoss = pContent->FindFootnoteBossFrm( !bEnd );
 
 #if OSL_DEBUG_LEVEL > 1
     SwTwips nRstHeight = GetRstHeight();
@@ -613,51 +613,51 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 
     pSect = pBoss->FindSctFrm();
     bool bDocEnd = bEnd ? !( pSect && pSect->IsEndnAtEnd() ) :
-                   ( !( pSect && pSect->IsFtnAtEnd() ) &&
-                       FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFtnInfo().ePos );
+                   ( !( pSect && pSect->IsFootnoteAtEnd() ) &&
+                       FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFootnoteInfo().ePos );
 
-    // Ftn can be registered with the Follow
-    SwCntntFrm *pSrcFrm = FindFtnRef( pFtn );
+    // Footnote can be registered with the Follow
+    SwContentFrm *pSrcFrm = FindFootnoteRef( pFootnote );
 
     if( bDocEnd )
     {
         if( pSect && pSrcFrm )
         {
-            SwFtnFrm *pFtnFrm = SwFtnBossFrm::FindFtn( pSrcFrm, pFtn );
-            if( pFtnFrm && pFtnFrm->IsInSct() )
+            SwFootnoteFrm *pFootnoteFrm = SwFootnoteBossFrm::FindFootnote( pSrcFrm, pFootnote );
+            if( pFootnoteFrm && pFootnoteFrm->IsInSct() )
             {
-                pBoss->RemoveFtn( pSrcFrm, pFtn );
+                pBoss->RemoveFootnote( pSrcFrm, pFootnote );
                 pSrcFrm = 0;
             }
         }
     }
     else if( bEnd && pSect )
     {
-        SwFtnFrm *pFtnFrm = pSrcFrm ? SwFtnBossFrm::FindFtn( pSrcFrm, pFtn ) : NULL;
-        if( pFtnFrm && !pFtnFrm->GetUpper() )
-            pFtnFrm = NULL;
+        SwFootnoteFrm *pFootnoteFrm = pSrcFrm ? SwFootnoteBossFrm::FindFootnote( pSrcFrm, pFootnote ) : NULL;
+        if( pFootnoteFrm && !pFootnoteFrm->GetUpper() )
+            pFootnoteFrm = NULL;
         SwDoc *pDoc = GetNode()->GetDoc();
-        if( SwLayouter::Collecting( pDoc, pSect, pFtnFrm ) )
+        if( SwLayouter::Collecting( pDoc, pSect, pFootnoteFrm ) )
         {
             if( !pSrcFrm )
             {
-                SwFtnFrm *pNew = new SwFtnFrm(pDoc->GetDfltFrmFmt(),this,this,pFtn);
-                 SwNodeIndex aIdx( *pFtn->GetStartNode(), 1 );
+                SwFootnoteFrm *pNew = new SwFootnoteFrm(pDoc->GetDfltFrameFormat(),this,this,pFootnote);
+                 SwNodeIndex aIdx( *pFootnote->GetStartNode(), 1 );
                  ::_InsertCnt( pNew, pDoc, aIdx.GetIndex() );
                 GetNode()->getIDocumentLayoutAccess()->GetLayouter()->CollectEndnote( pNew );
             }
             else if( pSrcFrm != this )
-                SwFtnBossFrm::ChangeFtnRef( pSrcFrm, pFtn, this );
-            bInFtnConnect = false;
+                SwFootnoteBossFrm::ChangeFootnoteRef( pSrcFrm, pFootnote, this );
+            bInFootnoteConnect = false;
             return;
         }
         else if( pSrcFrm )
         {
-            SwFtnBossFrm *pFtnBoss = pFtnFrm->FindFtnBossFrm();
-            if( !pFtnBoss->IsInSct() ||
-                pFtnBoss->ImplFindSctFrm()->GetSection()!=pSect->GetSection() )
+            SwFootnoteBossFrm *pFootnoteBoss = pFootnoteFrm->FindFootnoteBossFrm();
+            if( !pFootnoteBoss->IsInSct() ||
+                pFootnoteBoss->ImplFindSctFrm()->GetSection()!=pSect->GetSection() )
             {
-                pBoss->RemoveFtn( pSrcFrm, pFtn );
+                pBoss->RemoveFootnote( pSrcFrm, pFootnote );
                 pSrcFrm = 0;
             }
         }
@@ -666,27 +666,27 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
     if( bDocEnd || bEnd )
     {
         if( !pSrcFrm )
-            pBoss->AppendFtn( this, pFtn );
+            pBoss->AppendFootnote( this, pFootnote );
         else if( pSrcFrm != this )
-            SwFtnBossFrm::ChangeFtnRef( pSrcFrm, pFtn, this );
-        bInFtnConnect = false;
+            SwFootnoteBossFrm::ChangeFootnoteRef( pSrcFrm, pFootnote, this );
+        bInFootnoteConnect = false;
         return;
     }
 
-    SwSaveFtnHeight aHeight( pBoss, nDeadLine );
+    SwSaveFootnoteHeight aHeight( pBoss, nDeadLine );
 
-    if( !pSrcFrm ) // No Ftn was found at all
-        pBoss->AppendFtn( this, pFtn );
+    if( !pSrcFrm ) // No Footnote was found at all
+        pBoss->AppendFootnote( this, pFootnote );
     else
     {
-        SwFtnFrm *pFtnFrm = SwFtnBossFrm::FindFtn( pSrcFrm, pFtn );
-        SwFtnBossFrm *pFtnBoss = pFtnFrm->FindFtnBossFrm();
+        SwFootnoteFrm *pFootnoteFrm = SwFootnoteBossFrm::FindFootnote( pSrcFrm, pFootnote );
+        SwFootnoteBossFrm *pFootnoteBoss = pFootnoteFrm->FindFootnoteBossFrm();
 
         bool bBrutal = false;
 
-        if( pFtnBoss == pBoss ) // Ref and Ftn are on the same Page/Column
+        if( pFootnoteBoss == pBoss ) // Ref and Footnote are on the same Page/Column
         {
-            SwFrm *pCont = pFtnFrm->GetUpper();
+            SwFrm *pCont = pFootnoteFrm->GetUpper();
 
             SWRECTFN ( pCont )
             long nDiff = (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(),
@@ -697,13 +697,13 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                 // If the Footnote has been registered to a Follow, we need to
                 // rewire it now too
                 if ( pSrcFrm != this )
-                    SwFtnBossFrm::ChangeFtnRef( pSrcFrm, pFtn, this );
+                    SwFootnoteBossFrm::ChangeFootnoteRef( pSrcFrm, pFootnote, this );
 
                 // We have some room left, so the Footnote can grow
-                if ( pFtnFrm->GetFollow() && nDiff > 0 )
+                if ( pFootnoteFrm->GetFollow() && nDiff > 0 )
                 {
                     SwTwips nHeight = (pCont->Frm().*fnRect->fnGetHeight)();
-                    pBoss->RearrangeFtns( nDeadLine, false, pFtn );
+                    pBoss->RearrangeFootnotes( nDeadLine, false, pFootnote );
                     ValidateBodyFrm();
                     ValidateFrm();
                     SwViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -711,7 +711,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                         // So that we don't miss anything
                         pSh->InvalidateWindows( pCont->Frm() );
                 }
-                bInFtnConnect = false;
+                bInFootnoteConnect = false;
                 return;
             }
             else
@@ -719,7 +719,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         }
         else
         {
-            // Ref and Ftn are not on one Page; attempt to move is necessary
+            // Ref and Footnote are not on one Page; attempt to move is necessary
             SwFrm* pTmp = this;
             while( pTmp->GetNext() && pSrcFrm != pTmp )
                 pTmp = pTmp->GetNext();
@@ -727,54 +727,54 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                 bBrutal = true;
             else
             {   // If our Parent is in a column Area, but the Page already has a
-                // FtnContainer, we can only brute force it
-                if( pSect && pSect->FindFtnBossFrm( !bEnd )->FindFtnCont() )
+                // FootnoteContainer, we can only brute force it
+                if( pSect && pSect->FindFootnoteBossFrm( !bEnd )->FindFootnoteCont() )
                     bBrutal = true;
 
-                else if ( !pFtnFrm->GetPrev() ||
-                          pFtnBoss->IsBefore( pBoss )
+                else if ( !pFootnoteFrm->GetPrev() ||
+                          pFootnoteBoss->IsBefore( pBoss )
                         )
                 {
-                    SwFtnBossFrm *pSrcBoss = pSrcFrm->FindFtnBossFrm( !bEnd );
-                    pSrcBoss->MoveFtns( pSrcFrm, this, pFtn );
+                    SwFootnoteBossFrm *pSrcBoss = pSrcFrm->FindFootnoteBossFrm( !bEnd );
+                    pSrcBoss->MoveFootnotes( pSrcFrm, this, pFootnote );
                 }
                 else
-                    SwFtnBossFrm::ChangeFtnRef( pSrcFrm, pFtn, this );
+                    SwFootnoteBossFrm::ChangeFootnoteRef( pSrcFrm, pFootnote, this );
             }
         }
 
         // The brute force method: Remove Footnote and append.
-        // We need to call SetFtnDeadLine(), as we can more easily adapt the
-        // nMaxFtnHeight after RemoveFtn
+        // We need to call SetFootnoteDeadLine(), as we can more easily adapt the
+        // nMaxFootnoteHeight after RemoveFootnote
         if( bBrutal )
         {
-            pBoss->RemoveFtn( pSrcFrm, pFtn, false );
-            SwSaveFtnHeight *pHeight = bEnd ? NULL : new SwSaveFtnHeight( pBoss, nDeadLine );
-            pBoss->AppendFtn( this, pFtn );
+            pBoss->RemoveFootnote( pSrcFrm, pFootnote, false );
+            SwSaveFootnoteHeight *pHeight = bEnd ? NULL : new SwSaveFootnoteHeight( pBoss, nDeadLine );
+            pBoss->AppendFootnote( this, pFootnote );
             delete pHeight;
         }
     }
 
-    // In column Areas, that not yet reach the Page's border a RearrangeFtns is not
+    // In column Areas, that not yet reach the Page's border a RearrangeFootnotes is not
     // useful yet, as the Footnote container has not yet been calculated
     if( !pSect || !pSect->Growable() )
     {
         // Validate environment, to avoid oscillation
-        SwSaveFtnHeight aNochmal( pBoss, nDeadLine );
+        SwSaveFootnoteHeight aNochmal( pBoss, nDeadLine );
         ValidateBodyFrm();
-        pBoss->RearrangeFtns( nDeadLine, true );
+        pBoss->RearrangeFootnotes( nDeadLine, true );
         ValidateFrm();
     }
-    else if( pSect->IsFtnAtEnd() )
+    else if( pSect->IsFootnoteAtEnd() )
     {
         ValidateBodyFrm();
         ValidateFrm();
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    // pFtnFrm may have changed due to Calc ...
-    SwFtnFrm *pFtnFrm = pBoss->FindFtn( this, pFtn );
-    if( pFtnFrm && pBoss != pFtnFrm->FindFtnBossFrm( !bEnd ) )
+    // pFootnoteFrm may have changed due to Calc ...
+    SwFootnoteFrm *pFootnoteFrm = pBoss->FindFootnote( this, pFootnote );
+    if( pFootnoteFrm && pBoss != pFootnoteFrm->FindFootnoteBossFrm( !bEnd ) )
     {
         int bla = 5;
         (void)bla;
@@ -782,28 +782,28 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
     nRstHeight = GetRstHeight();
     (void)nRstHeight;
 #endif
-    bInFtnConnect = false;
+    bInFootnoteConnect = false;
     return;
 }
 
 /**
- * The portion for the Ftn Reference in the Text
+ * The portion for the Footnote Reference in the Text
  */
-SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
-                                             SwTxtAttr *pHint )
+SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
+                                             SwTextAttr *pHint )
 {
     OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
-            "NewFtnPortion with unswapped frame" );
+            "NewFootnotePortion with unswapped frame" );
 
-    if( !pFrm->IsFtnAllowed() )
+    if( !pFrm->IsFootnoteAllowed() )
         return 0;
 
-    SwTxtFtn  *pFtn = static_cast<SwTxtFtn*>(pHint);
-    const SwFmtFtn& rFtn = static_cast<const SwFmtFtn&>(pFtn->GetFtn());
+    SwTextFootnote  *pFootnote = static_cast<SwTextFootnote*>(pHint);
+    const SwFormatFootnote& rFootnote = static_cast<const SwFormatFootnote&>(pFootnote->GetFootnote());
     SwDoc *pDoc = pFrm->GetNode()->GetDoc();
 
     if( rInf.IsTest() )
-        return new SwFtnPortion( rFtn.GetViewNumStr( *pDoc ), pFtn );
+        return new SwFootnotePortion( rFootnote.GetViewNumStr( *pDoc ), pFootnote );
 
     SWAP_IF_SWAPPED( pFrm )
 
@@ -827,43 +827,43 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     if( bVertical )
         nLower = pFrm->SwitchHorizontalToVertical( nLower );
 
-    nLower = lcl_GetFtnLower( pFrm, nLower );
+    nLower = lcl_GetFootnoteLower( pFrm, nLower );
 
     // We just refresh.
     // The Connect does not do anything useful in this case, but will
-    // mostly throw away the Ftn and create it anew.
+    // mostly throw away the Footnote and create it anew.
     if( !rInf.IsQuick() )
-        pFrm->ConnectFtn( pFtn, nLower );
+        pFrm->ConnectFootnote( pFootnote, nLower );
 
-    SwTxtFrm *pScrFrm = pFrm->FindFtnRef( pFtn );
-    SwFtnBossFrm *pBoss = pFrm->FindFtnBossFrm( !rFtn.IsEndNote() );
-    SwFtnFrm *pFtnFrm = NULL;
+    SwTextFrm *pScrFrm = pFrm->FindFootnoteRef( pFootnote );
+    SwFootnoteBossFrm *pBoss = pFrm->FindFootnoteBossFrm( !rFootnote.IsEndNote() );
+    SwFootnoteFrm *pFootnoteFrm = NULL;
     if( pScrFrm )
-        pFtnFrm = SwFtnBossFrm::FindFtn( pScrFrm, pFtn );
+        pFootnoteFrm = SwFootnoteBossFrm::FindFootnote( pScrFrm, pFootnote );
 
     // We see whether our Append has caused some Footnote to
     // still be on the Page/Column. If not, our line disappears too,
     // which will lead to the following undesired behaviour:
-    // Ftn1 still fits onto the Page/Column, but Ftn2 doesn't.
-    // The Ftn2 Reference remains on the Page/Column. The Footnote itself
+    // Footnote1 still fits onto the Page/Column, but Footnote2 doesn't.
+    // The Footnote2 Reference remains on the Page/Column. The Footnote itself
     // is on the next Page/Column.
     //
     // Exception: If the Page/Column cannot accomodate another line,
-    // the Ftn Reference should be moved to the next one.
-    if( !rFtn.IsEndNote() )
+    // the Footnote Reference should be moved to the next one.
+    if( !rFootnote.IsEndNote() )
     {
         SwSectionFrm *pSct = pBoss->FindSctFrm();
-        bool bAtSctEnd = pSct && pSct->IsFtnAtEnd();
-        if( FTNPOS_CHAPTER != pDoc->GetFtnInfo().ePos || bAtSctEnd )
+        bool bAtSctEnd = pSct && pSct->IsFootnoteAtEnd();
+        if( FTNPOS_CHAPTER != pDoc->GetFootnoteInfo().ePos || bAtSctEnd )
         {
-            SwFrm* pFtnCont = pBoss->FindFtnCont();
+            SwFrm* pFootnoteCont = pBoss->FindFootnoteCont();
             // If the Parent is within an Area, it can only be a Column of this
             // Area. If this one is not the first Column, we can avoid it.
             if( !pFrm->IsInTab() && ( GetLineNr() > 1 || pFrm->GetPrev() ||
                 ( !bAtSctEnd && pFrm->GetIndPrev() ) ||
                 ( pSct && pBoss->GetPrev() ) ) )
             {
-                if( !pFtnCont )
+                if( !pFootnoteCont )
                 {
                     rInf.SetStop( true );
                     UNDO_SWAP( pFrm )
@@ -875,12 +875,12 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                     // Page/Page column
                     if( pSct && !bAtSctEnd ) // Is the Container in a (column) Area?
                     {
-                        SwFtnBossFrm* pTmp = pBoss->FindSctFrm()->FindFtnBossFrm( true );
-                        SwFtnContFrm* pFtnC = pTmp->FindFtnCont();
-                        if( pFtnC )
+                        SwFootnoteBossFrm* pTmp = pBoss->FindSctFrm()->FindFootnoteBossFrm( true );
+                        SwFootnoteContFrm* pFootnoteC = pTmp->FindFootnoteCont();
+                        if( pFootnoteC )
                         {
-                            SwFtnFrm* pTmpFrm = static_cast<SwFtnFrm*>(pFtnC->Lower());
-                            if( pTmpFrm && *pTmpFrm < pFtn )
+                            SwFootnoteFrm* pTmpFrm = static_cast<SwFootnoteFrm*>(pFootnoteC->Lower());
+                            if( pTmpFrm && *pTmpFrm < pFootnote )
                             {
                                 rInf.SetStop( true );
                                 UNDO_SWAP( pFrm )
@@ -894,18 +894,18 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                     if( bVertical )
                         nTmpBot = pFrm->SwitchHorizontalToVertical( nTmpBot );
 
-                    SWRECTFN( pFtnCont )
+                    SWRECTFN( pFootnoteCont )
 
                     const long nDiff = (*fnRect->fnYDiff)(
-                                            (pFtnCont->Frm().*fnRect->fnGetTop)(),
+                                            (pFootnoteCont->Frm().*fnRect->fnGetTop)(),
                                              nTmpBot );
 
                     if( pScrFrm && nDiff < 0 )
                     {
-                        if( pFtnFrm )
+                        if( pFootnoteFrm )
                         {
-                            SwFtnBossFrm *pFtnBoss = pFtnFrm->FindFtnBossFrm();
-                            if( pFtnBoss != pBoss )
+                            SwFootnoteBossFrm *pFootnoteBoss = pFootnoteFrm->FindFootnoteBossFrm();
+                            if( pFootnoteBoss != pBoss )
                             {
                                 // We're in the last Line and the Footnote has moved
                                 // to another Page. We also want to be on that Page!
@@ -919,10 +919,10 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
             }
         }
     }
-    // Finally: Create FtnPortion and exit ...
-    SwFtnPortion *pRet = new SwFtnPortion( rFtn.GetViewNumStr( *pDoc ),
-                                           pFtn, nReal );
-    rInf.SetFtnInside( true );
+    // Finally: Create FootnotePortion and exit ...
+    SwFootnotePortion *pRet = new SwFootnotePortion( rFootnote.GetViewNumStr( *pDoc ),
+                                           pFootnote, nReal );
+    rInf.SetFootnoteInside( true );
 
     UNDO_SWAP( pFrm )
 
@@ -930,34 +930,34 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
  }
 
 /**
- * The portion for the Ftn Numbering in the Ftn Area
+ * The portion for the Footnote Numbering in the Footnote Area
  */
-SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
+SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo &rInf ) const
 {
-    OSL_ENSURE( pFrm->IsInFtn() && !pFrm->GetIndPrev() && !rInf.IsFtnDone(),
+    OSL_ENSURE( pFrm->IsInFootnote() && !pFrm->GetIndPrev() && !rInf.IsFootnoteDone(),
             "This is the wrong place for a ftnnumber" );
-    if( rInf.GetTxtStart() != nStart ||
-        rInf.GetTxtStart() != rInf.GetIdx() )
+    if( rInf.GetTextStart() != nStart ||
+        rInf.GetTextStart() != rInf.GetIdx() )
         return 0;
 
-    const SwFtnFrm* pFtnFrm = pFrm->FindFtnFrm();
-    const SwTxtFtn* pFtn = pFtnFrm->GetAttr();
+    const SwFootnoteFrm* pFootnoteFrm = pFrm->FindFootnoteFrm();
+    const SwTextFootnote* pFootnote = pFootnoteFrm->GetAttr();
 
     // Aha! So we're in the Footnote Area!
-    SwFmtFtn& rFtn = (SwFmtFtn&)pFtn->GetFtn();
+    SwFormatFootnote& rFootnote = (SwFormatFootnote&)pFootnote->GetFootnote();
 
     SwDoc *pDoc = pFrm->GetNode()->GetDoc();
-    OUString aFtnTxt( rFtn.GetViewNumStr( *pDoc, true ));
+    OUString aFootnoteText( rFootnote.GetViewNumStr( *pDoc, true ));
 
     const SwEndNoteInfo* pInfo;
-    if( rFtn.IsEndNote() )
+    if( rFootnote.IsEndNote() )
         pInfo = &pDoc->GetEndNoteInfo();
     else
-        pInfo = &pDoc->GetFtnInfo();
-    const SwAttrSet& rSet = pInfo->GetCharFmt(*pDoc)->GetAttrSet();
+        pInfo = &pDoc->GetFootnoteInfo();
+    const SwAttrSet& rSet = pInfo->GetCharFormat(*pDoc)->GetAttrSet();
 
     const SwAttrSet* pParSet = &rInf.GetCharAttr();
-    const IDocumentSettingAccess* pIDSA = pFrm->GetTxtNode()->getIDocumentSettingAccess();
+    const IDocumentSettingAccess* pIDSA = pFrm->GetTextNode()->getIDocumentSettingAccess();
     SwFont *pNumFnt = new SwFont( pParSet, pIDSA );
 
     // #i37142#
@@ -965,7 +965,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     // Overline style of paragraph font should not be considered
     // Weight style of paragraph font should not be considered
     // Posture style of paragraph font should not be considered
-    // See also #i18463# and SwTxtFormatter::NewNumberPortion()
+    // See also #i18463# and SwTextFormatter::NewNumberPortion()
     pNumFnt->SetUnderline( UNDERLINE_NONE );
     pNumFnt->SetOverline( UNDERLINE_NONE );
     pNumFnt->SetItalic( ITALIC_NONE, SW_LATIN );
@@ -978,30 +978,30 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     pNumFnt->SetDiffFnt(&rSet, pIDSA );
     pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
 
-    SwFtnNumPortion* pNewPor = new SwFtnNumPortion( aFtnTxt, pNumFnt );
+    SwFootnoteNumPortion* pNewPor = new SwFootnoteNumPortion( aFootnoteText, pNumFnt );
     pNewPor->SetLeft( !pFrm->IsRightToLeft() );
     return pNewPor;
 }
 
 OUString lcl_GetPageNumber( const SwPageFrm* pPage )
 {
-    OSL_ENSURE( pPage, "GetPageNumber: Homeless TxtFrm" );
+    OSL_ENSURE( pPage, "GetPageNumber: Homeless TextFrm" );
     const sal_uInt16 nVirtNum = pPage->GetVirtPageNum();
     const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
     return rNum.GetNumStr( nVirtNum );
 }
 
-SwErgoSumPortion *SwTxtFormatter::NewErgoSumPortion( SwTxtFormatInfo &rInf ) const
+SwErgoSumPortion *SwTextFormatter::NewErgoSumPortion( SwTextFormatInfo &rInf ) const
 {
     // We cannot assume we're a Follow
-    if( !pFrm->IsInFtn()  || pFrm->GetPrev() ||
+    if( !pFrm->IsInFootnote()  || pFrm->GetPrev() ||
         rInf.IsErgoDone() || rInf.GetIdx() != pFrm->GetOfst() ||
-        pFrm->ImplFindFtnFrm()->GetAttr()->GetFtn().IsEndNote() )
+        pFrm->ImplFindFootnoteFrm()->GetAttr()->GetFootnote().IsEndNote() )
         return 0;
 
     // Aha, wir sind also im Fussnotenbereich
-    const SwFtnInfo &rFtnInfo = pFrm->GetNode()->GetDoc()->GetFtnInfo();
-    SwTxtFrm *pQuoFrm = pFrm->FindQuoVadisFrm();
+    const SwFootnoteInfo &rFootnoteInfo = pFrm->GetNode()->GetDoc()->GetFootnoteInfo();
+    SwTextFrm *pQuoFrm = pFrm->FindQuoVadisFrm();
     if( !pQuoFrm )
         return 0;
     const SwPageFrm* pPage = pFrm->FindPageFrm();
@@ -1012,22 +1012,22 @@ SwErgoSumPortion *SwTxtFormatter::NewErgoSumPortion( SwTxtFormatInfo &rInf ) con
     SwParaPortion *pPara = pQuoFrm->GetPara();
     if( pPara )
         pPara->SetErgoSumNum( aPage );
-    if( rFtnInfo.aErgoSum.isEmpty() )
+    if( rFootnoteInfo.aErgoSum.isEmpty() )
         return 0;
-    SwErgoSumPortion *pErgo = new SwErgoSumPortion( rFtnInfo.aErgoSum,
+    SwErgoSumPortion *pErgo = new SwErgoSumPortion( rFootnoteInfo.aErgoSum,
                                 lcl_GetPageNumber( pQuoPage ) );
     return pErgo;
 }
 
-sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
+sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
 {
     OSL_ENSURE( ! pFrm->IsVertical() || ! pFrm->IsSwapped(),
-            "SwTxtFormatter::FormatQuoVadis with swapped frame" );
+            "SwTextFormatter::FormatQuoVadis with swapped frame" );
 
-    if( !pFrm->IsInFtn() || pFrm->ImplFindFtnFrm()->GetAttr()->GetFtn().IsEndNote() )
+    if( !pFrm->IsInFootnote() || pFrm->ImplFindFootnoteFrm()->GetAttr()->GetFootnote().IsEndNote() )
         return nOffset;
 
-    const SwFrm* pErgoFrm = pFrm->FindFtnFrm()->GetFollow();
+    const SwFrm* pErgoFrm = pFrm->FindFootnoteFrm()->GetFollow();
     if( !pErgoFrm && pFrm->HasFollow() )
         pErgoFrm = pFrm->GetFollow();
     if( !pErgoFrm )
@@ -1049,9 +1049,9 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
             return nOffset; // If the ErgoSum is on the same Page
     }
 
-    SwTxtFormatInfo &rInf = GetInfo();
-    const SwFtnInfo &rFtnInfo = pFrm->GetNode()->GetDoc()->GetFtnInfo();
-    if( rFtnInfo.aQuoVadis.isEmpty() )
+    SwTextFormatInfo &rInf = GetInfo();
+    const SwFootnoteInfo &rFootnoteInfo = pFrm->GetNode()->GetDoc()->GetFootnoteInfo();
+    if( rFootnoteInfo.aQuoVadis.isEmpty() )
         return nOffset;
 
     // A remark on QuoVadis/ErgoSum:
@@ -1083,9 +1083,9 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
     rInf.RealWidth( nOldRealWidth - nLastLeft );
 
     OUString aErgo = lcl_GetPageNumber( pErgoFrm->FindPageFrm() );
-    SwQuoVadisPortion *pQuo = new SwQuoVadisPortion(rFtnInfo.aQuoVadis, aErgo );
+    SwQuoVadisPortion *pQuo = new SwQuoVadisPortion(rFootnoteInfo.aQuoVadis, aErgo );
     pQuo->SetAscent( rInf.GetAscent()  );
-    pQuo->Height( rInf.GetTxtHeight() );
+    pQuo->Height( rInf.GetTextHeight() );
     pQuo->Format( rInf );
     sal_uInt16 nQuoWidth = pQuo->Width();
     SwLinePortion* pCurrPor = pQuo;
@@ -1215,10 +1215,10 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
  * This function creates a Line that reaches to the other Page Margin.
  * DummyLines or DummyPortions make sure, that osicllations stop, because
  * there's no way to flow back.
- * They are used for Footnotes in paragraph-bound Frames and for Ftn
+ * They are used for Footnotes in paragraph-bound Frames and for Footnote
  * oscillations
  */
-void SwTxtFormatter::MakeDummyLine()
+void SwTextFormatter::MakeDummyLine()
 {
     sal_uInt16 nRstHeight = GetFrmRstHeight();
     if( pCurr && nRstHeight > pCurr->Height() )
@@ -1232,35 +1232,35 @@ void SwTxtFormatter::MakeDummyLine()
     }
 }
 
-class SwFtnSave
+class SwFootnoteSave
 {
-    SwTxtSizeInfo *pInf;
+    SwTextSizeInfo *pInf;
     SwFont       *pFnt;
     SwFont       *pOld;
 public:
-    SwFtnSave( const SwTxtSizeInfo &rInf,
-               const SwTxtFtn *pTxtFtn,
+    SwFootnoteSave( const SwTextSizeInfo &rInf,
+               const SwTextFootnote *pTextFootnote,
                const bool bApplyGivenScriptType,
                const sal_uInt8 nGivenScriptType );
-   ~SwFtnSave();
+   ~SwFootnoteSave();
 };
 
-SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
-                      const SwTxtFtn* pTxtFtn,
+SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
+                      const SwTextFootnote* pTextFootnote,
                       const bool bApplyGivenScriptType,
                       const sal_uInt8 nGivenScriptType )
-    : pInf( &((SwTxtSizeInfo&)rInf) )
+    : pInf( &((SwTextSizeInfo&)rInf) )
     , pFnt( 0 )
     , pOld( 0 )
 {
-    if( pTxtFtn && rInf.GetTxtFrm() )
+    if( pTextFootnote && rInf.GetTextFrm() )
     {
-        pFnt = ((SwTxtSizeInfo&)rInf).GetFont();
+        pFnt = ((SwTextSizeInfo&)rInf).GetFont();
           pOld = new SwFont( *pFnt );
         pOld->GetTox() = pFnt->GetTox();
         pFnt->GetTox() = 0;
-        SwFmtFtn& rFtn = (SwFmtFtn&)pTxtFtn->GetFtn();
-        const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
+        SwFormatFootnote& rFootnote = (SwFormatFootnote&)pTextFootnote->GetFootnote();
+        const SwDoc *pDoc = rInf.GetTextFrm()->GetNode()->GetDoc();
 
         // #i98418#
         if ( bApplyGivenScriptType )
@@ -1270,17 +1270,17 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
         else
         {
             // examine text and set script
-            OUString aTmpStr( rFtn.GetViewNumStr( *pDoc ) );
+            OUString aTmpStr( rFootnote.GetViewNumStr( *pDoc ) );
             pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmpStr, 0 ) );
         }
 
         const SwEndNoteInfo* pInfo;
-        if( rFtn.IsEndNote() )
+        if( rFootnote.IsEndNote() )
             pInfo = &pDoc->GetEndNoteInfo();
         else
-            pInfo = &pDoc->GetFtnInfo();
-        const SwAttrSet& rSet = pInfo->GetAnchorCharFmt((SwDoc&)*pDoc)->GetAttrSet();
-        pFnt->SetDiffFnt( &rSet, rInf.GetTxtFrm()->GetNode()->getIDocumentSettingAccess() );
+            pInfo = &pDoc->GetFootnoteInfo();
+        const SwAttrSet& rSet = pInfo->GetAnchorCharFormat((SwDoc&)*pDoc)->GetAttrSet();
+        pFnt->SetDiffFnt( &rSet, rInf.GetTextFrm()->GetNode()->getIDocumentSettingAccess() );
 
         // we reduce footnote size, if we are inside a double line portion
         if ( ! pOld->GetEscapement() && 50 == pOld->GetPropr() )
@@ -1296,7 +1296,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
         if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_ROTATE,
             true, &pItem ))
             pFnt->SetVertical( static_cast<const SvxCharRotateItem*>(pItem)->GetValue(),
-                                rInf.GetTxtFrm()->IsVertical() );
+                                rInf.GetTextFrm()->IsVertical() );
 
         pFnt->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
 
@@ -1308,7 +1308,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
         pFnt = NULL;
 }
 
-SwFtnSave::~SwFtnSave()
+SwFootnoteSave::~SwFootnoteSave()
 {
     if( pFnt )
     {
@@ -1320,10 +1320,10 @@ SwFtnSave::~SwFtnSave()
     }
 }
 
-SwFtnPortion::SwFtnPortion( const OUString &rExpand,
-                            SwTxtFtn *pFootn, sal_uInt16 nReal )
-        : SwFldPortion( rExpand, 0 )
-        , pFtn(pFootn)
+SwFootnotePortion::SwFootnotePortion( const OUString &rExpand,
+                            SwTextFootnote *pFootn, sal_uInt16 nReal )
+        : SwFieldPortion( rExpand, 0 )
+        , pFootnote(pFootn)
         , nOrigHeight( nReal )
         // #i98418#
         , mbPreferredScriptTypeSet( false )
@@ -1333,79 +1333,79 @@ SwFtnPortion::SwFtnPortion( const OUString &rExpand,
     SetWhichPor( POR_FTN );
 }
 
-bool SwFtnPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
+bool SwFootnotePortion::GetExpText( const SwTextSizeInfo &, OUString &rText ) const
 {
-    rTxt = aExpand;
+    rText = aExpand;
     return true;
 }
 
-bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
+bool SwFootnotePortion::Format( SwTextFormatInfo &rInf )
 {
     // #i98418#
-//    SwFtnSave aFtnSave( rInf, pFtn );
-    SwFtnSave aFtnSave( rInf, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
+//    SwFootnoteSave aFootnoteSave( rInf, pFootnote );
+    SwFootnoteSave aFootnoteSave( rInf, pFootnote, mbPreferredScriptTypeSet, mnPreferredScriptType );
     // the idx is manipulated in SwExpandPortion::Format
     // this flag indicates, that a footnote is allowed to trigger
-    // an underflow during SwTxtGuess::Guess
+    // an underflow during SwTextGuess::Guess
     rInf.SetFakeLineStart( rInf.GetIdx() > rInf.GetLineStart() );
-    const bool bFull = SwFldPortion::Format( rInf );
+    const bool bFull = SwFieldPortion::Format( rInf );
     rInf.SetFakeLineStart( false );
     SetAscent( rInf.GetAscent() );
-    Height( rInf.GetTxtHeight() );
-    rInf.SetFtnDone( !bFull );
+    Height( rInf.GetTextHeight() );
+    rInf.SetFootnoteDone( !bFull );
     if( !bFull )
-        rInf.SetParaFtn();
+        rInf.SetParaFootnote();
     return bFull;
 }
 
-void SwFtnPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwFootnotePortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     // #i98418#
-//    SwFtnSave aFtnSave( rInf, pFtn );
-    SwFtnSave aFtnSave( rInf, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
+//    SwFootnoteSave aFootnoteSave( rInf, pFootnote );
+    SwFootnoteSave aFootnoteSave( rInf, pFootnote, mbPreferredScriptTypeSet, mnPreferredScriptType );
     rInf.DrawViewOpt( *this, POR_FTN );
     SwExpandPortion::Paint( rInf );
 }
 
-SwPosSize SwFtnPortion::GetTxtSize( const SwTxtSizeInfo &rInfo ) const
+SwPosSize SwFootnotePortion::GetTextSize( const SwTextSizeInfo &rInfo ) const
 {
     // #i98418#
-//    SwFtnSave aFtnSave( rInfo, pFtn );
-    SwFtnSave aFtnSave( rInfo, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
-    return SwExpandPortion::GetTxtSize( rInfo );
+//    SwFootnoteSave aFootnoteSave( rInfo, pFootnote );
+    SwFootnoteSave aFootnoteSave( rInfo, pFootnote, mbPreferredScriptTypeSet, mnPreferredScriptType );
+    return SwExpandPortion::GetTextSize( rInfo );
 }
 
 // #i98418#
-void SwFtnPortion::SetPreferredScriptType( sal_uInt8 nPreferredScriptType )
+void SwFootnotePortion::SetPreferredScriptType( sal_uInt8 nPreferredScriptType )
 {
     mbPreferredScriptTypeSet = true;
     mnPreferredScriptType = nPreferredScriptType;
 }
 
-SwFldPortion *SwQuoVadisPortion::Clone( const OUString &rExpand ) const
+SwFieldPortion *SwQuoVadisPortion::Clone( const OUString &rExpand ) const
 {
     return new SwQuoVadisPortion( rExpand, aErgo );
 }
 
 SwQuoVadisPortion::SwQuoVadisPortion( const OUString &rExp, const OUString& rStr )
-    : SwFldPortion( rExp ), aErgo(rStr)
+    : SwFieldPortion( rExp ), aErgo(rStr)
 {
     SetLen(0);
     SetWhichPor( POR_QUOVADIS );
 }
 
-bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
+bool SwQuoVadisPortion::Format( SwTextFormatInfo &rInf )
 {
     // First try; maybe the Text fits
     CheckScript( rInf );
-    bool bFull = SwFldPortion::Format( rInf );
+    bool bFull = SwFieldPortion::Format( rInf );
     SetLen( 0 );
 
     if( bFull )
     {
         // Second try; we make the String shorter
         aExpand = "...";
-        bFull = SwFldPortion::Format( rInf );
+        bFull = SwFieldPortion::Format( rInf );
         SetLen( 0 );
         if( bFull  )
             // Third try; we're done: we crush
@@ -1421,13 +1421,13 @@ bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-bool SwQuoVadisPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
+bool SwQuoVadisPortion::GetExpText( const SwTextSizeInfo &, OUString &rText ) const
 {
-    rTxt = aExpand;
+    rText = aExpand;
     // if this QuoVadisPortion has a follow, the follow is responsible for
     // the ergo text.
     if ( ! HasFollow() )
-        rTxt += aErgo;
+        rText += aErgo;
     return true;
 }
 
@@ -1436,26 +1436,26 @@ void SwQuoVadisPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), aExpand + aErgo, GetWhichPor() );
 }
 
-void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwQuoVadisPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     // We _always_ want to ouput per DrawStretchText, because nErgo
     // can quickly switch
     if( PrtWidth() )
     {
         rInf.DrawViewOpt( *this, POR_QUOVADIS );
-        SwTxtSlot aDiffTxt( &rInf, this, true, false );
+        SwTextSlot aDiffText( &rInf, this, true, false );
         SwFontSave aSave( rInf, pFnt );
         rInf.DrawText( *this, rInf.GetLen(), true );
     }
 }
 
-SwFldPortion *SwErgoSumPortion::Clone( const OUString &rExpand ) const
+SwFieldPortion *SwErgoSumPortion::Clone( const OUString &rExpand ) const
 {
     return new SwErgoSumPortion( rExpand, OUString() );
 }
 
 SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
-    : SwFldPortion( rExp )
+    : SwFieldPortion( rExp )
 {
     SetLen(0);
     aExpand += rStr;
@@ -1470,9 +1470,9 @@ sal_Int32 SwErgoSumPortion::GetCrsrOfst( const sal_uInt16 ) const
     return 0;
 }
 
-bool SwErgoSumPortion::Format( SwTxtFormatInfo &rInf )
+bool SwErgoSumPortion::Format( SwTextFormatInfo &rInf )
 {
-    const bool bFull = SwFldPortion::Format( rInf );
+    const bool bFull = SwFieldPortion::Format( rInf );
     SetLen( 0 );
     rInf.SetErgoDone( true );
 
@@ -1508,7 +1508,7 @@ void SwParaPortion::SetErgoSumNum( const OUString& rErgo )
 }
 
 /**
- * Is called in SwTxtFrm::Prepare()
+ * Is called in SwTextFrm::Prepare()
  */
 bool SwParaPortion::UpdateQuoVadis( const OUString &rQuo )
 {
@@ -1529,7 +1529,7 @@ bool SwParaPortion::UpdateQuoVadis( const OUString &rQuo )
     if( !pQuo )
         return false;
 
-    return pQuo->GetQuoTxt() == rQuo;
+    return pQuo->GetQuoText() == rQuo;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

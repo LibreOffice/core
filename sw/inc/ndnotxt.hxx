@@ -23,12 +23,12 @@
 
 namespace tools { class PolyPolygon; }
 
-// SwNoTxtNode
+// SwNoTextNode
 
-class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
+class SW_DLLPUBLIC SwNoTextNode : public SwContentNode
 {
     friend class SwNodes;
-    friend class SwNoTxtFrm;
+    friend class SwNoTextFrm;
 
     tools::PolyPolygon *pContour;
     bool bAutomaticContour : 1; // automatic contour polygon, not manipulated
@@ -38,22 +38,22 @@ class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
     bool bPixelContour : 1;     // contour map mode is invalid and pixel.
 
     // Creates for all derivations an AttrSet with ranges for frame- and
-    // graphics-attributes (only called by SwCntntNode).
+    // graphics-attributes (only called by SwContentNode).
     virtual void NewAttrSet( SwAttrPool& ) SAL_OVERRIDE;
 
-    SwNoTxtNode( const SwNoTxtNode& ) SAL_DELETED_FUNCTION;
-    SwNoTxtNode &operator=( const SwNoTxtNode& ) SAL_DELETED_FUNCTION;
+    SwNoTextNode( const SwNoTextNode& ) SAL_DELETED_FUNCTION;
+    SwNoTextNode &operator=( const SwNoTextNode& ) SAL_DELETED_FUNCTION;
 
 protected:
-    SwNoTxtNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
-                SwGrfFmtColl *pGrColl, SwAttrSet* pAutoAttr = 0 );
+    SwNoTextNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
+                SwGrfFormatColl *pGrColl, SwAttrSet* pAutoAttr = 0 );
 
 public:
-    virtual ~SwNoTxtNode();
+    virtual ~SwNoTextNode();
 
-    virtual SwCntntFrm *MakeFrm( SwFrm* ) SAL_OVERRIDE;
+    virtual SwContentFrm *MakeFrm( SwFrm* ) SAL_OVERRIDE;
 
-    inline SwGrfFmtColl *GetGrfColl() const { return const_cast<SwGrfFmtColl*>(static_cast<const SwGrfFmtColl*>(GetRegisteredIn())); }
+    inline SwGrfFormatColl *GetGrfColl() const { return const_cast<SwGrfFormatColl*>(static_cast<const SwGrfFormatColl*>(GetRegisteredIn())); }
 
     virtual Size GetTwipSize() const = 0;
 
@@ -90,14 +90,14 @@ public:
     Graphic GetGraphic() const;
 };
 
-// Inline methods from Node.hxx - we know TxtNode only here!!
-inline SwNoTxtNode *SwNode::GetNoTxtNode()
+// Inline methods from Node.hxx - we know TextNode only here!!
+inline SwNoTextNode *SwNode::GetNoTextNode()
 {
-    return ND_NOTXTNODE & nNodeType ? static_cast<SwNoTxtNode*>(this) : 0;
+    return ND_NOTXTNODE & nNodeType ? static_cast<SwNoTextNode*>(this) : 0;
 }
-inline const SwNoTxtNode *SwNode::GetNoTxtNode() const
+inline const SwNoTextNode *SwNode::GetNoTextNode() const
 {
-    return ND_NOTXTNODE & nNodeType ? static_cast<const SwNoTxtNode*>(this) : 0;
+    return ND_NOTXTNODE & nNodeType ? static_cast<const SwNoTextNode*>(this) : 0;
 }
 
 #endif // INCLUDED_SW_INC_NDNOTXT_HXX

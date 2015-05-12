@@ -398,7 +398,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
-        SvxSwAutoFmtFlags& rSwFlags = rParent.pAutoCorrect->GetSwFlags();
+        SvxSwAutoFormatFlags& rSwFlags = rParent.pAutoCorrect->GetSwFlags();
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
             if(pValues[nProp].hasValue())
@@ -461,16 +461,16 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                             sal::static_int_cast< sal_uInt8 >(nVal);
                     }
                     break; // "Format/Option/CombineValue",
-                    case  23: rSwFlags.bAFmtDelSpacesAtSttEnd =  *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/DelSpacesAtStartEnd",
-                    case  24: rSwFlags.bAFmtDelSpacesBetweenLines = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/DelSpacesBetween",
+                    case  23: rSwFlags.bAFormatDelSpacesAtSttEnd =  *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/DelSpacesAtStartEnd",
+                    case  24: rSwFlags.bAFormatDelSpacesBetweenLines = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/Option/DelSpacesBetween",
                     case  25: rParent.bAutoFmtByInput = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/Enable",
                     case  26: rSwFlags.bChgToEnEmDash = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ChangeDash",
                     case  27: rSwFlags.bSetNumRule = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ApplyNumbering/Enable",
                     case  28: rSwFlags.bSetBorder = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ChangeToBorders",
                     case  29: rSwFlags.bCreateTable = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ChangeToTable",
                     case  30: rSwFlags.bReplaceStyles =  *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/ReplaceStyle",
-                    case  31: rSwFlags.bAFmtByInpDelSpacesAtSttEnd =  *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/DelSpacesAtStartEnd",
-                    case  32: rSwFlags.bAFmtByInpDelSpacesBetweenLines = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/DelSpacesBetween",
+                    case  31: rSwFlags.bAFormatByInpDelSpacesAtSttEnd =  *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/DelSpacesAtStartEnd",
+                    case  32: rSwFlags.bAFormatByInpDelSpacesBetweenLines = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Format/ByInput/DelSpacesBetween",
                     case  33: rSwFlags.bAutoCompleteWords = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break; // "Completion/Enable",
                     case  34:
                     {
@@ -554,7 +554,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
 
     const Type& rType = cppu::UnoType<bool>::get();
     sal_Bool bVal;
-    SvxSwAutoFmtFlags& rSwFlags = rParent.pAutoCorrect->GetSwFlags();
+    SvxSwAutoFormatFlags& rSwFlags = rParent.pAutoCorrect->GetSwFlags();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -597,16 +597,16 @@ void SvxSwAutoCorrCfg::ImplCommit()
             case  22:
                 pValues[nProp] <<= (sal_Int32)rSwFlags.nRightMargin;
             break; // "Format/Option/CombineValue",
-            case  23: bVal = rSwFlags.bAFmtDelSpacesAtSttEnd; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/DelSpacesAtStartEnd",
-            case  24: bVal = rSwFlags.bAFmtDelSpacesBetweenLines; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/DelSpacesBetween",
+            case  23: bVal = rSwFlags.bAFormatDelSpacesAtSttEnd; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/DelSpacesAtStartEnd",
+            case  24: bVal = rSwFlags.bAFormatDelSpacesBetweenLines; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/DelSpacesBetween",
             case  25: bVal = rParent.bAutoFmtByInput; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/Enable",
             case  26: bVal = rSwFlags.bChgToEnEmDash; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ChangeDash",
             case  27: bVal = rSwFlags.bSetNumRule; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ApplyNumbering/Enable",
             case  28: bVal = rSwFlags.bSetBorder; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ChangeToBorders",
             case  29: bVal = rSwFlags.bCreateTable; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ChangeToTable",
             case  30: bVal = rSwFlags.bReplaceStyles; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ReplaceStyle",
-            case  31: bVal = rSwFlags.bAFmtByInpDelSpacesAtSttEnd; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/DelSpacesAtStartEnd",
-            case  32: bVal = rSwFlags.bAFmtByInpDelSpacesBetweenLines; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/DelSpacesBetween",
+            case  31: bVal = rSwFlags.bAFormatByInpDelSpacesAtSttEnd; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/DelSpacesAtStartEnd",
+            case  32: bVal = rSwFlags.bAFormatByInpDelSpacesBetweenLines; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/DelSpacesBetween",
             case  33: bVal = rSwFlags.bAutoCompleteWords; pValues[nProp].setValue(&bVal, rType); break; // "Completion/Enable",
             case  34:
                 pValues[nProp] <<= (sal_Int32)rSwFlags.nAutoCmpltWordLen;

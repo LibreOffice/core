@@ -27,11 +27,11 @@ class SdrObject;
 class SwFrm;
 class SwFlyFrm;
 class SwContact;
-class SwFrmFmt;
+class SwFrameFormat;
 class SwRect;
 class SvxLRSpaceItem;
 class SvxULSpaceItem;
-class SwFmtHoriOrient;
+class SwFormatHoriOrient;
 class SwAnchoredObject;
 
 namespace objectpositioning
@@ -53,7 +53,7 @@ namespace objectpositioning
         // contact object
         SwContact* mpContact;
         // frame format
-        const SwFrmFmt* mpFrmFmt;
+        const SwFrameFormat* mpFrameFormat;
         // #i62875#
         bool mbFollowTextFlow;
         // #i62875#
@@ -63,7 +63,7 @@ namespace objectpositioning
         /** determine information about object
 
             member <mbIsObjFly>, <mpAnchoredObj>, <mpAnchorFrm>, <mpContact>
-            and <mpFrmFmt> are set
+            and <mpFrameFormat> are set
         */
         void _GetInfoAboutObj();
 
@@ -104,9 +104,9 @@ namespace objectpositioning
         {
             return *mpContact;
         }
-        inline const SwFrmFmt& GetFrmFmt() const
+        inline const SwFrameFormat& GetFrameFormat() const
         {
-            return *mpFrmFmt;
+            return *mpFrameFormat;
         }
         // #i62875#
         inline bool DoesObjFollowsTextFlow() const
@@ -240,7 +240,7 @@ namespace objectpositioning
         */
         SwTwips _CalcRelPosX( const SwFrm& _rHoriOrientFrm,
                               const SwEnvironmentOfAnchoredObject& _rEnvOfObj,
-                              const SwFmtHoriOrient& _rHoriOrient,
+                              const SwFormatHoriOrient& _rHoriOrient,
                               const SvxLRSpaceItem& _rLRSpacing,
                               const SvxULSpaceItem& _rULSpacing,
                               const bool _bObjWrapThrough,

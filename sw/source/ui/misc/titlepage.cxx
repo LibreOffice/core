@@ -29,7 +29,7 @@
 
 namespace
 {
-    bool lcl_GetPageDesc(SwWrtShell *pSh, sal_uInt16 &rPageNo, const SwFmtPageDesc **ppPageFmtDesc)
+    bool lcl_GetPageDesc(SwWrtShell *pSh, sal_uInt16 &rPageNo, const SwFormatPageDesc **ppPageFormatDesc)
     {
         bool bRet = false;
         SfxItemSet aSet( pSh->GetAttrPool(), RES_PAGEDESC, RES_PAGEDESC );
@@ -38,11 +38,11 @@ namespace
             const SfxPoolItem* pItem(0);
             if (SfxItemState::SET == aSet.GetItemState( RES_PAGEDESC, true, &pItem ) && pItem)
             {
-                ::boost::optional<sal_uInt16> oNumOffset = static_cast<const SwFmtPageDesc *>(pItem)->GetNumOffset();
+                ::boost::optional<sal_uInt16> oNumOffset = static_cast<const SwFormatPageDesc *>(pItem)->GetNumOffset();
                 if (oNumOffset)
                     rPageNo = oNumOffset.get();
-                if (ppPageFmtDesc)
-                    (*ppPageFmtDesc) = static_cast<const SwFmtPageDesc *>(pItem->Clone());
+                if (ppPageFormatDesc)
+                    (*ppPageFormatDesc) = static_cast<const SwFormatPageDesc *>(pItem->Clone());
                 bRet = true;
             }
         }
@@ -55,9 +55,9 @@ namespace
         const sal_uInt16 nCurIdx = pSh->GetCurPageDesc();
         const SwPageDesc &rCurrentDesc = pSh->GetPageDesc( nCurIdx );
 
-        const SwFmtPageDesc *pPageFmtDesc(0);
+        const SwFormatPageDesc *pPageFormatDesc(0);
         sal_uInt16 nDontCare;
-        lcl_GetPageDesc(pSh, nDontCare, &pPageFmtDesc);
+        lcl_GetPageDesc(pSh, nDontCare, &pPageFormatDesc);
 
         // If we want a new number then set it, otherwise reuse the existing one
         sal_uInt16 nPgNo;
@@ -67,9 +67,9 @@ namespace
         }
         else
         {
-            if (pPageFmtDesc)
+            if (pPageFormatDesc)
             {
-                ::boost::optional<sal_uInt16> oNumOffset = pPageFmtDesc->GetNumOffset();
+                ::boost::optional<sal_uInt16> oNumOffset = pPageFormatDesc->GetNumOffset();
                 if (oNumOffset)
                 {
                     nPgNo = oNumOffset.get();
@@ -88,18 +88,18 @@ namespace
         // If we want a new descriptior then set it, otherwise reuse the existing one
         if (!pNewDesc)
         {
-            SwFmtPageDesc aPageFmtDesc(pPageFmtDesc ? *pPageFmtDesc : &rCurrentDesc);
-            if (nPgNo) aPageFmtDesc.SetNumOffset(nPgNo);
-            pSh->SetAttrItem(aPageFmtDesc);
+            SwFormatPageDesc aPageFormatDesc(pPageFormatDesc ? *pPageFormatDesc : &rCurrentDesc);
+            if (nPgNo) aPageFormatDesc.SetNumOffset(nPgNo);
+            pSh->SetAttrItem(aPageFormatDesc);
         }
         else
         {
-            SwFmtPageDesc aPageFmtDesc(pNewDesc);
-            if (nPgNo) aPageFmtDesc.SetNumOffset(nPgNo);
-            pSh->SetAttrItem(aPageFmtDesc);
+            SwFormatPageDesc aPageFormatDesc(pNewDesc);
+            if (nPgNo) aPageFormatDesc.SetNumOffset(nPgNo);
+            pSh->SetAttrItem(aPageFormatDesc);
         }
 
-        delete pPageFmtDesc;
+        delete pPageFormatDesc;
     }
 
     void lcl_PushCursor(SwWrtShell *pSh)
@@ -152,7 +152,7 @@ sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
 
 SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
     SfxModalDialog( pParent, "DLG_TITLEPAGE", "modules/swriter/ui/titlepage.ui"),
-    mpPageFmtDesc(0)
+    mpPageFormatDesc(0)
 {
     get(m_pUseExistingPagesRB, "RB_USE_EXISTING_PAGES");
     get(m_pPageCountNF, "NF_PAGE_COUNT");
@@ -187,9 +187,9 @@ SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
     mpNormalDesc = mpSh->GetPageDescFromPool(RES_POOLPAGE_STANDARD);
 
     mpSh->SttDoc();
-    if (lcl_GetPageDesc( mpSh, nSetPage, &mpPageFmtDesc ))
+    if (lcl_GetPageDesc( mpSh, nSetPage, &mpPageFormatDesc ))
     {
-        if (mpPageFmtDesc->GetPageDesc() == mpTitleDesc)
+        if (mpPageFormatDesc->GetPageDesc() == mpTitleDesc)
         {
             while (mpSh->SttNxtPg())
             {
@@ -275,7 +275,7 @@ SwTitlePageDlg::~SwTitlePageDlg()
 
 void SwTitlePageDlg::dispose()
 {
-    delete mpPageFmtDesc;
+    delete mpPageFormatDesc;
     m_pUseExistingPagesRB.clear();
     m_pPageCountNF.clear();
     m_pDocumentStartRB.clear();
@@ -306,12 +306,12 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl)
 
     mpSh->StartUndo();
 
-    SwFmtPageDesc aTitleDesc(mpTitleDesc);
+    SwFormatPageDesc aTitleDesc(mpTitleDesc);
 
     if (m_pSetPageNumberCB->IsChecked())
         aTitleDesc.SetNumOffset(m_pSetPageNumberNF->GetValue());
-    else if (mpPageFmtDesc)
-        aTitleDesc.SetNumOffset(mpPageFmtDesc->GetNumOffset());
+    else if (mpPageFormatDesc)
+        aTitleDesc.SetNumOffset(mpPageFormatDesc->GetNumOffset());
 
     sal_uInt16 nNoPages = m_pPageCountNF->GetValue();
     if (!m_pUseExistingPagesRB->IsChecked())
@@ -333,8 +333,8 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl)
 
     if (nNoPages > 1 && mpSh->GotoPage(GetInsertPosition() + nNoPages, false))
     {
-        SwFmtPageDesc aPageFmtDesc(mpNormalDesc);
-        mpSh->SetAttrItem(aPageFmtDesc);
+        SwFormatPageDesc aPageFormatDesc(mpNormalDesc);
+        mpSh->SetAttrItem(aPageFormatDesc);
     }
 
     if (m_pRestartNumberingCB->IsChecked() || nNoPages > 1)

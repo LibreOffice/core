@@ -244,7 +244,7 @@ bool SvxTabulatorTabPage::FillItemSet( SfxItemSet* rSet )
         if ( SfxItemState::SET != rSet->GetItemState( GetWhich( SID_ATTR_LRSPACE ), true, &pLRSpace ) )
             pLRSpace = GetOldItem( *rSet, SID_ATTR_LRSPACE );
 
-        if ( pLRSpace && static_cast<const SvxLRSpaceItem*>(pLRSpace)->GetTxtFirstLineOfst() < 0 )
+        if ( pLRSpace && static_cast<const SvxLRSpaceItem*>(pLRSpace)->GetTextFirstLineOfst() < 0 )
         {
             SvxTabStop aNull( 0, SVX_TAB_ADJUST_DEFAULT );
             aNewTabs.Insert( aNull );

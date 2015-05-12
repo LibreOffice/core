@@ -198,7 +198,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
     SwNodes *const pNds = &rDoc.GetNodes();
 
     SwNodeIndex aStt( *pNds, nStartIdx );
-    SwCntntNode* pCNode = aStt.GetNode().GetCntntNode();
+    SwContentNode* pCNode = aStt.GetNode().GetContentNode();
     if( !pCNode && 0 == pNds->GoNext( &aStt ) )
     {
         OSL_FAIL( "No more ContentNode at StartPos" );
@@ -207,7 +207,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
     SwPaM* pNew = new SwPaM( aStt );
     pNew->SetMark();
     aStt = nEndIdx;
-    pCNode = aStt.GetNode().GetCntntNode();
+    pCNode = aStt.GetNode().GetContentNode();
     if (!pCNode)
         pCNode = SwNodes::GoPrevious(&aStt);
     assert(pCNode && "No more ContentNode at StartPos");
@@ -300,26 +300,26 @@ sal_uLong Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, cons
     return ERR_SWG_WRITE_ERROR;
 }
 
-void Writer::PutNumFmtFontsInAttrPool()
+void Writer::PutNumFormatFontsInAttrPool()
 {
     // then there are a few fonts in the NumRules
     // These put into the Pool. After this does they have a RefCount > 1
     // it can be removed - it is already in the Pool
     SfxItemPool& rPool = pDoc->GetAttrPool();
-    const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
+    const SwNumRuleTable& rListTable = pDoc->GetNumRuleTable();
     const SwNumRule* pRule;
-    const SwNumFmt* pFmt;
+    const SwNumFormat* pFormat;
     const vcl::Font* pFont;
     const vcl::Font* pDefFont = &numfunc::GetDefBulletFont();
     bool bCheck = false;
 
-    for( size_t nGet = rListTbl.size(); nGet; )
-        if( SwDoc::IsUsed( *(pRule = rListTbl[ --nGet ] )))
+    for( size_t nGet = rListTable.size(); nGet; )
+        if( SwDoc::IsUsed( *(pRule = rListTable[ --nGet ] )))
             for( sal_uInt8 nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
-                if( SVX_NUM_CHAR_SPECIAL == (pFmt = &pRule->Get( nLvl ))->GetNumberingType() ||
-                    SVX_NUM_BITMAP == pFmt->GetNumberingType() )
+                if( SVX_NUM_CHAR_SPECIAL == (pFormat = &pRule->Get( nLvl ))->GetNumberingType() ||
+                    SVX_NUM_BITMAP == pFormat->GetNumberingType() )
                 {
-                    if( 0 == ( pFont = pFmt->GetBulletFont() ) )
+                    if( 0 == ( pFont = pFormat->GetBulletFont() ) )
                         pFont = pDefFont;
 
                     if( bCheck )
@@ -386,7 +386,7 @@ void Writer::_AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
 
 // build a bookmark table, which is sort by the node position. The
 // OtherPos of the bookmarks also inserted.
-void Writer::CreateBookmarkTbl()
+void Writer::CreateBookmarkTable()
 {
     const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     for(IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getBookmarksBegin();
@@ -398,7 +398,7 @@ void Writer::CreateBookmarkTbl()
 }
 
 // search alle Bookmarks in the range and return it in the Array
-bool Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,
+bool Writer::GetBookmarks(const SwContentNode& rNd, sal_Int32 nStt,
     sal_Int32 nEnd, std::vector< const ::sw::mark::IMark* >& rArr)
 {
     OSL_ENSURE( rArr.empty(), "there are still entries available" );
@@ -418,17 +418,17 @@ bool Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,
             for( SwBookmarkNodeTable::const_iterator it = aIterPair.first; it != aIterPair.second; ++it )
             {
                 const ::sw::mark::IMark& rBkmk = *(it->second);
-                sal_Int32 nCntnt;
+                sal_Int32 nContent;
                 if( rBkmk.GetMarkPos().nNode == nNd &&
-                    (nCntnt = rBkmk.GetMarkPos().nContent.GetIndex() ) >= nStt &&
-                    nCntnt < nEnd )
+                    (nContent = rBkmk.GetMarkPos().nContent.GetIndex() ) >= nStt &&
+                    nContent < nEnd )
                 {
                     rArr.push_back( &rBkmk );
                 }
                 else if( rBkmk.IsExpanded() && nNd ==
-                        rBkmk.GetOtherMarkPos().nNode.GetIndex() && (nCntnt =
+                        rBkmk.GetOtherMarkPos().nNode.GetIndex() && (nContent =
                         rBkmk.GetOtherMarkPos().nContent.GetIndex() ) >= nStt &&
-                        nCntnt < nEnd )
+                        nContent < nEnd )
                 {
                     rArr.push_back( &rBkmk );
                 }

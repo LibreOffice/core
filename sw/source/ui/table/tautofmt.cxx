@@ -45,14 +45,14 @@ using namespace com::sun::star;
 
 #define FRAME_OFFSET 4
 
-class AutoFmtPreview : public vcl::Window
+class AutoFormatPreview : public vcl::Window
 {
 public:
-    AutoFmtPreview(vcl::Window* pParent, WinBits nStyle);
-    virtual ~AutoFmtPreview();
+    AutoFormatPreview(vcl::Window* pParent, WinBits nStyle);
+    virtual ~AutoFormatPreview();
     virtual void dispose() SAL_OVERRIDE;
 
-    void NotifyChange( const SwTableAutoFmt& rNewData );
+    void NotifyChange( const SwTableAutoFormat& rNewData );
 
     void DetectRTL(SwWrtShell* pWrtShell);
 
@@ -61,7 +61,7 @@ protected:
     virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
-    SwTableAutoFmt          aCurData;
+    SwTableAutoFormat          aCurData;
     ScopedVclPtr<VirtualDevice> aVD;
     SvtScriptedTextHelper   aScriptedText;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
@@ -79,7 +79,7 @@ private:
     const OUString          aStrMid;
     const OUString          aStrSouth;
     const OUString          aStrSum;
-    SvNumberFormatter*      pNumFmt;
+    SvNumberFormatter*      pNumFormat;
 
     uno::Reference< i18n::XBreakIterator >       m_xBreak;
 
@@ -145,7 +145,7 @@ void SwStringInputDlg::dispose()
 // AutoFormat-Dialogue:
 
 SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
-                    bool bAutoFormat, const SwTableAutoFmt* pSelFmt )
+                    bool bAutoFormat, const SwTableAutoFormat* pSelFormat )
     : SfxModalDialog(pParent, "AutoFormatTableDialog", "modules/swriter/ui/autoformattable.ui")
     , aStrTitle(SW_RES(STR_ADD_AUTOFORMAT_TITLE))
     , aStrLabel(SW_RES(STR_ADD_AUTOFORMAT_LABEL))
@@ -153,12 +153,12 @@ SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
     , aStrDelTitle(SW_RES(STR_DEL_AUTOFORMAT_TITLE))
     , aStrDelMsg(SW_RES(STR_DEL_AUTOFORMAT_MSG))
     , aStrRenameTitle(SW_RES(STR_RENAME_AUTOFORMAT_TITLE))
-    , aStrInvalidFmt(SW_RES(STR_INVALID_AUTOFORMAT_NAME))
+    , aStrInvalidFormat(SW_RES(STR_INVALID_AUTOFORMAT_NAME))
     , pShell(pWrtShell)
     , nIndex(0)
     , nDfltStylePos(0)
     , bCoreDataChanged(false)
-    , bSetAutoFmt(bAutoFormat)
+    , bSetAutoFormat(bAutoFormat)
 {
     get(m_pLbFormat, "formatlb");
     get(m_pFormatting, "formatting");
@@ -176,10 +176,10 @@ SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
 
     m_pWndPreview->DetectRTL(pWrtShell);
 
-    pTableTbl = new SwTableAutoFmtTbl;
-    pTableTbl->Load();
+    pTableTable = new SwTableAutoFormatTable;
+    pTableTable->Load();
 
-    Init(pSelFmt);
+    Init(pSelFormat);
 }
 
 SwAutoFormatDlg::~SwAutoFormatDlg()
@@ -190,8 +190,8 @@ SwAutoFormatDlg::~SwAutoFormatDlg()
 void SwAutoFormatDlg::dispose()
 {
     if (bCoreDataChanged)
-        pTableTbl->Save();
-    delete pTableTbl;
+        pTableTable->Save();
+    delete pTableTable;
     m_pLbFormat.clear();
     m_pFormatting.clear();
     m_pBtnNumFormat.clear();
@@ -208,7 +208,7 @@ void SwAutoFormatDlg::dispose()
     SfxModalDialog::dispose();
 }
 
-void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
+void SwAutoFormatDlg::Init( const SwTableAutoFormat* pSelFormat )
 {
     Link<> aLk( LINK( this, SwAutoFormatDlg, CheckHdl ) );
     m_pBtnBorder->SetClickHdl( aLk );
@@ -221,12 +221,12 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
     m_pBtnRemove->SetClickHdl ( LINK( this, SwAutoFormatDlg, RemoveHdl ) );
     m_pBtnRename->SetClickHdl ( LINK( this, SwAutoFormatDlg, RenameHdl ) );
     m_pBtnOk->SetClickHdl ( LINK( this, SwAutoFormatDlg, OkHdl ) );
-    m_pLbFormat->SetSelectHdl( LINK( this, SwAutoFormatDlg, SelFmtHdl ) );
+    m_pLbFormat->SetSelectHdl( LINK( this, SwAutoFormatDlg, SelFormatHdl ) );
 
-    m_pBtnAdd->Enable( bSetAutoFmt );
+    m_pBtnAdd->Enable( bSetAutoFormat );
 
     nIndex = 0;
-    if( !bSetAutoFmt )
+    if( !bSetAutoFormat )
     {
         // Then the list to be expanded by the entry "- none -".
         m_pLbFormat->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
@@ -234,45 +234,45 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
         nIndex = 255;
     }
 
-    for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(pTableTbl->size());
+    for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(pTableTable->size());
             i < nCount; i++)
     {
-        SwTableAutoFmt const& rFmt = (*pTableTbl)[ i ];
-        m_pLbFormat->InsertEntry(rFmt.GetName());
-        if (pSelFmt && rFmt.GetName() == pSelFmt->GetName())
+        SwTableAutoFormat const& rFormat = (*pTableTable)[ i ];
+        m_pLbFormat->InsertEntry(rFormat.GetName());
+        if (pSelFormat && rFormat.GetName() == pSelFormat->GetName())
             nIndex = i;
     }
 
     m_pLbFormat->SelectEntryPos( 255 != nIndex ? (nDfltStylePos + nIndex) : 0 );
-    SelFmtHdl( 0 );
+    SelFormatHdl( 0 );
 }
 
-void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFmt& rFmt, bool bEnable )
+void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFormat& rFormat, bool bEnable )
 {
     m_pBtnNumFormat->Enable( bEnable );
-    m_pBtnNumFormat->Check( rFmt.IsValueFormat() );
+    m_pBtnNumFormat->Check( rFormat.IsValueFormat() );
 
     m_pBtnBorder->Enable( bEnable );
-    m_pBtnBorder->Check( rFmt.IsFrame() );
+    m_pBtnBorder->Check( rFormat.IsFrame() );
 
     m_pBtnFont->Enable( bEnable );
-    m_pBtnFont->Check( rFmt.IsFont() );
+    m_pBtnFont->Check( rFormat.IsFont() );
 
     m_pBtnPattern->Enable( bEnable );
-    m_pBtnPattern->Check( rFmt.IsBackground() );
+    m_pBtnPattern->Check( rFormat.IsBackground() );
 
     m_pBtnAlignment->Enable( bEnable );
-    m_pBtnAlignment->Check( rFmt.IsJustify() );
+    m_pBtnAlignment->Check( rFormat.IsJustify() );
 }
 
-void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
+void SwAutoFormatDlg::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
 {
     if( 255 != nIndex )
     {
         if( rToFill )
-            *rToFill = (*pTableTbl)[ nIndex ];
+            *rToFill = (*pTableTable)[ nIndex ];
         else
-            rToFill = new SwTableAutoFmt( (*pTableTbl)[ nIndex ] );
+            rToFill = new SwTableAutoFormat( (*pTableTable)[ nIndex ] );
     }
     else
         delete rToFill, rToFill = 0;
@@ -282,7 +282,7 @@ void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
 
 IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
-    SwTableAutoFmt* pData  = &(*pTableTbl)[nIndex];
+    SwTableAutoFormat* pData  = &(*pTableTable)[nIndex];
     bool bCheck = static_cast<CheckBox*>(pBtn)->IsChecked(), bDataChgd = true;
 
     if( pBtn == m_pBtnNumFormat )
@@ -313,7 +313,7 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 
 IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
 {
-    bool bOk = false, bFmtInserted = false;
+    bool bOk = false, bFormatInserted = false;
     while( !bOk )
     {
         VclPtrInstance<SwStringInputDlg> pDlg( this, aStrTitle,
@@ -325,26 +325,26 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
             if ( !aFormatName.isEmpty() )
             {
                 size_t n;
-                for( n = 0; n < pTableTbl->size(); ++n )
-                    if( (*pTableTbl)[n].GetName() == aFormatName )
+                for( n = 0; n < pTableTable->size(); ++n )
+                    if( (*pTableTable)[n].GetName() == aFormatName )
                         break;
 
-                if( n >= pTableTbl->size() )
+                if( n >= pTableTable->size() )
                 {
                     // Format with the name does not already exist, so take up.
-                    SwTableAutoFmt* pNewData = new
-                                        SwTableAutoFmt( aFormatName );
-                    pShell->GetTableAutoFmt( *pNewData );
+                    SwTableAutoFormat* pNewData = new
+                                        SwTableAutoFormat( aFormatName );
+                    pShell->GetTableAutoFormat( *pNewData );
 
                     // Insert sorted!!
-                    for( n = 1; n < pTableTbl->size(); ++n )
-                        if( (*pTableTbl)[ n ].GetName() > aFormatName )
+                    for( n = 1; n < pTableTable->size(); ++n )
+                        if( (*pTableTable)[ n ].GetName() > aFormatName )
                             break;
 
-                    pTableTbl->InsertAutoFmt(n, pNewData);
+                    pTableTable->InsertAutoFormat(n, pNewData);
                     m_pLbFormat->InsertEntry( aFormatName, nDfltStylePos + n );
                     m_pLbFormat->SelectEntryPos( nDfltStylePos + n );
-                    bFmtInserted = true;
+                    bFormatInserted = true;
                     m_pBtnAdd->Enable( false );
                     if ( !bCoreDataChanged )
                     {
@@ -352,14 +352,14 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
                         bCoreDataChanged = true;
                     }
 
-                    SelFmtHdl( 0 );
+                    SelFormatHdl( 0 );
                     bOk = true;
                 }
             }
 
-            if( !bFmtInserted )
+            if( !bFormatInserted )
             {
-                bOk = RET_CANCEL == MessageDialog(this, aStrInvalidFmt, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL)
+                bOk = RET_CANCEL == MessageDialog(this, aStrInvalidFormat, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL)
                                     .Execute();
             }
         }
@@ -384,7 +384,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
         m_pLbFormat->RemoveEntry( nDfltStylePos + nIndex );
         m_pLbFormat->SelectEntryPos( nDfltStylePos + nIndex-1 );
 
-        pTableTbl->EraseAutoFmt(nIndex);
+        pTableTable->EraseAutoFormat(nIndex);
         nIndex--;
 
         if( !nIndex )
@@ -401,7 +401,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
     }
     pBox.reset();
 
-    SelFmtHdl( 0 );
+    SelFormatHdl( 0 );
 
     return 0;
 }
@@ -416,32 +416,32 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
                                                OUString() );
         if( pDlg->Execute() == RET_OK )
         {
-            bool bFmtRenamed = false;
+            bool bFormatRenamed = false;
             const OUString aFormatName( pDlg->GetInputString() );
 
             if ( !aFormatName.isEmpty() )
             {
                 size_t n;
-                for( n = 0; n < pTableTbl->size(); ++n )
-                    if ((*pTableTbl)[n].GetName() == aFormatName)
+                for( n = 0; n < pTableTable->size(); ++n )
+                    if ((*pTableTable)[n].GetName() == aFormatName)
                         break;
 
-                if( n >= pTableTbl->size() )
+                if( n >= pTableTable->size() )
                 {
                     // no format with this name exists, so rename it
                     m_pLbFormat->RemoveEntry( nDfltStylePos + nIndex );
-                    SwTableAutoFmt* p = pTableTbl->ReleaseAutoFmt( nIndex );
+                    SwTableAutoFormat* p = pTableTable->ReleaseAutoFormat( nIndex );
 
                     p->SetName( aFormatName );
 
                     // keep all arrays sorted!
-                    for( n = 1; n < pTableTbl->size(); ++n )
-                        if ((*pTableTbl)[n].GetName() > aFormatName)
+                    for( n = 1; n < pTableTable->size(); ++n )
+                        if ((*pTableTable)[n].GetName() > aFormatName)
                         {
                             break;
                         }
 
-                    pTableTbl->InsertAutoFmt( n, p );
+                    pTableTable->InsertAutoFormat( n, p );
                     m_pLbFormat->InsertEntry( aFormatName, nDfltStylePos + n );
                     m_pLbFormat->SelectEntryPos( nDfltStylePos + n );
 
@@ -451,15 +451,15 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
                         bCoreDataChanged = true;
                     }
 
-                    SelFmtHdl( 0 );
+                    SelFormatHdl( 0 );
                     bOk = true;
-                    bFmtRenamed = true;
+                    bFormatRenamed = true;
                 }
             }
 
-            if( !bFmtRenamed )
+            if( !bFormatRenamed )
             {
-                bOk = RET_CANCEL == MessageDialog(this, aStrInvalidFmt, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL)
+                bOk = RET_CANCEL == MessageDialog(this, aStrInvalidFormat, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL)
                                     .Execute();
             }
         }
@@ -469,22 +469,22 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
+IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl)
 {
     bool bBtnEnable = false;
     sal_uInt8 nSelPos = (sal_uInt8) m_pLbFormat->GetSelectEntryPos(), nOldIdx = nIndex;
     if( nSelPos >= nDfltStylePos )
     {
         nIndex = nSelPos - nDfltStylePos;
-        m_pWndPreview->NotifyChange( (*pTableTbl)[nIndex] );
+        m_pWndPreview->NotifyChange( (*pTableTable)[nIndex] );
         bBtnEnable = 0 != nIndex;
-        UpdateChecks( (*pTableTbl)[nIndex], true );
+        UpdateChecks( (*pTableTable)[nIndex], true );
     }
     else
     {
         nIndex = 255;
 
-        SwTableAutoFmt aTmp( SwViewShell::GetShellRes()->aStrNone );
+        SwTableAutoFormat aTmp( SwViewShell::GetShellRes()->aStrNone );
         aTmp.SetFont( false );
         aTmp.SetJustify( false );
         aTmp.SetFrame( false );
@@ -505,13 +505,13 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
 
 IMPL_LINK_NOARG(SwAutoFormatDlg, OkHdl)
 {
-    if( bSetAutoFmt )
-        pShell->SetTableAutoFmt( (*pTableTbl)[ nIndex ] );
+    if( bSetAutoFormat )
+        pShell->SetTableAutoFormat( (*pTableTable)[ nIndex ] );
     EndDialog( RET_OK );
     return sal_IntPtr(true);
 }
 
-AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent, WinBits nStyle) :
+AutoFormatPreview::AutoFormatPreview(vcl::Window* pParent, WinBits nStyle) :
         Window          ( pParent, nStyle ),
         aCurData        ( OUString() ),
         aVD             ( VclPtr<VirtualDevice>::Create(*this) ),
@@ -528,21 +528,21 @@ AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent, WinBits nStyle) :
 {
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     m_xBreak = i18n::BreakIterator::create(xContext);
-    pNumFmt = new SvNumberFormatter( xContext, LANGUAGE_SYSTEM );
+    pNumFormat = new SvNumberFormatter( xContext, LANGUAGE_SYSTEM );
 
     Init();
 }
 
-VCL_BUILDER_DECL_FACTORY(AutoFmtPreview)
+VCL_BUILDER_DECL_FACTORY(AutoFormatPreview)
 {
     WinBits nWinStyle = 0;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    rRet = VclPtr<AutoFmtPreview>::Create(pParent, nWinStyle);
+    rRet = VclPtr<AutoFormatPreview>::Create(pParent, nWinStyle);
 }
 
-void AutoFmtPreview::Resize()
+void AutoFormatPreview::Resize()
 {
     aPrvSize = Size(GetSizePixel().Width() - 6, GetSizePixel().Height() - 30);
     nLabelColWidth = (aPrvSize.Width() - 4) / 4 - 12;
@@ -552,22 +552,22 @@ void AutoFmtPreview::Resize()
     NotifyChange(aCurData);
 }
 
-void AutoFmtPreview::DetectRTL(SwWrtShell* pWrtShell)
+void AutoFormatPreview::DetectRTL(SwWrtShell* pWrtShell)
 {
-    if (!pWrtShell->IsCrsrInTbl()) // We haven't created the table yet
+    if (!pWrtShell->IsCrsrInTable()) // We haven't created the table yet
         mbRTL = AllSettings::GetLayoutRTL();
     else
         mbRTL = pWrtShell->IsTableRightToLeft();
 }
 
-AutoFmtPreview::~AutoFmtPreview()
+AutoFormatPreview::~AutoFormatPreview()
 {
     disposeOnce();
 }
 
-void AutoFmtPreview::dispose()
+void AutoFormatPreview::dispose()
 {
-    delete pNumFmt;
+    delete pNumFormat;
     vcl::Window::dispose();
 }
 
@@ -591,30 +591,30 @@ rFont.MethodName( Value );                                  \
 rCJKFont.MethodName( Value );                               \
 rCTLFont.MethodName( Value );
 
-void AutoFmtPreview::MakeFonts( sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont )
+void AutoFormatPreview::MakeFonts( sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont )
 {
-    const SwBoxAutoFmt& rBoxFmt = aCurData.GetBoxFmt( nIndex );
+    const SwBoxAutoFormat& rBoxFormat = aCurData.GetBoxFormat( nIndex );
 
     rFont = rCJKFont = rCTLFont = GetFont();
     Size aFontSize( rFont.GetSize().Width(), 10 * GetDPIScaleFactor() );
 
-    lcl_SetFontProperties( rFont, rBoxFmt.GetFont(), rBoxFmt.GetWeight(), rBoxFmt.GetPosture() );
-    lcl_SetFontProperties( rCJKFont, rBoxFmt.GetCJKFont(), rBoxFmt.GetCJKWeight(), rBoxFmt.GetCJKPosture() );
-    lcl_SetFontProperties( rCTLFont, rBoxFmt.GetCTLFont(), rBoxFmt.GetCTLWeight(), rBoxFmt.GetCTLPosture() );
+    lcl_SetFontProperties( rFont, rBoxFormat.GetFont(), rBoxFormat.GetWeight(), rBoxFormat.GetPosture() );
+    lcl_SetFontProperties( rCJKFont, rBoxFormat.GetCJKFont(), rBoxFormat.GetCJKWeight(), rBoxFormat.GetCJKPosture() );
+    lcl_SetFontProperties( rCTLFont, rBoxFormat.GetCTLFont(), rBoxFormat.GetCTLWeight(), rBoxFormat.GetCTLPosture() );
 
-    SETONALLFONTS( SetUnderline,    (FontUnderline)rBoxFmt.GetUnderline().GetValue() );
-    SETONALLFONTS( SetOverline,     (FontUnderline)rBoxFmt.GetOverline().GetValue() );
-    SETONALLFONTS( SetStrikeout,    (FontStrikeout)rBoxFmt.GetCrossedOut().GetValue() );
-    SETONALLFONTS( SetOutline,      rBoxFmt.GetContour().GetValue() );
-    SETONALLFONTS( SetShadow,       rBoxFmt.GetShadowed().GetValue() );
-    SETONALLFONTS( SetColor,        rBoxFmt.GetColor().GetValue() );
+    SETONALLFONTS( SetUnderline,    (FontUnderline)rBoxFormat.GetUnderline().GetValue() );
+    SETONALLFONTS( SetOverline,     (FontUnderline)rBoxFormat.GetOverline().GetValue() );
+    SETONALLFONTS( SetStrikeout,    (FontStrikeout)rBoxFormat.GetCrossedOut().GetValue() );
+    SETONALLFONTS( SetOutline,      rBoxFormat.GetContour().GetValue() );
+    SETONALLFONTS( SetShadow,       rBoxFormat.GetShadowed().GetValue() );
+    SETONALLFONTS( SetColor,        rBoxFormat.GetColor().GetValue() );
     SETONALLFONTS( SetSize,         aFontSize );
     SETONALLFONTS( SetTransparent,  true );
 }
 
-sal_uInt8 AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
+sal_uInt8 AutoFormatPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 {
-    static const sal_uInt8 pnFmtMap[] =
+    static const sal_uInt8 pnFormatMap[] =
     {
         0,  1,  2,  1,  3,
         4,  5,  6,  5,  7,
@@ -622,15 +622,15 @@ sal_uInt8 AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
         4,  5,  6,  5,  7,
         12, 13, 14, 13, 15
     };
-    return pnFmtMap[ maArray.GetCellIndex( nCol, nRow, mbRTL ) ];
+    return pnFormatMap[ maArray.GetCellIndex( nCol, nRow, mbRTL ) ];
 }
 
-const SvxBoxItem& AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
+const SvxBoxItem& AutoFormatPreview::GetBoxItem( size_t nCol, size_t nRow ) const
 {
-    return aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBox();
+    return aCurData.GetBoxFormat( GetFormatIndex( nCol, nRow ) ).GetBox();
 }
 
-void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
+void AutoFormatPreview::DrawString( size_t nCol, size_t nRow )
 {
     // Output of the cell text:
     sal_uLong   nNum;
@@ -675,17 +675,17 @@ void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 MAKENUMSTR:
         if( aCurData.IsValueFormat() )
         {
-            OUString sFmt;
+            OUString sFormat;
             LanguageType eLng, eSys;
-            aCurData.GetBoxFmt( (sal_uInt8)nNum ).GetValueFormat( sFmt, eLng, eSys );
+            aCurData.GetBoxFormat( (sal_uInt8)nNum ).GetValueFormat( sFormat, eLng, eSys );
 
             short nType;
             bool bNew;
             sal_Int32 nCheckPos;
-            sal_uInt32 nKey = pNumFmt->GetIndexPuttingAndConverting( sFmt, eLng,
+            sal_uInt32 nKey = pNumFormat->GetIndexPuttingAndConverting( sFormat, eLng,
                                                                      eSys, nType, bNew, nCheckPos);
             Color* pDummy;
-            pNumFmt->GetOutputString( nVal, nKey, cellString, &pDummy );
+            pNumFormat->GetOutputString( nVal, nKey, cellString, &pDummy );
         }
         else
             cellString = OUString::number((sal_Int32)nVal);
@@ -696,7 +696,7 @@ MAKENUMSTR:
     if( !cellString.isEmpty() )
     {
         Size                aStrSize;
-        sal_uInt8           nFmtIndex       = GetFormatIndex( nCol, nRow );
+        sal_uInt8           nFormatIndex       = GetFormatIndex( nCol, nRow );
         Rectangle           cellRect        = maArray.GetCellRect( nCol, nRow );
         Point               aPos            = cellRect.TopLeft();
         long                nRightX         = 0;
@@ -706,7 +706,7 @@ MAKENUMSTR:
         if( aCurData.IsFont() )
         {
             vcl::Font aFont, aCJKFont, aCTLFont;
-            MakeFonts( nFmtIndex, aFont, aCJKFont, aCTLFont );
+            MakeFonts( nFormatIndex, aFont, aCJKFont, aCTLFont );
             aScriptedText.SetFonts( &aFont, &aCJKFont, &aCTLFont );
         }
         else
@@ -743,7 +743,7 @@ MAKENUMSTR:
             aPos.X() += nRightX;
         else if (aCurData.IsJustify())
         {
-            const SvxAdjustItem& rAdj = aCurData.GetBoxFmt(nFmtIndex).GetAdjust();
+            const SvxAdjustItem& rAdj = aCurData.GetBoxFormat(nFormatIndex).GetAdjust();
             switch ( rAdj.GetAdjust() )
             {
                 case SVX_ADJUST_LEFT:
@@ -778,20 +778,20 @@ MAKENUMSTR:
 
 #undef FRAME_OFFSET
 
-void AutoFmtPreview::DrawStrings()
+void AutoFormatPreview::DrawStrings()
 {
     for( size_t nRow = 0; nRow < 5; ++nRow )
         for( size_t nCol = 0; nCol < 5; ++nCol )
             DrawString( nCol, nRow );
 }
 
-void AutoFmtPreview::DrawBackground()
+void AutoFormatPreview::DrawBackground()
 {
     for( size_t nRow = 0; nRow < 5; ++nRow )
     {
         for( size_t nCol = 0; nCol < 5; ++nCol )
         {
-            SvxBrushItem aBrushItem( aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBackground() );
+            SvxBrushItem aBrushItem( aCurData.GetBoxFormat( GetFormatIndex( nCol, nRow ) ).GetBackground() );
 
             aVD->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
             aVD->SetLineColor();
@@ -802,7 +802,7 @@ void AutoFmtPreview::DrawBackground()
     }
 }
 
-void AutoFmtPreview::PaintCells()
+void AutoFormatPreview::PaintCells()
 {
     // 1) background
     if ( aCurData.IsBackground() )
@@ -816,7 +816,7 @@ void AutoFmtPreview::PaintCells()
         maArray.DrawArray( *aVD.get() );
 }
 
-void AutoFmtPreview::Init()
+void AutoFormatPreview::Init()
 {
     SetBorderStyle( GetBorderStyle() | WindowBorderStyle::MONO );
     maArray.Initialize( 5, 5 );
@@ -825,7 +825,7 @@ void AutoFmtPreview::Init()
     CalcLineMap();
 }
 
-void AutoFmtPreview::CalcCellArray( bool _bFitWidth )
+void AutoFormatPreview::CalcCellArray( bool _bFitWidth )
 {
     maArray.SetXOffset( 2 );
     maArray.SetAllColWidths( _bFitWidth ? nDataColWidth2 : nDataColWidth1 );
@@ -844,7 +844,7 @@ inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::S
     rStyle.Set( pBorder, 0.05, 5 );
 }
 
-void AutoFmtPreview::CalcLineMap()
+void AutoFormatPreview::CalcLineMap()
 {
     for( size_t nRow = 0; nRow < 5; ++nRow )
     {
@@ -871,7 +871,7 @@ void AutoFmtPreview::CalcLineMap()
     }
 }
 
-void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
+void AutoFormatPreview::NotifyChange( const SwTableAutoFormat& rNewData )
 {
     aCurData  = rNewData;
     bFitWidth = aCurData.IsJustify();  // true;  //???
@@ -880,7 +880,7 @@ void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
     DoPaint( Rectangle( Point(0,0), GetSizePixel() ) );
 }
 
-void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
+void AutoFormatPreview::DoPaint( const Rectangle& /*rRect*/ )
 {
     sal_uInt32 nOldDrawMode = aVD->GetDrawMode();
     if( GetSettings().GetStyleSettings().GetHighContrastMode() )
@@ -924,7 +924,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
     aVD->SetDrawMode( nOldDrawMode );
 }
 
-void AutoFmtPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void AutoFormatPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
     DoPaint( rRect );
 }

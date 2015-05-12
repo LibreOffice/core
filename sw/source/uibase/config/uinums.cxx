@@ -115,29 +115,29 @@ SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
 {
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
-        const SwNumFmt* pFmt = rCopy.GetNumFmt( n );
-        if( pFmt )
-            aFmts[ n ] = new _SwNumFmtGlobal( *pFmt );
+        const SwNumFormat* pFormat = rCopy.GetNumFormat( n );
+        if( pFormat )
+            aFormats[ n ] = new _SwNumFormatGlobal( *pFormat );
         else
-            aFmts[ n ] = 0;
+            aFormats[ n ] = 0;
     }
 }
 
 SwNumRulesWithName::SwNumRulesWithName()
 {
-    memset(aFmts, 0, sizeof(aFmts));
+    memset(aFormats, 0, sizeof(aFormats));
 }
 
 SwNumRulesWithName::SwNumRulesWithName( const SwNumRulesWithName& rCopy )
 {
-    memset( aFmts, 0, sizeof( aFmts ));
+    memset( aFormats, 0, sizeof( aFormats ));
     *this = rCopy;
 }
 
 SwNumRulesWithName::~SwNumRulesWithName()
 {
     for( int n = 0; n < MAXLEVEL; ++n )
-        delete aFmts[ n ];
+        delete aFormats[ n ];
 }
 
 const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName &rCopy)
@@ -147,13 +147,13 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
         maName = rCopy.maName;
         for( int n = 0; n < MAXLEVEL; ++n )
         {
-            delete aFmts[ n ];
+            delete aFormats[ n ];
 
-            _SwNumFmtGlobal* pFmt = rCopy.aFmts[ n ];
-            if( pFmt )
-                aFmts[ n ] = new _SwNumFmtGlobal( *pFmt );
+            _SwNumFormatGlobal* pFormat = rCopy.aFormats[ n ];
+            if( pFormat )
+                aFormats[ n ] = new _SwNumFormatGlobal( *pFormat );
             else
-                aFmts[ n ] = 0;
+                aFormats[ n ] = 0;
         }
     }
     return *this;
@@ -166,46 +166,46 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
     rChg.SetAutoRule( false );
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
-        _SwNumFmtGlobal* pFmt = aFmts[ n ];
-        if( 0 != pFmt)
+        _SwNumFormatGlobal* pFormat = aFormats[ n ];
+        if( 0 != pFormat)
         {
-            SwNumFmt aNew;
-            pFmt->ChgNumFmt( rSh, aNew );
+            SwNumFormat aNew;
+            pFormat->ChgNumFormat( rSh, aNew );
             rChg.Set( n, aNew );
         }
     }
 }
 
-void SwNumRulesWithName::GetNumFmt(
-    size_t const nIndex, SwNumFmt const*& rpNumFmt, OUString const*& rpName) const
+void SwNumRulesWithName::GetNumFormat(
+    size_t const nIndex, SwNumFormat const*& rpNumFormat, OUString const*& rpName) const
 {
-    rpNumFmt = (aFmts[nIndex]) ? &aFmts[nIndex]->aFmt : 0;
-    rpName = (aFmts[nIndex]) ? &aFmts[nIndex]->sCharFmtName : 0;
+    rpNumFormat = (aFormats[nIndex]) ? &aFormats[nIndex]->aFormat : 0;
+    rpName = (aFormats[nIndex]) ? &aFormats[nIndex]->sCharFormatName : 0;
 }
 
-void SwNumRulesWithName::SetNumFmt(
-        size_t const nIndex, SwNumFmt const& rNumFmt, OUString const& rName)
+void SwNumRulesWithName::SetNumFormat(
+        size_t const nIndex, SwNumFormat const& rNumFormat, OUString const& rName)
 {
-    delete aFmts[nIndex];
-    aFmts[nIndex] = new _SwNumFmtGlobal(rNumFmt);
-    aFmts[nIndex]->sCharFmtName = rName;
-    aFmts[nIndex]->nCharPoolId = USHRT_MAX;
-    aFmts[nIndex]->aItems.clear();
+    delete aFormats[nIndex];
+    aFormats[nIndex] = new _SwNumFormatGlobal(rNumFormat);
+    aFormats[nIndex]->sCharFormatName = rName;
+    aFormats[nIndex]->nCharPoolId = USHRT_MAX;
+    aFormats[nIndex]->aItems.clear();
 }
 
-SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
-    : aFmt( rFmt ), nCharPoolId( USHRT_MAX )
+SwNumRulesWithName::_SwNumFormatGlobal::_SwNumFormatGlobal( const SwNumFormat& rFormat )
+    : aFormat( rFormat ), nCharPoolId( USHRT_MAX )
 {
     // relative gaps?????
 
-    SwCharFmt* pFmt = rFmt.GetCharFmt();
-    if( pFmt )
+    SwCharFormat* pFormat = rFormat.GetCharFormat();
+    if( pFormat )
     {
-        sCharFmtName = pFmt->GetName();
-        nCharPoolId = pFmt->GetPoolFmtId();
-        if( pFmt->GetAttrSet().Count() )
+        sCharFormatName = pFormat->GetName();
+        nCharPoolId = pFormat->GetPoolFormatId();
+        if( pFormat->GetAttrSet().Count() )
         {
-            SfxItemIter aIter( pFmt->GetAttrSet() );
+            SfxItemIter aIter( pFormat->GetAttrSet() );
             const SfxPoolItem *pCurr = aIter.GetCurItem();
             while( true )
             {
@@ -216,60 +216,60 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
             }
         }
 
-        aFmt.SetCharFmt( 0 );
+        aFormat.SetCharFormat( 0 );
     }
 }
 
-SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const _SwNumFmtGlobal& rFmt )
+SwNumRulesWithName::_SwNumFormatGlobal::_SwNumFormatGlobal( const _SwNumFormatGlobal& rFormat )
     :
-    aFmt( rFmt.aFmt ),
-    sCharFmtName( rFmt.sCharFmtName ),
-    nCharPoolId( rFmt.nCharPoolId )
+    aFormat( rFormat.aFormat ),
+    sCharFormatName( rFormat.sCharFormatName ),
+    nCharPoolId( rFormat.nCharPoolId )
 {
-    for( sal_uInt16 n = rFmt.aItems.size(); n; )
-        aItems.push_back( rFmt.aItems[ --n ].Clone() );
+    for( sal_uInt16 n = rFormat.aItems.size(); n; )
+        aItems.push_back( rFormat.aItems[ --n ].Clone() );
 }
 
-SwNumRulesWithName::_SwNumFmtGlobal::~_SwNumFmtGlobal()
+SwNumRulesWithName::_SwNumFormatGlobal::~_SwNumFormatGlobal()
 {
 }
 
-void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
-                            SwNumFmt& rNew ) const
+void SwNumRulesWithName::_SwNumFormatGlobal::ChgNumFormat( SwWrtShell& rSh,
+                            SwNumFormat& rNew ) const
 {
-    SwCharFmt* pFmt = 0;
-    if( !sCharFmtName.isEmpty() )
+    SwCharFormat* pFormat = 0;
+    if( !sCharFormatName.isEmpty() )
     {
         // at first, look for the name
-        sal_uInt16 nArrLen = rSh.GetCharFmtCount();
+        sal_uInt16 nArrLen = rSh.GetCharFormatCount();
         for( sal_uInt16 i = 1; i < nArrLen; ++i )
         {
-            pFmt = &rSh.GetCharFmt( i );
-            if (pFmt->GetName()==sCharFmtName)
+            pFormat = &rSh.GetCharFormat( i );
+            if (pFormat->GetName()==sCharFormatName)
                 // exists, so leave attributes as they are!
                 break;
-            pFmt = 0;
+            pFormat = 0;
         }
 
-        if( !pFmt )
+        if( !pFormat )
         {
-            if( IsPoolUserFmt( nCharPoolId ) )
+            if( IsPoolUserFormat( nCharPoolId ) )
             {
-                pFmt = rSh.MakeCharFmt( sCharFmtName );
-                pFmt->SetAuto( false );
+                pFormat = rSh.MakeCharFormat( sCharFormatName );
+                pFormat->SetAuto( false );
             }
             else
-                pFmt = rSh.GetCharFmtFromPool( nCharPoolId );
+                pFormat = rSh.GetCharFormatFromPool( nCharPoolId );
 
-            if( !pFmt->HasWriterListeners() )       // set attributes
+            if( !pFormat->HasWriterListeners() )       // set attributes
                 for( sal_uInt16 n = aItems.size(); n; )
-                    pFmt->SetFmtAttr( aItems[ --n ] );
+                    pFormat->SetFormatAttr( aItems[ --n ] );
         }
     }
-    const_cast<SwNumFmt&>(aFmt).SetCharFmt( pFmt );
-    rNew = aFmt;
-    if( pFmt )
-        const_cast<SwNumFmt&>(aFmt).SetCharFmt( 0 );
+    const_cast<SwNumFormat&>(aFormat).SetCharFormat( pFormat );
+    rNew = aFormat;
+    if( pFormat )
+        const_cast<SwNumFormat&>(aFormat).SetCharFormat( 0 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

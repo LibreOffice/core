@@ -30,7 +30,7 @@ class SwAttrSetChg;
 /// SwTabFrm is one table in the document layout, containing rows (which contain cells).
 class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 {
-    friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
+    friend void CalcContent( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
 
     // does the special treatment for _Get[Next|Prev]Leaf()
     using SwFrm::GetLeaf;
@@ -47,11 +47,11 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     bool m_bLockBackMove    :1; /// The Master took care of the BackMove test
     bool m_bResizeHTMLTable :1; /// Call the Resize of the HTMLTableLayout in the MakeAll
                                 /// This is an optimization, so that we don't have to call
-                                /// it in CntntFrm::Grow; there it might be called for
+                                /// it in ContentFrm::Grow; there it might be called for
                                 /// _every_ Cell
 
     bool m_bONECalcLowers   :1; /// Primarily for the StarONE SS
-                                /// The Cntnts are formatted via Calc() on MakeAll in any
+                                /// The Contents are formatted via Calc() on MakeAll in any
                                 /// case. There are no further invalidations and that path can
                                 /// hardly give any guarantees
 
@@ -125,7 +125,7 @@ public:
     inline       SwTabFrm *GetFollow();
     SwTabFrm* FindMaster( bool bFirstMaster = false ) const;
 
-    virtual bool GetInfo( SfxPoolItem &rHnt ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem &rHint ) const SAL_OVERRIDE;
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
     virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
@@ -136,8 +136,8 @@ public:
     virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
                           const void *pVoid = 0, bool bNotify = true ) SAL_OVERRIDE;
 
-                 SwCntntFrm *FindLastCntnt();
-    inline const SwCntntFrm *FindLastCntnt() const;
+                 SwContentFrm *FindLastContent();
+    inline const SwContentFrm *FindLastContent() const;
 
     const SwTable *GetTable() const { return m_pTable; }
           SwTable *GetTable()       { return m_pTable; }
@@ -224,9 +224,9 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrm)
 };
 
-inline const SwCntntFrm *SwTabFrm::FindLastCntnt() const
+inline const SwContentFrm *SwTabFrm::FindLastContent() const
 {
-    return const_cast<SwTabFrm*>(this)->FindLastCntnt();
+    return const_cast<SwTabFrm*>(this)->FindLastContent();
 }
 
 inline const SwTabFrm *SwTabFrm::GetFollow() const

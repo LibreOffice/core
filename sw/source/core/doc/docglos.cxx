@@ -133,8 +133,8 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
     const sal_uInt16 nIdx = rBlock.GetIndex( rEntry );
     if( USHRT_MAX != nIdx )
     {
-        bool bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
-        mbInsOnlyTxtGlssry = rBlock.IsOnlyTextBlock( nIdx );
+        bool bSav_IsInsGlossary = mbInsOnlyTextGlssry;
+        mbInsOnlyTextGlssry = rBlock.IsOnlyTextBlock( nIdx );
 
         if( rBlock.BeginGetDoc( nIdx ) )
         {
@@ -153,19 +153,19 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
             pGDoc->getIDocumentFieldsAccess().SetFixFields(false, NULL);
 
             // StartAllAction();
-            getIDocumentFieldsAccess().LockExpFlds();
+            getIDocumentFieldsAccess().LockExpFields();
 
             SwNodeIndex aStt( pGDoc->GetNodes().GetEndOfExtras(), 1 );
-            SwCntntNode* pCntntNd = pGDoc->GetNodes().GoNext( &aStt );
-            const SwTableNode* pTblNd = pCntntNd->FindTableNode();
-            SwPaM aCpyPam( pTblNd ? *(SwNode*)pTblNd : *(SwNode*)pCntntNd );
+            SwContentNode* pContentNd = pGDoc->GetNodes().GoNext( &aStt );
+            const SwTableNode* pTableNd = pContentNd->FindTableNode();
+            SwPaM aCpyPam( pTableNd ? *(SwNode*)pTableNd : *(SwNode*)pContentNd );
             aCpyPam.SetMark();
 
             // till the nodes array's end
             aCpyPam.GetPoint()->nNode = pGDoc->GetNodes().GetEndOfContent().GetIndex()-1;
-            pCntntNd = aCpyPam.GetCntntNode();
+            pContentNd = aCpyPam.GetContentNode();
             aCpyPam.GetPoint()->nContent.Assign(
-                    pCntntNd, (pCntntNd) ? pCntntNd->Len() : 0 );
+                    pContentNd, (pContentNd) ? pContentNd->Len() : 0 );
 
             GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
             SwPaM *_pStartCrsr = &rPaM, *__pStartCrsr = _pStartCrsr;
@@ -191,17 +191,17 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
 
                 aACD.RestoreDontExpandItems( rInsPos );
                 if( pShell )
-                    pShell->SaveTblBoxCntnt( &rInsPos );
+                    pShell->SaveTableBoxContent( &rInsPos );
             } while( (_pStartCrsr = static_cast<SwPaM *>(_pStartCrsr->GetNext())) !=
                         __pStartCrsr );
             GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
 
-            getIDocumentFieldsAccess().UnlockExpFlds();
-            if( !getIDocumentFieldsAccess().IsExpFldsLocked() )
-                getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
+            getIDocumentFieldsAccess().UnlockExpFields();
+            if( !getIDocumentFieldsAccess().IsExpFieldsLocked() )
+                getIDocumentFieldsAccess().UpdateExpFields(NULL, true);
             bRet = true;
         }
-        mbInsOnlyTxtGlssry = bSav_IsInsGlossary;
+        mbInsOnlyTextGlssry = bSav_IsInsGlossary;
     }
     rBlock.EndGetDoc();
     return bRet;

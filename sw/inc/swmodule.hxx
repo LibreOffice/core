@@ -152,7 +152,7 @@ public:
                                      sal_uInt16 nDest = VIEWOPT_DEST_VIEW );
     void ApplyUserMetric( FieldUnit eMetric, bool bWeb );
     void ApplyRulerMetric( FieldUnit eMetric, bool bHorizontal, bool bWeb );
-    void ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags);
+    void ApplyFieldUpdateFlags(SwFieldUpdateFlags eFieldFlags);
     void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
     // Default page mode for text grid.
@@ -184,9 +184,9 @@ public:
     static void ShowDBObj( SwView& rView, const SwDBData& rData, bool bOnlyIfAvailable = false);
 
     // Table modi.
-    bool            IsInsTblFormatNum(bool bHTML) const;
-    bool            IsInsTblChangeNumFormat(bool bHTML) const;
-    bool            IsInsTblAlignNum(bool bHTML) const;
+    bool            IsInsTableFormatNum(bool bHTML) const;
+    bool            IsInsTableChangeNumFormat(bool bHTML) const;
+    bool            IsInsTableAlignNum(bool bHTML) const;
 
     // Redlining.
     sal_uInt16          GetRedlineAuthor();
@@ -214,7 +214,7 @@ public:
 
     // Pass update-statuses.
     sal_uInt16 GetLinkUpdMode( bool bWeb ) const;
-    SwFldUpdateFlags GetFldUpdateFlags( bool bWeb ) const;
+    SwFieldUpdateFlags GetFieldUpdateFlags( bool bWeb ) const;
 
     // Virtual methods for options dialog.
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;

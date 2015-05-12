@@ -496,15 +496,15 @@ sal_Int32 RtfSdrExport::StartShape()
     lcl_AppendSP(m_rAttrOutput.RunText(), "wzName", msfilter::rtfutil::OutString(m_pSdrObject->GetTitle(), m_rExport.eCurrentEncoding));
 
     // now check if we have some text
-    const SwFrmFmt* pShape = FindFrmFmt(m_pSdrObject);
+    const SwFrameFormat* pShape = FindFrameFormat(m_pSdrObject);
     if (pShape)
     {
-        if (SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(pShape))
+        if (SwFrameFormat* pTextBox = SwTextBoxHelper::findTextBox(pShape))
         {
             sw::Frame* pFrame = 0;
             for (sw::FrameIter it = m_rExport.m_aFrames.begin(); it != m_rExport.m_aFrames.end(); ++it)
             {
-                if (pTextBox == &it->GetFrmFmt())
+                if (pTextBox == &it->GetFrameFormat())
                 {
                     pFrame = &(*it);
                     break;
@@ -517,8 +517,8 @@ sal_Int32 RtfSdrExport::StartShape()
         }
     }
 
-    const SdrTextObj* pTxtObj = dynamic_cast<const SdrTextObj*>(m_pSdrObject);
-    if (pTxtObj)
+    const SdrTextObj* pTextObj = dynamic_cast<const SdrTextObj*>(m_pSdrObject);
+    if (pTextObj)
     {
         const OutlinerParaObject* pParaObj = 0;
         std::unique_ptr<const OutlinerParaObject> pOwnedParaObj;
@@ -528,14 +528,14 @@ sal_Int32 RtfSdrExport::StartShape()
         When the object is actively being edited, that text is not set into
         the objects normal text object, but lives in a separate object.
         */
-        if (pTxtObj->IsTextEditActive())
+        if (pTextObj->IsTextEditActive())
         {
-            pOwnedParaObj.reset(pTxtObj->GetEditOutlinerParaObject());
+            pOwnedParaObj.reset(pTextObj->GetEditOutlinerParaObject());
             pParaObj = pOwnedParaObj.get();
         }
         else
         {
-            pParaObj = pTxtObj->GetOutlinerParaObject();
+            pParaObj = pTextObj->GetOutlinerParaObject();
         }
 
         if (pParaObj)
@@ -579,8 +579,8 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
 
             aAttrIter.OutAttr(nAktPos);
             m_rAttrOutput.RunText().append('{').append(m_rAttrOutput.Styles().makeStringAndClear()).append(SAL_NEWLINE_STRING);
-            bool bTxtAtr = aAttrIter.IsTxtAttr(nAktPos);
-            if (!bTxtAtr)
+            bool bTextAtr = aAttrIter.IsTextAttr(nAktPos);
+            if (!bTextAtr)
             {
                 OUString aOut(aStr.copy(nAktPos, nNextAttr - nAktPos));
                 m_rAttrOutput.RunText().append(msfilter::rtfutil::OutString(aOut, eChrSet));
@@ -614,9 +614,9 @@ sal_uInt32 RtfSdrExport::AddSdrObject(const SdrObject& rObj)
     return EscherEx::AddSdrObject(rObj);
 }
 
-bool RtfSdrExport::isTextBox(const SwFrmFmt& rFrmFmt)
+bool RtfSdrExport::isTextBox(const SwFrameFormat& rFrameFormat)
 {
-    return m_aTextBoxes.find(&rFrmFmt) != m_aTextBoxes.end();
+    return m_aTextBoxes.find(&rFrameFormat) != m_aTextBoxes.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

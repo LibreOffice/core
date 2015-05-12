@@ -34,8 +34,8 @@ class SwIndex;
 class SwPaM;
 struct SwPosition;
 class SwDoc;
-class SwTxtFmtColl;
-class SwFrmFmt;
+class SwTextFormatColl;
+class SwFrameFormat;
 class SwNodeIndex;
 class SwNodeRange;
 class SwRedlineData;
@@ -116,30 +116,30 @@ public:
     // Save and set Redline data.
     static bool FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
                               bool bDelRange = true, bool bCopyNext = true );
-    static bool FillSaveDataForFmt( const SwPaM& , SwRedlineSaveDatas& );
+    static bool FillSaveDataForFormat( const SwPaM& , SwRedlineSaveDatas& );
     static void SetSaveData( SwDoc& rDoc, SwRedlineSaveDatas& rSData );
     static bool HasHiddenRedlines( const SwRedlineSaveDatas& rSData );
 };
 
-typedef sal_uInt16 DelCntntType;
-namespace nsDelCntntType
+typedef sal_uInt16 DelContentType;
+namespace nsDelContentType
 {
-    const DelCntntType DELCNT_FTN = 0x01;
-    const DelCntntType DELCNT_FLY = 0x02;
-    const DelCntntType DELCNT_TOC = 0x04;
-    const DelCntntType DELCNT_BKM = 0x08;
-    const DelCntntType DELCNT_ALL = 0x0F;
-    const DelCntntType DELCNT_CHKNOCNTNT = 0x80;
+    const DelContentType DELCNT_FTN = 0x01;
+    const DelContentType DELCNT_FLY = 0x02;
+    const DelContentType DELCNT_TOC = 0x04;
+    const DelContentType DELCNT_BKM = 0x08;
+    const DelContentType DELCNT_ALL = 0x0F;
+    const DelContentType DELCNT_CHKNOCNTNT = 0x80;
 }
 
-/// will DelCntntIndex destroy a frame anchored at character at rAnchorPos?
+/// will DelContentIndex destroy a frame anchored at character at rAnchorPos?
 bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
         SwPosition const & rStart, SwPosition const & rEnd, const SwDoc* doc,
-        DelCntntType const nDelCntntType = nsDelCntntType::DELCNT_ALL);
+        DelContentType const nDelContentType = nsDelContentType::DELCNT_ALL);
 
 // This class has to be inherited into an Undo-object if it saves content
 // for Redo/Undo...
-class SwUndoSaveCntnt
+class SwUndoSaveContent
 {
 protected:
 
@@ -166,16 +166,16 @@ protected:
 
     // Before moving stuff into UndoNodes-Array care has to be taken that
     // the content-bearing attributes are removed from the nodes-array.
-    void DelCntntIndex( const SwPosition& pMark, const SwPosition& pPoint,
-                        DelCntntType nDelCntntType = nsDelCntntType::DELCNT_ALL );
+    void DelContentIndex( const SwPosition& pMark, const SwPosition& pPoint,
+                        DelContentType nDelContentType = nsDelContentType::DELCNT_ALL );
 
 public:
-    SwUndoSaveCntnt();
-    ~SwUndoSaveCntnt();
+    SwUndoSaveContent();
+    ~SwUndoSaveContent();
 };
 
 // Save a complete section in nodes-array.
-class SwUndoSaveSection : private SwUndoSaveCntnt
+class SwUndoSaveSection : private SwUndoSaveContent
 {
     SwNodeIndex *pMvStt;
     SwRedlineSaveDatas* pRedlSaveData;
@@ -205,27 +205,27 @@ class SwUndRng
 {
 public:
     sal_uLong nSttNode, nEndNode;
-    sal_Int32 nSttCntnt, nEndCntnt;
+    sal_Int32 nSttContent, nEndContent;
 
     SwUndRng();
     SwUndRng( const SwPaM& );
 
     void SetValues( const SwPaM& rPam );
-    void SetPaM( SwPaM&, bool bCorrToCntnt = false ) const;
+    void SetPaM( SwPaM&, bool bCorrToContent = false ) const;
     SwPaM & AddUndoRedoPaM(
-        ::sw::UndoRedoContext &, bool const bCorrToCntnt = false) const;
+        ::sw::UndoRedoContext &, bool const bCorrToContent = false) const;
 };
 
-class SwUndoInsLayFmt;
+class SwUndoInsLayFormat;
 
 // base class for insertion of Document, Glossaries and Copy
-class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveCntnt
+class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveContent
 {
-    SwTxtFmtColl *pTxtFmtColl, *pLastNdColl;
-    std::vector<SwFrmFmt*>* pFrmFmts;
-    ::std::vector< ::boost::shared_ptr<SwUndoInsLayFmt> > m_FlyUndos;
+    SwTextFormatColl *pTextFormatColl, *pLastNdColl;
+    std::vector<SwFrameFormat*>* pFrameFormats;
+    ::std::vector< ::boost::shared_ptr<SwUndoInsLayFormat> > m_FlyUndos;
     SwRedlineData* pRedlData;
-    bool bSttWasTxtNd;
+    bool bSttWasTextNd;
 protected:
     sal_uLong nNdDiff;
     /// start of Content in UndoNodes for Redo
@@ -242,7 +242,7 @@ public:
 
     // Set destination range after reading.
     void SetInsertRange( const SwPaM&, bool bScanFlys = true,
-                         bool bSttWasTxtNd = true );
+                         bool bSttWasTextNd = true );
 };
 
 class SwUndoInsDoc : public SwUndoInserts
@@ -260,16 +260,16 @@ public:
 class SwUndoFlyBase : public SwUndo, private SwUndoSaveSection
 {
 protected:
-    SwFrmFmt* pFrmFmt;          // The saved FlyFormat.
+    SwFrameFormat* pFrameFormat;          // The saved FlyFormat.
     sal_uLong nNdPgPos;
     sal_Int32 nCntPos;         // Page at/in paragraph.
     sal_uInt16 nRndId;
-    bool bDelFmt;           // Delete saved format.
+    bool bDelFormat;           // Delete saved format.
 
     void InsFly(::sw::UndoRedoContext & rContext, bool bShowSel = true);
     void DelFly( SwDoc* );
 
-    SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId );
+    SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId );
 
     SwNodeIndex* GetMvSttIdx() const { return SwUndoSaveSection::GetMvSttIdx(); }
     sal_uLong GetMvNodeCnt() const { return SwUndoSaveSection::GetMvNodeCnt(); }
@@ -279,14 +279,14 @@ public:
 
 };
 
-class SwUndoInsLayFmt : public SwUndoFlyBase
+class SwUndoInsLayFormat : public SwUndoFlyBase
 {
     sal_uLong mnCrsrSaveIndexPara;           // Cursor position
     sal_Int32 mnCrsrSaveIndexPos;            // for undo
 public:
-    SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx );
+    SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx );
 
-    virtual ~SwUndoInsLayFmt();
+    virtual ~SwUndoInsLayFormat();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
@@ -296,11 +296,11 @@ public:
 
 };
 
-class SwUndoDelLayFmt : public SwUndoFlyBase
+class SwUndoDelLayFormat : public SwUndoFlyBase
 {
     bool bShowSelFrm;
 public:
-    SwUndoDelLayFmt( SwFrmFmt* pFormat );
+    SwUndoDelLayFormat( SwFrameFormat* pFormat );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;

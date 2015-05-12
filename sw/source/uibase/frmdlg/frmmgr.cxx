@@ -74,10 +74,10 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( bool bNew, SwWrtShell* pSh, sal_uInt8 nType ) 
             case FRMMGR_TYPE_OLE:   nId = RES_POOLFRM_OLE;      break;
             case FRMMGR_TYPE_GRF:   nId = RES_POOLFRM_GRAPHIC;  break;
         }
-        m_aSet.SetParent( &m_pOwnSh->GetFmtFromPool( nId )->GetAttrSet());
-        m_aSet.Put( SwFmtFrmSize( ATT_MIN_SIZE, DFLT_WIDTH, DFLT_HEIGHT ));
+        m_aSet.SetParent( &m_pOwnSh->GetFormatFromPool( nId )->GetAttrSet());
+        m_aSet.Put( SwFormatFrmSize( ATT_MIN_SIZE, DFLT_WIDTH, DFLT_HEIGHT ));
         if ( 0 != ::GetHtmlMode(pSh->GetView().GetDocShell()) )
-            m_aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::PRINT_AREA ) );
+            m_aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::PRINT_AREA ) );
     }
     else if ( nType == FRMMGR_TYPE_NONE )
     {
@@ -142,8 +142,8 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
             SfxItemSet aGetSet( *m_aSet.GetPool(), RES_ANCHOR, RES_ANCHOR );
             if( m_pOwnSh->GetFlyFrmAttr( aGetSet ) && 1 == aGetSet.Count() &&
                 SfxItemState::SET == aGetSet.GetItemState( RES_ANCHOR, false, &pGItem )
-                && static_cast<const SwFmtAnchor*>(pGItem)->GetAnchorId() ==
-                   static_cast<const SwFmtAnchor*>(pItem)->GetAnchorId() )
+                && static_cast<const SwFormatAnchor*>(pGItem)->GetAnchorId() ==
+                   static_cast<const SwFormatAnchor*>(pItem)->GetAnchorId() )
                 m_aSet.ClearItem( RES_ANCHOR );
         }
 
@@ -205,12 +205,12 @@ void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     m_pOwnSh->GetPageNum( nPhyPageNum, nVirtPageNum );
 
-    m_aSet.Put( SwFmtAnchor( eId, nPhyPageNum ) );
+    m_aSet.Put( SwFormatAnchor( eId, nPhyPageNum ) );
     if ((FLY_AT_PAGE == eId) || (FLY_AT_PARA == eId) || (FLY_AT_CHAR == eId)
         || (FLY_AT_FLY == eId))
     {
-        SwFmtVertOrient aVertOrient( GetVertOrient() );
-        SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
+        SwFormatVertOrient aVertOrient( GetVertOrient() );
+        SwFormatHoriOrient aHoriOrient( GetHoriOrient() );
         aHoriOrient.SetRelationOrient( text::RelOrientation::FRAME );
         aVertOrient.SetRelationOrient( text::RelOrientation::FRAME );
         m_aSet.Put( aVertOrient );
@@ -219,7 +219,7 @@ void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
 }
 
 // set the attribute for columns
-void SwFlyFrmAttrMgr::SetCol( const SwFmtCol &rCol )
+void SwFlyFrmAttrMgr::SetCol( const SwFormatCol &rCol )
 {
     m_aSet.Put( rCol );
 }
@@ -229,8 +229,8 @@ void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 {
     m_bAbsPos = true;
     m_aAbsPos = rPoint;
-    SwFmtVertOrient aVertOrient( GetVertOrient() );
-    SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
+    SwFormatVertOrient aVertOrient( GetVertOrient() );
+    SwFormatHoriOrient aHoriOrient( GetHoriOrient() );
     aHoriOrient.SetHoriOrient( text::HoriOrientation::NONE );
     aVertOrient.SetVertOrient( text::VertOrientation::NONE );
     m_aSet.Put( aVertOrient );
@@ -239,7 +239,7 @@ void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 
 // check metrics for correctness
 void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
-        const SwPosition* pToCharCntntPos,
+        const SwPosition* pToCharContentPos,
         bool bOnlyPercentRefValue )
 {
     if (!bOnlyPercentRefValue)
@@ -253,11 +253,11 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
     //      aligned to page for fly frame anchored to paragraph or to character.
     const RndStdIds eAnchorType = static_cast<RndStdIds >(rVal.nAnchorType);
-    const SwFmtFrmSize& rSize = static_cast<const SwFmtFrmSize&>(m_aSet.Get(RES_FRM_SIZE));
+    const SwFormatFrmSize& rSize = static_cast<const SwFormatFrmSize&>(m_aSet.Get(RES_FRM_SIZE));
     m_pOwnSh->CalcBoundRect( aBoundRect, eAnchorType,
                            rVal.nHRelOrient,
                            rVal.nVRelOrient,
-                           pToCharCntntPos,
+                           pToCharContentPos,
                            rVal.bFollowTextFlow,
                            rVal.bMirror, NULL, &rVal.aPercentSize,
                            &rSize);
@@ -539,8 +539,8 @@ void SwFlyFrmAttrMgr::SetULSpace( long nTop, long nBottom )
 
 void SwFlyFrmAttrMgr::SetPos( const Point& rPoint )
 {
-    SwFmtVertOrient aVertOrient( GetVertOrient() );
-    SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
+    SwFormatVertOrient aVertOrient( GetVertOrient() );
+    SwFormatHoriOrient aHoriOrient( GetHoriOrient() );
 
     aHoriOrient.SetPos       ( rPoint.X() );
     aHoriOrient.SetHoriOrient( text::HoriOrientation::NONE  );
@@ -554,28 +554,28 @@ void SwFlyFrmAttrMgr::SetPos( const Point& rPoint )
 
 void SwFlyFrmAttrMgr::SetHorzOrientation( sal_Int16 eOrient )
 {
-    SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
+    SwFormatHoriOrient aHoriOrient( GetHoriOrient() );
     aHoriOrient.SetHoriOrient( eOrient );
     m_aSet.Put( aHoriOrient );
 }
 
 void SwFlyFrmAttrMgr::SetVertOrientation( sal_Int16 eOrient )
 {
-    SwFmtVertOrient aVertOrient( GetVertOrient() );
+    SwFormatVertOrient aVertOrient( GetVertOrient() );
     aVertOrient.SetVertOrient( eOrient );
     m_aSet.Put( aVertOrient );
 }
 
 void SwFlyFrmAttrMgr::SetHeightSizeType( SwFrmSize eType )
 {
-    SwFmtFrmSize aSize( GetFrmSize() );
+    SwFormatFrmSize aSize( GetFrmSize() );
     aSize.SetHeightSizeType( eType );
     m_aSet.Put( aSize );
 }
 
 void SwFlyFrmAttrMgr::SetSize( const Size& rSize )
 {
-    SwFmtFrmSize aSize( GetFrmSize() );
+    SwFormatFrmSize aSize( GetFrmSize() );
     aSize.SetSize(Size(std::max(rSize.Width(), long(MINFLY)), std::max(rSize.Height(), long(MINFLY))));
     m_aSet.Put( aSize );
 }

@@ -337,13 +337,13 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
 
 // XAccessibleValue
 
-SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
+SwFrameFormat* SwAccessibleCell::GetTableBoxFormat() const
 {
     assert(GetFrm());
     assert(GetFrm()->IsCellFrm());
 
     const SwCellFrm* pCellFrm = static_cast<const SwCellFrm*>( GetFrm() );
-    return pCellFrm->GetTabBox()->GetFrmFmt();
+    return pCellFrm->GetTabBox()->GetFrameFormat();
 }
 
 //Implement TableCell currentValue
@@ -354,7 +354,7 @@ uno::Any SwAccessibleCell::getCurrentValue( )
     CHECK_FOR_DEFUNC( XAccessibleValue );
 
     uno::Any aAny;
-    aAny <<= GetTblBoxFormat()->GetTblBoxValue().GetValue();
+    aAny <<= GetTableBoxFormat()->GetTableBoxValue().GetValue();
     return aAny;
 }
 
@@ -368,8 +368,8 @@ sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
     bool bValid = (aNumber >>= fValue);
     if( bValid )
     {
-        SwTblBoxValue aValue( fValue );
-        GetTblBoxFormat()->SetFmtAttr( aValue );
+        SwTableBoxValue aValue( fValue );
+        GetTableBoxFormat()->SetFormatAttr( aValue );
     }
     return bValid;
 }
@@ -418,10 +418,10 @@ static OUString ReplaceFourChar(const OUString& oldOUString)
     SolarMutexGuard g;
 
     ::com::sun::star::uno::Any strRet;
-    SwFrmFmt *pFrmFmt = GetTblBoxFormat();
-    assert(pFrmFmt);
+    SwFrameFormat *pFrameFormat = GetTableBoxFormat();
+    assert(pFrameFormat);
 
-    const SwTblBoxFormula& tbl_formula = pFrmFmt->GetTblBoxFormula();
+    const SwTableBoxFormula& tbl_formula = pFrameFormat->GetTableBoxFormula();
 
     OUString strFormula = ReplaceFourChar(tbl_formula.GetFormula());
     OUString strFor("Formula:");

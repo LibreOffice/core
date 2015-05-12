@@ -253,7 +253,7 @@ struct SvxCSS1ItemIds
     sal_uInt16 nAdjust;
     sal_uInt16 nWidows;
     sal_uInt16 nOrphans;
-    sal_uInt16 nFmtSplit;
+    sal_uInt16 nFormatSplit;
 
     sal_uInt16 nLRSpace;
     sal_uInt16 nULSpace;
@@ -739,7 +739,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL, sal_
     aItemIds.nAdjust = rPool.GetTrueWhich( SID_ATTR_PARA_ADJUST, false );
     aItemIds.nWidows = rPool.GetTrueWhich( SID_ATTR_PARA_WIDOWS, false );
     aItemIds.nOrphans = rPool.GetTrueWhich( SID_ATTR_PARA_ORPHANS, false );
-    aItemIds.nFmtSplit = rPool.GetTrueWhich( SID_ATTR_PARA_SPLIT, false );
+    aItemIds.nFormatSplit = rPool.GetTrueWhich( SID_ATTR_PARA_SPLIT, false );
 
     aItemIds.nLRSpace = rPool.GetTrueWhich( SID_ATTR_LRSPACE, false );
     aItemIds.nULSpace = rPool.GetTrueWhich( SID_ATTR_ULSPACE, false );
@@ -752,10 +752,10 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL, sal_
     aItemIds.nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false );
 
     aWhichMap.insert( aWhichMap.begin(), 0 );
-    SvParser::BuildWhichTbl( aWhichMap, reinterpret_cast<sal_uInt16 *>(&aItemIds),
+    SvParser::BuildWhichTable( aWhichMap, reinterpret_cast<sal_uInt16 *>(&aItemIds),
                              sizeof(aItemIds) / sizeof(sal_uInt16) );
     if( pWhichIds && nWhichIds )
-        SvParser::BuildWhichTbl( aWhichMap, pWhichIds, nWhichIds );
+        SvParser::BuildWhichTable( aWhichMap, pWhichIds, nWhichIds );
 
     pSheetItemSet = new SfxItemSet( rPool, &aWhichMap[0] );
     pSheetPropInfo = new SvxCSS1PropertyInfo;
@@ -970,7 +970,7 @@ void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
             if( rSrcInfo.bRightMargin )
                 aLRSpace.SetRight( rNewLRSpace.GetRight() );
             if( rSrcInfo.bTextIndent )
-                aLRSpace.SetTxtFirstLineOfst( rNewLRSpace.GetTxtFirstLineOfst() );
+                aLRSpace.SetTextFirstLineOfst( rNewLRSpace.GetTextFirstLineOfst() );
 
             rTargetSet.Put( aLRSpace );
         }
@@ -2005,13 +2005,13 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
                                                    &pItem ) )
         {
             SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
-            aLRItem.SetTxtFirstLineOfst( nIndent );
+            aLRItem.SetTextFirstLineOfst( nIndent );
             rItemSet.Put( aLRItem );
         }
         else
         {
             SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-            aLRItem.SetTxtFirstLineOfst( nIndent );
+            aLRItem.SetTextFirstLineOfst( nIndent );
             rItemSet.Put( aLRItem );
         }
         rPropInfo.bTextIndent = true;
@@ -2060,13 +2060,13 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
                                                    &pItem ) )
         {
             SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
-            aLRItem.SetTxtLeft( (sal_uInt16)nLeft );
+            aLRItem.SetTextLeft( (sal_uInt16)nLeft );
             rItemSet.Put( aLRItem );
         }
         else
         {
             SvxLRSpaceItem aLRItem( aItemIds.nLRSpace );
-            aLRItem.SetTxtLeft( (sal_uInt16)nLeft );
+            aLRItem.SetTextLeft( (sal_uInt16)nLeft );
             rItemSet.Put( aLRItem );
         }
         rPropInfo.bLeftMargin = true;
@@ -2998,7 +2998,7 @@ static void ParseCSS1_page_break_inside( const CSS1Expression *pExpr,
     }
 
     if( bSetSplit )
-        rItemSet.Put( SvxFmtSplitItem( bSplit, aItemIds.nFmtSplit ) );
+        rItemSet.Put( SvxFormatSplitItem( bSplit, aItemIds.nFormatSplit ) );
 }
 
 static void ParseCSS1_widows( const CSS1Expression *pExpr,

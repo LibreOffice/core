@@ -59,15 +59,15 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
         sal_uInt32 nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
         {
-            const SwFmtINetFmt* pItem = static_cast<const SwFmtINetFmt*>(pDoc->GetAttrPool().GetItem2(RES_TXTATR_INETFMT, n ));
+            const SwFormatINetFormat* pItem = static_cast<const SwFormatINetFormat*>(pDoc->GetAttrPool().GetItem2(RES_TXTATR_INETFMT, n ));
             if( pItem != 0 &&
                 ( pItem->GetValue() == sURL || ( !sBkmk.isEmpty() && pItem->GetValue() == sBkmk )))
             {
-                const SwTxtINetFmt* pTxtAttr = pItem->GetTxtINetFmt();
-                if (pTxtAttr != 0)
+                const SwTextINetFormat* pTextAttr = pItem->GetTextINetFormat();
+                if (pTextAttr != 0)
                 {
-                    const SwTxtNode* pTxtNd = pTxtAttr->GetpTxtNode();
-                    if (pTxtNd != 0)
+                    const SwTextNode* pTextNd = pTextAttr->GetpTextNode();
+                    if (pTextNd != 0)
                     {
                         if( !bAction && pESh )
                         {
@@ -76,14 +76,14 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                             bUnLockView = !pESh->IsViewLocked();
                             pESh->LockView( true );
                         }
-                        const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid(false);
-                        const SwTxtAttr* pAttr = pTxtAttr;
+                        const_cast<SwTextINetFormat*>(pTextAttr)->SetVisitedValid(false);
+                        const SwTextAttr* pAttr = pTextAttr;
                         SwUpdateAttr aUpdateAttr(
                             pAttr->GetStart(),
                             *pAttr->End(),
                             RES_FMT_CHG);
 
-                        const_cast< SwTxtNode* >(pTxtNd)->ModifyNotification(&aUpdateAttr, &aUpdateAttr);
+                        const_cast< SwTextNode* >(pTextNd)->ModifyNotification(&aUpdateAttr, &aUpdateAttr);
                     }
                 }
             }

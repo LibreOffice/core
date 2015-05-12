@@ -46,48 +46,48 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 
-void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
+void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFamily )
 {
     // <style:style ...>
     CheckAttrList();
 
     // style:family="..."
-    OSL_ENSURE( RES_FRMFMT==rFmt.Which(), "frame format expected" );
-    if( RES_FRMFMT != rFmt.Which() )
+    OSL_ENSURE( RES_FRMFMT==rFormat.Which(), "frame format expected" );
+    if( RES_FRMFMT != rFormat.Which() )
         return;
     OSL_ENSURE( eFamily != XML_TOKEN_INVALID, "family must be specified" );
     // style:name="..."
     bool bEncoded = false;
     AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, EncodeStyleName(
-                    rFmt.GetName(), &bEncoded ) );
+                    rFormat.GetName(), &bEncoded ) );
     if( bEncoded )
-        AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, rFmt.GetName() );
+        AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, rFormat.GetName() );
 
     if( eFamily != XML_TOKEN_INVALID )
         AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, eFamily );
 
 #if OSL_DEBUG_LEVEL > 0
     // style:parent-style-name="..." (if its not the default only)
-    const SwFmt* pParent = rFmt.DerivedFrom();
+    const SwFormat* pParent = rFormat.DerivedFrom();
     // Parent-Namen nur uebernehmen, wenn kein Default
     OSL_ENSURE( !pParent || pParent->IsDefault(), "unexpected parent" );
 
-    OSL_ENSURE( USHRT_MAX == rFmt.GetPoolFmtId(), "pool ids arent'supported" );
-    OSL_ENSURE( USHRT_MAX == rFmt.GetPoolHelpId(), "help ids arent'supported" );
-    OSL_ENSURE( USHRT_MAX == rFmt.GetPoolHelpId() ||
-            UCHAR_MAX == rFmt.GetPoolHlpFileId(), "help file ids aren't supported" );
+    OSL_ENSURE( USHRT_MAX == rFormat.GetPoolFormatId(), "pool ids arent'supported" );
+    OSL_ENSURE( USHRT_MAX == rFormat.GetPoolHelpId(), "help ids arent'supported" );
+    OSL_ENSURE( USHRT_MAX == rFormat.GetPoolHelpId() ||
+            UCHAR_MAX == rFormat.GetPoolHlpFileId(), "help file ids aren't supported" );
 #endif
 
     // style:master-page-name
-    if( RES_FRMFMT == rFmt.Which() && XML_TABLE == eFamily )
+    if( RES_FRMFMT == rFormat.Which() && XML_TABLE == eFamily )
     {
         const SfxPoolItem *pItem;
-        if( SfxItemState::SET == rFmt.GetAttrSet().GetItemState( RES_PAGEDESC,
+        if( SfxItemState::SET == rFormat.GetAttrSet().GetItemState( RES_PAGEDESC,
                                                             false, &pItem ) )
         {
             OUString sName;
             const SwPageDesc *pPageDesc =
-                static_cast<const SwFmtPageDesc *>(pItem)->GetPageDesc();
+                static_cast<const SwFormatPageDesc *>(pItem)->GetPageDesc();
             if( pPageDesc )
                 SwStyleNameMapper::FillProgName(
                                     pPageDesc->GetName(),
@@ -101,15 +101,15 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
 
     if( XML_TABLE_CELL == eFamily )
     {
-        OSL_ENSURE(RES_FRMFMT == rFmt.Which(), "only frame format");
+        OSL_ENSURE(RES_FRMFMT == rFormat.Which(), "only frame format");
 
         const SfxPoolItem *pItem;
         if( SfxItemState::SET ==
-            rFmt.GetAttrSet().GetItemState( RES_BOXATR_FORMAT,
+            rFormat.GetAttrSet().GetItemState( RES_BOXATR_FORMAT,
                                             false, &pItem ) )
         {
             sal_Int32 nFormat = (sal_Int32)
-                static_cast<const SwTblBoxNumFormat *>(pItem)->GetValue();
+                static_cast<const SwTableBoxNumFormat *>(pItem)->GetValue();
 
             if ( (nFormat != -1) && (nFormat != css::util::NumberFormat::TEXT) )
             {
@@ -152,7 +152,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
             rItemMapper.setMapEntries( xItemMap );
 
             GetTableItemMapper().exportXML( *this,
-                                           rFmt.GetAttrSet(),
+                                           rFormat.GetAttrSet(),
                                            GetTwipUnitConverter(),
                                            ePropToken,
                                            SvXmlExportFlags::IGN_WS );
@@ -228,7 +228,7 @@ void SwXMLExport::_ExportAutoStyles()
         GetPageExport()->exportAutoStyles();
 
     // we rely on data styles being written after cell styles in the
-    // ExportFmt() method; so be careful when changing order.
+    // ExportFormat() method; so be careful when changing order.
     exportAutoDataStyles();
 
     SvXMLExportFlags nContentAutostyles = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES;

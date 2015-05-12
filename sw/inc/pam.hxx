@@ -30,12 +30,12 @@
 
 #include <iostream>
 
-class SwFmt;
+class SwFormat;
 class SfxPoolItem;
 class SfxItemSet;
 class SwDoc;
 class SwNode;
-class SwCntntNode;
+class SwContentNode;
 class SwPaM;
 class Point;
 
@@ -53,10 +53,10 @@ struct SW_DLLPUBLIC SwPosition
     SwNodeIndex nNode;
     SwIndex nContent;
 
-    SwPosition( const SwNodeIndex &rNode, const SwIndex &rCntnt );
+    SwPosition( const SwNodeIndex &rNode, const SwIndex &rContent );
     explicit SwPosition( const SwNodeIndex &rNode );
     explicit SwPosition( const SwNode& rNode );
-    explicit SwPosition( SwCntntNode& rNode, const sal_Int32 nOffset = 0 );
+    explicit SwPosition( SwContentNode& rNode, const sal_Int32 nOffset = 0 );
 
     SwPosition( const SwPosition & );
     SwPosition &operator=(const SwPosition &);
@@ -147,10 +147,10 @@ typedef bool (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
 SW_DLLPUBLIC extern SwGoInDoc fnGoDoc;
 extern SwGoInDoc fnGoSection;
 SW_DLLPUBLIC extern SwGoInDoc fnGoNode;
-SW_DLLPUBLIC extern SwGoInDoc fnGoCntnt; ///< SwPam::Move() default argument.
-extern SwGoInDoc fnGoCntntCells;
-extern SwGoInDoc fnGoCntntSkipHidden;
-extern SwGoInDoc fnGoCntntCellsSkipHidden;
+SW_DLLPUBLIC extern SwGoInDoc fnGoContent; ///< SwPam::Move() default argument.
+extern SwGoInDoc fnGoContentCells;
+extern SwGoInDoc fnGoContentSkipHidden;
+extern SwGoInDoc fnGoContentCellsSkipHidden;
 
 void _InitPam();
 
@@ -175,12 +175,12 @@ public:
            long nMkOffset = 0, long nPtOffset = 0, SwPaM* pRing = 0 );
     SwPaM( const SwNode& rMk, const SwNode& rPt,
            long nMkOffset = 0, long nPtOffset = 0, SwPaM* pRing = 0 );
-    SwPaM(  const SwNodeIndex& rMk, sal_Int32 nMkCntnt,
-            const SwNodeIndex& rPt, sal_Int32 nPtCntnt, SwPaM* pRing = 0 );
-    SwPaM(  const SwNode& rMk, sal_Int32 nMkCntnt,
-            const SwNode& rPt, sal_Int32 nPtCntnt, SwPaM* pRing = 0 );
-    SwPaM( const SwNode& rNd, sal_Int32 nCntnt = 0, SwPaM* pRing = 0 );
-    SwPaM( const SwNodeIndex& rNd, sal_Int32 nCntnt = 0, SwPaM* pRing = 0 );
+    SwPaM(  const SwNodeIndex& rMk, sal_Int32 nMkContent,
+            const SwNodeIndex& rPt, sal_Int32 nPtContent, SwPaM* pRing = 0 );
+    SwPaM(  const SwNode& rMk, sal_Int32 nMkContent,
+            const SwNode& rPt, sal_Int32 nPtContent, SwPaM* pRing = 0 );
+    SwPaM( const SwNode& rNd, sal_Int32 nContent = 0, SwPaM* pRing = 0 );
+    SwPaM( const SwNodeIndex& rNd, sal_Int32 nContent = 0, SwPaM* pRing = 0 );
     virtual ~SwPaM();
 
     /// this takes a second parameter, which indicates the Ring that
@@ -191,15 +191,15 @@ public:
 
     /// Movement of cursor.
     bool Move( SwMoveFn fnMove = fnMoveForward,
-                SwGoInDoc fnGo = fnGoCntnt );
+                SwGoInDoc fnGo = fnGoContent );
 
     /// Search.
     bool Find(  const com::sun::star::util::SearchOptions& rSearchOpt,
                 bool bSearchInNotes,
-                utl::TextSearch& rSTxt,
+                utl::TextSearch& rSText,
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =0, bool bInReadOnly = false);
-    bool Find(  const SwFmt& rFmt,
+    bool Find(  const SwFormat& rFormat,
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =0, bool bInReadOnly = false);
     bool Find(  const SfxPoolItem& rAttr, bool bValue = true,
@@ -209,9 +209,9 @@ public:
                 SwMoveFn fnMove,
                 const SwPaM *pPam, bool bInReadOnly, bool bMoveFirst );
 
-    bool DoSearch( const com::sun::star::util::SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
+    bool DoSearch( const com::sun::star::util::SearchOptions& rSearchOpt, utl::TextSearch& rSText,
                    SwMoveFn fnMove, bool bSrchForward, bool bRegSearch, bool bChkEmptyPara, bool bChkParaEnd,
-                   sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTxtLen, SwNode* pNode, SwPaM* pPam);
+                   sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTextLen, SwNode* pNode, SwPaM* pPam);
 
     inline bool IsInFrontOfLabel() const        { return m_bIsInFrontOfLabel; }
     inline void _SetInFrontOfLabel( bool bNew ) { m_bIsInFrontOfLabel = bNew; }
@@ -271,9 +271,9 @@ public:
     }
 
     /// @return current ContentNode at Point/Mark
-    SwCntntNode* GetCntntNode( bool bPoint = true ) const
+    SwContentNode* GetContentNode( bool bPoint = true ) const
     {
-        return GetNode(bPoint).GetCntntNode();
+        return GetNode(bPoint).GetContentNode();
     }
 
     /**
@@ -306,7 +306,7 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
 
-    OUString GetTxt() const;
+    OUString GetText() const;
     void InvalidatePaM();
     SwPaM* GetNext()
         { return GetNextInRing(); }

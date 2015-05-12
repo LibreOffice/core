@@ -110,7 +110,7 @@ IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl)
     if (pDocSh)
     {
         SwgReaderOption aOption;
-        aOption.SetTxtFmts(true);
+        aOption.SetTextFormats(true);
         aOption.SetNumRules(true);
         pDocSh->LoadStylesFromFile(pEntry->maURL, aOption, false);
     }

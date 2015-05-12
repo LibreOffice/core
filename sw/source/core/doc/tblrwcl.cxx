@@ -82,13 +82,13 @@ typedef std::map<SwTableLine*, sal_uInt16> SwTableLineWidthMap_t;
 struct _CpyTabFrm
 {
     union {
-        SwTableBoxFmt *pFrmFmt;     // for CopyCol
+        SwTableBoxFormat *pFrameFormat;     // for CopyCol
         SwTwips nSize;              // for DelCol
     } Value;
-    SwTableBoxFmt *pNewFrmFmt;
+    SwTableBoxFormat *pNewFrameFormat;
 
-    _CpyTabFrm( SwTableBoxFmt* pAktFrmFmt ) : pNewFrmFmt( 0 )
-    {   Value.pFrmFmt = pAktFrmFmt; }
+    _CpyTabFrm( SwTableBoxFormat* pAktFrameFormat ) : pNewFrameFormat( 0 )
+    {   Value.pFrameFormat = pAktFrameFormat; }
 
     _CpyTabFrm& operator=( const _CpyTabFrm& );
 
@@ -102,43 +102,43 @@ struct CR_SetBoxWidth
 {
     SwSelBoxes m_Boxes;
     SwTableLineWidthMap_t m_LineWidthMap;
-    SwShareBoxFmts aShareFmts;
-    SwTableNode* pTblNd;
-    SwUndoTblNdsChg* pUndo;
+    SwShareBoxFormats aShareFormats;
+    SwTableNode* pTableNd;
+    SwUndoTableNdsChg* pUndo;
     SwTwips nDiff, nSide, nMaxSize, nLowerDiff;
-    TblChgMode nMode;
-    sal_uInt16 nTblWidth, nRemainWidth, nBoxWidth;
+    TableChgMode nMode;
+    sal_uInt16 nTableWidth, nRemainWidth, nBoxWidth;
     bool bBigger, bLeft, bSplittBox, bAnyBoxFnd;
 
-    CR_SetBoxWidth( sal_uInt16 eType, SwTwips nDif, SwTwips nSid, SwTwips nTblW,
+    CR_SetBoxWidth( sal_uInt16 eType, SwTwips nDif, SwTwips nSid, SwTwips nTableW,
                     SwTwips nMax, SwTableNode* pTNd )
-        : pTblNd( pTNd ), pUndo( 0 ),
+        : pTableNd( pTNd ), pUndo( 0 ),
         nDiff( nDif ), nSide( nSid ), nMaxSize( nMax ), nLowerDiff( 0 ),
-        nTblWidth( (sal_uInt16)nTblW ), nRemainWidth( 0 ), nBoxWidth( 0 ),
+        nTableWidth( (sal_uInt16)nTableW ), nRemainWidth( 0 ), nBoxWidth( 0 ),
         bSplittBox( false ), bAnyBoxFnd( false )
     {
-        bLeft = nsTblChgWidthHeightType::WH_COL_LEFT == ( eType & 0xff ) ||
-                nsTblChgWidthHeightType::WH_CELL_LEFT == ( eType & 0xff );
-        bBigger = 0 != (eType & nsTblChgWidthHeightType::WH_FLAG_BIGGER );
-        nMode = pTblNd->GetTable().GetTblChgMode();
+        bLeft = nsTableChgWidthHeightType::WH_COL_LEFT == ( eType & 0xff ) ||
+                nsTableChgWidthHeightType::WH_CELL_LEFT == ( eType & 0xff );
+        bBigger = 0 != (eType & nsTableChgWidthHeightType::WH_FLAG_BIGGER );
+        nMode = pTableNd->GetTable().GetTableChgMode();
     }
     CR_SetBoxWidth( const CR_SetBoxWidth& rCpy )
         : m_LineWidthMap(rCpy.m_LineWidthMap)
         ,
-        pTblNd( rCpy.pTblNd ),
+        pTableNd( rCpy.pTableNd ),
         pUndo( rCpy.pUndo ),
         nDiff( rCpy.nDiff ), nSide( rCpy.nSide ),
         nMaxSize( rCpy.nMaxSize ), nLowerDiff( 0 ),
-        nMode( rCpy.nMode ), nTblWidth( rCpy.nTblWidth ),
+        nMode( rCpy.nMode ), nTableWidth( rCpy.nTableWidth ),
         nRemainWidth( rCpy.nRemainWidth ), nBoxWidth( rCpy.nBoxWidth ),
         bBigger( rCpy.bBigger ), bLeft( rCpy.bLeft ),
         bSplittBox( rCpy.bSplittBox ), bAnyBoxFnd( rCpy.bAnyBoxFnd )
     {
     }
 
-    SwUndoTblNdsChg* CreateUndo( SwUndoId eUndoType )
+    SwUndoTableNdsChg* CreateUndo( SwUndoId eUndoType )
     {
-        return pUndo = new SwUndoTblNdsChg( eUndoType, m_Boxes, *pTblNd );
+        return pUndo = new SwUndoTableNdsChg( eUndoType, m_Boxes, *pTableNd );
     }
 
     void LoopClear()
@@ -166,7 +166,7 @@ typedef bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, bool 
 
 #define CHECKBOXWIDTH                                           \
     {                                                           \
-        SwTwips nSize = GetFrmFmt()->GetFrmSize().GetWidth();   \
+        SwTwips nSize = GetFrameFormat()->GetFrmSize().GetWidth();   \
         for (size_t nTmp = 0; nTmp < aLines.size(); ++nTmp)   \
             ::_CheckBoxWidth( *aLines[ nTmp ], nSize );         \
     }
@@ -175,8 +175,8 @@ typedef bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, bool 
     {                                                               \
         for ( sal_uInt16 i = 0; i < GetTabLines().size(); ++i )        \
         {                                                           \
-            SwFrmFmt* pFmt = GetTabLines()[i]->GetFrmFmt();  \
-            SwIterator<SwRowFrm,SwFmt> aIter( *pFmt );              \
+            SwFrameFormat* pFormat = GetTabLines()[i]->GetFrameFormat();  \
+            SwIterator<SwRowFrm,SwFormat> aIter( *pFormat );              \
             for (SwRowFrm* pFrm=aIter.First(); pFrm; pFrm=aIter.Next())\
             {                                                       \
                 if ( pFrm->GetTabLine() == GetTabLines()[i] )       \
@@ -198,36 +198,36 @@ typedef bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, bool 
 struct CR_SetLineHeight
 {
     SwSelBoxes m_Boxes;
-    SwShareBoxFmts aShareFmts;
-    SwTableNode* pTblNd;
-    SwUndoTblNdsChg* pUndo;
+    SwShareBoxFormats aShareFormats;
+    SwTableNode* pTableNd;
+    SwUndoTableNdsChg* pUndo;
     SwTwips nMaxSpace, nMaxHeight;
-    TblChgMode nMode;
+    TableChgMode nMode;
     sal_uInt16 nLines;
     bool bBigger, bTop, bSplittBox, bAnyBoxFnd;
 
     CR_SetLineHeight( sal_uInt16 eType, SwTableNode* pTNd )
-        : pTblNd( pTNd ), pUndo( 0 ),
+        : pTableNd( pTNd ), pUndo( 0 ),
         nMaxSpace( 0 ), nMaxHeight( 0 ), nLines( 0 ),
         bSplittBox( false ), bAnyBoxFnd( false )
     {
-        bTop = nsTblChgWidthHeightType::WH_ROW_TOP == ( eType & 0xff ) || nsTblChgWidthHeightType::WH_CELL_TOP == ( eType & 0xff );
-        bBigger = 0 != (eType & nsTblChgWidthHeightType::WH_FLAG_BIGGER );
-        if( eType & nsTblChgWidthHeightType::WH_FLAG_INSDEL )
+        bTop = nsTableChgWidthHeightType::WH_ROW_TOP == ( eType & 0xff ) || nsTableChgWidthHeightType::WH_CELL_TOP == ( eType & 0xff );
+        bBigger = 0 != (eType & nsTableChgWidthHeightType::WH_FLAG_BIGGER );
+        if( eType & nsTableChgWidthHeightType::WH_FLAG_INSDEL )
             bBigger = !bBigger;
-        nMode = pTblNd->GetTable().GetTblChgMode();
+        nMode = pTableNd->GetTable().GetTableChgMode();
     }
     CR_SetLineHeight( const CR_SetLineHeight& rCpy )
-        : pTblNd( rCpy.pTblNd ), pUndo( rCpy.pUndo ),
+        : pTableNd( rCpy.pTableNd ), pUndo( rCpy.pUndo ),
         nMaxSpace( rCpy.nMaxSpace ), nMaxHeight( rCpy.nMaxHeight ),
         nMode( rCpy.nMode ), nLines( rCpy.nLines ),
         bBigger( rCpy.bBigger ), bTop( rCpy.bTop ),
         bSplittBox( rCpy.bSplittBox ), bAnyBoxFnd( rCpy.bAnyBoxFnd )
     {}
 
-    SwUndoTblNdsChg* CreateUndo( SwUndoId nUndoType )
+    SwUndoTableNdsChg* CreateUndo( SwUndoId nUndoType )
     {
-        return pUndo = new SwUndoTblNdsChg( nUndoType, m_Boxes, *pTblNd );
+        return pUndo = new SwUndoTableNdsChg( nUndoType, m_Boxes, *pTableNd );
     }
 };
 
@@ -242,7 +242,7 @@ typedef bool (*FN_lcl_SetLineHeight)(SwTableLine*, CR_SetLineHeight&, SwTwips, b
 
 _CpyTabFrm& _CpyTabFrm::operator=( const _CpyTabFrm& rCpyTabFrm )
 {
-    pNewFrmFmt = rCpyTabFrm.pNewFrmFmt;
+    pNewFrameFormat = rCpyTabFrm.pNewFrameFormat;
     Value = rCpyTabFrm.Value;
     return *this;
 }
@@ -253,7 +253,7 @@ struct _CpyPara
 {
     boost::shared_ptr< std::vector< std::vector< sal_uLong > > > pWidths;
     SwDoc* pDoc;
-    SwTableNode* pTblNd;
+    SwTableNode* pTableNd;
     _CpyTabFrms& rTabFrmArr;
     SwTableLine* pInsLine;
     SwTableBox* pInsBox;
@@ -262,32 +262,32 @@ struct _CpyPara
     sal_uInt16 nCpyCnt, nInsPos;
     sal_uInt16 nLnIdx, nBoxIdx;
     sal_uInt8 nDelBorderFlag;
-    bool bCpyCntnt;
+    bool bCpyContent;
 
     _CpyPara( SwTableNode* pNd, sal_uInt16 nCopies, _CpyTabFrms& rFrmArr,
               bool bCopyContent = true )
-        : pDoc( pNd->GetDoc() ), pTblNd( pNd ), rTabFrmArr(rFrmArr),
+        : pDoc( pNd->GetDoc() ), pTableNd( pNd ), rTabFrmArr(rFrmArr),
         pInsLine(0), pInsBox(0), nOldSize(0), nNewSize(0),
         nMinLeft(ULONG_MAX), nMaxRight(0),
         nCpyCnt(nCopies), nInsPos(0),
         nLnIdx(0), nBoxIdx(0),
-        nDelBorderFlag(0), bCpyCntnt( bCopyContent )
+        nDelBorderFlag(0), bCpyContent( bCopyContent )
         {}
     _CpyPara( const _CpyPara& rPara, SwTableLine* pLine )
-        : pWidths( rPara.pWidths ), pDoc(rPara.pDoc), pTblNd(rPara.pTblNd),
+        : pWidths( rPara.pWidths ), pDoc(rPara.pDoc), pTableNd(rPara.pTableNd),
         rTabFrmArr(rPara.rTabFrmArr), pInsLine(pLine), pInsBox(rPara.pInsBox),
         nOldSize(0), nNewSize(rPara.nNewSize), nMinLeft( rPara.nMinLeft ),
         nMaxRight( rPara.nMaxRight ), nCpyCnt(rPara.nCpyCnt), nInsPos(0),
         nLnIdx( rPara.nLnIdx), nBoxIdx( rPara.nBoxIdx ),
-        nDelBorderFlag( rPara.nDelBorderFlag ), bCpyCntnt( rPara.bCpyCntnt )
+        nDelBorderFlag( rPara.nDelBorderFlag ), bCpyContent( rPara.bCpyContent )
         {}
     _CpyPara( const _CpyPara& rPara, SwTableBox* pBox )
-        : pWidths( rPara.pWidths ), pDoc(rPara.pDoc), pTblNd(rPara.pTblNd),
+        : pWidths( rPara.pWidths ), pDoc(rPara.pDoc), pTableNd(rPara.pTableNd),
         rTabFrmArr(rPara.rTabFrmArr), pInsLine(rPara.pInsLine), pInsBox(pBox),
         nOldSize(rPara.nOldSize), nNewSize(rPara.nNewSize),
         nMinLeft( rPara.nMinLeft ), nMaxRight( rPara.nMaxRight ),
         nCpyCnt(rPara.nCpyCnt), nInsPos(0), nLnIdx(rPara.nLnIdx), nBoxIdx(rPara.nBoxIdx),
-        nDelBorderFlag( rPara.nDelBorderFlag ), bCpyCntnt( rPara.bCpyCntnt )
+        nDelBorderFlag( rPara.nDelBorderFlag ), bCpyContent( rPara.bCpyContent )
         {}
 };
 
@@ -297,7 +297,7 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
 {
     // Look up the Frame Format in the Frame Format Array
     SwTableBox* pBox = rFndBox.GetBox();
-    _CpyTabFrm aFindFrm( static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt()) );
+    _CpyTabFrm aFindFrm( static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat()) );
 
     sal_uInt16 nFndPos;
     if( pCpyPara->nCpyCnt )
@@ -307,11 +307,11 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
         if( itFind == pCpyPara->rTabFrmArr.end() || !(*itFind == aFindFrm) )
         {
             // For nested copying, also save the new Format as an old one.
-            SwTableBoxFmt* pNewFmt = static_cast<SwTableBoxFmt*>(pBox->ClaimFrmFmt());
+            SwTableBoxFormat* pNewFormat = static_cast<SwTableBoxFormat*>(pBox->ClaimFrameFormat());
 
             // Find the selected Boxes in the Line:
             _FndLine const* pCmpLine = NULL;
-            SwFmtFrmSize aFrmSz( pNewFmt->GetFrmSize() );
+            SwFormatFrmSize aFrmSz( pNewFormat->GetFrmSize() );
 
             bool bDiffCount = false;
             if( pBox->GetTabLines().size() )
@@ -329,34 +329,34 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
                 for( auto n = rFndBoxes.size(); n; )
                 {
                     nSz += rFndBoxes[--n].GetBox()->
-                            GetFrmFmt()->GetFrmSize().GetWidth();
+                            GetFrameFormat()->GetFrmSize().GetWidth();
                 }
                 aFrmSz.SetWidth( aFrmSz.GetWidth() -
                                             nSz / ( pCpyPara->nCpyCnt + 1 ) );
-                pNewFmt->SetFmtAttr( aFrmSz );
+                pNewFormat->SetFormatAttr( aFrmSz );
                 aFrmSz.SetWidth( nSz / ( pCpyPara->nCpyCnt + 1 ) );
 
                 // Create a new Format for the new Box, specifying its size.
-                aFindFrm.pNewFrmFmt = reinterpret_cast<SwTableBoxFmt*>(pNewFmt->GetDoc()->
-                                            MakeTableLineFmt());
-                *aFindFrm.pNewFrmFmt = *pNewFmt;
-                aFindFrm.pNewFrmFmt->SetFmtAttr( aFrmSz );
+                aFindFrm.pNewFrameFormat = reinterpret_cast<SwTableBoxFormat*>(pNewFormat->GetDoc()->
+                                            MakeTableLineFormat());
+                *aFindFrm.pNewFrameFormat = *pNewFormat;
+                aFindFrm.pNewFrameFormat->SetFormatAttr( aFrmSz );
             }
             else
             {
                 aFrmSz.SetWidth( aFrmSz.GetWidth() / ( pCpyPara->nCpyCnt + 1 ) );
-                pNewFmt->SetFmtAttr( aFrmSz );
+                pNewFormat->SetFormatAttr( aFrmSz );
 
-                aFindFrm.pNewFrmFmt = pNewFmt;
+                aFindFrm.pNewFrameFormat = pNewFormat;
                 pCpyPara->rTabFrmArr.insert( aFindFrm );
-                aFindFrm.Value.pFrmFmt = pNewFmt;
+                aFindFrm.Value.pFrameFormat = pNewFormat;
                 pCpyPara->rTabFrmArr.insert( aFindFrm );
             }
         }
         else
         {
             aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ];
-            pBox->ChgFrmFmt( aFindFrm.pNewFrmFmt );
+            pBox->ChgFrameFormat( aFindFrm.pNewFrameFormat );
         }
     }
     else
@@ -366,12 +366,12 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
             itFind != pCpyPara->rTabFrmArr.end() )
             aFindFrm = *itFind;
         else
-            aFindFrm.pNewFrmFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
+            aFindFrm.pNewFrameFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
     }
 
     if (!rFndBox.GetLines().empty())
     {
-        pBox = new SwTableBox( aFindFrm.pNewFrmFmt,
+        pBox = new SwTableBox( aFindFrm.pNewFrameFormat,
                     rFndBox.GetLines().size(), pCpyPara->pInsLine );
         pCpyPara->pInsLine->GetTabBoxes().insert( pCpyPara->pInsLine->GetTabBoxes().begin() + pCpyPara->nInsPos++, pBox );
         _CpyPara aPara( *pCpyPara, pBox );
@@ -382,20 +382,20 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
     }
     else
     {
-        ::_InsTblBox( pCpyPara->pDoc, pCpyPara->pTblNd, pCpyPara->pInsLine,
-                    aFindFrm.pNewFrmFmt, pBox, pCpyPara->nInsPos++ );
+        ::_InsTableBox( pCpyPara->pDoc, pCpyPara->pTableNd, pCpyPara->pInsLine,
+                    aFindFrm.pNewFrameFormat, pBox, pCpyPara->nInsPos++ );
 
         const _FndBoxes& rFndBxs = rFndBox.GetUpper()->GetBoxes();
         if( 8 > pCpyPara->nDelBorderFlag
                 ? pCpyPara->nDelBorderFlag != 0
                 : &rFndBox == &rFndBxs[rFndBxs.size() - 1] )
         {
-            const SvxBoxItem& rBoxItem = pBox->GetFrmFmt()->GetBox();
+            const SvxBoxItem& rBoxItem = pBox->GetFrameFormat()->GetBox();
             if( 8 > pCpyPara->nDelBorderFlag
                     ? rBoxItem.GetTop()
                     : rBoxItem.GetRight() )
             {
-                aFindFrm.Value.pFrmFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
+                aFindFrm.Value.pFrameFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
 
                 SvxBoxItem aNew( rBoxItem );
                 if( 8 > pCpyPara->nDelBorderFlag )
@@ -411,11 +411,11 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
                                             pCpyPara->nInsPos - 1 ];
                 }
 
-                aFindFrm.pNewFrmFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
+                aFindFrm.pNewFrameFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
 
                 // Else we copy before that and the first Line keeps the TopLine
                 // and we remove it at the original
-                pBox->ClaimFrmFmt()->SetFmtAttr( aNew );
+                pBox->ClaimFrameFormat()->SetFormatAttr( aNew );
 
                 if( !pCpyPara->nCpyCnt )
                     pCpyPara->rTabFrmArr.insert( aFindFrm );
@@ -427,7 +427,7 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
 static void lcl_CopyRow(_FndLine& rFndLine, _CpyPara *const pCpyPara)
 {
     SwTableLine* pNewLine = new SwTableLine(
-                            static_cast<SwTableLineFmt*>(rFndLine.GetLine()->GetFrmFmt()),
+                            static_cast<SwTableLineFormat*>(rFndLine.GetLine()->GetFrameFormat()),
                         rFndLine.GetBoxes().size(), pCpyPara->pInsBox );
     if( pCpyPara->pInsBox )
     {
@@ -436,7 +436,7 @@ static void lcl_CopyRow(_FndLine& rFndLine, _CpyPara *const pCpyPara)
     }
     else
     {
-        SwTableLines& rLines = pCpyPara->pTblNd->GetTable().GetTabLines();
+        SwTableLines& rLines = pCpyPara->pTableNd->GetTable().GetTabLines();
         rLines.insert( rLines.begin() + pCpyPara->nInsPos++, pNewLine );
     }
 
@@ -488,7 +488,7 @@ static void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, sal_uInt16 nCpyCnt
 
 SwRowFrm* GetRowFrm( SwTableLine& rLine )
 {
-    SwIterator<SwRowFrm,SwFmt> aIter( *rLine.GetFrmFmt() );
+    SwIterator<SwRowFrm,SwFormat> aIter( *rLine.GetFrameFormat() );
     for( SwRowFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         if( pFrm->GetTabLine() == &rLine )
             return pFrm;
@@ -498,8 +498,8 @@ SwRowFrm* GetRowFrm( SwTableLine& rLine )
 bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
 {
     OSL_ENSURE( !rBoxes.empty() && nCnt, "No valid Box List" );
-    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
-    if( !pTblNd )
+    SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
+    if( !pTableNd )
         return false;
 
     bool bRes = true;
@@ -526,7 +526,7 @@ bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
         // get notified about new rows/cols.
 
         _CpyTabFrms aTabFrmArr;
-        _CpyPara aCpyPara( pTblNd, nCnt, aTabFrmArr );
+        _CpyPara aCpyPara( pTableNd, nCnt, aTabFrmArr );
 
         for( auto &rLine : aFndBox.GetLines() )
             lcl_InsCol( &rLine, aCpyPara, nCnt, bBehind );
@@ -545,7 +545,7 @@ bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
     SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
     if (pPCD && nCnt)
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
-    pDoc->UpdateCharts( GetFrmFmt()->GetName() );
+    pDoc->UpdateCharts( GetFrameFormat()->GetName() );
 
     return bRes;
 }
@@ -554,8 +554,8 @@ bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         sal_uInt16 nCnt, bool bBehind )
 {
     OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid Box List" );
-    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
-    if( !pTblNd )
+    SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
+    if( !pTableNd )
         return false;
 
      // Find all Boxes/Lines
@@ -586,7 +586,7 @@ bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     // Find Lines for the layout update
     const bool bLayout = !IsNewModel() &&
-        nullptr != SwIterator<SwTabFrm,SwFmt>( *GetFrmFmt() ).First();
+        nullptr != SwIterator<SwTabFrm,SwFormat>( *GetFrameFormat() ).First();
 
     if ( bLayout )
     {
@@ -598,7 +598,7 @@ bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     }
 
     _CpyTabFrms aTabFrmArr;
-    _CpyPara aCpyPara( pTblNd, 0, aTabFrmArr );
+    _CpyPara aCpyPara( pTableNd, 0, aTabFrmArr );
 
     SwTableLine* pLine = pFndBox->GetLines()[ bBehind ?
                     pFndBox->GetLines().size()-1 : 0 ].GetLine();
@@ -645,64 +645,64 @@ bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
     if (pPCD && nCnt)
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
-    pDoc->UpdateCharts( GetFrmFmt()->GetName() );
+    pDoc->UpdateCharts( GetFrameFormat()->GetName() );
 
     return true;
 }
 
 static void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
-                            bool bFirst, SwShareBoxFmts& rShareFmts );
+                            bool bFirst, SwShareBoxFormats& rShareFormats );
 
 static void lcl_LastBoxSetWidthLine( SwTableLines &rLines, const long nOffset,
-                                bool bFirst, SwShareBoxFmts& rShareFmts )
+                                bool bFirst, SwShareBoxFormats& rShareFormats )
 {
     for ( auto pLine : rLines )
-        ::lcl_LastBoxSetWidth( pLine->GetTabBoxes(), nOffset, bFirst, rShareFmts );
+        ::lcl_LastBoxSetWidth( pLine->GetTabBoxes(), nOffset, bFirst, rShareFormats );
 }
 
 static void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
-                            bool bFirst, SwShareBoxFmts& rShareFmts )
+                            bool bFirst, SwShareBoxFormats& rShareFormats )
 {
     SwTableBox& rBox = *(bFirst ? rBoxes.front() : rBoxes.back());
     if( !rBox.GetSttNd() )
         ::lcl_LastBoxSetWidthLine( rBox.GetTabLines(), nOffset,
-                                    bFirst, rShareFmts );
+                                    bFirst, rShareFormats );
 
     // Adapt the Box
-    const SwFrmFmt *pBoxFmt = rBox.GetFrmFmt();
-    SwFmtFrmSize aNew( pBoxFmt->GetFrmSize() );
+    const SwFrameFormat *pBoxFormat = rBox.GetFrameFormat();
+    SwFormatFrmSize aNew( pBoxFormat->GetFrmSize() );
     aNew.SetWidth( aNew.GetWidth() + nOffset );
-    SwFrmFmt *pFmt = rShareFmts.GetFormat( *pBoxFmt, aNew );
-    if( pFmt )
-        rBox.ChgFrmFmt( static_cast<SwTableBoxFmt*>(pFmt) );
+    SwFrameFormat *pFormat = rShareFormats.GetFormat( *pBoxFormat, aNew );
+    if( pFormat )
+        rBox.ChgFrameFormat( static_cast<SwTableBoxFormat*>(pFormat) );
     else
     {
-        pFmt = rBox.ClaimFrmFmt();
+        pFormat = rBox.ClaimFrameFormat();
 
-        pFmt->LockModify();
-        pFmt->SetFmtAttr( aNew );
-        pFmt->UnlockModify();
+        pFormat->LockModify();
+        pFormat->SetFormatAttr( aNew );
+        pFormat->UnlockModify();
 
-        rShareFmts.AddFormat( *pBoxFmt, *pFmt );
+        rShareFormats.AddFormat( *pBoxFormat, *pFormat );
     }
 }
 
-void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
+void _DeleteBox( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
                 bool bCalcNewSize, const bool bCorrBorder,
-                SwShareBoxFmts* pShareFmts )
+                SwShareBoxFormats* pShareFormats )
 {
     do {
         SwTwips nBoxSz = bCalcNewSize ?
-                pBox->GetFrmFmt()->GetFrmSize().GetWidth() : 0;
+                pBox->GetFrameFormat()->GetFrmSize().GetWidth() : 0;
         SwTableLine* pLine = pBox->GetUpper();
-        SwTableBoxes& rTblBoxes = pLine->GetTabBoxes();
-        sal_uInt16 nDelPos = rTblBoxes.GetPos( pBox );
+        SwTableBoxes& rTableBoxes = pLine->GetTabBoxes();
+        sal_uInt16 nDelPos = rTableBoxes.GetPos( pBox );
         SwTableBox* pUpperBox = pBox->GetUpper()->GetUpper();
 
         // Special treatment for the border:
-        if( bCorrBorder && 1 < rTblBoxes.size() )
+        if( bCorrBorder && 1 < rTableBoxes.size() )
         {
-            const SvxBoxItem& rBoxItem = pBox->GetFrmFmt()->GetBox();
+            const SvxBoxItem& rBoxItem = pBox->GetFrameFormat()->GetBox();
 
             if( rBoxItem.GetLeft() || rBoxItem.GetRight() )
             {
@@ -710,46 +710,46 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
 
                 // JP 02.04.97: 1st part for Bug 36271
                 // First the left/right edges
-                if( nDelPos + 1 < (sal_uInt16)rTblBoxes.size() )
+                if( nDelPos + 1 < (sal_uInt16)rTableBoxes.size() )
                 {
-                    SwTableBox* pNxtBox = rTblBoxes[ nDelPos + 1 ];
-                    const SvxBoxItem& rNxtBoxItem = pNxtBox->GetFrmFmt()->GetBox();
+                    SwTableBox* pNxtBox = rTableBoxes[ nDelPos + 1 ];
+                    const SvxBoxItem& rNxtBoxItem = pNxtBox->GetFrameFormat()->GetBox();
 
-                    SwTableBox* pPrvBox = nDelPos ? rTblBoxes[ nDelPos - 1 ] : 0;
+                    SwTableBox* pPrvBox = nDelPos ? rTableBoxes[ nDelPos - 1 ] : 0;
 
                     if( pNxtBox->GetSttNd() && !rNxtBoxItem.GetLeft() &&
-                        ( !pPrvBox || !pPrvBox->GetFrmFmt()->GetBox().GetRight()) )
+                        ( !pPrvBox || !pPrvBox->GetFrameFormat()->GetBox().GetRight()) )
                     {
                         SvxBoxItem aTmp( rNxtBoxItem );
                         aTmp.SetLine( rBoxItem.GetLeft() ? rBoxItem.GetLeft()
                                                          : rBoxItem.GetRight(),
                                                             SvxBoxItemLine::LEFT );
-                        if( pShareFmts )
-                            pShareFmts->SetAttr( *pNxtBox, aTmp );
+                        if( pShareFormats )
+                            pShareFormats->SetAttr( *pNxtBox, aTmp );
                         else
-                            pNxtBox->ClaimFrmFmt()->SetFmtAttr( aTmp );
+                            pNxtBox->ClaimFrameFormat()->SetFormatAttr( aTmp );
                         bChgd = true;
                     }
                 }
                 if( !bChgd && nDelPos )
                 {
-                    SwTableBox* pPrvBox = rTblBoxes[ nDelPos - 1 ];
-                    const SvxBoxItem& rPrvBoxItem = pPrvBox->GetFrmFmt()->GetBox();
+                    SwTableBox* pPrvBox = rTableBoxes[ nDelPos - 1 ];
+                    const SvxBoxItem& rPrvBoxItem = pPrvBox->GetFrameFormat()->GetBox();
 
-                    SwTableBox* pNxtBox = nDelPos + 1 < (sal_uInt16)rTblBoxes.size()
-                                            ? rTblBoxes[ nDelPos + 1 ] : 0;
+                    SwTableBox* pNxtBox = nDelPos + 1 < (sal_uInt16)rTableBoxes.size()
+                                            ? rTableBoxes[ nDelPos + 1 ] : 0;
 
                     if( pPrvBox->GetSttNd() && !rPrvBoxItem.GetRight() &&
-                        ( !pNxtBox || !pNxtBox->GetFrmFmt()->GetBox().GetLeft()) )
+                        ( !pNxtBox || !pNxtBox->GetFrameFormat()->GetBox().GetLeft()) )
                     {
                         SvxBoxItem aTmp( rPrvBoxItem );
                         aTmp.SetLine( rBoxItem.GetLeft() ? rBoxItem.GetLeft()
                                                          : rBoxItem.GetRight(),
                                                             SvxBoxItemLine::RIGHT );
-                        if( pShareFmts )
-                            pShareFmts->SetAttr( *pPrvBox, aTmp );
+                        if( pShareFormats )
+                            pShareFormats->SetAttr( *pPrvBox, aTmp );
                         else
-                            pPrvBox->ClaimFrmFmt()->SetFmtAttr( aTmp );
+                            pPrvBox->ClaimFrameFormat()->SetFormatAttr( aTmp );
                     }
                 }
             }
@@ -757,49 +757,49 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
 
         // Delete the Box first, then the Nodes!
         SwStartNode* pSttNd = const_cast<SwStartNode*>(pBox->GetSttNd());
-        if( pShareFmts )
-            pShareFmts->RemoveFormat( *rTblBoxes[ nDelPos ]->GetFrmFmt() );
+        if( pShareFormats )
+            pShareFormats->RemoveFormat( *rTableBoxes[ nDelPos ]->GetFrameFormat() );
 
         // Before deleting the 'Table Box' from memory - delete any redlines attached to it
-        if ( rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().HasExtraRedlineTbl() )
-            rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTbl().DeleteTableCellRedline( rTbl.GetFrmFmt()->GetDoc(), *(rTblBoxes[nDelPos]), true, USHRT_MAX );
-        delete rTblBoxes[nDelPos];
-        rTblBoxes.erase( rTblBoxes.begin() + nDelPos );
+        if ( rTable.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().HasExtraRedlineTable() )
+            rTable.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteTableCellRedline( rTable.GetFrameFormat()->GetDoc(), *(rTableBoxes[nDelPos]), true, USHRT_MAX );
+        delete rTableBoxes[nDelPos];
+        rTableBoxes.erase( rTableBoxes.begin() + nDelPos );
 
         if( pSttNd )
         {
             // Has the UndoObject been prepared to save the Section?
             if( pUndo && pUndo->IsDelBox() )
-                static_cast<SwUndoTblNdsChg*>(pUndo)->SaveSection( pSttNd );
+                static_cast<SwUndoTableNdsChg*>(pUndo)->SaveSection( pSttNd );
             else
                 pSttNd->GetDoc()->getIDocumentContentOperations().DeleteSection( pSttNd );
         }
 
         // Also delete the Line?
-        if( !rTblBoxes.empty() )
+        if( !rTableBoxes.empty() )
         {
             // Then adapt the Frame-SSize
-            bool bLastBox = nDelPos == rTblBoxes.size();
+            bool bLastBox = nDelPos == rTableBoxes.size();
             if( bLastBox )
                 --nDelPos;
-            pBox = rTblBoxes[nDelPos];
+            pBox = rTableBoxes[nDelPos];
             if( bCalcNewSize )
             {
-                SwFmtFrmSize aNew( pBox->GetFrmFmt()->GetFrmSize() );
+                SwFormatFrmSize aNew( pBox->GetFrameFormat()->GetFrmSize() );
                 aNew.SetWidth( aNew.GetWidth() + nBoxSz );
-                if( pShareFmts )
-                    pShareFmts->SetSize( *pBox, aNew );
+                if( pShareFormats )
+                    pShareFormats->SetSize( *pBox, aNew );
                 else
-                    pBox->ClaimFrmFmt()->SetFmtAttr( aNew );
+                    pBox->ClaimFrameFormat()->SetFormatAttr( aNew );
 
                 if( !pBox->GetSttNd() )
                 {
                     // We need to this recursively in all Lines in all Cells!
-                    SwShareBoxFmts aShareFmts;
+                    SwShareBoxFormats aShareFormats;
                     ::lcl_LastBoxSetWidthLine( pBox->GetTabLines(), nBoxSz,
                                                 !bLastBox,
-                                                pShareFmts ? *pShareFmts
-                                                           : aShareFmts );
+                                                pShareFormats ? *pShareFormats
+                                                           : aShareFormats );
                 }
             }
             break;      // Stop deleting
@@ -808,36 +808,36 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
         if( !pUpperBox )
         {
             // Also delete the Line from the Table
-            nDelPos = rTbl.GetTabLines().GetPos( pLine );
-            if( pShareFmts )
-                pShareFmts->RemoveFormat( *rTbl.GetTabLines()[ nDelPos ]->GetFrmFmt() );
+            nDelPos = rTable.GetTabLines().GetPos( pLine );
+            if( pShareFormats )
+                pShareFormats->RemoveFormat( *rTable.GetTabLines()[ nDelPos ]->GetFrameFormat() );
 
-            SwTableLine* pTabLineToDelete = rTbl.GetTabLines()[ nDelPos ];
+            SwTableLine* pTabLineToDelete = rTable.GetTabLines()[ nDelPos ];
             // Before deleting the 'Table Line' from memory - delete any redlines attached to it
-            if ( rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().HasExtraRedlineTbl() )
-                rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTbl().DeleteTableRowRedline( rTbl.GetFrmFmt()->GetDoc(), *pTabLineToDelete, true, USHRT_MAX );
+            if ( rTable.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().HasExtraRedlineTable() )
+                rTable.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteTableRowRedline( rTable.GetFrameFormat()->GetDoc(), *pTabLineToDelete, true, USHRT_MAX );
             delete pTabLineToDelete;
-            rTbl.GetTabLines().erase( rTbl.GetTabLines().begin() + nDelPos );
+            rTable.GetTabLines().erase( rTable.GetTabLines().begin() + nDelPos );
             break;      // we cannot delete more
         }
 
         // finally also delete the Line
         pBox = pUpperBox;
         nDelPos = pBox->GetTabLines().GetPos( pLine );
-        if( pShareFmts )
-            pShareFmts->RemoveFormat( *pBox->GetTabLines()[ nDelPos ]->GetFrmFmt() );
+        if( pShareFormats )
+            pShareFormats->RemoveFormat( *pBox->GetTabLines()[ nDelPos ]->GetFrameFormat() );
 
         SwTableLine* pTabLineToDelete = pBox->GetTabLines()[ nDelPos ];
         // Before deleting the 'Table Line' from memory - delete any redlines attached to it
-        if ( rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().HasExtraRedlineTbl() )
-            rTbl.GetFrmFmt()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTbl().DeleteTableRowRedline( rTbl.GetFrmFmt()->GetDoc(), *pTabLineToDelete, true, USHRT_MAX );
+        if ( rTable.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().HasExtraRedlineTable() )
+            rTable.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteTableRowRedline( rTable.GetFrameFormat()->GetDoc(), *pTabLineToDelete, true, USHRT_MAX );
         delete pTabLineToDelete;
         pBox->GetTabLines().erase( pBox->GetTabLines().begin() + nDelPos );
     } while( pBox->GetTabLines().empty() );
 }
 
 static SwTableBox*
-lcl_FndNxtPrvDelBox( const SwTableLines& rTblLns,
+lcl_FndNxtPrvDelBox( const SwTableLines& rTableLns,
                                 SwTwips nBoxStt, SwTwips nBoxWidth,
                                 sal_uInt16 nLinePos, bool bNxt,
                                 SwSelBoxes* pAllDelBoxes, size_t *const pCurPos)
@@ -848,7 +848,7 @@ lcl_FndNxtPrvDelBox( const SwTableLines& rTblLns,
             ++nLinePos;
         else
             --nLinePos;
-        SwTableLine* pLine = rTblLns[ nLinePos ];
+        SwTableLine* pLine = rTableLns[ nLinePos ];
         SwTwips nFndBoxWidth = 0;
         SwTwips nFndWidth = nBoxStt + nBoxWidth;
 
@@ -860,7 +860,7 @@ lcl_FndNxtPrvDelBox( const SwTableLines& rTblLns,
                 break;
             }
             pFndBox = pBox;
-            nFndBoxWidth = pFndBox->GetFrmFmt()->GetFrmSize().GetWidth();
+            nFndBoxWidth = pFndBox->GetFrameFormat()->GetFrmSize().GetWidth();
             nFndWidth -= nFndBoxWidth;
         }
 
@@ -892,77 +892,77 @@ lcl_FndNxtPrvDelBox( const SwTableLines& rTblLns,
                 --*pCurPos;
             pAllDelBoxes->erase( pAllDelBoxes->begin() + nFndPos );
         }
-    } while( bNxt ? ( nLinePos + 1 < (sal_uInt16)rTblLns.size() ) : nLinePos != 0 );
+    } while( bNxt ? ( nLinePos + 1 < (sal_uInt16)rTableLns.size() ) : nLinePos != 0 );
     return pFndBox;
 }
 
 static void
-lcl_SaveUpperLowerBorder( SwTable& rTbl, const SwTableBox& rBox,
-                                SwShareBoxFmts& rShareFmts,
+lcl_SaveUpperLowerBorder( SwTable& rTable, const SwTableBox& rBox,
+                                SwShareBoxFormats& rShareFormats,
                                 SwSelBoxes* pAllDelBoxes = 0,
                                 size_t *const pCurPos = 0 )
 {
 //JP 16.04.97:  2. part for Bug 36271
     const SwTableLine* pLine = rBox.GetUpper();
-    const SwTableBoxes& rTblBoxes = pLine->GetTabBoxes();
+    const SwTableBoxes& rTableBoxes = pLine->GetTabBoxes();
     const SwTableBox* pUpperBox = &rBox;
-    sal_uInt16 nDelPos = rTblBoxes.GetPos( pUpperBox );
+    sal_uInt16 nDelPos = rTableBoxes.GetPos( pUpperBox );
     pUpperBox = rBox.GetUpper()->GetUpper();
-    const SvxBoxItem& rBoxItem = rBox.GetFrmFmt()->GetBox();
+    const SvxBoxItem& rBoxItem = rBox.GetFrameFormat()->GetBox();
 
     // then the top/bottom edges
     if( rBoxItem.GetTop() || rBoxItem.GetBottom() )
     {
         bool bChgd = false;
-        const SwTableLines* pTblLns;
+        const SwTableLines* pTableLns;
         if( pUpperBox )
-            pTblLns = &pUpperBox->GetTabLines();
+            pTableLns = &pUpperBox->GetTabLines();
         else
-            pTblLns = &rTbl.GetTabLines();
+            pTableLns = &rTable.GetTabLines();
 
-        sal_uInt16 nLnPos = pTblLns->GetPos( pLine );
+        sal_uInt16 nLnPos = pTableLns->GetPos( pLine );
 
         // Calculate the attribute position of the top-be-deleted Box and then
         // search in the top/bottom Line of the respective counterparts.
         SwTwips nBoxStt = 0;
         for( sal_uInt16 n = 0; n < nDelPos; ++n )
-            nBoxStt += rTblBoxes[ n ]->GetFrmFmt()->GetFrmSize().GetWidth();
-        SwTwips nBoxWidth = rBox.GetFrmFmt()->GetFrmSize().GetWidth();
+            nBoxStt += rTableBoxes[ n ]->GetFrameFormat()->GetFrmSize().GetWidth();
+        SwTwips nBoxWidth = rBox.GetFrameFormat()->GetFrmSize().GetWidth();
 
         SwTableBox *pPrvBox = 0, *pNxtBox = 0;
         if( nLnPos )        // Predecessor?
-            pPrvBox = ::lcl_FndNxtPrvDelBox( *pTblLns, nBoxStt, nBoxWidth,
+            pPrvBox = ::lcl_FndNxtPrvDelBox( *pTableLns, nBoxStt, nBoxWidth,
                                 nLnPos, false, pAllDelBoxes, pCurPos );
 
-        if( nLnPos + 1 < (sal_uInt16)pTblLns->size() )     // Successor?
-            pNxtBox = ::lcl_FndNxtPrvDelBox( *pTblLns, nBoxStt, nBoxWidth,
+        if( nLnPos + 1 < (sal_uInt16)pTableLns->size() )     // Successor?
+            pNxtBox = ::lcl_FndNxtPrvDelBox( *pTableLns, nBoxStt, nBoxWidth,
                                 nLnPos, true, pAllDelBoxes, pCurPos );
 
         if( pNxtBox && pNxtBox->GetSttNd() )
         {
-            const SvxBoxItem& rNxtBoxItem = pNxtBox->GetFrmFmt()->GetBox();
+            const SvxBoxItem& rNxtBoxItem = pNxtBox->GetFrameFormat()->GetBox();
             if( !rNxtBoxItem.GetTop() && ( !pPrvBox ||
-                !pPrvBox->GetFrmFmt()->GetBox().GetBottom()) )
+                !pPrvBox->GetFrameFormat()->GetBox().GetBottom()) )
             {
                 SvxBoxItem aTmp( rNxtBoxItem );
                 aTmp.SetLine( rBoxItem.GetTop() ? rBoxItem.GetTop()
                                                 : rBoxItem.GetBottom(),
                                                 SvxBoxItemLine::TOP );
-                rShareFmts.SetAttr( *pNxtBox, aTmp );
+                rShareFormats.SetAttr( *pNxtBox, aTmp );
                 bChgd = true;
             }
         }
         if( !bChgd && pPrvBox && pPrvBox->GetSttNd() )
         {
-            const SvxBoxItem& rPrvBoxItem = pPrvBox->GetFrmFmt()->GetBox();
+            const SvxBoxItem& rPrvBoxItem = pPrvBox->GetFrameFormat()->GetBox();
             if( !rPrvBoxItem.GetTop() && ( !pNxtBox ||
-                !pNxtBox->GetFrmFmt()->GetBox().GetTop()) )
+                !pNxtBox->GetFrameFormat()->GetBox().GetTop()) )
             {
                 SvxBoxItem aTmp( rPrvBoxItem );
                 aTmp.SetLine( rBoxItem.GetTop() ? rBoxItem.GetTop()
                                                 : rBoxItem.GetBottom(),
                                                 SvxBoxItemLine::BOTTOM );
-                rShareFmts.SetAttr( *pPrvBox, aTmp );
+                rShareFormats.SetAttr( *pPrvBox, aTmp );
             }
         }
     }
@@ -976,11 +976,11 @@ bool SwTable::DeleteSel(
     const bool bDelMakeFrms, const bool bCorrBorder )
 {
     OSL_ENSURE( pDoc, "No doc?" );
-    SwTableNode* pTblNd = 0;
+    SwTableNode* pTableNd = 0;
     if( !rBoxes.empty() )
     {
-        pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
-        if( !pTblNd )
+        pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
+        if( !pTableNd )
             return false;
     }
 
@@ -997,7 +997,7 @@ bool SwTable::DeleteSel(
         aFndBox.DelFrms( *this );
     }
 
-    SwShareBoxFmts aShareFmts;
+    SwShareBoxFormats aShareFormats;
 
     // First switch the Border, then delete
     if( bCorrBorder )
@@ -1005,7 +1005,7 @@ bool SwTable::DeleteSel(
         SwSelBoxes aBoxes( rBoxes );
         for (size_t n = 0; n < aBoxes.size(); ++n)
         {
-            ::lcl_SaveUpperLowerBorder( *this, *rBoxes[ n ], aShareFmts,
+            ::lcl_SaveUpperLowerBorder( *this, *rBoxes[ n ], aShareFormats,
                                         &aBoxes, &n );
         }
     }
@@ -1021,11 +1021,11 @@ bool SwTable::DeleteSel(
         // First adapt the data-sequence for chart if necessary
         // (needed to move the implementation cursor properly to it's new
         // position which can't be done properly if the cell is already gone)
-        if (pPCD && pTblNd)
-            pPCD->DeleteBox( &pTblNd->GetTable(), *rBoxes[nIdx] );
+        if (pPCD && pTableNd)
+            pPCD->DeleteBox( &pTableNd->GetTable(), *rBoxes[nIdx] );
 
         // ... then delete the boxes
-        _DeleteBox( *this, rBoxes[nIdx], pUndo, true, bCorrBorder, &aShareFmts );
+        _DeleteBox( *this, rBoxes[nIdx], pUndo, true, bCorrBorder, &aShareFormats );
     }
 
     // then clean up the structure of all Lines
@@ -1035,7 +1035,7 @@ bool SwTable::DeleteSel(
         aFndBox.MakeFrms( *this );
 
     // TL_CHART2: now inform chart that sth has changed
-    pDoc->UpdateCharts( GetFrmFmt()->GetName() );
+    pDoc->UpdateCharts( GetFrameFormat()->GetName() );
 
     CHECKTABLELAYOUT;
     CHECK_TABLE( *this );
@@ -1047,8 +1047,8 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                         bool bSameHeight )
 {
     OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid values" );
-    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
-    if( !pTblNd )
+    SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
+    if( !pTableNd )
         return false;
 
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
@@ -1086,10 +1086,10 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
 
         // Insert nCnt new Lines into the Box
         SwTableLine* pInsLine = pSelBox->GetUpper();
-        SwTableBoxFmt* pFrmFmt = static_cast<SwTableBoxFmt*>(pSelBox->GetFrmFmt());
+        SwTableBoxFormat* pFrameFormat = static_cast<SwTableBoxFormat*>(pSelBox->GetFrameFormat());
 
         // Respect the Line's height, reset if needed
-        SwFmtFrmSize aFSz( pInsLine->GetFrmFmt()->GetFrmSize() );
+        SwFormatFrmSize aFSz( pInsLine->GetFrameFormat()->GetFrmSize() );
         if ( bSameHeight && ATT_VAR_SIZE == aFSz.GetHeightSizeType() )
             aFSz.SetHeightSizeType( ATT_MIN_SIZE );
 
@@ -1098,7 +1098,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
             aFSz.SetHeight( ( bSameHeight ? pRowHeights[ n ] : aFSz.GetHeight() ) /
                              (nCnt + 1) );
 
-        SwTableBox* pNewBox = new SwTableBox( pFrmFmt, nCnt, pInsLine );
+        SwTableBox* pNewBox = new SwTableBox( pFrameFormat, nCnt, pInsLine );
         sal_uInt16 nBoxPos = pInsLine->GetTabBoxes().GetPos( pSelBox );
         pInsLine->GetTabBoxes()[nBoxPos] = pNewBox; // overwrite old one
 
@@ -1111,26 +1111,26 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
             sal_uLong nSttNd = pLastBox->GetSttIdx() + 1,
                     nEndNd = pLastBox->GetSttNd()->EndOfSectionIndex();
             while( nSttNd < nEndNd )
-                if( !pDoc->GetNodes()[ nSttNd++ ]->IsTxtNode() )
+                if( !pDoc->GetNodes()[ nSttNd++ ]->IsTextNode() )
                 {
                     bMoveNodes = false;
                     break;
                 }
         }
 
-        SwTableBoxFmt* pCpyBoxFrmFmt = static_cast<SwTableBoxFmt*>(pSelBox->GetFrmFmt());
-        bool bChkBorder = 0 != pCpyBoxFrmFmt->GetBox().GetTop();
+        SwTableBoxFormat* pCpyBoxFrameFormat = static_cast<SwTableBoxFormat*>(pSelBox->GetFrameFormat());
+        bool bChkBorder = 0 != pCpyBoxFrameFormat->GetBox().GetTop();
         if( bChkBorder )
-            pCpyBoxFrmFmt = static_cast<SwTableBoxFmt*>(pSelBox->ClaimFrmFmt());
+            pCpyBoxFrameFormat = static_cast<SwTableBoxFormat*>(pSelBox->ClaimFrameFormat());
 
         for( sal_uInt16 i = 0; i <= nCnt; ++i )
         {
             // Create a new Line in the new Box
             SwTableLine* pNewLine = new SwTableLine(
-                    static_cast<SwTableLineFmt*>(pInsLine->GetFrmFmt()), 1, pNewBox );
+                    static_cast<SwTableLineFormat*>(pInsLine->GetFrameFormat()), 1, pNewBox );
             if( bChgLineSz )
             {
-                pNewLine->ClaimFrmFmt()->SetFmtAttr( aFSz );
+                pNewLine->ClaimFrameFormat()->SetFormatAttr( aFSz );
             }
 
             pNewBox->GetTabLines().insert( pNewBox->GetTabLines().begin() + i, pNewLine );
@@ -1142,15 +1142,15 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
             }
             else
             {
-                ::_InsTblBox( pDoc, pTblNd, pNewLine, pCpyBoxFrmFmt,
+                ::_InsTableBox( pDoc, pTableNd, pNewLine, pCpyBoxFrameFormat,
                                 pLastBox, 0 );
 
                 if( bChkBorder )
                 {
-                    pCpyBoxFrmFmt = static_cast<SwTableBoxFmt*>(pNewLine->GetTabBoxes()[ 0 ]->ClaimFrmFmt());
-                    SvxBoxItem aTmp( pCpyBoxFrmFmt->GetBox() );
+                    pCpyBoxFrameFormat = static_cast<SwTableBoxFormat*>(pNewLine->GetTabBoxes()[ 0 ]->ClaimFrameFormat());
+                    SvxBoxItem aTmp( pCpyBoxFrameFormat->GetBox() );
                     aTmp.SetLine( 0, SvxBoxItemLine::TOP );
-                    pCpyBoxFrmFmt->SetFmtAttr( aTmp );
+                    pCpyBoxFrameFormat->SetFormatAttr( aTmp );
                     bChkBorder = false;
                 }
 
@@ -1170,9 +1170,9 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
             }
         }
         // In Boxes with Lines, we can only have Size/Fillorder
-        pFrmFmt = static_cast<SwTableBoxFmt*>(pNewBox->ClaimFrmFmt());
-        pFrmFmt->ResetFmtAttr( RES_LR_SPACE, RES_FRMATR_END - 1 );
-        pFrmFmt->ResetFmtAttr( RES_BOXATR_BEGIN, RES_BOXATR_END - 1 );
+        pFrameFormat = static_cast<SwTableBoxFormat*>(pNewBox->ClaimFrameFormat());
+        pFrameFormat->ResetFormatAttr( RES_LR_SPACE, RES_FRMATR_END - 1 );
+        pFrameFormat->ResetFormatAttr( RES_BOXATR_BEGIN, RES_BOXATR_END - 1 );
     }
 
     delete[] pRowHeights;
@@ -1189,8 +1189,8 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
 bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 {
     OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid values" );
-    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
-    if( !pTblNd )
+    SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
+    if( !pTableNd )
         return false;
 
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
@@ -1208,14 +1208,14 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
     aFndBox.DelFrms( *this );
 
     _CpyTabFrms aFrmArr;
-    std::vector<SwTableBoxFmt*> aLastBoxArr;
+    std::vector<SwTableBoxFormat*> aLastBoxArr;
     for (size_t n = 0; n < aSelBoxes.size(); ++n)
     {
         SwTableBox* pSelBox = aSelBoxes[n];
         OSL_ENSURE( pSelBox, "Box is not in the table" );
 
         // We don't want to split small table cells into very very small cells
-        if( pSelBox->GetFrmFmt()->GetFrmSize().GetWidth()/( nCnt + 1 ) < 10 )
+        if( pSelBox->GetFrameFormat()->GetFrmSize().GetWidth()/( nCnt + 1 ) < 10 )
             continue;
 
         // Then split the nCnt Box up into nCnt Boxes
@@ -1223,62 +1223,62 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
         sal_uInt16 nBoxPos = pInsLine->GetTabBoxes().GetPos( pSelBox );
 
         // Find the Frame Format in the Frame Format Array
-        SwTableBoxFmt* pLastBoxFmt;
-        _CpyTabFrm aFindFrm( static_cast<SwTableBoxFmt*>(pSelBox->GetFrmFmt()) );
+        SwTableBoxFormat* pLastBoxFormat;
+        _CpyTabFrm aFindFrm( static_cast<SwTableBoxFormat*>(pSelBox->GetFrameFormat()) );
         _CpyTabFrms::const_iterator itFind = aFrmArr.lower_bound( aFindFrm );
         const size_t nFndPos = itFind - aFrmArr.begin();
         if( itFind == aFrmArr.end() || !(*itFind == aFindFrm) )
         {
-            // Change the FrmFmt
-            aFindFrm.pNewFrmFmt = static_cast<SwTableBoxFmt*>(pSelBox->ClaimFrmFmt());
-            SwTwips nBoxSz = aFindFrm.pNewFrmFmt->GetFrmSize().GetWidth();
+            // Change the FrameFormat
+            aFindFrm.pNewFrameFormat = static_cast<SwTableBoxFormat*>(pSelBox->ClaimFrameFormat());
+            SwTwips nBoxSz = aFindFrm.pNewFrameFormat->GetFrmSize().GetWidth();
             SwTwips nNewBoxSz = nBoxSz / ( nCnt + 1 );
-            aFindFrm.pNewFrmFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
+            aFindFrm.pNewFrameFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE,
                                                         nNewBoxSz, 0 ) );
             aFrmArr.insert( aFindFrm );
 
-            pLastBoxFmt = aFindFrm.pNewFrmFmt;
+            pLastBoxFormat = aFindFrm.pNewFrameFormat;
             if( nBoxSz != ( nNewBoxSz * (nCnt + 1)))
             {
                 // We have a remainder, so we need to define an own Format
                 // for the last Box.
-                pLastBoxFmt = new SwTableBoxFmt( *aFindFrm.pNewFrmFmt );
-                pLastBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
+                pLastBoxFormat = new SwTableBoxFormat( *aFindFrm.pNewFrameFormat );
+                pLastBoxFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE,
                                 nBoxSz - ( nNewBoxSz * nCnt ), 0 ) );
             }
-            aLastBoxArr.insert( aLastBoxArr.begin() + nFndPos, pLastBoxFmt );
+            aLastBoxArr.insert( aLastBoxArr.begin() + nFndPos, pLastBoxFormat );
         }
         else
         {
             aFindFrm = aFrmArr[ nFndPos ];
-            pSelBox->ChgFrmFmt( aFindFrm.pNewFrmFmt );
-            pLastBoxFmt = aLastBoxArr[ nFndPos ];
+            pSelBox->ChgFrameFormat( aFindFrm.pNewFrameFormat );
+            pLastBoxFormat = aLastBoxArr[ nFndPos ];
         }
 
         // Insert the Boxes at the Position
         for( sal_uInt16 i = 1; i < nCnt; ++i )
-            ::_InsTblBox( pDoc, pTblNd, pInsLine, aFindFrm.pNewFrmFmt,
+            ::_InsTableBox( pDoc, pTableNd, pInsLine, aFindFrm.pNewFrameFormat,
                         pSelBox, nBoxPos + i ); // insert after
 
-        ::_InsTblBox( pDoc, pTblNd, pInsLine, pLastBoxFmt,
+        ::_InsTableBox( pDoc, pTableNd, pInsLine, pLastBoxFormat,
                     pSelBox, nBoxPos + nCnt );  // insert after
 
         // Special treatment for the Border:
-        const SvxBoxItem& aSelBoxItem = aFindFrm.pNewFrmFmt->GetBox();
+        const SvxBoxItem& aSelBoxItem = aFindFrm.pNewFrameFormat->GetBox();
         if( aSelBoxItem.GetRight() )
         {
-            pInsLine->GetTabBoxes()[ nBoxPos + nCnt ]->ClaimFrmFmt();
+            pInsLine->GetTabBoxes()[ nBoxPos + nCnt ]->ClaimFrameFormat();
 
             SvxBoxItem aTmp( aSelBoxItem );
             aTmp.SetLine( 0, SvxBoxItemLine::RIGHT );
-            aFindFrm.pNewFrmFmt->SetFmtAttr( aTmp );
+            aFindFrm.pNewFrameFormat->SetFormatAttr( aTmp );
 
             // Remove the Format from the "cache"
             for( auto i = aFrmArr.size(); i; )
             {
                 const _CpyTabFrm& rCTF = aFrmArr[ --i ];
-                if( rCTF.pNewFrmFmt == aFindFrm.pNewFrmFmt ||
-                    rCTF.Value.pFrmFmt == aFindFrm.pNewFrmFmt )
+                if( rCTF.pNewFrameFormat == aFindFrm.pNewFrameFormat ||
+                    rCTF.Value.pFrameFormat == aFindFrm.pNewFrameFormat )
                 {
                     aFrmArr.erase( aFrmArr.begin() + i );
                     aLastBoxArr.erase( aLastBoxArr.begin() + i );
@@ -1340,7 +1340,7 @@ static void lcl_CpyBoxes( sal_uInt16 nStt, sal_uInt16 nEnd,
 static void lcl_CalcWidth( SwTableBox* pBox )
 {
     // Assertion: Every Line in the Box is as large
-    SwFrmFmt* pFmt = pBox->ClaimFrmFmt();
+    SwFrameFormat* pFormat = pBox->ClaimFrameFormat();
     OSL_ENSURE( pBox->GetTabLines().size(), "Box does not have any Lines" );
 
     SwTableLine* pLine = pBox->GetTabLines()[0];
@@ -1348,18 +1348,18 @@ static void lcl_CalcWidth( SwTableBox* pBox )
 
     long nWidth = 0;
     for( auto pTabBox : pLine->GetTabBoxes() )
-        nWidth += pTabBox->GetFrmFmt()->GetFrmSize().GetWidth();
+        nWidth += pTabBox->GetFrameFormat()->GetFrmSize().GetWidth();
 
-    pFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
+    pFormat->SetFormatAttr( SwFormatFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
 
     // Boxes with Lines can only have Size/Fillorder
-    pFmt->ResetFmtAttr( RES_LR_SPACE, RES_FRMATR_END - 1 );
-    pFmt->ResetFmtAttr( RES_BOXATR_BEGIN, RES_BOXATR_END - 1 );
+    pFormat->ResetFormatAttr( RES_LR_SPACE, RES_FRMATR_END - 1 );
+    pFormat->ResetFormatAttr( RES_BOXATR_BEGIN, RES_BOXATR_END - 1 );
 }
 
 struct _InsULPara
 {
-    SwTableNode* pTblNd;
+    SwTableNode* pTableNd;
     SwTableLine* pInsLine;
     SwTableBox* pInsBox;
     bool bUL_LR : 1;        // Upper-Lower(true) or Left-Right(false) ?
@@ -1372,7 +1372,7 @@ struct _InsULPara
     _InsULPara( SwTableNode* pTNd, bool bUpperLower, bool bUpper,
                 SwTableBox* pLeft, SwTableBox* pMerge, SwTableBox* pRight,
                 SwTableLine* pLine=0, SwTableBox* pBox=0 )
-        : pTblNd( pTNd ), pInsLine( pLine ), pInsBox( pBox ),
+        : pTableNd( pTNd ), pInsLine( pLine ), pInsBox( pBox ),
         pLeftBox( pLeft ), pRightBox( pRight ), pMergeBox( pMerge )
         {   bUL_LR = bUpperLower; bUL = bUpper; }
 
@@ -1426,7 +1426,7 @@ static void lcl_Merge_MoveBox(_FndBox & rFndBox, _InsULPara *const pULPara)
     if (rFndBox.GetBox()->GetTabLines().size())
     {
         SwTableBox* pBox = new SwTableBox(
-                static_cast<SwTableBoxFmt*>(rFndBox.GetBox()->GetFrmFmt()),
+                static_cast<SwTableBoxFormat*>(rFndBox.GetBox()->GetFrameFormat()),
                 0, pULPara->pInsLine );
         _InsULPara aPara( *pULPara );
         aPara.pInsBox = pBox;
@@ -1459,7 +1459,7 @@ static void lcl_Merge_MoveLine(_FndLine& rFndLine, _InsULPara *const pULPara)
         SwTableLine* pFndLn = rFndLine.GetLine();
         pLines = pFndLn->GetUpper() ?
                         &pFndLn->GetUpper()->GetTabLines() :
-                        &pULPara->pTblNd->GetTable().GetTabLines();
+                        &pULPara->pTableNd->GetTable().GetTabLines();
 
         SwTableBox* pLBx = rFndLine.GetBoxes().front().GetBox();
         SwTableBox* pRBx = rFndLine.GetBoxes().back().GetBox();
@@ -1491,10 +1491,10 @@ static void lcl_Merge_MoveLine(_FndLine& rFndLine, _InsULPara *const pULPara)
             // inserted
             SwTableLine* pInsLine = pULPara->pLeftBox->GetUpper();
             SwTableBox* pLMBox = new SwTableBox(
-                static_cast<SwTableBoxFmt*>(pULPara->pLeftBox->GetFrmFmt()), 0, pInsLine );
+                static_cast<SwTableBoxFormat*>(pULPara->pLeftBox->GetFrameFormat()), 0, pInsLine );
             SwTableLine* pLMLn = new SwTableLine(
-                        static_cast<SwTableLineFmt*>(pInsLine->GetFrmFmt()), 2, pLMBox );
-            pLMLn->ClaimFrmFmt()->ResetFmtAttr( RES_FRM_SIZE );
+                        static_cast<SwTableLineFormat*>(pInsLine->GetFrameFormat()), 2, pLMBox );
+            pLMLn->ClaimFrameFormat()->ResetFormatAttr( RES_FRM_SIZE );
 
             pLMBox->GetTabLines().insert( pLMBox->GetTabLines().begin(), pLMLn );
 
@@ -1526,7 +1526,7 @@ static void lcl_Merge_MoveLine(_FndLine& rFndLine, _InsULPara *const pULPara)
     pLines = &pULPara->pInsBox->GetTabLines();
 
     SwTableLine* pNewLine = new SwTableLine(
-        static_cast<SwTableLineFmt*>(rFndLine.GetLine()->GetFrmFmt()), 0, pULPara->pInsBox );
+        static_cast<SwTableLineFormat*>(rFndLine.GetLine()->GetFrameFormat()), 0, pULPara->pInsBox );
     _InsULPara aPara( *pULPara );       // copying
     aPara.pInsLine = pNewLine;
     _FndBoxes & rLineBoxes = rFndLine.GetBoxes();
@@ -1549,11 +1549,11 @@ static void lcl_Merge_MoveLine(_FndLine& rFndLine, _InsULPara *const pULPara)
 static void lcl_BoxSetHeadCondColl( const SwTableBox* pBox );
 
 bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
-                        SwTableBox* pMergeBox, SwUndoTblMerge* pUndo )
+                        SwTableBox* pMergeBox, SwUndoTableMerge* pUndo )
 {
     OSL_ENSURE( !rBoxes.empty() && pMergeBox, "no valid values" );
-    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
-    if( !pTblNd )
+    SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
+    if( !pTableNd )
         return false;
 
     // Find all Boxes/Lines
@@ -1587,9 +1587,9 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     }
 
     SwTableLine* pInsLine = new SwTableLine(
-                static_cast<SwTableLineFmt*>(pFndBox->GetLines().front().GetLine()->GetFrmFmt()), 0,
+                static_cast<SwTableLineFormat*>(pFndBox->GetLines().front().GetLine()->GetFrameFormat()), 0,
                 !pFndBox->GetUpper() ? 0 : pFndBox->GetBox() );
-    pInsLine->ClaimFrmFmt()->ResetFmtAttr( RES_FRM_SIZE );
+    pInsLine->ClaimFrameFormat()->ResetFormatAttr( RES_FRM_SIZE );
 
     // Add the new Line
     SwTableLines* pLines =  pFndBox->GetUpper() ?
@@ -1599,18 +1599,18 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     sal_uInt16 nInsPos = pLines->GetPos( pNewLine );
     pLines->insert( pLines->begin() + nInsPos, pInsLine );
 
-    SwTableBox* pLeftBox = new SwTableBox( static_cast<SwTableBoxFmt*>(pMergeBox->GetFrmFmt()), 0, pInsLine );
-    SwTableBox* pRightBox = new SwTableBox( static_cast<SwTableBoxFmt*>(pMergeBox->GetFrmFmt()), 0, pInsLine );
+    SwTableBox* pLeftBox = new SwTableBox( static_cast<SwTableBoxFormat*>(pMergeBox->GetFrameFormat()), 0, pInsLine );
+    SwTableBox* pRightBox = new SwTableBox( static_cast<SwTableBoxFormat*>(pMergeBox->GetFrameFormat()), 0, pInsLine );
     pMergeBox->SetUpper( pInsLine );
     pInsLine->GetTabBoxes().insert( pInsLine->GetTabBoxes().begin(), pLeftBox );
-    pLeftBox->ClaimFrmFmt();
+    pLeftBox->ClaimFrameFormat();
     pInsLine->GetTabBoxes().insert( pInsLine->GetTabBoxes().begin() + 1, pMergeBox);
     pInsLine->GetTabBoxes().insert( pInsLine->GetTabBoxes().begin() + 2, pRightBox );
-    pRightBox->ClaimFrmFmt();
+    pRightBox->ClaimFrameFormat();
 
     // This contains all Lines that are above the selected Area,
     // thus they form a Upper/Lower Line
-    _InsULPara aPara( pTblNd, true, true, pLeftBox, pMergeBox, pRightBox, pInsLine );
+    _InsULPara aPara( pTableNd, true, true, pLeftBox, pMergeBox, pRightBox, pInsLine );
 
     // Move the overlapping upper/lower Lines of the selected Area
     _FndBoxes& rLineBoxes = pFndBox->GetLines().front().GetBoxes();
@@ -1669,14 +1669,14 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     return true;
 }
 
-static void lcl_CheckRowSpan( SwTable &rTbl )
+static void lcl_CheckRowSpan( SwTable &rTable )
 {
-    const long nLineCount = static_cast<long>(rTbl.GetTabLines().size());
+    const long nLineCount = static_cast<long>(rTable.GetTabLines().size());
     long nMaxSpan = nLineCount;
     long nMinSpan = 1;
     while( nMaxSpan )
     {
-        SwTableLine* pLine = rTbl.GetTabLines()[ nLineCount - nMaxSpan ];
+        SwTableLine* pLine = rTable.GetTabLines()[ nLineCount - nMaxSpan ];
         for( auto pBox : pLine->GetTabBoxes() )
         {
             long nRowSpan = pBox->getRowSpan();
@@ -1706,7 +1706,7 @@ static sal_uInt16 lcl_GetBoxOffset( const _FndBox& rBox )
         {
             if (pBox==pCmp)
                 break;
-            nRet = nRet + (sal_uInt16) pCmp->GetFrmFmt()->GetFrmSize().GetWidth();
+            nRet = nRet + (sal_uInt16) pCmp->GetFrameFormat()->GetFrmSize().GetWidth();
         }
         pBox = pBox->GetUpper()->GetUpper();
     } while( pBox );
@@ -1719,7 +1719,7 @@ static sal_uInt16 lcl_GetLineWidth( const _FndLine& rLine )
     for( auto n = rLine.GetBoxes().size(); n; )
     {
         nRet = nRet + static_cast<sal_uInt16>(rLine.GetBoxes()[--n].GetBox()
-                            ->GetFrmFmt()->GetFrmSize().GetWidth());
+                            ->GetFrameFormat()->GetFrmSize().GetWidth());
     }
     return nRet;
 }
@@ -1754,7 +1754,7 @@ static void lcl_CalcNewWidths( const _FndLines& rFndLines, _CpyPara& rPara )
                     {
                         SwTableBox* pBox = pLine->GetTabBoxes()[nBox++];
                         if( pBox != pSel )
-                            nPos += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
+                            nPos += pBox->GetFrameFormat()->GetFrmSize().GetWidth();
                         else
                             break;
                     }
@@ -1769,7 +1769,7 @@ static void lcl_CalcNewWidths( const _FndLines& rFndLines, _CpyPara& rPara )
                     for( nBox = 0; nBox < nBoxCount; )
                     {
                         nPos += pFndLine->GetBoxes()[nBox]
-                            .GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
+                            .GetBox()->GetFrameFormat()->GetFrmSize().GetWidth();
                         rWidth[ ++nBox ] = nPos;
                     }
                     // nPos: The right border of the last selected box
@@ -1816,7 +1816,7 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
     sal_uLong nRealSize;
     sal_uLong nDummy1 = 0;
     sal_uLong nDummy2 = 0;
-    if( pCpyPara->pTblNd->GetTable().IsNewModel() )
+    if( pCpyPara->pTableNd->GetTable().IsNewModel() )
     {
         if( pCpyPara->nBoxIdx == 1 )
             nDummy1 = (*pCpyPara->pWidths.get())[pCpyPara->nLnIdx][0];
@@ -1827,7 +1827,7 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
     else
     {
         nRealSize = pCpyPara->nNewSize;
-        nRealSize *= rFndBox.GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
+        nRealSize *= rFndBox.GetBox()->GetFrameFormat()->GetFrmSize().GetWidth();
         if (pCpyPara->nOldSize == 0)
             throw o3tl::divide_by_zero();
         nRealSize /= pCpyPara->nOldSize;
@@ -1845,29 +1845,29 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
     do
     {
         // Find the Frame Format in the list of all Frame Formats
-        _CpyTabFrm aFindFrm(static_cast<SwTableBoxFmt*>(rFndBox.GetBox()->GetFrmFmt()));
+        _CpyTabFrm aFindFrm(static_cast<SwTableBoxFormat*>(rFndBox.GetBox()->GetFrameFormat()));
 
-        SwFmtFrmSize aFrmSz;
+        SwFormatFrmSize aFrmSz;
         _CpyTabFrms::const_iterator itFind = pCpyPara->rTabFrmArr.lower_bound( aFindFrm );
         const _CpyTabFrms::size_type nFndPos = itFind - pCpyPara->rTabFrmArr.begin();
         if( itFind == pCpyPara->rTabFrmArr.end() || !(*itFind == aFindFrm) ||
-            ( aFrmSz = ( aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ]).pNewFrmFmt->
+            ( aFrmSz = ( aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ]).pNewFrameFormat->
                 GetFrmSize()).GetWidth() != (SwTwips)nSize )
         {
             // It doesn't exist yet, so copy it
-            aFindFrm.pNewFrmFmt = pCpyPara->pDoc->MakeTableBoxFmt();
-            aFindFrm.pNewFrmFmt->CopyAttrs( *rFndBox.GetBox()->GetFrmFmt() );
-            if( !pCpyPara->bCpyCntnt )
-                aFindFrm.pNewFrmFmt->ResetFmtAttr(  RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
+            aFindFrm.pNewFrameFormat = pCpyPara->pDoc->MakeTableBoxFormat();
+            aFindFrm.pNewFrameFormat->CopyAttrs( *rFndBox.GetBox()->GetFrameFormat() );
+            if( !pCpyPara->bCpyContent )
+                aFindFrm.pNewFrameFormat->ResetFormatAttr(  RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
             aFrmSz.SetWidth( nSize );
-            aFindFrm.pNewFrmFmt->SetFmtAttr( aFrmSz );
+            aFindFrm.pNewFrameFormat->SetFormatAttr( aFrmSz );
             pCpyPara->rTabFrmArr.insert( aFindFrm );
         }
 
         SwTableBox* pBox;
         if (!rFndBox.GetLines().empty())
         {
-            pBox = new SwTableBox( aFindFrm.pNewFrmFmt,
+            pBox = new SwTableBox( aFindFrm.pNewFrameFormat,
                         rFndBox.GetLines().size(), pCpyPara->pInsLine );
             pCpyPara->pInsLine->GetTabBoxes().insert( pCpyPara->pInsLine->GetTabBoxes().begin() + pCpyPara->nInsPos++, pBox );
             _CpyPara aPara( *pCpyPara, pBox );
@@ -1878,14 +1878,14 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
         else
         {
             // Create an empty Box
-            pCpyPara->pDoc->GetNodes().InsBoxen( pCpyPara->pTblNd, pCpyPara->pInsLine,
-                            aFindFrm.pNewFrmFmt,
-                            pCpyPara->pDoc->GetDfltTxtFmtColl(),
+            pCpyPara->pDoc->GetNodes().InsBoxen( pCpyPara->pTableNd, pCpyPara->pInsLine,
+                            aFindFrm.pNewFrameFormat,
+                            pCpyPara->pDoc->GetDfltTextFormatColl(),
                             0, pCpyPara->nInsPos );
             pBox = pCpyPara->pInsLine->GetTabBoxes()[ pCpyPara->nInsPos ];
             if( bDummy )
                 pBox->setDummyFlag( true );
-            else if( pCpyPara->bCpyCntnt )
+            else if( pCpyPara->bCpyContent )
             {
                 // Copy the content into this empty Box
                 pBox->setRowSpan(rFndBox.GetBox()->getRowSpan());
@@ -1894,23 +1894,23 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
                 {
                     SfxItemSet aBoxAttrSet( pCpyPara->pDoc->GetAttrPool(),
                                             RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
-                    aBoxAttrSet.Put(rFndBox.GetBox()->GetFrmFmt()->GetAttrSet());
+                    aBoxAttrSet.Put(rFndBox.GetBox()->GetFrameFormat()->GetAttrSet());
                     if( aBoxAttrSet.Count() )
                     {
                         const SfxPoolItem* pItem;
                         SvNumberFormatter* pN = pCpyPara->pDoc->GetNumberFormatter( false );
-                        if( pN && pN->HasMergeFmtTbl() && SfxItemState::SET == aBoxAttrSet.
+                        if( pN && pN->HasMergeFormatTable() && SfxItemState::SET == aBoxAttrSet.
                             GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
                         {
-                            sal_uLong nOldIdx = static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue();
-                            sal_uLong nNewIdx = pN->GetMergeFmtIndex( nOldIdx );
+                            sal_uLong nOldIdx = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+                            sal_uLong nNewIdx = pN->GetMergeFormatIndex( nOldIdx );
                             if( nNewIdx != nOldIdx )
-                                aBoxAttrSet.Put( SwTblBoxNumFormat( nNewIdx ));
+                                aBoxAttrSet.Put( SwTableBoxNumFormat( nNewIdx ));
                         }
-                        pBox->ClaimFrmFmt()->SetFmtAttr( aBoxAttrSet );
+                        pBox->ClaimFrameFormat()->SetFormatAttr( aBoxAttrSet );
                     }
                 }
-                SwDoc* pFromDoc = rFndBox.GetBox()->GetFrmFmt()->GetDoc();
+                SwDoc* pFromDoc = rFndBox.GetBox()->GetFrameFormat()->GetDoc();
                 SwNodeRange aCpyRg( *rFndBox.GetBox()->GetSttNd(), 1,
                         *rFndBox.GetBox()->GetSttNd()->EndOfSectionNode() );
                 SwNodeIndex aInsIdx( *pBox->GetSttNd(), 1 );
@@ -1941,19 +1941,19 @@ static void
 lcl_CopyLineToDoc(const _FndLine& rFndLine, _CpyPara *const pCpyPara)
 {
     // Find the Frame Format in the list of all Frame Formats
-    _CpyTabFrm aFindFrm( static_cast<SwTableBoxFmt*>(rFndLine.GetLine()->GetFrmFmt()) );
+    _CpyTabFrm aFindFrm( static_cast<SwTableBoxFormat*>(rFndLine.GetLine()->GetFrameFormat()) );
     _CpyTabFrms::const_iterator itFind = pCpyPara->rTabFrmArr.find( aFindFrm );
     if( itFind == pCpyPara->rTabFrmArr.end() )
     {
         // It doesn't exist yet, so copy it
-        aFindFrm.pNewFrmFmt = reinterpret_cast<SwTableBoxFmt*>(pCpyPara->pDoc->MakeTableLineFmt());
-        aFindFrm.pNewFrmFmt->CopyAttrs( *rFndLine.GetLine()->GetFrmFmt() );
+        aFindFrm.pNewFrameFormat = reinterpret_cast<SwTableBoxFormat*>(pCpyPara->pDoc->MakeTableLineFormat());
+        aFindFrm.pNewFrameFormat->CopyAttrs( *rFndLine.GetLine()->GetFrameFormat() );
         pCpyPara->rTabFrmArr.insert( aFindFrm );
     }
     else
         aFindFrm = *itFind;
 
-    SwTableLine* pNewLine = new SwTableLine( reinterpret_cast<SwTableLineFmt*>(aFindFrm.pNewFrmFmt),
+    SwTableLine* pNewLine = new SwTableLine( reinterpret_cast<SwTableLineFormat*>(aFindFrm.pNewFrameFormat),
                         rFndLine.GetBoxes().size(), pCpyPara->pInsBox );
     if( pCpyPara->pInsBox )
     {
@@ -1962,13 +1962,13 @@ lcl_CopyLineToDoc(const _FndLine& rFndLine, _CpyPara *const pCpyPara)
     }
     else
     {
-        SwTableLines& rLines = pCpyPara->pTblNd->GetTable().GetTabLines();
+        SwTableLines& rLines = pCpyPara->pTableNd->GetTable().GetTabLines();
         rLines.insert( rLines.begin() + pCpyPara->nInsPos++, pNewLine);
     }
 
     _CpyPara aPara( *pCpyPara, pNewLine );
 
-    if( pCpyPara->pTblNd->GetTable().IsNewModel() )
+    if( pCpyPara->pTableNd->GetTable().IsNewModel() )
     {
         aPara.nOldSize = 0; // will not be used
         aPara.nBoxIdx = 1;
@@ -1977,34 +1977,34 @@ lcl_CopyLineToDoc(const _FndLine& rFndLine, _CpyPara *const pCpyPara)
                     rFndLine.GetLine()->GetTabBoxes().size() )
     {
         // Get the Parent's size
-        const SwFrmFmt* pFmt;
+        const SwFrameFormat* pFormat;
 
         if( rFndLine.GetLine()->GetUpper() )
-            pFmt = rFndLine.GetLine()->GetUpper()->GetFrmFmt();
+            pFormat = rFndLine.GetLine()->GetUpper()->GetFrameFormat();
         else
-            pFmt = pCpyPara->pTblNd->GetTable().GetFrmFmt();
-        aPara.nOldSize = pFmt->GetFrmSize().GetWidth();
+            pFormat = pCpyPara->pTableNd->GetTable().GetFrameFormat();
+        aPara.nOldSize = pFormat->GetFrmSize().GetWidth();
     }
     else
         // Calculate it
         for( auto &rBox : rFndLine.GetBoxes() )
         {
-            aPara.nOldSize += rBox.GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
+            aPara.nOldSize += rBox.GetBox()->GetFrameFormat()->GetFrmSize().GetWidth();
         }
 
     const _FndBoxes& rBoxes = rFndLine.GetBoxes();
     for (_FndBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it)
         lcl_CopyBoxToDoc(*it, &aPara);
-    if( pCpyPara->pTblNd->GetTable().IsNewModel() )
+    if( pCpyPara->pTableNd->GetTable().IsNewModel() )
         ++pCpyPara->nLnIdx;
 }
 
-bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
+bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
 {
     // Find all Boxes/Lines
     SwSelBoxes aSelBoxes;
     SwTableBox* pBox = GetTabSortBoxes()[ 0 ];
-    pBox = GetTblBox( pBox->GetSttNd()->StartOfSectionNode()->GetIndex() + 1 );
+    pBox = GetTableBox( pBox->GetSttNd()->StartOfSectionNode()->GetIndex() + 1 );
     SelLineFromBox( pBox, aSelBoxes, true );
 
     _FndBox aFndBox( 0, 0 );
@@ -2017,22 +2017,22 @@ bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
 
     {
         // Convert Table formulas to their relative representation
-        SwTableFmlUpdate aMsgHnt( this );
-        aMsgHnt.eFlags = TBL_RELBOXNAME;
-        GetFrmFmt()->GetDoc()->getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
+        SwTableFormulaUpdate aMsgHint( this );
+        aMsgHint.eFlags = TBL_RELBOXNAME;
+        GetFrameFormat()->GetDoc()->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
     }
 
-    _CpyTabFrms aCpyFmt;
-    _CpyPara aPara( &rTblNd, 1, aCpyFmt, true );
-    aPara.nNewSize = aPara.nOldSize = rTblNd.GetTable().GetFrmFmt()->GetFrmSize().GetWidth();
+    _CpyTabFrms aCpyFormat;
+    _CpyPara aPara( &rTableNd, 1, aCpyFormat, true );
+    aPara.nNewSize = aPara.nOldSize = rTableNd.GetTable().GetFrameFormat()->GetFrmSize().GetWidth();
     // Copy
     if( IsNewModel() )
         lcl_CalcNewWidths( aFndBox.GetLines(), aPara );
     for( _FndLine& rFndLine : aFndBox.GetLines() )
          lcl_CopyLineToDoc( rFndLine, &aPara );
-    if( rTblNd.GetTable().IsNewModel() )
+    if( rTableNd.GetTable().IsNewModel() )
     {   // The copied line must not contain any row span attributes > 1
-        SwTableLine* pLine = rTblNd.GetTable().GetTabLines()[0];
+        SwTableLine* pLine = rTableNd.GetTable().GetTabLines()[0];
         OSL_ENSURE( !pLine->GetTabBoxes().empty(), "Empty Table Line" );
         for( auto pTableBox : pLine->GetTabBoxes() )
         {
@@ -2059,63 +2059,63 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
 
     // First copy the PoolTemplates for the Table, so that the Tables are
     // actually copied and have valid values.
-    SwDoc* pSrcDoc = GetFrmFmt()->GetDoc();
+    SwDoc* pSrcDoc = GetFrameFormat()->GetDoc();
     if( pSrcDoc != pInsDoc )
     {
-        pInsDoc->CopyTxtColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TABLE ) );
-        pInsDoc->CopyTxtColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
+        pInsDoc->CopyTextColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE ) );
+        pInsDoc->CopyTextColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
     }
 
-    SwTable* pNewTbl = const_cast<SwTable*>(pInsDoc->InsertTable(
+    SwTable* pNewTable = const_cast<SwTable*>(pInsDoc->InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
-            rPos, 1, 1, GetFrmFmt()->GetHoriOrient().GetHoriOrient(),
+            rPos, 1, 1, GetFrameFormat()->GetHoriOrient().GetHoriOrient(),
             0, 0, false, IsNewModel() ));
-    if( !pNewTbl )
+    if( !pNewTable )
         return false;
 
     SwNodeIndex aIdx( rPos.nNode, -1 );
-    SwTableNode* pTblNd = aIdx.GetNode().FindTableNode();
+    SwTableNode* pTableNd = aIdx.GetNode().FindTableNode();
     ++aIdx;
-    OSL_ENSURE( pTblNd, "Where is the TableNode now?" );
+    OSL_ENSURE( pTableNd, "Where is the TableNode now?" );
 
-    pTblNd->GetTable().SetRowsToRepeat( GetRowsToRepeat() );
+    pTableNd->GetTable().SetRowsToRepeat( GetRowsToRepeat() );
 
     if( IS_TYPE( SwDDETable, this ))
     {
         // A DDE-Table is being copied
         // Does the new Document actually have it's FieldType?
-        SwFieldType* pFldType = pInsDoc->getIDocumentFieldsAccess().InsertFldType(
-                                    *static_cast<const SwDDETable*>(this)->GetDDEFldType() );
-        OSL_ENSURE( pFldType, "unknown FieldType" );
+        SwFieldType* pFieldType = pInsDoc->getIDocumentFieldsAccess().InsertFieldType(
+                                    *static_cast<const SwDDETable*>(this)->GetDDEFieldType() );
+        OSL_ENSURE( pFieldType, "unknown FieldType" );
 
         // Change the Table Pointer at the Node
-        pNewTbl = new SwDDETable( *pNewTbl,
-                                 static_cast<SwDDEFieldType*>(pFldType) );
-        pTblNd->SetNewTable( pNewTbl, false );
+        pNewTable = new SwDDETable( *pNewTable,
+                                 static_cast<SwDDEFieldType*>(pFieldType) );
+        pTableNd->SetNewTable( pNewTable, false );
     }
 
-    pNewTbl->GetFrmFmt()->CopyAttrs( *GetFrmFmt() );
-    pNewTbl->SetTblChgMode( GetTblChgMode() );
+    pNewTable->GetFrameFormat()->CopyAttrs( *GetFrameFormat() );
+    pNewTable->SetTableChgMode( GetTableChgMode() );
 
     // Destroy the already created Frames
-    pTblNd->DelFrms();
+    pTableNd->DelFrms();
 
     {
         // Conver the Table formulas to their relative representation
-        SwTableFmlUpdate aMsgHnt( this );
-        aMsgHnt.eFlags = TBL_RELBOXNAME;
-        pSrcDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aMsgHnt );
+        SwTableFormulaUpdate aMsgHint( this );
+        aMsgHint.eFlags = TBL_RELBOXNAME;
+        pSrcDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
     }
 
-    SwTblNumFmtMerge aTNFM( *pSrcDoc, *pInsDoc );
+    SwTableNumFormatMerge aTNFM( *pSrcDoc, *pInsDoc );
 
     // Also copy Names or enforce a new unique one
     if( bCpyName )
-        pNewTbl->GetFrmFmt()->SetName( GetFrmFmt()->GetName() );
+        pNewTable->GetFrameFormat()->SetName( GetFrameFormat()->GetName() );
 
-    _CpyTabFrms aCpyFmt;
-    _CpyPara aPara( pTblNd, 1, aCpyFmt, bCpyNds );
-    aPara.nNewSize = aPara.nOldSize = GetFrmFmt()->GetFrmSize().GetWidth();
+    _CpyTabFrms aCpyFormat;
+    _CpyPara aPara( pTableNd, 1, aCpyFormat, bCpyNds );
+    aPara.nNewSize = aPara.nOldSize = GetFrameFormat()->GetFrmSize().GetWidth();
 
     if( IsNewModel() )
         lcl_CalcNewWidths( aFndBox.GetLines(), aPara );
@@ -2132,7 +2132,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         if( USHRT_MAX != nLnPos && nLnPos )
         {
             // There is a Line before it
-            SwCollectTblLineBoxes aLnPara( false, HEADLINE_BORDERCOPY );
+            SwCollectTableLineBoxes aLnPara( false, HEADLINE_BORDERCOPY );
 
             pLn = GetTabLines()[ nLnPos - 1 ];
             for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
@@ -2143,10 +2143,10 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
                                 lcl_GetLineWidth( *pFndLn )) )
             {
                 aLnPara.SetValues( true );
-                pLn = pNewTbl->GetTabLines()[ 0 ];
+                pLn = pNewTable->GetTabLines()[ 0 ];
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
-                    sw_BoxSetSplitBoxFmts(*it, &aLnPara );
+                    sw_BoxSetSplitBoxFormats(*it, &aLnPara );
             }
         }
 
@@ -2157,7 +2157,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         if( nLnPos < GetTabLines().size() - 1 )
         {
             // There is a Line following it
-            SwCollectTblLineBoxes aLnPara( true, HEADLINE_BORDERCOPY );
+            SwCollectTableLineBoxes aLnPara( true, HEADLINE_BORDERCOPY );
 
             pLn = GetTabLines()[ nLnPos + 1 ];
             for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
@@ -2168,24 +2168,24 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
                                 lcl_GetLineWidth( *pFndLn )) )
             {
                 aLnPara.SetValues( false );
-                pLn = pNewTbl->GetTabLines().back();
+                pLn = pNewTable->GetTabLines().back();
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
-                    sw_BoxSetSplitBoxFmts(*it, &aLnPara );
+                    sw_BoxSetSplitBoxFormats(*it, &aLnPara );
             }
         }
     }
 
     // We need to delete the initial Box
-    _DeleteBox( *pNewTbl, pNewTbl->GetTabLines().back()->GetTabBoxes()[0],
+    _DeleteBox( *pNewTable, pNewTable->GetTabLines().back()->GetTabBoxes()[0],
                 0, false, false );
 
-    if( pNewTbl->IsNewModel() )
-        lcl_CheckRowSpan( *pNewTbl );
+    if( pNewTable->IsNewModel() )
+        lcl_CheckRowSpan( *pNewTable );
     // Clean up
-    pNewTbl->GCLines();
+    pNewTable->GCLines();
 
-    pTblNd->MakeFrms( &aIdx );  // re-generate the Frames
+    pTableNd->MakeFrms( &aIdx );  // re-generate the Frames
 
     CHECKTABLELAYOUT
 
@@ -2193,8 +2193,8 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
 }
 
 // Find the next Box with content from this Line
-SwTableBox* SwTableLine::FindNextBox( const SwTable& rTbl,
-                     const SwTableBox* pSrchBox, bool bOvrTblLns ) const
+SwTableBox* SwTableLine::FindNextBox( const SwTable& rTable,
+                     const SwTableBox* pSrchBox, bool bOvrTableLns ) const
 {
     const SwTableLine* pLine = this;            // for M800
     SwTableBox* pBox;
@@ -2215,17 +2215,17 @@ SwTableBox* SwTableLine::FindNextBox( const SwTable& rTbl,
         OSL_ENSURE( USHRT_MAX != nFndPos, "Line is not in the Table" );
         // Is there another Line?
         if( nFndPos+1 >= (sal_uInt16)GetUpper()->GetTabLines().size() )
-            return GetUpper()->GetUpper()->FindNextBox( rTbl, GetUpper(), bOvrTblLns );
+            return GetUpper()->GetUpper()->FindNextBox( rTable, GetUpper(), bOvrTableLns );
         pLine = GetUpper()->GetTabLines()[nFndPos+1];
     }
-    else if( bOvrTblLns )       // Over a Table's the "BaseLines"??
+    else if( bOvrTableLns )       // Over a Table's the "BaseLines"??
     {
         // Search for the next Line in the Table
-        nFndPos = rTbl.GetTabLines().GetPos( pLine );
-        if( nFndPos + 1 >= (sal_uInt16)rTbl.GetTabLines().size() )
+        nFndPos = rTable.GetTabLines().GetPos( pLine );
+        if( nFndPos + 1 >= (sal_uInt16)rTable.GetTabLines().size() )
             return 0;           // there are no more Boxes
 
-        pLine = rTbl.GetTabLines()[ nFndPos+1 ];
+        pLine = rTable.GetTabLines()[ nFndPos+1 ];
     }
     else
         return 0;
@@ -2237,12 +2237,12 @@ SwTableBox* SwTableLine::FindNextBox( const SwTable& rTbl,
             pBox = pBox->GetTabLines().front()->GetTabBoxes().front();
         return pBox;
     }
-    return pLine->FindNextBox( rTbl, 0, bOvrTblLns );
+    return pLine->FindNextBox( rTable, 0, bOvrTableLns );
 }
 
 // Find the previous Box from this Line
-SwTableBox* SwTableLine::FindPreviousBox( const SwTable& rTbl,
-                         const SwTableBox* pSrchBox, bool bOvrTblLns ) const
+SwTableBox* SwTableLine::FindPreviousBox( const SwTable& rTable,
+                         const SwTableBox* pSrchBox, bool bOvrTableLns ) const
 {
     const SwTableLine* pLine = this;            // for M800
     SwTableBox* pBox;
@@ -2266,17 +2266,17 @@ SwTableBox* SwTableLine::FindPreviousBox( const SwTable& rTbl,
         OSL_ENSURE( USHRT_MAX != nFndPos, "Line is not in the Table" );
         // Is there another Line?
         if( !nFndPos )
-            return GetUpper()->GetUpper()->FindPreviousBox( rTbl, GetUpper(), bOvrTblLns );
+            return GetUpper()->GetUpper()->FindPreviousBox( rTable, GetUpper(), bOvrTableLns );
         pLine = GetUpper()->GetTabLines()[nFndPos-1];
     }
-    else if( bOvrTblLns )       // Over a Table's the "BaseLines"??
+    else if( bOvrTableLns )       // Over a Table's the "BaseLines"??
     {
         // Search for the next Line in the Table
-        nFndPos = rTbl.GetTabLines().GetPos( pLine );
+        nFndPos = rTable.GetTabLines().GetPos( pLine );
         if( !nFndPos )
             return 0;           // there are no more Boxes
 
-        pLine = rTbl.GetTabLines()[ nFndPos-1 ];
+        pLine = rTable.GetTabLines()[ nFndPos-1 ];
     }
     else
         return 0;
@@ -2291,28 +2291,28 @@ SwTableBox* SwTableLine::FindPreviousBox( const SwTable& rTbl,
         }
         return pBox;
     }
-    return pLine->FindPreviousBox( rTbl, 0, bOvrTblLns );
+    return pLine->FindPreviousBox( rTable, 0, bOvrTableLns );
 }
 
 // Find the next Box with content from this Line
-SwTableBox* SwTableBox::FindNextBox( const SwTable& rTbl,
-                         const SwTableBox* pSrchBox, bool bOvrTblLns ) const
+SwTableBox* SwTableBox::FindNextBox( const SwTable& rTable,
+                         const SwTableBox* pSrchBox, bool bOvrTableLns ) const
 {
     if( !pSrchBox  && GetTabLines().empty() )
         return const_cast<SwTableBox*>(this);
-    return GetUpper()->FindNextBox( rTbl, pSrchBox ? pSrchBox : this,
-                                        bOvrTblLns );
+    return GetUpper()->FindNextBox( rTable, pSrchBox ? pSrchBox : this,
+                                        bOvrTableLns );
 
 }
 
 // Find the next Box with content from this Line
-SwTableBox* SwTableBox::FindPreviousBox( const SwTable& rTbl,
-                         const SwTableBox* pSrchBox, bool bOvrTblLns ) const
+SwTableBox* SwTableBox::FindPreviousBox( const SwTable& rTable,
+                         const SwTableBox* pSrchBox, bool bOvrTableLns ) const
 {
     if( !pSrchBox && GetTabLines().empty() )
         return const_cast<SwTableBox*>(this);
-    return GetUpper()->FindPreviousBox( rTbl, pSrchBox ? pSrchBox : this,
-                                        bOvrTblLns );
+    return GetUpper()->FindPreviousBox( rTable, pSrchBox ? pSrchBox : this,
+                                        bOvrTableLns );
 }
 
 static void lcl_BoxSetHeadCondColl( const SwTableBox* pBox )
@@ -2346,7 +2346,7 @@ static SwTwips lcl_GetDistance( SwTableBox* pBox, bool bLeft )
         bFirst = false;
 
         while( nStt < nPos )
-            nRet += pLine->GetTabBoxes()[ nStt++ ]->GetFrmFmt()
+            nRet += pLine->GetTabBoxes()[ nStt++ ]->GetFrameFormat()
                             ->GetFrmSize().GetWidth();
         pBox = pLine->GetUpper();
     }
@@ -2359,8 +2359,8 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
     for( auto pBox : rBoxes )
     {
-        SwFrmFmt* pFmt = pBox->GetFrmFmt();
-        const SwFmtFrmSize& rSz = pFmt->GetFrmSize();
+        SwFrameFormat* pFormat = pBox->GetFrameFormat();
+        const SwFormatFrmSize& rSz = pFormat->GetFrmSize();
         SwTwips nWidth = rSz.GetWidth();
         bool bGreaterBox = false;
 
@@ -2411,7 +2411,7 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                             - rParam.nSide ) < COLFUZZY ))
             {
                 // This column contains the Cursor - so decrease/increase
-                SwFmtFrmSize aNew( rSz );
+                SwFormatFrmSize aNew( rSz );
 
                 if( !nLowerDiff )
                 {
@@ -2433,7 +2433,7 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     aNew.SetWidth( nWidth + nLowerDiff );
                 else
                     aNew.SetWidth( nWidth - nLowerDiff );
-                rParam.aShareFmts.SetSize( *pBox, aNew );
+                rParam.aShareFormats.SetSize( *pBox, aNew );
                 break;
             }
         }
@@ -2457,8 +2457,8 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
     for( auto pBox : rBoxes )
     {
-        SwFrmFmt* pFmt = pBox->GetFrmFmt();
-        const SwFmtFrmSize& rSz = pFmt->GetFrmSize();
+        SwFrameFormat* pFormat = pBox->GetFrameFormat();
+        const SwFormatFrmSize& rSz = pFormat->GetFrmSize();
         SwTwips nWidth = rSz.GetWidth();
 
         if( bCheck )
@@ -2508,7 +2508,7 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                                          : nDist >= rParam.nSide - COLFUZZY)
                  ) )
             {
-                SwFmtFrmSize aNew( rSz );
+                SwFormatFrmSize aNew( rSz );
 
                 if( !nLowerDiff )
                 {
@@ -2530,7 +2530,7 @@ static bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                 else
                     aNew.SetWidth( nWidth + nLowerDiff );
 
-                rParam.aShareFmts.SetSize( *pBox, aNew );
+                rParam.aShareFormats.SetSize( *pBox, aNew );
             }
         }
 
@@ -2549,8 +2549,8 @@ static bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
     {
         SwTableBox* pBox = rBoxes[ n ];
-        SwTableBoxFmt* pFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
-        const SwFmtFrmSize& rSz = pFmt->GetFrmSize();
+        SwTableBoxFormat* pFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
+        const SwFormatFrmSize& rSz = pFormat->GetFrmSize();
         SwTwips nWidth = rSz.GetWidth();
 
         int nCmp {0};
@@ -2572,7 +2572,7 @@ static bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             if( nCmp )
             {
                 rParam.bAnyBoxFnd = true;
-                if( pFmt->GetProtect().IsCntntProtected() )
+                if( pFormat->GetProtect().IsContentProtected() )
                     return false;
 
                 if( rParam.bSplittBox &&
@@ -2617,9 +2617,9 @@ static bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     if( !rParam.bSplittBox )
                     {
                         // the current Box on
-                        SwFmtFrmSize aNew( rSz );
+                        SwFormatFrmSize aNew( rSz );
                         aNew.SetWidth( nWidth + rParam.nDiff );
-                        rParam.aShareFmts.SetSize( *pBox, aNew );
+                        rParam.aShareFormats.SetSize( *pBox, aNew );
                     }
                 }
                 else
@@ -2629,32 +2629,32 @@ static bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     if( !rParam.bLeft && 3 != nCmp )
                         ++n;
 
-                    ::_InsTblBox( pFmt->GetDoc(), rParam.pTblNd,
-                                        pLine, pFmt, pBox, n );
+                    ::_InsTableBox( pFormat->GetDoc(), rParam.pTableNd,
+                                        pLine, pFormat, pBox, n );
 
                     SwTableBox* pNewBox = rBoxes[ n ];
-                    SwFmtFrmSize aNew( rSz );
+                    SwFormatFrmSize aNew( rSz );
                     aNew.SetWidth( rParam.nDiff );
-                    rParam.aShareFmts.SetSize( *pNewBox, aNew );
+                    rParam.aShareFormats.SetSize( *pNewBox, aNew );
 
                     // Special case: There is no space in the other Boxes, but in the Cell
                     if( rParam.bSplittBox )
                     {
                         // the current Box on
-                        SwFmtFrmSize aNewSize( rSz );
+                        SwFormatFrmSize aNewSize( rSz );
                         aNewSize.SetWidth( nWidth - rParam.nDiff );
-                        rParam.aShareFmts.SetSize( *pBox, aNewSize );
+                        rParam.aShareFormats.SetSize( *pBox, aNewSize );
                     }
 
                     // Special treatment for the Border
                     // The right one needs to be removed
                     {
-                        const SvxBoxItem& rBoxItem = pBox->GetFrmFmt()->GetBox();
+                        const SvxBoxItem& rBoxItem = pBox->GetFrameFormat()->GetBox();
                         if( rBoxItem.GetRight() )
                         {
                             SvxBoxItem aTmp( rBoxItem );
                             aTmp.SetLine( 0, SvxBoxItemLine::RIGHT );
-                            rParam.aShareFmts.SetAttr( rParam.bLeft
+                            rParam.aShareFormats.SetAttr( rParam.bLeft
                                                             ? *pNewBox
                                                             : *pBox, aTmp );
                         }
@@ -2691,12 +2691,12 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
         SwTwips nTmpDist = nDist;
         for( auto pBox : rBoxes )
         {
-            SwTwips nWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
+            SwTwips nWidth = pBox->GetFrameFormat()->GetFrmSize().GetWidth();
             if( (nTmpDist + nWidth / 2 ) > rParam.nSide )
             {
                 rParam.nRemainWidth = rParam.bLeft
                                         ? sal_uInt16(nTmpDist)
-                                        : sal_uInt16(rParam.nTblWidth - nTmpDist);
+                                        : sal_uInt16(rParam.nTableWidth - nTmpDist);
                 break;
             }
             nTmpDist += nWidth;
@@ -2706,8 +2706,8 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     for( SwTableBoxes::size_type n = 0; n < rBoxes.size(); ++n )
     {
         SwTableBox* pBox = rBoxes[ n ];
-        SwFrmFmt* pFmt = pBox->GetFrmFmt();
-        const SwFmtFrmSize& rSz = pFmt->GetFrmSize();
+        SwFrameFormat* pFormat = pBox->GetFrameFormat();
+        const SwFormatFrmSize& rSz = pFormat->GetFrmSize();
         SwTwips nWidth = rSz.GetWidth();
 
         if( bCheck )
@@ -2721,7 +2721,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                                 (TBLFIX_CHGABS != rParam.nMode ||
                                 (n < rBoxes.size() &&
                                   (nDist + nWidth + rBoxes[ n+1 ]->
-                                   GetFrmFmt()->GetFrmSize().GetWidth() / 2)
+                                   GetFrameFormat()->GetFrmSize().GetWidth() / 2)
                                   > rParam.nSide) ))
                              : (nDist + nWidth / 2 ) > rParam.nSide
                 )
@@ -2754,7 +2754,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                             pTmpBox = pTmpBox->GetUpper()->GetUpper();
                             nBoxPos = pTmpBox->GetUpper()->GetTabBoxes().GetPos( pTmpBox );
                         }
-                        nTmpWidth = pTmpBox->GetFrmFmt()->GetFrmSize().GetWidth();
+                        nTmpWidth = pTmpBox->GetFrameFormat()->GetFrmSize().GetWidth();
                     }
 
                     if( nTmpWidth < nDiff || nTmpWidth - nDiff < MINLAY )
@@ -2781,7 +2781,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                                 (TBLFIX_CHGABS != rParam.nMode ||
                                 (n < rBoxes.size() &&
                                   (nDist + nWidth + rBoxes[ n+1 ]->
-                                   GetFrmFmt()->GetFrmSize().GetWidth() / 2)
+                                   GetFrameFormat()->GetFrmSize().GetWidth() / 2)
                                   > rParam.nSide) ))
                               : (nDist + nWidth / 2 ) > rParam.nSide ))
             {
@@ -2798,14 +2798,14 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                         nLowerDiff = rParam.nDiff;
                 }
 
-                SwFmtFrmSize aNew( rSz );
+                SwFormatFrmSize aNew( rSz );
                 rParam.nLowerDiff += nLowerDiff;
 
                 if( rParam.bBigger )
                     aNew.SetWidth( nWidth - nLowerDiff );
                 else
                     aNew.SetWidth( nWidth + nLowerDiff );
-                rParam.aShareFmts.SetSize( *pBox, aNew );
+                rParam.aShareFormats.SetSize( *pBox, aNew );
 
                 if( TBLFIX_CHGABS == rParam.nMode )
                     break;
@@ -2869,7 +2869,7 @@ static void lcl_DelSelBox_CorrLowers( SwTableLine& rLine, CR_SetBoxWidth& rParam
     SwTwips nBoxWidth = 0;
 
     for( auto n = rBoxes.size(); n; )
-        nBoxWidth += rBoxes[ --n ]->GetFrmFmt()->GetFrmSize().GetWidth();
+        nBoxWidth += rBoxes[ --n ]->GetFrameFormat()->GetFrmSize().GetWidth();
 
     if( COLFUZZY < std::abs( nWidth - nBoxWidth ))
     {
@@ -2877,13 +2877,13 @@ static void lcl_DelSelBox_CorrLowers( SwTableLine& rLine, CR_SetBoxWidth& rParam
         for( auto n = rBoxes.size(); n; )
         {
             SwTableBox* pBox = rBoxes[ --n ];
-            SwFmtFrmSize aNew( pBox->GetFrmFmt()->GetFrmSize() );
+            SwFormatFrmSize aNew( pBox->GetFrameFormat()->GetFrmSize() );
             long nDiff = aNew.GetWidth();
             nDiff *= nWidth;
             nDiff /= nBoxWidth;
             aNew.SetWidth( nDiff );
 
-            rParam.aShareFmts.SetSize( *pBox, aNew );
+            rParam.aShareFormats.SetSize( *pBox, aNew );
 
             if( !pBox->GetSttNd() )
             {
@@ -2897,7 +2897,7 @@ static void lcl_DelSelBox_CorrLowers( SwTableLine& rLine, CR_SetBoxWidth& rParam
 }
 
 static void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
-                    const SwFmtFrmSize& rOldSz,
+                    const SwFormatFrmSize& rOldSz,
                     sal_uInt16& rDelWidth, SwTwips nDist )
 {
     long nDiff = 0;
@@ -2917,7 +2917,7 @@ static void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
             if( rParam.bLeft )
                 rParam.nRemainWidth = sal_uInt16(nDist);
             else
-                rParam.nRemainWidth = sal_uInt16(rParam.nTblWidth - nDist);
+                rParam.nRemainWidth = sal_uInt16(rParam.nTableWidth - nDist);
         }
 
         // Calculate relatively
@@ -2944,9 +2944,9 @@ static void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
 
     if( bSetSize )
     {
-        SwFmtFrmSize aNew( rOldSz );
+        SwFormatFrmSize aNew( rOldSz );
         aNew.SetWidth( aNew.GetWidth() + nDiff );
-        rParam.aShareFmts.SetSize( rBox, aNew );
+        rParam.aShareFormats.SetSize( rBox, aNew );
 
         // Change the Lower once again
         for( auto i = rBox.GetTabLines().size(); i; )
@@ -2964,7 +2964,7 @@ static bool lcl_DeleteBox_Recursive( CR_SetBoxWidth& rParam, SwTableBox& rBox,
         if( bCheck )
         {
             rParam.bAnyBoxFnd = true;
-            if( rBox.GetFrmFmt()->GetProtect().IsCntntProtected() )
+            if( rBox.GetFrameFormat()->GetProtect().IsContentProtected() )
                 bRet = false;
             else
             {
@@ -2973,8 +2973,8 @@ static bool lcl_DeleteBox_Recursive( CR_SetBoxWidth& rParam, SwTableBox& rBox,
             }
         }
         else
-            ::_DeleteBox( rParam.pTblNd->GetTable(), &rBox,
-                            rParam.pUndo, false, true, &rParam.aShareFmts );
+            ::_DeleteBox( rParam.pTableNd->GetTable(), &rBox,
+                            rParam.pUndo, false, true, &rParam.aShareFormats );
     }
     else
     {
@@ -3026,8 +3026,8 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
         else
             pBox = rBoxes[ n++ ];
 
-        SwFrmFmt* pFmt = pBox->GetFrmFmt();
-        const SwFmtFrmSize& rSz = pFmt->GetFrmSize();
+        SwFrameFormat* pFormat = pBox->GetFrameFormat();
+        const SwFormatFrmSize& rSz = pFormat->GetFrmSize();
         long nWidth = rSz.GetWidth();
         bool bDelBox = false, bChgLowers = false;
 
@@ -3117,13 +3117,13 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                         nDelWidth != rParam.nBoxWidth ) &&
                      COLFUZZY > std::abs( rParam.bLeft
                                     ? nWidth - nDist
-                                    : (nDist + nWidth - rParam.nTblWidth )))
+                                    : (nDist + nWidth - rParam.nTableWidth )))
                     || !::lcl_DeleteBox_Recursive(rParam, *pBox, bCheck))
                 {
                     return false;
                 }
 
-                if( pFmt->GetProtect().IsCntntProtected() )
+                if( pFormat->GetProtect().IsContentProtected() )
                     return false;
             }
             else
@@ -3190,7 +3190,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                 else
                 {
                     // Or else we need to adapt the Box's size
-                    SwFmtFrmSize aNew( rSz );
+                    SwFormatFrmSize aNew( rSz );
                     bool bCorrRel = false;
 
                     if( TBLVAR_CHGABS != rParam.nMode )
@@ -3233,7 +3233,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                             if( rParam.bLeft )
                                 rParam.nRemainWidth = sal_uInt16(nDist - nLowerDiff);
                             else
-                                rParam.nRemainWidth = sal_uInt16(rParam.nTblWidth - nDist
+                                rParam.nRemainWidth = sal_uInt16(rParam.nTableWidth - nDist
                                                                 - nLowerDiff );
                         }
 
@@ -3245,7 +3245,7 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                     }
                     else
                         aNew.SetWidth( aNew.GetWidth() - nLowerDiff );
-                    rParam.aShareFmts.SetSize( *pBox, aNew );
+                    rParam.aShareFormats.SetSize( *pBox, aNew );
 
                     if( bCorrLowers )
                     {
@@ -3278,12 +3278,12 @@ static void lcl_AjustLines( SwTableLine* pLine, CR_SetBoxWidth& rParam )
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
     for( auto pBox : rBoxes )
     {
-        SwFmtFrmSize aSz( pBox->GetFrmFmt()->GetFrmSize() );
+        SwFormatFrmSize aSz( pBox->GetFrameFormat()->GetFrmSize() );
         SwTwips nWidth = aSz.GetWidth();
         nWidth *= rParam.nDiff;
         nWidth /= rParam.nMaxSize;
         aSz.SetWidth( nWidth );
-        rParam.aShareFmts.SetSize( *pBox, aSz );
+        rParam.aShareFormats.SetSize( *pBox, aSz );
 
         for( auto pLn : pBox->GetTabLines() )
             ::lcl_AjustLines( pLn, rParam );
@@ -3300,7 +3300,7 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
     for (SwTableBoxes::const_iterator i(rBoxes.begin()); i != rBoxes.end(); ++i)
     {
         const SwTableBox* pBox = *i;
-        const SwTwips nBoxW = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
+        const SwTwips nBoxW = pBox->GetFrameFormat()->GetFrmSize().GetWidth();
         nAktSize += nBoxW;
 
         for( auto pLn : pBox->GetTabLines() )
@@ -3319,42 +3319,42 @@ static _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
                                 SwTableSortBoxes& rTmpLst, SwTwips nDistStt )
 {
     // Find all Boxes/Lines
-    SwTable& rTbl = rParam.pTblNd->GetTable();
+    SwTable& rTable = rParam.pTableNd->GetTable();
 
     if (rParam.m_Boxes.empty())
     {
         // Get the Boxes
         if( rParam.bBigger )
-            for( auto pLn : rTbl.GetTabLines() )
+            for( auto pLn : rTable.GetTabLines() )
                 ::lcl_DelSelBox( pLn, rParam, nDistStt, true );
         else
-            for( auto pLn : rTbl.GetTabLines() )
+            for( auto pLn : rTable.GetTabLines() )
                 ::lcl_InsSelBox( pLn, rParam, nDistStt, true );
     }
 
     // Prevent deleting the whole Table
     if (rParam.bBigger
-        && rParam.m_Boxes.size() == rTbl.GetTabSortBoxes().size())
+        && rParam.m_Boxes.size() == rTable.GetTabSortBoxes().size())
     {
         return 0;
     }
 
     _FndBox* pFndBox = new _FndBox( 0, 0 );
     if( rParam.bBigger )
-        pFndBox->SetTableLines( rParam.m_Boxes, rTbl );
+        pFndBox->SetTableLines( rParam.m_Boxes, rTable );
     else
     {
         _FndPara aPara(rParam.m_Boxes, pFndBox);
-        ForEach_FndLineCopyCol( rTbl.GetTabLines(), &aPara );
+        ForEach_FndLineCopyCol( rTable.GetTabLines(), &aPara );
         OSL_ENSURE( pFndBox->GetLines().size(), "Where are the Boxes" );
-        pFndBox->SetTableLines( rTbl );
+        pFndBox->SetTableLines( rTable );
 
         if( ppUndo )
-            rTmpLst.insert( rTbl.GetTabSortBoxes() );
+            rTmpLst.insert( rTable.GetTabSortBoxes() );
     }
 
     // Find Lines for the Layout update
-    pFndBox->DelFrms( rTbl );
+    pFndBox->DelFrms( rTable );
 
     // TL_CHART2: this function gest called from SetColWidth exclusively,
     // thus it is currently speculated that nothing needs to be done here.
@@ -3368,16 +3368,16 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 {
     SetHTMLTableLayout( 0 );    // Delete HTML Layout
 
-    const SwFmtFrmSize& rSz = GetFrmFmt()->GetFrmSize();
-    const SvxLRSpaceItem& rLR = GetFrmFmt()->GetLRSpace();
+    const SwFormatFrmSize& rSz = GetFrameFormat()->GetFrmSize();
+    const SvxLRSpaceItem& rLR = GetFrameFormat()->GetLRSpace();
 
     boost::scoped_ptr<_FndBox> xFndBox;                // for insertion/deletion
     SwTableSortBoxes aTmpLst;       // for Undo
     bool bBigger,
         bRet = false,
-        bLeft = nsTblChgWidthHeightType::WH_COL_LEFT == ( eType & 0xff ) ||
-                nsTblChgWidthHeightType::WH_CELL_LEFT == ( eType & 0xff ),
-        bInsDel = 0 != (eType & nsTblChgWidthHeightType::WH_FLAG_INSDEL );
+        bLeft = nsTableChgWidthHeightType::WH_COL_LEFT == ( eType & 0xff ) ||
+                nsTableChgWidthHeightType::WH_CELL_LEFT == ( eType & 0xff ),
+        bInsDel = 0 != (eType & nsTableChgWidthHeightType::WH_FLAG_INSDEL );
     sal_uInt16 n;
     sal_uLong nBoxIdx = rAktBox.GetSttIdx();
 
@@ -3397,7 +3397,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
         {
             fnSelBox = lcl_DelSelBox;
             fnOtherBox = lcl_DelOtherBox;
-            aParam.nBoxWidth = (sal_uInt16)rAktBox.GetFrmFmt()->GetFrmSize().GetWidth();
+            aParam.nBoxWidth = (sal_uInt16)rAktBox.GetFrameFormat()->GetFrmSize().GetWidth();
             if( bLeft )
                 nDistStt = rSz.GetWidth();
         }
@@ -3415,9 +3415,9 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 
     switch( eType & 0xff )
     {
-    case nsTblChgWidthHeightType::WH_COL_RIGHT:
-    case nsTblChgWidthHeightType::WH_COL_LEFT:
-        if( TBLVAR_CHGABS == eTblChgMode )
+    case nsTableChgWidthHeightType::WH_COL_RIGHT:
+    case nsTableChgWidthHeightType::WH_COL_LEFT:
+        if( TBLVAR_CHGABS == eTableChgMode )
         {
             if( bInsDel )
                 bBigger = !bBigger;
@@ -3426,7 +3426,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             bool bChgLRSpace = true;
             if( bBigger )
             {
-                if( GetFrmFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE) &&
+                if( GetFrameFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE) &&
                     !rSz.GetWidthPercent() )
                 {
                     bRet = rSz.GetWidth() < USHRT_MAX - nRelDiff;
@@ -3448,12 +3448,12 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 if( !bRet )
                 {
                     // Then call itself recursively; only with another mode (proportional)
-                    TblChgMode eOld = eTblChgMode;
-                    eTblChgMode = TBLFIX_CHGPROP;
+                    TableChgMode eOld = eTableChgMode;
+                    eTableChgMode = TBLFIX_CHGPROP;
 
                     bRet = SetColWidth( rAktBox, eType, nAbsDiff, nRelDiff,
                                         ppUndo );
-                    eTblChgMode = eOld;
+                    eTableChgMode = eOld;
                     return bRet;
                 }
             }
@@ -3481,7 +3481,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         aParam.m_Boxes.size() == m_TabSortContentBoxes.size())
                     {
                         // This whole Table is to be deleted!
-                        GetFrmFmt()->GetDoc()->DeleteRowCol(aParam.m_Boxes);
+                        GetFrameFormat()->GetDoc()->DeleteRowCol(aParam.m_Boxes);
                         return false;
                     }
 
@@ -3491,11 +3491,11 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                                                        : UNDO_TABLE_INSCOL );
                 }
                 else if( ppUndo )
-                    *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, true );
+                    *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                 long nFrmWidth = LONG_MAX;
                 LockModify();
-                SwFmtFrmSize aSz( rSz );
+                SwFormatFrmSize aSz( rSz );
                 SvxLRSpaceItem aLR( rLR );
                 if( bBigger )
                 {
@@ -3504,7 +3504,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     {
                         // Break down to USHRT_MAX / 2
                         CR_SetBoxWidth aTmpPara( 0, aSz.GetWidth() / 2,
-                                        0, aSz.GetWidth(), aSz.GetWidth(), aParam.pTblNd );
+                                        0, aSz.GetWidth(), aSz.GetWidth(), aParam.pTableNd );
                         for( sal_uInt16 nLn = 0; nLn < aLines.size(); ++nLn )
                             ::lcl_AjustLines( aLines[ nLn ], aTmpPara );
                         aSz.SetWidth( aSz.GetWidth() / 2 );
@@ -3524,23 +3524,23 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     aLR.SetRight( sal_uInt16( aLR.GetRight() + nAbsDiff ) );
 
                 if( bChgLRSpace )
-                    GetFrmFmt()->SetFmtAttr( aLR );
-                const SwFmtHoriOrient& rHOri = GetFrmFmt()->GetHoriOrient();
+                    GetFrameFormat()->SetFormatAttr( aLR );
+                const SwFormatHoriOrient& rHOri = GetFrameFormat()->GetHoriOrient();
                 if( text::HoriOrientation::FULL == rHOri.GetHoriOrient() ||
                     (text::HoriOrientation::LEFT == rHOri.GetHoriOrient() && aLR.GetLeft()) ||
                     (text::HoriOrientation::RIGHT == rHOri.GetHoriOrient() && aLR.GetRight()))
                 {
-                    SwFmtHoriOrient aHOri( rHOri );
+                    SwFormatHoriOrient aHOri( rHOri );
                     aHOri.SetHoriOrient( text::HoriOrientation::NONE );
-                    GetFrmFmt()->SetFmtAttr( aHOri );
+                    GetFrameFormat()->SetFormatAttr( aHOri );
 
                     // If the Table happens to contain relative values (USHORT_MAX),
                     // we need to convert them to absolute ones now.
                     // Bug 61494
-                    if( GetFrmFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE) &&
+                    if( GetFrameFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE) &&
                         !rSz.GetWidthPercent() )
                     {
-                        SwTabFrm* pTabFrm = SwIterator<SwTabFrm,SwFmt>( *GetFrmFmt() ).First();
+                        SwTabFrm* pTabFrm = SwIterator<SwTabFrm,SwFormat>( *GetFrameFormat() ).First();
                         if( pTabFrm &&
                             pTabFrm->Prt().Width() != rSz.GetWidth() )
                         {
@@ -3562,8 +3562,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     aSz.SetWidthPercent( static_cast<sal_uInt8>(( aSz.GetWidth() * 100 ) /
                         ( aSz.GetWidth() + aLR.GetRight() + aLR.GetLeft())));
 
-                GetFrmFmt()->SetFmtAttr( aSz );
-                aParam.nTblWidth = sal_uInt16( aSz.GetWidth() );
+                GetFrameFormat()->SetFormatAttr( aSz );
+                aParam.nTableWidth = sal_uInt16( aSz.GetWidth() );
 
                 UnlockModify();
 
@@ -3579,9 +3579,9 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 // Bug 61494
                 if( LONG_MAX != nFrmWidth )
                 {
-                    SwFmtFrmSize aAbsSz( aSz );
+                    SwFormatFrmSize aAbsSz( aSz );
                     aAbsSz.SetWidth( nFrmWidth );
-                    GetFrmFmt()->SetFmtAttr( aAbsSz );
+                    GetFrameFormat()->SetFormatAttr( aAbsSz );
                 }
             }
         }
@@ -3589,7 +3589,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 ( bLeft ? nDist != 0 : std::abs( rSz.GetWidth() - nDist ) > COLFUZZY ) )
         {
             bRet = true;
-            if( bLeft && TBLFIX_CHGABS == eTblChgMode && !bInsDel )
+            if( bLeft && TBLFIX_CHGABS == eTableChgMode && !bInsDel )
                 aParam.bBigger = !bBigger;
 
             // First test if we have room at all
@@ -3625,7 +3625,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                             bRet = false;
                     }
 
-                    if( !bRet && rAktBox.GetFrmFmt()->GetFrmSize().GetWidth()
+                    if( !bRet && rAktBox.GetFrameFormat()->GetFrmSize().GetWidth()
                         - nRelDiff > COLFUZZY +
                             ( 567 / 2 /*leave room for at least 0.5 cm*/) )
                     {
@@ -3685,11 +3685,11 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                                                        : UNDO_TABLE_INSCOL );
                 }
                 else if( ppUndo )
-                    *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, true );
+                    *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                 if( bInsDel
-                    ? ( TBLFIX_CHGABS == eTblChgMode ? (bBigger && bLeft) : bLeft )
-                    : ( TBLFIX_CHGABS != eTblChgMode && bLeft ) )
+                    ? ( TBLFIX_CHGABS == eTableChgMode ? (bBigger && bLeft) : bLeft )
+                    : ( TBLFIX_CHGABS != eTableChgMode && bLeft ) )
                 {
                     for( n = aLines.size(); n; )
                     {
@@ -3715,23 +3715,23 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
         }
         break;
 
-    case nsTblChgWidthHeightType::WH_CELL_RIGHT:
-    case nsTblChgWidthHeightType::WH_CELL_LEFT:
-        if( TBLVAR_CHGABS == eTblChgMode )
+    case nsTableChgWidthHeightType::WH_CELL_RIGHT:
+    case nsTableChgWidthHeightType::WH_CELL_LEFT:
+        if( TBLVAR_CHGABS == eTableChgMode )
         {
             // Then call itself recursively; only with another mode (proportional)
-            TblChgMode eOld = eTblChgMode;
-            eTblChgMode = TBLFIX_CHGABS;
+            TableChgMode eOld = eTableChgMode;
+            eTableChgMode = TBLFIX_CHGABS;
 
             bRet = SetColWidth( rAktBox, eType, nAbsDiff, nRelDiff,
                                 ppUndo );
-            eTblChgMode = eOld;
+            eTableChgMode = eOld;
             return bRet;
         }
         else if( bInsDel || ( bLeft ? nDist != 0
                                     : (rSz.GetWidth() - nDist) > COLFUZZY ))
         {
-            if( bLeft && TBLFIX_CHGABS == eTblChgMode && !bInsDel )
+            if( bLeft && TBLFIX_CHGABS == eTableChgMode && !bInsDel )
                 aParam.bBigger = !bBigger;
 
             // First, see if there is enough room at all
@@ -3755,7 +3755,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 if( bLeft )
                     aParam.nMaxSize = aParam.nSide;
                 else
-                    aParam.nMaxSize = pLine->GetUpper()->GetFrmFmt()->
+                    aParam.nMaxSize = pLine->GetUpper()->GetFrameFormat()->
                                     GetFrmSize().GetWidth() - aParam.nSide;
             }
 
@@ -3771,7 +3771,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         bRet = false;
                 }
 
-                if( !bRet && !aParam.bBigger && rAktBox.GetFrmFmt()->
+                if( !bRet && !aParam.bBigger && rAktBox.GetFrameFormat()->
                     GetFrmSize().GetWidth() - nRelDiff > COLFUZZY +
                         ( 567 / 2 /*leave room for at least 0.5 cm*/) )
                 {
@@ -3800,11 +3800,11 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                                                        : UNDO_TABLE_INSCOL );
                 }
                 else if( ppUndo )
-                    *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, true );
+                    *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                 if( bInsDel
-                    ? ( TBLFIX_CHGABS == eTblChgMode ? (bBigger && bLeft) : bLeft )
-                    : ( TBLFIX_CHGABS != eTblChgMode && bLeft ) )
+                    ? ( TBLFIX_CHGABS == eTableChgMode ? (bBigger && bLeft) : bLeft )
+                    : ( TBLFIX_CHGABS != eTableChgMode && bLeft ) )
                 {
                     (*fnSelBox)( pLine, aParam, nDistStt, false );
                     (*fnOtherBox)( pLine, aParam1, nDistStt, false );
@@ -3837,10 +3837,10 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 
         if( ppUndo && *ppUndo )
         {
-            aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(eTblChgMode), eType,
+            aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(eTableChgMode), eType,
                                             nAbsDiff, nRelDiff );
             if( !aParam.bBigger )
-                aParam.pUndo->SaveNewBoxes( *aParam.pTblNd, aTmpLst );
+                aParam.pUndo->SaveNewBoxes( *aParam.pTableNd, aTmpLst );
         }
     }
 
@@ -3857,33 +3857,33 @@ static _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
                                 SwTableSortBoxes& rTmpLst )
 {
     // Find all Boxes/Lines
-    SwTable& rTbl = rParam.pTblNd->GetTable();
+    SwTable& rTable = rParam.pTableNd->GetTable();
 
     OSL_ENSURE( !rParam.m_Boxes.empty(), "We can't go on without Boxes!" );
 
     // Prevent deleting the whole Table
     if (!rParam.bBigger
-        && rParam.m_Boxes.size() == rTbl.GetTabSortBoxes().size())
+        && rParam.m_Boxes.size() == rTable.GetTabSortBoxes().size())
     {
         return 0;
     }
 
     _FndBox* pFndBox = new _FndBox( 0, 0 );
     if( !rParam.bBigger )
-        pFndBox->SetTableLines( rParam.m_Boxes, rTbl );
+        pFndBox->SetTableLines( rParam.m_Boxes, rTable );
     else
     {
         _FndPara aPara(rParam.m_Boxes, pFndBox);
-        ForEach_FndLineCopyCol( rTbl.GetTabLines(), &aPara );
+        ForEach_FndLineCopyCol( rTable.GetTabLines(), &aPara );
         OSL_ENSURE( pFndBox->GetLines().size(), "Where are the Boxes?" );
-        pFndBox->SetTableLines( rTbl );
+        pFndBox->SetTableLines( rTable );
 
         if( ppUndo )
-            rTmpLst.insert( rTbl.GetTabSortBoxes() );
+            rTmpLst.insert( rTable.GetTabSortBoxes() );
     }
 
     // Find Lines for the Layout update
-    pFndBox->DelFrms( rTbl );
+    pFndBox->DelFrms( rTable );
 
     // TL_CHART2: it is currently unclear if sth has to be done here.
 
@@ -3896,7 +3896,7 @@ void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewHeight,
     SwLayoutFrm* pLineFrm = GetRowFrm( rLine );
     OSL_ENSURE( pLineFrm, "Where is the Frame from the SwTableLine?" );
 
-    SwFrmFmt* pFmt = rLine.ClaimFrmFmt();
+    SwFrameFormat* pFormat = rLine.ClaimFrameFormat();
 
     SwTwips nMyNewH, nMyOldH = pLineFrm->Frm().Height();
     if( !nOldHeight )                       // the BaseLine and absolute
@@ -3915,7 +3915,7 @@ void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewHeight,
         ( nMyOldH - nMyNewH ) > ( CalcRowRstHeight( pLineFrm ) + ROWFUZZY ))
         eSize = ATT_FIX_SIZE;
 
-    pFmt->SetFmtAttr( SwFmtFrmSize( eSize, 0, nMyNewH ) );
+    pFormat->SetFormatAttr( SwFormatFrmSize( eSize, 0, nMyNewH ) );
 
     // First adapt all internal ones
     for( auto pBox : rLine.GetTabBoxes() )
@@ -4004,39 +4004,39 @@ static bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
     if( !bCheck )
     {
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-        SwDoc* pDoc = pLine->GetFrmFmt()->GetDoc();
+        SwDoc* pDoc = pLine->GetFrameFormat()->GetDoc();
         if( !rParam.bBigger )
         {
             for (size_t n = rBoxes.size(); n; )
             {
-                ::lcl_SaveUpperLowerBorder( rParam.pTblNd->GetTable(),
+                ::lcl_SaveUpperLowerBorder( rParam.pTableNd->GetTable(),
                                                     *rBoxes[ --n ],
-                                                    rParam.aShareFmts );
+                                                    rParam.aShareFormats );
             }
             for (size_t n = rBoxes.size(); n; )
             {
-                ::_DeleteBox( rParam.pTblNd->GetTable(),
+                ::_DeleteBox( rParam.pTableNd->GetTable(),
                                     rBoxes[ --n ], rParam.pUndo, false,
-                                    false, &rParam.aShareFmts );
+                                    false, &rParam.aShareFormats );
             }
         }
         else
         {
             // Insert Line
-            SwTableLine* pNewLine = new SwTableLine( static_cast<SwTableLineFmt*>(pLine->GetFrmFmt()),
+            SwTableLine* pNewLine = new SwTableLine( static_cast<SwTableLineFormat*>(pLine->GetFrameFormat()),
                                         rBoxes.size(), pLine->GetUpper() );
             SwTableLines* pLines;
             if( pLine->GetUpper() )
                 pLines = &pLine->GetUpper()->GetTabLines();
             else
-                pLines = &rParam.pTblNd->GetTable().GetTabLines();
+                pLines = &rParam.pTableNd->GetTable().GetTabLines();
             sal_uInt16 nPos = pLines->GetPos( pLine );
             if( !rParam.bTop )
                 ++nPos;
             pLines->insert( pLines->begin() + nPos, pNewLine );
 
-            SwFrmFmt* pNewFmt = pNewLine->ClaimFrmFmt();
-            pNewFmt->SetFmtAttr( SwFmtFrmSize( ATT_MIN_SIZE, 0, nDist ) );
+            SwFrameFormat* pNewFormat = pNewLine->ClaimFrameFormat();
+            pNewFormat->SetFormatAttr( SwFormatFrmSize( ATT_MIN_SIZE, 0, nDist ) );
 
             // And once again calculate the Box count
             SwTableBoxes& rNewBoxes = pNewLine->GetTabBoxes();
@@ -4047,28 +4047,28 @@ static bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
                 if( !pOld->GetSttNd() )
                 {
                     // Not a normal content Box, so fall back to the 1st next Box
-                    nWidth = pOld->GetFrmFmt()->GetFrmSize().GetWidth();
+                    nWidth = pOld->GetFrameFormat()->GetFrmSize().GetWidth();
                     while( !pOld->GetSttNd() )
                         pOld = pOld->GetTabLines()[ 0 ]->GetTabBoxes()[ 0 ];
                 }
-                ::_InsTblBox( pDoc, rParam.pTblNd, pNewLine,
-                                    static_cast<SwTableBoxFmt*>(pOld->GetFrmFmt()), pOld, n );
+                ::_InsTableBox( pDoc, rParam.pTableNd, pNewLine,
+                                    static_cast<SwTableBoxFormat*>(pOld->GetFrameFormat()), pOld, n );
 
                 // Special treatment for the border:
                 // The top one needs to be removed
-                const SvxBoxItem& rBoxItem = pOld->GetFrmFmt()->GetBox();
+                const SvxBoxItem& rBoxItem = pOld->GetFrameFormat()->GetBox();
                 if( rBoxItem.GetTop() )
                 {
                     SvxBoxItem aTmp( rBoxItem );
                     aTmp.SetLine( 0, SvxBoxItemLine::TOP );
-                    rParam.aShareFmts.SetAttr( rParam.bTop
+                    rParam.aShareFormats.SetAttr( rParam.bTop
                                                 ? *pOld
                                                 : *rNewBoxes[ n ], aTmp );
                 }
 
                 if( nWidth )
-                    rParam.aShareFmts.SetAttr( *rNewBoxes[ n ],
-                                SwFmtFrmSize( ATT_FIX_SIZE, nWidth, 0 ) );
+                    rParam.aShareFormats.SetAttr( *rNewBoxes[ n ],
+                                SwFormatFrmSize( ATT_FIX_SIZE, nWidth, 0 ) );
             }
         }
     }
@@ -4079,7 +4079,7 @@ static bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
         for( auto n = rBoxes.size(); n; )
         {
             SwTableBox* pBox = rBoxes[ --n ];
-            if( pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
+            if( pBox->GetFrameFormat()->GetProtect().IsContentProtected() )
                 return false;
 
             if( pBox->GetSttNd() )
@@ -4110,9 +4110,9 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     SwTableSortBoxes aTmpLst;       // for Undo
     bool bBigger,
         bRet = false,
-        bTop = nsTblChgWidthHeightType::WH_ROW_TOP == ( eType & 0xff ) ||
-                nsTblChgWidthHeightType::WH_CELL_TOP == ( eType & 0xff ),
-        bInsDel = 0 != (eType & nsTblChgWidthHeightType::WH_FLAG_INSDEL );
+        bTop = nsTableChgWidthHeightType::WH_ROW_TOP == ( eType & 0xff ) ||
+                nsTableChgWidthHeightType::WH_CELL_TOP == ( eType & 0xff ),
+        bInsDel = 0 != (eType & nsTableChgWidthHeightType::WH_FLAG_INSDEL );
     sal_uInt16 nBaseLinePos = GetTabLines().GetPos( pBaseLine );
     sal_uLong nBoxIdx = rAktBox.GetSttIdx();
 
@@ -4131,8 +4131,8 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     // How do we get to the height?
     switch( eType & 0xff )
     {
-    case nsTblChgWidthHeightType::WH_CELL_TOP:
-    case nsTblChgWidthHeightType::WH_CELL_BOTTOM:
+    case nsTableChgWidthHeightType::WH_CELL_TOP:
+    case nsTableChgWidthHeightType::WH_CELL_BOTTOM:
         if( pLine == pBaseLine )
             break;  // it doesn't work then!
 
@@ -4142,15 +4142,15 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
         pBaseLine = pLine;
         // no break!
 
-    case nsTblChgWidthHeightType::WH_ROW_TOP:
-    case nsTblChgWidthHeightType::WH_ROW_BOTTOM:
+    case nsTableChgWidthHeightType::WH_ROW_TOP:
+    case nsTableChgWidthHeightType::WH_ROW_BOTTOM:
         {
             if( bInsDel && !bBigger )       // By how much does it get higher?
             {
                 nAbsDiff = GetRowFrm( *pBaseLine )->Frm().Height();
             }
 
-            if( TBLVAR_CHGABS == eTblChgMode )
+            if( TBLVAR_CHGABS == eTableChgMode )
             {
                 // First test if we have room at all
                 if( bBigger )
@@ -4175,7 +4175,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                         if( !bBigger &&
                             aParam.m_Boxes.size() == m_TabSortContentBoxes.size())
                         {
-                            GetFrmFmt()->GetDoc()->DeleteRowCol(aParam.m_Boxes);
+                            GetFrameFormat()->GetDoc()->DeleteRowCol(aParam.m_Boxes);
                             return false;
                         }
 
@@ -4185,7 +4185,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                                                 : UNDO_ROW_DELETE );
                     }
                     else if( ppUndo )
-                        *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, true );
+                        *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                     (*fnSelLine)( (*pLines)[ nBaseLinePos ], aParam,
                                     nAbsDiff, false );
@@ -4202,7 +4202,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                     nStt = nBaseLinePos + 1, nEnd = pLines->size();
 
                 // Get the current Lines' height
-                if( TBLFIX_CHGPROP == eTblChgMode )
+                if( TBLFIX_CHGPROP == eTableChgMode )
                 {
                     for( auto n = nStt; n < nEnd; ++n )
                     {
@@ -4263,10 +4263,10 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                                                 : UNDO_ROW_DELETE );
                     }
                     else if( ppUndo )
-                        *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, true );
+                        *ppUndo = new SwUndoAttrTable( *aParam.pTableNd, true );
 
                     CR_SetLineHeight aParam1( aParam );
-                    if( TBLFIX_CHGPROP == eTblChgMode && !bBigger &&
+                    if( TBLFIX_CHGPROP == eTableChgMode && !bBigger &&
                         !aParam.nMaxSpace )
                     {
                         // We need to distribute the space evenly among all the Lines.
@@ -4294,13 +4294,13 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                 else
                 {
                     // Then call itself recursively; only with another mode (proportional)
-                    TblChgMode eOld = eTblChgMode;
-                    eTblChgMode = TBLVAR_CHGABS;
+                    TableChgMode eOld = eTableChgMode;
+                    eTableChgMode = TBLVAR_CHGABS;
 
                     bRet = SetRowHeight( rAktBox, eType, nAbsDiff,
                                         nRelDiff, ppUndo );
 
-                    eTblChgMode = eOld;
+                    eTableChgMode = eOld;
                     xFndBox.reset();
                 }
             }
@@ -4323,10 +4323,10 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
         if (ppUndo && *ppUndo && aParam.pUndo)
         {
-            aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(eTblChgMode), eType,
+            aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(eTableChgMode), eType,
                                             nAbsDiff, nRelDiff );
             if( bBigger )
-                aParam.pUndo->SaveNewBoxes( *aParam.pTblNd, aTmpLst );
+                aParam.pUndo->SaveNewBoxes( *aParam.pTableNd, aTmpLst );
         }
     }
 
@@ -4335,11 +4335,11 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     return bRet;
 }
 
-SwFrmFmt* SwShareBoxFmt::GetFormat( long nWidth ) const
+SwFrameFormat* SwShareBoxFormat::GetFormat( long nWidth ) const
 {
-    SwFrmFmt *pRet = 0, *pTmp;
-    for( auto n = aNewFmts.size(); n; )
-        if( ( pTmp = aNewFmts[ --n ])->GetFrmSize().GetWidth()
+    SwFrameFormat *pRet = 0, *pTmp;
+    for( auto n = aNewFormats.size(); n; )
+        if( ( pTmp = aNewFormats[ --n ])->GetFrmSize().GetWidth()
                 == nWidth )
         {
             pRet = pTmp;
@@ -4348,16 +4348,16 @@ SwFrmFmt* SwShareBoxFmt::GetFormat( long nWidth ) const
     return pRet;
 }
 
-SwFrmFmt* SwShareBoxFmt::GetFormat( const SfxPoolItem& rItem ) const
+SwFrameFormat* SwShareBoxFormat::GetFormat( const SfxPoolItem& rItem ) const
 {
     const SfxPoolItem* pItem;
     sal_uInt16 nWhich = rItem.Which();
-    SwFrmFmt *pRet = 0, *pTmp;
-    const SfxPoolItem& rFrmSz = pOldFmt->GetFmtAttr( RES_FRM_SIZE, false );
-    for( auto n = aNewFmts.size(); n; )
-        if( SfxItemState::SET == ( pTmp = aNewFmts[ --n ])->
+    SwFrameFormat *pRet = 0, *pTmp;
+    const SfxPoolItem& rFrmSz = pOldFormat->GetFormatAttr( RES_FRM_SIZE, false );
+    for( auto n = aNewFormats.size(); n; )
+        if( SfxItemState::SET == ( pTmp = aNewFormats[ --n ])->
             GetItemState( nWhich, false, &pItem ) && *pItem == rItem &&
-            pTmp->GetFmtAttr( RES_FRM_SIZE, false ) == rFrmSz )
+            pTmp->GetFormatAttr( RES_FRM_SIZE, false ) == rFrmSz )
         {
             pRet = pTmp;
             break;
@@ -4365,51 +4365,51 @@ SwFrmFmt* SwShareBoxFmt::GetFormat( const SfxPoolItem& rItem ) const
     return pRet;
 }
 
-void SwShareBoxFmt::AddFormat( SwFrmFmt& rNew )
+void SwShareBoxFormat::AddFormat( SwFrameFormat& rNew )
 {
-    aNewFmts.push_back( &rNew );
+    aNewFormats.push_back( &rNew );
 }
 
-bool SwShareBoxFmt::RemoveFormat( const SwFrmFmt& rFmt )
+bool SwShareBoxFormat::RemoveFormat( const SwFrameFormat& rFormat )
 {
     // returns true, if we can delete
-    if( pOldFmt == &rFmt )
+    if( pOldFormat == &rFormat )
         return true;
 
-    std::vector<SwFrmFmt*>::iterator it = std::find( aNewFmts.begin(), aNewFmts.end(), &rFmt );
-    if( aNewFmts.end() != it )
-        aNewFmts.erase( it );
-    return aNewFmts.empty();
+    std::vector<SwFrameFormat*>::iterator it = std::find( aNewFormats.begin(), aNewFormats.end(), &rFormat );
+    if( aNewFormats.end() != it )
+        aNewFormats.erase( it );
+    return aNewFormats.empty();
 }
 
-SwShareBoxFmts::~SwShareBoxFmts()
+SwShareBoxFormats::~SwShareBoxFormats()
 {
 }
 
-SwFrmFmt* SwShareBoxFmts::GetFormat( const SwFrmFmt& rFmt, long nWidth ) const
+SwFrameFormat* SwShareBoxFormats::GetFormat( const SwFrameFormat& rFormat, long nWidth ) const
 {
     sal_uInt16 nPos;
-    return Seek_Entry( rFmt, &nPos )
+    return Seek_Entry( rFormat, &nPos )
                     ? aShareArr[ nPos ].GetFormat( nWidth )
                     : 0;
 }
-SwFrmFmt* SwShareBoxFmts::GetFormat( const SwFrmFmt& rFmt,
+SwFrameFormat* SwShareBoxFormats::GetFormat( const SwFrameFormat& rFormat,
                                      const SfxPoolItem& rItem ) const
 {
     sal_uInt16 nPos;
-    return Seek_Entry( rFmt, &nPos )
+    return Seek_Entry( rFormat, &nPos )
                     ? aShareArr[ nPos ].GetFormat( rItem )
                     : 0;
 }
 
-void SwShareBoxFmts::AddFormat( const SwFrmFmt& rOld, SwFrmFmt& rNew )
+void SwShareBoxFormats::AddFormat( const SwFrameFormat& rOld, SwFrameFormat& rNew )
 {
     {
         sal_uInt16 nPos;
-        SwShareBoxFmt* pEntry;
+        SwShareBoxFormat* pEntry;
         if( !Seek_Entry( rOld, &nPos ))
         {
-            pEntry = new SwShareBoxFmt( rOld );
+            pEntry = new SwShareBoxFormat( rOld );
             aShareArr.insert( aShareArr.begin() + nPos, pEntry );
         }
         else
@@ -4419,22 +4419,22 @@ void SwShareBoxFmts::AddFormat( const SwFrmFmt& rOld, SwFrmFmt& rNew )
     }
 }
 
-void SwShareBoxFmts::ChangeFrmFmt( SwTableBox* pBox, SwTableLine* pLn,
-                                    SwFrmFmt& rFmt )
+void SwShareBoxFormats::ChangeFrameFormat( SwTableBox* pBox, SwTableLine* pLn,
+                                    SwFrameFormat& rFormat )
 {
     SwClient aCl;
-    SwFrmFmt* pOld = 0;
+    SwFrameFormat* pOld = 0;
     if( pBox )
     {
-        pOld = pBox->GetFrmFmt();
+        pOld = pBox->GetFrameFormat();
         pOld->Add( &aCl );
-        pBox->ChgFrmFmt( static_cast<SwTableBoxFmt*>(&rFmt) );
+        pBox->ChgFrameFormat( static_cast<SwTableBoxFormat*>(&rFormat) );
     }
     else if( pLn )
     {
-        pOld = pLn->GetFrmFmt();
+        pOld = pLn->GetFrameFormat();
         pOld->Add( &aCl );
-        pLn->ChgFrmFmt( static_cast<SwTableLineFmt*>(&rFmt) );
+        pLn->ChgFrameFormat( static_cast<SwTableLineFormat*>(&rFormat) );
     }
     if( pOld && pOld->HasOnlyOneListener() )
     {
@@ -4443,73 +4443,73 @@ void SwShareBoxFmts::ChangeFrmFmt( SwTableBox* pBox, SwTableLine* pLn,
     }
 }
 
-void SwShareBoxFmts::SetSize( SwTableBox& rBox, const SwFmtFrmSize& rSz )
+void SwShareBoxFormats::SetSize( SwTableBox& rBox, const SwFormatFrmSize& rSz )
 {
-    SwFrmFmt *pBoxFmt = rBox.GetFrmFmt(),
-             *pRet = GetFormat( *pBoxFmt, rSz.GetWidth() );
+    SwFrameFormat *pBoxFormat = rBox.GetFrameFormat(),
+             *pRet = GetFormat( *pBoxFormat, rSz.GetWidth() );
     if( pRet )
-        ChangeFrmFmt( &rBox, 0, *pRet );
+        ChangeFrameFormat( &rBox, 0, *pRet );
     else
     {
-        pRet = rBox.ClaimFrmFmt();
-        pRet->SetFmtAttr( rSz );
-        AddFormat( *pBoxFmt, *pRet );
+        pRet = rBox.ClaimFrameFormat();
+        pRet->SetFormatAttr( rSz );
+        AddFormat( *pBoxFormat, *pRet );
     }
 }
 
-void SwShareBoxFmts::SetAttr( SwTableBox& rBox, const SfxPoolItem& rItem )
+void SwShareBoxFormats::SetAttr( SwTableBox& rBox, const SfxPoolItem& rItem )
 {
-    SwFrmFmt *pBoxFmt = rBox.GetFrmFmt(),
-             *pRet = GetFormat( *pBoxFmt, rItem );
+    SwFrameFormat *pBoxFormat = rBox.GetFrameFormat(),
+             *pRet = GetFormat( *pBoxFormat, rItem );
     if( pRet )
-        ChangeFrmFmt( &rBox, 0, *pRet );
+        ChangeFrameFormat( &rBox, 0, *pRet );
     else
     {
-        pRet = rBox.ClaimFrmFmt();
-        pRet->SetFmtAttr( rItem );
-        AddFormat( *pBoxFmt, *pRet );
+        pRet = rBox.ClaimFrameFormat();
+        pRet->SetFormatAttr( rItem );
+        AddFormat( *pBoxFormat, *pRet );
     }
 }
 
-void SwShareBoxFmts::SetAttr( SwTableLine& rLine, const SfxPoolItem& rItem )
+void SwShareBoxFormats::SetAttr( SwTableLine& rLine, const SfxPoolItem& rItem )
 {
-    SwFrmFmt *pLineFmt = rLine.GetFrmFmt(),
-             *pRet = GetFormat( *pLineFmt, rItem );
+    SwFrameFormat *pLineFormat = rLine.GetFrameFormat(),
+             *pRet = GetFormat( *pLineFormat, rItem );
     if( pRet )
-        ChangeFrmFmt( 0, &rLine, *pRet );
+        ChangeFrameFormat( 0, &rLine, *pRet );
     else
     {
-        pRet = rLine.ClaimFrmFmt();
-        pRet->SetFmtAttr( rItem );
-        AddFormat( *pLineFmt, *pRet );
+        pRet = rLine.ClaimFrameFormat();
+        pRet->SetFormatAttr( rItem );
+        AddFormat( *pLineFormat, *pRet );
     }
 }
 
-void SwShareBoxFmts::RemoveFormat( const SwFrmFmt& rFmt )
+void SwShareBoxFormats::RemoveFormat( const SwFrameFormat& rFormat )
 {
     for( auto i = aShareArr.size(); i; )
-        if( aShareArr[ --i ].RemoveFormat( rFmt ))
+        if( aShareArr[ --i ].RemoveFormat( rFormat ))
             aShareArr.erase( aShareArr.begin() + i );
 }
 
-bool SwShareBoxFmts::Seek_Entry( const SwFrmFmt& rFmt, sal_uInt16* pPos ) const
+bool SwShareBoxFormats::Seek_Entry( const SwFrameFormat& rFormat, sal_uInt16* pPos ) const
 {
-    sal_uLong nIdx = reinterpret_cast<sal_uLong>(&rFmt);
-    _SwShareBoxFmts::size_type nO = aShareArr.size(), nU = 0;
+    sal_uLong nIdx = reinterpret_cast<sal_uLong>(&rFormat);
+    _SwShareBoxFormats::size_type nO = aShareArr.size(), nU = 0;
     if( nO > 0 )
     {
         nO--;
         while( nU <= nO )
         {
             const auto nM = nU + ( nO - nU ) / 2;
-            sal_uLong nFmt = reinterpret_cast<sal_uLong>(&aShareArr[ nM ].GetOldFormat());
-            if( nFmt == nIdx )
+            sal_uLong nFormat = reinterpret_cast<sal_uLong>(&aShareArr[ nM ].GetOldFormat());
+            if( nFormat == nIdx )
             {
                 if( pPos )
                     *pPos = nM;
                 return true;
             }
-            else if( nFmt < nIdx )
+            else if( nFormat < nIdx )
                 nU = nM + 1;
             else if( nM == 0 )
             {

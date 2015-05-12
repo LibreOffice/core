@@ -421,7 +421,7 @@ bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     vcl::Font rActBulletFont = pActualBullets[nIndex]->aFont;
 
     sal_uInt16 nMask = 1;
-    OUString sBulletCharFmtName = GetBulCharFmtName();
+    OUString sBulletCharFormatName = GetBulCharFmtName();
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if(mLevel & nMask)
@@ -430,7 +430,7 @@ bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             aFmt.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
             aFmt.SetBulletFont(&rActBulletFont);
             aFmt.SetBulletChar(cChar );
-            aFmt.SetCharFmtName(sBulletCharFmtName);
+            aFmt.SetCharFormatName(sBulletCharFormatName);
             OUString aEmptyStr;
             aFmt.SetPrefix( aEmptyStr );
             aFmt.SetSuffix( aEmptyStr );
@@ -686,7 +686,7 @@ bool GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, s
             aFmt.SetNumberingType(nSetNumberingType);
             aFmt.SetPrefix( aEmptyStr );
             aFmt.SetSuffix( aEmptyStr );
-            aFmt.SetCharFmtName( sNumCharFmtName );
+            aFmt.SetCharFormatName( sNumCharFmtName );
 
                     Graphic aGraphic;
                     if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, pEntry->nGallaryIndex, &aGraphic))
@@ -1149,7 +1149,7 @@ bool MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
         //vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
         vcl::Font rActBulletFont = static_cast<BulletsSettings_Impl*>(pCurrentBullets->pBullets)->aFont;
         sal_uInt16 nMask = 1;
-        OUString sBulletCharFmtName = GetBulCharFmtName();
+        OUString sBulletCharFormatName = GetBulCharFmtName();
         for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
         {
             if(mLevel & nMask)
@@ -1159,7 +1159,7 @@ bool MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
                 aFmt.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
                 aFmt.SetBulletFont(&rActBulletFont);
                 aFmt.SetBulletChar(cChar );
-                aFmt.SetCharFmtName(sBulletCharFmtName);
+                aFmt.SetCharFormatName(sBulletCharFormatName);
                 OUString aEmptyStr;
                 aFmt.SetPrefix( aEmptyStr );
                 aFmt.SetSuffix( aEmptyStr );
@@ -1187,7 +1187,7 @@ bool MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
                 aFmt.SetNumberingType(nSetNumberingType);
                 aFmt.SetPrefix( aEmptyStr );
                 aFmt.SetSuffix( aEmptyStr );
-                aFmt.SetCharFmtName( sNumCharFmtName );
+                aFmt.SetCharFormatName( sNumCharFmtName );
                 if ( pCurrentBullets->nIndexDefault == (sal_uInt16)0xFFFF && pEntry->pGrfObj )
                 {
                     Size aSize = pEntry->aSize;
@@ -1428,7 +1428,7 @@ bool NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uIn
             aFmt.SetPrefix(_pSet->pNumSetting->sPrefix);
             aFmt.SetSuffix(_pSet->pNumSetting->sSuffix);
 
-            aFmt.SetCharFmtName(sNumCharFmtName);
+            aFmt.SetCharFormatName(sNumCharFmtName);
             if (isResetSize) aFmt.SetBulletRelSize(100);
             aNum.SetLevel(i, aFmt);
         }
@@ -1711,7 +1711,7 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     NumSettingsArr_Impl *pNumSettingsArr=pItemArr->pNumSettingsArr;
 
     NumSettings_ImplPtr pLevelSettings = 0;
-    OUString sBulletCharFmtName = GetBulCharFmtName();
+    OUString sBulletCharFormatName = GetBulCharFmtName();
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if(pNumSettingsArr->size() > i)
@@ -1774,7 +1774,7 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             }
 
             aFmt.SetBulletChar(cChar);
-            aFmt.SetCharFmtName( sBulletCharFmtName );
+            aFmt.SetCharFormatName( sBulletCharFormatName );
             if (isResetSize) aFmt.SetBulletRelSize(45);
         }else if ((aFmt.GetNumberingType()&(~LINK_TOKEN)) == SVX_NUM_BITMAP ) {
             if (pLevelSettings->pBrushItem) {
@@ -1793,7 +1793,7 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
         } else
         {
             aFmt.SetIncludeUpperLevels(sal::static_int_cast< sal_uInt8 >(0 != nUpperLevelOrChar ? aNum.GetLevelCount() : 0));
-            aFmt.SetCharFmtName(sBulletCharFmtName);
+            aFmt.SetCharFormatName(sBulletCharFormatName);
                 if (isResetSize) aFmt.SetBulletRelSize(100);
         }
         if(pNumSettingsArr->size() > i) {

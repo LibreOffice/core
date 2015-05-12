@@ -63,8 +63,8 @@ SwFieldType* SwChapterFieldType::Copy() const
 
 // chapter field
 
-SwChapterField::SwChapterField(SwChapterFieldType* pTyp, sal_uInt32 nFmt)
-    : SwField(pTyp, nFmt), nLevel( 0 )
+SwChapterField::SwChapterField(SwChapterFieldType* pTyp, sal_uInt32 nFormat)
+    : SwField(pTyp, nFormat), nLevel( 0 )
 {}
 
 OUString SwChapterField::Expand() const
@@ -99,41 +99,41 @@ SwField* SwChapterField::Copy() const
 
 // #i53420#
 void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
-                                      const SwCntntNode* pCntntNode,
+                                      const SwContentNode* pContentNode,
                                       bool bSrchNum )
 {
     OSL_ENSURE( pFrm, "In which frame am I?" );
-    SwDoc* pDoc = const_cast<SwDoc*>(pCntntNode->GetDoc());
+    SwDoc* pDoc = const_cast<SwDoc*>(pContentNode->GetDoc());
 
-    const SwTxtNode* pTxtNode = dynamic_cast<const SwTxtNode*>(pCntntNode);
-    if ( !pTxtNode || !pFrm->IsInDocBody() )
+    const SwTextNode* pTextNode = dynamic_cast<const SwTextNode*>(pContentNode);
+    if ( !pTextNode || !pFrm->IsInDocBody() )
     {
         SwPosition aDummyPos( pDoc->GetNodes().GetEndOfContent() );
-        pTxtNode = GetBodyTxtNode( *pDoc, aDummyPos, *pFrm );
+        pTextNode = GetBodyTextNode( *pDoc, aDummyPos, *pFrm );
     }
 
-    if ( pTxtNode )
+    if ( pTextNode )
     {
-        ChangeExpansion( *pTxtNode, bSrchNum );
+        ChangeExpansion( *pTextNode, bSrchNum );
     }
 }
 
-void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, bool bSrchNum)
+void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum)
 {
     sNumber.clear();
     sTitle.clear();
     sPost.clear();
     sPre.clear();
 
-    SwDoc* pDoc = const_cast<SwDoc*>(rTxtNd.GetDoc());
-    const SwTxtNode *pTxtNd = rTxtNd.FindOutlineNodeOfLevel( nLevel );
-    if( pTxtNd )
+    SwDoc* pDoc = const_cast<SwDoc*>(rTextNd.GetDoc());
+    const SwTextNode *pTextNd = rTextNd.FindOutlineNodeOfLevel( nLevel );
+    if( pTextNd )
     {
         if( bSrchNum )
         {
-            const SwTxtNode* pONd = pTxtNd;
+            const SwTextNode* pONd = pTextNd;
             do {
-                if( pONd && pONd->GetTxtColl() )
+                if( pONd && pONd->GetTextColl() )
                 {
                     sal_uInt8 nPrevLvl = nLevel;
 
@@ -146,13 +146,13 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, bool bSrchNum)
                     else if( SVX_NUM_NUMBER_NONE != pDoc->GetOutlineNumRule()
                             ->Get( nLevel ).GetNumberingType() )
                     {
-                        pTxtNd = pONd;
+                        pTextNd = pONd;
                         break;
                     }
 
                     if( !nLevel-- )
                         break;
-                    pONd = pTxtNd->FindOutlineNodeOfLevel( nLevel );
+                    pONd = pTextNd->FindOutlineNodeOfLevel( nLevel );
                 }
                 else
                     break;
@@ -161,25 +161,25 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, bool bSrchNum)
 
         // get the number without Pre-/Post-fixstrings
 
-        if ( pTxtNd->IsOutline() )
+        if ( pTextNd->IsOutline() )
         {
             // correction of refactoring done by cws swnumtree:
             // retrieve numbering string without prefix and suffix strings
             // as stated in the above german comment.
-            sNumber = pTxtNd->GetNumString( false );
+            sNumber = pTextNd->GetNumString( false );
 
-            SwNumRule* pRule( pTxtNd->GetNumRule() );
-            if ( pTxtNd->IsCountedInList() && pRule )
+            SwNumRule* pRule( pTextNd->GetNumRule() );
+            if ( pTextNd->IsCountedInList() && pRule )
             {
-                int nListLevel = pTxtNd->GetActualListLevel();
+                int nListLevel = pTextNd->GetActualListLevel();
                 if (nListLevel < 0)
                     nListLevel = 0;
                 if (nListLevel >= MAXLEVEL)
                     nListLevel = MAXLEVEL - 1;
 
-                const SwNumFmt& rNFmt = pRule->Get(nListLevel);
-                sPost = rNFmt.GetSuffix();
-                sPre = rNFmt.GetPrefix();
+                const SwNumFormat& rNFormat = pRule->Get(nListLevel);
+                sPost = rNFormat.GetSuffix();
+                sPre = rNFormat.GetPrefix();
             }
         }
         else
@@ -187,7 +187,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, bool bSrchNum)
             sNumber = "??";
         }
 
-        sTitle = removeControlChars(pTxtNd->GetExpandTxt(0, -1, false, false, false, false));
+        sTitle = removeControlChars(pTextNd->GetExpandText(0, -1, false, false, false, false));
 
     }
 }

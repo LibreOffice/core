@@ -26,8 +26,8 @@
 class SwWrtShell;
 class SwContentArr;
 class SwContentType;
-class SwFmtFld;
-class SwTxtINetFmt;
+class SwFormatField;
+class SwTextINetFormat;
 class SwTOXBase;
 class SwRangeRedline;
 
@@ -71,34 +71,34 @@ class SwRegionContent : public SwContent
 class SwURLFieldContent : public SwContent
 {
     OUString sURL;
-    const SwTxtINetFmt* pINetAttr;
+    const SwTextINetFormat* pINetAttr;
 
 public:
     SwURLFieldContent(  const SwContentType* pCnt,
                             const OUString& rName,
                             const OUString& rURL,
-                            const SwTxtINetFmt* pAttr,
+                            const SwTextINetFormat* pAttr,
                             long nYPos )
         : SwContent( pCnt, rName, nYPos ), sURL( rURL ), pINetAttr( pAttr )
     {}
 
     virtual bool        IsProtect() const SAL_OVERRIDE;
     const OUString&     GetURL()    const   { return sURL; }
-    const SwTxtINetFmt* GetINetAttr()       { return pINetAttr; }
+    const SwTextINetFormat* GetINetAttr()       { return pINetAttr; }
 };
 
 class SwPostItContent : public SwContent
 {
-    const SwFmtFld*     pFld;
+    const SwFormatField*     pField;
     SwRangeRedline*     pRedline;
     bool                mbPostIt;
 public:
     SwPostItContent( const SwContentType* pCnt,
                             const OUString& rName,
-                            const SwFmtFld* pFormatField,
+                            const SwFormatField* pFormatField,
                             long nYPos )
         : SwContent(pCnt, rName, nYPos)
-        , pFld(pFormatField)
+        , pField(pFormatField)
         , pRedline(NULL)
         , mbPostIt(true)
     {}
@@ -107,12 +107,12 @@ public:
                             SwRangeRedline* pRed,
                             long nYPos )
         : SwContent(pCnt, rName, nYPos)
-        , pFld(NULL)
+        , pField(NULL)
         , pRedline(pRed)
         , mbPostIt(false)
     {}
 
-    const SwFmtFld* GetPostIt() const  { return pFld; }
+    const SwFormatField* GetPostIt() const  { return pField; }
     SwRangeRedline* GetRedline() { return pRedline; }
     virtual bool    IsProtect()     const SAL_OVERRIDE;
     bool            IsPostIt()   const {return mbPostIt; }

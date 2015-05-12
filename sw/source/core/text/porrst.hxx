@@ -24,13 +24,13 @@
 #define LINE_BREAK_WIDTH        150
 #define SPECIAL_FONT_HEIGHT     200
 
-class SwTxtFormatInfo;
+class SwTextFormatInfo;
 
 class SwTmpEndPortion : public SwLinePortion
 {
 public:
             SwTmpEndPortion( const SwLinePortion &rPortion );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
 
@@ -40,9 +40,9 @@ public:
             SwBreakPortion( const SwLinePortion &rPortion );
     // Returns 0 if we have no usable data
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo &rInf ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
     virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
@@ -71,8 +71,8 @@ public:
     // of rPortion. It is only used for kerning portions for grid mode
     SwKernPortion( const SwLinePortion &rPortion );
 
-    virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual void FormatEOL( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
 
     OUTPUT_OPERATOR_OVERRIDE
 };
@@ -83,8 +83,8 @@ class SwArrowPortion : public SwLinePortion
     bool bLeft;
 public:
             SwArrowPortion( const SwLinePortion &rPortion );
-            SwArrowPortion( const SwTxtPaintInfo &rInf );
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
+            SwArrowPortion( const SwTextPaintInfo &rInf );
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
     inline bool IsLeft() const { return bLeft; }
     inline const Point& GetPos() const { return aPos; }
@@ -95,7 +95,7 @@ public:
 // other punctuation marks are allowed to display in the margin of the page
 // by a user option.
 // The SwHangingPortion is the corresponding textportion to do that.
-class SwHangingPortion : public SwTxtPortion
+class SwHangingPortion : public SwTextPortion
 {
     sal_uInt16 nInnerWidth;
 public:
@@ -112,8 +112,8 @@ public:
     inline SwHiddenTextPortion( sal_Int32 nLen )
         { SetWhichPor( POR_HIDDEN_TXT );  SetLen( nLen ); }
 
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
 };
 
 class SwControlCharPortion : public SwLinePortion
@@ -132,9 +132,9 @@ public:
         SetWhichPor( POR_CONTROLCHAR ); SetLen( 1 );
     }
 
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual sal_uInt16 GetViewWidth( const SwTxtSizeInfo& rInf ) const SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo& rInf ) const SAL_OVERRIDE;
 };
 
 #endif

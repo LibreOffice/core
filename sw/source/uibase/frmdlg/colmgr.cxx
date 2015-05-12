@@ -27,7 +27,7 @@
 // private methods
 
 // set column width to current width
-void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
+void FitToActualSize(SwFormatCol& rCol, sal_uInt16 nWidth)
 {
     const sal_uInt16 nCount = rCol.GetColumns().size();
     for(sal_uInt16 i = 0; i < nCount; ++i)
@@ -43,20 +43,20 @@ void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
 // set column quantity and Gutterwidth
 void SwColMgr::SetCount(sal_uInt16 nCount, sal_uInt16  nGutterWidth)
 {
-    aFmtCol.Init(nCount, nGutterWidth, nWidth);
-    aFmtCol.SetWishWidth(nWidth);
-    aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
+    aFormatCol.Init(nCount, nGutterWidth, nWidth);
+    aFormatCol.SetWishWidth(nWidth);
+    aFormatCol.SetGutterWidth(nGutterWidth, nWidth);
 }
 
 sal_uInt16 SwColMgr::GetGutterWidth( sal_uInt16 nPos ) const
 {
     sal_uInt16 nRet;
     if(nPos == USHRT_MAX )
-        nRet = GetCount() > 1 ? aFmtCol.GetGutterWidth() : DEF_GUTTER_WIDTH;
+        nRet = GetCount() > 1 ? aFormatCol.GetGutterWidth() : DEF_GUTTER_WIDTH;
     else
     {
         OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
-        const SwColumns& rCols = aFmtCol.GetColumns();
+        const SwColumns& rCols = aFormatCol.GetColumns();
         nRet = rCols[nPos].GetRight() + rCols[nPos + 1].GetLeft();
     }
     return nRet;
@@ -65,11 +65,11 @@ sal_uInt16 SwColMgr::GetGutterWidth( sal_uInt16 nPos ) const
 void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
 {
     if(nPos == USHRT_MAX)
-        aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
+        aFormatCol.SetGutterWidth(nGutterWidth, nWidth);
     else
     {
         OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
-        SwColumns& rCols = aFmtCol.GetColumns();
+        SwColumns& rCols = aFormatCol.GetColumns();
         sal_uInt16 nGutterWidth2 = nGutterWidth / 2;
         rCols[nPos].SetRight(nGutterWidth2);
         rCols[nPos + 1].SetLeft(nGutterWidth2);
@@ -79,25 +79,25 @@ void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
 // height separation line
 short SwColMgr::GetLineHeightPercent() const
 {
-    return (short)aFmtCol.GetLineHeight();
+    return (short)aFormatCol.GetLineHeight();
 }
 void SwColMgr::SetLineHeightPercent(short nPercent)
 {
     OSL_ENSURE(nPercent <= 100, "line height may be at most 100%");
-    aFmtCol.SetLineHeight((sal_uInt8)nPercent);
+    aFormatCol.SetLineHeight((sal_uInt8)nPercent);
 }
 
 // column width
 sal_uInt16 SwColMgr::GetColWidth(sal_uInt16 nIdx) const
 {
     OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
-    return aFmtCol.CalcPrtColWidth(nIdx, nWidth);
+    return aFormatCol.CalcPrtColWidth(nIdx, nWidth);
 }
 
 void SwColMgr::SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWd)
 {
     OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
-    aFmtCol.GetColumns()[nIdx].SetWishWidth(nWd);
+    aFormatCol.GetColumns()[nIdx].SetWishWidth(nWd);
 
 }
 
@@ -105,24 +105,24 @@ void SwColMgr::SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWd)
 void SwColMgr::SetActualWidth(sal_uInt16 nW)
 {
     nWidth = nW;
-    ::FitToActualSize(aFmtCol, nW);
+    ::FitToActualSize(aFormatCol, nW);
 }
 
 // ctor
 SwColMgr::SwColMgr(const SfxItemSet& rSet, sal_uInt16 nActWidth) :
-    aFmtCol(static_cast<const SwFmtCol&>(rSet.Get(RES_COL))),
+    aFormatCol(static_cast<const SwFormatCol&>(rSet.Get(RES_COL))),
     nWidth(nActWidth)
 {
     if(nWidth == USHRT_MAX)
     {
-        nWidth = (sal_uInt16)static_cast<const SwFmtFrmSize&>(rSet.Get(RES_FRM_SIZE)).GetWidth();
+        nWidth = (sal_uInt16)static_cast<const SwFormatFrmSize&>(rSet.Get(RES_FRM_SIZE)).GetWidth();
         if (nWidth < MINLAY)
             nWidth = USHRT_MAX;
         const SvxLRSpaceItem &rLR = static_cast<const SvxLRSpaceItem&>(rSet.Get(RES_LR_SPACE));
         nWidth = nWidth - (sal_uInt16)rLR.GetLeft();
         nWidth = nWidth - (sal_uInt16)rLR.GetRight();
     }
-    ::FitToActualSize(aFmtCol, nWidth);
+    ::FitToActualSize(aFormatCol, nWidth);
 }
 
 SwColMgr::~SwColMgr()
@@ -131,9 +131,9 @@ SwColMgr::~SwColMgr()
 
 void SwColMgr::SetLineWidthAndColor(::editeng::SvxBorderStyle eStyle, sal_uLong nLWidth, const Color& rCol)
 {
-    aFmtCol.SetLineStyle(eStyle);
-    aFmtCol.SetLineWidth(nLWidth);
-    aFmtCol.SetLineColor(rCol);
+    aFormatCol.SetLineStyle(eStyle);
+    aFormatCol.SetLineWidth(nLWidth);
+    aFormatCol.SetLineColor(rCol);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

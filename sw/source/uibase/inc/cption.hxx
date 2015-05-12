@@ -41,7 +41,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-class SwFldMgr;
+class SwFieldMgr;
 class SwView;
 
 #include <wrtsh.hxx>
@@ -83,7 +83,7 @@ class SwCaptionDialog : public SvxStandardDialog
     VclPtr<SwCaptionPreview> m_pPreview;
 
     SwView       &rView; // search per active, avoid View
-    SwFldMgr     *pMgr;      // pointer to save the include
+    SwFieldMgr     *pMgr;      // pointer to save the include
     SelectionType eType;
 
     OUString     sCharacterStyle;

@@ -68,7 +68,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-void SwWrtShell::Insert(SwField &rFld)
+void SwWrtShell::Insert(SwField &rField)
 {
     ResetCursorStack();
     if(!CanInsert())
@@ -76,7 +76,7 @@ void SwWrtShell::Insert(SwField &rFld)
     StartAllAction();
 
     SwRewriter aRewriter;
-    aRewriter.AddRule(UndoArg1, rFld.GetDescription());
+    aRewriter.AddRule(UndoArg1, rField.GetDescription());
 
     StartUndo(UNDO_INSERT, &aRewriter);
 
@@ -84,15 +84,15 @@ void SwWrtShell::Insert(SwField &rFld)
     boost::scoped_ptr<SwPaM> pAnnotationTextRange;
     if ( HasSelection() )
     {
-        if ( rFld.GetTyp()->Which() == RES_POSTITFLD )
+        if ( rField.GetTyp()->Which() == RES_POSTITFLD )
         {
             // for annotation fields:
             // - keep the current selection in order to create a corresponding annotation mark
             // - collapse cursor to its end
             if ( IsTableMode() )
             {
-                GetTblCrs()->Normalize( false );
-                const SwPosition rStartPos( *(GetTblCrs()->GetMark()->nNode.GetNode().GetCntntNode()), 0 );
+                GetTableCrs()->Normalize( false );
+                const SwPosition rStartPos( *(GetTableCrs()->GetMark()->nNode.GetNode().GetContentNode()), 0 );
                 KillPams();
                 if ( !IsEndOfPara() )
                 {
@@ -115,7 +115,7 @@ void SwWrtShell::Insert(SwField &rFld)
         }
     }
 
-    SwEditShell::Insert2(rFld, bDeleted);
+    SwEditShell::Insert2(rField, bDeleted);
 
     if ( pAnnotationTextRange )
     {
@@ -133,7 +133,7 @@ void SwWrtShell::Insert(SwField &rFld)
 
 // Start the field update
 
-void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst )
+void SwWrtShell::UpdateInputFields( SwInputFieldList* pLst )
 {
     // Go through the list of fields and updating
     SwInputFieldList* pTmp = pLst;
@@ -152,14 +152,14 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst )
             pTmp->GotoFieldPos( i );
             SwField* pField = pTmp->GetField( i );
             if(pField->GetTyp()->Which() == RES_DROPDOWN)
-                bCancel = StartDropDownFldDlg( pField, true, &aDlgPos );
+                bCancel = StartDropDownFieldDlg( pField, true, &aDlgPos );
             else
-                bCancel = StartInputFldDlg( pField, true, 0, &aDlgPos);
+                bCancel = StartInputFieldDlg( pField, true, 0, &aDlgPos);
 
             if (!bCancel)
             {
                 // Otherwise update error at multi-selection:
-                pTmp->GetField( i )->GetTyp()->UpdateFlds();
+                pTmp->GetField( i )->GetTyp()->UpdateFields();
             }
         }
         pTmp->PopCrsr();
@@ -171,39 +171,39 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst )
 
 // Listener class: will close InputField dialog if input field(s)
 // is(are) deleted (for instance, by an extension) after the dialog shows up.
-// Otherwise, the for loop in SwWrtShell::UpdateInputFlds will crash when doing:
-//         'pTmp->GetField( i )->GetTyp()->UpdateFlds();'
+// Otherwise, the for loop in SwWrtShell::UpdateInputFields will crash when doing:
+//         'pTmp->GetField( i )->GetTyp()->UpdateFields();'
 // on a deleted field.
 class FieldDeletionModify : public SwModify
 {
     public:
-        FieldDeletionModify(AbstractFldInputDlg* pInputFieldDlg, SwField* pFld)
+        FieldDeletionModify(AbstractFieldInputDlg* pInputFieldDlg, SwField* pField)
             : mpInputFieldDlg(pInputFieldDlg)
-            , mpFmtFld(NULL)
+            , mpFormatField(NULL)
         {
-            SwInputField *const pInputField(dynamic_cast<SwInputField*>(pFld));
-            SwSetExpField *const pSetExpFld(dynamic_cast<SwSetExpField*>(pFld));
+            SwInputField *const pInputField(dynamic_cast<SwInputField*>(pField));
+            SwSetExpField *const pSetExpField(dynamic_cast<SwSetExpField*>(pField));
 
-            if (pInputField && pInputField->GetFmtFld())
+            if (pInputField && pInputField->GetFormatField())
             {
-                mpFmtFld = pInputField->GetFmtFld();
+                mpFormatField = pInputField->GetFormatField();
             }
-            else if (pSetExpFld && pSetExpFld->GetFmtFld())
+            else if (pSetExpField && pSetExpField->GetFormatField())
             {
-                mpFmtFld = pSetExpFld->GetFmtFld();
+                mpFormatField = pSetExpField->GetFormatField();
             }
 
             // Register for possible field deletion while dialog is open
-            if (mpFmtFld)
-                mpFmtFld->Add(this);
+            if (mpFormatField)
+                mpFormatField->Add(this);
         }
 
         virtual ~FieldDeletionModify()
         {
-            if (mpFmtFld)
+            if (mpFormatField)
             {
                 // Dialog closed, remove modification listener
-                mpFmtFld->Remove(this);
+                mpFormatField->Remove(this);
             }
         }
 
@@ -216,25 +216,25 @@ class FieldDeletionModify : public SwModify
                 {
                 case RES_REMOVE_UNO_OBJECT:
                 case RES_OBJECTDYING:
-                    mpFmtFld = NULL;
+                    mpFormatField = NULL;
                     mpInputFieldDlg->EndDialog(RET_CANCEL);
                     break;
                 }
             }
         }
     private:
-        AbstractFldInputDlg* mpInputFieldDlg;
-        SwFmtFld* mpFmtFld;
+        AbstractFieldInputDlg* mpInputFieldDlg;
+        SwFormatField* mpFormatField;
 };
 
 // Start input dialog for a specific field
-bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
+bool SwWrtShell::StartInputFieldDlg( SwField* pField, bool bNextButton,
                                    vcl::Window* pParentWin, OString* pWindowState )
 {
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
-    boost::scoped_ptr<AbstractFldInputDlg> pDlg(pFact->CreateFldInputDlg(pParentWin, *this, pFld, bNextButton));
+    boost::scoped_ptr<AbstractFieldInputDlg> pDlg(pFact->CreateFieldInputDlg(pParentWin, *this, pField, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
@@ -242,7 +242,7 @@ bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
     bool bRet;
 
     {
-        FieldDeletionModify aModify(pDlg.get(), pFld);
+        FieldDeletionModify aModify(pDlg.get(), pField);
         bRet = RET_CANCEL == pDlg->Execute();
     }
 
@@ -254,12 +254,12 @@ bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
     return bRet;
 }
 
-bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, bool bNextButton, OString* pWindowState)
+bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bNextButton, OString* pWindowState)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(NULL, *this, pFld, bNextButton));
+    boost::scoped_ptr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(NULL, *this, pField, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
@@ -315,10 +315,10 @@ bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 // handler for click on the field given as parameter.
 // the cursor is positioned on the field.
 
-void SwWrtShell::ClickToField( const SwField& rFld )
+void SwWrtShell::ClickToField( const SwField& rField )
 {
     // cross reference field must not be selected because it moves the cursor
-    if (RES_GETREFFLD != rFld.GetTyp()->Which())
+    if (RES_GETREFFLD != rField.GetTyp()->Which())
     {
         StartAllAction();
         Right( CRSR_SKIP_CHARS, true, 1, false ); // Select the field.
@@ -327,12 +327,12 @@ void SwWrtShell::ClickToField( const SwField& rFld )
     }
 
     m_bIsInClickToEdit = true;
-    switch( rFld.GetTyp()->Which() )
+    switch( rField.GetTyp()->Which() )
     {
     case RES_JUMPEDITFLD:
         {
             sal_uInt16 nSlotId = 0;
-            switch( rFld.GetFormat() )
+            switch( rField.GetFormat() )
             {
             case JE_FMT_TABLE:
                 nSlotId = FN_INSERT_TABLE;
@@ -361,17 +361,17 @@ void SwWrtShell::ClickToField( const SwField& rFld )
 
     case RES_MACROFLD:
         {
-            const SwMacroField *pFld = static_cast<const SwMacroField*>(&rFld);
-            const OUString sText( rFld.GetPar2() );
+            const SwMacroField *pField = static_cast<const SwMacroField*>(&rField);
+            const OUString sText( rField.GetPar2() );
             OUString sRet( sText );
-            ExecMacro( pFld->GetSvxMacro(), &sRet );
+            ExecMacro( pField->GetSvxMacro(), &sRet );
 
             // return value changed?
             if( sRet != sText )
             {
                 StartAllAction();
-                const_cast<SwField&>(rFld).SetPar2( sRet );
-                rFld.GetTyp()->UpdateFlds();
+                const_cast<SwField&>(rField).SetPar2( sRet );
+                rField.GetTyp()->UpdateFields();
                 EndAllAction();
             }
         }
@@ -379,37 +379,37 @@ void SwWrtShell::ClickToField( const SwField& rFld )
 
     case RES_GETREFFLD:
         StartAllAction();
-        SwCrsrShell::GotoRefMark( static_cast<const SwGetRefField&>(rFld).GetSetRefName(),
-                                    static_cast<const SwGetRefField&>(rFld).GetSubType(),
-                                    static_cast<const SwGetRefField&>(rFld).GetSeqNo() );
+        SwCrsrShell::GotoRefMark( static_cast<const SwGetRefField&>(rField).GetSetRefName(),
+                                    static_cast<const SwGetRefField&>(rField).GetSubType(),
+                                    static_cast<const SwGetRefField&>(rField).GetSeqNo() );
         EndAllAction();
         break;
 
     case RES_INPUTFLD:
         {
-            const SwInputField* pInputField = dynamic_cast<const SwInputField*>(&rFld);
+            const SwInputField* pInputField = dynamic_cast<const SwInputField*>(&rField);
             if ( pInputField == NULL )
             {
-                StartInputFldDlg( const_cast<SwField*>(&rFld), false );
+                StartInputFieldDlg( const_cast<SwField*>(&rField), false );
             }
         }
         break;
 
     case RES_SETEXPFLD:
-        if( static_cast<const SwSetExpField&>(rFld).GetInputFlag() )
-            StartInputFldDlg( const_cast<SwField*>(&rFld), false );
+        if( static_cast<const SwSetExpField&>(rField).GetInputFlag() )
+            StartInputFieldDlg( const_cast<SwField*>(&rField), false );
         break;
     case RES_DROPDOWN :
-        StartDropDownFldDlg( const_cast<SwField*>(&rFld), false );
+        StartDropDownFieldDlg( const_cast<SwField*>(&rField), false );
     break;
     default:
-        SAL_WARN_IF(rFld.IsClickable(), "sw", "unhandled clickable field!");
+        SAL_WARN_IF(rField.IsClickable(), "sw", "unhandled clickable field!");
     }
 
     m_bIsInClickToEdit = false;
 }
 
-void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter )
+void SwWrtShell::ClickToINetAttr( const SwFormatINetFormat& rItem, sal_uInt16 nFilter )
 {
     if( rItem.GetValue().isEmpty() )
         return ;
@@ -427,11 +427,11 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
 
     // So that the implementation of templates is displayed immediately
     ::LoadURL( *this, rItem.GetValue(), nFilter, rItem.GetTargetFrame() );
-    const SwTxtINetFmt* pTxtAttr = rItem.GetTxtINetFmt();
-    if( pTxtAttr )
+    const SwTextINetFormat* pTextAttr = rItem.GetTextINetFormat();
+    if( pTextAttr )
     {
-        const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisited( true );
-        const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( true );
+        const_cast<SwTextINetFormat*>(pTextAttr)->SetVisited( true );
+        const_cast<SwTextINetFormat*>(pTextAttr)->SetVisitedValid( true );
     }
 
     m_bIsInClickToEdit = false;
@@ -442,7 +442,7 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
     bool bRet = false;
     OUString sURL;
     OUString sTargetFrameName;
-    const SwFrmFmt* pFnd = IsURLGrfAtPos( rDocPt, &sURL, &sTargetFrameName );
+    const SwFrameFormat* pFnd = IsURLGrfAtPos( rDocPt, &sURL, &sTargetFrameName );
     if( pFnd && !sURL.isEmpty() )
     {
         bRet = true;
@@ -548,8 +548,8 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
                 }
             }
         }
-        SwFmtINetFmt aFmt( sURL, OUString() );
-        InsertURL( aFmt, rBkmk.GetDescription() );
+        SwFormatINetFormat aFormat( sURL, OUString() );
+        InsertURL( aFormat, rBkmk.GetDescription() );
     }
     else
     {
@@ -580,7 +580,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
                     DoUndo(false);
                 }
             }
-            UpdateSection( GetSectionFmtPos( *pIns->GetFmt() ), aSection );
+            UpdateSection( GetSectionFormatPos( *pIns->GetFormat() ), aSection );
             DoUndo( bDoesUndo );
         }
     }

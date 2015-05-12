@@ -23,7 +23,7 @@
 #include "needed_cast.hxx"
 #include "types.hxx"
 
-class SwFrmFmt;
+class SwFrameFormat;
 class SfxItemSet;
 
 namespace sw
@@ -97,7 +97,7 @@ namespace sw
             follow frame and the title frame are the same from word persecptive
             except for the content of their headers.
 
-            @return true if the rTitleFmt followed by rFollowFmt could be
+            @return true if the rTitleFormat followed by rFollowFormat could be
             expressed in word as a single word Section with different title
             page enabled.
 
@@ -106,8 +106,8 @@ namespace sw
 
             @see #i4320#/#i14509#/#i11717# for examples
         */
-        bool IsPlausableSingleWordSection(const SwFrmFmt &rTitleFmt,
-            const SwFrmFmt &rFollowFmt);
+        bool IsPlausableSingleWordSection(const SwFrameFormat &rTitleFormat,
+            const SwFrameFormat &rFollowFormat);
 
         /** Make export a word section top/bottom values easy
 

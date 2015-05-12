@@ -24,10 +24,10 @@
 
 class SwViewShell;
 class SwRootFrm;
-class SwFrmFmt;
+class SwFrameFormat;
 class SfxItemSet;
 class SwLayouter;
-class SwFmtAnchor;
+class SwFormatAnchor;
 
 /** Provides access to the layout of a document.
 */
@@ -49,7 +49,7 @@ public:
 
     /**
     */
-    virtual SwFrmFmt* MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet ) = 0;
+    virtual SwFrameFormat* MakeLayoutFormat( RndStdIds eRequest, const SfxItemSet* pSet ) = 0;
 
     /**
     */
@@ -59,12 +59,12 @@ public:
 
     /**
     */
-    virtual void DelLayoutFmt( SwFrmFmt *pFmt ) = 0;
+    virtual void DelLayoutFormat( SwFrameFormat *pFormat ) = 0;
 
     /**
     */
-    virtual SwFrmFmt* CopyLayoutFmt( const SwFrmFmt& rSrc, const SwFmtAnchor& rNewAnchor,
-                                     bool bSetTxtFlyAtt, bool bMakeFrms ) = 0;
+    virtual SwFrameFormat* CopyLayoutFormat( const SwFrameFormat& rSrc, const SwFormatAnchor& rNewAnchor,
+                                     bool bSetTextFlyAtt, bool bMakeFrms ) = 0;
 
 protected:
 

@@ -238,8 +238,8 @@ void SwViewShell::ChgAllPageOrientation( Orientation eOri )
                 GetDoc()->CopyPageDesc(rOld, aNew);
             }
             aNew.SetLandscape( bNewOri );
-            SwFrmFmt& rFmt = aNew.GetMaster();
-            SwFmtFrmSize aSz( rFmt.GetFrmSize() );
+            SwFrameFormat& rFormat = aNew.GetMaster();
+            SwFormatFrmSize aSz( rFormat.GetFrmSize() );
             // adjust size
             // PORTRAIT  -> higher than wide
             // LANDSCAPE -> wider than high
@@ -250,7 +250,7 @@ void SwViewShell::ChgAllPageOrientation( Orientation eOri )
                 SwTwips aTmp = aSz.GetHeight();
                 aSz.SetHeight( aSz.GetWidth() );
                 aSz.SetWidth( aTmp );
-                rFmt.SetFmtAttr( aSz );
+                rFormat.SetFormatAttr( aSz );
             }
             GetDoc()->ChgPageDesc( i, aNew );
         }
@@ -273,7 +273,7 @@ void SwViewShell::ChgAllPageSize( Size &rSz )
             ::sw::UndoGuard const ug(GetDoc()->GetIDocumentUndoRedo());
             GetDoc()->CopyPageDesc( rOld, aNew );
         }
-        SwFrmFmt& rPgFmt = aNew.GetMaster();
+        SwFrameFormat& rPgFormat = aNew.GetMaster();
         Size aSz( rSz );
         const bool bOri = aNew.GetLandscape();
         if( bOri  ? aSz.Height() > aSz.Width()
@@ -284,9 +284,9 @@ void SwViewShell::ChgAllPageSize( Size &rSz )
             aSz.Width()  = aTmp;
         }
 
-        SwFmtFrmSize aFrmSz( rPgFmt.GetFrmSize() );
+        SwFormatFrmSize aFrmSz( rPgFormat.GetFrmSize() );
         aFrmSz.SetSize( aSz );
-        rPgFmt.SetFmtAttr( aFrmSz );
+        rPgFormat.SetFormatAttr( aFrmSz );
         pMyDoc->ChgPageDesc( i, aNew );
     }
 }
@@ -325,7 +325,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
     OSL_ENSURE( this->IsA( TYPE(SwFEShell) ),"SwViewShell::Prt for FEShell only");
     SwFEShell* pFESh = static_cast<SwFEShell*>(this);
-    pPrtDoc->getIDocumentFieldsAccess().LockExpFlds();
+    pPrtDoc->getIDocumentFieldsAccess().LockExpFields();
 
     // use given printer
     //! Make a copy of it since it gets destroyed with the temporary document
@@ -356,15 +356,15 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     Point aSelPoint;
     if( pFESh->IsTableMode() )
     {
-        SwShellTableCrsr* pShellTblCrsr = pFESh->GetTableCrsr();
+        SwShellTableCrsr* pShellTableCrsr = pFESh->GetTableCrsr();
 
-        const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode().GetCntntNode();
-        const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->getLayoutFrm( GetLayout(), 0, pShellTblCrsr->Start() ) : 0;
-        if( pCntntFrm )
+        const SwContentNode* pContentNode = pShellTableCrsr->GetNode().GetContentNode();
+        const SwContentFrm *pContentFrm = pContentNode ? pContentNode->getLayoutFrm( GetLayout(), 0, pShellTableCrsr->Start() ) : 0;
+        if( pContentFrm )
         {
             SwRect aCharRect;
             SwCrsrMoveState aTmpState( MV_NONE );
-            pCntntFrm->GetCharRect( aCharRect, *pShellTblCrsr->Start(), &aTmpState );
+            pContentFrm->GetCharRect( aCharRect, *pShellTableCrsr->Start(), &aTmpState );
             aSelPoint = Point( aCharRect.Left(), aCharRect.Top() );
         }
     }
@@ -383,12 +383,12 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     if( !pFESh->IsTableMode() && pActCrsr && pActCrsr->HasMark() )
     {   // Tweak paragraph attributes of last paragraph
         SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-        SwTxtNode* pTxtNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx )->GetTxtNode();
-        SwCntntNode *pLastNd =
-            pActCrsr->GetCntntNode( (*pActCrsr->GetMark()) <= (*pActCrsr->GetPoint()) );
+        SwTextNode* pTextNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx )->GetTextNode();
+        SwContentNode *pLastNd =
+            pActCrsr->GetContentNode( (*pActCrsr->GetMark()) <= (*pActCrsr->GetPoint()) );
         // copy the paragraph attributes of the first paragraph
-        if( pLastNd && pLastNd->IsTxtNode() )
-            static_cast<SwTxtNode*>(pLastNd)->CopyCollFmt( *pTxtNd );
+        if( pLastNd && pLastNd->IsTextNode() )
+            static_cast<SwTextNode*>(pLastNd)->CopyCollFormat( *pTextNd );
     }
 
     // fill it with the selected content
@@ -397,26 +397,26 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     // set the page style at the first paragraph
     {
         SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-        SwCntntNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx ); // go to 1st ContentNode
+        SwContentNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx ); // go to 1st ContentNode
         if( pFESh->IsTableMode() )
         {
             SwTableNode* pTNd = pCNd->FindTableNode();
             if( pTNd )
-                pTNd->GetTable().GetFrmFmt()->SetFmtAttr( SwFmtPageDesc( pPageDesc ) );
+                pTNd->GetTable().GetFrameFormat()->SetFormatAttr( SwFormatPageDesc( pPageDesc ) );
         }
         else
         {
-            pCNd->SetAttr( SwFmtPageDesc( pPageDesc ) );
+            pCNd->SetAttr( SwFormatPageDesc( pPageDesc ) );
             if( pFirstCrsr && pFirstCrsr->HasMark() )
             {
-                SwTxtNode *pTxtNd = pCNd->GetTxtNode();
-                if( pTxtNd )
+                SwTextNode *pTextNd = pCNd->GetTextNode();
+                if( pTextNd )
                 {
-                    SwCntntNode *pFirstNd =
-                        pFirstCrsr->GetCntntNode( (*pFirstCrsr->GetMark()) > (*pFirstCrsr->GetPoint()) );
+                    SwContentNode *pFirstNd =
+                        pFirstCrsr->GetContentNode( (*pFirstCrsr->GetMark()) > (*pFirstCrsr->GetPoint()) );
                     // copy paragraph attributes of the first paragraph
-                    if( pFirstNd && pFirstNd->IsTxtNode() )
-                        static_cast<SwTxtNode*>(pFirstNd)->CopyCollFmt( *pTxtNd );
+                    if( pFirstNd && pFirstNd->IsTextNode() )
+                        static_cast<SwTextNode*>(pFirstNd)->CopyCollFormat( *pTextNd );
                 }
             }
         }
@@ -632,9 +632,9 @@ bool SwViewShell::IsAnyFieldInDoc() const
     {
         if( 0 != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
         {
-            const SwFmtFld* pFmtFld = static_cast<const SwFmtFld*>(pItem);
-            const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-            if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+            const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
+            const SwTextField* pTextField = pFormatField->GetTextField();
+            if( pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
             {
                 return true;
             }
@@ -646,9 +646,9 @@ bool SwViewShell::IsAnyFieldInDoc() const
     {
         if( 0 != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n )))
         {
-            const SwFmtFld* pFmtFld = static_cast<const SwFmtFld*>(pItem);
-            const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-            if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+            const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
+            const SwTextField* pTextField = pFormatField->GetTextField();
+            if( pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
             {
                 return true;
             }

@@ -48,13 +48,13 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aD
 
     // get SwDoc*
     uno::Reference< uno::XInterface > xIfc(m_xSrcDoc, uno::UNO_QUERY);
-    SwXTextDocument* pTxtDoc = dynamic_cast< SwXTextDocument* >(xIfc.get());
-    if (!pTxtDoc)
+    SwXTextDocument* pTextDoc = dynamic_cast< SwXTextDocument* >(xIfc.get());
+    if (!pTextDoc)
     {
         return sal_False;
     }
 
-    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     if (!pDoc)
     {
         return sal_False;

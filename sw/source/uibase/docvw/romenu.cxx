@@ -93,13 +93,13 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     rSh.IsURLGrfAtPos( rDocPos, &sURL, &sTargetFrameName, &sDescription );
     if ( sURL.isEmpty() )
     {
-        SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
-        if( rSh.GetContentAtPos( rDocPos, aCntntAtPos, false))
+        SwContentAtPos aContentAtPos( SwContentAtPos::SW_INETATTR );
+        if( rSh.GetContentAtPos( rDocPos, aContentAtPos, false))
         {
-            const SwFmtINetFmt &rIItem = *static_cast<const SwFmtINetFmt*>(aCntntAtPos.aFnd.pAttr);
+            const SwFormatINetFormat &rIItem = *static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr);
             sURL = rIItem.GetValue();
             sTargetFrameName = rIItem.GetTargetFrame();
-            sDescription = aCntntAtPos.sStr;
+            sDescription = aContentAtPos.sStr;
         }
     }
 
@@ -113,12 +113,12 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     else
     {
         aGraphic = *pGrf;
-        const SwFrmFmt* pGrfFmt = rSh.GetFmtFromObj( rDocPos );
+        const SwFrameFormat* pGrfFormat = rSh.GetFormatFromObj( rDocPos );
         const SfxPoolItem* pURLItem;
-        if( pGrfFmt && SfxItemState::SET == pGrfFmt->GetItemState(
+        if( pGrfFormat && SfxItemState::SET == pGrfFormat->GetItemState(
             RES_URL, true, &pURLItem ))
         {
-            const SwFmtURL& rURL = *static_cast<const SwFmtURL*>(pURLItem);
+            const SwFormatURL& rURL = *static_cast<const SwFormatURL*>(pURLItem);
             if( rURL.GetMap() )
                 pImageMap = new ImageMap( *rURL.GetMap() );
             else if( !rURL.GetURL().isEmpty() )

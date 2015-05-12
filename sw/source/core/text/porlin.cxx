@@ -63,7 +63,7 @@ SwLinePortion *SwLinePortion::Compress()
     return GetLen() || Width() ? this : 0;
 }
 
-sal_uInt16 SwLinePortion::GetViewWidth( const SwTxtSizeInfo & ) const
+sal_uInt16 SwLinePortion::GetViewWidth( const SwTextSizeInfo & ) const
 {
     return 0;
 }
@@ -78,7 +78,7 @@ SwLinePortion::SwLinePortion( ) :
 {
 }
 
-void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
+void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
                               const SwLinePortion* pLast ) const
 {
     OSL_ENSURE( rInf.OnWin(), "SwLinePortion::PrePaint: don't prepaint on a printer");
@@ -96,14 +96,14 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
         nLastWidth = nLastWidth + (sal_uInt16)pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
 
     sal_uInt16 nPos;
-    SwTxtPaintInfo aInf( rInf );
+    SwTextPaintInfo aInf( rInf );
 
-    const bool bBidiPor = rInf.GetTxtFrm()->IsRightToLeft() !=
+    const bool bBidiPor = rInf.GetTextFrm()->IsRightToLeft() !=
                           bool( TEXT_LAYOUT_BIDI_RTL & rInf.GetOut()->GetLayoutMode() );
 
     sal_uInt16 nDir = bBidiPor ?
                   1800 :
-                  rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
+                  rInf.GetFont()->GetOrientation( rInf.GetTextFrm()->IsVertical() );
 
     switch ( nDir )
     {
@@ -139,15 +139,15 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
     pThis->Width(0);
 }
 
-void SwLinePortion::CalcTxtSize( const SwTxtSizeInfo &rInf )
+void SwLinePortion::CalcTextSize( const SwTextSizeInfo &rInf )
 {
     if( GetLen() == rInf.GetLen()  )
-        *static_cast<SwPosSize*>(this) = GetTxtSize( rInf );
+        *static_cast<SwPosSize*>(this) = GetTextSize( rInf );
     else
     {
-        SwTxtSizeInfo aInf( rInf );
+        SwTextSizeInfo aInf( rInf );
         aInf.SetLen( GetLen() );
-        *static_cast<SwPosSize*>(this) = GetTxtSize( aInf );
+        *static_cast<SwPosSize*>(this) = GetTextSize( aInf );
     }
 }
 
@@ -230,14 +230,14 @@ sal_Int32 SwLinePortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
         return 0;
 }
 
-SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
+SwPosSize SwLinePortion::GetTextSize( const SwTextSizeInfo & ) const
 {
-    OSL_ENSURE( false, "SwLinePortion::GetTxtSize: don't ask me about sizes, "
+    OSL_ENSURE( false, "SwLinePortion::GetTextSize: don't ask me about sizes, "
                    "I'm only a stupid SwLinePortion" );
     return SwPosSize();
 }
 
-bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
+bool SwLinePortion::Format( SwTextFormatInfo &rInf )
 {
     if( rInf.X() > rInf.Width() )
     {
@@ -265,13 +265,13 @@ bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
 
 // Format end of line
 
-void SwLinePortion::FormatEOL( SwTxtFormatInfo & )
+void SwLinePortion::FormatEOL( SwTextFormatInfo & )
 { }
 
-void SwLinePortion::Move( SwTxtPaintInfo &rInf )
+void SwLinePortion::Move( SwTextPaintInfo &rInf )
 {
     bool bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
-    const bool bFrmDir = rInf.GetTxtFrm()->IsRightToLeft();
+    const bool bFrmDir = rInf.GetTextFrm()->IsRightToLeft();
     bool bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
                        (   bFrmDir && DIR_LEFT2RIGHT == rInf.GetDirection() );
 
@@ -305,12 +305,12 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
     rInf.SetIdx( rInf.GetIdx() + GetLen() );
 }
 
-long SwLinePortion::CalcSpacing( long , const SwTxtSizeInfo & ) const
+long SwLinePortion::CalcSpacing( long , const SwTextSizeInfo & ) const
 {
     return 0;
 }
 
-bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &, OUString & ) const
+bool SwLinePortion::GetExpText( const SwTextSizeInfo &, OUString & ) const
 {
     return false;
 }

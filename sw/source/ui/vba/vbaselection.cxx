@@ -798,8 +798,8 @@ SwVbaSelection::Tables( const uno::Any& aIndex ) throw (uno::RuntimeException, s
     if( xTextTable.is() )
     {
             uno::Reference< css::text::XTextDocument > xTextDoc( mxModel, uno::UNO_QUERY_THROW );
-            uno::Reference< word::XTable > xVBATbl = new SwVbaTable( mxParent, mxContext, xTextDoc, xTextTable );
-            aRet <<= xVBATbl;
+            uno::Reference< word::XTable > xVBATable = new SwVbaTable( mxParent, mxContext, xTextDoc, xTextTable );
+            aRet <<= xVBATable;
             return aRet;
     }
 
@@ -812,13 +812,13 @@ SwVbaSelection::Tables( const uno::Any& aIndex ) throw (uno::RuntimeException, s
     SwXTextTableCursor* pTTCursor = dynamic_cast< SwXTextTableCursor* >( xTextTableCursor.get() );
     if ( pTTCursor )
     {
-        SwFrmFmt* pFmt = pTTCursor->GetFrmFmt();
-        if ( pFmt )
+        SwFrameFormat* pFormat = pTTCursor->GetFrameFormat();
+        if ( pFormat )
         {
-            uno::Reference< text::XTextTable > xTbl = SwXTextTables::GetObject(*pFmt);
+            uno::Reference< text::XTextTable > xTable = SwXTextTables::GetObject(*pFormat);
             uno::Reference< css::text::XTextDocument > xTextDoc( mxModel, uno::UNO_QUERY_THROW );
-            uno::Reference< word::XTable > xVBATbl = new SwVbaTable( mxParent, mxContext, xTextDoc, xTbl );
-            aRet <<= xVBATbl;
+            uno::Reference< word::XTable > xVBATable = new SwVbaTable( mxParent, mxContext, xTextDoc, xTable );
+            aRet <<= xVBATable;
         }
     }
     return aRet;

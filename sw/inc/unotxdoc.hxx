@@ -148,7 +148,7 @@ private:
 
     css::uno::Reference< css::text::XText >                 xBodyText;
     SwXBodyText*            pBodyText;
-    css::uno::Reference< css::uno::XAggregation >           xNumFmtAgg;
+    css::uno::Reference< css::uno::XAggregation >           xNumFormatAgg;
 
     css::uno::Reference< css::container::XIndexAccess > *     pxXNumberingRules;
     css::uno::Reference< css::container::XIndexAccess > *     pxXFootnotes;

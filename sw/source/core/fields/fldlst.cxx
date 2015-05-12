@@ -36,40 +36,40 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
     : pSh(pShell)
 {
     // create sorted list of all  input fields
-    pSrtLst = new _SetGetExpFlds();
+    pSrtLst = new _SetGetExpFields();
 
-    const SwFldTypes& rFldTypes = *pSh->GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
-    const size_t nSize = rFldTypes.size();
+    const SwFieldTypes& rFieldTypes = *pSh->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+    const size_t nSize = rFieldTypes.size();
 
     // iterate over all types
     for(size_t i=0; i < nSize; ++i)
     {
-        SwFieldType* pFldType = (SwFieldType*)rFldTypes[ i ];
-        const sal_uInt16 nType = pFldType->Which();
+        SwFieldType* pFieldType = (SwFieldType*)rFieldTypes[ i ];
+        const sal_uInt16 nType = pFieldType->Which();
 
         if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType || RES_DROPDOWN == nType )
         {
-            SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-            for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+            SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
+            for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
             {
-                const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+                const SwTextField* pTextField = pFormatField->GetTextField();
 
-                // only process InputFields, interactive SetExpFlds and DropDown fields
-                if( !pTxtFld || ( RES_SETEXPFLD == nType &&
-                    !static_cast<SwSetExpField*>(pFmtFld->GetField())->GetInputFlag()))
+                // only process InputFields, interactive SetExpFields and DropDown fields
+                if( !pTextField || ( RES_SETEXPFLD == nType &&
+                    !static_cast<SwSetExpField*>(pFormatField->GetField())->GetInputFlag()))
                     continue;
 
-                const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
-                if( rTxtNode.GetNodes().IsDocNodes() )
+                const SwTextNode& rTextNode = pTextField->GetTextNode();
+                if( rTextNode.GetNodes().IsDocNodes() )
                 {
                     if( bBuildTmpLst )
                     {
-                        aTmpLst.insert( pTxtFld );
+                        aTmpLst.insert( pTextField );
                     }
                     else
                     {
-                        SwNodeIndex aIdx( rTxtNode );
-                        _SetGetExpFld* pNew = new _SetGetExpFld(aIdx, pTxtFld );
+                        SwNodeIndex aIdx( rTextNode );
+                        _SetGetExpField* pNew = new _SetGetExpField(aIdx, pTextField );
                         pSrtLst->insert( pNew );
                     }
                 }
@@ -91,9 +91,9 @@ size_t SwInputFieldList::Count() const
 // get field from list in sorted order
 SwField* SwInputFieldList::GetField(size_t nId)
 {
-    const SwTxtFld* pTxtFld = (*pSrtLst)[ nId ]->GetTxtFld();
-    OSL_ENSURE( pTxtFld, "no TextFld" );
-    return const_cast<SwField*>(pTxtFld->GetFmtFld().GetField());
+    const SwTextField* pTextField = (*pSrtLst)[ nId ]->GetTextField();
+    OSL_ENSURE( pTextField, "no TextField" );
+    return const_cast<SwField*>(pTextField->GetFormatField().GetField());
 }
 
 /// save cursor
@@ -126,36 +126,36 @@ void SwInputFieldList::GotoFieldPos(size_t nId)
  */
 bool SwInputFieldList::BuildSortLst()
 {
-    const SwFldTypes& rFldTypes = *pSh->GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
-    const size_t nSize = rFldTypes.size();
+    const SwFieldTypes& rFieldTypes = *pSh->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+    const size_t nSize = rFieldTypes.size();
 
     // iterate over all types
     for( size_t i = 0; i < nSize; ++i )
     {
-        SwFieldType* pFldType = (SwFieldType*)rFldTypes[ i ];
-        const sal_uInt16 nType = pFldType->Which();
+        SwFieldType* pFieldType = (SwFieldType*)rFieldTypes[ i ];
+        const sal_uInt16 nType = pFieldType->Which();
 
         if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType )
         {
-            SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-            for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+            SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
+            for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
             {
-                const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+                const SwTextField* pTextField = pFormatField->GetTextField();
 
-                //  process only InputFields and interactive SetExpFlds
-                if( !pTxtFld || ( RES_SETEXPFLD == nType &&
-                    !static_cast<SwSetExpField*>(pFmtFld->GetField())->GetInputFlag()))
+                //  process only InputFields and interactive SetExpFields
+                if( !pTextField || ( RES_SETEXPFLD == nType &&
+                    !static_cast<SwSetExpField*>(pFormatField->GetField())->GetInputFlag()))
                     continue;
 
-                const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
-                if( rTxtNode.GetNodes().IsDocNodes() )
+                const SwTextNode& rTextNode = pTextField->GetTextNode();
+                if( rTextNode.GetNodes().IsDocNodes() )
                 {
                     // not in TempList, thus add to SortList
-                    std::set<const SwTxtFld*>::iterator it = aTmpLst.find( pTxtFld );
+                    std::set<const SwTextField*>::iterator it = aTmpLst.find( pTextField );
                     if( aTmpLst.end() == it )
                     {
-                        SwNodeIndex aIdx( rTxtNode );
-                        _SetGetExpFld* pNew = new _SetGetExpFld(aIdx, pTxtFld );
+                        SwNodeIndex aIdx( rTextNode );
+                        _SetGetExpField* pNew = new _SetGetExpField(aIdx, pTextField );
                         pSrtLst->insert( pNew );
                     }
                     else

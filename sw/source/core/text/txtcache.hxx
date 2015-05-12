@@ -24,17 +24,17 @@
 #include "swcache.hxx"
 
 class SwParaPortion;
-class SwTxtFrm;
+class SwTextFrm;
 
-class SwTxtLine : public SwCacheObj
+class SwTextLine : public SwCacheObj
 {
     SwParaPortion *pLine;
 
 public:
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTxtLine)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwTextLine)
 
-    SwTxtLine( SwTxtFrm *pFrm, SwParaPortion *pNew = 0 );
-    virtual ~SwTxtLine();
+    SwTextLine( SwTextFrm *pFrm, SwParaPortion *pNew = 0 );
+    virtual ~SwTextLine();
 
     inline       SwParaPortion *GetPara()       { return pLine; }
     inline const SwParaPortion *GetPara() const { return pLine; }
@@ -42,25 +42,25 @@ public:
     inline void SetPara( SwParaPortion *pNew ) { pLine = pNew; }
 };
 
-class SwTxtLineAccess : public SwCacheAccess
+class SwTextLineAccess : public SwCacheAccess
 {
 
 protected:
     virtual SwCacheObj *NewObj() SAL_OVERRIDE;
 
 public:
-    SwTxtLineAccess( const SwTxtFrm *pOwner );
+    SwTextLineAccess( const SwTextFrm *pOwner );
 
     SwParaPortion *GetPara();
 
-    inline SwTxtLine &GetTxtLine();
+    inline SwTextLine &GetTextLine();
 
     virtual bool IsAvailable() const SAL_OVERRIDE;
 };
 
-inline SwTxtLine &SwTxtLineAccess::GetTxtLine()
+inline SwTextLine &SwTextLineAccess::GetTextLine()
 {
-    return *static_cast<SwTxtLine*>(Get());
+    return *static_cast<SwTextLine*>(Get());
 }
 
 #endif

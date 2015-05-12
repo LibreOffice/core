@@ -23,17 +23,17 @@
 #include <sal/types.h>
 #include <tools/solar.h>
 
-class SwFldTypes;
+class SwFieldTypes;
 class SwFieldType;
 class SfxPoolItem;
 struct SwPosition;
-class SwDocUpdtFld;
+class SwDocUpdateField;
 class SwCalc;
-class SwTxtFld;
+class SwTextField;
 class SwField;
 class SwMsgPoolItem;
 class DateTime;
-class _SetGetExpFld;
+class _SetGetExpField;
 struct SwHash;
 class SwNode;
 
@@ -46,19 +46,19 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
  class IDocumentFieldsAccess
  {
  public:
-    virtual const SwFldTypes *GetFldTypes() const = 0;
+    virtual const SwFieldTypes *GetFieldTypes() const = 0;
 
-    virtual SwFieldType *InsertFldType(const SwFieldType &) = 0;
+    virtual SwFieldType *InsertFieldType(const SwFieldType &) = 0;
 
-    virtual SwFieldType *GetSysFldType( const sal_uInt16 eWhich ) const = 0;
+    virtual SwFieldType *GetSysFieldType( const sal_uInt16 eWhich ) const = 0;
 
-    virtual SwFieldType* GetFldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const = 0;
+    virtual SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const = 0;
 
-    virtual void RemoveFldType(size_t nFld) = 0;
+    virtual void RemoveFieldType(size_t nField) = 0;
 
-    virtual void UpdateFlds( SfxPoolItem* pNewHt, bool bCloseDB) = 0;
+    virtual void UpdateFields( SfxPoolItem* pNewHt, bool bCloseDB) = 0;
 
-    virtual void InsDeletedFldType(SwFieldType &) = 0;
+    virtual void InsDeletedFieldType(SwFieldType &) = 0;
 
     /**
        Puts a value into a field at a certain position.
@@ -78,33 +78,33 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
     /** Updates a field.
 
-        @param rDstFmtFld field to update
-        @param rSrcFld field containing the new values
-        @param pMsgHnt
-        @param bUpdateTblFlds TRUE: update table fields, too.
+        @param rDstFormatField field to update
+        @param rSrcField field containing the new values
+        @param pMsgHint
+        @param bUpdateTableFields TRUE: update table fields, too.
 
         @retval true             update was successful
         @retval false            else
     */
-    virtual bool UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld, SwMsgPoolItem * pMsgHnt, bool bUpdateTblFlds) = 0;
+    virtual bool UpdateField(SwTextField * rDstFormatField, SwField & rSrcField, SwMsgPoolItem * pMsgHint, bool bUpdateTableFields) = 0;
 
-    virtual void UpdateRefFlds(SfxPoolItem* pHt) = 0;
+    virtual void UpdateRefFields(SfxPoolItem* pHt) = 0;
 
-    virtual void UpdateTblFlds(SfxPoolItem* pHt) = 0;
+    virtual void UpdateTableFields(SfxPoolItem* pHt) = 0;
 
-    virtual void UpdateExpFlds(SwTxtFld* pFld, bool bUpdateRefFlds) = 0;
+    virtual void UpdateExpFields(SwTextField* pField, bool bUpdateRefFields) = 0;
 
-    virtual void UpdateUsrFlds() = 0;
+    virtual void UpdateUsrFields() = 0;
 
-    virtual void UpdatePageFlds(SfxPoolItem*) = 0;
+    virtual void UpdatePageFields(SfxPoolItem*) = 0;
 
-    virtual void LockExpFlds() = 0;
+    virtual void LockExpFields() = 0;
 
-    virtual void UnlockExpFlds() = 0;
+    virtual void UnlockExpFields() = 0;
 
-    virtual bool IsExpFldsLocked() const = 0;
+    virtual bool IsExpFieldsLocked() const = 0;
 
-    virtual SwDocUpdtFld& GetUpdtFlds() const = 0;
+    virtual SwDocUpdateField& GetUpdateFields() const = 0;
 
     /*  @@@MAINTAINABILITY-HORROR@@@
         SwNode (see parameter pChk) is (?) part of the private
@@ -118,17 +118,17 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     // (Node [ + ::com::sun::star::ucb::Content]).
     // A generated list of all fields may be passed along too
     // (if the addreess != 0 and the pointer == 0 a new list will be returned).
-    virtual void FldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) = 0;
+    virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) = 0;
 
-    virtual void FldsToCalc(SwCalc& rCalc, const _SetGetExpFld& rToThisFld) = 0;
+    virtual void FieldsToCalc(SwCalc& rCalc, const _SetGetExpField& rToThisField) = 0;
 
-    virtual void FldsToExpand(SwHash**& ppTbl, sal_uInt16& rTblSize, const _SetGetExpFld& rToThisFld) = 0;
+    virtual void FieldsToExpand(SwHash**& ppTable, sal_uInt16& rTableSize, const _SetGetExpField& rToThisField) = 0;
 
-    virtual bool IsNewFldLst() const = 0;
+    virtual bool IsNewFieldLst() const = 0;
 
-    virtual void SetNewFldLst( bool bFlag) = 0;
+    virtual void SetNewFieldLst( bool bFlag) = 0;
 
-    virtual void InsDelFldInFldLst(bool bIns, const SwTxtFld& rFld) = 0;
+    virtual void InsDelFieldInFieldLst(bool bIns, const SwTextField& rField) = 0;
 
 protected:
     virtual ~IDocumentFieldsAccess() {};

@@ -29,17 +29,17 @@
 class Graphic;
 class SwGrfNode;
 class SwUndoDelete;
-class SwUndoFmtAttr;
+class SwUndoFormatAttr;
 namespace sw { class DocumentContentOperationsManager; }
 
-class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
+class SwUndoInsert: public SwUndo, private SwUndoSaveContent
 {
     /// start of Content in UndoNodes for Redo
     ::boost::scoped_ptr<SwNodeIndex> m_pUndoNodeIndex;
-    OUString *pTxt, *pUndoTxt;
+    OUString *pText, *pUndoText;
     SwRedlineData* pRedlData;
     sal_uLong nNode;
-    sal_Int32 nCntnt, nLen;
+    sal_Int32 nContent, nLen;
     bool bIsWordDelim : 1;
     bool bIsAppend : 1;
     bool m_bWithRsid : 1;
@@ -53,10 +53,10 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     SwDoc * pDoc;
 
     void Init(const SwNodeIndex & rNode);
-    OUString * GetTxtFromDoc() const;
+    OUString * GetTextFromDoc() const;
 
 public:
-    SwUndoInsert( const SwNodeIndex& rNode, sal_Int32 nCntnt, sal_Int32 nLen,
+    SwUndoInsert( const SwNodeIndex& rNode, sal_Int32 nContent, sal_Int32 nLen,
                   const SwInsertFlags nInsertFlags,
                   bool bWDelim = true );
     SwUndoInsert( const SwNodeIndex& rNode );
@@ -152,12 +152,12 @@ class SwUndoInsertLabel : public SwUndo
 {
     union {
         struct {
-            // for NoTxtFrms
-            SwUndoInsLayFmt* pUndoFly;
-            SwUndoFmtAttr* pUndoAttr;
+            // for NoTextFrms
+            SwUndoInsLayFormat* pUndoFly;
+            SwUndoFormatAttr* pUndoAttr;
         } OBJECT;
         struct {
-            // for tables or TxtFrms
+            // for tables or TextFrms
             SwUndoDelete* pUndoInsNd;
             sal_uLong nNode;
         } NODE;
@@ -169,7 +169,7 @@ class SwUndoInsertLabel : public SwUndo
     OUString sNumberSeparator;
     OUString sCharacterStyle;
     // #i26791# - re-store of drawing object position no longer needed
-    sal_uInt16 nFldId;
+    sal_uInt16 nFieldId;
     SwLabelType eType;
     sal_uInt8 nLayerId;              // for character objects
     bool bBefore        :1;
@@ -208,7 +208,7 @@ public:
         { if( LTYPE_OBJECT != eType ) NODE.nNode = nNd; }
 
     void SetUndoKeep()  { bUndoKeep = true; }
-    void SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet, SwFrmFmt& rNewFly );
+    void SetFlys( SwFrameFormat& rOldFly, SfxItemSet& rChgSet, SwFrameFormat& rNewFly );
     void SetDrawObj( sal_uInt8 nLayerId );
 };
 

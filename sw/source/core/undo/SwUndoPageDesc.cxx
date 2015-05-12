@@ -42,48 +42,48 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
     sal_uLong nFooterMaster = ULONG_MAX;
     sal_uLong nFooterLeft = ULONG_MAX;
 
-    SwFmtHeader& rHead = (SwFmtHeader&)rPageDesc.GetMaster().GetHeader();
-    SwFmtFooter& rFoot = (SwFmtFooter&)rPageDesc.GetMaster().GetFooter();
-    SwFmtHeader& rLeftHead = (SwFmtHeader&)rPageDesc.GetLeft().GetHeader();
-    SwFmtFooter& rLeftFoot = (SwFmtFooter&)rPageDesc.GetLeft().GetFooter();
+    SwFormatHeader& rHead = (SwFormatHeader&)rPageDesc.GetMaster().GetHeader();
+    SwFormatFooter& rFoot = (SwFormatFooter&)rPageDesc.GetMaster().GetFooter();
+    SwFormatHeader& rLeftHead = (SwFormatHeader&)rPageDesc.GetLeft().GetHeader();
+    SwFormatFooter& rLeftFoot = (SwFormatFooter&)rPageDesc.GetLeft().GetFooter();
     if( rHead.IsActive() )
     {
-        SwFrmFmt* pHeaderFmt = rHead.GetHeaderFmt();
-        if( pHeaderFmt )
+        SwFrameFormat* pHeaderFormat = rHead.GetHeaderFormat();
+        if( pHeaderFormat )
         {
-            const SwFmtCntnt* pCntnt = &pHeaderFmt->GetCntnt();
-            if( pCntnt->GetCntntIdx() )
-                nHeaderMaster = pCntnt->GetCntntIdx()->GetIndex();
+            const SwFormatContent* pContent = &pHeaderFormat->GetContent();
+            if( pContent->GetContentIdx() )
+                nHeaderMaster = pContent->GetContentIdx()->GetIndex();
             else
                 nHeaderMaster = 0;
         }
-        SwFrmFmt* pLeftHeaderFmt = rLeftHead.GetHeaderFmt();
-        if( pLeftHeaderFmt )
+        SwFrameFormat* pLeftHeaderFormat = rLeftHead.GetHeaderFormat();
+        if( pLeftHeaderFormat )
         {
-            const SwFmtCntnt* pLeftCntnt = &pLeftHeaderFmt->GetCntnt();
-            if( pLeftCntnt->GetCntntIdx() )
-                nHeaderLeft = pLeftCntnt->GetCntntIdx()->GetIndex();
+            const SwFormatContent* pLeftContent = &pLeftHeaderFormat->GetContent();
+            if( pLeftContent->GetContentIdx() )
+                nHeaderLeft = pLeftContent->GetContentIdx()->GetIndex();
             else
                 nHeaderLeft = 0;
         }
     }
     if( rFoot.IsActive() )
     {
-        SwFrmFmt* pFooterFmt = rFoot.GetFooterFmt();
-        if( pFooterFmt )
+        SwFrameFormat* pFooterFormat = rFoot.GetFooterFormat();
+        if( pFooterFormat )
         {
-            const SwFmtCntnt* pCntnt = &pFooterFmt->GetCntnt();
-            if( pCntnt->GetCntntIdx() )
-                nFooterMaster = pCntnt->GetCntntIdx()->GetIndex();
+            const SwFormatContent* pContent = &pFooterFormat->GetContent();
+            if( pContent->GetContentIdx() )
+                nFooterMaster = pContent->GetContentIdx()->GetIndex();
             else
                 nFooterMaster = 0;
         }
-        SwFrmFmt* pLeftFooterFmt = rLeftFoot.GetFooterFmt();
-        if( pLeftFooterFmt )
+        SwFrameFormat* pLeftFooterFormat = rLeftFoot.GetFooterFormat();
+        if( pLeftFooterFormat )
         {
-            const SwFmtCntnt* pLeftCntnt = &pLeftFooterFmt->GetCntnt();
-            if( pLeftCntnt->GetCntntIdx() )
-                nFooterLeft = pLeftCntnt->GetCntntIdx()->GetIndex();
+            const SwFormatContent* pLeftContent = &pLeftFooterFormat->GetContent();
+            if( pLeftContent->GetContentIdx() )
+                nFooterLeft = pLeftContent->GetContentIdx()->GetIndex();
             else
                 nFooterLeft = 0;
         }
@@ -120,10 +120,10 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
     */
     SwPageDesc &rOldDesc = aOld.m_PageDesc;
     SwPageDesc &rNewDesc = aNew.m_PageDesc;
-    const SwFmtHeader& rOldHead = rOldDesc.GetMaster().GetHeader();
-    const SwFmtHeader& rNewHead = rNewDesc.GetMaster().GetHeader();
-    const SwFmtFooter& rOldFoot = rOldDesc.GetMaster().GetFooter();
-    const SwFmtFooter& rNewFoot = rNewDesc.GetMaster().GetFooter();
+    const SwFormatHeader& rOldHead = rOldDesc.GetMaster().GetHeader();
+    const SwFormatHeader& rNewHead = rNewDesc.GetMaster().GetHeader();
+    const SwFormatFooter& rOldFoot = rOldDesc.GetMaster().GetFooter();
+    const SwFormatFooter& rNewFoot = rNewDesc.GetMaster().GetFooter();
     /* bExchange must not be set, if the old page descriptor will stay active.
     Two known situations:
     #i67735#: renaming a page descriptor
@@ -144,39 +144,39 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
     {
         if( rNewHead.IsActive() )
         {
-            SwFrmFmt* pFormat = new SwFrmFmt( *rNewHead.GetHeaderFmt() );
+            SwFrameFormat* pFormat = new SwFrameFormat( *rNewHead.GetHeaderFormat() );
             // The Ctor of this object will remove the duplicate!
-            SwFmtHeader aFormatHeader(pFormat);
+            SwFormatHeader aFormatHeader(pFormat);
             if (!rNewDesc.IsHeaderShared())
             {
-                pFormat = new SwFrmFmt( *rNewDesc.GetLeft().GetHeader().GetHeaderFmt() );
+                pFormat = new SwFrameFormat( *rNewDesc.GetLeft().GetHeader().GetHeaderFormat() );
                 // The Ctor of this object will remove the duplicate!
-                SwFmtHeader aLeftHeader(pFormat);
+                SwFormatHeader aLeftHeader(pFormat);
             }
             if (!rNewDesc.IsFirstShared())
             {
-                pFormat = new SwFrmFmt( *rNewDesc.GetFirstMaster().GetHeader().GetHeaderFmt() );
+                pFormat = new SwFrameFormat( *rNewDesc.GetFirstMaster().GetHeader().GetHeaderFormat() );
                 // The Ctor of this object will remove the duplicate!
-                SwFmtHeader aFirstHeader(pFormat);
+                SwFormatHeader aFirstHeader(pFormat);
             }
         }
         // Same procedure for footers...
         if( rNewFoot.IsActive() )
         {
-            SwFrmFmt* pFormat = new SwFrmFmt( *rNewFoot.GetFooterFmt() );
+            SwFrameFormat* pFormat = new SwFrameFormat( *rNewFoot.GetFooterFormat() );
             // The Ctor of this object will remove the duplicate!
-            SwFmtFooter aFormatFooter(pFormat);
+            SwFormatFooter aFormatFooter(pFormat);
             if (!rNewDesc.IsFooterShared())
             {
-                pFormat = new SwFrmFmt( *rNewDesc.GetLeft().GetFooter().GetFooterFmt() );
+                pFormat = new SwFrameFormat( *rNewDesc.GetLeft().GetFooter().GetFooterFormat() );
                 // The Ctor of this object will remove the duplicate!
-                SwFmtFooter aLeftFooter(pFormat);
+                SwFormatFooter aLeftFooter(pFormat);
             }
             if (!rNewDesc.IsFirstShared())
             {
-                pFormat = new SwFrmFmt( *rNewDesc.GetFirstMaster().GetFooter().GetFooterFmt() );
+                pFormat = new SwFrameFormat( *rNewDesc.GetFirstMaster().GetFooter().GetFooterFormat() );
                 // The Ctor of this object will remove the duplicate!
-                SwFmtFooter aFirstFooter(pFormat);
+                SwFormatFooter aFirstFooter(pFormat);
             }
         }
 
@@ -197,8 +197,8 @@ SwUndoPageDesc::~SwUndoPageDesc()
 void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDest )
 {
     OSL_ENSURE( bExchange, "You shouldn't do that." );
-    const SwFmtHeader& rDestHead = rDest.GetMaster().GetHeader();
-    const SwFmtHeader& rSourceHead = rSource.GetMaster().GetHeader();
+    const SwFormatHeader& rDestHead = rDest.GetMaster().GetHeader();
+    const SwFormatHeader& rSourceHead = rSource.GetMaster().GetHeader();
     if( rDestHead.IsActive() )
     {
         // Let the destination page description point to the source node position,
@@ -206,131 +206,131 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         const SfxPoolItem* pItem;
         rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
-        SwFrmFmt* pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
+        SwFrameFormat* pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
 #if OSL_DEBUG_LEVEL > 1
-        const SwFmtCntnt& rSourceCntnt = rSourceHead.GetHeaderFmt()->GetCntnt();
-        (void)rSourceCntnt;
-        const SwFmtCntnt& rDestCntnt = rDestHead.GetHeaderFmt()->GetCntnt();
-        (void)rDestCntnt;
+        const SwFormatContent& rSourceContent = rSourceHead.GetHeaderFormat()->GetContent();
+        (void)rSourceContent;
+        const SwFormatContent& rDestContent = rDestHead.GetHeaderFormat()->GetContent();
+        (void)rDestContent;
 #endif
-        pNewFmt->SetFmtAttr( rSourceHead.GetHeaderFmt()->GetCntnt() );
+        pNewFormat->SetFormatAttr( rSourceHead.GetHeaderFormat()->GetContent() );
         delete pNewItem;
 
         // Let the source page description point to zero node position,
         // it loses the responsible and can be destroyed without removing the content nodes.
         rSource.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
         pNewItem = pItem->Clone();
-        pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
-        pNewFmt->SetFmtAttr( SwFmtCntnt() );
+        pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
+        pNewFormat->SetFormatAttr( SwFormatContent() );
         delete pNewItem;
 
         if( !rDest.IsHeaderShared() )
         {
             // Same procedure for unshared header..
-            const SwFmtHeader& rSourceLeftHead = rSource.GetLeft().GetHeader();
+            const SwFormatHeader& rSourceLeftHead = rSource.GetLeft().GetHeader();
             rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
+            pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
 #if OSL_DEBUG_LEVEL > 1
-            const SwFmtCntnt& rSourceCntnt1 = rSourceLeftHead.GetHeaderFmt()->GetCntnt();
-            (void)rSourceCntnt1;
-            const SwFmtCntnt& rDestCntnt1 = rDest.GetLeft().GetHeader().GetHeaderFmt()->GetCntnt();
-            (void)rDestCntnt1;
+            const SwFormatContent& rSourceContent1 = rSourceLeftHead.GetHeaderFormat()->GetContent();
+            (void)rSourceContent1;
+            const SwFormatContent& rDestContent1 = rDest.GetLeft().GetHeader().GetHeaderFormat()->GetContent();
+            (void)rDestContent1;
 #endif
-            pNewFmt->SetFmtAttr( rSourceLeftHead.GetHeaderFmt()->GetCntnt() );
+            pNewFormat->SetFormatAttr( rSourceLeftHead.GetHeaderFormat()->GetContent() );
             delete pNewItem;
             rSource.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
-            pNewFmt->SetFmtAttr( SwFmtCntnt() );
+            pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
+            pNewFormat->SetFormatAttr( SwFormatContent() );
             delete pNewItem;
         }
         if (!rDest.IsFirstShared())
         {
             // Same procedure for unshared header..
-            const SwFmtHeader& rSourceFirstMasterHead = rSource.GetFirstMaster().GetHeader();
+            const SwFormatHeader& rSourceFirstMasterHead = rSource.GetFirstMaster().GetHeader();
             rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
+            pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
 #if OSL_DEBUG_LEVEL > 1
-            const SwFmtCntnt& rSourceCntnt1 = rSourceFirstMasterHead.GetHeaderFmt()->GetCntnt();
-            (void)rSourceCntnt1;
-            const SwFmtCntnt& rDestCntnt1 = rDest.GetFirstMaster().GetHeader().GetHeaderFmt()->GetCntnt();
-            (void)rDestCntnt1;
+            const SwFormatContent& rSourceContent1 = rSourceFirstMasterHead.GetHeaderFormat()->GetContent();
+            (void)rSourceContent1;
+            const SwFormatContent& rDestContent1 = rDest.GetFirstMaster().GetHeader().GetHeaderFormat()->GetContent();
+            (void)rDestContent1;
 #endif
-            pNewFmt->SetFmtAttr( rSourceFirstMasterHead.GetHeaderFmt()->GetCntnt() );
+            pNewFormat->SetFormatAttr( rSourceFirstMasterHead.GetHeaderFormat()->GetContent() );
             delete pNewItem;
             rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
-            pNewFmt->SetFmtAttr( SwFmtCntnt() );
+            pNewFormat = static_cast<SwFormatHeader*>(pNewItem)->GetHeaderFormat();
+            pNewFormat->SetFormatAttr( SwFormatContent() );
             delete pNewItem;
         }
     }
     // Same procedure for footers...
-    const SwFmtFooter& rDestFoot = rDest.GetMaster().GetFooter();
-    const SwFmtFooter& rSourceFoot = rSource.GetMaster().GetFooter();
+    const SwFormatFooter& rDestFoot = rDest.GetMaster().GetFooter();
+    const SwFormatFooter& rSourceFoot = rSource.GetMaster().GetFooter();
     if( rDestFoot.IsActive() )
     {
         const SfxPoolItem* pItem;
         rDest.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
-        SwFrmFmt *pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
-        pNewFmt->SetFmtAttr( rSourceFoot.GetFooterFmt()->GetCntnt() );
+        SwFrameFormat *pNewFormat = static_cast<SwFormatFooter*>(pNewItem)->GetFooterFormat();
+        pNewFormat->SetFormatAttr( rSourceFoot.GetFooterFormat()->GetContent() );
         delete pNewItem;
 
 #if OSL_DEBUG_LEVEL > 1
-        const SwFmtCntnt& rFooterSourceCntnt = rSourceFoot.GetFooterFmt()->GetCntnt();
-        (void)rFooterSourceCntnt;
-        const SwFmtCntnt& rFooterDestCntnt = rDestFoot.GetFooterFmt()->GetCntnt();
-        (void)rFooterDestCntnt;
+        const SwFormatContent& rFooterSourceContent = rSourceFoot.GetFooterFormat()->GetContent();
+        (void)rFooterSourceContent;
+        const SwFormatContent& rFooterDestContent = rDestFoot.GetFooterFormat()->GetContent();
+        (void)rFooterDestContent;
 #endif
         rSource.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
         pNewItem = pItem->Clone();
-        pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
-        pNewFmt->SetFmtAttr( SwFmtCntnt() );
+        pNewFormat = static_cast<SwFormatFooter*>(pNewItem)->GetFooterFormat();
+        pNewFormat->SetFormatAttr( SwFormatContent() );
         delete pNewItem;
 
         if( !rDest.IsFooterShared() )
         {
-            const SwFmtFooter& rSourceLeftFoot = rSource.GetLeft().GetFooter();
+            const SwFormatFooter& rSourceLeftFoot = rSource.GetLeft().GetFooter();
 #if OSL_DEBUG_LEVEL > 1
-            const SwFmtCntnt& rFooterSourceCntnt2 = rSourceLeftFoot.GetFooterFmt()->GetCntnt();
-            const SwFmtCntnt& rFooterDestCntnt2 =
-                rDest.GetLeft().GetFooter().GetFooterFmt()->GetCntnt();
-            (void)rFooterSourceCntnt2;
-            (void)rFooterDestCntnt2;
+            const SwFormatContent& rFooterSourceContent2 = rSourceLeftFoot.GetFooterFormat()->GetContent();
+            const SwFormatContent& rFooterDestContent2 =
+                rDest.GetLeft().GetFooter().GetFooterFormat()->GetContent();
+            (void)rFooterSourceContent2;
+            (void)rFooterDestContent2;
 #endif
             rDest.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
-            pNewFmt->SetFmtAttr( rSourceLeftFoot.GetFooterFmt()->GetCntnt() );
+            pNewFormat = static_cast<SwFormatFooter*>(pNewItem)->GetFooterFormat();
+            pNewFormat->SetFormatAttr( rSourceLeftFoot.GetFooterFormat()->GetContent() );
             delete pNewItem;
             rSource.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
-            pNewFmt->SetFmtAttr( SwFmtCntnt() );
+            pNewFormat = static_cast<SwFormatFooter*>(pNewItem)->GetFooterFormat();
+            pNewFormat->SetFormatAttr( SwFormatContent() );
             delete pNewItem;
         }
         if (!rDest.IsFirstShared())
         {
-            const SwFmtFooter& rSourceFirstMasterFoot = rSource.GetFirstMaster().GetFooter();
+            const SwFormatFooter& rSourceFirstMasterFoot = rSource.GetFirstMaster().GetFooter();
 #if OSL_DEBUG_LEVEL > 1
-            const SwFmtCntnt& rFooterSourceCntnt2 = rSourceFirstMasterFoot.GetFooterFmt()->GetCntnt();
-            const SwFmtCntnt& rFooterDestCntnt2 =
-                rDest.GetFirstMaster().GetFooter().GetFooterFmt()->GetCntnt();
-            (void)rFooterSourceCntnt2;
-            (void)rFooterDestCntnt2;
+            const SwFormatContent& rFooterSourceContent2 = rSourceFirstMasterFoot.GetFooterFormat()->GetContent();
+            const SwFormatContent& rFooterDestContent2 =
+                rDest.GetFirstMaster().GetFooter().GetFooterFormat()->GetContent();
+            (void)rFooterSourceContent2;
+            (void)rFooterDestContent2;
 #endif
             rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
-            pNewFmt->SetFmtAttr( rSourceFirstMasterFoot.GetFooterFmt()->GetCntnt() );
+            pNewFormat = static_cast<SwFormatFooter*>(pNewItem)->GetFooterFormat();
+            pNewFormat->SetFormatAttr( rSourceFirstMasterFoot.GetFooterFormat()->GetContent() );
             delete pNewItem;
             rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
-            pNewFmt->SetFmtAttr( SwFmtCntnt() );
+            pNewFormat = static_cast<SwFormatFooter*>(pNewItem)->GetFooterFormat();
+            pNewFormat->SetFormatAttr( SwFormatContent() );
             delete pNewItem;
         }
     }

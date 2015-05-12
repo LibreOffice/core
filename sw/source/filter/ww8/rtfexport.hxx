@@ -26,11 +26,11 @@
 class RtfAttributeOutput;
 class RtfExportFilter;
 class RtfSdrExport;
-typedef std::map<sal_uInt16,Color> RtfColorTbl;
-typedef std::map<sal_uInt16,OString> RtfStyleTbl;
-typedef std::map<OUString,sal_uInt16> RtfRedlineTbl;
+typedef std::map<sal_uInt16,Color> RtfColorTable;
+typedef std::map<sal_uInt16,OString> RtfStyleTable;
+typedef std::map<OUString,sal_uInt16> RtfRedlineTable;
 class SwNode;
-class SwTxtNode;
+class SwTextNode;
 class SwGrfNode;
 class SwOLENode;
 
@@ -89,14 +89,14 @@ public:
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk(sal_uInt16 nScript, sal_uInt16 nWhich) SAL_OVERRIDE;
 
-    virtual void AppendBookmarks(const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen) SAL_OVERRIDE;
+    virtual void AppendBookmarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen) SAL_OVERRIDE;
 
     virtual void AppendBookmark(const OUString& rName, bool bSkip = false) SAL_OVERRIDE;
 
-    virtual void AppendAnnotationMarks(const SwTxtNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen) SAL_OVERRIDE;
+    virtual void AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen) SAL_OVERRIDE;
 
     //For i120928,add an interface to export graphic of bullet
-    virtual void ExportGrfBullet(const SwTxtNode& rNd) SAL_OVERRIDE;
+    virtual void ExportGrfBullet(const SwTextNode& rNd) SAL_OVERRIDE;
 
     virtual void WriteCR(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/) SAL_OVERRIDE { /* no-op for rtf, most probably should not even be in MSWordExportBase */ }
     virtual void WriteChar(sal_Unicode) SAL_OVERRIDE;
@@ -109,11 +109,11 @@ public:
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters(sal_uInt8 nHeadFootFlags,
-                                     const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 nBreakCode) SAL_OVERRIDE;
+                                     const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat, sal_uInt8 nBreakCode) SAL_OVERRIDE;
 
     /// Write the field
-    virtual void OutputField(const SwField* pFld, ww::eField eFldType,
-                             const OUString& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL) SAL_OVERRIDE;
+    virtual void OutputField(const SwField* pField, ww::eField eFieldType,
+                             const OUString& rFieldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL) SAL_OVERRIDE;
 
     /// Write the data of the form field
     virtual void WriteFormData(const ::sw::mark::IFieldmark& rFieldmark) SAL_OVERRIDE;
@@ -125,7 +125,7 @@ public:
                             const OUString& rSelected,
                             css::uno::Sequence<OUString>& rListItems) SAL_OVERRIDE;
 
-    virtual void DoFormText(const SwInputField* pFld) SAL_OVERRIDE;
+    virtual void DoFormText(const SwInputField* pField) SAL_OVERRIDE;
 
     virtual sal_uLong ReplaceCr(sal_uInt8 nChar) SAL_OVERRIDE;
 
@@ -133,19 +133,19 @@ protected:
     /// Format-dependent part of the actual export.
     virtual void ExportDocument_Impl() SAL_OVERRIDE;
 
-    virtual void SectionBreaksAndFrames(const SwTxtNode& /*rNode*/) SAL_OVERRIDE {}
+    virtual void SectionBreaksAndFrames(const SwTextNode& /*rNode*/) SAL_OVERRIDE {}
 
     /// Get ready for a new section.
     virtual void PrepareNewPageDesc(const SfxItemSet* pSet,
                                     const SwNode& rNd,
-                                    const SwFmtPageDesc* pNewPgDescFmt = 0,
+                                    const SwFormatPageDesc* pNewPgDescFormat = 0,
                                     const SwPageDesc* pNewPgDesc = 0) SAL_OVERRIDE;
 
     /// Return value indicates if an inherited outline numbering is suppressed.
-    virtual bool DisallowInheritingOutlineNumbering(const SwFmt& rFmt) SAL_OVERRIDE;
+    virtual bool DisallowInheritingOutlineNumbering(const SwFormat& rFormat) SAL_OVERRIDE;
 
-    /// Output SwTxtNode is depending on outline export mode
-    virtual void OutputTextNode(const SwTxtNode&) SAL_OVERRIDE;
+    /// Output SwTextNode is depending on outline export mode
+    virtual void OutputTextNode(const SwTextNode&) SAL_OVERRIDE;
 
     /// Output SwGrfNode
     virtual void OutputGrfNode(const SwGrfNode&) SAL_OVERRIDE;
@@ -155,7 +155,7 @@ protected:
 
     virtual void OutputLinkedOLE(const OUString&) SAL_OVERRIDE;
 
-    virtual void AppendSection(const SwPageDesc* pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum) SAL_OVERRIDE;
+    virtual void AppendSection(const SwPageDesc* pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum) SAL_OVERRIDE;
 
 public:
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
@@ -170,7 +170,7 @@ public:
     rtl_TextEncoding eCurrentEncoding;
     /// This is used by OutputFlyFrame_Impl() to control the written syntax
     bool bRTFFlySyntax;
-    /// Index of the current SwTxtNode, if any.
+    /// Index of the current SwTextNode, if any.
     sal_uLong m_nCurrentNodeIndex;
 
     SvStream& Strm();
@@ -211,11 +211,11 @@ private:
     /// This is necessary to have the numbering table ready before the main text is being processed.
     void BuildNumbering();
     void WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader);
-    void WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr, bool bTitlepg = false);
+    void WriteHeaderFooter(const SwFrameFormat& rFormat, bool bHeader, const sal_Char* pStr, bool bTitlepg = false);
 
-    RtfColorTbl m_aColTbl;
-    RtfStyleTbl m_aStyTbl;
-    RtfRedlineTbl m_aRedlineTbl;
+    RtfColorTable m_aColTable;
+    RtfStyleTable m_aStyTable;
+    RtfRedlineTable m_aRedlineTable;
     /// If set, then Strm() returns this tream, instead of m_pWriter's stream.
     std::unique_ptr<SvMemoryStream> m_pStream;
 };

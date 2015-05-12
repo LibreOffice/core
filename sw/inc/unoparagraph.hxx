@@ -43,7 +43,7 @@ struct SwPosition;
 class SwPaM;
 class SwUnoCrsr;
 class SwStartNode;
-class SwTxtNode;
+class SwTextNode;
 class SwTable;
 class SwXText;
 
@@ -74,7 +74,7 @@ private:
 
     SwXParagraph(::com::sun::star::uno::Reference<
                     ::com::sun::star::text::XText > const & xParent,
-            SwTxtNode & rTxtNode,
+            SwTextNode & rTextNode,
             const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = - 1);
 
     /// descriptor
@@ -84,17 +84,17 @@ public:
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XTextContent>
-        CreateXParagraph(SwDoc & rDoc, SwTxtNode * pTxtNode,
+        CreateXParagraph(SwDoc & rDoc, SwTextNode * pTextNode,
             ::com::sun::star::uno::Reference< ::com::sun::star::text::XText>
                 const& xParentText = 0,
             const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = - 1);
 
-    const SwTxtNode * GetTxtNode() const;
+    const SwTextNode * GetTextNode() const;
     bool            IsDescriptor() const;
     /// make rPaM select the paragraph
     bool SelectPaM(SwPaM & rPaM);
     /// for SwXText
-    void attachToText(SwXText & rParent, SwTxtNode & rTxtNode);
+    void attachToText(SwXText & rParent, SwTextNode & rTextNode);
 
     // MetadatableMixin
     virtual ::sfx2::Metadatable* GetCoreObject() SAL_OVERRIDE;

@@ -138,18 +138,18 @@ SwDoc* SwUiWriterTest::createDoc(const char* pName)
         pName = "empty.odt";
     load(DATA_DIRECTORY, pName);
 
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
-    return pTxtDoc->GetDocShell()->GetDoc();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    return pTextDoc->GetDocShell()->GetDoc();
 }
 
 //Replacement tests
 
 static void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)
 {
-    rPaM.GetPoint()->nContent.Assign(rPaM.GetCntntNode(), first);
+    rPaM.GetPoint()->nContent.Assign(rPaM.GetContentNode(), first);
     rPaM.SetMark();
-    rPaM.GetPoint()->nContent.Assign(rPaM.GetCntntNode(), end);
+    rPaM.GetPoint()->nContent.Assign(rPaM.GetContentNode(), end);
 }
 
 static const OUString ORIGINAL_REPLACE_CONTENT("toto titi tutu");
@@ -166,15 +166,15 @@ void SwUiWriterTest::testReplaceForward()
 
     pDoc->getIDocumentContentOperations().InsertString(aPaM, ORIGINAL_REPLACE_CONTENT);
 
-    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
     lcl_selectCharacters(aPaM, 5, 9);
     pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, OUString("toto"), false);
 
-    CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTxtNode->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTextNode->GetText());
 
     rUndoManager.Undo();
 
-    CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTxtNode->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTextNode->GetText());
 }
 
 void SwUiWriterTest::testFdo75110()
@@ -215,16 +215,16 @@ void SwUiWriterTest::testReplaceBackward()
     SwPaM aPaM(aIdx);
 
     pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("toto titi tutu"));
-    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
     lcl_selectCharacters(aPaM, 9, 5);
 
     pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, OUString("toto"), false);
 
-    CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTxtNode->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTextNode->GetText());
 
     rUndoManager.Undo();
 
-    CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTxtNode->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTextNode->GetText());
 }
 
 void SwUiWriterTest::testFdo69893()
@@ -236,9 +236,9 @@ void SwUiWriterTest::testFdo69893()
     pWrtShell->SelAll(); // Selects the whole document.
 
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
-    SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
+    SwTextNode& rEnd = dynamic_cast<SwTextNode&>(pShellCrsr->End()->nNode.GetNode());
     // Selection did not include the para after table, this was "B1".
-    CPPUNIT_ASSERT_EQUAL(OUString("Para after table."), rEnd.GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("Para after table."), rEnd.GetText());
 }
 
 void SwUiWriterTest::testFdo70807()
@@ -287,8 +287,8 @@ void SwUiWriterTest::testImportRTF()
     CPPUNIT_ASSERT_EQUAL(sal_uLong(0), aReader.Read(*pRTFReader));
 
     sal_uLong nIndex = pWrtShell->GetCrsr()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), pDoc->GetNodes()[nIndex - 1]->GetTxtNode()->GetTxt());
-    CPPUNIT_ASSERT_EQUAL(OUString("bar"), pDoc->GetNodes()[nIndex]->GetTxtNode()->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), pDoc->GetNodes()[nIndex - 1]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("bar"), pDoc->GetNodes()[nIndex]->GetTextNode()->GetText());
 }
 
 void SwUiWriterTest::testExportRTF()
@@ -334,13 +334,13 @@ void SwUiWriterTest::testFdo74981()
     // create a document with an input field
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFldType(0, RES_INPUTFLD)), OUString("foo"), OUString("bar"), 0, 0);
+    SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFieldType(0, RES_INPUTFLD)), OUString("foo"), OUString("bar"), 0, 0);
     pWrtShell->Insert(aField);
 
     // expect hints
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
-    SwTxtNode* pTxtNode = aIdx.GetNode().GetTxtNode();
-    CPPUNIT_ASSERT(pTxtNode->HasHints());
+    SwTextNode* pTextNode = aIdx.GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode->HasHints());
 
     // go to the begin of the paragraph and split this node
     pWrtShell->Left(CRSR_SKIP_CHARS, false, 100, false);
@@ -348,11 +348,11 @@ void SwUiWriterTest::testFdo74981()
 
     // expect only the second paragraph to have hints
     aIdx = SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
-    pTxtNode = aIdx.GetNode().GetTxtNode();
-    CPPUNIT_ASSERT(pTxtNode->HasHints());
+    pTextNode = aIdx.GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode->HasHints());
     --aIdx;
-    pTxtNode = aIdx.GetNode().GetTxtNode();
-    CPPUNIT_ASSERT(!pTxtNode->HasHints());
+    pTextNode = aIdx.GetNode().GetTextNode();
+    CPPUNIT_ASSERT(!pTextNode->HasHints());
 }
 
 void SwUiWriterTest::testShapeTextboxSelect()
@@ -363,14 +363,14 @@ void SwUiWriterTest::testShapeTextboxSelect()
     SdrObject* pObject = pPage->GetObj(1);
     SwContact* pTextBox = static_cast<SwContact*>(pObject->GetUserCall());
     // First, make sure that pTextBox is a fly frame (textbox of a shape).
-    CPPUNIT_ASSERT_EQUAL(RES_FLYFRMFMT, static_cast<RES_FMT>(pTextBox->GetFmt()->Which()));
+    CPPUNIT_ASSERT_EQUAL(RES_FLYFRMFMT, static_cast<RES_FMT>(pTextBox->GetFormat()->Which()));
 
     // Then select it.
     pWrtShell->SelectObj(Point(), 0, pObject);
     const SdrMarkList& rMarkList = pWrtShell->GetDrawView()->GetMarkedObjectList();
     SwDrawContact* pShape = static_cast<SwDrawContact*>(rMarkList.GetMark(0)->GetMarkedSdrObj()->GetUserCall());
     // And finally make sure the shape got selected, not just the textbox itself.
-    CPPUNIT_ASSERT_EQUAL(RES_DRAWFRMFMT, static_cast<RES_FMT>(pShape->GetFmt()->Which()));
+    CPPUNIT_ASSERT_EQUAL(RES_DRAWFRMFMT, static_cast<RES_FMT>(pShape->GetFormat()->Which()));
 }
 
 void SwUiWriterTest::testShapeTextboxDelete()
@@ -395,22 +395,22 @@ void SwUiWriterTest::testCp1000071()
     SwDoc* pDoc = createDoc("cp1000071.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    const SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
-    CPPUNIT_ASSERT_EQUAL( size_t( 2 ), rTbl.size());
-    sal_uLong redlineStart0NodeIndex = rTbl[ 0 ]->Start()->nNode.GetIndex();
-    sal_Int32 redlineStart0Index = rTbl[ 0 ]->Start()->nContent.GetIndex();
-    sal_uLong redlineEnd0NodeIndex = rTbl[ 0 ]->End()->nNode.GetIndex();
-    sal_Int32 redlineEnd0Index = rTbl[ 0 ]->End()->nContent.GetIndex();
-    sal_uLong redlineStart1NodeIndex = rTbl[ 1 ]->Start()->nNode.GetIndex();
-    sal_Int32 redlineStart1Index = rTbl[ 1 ]->Start()->nContent.GetIndex();
-    sal_uLong redlineEnd1NodeIndex = rTbl[ 1 ]->End()->nNode.GetIndex();
-    sal_Int32 redlineEnd1Index = rTbl[ 1 ]->End()->nContent.GetIndex();
+    const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL( size_t( 2 ), rTable.size());
+    sal_uLong redlineStart0NodeIndex = rTable[ 0 ]->Start()->nNode.GetIndex();
+    sal_Int32 redlineStart0Index = rTable[ 0 ]->Start()->nContent.GetIndex();
+    sal_uLong redlineEnd0NodeIndex = rTable[ 0 ]->End()->nNode.GetIndex();
+    sal_Int32 redlineEnd0Index = rTable[ 0 ]->End()->nContent.GetIndex();
+    sal_uLong redlineStart1NodeIndex = rTable[ 1 ]->Start()->nNode.GetIndex();
+    sal_Int32 redlineStart1Index = rTable[ 1 ]->Start()->nContent.GetIndex();
+    sal_uLong redlineEnd1NodeIndex = rTable[ 1 ]->End()->nNode.GetIndex();
+    sal_Int32 redlineEnd1Index = rTable[ 1 ]->End()->nContent.GetIndex();
 
     // Change the document layout to be 2 columns, and then undo.
     pWrtShell->SelAll();
     SwSectionData section(CONTENT_SECTION, pWrtShell->GetUniqueSectionName());
     SfxItemSet set( pDoc->GetDocShell()->GetPool(), RES_COL, RES_COL, 0 );
-    SwFmtCol col;
+    SwFormatCol col;
     col.Init( 2, 0, 10000 );
     set.Put( col );
     pWrtShell->InsertSection( section, &set );
@@ -418,15 +418,15 @@ void SwUiWriterTest::testCp1000071()
     rUndoManager.Undo();
 
     // Check that redlines are the same like at the beginning.
-    CPPUNIT_ASSERT_EQUAL( size_t( 2 ), rTbl.size());
-    CPPUNIT_ASSERT_EQUAL( redlineStart0NodeIndex, rTbl[ 0 ]->Start()->nNode.GetIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineStart0Index, rTbl[ 0 ]->Start()->nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineEnd0NodeIndex, rTbl[ 0 ]->End()->nNode.GetIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineEnd0Index, rTbl[ 0 ]->End()->nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineStart1NodeIndex, rTbl[ 1 ]->Start()->nNode.GetIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineStart1Index, rTbl[ 1 ]->Start()->nContent.GetIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineEnd1NodeIndex, rTbl[ 1 ]->End()->nNode.GetIndex());
-    CPPUNIT_ASSERT_EQUAL( redlineEnd1Index, rTbl[ 1 ]->End()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( size_t( 2 ), rTable.size());
+    CPPUNIT_ASSERT_EQUAL( redlineStart0NodeIndex, rTable[ 0 ]->Start()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineStart0Index, rTable[ 0 ]->Start()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd0NodeIndex, rTable[ 0 ]->End()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd0Index, rTable[ 0 ]->End()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineStart1NodeIndex, rTable[ 1 ]->Start()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineStart1Index, rTable[ 1 ]->Start()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd1NodeIndex, rTable[ 1 ]->End()->nNode.GetIndex());
+    CPPUNIT_ASSERT_EQUAL( redlineEnd1Index, rTable[ 1 ]->End()->nContent.GetIndex());
 }
 
 void SwUiWriterTest::testShapeTextboxVertadjust()
@@ -434,9 +434,9 @@ void SwUiWriterTest::testShapeTextboxVertadjust()
     SwDoc* pDoc = createDoc("shape-textbox-vertadjust.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(1);
-    SwFrmFmt* pFmt = static_cast<SwContact*>(pObject->GetUserCall())->GetFmt();
+    SwFrameFormat* pFormat = static_cast<SwContact*>(pObject->GetUserCall())->GetFormat();
     // This was SDRTEXTVERTADJUST_TOP.
-    CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_CENTER, pFmt->GetTextVertAdjust().GetValue());
+    CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_CENTER, pFormat->GetTextVertAdjust().GetValue());
 }
 
 void SwUiWriterTest::testShapeTextboxAutosize()
@@ -459,7 +459,7 @@ void SwUiWriterTest::testFdo82191()
 {
     SwDoc* pDoc = createDoc("fdo82191.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+    std::set<const SwFrameFormat*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
     // Make sure we have a single draw shape.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), SwTextBoxHelper::getCount(pPage, aTextBoxes));
 
@@ -526,8 +526,8 @@ void SwUiWriterTest::testChineseConversionBlank()
 
 
     // Then
-    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
-    CPPUNIT_ASSERT_EQUAL(OUString(), pTxtNode->GetTxt());
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(OUString(), pTextNode->GetText());
 
 }
 
@@ -552,8 +552,8 @@ void SwUiWriterTest::testChineseConversionNonChineseText()
 
 
     // Then
-    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
-    CPPUNIT_ASSERT_EQUAL(NON_CHINESE_CONTENT, pTxtNode->GetTxt());
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(NON_CHINESE_CONTENT, pTextNode->GetText());
 
 }
 
@@ -578,8 +578,8 @@ void SwUiWriterTest::testChineseConversionTraditionalToSimplified()
 
 
     // Then
-    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
-    CPPUNIT_ASSERT_EQUAL(CHINESE_SIMPLIFIED_CONTENT, pTxtNode->GetTxt());
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(CHINESE_SIMPLIFIED_CONTENT, pTextNode->GetText());
 
 }
 
@@ -604,8 +604,8 @@ void SwUiWriterTest::testChineseConversionSimplifiedToTraditional()
 
 
     // Then
-    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
-    CPPUNIT_ASSERT_EQUAL(CHINESE_TRADITIONAL_CONTENT, pTxtNode->GetTxt());
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(CHINESE_TRADITIONAL_CONTENT, pTextNode->GetText());
 
 }
 
@@ -643,7 +643,7 @@ void SwUiWriterTest::testAutoCorr()
     pWrtShell->Insert("tset");
     pWrtShell->AutoCorrect(corr, cIns);
     sal_uLong nIndex = pWrtShell->GetCrsr()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(OUString("Test "), static_cast<SwTxtNode*>(pDoc->GetNodes()[nIndex])->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("Test "), static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
     //AutoCorrect with change style to bolt
     pWrtShell->Insert("Bolt");
@@ -825,8 +825,8 @@ void SwUiWriterTest::testTdf68183()
 
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
-    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
-    CPPUNIT_ASSERT_EQUAL(false, pTxtNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(false, pTextNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
 
     // Then enable storing of RSID and make sure that the attribute is inserted.
     SW_MOD()->GetModuleConfig()->SetStoreRsid(true);
@@ -834,7 +834,7 @@ void SwUiWriterTest::testTdf68183()
     pWrtShell->DelToStartOfLine();
     pWrtShell->Insert2("X");
 
-    CPPUNIT_ASSERT_EQUAL(true, pTxtNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
+    CPPUNIT_ASSERT_EQUAL(true, pTextNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
 }
 
 void SwUiWriterTest::testCp1000115()
@@ -883,14 +883,14 @@ void SwUiWriterTest::testSearchWithTransliterate()
     //transliteration option set so that at least one of the search strings is not found
     sal_uLong case1 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END,FND_IN_BODY,false);
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(true);
-    CPPUNIT_ASSERT_EQUAL(OUString(""),pShellCrsr->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString(""),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(0,(int)case1);
     SearchOpt.searchString = "paragraph";
     SearchOpt.transliterateFlags = com::sun::star::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
     //transliteration option set so that all search strings are found
     sal_uLong case2 = pWrtShell->SearchPattern(SearchOpt,true,DOCPOS_START,DOCPOS_END,FND_IN_BODY,false);
     pShellCrsr = pWrtShell->getShellCrsr(true);
-    CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
 }
 
@@ -928,13 +928,13 @@ void SwUiWriterTest::testUndoCharAttribute()
         pCrsr->Move(fnMoveBackward);
     }
     // Check that correct text was selected
-    CPPUNIT_ASSERT_EQUAL(OUString("be bolded"), pCrsr->GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("be bolded"), pCrsr->GetText());
     // Apply a "Bold" attribute to selection
     SvxWeightItem aWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
     rIDCO.InsertPoolItem(*pCrsr, aWeightItem);
     SfxItemSet aSet( pDoc->GetAttrPool(), RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT);
     // Adds selected text's attributes to aSet
-    pCrsr->GetNode().GetTxtNode()->GetAttr(aSet, 10, 19);
+    pCrsr->GetNode().GetTextNode()->GetAttr(aSet, 10, 19);
     SfxPoolItem const * aPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
     SfxPoolItem& ampPoolItem = aWeightItem;
     // Check that bold is active on the selection; checks if it's in aSet
@@ -943,7 +943,7 @@ void SwUiWriterTest::testUndoCharAttribute()
     rUndoManager.Undo();
     // Check that bold is no longer active
     aSet.ClearItem(RES_CHRATR_WEIGHT);
-    pCrsr->GetNode().GetTxtNode()->GetAttr(aSet, 10, 19);
+    pCrsr->GetNode().GetTextNode()->GetAttr(aSet, 10, 19);
     aPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
     CPPUNIT_ASSERT_EQUAL((*aPoolItem == ampPoolItem), false);
 }

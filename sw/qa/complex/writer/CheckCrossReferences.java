@@ -33,7 +33,7 @@ public class CheckCrossReferences {
 
     private com.sun.star.container.XEnumeration xParaEnum;
     private com.sun.star.container.XEnumeration xPortionEnum;
-    private com.sun.star.util.XRefreshable xFldsRefresh;
+    private com.sun.star.util.XRefreshable xFieldsRefresh;
 
     public com.sun.star.text.XTextField getNextField()
         throws com.sun.star.uno.Exception
@@ -86,18 +86,18 @@ public class CheckCrossReferences {
     public void checkField( com.sun.star.text.XTextField xField,
             com.sun.star.beans.XPropertySet xProps,
             short nFormat,
-            String aExpectedFldResult )
+            String aExpectedFieldResult )
         throws com.sun.star.uno.Exception
     {
         // set requested format
         xProps.setPropertyValue("ReferenceFieldPart", Short.valueOf(nFormat));
 
         // refresh fields in order to get new format applied
-        xFldsRefresh.refresh();
+        xFieldsRefresh.refresh();
 
-        String aFldResult = xField.getPresentation( false );
+        String aFieldResult = xField.getPresentation( false );
         assertEquals( "set reference field format doesn't result in correct field result",
-                      aExpectedFldResult, aFldResult);
+                      aExpectedFieldResult, aFieldResult);
     }
 
     @Test public void checkCrossReferences() throws com.sun.star.uno.Exception {
@@ -114,25 +114,25 @@ public class CheckCrossReferences {
             com.sun.star.text.XTextFieldsSupplier xFieldSupp =
                     UnoRuntime.queryInterface(
             com.sun.star.text.XTextFieldsSupplier.class, document);
-            xFldsRefresh = UnoRuntime.queryInterface(
+            xFieldsRefresh = UnoRuntime.queryInterface(
                     com.sun.star.util.XRefreshable.class, xFieldSupp.getTextFields());
         }
 
         // check first reference field
         {
             // strings for checking
-            final String FldResult1 = "*i*";
-            final String FldResult2 = "+b+*i*";
-            final String FldResult3 = "-1-+b+*i*";
-            final String FldResult4 = "1";
-            final String FldResult5 = "1";
-            final String FldResult6 = "A.1";
-            final String FldResult7 = "2(a)";
-            final String FldResult8 = "2(b)";
-            final String FldResult9 = "2";
-            final String FldResult10 = "1(a)";
-            final String FldResult11 = "(b)";
-            final String FldResult12 = "(a)";
+            final String FieldResult1 = "*i*";
+            final String FieldResult2 = "+b+*i*";
+            final String FieldResult3 = "-1-+b+*i*";
+            final String FieldResult4 = "1";
+            final String FieldResult5 = "1";
+            final String FieldResult6 = "A.1";
+            final String FieldResult7 = "2(a)";
+            final String FieldResult8 = "2(b)";
+            final String FieldResult9 = "2";
+            final String FieldResult10 = "1(a)";
+            final String FieldResult11 = "(b)";
+            final String FieldResult12 = "(a)";
 
             // variables for current field
             com.sun.star.text.XTextField xField = null;
@@ -140,75 +140,75 @@ public class CheckCrossReferences {
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult2 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult1 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult3 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult2 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult1 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult3 );
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult1 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult1 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult3 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult1 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult1 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult3 );
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult3 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult1 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult3 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult3 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult1 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult3 );
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult5 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult4 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult6 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult5 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult4 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult6 );
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult4 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult4 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult6 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult4 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult4 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult6 );
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult6 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult4 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult6 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult6 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult4 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult6 );
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult7 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult12 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult7 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult7 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult12 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult7 );
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult8 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult11 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult8 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult8 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult11 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult8 );
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult9 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult9 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult9 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult9 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult9 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult9 );
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult4 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult4 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult4 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult4 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult4 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult4 );
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult10 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult12 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult10 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult10 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult12 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult10 );
 
             xField = getNextField();
             xProps = getFieldProps( xField );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult12 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult12 );
-            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult7 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FieldResult12 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FieldResult12 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FieldResult7 );
         }
 
         // insert a certain cross-reference bookmark and a reference field to this bookmark
@@ -267,7 +267,7 @@ public class CheckCrossReferences {
                         UnoRuntime.queryInterface(
                 com.sun.star.text.XTextRange.class, xParaEnum.nextElement());
                 xNewField.attach(xFieldTextRange.getEnd());
-                xFldsRefresh.refresh();
+                xFieldsRefresh.refresh();
             }
 
             // check inserted reference field
@@ -278,7 +278,7 @@ public class CheckCrossReferences {
                           "J", xField.getPresentation( false ) );
 
             xParaTextRange.getStart().setString( "Hallo new bookmark: " );
-            xFldsRefresh.refresh();
+            xFieldsRefresh.refresh();
             assertEquals( "inserted reference field doesn't has correct field result",
                           "Hallo new bookmark: J", xField.getPresentation( false ) );
         }

@@ -134,16 +134,16 @@ struct SwHash
 struct SwCalcExp : public SwHash
 {
     SwSbxValue  nValue;
-    const SwFieldType* pFldType;
+    const SwFieldType* pFieldType;
 
     SwCalcExp( const OUString& rStr, const SwSbxValue& rVal,
-                const SwFieldType* pFldType = 0 );
+                const SwFieldType* pFieldType = 0 );
 };
 
 SwHash* Find( const OUString& rSrch, SwHash* const * ppTable,
-                sal_uInt16 nTblSize, sal_uInt16* pPos = 0 );
+                sal_uInt16 nTableSize, sal_uInt16* pPos = 0 );
 
-void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTblSize );
+void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTableSize );
 
 // if _CalcOp != 0, this is a valid operator
 struct _CalcOp;

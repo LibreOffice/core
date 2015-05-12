@@ -27,13 +27,13 @@ class SwUndoSplitNode: public SwUndo
     SwHistory* pHistory;
     SwRedlineData* pRedlData;
     sal_uLong nNode;
-    sal_Int32 nCntnt;
-    bool bTblFlag : 1;
-    bool bChkTblStt : 1;
+    sal_Int32 nContent;
+    bool bTableFlag : 1;
+    bool bChkTableStt : 1;
     sal_uInt32 nParRsid;
 
 public:
-    SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, bool bChkTbl );
+    SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, bool bChkTable );
 
     virtual ~SwUndoSplitNode();
 
@@ -41,18 +41,18 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
-    void SetTblFlag()       { bTblFlag = true; }
+    void SetTableFlag()       { bTableFlag = true; }
 };
 
-class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
+class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveContent
 {
     // nDest.. - destination range of move (after move!)
     // nIns..  - source Position of move (after move!)
     // nMv..   - destination position of move (before move!); for REDO
     sal_uLong nDestSttNode, nDestEndNode, nInsPosNode, nMvDestNode;
-    sal_Int32 nDestSttCntnt, nDestEndCntnt, nInsPosCntnt, nMvDestCntnt;
+    sal_Int32 nDestSttContent, nDestEndContent, nInsPosContent, nMvDestContent;
 
-    sal_uInt16 nFtnStt; // StartPos of Footnotes in History
+    sal_uInt16 nFootnoteStt; // StartPos of Footnotes in History
 
     bool bJoinNext : 1,
          bJoinPrev : 1,
@@ -60,7 +60,7 @@ class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
 
     bool bMoveRedlines; // use DOC_MOVEREDLINES when calling SwDoc::Move
 
-    void DelFtn( const SwPaM& );
+    void DelFootnote( const SwPaM& );
 
 public:
     SwUndoMove( const SwPaM&, const SwPosition& );
@@ -77,7 +77,7 @@ public:
     bool IsMoveRange() const        { return bMoveRange; }
     sal_uLong GetEndNode() const        { return nEndNode; }
     sal_uLong GetDestSttNode() const    { return nDestSttNode; }
-    sal_Int32 GetDestSttCntnt() const  { return nDestSttCntnt; }
+    sal_Int32 GetDestSttContent() const  { return nDestSttContent; }
 
     void SetMoveRedlines( bool b )       { bMoveRedlines = b; }
 };

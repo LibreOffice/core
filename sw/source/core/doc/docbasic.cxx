@@ -137,7 +137,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
         return 0;
 
     sal_uInt16 nRet = 0;
-    const SvxMacroTableDtor* pTbl = 0;
+    const SvxMacroTableDtor* pTable = 0;
     switch( rCallEvent.eType )
     {
     case EVENT_OBJECT_INETATTR:
@@ -156,20 +156,20 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             }
         }
         if( !bCheckPtr )
-            pTbl = rCallEvent.PTR.pINetAttr->GetMacroTbl();
+            pTable = rCallEvent.PTR.pINetAttr->GetMacroTable();
         break;
 
     case EVENT_OBJECT_URLITEM:
     case EVENT_OBJECT_IMAGE:
         {
-            const SwFrmFmt* pFmt = rCallEvent.PTR.pFmt;
+            const SwFrameFormat* pFormat = rCallEvent.PTR.pFormat;
             if( bCheckPtr )
             {
-                if ( GetSpzFrmFmts()->Contains( pFmt ) )
+                if ( GetSpzFrameFormats()->Contains( pFormat ) )
                     bCheckPtr = false;      // misuse as a flag
             }
             if( !bCheckPtr )
-                pTbl = &pFmt->GetMacro().GetMacroTable();
+                pTable = &pFormat->GetMacro().GetMacroTable();
         }
         break;
 
@@ -178,10 +178,10 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             const IMapObject* pIMapObj = rCallEvent.PTR.IMAP.pIMapObj;
             if( bCheckPtr )
             {
-                const SwFrmFmt* pFmt = rCallEvent.PTR.IMAP.pFmt;
+                const SwFrameFormat* pFormat = rCallEvent.PTR.IMAP.pFormat;
                 const ImageMap* pIMap;
-                if( GetSpzFrmFmts()->Contains( pFmt ) &&
-                    0 != (pIMap = pFmt->GetURL().GetMap()) )
+                if( GetSpzFrameFormats()->Contains( pFormat ) &&
+                    0 != (pIMap = pFormat->GetURL().GetMap()) )
                 {
                     for( size_t nPos = pIMap->GetIMapObjectCount(); nPos; )
                         if( pIMapObj == pIMap->GetIMapObject( --nPos ))
@@ -192,19 +192,19 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                 }
             }
             if( !bCheckPtr )
-                pTbl = &pIMapObj->GetMacroTable();
+                pTable = &pIMapObj->GetMacroTable();
         }
         break;
     default:
         break;
     }
 
-    if( pTbl )
+    if( pTable )
     {
         nRet = 0x1;
-        if( pTbl->IsKeyValid( nEvent ) )
+        if( pTable->IsKeyValid( nEvent ) )
         {
-            const SvxMacro& rMacro = *pTbl->Get( nEvent );
+            const SvxMacro& rMacro = *pTable->Get( nEvent );
             if( STARBASIC == rMacro.GetScriptType() )
             {
                 nRet += 0 == mpDocShell->CallBasic( rMacro.GetMacName(),

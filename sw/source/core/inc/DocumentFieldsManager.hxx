@@ -36,32 +36,32 @@ public:
 
     DocumentFieldsManager( SwDoc& i_rSwdoc );
 
-    virtual const SwFldTypes *GetFldTypes() const SAL_OVERRIDE;
-    virtual SwFieldType *InsertFldType(const SwFieldType &) SAL_OVERRIDE;
-    virtual SwFieldType *GetSysFldType( const sal_uInt16 eWhich ) const SAL_OVERRIDE;
-    virtual SwFieldType* GetFldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const SAL_OVERRIDE;
-    virtual void RemoveFldType(size_t nFld) SAL_OVERRIDE;
-    virtual void UpdateFlds( SfxPoolItem* pNewHt, bool bCloseDB) SAL_OVERRIDE;
-    virtual void InsDeletedFldType(SwFieldType &) SAL_OVERRIDE;
+    virtual const SwFieldTypes *GetFieldTypes() const SAL_OVERRIDE;
+    virtual SwFieldType *InsertFieldType(const SwFieldType &) SAL_OVERRIDE;
+    virtual SwFieldType *GetSysFieldType( const sal_uInt16 eWhich ) const SAL_OVERRIDE;
+    virtual SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const SAL_OVERRIDE;
+    virtual void RemoveFieldType(size_t nField) SAL_OVERRIDE;
+    virtual void UpdateFields( SfxPoolItem* pNewHt, bool bCloseDB) SAL_OVERRIDE;
+    virtual void InsDeletedFieldType(SwFieldType &) SAL_OVERRIDE;
     virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich) SAL_OVERRIDE;
-    virtual bool UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld, SwMsgPoolItem * pMsgHnt, bool bUpdateTblFlds) SAL_OVERRIDE;
-    virtual void UpdateRefFlds(SfxPoolItem* pHt) SAL_OVERRIDE;
-    virtual void UpdateTblFlds(SfxPoolItem* pHt) SAL_OVERRIDE;
-    virtual void UpdateExpFlds(SwTxtFld* pFld, bool bUpdateRefFlds) SAL_OVERRIDE;
-    virtual void UpdateUsrFlds() SAL_OVERRIDE;
-    virtual void UpdatePageFlds(SfxPoolItem*) SAL_OVERRIDE;
-    virtual void LockExpFlds() SAL_OVERRIDE;
-    virtual void UnlockExpFlds() SAL_OVERRIDE;
-    virtual bool IsExpFldsLocked() const SAL_OVERRIDE;
-    virtual SwDocUpdtFld& GetUpdtFlds() const SAL_OVERRIDE;
+    virtual bool UpdateField(SwTextField * rDstFormatField, SwField & rSrcField, SwMsgPoolItem * pMsgHint, bool bUpdateTableFields) SAL_OVERRIDE;
+    virtual void UpdateRefFields(SfxPoolItem* pHt) SAL_OVERRIDE;
+    virtual void UpdateTableFields(SfxPoolItem* pHt) SAL_OVERRIDE;
+    virtual void UpdateExpFields(SwTextField* pField, bool bUpdateRefFields) SAL_OVERRIDE;
+    virtual void UpdateUsrFields() SAL_OVERRIDE;
+    virtual void UpdatePageFields(SfxPoolItem*) SAL_OVERRIDE;
+    virtual void LockExpFields() SAL_OVERRIDE;
+    virtual void UnlockExpFields() SAL_OVERRIDE;
+    virtual bool IsExpFieldsLocked() const SAL_OVERRIDE;
+    virtual SwDocUpdateField& GetUpdateFields() const SAL_OVERRIDE;
     virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) SAL_OVERRIDE;
     virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) SAL_OVERRIDE;
-    virtual void FldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) SAL_OVERRIDE;
-    virtual void FldsToCalc(SwCalc& rCalc, const _SetGetExpFld& rToThisFld) SAL_OVERRIDE;
-    virtual void FldsToExpand(SwHash**& ppTbl, sal_uInt16& rTblSize, const _SetGetExpFld& rToThisFld) SAL_OVERRIDE;
-    virtual bool IsNewFldLst() const SAL_OVERRIDE;
-    virtual void SetNewFldLst( bool bFlag) SAL_OVERRIDE;
-    virtual void InsDelFldInFldLst(bool bIns, const SwTxtFld& rFld) SAL_OVERRIDE;
+    virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) SAL_OVERRIDE;
+    virtual void FieldsToCalc(SwCalc& rCalc, const _SetGetExpField& rToThisField) SAL_OVERRIDE;
+    virtual void FieldsToExpand(SwHash**& ppTable, sal_uInt16& rTableSize, const _SetGetExpField& rToThisField) SAL_OVERRIDE;
+    virtual bool IsNewFieldLst() const SAL_OVERRIDE;
+    virtual void SetNewFieldLst( bool bFlag) SAL_OVERRIDE;
+    virtual void InsDelFieldInFieldLst(bool bIns, const SwTextField& rField) SAL_OVERRIDE;
 
     //Non Interface methods
 
@@ -75,7 +75,7 @@ public:
        @param rPos position to search at
        @return pointer to field at the given position or NULL in case no field is found
     */
-    static SwTxtFld* GetTxtFldAtPos(const SwPosition& rPos);
+    static SwTextField* GetTextFieldAtPos(const SwPosition& rPos);
 
     bool containsUpdatableFields();
 
@@ -86,7 +86,7 @@ public:
 
     void ClearFieldTypes();
 
-    void UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc );
+    void UpdateDBNumFields( SwDBNameInfField& rDBField, SwCalc& rCalc );
 
     virtual ~DocumentFieldsManager();
 
@@ -94,10 +94,10 @@ private:
 
     SwDoc& m_rDoc;
 
-    bool mbNewFldLst; //< TRUE: Rebuild field-list.
-    SwDocUpdtFld    *mpUpdtFlds; //< Struct for updating fields
-    SwFldTypes      *mpFldTypes;
-    sal_Int8    mnLockExpFld;  //< If != 0 UpdateExpFlds() has no effect!
+    bool mbNewFieldLst; //< TRUE: Rebuild field-list.
+    SwDocUpdateField    *mpUpdateFields; //< Struct for updating fields
+    SwFieldTypes      *mpFieldTypes;
+    sal_Int8    mnLockExpField;  //< If != 0 UpdateExpFields() has no effect!
 };
 
 }

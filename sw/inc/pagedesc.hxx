@@ -28,11 +28,11 @@
 #include <editeng/borderline.hxx>
 
 class SfxPoolItem;
-class SwTxtFmtColl;
+class SwTextFormatColl;
 class SwNode;
 
 /// Separator line adjustment.
-enum SwFtnAdj
+enum SwFootnoteAdj
 {
     FTNADJ_LEFT,
     FTNADJ_CENTER,
@@ -40,7 +40,7 @@ enum SwFtnAdj
 };
 
 /// Footnote information.
-class SW_DLLPUBLIC SwPageFtnInfo
+class SW_DLLPUBLIC SwPageFootnoteInfo
 {
 private:
     SwTwips     m_nMaxHeight;   ///< maximum height of the footnote area.
@@ -48,7 +48,7 @@ private:
     editeng::SvxBorderStyle m_eLineStyle;  ///< Style of the separator line
     Color       m_LineColor;    ///< color of the separator line
     Fraction    m_Width;        ///< percentage width of the separator line.
-    SwFtnAdj    m_eAdjust;      ///< line adjustment.
+    SwFootnoteAdj    m_eAdjust;      ///< line adjustment.
     SwTwips     m_nTopDist;     ///< distance between body and separator.
     SwTwips     m_nBottomDist;  ///< distance between separator and first footnote
 
@@ -58,7 +58,7 @@ public:
     const Color& GetLineColor() const   { return m_LineColor;}
     editeng::SvxBorderStyle  GetLineStyle() const { return m_eLineStyle; }
     const Fraction& GetWidth() const    { return m_Width; }
-    SwFtnAdj    GetAdj() const          { return m_eAdjust; }
+    SwFootnoteAdj    GetAdj() const          { return m_eAdjust; }
     SwTwips     GetTopDist() const      { return m_nTopDist; }
     SwTwips     GetBottomDist() const   { return m_nBottomDist; }
 
@@ -67,19 +67,19 @@ public:
     void SetLineStyle(editeng::SvxBorderStyle const eSet) {m_eLineStyle = eSet;}
     void SetLineColor(const Color& rCol)    { m_LineColor = rCol;}
     void SetWidth(const Fraction & rNew)    { m_Width = rNew; }
-    void SetAdj(SwFtnAdj const eNew)        { m_eAdjust = eNew; }
+    void SetAdj(SwFootnoteAdj const eNew)        { m_eAdjust = eNew; }
     void SetTopDist   (SwTwips const nNew)  { m_nTopDist = nNew; }
     void SetBottomDist(SwTwips const nNew)  { m_nBottomDist = nNew; }
 
-    SwPageFtnInfo();
-    SwPageFtnInfo( const SwPageFtnInfo& );
-    SwPageFtnInfo& operator=( const SwPageFtnInfo& );
+    SwPageFootnoteInfo();
+    SwPageFootnoteInfo( const SwPageFootnoteInfo& );
+    SwPageFootnoteInfo& operator=( const SwPageFootnoteInfo& );
 
-    bool operator ==( const SwPageFtnInfo& ) const;
+    bool operator ==( const SwPageFootnoteInfo& ) const;
 };
 
 /*
- *  Use of UseOnPage (m_eUse) and of FrmFmts
+ *  Use of UseOnPage (m_eUse) and of FrameFormats
  *
  *  RIGHT   - m_Master only for right hand (odd) pages, left hand (even) pages
  *            always empty.
@@ -134,11 +134,11 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
 
     OUString    m_StyleName;
     SvxNumberType m_NumType;
-    SwFrmFmt    m_Master;
-    SwFrmFmt    m_Left;
+    SwFrameFormat    m_Master;
+    SwFrameFormat    m_Left;
     // FIXME epicycles growing here - page margins need to be stored differently
-    SwFrmFmt    m_FirstMaster;
-    SwFrmFmt    m_FirstLeft;
+    SwFrameFormat    m_FirstMaster;
+    SwFrameFormat    m_FirstLeft;
     SwDepend    m_Depend; ///< Because of grid alignment (Registerhaltigkeit).
     SwPageDesc *m_pFollow;
     sal_uInt16  m_nRegHeight; ///< Sentence spacing and fontascent of style.
@@ -148,7 +148,7 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     bool        m_IsHidden;
 
     /// Footnote information.
-    SwPageFtnInfo m_IsFtnInfo;
+    SwPageFootnoteInfo m_IsFootnoteInfo;
 
     /** Called for mirroring of Chg (doc).
        No adjustment at any other place. */
@@ -156,7 +156,7 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
 
     SAL_DLLPRIVATE void ResetAllAttr( bool bLeft );
 
-    SAL_DLLPRIVATE SwPageDesc(const OUString&, SwFrmFmt*, SwDoc *pDc );
+    SAL_DLLPRIVATE SwPageDesc(const OUString&, SwFrameFormat*, SwDoc *pDc );
 
 protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue ) SAL_OVERRIDE;
@@ -172,9 +172,9 @@ public:
     const SvxNumberType &GetNumType() const { return m_NumType; }
     void  SetNumType(const SvxNumberType& rNew) { m_NumType = rNew; }
 
-    const SwPageFtnInfo &GetFtnInfo() const { return m_IsFtnInfo; }
-          SwPageFtnInfo &GetFtnInfo()       { return m_IsFtnInfo; }
-    void  SetFtnInfo(const SwPageFtnInfo &rNew) { m_IsFtnInfo = rNew; }
+    const SwPageFootnoteInfo &GetFootnoteInfo() const { return m_IsFootnoteInfo; }
+          SwPageFootnoteInfo &GetFootnoteInfo()       { return m_IsFootnoteInfo; }
+    void  SetFootnoteInfo(const SwPageFootnoteInfo &rNew) { m_IsFootnoteInfo = rNew; }
 
     inline bool IsHeaderShared() const;
     inline bool IsFooterShared() const;
@@ -192,14 +192,14 @@ public:
     void      WriteUseOn(UseOnPage const eNew) { m_eUse = eNew; }
     UseOnPage ReadUseOn() const { return m_eUse; }
 
-          SwFrmFmt &GetMaster()      { return m_Master; }
-          SwFrmFmt &GetLeft()        { return m_Left; }
-          SwFrmFmt &GetFirstMaster() { return m_FirstMaster; }
-          SwFrmFmt &GetFirstLeft()   { return m_FirstLeft; }
-    const SwFrmFmt &GetMaster() const      { return m_Master; }
-    const SwFrmFmt &GetLeft()   const      { return m_Left; }
-    const SwFrmFmt &GetFirstMaster() const { return m_FirstMaster; }
-    const SwFrmFmt &GetFirstLeft()   const { return m_FirstLeft; }
+          SwFrameFormat &GetMaster()      { return m_Master; }
+          SwFrameFormat &GetLeft()        { return m_Left; }
+          SwFrameFormat &GetFirstMaster() { return m_FirstMaster; }
+          SwFrameFormat &GetFirstLeft()   { return m_FirstLeft; }
+    const SwFrameFormat &GetMaster() const      { return m_Master; }
+    const SwFrameFormat &GetLeft()   const      { return m_Left; }
+    const SwFrameFormat &GetFirstMaster() const { return m_FirstMaster; }
+    const SwFrameFormat &GetFirstLeft()   const { return m_FirstLeft; }
 
     /** Reset all attrs of the format but keep the ones a pagedesc
        cannot live without. */
@@ -208,10 +208,10 @@ public:
 
     /** Layout uses the following methods to obtain a format in order
        to be able to create a page. */
-           SwFrmFmt *GetRightFmt(bool const bFirst = false);
-    inline const SwFrmFmt *GetRightFmt(bool const bFirst = false) const;
-           SwFrmFmt *GetLeftFmt(bool const bFirst = false);
-    inline const SwFrmFmt *GetLeftFmt(bool const bFirst = false) const;
+           SwFrameFormat *GetRightFormat(bool const bFirst = false);
+    inline const SwFrameFormat *GetRightFormat(bool const bFirst = false) const;
+           SwFrameFormat *GetLeftFormat(bool const bFirst = false);
+    inline const SwFrameFormat *GetLeftFormat(bool const bFirst = false) const;
 
     sal_uInt16 GetRegHeight() const { return m_nRegHeight; }
     sal_uInt16 GetRegAscent() const { return m_nRegAscent; }
@@ -222,13 +222,13 @@ public:
     const SwPageDesc* GetFollow() const { return m_pFollow; }
           SwPageDesc* GetFollow() { return m_pFollow; }
 
-    void SetRegisterFmtColl( const SwTxtFmtColl* rFmt );
-    const SwTxtFmtColl* GetRegisterFmtColl() const;
+    void SetRegisterFormatColl( const SwTextFormatColl* rFormat );
+    const SwTextFormatColl* GetRegisterFormatColl() const;
     void RegisterChange();
 
     /// Query and set PoolFormat-Id.
-    sal_uInt16 GetPoolFmtId() const         { return m_Master.GetPoolFmtId(); }
-    void SetPoolFmtId(sal_uInt16 const nId) { m_Master.SetPoolFmtId(nId); }
+    sal_uInt16 GetPoolFormatId() const         { return m_Master.GetPoolFormatId(); }
+    void SetPoolFormatId(sal_uInt16 const nId) { m_Master.SetPoolFormatId(nId); }
     sal_uInt16 GetPoolHelpId() const        { return m_Master.GetPoolHelpId(); }
     void SetPoolHelpId(sal_uInt16 const nId){ m_Master.SetPoolHelpId(nId); }
     sal_uInt8 GetPoolHlpFileId() const      { return m_Master.GetPoolHlpFileId(); }
@@ -237,7 +237,7 @@ public:
     /// Query information from Client.
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
 
-    const SwFrmFmt* GetPageFmtOfNode( const SwNode& rNd,
+    const SwFrameFormat* GetPageFormatOfNode( const SwNode& rNd,
                                     bool bCheckForThisPgDc = true ) const;
     bool IsFollowNextPageOfNode( const SwNode& rNd ) const;
 
@@ -310,13 +310,13 @@ inline void SwPageDesc::ResetAllLeftAttr()
     ResetAllAttr( true );
 }
 
-inline const SwFrmFmt *SwPageDesc::GetRightFmt(bool const bFirst) const
+inline const SwFrameFormat *SwPageDesc::GetRightFormat(bool const bFirst) const
 {
-    return const_cast<SwPageDesc*>(this)->GetRightFmt(bFirst);
+    return const_cast<SwPageDesc*>(this)->GetRightFormat(bFirst);
 }
-inline const SwFrmFmt *SwPageDesc::GetLeftFmt(bool const bFirst) const
+inline const SwFrameFormat *SwPageDesc::GetLeftFormat(bool const bFirst) const
 {
-    return const_cast<SwPageDesc*>(this)->GetLeftFmt(bFirst);
+    return const_cast<SwPageDesc*>(this)->GetLeftFormat(bFirst);
 }
 
 class SwPageDescExt

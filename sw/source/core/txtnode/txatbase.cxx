@@ -24,13 +24,13 @@
 #include <fmtfld.hxx>
 #include <docufld.hxx>
 
-SwTxtAttr::SwTxtAttr( SfxPoolItem& rAttr, sal_Int32 nStart )
+SwTextAttr::SwTextAttr( SfxPoolItem& rAttr, sal_Int32 nStart )
     : m_pAttr( &rAttr )
     , m_nStart( nStart )
     , m_bDontExpand( false )
     , m_bLockExpandFlag( false )
     , m_bDontMoveAttr( false )
-    , m_bCharFmtAttr( false )
+    , m_bCharFormatAttr( false )
     , m_bOverlapAllowedAttr( false )
     , m_bPriorityAttr( false )
     , m_bDontExpandStart( false )
@@ -42,16 +42,16 @@ SwTxtAttr::SwTxtAttr( SfxPoolItem& rAttr, sal_Int32 nStart )
 {
 }
 
-SwTxtAttr::~SwTxtAttr( )
+SwTextAttr::~SwTextAttr( )
 {
 }
 
-sal_Int32* SwTxtAttr::GetEnd()
+sal_Int32* SwTextAttr::GetEnd()
 {
     return 0;
 }
 
-void SwTxtAttr::Destroy( SwTxtAttr * pToDestroy, SfxItemPool& rPool )
+void SwTextAttr::Destroy( SwTextAttr * pToDestroy, SfxItemPool& rPool )
 {
     if (!pToDestroy) return;
     SfxPoolItem * const pAttr = pToDestroy->m_pAttr;
@@ -59,25 +59,25 @@ void SwTxtAttr::Destroy( SwTxtAttr * pToDestroy, SfxItemPool& rPool )
     rPool.Remove( *pAttr );
 }
 
-bool SwTxtAttr::operator==( const SwTxtAttr& rAttr ) const
+bool SwTextAttr::operator==( const SwTextAttr& rAttr ) const
 {
     return GetAttr() == rAttr.GetAttr();
 }
 
-SwTxtAttrEnd::SwTxtAttrEnd( SfxPoolItem& rAttr,
+SwTextAttrEnd::SwTextAttrEnd( SfxPoolItem& rAttr,
         sal_Int32 nStart, sal_Int32 nEnd ) :
-    SwTxtAttr( rAttr, nStart ), m_nEnd( nEnd )
+    SwTextAttr( rAttr, nStart ), m_nEnd( nEnd )
 {
 }
 
-sal_Int32* SwTxtAttrEnd::GetEnd()
+sal_Int32* SwTextAttrEnd::GetEnd()
 {
     return & m_nEnd;
 }
 
-void SwTxtAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swTxtAttr"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swTextAttr"));
 
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("start"), BAD_CAST(OString::number(m_nStart).getStr()));
     if (End())
@@ -99,15 +99,15 @@ void SwTxtAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
     case RES_TXTATR_CHARFMT:
         {
             pWhich = "character format";
-            if (SwCharFmt* pCharFmt = GetCharFmt().GetCharFmt())
-                oValue = "name: " + OUStringToOString(pCharFmt->GetName(), RTL_TEXTENCODING_UTF8);
+            if (SwCharFormat* pCharFormat = GetCharFormat().GetCharFormat())
+                oValue = "name: " + OUStringToOString(pCharFormat->GetName(), RTL_TEXTENCODING_UTF8);
             break;
         }
     case RES_TXTATR_INETFMT:
         {
             pWhich = "inet format";
-            const SwFmtINetFmt& rFmt = GetINetFmt();
-            oValue = "url: " + rFmt.GetValue().toUtf8();
+            const SwFormatINetFormat& rFormat = GetINetFormat();
+            oValue = "url: " + rFormat.GetValue().toUtf8();
             break;
         }
     default:
@@ -118,7 +118,7 @@ void SwTxtAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (oValue)
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(oValue->getStr()));
     if (Which() == RES_TXTATR_AUTOFMT)
-        GetAutoFmt().dumpAsXml(pWriter);
+        GetAutoFormat().dumpAsXml(pWriter);
 
     xmlTextWriterEndElement(pWriter);
 }

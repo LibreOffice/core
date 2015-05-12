@@ -73,10 +73,10 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
     aFont.SetWeight( WEIGHT_LIGHT );
     m_pEditED->SetFont( aFont );
 
-    pMgr = new SwFldMgr(pSh);
-    pFld = static_cast<SwScriptField*>(pMgr->GetCurFld());
+    pMgr = new SwFieldMgr(pSh);
+    pField = static_cast<SwScriptField*>(pMgr->GetCurField());
 
-    bNew = !(pFld && pFld->GetTyp()->Which() == RES_SCRIPTFLD);
+    bNew = !(pField && pField->GetTyp()->Which() == RES_SCRIPTFLD);
 
     CheckTravel();
 
@@ -114,9 +114,9 @@ IMPL_LINK_NOARG(SwJavaEditDialog, PrevHdl)
 {
     pSh->EnterStdMode();
 
-    SetFld();
+    SetField();
     pMgr->GoPrev();
-    pFld = static_cast<SwScriptField*>(pMgr->GetCurFld());
+    pField = static_cast<SwScriptField*>(pMgr->GetCurField());
     CheckTravel();
     RadioButtonHdl(NULL);
 
@@ -127,9 +127,9 @@ IMPL_LINK_NOARG(SwJavaEditDialog, NextHdl)
 {
     pSh->EnterStdMode();
 
-    SetFld();
+    SetField();
     pMgr->GoNext();
-    pFld = static_cast<SwScriptField*>(pMgr->GetCurFld());
+    pField = static_cast<SwScriptField*>(pMgr->GetCurField());
     CheckTravel();
     RadioButtonHdl(NULL);
 
@@ -138,7 +138,7 @@ IMPL_LINK_NOARG(SwJavaEditDialog, NextHdl)
 
 IMPL_LINK_NOARG(SwJavaEditDialog, OKHdl)
 {
-    SetFld();
+    SetField();
     EndDialog( RET_OK );
     return 0;
 }
@@ -169,9 +169,9 @@ void SwJavaEditDialog::CheckTravel()
         pSh->DestroyCrsr();
         pSh->EndAction();
 
-        if (pFld->IsCodeURL())
+        if (pField->IsCodeURL())
         {
-            OUString sURL(pFld->GetPar2());
+            OUString sURL(pField->GetPar2());
             if(!sURL.isEmpty())
             {
                 INetURLObject aINetURL(sURL);
@@ -184,11 +184,11 @@ void SwJavaEditDialog::CheckTravel()
         }
         else
         {
-            m_pEditED->SetText(pFld->GetPar2());
+            m_pEditED->SetText(pField->GetPar2());
             m_pUrlED->SetText(OUString());
             m_pEditRB->Check();
         }
-        m_pTypeED->SetText(pFld->GetPar1());
+        m_pTypeED->SetText(pField->GetPar1());
     }
 
     if ( !bTravel )
@@ -203,7 +203,7 @@ void SwJavaEditDialog::CheckTravel()
     }
 }
 
-void SwJavaEditDialog::SetFld()
+void SwJavaEditDialog::SetField()
 {
     if( !m_pOKBtn->IsEnabled() )
         return ;
@@ -234,7 +234,7 @@ void SwJavaEditDialog::SetFld()
 
 bool SwJavaEditDialog::IsUpdate() const
 {
-    return pFld && ( sal_uInt32(bIsUrl ? 1 : 0) != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
+    return pField && ( sal_uInt32(bIsUrl ? 1 : 0) != pField->GetFormat() || pField->GetPar2() != aType || pField->GetPar1() != aText );
 }
 
 IMPL_LINK_NOARG(SwJavaEditDialog, RadioButtonHdl)

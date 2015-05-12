@@ -129,7 +129,7 @@ void SwXSelChgLstnr_Impl::disposing( const EventObject&  ) throw (RuntimeExcepti
 
 SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
         const OUString& rSourceName,
-        const OUString& rTblName,
+        const OUString& rTableName,
         sal_Int32 nCommandType,
         const uno::Reference< XConnection>& _xConnection,
         Sequence< Any >* pSelection) :
@@ -170,7 +170,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     get(m_pFilterFT, "fileformatlabel");
     get(m_pFilterLB, "fileformat");
 
-    get(m_pAddressFldLB, "address");
+    get(m_pAddressFieldLB, "address");
     get(m_pSubjectFT, "subjectlabel");
     get(m_pSubjectED, "subject");
     get(m_pFormatFT, "mailformatlabel");
@@ -233,7 +233,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
                 pProperties[0].Name = "DataSourceName";
                 pProperties[0].Value <<= rSourceName;
                 pProperties[1].Name = "Command";
-                pProperties[1].Value <<= rTblName;
+                pProperties[1].Value <<= rTableName;
                 pProperties[2].Name = "CommandType";
                 pProperties[2].Value <<= nCommandType;
                 xD->dispatch(aURL, aProperties);
@@ -256,10 +256,10 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
 
     pModOpt = SW_MOD()->GetModuleConfig();
 
-    MailTxtFormats nMailingMode(pModOpt->GetMailingFormats());
-    m_pFormatSwCB->Check(bool(nMailingMode & MailTxtFormats::OFFICE));
-    m_pFormatHtmlCB->Check(bool(nMailingMode & MailTxtFormats::HTML));
-    m_pFormatRtfCB->Check(bool(nMailingMode & MailTxtFormats::RTF));
+    MailTextFormats nMailingMode(pModOpt->GetMailingFormats());
+    m_pFormatSwCB->Check(bool(nMailingMode & MailTextFormats::OFFICE));
+    m_pFormatHtmlCB->Check(bool(nMailingMode & MailTextFormats::HTML));
+    m_pFormatRtfCB->Check(bool(nMailingMode & MailTextFormats::RTF));
 
     m_pAllRB->Check(true);
 
@@ -299,13 +299,13 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
 
     SwDBManager* pDBManager = rSh.GetDBManager();
     if(_xConnection.is())
-        SwDBManager::GetColumnNames(m_pAddressFldLB, _xConnection, rTblName);
+        SwDBManager::GetColumnNames(m_pAddressFieldLB, _xConnection, rTableName);
     else
-        pDBManager->GetColumnNames(m_pAddressFldLB, rSourceName, rTblName);
-    for(sal_Int32 nEntry = 0; nEntry < m_pAddressFldLB->GetEntryCount(); ++nEntry)
-        m_pColumnLB->InsertEntry(m_pAddressFldLB->GetEntry(nEntry));
+        pDBManager->GetColumnNames(m_pAddressFieldLB, rSourceName, rTableName);
+    for(sal_Int32 nEntry = 0; nEntry < m_pAddressFieldLB->GetEntryCount(); ++nEntry)
+        m_pColumnLB->InsertEntry(m_pAddressFieldLB->GetEntry(nEntry));
 
-    m_pAddressFldLB->SelectEntry("EMAIL");
+    m_pAddressFieldLB->SelectEntry("EMAIL");
 
     OUString sPath(pModOpt->GetMailingPath());
     if(sPath.isEmpty())
@@ -326,8 +326,8 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     else
         m_pColumnLB->SelectEntry(pModOpt->GetNameFromColumn());
 
-    if (m_pAddressFldLB->GetSelectEntryCount() == 0)
-        m_pAddressFldLB->SelectEntryPos(0);
+    if (m_pAddressFieldLB->GetSelectEntryCount() == 0)
+        m_pAddressFieldLB->SelectEntryPos(0);
     if (m_pColumnLB->GetSelectEntryCount() == 0)
         m_pColumnLB->SelectEntryPos(0);
 
@@ -427,7 +427,7 @@ void SwMailMergeDlg::dispose()
     m_pPathPB.clear();
     m_pFilterFT.clear();
     m_pFilterLB.clear();
-    m_pAddressFldLB.clear();
+    m_pAddressFieldLB.clear();
     m_pSubjectFT.clear();
     m_pSubjectED.clear();
     m_pFormatFT.clear();
@@ -616,14 +616,14 @@ bool SwMailMergeDlg::ExecQryShell()
 
     pModOpt->SetSinglePrintJob(m_pSingleJobsCB->IsChecked());
 
-    MailTxtFormats nMailingMode = MailTxtFormats::NONE;
+    MailTextFormats nMailingMode = MailTextFormats::NONE;
 
     if (m_pFormatSwCB->IsChecked())
-        nMailingMode |= MailTxtFormats::OFFICE;
+        nMailingMode |= MailTextFormats::OFFICE;
     if (m_pFormatHtmlCB->IsChecked())
-        nMailingMode |= MailTxtFormats::HTML;
+        nMailingMode |= MailTextFormats::HTML;
     if (m_pFormatRtfCB->IsChecked())
-        nMailingMode |= MailTxtFormats::RTF;
+        nMailingMode |= MailTextFormats::RTF;
     pModOpt->SetMailingFormats(nMailingMode);
     return true;
 }

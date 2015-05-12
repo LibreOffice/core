@@ -284,7 +284,7 @@ void SwLabPreview::UpdateItem(const SwLabItem& rItem)
     Invalidate();
 }
 
-SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
+SwLabFormatPage::SwLabFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "LabelFormatPage",
         "modules/swriter/ui/labelformatpage.ui", &rSet)
     , bModified(false)
@@ -319,7 +319,7 @@ SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     SetMetric(*m_pPHeightField, aMetric);
 
     // Install handlers
-    Link<> aLk = LINK(this, SwLabFmtPage, ModifyHdl);
+    Link<> aLk = LINK(this, SwLabFormatPage, ModifyHdl);
     m_pHDistField->SetModifyHdl( aLk );
     m_pVDistField->SetModifyHdl( aLk );
     m_pWidthField->SetModifyHdl( aLk );
@@ -331,7 +331,7 @@ SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pPWidthField->SetModifyHdl( aLk );
     m_pPHeightField->SetModifyHdl( aLk );
 
-    aLk = LINK(this, SwLabFmtPage, LoseFocusHdl);
+    aLk = LINK(this, SwLabFormatPage, LoseFocusHdl);
     m_pHDistField->SetLoseFocusHdl( aLk );
     m_pVDistField->SetLoseFocusHdl( aLk );
     m_pWidthField->SetLoseFocusHdl( aLk );
@@ -343,18 +343,18 @@ SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pPWidthField->SetLoseFocusHdl( aLk );
     m_pPHeightField->SetLoseFocusHdl( aLk );
 
-    m_pSavePB->SetClickHdl( LINK (this, SwLabFmtPage, SaveHdl));
+    m_pSavePB->SetClickHdl( LINK (this, SwLabFormatPage, SaveHdl));
     // Set timer
     aPreviewIdle.SetPriority(SchedulerPriority::LOWEST);
-    aPreviewIdle.SetIdleHdl(LINK(this, SwLabFmtPage, PreviewHdl));
+    aPreviewIdle.SetIdleHdl(LINK(this, SwLabFormatPage, PreviewHdl));
 }
 
-SwLabFmtPage::~SwLabFmtPage()
+SwLabFormatPage::~SwLabFormatPage()
 {
     disposeOnce();
 }
 
-void SwLabFmtPage::dispose()
+void SwLabFormatPage::dispose()
 {
     m_pMakeFI.clear();
     m_pTypeFI.clear();
@@ -375,7 +375,7 @@ void SwLabFmtPage::dispose()
 
 
 // Modify-handler of MetricFields. start preview timer
-IMPL_LINK_NOARG(SwLabFmtPage, ModifyHdl)
+IMPL_LINK_NOARG(SwLabFormatPage, ModifyHdl)
 {
     bModified = true;
     aPreviewIdle.Start();
@@ -383,7 +383,7 @@ IMPL_LINK_NOARG(SwLabFmtPage, ModifyHdl)
 }
 
 // Invalidate preview
-IMPL_LINK_NOARG_TYPED(SwLabFmtPage, PreviewHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SwLabFormatPage, PreviewHdl, Idle *, void)
 {
     aPreviewIdle.Stop();
     ChangeMinMax();
@@ -392,14 +392,14 @@ IMPL_LINK_NOARG_TYPED(SwLabFmtPage, PreviewHdl, Idle *, void)
 }
 
 // LoseFocus-Handler: Update on change
-IMPL_LINK( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
+IMPL_LINK( SwLabFormatPage, LoseFocusHdl, Control *, pControl )
 {
     if (static_cast<Edit*>( pControl)->IsModified())
         PreviewHdl(0);
     return 0;
 }
 
-void SwLabFmtPage::ChangeMinMax()
+void SwLabFormatPage::ChangeMinMax()
 {
     long lMax = 31748; // 56 cm
     long nMinSize = 10; // 0,1cm
@@ -478,18 +478,18 @@ void SwLabFmtPage::ChangeMinMax()
     m_pPHeightField->Reformat();
 }
 
-VclPtr<SfxTabPage> SwLabFmtPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SwLabFormatPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>(new SwLabFmtPage(pParent, *rSet), SAL_NO_ACQUIRE);
+    return VclPtr<SfxTabPage>(new SwLabFormatPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
-void SwLabFmtPage::ActivatePage(const SfxItemSet& rSet)
+void SwLabFormatPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
     Reset(&aSet);
 }
 
-SfxTabPage::sfxpg SwLabFmtPage::DeactivatePage(SfxItemSet* _pSet)
+SfxTabPage::sfxpg SwLabFormatPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
         FillItemSet(_pSet);
@@ -497,7 +497,7 @@ SfxTabPage::sfxpg SwLabFmtPage::DeactivatePage(SfxItemSet* _pSet)
     return LEAVE_PAGE;
 }
 
-void SwLabFmtPage::FillItem(SwLabItem& rItem)
+void SwLabFormatPage::FillItem(SwLabItem& rItem)
 {
     if (bModified)
     {
@@ -517,7 +517,7 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
     }
 }
 
-bool SwLabFmtPage::FillItemSet(SfxItemSet* rSet)
+bool SwLabFormatPage::FillItemSet(SfxItemSet* rSet)
 {
     FillItem(aItem);
     rSet->Put(aItem);
@@ -525,7 +525,7 @@ bool SwLabFmtPage::FillItemSet(SfxItemSet* rSet)
     return true;
 }
 
-void SwLabFmtPage::Reset(const SfxItemSet* )
+void SwLabFormatPage::Reset(const SfxItemSet* )
 {
     // Initialise fields
     GetParentSwLabDlg()->GetLabItem(aItem);
@@ -558,7 +558,7 @@ void SwLabFmtPage::Reset(const SfxItemSet* )
     PreviewHdl(0);
 }
 
-IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
+IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl)
 {
     SwLabRec aRec;
     aRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField));
@@ -590,7 +590,7 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
     return 0;
 }
 
-SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec)
+SwSaveLabelDlg::SwSaveLabelDlg(SwLabFormatPage* pParent, SwLabRec& rRec)
     : ModalDialog(pParent, "SaveLabelDialog",
         "modules/swriter/ui/savelabeldialog.ui")
     , bSuccess(false)

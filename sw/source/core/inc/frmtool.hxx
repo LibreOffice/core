@@ -30,7 +30,7 @@
 
 class SwPageFrm;
 class SwFlyFrm;
-class SwCntntFrm;
+class SwContentFrm;
 class SwRootFrm;
 class SwDoc;
 class SwAttrSet;
@@ -44,7 +44,7 @@ class OutputDevice;
 class GraphicObject;
 class GraphicAttr;
 class SwPageDesc;
-class SwFrmFmts;
+class SwFrameFormats;
 class SwRegionRects;
 
 #define FAR_AWAY LONG_MAX - 20000  // initial position of a Fly
@@ -53,7 +53,7 @@ class SwRegionRects;
 #define GRFNUM_YES 1
 #define GRFNUM_REPLACE 2
 
-void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
+void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
                        SwFrm *pFrm, SwPageFrm *pPage, SwDoc* doc );
 
 // draw background with brush or graphics
@@ -102,10 +102,10 @@ void PaintCharacterBorder(
 // Implementation in feshview.cxx
 SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh );
 
-SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart = NULL );
-void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGrow );
+SwFrm *SaveContent( SwLayoutFrm *pLay, SwFrm *pStart = NULL );
+void RestoreContent( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGrow );
 
-// Get CntntNodes, create CntntFrms, and add them to LayFrm.
+// Get ContentNodes, create ContentFrms, and add them to LayFrm.
 void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc, sal_uLong nIndex,
                  bool bPages = false, sal_uLong nEndIndex = 0,
                  SwFrm *pPrv = 0 );
@@ -125,7 +125,7 @@ long CalcRowRstHeight( SwLayoutFrm *pRow );
 long CalcHeightWithFlys( const SwFrm *pFrm );
 
 SwPageFrm *InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
-                          bool bOdd, bool bFirst, bool bInsertEmpty, bool bFtn,
+                          bool bOdd, bool bFirst, bool bInsertEmpty, bool bFootnote,
                           SwFrm *pSibling );
 
 // connect Flys with page
@@ -152,7 +152,7 @@ bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm );
 
 const SwFrm * FindPage( const SwRect &rRect, const SwFrm *pPage );
 
-// used by SwCntntNode::GetFrm and SwFlyFrm::GetFrm
+// used by SwContentNode::GetFrm and SwFlyFrm::GetFrm
 SwFrm* GetFrmOfModify( const SwRootFrm* pLayout,
                        SwModify const&,
                        sal_uInt16 const nFrmType,
@@ -163,8 +163,8 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout,
 // Should extra data (redline stroke, line numbers) be painted?
 bool IsExtraData( const SwDoc *pDoc );
 
-// #i11760# - method declaration <CalcCntnt(..)>
-void CalcCntnt( SwLayoutFrm *pLay,
+// #i11760# - method declaration <CalcContent(..)>
+void CalcContent( SwLayoutFrm *pLay,
                 bool bNoColl = false,
                 bool bNoCalcFollow = false );
 
@@ -225,7 +225,7 @@ public:
     SwPageFrm *GetOldPage() const { return pOldPage; }
 };
 
-class SwCntntNotify : public SwFrmNotify
+class SwContentNotify : public SwFrmNotify
 {
 private:
     // #i11859#
@@ -236,11 +236,11 @@ private:
     bool        mbInvalidatePrevPrtArea;
     bool        mbBordersJoinedWithPrev;
 
-    SwCntntFrm *GetCnt();
+    SwContentFrm *GetCnt();
 
 public:
-    SwCntntNotify( SwCntntFrm *pCntFrm );
-    ~SwCntntNotify();
+    SwContentNotify( SwContentFrm *pCntFrm );
+    ~SwContentNotify();
 
     // #i25029#
     void SetInvalidatePrevPrtArea()
@@ -545,7 +545,7 @@ void GetSpacingValuesOfFrm( const SwFrm& rFrm,
         pointer to the found content frame or 0
 */
 
-const SwCntntFrm* GetCellCntnt( const SwLayoutFrm& rCell_ );
+const SwContentFrm* GetCellContent( const SwLayoutFrm& rCell_ );
 
 /** helper class to check if a frame has been deleted during an operation
  *  WARNING! This should only be used as a last and desperate means to make the

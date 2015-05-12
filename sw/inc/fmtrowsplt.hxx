@@ -26,10 +26,10 @@
 
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFmtRowSplit : public SfxBoolItem
+class SW_DLLPUBLIC SwFormatRowSplit : public SfxBoolItem
 {
 public:
-    SwFmtRowSplit( bool bSplit = true ) : SfxBoolItem( RES_ROW_SPLIT, bSplit ) {}
+    SwFormatRowSplit( bool bSplit = true ) : SfxBoolItem( RES_ROW_SPLIT, bSplit ) {}
 
     // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
@@ -40,10 +40,10 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 };
 
-inline const SwFmtRowSplit &SwAttrSet::GetRowSplit(bool bInP) const
-    { return static_cast<const SwFmtRowSplit&>(Get( RES_ROW_SPLIT,bInP)); }
+inline const SwFormatRowSplit &SwAttrSet::GetRowSplit(bool bInP) const
+    { return static_cast<const SwFormatRowSplit&>(Get( RES_ROW_SPLIT,bInP)); }
 
-inline const SwFmtRowSplit &SwFmt::GetRowSplit(bool bInP) const
+inline const SwFormatRowSplit &SwFormat::GetRowSplit(bool bInP) const
     { return m_aSet.GetRowSplit(bInP); }
 
 #endif

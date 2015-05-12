@@ -24,7 +24,7 @@
 #include <vcl/edit.hxx>
 #include <sfx2/basedlgs.hxx>
 
-class SwTableAutoFmt;
+class SwTableAutoFormat;
 class SwView;
 class SwWrtShell;
 class NumericField;
@@ -49,13 +49,13 @@ class SwConvertTableDlg: public SfxModalDialog
 
     VclPtr<CheckBox>       mpDontSplitCB;
     VclPtr<CheckBox>       mpBorderCB;
-    VclPtr<PushButton>     mpAutoFmtBtn;
+    VclPtr<PushButton>     mpAutoFormatBtn;
 
     OUString        sConvertTextTable;
-    SwTableAutoFmt* pTAutoFmt;
+    SwTableAutoFormat* pTAutoFormat;
     SwWrtShell*     pShell;
 
-    DECL_LINK( AutoFmtHdl, PushButton* );
+    DECL_LINK( AutoFormatHdl, PushButton* );
     DECL_LINK( BtnHdl, Button* );
     DECL_LINK(CheckBoxHdl, void * = 0);
     DECL_LINK( ReapeatHeaderCheckBoxHdl, void* p = 0 );
@@ -66,8 +66,8 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     void GetValues( sal_Unicode& rDelim,
-                    SwInsertTableOptions& rInsTblOpts,
-                    SwTableAutoFmt const*& prTAFmt );
+                    SwInsertTableOptions& rInsTableOpts,
+                    SwTableAutoFormat const*& prTAFormat );
 };
 
 #endif

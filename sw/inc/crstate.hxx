@@ -65,7 +65,7 @@ struct Sw2LinesPos
 
 /**
  *  SwSpecialPos. This structure is used to pass some additional information
- *  during the call of SwTxtFrm::GetCharRect(). An SwSpecialPos defines a position
+ *  during the call of SwTextFrm::GetCharRect(). An SwSpecialPos defines a position
  *  inside a portion which does not have a representation in the core string or
  *  which is only represented by one position,  e.g., field portions,
  *  number portions, ergo sum and quo vadis portions.
@@ -82,7 +82,7 @@ struct Sw2LinesPos
  *
  *      Get the position of the second character inside a number portion:
  *          nCharOfst = 2; nLineOfst = 0; nExtendRange = SP_EXTEND_RANGE_BEFORE;
- *          Call SwTxtFrm:::GetCharRect with core string position 0.
+ *          Call SwTextFrm:::GetCharRect with core string position 0.
  *
  *  Example 2)
  *
@@ -91,7 +91,7 @@ struct Sw2LinesPos
  *      Get the position of the third character in follow field B, core position
  *      of field A is 33.
  *          nCharOfst = 7; nLineOfst = 0; nExtendRange = SP_EXTEND_RANGE_NONE;
- *          Call SwTxtFrm:::GetCharRect with core string position 33.
+ *          Call SwTextFrm:::GetCharRect with core string position 33.
  */
 
 #define SP_EXTEND_RANGE_NONE    0
@@ -134,9 +134,9 @@ struct SwCrsrMoveState
     bool bRealHeight;           ///< should the real height be calculated?
     bool bFieldInfo;            ///< should be fields recognized?
     bool bPosCorr;              ///< Point had to be corrected
-    bool bFtnNoInfo;            ///< recognized footnote numbering
+    bool bFootnoteNoInfo;            ///< recognized footnote numbering
     bool bExactOnly;            /**< let GetCrsrOfst look for exact matches only,
-                                         i.e. never let it run into GetCntntPos */
+                                         i.e. never let it run into GetContentPos */
     bool bFillRet;              ///< only used temporary in FillMode
     bool bSetInReadOnly;        ///< ReadOnly areas may be entered
     bool bRealWidth;            ///< Calculation of the width required
@@ -146,7 +146,7 @@ struct SwCrsrMoveState
                                        position if screen position is inside second
                                        have of bound rect */
 
-    bool bCntntCheck;           // #i43742# Cursor position over content?
+    bool bContentCheck;           // #i43742# Cursor position over content?
 
     // #i27615#
     /**
@@ -166,7 +166,7 @@ struct SwCrsrMoveState
         bRealHeight( false ),
         bFieldInfo( false ),
         bPosCorr( false ),
-        bFtnNoInfo( false ),
+        bFootnoteNoInfo( false ),
         bExactOnly( false ),
         bFillRet( false ),
         bSetInReadOnly( false ),
@@ -174,7 +174,7 @@ struct SwCrsrMoveState
         b2Lines( false ),
         bNoScroll( false ),
         bPosMatchesBounds( false ),
-        bCntntCheck( false ), // #i43742#
+        bContentCheck( false ), // #i43742#
         bInFrontOfLabel( false ), // #i27615#
         bInNumPortion(false), // #i26726#
         nInNumPostionOffset(0) // #i26726#
@@ -189,7 +189,7 @@ struct SwCrsrMoveState
         bRealHeight( false ),
         bFieldInfo( false ),
         bPosCorr( false ),
-        bFtnNoInfo( false ),
+        bFootnoteNoInfo( false ),
         bExactOnly( false ),
         bFillRet( false ),
         bSetInReadOnly( false ),
@@ -197,7 +197,7 @@ struct SwCrsrMoveState
         b2Lines( false ),
         bNoScroll( false ),
         bPosMatchesBounds( false ),
-        bCntntCheck( false ), // #i43742#
+        bContentCheck( false ), // #i43742#
         bInFrontOfLabel( false ), // #i27615#
         bInNumPortion(false), // #i23726#
         nInNumPostionOffset(0) // #i23726#

@@ -27,7 +27,7 @@
 #include <SidebarWindowsTypes.hxx>
 
 class SfxBroadcaster;
-class SwTxtFld;
+class SwTextField;
 class SwRootFrm;
 class SwPostItMgr;
 class SwEditWin;
@@ -112,7 +112,7 @@ public:
 
     virtual SwPosition GetAnchorPosition() const = 0;
     virtual bool UseElement() = 0;
-    virtual const SwFmtFld& GetFmtFld() const = 0;
+    virtual const SwFormatField& GetFormatField() const = 0;
     virtual const SfxBroadcaster* GetBroadCaster() const = 0;
     virtual VclPtr<sw::sidebarwindows::SwSidebarWin> GetSidebarWindow( SwEditWin& rEditWin,
                                                                 WinBits nBits,
@@ -124,11 +124,11 @@ class SwAnnotationItem: public SwSidebarItem
 {
 public:
     SwAnnotationItem(
-        SwFmtFld& rFmtFld,
+        SwFormatField& rFormatField,
         const bool aShow,
         const bool aFocus)
         : SwSidebarItem( aShow, aFocus )
-        , mrFmtFld( rFmtFld )
+        , mrFormatField( rFormatField )
     {
     }
 
@@ -138,13 +138,13 @@ public:
 
     virtual SwPosition GetAnchorPosition() const SAL_OVERRIDE;
     virtual bool UseElement() SAL_OVERRIDE;
-    virtual const SwFmtFld& GetFmtFld() const SAL_OVERRIDE
+    virtual const SwFormatField& GetFormatField() const SAL_OVERRIDE
     {
-        return mrFmtFld;
+        return mrFormatField;
     }
     virtual const SfxBroadcaster* GetBroadCaster() const SAL_OVERRIDE
     {
-        return dynamic_cast<const SfxBroadcaster *> (&mrFmtFld);
+        return dynamic_cast<const SfxBroadcaster *> (&mrFormatField);
     }
     virtual VclPtr<sw::sidebarwindows::SwSidebarWin> GetSidebarWindow(
         SwEditWin& rEditWin,
@@ -153,7 +153,7 @@ public:
         SwPostItBits aBits ) SAL_OVERRIDE;
 
 private:
-    SwFmtFld& mrFmtFld;
+    SwFormatField& mrFormatField;
 };
 
 #endif // INCLUDED_SW_INC_POSTITHELPER_HXX

@@ -31,7 +31,7 @@ DocumentStateManager::DocumentStateManager( SwDoc& i_rSwdoc ) :
     m_rDoc( i_rSwdoc ),
     mbModified(false),
     mbLoaded(false),
-    mbUpdateExpFld(false),
+    mbUpdateExpField(false),
     mbNewDoc(false),
     mbPageNums(false),
     mbInCallModified(false)
@@ -89,9 +89,9 @@ bool DocumentStateManager::IsLoaded() const
     return mbLoaded;
 }
 
-bool DocumentStateManager::IsUpdateExpFld() const
+bool DocumentStateManager::IsUpdateExpField() const
 {
-    return mbUpdateExpFld;
+    return mbUpdateExpField;
 }
 
 bool DocumentStateManager::IsNewDoc() const
@@ -114,9 +114,9 @@ void DocumentStateManager::SetNewDoc(bool b)
     mbNewDoc = b;
 }
 
-void DocumentStateManager::SetUpdateExpFldStat(bool b)
+void DocumentStateManager::SetUpdateExpFieldStat(bool b)
 {
-    mbUpdateExpFld = b;
+    mbUpdateExpField = b;
 }
 
 void DocumentStateManager::SetLoaded(bool b)

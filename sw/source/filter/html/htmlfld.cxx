@@ -37,13 +37,13 @@
 using namespace nsSwDocInfoSubType;
 using namespace ::com::sun::star;
 
-struct HTMLNumFmtTblEntry
+struct HTMLNumFormatTableEntry
 {
     const sal_Char *pName;
-    NfIndexTableOffset eFmt;
+    NfIndexTableOffset eFormat;
 };
 
-static HTMLOptionEnum aHTMLFldTypeTable[] =
+static HTMLOptionEnum aHTMLFieldTypeTable[] =
 {
     { OOO_STRING_SW_HTML_FT_author, RES_AUTHORFLD       },
     { OOO_STRING_SW_HTML_FT_sender, RES_EXTUSERFLD      },
@@ -57,7 +57,7 @@ static HTMLOptionEnum aHTMLFldTypeTable[] =
     { 0,                0                   }
 };
 
-static HTMLNumFmtTblEntry aHTMLDateFldFmtTable[] =
+static HTMLNumFormatTableEntry aHTMLDateFieldFormatTable[] =
 {
     { "SSYS",       NF_DATE_SYSTEM_SHORT    },
     { "LSYS",       NF_DATE_SYSTEM_LONG     },
@@ -79,7 +79,7 @@ static HTMLNumFmtTblEntry aHTMLDateFldFmtTable[] =
     { 0,                    NF_NUMERIC_START }
 };
 
-static HTMLNumFmtTblEntry aHTMLTimeFldFmtTable[] =
+static HTMLNumFormatTableEntry aHTMLTimeFieldFormatTable[] =
 {
     { "SYS",     NF_TIME_HHMMSS },
     { "SSMM24",      NF_TIME_HHMM },
@@ -87,7 +87,7 @@ static HTMLNumFmtTblEntry aHTMLTimeFldFmtTable[] =
     { 0,                 NF_NUMERIC_START }
 };
 
-static HTMLOptionEnum aHTMLPageNumFldFmtTable[] =
+static HTMLOptionEnum aHTMLPageNumFieldFormatTable[] =
 {
     { OOO_STRING_SW_HTML_FF_uletter,     SVX_NUM_CHARS_UPPER_LETTER },
     { OOO_STRING_SW_HTML_FF_lletter,     SVX_NUM_CHARS_LOWER_LETTER },
@@ -102,7 +102,7 @@ static HTMLOptionEnum aHTMLPageNumFldFmtTable[] =
     { 0,                     0 }
 };
 
-static HTMLOptionEnum aHTMLExtUsrFldSubTable[] =
+static HTMLOptionEnum aHTMLExtUsrFieldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_company,         EU_COMPANY },
     { OOO_STRING_SW_HTML_FS_firstname,   EU_FIRSTNAME },
@@ -122,14 +122,14 @@ static HTMLOptionEnum aHTMLExtUsrFldSubTable[] =
     { 0,                     0 }
 };
 
-static HTMLOptionEnum aHTMLAuthorFldFmtTable[] =
+static HTMLOptionEnum aHTMLAuthorFieldFormatTable[] =
 {
     { OOO_STRING_SW_HTML_FF_name,        AF_NAME },
     { OOO_STRING_SW_HTML_FF_shortcut,    AF_SHORTCUT },
     { 0,                     0 }
 };
 
-static HTMLOptionEnum aHTMLPageNumFldSubTable[] =
+static HTMLOptionEnum aHTMLPageNumFieldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_random,      PG_RANDOM },
     { OOO_STRING_SW_HTML_FS_next,        PG_NEXT },
@@ -145,7 +145,7 @@ static HTMLOptionEnum aHTMLPageNumFldSubTable[] =
     const SwDocInfoSubType DI_INFO3         =  DI_SUBTYPE_END + 3;
     const SwDocInfoSubType DI_INFO4         =  DI_SUBTYPE_END + 4;
 
-static HTMLOptionEnum aHTMLDocInfoFldSubTable[] =
+static HTMLOptionEnum aHTMLDocInfoFieldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_title,   DI_TITEL },
     { OOO_STRING_SW_HTML_FS_theme,   DI_THEMA },
@@ -161,7 +161,7 @@ static HTMLOptionEnum aHTMLDocInfoFldSubTable[] =
     { 0,                 0 }
 };
 
-static HTMLOptionEnum aHTMLDocInfoFldFmtTable[] =
+static HTMLOptionEnum aHTMLDocInfoFieldFormatTable[] =
 {
     { OOO_STRING_SW_HTML_FF_author,      DI_SUB_AUTHOR },
     { OOO_STRING_SW_HTML_FF_time,    DI_SUB_TIME },
@@ -169,7 +169,7 @@ static HTMLOptionEnum aHTMLDocInfoFldFmtTable[] =
     { 0,                 0 }
 };
 
-static HTMLOptionEnum aHTMLDocStatFldSubTable[] =
+static HTMLOptionEnum aHTMLDocStatFieldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_page,    DS_PAGE },
     { OOO_STRING_SW_HTML_FS_para,    DS_PARA },
@@ -181,7 +181,7 @@ static HTMLOptionEnum aHTMLDocStatFldSubTable[] =
     { 0,                 0 }
 };
 
-static HTMLOptionEnum aHTMLFileNameFldFmtTable[] =
+static HTMLOptionEnum aHTMLFileNameFieldFormatTable[] =
 {
     { OOO_STRING_SW_HTML_FF_name,       FF_NAME },
     { OOO_STRING_SW_HTML_FF_pathname,   FF_PATHNAME },
@@ -193,7 +193,7 @@ static HTMLOptionEnum aHTMLFileNameFldFmtTable[] =
 sal_uInt16 SwHTMLParser::GetNumType( const OUString& rStr, sal_uInt16 nDfltType )
 {
     sal_uInt16 nType = nDfltType;
-    const HTMLOptionEnum *pOptEnums = aHTMLPageNumFldFmtTable;
+    const HTMLOptionEnum *pOptEnums = aHTMLPageNumFieldFormatTable;
     while( pOptEnums->pName )
         if( !rStr.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
             pOptEnums++;
@@ -209,10 +209,10 @@ sal_uInt16 SwHTMLParser::GetNumType( const OUString& rStr, sal_uInt16 nDfltType 
 void SwHTMLParser::NewField()
 {
     bool bKnownType = false, bFixed = false,
-         bHasNumFmt = false, bHasNumValue = false;
+         bHasNumFormat = false, bHasNumValue = false;
     sal_uInt16 nType = 0;
-    OUString aValue, aNumFmt, aNumValue, aName;
-    const HTMLOption *pSubOption=0, *pFmtOption=0;
+    OUString aValue, aNumFormat, aNumValue, aName;
+    const HTMLOption *pSubOption=0, *pFormatOption=0;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     size_t i;
@@ -223,13 +223,13 @@ void SwHTMLParser::NewField()
         switch( rOption.GetToken() )
         {
         case HTML_O_TYPE:
-            bKnownType = rOption.GetEnum( nType, aHTMLFldTypeTable );
+            bKnownType = rOption.GetEnum( nType, aHTMLFieldTypeTable );
             break;
         case HTML_O_SUBTYPE:
             pSubOption = &rOption;
             break;
         case HTML_O_FORMAT:
-            pFmtOption = &rOption;
+            pFormatOption = &rOption;
             break;
         case HTML_O_NAME:
             aName = rOption.GetString();
@@ -238,8 +238,8 @@ void SwHTMLParser::NewField()
             aValue = rOption.GetString();
             break;
         case HTML_O_SDNUM:
-            aNumFmt = rOption.GetString();
-            bHasNumFmt = true;
+            aNumFormat = rOption.GetString();
+            bHasNumFormat = true;
             break;
         case HTML_O_SDVAL:
             aNumValue = rOption.GetString();
@@ -284,7 +284,7 @@ void SwHTMLParser::NewField()
     if( RES_DATEFLD==nType || RES_TIMEFLD==nType )
         nWhich = RES_DATETIMEFLD;
 
-    SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetSysFldType( nWhich );
+    SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetSysFieldType( nWhich );
     SwField *pNewField = 0;
     bool bInsOnEndTag = false;
 
@@ -294,53 +294,53 @@ void SwHTMLParser::NewField()
         if( pSubOption )
         {
             sal_uInt16 nSub;
-            sal_uLong nFmt = 0;
+            sal_uLong nFormat = 0;
             if( bFixed )
             {
-                nFmt |= AF_FIXED;
+                nFormat |= AF_FIXED;
                 bInsOnEndTag = true;
             }
-            if( pSubOption->GetEnum( nSub, aHTMLExtUsrFldSubTable ) )
-                pNewField = new SwExtUserField(static_cast<SwExtUserFieldType*>(pType), nSub, nFmt);
+            if( pSubOption->GetEnum( nSub, aHTMLExtUsrFieldSubTable ) )
+                pNewField = new SwExtUserField(static_cast<SwExtUserFieldType*>(pType), nSub, nFormat);
         }
         break;
 
     case RES_AUTHORFLD:
         {
-            sal_uInt16 nFmt = AF_NAME;
-            if( pFmtOption )
-                pFmtOption->GetEnum( nFmt, aHTMLAuthorFldFmtTable );
+            sal_uInt16 nFormat = AF_NAME;
+            if( pFormatOption )
+                pFormatOption->GetEnum( nFormat, aHTMLAuthorFieldFormatTable );
             if( bFixed )
             {
-                nFmt |= AF_FIXED;
+                nFormat |= AF_FIXED;
                 bInsOnEndTag = true;
             }
 
-            pNewField = new SwAuthorField(static_cast<SwAuthorFieldType*>(pType), nFmt);
+            pNewField = new SwAuthorField(static_cast<SwAuthorFieldType*>(pType), nFormat);
         }
         break;
 
     case RES_DATEFLD:
     case RES_TIMEFLD:
         {
-            sal_uLong nNumFmt = 0;
+            sal_uLong nNumFormat = 0;
             sal_Int64 nTime = tools::Time( tools::Time::SYSTEM ).GetTime();
             sal_Int32 nDate = Date( Date::SYSTEM ).GetDate();
             sal_uInt16 nSub = 0;
-            bool bValidFmt = false;
-            HTMLNumFmtTblEntry * pFmtTbl;
+            bool bValidFormat = false;
+            HTMLNumFormatTableEntry * pFormatTable;
 
             if( RES_DATEFLD==nType )
             {
                 nSub = DATEFLD;
-                pFmtTbl = aHTMLDateFldFmtTable;
+                pFormatTable = aHTMLDateFieldFormatTable;
                 if( !aValue.isEmpty() )
                     nDate = aValue.toInt32();
             }
             else
             {
                 nSub = TIMEFLD;
-                pFmtTbl = aHTMLTimeFldFmtTable;
+                pFormatTable = aHTMLTimeFieldFormatTable;
                 if( !aValue.isEmpty() )
                     nTime = (sal_uLong)aValue.toInt32();
             }
@@ -348,25 +348,25 @@ void SwHTMLParser::NewField()
                 nSub |= FIXEDFLD;
 
             SvNumberFormatter *pFormatter = pDoc->GetNumberFormatter();
-            if( pFmtOption )
+            if( pFormatOption )
             {
-                const OUString& rFmt = pFmtOption->GetString();
-                for( sal_uInt16 k = 0; pFmtTbl[k].pName; k++ )
+                const OUString& rFormat = pFormatOption->GetString();
+                for( sal_uInt16 k = 0; pFormatTable[k].pName; k++ )
                 {
-                    if( rFmt.equalsIgnoreAsciiCaseAscii( pFmtTbl[k].pName ) )
+                    if( rFormat.equalsIgnoreAsciiCaseAscii( pFormatTable[k].pName ) )
                     {
-                        nNumFmt = pFormatter->GetFormatIndex(
-                                        pFmtTbl[k].eFmt, LANGUAGE_SYSTEM);
-                        bValidFmt = true;
+                        nNumFormat = pFormatter->GetFormatIndex(
+                                        pFormatTable[k].eFormat, LANGUAGE_SYSTEM);
+                        bValidFormat = true;
                         break;
                     }
                 }
             }
-            if( !bValidFmt )
-                nNumFmt = pFormatter->GetFormatIndex( pFmtTbl[i].eFmt,
+            if( !bValidFormat )
+                nNumFormat = pFormatter->GetFormatIndex( pFormatTable[i].eFormat,
                                                       LANGUAGE_SYSTEM);
 
-            pNewField = new SwDateTimeField(static_cast<SwDateTimeFieldType *>(pType), nSub, nNumFmt);
+            pNewField = new SwDateTimeField(static_cast<SwDateTimeFieldType *>(pType), nSub, nNumFormat);
 
             if (nSub & FIXEDFLD)
                 static_cast<SwDateTimeField *>(pNewField)->SetDateTime(DateTime(Date(nDate), tools::Time(nTime)));
@@ -374,18 +374,18 @@ void SwHTMLParser::NewField()
         break;
 
     case RES_DATETIMEFLD:
-        if( bHasNumFmt )
+        if( bHasNumFormat )
         {
             sal_uInt16 nSub = 0;
 
             SvNumberFormatter *pFormatter = pDoc->GetNumberFormatter();
-            sal_uInt32 nNumFmt;
+            sal_uInt32 nNumFormat;
             LanguageType eLang;
             double dValue = GetTableDataOptionsValNum(
-                                nNumFmt, eLang, aNumValue, aNumFmt,
+                                nNumFormat, eLang, aNumValue, aNumFormat,
                                 *pDoc->GetNumberFormatter() );
-            short nFmtType = pFormatter->GetType( nNumFmt );
-            switch( nFmtType )
+            short nFormatType = pFormatter->GetType( nNumFormat );
+            switch( nFormatType )
             {
             case css::util::NumberFormat::DATE: nSub = DATEFLD; break;
             case css::util::NumberFormat::TIME: nSub = TIMEFLD; break;
@@ -396,7 +396,7 @@ void SwHTMLParser::NewField()
                 if( bHasNumValue )
                     nSub |= FIXEDFLD;
 
-                pNewField = new SwDateTimeField(static_cast<SwDateTimeFieldType *>(pType), nSub, nNumFmt);
+                pNewField = new SwDateTimeField(static_cast<SwDateTimeFieldType *>(pType), nSub, nNumFormat);
                 if (bHasNumValue)
                     static_cast<SwDateTimeField *>(pNewField)->SetValue(dValue);
             }
@@ -407,27 +407,27 @@ void SwHTMLParser::NewField()
         if( pSubOption )
         {
             sal_uInt16 nSub;
-            if( pSubOption->GetEnum( nSub, aHTMLPageNumFldSubTable ) )
+            if( pSubOption->GetEnum( nSub, aHTMLPageNumFieldSubTable ) )
             {
-                sal_uInt16 nFmt = SVX_NUM_PAGEDESC;
-                if( pFmtOption )
-                    pFmtOption->GetEnum( nFmt, aHTMLPageNumFldFmtTable );
+                sal_uInt16 nFormat = SVX_NUM_PAGEDESC;
+                if( pFormatOption )
+                    pFormatOption->GetEnum( nFormat, aHTMLPageNumFieldFormatTable );
 
                 short nOff = 0;
 
-                if( (SvxExtNumType)nFmt!=SVX_NUM_CHAR_SPECIAL && !aValue.isEmpty() )
+                if( (SvxExtNumType)nFormat!=SVX_NUM_CHAR_SPECIAL && !aValue.isEmpty() )
                     nOff = (short)aValue.toInt32();
                 else if( (SwPageNumSubType)nSub == PG_NEXT  )
                     nOff = 1;
                 else if( (SwPageNumSubType)nSub == PG_PREV  )
                     nOff = -1;
 
-                if( (SvxExtNumType)nFmt==SVX_NUM_CHAR_SPECIAL &&
+                if( (SvxExtNumType)nFormat==SVX_NUM_CHAR_SPECIAL &&
                     (SwPageNumSubType)nSub==PG_RANDOM )
-                    nFmt = SVX_NUM_PAGEDESC;
+                    nFormat = SVX_NUM_PAGEDESC;
 
-                pNewField = new SwPageNumberField(static_cast<SwPageNumberFieldType*>(pType), nSub, nFmt, nOff);
-                if ((SvxExtNumType)nFmt == SVX_NUM_CHAR_SPECIAL)
+                pNewField = new SwPageNumberField(static_cast<SwPageNumberFieldType*>(pType), nSub, nFormat, nOff);
+                if ((SvxExtNumType)nFormat == SVX_NUM_CHAR_SPECIAL)
                     static_cast<SwPageNumberField *>(pNewField)->SetUserString(aValue);
             }
         }
@@ -437,25 +437,25 @@ void SwHTMLParser::NewField()
         if( pSubOption )
         {
             sal_uInt16 nSub;
-            if( pSubOption->GetEnum( nSub, aHTMLDocInfoFldSubTable ) )
+            if( pSubOption->GetEnum( nSub, aHTMLDocInfoFieldSubTable ) )
             {
                 sal_uInt16 nExtSub = 0;
                 if( DI_CREATE==(SwDocInfoSubType)nSub ||
                     DI_CHANGE==(SwDocInfoSubType)nSub )
                 {
                     nExtSub = DI_SUB_AUTHOR;
-                    if( pFmtOption )
-                        pFmtOption->GetEnum( nExtSub, aHTMLDocInfoFldFmtTable );
+                    if( pFormatOption )
+                        pFormatOption->GetEnum( nExtSub, aHTMLDocInfoFieldFormatTable );
                     nSub |= nExtSub;
                 }
 
-                sal_uInt32 nNumFmt = 0;
+                sal_uInt32 nNumFormat = 0;
                 double dValue = 0;
-                if( bHasNumFmt && (DI_SUB_DATE==nExtSub || DI_SUB_TIME==nExtSub) )
+                if( bHasNumFormat && (DI_SUB_DATE==nExtSub || DI_SUB_TIME==nExtSub) )
                 {
                     LanguageType eLang;
                     dValue = GetTableDataOptionsValNum(
-                                    nNumFmt, eLang, aNumValue, aNumFmt,
+                                    nNumFormat, eLang, aNumValue, aNumFormat,
                                     *pDoc->GetNumberFormatter() );
                     bFixed &= bHasNumValue;
                 }
@@ -476,7 +476,7 @@ void SwHTMLParser::NewField()
                     bInsOnEndTag = true;
                 }
 
-                pNewField = new SwDocInfoField(static_cast<SwDocInfoFieldType *>(pType), nSub, aName, nNumFmt);
+                pNewField = new SwDocInfoField(static_cast<SwDocInfoFieldType *>(pType), nSub, aName, nNumFormat);
                 if (bHasNumValue)
                     static_cast<SwDocInfoField*>(pNewField)->SetValue(dValue);
             }
@@ -487,29 +487,29 @@ void SwHTMLParser::NewField()
         if( pSubOption )
         {
             sal_uInt16 nSub;
-            if( pSubOption->GetEnum( nSub, aHTMLDocStatFldSubTable ) )
+            if( pSubOption->GetEnum( nSub, aHTMLDocStatFieldSubTable ) )
             {
-                sal_uInt16 nFmt = SVX_NUM_ARABIC;
-                if( pFmtOption )
-                    pFmtOption->GetEnum( nFmt, aHTMLPageNumFldFmtTable );
-                pNewField = new SwDocStatField(static_cast<SwDocStatFieldType*>(pType), nSub, nFmt);
-                bUpdateDocStat |= (DS_PAGE != nFmt);
+                sal_uInt16 nFormat = SVX_NUM_ARABIC;
+                if( pFormatOption )
+                    pFormatOption->GetEnum( nFormat, aHTMLPageNumFieldFormatTable );
+                pNewField = new SwDocStatField(static_cast<SwDocStatFieldType*>(pType), nSub, nFormat);
+                bUpdateDocStat |= (DS_PAGE != nFormat);
             }
         }
         break;
 
     case RES_FILENAMEFLD:
         {
-            sal_uInt16 nFmt = FF_NAME;
-            if( pFmtOption )
-                pFmtOption->GetEnum( nFmt, aHTMLFileNameFldFmtTable );
+            sal_uInt16 nFormat = FF_NAME;
+            if( pFormatOption )
+                pFormatOption->GetEnum( nFormat, aHTMLFileNameFieldFormatTable );
             if( bFixed )
             {
-                nFmt |= FF_FIXED;
+                nFormat |= FF_FIXED;
                 bInsOnEndTag = true;
             }
 
-            pNewField = new SwFileNameField(static_cast<SwFileNameFieldType*>(pType), nFmt);
+            pNewField = new SwFileNameField(static_cast<SwFileNameFieldType*>(pType), nFormat);
         }
         break;
     default:
@@ -524,7 +524,7 @@ void SwHTMLParser::NewField()
         }
         else
         {
-            pDoc->getIDocumentContentOperations().InsertPoolItem(*pPam, SwFmtFld(*pNewField));
+            pDoc->getIDocumentContentOperations().InsertPoolItem(*pPam, SwFormatField(*pNewField));
             delete pNewField;
         }
         bInField = true;
@@ -562,7 +562,7 @@ void SwHTMLParser::EndField()
             break;
         }
 
-        pDoc->getIDocumentContentOperations().InsertPoolItem( *pPam, SwFmtFld(*pField) );
+        pDoc->getIDocumentContentOperations().InsertPoolItem( *pPam, SwFormatField(*pField) );
         delete pField;
         pField = 0;
     }
@@ -608,9 +608,9 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
     // werden soll, fuegen wir es vor dem Space ein. Dann gibt es
     // weniger Probleme beim Formatieren (bug #40483#)
     const sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
-    SwTxtNode *pTxtNd = pPam->GetNode().GetTxtNode();
+    SwTextNode *pTextNd = pPam->GetNode().GetTextNode();
     bool bMoveFwd = false;
-    if (nPos>0 && pTxtNd && (' ' == pTxtNd->GetTxt()[nPos-1]))
+    if (nPos>0 && pTextNd && (' ' == pTextNd->GetText()[nPos-1]))
     {
         bMoveFwd = true;
 
@@ -624,7 +624,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
                 break;
 
             if( RES_TXTATR_FIELD == pAttr->pItem->Which() &&
-                RES_SCRIPTFLD == static_cast<const SwFmtFld *>(pAttr->pItem)->GetField()->GetTyp()->Which() )
+                RES_SCRIPTFLD == static_cast<const SwFormatField *>(pAttr->pItem)->GetField()->GetTyp()->Which() )
             {
                 bMoveFwd = false;
                 break;
@@ -635,10 +635,10 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
             pPam->Move( fnMoveBackward );
     }
 
-    SwPostItField aPostItFld(
-                    static_cast<SwPostItFieldType*>(pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_POSTITFLD )),
+    SwPostItField aPostItField(
+                    static_cast<SwPostItFieldType*>(pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_POSTITFLD )),
                     aEmptyOUStr, aComment, aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
-    InsertAttr( SwFmtFld( aPostItFld ) );
+    InsertAttr( SwFormatField( aPostItField ) );
 
     if( bMoveFwd )
         pPam->Move( fnMoveForward );

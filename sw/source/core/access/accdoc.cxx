@@ -593,32 +593,32 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
         sAttrName = "line-number:";
 
-        SwCntntFrm* pCurrFrm = pCrsrShell->GetCurrFrm();
+        SwContentFrm* pCurrFrm = pCrsrShell->GetCurrFrm();
         SwPageFrm* pCurrPage=static_cast<SwFrm*>(pCurrFrm)->FindPageFrm();
         sal_uLong nLineNum = 0;
-        SwTxtFrm* pTxtFrm = NULL;
-        SwTxtFrm* pCurrTxtFrm = NULL;
-        pTxtFrm = static_cast< SwTxtFrm* >(static_cast< SwPageFrm* > (pCurrPage)->ContainsCntnt());
+        SwTextFrm* pTextFrm = NULL;
+        SwTextFrm* pCurrTextFrm = NULL;
+        pTextFrm = static_cast< SwTextFrm* >(static_cast< SwPageFrm* > (pCurrPage)->ContainsContent());
         if (pCurrFrm->IsInFly())//such as, graphic,chart
         {
             SwFlyFrm *pFlyFrm = pCurrFrm->FindFlyFrm();
-            const SwFmtAnchor& rAnchor = pFlyFrm->GetFmt()->GetAnchor();
+            const SwFormatAnchor& rAnchor = pFlyFrm->GetFormat()->GetAnchor();
             RndStdIds eAnchorId = rAnchor.GetAnchorId();
             if(eAnchorId == FLY_AS_CHAR)
             {
                 const SwFrm *pSwFrm = pFlyFrm->GetAnchorFrm();
-                if(pSwFrm->IsTxtFrm())
-                    pCurrTxtFrm = const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pSwFrm));
+                if(pSwFrm->IsTextFrm())
+                    pCurrTextFrm = const_cast<SwTextFrm*>(static_cast<const SwTextFrm*>(pSwFrm));
             }
         }
         else
-            pCurrTxtFrm = const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm* >(pCurrFrm));
+            pCurrTextFrm = const_cast<SwTextFrm*>(static_cast<const SwTextFrm* >(pCurrFrm));
         //check whether the text frame where the Graph/OLE/Frame anchored is in the Header/Footer
-        SwFrm* pFrm = pCurrTxtFrm;
+        SwFrm* pFrm = pCurrTextFrm;
         while ( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
             pFrm = pFrm->GetUpper();
         if ( pFrm )
-            pCurrTxtFrm = NULL;
+            pCurrTextFrm = NULL;
         //check shape
         if(pCrsrShell->Imp()->GetDrawView())
         {
@@ -626,48 +626,48 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
-                SwFrmFmt* pFmt = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFmt();
-                const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+                SwFrameFormat* pFormat = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFormat();
+                const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
                 if( FLY_AS_CHAR != rAnchor.GetAnchorId() )
-                    pCurrTxtFrm = NULL;
+                    pCurrTextFrm = NULL;
             }
         }
         //calculate line number
-        if (pCurrTxtFrm && pTxtFrm)
+        if (pCurrTextFrm && pTextFrm)
         {
-            if (!(pCurrTxtFrm->IsInTab() || pCurrTxtFrm->IsInFtn()))
+            if (!(pCurrTextFrm->IsInTab() || pCurrTextFrm->IsInFootnote()))
             {
-                while( pTxtFrm != pCurrTxtFrm )
+                while( pTextFrm != pCurrTextFrm )
                 {
                     //check header/footer
-                    pFrm = pTxtFrm;
+                    pFrm = pTextFrm;
                     while ( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
                         pFrm = pFrm->GetUpper();
                     if ( pFrm )
                     {
-                        pTxtFrm = static_cast< SwTxtFrm*>(pTxtFrm->GetNextCntntFrm());
+                        pTextFrm = static_cast< SwTextFrm*>(pTextFrm->GetNextContentFrm());
                         continue;
                     }
-                    if (!(pTxtFrm->IsInTab() || pTxtFrm->IsInFtn() || pTxtFrm->IsInFly()))
-                        nLineNum += pTxtFrm->GetThisLines();
-                    pTxtFrm = static_cast< SwTxtFrm* >(pTxtFrm ->GetNextCntntFrm());
+                    if (!(pTextFrm->IsInTab() || pTextFrm->IsInFootnote() || pTextFrm->IsInFly()))
+                        nLineNum += pTextFrm->GetThisLines();
+                    pTextFrm = static_cast< SwTextFrm* >(pTextFrm ->GetNextContentFrm());
                 }
                 SwPaM* pCaret = pCrsrShell->GetCrsr();
-                if (!pCurrTxtFrm->IsEmpty() && pCaret)
+                if (!pCurrTextFrm->IsEmpty() && pCaret)
                 {
-                    if (pCurrTxtFrm->IsTxtFrm())
+                    if (pCurrTextFrm->IsTextFrm())
                     {
                         const SwPosition* pPoint = NULL;
-                        if(pCurrTxtFrm->IsInFly())
+                        if(pCurrTextFrm->IsInFly())
                         {
-                            SwFlyFrm *pFlyFrm = pCurrTxtFrm->FindFlyFrm();
-                            const SwFmtAnchor& rAnchor = pFlyFrm->GetFmt()->GetAnchor();
-                            pPoint= rAnchor.GetCntntAnchor();
+                            SwFlyFrm *pFlyFrm = pCurrTextFrm->FindFlyFrm();
+                            const SwFormatAnchor& rAnchor = pFlyFrm->GetFormat()->GetAnchor();
+                            pPoint= rAnchor.GetContentAnchor();
                         }
                         else
                             pPoint = pCaret->GetPoint();
                         const sal_Int32 nActPos = pPoint->nContent.GetIndex();
-                        nLineNum += pCurrTxtFrm->GetLineCount( nActPos );
+                        nLineNum += pCurrTextFrm->GetLineCount( nActPos );
                     }
                     else//graphic, form, shape, etc.
                     {
@@ -676,7 +676,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                         if( pCrsrShell->GetLayout()->GetCrsrOfst( pPoint, aPt/*,* &eTmpState*/ ) )
                         {
                             const sal_Int32 nActPos = pPoint->nContent.GetIndex();
-                            nLineNum += pCurrTxtFrm->GetLineCount( nActPos );
+                            nLineNum += pCurrTextFrm->GetLineCount( nActPos );
                         }
                     }
                 }
@@ -722,8 +722,8 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
         sAttrName = "total-columns:";
 
-        const SwFmtCol &rFmtCol=pCurrPage->GetAttrSet()->GetCol();
-        sal_uInt16 nColCount=rFmtCol.GetNumCols();
+        const SwFormatCol &rFormatCol=pCurrPage->GetAttrSet()->GetCol();
+        sal_uInt16 nColCount=rFormatCol.GetNumCols();
         nColCount = nColCount>0?nColCount:1;
         sValue += sAttrName;
         sValue += OUString::number( nColCount ) ;
@@ -772,8 +772,8 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
             //section-total-columns
             sAttrName = "section-total-columns:";
-            const SwFmtCol &rFmtSctCol=pCurrSctFrm->GetAttrSet()->GetCol();
-            sal_uInt16 nSctColCount=rFmtSctCol.GetNumCols();
+            const SwFormatCol &rFormatSctCol=pCurrSctFrm->GetAttrSet()->GetCol();
+            sal_uInt16 nSctColCount=rFormatSctCol.GetNumCols();
             nSctColCount = nSctColCount>0?nSctColCount:1;
             sValue += sAttrName;
             sValue += OUString::number( nSctColCount ) ;
@@ -868,24 +868,24 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
         if ( pCrsrShell )
         {
             SwPaM *_pStartCrsr = pCrsrShell->GetCrsr(), *__pStartCrsr = _pStartCrsr;
-            SwCntntNode* pPrevNode = NULL;
+            SwContentNode* pPrevNode = NULL;
             std::vector<SwFrm*> vFrmList;
             do
             {
                 if ( _pStartCrsr && _pStartCrsr->HasMark() )
                 {
-                    SwCntntNode* pCntntNode = _pStartCrsr->GetCntntNode();
-                    if ( pCntntNode == pPrevNode )
+                    SwContentNode* pContentNode = _pStartCrsr->GetContentNode();
+                    if ( pContentNode == pPrevNode )
                     {
                         continue;
                     }
-                    SwFrm* pFrm = pCntntNode ? pCntntNode->getLayoutFrm( pCrsrShell->GetLayout() ) : NULL;
+                    SwFrm* pFrm = pContentNode ? pContentNode->getLayoutFrm( pCrsrShell->GetLayout() ) : NULL;
                     if ( pFrm )
                     {
                         vFrmList.push_back( pFrm );
                     }
 
-                    pPrevNode = pCntntNode;
+                    pPrevNode = pContentNode;
                 }
             }
 

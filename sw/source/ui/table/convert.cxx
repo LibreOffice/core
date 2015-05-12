@@ -43,8 +43,8 @@ static bool bIsKeepColumn = true;
 static sal_Unicode uOther = ',';
 
 void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
-                                    SwInsertTableOptions& rInsTblOpts,
-                                    SwTableAutoFmt const*& prTAFmt )
+                                    SwInsertTableOptions& rInsTableOpts,
+                                    SwTableAutoFormat const*& prTAFormat )
 {
     if( mpTabBtn->IsChecked() )
     {
@@ -81,22 +81,22 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
     if (mpHeaderCB->IsChecked())
         nInsMode |= tabopts::HEADLINE;
     if (mpRepeatHeaderCB->IsEnabled() && mpRepeatHeaderCB->IsChecked())
-        rInsTblOpts.mnRowsToRepeat = sal_uInt16( mpRepeatHeaderNF->GetValue() );
+        rInsTableOpts.mnRowsToRepeat = sal_uInt16( mpRepeatHeaderNF->GetValue() );
     else
-        rInsTblOpts.mnRowsToRepeat = 0;
+        rInsTableOpts.mnRowsToRepeat = 0;
     if (!mpDontSplitCB->IsChecked())
         nInsMode |= tabopts::SPLIT_LAYOUT;
 
-    if( pTAutoFmt )
-        prTAFmt = new SwTableAutoFmt( *pTAutoFmt );
+    if( pTAutoFormat )
+        prTAFormat = new SwTableAutoFormat( *pTAutoFormat );
 
-    rInsTblOpts.mnInsMode = nInsMode;
+    rInsTableOpts.mnInsMode = nInsMode;
 }
 
 SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     : SfxModalDialog(&rView.GetViewFrame()->GetWindow(), "ConvertTextTableDialog", "modules/swriter/ui/converttexttable.ui" )
     , sConvertTextTable(SW_RES(STR_CONVERT_TEXT_TABLE))
-    , pTAutoFmt(0)
+    , pTAutoFormat(0)
     , pShell(&rView.GetWrtShell())
 {
     get(mpTabBtn, "tabs");
@@ -112,7 +112,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     get(mpRepeatHeaderNF, "repeatheadersb");
     get(mpDontSplitCB, "dontsplitcb");
     get(mpBorderCB, "bordercb");
-    get(mpAutoFmtBtn, "autofmt");
+    get(mpAutoFormatBtn, "autofmt");
 
     if(nSaveButtonState > -1)
     {
@@ -135,8 +135,8 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     if( bToTable )
     {
         SetText( sConvertTextTable );
-        mpAutoFmtBtn->SetClickHdl(LINK(this, SwConvertTableDlg, AutoFmtHdl));
-        mpAutoFmtBtn->Show();
+        mpAutoFormatBtn->SetClickHdl(LINK(this, SwConvertTableDlg, AutoFormatHdl));
+        mpAutoFormatBtn->Show();
         mpKeepColumn->Show();
         mpKeepColumn->Enable( mpTabBtn->IsChecked() );
     }
@@ -158,13 +158,13 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 
     bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
 
-    SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
-    sal_uInt16 nInsTblFlags = aInsOpts.mnInsMode;
+    SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(bHTMLMode);
+    sal_uInt16 nInsTableFlags = aInsOpts.mnInsMode;
 
-    mpHeaderCB->Check( 0 != (nInsTblFlags & tabopts::HEADLINE) );
+    mpHeaderCB->Check( 0 != (nInsTableFlags & tabopts::HEADLINE) );
     mpRepeatHeaderCB->Check(aInsOpts.mnRowsToRepeat > 0);
-    mpDontSplitCB->Check( 0 == (nInsTblFlags & tabopts::SPLIT_LAYOUT));
-    mpBorderCB->Check( 0!= (nInsTblFlags & tabopts::DEFAULT_BORDER) );
+    mpDontSplitCB->Check( 0 == (nInsTableFlags & tabopts::SPLIT_LAYOUT));
+    mpBorderCB->Check( 0!= (nInsTableFlags & tabopts::DEFAULT_BORDER) );
 
     mpHeaderCB->SetClickHdl(LINK(this, SwConvertTableDlg, CheckBoxHdl));
     mpRepeatHeaderCB->SetClickHdl(LINK(this, SwConvertTableDlg, ReapeatHeaderCheckBoxHdl));
@@ -179,7 +179,7 @@ SwConvertTableDlg:: ~SwConvertTableDlg()
 
 void SwConvertTableDlg::dispose()
 {
-    delete pTAutoFmt;
+    delete pTAutoFormat;
     mpTabBtn.clear();
     mpSemiBtn.clear();
     mpParaBtn.clear();
@@ -193,19 +193,19 @@ void SwConvertTableDlg::dispose()
     mpRepeatHeaderNF.clear();
     mpDontSplitCB.clear();
     mpBorderCB.clear();
-    mpAutoFmtBtn.clear();
+    mpAutoFormatBtn.clear();
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK( SwConvertTableDlg, AutoFmtHdl, PushButton*, pButton )
+IMPL_LINK( SwConvertTableDlg, AutoFormatHdl, PushButton*, pButton )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pShell, false, pTAutoFmt));
+    boost::scoped_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pShell, false, pTAutoFormat));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
-        pDlg->FillAutoFmtOfIndex( pTAutoFmt );
+        pDlg->FillAutoFormatOfIndex( pTAutoFormat );
     return 0;
 }
 

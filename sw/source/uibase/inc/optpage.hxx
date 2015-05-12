@@ -54,9 +54,9 @@ class SwContentOptPage : public SfxTabPage
     VclPtr<CheckBox>   m_pSmoothCBox;
 
     VclPtr<CheckBox>   m_pGrfCB;
-    VclPtr<CheckBox>   m_pTblCB;
+    VclPtr<CheckBox>   m_pTableCB;
     VclPtr<CheckBox>   m_pDrwCB;
-    VclPtr<CheckBox>   m_pFldNameCB;
+    VclPtr<CheckBox>   m_pFieldNameCB;
     VclPtr<CheckBox>   m_pPostItCB;
 
     VclPtr<VclFrame>   m_pSettingsFrame;
@@ -84,7 +84,7 @@ public:
 class SwAddPrinterTabPage : public SfxTabPage
 {
     VclPtr<CheckBox>       m_pGrfCB;
-    VclPtr<CheckBox>       m_pCtrlFldCB;
+    VclPtr<CheckBox>       m_pCtrlFieldCB;
     VclPtr<CheckBox>       m_pBackgroundCB;
     VclPtr<CheckBox>       m_pBlackFontCB;
     VclPtr<CheckBox>       m_pPrintHiddenTextCB;
@@ -212,7 +212,7 @@ class SwTableOptionsTabPage : public SfxTabPage
     VclPtr<CheckBox>    pBorderCB;
 
     VclPtr<CheckBox>    pNumFormattingCB;
-    VclPtr<CheckBox>    pNumFmtFormattingCB;
+    VclPtr<CheckBox>    pNumFormatFormattingCB;
     VclPtr<CheckBox>    pNumAlignmentCB;
 
     VclPtr<MetricField> pRowMoveMF;
@@ -258,8 +258,8 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
     VclPtr<CheckBox> m_pTabCB;
     VclPtr<CheckBox> m_pBreakCB;
     VclPtr<CheckBox> m_pCharHiddenCB;
-    VclPtr<CheckBox> m_pFldHiddenCB;
-    VclPtr<CheckBox> m_pFldHiddenParaCB;
+    VclPtr<CheckBox> m_pFieldHiddenCB;
+    VclPtr<CheckBox> m_pFieldHiddenParaCB;
 
     VclPtr<VclFrame> m_pDirectCursorFrame;
     VclPtr<CheckBox> m_pOnOffCB;
@@ -301,7 +301,7 @@ class SwMarkPreview : public vcl::Window
     Color           m_aMarkCol;         // marks
     Color           m_aLineCol;         // general lines
     Color           m_aShadowCol;       // shadow
-    Color           m_aTxtCol;          // text
+    Color           m_aTextCol;          // text
     Color           m_aPrintAreaCol;    // frame for print area
 
     Rectangle       aPage;

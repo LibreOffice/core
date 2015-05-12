@@ -6094,14 +6094,14 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
         sal_uInt16 nAbsLSpace = (sal_uInt16)( ( (sal_uInt32)_nTextOfs * 2540 ) / 576 );
         sal_uInt16 nFirstLineOffset = nAbsLSpace - (sal_uInt16)( ( (sal_uInt32)_nBulletOfs * 2540 ) / 576 );
         aLRSpaceItem.SetLeft( nAbsLSpace );
-        aLRSpaceItem.SetTxtFirstLineOfstValue( -nFirstLineOffset );
+        aLRSpaceItem.SetTextFirstLineOfstValue( -nFirstLineOffset );
         rSet.Put( aLRSpaceItem );
     }
     else
     {
         SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
         aLRSpaceItem.SetLeft( 0 );
-        aLRSpaceItem.SetTxtFirstLineOfstValue( 0 );
+        aLRSpaceItem.SetTextFirstLineOfstValue( 0 );
         rSet.Put( aLRSpaceItem );
     }
     if ( GetAttrib( PPT_ParaAttr_Adjust, nVal, nDestinationInstance ) )

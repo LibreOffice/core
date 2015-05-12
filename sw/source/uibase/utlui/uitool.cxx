@@ -232,20 +232,20 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, const sa
 
 // Fill header footer
 
-void FillHdFt(SwFrmFmt* pFmt, const  SfxItemSet& rSet)
+void FillHdFt(SwFrameFormat* pFormat, const  SfxItemSet& rSet)
 {
-    SwAttrSet aSet(pFmt->GetAttrSet());
+    SwAttrSet aSet(pFormat->GetAttrSet());
     aSet.Put(rSet);
 
     const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get(SID_ATTR_PAGE_SIZE));
     const SfxBoolItem& rDynamic = static_cast<const SfxBoolItem&>(rSet.Get(SID_ATTR_PAGE_DYNAMIC));
 
     // Convert size
-    SwFmtFrmSize aFrmSize(rDynamic.GetValue() ? ATT_MIN_SIZE : ATT_FIX_SIZE,
+    SwFormatFrmSize aFrmSize(rDynamic.GetValue() ? ATT_MIN_SIZE : ATT_FIX_SIZE,
                             rSize.GetSize().Width(),
                             rSize.GetSize().Height());
     aSet.Put(aFrmSize);
-    pFmt->SetFmtAttr(aSet);
+    pFormat->SetFormatAttr(aSet);
 }
 
 /// Convert from UseOnPage to SvxPageUsage.
@@ -282,11 +282,11 @@ UseOnPage lcl_convertUseFromSvx(UseOnPage nUse)
 
 void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 {
-    SwFrmFmt& rMaster = rPageDesc.GetMaster();
+    SwFrameFormat& rMaster = rPageDesc.GetMaster();
     int nFirstShare = -1;
 
     // Transfer all general frame attributes
-    rMaster.SetFmtAttr(rSet);
+    rMaster.SetFormatAttr(rSet);
 
     // PageData
     if(rSet.GetItemState(SID_ATTR_PAGE) == SfxItemState::SET)
@@ -305,9 +305,9 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     if(rSet.GetItemState(SID_ATTR_PAGE_SIZE) == SfxItemState::SET)
     {
         const SvxSizeItem& rSizeItem = static_cast<const SvxSizeItem&>(rSet.Get(SID_ATTR_PAGE_SIZE));
-        SwFmtFrmSize aSize(ATT_FIX_SIZE);
+        SwFormatFrmSize aSize(ATT_FIX_SIZE);
         aSize.SetSize(rSizeItem.GetSize());
-        rMaster.SetFmtAttr(aSize);
+        rMaster.SetFormatAttr(aSize);
     }
     // Evaluate header attributes
     const SfxPoolItem* pItem;
@@ -321,14 +321,14 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         {
             // Take over values
             if(!rMaster.GetHeader().IsActive())
-                rMaster.SetFmtAttr(SwFmtHeader(true));
+                rMaster.SetFormatAttr(SwFormatHeader(true));
 
             // Pick out everything and adapt the header format
-            SwFmtHeader aHeaderFmt(rMaster.GetHeader());
-            SwFrmFmt *pHeaderFmt = aHeaderFmt.GetHeaderFmt();
-            OSL_ENSURE(pHeaderFmt != 0, "no header format");
+            SwFormatHeader aHeaderFormat(rMaster.GetHeader());
+            SwFrameFormat *pHeaderFormat = aHeaderFormat.GetHeaderFormat();
+            OSL_ENSURE(pHeaderFormat != 0, "no header format");
 
-            ::FillHdFt(pHeaderFmt, rHeaderSet);
+            ::FillHdFt(pHeaderFormat, rHeaderSet);
 
             rPageDesc.ChgHeaderShare(static_cast<const SfxBoolItem&>(
                         rHeaderSet.Get(SID_ATTR_PAGE_SHARED)).GetValue());
@@ -344,7 +344,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             // Disable header
             if(rMaster.GetHeader().IsActive())
             {
-                rMaster.SetFmtAttr(SwFmtHeader(false));
+                rMaster.SetFormatAttr(SwFormatHeader(false));
                 rPageDesc.ChgHeaderShare(false);
             }
         }
@@ -361,14 +361,14 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         {
             // Take over values
             if(!rMaster.GetFooter().IsActive())
-                rMaster.SetFmtAttr(SwFmtFooter(true));
+                rMaster.SetFormatAttr(SwFormatFooter(true));
 
             // Pick out everything and adapt the footer format
-            SwFmtFooter aFooterFmt(rMaster.GetFooter());
-            SwFrmFmt *pFooterFmt = aFooterFmt.GetFooterFmt();
-            OSL_ENSURE(pFooterFmt != 0, "no footer format");
+            SwFormatFooter aFooterFormat(rMaster.GetFooter());
+            SwFrameFormat *pFooterFormat = aFooterFormat.GetFooterFormat();
+            OSL_ENSURE(pFooterFormat != 0, "no footer format");
 
-            ::FillHdFt(pFooterFmt, rFooterSet);
+            ::FillHdFt(pFooterFormat, rFooterSet);
 
             rPageDesc.ChgFooterShare(static_cast<const SfxBoolItem&>(
                         rFooterSet.Get(SID_ATTR_PAGE_SHARED)).GetValue());
@@ -384,7 +384,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             // Disable footer
             if(rMaster.GetFooter().IsActive())
             {
-                rMaster.SetFmtAttr(SwFmtFooter(false));
+                rMaster.SetFormatAttr(SwFormatFooter(false));
                 rPageDesc.ChgFooterShare(false);
             }
         }
@@ -394,7 +394,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_FTN_INFO,
             false, &pItem ) )
-        rPageDesc.SetFtnInfo( static_cast<const SwPageFtnInfoItem*>(pItem)->GetPageFtnInfo() );
+        rPageDesc.SetFootnoteInfo( static_cast<const SwPageFootnoteInfoItem*>(pItem)->GetPageFootnoteInfo() );
 
     // Columns
 
@@ -405,33 +405,33 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     {
         bool bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         if(!bSet)
-            rPageDesc.SetRegisterFmtColl(0);
+            rPageDesc.SetRegisterFormatColl(0);
         else if(SfxItemState::SET == rSet.GetItemState(
                                 SID_SWREGISTER_COLLECTION, false, &pItem))
         {
             const OUString& rColl = static_cast<const SfxStringItem*>(pItem)->GetValue();
             SwDoc& rDoc = *rMaster.GetDoc();
-            SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( rColl );
+            SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( rColl );
             if( !pColl )
             {
                 const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
                     rColl, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if( USHRT_MAX != nId )
-                    pColl = rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( nId );
+                    pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
                 else
-                    pColl = rDoc.MakeTxtFmtColl( rColl,
-                                rDoc.GetDfltTxtFmtColl() );
+                    pColl = rDoc.MakeTextFormatColl( rColl,
+                                rDoc.GetDfltTextFormatColl() );
             }
             if( pColl )
-                pColl->SetFmtAttr( SwRegisterItem ( true ));
-            rPageDesc.SetRegisterFmtColl( pColl );
+                pColl->SetFormatAttr( SwRegisterItem ( true ));
+            rPageDesc.SetRegisterFormatColl( pColl );
         }
     }
 }
 
 void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 {
-    const SwFrmFmt& rMaster = rPageDesc.GetMaster();
+    const SwFrameFormat& rMaster = rPageDesc.GetMaster();
 
     // Page data
     SvxPageItem aPageItem(SID_ATTR_PAGE);
@@ -477,9 +477,9 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     // Header
     if(rMaster.GetHeader().IsActive())
     {
-        const SwFmtHeader &rHeaderFmt = rMaster.GetHeader();
-        const SwFrmFmt *pHeaderFmt = rHeaderFmt.GetHeaderFmt();
-        OSL_ENSURE(pHeaderFmt != 0, "no header format");
+        const SwFormatHeader &rHeaderFormat = rMaster.GetHeader();
+        const SwFrameFormat *pHeaderFormat = rHeaderFormat.GetHeaderFormat();
+        OSL_ENSURE(pHeaderFormat != 0, "no header format");
 
         // HeaderInfo, margins, background, border
         SfxItemSet aHeaderSet(*rSet.GetPool(),
@@ -495,13 +495,13 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             0, 0);
 
         //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
-        aHeaderSet.SetParent(&rMaster.GetDoc()->GetDfltFrmFmt()->GetAttrSet());
+        aHeaderSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
         // Dynamic or fixed height
         SfxBoolItem aOn(SID_ATTR_PAGE_ON, true);
         aHeaderSet.Put(aOn);
 
-        const SwFmtFrmSize &rFrmSize = pHeaderFmt->GetFrmSize();
+        const SwFormatFrmSize &rFrmSize = pHeaderFormat->GetFrmSize();
         const SwFrmSize eSizeType = rFrmSize.GetHeightSizeType();
         SfxBoolItem aDynamic(SID_ATTR_PAGE_DYNAMIC, eSizeType != ATT_FIX_SIZE);
         aHeaderSet.Put(aDynamic);
@@ -517,7 +517,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aHeaderSet.Put(aSize);
 
         // Shifting frame attributes
-        aHeaderSet.Put(pHeaderFmt->GetAttrSet());
+        aHeaderSet.Put(pHeaderFormat->GetAttrSet());
         aHeaderSet.Put( aBoxInfo );
 
         // Create SetItem
@@ -528,9 +528,9 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     // Footer
     if(rMaster.GetFooter().IsActive())
     {
-        const SwFmtFooter &rFooterFmt = rMaster.GetFooter();
-        const SwFrmFmt *pFooterFmt = rFooterFmt.GetFooterFmt();
-        OSL_ENSURE(pFooterFmt != 0, "no footer format");
+        const SwFormatFooter &rFooterFormat = rMaster.GetFooter();
+        const SwFrameFormat *pFooterFormat = rFooterFormat.GetFooterFormat();
+        OSL_ENSURE(pFooterFormat != 0, "no footer format");
 
         // FooterInfo, margins, background, border
         SfxItemSet aFooterSet(*rSet.GetPool(),
@@ -546,13 +546,13 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             0, 0);
 
         //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
-        aFooterSet.SetParent(&rMaster.GetDoc()->GetDfltFrmFmt()->GetAttrSet());
+        aFooterSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
         // Dynamic or fixed height
         SfxBoolItem aOn(SID_ATTR_PAGE_ON, true);
         aFooterSet.Put(aOn);
 
-        const SwFmtFrmSize &rFrmSize = pFooterFmt->GetFrmSize();
+        const SwFormatFrmSize &rFrmSize = pFooterFormat->GetFrmSize();
         const SwFrmSize eSizeType = rFrmSize.GetHeightSizeType();
         SfxBoolItem aDynamic(SID_ATTR_PAGE_DYNAMIC, eSizeType != ATT_FIX_SIZE);
         aFooterSet.Put(aDynamic);
@@ -568,7 +568,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         aFooterSet.Put(aSize);
 
         // Shifting Frame attributes
-        aFooterSet.Put(pFooterFmt->GetAttrSet());
+        aFooterSet.Put(pFooterFormat->GetAttrSet());
         aFooterSet.Put( aBoxInfo );
 
         // Create SetItem
@@ -577,12 +577,12 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     }
 
     // Integrate footnotes
-    SwPageFtnInfo& rInfo = (SwPageFtnInfo&)rPageDesc.GetFtnInfo();
-    SwPageFtnInfoItem aFtnItem(FN_PARAM_FTN_INFO, rInfo);
-    rSet.Put(aFtnItem);
+    SwPageFootnoteInfo& rInfo = (SwPageFootnoteInfo&)rPageDesc.GetFootnoteInfo();
+    SwPageFootnoteInfoItem aFootnoteItem(FN_PARAM_FTN_INFO, rInfo);
+    rSet.Put(aFootnoteItem);
 
     // Register compliant
-    const SwTxtFmtColl* pCol = rPageDesc.GetRegisterFmtColl();
+    const SwTextFormatColl* pCol = rPageDesc.GetRegisterFormatColl();
     SwRegisterItem aReg(pCol != 0);
     aReg.SetWhich(SID_SWREGISTER_MODE);
     rSet.Put(aReg);
@@ -614,7 +614,7 @@ SwTwips GetTabDist(const SvxTabStopItem& rTabs)
 void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
-    SwFmtPageDesc aPgDesc;
+    SwFormatPageDesc aPgDesc;
 
     bool bChanged = false;
     // Page number
@@ -644,9 +644,9 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
         rShell.GetCurAttr( aCoreSet );
         if(SfxItemState::SET == aCoreSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
         {
-            if( static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc() )
+            if( static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc() )
             {
-                aPgDesc.RegisterToPageDesc( *const_cast<SwFmtPageDesc*>(static_cast<const SwFmtPageDesc*>(pItem))->GetPageDesc() );
+                aPgDesc.RegisterToPageDesc( *const_cast<SwFormatPageDesc*>(static_cast<const SwFormatPageDesc*>(pItem))->GetPageDesc() );
             }
         }
     }
@@ -666,10 +666,10 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
     {
     case SfxItemState::SET:
         {
-            if( static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc() )
+            if( static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc() )
             {
-                aName = static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc()->GetName();
-                oNumOffset = static_cast<const SwFmtPageDesc*>(pItem)->GetNumOffset();
+                aName = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc()->GetName();
+                oNumOffset = static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset();
             }
             rCoreSet.ClearItem( RES_PAGEDESC );
             // Page number
@@ -742,13 +742,13 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
         pBase = pPool->Next();
     }
     // non-pool styles
-    const SwCharFmts* pFmts = pDoc->GetCharFmts();
-    for(size_t i = 0; i < pFmts->size(); ++i)
+    const SwCharFormats* pFormats = pDoc->GetCharFormats();
+    for(size_t i = 0; i < pFormats->size(); ++i)
     {
-        const SwCharFmt* pFmt = (*pFmts)[i];
-        if(pFmt->IsDefault())
+        const SwCharFormat* pFormat = (*pFormats)[i];
+        if(pFormat->IsDefault())
             continue;
-        const OUString& rName = pFmt->GetName();
+        const OUString& rName = pFormat->GetName();
         if(rToFill.GetEntryPos(rName) == LISTBOX_ENTRY_NOTFOUND)
         {
             const sal_Int32 nPos = bSorted
@@ -760,12 +760,12 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
     }
 };
 
-SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
+SwTwips GetTableWidth( SwFrameFormat* pFormat, SwTabCols& rCols, sal_uInt16 *pPercent,
             SwWrtShell* pSh )
 {
     // To get the width is slightly more complicated.
     SwTwips nWidth = 0;
-    const sal_Int16 eOri = pFmt->GetHoriOrient().GetHoriOrient();
+    const sal_Int16 eOri = pFormat->GetHoriOrient().GetHoriOrient();
     switch(eOri)
     {
         case text::HoriOrientation::FULL: nWidth = rCols.GetRight(); break;
@@ -773,13 +773,13 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
         case text::HoriOrientation::LEFT:
         case text::HoriOrientation::RIGHT:
         case text::HoriOrientation::CENTER:
-            nWidth = pFmt->GetFrmSize().GetWidth();
+            nWidth = pFormat->GetFrmSize().GetWidth();
         break;
         default:
         {
             if(pSh)
             {
-                if ( 0 == pSh->GetFlyFrmFmt() )
+                if ( 0 == pSh->GetFlyFrameFormat() )
                 {
                     nWidth = pSh->GetAnyCurRect(RECT_PAGE_PRT).Width();
                 }
@@ -792,12 +792,12 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
             {
                 OSL_FAIL("where to get the actual width from?");
             }
-            const SvxLRSpaceItem& rLRSpace = pFmt->GetLRSpace();
+            const SvxLRSpaceItem& rLRSpace = pFormat->GetLRSpace();
             nWidth -= (rLRSpace.GetRight() + rLRSpace.GetLeft());
         }
     }
     if (pPercent)
-        *pPercent = pFmt->GetFrmSize().GetWidthPercent();
+        *pPercent = pFormat->GetFrmSize().GetWidthPercent();
     return nWidth;
 }
 

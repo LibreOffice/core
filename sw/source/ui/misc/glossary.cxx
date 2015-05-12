@@ -565,10 +565,10 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
             SfxItemState::SET == pMacroDlg->GetOutputItemSet()->GetItemState( RES_FRMMACRO, false, &pItem ) )
         {
-            const SvxMacroTableDtor& rTbl = static_cast<const SvxMacroItem*>(pItem)->GetMacroTable();
+            const SvxMacroTableDtor& rTable = static_cast<const SvxMacroItem*>(pItem)->GetMacroTable();
             pGlossaryHdl->SetMacros( m_pShortNameEdit->GetText(),
-                                        rTbl.Get( SW_EVENT_START_INS_GLOSSARY ),
-                                        rTbl.Get( SW_EVENT_END_INS_GLOSSARY ) );
+                                        rTable.Get( SW_EVENT_START_INS_GLOSSARY ),
+                                        rTable.Get( SW_EVENT_END_INS_GLOSSARY ) );
         }
     }
     else if (sItemIdent == "import")

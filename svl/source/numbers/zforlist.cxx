@@ -2969,7 +2969,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
 
 SvNumberFormatterMergeMap SvNumberFormatter::ConvertMergeTableToMap()
 {
-    if (!HasMergeFmtTbl())
+    if (!HasMergeFormatTable())
     {
         return SvNumberFormatterMergeMap();
     }
@@ -3837,7 +3837,7 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
     return nDefault;
 }
 
-sal_uInt32 SvNumberFormatter::GetMergeFmtIndex( sal_uInt32 nOldFmt ) const
+sal_uInt32 SvNumberFormatter::GetMergeFormatIndex( sal_uInt32 nOldFmt ) const
 {
     if (pMergeTable)
     {
@@ -3850,7 +3850,7 @@ sal_uInt32 SvNumberFormatter::GetMergeFmtIndex( sal_uInt32 nOldFmt ) const
     return nOldFmt;
 }
 
-bool SvNumberFormatter::HasMergeFmtTbl() const
+bool SvNumberFormatter::HasMergeFormatTable() const
 {
     return pMergeTable && !pMergeTable->empty();
 }

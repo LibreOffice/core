@@ -118,15 +118,15 @@ sal_uLong SwASCWriter::WriteStream()
               (pCurPam->GetPoint()->nNode.GetIndex() == pCurPam->GetMark()->nNode.GetIndex() &&
                pCurPam->GetPoint()->nContent.GetIndex() <= pCurPam->GetMark()->nContent.GetIndex()) )
         {
-            SwTxtNode* pNd = pCurPam->GetPoint()->nNode.GetNode().GetTxtNode();
+            SwTextNode* pNd = pCurPam->GetPoint()->nNode.GetNode().GetTextNode();
             if( pNd )
             {
                 // Should we have frames only?
                 // That's possible, if we put a frame selection into the clipboard
                 if( bTstFly && bWriteAll &&
-                    pNd->GetTxt().isEmpty() &&
+                    pNd->GetText().isEmpty() &&
                     // Frame exists
-                    pDoc->GetSpzFrmFmts()->size() &&
+                    pDoc->GetSpzFrameFormats()->size() &&
                     // Only one node in the array
                     pDoc->GetNodes().GetEndOfExtras().GetIndex() + 3 ==
                     pDoc->GetNodes().GetEndOfContent().GetIndex() &&
@@ -136,8 +136,8 @@ sal_uLong SwASCWriter::WriteStream()
                 {
                     // Print the frame's content.
                     // It is always at position 0!
-                    const SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[ 0 ];
-                    const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+                    const SwFrameFormat* pFormat = (*pDoc->GetSpzFrameFormats())[ 0 ];
+                    const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
                     if( pIdx )
                     {
                         delete pCurPam;

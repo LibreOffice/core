@@ -297,7 +297,7 @@ const char * dbg_out(const SfxItemSet & rSet)
     return dbg_out(lcl_dbg_out(rSet));
 }
 
-static const OUString lcl_dbg_out(const SwTxtAttr & rAttr)
+static const OUString lcl_dbg_out(const SwTextAttr & rAttr)
 {
     OUString aStr("[ ");
 
@@ -312,7 +312,7 @@ static const OUString lcl_dbg_out(const SwTxtAttr & rAttr)
     return aStr;
 }
 
-const char * dbg_out(const SwTxtAttr & rAttr)
+const char * dbg_out(const SwTextAttr & rAttr)
 {
     return dbg_out(lcl_dbg_out(rAttr));
 }
@@ -413,31 +413,31 @@ const char * dbg_out(const SwRect & rRect)
     return dbg_out(lcl_dbg_out(rRect));
 }
 
-static OUString lcl_dbg_out(const SwFrmFmt & rFrmFmt)
+static OUString lcl_dbg_out(const SwFrameFormat & rFrameFormat)
 {
     OUString aResult("[ ");
 
     char sBuffer[256];
-    sprintf(sBuffer, "%p", &rFrmFmt);
+    sprintf(sBuffer, "%p", &rFrameFormat);
 
     aResult += OUString(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US);
     aResult += "(";
-    aResult += rFrmFmt.GetName();
+    aResult += rFrameFormat.GetName();
     aResult += ")";
 
-    if (rFrmFmt.IsAuto())
+    if (rFrameFormat.IsAuto())
         aResult += "*";
 
     aResult += " ,";
-    aResult += lcl_dbg_out(rFrmFmt.FindLayoutRect());
+    aResult += lcl_dbg_out(rFrameFormat.FindLayoutRect());
     aResult += " ]";
 
     return aResult;
 }
 
-const char * dbg_out(const SwFrmFmt & rFrmFmt)
+const char * dbg_out(const SwFrameFormat & rFrameFormat)
 {
-    return dbg_out(lcl_dbg_out(rFrmFmt));
+    return dbg_out(lcl_dbg_out(rFrameFormat));
 }
 
 static const OUString lcl_AnchoredFrames(const SwNode & rNode)
@@ -447,16 +447,16 @@ static const OUString lcl_AnchoredFrames(const SwNode & rNode)
     const SwDoc * pDoc = rNode.GetDoc();
     if (pDoc)
     {
-        const SwFrmFmts * pFrmFmts = pDoc->GetSpzFrmFmts();
+        const SwFrameFormats * pFrameFormats = pDoc->GetSpzFrameFormats();
 
-        if (pFrmFmts)
+        if (pFrameFormats)
         {
             bool bFirst = true;
-            for (SwFrmFmts::const_iterator i(pFrmFmts->begin());
-                 i != pFrmFmts->end(); ++i)
+            for (SwFrameFormats::const_iterator i(pFrameFormats->begin());
+                 i != pFrameFormats->end(); ++i)
             {
-                const SwFmtAnchor & rAnchor = (*i)->GetAnchor();
-                const SwPosition * pPos = rAnchor.GetCntntAnchor();
+                const SwFormatAnchor & rAnchor = (*i)->GetAnchor();
+                const SwPosition * pPos = rAnchor.GetContentAnchor();
 
                 if (pPos && &pPos->nNode.GetNode() == &rNode)
                 {
@@ -542,31 +542,31 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
     aTmpStr += "\">";
 
-    const SwTxtNode * pTxtNode = rNode.GetTxtNode();
+    const SwTextNode * pTextNode = rNode.GetTextNode();
 
-    if (rNode.IsTxtNode())
+    if (rNode.IsTextNode())
     {
-        const SfxItemSet * pAttrSet = pTxtNode->GetpSwAttrSet();
+        const SfxItemSet * pAttrSet = pTextNode->GetpSwAttrSet();
 
         aTmpStr += "<txt>";
-        aTmpStr += pTxtNode->GetTxt().getLength() > 10 ? pTxtNode->GetTxt().copy(0, 10) : pTxtNode->GetTxt();
+        aTmpStr += pTextNode->GetText().getLength() > 10 ? pTextNode->GetText().copy(0, 10) : pTextNode->GetText();
         aTmpStr += "</txt>";
 
         if (rNode.IsTableNode())
             aTmpStr += "<tbl/>";
 
         aTmpStr += "<outlinelevel>";
-        aTmpStr += OUString::number(pTxtNode->GetAttrOutlineLevel()-1);
+        aTmpStr += OUString::number(pTextNode->GetAttrOutlineLevel()-1);
         aTmpStr += "</outlinelevel>";
 
-        const SwNumRule * pNumRule = pTxtNode->GetNumRule();
+        const SwNumRule * pNumRule = pTextNode->GetNumRule();
 
         if (pNumRule != NULL)
         {
             aTmpStr += "<number>";
-            if ( pTxtNode->GetNum() )
+            if ( pTextNode->GetNum() )
             {
-                aTmpStr += lcl_dbg_out(*(pTxtNode->GetNum()));
+                aTmpStr += lcl_dbg_out(*(pTextNode->GetNum()));
             }
             aTmpStr += "</number>";
 
@@ -585,25 +585,25 @@ static OUString lcl_dbg_out(const SwNode & rNode)
                 aTmpStr += "*";
             }
 
-            const SwNumFmt * pNumFmt = NULL;
+            const SwNumFormat * pNumFormat = NULL;
             aTmpStr += "</rule>";
 
-            if (pTxtNode->GetActualListLevel() > 0)
-                pNumFmt = pNumRule->GetNumFmt( static_cast< sal_uInt16 >(pTxtNode->GetActualListLevel()) );
+            if (pTextNode->GetActualListLevel() > 0)
+                pNumFormat = pNumRule->GetNumFormat( static_cast< sal_uInt16 >(pTextNode->GetActualListLevel()) );
 
-            if (pNumFmt)
+            if (pNumFormat)
             {
                 aTmpStr += "<numformat>";
                 aTmpStr +=
-                    lcl_dbg_out_NumType(pNumFmt->GetNumberingType());
+                    lcl_dbg_out_NumType(pNumFormat->GetNumberingType());
                 aTmpStr += "</numformat>";
             }
         }
 
-        if (pTxtNode->IsCountedInList())
+        if (pTextNode->IsCountedInList())
             aTmpStr += "<counted/>";
 
-        SwFmtColl * pColl = pTxtNode->GetFmtColl();
+        SwFormatColl * pColl = pTextNode->GetFormatColl();
 
         if (pColl)
         {
@@ -612,10 +612,10 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
             aTmpStr += "(";
 
-            SwTxtFmtColl *pTxtColl = static_cast<SwTxtFmtColl*>(pColl);
-            if (pTxtColl->IsAssignedToListLevelOfOutlineStyle())
+            SwTextFormatColl *pTextColl = static_cast<SwTextFormatColl*>(pColl);
+            if (pTextColl->IsAssignedToListLevelOfOutlineStyle())
             {
-                aTmpStr += OUString::number(pTxtColl->GetAssignedOutlineStyleLevel());
+                aTmpStr += OUString::number(pTextColl->GetAssignedOutlineStyleLevel());
             }
             else
             {
@@ -624,7 +624,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
             const SwNumRuleItem & rItem =
                 static_cast<const SwNumRuleItem &>
-                (pColl->GetFmtAttr(RES_PARATR_NUMRULE));
+                (pColl->GetFormatAttr(RES_PARATR_NUMRULE));
             const OUString sNumruleName = rItem.GetValue();
 
             if (!sNumruleName.isEmpty())
@@ -636,7 +636,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
             aTmpStr += "</coll>";
         }
 
-        SwFmtColl * pCColl = pTxtNode->GetCondFmtColl();
+        SwFormatColl * pCColl = pTextNode->GetCondFormatColl();
 
         if (pCColl)
         {
@@ -652,7 +652,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
         if (bDbgOutPrintAttrSet)
         {
             aTmpStr += "<attrs>";
-            aTmpStr += lcl_dbg_out(pTxtNode->GetSwAttrSet());
+            aTmpStr += lcl_dbg_out(pTextNode->GetSwAttrSet());
             aTmpStr += "</attrs>";
         }
     }
@@ -687,7 +687,7 @@ const char * dbg_out(const SwNode * pNode)
         return NULL;
 }
 
-const char * dbg_out(const SwCntntNode * pNode)
+const char * dbg_out(const SwContentNode * pNode)
 {
     if (NULL != pNode)
         return dbg_out(*pNode);
@@ -695,7 +695,7 @@ const char * dbg_out(const SwCntntNode * pNode)
         return NULL;
 }
 
-const char * dbg_out(const SwTxtNode * pNode)
+const char * dbg_out(const SwTextNode * pNode)
 {
     if (NULL != pNode)
         return dbg_out(*pNode);
@@ -829,11 +829,11 @@ const char * dbg_out(const SwRewriter & rRewriter)
     return dbg_out(lcl_dbg_out(rRewriter));
 }
 
-static OUString lcl_dbg_out(const SvxNumberFormat & rFmt)
+static OUString lcl_dbg_out(const SvxNumberFormat & rFormat)
 {
     OUString aResult;
 
-    aResult = lcl_dbg_out_NumType(rFmt.GetNumberingType());
+    aResult = lcl_dbg_out_NumType(rFormat.GetNumberingType());
 
     return aResult;
 }
@@ -865,45 +865,45 @@ const char * dbg_out(const SwNumRule & rRule)
     return dbg_out(lcl_dbg_out(rRule));
 }
 
-static OUString lcl_dbg_out(const SwTxtFmtColl & rFmt)
+static OUString lcl_dbg_out(const SwTextFormatColl & rFormat)
 {
-    OUString aResult(rFmt.GetName());
+    OUString aResult(rFormat.GetName());
 
     aResult += "(";
-    aResult += OUString::number(rFmt.GetAttrOutlineLevel());
+    aResult += OUString::number(rFormat.GetAttrOutlineLevel());
     aResult += ")";
 
     return aResult;
 }
 
-const char * dbg_out(const SwTxtFmtColl & rFmt)
+const char * dbg_out(const SwTextFormatColl & rFormat)
 {
-    return dbg_out(lcl_dbg_out(rFmt));
+    return dbg_out(lcl_dbg_out(rFormat));
 }
 
-static OUString lcl_dbg_out(const SwFrmFmts & rFrmFmts)
+static OUString lcl_dbg_out(const SwFrameFormats & rFrameFormats)
 {
-    return lcl_dbg_out_SvPtrArr<SwFrmFmts>(rFrmFmts);
+    return lcl_dbg_out_SvPtrArr<SwFrameFormats>(rFrameFormats);
 }
 
-const char * dbg_out(const SwFrmFmts & rFrmFmts)
+const char * dbg_out(const SwFrameFormats & rFrameFormats)
 {
-    return dbg_out(lcl_dbg_out(rFrmFmts));
+    return dbg_out(lcl_dbg_out(rFrameFormats));
 }
 
-static OUString lcl_dbg_out(const SwNumRuleTbl & rTbl)
+static OUString lcl_dbg_out(const SwNumRuleTable & rTable)
 {
     OUString aResult("[");
 
-    for (size_t n = 0; n < rTbl.size(); n++)
+    for (size_t n = 0; n < rTable.size(); n++)
     {
         if (n > 0)
             aResult += ", ";
 
-        aResult += rTbl[n]->GetName();
+        aResult += rTable[n]->GetName();
 
         char sBuffer[256];
-        sprintf(sBuffer, "(%p)", rTbl[n]);
+        sprintf(sBuffer, "(%p)", rTable[n]);
         aResult += OUString(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US);
     }
 
@@ -912,9 +912,9 @@ static OUString lcl_dbg_out(const SwNumRuleTbl & rTbl)
     return aResult;
 }
 
-const char * dbg_out(const SwNumRuleTbl & rTbl)
+const char * dbg_out(const SwNumRuleTable & rTable)
 {
-    return dbg_out(lcl_dbg_out(rTbl));
+    return dbg_out(lcl_dbg_out(rTable));
 }
 
 static OUString lcl_TokenType2Str(FormTokenType nType)

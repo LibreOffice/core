@@ -263,14 +263,14 @@ struct QuickHelpData
     /// Help string is currently displayed.
     bool m_bIsDisplayed;
 
-    QuickHelpData() { ClearCntnt(); }
+    QuickHelpData() { ClearContent(); }
 
     void Move( QuickHelpData& rCpy );
-    void ClearCntnt();
+    void ClearContent();
     void Start( SwWrtShell& rSh, sal_uInt16 nWrdLen );
     void Stop( SwWrtShell& rSh );
 
-    bool HasCntnt() const { return !m_aHelpStrings.empty() && 0 != nLen; }
+    bool HasContent() const { return !m_aHelpStrings.empty() && 0 != nLen; }
 
     /// Next help string.
     void Next( bool bEndLess )
@@ -345,7 +345,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
         {
             SwRect aRect;
             SwRect* pRect = &aRect;
-            const SwFrmFmt* pFmt = 0;
+            const SwFrameFormat* pFormat = 0;
 
             bool bFrameIsValidTarget = false;
             if( m_pApplyTempl->m_pFormatClipboard )
@@ -354,8 +354,8 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                 bFrameIsValidTarget = ( m_pApplyTempl->eType == SFX_STYLE_FAMILY_FRAME );
 
             if( bFrameIsValidTarget &&
-                        0 !=(pFmt = rSh.GetFmtFromObj( rLPt, &pRect )) &&
-                        PTR_CAST(SwFlyFrmFmt, pFmt))
+                        0 !=(pFormat = rSh.GetFormatFromObj( rLPt, &pRect )) &&
+                        PTR_CAST(SwFlyFrameFormat, pFormat))
             {
                 //turn on highlight for frame
                 Rectangle aTmp( pRect->SVRect() );
@@ -385,7 +385,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     if ( IsChainMode() )
     {
         SwRect aRect;
-        SwChainRet nChainable = rSh.Chainable( aRect, *rSh.GetFlyFrmFmt(), rLPt );
+        SwChainRet nChainable = rSh.Chainable( aRect, *rSh.GetFlyFrameFormat(), rLPt );
         PointerStyle eStyle = nChainable != SwChainRet::OK
                 ? POINTER_CHAIN_NOTALLOWED : POINTER_CHAIN;
         if ( nChainable == SwChainRet::OK )
@@ -559,23 +559,23 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                 if( rSh.GetContentAtPos( rLPt, aSwContentAtPos) )
                 {
                     // Is edit inline input field
-                    if (SwContentAtPos::SW_FIELD == aSwContentAtPos.eCntntAtPos)
+                    if (SwContentAtPos::SW_FIELD == aSwContentAtPos.eContentAtPos)
                     {
-                        if ( aSwContentAtPos.pFndTxtAttr != NULL
-                            && aSwContentAtPos.pFndTxtAttr->Which() == RES_TXTATR_INPUTFIELD)
+                        if ( aSwContentAtPos.pFndTextAttr != NULL
+                            && aSwContentAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD)
                         {
-                            const SwField *pCrsrField = rSh.CrsrInsideInputFld() ? rSh.GetCurFld( true ) : NULL;
-                            if (!(pCrsrField && pCrsrField == aSwContentAtPos.pFndTxtAttr->GetFmtFld().GetField()))
+                            const SwField *pCrsrField = rSh.CrsrInsideInputField() ? rSh.GetCurField( true ) : NULL;
+                            if (!(pCrsrField && pCrsrField == aSwContentAtPos.pFndTextAttr->GetFormatField().GetField()))
                                 eStyle = POINTER_REFHAND;
                         }
                     }
                     else
                     {
-                        const bool bClickToFollow = SwContentAtPos::SW_INETATTR == aSwContentAtPos.eCntntAtPos ||
-                                                    SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eCntntAtPos;
+                        const bool bClickToFollow = SwContentAtPos::SW_INETATTR == aSwContentAtPos.eContentAtPos ||
+                                                    SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eContentAtPos;
                         if( !bClickToFollow ||
-                            (SwContentAtPos::SW_INETATTR == aSwContentAtPos.eCntntAtPos && bExecHyperlinks) ||
-                            (SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eCntntAtPos && bExecSmarttags) )
+                            (SwContentAtPos::SW_INETATTR == aSwContentAtPos.eContentAtPos && bExecHyperlinks) ||
+                            (SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eContentAtPos && bExecSmarttags) )
                             eStyle = POINTER_REFHAND;
                     }
                 }
@@ -614,7 +614,7 @@ IMPL_LINK_NOARG_TYPED(SwEditWin, TimerHandler, Timer *, void)
             bDone = true;
         }
         if ( !bDone )
-            aModPt = rSh.GetCntntPos( aModPt,aModPt.Y() > rSh.VisArea().Bottom() );
+            aModPt = rSh.GetContentPos( aModPt,aModPt.Y() > rSh.VisArea().Bottom() );
     }
     if ( !bDone && !(g_bFrmDrag || m_bInsDraw) )
     {
@@ -859,7 +859,7 @@ void SwEditWin::FlushInBuffer()
                 rSh.GetCrsr()->SetMark();
             rSh.GetCrsr()->GetMark()->nContent = 0;
 
-            const OUString aOldText( rSh.GetCrsr()->GetTxt() );
+            const OUString aOldText( rSh.GetCrsr()->GetText() );
             const sal_Int32 nOldLen = aOldText.getLength();
 
             SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
@@ -886,11 +886,11 @@ void SwEditWin::FlushInBuffer()
 
                     // find position of first character that has changed
                     sal_Int32 nNewLen = aNewText.getLength();
-                    const sal_Unicode *pOldTxt = aOldText.getStr();
-                    const sal_Unicode *pNewTxt = aNewText.getStr();
+                    const sal_Unicode *pOldText = aOldText.getStr();
+                    const sal_Unicode *pNewText = aNewText.getStr();
                     sal_Int32 nChgPos = 0;
                     while ( nChgPos < nOldLen && nChgPos < nNewLen &&
-                            pOldTxt[nChgPos] == pNewTxt[nChgPos] )
+                            pOldText[nChgPos] == pNewText[nChgPos] )
                         ++nChgPos;
 
                     const sal_Int32 nChgLen = nNewLen - nChgPos;
@@ -996,7 +996,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
                         RES_PROTECT, RES_PROTECT,
                         RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW, 0);
         rSh.GetFlyFrmAttr( aSet );
-        RndStdIds eAnchorId = static_cast<const SwFmtAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
+        RndStdIds eAnchorId = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
         Size aSnap;
         bool bHuge(MOVE_LEFT_HUGE == nDir ||
             MOVE_UP_HUGE == nDir ||
@@ -1032,13 +1032,13 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         // adjustment for allowing vertical position
         // aligned to page for fly frame anchored to paragraph or to character.
         {
-            SwFmtVertOrient aVert( static_cast<const SwFmtVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
+            SwFormatVertOrient aVert( static_cast<const SwFormatVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
             const bool bFollowTextFlow =
-                    static_cast<const SwFmtFollowTextFlow&>(aSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
-            const SwPosition* pToCharCntntPos = static_cast<const SwFmtAnchor&>(aSet.Get(RES_ANCHOR)).GetCntntAnchor();
+                    static_cast<const SwFormatFollowTextFlow&>(aSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
+            const SwPosition* pToCharContentPos = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR)).GetContentAnchor();
             rSh.CalcBoundRect( aBoundRect, eAnchorId,
                                text::RelOrientation::FRAME, aVert.GetRelationOrient(),
-                               pToCharCntntPos, bFollowTextFlow,
+                               pToCharContentPos, bFollowTextFlow,
                                false, &aRefPoint );
         }
         long nLeft = std::min( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
@@ -1084,7 +1084,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
                 aDiff = 0;
             else if ( aDiff < -aTmp.Height() )
                 aDiff = -aTmp.Height();
-            SwFmtVertOrient aVert( static_cast<const SwFmtVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
+            SwFormatVertOrient aVert( static_cast<const SwFormatVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
             sal_Int16 eNew;
             if( bWeb )
             {
@@ -1125,7 +1125,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         if (bWeb && (FLY_AT_PARA == eAnchorId)
             && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ))
         {
-            SwFmtHoriOrient aHori( static_cast<const SwFmtHoriOrient&>(aSet.Get(RES_HORI_ORIENT)) );
+            SwFormatHoriOrient aHori( static_cast<const SwFormatHoriOrient&>(aSet.Get(RES_HORI_ORIENT)) );
             sal_Int16 eNew;
             eNew = aHori.GetHoriOrient();
             switch( eNew )
@@ -1420,10 +1420,10 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             // 2. Exception: For a table cursor in a vertical table, the
             //               directions should always be mapped.
             const bool bVertText = rSh.IsInVerticalText();
-            const bool bTblCrsr = rSh.GetTableCrsr();
+            const bool bTableCrsr = rSh.GetTableCrsr();
             const bool bVertTable = rSh.IsTableVertical();
-            if( ( bVertText && ( !bTblCrsr || bVertTable ) ) ||
-                ( bTblCrsr && bVertTable ) )
+            if( ( bVertText && ( !bTableCrsr || bVertTable ) ) ||
+                ( bTableCrsr && bVertTable ) )
             {
                 // Attempt to integrate cursor travelling for mongolian layout does not work.
                 // Thus, back to previous mapping of cursor keys to direction keys.
@@ -1453,13 +1453,13 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((rKeyCode.GetCode() == KEY_PAGEUP) || (rKeyCode.GetCode() == KEY_PAGEDOWN)))
     {
         const bool bNext = rKeyCode.GetCode()==KEY_PAGEDOWN;
-        const SwFieldType* pFldType = rSh.GetFldType( 0, RES_POSTITFLD );
-        rSh.MoveFldType( pFldType, bNext );
+        const SwFieldType* pFieldType = rSh.GetFieldType( 0, RES_POSTITFLD );
+        rSh.MoveFieldType( pFieldType, bNext );
         return;
     }
 
-    const SwFrmFmt* pFlyFmt = rSh.GetFlyFrmFmt();
-    if( pFlyFmt )
+    const SwFrameFormat* pFlyFormat = rSh.GetFlyFrameFormat();
+    if( pFlyFormat )
     {
         sal_uInt16 nEvent;
 
@@ -1469,12 +1469,12 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         else
             nEvent = SW_EVENT_FRM_KEYINPUT_NOALPHA;
 
-        const SvxMacro* pMacro = pFlyFmt->GetMacro().GetMacroTable().Get( nEvent );
+        const SvxMacro* pMacro = pFlyFormat->GetMacro().GetMacroTable().Get( nEvent );
         if( pMacro )
         {
             SbxArrayRef xArgs = new SbxArray;
             SbxVariableRef xVar = new SbxVariable;
-            xVar->PutString( pFlyFmt->GetName() );
+            xVar->PutString( pFlyFormat->GetName() );
             xArgs->Put( &xVar, 1 );
 
             xVar = new SbxVariable;
@@ -1521,10 +1521,10 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    TblChgWidthHeightType eTblChgMode = nsTblChgWidthHeightType::WH_COL_LEFT;    // initialization just for warning-free code
-    sal_uInt16 nTblChgSize = 0;
+    TableChgWidthHeightType eTableChgMode = nsTableChgWidthHeightType::WH_COL_LEFT;    // initialization just for warning-free code
+    sal_uInt16 nTableChgSize = 0;
     bool bStopKeyInputTimer = true;
-    OUString sFmlEntry;
+    OUString sFormulaEntry;
 
     enum SW_KeyState { KS_Start,
                        KS_CheckKey, KS_InsChar, KS_InsTab,
@@ -1534,7 +1534,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        KS_OutlineLvOff,
                        KS_NextCell, KS_PrevCell, KS_OutlineUp, KS_OutlineDown,
                        KS_GlossaryExpand, KS_NextPrevGlossary,
-                       KS_AutoFmtByInput,
+                       KS_AutoFormatByInput,
                        KS_NextObject, KS_PrevObject,
                        KS_KeyToView,
                        KS_LaunchOLEObject, KS_GoIntoFly, KS_GoIntoDrawing,
@@ -1558,7 +1558,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        KS_InsDel_CellLeftSmall, KS_InsDel_CellRightSmall,
                        KS_InsDel_CellTopBig, KS_InsDel_CellBottomBig,
                        KS_InsDel_CellTopSmall, KS_InsDel_CellBottomSmall,
-                       KS_TblColCellInsDel,
+                       KS_TableColCellInsDel,
 
                        KS_Fly_Change, KS_Draw_Change,
                        KS_SpecialInsert,
@@ -1596,7 +1596,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 #endif
 
             if( !rKeyCode.IsMod2() && '=' == aCh &&
-                !rSh.IsTableMode() && rSh.GetTableFmt() &&
+                !rSh.IsTableMode() && rSh.GetTableFormat() &&
                 rSh.IsSttPara() &&
                 !rSh.HasReadonlySel() )
             {
@@ -1615,14 +1615,14 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     rSh.MoveSection( fnSectionCurr, fnSectionEnd );
                     rSh.Pop( true );
                     rSh.EndSelect();
-                    sFmlEntry = "=";
+                    sFormulaEntry = "=";
                 }
                 else
                     rSh.Pop( false );
             }
             else
             {
-                if( pACorr && aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
+                if( pACorr && aTmpQHD.HasContent() && !rSh.HasSelection() &&
                     !rSh.HasReadonlySel() && !aTmpQHD.m_bIsAutoText &&
                     pACorr->GetSwFlags().nAutoCmpltExpandKey ==
                     (rKeyCode.GetModifier() | rKeyCode.GetCode()) )
@@ -1698,17 +1698,17 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     goto KEYINPUT_CHECKTABLE;
 
 KEYINPUT_CHECKTABLE:
-                    if( rSh.IsTableMode() || !rSh.GetTableFmt() )
+                    if( rSh.IsTableMode() || !rSh.GetTableFormat() )
                     {
                         if(KS_KeyToView != eFlyState)
                         {
-                            if(!pFlyFmt && KS_KeyToView != eFlyState &&
+                            if(!pFlyFormat && KS_KeyToView != eFlyState &&
                                 (rSh.GetSelectionType() & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM))  &&
                                     rSh.GetDrawView()->AreObjectsMarked())
                                 eKeyState = KS_Draw_Change;
                         }
 
-                        if( pFlyFmt )
+                        if( pFlyFormat )
                             eKeyState = eFlyState;
                         else if( KS_Draw_Change != eKeyState)
                             eKeyState = KS_EnterCharCell;
@@ -1722,12 +1722,12 @@ KEYINPUT_CHECKTABLE:
                 case KEY_DOWN | KEY_SHIFT:
                 {
                     const int nSelectionType = rSh.GetSelectionType();
-                    if ( ( pFlyFmt
+                    if ( ( pFlyFormat
                            && ( nSelectionType & (nsSelectionType::SEL_FRM|nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF) ) )
                          || ( ( nSelectionType & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM) )
                               && rSh.GetDrawView()->AreObjectsMarked() ) )
                     {
-                        eKeyState = pFlyFmt ? KS_Fly_Change : KS_Draw_Change;
+                        eKeyState = pFlyFormat ? KS_Fly_Change : KS_Draw_Change;
                         switch ( rKeyCode.GetCode() )
                         {
                             case KEY_RIGHT: nDir = MOVE_RIGHT_HUGE; break;
@@ -1748,17 +1748,17 @@ KEYINPUT_CHECKTABLE:
                         eFlyState = KS_Fly_Change;
                         nDir = MOVE_LEFT_BIG;
                     }
-                    eTblChgMode = nsTblChgWidthHeightType::WH_FLAG_INSDEL |
+                    eTableChgMode = nsTableChgWidthHeightType::WH_FLAG_INSDEL |
                             ( bMod1
-                                ? nsTblChgWidthHeightType::WH_CELL_LEFT
-                                : nsTblChgWidthHeightType::WH_COL_LEFT );
-                    nTblChgSize = pModOpt->GetTblVInsert();
+                                ? nsTableChgWidthHeightType::WH_CELL_LEFT
+                                : nsTableChgWidthHeightType::WH_COL_LEFT );
+                    nTableChgSize = pModOpt->GetTableVInsert();
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 case KEY_RIGHT | KEY_MOD1:
                 {
-                    eTblChgMode = nsTblChgWidthHeightType::WH_FLAG_INSDEL | nsTblChgWidthHeightType::WH_CELL_RIGHT;
-                    nTblChgSize = pModOpt->GetTblVInsert();
+                    eTableChgMode = nsTableChgWidthHeightType::WH_FLAG_INSDEL | nsTableChgWidthHeightType::WH_CELL_RIGHT;
+                    nTableChgSize = pModOpt->GetTableVInsert();
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 case KEY_UP:
@@ -1770,11 +1770,11 @@ KEYINPUT_CHECKTABLE:
                         eFlyState = KS_Fly_Change;
                         nDir = MOVE_UP_BIG;
                     }
-                    eTblChgMode = nsTblChgWidthHeightType::WH_FLAG_INSDEL |
+                    eTableChgMode = nsTableChgWidthHeightType::WH_FLAG_INSDEL |
                             ( bMod1
-                                ? nsTblChgWidthHeightType::WH_CELL_TOP
-                                : nsTblChgWidthHeightType::WH_ROW_TOP );
-                    nTblChgSize = pModOpt->GetTblHInsert();
+                                ? nsTableChgWidthHeightType::WH_CELL_TOP
+                                : nsTableChgWidthHeightType::WH_ROW_TOP );
+                    nTableChgSize = pModOpt->GetTableHInsert();
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 case KEY_DOWN:
@@ -1786,17 +1786,17 @@ KEYINPUT_CHECKTABLE:
                         eFlyState = KS_Fly_Change;
                         nDir = MOVE_DOWN_BIG;
                     }
-                    eTblChgMode = nsTblChgWidthHeightType::WH_FLAG_INSDEL |
+                    eTableChgMode = nsTableChgWidthHeightType::WH_FLAG_INSDEL |
                             ( bMod1
-                                ? nsTblChgWidthHeightType::WH_CELL_BOTTOM
-                                : nsTblChgWidthHeightType::WH_ROW_BOTTOM );
-                    nTblChgSize = pModOpt->GetTblHInsert();
+                                ? nsTableChgWidthHeightType::WH_CELL_BOTTOM
+                                : nsTableChgWidthHeightType::WH_ROW_BOTTOM );
+                    nTableChgSize = pModOpt->GetTableHInsert();
                 }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
 
 KEYINPUT_CHECKTABLE_INSDEL:
-                    if( rSh.IsTableMode() || !rSh.GetTableFmt() ||
-                        !m_bTblInsDelMode ||
+                    if( rSh.IsTableMode() || !rSh.GetTableFormat() ||
+                        !m_bTableInsDelMode ||
                         false /* table protected */
                             )
                     {
@@ -1814,9 +1814,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else
                     {
-                        if( !m_bTblIsInsMode )
-                            eTblChgMode = eTblChgMode | nsTblChgWidthHeightType::WH_FLAG_BIGGER;
-                        eKeyState = KS_TblColCellInsDel;
+                        if( !m_bTableIsInsMode )
+                            eTableChgMode = eTableChgMode | nsTableChgWidthHeightType::WH_FLAG_BIGGER;
+                        eKeyState = KS_TableColCellInsDel;
                     }
                     break;
 
@@ -1835,21 +1835,21 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     break;
 
                 case KEY_DELETE | KEY_MOD2:
-                    if( !rSh.IsTableMode() && rSh.GetTableFmt() )
+                    if( !rSh.IsTableMode() && rSh.GetTableFormat() )
                     {
                         eKeyState = KS_End;
-                        m_bTblInsDelMode = true;
-                        m_bTblIsInsMode = false;
+                        m_bTableInsDelMode = true;
+                        m_bTableIsInsMode = false;
                         m_aKeyInputTimer.Start();
                         bStopKeyInputTimer = false;
                     }
                     break;
                 case KEY_INSERT | KEY_MOD2:
-                    if( !rSh.IsTableMode() && rSh.GetTableFmt() )
+                    if( !rSh.IsTableMode() && rSh.GetTableFormat() )
                     {
                         eKeyState = KS_End;
-                        m_bTblInsDelMode = true;
-                        m_bTblIsInsMode = true;
+                        m_bTableInsDelMode = true;
+                        m_bTableIsInsMode = true;
                         m_aKeyInputTimer.Start();
                         bStopKeyInputTimer = false;
                     }
@@ -1858,7 +1858,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_RETURN:
                 {
                     if ( !rSh.HasReadonlySel()
-                         && !rSh.CrsrInsideInputFld() )
+                         && !rSh.CrsrInsideInputField() )
                     {
                         const int nSelectionType = rSh.GetSelectionType();
                         if(nSelectionType & nsSelectionType::SEL_OLE)
@@ -1869,7 +1869,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 0 == (nSelectionType & nsSelectionType::SEL_DRW_TXT) &&
                                 rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1)
                             eKeyState = KS_GoIntoDrawing;
-                        else if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
+                        else if( aTmpQHD.HasContent() && !rSh.HasSelection() &&
                             aTmpQHD.m_bIsAutoText )
                             eKeyState = KS_GlossaryExpand;
 
@@ -1882,12 +1882,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_NumOff, eNextKeyState = KS_OutlineLvOff;
 
                         //RETURN for new paragraph with AutoFormating
-                        else if( pACfg && pACfg->IsAutoFmtByInput() &&
+                        else if( pACfg && pACfg->IsAutoFormatByInput() &&
                                 !(nSelectionType & (nsSelectionType::SEL_GRF |
                                     nsSelectionType::SEL_OLE | nsSelectionType::SEL_FRM |
                                     nsSelectionType::SEL_TBL_CELLS | nsSelectionType::SEL_DRW |
                                     nsSelectionType::SEL_DRW_TXT)) )
-                            eKeyState = KS_CheckAutoCorrect, eNextKeyState = KS_AutoFmtByInput;
+                            eKeyState = KS_CheckAutoCorrect, eNextKeyState = KS_AutoFormatByInput;
                         else
                             eNextKeyState = eKeyState, eKeyState = KS_CheckAutoCorrect;
                     }
@@ -1898,7 +1898,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if ( !rSh.HasReadonlySel()
                          && !rSh.IsSttPara()
                          && rSh.GetNumRuleAtCurrCrsrPos()
-                         && !rSh.CrsrInsideInputFld() )
+                         && !rSh.CrsrInsideInputField() )
                     {
                         eKeyState = KS_NoNum;
                     }
@@ -2002,8 +2002,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     {
                         eFlyState = KS_Fly_Change;
                         nDir = MOVE_RIGHT_BIG;
-                        eTblChgMode = nsTblChgWidthHeightType::WH_FLAG_INSDEL | nsTblChgWidthHeightType::WH_COL_RIGHT;
-                        nTblChgSize = pModOpt->GetTblVInsert();
+                        eTableChgMode = nsTableChgWidthHeightType::WH_FLAG_INSDEL | nsTableChgWidthHeightType::WH_COL_RIGHT;
+                        nTableChgSize = pModOpt->GetTableVInsert();
                         goto KEYINPUT_CHECKTABLE_INSDEL;
                     }
                 case KEY_TAB:
@@ -2013,7 +2013,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     {
                         eKeyState=KS_GotoNextFieldMark;
                     }
-                    else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputFld() )
+                    else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputField() )
                     {
                         GetView().GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_NEXT_INPUTFLD );
                         eKeyState = KS_End;
@@ -2029,7 +2029,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else
                             eKeyState = KS_NumDown;
                     }
-                    else if ( rSh.GetTableFmt() )
+                    else if ( rSh.GetTableFormat() )
                     {
                         if( rSh.HasSelection() || rSh.HasReadonlySel() )
                             eKeyState = KS_NextCell;
@@ -2049,7 +2049,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         eKeyState = KS_InsTab;
                         if( rSh.IsSttOfPara() && !rSh.HasReadonlySel() )
                         {
-                            SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
+                            SwTextFormatColl* pColl = rSh.GetCurTextFormatColl();
                             if( pColl &&
 
                                 pColl->IsAssignedToListLevelOfOutlineStyle()
@@ -2065,7 +2065,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     {
                         eKeyState=KS_GotoPrevFieldMark;
                     }
-                    else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputFld() )
+                    else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputField() )
                     {
                         GetView().GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_PREV_INPUTFLD );
                         eKeyState = KS_End;
@@ -2081,7 +2081,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         else
                             eKeyState = KS_NumUp;
                     }
-                    else if ( rSh.GetTableFmt() )
+                    else if ( rSh.GetTableFormat() )
                     {
                         if( rSh.HasSelection() || rSh.HasReadonlySel() )
                             eKeyState = KS_PrevCell;
@@ -2101,7 +2101,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         eKeyState = KS_End;
                         if( rSh.IsSttOfPara() && !rSh.HasReadonlySel() )
                         {
-                            SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
+                            SwTextFormatColl* pColl = rSh.GetCurTextFormatColl();
                             if( pColl &&
                                 pColl->IsAssignedToListLevelOfOutlineStyle() &&
                                 0 < pColl->GetAssignedOutlineStyleLevel())
@@ -2114,14 +2114,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_TAB | KEY_MOD2:
                     if( !rSh.HasReadonlySel() )
                     {
-                        if( aTmpQHD.HasCntnt() && !rSh.HasSelection() )
+                        if( aTmpQHD.HasContent() && !rSh.HasSelection() )
                         {
                             // Next auto-complete suggestion
                             aTmpQHD.Next( pACorr &&
                                           pACorr->GetSwFlags().bAutoCmpltEndless );
                             eKeyState = KS_NextPrevGlossary;
                         }
-                        else if( rSh.GetTableFmt() )
+                        else if( rSh.GetTableFormat() )
                             eKeyState = KS_InsTab;
                         else if((rSh.GetSelectionType() &
                                     (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM|
@@ -2137,7 +2137,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                     case KEY_TAB | KEY_MOD1 | KEY_SHIFT:
                     {
-                        if( aTmpQHD.HasCntnt() && !rSh.HasSelection() &&
+                        if( aTmpQHD.HasContent() && !rSh.HasSelection() &&
                             !rSh.HasReadonlySel() )
                         {
                             // Previous auto-complete suggestion.
@@ -2186,7 +2186,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = rKeyCode.GetModifier() & KEY_SHIFT ?
                                                 KS_PrevObject : KS_NextObject;
                         }
-                        else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputFld() )
+                        else if ( !rSh.IsMultiSelection() && rSh.CrsrInsideInputField() )
                         {
                             GetView().GetViewFrame()->GetDispatcher()->Execute(
                                 KEY_SHIFT != rKeyCode.GetModifier() ? FN_GOTO_NEXT_INPUTFLD : FN_GOTO_PREV_INPUTFLD );
@@ -2210,7 +2210,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, true);
                                 bNormalChar = false;
                                 eKeyState = KS_End;
-                                rSh.ClickToINetAttr(static_cast<const SwFmtINetFmt&>(rItem), URLLOAD_NOFILTER);
+                                rSh.ClickToINetAttr(static_cast<const SwFormatINetFormat&>(rItem), URLLOAD_NOFILTER);
                             }
                         }
                     }
@@ -2365,7 +2365,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 eKeyState = KS_End;
             }
             else if ( !rSh.HasReadonlySel()
-                      || rSh.CrsrInsideInputFld() )
+                      || rSh.CrsrInsideInputField() )
             {
                 const bool bIsNormalChar =
                     GetAppCharClass().isLetterNumeric( OUString( aCh ), 0 );
@@ -2380,7 +2380,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 const bool bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
                 const bool bRunNext = pACorr != NULL && pACorr->HasRunNext();
                 if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
-                        pACfg->IsAutoFmtByInput() &&
+                        pACfg->IsAutoFormatByInput() &&
                     (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
                         ( '*' == aCh || '_' == aCh ) ) ||
                      ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
@@ -2392,7 +2392,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         rSh.UpdateAttr();
                 }
                 else if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
-                        pACfg->IsAutoFmtByInput() &&
+                        pACfg->IsAutoFormatByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                             ChgOrdinalNumber | AddNonBrkSpace |
                                             ChgToEnEmDash | SetINetAttr |
@@ -2426,7 +2426,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
         case KS_CheckAutoCorrect:
         {
-            if( pACorr && pACfg->IsAutoFmtByInput() &&
+            if( pACorr && pACfg->IsAutoFormatByInput() &&
                 pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                         ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |
@@ -2510,7 +2510,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 rSh.GoPrevCell();
                 nSlotId = FN_GOTO_PREV_CELL;
                 break;
-            case KS_AutoFmtByInput:
+            case KS_AutoFormatByInput:
                 rSh.SplitNode( true );
                 break;
 
@@ -2576,44 +2576,44 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 SwInputChild* pChildWin = static_cast<SwInputChild*>(pVFrame->
                                                     GetChildWindow( nId ));
                 if( pChildWin )
-                    pChildWin->SetFormula( sFmlEntry );
+                    pChildWin->SetFormula( sFormulaEntry );
             }
             break;
 
-            case KS_ColLeftBig:         rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_COL_LEFT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHMove() );   break;
-            case KS_ColRightBig:        rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_COL_RIGHT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHMove() );  break;
-            case KS_ColLeftSmall:       rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_COL_LEFT, pModOpt->GetTblHMove() );   break;
-            case KS_ColRightSmall:      rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_COL_RIGHT, pModOpt->GetTblHMove() );  break;
-            case KS_ColBottomBig:       rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_ROW_BOTTOM|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblVMove() ); break;
-            case KS_ColBottomSmall:     rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_ROW_BOTTOM, pModOpt->GetTblVMove() ); break;
-            case KS_CellLeftBig:        rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_LEFT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHMove() );  break;
-            case KS_CellRightBig:       rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_RIGHT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHMove() ); break;
-            case KS_CellLeftSmall:      rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_LEFT, pModOpt->GetTblHMove() );  break;
-            case KS_CellRightSmall:     rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_RIGHT, pModOpt->GetTblHMove() ); break;
-            case KS_CellTopBig:         rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_TOP|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblVMove() );   break;
-            case KS_CellBottomBig:      rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_BOTTOM|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblVMove() );    break;
-            case KS_CellTopSmall:       rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_TOP, pModOpt->GetTblVMove() );   break;
-            case KS_CellBottomSmall:    rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_CELL_BOTTOM, pModOpt->GetTblVMove() );    break;
+            case KS_ColLeftBig:         rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_COL_LEFT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHMove() );   break;
+            case KS_ColRightBig:        rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_COL_RIGHT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHMove() );  break;
+            case KS_ColLeftSmall:       rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_COL_LEFT, pModOpt->GetTableHMove() );   break;
+            case KS_ColRightSmall:      rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_COL_RIGHT, pModOpt->GetTableHMove() );  break;
+            case KS_ColBottomBig:       rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_ROW_BOTTOM|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableVMove() ); break;
+            case KS_ColBottomSmall:     rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_ROW_BOTTOM, pModOpt->GetTableVMove() ); break;
+            case KS_CellLeftBig:        rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_LEFT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHMove() );  break;
+            case KS_CellRightBig:       rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_RIGHT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHMove() ); break;
+            case KS_CellLeftSmall:      rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_LEFT, pModOpt->GetTableHMove() );  break;
+            case KS_CellRightSmall:     rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_RIGHT, pModOpt->GetTableHMove() ); break;
+            case KS_CellTopBig:         rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_TOP|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableVMove() );   break;
+            case KS_CellBottomBig:      rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_BOTTOM|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableVMove() );    break;
+            case KS_CellTopSmall:       rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_TOP, pModOpt->GetTableVMove() );   break;
+            case KS_CellBottomSmall:    rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_CELL_BOTTOM, pModOpt->GetTableVMove() );    break;
 
-            case KS_InsDel_ColLeftBig:          rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_COL_LEFT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHInsert() ); break;
-            case KS_InsDel_ColRightBig:         rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_COL_RIGHT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHInsert() );    break;
-            case KS_InsDel_ColLeftSmall:        rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_COL_LEFT, pModOpt->GetTblHInsert() ); break;
-            case KS_InsDel_ColRightSmall:       rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_COL_RIGHT, pModOpt->GetTblHInsert() );    break;
-            case KS_InsDel_ColTopBig:           rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_ROW_TOP|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblVInsert() );  break;
-            case KS_InsDel_ColBottomBig:        rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_ROW_BOTTOM|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblVInsert() );   break;
-            case KS_InsDel_ColTopSmall:         rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_ROW_TOP, pModOpt->GetTblVInsert() );  break;
-            case KS_InsDel_ColBottomSmall:      rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_ROW_BOTTOM, pModOpt->GetTblVInsert() );   break;
-            case KS_InsDel_CellLeftBig:         rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_CELL_LEFT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHInsert() );    break;
-            case KS_InsDel_CellRightBig:        rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_CELL_RIGHT|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblHInsert() );   break;
-            case KS_InsDel_CellLeftSmall:       rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_CELL_LEFT, pModOpt->GetTblHInsert() );    break;
-            case KS_InsDel_CellRightSmall:      rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_CELL_RIGHT, pModOpt->GetTblHInsert() );   break;
-            case KS_InsDel_CellTopBig:          rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_CELL_TOP|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblVInsert() ); break;
-            case KS_InsDel_CellBottomBig:       rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_CELL_BOTTOM|nsTblChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTblVInsert() );  break;
-            case KS_InsDel_CellTopSmall:        rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_CELL_TOP, pModOpt->GetTblVInsert() ); break;
-            case KS_InsDel_CellBottomSmall:     rSh.SetColRowWidthHeight( nsTblChgWidthHeightType::WH_FLAG_INSDEL|nsTblChgWidthHeightType::WH_CELL_BOTTOM, pModOpt->GetTblVInsert() );  break;
+            case KS_InsDel_ColLeftBig:          rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_COL_LEFT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHInsert() ); break;
+            case KS_InsDel_ColRightBig:         rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_COL_RIGHT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHInsert() );    break;
+            case KS_InsDel_ColLeftSmall:        rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_COL_LEFT, pModOpt->GetTableHInsert() ); break;
+            case KS_InsDel_ColRightSmall:       rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_COL_RIGHT, pModOpt->GetTableHInsert() );    break;
+            case KS_InsDel_ColTopBig:           rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_ROW_TOP|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableVInsert() );  break;
+            case KS_InsDel_ColBottomBig:        rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_ROW_BOTTOM|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableVInsert() );   break;
+            case KS_InsDel_ColTopSmall:         rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_ROW_TOP, pModOpt->GetTableVInsert() );  break;
+            case KS_InsDel_ColBottomSmall:      rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_ROW_BOTTOM, pModOpt->GetTableVInsert() );   break;
+            case KS_InsDel_CellLeftBig:         rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_CELL_LEFT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHInsert() );    break;
+            case KS_InsDel_CellRightBig:        rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_CELL_RIGHT|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableHInsert() );   break;
+            case KS_InsDel_CellLeftSmall:       rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_CELL_LEFT, pModOpt->GetTableHInsert() );    break;
+            case KS_InsDel_CellRightSmall:      rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_CELL_RIGHT, pModOpt->GetTableHInsert() );   break;
+            case KS_InsDel_CellTopBig:          rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_CELL_TOP|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableVInsert() ); break;
+            case KS_InsDel_CellBottomBig:       rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_CELL_BOTTOM|nsTableChgWidthHeightType::WH_FLAG_BIGGER, pModOpt->GetTableVInsert() );  break;
+            case KS_InsDel_CellTopSmall:        rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_CELL_TOP, pModOpt->GetTableVInsert() ); break;
+            case KS_InsDel_CellBottomSmall:     rSh.SetColRowWidthHeight( nsTableChgWidthHeightType::WH_FLAG_INSDEL|nsTableChgWidthHeightType::WH_CELL_BOTTOM, pModOpt->GetTableVInsert() );  break;
 
-            case KS_TblColCellInsDel:
-                rSh.SetColRowWidthHeight( eTblChgMode, nTblChgSize );
+            case KS_TableColCellInsDel:
+                rSh.SetColRowWidthHeight( eTableChgMode, nTableChgSize );
                 break;
             case KS_Fly_Change:
             {
@@ -2644,7 +2644,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
     if( bStopKeyInputTimer )
     {
         m_aKeyInputTimer.Stop();
-        m_bTblInsDelMode = false;
+        m_bTableInsDelMode = false;
     }
 
     // in case the buffered characters are inserted
@@ -2735,7 +2735,7 @@ void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
-    const SwField *pCrsrFld = rSh.CrsrInsideInputFld() ? rSh.GetCurFld( true ) : NULL;
+    const SwField *pCrsrField = rSh.CrsrInsideInputField() ? rSh.GetCurField( true ) : NULL;
 
     // We have to check if a context menu is shown and we have an UI
     // active inplace client. In that case we have to ignore the mouse
@@ -2779,7 +2779,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     bool bOverHeaderFooterFly = IsOverHeaderFooterFly( aDocPos, eControl, bOverFly, bPageAnchored );
 
     bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly();
-    if (bOverHeaderFooterFly && (!bIsDocReadOnly && rSh.GetCurFld()))
+    if (bOverHeaderFooterFly && (!bIsDocReadOnly && rSh.GetCurField()))
         // We have a field here, that should have priority over header/footer fly.
         bOverHeaderFooterFly = false;
 
@@ -2802,16 +2802,16 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         bool bActive = true;
         const SwPageDesc* pDesc = pPageFrm->GetPageDesc();
 
-        const SwFrmFmt* pFmt = pDesc->GetLeftFmt();
+        const SwFrameFormat* pFormat = pDesc->GetLeftFormat();
         if ( pPageFrm->OnRightPage() )
-             pFmt = pDesc->GetRightFmt();
+             pFormat = pDesc->GetRightFormat();
 
-        if ( pFmt )
+        if ( pFormat )
         {
             if ( eControl == Header )
-                bActive = pFmt->GetHeader().IsActive();
+                bActive = pFormat->GetHeader().IsActive();
             else
-                bActive = pFmt->GetFooter().IsActive();
+                bActive = pFormat->GetFooter().IsActive();
         }
 
         if ( !bActive )
@@ -2869,9 +2869,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     {
         SetChainMode( false );
         SwRect aDummy;
-        SwFlyFrmFmt *pFmt = static_cast<SwFlyFrmFmt*>(rSh.GetFlyFrmFmt());
-        if ( rSh.Chainable( aDummy, *pFmt, aDocPos ) == SwChainRet::OK )
-            rSh.Chain( *pFmt, aDocPos );
+        SwFlyFrameFormat *pFormat = static_cast<SwFlyFrameFormat*>(rSh.GetFlyFrameFormat());
+        if ( rSh.Chainable( aDummy, *pFormat, aDocPos ) == SwChainRet::OK )
+            rSh.Chain( *pFormat, aDocPos );
         UpdatePointer( aDocPos, rMEvt.GetModifier() );
         return;
     }
@@ -2959,7 +2959,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     else if (bTmp &&
              rSh.IsNumLabel(aDocPos))
     {
-        SwTxtNode* pNodeAtPos = rSh.GetNumRuleNodeAtPos( aDocPos );
+        SwTextNode* pNodeAtPos = rSh.GetNumRuleNodeAtPos( aDocPos );
         m_rView.SetNumRuleNodeFromDoc( pNodeAtPos );
         m_rView.InvalidateRulerPos();
         SfxBindings& rBind = m_rView.GetViewFrame()->GetBindings();
@@ -3286,19 +3286,19 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if ((!g_bValidCrsrPos || rSh.IsFrmSelected()) && !rSh.isTiledRendering())
                             return;
 
-                        SwField *pFld;
-                        bool bFtn = false;
+                        SwField *pField;
+                        bool bFootnote = false;
 
                         if( !bIsDocReadOnly &&
-                            ( 0 != ( pFld = rSh.GetCurFld() ) ||
-                              ( bFtn = rSh.GetCurFtn() )        ) )
+                            ( 0 != ( pField = rSh.GetCurField() ) ||
+                              ( bFootnote = rSh.GetCurFootnote() )        ) )
                         {
                             RstMBDownFlags();
-                            if( bFtn )
+                            if( bFootnote )
                                 GetView().GetViewFrame()->GetBindings().Execute( FN_EDIT_FOOTNOTE );
                             else
                             {
-                                sal_uInt16 nTypeId = pFld->GetTypeId();
+                                sal_uInt16 nTypeId = pField->GetTypeId();
                                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
                                 switch( nTypeId )
                                 {
@@ -3339,7 +3339,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 // Double click did not select any word: try to
                                 // select the current cell in case we are in a
                                 // table.
-                                rSh.SelTblBox();
+                                rSh.SelTableBox();
                         }
                         g_bHoldSelection = true;
                         return;
@@ -3536,15 +3536,15 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     bSttSelect = true;
                                     if( bExecHyperlinks )
                                     {
-                                        SwContentAtPos aCntntAtPos(
+                                        SwContentAtPos aContentAtPos(
                                             SwContentAtPos::SW_FTN |
                                             SwContentAtPos::SW_INETATTR );
 
-                                        if( rSh.GetContentAtPos( aDocPos, aCntntAtPos ) )
+                                        if( rSh.GetContentAtPos( aDocPos, aContentAtPos ) )
                                         {
                                             if( !rSh.IsViewLocked() &&
                                                 !rSh.IsReadOnlyAvailable() &&
-                                                aCntntAtPos.IsInProtectSect() )
+                                                aContentAtPos.IsInProtectSect() )
                                                     bLockView = true;
 
                                             bSttSelect = false;
@@ -3564,11 +3564,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     default:
                         if( !rSh.IsViewLocked() )
                         {
-                            SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
+                            SwContentAtPos aContentAtPos( SwContentAtPos::SW_CLICKFIELD |
                                                         SwContentAtPos::SW_INETATTR );
-                            if( rSh.GetContentAtPos( aDocPos, aCntntAtPos, false ) &&
+                            if( rSh.GetContentAtPos( aDocPos, aContentAtPos, false ) &&
                                 !rSh.IsReadOnlyAvailable() &&
-                                aCntntAtPos.IsInProtectSect() )
+                                aContentAtPos.IsInProtectSect() )
                                 bLockView = true;
                         }
                 }
@@ -3585,8 +3585,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 // Are we clicking on a field?
                 if (rSh.GetContentAtPos(aDocPos, aFieldAtPos))
                 {
-                    bool bEditableField = (aFieldAtPos.pFndTxtAttr != NULL
-                        && aFieldAtPos.pFndTxtAttr->Which() == RES_TXTATR_INPUTFIELD);
+                    bool bEditableField = (aFieldAtPos.pFndTextAttr != NULL
+                        && aFieldAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD);
 
                     if (!bEditableField)
                     {
@@ -3594,12 +3594,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         // Unfortunately the cursor may be on field
                         // position or on position after field depending on which
                         // half of the field was clicked on.
-                        SwTxtAttr const*const pTxtFld(aFieldAtPos.pFndTxtAttr);
+                        SwTextAttr const*const pTextField(aFieldAtPos.pFndTextAttr);
                         if (rSh.GetCurrentShellCursor().GetPoint()->nContent
-                                .GetIndex() != pTxtFld->GetStart())
+                                .GetIndex() != pTextField->GetStart())
                         {
                             assert(rSh.GetCurrentShellCursor().GetPoint()->nContent
-                                    .GetIndex() == (pTxtFld->GetStart() + 1));
+                                    .GetIndex() == (pTextField->GetStart() + 1));
                             rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
                         }
                         // don't go into the !bOverSelect block below - it moves
@@ -3635,14 +3635,14 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         bCallBase = false;
                     }
                 }
-                if ( !bOverSelect && bEditableFieldClicked && (!pCrsrFld ||
-                     pCrsrFld != aFieldAtPos.pFndTxtAttr->GetFmtFld().GetField()))
+                if ( !bOverSelect && bEditableFieldClicked && (!pCrsrField ||
+                     pCrsrField != aFieldAtPos.pFndTextAttr->GetFormatField().GetField()))
                 {
                     // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
                     // and CH_TXT_ATR_INPUTFIELDEND
                     rSh.SttSelect();
-                    rSh.SelectTxt( aFieldAtPos.pFndTxtAttr->GetStart() + 1,
-                                 *(aFieldAtPos.pFndTxtAttr->End()) - 1 );
+                    rSh.SelectText( aFieldAtPos.pFndTextAttr->GetStart() + 1,
+                                 *(aFieldAtPos.pFndTextAttr->End()) - 1 );
                 }
                 // don't reset here any longer so that, in case through MouseMove
                 // with pressed Ctrl key a multiple-selection should happen,
@@ -3660,9 +3660,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         // Are we clicking on a field?
         if (g_bValidCrsrPos
             && rSh.GetContentAtPos(aDocPos, aFieldAtPos)
-            && aFieldAtPos.pFndTxtAttr != NULL
-            && aFieldAtPos.pFndTxtAttr->Which() == RES_TXTATR_INPUTFIELD
-            && (!pCrsrFld || pCrsrFld != aFieldAtPos.pFndTxtAttr->GetFmtFld().GetField()))
+            && aFieldAtPos.pFndTextAttr != NULL
+            && aFieldAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD
+            && (!pCrsrField || pCrsrField != aFieldAtPos.pFndTextAttr->GetFormatField().GetField()))
         {
             // Move the cursor
             MoveCursor( rSh, aDocPos, rSh.IsObjSelectable( aDocPos ), m_bWasShdwCrsr );
@@ -3671,8 +3671,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
             // and CH_TXT_ATR_INPUTFIELDEND
             rSh.SttSelect();
-            rSh.SelectTxt( aFieldAtPos.pFndTxtAttr->GetStart() + 1,
-                         *(aFieldAtPos.pFndTxtAttr->End()) - 1 );
+            rSh.SelectText( aFieldAtPos.pFndTextAttr->GetStart() + 1,
+                         *(aFieldAtPos.pFndTextAttr->End()) - 1 );
         }
     }
 
@@ -3796,19 +3796,19 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
              !rSh.IsObjSelectable( aDocPt ) )
         {
             sal_uInt16 nPointer = USHRT_MAX;
-            bool bChkTblSel = false;
+            bool bChkTableSel = false;
 
             switch ( nMouseTabCol )
             {
                 case SwTab::COL_VERT :
                 case SwTab::ROW_HORI :
                     nPointer = POINTER_VSIZEBAR;
-                    bChkTblSel = true;
+                    bChkTableSel = true;
                     break;
                 case SwTab::ROW_VERT :
                 case SwTab::COL_HORI :
                     nPointer = POINTER_HSIZEBAR;
-                    bChkTblSel = true;
+                    bChkTableSel = true;
                     break;
                 // Enhanced table selection
                 case SwTab::SEL_HORI :
@@ -3834,7 +3834,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
             if ( USHRT_MAX != nPointer &&
                 // i#35543 - Enhanced table selection is explicitly allowed in table mode
-                ( !bChkTblSel || !rSh.IsTableMode() ) )
+                ( !bChkTableSel || !rSh.IsTableMode() ) )
             {
                 SetPointer( nPointer );
             }
@@ -3844,7 +3844,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         else if (rSh.IsNumLabel(aDocPt, RULER_MOUSE_MARGINWIDTH))
         {
             // i#42921 - consider vertical mode
-            SwTxtNode* pNodeAtPos = rSh.GetNumRuleNodeAtPos( aDocPt );
+            SwTextNode* pNodeAtPos = rSh.GetNumRuleNodeAtPos( aDocPt );
             const sal_uInt16 nPointer =
                     SwFEShell::IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPt )
                     ? POINTER_VSIZEBAR
@@ -3934,7 +3934,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     // event processing for resizing
                     if (pSdrView && pSdrView->AreObjectsMarked())
                     {
-                        const SwFrmFmt* pFlyFmt;
+                        const SwFrameFormat* pFlyFormat;
                         const SvxMacro* pMacro;
 
                         const Point aSttPt( PixelToLogic( m_aStartPos ) );
@@ -3950,8 +3950,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                                             ? SW_EVENT_FRM_MOVE
                                             : SW_EVENT_FRM_RESIZE;
 
-                        if( 0 != ( pFlyFmt = rSh.GetFlyFrmFmt() ) &&
-                            0 != ( pMacro = pFlyFmt->GetMacro().GetMacroTable().
+                        if( 0 != ( pFlyFormat = rSh.GetFlyFrameFormat() ) &&
+                            0 != ( pMacro = pFlyFormat->GetMacro().GetMacroTable().
                             Get( nEvent )) &&
                         // or notify only e.g. every 20 Twip?
                             m_aRszMvHdlPt != aDocPt )
@@ -3960,7 +3960,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             sal_uInt16 nPos = 0;
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
-                            xVar->PutString( pFlyFmt->GetName() );
+                            xVar->PutString( pFlyFormat->GetName() );
                             xArgs->Put( &xVar, ++nPos );
 
                             if( SW_EVENT_FRM_RESIZE == nEvent )
@@ -4078,14 +4078,14 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             }
             // change ui if mouse is over SwPostItField
             // TODO: do the same thing for redlines SW_REDLINE
-            SwRect aFldRect;
-            SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD);
-            if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, false, &aFldRect ) )
+            SwRect aFieldRect;
+            SwContentAtPos aContentAtPos( SwContentAtPos::SW_FIELD);
+            if( rSh.GetContentAtPos( aDocPt, aContentAtPos, false, &aFieldRect ) )
             {
-                const SwField* pFld = aCntntAtPos.aFnd.pFld;
-                if (pFld->Which()== RES_POSTITFLD)
+                const SwField* pField = aContentAtPos.aFnd.pField;
+                if (pField->Which()== RES_POSTITFLD)
                 {
-                    m_rView.GetPostItMgr()->SetShadowState(reinterpret_cast<const SwPostItField*>(pFld),false);
+                    m_rView.GetPostItMgr()->SetShadowState(reinterpret_cast<const SwPostItField*>(pField),false);
                 }
                 else
                     m_rView.GetPostItMgr()->SetShadowState(0,false);
@@ -4103,27 +4103,27 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
                 UpdatePointer( aDocPt, rMEvt.GetModifier() );
 
-                const SwFrmFmt* pFmt = 0;
-                const SwFmtINetFmt* pINet = 0;
-                SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
-                if( rSh.GetContentAtPos( aDocPt, aCntntAtPos ) )
-                    pINet = static_cast<const SwFmtINetFmt*>(aCntntAtPos.aFnd.pAttr);
+                const SwFrameFormat* pFormat = 0;
+                const SwFormatINetFormat* pINet = 0;
+                SwContentAtPos aContentAtPos( SwContentAtPos::SW_INETATTR );
+                if( rSh.GetContentAtPos( aDocPt, aContentAtPos ) )
+                    pINet = static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr);
 
                 const void* pTmp = pINet;
 
                 if( pINet ||
-                    0 != ( pTmp = pFmt = rSh.GetFmtFromAnyObj( aDocPt )))
+                    0 != ( pTmp = pFormat = rSh.GetFormatFromAnyObj( aDocPt )))
                 {
                     bTstShdwCrsr = false;
                     if( pTmp == pINet )
                         m_aSaveCallEvent.Set( pINet );
                     else
                     {
-                        IMapObject* pIMapObj = pFmt->GetIMapObject( aDocPt );
+                        IMapObject* pIMapObj = pFormat->GetIMapObject( aDocPt );
                         if( pIMapObj )
-                            m_aSaveCallEvent.Set( pFmt, pIMapObj );
+                            m_aSaveCallEvent.Set( pFormat, pIMapObj );
                         else
-                            m_aSaveCallEvent.Set( EVENT_OBJECT_URLITEM, pFmt );
+                            m_aSaveCallEvent.Set( EVENT_OBJECT_URLITEM, pFormat );
                     }
 
                     // should be over a InternetField with an
@@ -4250,10 +4250,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             SdrPageView* pPV;
             if (pSdrView && pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SdrSearchOptions::ALSOONMASTER ))
             {
-                std::map<SwFrmFmt*, SwFrmFmt*> aTextBoxShapes = SwTextBoxHelper::findShapes(rSh.GetDoc());
+                std::map<SwFrameFormat*, SwFrameFormat*> aTextBoxShapes = SwTextBoxHelper::findShapes(rSh.GetDoc());
                 SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
-                SwFrmFmt* pFmt = pDrawContact->GetFmt();
-                if (aTextBoxShapes.find(pFmt) == aTextBoxShapes.end())
+                SwFrameFormat* pFormat = pDrawContact->GetFormat();
+                if (aTextBoxShapes.find(pFormat) == aTextBoxShapes.end())
                 {
                     pSdrView->UnmarkAllObj();
                     pSdrView->MarkObj(pObj,pPV,false,false);
@@ -4261,7 +4261,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 else
                 {
                     // If the fly frame is a textbox of a shape, then select the shape instead.
-                    SdrObject* pShape = aTextBoxShapes[pFmt]->FindSdrObject();
+                    SdrObject* pShape = aTextBoxShapes[pFormat]->FindSdrObject();
                     pSdrView->UnmarkAllObj();
                     pSdrView->MarkObj(pShape, pPV, false, false);
                 }
@@ -4384,15 +4384,15 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 else
                 {
                     {
-                        const SwFrmFmt* pFlyFmt;
+                        const SwFrameFormat* pFlyFormat;
                         const SvxMacro* pMacro;
 
                         sal_uInt16 nEvent = HDL_MOVE == eOldSdrMoveHdl
                                             ? SW_EVENT_FRM_MOVE
                                             : SW_EVENT_FRM_RESIZE;
 
-                        if( 0 != ( pFlyFmt = rSh.GetFlyFrmFmt() ) &&
-                            0 != ( pMacro = pFlyFmt->GetMacro().GetMacroTable().
+                        if( 0 != ( pFlyFormat = rSh.GetFlyFrameFormat() ) &&
+                            0 != ( pMacro = pFlyFormat->GetMacro().GetMacroTable().
                             Get( nEvent )) )
                         {
                             const Point aSttPt( PixelToLogic( m_aStartPos ) );
@@ -4400,7 +4400,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             sal_uInt16 nPos = 0;
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
-                            xVar->PutString( pFlyFmt->GetName() );
+                            xVar->PutString( pFlyFormat->GetName() );
                             xArgs->Put( &xVar, ++nPos );
 
                             if( SW_EVENT_FRM_RESIZE == nEvent )
@@ -4495,25 +4495,25 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         if(m_pApplyTempl)
                             bExecHyperlinks = false;
 
-                        SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD |
+                        SwContentAtPos aContentAtPos( SwContentAtPos::SW_FIELD |
                                                     SwContentAtPos::SW_INETATTR |
                                                     SwContentAtPos::SW_SMARTTAG  | SwContentAtPos::SW_FORMCTRL);
 
-                        if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, false ) )
+                        if( rSh.GetContentAtPos( aDocPt, aContentAtPos, false ) )
                         {
                             // Do it again if we're not on a field/hyperlink to update the cursor accordingly
-                            if ( SwContentAtPos::SW_FIELD != aCntntAtPos.eCntntAtPos
-                                 && SwContentAtPos::SW_INETATTR != aCntntAtPos.eCntntAtPos )
-                                rSh.GetContentAtPos( aDocPt, aCntntAtPos, true );
+                            if ( SwContentAtPos::SW_FIELD != aContentAtPos.eContentAtPos
+                                 && SwContentAtPos::SW_INETATTR != aContentAtPos.eContentAtPos )
+                                rSh.GetContentAtPos( aDocPt, aContentAtPos, true );
 
                             bool bViewLocked = rSh.IsViewLocked();
                             if( !bViewLocked && !rSh.IsReadOnlyAvailable() &&
-                                aCntntAtPos.IsInProtectSect() )
+                                aContentAtPos.IsInProtectSect() )
                                 rSh.LockView( true );
 
                             ReleaseMouse();
 
-                            if( SwContentAtPos::SW_FIELD == aCntntAtPos.eCntntAtPos )
+                            if( SwContentAtPos::SW_FIELD == aContentAtPos.eContentAtPos )
                             {
                                 bool bAddMode(false);
                                 // AdditionalMode if applicable
@@ -4523,8 +4523,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     bAddMode = true;
                                     rSh.EnterAddMode();
                                 }
-                                if ( aCntntAtPos.pFndTxtAttr != NULL
-                                     && aCntntAtPos.pFndTxtAttr->Which() == RES_TXTATR_INPUTFIELD )
+                                if ( aContentAtPos.pFndTextAttr != NULL
+                                     && aContentAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD )
                                 {
                                     if (!rSh.IsInSelect())
                                     {
@@ -4541,7 +4541,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 }
                                 else
                                 {
-                                    rSh.ClickToField( *aCntntAtPos.aFnd.pFld );
+                                    rSh.ClickToField( *aContentAtPos.aFnd.pField );
                                     // a bit of a mystery what this is good for?
                                     // in this case we assume it's valid since we
                                     // just selected a field
@@ -4552,18 +4552,18 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     rSh.LeaveAddMode();
                                 }
                             }
-                            else if ( SwContentAtPos::SW_SMARTTAG == aCntntAtPos.eCntntAtPos )
+                            else if ( SwContentAtPos::SW_SMARTTAG == aContentAtPos.eContentAtPos )
                             {
                                     // execute smarttag menu
                                     if ( bExecSmarttags && SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                                         m_rView.ExecSmartTagPopup( aDocPt );
                             }
-                            else if ( SwContentAtPos::SW_FORMCTRL == aCntntAtPos.eCntntAtPos )
+                            else if ( SwContentAtPos::SW_FORMCTRL == aContentAtPos.eContentAtPos )
                             {
-                                OSL_ENSURE( aCntntAtPos.aFnd.pFldmark != NULL, "where is my field ptr???");
-                                if ( aCntntAtPos.aFnd.pFldmark != NULL)
+                                OSL_ENSURE( aContentAtPos.aFnd.pFieldmark != NULL, "where is my field ptr???");
+                                if ( aContentAtPos.aFnd.pFieldmark != NULL)
                                 {
-                                    IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
+                                    IFieldmark *fieldBM = const_cast< IFieldmark* > ( aContentAtPos.aFnd.pFieldmark );
                                     if ( fieldBM->GetFieldname( ) == ODF_FORMCHECKBOX )
                                     {
                                         ICheckboxFieldmark& rCheckboxFm = dynamic_cast<ICheckboxFieldmark&>(*fieldBM);
@@ -4579,10 +4579,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     }
                                 }
                             }
-                            else if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
+                            else if ( SwContentAtPos::SW_INETATTR == aContentAtPos.eContentAtPos )
                             {
-                                if ( bExecHyperlinks && aCntntAtPos.aFnd.pAttr )
-                                    rSh.ClickToINetAttr( *static_cast<const SwFmtINetFmt*>(aCntntAtPos.aFnd.pAttr), nFilter );
+                                if ( bExecHyperlinks && aContentAtPos.aFnd.pAttr )
+                                    rSh.ClickToINetAttr( *static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr), nFilter );
                             }
 
                             rSh.LockView( bViewLocked );
@@ -4590,8 +4590,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         }
                         else
                         {
-                            aCntntAtPos = SwContentAtPos( SwContentAtPos::SW_FTN );
-                            if( !rSh.GetContentAtPos( aDocPt, aCntntAtPos, true ) && bExecHyperlinks )
+                            aContentAtPos = SwContentAtPos( SwContentAtPos::SW_FTN );
+                            if( !rSh.GetContentAtPos( aDocPt, aContentAtPos, true ) && bExecHyperlinks )
                             {
                                 SdrViewEvent aVEvt;
 
@@ -4734,37 +4734,37 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     if( (( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL )
                          & eSelection ) && !rSh.HasReadonlySel() )
                     {
-                        rSh.SetTxtFmtColl( m_pApplyTempl->aColl.pTxtColl );
+                        rSh.SetTextFormatColl( m_pApplyTempl->aColl.pTextColl );
                         m_pApplyTempl->bUndo = true;
                         bCallBase = false;
-                        if ( m_pApplyTempl->aColl.pTxtColl )
-                            aStyleName = m_pApplyTempl->aColl.pTxtColl->GetName();
+                        if ( m_pApplyTempl->aColl.pTextColl )
+                            aStyleName = m_pApplyTempl->aColl.pTextColl->GetName();
                     }
                     break;
                 case SFX_STYLE_FAMILY_CHAR:
                     if( (( nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL )
                          & eSelection ) && !rSh.HasReadonlySel() )
                     {
-                        rSh.SetAttrItem( SwFmtCharFmt(m_pApplyTempl->aColl.pCharFmt) );
+                        rSh.SetAttrItem( SwFormatCharFormat(m_pApplyTempl->aColl.pCharFormat) );
                         rSh.UnSetVisCrsr();
                         rSh.EnterStdMode();
                         rSh.SetVisCrsr(aDocPt);
                         m_pApplyTempl->bUndo = true;
                         bCallBase = false;
-                        if ( m_pApplyTempl->aColl.pCharFmt )
-                            aStyleName = m_pApplyTempl->aColl.pCharFmt->GetName();
+                        if ( m_pApplyTempl->aColl.pCharFormat )
+                            aStyleName = m_pApplyTempl->aColl.pCharFormat->GetName();
                     }
                     break;
                 case SFX_STYLE_FAMILY_FRAME :
                 {
-                    const SwFrmFmt* pFmt = rSh.GetFmtFromObj( aDocPt );
-                    if(PTR_CAST(SwFlyFrmFmt, pFmt))
+                    const SwFrameFormat* pFormat = rSh.GetFormatFromObj( aDocPt );
+                    if(PTR_CAST(SwFlyFrameFormat, pFormat))
                     {
-                        rSh.SetFrmFmt( m_pApplyTempl->aColl.pFrmFmt, false, &aDocPt );
+                        rSh.SetFrameFormat( m_pApplyTempl->aColl.pFrameFormat, false, &aDocPt );
                         m_pApplyTempl->bUndo = true;
                         bCallBase = false;
-                        if( m_pApplyTempl->aColl.pFrmFmt )
-                            aStyleName = m_pApplyTempl->aColl.pFrmFmt->GetName();
+                        if( m_pApplyTempl->aColl.pFrameFormat )
+                            aStyleName = m_pApplyTempl->aColl.pFrameFormat->GetName();
                     }
                     break;
                 }
@@ -4923,8 +4923,8 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_bIsInDrag(false),
     m_bOldIdle(false),
     m_bOldIdleSet(false),
-    m_bTblInsDelMode(false),
-    m_bTblIsInsMode(false),
+    m_bTableInsDelMode(false),
+    m_bTableIsInsMode(false),
     m_bChainMode(false),
     m_bWasShdwCrsr(false),
     m_bLockInput(false),
@@ -4949,7 +4949,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     SetPointer( POINTER_TEXT );
     m_aTimer.SetTimeoutHdl(LINK(this, SwEditWin, TimerHandler));
 
-    m_bTblInsDelMode = false;
+    m_bTableInsDelMode = false;
     m_aKeyInputTimer.SetTimeout( 3000 );
     m_aKeyInputTimer.SetTimeoutHdl(LINK(this, SwEditWin, KeyInputTimerHandler));
 
@@ -5428,7 +5428,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 rSh.GetCrsr()->GetPoint()->nContent = nPosIdx;
                 rSh.GetCrsr()->GetMark()->nNode = nPosNodeIdx;
                 rSh.GetCrsr()->GetMark()->nContent =
-                    rSh.GetCrsr()->GetCntntNode( true )->Len();
+                    rSh.GetCrsr()->GetContentNode( true )->Len();
                 }
                 else if( nPosNodeIdx == nMarkNodeIdx )
                 {
@@ -5443,7 +5443,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 rSh.GetCrsr()->GetMark()->nContent = nMarkIdx;
                 rSh.GetCrsr()->GetPoint()->nNode = nMarkNodeIdx;
                 rSh.GetCrsr()->GetPoint()->nContent =
-                    rSh.GetCrsr()->GetCntntNode( false )->Len();
+                    rSh.GetCrsr()->GetContentNode( false )->Len();
                 }
 
                 rSh.EndCrsrMove( true );
@@ -5742,7 +5742,7 @@ IMPL_LINK_NOARG_TYPED(SwEditWin, KeyInputFlushHandler, Timer *, void)
 
 IMPL_LINK_NOARG_TYPED(SwEditWin, KeyInputTimerHandler, Timer *, void)
 {
-    m_bTblInsDelMode = false;
+    m_bTableInsDelMode = false;
 }
 
 void SwEditWin::_InitStaticData()
@@ -5813,7 +5813,7 @@ void QuickHelpData::Move( QuickHelpData& rCpy )
     m_bIsAutoText = rCpy.m_bIsAutoText;
 }
 
-void QuickHelpData::ClearCntnt()
+void QuickHelpData::ClearContent()
 {
     nLen = nCurArrPos = 0;
     m_bIsDisplayed = m_bAppendSpace = false;
@@ -5874,7 +5874,7 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
         rSh.DeleteExtTextInput( 0, false );
     else if( nTipId )
         Help::HideTip( nTipId );
-    ClearCntnt();
+    ClearContent();
 }
 
 void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
@@ -6032,7 +6032,7 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
         bool bFromIME )
 {
     SwWrtShell& rSh = m_rView.GetWrtShell();
-    m_pQuickHlpData->ClearCntnt();
+    m_pQuickHlpData->ClearContent();
     if( pACfg->IsAutoTextTip() )
     {
         SwGlossaryList* pList = ::GetGlossaryList();
@@ -6107,10 +6107,10 @@ bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& r
     if ( pStartFly )
     {
         bOverFly = true;
-        SwFrmFmt* pFlyFmt = pStartFly->GetFlyFmt( );
-        if ( pFlyFmt )
+        SwFrameFormat* pFlyFormat = pStartFly->GetFlyFormat( );
+        if ( pFlyFormat )
         {
-            const SwPosition* pAnchor = pFlyFmt->GetAnchor( ).GetCntntAnchor( );
+            const SwPosition* pAnchor = pFlyFormat->GetAnchor( ).GetContentAnchor( );
             if ( pAnchor )
             {
                 bool bInHeader = pAnchor->nNode.GetNode( ).FindHeaderStartNode( ) != NULL;
@@ -6123,7 +6123,7 @@ bool SwEditWin::IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& r
                     rControl = Footer;
             }
             else
-                bPageAnchored = pFlyFmt->GetAnchor( ).GetAnchorId( ) == FLY_AT_PAGE;
+                bPageAnchored = pFlyFormat->GetAnchor( ).GetAnchorId( ) == FLY_AT_PAGE;
         }
     }
     else

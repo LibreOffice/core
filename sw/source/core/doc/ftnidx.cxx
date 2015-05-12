@@ -29,14 +29,14 @@
 #include <fmtftntx.hxx>
 #include <rootfrm.hxx>
 
-bool CompareSwFtnIdxs::operator()(SwTxtFtn* const& lhs, SwTxtFtn* const& rhs) const
+bool CompareSwFootnoteIdxs::operator()(SwTextFootnote* const& lhs, SwTextFootnote* const& rhs) const
 {
-    sal_uLong nIdxLHS = _SwTxtFtn_GetIndex( lhs );
-    sal_uLong nIdxRHS = _SwTxtFtn_GetIndex( rhs );
+    sal_uLong nIdxLHS = _SwTextFootnote_GetIndex( lhs );
+    sal_uLong nIdxRHS = _SwTextFootnote_GetIndex( rhs );
     return ( nIdxLHS == nIdxRHS && lhs->GetStart() < rhs->GetStart() ) || nIdxLHS < nIdxRHS;
 }
 
-void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
+void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
 {
     if( empty() )
         return;
@@ -45,14 +45,14 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     SwDoc* pDoc = rStt.GetNode().GetDoc();
     if( pDoc->IsInReading() )
         return ;
-    SwTxtFtn* pTxtFtn;
+    SwTextFootnote* pTextFootnote;
 
     const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
-    const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();
+    const SwFootnoteInfo& rFootnoteInfo = pDoc->GetFootnoteInfo();
 
     // For normal foot notes we treat per-chapter and per-document numbering
     // separately. For Endnotes we only have per-document numbering.
-    if( FTNNUM_CHAPTER == rFtnInfo.eNum )
+    if( FTNNUM_CHAPTER == rFootnoteInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
         const SwNode* pCapStt = &pDoc->GetNodes().GetEndOfExtras();
@@ -65,11 +65,11 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
             for( ; n < rOutlNds.size(); ++n )
                 if( rOutlNds[ n ]->GetIndex() > rStt.GetIndex() )
                     break;      // found it!
-                else if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )
+                else if ( rOutlNds[ n ]->GetTextNode()->GetAttrOutlineLevel() == 1 )
                     pCapStt = rOutlNds[ n ];    // Beginning of a new Chapter
             // now find the end of the range
             for( ; n < rOutlNds.size(); ++n )
-                if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )
+                if ( rOutlNds[ n ]->GetTextNode()->GetAttrOutlineLevel() == 1 )
                 {
                     nCapEnd = rOutlNds[ n ]->GetIndex();    // End of the found Chapter
                     break;
@@ -77,12 +77,12 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         }
 
         size_t nPos = 0;
-        size_t nFtnNo = 1;
+        size_t nFootnoteNo = 1;
         if( SeekEntry( *pCapStt, &nPos ) && nPos )
         {
             // Step forward until the Index is not the same anymore
             const SwNode* pCmpNd = &rStt.GetNode();
-            while( nPos && pCmpNd == &((*this)[ --nPos ]->GetTxtNode()) )
+            while( nPos && pCmpNd == &((*this)[ --nPos ]->GetTextNode()) )
                 ;
             ++nPos;
         }
@@ -91,47 +91,47 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
             return;
 
         if( rOutlNds.empty() )
-            nFtnNo = nPos+1;
+            nFootnoteNo = nPos+1;
 
         for( ; nPos < size(); ++nPos )
         {
-            pTxtFtn = (*this)[ nPos ];
-            if( pTxtFtn->GetTxtNode().GetIndex() >= nCapEnd )
+            pTextFootnote = (*this)[ nPos ];
+            if( pTextFootnote->GetTextNode().GetIndex() >= nCapEnd )
                 break;
 
-            const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-            if( rFtn.GetNumStr().isEmpty() && !rFtn.IsEndNote() &&
-                !SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *pTxtFtn ))
+            const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
+            if( rFootnote.GetNumStr().isEmpty() && !rFootnote.IsEndNote() &&
+                !SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *pTextFootnote ))
             {
-                pTxtFtn->SetNumber( rFtnInfo.nFtnOffset + nFtnNo++, rFtn.GetNumStr() );
+                pTextFootnote->SetNumber( rFootnoteInfo.nFootnoteOffset + nFootnoteNo++, rFootnote.GetNumStr() );
             }
         }
     }
 
-    SwUpdFtnEndNtAtEnd aNumArr;
+    SwUpdFootnoteEndNtAtEnd aNumArr;
 
     // unless we have per-document numbering, only look at endnotes here
-    const bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
+    const bool bEndNoteOnly = FTNNUM_DOC != rFootnoteInfo.eNum;
 
     size_t nPos;
-    size_t nFtnNo = 1;
+    size_t nFootnoteNo = 1;
     size_t nEndNo = 1;
     sal_uLong nUpdNdIdx = rStt.GetIndex();
     for( nPos = 0; nPos < size(); ++nPos )
     {
-        pTxtFtn = (*this)[ nPos ];
-        if( nUpdNdIdx <= pTxtFtn->GetTxtNode().GetIndex() )
+        pTextFootnote = (*this)[ nPos ];
+        if( nUpdNdIdx <= pTextFootnote->GetTextNode().GetIndex() )
             break;
 
-        const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-        if( rFtn.GetNumStr().isEmpty() )
+        const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
+        if( rFootnote.GetNumStr().isEmpty() )
         {
-            if( !aNumArr.ChkNumber( *pTxtFtn ) )
+            if( !aNumArr.ChkNumber( *pTextFootnote ) )
             {
-                if( pTxtFtn->GetFtn().IsEndNote() )
+                if( pTextFootnote->GetFootnote().IsEndNote() )
                     nEndNo++;
                 else
-                    nFtnNo++;
+                    nFootnoteNo++;
             }
         }
     }
@@ -139,111 +139,111 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     // Set the array number for all footnotes starting from nPos
     for( ; nPos < size(); ++nPos )
     {
-        pTxtFtn = (*this)[ nPos ];
-        const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-        if( rFtn.GetNumStr().isEmpty() )
+        pTextFootnote = (*this)[ nPos ];
+        const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
+        if( rFootnote.GetNumStr().isEmpty() )
         {
-            sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTxtFtn );
-            if( !nSectNo && ( rFtn.IsEndNote() || !bEndNoteOnly ))
-                nSectNo = rFtn.IsEndNote()
-                            ? rEndInfo.nFtnOffset + nEndNo++
-                            : rFtnInfo.nFtnOffset + nFtnNo++;
+            sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTextFootnote );
+            if( !nSectNo && ( rFootnote.IsEndNote() || !bEndNoteOnly ))
+                nSectNo = rFootnote.IsEndNote()
+                            ? rEndInfo.nFootnoteOffset + nEndNo++
+                            : rFootnoteInfo.nFootnoteOffset + nFootnoteNo++;
 
             if( nSectNo )
             {
-                pTxtFtn->SetNumber( nSectNo, rFtn.GetNumStr() );
+                pTextFootnote->SetNumber( nSectNo, rFootnote.GetNumStr() );
             }
         }
     }
 }
 
-void SwFtnIdxs::UpdateAllFtn()
+void SwFootnoteIdxs::UpdateAllFootnote()
 {
     if( empty() )
         return;
 
     // Get the NodesArray via the StartIndex of the first Footnote
-    SwDoc* pDoc = const_cast<SwDoc*>((*this)[ 0 ]->GetTxtNode().GetDoc());
-    SwTxtFtn* pTxtFtn;
+    SwDoc* pDoc = const_cast<SwDoc*>((*this)[ 0 ]->GetTextNode().GetDoc());
+    SwTextFootnote* pTextFootnote;
     const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
-    const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();
+    const SwFootnoteInfo& rFootnoteInfo = pDoc->GetFootnoteInfo();
 
-    SwUpdFtnEndNtAtEnd aNumArr;
+    SwUpdFootnoteEndNtAtEnd aNumArr;
 
     SwRootFrm* pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
     // For normal Footnotes per-chapter and per-document numbering are treated separately.
     // For Endnotes we only have document-wise numbering.
-    if( FTNNUM_CHAPTER == rFtnInfo.eNum )
+    if( FTNNUM_CHAPTER == rFootnoteInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
         sal_uInt16 nNo = 1;     // Number for the Footnotes
-        size_t nFtnIdx = 0;     // Index into theFtnIdx array
+        size_t nFootnoteIdx = 0;     // Index into theFootnoteIdx array
         for( size_t n = 0; n < rOutlNds.size(); ++n )
         {
-            if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )
+            if ( rOutlNds[ n ]->GetTextNode()->GetAttrOutlineLevel() == 1 )
             {
                 sal_uLong nCapStt = rOutlNds[ n ]->GetIndex();  // Start of a new chapter
-                for( ; nFtnIdx < size(); ++nFtnIdx )
+                for( ; nFootnoteIdx < size(); ++nFootnoteIdx )
                 {
-                    pTxtFtn = (*this)[ nFtnIdx ];
-                    if( pTxtFtn->GetTxtNode().GetIndex() >= nCapStt )
+                    pTextFootnote = (*this)[ nFootnoteIdx ];
+                    if( pTextFootnote->GetTextNode().GetIndex() >= nCapStt )
                         break;
 
                     // Endnotes are per-document only
-                    const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-                    if( !rFtn.IsEndNote() && rFtn.GetNumStr().isEmpty() &&
-                        !SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *pTxtFtn ))
+                    const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
+                    if( !rFootnote.IsEndNote() && rFootnote.GetNumStr().isEmpty() &&
+                        !SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *pTextFootnote ))
                     {
-                        pTxtFtn->SetNumber( rFtnInfo.nFtnOffset + nNo++, rFtn.GetNumStr() );
+                        pTextFootnote->SetNumber( rFootnoteInfo.nFootnoteOffset + nNo++, rFootnote.GetNumStr() );
                     }
                 }
-                if( nFtnIdx >= size() )
+                if( nFootnoteIdx >= size() )
                     break;          // ok, everything is updated
                 nNo = 1;
             }
         }
 
-        for( nNo = 1; nFtnIdx < size(); ++nFtnIdx )
+        for( nNo = 1; nFootnoteIdx < size(); ++nFootnoteIdx )
         {
             // Endnotes are per-document
-            pTxtFtn = (*this)[ nFtnIdx ];
-            const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-            if( !rFtn.IsEndNote() && rFtn.GetNumStr().isEmpty() &&
-                !SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *pTxtFtn ))
+            pTextFootnote = (*this)[ nFootnoteIdx ];
+            const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
+            if( !rFootnote.IsEndNote() && rFootnote.GetNumStr().isEmpty() &&
+                !SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *pTextFootnote ))
             {
-                pTxtFtn->SetNumber( rFtnInfo.nFtnOffset + nNo++, rFtn.GetNumStr() );
+                pTextFootnote->SetNumber( rFootnoteInfo.nFootnoteOffset + nNo++, rFootnote.GetNumStr() );
             }
         }
     }
 
     // We use bool here, so that we also iterate through the Endnotes with a chapter setting.
-    const bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
-    sal_uInt16 nFtnNo = 0, nEndNo = 0;
+    const bool bEndNoteOnly = FTNNUM_DOC != rFootnoteInfo.eNum;
+    sal_uInt16 nFootnoteNo = 0, nEndNo = 0;
     for( size_t nPos = 0; nPos < size(); ++nPos )
     {
-        pTxtFtn = (*this)[ nPos ];
-        const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
-        if( rFtn.GetNumStr().isEmpty() )
+        pTextFootnote = (*this)[ nPos ];
+        const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
+        if( rFootnote.GetNumStr().isEmpty() )
         {
-            sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTxtFtn );
-            if( !nSectNo && ( rFtn.IsEndNote() || !bEndNoteOnly ))
-                nSectNo = rFtn.IsEndNote()
-                                ? rEndInfo.nFtnOffset + (++nEndNo)
-                                : rFtnInfo.nFtnOffset + (++nFtnNo);
+            sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTextFootnote );
+            if( !nSectNo && ( rFootnote.IsEndNote() || !bEndNoteOnly ))
+                nSectNo = rFootnote.IsEndNote()
+                                ? rEndInfo.nFootnoteOffset + (++nEndNo)
+                                : rFootnoteInfo.nFootnoteOffset + (++nFootnoteNo);
 
             if( nSectNo )
             {
-                pTxtFtn->SetNumber( nSectNo, rFtn.GetNumStr() );
+                pTextFootnote->SetNumber( nSectNo, rFootnote.GetNumStr() );
             }
         }
     }
 
-    if( pTmpRoot && FTNNUM_PAGE == rFtnInfo.eNum )
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));
+    if( pTmpRoot && FTNNUM_PAGE == rFootnoteInfo.eNum )
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFootnoteNums));
 }
 
-SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFndPos ) const
+SwTextFootnote* SwFootnoteIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFndPos ) const
 {
     sal_uLong nIdx = rPos.GetIndex();
 
@@ -255,7 +255,7 @@ SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFndPos ) const
         while( nU <= nO )
         {
             const size_t nM = nU + ( nO - nU ) / 2;
-            sal_uLong nNdIdx = _SwTxtFtn_GetIndex( (*this)[ nM ] );
+            sal_uLong nNdIdx = _SwTextFootnote_GetIndex( (*this)[ nM ] );
             if( nNdIdx == nIdx )
             {
                 if( pFndPos )
@@ -279,29 +279,29 @@ SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFndPos ) const
     return 0;
 }
 
-const SwSectionNode* SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr(
-                const SwTxtFtn& rTxtFtn )
+const SwSectionNode* SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr(
+                const SwTextFootnote& rTextFootnote )
 {
-    sal_uInt16 nWh = static_cast<sal_uInt16>( rTxtFtn.GetFtn().IsEndNote() ?
+    sal_uInt16 nWh = static_cast<sal_uInt16>( rTextFootnote.GetFootnote().IsEndNote() ?
                         RES_END_AT_TXTEND : RES_FTN_AT_TXTEND );
     sal_uInt16 nVal;
-    const SwSectionNode* pNd = rTxtFtn.GetTxtNode().FindSectionNode();
+    const SwSectionNode* pNd = rTextFootnote.GetTextNode().FindSectionNode();
     while( pNd && FTNEND_ATTXTEND_OWNNUMSEQ != ( nVal =
-            static_cast<const SwFmtFtnEndAtTxtEnd&>(pNd->GetSection().GetFmt()->
-            GetFmtAttr( nWh, true )).GetValue() ) &&
+            static_cast<const SwFormatFootnoteEndAtTextEnd&>(pNd->GetSection().GetFormat()->
+            GetFormatAttr( nWh, true )).GetValue() ) &&
             FTNEND_ATTXTEND_OWNNUMANDFMT != nVal )
         pNd = pNd->StartOfSectionNode()->FindSectionNode();
 
     return pNd;
 }
 
-sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
+sal_uInt16 SwUpdFootnoteEndNtAtEnd::GetNumber( const SwTextFootnote& rTextFootnote,
                                     const SwSectionNode& rNd )
 {
     sal_uInt16 nRet = 0, nWh;
     std::vector<const SwSectionNode*>* pArr;
     std::vector<sal_uInt16> *pNum;
-    if( rTxtFtn.GetFtn().IsEndNote() )
+    if( rTextFootnote.GetFootnote().IsEndNote() )
     {
         pArr = &aEndSects;
         pNum = &aEndNums;
@@ -309,8 +309,8 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
     }
     else
     {
-        pArr = &aFtnSects;
-        pNum = &aFtnNums;
+        pArr = &aFootnoteSects;
+        pNum = &aFootnoteNums;
         nWh = RES_FTN_AT_TXTEND;
     }
 
@@ -324,18 +324,18 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
     if( !nRet )
     {
         pArr->push_back( &rNd );
-        nRet = static_cast<const SwFmtFtnEndAtTxtEnd&>(rNd.GetSection().GetFmt()->
-                                GetFmtAttr( nWh )).GetOffset();
+        nRet = static_cast<const SwFormatFootnoteEndAtTextEnd&>(rNd.GetSection().GetFormat()->
+                                GetFormatAttr( nWh )).GetOffset();
         ++nRet;
         pNum->push_back( nRet );
     }
     return nRet;
 }
 
-sal_uInt16 SwUpdFtnEndNtAtEnd::ChkNumber( const SwTxtFtn& rTxtFtn )
+sal_uInt16 SwUpdFootnoteEndNtAtEnd::ChkNumber( const SwTextFootnote& rTextFootnote )
 {
-    const SwSectionNode* pSectNd = FindSectNdWithEndAttr( rTxtFtn );
-    return pSectNd ? GetNumber( rTxtFtn, *pSectNd ) : 0;
+    const SwSectionNode* pSectNd = FindSectNdWithEndAttr( rTextFootnote );
+    return pSectNd ? GetNumber( rTextFootnote, *pSectNd ) : 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

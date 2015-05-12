@@ -145,14 +145,14 @@ void SwXMLTextBlocks::ClearDoc()
     pDocShell->ClearEmbeddedObjects();
 }
 
-void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong, bool bOnlyTxt )
+void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong, bool bOnlyText )
 {
     aPackageName = GeneratePackageName( rShort );
-    AddName(rShort, rLong, aPackageName, bOnlyTxt);
+    AddName(rShort, rLong, aPackageName, bOnlyText);
 }
 
 void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong,
-                               const OUString& rPackageName, bool bOnlyTxt )
+                               const OUString& rPackageName, bool bOnlyText )
 {
     sal_uInt16 nIdx = GetIndex( rShort );
     if (nIdx != USHRT_MAX)
@@ -161,8 +161,8 @@ void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong,
         aNames.erase( aNames.begin() + nIdx );
     }
     SwBlockName* pNew = new SwBlockName( rShort, rLong, rPackageName );
-    pNew->bIsOnlyTxtFlagInit = true;
-    pNew->bIsOnlyTxt = bOnlyTxt;
+    pNew->bIsOnlyTextFlagInit = true;
+    pNew->bIsOnlyText = bOnlyText;
     aNames.insert( pNew );
     bInfoChanged = true;
 }
@@ -501,7 +501,7 @@ void SwXMLTextBlocks::SetIsTextOnly( const OUString& rShort, bool bNewValue )
 {
     sal_uInt16 nIdx = GetIndex ( rShort );
     if (nIdx != USHRT_MAX)
-        aNames[nIdx]->bIsOnlyTxt = bNewValue;
+        aNames[nIdx]->bIsOnlyText = bNewValue;
 }
 
 bool SwXMLTextBlocks::IsOnlyTextBlock( const OUString& rShort ) const
@@ -510,13 +510,13 @@ bool SwXMLTextBlocks::IsOnlyTextBlock( const OUString& rShort ) const
     bool bRet = false;
     if (nIdx != USHRT_MAX)
     {
-        bRet = aNames[nIdx]->bIsOnlyTxt;
+        bRet = aNames[nIdx]->bIsOnlyText;
     }
     return bRet;
 }
 bool SwXMLTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
 {
-    return aNames[nIdx]->bIsOnlyTxt;
+    return aNames[nIdx]->bIsOnlyText;
 }
 
 bool SwXMLTextBlocks::IsFileUCBStorage( const OUString & rFileName)
@@ -581,20 +581,20 @@ sal_uLong SwXMLTextBlocks::PutText( const OUString& rShort, const OUString& rNam
 
 void SwXMLTextBlocks::MakeBlockText( const OUString& rText )
 {
-    SwTxtNode* pTxtNode = pDoc->GetNodes()[ pDoc->GetNodes().GetEndOfContent().
-                                        GetIndex() - 1 ]->GetTxtNode();
-    if( pTxtNode->GetTxtColl() == pDoc->GetDfltTxtFmtColl() )
-        pTxtNode->ChgFmtColl( pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
+    SwTextNode* pTextNode = pDoc->GetNodes()[ pDoc->GetNodes().GetEndOfContent().
+                                        GetIndex() - 1 ]->GetTextNode();
+    if( pTextNode->GetTextColl() == pDoc->GetDfltTextFormatColl() )
+        pTextNode->ChgFormatColl( pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
 
     sal_Int32 nPos = 0;
     do
     {
         if ( nPos )
         {
-            pTxtNode = static_cast<SwTxtNode*>(pTxtNode->AppendNode( SwPosition( *pTxtNode ) ));
+            pTextNode = static_cast<SwTextNode*>(pTextNode->AppendNode( SwPosition( *pTextNode ) ));
         }
-        SwIndex aIdx( pTxtNode );
-        pTxtNode->InsertText( rText.getToken( 0, '\015', nPos ), aIdx );
+        SwIndex aIdx( pTextNode );
+        pTextNode->InsertText( rText.getToken( 0, '\015', nPos ), aIdx );
     } while ( -1 != nPos );
 }
 

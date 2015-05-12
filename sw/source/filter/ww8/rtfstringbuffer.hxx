@@ -13,7 +13,7 @@
 #include <vector>
 
 class SwGrfNode;
-class SwFlyFrmFmt;
+class SwFlyFrameFormat;
 class RtfAttributeOutput;
 
 /// Contains a buffered string or graphic during RTF export.
@@ -23,7 +23,7 @@ public:
     /// Constructor for a string buffering.
     RtfStringBufferValue();
     /// Constructor for graphic buffering.
-    RtfStringBufferValue(const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode* pGrfNode);
+    RtfStringBufferValue(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode);
     /// This version handles graphics.
     void makeStringAndClear(RtfAttributeOutput* pAttributeOutput);
     /// This one doesn't.
@@ -31,7 +31,7 @@ public:
     bool isGraphic() const;
 
     OStringBuffer m_aBuffer;
-    const SwFlyFrmFmt* m_pFlyFrmFmt;
+    const SwFlyFrameFormat* m_pFlyFrameFormat;
     const SwGrfNode* m_pGrfNode;
 };
 
@@ -52,7 +52,7 @@ public:
     /// Similar to ->setLength(0), but for all buffers.
     void clear();
     /// Same as ->append(), but for graphics and without expanding contents to save memory.
-    void append(const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode* pGrfNode);
+    void append(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode);
     /// Append all contained buffers and clear the argument.
     void appendAndClear(RtfStringBuffer& rBuf);
 private:

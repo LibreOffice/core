@@ -60,35 +60,35 @@ class SwDBManager;
 struct SwDocStat;
 class SwAutoCompleteWord;
 
-class SwFmtRefMark;
+class SwFormatRefMark;
 
 class SwNumRule;
 
-class SwTxtFmtColl;
+class SwTextFormatColl;
 class SwGrfNode;
-class SwFlyFrmFmt;
+class SwFlyFrameFormat;
 
-class SwFrmFmt;
-class SwCharFmt;
+class SwFrameFormat;
+class SwCharFormat;
 class SwExtTextInput;
 class Graphic;
 class GraphicObject;
-class SwFmtINetFmt;
+class SwFormatINetFormat;
 class SwTable;
 class SwTextBlocks;
-class SwFmtFtn;
+class SwFormatFootnote;
 class SwSection;
 class SwSectionData;
-class SwSectionFmt;
-class SwTableAutoFmt;
+class SwSectionFormat;
+class SwTableAutoFormat;
 class SwPageDesc;
-class SwTxtINetFmt;
-class SwSeqFldList;
+class SwTextINetFormat;
+class SwSeqFieldList;
 class SwGlblDocContent;
 class SwGlblDocContents;
 class SwRangeRedline;
 class SwRedlineData;
-class SwFtnInfo;
+class SwFootnoteInfo;
 class SwEndNoteInfo;
 class SwLineNumberInfo;
 class SwAuthEntry;
@@ -119,10 +119,10 @@ namespace sw {
 struct SwGetINetAttr
 {
     OUString sText;
-    const SwTxtINetFmt& rINetAttr;
+    const SwTextINetFormat& rINetAttr;
 
-    SwGetINetAttr( const OUString& rTxt, const SwTxtINetFmt& rAttr )
-        : sText( rTxt ), rINetAttr( rAttr )
+    SwGetINetAttr( const OUString& rText, const SwTextINetFormat& rAttr )
+        : sText( rText ), rINetAttr( rAttr )
     {}
 };
 typedef boost::ptr_vector<SwGetINetAttr> SwGetINetAttrs;
@@ -133,13 +133,13 @@ typedef boost::ptr_vector<SwGetINetAttr> SwGetINetAttrs;
 #define CNT_OLE 0x0010
 
 // Test USHORT for a defined form of content.
-#define CNT_HasTxt(USH) ((USH)&CNT_TXT)
+#define CNT_HasText(USH) ((USH)&CNT_TXT)
 #define CNT_HasGrf(USH) ((USH)&CNT_GRF)
 #define CNT_HasOLE(USH) ((USH)&CNT_OLE)
 
 class SW_DLLPUBLIC SwEditShell : public SwCrsrShell
 {
-    static SvxSwAutoFmtFlags* s_pAutoFmtFlags;
+    static SvxSwAutoFormatFlags* s_pAutoFormatFlags;
 
     /// For the private methods DelRange and those of AutoCorrect.
     friend class SwAutoFormat;
@@ -148,7 +148,7 @@ class SW_DLLPUBLIC SwEditShell : public SwCrsrShell
     /// For the PamCorrAbs/-Rel methods.
     friend class SwUndo;
 
-    SAL_DLLPRIVATE SfxPoolItem& _GetChrFmt( SfxPoolItem& ) const;
+    SAL_DLLPRIVATE SfxPoolItem& _GetChrFormat( SfxPoolItem& ) const;
 
     /** Returns pointer to a SwGrfNode
      that will be used by GetGraphic() and GetGraphicSize(). */
@@ -156,9 +156,9 @@ class SW_DLLPUBLIC SwEditShell : public SwCrsrShell
 
     SAL_DLLPRIVATE void DeleteSel( SwPaM& rPam, bool* pUndo = 0 );
 
-    SAL_DLLPRIVATE void _SetSectionAttr( SwSectionFmt& rSectFmt, const SfxItemSet& rSet );
+    SAL_DLLPRIVATE void _SetSectionAttr( SwSectionFormat& rSectFormat, const SfxItemSet& rSet );
 
-    using SwViewShell::UpdateFlds;
+    using SwViewShell::UpdateFields;
     using SwModify::GetInfo;
 
 public:
@@ -207,8 +207,8 @@ public:
     bool _CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pNdInsPos = 0 );
 
     long SplitNode( bool bAutoFormat = false, bool bCheckTableStart = true );
-    bool AppendTxtNode();
-    void AutoFmtBySplitNode();
+    bool AppendTextNode();
+    void AutoFormatBySplitNode();
 
     /** If cursor is in a INetAttribute it will be deleted completely
      including the descriptive text (needed at drag & drop). */
@@ -216,7 +216,7 @@ public:
 
     /** If Cursor is at the end of a character style in which the DontExpand-flag
      is not yet set, the latter will be set (==> return TRUE). */
-    bool DontExpandFmt();
+    bool DontExpandFormat();
 
     /** Apply / remove attributes.
      @return attributes in required AttributeSet.
@@ -272,7 +272,7 @@ public:
     void SetDefault( const SfxPoolItem& );
 
     /// Query default attribute of document.
-    const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
+    const SfxPoolItem& GetDefault( sal_uInt16 nFormatHint ) const;
 
     void ResetAttr( const std::set<sal_uInt16> &attrs = std::set<sal_uInt16>(), SwPaM* pCrsr = NULL );
     void GCAttr();
@@ -284,17 +284,17 @@ public:
     sal_uInt16 GetCurLang() const;
 
     /// TABLE
-    size_t GetTblFrmFmtCount( bool bUsed = false ) const;
-    SwFrmFmt& GetTblFrmFmt(size_t nFmt, bool bUsed = false ) const;
-    OUString GetUniqueTblName() const;
+    size_t GetTableFrameFormatCount( bool bUsed = false ) const;
+    SwFrameFormat& GetTableFrameFormat(size_t nFormat, bool bUsed = false ) const;
+    OUString GetUniqueTableName() const;
 
     /// CHAR
-    sal_uInt16 GetCharFmtCount() const;
-    SwCharFmt& GetCharFmt(sal_uInt16 nFmt) const;
-    SwCharFmt* GetCurCharFmt() const;
-    void FillByEx(SwCharFmt*, bool bReset = false);
-    SwCharFmt* MakeCharFmt( const OUString& rName, SwCharFmt* pDerivedFrom = 0 );
-    SwCharFmt* FindCharFmtByName( const OUString& rName ) const;
+    sal_uInt16 GetCharFormatCount() const;
+    SwCharFormat& GetCharFormat(sal_uInt16 nFormat) const;
+    SwCharFormat* GetCurCharFormat() const;
+    void FillByEx(SwCharFormat*, bool bReset = false);
+    SwCharFormat* MakeCharFormat( const OUString& rName, SwCharFormat* pDerivedFrom = 0 );
+    SwCharFormat* FindCharFormatByName( const OUString& rName ) const;
 
     /* FormatCollections (new) - Explaining the general naming pattern:
      * GetXXXCount() returns the count of xxx in the document.
@@ -307,20 +307,20 @@ public:
      */
 
     // TXT
-    SwTxtFmtColl& GetDfltTxtFmtColl() const;
-    sal_uInt16 GetTxtFmtCollCount() const;
-    SwTxtFmtColl& GetTxtFmtColl( sal_uInt16 nTxtFmtColl) const;
+    SwTextFormatColl& GetDfltTextFormatColl() const;
+    sal_uInt16 GetTextFormatCollCount() const;
+    SwTextFormatColl& GetTextFormatColl( sal_uInt16 nTextFormatColl) const;
     /**
      * Get the named paragraph format of the current selection.
      *
-     * @see GetPaMTxtFmtColl()
+     * @see GetPaMTextFormatColl()
      *
      * @return the named paragraph format of the first node that contains one.
      * Nodes are sort by order of appearance in the selections ;
      * selections are sort by their order of creation
      * (last created selection first, oldest selection at last).
      */
-    SwTxtFmtColl* GetCurTxtFmtColl() const;
+    SwTextFormatColl* GetCurTextFormatColl() const;
     /**
      * Get the named paragraph format of the selection(s) described by a SwPaM.
      *
@@ -329,21 +329,21 @@ public:
      *
      * @return the named paragraph format of the first node that contains one.
      */
-    SwTxtFmtColl* GetPaMTxtFmtColl( SwPaM* pPaM ) const;
+    SwTextFormatColl* GetPaMTextFormatColl( SwPaM* pPaM ) const;
 
     // #i62675#
-    /// Add 2nd optional parameter <bResetListAttrs> - see also <SwDoc::SetTxtFmtColl(..)>
-    void SetTxtFmtColl(SwTxtFmtColl*, const bool bResetListAttrs = false);
-    SwTxtFmtColl *MakeTxtFmtColl(const OUString &rFmtCollName,
-        SwTxtFmtColl *pDerivedFrom = 0);
-    void FillByEx(SwTxtFmtColl*, bool bReset = false);
-    SwTxtFmtColl* FindTxtFmtCollByName( const OUString& rName ) const;
+    /// Add 2nd optional parameter <bResetListAttrs> - see also <SwDoc::SetTextFormatColl(..)>
+    void SetTextFormatColl(SwTextFormatColl*, const bool bResetListAttrs = false);
+    SwTextFormatColl *MakeTextFormatColl(const OUString &rFormatCollName,
+        SwTextFormatColl *pDerivedFrom = 0);
+    void FillByEx(SwTextFormatColl*, bool bReset = false);
+    SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const;
 
     /// @return "Auto-Collection" with given Id. If it does not exist create it.
-    SwTxtFmtColl* GetTxtCollFromPool( sal_uInt16 nId );
+    SwTextFormatColl* GetTextCollFromPool( sal_uInt16 nId );
 
     /// @return required automatic format base class.
-    SwFmt* GetFmtFromPool( sal_uInt16 nId );
+    SwFormat* GetFormatFromPool( sal_uInt16 nId );
 
     /// @return required automatic page style.
     SwPageDesc* GetPageDescFromPool( sal_uInt16 nId );
@@ -352,21 +352,21 @@ public:
     bool IsUsed( const SwModify& ) const;
 
     /// @return required automatic format.
-    SwFrmFmt* GetFrmFmtFromPool( sal_uInt16 nId )
-        { return static_cast<SwFrmFmt*>(SwEditShell::GetFmtFromPool( nId )); }
-    SwCharFmt* GetCharFmtFromPool( sal_uInt16 nId )
-        { return static_cast<SwCharFmt*>(SwEditShell::GetFmtFromPool( nId )); }
+    SwFrameFormat* GetFrameFormatFromPool( sal_uInt16 nId )
+        { return static_cast<SwFrameFormat*>(SwEditShell::GetFormatFromPool( nId )); }
+    SwCharFormat* GetCharFormatFromPool( sal_uInt16 nId )
+        { return static_cast<SwCharFormat*>(SwEditShell::GetFormatFromPool( nId )); }
 
     void Insert2(SwField&, const bool bForceExpandHints = false);
 
-    void UpdateFlds( SwField & );   ///< One single field.
+    void UpdateFields( SwField & );   ///< One single field.
 
-    sal_uInt16 GetFldTypeCount(sal_uInt16 nResId = USHRT_MAX, bool bUsed = false) const;
-    SwFieldType* GetFldType(sal_uInt16 nId, sal_uInt16 nResId = USHRT_MAX, bool bUsed = false) const;
-    SwFieldType* GetFldType(sal_uInt16 nResId, const OUString& rName) const;
+    sal_uInt16 GetFieldTypeCount(sal_uInt16 nResId = USHRT_MAX, bool bUsed = false) const;
+    SwFieldType* GetFieldType(sal_uInt16 nId, sal_uInt16 nResId = USHRT_MAX, bool bUsed = false) const;
+    SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName) const;
 
-    void RemoveFldType(sal_uInt16 nId, sal_uInt16 nResId = USHRT_MAX);
-    void RemoveFldType(sal_uInt16 nResId, const OUString& rName);
+    void RemoveFieldType(sal_uInt16 nId, sal_uInt16 nResId = USHRT_MAX);
+    void RemoveFieldType(sal_uInt16 nResId, const OUString& rName);
 
     void FieldToText( SwFieldType* pType );
 
@@ -385,17 +385,17 @@ public:
 
     /// Check whether DB fields point to an available data source and returns it.
     bool IsFieldDataSourceAvailable(OUString& rUsedDataSource) const;
-    void UpdateExpFlds(bool bCloseDB = false);///< only every expression fields update
-    void LockExpFlds();
-    void UnlockExpFlds();
+    void UpdateExpFields(bool bCloseDB = false);///< only every expression fields update
+    void LockExpFields();
+    void UnlockExpFields();
 
-    SwFldUpdateFlags GetFldUpdateFlags(bool bDocSettings = false) const;
-    void SetFldUpdateFlags( SwFldUpdateFlags eFlags );
+    SwFieldUpdateFlags GetFieldUpdateFlags(bool bDocSettings = false) const;
+    void SetFieldUpdateFlags( SwFieldUpdateFlags eFlags );
 
     /// For evaluation of DB fields (new DB-manager).
     SwDBManager* GetDBManager() const;
 
-    SwFieldType* InsertFldType(const SwFieldType &);
+    SwFieldType* InsertFieldType(const SwFieldType &);
 
     /// Changes in document?
     bool IsModified() const;
@@ -519,7 +519,7 @@ public:
     bool SelectionHasBullet() const;
 
     OUString GetUniqueNumRuleName( const OUString* pChkStr = 0, bool bAutoNum = true ) const;
-    void ChgNumRuleFmts( const SwNumRule& rRule );
+    void ChgNumRuleFormats( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.
     void SetNumRuleStart( bool bFlag = true, SwPaM* pCrsr = NULL );
@@ -614,7 +614,7 @@ public:
      else give a rap on the knuckles!
      If a string-ptr != 0 return the respective name. */
     void GetGrfNms( OUString* pGrfName, OUString* pFltName,
-                    const SwFlyFrmFmt* = 0 ) const;
+                    const SwFlyFrameFormat* = 0 ) const;
 
     /// Re-read if graphic is not ok. Current graphic is replaced by the new one.
     void ReRead( const OUString& rGrfName, const OUString& rFltName,
@@ -627,14 +627,14 @@ public:
     // #i73788#
     /// Remove default parameter, because method always called this default value.
     Graphic GetIMapGraphic() const; ///< @return a graphic for all Flys!
-    const SwFlyFrmFmt* FindFlyByName( const OUString& rName, sal_uInt8 nNdTyp = 0 ) const;
+    const SwFlyFrameFormat* FindFlyByName( const OUString& rName, sal_uInt8 nNdTyp = 0 ) const;
 
     /** @return a ClientObject, if CurCrsr->Point() points to a SwOLENode
      (and mark is neither set not pointint to same ClientObject)
      else give rap on the knuckles. */
     svt::EmbeddedObjectRef&  GetOLEObject() const;
 
-    /// Is there an OLEObject with this name (SwFmt)?
+    /// Is there an OLEObject with this name (SwFormat)?
     bool HasOLEObj( const OUString &rName ) const;
 
     /// @return pointer to the data of the chart in which Cursr is.
@@ -653,13 +653,13 @@ public:
      including styles. */
     sal_uInt16 MakeGlossary( SwTextBlocks& rToFill, const OUString& rName,
                          const OUString& rShortName, bool bSaveRelFile = false,
-                         const OUString* pOnlyTxt=0 );
+                         const OUString* pOnlyText=0 );
 
     /// Save complete content of doc as glossary.
     sal_uInt16 SaveGlossaryDoc( SwTextBlocks& rGlossary, const OUString& rName,
                             const OUString& rShortName,
                             bool bSaveRelFile = false,
-                            bool bOnlyTxt = false );
+                            bool bOnlyText = false );
 
     // Linguistics...
     /// Save selections.
@@ -675,35 +675,35 @@ public:
     /// For Inserting SoftHyphen. Position is offset within the syllabificated word.
     static void InsertSoftHyph( const sal_Int32 nHyphPos );
 
-    const SwTable& InsertTable( const SwInsertTableOptions& rInsTblOpts,  ///< ALL_TBL_INS_ATTR
+    const SwTable& InsertTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
                                 sal_uInt16 nRows, sal_uInt16 nCols,
                                 sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL,
-                                const SwTableAutoFmt* pTAFmt = 0 );
+                                const SwTableAutoFormat* pTAFormat = 0 );
 
-    void InsertDDETable( const SwInsertTableOptions& rInsTblOpts,  ///< HEADLINE_NO_BORDER
+    void InsertDDETable( const SwInsertTableOptions& rInsTableOpts,  ///< HEADLINE_NO_BORDER
                          SwDDEFieldType* pDDEType,
                          sal_uInt16 nRows, sal_uInt16 nCols,
                          sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL );
 
     void UpdateTable();
-    void SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName );
+    void SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName );
 
-    SwFrmFmt *GetTableFmt();
-    bool TextToTable( const SwInsertTableOptions& rInsTblOpts,  ///< ALL_TBL_INS_ATTR
+    SwFrameFormat *GetTableFormat();
+    bool TextToTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
                       sal_Unicode cCh,
                       sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL,
-                      const SwTableAutoFmt* pTAFmt = 0 );
+                      const SwTableAutoFormat* pTAFormat = 0 );
     bool TableToText( sal_Unicode cCh );
     bool IsTextToTableAvailable() const;
 
-    bool GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const;
-    void SetTblBoxFormulaAttrs( const SfxItemSet& rSet );
+    bool GetTableBoxFormulaAttrs( SfxItemSet& rSet ) const;
+    void SetTableBoxFormulaAttrs( const SfxItemSet& rSet );
 
     bool IsTableBoxTextFormat() const;
     OUString GetTableBoxText() const;
 
-    TblChgMode GetTblChgMode() const;
-    void SetTblChgMode( TblChgMode eMode );
+    TableChgMode GetTableChgMode() const;
+    void SetTableChgMode( TableChgMode eMode );
 
     /// Split table at cursor position.
     bool SplitTable( sal_uInt16 eMode );
@@ -766,7 +766,7 @@ public:
     void SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd );
 
     /// @return reference set in document according to given name.
-    const SwFmtRefMark* GetRefMark( const OUString& rName ) const;
+    const SwFormatRefMark* GetRefMark( const OUString& rName ) const;
 
     /**  @return names of all references set in document.
       If ArrayPointer == 0 then return only whether a RefMark is set in document. */
@@ -778,20 +778,20 @@ public:
     bool GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord );
 
     /// Set our styles according to the respective rules.
-    void AutoFormat( const SvxSwAutoFmtFlags* pAFlags = 0 );
+    void AutoFormat( const SvxSwAutoFormatFlags* pAFlags = 0 );
 
-    static SvxSwAutoFmtFlags* GetAutoFmtFlags();
-    static void SetAutoFmtFlags(SvxSwAutoFmtFlags *);
+    static SvxSwAutoFormatFlags* GetAutoFormatFlags();
+    static void SetAutoFormatFlags(SvxSwAutoFormatFlags *);
 
     /// Calculates selection.
     OUString Calculate();
 
-    bool InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr,
+    bool InsertURL( const SwFormatINetFormat& rFormat, const OUString& rStr,
                     bool bKeepSelection = false );
     void GetINetAttrs( SwGetINetAttrs& rArr );
 
-    OUString GetDropTxt( const sal_Int32 nChars ) const;
-    void   ReplaceDropTxt( const OUString &rStr, SwPaM* pPaM = NULL );
+    OUString GetDropText( const sal_Int32 nChars ) const;
+    void   ReplaceDropText( const OUString &rStr, SwPaM* pPaM = NULL );
 
     /** May an outline be moved or copied?
      Check whether it's in text body, not in table, and not read-only (move). */
@@ -801,11 +801,11 @@ public:
     sal_uInt16 GetLineCount( bool bActPos = true );
 
     /// Query and set footnote-text/number. Set.. to current SSelection!
-    bool GetCurFtn( SwFmtFtn* pToFillFtn = 0 );
-    bool SetCurFtn( const SwFmtFtn& rFillFtn );
-    bool HasFtns( bool bEndNotes = false ) const;
+    bool GetCurFootnote( SwFormatFootnote* pToFillFootnote = 0 );
+    bool SetCurFootnote( const SwFormatFootnote& rFillFootnote );
+    bool HasFootnotes( bool bEndNotes = false ) const;
 
-    size_t GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes = false );
+    size_t GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes = false );
     /// @return list of all footnotes and their first portions of text.
 
     SwSection const* InsertSection(
@@ -820,10 +820,10 @@ public:
      and not an inner one. */
     SwSection* GetAnySection( bool bOutOfTab = false, const Point* pPt = 0 );
 
-    size_t GetSectionFmtCount() const;
-    size_t GetSectionFmtPos(const SwSectionFmt&) const;
-    const SwSectionFmt& GetSectionFmt(size_t nFmt) const;
-    void DelSectionFmt( size_t nFmt);
+    size_t GetSectionFormatCount() const;
+    size_t GetSectionFormatPos(const SwSectionFormat&) const;
+    const SwSectionFormat& GetSectionFormat(size_t nFormat) const;
+    void DelSectionFormat( size_t nFormat);
     void UpdateSection( size_t const nSect, SwSectionData &,
             SfxItemSet const*const  = 0);
     bool IsAnySectionInDoc( bool bChkReadOnly = false,
@@ -833,7 +833,7 @@ public:
     OUString GetUniqueSectionName( const OUString* pChkStr = 0 ) const;
 
     /// Set attributes.
-    void SetSectionAttr(const SfxItemSet& rSet, SwSectionFmt* pSectFmt = 0);
+    void SetSectionAttr(const SfxItemSet& rSet, SwSectionFormat* pSectFormat = 0);
 
     /** Search inside the cursor selection for full selected sections.
      if any part of section in the selection @return 0.
@@ -911,8 +911,8 @@ public:
     long MergeDoc( const SwDoc& rDoc );
 
     /// Footnote attributes global to document.
-    const SwFtnInfo& GetFtnInfo() const;
-    void  SetFtnInfo(const SwFtnInfo& rInfo);
+    const SwFootnoteInfo& GetFootnoteInfo() const;
+    void  SetFootnoteInfo(const SwFootnoteInfo& rInfo);
     const SwEndNoteInfo& GetEndNoteInfo() const;
     void  SetEndNoteInfo(const SwEndNoteInfo& rInfo);
 

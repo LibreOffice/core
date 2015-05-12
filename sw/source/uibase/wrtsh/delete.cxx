@@ -53,16 +53,16 @@ bool SwWrtShell::TryRemoveIndent()
     GetCurAttr(aAttrSet);
 
     SvxLRSpaceItem aItem = static_cast<const SvxLRSpaceItem &>(aAttrSet.Get(RES_LR_SPACE));
-    short aOldFirstLineOfst = aItem.GetTxtFirstLineOfst();
+    short aOldFirstLineOfst = aItem.GetTextFirstLineOfst();
 
     if (aOldFirstLineOfst > 0)
     {
-        aItem.SetTxtFirstLineOfst(0);
+        aItem.SetTextFirstLineOfst(0);
         bResult = true;
     }
     else if (aOldFirstLineOfst < 0)
     {
-        aItem.SetTxtFirstLineOfst(0);
+        aItem.SetTextFirstLineOfst(0);
         aItem.SetLeft(aItem.GetLeft() + aOldFirstLineOfst);
 
         bResult = true;
@@ -177,13 +177,13 @@ long SwWrtShell::DelLeft()
 
     // JP 29.06.95: never erase a table standing in front of it.
     bool bSwap = false;
-    const SwTableNode * pWasInTblNd = SwCrsrShell::IsCrsrInTbl();
+    const SwTableNode * pWasInTableNd = SwCrsrShell::IsCrsrInTable();
 
     if( SwCrsrShell::IsSttPara())
     {
         // #i4032# Don't actually call a 'delete' if we
         // changed the table cell, compare DelRight().
-        const SwStartNode * pSNdOld = pWasInTblNd ?
+        const SwStartNode * pSNdOld = pWasInTableNd ?
                                       GetSwCrsr()->GetNode().FindTableBoxStartNode() :
                                       0;
 
@@ -194,11 +194,11 @@ long SwWrtShell::DelLeft()
 
         // If the cursor entered or left a table (or both) we are done. No step
         // back.
-        const SwTableNode* pIsInTblNd = SwCrsrShell::IsCrsrInTbl();
-        if( pIsInTblNd != pWasInTblNd )
+        const SwTableNode* pIsInTableNd = SwCrsrShell::IsCrsrInTable();
+        if( pIsInTableNd != pWasInTableNd )
             return 0;
 
-        const SwStartNode* pSNdNew = pIsInTblNd ?
+        const SwStartNode* pSNdNew = pIsInTableNd ?
                                      GetSwCrsr()->GetNode().FindTableBoxStartNode() :
                                      0;
 
@@ -235,7 +235,7 @@ long SwWrtShell::DelRight()
     if(nSelection & nsSelectionType::SEL_TXT)
         nSelection = nsSelectionType::SEL_TXT;
 
-    const SwTableNode * pWasInTblNd = NULL;
+    const SwTableNode * pWasInTableNd = NULL;
 
     switch( nSelection & ~(nsSelectionType::SEL_BEZ) )
     {
@@ -271,7 +271,7 @@ long SwWrtShell::DelRight()
                 EnterStdMode();
         }
 
-        pWasInTblNd = IsCrsrInTbl();
+        pWasInTableNd = IsCrsrInTable();
 
         if( nsSelectionType::SEL_TXT & nSelection && SwCrsrShell::IsSttPara() &&
             SwCrsrShell::IsEndPara() )
@@ -282,8 +282,8 @@ long SwWrtShell::DelRight()
             bool bDelFull = false;
             if ( SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
             {
-                const SwTableNode * pCurrTblNd = IsCrsrInTbl();
-                bDelFull = pCurrTblNd && pCurrTblNd != pWasInTblNd;
+                const SwTableNode * pCurrTableNd = IsCrsrInTable();
+                bDelFull = pCurrTableNd && pCurrTableNd != pWasInTableNd;
             }
 
             // restore cursor
@@ -313,7 +313,7 @@ long SwWrtShell::DelRight()
 
                 if ( SwCrsrShell::Right(1, CRSR_SKIP_CHARS) )
                 {
-                    if (IsCrsrInTbl() || (pWasInTblNd != IsCrsrInTbl()))
+                    if (IsCrsrInTable() || (pWasInTableNd != IsCrsrInTable()))
                     {
                         /** #108049# Save the startnode of the current
                             cell. May be different to pSNdOld as we have

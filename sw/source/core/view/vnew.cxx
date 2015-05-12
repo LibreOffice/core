@@ -100,7 +100,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
     // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
     if ( !bBrowseMode )
     {
-        mpDoc->CheckDefaultPageFmt();
+        mpDoc->CheckDefaultPageFormat();
     }
     // <--
 
@@ -126,9 +126,9 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
         if( !mpLayout )
         {
             // switched to two step construction because creating the layout in SwRootFrm needs a valid pLayout set
-            mpLayout = SwRootFrmPtr(new SwRootFrm(mpDoc->GetDfltFrmFmt(), this),
+            mpLayout = SwRootFrmPtr(new SwRootFrm(mpDoc->GetDfltFrameFormat(), this),
                                     &SwFrm::DestroyFrm);
-            mpLayout->Init( mpDoc->GetDfltFrmFmt() );
+            mpLayout->Init( mpDoc->GetDfltFrameFormat() );
         }
     }
     SizeChgNotify();
@@ -200,10 +200,10 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
 
     SET_CURR_SHELL( this );
 
-    static_cast<SwHiddenTxtFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
+    static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENTXTFLD ))->
         SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
-    // In Init a standard FrmFmt is created.
+    // In Init a standard FrameFormat is created.
     // --> OD 2005-02-11 #i38810#
     if (   !mpDoc->GetIDocumentUndoRedo().IsUndoNoResetModified()
         && !bIsDocModified )
@@ -213,8 +213,8 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     }
 
     // extend format cache.
-    if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
-        SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
+    if ( SwTextFrm::GetTextCache()->GetCurMax() < 2550 )
+        SwTextFrm::GetTextCache()->IncreaseMax( 100 );
     if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
         Imp()->MakeDrawView();
 
@@ -274,18 +274,18 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     if ( mbPreview )
         mpImp->InitPagePreviewLayout();
 
-    static_cast<SwHiddenTxtFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
+    static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENTXTFLD ))->
             SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
-    // In Init a standard FrmFmt is created.
+    // In Init a standard FrameFormat is created.
     if( !bModified && !mpDoc->GetIDocumentUndoRedo().IsUndoNoResetModified() )
     {
         mpDoc->getIDocumentState().ResetModified();
     }
 
     // extend format cache.
-    if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
-        SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
+    if ( SwTextFrm::GetTextCache()->GetCurMax() < 2550 )
+        SwTextFrm::GetTextCache()->IncreaseMax( 100 );
     if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
         Imp()->MakeDrawView();
 
@@ -320,8 +320,8 @@ SwViewShell::~SwViewShell()
                         SwIterator<SwFrm,SwGrfNode> aIter( *pGNd );
                         for( SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
                         {
-                            OSL_ENSURE( pFrm->IsNoTxtFrm(), "GraphicNode with Text?" );
-                            static_cast<SwNoTxtFrm*>(pFrm)->StopAnimation( mpOut );
+                            OSL_ENSURE( pFrm->IsNoTextFrm(), "GraphicNode with Text?" );
+                            static_cast<SwNoTextFrm*>(pFrm)->StopAnimation( mpOut );
                         }
                     }
                 }
@@ -345,8 +345,8 @@ SwViewShell::~SwViewShell()
         delete mpOpt;
 
         // resize format cache.
-        if ( SwTxtFrm::GetTxtCache()->GetCurMax() > 250 )
-            SwTxtFrm::GetTxtCache()->DecreaseMax( 100 );
+        if ( SwTextFrm::GetTextCache()->GetCurMax() > 250 )
+            SwTextFrm::GetTextCache()->DecreaseMax( 100 );
 
         // Remove from PaintQueue if necessary
         SwPaintQueue::Remove( this );

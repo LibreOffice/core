@@ -148,7 +148,7 @@ struct DocxSdrExport::Impl
     sal_Int32 m_nSeq ;
     bool m_bDMLAndVMLDrawingOpen;
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
-    std::set<const SwFrmFmt*> m_aTextBoxes;
+    std::set<const SwFrameFormat*> m_aTextBoxes;
     /// Preserved rotation for TextFrames.
     sal_Int32 m_nDMLandVMLTextFrameRotation;
 
@@ -181,7 +181,7 @@ struct DocxSdrExport::Impl
 
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
 
-    void textFrameShadow(const SwFrmFmt& rFrmFmt);
+    void textFrameShadow(const SwFrameFormat& rFrameFormat);
     static bool isSupportedDMLShape(uno::Reference<drawing::XShape> xShape);
     /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
     bool checkFrameBtlr(SwNode* pStartNode, bool bDML);
@@ -286,14 +286,14 @@ void DocxSdrExport::setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrL
     m_pImpl->m_pFlyWrapAttrList = pAttrList;
 }
 
-void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rSize)
+void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, const Size& rSize)
 {
     m_pImpl->m_bDrawingOpen = true;
     m_pImpl->m_bParagraphHasDrawing = true;
     m_pImpl->m_pSerializer->startElementNS(XML_w, XML_drawing, FSEND);
 
-    const SvxLRSpaceItem pLRSpaceItem = pFrmFmt->GetLRSpace(false);
-    const SvxULSpaceItem pULSpaceItem = pFrmFmt->GetULSpace(false);
+    const SvxLRSpaceItem pLRSpaceItem = pFrameFormat->GetLRSpace(false);
+    const SvxULSpaceItem pULSpaceItem = pFrameFormat->GetULSpace(false);
 
     bool isAnchor;
 
@@ -303,11 +303,11 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     }
     else
     {
-        isAnchor = pFrmFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
+        isAnchor = pFrameFormat->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
     }
 
     // Count effectExtent values, their value is needed before dist{T,B,L,R} is written.
-    SvxShadowItem aShadowItem = pFrmFmt->GetShadow();
+    SvxShadowItem aShadowItem = pFrameFormat->GetShadow();
     sal_Int32 nLeftExt = 0, nRightExt = 0, nTopExt = 0, nBottomExt = 0;
     if (aShadowItem.GetLocation() != SVX_SHADOW_NONE)
     {
@@ -331,7 +331,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
             break;
         }
     }
-    else if (const SdrObject* pObject = pFrmFmt->FindRealSdrObject())
+    else if (const SdrObject* pObject = pFrameFormat->FindRealSdrObject())
     {
         // No shadow, but we have an idea what was the original effectExtent.
         uno::Any aAny;
@@ -358,13 +358,13 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     if (isAnchor)
     {
         sax_fastparser::FastAttributeList* attrList = sax_fastparser::FastSerializerHelper::createAttrList();
-        bool bOpaque = pFrmFmt->GetOpaque().GetValue();
-        awt::Point aPos(pFrmFmt->GetHoriOrient().GetPos(), pFrmFmt->GetVertOrient().GetPos());
-        const SdrObject* pObj = pFrmFmt->FindRealSdrObject();
+        bool bOpaque = pFrameFormat->GetOpaque().GetValue();
+        awt::Point aPos(pFrameFormat->GetHoriOrient().GetPos(), pFrameFormat->GetVertOrient().GetPos());
+        const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
         if (pObj != NULL)
         {
             // SdrObjects know their layer, consider that instead of the frame format.
-            bOpaque = pObj->GetLayer() != pFrmFmt->GetDoc()->getIDocumentDrawModelAccess().GetHellId() && pObj->GetLayer() != pFrmFmt->GetDoc()->getIDocumentDrawModelAccess().GetInvisibleHellId();
+            bOpaque = pObj->GetLayer() != pFrameFormat->GetDoc()->getIDocumentDrawModelAccess().GetHellId() && pObj->GetLayer() != pFrameFormat->GetDoc()->getIDocumentDrawModelAccess().GetInvisibleHellId();
 
             lclMovePositionWithRotation(aPos, rSize, pObj->GetRotateAngle());
         }
@@ -396,7 +396,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         const char* relativeFromV;
         const char* alignH = NULL;
         const char* alignV = NULL;
-        switch (pFrmFmt->GetVertOrient().GetRelationOrient())
+        switch (pFrameFormat->GetVertOrient().GetRelationOrient())
         {
         case text::RelOrientation::PAGE_PRINT_AREA:
             relativeFromV = "margin";
@@ -412,12 +412,12 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
             relativeFromV = "line";
             break;
         }
-        switch (pFrmFmt->GetVertOrient().GetVertOrient())
+        switch (pFrameFormat->GetVertOrient().GetVertOrient())
         {
         case text::VertOrientation::TOP:
         case text::VertOrientation::CHAR_TOP:
         case text::VertOrientation::LINE_TOP:
-            if (pFrmFmt->GetVertOrient().GetRelationOrient() == text::RelOrientation::TEXT_LINE)
+            if (pFrameFormat->GetVertOrient().GetRelationOrient() == text::RelOrientation::TEXT_LINE)
                 alignV = "bottom";
             else
                 alignV = "top";
@@ -425,7 +425,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         case text::VertOrientation::BOTTOM:
         case text::VertOrientation::CHAR_BOTTOM:
         case text::VertOrientation::LINE_BOTTOM:
-            if (pFrmFmt->GetVertOrient().GetRelationOrient() == text::RelOrientation::TEXT_LINE)
+            if (pFrameFormat->GetVertOrient().GetRelationOrient() == text::RelOrientation::TEXT_LINE)
                 alignV = "top";
             else
                 alignV = "bottom";
@@ -438,7 +438,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         default:
             break;
         }
-        switch (pFrmFmt->GetHoriOrient().GetRelationOrient())
+        switch (pFrameFormat->GetHoriOrient().GetRelationOrient())
         {
         case text::RelOrientation::PAGE_PRINT_AREA:
             relativeFromH = "margin";
@@ -458,7 +458,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
             relativeFromH = "column";
             break;
         }
-        switch (pFrmFmt->GetHoriOrient().GetHoriOrient())
+        switch (pFrameFormat->GetHoriOrient().GetHoriOrient())
         {
         case text::HoriOrientation::LEFT:
             alignH = "left";
@@ -551,7 +551,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         aAttrList->add(XML_distB, OString::number(TwipsToEMU(pULSpaceItem.GetLower())).getStr());
         aAttrList->add(XML_distL, OString::number(TwipsToEMU(pLRSpaceItem.GetLeft())).getStr());
         aAttrList->add(XML_distR, OString::number(TwipsToEMU(pLRSpaceItem.GetRight())).getStr());
-        const SdrObject* pObj = pFrmFmt->FindRealSdrObject();
+        const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
         if (pObj != NULL)
         {
             OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObj);
@@ -632,7 +632,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
 
     // See if we know the exact wrap type from grab-bag.
     sal_Int32 nWrapToken = 0;
-    if (const SdrObject* pObject = pFrmFmt->FindRealSdrObject())
+    if (const SdrObject* pObject = pFrameFormat->FindRealSdrObject())
     {
         uno::Any aAny;
         pObject->GetGrabBagItem(aAny);
@@ -675,9 +675,9 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     }
 
     // Or if we have a contour.
-    if (!nWrapToken && pFrmFmt->GetSurround().IsContour())
+    if (!nWrapToken && pFrameFormat->GetSurround().IsContour())
     {
-        if (const SwNoTxtNode* pNd = sw::util::GetNoTxtNodeFromSwFrmFmt(*pFrmFmt))
+        if (const SwNoTextNode* pNd = sw::util::GetNoTextNodeFromSwFrameFormat(*pFrameFormat))
         {
             const tools::PolyPolygon* pPolyPoly = pNd->HasContour();
             if (pPolyPoly && pPolyPoly->Count())
@@ -705,7 +705,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     // No? Then just approximate based on what we have.
     if (isAnchor && !nWrapToken)
     {
-        switch (pFrmFmt->GetSurround().GetValue())
+        switch (pFrameFormat->GetSurround().GetValue())
         {
         case SURROUND_NONE:
             m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapTopAndBottom, FSEND);
@@ -726,7 +726,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     }
 }
 
-void DocxSdrExport::endDMLAnchorInline(const SwFrmFmt* pFrmFmt)
+void DocxSdrExport::endDMLAnchorInline(const SwFrameFormat* pFrameFormat)
 {
     bool isAnchor;
     if (m_pImpl->m_bFlyFrameGraphic)
@@ -735,7 +735,7 @@ void DocxSdrExport::endDMLAnchorInline(const SwFrmFmt* pFrmFmt)
     }
     else
     {
-        isAnchor = pFrmFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
+        isAnchor = pFrameFormat->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
     }
     m_pImpl->m_pSerializer->endElementNS(XML_wp, isAnchor ? XML_anchor : XML_inline);
 
@@ -743,7 +743,7 @@ void DocxSdrExport::endDMLAnchorInline(const SwFrmFmt* pFrmFmt)
     m_pImpl->m_bDrawingOpen = false;
 }
 
-void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft)
+void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft)
 {
     bool bSwapInPage = false;
     if (!(sdrObj)->GetPage())
@@ -762,8 +762,8 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFr
     m_pImpl->m_pDrawingML->SetFS(m_pImpl->m_pSerializer);
     // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
 
-    SwFmtHoriOrient rHoriOri = (rFrmFmt).GetHoriOrient();
-    SwFmtVertOrient rVertOri = (rFrmFmt).GetVertOrient();
+    SwFormatHoriOrient rHoriOri = (rFrameFormat).GetHoriOrient();
+    SwFormatVertOrient rVertOri = (rFrameFormat).GetVertOrient();
     m_pImpl->m_rExport.VMLExporter().AddSdrObject(*(sdrObj),
             rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
             rHoriOri.GetRelationOrient(),
@@ -795,7 +795,7 @@ bool lcl_isLockedCanvas(uno::Reference<drawing::XShape> xShape)
     return bRet;
 }
 
-void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt* pFrmFmt, int nAnchorId)
+void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFormat* pFrameFormat, int nAnchorId)
 {
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY_THROW);
     if (!Impl::isSupportedDMLShape(xShape))
@@ -805,7 +805,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
 
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     Size aSize(pSdrObject->GetLogicRect().GetWidth(), pSdrObject->GetLogicRect().GetHeight());
-    startDMLAnchorInline(pFrmFmt, aSize);
+    startDMLAnchorInline(pFrameFormat, aSize);
 
     sax_fastparser::FastAttributeList* pDocPrAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
@@ -866,12 +866,12 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
         pFS->endElementNS(XML_wp14, XML_sizeRelV);
     }
 
-    endDMLAnchorInline(pFrmFmt);
+    endDMLAnchorInline(pFrameFormat);
 }
 
-void DocxSdrExport::Impl::textFrameShadow(const SwFrmFmt& rFrmFmt)
+void DocxSdrExport::Impl::textFrameShadow(const SwFrameFormat& rFrameFormat)
 {
-    SvxShadowItem aShadowItem = rFrmFmt.GetShadow();
+    SvxShadowItem aShadowItem = rFrameFormat.GetShadow();
     if (aShadowItem.GetLocation() == SVX_SHADOW_NONE)
         return;
 
@@ -917,7 +917,7 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(uno::Reference<drawing::XShape> xS
     return supported;
 }
 
-void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft, int nAnchorId)
+void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft, int nAnchorId)
 {
     bool bDMLAndVMLDrawingOpen = m_pImpl->m_bDMLAndVMLDrawingOpen;
     m_pImpl->m_bDMLAndVMLDrawingOpen = true;
@@ -943,17 +943,17 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFm
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Choice,
                                                XML_Requires, (pObjGroup ? "wpg" : "wps"),
                                                FSEND);
-        writeDMLDrawing(sdrObj, &rFrmFmt, nAnchorId);
+        writeDMLDrawing(sdrObj, &rFrameFormat, nAnchorId);
         m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_Choice);
 
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
-        writeVMLDrawing(sdrObj, rFrmFmt, rNdTopLeft);
+        writeVMLDrawing(sdrObj, rFrameFormat, rNdTopLeft);
         m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_Fallback);
 
         m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
     }
     else
-        writeVMLDrawing(sdrObj, rFrmFmt, rNdTopLeft);
+        writeVMLDrawing(sdrObj, rFrameFormat, rNdTopLeft);
 
     m_pImpl->m_bDMLAndVMLDrawingOpen = false;
 }
@@ -970,9 +970,9 @@ OString lcl_ConvertTransparency(const Color& rColor)
         return OString("");
 }
 
-void DocxSdrExport::writeDMLEffectLst(const SwFrmFmt& rFrmFmt)
+void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
 {
-    SvxShadowItem aShadowItem = rFrmFmt.GetShadow();
+    SvxShadowItem aShadowItem = rFrameFormat.GetShadow();
 
     // Output effects
     if (aShadowItem.GetLocation() != SVX_SHADOW_NONE)
@@ -1096,7 +1096,7 @@ void DocxSdrExport::writeDiagramRels(uno::Reference<xml::dom::XDocument> xDom,
     }
 }
 
-void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFrmFmt,  int nAnchorId)
+void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat& rFrameFormat,  int nAnchorId)
 {
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     uno::Reference< drawing::XShape > xShape(const_cast<SdrObject*>(sdrObject)->getUnoShape(), uno::UNO_QUERY);
@@ -1141,7 +1141,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
 
     // write necessary tags to document.xml
     Size aSize(sdrObject->GetSnapRect().GetWidth(), sdrObject->GetSnapRect().GetHeight());
-    startDMLAnchorInline(&rFrmFmt, aSize);
+    startDMLAnchorInline(&rFrameFormat, aSize);
 
     // generate an unique id
     sax_fastparser::FastAttributeList* pDocPrAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
@@ -1228,7 +1228,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
 
     pFS->endElementNS(XML_a, XML_graphicData);
     pFS->endElementNS(XML_a, XML_graphic);
-    endDMLAnchorInline(&rFrmFmt);
+    endDMLAnchorInline(&rFrameFormat);
 
     uno::Reference< xml::sax::XSAXSerializable > serializer;
     uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create(comphelper::getProcessComponentContext());
@@ -1285,8 +1285,8 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
 
 void DocxSdrExport::writeOnlyTextOfFrame(sw::Frame* pParentFrame)
 {
-    const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
-    const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+    const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
+    const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
 
     sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
@@ -1355,8 +1355,8 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
     m_pImpl->m_bDMLAndVMLDrawingOpen = true;
 
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
-    const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
-    const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+    const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
+    const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
 
     sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
     sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
@@ -1369,7 +1369,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
     const Size aSize = pParentFrame->GetSize();
 
     uno::Reference< drawing::XShape > xShape;
-    const SdrObject* pSdrObj = rFrmFmt.FindRealSdrObject();
+    const SdrObject* pSdrObj = rFrameFormat.FindRealSdrObject();
     if (pSdrObj)
         xShape = uno::Reference< drawing::XShape >(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
@@ -1387,11 +1387,11 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
 
     if (!bTextBoxOnly)
     {
-        startDMLAnchorInline(&rFrmFmt, aSize);
+        startDMLAnchorInline(&rFrameFormat, aSize);
 
         sax_fastparser::FastAttributeList* pDocPrAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
         pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
-        pDocPrAttrList->add(XML_name, OUStringToOString(rFrmFmt.GetName(), RTL_TEXTENCODING_UTF8).getStr());
+        pDocPrAttrList->add(XML_name, OUStringToOString(rFrameFormat.GetName(), RTL_TEXTENCODING_UTF8).getStr());
         sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
         pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
@@ -1470,9 +1470,9 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
                              XML_prst, OUStringToOString(shapeType, RTL_TEXTENCODING_UTF8).getStr(),
                              FSEND);
         m_pImpl->m_bDMLTextFrameSyntax = true;
-        m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrmFmt(), false, false, true);
+        m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrameFormat(), false, false, true);
         m_pImpl->m_bDMLTextFrameSyntax = false;
-        writeDMLEffectLst(rFrmFmt);
+        writeDMLEffectLst(rFrameFormat);
         pFS->endElementNS(XML_wps, XML_spPr);
     }
 
@@ -1550,7 +1550,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
     {
         pFS->startElementNS(XML_wps, XML_bodyPr, xBodyPrAttrList);
         // AutoSize of the Text Frame.
-        const SwFmtFrmSize& rSize = rFrmFmt.GetFrmSize();
+        const SwFormatFrmSize& rSize = rFrameFormat.GetFrmSize();
         pFS->singleElementNS(XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit), FSEND);
         pFS->endElementNS(XML_wps, XML_bodyPr);
 
@@ -1580,7 +1580,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
             pFS->endElementNS(XML_wp14, XML_sizeRelV);
         }
 
-        endDMLAnchorInline(&rFrmFmt);
+        endDMLAnchorInline(&rFrameFormat);
     }
     m_pImpl->m_bDMLAndVMLDrawingOpen = bDMLAndVMLDrawingOpen;
 }
@@ -1591,8 +1591,8 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     m_pImpl->m_bDMLAndVMLDrawingOpen = true;
 
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
-    const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
-    const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+    const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
+    const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
 
     sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
     sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
@@ -1614,10 +1614,10 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
         OString sRotation(OString::number(m_pImpl->m_nDMLandVMLTextFrameRotation / -100));
         m_pImpl->m_rExport.SdrExporter().getTextFrameStyle().append(";rotation:").append(sRotation);
     }
-    m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrmFmt(), false, false, true);
+    m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrameFormat(), false, false, true);
     m_pImpl->m_pFlyAttrList->add(XML_style, m_pImpl->m_aTextFrameStyle.makeStringAndClear());
 
-    const SdrObject* pObject = pParentFrame->GetFrmFmt().FindRealSdrObject();
+    const SdrObject* pObject = pParentFrame->GetFrameFormat().FindRealSdrObject();
     if (pObject != NULL)
     {
         OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObject);
@@ -1635,7 +1635,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     {
         pFS->startElementNS(XML_w, XML_pict, FSEND);
         pFS->startElementNS(XML_v, XML_rect, xFlyAttrList);
-        m_pImpl->textFrameShadow(rFrmFmt);
+        m_pImpl->textFrameShadow(rFrameFormat);
         if (m_pImpl->m_pFlyFillAttrList)
         {
             sax_fastparser::XFastAttributeListRef xFlyFillAttrList(m_pImpl->m_pFlyFillAttrList.release());
@@ -1685,30 +1685,30 @@ bool DocxSdrExport::Impl::checkFrameBtlr(SwNode* pStartNode, bool bDML)
     else
         assert(m_pTextboxAttrList);
 
-    if (!pStartNode->IsTxtNode())
+    if (!pStartNode->IsTextNode())
         return false;
 
-    SwTxtNode* pTxtNode = pStartNode->GetTxtNode();
+    SwTextNode* pTextNode = pStartNode->GetTextNode();
 
     const SfxPoolItem* pItem = 0; // explicitly init to avoid warnings
     bool bItemSet = false;
-    if (pTxtNode->HasSwAttrSet())
+    if (pTextNode->HasSwAttrSet())
     {
-        const SwAttrSet& rAttrSet = pTxtNode->GetSwAttrSet();
+        const SwAttrSet& rAttrSet = pTextNode->GetSwAttrSet();
         bItemSet = rAttrSet.GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SfxItemState::SET;
     }
 
     if (!bItemSet)
     {
-        if (!pTxtNode->HasHints())
+        if (!pTextNode->HasHints())
             return false;
 
-        SwTxtAttr* pTxtAttr = pTxtNode->GetTxtAttrAt(0, RES_TXTATR_AUTOFMT);
+        SwTextAttr* pTextAttr = pTextNode->GetTextAttrAt(0, RES_TXTATR_AUTOFMT);
 
-        if (!pTxtAttr || pTxtAttr->Which() != RES_TXTATR_AUTOFMT)
+        if (!pTextAttr || pTextAttr->Which() != RES_TXTATR_AUTOFMT)
             return false;
 
-        std::shared_ptr<SfxItemSet> pItemSet = pTxtAttr->GetAutoFmt().GetStyleHandle();
+        std::shared_ptr<SfxItemSet> pItemSet = pTextAttr->GetAutoFormat().GetStyleHandle();
         bItemSet = pItemSet->GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SfxItemState::SET;
     }
 
@@ -1727,9 +1727,9 @@ bool DocxSdrExport::Impl::checkFrameBtlr(SwNode* pStartNode, bool bDML)
     return false;
 }
 
-bool DocxSdrExport::isTextBox(const SwFrmFmt& rFrmFmt)
+bool DocxSdrExport::isTextBox(const SwFrameFormat& rFrameFormat)
 {
-    return m_pImpl->m_aTextBoxes.find(&rFrmFmt) != m_pImpl->m_aTextBoxes.end();
+    return m_pImpl->m_aTextBoxes.find(&rFrameFormat) != m_pImpl->m_aTextBoxes.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

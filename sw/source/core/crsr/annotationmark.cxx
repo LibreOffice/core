@@ -51,15 +51,15 @@ namespace sw { namespace mark
 
     void AnnotationMark::InitDoc(SwDoc* const io_pDoc)
     {
-        SwTxtNode *pTxtNode = GetMarkEnd().nNode.GetNode().GetTxtNode();
+        SwTextNode *pTextNode = GetMarkEnd().nNode.GetNode().GetTextNode();
 
-        SwTxtFld* pTxtFld = pTxtNode ?
-            pTxtNode->GetFldTxtAttrAt(
+        SwTextField* pTextField = pTextNode ?
+            pTextNode->GetFieldTextAttrAt(
             GetMarkEnd().nContent.GetIndex()-1, true ) : NULL;
-        OSL_ENSURE( pTxtFld != NULL, "<AnnotationMark::InitDoc(..)> - missing text attribute for annotation field!" );
-        if ( pTxtFld != NULL )
+        OSL_ENSURE( pTextField != NULL, "<AnnotationMark::InitDoc(..)> - missing text attribute for annotation field!" );
+        if ( pTextField != NULL )
         {
-            const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTxtFld->GetFmtFld().GetField());
+            const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTextField->GetFormatField().GetField());
             OSL_ENSURE( pPostItField != NULL, "<AnnotationMark::InitDoc(..)> - annotation field missing!" );
             if ( pPostItField != NULL )
             {
@@ -81,33 +81,33 @@ namespace sw { namespace mark
         io_pDoc->getIDocumentState().SetModified();
     }
 
-    const SwFmtFld* AnnotationMark::GetAnnotationFmtFld() const
+    const SwFormatField* AnnotationMark::GetAnnotationFormatField() const
     {
         SwDoc* pDoc = GetMarkPos().GetDoc();
         if ( pDoc == NULL )
         {
-            OSL_ENSURE( false, "<AnnotationMark::GetAnnotationFmtFld()> - missing document at annotation mark" );
+            OSL_ENSURE( false, "<AnnotationMark::GetAnnotationFormatField()> - missing document at annotation mark" );
             return NULL;
         }
 
-        SwFmtFld* pAnnotationFmtFld = NULL;
+        SwFormatField* pAnnotationFormatField = NULL;
 
-        SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetFldType( RES_POSTITFLD, OUString(), false );
-        SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld != NULL; pFmtFld = aIter.Next() )
+        SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetFieldType( RES_POSTITFLD, OUString(), false );
+        SwIterator<SwFormatField,SwFieldType> aIter( *pType );
+        for( SwFormatField* pFormatField = aIter.First(); pFormatField != NULL; pFormatField = aIter.Next() )
         {
-            if ( pFmtFld->IsFldInDoc() )
+            if ( pFormatField->IsFieldInDoc() )
             {
-                const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pFmtFld->GetField());
+                const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pFormatField->GetField());
                 if (pPostItField != NULL && pPostItField->GetName() == GetName())
                 {
-                    pAnnotationFmtFld = pFmtFld;
+                    pAnnotationFormatField = pFormatField;
                     break;
                 }
             }
         }
 
-        return pAnnotationFmtFld;
+        return pAnnotationFormatField;
     }
 }}
 

@@ -30,10 +30,10 @@ class SwRootFrm;
 class SwLayoutFrm;
 class SwPageFrm;
 class SwFlyFrm;
-class SwCntntFrm;
+class SwContentFrm;
 class SwTabFrm;
 class SwViewShellImp;
-class SwCntntNode;
+class SwContentNode;
 class SwWait;
 
 /**
@@ -56,7 +56,7 @@ class SwLayAction
     // For the sake of optimization, so that the tables stick a bit better to
     // the Crsr when hitting return/backspace in front of one.
     // The first TabFrm that paints itself (per page) adds itself to the pointer.
-    // The CntntFrms beneath the page do not need to deregister at the Shell for
+    // The ContentFrms beneath the page do not need to deregister at the Shell for
     // painting.
     const SwTabFrm *pOptTab;
 
@@ -84,31 +84,31 @@ class SwLayAction
     bool bIdle;          // True if the LayAction was triggered by the Idler
     bool bReschedule;    // Call Reschedule depending on Progress?
     bool bCheckPages;    // Run CheckPageDescs() or delay it
-    bool bUpdateExpFlds; // Is set if, after Formatting, we need to do another round for ExpFld
+    bool bUpdateExpFields; // Is set if, after Formatting, we need to do another round for ExpField
     bool bBrowseActionStop; // Terminate Action early (as per bInput) and leave the rest to the Idler
     bool bWaitAllowed;      // Waitcursor allowed?
     bool bPaintExtraData;   // Painting line numbers (or similar) enabled?
     bool bActionInProgress; // Is set in Action() at the beginning and deleted at the end
 
     // OD 14.04.2003 #106346# - new flag for content formatting on interrupt.
-    bool    mbFormatCntntOnInterrupt;
+    bool    mbFormatContentOnInterrupt;
 
-    void PaintCntnt( const SwCntntFrm *, const SwPageFrm *,
+    void PaintContent( const SwContentFrm *, const SwPageFrm *,
                      const SwRect &rOldRect, long nOldBottom );
-    bool PaintWithoutFlys( const SwRect &, const SwCntntFrm *,
+    bool PaintWithoutFlys( const SwRect &, const SwContentFrm *,
                            const SwPageFrm * );
-    inline bool _PaintCntnt( const SwCntntFrm *, const SwPageFrm *,
+    inline bool _PaintContent( const SwContentFrm *, const SwPageFrm *,
                              const SwRect & );
 
     bool FormatLayout( SwLayoutFrm *, bool bAddRect = true );
     bool FormatLayoutTab( SwTabFrm *, bool bAddRect = true );
-    bool FormatCntnt( const SwPageFrm* pPage );
-    void _FormatCntnt( const SwCntntFrm* pCntnt,
+    bool FormatContent( const SwPageFrm* pPage );
+    void _FormatContent( const SwContentFrm* pContent,
                        const SwPageFrm* pPage );
     bool IsShortCut( SwPageFrm *& );
 
     bool TurboAction();
-    bool _TurboAction( const SwCntntFrm * );
+    bool _TurboAction( const SwContentFrm * );
     void InternalAction();
 
     static SwPageFrm *CheckFirstVisPage( SwPageFrm *pPage );
@@ -149,7 +149,7 @@ public:
     void SetWaitAllowed ( bool bNew )   { bWaitAllowed = bNew; }
 
     void SetAgain()         { bAgain = true; }
-    void SetUpdateExpFlds() {bUpdateExpFlds = true; }
+    void SetUpdateExpFields() {bUpdateExpFields = true; }
 
     inline void SetCheckPageNum( sal_uInt16 nNew );
     inline void SetCheckPageNumDirect( sal_uInt16 nNew ) { nCheckPageNum = nNew; }
@@ -159,7 +159,7 @@ public:
 
     bool IsAgain()      const { return bAgain; }
     bool IsComplete()   const { return bComplete; }
-    bool IsExpFlds()    const { return bUpdateExpFlds; }
+    bool IsExpFields()    const { return bUpdateExpFields; }
     bool IsCalcLayout() const { return bCalcLayout;  }
     bool IsCheckPages() const { return bCheckPages;  }
     bool IsBrowseActionStop() const { return bBrowseActionStop; }
@@ -174,7 +174,7 @@ public:
     // delete 2nd parameter, because its not used;
     bool FormatLayoutFly( SwFlyFrm * );
     // #i28701# - method is now public
-    bool _FormatFlyCntnt( const SwFlyFrm * );
+    bool _FormatFlyContent( const SwFlyFrm * );
 
 };
 
@@ -183,8 +183,8 @@ class SwLayIdle
 
     SwRootFrm *pRoot;
     SwViewShellImp  *pImp;           // The Idler registers and deregisters here
-    SwCntntNode *pCntntNode;    // The current cursor position is saved here
-    sal_Int32  nTxtPos;
+    SwContentNode *pContentNode;    // The current cursor position is saved here
+    sal_Int32  nTextPos;
     bool        bPageValid;     // Were we able to evaluate everything on the whole page?
     bool        bAllValid;      // Were we able to evaluate everything?
 
@@ -197,7 +197,7 @@ class SwLayIdle
 #endif
 
     enum IdleJobType{ ONLINE_SPELLING, AUTOCOMPLETE_WORDS, WORD_COUNT, SMART_TAGS };
-    bool _DoIdleJob( const SwCntntFrm*, IdleJobType );
+    bool _DoIdleJob( const SwContentFrm*, IdleJobType );
     bool DoIdleJob( IdleJobType, bool bVisAreaOnly );
 
 public:

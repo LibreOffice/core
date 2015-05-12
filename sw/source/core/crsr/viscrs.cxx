@@ -68,16 +68,16 @@ MapMode* SwSelPaintRects::s_pMapMode = 0;
 SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
     : m_pCrsrShell( pCShell )
 {
-    pCShell->GetWin()->SetCursor( &m_aTxtCrsr );
-    m_bIsVisible = m_aTxtCrsr.IsVisible();
+    pCShell->GetWin()->SetCursor( &m_aTextCrsr );
+    m_bIsVisible = m_aTextCrsr.IsVisible();
     m_bIsDragCrsr = false;
-    m_aTxtCrsr.SetWidth( 0 );
+    m_aTextCrsr.SetWidth( 0 );
 }
 
 SwVisCrsr::~SwVisCrsr()
 {
-    if( m_bIsVisible && m_aTxtCrsr.IsVisible() )
-        m_aTxtCrsr.Hide();
+    if( m_bIsVisible && m_aTextCrsr.IsVisible() )
+        m_aTextCrsr.Hide();
 
     m_pCrsrShell->GetWin()->SetCursor( 0 );
 }
@@ -100,8 +100,8 @@ void SwVisCrsr::Hide()
     {
         m_bIsVisible = false;
 
-        if( m_aTxtCrsr.IsVisible() )      // Shouldn't the flags be in effect?
-            m_aTxtCrsr.Hide();
+        if( m_aTextCrsr.IsVisible() )      // Shouldn't the flags be in effect?
+            m_aTextCrsr.Hide();
     }
 }
 
@@ -112,7 +112,7 @@ void SwVisCrsr::_SetPosAndShow()
     if( 0 > nTmpY )
     {
         nTmpY = -nTmpY;
-        m_aTxtCrsr.SetOrientation( 900 );
+        m_aTextCrsr.SetOrientation( 900 );
         aRect = SwRect( m_pCrsrShell->m_aCharRect.Pos(),
            Size( m_pCrsrShell->m_aCharRect.Height(), nTmpY ) );
         aRect.Pos().setX(aRect.Pos().getX() + m_pCrsrShell->m_aCrsrHeight.getX());
@@ -121,30 +121,30 @@ void SwVisCrsr::_SetPosAndShow()
     }
     else
     {
-        m_aTxtCrsr.SetOrientation( 0 );
+        m_aTextCrsr.SetOrientation( 0 );
         aRect = SwRect( m_pCrsrShell->m_aCharRect.Pos(),
            Size( m_pCrsrShell->m_aCharRect.Width(), nTmpY ) );
         aRect.Pos().setY(aRect.Pos().getY() + m_pCrsrShell->m_aCrsrHeight.getX());
     }
 
     // check if cursor should show the current cursor bidi level
-    m_aTxtCrsr.SetDirection( CursorDirection::NONE );
+    m_aTextCrsr.SetDirection( CursorDirection::NONE );
     const SwCursor* pTmpCrsr = m_pCrsrShell->_GetCrsr();
 
     if ( pTmpCrsr && !m_pCrsrShell->IsOverwriteCrsr() )
     {
         SwNode& rNode = pTmpCrsr->GetPoint()->nNode.GetNode();
-        if( rNode.IsTxtNode() )
+        if( rNode.IsTextNode() )
         {
-            const SwTxtNode& rTNd = *rNode.GetTxtNode();
+            const SwTextNode& rTNd = *rNode.GetTextNode();
             const SwFrm* pFrm = rTNd.getLayoutFrm( m_pCrsrShell->GetLayout(), 0, 0, false );
             if ( pFrm )
             {
-                const SwScriptInfo* pSI = static_cast<const SwTxtFrm*>(pFrm)->GetScriptInfo();
+                const SwScriptInfo* pSI = static_cast<const SwTextFrm*>(pFrm)->GetScriptInfo();
                  // cursor level has to be shown
                 if ( pSI && pSI->CountDirChg() > 1 )
                 {
-                    m_aTxtCrsr.SetDirection(
+                    m_aTextCrsr.SetDirection(
                         ( pTmpCrsr->GetCrsrBidiLevel() % 2 ) ?
                           CursorDirection::RTL :
                           CursorDirection::LTR );
@@ -173,9 +173,9 @@ void SwVisCrsr::_SetPosAndShow()
         m_pCrsrShell->IsSelection() )
         aRect.Width( 0 );
 
-    m_aTxtCrsr.SetSize( aRect.SSize() );
+    m_aTextCrsr.SetSize( aRect.SSize() );
 
-    m_aTxtCrsr.SetPos( aRect.Pos() );
+    m_aTextCrsr.SetPos( aRect.Pos() );
 
     if (m_pCrsrShell->isTiledRendering())
     {
@@ -191,13 +191,13 @@ void SwVisCrsr::_SetPosAndShow()
                     !m_pCrsrShell->IsSelection() );
 
         sal_uInt16 nStyle = m_bIsDragCrsr ? CURSOR_SHADOW : 0;
-        if( nStyle != m_aTxtCrsr.GetStyle() )
+        if( nStyle != m_aTextCrsr.GetStyle() )
         {
-            m_aTxtCrsr.SetStyle( nStyle );
-            m_aTxtCrsr.SetWindow( m_bIsDragCrsr ? m_pCrsrShell->GetWin() : 0 );
+            m_aTextCrsr.SetStyle( nStyle );
+            m_aTextCrsr.SetWindow( m_bIsDragCrsr ? m_pCrsrShell->GetWin() : 0 );
         }
 
-        m_aTxtCrsr.Show();
+        m_aTextCrsr.Show();
     }
 }
 
@@ -206,8 +206,8 @@ SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
     , m_pCursorShell( &rCSh )
 #if HAVE_FEATURE_DESKTOP
     , m_pCursorOverlay(nullptr)
-    , m_bShowTxtInputFldOverlay(true)
-    , m_pTxtInputFldOverlay(nullptr)
+    , m_bShowTextInputFieldOverlay(true)
+    , m_pTextInputFieldOverlay(nullptr)
 #endif
 {
 }
@@ -227,13 +227,13 @@ void SwSelPaintRects::swapContent(SwSelPaintRects& rSwap)
     setCursorOverlay(rSwap.getCursorOverlay());
     rSwap.setCursorOverlay(pTempOverlay);
 
-    const bool bTempShowTxtInputFldOverlay = m_bShowTxtInputFldOverlay;
-    m_bShowTxtInputFldOverlay = rSwap.m_bShowTxtInputFldOverlay;
-    rSwap.m_bShowTxtInputFldOverlay = bTempShowTxtInputFldOverlay;
+    const bool bTempShowTextInputFieldOverlay = m_bShowTextInputFieldOverlay;
+    m_bShowTextInputFieldOverlay = rSwap.m_bShowTextInputFieldOverlay;
+    rSwap.m_bShowTextInputFieldOverlay = bTempShowTextInputFieldOverlay;
 
-    sw::overlay::OverlayRangesOutline* pTempTxtInputFldOverlay = m_pTxtInputFldOverlay;
-    m_pTxtInputFldOverlay = rSwap.m_pTxtInputFldOverlay;
-    rSwap.m_pTxtInputFldOverlay = pTempTxtInputFldOverlay;
+    sw::overlay::OverlayRangesOutline* pTempTextInputFieldOverlay = m_pTextInputFieldOverlay;
+    m_pTextInputFieldOverlay = rSwap.m_pTextInputFieldOverlay;
+    rSwap.m_pTextInputFieldOverlay = pTempTextInputFieldOverlay;
 #endif
 }
 
@@ -246,10 +246,10 @@ void SwSelPaintRects::Hide()
         m_pCursorOverlay = nullptr;
     }
 
-    if (m_pTxtInputFldOverlay != nullptr)
+    if (m_pTextInputFieldOverlay != nullptr)
     {
-        delete m_pTxtInputFldOverlay;
-        m_pTxtInputFldOverlay = nullptr;
+        delete m_pTextInputFieldOverlay;
+        m_pTextInputFieldOverlay = nullptr;
     }
 #endif
 
@@ -266,8 +266,8 @@ void SwSelPaintRects::Hide()
  */
 static SwRect lcl_getLayoutRect(const Point& rPoint, const SwPosition& rPosition)
 {
-    const SwCntntNode* pNode = rPosition.nNode.GetNode().GetCntntNode();
-    const SwCntntFrm* pFrm = pNode->getLayoutFrm(pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &rPoint, &rPosition);
+    const SwContentNode* pNode = rPosition.nNode.GetNode().GetContentNode();
+    const SwContentFrm* pFrm = pNode->getLayoutFrm(pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &rPoint, &rPosition);
     SwRect aRect;
     pFrm->GetCharRect(aRect, rPosition);
     return aRect;
@@ -338,7 +338,7 @@ void SwSelPaintRects::Show()
             }
         }
 
-        HighlightInputFld();
+        HighlightInputField();
 #endif
 
         // Tiled editing does not expose the draw and writer cursor, it just
@@ -384,42 +384,42 @@ void SwSelPaintRects::Show()
     }
 }
 
-void SwSelPaintRects::HighlightInputFld()
+void SwSelPaintRects::HighlightInputField()
 {
-    std::vector< basegfx::B2DRange > aInputFldRanges;
+    std::vector< basegfx::B2DRange > aInputFieldRanges;
 
-    if (m_bShowTxtInputFldOverlay)
+    if (m_bShowTextInputFieldOverlay)
     {
-        SwTxtInputFld* pCurTxtInputFldAtCrsr =
-            dynamic_cast<SwTxtInputFld*>(SwCrsrShell::GetTxtFldAtPos( GetShell()->GetCrsr()->Start(), false ));
-        if ( pCurTxtInputFldAtCrsr != NULL )
+        SwTextInputField* pCurTextInputFieldAtCrsr =
+            dynamic_cast<SwTextInputField*>(SwCrsrShell::GetTextFieldAtPos( GetShell()->GetCrsr()->Start(), false ));
+        if ( pCurTextInputFieldAtCrsr != NULL )
         {
-            SwTxtNode* pTxtNode = pCurTxtInputFldAtCrsr->GetpTxtNode();
-            ::boost::scoped_ptr<SwShellCrsr> pCrsrForInputTxtFld(
-                new SwShellCrsr( *GetShell(), SwPosition( *pTxtNode, pCurTxtInputFldAtCrsr->GetStart() ) ) );
-            pCrsrForInputTxtFld->SetMark();
-            pCrsrForInputTxtFld->GetMark()->nNode = *pTxtNode;
-            pCrsrForInputTxtFld->GetMark()->nContent.Assign( pTxtNode, *(pCurTxtInputFldAtCrsr->End()) );
+            SwTextNode* pTextNode = pCurTextInputFieldAtCrsr->GetpTextNode();
+            ::boost::scoped_ptr<SwShellCrsr> pCrsrForInputTextField(
+                new SwShellCrsr( *GetShell(), SwPosition( *pTextNode, pCurTextInputFieldAtCrsr->GetStart() ) ) );
+            pCrsrForInputTextField->SetMark();
+            pCrsrForInputTextField->GetMark()->nNode = *pTextNode;
+            pCrsrForInputTextField->GetMark()->nContent.Assign( pTextNode, *(pCurTextInputFieldAtCrsr->End()) );
 
-            pCrsrForInputTxtFld->FillRects();
-            SwRects* pRects = static_cast<SwRects*>(pCrsrForInputTxtFld.get());
+            pCrsrForInputTextField->FillRects();
+            SwRects* pRects = static_cast<SwRects*>(pCrsrForInputTextField.get());
             for (size_t a(0); a < pRects->size(); ++a)
             {
                 const SwRect aNextRect((*pRects)[a]);
                 const Rectangle aPntRect(aNextRect.SVRect());
 
-                aInputFldRanges.push_back(basegfx::B2DRange(
+                aInputFieldRanges.push_back(basegfx::B2DRange(
                     aPntRect.Left(), aPntRect.Top(),
                     aPntRect.Right() + 1, aPntRect.Bottom() + 1));
             }
         }
     }
 
-    if ( aInputFldRanges.size() > 0 )
+    if ( aInputFieldRanges.size() > 0 )
     {
-        if (m_pTxtInputFldOverlay != nullptr)
+        if (m_pTextInputFieldOverlay != nullptr)
         {
-            m_pTxtInputFldOverlay->setRanges( aInputFldRanges );
+            m_pTextInputFieldOverlay->setRanges( aInputFieldRanges );
         }
         else
         {
@@ -434,18 +434,18 @@ void SwSelPaintRects::HighlightInputFld()
                 Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
                 aHighlight.DecreaseLuminance( 128 );
 
-                m_pTxtInputFldOverlay = new sw::overlay::OverlayRangesOutline(
-                        aHighlight, aInputFldRanges );
-                xTargetOverlay->add( *m_pTxtInputFldOverlay );
+                m_pTextInputFieldOverlay = new sw::overlay::OverlayRangesOutline(
+                        aHighlight, aInputFieldRanges );
+                xTargetOverlay->add( *m_pTextInputFieldOverlay );
             }
         }
     }
     else
     {
-        if (m_pTxtInputFldOverlay != nullptr)
+        if (m_pTextInputFieldOverlay != nullptr)
         {
-            delete m_pTxtInputFldOverlay;
-            m_pTxtInputFldOverlay = nullptr;
+            delete m_pTextInputFieldOverlay;
+            m_pTextInputFieldOverlay = nullptr;
         }
     }
 }
@@ -556,11 +556,11 @@ void SwShellCrsr::FillRects()
 {
     // calculate the new rectangles
     if( HasMark() &&
-        GetPoint()->nNode.GetNode().IsCntntNode() &&
-        GetPoint()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) &&
+        GetPoint()->nNode.GetNode().IsContentNode() &&
+        GetPoint()->nNode.GetNode().GetContentNode()->getLayoutFrm( GetShell()->GetLayout() ) &&
         (GetMark()->nNode == GetPoint()->nNode ||
-        (GetMark()->nNode.GetNode().IsCntntNode() &&
-         GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) )   ))
+        (GetMark()->nNode.GetNode().IsContentNode() &&
+         GetMark()->nNode.GetNode().GetContentNode()->getLayoutFrm( GetShell()->GetLayout() ) )   ))
         GetShell()->GetLayout()->CalcFrmRects( *this );
 }
 
@@ -642,9 +642,9 @@ short SwShellCrsr::MaxReplaceArived()
     return nRet;
 }
 
-void SwShellCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
+void SwShellCrsr::SaveTableBoxContent( const SwPosition* pPos )
 {
-    const_cast<SwCrsrShell*>(GetShell())->SaveTblBoxCntnt( pPos );
+    const_cast<SwCrsrShell*>(GetShell())->SaveTableBoxContent( pPos );
 }
 
 bool SwShellCrsr::UpDown( bool bUp, sal_uInt16 nCnt )
@@ -696,9 +696,9 @@ short SwShellTableCrsr::MaxReplaceArived()
     return SwShellCrsr::MaxReplaceArived();
 }
 
-void SwShellTableCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
+void SwShellTableCrsr::SaveTableBoxContent( const SwPosition* pPos )
 {
-    SwShellCrsr::SaveTblBoxCntnt( pPos );
+    SwShellCrsr::SaveTableBoxContent( pPos );
 }
 
 void SwShellTableCrsr::FillRects()
@@ -716,20 +716,20 @@ void SwShellTableCrsr::FillRects()
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
     {
         const SwStartNode* pSttNd = m_SelectedBoxes[n]->GetSttNd();
-        const SwTableNode* pSelTblNd = pSttNd->FindTableNode();
+        const SwTableNode* pSelTableNd = pSttNd->FindTableNode();
 
         SwNodeIndex aIdx( *pSttNd );
-        SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
+        SwContentNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
 
         // table in table
         // (see also lcl_FindTopLevelTable in unoobj2.cxx for a different
         // version to do this)
-        const SwTableNode* pCurTblNd = pCNd ? pCNd->FindTableNode() : NULL;
-        while ( pSelTblNd != pCurTblNd && pCurTblNd )
+        const SwTableNode* pCurTableNd = pCNd ? pCNd->FindTableNode() : NULL;
+        while ( pSelTableNd != pCurTableNd && pCurTableNd )
         {
-            aIdx = pCurTblNd->EndOfSectionIndex();
+            aIdx = pCurTableNd->EndOfSectionIndex();
             pCNd = rNds.GoNextSection( &aIdx, true, false );
-            pCurTblNd = pCNd->FindTableNode();
+            pCurTableNd = pCNd->FindTableNode();
         }
 
         if( !pCNd )
@@ -780,7 +780,7 @@ bool SwShellTableCrsr::IsInside( const Point& rPt ) const
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
     {
         SwNodeIndex aIdx( *m_SelectedBoxes[n]->GetSttNd() );
-        SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
+        SwContentNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
         if( !pCNd )
             continue;
 

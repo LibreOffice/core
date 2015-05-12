@@ -21,58 +21,58 @@
 
 #include "porfld.hxx"
 
-class SwTxtFrm;
-class SwTxtFtn;
+class SwTextFrm;
+class SwTextFootnote;
 
-class SwFtnPortion : public SwFldPortion
+class SwFootnotePortion : public SwFieldPortion
 {
-    SwTxtFtn *pFtn;
+    SwTextFootnote *pFootnote;
     sal_uInt16 nOrigHeight;
     // #i98418#
     bool mbPreferredScriptTypeSet;
     sal_uInt8 mnPreferredScriptType;
 public:
-    SwFtnPortion( const OUString &rExpand, SwTxtFtn *pFtn,
+    SwFootnotePortion( const OUString &rExpand, SwTextFootnote *pFootnote,
                   sal_uInt16 nOrig = USHRT_MAX );
     sal_uInt16& Orig() { return nOrigHeight; }
 
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
-    virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const SAL_OVERRIDE;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
+    virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
 
     // #i98418#
     void SetPreferredScriptType( sal_uInt8 nPreferredScriptType );
 
-    const SwTxtFtn* GetTxtFtn() const { return pFtn; };
+    const SwTextFootnote* GetTextFootnote() const { return pFootnote; };
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-class SwFtnNumPortion : public SwNumberPortion
+class SwFootnoteNumPortion : public SwNumberPortion
 {
 public:
-    SwFtnNumPortion( const OUString &rExpand, SwFont *pFntL )
+    SwFootnoteNumPortion( const OUString &rExpand, SwFont *pFntL )
          : SwNumberPortion( rExpand, pFntL, true, false, 0, false )
          { SetWhichPor( POR_FTNNUM ); }
 
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-class SwQuoVadisPortion : public SwFldPortion
+class SwQuoVadisPortion : public SwFieldPortion
 {
     OUString   aErgo;
 public:
     SwQuoVadisPortion( const OUString &rExp, const OUString& rStr );
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
-    virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
-    virtual bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual void Paint( const SwTextPaintInfo &rInf ) const SAL_OVERRIDE;
+    virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
 
     void SetNumber( const OUString& rStr ) { aErgo = rStr; }
-    const OUString GetQuoTxt() const { return aExpand; }
-    const OUString &GetContTxt() const { return aErgo; }
+    const OUString GetQuoText() const { return aExpand; }
+    const OUString &GetContText() const { return aErgo; }
 
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
+    virtual SwFieldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
@@ -80,15 +80,15 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-class SwErgoSumPortion : public SwFldPortion
+class SwErgoSumPortion : public SwFieldPortion
 {
 public:
     SwErgoSumPortion( const OUString &rExp, const OUString& rStr );
     virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
-    virtual bool Format( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
+    virtual bool Format( SwTextFormatInfo &rInf ) SAL_OVERRIDE;
 
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
+    virtual SwFieldPortion *Clone( const OUString &rExpand ) const SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
 

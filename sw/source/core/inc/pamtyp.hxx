@@ -26,7 +26,7 @@
 class SwpHints;
 struct SwPosition;
 class SwPaM;
-class SwTxtAttr;
+class SwTextAttr;
 
 // Funktions-Deklarationen fuer die Move/Find-Methoden vom SwPaM
 
@@ -37,17 +37,17 @@ void GoEndSection( SwPosition*);
 bool GoInDoc( SwPaM&, SwMoveFn);
 bool GoInSection( SwPaM&, SwMoveFn);
 bool GoInNode( SwPaM&, SwMoveFn);
-bool GoInCntnt( SwPaM&, SwMoveFn);
-bool GoInCntntCells( SwPaM&, SwMoveFn);
-bool GoInCntntSkipHidden( SwPaM&, SwMoveFn);
-bool GoInCntntCellsSkipHidden( SwPaM&, SwMoveFn);
-const SwTxtAttr* GetFrwrdTxtHint( const SwpHints&, sal_uInt16&, sal_Int32 );
-const SwTxtAttr* GetBkwrdTxtHint( const SwpHints&, sal_uInt16&, sal_Int32 );
+bool GoInContent( SwPaM&, SwMoveFn);
+bool GoInContentCells( SwPaM&, SwMoveFn);
+bool GoInContentSkipHidden( SwPaM&, SwMoveFn);
+bool GoInContentCellsSkipHidden( SwPaM&, SwMoveFn);
+const SwTextAttr* GetFrwrdTextHint( const SwpHints&, sal_uInt16&, sal_Int32 );
+const SwTextAttr* GetBkwrdTextHint( const SwpHints&, sal_uInt16&, sal_Int32 );
 
 bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
 bool GoPrevious(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
-SW_DLLPUBLIC SwCntntNode* GoNextNds( SwNodeIndex * pIdx, bool );
-SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
+SW_DLLPUBLIC SwContentNode* GoNextNds( SwNodeIndex * pIdx, bool );
+SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
 
 // Funktionsdefinitionen fuer die SwCrsrShell
 bool GoPrevPara( SwPaM&, SwPosPara);
@@ -59,12 +59,12 @@ bool GoNextSection( SwPaM&, SwPosSection);
 
 // Typedefiniton fuer Funktionen
 typedef bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );
-typedef SwCntntNode* (*GoNds)( SwNodeIndex*, bool );
+typedef SwContentNode* (*GoNds)( SwNodeIndex*, bool );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
 typedef bool (SwPosition:: *CmpOp)( const SwPosition& ) const;
-typedef const SwTxtAttr* (*GetHint)( const SwpHints&, sal_uInt16&, sal_Int32 );
-typedef bool (utl::TextSearch:: *SearchTxt)( const OUString&, sal_Int32*,
+typedef const SwTextAttr* (*GetHint)( const SwpHints&, sal_uInt16&, sal_Int32 );
+typedef bool (utl::TextSearch:: *SearchText)( const OUString&, sal_Int32*,
                     sal_Int32*, ::com::sun::star::util::SearchResult* );
 typedef void (*MvSection)( SwNodeIndex * );
 
@@ -76,12 +76,12 @@ struct SwMoveFnCollection
     GoSection fnSections;
     CmpOp     fnCmpOp;
     GetHint   fnGetHint;
-    SearchTxt fnSearch;
+    SearchText fnSearch;
     MvSection fnSection;
 };
 
 // Funktionsdefinitionen fuers Suchen
-SwCntntNode* GetNode( SwPaM&, bool&, SwMoveFn, bool bInReadOnly = false );
+SwContentNode* GetNode( SwPaM&, bool&, SwMoveFn, bool bInReadOnly = false );
 
 #endif
 

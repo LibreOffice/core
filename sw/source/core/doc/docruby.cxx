@@ -43,7 +43,7 @@ using namespace ::com::sun::star::i18n;
 /*
  * Members in the list:
  *   - String - the orig text
- *   - SwFmtRuby - the ruby attribute
+ *   - SwFormatRuby - the ruby attribute
  */
 sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                             sal_uInt16 nMode )
@@ -184,10 +184,10 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
 {
     // Point must be the startposition, Mark is optional the end position
     SwPosition* pPos = rPam.GetPoint();
-       const SwTxtNode* pTNd = pPos->nNode.GetNode().GetTxtNode();
-    OUString const& rTxt = pTNd->GetTxt();
+       const SwTextNode* pTNd = pPos->nNode.GetNode().GetTextNode();
+    OUString const& rText = pTNd->GetText();
     sal_Int32 nStart = pPos->nContent.GetIndex();
-    sal_Int32 nEnd = rTxt.getLength();
+    sal_Int32 nEnd = rText.getLength();
 
     bool bHasMark = rPam.HasMark();
     if( bHasMark )
@@ -206,12 +206,12 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
     // search the start
     // look where a ruby attribute starts
     const SwpHints* pHts = pTNd->GetpSwpHints();
-    const SwTxtAttr* pAttr = 0;
+    const SwTextAttr* pAttr = 0;
     if( pHts )
     {
         for( size_t nHtIdx = 0; nHtIdx < pHts->Count(); ++nHtIdx )
         {
-            const SwTxtAttr* pHt = (*pHts)[ nHtIdx ];
+            const SwTextAttr* pHt = (*pHts)[ nHtIdx ];
             if( RES_TXTATR_CJK_RUBY == pHt->Which() &&
                 *pHt->GetAnyEnd() > nStart )
             {
@@ -233,7 +233,7 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
     {
         // skip to the word begin!
         const sal_Int32 nWordStt = g_pBreakIt->GetBreakIter()->getWordBoundary(
-                            rTxt, nStart,
+                            rText, nStart,
                             g_pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
                             true ).startPos;
@@ -263,7 +263,7 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
             break;
         }
 
-        sal_Int32 nChType = rCC.getType(rTxt, nStart);
+        sal_Int32 nChType = rCC.getType(rText, nStart);
         bool bIgnoreChar = false, bIsAlphaNum = false, bChkNxtWrd = false;
         switch( nChType )
         {
@@ -303,7 +303,7 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
             {
                 // search the end of this word
                 nWordEnd = g_pBreakIt->GetBreakIter()->getWordBoundary(
-                            rTxt, nStart,
+                            rText, nStart,
                             g_pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
                             true ).endPos;
@@ -316,7 +316,7 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
     }
 
     nStart = rPam.GetMark()->nContent.GetIndex();
-    rEntry.SetText( rTxt.copy( nStart,
+    rEntry.SetText( rText.copy( nStart,
                            rPam.GetPoint()->nContent.GetIndex() - nStart ));
     return rPam.HasMark();
 }

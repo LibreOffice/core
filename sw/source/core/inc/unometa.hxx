@@ -42,7 +42,7 @@ typedef ::std::deque<
     TextRangeList_t;
 
 class SwPaM;
-class SwTxtNode;
+class SwTextNode;
 
 namespace sw {
     class Meta;
@@ -104,7 +104,7 @@ public:
 
     /// init params with position of the attribute content (w/out CH_TXTATR)
     bool SetContentRange(
-            SwTxtNode *& rpNode, sal_Int32 & rStart, sal_Int32 & rEnd) const;
+            SwTextNode *& rpNode, sal_Int32 & rStart, sal_Int32 & rEnd) const;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
         GetParentText() const;
 

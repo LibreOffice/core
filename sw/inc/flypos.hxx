@@ -23,20 +23,20 @@
 #include <boost/shared_ptr.hpp>
 #include <set>
 
-class SwFrmFmt;
+class SwFrameFormat;
 class SwNodeIndex;
 
 /// For querying current flys in document.
 class SW_DLLPUBLIC SwPosFlyFrm
 {
-    const SwFrmFmt* pFrmFmt;    ///< FlyFrmFmt
+    const SwFrameFormat* pFrameFormat;    ///< FlyFrameFormat
     SwNodeIndex* pNdIdx;        ///< Index for node is sufficient.
     sal_uInt32 nOrdNum;
 public:
-    SwPosFlyFrm( const SwNodeIndex& , const SwFrmFmt*, sal_uInt16 nArrPos );
+    SwPosFlyFrm( const SwNodeIndex& , const SwFrameFormat*, sal_uInt16 nArrPos );
     virtual ~SwPosFlyFrm(); ///< Virtual for Writer (DLL !!)
 
-    const SwFrmFmt& GetFmt() const { return *pFrmFmt; }
+    const SwFrameFormat& GetFormat() const { return *pFrameFormat; }
     const SwNodeIndex& GetNdIndex() const { return *pNdIdx; }
     sal_uInt32 GetOrdNum() const { return nOrdNum; }
 };

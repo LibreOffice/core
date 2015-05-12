@@ -38,16 +38,16 @@ public:
     void ChangeContent();
     bool  NoDDETable();
 
-    SwDDEFieldType* GetDDEFldType();
-    inline const SwDDEFieldType* GetDDEFldType() const;
+    SwDDEFieldType* GetDDEFieldType();
+    inline const SwDDEFieldType* GetDDEFieldType() const;
 protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) SAL_OVERRIDE;
 };
 
-inline const SwDDEFieldType* SwDDETable::GetDDEFldType() const
+inline const SwDDEFieldType* SwDDETable::GetDDEFieldType() const
 {
-    return const_cast<SwDDETable*>(this)->GetDDEFldType();
+    return const_cast<SwDDETable*>(this)->GetDDEFieldType();
 }
 
 #endif

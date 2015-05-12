@@ -278,19 +278,19 @@ void StgReader::SetFltName( const OUString& rFltNm )
 
 SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc& rDoc, bool bNDoc )
 {
-    pNumRuleTbl = new SwNumRuleTbl();
-    pNumRuleTbl->reserve(8);
+    pNumRuleTable = new SwNumRuleTable();
+    pNumRuleTable->reserve(8);
     if( !bNDoc )
-        pNumRuleTbl->insert( pNumRuleTbl->begin(),
-            rDoc.GetNumRuleTbl().begin(), rDoc.GetNumRuleTbl().end() );
+        pNumRuleTable->insert( pNumRuleTable->begin(),
+            rDoc.GetNumRuleTable().begin(), rDoc.GetNumRuleTable().end() );
 }
 
 SwRelNumRuleSpaces::~SwRelNumRuleSpaces()
 {
-    if( pNumRuleTbl )
+    if( pNumRuleTable )
     {
-        pNumRuleTbl->clear();
-        delete pNumRuleTbl;
+        pNumRuleTable->clear();
+        delete pNumRuleTable;
     }
 }
 
@@ -299,39 +299,39 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
 {
     const SfxPoolItem* pItem = 0;
     if( SfxItemState::SET != rFlySet.GetItemState( RES_FRM_SIZE, true, &pItem ) ||
-            MINFLY > static_cast<const SwFmtFrmSize*>(pItem)->GetWidth() )
+            MINFLY > static_cast<const SwFormatFrmSize*>(pItem)->GetWidth() )
     {
-        SwFmtFrmSize aSz(static_cast<const SwFmtFrmSize&>(rFlySet.Get(RES_FRM_SIZE, true)));
+        SwFormatFrmSize aSz(static_cast<const SwFormatFrmSize&>(rFlySet.Get(RES_FRM_SIZE, true)));
         if (pItem)
-            aSz = static_cast<const SwFmtFrmSize&>(*pItem);
+            aSz = static_cast<const SwFormatFrmSize&>(*pItem);
 
         SwTwips nWidth;
         // determine the width; if there is a table use the width of the table;
         // otherwise use the width of the page
-        const SwTableNode* pTblNd = rAnchor.GetNode().FindTableNode();
-        if( pTblNd )
-            nWidth = pTblNd->GetTable().GetFrmFmt()->GetFrmSize().GetWidth();
+        const SwTableNode* pTableNd = rAnchor.GetNode().FindTableNode();
+        if( pTableNd )
+            nWidth = pTableNd->GetTable().GetFrameFormat()->GetFrmSize().GetWidth();
         else
             nWidth = nPageWidth;
 
-        const SwNodeIndex* pSttNd = static_cast<const SwFmtCntnt&>(rFlySet.Get( RES_CNTNT )).
-                                                                GetCntntIdx();
+        const SwNodeIndex* pSttNd = static_cast<const SwFormatContent&>(rFlySet.Get( RES_CNTNT )).
+                                                                GetContentIdx();
         if( pSttNd )
         {
             bool bOnlyOneNode = true;
             sal_uLong nMinFrm = 0;
             sal_uLong nMaxFrm = 0;
-            SwTxtNode* pFirstTxtNd = 0;
+            SwTextNode* pFirstTextNd = 0;
             SwNodeIndex aIdx( *pSttNd, 1 );
             SwNodeIndex aEnd( *pSttNd->GetNode().EndOfSectionNode() );
             while( aIdx < aEnd )
             {
-                SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
-                if( pTxtNd )
+                SwTextNode *pTextNd = aIdx.GetNode().GetTextNode();
+                if( pTextNd )
                 {
-                    if( !pFirstTxtNd )
-                        pFirstTxtNd = pTxtNd;
-                    else if( pFirstTxtNd != pTxtNd )
+                    if( !pFirstTextNd )
+                        pFirstTextNd = pTextNd;
+                    else if( pFirstTextNd != pTextNd )
                     {
                         // forget it
                         bOnlyOneNode = false;
@@ -339,24 +339,24 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                     }
 
                     sal_uLong nAbsMinCnts;
-                    pTxtNd->GetMinMaxSize( aIdx.GetIndex(), nMinFrm, nMaxFrm, nAbsMinCnts );
+                    pTextNd->GetMinMaxSize( aIdx.GetIndex(), nMinFrm, nMaxFrm, nAbsMinCnts );
                 }
                 ++aIdx;
             }
 
             if( bOnlyOneNode )
             {
-                if( nMinFrm < MINLAY && pFirstTxtNd )
+                if( nMinFrm < MINLAY && pFirstTextNd )
                 {
                     // if the first node dont contained any content, then
                     // insert one char in it calc again and delete once again
-                    SwIndex aNdIdx( pFirstTxtNd );
-                    pFirstTxtNd->InsertText(OUString("MM"), aNdIdx);
+                    SwIndex aNdIdx( pFirstTextNd );
+                    pFirstTextNd->InsertText(OUString("MM"), aNdIdx);
                     sal_uLong nAbsMinCnts;
-                    pFirstTxtNd->GetMinMaxSize( pFirstTxtNd->GetIndex(),
+                    pFirstTextNd->GetMinMaxSize( pFirstTextNd->GetIndex(),
                                                                     nMinFrm, nMaxFrm, nAbsMinCnts );
                     aNdIdx -= 2;
-                    pFirstTxtNd->EraseText( aNdIdx, 2 );
+                    pFirstTextNd->EraseText( aNdIdx, 2 );
                 }
 
                 // consider border and distance to content
@@ -396,9 +396,9 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
             aSz.SetHeight( MINFLY );
         rFlySet.Put( aSz );
     }
-    else if( MINFLY > static_cast<const SwFmtFrmSize*>(pItem)->GetHeight() )
+    else if( MINFLY > static_cast<const SwFormatFrmSize*>(pItem)->GetHeight() )
     {
-        SwFmtFrmSize aSz( *static_cast<const SwFmtFrmSize*>(pItem) );
+        SwFormatFrmSize aSz( *static_cast<const SwFormatFrmSize*>(pItem) );
         aSz.SetHeight( MINFLY );
         rFlySet.Put( aSz );
     }

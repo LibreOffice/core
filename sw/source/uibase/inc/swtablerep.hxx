@@ -29,7 +29,7 @@ class SW_DLLPUBLIC SwTableRep
 {
     TColumn*    pTColumns;
 
-    SwTwips     nTblWidth;
+    SwTwips     nTableWidth;
     SwTwips     nSpace;
     SwTwips     nLeftSpace;
     SwTwips     nRightSpace;
@@ -53,8 +53,8 @@ public:
     SwTwips     GetRightSpace() const           {return nRightSpace;}
     void        SetRightSpace(SwTwips nSet)     {nRightSpace = nSet;}
 
-    SwTwips     GetWidth() const                {return nTblWidth;}
-    void        SetWidth(SwTwips nSet)          {nTblWidth = nSet;}
+    SwTwips     GetWidth() const                {return nTableWidth;}
+    void        SetWidth(SwTwips nSet)          {nTableWidth = nSet;}
 
     sal_uInt16      GetWidthPercent() const         {return nWidthPercent;}
     void        SetWidthPercent(sal_uInt16 nSet)    {nWidthPercent = nSet;}

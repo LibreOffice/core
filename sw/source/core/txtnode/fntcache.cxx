@@ -1793,7 +1793,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
 Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 {
-    Size aTxtSize;
+    Size aTextSize;
     const sal_Int32 nLn = ( COMPLETE_STRING != rInf.GetLen() ) ? rInf.GetLen() :
                            rInf.GetText().getLength();
 
@@ -1824,24 +1824,24 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             else
                 pOutDev = rInf.GetpOut();
 
-            aTxtSize.Width() =
+            aTextSize.Width() =
                     pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
 
             OSL_ENSURE( !rInf.GetShell() ||
                     ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading() ),
                 "Leading values should be already calculated" );
-            aTxtSize.Height() = pOutDev->GetTextHeight() +
+            aTextSize.Height() = pOutDev->GetTextHeight() +
                                 GetFontLeading( rInf.GetShell(), rInf.GetOut() );
 
-            long nAvgWidthPerChar = aTxtSize.Width() / nLn;
+            long nAvgWidthPerChar = aTextSize.Width() / nLn;
 
             const sal_uLong i = nAvgWidthPerChar ?
                             ( nAvgWidthPerChar - 1 ) / nGridWidth + 1:
                             1;
 
-            aTxtSize.Width() = i * nGridWidth * nLn;
+            aTextSize.Width() = i * nGridWidth * nLn;
             rInf.SetKanaDiff( 0 );
-            return aTxtSize;
+            return aTextSize;
         }
     }
 
@@ -1862,15 +1862,15 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             }
             else
                 pOutDev = rInf.GetpOut();
-            aTxtSize.Width() = pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
-            aTxtSize.Height() = pOutDev->GetTextHeight() +
+            aTextSize.Width() = pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
+            aTextSize.Height() = pOutDev->GetTextHeight() +
                                 GetFontLeading( rInf.GetShell(), rInf.GetOut() );
-            aTxtSize.Width() += nLn * nGridWidthAdd;
+            aTextSize.Width() += nLn * nGridWidthAdd;
             //if ( rInf.GetKern() && nLn )
-            //    aTxtSize.Width() += ( nLn ) * long( rInf.GetKern() );
+            //    aTextSize.Width() += ( nLn ) * long( rInf.GetKern() );
 
             rInf.SetKanaDiff( 0 );
-            return aTxtSize;
+            return aTextSize;
         }
     }
 
@@ -1890,9 +1890,9 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     {
         if( !pPrtFont->IsSameInstance( pPrinter->GetFont() ) )
             pPrinter->SetFont(*pPrtFont);
-        aTxtSize.Width() = pPrinter->GetTextWidth( rInf.GetText(),
+        aTextSize.Width() = pPrinter->GetTextWidth( rInf.GetText(),
                                                    rInf.GetIdx(), nLn );
-        aTxtSize.Height() = pPrinter->GetTextHeight();
+        aTextSize.Height() = pPrinter->GetTextHeight();
         long* pKernArray = new long[nLn];
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
@@ -1953,7 +1953,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         }
 
         delete[] pKernArray;
-        aTxtSize.Width() = nScrPos;
+        aTextSize.Width() = nScrPos;
     }
     else
     {
@@ -1967,28 +1967,28 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
                 rInf.GetIdx(), nLn, rInf.GetKanaComp(),
                 (sal_uInt16) aFont.GetSize().Height() ) );
-            aTxtSize.Width() = pKernArray[ nLn - 1 ];
+            aTextSize.Width() = pKernArray[ nLn - 1 ];
             delete[] pKernArray;
         }
         else
         {
-            aTxtSize.Width() = rInf.GetOut().GetTextWidth( rInf.GetText(),
+            aTextSize.Width() = rInf.GetOut().GetTextWidth( rInf.GetText(),
                                                            rInf.GetIdx(), nLn,
                                                            rInf.GetVclCache());
             rInf.SetKanaDiff( 0 );
         }
 
-        aTxtSize.Height() = rInf.GetOut().GetTextHeight();
+        aTextSize.Height() = rInf.GetOut().GetTextHeight();
     }
 
     if ( rInf.GetKern() && nLn )
-        aTxtSize.Width() += ( nLn - 1 ) * long( rInf.GetKern() );
+        aTextSize.Width() += ( nLn - 1 ) * long( rInf.GetKern() );
 
     OSL_ENSURE( !rInf.GetShell() ||
             ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading() ),
               "Leading values should be already calculated" );
-    aTxtSize.Height() += GetFontLeading( rInf.GetShell(), rInf.GetOut() );
-    return aTxtSize;
+    aTextSize.Height() += GetFontLeading( rInf.GetShell(), rInf.GetOut() );
+    return aTextSize;
 }
 
 sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
@@ -2301,7 +2301,7 @@ SwCacheObj *SwFntAccess::NewObj( )
     return new SwFntObj( *static_cast<SwSubFont const *>(pOwner), ++pMagicNo, pShell );
 }
 
-sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
+sal_Int32 SwFont::GetTextBreak( SwDrawTextInfo& rInf, long nTextWidth )
 {
     ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
@@ -2314,7 +2314,7 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     OSL_ENSURE( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
-    sal_Int32 nTxtBreak = 0;
+    sal_Int32 nTextBreak = 0;
     long nKern = 0;
 
     sal_Int32 nLn = rInf.GetLen() == COMPLETE_STRING
@@ -2342,14 +2342,14 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             nAvgWidthPerChar = i * nGridWidth;
             long nCurrPos = nAvgWidthPerChar;
 
-            while( nTxtBreak < rInf.GetLen() && nTextWidth >= nCurrPos )
+            while( nTextBreak < rInf.GetLen() && nTextWidth >= nCurrPos )
             {
                 nCurrPos += nAvgWidthPerChar;
-                ++nTxtBreak;
+                ++nTextBreak;
             }
 
             delete[] pKernArray;
-            return nTxtBreak + rInf.GetIdx();
+            return nTextBreak + rInf.GetIdx();
         }
     }
 
@@ -2365,20 +2365,20 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             long* pKernArray = new long[rInf.GetLen()];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                             rInf.GetIdx(), rInf.GetLen() );
-            long nCurrPos = pKernArray[nTxtBreak] + nGridWidthAdd;
-            while( nTxtBreak < rInf.GetLen() && nTextWidth >= nCurrPos)
+            long nCurrPos = pKernArray[nTextBreak] + nGridWidthAdd;
+            while( nTextBreak < rInf.GetLen() && nTextWidth >= nCurrPos)
             {
-                nTxtBreak++;
-                nCurrPos = pKernArray[nTxtBreak] + nGridWidthAdd * ( nTxtBreak + 1 );
+                nTextBreak++;
+                nCurrPos = pKernArray[nTextBreak] + nGridWidthAdd * ( nTextBreak + 1 );
             }
             delete[] pKernArray;
-            return nTxtBreak + rInf.GetIdx();
+            return nTextBreak + rInf.GetIdx();
         }
     }
 
     if( aSub[nActual].IsCapital() && nLn )
     {
-        nTxtBreak = GetCapitalBreak( rInf.GetShell(), rInf.GetpOut(),
+        nTextBreak = GetCapitalBreak( rInf.GetShell(), rInf.GetpOut(),
             rInf.GetScriptInfo(), rInf.GetText(), nTextWidth, rInf.GetIdx(),
             nLn );
     }
@@ -2429,38 +2429,38 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 
         if( rInf.GetHyphPos() ) {
             sal_Int32 nHyphPos = *rInf.GetHyphPos();
-            nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
+            nTextBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
                              static_cast<sal_Unicode>('-'), nHyphPos,
                              nTmpIdx, nTmpLen, nKern, rInf.GetVclCache());
             *rInf.GetHyphPos() = (nHyphPos == -1) ? COMPLETE_STRING : nHyphPos;
         }
         else
-            nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
+            nTextBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
                              nTmpIdx, nTmpLen, nKern, rInf.GetVclCache());
 
-        if ( bTextReplaced && nTxtBreak != -1 )
+        if ( bTextReplaced && nTextBreak != -1 )
         {
             if ( nTmpLen != nLn )
-                nTxtBreak = sw_CalcCaseMap( *this, rInf.GetText(),
-                                             rInf.GetIdx(), nLn, nTxtBreak );
+                nTextBreak = sw_CalcCaseMap( *this, rInf.GetText(),
+                                             rInf.GetIdx(), nLn, nTextBreak );
             else
-                nTxtBreak = nTxtBreak + rInf.GetIdx();
+                nTextBreak = nTextBreak + rInf.GetIdx();
         }
     }
 
-    sal_Int32 nTxtBreak2 = nTxtBreak == -1 ? COMPLETE_STRING : nTxtBreak;
+    sal_Int32 nTextBreak2 = nTextBreak == -1 ? COMPLETE_STRING : nTextBreak;
 
     if ( ! bCompress )
-        return nTxtBreak2;
+        return nTextBreak2;
 
-    nTxtBreak2 = nTxtBreak2 - rInf.GetIdx();
+    nTextBreak2 = nTextBreak2 - rInf.GetIdx();
 
-    if( nTxtBreak2 < nLn )
+    if( nTextBreak2 < nLn )
     {
-        if( !nTxtBreak2 && nLn )
+        if( !nTextBreak2 && nLn )
             nLn = 1;
-        else if( nLn > 2 * nTxtBreak2 )
-            nLn = 2 * nTxtBreak2;
+        else if( nLn > 2 * nTextBreak2 )
+            nLn = 2 * nTextBreak2;
         long* pKernArray = new long[ nLn ];
         rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                     rInf.GetIdx(), nLn );
@@ -2468,22 +2468,22 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                             rInf.GetKanaComp(), (sal_uInt16)GetHeight( nActual ) ) )
         {
             long nKernAdd = nKern;
-            sal_Int32 nTmpBreak = nTxtBreak2;
-            if( nKern && nTxtBreak2 )
-                nKern *= nTxtBreak2 - 1;
-            while( nTxtBreak2<nLn && nTextWidth >= pKernArray[nTxtBreak2] +nKern )
+            sal_Int32 nTmpBreak = nTextBreak2;
+            if( nKern && nTextBreak2 )
+                nKern *= nTextBreak2 - 1;
+            while( nTextBreak2<nLn && nTextWidth >= pKernArray[nTextBreak2] +nKern )
             {
                 nKern += nKernAdd;
-                ++nTxtBreak2;
+                ++nTextBreak2;
             }
             if( rInf.GetHyphPos() )
-                *rInf.GetHyphPos() += nTxtBreak2 - nTmpBreak; // It's not perfect
+                *rInf.GetHyphPos() += nTextBreak2 - nTmpBreak; // It's not perfect
         }
         delete[] pKernArray;
     }
-    nTxtBreak2 = nTxtBreak2 + rInf.GetIdx();
+    nTextBreak2 = nTextBreak2 + rInf.GetIdx();
 
-    return nTxtBreak2;
+    return nTextBreak2;
 }
 
 extern Color aGlobalRetoucheColor;

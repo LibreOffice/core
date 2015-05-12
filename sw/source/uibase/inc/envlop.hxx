@@ -32,11 +32,11 @@
 
 #include "envimg.hxx"
 
-#define GetFldVal(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
-#define SetFldVal(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
+#define GetFieldVal(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
+#define SetFieldVal(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)
 
 class SwEnvPage;
-class SwEnvFmtPage;
+class SwEnvFormatPage;
 class SwWrtShell;
 class Printer;
 
@@ -56,7 +56,7 @@ protected:
 class SwEnvDlg : public SfxTabDialog
 {
 friend class SwEnvPage;
-friend class SwEnvFmtPage;
+friend class SwEnvFormatPage;
 friend class SwEnvPrtPage;
 friend class SwEnvPreview;
 

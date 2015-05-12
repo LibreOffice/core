@@ -29,7 +29,7 @@ class SwXTextFrame;
 class SwXTextGraphicObject;
 class SwXTextEmbeddedObject;
 class SwXFrameStyle;
-class SwFmtINetFmt;
+class SwFormatINetFormat;
 
 class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
 {
@@ -44,8 +44,8 @@ public:
 
      SwHyperlinkEventDescriptor();
 
-    void copyMacrosFromINetFmt(const SwFmtINetFmt& aFmt);
-    void copyMacrosIntoINetFmt(SwFmtINetFmt& aFmt);
+    void copyMacrosFromINetFormat(const SwFormatINetFormat& aFormat);
+    void copyMacrosIntoINetFormat(SwFormatINetFormat& aFormat);
 
     void copyMacrosFromNameReplace(
         ::com::sun::star::uno::Reference<

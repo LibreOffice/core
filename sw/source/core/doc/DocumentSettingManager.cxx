@@ -39,7 +39,7 @@
 sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     :m_rDoc(rDoc),
     mnLinkUpdMode( GLOBALSETTING ),
-    meFldUpdMode( AUTOUPD_GLOBALSETTING ),
+    meFieldUpdMode( AUTOUPD_GLOBALSETTING ),
     meChrCmprType( CHARCOMPRESS_NONE ),
     mn32DummyCompatibilityOptions1(0),
     mn32DummyCompatibilityOptions2(0),
@@ -210,9 +210,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             {
                 mbOldNumbering = value;
 
-                const SwNumRuleTbl& rNmTbl = m_rDoc.GetNumRuleTbl();
-                for( SwNumRuleTbl::size_type n = 0; n < rNmTbl.size(); ++n )
-                    rNmTbl[n]->SetInvalidRule(true);
+                const SwNumRuleTable& rNmTable = m_rDoc.GetNumRuleTable();
+                for( SwNumRuleTable::size_type n = 0; n < rNmTable.size(); ++n )
+                    rNmTable[n]->SetInvalidRule(true);
 
                 m_rDoc.UpdateNumRule();
 
@@ -417,7 +417,7 @@ void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLan
     {
         pTmpRoot->StartAllAction();
         std::set<SwRootFrm*> aAllLayouts = m_rDoc.GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllContent), INV_SIZE));
         pTmpRoot->EndAllAction();
     }
     m_rDoc.getIDocumentState().SetModified();
@@ -450,17 +450,17 @@ void sw::DocumentSettingManager::setLinkUpdateMode( /*[in]*/sal_uInt16 eMode )
     mnLinkUpdMode = eMode;
 }
 
-SwFldUpdateFlags sw::DocumentSettingManager::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const
+SwFieldUpdateFlags sw::DocumentSettingManager::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const
 {
-    SwFldUpdateFlags eRet = meFldUpdMode;
+    SwFieldUpdateFlags eRet = meFieldUpdMode;
     if( bGlobalSettings && AUTOUPD_GLOBALSETTING == eRet )
-        eRet = SW_MOD()->GetFldUpdateFlags(get(DocumentSettingId::HTML_MODE));
+        eRet = SW_MOD()->GetFieldUpdateFlags(get(DocumentSettingId::HTML_MODE));
     return eRet;
 }
 
-void sw::DocumentSettingManager::setFieldUpdateFlags(/*[in]*/SwFldUpdateFlags eMode )
+void sw::DocumentSettingManager::setFieldUpdateFlags(/*[in]*/SwFieldUpdateFlags eMode )
 {
-    meFldUpdMode = eMode;
+    meFieldUpdMode = eMode;
 }
 
 SwCharCompressType sw::DocumentSettingManager::getCharacterCompressionType() const
@@ -487,7 +487,7 @@ void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharComp
         {
             pTmpRoot->StartAllAction();
             std::set<SwRootFrm*> aAllLayouts = m_rDoc.GetAllLayouts();
-            std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
+            std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllContent), INV_SIZE));
             pTmpRoot->EndAllAction();
         }
         m_rDoc.getIDocumentState().SetModified();

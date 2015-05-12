@@ -64,9 +64,9 @@ class SwSortDlg : public SvxStandardDialog
 
     VclPtr<CheckBox>           m_pCaseCB;
 
-    OUString aColTxt;
-    OUString aRowTxt;
-    OUString aNumericTxt;
+    OUString aColText;
+    OUString aRowText;
+    OUString aNumericText;
 
     SwWrtShell          &rSh;
     CollatorResource* pColRes;

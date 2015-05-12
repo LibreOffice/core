@@ -59,7 +59,7 @@ TYPEINIT1_FACTORY(SvxWidowsItem, SfxByteItem, new SvxWidowsItem(0, 0));
 TYPEINIT1_FACTORY(SvxOrphansItem, SfxByteItem, new SvxOrphansItem(0, 0));
 TYPEINIT1_FACTORY(SvxHyphenZoneItem, SfxPoolItem, new SvxHyphenZoneItem(false, 0));
 TYPEINIT1_FACTORY(SvxTabStopItem, SfxPoolItem, new SvxTabStopItem(0));
-TYPEINIT1_FACTORY(SvxFmtSplitItem, SfxBoolItem, new SvxFmtSplitItem(false, 0));
+TYPEINIT1_FACTORY(SvxFormatSplitItem, SfxBoolItem, new SvxFormatSplitItem(false, 0));
 TYPEINIT1_FACTORY(SvxPageModelItem, SfxStringItem, new SvxPageModelItem(0));
 TYPEINIT1_FACTORY(SvxScriptSpaceItem, SfxBoolItem, new SvxScriptSpaceItem(false, 0));
 TYPEINIT1_FACTORY(SvxHangingPunctuationItem, SfxBoolItem, new SvxHangingPunctuationItem(false, 0));
@@ -1208,19 +1208,19 @@ void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart,
 
 
 
-// class SvxFmtSplitItem -------------------------------------------------
-SvxFmtSplitItem::~SvxFmtSplitItem()
+// class SvxFormatSplitItem -------------------------------------------------
+SvxFormatSplitItem::~SvxFormatSplitItem()
 {
 }
 
-SfxPoolItem* SvxFmtSplitItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxFormatSplitItem::Clone( SfxItemPool * ) const
 {
-    return new SvxFmtSplitItem( *this );
+    return new SvxFormatSplitItem( *this );
 }
 
 
 
-SvStream& SvxFmtSplitItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
+SvStream& SvxFormatSplitItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm.WriteSChar( (sal_Int8)GetValue() );
     return rStrm;
@@ -1228,16 +1228,16 @@ SvStream& SvxFmtSplitItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ )
 
 
 
-SfxPoolItem* SvxFmtSplitItem::Create( SvStream& rStrm, sal_uInt16 ) const
+SfxPoolItem* SvxFormatSplitItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
     sal_Int8 bIsSplit;
     rStrm.ReadSChar( bIsSplit );
-    return new SvxFmtSplitItem( bIsSplit != 0, Which() );
+    return new SvxFormatSplitItem( bIsSplit != 0, Which() );
 }
 
 
 
-bool SvxFmtSplitItem::GetPresentation
+bool SvxFormatSplitItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
     SfxMapUnit          /*eCoreUnit*/,

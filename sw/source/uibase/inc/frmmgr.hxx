@@ -33,7 +33,7 @@ class   SwWrtShell;
 struct  SvxSwFrameValidation;
 struct  SwPosition;
 
-class   SwFmtCol;
+class   SwFormatCol;
 
 const SwTwips   DFLT_WIDTH      = MM50 * 4;
 const SwTwips   DFLT_HEIGHT     = MM50;
@@ -100,7 +100,7 @@ public:
     void                SetULSpace( long nTop   = LONG_MAX,
                                     long nBottom= LONG_MAX );
 
-    void                SetCol( const SwFmtCol &rCol);
+    void                SetCol( const SwFormatCol &rCol);
 
     // change and query attributes
     void                UpdateAttrMgr();
@@ -115,7 +115,7 @@ public:
 
     // check and change metrics
     void                ValidateMetrics(SvxSwFrameValidation& rVal,
-                            const SwPosition* pToCharCntntPos,
+                            const SwPosition* pToCharContentPos,
                             bool bOnlyPercentRefValue = false);
 
     void                DelAttr(sal_uInt16 nId);
@@ -125,12 +125,12 @@ public:
     inline       SfxItemSet &GetAttrSet()       { return m_aSet; }
     void                     SetAttrSet(const SfxItemSet& rSet);
 
-    inline const SwFmtVertOrient &GetVertOrient() const;
-    inline const SwFmtHoriOrient &GetHoriOrient() const;
+    inline const SwFormatVertOrient &GetVertOrient() const;
+    inline const SwFormatHoriOrient &GetHoriOrient() const;
     inline const SvxShadowItem   &GetShadow() const;
     inline const SvxBoxItem      &GetBox() const;
-    inline const SwFmtSurround   &GetSurround() const;
-    inline const SwFmtFrmSize    &GetFrmSize() const;
+    inline const SwFormatSurround   &GetSurround() const;
+    inline const SwFormatFrmSize    &GetFrmSize() const;
 
     long CalcWidthBorder()  { return CalcLeftSpace()+CalcRightSpace(); }
     long CalcHeightBorder() { return CalcTopSpace()+CalcBottomSpace(); }
@@ -138,20 +138,20 @@ public:
 
 inline const Size& SwFlyFrmAttrMgr::GetSize() const
 {
-    return static_cast<const SwFmtFrmSize&>(m_aSet.Get(RES_FRM_SIZE)).GetSize();
+    return static_cast<const SwFormatFrmSize&>(m_aSet.Get(RES_FRM_SIZE)).GetSize();
 }
 
-inline const SwFmtVertOrient &SwFlyFrmAttrMgr::GetVertOrient() const
+inline const SwFormatVertOrient &SwFlyFrmAttrMgr::GetVertOrient() const
 {
-    return static_cast<const SwFmtVertOrient&>(m_aSet.Get(RES_VERT_ORIENT));
+    return static_cast<const SwFormatVertOrient&>(m_aSet.Get(RES_VERT_ORIENT));
 }
-inline const SwFmtHoriOrient &SwFlyFrmAttrMgr::GetHoriOrient() const
+inline const SwFormatHoriOrient &SwFlyFrmAttrMgr::GetHoriOrient() const
 {
-    return static_cast<const SwFmtHoriOrient &>(m_aSet.Get(RES_HORI_ORIENT));
+    return static_cast<const SwFormatHoriOrient &>(m_aSet.Get(RES_HORI_ORIENT));
 }
-inline const SwFmtFrmSize& SwFlyFrmAttrMgr::GetFrmSize() const
+inline const SwFormatFrmSize& SwFlyFrmAttrMgr::GetFrmSize() const
 {
-    return static_cast<const SwFmtFrmSize&>(m_aSet.Get(RES_FRM_SIZE));
+    return static_cast<const SwFormatFrmSize&>(m_aSet.Get(RES_FRM_SIZE));
 }
 inline const SvxShadowItem &SwFlyFrmAttrMgr::GetShadow() const
 {
@@ -161,9 +161,9 @@ inline const SvxBoxItem &SwFlyFrmAttrMgr::GetBox() const
 {
     return static_cast<const SvxBoxItem&>(m_aSet.Get(RES_BOX));
 }
-inline const SwFmtSurround &SwFlyFrmAttrMgr::GetSurround() const
+inline const SwFormatSurround &SwFlyFrmAttrMgr::GetSurround() const
 {
-    return static_cast<const SwFmtSurround&>(m_aSet.Get(RES_SURROUND));
+    return static_cast<const SwFormatSurround&>(m_aSet.Get(RES_SURROUND));
 }
 
 inline Point SwFlyFrmAttrMgr::GetPos() const
@@ -173,7 +173,7 @@ inline Point SwFlyFrmAttrMgr::GetPos() const
 
 inline RndStdIds SwFlyFrmAttrMgr::GetAnchor()  const
 {
-    return static_cast<const SwFmtAnchor&>(m_aSet.Get(RES_ANCHOR)).GetAnchorId();
+    return static_cast<const SwFormatAnchor&>(m_aSet.Get(RES_ANCHOR)).GetAnchorId();
 }
 
 inline sal_uInt16 SwFlyFrmAttrMgr::GetHeightPercent() const

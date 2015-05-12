@@ -26,14 +26,14 @@
 
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFmtLineNumber: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatLineNumber: public SfxPoolItem
 {
     sal_uLong nStartValue   :24; ///< Starting value for the paragraph. 0 == no starting value.
     bool      bCountLines   :1;  ///< Also count lines of paragraph.
 
 public:
-    SwFmtLineNumber();
-    virtual ~SwFmtLineNumber();
+    SwFormatLineNumber();
+    virtual ~SwFormatLineNumber();
 
     TYPEINFO_OVERRIDE();
 
@@ -55,8 +55,8 @@ public:
     void SetCountLines( bool b )     { bCountLines = b;    }
 };
 
-inline const SwFmtLineNumber &SwAttrSet::GetLineNumber(bool bInP) const
-    { return static_cast<const SwFmtLineNumber&>(Get( RES_LINENUMBER,bInP)); }
+inline const SwFormatLineNumber &SwAttrSet::GetLineNumber(bool bInP) const
+    { return static_cast<const SwFormatLineNumber&>(Get( RES_LINENUMBER,bInP)); }
 
 #endif
 

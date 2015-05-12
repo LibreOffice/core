@@ -16,8 +16,8 @@ for I in "FrmFmt/FrameFormat" "Fmt/Format" "Cntnt/Content" "Txt/Text" "Tbl/Table
 do
     S="${I%/*}"
     # change all except the filenames (in the .mk and in #include)
-    # also avoid XML_numFmt, that's a token name
-    git grep -l "$S" sw/ | grep -v -e '\.mk' -e '/data/' | xargs sed -i '/\(#include\|XML_numFmt\)/ !{ s/'"$I"'/g }'
+    # also avoid numFmt (OOXML token) and other stuff that must stay verbatim
+    git grep -l "$S" sw/ | grep -v -e '\.mk' -e '/data/' | xargs sed -i '/\(#include\|numFmt\|ForeignTxt\)/ !{ s/'"$I"'/g }'
 done
 
 # global:
@@ -40,4 +40,4 @@ do
     git grep -l "$S" | grep -v -e '\.mk' -e 'rename-sw-abbreviations.sh' | xargs sed -i "s/$I/g"
 done
 
-# vim: set noet sw=4 ts=4:
+# vim: set et sw=4 ts=4 textwidth=0:

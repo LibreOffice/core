@@ -48,7 +48,7 @@ SwRenderData::~SwRenderData()
 void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
 {
     DeletePostItData();
-    m_pPostItFields.reset(new _SetGetExpFlds);
+    m_pPostItFields.reset(new _SetGetExpFields);
     sw_GetPostIts( &pDoc->getIDocumentFieldsAccess(), m_pPostItFields.get() );
 
     //!! Disable spell and grammar checking in the temporary document.

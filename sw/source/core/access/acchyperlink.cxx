@@ -44,22 +44,22 @@ SwAccessibleHyperlink::SwAccessibleHyperlink( size_t nHPos,
 {
 }
 
-const SwTxtAttr *SwAccessibleHyperlink::GetTxtAttr() const
+const SwTextAttr *SwAccessibleHyperlink::GetTextAttr() const
 {
-    const SwTxtAttr *pTxtAttr = 0;
+    const SwTextAttr *pTextAttr = 0;
     if( xPara.is() && xPara->GetMap() )
     {
-        const SwTxtNode *pTxtNd = xPara->GetTxtNode();
-        const SwpHints *pHints = pTxtNd->GetpSwpHints();
+        const SwTextNode *pTextNd = xPara->GetTextNode();
+        const SwpHints *pHints = pTextNd->GetpSwpHints();
         if( pHints && nHintPos < pHints->Count() )
         {
-            const SwTxtAttr *pHt = (*pHints)[nHintPos];
+            const SwTextAttr *pHt = (*pHints)[nHintPos];
             if( RES_TXTATR_INETFMT == pHt->Which() )
-                pTxtAttr = pHt;
+                pTextAttr = pHt;
         }
     }
 
-    return pTxtAttr;
+    return pTextAttr;
 }
 
 // XAccessibleAction
@@ -78,24 +78,24 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
 
     if(nIndex != 0)
         throw lang::IndexOutOfBoundsException();
-    const SwTxtAttr *pTxtAttr = GetTxtAttr();
-    if( pTxtAttr )
+    const SwTextAttr *pTextAttr = GetTextAttr();
+    if( pTextAttr )
     {
-        const SwFmtINetFmt& rINetFmt = pTxtAttr->GetINetFmt();
-        if( !rINetFmt.GetValue().isEmpty() )
+        const SwFormatINetFormat& rINetFormat = pTextAttr->GetINetFormat();
+        if( !rINetFormat.GetValue().isEmpty() )
         {
             SwViewShell *pVSh = xPara->GetShell();
             if( pVSh )
             {
-                LoadURL(*pVSh, rINetFmt.GetValue(), URLLOAD_NOFILTER,
-                         rINetFmt.GetTargetFrame());
-                OSL_ENSURE( pTxtAttr == rINetFmt.GetTxtINetFmt(),
+                LoadURL(*pVSh, rINetFormat.GetValue(), URLLOAD_NOFILTER,
+                         rINetFormat.GetTargetFrame());
+                OSL_ENSURE( pTextAttr == rINetFormat.GetTextINetFormat(),
                          "lost my txt attr" );
-                const SwTxtINetFmt* pTxtAttr2 = rINetFmt.GetTxtINetFmt();
-                if( pTxtAttr2 )
+                const SwTextINetFormat* pTextAttr2 = rINetFormat.GetTextINetFormat();
+                if( pTextAttr2 )
                 {
-                    const_cast<SwTxtINetFmt*>(pTxtAttr2)->SetVisited(true);
-                    const_cast<SwTxtINetFmt*>(pTxtAttr2)->SetVisitedValid(true);
+                    const_cast<SwTextINetFormat*>(pTextAttr2)->SetVisited(true);
+                    const_cast<SwTextINetFormat*>(pTextAttr2)->SetVisitedValid(true);
                 }
                 bRet = true;
             }
@@ -112,11 +112,11 @@ OUString SAL_CALL SwAccessibleHyperlink::getAccessibleActionDescription(
     if(nIndex != 0)
         throw lang::IndexOutOfBoundsException();
 
-    const SwTxtAttr *pTxtAttr = GetTxtAttr();
-    if( pTxtAttr )
+    const SwTextAttr *pTextAttr = GetTextAttr();
+    if( pTextAttr )
     {
-        const SwFmtINetFmt& rINetFmt = pTxtAttr->GetINetFmt();
-        return rINetFmt.GetValue();
+        const SwFormatINetFormat& rINetFormat = pTextAttr->GetINetFormat();
+        return rINetFormat.GetValue();
     }
 
     return OUString();
@@ -169,12 +169,12 @@ uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionObject(
 
     if(nIndex != 0)
         throw lang::IndexOutOfBoundsException();
-    const SwTxtAttr *pTxtAttr = GetTxtAttr();
+    const SwTextAttr *pTextAttr = GetTextAttr();
     OUString retText;
-    if( pTxtAttr )
+    if( pTextAttr )
     {
-        const SwFmtINetFmt& rINetFmt = pTxtAttr->GetINetFmt();
-        retText = OUString( rINetFmt.GetValue() );
+        const SwFormatINetFormat& rINetFormat = pTextAttr->GetINetFormat();
+        retText = OUString( rINetFormat.GetValue() );
     }
     uno::Any aRet;
     aRet <<= retText;
@@ -199,12 +199,12 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
     SolarMutexGuard aGuard;
     if (xPara.is())
     {
-        const SwTxtAttr *pTxtAttr = GetTxtAttr();
+        const SwTextAttr *pTextAttr = GetTextAttr();
         OUString sText;
-        if( pTxtAttr )
+        if( pTextAttr )
         {
-            const SwFmtINetFmt& rINetFmt = pTxtAttr->GetINetFmt();
-            sText = OUString( rINetFmt.GetValue() );
+            const SwFormatINetFormat& rINetFormat = pTextAttr->GetINetFormat();
+            sText = OUString( rINetFormat.GetValue() );
             OUString sToken = "#";
             sal_Int32 nPos = sText.indexOf(sToken);
             if (nPos==0)//document link

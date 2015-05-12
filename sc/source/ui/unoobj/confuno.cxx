@@ -306,13 +306,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             else if ( aPropertyName == SC_UNO_RASTERVIS )
                 aGridOpt.SetGridVisible( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else if ( aPropertyName == SC_UNO_RASTERRESX )
-                aGridOpt.SetFldDrawX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
+                aGridOpt.SetFieldDrawX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
             else if ( aPropertyName == SC_UNO_RASTERRESY )
-                aGridOpt.SetFldDrawY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
+                aGridOpt.SetFieldDrawY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
             else if ( aPropertyName == SC_UNO_RASTERSUBX )
-                aGridOpt.SetFldDivisionX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
+                aGridOpt.SetFieldDivisionX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
             else if ( aPropertyName == SC_UNO_RASTERSUBY )
-                aGridOpt.SetFldDivisionY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
+                aGridOpt.SetFieldDivisionY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
             else if ( aPropertyName == SC_UNO_RASTERSYNC )
                 aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else
@@ -442,13 +442,13 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
             else if ( aPropertyName == SC_UNO_RASTERVIS )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aGridOpt.GetGridVisible() );
             else if ( aPropertyName == SC_UNO_RASTERRESX )
-                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDrawX() );
+                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDrawX() );
             else if ( aPropertyName == SC_UNO_RASTERRESY )
-                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDrawY() );
+                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDrawY() );
             else if ( aPropertyName == SC_UNO_RASTERSUBX )
-                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDivisionX() );
+                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDivisionX() );
             else if ( aPropertyName == SC_UNO_RASTERSUBY )
-                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDivisionY() );
+                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDivisionY() );
             else if ( aPropertyName == SC_UNO_RASTERSYNC )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aGridOpt.GetSynchronize() );
             else

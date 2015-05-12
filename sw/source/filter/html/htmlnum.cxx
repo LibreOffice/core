@@ -21,21 +21,21 @@
 #include <ndtxt.hxx>
 #include <doc.hxx>
 
-void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
+void SwHTMLNumRuleInfo::Set( const SwTextNode& rTextNd )
 {
-    const SwNumRule* pTxtNdNumRule( rTxtNd.GetNumRule() );
-    if ( pTxtNdNumRule &&
-         pTxtNdNumRule != rTxtNd.GetDoc()->GetOutlineNumRule() )
+    const SwNumRule* pTextNdNumRule( rTextNd.GetNumRule() );
+    if ( pTextNdNumRule &&
+         pTextNdNumRule != rTextNd.GetDoc()->GetOutlineNumRule() )
     {
-        pNumRule = const_cast<SwNumRule*>(pTxtNdNumRule);
-        nDeep = static_cast< sal_uInt16 >(pNumRule ? rTxtNd.GetActualListLevel() + 1 : 0);
-        bNumbered = rTxtNd.IsCountedInList();
+        pNumRule = const_cast<SwNumRule*>(pTextNdNumRule);
+        nDeep = static_cast< sal_uInt16 >(pNumRule ? rTextNd.GetActualListLevel() + 1 : 0);
+        bNumbered = rTextNd.IsCountedInList();
         // #i57919# - correction of refactoring done by cws swnumtree:
         // <bRestart> has to be set to <true>, if numbering is restarted at this
         // text node and the start value equals <USHRT_MAX>.
         // Start value <USHRT_MAX> indicates, that at this text node the numbering
         // is restarted with the value given at the corresponding level.
-        bRestart = rTxtNd.IsListRestart() && !rTxtNd.HasAttrListRestartValue();
+        bRestart = rTextNd.IsListRestart() && !rTextNd.HasAttrListRestartValue();
     }
     else
     {

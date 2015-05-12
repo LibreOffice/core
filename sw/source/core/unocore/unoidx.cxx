@@ -334,7 +334,7 @@ public:
     Impl(   SwDoc & rDoc,
             const TOXTypes eType,
             SwTOXBaseSection *const pBaseSection)
-        : SwClient((pBaseSection) ? pBaseSection->GetFmt() : 0)
+        : SwClient((pBaseSection) ? pBaseSection->GetFormat() : 0)
         , m_Listeners(m_Mutex)
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
@@ -347,18 +347,18 @@ public:
     {
     }
 
-    SwSectionFmt * GetSectionFmt() const {
-        return static_cast<SwSectionFmt *>(
+    SwSectionFormat * GetSectionFormat() const {
+        return static_cast<SwSectionFormat *>(
                 const_cast<SwModify *>(GetRegisteredIn()));
     }
 
     SwTOXBase & GetTOXSectionOrThrow() const
     {
-        SwSectionFmt *const pSectionFmt(GetSectionFmt());
+        SwSectionFormat *const pSectionFormat(GetSectionFormat());
         SwTOXBase *const pTOXSection( (m_bIsDescriptor)
             ?  &m_pProps->GetTOXBase()
-            : ((pSectionFmt)
-                ? static_cast<SwTOXBaseSection*>(pSectionFmt->GetSection())
+            : ((pSectionFormat)
+                ? static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection())
                 : 0));
         if (!pTOXSection)
         {
@@ -423,8 +423,8 @@ SwXDocumentIndex::CreateXDocumentIndex(
     uno::Reference<text::XDocumentIndex> xIndex;
     if (pSection)
     {
-        SwSectionFmt const *const pFmt = pSection->GetFmt();
-        xIndex.set(pFmt->GetXObject(), uno::UNO_QUERY);
+        SwSectionFormat const *const pFormat = pSection->GetFormat();
+        xIndex.set(pFormat->GetXObject(), uno::UNO_QUERY);
     }
     if (!xIndex.is())
     {
@@ -434,7 +434,7 @@ SwXDocumentIndex::CreateXDocumentIndex(
         xIndex.set(pIndex);
         if (pSection)
         {
-            pSection->GetFmt()->SetXObject(xIndex);
+            pSection->GetFormat()->SetXObject(xIndex);
         }
         // need a permanent Reference to initialize m_wThis
         pIndex->m_pImpl->m_wThis = xIndex;
@@ -572,7 +572,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             static_cast<cppu::OWeakObject *>(this));
     }
 
-    SwSectionFmt *const pSectionFmt(m_pImpl->GetSectionFmt());
+    SwSectionFormat *const pSectionFormat(m_pImpl->GetSectionFormat());
     SwTOXBase & rTOXBase( m_pImpl->GetTOXSectionOrThrow() );
 
     sal_uInt16 nCreate = rTOXBase.GetCreateType();
@@ -614,11 +614,11 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             lcl_ConvertTOUNameToUserName(sNewName);
             OSL_ENSURE(TOX_USER == eTxBaseType,
                     "tox type name can only be changed for user indexes");
-            if (pSectionFmt)
+            if (pSectionFormat)
             {
                 if (rTOXBase.GetTOXType()->GetTypeName() != sNewName)
                 {
-                    lcl_ReAssignTOXType(pSectionFmt->GetDoc(),
+                    lcl_ReAssignTOXType(pSectionFormat->GetDoc(),
                             rTOXBase, sNewName);
                 }
             }
@@ -697,7 +697,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         {
             bool bSet = lcl_AnyToBool(rValue);
             rTOXBase.SetProtected(bSet);
-            if (pSectionFmt)
+            if (pSectionFormat)
             {
                 static_cast<SwTOXBaseSection &>(rTOXBase).SetProtect(bSet);
             }
@@ -858,11 +858,11 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 m_pImpl->m_rPropSet.setPropertyValue(
                         rPropertyName, rValue, aAttrSet);
 
-                const SwSectionFmts& rSects = m_pImpl->m_pDoc->GetSections();
+                const SwSectionFormats& rSects = m_pImpl->m_pDoc->GetSections();
                 for (size_t i = 0; i < rSects.size(); ++i)
                 {
-                    const SwSectionFmt* pTmpFmt = rSects[ i ];
-                    if (pTmpFmt == pSectionFmt)
+                    const SwSectionFormat* pTmpFormat = rSects[ i ];
+                    if (pTmpFormat == pSectionFormat)
                     {
                         SwSectionData tmpData(
                             static_cast<SwTOXBaseSection&>(rTOXBase));
@@ -901,11 +901,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             static_cast< cppu::OWeakObject * >(this));
     }
 
-    SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
+    SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     SwTOXBase* pTOXBase = 0;
-    if (pSectionFmt)
+    if (pSectionFormat)
     {
-        pTOXBase = static_cast<SwTOXBaseSection*>(pSectionFmt->GetSection());
+        pTOXBase = static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection());
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
@@ -927,13 +927,13 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 if(WID_IDX_CONTENT_SECTION == pEntry->nWID)
                 {
                     const uno::Reference <text::XTextSection> xContentSect =
-                        SwXTextSection::CreateXTextSection( pSectionFmt );
+                        SwXTextSection::CreateXTextSection( pSectionFormat );
                     aRet <<= xContentSect;
                 }
-                else if (pSectionFmt)
+                else if (pSectionFormat)
                 {
                     SwSections aSectArr;
-                    pSectionFmt->GetChildSections(aSectArr,
+                    pSectionFormat->GetChildSections(aSectArr,
                             SORTSECT_NOT, false);
                     for(size_t i = 0; i < aSectArr.size(); ++i)
                     {
@@ -942,7 +942,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                         {
                             const uno::Reference <text::XTextSection> xHeader =
                                 SwXTextSection::CreateXTextSection(
-                                    pSect->GetFmt() );
+                                    pSect->GetFormat() );
                             aRet <<= xHeader;
                             break;
                         }
@@ -1282,9 +1282,9 @@ void SAL_CALL SwXDocumentIndex::refresh() throw (uno::RuntimeException, std::exc
     {
         SolarMutexGuard g;
 
-        SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
-        SwTOXBaseSection *const pTOXBase = (pFmt) ?
-            static_cast<SwTOXBaseSection*>(pFmt->GetSection()) : 0;
+        SwSectionFormat *const pFormat = m_pImpl->GetSectionFormat();
+        SwTOXBaseSection *const pTOXBase = (pFormat) ?
+            static_cast<SwTOXBaseSection*>(pFormat->GetSection()) : 0;
         if (!pTOXBase)
         {
             throw uno::RuntimeException(
@@ -1381,8 +1381,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     pDoc->SetTOXBaseName(*pTOX, m_pImpl->m_pProps->GetTOXBase().GetTOXName());
 
     // update page numbers
-    pTOX->GetFmt()->Add(m_pImpl.get());
-    pTOX->GetFmt()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
+    pTOX->GetFormat()->Add(m_pImpl.get());
+    pTOX->GetFormat()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
     const_cast<SwTOXBaseSection*>(pTOX)->UpdatePageNum();
 
     m_pImpl->m_pProps.reset();
@@ -1395,22 +1395,22 @@ SwXDocumentIndex::getAnchor() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
-    if (!pSectionFmt)
+    SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
+    if (!pSectionFormat)
     {
         throw uno::RuntimeException();
     }
 
     uno::Reference< text::XTextRange > xRet;
-    SwNodeIndex const*const pIdx( pSectionFmt->GetCntnt().GetCntntIdx() );
+    SwNodeIndex const*const pIdx( pSectionFormat->GetContent().GetContentIdx() );
     if (pIdx && pIdx->GetNode().GetNodes().IsDocNodes())
     {
         SwPaM aPaM(*pIdx);
-        aPaM.Move( fnMoveForward, fnGoCntnt );
+        aPaM.Move( fnMoveForward, fnGoContent );
         aPaM.SetMark();
         aPaM.GetPoint()->nNode = *pIdx->GetNode().EndOfSectionNode();
-        aPaM.Move( fnMoveBackward, fnGoCntnt );
-        xRet = SwXTextRange::CreateXTextRange(*pSectionFmt->GetDoc(),
+        aPaM.Move( fnMoveBackward, fnGoContent );
+        xRet = SwXTextRange::CreateXTextRange(*pSectionFormat->GetDoc(),
             *aPaM.GetMark(), aPaM.GetPoint());
     }
     return xRet;
@@ -1420,11 +1420,11 @@ void SAL_CALL SwXDocumentIndex::dispose() throw (uno::RuntimeException, std::exc
 {
     SolarMutexGuard aGuard;
 
-    SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
-    if (pSectionFmt)
+    SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
+    if (pSectionFormat)
     {
-        pSectionFmt->GetDoc()->DeleteTOX(
-            *static_cast<SwTOXBaseSection*>(pSectionFmt->GetSection()),
+        pSectionFormat->GetDoc()->DeleteTOX(
+            *static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection()),
             true);
     }
 }
@@ -1454,14 +1454,14 @@ OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException, std:
     SolarMutexGuard g;
 
     OUString uRet;
-    SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
+    SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     if (m_pImpl->m_bIsDescriptor)
     {
         uRet = m_pImpl->m_pProps->GetTOXBase().GetTOXName();
     }
-    else if(pSectionFmt)
+    else if(pSectionFormat)
     {
-        uRet = pSectionFmt->GetSection()->GetSectionName();
+        uRet = pSectionFormat->GetSection()->GetSectionName();
     }
     else
     {
@@ -1480,15 +1480,15 @@ SwXDocumentIndex::setName(const OUString& rName) throw (uno::RuntimeException, s
         throw uno::RuntimeException();
     }
 
-    SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
+    SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     if (m_pImpl->m_bIsDescriptor)
     {
         m_pImpl->m_pProps->GetTOXBase().SetTOXName(rName);
     }
-    else if (pSectionFmt)
+    else if (pSectionFormat)
     {
-        const bool bSuccess = pSectionFmt->GetDoc()->SetTOXBaseName(
-            *static_cast<SwTOXBaseSection*>(pSectionFmt->GetSection()), rName);
+        const bool bSuccess = pSectionFormat->GetDoc()->SetTOXBaseName(
+            *static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection()), rName);
         if (!bSuccess)
         {
             throw uno::RuntimeException();
@@ -1503,16 +1503,16 @@ SwXDocumentIndex::setName(const OUString& rName) throw (uno::RuntimeException, s
 // MetadatableMixin
 ::sfx2::Metadatable* SwXDocumentIndex::GetCoreObject()
 {
-    SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
-    return pSectionFmt;
+    SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
+    return pSectionFormat;
 }
 
 uno::Reference<frame::XModel> SwXDocumentIndex::GetModel()
 {
-    SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
-    if (pSectionFmt)
+    SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
+    if (pSectionFormat)
     {
-        SwDocShell const*const pShell( pSectionFmt->GetDoc()->GetDocShell() );
+        SwDocShell const*const pShell( pSectionFormat->GetDoc()->GetDocShell() );
         return (pShell) ? pShell->GetModel() : 0;
     }
     return 0;
@@ -1798,13 +1798,13 @@ throw (uno::RuntimeException, std::exception)
     {
         SwTOXMark aMark(*m_pImpl->m_pTOXMark);
         aMark.SetAlternativeText(rIndexEntry);
-        SwTxtTOXMark const*const pTxtMark =
-            m_pImpl->m_pTOXMark->GetTxtTOXMark();
-        SwPaM aPam(pTxtMark->GetTxtNode(), pTxtMark->GetStart());
+        SwTextTOXMark const*const pTextMark =
+            m_pImpl->m_pTOXMark->GetTextTOXMark();
+        SwPaM aPam(pTextMark->GetTextNode(), pTextMark->GetStart());
         aPam.SetMark();
-        if(pTxtMark->End())
+        if(pTextMark->End())
         {
-            aPam.GetPoint()->nContent = *pTxtMark->End();
+            aPam.GetPoint()->nContent = *pTextMark->End();
         }
         else
             ++aPam.GetPoint()->nContent;
@@ -1986,10 +1986,10 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
             | SetAttrMode::DONTEXPAND)
         : SetAttrMode::DONTEXPAND;
 
-    ::std::vector<SwTxtAttr *> oldMarks;
+    ::std::vector<SwTextAttr *> oldMarks;
     if (bMark)
     {
-        oldMarks = rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
+        oldMarks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
             rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK);
     }
 
@@ -2000,30 +2000,30 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     }
 
     // rMark was copied into the document pool; now retrieve real format...
-    SwTxtAttr * pTxtAttr(0);
+    SwTextAttr * pTextAttr(0);
     if (bMark)
     {
         // #i107672#
         // ensure that we do not retrieve a different mark at the same position
-        ::std::vector<SwTxtAttr *> const newMarks(
-            rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
+        ::std::vector<SwTextAttr *> const newMarks(
+            rPam.GetNode().GetTextNode()->GetTextAttrsAt(
                 rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK));
-        ::std::vector<SwTxtAttr *>::const_iterator const iter(
+        ::std::vector<SwTextAttr *>::const_iterator const iter(
             ::std::find_if(newMarks.begin(), newMarks.end(),
-                NotContainedIn<SwTxtAttr *>(oldMarks)));
+                NotContainedIn<SwTextAttr *>(oldMarks)));
         OSL_ASSERT(newMarks.end() != iter);
         if (newMarks.end() != iter)
         {
-            pTxtAttr = *iter;
+            pTextAttr = *iter;
         }
     }
     else
     {
-        pTxtAttr = rPam.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
+        pTextAttr = rPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
             rPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
     }
 
-    if (!pTxtAttr)
+    if (!pTextAttr)
     {
         throw uno::RuntimeException(
             "SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute",
@@ -2031,7 +2031,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     }
 
     m_pDoc = pDoc;
-    m_pTOXMark = & pTxtAttr->GetTOXMark();
+    m_pTOXMark = & pTextAttr->GetTOXMark();
     const_cast<SwTOXMark*>(m_pTOXMark)->Add(this);
     const_cast<SwTOXType &>(rTOXType).Add(& m_TypeDepend);
 }
@@ -2046,16 +2046,16 @@ SwXDocumentIndexMark::getAnchor() throw (uno::RuntimeException, std::exception)
     {
         throw uno::RuntimeException();
     }
-    if (!m_pImpl->m_pTOXMark->GetTxtTOXMark())
+    if (!m_pImpl->m_pTOXMark->GetTextTOXMark())
     {
         throw uno::RuntimeException();
     }
-    const SwTxtTOXMark* pTxtMark = m_pImpl->m_pTOXMark->GetTxtTOXMark();
-    SwPaM aPam(pTxtMark->GetTxtNode(), pTxtMark->GetStart());
+    const SwTextTOXMark* pTextMark = m_pImpl->m_pTOXMark->GetTextTOXMark();
+    SwPaM aPam(pTextMark->GetTextNode(), pTextMark->GetStart());
     aPam.SetMark();
-    if(pTxtMark->End())
+    if(pTextMark->End())
     {
-        aPam.GetPoint()->nContent = *pTxtMark->End();
+        aPam.GetPoint()->nContent = *pTextMark->End();
     }
     else
     {
@@ -2191,13 +2191,13 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 aMark.SetSecondaryKeyReading(lcl_AnyToString(rValue));
             break;
         }
-        SwTxtTOXMark const*const pTxtMark =
-            m_pImpl->m_pTOXMark->GetTxtTOXMark();
-        SwPaM aPam(pTxtMark->GetTxtNode(), pTxtMark->GetStart());
+        SwTextTOXMark const*const pTextMark =
+            m_pImpl->m_pTOXMark->GetTextTOXMark();
+        SwPaM aPam(pTextMark->GetTextNode(), pTextMark->GetStart());
         aPam.SetMark();
-        if(pTxtMark->End())
+        if(pTextMark->End())
         {
-            aPam.GetPoint()->nContent = *pTxtMark->End();
+            aPam.GetPoint()->nContent = *pTextMark->End();
         }
         else
         {
@@ -2475,12 +2475,12 @@ SwXDocumentIndexes::getCount() throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
 
     sal_uInt32 nRet = 0;
-    const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( size_t n = 0; n < rFmts.size(); ++n )
+    const SwSectionFormats& rFormats = GetDoc()->GetSections();
+    for( size_t n = 0; n < rFormats.size(); ++n )
     {
-        const SwSection* pSect = rFmts[ n ]->GetSection();
+        const SwSection* pSect = rFormats[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
-            pSect->GetFmt()->GetSectionNode() )
+            pSect->GetFormat()->GetSectionNode() )
         {
             ++nRet;
         }
@@ -2500,12 +2500,12 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
     sal_Int32 nIdx = 0;
 
-    const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( size_t n = 0; n < rFmts.size(); ++n )
+    const SwSectionFormats& rFormats = GetDoc()->GetSections();
+    for( size_t n = 0; n < rFormats.size(); ++n )
     {
-        SwSection* pSect = rFmts[ n ]->GetSection();
+        SwSection* pSect = rFormats[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
-            pSect->GetFmt()->GetSectionNode() &&
+            pSect->GetFormat()->GetSectionNode() &&
             nIdx++ == nIndex )
         {
            const uno::Reference< text::XDocumentIndex > xTmp =
@@ -2530,12 +2530,12 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     if(!IsValid())
         throw uno::RuntimeException();
 
-    const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( size_t n = 0; n < rFmts.size(); ++n )
+    const SwSectionFormats& rFormats = GetDoc()->GetSections();
+    for( size_t n = 0; n < rFormats.size(); ++n )
     {
-        SwSection* pSect = rFmts[ n ]->GetSection();
+        SwSection* pSect = rFormats[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
-            pSect->GetFmt()->GetSectionNode() &&
+            pSect->GetFormat()->GetSectionNode() &&
             (static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()
                 == rName))
         {
@@ -2558,13 +2558,13 @@ SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException, std::excepti
     if(!IsValid())
         throw uno::RuntimeException();
 
-    const SwSectionFmts& rFmts = GetDoc()->GetSections();
+    const SwSectionFormats& rFormats = GetDoc()->GetSections();
     sal_Int32 nCount = 0;
-    for( size_t n = 0; n < rFmts.size(); ++n )
+    for( size_t n = 0; n < rFormats.size(); ++n )
     {
-        SwSection const*const pSect = rFmts[ n ]->GetSection();
+        SwSection const*const pSect = rFormats[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
-            pSect->GetFmt()->GetSectionNode() )
+            pSect->GetFormat()->GetSectionNode() )
         {
             ++nCount;
         }
@@ -2573,11 +2573,11 @@ SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException, std::excepti
     uno::Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
     sal_Int32 nCnt = 0;
-    for( size_t n = 0; n < rFmts.size(); ++n )
+    for( size_t n = 0; n < rFormats.size(); ++n )
     {
-        SwSection const*const pSect = rFmts[ n ]->GetSection();
+        SwSection const*const pSect = rFormats[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
-            pSect->GetFmt()->GetSectionNode())
+            pSect->GetFormat()->GetSectionNode())
         {
             pArray[nCnt++] = static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName();
         }
@@ -2594,12 +2594,12 @@ throw (uno::RuntimeException, std::exception)
     if(!IsValid())
         throw uno::RuntimeException();
 
-    const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( size_t n = 0; n < rFmts.size(); ++n )
+    const SwSectionFormats& rFormats = GetDoc()->GetSections();
+    for( size_t n = 0; n < rFormats.size(); ++n )
     {
-        SwSection const*const pSect = rFmts[ n ]->GetSection();
+        SwSection const*const pSect = rFormats[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
-            pSect->GetFmt()->GetSectionNode())
+            pSect->GetFormat()->GetSectionNode())
         {
             if (static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()
                     == rName)

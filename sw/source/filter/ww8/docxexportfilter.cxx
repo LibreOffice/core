@@ -43,11 +43,11 @@ bool DocxExportFilter::exportDocument()
 
     // get SwDoc*
     uno::Reference< uno::XInterface > xIfc( getModel(), uno::UNO_QUERY );
-    SwXTextDocument *pTxtDoc = dynamic_cast< SwXTextDocument * >( xIfc.get() );
-    if ( !pTxtDoc )
+    SwXTextDocument *pTextDoc = dynamic_cast< SwXTextDocument * >( xIfc.get() );
+    if ( !pTextDoc )
         return false;
 
-    SwDoc *pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    SwDoc *pDoc = pTextDoc->GetDocShell()->GetDoc();
     if ( !pDoc )
         return false;
 

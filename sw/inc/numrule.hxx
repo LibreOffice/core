@@ -33,7 +33,7 @@
 #include <vector>
 #include <charfmt.hxx>
 
-class SwTxtFmtColl;
+class SwTextFormatColl;
 class IDocumentListsAccess;
 class SwNodeNum;
 namespace vcl { class Font; }
@@ -41,15 +41,15 @@ class SvxBrushItem;
 class SfxGrabBagItem;
 class SvxNumRule;
 class SwDoc;
-class SwFmtVertOrient;
-class SwTxtNode;
+class SwFormatVertOrient;
+class SwTextNode;
 class Size;
 
 const sal_Unicode cBulletChar = 0x2022; ///< Character for lists.
 
-class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
+class SW_DLLPUBLIC SwNumFormat : public SvxNumberFormat, public SwClient
 {
-    SwFmtVertOrient* pVertOrient;
+    SwFormatVertOrient* pVertOrient;
     //For i120928,record the cp info of graphic within bullet
     sal_Unicode     cGrfBulletCP;
     SAL_DLLPRIVATE void UpdateNumNodes( SwDoc* pDoc );
@@ -62,22 +62,22 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
 
 public:
-    SwNumFmt();
-    SwNumFmt( const SwNumFmt& );
-    SwNumFmt( const SvxNumberFormat&, SwDoc* pDoc);
+    SwNumFormat();
+    SwNumFormat( const SwNumFormat& );
+    SwNumFormat( const SvxNumberFormat&, SwDoc* pDoc);
 
-    virtual ~SwNumFmt();
+    virtual ~SwNumFormat();
 
-    SwNumFmt& operator=( const SwNumFmt& );
+    SwNumFormat& operator=( const SwNumFormat& );
 
-    bool operator==( const SwNumFmt& ) const;
-    bool operator!=( const SwNumFmt& r ) const { return !(*this == r); }
+    bool operator==( const SwNumFormat& ) const;
+    bool operator!=( const SwNumFormat& r ) const { return !(*this == r); }
 
-    SwCharFmt* GetCharFmt() const { return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(GetRegisteredIn())); }
-    void       SetCharFmt( SwCharFmt* );
+    SwCharFormat* GetCharFormat() const { return const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(GetRegisteredIn())); }
+    void       SetCharFormat( SwCharFormat* );
 
-    void                    SetCharFmtName(const OUString& rSet);
-    virtual OUString        GetCharFmtName() const SAL_OVERRIDE;
+    void                    SetCharFormatName(const OUString& rSet);
+    virtual OUString        GetCharFormatName() const SAL_OVERRIDE;
 
     //For i120928,access the cp info of graphic within bullet
     void            SetGrfBulletCP(sal_Unicode cP){cGrfBulletCP = cP;}
@@ -87,7 +87,7 @@ public:
 
     virtual void                SetVertOrient(sal_Int16 eSet) SAL_OVERRIDE;
     virtual sal_Int16   GetVertOrient() const SAL_OVERRIDE;
-    const SwFmtVertOrient*      GetGraphicOrientation() const;
+    const SwFormatVertOrient*      GetGraphicOrientation() const;
 
     bool IsEnumeration() const; // #i22362#
     bool IsItemize() const; // #i29560#
@@ -99,8 +99,8 @@ class SW_DLLPUBLIC SwNumRule
 {
 
 public:
-    typedef std::vector< SwTxtNode* > tTxtNodeList;
-    typedef std::vector< SwTxtFmtColl* > tParagraphStyleList;
+    typedef std::vector< SwTextNode* > tTextNodeList;
+    typedef std::vector< SwTextFormatColl* > tParagraphStyleList;
 
     struct Extremities
     {
@@ -111,16 +111,16 @@ public:
 private:
     friend void _FinitCore();
 
-    static SwNumFmt* maBaseFmts [ RULE_END ][ MAXLEVEL ];
+    static SwNumFormat* maBaseFormats [ RULE_END ][ MAXLEVEL ];
     static const sal_uInt16 maDefNumIndents[ MAXLEVEL ];
     /// default list level properties for position-and-space mode LABEL_ALIGNMENT
-    static SwNumFmt* maLabelAlignmentBaseFmts [ RULE_END ][ MAXLEVEL ];
+    static SwNumFormat* maLabelAlignmentBaseFormats [ RULE_END ][ MAXLEVEL ];
     static sal_uInt16 mnRefCount;
 
-    SwNumFmt* maFmts[ MAXLEVEL ];
+    SwNumFormat* maFormats[ MAXLEVEL ];
 
     /** container for associated text nodes */
-    tTxtNodeList maTxtNodeList;
+    tTextNodeList maTextNodeList;
 
     /** container for associated paragraph styles */
     tParagraphStyleList maParagraphStyleList;
@@ -130,7 +130,7 @@ private:
 
     OUString msName;
     SwNumRuleType meRuleType;
-    sal_uInt16 mnPoolFmtId;      ///< Id-for NumRules created "automatically"
+    sal_uInt16 mnPoolFormatId;      ///< Id-for NumRules created "automatically"
     sal_uInt16 mnPoolHelpId;     ///< HelpId for this Pool-style.
     sal_uInt8 mnPoolHlpFileId;   ///< FilePos at Doc on style helps.
     bool mbAutoRuleFlag : 1;
@@ -158,14 +158,14 @@ public:
     bool operator==( const SwNumRule& ) const;
     bool operator!=( const SwNumRule& r ) const { return !(*this == r); }
 
-    const SwNumFmt* GetNumFmt( sal_uInt16 i ) const;
-    const SwNumFmt& Get( sal_uInt16 i ) const;
+    const SwNumFormat* GetNumFormat( sal_uInt16 i ) const;
+    const SwNumFormat& Get( sal_uInt16 i ) const;
 
     bool IsHidden( ) const { return mbHidden; }
     void SetHidden( bool bValue ) { mbHidden = bValue; }
 
-    void Set( sal_uInt16 i, const SwNumFmt* );
-    void Set( sal_uInt16 i, const SwNumFmt& );
+    void Set( sal_uInt16 i, const SwNumFormat* );
+    void Set( sal_uInt16 i, const SwNumFormat& );
     OUString MakeNumString( const SwNodeNum&, bool bInclStrings = true,
                             bool bOnlyArabic = false ) const;
     /** - add optional parameter <_nRestrictToThisLevel> in order to
@@ -183,15 +183,15 @@ public:
 
        @return list of associated text nodes
     */
-    void GetTxtNodeList( SwNumRule::tTxtNodeList& rTxtNodeList ) const;
-    SwNumRule::tTxtNodeList::size_type GetTxtNodeListSize() const;
+    void GetTextNodeList( SwNumRule::tTextNodeList& rTextNodeList ) const;
+    SwNumRule::tTextNodeList::size_type GetTextNodeListSize() const;
 
-    void AddTxtNode( SwTxtNode& rTxtNode );
-    void RemoveTxtNode( SwTxtNode& rTxtNode );
+    void AddTextNode( SwTextNode& rTextNode );
+    void RemoveTextNode( SwTextNode& rTextNode );
 
     SwNumRule::tParagraphStyleList::size_type GetParagraphStyleListSize() const;
-    void AddParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
-    void RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
+    void AddParagraphStyle( SwTextFormatColl& rTextFormatColl );
+    void RemoveParagraphStyle( SwTextFormatColl& rTextFormatColl );
 
     inline void SetDefaultListId( const OUString& sDefaultListId )
     {
@@ -225,7 +225,7 @@ public:
 
     /** Tests whether the CharFormats are from the given doc
        and copies them if appropriate. */
-    void CheckCharFmts( SwDoc* pDoc );
+    void CheckCharFormats( SwDoc* pDoc );
 
     OUString GetName() const { return msName; }
 
@@ -250,8 +250,8 @@ public:
     void SetCountPhantoms(bool bCountPhantoms);
 
     /// Query and set PoolFormat IDs.
-    sal_uInt16 GetPoolFmtId() const         { return mnPoolFmtId; }
-    void SetPoolFmtId( sal_uInt16 nId )     { mnPoolFmtId = nId; }
+    sal_uInt16 GetPoolFormatId() const         { return mnPoolFormatId; }
+    void SetPoolFormatId( sal_uInt16 nId )     { mnPoolFormatId = nId; }
 
     /// Query and set Help-IDs for document styles.
     sal_uInt16 GetPoolHelpId() const        { return mnPoolHelpId; }

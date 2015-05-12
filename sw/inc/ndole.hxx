@@ -23,7 +23,7 @@
 
 #include <svtools/embedhlp.hxx>
 
-class SwGrfFmtColl;
+class SwGrfFormatColl;
 class SwDoc;
 class SwOLENode;
 
@@ -66,11 +66,11 @@ public:
 
 // SwOLENode
 
-class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
+class SW_DLLPUBLIC SwOLENode: public SwNoTextNode
 {
     friend class SwNodes;
     mutable SwOLEObj aOLEObj;
-    OUString sChartTblName;     ///< with chart objects: name of referenced table.
+    OUString sChartTableName;     ///< with chart objects: name of referenced table.
     bool   bOLESizeInvalid; /**< Should be considered at SwDoc::PrtOLENotify
                                    (e.g. copied). Is not persistent. */
 
@@ -79,28 +79,28 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
 
     SwOLENode(  const SwNodeIndex &rWhere,
                 const svt::EmbeddedObjectRef&,
-                SwGrfFmtColl *pGrfColl,
+                SwGrfFormatColl *pGrfColl,
                 SwAttrSet* pAutoAttr = 0 );
 
     SwOLENode(  const SwNodeIndex &rWhere,
                 const OUString &rName,
                 sal_Int64 nAspect,
-                SwGrfFmtColl *pGrfColl,
+                SwGrfFormatColl *pGrfColl,
                 SwAttrSet* pAutoAttr = 0 );
 
     SwOLENode( const SwOLENode & ) SAL_DELETED_FUNCTION;
 
-    using SwNoTxtNode::GetGraphic;
+    using SwNoTextNode::GetGraphic;
 
 public:
     const SwOLEObj& GetOLEObj() const { return aOLEObj; }
           SwOLEObj& GetOLEObj()       { return aOLEObj; }
     virtual ~SwOLENode();
 
-    virtual SwCntntNode *SplitCntntNode( const SwPosition & ) SAL_OVERRIDE;
+    virtual SwContentNode *SplitContentNode( const SwPosition & ) SAL_OVERRIDE;
 
     /// Is in ndcopy.cxx.
-    virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const SAL_OVERRIDE;
+    virtual SwContentNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const SAL_OVERRIDE;
 
     virtual Size GetTwipSize() const SAL_OVERRIDE;
 
@@ -133,8 +133,8 @@ public:
     // #i99665#
     bool IsChart() const;
 
-    OUString GetChartTblName() const { return sChartTblName; }
-    void SetChartTblName( const OUString& rNm ) { sChartTblName = rNm; }
+    OUString GetChartTableName() const { return sChartTableName; }
+    void SetChartTableName( const OUString& rNm ) { sChartTableName = rNm; }
 };
 
 /// Inline methods from Node.hxx

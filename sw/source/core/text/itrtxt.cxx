@@ -33,9 +33,9 @@
 #include "txtfrm.hxx"
 #include "porfly.hxx"
 
-void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
+void SwTextIter::CtorInitTextIter( SwTextFrm *pNewFrm, SwTextInfo *pNewInf )
 {
-    SwTxtNode *pNode = pNewFrm->GetTxtNode();
+    SwTextNode *pNode = pNewFrm->GetTextNode();
 
     OSL_ENSURE( pNewFrm->GetPara(), "No paragraph" );
 
@@ -45,30 +45,30 @@ void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
     pInf = pNewInf;
     aLineInf.CtorInitLineInfo( pNode->GetSwAttrSet(), *pNode );
     nFrameStart = pFrm->Frm().Pos().Y() + pFrm->Prt().Pos().Y();
-    SwTxtIter::Init();
+    SwTextIter::Init();
 
     // Order is important: only execute FillRegister if GetValue!=0
     bRegisterOn = pNode->GetSwAttrSet().GetRegister().GetValue()
         && pFrm->FillRegister( nRegStart, nRegDiff );
 }
 
-void SwTxtIter::Init()
+void SwTextIter::Init()
 {
     pCurr = pInf->GetParaPortion();
-    nStart = pInf->GetTxtStart();
+    nStart = pInf->GetTextStart();
     nY = nFrameStart;
     bPrev = true;
     pPrev = 0;
     nLineNr = 1;
 }
 
-void SwTxtIter::CalcAscentAndHeight( sal_uInt16 &rAscent, sal_uInt16 &rHeight ) const
+void SwTextIter::CalcAscentAndHeight( sal_uInt16 &rAscent, sal_uInt16 &rHeight ) const
 {
     rHeight = GetLineHeight();
     rAscent = pCurr->GetAscent() + rHeight - pCurr->Height();
 }
 
-SwLineLayout *SwTxtIter::_GetPrev()
+SwLineLayout *SwTextIter::_GetPrev()
 {
     pPrev = 0;
     bPrev = true;
@@ -80,14 +80,14 @@ SwLineLayout *SwTxtIter::_GetPrev()
     return pPrev = pLay;
 }
 
-const SwLineLayout *SwTxtIter::GetPrev()
+const SwLineLayout *SwTextIter::GetPrev()
 {
     if(! bPrev)
         _GetPrev();
     return pPrev;
 }
 
-const SwLineLayout *SwTxtIter::Prev()
+const SwLineLayout *SwTextIter::Prev()
 {
     if( !bPrev )
         _GetPrev();
@@ -105,7 +105,7 @@ const SwLineLayout *SwTxtIter::Prev()
         return 0;
 }
 
-const SwLineLayout *SwTxtIter::Next()
+const SwLineLayout *SwTextIter::Next()
 {
     if(pCurr->GetNext())
     {
@@ -121,7 +121,7 @@ const SwLineLayout *SwTxtIter::Next()
         return 0;
 }
 
-const SwLineLayout *SwTxtIter::NextLine()
+const SwLineLayout *SwTextIter::NextLine()
 {
     const SwLineLayout *pNext = Next();
     while( pNext && pNext->IsDummy() && pNext->GetNext() )
@@ -131,7 +131,7 @@ const SwLineLayout *SwTxtIter::NextLine()
     return pNext;
 }
 
-const SwLineLayout *SwTxtIter::GetNextLine() const
+const SwLineLayout *SwTextIter::GetNextLine() const
 {
     const SwLineLayout *pNext = pCurr->GetNext();
     while( pNext && pNext->IsDummy() && pNext->GetNext() )
@@ -141,7 +141,7 @@ const SwLineLayout *SwTxtIter::GetNextLine() const
     return pNext;
 }
 
-const SwLineLayout *SwTxtIter::GetPrevLine()
+const SwLineLayout *SwTextIter::GetPrevLine()
 {
     const SwLineLayout *pRoot = pInf->GetParaPortion();
     if( pRoot == pCurr )
@@ -167,7 +167,7 @@ const SwLineLayout *SwTxtIter::GetPrevLine()
     return pLay;
 }
 
-const SwLineLayout *SwTxtIter::PrevLine()
+const SwLineLayout *SwTextIter::PrevLine()
 {
     const SwLineLayout *pMyPrev = Prev();
     if( !pMyPrev )
@@ -182,7 +182,7 @@ const SwLineLayout *SwTxtIter::PrevLine()
     return pMyPrev ? pMyPrev : pLast;
 }
 
-void SwTxtIter::Bottom()
+void SwTextIter::Bottom()
 {
     while( Next() )
     {
@@ -190,7 +190,7 @@ void SwTxtIter::Bottom()
     }
 }
 
-void SwTxtIter::CharToLine(const sal_Int32 nChar)
+void SwTextIter::CharToLine(const sal_Int32 nChar)
 {
     while( nStart + pCurr->GetLen() <= nChar && Next() )
         ;
@@ -199,7 +199,7 @@ void SwTxtIter::CharToLine(const sal_Int32 nChar)
 }
 
 // 1170: beruecksichtigt Mehrdeutigkeiten:
-const SwLineLayout *SwTxtCursor::CharCrsrToLine( const sal_Int32 nPosition )
+const SwLineLayout *SwTextCursor::CharCrsrToLine( const sal_Int32 nPosition )
 {
     CharToLine( nPosition );
     if( nPosition != nStart )
@@ -211,7 +211,7 @@ const SwLineLayout *SwTxtCursor::CharCrsrToLine( const sal_Int32 nPosition )
     return bPrevious ? PrevLine() : pCurr;
 }
 
-sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
+sal_uInt16 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
                                     const SwLinePortion* pPor,
                                     sal_uInt16 nPorHeight, sal_uInt16 nPorAscent,
                                     const bool bAutoToCentered ) const
@@ -272,9 +272,9 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                 nOfst += rLine.Height() - nPorHeight + nPorAscent;
                 break;
             case SvxParaVertAlignItem::AUTOMATIC :
-                if ( bAutoToCentered || GetInfo().GetTxtFrm()->IsVertical() )
+                if ( bAutoToCentered || GetInfo().GetTextFrm()->IsVertical() )
                 {
-                    if( GetInfo().GetTxtFrm()->IsVertLR() )
+                    if( GetInfo().GetTextFrm()->IsVertLR() )
                             nOfst += rLine.Height() - ( rLine.Height() - nPorHeight ) / 2 - nPorAscent;
                     else
                             nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
@@ -290,7 +290,7 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
     return nOfst;
 }
 
-const SwLineLayout *SwTxtIter::TwipsToLine( const SwTwips y)
+const SwLineLayout *SwTextIter::TwipsToLine( const SwTwips y)
 {
     while( nY + GetLineHeight() <= y && Next() )
         ;
@@ -306,15 +306,15 @@ static bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
     bool bRet = false;
     while( pPor && !bRet )
     {
-        bRet = pPor->InFldGrp() && static_cast<const SwFldPortion*>(pPor)->HasFollow();
-        if( !pPor->GetPortion() || !pPor->GetPortion()->InFldGrp() )
+        bRet = pPor->InFieldGrp() && static_cast<const SwFieldPortion*>(pPor)->HasFollow();
+        if( !pPor->GetPortion() || !pPor->GetPortion()->InFieldGrp() )
             break;
         pPor = pPor->GetPortion();
     }
     return bRet;
 }
 
-void SwTxtIter::TruncLines( bool bNoteFollow )
+void SwTextIter::TruncLines( bool bNoteFollow )
 {
     SwLineLayout *pDel = pCurr->GetNext();
     const sal_Int32 nEnd = nStart + pCurr->GetLen();
@@ -328,7 +328,7 @@ void SwTxtIter::TruncLines( bool bNoteFollow )
                                                         lcl_NeedsFieldRest( pCurr ) );
 
             // bug 88534: wrong positioning of flys
-            SwTxtFrm* pFollow = GetTxtFrm()->GetFollow();
+            SwTextFrm* pFollow = GetTextFrm()->GetFollow();
             if ( pFollow && ! pFollow->IsLocked() &&
                  nEnd == pFollow->GetOfst() )
             {
@@ -342,12 +342,12 @@ void SwTxtIter::TruncLines( bool bNoteFollow )
                     pLine = pLine->GetNext();
                 }
 
-                SwpHints* pTmpHints = GetTxtFrm()->GetTxtNode()->GetpSwpHints();
+                SwpHints* pTmpHints = GetTextFrm()->GetTextNode()->GetpSwpHints();
 
                 // examine hints in range nEnd - (nEnd + nRangeChar)
                 for( size_t i = 0; i < pTmpHints->Count(); ++i )
                 {
-                    const SwTxtAttr* pHt = pTmpHints->GetTextHint( i );
+                    const SwTextAttr* pHt = pTmpHints->GetTextHint( i );
                     if( RES_TXTATR_FLYCNT == pHt->Which() )
                     {
                         // check, if hint is in our range
@@ -363,13 +363,13 @@ void SwTxtIter::TruncLines( bool bNoteFollow )
     }
     if( pCurr->IsDummy() &&
         !pCurr->GetLen() &&
-         nStart < GetTxtFrm()->GetTxt().getLength() )
+         nStart < GetTextFrm()->GetText().getLength() )
         pCurr->SetRealHeight( 1 );
     if( GetHints() )
-        pFrm->RemoveFtn( nEnd );
+        pFrm->RemoveFootnote( nEnd );
 }
 
-void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
+void SwTextIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
 {
     nEndCnt = 0;
     nMidCnt = 0;
@@ -394,7 +394,7 @@ void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
 
 // Change current output device to formatting device, this has to be done before
 // formatting.
-SwHookOut::SwHookOut( SwTxtSizeInfo& rInfo ) :
+SwHookOut::SwHookOut( SwTextSizeInfo& rInfo ) :
      pInf( &rInfo ),
      pOut( rInfo.GetOut() ),
      bOnWin( rInfo.OnWin() )

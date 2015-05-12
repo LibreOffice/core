@@ -24,7 +24,7 @@
 #include "swdbdata.hxx"
 
 class SwDoc;
-class SwTxtFld;
+class SwTextField;
 class SwFrm;
 
 // Database field.
@@ -60,7 +60,7 @@ class SW_DLLPUBLIC SwDBField : public SwValueField
     OUString aContent;
     OUString sFieldCode; ///< contains Word's field code
     sal_uInt16  nSubType;
-    bool    bIsInBodyTxt    : 1;
+    bool    bIsInBodyText    : 1;
     bool    bValidValue     : 1;
     bool    bInitialized    : 1;
 
@@ -68,7 +68,7 @@ class SW_DLLPUBLIC SwDBField : public SwValueField
     virtual SwField*    Copy() const SAL_OVERRIDE;
 
 public:
-    SwDBField(SwDBFieldType*, sal_uLong nFmt = 0);
+    SwDBField(SwDBFieldType*, sal_uLong nFormat = 0);
     virtual ~SwDBField();
 
     virtual SwFieldType*    ChgTyp( SwFieldType* ) SAL_OVERRIDE;
@@ -88,11 +88,11 @@ public:
     void                Evaluate();
 
     /// Evaluation for header and footer.
-    void                ChangeExpansion( const SwFrm*, const SwTxtFld* );
+    void                ChangeExpansion( const SwFrm*, const SwTextField* );
     void                InitContent();
     void                InitContent(const OUString& rExpansion);
 
-    inline void         ChgBodyTxtFlag( bool bIsInBody );
+    inline void         ChgBodyTextFlag( bool bIsInBody );
 
     inline bool         IsInitialized() const   { return bInitialized; }
     inline void         ClearInitialized()      { bInitialized = false; }
@@ -110,16 +110,16 @@ public:
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 
-    static bool FormatValue( SvNumberFormatter* pDocFormatter, OUString &aString, sal_uInt32 nFmt,
+    static bool FormatValue( SvNumberFormatter* pDocFormatter, OUString &aString, sal_uInt32 nFormat,
                              double &aNumber, sal_Int32 nColumnType, SwDBField *pField = NULL );
 };
 
 inline  void SwDBField::SetExpansion(const OUString& rStr)
     { aContent = rStr; }
 
-/// set from UpdateExpFlds (the Node-Position is known there)
-inline void SwDBField::ChgBodyTxtFlag( bool bIsInBody )
-    { bIsInBodyTxt = bIsInBody; }
+/// set from UpdateExpFields (the Node-Position is known there)
+inline void SwDBField::ChgBodyTextFlag( bool bIsInBody )
+    { bIsInBodyText = bIsInBody; }
 
 // Base class for all other database fields.
 class SW_DLLPUBLIC SwDBNameInfField : public SwField
@@ -131,7 +131,7 @@ protected:
     const SwDBData& GetDBData() const {return aDBData;}
     SwDBData&       GetDBData() {return aDBData;}
 
-    SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFmt = 0);
+    SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFormat = 0);
 
 public:
     /// DBName
@@ -249,7 +249,7 @@ public:
 class SW_DLLPUBLIC SwDBNameField : public SwDBNameInfField
 {
 public:
-    SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData, sal_uLong nFmt = 0);
+    SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData, sal_uLong nFormat = 0);
 
     virtual OUString Expand() const SAL_OVERRIDE;
     virtual SwField* Copy() const SAL_OVERRIDE;
@@ -271,7 +271,7 @@ class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
 {
     long    nNumber;
 public:
-    SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, sal_uLong nFmt = 0);
+    SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, sal_uLong nFormat = 0);
 
     virtual OUString Expand() const SAL_OVERRIDE;
     virtual         SwField* Copy() const SAL_OVERRIDE;

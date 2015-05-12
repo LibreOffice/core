@@ -33,13 +33,13 @@ interface TextTable : BaseTextTable
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 /*
-    SvxFmtSplitItem TableSplit SID_ATTR_PARA_SPLIT // status(final|play)
+    SvxFormatSplitItem TableSplit SID_ATTR_PARA_SPLIT // status(final|play)
     [
         ExecMethod = Execute;
         StateMethod = GetState;
         GroupId = GID_TABLE ;
     ]
-    SvxFmtKeepItem TableKeepTogether SID_ATTR_PARA_KEEP // status(final|play)
+    SvxFormatKeepItem TableKeepTogether SID_ATTR_PARA_KEEP // status(final|play)
     [
         ExecMethod = Execute;
         StateMethod = GetState;

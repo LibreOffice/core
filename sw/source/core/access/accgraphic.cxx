@@ -76,7 +76,7 @@ sal_Int16 SAL_CALL SwAccessibleGraphic::getAccessibleRole()
 {
     SolarMutexGuard g;
 
-    SwFmtURL aURL( static_cast<const SwLayoutFrm*>(GetFrm())->GetFmt()->GetURL() );
+    SwFormatURL aURL( static_cast<const SwLayoutFrm*>(GetFrm())->GetFormat()->GetURL() );
 
     if (aURL.GetMap())
         return AccessibleRole::IMAGE_MAP;

@@ -41,7 +41,7 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
     DECL_DLLPRIVATE_LINK( SelectHdl, ListBox * );
 
     SAL_DLLPRIVATE double          GetDefValue(const short nFormatType) const;
-    SAL_DLLPRIVATE void            Init(short nFormatType, bool bUsrFmts);
+    SAL_DLLPRIVATE void            Init(short nFormatType, bool bUsrFormats);
     SAL_DLLPRIVATE SwView*           GetView();
 
 public:
@@ -56,7 +56,7 @@ public:
 
     void            SetFormatType(const short nFormatType);
     inline short    GetFormatType() const { return nCurrFormatType; }
-    void            SetDefFormat(const sal_uLong nDefFmt);
+    void            SetDefFormat(const sal_uLong nDefFormat);
     sal_uLong           GetFormat() const;
 
     inline LanguageType GetCurLanguage() const { return eCurLanguage;}

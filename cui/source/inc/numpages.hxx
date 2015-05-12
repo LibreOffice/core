@@ -138,7 +138,7 @@ class SvxBulletPickTabPage : public SfxTabPage
     bool                bPreset     : 1;
     sal_uInt16              nNumItemId;
 
-    OUString            sBulletCharFmtName;
+    OUString            sBulletCharFormatName;
 protected:
         DECL_LINK(NumSelectHdl_Impl, void *);
         DECL_LINK(DoubleClickHdl_Impl, void *);
@@ -156,7 +156,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
-    void                SetCharFmtName(const OUString& rName){sBulletCharFmtName = rName;}
+    void                SetCharFormatName(const OUString& rName){sBulletCharFormatName = rName;}
     virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
@@ -170,7 +170,7 @@ class SvxNumPickTabPage : public SfxTabPage
 
     VclPtr<SvxNumValueSet>     m_pExamplesVS;
     OUString            sNumCharFmtName;
-    OUString            sBulletCharFmtName;
+    OUString            sBulletCharFormatName;
 
     SvxNumSettingsArr_Impl  aNumSettingsArrays[NUM_VALUSET_COUNT];  // is initialized with the five formats
 
@@ -200,9 +200,9 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
-    void                SetCharFmtNames(const OUString& rCharName, const OUString& rBulName)
+    void                SetCharFormatNames(const OUString& rCharName, const OUString& rBulName)
                             {   sNumCharFmtName = rCharName;
-                                sBulletCharFmtName = rBulName;}
+                                sBulletCharFormatName = rBulName;}
     virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };
 
@@ -298,7 +298,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     VclPtr<SvxNumberingPreview> m_pPreviewWIN;
 
     OUString        m_sNumCharFmtName;
-    OUString        m_sBulletCharFmtName;
+    OUString        m_sBulletCharFormatName;
 
     Timer           aInvalidateTimer;
 
@@ -365,7 +365,7 @@ public:
     void                SetCharFmts(const OUString& rNumName, const OUString& rBulletName)
                         {
                             m_sNumCharFmtName = rNumName;
-                            m_sBulletCharFmtName = rBulletName;
+                            m_sBulletCharFormatName = rBulletName;
                         }
     void                SetMetric(FieldUnit eSet);
 

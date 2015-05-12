@@ -22,7 +22,7 @@
 
 bool sw_JoinText( SwPaM& rPam, bool bJoinPrev );
 
-void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinTxt, bool& rJoinPrev );
+void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev );
 
 #endif
 

@@ -438,7 +438,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 // Insert object into the Core.
 // From ClipBoard or Insert
 
-bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFmt **pFlyFrmFmt )
+bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrameFormat **pFlyFrameFormat )
 {
     ResetCursorStack();
     StartAllAction();
@@ -512,14 +512,14 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
         aSz.Width() = aBound.Width();
     }
     aFrmMgr.SetSize( aSz );
-    SwFlyFrmFmt *pFmt = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
+    SwFlyFrameFormat *pFormat = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
 
     // --> #i972#
     if ( bStarMath && mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) )
         AlignFormulaToBaseline( xRef.GetObject() );
 
-    if (pFlyFrmFmt)
-        *pFlyFrmFmt = pFmt;
+    if (pFlyFrameFormat)
+        *pFlyFrameFormat = pFormat;
 
     if ( SotExchange::IsChart( aCLSID ) )
     {
@@ -615,7 +615,7 @@ void SwWrtShell::MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& 
 void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect,
                                   const SwRect *pFlyFrmRect,
-                                  const bool bNoTxtFrmPrtAreaChanged )
+                                  const bool bNoTextFrmPrtAreaChanged )
 {
     // Setting the scale of the client. This arises from the difference
     // between the VisArea of the object and the ObjArea.
@@ -713,7 +713,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
              //|| SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus()
              // --> OD #i117189# - refine condition for non-resizable objects
              // non-resizable objects need to be set the size back by this method
-             || ( bNoTxtFrmPrtAreaChanged && nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
+             || ( bNoTextFrmPrtAreaChanged && nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
         {
             pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
         }
@@ -800,11 +800,11 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     if ( bUseObjectSize )
     {
         // --> this moves non-resizable object so that when adding borders the baseline remains the same
-        const SwFlyFrmFmt *pFlyFrmFmt = dynamic_cast< const SwFlyFrmFmt * >( GetFlyFrmFmt() );
-        OSL_ENSURE( pFlyFrmFmt, "Could not find fly frame." );
-        if ( pFlyFrmFmt )
+        const SwFlyFrameFormat *pFlyFrameFormat = dynamic_cast< const SwFlyFrameFormat * >( GetFlyFrameFormat() );
+        OSL_ENSURE( pFlyFrameFormat, "Could not find fly frame." );
+        if ( pFlyFrameFormat )
         {
-            const Point &rPoint = pFlyFrmFmt->GetLastFlyFrmPrtRectPos();
+            const Point &rPoint = pFlyFrameFormat->GetLastFlyFrmPrtRectPos();
             SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
                         : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
             aArea += rPoint - aRect.Pos(); // adjust area by diff of printing area position in order to keep baseline alignment correct.
@@ -841,7 +841,7 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, const ::boost::optio
         SwActContext aActContext(this);
         StartUndo(UNDO_UI_INSERT_PAGE_BREAK);
 
-        if ( !IsCrsrInTbl() )
+        if ( !IsCrsrInTable() )
         {
             if(HasSelection())
                 DelRight();
@@ -854,12 +854,12 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, const ::boost::optio
                                 ? FindPageDescByName( *pPageDesc, true ) : 0;
         if( pDesc )
         {
-            SwFmtPageDesc aDesc( pDesc );
+            SwFormatPageDesc aDesc( pDesc );
             aDesc.SetNumOffset( oPgNum );
             SetAttrItem( aDesc );
         }
         else
-            SetAttrItem( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
+            SetAttrItem( SvxFormatBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
         EndUndo(UNDO_UI_INSERT_PAGE_BREAK);
     }
 }
@@ -895,13 +895,13 @@ void SwWrtShell::InsertColumnBreak()
     {
         StartUndo(UNDO_UI_INSERT_COLUMN_BREAK);
 
-        if ( !IsCrsrInTbl() )
+        if ( !IsCrsrInTable() )
         {
             if(HasSelection())
                 DelRight();
             SwFEShell::SplitNode( false, false );
         }
-        SetAttrItem(SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
+        SetAttrItem(SvxFormatBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
 
         EndUndo(UNDO_UI_INSERT_COLUMN_BREAK);
     }
@@ -923,7 +923,7 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit 
             ClearMark();
         }
         SwPosition aPos = *GetCrsr()->GetPoint();
-        SwFmtFtn aFootNote( bEndNote );
+        SwFormatFootnote aFootNote( bEndNote );
         if(!rStr.isEmpty())
             aFootNote.SetNumStr( rStr );
 
@@ -933,7 +933,7 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit 
         {
             // For editing the footnote text.
             Left(CRSR_SKIP_CHARS, false, 1, false );
-            GotoFtnTxt();
+            GotoFootnoteText();
         }
         m_aNavigationMgr.addEntry(aPos);
     }
@@ -943,7 +943,7 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit 
 //                  - of deleting selected content;
 //                  - of reset of the Cursorstack if necessary.
 
-void SwWrtShell::SplitNode( bool bAutoFmt, bool bCheckTableStart )
+void SwWrtShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
 {
     ResetCursorStack();
     if( CanInsert() )
@@ -958,7 +958,7 @@ void SwWrtShell::SplitNode( bool bAutoFmt, bool bCheckTableStart )
             DelRight();
         }
 
-        SwFEShell::SplitNode( bAutoFmt, bCheckTableStart );
+        SwFEShell::SplitNode( bAutoFormat, bCheckTableStart );
         if( bHasSel )
             EndUndo( UNDO_INSERT );
     }
@@ -970,7 +970,7 @@ void SwWrtShell::SplitNode( bool bAutoFmt, bool bCheckTableStart )
 //              into a number and less than nMaxRules.
 
 // To test the CharFormats at the numbering
-// external void SetNumChrFmt( SwWrtShell*, SwNumRules& );
+// external void SetNumChrFormat( SwWrtShell*, SwNumRules& );
 
 // -> #i40041#
 // Preconditions (as far as OD has figured out):
@@ -994,7 +994,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
     bool bContinueFoundNumRule( false );
     bool bActivateOutlineRule( false );
     int nActivateOutlineLvl( MAXLEVEL );    // only relevant, if <bActivateOutlineRule> == true
-    SwTxtFmtColl * pColl = GetCurTxtFmtColl();
+    SwTextFormatColl * pColl = GetCurTextFormatColl();
     if ( pColl )
     {
         // retrieve numbering rule at paragraph
@@ -1028,9 +1028,9 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 // check, if text node at current cursor positioned is counted.
                 // If not, let it been counted. Then it has to be checked,
                 // of the outline numbering has to be activated or continued.
-                SwTxtNode* pTxtNode =
-                            GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
-                if ( pTxtNode && !pTxtNode->IsCountedInList() )
+                SwTextNode* pTextNode =
+                            GetCrsr()->GetPoint()->nNode.GetNode().GetTextNode();
+                if ( pTextNode && !pTextNode->IsCountedInList() )
                 {
                     // check, if numbering of the outline level of the paragraph
                     // style is active. If not, activate this outline level.
@@ -1135,14 +1135,14 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         // do not change found numbering/bullet rule, if it should only be continued.
         if ( !bContinueFoundNumRule )
         {
-            SwTxtNode * pTxtNode = GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+            SwTextNode * pTextNode = GetCrsr()->GetPoint()->nNode.GetNode().GetTextNode();
 
-            if (pTxtNode)
+            if (pTextNode)
             {
                 // use above retrieve outline level, if outline numbering has to be activated.
                 int nLevel = bActivateOutlineRule
                               ? nActivateOutlineLvl
-                              : pTxtNode->GetActualListLevel();
+                              : pTextNode->GetActualListLevel();
 
                 if (nLevel < 0)
                     nLevel = 0;
@@ -1150,25 +1150,25 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 if (nLevel >= MAXLEVEL)
                     nLevel = MAXLEVEL - 1;
 
-                SwNumFmt aFmt(aNumRule.Get(static_cast<sal_uInt16>(nLevel)));
+                SwNumFormat aFormat(aNumRule.Get(static_cast<sal_uInt16>(nLevel)));
 
                 if (bNum)
-                    aFmt.SetNumberingType(SVX_NUM_ARABIC);
+                    aFormat.SetNumberingType(SVX_NUM_ARABIC);
                 else
                 {
                     // #i63395# Only apply user defined default bullet font
                     if ( numfunc::IsDefBulletFontUserDefined() )
                     {
                         const vcl::Font* pFnt = &numfunc::GetDefBulletFont();
-                        aFmt.SetBulletFont( pFnt );
+                        aFormat.SetBulletFont( pFnt );
                     }
-                    aFmt.SetBulletChar( numfunc::GetBulletChar(static_cast<sal_uInt8>(nLevel)));
-                    aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                    aFormat.SetBulletChar( numfunc::GetBulletChar(static_cast<sal_uInt8>(nLevel)));
+                    aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                     // #i93908# clear suffix for bullet lists
-                    aFmt.SetPrefix(OUString());
-                    aFmt.SetSuffix(OUString());
+                    aFormat.SetPrefix(OUString());
+                    aFormat.SetSuffix(OUString());
                 }
-                aNumRule.Set(static_cast<sal_uInt16>(nLevel), aFmt);
+                aNumRule.Set(static_cast<sal_uInt16>(nLevel), aFormat);
             }
         }
 
@@ -1182,7 +1182,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                                     numfunc::GetDefaultPositionAndSpaceMode() );
         SwNumRule aNumRule( GetUniqueNumRuleName(), ePosAndSpaceMode );
         // Append the character template at the numbering.
-        SwCharFmt* pChrFmt;
+        SwCharFormat* pChrFormat;
         SwDocShell* pDocSh = GetView().GetDocShell();
         // #i63395#
         // Only apply user defined default bullet font
@@ -1192,16 +1192,16 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
 
         if (bNum)
         {
-            pChrFmt = GetCharFmtFromPool( RES_POOLCHR_NUM_LEVEL );
+            pChrFormat = GetCharFormatFromPool( RES_POOLCHR_NUM_LEVEL );
         }
         else
         {
-            pChrFmt = GetCharFmtFromPool( RES_POOLCHR_BUL_LEVEL );
+            pChrFormat = GetCharFormatFromPool( RES_POOLCHR_BUL_LEVEL );
         }
 
-        const SwTxtNode* pTxtNode = GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
-        const SwTwips nWidthOfTabs = pTxtNode
-                                     ? pTxtNode->GetWidthOfLeadingTabs()
+        const SwTextNode* pTextNode = GetCrsr()->GetPoint()->nNode.GetNode().GetTextNode();
+        const SwTwips nWidthOfTabs = pTextNode
+                                     ? pTextNode->GetWidthOfLeadingTabs()
                                      : 0;
         GetDoc()->getIDocumentContentOperations().RemoveLeadingWhiteSpace( *GetCrsr()->GetPoint() );
 
@@ -1209,8 +1209,8 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         const bool bRightToLeft = IsInRightToLeftText();
         for( sal_uInt8 nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
         {
-            SwNumFmt aFmt( aNumRule.Get( nLvl ) );
-            aFmt.SetCharFmt( pChrFmt );
+            SwNumFormat aFormat( aNumRule.Get( nLvl ) );
+            aFormat.SetCharFormat( pChrFormat );
 
             if (! bNum)
             {
@@ -1218,13 +1218,13 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 // Only apply user defined default bullet font
                 if ( pFnt )
                 {
-                    aFmt.SetBulletFont( pFnt );
+                    aFormat.SetBulletFont( pFnt );
                 }
-                aFmt.SetBulletChar( numfunc::GetBulletChar(nLvl) );
-                aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                aFormat.SetBulletChar( numfunc::GetBulletChar(nLvl) );
+                aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 // #i93908# clear suffix for bullet lists
-                aFmt.SetPrefix(OUString());
-                aFmt.SetSuffix(OUString());
+                aFormat.SetPrefix(OUString());
+                aFormat.SetSuffix(OUString());
             }
 
             // #i95907#
@@ -1233,11 +1233,11 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 if(bHtml && nLvl)
                 {
                     // 1/2" for HTML
-                    aFmt.SetAbsLSpace(nLvl * 720);
+                    aFormat.SetAbsLSpace(nLvl * 720);
                 }
                 else if ( nWidthOfTabs > 0 )
                 {
-                    aFmt.SetAbsLSpace(nWidthOfTabs + nLvl * 720);
+                    aFormat.SetAbsLSpace(nWidthOfTabs + nLvl * 720);
                 }
             }
 
@@ -1245,28 +1245,28 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
             // numbering/bullet should be rtl in rtl paragraph:
             if ( bRightToLeft )
             {
-                aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
+                aFormat.SetNumAdjust( SVX_ADJUST_RIGHT );
             }
 
-            aNumRule.Set( nLvl, aFmt );
+            aNumRule.Set( nLvl, aFormat );
         }
 
         // #i95907#
-        if ( pTxtNode &&
+        if ( pTextNode &&
              ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
         {
 
-            const SwTwips nTxtNodeIndent = pTxtNode->GetAdditionalIndentForStartingNewList();
-            if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
+            const SwTwips nTextNodeIndent = pTextNode->GetAdditionalIndentForStartingNewList();
+            if ( ( nTextNodeIndent + nWidthOfTabs ) != 0 )
             {
                 // #i111172#/fdo#85666
                 // If text node is already inside a list, assure that the indents
                 // are the same. Thus, adjust the indent change value by subtracting
                 // indents of to be applied list style.
-                SwTwips nIndentChange = nTxtNodeIndent + nWidthOfTabs;
-                if ( pTxtNode->GetNumRule() )
+                SwTwips nIndentChange = nTextNodeIndent + nWidthOfTabs;
+                if ( pTextNode->GetNumRule() )
                 {
-                    int nLevel = pTxtNode->GetActualListLevel();
+                    int nLevel = pTextNode->GetActualListLevel();
 
                     if (nLevel < 0)
                         nLevel = 0;
@@ -1274,10 +1274,10 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                     if (nLevel >= MAXLEVEL)
                         nLevel = MAXLEVEL - 1;
 
-                    const SwNumFmt aFmt( aNumRule.Get( nLevel ) );
-                    if ( aFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+                    const SwNumFormat aFormat( aNumRule.Get( nLevel ) );
+                    if ( aFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
                     {
-                        nIndentChange -= aFmt.GetIndentAt() + aFmt.GetFirstLineIndent();
+                        nIndentChange -= aFormat.GetIndentAt() + aFormat.GetFirstLineIndent();
                     }
                 }
                 aNumRule.ChangeIndent( nIndentChange );
@@ -1307,12 +1307,12 @@ void SwWrtShell::NumOrBulletOff()
         {
             SwNumRule aNumRule(*pCurNumRule);
 
-            SwTxtNode * pTxtNode =
-                GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+            SwTextNode * pTextNode =
+                GetCrsr()->GetPoint()->nNode.GetNode().GetTextNode();
 
-            if (pTxtNode)
+            if (pTextNode)
             {
-                int nLevel = pTxtNode->GetActualListLevel();
+                int nLevel = pTextNode->GetActualListLevel();
 
                 if (nLevel < 0)
                     nLevel = 0;
@@ -1320,10 +1320,10 @@ void SwWrtShell::NumOrBulletOff()
                 if (nLevel >= MAXLEVEL)
                     nLevel = MAXLEVEL - 1;
 
-                SwNumFmt aFmt(aNumRule.Get(static_cast<sal_uInt16>(nLevel)));
+                SwNumFormat aFormat(aNumRule.Get(static_cast<sal_uInt16>(nLevel)));
 
-                aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
-                aNumRule.Set(nLevel, aFmt);
+                aFormat.SetNumberingType(SVX_NUM_NUMBER_NONE);
+                aNumRule.Set(nLevel, aFormat);
 
                 // no start or continuation of a list - the outline style is only changed.
                 SetCurNumRule( aNumRule, false );
@@ -1408,7 +1408,7 @@ SelectionType SwWrtShell::GetSelectionType() const
             return nsSelectionType::SEL_FRM;
     }
 
-    if ( IsCrsrInTbl() )
+    if ( IsCrsrInTable() )
         nCnt |= nsSelectionType::SEL_TBL;
 
     if ( IsTableMode() )
@@ -1418,12 +1418,12 @@ SelectionType SwWrtShell::GetSelectionType() const
     const SwNumRule* pNumRule = GetNumRuleAtCurrCrsrPos();
     if ( pNumRule )
     {
-        const SwTxtNode* pTxtNd =
-            GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+        const SwTextNode* pTextNd =
+            GetCrsr()->GetPoint()->nNode.GetNode().GetTextNode();
 
-        if ( pTxtNd && pTxtNd->IsInList() )
+        if ( pTextNd && pTextNd->IsInList() )
         {
-            int nLevel = pTxtNd->GetActualListLevel();
+            int nLevel = pTextNd->GetActualListLevel();
 
             if (nLevel < 0)
                 nLevel = 0;
@@ -1431,8 +1431,8 @@ SelectionType SwWrtShell::GetSelectionType() const
             if (nLevel >= MAXLEVEL)
                 nLevel = MAXLEVEL - 1;
 
-            const SwNumFmt& rFmt = pNumRule->Get(nLevel);
-            if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
+            const SwNumFormat& rFormat = pNumRule->Get(nLevel);
+            if ( SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType() )
                 nCnt |= nsSelectionType::SEL_NUM;
         }
     }
@@ -1445,14 +1445,14 @@ SelectionType SwWrtShell::GetSelectionType() const
 //            text collection with this name exists, or
 //            this is a default template.
 
-SwTxtFmtColl *SwWrtShell::GetParaStyle(const OUString &rCollName, GetStyle eCreate )
+SwTextFormatColl *SwWrtShell::GetParaStyle(const OUString &rCollName, GetStyle eCreate )
 {
-    SwTxtFmtColl* pColl = FindTxtFmtCollByName( rCollName );
+    SwTextFormatColl* pColl = FindTextFormatCollByName( rCollName );
     if( !pColl && GETSTYLE_NOCREATE != eCreate )
     {
         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
         if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
-            pColl = GetTxtCollFromPool( nId );
+            pColl = GetTextCollFromPool( nId );
     }
     return pColl;
 }
@@ -1462,31 +1462,31 @@ SwTxtFmtColl *SwWrtShell::GetParaStyle(const OUString &rCollName, GetStyle eCrea
 //            character template with this name exists, or
 //            this is a default template or template is automatic.
 
-SwCharFmt *SwWrtShell::GetCharStyle(const OUString &rFmtName, GetStyle eCreate )
+SwCharFormat *SwWrtShell::GetCharStyle(const OUString &rFormatName, GetStyle eCreate )
 {
-    SwCharFmt* pFmt = FindCharFmtByName( rFmtName );
-    if( !pFmt && GETSTYLE_NOCREATE != eCreate )
+    SwCharFormat* pFormat = FindCharFormatByName( rFormatName );
+    if( !pFormat && GETSTYLE_NOCREATE != eCreate )
     {
-        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rFmtName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rFormatName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
         if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
-            pFmt = static_cast<SwCharFmt*>(GetFmtFromPool( nId ));
+            pFormat = static_cast<SwCharFormat*>(GetFormatFromPool( nId ));
     }
-    return pFmt;
+    return pFormat;
 }
 
-// Find the table format with the name rFmtname
+// Find the table format with the name rFormatname
 // Returns:   Pointer at the collection or 0, if no
 //            frame format with this name exists or
 //            this is a default format or the format is automatic.
 
-SwFrmFmt *SwWrtShell::GetTblStyle(const OUString &rFmtName)
+SwFrameFormat *SwWrtShell::GetTableStyle(const OUString &rFormatName)
 {
-    for( size_t i = GetTblFrmFmtCount(); i; )
+    for( size_t i = GetTableFrameFormatCount(); i; )
     {
-        SwFrmFmt *pFmt = &GetTblFrmFmt( --i );
-        if( !pFmt->IsDefault() &&
-            pFmt->GetName() == rFmtName && IsUsed( *pFmt ) )
-            return pFmt;
+        SwFrameFormat *pFormat = &GetTableFrameFormat( --i );
+        if( !pFormat->IsDefault() &&
+            pFormat->GetName() == rFormatName && IsUsed( *pFormat ) )
+            return pFormat;
     }
     return 0;
 }
@@ -1519,18 +1519,18 @@ OUString SwWrtShell::GetCurPageStyle( const bool bCalcFrm ) const
 
 void SwWrtShell::QuickUpdateStyle()
 {
-    SwTxtFmtColl *pColl = GetCurTxtFmtColl();
+    SwTextFormatColl *pColl = GetCurTextFormatColl();
 
     // Default cannot be changed
     if(pColl && !pColl->IsDefault())
     {
         FillByEx(pColl);
             // Also apply the template to remove hard attribute assignment.
-        SetTxtFmtColl(pColl);
+        SetTextFormatColl(pColl);
     }
 }
 
-void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM )
+void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM )
 {
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr( );
     SfxItemSet aCoreSet( GetAttrPool(),
@@ -1568,16 +1568,16 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
         ResetAttr( std::set<sal_uInt16>(), pCrsr );
         SetAttrSet(aCoreSet, SetAttrMode::DEFAULT, pCrsr);
     }
-    mpDoc->ChgFmt(*pColl, rStyleSet );
+    mpDoc->ChgFormat(*pColl, rStyleSet );
     EndAction();
 }
 
-void SwWrtShell::AutoUpdateFrame( SwFrmFmt* pFmt, const SfxItemSet& rStyleSet )
+void SwWrtShell::AutoUpdateFrame( SwFrameFormat* pFormat, const SfxItemSet& rStyleSet )
 {
     StartAction();
 
     ResetFlyFrmAttr( 0, &rStyleSet );
-    pFmt->SetFmtAttr( rStyleSet );
+    pFormat->SetFormatAttr( rStyleSet );
 
     EndAction();
 }
@@ -1709,10 +1709,10 @@ OUString SwWrtShell::GetSelDescr() const
         break;
     case nsSelectionType::SEL_FRM:
         {
-            const SwFrmFmt * pFrmFmt = GetCurFrmFmt();
+            const SwFrameFormat * pFrameFormat = GetCurFrameFormat();
 
-            if (pFrmFmt)
-                aResult = pFrmFmt->GetDescription();
+            if (pFrameFormat)
+                aResult = pFrameFormat->GetDescription();
         }
         break;
     case nsSelectionType::SEL_DRW:
@@ -1782,18 +1782,18 @@ void SwWrtShell::ChangeHeaderOrFooter(
             if( bExecute )
             {
                 bChgd = true;
-                SwFrmFmt &rMaster = aDesc.GetMaster();
+                SwFrameFormat &rMaster = aDesc.GetMaster();
                 if(bHeader)
-                    rMaster.SetFmtAttr( SwFmtHeader( bOn ));
+                    rMaster.SetFormatAttr( SwFormatHeader( bOn ));
                 else
-                    rMaster.SetFmtAttr( SwFmtFooter( bOn ));
+                    rMaster.SetFormatAttr( SwFormatFooter( bOn ));
                 if( bOn )
                 {
                     SvxULSpaceItem aUL(bHeader ? 0 : MM50, bHeader ? MM50 : 0, RES_UL_SPACE );
-                    SwFrmFmt* pFmt = bHeader ?
-                        const_cast<SwFrmFmt*>(rMaster.GetHeader().GetHeaderFmt()) :
-                        const_cast<SwFrmFmt*>(rMaster.GetFooter().GetFooterFmt());
-                    pFmt->SetFmtAttr( aUL );
+                    SwFrameFormat* pFormat = bHeader ?
+                        const_cast<SwFrameFormat*>(rMaster.GetHeader().GetHeaderFormat()) :
+                        const_cast<SwFrameFormat*>(rMaster.GetFooter().GetFooterFormat());
+                    pFormat->SetFormatAttr( aUL );
                 }
             }
             if( bChgd )

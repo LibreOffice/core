@@ -29,7 +29,7 @@ class IntlWrapper;
 
 // URL, ServerMap und ClientMap
 
-class SW_DLLPUBLIC SwFmtURL: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatURL: public SfxPoolItem
 {
     OUString  sTargetFrameName; ///< Target frame for URL.
     OUString  sURL;             ///< Simple URL.
@@ -38,15 +38,15 @@ class SW_DLLPUBLIC SwFmtURL: public SfxPoolItem
 
     bool      bIsServerMap;     ///< A ServerSideImageMap with the URL.
 
-    SwFmtURL& operator=( const SwFmtURL& ) SAL_DELETED_FUNCTION;
+    SwFormatURL& operator=( const SwFormatURL& ) SAL_DELETED_FUNCTION;
 
 public:
-    SwFmtURL();
+    SwFormatURL();
 
     /// @@@ copy construction allowed, but assigment is not? @@@
-    SwFmtURL( const SwFmtURL& );
+    SwFormatURL( const SwFormatURL& );
 
-    virtual ~SwFmtURL();
+    virtual ~SwFormatURL();
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -73,10 +73,10 @@ public:
     void SetName( const OUString& rNm )     { sName = rNm; }
 };
 
-inline const SwFmtURL &SwAttrSet::GetURL(bool bInP) const
-    { return static_cast<const SwFmtURL&>(Get( RES_URL,bInP)); }
+inline const SwFormatURL &SwAttrSet::GetURL(bool bInP) const
+    { return static_cast<const SwFormatURL&>(Get( RES_URL,bInP)); }
 
-inline const SwFmtURL &SwFmt::GetURL(bool bInP) const
+inline const SwFormatURL &SwFormat::GetURL(bool bInP) const
     { return m_aSet.GetURL(bInP); }
 
 #endif

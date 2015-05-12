@@ -22,7 +22,7 @@
 
 class SwLinePortion;
 class SwRootFrm;
-class SwTxtFrm;
+class SwTextFrm;
 
 #include <vcl/timer.hxx>
 #include <tools/gen.hxx>
@@ -76,7 +76,7 @@ public:
     DECL_LINK_TYPED( Blinker, Timer *, void );
 
     void Insert( const Point& rPoint, const SwLinePortion* pPor,
-                 const SwTxtFrm *pTxtFrm, sal_uInt16 nDir );
+                 const SwTextFrm *pTextFrm, sal_uInt16 nDir );
     void Replace( const SwLinePortion* pOld, const SwLinePortion* pNew );
     void Delete( const SwLinePortion* pPor );
     void FrmDelete( const SwRootFrm* pRoot );

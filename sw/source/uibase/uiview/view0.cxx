@@ -282,7 +282,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_VIEW_FIELDS:
                 aBool.SetValue( SwViewOption::IsFieldShadings() ); break;
             case FN_VIEW_FIELDNAME:
-                aBool.SetValue( pOpt->IsFldName() ); break;
+                aBool.SetValue( pOpt->IsFieldName() ); break;
             case FN_VIEW_MARKS:
                 aBool.SetValue( lcl_IsViewMarks(*pOpt) ); break;
             case FN_VIEW_META_CHARS:
@@ -485,9 +485,9 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     case FN_VIEW_FIELDNAME:
         if( STATE_TOGGLE == eState )
-            bFlag = !pOpt->IsFldName() ;
+            bFlag = !pOpt->IsFieldName() ;
 
-        pOpt->SetFldName( bFlag );
+        pOpt->SetFieldName( bFlag );
         break;
 
     case FN_VIEW_MARKS:

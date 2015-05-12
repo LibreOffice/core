@@ -94,15 +94,15 @@ static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
     return sBuf.makeStringAndClear();
 }
 
-OUString SwEditWin::ClipLongToolTip(const OUString& rTxt)
+OUString SwEditWin::ClipLongToolTip(const OUString& rText)
 {
-    OUString sDisplayTxt(rTxt);
-    long nTextWidth = GetTextWidth(sDisplayTxt);
+    OUString sDisplayText(rText);
+    long nTextWidth = GetTextWidth(sDisplayText);
     long nMaxWidth = GetDesktopRectPixel().GetWidth() * 2 / 3;
     nMaxWidth = PixelToLogic(Size(nMaxWidth, 0)).Width();
     if (nTextWidth > nMaxWidth)
-        sDisplayTxt = GetEllipsisString(sDisplayTxt, nMaxWidth, TEXT_DRAW_CENTERELLIPSIS);
-    return sDisplayTxt;
+        sDisplayText = GetEllipsisString(sDisplayText, nMaxWidth, TEXT_DRAW_CENTERELLIPSIS);
+    return sDisplayText;
 }
 
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
@@ -113,7 +113,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         return;
     bool bContinue = true;
     SET_CURR_SHELL(&rSh);
-    OUString sTxt;
+    OUString sText;
     Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
     bool bBalloon = bool(rEvt.GetMode() & HelpEventMode::BALLOON);
 
@@ -131,8 +131,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
     if( bContinue && bQuickBalloon)
     {
-        SwRect aFldRect;
-        SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD |
+        SwRect aFieldRect;
+        SwContentAtPos aContentAtPos( SwContentAtPos::SW_FIELD |
                                     SwContentAtPos::SW_INETATTR |
                                     SwContentAtPos::SW_FTN |
                                     SwContentAtPos::SW_REDLINE |
@@ -145,39 +145,39 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 #endif
                                     SwContentAtPos::SW_TABLEBOXFML );
 
-        if( rSh.GetContentAtPos( aPos, aCntntAtPos, false, &aFldRect ) )
+        if( rSh.GetContentAtPos( aPos, aContentAtPos, false, &aFieldRect ) )
         {
             sal_uInt16 nStyle = 0; // style of quick help
-            switch( aCntntAtPos.eCntntAtPos )
+            switch( aContentAtPos.eContentAtPos )
             {
             case SwContentAtPos::SW_TABLEBOXFML:
-                sTxt = "= ";
-                sTxt += static_cast<const SwTblBoxFormula*>(aCntntAtPos.aFnd.pAttr)->GetFormula();
+                sText = "= ";
+                sText += static_cast<const SwTableBoxFormula*>(aContentAtPos.aFnd.pAttr)->GetFormula();
                 break;
 #ifdef DBG_UTIL
             case SwContentAtPos::SW_TABLEBOXVALUE:
             {
-                sTxt = OStringToOUString(OString::number(
-                            static_cast<const SwTblBoxValue*>(aCntntAtPos.aFnd.pAttr)->GetValue()),
+                sText = OStringToOUString(OString::number(
+                            static_cast<const SwTableBoxValue*>(aContentAtPos.aFnd.pAttr)->GetValue()),
                             osl_getThreadTextEncoding());
             }
             break;
             case SwContentAtPos::SW_CURR_ATTRS:
-                sTxt = aCntntAtPos.sStr;
+                sText = aContentAtPos.sStr;
                 break;
 #endif
 
             case SwContentAtPos::SW_INETATTR:
             {
-                sTxt = static_cast<const SfxStringItem*>(aCntntAtPos.aFnd.pAttr)->GetValue();
-                sTxt = URIHelper::removePassword( sTxt,
+                sText = static_cast<const SfxStringItem*>(aContentAtPos.aFnd.pAttr)->GetValue();
+                sText = URIHelper::removePassword( sText,
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
                 //#i63832# remove the link target type
-                sal_Int32 nFound = sTxt.indexOf(cMarkSeparator);
-                if( nFound != -1 && (++nFound) < sTxt.getLength() )
+                sal_Int32 nFound = sText.indexOf(cMarkSeparator);
+                if( nFound != -1 && (++nFound) < sText.getLength() )
                 {
-                    OUString sSuffix( sTxt.copy(nFound) );
+                    OUString sSuffix( sText.copy(nFound) );
                     if( sSuffix == "table" ||
                         sSuffix == "frame" ||
                         sSuffix == "region" ||
@@ -185,12 +185,12 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sSuffix == "text" ||
                         sSuffix == "graphic" ||
                         sSuffix == "ole" )
-                    sTxt = sTxt.copy( 0, nFound - 1);
+                    sText = sText.copy( 0, nFound - 1);
                 }
                 // #i104300#
                 // special handling if target is a cross-reference bookmark
                 {
-                    OUString sTmpSearchStr = sTxt.copy( 1 );
+                    OUString sTmpSearchStr = sText.copy( 1 );
                     IDocumentMarkAccess* const pMarkAccess =
                                                 rSh.getIDocumentMarkAccess();
                     IDocumentMarkAccess::const_iterator_t ppBkmk =
@@ -199,14 +199,14 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                          IDocumentMarkAccess::GetType( *(ppBkmk->get()) )
                             == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK )
                     {
-                        SwTxtNode* pTxtNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTxtNode();
-                        if ( pTxtNode )
+                        SwTextNode* pTextNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTextNode();
+                        if ( pTextNode )
                         {
-                            sTxt = pTxtNode->GetExpandTxt( 0, pTxtNode->Len(), true, true );
+                            sText = pTextNode->GetExpandText( 0, pTextNode->Len(), true, true );
 
-                            if( !sTxt.isEmpty() )
+                            if( !sText.isEmpty() )
                             {
-                                OUStringBuffer sTmp(comphelper::string::remove(sTxt, 0xad));
+                                OUStringBuffer sTmp(comphelper::string::remove(sText, 0xad));
                                 for (sal_Int32 i = 0; i < sTmp.getLength(); ++i)
                                 {
                                     if (sTmp[i] < 0x20)
@@ -214,7 +214,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     else if (sTmp[i] == 0x2011)
                                         sTmp[i] = '-';
                                 }
-                                sTxt = sTmp.makeStringAndClear();
+                                sText = sTmp.makeStringAndClear();
                             }
                         }
                     }
@@ -226,11 +226,11 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     SvtSecurityOptions aSecOpts;
                     bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
 
-                    sTxt = ": " + sTxt;
+                    sText = ": " + sText;
                     if ( !bExecHyperlinks )
-                        sTxt = SwViewShell::GetShellRes()->aLinkCtrlClick + sTxt;
+                        sText = SwViewShell::GetShellRes()->aLinkCtrlClick + sText;
                     else
-                        sTxt = SwViewShell::GetShellRes()->aLinkClick + sTxt;
+                        sText = SwViewShell::GetShellRes()->aLinkClick + sText;
                 }
                 break;
             }
@@ -241,47 +241,47 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 OUString aModStr( aModifiedCode.GetName() );
                 aModStr = aModStr.replaceFirst(aCode.GetName(), OUString());
                 aModStr = aModStr.replaceAll("+", OUString());
-                sTxt = SW_RESSTR(STR_SMARTTAG_CLICK).replaceAll("%s", aModStr);
+                sText = SW_RESSTR(STR_SMARTTAG_CLICK).replaceAll("%s", aModStr);
             }
             break;
 
             case SwContentAtPos::SW_FTN:
-                if( aCntntAtPos.pFndTxtAttr && aCntntAtPos.aFnd.pAttr )
+                if( aContentAtPos.pFndTextAttr && aContentAtPos.aFnd.pAttr )
                 {
-                    const SwFmtFtn* pFtn = static_cast<const SwFmtFtn*>(aCntntAtPos.aFnd.pAttr);
+                    const SwFormatFootnote* pFootnote = static_cast<const SwFormatFootnote*>(aContentAtPos.aFnd.pAttr);
                     OUString sTmp;
-                    pFtn->GetFtnText( sTmp );
-                    sTxt = SW_RESSTR( pFtn->IsEndNote()
+                    pFootnote->GetFootnoteText( sTmp );
+                    sText = SW_RESSTR( pFootnote->IsEndNote()
                                     ? STR_ENDNOTE : STR_FTNNOTE ) + sTmp;
                     bBalloon = true;
-                    if( aCntntAtPos.IsInRTLText() )
+                    if( aContentAtPos.IsInRTLText() )
                         nStyle |= QUICKHELP_BIDI_RTL;
                 }
                 break;
 
             case SwContentAtPos::SW_REDLINE:
-                sTxt = lcl_GetRedlineHelp(*aCntntAtPos.aFnd.pRedl, bBalloon);
+                sText = lcl_GetRedlineHelp(*aContentAtPos.aFnd.pRedl, bBalloon);
                 break;
 
             case SwContentAtPos::SW_TOXMARK:
-                sTxt = aCntntAtPos.sStr;
-                if( !sTxt.isEmpty() && aCntntAtPos.pFndTxtAttr )
+                sText = aContentAtPos.sStr;
+                if( !sText.isEmpty() && aContentAtPos.pFndTextAttr )
                 {
-                    const SwTOXType* pTType = aCntntAtPos.pFndTxtAttr->
+                    const SwTOXType* pTType = aContentAtPos.pFndTextAttr->
                                         GetTOXMark().GetTOXType();
                     if( pTType && !pTType->GetTypeName().isEmpty() )
                     {
-                        sTxt = ": " + sTxt;
-                        sTxt = pTType->GetTypeName() + sTxt;
+                        sText = ": " + sText;
+                        sText = pTType->GetTypeName() + sText;
                     }
                 }
                 break;
             case SwContentAtPos::SW_REFMARK:
-                if(aCntntAtPos.aFnd.pAttr)
+                if(aContentAtPos.aFnd.pAttr)
                 {
-                    sTxt = SW_RESSTR(STR_CONTENT_TYPE_SINGLE_REFERENCE);
-                    sTxt += ": ";
-                    sTxt += static_cast<const SwFmtRefMark*>(aCntntAtPos.aFnd.pAttr)->GetRefName();
+                    sText = SW_RESSTR(STR_CONTENT_TYPE_SINGLE_REFERENCE);
+                    sText += ": ";
+                    sText += static_cast<const SwFormatRefMark*>(aContentAtPos.aFnd.pAttr)->GetRefName();
                 }
             break;
 
@@ -290,17 +290,17 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
                     if(!pModOpt->IsHideFieldTips())
                     {
-                        const SwField* pFld = aCntntAtPos.aFnd.pFld;
-                        switch( pFld->Which() )
+                        const SwField* pField = aContentAtPos.aFnd.pField;
+                        switch( pField->Which() )
                         {
                         case RES_SETEXPFLD:
                         case RES_TABLEFLD:
                         case RES_GETEXPFLD:
                         {
-                            sal_uInt16 nOldSubType = pFld->GetSubType();
-                            const_cast<SwField*>(pFld)->SetSubType(nsSwExtendedSubType::SUB_CMD);
-                            sTxt = pFld->ExpandField(true);
-                            const_cast<SwField*>(pFld)->SetSubType(nOldSubType);
+                            sal_uInt16 nOldSubType = pField->GetSubType();
+                            const_cast<SwField*>(pField)->SetSubType(nsSwExtendedSubType::SUB_CMD);
+                            sText = pField->ExpandField(true);
+                            const_cast<SwField*>(pField)->SetSubType(nOldSubType);
                         }
                         break;
 
@@ -312,45 +312,45 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             bBalloon = true;
                             /* no break */
                         case RES_JUMPEDITFLD:
-                            sTxt = pFld->GetPar2();
+                            sText = pField->GetPar2();
                             break;
 
                         case RES_DBFLD:
-                            sTxt = pFld->GetFieldName();
+                            sText = pField->GetFieldName();
                             break;
 
                         case RES_USERFLD:
                         case RES_HIDDENTXTFLD:
-                            sTxt = pFld->GetPar1();
+                            sText = pField->GetPar1();
                             break;
 
                         case RES_DOCSTATFLD:
                             break;
 
                         case RES_MACROFLD:
-                            sTxt = static_cast<const SwMacroField*>(pFld)->GetMacro();
+                            sText = static_cast<const SwMacroField*>(pField)->GetMacro();
                             break;
 
                         case RES_GETREFFLD:
                         {
                             // #i85090#
-                            const SwGetRefField* pRefFld( dynamic_cast<const SwGetRefField*>(pFld) );
-                            OSL_ENSURE( pRefFld,
-                                    "<SwEditWin::RequestHelp(..)> - unexpected type of <pFld>" );
-                            if ( pRefFld )
+                            const SwGetRefField* pRefField( dynamic_cast<const SwGetRefField*>(pField) );
+                            OSL_ENSURE( pRefField,
+                                    "<SwEditWin::RequestHelp(..)> - unexpected type of <pField>" );
+                            if ( pRefField )
                             {
-                                if ( pRefFld->IsRefToHeadingCrossRefBookmark() ||
-                                     pRefFld->IsRefToNumItemCrossRefBookmark() )
+                                if ( pRefField->IsRefToHeadingCrossRefBookmark() ||
+                                     pRefField->IsRefToNumItemCrossRefBookmark() )
                                 {
-                                    sTxt = pRefFld->GetExpandedTxtOfReferencedTxtNode();
-                                    if ( sTxt.getLength() > 80  )
+                                    sText = pRefField->GetExpandedTextOfReferencedTextNode();
+                                    if ( sText.getLength() > 80  )
                                     {
-                                        sTxt = sTxt.copy(0, 80) + "...";
+                                        sText = sText.copy(0, 80) + "...";
                                     }
                                 }
                                 else
                                 {
-                                    sTxt = static_cast<const SwGetRefField*>(pFld)->GetSetRefName();
+                                    sText = static_cast<const SwGetRefField*>(pField)->GetSetRefName();
                                 }
                             }
                         }
@@ -358,30 +358,30 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         }
                     }
 
-                    if( sTxt.isEmpty() )
+                    if( sText.isEmpty() )
                     {
-                        aCntntAtPos.eCntntAtPos = SwContentAtPos::SW_REDLINE;
-                        if( rSh.GetContentAtPos( aPos, aCntntAtPos, false, &aFldRect ) )
-                            sTxt = lcl_GetRedlineHelp(*aCntntAtPos.aFnd.pRedl, bBalloon);
+                        aContentAtPos.eContentAtPos = SwContentAtPos::SW_REDLINE;
+                        if( rSh.GetContentAtPos( aPos, aContentAtPos, false, &aFieldRect ) )
+                            sText = lcl_GetRedlineHelp(*aContentAtPos.aFnd.pRedl, bBalloon);
                     }
                 }
             }
-            if (!sTxt.isEmpty())
+            if (!sText.isEmpty())
             {
                 if( bBalloon )
-                    Help::ShowBalloon( this, rEvt.GetMousePosPixel(), sTxt );
+                    Help::ShowBalloon( this, rEvt.GetMousePosPixel(), sText );
                 else
                 {
                     // the show the help
-                    Rectangle aRect( aFldRect.SVRect() );
+                    Rectangle aRect( aFieldRect.SVRect() );
                     Point aPt( OutputToScreenPixel( LogicToPixel( aRect.TopLeft() )));
                     aRect.Left()   = aPt.X();
                     aRect.Top()    = aPt.Y();
                     aPt = OutputToScreenPixel( LogicToPixel( aRect.BottomRight() ));
                     aRect.Right()  = aPt.X();
                     aRect.Bottom() = aPt.Y();
-                    OUString sDisplayTxt(ClipLongToolTip(sTxt));
-                    Help::ShowQuickHelp(this, aRect, sDisplayTxt, nStyle);
+                    OUString sDisplayText(ClipLongToolTip(sText));
+                    Help::ShowQuickHelp(this, aRect, sDisplayText, nStyle);
                 }
             }
 
@@ -420,11 +420,11 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             }
             if(nTabRes)
             {
-                sTxt = SW_RESSTR(nTabRes);
-                Size aTxtSize( GetTextWidth(sTxt), GetTextHeight());
-                Rectangle aRect(rEvt.GetMousePosPixel(), aTxtSize);
-                OUString sDisplayTxt(ClipLongToolTip(sTxt));
-                Help::ShowQuickHelp(this, aRect, sDisplayTxt);
+                sText = SW_RESSTR(nTabRes);
+                Size aTextSize( GetTextWidth(sText), GetTextHeight());
+                Rectangle aRect(rEvt.GetMousePosPixel(), aTextSize);
+                OUString sDisplayText(ClipLongToolTip(sText));
+                Help::ShowQuickHelp(this, aRect, sDisplayText);
             }
             bContinue = false;
         }

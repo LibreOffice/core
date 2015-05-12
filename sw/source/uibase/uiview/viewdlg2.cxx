@@ -104,13 +104,13 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     {
         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
         if( USHRT_MAX != nPoolId )
-            rSh.GetTxtCollFromPool(nPoolId);
+            rSh.GetTextCollFromPool(nPoolId);
             // Pool template does not exist: Does it exist on the document?
         else if( !rSh.GetParaStyle(rName) )
         {
             // It also does not exist in the document: generate
-            SwTxtFmtColl* pDerivedFrom = rSh.GetTxtCollFromPool(RES_POOLCOLL_LABEL);
-            rSh.MakeTxtFmtColl(rName, pDerivedFrom);
+            SwTextFormatColl* pDerivedFrom = rSh.GetTextCollFromPool(RES_POOLCOLL_LABEL);
+            rSh.MakeTextFormatColl(rName, pDerivedFrom);
         }
     }
 
@@ -124,34 +124,34 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
                       eType & nsSelectionType::SEL_DRW ? LTYPE_DRAW :
                                                     LTYPE_OBJECT;
 
-    SwFldMgr aMgr(&rSh);
-    SwSetExpFieldType* pFldType =
-            static_cast<SwSetExpFieldType*>(aMgr.GetFldType(RES_SETEXPFLD, rName));
-    if (!pFldType && !rName.isEmpty() )
+    SwFieldMgr aMgr(&rSh);
+    SwSetExpFieldType* pFieldType =
+            static_cast<SwSetExpFieldType*>(aMgr.GetFieldType(RES_SETEXPFLD, rName));
+    if (!pFieldType && !rName.isEmpty() )
     {
         // Create new field types
         SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), rName, nsSwGetSetExpType::GSE_SEQ);
-        aMgr.InsertFldType(aSwSetExpFieldType);
-        pFldType = static_cast<SwSetExpFieldType*>(aMgr.GetFldType(RES_SETEXPFLD, rName));
+        aMgr.InsertFieldType(aSwSetExpFieldType);
+        pFieldType = static_cast<SwSetExpFieldType*>(aMgr.GetFieldType(RES_SETEXPFLD, rName));
     }
 
     if (!pOpt->IgnoreSeqOpts())
     {
-        if (pFldType)
+        if (pFieldType)
         {
-            pFldType->SetDelimiter(pOpt->GetSeparator());
-            pFldType->SetOutlineLvl( static_cast< sal_uInt8 >(pOpt->GetLevel()) );
+            pFieldType->SetDelimiter(pOpt->GetSeparator());
+            pFieldType->SetOutlineLvl( static_cast< sal_uInt8 >(pOpt->GetLevel()) );
         }
     }
 
     sal_uInt16       nID    = USHRT_MAX;
     SwFieldType* pType  = 0;
-    const sal_uInt16 nCount = aMgr.GetFldTypeCount();
+    const sal_uInt16 nCount = aMgr.GetFieldTypeCount();
     if( !rName.isEmpty() )
     {
         for (sal_uInt16 i = 0; i < nCount; ++i)
         {
-            pType = aMgr.GetFldType(USHRT_MAX, i);
+            pType = aMgr.GetFieldType(USHRT_MAX, i);
             OUString aTmpName( pType->GetName() );
             if (aTmpName == rName && pType->Which() == RES_SETEXPFLD)
             {
@@ -174,7 +174,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     if(pType)
         static_cast<SwSetExpFieldType*>(pType)->SetSeqFormat(pOpt->GetNumType());
 
-    rSh.UpdateExpFlds( true );
+    rSh.UpdateExpFields( true );
 
     rSh.EndAllAction();
 

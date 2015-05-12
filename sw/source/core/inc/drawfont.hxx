@@ -25,7 +25,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
 
-class SwTxtFrm;
+class SwTextFrm;
 class SwViewShell;
 class SwScriptInfo;
 class Point;
@@ -42,7 +42,7 @@ class SwUnderlineFont;
 // encapsulates information for drawing text
 class SwDrawTextInfo
 {
-    const SwTxtFrm* pFrm;
+    const SwTextFrm* pFrm;
     VclPtr<OutputDevice> pOut;
     SwViewShell const * pSh;
     const SwScriptInfo* pScriptInfo;
@@ -162,12 +162,12 @@ public:
 #endif
     }
 
-    const SwTxtFrm* GetFrm() const
+    const SwTextFrm* GetFrm() const
     {
         return pFrm;
     }
 
-    void SetFrm( const SwTxtFrm* pNewFrm )
+    void SetFrm( const SwTextFrm* pNewFrm )
     {
         pFrm = pNewFrm;
     }

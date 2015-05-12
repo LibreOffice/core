@@ -53,11 +53,11 @@ namespace
     struct _FindItem
     {
         const OUString m_Item;
-        SwTableNode* pTblNd;
+        SwTableNode* pTableNd;
         SwSectionNode* pSectNd;
 
         _FindItem(const OUString& rS)
-            : m_Item(rS), pTblNd(0), pSectNd(0)
+            : m_Item(rS), pTableNd(0), pSectNd(0)
         {}
      };
 
@@ -112,9 +112,9 @@ namespace
     }
 
 
-    bool lcl_FindSection( const SwSectionFmt* pSectFmt, _FindItem * const pItem, bool bCaseSensitive )
+    bool lcl_FindSection( const SwSectionFormat* pSectFormat, _FindItem * const pItem, bool bCaseSensitive )
     {
-        SwSection* pSect = pSectFmt->GetSection();
+        SwSection* pSect = pSectFormat->GetSection();
         if( pSect )
         {
             OUString sNm( (bCaseSensitive)
@@ -127,8 +127,8 @@ namespace
             {
                 // found, so get the data
                 const SwNodeIndex* pIdx;
-                if( 0 != (pIdx = pSectFmt->GetCntnt().GetCntntIdx() ) &&
-                    &pSectFmt->GetDoc()->GetNodes() == &pIdx->GetNodes() )
+                if( 0 != (pIdx = pSectFormat->GetContent().GetContentIdx() ) &&
+                    &pSectFormat->GetDoc()->GetNodes() == &pIdx->GetNodes() )
                 {
                     // a table in the normal NodesArr
                     pItem->pSectNd = pIdx->GetNode().GetSectionNode();
@@ -141,20 +141,20 @@ namespace
         return true;
     }
 
-    bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
+    bool lcl_FindTable( const SwFrameFormat* pTableFormat, _FindItem * const pItem )
     {
-        OUString sNm( GetAppCharClass().lowercase( pTableFmt->GetName() ));
+        OUString sNm( GetAppCharClass().lowercase( pTableFormat->GetName() ));
         if ( sNm == pItem->m_Item )
         {
-            SwTable* pTmpTbl;
+            SwTable* pTmpTable;
             SwTableBox* pFBox;
-            if( 0 != ( pTmpTbl = SwTable::FindTable( pTableFmt ) ) &&
-                0 != ( pFBox = pTmpTbl->GetTabSortBoxes()[0] ) &&
+            if( 0 != ( pTmpTable = SwTable::FindTable( pTableFormat ) ) &&
+                0 != ( pFBox = pTmpTable->GetTabSortBoxes()[0] ) &&
                 pFBox->GetSttNd() &&
-                &pTableFmt->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
+                &pTableFormat->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
             {
                 // a table in the normal NodesArr
-                pItem->pTblNd = const_cast<SwTableNode*>(
+                pItem->pTableNd = const_cast<SwTableNode*>(
                                             pFBox->GetSttNd()->FindTableNode());
                 return false;
             }
@@ -247,9 +247,9 @@ bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const O
         // Do we already have the Item?
         OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
-        for( const SwSectionFmt* pFmt : m_rDoc.GetSections() )
+        for( const SwSectionFormat* pFormat : m_rDoc.GetSections() )
         {
-            if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
+            if (!(lcl_FindSection(pFormat, &aPara, bCaseSensitive)))
                 break;
         }
         if( aPara.pSectNd )
@@ -263,14 +263,14 @@ bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const O
     }
 
     _FindItem aPara( GetAppCharClass().lowercase( rItem ));
-    for( const SwFrmFmt* pFmt : *m_rDoc.GetTblFrmFmts() )
+    for( const SwFrameFormat* pFormat : *m_rDoc.GetTableFrameFormats() )
     {
-        if (!(lcl_FindTable(pFmt, &aPara)))
+        if (!(lcl_FindTable(pFormat, &aPara)))
             break;
     }
-    if( aPara.pTblNd )
+    if( aPara.pTableNd )
     {
-        return SwServerObject( *aPara.pTblNd ).GetData( rValue, rMimeType );
+        return SwServerObject( *aPara.pTableNd ).GetData( rValue, rMimeType );
     }
 
     return false;
@@ -292,9 +292,9 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
         // Do we already have the Item?
         OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
-        for( const SwSectionFmt* pFmt : m_rDoc.GetSections() )
+        for( const SwSectionFormat* pFormat : m_rDoc.GetSections() )
         {
-            if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
+            if (!(lcl_FindSection(pFormat, &aPara, bCaseSensitive)))
                 break;
         }
         if( aPara.pSectNd )
@@ -309,9 +309,9 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
 
     OUString sItem(GetAppCharClass().lowercase(rItem));
     _FindItem aPara( sItem );
-    for( const SwFrmFmt* pFmt : *m_rDoc.GetTblFrmFmts() )
+    for( const SwFrameFormat* pFormat : *m_rDoc.GetTableFrameFormats() )
     {
-        if (!(lcl_FindTable(pFmt, &aPara)))
+        if (!(lcl_FindTable(pFormat, &aPara)))
             break;
     }
 
@@ -341,9 +341,9 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
 
         _FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         // sections
-        for( const SwSectionFmt* pFmt : m_rDoc.GetSections() )
+        for( const SwSectionFormat* pFormat : m_rDoc.GetSections() )
         {
-            if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
+            if (!(lcl_FindSection(pFormat, &aPara, bCaseSensitive)))
                 break;
         }
 
@@ -364,17 +364,17 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
 
     _FindItem aPara( GetAppCharClass().lowercase(rItem) );
     // tables
-    for( const SwFrmFmt* pFmt : *m_rDoc.GetTblFrmFmts() )
+    for( const SwFrameFormat* pFormat : *m_rDoc.GetTableFrameFormats() )
     {
-        if (!(lcl_FindTable(pFmt, &aPara)))
+        if (!(lcl_FindTable(pFormat, &aPara)))
             break;
     }
-    if(aPara.pTblNd
-        && (0 == (pObj = aPara.pTblNd->GetTable().GetObject())))
+    if(aPara.pTableNd
+        && (0 == (pObj = aPara.pTableNd->GetTable().GetObject())))
     {
         // table found, but no link yet -> create hotlink
-        pObj = new SwServerObject(*aPara.pTblNd);
-        aPara.pTblNd->GetTable().SetRefObject(pObj);
+        pObj = new SwServerObject(*aPara.pTableNd);
+        aPara.pTableNd->GetTable().SetRefObject(pObj);
         GetLinkManager().InsertServer(pObj);
     }
     return pObj;
@@ -453,15 +453,15 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
         if( sCmp == "table" )
         {
             sName = rCC.lowercase( sName );
-            for( const SwFrmFmt* pFmt : *m_rDoc.GetTblFrmFmts() )
+            for( const SwFrameFormat* pFormat : *m_rDoc.GetTableFrameFormats() )
             {
-                if (!(lcl_FindTable(pFmt, &aPara)))
+                if (!(lcl_FindTable(pFormat, &aPara)))
                     break;
             }
-            if( aPara.pTblNd )
+            if( aPara.pTableNd )
             {
-                rpRange = new SwNodeRange( *aPara.pTblNd, 0,
-                                *aPara.pTblNd->EndOfSectionNode(), 1 );
+                rpRange = new SwNodeRange( *aPara.pTableNd, 0,
+                                *aPara.pTableNd->EndOfSectionNode(), 1 );
                 return true;
             }
         }
@@ -469,10 +469,10 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
         {
             SwNodeIndex* pIdx;
             SwNode* pNd;
-            const SwFlyFrmFmt* pFlyFmt = m_rDoc.FindFlyByName( sName );
-            if( pFlyFmt &&
-                0 != ( pIdx = const_cast<SwNodeIndex*>(pFlyFmt->GetCntnt().GetCntntIdx()) ) &&
-                !( pNd = &pIdx->GetNode())->IsNoTxtNode() )
+            const SwFlyFrameFormat* pFlyFormat = m_rDoc.FindFlyByName( sName );
+            if( pFlyFormat &&
+                0 != ( pIdx = const_cast<SwNodeIndex*>(pFlyFormat->GetContent().GetContentIdx()) ) &&
+                !( pNd = &pIdx->GetNode())->IsNoTextNode() )
             {
                 rpRange = new SwNodeRange( *pNd, 1, *pNd->EndOfSectionNode() );
                 return true;
@@ -489,7 +489,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
             if( m_rDoc.GotoOutline( aPos, sName ))
             {
                 SwNode* pNd = &aPos.nNode.GetNode();
-                const int nLvl = pNd->GetTxtNode()->GetAttrOutlineLevel()-1;
+                const int nLvl = pNd->GetTextNode()->GetAttrOutlineLevel()-1;
 
                 const SwOutlineNodes& rOutlNds = m_rDoc.GetNodes().GetOutLineNds();
                 sal_uInt16 nTmpPos;
@@ -499,7 +499,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
                 // look for the section's end, now
                 for( ++nTmpPos;
                         nTmpPos < rOutlNds.size() &&
-                        nLvl < rOutlNds[ nTmpPos ]->GetTxtNode()->
+                        nLvl < rOutlNds[ nTmpPos ]->GetTextNode()->
                                 GetAttrOutlineLevel()-1;
                     ++nTmpPos )
                     ;       // there is no block
@@ -534,9 +534,9 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
 
         if( !m_rDoc.GetSections().empty() )
         {
-            for( const SwSectionFmt* pFmt : m_rDoc.GetSections() )
+            for( const SwSectionFormat* pFormat : m_rDoc.GetSections() )
             {
-                if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
+                if (!(lcl_FindSection(pFormat, &aPara, bCaseSensitive)))
                     break;
             }
             if( aPara.pSectNd )

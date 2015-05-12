@@ -775,12 +775,12 @@ SwAccessibleTable::SwAccessibleTable(
 {
     SolarMutexGuard aGuard;
 
-    const SwFrmFmt *pFrmFmt = pTabFrm->GetFmt();
-    const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
+    const SwFrameFormat *pFrameFormat = pTabFrm->GetFormat();
+    const_cast< SwFrameFormat * >( pFrameFormat )->Add( this );
 
-    SetName( pFrmFmt->GetName() + "-" + OUString::number( pTabFrm->GetPhyPageNum() ) );
+    SetName( pFrameFormat->GetName() + "-" + OUString::number( pTabFrm->GetPhyPageNum() ) );
 
-    const OUString sArg1( static_cast< const SwTabFrm * >( GetFrm() )->GetFmt()->GetName() );
+    const OUString sArg1( static_cast< const SwTabFrm * >( GetFrm() )->GetFormat()->GetName() );
     const OUString sArg2( GetFormattedPageNumber() );
 
     sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
@@ -803,11 +803,11 @@ void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew
     case RES_NAME_CHANGED:
         if( pTabFrm )
         {
-            const SwFrmFmt *pFrmFmt = pTabFrm->GetFmt();
-            OSL_ENSURE( pFrmFmt == GetRegisteredIn(), "invalid frame" );
+            const SwFrameFormat *pFrameFormat = pTabFrm->GetFormat();
+            OSL_ENSURE( pFrameFormat == GetRegisteredIn(), "invalid frame" );
 
             const OUString sOldName( GetName() );
-            const OUString sNewTabName = pFrmFmt->GetName();
+            const OUString sNewTabName = pFrameFormat->GetName();
 
             SetName( sNewTabName + "-" + OUString::number( pTabFrm->GetPhyPageNum() ) );
 
@@ -1520,7 +1520,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 
     // if we have a selection in a table, check if it's in the
     // same table that we're trying to select in
-    const SwTableNode* pSelectedTable = pCrsrShell->IsCrsrInTbl();
+    const SwTableNode* pSelectedTable = pCrsrShell->IsCrsrInTable();
     if( pSelectedTable != NULL )
     {
         // get top-most table line
@@ -1535,7 +1535,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 
     // create the new selection
     const SwStartNode* pStartNode = pBox->GetSttNd();
-    if( pSelectedTable == NULL || !pCrsrShell->GetTblCrs() )
+    if( pSelectedTable == NULL || !pCrsrShell->GetTableCrs() )
     {
         pCrsrShell->StartAction();
         // Set cursor into current cell. This deletes any table cursor.
@@ -1547,7 +1547,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         pCrsrShell->SetMark();
         pCrsrShell->MoveTable( fnTableCurr, fnTableEnd );
         // now set the cursor into the cell again.
-        SwPaM *pPaM = pCrsrShell->GetTblCrs() ? pCrsrShell->GetTblCrs()
+        SwPaM *pPaM = pCrsrShell->GetTableCrs() ? pCrsrShell->GetTableCrs()
                                                     : pCrsrShell->GetCrsr();
         *pPaM->GetPoint() = *pPaM->GetMark();
         pCrsrShell->EndAction();
@@ -1561,7 +1561,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         SwPaM aPaM( *pStartNode );
         aPaM.Move( fnMoveForward, fnGoNode );
         aPaM.SetMark();
-        const SwPaM *pPaM = pCrsrShell->GetTblCrs() ? pCrsrShell->GetTblCrs()
+        const SwPaM *pPaM = pCrsrShell->GetTableCrs() ? pCrsrShell->GetTableCrs()
                                                     : pCrsrShell->GetCrsr();
         *(aPaM.GetMark()) = *pPaM->GetMark();
         Select( aPaM );
@@ -1681,7 +1681,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     // If we unselect point, then set cursor to mark. If we clear another
     // selected box, then set cursor to point.
     // reduce selection to mark.
-    SwPaM *pPaM = pCrsrShell->GetTblCrs() ? pCrsrShell->GetTblCrs()
+    SwPaM *pPaM = pCrsrShell->GetTableCrs() ? pCrsrShell->GetTableCrs()
                                                 : pCrsrShell->GetCrsr();
     bool bDeselectPoint =
         pBox->GetSttNd() ==
@@ -1698,7 +1698,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     pCrsrShell->SetMark();
     pCrsrShell->MoveTable( fnTableCurr, fnTableEnd );
     // now set the cursor into the cell again.
-    pPaM = pCrsrShell->GetTblCrs() ? pCrsrShell->GetTblCrs()
+    pPaM = pCrsrShell->GetTableCrs() ? pCrsrShell->GetTableCrs()
                                         : pCrsrShell->GetCrsr();
     *pPaM->GetPoint() = *pPaM->GetMark();
     pCrsrShell->EndAction();
@@ -1867,9 +1867,9 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap2
 {
     SolarMutexGuard aGuard;
 
-    const SwFrmFmt *pFrmFmt = pTabFrm->GetFmt();
-    const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
-    const OUString aName = pFrmFmt->GetName() + "-ColumnHeaders";
+    const SwFrameFormat *pFrameFormat = pTabFrm->GetFormat();
+    const_cast< SwFrameFormat * >( pFrameFormat )->Add( this );
+    const OUString aName = pFrameFormat->GetName() + "-ColumnHeaders";
 
     SetName( aName + "-" + OUString::number( pTabFrm->GetPhyPageNum() ) );
 

@@ -23,11 +23,11 @@
 
 class SfxPoolItem;
 class SwDoc;
-class SwTxtNode;
-class SwTxtFld;
+class SwTextNode;
+class SwTextField;
 
-bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
-                    const SwTxtNode& rBehindNd, sal_Int32 nSttPos );
+bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
+                    const SwTextNode& rBehindNd, sal_Int32 nSttPos );
 
 enum REFERENCESUBTYPE
 {
@@ -74,7 +74,7 @@ public:
 
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 
-    static SwTxtNode* FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
+    static SwTextNode* FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
                                         sal_Int32* pStt, sal_Int32* pEnd = 0 );
 };
@@ -83,7 +83,7 @@ class SW_DLLPUBLIC SwGetRefField : public SwField
 {
 private:
     OUString sSetRefName;
-    OUString sTxt;
+    OUString sText;
     sal_uInt16 nSubType;
     sal_uInt16 nSeqNo;
 
@@ -91,13 +91,13 @@ private:
     virtual SwField*    Copy() const SAL_OVERRIDE;
 
     // #i81002#
-    static OUString MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
-                          const SwTxtNode& rTxtNodeOfReferencedItem,
+    static OUString MakeRefNumStr( const SwTextNode& rTextNodeOfField,
+                          const SwTextNode& rTextNodeOfReferencedItem,
                           const sal_uInt32 nRefNumFormat );
 
 public:
     SwGetRefField( SwGetRefFieldType*, const OUString& rSetRef,
-                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFmt );
+                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFormat );
 
     virtual ~SwGetRefField();
 
@@ -106,15 +106,15 @@ public:
     OUString GetSetRefName() const { return sSetRefName; }
 
     // #i81002#
-    /** The <SwTxtFld> instance, which represents the text attribute for the
+    /** The <SwTextField> instance, which represents the text attribute for the
        <SwGetRefField> instance, has to be passed to the method.
-       This <SwTxtFld> instance is needed for the reference format type REF_UPDOWN
+       This <SwTextField> instance is needed for the reference format type REF_UPDOWN
        and REF_NUMBER.
        Note: This instance may be NULL (field in Undo/Redo). This will cause
        no update for these reference format types. */
-    void                UpdateField( const SwTxtFld* pFldTxtAttr );
+    void                UpdateField( const SwTextField* pFieldTextAttr );
 
-    void                SetExpand( const OUString& rStr ) { sTxt = rStr; }
+    void                SetExpand( const OUString& rStr ) { sText = rStr; }
 
     /// Get/set sub type.
     virtual sal_uInt16      GetSubType() const SAL_OVERRIDE;
@@ -123,9 +123,9 @@ public:
     // --> #i81002#
     bool IsRefToHeadingCrossRefBookmark() const;
     bool IsRefToNumItemCrossRefBookmark() const;
-    const SwTxtNode* GetReferencedTxtNode() const;
+    const SwTextNode* GetReferencedTextNode() const;
     // #i85090#
-    OUString GetExpandedTxtOfReferencedTxtNode() const;
+    OUString GetExpandedTextOfReferencedTextNode() const;
 
     /// Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
     sal_uInt16              GetSeqNo() const        { return nSeqNo; }

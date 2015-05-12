@@ -60,10 +60,10 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwPostItMgr& aMgr,
                                   SwPostItBits aBits,
                                   SwSidebarItem& rSidebarItem,
-                                  SwFmtFld* aField )
+                                  SwFormatField* aField )
     : SwSidebarWin( rEditWin, nBits, aMgr, aBits, rSidebarItem )
-    , mpFmtFld(aField)
-    , mpFld( static_cast<SwPostItField*>(aField->GetField()))
+    , mpFormatField(aField)
+    , mpField( static_cast<SwPostItField*>(aField->GetField()))
     , mpButtonPopup(0)
 {
 }
@@ -88,16 +88,16 @@ void SwAnnotationWin::SetPostItText()
 
     //If the new text is the same as the old text, keep the same insertion
     //point .e.g. fdo#33599
-    mpFld = static_cast<SwPostItField*>(mpFmtFld->GetField());
-    OUString sNewText = mpFld->GetPar2();
+    mpField = static_cast<SwPostItField*>(mpFormatField->GetField());
+    OUString sNewText = mpField->GetPar2();
     bool bTextUnchanged = sNewText.equals(Engine()->GetEditEngine().GetText());
     ESelection aOrigSelection(GetOutlinerView()->GetEditView().GetSelection());
 
     // get text from SwPostItField and insert into our textview
     Engine()->SetModifyHdl( Link<>() );
     Engine()->EnableUndo( false );
-    if( mpFld->GetTextObject() )
-        Engine()->SetText( *mpFld->GetTextObject() );
+    if( mpField->GetTextObject() )
+        Engine()->SetText( *mpField->GetTextObject() );
     else
     {
         Engine()->Clear();
@@ -125,22 +125,22 @@ void SwAnnotationWin::UpdateData()
         boost::scoped_ptr<SwField> pOldField;
         if (rUndoRedo.DoesUndo())
         {
-            pOldField.reset(mpFld->Copy());
+            pOldField.reset(mpField->Copy());
         }
-        mpFld->SetPar2(Engine()->GetEditEngine().GetText());
-        mpFld->SetTextObject(Engine()->CreateParaObject());
+        mpField->SetPar2(Engine()->GetEditEngine().GetText());
+        mpField->SetTextObject(Engine()->CreateParaObject());
         if (rUndoRedo.DoesUndo())
         {
-            SwTxtFld *const pTxtFld = mpFmtFld->GetTxtFld();
-            SwPosition aPosition( pTxtFld->GetTxtNode() );
-            aPosition.nContent = pTxtFld->GetStart();
+            SwTextField *const pTextField = mpFormatField->GetTextField();
+            SwPosition aPosition( pTextField->GetTextNode() );
+            aPosition.nContent = pTextField->GetStart();
             rUndoRedo.AppendUndo(
-                new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+                new SwUndoFieldFromDoc(aPosition, *pOldField, *mpField, 0, true));
         }
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         Mgr().SetLayout();
         // #i98686# if we have several views, all notes should update their text
-        mpFmtFld->Broadcast(SwFmtFldHint( 0, SwFmtFldHintWhich::CHANGED));
+        mpFormatField->Broadcast(SwFormatFieldHint( 0, SwFormatFieldHintWhich::CHANGED));
         DocView().GetDocShell()->SetModified();
     }
     Engine()->ClearModifyFlag();
@@ -149,7 +149,7 @@ void SwAnnotationWin::UpdateData()
 
 void SwAnnotationWin::Delete()
 {
-    if (DocView().GetWrtShellPtr()->GotoField(*mpFmtFld))
+    if (DocView().GetWrtShellPtr()->GotoField(*mpFormatField))
     {
         SwSidebarWin::Delete();
         // we delete the field directly, the Mgr cleans up the PostIt by listening
@@ -160,7 +160,7 @@ void SwAnnotationWin::Delete()
 
 void SwAnnotationWin::GotoPos()
 {
-    DocView().GetDocShell()->GetWrtShell()->GotoField(*mpFmtFld);
+    DocView().GetDocShell()->GetWrtShell()->GotoField(*mpFormatField);
 }
 
 sal_uInt32 SwAnnotationWin::MoveCaret()
@@ -175,39 +175,39 @@ sal_uInt32 SwAnnotationWin::MoveCaret()
 //returns true, if there is another note right before this note
 bool SwAnnotationWin::CalcFollow()
 {
-    SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
-    SwPosition aPosition( pTxtFld->GetTxtNode() );
-    aPosition.nContent = pTxtFld->GetStart();
-    SwTxtAttr * const pTxtAttr =
-        pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
+    SwTextField* pTextField = mpFormatField->GetTextField();
+    SwPosition aPosition( pTextField->GetTextNode() );
+    aPosition.nContent = pTextField->GetStart();
+    SwTextAttr * const pTextAttr =
+        pTextField->GetTextNode().GetTextAttrForCharAt(
             aPosition.nContent.GetIndex() - 1,
             RES_TXTATR_ANNOTATION );
-    const SwField* pFld = pTxtAttr ? pTxtAttr->GetFmtFld().GetField() : 0;
-    return pFld && (pFld->Which()== RES_POSTITFLD);
+    const SwField* pField = pTextAttr ? pTextAttr->GetFormatField().GetField() : 0;
+    return pField && (pField->Which()== RES_POSTITFLD);
 }
 
 // counts how many SwPostItField we have right after the current one
 sal_uInt32 SwAnnotationWin::CountFollowing()
 {
     sal_uInt32 aCount = 1;  // we start with 1, so we have to subtract one at the end again
-    SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
-    SwPosition aPosition( pTxtFld->GetTxtNode() );
-    aPosition.nContent = pTxtFld->GetStart();
+    SwTextField* pTextField = mpFormatField->GetTextField();
+    SwPosition aPosition( pTextField->GetTextNode() );
+    aPosition.nContent = pTextField->GetStart();
 
-    SwTxtAttr * pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
+    SwTextAttr * pTextAttr = pTextField->GetTextNode().GetTextAttrForCharAt(
                                         aPosition.nContent.GetIndex() + 1,
                                         RES_TXTATR_ANNOTATION );
-    SwField* pFld = pTxtAttr
-                    ? const_cast<SwField*>(pTxtAttr->GetFmtFld().GetField())
+    SwField* pField = pTextAttr
+                    ? const_cast<SwField*>(pTextAttr->GetFormatField().GetField())
                     : 0;
-    while ( pFld && ( pFld->Which()== RES_POSTITFLD ) )
+    while ( pField && ( pField->Which()== RES_POSTITFLD ) )
     {
         aCount++;
-        pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
+        pTextAttr = pTextField->GetTextNode().GetTextAttrForCharAt(
                                         aPosition.nContent.GetIndex() + aCount,
                                         RES_TXTATR_ANNOTATION );
-        pFld = pTxtAttr
-               ? const_cast<SwField*>(pTxtAttr->GetFmtFld().GetField())
+        pField = pTextAttr
+               ? const_cast<SwField*>(pTextAttr->GetFormatField().GetField())
                : 0;
     }
     return aCount - 1;
@@ -267,17 +267,17 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     boost::scoped_ptr<SwField> pOldField;
     if (rUndoRedo.DoesUndo())
     {
-        pOldField.reset(mpFld->Copy());
+        pOldField.reset(mpField->Copy());
     }
-    mpFld->SetPar2(Engine()->GetEditEngine().GetText());
-    mpFld->SetTextObject(Engine()->CreateParaObject());
+    mpField->SetPar2(Engine()->GetEditEngine().GetText());
+    mpField->SetTextObject(Engine()->CreateParaObject());
     if (rUndoRedo.DoesUndo())
     {
-        SwTxtFld *const pTxtFld = mpFmtFld->GetTxtFld();
-        SwPosition aPosition( pTxtFld->GetTxtNode() );
-        aPosition.nContent = pTxtFld->GetStart();
+        SwTextField *const pTextField = mpFormatField->GetTextField();
+        SwPosition aPosition( pTextField->GetTextNode() );
+        aPosition.nContent = pTextField->GetStart();
         rUndoRedo.AppendUndo(
-            new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+            new SwUndoFieldFromDoc(aPosition, *pOldField, *mpField, 0, true));
     }
     Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     Engine()->ClearModifyFlag();
@@ -287,7 +287,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
 SvxLanguageItem SwAnnotationWin::GetLanguage()
 {
     // set initial language for outliner
-    SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
+    SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpField->GetLanguage() );
     sal_uInt16 nLangWhichId = 0;
     switch (nScriptType)
     {
@@ -296,29 +296,29 @@ SvxLanguageItem SwAnnotationWin::GetLanguage()
         case SvtScriptType::COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
         default: OSL_FAIL("GetLanguage: wrong script type");
     }
-    return SvxLanguageItem(mpFld->GetLanguage(),nLangWhichId);
+    return SvxLanguageItem(mpField->GetLanguage(),nLangWhichId);
 }
 
 bool SwAnnotationWin::IsProtected()
 {
     return SwSidebarWin::IsProtected() ||
            GetLayoutStatus() == SwPostItHelper::DELETED ||
-           ( mpFmtFld && mpFmtFld->IsProtect() );
+           ( mpFormatField && mpFormatField->IsProtect() );
 }
 
 OUString SwAnnotationWin::GetAuthor()
 {
-    return mpFld->GetPar1();
+    return mpField->GetPar1();
 }
 
 Date SwAnnotationWin::GetDate()
 {
-    return mpFld->GetDate();
+    return mpField->GetDate();
 }
 
 tools::Time SwAnnotationWin::GetTime()
 {
-    return mpFld->GetTime();
+    return mpField->GetTime();
 }
 
 } } // end of namespace sw::annotation

@@ -55,7 +55,7 @@
 
 SwTableRep::SwTableRep( const SwTabCols& rTabCol )
     :
-    nTblWidth(0),
+    nTableWidth(0),
     nSpace(0),
     nLeftSpace(0),
     nRightSpace(0),
@@ -152,7 +152,7 @@ bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
             rTabCols[i] = nPos + nLeft;
             rTabCols.SetHidden( i, bOld );
         }
-        rTabCols.SetRight(nLeft + nTblWidth);
+        rTabCols.SetRight(nLeft + nTableWidth);
     }
     else
     {

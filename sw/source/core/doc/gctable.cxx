@@ -30,11 +30,11 @@ inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, bool bTop )
     return bTop ? pBox->GetTop() : pBox->GetBottom();
 }
 
-bool _SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrmFmt& rFmt )
+bool _SwGCBorder_BoxBrd::CheckLeftBorderOfFormat( const SwFrameFormat& rFormat )
 {
     const SvxBorderLine* pBrd;
     const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rFmt.GetItemState( RES_BOX, true, &pItem ) &&
+    if( SfxItemState::SET == rFormat.GetItemState( RES_BOX, true, &pItem ) &&
         0 != ( pBrd = static_cast<const SvxBoxItem*>(pItem)->GetLeft() ) )
     {
         if( *pBrdLn == *pBrd )
@@ -66,7 +66,7 @@ static bool lcl_GCBorder_ChkBoxBrd_B( const SwTableBox* pBox, _SwGCBorder_BoxBrd
         return true;
     }
 
-    return pPara->CheckLeftBorderOfFormat( *pBox->GetFrmFmt() );
+    return pPara->CheckLeftBorderOfFormat( *pBox->GetFrameFormat() );
 }
 
 static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPara );
@@ -91,7 +91,7 @@ static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPa
 }
 
 // Find the "end" of the passed BorderLine. Returns the "Layout"Pos!
-static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
+static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTableLineBoxes& rCollTLB,
                         const SvxBorderLine& rBrdLn, size_t& rStt, bool bTop )
 {
     sal_uInt16 nPos, nLastPos = 0;
@@ -101,7 +101,7 @@ static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
         const SvxBorderLine* pBrd;
         const SwTableBox& rBox = rCollTLB.GetBox( rStt, &nPos );
 
-        if( SfxItemState::SET != rBox.GetFrmFmt()->GetItemState(RES_BOX,true, &pItem )
+        if( SfxItemState::SET != rBox.GetFrameFormat()->GetItemState(RES_BOX,true, &pItem )
             || 0 == ( pBrd = GetLineTB( static_cast<const SvxBoxItem*>(pItem), bTop ))
             || !( *pBrd == rBrdLn ))
             break;
@@ -114,17 +114,17 @@ static inline const SvxBorderLine* lcl_GCBorder_GetBorder( const SwTableBox& rBo
                                                 bool bTop,
                                                 const SfxPoolItem** ppItem )
 {
-    return SfxItemState::SET == rBox.GetFrmFmt()->GetItemState( RES_BOX, true, ppItem )
+    return SfxItemState::SET == rBox.GetFrameFormat()->GetItemState( RES_BOX, true, ppItem )
             ? GetLineTB( static_cast<const SvxBoxItem*>(*ppItem), bTop )
             : 0;
 }
 
-static void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
+static void lcl_GCBorder_DelBorder( const SwCollectTableLineBoxes& rCollTLB,
                                 size_t& rStt, bool bTop,
                                 const SvxBorderLine& rLine,
                                 const SfxPoolItem* pItem,
                                 sal_uInt16 nEndPos,
-                                SwShareBoxFmts* pShareFmts )
+                                SwShareBoxFormats* pShareFormats )
 {
     SwTableBox* pBox = const_cast<SwTableBox*>(&rCollTLB.GetBox( rStt ));
     sal_uInt16 nNextPos;
@@ -139,10 +139,10 @@ static void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
             else
                 aBox.SetLine( 0, SvxBoxItemLine::BOTTOM );
 
-            if( pShareFmts )
-                pShareFmts->SetAttr( *pBox, aBox );
+            if( pShareFormats )
+                pShareFormats->SetAttr( *pBox, aBox );
             else
-                pBox->ClaimFrmFmt()->SetFmtAttr( aBox );
+                pBox->ClaimFrameFormat()->SetFormatAttr( aBox );
         }
 
         if( ++rStt >= rCollTLB.Count() )
@@ -181,7 +181,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
             for( SwTableBoxes::size_type i = aBoxes.size(); i; )
             {
                 SwTableBox* pBox;
-                if( SfxItemState::SET == (pBox = aBoxes[ --i ])->GetFrmFmt()->
+                if( SfxItemState::SET == (pBox = aBoxes[ --i ])->GetFrameFormat()->
                     GetItemState( RES_BOX, true, &pItem ) &&
                     0 != ( pBrd = static_cast<const SvxBoxItem*>(pItem)->GetRight() ) )
                 {
@@ -192,10 +192,10 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
                     {
                         SvxBoxItem aBox( *static_cast<const SvxBoxItem*>(pItem) );
                         aBox.SetLine( 0, SvxBoxItemLine::RIGHT );
-                        if( pGCPara->pShareFmts )
-                            pGCPara->pShareFmts->SetAttr( *pBox, aBox );
+                        if( pGCPara->pShareFormats )
+                            pGCPara->pShareFormats->SetAttr( *pBox, aBox );
                         else
-                            pBox->ClaimFrmFmt()->SetFmtAttr( aBox );
+                            pBox->ClaimFrameFormat()->SetFormatAttr( aBox );
                     }
                 }
             }
@@ -207,8 +207,8 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
     // And now the own bottom edge with the succeeding top edge
     if( !pGCPara->IsLastLine() )
     {
-        SwCollectTblLineBoxes aBottom( false );
-        SwCollectTblLineBoxes aTop( true );
+        SwCollectTableLineBoxes aBottom( false );
+        SwCollectTableLineBoxes aTop( true );
 
         sw_Line_CollectBox( pLine, &aBottom );
 
@@ -254,7 +254,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
                     if( nTopPos <= nBtmEndPos )
                         lcl_GCBorder_DelBorder( aTop, --nSttTop, true,
                                             *pBtmLine, pTopItem, nBtmEndPos,
-                                            pGCPara->pShareFmts );
+                                            pGCPara->pShareFormats );
                     else
                         nSttBtm = nSavSttBtm;
                 }
@@ -265,7 +265,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
                     if( nBtmPos <= nTopEndPos )
                         lcl_GCBorder_DelBorder( aBottom, --nSttBtm, false,
                                             *pTopLine, pBtmItem, nTopEndPos,
-                                            pGCPara->pShareFmts );
+                                            pGCPara->pShareFormats );
                     else
                         nSttTop = nSavSttTop;
                 }
@@ -313,7 +313,7 @@ static void lcl_GC_Box_Border( const SwTableBox* pBox, _SwGCLineBorder* pPara )
     if( !pBox->GetTabLines().empty() )
     {
         _SwGCLineBorder aPara( *pBox );
-        aPara.pShareFmts = pPara->pShareFmts;
+        aPara.pShareFormats = pPara->pShareFormats;
         for( const SwTableLine* pLine : pBox->GetTabLines() )
             sw_GC_Line_Border( pLine, &aPara );
     }
@@ -322,32 +322,32 @@ static void lcl_GC_Box_Border( const SwTableBox* pBox, _SwGCLineBorder* pPara )
 struct _GCLinePara
 {
     SwTableLines* pLns;
-    SwShareBoxFmts* pShareFmts;
+    SwShareBoxFormats* pShareFormats;
 
     _GCLinePara( SwTableLines& rLns, _GCLinePara* pPara = 0 )
-        : pLns( &rLns ), pShareFmts( pPara ? pPara->pShareFmts : 0 )
+        : pLns( &rLns ), pShareFormats( pPara ? pPara->pShareFormats : 0 )
     {}
 };
 
 static bool lcl_MergeGCLine(SwTableLine* pLine, _GCLinePara* pPara);
 
-static bool lcl_MergeGCBox(SwTableBox* pTblBox, _GCLinePara* pPara)
+static bool lcl_MergeGCBox(SwTableBox* pTableBox, _GCLinePara* pPara)
 {
-    if( !pTblBox->GetTabLines().empty() )
+    if( !pTableBox->GetTabLines().empty() )
     {
         // ATTENTION: The Line count can change!
-        _GCLinePara aPara( pTblBox->GetTabLines(), pPara );
+        _GCLinePara aPara( pTableBox->GetTabLines(), pPara );
         for( SwTableLines::size_type n = 0;
-            n < pTblBox->GetTabLines().size() && lcl_MergeGCLine( pTblBox->GetTabLines()[n], &aPara );
+            n < pTableBox->GetTabLines().size() && lcl_MergeGCLine( pTableBox->GetTabLines()[n], &aPara );
             ++n )
             ;
 
-        if( 1 == pTblBox->GetTabLines().size() )
+        if( 1 == pTableBox->GetTabLines().size() )
         {
             // we have a box with a single line, so we just replace it by the line's boxes
-            SwTableLine* pInsLine = pTblBox->GetUpper();
-            SwTableLine* pCpyLine = pTblBox->GetTabLines()[0];
-            SwTableBoxes::iterator it = std::find( pInsLine->GetTabBoxes().begin(), pInsLine->GetTabBoxes().end(), pTblBox );
+            SwTableLine* pInsLine = pTableBox->GetUpper();
+            SwTableLine* pCpyLine = pTableBox->GetTabLines()[0];
+            SwTableBoxes::iterator it = std::find( pInsLine->GetTabBoxes().begin(), pInsLine->GetTabBoxes().end(), pTableBox );
             for( auto pTabBox : pCpyLine->GetTabBoxes() )
                 pTabBox->SetUpper( pInsLine );
 
@@ -357,7 +357,7 @@ static bool lcl_MergeGCBox(SwTableBox* pTblBox, _GCLinePara* pPara)
             pInsLine->GetTabBoxes().insert( it, pCpyLine->GetTabBoxes().begin(), pCpyLine->GetTabBoxes().end());
             pCpyLine->GetTabBoxes().clear();
             // destroy the removed box
-            delete pTblBox;
+            delete pTableBox;
 
             return false; // set up anew
         }
@@ -396,14 +396,14 @@ static bool lcl_MergeGCLine(SwTableLine* pLn, _GCLinePara* pGCPara)
             // JP 31.03.99: Bug 60000
             // Pass the attributes of the to-be-deleted Lines to the "inserted" one
             const SfxPoolItem* pItem;
-            if( SfxItemState::SET == pLn->GetFrmFmt()->GetItemState(
+            if( SfxItemState::SET == pLn->GetFrameFormat()->GetItemState(
                                     RES_BACKGROUND, true, &pItem ))
             {
                 SwTableLines& rBoxLns = pBox->GetTabLines();
                 for( auto pBoxLine : rBoxLns )
-                    if( SfxItemState::SET != pBoxLine->GetFrmFmt()->
+                    if( SfxItemState::SET != pBoxLine->GetFrameFormat()->
                             GetItemState( RES_BACKGROUND, true ))
-                        pGCPara->pShareFmts->SetAttr( *pBoxLine, *pItem );
+                        pGCPara->pShareFormats->SetAttr( *pBoxLine, *pItem );
             }
 
             pBox->GetTabLines().erase( pBox->GetTabLines().begin(), pBox->GetTabLines().begin() + nLines );  // Remove Lines from the array
@@ -431,8 +431,8 @@ void SwTable::GCLines()
 {
     // ATTENTION: The Line count can change!
     _GCLinePara aPara( GetTabLines() );
-    SwShareBoxFmts aShareFmts;
-    aPara.pShareFmts = &aShareFmts;
+    SwShareBoxFormats aShareFormats;
+    aPara.pShareFormats = &aShareFormats;
     for( SwTableLines::size_type n = 0; n < GetTabLines().size() &&
             lcl_MergeGCLine( GetTabLines()[n], &aPara ); ++n )
         ;

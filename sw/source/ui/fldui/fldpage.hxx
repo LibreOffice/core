@@ -28,17 +28,17 @@ class ListBox;
 
 const int coLBCount = 3;
 
-class SwFldPage : public SfxTabPage
+class SwFieldPage : public SfxTabPage
 {
     OUString            m_aLstStrArr[ coLBCount ];
-    SwFldMgr            m_aMgr;
-    SwField             *m_pCurFld;
+    SwFieldMgr            m_aMgr;
+    SwField             *m_pCurField;
     SwWrtShell*         m_pWrtShell;
     sal_Int32           m_nTypeSel;
     sal_Int32           m_nSelectionSel;
-    bool                m_bFldEdit;
+    bool                m_bFieldEdit;
     bool                m_bInsert;
-    bool                m_bFldDlgHtmlMode;
+    bool                m_bFieldDlgHtmlMode;
     bool                m_bRefresh;
     bool                m_bFirstHTMLInit;
 
@@ -48,9 +48,9 @@ protected:
     void                SetTypeSel(sal_Int32  nSet)     { m_nTypeSel = nSet;}
     sal_Int32           GetSelectionSel() const     { return m_nSelectionSel;}
     void                SetSelectionSel(sal_Int32  nSet){ m_nSelectionSel = nSet;}
-    bool                IsFldDlgHtmlMode() const    { return m_bFldDlgHtmlMode;}
+    bool                IsFieldDlgHtmlMode() const    { return m_bFieldDlgHtmlMode;}
     bool                IsRefresh() const           { return m_bRefresh;}
-    SwField*            GetCurField()               { return m_pCurFld;}
+    SwField*            GetCurField()               { return m_pCurField;}
     SwWrtShell*         GetWrtShell() { return m_pWrtShell;}
 
     DECL_LINK( InsertHdl, Button *pBtn = 0 );
@@ -63,10 +63,10 @@ protected:
     void                RestorePos( ListBox* pLst1, ListBox* pLst2 = 0,
                                     ListBox* pLst3 = 0 );
     void                EnableInsert(bool bEnable = true);
-    inline bool         IsFldEdit() const   { return m_bFldEdit; }
+    inline bool         IsFieldEdit() const   { return m_bFieldEdit; }
 
     // insert field
-    bool                InsertFld(  sal_uInt16 nTypeId,
+    bool                InsertField(  sal_uInt16 nTypeId,
                                     sal_uInt16 nSubType,
                                     const OUString& rPar1,
                                     const OUString& rPar2,
@@ -77,14 +77,14 @@ protected:
     using SfxTabPage::ActivatePage;
 
 public:
-    SwFldPage(vcl::Window *pParent, const OString& rID,
+    SwFieldPage(vcl::Window *pParent, const OString& rID,
         const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet);
 
-    virtual ~SwFldPage();
+    virtual ~SwFieldPage();
 
     virtual void        ActivatePage() SAL_OVERRIDE;
 
-    inline SwFldMgr&    GetFldMgr()         { return m_aMgr; }
+    inline SwFieldMgr&    GetFieldMgr()         { return m_aMgr; }
     void                SetWrtShell( SwWrtShell* m_pWrtShell );
     void                EditNewField( bool bOnlyActivate = false );
     virtual sal_uInt16      GetGroup() = 0;

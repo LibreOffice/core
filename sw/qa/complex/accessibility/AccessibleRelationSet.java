@@ -71,11 +71,11 @@ public class AccessibleRelationSet {
             "didn't gain correct relation type for paragraph 0", types[2],
             types[firstrelation]);
 
-        XAccessibleText paraTxt2 =
+        XAccessibleText paraText2 =
           UnoRuntime.queryInterface(XAccessibleText.class, para2);
         assertEquals(
             "didn't gain correct target paragraph", atarget.getText(),
-            paraTxt2.getText());
+            paraText2.getText());
     }
 
     @Test public void contents_flows_from() {
@@ -131,21 +131,21 @@ public class AccessibleRelationSet {
             "didn't gain correct relation type for paragraph 1", types[1],
             types[relationtypes[0]]);
 
-        XAccessibleText paraTxt1 =
+        XAccessibleText paraText1 =
           UnoRuntime.queryInterface(XAccessibleText.class, para1);
         assertEquals(
             "didn't gain correct target paragraph", atargets[0].getText(),
-            paraTxt1.getText());
+            paraText1.getText());
 
         assertEquals(
             "didn't gain correct relation type for paragraph 3", types[2],
             types[relationtypes[1]]);
 
-        XAccessibleText paraTxt3 =
+        XAccessibleText paraText3 =
           UnoRuntime.queryInterface(XAccessibleText.class, para3);
         assertEquals(
             "didn't gain correct target paragraph", atargets[1].getText(),
-            paraTxt3.getText());
+            paraText3.getText());
     }
 
     @Before public void before()

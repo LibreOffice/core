@@ -71,7 +71,7 @@ public:
     void            SetShowSymbol(bool bSet) {bShowSymbol = bSet;}
     bool            IsShowSymbol()const{return bShowSymbol;}
 
-    bool            IsTxtFmt() const
+    bool            IsTextFormat() const
                     {
                         return com::sun::star::style::NumberingType::NUMBER_NONE != nNumType &&
                                com::sun::star::style::NumberingType::CHAR_SPECIAL != nNumType &&
@@ -163,8 +163,8 @@ public:
     void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
     const OUString&   GetSuffix() const { return sSuffix;}
 
-    void                    SetCharFmtName(const OUString& rSet){ sCharStyleName = rSet; }
-    virtual OUString        GetCharFmtName()const;
+    void                    SetCharFormatName(const OUString& rSet){ sCharStyleName = rSet; }
+    virtual OUString        GetCharFormatName()const;
 
     void            SetBulletFont(const vcl::Font* pFont);
     const vcl::Font* GetBulletFont() const {return pBulletFont;}

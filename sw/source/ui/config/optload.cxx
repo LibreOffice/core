@@ -172,16 +172,16 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
     else if (m_pRequestRB->IsChecked())
         nNewLinkMode = MANUAL;
 
-    SwFldUpdateFlags eFldFlags = m_pAutoUpdateFields->IsChecked() ?
+    SwFieldUpdateFlags eFieldFlags = m_pAutoUpdateFields->IsChecked() ?
         m_pAutoUpdateCharts->IsChecked() ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF;
 
     if(m_pAutoUpdateFields->IsValueChangedFromSaved() ||
        m_pAutoUpdateCharts->IsValueChangedFromSaved())
     {
-        pMod->ApplyFldUpdateFlags(eFldFlags);
+        pMod->ApplyFieldUpdateFlags(eFieldFlags);
         if(m_pWrtShell)
         {
-            m_pWrtShell->SetFldUpdateFlags(eFldFlags);
+            m_pWrtShell->SetFieldUpdateFlags(eFieldFlags);
             m_pWrtShell->SetModified();
         }
     }
@@ -278,20 +278,20 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
         m_pWrtShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
 
-    SwFldUpdateFlags eFldFlags = AUTOUPD_GLOBALSETTING;
+    SwFieldUpdateFlags eFieldFlags = AUTOUPD_GLOBALSETTING;
     m_nOldLinkMode = GLOBALSETTING;
     if (m_pWrtShell)
     {
-        eFldFlags = m_pWrtShell->GetFldUpdateFlags(true);
+        eFieldFlags = m_pWrtShell->GetFieldUpdateFlags(true);
         m_nOldLinkMode = m_pWrtShell->GetLinkUpdMode(true);
     }
     if(GLOBALSETTING == m_nOldLinkMode)
         m_nOldLinkMode = pUsrPref->GetUpdateLinkMode();
-    if(AUTOUPD_GLOBALSETTING == eFldFlags)
-        eFldFlags = pUsrPref->GetFldUpdateFlags();
+    if(AUTOUPD_GLOBALSETTING == eFieldFlags)
+        eFieldFlags = pUsrPref->GetFieldUpdateFlags();
 
-    m_pAutoUpdateFields->Check(eFldFlags != AUTOUPD_OFF);
-    m_pAutoUpdateCharts->Check(eFldFlags == AUTOUPD_FIELD_AND_CHARTS);
+    m_pAutoUpdateFields->Check(eFieldFlags != AUTOUPD_OFF);
+    m_pAutoUpdateCharts->Check(eFieldFlags == AUTOUPD_FIELD_AND_CHARTS);
 
     switch (m_nOldLinkMode)
     {
@@ -444,7 +444,7 @@ SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet
     , m_sAbove(SW_RESSTR(STR_CAPTION_ABOVE))
     , m_sBelow(SW_RESSTR(STR_CAPTION_BELOW))
     , m_sNone(SW_RESSTR(SW_STR_NONE))
-    , pMgr(new SwFldMgr())
+    , pMgr(new SwFieldMgr())
     , bHTMLMode(false)
 {
     get(m_pCheckLB, "objects");
@@ -477,15 +477,15 @@ SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet
     SwWrtShell *pSh = ::GetActiveWrtShell();
 
     // m_pFormatBox
-    sal_uInt16 nSelFmt = SVX_NUM_ARABIC;
+    sal_uInt16 nSelFormat = SVX_NUM_ARABIC;
     if (pSh)
     {
-        for ( sal_uInt16 i = pMgr->GetFldTypeCount(); i; )
+        for ( sal_uInt16 i = pMgr->GetFieldTypeCount(); i; )
         {
-            SwFieldType* pFldType = pMgr->GetFldType(USHRT_MAX, --i);
-            if (pFldType->GetName().equals(m_pCategoryBox->GetText()))
+            SwFieldType* pFieldType = pMgr->GetFieldType(USHRT_MAX, --i);
+            if (pFieldType->GetName().equals(m_pCategoryBox->GetText()))
             {
-                nSelFmt = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFldType)->GetSeqFormat();
+                nSelFormat = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat();
                 break;
             }
         }
@@ -497,9 +497,9 @@ SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         m_pFormatBox->InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
-        const sal_uInt16 nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
-        m_pFormatBox->SetEntryData( i, reinterpret_cast<void*>(nFmtId) );
-        if( nFmtId == nSelFmt )
+        const sal_uInt16 nFormatId = pMgr->GetFormatId(TYP_SEQFLD, i);
+        m_pFormatBox->SetEntryData( i, reinterpret_cast<void*>(nFormatId) );
+        if( nFormatId == nSelFormat )
             m_pFormatBox->SelectEntryPos( i );
     }
 
@@ -511,12 +511,12 @@ SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet
 
     if (pSh)
     {
-        SwSetExpFieldType* pFldType = static_cast<SwSetExpFieldType*>(pMgr->GetFldType(
+        SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(pMgr->GetFieldType(
                                             RES_SETEXPFLD, m_pCategoryBox->GetText() ));
-        if( pFldType )
+        if( pFieldType )
         {
-            sDelim = pFldType->GetDelimiter();
-            nLvl = pFldType->GetOutlineLvl();
+            sDelim = pFieldType->GetDelimiter();
+            nLvl = pFieldType->GetOutlineLvl();
         }
     }
 
@@ -700,11 +700,11 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
         m_pCategoryBox->InsertEntry(m_sNone);
         if (pSh)
         {
-            const sal_uInt16 nCount = pMgr->GetFldTypeCount();
+            const sal_uInt16 nCount = pMgr->GetFieldTypeCount();
 
             for (sal_uInt16 i = 0; i < nCount; i++)
             {
-                SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
+                SwFieldType *pType = pMgr->GetFieldType( USHRT_MAX, i );
                 if( pType->Which() == RES_SETEXPFLD &&
                     static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
                     m_pCategoryBox->InsertSwEntry(SwBoxEntry(pType->GetName()));
@@ -826,13 +826,13 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
 
 IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
 {
-    const OUString sFldTypeName = m_pCategoryBox->GetText();
+    const OUString sFieldTypeName = m_pCategoryBox->GetText();
 
     SfxSingleTabDialog *pDlg = dynamic_cast<SfxSingleTabDialog*>(GetParentDialog());
     PushButton *pBtn = pDlg ? pDlg->GetOKButton() : NULL;
     if (pBtn)
-        pBtn->Enable(!sFldTypeName.isEmpty());
-    bool bEnable = m_pCategoryBox->IsEnabled() && sFldTypeName != m_sNone;
+        pBtn->Enable(!sFieldTypeName.isEmpty());
+    bool bEnable = m_pCategoryBox->IsEnabled() && sFieldTypeName != m_sNone;
 
     m_pFormatText->Enable(bEnable);
     m_pFormatBox->Enable(bEnable);
@@ -875,9 +875,9 @@ void SwCaptionOptPage::DrawSample()
         //#i61007# order of captions
         bool bOrderNumberingFirst = m_pLbCaptionOrder->GetSelectEntryPos() == 1;
         // number
-        const sal_uInt16 nNumFmt = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(
+        const sal_uInt16 nNumFormat = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(
                                         m_pFormatBox->GetSelectEntryPos() ));
-        if( SVX_NUM_NUMBER_NONE != nNumFmt )
+        if( SVX_NUM_NUMBER_NONE != nNumFormat )
         {
             //#i61007# order of captions
             if( !bOrderNumberingFirst )
@@ -889,11 +889,11 @@ void SwCaptionOptPage::DrawSample()
             SwWrtShell *pSh = ::GetActiveWrtShell();
             if (pSh)
             {
-                SwSetExpFieldType* pFldType = static_cast<SwSetExpFieldType*>(pMgr->GetFldType(
+                SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(pMgr->GetFieldType(
                                                 RES_SETEXPFLD, m_pCategoryBox->GetText() ));
-                if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
+                if( pFieldType && pFieldType->GetOutlineLvl() < MAXLEVEL )
                 {
-                    sal_uInt8 nLvl = pFldType->GetOutlineLvl();
+                    sal_uInt8 nLvl = pFieldType->GetOutlineLvl();
                     SwNumberTree::tNumberVector aNumVector;
                     for( sal_uInt8 i = 0; i <= nLvl; ++i )
                         aNumVector.push_back(1);
@@ -901,11 +901,11 @@ void SwCaptionOptPage::DrawSample()
                     const OUString sNumber( pSh->GetOutlineNumRule()->MakeNumString(
                                                             aNumVector, false ));
                     if( !sNumber.isEmpty() )
-                        aStr += sNumber + pFldType->GetDelimiter();
+                        aStr += sNumber + pFieldType->GetDelimiter();
                 }
             }
 
-            switch( nNumFmt )
+            switch( nNumFormat )
             {
                 case SVX_NUM_CHARS_UPPER_LETTER:    aStr += "A"; break;
                 case SVX_NUM_CHARS_UPPER_LETTER_N:  aStr += "A"; break;

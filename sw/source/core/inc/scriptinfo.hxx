@@ -26,7 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
-class SwTxtNode;
+class SwTextNode;
 class Point;
 class MultiSelection;
 typedef std::list< sal_Int32 > PositionList;
@@ -79,7 +79,7 @@ private:
     sal_Int32 nInvalidityPos;
     sal_uInt8 nDefaultDir;
 
-    void UpdateBidiInfo( const OUString& rTxt );
+    void UpdateBidiInfo( const OUString& rText );
 
     bool IsKashidaValid(sal_Int32 nKashPos) const;
     void MarkKashidaInvalid(sal_Int32 nKashPos);
@@ -96,8 +96,8 @@ public:
     ~SwScriptInfo();
 
     // determines script changes
-    void InitScriptInfo( const SwTxtNode& rNode, bool bRTL );
-    void InitScriptInfo( const SwTxtNode& rNode );
+    void InitScriptInfo( const SwTextNode& rNode, bool bRTL );
+    void InitScriptInfo( const SwTextNode& rNode );
 
     // set/get position from which data is invalid
     void SetInvalidityA(const sal_Int32 nPos)
@@ -172,9 +172,9 @@ public:
         OSL_ENSURE( nCnt < aHiddenChg.size(),"No HiddenChg today!");
         return aHiddenChg[ nCnt ];
     }
-    static void CalcHiddenRanges(const SwTxtNode& rNode, MultiSelection& rHiddenMulti);
-    static void selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelection &rHiddenMulti);
-    static void selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &rHiddenMulti, bool bSelect=true);
+    static void CalcHiddenRanges(const SwTextNode& rNode, MultiSelection& rHiddenMulti);
+    static void selectHiddenTextProperty(const SwTextNode& rNode, MultiSelection &rHiddenMulti);
+    static void selectRedLineDeleted(const SwTextNode& rNode, MultiSelection &rHiddenMulti, bool bSelect=true);
 
     // "high" level operations, nPos refers to string position
     sal_Int32 NextScriptChg( const sal_Int32 nPos ) const;
@@ -194,7 +194,7 @@ public:
 
     @descr  Determines if a given position is inside a hidden text range. The
             static version tries to obtain a valid SwScriptInfo object
-            via the SwTxtNode, otherwise it calculates the values from scratch.
+            via the SwTextNode, otherwise it calculates the values from scratch.
             The non-static version uses the internally cached informatio
             for the calculation.
 
@@ -214,13 +214,13 @@ public:
             returns true if there are any hidden characters in this paragraph.
 
 */
-    static bool GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPos,
+    static bool GetBoundsOfHiddenRange( const SwTextNode& rNode, sal_Int32 nPos,
                                         sal_Int32& rnStartPos, sal_Int32& rnEndPos,
                                         PositionList* pList = 0 );
     bool GetBoundsOfHiddenRange(  sal_Int32 nPos, sal_Int32& rnStartPos,
                                   sal_Int32& rnEndPos, PositionList* pList = 0 ) const;
 
-    static bool IsInHiddenRange( const SwTxtNode& rNode, sal_Int32 nPos );
+    static bool IsInHiddenRange( const SwTextNode& rNode, sal_Int32 nPos );
 
 /** Hidden text attribute handling
 
@@ -237,18 +237,18 @@ public:
                 If set, the hidden ranges will be deleted from the text node.
  */
     static sal_Int32 MaskHiddenRanges(
-            const SwTxtNode& rNode, OUStringBuffer& rText,
+            const SwTextNode& rNode, OUStringBuffer& rText,
                                     const sal_Int32 nStt, const sal_Int32 nEnd,
                                     const sal_Unicode cChar );
 
 /** Hidden text attribute handling
 
-    @descr  Takes a SwTxtNode and deletes the hidden ranges from the node.
+    @descr  Takes a SwTextNode and deletes the hidden ranges from the node.
 
     @param  rNode
                 The text node.
  */
-    static void DeleteHiddenRanges( SwTxtNode& rNode );
+    static void DeleteHiddenRanges( SwTextNode& rNode );
 
     // HIDDEN TEXT STUFF END
 
@@ -320,19 +320,19 @@ public:
 /** Checks if text is Arabic text.
 
      @descr  Checks if text is Arabic text.
-     @param  rTxt
+     @param  rText
                  The text to check
      @param  nStt
                  Start index of the text
      @return Returns if the language is an Arabic language
  */
-    static bool IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32 nLen );
+    static bool IsArabicText( const OUString& rText, sal_Int32 nStt, sal_Int32 nLen );
 
 /** Performs a thai justification on the kerning array
 
     @descr  Add some extra space for thai justification to the
             positions in the kerning array.
-    @param  rTxt
+    @param  rText
                 The String
     @param  pKernArray
                 The printers kerning array. Optional.
@@ -346,15 +346,15 @@ public:
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
-    static sal_Int32 ThaiJustify( const OUString& rTxt, long* pKernArray,
+    static sal_Int32 ThaiJustify( const OUString& rText, long* pKernArray,
                                   long* pScrArray, sal_Int32 nIdx,
                                   sal_Int32 nLen, sal_Int32 nNumberOfBlanks = 0,
                                   long nSpaceAdd = 0 );
 
-    static SwScriptInfo* GetScriptInfo( const SwTxtNode& rNode,
+    static SwScriptInfo* GetScriptInfo( const SwTextNode& rNode,
                                         bool bAllowInvalid = false );
 
-    static sal_uInt8 WhichFont(sal_Int32 nIdx, const OUString* pTxt, const SwScriptInfo* pSI);
+    static sal_uInt8 WhichFont(sal_Int32 nIdx, const OUString* pText, const SwScriptInfo* pSI);
 };
 
 #endif

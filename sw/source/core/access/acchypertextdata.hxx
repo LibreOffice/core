@@ -23,21 +23,21 @@
 #include <cppuhelper/weakref.hxx>
 #include <map>
 
-class SwTxtAttr;
+class SwTextAttr;
 namespace com { namespace sun { namespace star {
     namespace accessibility { class XAccessibleHyperlink; }
 } } }
 
-typedef ::std::less< const SwTxtAttr * > SwTxtAttrPtrLess;
+typedef ::std::less< const SwTextAttr * > SwTextAttrPtrLess;
 
 class SwAccessibleHyperTextData
 {
 public:
-    typedef const SwTxtAttr *                                           key_type;
+    typedef const SwTextAttr *                                           key_type;
     typedef ::com::sun::star::uno::WeakReference<
         com::sun::star::accessibility::XAccessibleHyperlink >           mapped_type;
     typedef std::pair<const key_type,mapped_type>                       value_type;
-    typedef SwTxtAttrPtrLess                                            key_compare;
+    typedef SwTextAttrPtrLess                                            key_compare;
     typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;
 private:
     std::map<key_type,mapped_type,key_compare> maMap;

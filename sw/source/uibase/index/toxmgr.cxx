@@ -360,12 +360,12 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             if(TOX_AUTHORITIES == eCurTOXType)
             {
                 SwAuthorityFieldType* pFType = static_cast<SwAuthorityFieldType*>(
-                                                pSh->GetFldType(RES_AUTHORITY, aEmptyOUStr));
+                                                pSh->GetFieldType(RES_AUTHORITY, aEmptyOUStr));
                 if (!pFType)
                 {
                     SwAuthorityFieldType const type(pSh->GetDoc());
                     pFType = static_cast<SwAuthorityFieldType*>(
-                                pSh->InsertFldType(type));
+                                pSh->InsertFieldType(type));
                 }
                 pFType->SetPreSuffix(rDesc.GetAuthBrackets()[0],
                     rDesc.GetAuthBrackets()[1]);
@@ -379,7 +379,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                 pFType->SetLanguage(rDesc.GetLanguage());
                 pFType->SetSortAlgorithm(rDesc.GetSortAlgorithm());
 
-                pFType->UpdateFlds();
+                pFType->UpdateFields();
             }
             // TODO: consider properties of the current TOXType
             if(!pCurTOX || (ppBase && !(*ppBase)))

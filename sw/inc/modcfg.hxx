@@ -36,7 +36,7 @@ class SwModuleOptions;
 class InsCaptionOpt;
 
 // text format for the sending of messages ------------------------------
-enum class MailTxtFormats
+enum class MailTextFormats
 {
     NONE      = 0x00,
     ASCII     = 0x01,
@@ -46,7 +46,7 @@ enum class MailTxtFormats
 };
 namespace o3tl
 {
-    template<> struct typed_flags<MailTxtFormats> : is_typed_flags<MailTxtFormats, 0x0f> {};
+    template<> struct typed_flags<MailTextFormats> : is_typed_flags<MailTextFormats, 0x0f> {};
 }
 
 
@@ -122,7 +122,7 @@ class SwInsertConfig : public utl::ConfigItem
     bool            bInsWithCaption;       //Insert/Caption/Automatic
     bool            bCaptionOrderNumberingFirst; //#i61007# caption order starting with numbering
 
-    SwInsertTableOptions    aInsTblOpts;
+    SwInsertTableOptions    aInsTableOpts;
     bool            bIsWeb;
 
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
@@ -142,15 +142,15 @@ class SwTableConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    sal_uInt16      nTblHMove;          //int Table/Shift/Row
-    sal_uInt16      nTblVMove;          //int Table/Shift/Column
-    sal_uInt16      nTblHInsert;        //int Table/Insert/Row
-    sal_uInt16      nTblVInsert;        //int Table/Insert/Column
-    TblChgMode  eTblChgMode;        //int Table/Change/Effect
+    sal_uInt16      nTableHMove;          //int Table/Shift/Row
+    sal_uInt16      nTableVMove;          //int Table/Shift/Column
+    sal_uInt16      nTableHInsert;        //int Table/Insert/Row
+    sal_uInt16      nTableVInsert;        //int Table/Insert/Column
+    TableChgMode  eTableChgMode;        //int Table/Change/Effect
 
-    bool    bInsTblFormatNum;       // Table/Input/NumberRecognition        // Automatic recognition of numbers.
-    bool    bInsTblChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
-    bool    bInsTblAlignNum;        // Table/Input/Alignment                // Align numbers.
+    bool    bInsTableFormatNum;       // Table/Input/NumberRecognition        // Automatic recognition of numbers.
+    bool    bInsTableChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
+    bool    bInsTableAlignNum;        // Table/Input/Alignment                // Align numbers.
 
     static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
@@ -177,7 +177,7 @@ class SwMiscConfig : public utl::ConfigItem
     bool        bSinglePrintJob;            // FormLetter/PrintOutput/SinglePrintJobs
     bool        bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
     bool        bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
-    MailTxtFormats nMailingFormats;            // FormLetter/MailingOutput/Formats
+    MailTextFormats nMailingFormats;            // FormLetter/MailingOutput/Formats
     OUString    sNameFromColumn;            // FormLetter/FileOutput/FileName/FromDatabaseField (string!)
     OUString    sMailingPath;               // FormLetter/FileOutput/Path
     OUString    sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
@@ -214,24 +214,24 @@ class SW_DLLPUBLIC SwModuleOptions
 public:
     SwModuleOptions();
 
-    TblChgMode  GetTblMode() const { return aTableConfig.eTblChgMode;}
-    void        SetTblMode( TblChgMode  eSet ) { aTableConfig.eTblChgMode = eSet;
+    TableChgMode  GetTableMode() const { return aTableConfig.eTableChgMode;}
+    void        SetTableMode( TableChgMode  eSet ) { aTableConfig.eTableChgMode = eSet;
                                                 aTableConfig.SetModified();}
 
-    sal_uInt16      GetTblHMove() const { return aTableConfig.nTblHMove;}
-    void        SetTblHMove( sal_uInt16 nSet ) {    aTableConfig.nTblHMove = nSet;
+    sal_uInt16      GetTableHMove() const { return aTableConfig.nTableHMove;}
+    void        SetTableHMove( sal_uInt16 nSet ) {    aTableConfig.nTableHMove = nSet;
                                                 aTableConfig.SetModified();}
 
-    sal_uInt16      GetTblVMove() const { return aTableConfig.nTblVMove;}
-    void        SetTblVMove( sal_uInt16 nSet ) {    aTableConfig.nTblVMove = nSet;
+    sal_uInt16      GetTableVMove() const { return aTableConfig.nTableVMove;}
+    void        SetTableVMove( sal_uInt16 nSet ) {    aTableConfig.nTableVMove = nSet;
                                                 aTableConfig.SetModified();}
 
-    sal_uInt16      GetTblHInsert() const {return aTableConfig.nTblHInsert;}
-    void        SetTblHInsert( sal_uInt16 nSet ) {  aTableConfig.nTblHInsert = nSet;
+    sal_uInt16      GetTableHInsert() const {return aTableConfig.nTableHInsert;}
+    void        SetTableHInsert( sal_uInt16 nSet ) {  aTableConfig.nTableHInsert = nSet;
                                                 aTableConfig.SetModified();}
 
-    sal_uInt16      GetTblVInsert() const {return aTableConfig.nTblVInsert;}
-    void        SetTblVInsert( sal_uInt16 nSet ) {  aTableConfig.nTblVInsert = nSet;
+    sal_uInt16      GetTableVInsert() const {return aTableConfig.nTableVInsert;}
+    void        SetTableVInsert( sal_uInt16 nSet ) {  aTableConfig.nTableVInsert = nSet;
                                                 aTableConfig.SetModified();}
 
     const AuthorCharAttr    &GetInsertAuthorAttr() const { return aRevisionConfig.aInsertAttr; }
@@ -271,28 +271,28 @@ public:
                     }
                 }
 
-    bool        IsInsTblFormatNum(bool bHTML) const
-                    { return bHTML ? aWebTableConfig.bInsTblFormatNum : aTableConfig.bInsTblFormatNum; }
-    void        SetInsTblFormatNum( bool bHTML, bool b )
-                    { bHTML ? (aWebTableConfig.bInsTblFormatNum = b) : (aTableConfig.bInsTblFormatNum = b);
+    bool        IsInsTableFormatNum(bool bHTML) const
+                    { return bHTML ? aWebTableConfig.bInsTableFormatNum : aTableConfig.bInsTableFormatNum; }
+    void        SetInsTableFormatNum( bool bHTML, bool b )
+                    { bHTML ? (aWebTableConfig.bInsTableFormatNum = b) : (aTableConfig.bInsTableFormatNum = b);
                       bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
 
-    bool        IsInsTblChangeNumFormat(bool bHTML) const
-                    { return bHTML ? aWebTableConfig.bInsTblChangeNumFormat : aTableConfig.bInsTblChangeNumFormat; }
-    void        SetInsTblChangeNumFormat( bool bHTML, bool b )
-                    { bHTML ? (aWebTableConfig.bInsTblChangeNumFormat = b) : (aTableConfig.bInsTblChangeNumFormat = b);
+    bool        IsInsTableChangeNumFormat(bool bHTML) const
+                    { return bHTML ? aWebTableConfig.bInsTableChangeNumFormat : aTableConfig.bInsTableChangeNumFormat; }
+    void        SetInsTableChangeNumFormat( bool bHTML, bool b )
+                    { bHTML ? (aWebTableConfig.bInsTableChangeNumFormat = b) : (aTableConfig.bInsTableChangeNumFormat = b);
                       bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
 
-    bool        IsInsTblAlignNum(bool bHTML) const
-                    { return bHTML ? aWebTableConfig.bInsTblAlignNum : aTableConfig.bInsTblAlignNum; }
-    void        SetInsTblAlignNum( bool bHTML, bool b )
-                    { bHTML ? (aWebTableConfig.bInsTblAlignNum = b) : (aTableConfig.bInsTblAlignNum = b);
+    bool        IsInsTableAlignNum(bool bHTML) const
+                    { return bHTML ? aWebTableConfig.bInsTableAlignNum : aTableConfig.bInsTableAlignNum; }
+    void        SetInsTableAlignNum( bool bHTML, bool b )
+                    { bHTML ? (aWebTableConfig.bInsTableAlignNum = b) : (aTableConfig.bInsTableAlignNum = b);
                         bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
 
-    SwInsertTableOptions GetInsTblFlags(bool bHTML) const
-                    { return bHTML ? aWebInsertConfig.aInsTblOpts : aInsertConfig.aInsTblOpts;}
-    void        SetInsTblFlags( bool bHTML, const SwInsertTableOptions& rOpts ) {
-                    bHTML ? (aWebInsertConfig.aInsTblOpts = rOpts) : (aInsertConfig.aInsTblOpts = rOpts);
+    SwInsertTableOptions GetInsTableFlags(bool bHTML) const
+                    { return bHTML ? aWebInsertConfig.aInsTableOpts : aInsertConfig.aInsTableOpts;}
+    void        SetInsTableFlags( bool bHTML, const SwInsertTableOptions& rOpts ) {
+                    bHTML ? (aWebInsertConfig.aInsTableOpts = rOpts) : (aInsertConfig.aInsTableOpts = rOpts);
                     bHTML ? aWebInsertConfig.SetModified() : aInsertConfig.SetModified();}
 
     const InsCaptionOpt* GetCapOption(bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId);
@@ -302,8 +302,8 @@ public:
     void        SetGrfToGalleryAsLnk( bool b )  { aMiscConfig.bGrfToGalleryAsLnk = b;
                                                   aMiscConfig.SetModified();}
 
-    MailTxtFormats GetMailingFormats() const               { return aMiscConfig.nMailingFormats;}
-    void           SetMailingFormats( MailTxtFormats nSet ) { aMiscConfig.nMailingFormats = nSet;
+    MailTextFormats GetMailingFormats() const               { return aMiscConfig.nMailingFormats;}
+    void           SetMailingFormats( MailTextFormats nSet ) { aMiscConfig.nMailingFormats = nSet;
                                                             aMiscConfig.SetModified();}
 
     bool        IsSinglePrintJob() const        { return aMiscConfig.bSinglePrintJob; }

@@ -44,23 +44,23 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
     const SwPosition* pAnnotationStartPos )
 {
     SwLayoutStatus aRet = INVISIBLE;
-    SwTxtNode* pTxtNode = rAnchorPos.nNode.GetNode().GetTxtNode();
-    if ( pTxtNode == NULL )
+    SwTextNode* pTextNode = rAnchorPos.nNode.GetNode().GetTextNode();
+    if ( pTextNode == NULL )
         return aRet;
 
-    SwIterator<SwTxtFrm,SwCntntNode> aIter( *pTxtNode );
-    for( SwTxtFrm* pTxtFrm = aIter.First(); pTxtFrm != NULL; pTxtFrm = aIter.Next() )
+    SwIterator<SwTextFrm,SwContentNode> aIter( *pTextNode );
+    for( SwTextFrm* pTextFrm = aIter.First(); pTextFrm != NULL; pTextFrm = aIter.Next() )
     {
-        if( !pTxtFrm->IsFollow() )
+        if( !pTextFrm->IsFollow() )
         {
-            pTxtFrm = pTxtFrm->GetFrmAtPos( rAnchorPos );
-            SwPageFrm *pPage = pTxtFrm ? pTxtFrm->FindPageFrm() : 0;
+            pTextFrm = pTextFrm->GetFrmAtPos( rAnchorPos );
+            SwPageFrm *pPage = pTextFrm ? pTextFrm->FindPageFrm() : 0;
             if ( pPage != NULL && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
             {
                 aRet = VISIBLE;
 
-                o_rInfo.mpAnchorFrm = pTxtFrm;
-                pTxtFrm->GetCharRect( o_rInfo.mPosition, rAnchorPos, 0 );
+                o_rInfo.mpAnchorFrm = pTextFrm;
+                pTextFrm->GetCharRect( o_rInfo.mPosition, rAnchorPos, 0 );
                 if ( pAnnotationStartPos != NULL )
                 {
                     o_rInfo.mnStartNodeIdx = pAnnotationStartPos->nNode.GetIndex();
@@ -78,7 +78,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                 o_rInfo.meSidebarPosition = pPage->SidebarPosition();
                 o_rInfo.mRedlineAuthor = 0;
 
-                const IDocumentRedlineAccess* pIDRA = pTxtNode->getIDocumentRedlineAccess();
+                const IDocumentRedlineAccess* pIDRA = pTextNode->getIDocumentRedlineAccess();
                 if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
                 {
                     const SwRangeRedline* pRedline = pIDRA->GetRedline( rAnchorPos, 0 );
@@ -95,7 +95,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
         }
     }
 
-    return ( (aRet==VISIBLE) && SwScriptInfo::IsInHiddenRange( *pTxtNode , rAnchorPos.nContent.GetIndex()) )
+    return ( (aRet==VISIBLE) && SwScriptInfo::IsInHiddenRange( *pTextNode , rAnchorPos.nContent.GetIndex()) )
              ? HIDDEN
              : aRet;
 }
@@ -130,17 +130,17 @@ unsigned long SwPostItHelper::getPageInfo( SwRect& rPageFrm, const SwRootFrm* pR
 
 SwPosition SwAnnotationItem::GetAnchorPosition() const
 {
-    SwTxtFld* pTxtFld = mrFmtFld.GetTxtFld();
-    SwTxtNode* pTxtNode = pTxtFld->GetpTxtNode();
+    SwTextField* pTextField = mrFormatField.GetTextField();
+    SwTextNode* pTextNode = pTextField->GetpTextNode();
 
-    SwPosition aPos( *pTxtNode );
-    aPos.nContent.Assign( pTxtNode, pTxtFld->GetStart() );
+    SwPosition aPos( *pTextNode );
+    aPos.nContent.Assign( pTextNode, pTextField->GetStart() );
     return aPos;
 }
 
 bool SwAnnotationItem::UseElement()
 {
-    return mrFmtFld.IsFldInDoc();
+    return mrFormatField.IsFieldInDoc();
 }
 
 VclPtr<sw::sidebarwindows::SwSidebarWin> SwAnnotationItem::GetSidebarWindow(
@@ -152,7 +152,7 @@ VclPtr<sw::sidebarwindows::SwSidebarWin> SwAnnotationItem::GetSidebarWindow(
     return VclPtr<sw::annotation::SwAnnotationWin>::Create( rEditWin, nBits,
                                                 aMgr, aBits,
                                                 *this,
-                                                &mrFmtFld );
+                                                &mrFormatField );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

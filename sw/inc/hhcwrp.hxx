@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
     sal_uInt16      m_nPageStart;     ///< first checked page
 
     bool        m_bIsDrawObj;
-    bool        m_bIsOtherCntnt;
+    bool        m_bIsOtherContent;
     bool        m_bStartChk;
     bool        m_bIsSelection;       ///< true if only the selected text should be converted
     bool        m_bStartDone;

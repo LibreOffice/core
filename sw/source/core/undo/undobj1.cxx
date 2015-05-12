@@ -39,20 +39,20 @@
 #include <dcontact.hxx>
 #include <ndole.hxx>
 
-SwUndoFlyBase::SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId )
+SwUndoFlyBase::SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId )
     : SwUndo(nUndoId)
-    , pFrmFmt(pFormat)
+    , pFrameFormat(pFormat)
     , nNdPgPos(0)
     , nCntPos(0)
     , nRndId(0)
-    , bDelFmt(false)
+    , bDelFormat(false)
 {
 }
 
 SwUndoFlyBase::~SwUndoFlyBase()
 {
-    if( bDelFmt )       // delete during an Undo?
-        delete pFrmFmt;
+    if( bDelFormat )       // delete during an Undo?
+        delete pFrameFormat;
 }
 
 void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
@@ -60,14 +60,14 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
     SwDoc *const pDoc = & rContext.GetDoc();
 
     // add again into array
-    SwFrmFmts& rFlyFmts = *pDoc->GetSpzFrmFmts();
-    rFlyFmts.push_back( pFrmFmt );
+    SwFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
+    rFlyFormats.push_back( pFrameFormat );
 
     // OD 26.06.2003 #108784# - insert 'master' drawing object into drawing page
-    if ( RES_DRAWFRMFMT == pFrmFmt->Which() )
+    if ( RES_DRAWFRMFMT == pFrameFormat->Which() )
     {
         SwDrawContact* pDrawContact =
-            static_cast<SwDrawContact*>(pFrmFmt->FindContactObj());
+            static_cast<SwDrawContact*>(pFrameFormat->FindContactObj());
         if ( pDrawContact )
         {
             pDrawContact->InsertMasterIntoDrawPage();
@@ -77,7 +77,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
         }
     }
 
-    SwFmtAnchor aAnchor( (RndStdIds)nRndId );
+    SwFormatAnchor aAnchor( (RndStdIds)nRndId );
 
     if (FLY_AT_PAGE == nRndId)
     {
@@ -89,39 +89,39 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
         aNewPos.nNode = nNdPgPos;
         if ((FLY_AS_CHAR == nRndId) || (FLY_AT_CHAR == nRndId))
         {
-            aNewPos.nContent.Assign( aNewPos.nNode.GetNode().GetCntntNode(),
+            aNewPos.nContent.Assign( aNewPos.nNode.GetNode().GetContentNode(),
                                     nCntPos );
         }
         aAnchor.SetAnchor( &aNewPos );
     }
 
-    pFrmFmt->SetFmtAttr( aAnchor );     // reset anchor
+    pFrameFormat->SetFormatAttr( aAnchor );     // reset anchor
 
-    if( RES_DRAWFRMFMT != pFrmFmt->Which() )
+    if( RES_DRAWFRMFMT != pFrameFormat->Which() )
     {
         // get Content and reset ContentAttribute
         SwNodeIndex aIdx( pDoc->GetNodes() );
         RestoreSection( pDoc, &aIdx, SwFlyStartNode );
-        pFrmFmt->SetFmtAttr( SwFmtCntnt( aIdx.GetNode().GetStartNode() ));
+        pFrameFormat->SetFormatAttr( SwFormatContent( aIdx.GetNode().GetStartNode() ));
     }
 
-    // Set InCntntAttribute not until there is content!
+    // Set InContentAttribute not until there is content!
     // Otherwise the layout would format the Fly beforehand but would not find
     // content; this happened with graphics from the internet.
     if (FLY_AS_CHAR == nRndId)
     {
         // there must be at least the attribute in a TextNode
-        SwCntntNode* pCNd = aAnchor.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
-        OSL_ENSURE( pCNd->IsTxtNode(), "no Text Node at position." );
-        SwFmtFlyCnt aFmt( pFrmFmt );
-        pCNd->GetTxtNode()->InsertItem( aFmt, nCntPos, nCntPos );
+        SwContentNode* pCNd = aAnchor.GetContentAnchor()->nNode.GetNode().GetContentNode();
+        OSL_ENSURE( pCNd->IsTextNode(), "no Text Node at position." );
+        SwFormatFlyCnt aFormat( pFrameFormat );
+        pCNd->GetTextNode()->InsertItem( aFormat, nCntPos, nCntPos );
     }
 
-    pFrmFmt->MakeFrms();
+    pFrameFormat->MakeFrms();
 
     if( bShowSelFrm )
     {
-        rContext.SetSelections(pFrmFmt, 0);
+        rContext.SetSelections(pFrameFormat, 0);
     }
 
     if( GetHistory() )
@@ -132,74 +132,74 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
     case FLY_AS_CHAR:
     case FLY_AT_CHAR:
         {
-            const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-            nNdPgPos = rAnchor.GetCntntAnchor()->nNode.GetIndex();
-            nCntPos = rAnchor.GetCntntAnchor()->nContent.GetIndex();
+            const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+            nNdPgPos = rAnchor.GetContentAnchor()->nNode.GetIndex();
+            nCntPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
         }
         break;
     case FLY_AT_PARA:
     case FLY_AT_FLY:
         {
-            const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-            nNdPgPos = rAnchor.GetCntntAnchor()->nNode.GetIndex();
+            const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+            nNdPgPos = rAnchor.GetContentAnchor()->nNode.GetIndex();
         }
         break;
     case FLY_AT_PAGE:
         break;
     }
-    bDelFmt =  false;
+    bDelFormat =  false;
 }
 
 void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 {
-    bDelFmt = true;                 // delete Format in DTOR
-    pFrmFmt->DelFrms();                 // destroy Frms
+    bDelFormat = true;                 // delete Format in DTOR
+    pFrameFormat->DelFrms();                 // destroy Frms
 
     // all Uno objects should now log themselves off
     {
-        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFrmFmt );
-        pFrmFmt->ModifyNotification( &aMsgHint, &aMsgHint );
+        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFrameFormat );
+        pFrameFormat->ModifyNotification( &aMsgHint, &aMsgHint );
     }
 
-    if ( RES_DRAWFRMFMT != pFrmFmt->Which() )
+    if ( RES_DRAWFRMFMT != pFrameFormat->Which() )
     {
         // if there is content than save it
-        const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-        OSL_ENSURE( rCntnt.GetCntntIdx(), "Fly ohne Inhalt" );
+        const SwFormatContent& rContent = pFrameFormat->GetContent();
+        OSL_ENSURE( rContent.GetContentIdx(), "Fly ohne Inhalt" );
 
-        SaveSection( *rCntnt.GetCntntIdx() );
-        const_cast<SwFmtCntnt&>(rCntnt).SetNewCntntIdx( (const SwNodeIndex*)0 );
+        SaveSection( *rContent.GetContentIdx() );
+        const_cast<SwFormatContent&>(rContent).SetNewContentIdx( (const SwNodeIndex*)0 );
     }
     // OD 02.07.2003 #108784# - remove 'master' drawing object from drawing page
-    else if ( RES_DRAWFRMFMT == pFrmFmt->Which() )
+    else if ( RES_DRAWFRMFMT == pFrameFormat->Which() )
     {
         SwDrawContact* pDrawContact =
-            static_cast<SwDrawContact*>(pFrmFmt->FindContactObj());
+            static_cast<SwDrawContact*>(pFrameFormat->FindContactObj());
         if ( pDrawContact )
         {
             pDrawContact->RemoveMasterFromDrawPage();
         }
     }
 
-    const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-    const SwPosition* pPos = rAnchor.GetCntntAnchor();
+    const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+    const SwPosition* pPos = rAnchor.GetContentAnchor();
     // The positions in Nodes array got shifted.
     nRndId = static_cast<sal_uInt16>(rAnchor.GetAnchorId());
     if (FLY_AS_CHAR == nRndId)
     {
         nNdPgPos = pPos->nNode.GetIndex();
         nCntPos = pPos->nContent.GetIndex();
-        SwTxtNode *const pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-        OSL_ENSURE( pTxtNd, "Kein Textnode gefunden" );
-        SwTxtFlyCnt* const pAttr = static_cast<SwTxtFlyCnt*>(
-            pTxtNd->GetTxtAttrForCharAt( nCntPos, RES_TXTATR_FLYCNT ) );
+        SwTextNode *const pTextNd = pPos->nNode.GetNode().GetTextNode();
+        OSL_ENSURE( pTextNd, "Kein Textnode gefunden" );
+        SwTextFlyCnt* const pAttr = static_cast<SwTextFlyCnt*>(
+            pTextNd->GetTextAttrForCharAt( nCntPos, RES_TXTATR_FLYCNT ) );
         // attribute is still in TextNode, delete
-        if( pAttr && pAttr->GetFlyCnt().GetFrmFmt() == pFrmFmt )
+        if( pAttr && pAttr->GetFlyCnt().GetFrameFormat() == pFrameFormat )
         {
             // Pointer to 0, do not delete
-            const_cast<SwFmtFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFmt();
+            const_cast<SwFormatFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFormat();
             SwIndex aIdx( pPos->nContent );
-            pTxtNd->EraseText( aIdx, 1 );
+            pTextNd->EraseText( aIdx, 1 );
         }
     }
     else if (FLY_AT_CHAR == nRndId)
@@ -216,21 +216,21 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         nNdPgPos = rAnchor.GetPageNum();
     }
 
-    pFrmFmt->ResetFmtAttr( RES_ANCHOR );        // delete anchor
+    pFrameFormat->ResetFormatAttr( RES_ANCHOR );        // delete anchor
 
     // delete from array
-    SwFrmFmts& rFlyFmts = *pDoc->GetSpzFrmFmts();
-    rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFrmFmt ));
+    SwFrameFormats& rFlyFormats = *pDoc->GetSpzFrameFormats();
+    rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), pFrameFormat ));
 }
 
-SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx )
+SwUndoInsLayFormat::SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx )
     : SwUndoFlyBase( pFormat, RES_DRAWFRMFMT == pFormat->Which() ?
                                             UNDO_INSDRAWFMT : UNDO_INSLAYFMT ),
     mnCrsrSaveIndexPara( nNodeIdx ), mnCrsrSaveIndexPos( nCntIdx )
 {
-    const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
+    const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
     nRndId = static_cast<sal_uInt16>(rAnchor.GetAnchorId());
-    bDelFmt = false;
+    bDelFormat = false;
     switch( nRndId )
     {
     case FLY_AT_PAGE:
@@ -238,12 +238,12 @@ SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, sal_Int
         break;
     case FLY_AT_PARA:
     case FLY_AT_FLY:
-        nNdPgPos = rAnchor.GetCntntAnchor()->nNode.GetIndex();
+        nNdPgPos = rAnchor.GetContentAnchor()->nNode.GetIndex();
         break;
     case FLY_AS_CHAR:
     case FLY_AT_CHAR:
         {
-            const SwPosition* pPos = rAnchor.GetCntntAnchor();
+            const SwPosition* pPos = rAnchor.GetContentAnchor();
             nCntPos = pPos->nContent.GetIndex();
             nNdPgPos = pPos->nNode.GetIndex();
         }
@@ -253,25 +253,25 @@ SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, sal_Int
     }
 }
 
-SwUndoInsLayFmt::~SwUndoInsLayFmt()
+SwUndoInsLayFormat::~SwUndoInsLayFormat()
 {
 }
 
-void SwUndoInsLayFmt::UndoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoInsLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc(rContext.GetDoc());
-    const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() )  // no content
+    const SwFormatContent& rContent = pFrameFormat->GetContent();
+    if( rContent.GetContentIdx() )  // no content
     {
         bool bRemoveIdx = true;
         if( mnCrsrSaveIndexPara > 0 )
         {
-            SwTxtNode *const pNode =
-                rDoc.GetNodes()[mnCrsrSaveIndexPara]->GetTxtNode();
+            SwTextNode *const pNode =
+                rDoc.GetNodes()[mnCrsrSaveIndexPara]->GetTextNode();
             if( pNode )
             {
                 SwNodeIndex aIdx( rDoc.GetNodes(),
-                        rCntnt.GetCntntIdx()->GetIndex() );
+                        rContent.GetContentIdx()->GetIndex() );
                 SwNodeIndex aEndIdx( rDoc.GetNodes(),
                         aIdx.GetNode().EndOfSectionIndex() );
                 SwIndex aIndex( pNode, mnCrsrSaveIndexPos );
@@ -282,22 +282,22 @@ void SwUndoInsLayFmt::UndoImpl(::sw::UndoRedoContext & rContext)
         }
         if( bRemoveIdx )
         {
-            RemoveIdxFromSection( rDoc, rCntnt.GetCntntIdx()->GetIndex() );
+            RemoveIdxFromSection( rDoc, rContent.GetContentIdx()->GetIndex() );
         }
     }
     DelFly(& rDoc);
 }
 
-void SwUndoInsLayFmt::RedoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoInsLayFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     InsFly(rContext);
 }
 
-void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
+void SwUndoInsLayFormat::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
     // get anchor and reset it
-    SwFmtAnchor aAnchor( pFrmFmt->GetAnchor() );
+    SwFormatAnchor aAnchor( pFrameFormat->GetAnchor() );
     if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
         (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
         (FLY_AS_CHAR == aAnchor.GetAnchorId()))
@@ -331,17 +331,17 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
         OSL_FAIL( "What kind of anchor is this?" );
     }
 
-    SwFrmFmt* pFlyFmt = pDoc->getIDocumentLayoutAccess().CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
-    (void) pFlyFmt;
+    SwFrameFormat* pFlyFormat = pDoc->getIDocumentLayoutAccess().CopyLayoutFormat( *pFrameFormat, aAnchor, true, true );
+    (void) pFlyFormat;
 }
 
 // #111827#
-OUString SwUndoInsLayFmt::GetComment() const
+OUString SwUndoInsLayFormat::GetComment() const
 {
     OUString aResult;
 
     // HACK: disable caching:
-    // the SfxUndoManager calls GetComment() too early: the pFrmFmt does not
+    // the SfxUndoManager calls GetComment() too early: the pFrameFormat does not
     // have a SwDrawContact yet, so it will fall back to SwUndo::GetComment(),
     // which sets pComment to a wrong value.
 //    if (! pComment)
@@ -352,9 +352,9 @@ OUString SwUndoInsLayFmt::GetComment() const
           comment of the SdrObject. Otherwise use the default comment.
         */
         bool bDone = false;
-        if (pFrmFmt)
+        if (pFrameFormat)
         {
-            const SdrObject * pSdrObj = pFrmFmt->FindSdrObject();
+            const SdrObject * pSdrObj = pFrameFormat->FindSdrObject();
             if ( pSdrObj )
             {
                 aResult = SdrUndoNewObj::GetComment( *pSdrObj );
@@ -372,20 +372,20 @@ OUString SwUndoInsLayFmt::GetComment() const
 }
 
 static SwUndoId
-lcl_GetSwUndoId(SwFrmFmt *const pFrmFmt)
+lcl_GetSwUndoId(SwFrameFormat *const pFrameFormat)
 {
-    if (RES_DRAWFRMFMT != pFrmFmt->Which())
+    if (RES_DRAWFRMFMT != pFrameFormat->Which())
     {
-        const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-        OSL_ENSURE( rCntnt.GetCntntIdx(), "Fly without content" );
+        const SwFormatContent& rContent = pFrameFormat->GetContent();
+        OSL_ENSURE( rContent.GetContentIdx(), "Fly without content" );
 
-        SwNodeIndex firstNode(*rCntnt.GetCntntIdx(), 1);
-        SwNoTxtNode *const pNoTxtNode(firstNode.GetNode().GetNoTxtNode());
-        if (pNoTxtNode && pNoTxtNode->IsGrfNode())
+        SwNodeIndex firstNode(*rContent.GetContentIdx(), 1);
+        SwNoTextNode *const pNoTextNode(firstNode.GetNode().GetNoTextNode());
+        if (pNoTextNode && pNoTextNode->IsGrfNode())
         {
             return UNDO_DELGRF;
         }
-        else if (pNoTxtNode && pNoTxtNode->IsOLENode())
+        else if (pNoTextNode && pNoTextNode->IsOLENode())
         {
             // surprisingly not UNDO_DELOLE, which does not seem to work
             return UNDO_DELETE;
@@ -394,7 +394,7 @@ lcl_GetSwUndoId(SwFrmFmt *const pFrmFmt)
     return UNDO_DELLAYFMT;
 }
 
-SwUndoDelLayFmt::SwUndoDelLayFmt( SwFrmFmt* pFormat )
+SwUndoDelLayFormat::SwUndoDelLayFormat( SwFrameFormat* pFormat )
     : SwUndoFlyBase( pFormat, lcl_GetSwUndoId(pFormat) )
     , bShowSelFrm( true )
 {
@@ -402,11 +402,11 @@ SwUndoDelLayFmt::SwUndoDelLayFmt( SwFrmFmt* pFormat )
     DelFly( pDoc );
 }
 
-SwRewriter SwUndoDelLayFmt::GetRewriter() const
+SwRewriter SwUndoDelLayFormat::GetRewriter() const
 {
     SwRewriter aRewriter;
 
-    SwDoc * pDoc = pFrmFmt->GetDoc();
+    SwDoc * pDoc = pFrameFormat->GetDoc();
 
     if (pDoc)
     {
@@ -415,7 +415,7 @@ SwRewriter SwUndoDelLayFmt::GetRewriter() const
         {
             SwNode *const pNd = & pIdx->GetNode();
 
-            if ( pNd->IsNoTxtNode() && pNd->IsOLENode())
+            if ( pNd->IsNoTextNode() && pNd->IsOLENode())
             {
                 SwOLENode * pOLENd = pNd->GetOLENode();
 
@@ -427,76 +427,76 @@ SwRewriter SwUndoDelLayFmt::GetRewriter() const
     return aRewriter;
 }
 
-void SwUndoDelLayFmt::UndoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoDelLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     InsFly( rContext, bShowSelFrm );
 }
 
-void SwUndoDelLayFmt::RedoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoDelLayFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc(rContext.GetDoc());
-    const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() )  // no content
+    const SwFormatContent& rContent = pFrameFormat->GetContent();
+    if( rContent.GetContentIdx() )  // no content
     {
-        RemoveIdxFromSection(rDoc, rCntnt.GetCntntIdx()->GetIndex());
+        RemoveIdxFromSection(rDoc, rContent.GetContentIdx()->GetIndex());
     }
 
     DelFly(& rDoc);
 }
 
-void SwUndoDelLayFmt::RedoForRollback()
+void SwUndoDelLayFormat::RedoForRollback()
 {
-    const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    if( rCntnt.GetCntntIdx() )  // no content
-        RemoveIdxFromSection( *pFrmFmt->GetDoc(),
-                                rCntnt.GetCntntIdx()->GetIndex() );
+    const SwFormatContent& rContent = pFrameFormat->GetContent();
+    if( rContent.GetContentIdx() )  // no content
+        RemoveIdxFromSection( *pFrameFormat->GetDoc(),
+                                rContent.GetContentIdx()->GetIndex() );
 
-    DelFly( pFrmFmt->GetDoc() );
+    DelFly( pFrameFormat->GetDoc() );
 }
 
-SwUndoSetFlyFmt::SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt )
-    : SwUndo( UNDO_SETFLYFRMFMT ), SwClient( &rFlyFmt ), pFrmFmt( &rFlyFmt ),
-    pOldFmt( static_cast<SwFrmFmt*>(rFlyFmt.DerivedFrom()) ), pNewFmt( &rNewFrmFmt ),
-    pItemSet( new SfxItemSet( *rFlyFmt.GetAttrSet().GetPool(),
-                                rFlyFmt.GetAttrSet().GetRanges() )),
+SwUndoSetFlyFormat::SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, SwFrameFormat& rNewFrameFormat )
+    : SwUndo( UNDO_SETFLYFRMFMT ), SwClient( &rFlyFormat ), pFrameFormat( &rFlyFormat ),
+    pOldFormat( static_cast<SwFrameFormat*>(rFlyFormat.DerivedFrom()) ), pNewFormat( &rNewFrameFormat ),
+    pItemSet( new SfxItemSet( *rFlyFormat.GetAttrSet().GetPool(),
+                                rFlyFormat.GetAttrSet().GetRanges() )),
     nOldNode( 0 ), nNewNode( 0 ),
-    nOldCntnt( 0 ), nNewCntnt( 0 ),
+    nOldContent( 0 ), nNewContent( 0 ),
     nOldAnchorTyp( 0 ), nNewAnchorTyp( 0 ), bAnchorChgd( false )
 {
 }
 
-SwRewriter SwUndoSetFlyFmt::GetRewriter() const
+SwRewriter SwUndoSetFlyFormat::GetRewriter() const
 {
     SwRewriter aRewriter;
 
-    if (pNewFmt)
-        aRewriter.AddRule(UndoArg1, pNewFmt->GetName());
+    if (pNewFormat)
+        aRewriter.AddRule(UndoArg1, pNewFormat->GetName());
 
     return aRewriter;
 }
 
-SwUndoSetFlyFmt::~SwUndoSetFlyFmt()
+SwUndoSetFlyFormat::~SwUndoSetFlyFormat()
 {
     delete pItemSet;
 }
 
-void SwUndoSetFlyFmt::DeRegisterFromFormat( SwFmt& rFmt )
+void SwUndoSetFlyFormat::DeRegisterFromFormat( SwFormat& rFormat )
 {
-    rFmt.Remove(this);
+    rFormat.Remove(this);
 }
 
-void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
-                                sal_uLong nNode, sal_Int32 nCntnt )
+void SwUndoSetFlyFormat::GetAnchor( SwFormatAnchor& rAnchor,
+                                sal_uLong nNode, sal_Int32 nContent )
 {
     RndStdIds nAnchorTyp = rAnchor.GetAnchorId();
     if (FLY_AT_PAGE != nAnchorTyp)
     {
-        SwNode* pNd = pFrmFmt->GetDoc()->GetNodes()[ nNode ];
+        SwNode* pNd = pFrameFormat->GetDoc()->GetNodes()[ nNode ];
 
         if( FLY_AT_FLY == nAnchorTyp
                 ? ( !pNd->IsStartNode() || SwFlyStartNode !=
                     static_cast<SwStartNode*>(pNd)->GetStartNodeType() )
-                : !pNd->IsTxtNode() )
+                : !pNd->IsTextNode() )
         {
             pNd = 0;    // invalid position
         }
@@ -506,13 +506,13 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
             if ((FLY_AS_CHAR == nAnchorTyp) ||
                 (FLY_AT_CHAR == nAnchorTyp))
             {
-                if (nCntnt > pNd->GetTxtNode()->GetTxt().getLength())
+                if (nContent > pNd->GetTextNode()->GetText().getLength())
                 {
                     pNd = 0;    // invalid position
                 }
                 else
                 {
-                    aPos.nContent.Assign(pNd->GetTxtNode(), nCntnt);
+                    aPos.nContent.Assign(pNd->GetTextNode(), nContent);
                 }
             }
             if ( pNd )
@@ -529,31 +529,31 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
         }
     }
     else
-        rAnchor.SetPageNum( nCntnt );
+        rAnchor.SetPageNum( nContent );
 }
 
-void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if( rDoc.GetFrmFmts()->Contains( pOldFmt ) )
+    if( rDoc.GetFrameFormats()->Contains( pOldFormat ) )
     {
         if( bAnchorChgd )
-            pFrmFmt->DelFrms();
+            pFrameFormat->DelFrms();
 
-        if( pFrmFmt->DerivedFrom() != pOldFmt )
-            pFrmFmt->SetDerivedFrom( pOldFmt );
+        if( pFrameFormat->DerivedFrom() != pOldFormat )
+            pFrameFormat->SetDerivedFrom( pOldFormat );
 
         SfxItemIter aIter( *pItemSet );
         const SfxPoolItem* pItem = aIter.GetCurItem();
         while( pItem )
         {
             if( IsInvalidItem( pItem ))
-                pFrmFmt->ResetFmtAttr( pItemSet->GetWhichByPos(
+                pFrameFormat->ResetFormatAttr( pItemSet->GetWhichByPos(
                                         aIter.GetCurPos() ));
             else
-                pFrmFmt->SetFmtAttr( *pItem );
+                pFrameFormat->SetFormatAttr( *pItem );
 
             if( aIter.IsAtEnd() )
                 break;
@@ -562,73 +562,73 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( bAnchorChgd )
         {
-            const SwFmtAnchor& rOldAnch = pFrmFmt->GetAnchor();
+            const SwFormatAnchor& rOldAnch = pFrameFormat->GetAnchor();
             if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
             {
-                // With InCntnts it's tricky: the text attribute needs to be
+                // With InContents it's tricky: the text attribute needs to be
                 // deleted. Unfortunately, this not only destroys the Frms but
                 // also the format. To prevent that, first detach the
                 // connection between attribute and format.
-                const SwPosition *pPos = rOldAnch.GetCntntAnchor();
-                SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
-                OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+                const SwPosition *pPos = rOldAnch.GetContentAnchor();
+                SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
+                OSL_ENSURE( pTextNode->HasHints(), "Missing FlyInCnt-Hint." );
                 const sal_Int32 nIdx = pPos->nContent.GetIndex();
-                SwTxtAttr * pHnt = pTxtNode->GetTxtAttrForCharAt(
+                SwTextAttr * pHint = pTextNode->GetTextAttrForCharAt(
                         nIdx, RES_TXTATR_FLYCNT );
-                OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+                OSL_ENSURE( pHint && pHint->Which() == RES_TXTATR_FLYCNT,
                             "Missing FlyInCnt-Hint." );
-                OSL_ENSURE( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFrmFmt,
-                            "Wrong TxtFlyCnt-Hint." );
-                const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
+                OSL_ENSURE( pHint && pHint->GetFlyCnt().GetFrameFormat() == pFrameFormat,
+                            "Wrong TextFlyCnt-Hint." );
+                const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt()).SetFlyFormat();
 
                 // Connection is now detached, therefore the attribute can be
                 // deleted
-                pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
+                pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
             }
 
             // reposition anchor
-            SwFmtAnchor aNewAnchor( (RndStdIds) nOldAnchorTyp );
-            GetAnchor( aNewAnchor, nOldNode, nOldCntnt );
-            pFrmFmt->SetFmtAttr( aNewAnchor );
+            SwFormatAnchor aNewAnchor( (RndStdIds) nOldAnchorTyp );
+            GetAnchor( aNewAnchor, nOldNode, nOldContent );
+            pFrameFormat->SetFormatAttr( aNewAnchor );
 
             if (FLY_AS_CHAR == aNewAnchor.GetAnchorId())
             {
-                const SwPosition* pPos = aNewAnchor.GetCntntAnchor();
-                SwFmtFlyCnt aFmt( pFrmFmt );
-                pPos->nNode.GetNode().GetTxtNode()->InsertItem( aFmt,
-                    nOldCntnt, 0 );
+                const SwPosition* pPos = aNewAnchor.GetContentAnchor();
+                SwFormatFlyCnt aFormat( pFrameFormat );
+                pPos->nNode.GetNode().GetTextNode()->InsertItem( aFormat,
+                    nOldContent, 0 );
             }
 
-            pFrmFmt->MakeFrms();
+            pFrameFormat->MakeFrms();
         }
-        rContext.SetSelections(pFrmFmt, 0);
+        rContext.SetSelections(pFrameFormat, 0);
     }
 }
 
-void SwUndoSetFlyFmt::RedoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoSetFlyFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if( rDoc.GetFrmFmts()->Contains( pNewFmt ) )
+    if( rDoc.GetFrameFormats()->Contains( pNewFormat ) )
     {
 
         if( bAnchorChgd )
         {
-            SwFmtAnchor aNewAnchor( (RndStdIds) nNewAnchorTyp );
-            GetAnchor( aNewAnchor, nNewNode, nNewCntnt );
-            SfxItemSet aSet( rDoc.GetAttrPool(), aFrmFmtSetRange );
+            SwFormatAnchor aNewAnchor( (RndStdIds) nNewAnchorTyp );
+            GetAnchor( aNewAnchor, nNewNode, nNewContent );
+            SfxItemSet aSet( rDoc.GetAttrPool(), aFrameFormatSetRange );
             aSet.Put( aNewAnchor );
-            rDoc.SetFrmFmtToFly( *pFrmFmt, *pNewFmt, &aSet );
+            rDoc.SetFrameFormatToFly( *pFrameFormat, *pNewFormat, &aSet );
         }
         else
-            rDoc.SetFrmFmtToFly( *pFrmFmt, *pNewFmt, 0 );
+            rDoc.SetFrameFormatToFly( *pFrameFormat, *pNewFormat, 0 );
 
-        rContext.SetSelections(pFrmFmt, 0);
+        rContext.SetSelections(pFrameFormat, 0);
     }
 }
 
-void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
+void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
 {
     if( pItem && pItem != GetDfltAttr( nWhich ) )
     {
@@ -640,36 +640,36 @@ void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
 
             bAnchorChgd = true;
 
-            const SwFmtAnchor* pAnchor = static_cast<const SwFmtAnchor*>(pItem);
+            const SwFormatAnchor* pAnchor = static_cast<const SwFormatAnchor*>(pItem);
             switch( nOldAnchorTyp = static_cast<sal_uInt16>(pAnchor->GetAnchorId()) )
             {
             case FLY_AS_CHAR:
             case FLY_AT_CHAR:
-                nOldCntnt = pAnchor->GetCntntAnchor()->nContent.GetIndex();
+                nOldContent = pAnchor->GetContentAnchor()->nContent.GetIndex();
                 //fall-through
             case FLY_AT_PARA:
             case FLY_AT_FLY:
-                nOldNode = pAnchor->GetCntntAnchor()->nNode.GetIndex();
+                nOldNode = pAnchor->GetContentAnchor()->nNode.GetIndex();
                 break;
 
             default:
-                nOldCntnt = pAnchor->GetPageNum();
+                nOldContent = pAnchor->GetPageNum();
             }
 
-            pAnchor = &pFrmFmt->GetAnchor();
+            pAnchor = &pFrameFormat->GetAnchor();
             switch( nNewAnchorTyp = static_cast<sal_uInt16>(pAnchor->GetAnchorId()) )
             {
             case FLY_AS_CHAR:
             case FLY_AT_CHAR:
-                nNewCntnt = pAnchor->GetCntntAnchor()->nContent.GetIndex();
+                nNewContent = pAnchor->GetContentAnchor()->nContent.GetIndex();
                 //fall-through
             case FLY_AT_PARA:
             case FLY_AT_FLY:
-                nNewNode = pAnchor->GetCntntAnchor()->nNode.GetIndex();
+                nNewNode = pAnchor->GetContentAnchor()->nNode.GetIndex();
                 break;
 
             default:
-                nNewCntnt = pAnchor->GetPageNum();
+                nNewContent = pAnchor->GetPageNum();
             }
         }
         else
@@ -679,7 +679,7 @@ void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
         pItemSet->InvalidateItem( nWhich );
 }
 
-void SwUndoSetFlyFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* )
+void SwUndoSetFlyFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* )
 {
     if( pOld )
     {

@@ -209,9 +209,9 @@ void SwEmbedObjectLink::Closed()
 
 SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     const svt::EmbeddedObjectRef& xObj,
-                    SwGrfFmtColl *pGrfColl,
+                    SwGrfFormatColl *pGrfColl,
                     SwAttrSet* pAutoAttr ) :
-    SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
+    SwNoTextNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
     aOLEObj( xObj ),
     bOLESizeInvalid( false ),
     mpObjectLink( NULL )
@@ -222,9 +222,9 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
 SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     const OUString &rString,
                     sal_Int64 nAspect,
-                    SwGrfFmtColl *pGrfColl,
+                    SwGrfFormatColl *pGrfColl,
                     SwAttrSet* pAutoAttr ) :
-    SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
+    SwNoTextNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
     aOLEObj( rString, nAspect ),
     bOLESizeInvalid( false ),
     mpObjectLink( NULL )
@@ -244,7 +244,7 @@ const Graphic* SwOLENode::GetGraphic()
     return 0;
 }
 
-SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
+SwContentNode *SwOLENode::SplitContentNode( const SwPosition & )
 {
     // Multiply OLE objects?
     OSL_FAIL( "OleNode: can't split." );
@@ -336,7 +336,7 @@ bool SwOLENode::SavePersistentData()
             */
             bool bKeepObjectToTempStorage = true;
             uno::Reference < embed::XEmbeddedObject > xIP = GetOLEObj().GetOleRef();
-            if (IsChart() && !sChartTblName.isEmpty()
+            if (IsChart() && !sChartTableName.isEmpty()
                 && svt::EmbeddedObjectRef::TryRunningState(xIP))
             {
                 uno::Reference< chart2::XChartDocument > xChart( xIP->getComponent(), UNO_QUERY );
@@ -369,7 +369,7 @@ bool SwOLENode::SavePersistentData()
 
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
                     const svt::EmbeddedObjectRef& xObj,
-                                    SwGrfFmtColl* pGrfColl,
+                                    SwGrfFormatColl* pGrfColl,
                                     SwAttrSet* pAutoAttr )
 {
     OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer is 0." );
@@ -391,7 +391,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 }
 
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
-    const OUString &rName, sal_Int64 nAspect, SwGrfFmtColl* pGrfColl, SwAttrSet* pAutoAttr )
+    const OUString &rName, sal_Int64 nAspect, SwGrfFormatColl* pGrfColl, SwAttrSet* pAutoAttr )
 {
     OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer is 0." );
 
@@ -417,7 +417,7 @@ Size SwOLENode::GetTwipSize() const
     return const_cast<SwOLENode*>(this)->aOLEObj.GetObject().GetSize( &aMapMode );
 }
 
-SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
+SwContentNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
     // If there's already a SvPersist instance, we use it
     SfxObjectShell* pPersistShell = pDoc->GetPersist();
@@ -443,10 +443,10 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         OUString());
 
     SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName, GetAspect(),
-                                    pDoc->GetDfltGrfFmtColl(),
+                                    pDoc->GetDfltGrfFormatColl(),
                                     const_cast<SwAttrSet*>(GetpSwAttrSet()) );
 
-    pOLENd->SetChartTblName( GetChartTblName() );
+    pOLENd->SetChartTableName( GetChartTableName() );
     pOLENd->SetTitle( GetTitle() );
     pOLENd->SetDescription( GetDescription() );
     pOLENd->SetContour( HasContour(), HasAutomaticContour() );
@@ -464,15 +464,15 @@ bool SwOLENode::IsInGlobalDocSection() const
     sal_uLong nEndExtraIdx = GetNodes().GetEndOfExtras().GetIndex();
     const SwNode* pAnchorNd = this;
     do {
-        SwFrmFmt* pFlyFmt = pAnchorNd->GetFlyFmt();
-        if( !pFlyFmt )
+        SwFrameFormat* pFlyFormat = pAnchorNd->GetFlyFormat();
+        if( !pFlyFormat )
             return false;
 
-        const SwFmtAnchor& rAnchor = pFlyFmt->GetAnchor();
-        if( !rAnchor.GetCntntAnchor() )
+        const SwFormatAnchor& rAnchor = pFlyFormat->GetAnchor();
+        if( !rAnchor.GetContentAnchor() )
             return false;
 
-        pAnchorNd = &rAnchor.GetCntntAnchor()->nNode.GetNode();
+        pAnchorNd = &rAnchor.GetContentAnchor()->nNode.GetNode();
     } while( pAnchorNd->GetIndex() < nEndExtraIdx );
 
     const SwSectionNode* pSectNd = pAnchorNd->FindSectionNode();

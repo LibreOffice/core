@@ -1564,14 +1564,14 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         {
             ContentInfo& rC = aContents[i];
             const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rC.GetParaAttribs().Get(EE_PARA_LRSPACE));
-            if ( rLRSpace.GetTxtLeft() && ( rC.GetParaAttribs().GetItemState( EE_PARA_TABS ) == SfxItemState::SET ) )
+            if ( rLRSpace.GetTextLeft() && ( rC.GetParaAttribs().GetItemState( EE_PARA_TABS ) == SfxItemState::SET ) )
             {
                 const SvxTabStopItem& rTabs = static_cast<const SvxTabStopItem&>(rC.GetParaAttribs().Get(EE_PARA_TABS));
                 SvxTabStopItem aNewTabs( 0, 0, SVX_TAB_ADJUST_LEFT, EE_PARA_TABS );
                 for ( sal_uInt16 t = 0; t < rTabs.Count(); t++ )
                 {
                     const SvxTabStop& rT = rTabs[ t ];
-                    aNewTabs.Insert( SvxTabStop( rT.GetTabPos() - rLRSpace.GetTxtLeft(),
+                    aNewTabs.Insert( SvxTabStop( rT.GetTabPos() - rLRSpace.GetTextLeft(),
                                 rT.GetAdjustment(), rT.GetDecimal(), rT.GetFill() ) );
                 }
                 rC.GetParaAttribs().Put( aNewTabs );

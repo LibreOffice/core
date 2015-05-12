@@ -220,8 +220,8 @@ SwDrawModel* DocumentDrawModelManager::_MakeDrawModel()
         // Broadcast, so that the FormShell can be connected to the DrawView
         if( m_rDoc.GetDocShell() )
         {
-            SfxSimpleHint aHnt( SW_BROADCAST_DRAWVIEWS_CREATED );
-            m_rDoc.GetDocShell()->Broadcast( aHnt );
+            SfxSimpleHint aHint( SW_BROADCAST_DRAWVIEWS_CREATED );
+            m_rDoc.GetDocShell()->Broadcast( aHint );
         }
     }
     return mpDrawModel;

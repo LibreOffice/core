@@ -524,14 +524,14 @@ public:
 
     const SvxFieldItem& GetField() const { return rFldItem; }
 
-    Color*          GetTxtColor() const { return pTxtColor; }
-    void            SetTxtColor( const Color& rColor )
+    Color*          GetTextColor() const { return pTxtColor; }
+    void            SetTextColor( const Color& rColor )
                         { delete pTxtColor; pTxtColor = new Color( rColor ); }
 
-    Color*          GetFldColor() const { return pFldColor; }
-    void            SetFldColor( const Color& rColor )
+    Color*          GetFieldColor() const { return pFldColor; }
+    void            SetFieldColor( const Color& rColor )
                         { delete pFldColor; pFldColor = new Color( rColor ); }
-    void            ClearFldColor()
+    void            ClearFieldColor()
                         { delete pFldColor; pFldColor = 0; }
 
     sal_Int32       GetPara() const { return nPara; }

@@ -62,7 +62,7 @@ public:
     void        ExecDraw(SfxRequest &);
     void        GetStatePropPanelAttr(SfxItemSet &);
     void        GetState(SfxItemSet &);
-    void        GetDrawTxtCtrlState(SfxItemSet&);
+    void        GetDrawTextCtrlState(SfxItemSet&);
 
     void        ExecFontWork(SfxRequest& rReq);
     void        StateFontWork(SfxItemSet& rSet);

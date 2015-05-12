@@ -198,8 +198,8 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
     sIntName = rHyperlinkItem.sIntName;
     nMacroEvents = rHyperlinkItem.nMacroEvents;
 
-    if( rHyperlinkItem.GetMacroTbl() )
-        pMacroTable = new SvxMacroTableDtor( *rHyperlinkItem.GetMacroTbl() );
+    if( rHyperlinkItem.GetMacroTable() )
+        pMacroTable = new SvxMacroTableDtor( *rHyperlinkItem.GetMacroTable() );
     else
         pMacroTable=NULL;
 

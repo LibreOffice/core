@@ -36,7 +36,7 @@
     0 coordinate for the first line indent:
 
     UI         UI       LAYOUT   UI/TEXT      UI/TEXT    (Where?)
-    SetTxtLeft SetTxtFirst GetLeft  GetTxtLeft  GetTxtFirst  (What?)
+    SetTextLeft SetTxtFirst GetLeft  GetTextLeft  GetTxtFirst  (What?)
     500       -500        0        500         -500      (How much?)
     500         0        500       500           0
     500       +500       500       500         +500
@@ -115,16 +115,16 @@ public:
     inline sal_uInt16 GetPropRight() const { return nPropRightMargin;}
 
     // The UI/text interface:
-    inline void SetTxtLeft( const long nL, const sal_uInt16 nProp = 100 );
-    inline long GetTxtLeft() const { return nTxtLeft; }
+    inline void SetTextLeft( const long nL, const sal_uInt16 nProp = 100 );
+    inline long GetTextLeft() const { return nTxtLeft; }
 
-    inline void   SetTxtFirstLineOfst( const short nF, const sal_uInt16 nProp = 100 );
-    inline short  GetTxtFirstLineOfst() const { return nFirstLineOfst; }
-    inline void SetPropTxtFirstLineOfst( const sal_uInt16 nProp = 100 )
+    inline void   SetTextFirstLineOfst( const short nF, const sal_uInt16 nProp = 100 );
+    inline short  GetTextFirstLineOfst() const { return nFirstLineOfst; }
+    inline void SetPropTextFirstLineOfst( const sal_uInt16 nProp = 100 )
                     { nPropFirstLineOfst = nProp; }
-    inline sal_uInt16 GetPropTxtFirstLineOfst() const
+    inline sal_uInt16 GetPropTextFirstLineOfst() const
                     { return nPropFirstLineOfst; }
-    inline void SetTxtFirstLineOfstValue( const short nValue )
+    inline void SetTextFirstLineOfstValue( const short nValue )
                     { nFirstLineOfst = nValue; }
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
@@ -159,7 +159,7 @@ inline void SvxLRSpaceItem::SetRight( const long nR, const sal_uInt16 nProp )
     nRightMargin = (nR * nProp) / 100;
     nPropRightMargin = nProp;
 }
-inline void SvxLRSpaceItem::SetTxtFirstLineOfst( const short nF,
+inline void SvxLRSpaceItem::SetTextFirstLineOfst( const short nF,
                                                  const sal_uInt16 nProp )
 {
     nFirstLineOfst = short((long(nF) * nProp ) / 100);
@@ -167,7 +167,7 @@ inline void SvxLRSpaceItem::SetTxtFirstLineOfst( const short nF,
     AdjustLeft();
 }
 
-inline void SvxLRSpaceItem::SetTxtLeft( const long nL, const sal_uInt16 nProp )
+inline void SvxLRSpaceItem::SetTextLeft( const long nL, const sal_uInt16 nProp )
 {
     if (0 == nL)
     {

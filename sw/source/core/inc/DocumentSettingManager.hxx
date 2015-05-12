@@ -31,7 +31,7 @@ class DocumentSettingManager :
 
     sal_uInt16  mnLinkUpdMode;       //< UpdateMode for links.
 
-    SwFldUpdateFlags    meFldUpdMode;//< Automatically Update Mode for fields/charts.
+    SwFieldUpdateFlags    meFieldUpdMode;//< Automatically Update Mode for fields/charts.
     SwCharCompressType meChrCmprType;//< for ASIAN: compress punctuation/kana
 
     sal_uInt32  mn32DummyCompatibilityOptions1;
@@ -167,8 +167,8 @@ public:
     virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const SAL_OVERRIDE;
     virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const SAL_OVERRIDE;
     virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode ) SAL_OVERRIDE;
-    virtual SwFldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const SAL_OVERRIDE;
-    virtual void setFieldUpdateFlags( /*[in]*/ SwFldUpdateFlags eMode ) SAL_OVERRIDE;
+    virtual SwFieldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const SAL_OVERRIDE;
+    virtual void setFieldUpdateFlags( /*[in]*/ SwFieldUpdateFlags eMode ) SAL_OVERRIDE;
     virtual SwCharCompressType getCharacterCompressionType() const SAL_OVERRIDE;
     virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType ) SAL_OVERRIDE;
 

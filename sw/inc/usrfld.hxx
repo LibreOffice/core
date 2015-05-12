@@ -41,10 +41,10 @@ public:
     virtual OUString        GetName() const SAL_OVERRIDE;
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 
-    OUString                Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng);
+    OUString                Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, sal_uInt16 nLng);
 
-    OUString                GetContent( sal_uInt32 nFmt = 0 );
-           void             SetContent( const OUString& rStr, sal_uInt32 nFmt = 0 );
+    OUString                GetContent( sal_uInt32 nFormat = 0 );
+           void             SetContent( const OUString& rStr, sal_uInt32 nFormat = 0 );
 
     inline bool             IsValid() const;
     inline void             ChgValid( bool bNew );
@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwUserField : public SwValueField
     virtual SwField*        Copy() const SAL_OVERRIDE;
 
 public:
-    SwUserField(SwUserFieldType*, sal_uInt16 nSub = 0, sal_uInt32 nFmt = 0);
+    SwUserField(SwUserFieldType*, sal_uInt16 nSub = 0, sal_uInt32 nFormat = 0);
 
     virtual sal_uInt16          GetSubType() const SAL_OVERRIDE;
     virtual void            SetSubType(sal_uInt16 nSub) SAL_OVERRIDE;

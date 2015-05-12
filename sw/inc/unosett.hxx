@@ -34,10 +34,10 @@
 #include <svl/itemprop.hxx>
 
 class SwDoc;
-class SwFmtCol;
+class SwFormatCol;
 class SwDocShell;
 class SwNumRule;
-class SwNumFmt;
+class SwNumFormat;
 
 class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
 <
@@ -206,11 +206,11 @@ public:
     void    Invalidate()    {pDocShell = 0;}
     OUString                GetCreatedNumRuleName() const {return m_sCreatedNumRuleName;}
 
-    static css::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFmt(
-            const SwNumFmt& rFmt, OUString const& rCharFormatName,
+    static css::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFormat(
+            const SwNumFormat& rFormat, OUString const& rCharFormatName,
             OUString const* pHeadingStyleName);
-    static void SetPropertiesToNumFmt(
-            SwNumFmt & aFmt,
+    static void SetPropertiesToNumFormat(
+            SwNumFormat & aFormat,
             OUString & rCharStyleName,
             OUString *const pBulletFontName,
             OUString *const pHeadingStyleName,
@@ -264,7 +264,7 @@ protected:
     virtual ~SwXTextColumns();
 public:
     SwXTextColumns(sal_uInt16 nColCount);
-    SwXTextColumns(const SwFmtCol& rFmtCol);
+    SwXTextColumns(const SwFormatCol& rFormatCol);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

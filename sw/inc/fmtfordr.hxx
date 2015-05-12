@@ -33,11 +33,11 @@ enum SwFillOrder
     SW_FILL_ORDER_END
 };
 
-class SwFmtFillOrder: public SfxEnumItem
+class SwFormatFillOrder: public SfxEnumItem
 {
 public:
-    SwFmtFillOrder( SwFillOrder = ATT_TOP_DOWN );
-    inline SwFmtFillOrder &operator=( const SwFmtFillOrder &rCpy );
+    SwFormatFillOrder( SwFillOrder = ATT_TOP_DOWN );
+    inline SwFormatFillOrder &operator=( const SwFormatFillOrder &rCpy );
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
@@ -46,16 +46,16 @@ public:
     SwFillOrder GetFillOrder() const { return SwFillOrder(GetValue()); }
 };
 
-inline SwFmtFillOrder &SwFmtFillOrder::operator=( const SwFmtFillOrder &rCpy )
+inline SwFormatFillOrder &SwFormatFillOrder::operator=( const SwFormatFillOrder &rCpy )
 {
     SetValue( rCpy.GetValue() );
     return *this;
 }
 
-inline const SwFmtFillOrder &SwAttrSet::GetFillOrder(bool bInP) const
-    { return static_cast<const SwFmtFillOrder&>(Get( RES_FILL_ORDER,bInP)); }
+inline const SwFormatFillOrder &SwAttrSet::GetFillOrder(bool bInP) const
+    { return static_cast<const SwFormatFillOrder&>(Get( RES_FILL_ORDER,bInP)); }
 
-inline const SwFmtFillOrder &SwFmt::GetFillOrder(bool bInP) const
+inline const SwFormatFillOrder &SwFormat::GetFillOrder(bool bInP) const
     { return m_aSet.GetFillOrder(bInP); }
 
 #endif

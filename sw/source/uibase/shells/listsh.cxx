@@ -261,7 +261,7 @@ void SwListShell::GetState(SfxItemSet &rSet)
             break;
 
             case FN_NUM_BULLET_NONUM:
-                if ( rSh.CrsrInsideInputFld() )
+                if ( rSh.CrsrInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
                 }

@@ -248,7 +248,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
     const Point aDocPt( PixelToLogic( rPixPnt ) );
     if( rSh.ChgCurrPam( aDocPt )
         || rSh.IsOverReadOnlyPos( aDocPt )
-        || rSh.DocPtInsideInputFld( aDocPt ) )
+        || rSh.DocPtInsideInputField( aDocPt ) )
         return SotExchangeDest::NONE;
 
     SdrObject *pObj = NULL;
@@ -279,7 +279,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
         case OBJCNT_GRF:
             {
                 bool bLink,
-                    bIMap = 0 != rSh.GetFmtFromObj( aDocPt )->GetURL().GetMap();
+                    bIMap = 0 != rSh.GetFormatFromObj( aDocPt )->GetURL().GetMap();
                 OUString aDummy;
                 rSh.GetGrfAtPos( aDocPt, aDummy, bLink );
                 if ( bLink && bIMap )

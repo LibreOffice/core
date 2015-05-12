@@ -23,14 +23,14 @@
 #include <i18nlangtag/lang.h>
 #include <modeltoviewhelper.hxx>
 
-class SwTxtNode;
+class SwTextNode;
 
 // Helper class that provides consecutively the words of a selected area
 // during spell check
 class SwScanner
 {
     OUString aWord;
-    const SwTxtNode& rNode;
+    const SwTextNode& rNode;
     const OUString aPreDashReplacementText;
     OUString aText;
     const LanguageType* pLanguage;
@@ -45,7 +45,7 @@ class SwScanner
     bool bClip;
 
 public:
-    SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
+    SwScanner( const SwTextNode& rNd, const OUString& rText,
                const LanguageType* pLang,
                const ModelToViewHelper& rConvMap,
                sal_uInt16 nWordType,

@@ -33,7 +33,7 @@ namespace {
         - the SwRootFrm if the frame is part of a page body
         - the SwHeaderFrm if the frame is part of a page header
         - the SwFooterFrm if the frame is part of a page footer
-        - the (master) SwFtnFrm if the frame is part of footnote
+        - the (master) SwFootnoteFrm if the frame is part of footnote
         - the (first) SwFlyFrm if the frame is part of a (linked) fly frame
 
         @param pFrm
@@ -54,11 +54,11 @@ namespace {
                     pFly = pFly->GetPrevLink();
                 break;
             }
-            if( pFrm->IsFtnFrm() )
+            if( pFrm->IsFootnoteFrm() )
             {
-                const SwFtnFrm* pFtn = static_cast<const SwFtnFrm*>( pFrm );
-                while( pFtn->GetMaster() )
-                    pFtn = pFtn->GetMaster();
+                const SwFootnoteFrm* pFootnote = static_cast<const SwFootnoteFrm*>( pFrm );
+                while( pFootnote->GetMaster() )
+                    pFootnote = pFootnote->GetMaster();
                 break;
             }
             pFrm = pFrm->GetUpper();

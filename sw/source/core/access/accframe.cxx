@@ -433,12 +433,12 @@ const SwFrm* SwAccessibleFrame::GetParent( const SwAccessibleChild& rFrmOrObj,
 OUString SwAccessibleFrame::GetFormattedPageNumber() const
 {
     sal_uInt16 nPageNum = GetFrm()->GetVirtPageNum();
-    sal_uInt32 nFmt = GetFrm()->FindPageFrm()->GetPageDesc()
+    sal_uInt32 nFormat = GetFrm()->FindPageFrm()->GetPageDesc()
                               ->GetNumType().GetNumberingType();
-    if( SVX_NUM_NUMBER_NONE == nFmt )
-        nFmt = SVX_NUM_ARABIC;
+    if( SVX_NUM_NUMBER_NONE == nFormat )
+        nFormat = SVX_NUM_ARABIC;
 
-    OUString sRet( FormatNumber( nPageNum, nFmt ) );
+    OUString sRet( FormatNumber( nPageNum, nFormat ) );
     return sRet;
 }
 

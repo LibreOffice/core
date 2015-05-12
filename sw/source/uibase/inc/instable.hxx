@@ -28,7 +28,7 @@
 #include <actctrl.hxx>
 
 class SwWrtShell;
-class SwTableAutoFmt;
+class SwTableAutoFormat;
 class SwView;
 struct SwInsertTableOptions;
 
@@ -49,15 +49,15 @@ class SwInsTableDlg : public SfxModalDialog
     VclPtr<CheckBox>       m_pBorderCB;
 
     VclPtr<PushButton>     m_pInsertBtn;
-    VclPtr<PushButton>     m_pAutoFmtBtn;
+    VclPtr<PushButton>     m_pAutoFormatBtn;
 
     SwWrtShell*     pShell;
-    SwTableAutoFmt* pTAutoFmt;
+    SwTableAutoFormat* pTAutoFormat;
     sal_Int64       nEnteredValRepeatHeaderNF;
 
     DECL_LINK( ModifyName, Edit * );
     DECL_LINK( ModifyRowCol, NumericField * );
-    DECL_LINK( AutoFmtHdl, PushButton* );
+    DECL_LINK( AutoFormatHdl, PushButton* );
     DECL_LINK(OKHdl, void*);
     DECL_LINK(CheckBoxHdl, void * = 0);
     DECL_LINK( ReapeatHeaderCheckBoxHdl, void* p = 0 );
@@ -69,8 +69,8 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     void GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                    SwInsertTableOptions& rInsTblOpts, OUString& rTableAutoFmtName,
-                    SwTableAutoFmt *& prTAFmt );
+                    SwInsertTableOptions& rInsTableOpts, OUString& rTableAutoFormatName,
+                    SwTableAutoFormat *& prTAFormat );
 };
 
 #endif

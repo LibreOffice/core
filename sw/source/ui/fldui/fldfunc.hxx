@@ -30,7 +30,7 @@
 #include "fldpage.hxx"
 #include <actctrl.hxx>
 
-class SwFldFuncPage : public SwFldPage
+class SwFieldFuncPage : public SwFieldPage
 {
     VclPtr<ListBox>        m_pTypeLB;
     VclPtr<ListBox>        m_pSelectionLB;
@@ -83,9 +83,9 @@ protected:
     virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
-                        SwFldFuncPage(vcl::Window* pParent, const SfxItemSet& rSet);
+                        SwFieldFuncPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
-                        virtual ~SwFldFuncPage();
+                        virtual ~SwFieldFuncPage();
     virtual void        dispose() SAL_OVERRIDE;
 
     static VclPtr<SfxTabPage>  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);

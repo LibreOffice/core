@@ -33,11 +33,11 @@ class SfxItemSet;
 class SfxPoolItem;
 class GraphicObject;
 class SdrObject;
-class SwFrmFmt;
-class SwDrawFrmFmt;
-class SwFlyFrmFmt;
+class SwFrameFormat;
+class SwDrawFrameFormat;
+class SwFlyFrameFormat;
 class SwNodeIndex;
-class SwFmtFld;
+class SwFormatField;
 
 namespace utl { class TransliterationWrapper; }
 namespace svt { class EmbeddedObjectRef; }
@@ -111,7 +111,7 @@ public:
     */
     virtual void DeleteSection(SwNode* pNode) = 0;
 
-    /** Delete a range SwFlyFrmFmt.
+    /** Delete a range SwFlyFrameFormat.
     */
     virtual bool DeleteRange(SwPaM&) = 0;
 
@@ -151,11 +151,11 @@ public:
 
     /** Insert graphic or formula. The XXXX are copied.
      */
-    virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic,
-                        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
+    virtual SwFlyFrameFormat* Insert(const SwPaM &rRg, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic,
+                        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrameFormat*) = 0;
 
-    virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
-        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
+    virtual SwFlyFrameFormat* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
+        const SfxItemSet* pGrfAttrSet, SwFrameFormat*) = 0;
 
     /** Transpose graphic (with undo)
      */
@@ -164,23 +164,23 @@ public:
     /** Insert a DrawObject. The object must be already registered
         in DrawModel.
     */
-    virtual SwDrawFrmFmt* InsertDrawObj( const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet& rFlyAttrSet ) = 0;
+    virtual SwDrawFrameFormat* InsertDrawObj( const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet& rFlyAttrSet ) = 0;
 
     /** Insert OLE-objects.
     */
-    virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
-        const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
+    virtual SwFlyFrameFormat* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
+        const SfxItemSet* pGrfAttrSet, SwFrameFormat*) = 0;
 
-    virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
-                           const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
+    virtual SwFlyFrameFormat* InsertOLE(const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
+                           const SfxItemSet* pGrfAttrSet, SwFrameFormat*) = 0;
 
-    /** Split a node at rPos (implemented only for TxtNode).
+    /** Split a node at rPos (implemented only for TextNode).
     */
     virtual bool SplitNode(const SwPosition &rPos, bool bChkTableStart) = 0;
 
-    virtual bool AppendTxtNode(SwPosition& rPos) = 0;
+    virtual bool AppendTextNode(SwPosition& rPos) = 0;
 
-    /** Replace selected range in a TxtNode with string.
+    /** Replace selected range in a TextNode with string.
         Intended for search & replace.
         bRegExpRplc - replace tabs (\\t) and insert the found string
         ( not \& ). E.g.: Find: "zzz", Replace: "xx\t\\t..&..\&"

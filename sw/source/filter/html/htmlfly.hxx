@@ -24,7 +24,7 @@
 #include <o3tl/sorted_vector.hxx>
 
 class SdrObject;
-class SwFrmFmt;
+class SwFrameFormat;
 class SwNodeIndex;
 class SwPosFlyFrm;
 
@@ -84,11 +84,11 @@ extern sal_uInt8 aHTMLOutFrmAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
 
 class SwHTMLPosFlyFrm
 {
-    const SwFrmFmt      *pFrmFmt;       // der Rahmen
+    const SwFrameFormat      *pFrameFormat;       // der Rahmen
     const SdrObject     *pSdrObject;    // ggf. Sdr-Objekt
     SwNodeIndex         *pNdIdx;        // Node-Index
     sal_uInt32              nOrdNum;        // Aus SwPosFlyFrm
-    sal_Int32          nCntntIdx;      // seine Position im Content
+    sal_Int32          nContentIdx;      // seine Position im Content
     sal_uInt8               nOutputMode;    // Ausgabe-Infos
 
 public:
@@ -99,12 +99,12 @@ public:
     bool operator==( const SwHTMLPosFlyFrm& ) const { return false; }
     bool operator<( const SwHTMLPosFlyFrm& ) const;
 
-    const SwFrmFmt& GetFmt() const { return *pFrmFmt; }
+    const SwFrameFormat& GetFormat() const { return *pFrameFormat; }
     const SdrObject *GetSdrObject() const { return pSdrObject; }
 
     const SwNodeIndex& GetNdIndex() const { return *pNdIdx; }
 
-    sal_Int32 GetCntntIndex() const    { return nCntntIdx; }
+    sal_Int32 GetContentIndex() const    { return nContentIdx; }
 
     sal_uInt8 GetOutMode() const { return nOutputMode; }
 

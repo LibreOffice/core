@@ -38,16 +38,16 @@
 #include "txtfly.hxx"
 #include "dbg_lay.hxx"
 
-SwCache *SwTxtFrm::pTxtCache = 0;
-long SwTxtFrm::nMinPrtLine = 0;
+SwCache *SwTextFrm::pTextCache = 0;
+long SwTextFrm::nMinPrtLine = 0;
 SwContourCache *pContourCache = 0;
 SwDropCapCache *pDropCapCache = 0;
 
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtLine )
+IMPL_FIXEDMEMPOOL_NEWDEL( SwTextLine )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion ) // Paragraphs
 IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout ) // Lines
 IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion ) // e.g. Blanks at the line end
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion ) // Attribute change
+IMPL_FIXEDMEMPOOL_NEWDEL( SwTextPortion ) // Attribute change
 
 // Are ONLY used in init.cxx.
 // There we have extern void _TextFinit()
@@ -56,13 +56,13 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion ) // Attribute change
 void _TextInit()
 {
     pFntCache = new SwFntCache; // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
-    pSwFontCache = new SwFontCache; // Cache for SwTxtFmtColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
-    SwCache *pTxtCache = new SwCache( 250 // Cache for SwTxtFrm -> SwTxtLine = { SwParaPortion* pLine }
+    pSwFontCache = new SwFontCache; // Cache for SwTextFormatColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
+    SwCache *pTextCache = new SwCache( 250 // Cache for SwTextFrm -> SwTextLine = { SwParaPortion* pLine }
 #ifdef DBG_UTIL
-    , "static SwTxtFrm::pTxtCache"
+    , "static SwTextFrm::pTextCache"
 #endif
     );
-    SwTxtFrm::SetTxtCache( pTxtCache );
+    SwTextFrm::SetTextCache( pTextCache );
     pWaveCol = new Color( COL_GRAY );
     PROTOCOL_INIT
 }
@@ -70,7 +70,7 @@ void _TextInit()
 void _TextFinit()
 {
     PROTOCOL_STOP
-    delete SwTxtFrm::GetTxtCache();
+    delete SwTextFrm::GetTextCache();
     delete pSwFontCache;
     delete pFntCache;
     delete pBlink;

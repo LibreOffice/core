@@ -39,8 +39,8 @@ void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
         pTmpRoot->StartAllAction();
         // FME 2007-08-14 #i80120# Invalidate size, because ChgThisLines()
         // is only (onny may only be) called by the formatting routines
-        //pTmpRoot->InvalidateAllCntnt( INV_LINENUM | INV_SIZE );
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_LINENUM | INV_SIZE));
+        //pTmpRoot->InvalidateAllContent( INV_LINENUM | INV_SIZE );
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllContent), INV_LINENUM | INV_SIZE));
          pTmpRoot->EndAllAction();
     }
     *mpLineNumberInfo = rNew;
@@ -116,26 +116,26 @@ bool SwLineNumberInfo::operator==( const SwLineNumberInfo& rInf ) const
             bRestartEachPage == rInf.IsRestartEachPage();
 }
 
-SwCharFmt* SwLineNumberInfo::GetCharFmt( IDocumentStylePoolAccess& rIDSPA ) const
+SwCharFormat* SwLineNumberInfo::GetCharFormat( IDocumentStylePoolAccess& rIDSPA ) const
 {
     if ( !GetRegisteredIn() )
     {
-        SwCharFmt* pFmt = rIDSPA.GetCharFmtFromPool( RES_POOLCHR_LINENUM );
-        pFmt->Add( (SwClient*)this );
+        SwCharFormat* pFormat = rIDSPA.GetCharFormatFromPool( RES_POOLCHR_LINENUM );
+        pFormat->Add( (SwClient*)this );
     }
-    return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(GetRegisteredIn()));
+    return const_cast<SwCharFormat*>(static_cast<const SwCharFormat*>(GetRegisteredIn()));
 }
 
-void SwLineNumberInfo::SetCharFmt( SwCharFmt *pChFmt )
+void SwLineNumberInfo::SetCharFormat( SwCharFormat *pChFormat )
 {
-    OSL_ENSURE( pChFmt, "SetCharFmt, 0 is not a valid pointer" );
-    pChFmt->Add( this );
+    OSL_ENSURE( pChFormat, "SetCharFormat, 0 is not a valid pointer" );
+    pChFormat->Add( this );
 }
 
 void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     CheckRegistration( pOld, pNew );
-    SwDoc *pDoc = static_cast<SwCharFmt*>(GetRegisteredIn())->GetDoc();
+    SwDoc *pDoc = static_cast<SwCharFormat*>(GetRegisteredIn())->GetDoc();
     SwRootFrm* pRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if( pRoot )
     {

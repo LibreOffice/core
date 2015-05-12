@@ -36,7 +36,7 @@ class SdrObject;
 namespace sw { class DocumentLayoutManager; }
 
 /// Style of a layout element.
-class SW_DLLPUBLIC SwFrmFmt: public SwFmt
+class SW_DLLPUBLIC SwFrameFormat: public SwFormat
 {
     friend class SwDoc;
     friend class SwPageDesc;    ///< Is allowed to call protected CTor.
@@ -49,25 +49,25 @@ class SW_DLLPUBLIC SwFrmFmt: public SwFmt
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
 
 protected:
-    SwFrmFmt(
+    SwFrameFormat(
         SwAttrPool& rPool,
-        const sal_Char* pFmtNm,
-        SwFrmFmt *pDrvdFrm,
-        sal_uInt16 nFmtWhich = RES_FRMFMT,
+        const sal_Char* pFormatNm,
+        SwFrameFormat *pDrvdFrm,
+        sal_uInt16 nFormatWhich = RES_FRMFMT,
         const sal_uInt16* pWhichRange = 0);
 
-    SwFrmFmt(
+    SwFrameFormat(
         SwAttrPool& rPool,
-        const OUString &rFmtNm,
-        SwFrmFmt *pDrvdFrm,
-        sal_uInt16 nFmtWhich = RES_FRMFMT,
+        const OUString &rFormatNm,
+        SwFrameFormat *pDrvdFrm,
+        sal_uInt16 nFormatWhich = RES_FRMFMT,
         const sal_uInt16* pWhichRange = 0);
 
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();     ///< Already in base class Client.
-    virtual ~SwFrmFmt();
+    virtual ~SwFrameFormat();
 
     /// Destroys all Frms in aDepend (Frms are identified via PTR_CAST).
     virtual void DelFrms();
@@ -95,21 +95,21 @@ public:
        The UserCall knows its SdrObject. */
           SwContact *FindContactObj();
     const SwContact *FindContactObj() const
-        { return const_cast<SwFrmFmt*>(this)->FindContactObj(); }
+        { return const_cast<SwFrameFormat*>(this)->FindContactObj(); }
 
     /** @return the SdrObject, that is connected to the ContactObject.
-       Only DrawFrmFmts are connected to the "real SdrObject". FlyFrmFmts
+       Only DrawFrameFormats are connected to the "real SdrObject". FlyFrameFormats
        are connected to a Master and all FlyFrms has the "real SdrObject".
        "Real SdrObject" has position and a Z-order. */
           SdrObject *FindSdrObject();
     const SdrObject *FindSdrObject() const
-        { return const_cast<SwFrmFmt*>(this)->FindSdrObject(); }
+        { return const_cast<SwFrameFormat*>(this)->FindSdrObject(); }
 
           SdrObject *FindRealSdrObject();
     const SdrObject *FindRealSdrObject() const
-        { return const_cast<SwFrmFmt*>(this)->FindRealSdrObject(); }
+        { return const_cast<SwFrameFormat*>(this)->FindRealSdrObject(); }
 
-    bool IsLowerOf( const SwFrmFmt& rFmt ) const;
+    bool IsLowerOf( const SwFrameFormat& rFormat ) const;
 
     enum tLayoutDir
     {
@@ -119,8 +119,8 @@ public:
         VERT_L2R    ///< Not supported yet.
     };
 
-    virtual SwFrmFmt::tLayoutDir GetLayoutDir() const;
-    virtual void SetLayoutDir( const SwFrmFmt::tLayoutDir _eLayoutDir );
+    virtual SwFrameFormat::tLayoutDir GetLayoutDir() const;
+    virtual void SetLayoutDir( const SwFrameFormat::tLayoutDir _eLayoutDir );
 
     virtual sal_Int16 GetPositionLayoutDir() const;
     virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
@@ -134,8 +134,8 @@ public:
                     ::com::sun::star::uno::XInterface> const& xObject)
             { m_wXObject = xObject; }
 
-    DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrmFmt)
-    void RegisterToFormat( SwFmt& rFmt );
+    DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrameFormat)
+    void RegisterToFormat( SwFormat& rFormat );
 
     //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const SAL_OVERRIDE;
@@ -146,7 +146,7 @@ public:
 
 // The FlyFrame-Format
 
-class SW_DLLPUBLIC SwFlyFrmFmt: public SwFrmFmt
+class SW_DLLPUBLIC SwFlyFrameFormat: public SwFrameFormat
 {
     friend class SwDoc;
     OUString msTitle;
@@ -158,22 +158,22 @@ class SW_DLLPUBLIC SwFlyFrmFmt: public SwFrmFmt
        when they get borders (this is done in SwWrtShell::CalcAndGetScale) */
     Point   m_aLastFlyFrmPrtRectPos;
 
-    SwFlyFrmFmt( const SwFlyFrmFmt &rCpy ) SAL_DELETED_FUNCTION;
-    SwFlyFrmFmt &operator=( const SwFlyFrmFmt &rCpy ) SAL_DELETED_FUNCTION;
+    SwFlyFrameFormat( const SwFlyFrameFormat &rCpy ) SAL_DELETED_FUNCTION;
+    SwFlyFrameFormat &operator=( const SwFlyFrameFormat &rCpy ) SAL_DELETED_FUNCTION;
 
 protected:
-    SwFlyFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FLYFRMFMT )
+    SwFlyFrameFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
+                    SwFrameFormat *pDrvdFrm )
+        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FLYFRMFMT )
     {}
-    SwFlyFrmFmt( SwAttrPool& rPool, const OUString &rFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FLYFRMFMT )
+    SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
+                    SwFrameFormat *pDrvdFrm )
+        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FLYFRMFMT )
     {}
 
 public:
     TYPEINFO_OVERRIDE();
-    virtual ~SwFlyFrmFmt();
+    virtual ~SwFlyFrameFormat();
 
     /// Creates the views.
     virtual void MakeFrms() SAL_OVERRIDE;
@@ -193,7 +193,7 @@ public:
     OUString GetObjDescription() const;
     void SetObjDescription( const OUString& rDescription, bool bBroadcast = false );
 
-    /** SwFlyFrmFmt::IsBackgroundTransparent
+    /** SwFlyFrameFormat::IsBackgroundTransparent
 
         Override virtual method and its default implementation,
         because format of fly frame provides transparent backgrounds.
@@ -206,7 +206,7 @@ public:
     */
     virtual bool IsBackgroundTransparent() const SAL_OVERRIDE;
 
-    /** SwFlyFrmFmt::IsBackgroundBrushInherited
+    /** SwFlyFrameFormat::IsBackgroundBrushInherited
 
         Method to determine, if the brush for drawing the
         background is "inherited" from its parent/grandparent.
@@ -222,45 +222,45 @@ public:
     const Point & GetLastFlyFrmPrtRectPos() const       { return m_aLastFlyFrmPrtRectPos; }
     void SetLastFlyFrmPrtRectPos( const Point &rPoint ) { m_aLastFlyFrmPrtRectPos = rPoint; }
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrmFmt)
+    DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrameFormat)
 };
 
 //The DrawFrame-Format
 
-class SW_DLLPUBLIC SwDrawFrmFmt: public SwFrmFmt
+class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
 {
     friend class SwDoc;
 
     mutable const SdrObject * pSdrObjCached;
     mutable OUString sSdrObjCachedComment;
 
-    SwDrawFrmFmt( const SwDrawFrmFmt &rCpy ) SAL_DELETED_FUNCTION;
-    SwDrawFrmFmt &operator=( const SwDrawFrmFmt &rCpy ) SAL_DELETED_FUNCTION;
+    SwDrawFrameFormat( const SwDrawFrameFormat &rCpy ) SAL_DELETED_FUNCTION;
+    SwDrawFrameFormat &operator=( const SwDrawFrameFormat &rCpy ) SAL_DELETED_FUNCTION;
 
-    SwFrmFmt::tLayoutDir meLayoutDir;
+    SwFrameFormat::tLayoutDir meLayoutDir;
 
     sal_Int16 mnPositionLayoutDir;
 
     bool mbPosAttrSet;
 
 protected:
-    SwDrawFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_DRAWFRMFMT ),
+    SwDrawFrameFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
+                    SwFrameFormat *pDrvdFrm )
+        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_DRAWFRMFMT ),
           pSdrObjCached(NULL),
 
-          meLayoutDir( SwFrmFmt::HORI_L2R ),
+          meLayoutDir( SwFrameFormat::HORI_L2R ),
 
           mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
 
           mbPosAttrSet( false )
 
     {}
-    SwDrawFrmFmt( SwAttrPool& rPool, const OUString &rFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_DRAWFRMFMT ),
+    SwDrawFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
+                    SwFrameFormat *pDrvdFrm )
+        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_DRAWFRMFMT ),
           pSdrObjCached(NULL),
-          meLayoutDir( SwFrmFmt::HORI_L2R ),
+          meLayoutDir( SwFrameFormat::HORI_L2R ),
 
           mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
 
@@ -269,7 +269,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    virtual ~SwDrawFrmFmt();
+    virtual ~SwDrawFrameFormat();
 
     /** DrawObjects are removed from the arrays at the layout.
      The DrawObjects are marked as deleted. */
@@ -281,8 +281,8 @@ public:
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL ) SAL_OVERRIDE;
 
-    virtual SwFrmFmt::tLayoutDir GetLayoutDir() const SAL_OVERRIDE;
-    virtual void SetLayoutDir( const SwFrmFmt::tLayoutDir _eLayoutDir ) SAL_OVERRIDE;
+    virtual SwFrameFormat::tLayoutDir GetLayoutDir() const SAL_OVERRIDE;
+    virtual void SetLayoutDir( const SwFrameFormat::tLayoutDir _eLayoutDir ) SAL_OVERRIDE;
 
     virtual sal_Int16 GetPositionLayoutDir() const SAL_OVERRIDE;
     virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir ) SAL_OVERRIDE;
@@ -297,10 +297,10 @@ public:
 
     virtual OUString GetDescription() const SAL_OVERRIDE;
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrmFmt);
+    DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrameFormat);
 };
 
-SW_DLLPUBLIC bool IsFlyFrmFmtInHeader(const SwFrmFmt& rFmt);
+SW_DLLPUBLIC bool IsFlyFrameFormatInHeader(const SwFrameFormat& rFormat);
 
 #endif
 

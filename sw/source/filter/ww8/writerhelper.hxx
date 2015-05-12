@@ -35,15 +35,15 @@
 #include <tools/poly.hxx>
 #include <doc.hxx>
 
-class SwTxtFmtColl;
-class SwCharFmt;
+class SwTextFormatColl;
+class SwCharFormat;
 class SdrObject;
 class SdrOle2Obj;
 class OutlinerParaObject;
-class SwNumFmt;
-class SwTxtNode;
-class SwNoTxtNode;
-class SwFmtCharFmt;
+class SwNumFormat;
+class SwTextNode;
+class SwNoTextNode;
+class SwFormatCharFormat;
 class Graphic;
 class SwDoc;
 class SwNumRule;
@@ -63,8 +63,8 @@ namespace sw
 
 namespace sw
 {
-    /// STL container of Paragraph Styles (SwTxtFmtColl)
-    typedef std::vector<SwTxtFmtColl *> ParaStyles;
+    /// STL container of Paragraph Styles (SwTextFormatColl)
+    typedef std::vector<SwTextFormatColl *> ParaStyles;
     /// STL iterator for ParaStyles
     typedef ParaStyles::iterator ParaStyleIter;
     /// STL container of SfxPoolItems (Attributes)
@@ -94,9 +94,9 @@ namespace sw
     class Frame
     {
     public:
-        enum WriterSource {eTxtBox, eGraphic, eOle, eDrawing, eFormControl,eBulletGrf};
+        enum WriterSource {eTextBox, eGraphic, eOle, eDrawing, eFormControl,eBulletGrf};
     private:
-        const SwFrmFmt* mpFlyFrm;
+        const SwFrameFormat* mpFlyFrm;
         SwPosition maPos;
         Size maSize;
         // #i43447# - Size of the frame in the layout.
@@ -110,15 +110,15 @@ namespace sw
         bool mbForBullet:1;
         Graphic maGrf;
     public:
-        Frame(const SwFrmFmt &rFlyFrm, const SwPosition &rPos);
+        Frame(const SwFrameFormat &rFlyFrm, const SwPosition &rPos);
         Frame(const Graphic&, const SwPosition &);
 
-        /** Get the writer SwFrmFmt that this object describes
+        /** Get the writer SwFrameFormat that this object describes
 
             @return
-            The wrapped SwFrmFmt
+            The wrapped SwFrameFormat
         */
-        const SwFrmFmt &GetFrmFmt() const { return *mpFlyFrm; }
+        const SwFrameFormat &GetFrameFormat() const { return *mpFlyFrm; }
 
         /** Get the position this frame is anchored at
 
@@ -130,10 +130,10 @@ namespace sw
         /** Get the node this frame is anchored into
 
             @return
-            The SwTxtNode this frame is anchored inside
+            The SwTextNode this frame is anchored inside
         */
-        const SwCntntNode *GetCntntNode() const
-            { return maPos.nNode.GetNode().GetCntntNode(); }
+        const SwContentNode *GetContentNode() const
+            { return maPos.nNode.GetNode().GetContentNode(); }
 
         /** Get the type of frame that this wraps
 
@@ -265,7 +265,7 @@ namespace sw
             return static_cast<const T *>(pItem);
         }
 
-        /** Extract a SfxPoolItem derived property from a SwCntntNode
+        /** Extract a SfxPoolItem derived property from a SwContentNode
 
             Writer's attributes are retrieved by passing a numeric identifier
             and receiving a SfxPoolItem reference which must then typically be
@@ -275,7 +275,7 @@ namespace sw
             retrieved property is of the type that the developer thinks it is.
 
             @param rNode
-            The SwCntntNode to retrieve the property from
+            The SwContentNode to retrieve the property from
 
             @param eType
             The numeric identifier of the property to be retrieved
@@ -290,13 +290,13 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        template<class T> const T & ItemGet(const SwCntntNode &rNode,
+        template<class T> const T & ItemGet(const SwContentNode &rNode,
             sal_uInt16 eType) throw(std::bad_cast)
         {
             return item_cast<T>(rNode.GetAttr(eType));
         }
 
-        /** Extract a SfxPoolItem derived property from a SwFmt
+        /** Extract a SfxPoolItem derived property from a SwFormat
 
             Writer's attributes are retrieved by passing a numeric identifier
             and receiving a SfxPoolItem reference which must then typically be
@@ -305,8 +305,8 @@ namespace sw
             ItemGet uses item_cast () on the retrieved reference to test that the
             retrieved property is of the type that the developer thinks it is.
 
-            @param rFmt
-            The SwFmt to retrieve the property from
+            @param rFormat
+            The SwFormat to retrieve the property from
 
             @param eType
             The numeric identifier of the property to be retrieved
@@ -319,10 +319,10 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        template<class T> const T & ItemGet(const SwFmt &rFmt,
+        template<class T> const T & ItemGet(const SwFormat &rFormat,
             sal_uInt16 eType) throw(std::bad_cast, css::uno::RuntimeException)
         {
-            return item_cast<T>(rFmt.GetFmtAttr(eType));
+            return item_cast<T>(rFormat.GetFormatAttr(eType));
         }
 
         /** Extract a SfxPoolItem derived property from a SfxItemSet
@@ -462,20 +462,20 @@ namespace sw
         }
 
         /** Return a pointer to a SfxPoolItem derived class if it exists in an
-            SwFmt
+            SwFormat
 
             Writer's attributes are retrieved by passing a numeric identifier
             and receiving a SfxPoolItem reference which must then typically be
             cast back to its original type which is both tedious and verbose.
 
             HasItem returns a pointer to the requested SfxPoolItem for a given
-            property id if it exists in the SwFmt e.g. fontsize
+            property id if it exists in the SwFormat e.g. fontsize
 
             HasItem uses item_cast () on the retrieved pointer to test that the
             retrieved property is of the type that the developer thinks it is.
 
             @param rSet
-            The SwFmt whose property we want
+            The SwFormat whose property we want
 
             @param eType
             The numeric identifier of the default property to be retrieved
@@ -488,10 +488,10 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        template<class T> const T* HasItem(const SwFmt &rFmt,
+        template<class T> const T* HasItem(const SwFormat &rFormat,
             sal_uInt16 eType)
         {
-            return HasItem<T>(rFmt.GetAttrSet(), eType);
+            return HasItem<T>(rFormat.GetAttrSet(), eType);
         }
 
         /** Get the Paragraph Styles of a SwDoc
@@ -526,7 +526,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const OUString& rName);
+        SwTextFormatColl* GetParaStyle(SwDoc &rDoc, const OUString& rName);
 
         /** Get a Character Style which fits a given name
 
@@ -544,7 +544,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        SwCharFmt* GetCharStyle(SwDoc &rDoc, const OUString& rName);
+        SwCharFormat* GetCharStyle(SwDoc &rDoc, const OUString& rName);
 
         /** Sort sequence of Paragraph Styles by assigned outline style list level
 
@@ -589,31 +589,31 @@ namespace sw
             return item_cast<T>(SearchPoolItems(rItems, eType));
         }
 
-        /** Remove properties from an SfxItemSet which a SwFmtCharFmt overrides
+        /** Remove properties from an SfxItemSet which a SwFormatCharFormat overrides
 
-            Given an SfxItemSet and a SwFmtCharFmt remove from the rSet all the
-            properties which the SwFmtCharFmt would override. An SfxItemSet
-            contains attributes, and a SwFmtCharFmt is a "Character Style",
+            Given an SfxItemSet and a SwFormatCharFormat remove from the rSet all the
+            properties which the SwFormatCharFormat would override. An SfxItemSet
+            contains attributes, and a SwFormatCharFormat is a "Character Style",
             so if the SfxItemSet contains bold and so does the character style
             then delete bold from the SfxItemSet
 
             @param
-            rFmt the SwFmtCharFmt which describes the Character Style
+            rFormat the SwFormatCharFormat which describes the Character Style
 
             @param
             rSet the SfxItemSet from which we want to remove any properties
-            which the rFmt would override
+            which the rFormat would override
 
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
 
             @see #i24291# for examples
         */
-        void ClearOverridesFromSet(const SwFmtCharFmt &rFmt, SfxItemSet &rSet);
+        void ClearOverridesFromSet(const SwFormatCharFormat &rFormat, SfxItemSet &rSet);
 
         /** Get the Floating elements in a SwDoc
 
-            Writer's FrmFmts may or may not be anchored to some text content,
+            Writer's FrameFormats may or may not be anchored to some text content,
             e.g. Page Anchored elements will not be. For the winword export we
             need them to have something to be anchored to. So this method
             returns all the floating elements in a document as a STL container
@@ -655,20 +655,20 @@ namespace sw
             There are two differing types of numbering formats that may be on a
             paragraph, normal and outline. The outline is that numbering you
             see in tools->outline numbering. Theres no difference in the
-            numbering itself, just how you get it from the SwTxtNode. Needless
+            numbering itself, just how you get it from the SwTextNode. Needless
             to say the filter generally couldn't care less what type of
             numbering is in use.
 
-            @param rTxtNode
-            The SwTxtNode that is the paragraph
+            @param rTextNode
+            The SwTextNode that is the paragraph
 
-            @return A SwNumFmt pointer that describes the numbering level
+            @return A SwNumFormat pointer that describes the numbering level
             on this paragraph, or 0 if there is none.
 
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode);
+        const SwNumFormat* GetNumFormatFromTextNode(const SwTextNode &rTextNode);
 
         /** Get the Numbering Format for a given level from a numbering rule
 
@@ -678,37 +678,37 @@ namespace sw
             @param nLevel
             The numbering level
 
-            @return A SwNumFmt pointer that describes the numbering level
+            @return A SwNumFormat pointer that describes the numbering level
             or 0 if the nLevel is out of range
 
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        const SwNumFmt* GetNumFmtFromSwNumRuleLevel(const SwNumRule &rRule,
+        const SwNumFormat* GetNumFormatFromSwNumRuleLevel(const SwNumRule &rRule,
             int nLevel);
 
-        const SwNumRule* GetNumRuleFromTxtNode(const SwTxtNode &rTxtNd);
-        const SwNumRule* GetNormalNumRuleFromTxtNode(const SwTxtNode &rTxtNd);
+        const SwNumRule* GetNumRuleFromTextNode(const SwTextNode &rTextNd);
+        const SwNumRule* GetNormalNumRuleFromTextNode(const SwTextNode &rTextNd);
 
-        /** Get the SwNoTxtNode associated with a SwFrmFmt if here is one
+        /** Get the SwNoTextNode associated with a SwFrameFormat if here is one
 
             There are two differing types of numbering formats that may be on a
             paragraph, normal and outline. The outline is that numbering you
             see in tools->outline numbering. Theres no difference in the
-            numbering itself, just how you get it from the SwTxtNode. Needless
+            numbering itself, just how you get it from the SwTextNode. Needless
             to say the filter generally couldn't care less what type of
             numbering is in use.
 
-            @param rFmt
-            The SwFrmFmt that may describe a graphic
+            @param rFormat
+            The SwFrameFormat that may describe a graphic
 
-            @return A SwNoTxtNode pointer that describes the graphic of this
+            @return A SwNoTextNode pointer that describes the graphic of this
             frame if there is one, or 0 if there is none.
 
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        SwNoTxtNode *GetNoTxtNodeFromSwFrmFmt(const SwFrmFmt &rFmt);
+        SwNoTextNode *GetNoTextNodeFromSwFrameFormat(const SwFrameFormat &rFormat);
 
         /** Does a node have a "page break before" applied
 
@@ -742,7 +742,7 @@ namespace sw
         Polygon PolygonFromPolyPolygon(const tools::PolyPolygon &rPolyPoly);
 
         /// Undo all scaling / move tricks of the wrap polygon done during import.
-        Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTxtNode* pNd);
+        Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTextNode* pNd);
 
         /** Make setting a drawing object's layer in a Writer document easy
 
