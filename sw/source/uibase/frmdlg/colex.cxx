@@ -206,33 +206,30 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     Invalidate();
 }
 
-void SwColExample::DrawPage( const Point& rOrg,
-                            const bool bSecond,
-                            const bool bEnabled )
+void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
+                            const bool bSecond, const bool bEnabled)
 {
-    SwPageExample::DrawPage( rOrg, bSecond, bEnabled );
+    SwPageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
     sal_uInt16 nColumnCount;
-    if( pColMgr && 0 != (nColumnCount = pColMgr->GetCount()))
+    if (pColMgr && 0 != (nColumnCount = pColMgr->GetCount()))
     {
         long nL = GetLeft();
         long nR = GetRight();
 
-        if ( GetUsage() == SVX_PAGE_MIRROR && !bSecond )
+        if (GetUsage() == SVX_PAGE_MIRROR && !bSecond)
         {
             // rotate for mirrored
             nL = GetRight();
             nR = GetLeft();
         }
 
-        SetFillColor( Color( COL_LIGHTGRAY ) );
+        rRenderContext.SetFillColor(Color(COL_LIGHTGRAY));
         Rectangle aRect;
         aRect.Right() = rOrg.X() + GetSize().Width() - nR;
         aRect.Left()  = rOrg.X() + nL;
-        aRect.Top()   = rOrg.Y() + GetTop()
-                        + GetHdHeight() + GetHdDist();
-        aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom()
-                        - GetFtHeight() - GetFtDist();
-        DrawRect(aRect);
+        aRect.Top()   = rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist();
+        aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist();
+        rRenderContext.DrawRect(aRect);
 
         //UUUU
         const Rectangle aDefineRect(aRect);
@@ -240,54 +237,53 @@ void SwColExample::DrawPage( const Point& rOrg,
         //UUUU
         const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes = getPageFillAttributes();
 
-        if(!rFillAttributes.get() || !rFillAttributes->isUsed())
+        if (!rFillAttributes.get() || !rFillAttributes->isUsed())
         {
             //UUUU If there is no fill, use fallback color
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
             const Color& rFieldColor = rStyleSettings.GetFieldColor();
 
             setPageFillAttributes(
                 drawinglayer::attribute::SdrAllFillAttributesHelperPtr(
-                    new drawinglayer::attribute::SdrAllFillAttributesHelper(
-                        rFieldColor)));
+                    new drawinglayer::attribute::SdrAllFillAttributesHelper(rFieldColor)));
         }
 
         // #97495# make sure that the automatic column width's are always equal
         bool bAutoWidth = pColMgr->IsAutoWidth();
         sal_Int32 nAutoColWidth = 0;
-        if(bAutoWidth)
+        if (bAutoWidth)
         {
             sal_Int32 nColumnWidthSum = 0;
             sal_uInt16 i;
-            for(i = 0; i < nColumnCount; ++i)
+            for (i = 0; i < nColumnCount; ++i)
                 nColumnWidthSum += pColMgr->GetColWidth( i );
             nAutoColWidth = nColumnWidthSum / nColumnCount;
         }
 
         sal_uInt16 i;
-        for( i = 0; i < nColumnCount; i++)
+        for (i = 0; i < nColumnCount; i++)
         {
-            if(!bAutoWidth)
-                nAutoColWidth = pColMgr->GetColWidth( i );
+            if (!bAutoWidth)
+                nAutoColWidth = pColMgr->GetColWidth(i);
             aRect.Right() = aRect.Left() + nAutoColWidth;
 
             //UUUU use primitive draw command
-            drawFillAttributes(getPageFillAttributes(), aRect, aDefineRect);
+            drawFillAttributes(rRenderContext, getPageFillAttributes(), aRect, aDefineRect);
 
-            if(i < nColumnCount - 1)
+            if (i < nColumnCount - 1)
                 aRect.Left() = aRect.Right() + pColMgr->GetGutterWidth(i);
         }
-        if(pColMgr->HasLine())
+        if (pColMgr->HasLine())
         {
-            Point aUp( rOrg.X() + nL, rOrg.Y() + GetTop() );
-            Point aDown( rOrg.X() + nL, rOrg.Y() + GetSize().Height()
-                        - GetBottom() - GetFtHeight() - GetFtDist() );
+            Point aUp(rOrg.X() + nL, rOrg.Y() + GetTop());
+            Point aDown(rOrg.X() + nL,
+                        rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist());
 
-            if( pColMgr->GetLineHeightPercent() != 100 )
+            if (pColMgr->GetLineHeightPercent() != 100)
             {
                 long nLength = aDown.Y() - aUp.Y();
                 nLength -= nLength * pColMgr->GetLineHeightPercent() / 100;
-                switch(pColMgr->GetAdjust())
+                switch (pColMgr->GetAdjust())
                 {
                     case COLADJ_BOTTOM: aUp.Y() += nLength; break;
                     case COLADJ_TOP: aDown.Y() -= nLength; break;
@@ -299,17 +295,14 @@ void SwColExample::DrawPage( const Point& rOrg,
                 }
             }
 
-            for( i = 0; i < nColumnCount -  1; i++)
+            for (i = 0; i < nColumnCount -  1; i++)
             {
                 int nGutter = pColMgr->GetGutterWidth(i);
                 int nDist = pColMgr->GetColWidth( i ) + nGutter;
-                nDist -= (i == 0) ?
-                    nGutter/2 :
-                        0;
+                nDist -= (i == 0) ? nGutter / 2 : 0;
                 aUp.X() += nDist;
                 aDown.X() += nDist;
-                DrawLine( aUp, aDown );
-
+                rRenderContext.DrawLine(aUp, aDown);
             }
         }
     }
@@ -491,25 +484,24 @@ void SwPageGridExample::dispose()
     SwPageExample::dispose();
 }
 
-void SwPageGridExample::DrawPage( const Point& rOrg,
-                           const bool bSecond,
-                           const bool bEnabled )
+void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg,
+                                 const bool bSecond, const bool bEnabled)
 {
-    SwPageExample::DrawPage(rOrg, bSecond, bEnabled);
-    if(pGridItem && pGridItem->GetGridType())
+    SwPageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
+    if (pGridItem && pGridItem->GetGridType())
     {
         //paint the grid now
         Color aLineColor = pGridItem->GetColor();
-        if(aLineColor.GetColor() == COL_AUTO)
+        if (aLineColor.GetColor() == COL_AUTO)
         {
-            aLineColor = GetFillColor();
+            aLineColor = rRenderContext.GetFillColor();
             aLineColor.Invert();
         }
-        SetLineColor(aLineColor);
+        rRenderContext.SetLineColor(aLineColor);
         long nL = GetLeft();
         long nR = GetRight();
 
-        if ( GetUsage() == SVX_PAGE_MIRROR && !bSecond )
+        if (GetUsage() == SVX_PAGE_MIRROR && !bSecond)
         {
             // rotate for mirrored
             nL = GetRight();
@@ -519,10 +511,8 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
         Rectangle aRect;
         aRect.Right() = rOrg.X() + GetSize().Width() - nR;
         aRect.Left()  = rOrg.X() + nL;
-        aRect.Top()   = rOrg.Y() + GetTop()
-                        + GetHdHeight() + GetHdDist();
-        aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom()
-                        - GetFtHeight() - GetFtDist();
+        aRect.Top()   = rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist();
+        aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist();
 
         //increase the values to get a 'viewable' preview
         sal_Int32 nBaseHeight = pGridItem->GetBaseHeight() * 3;
@@ -542,19 +532,19 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
 
         //detect count of rectangles
         sal_Int32 nLines = (m_bVertical ? aRect.GetWidth(): aRect.GetHeight()) / nLineHeight;
-        if(nLines > pGridItem->GetLines())
+        if (nLines > pGridItem->GetLines())
             nLines = pGridItem->GetLines();
 
         // determine start position
-        if(m_bVertical)
+        if (m_bVertical)
         {
-            sal_Int16 nXStart = static_cast< sal_Int16 >(aRect.GetWidth() / 2 - nLineHeight * nLines /2);
+            sal_Int16 nXStart = static_cast<sal_Int16>(aRect.GetWidth() / 2 - nLineHeight * nLines /2);
             aRubyRect.Move(nXStart, 0);
             aCharRect.Move(nXStart, 0);
         }
         else
         {
-            sal_Int16 nYStart = static_cast< sal_Int16 >(aRect.GetHeight() / 2 - nLineHeight * nLines /2);
+            sal_Int16 nYStart = static_cast<sal_Int16>(aRect.GetHeight() / 2 - nLineHeight * nLines /2);
             aRubyRect.Move(0, nYStart);
             aCharRect.Move(0, nYStart);
         }
@@ -566,20 +556,20 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
 
         //vertical lines
         bool bBothLines = pGridItem->GetGridType() == GRID_LINES_CHARS;
-        SetFillColor( Color( COL_TRANSPARENT ) );
+        rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
         sal_Int32 nXMove = m_bVertical ? nLineHeight : 0;
         sal_Int32 nYMove = m_bVertical ? 0 : nLineHeight;
-        for(sal_Int32 nLine = 0; nLine < nLines; nLine++)
+        for (sal_Int32 nLine = 0; nLine < nLines; nLine++)
         {
-            DrawRect(aRubyRect);
-            DrawRect(aCharRect);
-            if(bBothLines)
+            rRenderContext.DrawRect(aRubyRect);
+            rRenderContext.DrawRect(aCharRect);
+            if (bBothLines)
             {
                 Point aStart = aCharRect.TopLeft();
                 Point aEnd = m_bVertical ? aCharRect.TopRight() : aCharRect.BottomLeft();
                 while(m_bVertical ? aStart.Y() < aRect.Bottom(): aStart.X() < aRect.Right())
                 {
-                    DrawLine(aStart, aEnd);
+                    rRenderContext.DrawLine(aStart, aEnd);
                     if(m_bVertical)
                         aStart.Y() = aEnd.Y() += nBaseHeight;
                     else

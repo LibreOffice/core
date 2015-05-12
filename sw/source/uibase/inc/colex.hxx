@@ -47,14 +47,16 @@ class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
     SwTextGridItem*     pGridItem;
     bool            m_bVertical;
 protected:
-    virtual void DrawPage( const Point& rPoint,
-                           const bool bSecond,
-                           const bool bEnabled ) SAL_OVERRIDE;
+    virtual void DrawPage(vcl::RenderContext& rRenderContext,
+                          const Point& rPoint,
+                          const bool bSecond,
+                          const bool bEnabled) SAL_OVERRIDE;
 public:
-    SwPageGridExample(vcl::Window* pPar) :
-                                SwPageExample(pPar),
-                                pGridItem(0),
-                                m_bVertical(false){}
+    SwPageGridExample(vcl::Window* pPar)
+        : SwPageExample(pPar)
+        , pGridItem(0)
+        , m_bVertical(false)
+    {}
 
     virtual ~SwPageGridExample();
     virtual void dispose() SAL_OVERRIDE;
@@ -68,9 +70,10 @@ class SW_DLLPUBLIC SwColExample : public SwPageExample
     using SwPageExample::UpdateExample;
 
 protected:
-    virtual void DrawPage( const Point& rPoint,
-                           const bool bSecond,
-                           const bool bEnabled ) SAL_OVERRIDE;
+    virtual void DrawPage(vcl::RenderContext& rRenderContext,
+                          const Point& rPoint,
+                          const bool bSecond,
+                          const bool bEnabled) SAL_OVERRIDE;
 
 public:
     SwColExample(vcl::Window* pPar)
@@ -95,7 +98,7 @@ private:
     SwFmtCol    m_aCols;
 
 protected:
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 
 public:
     SwColumnOnlyExample(vcl::Window*);

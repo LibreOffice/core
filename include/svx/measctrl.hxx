@@ -22,23 +22,17 @@
 #include <vcl/ctrl.hxx>
 #include <svx/svxdllapi.h>
 
-
 class SfxItemSet;
 class SdrMeasureObj;
 class SdrModel;
 
-/*************************************************************************
-|*
-|* SvxXMeasurePreview
-|*
-\************************************************************************/
 class SVX_DLLPUBLIC SvxXMeasurePreview : public Control
 {
  friend class SvxMeasurePage;
 
 private:
-    SdrMeasureObj*      pMeasureObj;
-    SdrModel*           pModel;
+    SdrMeasureObj* pMeasureObj;
+    SdrModel* pModel;
 
 public:
     SvxXMeasurePreview(vcl::Window* pParent, WinBits nStyle);
@@ -47,12 +41,12 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
-    void         SetAttributes( const SfxItemSet& rInAttrs );
+    void SetAttributes(const SfxItemSet& rInAttrs);
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
 };
 
 #endif
