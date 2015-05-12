@@ -2716,7 +2716,7 @@ void ImplWin::ImplDraw( bool bLayout )
 
         if( IsEnabled() )
         {
-            if( HasFocus() )
+            if (HasFocus() && !ImplGetSVData()->maNWFData.mbDDListBoxNoTextArea)
             {
                 SetTextColor( rStyleSettings.GetHighlightTextColor() );
                 SetFillColor( rStyleSettings.GetHighlightColor() );
