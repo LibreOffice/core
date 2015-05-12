@@ -162,10 +162,10 @@ const SwFieldTypes* DocumentFieldsManager::GetFieldTypes() const
  */
 SwFieldType* DocumentFieldsManager::InsertFieldType(const SwFieldType &rFieldTyp)
 {
-    sal_uInt16 nSize = mpFieldTypes->size(),
-            nFieldWhich = rFieldTyp.Which();
+    const SwFieldTypes::size_type nSize = mpFieldTypes->size();
+    const sal_uInt16 nFieldWhich = rFieldTyp.Which();
 
-    sal_uInt16 i = INIT_FLDTYPES;
+    SwFieldTypes::size_type i = INIT_FLDTYPES;
 
     switch( nFieldWhich )
     {
@@ -236,7 +236,7 @@ SwFieldType* DocumentFieldsManager::InsertFieldType(const SwFieldType &rFieldTyp
 /// @returns the field type of the Doc
 SwFieldType *DocumentFieldsManager::GetSysFieldType( const sal_uInt16 eWhich ) const
 {
-    for( sal_uInt16 i = 0; i < INIT_FLDTYPES; ++i )
+    for( SwFieldTypes::size_type i = 0; i < INIT_FLDTYPES; ++i )
         if( eWhich == (*mpFieldTypes)[i]->Which() )
             return (*mpFieldTypes)[i];
     return 0;
@@ -249,7 +249,8 @@ SwFieldType* DocumentFieldsManager::GetFieldType(
     bool bDbFieldMatching // used in some UNO calls for RES_DBFLD to use different string matching code #i51815#
     ) const
 {
-    sal_uInt16 nSize = mpFieldTypes->size(), i = 0;
+    const SwFieldTypes::size_type nSize = mpFieldTypes->size();
+    SwFieldTypes::size_type i {0};
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
 
     switch( nResId )
@@ -296,8 +297,7 @@ void DocumentFieldsManager::RemoveFieldType(size_t nField)
     /*
      * Dependent fields present -> ErrRaise
      */
-    size_t nSize = mpFieldTypes->size();
-    if(nField < nSize)
+    if(nField < mpFieldTypes->size())
     {
         SwFieldType* pTmp = (*mpFieldTypes)[nField];
 
@@ -340,9 +340,9 @@ void DocumentFieldsManager::UpdateFields( SfxPoolItem *pNewHt, bool bCloseDB )
     // Call Modify() for every field type,
     // dependent SwTextField get notified ...
 
-    for( sal_uInt16 i=0; i < mpFieldTypes->size(); ++i)
+    for( auto pFieldType : *mpFieldTypes )
     {
-        switch( (*mpFieldTypes)[i]->Which() )
+        switch( pFieldType->Which() )
         {
             // Update table fields second to last
             // Update references last
@@ -358,10 +358,10 @@ void DocumentFieldsManager::UpdateFields( SfxPoolItem *pNewHt, bool bCloseDB )
             if( !pNewHt )
             {
                 SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-                (*mpFieldTypes)[i]->ModifyNotification( 0, &aUpdateDDE );
+                pFieldType->ModifyNotification( 0, &aUpdateDDE );
             }
             else
-                (*mpFieldTypes)[i]->ModifyNotification( 0, pNewHt );
+                pFieldType->ModifyNotification( 0, pNewHt );
             break;
         }
         case RES_GETEXPFLD:
@@ -372,7 +372,7 @@ void DocumentFieldsManager::UpdateFields( SfxPoolItem *pNewHt, bool bCloseDB )
             if( !pNewHt )
                 break;
         default:
-            (*mpFieldTypes)[i]->ModifyNotification ( 0, pNewHt );
+            pFieldType->ModifyNotification ( 0, pNewHt );
         }
     }
 
@@ -401,8 +401,8 @@ void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
     // - If it's not present, it can be re-inserted.
     // - If the same type is found, the deleted one has to be renamed.
 
-    sal_uInt16 nSize = mpFieldTypes->size(), nFieldWhich = rFieldTyp.Which();
-    sal_uInt16 i = INIT_FLDTYPES;
+    const SwFieldTypes::size_type nSize = mpFieldTypes->size();
+    const sal_uInt16 nFieldWhich = rFieldTyp.Which();
 
     OSL_ENSURE( RES_SETEXPFLD == nFieldWhich ||
             RES_USERFLD == nFieldWhich ||
@@ -412,12 +412,12 @@ void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
     const OUString& rFieldNm = rFieldTyp.GetName();
     SwFieldType* pFnd;
 
-    for( ; i < nSize; ++i )
+    for( SwFieldTypes::size_type i = INIT_FLDTYPES; i < nSize; ++i )
         if( nFieldWhich == (pFnd = (*mpFieldTypes)[i])->Which() &&
             rSCmp.isEqual( rFieldNm, pFnd->GetName() ) )
         {
             // find new name
-            sal_uInt16 nNum = 1;
+            SwFieldTypes::size_type nNum = 1;
             do {
                 OUString sSrch = rFieldNm + OUString::number( nNum );
                 for( i = INIT_FLDTYPES; i < nSize; ++i )
@@ -569,9 +569,8 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
 /// Update reference and table fields
 void DocumentFieldsManager::UpdateRefFields( SfxPoolItem* pHt )
 {
-    SwFieldType* pFieldType;
-    for( sal_uInt16 i = 0; i < mpFieldTypes->size(); ++i )
-        if( RES_GETREFFLD == ( pFieldType = (*mpFieldTypes)[i] )->Which() )
+    for( auto pFieldType : *mpFieldTypes )
+        if( RES_GETREFFLD == pFieldType->Which() )
             pFieldType->ModifyNotification( 0, pHt );
 }
 
@@ -582,15 +581,15 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
 
     SwFieldType* pFieldType(0);
 
-    for (sal_uInt16 i = 0; i < mpFieldTypes->size(); ++i)
+    for (auto pFieldTypeTmp : *mpFieldTypes)
     {
-        if( RES_TABLEFLD == ( pFieldType = (*mpFieldTypes)[i] )->Which() )
+        if( RES_TABLEFLD == pFieldTypeTmp->Which() )
         {
             SwTableFormulaUpdate* pUpdateField = 0;
             if( pHt && RES_TABLEFML_UPDATE == pHt->Which() )
                 pUpdateField = static_cast<SwTableFormulaUpdate*>(pHt);
 
-            SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
+            SwIterator<SwFormatField,SwFieldType> aIter( *pFieldTypeTmp );
             for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
             {
                 if( pFormatField->GetTextField() )
@@ -644,10 +643,9 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         pField->ChgValid( false );
                 }
             }
-
+            pFieldType = pFieldTypeTmp;
             break;
         }
-        pFieldType = 0;
     }
 
     // process all table box formulas
@@ -850,18 +848,20 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
         return ;
     }
 
-    sal_uInt16 nWhich, n;
+    sal_uInt16 nWhich;
 
     // Hash table for all string replacements is filled on-the-fly.
     // Try to fabricate an uneven number.
-    sal_uInt16 nStrFormatCnt = (( mpFieldTypes->size() / 7 ) + 1 ) * 7;
+    const SwFieldTypes::size_type nHashSize {(( mpFieldTypes->size() / 7 ) + 1 ) * 7};
+    const sal_uInt16 nStrFormatCnt = static_cast<sal_uInt16>(nHashSize);
+    OSL_ENSURE( nStrFormatCnt == nHashSize, "Downcasting to sal_uInt16 lost information!" );
     SwHash** pHashStrTable = new SwHash*[ nStrFormatCnt ];
     memset( pHashStrTable, 0, sizeof( _HashStr* ) * nStrFormatCnt );
 
     {
         const SwFieldType* pFieldType;
         // process separately:
-        for( n = mpFieldTypes->size(); n; )
+        for( auto n = mpFieldTypes->size(); n; )
             switch( ( pFieldType = (*mpFieldTypes)[ --n ] )->Which() )
             {
             case RES_USERFLD:
@@ -1172,7 +1172,7 @@ void DocumentFieldsManager::UpdateUsrFields()
 {
     SwCalc* pCalc = 0;
     const SwFieldType* pFieldType;
-    for( sal_uInt16 i = INIT_FLDTYPES; i < mpFieldTypes->size(); ++i )
+    for( SwFieldTypes::size_type i = INIT_FLDTYPES; i < mpFieldTypes->size(); ++i )
         if( RES_USERFLD == ( pFieldType = (*mpFieldTypes)[i] )->Which() )
         {
             if( !pCalc )
@@ -1189,9 +1189,10 @@ void DocumentFieldsManager::UpdateUsrFields()
 
 void DocumentFieldsManager::UpdatePageFields( SfxPoolItem* pMsgHint )
 {
-    SwFieldType* pFieldType;
-    for( sal_uInt16 i = 0; i < INIT_FLDTYPES; ++i )
-        switch( ( pFieldType = (*mpFieldTypes)[ i ] )->Which() )
+    for( SwFieldTypes::size_type i = 0; i < INIT_FLDTYPES; ++i )
+    {
+        SwFieldType* pFieldType = (*mpFieldTypes)[ i ];
+        switch( pFieldType->Which() )
         {
         case RES_PAGENUMBERFLD:
         case RES_CHAPTERFLD:
@@ -1203,6 +1204,7 @@ void DocumentFieldsManager::UpdatePageFields( SfxPoolItem* pMsgHint )
             pFieldType->ModifyNotification( 0, 0 );
             break;
         }
+    }
     SetNewFieldLst(true);
 }
 
@@ -1550,9 +1552,8 @@ SwTextField * DocumentFieldsManager::GetTextFieldAtPos(const SwPosition & rPos)
 ///       optimization currently only available when no fields exist.
 bool DocumentFieldsManager::containsUpdatableFields()
 {
-    for (sal_uInt16 i = 0; i < mpFieldTypes->size(); ++i)
+    for (auto pFieldType : *mpFieldTypes)
     {
-        SwFieldType* pFieldType = (*mpFieldTypes)[i];
         SwIterator<SwFormatField,SwFieldType> aIter(*pFieldType);
         if (aIter.First())
             return true;
@@ -1563,7 +1564,7 @@ bool DocumentFieldsManager::containsUpdatableFields()
 /// Remove all unreferenced field types of a document
 void DocumentFieldsManager::GCFieldTypes()
 {
-    for( sal_uInt16 n = mpFieldTypes->size(); n > INIT_FLDTYPES; )
+    for( auto n = mpFieldTypes->size(); n > INIT_FLDTYPES; )
         if( !(*mpFieldTypes)[ --n ]->HasWriterListeners() )
             RemoveFieldType( n );
 }

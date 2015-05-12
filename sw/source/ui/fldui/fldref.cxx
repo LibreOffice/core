@@ -201,9 +201,11 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
     if(!pSh)
         pSh = ::GetActiveWrtShell();
 
-    const sal_uInt16 nFieldTypeCnt = pSh->GetFieldTypeCount(RES_SETEXPFLD);
+    const size_t nFieldTypeCnt = pSh->GetFieldTypeCount(RES_SETEXPFLD);
 
-    for (sal_uInt16 n = 0; n < nFieldTypeCnt; ++n)
+    OSL_ENSURE( nFieldTypeCnt < static_cast<size_t>(REFFLDFLAG), "<SwFieldRefPage::Reset> - Item index will overlap flags!" );
+
+    for (size_t n = 0; n < nFieldTypeCnt; ++n)
     {
         SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFieldType(n, RES_SETEXPFLD));
 

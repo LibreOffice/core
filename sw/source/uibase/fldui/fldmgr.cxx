@@ -258,18 +258,18 @@ void SwFieldMgr::RemoveFieldType(sal_uInt16 nResId, const OUString& rName )
         pSh->RemoveFieldType(nResId, rName);
 }
 
-sal_uInt16 SwFieldMgr::GetFieldTypeCount(sal_uInt16 nResId) const
+size_t SwFieldMgr::GetFieldTypeCount(sal_uInt16 nResId) const
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
     OSL_ENSURE(pSh, "no SwWrtShell found");
     return pSh ? pSh->GetFieldTypeCount(nResId) : 0;
 }
 
-SwFieldType* SwFieldMgr::GetFieldType(sal_uInt16 nResId, sal_uInt16 nId) const
+SwFieldType* SwFieldMgr::GetFieldType(sal_uInt16 nResId, size_t nField) const
 {
     SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
     OSL_ENSURE(pSh, "no SwWrtShell found");
-    return pSh ? pSh->GetFieldType(nId, nResId) : 0;
+    return pSh ? pSh->GetFieldType(nField, nResId) : 0;
 }
 
 SwFieldType* SwFieldMgr::GetFieldType(sal_uInt16 nResId, const OUString& rName) const
@@ -456,8 +456,8 @@ bool SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
             case TYP_USERFLD:
             {
 
-                const sal_uInt16 nCount = pSh->GetFieldTypeCount();
-                for(sal_uInt16 i = 0; i < nCount; ++i)
+                const size_t nCount = pSh->GetFieldTypeCount();
+                for(size_t i = 0; i < nCount; ++i)
                 {
                     SwFieldType* pFieldType = pSh->GetFieldType( i );
                     const sal_uInt16 nWhich = pFieldType->Which();

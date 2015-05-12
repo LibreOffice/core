@@ -986,7 +986,7 @@ throw (uno::RuntimeException, std::exception)
     SwFieldType *const pFieldType = GetFieldType(true);
     if (!pFieldType)
         throw uno::RuntimeException();
-    sal_uInt16 nTypeIdx = USHRT_MAX;
+    size_t nTypeIdx = SIZE_MAX;
     const SwFieldTypes* pTypes = m_pImpl->m_pDoc->getIDocumentFieldsAccess().GetFieldTypes();
     for( size_t i = 0; i < pTypes->size(); i++ )
     {

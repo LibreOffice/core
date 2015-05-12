@@ -146,16 +146,17 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
     sal_uInt16       nID    = USHRT_MAX;
     SwFieldType* pType  = 0;
-    const sal_uInt16 nCount = aMgr.GetFieldTypeCount();
+    const size_t nCount = aMgr.GetFieldTypeCount();
     if( !rName.isEmpty() )
     {
-        for (sal_uInt16 i = 0; i < nCount; ++i)
+        for (size_t i = 0; i < nCount; ++i)
         {
             pType = aMgr.GetFieldType(USHRT_MAX, i);
             OUString aTmpName( pType->GetName() );
             if (aTmpName == rName && pType->Which() == RES_SETEXPFLD)
             {
                 nID = i;
+                OSL_ENSURE(nID==i, "Downcasting to sal_uInt16 lost information!");
                 break;
             }
         }

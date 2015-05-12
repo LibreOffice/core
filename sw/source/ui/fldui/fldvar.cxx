@@ -243,10 +243,10 @@ IMPL_LINK( SwFieldVarPage, SubTypeHdl, ListBox *, pBox )
 {
     sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
     sal_Int32 nSelPos = m_pSelectionLB->GetSelectEntryPos();
-    sal_uInt16 nSelData = USHRT_MAX;
+    size_t nSelData = SIZE_MAX;
 
     if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
-        nSelData = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nSelPos));
+        nSelData = static_cast<size_t>(reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nSelPos)));
 
     if (IsFieldEdit() && (!pBox || bInit))
     {
@@ -574,11 +574,11 @@ IMPL_LINK( SwFieldVarPage, SubTypeHdl, ListBox *, pBox )
                     nSelPos = m_pSelectionLB->GetSelectEntryPos();
 
                     if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
-                        nSelData = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nSelPos));
+                        nSelData = static_cast<size_t>(reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nSelPos)));
                     else
-                        nSelData = USHRT_MAX;
+                        nSelData = SIZE_MAX;
 
-                    if (nSelData != USHRT_MAX && pBox && !bInit)
+                    if (nSelData != SIZE_MAX && pBox && !bInit)
                     {
                         m_pValueED->ReplaceSelected(m_pSelectionLB->GetSelectEntry());
                         ModifyHdl();

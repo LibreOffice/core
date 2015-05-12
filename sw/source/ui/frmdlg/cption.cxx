@@ -143,8 +143,8 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     m_pAutoCaptionButton->SetClickHdl(LINK(this, SwCaptionDialog, CaptionHdl));
 
     m_pCategoryBox->InsertEntry( m_sNone );
-    sal_uInt16 nCount = pMgr->GetFieldTypeCount();
-    for (sal_uInt16 i = 0; i < nCount; i++)
+    size_t nCount = pMgr->GetFieldTypeCount();
+    for (size_t i = 0; i < nCount; ++i)
     {
         SwFieldType *pType = pMgr->GetFieldType( USHRT_MAX, i );
         if( pType->Which() == RES_SETEXPFLD &&
@@ -206,7 +206,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     // aFormatBox
     sal_uInt16 nSelFormat = SVX_NUM_ARABIC;
     nCount = pMgr->GetFieldTypeCount();
-    for ( sal_uInt16 i = nCount; i; )
+    for ( size_t i = nCount; i; )
     {
         SwFieldType* pFieldType = pMgr->GetFieldType(USHRT_MAX, --i);
         if( pFieldType->GetName().equals(m_pCategoryBox->GetText()) )

@@ -2109,10 +2109,11 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
     }
 
     SwFieldType* pTyp = 0;
-    sal_uInt16 i = 1,j;
+    size_t i = 1;
+    size_t j;
     OUString aName;
     bool bAlreadyThere = false, bDoublePaste = false;
-    sal_uInt16 nSize = rWrtShell.GetFieldTypeCount();
+    const size_t nSize = rWrtShell.GetFieldTypeCount();
     const ::utl::TransliterationWrapper& rColl = ::GetAppCmpStrIgnore();
 
     do {

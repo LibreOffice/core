@@ -486,7 +486,7 @@ SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     sal_uInt16 nSelFormat = SVX_NUM_ARABIC;
     if (pSh)
     {
-        for ( sal_uInt16 i = pMgr->GetFieldTypeCount(); i; )
+        for ( auto i = pMgr->GetFieldTypeCount(); i; )
         {
             SwFieldType* pFieldType = pMgr->GetFieldType(USHRT_MAX, --i);
             if (pFieldType->GetName().equals(m_pCategoryBox->GetText()))
@@ -706,9 +706,9 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
         m_pCategoryBox->InsertEntry(m_sNone);
         if (pSh)
         {
-            const sal_uInt16 nCount = pMgr->GetFieldTypeCount();
+            const size_t nCount = pMgr->GetFieldTypeCount();
 
-            for (sal_uInt16 i = 0; i < nCount; i++)
+            for (size_t i = 0; i < nCount; ++i)
             {
                 SwFieldType *pType = pMgr->GetFieldType( USHRT_MAX, i );
                 if( pType->Which() == RES_SETEXPFLD &&

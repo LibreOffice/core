@@ -361,11 +361,11 @@ public:
 
     void UpdateFields( SwField & );   ///< One single field.
 
-    sal_uInt16 GetFieldTypeCount(sal_uInt16 nResId = USHRT_MAX, bool bUsed = false) const;
-    SwFieldType* GetFieldType(sal_uInt16 nId, sal_uInt16 nResId = USHRT_MAX, bool bUsed = false) const;
+    size_t GetFieldTypeCount(sal_uInt16 nResId = USHRT_MAX, bool bUsed = false) const;
+    SwFieldType* GetFieldType(size_t nField, sal_uInt16 nResId = USHRT_MAX, bool bUsed = false) const;
     SwFieldType* GetFieldType(sal_uInt16 nResId, const OUString& rName) const;
 
-    void RemoveFieldType(sal_uInt16 nId, sal_uInt16 nResId = USHRT_MAX);
+    void RemoveFieldType(size_t nField, sal_uInt16 nResId = USHRT_MAX);
     void RemoveFieldType(sal_uInt16 nResId, const OUString& rName);
 
     void FieldToText( SwFieldType* pType );

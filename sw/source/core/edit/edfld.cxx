@@ -42,7 +42,7 @@
 #include <IDocumentContentOperations.hxx>
 
 /// count field types with a ResId, if 0 count all
-sal_uInt16 SwEditShell::GetFieldTypeCount(sal_uInt16 nResId, bool bUsed ) const
+size_t SwEditShell::GetFieldTypeCount(sal_uInt16 nResId, bool bUsed ) const
 {
     const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
 
@@ -51,7 +51,7 @@ sal_uInt16 SwEditShell::GetFieldTypeCount(sal_uInt16 nResId, bool bUsed ) const
         if(!bUsed)
             return static_cast<sal_uInt16>(pFieldTypes->size());
 
-        sal_uInt16 nUsed = 0;
+        size_t nUsed = 0;
         for ( const auto pFieldType : *pFieldTypes )
         {
             if(IsUsed(*pFieldType))
@@ -61,7 +61,7 @@ sal_uInt16 SwEditShell::GetFieldTypeCount(sal_uInt16 nResId, bool bUsed ) const
     }
 
     // all types with the same ResId
-    sal_uInt16 nIdx  = 0;
+    size_t nIdx  = 0;
     for(const auto pFieldType : *pFieldTypes)
     {
         // same ResId -> increment index
@@ -72,7 +72,7 @@ sal_uInt16 SwEditShell::GetFieldTypeCount(sal_uInt16 nResId, bool bUsed ) const
 }
 
 /// get field types with a ResId, if 0 get all
-SwFieldType* SwEditShell::GetFieldType(sal_uInt16 nField, sal_uInt16 nResId, bool bUsed ) const
+SwFieldType* SwEditShell::GetFieldType(size_t nField, sal_uInt16 nResId, bool bUsed ) const
 {
     const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
 
@@ -81,7 +81,7 @@ SwFieldType* SwEditShell::GetFieldType(sal_uInt16 nField, sal_uInt16 nResId, boo
         if(!bUsed)
             return (*pFieldTypes)[nField];
 
-        SwFieldTypes::size_type nUsed = 0;
+        size_t nUsed = 0;
         for ( const auto pFieldType : *pFieldTypes )
         {
             if(IsUsed(*pFieldType))
@@ -94,7 +94,7 @@ SwFieldType* SwEditShell::GetFieldType(sal_uInt16 nField, sal_uInt16 nResId, boo
         return nullptr;
     }
 
-    sal_uInt16 nIdx = 0;
+    size_t nIdx = 0;
     for(const auto pFieldType : *pFieldTypes)
     {
         // same ResId -> increment index
@@ -118,7 +118,7 @@ SwFieldType* SwEditShell::GetFieldType(sal_uInt16 nResId, const OUString& rName)
 }
 
 /// delete field type
-void SwEditShell::RemoveFieldType(sal_uInt16 nField, sal_uInt16 nResId)
+void SwEditShell::RemoveFieldType(size_t nField, sal_uInt16 nResId)
 {
     if( USHRT_MAX == nResId )
     {
@@ -127,7 +127,7 @@ void SwEditShell::RemoveFieldType(sal_uInt16 nField, sal_uInt16 nResId)
     }
 
     const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
-    sal_uInt16 nIdx = 0;
+    size_t nIdx = 0;
     const SwFieldTypes::size_type nSize = pFieldTypes->size();
     for( SwFieldTypes::size_type i = 0; i < nSize; ++i )
         // Gleiche ResId -> Index erhoehen

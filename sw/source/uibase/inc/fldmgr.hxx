@@ -164,8 +164,8 @@ public:
     bool            CanInsertRefMark( const OUString& rStr );
 
     // access to field types via ResId
-    sal_uInt16          GetFieldTypeCount(sal_uInt16 nResId = USHRT_MAX) const;
-    SwFieldType*    GetFieldType(sal_uInt16 nResId, sal_uInt16 nId = 0) const;
+    size_t          GetFieldTypeCount(sal_uInt16 nResId = USHRT_MAX) const;
+    SwFieldType*    GetFieldType(sal_uInt16 nResId, size_t nField = 0) const;
     SwFieldType*    GetFieldType(sal_uInt16 nResId, const OUString& rName) const;
 
     void            RemoveFieldType(sal_uInt16 nResId, const OUString& rName);

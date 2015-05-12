@@ -1274,8 +1274,8 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet* )
     m_pFromFileCB->Check( !sAutoMarkURL.isEmpty() );
 
     m_pCaptionSequenceLB->Clear();
-    const sal_uInt16 nCount = rSh.GetFieldTypeCount(RES_SETEXPFLD);
-    for (sal_uInt16 i = 0; i < nCount; i++)
+    const size_t nCount = rSh.GetFieldTypeCount(RES_SETEXPFLD);
+    for (size_t i = 0; i < nCount; ++i)
     {
         SwFieldType *pType = rSh.GetFieldType( i, RES_SETEXPFLD );
         if( pType->Which() == RES_SETEXPFLD &&
