@@ -39,7 +39,6 @@
 #define IMPL_PAINT_ERASE            ((sal_uInt16)0x0010)
 #define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
 
-
 class PaintHelper
 {
 private:
@@ -127,7 +126,160 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
     }
 }
 
-namespace vcl {
+namespace vcl
+{
+
+void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window& rWindow,
+                                          const Rectangle& rRect, sal_uInt16 nHighlight,
+                                          bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
+                                          Color* pSelectionTextColor, long nCornerRadius, Color* pPaintColor)
+{
+    if (rRect.IsEmpty())
+        return;
+
+    bool bRoundEdges = nCornerRadius > 0;
+
+    const StyleSettings& rStyles = rRenderContext.GetSettings().GetStyleSettings();
+
+    // colors used for item highlighting
+    Color aSelectionBorderColor(pPaintColor ? *pPaintColor : rStyles.GetHighlightColor());
+    Color aSelectionFillColor(aSelectionBorderColor);
+
+    bool bDark = rStyles.GetFaceColor().IsDark();
+    bool bBright = ( rStyles.GetFaceColor() == Color( COL_WHITE ) );
+
+    int c1 = aSelectionBorderColor.GetLuminance();
+    int c2 = rWindow.GetDisplayBackground().GetColor().GetLuminance();
+
+    if (!bDark && !bBright && std::abs(c2 - c1) < (pPaintColor ? 40 : 75))
+    {
+        // constrast too low
+        sal_uInt16 h, s, b;
+        aSelectionFillColor.RGBtoHSB( h, s, b );
+        if( b > 50 )    b -= 40;
+        else            b += 40;
+        aSelectionFillColor.SetColor( Color::HSBtoRGB( h, s, b ) );
+        aSelectionBorderColor = aSelectionFillColor;
+    }
+
+    if (bRoundEdges)
+    {
+        if (aSelectionBorderColor.IsDark())
+            aSelectionBorderColor.IncreaseLuminance(128);
+        else
+            aSelectionBorderColor.DecreaseLuminance(128);
+    }
+
+    Rectangle aRect(rRect);
+    if (bDrawExtBorderOnly)
+    {
+        aRect.Left()   -= 1;
+        aRect.Top()    -= 1;
+        aRect.Right()  += 1;
+        aRect.Bottom() += 1;
+    }
+    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+
+    if (bDrawBorder)
+        rRenderContext.SetLineColor(bDark ? Color(COL_WHITE) : (bBright ? Color(COL_BLACK) : aSelectionBorderColor));
+    else
+        rRenderContext.SetLineColor();
+
+    sal_uInt16 nPercent = 0;
+    if (!nHighlight)
+    {
+        if (bDark)
+            aSelectionFillColor = COL_BLACK;
+        else
+            nPercent = 80;  // just checked (light)
+    }
+    else
+    {
+        if (bChecked && nHighlight == 2)
+        {
+            if (bDark)
+                aSelectionFillColor = COL_LIGHTGRAY;
+            else if (bBright)
+            {
+                aSelectionFillColor = COL_BLACK;
+                rRenderContext.SetLineColor(COL_BLACK);
+                nPercent = 0;
+            }
+            else
+                nPercent = bRoundEdges ? 40 : 20; // selected, pressed or checked ( very dark )
+        }
+        else if (bChecked || nHighlight == 1)
+        {
+            if (bDark)
+                aSelectionFillColor = COL_GRAY;
+            else if (bBright)
+            {
+                aSelectionFillColor = COL_BLACK;
+                rRenderContext.SetLineColor(COL_BLACK);
+                nPercent = 0;
+            }
+            else
+                nPercent = bRoundEdges ? 60 : 35; // selected, pressed or checked ( very dark )
+        }
+        else
+        {
+            if (bDark)
+                aSelectionFillColor = COL_LIGHTGRAY;
+            else if (bBright)
+            {
+                aSelectionFillColor = COL_BLACK;
+                rRenderContext.SetLineColor(COL_BLACK);
+                if (nHighlight == 3)
+                    nPercent = 80;
+                else
+                    nPercent = 0;
+            }
+            else
+                nPercent = 70; // selected ( dark )
+        }
+    }
+
+    if (bDark && bDrawExtBorderOnly)
+    {
+        rRenderContext.SetFillColor();
+        if (pSelectionTextColor)
+            *pSelectionTextColor = rStyles.GetHighlightTextColor();
+    }
+    else
+    {
+        rRenderContext.SetFillColor(aSelectionFillColor);
+        if (pSelectionTextColor)
+        {
+            Color aTextColor = rWindow.IsControlBackground() ? rWindow.GetControlForeground() : rStyles.GetButtonTextColor();
+            Color aHLTextColor = rStyles.GetHighlightTextColor();
+            int nTextDiff = std::abs(aSelectionFillColor.GetLuminance() - aTextColor.GetLuminance());
+            int nHLDiff = std::abs(aSelectionFillColor.GetLuminance() - aHLTextColor.GetLuminance());
+            *pSelectionTextColor = (nHLDiff >= nTextDiff) ? aHLTextColor : aTextColor;
+        }
+    }
+
+    if (bDark)
+    {
+        rRenderContext.DrawRect(aRect);
+    }
+    else
+    {
+        if (bRoundEdges)
+        {
+            Polygon aPoly(aRect, nCornerRadius, nCornerRadius);
+            tools::PolyPolygon aPolyPoly(aPoly);
+            rRenderContext.DrawTransparent(aPolyPoly, nPercent);
+        }
+        else
+        {
+            Polygon aPoly(aRect);
+            tools::PolyPolygon aPolyPoly(aPoly);
+            rRenderContext.DrawTransparent(aPolyPoly, nPercent);
+        }
+    }
+
+    rRenderContext.Pop(); // LINECOLOR | FILLCOLOR
+}
 
 void Window::PushPaintHelper(PaintHelper *pHelper)
 {

@@ -378,6 +378,19 @@ namespace vcl {
 
 typedef OutputDevice RenderContext;
 
+class VCL_DLLPUBLIC RenderTools
+{
+public:
+    // transparent background for selected or checked items in toolboxes etc.
+    // + selection Color with a text color complementing the selection background
+    // + rounded edge
+    static void DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window& rWindow,
+                                        const Rectangle& rRect, sal_uInt16 nHighlight,
+                                        bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
+                                        Color* pSelectionTextColor = nullptr, long nCornerRadius = 0,
+                                        Color* pPaintColor = nullptr);
+};
+
 class VCL_DLLPUBLIC Window : public ::OutputDevice, public Resource
 {
     friend class ::vcl::Cursor;
