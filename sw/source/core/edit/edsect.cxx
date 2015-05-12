@@ -88,7 +88,7 @@ SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const Point* pPt )
         SwPosition aPos( *GetCrsr()->GetPoint() );
         Point aPt( *pPt );
         GetLayout()->GetCrsrOfst( &aPos, aPt );
-        SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
+        SwContentNode *pNd = aPos.nNode.GetNode().GetContentNode();
         pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
     }
     else
@@ -100,7 +100,7 @@ SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const Point* pPt )
     {
         SwSectionFrm* pSect = pFrm->FindSctFrm();
         OSL_ENSURE( pSect, "GetAnySection: Where's my Sect?" );
-        if( pSect->IsInFtn() && pSect->GetUpper()->IsInSct() )
+        if( pSect->IsInFootnote() && pSect->GetUpper()->IsInSct() )
         {
             pSect = pSect->GetUpper()->FindSctFrm();
             OSL_ENSURE( pSect, "GetAnySection: Where's my SectFrm?" );
@@ -110,24 +110,24 @@ SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const Point* pPt )
     return NULL;
 }
 
-size_t SwEditShell::GetSectionFmtCount() const
+size_t SwEditShell::GetSectionFormatCount() const
 {
     return GetDoc()->GetSections().size();
 }
 
 bool SwEditShell::IsAnySectionInDoc( bool bChkReadOnly, bool bChkHidden, bool bChkTOX ) const
 {
-    const SwSectionFmts& rFmts = GetDoc()->GetSections();
+    const SwSectionFormats& rFormats = GetDoc()->GetSections();
 
-    for( const SwSectionFmt* pFmt : rFmts )
+    for( const SwSectionFormat* pFormat : rFormats )
     {
         SectionType eTmpType;
-        if( pFmt->IsInNodesArr() &&
+        if( pFormat->IsInNodesArr() &&
             (bChkTOX  ||
-                ( (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
+                ( (eTmpType = pFormat->GetSection()->GetType()) != TOX_CONTENT_SECTION
                   && TOX_HEADER_SECTION != eTmpType ) ) )
         {
-            const SwSection& rSect = *pFmt->GetSection();
+            const SwSection& rSect = *pFormat->GetSection();
             if( (!bChkReadOnly && !bChkHidden ) ||
                 (bChkReadOnly && rSect.IsProtectFlag() ) ||
                 (bChkHidden && rSect.IsHiddenFlag() ) )
@@ -137,21 +137,21 @@ bool SwEditShell::IsAnySectionInDoc( bool bChkReadOnly, bool bChkHidden, bool bC
     return false;
 }
 
-size_t SwEditShell::GetSectionFmtPos( const SwSectionFmt& rFmt ) const
+size_t SwEditShell::GetSectionFormatPos( const SwSectionFormat& rFormat ) const
 {
-    SwSectionFmt* pFmt = const_cast<SwSectionFmt*>(&rFmt);
-    return GetDoc()->GetSections().GetPos( pFmt );
+    SwSectionFormat* pFormat = const_cast<SwSectionFormat*>(&rFormat);
+    return GetDoc()->GetSections().GetPos( pFormat );
 }
 
-const SwSectionFmt& SwEditShell::GetSectionFmt(size_t nFmt) const
+const SwSectionFormat& SwEditShell::GetSectionFormat(size_t nFormat) const
 {
-    return *GetDoc()->GetSections()[ nFmt ];
+    return *GetDoc()->GetSections()[ nFormat ];
 }
 
-void SwEditShell::DelSectionFmt(size_t nFmt)
+void SwEditShell::DelSectionFormat(size_t nFormat)
 {
     StartAllAction();
-    GetDoc()->DelSectionFmt( GetDoc()->GetSections()[ nFmt ] );
+    GetDoc()->DelSectionFormat( GetDoc()->GetSections()[ nFormat ] );
     // Call the AttrChangeNotify on the UI page.
     CallChgLnk();
     EndAllAction();
@@ -173,10 +173,10 @@ OUString SwEditShell::GetUniqueSectionName( const OUString* pChkStr ) const
 }
 
 void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
-                                    SwSectionFmt* pSectFmt )
+                                    SwSectionFormat* pSectFormat )
 {
-    if( pSectFmt )
-        _SetSectionAttr( *pSectFmt, rSet );
+    if( pSectFormat )
+        _SetSectionAttr( *pSectFormat, rSet );
     else
     {
         // for all section in the selection
@@ -192,10 +192,10 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
             if( pSttSectNd || pEndSectNd )
             {
                 if( pSttSectNd )
-                    _SetSectionAttr( *pSttSectNd->GetSection().GetFmt(),
+                    _SetSectionAttr( *pSttSectNd->GetSection().GetFormat(),
                                     rSet );
                 if( pEndSectNd && pSttSectNd != pEndSectNd )
-                    _SetSectionAttr( *pEndSectNd->GetSection().GetFmt(),
+                    _SetSectionAttr( *pEndSectNd->GetSection().GetFormat(),
                                     rSet );
 
                 if( pSttSectNd && pEndSectNd )
@@ -215,7 +215,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
                             || ( aSIdx.GetNode().IsEndNode() &&
                                 0 != ( pSttSectNd = aSIdx.GetNode().
                                     StartOfSectionNode()->GetSectionNode())) )
-                            _SetSectionAttr( *pSttSectNd->GetSection().GetFmt(),
+                            _SetSectionAttr( *pSttSectNd->GetSection().GetFormat(),
                                             rSet );
                         ++aSIdx;
                     }
@@ -226,7 +226,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
     }
 }
 
-void SwEditShell::_SetSectionAttr( SwSectionFmt& rSectFmt,
+void SwEditShell::_SetSectionAttr( SwSectionFormat& rSectFormat,
                                     const SfxItemSet& rSet )
 {
     StartAllAction();
@@ -234,10 +234,10 @@ void SwEditShell::_SetSectionAttr( SwSectionFmt& rSectFmt,
     {
         SfxItemSet aSet(rSet);
         aSet.ClearItem(RES_CNTNT);
-        GetDoc()->SetAttr( aSet, rSectFmt );
+        GetDoc()->SetAttr( aSet, rSectFormat );
     }
     else
-        GetDoc()->SetAttr( rSet, rSectFmt );
+        GetDoc()->SetAttr( rSet, rSectFormat );
 
     // Call the AttrChangeNotify on the UI page.
     CallChgLnk();
@@ -256,10 +256,10 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
 
         const SwPosition* pStt = rPaM.Start(),
                         * pEnd = rPaM.End();
-        const SwCntntNode* pCNd;
+        const SwContentNode* pCNd;
         // check the selection, if Start at Node begin and End at Node end
         if( pStt->nContent.GetIndex() ||
-            ( 0 == ( pCNd = pEnd->nNode.GetNode().GetCntntNode() )) ||
+            ( 0 == ( pCNd = pEnd->nNode.GetNode().GetContentNode() )) ||
             pCNd->Len() != pEnd->nContent.GetIndex() )
         {
             nRet = 0;
@@ -351,7 +351,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
         // - we're at or just before a start node
         // - there are only start nodes between the current and pInnermostNode
         SwNodeIndex aBegin( pCurrentPos->nNode );
-        if( rCurrentNode.IsCntntNode() &&
+        if( rCurrentNode.IsContentNode() &&
             (pCurrentPos->nContent.GetIndex() == 0))
             --aBegin;
         while( (aBegin != pInnermostNode->GetIndex()) &&
@@ -364,9 +364,9 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
         // - there are only end nodes between the current node and
         //   pInnermostNode's end node
         SwNodeIndex aEnd( pCurrentPos->nNode );
-        if( rCurrentNode.IsCntntNode() &&
+        if( rCurrentNode.IsContentNode() &&
             ( pCurrentPos->nContent.GetIndex() ==
-              rCurrentNode.GetCntntNode()->Len() ) )
+              rCurrentNode.GetContentNode()->Len() ) )
             ++aEnd;
         while( (aEnd != pInnermostNode->EndOfSectionNode()->GetIndex()) &&
                aEnd.GetNode().IsEndNode() )
@@ -415,7 +415,7 @@ bool SwEditShell::DoSpecialInsert()
         SwPosition aInsertPos( aInsertIndex );
 
         // insert a new text node, and set the cursor
-        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aInsertPos );
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTextNode( aInsertPos );
         *pCursorPos = aInsertPos;
 
         // call AttrChangeNotify for the UI

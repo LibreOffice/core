@@ -36,7 +36,7 @@ class SwEndNoteInfo;
 /** Pagedescriptor
  Client of SwPageDesc that is "described" by the attribute. */
 
-class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatPageDesc : public SfxPoolItem, public SwClient
 {
     /** This "Doc"-function is made friend in order to be able
      to set the auto-flag after copying!! */
@@ -45,16 +45,16 @@ class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
     ::boost::optional<sal_uInt16> oNumOffset;          ///< Offset page number.
     sal_uInt16 nDescNameIdx;        ///< SW3-Reader: stringpool-index of style name.
     SwModify* pDefinedIn;       /**< Points to the object in which the
-                                 attribute was set (CntntNode/Format). */
+                                 attribute was set (ContentNode/Format). */
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
     virtual void SwClientNotify( const SwModify&, const SfxHint& rHint ) SAL_OVERRIDE;
 
 public:
-    SwFmtPageDesc( const SwPageDesc *pDesc = 0 );
-    SwFmtPageDesc( const SwFmtPageDesc &rCpy );
-    SwFmtPageDesc &operator=( const SwFmtPageDesc &rCpy );
-    virtual ~SwFmtPageDesc();
+    SwFormatPageDesc( const SwPageDesc *pDesc = 0 );
+    SwFormatPageDesc( const SwFormatPageDesc &rCpy );
+    SwFormatPageDesc &operator=( const SwFormatPageDesc &rCpy );
+    virtual ~SwFormatPageDesc();
 
     TYPEINFO_OVERRIDE();
 
@@ -84,10 +84,10 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(bool bInP) const
-    { return static_cast<const SwFmtPageDesc&>(Get( RES_PAGEDESC,bInP)); }
+inline const SwFormatPageDesc &SwAttrSet::GetPageDesc(bool bInP) const
+    { return static_cast<const SwFormatPageDesc&>(Get( RES_PAGEDESC,bInP)); }
 
-inline const SwFmtPageDesc &SwFmt::GetPageDesc(bool bInP) const
+inline const SwFormatPageDesc &SwFormat::GetPageDesc(bool bInP) const
     { return m_aSet.GetPageDesc(bInP); }
 
 #endif

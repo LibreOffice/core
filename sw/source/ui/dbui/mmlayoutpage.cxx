@@ -246,12 +246,12 @@ bool SwMailMergeLayoutPage::commitPage( ::svt::WizardTypes::CommitPageReason _eR
     return true;
 }
 
-SwFrmFmt*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
+SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
         SwMailMergeConfigItem& rConfigItem,
         const Point& rAddressPosition,
         bool bAlignToBody)
 {
-    SwFrmFmt* pAddressBlockFormat = 0;
+    SwFrameFormat* pAddressBlockFormat = 0;
     pView->GetWrtShell().StartUndo(UNDO_INSERT);
     if(rConfigItem.IsAddressBlock() && !rConfigItem.IsAddressInserted())
     {
@@ -274,7 +274,7 @@ SwFrmFmt*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
     return pAddressBlockFormat;
 }
 
-SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
+SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
         SwWrtShell& rShell,
         SwMailMergeConfigItem& rConfigItem,
         const Point& rDestination,
@@ -289,20 +289,20 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                         RES_FRM_SIZE, RES_FRM_SIZE,
                         RES_SURROUND, RES_SURROUND,
                         0 );
-    aSet.Put(SwFmtAnchor(FLY_AT_PAGE, 1));
+    aSet.Put(SwFormatAnchor(FLY_AT_PAGE, 1));
     if(bAlignLeft)
-        aSet.Put(SwFmtHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
+        aSet.Put(SwFormatHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
     else
-        aSet.Put(SwFmtHoriOrient( rDestination.X(), text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-    aSet.Put(SwFmtVertOrient( rDestination.Y(), text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-    aSet.Put(SwFmtFrmSize( ATT_MIN_SIZE, DEFAULT_ADDRESS_WIDTH, DEFAULT_ADDRESS_HEIGHT ));
+        aSet.Put(SwFormatHoriOrient( rDestination.X(), text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
+    aSet.Put(SwFormatVertOrient( rDestination.Y(), text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
+    aSet.Put(SwFormatFrmSize( ATT_MIN_SIZE, DEFAULT_ADDRESS_WIDTH, DEFAULT_ADDRESS_HEIGHT ));
     // the example gets a border around the frame, the real document doesn't get one
     if(!bExample)
         aSet.Put(SvxBoxItem( RES_BOX ));
-    aSet.Put(SwFmtSurround( SURROUND_NONE ));
+    aSet.Put(SwFormatSurround( SURROUND_NONE ));
 
     rShell.NewFlyFrm(aSet, true );
-    SwFrmFmt* pRet = rShell.GetFlyFrmFmt();
+    SwFrameFormat* pRet = rShell.GetFlyFrameFormat();
     OSL_ENSURE( pRet, "Fly not inserted" );
 
     rShell.UnSelectFrm();
@@ -314,7 +314,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
     else
     {
         //the placeholders should be replaced by the appropriate fields
-        SwFldMgr aFldMgr(&rShell);
+        SwFieldMgr aFieldMgr(&rShell);
         //create a database string source.command.commandtype.column
         const SwDBData& rData = rConfigItem.GetCurrentDBData();
         OUString sDBName(rData.sDataSource + OUString(DB_DELIM)
@@ -372,22 +372,22 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                     if( !rExcludeCountry.isEmpty() )
                     {
                         const OUString sExpression("[" + sDatabaseConditionPrefix + sCountryColumn + "]");
-                        SwInsertFld_Data aData(TYP_CONDTXTFLD, 0,
+                        SwInsertField_Data aData(TYP_CONDTXTFLD, 0,
                                                sExpression + " != \"" + rExcludeCountry + "\"",
                                                sExpression,
                                                0, &rShell );
-                        aFldMgr.InsertFld( aData );
+                        aFieldMgr.InsertField( aData );
                     }
                     else
                     {
-                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, "", "", 0, &rShell );
-                        aFldMgr.InsertFld( aData );
+                        SwInsertField_Data aData(TYP_HIDDENPARAFLD, 0, "", "", 0, &rShell );
+                        aFieldMgr.InsertField( aData );
                     }
                 }
                 else
                 {
-                    SwInsertFld_Data aData(TYP_DBFLD, 0, sDB, aEmptyOUStr, 0, &rShell );
-                    aFldMgr.InsertFld( aData );
+                    SwInsertField_Data aData(TYP_DBFLD, 0, sDB, aEmptyOUStr, 0, &rShell );
+                    aFieldMgr.InsertField( aData );
                 }
             }
             else if(!aItem.bIsReturn)
@@ -398,8 +398,8 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
             {
                 if(bHideEmptyParagraphs)
                 {
-                    SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, aEmptyOUStr, 0, &rShell );
-                    aFldMgr.InsertFld( aData );
+                    SwInsertField_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, aEmptyOUStr, 0, &rShell );
+                    aFieldMgr.InsertField( aData );
                 }
                 sHideParagraphsExpression.clear();
                 //now add a new paragraph
@@ -408,8 +408,8 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         }
         if(bHideEmptyParagraphs && !sHideParagraphsExpression.isEmpty())
         {
-            SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, aEmptyOUStr, 0, &rShell );
-            aFldMgr.InsertFld( aData );
+            SwInsertField_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, aEmptyOUStr, 0, &rShell );
+            aFieldMgr.InsertField( aData );
         }
     }
     return pRet;
@@ -440,7 +440,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
         //text needs to be appended
         while(nYPos < GREETING_TOP_DISTANCE)
         {
-            if(!rShell.AppendTxtNode())
+            if(!rShell.AppendTextNode())
                 break;
             nYPos = rShell.GetCharRect().Top();
         }
@@ -475,7 +475,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     if(bIndividual)
     {
         //lock expression fields - prevents hiding of the paragraph to insert into
-        rShell.LockExpFlds();
+        rShell.LockExpFields();
         if(bExample)
         {
             for(sal_Int8 eGender = SwMailMergeConfigItem::FEMALE;
@@ -494,7 +494,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
         }
         else
         {
-            SwFldMgr aFldMgr(&rShell);
+            SwFieldMgr aFieldMgr(&rShell);
             //three paragraphs, each with an appropriate hidden paragraph field
             //are to be inserted
 
@@ -548,13 +548,13 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                     if(bHideEmptyParagraphs && !sHideParagraphsExpression.isEmpty())
                     {
                         OUString sComplete = "(" + sCondition + ") OR (" + sHideParagraphsExpression + ")";
-                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sComplete, aEmptyOUStr, 0, &rShell );
-                        aFldMgr.InsertFld( aData );
+                        SwInsertField_Data aData(TYP_HIDDENPARAFLD, 0, sComplete, aEmptyOUStr, 0, &rShell );
+                        aFieldMgr.InsertField( aData );
                     }
                     else
                     {
-                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sCondition, aEmptyOUStr, 0, &rShell );
-                        aFldMgr.InsertFld( aData );
+                        SwInsertField_Data aData(TYP_HIDDENPARAFLD, 0, sCondition, aEmptyOUStr, 0, &rShell );
+                        aFieldMgr.InsertField( aData );
                     }
                     //now the text has to be inserted
                     const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
@@ -580,10 +580,10 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                                     break;
                                 }
                             }
-                            SwInsertFld_Data aData(TYP_DBFLD, 0,
+                            SwInsertField_Data aData(TYP_DBFLD, 0,
                                 sDBName + sConvertedColumn,
                                 aEmptyOUStr, 0, &rShell );
-                            aFldMgr.InsertFld( aData );
+                            aFieldMgr.InsertField( aData );
                         }
                         else
                         {
@@ -596,7 +596,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             }
 
         }
-        rShell.UnlockExpFlds();
+        rShell.UnlockExpFields();
     }
     else
     {
@@ -616,7 +616,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     //put the cursor to the start of the paragraph
     rShell.SttPara();
 
-    OSL_ENSURE(0 == rShell.GetTableFmt(), "What to do with a table here?");
+    OSL_ENSURE(0 == rShell.GetTableFormat(), "What to do with a table here?");
 }
 
 IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
@@ -653,7 +653,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
     aZoom <<= (sal_Int16)DocumentZoomType::ENTIRE_PAGE;
     m_xViewProperties->setPropertyValue(UNO_NAME_ZOOM_TYPE, aZoom);
 
-    const SwFmtFrmSize& rPageSize = m_pExampleWrtShell->GetPageDesc(
+    const SwFormatFrmSize& rPageSize = m_pExampleWrtShell->GetPageDesc(
                                      m_pExampleWrtShell->GetCurPageDesc()).GetMaster().GetFrmSize();
     m_pLeftMF->SetMax(rPageSize.GetWidth() - DEFAULT_LEFT_DISTANCE);
     m_pTopMF->SetMax(rPageSize.GetHeight() - DEFAULT_TOP_DISTANCE);
@@ -695,10 +695,10 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl)
                             RES_HORI_ORIENT, RES_HORI_ORIENT,
                             0 );
         if(m_pAlignToBodyCB->IsChecked())
-            aSet.Put(SwFmtHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
+            aSet.Put(SwFormatHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
         else
-            aSet.Put(SwFmtHoriOrient( nLeft, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
-        aSet.Put(SwFmtVertOrient( nTop, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
+            aSet.Put(SwFormatHoriOrient( nLeft, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
+        aSet.Put(SwFormatVertOrient( nTop, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
         m_pExampleWrtShell->GetDoc()->SetFlyFrmAttr( *m_pAddressBlockFormat, aSet );
     }
     return 0;

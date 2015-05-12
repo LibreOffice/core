@@ -186,14 +186,14 @@ _CalcOp* FindOperator( const OUString& rSrch )
 }
 
 SwHash* Find( const OUString& rStr, SwHash* const * ppTable,
-              sal_uInt16 nTblSize, sal_uInt16* pPos )
+              sal_uInt16 nTableSize, sal_uInt16* pPos )
 {
     sal_uLong ii = 0;
     for( sal_Int32 n = 0; n < rStr.getLength(); ++n )
     {
         ii = ii << 1 ^ rStr[n];
     }
-    ii %= nTblSize;
+    ii %= nTableSize;
 
     if( pPos )
         *pPos = static_cast<sal_uInt16>(ii);
@@ -312,7 +312,7 @@ SwCalc::SwCalc( SwDoc& rD )
 
     static sal_uInt16 SwDocStat::* const aDocStat1[ 3 ] =
     {
-        &SwDocStat::nTbl, &SwDocStat::nGrf, &SwDocStat::nOLE
+        &SwDocStat::nTable, &SwDocStat::nGrf, &SwDocStat::nOLE
     };
     static sal_uLong SwDocStat::* const aDocStat2[ 4 ] =
     {
@@ -458,14 +458,14 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
     if( !pFnd )
     {
         // then check doc
-        SwHash* const * ppDocTbl = rDoc.getIDocumentFieldsAccess().GetUpdtFlds().GetFldTypeTable();
-        for( SwHash* pEntry = *(ppDocTbl+ii); pEntry; pEntry = pEntry->pNext )
+        SwHash* const * ppDocTable = rDoc.getIDocumentFieldsAccess().GetUpdateFields().GetFieldTypeTable();
+        for( SwHash* pEntry = *(ppDocTable+ii); pEntry; pEntry = pEntry->pNext )
         {
             if( aStr == pEntry->aStr )
             {
                 // then insert here
                 pFnd = new SwCalcExp( aStr, SwSbxValue(),
-                                    static_cast<SwCalcFldType*>(pEntry)->pFldType );
+                                    static_cast<SwCalcFieldType*>(pEntry)->pFieldType );
                 pFnd->pNext = *(VarTable+ii);
                 *(VarTable+ii) = pFnd;
                 break;
@@ -477,14 +477,14 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
     {
         SwCalcExp* pFndExp = static_cast<SwCalcExp*>(pFnd);
 
-        if( pFndExp->pFldType && pFndExp->pFldType->Which() == RES_USERFLD )
+        if( pFndExp->pFieldType && pFndExp->pFieldType->Which() == RES_USERFLD )
         {
-            SwUserFieldType* pUFld = const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFndExp->pFldType));
-            if( nsSwGetSetExpType::GSE_STRING & pUFld->GetType() )
+            SwUserFieldType* pUField = const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFndExp->pFieldType));
+            if( nsSwGetSetExpType::GSE_STRING & pUField->GetType() )
             {
-                pFndExp->nValue.PutString( pUFld->GetContent() );
+                pFndExp->nValue.PutString( pUField->GetContent() );
             }
-            else if( !pUFld->IsValid() )
+            else if( !pUField->IsValid() )
             {
                 // Save the current values...
                 sal_uInt16          nOld_ListPor        = nListPor;
@@ -494,7 +494,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
                 SwCalcOper      eOld_CurrOper       = eCurrOper;
                 SwCalcOper      eOld_CurrListOper   = eCurrListOper;
 
-                pFndExp->nValue.PutDouble( pUFld->GetValue( *this ) );
+                pFndExp->nValue.PutDouble( pUField->GetValue( *this ) );
 
                 // ...and write them back.
                 nListPor        = nOld_ListPor;
@@ -506,7 +506,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
             }
             else
             {
-                pFndExp->nValue.PutDouble( pUFld->GetValue() );
+                pFndExp->nValue.PutDouble( pUField->GetValue() );
             }
         }
         return pFndExp;
@@ -1589,7 +1589,7 @@ SwCalcExp::SwCalcExp(const OUString& rStr, const SwSbxValue& rVal,
                       const SwFieldType* pType)
     : SwHash(rStr)
     , nValue(rVal)
-    , pFldType(pType)
+    , pFieldType(pType)
 {
 }
 
@@ -1660,8 +1660,8 @@ void main()
         sNType24, sNType25, sNType26
     };
 
-    const unsigned short nTblSize = 47;
-    int aArr[ nTblSize ] = { 0 };
+    const unsigned short nTableSize = 47;
+    int aArr[ nTableSize ] = { 0 };
     sal_Char ch;
 
     for( int n = 0; n < 27; ++n )
@@ -1673,7 +1673,7 @@ void main()
         {
             ii = ii << 1 ^ *pp++;
         }
-        ii %= nTblSize;
+        ii %= nTableSize;
 
         ch = aArr[ ii ] ? 'X' : ' ';
         aArr[ ii ] = 1;

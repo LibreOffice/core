@@ -28,10 +28,10 @@ class HtmlImportTest : public SwModelTestBase
 
 DECLARE_HTMLIMPORT_TEST(testPictureImport, "picture.html")
 {
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
     // The document contains two pictures stored as a link.
-    sfx2::LinkManager& rLinkManager = pTxtDoc->GetDocShell()->GetDoc()->GetEditShell()->GetLinkManager();
+    sfx2::LinkManager& rLinkManager = pTextDoc->GetDocShell()->GetDoc()->GetEditShell()->GetLinkManager();
     CPPUNIT_ASSERT_EQUAL(size_t(2), rLinkManager.GetLinks().size());
     rLinkManager.Remove(0,2);
     CPPUNIT_ASSERT_EQUAL(size_t(0), rLinkManager.GetLinks().size());
@@ -44,11 +44,11 @@ DECLARE_HTMLIMPORT_TEST(testPictureImport, "picture.html")
 
 DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
 {
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTxtDoc);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
     // The document contains only one embedded picture inlined in img's src attribute.
 
-    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     SwEditShell* pEditShell = pDoc->GetEditShell();
     CPPUNIT_ASSERT(pEditShell);
 

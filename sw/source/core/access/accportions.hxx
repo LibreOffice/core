@@ -25,7 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vector>
 
-class SwTxtNode;
+class SwTextNode;
 struct SwSpecialPos;
 class SwViewOption;
 namespace com { namespace sun { namespace star {
@@ -38,7 +38,7 @@ namespace com { namespace sun { namespace star {
 class SwAccessiblePortionData : public SwPortionHandler
 {
     // the node this portion is referring to
-    const SwTxtNode* pTxtNode;
+    const SwTextNode* pTextNode;
 
     // variables used while collecting the data
     OUStringBuffer aBuffer;
@@ -92,7 +92,7 @@ class SwAccessiblePortionData : public SwPortionHandler
                          sal_Int32& nCorePos, bool& bEdit ) const;
 
 public:
-    SwAccessiblePortionData( const SwTxtNode* pTxtNd,
+    SwAccessiblePortionData( const SwTextNode* pTextNd,
                              const SwViewOption* pViewOpt = NULL );
     virtual ~SwAccessiblePortionData();
 
@@ -103,7 +103,7 @@ public:
     virtual void Skip(sal_Int32 nLength) SAL_OVERRIDE;
     virtual void Finish() SAL_OVERRIDE;
 
-    virtual void SetAttrFieldType( sal_uInt16 nAttrFldType ) SAL_OVERRIDE;
+    virtual void SetAttrFieldType( sal_uInt16 nAttrFieldType ) SAL_OVERRIDE;
     bool FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos );
     bool IsIndexInFootnode(sal_Int32 nIndex);
     bool IsInGrayPortion( sal_Int32 nPos );
@@ -146,7 +146,7 @@ public:
     sal_Int32 GetModelPosition( sal_Int32 nPos ) const;
 
     /// fill a SwSpecialPos structure, suitable for calling
-    /// SwTxtFrm->GetCharRect
+    /// SwTextFrm->GetCharRect
     /// Returns the core position, and fills rpPos either with NULL or
     /// with the &rPos, after putting the appropriate data into it.
     sal_Int32 FillSpecialPos( sal_Int32 nPos,

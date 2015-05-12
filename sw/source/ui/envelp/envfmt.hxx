@@ -26,9 +26,9 @@
 
 #include "envlop.hxx"
 
-class SwTxtFmtColl;
+class SwTextFormatColl;
 
-class SwEnvFmtPage : public SfxTabPage
+class SwEnvFormatPage : public SfxTabPage
 {
     VclPtr<MetricField>  m_pAddrLeftField;
     VclPtr<MetricField>  m_pAddrTopField;
@@ -49,7 +49,7 @@ class SwEnvFmtPage : public SfxTabPage
 
     void SetMinMax();
 
-    SfxItemSet  *GetCollItemSet(SwTxtFmtColl* pColl, bool bSender);
+    SfxItemSet  *GetCollItemSet(SwTextFormatColl* pColl, bool bSender);
 
     SwEnvDlg    *GetParentSwEnvDlg() {return static_cast<SwEnvDlg*>(GetParentDialog());}
 
@@ -57,8 +57,8 @@ class SwEnvFmtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
-    SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwEnvFmtPage();
+    SwEnvFormatPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    virtual ~SwEnvFormatPage();
     virtual void dispose() SAL_OVERRIDE;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);

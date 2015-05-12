@@ -24,7 +24,7 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 
-class SW_DLLPUBLIC SwFmtWrapInfluenceOnObjPos: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatWrapInfluenceOnObjPos: public SfxPoolItem
 {
 private:
     sal_Int16 mnWrapInfluenceOnPosition;
@@ -33,15 +33,15 @@ public:
     TYPEINFO_OVERRIDE();
 
     // #i35017# - constant name has changed
-    SwFmtWrapInfluenceOnObjPos(
+    SwFormatWrapInfluenceOnObjPos(
             sal_Int16 _nWrapInfluenceOnPosition =
             com::sun::star::text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
-    SwFmtWrapInfluenceOnObjPos(
-            const SwFmtWrapInfluenceOnObjPos& _rCpy );
-    virtual ~SwFmtWrapInfluenceOnObjPos();
+    SwFormatWrapInfluenceOnObjPos(
+            const SwFormatWrapInfluenceOnObjPos& _rCpy );
+    virtual ~SwFormatWrapInfluenceOnObjPos();
 
-    SwFmtWrapInfluenceOnObjPos& operator=(
-            const SwFmtWrapInfluenceOnObjPos& _rSource );
+    SwFormatWrapInfluenceOnObjPos& operator=(
+            const SwFormatWrapInfluenceOnObjPos& _rSource );
 
     /// pure virtual methods of class <SfxPoolItem>
     virtual bool operator==( const SfxPoolItem& _rAttr ) const SAL_OVERRIDE;
@@ -60,10 +60,10 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-inline const SwFmtWrapInfluenceOnObjPos& SwAttrSet::GetWrapInfluenceOnObjPos(bool bInP) const
-    { return static_cast<const SwFmtWrapInfluenceOnObjPos&>(Get( RES_WRAP_INFLUENCE_ON_OBJPOS,bInP)); }
+inline const SwFormatWrapInfluenceOnObjPos& SwAttrSet::GetWrapInfluenceOnObjPos(bool bInP) const
+    { return static_cast<const SwFormatWrapInfluenceOnObjPos&>(Get( RES_WRAP_INFLUENCE_ON_OBJPOS,bInP)); }
 
- inline const SwFmtWrapInfluenceOnObjPos& SwFmt::GetWrapInfluenceOnObjPos(bool bInP) const
+ inline const SwFormatWrapInfluenceOnObjPos& SwFormat::GetWrapInfluenceOnObjPos(bool bInP) const
     { return m_aSet.GetWrapInfluenceOnObjPos(bInP); }
 
 #endif

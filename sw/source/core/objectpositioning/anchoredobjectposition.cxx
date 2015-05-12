@@ -102,14 +102,14 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
     // determine format the object belongs to
     {
         // #i28701#
-        mpFrmFmt = &mpAnchoredObj->GetFrmFmt();
-        assert(mpFrmFmt &&
+        mpFrameFormat = &mpAnchoredObj->GetFrameFormat();
+        assert(mpFrameFormat &&
                 "<SwAnchoredObjectPosition::_GetInfoAboutObj() - missing frame format.");
     }
 
     // #i62875# - determine attribute value of <Follow-Text-Flow>
     {
-        mbFollowTextFlow = mpFrmFmt->GetFollowTextFlow().GetValue();
+        mbFollowTextFlow = mpFrameFormat->GetFollowTextFlow().GetValue();
     }
 
     // determine, if anchored object has not to be captured on the page.
@@ -119,7 +119,7 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
     // - it doesn't follow the text flow
     {
         mbDoNotCaptureAnchoredObj = !mbIsObjFly && !mbFollowTextFlow &&
-                                    mpFrmFmt->getIDocumentSettingAccess()->get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE);
+                                    mpFrameFormat->getIDocumentSettingAccess()->get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE);
     }
 }
 
@@ -158,18 +158,18 @@ SwTwips SwAnchoredObjectPosition::_GetTopForObjPos( const SwFrm& _rFrm,
 {
     SwTwips nTopOfFrmForObjPos = (_rFrm.Frm().*_fnRect->fnGetTop)();
 
-    if ( _rFrm.IsTxtFrm() )
+    if ( _rFrm.IsTextFrm() )
     {
-        const SwTxtFrm& rTxtFrm = static_cast<const SwTxtFrm&>(_rFrm);
+        const SwTextFrm& rTextFrm = static_cast<const SwTextFrm&>(_rFrm);
         if ( _bVert )
         {
             nTopOfFrmForObjPos -=
-                rTxtFrm.GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+                rTextFrm.GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
         }
         else
         {
             nTopOfFrmForObjPos +=
-                rTxtFrm.GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+                rTextFrm.GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
         }
     }
 
@@ -191,8 +191,8 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
     // #i11860# - upper space amount of <_rVertOrientFrm> considered
     // for previous frame
     const SwTwips nVertOrientUpperSpaceForPrevFrmAndPageGrid =
-            _rVertOrientFrm.IsTxtFrm()
-            ? static_cast<const SwTxtFrm&>(_rVertOrientFrm).
+            _rVertOrientFrm.IsTextFrm()
+            ? static_cast<const SwTextFrm&>(_rVertOrientFrm).
                         GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid()
             : 0;
     switch ( _eRelOrient )
@@ -409,7 +409,7 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
     {
         // #i26945# - no extension of restricted area, if
         // object's attribute follow text flow is set and its inside a table
-        if ( GetFrmFmt().getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
+        if ( GetFrameFormat().getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              ( !bFollowTextFlow ||
                !GetAnchoredObj().GetAnchorFrm()->IsInTab() ) )
         {
@@ -546,10 +546,10 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
         {
             nWidth = (_rHoriOrientFrm.Prt().*fnRect->fnGetWidth)();
             nOffset = (_rHoriOrientFrm.*fnRect->fnGetLeftMargin)();
-            if ( _rHoriOrientFrm.IsTxtFrm() )
+            if ( _rHoriOrientFrm.IsTextFrm() )
             {
                 // consider movement of text frame left
-                nOffset += static_cast<const SwTxtFrm&>(_rHoriOrientFrm).GetBaseOfstForFly( !_bObjWrapThrough );
+                nOffset += static_cast<const SwTextFrm&>(_rHoriOrientFrm).GetBaseOfstForFly( !_bObjWrapThrough );
             }
             else if ( _rHoriOrientFrm.IsPageFrm() && bVert )
             {
@@ -668,8 +668,8 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
             // text frame, as we do want to have the textbox overlap with its
             // draw shape.
             bool bIgnoreFlysAnchoredAtFrame = !_bObjWrapThrough || SwTextBoxHelper::isTextBox(&GetObject());
-            nOffset = _rHoriOrientFrm.IsTxtFrm() ?
-                   static_cast<const SwTxtFrm&>(_rHoriOrientFrm).GetBaseOfstForFly( bIgnoreFlysAnchoredAtFrame ) :
+            nOffset = _rHoriOrientFrm.IsTextFrm() ?
+                   static_cast<const SwTextFrm&>(_rHoriOrientFrm).GetBaseOfstForFly( bIgnoreFlysAnchoredAtFrame ) :
                    0;
             break;
         }
@@ -738,7 +738,7 @@ void SwAnchoredObjectPosition::_ToggleHoriOrientAndAlign(
 SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
                                 const SwFrm& _rHoriOrientFrm,
                                 const SwEnvironmentOfAnchoredObject& _rEnvOfObj,
-                                const SwFmtHoriOrient& _rHoriOrient,
+                                const SwFormatHoriOrient& _rHoriOrient,
                                 const SvxLRSpaceItem& _rLRSpacing,
                                 const SvxULSpaceItem& _rULSpacing,
                                 const bool _bObjWrapThrough,
@@ -858,14 +858,14 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                                           ) const
 {
     // #i26791#
-    if ( !GetAnchorFrm().ISA(SwTxtFrm) ||
+    if ( !GetAnchorFrm().ISA(SwTextFrm) ||
          !GetAnchoredObj().ISA(SwFlyAtCntFrm) )
     {
         OSL_FAIL( "<SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(..) - usage for wrong anchor type" );
         return _nProposedRelPosX;
     }
 
-    const SwTxtFrm& rAnchorTxtFrm = static_cast<const SwTxtFrm&>(GetAnchorFrm());
+    const SwTextFrm& rAnchorTextFrm = static_cast<const SwTextFrm&>(GetAnchorFrm());
     // #i26791#
     const SwFlyAtCntFrm& rFlyAtCntFrm =
                         static_cast<const SwFlyAtCntFrm&>(GetAnchoredObj());
@@ -875,7 +875,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
     SwTwips nAdjustedRelPosX = _nProposedRelPosX;
 
     // determine proposed object bound rectangle
-    Point aTmpPos = (rAnchorTxtFrm.Frm().*fnRect->fnGetPos)();
+    Point aTmpPos = (rAnchorTextFrm.Frm().*fnRect->fnGetPos)();
     if( bVert )
     {
         aTmpPos.X() -= _nRelPosY + aObjBoundRect.Width();
@@ -890,8 +890,8 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
 
     const sal_uInt32 nObjOrdNum = GetObject().GetOrdNum();
     const SwPageFrm* pObjPage = rFlyAtCntFrm.FindPageFrm();
-    const SwFrm* pObjContext = ::FindKontext( &rAnchorTxtFrm, FRM_COLUMN );
-    sal_uLong nObjIndex = rAnchorTxtFrm.GetTxtNode()->GetIndex();
+    const SwFrm* pObjContext = ::FindKontext( &rAnchorTextFrm, FRM_COLUMN );
+    sal_uLong nObjIndex = rAnchorTextFrm.GetTextNode()->GetIndex();
     SwOrderIter aIter( pObjPage, true );
     const SwFlyFrm* pFly = static_cast<const SwVirtFlyDrawObj*>(aIter.Bottom())->GetFlyFrm();
     while ( pFly && nObjOrdNum > pFly->GetVirtDrawObj()->GetOrdNumDirect() )
@@ -901,7 +901,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
         {
             if( bVert )
             {
-                const SvxULSpaceItem& rOtherUL = pFly->GetFmt()->GetULSpace();
+                const SvxULSpaceItem& rOtherUL = pFly->GetFormat()->GetULSpace();
                 const SwTwips nOtherTop = pFly->Frm().Top() - rOtherUL.GetUpper();
                 const SwTwips nOtherBot = pFly->Frm().Bottom() + rOtherUL.GetLower();
                 if ( nOtherTop <= aTmpObjRect.Bottom() + _rULSpacing.GetLower() &&
@@ -910,9 +910,9 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                     if ( _eHoriOrient == text::HoriOrientation::LEFT )
                     {
                         SwTwips nTmp = nOtherBot + 1 + _rULSpacing.GetUpper() -
-                                       rAnchorTxtFrm.Frm().Top();
+                                       rAnchorTextFrm.Frm().Top();
                         if ( nTmp > nAdjustedRelPosX &&
-                             rAnchorTxtFrm.Frm().Top() + nTmp +
+                             rAnchorTextFrm.Frm().Top() + nTmp +
                              aObjBoundRect.Height() + _rULSpacing.GetLower()
                              <= pObjPage->Frm().Height() + pObjPage->Frm().Top() )
                         {
@@ -923,21 +923,21 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                     {
                         SwTwips nTmp = nOtherTop - 1 - _rULSpacing.GetLower() -
                                        aObjBoundRect.Height() -
-                                       rAnchorTxtFrm.Frm().Top();
+                                       rAnchorTextFrm.Frm().Top();
                         if ( nTmp < nAdjustedRelPosX &&
-                             rAnchorTxtFrm.Frm().Top() + nTmp - _rULSpacing.GetUpper()
+                             rAnchorTextFrm.Frm().Top() + nTmp - _rULSpacing.GetUpper()
                               >= pObjPage->Frm().Top() )
                         {
                             nAdjustedRelPosX = nTmp;
                         }
                     }
-                    aTmpObjRect.Pos().Y() = rAnchorTxtFrm.Frm().Top() +
+                    aTmpObjRect.Pos().Y() = rAnchorTextFrm.Frm().Top() +
                                             nAdjustedRelPosX;
                 }
             }
             else
             {
-                const SvxLRSpaceItem& rOtherLR = pFly->GetFmt()->GetLRSpace();
+                const SvxLRSpaceItem& rOtherLR = pFly->GetFormat()->GetLRSpace();
                 const SwTwips nOtherLeft = pFly->Frm().Left() - rOtherLR.GetLeft();
                 const SwTwips nOtherRight = pFly->Frm().Right() + rOtherLR.GetRight();
                 if( nOtherLeft <= aTmpObjRect.Right() + _rLRSpacing.GetRight() &&
@@ -946,9 +946,9 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                     if ( _eHoriOrient == text::HoriOrientation::LEFT )
                     {
                         SwTwips nTmp = nOtherRight + 1 + _rLRSpacing.GetLeft() -
-                                       rAnchorTxtFrm.Frm().Left();
+                                       rAnchorTextFrm.Frm().Left();
                         if ( nTmp > nAdjustedRelPosX &&
-                             rAnchorTxtFrm.Frm().Left() + nTmp +
+                             rAnchorTextFrm.Frm().Left() + nTmp +
                              aObjBoundRect.Width() + _rLRSpacing.GetRight()
                              <= pObjPage->Frm().Width() + pObjPage->Frm().Left() )
                         {
@@ -959,15 +959,15 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                     {
                         SwTwips nTmp = nOtherLeft - 1 - _rLRSpacing.GetRight() -
                                        aObjBoundRect.Width() -
-                                       rAnchorTxtFrm.Frm().Left();
+                                       rAnchorTextFrm.Frm().Left();
                         if ( nTmp < nAdjustedRelPosX &&
-                             rAnchorTxtFrm.Frm().Left() + nTmp - _rLRSpacing.GetLeft()
+                             rAnchorTextFrm.Frm().Left() + nTmp - _rLRSpacing.GetLeft()
                              >= pObjPage->Frm().Left() )
                         {
                             nAdjustedRelPosX = nTmp;
                         }
                     }
-                    aTmpObjRect.Pos().X() = rAnchorTxtFrm.Frm().Left() +
+                    aTmpObjRect.Pos().X() = rAnchorTextFrm.Frm().Left() +
                                             nAdjustedRelPosX;
                 }
             } // end of <if (bVert)>
@@ -1002,10 +1002,10 @@ bool SwAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
          ::FindKontext( _pFly->GetAnchorFrm(), FRM_COLUMN ) == _pObjContext )
     {
         sal_uLong nOtherIndex =
-            static_cast<const SwTxtFrm*>(_pFly->GetAnchorFrm())->GetTxtNode()->GetIndex();
+            static_cast<const SwTextFrm*>(_pFly->GetAnchorFrm())->GetTextNode()->GetIndex();
         if( _nObjIndex >= nOtherIndex )
         {
-            const SwFmtHoriOrient& rHori = _pFly->GetFmt()->GetHoriOrient();
+            const SwFormatHoriOrient& rHori = _pFly->GetFormat()->GetHoriOrient();
             sal_Int16 eOtherRelOrient = rHori.GetRelationOrient();
             if( text::RelOrientation::CHAR != eOtherRelOrient )
             {

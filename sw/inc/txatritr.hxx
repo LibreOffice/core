@@ -26,8 +26,8 @@
 #include <swtypes.hxx>
 #include <deque>
 
-class SwTxtNode;
-class SwTxtAttr;
+class SwTextNode;
+class SwTextAttr;
 class SfxPoolItem;
 
 class SwScriptIterator
@@ -48,22 +48,22 @@ public:
     const OUString& GetText() const { return m_rText; }
 };
 
-class SwTxtAttrIterator
+class SwTextAttrIterator
 {
     SwScriptIterator aSIter;
-    std::deque<const SwTxtAttr*> aStack;
-    const SwTxtNode& rTxtNd;
+    std::deque<const SwTextAttr*> aStack;
+    const SwTextNode& rTextNd;
     const SfxPoolItem *pParaItem, *pCurItem;
     size_t nAttrPos;
     sal_Int32 nChgPos;
     sal_uInt16 nWhichId;
     bool bIsUseGetWhichOfScript;
 
-    void AddToStack( const SwTxtAttr& rAttr );
+    void AddToStack( const SwTextAttr& rAttr );
     void SearchNextChg();
 
 public:
-    SwTxtAttrIterator( const SwTxtNode& rTxtNd, sal_uInt16 nWhichId,
+    SwTextAttrIterator( const SwTextNode& rTextNd, sal_uInt16 nWhichId,
                         sal_Int32 nStart = 0, bool bUseGetWhichOfScript = true );
 
     bool Next();
@@ -72,13 +72,13 @@ public:
     sal_Int32 GetChgPos() const        { return nChgPos; }
 };
 
-class SwLanguageIterator : public SwTxtAttrIterator
+class SwLanguageIterator : public SwTextAttrIterator
 {
 public:
-    SwLanguageIterator( const SwTxtNode& rTxtNode, sal_Int32 nStart = 0,
+    SwLanguageIterator( const SwTextNode& rTextNode, sal_Int32 nStart = 0,
                         sal_uInt16 nWhich = RES_CHRATR_LANGUAGE,
                         bool bUseGetWhichOfScript = true )
-        : SwTxtAttrIterator( rTxtNode, nWhich, nStart, bUseGetWhichOfScript )
+        : SwTextAttrIterator( rTextNode, nWhich, nStart, bUseGetWhichOfScript )
     {}
 
     sal_uInt16 GetLanguage() const

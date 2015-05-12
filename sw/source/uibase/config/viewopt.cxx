@@ -167,7 +167,7 @@ SwViewOption::SwViewOption() :
     bShowPlaceHolderFields( true ),
     nZoom( 100 ),
     eZoom( SvxZoomType::PERCENT ),
-    nTblDest(TBL_DEST_CELL)
+    nTableDest(TBL_DEST_CELL)
 {
     // Initialisation is a little simpler now
     // all Bits to 0
@@ -223,7 +223,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     nPagePrevCol    = rVOpt.nPagePrevCol;
     bIsPagePreview  = rVOpt.bIsPagePreview;
     eZoom           = rVOpt.eZoom       ;
-    nTblDest        = rVOpt.nTblDest    ;
+    nTableDest        = rVOpt.nTableDest    ;
     nUIOptions      = rVOpt.nUIOptions  ;
     nCoreOptions    = rVOpt.nCoreOptions  ;
     nCore2Options   = rVOpt.nCore2Options  ;
@@ -263,7 +263,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     nPagePrevCol    = rVOpt.nPagePrevCol;
     bIsPagePreview  = rVOpt.bIsPagePreview;
     eZoom           = rVOpt.eZoom       ;
-    nTblDest        = rVOpt.nTblDest    ;
+    nTableDest        = rVOpt.nTableDest    ;
     nUIOptions      = rVOpt.nUIOptions  ;
     nCoreOptions    = rVOpt.nCoreOptions;
     nCore2Options   = rVOpt.nCore2Options;
@@ -305,7 +305,7 @@ void SwViewOption::Init( vcl::Window *pWin )
 
 bool SwViewOption::IsAutoCompleteWords()
 {
-    const SvxSwAutoFmtFlags& rFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
+    const SvxSwAutoFormatFlags& rFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
     return rFlags.bAutoCmpltCollectWords;
 }
 

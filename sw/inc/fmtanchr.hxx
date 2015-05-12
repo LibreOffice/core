@@ -31,9 +31,9 @@ struct SwPosition;
 class IntlWrapper;
 
 /// FlyAnchors
-class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatAnchor: public SfxPoolItem
 {
-    ::boost::scoped_ptr<SwPosition> m_pCntntAnchor; /**< 0 for page-bound frames.
+    ::boost::scoped_ptr<SwPosition> m_pContentAnchor; /**< 0 for page-bound frames.
                                                      Index for paragraph-bound frames.
                                                      Position for character-bound frames. */
     RndStdIds  nAnchorId;
@@ -44,11 +44,11 @@ class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem
     static sal_uInt32 mnOrderCounter;
 
 public:
-    SwFmtAnchor( RndStdIds eRnd = FLY_AT_PAGE, sal_uInt16 nPageNum = 0 );
-    SwFmtAnchor( const SwFmtAnchor &rCpy );
-    virtual ~SwFmtAnchor();
+    SwFormatAnchor( RndStdIds eRnd = FLY_AT_PAGE, sal_uInt16 nPageNum = 0 );
+    SwFormatAnchor( const SwFormatAnchor &rCpy );
+    virtual ~SwFormatAnchor();
 
-    SwFmtAnchor &operator=( const SwFmtAnchor& );
+    SwFormatAnchor &operator=( const SwFormatAnchor& );
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -64,7 +64,7 @@ public:
 
     RndStdIds GetAnchorId() const { return nAnchorId; }
     sal_uInt16 GetPageNum() const { return nPageNum; }
-    const SwPosition *GetCntntAnchor() const { return m_pCntntAnchor.get(); }
+    const SwPosition *GetContentAnchor() const { return m_pContentAnchor.get(); }
     // #i28701#
     sal_uInt32 GetOrder() const { return mnOrder;}
 
@@ -75,10 +75,10 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-inline const SwFmtAnchor &SwAttrSet::GetAnchor(bool bInP) const
-    { return static_cast<const SwFmtAnchor&>(Get(RES_ANCHOR, bInP)); }
+inline const SwFormatAnchor &SwAttrSet::GetAnchor(bool bInP) const
+    { return static_cast<const SwFormatAnchor&>(Get(RES_ANCHOR, bInP)); }
 
- inline const SwFmtAnchor &SwFmt::GetAnchor(bool bInP) const
+ inline const SwFormatAnchor &SwFormat::GetAnchor(bool bInP) const
      { return m_aSet.GetAnchor(bInP); }
 
 #endif

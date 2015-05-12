@@ -23,7 +23,7 @@
 #include <vector>
 
 class SwFrm;
-class SwFmtFld;
+class SwFormatField;
 namespace vcl { class Window; }
 
 namespace sw { namespace sidebarwindows {
@@ -38,7 +38,7 @@ class SwFrmSidebarWinContainer
         ~SwFrmSidebarWinContainer();
 
         bool insert( const SwFrm& rFrm,
-                     const SwFmtFld& rFmtFld,
+                     const SwFormatField& rFormatField,
                      SwSidebarWin& rSidebarWin );
 
         bool remove( const SwFrm& rFrm,

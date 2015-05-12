@@ -35,7 +35,7 @@
 class SwDepend;
 class SwNodeIndex;
 class SwPaM;
-class SwFrmFmt;
+class SwFrameFormat;
 
 struct FrameDependSortListEntry
 {
@@ -85,7 +85,7 @@ private:
 public:
 
     SwXParaFrameEnumeration(const SwPaM& rPaM,
-        const enum ParaFrameMode eParaFrameMode, SwFrmFmt *const pFmt = 0);
+        const enum ParaFrameMode eParaFrameMode, SwFrameFormat *const pFormat = 0);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

@@ -81,19 +81,19 @@ actions; these are created by the StartUndo/EndUndo wrapper methods.
 === Text Attributes ===
 
 The sub-structure of paragraphs is stored in the SwpHintsArray member
-SwTxtNode::m_pSwpHints.  There is a base class SwTxtAttr with numerous
-subclasses; the SwTxtAttr has a start and end index and a SfxPoolItem
+SwTextNode::m_pSwpHints.  There is a base class SwTextAttr with numerous
+subclasses; the SwTextAttr has a start and end index and a SfxPoolItem
 to store the actual formatting attribute.
 
-There are several sub-categories of SwTxtAttr:
+There are several sub-categories of SwTextAttr:
 
-- formatting attributes: Character Styles (SwTxtCharFmt, RES_TXTATR_CHARFMT)
+- formatting attributes: Character Styles (SwTextCharFormat, RES_TXTATR_CHARFMT)
   and Automatic Styles (no special class, RES_TXTATR_AUTOFMT):
   these are handled by SwpHintsArray::BuildPortions and MergePortions,
   which create non-overlapping portions of formatting attributes.
 
-- nesting attributes: Hyperlinks (SwTxtINetFmt, RES_TXTATR_INETFMT),
-  Ruby (SwTxtRuby, RES_TXTATR_CJK_RUBY) and Meta/MetaField (SwTxtMeta,
+- nesting attributes: Hyperlinks (SwTextINetFormat, RES_TXTATR_INETFMT),
+  Ruby (SwTextRuby, RES_TXTATR_CJK_RUBY) and Meta/MetaField (SwTextMeta,
   RES_TXTATR_META/RES_TXTATR_METAFIELD):
   these maintain a properly nested tree structure.
   The Meta/Metafield are "special" because they have both start/end
@@ -116,26 +116,26 @@ There are multiple model classes involved for fields:
   For most types of fields there is one shared instance of this per type,
   which is created in DocumentFieldsManager::_InitFieldTypes()
   but for some there are more than one, and they are dynamically created, see
-  DocumentFieldsManager::InsertFldType().  An example for the latter are
-  variable fields (RES_GETEXPFLD/RES_SETEXPFLD), with one SwFldType per
+  DocumentFieldsManager::InsertFieldType().  An example for the latter are
+  variable fields (RES_GETEXPFLD/RES_SETEXPFLD), with one SwFieldType per
   variable.
 - SwXFieldMaster is the UNO wrapper of a field type.
   It is a SwClient registered at the SwFieldType.
   Its life-cycle is determined by UNO clients outside of sw; it will get
   disposed when the SwFieldType dies.
-- SwFmtFld is the SfxPoolItem of a field.
-  The SwFmtFld is a SwClient registered at its SwFldType.
-  The SwFmtFld owns the SwField of the field.
+- SwFormatField is the SfxPoolItem of a field.
+  The SwFormatField is a SwClient registered at its SwFieldType.
+  The SwFormatField owns the SwField of the field.
 - SwField contains the core logic of a field.
-  The SwField is owned by the SwFmtFld of the field.
+  The SwField is owned by the SwFormatField of the field.
   There are many subclasses of SwField, one for each different type of field.
   Note that there are not many places that can Expand the field to its
   correct value, since for example page number fields require a View
   with an up to date layout; therefore the correct expansion is cached.
-- SwTxtFld is the text attribute of a field.
-  It owns the SwFmtFld of the field (like all text attributes).
+- SwTextField is the text attribute of a field.
+  It owns the SwFormatField of the field (like all text attributes).
 - SwXTextField is the UNO wrapper object of a field.
-  It is a SwClient registered at the SwFmtFld.
+  It is a SwClient registered at the SwFormatField.
   Its life-cycle is determined by UNO clients outside of sw; it will get
-  disposed when the SwFmtFld dies.
+  disposed when the SwFormatField dies.
 

@@ -40,7 +40,7 @@ class SwWrtShell;
 class SwDoc;
 class SwView;
 class SwPostItField;
-class SwFmtFld;
+class SwFormatField;
 class SwField;
 class SfxBroadcaster;
 class SfxHint;
@@ -89,10 +89,10 @@ struct SwPostItPageItem
 
 struct FieldShadowState
 {
-    const SwPostItField* mpShadowFld;
+    const SwPostItField* mpShadowField;
     bool bCursor;
     bool bMouse;
-    FieldShadowState(): mpShadowFld(0),bCursor(false),bMouse(false)
+    FieldShadowState(): mpShadowField(0),bCursor(false),bMouse(false)
     {
     }
 };
@@ -142,7 +142,7 @@ class SwPostItMgr: public SfxListener
         SwView*                         mpView;
         SwWrtShell*                     mpWrtShell;
         VclPtr<SwEditWin>               mpEditWin;
-        std::list< SwSidebarItem*>      mvPostItFlds;
+        std::list< SwSidebarItem*>      mvPostItFields;
         std::vector<SwPostItPageItem*>  mPages;
         ImplSVEvent *                   mnEventId;
         bool                            mbWaitingForCalcRects;
@@ -194,8 +194,8 @@ class SwPostItMgr: public SfxListener
             virtual ~SwPostItMgr();
 
             typedef std::list< SwSidebarItem* >::const_iterator const_iterator;
-            const_iterator begin()  const { return mvPostItFlds.begin(); }
-            const_iterator end()    const { return mvPostItFlds.end();  }
+            const_iterator begin()  const { return mvPostItFields.begin(); }
+            const_iterator end()    const { return mvPostItFields.end();  }
 
             void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
@@ -236,7 +236,7 @@ class SwPostItMgr: public SfxListener
             bool IsHit(const Point &aPointPixel);
             Color GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) const;
 
-            sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pFld) const;
+            sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pField) const;
 
             sw::sidebarwindows::SwSidebarWin* GetNextPostIt( sal_uInt16 aDirection,
                                                              sw::sidebarwindows::SwSidebarWin* aPostIt);
@@ -255,7 +255,7 @@ class SwPostItMgr: public SfxListener
             sal_Int32 GetMinimumSizeWithMeta() const;
             sal_Int32 GetSidebarScrollerHeight() const;
 
-            void SetShadowState(const SwPostItField* pFld,bool bCursor = true);
+            void SetShadowState(const SwPostItField* pField,bool bCursor = true);
 
             void SetSpellChecking();
 
@@ -269,15 +269,15 @@ class SwPostItMgr: public SfxListener
             void StartSpelling();
 
             sal_uInt16 Replace(SvxSearchItem* pItem);
-            sal_uInt16 SearchReplace(const SwFmtFld &pFld, const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
+            sal_uInt16 SearchReplace(const SwFormatField &pField, const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
             sal_uInt16 FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
 
             // get the PostIt window by index
-            sal_Int32 GetPostItCount() const {return mvPostItFlds.size();}
+            sal_Int32 GetPostItCount() const {return mvPostItFields.size();}
             void AssureStdModeAtShell();
 
             void ConnectSidebarWinToFrm( const SwFrm& rFrm,
-                                         const SwFmtFld& rFmtFld,
+                                         const SwFormatField& rFormatField,
                                          sw::sidebarwindows::SwSidebarWin& rSidebarWin );
             void DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
                                               sw::sidebarwindows::SwSidebarWin& rSidebarWin );

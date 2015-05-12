@@ -35,88 +35,88 @@
 #include <calbck.hxx>
 #include <svl/intitem.hxx>
 
-TYPEINIT1( SwTxtFmtColl, SwFmtColl );
-TYPEINIT1( SwGrfFmtColl, SwFmtColl );
-TYPEINIT1( SwConditionTxtFmtColl, SwTxtFmtColl );
+TYPEINIT1( SwTextFormatColl, SwFormatColl );
+TYPEINIT1( SwGrfFormatColl, SwFormatColl );
+TYPEINIT1( SwConditionTextFormatColl, SwTextFormatColl );
 TYPEINIT1( SwCollCondition, SwClient );
 
-namespace TxtFmtCollFunc
+namespace TextFormatCollFunc
 {
     // #i71574#
-    void CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
-                                            SwFmt* pFmt,
+    void CheckTextFormatCollForDeletionOfAssignmentToOutlineStyle(
+                                            SwFormat* pFormat,
                                             const SwNumRuleItem* pNewNumRuleItem )
     {
-        SwTxtFmtColl* pTxtFmtColl = dynamic_cast<SwTxtFmtColl*>(pFmt);
-        if ( !pTxtFmtColl )
+        SwTextFormatColl* pTextFormatColl = dynamic_cast<SwTextFormatColl*>(pFormat);
+        if ( !pTextFormatColl )
         {
-            OSL_FAIL( "<TxtFmtCollFunc::CheckTxtFmtCollFuncForDeletionOfAssignmentToOutlineStyle> - misuse of method - it's only for instances of <SwTxtFmtColl>" );
+            OSL_FAIL( "<TextFormatCollFunc::CheckTextFormatCollFuncForDeletionOfAssignmentToOutlineStyle> - misuse of method - it's only for instances of <SwTextFormatColl>" );
             return;
         }
 
         // #i73790#
-        if ( !pTxtFmtColl->StayAssignedToListLevelOfOutlineStyle() &&
-             pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
+        if ( !pTextFormatColl->StayAssignedToListLevelOfOutlineStyle() &&
+             pTextFormatColl->IsAssignedToListLevelOfOutlineStyle() )
         {
             if ( !pNewNumRuleItem )
             {
-                pTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNewNumRuleItem) );
+                pTextFormatColl->GetItemState( RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNewNumRuleItem) );
             }
             if ( pNewNumRuleItem )
             {
                 OUString sNumRuleName = pNewNumRuleItem->GetValue();
                 if ( sNumRuleName.isEmpty() ||
-                     sNumRuleName != pTxtFmtColl->GetDoc()->GetOutlineNumRule()->GetName() )
+                     sNumRuleName != pTextFormatColl->GetDoc()->GetOutlineNumRule()->GetName() )
                 {
                     // delete assignment of paragraph style to list level of outline style.
-                    pTxtFmtColl->DeleteAssignmentToListLevelOfOutlineStyle();
+                    pTextFormatColl->DeleteAssignmentToListLevelOfOutlineStyle();
                 }
             }
         }
     }
 
-    SwNumRule* GetNumRule( SwTxtFmtColl& rTxtFmtColl )
+    SwNumRule* GetNumRule( SwTextFormatColl& rTextFormatColl )
     {
         SwNumRule* pNumRule( 0 );
 
         const SwNumRuleItem* pNumRuleItem( 0 );
-        rTxtFmtColl.GetItemState( RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNumRuleItem) );
+        rTextFormatColl.GetItemState( RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNumRuleItem) );
         if ( pNumRuleItem )
         {
             const OUString sNumRuleName = pNumRuleItem->GetValue();
             if ( !sNumRuleName.isEmpty() )
             {
-                pNumRule = rTxtFmtColl.GetDoc()->FindNumRulePtr( sNumRuleName );
+                pNumRule = rTextFormatColl.GetDoc()->FindNumRulePtr( sNumRuleName );
             }
         }
 
         return pNumRule;
     }
 
-    void AddToNumRule( SwTxtFmtColl& rTxtFmtColl )
+    void AddToNumRule( SwTextFormatColl& rTextFormatColl )
     {
-        SwNumRule* pNumRule = GetNumRule( rTxtFmtColl );
+        SwNumRule* pNumRule = GetNumRule( rTextFormatColl );
         if ( pNumRule )
         {
-            pNumRule->AddParagraphStyle( rTxtFmtColl );
+            pNumRule->AddParagraphStyle( rTextFormatColl );
         }
     }
 
-    void RemoveFromNumRule( SwTxtFmtColl& rTxtFmtColl )
+    void RemoveFromNumRule( SwTextFormatColl& rTextFormatColl )
     {
-        SwNumRule* pNumRule = GetNumRule( rTxtFmtColl );
+        SwNumRule* pNumRule = GetNumRule( rTextFormatColl );
         if ( pNumRule )
         {
-            pNumRule->RemoveParagraphStyle( rTxtFmtColl );
+            pNumRule->RemoveParagraphStyle( rTextFormatColl );
         }
     }
-} // end of namespace TxtFmtCollFunc
+} // end of namespace TextFormatCollFunc
 
-void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( GetDoc()->IsInDtor() )
     {
-        SwFmtColl::Modify( pOld, pNew );
+        SwFormatColl::Modify( pOld, pNew );
         return;
     }
 
@@ -200,7 +200,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     // #i70223#
     if ( bAssignedToListLevelOfOutlineStyle && pNewNumRuleItem )
     {
-        TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
+        TextFormatCollFunc::CheckTextFormatCollForDeletionOfAssignmentToOutlineStyle(
                                                         this, pNewNumRuleItem );
     }
 
@@ -229,16 +229,16 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 bChg |= nTmp != aNew.GetRight();
             }
             // We had a relative value -> recalculate
-            if( 100 != aNew.GetPropTxtFirstLineOfst() )
+            if( 100 != aNew.GetPropTextFirstLineOfst() )
             {
-                short nTmp = aNew.GetTxtFirstLineOfst();    // keep so that we can compare
-                aNew.SetTxtFirstLineOfst( pNewLRSpace->GetTxtFirstLineOfst(),
-                                            aNew.GetPropTxtFirstLineOfst() );
-                bChg |= nTmp != aNew.GetTxtFirstLineOfst();
+                short nTmp = aNew.GetTextFirstLineOfst();    // keep so that we can compare
+                aNew.SetTextFirstLineOfst( pNewLRSpace->GetTextFirstLineOfst(),
+                                            aNew.GetPropTextFirstLineOfst() );
+                bChg |= nTmp != aNew.GetTextFirstLineOfst();
             }
             if( bChg )
             {
-                SetFmtAttr( aNew );
+                SetFormatAttr( aNew );
                 bContinue = 0 != pOldChgSet || bNewParent;
             }
             // We set it to absolute -> do not propagate it further, unless
@@ -270,7 +270,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
         if( bChg )
         {
-            SetFmtAttr( aNew );
+            SetFormatAttr( aNew );
             bContinue = 0 != pOldChgSet || bNewParent;
         }
         // We set it to absolute -> do not propagate it further, unless
@@ -305,7 +305,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                                 pOldFSize->GetPropUnit() );
                 if( nTmp != aNew.GetHeight() )
                 {
-                    SetFmtAttr( aNew );
+                    SetFormatAttr( aNew );
                     bContinue = 0 != pOldChgSet || bNewParent;
                 }
                 // We set it to absolute -> do not propagate it further, unless
@@ -317,58 +317,58 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 
     if( bContinue )
-        SwFmtColl::Modify( pOld, pNew );
+        SwFormatColl::Modify( pOld, pNew );
 }
 
-bool SwTxtFmtColl::IsAtDocNodeSet() const
+bool SwTextFormatColl::IsAtDocNodeSet() const
 {
-    SwIterator<SwCntntNode,SwFmtColl> aIter( *this );
+    SwIterator<SwContentNode,SwFormatColl> aIter( *this );
     const SwNodes& rNds = GetDoc()->GetNodes();
-    for( SwCntntNode* pNode = aIter.First(); pNode; pNode = aIter.Next() )
+    for( SwContentNode* pNode = aIter.First(); pNode; pNode = aIter.Next() )
         if( &(pNode->GetNodes()) == &rNds )
             return true;
 
     return false;
 }
 
-bool SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
+bool SwTextFormatColl::SetFormatAttr( const SfxPoolItem& rAttr )
 {
     const bool bIsNumRuleItem = rAttr.Which() == RES_PARATR_NUMRULE;
     if ( bIsNumRuleItem )
     {
-        TxtFmtCollFunc::RemoveFromNumRule( *this );
+        TextFormatCollFunc::RemoveFromNumRule( *this );
     }
 
-    const bool bRet = SwFmtColl::SetFmtAttr( rAttr );
+    const bool bRet = SwFormatColl::SetFormatAttr( rAttr );
 
     if ( bIsNumRuleItem )
     {
-        TxtFmtCollFunc::AddToNumRule( *this );
+        TextFormatCollFunc::AddToNumRule( *this );
     }
 
     return bRet;
 }
 
-bool SwTxtFmtColl::SetFmtAttr( const SfxItemSet& rSet )
+bool SwTextFormatColl::SetFormatAttr( const SfxItemSet& rSet )
 {
     const bool bIsNumRuleItemAffected =
                 rSet.GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::SET;
     if ( bIsNumRuleItemAffected )
     {
-        TxtFmtCollFunc::RemoveFromNumRule( *this );
+        TextFormatCollFunc::RemoveFromNumRule( *this );
     }
 
-    const bool bRet = SwFmtColl::SetFmtAttr( rSet );
+    const bool bRet = SwFormatColl::SetFormatAttr( rSet );
 
     if ( bIsNumRuleItemAffected )
     {
-        TxtFmtCollFunc::AddToNumRule( *this );
+        TextFormatCollFunc::AddToNumRule( *this );
     }
 
     return bRet;
 }
 
-bool SwTxtFmtColl::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
+bool SwTextFormatColl::ResetFormatAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 {
     const bool bIsNumRuleItemAffected =
                 ( nWhich2 != 0 && nWhich2 > nWhich1 )
@@ -377,16 +377,16 @@ bool SwTxtFmtColl::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
                 : nWhich1 == RES_PARATR_NUMRULE;
     if ( bIsNumRuleItemAffected )
     {
-        TxtFmtCollFunc::RemoveFromNumRule( *this );
+        TextFormatCollFunc::RemoveFromNumRule( *this );
     }
 
-    const bool bRet = SwFmtColl::ResetFmtAttr( nWhich1, nWhich2 );
+    const bool bRet = SwFormatColl::ResetFormatAttr( nWhich1, nWhich2 );
 
     return bRet;
 }
 
 // #i73790#
-sal_uInt16 SwTxtFmtColl::ResetAllFmtAttr()
+sal_uInt16 SwTextFormatColl::ResetAllFormatAttr()
 {
     const bool bOldState( mbStayAssignedToListLevelOfOutlineStyle );
     mbStayAssignedToListLevelOfOutlineStyle = true;
@@ -398,7 +398,7 @@ sal_uInt16 SwTxtFmtColl::ResetAllFmtAttr()
                                      ? GetAssignedOutlineStyleLevel()
                                      : -1;
 
-    sal_uInt16 nRet = SwFmtColl::ResetAllFmtAttr();
+    sal_uInt16 nRet = SwFormatColl::ResetAllFormatAttr();
 
     // #i70748#
     if ( nAssignedOutlineStyleLevel != -1 )
@@ -411,7 +411,7 @@ sal_uInt16 SwTxtFmtColl::ResetAllFmtAttr()
     return nRet;
 }
 
-bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
+bool SwTextFormatColl::AreListLevelIndentsApplicable() const
 {
     bool bAreListLevelIndentsApplicable( true );
 
@@ -437,7 +437,7 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
         // paragraph style has no hard-set indent attributes
 
         // check parent paragraph styles
-        const SwTxtFmtColl* pColl = dynamic_cast<const SwTxtFmtColl*>(DerivedFrom());
+        const SwTextFormatColl* pColl = dynamic_cast<const SwTextFormatColl*>(DerivedFrom());
         while ( pColl )
         {
             if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, false ) == SfxItemState::SET )
@@ -455,46 +455,46 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
                 break;
             }
 
-            pColl = dynamic_cast<const SwTxtFmtColl*>(pColl->DerivedFrom());
+            pColl = dynamic_cast<const SwTextFormatColl*>(pColl->DerivedFrom());
             OSL_ENSURE( pColl,
-                    "<SwTxtFmtColl::AreListLevelIndentsApplicable()> - something wrong in paragraph style hierarchy. The applied list style is not found." );
+                    "<SwTextFormatColl::AreListLevelIndentsApplicable()> - something wrong in paragraph style hierarchy. The applied list style is not found." );
         }
     }
 
     return bAreListLevelIndentsApplicable;
 }
 
-void SwTxtFmtColl::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwTextFormatColl::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swTxtFmtColl"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swTextFormatColl"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
     GetAttrSet().dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
 
-void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwTextFormatColls::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swTxtFmtColls"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swTextFormatColls"));
     for (size_t i = 0; i < size(); ++i)
-        GetFmt(i)->dumpAsXml(pWriter);
+        GetFormat(i)->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
 
 //FEATURE::CONDCOLL
 
-SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
+SwCollCondition::SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
                                 sal_uLong nSubCond )
     : SwClient( pColl ), nCondition( nMasterCond )
 {
     aSubCondition.nSubCondition = nSubCond;
 }
 
-SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
+SwCollCondition::SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
                                     const OUString& rSubExp )
     : SwClient( pColl ), nCondition( nMasterCond )
 {
     if( USRFLD_EXPRESSION & nCondition )
-        aSubCondition.pFldExpression = new OUString( rSubExp );
+        aSubCondition.pFieldExpression = new OUString( rSubExp );
     else
         aSubCondition.nSubCondition = 0;
 }
@@ -503,7 +503,7 @@ SwCollCondition::SwCollCondition( const SwCollCondition& rCopy )
     : SwClient( const_cast<SwModify*>(rCopy.GetRegisteredIn()) ), nCondition( rCopy.nCondition )
 {
     if( USRFLD_EXPRESSION & rCopy.nCondition )
-        aSubCondition.pFldExpression = new OUString( *rCopy.GetFldExpression() );
+        aSubCondition.pFieldExpression = new OUString( *rCopy.GetFieldExpression() );
     else
         aSubCondition.nSubCondition = rCopy.aSubCondition.nSubCondition;
 }
@@ -511,12 +511,12 @@ SwCollCondition::SwCollCondition( const SwCollCondition& rCopy )
 SwCollCondition::~SwCollCondition()
 {
     if( USRFLD_EXPRESSION & nCondition )
-        delete aSubCondition.pFldExpression;
+        delete aSubCondition.pFieldExpression;
 }
 
-void SwCollCondition::RegisterToFormat( SwFmt& rFmt )
+void SwCollCondition::RegisterToFormat( SwFormat& rFormat )
 {
-    rFmt.Add( this );
+    rFormat.Add( this );
 }
 
 bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const
@@ -527,14 +527,14 @@ bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const
         if( USRFLD_EXPRESSION & nCondition )
         {
             // The SubCondition contains the expression for the UserField
-            const OUString* pTmp = aSubCondition.pFldExpression;
+            const OUString* pTmp = aSubCondition.pFieldExpression;
             if( !pTmp )
-                pTmp = rCmp.aSubCondition.pFldExpression;
+                pTmp = rCmp.aSubCondition.pFieldExpression;
             if( pTmp )
             {
-                SwTxtFmtColl* pColl = GetTxtFmtColl();
+                SwTextFormatColl* pColl = GetTextFormatColl();
                 if( !pColl )
-                    pColl = rCmp.GetTxtFmtColl();
+                    pColl = rCmp.GetTextFormatColl();
 
                 if( pColl )
                 {
@@ -553,16 +553,16 @@ bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const
 void SwCollCondition::SetCondition( sal_uLong nCond, sal_uLong nSubCond )
 {
     if( USRFLD_EXPRESSION & nCondition )
-        delete aSubCondition.pFldExpression;
+        delete aSubCondition.pFieldExpression;
     nCondition = nCond;
     aSubCondition.nSubCondition = nSubCond;
 }
 
-SwConditionTxtFmtColl::~SwConditionTxtFmtColl()
+SwConditionTextFormatColl::~SwConditionTextFormatColl()
 {
 }
 
-const SwCollCondition* SwConditionTxtFmtColl::HasCondition(
+const SwCollCondition* SwConditionTextFormatColl::HasCondition(
                         const SwCollCondition& rCond ) const
 {
     for( const auto &rFnd : aCondColls )
@@ -572,9 +572,9 @@ const SwCollCondition* SwConditionTxtFmtColl::HasCondition(
     return nullptr;
 }
 
-void SwConditionTxtFmtColl::InsertCondition( const SwCollCondition& rCond )
+void SwConditionTextFormatColl::InsertCondition( const SwCollCondition& rCond )
 {
-    for( SwFmtCollConditions::size_type n = 0; n < aCondColls.size(); ++n )
+    for( SwFormatCollConditions::size_type n = 0; n < aCondColls.size(); ++n )
         if( aCondColls[ n ] == rCond )
         {
             aCondColls.erase( aCondColls.begin() + n );
@@ -586,10 +586,10 @@ void SwConditionTxtFmtColl::InsertCondition( const SwCollCondition& rCond )
     aCondColls.push_back( pNew );
 }
 
-bool SwConditionTxtFmtColl::RemoveCondition( const SwCollCondition& rCond )
+bool SwConditionTextFormatColl::RemoveCondition( const SwCollCondition& rCond )
 {
     bool bRet = false;
-    for( SwFmtCollConditions::size_type n = 0; n < aCondColls.size(); ++n )
+    for( SwFormatCollConditions::size_type n = 0; n < aCondColls.size(); ++n )
         if( aCondColls[ n ] == rCond )
         {
             aCondColls.erase( aCondColls.begin() + n );
@@ -599,20 +599,20 @@ bool SwConditionTxtFmtColl::RemoveCondition( const SwCollCondition& rCond )
     return bRet;
 }
 
-void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
+void SwConditionTextFormatColl::SetConditions( const SwFormatCollConditions& rCndClls )
 {
     // Copy the Conditions, but first delete the old ones
     aCondColls.clear();
     SwDoc& rDoc = *GetDoc();
     for( const auto &rFnd : rCndClls )
     {
-        SwTxtFmtColl* pTmpColl = rFnd.GetTxtFmtColl()
-                                    ? rDoc.CopyTxtColl( *rFnd.GetTxtFmtColl() )
+        SwTextFormatColl* pTmpColl = rFnd.GetTextFormatColl()
+                                    ? rDoc.CopyTextColl( *rFnd.GetTextFormatColl() )
                                     : 0;
         SwCollCondition* pNew;
         if( USRFLD_EXPRESSION & rFnd.GetCondition() )
             pNew = new SwCollCondition( pTmpColl, rFnd.GetCondition(),
-                                        *rFnd.GetFldExpression() );
+                                        *rFnd.GetFieldExpression() );
         else
             pNew = new SwCollCondition( pTmpColl, rFnd.GetCondition(),
                                         rFnd.GetSubCondition() );
@@ -621,59 +621,59 @@ void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
 }
 
 // FEATURE::CONDCOLL
-void SwTxtFmtColl::SetAttrOutlineLevel( int nLevel)
+void SwTextFormatColl::SetAttrOutlineLevel( int nLevel)
 {
-    OSL_ENSURE( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtFmtColl: Level Out Of Range" );
-    SetFmtAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
+    OSL_ENSURE( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTextFormatColl: Level Out Of Range" );
+    SetFormatAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
                             static_cast<sal_uInt16>(nLevel) ) );
 }
 
-int SwTxtFmtColl::GetAttrOutlineLevel() const
+int SwTextFormatColl::GetAttrOutlineLevel() const
 {
-    return static_cast<const SfxUInt16Item &>(GetFmtAttr(RES_PARATR_OUTLINELEVEL)).GetValue();
+    return static_cast<const SfxUInt16Item &>(GetFormatAttr(RES_PARATR_OUTLINELEVEL)).GetValue();
 }
 
-int SwTxtFmtColl::GetAssignedOutlineStyleLevel() const
+int SwTextFormatColl::GetAssignedOutlineStyleLevel() const
 {
     OSL_ENSURE( IsAssignedToListLevelOfOutlineStyle(),
-        "<SwTxtFmtColl::GetAssignedOutlineStyleLevel()> - misuse of method");
+        "<SwTextFormatColl::GetAssignedOutlineStyleLevel()> - misuse of method");
     return GetAttrOutlineLevel() - 1;
 }
 
-void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
+void SwTextFormatColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
 {
     mbAssignedToOutlineStyle = true;
     SetAttrOutlineLevel(nAssignedListLevel+1);
 
     // #i100277#
-    SwIterator<SwTxtFmtColl,SwFmtColl> aIter( *this );
-    SwTxtFmtColl* pDerivedTxtFmtColl = aIter.First();
-    while ( pDerivedTxtFmtColl != 0 )
+    SwIterator<SwTextFormatColl,SwFormatColl> aIter( *this );
+    SwTextFormatColl* pDerivedTextFormatColl = aIter.First();
+    while ( pDerivedTextFormatColl != 0 )
     {
-        if ( !pDerivedTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
+        if ( !pDerivedTextFormatColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::DEFAULT )
+            if ( pDerivedTextFormatColl->GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::DEFAULT )
             {
                 SwNumRuleItem aItem(aEmptyOUStr);
-                pDerivedTxtFmtColl->SetFmtAttr( aItem );
+                pDerivedTextFormatColl->SetFormatAttr( aItem );
             }
-            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_OUTLINELEVEL, false ) == SfxItemState::DEFAULT )
+            if ( pDerivedTextFormatColl->GetItemState( RES_PARATR_OUTLINELEVEL, false ) == SfxItemState::DEFAULT )
             {
-                pDerivedTxtFmtColl->SetAttrOutlineLevel( 0 );
+                pDerivedTextFormatColl->SetAttrOutlineLevel( 0 );
             }
         }
 
-        pDerivedTxtFmtColl = aIter.Next();
+        pDerivedTextFormatColl = aIter.Next();
     }
 }
 
-void SwTxtFmtColl::DeleteAssignmentToListLevelOfOutlineStyle(
+void SwTextFormatColl::DeleteAssignmentToListLevelOfOutlineStyle(
     const bool bResetOutlineLevel)
 {
     mbAssignedToOutlineStyle = false;
     if (bResetOutlineLevel)
     {
-        ResetFmtAttr(RES_PARATR_OUTLINELEVEL);
+        ResetFormatAttr(RES_PARATR_OUTLINELEVEL);
     }
 }
 

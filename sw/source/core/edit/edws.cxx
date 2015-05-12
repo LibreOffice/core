@@ -128,7 +128,7 @@ sal_uInt16 SwEditShell::GetCntType() const
 bool SwEditShell::HasOtherCnt() const
 
 {
-    if ( !GetDoc()->GetSpzFrmFmts()->empty() )
+    if ( !GetDoc()->GetSpzFrameFormats()->empty() )
         return true;
 
     const SwNodes &rNds = GetDoc()->GetNodes();
@@ -169,10 +169,10 @@ SwMvContext::~SwMvContext()
     m_rShell.EndCrsrMove();
 }
 
-SwFrmFmt *SwEditShell::GetTableFmt() // fastest test on a table
+SwFrameFormat *SwEditShell::GetTableFormat() // fastest test on a table
 {
-    const SwTableNode* pTblNd = IsCrsrInTbl();
-    return pTblNd ? (SwFrmFmt*)pTblNd->GetTable().GetFrmFmt() : 0;
+    const SwTableNode* pTableNd = IsCrsrInTable();
+    return pTableNd ? (SwFrameFormat*)pTableNd->GetTable().GetFrameFormat() : 0;
 }
 
 // TODO: Why is this called 3x for a new document?
@@ -242,16 +242,16 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
     StartAllAction();
 
     SwPaM* pCrsr = getShellCrsr( true );
-    SwTxtNode* pTNd = pCrsr->GetNode().GetTxtNode();
+    SwTextNode* pTNd = pCrsr->GetNode().GetTextNode();
 
     SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, cChar );
     // FIXME: this _must_ be called with reference to the actual node text!
-    OUString const& rNodeText(pTNd->GetTxt());
+    OUString const& rNodeText(pTNd->GetText());
     rACorr.DoAutoCorrect( aSwAutoCorrDoc,
                     rNodeText, pCrsr->GetPoint()->nContent.GetIndex(),
                     cChar, bInsert, GetWin() );
     if( cChar )
-        SaveTblBoxCntnt( pCrsr->GetPoint() );
+        SaveTableBoxContent( pCrsr->GetPoint() );
     EndAllAction();
 }
 
@@ -267,12 +267,12 @@ bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord )
     bool bRet;
     SwPaM* pCrsr = getShellCrsr( true );
     const sal_Int32 nPos = pCrsr->GetPoint()->nContent.GetIndex();
-    SwTxtNode* pTNd = pCrsr->GetNode().GetTxtNode();
+    SwTextNode* pTNd = pCrsr->GetNode().GetTextNode();
     if( pTNd && nPos )
     {
         SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, 0 );
         bRet = rACorr.GetPrevAutoCorrWord( aSwAutoCorrDoc,
-                                            pTNd->GetTxt(), nPos, rWord );
+                                            pTNd->GetText(), nPos, rWord );
     }
     else
         bRet = false;

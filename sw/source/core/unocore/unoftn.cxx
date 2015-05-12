@@ -58,27 +58,27 @@ public:
     const bool                  m_bIsEndnote;
     ::cppu::OInterfaceContainerHelper m_EventListeners;
     bool                        m_bIsDescriptor;
-    const SwFmtFtn *            m_pFmtFtn;
+    const SwFormatFootnote *            m_pFormatFootnote;
     OUString             m_sLabel;
 
     Impl(   SwXFootnote & rThis,
-            SwFmtFtn *const pFootnote,
+            SwFormatFootnote *const pFootnote,
             const bool bIsEndnote)
         : SwClient(pFootnote)
         , m_rThis(rThis)
         , m_bIsEndnote(bIsEndnote)
         , m_EventListeners(m_Mutex)
         , m_bIsDescriptor(0 == pFootnote)
-        , m_pFmtFtn(pFootnote)
+        , m_pFormatFootnote(pFootnote)
     {
     }
 
-    const SwFmtFtn* GetFootnoteFormat() const {
-        return m_rThis.GetDoc() ? m_pFmtFtn : 0;
+    const SwFormatFootnote* GetFootnoteFormat() const {
+        return m_rThis.GetDoc() ? m_pFormatFootnote : 0;
     }
 
-    SwFmtFtn const& GetFootnoteFormatOrThrow() {
-        SwFmtFtn const*const pFootnote( GetFootnoteFormat() );
+    SwFormatFootnote const& GetFootnoteFormatOrThrow() {
+        SwFormatFootnote const*const pFootnote( GetFootnoteFormat() );
         if (!pFootnote) {
             throw uno::RuntimeException(OUString(
                         "SwXFootnote: disposed or invalid"), 0);
@@ -99,7 +99,7 @@ void SwXFootnote::Impl::Invalidate()
     {
         const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
     }
-    m_pFmtFtn = 0;
+    m_pFormatFootnote = 0;
     m_rThis.SetDoc(0);
     uno::Reference<uno::XInterface> const xThis(m_wThis);
     if (!xThis.is())
@@ -126,9 +126,9 @@ SwXFootnote::SwXFootnote(const bool bEndnote)
 {
 }
 
-SwXFootnote::SwXFootnote(SwDoc & rDoc, SwFmtFtn & rFmt)
+SwXFootnote::SwXFootnote(SwDoc & rDoc, SwFormatFootnote & rFormat)
     : SwXText(& rDoc, CURSOR_FOOTNOTE)
-    , m_pImpl( new SwXFootnote::Impl(*this, &rFmt, rFmt.IsEndNote()) )
+    , m_pImpl( new SwXFootnote::Impl(*this, &rFormat, rFormat.IsEndNote()) )
 {
 }
 
@@ -137,24 +137,24 @@ SwXFootnote::~SwXFootnote()
 }
 
 uno::Reference<text::XFootnote>
-SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFmtFtn *const pFootnoteFmt,
+SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFormatFootnote *const pFootnoteFormat,
         bool const isEndnote)
 {
     // i#105557: do not iterate over the registered clients: race condition
     uno::Reference<text::XFootnote> xNote;
-    if (pFootnoteFmt)
+    if (pFootnoteFormat)
     {
-        xNote = pFootnoteFmt->GetXFootnote();
+        xNote = pFootnoteFormat->GetXFootnote();
     }
     if (!xNote.is())
     {
-        SwXFootnote *const pNote((pFootnoteFmt)
-                ? new SwXFootnote(rDoc, *pFootnoteFmt)
+        SwXFootnote *const pNote((pFootnoteFormat)
+                ? new SwXFootnote(rDoc, *pFootnoteFormat)
                 : new SwXFootnote(isEndnote));
         xNote.set(pNote);
-        if (pFootnoteFmt)
+        if (pFootnoteFormat)
         {
-            pFootnoteFmt->SetXFootnote(xNote);
+            pFootnoteFormat->SetXFootnote(xNote);
         }
         // need a permanent Reference to initialize m_wThis
         pNote->m_pImpl->m_wThis = xNote;
@@ -242,10 +242,10 @@ OUString SAL_CALL SwXFootnote::getLabel() throw (uno::RuntimeException, std::exc
     SolarMutexGuard aGuard;
 
     OUString sRet;
-    SwFmtFtn const*const pFmt = m_pImpl->GetFootnoteFormat();
-    if(pFmt)
+    SwFormatFootnote const*const pFormat = m_pImpl->GetFootnoteFormat();
+    if(pFormat)
     {
-        sRet = pFmt->GetNumStr();
+        sRet = pFormat->GetNumStr();
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
@@ -263,15 +263,15 @@ SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException, std:
 {
     SolarMutexGuard aGuard;
 
-    SwFmtFtn const*const pFmt = m_pImpl->GetFootnoteFormat();
-    if(pFmt)
+    SwFormatFootnote const*const pFormat = m_pImpl->GetFootnoteFormat();
+    if(pFormat)
     {
-        const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-        OSL_ENSURE(pTxtFtn, "kein TextNode?");
-        SwTxtNode& rTxtNode = (SwTxtNode&)pTxtFtn->GetTxtNode();
+        const SwTextFootnote* pTextFootnote = pFormat->GetTextFootnote();
+        OSL_ENSURE(pTextFootnote, "kein TextNode?");
+        SwTextNode& rTextNode = (SwTextNode&)pTextFootnote->GetTextNode();
 
-        SwPaM aPam(rTxtNode, pTxtFtn->GetStart());
-        GetDoc()->SetCurFtn(aPam, aLabel, pFmt->GetNumber(), pFmt->IsEndNote());
+        SwPaM aPam(rTextNode, pTextFootnote->GetStart());
+        GetDoc()->SetCurFootnote(aPam, aLabel, pFormat->GetNumber(), pFormat->IsEndNote());
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
@@ -313,7 +313,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     UnoActionContext aCont(pNewDoc);
     pNewDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
     aPam.DeleteMark();
-    SwFmtFtn aFootNote(m_pImpl->m_bIsEndnote);
+    SwFormatFootnote aFootNote(m_pImpl->m_bIsEndnote);
     if (!m_pImpl->m_sLabel.isEmpty())
     {
         aFootNote.SetNumStr(m_pImpl->m_sLabel);
@@ -328,23 +328,23 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
     pNewDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aFootNote, nInsertFlags);
 
-    SwTxtFtn *const pTxtAttr = static_cast<SwTxtFtn*>(
-        aPam.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
+    SwTextFootnote *const pTextAttr = static_cast<SwTextFootnote*>(
+        aPam.GetNode().GetTextNode()->GetTextAttrForCharAt(
                 aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FTN ));
 
-    if (pTxtAttr)
+    if (pTextAttr)
     {
-        const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
-        m_pImpl->m_pFmtFtn = &rFtn;
-        const_cast<SwFmtFtn*>(m_pImpl->m_pFmtFtn)->Add(m_pImpl.get());
+        const SwFormatFootnote& rFootnote = pTextAttr->GetFootnote();
+        m_pImpl->m_pFormatFootnote = &rFootnote;
+        const_cast<SwFormatFootnote*>(m_pImpl->m_pFormatFootnote)->Add(m_pImpl.get());
         // force creation of sequence id - is used for references
         if (pNewDoc->IsInReading())
         {
-            pTxtAttr->SetSeqNo(pNewDoc->GetFtnIdxs().size());
+            pTextAttr->SetSeqNo(pNewDoc->GetFootnoteIdxs().size());
         }
         else
         {
-            pTxtAttr->SetSeqRefNo();
+            pTextAttr->SetSeqRefNo();
         }
     }
     m_pImpl->m_bIsDescriptor = false;
@@ -356,10 +356,10 @@ SwXFootnote::getAnchor() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
+    SwFormatFootnote const& rFormat( m_pImpl->GetFootnoteFormatOrThrow() );
 
-    SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
-    SwPaM aPam( pTxtFtn->GetTxtNode(), pTxtFtn->GetStart() );
+    SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
+    SwPaM aPam( pTextFootnote->GetTextNode(), pTextFootnote->GetStart() );
     SwPosition aMark( *aPam.Start() );
     aPam.SetMark();
     ++aPam.GetMark()->nContent;
@@ -372,13 +372,13 @@ void SAL_CALL SwXFootnote::dispose() throw (uno::RuntimeException, std::exceptio
 {
     SolarMutexGuard aGuard;
 
-    SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
+    SwFormatFootnote const& rFormat( m_pImpl->GetFootnoteFormatOrThrow() );
 
-    SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
-    OSL_ENSURE(pTxtFtn, "no TextNode?");
-    SwTxtNode& rTxtNode = const_cast<SwTxtNode&>(pTxtFtn->GetTxtNode());
-    const sal_Int32 nPos = pTxtFtn->GetStart();
-    SwPaM aPam(rTxtNode, nPos, rTxtNode, nPos+1);
+    SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
+    OSL_ENSURE(pTextFootnote, "no TextNode?");
+    SwTextNode& rTextNode = const_cast<SwTextNode&>(pTextFootnote->GetTextNode());
+    const sal_Int32 nPos = pTextFootnote->GetStart();
+    SwPaM aPam(rTextNode, nPos, rTextNode, nPos+1);
     GetDoc()->getIDocumentContentOperations().DeleteAndJoin( aPam );
 }
 
@@ -402,13 +402,13 @@ throw (uno::RuntimeException, std::exception)
 
 const SwStartNode *SwXFootnote::GetStartNode() const
 {
-    SwFmtFtn const*const   pFmt = m_pImpl->GetFootnoteFormat();
-    if(pFmt)
+    SwFormatFootnote const*const   pFormat = m_pImpl->GetFootnoteFormat();
+    if(pFormat)
     {
-        const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-        if( pTxtFtn )
+        const SwTextFootnote* pTextFootnote = pFormat->GetTextFootnote();
+        if( pTextFootnote )
         {
-            return pTxtFtn->GetStartNode()->GetNode().GetStartNode();
+            return pTextFootnote->GetStartNode()->GetNode().GetStartNode();
         }
     }
     return 0;
@@ -425,10 +425,10 @@ SwXFootnote::createTextCursor() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
+    SwFormatFootnote const& rFormat( m_pImpl->GetFootnoteFormatOrThrow() );
 
-    SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
-    SwPosition aPos( *pTxtFtn->GetStartNode() );
+    SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
+    SwPosition aPos( *pTextFootnote->GetStartNode() );
     SwXTextCursor *const pXCursor =
         new SwXTextCursor(*GetDoc(), this, CURSOR_FOOTNOTE, aPos);
     SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
@@ -445,7 +445,7 @@ throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
+    SwFormatFootnote const& rFormat( m_pImpl->GetFootnoteFormatOrThrow() );
 
     SwUnoInternalPaM aPam(*GetDoc());
     if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
@@ -453,11 +453,11 @@ throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
 
-    SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
-    SwNode const*const pFtnStartNode = &pTxtFtn->GetStartNode()->GetNode();
+    SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
+    SwNode const*const pFootnoteStartNode = &pTextFootnote->GetStartNode()->GetNode();
 
     const SwNode* pStart = aPam.GetNode().FindFootnoteStartNode();
-    if (pStart != pFtnStartNode)
+    if (pStart != pFootnoteStartNode)
     {
         throw uno::RuntimeException();
     }
@@ -474,10 +474,10 @@ SwXFootnote::createEnumeration() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
-    SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
+    SwFormatFootnote const& rFormat( m_pImpl->GetFootnoteFormatOrThrow() );
 
-    SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
-    SwPosition aPos( *pTxtFtn->GetStartNode() );
+    SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
+    SwPosition aPos( *pTextFootnote->GetStartNode() );
     ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
         GetDoc()->CreateUnoCrsr(aPos, false));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
@@ -538,12 +538,12 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         }
         else if (rPropertyName == UNO_NAME_REFERENCE_ID)
         {
-            SwFmtFtn const*const pFmt = m_pImpl->GetFootnoteFormat();
-            if (pFmt)
+            SwFormatFootnote const*const pFormat = m_pImpl->GetFootnoteFormat();
+            if (pFormat)
             {
-                SwTxtFtn const*const pTxtFtn = pFmt->GetTxtFtn();
-                OSL_ENSURE(pTxtFtn, "no TextNode?");
-                aRet <<= static_cast<sal_Int16>(pTxtFtn->GetSeqRefNo());
+                SwTextFootnote const*const pTextFootnote = pFormat->GetTextFootnote();
+                OSL_ENSURE(pTextFootnote, "no TextNode?");
+                aRet <<= static_cast<sal_Int16>(pTextFootnote->GetSeqRefNo());
             }
         }
         else

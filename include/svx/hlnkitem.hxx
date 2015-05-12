@@ -87,7 +87,7 @@ public:
     void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
 
     void SetMacroTable( const SvxMacroTableDtor& rTbl );
-    const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTable; }
+    const SvxMacroTableDtor* GetMacroTable() const    { return pMacroTable; }
 
     void SetMacroEvents (const sal_uInt16 nEvents) { nMacroEvents = nEvents; }
     sal_uInt16 GetMacroEvents() const { return nMacroEvents; }

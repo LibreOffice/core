@@ -54,16 +54,16 @@ namespace
     static const int BEHIND_SAME_NODE = 3;     // Same node index but content index behind given content index
     static const int BEHIND_NODE = 4;          // Position behind the given node index
 
-    static int lcl_RelativePosition( const SwPosition& rPos, sal_uLong nNode, sal_Int32 nCntnt )
+    static int lcl_RelativePosition( const SwPosition& rPos, sal_uLong nNode, sal_Int32 nContent )
     {
         sal_uLong nIndex = rPos.nNode.GetIndex();
         int nReturn = BEFORE_NODE;
         if( nIndex == nNode )
         {
             const sal_Int32 nCntIdx = rPos.nContent.GetIndex();
-            if( nCntIdx < nCntnt )
+            if( nCntIdx < nContent )
                 nReturn = BEFORE_SAME_NODE;
-            else if( nCntIdx == nCntnt )
+            else if( nCntIdx == nContent )
                 nReturn = SAME_POSITION;
             else
                 nReturn = BEHIND_SAME_NODE;
@@ -76,11 +76,11 @@ namespace
     {
         long int m_nIdx;
         bool m_bOther;
-        sal_Int32 m_nCntnt;
+        sal_Int32 m_nContent;
 #if 0
         void Dump()
         {
-            SAL_INFO("sw.core", "Index: " << m_nIdx << "\tOther: " << m_bOther << "\tContent: " << m_nCntnt);
+            SAL_INFO("sw.core", "Index: " << m_nIdx << "\tOther: " << m_bOther << "\tContent: " << m_nContent);
         }
 #endif
     };
@@ -88,33 +88,33 @@ namespace
     {
         SwPaM* m_pPaM;
         bool m_isMark;
-        sal_Int32 m_nCntnt;
+        sal_Int32 m_nContent;
     };
     struct OffsetUpdater
     {
-        const SwCntntNode* m_pNewCntntNode;
+        const SwContentNode* m_pNewContentNode;
         const sal_Int32 m_nOffset;
-        OffsetUpdater(SwCntntNode* pNewCntntNode, sal_Int32 nOffset)
-            : m_pNewCntntNode(pNewCntntNode), m_nOffset(nOffset) {};
-        void operator()(SwPosition& rPos, sal_Int32 nCntnt) const
+        OffsetUpdater(SwContentNode* pNewContentNode, sal_Int32 nOffset)
+            : m_pNewContentNode(pNewContentNode), m_nOffset(nOffset) {};
+        void operator()(SwPosition& rPos, sal_Int32 nContent) const
         {
-            rPos.nNode = *m_pNewCntntNode;
-            rPos.nContent.Assign(const_cast<SwCntntNode*>(m_pNewCntntNode), nCntnt + m_nOffset);
+            rPos.nNode = *m_pNewContentNode;
+            rPos.nContent.Assign(const_cast<SwContentNode*>(m_pNewContentNode), nContent + m_nOffset);
         };
     };
     struct LimitUpdater
     {
-        const SwCntntNode* m_pNewCntntNode;
+        const SwContentNode* m_pNewContentNode;
         const sal_uLong m_nLen;
         const sal_Int32 m_nCorrLen;
-        LimitUpdater(SwCntntNode* pNewCntntNode, sal_uLong nLen, sal_Int32 nCorrLen)
-            : m_pNewCntntNode(pNewCntntNode), m_nLen(nLen), m_nCorrLen(nCorrLen) {};
-        void operator()(SwPosition& rPos, sal_Int32 nCntnt) const
+        LimitUpdater(SwContentNode* pNewContentNode, sal_uLong nLen, sal_Int32 nCorrLen)
+            : m_pNewContentNode(pNewContentNode), m_nLen(nLen), m_nCorrLen(nCorrLen) {};
+        void operator()(SwPosition& rPos, sal_Int32 nContent) const
         {
-            rPos.nNode = *m_pNewCntntNode;
-            if( nCntnt < m_nCorrLen )
+            rPos.nNode = *m_pNewContentNode;
+            if( nContent < m_nCorrLen )
             {
-                rPos.nContent.Assign(const_cast<SwCntntNode*>(m_pNewCntntNode), std::min( nCntnt, static_cast<sal_Int32>(m_nLen) ) );
+                rPos.nContent.Assign(const_cast<SwContentNode*>(m_pNewContentNode), std::min( nContent, static_cast<sal_Int32>(m_nLen) ) );
             }
             else
             {
@@ -122,14 +122,14 @@ namespace
             }
         };
     };
-    struct CntntIdxStoreImpl : sw::mark::CntntIdxStore
+    struct ContentIdxStoreImpl : sw::mark::ContentIdxStore
     {
         std::vector<MarkEntry> m_aBkmkEntries;
         std::vector<MarkEntry> m_aRedlineEntries;
         std::vector<MarkEntry> m_aFlyEntries;
         std::vector<PaMEntry> m_aUnoCrsrEntries;
         std::vector<PaMEntry> m_aShellCrsrEntries;
-        typedef boost::function<void (SwPosition& rPos, sal_Int32 nCntnt)> updater_t;
+        typedef boost::function<void (SwPosition& rPos, sal_Int32 nContent)> updater_t;
         virtual void Clear() SAL_OVERRIDE
         {
             m_aBkmkEntries.clear();
@@ -142,17 +142,17 @@ namespace
         {
             return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aFlyEntries.empty() && m_aUnoCrsrEntries.empty() && m_aShellCrsrEntries.empty();
         }
-        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, bool bSaveFlySplit=false) SAL_OVERRIDE
+        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit=false) SAL_OVERRIDE
         {
-            SaveBkmks(pDoc, nNode, nCntnt);
-            SaveRedlines(pDoc, nNode, nCntnt);
-            SaveFlys(pDoc, nNode, nCntnt, bSaveFlySplit);
-            SaveUnoCrsrs(pDoc, nNode, nCntnt);
-            SaveShellCrsrs(pDoc, nNode, nCntnt);
+            SaveBkmks(pDoc, nNode, nContent);
+            SaveRedlines(pDoc, nNode, nContent);
+            SaveFlys(pDoc, nNode, nContent, bSaveFlySplit);
+            SaveUnoCrsrs(pDoc, nNode, nContent);
+            SaveShellCrsrs(pDoc, nNode, nContent);
         }
         virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) SAL_OVERRIDE
         {
-            SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
+            SwContentNode* pCNd = pDoc->GetNodes()[ nNode ]->GetContentNode();
             updater_t aUpdater = OffsetUpdater(pCNd, nOffset);
             RestoreBkmks(pDoc, aUpdater);
             RestoreRedlines(pDoc, aUpdater);
@@ -162,7 +162,7 @@ namespace
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
         {
-            SwCntntNode* pCNd = rNd.GetCntntNode();
+            SwContentNode* pCNd = rNd.GetContentNode();
             SwDoc* pDoc = rNd.GetDoc();
             updater_t aUpdater = LimitUpdater(pCNd, nLen, nCorrLen);
             RestoreBkmks(pDoc, aUpdater);
@@ -171,36 +171,36 @@ namespace
             RestoreUnoCrsrs(aUpdater);
             RestoreShellCrsrs(aUpdater);
         }
-        virtual ~CntntIdxStoreImpl(){};
+        virtual ~ContentIdxStoreImpl(){};
         private:
-            inline void SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
+            inline void SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
             inline void RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater);
-            inline void SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
+            inline void SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
             inline void RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater);
-            inline void SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, bool bSaveFlySplit);
+            inline void SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit);
             inline void RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto);
-            inline void SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
+            inline void SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
             inline void RestoreUnoCrsrs(updater_t& rUpdater);
-            inline void SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
+            inline void SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
             inline void RestoreShellCrsrs(updater_t& rUpdater);
             static inline const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
             static inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
     };
-    static inline void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nCntnt, SwPaM& rPaM, const bool bPoint)
+    static inline void lcl_ChkPaM( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM, const bool bPoint)
     {
         const SwPosition* pPos = &rPaM.GetBound( bPoint );
-        if( pPos->nNode.GetIndex() == nNode && pPos->nContent.GetIndex() < nCntnt )
+        if( pPos->nNode.GetIndex() == nNode && pPos->nContent.GetIndex() < nContent )
         {
             const PaMEntry aEntry = { &rPaM, bPoint, pPos->nContent.GetIndex() };
             rPaMEntries.push_back(aEntry);
         }
     }
-    static inline void lcl_ChkPaMBoth( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nCntnt, SwPaM& rPaM)
+    static inline void lcl_ChkPaMBoth( std::vector<PaMEntry>& rPaMEntries, const sal_uLong nNode, const sal_Int32 nContent, SwPaM& rPaM)
     {
-        lcl_ChkPaM(rPaMEntries, nNode, nCntnt, rPaM, true);
-        lcl_ChkPaM(rPaMEntries, nNode, nCntnt, rPaM, false);
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, true);
+        lcl_ChkPaM(rPaMEntries, nNode, nContent, rPaM, false);
     }
 
 #if 0
@@ -212,7 +212,7 @@ namespace
 #endif
 }
 
-void CntntIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
+void ContentIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     const IDocumentMarkAccess::const_iterator_t ppBkmkEnd = pMarkAccess->getAllMarksEnd();
@@ -224,19 +224,19 @@ void CntntIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt
         const ::sw::mark::IMark* pBkmk = ppBkmk->get();
         bool bMarkPosEqual = false;
         if(pBkmk->GetMarkPos().nNode.GetIndex() == nNode
-            && pBkmk->GetMarkPos().nContent.GetIndex() <= nCntnt)
+            && pBkmk->GetMarkPos().nContent.GetIndex() <= nContent)
         {
-            if(pBkmk->GetMarkPos().nContent.GetIndex() < nCntnt)
+            if(pBkmk->GetMarkPos().nContent.GetIndex() < nContent)
             {
                 const MarkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), false, pBkmk->GetMarkPos().nContent.GetIndex() };
                 m_aBkmkEntries.push_back(aEntry);
             }
-            else // if a bookmark position is equal nCntnt, the other position
+            else // if a bookmark position is equal nContent, the other position
                 bMarkPosEqual = true; // has to decide if it is added to the array
         }
         if(pBkmk->IsExpanded()
             && pBkmk->GetOtherMarkPos().nNode.GetIndex() == nNode
-            && pBkmk->GetOtherMarkPos().nContent.GetIndex() <= nCntnt)
+            && pBkmk->GetOtherMarkPos().nContent.GetIndex() <= nContent)
         {
             if(bMarkPosEqual)
             { // the other position is before, the (main) position is equal
@@ -249,7 +249,7 @@ void CntntIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt
     }
 }
 
-void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater)
+void ContentIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater)
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     for (const MarkEntry& aEntry : m_aBkmkEntries)
@@ -257,20 +257,20 @@ void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater)
         if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nIdx].get()))
         {
             SwPosition aNewPos(GetRightMarkPos(pMark, aEntry.m_bOther));
-            rUpdater(aNewPos, aEntry.m_nCntnt);
+            rUpdater(aNewPos, aEntry.m_nContent);
             SetRightMarkPos(pMark, aEntry.m_bOther, &aNewPos);
         }
     }
 }
 
-void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
+void ContentIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
 {
-    SwRedlineTbl const & pRedlineTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
+    SwRedlineTable const & pRedlineTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     long int nIdx = 0;
-    for (const SwRangeRedline* pRdl : pRedlineTbl)
+    for (const SwRangeRedline* pRdl : pRedlineTable)
     {
-        int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );
-        int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nCntnt ) :
+        int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nContent );
+        int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nContent ) :
                                           nPointPos;
         // #i59534: We have to store the positions inside the same node before the insert position
         // and the one at the insert position if the corresponding Point/Mark position is before
@@ -291,21 +291,21 @@ void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
     }
 }
 
-void CntntIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater)
+void ContentIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater)
 {
-    const SwRedlineTbl& rRedlTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
+    const SwRedlineTable& rRedlTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     for (const MarkEntry& aEntry : m_aRedlineEntries)
     {
         SwPosition* const pPos = aEntry.m_bOther
-            ? rRedlTbl[ aEntry.m_nIdx ]->GetMark()
-            : rRedlTbl[ aEntry.m_nIdx ]->GetPoint();
-        rUpdater(*pPos, aEntry.m_nCntnt);
+            ? rRedlTable[ aEntry.m_nIdx ]->GetMark()
+            : rRedlTable[ aEntry.m_nIdx ]->GetPoint();
+        rUpdater(*pPos, aEntry.m_nContent);
     }
 }
 
-void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, bool bSaveFlySplit)
+void ContentIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit)
 {
-    SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
+    SwContentNode *pNode = pDoc->GetNodes()[nNode]->GetContentNode();
     if( !pNode )
         return;
     SwFrm* pFrm = pNode->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
@@ -315,22 +315,22 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
             return; // if we have a layout and no DrawObjs, we can skip this
     }
     MarkEntry aSave = { 0, false, 0 };
-    for (const SwFrmFmt* pFrmFmt : *pDoc->GetSpzFrmFmts())
+    for (const SwFrameFormat* pFrameFormat : *pDoc->GetSpzFrameFormats())
     {
-        if ( RES_FLYFRMFMT == pFrmFmt->Which() || RES_DRAWFRMFMT == pFrmFmt->Which() )
+        if ( RES_FLYFRMFMT == pFrameFormat->Which() || RES_DRAWFRMFMT == pFrameFormat->Which() )
         {
-            const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-            SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+            const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
+            SwPosition const*const pAPos = rAnchor.GetContentAnchor();
             if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
                  ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
                    FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
             {
                 bool bSkip = false;
                 aSave.m_bOther = false;
-                aSave.m_nCntnt = pAPos->nContent.GetIndex();
+                aSave.m_nContent = pAPos->nContent.GetIndex();
                 if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
                 {
-                    if( nCntnt <= aSave.m_nCntnt )
+                    if( nContent <= aSave.m_nContent )
                     {
                         if( bSaveFlySplit )
                             aSave.m_bOther = true;
@@ -346,65 +346,65 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
     }
 }
 
-void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto)
+void ContentIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto)
 {
-    SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
+    SwFrameFormats* pSpz = pDoc->GetSpzFrameFormats();
     for (const MarkEntry& aEntry : m_aFlyEntries)
     {
         if(!aEntry.m_bOther)
         {
-            SwFrmFmt *pFrmFmt = (*pSpz)[ aEntry.m_nIdx ];
-            const SwFmtAnchor& rFlyAnchor = pFrmFmt->GetAnchor();
-            if( rFlyAnchor.GetCntntAnchor() )
+            SwFrameFormat *pFrameFormat = (*pSpz)[ aEntry.m_nIdx ];
+            const SwFormatAnchor& rFlyAnchor = pFrameFormat->GetAnchor();
+            if( rFlyAnchor.GetContentAnchor() )
             {
-                SwFmtAnchor aNew( rFlyAnchor );
-                SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
-                rUpdater(aNewPos, aEntry.m_nCntnt);
+                SwFormatAnchor aNew( rFlyAnchor );
+                SwPosition aNewPos( *rFlyAnchor.GetContentAnchor() );
+                rUpdater(aNewPos, aEntry.m_nContent);
                 if ( FLY_AT_CHAR != rFlyAnchor.GetAnchorId() )
                 {
                     aNewPos.nContent.Assign( 0, 0 );
                 }
                 aNew.SetAnchor( &aNewPos );
-                pFrmFmt->SetFmtAttr( aNew );
+                pFrameFormat->SetFormatAttr( aNew );
             }
         }
         else if( bAuto )
         {
-            SwFrmFmt *pFrmFmt = (*pSpz)[ aEntry.m_nIdx ];
-            SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
-            pFrmFmt->NotifyClients( pAnchor, pAnchor );
+            SwFrameFormat *pFrameFormat = (*pSpz)[ aEntry.m_nIdx ];
+            SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrameFormat->GetAnchor();
+            pFrameFormat->NotifyClients( pAnchor, pAnchor );
         }
     }
 }
 
-void CntntIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
+void ContentIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
 {
-    for (const SwUnoCrsr* pUnoCrsr : pDoc->GetUnoCrsrTbl())
+    for (const SwUnoCrsr* pUnoCrsr : pDoc->GetUnoCrsrTable())
     {
         for(SwPaM& rPaM : (const_cast<SwUnoCrsr*>(pUnoCrsr))->GetRingContainer())
         {
-            lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nCntnt, rPaM);
+            lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nContent, rPaM);
         }
-        const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
-        if( pUnoTblCrsr )
+        const SwUnoTableCrsr* pUnoTableCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
+        if( pUnoTableCrsr )
         {
-            for(SwPaM& rPaM : (&(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing())->GetRingContainer())
+            for(SwPaM& rPaM : (&(const_cast<SwUnoTableCrsr*>(pUnoTableCrsr))->GetSelRing())->GetRingContainer())
             {
-                lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nCntnt, rPaM);
+                lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nContent, rPaM);
             }
         }
     }
 }
 
-void CntntIdxStoreImpl::RestoreUnoCrsrs(updater_t& rUpdater)
+void ContentIdxStoreImpl::RestoreUnoCrsrs(updater_t& rUpdater)
 {
     for (const PaMEntry& aEntry : m_aUnoCrsrEntries)
     {
-        rUpdater(aEntry.m_pPaM->GetBound(!aEntry.m_isMark), aEntry.m_nCntnt);
+        rUpdater(aEntry.m_pPaM->GetBound(!aEntry.m_isMark), aEntry.m_nContent);
     }
 }
 
-void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
+void ContentIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
 {
     SwCrsrShell* pShell = pDoc->GetEditShell();
     if( !pShell )
@@ -416,30 +416,30 @@ void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
             SwPaM *_pStkCrsr = static_cast<SwCrsrShell*>(&rCurShell)->GetStkCrsr();
             if( _pStkCrsr )
                 do {
-                    lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr);
+                    lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nContent, *_pStkCrsr);
                 } while ( (_pStkCrsr != 0 ) &&
                     ((_pStkCrsr = _pStkCrsr->GetNext()) != static_cast<SwCrsrShell*>(&rCurShell)->GetStkCrsr()) );
 
             for(SwPaM& rPaM : (static_cast<SwCrsrShell*>(&rCurShell)->_GetCrsr())->GetRingContainer())
             {
-                lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nCntnt, rPaM);
+                lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nContent, rPaM);
             }
         }
     }
 }
 
-void CntntIdxStoreImpl::RestoreShellCrsrs(updater_t& rUpdater)
+void ContentIdxStoreImpl::RestoreShellCrsrs(updater_t& rUpdater)
 {
     for (const PaMEntry& aEntry : m_aShellCrsrEntries)
     {
-        rUpdater(aEntry.m_pPaM->GetBound(aEntry.m_isMark), aEntry.m_nCntnt);
+        rUpdater(aEntry.m_pPaM->GetBound(aEntry.m_isMark), aEntry.m_nContent);
     }
 }
 
 namespace sw { namespace mark {
-    std::shared_ptr<CntntIdxStore> CntntIdxStore::Create()
+    std::shared_ptr<ContentIdxStore> ContentIdxStore::Create()
     {
-       return std::make_shared<CntntIdxStoreImpl>();
+       return std::make_shared<ContentIdxStoreImpl>();
     }
 }}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

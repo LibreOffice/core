@@ -25,7 +25,7 @@
 #include <tools/mempool.hxx>
 
 class SwRedlineSaveDatas;
-class SwTxtNode;
+class SwTextNode;
 
 namespace sfx2 {
     class MetadatableUndo;
@@ -34,7 +34,7 @@ namespace sfx2 {
 class SwUndoDelete
     : public SwUndo
     , private SwUndRng
-    , private SwUndoSaveCntnt
+    , private SwUndoSaveContent
 {
     SwNodeIndex* pMvStt;            // Position of Nodes in UndoNodes-Array
     OUString *pSttStr, *pEndStr;
@@ -54,20 +54,20 @@ class SwUndoDelete
     bool bGroup : 1;         // TRUE: is already Grouped; see CanGrouping()
     bool bBackSp : 1;        // TRUE: if Grouped and preceding content deleted
     bool bJoinNext: 1;       // TRUE: if range is selected forwards
-    bool bTblDelLastNd : 1;  // TRUE: TextNode following Table inserted/deleted
+    bool bTableDelLastNd : 1;  // TRUE: TextNode following Table inserted/deleted
     bool bDelFullPara : 1;   // TRUE: entire Nodes were deleted
     bool bResetPgDesc : 1;   // TRUE: reset PgDsc on following node
     bool bResetPgBrk : 1;    // TRUE: reset PgBreak on following node
-    bool bFromTableCopy : 1; // TRUE: called by SwUndoTblCpyTbl
+    bool bFromTableCopy : 1; // TRUE: called by SwUndoTableCpyTable
 
-    bool SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
-                    SwTxtNode* pSttTxtNd, SwTxtNode* pEndTxtNd );
+    bool SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
+                    SwTextNode* pSttTextNd, SwTextNode* pEndTextNd );
 
 public:
     SwUndoDelete(
         SwPaM&,
         bool bFullPara = false,
-        bool bCalledByTblCpy = false );
+        bool bCalledByTableCpy = false );
     virtual ~SwUndoDelete();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
@@ -88,7 +88,7 @@ public:
 
     bool CanGrouping( SwDoc*, const SwPaM& );
 
-    void SetTblDelLastNd()      { bTblDelLastNd = true; }
+    void SetTableDelLastNd()      { bTableDelLastNd = true; }
 
     // for PageDesc/PageBreak Attributes of a table
     void SetPgBrkFlags( bool bPageBreak, bool bPageDesc )
@@ -96,7 +96,7 @@ public:
 
     void SetTableName(const OUString & rName);
 
-    // SwUndoTblCpyTbl needs this information:
+    // SwUndoTableCpyTable needs this information:
     bool IsDelFullPara() const { return bDelFullPara; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)

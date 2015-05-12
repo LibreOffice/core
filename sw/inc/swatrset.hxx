@@ -57,45 +57,45 @@ class SvxCharReliefItem;
 class SvxCharHiddenItem;
 
 // Frame attributes
-class SwFmtFillOrder;
-class SwFmtFrmSize;
+class SwFormatFillOrder;
+class SwFormatFrmSize;
 class SvxPaperBinItem;
 class SvxLRSpaceItem;
 class SvxULSpaceItem;
-class SwFmtCntnt;
-class SwFmtHeader;
-class SwFmtFooter;
+class SwFormatContent;
+class SwFormatHeader;
+class SwFormatFooter;
 class SvxPrintItem;
 class SvxOpaqueItem;
 class SvxProtectItem;
-class SwFmtSurround;
-class SwFmtVertOrient;
-class SwFmtHoriOrient;
-class SwFmtAnchor;
+class SwFormatSurround;
+class SwFormatVertOrient;
+class SwFormatHoriOrient;
+class SwFormatAnchor;
 class SvxBoxItem;
 class SvxBrushItem;
 class XFillStyleItem;
 class XFillGradientItem;
 class SvxShadowItem;
-class SwFmtPageDesc;
-class SvxFmtBreakItem;
-class SwFmtCol;
+class SwFormatPageDesc;
+class SvxFormatBreakItem;
+class SwFormatCol;
 class SvxMacroItem;
-class SvxFmtKeepItem;
-class SwFmtURL;
-class SwFmtLineNumber;
-class SwFmtEditInReadonly;
-class SwFmtLayoutSplit;
-class SwFmtRowSplit;
-class SwFmtChain;
-class SwFmtFtnAtTxtEnd;
-class SwFmtEndAtTxtEnd;
-class SwFmtNoBalancedColumns;
+class SvxFormatKeepItem;
+class SwFormatURL;
+class SwFormatLineNumber;
+class SwFormatEditInReadonly;
+class SwFormatLayoutSplit;
+class SwFormatRowSplit;
+class SwFormatChain;
+class SwFormatFootnoteAtTextEnd;
+class SwFormatEndAtTextEnd;
+class SwFormatNoBalancedColumns;
 class SvxFrameDirectionItem;
 class SwTextGridItem;
 class SwHeaderAndFooterEatSpacingItem;
-class SwFmtFollowTextFlow;
-class SwFmtWrapInfluenceOnObjPos;
+class SwFormatFollowTextFlow;
+class SwFormatWrapInfluenceOnObjPos;
 class SdrTextVertAdjustItem;
 
 // Graphic attributes
@@ -115,14 +115,14 @@ class SwDrawModeGrf;
 // Paragraph attributes
 class SvxLineSpacingItem;
 class SvxAdjustItem;
-class SvxFmtSplitItem;
+class SvxFormatSplitItem;
 class SwRegisterItem;
 class SwNumRuleItem;
 class SvxWidowsItem;
 class SvxOrphansItem;
 class SvxTabStopItem;
 class SvxHyphenZoneItem;
-class SwFmtDrop;
+class SwFormatDrop;
 class SvxScriptSpaceItem;
 class SvxHangingPunctuationItem;
 class SvxForbiddenRuleItem;
@@ -131,9 +131,9 @@ class SvxParaGridItem;
 class SwParaConnectBorderItem;
 
 // TableBox attributes
-class SwTblBoxNumFormat;
-class SwTblBoxFormula;
-class SwTblBoxValue;
+class SwTableBoxNumFormat;
+class SwTableBoxFormula;
+class SwTableBoxValue;
 
 class SwAttrPool : public SfxItemPool
 {
@@ -206,10 +206,10 @@ public:
 
     // Special treatment for some attributes.
     // Set Modify-pointer (the old pDefinedIn) at the following attributes:
-    //  - SwFmtDropCaps
-    //  - SwFmtPageDesc
+    //  - SwFormatDropCaps
+    //  - SwFormatPageDesc
     // (Is called at insert in formats/nodes.)
-    // Second version is for the SwAttrSet handles of SwCntntNode.
+    // Second version is for the SwAttrSet handles of SwContentNode.
     bool SetModifyAtAttr( const SwModify* pModify );
 
     // Document is set at SwAttrPool. Therefore it is always accessible.
@@ -262,43 +262,43 @@ public:
     inline const SvxShadowItem      &GetCharShadow( bool = true ) const;
 
     // Frame attributes. Implementation in frmatr.hxx.
-    inline const SwFmtFillOrder       &GetFillOrder( bool = true ) const;
-    inline const SwFmtFrmSize             &GetFrmSize( bool = true ) const;
+    inline const SwFormatFillOrder       &GetFillOrder( bool = true ) const;
+    inline const SwFormatFrmSize             &GetFrmSize( bool = true ) const;
     inline const SvxPaperBinItem      &GetPaperBin( bool = true ) const;
     inline const SvxLRSpaceItem           &GetLRSpace( bool = true ) const;
     inline const SvxULSpaceItem           &GetULSpace( bool = true ) const;
-    inline const SwFmtCntnt           &GetCntnt( bool = true ) const;
-    inline const SwFmtHeader          &GetHeader( bool = true ) const;
-    inline const SwFmtFooter          &GetFooter( bool = true ) const;
+    inline const SwFormatContent           &GetContent( bool = true ) const;
+    inline const SwFormatHeader          &GetHeader( bool = true ) const;
+    inline const SwFormatFooter          &GetFooter( bool = true ) const;
     inline const SvxPrintItem             &GetPrint( bool = true ) const;
     inline const SvxOpaqueItem            &GetOpaque( bool = true ) const;
     inline const SvxProtectItem           &GetProtect( bool = true ) const;
-    inline const SwFmtSurround            &GetSurround( bool = true ) const;
-    inline const SwFmtVertOrient      &GetVertOrient( bool = true ) const;
-    inline const SwFmtHoriOrient      &GetHoriOrient( bool = true ) const;
-    inline const SwFmtAnchor          &GetAnchor( bool = true ) const;
+    inline const SwFormatSurround            &GetSurround( bool = true ) const;
+    inline const SwFormatVertOrient      &GetVertOrient( bool = true ) const;
+    inline const SwFormatHoriOrient      &GetHoriOrient( bool = true ) const;
+    inline const SwFormatAnchor          &GetAnchor( bool = true ) const;
     inline const SvxBoxItem               &GetBox( bool = true ) const;
-    inline const SvxFmtKeepItem         &GetKeep( bool = true ) const;
+    inline const SvxFormatKeepItem         &GetKeep( bool = true ) const;
     inline const SvxBrushItem           &GetBackground( bool = true ) const;
     inline const SvxShadowItem            &GetShadow( bool = true ) const;
-    inline const SwFmtPageDesc            &GetPageDesc( bool = true ) const;
-    inline const SvxFmtBreakItem      &GetBreak( bool = true ) const;
-    inline const SwFmtCol                 &GetCol( bool = true ) const;
+    inline const SwFormatPageDesc            &GetPageDesc( bool = true ) const;
+    inline const SvxFormatBreakItem      &GetBreak( bool = true ) const;
+    inline const SwFormatCol                 &GetCol( bool = true ) const;
     inline const SvxMacroItem             &GetMacro( bool = true ) const;
-    inline const SwFmtURL             &GetURL( bool = true ) const;
-    inline const SwFmtEditInReadonly  &GetEditInReadonly( bool = true ) const;
-    inline const SwFmtLayoutSplit     &GetLayoutSplit( bool = true ) const;
-    inline const SwFmtRowSplit          &GetRowSplit( bool = true ) const;
-    inline const SwFmtChain             &GetChain( bool = true ) const;
-    inline const SwFmtLineNumber      &GetLineNumber( bool = true ) const;
-    inline const SwFmtFtnAtTxtEnd     &GetFtnAtTxtEnd( bool = true ) const;
-    inline const SwFmtEndAtTxtEnd     &GetEndAtTxtEnd( bool = true ) const;
-    inline const SwFmtNoBalancedColumns &GetBalancedColumns( bool = true ) const;
+    inline const SwFormatURL             &GetURL( bool = true ) const;
+    inline const SwFormatEditInReadonly  &GetEditInReadonly( bool = true ) const;
+    inline const SwFormatLayoutSplit     &GetLayoutSplit( bool = true ) const;
+    inline const SwFormatRowSplit          &GetRowSplit( bool = true ) const;
+    inline const SwFormatChain             &GetChain( bool = true ) const;
+    inline const SwFormatLineNumber      &GetLineNumber( bool = true ) const;
+    inline const SwFormatFootnoteAtTextEnd     &GetFootnoteAtTextEnd( bool = true ) const;
+    inline const SwFormatEndAtTextEnd     &GetEndAtTextEnd( bool = true ) const;
+    inline const SwFormatNoBalancedColumns &GetBalancedColumns( bool = true ) const;
     inline const SvxFrameDirectionItem    &GetFrmDir( bool = true ) const;
     inline const SwTextGridItem         &GetTextGrid( bool = true ) const;
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( bool = true ) const;
-    inline const SwFmtFollowTextFlow    &GetFollowTextFlow(bool = true) const;
-    inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(bool = true) const;
+    inline const SwFormatFollowTextFlow    &GetFollowTextFlow(bool = true) const;
+    inline const SwFormatWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(bool = true) const;
     inline const SdrTextVertAdjustItem& GetTextVertAdjust(bool = true) const;
 
     // Graphic attributes   - implementation in grfatr.hxx
@@ -318,14 +318,14 @@ public:
     // Paragraph attributes - implementation in paratr.hxx
     inline const SvxLineSpacingItem       &GetLineSpacing( bool = true ) const;
     inline const SvxAdjustItem            &GetAdjust( bool = true ) const;
-    inline const SvxFmtSplitItem      &GetSplit( bool = true ) const;
+    inline const SvxFormatSplitItem      &GetSplit( bool = true ) const;
     inline const SwRegisterItem           &GetRegister( bool = true ) const;
     inline const SwNumRuleItem            &GetNumRule( bool = true ) const;
     inline const SvxWidowsItem            &GetWidows( bool = true ) const;
     inline const SvxOrphansItem           &GetOrphans( bool = true ) const;
     inline const SvxTabStopItem           &GetTabStops( bool = true ) const;
     inline const SvxHyphenZoneItem        &GetHyphenZone( bool = true ) const;
-    inline const SwFmtDrop                &GetDrop( bool = true ) const;
+    inline const SwFormatDrop                &GetDrop( bool = true ) const;
     inline const SvxScriptSpaceItem       &GetScriptSpace(bool = true) const;
     inline const SvxHangingPunctuationItem &GetHangingPunctuation(bool = true) const;
     inline const SvxForbiddenRuleItem     &GetForbiddenRule(bool = true) const;
@@ -334,9 +334,9 @@ public:
     inline const SwParaConnectBorderItem &GetParaConnectBorder(bool = true ) const;
 
     // Tablebox attributes  - implementation in cellatr.hxx
-    inline  const SwTblBoxNumFormat       &GetTblBoxNumFmt( bool = true ) const;
-    inline  const SwTblBoxFormula     &GetTblBoxFormula( bool = true ) const;
-    inline  const SwTblBoxValue           &GetTblBoxValue( bool = true ) const;
+    inline  const SwTableBoxNumFormat       &GetTableBoxNumFormat( bool = true ) const;
+    inline  const SwTableBoxFormula     &GetTableBoxFormula( bool = true ) const;
+    inline  const SwTableBoxValue           &GetTableBoxValue( bool = true ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwAttrSet)
 };

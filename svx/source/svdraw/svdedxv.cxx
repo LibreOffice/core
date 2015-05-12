@@ -493,14 +493,14 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
         bOk=pTextObj->CalcFieldValue(pFI->GetField(),pFI->GetPara(),pFI->GetPos(),true,pTxtCol,pFldCol,rStr);
         if (bOk) {
             if (pTxtCol!=NULL) {
-                pFI->SetTxtColor(*pTxtCol);
+                pFI->SetTextColor(*pTxtCol);
                 delete pTxtCol;
             }
             if (pFldCol!=NULL) {
-                pFI->SetFldColor(*pFldCol);
+                pFI->SetFieldColor(*pFldCol);
                 delete pFldCol;
             } else {
-                pFI->SetFldColor(Color(COL_LIGHTGRAY)); // TODO: remove this later on (357)
+                pFI->SetFieldColor(Color(COL_LIGHTGRAY)); // TODO: remove this later on (357)
             }
         }
     }

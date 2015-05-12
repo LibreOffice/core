@@ -37,12 +37,12 @@ class SwRootFrm;
 class SwPageFrm;
 class SwFlyFrm;
 class SwSectionFrm;
-class SwFtnFrm;
-class SwFtnBossFrm;
+class SwFootnoteFrm;
+class SwFootnoteBossFrm;
 class SwTabFrm;
 class SwRowFrm;
 class SwFlowFrm;
-class SwCntntFrm;
+class SwContentFrm;
 class SfxPoolItem;
 class SwAttrSet;
 class SwViewShell;
@@ -55,7 +55,7 @@ class XFillGradientItem;
 class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
-class SwFmt;
+class SwFormat;
 class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
@@ -221,18 +221,18 @@ class SwFrm: public SwClient, public SfxBroadcaster
     friend class SwLooping;
 
     // voids lower during creation of a column
-    friend SwFrm *SaveCntnt( SwLayoutFrm *, SwFrm* pStart );
-    friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
+    friend SwFrm *SaveContent( SwLayoutFrm *, SwFrm* pStart );
+    friend void   RestoreContent( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
 #ifdef DBG_UTIL
     // remove empty SwSectionFrms from a chain
     friend SwFrm* SwClearDummies( SwFrm* pFrm );
 #endif
 
-    // for validating a mistakenly invalidated one in SwCntntFrm::MakeAll
+    // for validating a mistakenly invalidated one in SwContentFrm::MakeAll
     friend void ValidateSz( SwFrm *pFrm );
-    // implemented in text/txtftn.cxx, prevents Ftn oscillation
-    friend void ValidateTxt( SwFrm *pFrm );
+    // implemented in text/txtftn.cxx, prevents Footnote oscillation
+    friend void ValidateText( SwFrm *pFrm );
 
     friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );
 
@@ -269,20 +269,20 @@ class SwFrm: public SwClient, public SfxBroadcaster
         - Each group of linked fly frames
         - All footnotes
         - All document body frames
-        #i27138# - adding parameter <_bInSameFtn>
+        #i27138# - adding parameter <_bInSameFootnote>
         Its default value is <false>. If its value is <true>, the environment
         'All footnotes' is no longer treated. Instead each footnote is treated
         as an own environment.
 
-        @param _bInSameFtn
+        @param _bInSameFootnote
         input parameter - boolean indicating, that the found next content
         frame has to be in the same footnote frame. This parameter is only
         relevant for flow frames in footnotes.
 
-        @return SwCntntFrm*
+        @return SwContentFrm*
         pointer to the found next content frame. It's NULL, if none exists.
     */
-    SwCntntFrm* _FindNextCnt( const bool _bInSameFtn = false );
+    SwContentFrm* _FindNextCnt( const bool _bInSameFootnote = false );
 
     /** method to determine previous content frame in the same environment
         for a flow frame (content frame, table frame, section frame)
@@ -298,20 +298,20 @@ class SwFrm: public SwClient, public SfxBroadcaster
         - Each group of linked fly frames
         - All footnotes
         - All document body frames
-        #i27138# - adding parameter <_bInSameFtn>
+        #i27138# - adding parameter <_bInSameFootnote>
         Its default value is <false>. If its value is <true>, the environment
         'All footnotes' is no longer treated. Instead each footnote is treated
         as an own environment.
 
-        @param _bInSameFtn
+        @param _bInSameFootnote
         input parameter - boolean indicating, that the found previous content
         frame has to be in the same footnote frame. This parameter is only
         relevant for flow frames in footnotes.
 
-        @return SwCntntFrm*
+        @return SwContentFrm*
         pointer to the found previous content frame. It's NULL, if none exists.
     */
-    SwCntntFrm* _FindPrevCnt( const bool _bInSameFtn = false );
+    SwContentFrm* _FindPrevCnt( const bool _bInSameFootnote = false );
 
     void _UpdateAttrFrm( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 & );
     SwFrm* _GetIndNext();
@@ -344,7 +344,7 @@ protected:
     bool mbValidLineNum  : 1;
     bool mbFixSize       : 1;
     // if true, frame will be painted completely even content was changed
-    // only partially. For CntntFrms a border (from Action) will exclusively
+    // only partially. For ContentFrms a border (from Action) will exclusively
     // painted if <mbCompletePaint> is true.
     bool mbCompletePaint : 1;
     bool mbRetouche      : 1; // frame is responsible for retouching
@@ -353,7 +353,7 @@ protected:
     bool mbInfBody       : 1;  // Frm is in document body
     bool mbInfTab        : 1;  // Frm is in a table
     bool mbInfFly        : 1;  // Frm is in a Fly
-    bool mbInfFtn        : 1;  // Frm is in a footnote
+    bool mbInfFootnote        : 1;  // Frm is in a footnote
     bool mbInfSct        : 1;  // Frm is in a section
     bool mbColLocked     : 1;  // lock Grow/Shrink for column-wise section
                                   // or fly frames, will be set in Format
@@ -369,14 +369,14 @@ protected:
     // Only used by SwRootFrm Ctor to get 'this' into mpRoot...
     void setRootFrm( SwRootFrm* pRoot ) { mpRoot = pRoot; }
 
-    SwPageFrm *InsertPage( SwPageFrm *pSibling, bool bFtn );
+    SwPageFrm *InsertPage( SwPageFrm *pSibling, bool bFootnote );
     void PrepareMake();
     void OptPrepareMake();
     void MakePos();
     // Format next frame of table frame to assure keeping attributes.
     // In case of nested tables method <SwFrm::MakeAll()> is called to
     // avoid formatting of superior table frame.
-    friend SwFrm* sw_FormatNextCntntForKeep( SwTabFrm* pTabFrm );
+    friend SwFrm* sw_FormatNextContentForKeep( SwTabFrm* pTabFrm );
 
     virtual void MakeAll() = 0;
     // adjust frames of a page
@@ -454,13 +454,13 @@ public:
     // Does special treatment for _Get[Next|Prev]Leaf() (for tables).
     SwLayoutFrm *GetLeaf( MakePageType eMakePage, bool bFwd );
     SwLayoutFrm *GetNextLeaf   ( MakePageType eMakePage );
-    SwLayoutFrm *GetNextFtnLeaf( MakePageType eMakePage );
+    SwLayoutFrm *GetNextFootnoteLeaf( MakePageType eMakePage );
     SwLayoutFrm *GetNextSctLeaf( MakePageType eMakePage );
     SwLayoutFrm *GetNextCellLeaf( MakePageType eMakePage );
-    SwLayoutFrm *GetPrevLeaf   ( MakePageType eMakeFtn = MAKEPAGE_FTN );
-    SwLayoutFrm *GetPrevFtnLeaf( MakePageType eMakeFtn = MAKEPAGE_FTN );
-    SwLayoutFrm *GetPrevSctLeaf( MakePageType eMakeFtn = MAKEPAGE_FTN );
-    SwLayoutFrm *GetPrevCellLeaf( MakePageType eMakeFtn = MAKEPAGE_FTN );
+    SwLayoutFrm *GetPrevLeaf   ( MakePageType eMakeFootnote = MAKEPAGE_FTN );
+    SwLayoutFrm *GetPrevFootnoteLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
+    SwLayoutFrm *GetPrevSctLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
+    SwLayoutFrm *GetPrevCellLeaf( MakePageType eMakeFootnote = MAKEPAGE_FTN );
     const SwLayoutFrm *GetLeaf ( MakePageType eMakePage, bool bFwd,
                                  const SwFrm *pAnch ) const;
 
@@ -482,12 +482,12 @@ public:
     virtual void PaintBorder( const SwRect&, const SwPageFrm *pPage,
                               const SwBorderAttrs & ) const;
     void PaintBaBo( const SwRect&, const SwPageFrm *pPage = 0,
-                    const bool bLowerBorder = false, const bool bOnlyTxtBackground = false ) const;
+                    const bool bLowerBorder = false, const bool bOnlyTextBackground = false ) const;
     void PaintBackground( const SwRect&, const SwPageFrm *pPage,
                           const SwBorderAttrs &,
                           const bool bLowerMode = false,
                           const bool bLowerBorder = false,
-                          const bool bOnlyTxtBackground = false ) const;
+                          const bool bOnlyTextBackground = false ) const;
     void PaintBorderLine( const SwRect&, const SwRect&, const SwPageFrm*,
                           const Color *pColor, const editeng::SvxBorderStyle =
                 ::com::sun::star::table::BorderLineStyle::SOLID ) const;
@@ -517,7 +517,7 @@ public:
     void SetInfFlags();
     inline void InvalidateInfFlags() { mbInfInvalid = true; }
     inline bool IsInDocBody() const;    // use InfoFlags, determine flags
-    inline bool IsInFtn() const;        // if necessary
+    inline bool IsInFootnote() const;        // if necessary
     inline bool IsInTab() const;
     inline bool IsInFly() const;
     inline bool IsInSct() const;
@@ -569,9 +569,9 @@ public:
     */
     bool IsMoveable( const SwLayoutFrm* _pLayoutFrm = 0L ) const;
 
-    // Is it permitted for the (Txt)Frm to add a footnote in the current
+    // Is it permitted for the (Text)Frm to add a footnote in the current
     // environment (not e.g. for repeating table headlines)
-    bool IsFtnAllowed() const;
+    bool IsFootnoteAllowed() const;
 
     virtual void  Format( const SwBorderAttrs *pAttrs = 0 );
 
@@ -595,9 +595,9 @@ public:
     SwPageFrm           *FindPageFrm();
     SwFrm               *FindColFrm();
     SwRowFrm            *FindRowFrm();
-    SwFtnBossFrm        *FindFtnBossFrm( bool bFootnotes = false );
+    SwFootnoteBossFrm        *FindFootnoteBossFrm( bool bFootnotes = false );
     SwTabFrm            *ImplFindTabFrm();
-    SwFtnFrm            *ImplFindFtnFrm();
+    SwFootnoteFrm            *ImplFindFootnoteFrm();
     SwFlyFrm            *ImplFindFlyFrm();
     SwSectionFrm        *ImplFindSctFrm();
     SwFrm               *FindFooterOrHeader();
@@ -607,30 +607,30 @@ public:
     const SwLayoutFrm   *GetUpper() const { return mpUpper; }
     const SwRootFrm     *getRootFrm()   const { return mpRoot; }
     inline SwTabFrm     *FindTabFrm();
-    inline SwFtnFrm     *FindFtnFrm();
+    inline SwFootnoteFrm     *FindFootnoteFrm();
     inline SwFlyFrm     *FindFlyFrm();
     inline SwSectionFrm *FindSctFrm();
     inline SwFrm        *FindNext();
-    // #i27138# - add parameter <_bInSameFtn>
-    SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false );
+    // #i27138# - add parameter <_bInSameFootnote>
+    SwContentFrm* FindNextCnt( const bool _bInSameFootnote = false );
     inline SwFrm        *FindPrev();
     inline const SwPageFrm *FindPageFrm() const;
-    inline const SwFtnBossFrm *FindFtnBossFrm( bool bFtn = false ) const;
+    inline const SwFootnoteBossFrm *FindFootnoteBossFrm( bool bFootnote = false ) const;
     inline const SwFrm     *FindColFrm() const;
     inline const SwFrm     *FindFooterOrHeader() const;
     inline const SwTabFrm  *FindTabFrm() const;
-    inline const SwFtnFrm  *FindFtnFrm() const;
+    inline const SwFootnoteFrm  *FindFootnoteFrm() const;
     inline const SwFlyFrm  *FindFlyFrm() const;
     inline const SwSectionFrm *FindSctFrm() const;
     inline const SwFrm     *FindNext() const;
-    // #i27138# - add parameter <_bInSameFtn>
-    const SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false ) const;
+    // #i27138# - add parameter <_bInSameFootnote>
+    const SwContentFrm* FindNextCnt( const bool _bInSameFootnote = false ) const;
     inline const SwFrm     *FindPrev() const;
            const SwFrm     *GetLower()  const;
 
-    SwCntntFrm* FindPrevCnt( const bool _bInSameFtn = false );
+    SwContentFrm* FindPrevCnt( const bool _bInSameFootnote = false );
 
-    const SwCntntFrm* FindPrevCnt( const bool _bInSameFtn = false ) const;
+    const SwContentFrm* FindPrevCnt( const bool _bInSameFootnote = false ) const;
 
     // #i79774#
     SwFrm* _GetIndPrev() const;
@@ -748,8 +748,8 @@ public:
     void ImplInvalidatePos();
     void ImplInvalidateLineNum();
 
-    inline void InvalidateNextPos( bool bNoFtn = false );
-    void ImplInvalidateNextPos( bool bNoFtn = false );
+    inline void InvalidateNextPos( bool bNoFootnote = false );
+    void ImplInvalidateNextPos( bool bNoFootnote = false );
 
     /** method to invalidate printing area of next frame
         #i11859#
@@ -778,11 +778,11 @@ public:
     inline bool IsRootFrm() const;
     inline bool IsPageFrm() const;
     inline bool IsColumnFrm() const;
-    inline bool IsFtnBossFrm() const;  // footnote bosses might be PageFrms or ColumnFrms
+    inline bool IsFootnoteBossFrm() const;  // footnote bosses might be PageFrms or ColumnFrms
     inline bool IsHeaderFrm() const;
     inline bool IsFooterFrm() const;
-    inline bool IsFtnContFrm() const;
-    inline bool IsFtnFrm() const;
+    inline bool IsFootnoteContFrm() const;
+    inline bool IsFootnoteFrm() const;
     inline bool IsBodyFrm() const;
     inline bool IsColBodyFrm() const;  // implemented in layfrm.hxx, BodyFrm above ColumnFrm
     inline bool IsPageBodyFrm() const; // implemented in layfrm.hxx, BodyFrm above PageFrm
@@ -791,9 +791,9 @@ public:
     inline bool IsTabFrm() const;
     inline bool IsRowFrm() const;
     inline bool IsCellFrm() const;
-    inline bool IsCntntFrm() const;
-    inline bool IsTxtFrm() const;
-    inline bool IsNoTxtFrm() const;
+    inline bool IsContentFrm() const;
+    inline bool IsTextFrm() const;
+    inline bool IsNoTextFrm() const;
     // Frms where its PrtArea depends on their neighbors and that are
     // positioned in the content flow
     inline bool IsFlowFrm() const;
@@ -856,8 +856,8 @@ public:
     bool IsInCoveredCell() const;
 
     // #i81146# new loop control
-    bool KnowsFormat( const SwFmt& rFmt ) const;
-    void RegisterToFormat( SwFmt& rFmt );
+    bool KnowsFormat( const SwFormat& rFormat ) const;
+    void RegisterToFormat( SwFormat& rFormat );
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
 
     void ForbidDelete()      { mbForbidDelete = true; }
@@ -882,11 +882,11 @@ inline bool SwFrm::IsInDocBody() const
         const_cast<SwFrm*>(this)->SetInfFlags();
     return mbInfBody;
 }
-inline bool SwFrm::IsInFtn() const
+inline bool SwFrm::IsInFootnote() const
 {
     if ( mbInfInvalid )
         const_cast<SwFrm*>(this)->SetInfFlags();
-    return mbInfFtn;
+    return mbInfFootnote;
 }
 inline bool SwFrm::IsInTab() const
 {
@@ -990,12 +990,12 @@ inline void SwFrm::InvalidateAll()
         _ActionOnInvalidation( INVALID_ALL );
     }
 }
-inline void SwFrm::InvalidateNextPos( bool bNoFtn )
+inline void SwFrm::InvalidateNextPos( bool bNoFootnote )
 {
     if ( mpNext && !mpNext->IsSctFrm() )
         mpNext->InvalidatePos();
     else
-        ImplInvalidateNextPos( bNoFtn );
+        ImplInvalidateNextPos( bNoFootnote );
 }
 
 inline void SwFrm::Calc() const
@@ -1024,13 +1024,13 @@ inline SwTabFrm *SwFrm::FindTabFrm()
 {
     return IsInTab() ? ImplFindTabFrm() : 0;
 }
-inline const SwFtnBossFrm *SwFrm::FindFtnBossFrm( bool bFtn ) const
+inline const SwFootnoteBossFrm *SwFrm::FindFootnoteBossFrm( bool bFootnote ) const
 {
-    return const_cast<SwFrm*>(this)->FindFtnBossFrm( bFtn );
+    return const_cast<SwFrm*>(this)->FindFootnoteBossFrm( bFootnote );
 }
-inline SwFtnFrm *SwFrm::FindFtnFrm()
+inline SwFootnoteFrm *SwFrm::FindFootnoteFrm()
 {
-    return IsInFtn() ? ImplFindFtnFrm() : 0;
+    return IsInFootnote() ? ImplFindFootnoteFrm() : 0;
 }
 inline SwFlyFrm *SwFrm::FindFlyFrm()
 {
@@ -1045,9 +1045,9 @@ inline const SwTabFrm *SwFrm::FindTabFrm() const
 {
     return IsInTab() ? const_cast<SwFrm*>(this)->ImplFindTabFrm() : 0;
 }
-inline const SwFtnFrm *SwFrm::FindFtnFrm() const
+inline const SwFootnoteFrm *SwFrm::FindFootnoteFrm() const
 {
-    return IsInFtn() ? const_cast<SwFrm*>(this)->ImplFindFtnFrm() : 0;
+    return IsInFootnote() ? const_cast<SwFrm*>(this)->ImplFindFootnoteFrm() : 0;
 }
 inline const SwFlyFrm *SwFrm::FindFlyFrm() const
 {
@@ -1102,7 +1102,7 @@ inline bool SwFrm::IsColumnFrm() const
 {
     return mnFrmType == FRM_COLUMN;
 }
-inline bool SwFrm::IsFtnBossFrm() const
+inline bool SwFrm::IsFootnoteBossFrm() const
 {
     return (GetType() & FRM_FTNBOSS) != 0;
 }
@@ -1114,11 +1114,11 @@ inline bool SwFrm::IsFooterFrm() const
 {
     return mnFrmType == FRM_FOOTER;
 }
-inline bool SwFrm::IsFtnContFrm() const
+inline bool SwFrm::IsFootnoteContFrm() const
 {
     return mnFrmType == FRM_FTNCONT;
 }
-inline bool SwFrm::IsFtnFrm() const
+inline bool SwFrm::IsFootnoteFrm() const
 {
     return mnFrmType == FRM_FTN;
 }
@@ -1146,15 +1146,15 @@ inline bool SwFrm::IsCellFrm() const
 {
     return mnFrmType == FRM_CELL;
 }
-inline bool SwFrm::IsCntntFrm() const
+inline bool SwFrm::IsContentFrm() const
 {
     return (GetType() & FRM_CNTNT) != 0;
 }
-inline bool SwFrm::IsTxtFrm() const
+inline bool SwFrm::IsTextFrm() const
 {
     return mnFrmType == FRM_TXT;
 }
-inline bool SwFrm::IsNoTxtFrm() const
+inline bool SwFrm::IsNoTextFrm() const
 {
     return mnFrmType == FRM_NOTXT;
 }

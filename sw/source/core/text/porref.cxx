@@ -23,12 +23,12 @@
 #include "porref.hxx"
 #include "inftxt.hxx"
 
-void SwRefPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwRefPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
     {
         rInf.DrawViewOpt( *this, POR_REF );
-        SwTxtPortion::Paint( rInf );
+        SwTextPortion::Paint( rInf );
     }
 }
 
@@ -40,7 +40,7 @@ SwIsoRefPortion::SwIsoRefPortion() : nViewWidth(0)
     SetWhichPor( POR_ISOREF );
 }
 
-sal_uInt16 SwIsoRefPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+sal_uInt16 SwIsoRefPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
 {
     // Although we are const, nViewWidth should be calculated in the last
     // moment possible
@@ -49,19 +49,19 @@ sal_uInt16 SwIsoRefPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
             !rInf.GetOpt().IsReadonly() && !rInf.GetOpt().IsPagePreview() )
     {
         if( !nViewWidth )
-            pThis->nViewWidth = rInf.GetTxtSize(OUString(' ')).Width();
+            pThis->nViewWidth = rInf.GetTextSize(OUString(' ')).Width();
     }
     else
         pThis->nViewWidth = 0;
     return nViewWidth;
 }
 
-bool SwIsoRefPortion::Format( SwTxtFormatInfo &rInf )
+bool SwIsoRefPortion::Format( SwTextFormatInfo &rInf )
 {
     return SwLinePortion::Format( rInf );
 }
 
-void SwIsoRefPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwIsoRefPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
         rInf.DrawViewOpt( *this, POR_REF );

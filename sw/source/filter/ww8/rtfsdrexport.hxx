@@ -29,7 +29,7 @@
 
 class RtfExport;
 class RtfAttributeOutput;
-class SwFrmFmt;
+class SwFrameFormat;
 
 /// Handles export of drawings using RTF markup
 class RtfSdrExport : public EscherEx
@@ -55,7 +55,7 @@ class RtfSdrExport : public EscherEx
     bool* m_pShapeTypeWritten;
 
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
-    std::set<const SwFrmFmt*> m_aTextBoxes;
+    std::set<const SwFrameFormat*> m_aTextBoxes;
 
 public:
     RtfSdrExport(RtfExport& rExport);
@@ -67,7 +67,7 @@ public:
     sal_uInt32 AddSdrObject(const SdrObject& rObj);
 
     /// Is this a standalone TextFrame, or used as a TextBox of a shape?
-    bool isTextBox(const SwFrmFmt& rFrmFmt);
+    bool isTextBox(const SwFrameFormat& rFrameFormat);
 
 protected:
     /// Start the shape for which we just collected the information.

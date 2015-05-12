@@ -73,7 +73,7 @@ void SwHTMLParser::NewScript()
 void SwHTMLParser::EndScript()
 {
     bool bInsIntoBasic = false,
-         bInsSrcIntoFld = false;
+         bInsSrcIntoField = false;
 
     switch( eScriptLang )
     {
@@ -81,7 +81,7 @@ void SwHTMLParser::EndScript()
         bInsIntoBasic = true;
         break;
     default:
-        bInsSrcIntoFld = true;
+        bInsSrcIntoField = true;
         break;
     }
 
@@ -90,15 +90,15 @@ void SwHTMLParser::EndScript()
 
     // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
     // Modulnamen in einem Feld merken merken
-    if( bInsSrcIntoFld && !bIgnoreHTMLComments )
+    if( bInsSrcIntoField && !bIgnoreHTMLComments )
     {
         SwScriptFieldType *pType =
-            static_cast<SwScriptFieldType*>(pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_SCRIPTFLD ));
+            static_cast<SwScriptFieldType*>(pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_SCRIPTFLD ));
 
-        SwScriptField aFld( pType, aScriptType,
+        SwScriptField aField( pType, aScriptType,
                             !aScriptURL.isEmpty() ? aScriptURL : aScriptSource,
                             !aScriptURL.isEmpty() );
-        InsertAttr( SwFmtFld( aFld ) );
+        InsertAttr( SwFormatField( aField ) );
     }
 
     SwDocShell *pDocSh = pDoc->GetDocShell();

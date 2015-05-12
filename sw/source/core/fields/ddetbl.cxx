@@ -64,17 +64,17 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, bool bUpdate 
 
 SwDDETable::~SwDDETable()
 {
-    SwDDEFieldType* pFldTyp = static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
-    SwDoc* pDoc = GetFrmFmt()->GetDoc();
+    SwDDEFieldType* pFieldTyp = static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
+    SwDoc* pDoc = GetFrameFormat()->GetDoc();
     if( !pDoc->IsInDtor() && !aLines.empty() &&
         GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
-        pFldTyp->DecRefCnt();
+        pFieldTyp->DecRefCnt();
 
     // If it is the last dependent of the "deleted field" than delete it finally
-    if( pFldTyp->IsDeleted() && pFldTyp->HasOnlyOneListener() )
+    if( pFieldTyp->IsDeleted() && pFieldTyp->HasOnlyOneListener() )
     {
-        pFldTyp->Remove( &aDepend );
-        delete pFldTyp;
+        pFieldTyp->Remove( &aDepend );
+        delete pFieldTyp;
     }
 }
 
@@ -97,7 +97,7 @@ void SwDDETable::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 
 void SwDDETable::ChangeContent()
 {
-    OSL_ENSURE( GetFrmFmt(), "No FrameFormat" );
+    OSL_ENSURE( GetFrameFormat(), "No FrameFormat" );
 
     // Is this the correct NodesArray? (because of UNDO)
     if( aLines.empty() )
@@ -106,7 +106,7 @@ void SwDDETable::ChangeContent()
     if( !GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
         return;
 
-    // access to DDEFldType
+    // access to DDEFieldType
     SwDDEFieldType* pDDEType = static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
 
     OUString aExpand = comphelper::string::remove(pDDEType->GetExpansion(), '\r');
@@ -122,26 +122,26 @@ void SwDDETable::ChangeContent()
             SwTableBox* pBox = pLine->GetTabBoxes()[ i ];
             OSL_ENSURE( pBox->GetSttIdx(), "no content box" );
             SwNodeIndex aNdIdx( *pBox->GetSttNd(), 1 );
-            SwTxtNode* pTxtNode = aNdIdx.GetNode().GetTxtNode();
-            OSL_ENSURE( pTxtNode, "No Node" );
-            SwIndex aCntIdx( pTxtNode, 0 );
-            pTxtNode->EraseText( aCntIdx );
-            pTxtNode->InsertText( aLine.getToken( 0, '\t', nLineTokenPos ), aCntIdx );
+            SwTextNode* pTextNode = aNdIdx.GetNode().GetTextNode();
+            OSL_ENSURE( pTextNode, "No Node" );
+            SwIndex aCntIdx( pTextNode, 0 );
+            pTextNode->EraseText( aCntIdx );
+            pTextNode->InsertText( aLine.getToken( 0, '\t', nLineTokenPos ), aCntIdx );
 
-            SwTableBoxFmt* pBoxFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
-            pBoxFmt->LockModify();
-            pBoxFmt->ResetFmtAttr( RES_BOXATR_VALUE );
-            pBoxFmt->UnlockModify();
+            SwTableBoxFormat* pBoxFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
+            pBoxFormat->LockModify();
+            pBoxFormat->ResetFormatAttr( RES_BOXATR_VALUE );
+            pBoxFormat->UnlockModify();
         }
     }
 
-    const IDocumentSettingAccess* pIDSA = GetFrmFmt()->getIDocumentSettingAccess();
-    SwDoc* pDoc = GetFrmFmt()->GetDoc();
+    const IDocumentSettingAccess* pIDSA = GetFrameFormat()->getIDocumentSettingAccess();
+    SwDoc* pDoc = GetFrameFormat()->GetDoc();
     if( AUTOUPD_FIELD_AND_CHARTS == pIDSA->getFieldUpdateFlags(true) )
         pDoc->getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
 }
 
-SwDDEFieldType* SwDDETable::GetDDEFldType()
+SwDDEFieldType* SwDDETable::GetDDEFieldType()
 {
     return static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
 }
@@ -149,8 +149,8 @@ SwDDEFieldType* SwDDETable::GetDDEFldType()
 bool SwDDETable::NoDDETable()
 {
     // search table node
-    OSL_ENSURE( GetFrmFmt(), "No FrameFormat" );
-    SwDoc* pDoc = GetFrmFmt()->GetDoc();
+    OSL_ENSURE( GetFrameFormat(), "No FrameFormat" );
+    SwDoc* pDoc = GetFrameFormat()->GetDoc();
 
     // Is this the correct NodesArray? (because of UNDO)
     if( aLines.empty() )
@@ -160,23 +160,23 @@ bool SwDDETable::NoDDETable()
     if( !pNd->GetNodes().IsDocNodes() )
         return false;
 
-    SwTableNode* pTblNd = pNd->FindTableNode();
-    OSL_ENSURE( pTblNd, "Where is the table?");
+    SwTableNode* pTableNd = pNd->FindTableNode();
+    OSL_ENSURE( pTableNd, "Where is the table?");
 
-    SwTable* pNewTbl = new SwTable( *this );
+    SwTable* pNewTable = new SwTable( *this );
 
     // copy the table data
-    pNewTbl->GetTabSortBoxes().insert( GetTabSortBoxes() ); // move content boxes
+    pNewTable->GetTabSortBoxes().insert( GetTabSortBoxes() ); // move content boxes
     GetTabSortBoxes().clear();
 
-    pNewTbl->GetTabLines().insert( pNewTbl->GetTabLines().begin(),
+    pNewTable->GetTabLines().insert( pNewTable->GetTabLines().begin(),
                                    GetTabLines().begin(), GetTabLines().end() ); // move lines
     GetTabLines().clear();
 
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
         static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn())->DecRefCnt();
 
-    pTblNd->SetNewTable( pNewTbl );       // replace table
+    pTableNd->SetNewTable( pNewTable );       // replace table
 
     return true;
 }

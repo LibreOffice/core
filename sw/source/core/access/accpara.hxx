@@ -34,8 +34,8 @@
 #include <unordered_map>
 
 class SwField;
-class SwTxtFrm;
-class SwTxtNode;
+class SwTextFrm;
+class SwTextNode;
 class SwPaM;
 class SwAccessiblePortionData;
 class SwAccessibleHyperTextData;
@@ -90,8 +90,8 @@ class SwAccessibleParagraph :
 
     SwParaChangeTrackingInfo* mpParaChangeTrackInfo; // #i108125#
 
-    /// get the SwTxtNode (requires frame; check before)
-    const SwTxtNode* GetTxtNode() const;
+    /// get the SwTextNode (requires frame; check before)
+    const SwTextNode* GetTextNode() const;
 
     /// get the (accessible) text string (requires frame; check before)
     OUString GetString();
@@ -240,7 +240,7 @@ protected:
 public:
 
     SwAccessibleParagraph( SwAccessibleMap& rInitMap,
-                           const SwTxtFrm& rTxtFrm );
+                           const SwTextFrm& rTextFrm );
 
     inline operator ::com::sun::star::accessibility::XAccessibleText *();
 

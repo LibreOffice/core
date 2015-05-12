@@ -43,7 +43,7 @@ private:
 
     SwWrtShell *mpSh;
 
-    const SwFmtPageDesc *mpPageFmtDesc;
+    const SwFormatPageDesc *mpPageFormatDesc;
 
     SwPageDesc *mpTitleDesc;
     const SwPageDesc *mpIndexDesc;

@@ -31,9 +31,9 @@ void SwFrm::Paint(SwRect const&, SwPrintData const*const) const
     OSL_FAIL( "Paint() of the base class called." );
 }
 
-bool SwCntntFrm::WouldFit( SwTwips &, bool&, bool )
+bool SwContentFrm::WouldFit( SwTwips &, bool&, bool )
 {
-    OSL_FAIL( "WouldFit of CntntFrm called." );
+    OSL_FAIL( "WouldFit of ContentFrm called." );
     return false;
 }
 

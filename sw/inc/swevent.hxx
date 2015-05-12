@@ -51,8 +51,8 @@
 #define     STR_SW_EVENT_FRM_RESIZE           11
 #define     STR_SW_EVENT_FRM_MOVE             12
 
-class SwFrmFmt;
-class SwFmtINetFmt;
+class SwFrameFormat;
+class SwFormatINetFormat;
 class IMapObject;
 
 // Enum for objects that call events into Basic or JavaScript.
@@ -73,43 +73,43 @@ struct SwCallMouseEvent
     union
     {
         // EVENT_OBJECT_IMAGE/EVENT_OBJECT_URLITEM
-        const SwFrmFmt* pFmt;
+        const SwFrameFormat* pFormat;
 
         // EVENT_OBJECT_INETATTR
-        const SwFmtINetFmt* pINetAttr;
+        const SwFormatINetFormat* pINetAttr;
 
         // EVENT_OBJECT_IMAGEMAP
         struct
         {
-            const SwFrmFmt* pFmt;
+            const SwFrameFormat* pFormat;
             const IMapObject* pIMapObj;
         } IMAP;
     } PTR;
 
     SwCallMouseEvent()
         : eType( EVENT_OBJECT_NONE )
-        { PTR.pFmt = 0; PTR.IMAP.pIMapObj = 0; }
+        { PTR.pFormat = 0; PTR.IMAP.pIMapObj = 0; }
 
-    void Set( SwCallEventObjectType eTyp, const SwFrmFmt* pFmt )
-        { eType = eTyp; PTR.pFmt = pFmt; PTR.IMAP.pIMapObj = 0; }
+    void Set( SwCallEventObjectType eTyp, const SwFrameFormat* pFormat )
+        { eType = eTyp; PTR.pFormat = pFormat; PTR.IMAP.pIMapObj = 0; }
 
-    void Set( const SwFrmFmt* pFmt, const IMapObject* pIMapObj )
-        { eType = EVENT_OBJECT_IMAGEMAP; PTR.pFmt = pFmt; PTR.IMAP.pIMapObj = pIMapObj; }
+    void Set( const SwFrameFormat* pFormat, const IMapObject* pIMapObj )
+        { eType = EVENT_OBJECT_IMAGEMAP; PTR.pFormat = pFormat; PTR.IMAP.pIMapObj = pIMapObj; }
 
-    void Set( const SwFmtINetFmt* pINetAttr )
+    void Set( const SwFormatINetFormat* pINetAttr )
         { eType = EVENT_OBJECT_INETATTR; PTR.pINetAttr = pINetAttr; PTR.IMAP.pIMapObj = 0; }
 
     bool operator==( const SwCallMouseEvent& rEvent ) const
         {
             return eType == rEvent.eType &&
-                    PTR.pFmt == rEvent.PTR.pFmt &&
+                    PTR.pFormat == rEvent.PTR.pFormat &&
                     PTR.IMAP.pIMapObj == rEvent.PTR.IMAP.pIMapObj;
         }
     bool operator!=( const SwCallMouseEvent& rEvent ) const
         {   return !( *this == rEvent );    }
 
     void Clear()
-        { eType = EVENT_OBJECT_NONE; PTR.pFmt = 0; PTR.IMAP.pIMapObj = 0; }
+        { eType = EVENT_OBJECT_NONE; PTR.pFormat = 0; PTR.IMAP.pIMapObj = 0; }
 
     bool HasEvent() const { return EVENT_OBJECT_NONE != eType; }
 };

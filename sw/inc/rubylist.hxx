@@ -26,7 +26,7 @@
 class SwRubyListEntry
 {
     OUString m_sText;
-    SwFmtRuby m_aRubyAttr;
+    SwFormatRuby m_aRubyAttr;
 public:
     SwRubyListEntry() : m_aRubyAttr( OUString() ) {}
     ~SwRubyListEntry();
@@ -34,9 +34,9 @@ public:
     OUString GetText() const                    { return m_sText; }
     void SetText( const OUString& rStr )        { m_sText = rStr; }
 
-    const SwFmtRuby& GetRubyAttr() const        { return m_aRubyAttr; }
-          SwFmtRuby& GetRubyAttr()              { return m_aRubyAttr; }
-    void SetRubyAttr( const SwFmtRuby& rAttr )  { m_aRubyAttr = rAttr; }
+    const SwFormatRuby& GetRubyAttr() const        { return m_aRubyAttr; }
+          SwFormatRuby& GetRubyAttr()              { return m_aRubyAttr; }
+    void SetRubyAttr( const SwFormatRuby& rAttr )  { m_aRubyAttr = rAttr; }
 };
 
 class SwRubyList : public boost::ptr_vector<SwRubyListEntry> {};

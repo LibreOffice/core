@@ -21,33 +21,33 @@
 
 #include <svl/poolitem.hxx>
 
-class SwFrmFmt;
-class SwTxtFlyCnt;
+class SwFrameFormat;
+class SwTextFlyCnt;
 
 /**
  * Format of a fly content.
  *
  * A pool item that is attached to the placeholder character of an as-character frame. (TextFrame, etc.)
  */
-class SwFmtFlyCnt : public SfxPoolItem
+class SwFormatFlyCnt : public SfxPoolItem
 {
-    friend class SwTxtFlyCnt;
-    SwTxtFlyCnt* pTxtAttr;
-    SwFrmFmt* pFmt; ///< My Fly/DrawFrame-format.
-    SwFmtFlyCnt& operator=(const SwFmtFlyCnt& rFlyCnt) SAL_DELETED_FUNCTION;
+    friend class SwTextFlyCnt;
+    SwTextFlyCnt* pTextAttr;
+    SwFrameFormat* pFormat; ///< My Fly/DrawFrame-format.
+    SwFormatFlyCnt& operator=(const SwFormatFlyCnt& rFlyCnt) SAL_DELETED_FUNCTION;
 
 public:
-    SwFmtFlyCnt( SwFrmFmt *pFrmFmt );
+    SwFormatFlyCnt( SwFrameFormat *pFrameFormat );
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
-    inline SwFrmFmt *GetFrmFmt() const { return pFmt; }
+    inline SwFrameFormat *GetFrameFormat() const { return pFormat; }
     /// For Undo: delete the FlyFrmFormat "logically"; it is kept in Undo-object.
-    inline void SetFlyFmt( SwFrmFmt* pNew = 0 )   { pFmt = pNew; }
+    inline void SetFlyFormat( SwFrameFormat* pNew = 0 )   { pFormat = pNew; }
 
-    const SwTxtFlyCnt *GetTxtFlyCnt() const { return pTxtAttr; }
-          SwTxtFlyCnt *GetTxtFlyCnt()       { return pTxtAttr; }
+    const SwTextFlyCnt *GetTextFlyCnt() const { return pTextAttr; }
+          SwTextFlyCnt *GetTextFlyCnt()       { return pTextAttr; }
 
     bool Sw3ioExportAllowed() const;
 };

@@ -104,8 +104,8 @@ ToxLinkProcessorTest::LinkIsCreatedCorrectly()
     sut.StartNewLink(0, STYLE_NAME_1);
     sut.CloseLink(1, URL_1);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style is stored correctly in link", STYLE_NAME_1, sut.mClosedLinks.at(0).mINetFmt.GetVisitedFmt());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Url is stored correctly in link", URL_1, sut.mClosedLinks.at(0).mINetFmt.GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style is stored correctly in link", STYLE_NAME_1, sut.mClosedLinks.at(0).mINetFormat.GetVisitedFormat());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Url is stored correctly in link", URL_1, sut.mClosedLinks.at(0).mINetFormat.GetValue());
 }
 
 void
@@ -122,18 +122,18 @@ ToxLinkProcessorTest::LinkSequenceIsPreserved()
 
     // check first closed element
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Style is stored correctly in link",
-            STYLE_NAME_2, sut.mClosedLinks.at(0).mINetFmt.GetVisitedFmt());
+            STYLE_NAME_2, sut.mClosedLinks.at(0).mINetFormat.GetVisitedFormat());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Pool id is stored correctly in link",
-            POOL_ID_2, sut.mClosedLinks.at(0).mINetFmt.GetINetFmtId());
+            POOL_ID_2, sut.mClosedLinks.at(0).mINetFormat.GetINetFormatId());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Url is stored correctly in link",
-            URL_2, sut.mClosedLinks.at(0).mINetFmt.GetValue());
+            URL_2, sut.mClosedLinks.at(0).mINetFormat.GetValue());
     // check second closed element
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Style is stored correctly in link",
-            STYLE_NAME_1, sut.mClosedLinks.at(1).mINetFmt.GetVisitedFmt());
+            STYLE_NAME_1, sut.mClosedLinks.at(1).mINetFormat.GetVisitedFormat());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Pool id is stored correctly in link",
-            POOL_ID_1, sut.mClosedLinks.at(1).mINetFmt.GetINetFmtId());
+            POOL_ID_1, sut.mClosedLinks.at(1).mINetFormat.GetINetFormatId());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Url is stored correctly in link",
-            URL_1, sut.mClosedLinks.at(1).mINetFmt.GetValue());
+            URL_1, sut.mClosedLinks.at(1).mINetFormat.GetValue());
 }
 
 // Put the test suite in the registry

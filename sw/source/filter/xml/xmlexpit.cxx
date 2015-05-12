@@ -117,7 +117,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
 {
     if( 0 != (rEntry.nMemberId & MID_SW_FLAG_SPECIAL_ITEM_EXPORT) )
     {
-        if( rItem.ISA( SwFmtRowSplit ) )
+        if( rItem.ISA( SwFormatRowSplit ) )
         {
             OUString aValue;
             bool bAddAttribute = true;
@@ -429,15 +429,15 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 case  MID_FIRST_LINE_INDENT:
                     if( !pLRSpace->IsAutoFirst() )
                     {
-                        if(pLRSpace->GetPropTxtFirstLineOfst() != 100)
+                        if(pLRSpace->GetPropTextFirstLineOfst() != 100)
                         {
                             ::sax::Converter::convertPercent(
-                                aOut, pLRSpace->GetPropTxtFirstLineOfst() );
+                                aOut, pLRSpace->GetPropTextFirstLineOfst() );
                         }
                         else
                         {
                             rUnitConverter.convertMeasureToXML(
-                                    aOut, pLRSpace->GetTxtFirstLineOfst() );
+                                    aOut, pLRSpace->GetTextFirstLineOfst() );
                         }
                     }
                     else
@@ -827,15 +827,15 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_BREAK:
         {
-            const SvxFmtBreakItem* pFmtBreak = PTR_CAST(SvxFmtBreakItem, &rItem);
-            OSL_ENSURE( pFmtBreak != NULL, "Wrong Which-ID" );
+            const SvxFormatBreakItem* pFormatBreak = PTR_CAST(SvxFormatBreakItem, &rItem);
+            OSL_ENSURE( pFormatBreak != NULL, "Wrong Which-ID" );
 
             unsigned int eEnum = 0;
 
             switch( nMemberId )
             {
             case MID_BREAK_BEFORE:
-                switch( pFmtBreak->GetValue() )
+                switch( pFormatBreak->GetValue() )
                 {
                     case SVX_BREAK_COLUMN_BEFORE:
                         eEnum = 1;
@@ -851,7 +851,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 }
                 break;
             case MID_BREAK_AFTER:
-                switch( pFmtBreak->GetValue() )
+                switch( pFormatBreak->GetValue() )
                 {
                     case SVX_BREAK_COLUMN_AFTER:
                         eEnum = 1;
@@ -874,11 +874,11 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_KEEP:
         {
-            const SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
-            assert(pFmtKeep && "Wrong Which-ID");
-            if (pFmtKeep)
+            const SvxFormatKeepItem* pFormatKeep = PTR_CAST(SvxFormatKeepItem, &rItem);
+            assert(pFormatKeep && "Wrong Which-ID");
+            if (pFormatKeep)
             {
-                aOut.append( pFmtKeep->GetValue()
+                aOut.append( pFormatKeep->GetValue()
                              ? GetXMLToken( XML_ALWAYS )
                              : GetXMLToken( XML_AUTO ) );
                 bOk = true;
@@ -1002,7 +1002,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_PAGEDESC:
         {
-            const SwFmtPageDesc* pPageDesc = PTR_CAST(SwFmtPageDesc, &rItem);
+            const SwFormatPageDesc* pPageDesc = PTR_CAST(SwFormatPageDesc, &rItem);
             OSL_ENSURE( pPageDesc != NULL, "Wrong Which-ID" );
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
@@ -1038,7 +1038,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_HORI_ORIENT:
         {
-            const SwFmtHoriOrient* pHoriOrient = PTR_CAST(SwFmtHoriOrient, &rItem);
+            const SwFormatHoriOrient* pHoriOrient = PTR_CAST(SwFormatHoriOrient, &rItem);
             assert(pHoriOrient && "Wrong Which-ID");
             if (pHoriOrient)
             {
@@ -1051,7 +1051,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_VERT_ORIENT:
         {
-            const SwFmtVertOrient* pVertOrient = PTR_CAST(SwFmtVertOrient, &rItem);
+            const SwFormatVertOrient* pVertOrient = PTR_CAST(SwFormatVertOrient, &rItem);
             assert(pVertOrient && "Wrong Which-ID");
 
             SvXMLUnitConverter::convertEnum( aOut, pVertOrient->GetVertOrient(),
@@ -1062,7 +1062,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_FRM_SIZE:
         {
-            const SwFmtFrmSize* pFrmSize = PTR_CAST(SwFmtFrmSize, &rItem);
+            const SwFormatFrmSize* pFrmSize = PTR_CAST(SwFormatFrmSize, &rItem);
             OSL_ENSURE( pFrmSize != NULL, "Wrong Which-ID" );
 
             bool bOutHeight = false;

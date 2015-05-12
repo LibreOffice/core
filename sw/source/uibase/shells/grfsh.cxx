@@ -259,7 +259,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
 
             const SwRect* pRect = &rSh.GetAnyCurRect(RECT_PAGE);
-            SwFmtFrmSize aFrmSize( ATT_VAR_SIZE, pRect->Width(), pRect->Height());
+            SwFormatFrmSize aFrmSize( ATT_VAR_SIZE, pRect->Width(), pRect->Height());
             aFrmSize.SetWhich( GetPool().GetWhich( SID_ATTR_PAGE_SIZE ) );
             aSet.Put( aFrmSize );
 
@@ -280,7 +280,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
             // At percentage values initialize size
-            SwFmtFrmSize aSizeCopy = static_cast<const SwFmtFrmSize&>(aSet.Get(RES_FRM_SIZE));
+            SwFormatFrmSize aSizeCopy = static_cast<const SwFormatFrmSize&>(aSet.Get(RES_FRM_SIZE));
             if (aSizeCopy.GetWidthPercent() && aSizeCopy.GetWidthPercent() != 0xff)
                 aSizeCopy.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
             if (aSizeCopy.GetHeightPercent() && aSizeCopy.GetHeightPercent() != 0xff)
@@ -365,7 +365,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if( SfxItemState::SET == pSet->GetItemState(
                                 SID_ATTR_GRAF_FRMSIZE, false, &pItem ))
                 {
-                    SwFmtFrmSize aSize;
+                    SwFormatFrmSize aSize;
                     const Size& rSz = static_cast<const SvxSizeItem*>(pItem)->GetSize();
                     aSize.SetWidth( rSz.Width() );
                     aSize.SetHeight( rSz.Height() );
@@ -381,10 +381,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 }
 
                 // Templates AutoUpdate
-                SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
-                if(pFmt && pFmt->IsAutoUpdateFmt())
+                SwFrameFormat* pFormat = rSh.GetCurFrameFormat();
+                if(pFormat && pFormat->IsAutoUpdateFormat())
                 {
-                    pFmt->SetFmtAttr(*pSet);
+                    pFormat->SetFormatAttr(*pSet);
                     SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,   RES_FRM_SIZE,
                                                     RES_SURROUND,   RES_SURROUND,
                                                     RES_ANCHOR,     RES_ANCHOR,
@@ -646,10 +646,10 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
 void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
-    SfxItemSet aCoreSet( GetPool(), aNoTxtNodeSetRange );
+    SfxItemSet aCoreSet( GetPool(), aNoTextNodeSetRange );
     rSh.GetCurAttr( aCoreSet );
     bool bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
-    bool bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
+    bool bIsGrfContent = CNT_GRF == GetShell().GetCntType();
 
     SetGetStateSet( &rSet );
 
@@ -663,10 +663,10 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         case SID_TWAIN_TRANSFER:
-            if( bParentCntProt || !bIsGrfCntnt )
+            if( bParentCntProt || !bIsGrfContent )
                 bDisable = true;
             else if ( nWhich == SID_INSERT_GRAPHIC
-                      && rSh.CrsrInsideInputFld() )
+                      && rSh.CrsrInsideInputField() )
             {
                 bDisable = true;
             }
@@ -680,7 +680,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_COLOR_SETTINGS:
         {
-            if ( bParentCntProt || !bIsGrfCntnt )
+            if ( bParentCntProt || !bIsGrfContent )
                 bDisable = true;
             else
             {
@@ -790,7 +790,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_GRFFILTER_SEPIA:
         case SID_GRFFILTER_SOLARIZE:
             {
-                if( bParentCntProt || !bIsGrfCntnt )
+                if( bParentCntProt || !bIsGrfContent )
                     bDisable = true;
                 // #i59688# load graphic only if type is unknown
                 else

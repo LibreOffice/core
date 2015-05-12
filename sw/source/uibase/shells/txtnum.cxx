@@ -123,13 +123,13 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             //convert type of linked bitmaps from SVX_NUM_BITMAP to (SVX_NUM_BITMAP|LINK_TOKEN)
             for ( sal_uInt16 i = 0; i < aRule.GetLevelCount(); i++ )
             {
-                SvxNumberFormat aFmt( aRule.GetLevel( i ) );
-                if ( SVX_NUM_BITMAP == aFmt.GetNumberingType() )
+                SvxNumberFormat aFormat( aRule.GetLevel( i ) );
+                if ( SVX_NUM_BITMAP == aFormat.GetNumberingType() )
                 {
-                    const SvxBrushItem* pBrush = aFmt.GetBrush();
+                    const SvxBrushItem* pBrush = aFormat.GetBrush();
                     if(pBrush && !pBrush->GetGraphicLink().isEmpty())
-                        aFmt.SetNumberingType(SvxExtNumType(SVX_NUM_BITMAP|LINK_TOKEN));
-                    aRule.SetLevel(i, aFmt, aRule.Get(i) != 0);
+                        aFormat.SetNumberingType(SvxExtNumType(SVX_NUM_BITMAP|LINK_TOKEN));
+                    aRule.SetLevel(i, aFormat, aRule.Get(i) != 0);
                 }
             }
             if(bHtml)
@@ -157,19 +157,19 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             {
                 for ( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
                 {
-                    SvxNumberFormat aFmt( aSvxRule.GetLevel( n ) );
+                    SvxNumberFormat aFormat( aSvxRule.GetLevel( n ) );
                     if ( n && bHtml )
                     {
                         // 1/2" for HTML
-                        aFmt.SetAbsLSpace(n * 720);
+                        aFormat.SetAbsLSpace(n * 720);
                     }
                     // #i38904#  Default alignment for
                     // numbering/bullet should be rtl in rtl paragraph:
                     if ( bRightToLeft )
                     {
-                        aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
+                        aFormat.SetNumAdjust( SVX_ADJUST_RIGHT );
                     }
-                    aSvxRule.SetLevel( n, aFmt, false );
+                    aSvxRule.SetLevel( n, aFormat, false );
                 }
                 aSvxRule.SetFeatureFlag(SvxNumRuleFlags::ENABLE_EMBEDDED_BMP, false);
             }

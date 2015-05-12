@@ -58,9 +58,9 @@ public:
     virtual ~SwAutoCorrDoc();
 
     virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) SAL_OVERRIDE;
-    virtual bool Insert( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE;
-    virtual bool Replace( sal_Int32 nPos, const OUString& rTxt ) SAL_OVERRIDE;
-    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt ) SAL_OVERRIDE;
+    virtual bool Insert( sal_Int32 nPos, const OUString& rText ) SAL_OVERRIDE;
+    virtual bool Replace( sal_Int32 nPos, const OUString& rText ) SAL_OVERRIDE;
+    virtual bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rText ) SAL_OVERRIDE;
 
     virtual bool SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
                             SfxPoolItem& ) SAL_OVERRIDE;

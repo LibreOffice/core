@@ -358,8 +358,8 @@ void SwDLL::RegisterControls()
     SvxSearchDialogWrapper::RegisterChildWindow( false, pMod );
     SvxHlinkDlgWrapper::RegisterChildWindow( false, pMod );
     SvxFontWorkChildWindow::RegisterChildWindow( false, pMod );
-    SwFldDlgWrapper::RegisterChildWindow( false, pMod );
-    SwFldDataOnlyDlgWrapper::RegisterChildWindow( false, pMod );
+    SwFieldDlgWrapper::RegisterChildWindow( false, pMod );
+    SwFieldDataOnlyDlgWrapper::RegisterChildWindow( false, pMod );
     SvxContourDlgChildWindow::RegisterChildWindow( false, pMod );
     SwNavigationChild::RegisterChildWindowContext( pMod );
     SwInputChild::RegisterChildWindow( false, pMod, SfxChildWindowFlags::FORCEDOCK );

@@ -111,20 +111,20 @@ SwPageNumberFieldType::SwPageNumberFieldType()
 {
 }
 
-OUString SwPageNumberFieldType::Expand( sal_uInt32 nFmt, short nOff,
+OUString SwPageNumberFieldType::Expand( sal_uInt32 nFormat, short nOff,
          sal_uInt16 const nPageNumber, sal_uInt16 const nMaxPage,
          const OUString& rUserStr ) const
 {
-    sal_uInt32 nTmpFmt = (SVX_NUM_PAGEDESC == nFmt) ? (sal_uInt32)nNumberingType : nFmt;
+    sal_uInt32 nTmpFormat = (SVX_NUM_PAGEDESC == nFormat) ? (sal_uInt32)nNumberingType : nFormat;
     int const nTmp = nPageNumber + nOff;
 
-    if (0 > nTmp || SVX_NUM_NUMBER_NONE == nTmpFmt || (!bVirtuell && nTmp > nMaxPage))
+    if (0 > nTmp || SVX_NUM_NUMBER_NONE == nTmpFormat || (!bVirtuell && nTmp > nMaxPage))
         return OUString();
 
-    if( SVX_NUM_CHAR_SPECIAL == nTmpFmt )
+    if( SVX_NUM_CHAR_SPECIAL == nTmpFormat )
         return rUserStr;
 
-    return FormatNumber( nTmp, nTmpFmt );
+    return FormatNumber( nTmp, nTmpFormat );
 }
 
 SwFieldType* SwPageNumberFieldType::Copy() const
@@ -139,10 +139,10 @@ SwFieldType* SwPageNumberFieldType::Copy() const
 
 void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
                                             bool bVirt,
-                                            const sal_Int16* pNumFmt )
+                                            const sal_Int16* pNumFormat )
 {
-    if( pNumFmt )
-        nNumberingType = *pNumFmt;
+    if( pNumFormat )
+        nNumberingType = *pNumFormat;
 
     bVirtuell = false;
     if (bVirt && pDoc)
@@ -152,19 +152,19 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
         sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
         {
-            const SwFmtPageDesc *pDesc;
-            if( 0 != (pDesc = static_cast<const SwFmtPageDesc*>(rPool.GetItem2( RES_PAGEDESC, n )) )
+            const SwFormatPageDesc *pDesc;
+            if( 0 != (pDesc = static_cast<const SwFormatPageDesc*>(rPool.GetItem2( RES_PAGEDESC, n )) )
                 && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
             {
-                const SwCntntNode* pNd = PTR_CAST( SwCntntNode, pDesc->GetDefinedIn() );
+                const SwContentNode* pNd = PTR_CAST( SwContentNode, pDesc->GetDefinedIn() );
                 if( pNd )
                 {
-                    if ( SwIterator<SwFrm,SwCntntNode>(*pNd).First() )
+                    if ( SwIterator<SwFrm,SwContentNode>(*pNd).First() )
                         bVirtuell = true;
                 }
-                else if( pDesc->GetDefinedIn()->ISA( SwFmt ))
+                else if( pDesc->GetDefinedIn()->ISA( SwFormat ))
                 {
-                    SwAutoFmtGetDocNode aGetHt( &pDoc->GetNodes() );
+                    SwAutoFormatGetDocNode aGetHt( &pDoc->GetNodes() );
                     bVirtuell = !pDesc->GetDefinedIn()->GetInfo( aGetHt );
                     break;
                 }
@@ -174,9 +174,9 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
 }
 
 SwPageNumberField::SwPageNumberField(SwPageNumberFieldType* pTyp,
-          sal_uInt16 nSub, sal_uInt32 nFmt, short nOff,
+          sal_uInt16 nSub, sal_uInt32 nFormat, short nOff,
           sal_uInt16 const nPageNumber, sal_uInt16 const nMaxPage)
-    : SwField(pTyp, nFmt), nSubType(nSub), nOffset(nOff)
+    : SwField(pTyp, nFormat), nSubType(nSub), nOffset(nOff)
     , m_nPageNumber(nPageNumber)
     , m_nMaxPage(nMaxPage)
 {
@@ -192,26 +192,26 @@ void SwPageNumberField::ChangeExpansion(sal_uInt16 const nPageNumber,
 OUString SwPageNumberField::Expand() const
 {
     OUString sRet;
-    SwPageNumberFieldType* pFldType = static_cast<SwPageNumberFieldType*>(GetTyp());
+    SwPageNumberFieldType* pFieldType = static_cast<SwPageNumberFieldType*>(GetTyp());
 
     if( PG_NEXT == nSubType && 1 != nOffset )
     {
-        sRet = pFldType->Expand(GetFormat(), 1, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(GetFormat(), 1, m_nPageNumber, m_nMaxPage, sUserStr);
         if (!sRet.isEmpty())
         {
-            sRet = pFldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+            sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
         }
     }
     else if( PG_PREV == nSubType && -1 != nOffset )
     {
-        sRet = pFldType->Expand(GetFormat(), -1, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(GetFormat(), -1, m_nPageNumber, m_nMaxPage, sUserStr);
         if (!sRet.isEmpty())
         {
-            sRet = pFldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+            sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
         }
     }
     else
-        sRet = pFldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
     return sRet;
 }
 
@@ -321,10 +321,10 @@ SwAuthorFieldType::SwAuthorFieldType()
 {
 }
 
-OUString SwAuthorFieldType::Expand(sal_uLong nFmt)
+OUString SwAuthorFieldType::Expand(sal_uLong nFormat)
 {
     SvtUserOptions&  rOpt = SW_MOD()->GetUserOptions();
-    if((nFmt & 0xff) == AF_NAME)
+    if((nFormat & 0xff) == AF_NAME)
         return rOpt.GetFullName();
 
     return rOpt.GetID();
@@ -335,8 +335,8 @@ SwFieldType* SwAuthorFieldType::Copy() const
     return new SwAuthorFieldType;
 }
 
-SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, sal_uInt32 nFmt)
-    : SwField(pTyp, nFmt)
+SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, sal_uInt32 nFormat)
+    : SwField(pTyp, nFormat)
 {
     aContent = SwAuthorFieldType::Expand(GetFormat());
 }
@@ -411,14 +411,14 @@ SwFileNameFieldType::SwFileNameFieldType(SwDoc *pDocument)
     pDoc = pDocument;
 }
 
-OUString SwFileNameFieldType::Expand(sal_uLong nFmt) const
+OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
 {
     OUString aRet;
     const SwDocShell* pDShell = pDoc->GetDocShell();
     if( pDShell && pDShell->HasName() )
     {
         const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
-        switch( nFmt & ~FF_FIXED )
+        switch( nFormat & ~FF_FIXED )
         {
             case FF_PATH:
                 {
@@ -469,8 +469,8 @@ SwFieldType* SwFileNameFieldType::Copy() const
     return pTmp;
 }
 
-SwFileNameField::SwFileNameField(SwFileNameFieldType* pTyp, sal_uInt32 nFmt)
-    : SwField(pTyp, nFmt)
+SwFileNameField::SwFileNameField(SwFileNameFieldType* pTyp, sal_uInt32 nFormat)
+    : SwField(pTyp, nFormat)
 {
     aContent = static_cast<SwFileNameFieldType*>(GetTyp())->Expand(GetFormat());
 }
@@ -583,9 +583,9 @@ SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
     pDoc = pDocument;
 }
 
-OUString SwTemplNameFieldType::Expand(sal_uLong nFmt) const
+OUString SwTemplNameFieldType::Expand(sal_uLong nFormat) const
 {
-    OSL_ENSURE( nFmt < FF_END, "Expand: no valid Fmt!" );
+    OSL_ENSURE( nFormat < FF_END, "Expand: no valid Format!" );
 
     OUString aRet;
     SwDocShell *pDocShell(pDoc->GetDocShell());
@@ -597,11 +597,11 @@ OUString SwTemplNameFieldType::Expand(sal_uLong nFmt) const
             xDPS->getDocumentProperties());
         OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
 
-        if( FF_UI_NAME == nFmt )
+        if( FF_UI_NAME == nFormat )
             aRet = xDocProps->getTemplateName();
         else if( !xDocProps->getTemplateURL().isEmpty() )
         {
-            if( FF_UI_RANGE == nFmt )
+            if( FF_UI_RANGE == nFormat )
             {
                 // for getting region names!
                 SfxDocumentTemplates aFac;
@@ -613,13 +613,13 @@ OUString SwTemplNameFieldType::Expand(sal_uLong nFmt) const
             else
             {
                 INetURLObject aPathName( xDocProps->getTemplateURL() );
-                if( FF_NAME == nFmt )
+                if( FF_NAME == nFormat )
                     aRet = aPathName.GetName(URL_DECODE);
-                else if( FF_NAME_NOEXT == nFmt )
+                else if( FF_NAME_NOEXT == nFormat )
                     aRet = aPathName.GetBase();
                 else
                 {
-                    if( FF_PATH == nFmt )
+                    if( FF_PATH == nFormat )
                     {
                         aPathName.removeSegment();
                         aRet = aPathName.GetFull();
@@ -639,8 +639,8 @@ SwFieldType* SwTemplNameFieldType::Copy() const
     return pTmp;
 }
 
-SwTemplNameField::SwTemplNameField(SwTemplNameFieldType* pTyp, sal_uInt32 nFmt)
-    : SwField(pTyp, nFmt)
+SwTemplNameField::SwTemplNameField(SwTemplNameFieldType* pTyp, sal_uInt32 nFormat)
+    : SwField(pTyp, nFormat)
 {}
 
 OUString SwTemplNameField::Expand() const
@@ -725,13 +725,13 @@ SwDocStatFieldType::SwDocStatFieldType(SwDoc* pDocument)
     pDoc = pDocument;
 }
 
-OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
+OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFormat) const
 {
     sal_uInt32 nVal = 0;
     const SwDocStat& rDStat = pDoc->getIDocumentStatistics().GetDocStat();
     switch( nSubType )
     {
-        case DS_TBL:  nVal = rDStat.nTbl;   break;
+        case DS_TBL:  nVal = rDStat.nTable;   break;
         case DS_GRF:  nVal = rDStat.nGrf;   break;
         case DS_OLE:  nVal = rDStat.nOLE;   break;
         case DS_PARA: nVal = rDStat.nPara;  break;
@@ -741,15 +741,15 @@ OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
             if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
                 ((SwDocStat &)rDStat).nPage = pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum();
             nVal = rDStat.nPage;
-            if( SVX_NUM_PAGEDESC == nFmt )
-                nFmt = (sal_uInt32)nNumberingType;
+            if( SVX_NUM_PAGEDESC == nFormat )
+                nFormat = (sal_uInt32)nNumberingType;
             break;
         default:
             OSL_FAIL( "SwDocStatFieldType::Expand: unknown SubType" );
     }
 
     if( nVal <= SHRT_MAX )
-        return FormatNumber( nVal, nFmt );
+        return FormatNumber( nVal, nFormat );
 
     return OUString::number( nVal );
 }
@@ -763,10 +763,10 @@ SwFieldType* SwDocStatFieldType::Copy() const
 /**
  * @param pTyp
  * @param nSub SubType
- * @param nFmt
+ * @param nFormat
  */
-SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFmt)
-    : SwField(pTyp, nFmt),
+SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFormat)
+    : SwField(pTyp, nFormat),
     nSubType(nSub)
 {}
 
@@ -1004,15 +1004,15 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 
 // document info field
 
-SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const OUString& rName, sal_uInt32 nFmt) :
-    SwValueField(pTyp, nFmt), nSubType(nSub)
+SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const OUString& rName, sal_uInt32 nFormat) :
+    SwValueField(pTyp, nFormat), nSubType(nSub)
 {
     aName = rName;
-    aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(nSubType, nFmt, GetLanguage(), aName);
+    aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(nSubType, nFormat, GetLanguage(), aName);
 }
 
-SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const OUString& rName, const OUString& rValue, sal_uInt32 nFmt) :
-    SwValueField(pTyp, nFmt), nSubType(nSub)
+SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const OUString& rName, const OUString& rValue, sal_uInt32 nFormat) :
+    SwValueField(pTyp, nFormat), nSubType(nSub)
 {
     aName = rName;
     aContent = rValue;
@@ -1140,11 +1140,11 @@ OUString SwDocInfoField::GetFieldName() const
 
 SwField* SwDocInfoField::Copy() const
 {
-    SwDocInfoField* pFld = new SwDocInfoField(static_cast<SwDocInfoFieldType*>(GetTyp()), nSubType, aName, GetFormat());
-    pFld->SetAutomaticLanguage(IsAutomaticLanguage());
-    pFld->aContent = aContent;
+    SwDocInfoField* pField = new SwDocInfoField(static_cast<SwDocInfoFieldType*>(GetTyp()), nSubType, aName, GetFormat());
+    pField->SetAutomaticLanguage(IsAutomaticLanguage());
+    pField->aContent = aContent;
 
-    return pFld;
+    return pField;
 }
 
 sal_uInt16 SwDocInfoField::GetSubType() const
@@ -1258,42 +1258,42 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-SwHiddenTxtFieldType::SwHiddenTxtFieldType( bool bSetHidden )
+SwHiddenTextFieldType::SwHiddenTextFieldType( bool bSetHidden )
     : SwFieldType( RES_HIDDENTXTFLD ), bHidden( bSetHidden )
 {
 }
 
-SwFieldType* SwHiddenTxtFieldType::Copy() const
+SwFieldType* SwHiddenTextFieldType::Copy() const
 {
-    return new SwHiddenTxtFieldType( bHidden );
+    return new SwHiddenTextFieldType( bHidden );
 }
 
-void SwHiddenTxtFieldType::SetHiddenFlag( bool bSetHidden )
+void SwHiddenTextFieldType::SetHiddenFlag( bool bSetHidden )
 {
     if( bHidden != bSetHidden )
     {
         bHidden = bSetHidden;
-        UpdateFlds();       // notify all HiddenTexts
+        UpdateFields();       // notify all HiddenTexts
     }
 }
 
-SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
+SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
                                     bool    bConditional,
                                     const OUString& rCond,
                                     const OUString& rStr,
                                     bool    bHidden,
                                     sal_uInt16  nSub) :
-    SwField( pFldType ), aCond(rCond), nSubType(nSub),
+    SwField( pFieldType ), aCond(rCond), nSubType(nSub),
     bCanToggle(bConditional), bIsHidden(bHidden), bValid(false)
 {
     if(nSubType == TYP_CONDTXTFLD)
     {
         sal_Int32 nPos = 0;
-        aTRUETxt = rStr.getToken(0, '|', nPos);
+        aTRUEText = rStr.getToken(0, '|', nPos);
 
         if(nPos != -1)
         {
-            aFALSETxt = rStr.getToken(0, '|', nPos);
+            aFALSEText = rStr.getToken(0, '|', nPos);
             if(nPos != -1)
             {
                 aContent = rStr.getToken(0, '|', nPos);
@@ -1302,21 +1302,21 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
         }
     }
     else
-        aTRUETxt = rStr;
+        aTRUEText = rStr;
 }
 
-SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
+SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
                                     const OUString& rCond,
                                     const OUString& rTrue,
                                     const OUString& rFalse,
                                     sal_uInt16 nSub)
-    : SwField( pFldType ), aTRUETxt(rTrue), aFALSETxt(rFalse), aCond(rCond), nSubType(nSub),
+    : SwField( pFieldType ), aTRUEText(rTrue), aFALSEText(rFalse), aCond(rCond), nSubType(nSub),
       bIsHidden(true), bValid(false)
 {
     bCanToggle = !aCond.isEmpty();
 }
 
-OUString SwHiddenTxtField::Expand() const
+OUString SwHiddenTextField::Expand() const
 {
     // Type: !Hidden  -> show always
     //        Hide    -> evaluate condition
@@ -1327,17 +1327,17 @@ OUString SwHiddenTxtField::Expand() const
             return aContent;
 
         if( bCanToggle && !bIsHidden )
-            return aTRUETxt;
+            return aTRUEText;
     }
-    else if( !static_cast<SwHiddenTxtFieldType*>(GetTyp())->GetHiddenFlag() ||
+    else if( !static_cast<SwHiddenTextFieldType*>(GetTyp())->GetHiddenFlag() ||
         ( bCanToggle && bIsHidden ))
-        return aTRUETxt;
+        return aTRUEText;
 
-    return aFALSETxt;
+    return aFALSEText;
 }
 
 /// get current field value and cache it
-void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
+void SwHiddenTextField::Evaluate(SwDoc* pDoc)
 {
     OSL_ENSURE(pDoc, "got no document");
 
@@ -1349,7 +1349,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
         SwDBManager* pMgr = pDoc->GetDBManager();
 #endif
         bValid = false;
-        OUString sTmpName = (bCanToggle && !bIsHidden) ? aTRUETxt : aFALSETxt;
+        OUString sTmpName = (bCanToggle && !bIsHidden) ? aTRUEText : aFALSEText;
 
         // Database expressions need to be different from normal text. Therefore, normal text is set
         // in quotes. If the latter exist they will be removed. If not, check if potential DB name.
@@ -1393,77 +1393,77 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
     }
 }
 
-OUString SwHiddenTxtField::GetFieldName() const
+OUString SwHiddenTextField::GetFieldName() const
 {
     OUString aStr = SwFieldType::GetTypeStr(nSubType) +
-        " " + aCond + " " + aTRUETxt;
+        " " + aCond + " " + aTRUEText;
 
     if (nSubType == TYP_CONDTXTFLD)
     {
-        aStr += " : " + aFALSETxt;
+        aStr += " : " + aFALSEText;
     }
     return aStr;
 }
 
-SwField* SwHiddenTxtField::Copy() const
+SwField* SwHiddenTextField::Copy() const
 {
-    SwHiddenTxtField* pFld =
-        new SwHiddenTxtField(static_cast<SwHiddenTxtFieldType*>(GetTyp()), aCond,
-                              aTRUETxt, aFALSETxt);
-    pFld->bIsHidden = bIsHidden;
-    pFld->bValid    = bValid;
-    pFld->aContent  = aContent;
-    pFld->SetFormat(GetFormat());
-    pFld->nSubType  = nSubType;
-    return pFld;
+    SwHiddenTextField* pField =
+        new SwHiddenTextField(static_cast<SwHiddenTextFieldType*>(GetTyp()), aCond,
+                              aTRUEText, aFALSEText);
+    pField->bIsHidden = bIsHidden;
+    pField->bValid    = bValid;
+    pField->aContent  = aContent;
+    pField->SetFormat(GetFormat());
+    pField->nSubType  = nSubType;
+    return pField;
 }
 
 /// set condition
-void SwHiddenTxtField::SetPar1(const OUString& rStr)
+void SwHiddenTextField::SetPar1(const OUString& rStr)
 {
     aCond = rStr;
     bCanToggle = !aCond.isEmpty();
 }
 
-OUString SwHiddenTxtField::GetPar1() const
+OUString SwHiddenTextField::GetPar1() const
 {
     return aCond;
 }
 
 /// set True/False text
-void SwHiddenTxtField::SetPar2(const OUString& rStr)
+void SwHiddenTextField::SetPar2(const OUString& rStr)
 {
     if (nSubType == TYP_CONDTXTFLD)
     {
         sal_Int32 nPos = rStr.indexOf('|');
         if (nPos == -1)
-            aTRUETxt = rStr;
+            aTRUEText = rStr;
         else
         {
-            aTRUETxt = rStr.copy(0, nPos);
-            aFALSETxt = rStr.copy(nPos + 1);
+            aTRUEText = rStr.copy(0, nPos);
+            aFALSEText = rStr.copy(nPos + 1);
         }
     }
     else
-        aTRUETxt = rStr;
+        aTRUEText = rStr;
 }
 
 /// get True/False text
-OUString SwHiddenTxtField::GetPar2() const
+OUString SwHiddenTextField::GetPar2() const
 {
     if(nSubType != TYP_CONDTXTFLD)
     {
-        return aTRUETxt;
+        return aTRUEText;
     }
-    return aTRUETxt + "|" + aFALSETxt;
+    return aTRUEText + "|" + aFALSEText;
 }
 
-sal_uInt16 SwHiddenTxtField::GetSubType() const
+sal_uInt16 SwHiddenTextField::GetSubType() const
 {
     return nSubType;
 }
 
-bool SwHiddenTxtField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwHiddenTextField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -1471,10 +1471,10 @@ bool SwHiddenTxtField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= aCond;
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= aTRUETxt;
+        rAny <<= aTRUEText;
         break;
     case FIELD_PROP_PAR3:
-        rAny <<= aFALSETxt;
+        rAny <<= aFALSEText;
         break;
     case FIELD_PROP_PAR4 :
         rAny <<= aContent;
@@ -1488,7 +1488,7 @@ bool SwHiddenTxtField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return true;
 }
 
-bool SwHiddenTxtField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwHiddenTextField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -1500,10 +1500,10 @@ bool SwHiddenTxtField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_PAR2:
-        rAny >>= aTRUETxt;
+        rAny >>= aTRUEText;
         break;
     case FIELD_PROP_PAR3:
-        rAny >>= aFALSETxt;
+        rAny >>= aFALSEText;
         break;
     case FIELD_PROP_BOOL1:
         bIsHidden = *static_cast<sal_Bool const *>(rAny.getValue());
@@ -1518,7 +1518,7 @@ bool SwHiddenTxtField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-OUString SwHiddenTxtField::GetColumnName(const OUString& rName)
+OUString SwHiddenTextField::GetColumnName(const OUString& rName)
 {
     sal_Int32 nPos = rName.indexOf(DB_DELIM);
     if( nPos>=0 )
@@ -1531,7 +1531,7 @@ OUString SwHiddenTxtField::GetColumnName(const OUString& rName)
     return rName;
 }
 
-OUString SwHiddenTxtField::GetDBName(const OUString& rName, SwDoc *pDoc)
+OUString SwHiddenTextField::GetDBName(const OUString& rName, SwDoc *pDoc)
 {
     sal_Int32 nPos = rName.indexOf(DB_DELIM);
     if( nPos>=0 )
@@ -1574,10 +1574,10 @@ OUString SwHiddenParaField::Expand() const
 
 SwField* SwHiddenParaField::Copy() const
 {
-    SwHiddenParaField* pFld = new SwHiddenParaField(static_cast<SwHiddenParaFieldType*>(GetTyp()), aCond);
-    pFld->bIsHidden = bIsHidden;
+    SwHiddenParaField* pField = new SwHiddenParaField(static_cast<SwHiddenParaFieldType*>(GetTyp()), aCond);
+    pField->bIsHidden = bIsHidden;
 
-    return pFld;
+    return pField;
 }
 
 bool SwHiddenParaField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -1641,12 +1641,12 @@ SwFieldType* SwPostItFieldType::Copy() const
 
 SwPostItField::SwPostItField( SwPostItFieldType* pT,
         const OUString& rAuthor,
-        const OUString& rTxt,
+        const OUString& rText,
         const OUString& rInitials,
         const OUString& rName,
         const DateTime& rDateTime )
     : SwField( pT )
-    , sTxt( rTxt )
+    , sText( rText )
     , sAuthor( rAuthor )
     , sInitials( rInitials )
     , sName( rName )
@@ -1679,7 +1679,7 @@ OUString SwPostItField::GetDescription() const
 
 SwField* SwPostItField::Copy() const
 {
-    SwPostItField* pRet = new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), sAuthor, sTxt, sInitials, sName,
+    SwPostItField* pRet = new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), sAuthor, sText, sInitials, sName,
                                 aDateTime);
     if (mpText)
         pRet->SetTextObject( new OutlinerParaObject(*mpText) );
@@ -1704,13 +1704,13 @@ OUString SwPostItField::GetPar1() const
 /// set the PostIt's text
 void SwPostItField::SetPar2(const OUString& rStr)
 {
-    sTxt = rStr;
+    sText = rStr;
 }
 
 /// get the PostIt's text
 OUString SwPostItField::GetPar2() const
 {
-    return sTxt;
+    return sText;
 }
 
 
@@ -1741,7 +1741,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_PAR2:
         {
-        rAny <<= sTxt;
+        rAny <<= sText;
         break;
         }
     case FIELD_PROP_PAR3:
@@ -1764,7 +1764,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             if ( mpText )
                 m_pTextObject->SetText( *mpText );
             else
-                m_pTextObject->SetString( sTxt );
+                m_pTextObject->SetString( sText );
 
             uno::Reference < text::XText > xText( m_pTextObject );
             rAny <<= xText;
@@ -1795,7 +1795,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= sAuthor;
         break;
     case FIELD_PROP_PAR2:
-        rAny >>= sTxt;
+        rAny >>= sText;
         //#i100374# new string via api, delete complex text object so SwPostItNote picks up the new string
         if (mpText)
         {
@@ -1881,8 +1881,8 @@ OUString SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 )
 
 // extended user information field
 
-SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal_uInt32 nFmt) :
-    SwField(pTyp, nFmt), nType(nSubTyp)
+SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal_uInt32 nFormat) :
+    SwField(pTyp, nFormat), nType(nSubTyp)
 {
     aContent = SwExtUserFieldType::Expand(nType, GetFormat());
 }
@@ -1897,10 +1897,10 @@ OUString SwExtUserField::Expand() const
 
 SwField* SwExtUserField::Copy() const
 {
-    SwExtUserField* pFld = new SwExtUserField(static_cast<SwExtUserFieldType*>(GetTyp()), nType, GetFormat());
-    pFld->SetExpansion(aContent);
+    SwExtUserField* pField = new SwExtUserField(static_cast<SwExtUserFieldType*>(GetTyp()), nType, GetFormat());
+    pField->SetExpansion(aContent);
 
-    return pFld;
+    return pField;
 }
 
 sal_uInt16 SwExtUserField::GetSubType() const
@@ -2060,14 +2060,14 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     if( !pNew && !pOld && HasWriterListeners() )
     {
         // first collect all SetPageRefFields
-        _SetGetExpFlds aTmpLst;
+        _SetGetExpFields aTmpLst;
         if( MakeSetList( aTmpLst ) )
         {
-            SwIterator<SwFmtFld,SwFieldType> aIter( *this );
-            for ( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+            SwIterator<SwFormatField,SwFieldType> aIter( *this );
+            for ( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
                     // update only the GetRef fields
-                    if( pFmtFld->GetTxtFld() )
-                        UpdateField( pFmtFld->GetTxtFld(), aTmpLst );
+                    if( pFormatField->GetTextField() )
+                        UpdateField( pFormatField->GetTextField(), aTmpLst );
         }
     }
 
@@ -2075,22 +2075,22 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     NotifyClients( pOld, pNew );
 }
 
-bool SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
+bool SwRefPageGetFieldType::MakeSetList( _SetGetExpFields& rTmpLst )
 {
-    SwIterator<SwFmtFld,SwFieldType> aIter(*pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_REFPAGESETFLD));
-    for ( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+    SwIterator<SwFormatField,SwFieldType> aIter(*pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_REFPAGESETFLD));
+    for ( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
     {
             // update only the GetRef fields
-            const SwTxtFld* pTFld = pFmtFld->GetTxtFld();
-            if( pTFld )
+            const SwTextField* pTField = pFormatField->GetTextField();
+            if( pTField )
             {
-                const SwTxtNode& rTxtNd = pTFld->GetTxtNode();
+                const SwTextNode& rTextNd = pTField->GetTextNode();
 
                 // Always the first! (in Tab-Headline, header/footer )
                 Point aPt;
-                const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rTxtNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
+                const SwContentFrm* pFrm = rTextNd.getLayoutFrm( rTextNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
 
-                _SetGetExpFld* pNew;
+                _SetGetExpField* pNew;
 
                 if( !pFrm ||
                      pFrm->IsInDocBody() ||
@@ -2099,17 +2099,17 @@ bool SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
                     !pFrm->FindPageFrm() )
                 {
                     //  create index for determination of the TextNode
-                    SwNodeIndex aIdx( rTxtNd );
-                    pNew = new _SetGetExpFld( aIdx, pTFld );
+                    SwNodeIndex aIdx( rTextNd );
+                    pNew = new _SetGetExpField( aIdx, pTField );
                 }
                 else
                 {
                     //  create index for determination of the TextNode
                     SwPosition aPos( pDoc->GetNodes().GetEndOfPostIts() );
-                    bool const bResult = GetBodyTxtNode( *pDoc, aPos, *pFrm );
+                    bool const bResult = GetBodyTextNode( *pDoc, aPos, *pFrm );
                     OSL_ENSURE(bResult, "where is the Field?");
                     (void) bResult; // unused in non-debug
-                    pNew = new _SetGetExpFld( aPos.nNode, pTFld,
+                    pNew = new _SetGetExpField( aPos.nNode, pTField,
                                                 &aPos.nContent );
                 }
 
@@ -2121,129 +2121,129 @@ bool SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
     return !rTmpLst.empty();
 }
 
-void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
-                                        _SetGetExpFlds& rSetList )
+void SwRefPageGetFieldType::UpdateField( SwTextField* pTextField,
+                                        _SetGetExpFields& rSetList )
 {
-    SwRefPageGetField* pGetFld = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pTxtFld->GetFmtFld().GetField()));
-    pGetFld->SetText( OUString() );
+    SwRefPageGetField* pGetField = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pTextField->GetFormatField().GetField()));
+    pGetField->SetText( OUString() );
 
     // then search the correct RefPageSet field
-    SwTxtNode* pTxtNode = &pTxtFld->GetTxtNode();
-    if( pTxtNode->StartOfSectionIndex() >
+    SwTextNode* pTextNode = &pTextField->GetTextNode();
+    if( pTextNode->StartOfSectionIndex() >
         pDoc->GetNodes().GetEndOfExtras().GetIndex() )
     {
-        SwNodeIndex aIdx( *pTxtNode );
-        _SetGetExpFld aEndFld( aIdx, pTxtFld );
+        SwNodeIndex aIdx( *pTextNode );
+        _SetGetExpField aEndField( aIdx, pTextField );
 
-        _SetGetExpFlds::const_iterator itLast = rSetList.lower_bound( &aEndFld );
+        _SetGetExpFields::const_iterator itLast = rSetList.lower_bound( &aEndField );
 
         if( itLast != rSetList.begin() )
         {
             --itLast;
-            const SwTxtFld* pRefTxtFld = (*itLast)->GetTxtFld();
-            const SwRefPageSetField* pSetFld =
-                        static_cast<const SwRefPageSetField*>(pRefTxtFld->GetFmtFld().GetField());
-            if( pSetFld->IsOn() )
+            const SwTextField* pRefTextField = (*itLast)->GetTextField();
+            const SwRefPageSetField* pSetField =
+                        static_cast<const SwRefPageSetField*>(pRefTextField->GetFormatField().GetField());
+            if( pSetField->IsOn() )
             {
                 // determine the correct offset
                 Point aPt;
-                const SwCntntFrm* pFrm = pTxtNode->getLayoutFrm( pTxtNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
-                const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pRefTxtFld->GetTxtNode().GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
+                const SwContentFrm* pFrm = pTextNode->getLayoutFrm( pTextNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
+                const SwContentFrm* pRefFrm = pRefTextField->GetTextNode().getLayoutFrm( pRefTextField->GetTextNode().GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
                 const SwPageFrm* pPgFrm = 0;
                 const short nDiff = ( pFrm && pRefFrm )
                         ?   (pPgFrm = pFrm->FindPageFrm())->GetPhyPageNum() -
                             pRefFrm->FindPageFrm()->GetPhyPageNum() + 1
                         : 1;
 
-                sal_uInt32 nTmpFmt = SVX_NUM_PAGEDESC == pGetFld->GetFormat()
+                sal_uInt32 nTmpFormat = SVX_NUM_PAGEDESC == pGetField->GetFormat()
                         ? ( !pPgFrm
                                 ? (sal_uInt32)SVX_NUM_ARABIC
                                 : pPgFrm->GetPageDesc()->GetNumType().GetNumberingType() )
-                        : pGetFld->GetFormat();
-                const short nPageNum = std::max<short>(0, pSetFld->GetOffset() + nDiff);
-                pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
+                        : pGetField->GetFormat();
+                const short nPageNum = std::max<short>(0, pSetField->GetOffset() + nDiff);
+                pGetField->SetText( FormatNumber( nPageNum, nTmpFormat ) );
             }
         }
     }
     // start formatting
-    const_cast<SwFmtFld&>(pTxtFld->GetFmtFld()).ModifyNotification( 0, 0 );
+    const_cast<SwFormatField&>(pTextField->GetFormatField()).ModifyNotification( 0, 0 );
 }
 
 // queries for relative page numbering
 
 SwRefPageGetField::SwRefPageGetField( SwRefPageGetFieldType* pTyp,
-                                    sal_uInt32 nFmt )
-    : SwField( pTyp, nFmt )
+                                    sal_uInt32 nFormat )
+    : SwField( pTyp, nFormat )
 {
 }
 
 OUString SwRefPageGetField::Expand() const
 {
-    return sTxt;
+    return sText;
 }
 
 SwField* SwRefPageGetField::Copy() const
 {
     SwRefPageGetField* pCpy = new SwRefPageGetField(
                         static_cast<SwRefPageGetFieldType*>(GetTyp()), GetFormat() );
-    pCpy->SetText( sTxt );
+    pCpy->SetText( sText );
     return pCpy;
 }
 
 void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
-                                        const SwTxtFld* pFld )
+                                        const SwTextField* pField )
 {
     // only fields in Footer, Header, FootNote, Flys
     SwRefPageGetFieldType* pGetType = static_cast<SwRefPageGetFieldType*>(GetTyp());
     SwDoc* pDoc = pGetType->GetDoc();
-    if( pFld->GetTxtNode().StartOfSectionIndex() >
+    if( pField->GetTextNode().StartOfSectionIndex() >
         pDoc->GetNodes().GetEndOfExtras().GetIndex() )
         return;
 
-    sTxt.clear();
+    sText.clear();
 
     OSL_ENSURE( !pFrm->IsInDocBody(), "Flag incorrect, frame is in DocBody" );
 
     // collect all SetPageRefFields
-    _SetGetExpFlds aTmpLst;
+    _SetGetExpFields aTmpLst;
     if( !pGetType->MakeSetList( aTmpLst ) )
         return ;
 
     //  create index for determination of the TextNode
     SwPosition aPos( SwNodeIndex( pDoc->GetNodes() ) );
-    SwTxtNode* pTxtNode = const_cast<SwTxtNode*>(GetBodyTxtNode( *pDoc, aPos, *pFrm ));
+    SwTextNode* pTextNode = const_cast<SwTextNode*>(GetBodyTextNode( *pDoc, aPos, *pFrm ));
 
     // If no layout exists, ChangeExpansion is called for header and
-    // footer lines via layout formatting without existing TxtNode.
-    if(!pTxtNode)
+    // footer lines via layout formatting without existing TextNode.
+    if(!pTextNode)
         return;
 
-    _SetGetExpFld aEndFld( aPos.nNode, pFld, &aPos.nContent );
+    _SetGetExpField aEndField( aPos.nNode, pField, &aPos.nContent );
 
-    _SetGetExpFlds::const_iterator itLast = aTmpLst.lower_bound( &aEndFld );
+    _SetGetExpFields::const_iterator itLast = aTmpLst.lower_bound( &aEndField );
 
     if( itLast == aTmpLst.begin() )
         return;        // there is no corresponding set-field in front
     --itLast;
 
-    const SwTxtFld* pRefTxtFld = (*itLast)->GetTxtFld();
-    const SwRefPageSetField* pSetFld =
-                        static_cast<const SwRefPageSetField*>(pRefTxtFld->GetFmtFld().GetField());
+    const SwTextField* pRefTextField = (*itLast)->GetTextField();
+    const SwRefPageSetField* pSetField =
+                        static_cast<const SwRefPageSetField*>(pRefTextField->GetFormatField().GetField());
     Point aPt;
-    const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, false );
-    if( pSetFld->IsOn() && pRefFrm )
+    const SwContentFrm* pRefFrm = pRefTextField->GetTextNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, false );
+    if( pSetField->IsOn() && pRefFrm )
     {
         // determine the correct offset
         const SwPageFrm* pPgFrm = pFrm->FindPageFrm();
         const short nDiff = pPgFrm->GetPhyPageNum() -
                             pRefFrm->FindPageFrm()->GetPhyPageNum() + 1;
 
-        SwRefPageGetField* pGetFld = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pFld->GetFmtFld().GetField()));
-        sal_uInt32 nTmpFmt = SVX_NUM_PAGEDESC == pGetFld->GetFormat()
+        SwRefPageGetField* pGetField = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pField->GetFormatField().GetField()));
+        sal_uInt32 nTmpFormat = SVX_NUM_PAGEDESC == pGetField->GetFormat()
                             ? pPgFrm->GetPageDesc()->GetNumType().GetNumberingType()
-                            : pGetFld->GetFormat();
-        const short nPageNum = std::max<short>(0, pSetFld->GetOffset() + nDiff);
-        pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
+                            : pGetField->GetFormat();
+        const short nPageNum = std::max<short>(0, pSetField->GetOffset() + nDiff);
+        pGetField->SetText( FormatNumber( nPageNum, nTmpFormat ) );
     }
 }
 
@@ -2255,7 +2255,7 @@ bool SwRefPageGetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             rAny <<= (sal_Int16)GetFormat();
         break;
         case FIELD_PROP_PAR1:
-            rAny <<= sTxt;
+            rAny <<= sText;
         break;
         default:
             OSL_FAIL("illegal property");
@@ -2278,7 +2278,7 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
         case FIELD_PROP_PAR1:
-            rAny >>= sTxt;
+            rAny >>= sText;
         break;
     default:
         OSL_FAIL("illegal property");
@@ -2298,44 +2298,44 @@ SwFieldType* SwJumpEditFieldType::Copy() const
     return new SwJumpEditFieldType( pDoc );
 }
 
-SwCharFmt* SwJumpEditFieldType::GetCharFmt()
+SwCharFormat* SwJumpEditFieldType::GetCharFormat()
 {
-    SwCharFmt* pFmt = pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( RES_POOLCHR_JUMPEDIT );
+    SwCharFormat* pFormat = pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_JUMPEDIT );
 
     // not registered yet?
     if( !aDep.GetRegisteredIn() )
-        pFmt->Add( &aDep );     // register
+        pFormat->Add( &aDep );     // register
 
-    return pFmt;
+    return pFormat;
 }
 
 SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nForm,
-                                const OUString& rTxt, const OUString& rHelp )
-    : SwField( pTyp, nForm ), sTxt( rTxt ), sHelp( rHelp )
+                                const OUString& rText, const OUString& rHelp )
+    : SwField( pTyp, nForm ), sText( rText ), sHelp( rHelp )
 {
 }
 
 OUString SwJumpEditField::Expand() const
 {
-    return "<" + sTxt + ">";
+    return "<" + sText + ">";
 }
 
 SwField* SwJumpEditField::Copy() const
 {
     return new SwJumpEditField( static_cast<SwJumpEditFieldType*>(GetTyp()), GetFormat(),
-                                sTxt, sHelp );
+                                sText, sHelp );
 }
 
 /// get place holder text
 OUString SwJumpEditField::GetPar1() const
 {
-    return sTxt;
+    return sText;
 }
 
 /// set place holder text
 void SwJumpEditField::SetPar1(const OUString& rStr)
 {
-    sTxt = rStr;
+    sText = rStr;
 }
 
 /// get hint text
@@ -2373,7 +2373,7 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= sHelp;
         break;
     case FIELD_PROP_PAR2 :
-         rAny <<= sTxt;
+         rAny <<= sText;
          break;
     default:
         OSL_FAIL("illegal property");
@@ -2406,7 +2406,7 @@ bool SwJumpEditField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= sHelp;
         break;
     case FIELD_PROP_PAR2 :
-         rAny >>= sTxt;
+         rAny >>= sText;
          break;
     default:
         OSL_FAIL("illegal property");

@@ -63,9 +63,9 @@ const sal_uInt32 HTML_FRMOPTS_MARQUEE_CSS1  =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
-const SdrObject *SwHTMLWriter::GetMarqueeTextObj( const SwDrawFrmFmt& rFmt )
+const SdrObject *SwHTMLWriter::GetMarqueeTextObj( const SwDrawFrameFormat& rFormat )
 {
-    const SdrObject* pObj = rFmt.FindSdrObject();
+    const SdrObject* pObj = rFormat.FindSdrObject();
     return (pObj && ::IsMarqueeTextObj( *pObj )) ? pObj : 0;
 }
 
@@ -129,8 +129,8 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
     }
 }
 
-Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
-                                     const SwDrawFrmFmt& rFmt,
+Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
+                                     const SwDrawFrameFormat& rFormat,
                                      const SdrObject& rSdrObject )
 {
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
@@ -286,9 +286,9 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     sal_uInt32 nFrmFlags = HTML_FRMOPTS_MARQUEE;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         nFrmFlags |= HTML_FRMOPTS_MARQUEE_CSS1;
-    OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyOUStr, nFrmFlags );
+    OString aEndTags = rHTMLWrt.OutFrameFormatOptions( rFormat, aEmptyOUStr, nFrmFlags );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
-        rHTMLWrt.OutCSS1_FrmFmtOptions( rFmt, nFrmFlags, &rSdrObject );
+        rHTMLWrt.OutCSS1_FrameFormatOptions( rFormat, nFrmFlags, &rSdrObject );
 
     rWrt.Strm().WriteChar( '>' );
 

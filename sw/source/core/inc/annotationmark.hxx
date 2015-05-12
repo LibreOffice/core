@@ -23,7 +23,7 @@
 #include <bookmrk.hxx>
 #include <rtl/ustring.hxx>
 
-class SwFmtFld;
+class SwFormatField;
 
 namespace sw { namespace mark
 {
@@ -38,7 +38,7 @@ namespace sw { namespace mark
 
         virtual void InitDoc(SwDoc* const io_Doc) SAL_OVERRIDE;
 
-        const SwFmtFld* GetAnnotationFmtFld() const;
+        const SwFormatField* GetAnnotationFormatField() const;
     };
 }}
 #endif

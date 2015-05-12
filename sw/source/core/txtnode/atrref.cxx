@@ -24,38 +24,38 @@
 #include <txtrfmrk.hxx>
 #include <swfont.hxx>
 
-SwFmtRefMark::~SwFmtRefMark( )
+SwFormatRefMark::~SwFormatRefMark( )
 {
 }
 
-SwFmtRefMark::SwFmtRefMark( const OUString& rName )
+SwFormatRefMark::SwFormatRefMark( const OUString& rName )
     : SfxPoolItem(RES_TXTATR_REFMARK)
     , SwModify(0)
-    , pTxtAttr(0)
+    , pTextAttr(0)
     , aRefName(rName)
 {
 }
 
-SwFmtRefMark::SwFmtRefMark( const SwFmtRefMark& rAttr )
+SwFormatRefMark::SwFormatRefMark( const SwFormatRefMark& rAttr )
     : SfxPoolItem(RES_TXTATR_REFMARK)
     , SwModify(0)
-    , pTxtAttr(0)
+    , pTextAttr(0)
     , aRefName(rAttr.aRefName)
 {
 }
 
-bool SwFmtRefMark::operator==( const SfxPoolItem& rAttr ) const
+bool SwFormatRefMark::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return aRefName == static_cast<const SwFmtRefMark&>(rAttr).aRefName;
+    return aRefName == static_cast<const SwFormatRefMark&>(rAttr).aRefName;
 }
 
-SfxPoolItem* SwFmtRefMark::Clone( SfxItemPool* ) const
+SfxPoolItem* SwFormatRefMark::Clone( SfxItemPool* ) const
 {
-    return new SwFmtRefMark( *this );
+    return new SwFormatRefMark( *this );
 }
 
-void SwFmtRefMark::Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
+void SwFormatRefMark::Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
 {
     NotifyClients(pOld, pNew);
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
@@ -64,7 +64,7 @@ void SwFmtRefMark::Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
     }
 }
 
-void SwFmtRefMark::InvalidateRefMark()
+void SwFormatRefMark::InvalidateRefMark()
 {
     SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT,
             &static_cast<SwModify&>(*this)); // cast to base class (void*)
@@ -73,14 +73,14 @@ void SwFmtRefMark::InvalidateRefMark()
 
 // Attribut fuer Inhalts-/Positions-Referenzen im Text
 
-SwTxtRefMark::SwTxtRefMark( SwFmtRefMark& rAttr,
+SwTextRefMark::SwTextRefMark( SwFormatRefMark& rAttr,
             sal_Int32 const nStartPos, sal_Int32 const*const pEnd)
-    : SwTxtAttr(rAttr, nStartPos)
-    , SwTxtAttrEnd( rAttr, nStartPos, nStartPos )
-    , m_pTxtNode( 0 )
+    : SwTextAttr(rAttr, nStartPos)
+    , SwTextAttrEnd( rAttr, nStartPos, nStartPos )
+    , m_pTextNode( 0 )
     , m_pEnd( 0 )
 {
-    rAttr.pTxtAttr = this;
+    rAttr.pTextAttr = this;
     if ( pEnd )
     {
         m_nEnd = *pEnd;
@@ -94,7 +94,7 @@ SwTxtRefMark::SwTxtRefMark( SwFmtRefMark& rAttr,
     SetOverlapAllowedAttr( true );
 }
 
-sal_Int32* SwTxtRefMark::GetEnd()
+sal_Int32* SwTextRefMark::GetEnd()
 {
     return m_pEnd;
 }

@@ -22,7 +22,7 @@
 #include <tools/resary.hxx>
 
 class SwWrtShell;
-class SwFmt;
+class SwFormat;
 
 class SwCondCollPage : public SfxTabPage
 {
@@ -43,7 +43,7 @@ class SwCondCollPage : public SfxTabPage
 
     SwWrtShell          &rSh;
     const CommandStruct*pCmds;
-    SwFmt*              pFmt;
+    SwFormat*              pFormat;
 
     bool                bNewTemplate;
 
@@ -70,7 +70,7 @@ public:
     virtual bool FillItemSet(      SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset      (const SfxItemSet *rSet) SAL_OVERRIDE;
 
-    void SetCollection( SwFmt* pFormat, bool bNew );
+    void SetCollection( SwFormat* pFormat, bool bNew );
 };
 
 #endif

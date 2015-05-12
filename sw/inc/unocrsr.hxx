@@ -35,7 +35,7 @@ public:
 
 protected:
 
-    virtual const SwCntntFrm* DoSetBidiLevelLeftRight(
+    virtual const SwContentFrm* DoSetBidiLevelLeftRight(
         bool & io_rbLeft, bool bVisualAllowed, bool bInsertCrsr) SAL_OVERRIDE;
     virtual void DoSetBidiLevelUpDown() SAL_OVERRIDE;
 
@@ -74,7 +74,7 @@ class SwUnoTableCrsr : public virtual SwUnoCrsr, public virtual SwTableCursor
     // The selection has the same order as the table boxes, i.e.
     // if something is deleted from the one array at a certain position
     // it has also to be deleted from the other!
-    SwCursor m_aTblSel;
+    SwCursor m_aTableSel;
 
     using SwTableCursor::MakeBoxSels;
 
@@ -93,8 +93,8 @@ public:
 
     void MakeBoxSels();
 
-          SwCursor& GetSelRing()            { return m_aTblSel; }
-    const SwCursor& GetSelRing() const      { return m_aTblSel; }
+          SwCursor& GetSelRing()            { return m_aTableSel; }
+    const SwCursor& GetSelRing() const      { return m_aTableSel; }
 };
 
 #endif

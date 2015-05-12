@@ -22,23 +22,23 @@
 #include <objectformatter.hxx>
 #include <sal/types.h>
 
-class SwTxtFrm;
+class SwTextFrm;
 
 // #i28701#
 // Format floating screen objects, which are anchored at a given anchor text frame
 // and registered at the given page frame.
-class SwObjectFormatterTxtFrm : public SwObjectFormatter
+class SwObjectFormatterTextFrm : public SwObjectFormatter
 {
     private:
         // anchor text frame
-        SwTxtFrm& mrAnchorTxtFrm;
+        SwTextFrm& mrAnchorTextFrm;
 
         // 'master' anchor text frame
-        SwTxtFrm* mpMasterAnchorTxtFrm;
+        SwTextFrm* mpMasterAnchorTextFrm;
 
-        SwObjectFormatterTxtFrm( SwTxtFrm& _rAnchorTxtFrm,
+        SwObjectFormatterTextFrm( SwTextFrm& _rAnchorTextFrm,
                                  const SwPageFrm& _rPageFrm,
-                                 SwTxtFrm* _pMasterAnchorTxtFrm,
+                                 SwTextFrm* _pMasterAnchorTextFrm,
                                  SwLayAction* _pLayAction );
 
         /** method to invalidate objects, anchored previous to given object at
@@ -119,18 +119,18 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
         virtual SwFrm& GetAnchorFrm() SAL_OVERRIDE;
 
     public:
-        virtual ~SwObjectFormatterTxtFrm();
+        virtual ~SwObjectFormatterTextFrm();
 
         // #i40147# - add parameter <_bCheckForMovedFwd>.
         virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                   const bool _bCheckForMovedFwd = false ) SAL_OVERRIDE;
         virtual bool DoFormatObjs() SAL_OVERRIDE;
 
-        /** method to create an instance of <SwObjectFormatterTxtFrm> is
+        /** method to create an instance of <SwObjectFormatterTextFrm> is
             necessary.
         */
-        static SwObjectFormatterTxtFrm* CreateObjFormatter(
-                                                SwTxtFrm& _rAnchorTxtFrm,
+        static SwObjectFormatterTextFrm* CreateObjFormatter(
+                                                SwTextFrm& _rAnchorTextFrm,
                                                 const SwPageFrm& _rPageFrm,
                                                 SwLayAction* _pLayAction );
 
@@ -142,11 +142,11 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
             to format the frames, which have become invalid due to the anchored
             object formatting in the iterative object positioning algorithm
 
-            @param _rAnchorTxtFrm
+            @param _rAnchorTextFrm
             input parameter - reference to anchor text frame, which has to be
             formatted including its previous frames of the page.
         */
-        static void FormatAnchorFrmAndItsPrevs( SwTxtFrm& _rAnchorTxtFrm );
+        static void FormatAnchorFrmAndItsPrevs( SwTextFrm& _rAnchorTextFrm );
 
         /** method to check the conditions, if 'anchor is moved forward'
 

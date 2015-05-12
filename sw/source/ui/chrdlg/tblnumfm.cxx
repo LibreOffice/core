@@ -29,7 +29,7 @@
 #include <svl/itemset.hxx>
 #include <sfx2/tabdlg.hxx>
 
-SwNumFmtDlg::SwNumFmtDlg(vcl::Window* pParent, const SfxItemSet& rSet)
+SwNumFormatDlg::SwNumFormatDlg(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet, "FormatNumberDialog",
         "cui/ui/formatnumberdialog.ui")
 {

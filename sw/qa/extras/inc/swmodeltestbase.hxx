@@ -304,9 +304,9 @@ private:
         xmlTextWriterStartDocument(pXmlWriter, NULL, NULL, NULL);
 
         // create the dump
-        SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT(pTxtDoc);
-        SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
         SwRootFrm* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
         pLayout->dumpAsXml(pXmlWriter);
 
@@ -327,9 +327,9 @@ protected:
 
     void calcLayout()
     {
-        SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT(pTxtDoc);
-        SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
         pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
     }
 

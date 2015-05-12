@@ -26,10 +26,10 @@
 
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFmtFollowTextFlow : public SfxBoolItem
+class SW_DLLPUBLIC SwFormatFollowTextFlow : public SfxBoolItem
 {
 public:
-    SwFmtFollowTextFlow( bool bFlag = false )
+    SwFormatFollowTextFlow( bool bFlag = false )
         : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag ) {}
 
     TYPEINFO_OVERRIDE();
@@ -45,10 +45,10 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-inline const SwFmtFollowTextFlow &SwAttrSet::GetFollowTextFlow(bool bInP) const
-    { return static_cast<const SwFmtFollowTextFlow&>(Get( RES_FOLLOW_TEXT_FLOW, bInP )); }
+inline const SwFormatFollowTextFlow &SwAttrSet::GetFollowTextFlow(bool bInP) const
+    { return static_cast<const SwFormatFollowTextFlow&>(Get( RES_FOLLOW_TEXT_FLOW, bInP )); }
 
-inline const SwFmtFollowTextFlow &SwFmt::GetFollowTextFlow(bool bInP) const
+inline const SwFormatFollowTextFlow &SwFormat::GetFollowTextFlow(bool bInP) const
     { return m_aSet.GetFollowTextFlow( bInP ); }
 
 #endif

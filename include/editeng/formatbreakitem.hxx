@@ -24,7 +24,7 @@
 #include <editeng/editengdllapi.h>
 
 
-// class SvxFmtBreakItem -------------------------------------------------
+// class SvxFormatBreakItem -------------------------------------------------
 
 /*  [Description]
 
@@ -33,15 +33,15 @@
 */
 #define FMTBREAK_NOAUTO ((sal_uInt16)0x0001)
 
-class EDITENG_DLLPUBLIC SvxFmtBreakItem : public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxFormatBreakItem : public SfxEnumItem
 {
 public:
     TYPEINFO_OVERRIDE();
 
-    inline SvxFmtBreakItem( const SvxBreak eBrk /*= SVX_BREAK_NONE*/,
+    inline SvxFormatBreakItem( const SvxBreak eBrk /*= SVX_BREAK_NONE*/,
                             const sal_uInt16 nWhich );
-    inline SvxFmtBreakItem( const SvxFmtBreakItem& rBreak );
-    inline SvxFmtBreakItem& operator=( const SvxFmtBreakItem& rCpy );
+    inline SvxFormatBreakItem( const SvxFormatBreakItem& rBreak );
+    inline SvxFormatBreakItem& operator=( const SvxFormatBreakItem& rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -69,17 +69,17 @@ public:
 };
 
 
-inline SvxFmtBreakItem::SvxFmtBreakItem( const SvxBreak eBreak,
+inline SvxFormatBreakItem::SvxFormatBreakItem( const SvxBreak eBreak,
                                          const sal_uInt16 _nWhich ) :
     SfxEnumItem( _nWhich, (sal_uInt16)eBreak )
 {}
 
-inline SvxFmtBreakItem::SvxFmtBreakItem( const SvxFmtBreakItem& rBreak ) :
+inline SvxFormatBreakItem::SvxFormatBreakItem( const SvxFormatBreakItem& rBreak ) :
     SfxEnumItem( rBreak )
 {}
 
-inline SvxFmtBreakItem& SvxFmtBreakItem::operator=(
-    const SvxFmtBreakItem& rBreak )
+inline SvxFormatBreakItem& SvxFormatBreakItem::operator=(
+    const SvxFormatBreakItem& rBreak )
 {
     SetValue( rBreak.GetValue() );
     return *this;

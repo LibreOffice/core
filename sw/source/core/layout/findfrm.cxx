@@ -32,8 +32,8 @@
 #include <txtfrm.hxx>
 #include <calbck.hxx>
 
-/// Searches the first CntntFrm in BodyText below the page.
-SwLayoutFrm *SwFtnBossFrm::FindBodyCont()
+/// Searches the first ContentFrm in BodyText below the page.
+SwLayoutFrm *SwFootnoteBossFrm::FindBodyCont()
 {
     SwFrm *pLay = Lower();
     while ( pLay && !pLay->IsBodyFrm() )
@@ -41,11 +41,11 @@ SwLayoutFrm *SwFtnBossFrm::FindBodyCont()
     return static_cast<SwLayoutFrm*>(pLay);
 }
 
-/// Searches the last CntntFrm in BodyText below the page.
-SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
+/// Searches the last ContentFrm in BodyText below the page.
+SwContentFrm *SwPageFrm::FindLastBodyContent()
 {
-    SwCntntFrm *pRet = FindFirstBodyCntnt();
-    SwCntntFrm *pNxt = pRet;
+    SwContentFrm *pRet = FindFirstBodyContent();
+    SwContentFrm *pNxt = pRet;
     while ( pNxt && pNxt->IsInDocBody() && IsAnLower( pNxt ) )
     {   pRet = pNxt;
         pNxt = pNxt->FindNextCnt();
@@ -54,15 +54,15 @@ SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
 }
 
 /**
- * Checks if the frame contains one or more CntntFrm's anywhere in his
- * subsidiary structure; if so the first found CntntFrm is returned.
+ * Checks if the frame contains one or more ContentFrm's anywhere in his
+ * subsidiary structure; if so the first found ContentFrm is returned.
  */
-const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
+const SwContentFrm *SwLayoutFrm::ContainsContent() const
 {
     //Search downwards the layout leaf and if there is no content, jump to the
     //next leaf until content is found or we leave "this".
-    //Sections: Cntnt next to sections would not be found this way (empty
-    //sections directly next to CntntFrm) therefore we need to recursively
+    //Sections: Content next to sections would not be found this way (empty
+    //sections directly next to ContentFrm) therefore we need to recursively
     //search for them even if it's more complex.
 
     const SwLayoutFrm *pLayLeaf = this;
@@ -74,7 +74,7 @@ const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
 
         if( pLayLeaf->IsSctFrm() && pLayLeaf != this )
         {
-            const SwCntntFrm *pCnt = pLayLeaf->ContainsCntnt();
+            const SwContentFrm *pCnt = pLayLeaf->ContainsContent();
             if( pCnt )
                 return pCnt;
             if( pLayLeaf->GetNext() )
@@ -85,11 +85,11 @@ const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
                     continue;
                 }
                 else
-                    return static_cast<const SwCntntFrm*>(pLayLeaf->GetNext());
+                    return static_cast<const SwContentFrm*>(pLayLeaf->GetNext());
             }
         }
         else if ( pLayLeaf->Lower() )
-            return static_cast<const SwCntntFrm*>(pLayLeaf->Lower());
+            return static_cast<const SwContentFrm*>(pLayLeaf->Lower());
 
         pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
         if( !IsAnLower( pLayLeaf) )
@@ -100,7 +100,7 @@ const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
 
 /**
  * Calls ContainsAny first to reach the innermost cell. From there we walk back
- * up to the first SwCellFrm. Since we use SectionFrms, ContainsCntnt()->GetUpper()
+ * up to the first SwCellFrm. Since we use SectionFrms, ContainsContent()->GetUpper()
  * is not enough anymore.
  */
 const SwCellFrm *SwLayoutFrm::FirstCell() const
@@ -111,12 +111,12 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
     return static_cast<const SwCellFrm*>(pCnt);
 }
 
-/** return CntntFrms, sections, and tables.
+/** return ContentFrms, sections, and tables.
  *
- * @param _bInvestigateFtnForSections controls investigation of content of footnotes for sections.
- * @see ContainsCntnt
+ * @param _bInvestigateFootnoteForSections controls investigation of content of footnotes for sections.
+ * @see ContainsContent
  */
-const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) const
+const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFootnoteForSections ) const
 {
     //Search downwards the layout leaf and if there is no content, jump to the
     //next leaf until content is found, we leave "this" or until we found
@@ -124,7 +124,7 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
 
     const SwLayoutFrm *pLayLeaf = this;
     // #130797#
-    const bool bNoFtn = IsSctFrm() && !_bInvestigateFtnForSections;
+    const bool bNoFootnote = IsSctFrm() && !_bInvestigateFootnoteForSections;
     do
     {
         while ( ( (!pLayLeaf->IsSctFrm() && !pLayLeaf->IsTabFrm())
@@ -136,19 +136,19 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
             && pLayLeaf != this )
         {
             // Now we also return "deleted" SectionFrms so they can be
-            // maintained on SaveCntnt and RestoreCntnt
+            // maintained on SaveContent and RestoreContent
             return pLayLeaf;
         }
         else if ( pLayLeaf->Lower() )
-            return static_cast<const SwCntntFrm*>(pLayLeaf->Lower());
+            return static_cast<const SwContentFrm*>(pLayLeaf->Lower());
 
         pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
-        if( bNoFtn && pLayLeaf && pLayLeaf->IsInFtn() )
+        if( bNoFootnote && pLayLeaf && pLayLeaf->IsInFootnote() )
         {
             do
             {
                 pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
-            } while( pLayLeaf && pLayLeaf->IsInFtn() );
+            } while( pLayLeaf && pLayLeaf->IsInFootnote() );
         }
         if( !IsAnLower( pLayLeaf) )
             return 0;
@@ -166,36 +166,36 @@ SwFrm* SwFrm::GetLower()
     return IsLayoutFrm() ? static_cast<SwLayoutFrm*>(this)->Lower() : 0;
 }
 
-SwCntntFrm* SwFrm::FindPrevCnt( const bool _bInSameFtn )
+SwContentFrm* SwFrm::FindPrevCnt( const bool _bInSameFootnote )
 {
-    if ( GetPrev() && GetPrev()->IsCntntFrm() )
-        return static_cast<SwCntntFrm*>(GetPrev());
+    if ( GetPrev() && GetPrev()->IsContentFrm() )
+        return static_cast<SwContentFrm*>(GetPrev());
     else
-        return _FindPrevCnt( _bInSameFtn );
+        return _FindPrevCnt( _bInSameFootnote );
 }
 
-const SwCntntFrm* SwFrm::FindPrevCnt( const bool _bInSameFtn ) const
+const SwContentFrm* SwFrm::FindPrevCnt( const bool _bInSameFootnote ) const
 {
-    if ( GetPrev() && GetPrev()->IsCntntFrm() )
-        return static_cast<const SwCntntFrm*>(GetPrev());
+    if ( GetPrev() && GetPrev()->IsContentFrm() )
+        return static_cast<const SwContentFrm*>(GetPrev());
     else
-        return const_cast<SwFrm*>(this)->_FindPrevCnt( _bInSameFtn );
+        return const_cast<SwFrm*>(this)->_FindPrevCnt( _bInSameFootnote );
 }
 
-SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn )
+SwContentFrm *SwFrm::FindNextCnt( const bool _bInSameFootnote )
 {
-    if ( mpNext && mpNext->IsCntntFrm() )
-        return static_cast<SwCntntFrm*>(mpNext);
+    if ( mpNext && mpNext->IsContentFrm() )
+        return static_cast<SwContentFrm*>(mpNext);
     else
-        return _FindNextCnt( _bInSameFtn );
+        return _FindNextCnt( _bInSameFootnote );
 }
 
-const SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn ) const
+const SwContentFrm *SwFrm::FindNextCnt( const bool _bInSameFootnote ) const
 {
-    if ( mpNext && mpNext->IsCntntFrm() )
-        return static_cast<SwCntntFrm*>(mpNext);
+    if ( mpNext && mpNext->IsContentFrm() )
+        return static_cast<SwContentFrm*>(mpNext);
     else
-        return const_cast<SwFrm*>(this)->_FindNextCnt( _bInSameFtn );
+        return const_cast<SwFrm*>(this)->_FindNextCnt( _bInSameFootnote );
 }
 
 bool SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
@@ -355,11 +355,11 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
  *
  * @warning fixes here may also need to be applied to the @{lcl_NextFrm} method above
  */
-const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
+const SwContentFrm* SwContentFrm::ImplGetNextContentFrm( bool bFwd ) const
 {
     const SwFrm *pFrm = this;
     // #100926#
-    const SwCntntFrm *pCntntFrm = 0;
+    const SwContentFrm *pContentFrm = 0;
     bool bGoingUp = false;
     do {
         const SwFrm *p = 0;
@@ -389,9 +389,9 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
         }
 
         pFrm = p;
-    } while ( 0 == (pCntntFrm = (pFrm->IsCntntFrm() ? static_cast<const SwCntntFrm*>(pFrm) : 0) ));
+    } while ( 0 == (pContentFrm = (pFrm->IsContentFrm() ? static_cast<const SwContentFrm*>(pFrm) : 0) ));
 
-    return pCntntFrm;
+    return pContentFrm;
 }
 
 SwPageFrm* SwFrm::FindPageFrm()
@@ -415,14 +415,14 @@ SwPageFrm* SwFrm::FindPageFrm()
     return static_cast<SwPageFrm*>(pRet);
 }
 
-SwFtnBossFrm* SwFrm::FindFtnBossFrm( bool bFootnotes )
+SwFootnoteBossFrm* SwFrm::FindFootnoteBossFrm( bool bFootnotes )
 {
     SwFrm *pRet = this;
     // Footnote bosses can't exist inside a table; also sections with columns
     // don't contain footnote texts there
     if( pRet->IsInTab() )
         pRet = pRet->FindTabFrm();
-    while ( pRet && !pRet->IsFtnBossFrm() )
+    while ( pRet && !pRet->IsFootnoteBossFrm() )
     {
         if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();
@@ -441,11 +441,11 @@ SwFtnBossFrm* SwFrm::FindFtnBossFrm( bool bFootnotes )
         !pRet->GetNext() && !pRet->GetPrev() )
     {
         SwSectionFrm* pSct = pRet->FindSctFrm();
-        OSL_ENSURE( pSct, "FindFtnBossFrm: Single column outside section?" );
-        if( !pSct->IsFtnAtEnd() )
-            return pSct->FindFtnBossFrm( true );
+        OSL_ENSURE( pSct, "FindFootnoteBossFrm: Single column outside section?" );
+        if( !pSct->IsFootnoteAtEnd() )
+            return pSct->FindFootnoteBossFrm( true );
     }
-    return static_cast<SwFtnBossFrm*>(pRet);
+    return static_cast<SwFootnoteBossFrm*>(pRet);
 }
 
 SwTabFrm* SwFrm::ImplFindTabFrm()
@@ -472,16 +472,16 @@ SwSectionFrm* SwFrm::ImplFindSctFrm()
     return static_cast<SwSectionFrm*>(pRet);
 }
 
-SwFtnFrm *SwFrm::ImplFindFtnFrm()
+SwFootnoteFrm *SwFrm::ImplFindFootnoteFrm()
 {
     SwFrm *pRet = this;
-    while ( !pRet->IsFtnFrm() )
+    while ( !pRet->IsFootnoteFrm() )
     {
         pRet = pRet->GetUpper();
         if ( !pRet )
             return 0;
     }
-    return static_cast<SwFtnFrm*>(pRet);
+    return static_cast<SwFootnoteFrm*>(pRet);
 }
 
 SwFlyFrm *SwFrm::ImplFindFlyFrm()
@@ -532,10 +532,10 @@ SwFrm* SwFrm::FindFooterOrHeader()
     return pRet;
 }
 
-const SwFtnFrm* SwFtnContFrm::FindFootNote() const
+const SwFootnoteFrm* SwFootnoteContFrm::FindFootNote() const
 {
-    const SwFtnFrm* pRet = static_cast<const SwFtnFrm*>(Lower());
-    if( pRet && !pRet->GetAttr()->GetFtn().IsEndNote() )
+    const SwFootnoteFrm* pRet = static_cast<const SwFootnoteFrm*>(Lower());
+    if( pRet && !pRet->GetAttr()->GetFootnote().IsEndNote() )
         return pRet;
     return NULL;
 }
@@ -584,54 +584,54 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
 
 const SwAttrSet* SwFrm::GetAttrSet() const
 {
-    if ( IsCntntFrm() )
-        return &static_cast<const SwCntntFrm*>(this)->GetNode()->GetSwAttrSet();
+    if ( IsContentFrm() )
+        return &static_cast<const SwContentFrm*>(this)->GetNode()->GetSwAttrSet();
     else
-        return &static_cast<const SwLayoutFrm*>(this)->GetFmt()->GetAttrSet();
+        return &static_cast<const SwLayoutFrm*>(this)->GetFormat()->GetAttrSet();
 }
 
 //UUUU
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrm::getSdrAllFillAttributesHelper() const
 {
-    if(IsCntntFrm())
+    if(IsContentFrm())
     {
-        return static_cast< const SwCntntFrm* >(this)->GetNode()->getSdrAllFillAttributesHelper();
+        return static_cast< const SwContentFrm* >(this)->GetNode()->getSdrAllFillAttributesHelper();
     }
     else
     {
-        return static_cast< const SwLayoutFrm* >(this)->GetFmt()->getSdrAllFillAttributesHelper();
+        return static_cast< const SwLayoutFrm* >(this)->GetFormat()->getSdrAllFillAttributesHelper();
     }
 }
 
 bool SwFrm::supportsFullDrawingLayerFillAttributeSet() const
 {
-    if (IsCntntFrm())
+    if (IsContentFrm())
     {
         return true;
     }
     else
     {
-        return static_cast< const SwLayoutFrm* >(this)->GetFmt()->supportsFullDrawingLayerFillAttributeSet();
+        return static_cast< const SwLayoutFrm* >(this)->GetFormat()->supportsFullDrawingLayerFillAttributeSet();
     }
 }
 
 /*
  *  SwFrm::_FindNext(), _FindPrev(), InvalidateNextPos()
- *         _FindNextCnt() visits tables and sections and only returns SwCntntFrms.
+ *         _FindNextCnt() visits tables and sections and only returns SwContentFrms.
  *
  *  Description         Invalidates the position of the next frame.
- *      This is the direct successor or in case of CntntFrms the next
- *      CntntFrm which sits in the same flow as I do:
+ *      This is the direct successor or in case of ContentFrms the next
+ *      ContentFrm which sits in the same flow as I do:
  *      - body,
  *      - footnote,
  *      - in headers/footers the notification only needs to be forwarded
  *        inside the section
  *      - same for Flys
- *      - Cntnts in tabs remain only inside their cell
- *      - in principle tables behave exactly like the Cntnts
+ *      - Contents in tabs remain only inside their cell
+ *      - in principle tables behave exactly like the Contents
  *      - sections also
  */
-// This helper function is an equivalent to the ImplGetNextCntntFrm() method,
+// This helper function is an equivalent to the ImplGetNextContentFrm() method,
 // besides ContentFrames this function also returns TabFrms and SectionFrms.
 static SwFrm* lcl_NextFrm( SwFrm* pFrm )
 {
@@ -657,7 +657,7 @@ static SwFrm* lcl_NextFrm( SwFrm* pFrm )
         }
         bGoingUp = !(bGoingFwd || bGoingDown);
         pFrm = p;
-    } while ( 0 == (pRet = ( ( pFrm->IsCntntFrm() || ( !bGoingUp &&
+    } while ( 0 == (pRet = ( ( pFrm->IsContentFrm() || ( !bGoingUp &&
             ( pFrm->IsTabFrm() || pFrm->IsSctFrm() ) ) )? pFrm : 0 ) ) );
     return pRet;
 }
@@ -669,31 +669,31 @@ SwFrm *SwFrm::_FindNext()
 
     if ( IsTabFrm() )
     {
-        //The last Cntnt of the table gets picked up and his follower is
+        //The last Content of the table gets picked up and his follower is
         //returned. To be able to deactivate the special case for tables
         //(see below) bIgnoreTab will be set.
         if ( static_cast<SwTabFrm*>(this)->GetFollow() )
             return static_cast<SwTabFrm*>(this)->GetFollow();
 
-        pThis = static_cast<SwTabFrm*>(this)->FindLastCntnt();
+        pThis = static_cast<SwTabFrm*>(this)->FindLastContent();
         if ( !pThis )
             pThis = this;
         bIgnoreTab = true;
     }
     else if ( IsSctFrm() )
     {
-        //The last Cntnt of the section gets picked and his follower is returned.
+        //The last Content of the section gets picked and his follower is returned.
         if ( static_cast<SwSectionFrm*>(this)->GetFollow() )
             return static_cast<SwSectionFrm*>(this)->GetFollow();
 
-        pThis = static_cast<SwSectionFrm*>(this)->FindLastCntnt();
+        pThis = static_cast<SwSectionFrm*>(this)->FindLastContent();
         if ( !pThis )
             pThis = this;
     }
-    else if ( IsCntntFrm() )
+    else if ( IsContentFrm() )
     {
-        if( static_cast<SwCntntFrm*>(this)->GetFollow() )
-            return static_cast<SwCntntFrm*>(this)->GetFollow();
+        if( static_cast<SwContentFrm*>(this)->GetFollow() )
+            return static_cast<SwContentFrm*>(this)->GetFollow();
     }
     else if ( IsRowFrm() )
     {
@@ -706,16 +706,16 @@ SwFrm *SwFrm::_FindNext()
         return NULL;
 
     SwFrm* pRet = NULL;
-    const bool bFtn  = pThis->IsInFtn();
+    const bool bFootnote  = pThis->IsInFootnote();
     if ( !bIgnoreTab && pThis->IsInTab() )
     {
         SwLayoutFrm *pUp = pThis->GetUpper();
         while (pUp && !pUp->IsCellFrm())
             pUp = pUp->GetUpper();
-        SAL_WARN_IF(!pUp, "sw.core", "Cntnt in table but not in cell.");
+        SAL_WARN_IF(!pUp, "sw.core", "Content in table but not in cell.");
         SwFrm* pNxt = pUp ? static_cast<SwCellFrm*>(pUp)->GetFollowCell() : NULL;
         if ( pNxt )
-            pNxt = static_cast<SwCellFrm*>(pNxt)->ContainsCntnt();
+            pNxt = static_cast<SwCellFrm*>(pNxt)->ContainsContent();
         if ( !pNxt )
         {
             pNxt = lcl_NextFrm( pThis );
@@ -731,7 +731,7 @@ SwFrm *SwFrm::_FindNext()
         SwFrm *pNxtCnt = lcl_NextFrm( pThis );
         if ( pNxtCnt )
         {
-            if ( bBody || bFtn )
+            if ( bBody || bFootnote )
             {
                 while ( pNxtCnt )
                 {
@@ -743,9 +743,9 @@ SwFrm *SwFrm::_FindNext()
                                    !pNxtCnt->FindSctFrm()->IsEndnAtEnd()
                                  );
                     if ( ( bBody && pNxtCnt->IsInDocBody() ) ||
-                         ( pNxtCnt->IsInFtn() &&
-                           ( bFtn ||
-                             ( bEndn && pNxtCnt->FindFtnFrm()->GetAttr()->GetFtn().IsEndNote() )
+                         ( pNxtCnt->IsInFootnote() &&
+                           ( bFootnote ||
+                             ( bEndn && pNxtCnt->FindFootnoteFrm()->GetAttr()->GetFootnote().IsEndNote() )
                            )
                          )
                        )
@@ -786,14 +786,14 @@ SwFrm *SwFrm::_FindNext()
         //Footnotes in frames with columns must not return the section which
         //contains the footnote
         if( !pSct->IsAnLower( this ) &&
-            (!bFtn || pSct->IsInFtn() ) )
+            (!bFootnote || pSct->IsInFootnote() ) )
             return pSct;
     }
     return pRet;
 }
 
-// #i27138# - add parameter <_bInSameFtn>
-SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
+// #i27138# - add parameter <_bInSameFootnote>
+SwContentFrm *SwFrm::_FindNextCnt( const bool _bInSameFootnote )
 {
     SwFrm *pThis = this;
 
@@ -801,11 +801,11 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
     {
         if ( static_cast<SwTabFrm*>(this)->GetFollow() )
         {
-            pThis = static_cast<SwTabFrm*>(this)->GetFollow()->ContainsCntnt();
+            pThis = static_cast<SwTabFrm*>(this)->GetFollow()->ContainsContent();
             if( pThis )
-                return static_cast<SwCntntFrm*>(pThis);
+                return static_cast<SwContentFrm*>(pThis);
         }
-        pThis = static_cast<SwTabFrm*>(this)->FindLastCntnt();
+        pThis = static_cast<SwTabFrm*>(this)->FindLastContent();
         if ( !pThis )
             return 0;
     }
@@ -813,60 +813,60 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
     {
         if ( static_cast<SwSectionFrm*>(this)->GetFollow() )
         {
-            pThis = static_cast<SwSectionFrm*>(this)->GetFollow()->ContainsCntnt();
+            pThis = static_cast<SwSectionFrm*>(this)->GetFollow()->ContainsContent();
             if( pThis )
-                return static_cast<SwCntntFrm*>(pThis);
+                return static_cast<SwContentFrm*>(pThis);
         }
-        pThis = static_cast<SwSectionFrm*>(this)->FindLastCntnt();
+        pThis = static_cast<SwSectionFrm*>(this)->FindLastContent();
         if ( !pThis )
             return 0;
     }
-    else if ( IsCntntFrm() && static_cast<SwCntntFrm*>(this)->GetFollow() )
-        return static_cast<SwCntntFrm*>(this)->GetFollow();
+    else if ( IsContentFrm() && static_cast<SwContentFrm*>(this)->GetFollow() )
+        return static_cast<SwContentFrm*>(this)->GetFollow();
 
-    if ( pThis->IsCntntFrm() )
+    if ( pThis->IsContentFrm() )
     {
         const bool bBody = pThis->IsInDocBody();
-        const bool bFtn  = pThis->IsInFtn();
-        SwCntntFrm *pNxtCnt = static_cast<SwCntntFrm*>(pThis)->GetNextCntntFrm();
+        const bool bFootnote  = pThis->IsInFootnote();
+        SwContentFrm *pNxtCnt = static_cast<SwContentFrm*>(pThis)->GetNextContentFrm();
         if ( pNxtCnt )
         {
             // #i27138#
-            if ( bBody || ( bFtn && !_bInSameFtn ) )
+            if ( bBody || ( bFootnote && !_bInSameFootnote ) )
             {
                 // handling for environments 'footnotes' and 'document body frames':
                 while ( pNxtCnt )
                 {
                     if ( (bBody && pNxtCnt->IsInDocBody()) ||
-                         (bFtn  && pNxtCnt->IsInFtn()) )
+                         (bFootnote  && pNxtCnt->IsInFootnote()) )
                         return pNxtCnt;
-                    pNxtCnt = pNxtCnt->GetNextCntntFrm();
+                    pNxtCnt = pNxtCnt->GetNextContentFrm();
                 }
             }
             // #i27138#
-            else if ( bFtn && _bInSameFtn )
+            else if ( bFootnote && _bInSameFootnote )
             {
                 // handling for environments 'each footnote':
                 // Assure that found next content frame belongs to the same footnotes
-                const SwFtnFrm* pFtnFrmOfNext( pNxtCnt->FindFtnFrm() );
-                const SwFtnFrm* pFtnFrmOfCurr( pThis->FindFtnFrm() );
-                OSL_ENSURE( pFtnFrmOfCurr,
+                const SwFootnoteFrm* pFootnoteFrmOfNext( pNxtCnt->FindFootnoteFrm() );
+                const SwFootnoteFrm* pFootnoteFrmOfCurr( pThis->FindFootnoteFrm() );
+                OSL_ENSURE( pFootnoteFrmOfCurr,
                         "<SwFrm::_FindNextCnt() - unknown layout situation: current frame has to have an upper footnote frame." );
-                if ( pFtnFrmOfNext == pFtnFrmOfCurr )
+                if ( pFootnoteFrmOfNext == pFootnoteFrmOfCurr )
                 {
                     return pNxtCnt;
                 }
-                else if ( pFtnFrmOfCurr->GetFollow() )
+                else if ( pFootnoteFrmOfCurr->GetFollow() )
                 {
                     // next content frame has to be the first content frame
                     // in the follow footnote, which contains a content frame.
-                    SwFtnFrm* pFollowFtnFrmOfCurr(
-                                        const_cast<SwFtnFrm*>(pFtnFrmOfCurr) );
+                    SwFootnoteFrm* pFollowFootnoteFrmOfCurr(
+                                        const_cast<SwFootnoteFrm*>(pFootnoteFrmOfCurr) );
                     pNxtCnt = 0L;
                     do {
-                        pFollowFtnFrmOfCurr = pFollowFtnFrmOfCurr->GetFollow();
-                        pNxtCnt = pFollowFtnFrmOfCurr->ContainsCntnt();
-                    } while ( !pNxtCnt && pFollowFtnFrmOfCurr->GetFollow() );
+                        pFollowFootnoteFrmOfCurr = pFollowFootnoteFrmOfCurr->GetFollow();
+                        pNxtCnt = pFollowFootnoteFrmOfCurr->ContainsContent();
+                    } while ( !pNxtCnt && pFollowFootnoteFrmOfCurr->GetFollow() );
                     return pNxtCnt;
                 }
                 else
@@ -904,7 +904,7 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
 
     OD 2005-11-30 #i27138#
 */
-SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
+SwContentFrm* SwFrm::_FindPrevCnt( const bool _bInSameFootnote )
 {
     if ( !IsFlowFrm() )
     {
@@ -912,18 +912,18 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
         return 0L;
     }
 
-    SwCntntFrm* pPrevCntntFrm( 0L );
+    SwContentFrm* pPrevContentFrm( 0L );
 
-    // Because method <SwCntntFrm::GetPrevCntntFrm()> is used to travel
+    // Because method <SwContentFrm::GetPrevContentFrm()> is used to travel
     // through the layout, a content frame, at which the travel starts, is needed.
-    SwCntntFrm* pCurrCntntFrm = dynamic_cast<SwCntntFrm*>(this);
+    SwContentFrm* pCurrContentFrm = dynamic_cast<SwContentFrm*>(this);
 
     // perform shortcut, if current frame is a follow, and
-    // determine <pCurrCntntFrm>, if current frame is a table or section frame
-    if ( pCurrCntntFrm && pCurrCntntFrm->IsFollow() )
+    // determine <pCurrContentFrm>, if current frame is a table or section frame
+    if ( pCurrContentFrm && pCurrContentFrm->IsFollow() )
     {
         // previous content frame is its master content frame
-        pPrevCntntFrm = pCurrCntntFrm->FindMaster();
+        pPrevContentFrm = pCurrContentFrm->FindMaster();
     }
     else if ( IsTabFrm() )
     {
@@ -931,13 +931,13 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
         if ( pTabFrm->IsFollow() )
         {
             // previous content frame is the last content of its master table frame
-            pPrevCntntFrm = pTabFrm->FindMaster()->FindLastCntnt();
+            pPrevContentFrm = pTabFrm->FindMaster()->FindLastContent();
         }
         else
         {
             // start content frame for the search is the first content frame of
             // the table frame.
-            pCurrCntntFrm = pTabFrm->ContainsCntnt();
+            pCurrContentFrm = pTabFrm->ContainsContent();
         }
     }
     else if ( IsSctFrm() )
@@ -946,74 +946,74 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
         if ( pSectFrm->IsFollow() )
         {
             // previous content frame is the last content of its master section frame
-            pPrevCntntFrm = pSectFrm->FindMaster()->FindLastCntnt();
+            pPrevContentFrm = pSectFrm->FindMaster()->FindLastContent();
         }
         else
         {
             // start content frame for the search is the first content frame of
             // the section frame.
-            pCurrCntntFrm = pSectFrm->ContainsCntnt();
+            pCurrContentFrm = pSectFrm->ContainsContent();
         }
     }
 
     // search for next content frame, depending on the environment, in which
     // the current frame is in.
-    if ( !pPrevCntntFrm && pCurrCntntFrm )
+    if ( !pPrevContentFrm && pCurrContentFrm )
     {
-        pPrevCntntFrm = pCurrCntntFrm->GetPrevCntntFrm();
-        if ( pPrevCntntFrm )
+        pPrevContentFrm = pCurrContentFrm->GetPrevContentFrm();
+        if ( pPrevContentFrm )
         {
-            if ( pCurrCntntFrm->IsInFly() )
+            if ( pCurrContentFrm->IsInFly() )
             {
                 // handling for environments 'unlinked fly frame' and
                 // 'group of linked fly frames':
-                // Nothing to do, <pPrevCntntFrm> is the one
+                // Nothing to do, <pPrevContentFrm> is the one
             }
             else
             {
-                const bool bInDocBody = pCurrCntntFrm->IsInDocBody();
-                const bool bInFtn  = pCurrCntntFrm->IsInFtn();
-                if ( bInDocBody || ( bInFtn && !_bInSameFtn ) )
+                const bool bInDocBody = pCurrContentFrm->IsInDocBody();
+                const bool bInFootnote  = pCurrContentFrm->IsInFootnote();
+                if ( bInDocBody || ( bInFootnote && !_bInSameFootnote ) )
                 {
                     // handling for environments 'footnotes' and 'document body frames':
                     // Assure that found previous frame is also in one of these
                     // environments. Otherwise, travel further
-                    while ( pPrevCntntFrm )
+                    while ( pPrevContentFrm )
                     {
-                        if ( ( bInDocBody && pPrevCntntFrm->IsInDocBody() ) ||
-                             ( bInFtn && pPrevCntntFrm->IsInFtn() ) )
+                        if ( ( bInDocBody && pPrevContentFrm->IsInDocBody() ) ||
+                             ( bInFootnote && pPrevContentFrm->IsInFootnote() ) )
                         {
                             break;
                         }
-                        pPrevCntntFrm = pPrevCntntFrm->GetPrevCntntFrm();
+                        pPrevContentFrm = pPrevContentFrm->GetPrevContentFrm();
                     }
                 }
-                else if ( bInFtn && _bInSameFtn )
+                else if ( bInFootnote && _bInSameFootnote )
                 {
                     // handling for environments 'each footnote':
                     // Assure that found next content frame belongs to the same footnotes
-                    const SwFtnFrm* pFtnFrmOfPrev( pPrevCntntFrm->FindFtnFrm() );
-                    const SwFtnFrm* pFtnFrmOfCurr( pCurrCntntFrm->FindFtnFrm() );
-                    if ( pFtnFrmOfPrev != pFtnFrmOfCurr )
+                    const SwFootnoteFrm* pFootnoteFrmOfPrev( pPrevContentFrm->FindFootnoteFrm() );
+                    const SwFootnoteFrm* pFootnoteFrmOfCurr( pCurrContentFrm->FindFootnoteFrm() );
+                    if ( pFootnoteFrmOfPrev != pFootnoteFrmOfCurr )
                     {
-                        if ( pFtnFrmOfCurr->GetMaster() )
+                        if ( pFootnoteFrmOfCurr->GetMaster() )
                         {
-                            SwFtnFrm* pMasterFtnFrmOfCurr(
-                                        const_cast<SwFtnFrm*>(pFtnFrmOfCurr) );
-                            pPrevCntntFrm = 0L;
+                            SwFootnoteFrm* pMasterFootnoteFrmOfCurr(
+                                        const_cast<SwFootnoteFrm*>(pFootnoteFrmOfCurr) );
+                            pPrevContentFrm = 0L;
                             // #146872#
                             // correct wrong loop-condition
                             do {
-                                pMasterFtnFrmOfCurr = pMasterFtnFrmOfCurr->GetMaster();
-                                pPrevCntntFrm = pMasterFtnFrmOfCurr->FindLastCntnt();
-                            } while ( !pPrevCntntFrm &&
-                                      pMasterFtnFrmOfCurr->GetMaster() );
+                                pMasterFootnoteFrmOfCurr = pMasterFootnoteFrmOfCurr->GetMaster();
+                                pPrevContentFrm = pMasterFootnoteFrmOfCurr->FindLastContent();
+                            } while ( !pPrevContentFrm &&
+                                      pMasterFootnoteFrmOfCurr->GetMaster() );
                         }
                         else
                         {
                             // current content frame is the first content in the
                             // footnote - no previous content exists.
-                            pPrevCntntFrm = 0L;
+                            pPrevContentFrm = 0L;
                         }
                     }
                 }
@@ -1021,27 +1021,27 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
                 {
                     // handling for environments 'page header' and 'page footer':
                     // Assure that found previous frame is also in the same
-                    // page header respectively page footer as <pCurrCntntFrm>
-                    // Note: At this point its clear, that <pCurrCntntFrm> has
+                    // page header respectively page footer as <pCurrContentFrm>
+                    // Note: At this point its clear, that <pCurrContentFrm> has
                     //       to be inside a page header or page footer and that
-                    //       neither <pCurrCntntFrm> nor <pPrevCntntFrm> are
+                    //       neither <pCurrContentFrm> nor <pPrevContentFrm> are
                     //       inside a fly frame.
                     //       Thus, method <FindFooterOrHeader()> can be used.
-                    OSL_ENSURE( pCurrCntntFrm->FindFooterOrHeader(),
+                    OSL_ENSURE( pCurrContentFrm->FindFooterOrHeader(),
                             "<SwFrm::_FindPrevCnt()> - unknown layout situation: current frame should be in page header or page footer" );
-                    OSL_ENSURE( !pPrevCntntFrm->IsInFly(),
+                    OSL_ENSURE( !pPrevContentFrm->IsInFly(),
                             "<SwFrm::_FindPrevCnt()> - unknown layout situation: found previous frame should *not* be inside a fly frame." );
-                    if ( pPrevCntntFrm->FindFooterOrHeader() !=
-                                            pCurrCntntFrm->FindFooterOrHeader() )
+                    if ( pPrevContentFrm->FindFooterOrHeader() !=
+                                            pCurrContentFrm->FindFooterOrHeader() )
                     {
-                        pPrevCntntFrm = 0L;
+                        pPrevContentFrm = 0L;
                     }
                 }
             }
         }
     }
 
-    return pPrevCntntFrm;
+    return pPrevContentFrm;
 }
 
 SwFrm *SwFrm::_FindPrev()
@@ -1051,19 +1051,19 @@ SwFrm *SwFrm::_FindPrev()
 
     if ( IsTabFrm() )
     {
-        //The first Cntnt of the table gets picked up and his predecessor is
+        //The first Content of the table gets picked up and his predecessor is
         //returned. To be able to deactivate the special case for tables
         //(see below) bIgnoreTab will be set.
         if ( static_cast<SwTabFrm*>(this)->IsFollow() )
             return static_cast<SwTabFrm*>(this)->FindMaster();
         else
-            pThis = static_cast<SwTabFrm*>(this)->ContainsCntnt();
+            pThis = static_cast<SwTabFrm*>(this)->ContainsContent();
         bIgnoreTab = true;
     }
 
-    if ( pThis && pThis->IsCntntFrm() )
+    if ( pThis && pThis->IsContentFrm() )
     {
-        SwCntntFrm *pPrvCnt = static_cast<SwCntntFrm*>(pThis)->GetPrevCntntFrm();
+        SwContentFrm *pPrvCnt = static_cast<SwContentFrm*>(pThis)->GetPrevContentFrm();
         if( !pPrvCnt )
             return 0;
         if ( !bIgnoreTab && pThis->IsInTab() )
@@ -1071,7 +1071,7 @@ SwFrm *SwFrm::_FindPrev()
             SwLayoutFrm *pUp = pThis->GetUpper();
             while (pUp && !pUp->IsCellFrm())
                 pUp = pUp->GetUpper();
-            SAL_WARN_IF(!pUp, "sw.core", "Cntnt in table but not in cell.");
+            SAL_WARN_IF(!pUp, "sw.core", "Content in table but not in cell.");
             if (pUp && pUp->IsAnLower(pPrvCnt))
                 return pPrvCnt;
         }
@@ -1079,19 +1079,19 @@ SwFrm *SwFrm::_FindPrev()
         {
             SwFrm* pRet;
             const bool bBody = pThis->IsInDocBody();
-            const bool bFtn  = !bBody && pThis->IsInFtn();
-            if ( bBody || bFtn )
+            const bool bFootnote  = !bBody && pThis->IsInFootnote();
+            if ( bBody || bFootnote )
             {
                 while ( pPrvCnt )
                 {
                     if ( (bBody && pPrvCnt->IsInDocBody()) ||
-                            (bFtn   && pPrvCnt->IsInFtn()) )
+                            (bFootnote   && pPrvCnt->IsInFootnote()) )
                     {
                         pRet = pPrvCnt->IsInTab() ? pPrvCnt->FindTabFrm()
                                                   : (SwFrm*)pPrvCnt;
                         return pRet;
                     }
-                    pPrvCnt = pPrvCnt->GetPrevCntntFrm();
+                    pPrvCnt = pPrvCnt->GetPrevContentFrm();
                 }
             }
             else if ( pThis->IsInFly() )
@@ -1121,7 +1121,7 @@ SwFrm *SwFrm::_FindPrev()
     return 0;
 }
 
-void SwFrm::ImplInvalidateNextPos( bool bNoFtn )
+void SwFrm::ImplInvalidateNextPos( bool bNoFootnote )
 {
     SwFrm *pFrm;
     if ( 0 != (pFrm = _FindNext()) )
@@ -1135,8 +1135,8 @@ void SwFrm::ImplInvalidateNextPos( bool bNoFtn )
                     SwFrm* pTmp = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
                     if( pTmp )
                         pTmp->InvalidatePos();
-                    else if( !bNoFtn )
-                        static_cast<SwSectionFrm*>(pFrm)->InvalidateFtnPos();
+                    else if( !bNoFootnote )
+                        static_cast<SwSectionFrm*>(pFrm)->InvalidateFootnotePos();
                     if( !IsInSct() || FindSctFrm()->GetFollow() != pFrm )
                         pFrm->InvalidatePos();
                     return;
@@ -1168,7 +1168,7 @@ void SwFrm::ImplInvalidateNextPos( bool bNoFtn )
 
     OD 09.01.2004 #i11859#
 
-    FME 2004-04-19 #i27145# Moved function from SwTxtFrm to SwFrm
+    FME 2004-04-19 #i27145# Moved function from SwTextFrm to SwFrm
 */
 void SwFrm::InvalidateNextPrtArea()
 {
@@ -1179,8 +1179,8 @@ void SwFrm::InvalidateNextPrtArea()
         while ( pNextFrm &&
                 ( ( pNextFrm->IsSctFrm() &&
                     !static_cast<SwSectionFrm*>(pNextFrm)->GetSection() ) ||
-                  ( pNextFrm->IsTxtFrm() &&
-                    static_cast<SwTxtFrm*>(pNextFrm)->IsHiddenNow() ) ) )
+                  ( pNextFrm->IsTextFrm() &&
+                    static_cast<SwTextFrm*>(pNextFrm)->IsHiddenNow() ) ) )
         {
             pNextFrm = pNextFrm->FindNext();
         }
@@ -1201,11 +1201,11 @@ void SwFrm::InvalidateNextPrtArea()
             }
 
             // Invalidate printing area of first content in found section.
-            SwFrm* pFstCntntOfSctFrm =
+            SwFrm* pFstContentOfSctFrm =
                     static_cast<SwSectionFrm*>(pNextFrm)->ContainsAny();
-            if ( pFstCntntOfSctFrm )
+            if ( pFstContentOfSctFrm )
             {
-                pFstCntntOfSctFrm->InvalidatePrt();
+                pFstContentOfSctFrm->InvalidatePrt();
             }
         }
         else
@@ -1258,10 +1258,10 @@ bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
         }
         else if ( _pLayoutFrm->IsInFly() ||
                   _pLayoutFrm->IsInDocBody() ||
-                  _pLayoutFrm->IsInFtn() )
+                  _pLayoutFrm->IsInFootnote() )
         {
             if ( _pLayoutFrm->IsInTab() && !IsTabFrm() &&
-                 ( !IsCntntFrm() || !const_cast<SwFrm*>(this)->GetNextCellLeaf( MAKEPAGE_NONE ) ) )
+                 ( !IsContentFrm() || !const_cast<SwFrm*>(this)->GetNextCellLeaf( MAKEPAGE_NONE ) ) )
             {
                 bRetVal = false;
             }
@@ -1308,15 +1308,15 @@ void SwFrm::SetInfFlags()
     if ( !IsFlyFrm() && !GetUpper() ) //not yet pasted, no information available
         return;
 
-    mbInfInvalid = mbInfBody = mbInfTab = mbInfFly = mbInfFtn = mbInfSct = false;
+    mbInfInvalid = mbInfBody = mbInfTab = mbInfFly = mbInfFootnote = mbInfSct = false;
 
     SwFrm *pFrm = this;
-    if( IsFtnContFrm() )
-        mbInfFtn = true;
+    if( IsFootnoteContFrm() )
+        mbInfFootnote = true;
     do
     {
         // mbInfBody is only set in the page body, but not in the column body
-        if ( pFrm->IsBodyFrm() && !mbInfFtn && pFrm->GetUpper()
+        if ( pFrm->IsBodyFrm() && !mbInfFootnote && pFrm->GetUpper()
              && pFrm->GetUpper()->IsPageFrm() )
             mbInfBody = true;
         else if ( pFrm->IsTabFrm() || pFrm->IsCellFrm() )
@@ -1327,8 +1327,8 @@ void SwFrm::SetInfFlags()
             mbInfFly = true;
         else if ( pFrm->IsSctFrm() )
             mbInfSct = true;
-        else if ( pFrm->IsFtnFrm() )
-            mbInfFtn = true;
+        else if ( pFrm->IsFootnoteFrm() )
+            mbInfFootnote = true;
 
         pFrm = pFrm->GetUpper();
 
@@ -1600,7 +1600,7 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
                                        GetTabBox()->FindStartOfRowSpan( *pTable, nMax ) :
                                        GetTabBox()->FindEndOfRowSpan( *pTable, nMax );
 
-        SwIterator<SwCellFrm,SwFmt> aIter( *rMasterBox.GetFrmFmt() );
+        SwIterator<SwCellFrm,SwFormat> aIter( *rMasterBox.GetFrameFormat() );
 
         for ( SwCellFrm* pMasterCell = aIter.First(); pMasterCell; pMasterCell = aIter.Next() )
         {

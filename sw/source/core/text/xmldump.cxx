@@ -324,20 +324,20 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
         }
 
         // Dump the children
-        if ( IsTxtFrm(  ) )
+        if ( IsTextFrm(  ) )
         {
-            const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm *>(this);
-            OUString aTxt = pTxtFrm->GetTxt(  );
+            const SwTextFrm *pTextFrm = static_cast<const SwTextFrm *>(this);
+            OUString aText = pTextFrm->GetText(  );
             for ( int i = 0; i < 32; i++ )
             {
-                aTxt = aTxt.replace( i, '*' );
+                aText = aText.replace( i, '*' );
             }
-            OString aTxt8 =OUStringToOString( aTxt,
+            OString aText8 =OUStringToOString( aText,
                                                           RTL_TEXTENCODING_UTF8 );
             xmlTextWriterWriteString( writer,
-                                      reinterpret_cast<const xmlChar *>(aTxt8.getStr(  )) );
+                                      reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
             XmlPortionDumper pdumper( writer );
-            pTxtFrm->VisitPortions( pdumper );
+            pTextFrm->VisitPortions( pdumper );
 
         }
         else
@@ -379,18 +379,18 @@ void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%" SAL_PRIuUINT32, GetUpper()->GetFrmId() );
     if ( GetLower( ) )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%" SAL_PRIuUINT32, GetLower()->GetFrmId() );
-    if ( IsTxtFrm(  ) )
+    if ( IsTextFrm(  ) )
     {
-        const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm *>(this);
-        const SwTxtNode *pTxtNode = pTxtFrm->GetTxtNode();
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), TMP_FORMAT, pTxtNode->GetIndex() );
+        const SwTextFrm *pTextFrm = static_cast<const SwTextFrm *>(this);
+        const SwTextNode *pTextNode = pTextFrm->GetTextNode();
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), TMP_FORMAT, pTextNode->GetIndex() );
     }
     if (IsHeaderFrm() || IsFooterFrm())
     {
         const SwHeadFootFrm *pHeadFootFrm = static_cast<const SwHeadFootFrm*>(this);
-        OUString aFmtName = pHeadFootFrm->GetFmt()->GetName();
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(OUStringToOString(aFmtName, RTL_TEXTENCODING_UTF8).getStr()));
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrm->GetFmt());
+        OUString aFormatName = pHeadFootFrm->GetFormat()->GetName();
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrm->GetFormat());
     }
 }
 
@@ -433,14 +433,14 @@ void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
     xmlTextWriterEndElement(writer);
 }
 
-void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
+void SwTextFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
     SwFrm::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrmId() );
 
     if (m_pPrecede != NULL)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTxtFrm*>(m_pPrecede)->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTextFrm*>(m_pPrecede)->GetFrmId() );
 }
 
 void SwSectionFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const

@@ -70,7 +70,7 @@ class SwRegionRects;
 class SwFrm;
 class SvtAccessibilityOptions;
 class SwPagePreviewLayout;
-class SwTxtFrm;
+class SwTextFrm;
 class BitmapEx;
 
 struct SwAccessibilityOptions;
@@ -381,7 +381,7 @@ public:
     void CalcPagesForPrint( sal_uInt16 nMax );
 
     // All about fields.
-    void UpdateFlds(bool bCloseDB = false);
+    void UpdateFields(bool bCloseDB = false);
     bool IsAnyFieldInDoc() const;
     // Update all charts, for that exists any table.
     void UpdateAllCharts();
@@ -520,18 +520,18 @@ public:
 
         @author OD
 
-        @param _pFromTxtFrm
+        @param _pFromTextFrm
         input parameter - paragraph frame, for which the relation CONTENT_FLOWS_FROM
         has to be invalidated.
         If NULL, no CONTENT_FLOWS_FROM relation has to be invalidated
 
-        @param _pToTxtFrm
+        @param _pToTextFrm
         input parameter - paragraph frame, for which the relation CONTENT_FLOWS_TO
         has to be invalidated.
         If NULL, no CONTENT_FLOWS_TO relation has to be invalidated
     */
-    void InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
-                                               const SwTxtFrm* _pToTxtFrm );
+    void InvalidateAccessibleParaFlowRelation( const SwTextFrm* _pFromTextFrm,
+                                               const SwTextFrm* _pToTextFrm );
 
     /** invalidate text selection for paragraphs
 
@@ -546,10 +546,10 @@ public:
 
         @author OD
 
-        @param rTxtFrm
+        @param rTextFrm
         input parameter - paragraph frame, whose attributes have changed
     */
-    void InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm );
+    void InvalidateAccessibleParaAttrs( const SwTextFrm& rTextFrm );
 
     SwAccessibleMap* GetAccessibleMap();
 

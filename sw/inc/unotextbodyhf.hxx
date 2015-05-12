@@ -30,7 +30,7 @@
 #include <unotext.hxx>
 
 class SwDoc;
-class SwFrmFmt;
+class SwFrameFormat;
 class SwXTextCursor;
 
 typedef ::cppu::WeakAggImplHelper2
@@ -134,12 +134,12 @@ protected:
 
     virtual ~SwXHeadFootText();
 
-    SwXHeadFootText(SwFrmFmt & rHeadFootFmt, const bool bIsHeader);
+    SwXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader);
 
 public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
-        CreateXHeadFootText(SwFrmFmt & rHeadFootFmt, const bool bIsHeader);
+        CreateXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader);
     static bool IsXHeadFootText(SwClient *const pClient);
 
     // XInterface

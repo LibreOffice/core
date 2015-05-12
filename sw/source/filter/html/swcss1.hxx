@@ -25,10 +25,10 @@
 #include "svxcss1.hxx"
 
 class SwDoc;
-class SwCharFmt;
-class SwTxtFmtColl;
+class SwCharFormat;
+class SwTextFormatColl;
 class SvxBrushItem;
-class SwFmtDrop;
+class SwFormatDrop;
 class SwPageDesc;
 
 // Dieser Header seiht zwar harmlos aus, included aber eben doch
@@ -54,18 +54,18 @@ class SwCSS1Parser : public SvxCSS1Parser
     bool bSetFirstPageDesc : 1;
     bool bSetRightPageDesc : 1;
 
-    bool bTableHeaderTxtCollSet : 1;
-    bool bTableTxtCollSet : 1;
+    bool bTableHeaderTextCollSet : 1;
+    bool bTableTextCollSet : 1;
 
-    bool bLinkCharFmtsSet : 1;
+    bool bLinkCharFormatsSet : 1;
 
     // die Vorlagen fuer DL anlegen
-    SwTxtFmtColl* GetDefListTxtFmtColl( sal_uInt16 nCollId, sal_uInt16 nDeep );
+    SwTextFormatColl* GetDefListTextFormatColl( sal_uInt16 nCollId, sal_uInt16 nDeep );
 
     const SwPageDesc* GetPageDesc( sal_uInt16 nPoolId, bool bCreate );
 
-    void SetTableTxtColl( bool bHeader );
-    void SetLinkCharFmts();
+    void SetTableTextColl( bool bHeader );
+    void SetLinkCharFormats();
 
 protected:
     virtual bool StyleParsed( const CSS1Selector *pSelector,
@@ -88,15 +88,15 @@ public:
 
     // das Zeichen-Format zu einem Token und einer ggf leeren Klasse
     // ermitteln
-    SwCharFmt* GetChrFmt( sal_uInt16 nToken, const OUString& rClass ) const;
+    SwCharFormat* GetChrFormat( sal_uInt16 nToken, const OUString& rClass ) const;
 
-    // eine TextFmtColl zu einer Pool-Id ermitteln
-    SwTxtFmtColl *GetTxtFmtColl( sal_uInt16 nTxtColl, const OUString& rClass );
+    // eine TextFormatColl zu einer Pool-Id ermitteln
+    SwTextFormatColl *GetTextFormatColl( sal_uInt16 nTextColl, const OUString& rClass );
 
     // This methods do the same as the one of SwDoc, but change the
     // encoding if required.
-    SwTxtFmtColl *GetTxtCollFromPool( sal_uInt16 nPoolId ) const;
-    SwCharFmt *GetCharFmtFromPool( sal_uInt16 nPoolId ) const;
+    SwTextFormatColl *GetTextCollFromPool( sal_uInt16 nPoolId ) const;
+    SwCharFormat *GetCharFormatFromPool( sal_uInt16 nPoolId ) const;
 
     // Die linke oder rechte Seiten-Vorlage holen. In Dokumenten mit nur
     // einer Vorlage gibt es nur eine rechtee Seite.
@@ -122,15 +122,15 @@ public:
                            const SvxCSS1PropertyInfo& rPropInfo );
 
     // Fuellen eines DropCap-Attributs
-    void FillDropCap( SwFmtDrop& rDrop, SfxItemSet& rItemSet,
+    void FillDropCap( SwFormatDrop& rDrop, SfxItemSet& rItemSet,
                       const OUString *pName=0 );
 
-    bool SetFmtBreak( SfxItemSet& rItemSet,
+    bool SetFormatBreak( SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rPropInfo );
 
-    static void AddClassName( OUString& rFmtName, const OUString& rClass );
+    static void AddClassName( OUString& rFormatName, const OUString& rClass );
 
-    static inline void AddFirstLetterExt( OUString& rFmtName );
+    static inline void AddFirstLetterExt( OUString& rFormatName );
 
     static bool MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                  bool bAutoWidth=false );
@@ -163,9 +163,9 @@ public:
     virtual void SetDfltEncoding( rtl_TextEncoding eEnc ) SAL_OVERRIDE;
 };
 
-inline void SwCSS1Parser::AddFirstLetterExt( OUString& rFmtName )
+inline void SwCSS1Parser::AddFirstLetterExt( OUString& rFormatName )
 {
-    rFmtName += ".FL";   // first letter
+    rFormatName += ".FL";   // first letter
 }
 
 inline const SwPageDesc* SwCSS1Parser::GetFirstPageDesc( bool bCreate )
@@ -185,20 +185,20 @@ inline const SwPageDesc* SwCSS1Parser::GetLeftPageDesc( bool bCreate )
 
 inline void SwCSS1Parser::SetTHTagStyles()
 {
-    if( !bTableHeaderTxtCollSet )
-        SetTableTxtColl( true );
+    if( !bTableHeaderTextCollSet )
+        SetTableTextColl( true );
 }
 
 inline void SwCSS1Parser::SetTDTagStyles()
 {
-    if( !bTableTxtCollSet )
-        SetTableTxtColl( false );
+    if( !bTableTextCollSet )
+        SetTableTextColl( false );
 }
 
 inline void SwCSS1Parser::SetATagStyles()
 {
-    if( !bLinkCharFmtsSet )
-        SetLinkCharFmts();
+    if( !bLinkCharFormatsSet )
+        SetLinkCharFormats();
 }
 
 inline void SwCSS1Parser::SetDelayedStyles()

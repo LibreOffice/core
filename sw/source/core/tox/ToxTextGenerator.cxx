@@ -69,11 +69,11 @@ ToxTextGenerator::GetNumStringOfFirstNode( const SwTOXSortTabBase& rBase, bool b
     }
 
     OUString sRet;
-    if (rBase.pTxtMark) { // only if it's not a Mark
+    if (rBase.pTextMark) { // only if it's not a Mark
         return sRet;
     }
 
-    const SwTxtNode* pNd = rBase.aTOXSources[0].pNd->GetTxtNode();
+    const SwTextNode* pNd = rBase.aTOXSources[0].pNd->GetTextNode();
     if (!pNd) {
         return sRet;
     }
@@ -110,13 +110,13 @@ ToxTextGenerator::HandleChapterToken(const SwTOXSortTabBase& rBase, const SwForm
     }
 
     // A bit tricky: Find a random Frame
-    const SwCntntNode* contentNode = rBase.aTOXSources.at(0).pNd->GetCntntNode();
+    const SwContentNode* contentNode = rBase.aTOXSources.at(0).pNd->GetContentNode();
     if (!contentNode) {
         return OUString();
     }
 
     // #i53420#
-    const SwCntntFrm* contentFrame = contentNode->getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    const SwContentFrm* contentFrame = contentNode->getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     if (!contentFrame) {
         return OUString();
     }
@@ -125,26 +125,26 @@ ToxTextGenerator::HandleChapterToken(const SwTOXSortTabBase& rBase, const SwForm
 }
 
 OUString
-ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, const SwCntntFrm* contentFrame,
-        const SwCntntNode *contentNode) const
+ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, const SwContentFrm* contentFrame,
+        const SwContentNode *contentNode) const
 {
     OUString retval;
 
     SwChapterFieldType chapterFieldType;
-    SwChapterField aFld = ObtainChapterField(&chapterFieldType, &chapterToken, contentFrame, contentNode);
+    SwChapterField aField = ObtainChapterField(&chapterFieldType, &chapterToken, contentFrame, contentNode);
 
     //---> #i89791#
     // continue to support CF_NUMBER and CF_NUM_TITLE in order to handle ODF 1.0/1.1 written by OOo 3.x
     // in the same way as OOo 2.x would handle them.
     if (CF_NUM_NOPREPST_TITLE == chapterToken.nChapterFormat || CF_NUMBER == chapterToken.nChapterFormat) {
-        retval += aFld.GetNumber(); // get the string number without pre/postfix
+        retval += aField.GetNumber(); // get the string number without pre/postfix
     }
     else if (CF_NUMBER_NOPREPST == chapterToken.nChapterFormat || CF_NUM_TITLE == chapterToken.nChapterFormat) {
-        retval += aFld.GetNumber();
+        retval += aField.GetNumber();
         retval += " ";
-        retval += aFld.GetTitle();
+        retval += aField.GetTitle();
     } else if (CF_TITLE == chapterToken.nChapterFormat) {
-        retval += aFld.GetTitle();
+        retval += aField.GetTitle();
     }
     return retval;
 }
@@ -156,14 +156,14 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
         sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess)
 {
     // pTOXNd is only set at the first mark
-    SwTxtNode* pTOXNd = const_cast<SwTxtNode*>(entries.at(indexOfEntryToProcess)->pTOXNd);
+    SwTextNode* pTOXNd = const_cast<SwTextNode*>(entries.at(indexOfEntryToProcess)->pTOXNd);
     // FIXME this operates directly on the node text
-    OUString & rTxt = const_cast<OUString&>(pTOXNd->GetTxt());
-    rTxt.clear();
+    OUString & rText = const_cast<OUString&>(pTOXNd->GetText());
+    rText.clear();
     for(sal_uInt16 nIndex = indexOfEntryToProcess; nIndex < indexOfEntryToProcess + numberOfEntriesToProcess; nIndex++)
     {
         if(nIndex > indexOfEntryToProcess)
-            rTxt += ", "; // comma separation
+            rText += ", "; // comma separation
         // Initialize String with the Pattern from the form
         const SwTOXSortTabBase& rBase = *entries.at(nIndex);
         sal_uInt16 nLvl = rBase.GetLevel();
@@ -178,12 +178,12 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
         while(aIt != aPattern.end()) // #i21237#
         {
             SwFormToken aToken = *aIt; // #i21237#
-            sal_Int32 nStartCharStyle = rTxt.getLength();
+            sal_Int32 nStartCharStyle = rText.getLength();
             switch( aToken.eTokenType )
             {
             case TOKEN_ENTRY_NO:
                 // for TOC numbering
-                rTxt += GetNumStringOfFirstNode( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) ) ;
+                rText += GetNumStringOfFirstNode( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) ) ;
                 break;
 
             case TOKEN_ENTRY_TEXT: {
@@ -195,9 +195,9 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
             case TOKEN_ENTRY:
                 {
                     // for TOC numbering
-                    rTxt += GetNumStringOfFirstNode( rBase, true, MAXLEVEL );
-                    SwIndex aIdx( pTOXNd, rTxt.getLength() );
-                    ToxWhitespaceStripper stripper(rBase.GetTxt().sText);
+                    rText += GetNumStringOfFirstNode( rBase, true, MAXLEVEL );
+                    SwIndex aIdx( pTOXNd, rText.getLength() );
+                    ToxWhitespaceStripper stripper(rBase.GetText().sText);
                     pTOXNd->InsertText(stripper.GetStrippedString(), aIdx);
                 }
                 break;
@@ -205,35 +205,35 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
             case TOKEN_TAB_STOP: {
                 ToxTabStopTokenHandler::HandledTabStopToken htst =
                         mTabStopTokenHandler->HandleTabStopToken(aToken, *pTOXNd, pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
-                rTxt += htst.text;
+                rText += htst.text;
                 aTStops.Insert(htst.tabStop);
                 break;
             }
 
             case TOKEN_TEXT:
-                rTxt += aToken.sText;
+                rText += aToken.sText;
                 break;
 
             case TOKEN_PAGE_NUMS:
-                rTxt += ConstructPageNumberPlaceholder(rBase.aTOXSources.size());
+                rText += ConstructPageNumberPlaceholder(rBase.aTOXSources.size());
                 break;
 
             case TOKEN_CHAPTER_INFO:
-                rTxt += HandleChapterToken(rBase, aToken, pDoc);
+                rText += HandleChapterToken(rBase, aToken, pDoc);
                 break;
 
             case TOKEN_LINK_START:
-                mLinkProcessor->StartNewLink(rTxt.getLength(), aToken.sCharStyleName);
+                mLinkProcessor->StartNewLink(rText.getLength(), aToken.sCharStyleName);
                 break;
 
             case TOKEN_LINK_END:
-                mLinkProcessor->CloseLink(rTxt.getLength(), rBase.GetURL());
+                mLinkProcessor->CloseLink(rText.getLength(), rBase.GetURL());
                 break;
 
             case TOKEN_AUTHORITY:
                 {
                     ToxAuthorityField eField = (ToxAuthorityField)aToken.nAuthorityField;
-                    SwIndex aIdx( pTOXNd, rTxt.getLength() );
+                    SwIndex aIdx( pTOXNd, rText.getLength() );
                     rBase.FillText( *pTOXNd, aIdx, static_cast<sal_uInt16>(eField) );
                 }
                 break;
@@ -242,17 +242,17 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
 
             if ( !aToken.sCharStyleName.isEmpty() )
             {
-                SwCharFmt* pCharFmt;
+                SwCharFormat* pCharFormat;
                 if( USHRT_MAX != aToken.nPoolId )
-                    pCharFmt = pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( aToken.nPoolId );
+                    pCharFormat = pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( aToken.nPoolId );
                 else
-                    pCharFmt = pDoc->FindCharFmtByName( aToken.sCharStyleName);
+                    pCharFormat = pDoc->FindCharFormatByName( aToken.sCharStyleName);
 
-                if (pCharFmt)
+                if (pCharFormat)
                 {
-                    SwFmtCharFmt aFmt( pCharFmt );
-                    pTOXNd->InsertItem( aFmt, nStartCharStyle,
-                        rTxt.getLength(), SetAttrMode::DONTEXPAND );
+                    SwFormatCharFormat aFormat( pCharFormat );
+                    pTOXNd->InsertItem( aFormat, nStartCharStyle,
+                        rText.getLength(), SetAttrMode::DONTEXPAND );
                 }
             }
 
@@ -265,13 +265,13 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
 }
 
 /*static*/ std::shared_ptr<SfxItemSet>
-ToxTextGenerator::CollectAttributesForTox(const SwTxtAttr& hint, SwAttrPool& pool)
+ToxTextGenerator::CollectAttributesForTox(const SwTextAttr& hint, SwAttrPool& pool)
 {
     std::shared_ptr<SfxItemSet> retval(new SfxItemSet(pool));
     if (hint.Which() != RES_TXTATR_AUTOFMT) {
         return retval;
     }
-    const SwFmtAutoFmt& afmt = hint.GetAutoFmt();
+    const SwFormatAutoFormat& afmt = hint.GetAutoFormat();
     SfxItemIter aIter( *afmt.GetStyleHandle());
     const SfxPoolItem* pItem = aIter.GetCurItem();
     while (true) {
@@ -294,21 +294,21 @@ ToxTextGenerator::HandledTextToken
 ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& pool)
 {
     HandledTextToken result;
-    ToxWhitespaceStripper stripper(source.GetTxt().sText);
+    ToxWhitespaceStripper stripper(source.GetText().sText);
     result.text = stripper.GetStrippedString();
 
-    const SwTxtNode* pSrc = source.aTOXSources.at(0).pNd->GetTxtNode();
+    const SwTextNode* pSrc = source.aTOXSources.at(0).pNd->GetTextNode();
     if (!pSrc->HasHints()) {
         return result;
     }
     const SwpHints& hints = pSrc->GetSwpHints();
     for (size_t i = 0; i < hints.Count(); ++i) {
-        const SwTxtAttr* hint = hints[i];
+        const SwTextAttr* hint = hints[i];
         std::shared_ptr<SfxItemSet> attributesToClone = CollectAttributesForTox(*hint, pool);
         if (attributesToClone->Count() <= 0) {
             continue;
         }
-        SwFmtAutoFmt* clone = static_cast<SwFmtAutoFmt*>(hint->GetAutoFmt().Clone());
+        SwFormatAutoFormat* clone = static_cast<SwFormatAutoFormat*>(hint->GetAutoFormat().Clone());
         clone->SetStyleHandle(attributesToClone);
 
         result.autoFormats.push_back(clone);
@@ -319,9 +319,9 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& po
 }
 
 /*static*/ void
-ToxTextGenerator::ApplyHandledTextToken(const HandledTextToken& htt, SwTxtNode& targetNode)
+ToxTextGenerator::ApplyHandledTextToken(const HandledTextToken& htt, SwTextNode& targetNode)
 {
-    sal_Int32 offset = targetNode.GetTxt().getLength();
+    sal_Int32 offset = targetNode.GetText().getLength();
     SwIndex aIdx(&targetNode, offset);
     targetNode.InsertText(htt.text, aIdx);
     for (size_t i=0; i < htt.autoFormats.size(); ++i) {
@@ -350,8 +350,8 @@ ToxTextGenerator::ConstructPageNumberPlaceholder(size_t numberOfToxSources)
 
 /*virtual*/ SwChapterField
 ToxTextGenerator::ObtainChapterField(SwChapterFieldType* chapterFieldType,
-        const SwFormToken* chapterToken, const SwCntntFrm* contentFrame,
-        const SwCntntNode* contentNode) const
+        const SwFormToken* chapterToken, const SwContentFrm* contentFrame,
+        const SwContentNode* contentNode) const
 {
     assert(chapterToken);
     assert(chapterToken->nOutlineLevel >= 1);

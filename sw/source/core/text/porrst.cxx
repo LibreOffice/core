@@ -57,7 +57,7 @@ SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion )
     SetWhichPor( POR_TMPEND );
 }
 
-void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if (rInf.OnWin() && rInf.GetOpt().IsParagraph())
     {
@@ -65,12 +65,12 @@ void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
         SwFont aFont(*pOldFnt);
         aFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
-        const_cast<SwTxtPaintInfo&>(rInf).SetFont(&aFont);
+        const_cast<SwTextPaintInfo&>(rInf).SetFont(&aFont);
 
         // draw the pilcrow
         rInf.DrawText(OUString(CH_PAR), *this);
 
-        const_cast<SwTxtPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
+        const_cast<SwTextPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
     }
 }
 
@@ -84,25 +84,25 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
 sal_Int32 SwBreakPortion::GetCrsrOfst( const sal_uInt16 ) const
 { return 0; }
 
-sal_uInt16 SwBreakPortion::GetViewWidth( const SwTxtSizeInfo & ) const
+sal_uInt16 SwBreakPortion::GetViewWidth( const SwTextSizeInfo & ) const
 { return 0; }
 
 SwLinePortion *SwBreakPortion::Compress()
-{ return (GetPortion() && GetPortion()->InTxtGrp() ? 0 : this); }
+{ return (GetPortion() && GetPortion()->InTextGrp() ? 0 : this); }
 
-void SwBreakPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsLineBreak() )
         rInf.DrawLineBreak( *this );
 }
 
-bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
+bool SwBreakPortion::Format( SwTextFormatInfo &rInf )
 {
     const SwLinePortion *pRoot = rInf.GetRoot();
     Width( 0 );
     Height( pRoot->Height() );
     SetAscent( pRoot->GetAscent() );
-    if ( rInf.GetIdx()+1 == rInf.GetTxt().getLength() )
+    if ( rInf.GetIdx()+1 == rInf.GetText().getLength() )
         rInf.SetNewLine( true );
     return true;
 }
@@ -135,7 +135,7 @@ SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
     SetWhichPor( POR_KERN );
 }
 
-void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwKernPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( Width() )
     {
@@ -151,18 +151,18 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
         if( rInf.GetFont()->IsPaintBlank() )
         {
-            OUString aTxtDouble("  ");
+            OUString aTextDouble("  ");
 
             SwRect aClipRect;
             rInf.CalcRect( *this, &aClipRect, 0 );
             SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
             aClip.ChgClip( aClipRect, 0 );
-            rInf.DrawText( aTxtDouble, *this, 0, 2, true );
+            rInf.DrawText( aTextDouble, *this, 0, 2, true );
         }
     }
 }
 
-void SwKernPortion::FormatEOL( SwTxtFormatInfo &rInf )
+void SwKernPortion::FormatEOL( SwTextFormatInfo &rInf )
 {
     if ( bGridKern )
         return;
@@ -185,32 +185,32 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
     SetWhichPor( POR_ARROW );
 }
 
-SwArrowPortion::SwArrowPortion( const SwTxtPaintInfo &rInf )
+SwArrowPortion::SwArrowPortion( const SwTextPaintInfo &rInf )
     : bLeft( false )
 {
-    Height( (sal_uInt16)(rInf.GetTxtFrm()->Prt().Height()) );
-    aPos.X() = rInf.GetTxtFrm()->Frm().Left() +
-               rInf.GetTxtFrm()->Prt().Right();
-    aPos.Y() = rInf.GetTxtFrm()->Frm().Top() +
-               rInf.GetTxtFrm()->Prt().Bottom();
+    Height( (sal_uInt16)(rInf.GetTextFrm()->Prt().Height()) );
+    aPos.X() = rInf.GetTextFrm()->Frm().Left() +
+               rInf.GetTextFrm()->Prt().Right();
+    aPos.Y() = rInf.GetTextFrm()->Frm().Top() +
+               rInf.GetTextFrm()->Prt().Bottom();
     SetWhichPor( POR_ARROW );
 }
 
-void SwArrowPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwArrowPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     const_cast<SwArrowPortion*>(this)->aPos = rInf.GetPos();
 }
 
 SwLinePortion *SwArrowPortion::Compress() { return this; }
 
-SwTwips SwTxtFrm::EmptyHeight() const
+SwTwips SwTextFrm::EmptyHeight() const
 {
     if (IsCollapse()) {
         SwViewShell *pSh = getRootFrm()->GetCurrShell();
         if ( pSh->IsA( TYPE(SwCrsrShell) ) ) {
             SwCrsrShell *pCrSh = static_cast<SwCrsrShell*>(pSh);
-            SwCntntFrm *pCurrFrm=pCrSh->GetCurrFrm();
-            if (pCurrFrm==(SwCntntFrm*)this) {
+            SwContentFrm *pCurrFrm=pCrSh->GetCurrFrm();
+            if (pCurrFrm==(SwContentFrm*)this) {
                 // do nothing
             } else {
                 return 1;
@@ -219,20 +219,20 @@ SwTwips SwTxtFrm::EmptyHeight() const
             return 1;
         }
     }
-    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::EmptyHeight with swapped frame" );
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrm::EmptyHeight with swapped frame" );
 
     SwFont *pFnt;
-    const SwTxtNode& rTxtNode = *GetTxtNode();
-    const IDocumentSettingAccess* pIDSA = rTxtNode.getIDocumentSettingAccess();
+    const SwTextNode& rTextNode = *GetTextNode();
+    const IDocumentSettingAccess* pIDSA = rTextNode.getIDocumentSettingAccess();
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    if ( rTxtNode.HasSwAttrSet() )
+    if ( rTextNode.HasSwAttrSet() )
     {
-        const SwAttrSet *pAttrSet = &( rTxtNode.GetSwAttrSet() );
+        const SwAttrSet *pAttrSet = &( rTextNode.GetSwAttrSet() );
         pFnt = new SwFont( pAttrSet, pIDSA );
     }
     else
     {
-        SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pSh);
+        SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), pSh);
         pFnt = new SwFont( aFontAccess.Get()->GetFont() );
         pFnt->ChkMagic( pSh, pFnt->GetActual() );
     }
@@ -244,19 +244,19 @@ SwTwips SwTxtFrm::EmptyHeight() const
     if ( !pOut || !pSh->GetViewOptions()->getBrowseMode() ||
          pSh->GetViewOptions()->IsPrtFormat() )
     {
-        pOut = rTxtNode.getIDocumentDeviceAccess()->getReferenceDevice(true);
+        pOut = rTextNode.getIDocumentDeviceAccess()->getReferenceDevice(true);
     }
 
-    const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
+    const IDocumentRedlineAccess* pIDRA = rTextNode.getIDocumentRedlineAccess();
     if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
     {
-        const sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
+        const sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTextNode, USHRT_MAX );
         if( USHRT_MAX != nRedlPos )
         {
             SwAttrHandler aAttrHandler;
-            aAttrHandler.Init(  GetTxtNode()->GetSwAttrSet(),
-                               *GetTxtNode()->getIDocumentSettingAccess(), NULL );
-            SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler,
+            aAttrHandler.Init(  GetTextNode()->GetSwAttrSet(),
+                               *GetTextNode()->getIDocumentSettingAccess(), NULL );
+            SwRedlineItr aRedln( rTextNode, *pFnt, aAttrHandler,
                                  nRedlPos, true );
         }
     }
@@ -276,18 +276,18 @@ SwTwips SwTxtFrm::EmptyHeight() const
     return nRet;
 }
 
-bool SwTxtFrm::FormatEmpty()
+bool SwTextFrm::FormatEmpty()
 {
-    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::FormatEmpty with swapped frame" );
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrm::FormatEmpty with swapped frame" );
 
     bool bCollapse = EmptyHeight( ) == 1 && this->IsCollapse( );
 
-    if ( HasFollow() || GetTxtNode()->GetpSwpHints() ||
-        0 != GetTxtNode()->GetNumRule() ||
-        GetTxtNode()->HasHiddenCharAttribute( true ) ||
-         IsInFtn() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
+    if ( HasFollow() || GetTextNode()->GetpSwpHints() ||
+        0 != GetTextNode()->GetNumRule() ||
+        GetTextNode()->HasHiddenCharAttribute( true ) ||
+         IsInFootnote() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
         return false;
-    const SwAttrSet& aSet = GetTxtNode()->GetSwAttrSet();
+    const SwAttrSet& aSet = GetTextNode()->GetSwAttrSet();
     const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
     if( !bCollapse && ( ( ( ! IsRightToLeft() && ( SVX_ADJUST_LEFT != nAdjust ) ) ||
           (   IsRightToLeft() && ( SVX_ADJUST_RIGHT != nAdjust ) ) ) ||
@@ -299,16 +299,16 @@ bool SwTxtFrm::FormatEmpty()
         aSet.GetLRSpace().IsAutoFirst() ) )
         return false;
 
-    SwTxtFly aTxtFly( this );
+    SwTextFly aTextFly( this );
     SwRect aRect;
     bool bFirstFlyCheck = 0 != Prt().Height();
     if ( !bCollapse && bFirstFlyCheck &&
-            aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
+            aTextFly.IsOn() && aTextFly.IsAnyObj( aRect ) )
         return false;
 
     SwTwips nHeight = EmptyHeight();
 
-    if ( GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
+    if ( GetTextNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
             IsInDocBody() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(FindPageFrm()));
@@ -335,7 +335,7 @@ bool SwTxtFrm::FormatEmpty()
         SetCompletePaint();
     }
     if( !bCollapse && !bFirstFlyCheck &&
-            aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
+            aTextFly.IsOn() && aTextFly.IsAnyObj( aRect ) )
         return false;
 
     // #i35635# - call method <HideAndShowObjects()>
@@ -345,7 +345,7 @@ bool SwTxtFrm::FormatEmpty()
     return true;
 }
 
-bool SwTxtFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
+bool SwTextFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
 {
     const SwFrm *pFrm = this;
     rRegDiff = 0;
@@ -365,10 +365,10 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                 rRegDiff = pDesc->GetRegHeight();
                 if( !rRegDiff )
                 {
-                    const SwTxtFmtColl *pFmt = pDesc->GetRegisterFmtColl();
-                    if( pFmt )
+                    const SwTextFormatColl *pFormat = pDesc->GetRegisterFormatColl();
+                    if( pFormat )
                     {
-                        const SvxLineSpacingItem &rSpace = pFmt->GetLineSpacing();
+                        const SvxLineSpacingItem &rSpace = pFormat->GetLineSpacing();
                         if( SVX_LINE_SPACE_FIX == rSpace.GetLineSpaceRule() )
                         {
                             rRegDiff = rSpace.GetLineHeight();
@@ -378,13 +378,13 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                         else
                         {
                             SwViewShell *pSh = getRootFrm()->GetCurrShell();
-                            SwFontAccess aFontAccess( pFmt, pSh );
+                            SwFontAccess aFontAccess( pFormat, pSh );
                             SwFont aFnt( aFontAccess.Get()->GetFont() );
 
                             OutputDevice *pOut = 0;
                             if( !pSh || !pSh->GetViewOptions()->getBrowseMode() ||
                                 pSh->GetViewOptions()->IsPrtFormat() )
-                                pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
+                                pOut = GetTextNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
 
                             if( pSh && !pOut )
                                 pOut = pSh->GetWin();
@@ -455,7 +455,7 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
     return ( 0 != rRegDiff );
 }
 
-void SwHiddenTextPortion::Paint( const SwTxtPaintInfo & rInf) const
+void SwHiddenTextPortion::Paint( const SwTextPaintInfo & rInf) const
 {
     (void)rInf;
 #ifdef DBG_UTIL
@@ -472,15 +472,15 @@ void SwHiddenTextPortion::Paint( const SwTxtPaintInfo & rInf) const
 #endif
 }
 
-bool SwHiddenTextPortion::Format( SwTxtFormatInfo &rInf )
+bool SwHiddenTextPortion::Format( SwTextFormatInfo &rInf )
 {
     Width( 0 );
-    rInf.GetTxtFrm()->HideFootnotes( rInf.GetIdx(), rInf.GetIdx() + GetLen() );
+    rInf.GetTextFrm()->HideFootnotes( rInf.GetIdx(), rInf.GetIdx() + GetLen() );
 
     return false;
 };
 
-void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if ( Width() )  // is only set during prepaint mode
     {
@@ -504,27 +504,27 @@ void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 case CHAR_ZWSP :
                     aOutString = "/"; break;
 //                case CHAR_LRM :
-//                    rTxt = sal_Unicode(0x2514); break;
+//                    rText = sal_Unicode(0x2514); break;
 //                case CHAR_RLM :
-//                    rTxt = sal_Unicode(0x2518); break;
+//                    rText = sal_Unicode(0x2518); break;
             }
 
             if ( !mnHalfCharWidth )
-                mnHalfCharWidth = rInf.GetTxtSize( aOutString ).Width() / 2;
+                mnHalfCharWidth = rInf.GetTextSize( aOutString ).Width() / 2;
 
             Point aOldPos = rInf.GetPos();
             Point aNewPos( aOldPos );
             aNewPos.X() = aNewPos.X() + ( Width() / 2 ) - mnHalfCharWidth;
-            const_cast< SwTxtPaintInfo& >( rInf ).SetPos( aNewPos );
+            const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
 
             rInf.DrawText( aOutString, *this );
 
-            const_cast< SwTxtPaintInfo& >( rInf ).SetPos( aOldPos );
+            const_cast< SwTextPaintInfo& >( rInf ).SetPos( aOldPos );
         }
     }
 }
 
-bool SwControlCharPortion::Format( SwTxtFormatInfo &rInf )
+bool SwControlCharPortion::Format( SwTextFormatInfo &rInf )
 {
     const SwLinePortion* pRoot = rInf.GetRoot();
     Width( 0 );
@@ -534,10 +534,10 @@ bool SwControlCharPortion::Format( SwTxtFormatInfo &rInf )
     return false;
 }
 
-sal_uInt16 SwControlCharPortion::GetViewWidth( const SwTxtSizeInfo& rInf ) const
+sal_uInt16 SwControlCharPortion::GetViewWidth( const SwTextSizeInfo& rInf ) const
 {
     if( !mnViewWidth )
-        mnViewWidth = rInf.GetTxtSize(OUString(' ')).Width();
+        mnViewWidth = rInf.GetTextSize(OUString(' ')).Width();
 
     return mnViewWidth;
 }

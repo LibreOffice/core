@@ -37,9 +37,9 @@ class SwAccessibleNoTextHyperlink :
     ::rtl::Reference< SwAccessibleNoTextFrame > xFrame;
     const SwFrm *mpFrm;
 
-    SwFrmFmt *GetFmt()
+    SwFrameFormat *GetFormat()
     {
-        return const_cast<SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(mpFrm))->GetFmt();
+        return const_cast<SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(mpFrm))->GetFormat();
     }
 public:
 

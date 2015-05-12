@@ -23,21 +23,21 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/help.hxx>
 
-SwFldRefTreeListBox::SwFldRefTreeListBox(vcl::Window* pParent, WinBits nStyle)
+SwFieldRefTreeListBox::SwFieldRefTreeListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
 {
 }
 
-VCL_BUILDER_DECL_FACTORY(SwFldRefTreeListBox)
+VCL_BUILDER_DECL_FACTORY(SwFieldRefTreeListBox)
 {
     WinBits nWinStyle = WB_TABSTOP;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
-    rRet = VclPtr<SwFldRefTreeListBox>::Create(pParent, nWinStyle);
+    rRet = VclPtr<SwFieldRefTreeListBox>::Create(pParent, nWinStyle);
 }
 
-void SwFldRefTreeListBox::RequestHelp( const HelpEvent& rHEvt )
+void SwFieldRefTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     bool bCallBase( true );
     if ( rHEvt.GetMode() & HelpEventMode::QUICK )

@@ -68,7 +68,7 @@ enum SwColLineAdj
     COLADJ_BOTTOM
 };
 
-class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
+class SW_DLLPUBLIC SwFormatCol : public SfxPoolItem
 {
     editeng::SvxBorderStyle m_eLineStyle;     ///< style of the separator line
     sal_uLong   m_nLineWidth;                 ///< Width of the separator line.
@@ -92,14 +92,14 @@ class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
     SAL_DLLPRIVATE void Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
 public:
-    SwFmtCol();
-    SwFmtCol( const SwFmtCol& );
-    virtual ~SwFmtCol();
+    SwFormatCol();
+    SwFormatCol( const SwFormatCol& );
+    virtual ~SwFormatCol();
     //#i120133#
     sal_Int16 GetAdjustValue() const { return m_aWidthAdjustValue; }
     void SetAdjustValue( const sal_Int16& n ) { m_aWidthAdjustValue = n; }
 
-    SwFmtCol& operator=( const SwFmtCol& );
+    SwFormatCol& operator=( const SwFormatCol& );
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -166,10 +166,10 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-inline const SwFmtCol &SwAttrSet::GetCol(bool bInP) const
-    { return static_cast<const SwFmtCol&>(Get( RES_COL,bInP)); }
+inline const SwFormatCol &SwAttrSet::GetCol(bool bInP) const
+    { return static_cast<const SwFormatCol&>(Get( RES_COL,bInP)); }
 
-inline const SwFmtCol &SwFmt::GetCol(bool bInP) const
+inline const SwFormatCol &SwFormat::GetCol(bool bInP) const
     { return m_aSet.GetCol(bInP); }
 
 #endif

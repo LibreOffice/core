@@ -23,21 +23,21 @@
 #include <format.hxx>
 #include <memory>
 
-class SwFmtAutoFmt: public SfxPoolItem
+class SwFormatAutoFormat: public SfxPoolItem
 {
     std::shared_ptr<SfxItemSet> mpHandle;
 
 public:
-    SwFmtAutoFmt( sal_uInt16 nWhich = RES_TXTATR_AUTOFMT );
+    SwFormatAutoFormat( sal_uInt16 nWhich = RES_TXTATR_AUTOFMT );
 
     /// single argument ctors shall be explicit.
-    virtual ~SwFmtAutoFmt();
+    virtual ~SwFormatAutoFormat();
 
     /// @@@ public copy ctor, but no copy assignment?
-    SwFmtAutoFmt( const SwFmtAutoFmt& rAttr );
+    SwFormatAutoFormat( const SwFormatAutoFormat& rAttr );
 private:
     /// @@@ public copy ctor, but no copy assignment?
-    SwFmtAutoFmt & operator= (const SwFmtAutoFmt &) SAL_DELETED_FUNCTION;
+    SwFormatAutoFormat & operator= (const SwFormatAutoFormat &) SAL_DELETED_FUNCTION;
 public:
 
     TYPEINFO_OVERRIDE();

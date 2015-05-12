@@ -270,30 +270,30 @@ void SwDocTest::testUserPerceivedCharCount()
     CPPUNIT_ASSERT_MESSAGE("Surrogate Pair should be counted as single character", nCount == 1);
 }
 
-SwTxtNode* getModelToViewTestDocument(SwDoc *pDoc)
+SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
 {
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    SwFmtFtn aFtn;
-    aFtn.SetNumStr(OUString("foo"));
+    SwFormatFootnote aFootnote;
+    aFootnote.SetNumStr(OUString("foo"));
 
-    pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+    pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
     pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("AAAAA BBBBB "));
-    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
     sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
-    pTxtNode->InsertItem(aFtn, nPos, nPos);
+    pTextNode->InsertItem(aFootnote, nPos, nPos);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(" CCCCC "));
     nPos = aPaM.GetPoint()->nContent.GetIndex();
-    pTxtNode->InsertItem(aFtn, nPos, nPos);
+    pTextNode->InsertItem(aFootnote, nPos, nPos);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(" DDDDD"));
-    CPPUNIT_ASSERT(pTxtNode->GetTxt().getLength() == (4*5) + 5 + 2);
+    CPPUNIT_ASSERT(pTextNode->GetText().getLength() == (4*5) + 5 + 2);
 
     //set start of selection to first B
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 6);
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 6);
     aPaM.SetMark();
     //set end of selection to last C
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 14);
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 14);
     //set character attribute hidden on range
     SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
     pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aHidden );
@@ -305,24 +305,24 @@ SwTxtNode* getModelToViewTestDocument(SwDoc *pDoc)
     CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineMode()));
 
     //set start of selection to last A
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 4);
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 4);
     aPaM.SetMark();
     //set end of selection to second last B
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 9);
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 9);
     pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);    //redline-aware deletion api
     aPaM.DeleteMark();
 
-    return pTxtNode;
+    return pTextNode;
 }
 
-SwTxtNode* getModelToViewTestDocument2(SwDoc *pDoc)
+SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(pDoc);
 
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+    pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
     pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("AAAAA"));
     IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
     sw::mark::IFieldmark *pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(
@@ -333,28 +333,28 @@ SwTxtNode* getModelToViewTestDocument2(SwDoc *pDoc)
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(sal_Int32(0));
     pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("CCCCC"));
-    pTxtNode = aPaM.GetNode().GetTxtNode();
+    pTextNode = aPaM.GetNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11),
-            pTxtNode->GetTxt().getLength());
+            pTextNode->GetText().getLength());
 
-    return pTxtNode;
+    return pTextNode;
 }
 
 void SwDocTest::testModelToViewHelperPassthrough()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode, ExpandMode::PassThrough);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::PassThrough);
     OUString sViewText = aModelToViewHelper.getViewText();
-    OUString sModelText = pTxtNode->GetTxt();
+    OUString sModelText = pTextNode->GetText();
     CPPUNIT_ASSERT_EQUAL(sModelText, sViewText);
 }
 
 void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnote()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode, ExpandMode::ExpandFields | ExpandMode::ExpandFootnote);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
         OUString("AAAAA BBBBB foo CCCCC foo DDDDD"), sViewText);
@@ -362,9 +362,9 @@ void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnote()
 
 void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode,
             ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
@@ -382,9 +382,9 @@ void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode()
 
 void SwDocTest::testModelToViewHelperExpandFields()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode, ExpandMode::ExpandFields);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
         OUString("AAAAA BBBBB  CCCCC  DDDDD"), sViewText);
@@ -392,9 +392,9 @@ void SwDocTest::testModelToViewHelperExpandFields()
 
 void SwDocTest::testModelToViewHelperExpandFieldsReplaceMode()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode,
         ExpandMode::ExpandFields | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(OUString("AAAAA BBBBB  CCCCC  DDDDD"),
@@ -407,9 +407,9 @@ void SwDocTest::testModelToViewHelperExpandFieldsReplaceMode()
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideInvisible()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode, ExpandMode::HideInvisible);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::HideInvisible);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
         OUString("AAAAA CCCCC " + OUStringLiteral1<CH_TXTATR_BREAKWORD>() + " DDDDD"),
@@ -418,9 +418,9 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisible()
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideRedlined()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode, ExpandMode::HideDeletions);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::HideDeletions);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
         OUString("AAAABB " + OUStringLiteral1<CH_TXTATR_BREAKWORD>() + " CCCCC " + OUStringLiteral1<CH_TXTATR_BREAKWORD>() + " DDDDD"),
@@ -429,18 +429,18 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideRedlined()
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleExpandFootnote()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode, ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::ExpandFootnote);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(OUString("AAAAA CCCCC foo DDDDD"), sViewText);
 }
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleExpandFootnoteReplaceMode()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode,
         ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
@@ -456,9 +456,9 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleExpandFootnoteRepl
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnote()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode, ExpandMode::ExpandFields | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
         OUString("AAAABB foo CCCCC foo DDDDD"), sViewText);
@@ -466,9 +466,9 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnote(
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnoteReplaceMode()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode,
         ExpandMode::ExpandFields | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
@@ -486,9 +486,9 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideHideRedlinedExpandFootnoteR
 
 void SwDocTest::testModelToViewHelperHideInvisibleHideRedlined()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode, ExpandMode::HideInvisible | ExpandMode::HideDeletions);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::HideInvisible | ExpandMode::HideDeletions);
     OUString sViewText = aModelToViewHelper.getViewText();
     OUStringBuffer aBuffer;
     aBuffer.append("AAAACCCCC ");
@@ -499,18 +499,18 @@ void SwDocTest::testModelToViewHelperHideInvisibleHideRedlined()
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpandFootnote()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode, ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(OUString("AAAACCCCC foo DDDDD"), sViewText);
 }
 
 void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpandFootnoteReplaceMode()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode,
         ExpandMode::ExpandFields | ExpandMode::HideInvisible | ExpandMode::HideDeletions | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(sViewText,
@@ -525,18 +525,18 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisibleHideRedlinedExpand
 
 void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnote2()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument2(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument2(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode, ExpandMode::ExpandFields | ExpandMode::ExpandFootnote);
+    ModelToViewHelper aModelToViewHelper(*pTextNode, ExpandMode::ExpandFields | ExpandMode::ExpandFootnote);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(OUString("AAAAABBBBBCCCCC"), sViewText);
 }
 
 void SwDocTest::testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode2()
 {
-    SwTxtNode* pTxtNode = getModelToViewTestDocument2(m_pDoc);
+    SwTextNode* pTextNode = getModelToViewTestDocument2(m_pDoc);
 
-    ModelToViewHelper aModelToViewHelper(*pTxtNode,
+    ModelToViewHelper aModelToViewHelper(*pTextNode,
         ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
@@ -555,16 +555,16 @@ void SwDocTest::testSwScanner()
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+    SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
 
-    CPPUNIT_ASSERT_MESSAGE("Has Text Node", pTxtNode);
+    CPPUNIT_ASSERT_MESSAGE("Has Text Node", pTextNode);
 
     //See https://bugs.libreoffice.org/show_bug.cgi?id=40449
     //See https://bugs.libreoffice.org/show_bug.cgi?id=39365
     //Use a temporary OUString as the arg, as that's the trouble behind
     //fdo#40449 and fdo#39365
     {
-        SwScanner aScanner(*pTxtNode,
+        SwScanner aScanner(*pTextNode,
             OUString("Hello World"),
             0, ModelToViewHelper(), i18n::WordType::DICTIONARY_WORD, 0,
             RTL_CONSTASCII_LENGTH("Hello World"));
@@ -595,8 +595,8 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aWestLangItem );
 
         SwDocStat aDocStat;
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(IDEOGRAPHICFULLSTOP_D));
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(IDEOGRAPHICFULLSTOP_D));
 
         CPPUNIT_ASSERT_MESSAGE("Should be 2", aDocStat.nChar == 2);
         CPPUNIT_ASSERT_MESSAGE("Should be 2", aDocStat.nCharExcludingSpaces == 2);
@@ -621,7 +621,7 @@ void SwDocTest::testSwScanner()
             0x0020, 0x0064, 0x006F, 0x0065, 0x0073, 0x0020, 0x0074, 0x0068,
             0x0069, 0x0073, 0x0020, 0x0064, 0x006F, 0x003F, 0x0020, 0x0020
         };
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(test,
             SAL_N_ELEMENTS(test)));
 
@@ -631,8 +631,8 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aWestLangItem );
 
         SwDocStat aDocStat;
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(test));
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(test));
         CPPUNIT_ASSERT_MESSAGE("58 words", aDocStat.nWord == 58);
         CPPUNIT_ASSERT_MESSAGE("43 Asian characters and Korean syllables", aDocStat.nAsianWord == 43);
         CPPUNIT_ASSERT_MESSAGE("105 non-whitespace chars", aDocStat.nCharExcludingSpaces == 105);
@@ -650,10 +650,10 @@ void SwDocTest::testSwScanner()
             0x0065, 0x0065, 0x2019
         };
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(aShouldBeThree, SAL_N_ELEMENTS(aShouldBeThree)));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeThree));
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeThree));
         CPPUNIT_ASSERT_MESSAGE("Should be 3", aDocStat.nWord == 3);
 
         const sal_Unicode aShouldBeFive[] = {
@@ -667,11 +667,11 @@ void SwDocTest::testSwScanner()
             0x006C, 0x0065, 0x0072, 0x3000, 0x00BB
         };
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(aShouldBeFive, SAL_N_ELEMENTS(aShouldBeFive)));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
+        pTextNode = aPaM.GetNode().GetTextNode();
         aDocStat.Reset();
-        pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeFive));
+        pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeFive));
         CPPUNIT_ASSERT_MESSAGE("Should be 5", aDocStat.nWord == 5);
     }
 
@@ -679,47 +679,47 @@ void SwDocTest::testSwScanner()
     {
         SwDocStat aDocStat;
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Apple"));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
+        pTextNode = aPaM.GetNode().GetTextNode();
         sal_Int32 nPos = aPaM.GetPoint()->nContent.GetIndex();
-        SwFmtFtn aFtn;
-        aFtn.SetNumStr(OUString("banana"));
-        SwTxtAttr* pTA = pTxtNode->InsertItem(aFtn, nPos, nPos);
+        SwFormatFootnote aFootnote;
+        aFootnote.SetNumStr(OUString("banana"));
+        SwTextAttr* pTA = pTextNode->InsertItem(aFootnote, nPos, nPos);
         CPPUNIT_ASSERT(pTA);
-        CPPUNIT_ASSERT(pTxtNode->Len() == 6); //Apple + 0x02
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(pTextNode->Len() == 6); //Apple + 0x02
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 1);
         CPPUNIT_ASSERT_MESSAGE("footnote should be expanded", aDocStat.nChar == 11);
 
         const sal_Int32 nNextPos = aPaM.GetPoint()->nContent.GetIndex();
         CPPUNIT_ASSERT(nNextPos == nPos+1);
-        SwFmtRefMark aRef(OUString("refmark"));
-        pTA = pTxtNode->InsertItem(aRef, nNextPos, nNextPos);
+        SwFormatRefMark aRef(OUString("refmark"));
+        pTA = pTextNode->InsertItem(aRef, nNextPos, nNextPos);
         CPPUNIT_ASSERT(pTA);
 
         aDocStat.Reset();
-        pTxtNode->SetWordCountDirty(true);
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode->SetWordCountDirty(true);
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 1);
         CPPUNIT_ASSERT_MESSAGE("refmark anchor should not be counted", aDocStat.nChar == 11);
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Apple"));
 
         DateTime aDate(DateTime::SYSTEM);
         SwPostItField aPostIt(
-            static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD)), OUString("An Author"),
+            static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType(RES_POSTITFLD)), OUString("An Author"),
             OUString("Some Text"), OUString("Initials"), OUString("Name"), aDate );
-        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFmtFld(aPostIt));
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFormatField(aPostIt));
 
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Apple"));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
+        pTextNode = aPaM.GetNode().GetTextNode();
         aDocStat.Reset();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 1);
         CPPUNIT_ASSERT_MESSAGE("postit anchor should effectively not exist", aDocStat.nChar == 10);
-        CPPUNIT_ASSERT(pTxtNode->Len() == 11);
+        CPPUNIT_ASSERT(pTextNode->Len() == 11);
 
         aDocStat.Reset();
     }
@@ -729,10 +729,10 @@ void SwDocTest::testSwScanner()
         SwDocStat aDocStat;
 
         const char aString[] = "Lorem ipsum";
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(aString));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(2));
 
         //turn on red-lining and show changes
@@ -742,17 +742,17 @@ void SwDocTest::testSwScanner()
 
         //delete everything except the first word
         aPaM.SetMark(); //set start of selection to current pos
-        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 5);   //set end of selection to fifth char of current node
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 5);   //set end of selection to fifth char of current node
         m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);    //redline-aware deletion api
         //"real underlying text should be the same"
-        CPPUNIT_ASSERT_EQUAL(pTxtNode->GetTxt(), OUString(aString));
+        CPPUNIT_ASSERT_EQUAL(pTextNode->GetText(), OUString(aString));
 
         aDocStat.Reset();
-        pTxtNode->SetWordCountDirty(true);
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //but word-counting the text should only count the non-deleted text
+        pTextNode->SetWordCountDirty(true);
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len()); //but word-counting the text should only count the non-deleted text
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(1));
 
-        pTxtNode->SetWordCountDirty(true);
+        pTextNode->SetWordCountDirty(true);
 
         //keep red-lining on but hide changes
         m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(nsRedlineMode_t::REDLINE_ON);
@@ -760,28 +760,28 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_MESSAGE("redlines should be invisible", !IDocumentRedlineAccess::IsShowChanges(m_pDoc->getIDocumentRedlineAccess().GetRedlineMode()));
 
         aDocStat.Reset();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //but word-counting the text should only count the non-deleted text
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len()); //but word-counting the text should only count the non-deleted text
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(1));
 
-        OUString sLorem = pTxtNode->GetTxt();
+        OUString sLorem = pTextNode->GetText();
         CPPUNIT_ASSERT(sLorem == "Lorem");
 
-        const SwRedlineTbl& rTbl = m_pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
+        const SwRedlineTable& rTable = m_pDoc->getIDocumentRedlineAccess().GetRedlineTable();
 
         SwNodes& rNds = m_pDoc->GetNodes();
-        CPPUNIT_ASSERT(rTbl.size() == 1);
+        CPPUNIT_ASSERT(rTable.size() == 1);
 
-        SwNodeIndex* pNodeIdx = rTbl[0]->GetContentIdx();
+        SwNodeIndex* pNodeIdx = rTable[0]->GetContentIdx();
         CPPUNIT_ASSERT(pNodeIdx);
 
-        pTxtNode = rNds[ pNodeIdx->GetIndex() + 1 ]->GetTxtNode();        //first deleted txtnode
-        CPPUNIT_ASSERT(pTxtNode);
+        pTextNode = rNds[ pNodeIdx->GetIndex() + 1 ]->GetTextNode();        //first deleted txtnode
+        CPPUNIT_ASSERT(pTextNode);
 
-        OUString sIpsum = pTxtNode->GetTxt();
+        OUString sIpsum = pTextNode->GetText();
         CPPUNIT_ASSERT(sIpsum == " ipsum");
 
         aDocStat.Reset();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //word-counting the text should only count the non-deleted text, and this whole chunk should be ignored
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len()); //word-counting the text should only count the non-deleted text, and this whole chunk should be ignored
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(0), aDocStat.nWord);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(0), aDocStat.nChar);
 
@@ -789,18 +789,18 @@ void SwDocTest::testSwScanner()
         // redline *added* text though
         m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
         aPaM.DeleteMark();
-        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 0);
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 0);
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "redline-new-text ");
         aDocStat.Reset();
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->SetWordCountDirty(true);
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->SetWordCountDirty(true);
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), aDocStat.nWord);
         //redline-new-text Lorem ipsum
         //+++++++++++++++++     ------
         //select start of original text and part of deleted text
         aDocStat.Reset();
-        pTxtNode->CountWords(aDocStat, 17, 25);
+        pTextNode->CountWords(aDocStat, 17, 25);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(5), aDocStat.nChar);
     }
 
@@ -810,73 +810,73 @@ void SwDocTest::testSwScanner()
 
         OUString sTemplate("ThisXis a test.");
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', ' '));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
                        aDocStat.nCharExcludingSpaces == 12 &&
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" = ")));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
                        aDocStat.nCharExcludingSpaces == 13 &&
                        aDocStat.nChar == 17);
         aDocStat.Reset();
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" _ ")));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
                        aDocStat.nCharExcludingSpaces == 13 &&
                        aDocStat.nChar == 17);
         aDocStat.Reset();
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" -- ")));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
                        aDocStat.nCharExcludingSpaces == 14 &&
                        aDocStat.nChar == 18);
         aDocStat.Reset();
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', '_'));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
                        aDocStat.nCharExcludingSpaces == 13 &&
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', '-'));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
                        aDocStat.nCharExcludingSpaces == 13 &&
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2012));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
                        aDocStat.nCharExcludingSpaces == 13 &&
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2015));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 3 &&
                        aDocStat.nCharExcludingSpaces == 13 &&
                        aDocStat.nChar == 15);
@@ -884,19 +884,19 @@ void SwDocTest::testSwScanner()
 
         //But default configuration should, msword-alike treak emdash
         //and endash as word separators for word-counting
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2013));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
                        aDocStat.nCharExcludingSpaces == 13 &&
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2014));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
                        aDocStat.nCharExcludingSpaces == 13 &&
                        aDocStat.nChar == 15);
@@ -904,10 +904,10 @@ void SwDocTest::testSwScanner()
 
         const sal_Unicode aChunk[] = {' ', 0x2013, ' '};
         OUString sChunk(aChunk, SAL_N_ELEMENTS(aChunk));
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), sChunk));
-        pTxtNode = aPaM.GetNode().GetTxtNode();
-        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        pTextNode = aPaM.GetNode().GetTextNode();
+        pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
                        aDocStat.nCharExcludingSpaces == 13 &&
                        aDocStat.nChar == 17);
@@ -921,26 +921,26 @@ void SwDocTest::testMergePortionsDeleteNotSorted()
     SwPaM aPaM(aIdx);
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("  AABBCC"));
 
-    SwCharFmt *const pCharFmt(m_pDoc->MakeCharFmt("foo", 0));
-    SwFmtCharFmt const charFmt(pCharFmt);
+    SwCharFormat *const pCharFormat(m_pDoc->MakeCharFormat("foo", 0));
+    SwFormatCharFormat const charFormat(pCharFormat);
 
-    SwFmtINetFmt const inetFmt("http://example.com", "");
+    SwFormatINetFormat const inetFormat("http://example.com", "");
 
     IDocumentContentOperations & rIDCO(m_pDoc->getIDocumentContentOperations());
     aPaM.SetMark();
     aPaM.GetPoint()->nContent = 2;
     aPaM.GetMark()->nContent = 4;
-    rIDCO.InsertPoolItem(aPaM, charFmt);
+    rIDCO.InsertPoolItem(aPaM, charFormat);
     aPaM.GetPoint()->nContent = 2;
     aPaM.GetMark()->nContent = 5;
-    rIDCO.InsertPoolItem(aPaM, inetFmt);
+    rIDCO.InsertPoolItem(aPaM, inetFormat);
     aPaM.GetPoint()->nContent = 6;
     aPaM.GetMark()->nContent = 8;
-    rIDCO.InsertPoolItem(aPaM, charFmt);
+    rIDCO.InsertPoolItem(aPaM, charFormat);
     aPaM.GetPoint()->nContent = 4;
     aPaM.GetMark()->nContent = 6;
     // this triggered an STL assert in SwpHints::MergePortions()
-    rIDCO.InsertPoolItem(aPaM, charFmt);
+    rIDCO.InsertPoolItem(aPaM, charFormat);
 }
 
 //See https://bugs.libreoffice.org/show_bug.cgi?id=40599
@@ -952,34 +952,34 @@ void SwDocTest::testGraphicAnchorDeletion()
     SwPaM aPaM(aIdx);
 
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 1"));
-    m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+    m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
 
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("graphic anchor>><<graphic anchor"));
     SwNodeIndex nPara2 = aPaM.GetPoint()->nNode;
-    m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+    m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
 
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 3"));
 
     aPaM.GetPoint()->nNode = nPara2;
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
 
     //Insert a graphic at X of >>X<< in paragraph 2
     SfxItemSet aFlySet(m_pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
-    SwFmtAnchor aAnchor(FLY_AS_CHAR);
+    SwFormatAnchor aAnchor(FLY_AS_CHAR);
     aAnchor.SetAnchor(aPaM.GetPoint());
     aFlySet.Put(aAnchor);
-    SwFlyFrmFmt *pFrame = m_pDoc->getIDocumentContentOperations().Insert(aPaM, OUString(), OUString(), NULL, &aFlySet, NULL, NULL);
+    SwFlyFrameFormat *pFrame = m_pDoc->getIDocumentContentOperations().Insert(aPaM, OUString(), OUString(), NULL, &aFlySet, NULL, NULL);
     CPPUNIT_ASSERT_MESSAGE("Expected frame", pFrame != NULL);
 
     CPPUNIT_ASSERT_MESSAGE("Should be 1 graphic", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 1);
 
     //Delete >X<
     aPaM.GetPoint()->nNode = nPara2;
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(),
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(),
         RTL_CONSTASCII_LENGTH("graphic anchor>><")+1);
     aPaM.SetMark();
     aPaM.GetPoint()->nNode = nPara2;
-    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), RTL_CONSTASCII_LENGTH("graphic anchor>"));
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), RTL_CONSTASCII_LENGTH("graphic anchor>"));
     m_pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
 
 #ifdef DEBUG_AS_HTML
@@ -1143,7 +1143,7 @@ translitTest(SwDoc & rDoc, SwPaM & rPaM, sal_uInt32 const nType)
     utl::TransliterationWrapper aTrans(
             ::comphelper::getProcessComponentContext(), nType);
     rDoc.getIDocumentContentOperations().TransliterateText(rPaM, aTrans);
-    return rPaM.GetTxt();
+    return rPaM.GetText();
 }
 
 void SwDocTest::testTransliterate()
@@ -1154,7 +1154,7 @@ void SwDocTest::testTransliterate()
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("foobar"));
     aPaM.SetMark();
     aPaM.GetPoint()->nContent = 0;
-    CPPUNIT_ASSERT_EQUAL(OUString("foobar"), aPaM.GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("foobar"), aPaM.GetText());
 
     CPPUNIT_ASSERT_EQUAL(OUString("FOOBAR"),
             translitTest(*m_pDoc, aPaM,
@@ -1223,13 +1223,13 @@ void SwDocTest::testMarkMove()
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
         pMarksAccess->makeMark(aPaM, OUString("Para1"), IDocumentMarkAccess::MarkType::BOOKMARK);
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 2"));
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
         pMarksAccess->makeMark(aPaM, OUString("Para2"), IDocumentMarkAccess::MarkType::BOOKMARK);
 
-        m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 3"));
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
@@ -1239,7 +1239,7 @@ void SwDocTest::testMarkMove()
     // join paragraph 2 and 3 and check
     {
         SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -2);
-        SwTxtNode& rParaNode2 = dynamic_cast<SwTxtNode&>(aIdx.GetNode());
+        SwTextNode& rParaNode2 = dynamic_cast<SwTextNode&>(aIdx.GetNode());
         rParaNode2.JoinNext();
     }
     ::sw::mark::IMark* pBM1 = pMarksAccess->findMark("Para1")->get();

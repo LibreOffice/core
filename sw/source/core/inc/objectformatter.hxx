@@ -23,7 +23,7 @@
 
 class SwFrm;
 // #i26945#
-class SwTxtFrm;
+class SwTextFrm;
 class SwLayoutFrm;
 class SwPageFrm;
 class SwAnchoredObject;
@@ -73,7 +73,7 @@ class SwObjectFormatter
 
             #i28701#
         */
-        void _FormatObjCntnt( SwAnchoredObject& _rAnchoredObj );
+        void _FormatObjContent( SwAnchoredObject& _rAnchoredObj );
 
     protected:
         SwObjectFormatter( const SwPageFrm& _rPageFrm,
@@ -129,10 +129,10 @@ class SwObjectFormatter
             Thus, the objects, whose anchor character is inside the follow text
             frame can be formatted.
 
-            @param _pMasterTxtFrm
+            @param _pMasterTextFrm
             input parameter - pointer to 'master' text frame. default value: NULL
         */
-        bool _FormatObjsAtFrm( SwTxtFrm* _pMasterTxtFrm = 0L );
+        bool _FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm = 0L );
 
         /** accessor to collected anchored object
 

@@ -240,38 +240,38 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
     if(m_SequArr.empty())
     {
         SwTOXSortTabBases aSortArr;
-        SwIterator<SwFmtFld,SwFieldType> aIter( *this );
+        SwIterator<SwFormatField,SwFieldType> aIter( *this );
 
         SwTOXInternational aIntl(m_eLanguage, 0, m_sSortAlgorithm);
 
-        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+        for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
         {
-            const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-            if(!pTxtFld || !pTxtFld->GetpTxtNode())
+            const SwTextField* pTextField = pFormatField->GetTextField();
+            if(!pTextField || !pTextField->GetpTextNode())
             {
 #if OSL_DEBUG_LEVEL > 0
-                if(nHandle == static_cast<SwAuthorityField*>(pFmtFld->GetField())->GetHandle())
+                if(nHandle == static_cast<SwAuthorityField*>(pFormatField->GetField())->GetHandle())
                     bCurrentFieldWithoutTextNode = true;
 #endif
                 continue;
             }
-            const SwTxtNode& rFldTxtNode = pTxtFld->GetTxtNode();
-            SwPosition aFldPos(rFldTxtNode);
-            SwDoc& rDoc = *const_cast<SwDoc*>(rFldTxtNode.GetDoc());
-            SwCntntFrm *pFrm = rFldTxtNode.getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
-            const SwTxtNode* pTxtNode = 0;
+            const SwTextNode& rFieldTextNode = pTextField->GetTextNode();
+            SwPosition aFieldPos(rFieldTextNode);
+            SwDoc& rDoc = *const_cast<SwDoc*>(rFieldTextNode.GetDoc());
+            SwContentFrm *pFrm = rFieldTextNode.getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
+            const SwTextNode* pTextNode = 0;
             if(pFrm && !pFrm->IsInDocBody())
-                pTxtNode = GetBodyTxtNode( rDoc, aFldPos, *pFrm );
+                pTextNode = GetBodyTextNode( rDoc, aFieldPos, *pFrm );
             //if no text node could be found or the field is in the document
             //body the directly available text node will be used
-            if(!pTxtNode)
-                pTxtNode = &rFldTxtNode;
-            if (!pTxtNode->GetTxt().isEmpty() &&
-                pTxtNode->getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ) &&
-                pTxtNode->GetNodes().IsDocNodes() )
+            if(!pTextNode)
+                pTextNode = &rFieldTextNode;
+            if (!pTextNode->GetText().isEmpty() &&
+                pTextNode->getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ) &&
+                pTextNode->GetNodes().IsDocNodes() )
             {
-                SwTOXAuthority* pNew = new SwTOXAuthority( *pTxtNode,
-                                                            *pFmtFld, aIntl );
+                SwTOXAuthority* pNew = new SwTOXAuthority( *pTextNode,
+                                                            *pFormatField, aIntl );
 
                 for(SwTOXSortTabBases::size_type i = 0; i < aSortArr.size(); ++i)
                 {
@@ -310,9 +310,9 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
         for(const auto *pBase : aSortArr)
         {
             const SwTOXSortTabBase& rBase = *pBase;
-            SwFmtFld& rFmtFld = const_cast<SwTOXAuthority&>(static_cast<const SwTOXAuthority&>(rBase)).GetFldFmt();
-            SwAuthorityField* pAFld = static_cast<SwAuthorityField*>(rFmtFld.GetField());
-            m_SequArr.push_back(pAFld->GetHandle());
+            SwFormatField& rFormatField = const_cast<SwTOXAuthority&>(static_cast<const SwTOXAuthority&>(rBase)).GetFieldFormat();
+            SwAuthorityField* pAField = static_cast<SwAuthorityField*>(rFormatField.GetField());
+            m_SequArr.push_back(pAField->GetHandle());
         }
         for (SwTOXSortTabBases::const_iterator it = aSortArr.begin(); it != aSortArr.end(); ++it)
             delete *it;
@@ -525,7 +525,7 @@ OUString SwAuthorityField::ConditionalExpand(ToxAuthorityField eField) const
 
     if( pAuthType->IsSequence() )
     {
-       if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFldsLocked())
+       if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFieldsLocked())
            m_nTempSequencePos = pAuthType->GetSequencePos( m_nHandle );
        if( m_nTempSequencePos >= 0 )
            sRet += OUString::number( m_nTempSequencePos );
@@ -549,7 +549,7 @@ OUString SwAuthorityField::ExpandCitation(ToxAuthorityField eField) const
 
     if( pAuthType->IsSequence() )
     {
-       if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFldsLocked())
+       if(!pAuthType->GetDoc()->getIDocumentFieldsAccess().IsExpFieldsLocked())
            m_nTempSequencePos = pAuthType->GetSequencePos( m_nHandle );
        if( m_nTempSequencePos >= 0 )
            sRet += OUString::number( m_nTempSequencePos );
@@ -693,10 +693,10 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
     return false;
 }
 
-SwFieldType* SwAuthorityField::ChgTyp( SwFieldType* pFldTyp )
+SwFieldType* SwAuthorityField::ChgTyp( SwFieldType* pFieldTyp )
 {
     SwAuthorityFieldType* pSrcTyp = static_cast<SwAuthorityFieldType*>(GetTyp()),
-                        * pDstTyp = static_cast<SwAuthorityFieldType*>(pFldTyp);
+                        * pDstTyp = static_cast<SwAuthorityFieldType*>(pFieldTyp);
     if( pSrcTyp != pDstTyp )
     {
 
@@ -705,7 +705,7 @@ SwFieldType* SwAuthorityField::ChgTyp( SwFieldType* pFldTyp )
         pSrcTyp->RemoveField( m_nHandle );
         m_nHandle = pDstTyp->GetHandle( nHdlPos );
         pDstTyp->AddField( m_nHandle );
-        SwField::ChgTyp( pFldTyp );
+        SwField::ChgTyp( pFieldTyp );
     }
     return pSrcTyp;
 }

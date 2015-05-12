@@ -56,7 +56,7 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
     ,
     rSh(::GetActiveView()->GetWrtShell()),
     pCmds( SwCondCollItem::GetCmds() ),
-    pFmt(0),
+    pFormat(0),
 
     bNewTemplate(false)
 {
@@ -176,7 +176,7 @@ void SwCondCollPage::Reset(const SfxItemSet *)
 {
     if(bNewTemplate)
         m_pConditionCB->Enable();
-    if(RES_CONDTXTFMTCOLL == pFmt->Which())
+    if(RES_CONDTXTFMTCOLL == pFormat->Which())
         m_pConditionCB->Check();
     OnOffHdl(m_pConditionCB);
 
@@ -188,7 +188,7 @@ void SwCondCollPage::Reset(const SfxItemSet *)
     const SfxStyleSheetBase* pBase = pPool->First();
     while( pBase )
     {
-        if(!pFmt || pBase->GetName() != pFmt->GetName())
+        if(!pFormat || pBase->GetName() != pFormat->GetName())
             m_pStyleLB->InsertEntry(pBase->GetName());
         pBase = pPool->Next();
     }
@@ -199,12 +199,12 @@ void SwCondCollPage::Reset(const SfxItemSet *)
         OUString aEntry( m_aStrArr[n] + "\t" );
 
         const SwCollCondition* pCond = 0;
-        if( pFmt && RES_CONDTXTFMTCOLL == pFmt->Which() &&
-            0 != ( pCond = static_cast<SwConditionTxtFmtColl*>(pFmt)->
+        if( pFormat && RES_CONDTXTFMTCOLL == pFormat->Which() &&
+            0 != ( pCond = static_cast<SwConditionTextFormatColl*>(pFormat)->
             HasCondition( SwCollCondition( 0, pCmds[n].nCnd, pCmds[n].nSubCond ) ) )
-            && pCond->GetTxtFmtColl() )
+            && pCond->GetTextFormatColl() )
         {
-            aEntry += pCond->GetTxtFmtColl()->GetName();
+            aEntry += pCond->GetTextFormatColl()->GetName();
         }
 
         SvTreeListEntry* pE = m_pTbLinks->InsertEntryToColumn( aEntry, n );
@@ -271,7 +271,7 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
 
         while( pBase )
         {
-            if(!pFmt || pBase->GetName() != pFmt->GetName())
+            if(!pFormat || pBase->GetName() != pFormat->GetName())
                 m_pStyleLB->InsertEntry(pBase->GetName());
             pBase = pPool->Next();
         }
@@ -295,9 +295,9 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     return 0;
 }
 
-void SwCondCollPage::SetCollection(SwFmt* pNewFormat, bool bNew)
+void SwCondCollPage::SetCollection(SwFormat* pNewFormat, bool bNew)
 {
-    pFmt = pNewFormat;
+    pFormat = pNewFormat;
     bNewTemplate = bNew;
 }
 

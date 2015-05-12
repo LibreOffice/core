@@ -79,7 +79,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
 {
     // The problem was that in 'MSWordExportBase::SectionProperties' function in 'wrt8sty.cxx'
     // it checked if it 'IsPlausableSingleWordSection'.
-    // The 'IsPlausableSingleWordSection' compared different aspects of 2 'SwFrmFmt' objects.
+    // The 'IsPlausableSingleWordSection' compared different aspects of 2 'SwFrameFormat' objects.
     // One of the checks was 'do both formats have the same distance from the top and bottom ?'
     // This check is correct if both have headers or both don't have headers.
     // However - if one has a header, and the other one has an empty header (no header) - it is not correct to compare

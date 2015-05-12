@@ -91,7 +91,7 @@ using namespace ::com::sun::star::beans;
 #define DRAW_SPECIAL_OPTIONS_ROTATE 2
 
 #ifdef DBG_UTIL
-bool SwTxtSizeInfo::IsOptDbg() const { return GetOpt().IsTest4(); }
+bool SwTextSizeInfo::IsOptDbg() const { return GetOpt().IsTest4(); }
 #endif
 
 SwLineInfo::SwLineInfo()
@@ -109,11 +109,11 @@ SwLineInfo::~SwLineInfo()
     delete pRuler;
 }
 void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
-                                   const SwTxtNode& rTxtNode )
+                                   const SwTextNode& rTextNode )
 {
     delete pRuler;
     pRuler = new SvxTabStopItem( rAttrSet.GetTabStops() );
-    if ( rTxtNode.GetListTabStopPosition( nListTabStopPosition ) )
+    if ( rTextNode.GetListTabStopPosition( nListTabStopPosition ) )
     {
         bListTabStopIncluded = true;
 
@@ -134,7 +134,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
         }
     }
 
-    if ( !rTxtNode.getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) )
+    if ( !rTextNode.getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) )
     {
         // remove default tab stop at position 0
         for ( sal_uInt16 i = 0; i < pRuler->Count(); i++ )
@@ -153,26 +153,26 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
     nDefTabStop = USHRT_MAX;
 }
 
-void SwTxtInfo::CtorInitTxtInfo( SwTxtFrm *pFrm )
+void SwTextInfo::CtorInitTextInfo( SwTextFrm *pFrm )
 {
     m_pPara = pFrm->GetPara();
-    m_nTxtStart = pFrm->GetOfst();
+    m_nTextStart = pFrm->GetOfst();
     if (!m_pPara)
     {
-        SAL_WARN("sw.core", "+SwTxtInfo::CTOR: missing paragraph information");
+        SAL_WARN("sw.core", "+SwTextInfo::CTOR: missing paragraph information");
         pFrm->Format();
         m_pPara = pFrm->GetPara();
     }
 }
 
-SwTxtInfo::SwTxtInfo( const SwTxtInfo &rInf )
-    : m_pPara( const_cast<SwTxtInfo&>(rInf).GetParaPortion() )
-    , m_nTxtStart( rInf.GetTxtStart() )
+SwTextInfo::SwTextInfo( const SwTextInfo &rInf )
+    : m_pPara( const_cast<SwTextInfo&>(rInf).GetParaPortion() )
+    , m_nTextStart( rInf.GetTextStart() )
 { }
 
 #if OSL_DEBUG_LEVEL > 0
 
-void ChkOutDev( const SwTxtSizeInfo &rInf )
+void ChkOutDev( const SwTextSizeInfo &rInf )
 {
     if ( !rInf.GetVsh() )
         return;
@@ -183,26 +183,26 @@ void ChkOutDev( const SwTxtSizeInfo &rInf )
 }
 #endif
 
-inline sal_Int32 GetMinLen( const SwTxtSizeInfo &rInf )
+inline sal_Int32 GetMinLen( const SwTextSizeInfo &rInf )
 {
-    const sal_Int32 nTxtLen = rInf.GetTxt().getLength();
+    const sal_Int32 nTextLen = rInf.GetText().getLength();
     if (rInf.GetLen() == COMPLETE_STRING)
-        return nTxtLen;
+        return nTextLen;
     const sal_Int32 nInfLen = rInf.GetIdx() + rInf.GetLen();
-    return std::min(nTxtLen, nInfLen);
+    return std::min(nTextLen, nInfLen);
 }
 
-SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
-    : SwTxtInfo( rNew ),
+SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
+    : SwTextInfo( rNew ),
       m_pKanaComp(rNew.GetpKanaComp()),
-      m_pVsh(const_cast<SwTxtSizeInfo&>(rNew).GetVsh()),
-      m_pOut(const_cast<SwTxtSizeInfo&>(rNew).GetOut()),
-      m_pRef(const_cast<SwTxtSizeInfo&>(rNew).GetRefDev()),
-      m_pFnt(const_cast<SwTxtSizeInfo&>(rNew).GetFont()),
+      m_pVsh(const_cast<SwTextSizeInfo&>(rNew).GetVsh()),
+      m_pOut(const_cast<SwTextSizeInfo&>(rNew).GetOut()),
+      m_pRef(const_cast<SwTextSizeInfo&>(rNew).GetRefDev()),
+      m_pFnt(const_cast<SwTextSizeInfo&>(rNew).GetFont()),
       m_pUnderFnt(rNew.GetUnderFnt()),
       m_pFrm(rNew.m_pFrm),
       m_pOpt(&rNew.GetOpt()),
-      m_pTxt(&rNew.GetTxt()),
+      m_pText(&rNew.GetText()),
       m_nIdx(rNew.GetIdx()),
       m_nLen(rNew.GetLen()),
       m_nKanaIdx( rNew.GetKanaIdx() ),
@@ -210,8 +210,8 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       m_bNotEOL( rNew.NotEOL() ),
       m_bURLNotify( rNew.URLNotify() ),
       m_bStopUnderflow( rNew.StopUnderflow() ),
-      m_bFtnInside( rNew.IsFtnInside() ),
-      m_bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
+      m_bFootnoteInside( rNew.IsFootnoteInside() ),
+      m_bOtherThanFootnoteInside( rNew.IsOtherThanFootnoteInside() ),
       m_bMulti( rNew.IsMulti() ),
       m_bFirstMulti( rNew.IsFirstMulti() ),
       m_bRuby( rNew.IsRuby() ),
@@ -226,14 +226,14 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
 #endif
 }
 
-void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
+void SwTextSizeInfo::CtorInitTextSizeInfo( SwTextFrm *pFrame, SwFont *pNewFnt,
                    const sal_Int32 nNewIdx, const sal_Int32 nNewLen )
 {
     m_pKanaComp = NULL;
     m_nKanaIdx = 0;
     m_pFrm = pFrame;
-    CtorInitTxtInfo( m_pFrm );
-    const SwTxtNode *pNd = m_pFrm->GetTxtNode();
+    CtorInitTextInfo( m_pFrm );
+    const SwTextNode *pNd = m_pFrm->GetTextNode();
     m_pVsh = m_pFrm->getRootFrm()->GetCurrShell();
 
     // Get the output and reference device
@@ -290,30 +290,30 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
 
     m_pFnt = pNewFnt;
     m_pUnderFnt = 0;
-    m_pTxt = &pNd->GetTxt();
+    m_pText = &pNd->GetText();
 
     m_nIdx = nNewIdx;
     m_nLen = nNewLen;
     m_bNotEOL = false;
-    m_bStopUnderflow = m_bFtnInside = m_bOtherThanFtnInside = false;
+    m_bStopUnderflow = m_bFootnoteInside = m_bOtherThanFootnoteInside = false;
     m_bMulti = m_bFirstMulti = m_bRuby = m_bHanging = m_bScriptSpace =
         m_bForbiddenChars = false;
 
     SetLen( GetMinLen( *this ) );
 }
 
-SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString* pTxt,
+SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew, const OUString* pText,
                               const sal_Int32 nIndex, const sal_Int32 nLength )
-    : SwTxtInfo( rNew ),
+    : SwTextInfo( rNew ),
       m_pKanaComp(rNew.GetpKanaComp()),
-      m_pVsh(const_cast<SwTxtSizeInfo&>(rNew).GetVsh()),
-      m_pOut(const_cast<SwTxtSizeInfo&>(rNew).GetOut()),
-      m_pRef(const_cast<SwTxtSizeInfo&>(rNew).GetRefDev()),
-      m_pFnt(const_cast<SwTxtSizeInfo&>(rNew).GetFont()),
+      m_pVsh(const_cast<SwTextSizeInfo&>(rNew).GetVsh()),
+      m_pOut(const_cast<SwTextSizeInfo&>(rNew).GetOut()),
+      m_pRef(const_cast<SwTextSizeInfo&>(rNew).GetRefDev()),
+      m_pFnt(const_cast<SwTextSizeInfo&>(rNew).GetFont()),
       m_pUnderFnt(rNew.GetUnderFnt()),
       m_pFrm( rNew.m_pFrm ),
       m_pOpt(&rNew.GetOpt()),
-      m_pTxt(pTxt),
+      m_pText(pText),
       m_nIdx(nIndex),
       m_nLen(nLength),
       m_nKanaIdx( rNew.GetKanaIdx() ),
@@ -321,8 +321,8 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString* pTxt,
       m_bNotEOL( rNew.NotEOL() ),
       m_bURLNotify( rNew.URLNotify() ),
       m_bStopUnderflow( rNew.StopUnderflow() ),
-      m_bFtnInside( rNew.IsFtnInside() ),
-      m_bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
+      m_bFootnoteInside( rNew.IsFootnoteInside() ),
+      m_bOtherThanFootnoteInside( rNew.IsOtherThanFootnoteInside() ),
       m_bMulti( rNew.IsMulti() ),
       m_bFirstMulti( rNew.IsFirstMulti() ),
       m_bRuby( rNew.IsRuby() ),
@@ -338,7 +338,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString* pTxt,
     SetLen( GetMinLen( *this ) );
 }
 
-void SwTxtSizeInfo::SelectFont()
+void SwTextSizeInfo::SelectFont()
 {
      // The path needs to go via ChgPhysFnt or the FontMetricCache gets confused.
      // In this case pLastMet has it's old value.
@@ -347,31 +347,31 @@ void SwTxtSizeInfo::SelectFont()
     GetFont()->ChgPhysFnt( m_pVsh, *GetOut() );
 }
 
-void SwTxtSizeInfo::NoteAnimation() const
+void SwTextSizeInfo::NoteAnimation() const
 {
     if( OnWin() )
         SwRootFrm::FlushVout();
 
     OSL_ENSURE( m_pOut == m_pVsh->GetOut(),
-            "SwTxtSizeInfo::NoteAnimation() changed m_pOut" );
+            "SwTextSizeInfo::NoteAnimation() changed m_pOut" );
 }
 
-SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
+SwPosSize SwTextSizeInfo::GetTextSize( OutputDevice* pOutDev,
                                      const SwScriptInfo* pSI,
-                                     const OUString& rTxt,
+                                     const OUString& rText,
                                      const sal_Int32 nIndex,
                                      const sal_Int32 nLength,
                                      const sal_uInt16 nComp) const
 {
-    SwDrawTextInfo aDrawInf( m_pVsh, *pOutDev, pSI, rTxt, nIndex, nLength );
+    SwDrawTextInfo aDrawInf( m_pVsh, *pOutDev, pSI, rText, nIndex, nLength );
     aDrawInf.SetFrm( m_pFrm );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    return m_pFnt->_GetTxtSize( aDrawInf );
+    return m_pFnt->_GetTextSize( aDrawInf );
 }
 
-SwPosSize SwTxtSizeInfo::GetTxtSize() const
+SwPosSize SwTextSizeInfo::GetTextSize() const
 {
     const SwScriptInfo& rSI =
                      const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
@@ -384,31 +384,31 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
                     GetKanaComp() :
                                 0 ;
 
-    SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rSI, *m_pTxt, m_nIdx, m_nLen );
+    SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rSI, *m_pText, m_nIdx, m_nLen );
     aDrawInf.SetFrm( m_pFrm );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    return m_pFnt->_GetTxtSize( aDrawInf );
+    return m_pFnt->_GetTextSize( aDrawInf );
 }
 
-void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const sal_Int32 nIndex,
+void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const sal_Int32 nIndex,
                                 const sal_Int32 nLength, const sal_uInt16 nComp,
                                 sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
                                 vcl::TextLayoutCache const*const pCache) const
 {
-    SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, pSI, *m_pTxt, nIndex, nLength,
+    SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, pSI, *m_pText, nIndex, nLength,
             0, false, pCache);
     aDrawInf.SetFrm( m_pFrm );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    SwPosSize aSize = m_pFnt->_GetTxtSize( aDrawInf );
+    SwPosSize aSize = m_pFnt->_GetTextSize( aDrawInf );
     nMaxSizeDiff = (sal_uInt16)aDrawInf.GetKanaDiff();
     nMinSize = aSize.Width();
 }
 
-sal_Int32 SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+sal_Int32 SwTextSizeInfo::GetTextBreak( const long nLineWidth,
                                        const sal_Int32 nMaxLen,
                                        const sal_uInt16 nComp,
                                        vcl::TextLayoutCache const*const pCache) const
@@ -416,19 +416,19 @@ sal_Int32 SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
     const SwScriptInfo& rScriptInfo =
                      const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
 
-    OSL_ENSURE( m_pRef == m_pOut, "GetTxtBreak is supposed to use the RefDev" );
+    OSL_ENSURE( m_pRef == m_pOut, "GetTextBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rScriptInfo,
-                             *m_pTxt, GetIdx(), nMaxLen,  0, false, pCache );
+                             *m_pText, GetIdx(), nMaxLen,  0, false, pCache );
     aDrawInf.SetFrm( m_pFrm );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
     aDrawInf.SetHyphPos( 0 );
 
-    return m_pFnt->GetTxtBreak( aDrawInf, nLineWidth );
+    return m_pFnt->GetTextBreak( aDrawInf, nLineWidth );
 }
 
-sal_Int32 SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+sal_Int32 SwTextSizeInfo::GetTextBreak( const long nLineWidth,
                                        const sal_Int32 nMaxLen,
                                        const sal_uInt16 nComp,
                                        sal_Int32& rExtraCharPos,
@@ -437,27 +437,27 @@ sal_Int32 SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
     const SwScriptInfo& rScriptInfo =
                      const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
 
-    OSL_ENSURE( m_pRef == m_pOut, "GetTxtBreak is supposed to use the RefDev" );
+    OSL_ENSURE( m_pRef == m_pOut, "GetTextBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rScriptInfo,
-                             *m_pTxt, GetIdx(), nMaxLen, 0, false, pCache );
+                             *m_pText, GetIdx(), nMaxLen, 0, false, pCache );
     aDrawInf.SetFrm( m_pFrm );
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
     aDrawInf.SetHyphPos( &rExtraCharPos );
 
-    return m_pFnt->GetTxtBreak( aDrawInf, nLineWidth );
+    return m_pFnt->GetTextBreak( aDrawInf, nLineWidth );
 }
 
-bool SwTxtSizeInfo::_HasHint( const SwTxtNode* pTxtNode, sal_Int32 nPos )
+bool SwTextSizeInfo::_HasHint( const SwTextNode* pTextNode, sal_Int32 nPos )
 {
-    return pTxtNode->GetTxtAttrForCharAt(nPos);
+    return pTextNode->GetTextAttrForCharAt(nPos);
 }
 
-void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPaint )
+void SwTextPaintInfo::CtorInitTextPaintInfo( SwTextFrm *pFrame, const SwRect &rPaint )
 {
-    CtorInitTxtSizeInfo( pFrame );
-    aTxtFly.CtorInitTxtFly( pFrame ),
+    CtorInitTextSizeInfo( pFrame );
+    aTextFly.CtorInitTextFly( pFrame ),
     aPaintRect = rPaint;
     nSpaceIdx = 0;
     pSpaceAdd = NULL;
@@ -472,27 +472,27 @@ void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPain
 #endif
 }
 
-SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const OUString* pTxt )
-    : SwTxtSizeInfo( rInf, pTxt ),
+SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf, const OUString* pText )
+    : SwTextSizeInfo( rInf, pText ),
       pWrongList( rInf.GetpWrongList() ),
       pGrammarCheckList( rInf.GetGrammarCheckList() ),
       pSmartTags( rInf.GetSmartTags() ),
       pSpaceAdd( rInf.GetpSpaceAdd() ),
       pBrushItem( rInf.GetBrushItem() ),
-      aTxtFly( rInf.GetTxtFly() ),
+      aTextFly( rInf.GetTextFly() ),
       aPos( rInf.GetPos() ),
       aPaintRect( rInf.GetPaintRect() ),
       nSpaceIdx( rInf.GetSpaceIdx() )
 { }
 
-SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf )
-    : SwTxtSizeInfo( rInf ),
+SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
+    : SwTextSizeInfo( rInf ),
       pWrongList( rInf.GetpWrongList() ),
       pGrammarCheckList( rInf.GetGrammarCheckList() ),
       pSmartTags( rInf.GetSmartTags() ),
       pSpaceAdd( rInf.GetpSpaceAdd() ),
       pBrushItem( rInf.GetBrushItem() ),
-      aTxtFly( rInf.GetTxtFly() ),
+      aTextFly( rInf.GetTextFly() ),
       aPos( rInf.GetPos() ),
       aPaintRect( rInf.GetPaintRect() ),
       nSpaceIdx( rInf.GetSpaceIdx() )
@@ -501,7 +501,7 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf )
 extern Color aGlobalRetoucheColor;
 
 /// Returns if the current background color is dark.
-static bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
+static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
 {
     const Color* pCol = rInf.GetFont()->GetBackColor();
     if( ! pCol || COL_TRANSPARENT == pCol->GetColor() )
@@ -516,7 +516,7 @@ static bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
         // See implementation in /core/layout/paintfrm.cxx
         // There is a background color, if there is a background brush and
         // its color is *not* "no fill"/"auto fill".
-        if( rInf.GetTxtFrm()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false ) )
+        if( rInf.GetTextFrm()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false ) )
         {
             if ( !pCol )
                 pCol = &pItem->GetColor();
@@ -535,7 +535,7 @@ static bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
     return pCol->IsDark();
 }
 
-void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor,
+void SwTextPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor,
                                 const sal_Int32 nStart, const sal_Int32 nLength,
                                 const bool bKern, const bool bWrong,
                                 const bool bSmartTag,
@@ -547,7 +547,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
     if( GetFont()->IsBlink() && OnWin() && rPor.Width() )
     {
         // check if accessibility options allow blinking portions:
-        const SwViewShell* pSh = GetTxtFrm()->getRootFrm()->GetCurrShell();
+        const SwViewShell* pSh = GetTextFrm()->getRootFrm()->GetCurrShell();
         if ( pSh && ! pSh->GetAccessibilityOptions()->IsStopAnimatedText() &&
              ! pSh->IsPreview() )
         {
@@ -556,16 +556,16 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
 
             Point aPoint( aPos );
 
-            if ( GetTxtFrm()->IsRightToLeft() )
-                GetTxtFrm()->SwitchLTRtoRTL( aPoint );
+            if ( GetTextFrm()->IsRightToLeft() )
+                GetTextFrm()->SwitchLTRtoRTL( aPoint );
 
             if ( TEXT_LAYOUT_BIDI_STRONG != GetOut()->GetLayoutMode() )
                 aPoint.X() -= rPor.Width();
 
-            if ( GetTxtFrm()->IsVertical() )
-                GetTxtFrm()->SwitchHorizontalToVertical( aPoint );
+            if ( GetTextFrm()->IsVertical() )
+                GetTextFrm()->SwitchHorizontalToVertical( aPoint );
 
-            pBlink->Insert( aPoint, &rPor, GetTxtFrm(), m_pFnt->GetOrientation() );
+            pBlink->Insert( aPoint, &rPor, GetTextFrm(), m_pFnt->GetOrientation() );
 
             if( !pBlink->IsVisible() )
                 return;
@@ -579,7 +579,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
 
     // The SwScriptInfo is useless if we are inside a field portion
     SwScriptInfo* pSI = 0;
-    if ( ! rPor.InFldGrp() )
+    if ( ! rPor.InFieldGrp() )
         pSI = &GetParaPortion()->GetScriptInfo();
 
     // in some cases, kana compression is not allowed or suppressed for
@@ -611,8 +611,8 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
         sal_Int32 nCharCnt = 0;
         // #i41860# Thai justified alignment needs some
         // additional information:
-        aDrawInf.SetNumberOfBlanks( rPor.InTxtGrp() ?
-                                    static_cast<const SwTxtPortion&>(rPor).GetSpaceCnt( *this, nCharCnt ) :
+        aDrawInf.SetNumberOfBlanks( rPor.InTextGrp() ?
+                                    static_cast<const SwTextPortion&>(rPor).GetSpaceCnt( *this, nCharCnt ) :
                                     0 );
     }
 
@@ -622,7 +622,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
     // the font is used to identify the current script via nActual
     aDrawInf.SetFont( m_pFnt );
     // the frame is used to identify the orientation
-    aDrawInf.SetFrm( GetTxtFrm() );
+    aDrawInf.SetFrm( GetTextFrm() );
     // we have to know if the paragraph should snap to grid
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     // for underlining we must know when not to add extra space behind
@@ -633,16 +633,16 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
 
     // Draw text next to the left border
     Point aFontPos(aPos);
-    if( m_pFnt->GetLeftBorder() && !static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithPrev() )
+    if( m_pFnt->GetLeftBorder() && !static_cast<const SwTextPortion&>(rPor).GetJoinBorderWithPrev() )
     {
         const sal_uInt16 nLeftBorderSpace = m_pFnt->GetLeftBorderSpace();
-        if ( GetTxtFrm()->IsRightToLeft() )
+        if ( GetTextFrm()->IsRightToLeft() )
         {
             aFontPos.X() -= nLeftBorderSpace;
         }
         else
         {
-            switch( m_pFnt->GetOrientation(GetTxtFrm()->IsVertical()) )
+            switch( m_pFnt->GetOrientation(GetTextFrm()->IsVertical()) )
             {
                 case 0 :
                     aFontPos.X() += nLeftBorderSpace;
@@ -664,7 +664,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
             aFontPos.X() = 0;
     }
 
-    if( GetTxtFly().IsOn() )
+    if( GetTextFly().IsOn() )
     {
         // aPos needs to be the TopLeft, because we cannot calculate the
         // ClipRects otherwise
@@ -677,7 +677,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
         aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
         aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : NULL );
         aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );
-        GetTxtFly().DrawTextOpaque( aDrawInf );
+        GetTextFly().DrawTextOpaque( aDrawInf );
     }
     else
     {
@@ -694,7 +694,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
     }
 }
 
-void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
+void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
                                SwRect* pRect, SwRect* pIntersect,
                                const bool bInsideBox ) const
 {
@@ -704,7 +704,7 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
     if( rPor.InSpaceGrp() && GetSpaceAdd() )
     {
         SwTwips nAdd = rPor.CalcSpacing( GetSpaceAdd(), *this );
-        if( rPor.InFldGrp() && GetSpaceAdd() < 0 && nAdd )
+        if( rPor.InFieldGrp() && GetSpaceAdd() < 0 && nAdd )
             nAdd += GetSpaceAdd() / SPACING_PRECISION_FACTOR;
         aSize.Width() += nAdd;
     }
@@ -730,14 +730,14 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
     else
     {
         aPoint.A() = X();
-        if ( GetTxtFrm()->IsVertLR() )
+        if ( GetTextFrm()->IsVertLR() )
             aPoint.B() = Y() - rPor.Height() + rPor.GetAscent();
         else
             aPoint.B() = Y() - rPor.GetAscent();
     }
 
     // Adjust x coordinate if we are inside a bidi portion
-    const bool bFrmDir = GetTxtFrm()->IsRightToLeft();
+    const bool bFrmDir = GetTextFrm()->IsRightToLeft();
     const bool bCounterDir = ( !bFrmDir && DIR_RIGHT2LEFT == GetDirection() ) ||
                              (  bFrmDir && DIR_LEFT2RIGHT == GetDirection() );
 
@@ -746,19 +746,19 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
 
     SwRect aRect( aPoint, aSize );
 
-    if ( GetTxtFrm()->IsRightToLeft() )
-        GetTxtFrm()->SwitchLTRtoRTL( aRect );
+    if ( GetTextFrm()->IsRightToLeft() )
+        GetTextFrm()->SwitchLTRtoRTL( aRect );
 
-    if ( GetTxtFrm()->IsVertical() )
-        GetTxtFrm()->SwitchHorizontalToVertical( aRect );
+    if ( GetTextFrm()->IsVertical() )
+        GetTextFrm()->SwitchHorizontalToVertical( aRect );
 
-    if( bInsideBox && rPor.InTxtGrp() )
+    if( bInsideBox && rPor.InTextGrp() )
     {
         const bool bJoinWithPrev =
-            static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithPrev();
+            static_cast<const SwTextPortion&>(rPor).GetJoinBorderWithPrev();
         const bool bJoinWithNext =
-            static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithNext();
-        const bool bIsVert = GetTxtFrm()->IsVertical();
+            static_cast<const SwTextPortion&>(rPor).GetJoinBorderWithNext();
+        const bool bIsVert = GetTextFrm()->IsVertical();
         aRect.Top(aRect.Top() + GetFont()->CalcShadowSpace(SvxShadowItemSide::TOP, bIsVert, bJoinWithPrev, bJoinWithNext ));
         aRect.Bottom(aRect.Bottom() - GetFont()->CalcShadowSpace(SvxShadowItemSide::BOTTOM, bIsVert, bJoinWithPrev, bJoinWithNext ));
         aRect.Left(aRect.Left() + GetFont()->CalcShadowSpace(SvxShadowItemSide::LEFT, bIsVert, bJoinWithPrev, bJoinWithNext ));
@@ -792,7 +792,7 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
  * @param bCenter Draw the character centered, otherwise left aligned
  * @param bRotate Rotate the character if character rotation is set
  */
-static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
+static void lcl_DrawSpecial( const SwTextPaintInfo& rInf, const SwLinePortion& rPor,
                       SwRect& rRect, const Color& rCol, sal_Unicode cChar,
                       sal_uInt8 nOptions )
 {
@@ -800,10 +800,10 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     bool bRotate = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_ROTATE );
 
     // rRect is given in absolute coordinates
-    if ( rInf.GetTxtFrm()->IsRightToLeft() )
-        rInf.GetTxtFrm()->SwitchRTLtoLTR( rRect );
-    if ( rInf.GetTxtFrm()->IsVertical() )
-        rInf.GetTxtFrm()->SwitchVerticalToHorizontal( rRect );
+    if ( rInf.GetTextFrm()->IsRightToLeft() )
+        rInf.GetTextFrm()->SwitchRTLtoLTR( rRect );
+    if ( rInf.GetTextFrm()->IsVertical() )
+        rInf.GetTextFrm()->SwitchVerticalToHorizontal( rRect );
 
     const SwFont* pOldFnt = rInf.GetFont();
 
@@ -820,7 +820,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
 
     // Some of the current values are set at the font:
     if ( ! bRotate )
-        m_pFnt->SetVertical( 0, rInf.GetTxtFrm()->IsVertical() );
+        m_pFnt->SetVertical( 0, rInf.GetTextFrm()->IsVertical() );
     else
         m_pFnt->SetVertical( pOldFnt->GetOrientation() );
 
@@ -829,10 +829,10 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     Size aFontSize( 0, SPECIAL_FONT_HEIGHT );
     m_pFnt->SetSize( aFontSize, m_pFnt->GetActual() );
 
-    const_cast<SwTxtPaintInfo&>(rInf).SetFont( m_pFnt );
+    const_cast<SwTextPaintInfo&>(rInf).SetFont( m_pFnt );
 
     // The maximum width depends on the current orientation
-    const sal_uInt16 nDir = m_pFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
+    const sal_uInt16 nDir = m_pFnt->GetOrientation( rInf.GetTextFrm()->IsVertical() );
     SwTwips nMaxWidth;
     if (nDir == 900 || nDir == 2700)
         nMaxWidth = rRect.Height();
@@ -844,7 +844,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
 
     // check if char fits into rectangle
     const OUString aTmp( cChar );
-    aFontSize = rInf.GetTxtSize( aTmp ).SvLSize();
+    aFontSize = rInf.GetTextSize( aTmp ).SvLSize();
     while ( aFontSize.Width() > nMaxWidth )
     {
         SwTwips nFactor = ( 100 * aFontSize.Width() ) / nMaxWidth;
@@ -860,7 +860,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
 
         m_pFnt->SetSize( aFontSize, nAct );
 
-        aFontSize = rInf.GetTxtSize( aTmp ).SvLSize();
+        aFontSize = rInf.GetTextSize( aTmp ).SvLSize();
 
         if ( aFontSize.Width() >= nOldWidth )
             break;
@@ -891,22 +891,22 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     }
 
     Point aTmpPos( nX, nY );
-    const_cast<SwTxtPaintInfo&>(rInf).SetPos( aTmpPos );
+    const_cast<SwTextPaintInfo&>(rInf).SetPos( aTmpPos );
     sal_uInt16 nOldWidth = rPor.Width();
     const_cast<SwLinePortion&>(rPor).Width( (sal_uInt16)aFontSize.Width() );
     rInf.DrawText( aTmp, rPor );
     const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
-    const_cast<SwTxtPaintInfo&>(rInf).SetFont( const_cast<SwFont*>(pOldFnt) );
-    const_cast<SwTxtPaintInfo&>(rInf).SetPos( aOldPos );
+    const_cast<SwTextPaintInfo&>(rInf).SetFont( const_cast<SwFont*>(pOldFnt) );
+    const_cast<SwTextPaintInfo&>(rInf).SetPos( aOldPos );
 }
 
-void SwTxtPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
+void SwTextPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
                                bool bRetouche ) const
 {
     if ( OnWin() || !bRetouche )
     {
-        if( aTxtFly.IsOn() )
-            const_cast<SwTxtPaintInfo*>(this)->GetTxtFly().
+        if( aTextFly.IsOn() )
+            const_cast<SwTextPaintInfo*>(this)->GetTextFly().
                 DrawFlyRect( m_pOut, rRect, *this, bNoGraphic );
         else if ( bNoGraphic )
             m_pOut->DrawRect( rRect.SVRect() );
@@ -924,7 +924,7 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
     }
 }
 
-void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 {
     if( OnWin() )
     {
@@ -934,14 +934,14 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
         if ( ! aRect.HasArea() )
             return;
 
-        const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ? CHAR_TAB_RTL : CHAR_TAB;
+        const sal_Unicode cChar = GetTextFrm()->IsRightToLeft() ? CHAR_TAB_RTL : CHAR_TAB;
         const sal_uInt8 nOptions = DRAW_SPECIAL_OPTIONS_CENTER | DRAW_SPECIAL_OPTIONS_ROTATE;
 
         lcl_DrawSpecial( *this, rPor, aRect, Color(NON_PRINTING_CHARACTER_COLOR), cChar, nOptions );
     }
 }
 
-void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
 {
     if( OnWin() )
     {
@@ -953,7 +953,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
 
         if( aRect.HasArea() )
         {
-            const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ?
+            const sal_Unicode cChar = GetTextFrm()->IsRightToLeft() ?
                                       CHAR_LINEBREAK_RTL : CHAR_LINEBREAK;
             const sal_uInt8 nOptions = 0;
 
@@ -964,7 +964,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
     }
 }
 
-void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
 {
     Size aSize( SPECIAL_FONT_HEIGHT, SPECIAL_FONT_HEIGHT );
     SwRect aRect( static_cast<const SwArrowPortion&>(rPor).GetPos(), aSize );
@@ -986,8 +986,8 @@ void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
         cChar = CHAR_RIGHT_ARROW;
     }
 
-    if ( GetTxtFrm()->IsVertical() )
-        GetTxtFrm()->SwitchHorizontalToVertical( aRect );
+    if ( GetTextFrm()->IsVertical() )
+        GetTextFrm()->SwitchHorizontalToVertical( aRect );
 
     Color aCol( COL_LIGHTRED );
 
@@ -998,7 +998,7 @@ void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     }
 }
 
-void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, bool bScript ) const
+void SwTextPaintInfo::DrawPostIts( const SwLinePortion&, bool bScript ) const
 {
     if( OnWin() && m_pOpt->IsPostIts() )
     {
@@ -1009,7 +1009,7 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, bool bScript ) const
         const sal_uInt16 nFontHeight = m_pFnt->GetHeight( m_pVsh, *GetOut() );
         const sal_uInt16 nFontAscent = m_pFnt->GetAscent( m_pVsh, *GetOut() );
 
-        switch ( m_pFnt->GetOrientation( GetTxtFrm()->IsVertical() ) )
+        switch ( m_pFnt->GetOrientation( GetTextFrm()->IsVertical() ) )
         {
         case 0 :
             aSize.Width() = nPostItsWidth;
@@ -1034,18 +1034,18 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, bool bScript ) const
 
         SwRect aTmpRect( aTmp, aSize );
 
-        if ( GetTxtFrm()->IsRightToLeft() )
-            GetTxtFrm()->SwitchLTRtoRTL( aTmpRect );
+        if ( GetTextFrm()->IsRightToLeft() )
+            GetTextFrm()->SwitchLTRtoRTL( aTmpRect );
 
-        if ( GetTxtFrm()->IsVertical() )
-            GetTxtFrm()->SwitchHorizontalToVertical( aTmpRect );
+        if ( GetTextFrm()->IsVertical() )
+            GetTextFrm()->SwitchHorizontalToVertical( aTmpRect );
 
         const Rectangle aRect( aTmpRect.SVRect() );
         SwViewOption::PaintPostIts( const_cast<OutputDevice*>(GetOut()), aRect, bScript );
     }
 }
 
-void SwTxtPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool bChecked) const
+void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool bChecked) const
 {
     SwRect aIntersect;
     CalcRect( rPor, &aIntersect, 0 );
@@ -1076,9 +1076,9 @@ void SwTxtPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool b
     }
 }
 
-void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 {
-    OSL_ENSURE( OnWin(), "SwTxtPaintInfo::DrawBackground: printer pollution ?" );
+    OSL_ENSURE( OnWin(), "SwTextPaintInfo::DrawBackground: printer pollution ?" );
 
     SwRect aIntersect;
     CalcRect( rPor, 0, &aIntersect, true );
@@ -1104,14 +1104,14 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     }
 }
 
-void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
 {
     {
         SwRect aIntersect;
         CalcRect( rPor, &aIntersect, 0, true );
         if(aIntersect.HasArea())
         {
-            SwTxtNode *pNd = m_pFrm->GetTxtNode();
+            SwTextNode *pNd = m_pFrm->GetTextNode();
             const ::sw::mark::IMark* pFieldmark = NULL;
             if(pNd)
             {
@@ -1123,7 +1123,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                     pFieldmark=doc->getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
                 }
             }
-            bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetTxt()[GetIdx()]);
+            bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetText()[GetIdx()]);
             if(pFieldmark) {
                 OSL_TRACE("Found Fieldmark");
 #if OSL_DEBUG_LEVEL > 1
@@ -1180,19 +1180,19 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
     }
 }
 
-void SwTxtPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
 {
     SwRect aDrawArea;
     CalcRect( rPor, &aDrawArea );
     if ( aDrawArea.HasArea() )
     {
         PaintCharacterBorder(
-            *m_pFnt, aDrawArea, GetTxtFrm()->IsVertical(),
+            *m_pFnt, aDrawArea, GetTextFrm()->IsVertical(),
             rPor.GetJoinBorderWithPrev(), rPor.GetJoinBorderWithNext());
     }
 }
 
-void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
+void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                                   const sal_uInt16 nWhich ) const
 {
     if( OnWin() && !IsMulti() )
@@ -1214,7 +1214,7 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                  && !GetOpt().IsReadonly()
                  && SwViewOption::IsFieldShadings()
                  && ( POR_NUMBER != nWhich
-                      || m_pFrm->GetTxtNode()->HasMarkedLabel())) // #i27615#
+                      || m_pFrm->GetTextNode()->HasMarkedLabel())) // #i27615#
             {
                 bDraw = true;
             }
@@ -1232,7 +1232,7 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
         case POR_BLANK:     if ( GetOpt().IsHardBlank())bDraw = true; break;
         default:
             {
-                OSL_ENSURE( false, "SwTxtPaintInfo::DrawViewOpt: don't know how to draw this" );
+                OSL_ENSURE( false, "SwTextPaintInfo::DrawViewOpt: don't know how to draw this" );
                 break;
             }
         }
@@ -1241,7 +1241,7 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
     }
 }
 
-void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
+void SwTextPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
 {
     OSL_ENSURE( pNoteURL, "NotifyURL: pNoteURL gone with the wind!" );
 
@@ -1250,13 +1250,13 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
 
     if( aIntersect.HasArea() )
     {
-        SwTxtNode *pNd = const_cast<SwTxtNode*>(GetTxtFrm()->GetTxtNode());
-        SwTxtAttr *const pAttr =
-            pNd->GetTxtAttrAt(GetIdx(), RES_TXTATR_INETFMT);
+        SwTextNode *pNd = const_cast<SwTextNode*>(GetTextFrm()->GetTextNode());
+        SwTextAttr *const pAttr =
+            pNd->GetTextAttrAt(GetIdx(), RES_TXTATR_INETFMT);
         if( pAttr )
         {
-            const SwFmtINetFmt& rFmt = pAttr->GetINetFmt();
-            pNoteURL->InsertURLNote( rFmt.GetValue(), rFmt.GetTargetFrame(),
+            const SwFormatINetFormat& rFormat = pAttr->GetINetFormat();
+            pNoteURL->InsertURLNote( rFormat.GetValue(), rFormat.GetTargetFrame(),
                 aIntersect );
         }
     }
@@ -1291,16 +1291,16 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
     }
 }
 
-const PropertyValues & SwTxtFormatInfo::GetHyphValues() const
+const PropertyValues & SwTextFormatInfo::GetHyphValues() const
 {
     OSL_ENSURE( 2 == aHyphVals.getLength(),
             "hyphenation values not yet initialized" );
     return aHyphVals;
 }
 
-bool SwTxtFormatInfo::InitHyph( const bool bAutoHyphen )
+bool SwTextFormatInfo::InitHyph( const bool bAutoHyphen )
 {
-    const SwAttrSet& rAttrSet = GetTxtFrm()->GetTxtNode()->GetSwAttrSet();
+    const SwAttrSet& rAttrSet = GetTextFrm()->GetTextNode()->GetSwAttrSet();
     SetHanging( rAttrSet.GetHangingPunctuation().GetValue() );
     SetScriptSpace( rAttrSet.GetScriptSpace().GetValue() );
     SetForbiddenChars( rAttrSet.GetForbiddenRule().GetValue() );
@@ -1316,10 +1316,10 @@ bool SwTxtFormatInfo::InitHyph( const bool bAutoHyphen )
     return bAuto;
 }
 
-void SwTxtFormatInfo::CtorInitTxtFormatInfo( SwTxtFrm *pNewFrm, const bool bNewInterHyph,
+void SwTextFormatInfo::CtorInitTextFormatInfo( SwTextFrm *pNewFrm, const bool bNewInterHyph,
                                 const bool bNewQuick, const bool bTst )
 {
-    CtorInitTxtPaintInfo( pNewFrm, SwRect() );
+    CtorInitTextPaintInfo( pNewFrm, SwRect() );
 
     bQuick = bNewQuick;
     bInterHyph = bNewInterHyph;
@@ -1354,7 +1354,7 @@ void SwTxtFormatInfo::CtorInitTxtFormatInfo( SwTxtFrm *pNewFrm, const bool bNewI
         // set digit mode to what will be used later to get same results
         SwDigitModeModifier const m(*m_pRef, LANGUAGE_NONE /*dummy*/);
         assert(m_pRef->GetDigitLanguage() != LANGUAGE_NONE);
-        SetCachedVclData(m_pRef->CreateTextLayoutCache(*m_pTxt));
+        SetCachedVclData(m_pRef->CreateTextLayoutCache(*m_pText));
     }
 
     Init();
@@ -1364,10 +1364,10 @@ void SwTxtFormatInfo::CtorInitTxtFormatInfo( SwTxtFrm *pNewFrm, const bool bNewI
  * If the Hyphenator returns ERROR or the language is set to NOLANGUAGE
  * we do not hyphenate.
  * Else, we always hyphenate if we do interactive hyphenation.
- * If we do not do interactive hyphenation, we only hyphenate if ParaFmt is
+ * If we do not do interactive hyphenation, we only hyphenate if ParaFormat is
  * set to automatic hyphenation.
  */
-bool SwTxtFormatInfo::IsHyphenate() const
+bool SwTextFormatInfo::IsHyphenate() const
 {
     if( !bInterHyph && !bAutoHyph )
         return false;
@@ -1386,27 +1386,27 @@ bool SwTxtFormatInfo::IsHyphenate() const
     return xHyph->hasLocale( g_pBreakIt->GetLocale(eTmp) );
 }
 
-const SwFmtDrop *SwTxtFormatInfo::GetDropFmt() const
+const SwFormatDrop *SwTextFormatInfo::GetDropFormat() const
 {
-    const SwFmtDrop *pDrop = &GetTxtFrm()->GetTxtNode()->GetSwAttrSet().GetDrop();
+    const SwFormatDrop *pDrop = &GetTextFrm()->GetTextNode()->GetSwAttrSet().GetDrop();
     if( 1 >= pDrop->GetLines() ||
         ( !pDrop->GetChars() && !pDrop->GetWholeWord() ) )
         pDrop = 0;
     return pDrop;
 }
 
-void SwTxtFormatInfo::Init()
+void SwTextFormatInfo::Init()
 {
     // Not initialized: pRest, nLeft, nRight, nFirst, nRealWidth
     X(0);
-    bArrowDone = bFull = bFtnDone = bErgoDone = bNumDone = bNoEndHyph =
+    bArrowDone = bFull = bFootnoteDone = bErgoDone = bNumDone = bNoEndHyph =
         bNoMidHyph = bStop = bNewLine = bUnderflow = bTabOverflow = false;
 
     // generally we do not allow number portions in follows, except...
-    if ( GetTxtFrm()->IsFollow() )
+    if ( GetTextFrm()->IsFollow() )
     {
-        const SwTxtFrm* pMaster = GetTxtFrm()->FindMaster();
-        OSL_ENSURE(pMaster, "pTxtFrm without Master");
+        const SwTextFrm* pMaster = GetTextFrm()->FindMaster();
+        OSL_ENSURE(pMaster, "pTextFrm without Master");
         const SwLinePortion* pTmpPara = pMaster ? pMaster->GetPara() : NULL;
 
         // there is a master for this follow and the master does not have
@@ -1418,7 +1418,7 @@ void SwTxtFormatInfo::Init()
     pRoot = 0;
     pLast = 0;
     pFly = 0;
-    pLastFld = 0;
+    pLastField = 0;
     pLastTab = 0;
     pUnderflow = 0;
     cTabDecimal = 0;
@@ -1428,7 +1428,7 @@ void SwTxtFormatInfo::Init()
     nUnderScorePos = COMPLETE_STRING;
     cHookChar = 0;
     SetIdx(0);
-    SetLen( GetTxt().getLength() );
+    SetLen( GetText().getLength() );
     SetPaintOfst(0);
 }
 
@@ -1440,14 +1440,14 @@ void SwTxtFormatInfo::Init()
  * the line width is the rest width from the surrounding line
  * and the bMulti and bFirstMulti-flag has to be set correctly.
  */
-SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
-    SwLineLayout& rLay, SwTwips nActWidth ) : SwTxtPaintInfo( rInf ),
+SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
+    SwLineLayout& rLay, SwTwips nActWidth ) : SwTextPaintInfo( rInf ),
     bTabOverflow( false )
 {
     pRoot = &rLay;
     pLast = &rLay;
     pFly = NULL;
-    pLastFld = NULL;
+    pLastField = NULL;
     pUnderflow = NULL;
     pRest = NULL;
     pLastTab = NULL;
@@ -1468,7 +1468,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     nMinTrailing = 0;
     nMinWordLength = 0;
     bFull = false;
-    bFtnDone = true;
+    bFootnoteDone = true;
     bErgoDone = true;
     bNumDone = true;
     bArrowDone = true;
@@ -1493,12 +1493,12 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     SetFirstMulti( rInf.IsFirstMulti() );
 }
 
-bool SwTxtFormatInfo::_CheckFtnPortion( SwLineLayout* pCurr )
+bool SwTextFormatInfo::_CheckFootnotePortion( SwLineLayout* pCurr )
 {
     const sal_uInt16 nHeight = pCurr->GetRealHeight();
     for( SwLinePortion *pPor = pCurr->GetPortion(); pPor; pPor = pPor->GetPortion() )
     {
-        if( pPor->IsFtnPortion() && nHeight > static_cast<SwFtnPortion*>(pPor)->Orig() )
+        if( pPor->IsFootnotePortion() && nHeight > static_cast<SwFootnotePortion*>(pPor)->Orig() )
         {
             SetLineHeight( nHeight );
             SetLineNetHeight( pCurr->Height() );
@@ -1508,7 +1508,7 @@ bool SwTxtFormatInfo::_CheckFtnPortion( SwLineLayout* pCurr )
     return false;
 }
 
-sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
+sal_Int32 SwTextFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
                                             const sal_Int32 nEnd )
 {
     cHookChar = 0;
@@ -1522,7 +1522,7 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
     const sal_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
 
     bool bNumFound = false;
-    const bool bTabCompat = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
+    const bool bTabCompat = GetTextFrm()->GetTextNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
 
     for( ; i < nEnd; ++i )
     {
@@ -1588,7 +1588,7 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
 
     // Check if character *behind* the portion has
     // to become the hook:
-    if ( i == nEnd && i < GetTxt().getLength() && bNumFound )
+    if ( i == nEnd && i < GetText().getLength() && bNumFound )
     {
         const sal_Unicode cPos = GetChar( i );
         if ( cPos != cTabDec && cPos != cThousandSep && cPos !=cThousandSep2 && ( 0x2F >= cPos || cPos >= 0x3A ) )
@@ -1601,7 +1601,7 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
     return i;
 }
 
-bool SwTxtFormatInfo::LastKernPortion()
+bool SwTextFormatInfo::LastKernPortion()
 {
     if( GetLast() )
     {
@@ -1629,13 +1629,13 @@ bool SwTxtFormatInfo::LastKernPortion()
     return false;
 }
 
-SwTxtSlot::SwTxtSlot(
-    const SwTxtSizeInfo *pNew,
+SwTextSlot::SwTextSlot(
+    const SwTextSizeInfo *pNew,
     const SwLinePortion *pPor,
-    bool bTxtLen,
+    bool bTextLen,
     bool bExgLists,
     OUString const & rCh )
-    : pOldTxt(0)
+    : pOldText(0)
     , pOldSmartTagList(0)
     , pOldGrammarCheckList(0)
     , pTempList(0)
@@ -1645,94 +1645,94 @@ SwTxtSlot::SwTxtSlot(
 {
     if( rCh.isEmpty() )
     {
-        bOn = pPor->GetExpTxt( *pNew, aTxt );
+        bOn = pPor->GetExpText( *pNew, aText );
     }
     else
     {
-        aTxt = rCh;
+        aText = rCh;
         bOn = true;
     }
 
     // The text is replaced ...
     if( bOn )
     {
-        pInf = const_cast<SwTxtSizeInfo*>(pNew);
+        pInf = const_cast<SwTextSizeInfo*>(pNew);
         nIdx = pInf->GetIdx();
         nLen = pInf->GetLen();
-        pOldTxt = &(pInf->GetTxt());
+        pOldText = &(pInf->GetText());
         m_pOldCachedVclData = pInf->GetCachedVclData();
-        pInf->SetTxt( aTxt );
+        pInf->SetText( aText );
         pInf->SetIdx( 0 );
-        pInf->SetLen( bTxtLen ? pInf->GetTxt().getLength() : pPor->GetLen() );
+        pInf->SetLen( bTextLen ? pInf->GetText().getLength() : pPor->GetLen() );
         pInf->SetCachedVclData(nullptr);
 
         // ST2
         if ( bExgLists )
         {
-            pOldSmartTagList = static_cast<SwTxtPaintInfo*>(pInf)->GetSmartTags();
+            pOldSmartTagList = static_cast<SwTextPaintInfo*>(pInf)->GetSmartTags();
             if ( pOldSmartTagList )
             {
                 const sal_uInt16 nPos = pOldSmartTagList->GetWrongPos(nIdx);
                 const sal_Int32 nListPos = pOldSmartTagList->Pos(nPos);
                 if( nListPos == nIdx )
-                    static_cast<SwTxtPaintInfo*>(pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
-                else if( !pTempList && nPos < pOldSmartTagList->Count() && nListPos < nIdx && !aTxt.isEmpty() )
+                    static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
+                else if( !pTempList && nPos < pOldSmartTagList->Count() && nListPos < nIdx && !aText.isEmpty() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_SMARTTAG );
-                    pTempList->Insert( OUString(), 0, 0, aTxt.getLength(), 0 );
-                    static_cast<SwTxtPaintInfo*>(pInf)->SetSmartTags( pTempList );
+                    pTempList->Insert( OUString(), 0, 0, aText.getLength(), 0 );
+                    static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags( pTempList );
                 }
                 else
-                    static_cast<SwTxtPaintInfo*>(pInf)->SetSmartTags( 0);
+                    static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags( 0);
             }
-            pOldGrammarCheckList = static_cast<SwTxtPaintInfo*>(pInf)->GetGrammarCheckList();
+            pOldGrammarCheckList = static_cast<SwTextPaintInfo*>(pInf)->GetGrammarCheckList();
             if ( pOldGrammarCheckList )
             {
                 const sal_uInt16 nPos = pOldGrammarCheckList->GetWrongPos(nIdx);
                 const sal_Int32 nListPos = pOldGrammarCheckList->Pos(nPos);
                 if( nListPos == nIdx )
-                    static_cast<SwTxtPaintInfo*>(pInf)->SetGrammarCheckList( pOldGrammarCheckList->SubList( nPos ) );
-                else if( !pTempList && nPos < pOldGrammarCheckList->Count() && nListPos < nIdx && !aTxt.isEmpty() )
+                    static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList( pOldGrammarCheckList->SubList( nPos ) );
+                else if( !pTempList && nPos < pOldGrammarCheckList->Count() && nListPos < nIdx && !aText.isEmpty() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_GRAMMAR );
-                    pTempList->Insert( OUString(), 0, 0, aTxt.getLength(), 0 );
-                    static_cast<SwTxtPaintInfo*>(pInf)->SetGrammarCheckList( pTempList );
+                    pTempList->Insert( OUString(), 0, 0, aText.getLength(), 0 );
+                    static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList( pTempList );
                 }
                 else
-                    static_cast<SwTxtPaintInfo*>(pInf)->SetGrammarCheckList( 0);
+                    static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList( 0);
             }
         }
     }
 }
 
-SwTxtSlot::~SwTxtSlot()
+SwTextSlot::~SwTextSlot()
 {
     if( bOn )
     {
         pInf->SetCachedVclData(m_pOldCachedVclData);
-        pInf->SetTxt( *pOldTxt );
+        pInf->SetText( *pOldText );
         pInf->SetIdx( nIdx );
         pInf->SetLen( nLen );
 
         // ST2
         // Restore old smart tag list
         if ( pOldSmartTagList )
-            static_cast<SwTxtPaintInfo*>(pInf)->SetSmartTags( pOldSmartTagList );
+            static_cast<SwTextPaintInfo*>(pInf)->SetSmartTags( pOldSmartTagList );
         if ( pOldGrammarCheckList )
-            static_cast<SwTxtPaintInfo*>(pInf)->SetGrammarCheckList( pOldGrammarCheckList );
+            static_cast<SwTextPaintInfo*>(pInf)->SetGrammarCheckList( pOldGrammarCheckList );
         delete pTempList;
     }
 }
 
-SwFontSave::SwFontSave(const SwTxtSizeInfo &rInf, SwFont *pNew,
+SwFontSave::SwFontSave(const SwTextSizeInfo &rInf, SwFont *pNew,
         SwAttrIter* pItr)
     : pInf(NULL)
-    , pFnt(pNew ? const_cast<SwTxtSizeInfo&>(rInf).GetFont() : NULL)
+    , pFnt(pNew ? const_cast<SwTextSizeInfo&>(rInf).GetFont() : NULL)
     , pIter(NULL)
 {
     if( pFnt )
     {
-        pInf = &const_cast<SwTxtSizeInfo&>(rInf);
+        pInf = &const_cast<SwTextSizeInfo&>(rInf);
         // In these cases we temporarily switch to the new font:
         // 1. the fonts have a different magic number
         // 2. they have different script types
@@ -1775,7 +1775,7 @@ SwFontSave::~SwFontSave()
     }
 }
 
-bool SwTxtFormatInfo::ChgHyph( const bool bNew )
+bool SwTextFormatInfo::ChgHyph( const bool bNew )
 {
     const bool bOld = bAutoHyph;
     if( bAutoHyph != bNew )

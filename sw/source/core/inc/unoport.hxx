@@ -43,10 +43,10 @@
 #include <calbck.hxx>
 #include <unobaseclass.hxx>
 
-class SwFmtFld;
-class SwFrmFmt;
+class SwFormatField;
+class SwFrameFormat;
 class SwRangeRedline;
-class SwTxtRuby;
+class SwTextRuby;
 
 typedef ::std::deque<
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > >
@@ -116,12 +116,12 @@ private:
     ::std::unique_ptr< ::com::sun::star::uno::Any > m_pRubyIsAbove;
 
     const SwDepend              m_FrameDepend;
-    SwFrmFmt *                  m_pFrameFmt;
+    SwFrameFormat *                  m_pFrameFormat;
     const SwTextPortionType     m_ePortionType;
 
     bool                        m_bIsCollapsed;
 
-    SwFmtFld * GetFldFmt(bool bInit = false);
+    SwFormatField * GetFieldFormat(bool bInit = false);
 
     void init(const SwUnoCrsr* pPortionCursor);
 
@@ -153,11 +153,11 @@ protected:
 
 public:
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType   eType   );
-    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwFrmFmt& rFmt );
+    SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwFrameFormat& rFormat );
 
     // for Ruby
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
-        SwTxtRuby const& rAttr,
+        SwTextRuby const& rAttr,
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >
             const& xParent,
         bool bIsEnd );

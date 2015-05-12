@@ -24,11 +24,11 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 
-struct SvxClipboardFmtItem_Impl;
+struct SvxClipboardFormatItem_Impl;
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxClipboardFmtItem : public SfxPoolItem
+class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxClipboardFormatItem : public SfxPoolItem
 {
-    SvxClipboardFmtItem_Impl* pImpl;
+    SvxClipboardFormatItem_Impl* pImpl;
 protected:
 
     virtual bool             operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
@@ -36,9 +36,9 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    SvxClipboardFmtItem( sal_uInt16 nId = 0 );
-    SvxClipboardFmtItem( const SvxClipboardFmtItem& );
-    virtual ~SvxClipboardFmtItem();
+    SvxClipboardFormatItem( sal_uInt16 nId = 0 );
+    SvxClipboardFormatItem( const SvxClipboardFormatItem& );
+    virtual ~SvxClipboardFormatItem();
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const SAL_OVERRIDE;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;

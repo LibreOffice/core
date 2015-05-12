@@ -49,7 +49,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionCount()
 {
     SolarMutexGuard g;
 
-    SwFmtURL aURL( GetFmt()->GetURL() );
+    SwFormatURL aURL( GetFormat()->GetURL() );
     ImageMap* pMap = aURL.GetMap();
     if( pMap != NULL )
     {
@@ -72,7 +72,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::doAccessibleAction( sal_Int32 nIn
         throw lang::IndexOutOfBoundsException();
 
     bool bRet = false;
-    SwFmtURL aURL( GetFmt()->GetURL() );
+    SwFormatURL aURL( GetFormat()->GetURL() );
     ImageMap* pMap = aURL.GetMap();
     if( pMap != NULL )
     {
@@ -113,7 +113,7 @@ OUString SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionDescription(
     if(nIndex < 0 || nIndex >= getAccessibleActionCount())
         throw lang::IndexOutOfBoundsException();
 
-    SwFmtURL aURL( GetFmt()->GetURL() );
+    SwFormatURL aURL( GetFormat()->GetURL() );
     ImageMap* pMap = aURL.GetMap();
     if( pMap != NULL )
     {
@@ -141,7 +141,7 @@ Reference< XAccessibleKeyBinding > SAL_CALL
         throw lang::IndexOutOfBoundsException();
 
     bool bIsValid = false;
-    SwFmtURL aURL( GetFmt()->GetURL() );
+    SwFormatURL aURL( GetFormat()->GetURL() );
     ImageMap* pMap = aURL.GetMap();
     if( pMap != NULL )
     {
@@ -197,7 +197,7 @@ Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionObject(
     if(nIndex < 0 || nIndex >= getAccessibleActionCount())
         throw lang::IndexOutOfBoundsException();
 
-    SwFmtURL aURL( GetFmt()->GetURL() );
+    SwFormatURL aURL( GetFormat()->GetURL() );
     OUString retText;
     ImageMap* pMap = aURL.GetMap();
     if( pMap != NULL )
@@ -231,7 +231,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextHyperlink::isValid(  )
 {
     SolarMutexGuard g;
 
-    SwFmtURL aURL( GetFmt()->GetURL() );
+    SwFormatURL aURL( GetFormat()->GetURL() );
 
     if( aURL.GetMap() || !aURL.GetURL().isEmpty() )
         return sal_True;

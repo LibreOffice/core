@@ -99,22 +99,22 @@ sal_uInt8 SwAccessibleFrameBase::GetNodeType( const SwFlyFrm *pFlyFrm )
     sal_uInt8 nType = ND_TEXTNODE;
     if( pFlyFrm->Lower() )
     {
-         if( pFlyFrm->Lower()->IsNoTxtFrm() )
+         if( pFlyFrm->Lower()->IsNoTextFrm() )
         {
-            const SwCntntFrm *pCntFrm =
-                static_cast<const SwCntntFrm *>( pFlyFrm->Lower() );
+            const SwContentFrm *pCntFrm =
+                static_cast<const SwContentFrm *>( pFlyFrm->Lower() );
             nType = pCntFrm->GetNode()->GetNodeType();
         }
     }
     else
     {
-        const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-        const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-        const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
+        const SwFrameFormat *pFrameFormat = pFlyFrm->GetFormat();
+        const SwFormatContent& rContent = pFrameFormat->GetContent();
+        const SwNodeIndex *pNdIdx = rContent.GetContentIdx();
         if( pNdIdx )
         {
-            const SwCntntNode *pCNd =
-                (pNdIdx->GetNodes())[pNdIdx->GetIndex()+1]->GetCntntNode();
+            const SwContentNode *pCNd =
+                (pNdIdx->GetNodes())[pNdIdx->GetIndex()+1]->GetContentNode();
             if( pCNd )
                 nType = pCNd->GetNodeType();
         }
@@ -132,10 +132,10 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
 {
     SolarMutexGuard aGuard;
 
-    const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-    const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
+    const SwFrameFormat *pFrameFormat = pFlyFrm->GetFormat();
+    const_cast< SwFrameFormat * >( pFrameFormat )->Add( this );
 
-    SetName( pFrmFmt->GetName() );
+    SetName( pFrameFormat->GetName() );
 
     bIsSelected = IsSelected();
 }
@@ -221,14 +221,14 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
     case RES_NAME_CHANGED:
         if(  pFlyFrm )
         {
-            const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-            assert(pFrmFmt == GetRegisteredIn() && "invalid frame");
+            const SwFrameFormat *pFrameFormat = pFlyFrm->GetFormat();
+            assert(pFrameFormat == GetRegisteredIn() && "invalid frame");
 
             const OUString sOldName( GetName() );
             assert( !pOld ||
                     static_cast<const SwStringMsgPoolItem *>(pOld)->GetString() == GetName());
 
-            SetName( pFrmFmt->GetName() );
+            SetName( pFrameFormat->GetName() );
             assert( !pNew ||
                     static_cast<const SwStringMsgPoolItem *>(pNew)->GetString() == GetName());
 
@@ -250,8 +250,8 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
 
     case RES_FMT_CHG:
         if( pOld &&
-            static_cast< const SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
-            static_cast< const SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
+            static_cast< const SwFormatChg * >(pNew)->pChangedFormat == GetRegisteredIn() &&
+            static_cast< const SwFormatChg * >(pOld)->pChangedFormat->IsFormatInDTOR() )
             GetRegisteredInNonConst()->Remove( this );
         break;
 
@@ -306,18 +306,18 @@ bool SwAccessibleFrameBase::GetSelectedState( )
 
     // SELETED.
     SwFlyFrm* pFlyFrm = getFlyFrm();
-    const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-    const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
-    const SwPosition *pPos = pAnchor.GetCntntAnchor();
+    const SwFrameFormat *pFrameFormat = pFlyFrm->GetFormat();
+    const SwFormatAnchor& pAnchor = pFrameFormat->GetAnchor();
+    const SwPosition *pPos = pAnchor.GetContentAnchor();
     if( !pPos )
         return false;
     int pIndex = pPos->nContent.GetIndex();
-    if( pPos->nNode.GetNode().GetTxtNode() )
+    if( pPos->nNode.GetNode().GetTextNode() )
     {
         SwPaM* pCrsr = GetCrsr();
         if( pCrsr != NULL )
         {
-            const SwTxtNode* pNode = pPos->nNode.GetNode().GetTxtNode();
+            const SwTextNode* pNode = pPos->nNode.GetNode().GetTextNode();
             sal_uLong nHere = pNode->GetIndex();
 
             // iterate over ring

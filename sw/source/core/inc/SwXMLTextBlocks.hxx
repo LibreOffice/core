@@ -52,8 +52,8 @@ public:
     short               nCurBlk;
     SwXMLTextBlocks( const OUString& rFile );
     SwXMLTextBlocks( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString& rFile );
-    void   AddName( const OUString&, const OUString&, const OUString&, bool bOnlyTxt = false );
-    virtual void   AddName( const OUString&, const OUString&, bool bOnlyTxt = false ) SAL_OVERRIDE;
+    void   AddName( const OUString&, const OUString&, const OUString&, bool bOnlyText = false );
+    virtual void   AddName( const OUString&, const OUString&, bool bOnlyText = false ) SAL_OVERRIDE;
     static OUString GeneratePackageName ( const OUString& rShort );
     virtual ~SwXMLTextBlocks();
     virtual sal_uLong Delete( sal_uInt16 ) SAL_OVERRIDE;
@@ -80,7 +80,7 @@ public:
     bool IsOnlyTextBlock( sal_uInt16 nIdx ) const;
     void SetIsTextOnly( const OUString& rShort, bool bNewValue );
 
-    virtual sal_uLong GetMacroTable( sal_uInt16, SvxMacroTableDtor& rMacroTbl,
+    virtual sal_uLong GetMacroTable( sal_uInt16, SvxMacroTableDtor& rMacroTable,
                                  bool bFileAlreadyOpen = false ) SAL_OVERRIDE;
     virtual sal_uLong SetMacroTable( sal_uInt16 nIdx,
                                  const SvxMacroTableDtor& rMacroTable,

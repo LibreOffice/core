@@ -31,7 +31,7 @@
 #include "swdllapi.h"
 
 class SwDoc;
-class SwFrmFmt;
+class SwFrameFormat;
 namespace com{namespace sun {namespace star {namespace text
 {
     class XTextTable;
@@ -39,12 +39,12 @@ namespace com{namespace sun {namespace star {namespace text
     class XFootnote;
 }}}}
 class SwXFrame;
-class SwFrmFmt;
-class SwFmtFtn;
+class SwFrameFormat;
+class SwFormatFootnote;
 class XBookmark;
 class SwXReferenceMark;
-class SwSectionFmt;
-class SwFmtRefMark;
+class SwSectionFormat;
+class SwFormatRefMark;
 class SwXReferenceMark;
 class SwXBookmark;
 struct SvEventDescription;
@@ -290,7 +290,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    static css::uno::Reference<css::text::XTextTable> GetObject(SwFrmFmt& rFmt);
+    static css::uno::Reference<css::text::XTextTable> GetObject(SwFrameFormat& rFormat);
 };
 
 typedef
@@ -404,7 +404,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextSection> GetObject( SwSectionFmt& rFmt );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextSection> GetObject( SwSectionFormat& rFormat );
 };
 
 class SwXBookmarks : public SwCollectionBaseClass,
@@ -487,7 +487,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> GetObject( SwDoc& rDoc, const SwFormatFootnote& rFormat );
 };
 
 class SwXReferenceMarks : public SwCollectionBaseClass,

@@ -615,9 +615,9 @@ bool SwViewShell::IsDummyPage( sal_uInt16 nPageNum ) const
  * Forces update of each field.
  * It notifies all fields with pNewHt. If that is 0 (default), the field
  * type is sent (???).
- * @param[in] bCloseDB Passed in to GetDoc()->UpdateFlds. [TODO] Purpose???
+ * @param[in] bCloseDB Passed in to GetDoc()->UpdateFields. [TODO] Purpose???
  */
-void SwViewShell::UpdateFlds(bool bCloseDB)
+void SwViewShell::UpdateFields(bool bCloseDB)
 {
     SET_CURR_SHELL( this );
 
@@ -627,7 +627,7 @@ void SwViewShell::UpdateFlds(bool bCloseDB)
     else
         StartAction();
 
-    GetDoc()->getIDocumentFieldsAccess().UpdateFlds(0, bCloseDB);
+    GetDoc()->getIDocumentFieldsAccess().UpdateFields(0, bCloseDB);
 
     if ( bCrsr )
         static_cast<SwCrsrShell*>(this)->EndAction();
@@ -652,7 +652,7 @@ bool SwViewShell::HasCharts() const
     {
         ++aIdx;
         const SwOLENode *pNd = aIdx.GetNode().GetOLENode();
-        if( pNd && !pNd->GetChartTblName().isEmpty() )
+        if( pNd && !pNd->GetChartTableName().isEmpty() )
         {
             bRet = true;
             break;
@@ -684,8 +684,8 @@ void SwViewShell::LayoutIdle()
 
     {
         //Prepare and recover cache, so that it will not get fouled.
-        SwSaveSetLRUOfst aSave( *SwTxtFrm::GetTxtCache(),
-                             SwTxtFrm::GetTxtCache()->GetCurMax() - 50 );
+        SwSaveSetLRUOfst aSave( *SwTextFrm::GetTextCache(),
+                             SwTextFrm::GetTextCache()->GetCurMax() - 50 );
         // #125243# there are lots of stacktraces indicating that Imp() returns NULL
         // this SwViewShell seems to be invalid - but it's not clear why
         // this return is only a workaround!
@@ -696,14 +696,14 @@ void SwViewShell::LayoutIdle()
     }
 }
 
-static void lcl_InvalidateAllCntnt( SwViewShell& rSh, sal_uInt8 nInv )
+static void lcl_InvalidateAllContent( SwViewShell& rSh, sal_uInt8 nInv )
 {
     bool bCrsr = rSh.ISA(SwCrsrShell);
     if ( bCrsr )
         static_cast<SwCrsrShell&>(rSh).StartAction();
     else
         rSh.StartAction();
-    rSh.GetLayout()->InvalidateAllCntnt( nInv );
+    rSh.GetLayout()->InvalidateAllContent( nInv );
     if ( bCrsr )
         static_cast<SwCrsrShell&>(rSh).EndAction();
     else
@@ -742,7 +742,7 @@ void SwViewShell::SetParaSpaceMax( bool bNew )
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         pIDSA->set(DocumentSettingId::PARA_SPACE_MAX, bNew );
         const sal_uInt8 nInv = INV_PRTAREA | INV_TABLE | INV_SECTION;
-        lcl_InvalidateAllCntnt( *this,  nInv );
+        lcl_InvalidateAllContent( *this,  nInv );
     }
 }
 
@@ -754,7 +754,7 @@ void SwViewShell::SetParaSpaceMaxAtPages( bool bNew )
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         pIDSA->set(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES, bNew );
         const sal_uInt8 nInv = INV_PRTAREA | INV_TABLE | INV_SECTION;
-        lcl_InvalidateAllCntnt( *this,  nInv );
+        lcl_InvalidateAllContent( *this,  nInv );
     }
 }
 
@@ -766,7 +766,7 @@ void SwViewShell::SetTabCompat( bool bNew )
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         pIDSA->set(DocumentSettingId::TAB_COMPAT, bNew );
         const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
-        lcl_InvalidateAllCntnt( *this, nInv );
+        lcl_InvalidateAllContent( *this, nInv );
     }
 }
 
@@ -781,7 +781,7 @@ void SwViewShell::SetAddExtLeading( bool bNew )
         if ( pTmpDrawModel )
             pTmpDrawModel->SetAddExtLeading( bNew );
         const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
-        lcl_InvalidateAllCntnt( *this, nInv );
+        lcl_InvalidateAllContent( *this, nInv );
     }
 }
 
@@ -809,7 +809,7 @@ void SwViewShell::SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCel
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         pIDSA->set(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS, _bAddParaSpacingToTableCells );
         const sal_uInt8 nInv = INV_PRTAREA;
-        lcl_InvalidateAllCntnt( *this, nInv );
+        lcl_InvalidateAllContent( *this, nInv );
     }
 }
 
@@ -826,7 +826,7 @@ void SwViewShell::SetUseFormerLineSpacing( bool _bUseFormerLineSpacing )
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         pIDSA->set(DocumentSettingId::OLD_LINE_SPACING, _bUseFormerLineSpacing );
         const sal_uInt8 nInv = INV_PRTAREA;
-        lcl_InvalidateAllCntnt( *this, nInv );
+        lcl_InvalidateAllContent( *this, nInv );
     }
 }
 
@@ -866,7 +866,7 @@ void SwViewShell::SetUseFormerTextWrapping( bool _bUseFormerTextWrapping )
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         pIDSA->set(DocumentSettingId::USE_FORMER_TEXT_WRAPPING, _bUseFormerTextWrapping );
         const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
-        lcl_InvalidateAllCntnt( *this, nInv );
+        lcl_InvalidateAllContent( *this, nInv );
     }
 }
 
@@ -879,7 +879,7 @@ void SwViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesW
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         pIDSA->set(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, _bDoNotJustifyLinesWithManualBreak );
         const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
-        lcl_InvalidateAllCntnt( *this, nInv );
+        lcl_InvalidateAllContent( *this, nInv );
     }
 }
 
@@ -896,7 +896,7 @@ void SwViewShell::Reformat()
     {
 
         StartAction();
-        GetLayout()->InvalidateAllCntnt( INV_SIZE | INV_POS | INV_PRTAREA );
+        GetLayout()->InvalidateAllContent( INV_SIZE | INV_POS | INV_PRTAREA );
         EndAction();
     }
 }
@@ -919,8 +919,8 @@ void SwViewShell::CalcLayout()
     SwWait aWait( *GetDoc()->GetDocShell(), true );
 
     //prepare and recover cache, so that it will not get fouled.
-    SwSaveSetLRUOfst aSaveLRU( *SwTxtFrm::GetTxtCache(),
-                                  SwTxtFrm::GetTxtCache()->GetCurMax() - 50 );
+    SwSaveSetLRUOfst aSaveLRU( *SwTextFrm::GetTextCache(),
+                                  SwTextFrm::GetTextCache()->GetCurMax() - 50 );
 
     //switch on Progress when none is running yet.
     const bool bEndProgress = SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) == 0;
@@ -936,22 +936,22 @@ void SwViewShell::CalcLayout()
     aAction.SetStatBar( true );
     aAction.SetCalcLayout( true );
     aAction.SetReschedule( true );
-    GetDoc()->getIDocumentFieldsAccess().LockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().LockExpFields();
     aAction.Action();
-    GetDoc()->getIDocumentFieldsAccess().UnlockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().UnlockExpFields();
 
-    //the SetNewFldLst() on the Doc was cut off and must be fetched again
+    //the SetNewFieldLst() on the Doc was cut off and must be fetched again
     //(see flowfrm.cxx, txtfld.cxx)
-    if ( aAction.IsExpFlds() )
+    if ( aAction.IsExpFields() )
     {
         aAction.Reset();
         aAction.SetPaint( false );
         aAction.SetStatBar( true );
         aAction.SetReschedule( true );
 
-        SwDocPosUpdate aMsgHnt( 0 );
-        GetDoc()->getIDocumentFieldsAccess().UpdatePageFlds( &aMsgHnt );
-        GetDoc()->getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
+        SwDocPosUpdate aMsgHint( 0 );
+        GetDoc()->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
+        GetDoc()->getIDocumentFieldsAccess().UpdateExpFields(NULL, true);
 
         aAction.Action();
     }
@@ -1904,14 +1904,14 @@ void SwViewShell::CheckBrowseView( bool bBrowseChgd )
     } while ( pPg );
 
     // When the size ratios in browse mode change,
-    // the Position and PrtArea of the Cntnt and Tab frames must be Invalidated.
+    // the Position and PrtArea of the Content and Tab frames must be Invalidated.
     sal_uInt8 nInv = INV_PRTAREA | INV_TABLE | INV_POS;
-    // In case of browse mode change the CntntFrms need a size-Invalidate
+    // In case of browse mode change the ContentFrms need a size-Invalidate
     // because of printer/screen formatting
     if( bBrowseChgd )
         nInv |= INV_SIZE | INV_DIRECTION;
 
-    GetLayout()->InvalidateAllCntnt( nInv );
+    GetLayout()->InvalidateAllContent( nInv );
 
     SwFrm::CheckPageDescs( static_cast<SwPageFrm*>(GetLayout()->Lower()) );
 
@@ -1980,7 +1980,7 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
         if(&rSh == this)
             continue;
         SwViewOption aOpt( *rSh.GetViewOptions() );
-        aOpt.SetFldName( rOpt.IsFldName() );
+        aOpt.SetFieldName( rOpt.IsFieldName() );
             aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
         aOpt.SetShowHiddenPara( rOpt.IsShowHiddenPara() );
             aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
@@ -2014,18 +2014,18 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     if( mpOpt->IsShowHiddenField() != rOpt.IsShowHiddenField() )
     {
-        static_cast<SwHiddenTxtFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
+        static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_HIDDENTXTFLD ))->
                                             SetHiddenFlag( !rOpt.IsShowHiddenField() );
         bReformat = true;
     }
     if ( mpOpt->IsShowHiddenPara() != rOpt.IsShowHiddenPara() )
     {
-        SwHiddenParaFieldType* pFldType = static_cast<SwHiddenParaFieldType*>(GetDoc()->
-                                          getIDocumentFieldsAccess().GetSysFldType(RES_HIDDENPARAFLD));
-        if( pFldType && pFldType->HasWriterListeners() )
+        SwHiddenParaFieldType* pFieldType = static_cast<SwHiddenParaFieldType*>(GetDoc()->
+                                          getIDocumentFieldsAccess().GetSysFieldType(RES_HIDDENPARAFLD));
+        if( pFieldType && pFieldType->HasWriterListeners() )
         {
-            SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
-            pFldType->ModifyNotification( &aHnt, 0);
+            SwMsgPoolItem aHint( RES_HIDDENPARA_PRINT );
+            pFieldType->ModifyNotification( &aHint, 0);
         }
         bReformat = true;
     }
@@ -2038,7 +2038,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     // - fieldnames apply or not ...
     // ( - SwEndPortion must _no_ longer be generated. )
     // - Of course, the screen is something completely different than the printer ...
-    bReformat = bReformat || mpOpt->IsFldName() != rOpt.IsFldName();
+    bReformat = bReformat || mpOpt->IsFieldName() != rOpt.IsFieldName();
 
     // The map mode is changed, minima/maxima will be attended by UI
     if( mpOpt->GetZoom() != rOpt.GetZoom() && !IsPreview() )
@@ -2104,14 +2104,14 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     {
         // #i44963# Good occasion to check if page sizes in
         // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
-        mpDoc->CheckDefaultPageFmt();
+        mpDoc->CheckDefaultPageFormat();
         CheckBrowseView( true );
     }
 
     pMyWin->Invalidate();
     if ( bReformat )
     {
-        // Nothing helps, we need to send all CntntFrms a
+        // Nothing helps, we need to send all ContentFrms a
         // Prepare, we format anew:
         StartAction();
         Reformat();
@@ -2156,7 +2156,7 @@ void SwViewShell::SetReadonlyOption(bool bSet)
         // so that the flags can be queried properly.
         mpOpt->SetReadonly( false );
 
-        bool bReformat = mpOpt->IsFldName();
+        bool bReformat = mpOpt->IsFieldName();
 
         mpOpt->SetReadonly( bSet );
 
@@ -2269,12 +2269,12 @@ void SwViewShell::InvalidateAccessibleFocus()
 /**
  * invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs #i27138#
  */
-void SwViewShell::InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
-                                                      const SwTxtFrm* _pToTxtFrm )
+void SwViewShell::InvalidateAccessibleParaFlowRelation( const SwTextFrm* _pFromTextFrm,
+                                                      const SwTextFrm* _pToTextFrm )
 {
     if ( GetLayout() && GetLayout()->IsAnyShellAccessible() )
     {
-        Imp()->_InvalidateAccessibleParaFlowRelation( _pFromTxtFrm, _pToTxtFrm );
+        Imp()->_InvalidateAccessibleParaFlowRelation( _pFromTextFrm, _pToTextFrm );
     }
 }
 
@@ -2292,11 +2292,11 @@ void SwViewShell::InvalidateAccessibleParaTextSelection()
 /**
  * invalidate attributes for paragraphs #i88069#
  */
-void SwViewShell::InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
+void SwViewShell::InvalidateAccessibleParaAttrs( const SwTextFrm& rTextFrm )
 {
     if ( GetLayout() && GetLayout()->IsAnyShellAccessible() )
     {
-        Imp()->_InvalidateAccessibleParaAttrs( rTxtFrm );
+        Imp()->_InvalidateAccessibleParaAttrs( rTextFrm );
     }
 }
 

@@ -194,7 +194,7 @@ bool SwWrtShell::RightMargin( bool bSelect, bool bBasicCall  )
 bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
                           bool bSelect, bool bDontMoveRegion )
 {
-    if ( IsCrsrInTbl() )
+    if ( IsCrsrInTable() )
     {
         const bool bBoxSelection = HasBoxSelection();
         if( !m_bBlockMode )
@@ -262,7 +262,7 @@ bool SwWrtShell::GoEnd(bool bKeepArea, bool *pMoveTable)
     if ( pMoveTable && *pMoveTable )
         return MoveTable( fnTableCurr, fnTableEnd );
 
-    if ( IsCrsrInTbl() )
+    if ( IsCrsrInTable() )
     {
         if ( MoveSection( fnSectionCurr, fnSectionEnd ) ||
              MoveTable( fnTableCurr, fnTableEnd ) )
@@ -408,7 +408,7 @@ bool SwWrtShell::PushCrsr(SwTwips lOffset, bool bSelect)
             aPt.Y() = aTmpArea.Top() + aTmpArea.Height() / 2;
 
         aPt.Y() += lOffset;
-        m_aDest = GetCntntPos(aPt,lOffset > 0);
+        m_aDest = GetContentPos(aPt,lOffset > 0);
         m_aDest.X() = aPt.X();
         m_bDestOnStack = true;
     }
@@ -596,7 +596,7 @@ bool SwWrtShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFram
     return bRet;
 }
 
-bool SwWrtShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
+bool SwWrtShell::GotoINetAttr( const SwTextINetFormat& rAttr )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoINetAttr(rAttr);
@@ -657,9 +657,9 @@ bool SwWrtShell::GotoTable( const OUString& rName )
     return bRet;
 }
 
-bool SwWrtShell::GotoFld( const SwFmtFld& rFld ) {
+bool SwWrtShell::GotoFormatField( const SwFormatField& rField ) {
     SwPosition aPos = *GetCrsr()->GetPoint();
-    bool bRet = SwCrsrShell::GotoFld(rFld);
+    bool bRet = SwCrsrShell::GotoFormatField(rField);
     if (bRet)
         m_aNavigationMgr.addEntry(aPos);
     return bRet;
@@ -673,13 +673,13 @@ const SwRangeRedline* SwWrtShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect 
     return pRedline;
 }
 
-bool SwWrtShell::SelectTxtAttr( sal_uInt16 nWhich, const SwTxtAttr* pAttr )
+bool SwWrtShell::SelectTextAttr( sal_uInt16 nWhich, const SwTextAttr* pAttr )
 {
     bool bRet;
     {
         SwMvContext aMvContext(this);
         SttSelect();
-        bRet = SwCrsrShell::SelectTxtAttr( nWhich, false, pAttr );
+        bRet = SwCrsrShell::SelectTextAttr( nWhich, false, pAttr );
     }
     EndSelect();
     return bRet;

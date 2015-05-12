@@ -49,9 +49,9 @@
  *
  * 1. Paragraph contains the Text, Lists, Extra, Register, Doc and HTML
  *    name arrays.
- * 2. Character contains the ChrFmt and HTMLChrFmt name arrays.
+ * 2. Character contains the ChrFormat and HTMLChrFormat name arrays.
  * 3. Page contains the PageDesc name array.
- * 4. Frame contains the FrmFmt name array.
+ * 4. Frame contains the FrameFormat name array.
  * 5. Numbering Rule contains the NumRule name array.
  */
 
@@ -88,9 +88,9 @@ protected:
                             *pRegisterUINameArray,
                             *pDocUINameArray,
                             *pHTMLUINameArray,
-                            *pFrmFmtUINameArray,
-                            *pChrFmtUINameArray,
-                            *pHTMLChrFmtUINameArray,
+                            *pFrameFormatUINameArray,
+                            *pChrFormatUINameArray,
+                            *pHTMLChrFormatUINameArray,
                             *pPageDescUINameArray,
                             *pNumRuleUINameArray,
     // Programmatic Name tables
@@ -100,9 +100,9 @@ protected:
                             *pRegisterProgNameArray,
                             *pDocProgNameArray,
                             *pHTMLProgNameArray,
-                            *pFrmFmtProgNameArray,
-                            *pChrFmtProgNameArray,
-                            *pHTMLChrFmtProgNameArray,
+                            *pFrameFormatProgNameArray,
+                            *pChrFormatProgNameArray,
+                            *pHTMLChrFormatProgNameArray,
                             *pPageDescProgNameArray,
                             *pNumRuleProgNameArray;
 
@@ -171,9 +171,9 @@ public:
     static const ::std::vector<OUString>& GetRegisterUINameArray();
     static const ::std::vector<OUString>& GetDocUINameArray();
     static const ::std::vector<OUString>& GetHTMLUINameArray();
-    static const ::std::vector<OUString>& GetFrmFmtUINameArray();
-    static const ::std::vector<OUString>& GetChrFmtUINameArray();
-    static const ::std::vector<OUString>& GetHTMLChrFmtUINameArray();
+    static const ::std::vector<OUString>& GetFrameFormatUINameArray();
+    static const ::std::vector<OUString>& GetChrFormatUINameArray();
+    static const ::std::vector<OUString>& GetHTMLChrFormatUINameArray();
     static const ::std::vector<OUString>& GetPageDescUINameArray();
     static const ::std::vector<OUString>& GetNumRuleUINameArray();
 
@@ -183,9 +183,9 @@ public:
     static const ::std::vector<OUString>& GetRegisterProgNameArray();
     static const ::std::vector<OUString>& GetDocProgNameArray();
     static const ::std::vector<OUString>& GetHTMLProgNameArray();
-    static const ::std::vector<OUString>& GetFrmFmtProgNameArray();
-    static const ::std::vector<OUString>& GetChrFmtProgNameArray();
-    static const ::std::vector<OUString>& GetHTMLChrFmtProgNameArray();
+    static const ::std::vector<OUString>& GetFrameFormatProgNameArray();
+    static const ::std::vector<OUString>& GetChrFormatProgNameArray();
+    static const ::std::vector<OUString>& GetHTMLChrFormatProgNameArray();
     static const ::std::vector<OUString>& GetPageDescProgNameArray();
     static const ::std::vector<OUString>& GetNumRuleProgNameArray();
 };

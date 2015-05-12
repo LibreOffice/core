@@ -31,7 +31,7 @@
 #include <algorithm>
 
 namespace {
-    void initChangeTrackTextMarkupLists( const SwTxtFrm& rTxtFrm,
+    void initChangeTrackTextMarkupLists( const SwTextFrm& rTextFrm,
                                          SwWrongList*& opChangeTrackInsertionTextMarkupList,
                                          SwWrongList*& opChangeTrackDeletionTextMarkupList,
                                          SwWrongList*& opChangeTrackFormatChangeTextMarkupList )
@@ -40,14 +40,14 @@ namespace {
         opChangeTrackDeletionTextMarkupList = new SwWrongList( WRONGLIST_CHANGETRACKING );
         opChangeTrackFormatChangeTextMarkupList = new SwWrongList( WRONGLIST_CHANGETRACKING );
 
-        if ( !rTxtFrm.GetTxtNode() )
+        if ( !rTextFrm.GetTextNode() )
         {
-            OSL_FAIL( "<initChangeTrackTextMarkupLists(..) - missing <SwTxtNode> instance!" );
+            OSL_FAIL( "<initChangeTrackTextMarkupLists(..) - missing <SwTextNode> instance!" );
             return;
         }
-        const SwTxtNode& rTxtNode( *(rTxtFrm.GetTxtNode()) );
+        const SwTextNode& rTextNode( *(rTextFrm.GetTextNode()) );
 
-        const IDocumentRedlineAccess* pIDocChangeTrack( rTxtNode.getIDocumentRedlineAccess() );
+        const IDocumentRedlineAccess* pIDocChangeTrack( rTextNode.getIDocumentRedlineAccess() );
         if ( !pIDocChangeTrack )
         {
             OSL_FAIL( "<initChangeTrackTextMarkupLists(..) - missing <IDocumentRedlineAccess> instance!" );
@@ -55,47 +55,47 @@ namespace {
         }
 
         if ( !IDocumentRedlineAccess::IsShowChanges( pIDocChangeTrack->GetRedlineMode() ) ||
-             pIDocChangeTrack->GetRedlineTbl().empty() )
+             pIDocChangeTrack->GetRedlineTable().empty() )
         {
             // nothing to do --> empty change track text markup lists.
             return;
         }
 
-        const sal_uInt16 nIdxOfFirstRedlineForTxtNode =
-                    pIDocChangeTrack->GetRedlinePos( rTxtNode, USHRT_MAX );
-        if ( nIdxOfFirstRedlineForTxtNode == USHRT_MAX )
+        const sal_uInt16 nIdxOfFirstRedlineForTextNode =
+                    pIDocChangeTrack->GetRedlinePos( rTextNode, USHRT_MAX );
+        if ( nIdxOfFirstRedlineForTextNode == USHRT_MAX )
         {
             // nothing to do --> empty change track text markup lists.
             return;
         }
 
-        const sal_Int32 nTxtFrmTextStartPos = rTxtFrm.IsFollow()
-                                               ? rTxtFrm.GetOfst()
+        const sal_Int32 nTextFrmTextStartPos = rTextFrm.IsFollow()
+                                               ? rTextFrm.GetOfst()
                                                : 0;
-        const sal_Int32 nTxtFrmTextEndPos = rTxtFrm.HasFollow()
-                                             ? rTxtFrm.GetFollow()->GetOfst()
-                                             : rTxtFrm.GetTxt().getLength();
+        const sal_Int32 nTextFrmTextEndPos = rTextFrm.HasFollow()
+                                             ? rTextFrm.GetFollow()->GetOfst()
+                                             : rTextFrm.GetText().getLength();
 
         // iteration over the redlines which overlap with the text node.
-        const SwRedlineTbl& rRedlineTbl = pIDocChangeTrack->GetRedlineTbl();
-        const sal_uInt16 nRedlineCount( rRedlineTbl.size() );
-        for ( sal_uInt16 nActRedline = nIdxOfFirstRedlineForTxtNode;
+        const SwRedlineTable& rRedlineTable = pIDocChangeTrack->GetRedlineTable();
+        const sal_uInt16 nRedlineCount( rRedlineTable.size() );
+        for ( sal_uInt16 nActRedline = nIdxOfFirstRedlineForTextNode;
               nActRedline < nRedlineCount;
               ++nActRedline)
         {
-            const SwRangeRedline* pActRedline = rRedlineTbl[ nActRedline ];
-            if ( pActRedline->Start()->nNode > rTxtNode.GetIndex() )
+            const SwRangeRedline* pActRedline = rRedlineTable[ nActRedline ];
+            if ( pActRedline->Start()->nNode > rTextNode.GetIndex() )
             {
                 break;
             }
 
-            sal_Int32 nTxtNodeChangeTrackStart(COMPLETE_STRING);
-            sal_Int32 nTxtNodeChangeTrackEnd(COMPLETE_STRING);
-            pActRedline->CalcStartEnd( rTxtNode.GetIndex(),
-                                       nTxtNodeChangeTrackStart,
-                                       nTxtNodeChangeTrackEnd );
-            if ( nTxtNodeChangeTrackStart > nTxtFrmTextEndPos ||
-                 nTxtNodeChangeTrackEnd < nTxtFrmTextStartPos )
+            sal_Int32 nTextNodeChangeTrackStart(COMPLETE_STRING);
+            sal_Int32 nTextNodeChangeTrackEnd(COMPLETE_STRING);
+            pActRedline->CalcStartEnd( rTextNode.GetIndex(),
+                                       nTextNodeChangeTrackStart,
+                                       nTextNodeChangeTrackEnd );
+            if ( nTextNodeChangeTrackStart > nTextFrmTextEndPos ||
+                 nTextNodeChangeTrackEnd < nTextFrmTextStartPos )
             {
                 // Consider only redlines which overlap with the text frame's text.
                 continue;
@@ -126,23 +126,23 @@ namespace {
             }
             if ( pMarkupList )
             {
-                const sal_Int32 nTxtFrmChangeTrackStart =
-                    std::max(nTxtNodeChangeTrackStart, nTxtFrmTextStartPos);
+                const sal_Int32 nTextFrmChangeTrackStart =
+                    std::max(nTextNodeChangeTrackStart, nTextFrmTextStartPos);
 
-                const sal_Int32 nTxtFrmChangeTrackEnd =
-                    std::min(nTxtNodeChangeTrackEnd, nTxtFrmTextEndPos);
+                const sal_Int32 nTextFrmChangeTrackEnd =
+                    std::min(nTextNodeChangeTrackEnd, nTextFrmTextEndPos);
 
                 pMarkupList->Insert( OUString(), 0,
-                                     nTxtFrmChangeTrackStart,
-                                     nTxtFrmChangeTrackEnd - nTxtFrmChangeTrackStart,
+                                     nTextFrmChangeTrackStart,
+                                     nTextFrmChangeTrackEnd - nTextFrmChangeTrackStart,
                                      pMarkupList->Count() );
             }
         } // eof iteration over the redlines which overlap with the text node
     }
 } // eof anonymous namespace
 
-SwParaChangeTrackingInfo::SwParaChangeTrackingInfo( const SwTxtFrm& rTxtFrm )
-    : mrTxtFrm( rTxtFrm )
+SwParaChangeTrackingInfo::SwParaChangeTrackingInfo( const SwTextFrm& rTextFrm )
+    : mrTextFrm( rTextFrm )
     , mpChangeTrackInsertionTextMarkupList( 0 )
     , mpChangeTrackDeletionTextMarkupList( 0 )
     , mpChangeTrackFormatChangeTextMarkupList( 0 )
@@ -176,7 +176,7 @@ const SwWrongList* SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList( co
                 "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..) - <mpChangeTrackDeletionTextMarkupList> expected to be NULL." );
         OSL_ENSURE( mpChangeTrackFormatChangeTextMarkupList == 0,
                 "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..) - <mpChangeTrackFormatChangeTextMarkupList> expected to be NULL." );
-        initChangeTrackTextMarkupLists( mrTxtFrm,
+        initChangeTrackTextMarkupLists( mrTextFrm,
                                         mpChangeTrackInsertionTextMarkupList,
                                         mpChangeTrackDeletionTextMarkupList,
                                         mpChangeTrackFormatChangeTextMarkupList );

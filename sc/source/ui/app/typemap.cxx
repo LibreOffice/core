@@ -111,7 +111,7 @@
 #define aSfxUInt32Item_Impl sc_source_ui_appl_typemap_aSfxUInt32Item_Impl
 #define aSfxVoidItem_Impl sc_source_ui_appl_typemap_aSfxVoidItem_Impl
 #define aSvxCharReliefItem_Impl sc_source_ui_appl_typemap_aSvxCharReliefItem_Impl
-#define aSvxClipboardFmtItem_Impl sc_source_ui_appl_typemap_aSvxClipboardFmtItem_Impl
+#define aSvxClipboardFormatItem_Impl sc_source_ui_appl_typemap_aSvxClipboardFormatItem_Impl
 #define aSvxColorItem_Impl sc_source_ui_appl_typemap_aSvxColorItem_Impl
 #define aSvxContourItem_Impl sc_source_ui_appl_typemap_aSvxContourItem_Impl
 #define aSvxCrossedOutItem_Impl sc_source_ui_appl_typemap_aSvxCrossedOutItem_Impl
@@ -136,7 +136,7 @@
 #undef aSfxUInt32Item_Impl
 #undef aSfxVoidItem_Impl
 #undef aSvxCharReliefItem_Impl
-#undef aSvxClipboardFmtItem_Impl
+#undef aSvxClipboardFormatItem_Impl
 #undef aSvxColorItem_Impl
 #undef aSvxContourItem_Impl
 #undef aSvxCrossedOutItem_Impl

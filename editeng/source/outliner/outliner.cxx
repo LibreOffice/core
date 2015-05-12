@@ -679,17 +679,17 @@ OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, 
     EditFieldInfo aFldInfo( this, rField, nPara, nPos );
     // The FldColor is preset with COL_LIGHTGRAY.
     if ( rpFldColor )
-        aFldInfo.SetFldColor( *rpFldColor );
+        aFldInfo.SetFieldColor( *rpFldColor );
 
     aCalcFieldValueHdl.Call( &aFldInfo );
-    if ( aFldInfo.GetTxtColor() )
+    if ( aFldInfo.GetTextColor() )
     {
         delete rpTxtColor;
-        rpTxtColor = new Color( *aFldInfo.GetTxtColor() );
+        rpTxtColor = new Color( *aFldInfo.GetTextColor() );
     }
 
     delete rpFldColor;
-    rpFldColor = aFldInfo.GetFldColor() ? new Color( *aFldInfo.GetFldColor() ) : 0;
+    rpFldColor = aFldInfo.GetFieldColor() ? new Color( *aFldInfo.GetFieldColor() ) : 0;
 
     return aFldInfo.GetRepresentation();
 }
@@ -1578,9 +1578,9 @@ Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bRetu
         const short nSpaceBefore = pFmt->GetAbsLSpace() + pFmt->GetFirstLineOffset();
 
         const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>( pEditEngine->GetParaAttrib( nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE ) );
-        aTopLeft.X() = rLR.GetTxtLeft() + rLR.GetTxtFirstLineOfst() + nSpaceBefore;
+        aTopLeft.X() = rLR.GetTextLeft() + rLR.GetTextFirstLineOfst() + nSpaceBefore;
 
-        long nBulletWidth = std::max( (long) -rLR.GetTxtFirstLineOfst(), (long) ((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()) );
+        long nBulletWidth = std::max( (long) -rLR.GetTextFirstLineOfst(), (long) ((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()) );
         if ( nBulletWidth < aBulletSize.Width() )   // The Bullet creates its space
             nBulletWidth = aBulletSize.Width();
 

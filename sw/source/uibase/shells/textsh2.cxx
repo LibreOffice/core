@@ -205,13 +205,13 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 sDBName += OUString(DB_DELIM);
                 sDBName += sColumnName;
 
-                SwFldMgr aFldMgr(GetShellPtr());
-                SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, OUString(), 0);
+                SwFieldMgr aFieldMgr(GetShellPtr());
+                SwInsertField_Data aData(TYP_DBFLD, 0, sDBName, OUString(), 0);
                 if(pConnectionItem)
                     aData.m_aDBConnection = static_cast<const SfxUsrAnyItem*>(pConnectionItem)->GetValue();
                 if(pColumnItem)
                     aData.m_aDBColumn = static_cast<const SfxUsrAnyItem*>(pColumnItem)->GetValue();
-                aFldMgr.InsertFld(aData);
+                aFieldMgr.InsertField(aData);
                 SfxViewFrame* pViewFrame = GetView().GetViewFrame();
                 uno::Reference< XDispatchRecorder > xRecorder =
                         pViewFrame->GetBindings().GetRecorder();

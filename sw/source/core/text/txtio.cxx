@@ -57,11 +57,11 @@ static void Error()
             return rOs; \
         }
 
-IMPL_OUTOP( SwTxtPortion )
+IMPL_OUTOP( SwTextPortion )
 IMPL_OUTOP( SwLinePortion )
 IMPL_OUTOP( SwBreakPortion )
 IMPL_OUTOP( SwGluePortion )
-IMPL_OUTOP( SwFldPortion )
+IMPL_OUTOP( SwFieldPortion )
 IMPL_OUTOP( SwHiddenPortion )
 IMPL_OUTOP( SwHyphPortion )
 IMPL_OUTOP( SwFixPortion )
@@ -73,8 +73,8 @@ IMPL_OUTOP( SwBulletPortion )
 IMPL_OUTOP( SwGrfNumPortion )
 IMPL_OUTOP( SwLineLayout )
 IMPL_OUTOP( SwParaPortion )
-IMPL_OUTOP( SwFtnPortion )
-IMPL_OUTOP( SwFtnNumPortion )
+IMPL_OUTOP( SwFootnotePortion )
+IMPL_OUTOP( SwFootnoteNumPortion )
 IMPL_OUTOP( SwTmpEndPortion )
 IMPL_OUTOP( SwHyphStrPortion )
 IMPL_OUTOP( SwExpandPortion )
@@ -180,10 +180,10 @@ SvStream &SwLinePortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwTxtPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwTextPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {TXT:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {TXT:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -191,8 +191,8 @@ SvStream &SwTxtPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwTmpEndPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {END:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {END:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     if( PrtWidth() )
         rOs.WriteCharPtr("(view)");
@@ -202,8 +202,8 @@ SvStream &SwTmpEndPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwBreakPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {BREAK:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {BREAK:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -211,8 +211,8 @@ SvStream &SwBreakPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwKernPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {KERN:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {KERN:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -220,8 +220,8 @@ SvStream &SwKernPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwArrowPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {ARROW:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {ARROW:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -229,8 +229,8 @@ SvStream &SwArrowPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwMultiPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {MULTI:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {MULTI:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -238,8 +238,8 @@ SvStream &SwMultiPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwCombinedPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {COMBINED:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {COMBINED:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -247,8 +247,8 @@ SvStream &SwCombinedPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwLineLayout::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {LINE:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {LINE:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     SwLinePortion *pPos = GetPortion();
     while( pPos )
@@ -263,8 +263,8 @@ SvStream &SwLineLayout::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwGluePortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {GLUE:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {GLUE:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     rOs.WriteCharPtr(" F:").WriteUInt16(GetFixWidth());
     rOs.WriteCharPtr(" G:").WriteInt16(GetPrtGlue());
@@ -274,8 +274,8 @@ SvStream &SwGluePortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwFixPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {FIX:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {FIX:" );
+    rOs.WriteCharPtr(pText);
     SwGluePortion::operator<<( rOs );
     rOs.WriteCharPtr(" Fix:").WriteUInt16(nFix);
     rOs.WriteCharPtr(pClose);
@@ -284,8 +284,8 @@ SvStream &SwFixPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwFlyPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {FLY:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {FLY:" );
+    rOs.WriteCharPtr(pText);
     SwFixPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -293,8 +293,8 @@ SvStream &SwFlyPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwMarginPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {MAR:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {MAR:" );
+    rOs.WriteCharPtr(pText);
     SwGluePortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -302,19 +302,19 @@ SvStream &SwMarginPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwFlyCntPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {FLYCNT:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {FLYCNT:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     if( bDraw )
     {
-        CONSTCHAR( pTxt2, " {DRAWINCNT" );
-        rOs.WriteCharPtr(pTxt2);
+        CONSTCHAR( pText2, " {DRAWINCNT" );
+        rOs.WriteCharPtr(pText2);
         rOs.WriteCharPtr(pClose);
     }
     else
     {
-        CONSTCHAR( pTxt2, " {FRM:" );
-        rOs.WriteCharPtr(pTxt2);
+        CONSTCHAR( pText2, " {FRM:" );
+        rOs.WriteCharPtr(pText2);
         rOs.WriteCharPtr(" {FRM:");
         WriteSwRect(rOs, GetFlyFrm()->Frm()).WriteCharPtr(pClose);
         rOs.WriteCharPtr(" {PRT:");
@@ -327,26 +327,26 @@ SvStream &SwFlyCntPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwExpandPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {EXP:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {EXP:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
-SvStream &SwFtnPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwFootnotePortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {FTN:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {FTN:" );
+    rOs.WriteCharPtr(pText);
     SwExpandPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
-SvStream &SwFtnNumPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwFootnoteNumPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {FTNNUM:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {FTNNUM:" );
+    rOs.WriteCharPtr(pText);
     SwNumberPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -354,8 +354,8 @@ SvStream &SwFtnNumPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwNumberPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {NUMBER:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {NUMBER:" );
+    rOs.WriteCharPtr(pText);
     SwExpandPortion::operator<<( rOs );
     rOs.WriteCharPtr(" Exp:\"").WriteChar('\"');
     rOs.WriteCharPtr(pClose);
@@ -364,8 +364,8 @@ SvStream &SwNumberPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwBulletPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {BULLET:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {BULLET:" );
+    rOs.WriteCharPtr(pText);
     SwNumberPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -373,8 +373,8 @@ SvStream &SwBulletPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwGrfNumPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {GRFNUM:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {GRFNUM:" );
+    rOs.WriteCharPtr(pText);
     SwNumberPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -382,35 +382,35 @@ SvStream &SwGrfNumPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwHiddenPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {Hidden:" );
-    rOs.WriteCharPtr(pTxt);
-    SwFldPortion::operator<<( rOs );
+    CONSTCHAR( pText, " {Hidden:" );
+    rOs.WriteCharPtr(pText);
+    SwFieldPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwToxPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {TOX:" );
-    rOs.WriteCharPtr(pTxt);
-    SwTxtPortion::operator<<( rOs );
+    CONSTCHAR( pText, " {TOX:" );
+    rOs.WriteCharPtr(pText);
+    SwTextPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwRefPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {Ref:" );
-    rOs.WriteCharPtr(pTxt);
-    SwTxtPortion::operator<<( rOs );
+    CONSTCHAR( pText, " {Ref:" );
+    rOs.WriteCharPtr(pText);
+    SwTextPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwIsoToxPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {ISOTOX:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {ISOTOX:" );
+    rOs.WriteCharPtr(pText);
     SwToxPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -418,8 +418,8 @@ SvStream &SwIsoToxPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwIsoRefPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {ISOREF:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {ISOREF:" );
+    rOs.WriteCharPtr(pText);
     SwRefPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -427,8 +427,8 @@ SvStream &SwIsoRefPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwHyphPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {HYPH:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {HYPH:" );
+    rOs.WriteCharPtr(pText);
     SwExpandPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -436,8 +436,8 @@ SvStream &SwHyphPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwHyphStrPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {HYPHSTR:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {HYPHSTR:" );
+    rOs.WriteCharPtr(pText);
     SwExpandPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -445,8 +445,8 @@ SvStream &SwHyphStrPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwSoftHyphPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {SOFTHYPH:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {SOFTHYPH:" );
+    rOs.WriteCharPtr(pText);
     SwHyphPortion::operator<<( rOs );
     rOs.WriteCharPtr(IsExpand() ? " on" : " off");
     rOs.WriteCharPtr(pClose);
@@ -455,8 +455,8 @@ SvStream &SwSoftHyphPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwSoftHyphStrPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {SOFTHYPHSTR:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {SOFTHYPHSTR:" );
+    rOs.WriteCharPtr(pText);
     SwHyphStrPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -464,17 +464,17 @@ SvStream &SwSoftHyphStrPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwBlankPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {BLANK:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {BLANK:" );
+    rOs.WriteCharPtr(pText);
     SwExpandPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
-SvStream &SwFldPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwFieldPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {FLD:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {FLD:" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     if( IsFollow() )
         rOs.WriteCharPtr(" F!");
@@ -484,8 +484,8 @@ SvStream &SwFldPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwPostItsPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {POSTITS" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {POSTITS" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -493,8 +493,8 @@ SvStream &SwPostItsPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwTabPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {TAB" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {TAB" );
+    rOs.WriteCharPtr(pText);
     SwFixPortion::operator<<( rOs );
     rOs.WriteCharPtr(" T:").WriteUInt16(nTabPos);
     if( IsFilled() )
@@ -505,8 +505,8 @@ SvStream &SwTabPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwTabLeftPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {TABLEFT" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {TABLEFT" );
+    rOs.WriteCharPtr(pText);
     SwTabPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -514,8 +514,8 @@ SvStream &SwTabLeftPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwTabRightPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {TABRIGHT" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {TABRIGHT" );
+    rOs.WriteCharPtr(pText);
     SwTabPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -523,8 +523,8 @@ SvStream &SwTabRightPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwTabCenterPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {TABCENTER" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {TABCENTER" );
+    rOs.WriteCharPtr(pText);
     SwTabPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -532,8 +532,8 @@ SvStream &SwTabCenterPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwTabDecimalPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {TABDECIMAL" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {TABDECIMAL" );
+    rOs.WriteCharPtr(pText);
     SwTabPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -541,8 +541,8 @@ SvStream &SwTabDecimalPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwParaPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {PAR" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {PAR" );
+    rOs.WriteCharPtr(pText);
     SwLineLayout::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -550,8 +550,8 @@ SvStream &SwParaPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwHolePortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {HOLE" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {HOLE" );
+    rOs.WriteCharPtr(pText);
     SwLinePortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
@@ -559,26 +559,26 @@ SvStream &SwHolePortion::operator<<( SvStream &rOs ) const //$ ostream
 
 SvStream &SwQuoVadisPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {QUOVADIS" );
-    rOs.WriteCharPtr(pTxt);
-    SwFldPortion::operator<<( rOs );
+    CONSTCHAR( pText, " {QUOVADIS" );
+    rOs.WriteCharPtr(pText);
+    SwFieldPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
 SvStream &SwErgoSumPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {ERGOSUM" );
-    rOs.WriteCharPtr(pTxt);
-    SwFldPortion::operator<<( rOs );
+    CONSTCHAR( pText, " {ERGOSUM" );
+    rOs.WriteCharPtr(pText);
+    SwFieldPortion::operator<<( rOs );
     rOs.WriteCharPtr(pClose);
     return rOs;
 }
 
-SvStream &operator<<( SvStream &rOs, const SwTxtSizeInfo &rInf ) //$ ostream
+SvStream &operator<<( SvStream &rOs, const SwTextSizeInfo &rInf ) //$ ostream
 {
-    CONSTCHAR( pTxt, " {SIZEINFO:" );
-    rOs.WriteCharPtr(pTxt);
+    CONSTCHAR( pText, " {SIZEINFO:" );
+    rOs.WriteCharPtr(pText);
     rOs.WriteChar(' ').WriteCharPtr(rInf.OnWin() ? "WIN:" : "PRT:");
     rOs.WriteCharPtr(" Idx:").WriteInt32(rInf.GetIdx());
     rOs.WriteCharPtr(" Len:").WriteInt32(rInf.GetLen());
@@ -588,9 +588,9 @@ SvStream &operator<<( SvStream &rOs, const SwTxtSizeInfo &rInf ) //$ ostream
 
 SvStream &SwDropPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
-    CONSTCHAR( pTxt, " {DROP:" );
-    rOs.WriteCharPtr(pTxt);
-    SwTxtPortion::operator<<( rOs );
+    CONSTCHAR( pText, " {DROP:" );
+    rOs.WriteCharPtr(pText);
+    SwTextPortion::operator<<( rOs );
     if( pPart && nDropHeight )
     {
         rOs.WriteCharPtr(" H:").WriteUInt16(nDropHeight);

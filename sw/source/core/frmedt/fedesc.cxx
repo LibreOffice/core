@@ -61,12 +61,12 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     SET_CURR_SHELL( this );
     while ( pPage )
     {
-        pFlow = pPage->FindFirstBodyCntnt();
+        pFlow = pPage->FindFirstBodyContent();
         if ( pFlow )
         {
             if ( pFlow->IsInTab() )
                 pFlow = pFlow->FindTabFrm();
-            const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
+            const SwFormatPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
             if( rPgDesc.GetPageDesc() )
             {
                 // wir haben ihn den Schlingel
@@ -79,24 +79,24 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     if ( !pPage )
     {
         pPage = static_cast<SwPageFrm*>(GetLayout()->Lower());
-        pFlow = pPage->FindFirstBodyCntnt();
+        pFlow = pPage->FindFirstBodyContent();
         if ( !pFlow )
         {
             pPage   = static_cast<SwPageFrm*>(pPage->GetNext());
-            pFlow = pPage->FindFirstBodyCntnt();
+            pFlow = pPage->FindFirstBodyContent();
             OSL_ENSURE( pFlow, "Dokuemnt ohne Inhalt?!?" );
         }
     }
 
     // use pagenumber
-    SwFmtPageDesc aNew( &rDesc );
+    SwFormatPageDesc aNew( &rDesc );
     aNew.SetNumOffset( oPageNumOffset );
 
     if ( pFlow->IsInTab() )
-        GetDoc()->SetAttr( aNew, *(SwFmt*)pFlow->FindTabFrm()->GetFmt() );
+        GetDoc()->SetAttr( aNew, *(SwFormat*)pFlow->FindTabFrm()->GetFormat() );
     else
     {
-        SwPaM aPaM( *static_cast<const SwCntntFrm*>(pFlow)->GetNode() );
+        SwPaM aPaM( *static_cast<const SwContentFrm*>(pFlow)->GetNode() );
         GetDoc()->getIDocumentContentOperations().InsertPoolItem( aPaM, aNew );
     }
     EndAllActionAndCall();
@@ -178,7 +178,7 @@ sal_uInt16 SwFEShell::GetCurPageDesc( const bool bCalcFrm ) const
 // Otherwise return 0 pointer
 const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
 {
-    const SwCntntNode* pCNd;
+    const SwContentNode* pCNd;
     const SwFrm* pMkFrm, *pPtFrm;
     const SwPageDesc* pFnd, *pRetDesc = reinterpret_cast<SwPageDesc*>(sal_IntPtr(-1));
     const Point aNulPt;
@@ -186,14 +186,14 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
     {
 
-        if( 0 != (pCNd = rPaM.GetCntntNode() ) &&
+        if( 0 != (pCNd = rPaM.GetContentNode() ) &&
             0 != ( pPtFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, false )) )
             pPtFrm = pPtFrm->FindPageFrm();
         else
             pPtFrm = 0;
 
         if( rPaM.HasMark() &&
-            0 != (pCNd = rPaM.GetCntntNode( false ) ) &&
+            0 != (pCNd = rPaM.GetContentNode( false ) ) &&
             0 != ( pMkFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, false )) )
             pMkFrm = pMkFrm->FindPageFrm();
         else

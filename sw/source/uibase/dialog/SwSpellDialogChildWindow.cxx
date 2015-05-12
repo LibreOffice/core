@@ -748,7 +748,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
     {
         m_pSpellState->m_bTextObjectsCollected = true;
         std::list<SdrTextObj*> aTextObjs;
-        SwDrawContact::GetTextObjectsFromFmt( aTextObjs, pDoc );
+        SwDrawContact::GetTextObjectsFromFormat( aTextObjs, pDoc );
         if(pCurrentTextObj)
         {
             m_pSpellState->m_aTextObjects.remove(pCurrentTextObj);

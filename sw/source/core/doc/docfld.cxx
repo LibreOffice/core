@@ -68,169 +68,169 @@ using namespace ::com::sun::star::uno;
 
 // the StartIndex can be supplied optionally (e.g. if it was queried before - is a virtual
 // method otherwise!)
-_SetGetExpFld::_SetGetExpFld(
+_SetGetExpField::_SetGetExpField(
     const SwNodeIndex& rNdIdx,
-    const SwTxtFld* pFld,
+    const SwTextField* pField,
     const SwIndex* pIdx )
 {
-    eSetGetExpFldType = TEXTFIELD;
-    CNTNT.pTxtFld = pFld;
+    eSetGetExpFieldType = TEXTFIELD;
+    CNTNT.pTextField = pField;
     nNode = rNdIdx.GetIndex();
     if( pIdx )
-        nCntnt = pIdx->GetIndex();
-    else if( pFld )
-        nCntnt = pFld->GetStart();
+        nContent = pIdx->GetIndex();
+    else if( pField )
+        nContent = pField->GetStart();
     else
-        nCntnt = 0;
+        nContent = 0;
 }
 
-_SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx,
-                            const SwTxtINetFmt& rINet, const SwIndex* pIdx )
+_SetGetExpField::_SetGetExpField( const SwNodeIndex& rNdIdx,
+                            const SwTextINetFormat& rINet, const SwIndex* pIdx )
 {
-    eSetGetExpFldType = TEXTINET;
-    CNTNT.pTxtINet = &rINet;
+    eSetGetExpFieldType = TEXTINET;
+    CNTNT.pTextINet = &rINet;
     nNode = rNdIdx.GetIndex();
     if( pIdx )
-        nCntnt = pIdx->GetIndex();
+        nContent = pIdx->GetIndex();
     else
-        nCntnt = rINet.GetStart();
+        nContent = rINet.GetStart();
 }
 
 // Extension for Sections:
 // these always have content position 0xffffffff!
 // There is never a field on this, only up to COMPLETE_STRING possible
-_SetGetExpFld::_SetGetExpFld( const SwSectionNode& rSectNd,
+_SetGetExpField::_SetGetExpField( const SwSectionNode& rSectNd,
                                 const SwPosition* pPos )
 {
-    eSetGetExpFldType = SECTIONNODE;
+    eSetGetExpFieldType = SECTIONNODE;
     CNTNT.pSection = &rSectNd.GetSection();
 
     if( pPos )
     {
         nNode = pPos->nNode.GetIndex();
-        nCntnt = pPos->nContent.GetIndex();
+        nContent = pPos->nContent.GetIndex();
     }
     else
     {
         nNode = rSectNd.GetIndex();
-        nCntnt = 0;
+        nContent = 0;
     }
 }
 
-_SetGetExpFld::_SetGetExpFld( const SwTableBox& rTBox, const SwPosition* pPos )
+_SetGetExpField::_SetGetExpField( const SwTableBox& rTBox, const SwPosition* pPos )
 {
-    eSetGetExpFldType = TABLEBOX;
+    eSetGetExpFieldType = TABLEBOX;
     CNTNT.pTBox = &rTBox;
 
     if( pPos )
     {
         nNode = pPos->nNode.GetIndex();
-        nCntnt = pPos->nContent.GetIndex();
+        nContent = pPos->nContent.GetIndex();
     }
     else
     {
         nNode = 0;
-        nCntnt = 0;
+        nContent = 0;
         if( rTBox.GetSttNd() )
         {
             SwNodeIndex aIdx( *rTBox.GetSttNd() );
-            const SwCntntNode* pNd = aIdx.GetNode().GetNodes().GoNext( &aIdx );
+            const SwContentNode* pNd = aIdx.GetNode().GetNodes().GoNext( &aIdx );
             if( pNd )
                 nNode = pNd->GetIndex();
         }
     }
 }
 
-_SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx,
-                                const SwTxtTOXMark& rTOX,
+_SetGetExpField::_SetGetExpField( const SwNodeIndex& rNdIdx,
+                                const SwTextTOXMark& rTOX,
                                 const SwIndex* pIdx )
 {
-    eSetGetExpFldType = TEXTTOXMARK;
-    CNTNT.pTxtTOX = &rTOX;
+    eSetGetExpFieldType = TEXTTOXMARK;
+    CNTNT.pTextTOX = &rTOX;
     nNode = rNdIdx.GetIndex();
     if( pIdx )
-        nCntnt = pIdx->GetIndex();
+        nContent = pIdx->GetIndex();
     else
-        nCntnt = rTOX.GetStart();
+        nContent = rTOX.GetStart();
 }
 
-_SetGetExpFld::_SetGetExpFld( const SwPosition& rPos )
+_SetGetExpField::_SetGetExpField( const SwPosition& rPos )
 {
-    eSetGetExpFldType = CRSRPOS;
+    eSetGetExpFieldType = CRSRPOS;
     CNTNT.pPos = &rPos;
     nNode = rPos.nNode.GetIndex();
-    nCntnt = rPos.nContent.GetIndex();
+    nContent = rPos.nContent.GetIndex();
 }
 
-_SetGetExpFld::_SetGetExpFld( const SwFlyFrmFmt& rFlyFmt,
+_SetGetExpField::_SetGetExpField( const SwFlyFrameFormat& rFlyFormat,
                                 const SwPosition* pPos  )
 {
-    eSetGetExpFldType = FLYFRAME;
-    CNTNT.pFlyFmt = &rFlyFmt;
+    eSetGetExpFieldType = FLYFRAME;
+    CNTNT.pFlyFormat = &rFlyFormat;
     if( pPos )
     {
         nNode = pPos->nNode.GetIndex();
-        nCntnt = pPos->nContent.GetIndex();
+        nContent = pPos->nContent.GetIndex();
     }
     else
     {
-        const SwFmtCntnt& rCntnt = rFlyFmt.GetCntnt();
-        nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
-        nCntnt = 0;
+        const SwFormatContent& rContent = rFlyFormat.GetContent();
+        nNode = rContent.GetContentIdx()->GetIndex() + 1;
+        nContent = 0;
     }
 }
 
-void _SetGetExpFld::GetPosOfContent( SwPosition& rPos ) const
+void _SetGetExpField::GetPosOfContent( SwPosition& rPos ) const
 {
-    const SwNode* pNd = GetNodeFromCntnt();
+    const SwNode* pNd = GetNodeFromContent();
     if( pNd )
-        pNd = pNd->GetCntntNode();
+        pNd = pNd->GetContentNode();
 
     if( pNd )
     {
         rPos.nNode = *pNd;
-        rPos.nContent.Assign( const_cast<SwCntntNode*>(static_cast<const SwCntntNode*>(pNd)), GetCntPosFromCntnt() );
+        rPos.nContent.Assign( const_cast<SwContentNode*>(static_cast<const SwContentNode*>(pNd)), GetCntPosFromContent() );
     }
     else
     {
         rPos.nNode = nNode;
-        rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), nCntnt );
+        rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(), nContent );
     }
 }
 
-void _SetGetExpFld::SetBodyPos( const SwCntntFrm& rFrm )
+void _SetGetExpField::SetBodyPos( const SwContentFrm& rFrm )
 {
     if( !rFrm.IsInDocBody() )
     {
         SwNodeIndex aIdx( *rFrm.GetNode() );
         SwDoc& rDoc = *aIdx.GetNodes().GetDoc();
         SwPosition aPos( aIdx );
-        bool const bResult = ::GetBodyTxtNode( rDoc, aPos, rFrm );
+        bool const bResult = ::GetBodyTextNode( rDoc, aPos, rFrm );
         OSL_ENSURE(bResult, "Where is the field?");
         (void) bResult; // unused in non-debug
         nNode = aPos.nNode.GetIndex();
-        nCntnt = aPos.nContent.GetIndex();
+        nContent = aPos.nContent.GetIndex();
     }
 }
 
-bool _SetGetExpFld::operator==( const _SetGetExpFld& rFld ) const
+bool _SetGetExpField::operator==( const _SetGetExpField& rField ) const
 {
-    return nNode == rFld.nNode
-           && nCntnt == rFld.nCntnt
-           && ( !CNTNT.pTxtFld
-                || !rFld.CNTNT.pTxtFld
-                || CNTNT.pTxtFld == rFld.CNTNT.pTxtFld );
+    return nNode == rField.nNode
+           && nContent == rField.nContent
+           && ( !CNTNT.pTextField
+                || !rField.CNTNT.pTextField
+                || CNTNT.pTextField == rField.CNTNT.pTextField );
 }
 
-bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
+bool _SetGetExpField::operator<( const _SetGetExpField& rField ) const
 {
-    if( nNode < rFld.nNode || ( nNode == rFld.nNode && nCntnt < rFld.nCntnt ))
+    if( nNode < rField.nNode || ( nNode == rField.nNode && nContent < rField.nContent ))
         return true;
-    else if( nNode != rFld.nNode || nCntnt != rFld.nCntnt )
+    else if( nNode != rField.nNode || nContent != rField.nContent )
         return false;
 
-    const SwNode *pFirst = GetNodeFromCntnt(),
-                 *pNext = rFld.GetNodeFromCntnt();
+    const SwNode *pFirst = GetNodeFromContent(),
+                 *pNext = rField.GetNodeFromContent();
 
     // Position is the same: continue only if both field pointers are set!
     if( !pFirst || !pNext )
@@ -241,23 +241,23 @@ bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
     {
         // is one in the table?
         const SwNode *pFirstStt, *pNextStt;
-        const SwTableNode* pTblNd = pFirst->FindTableNode();
-        if( pTblNd )
-            pFirstStt = pTblNd->StartOfSectionNode();
+        const SwTableNode* pTableNd = pFirst->FindTableNode();
+        if( pTableNd )
+            pFirstStt = pTableNd->StartOfSectionNode();
         else
             pFirstStt = pFirst->StartOfSectionNode();
 
-        if( 0 != ( pTblNd = pNext->FindTableNode() ) )
-            pNextStt = pTblNd->StartOfSectionNode();
+        if( 0 != ( pTableNd = pNext->FindTableNode() ) )
+            pNextStt = pTableNd->StartOfSectionNode();
         else
             pNextStt = pNext->StartOfSectionNode();
 
         if( pFirstStt != pNextStt )
         {
-            if( pFirst->IsTxtNode() && pNext->IsTxtNode() &&
+            if( pFirst->IsTextNode() && pNext->IsTextNode() &&
                 ( pFirst->FindFlyStartNode() || pNext->FindFlyStartNode() ))
             {
-                return ::IsFrameBehind( *pNext->GetTxtNode(), nCntnt, *pFirst->GetTxtNode(), nCntnt );
+                return ::IsFrameBehind( *pNext->GetTextNode(), nContent, *pFirst->GetTextNode(), nContent );
             }
             return pFirstStt->GetIndex() < pNextStt->GetIndex();
         }
@@ -268,25 +268,25 @@ bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
         return pFirst->GetIndex() < pNext->GetIndex();
 
     // same Node in the Section, check Position in the Node
-    return GetCntPosFromCntnt() < rFld.GetCntPosFromCntnt();
+    return GetCntPosFromContent() < rField.GetCntPosFromContent();
 }
 
-const SwNode* _SetGetExpFld::GetNodeFromCntnt() const
+const SwNode* _SetGetExpField::GetNodeFromContent() const
 {
     const SwNode* pRet = 0;
-    if( CNTNT.pTxtFld )
-        switch( eSetGetExpFldType )
+    if( CNTNT.pTextField )
+        switch( eSetGetExpFieldType )
         {
         case TEXTFIELD:
-            pRet = &CNTNT.pTxtFld->GetTxtNode();
+            pRet = &CNTNT.pTextField->GetTextNode();
             break;
 
         case TEXTINET:
-            pRet = &CNTNT.pTxtINet->GetTxtNode();
+            pRet = &CNTNT.pTextINet->GetTextNode();
             break;
 
         case SECTIONNODE:
-            pRet = CNTNT.pSection->GetFmt()->GetSectionNode();
+            pRet = CNTNT.pSection->GetFormat()->GetSectionNode();
             break;
 
         case CRSRPOS:
@@ -294,7 +294,7 @@ const SwNode* _SetGetExpFld::GetNodeFromCntnt() const
             break;
 
         case TEXTTOXMARK:
-            pRet = &CNTNT.pTxtTOX->GetTxtNode();
+            pRet = &CNTNT.pTextTOX->GetTextNode();
             break;
 
         case TABLEBOX:
@@ -307,7 +307,7 @@ const SwNode* _SetGetExpFld::GetNodeFromCntnt() const
 
         case FLYFRAME:
             {
-                SwNodeIndex aIdx( *CNTNT.pFlyFmt->GetCntnt().GetCntntIdx() );
+                SwNodeIndex aIdx( *CNTNT.pFlyFormat->GetContent().GetContentIdx() );
                 pRet = aIdx.GetNode().GetNodes().GoNext( &aIdx );
             }
             break;
@@ -315,16 +315,16 @@ const SwNode* _SetGetExpFld::GetNodeFromCntnt() const
     return pRet;
 }
 
-sal_Int32 _SetGetExpFld::GetCntPosFromCntnt() const
+sal_Int32 _SetGetExpField::GetCntPosFromContent() const
 {
     sal_Int32 nRet = 0;
-    if( CNTNT.pTxtFld )
-        switch( eSetGetExpFldType )
+    if( CNTNT.pTextField )
+        switch( eSetGetExpFieldType )
         {
         case TEXTFIELD:
         case TEXTINET:
         case TEXTTOXMARK:
-            nRet = CNTNT.pTxtFld->GetStart();
+            nRet = CNTNT.pTextField->GetStart();
             break;
         case CRSRPOS:
             nRet =  CNTNT.pPos->nContent.GetIndex();
@@ -343,10 +343,10 @@ _HashStr::_HashStr( const OUString& rName, const OUString& rText,
 }
 
 /// Look up the Name, if it is present, return it's String, otherwise return an empty String
-OUString LookString( SwHash** ppTbl, sal_uInt16 nSize, const OUString& rName,
+OUString LookString( SwHash** ppTable, sal_uInt16 nSize, const OUString& rName,
                      sal_uInt16* pPos )
 {
-    SwHash* pFnd = Find( comphelper::string::strip(rName, ' '), ppTbl, nSize, pPos );
+    SwHash* pFnd = Find( comphelper::string::strip(rName, ' '), ppTable, nSize, pPos );
     if( pFnd )
         return static_cast<_HashStr*>(pFnd)->aSetStr;
 
@@ -363,12 +363,12 @@ const SwDBData& SwDoc::GetDBDesc()
 #if HAVE_FEATURE_DBCONNECTIVITY
     if(maDBData.sDataSource.isEmpty())
     {
-        const SwFldTypes::size_type nSize = getIDocumentFieldsAccess().GetFldTypes()->size();
-        for(SwFldTypes::size_type i = 0; i < nSize && maDBData.sDataSource.isEmpty(); ++i)
+        const SwFieldTypes::size_type nSize = getIDocumentFieldsAccess().GetFieldTypes()->size();
+        for(SwFieldTypes::size_type i = 0; i < nSize && maDBData.sDataSource.isEmpty(); ++i)
         {
-            SwFieldType& rFldType = *((*getIDocumentFieldsAccess().GetFldTypes())[i]);
-            sal_uInt16 nWhich = rFldType.Which();
-            if(IsUsed(rFldType))
+            SwFieldType& rFieldType = *((*getIDocumentFieldsAccess().GetFieldTypes())[i]);
+            sal_uInt16 nWhich = rFieldType.Which();
+            if(IsUsed(rFieldType))
             {
                 switch(nWhich)
                 {
@@ -377,15 +377,15 @@ const SwDBData& SwDoc::GetDBDesc()
                     case RES_DBNUMSETFLD:
                     case RES_DBSETNUMBERFLD:
                     {
-                        SwIterator<SwFmtFld,SwFieldType> aIter( rFldType );
-                        for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+                        SwIterator<SwFormatField,SwFieldType> aIter( rFieldType );
+                        for( SwFormatField* pField = aIter.First(); pField; pField = aIter.Next() )
                         {
-                            if(pFld->IsFldInDoc())
+                            if(pField->IsFieldInDoc())
                             {
                                 if(RES_DBFLD == nWhich)
-                                    maDBData = (static_cast < SwDBFieldType * > (pFld->GetField()->GetTyp()))->GetDBData();
+                                    maDBData = (static_cast < SwDBFieldType * > (pField->GetField()->GetTyp()))->GetDBData();
                                 else
-                                    maDBData = (static_cast < SwDBNameInfField* > (pFld->GetField()))->GetRealDBData();
+                                    maDBData = (static_cast < SwDBNameInfField* > (pField->GetField()))->GetRealDBData();
                                 break;
                             }
                         }
@@ -438,7 +438,7 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
         pAllDBNames = &aAllDBNames;
     }
 
-    SwSectionFmts& rArr = GetSections();
+    SwSectionFormats& rArr = GetSections();
     for (auto n = rArr.size(); n; )
     {
         SwSection* pSect = rArr[ --n ]->GetSection();
@@ -458,35 +458,35 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
         if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) ))
             continue;
 
-        const SwFmtFld* pFmtFld = static_cast<const SwFmtFld*>(pItem);
-        const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-        if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+        const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
+        const SwTextField* pTextField = pFormatField->GetTextField();
+        if( !pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes() )
             continue;
 
-        const SwField* pFld = pFmtFld->GetField();
-        switch( pFld->GetTyp()->Which() )
+        const SwField* pField = pFormatField->GetField();
+        switch( pField->GetTyp()->Which() )
         {
             case RES_DBFLD:
                 AddUsedDBToList( rDBNameList,
-                                lcl_DBDataToString(static_cast<const SwDBField*>(pFld)->GetDBData() ));
+                                lcl_DBDataToString(static_cast<const SwDBField*>(pField)->GetDBData() ));
                 break;
 
             case RES_DBSETNUMBERFLD:
             case RES_DBNAMEFLD:
                 AddUsedDBToList( rDBNameList,
-                                lcl_DBDataToString(static_cast<const SwDBNameInfField*>(pFld)->GetRealDBData() ));
+                                lcl_DBDataToString(static_cast<const SwDBNameInfField*>(pField)->GetRealDBData() ));
                 break;
 
             case RES_DBNUMSETFLD:
             case RES_DBNEXTSETFLD:
                 AddUsedDBToList( rDBNameList,
-                                lcl_DBDataToString(static_cast<const SwDBNameInfField*>(pFld)->GetRealDBData() ));
+                                lcl_DBDataToString(static_cast<const SwDBNameInfField*>(pField)->GetRealDBData() ));
                 // no break  // JP: is that right like that?
 
             case RES_HIDDENTXTFLD:
             case RES_HIDDENPARAFLD:
                 AddUsedDBToList(rDBNameList, FindUsedDBs( *pAllDBNames,
-                                            pFld->GetPar1(), aUsedDBNames ));
+                                            pField->GetPar1(), aUsedDBNames ));
                 aUsedDBNames.clear();
                 break;
 
@@ -494,7 +494,7 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
             case RES_GETEXPFLD:
             case RES_TABLEFLD:
                 AddUsedDBToList(rDBNameList, FindUsedDBs( *pAllDBNames,
-                                        pFld->GetFormula(), aUsedDBNames ));
+                                        pField->GetFormula(), aUsedDBNames ));
                 aUsedDBNames.clear();
                 break;
         }
@@ -595,7 +595,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
     aNewDBData.sCommand = rNewName.getToken(1, DB_DELIM);
     aNewDBData.nCommandType = (short)rNewName.getToken(2, DB_DELIM).toInt32();
 
-    SwSectionFmts& rArr = GetSections();
+    SwSectionFormats& rArr = GetSections();
     for (auto n = rArr.size(); n; )
     {
         SwSection* pSect = rArr[ --n ]->GetSection();
@@ -614,30 +614,30 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
         if( !pItem )
             continue;
 
-        SwFmtFld* pFmtFld = const_cast<SwFmtFld*>(static_cast<const SwFmtFld*>(pItem));
-        SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-        if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+        SwFormatField* pFormatField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem));
+        SwTextField* pTextField = pFormatField->GetTextField();
+        if( !pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes() )
             continue;
 
-        SwField* pFld = pFmtFld->GetField();
+        SwField* pField = pFormatField->GetField();
         bool bExpand = false;
 
-        switch( pFld->GetTyp()->Which() )
+        switch( pField->GetTyp()->Which() )
         {
             case RES_DBFLD:
 #if HAVE_FEATURE_DBCONNECTIVITY
-                if( IsNameInArray( rOldNames, lcl_DBDataToString(static_cast<SwDBField*>(pFld)->GetDBData())))
+                if( IsNameInArray( rOldNames, lcl_DBDataToString(static_cast<SwDBField*>(pField)->GetDBData())))
                 {
-                    SwDBFieldType* pOldTyp = static_cast<SwDBFieldType*>(pFld->GetTyp());
+                    SwDBFieldType* pOldTyp = static_cast<SwDBFieldType*>(pField->GetTyp());
 
-                    SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(getIDocumentFieldsAccess().InsertFldType(
+                    SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(getIDocumentFieldsAccess().InsertFieldType(
                             SwDBFieldType(this, pOldTyp->GetColumnName(), aNewDBData)));
 
-                    pFmtFld->RegisterToFieldType( *pTyp );
-                    pFld->ChgTyp(pTyp);
+                    pFormatField->RegisterToFieldType( *pTyp );
+                    pField->ChgTyp(pTyp);
 
-                    static_cast<SwDBField*>(pFld)->ClearInitialized();
-                    static_cast<SwDBField*>(pFld)->InitContent();
+                    static_cast<SwDBField*>(pField)->ClearInitialized();
+                    static_cast<SwDBField*>(pField)->InitContent();
 
                     bExpand = true;
                 }
@@ -647,9 +647,9 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
             case RES_DBSETNUMBERFLD:
             case RES_DBNAMEFLD:
                 if( IsNameInArray( rOldNames,
-                                lcl_DBDataToString(static_cast<SwDBNameInfField*>(pFld)->GetRealDBData())))
+                                lcl_DBDataToString(static_cast<SwDBNameInfField*>(pField)->GetRealDBData())))
                 {
-                    static_cast<SwDBNameInfField*>(pFld)->SetDBData(aNewDBData);
+                    static_cast<SwDBNameInfField*>(pField)->SetDBData(aNewDBData);
                     bExpand = true;
                 }
                 break;
@@ -657,27 +657,27 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
             case RES_DBNUMSETFLD:
             case RES_DBNEXTSETFLD:
                 if( IsNameInArray( rOldNames,
-                                lcl_DBDataToString(static_cast<SwDBNameInfField*>(pFld)->GetRealDBData())))
+                                lcl_DBDataToString(static_cast<SwDBNameInfField*>(pField)->GetRealDBData())))
                 {
-                    static_cast<SwDBNameInfField*>(pFld)->SetDBData(aNewDBData);
+                    static_cast<SwDBNameInfField*>(pField)->SetDBData(aNewDBData);
                 }
                 // no break;
             case RES_HIDDENTXTFLD:
             case RES_HIDDENPARAFLD:
-                pFld->SetPar1( ReplaceUsedDBs(rOldNames, rNewName, pFld->GetPar1()) );
+                pField->SetPar1( ReplaceUsedDBs(rOldNames, rNewName, pField->GetPar1()) );
                 bExpand = true;
                 break;
 
             case RES_SETEXPFLD:
             case RES_GETEXPFLD:
             case RES_TABLEFLD:
-                pFld->SetPar2( ReplaceUsedDBs(rOldNames, rNewName, pFld->GetFormula()) );
+                pField->SetPar2( ReplaceUsedDBs(rOldNames, rNewName, pField->GetFormula()) );
                 bExpand = true;
                 break;
         }
 
         if (bExpand)
-            pTxtFld->ExpandTxtFld( true );
+            pTextField->ExpandTextField( true );
     }
     getIDocumentState().SetModified();
 #endif
@@ -747,14 +747,14 @@ bool SwDoc::IsNameInArray( const std::vector<OUString>& rArr, const OUString& rN
 
 void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
 {
-    const SwFldTypes::size_type nSize = getIDocumentFieldsAccess().GetFldTypes()->size();
+    const SwFieldTypes::size_type nSize = getIDocumentFieldsAccess().GetFieldTypes()->size();
 
-    for( SwFldTypes::size_type i = INIT_FLDTYPES; i < nSize; ++i )
+    for( SwFieldTypes::size_type i = INIT_FLDTYPES; i < nSize; ++i )
     {
-        SwFieldType* pFldType = (*getIDocumentFieldsAccess().GetFldTypes())[i];
-        if( RES_AUTHORITY  == pFldType->Which() )
+        SwFieldType* pFieldType = (*getIDocumentFieldsAccess().GetFieldTypes())[i];
+        if( RES_AUTHORITY  == pFieldType->Which() )
         {
-            SwAuthorityFieldType* pAuthType = static_cast<SwAuthorityFieldType*>(pFldType);
+            SwAuthorityFieldType* pAuthType = static_cast<SwAuthorityFieldType*>(pFieldType);
             pAuthType->ChangeEntryContent(pNewData);
             break;
         }
@@ -762,9 +762,9 @@ void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
 
 }
 
-void SwDocUpdtFld::InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld )
+void SwDocUpdateField::InsDelFieldInFieldLst( bool bIns, const SwTextField& rField )
 {
-    const sal_uInt16 nWhich = rFld.GetFmtFld().GetField()->GetTyp()->Which();
+    const sal_uInt16 nWhich = rField.GetFormatField().GetField()->GetTyp()->Which();
     switch( nWhich )
     {
     case RES_DBFLD:
@@ -782,54 +782,54 @@ void SwDocUpdtFld::InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld )
     }
 
     SetFieldsDirty( true );
-    if( !pFldSortLst )
+    if( !pFieldSortLst )
     {
         if( !bIns )             // if list is present and deleted
             return;             // don't do a thing
-        pFldSortLst = new _SetGetExpFlds;
+        pFieldSortLst = new _SetGetExpFields;
     }
 
     if( bIns )      // insert anew:
-        GetBodyNode( rFld, nWhich );
+        GetBodyNode( rField, nWhich );
     else
     {
-        // look up via the pTxtFld pointer. It is a sorted list, but it's sorted by node
+        // look up via the pTextField pointer. It is a sorted list, but it's sorted by node
         // position. Until this is found, the search for the pointer is already done.
-        for( _SetGetExpFlds::size_type n = 0; n < pFldSortLst->size(); ++n )
-            if( &rFld == (*pFldSortLst)[ n ]->GetPointer() )
+        for( _SetGetExpFields::size_type n = 0; n < pFieldSortLst->size(); ++n )
+            if( &rField == (*pFieldSortLst)[ n ]->GetPointer() )
             {
-                delete (*pFldSortLst)[n];
-                pFldSortLst->erase(n);
+                delete (*pFieldSortLst)[n];
+                pFieldSortLst->erase(n);
                 n--; // one field can occur multiple times
             }
     }
 }
 
-void SwDocUpdtFld::MakeFldList( SwDoc& rDoc, bool bAll, int eGetMode )
+void SwDocUpdateField::MakeFieldList( SwDoc& rDoc, bool bAll, int eGetMode )
 {
-    if( !pFldSortLst || bAll || !( eGetMode & nFldLstGetMode ) ||
+    if( !pFieldSortLst || bAll || !( eGetMode & nFieldLstGetMode ) ||
         rDoc.GetNodes().Count() != nNodes )
-        _MakeFldList( rDoc, eGetMode );
+        _MakeFieldList( rDoc, eGetMode );
 }
 
-void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
+void SwDocUpdateField::_MakeFieldList( SwDoc& rDoc, int eGetMode )
 {
     // new version: walk all fields of the attribute pool
-    delete pFldSortLst;
-    pFldSortLst = new _SetGetExpFlds;
+    delete pFieldSortLst;
+    pFieldSortLst = new _SetGetExpFields;
 
     // consider and unhide sections
     //     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
     //     notes by OD:
-    //         eGetMode == GETFLD_CALC in call from methods SwDoc::FldsToCalc
-    //         eGetMode == GETFLD_EXPAND in call from method SwDoc::FldsToExpand
-    //         eGetMode == GETFLD_ALL in call from method SwDoc::UpdateExpFlds
+    //         eGetMode == GETFLD_CALC in call from methods SwDoc::FieldsToCalc
+    //         eGetMode == GETFLD_EXPAND in call from method SwDoc::FieldsToExpand
+    //         eGetMode == GETFLD_ALL in call from method SwDoc::UpdateExpFields
     //         I figured out that hidden section only have to be shown,
-    //         if fields have updated (call by SwDoc::UpdateExpFlds) and thus
+    //         if fields have updated (call by SwDoc::UpdateExpFields) and thus
     //         the hide conditions of section have to be updated.
     //         For correct updating the hide condition of a section, its position
     //         have to be known in order to insert the hide condition as a new
-    //         expression field into the sorted field list (<pFldSortLst>).
+    //         expression field into the sorted field list (<pFieldSortLst>).
     if ( eGetMode == GETFLD_ALL )
     // Collect the sections first. Supply sections that are hidden by condition
     // with frames so that the contained fields are sorted properly.
@@ -838,19 +838,19 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         // from top to bottom
         std::vector<sal_uLong> aTmpArr;
         std::vector<sal_uLong>::size_type nArrStt = 0;
-        SwSectionFmts& rArr = rDoc.GetSections();
+        SwSectionFormats& rArr = rDoc.GetSections();
         SwSectionNode* pSectNd = 0;
-        sal_uLong nSttCntnt = rDoc.GetNodes().GetEndOfExtras().GetIndex();
+        sal_uLong nSttContent = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
-        for (SwSectionFmts::size_type n = rArr.size(); n; )
+        for (SwSectionFormats::size_type n = rArr.size(); n; )
         {
             SwSection* pSect = rArr[ --n ]->GetSection();
             if( pSect && pSect->IsHidden() && !pSect->GetCondition().isEmpty() &&
-                0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ))
+                0 != ( pSectNd = pSect->GetFormat()->GetSectionNode() ))
             {
                 sal_uLong nIdx = pSectNd->GetIndex();
                 aTmpArr.push_back( nIdx );
-                if( nIdx < nSttCntnt )
+                if( nIdx < nSttContent )
                     ++nArrStt;
             }
         }
@@ -892,14 +892,14 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         if( !pItem )
             continue;
 
-        const SwFmtFld* pFmtFld = static_cast<const SwFmtFld*>(pItem);
-        const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-        if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+        const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
+        const SwTextField* pTextField = pFormatField->GetTextField();
+        if( !pTextField || !pTextField->GetTextNode().GetNodes().IsDocNodes() )
             continue;
 
         OUString sFormula;
-        const SwField* pFld = pFmtFld->GetField();
-        const sal_uInt16 nWhich = pFld->GetTyp()->Which();
+        const SwField* pField = pFormatField->GetField();
+        const sal_uInt16 nWhich = pField->GetTyp()->Which();
         switch( nWhich )
         {
             case RES_DBSETNUMBERFLD:
@@ -915,7 +915,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 
             case RES_SETEXPFLD:
                 if ( !(eGetMode == GETFLD_EXPAND) ||
-                     (nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()) )
+                     (nsSwGetSetExpType::GSE_STRING & pField->GetSubType()) )
                 {
                     sFormula = sTrue;
                 }
@@ -924,64 +924,64 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
             case RES_HIDDENPARAFLD:
                 if( GETFLD_ALL == eGetMode )
                 {
-                    sFormula = pFld->GetPar1();
+                    sFormula = pField->GetPar1();
                     if (sFormula.isEmpty() || sFormula==sFalse)
-                        const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pFld))->SetHidden( false );
+                        const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pField))->SetHidden( false );
                     else if (sFormula==sTrue)
-                        const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pFld))->SetHidden( true );
+                        const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pField))->SetHidden( true );
                     else
                         break;
 
                     sFormula.clear();
                     // trigger formatting
-                    const_cast<SwFmtFld*>(pFmtFld)->ModifyNotification( 0, 0 );
+                    const_cast<SwFormatField*>(pFormatField)->ModifyNotification( 0, 0 );
                 }
                 break;
 
             case RES_HIDDENTXTFLD:
                 if( GETFLD_ALL == eGetMode )
                 {
-                    sFormula = pFld->GetPar1();
+                    sFormula = pField->GetPar1();
                     if (sFormula.isEmpty() || sFormula==sFalse)
-                        const_cast<SwHiddenTxtField*>(static_cast<const SwHiddenTxtField*>(pFld))->SetValue( true );
+                        const_cast<SwHiddenTextField*>(static_cast<const SwHiddenTextField*>(pField))->SetValue( true );
                     else if (sFormula==sTrue)
-                        const_cast<SwHiddenTxtField*>(static_cast<const SwHiddenTxtField*>(pFld))->SetValue( false );
+                        const_cast<SwHiddenTextField*>(static_cast<const SwHiddenTextField*>(pField))->SetValue( false );
                     else
                         break;
 
                     sFormula.clear();
 
                     // evaluate field
-                    const_cast<SwHiddenTxtField*>(static_cast<const SwHiddenTxtField*>(pFld))->Evaluate(&rDoc);
+                    const_cast<SwHiddenTextField*>(static_cast<const SwHiddenTextField*>(pField))->Evaluate(&rDoc);
                     // trigger formatting
-                    const_cast<SwFmtFld*>(pFmtFld)->ModifyNotification( 0, 0 );
+                    const_cast<SwFormatField*>(pFormatField)->ModifyNotification( 0, 0 );
                 }
                 break;
 
 #if HAVE_FEATURE_DBCONNECTIVITY
             case RES_DBNUMSETFLD:
             {
-                SwDBData aDBData(const_cast<SwDBNumSetField*>(static_cast<const SwDBNumSetField*>(pFld))->GetDBData(&rDoc));
+                SwDBData aDBData(const_cast<SwDBNumSetField*>(static_cast<const SwDBNumSetField*>(pField))->GetDBData(&rDoc));
 
                 if (
                      (bIsDBManager && rDoc.GetDBManager()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand)) &&
-                     (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && static_cast<const SwDBNumSetField*>(pFld)->IsCondValid()))
+                     (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && static_cast<const SwDBNumSetField*>(pField)->IsCondValid()))
                    )
                 {
-                    sFormula = pFld->GetPar1();
+                    sFormula = pField->GetPar1();
                 }
             }
             break;
             case RES_DBNEXTSETFLD:
             {
-                SwDBData aDBData(const_cast<SwDBNextSetField*>(static_cast<const SwDBNextSetField*>(pFld))->GetDBData(&rDoc));
+                SwDBData aDBData(const_cast<SwDBNextSetField*>(static_cast<const SwDBNextSetField*>(pField))->GetDBData(&rDoc));
 
                 if (
                      (bIsDBManager && rDoc.GetDBManager()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand)) &&
-                     (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && static_cast<const SwDBNextSetField*>(pFld)->IsCondValid()))
+                     (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && static_cast<const SwDBNextSetField*>(pField)->IsCondValid()))
                    )
                 {
-                    sFormula = pFld->GetPar1();
+                    sFormula = pField->GetPar1();
                 }
             }
             break;
@@ -990,29 +990,29 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 
         if (!sFormula.isEmpty())
         {
-            GetBodyNode( *pTxtFld, nWhich );
+            GetBodyNode( *pTextField, nWhich );
         }
     }
-    nFldLstGetMode = static_cast<sal_uInt8>( eGetMode );
+    nFieldLstGetMode = static_cast<sal_uInt8>( eGetMode );
     nNodes = rDoc.GetNodes().Count();
 }
 
-void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
+void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, sal_uInt16 nFieldWhich )
 {
-    const SwTxtNode& rTxtNd = rTFld.GetTxtNode();
-    const SwDoc& rDoc = *rTxtNd.GetDoc();
+    const SwTextNode& rTextNd = rTField.GetTextNode();
+    const SwDoc& rDoc = *rTextNd.GetDoc();
 
     // always the first! (in tab headline, header-/footer)
     Point aPt;
-    const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
+    const SwContentFrm* pFrm = rTextNd.getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
 
-    _SetGetExpFld* pNew = NULL;
+    _SetGetExpField* pNew = NULL;
     bool bIsInBody = false;
 
     if( !pFrm || pFrm->IsInDocBody() )
     {
         // create index to determine the TextNode
-        SwNodeIndex aIdx( rTxtNd );
+        SwNodeIndex aIdx( rTextNd );
         bIsInBody = rDoc.GetNodes().GetEndOfExtras().GetIndex() < aIdx.GetIndex();
 
         // We don't want to update fields in redlines, or those
@@ -1020,40 +1020,40 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
         // fields in hidden sections. So: In order to be updated, a field 1)
         // must have a frame, or 2) it must be in the document body.
         if( (pFrm != NULL) || bIsInBody )
-            pNew = new _SetGetExpFld( aIdx, &rTFld );
+            pNew = new _SetGetExpField( aIdx, &rTField );
     }
     else
     {
         // create index to determine the TextNode
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
-        bool const bResult = GetBodyTxtNode( rDoc, aPos, *pFrm );
+        bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrm );
         OSL_ENSURE(bResult, "where is the Field");
         (void) bResult; // unused in non-debug
-        pNew = new _SetGetExpFld( aPos.nNode, &rTFld, &aPos.nContent );
+        pNew = new _SetGetExpField( aPos.nNode, &rTField, &aPos.nContent );
     }
 
-    // always set the BodyTxtFlag in GetExp or DB fields
-    if( RES_GETEXPFLD == nFldWhich )
+    // always set the BodyTextFlag in GetExp or DB fields
+    if( RES_GETEXPFLD == nFieldWhich )
     {
-        SwGetExpField* pGetFld = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(rTFld.GetFmtFld().GetField()));
-        pGetFld->ChgBodyTxtFlag( bIsInBody );
+        SwGetExpField* pGetField = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(rTField.GetFormatField().GetField()));
+        pGetField->ChgBodyTextFlag( bIsInBody );
     }
 #if HAVE_FEATURE_DBCONNECTIVITY
-    else if( RES_DBFLD == nFldWhich )
+    else if( RES_DBFLD == nFieldWhich )
     {
-        SwDBField* pDBFld = const_cast<SwDBField*>(static_cast<const SwDBField*>(rTFld.GetFmtFld().GetField()));
-        pDBFld->ChgBodyTxtFlag( bIsInBody );
+        SwDBField* pDBField = const_cast<SwDBField*>(static_cast<const SwDBField*>(rTField.GetFormatField().GetField()));
+        pDBField->ChgBodyTextFlag( bIsInBody );
     }
 #endif
     if( pNew != NULL )
-        if( !pFldSortLst->insert( pNew ).second )
+        if( !pFieldSortLst->insert( pNew ).second )
             delete pNew;
 }
 
-void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
+void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
 {
     const SwDoc& rDoc = *rSectNd.GetDoc();
-    _SetGetExpFld* pNew = 0;
+    _SetGetExpField* pNew = 0;
 
     if( rSectNd.GetIndex() < rDoc.GetNodes().GetEndOfExtras().GetIndex() )
     {
@@ -1062,93 +1062,93 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
             // we need to get the anchor first
             // create index to determine the TextNode
             SwPosition aPos( rSectNd );
-            SwCntntNode* pCNd = rDoc.GetNodes().GoNext( &aPos.nNode ); // to the next ContentNode
+            SwContentNode* pCNd = rDoc.GetNodes().GoNext( &aPos.nNode ); // to the next ContentNode
 
-            if( !pCNd || !pCNd->IsTxtNode() )
+            if( !pCNd || !pCNd->IsTextNode() )
                 break;
 
             // always the first! (in tab headline, header-/footer)
             Point aPt;
-            const SwCntntFrm* pFrm = pCNd->getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
+            const SwContentFrm* pFrm = pCNd->getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, 0, false );
             if( !pFrm )
                 break;
 
-            bool const bResult = GetBodyTxtNode( rDoc, aPos, *pFrm );
+            bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrm );
             OSL_ENSURE(bResult, "where is the Field");
             (void) bResult; // unused in non-debug
-            pNew = new _SetGetExpFld( rSectNd, &aPos );
+            pNew = new _SetGetExpField( rSectNd, &aPos );
 
         } while( false );
     }
 
     if( !pNew )
-        pNew = new _SetGetExpFld( rSectNd );
+        pNew = new _SetGetExpField( rSectNd );
 
-    if( !pFldSortLst->insert( pNew ).second )
+    if( !pFieldSortLst->insert( pNew ).second )
         delete pNew;
 }
 
-void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
+void SwDocUpdateField::InsertFieldType( const SwFieldType& rType )
 {
-    OUString sFldName;
+    OUString sFieldName;
     switch( rType.Which() )
     {
     case RES_USERFLD :
-        sFldName = static_cast<const SwUserFieldType&>(rType).GetName();
+        sFieldName = static_cast<const SwUserFieldType&>(rType).GetName();
         break;
     case RES_SETEXPFLD:
-        sFldName = static_cast<const SwSetExpFieldType&>(rType).GetName();
+        sFieldName = static_cast<const SwSetExpFieldType&>(rType).GetName();
         break;
     default:
         OSL_ENSURE( false, "kein gueltiger FeldTyp" );
     }
 
-    if( !sFldName.isEmpty() )
+    if( !sFieldName.isEmpty() )
     {
         SetFieldsDirty( true );
         // look up and remove from the hash table
-        sFldName = GetAppCharClass().lowercase( sFldName );
+        sFieldName = GetAppCharClass().lowercase( sFieldName );
         sal_uInt16 n;
 
-        SwHash* pFnd = Find( sFldName, GetFldTypeTable(), TBLSZ, &n );
+        SwHash* pFnd = Find( sFieldName, GetFieldTypeTable(), TBLSZ, &n );
 
         if( !pFnd )
         {
-            SwCalcFldType* pNew = new SwCalcFldType( sFldName, &rType );
-            pNew->pNext = aFldTypeTable[ n ];
-            aFldTypeTable[ n ] = pNew;
+            SwCalcFieldType* pNew = new SwCalcFieldType( sFieldName, &rType );
+            pNew->pNext = aFieldTypeTable[ n ];
+            aFieldTypeTable[ n ] = pNew;
         }
     }
 }
 
-void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
+void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
 {
-    OUString sFldName;
+    OUString sFieldName;
     switch( rType.Which() )
     {
     case RES_USERFLD :
-        sFldName = static_cast<const SwUserFieldType&>(rType).GetName();
+        sFieldName = static_cast<const SwUserFieldType&>(rType).GetName();
         break;
     case RES_SETEXPFLD:
-        sFldName = static_cast<const SwSetExpFieldType&>(rType).GetName();
+        sFieldName = static_cast<const SwSetExpFieldType&>(rType).GetName();
         break;
     }
 
-    if( !sFldName.isEmpty() )
+    if( !sFieldName.isEmpty() )
     {
         SetFieldsDirty( true );
         // look up and remove from the hash table
-        sFldName = GetAppCharClass().lowercase( sFldName );
+        sFieldName = GetAppCharClass().lowercase( sFieldName );
         sal_uInt16 n;
 
-        SwHash* pFnd = Find( sFldName, GetFldTypeTable(), TBLSZ, &n );
+        SwHash* pFnd = Find( sFieldName, GetFieldTypeTable(), TBLSZ, &n );
         if( pFnd )
         {
-            if( aFldTypeTable[ n ] == pFnd )
-                aFldTypeTable[ n ] = static_cast<SwCalcFldType*>(pFnd->pNext);
+            if( aFieldTypeTable[ n ] == pFnd )
+                aFieldTypeTable[ n ] = static_cast<SwCalcFieldType*>(pFnd->pNext);
             else
             {
-                SwHash* pPrev = aFldTypeTable[ n ];
+                SwHash* pPrev = aFieldTypeTable[ n ];
                 while( pPrev->pNext != pFnd )
                     pPrev = pPrev->pNext;
                 pPrev->pNext = pFnd->pNext;
@@ -1159,24 +1159,24 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
     }
 }
 
-SwDocUpdtFld::SwDocUpdtFld(SwDoc* pDoc)
-    : pFldSortLst(0)
+SwDocUpdateField::SwDocUpdateField(SwDoc* pDoc)
+    : pFieldSortLst(0)
     , nNodes(0)
-    , nFldLstGetMode(0)
+    , nFieldLstGetMode(0)
     , pDocument(pDoc)
-    , bInUpdateFlds(false)
-    , bFldsDirty(false)
+    , bInUpdateFields(false)
+    , bFieldsDirty(false)
 
 {
-    memset( aFldTypeTable, 0, sizeof( aFldTypeTable ) );
+    memset( aFieldTypeTable, 0, sizeof( aFieldTypeTable ) );
 }
 
-SwDocUpdtFld::~SwDocUpdtFld()
+SwDocUpdateField::~SwDocUpdateField()
 {
-    delete pFldSortLst;
+    delete pFieldSortLst;
 
     for( int n = 0; n < TBLSZ; ++n )
-        delete aFldTypeTable[n];
+        delete aFieldTypeTable[n];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

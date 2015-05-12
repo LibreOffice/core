@@ -157,7 +157,7 @@ protected:
     sal_uInt16          nZoom;          // In percent.
     SvxZoomType     eZoom;              // 'enum' for zoom.
 
-    sal_uInt8            nTblDest;      // Destination for table background.
+    sal_uInt8            nTableDest;      // Destination for table background.
 
 #ifdef DBG_UTIL
     // Corresponds to statements in ui/config/cfgvw.src.
@@ -236,8 +236,8 @@ public:
     inline void SetSoftHyph( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_SOFTHYPH ) : ( nCoreOptions &= ~VIEWOPT_1_SOFTHYPH); }
 
-    inline bool IsFldName() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLDNAME) != 0; }
-    inline void SetFldName( bool b )
+    inline bool IsFieldName() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLDNAME) != 0; }
+    inline void SetFieldName( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_FLDNAME ) : ( nCoreOptions &= ~VIEWOPT_1_FLDNAME); }
 
     inline bool IsPostIts() const
@@ -462,7 +462,7 @@ public:
 
     SvxZoomType    GetZoomType()      const { return eZoom; }
 
-    sal_uInt8   GetTblDest() const    { return nTblDest; }
+    sal_uInt8   GetTableDest() const    { return nTableDest; }
 
     void   SetViewVScrollBar(bool b)
         { b ? (nUIOptions |= VIEWOPT_2_VSCROLLBAR ) : ( nUIOptions &= ~VIEWOPT_2_VSCROLLBAR); }
@@ -480,7 +480,7 @@ public:
         { b ? (nUIOptions |= VIEWOPT_2_SCROLLBAR_TIPS) : (nUIOptions &= ~VIEWOPT_2_SCROLLBAR_TIPS); }
 
     void            SetZoomType     (SvxZoomType eZoom_){ eZoom = eZoom_;  }
-    void            SetTblDest( sal_uInt8 nNew )    { nTblDest = nNew;  }
+    void            SetTableDest( sal_uInt8 nNew )    { nTableDest = nNew;  }
 
     const OUString& GetSymbolFont() const {return sSymbolFont;}
     void            SetSymbolFont(const OUString& sSet) {sSymbolFont = sSet;}
@@ -597,7 +597,7 @@ inline bool SwViewOption::operator==( const SwViewOption &rOpt ) const
 inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
 {
     nUIOptions = rVOpt.nUIOptions;
-    nTblDest = rVOpt.nTblDest;
+    nTableDest = rVOpt.nTableDest;
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
 }
 

@@ -25,28 +25,28 @@
 #include "rolbck.hxx"
 #include "docary.hxx"
 
-SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
-                              SwFmtColl* pColl,
+SwUndoFormatColl::SwUndoFormatColl( const SwPaM& rRange,
+                              SwFormatColl* pColl,
                               const bool bReset,
                               const bool bResetListAttrs )
     : SwUndo( UNDO_SETFMTCOLL ),
       SwUndRng( rRange ),
       pHistory( new SwHistory ),
-      pFmtColl( pColl ),
+      pFormatColl( pColl ),
       mbReset( bReset ),
       mbResetListAttrs( bResetListAttrs )
 {
     // #i31191#
     if ( pColl )
-        aFmtName = pColl->GetName();
+        aFormatName = pColl->GetName();
 }
 
-SwUndoFmtColl::~SwUndoFmtColl()
+SwUndoFormatColl::~SwUndoFormatColl()
 {
     delete pHistory;
 }
 
-void SwUndoFmtColl::UndoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoFormatColl::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     // restore old values
     pHistory->TmpRollback(& rContext.GetDoc(), 0);
@@ -56,39 +56,39 @@ void SwUndoFmtColl::UndoImpl(::sw::UndoRedoContext & rContext)
     AddUndoRedoPaM(rContext);
 }
 
-void SwUndoFmtColl::RedoImpl(::sw::UndoRedoContext & rContext)
+void SwUndoFormatColl::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwPaM & rPam = AddUndoRedoPaM(rContext);
 
-    DoSetFmtColl(rContext.GetDoc(), rPam);
+    DoSetFormatColl(rContext.GetDoc(), rPam);
 }
 
-void SwUndoFmtColl::RepeatImpl(::sw::RepeatContext & rContext)
+void SwUndoFormatColl::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    DoSetFmtColl(rContext.GetDoc(), rContext.GetRepeatPaM());
+    DoSetFormatColl(rContext.GetDoc(), rContext.GetRepeatPaM());
 }
 
-void SwUndoFmtColl::DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM)
+void SwUndoFormatColl::DoSetFormatColl(SwDoc & rDoc, SwPaM & rPaM)
 {
     // Only one TextFrmColl can be applied to a section, thus request only in
     // this array.
 
     // does the format still exist?
-    if( rDoc.GetTxtFmtColls()->Contains(static_cast<SwTxtFmtColl*>(pFmtColl)) )
+    if( rDoc.GetTextFormatColls()->Contains(static_cast<SwTextFormatColl*>(pFormatColl)) )
     {
-        rDoc.SetTxtFmtColl(rPaM, static_cast<SwTxtFmtColl*>(pFmtColl), mbReset,
+        rDoc.SetTextFormatColl(rPaM, static_cast<SwTextFormatColl*>(pFormatColl), mbReset,
                            mbResetListAttrs);
     }
 }
 
-SwRewriter SwUndoFmtColl::GetRewriter() const
+SwRewriter SwUndoFormatColl::GetRewriter() const
 {
     SwRewriter aResult;
 
     // #i31191# Use stored format name instead of
-    // pFmtColl->GetName(), because pFmtColl does not have to be available
+    // pFormatColl->GetName(), because pFormatColl does not have to be available
     // anymore.
-    aResult.AddRule(UndoArg1, aFmtName );
+    aResult.AddRule(UndoArg1, aFormatName );
 
     return aResult;
 }

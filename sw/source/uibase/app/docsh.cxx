@@ -250,7 +250,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     pRdr->GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, ISA(SwWebDocShell));
 
     // Restore the pool default if reading a saved document.
-    m_pDoc->RemoveAllFmtLanguageDependencies();
+    m_pDoc->RemoveAllFormatLanguageDependencies();
 
     sal_uLong nErr = pRdr->Read( *pRead );
 
@@ -342,7 +342,7 @@ bool SwDocShell::Save()
 
                 // End TableBox Edit!
                 if (m_pWrtShell)
-                    m_pWrtShell->EndAllTblBoxEdit();
+                    m_pWrtShell->EndAllTableBoxEdit();
 
                 WriterRef xWrt;
                 ::GetXMLWriter( aEmptyOUStr, GetMedium()->GetBaseURL( true ), xWrt );
@@ -454,7 +454,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         // End TableBox Edit!
         if (m_pWrtShell)
-            m_pWrtShell->EndAllTblBoxEdit();
+            m_pWrtShell->EndAllTableBoxEdit();
 
         // Remember and preserve Modified-Flag without calling the Link
         // (for OLE; after Statement from MM)
@@ -558,7 +558,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
     // End TableBox Edit!
     if (m_pWrtShell)
-        m_pWrtShell->EndAllTblBoxEdit();
+        m_pWrtShell->EndAllTableBoxEdit();
 
     if( pFlt->GetUserData() == "HTML" )
     {
@@ -851,7 +851,7 @@ Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
     {
         // Preview: set VisArea to the first page.
         SwNodeIndex aIdx( m_pDoc->GetNodes().GetEndOfExtras(), 1 );
-        SwCntntNode* pNd = m_pDoc->GetNodes().GoNext( &aIdx );
+        SwContentNode* pNd = m_pDoc->GetNodes().GoNext( &aIdx );
 
         const SwRect aPageRect = pNd->FindPageFrmRect( false, 0, false );
         return aPageRect.SVRect();
@@ -890,7 +890,7 @@ HiddenInformation SwDocShell::GetHiddenInformationState( HiddenInformation nStat
 
     if ( nStates & HiddenInformation::RECORDEDCHANGES )
     {
-        if ( !GetDoc()->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
+        if ( !GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty() )
             nState |= HiddenInformation::RECORDEDCHANGES;
     }
     if ( nStates & HiddenInformation::NOTES )
@@ -898,12 +898,12 @@ HiddenInformation SwDocShell::GetHiddenInformationState( HiddenInformation nStat
         OSL_ENSURE( GetWrtShell(), "No SwWrtShell, no information" );
         if ( GetWrtShell() )
         {
-            SwFieldType* pType = GetWrtShell()->GetFldType( RES_POSTITFLD, aEmptyOUStr );
-            SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-            SwFmtFld* pFirst = aIter.First();
+            SwFieldType* pType = GetWrtShell()->GetFieldType( RES_POSTITFLD, aEmptyOUStr );
+            SwIterator<SwFormatField,SwFieldType> aIter( *pType );
+            SwFormatField* pFirst = aIter.First();
             while( pFirst )
             {
-                if( pFirst->GetTxtFld() && pFirst->IsFldInDoc() )
+                if( pFirst->GetTextField() && pFirst->IsFieldInDoc() )
                 {
                     nState |= HiddenInformation::NOTES;
                     break;
@@ -1009,10 +1009,10 @@ void SwDocShell::GetState(SfxItemSet& rSet)
 
         case SID_ATTR_YEAR2000:
             {
-                const SvNumberFormatter* pFmtr = m_pDoc->GetNumberFormatter(false);
+                const SvNumberFormatter* pFormatr = m_pDoc->GetNumberFormatter(false);
                 rSet.Put( SfxUInt16Item( nWhich,
                         static_cast< sal_uInt16 >(
-                        pFmtr ? pFmtr->GetYear2000()
+                        pFormatr ? pFormatr->GetYear2000()
                               : ::utl::MiscCfg().GetYear2000() )));
             }
             break;
@@ -1024,7 +1024,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case SID_MAIL_PREPAREEXPORT:
         {
             //check if linked content or possibly hidden content is available
-            //m_pDoc->UpdateFlds( NULL, false );
+            //m_pDoc->UpdateFields( NULL, false );
             sfx2::LinkManager& rLnkMgr = m_pDoc->getIDocumentLinksAdministration().GetLinkManager();
             const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
             bool bRet = false;
@@ -1134,8 +1134,8 @@ SwFEShell* SwDocShell::GetFEShell()
 
 void SwDocShell::RemoveOLEObjects()
 {
-    SwIterator<SwCntntNode,SwFmtColl> aIter( *m_pDoc->GetDfltGrfFmtColl() );
-    for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
+    SwIterator<SwContentNode,SwFormatColl> aIter( *m_pDoc->GetDfltGrfFormatColl() );
+    for( SwContentNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
     {
         SwOLENode* pOLENd = pNd->GetOLENode();
         if( pOLENd && ( pOLENd->IsOLEObjectDeleted() ||
@@ -1162,8 +1162,8 @@ void SwDocShell::CalcLayoutForOLEObjects()
     if (!m_pWrtShell)
         return;
 
-    SwIterator<SwCntntNode,SwFmtColl> aIter( *m_pDoc->GetDfltGrfFmtColl() );
-    for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
+    SwIterator<SwContentNode,SwFormatColl> aIter( *m_pDoc->GetDfltGrfFormatColl() );
+    for( SwContentNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
     {
         SwOLENode* pOLENd = pNd->GetOLENode();
         if( pOLENd && pOLENd->IsOLESizeInvalid() )
@@ -1181,9 +1181,9 @@ void SwDocShell::UpdateLinks()
 {
     GetDoc()->getIDocumentLinksAdministration().UpdateLinks(true);
     // #i50703# Update footnote numbers
-    SwTxtFtn::SetUniqueSeqRefNo( *GetDoc() );
+    SwTextFootnote::SetUniqueSeqRefNo( *GetDoc() );
     SwNodeIndex aTmp( GetDoc()->GetNodes() );
-    GetDoc()->GetFtnIdxs().UpdateFtn( aTmp );
+    GetDoc()->GetFootnoteIdxs().UpdateFootnote( aTmp );
 }
 
 uno::Reference< frame::XController >

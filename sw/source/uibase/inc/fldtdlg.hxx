@@ -25,7 +25,7 @@ class SfxTabPage;
 class SwChildWinWrapper;
 struct SfxChildWinInfo;
 
-class SwFldDlg: public SfxTabDialog
+class SwFieldDlg: public SfxTabDialog
 {
     SwChildWinWrapper*  m_pChildWin;
     SfxBindings*        m_pBindings;
@@ -47,8 +47,8 @@ class SwFldDlg: public SfxTabDialog
                                        bool bOnlyActivate = false );
 
 public:
-    SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent);
-    virtual ~SwFldDlg();
+    SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent);
+    virtual ~SwFieldDlg();
 
     DECL_LINK(OKHdl, void *);
     DECL_LINK(CancelHdl, void *);

@@ -723,11 +723,11 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_PARA_LRSPACE:
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_FI );
-            sal_Int32 nTxtFirst = static_cast<const SvxLRSpaceItem&>(rItem).GetTxtFirstLineOfst();
+            sal_Int32 nTxtFirst = static_cast<const SvxLRSpaceItem&>(rItem).GetTextFirstLineOfst();
             nTxtFirst = LogicToTwips( nTxtFirst );
             rOutput.WriteInt32AsString( nTxtFirst );
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_LI );
-            sal_uInt32 nTxtLeft = static_cast< sal_uInt32 >(static_cast<const SvxLRSpaceItem&>(rItem).GetTxtLeft());
+            sal_uInt32 nTxtLeft = static_cast< sal_uInt32 >(static_cast<const SvxLRSpaceItem&>(rItem).GetTextLeft());
             nTxtLeft = (sal_uInt32)LogicToTwips( nTxtLeft );
             rOutput.WriteInt32AsString( nTxtLeft );
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RI );

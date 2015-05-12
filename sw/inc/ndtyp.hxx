@@ -33,7 +33,7 @@ const sal_uInt8 ND_OLENODE      = 0x20;
 const sal_uInt8 ND_SECTIONNODE  = 0x40 | ND_STARTNODE; ///< SwSectionNode is derived from SwStartNode.
 const sal_uInt8 ND_PLACEHOLDER  = 0x80;
 
-// NoTxtNode (if any of the 2 bits are set).
+// NoTextNode (if any of the 2 bits are set).
 const sal_uInt8 ND_NOTXTNODE    = ND_GRFNODE | ND_OLENODE;
 // ContentNode (if any of the 3 bits are set).
 const sal_uInt8 ND_CONTENTNODE  = ND_TEXTNODE | ND_NOTXTNODE;

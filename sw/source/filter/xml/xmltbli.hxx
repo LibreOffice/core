@@ -32,8 +32,8 @@ class SwTableNode;
 class SwTableBox;
 class SwTableLine;
 class SwStartNode;
-class SwTableBoxFmt;
-class SwTableLineFmt;
+class SwTableBoxFormat;
+class SwTableLineFormat;
 class SwXMLTableCell_Impl;
 class SwXMLTableRow_Impl;
 typedef boost::ptr_vector<SwXMLTableRow_Impl> SwXMLTableRows_Impl;
@@ -71,14 +71,14 @@ class SwXMLTableContext : public XMLTextTableContext
     SwTableBox          *pBox1;
     const SwStartNode   *pSttNd1;
 
-    SwTableBoxFmt       *pBoxFmt;
-    SwTableLineFmt      *pLineFmt;
+    SwTableBoxFormat       *pBoxFormat;
+    SwTableLineFormat      *pLineFormat;
 
     // hash map of shared format, indexed by the (XML) style name,
     // the column width, and protection flag
-    typedef std::unordered_map<TableBoxIndex,SwTableBoxFmt*,
-                          TableBoxIndexHasher> map_BoxFmt;
-    map_BoxFmt* pSharedBoxFormats;
+    typedef std::unordered_map<TableBoxIndex,SwTableBoxFormat*,
+                          TableBoxIndexHasher> map_BoxFormat;
+    map_BoxFormat* pSharedBoxFormats;
 
     SvXMLImportContextRef   xParentTable;   // if table is a sub table
 
@@ -118,8 +118,8 @@ class SwXMLTableContext : public XMLTextTableContext
     void FixRowSpan( sal_uInt32 nRow, sal_uInt32 nCol, sal_uInt32 nColSpan );
     void ReplaceWithEmptyCell( sal_uInt32 nRow, sal_uInt32 nCol, bool bRows );
 
-    /** sets the appropriate SwTblBoxFmt at pBox. */
-    SwTableBoxFmt* GetSharedBoxFormat(
+    /** sets the appropriate SwTableBoxFormat at pBox. */
+    SwTableBoxFormat* GetSharedBoxFormat(
         SwTableBox* pBox,   /// the table box
         const OUString& rStyleName, /// XML style name
         sal_Int32 nColumnWidth,     /// width of column

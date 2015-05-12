@@ -109,18 +109,18 @@ namespace SwLangHelper
         EditEngine * pEditEngine = rEditView.GetEditEngine();
 
         // get the language
-        OUString aNewLangTxt;
+        OUString aNewLangText;
 
         SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_LANGUAGE_STATUS , false );
         if (pItem)
-            aNewLangTxt = pItem->GetValue();
+            aNewLangText = pItem->GetValue();
 
         //!! Remember the view frame right now...
         //!! (call to GetView().GetViewFrame() will break if the
         //!! SwTextShell got destroyed meanwhile.)
         SfxViewFrame *pViewFrame = rView.GetViewFrame();
 
-        if (aNewLangTxt == "*" )
+        if (aNewLangText == "*" )
         {
             // open the dialog "Tools/Options/Language Settings - Language"
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -133,7 +133,7 @@ namespace SwLangHelper
         else
         {
             // setting the new language...
-            if (!aNewLangTxt.isEmpty())
+            if (!aNewLangText.isEmpty())
             {
                 const OUString aSelectionLangPrefix("Current_");
                 const OUString aParagraphLangPrefix("Paragraph_");
@@ -144,23 +144,23 @@ namespace SwLangHelper
                 sal_Int32 nPos = 0;
                 bool bForSelection = true;
                 bool bForParagraph = false;
-                if (-1 != (nPos = aNewLangTxt.indexOf( aSelectionLangPrefix, 0 )))
+                if (-1 != (nPos = aNewLangText.indexOf( aSelectionLangPrefix, 0 )))
                 {
                     // ... for the current selection
-                    aNewLangTxt = aNewLangTxt.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
+                    aNewLangText = aNewLangText.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
                     bForSelection = true;
                 }
-                else if (-1 != (nPos = aNewLangTxt.indexOf( aParagraphLangPrefix , 0 )))
+                else if (-1 != (nPos = aNewLangText.indexOf( aParagraphLangPrefix , 0 )))
                 {
                     // ... for the current paragraph language
-                    aNewLangTxt = aNewLangTxt.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
+                    aNewLangText = aNewLangText.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
                     bForSelection = true;
                     bForParagraph = true;
                 }
-                else if (-1 != (nPos = aNewLangTxt.indexOf( aDocumentLangPrefix , 0 )))
+                else if (-1 != (nPos = aNewLangText.indexOf( aDocumentLangPrefix , 0 )))
                 {
                     // ... as default document language
-                    aNewLangTxt = aNewLangTxt.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");
+                    aNewLangText = aNewLangText.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");
                     bForSelection = false;
                 }
 
@@ -181,12 +181,12 @@ namespace SwLangHelper
                     rSh.ExtendedSelectAll();
                 }
 
-                if (aNewLangTxt == aStrNone)
+                if (aNewLangText == aStrNone)
                     SwLangHelper::SetLanguage_None( rSh, pOLV, aSelection, bForSelection, aEditAttr );
-                else if (aNewLangTxt == aStrResetLangs)
+                else if (aNewLangText == aStrResetLangs)
                     SwLangHelper::ResetLanguages( rSh, pOLV, aSelection, bForSelection );
                 else
-                    SwLangHelper::SetLanguage( rSh, pOLV, aSelection, aNewLangTxt, bForSelection, aEditAttr );
+                    SwLangHelper::SetLanguage( rSh, pOLV, aSelection, aNewLangText, bForSelection, aEditAttr );
 
                 // ugly hack, as it seems that EditView/EditEngine does not update their spellchecking marks
                 // when setting a new language attribute
@@ -285,19 +285,19 @@ namespace SwLangHelper
 
                     //Resolves: fdo#35282 Clear the language from all Text Styles, and
                     //fallback to default document language
-                    const SwTxtFmtColls *pColls = rWrtSh.GetDoc()->GetTxtFmtColls();
+                    const SwTextFormatColls *pColls = rWrtSh.GetDoc()->GetTextFormatColls();
                     for(size_t i = 0, nCount = pColls->size(); i < nCount; ++i)
                     {
-                        SwTxtFmtColl &rTxtColl = *(*pColls)[ i ];
-                        rTxtColl.ResetFmtAttr(nLangWhichId);
+                        SwTextFormatColl &rTextColl = *(*pColls)[ i ];
+                        rTextColl.ResetFormatAttr(nLangWhichId);
                     }
                     //Resolves: fdo#35282 Clear the language from all Character Styles,
                     //and fallback to default document language
-                    const SwCharFmts *pCharFmts = rWrtSh.GetDoc()->GetCharFmts();
-                    for(size_t i = 0, nCount = pCharFmts->size(); i < nCount; ++i)
+                    const SwCharFormats *pCharFormats = rWrtSh.GetDoc()->GetCharFormats();
+                    for(size_t i = 0, nCount = pCharFormats->size(); i < nCount; ++i)
                     {
-                        SwCharFmt &rCharFmt = *(*pCharFmts)[ i ];
-                        rCharFmt.ResetFmtAttr(nLangWhichId);
+                        SwCharFormat &rCharFormat = *(*pCharFormats)[ i ];
+                        rCharFormat.ResetFormatAttr(nLangWhichId);
                     }
 
                     // #i102191: hard set respective language attribute in text document
@@ -541,10 +541,10 @@ namespace SwLangHelper
         // string for guessing language
         OUString aText;
         SwPaM *pCrsr = rSh.GetCrsr();
-        SwTxtNode *pNode = pCrsr->GetNode().GetTxtNode();
+        SwTextNode *pNode = pCrsr->GetNode().GetTextNode();
         if (pNode)
         {
-            aText = pNode->GetTxt();
+            aText = pNode->GetText();
             if (!aText.isEmpty())
             {
                 sal_Int32 nEnd = pCrsr->GetPoint()->nContent.GetIndex();
@@ -596,9 +596,9 @@ namespace SwLangHelper
         if (!rWrtSh.IsEndPara())
             rWrtSh.MovePara( fnParaCurr, fnParaEnd );
     #if OSL_DEBUG_LEVEL > 1
-        OUString aSelTxt;
-        rWrtSh.GetSelectedText( aSelTxt );
-        (void) aSelTxt;
+        OUString aSelText;
+        rWrtSh.GetSelectedText( aSelText );
+        (void) aSelText;
     #endif
     }
 }

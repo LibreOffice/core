@@ -53,10 +53,10 @@ void SwHTMLWriter::FillNextNumInfo()
     do
     {
         const SwNode* pNd = pDoc->GetNodes()[nPos];
-        if( pNd->IsTxtNode() )
+        if( pNd->IsTextNode() )
         {
             // Der naechste wird als naechstes ausgegeben.
-            pNextNumRuleInfo = new SwHTMLNumRuleInfo( *pNd->GetTxtNode() );
+            pNextNumRuleInfo = new SwHTMLNumRuleInfo( *pNd->GetTextNode() );
 
             // Vor einer Tabelle behalten wir erst einmal die alte Ebene bei,
             // wenn die gleiche Numerierung hinter der Tabelle
@@ -126,19 +126,19 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                     do
                     {
                         const SwNode* pNd = rWrt.pDoc->GetNodes()[nPos];
-                        if( pNd->IsTxtNode() )
+                        if( pNd->IsTextNode() )
                         {
-                            const SwTxtNode *pTxtNd = pNd->GetTxtNode();
-                            if( !pTxtNd->GetNumRule() )
+                            const SwTextNode *pTextNd = pNd->GetTextNode();
+                            if( !pTextNd->GetNumRule() )
                             {
                                 // node isn't numbered => check completed
                                 break;
                             }
 
-                            OSL_ENSURE(! pTxtNd->IsOutline(),
+                            OSL_ENSURE(! pTextNd->IsOutline(),
                                    "outline not expected");
 
-                            if( pTxtNd->GetActualListLevel() + 1 <
+                            if( pTextNd->GetActualListLevel() + 1 <
                                 rInfo.GetDepth() )
                             {
                                 // node is numbered, but level is lower
@@ -182,8 +182,8 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         rWrt.aBulletGrfs[i].clear();
         OStringBuffer sOut;
         sOut.append('<');
-        const SwNumFmt& rNumFmt = rInfo.GetNumRule()->Get( i );
-        sal_Int16 eType = rNumFmt.GetNumberingType();
+        const SwNumFormat& rNumFormat = rInfo.GetNumRule()->Get( i );
+        sal_Int16 eType = rNumFormat.GetNumberingType();
         if( SVX_NUM_CHAR_SPECIAL == eType )
         {
             // Aufzaehlungs-Liste: <OL>
@@ -191,7 +191,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
 
             // den Typ ueber das Bullet-Zeichen bestimmen
             const sal_Char *pStr = 0;
-            switch( rNumFmt.GetBulletChar() )
+            switch( rNumFormat.GetBulletChar() )
             {
             case HTML_BULLETCHAR_DISC:
                 pStr = OOO_STRING_SVTOOLS_HTML_ULTYPE_disc;
@@ -217,7 +217,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
             OutHTML_BulletImage( rWrt,
                                     0,
-                                    rNumFmt.GetBrush() );
+                                    rNumFormat.GetBrush() );
         }
         else
         {
@@ -249,14 +249,14 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                     append("=\"").append(cType).append("\"");
             }
 
-            sal_uInt16 nStartVal = rNumFmt.GetStart();
+            sal_uInt16 nStartVal = rNumFormat.GetStart();
             if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
             {
                 // #i51089 - TUNING#
-                if ( rWrt.pCurPam->GetNode().GetTxtNode()->GetNum() )
+                if ( rWrt.pCurPam->GetNode().GetTextNode()->GetNum() )
                 {
                     nStartVal = static_cast< sal_uInt16 >( rWrt.pCurPam->GetNode()
-                                .GetTxtNode()->GetNumberVector()[i] );
+                                .GetTextNode()->GetNumberVector()[i] );
                 }
                 else
                 {

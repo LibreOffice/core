@@ -28,11 +28,11 @@ class SwBorderAttrs;
 class SwDoc;
 class SwNodeIndex;
 // #i44049#
-class SwObjectFormatterTxtFrm;
+class SwObjectFormatterTextFrm;
 
 /** Base class that provides the general functionalities for frames that are
     allowed at page breaks (flow) and shall continue on the next page (can be
-    split), e.g. paragraphs (CntntFrm) or tables (TabFrm).
+    split), e.g. paragraphs (ContentFrm) or tables (TabFrm).
 
     Some parts of these functionalities are implemented in FlowFrm while the
     specific ones are done in the corresponding Frm classes. The FlowFrm has to
@@ -43,7 +43,7 @@ class SwObjectFormatterTxtFrm;
     FlowFrm that is virtually inherited from SwFrm and that works with its own
     member data. Further classes would need to inherit from FlowFrm and (via
     multiple base classes since the class tree splits exactly at the branch
-    from SwFrm to SwCntntFrm and SwLayoutFrm) also virtually from SwFrm as
+    from SwFrm to SwContentFrm and SwLayoutFrm) also virtually from SwFrm as
     well. Unfortunately, this leads - besides problems with compilers and
     debugging programs - to high additional costs, that we IMHO are not able to
     afford nowadays.
@@ -61,10 +61,10 @@ class SwFlowFrm
     friend inline void TableSplitRecalcLock( SwFlowFrm * );
     friend inline void TableSplitRecalcUnlock( SwFlowFrm * );
     // #i44049#
-    friend class SwObjectFormatterTxtFrm;
+    friend class SwObjectFormatterTextFrm;
     friend class FlowFrmJoinLockGuard;
 
-    // TblSel is allowed to reset the follow-bit
+    // TableSel is allowed to reset the follow-bit
     friend inline void UnsetFollow( SwFlowFrm *pFlow );
 
     friend void MakeFrms( SwDoc *, const SwNodeIndex &, const SwNodeIndex & );
@@ -121,8 +121,8 @@ protected:
 
     // checks if forward flow makes sense to prevent infinite moves
     inline bool IsFwdMoveAllowed();
-    // #i44049# - method <CalcCntnt(..)> has to check this property.
-    friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
+    // #i44049# - method <CalcContent(..)> has to check this property.
+    friend void CalcContent( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
     bool IsKeepFwdMoveAllowed();    // like above, forward flow for Keep.
 
     /** method to determine overlapping of an object that requests floating

@@ -159,7 +159,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
         break;
         case FN_REMOVE_DIRECT_CHAR_FORMATS:
             if( !rSh.HasReadonlySel() && rSh.IsEndPara())
-                rSh.DontExpandFmt();
+                rSh.DontExpandFormat();
         break;
         default:
             OSL_FAIL("wrong  dispatcher");
@@ -173,13 +173,13 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     bool bArgs = pArgs != 0 && pArgs->Count() > 0;
     SwWrtShell& rWrtSh = GetShell();
-    SwTxtFmtColl* pColl = 0;
+    SwTextFormatColl* pColl = 0;
 
-    // Is only set if the whole paragraph is selected and AutoUpdateFmt is set.
+    // Is only set if the whole paragraph is selected and AutoUpdateFormat is set.
     if (rWrtSh.HasSelection() && rWrtSh.IsSelFullPara())
     {
-        pColl = rWrtSh.GetCurTxtFmtColl();
-        if ( pColl && !pColl->IsAutoUpdateFmt() )
+        pColl = rWrtSh.GetCurTextFormatColl();
+        if ( pColl && !pColl->IsAutoUpdateFormat() )
             pColl = 0;
     }
     SfxItemPool& rPool = GetPool();
@@ -187,31 +187,31 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
     switch (nSlot)
     {
         case FN_TXTATR_INET:
-        // Special treatment of the PoolId of the SwFmtInetFmt
+        // Special treatment of the PoolId of the SwFormatInetFormat
         if(bArgs)
         {
             const SfxPoolItem& rItem = pArgs->Get( nWhich );
 
-            SwFmtINetFmt aINetFmt( static_cast<const SwFmtINetFmt&>(rItem) );
-            if ( USHRT_MAX == aINetFmt.GetVisitedFmtId() )
+            SwFormatINetFormat aINetFormat( static_cast<const SwFormatINetFormat&>(rItem) );
+            if ( USHRT_MAX == aINetFormat.GetVisitedFormatId() )
             {
                 OSL_ENSURE( false, "<SwTextShell::ExecCharAttrArgs(..)> - unexpected visited character format ID at hyperlink attribute" );
-                aINetFmt.SetVisitedFmtAndId(
-                        aINetFmt.GetVisitedFmt(),
-                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetVisitedFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) );
+                aINetFormat.SetVisitedFormatAndId(
+                        aINetFormat.GetVisitedFormat(),
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFormat.GetVisitedFormat(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) );
             }
-            if ( USHRT_MAX == aINetFmt.GetINetFmtId() )
+            if ( USHRT_MAX == aINetFormat.GetINetFormatId() )
             {
                 OSL_ENSURE( false, "<SwTextShell::ExecCharAttrArgs(..)> - unexpected unvisited character format ID at hyperlink attribute" );
-                aINetFmt.SetINetFmtAndId(
-                        aINetFmt.GetINetFmt(),
-                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetINetFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) );
+                aINetFormat.SetINetFormatAndId(
+                        aINetFormat.GetINetFormat(),
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFormat.GetINetFormat(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) );
             }
 
             if ( pColl )
-                pColl->SetFmtAttr( aINetFmt );
+                pColl->SetFormatAttr( aINetFormat );
             else
-                rWrtSh.SetAttrItem( aINetFmt );
+                rWrtSh.SetAttrItem( aINetFormat );
             rReq.Done();
         }
         break;
@@ -260,7 +260,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                     aSetItem.PutItemForScriptType( nScriptTypes, aSize );
                     aAttrSet.Put( aSetItem.GetItemSet() );
                     if( pColl )
-                        pColl->SetFmtAttr( aAttrSet );
+                        pColl->SetFormatAttr( aAttrSet );
                     else
                         rWrtSh.SetAttrSet( aAttrSet, SetAttrMode::DEFAULT, pPaM.get() );
                 }
@@ -382,14 +382,14 @@ SET_LINESPACE:
 
                     for(sal_uInt16 i = 0; i < aRule.GetLevelCount(); i++)
                     {
-                        SvxNumberFormat aFmt(aRule.GetLevel(i));
-                        if(SVX_ADJUST_LEFT == aFmt.GetNumAdjust())
-                            aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
+                        SvxNumberFormat aFormat(aRule.GetLevel(i));
+                        if(SVX_ADJUST_LEFT == aFormat.GetNumAdjust())
+                            aFormat.SetNumAdjust( SVX_ADJUST_RIGHT );
 
-                        else if(SVX_ADJUST_RIGHT == aFmt.GetNumAdjust())
-                            aFmt.SetNumAdjust( SVX_ADJUST_LEFT );
+                        else if(SVX_ADJUST_RIGHT == aFormat.GetNumAdjust())
+                            aFormat.SetNumAdjust( SVX_ADJUST_LEFT );
 
-                        aRule.SetLevel(i, aFmt, aRule.Get(i) != 0);
+                        aRule.SetLevel(i, aFormat, aRule.Get(i) != 0);
                     }
                     SwNumRule aSetRule( pCurRule->GetName(),
                                         pCurRule->Get( 0 ).GetPositionAndSpaceMode() );
@@ -407,8 +407,8 @@ SET_LINESPACE:
             return;
     }
     SwWrtShell& rWrtSh = GetShell();
-    SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
-    if(pColl && pColl->IsAutoUpdateFmt())
+    SwTextFormatColl* pColl = rWrtSh.GetCurTextFormatColl();
+    if(pColl && pColl->IsAutoUpdateFormat())
     {
         rWrtSh.AutoUpdatePara(pColl, aSet);
     }
@@ -434,11 +434,11 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 OUString sCharStyleName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                 SfxItemSet aSet(GetPool(), RES_PARATR_DROP, RES_PARATR_DROP, 0L);
                 rSh.GetCurAttr(aSet);
-                SwFmtDrop aDropItem(static_cast<const SwFmtDrop&>(aSet.Get(RES_PARATR_DROP)));
-                SwCharFmt* pFmt = 0;
+                SwFormatDrop aDropItem(static_cast<const SwFormatDrop&>(aSet.Get(RES_PARATR_DROP)));
+                SwCharFormat* pFormat = 0;
                 if(!sCharStyleName.isEmpty())
-                    pFmt = rSh.FindCharFmtByName( sCharStyleName );
-                aDropItem.SetCharFmt( pFmt );
+                    pFormat = rSh.FindCharFormatByName( sCharStyleName );
+                aDropItem.SetCharFormat( pFormat );
                 aSet.Put(aDropItem);
                 rSh.SetAttrSet(aSet);
             }
@@ -468,7 +468,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                     if ( SfxItemState::SET == aSet.GetItemState(HINT_END,false,&pItem) )
                     {
                         if ( !static_cast<const SfxStringItem*>(pItem)->GetValue().isEmpty() )
-                            rSh.ReplaceDropTxt(static_cast<const SfxStringItem*>(pItem)->GetValue());
+                            rSh.ReplaceDropText(static_cast<const SfxStringItem*>(pItem)->GetValue());
                     }
                     rSh.SetAttrSet(*pDlg->GetOutputItemSet());
                     rSh.StartUndo( UNDO_END );
@@ -510,7 +510,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
     SfxItemPool& rPool = GetPool();
-    SfxItemSet aCoreSet(rPool, aTxtFmtCollSetRange);
+    SfxItemSet aCoreSet(rPool, aTextFormatCollSetRange);
     // Request *all* text attributes from the core.
     // fdo#78737: this is called from SvxRuler, which requires the list indents!
     rSh.GetCurAttr(aCoreSet, /* bMergeIndentValuesOfNumRule = */ true);

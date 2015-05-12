@@ -345,7 +345,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO74106, "FDO74106.docx")
     xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
     if (!pXmlDoc)
         return;
-    assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt", "val","hebrew1");
+    assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFormat", "val","hebrew1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO74215, "FDO74215.docx")

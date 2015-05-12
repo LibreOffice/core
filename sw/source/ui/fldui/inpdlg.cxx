@@ -31,13 +31,13 @@
 #include <fldui.hrc>
 
 // edit field-insert
-SwFldInputDlg::SwFldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
+SwFieldInputDlg::SwFieldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
                               SwField* pField, bool bNextButton )
     : SvxStandardDialog( pParent, "InputFieldDialog",
         "modules/swriter/ui/inputfielddialog.ui")
     , rSh( rS )
-    , pInpFld(0)
-    , pSetFld(0)
+    , pInpField(0)
+    , pSetField(0)
     , pUsrType(0)
 {
     get(m_pLabelED, "name");
@@ -53,7 +53,7 @@ SwFldInputDlg::SwFldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
     if( bNextButton )
     {
         m_pNextBT->Show();
-        m_pNextBT->SetClickHdl(LINK(this, SwFldInputDlg, NextHdl));
+        m_pNextBT->SetClickHdl(LINK(this, SwFieldInputDlg, NextHdl));
     }
 
     // evaluation here
@@ -61,20 +61,20 @@ SwFldInputDlg::SwFldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
     if( RES_INPUTFLD == pField->GetTyp()->Which() )
     {   // it is an input field
 
-        pInpFld = static_cast<SwInputField*>(pField);
-        m_pLabelED->SetText( pInpFld->GetPar2() );
-        sal_uInt16 nSubType = pInpFld->GetSubType();
+        pInpField = static_cast<SwInputField*>(pField);
+        m_pLabelED->SetText( pInpField->GetPar2() );
+        sal_uInt16 nSubType = pInpField->GetSubType();
 
         switch(nSubType & 0xff)
         {
             case INP_TXT:
-                aStr = pInpFld->GetPar1();
+                aStr = pInpField->GetPar1();
                 break;
 
             case INP_USR:
                 // user field
-                if( 0 != ( pUsrType = static_cast<SwUserFieldType*>(rSh.GetFldType(
-                            RES_USERFLD, pInpFld->GetPar1() ) )  ) )
+                if( 0 != ( pUsrType = static_cast<SwUserFieldType*>(rSh.GetFieldType(
+                            RES_USERFLD, pInpField->GetPar1() ) )  ) )
                     aStr = pUsrType->GetContent();
                 break;
         }
@@ -82,17 +82,17 @@ SwFldInputDlg::SwFldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
     else
     {
         // it is a SetExpression
-        pSetFld = static_cast<SwSetExpField*>(pField);
-        OUString sFormula(pSetFld->GetFormula());
+        pSetField = static_cast<SwSetExpField*>(pField);
+        OUString sFormula(pSetField->GetFormula());
         //values are formatted - formulas are not
-        CharClass aCC( LanguageTag( pSetFld->GetLanguage() ));
+        CharClass aCC( LanguageTag( pSetField->GetLanguage() ));
         if( aCC.isNumeric( sFormula ))
         {
-            aStr = pSetFld->ExpandField(true);
+            aStr = pSetField->ExpandField(true);
         }
         else
             aStr = sFormula;
-        m_pLabelED->SetText( pSetFld->GetPromptText() );
+        m_pLabelED->SetText( pSetField->GetPromptText() );
     }
 
     // JP 31.3.00: Inputfields in readonly regions must be allowed to
@@ -106,12 +106,12 @@ SwFldInputDlg::SwFldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
         m_pEditED->SetText(convertLineEnd(aStr, GetSystemLineEnd()));
 }
 
-SwFldInputDlg::~SwFldInputDlg()
+SwFieldInputDlg::~SwFieldInputDlg()
 {
     disposeOnce();
 }
 
-void SwFldInputDlg::dispose()
+void SwFieldInputDlg::dispose()
 {
     m_pLabelED.clear();
     m_pEditED.clear();
@@ -120,7 +120,7 @@ void SwFldInputDlg::dispose()
     SvxStandardDialog::dispose();
 }
 
-void SwFldInputDlg::StateChanged( StateChangedType nType )
+void SwFieldInputDlg::StateChanged( StateChangedType nType )
 {
     if ( nType == StateChangedType::InitShow )
         m_pEditED->GrabFocus();
@@ -128,33 +128,33 @@ void SwFldInputDlg::StateChanged( StateChangedType nType )
 }
 
 // Close
-void SwFldInputDlg::Apply()
+void SwFieldInputDlg::Apply()
 {
     OUString aTmp(comphelper::string::remove(m_pEditED->GetText(), '\r'));
     rSh.StartAllAction();
     bool bModified = false;
-    if(pInpFld)
+    if(pInpField)
     {
         if(pUsrType)
         {
             if( !aTmp.equals(pUsrType->GetContent()) )
             {
                 pUsrType->SetContent(aTmp);
-                pUsrType->UpdateFlds();
+                pUsrType->UpdateFields();
                 bModified = true;
             }
         }
-        else if( !aTmp.equals(pInpFld->GetPar1()) )
+        else if( !aTmp.equals(pInpField->GetPar1()) )
         {
-            pInpFld->SetPar1(aTmp);
-            rSh.SwEditShell::UpdateFlds(*pInpFld);
+            pInpField->SetPar1(aTmp);
+            rSh.SwEditShell::UpdateFields(*pInpField);
             bModified = true;
         }
     }
-    else if( !aTmp.equals(pSetFld->GetPar2()) )
+    else if( !aTmp.equals(pSetField->GetPar2()) )
     {
-        pSetFld->SetPar2(aTmp);
-        rSh.SwEditShell::UpdateFlds(*pSetFld);
+        pSetField->SetPar2(aTmp);
+        rSh.SwEditShell::UpdateFields(*pSetField);
         bModified = true;
     }
 
@@ -164,7 +164,7 @@ void SwFldInputDlg::Apply()
     rSh.EndAllAction();
 }
 
-IMPL_LINK_NOARG(SwFldInputDlg, NextHdl)
+IMPL_LINK_NOARG(SwFieldInputDlg, NextHdl)
 {
     EndDialog(RET_OK);
     return 0;

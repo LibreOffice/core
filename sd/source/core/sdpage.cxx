@@ -2164,7 +2164,7 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
 
             const SvxLRSpaceItem& rLRItem = static_cast<const SvxLRSpaceItem&>( aSet.Get(EE_PARA_LRSPACE) );
             SvxLRSpaceItem aNewLRItem(rLRItem);
-            aNewLRItem.SetTxtLeft(0);
+            aNewLRItem.SetTextLeft(0);
             aSet.Put(aNewLRItem);
 
             pNewObj->SetMergedItemSet(aSet);

@@ -57,10 +57,10 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
 
-    bool IsCntntProtected() const { return bCntnt; }
+    bool IsContentProtected() const { return bCntnt; }
     bool IsSizeProtected()  const { return bSize;  }
     bool IsPosProtected()   const { return bPos;   }
-    void SetCntntProtect( bool bNew ) { bCntnt = bNew; }
+    void SetContentProtect( bool bNew ) { bCntnt = bNew; }
     void SetSizeProtect ( bool bNew ) { bSize  = bNew; }
     void SetPosProtect  ( bool bNew ) { bPos   = bNew; }
 
@@ -77,7 +77,7 @@ inline SvxProtectItem::SvxProtectItem( const sal_uInt16 nId )
 
 inline SvxProtectItem &SvxProtectItem::operator=( const SvxProtectItem &rCpy )
 {
-    bCntnt = rCpy.IsCntntProtected();
+    bCntnt = rCpy.IsContentProtected();
     bSize  = rCpy.IsSizeProtected();
     bPos   = rCpy.IsPosProtected();
     return *this;

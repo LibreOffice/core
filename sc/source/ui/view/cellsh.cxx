@@ -365,7 +365,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
     }
 }
 
-static bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper& rDataHelper,
+static bool lcl_TestFormat( SvxClipboardFormatItem& rFormats, const TransferableDataHelper& rDataHelper,
                         SotClipboardFormatId nFormatId )
 {
     if ( rDataHelper.HasFormat( nFormatId ) )
@@ -399,7 +399,7 @@ static bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDat
     return false;
 }
 
-void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
+void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats )
 {
     vcl::Window* pWin = GetViewData()->GetActiveWin();
     bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
@@ -569,7 +569,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
     }
     else if ( rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) != SfxItemState::UNKNOWN )
     {
-        SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+        SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
         GetPossibleClipboardFormats( aFormats );
         rSet.Put( aFormats );
     }

@@ -130,7 +130,7 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
                                                     &pItem ) )
             {
                 sal_Int16 eHoriOrient =
-                    static_cast<const SwFmtHoriOrient *>(pItem)->GetHoriOrient();
+                    static_cast<const SwFormatHoriOrient *>(pItem)->GetHoriOrient();
                 bool bExport = false;
                 sal_uInt16 nMemberId =
                     static_cast<sal_uInt16>( rEntry.nMemberId & MID_SW_FLAG_MASK );
@@ -232,11 +232,11 @@ void SwXMLExport::_FinitItemExport()
     delete pTwipUnitConv;
 }
 
-void SwXMLExport::ExportTableFmt( const SwFrmFmt& rFmt, sal_uInt32 nAbsWidth )
+void SwXMLExport::ExportTableFormat( const SwFrameFormat& rFormat, sal_uInt32 nAbsWidth )
 {
     static_cast<SwXMLTableItemMapper_Impl *>(pTableItemMapper)
         ->SetAbsWidth( nAbsWidth );
-    ExportFmt( rFmt, XML_TABLE );
+    ExportFormat( rFormat, XML_TABLE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

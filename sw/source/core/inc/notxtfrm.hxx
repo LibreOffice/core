@@ -21,12 +21,12 @@
 
 #include <cntfrm.hxx>
 
-class SwNoTxtNode;
+class SwNoTextNode;
 class OutputDevice;
 class SwBorderAttrs;
 struct SwCrsrMoveState;
 
-class SwNoTxtFrm: public SwCntntFrm
+class SwNoTextFrm: public SwContentFrm
 {
     friend void _FrmFinit();
 
@@ -38,13 +38,13 @@ class SwNoTxtFrm: public SwCntntFrm
     void PaintPicture( vcl::RenderContext*, const SwRect& ) const;
 
     virtual void DestroyImpl() SAL_OVERRIDE;
-    virtual ~SwNoTxtFrm();
+    virtual ~SwNoTextFrm();
 
 protected:
     virtual void MakeAll() SAL_OVERRIDE;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 public:
-    SwNoTxtFrm( SwNoTxtNode * const, SwFrm* );
+    SwNoTextFrm( SwNoTextNode * const, SwFrm* );
 
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;

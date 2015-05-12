@@ -37,33 +37,33 @@ class SwUndoSaveSections;
 class SwUndoMoves;
 class SwUndoDelete;
 class SwSelBoxes;
-class SwTblToTxtSaves;
+class SwTableToTextSaves;
 class SwTable;
 class SwTableBox;
 class SwStartNode;
 class SwTableNode;
-class SwTableAutoFmt;
+class SwTableAutoFormat;
 class SwTableSortBoxes;
 
-class SwUndoInsTbl : public SwUndo
+class SwUndoInsTable : public SwUndo
 {
-    OUString sTblNm;
-    SwInsertTableOptions aInsTblOpts;
-    SwDDEFieldType* pDDEFldType;
+    OUString sTableNm;
+    SwInsertTableOptions aInsTableOpts;
+    SwDDEFieldType* pDDEFieldType;
     std::vector<sal_uInt16> *pColWidth;
     SwRedlineData*  pRedlData;
-    SwTableAutoFmt* pAutoFmt;
+    SwTableAutoFormat* pAutoFormat;
     sal_uLong nSttNode;
     sal_uInt16 nRows, nCols;
     sal_uInt16 nAdjust;
 
 public:
-    SwUndoInsTbl( const SwPosition&, sal_uInt16 nCols, sal_uInt16 nRows,
-                    sal_uInt16 eAdjust, const SwInsertTableOptions& rInsTblOpts,
-                    const SwTableAutoFmt* pTAFmt, const std::vector<sal_uInt16> *pColArr,
+    SwUndoInsTable( const SwPosition&, sal_uInt16 nCols, sal_uInt16 nRows,
+                    sal_uInt16 eAdjust, const SwInsertTableOptions& rInsTableOpts,
+                    const SwTableAutoFormat* pTAFormat, const std::vector<sal_uInt16> *pColArr,
                   const OUString & rName);
 
-    virtual ~SwUndoInsTbl();
+    virtual ~SwUndoInsTable();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
@@ -72,23 +72,23 @@ public:
     virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 };
 
-class SwUndoTxtToTbl : public SwUndo, public SwUndRng
+class SwUndoTextToTable : public SwUndo, public SwUndRng
 {
-    OUString sTblNm;
-    SwInsertTableOptions aInsTblOpts;
+    OUString sTableNm;
+    SwInsertTableOptions aInsTableOpts;
     std::vector<sal_uLong>* pDelBoxes;
-    SwTableAutoFmt* pAutoFmt;
+    SwTableAutoFormat* pAutoFormat;
     SwHistory* pHistory;
     sal_Unicode cTrenner;
     sal_uInt16 nAdjust;
     bool bSplitEnd : 1;
 
 public:
-    SwUndoTxtToTbl( const SwPaM&, const SwInsertTableOptions&, sal_Unicode,
+    SwUndoTextToTable( const SwPaM&, const SwInsertTableOptions&, sal_Unicode,
                     sal_uInt16,
-                    const SwTableAutoFmt* pAFmt );
+                    const SwTableAutoFormat* pAFormat );
 
-    virtual ~SwUndoTxtToTbl();
+    virtual ~SwUndoTextToTable();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
@@ -98,22 +98,22 @@ public:
     void AddFillBox( const SwTableBox& rBox );
 };
 
-class SwUndoTblToTxt : public SwUndo
+class SwUndoTableToText : public SwUndo
 {
-    OUString sTblNm;
-    SwDDEFieldType* pDDEFldType;
-    _SaveTable* pTblSave;
-    SwTblToTxtSaves* pBoxSaves;
+    OUString sTableNm;
+    SwDDEFieldType* pDDEFieldType;
+    _SaveTable* pTableSave;
+    SwTableToTextSaves* pBoxSaves;
     SwHistory* pHistory;
     sal_uLong nSttNd, nEndNd;
     sal_Unicode cTrenner;
     sal_uInt16 nHdlnRpt;
-    bool bCheckNumFmt : 1;
+    bool bCheckNumFormat : 1;
 
 public:
-    SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh );
+    SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh );
 
-    virtual ~SwUndoTblToTxt();
+    virtual ~SwUndoTableToText();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
@@ -121,50 +121,50 @@ public:
 
     void SetRange( const SwNodeRange& );
     void AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEndIdx,
-                    sal_Int32 nCntntIdx = SAL_MAX_INT32);
+                    sal_Int32 nContentIdx = SAL_MAX_INT32);
 };
 
-class SwUndoAttrTbl : public SwUndo
+class SwUndoAttrTable : public SwUndo
 {
     sal_uLong nSttNode;
-    _SaveTable* pSaveTbl;
+    _SaveTable* pSaveTable;
     bool bClearTabCol : 1;
 
 public:
-    SwUndoAttrTbl( const SwTableNode& rTblNd, bool bClearTabCols = false );
+    SwUndoAttrTable( const SwTableNode& rTableNd, bool bClearTabCols = false );
 
-    virtual ~SwUndoAttrTbl();
+    virtual ~SwUndoAttrTable();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 };
 
-class SwUndoTblNumFmt;
+class SwUndoTableNumFormat;
 
-class SwUndoTblAutoFmt : public SwUndo
+class SwUndoTableAutoFormat : public SwUndo
 {
     sal_uLong nSttNode;
-    _SaveTable* pSaveTbl;
-    std::vector< std::shared_ptr<SwUndoTblNumFmt> > m_Undos;
-    bool bSaveCntntAttr;
+    _SaveTable* pSaveTable;
+    std::vector< std::shared_ptr<SwUndoTableNumFormat> > m_Undos;
+    bool bSaveContentAttr;
     sal_uInt16 m_nRepeatHeading;
 
     void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);
 
 public:
-    SwUndoTblAutoFmt( const SwTableNode& rTblNd, const SwTableAutoFmt& );
+    SwUndoTableAutoFormat( const SwTableNode& rTableNd, const SwTableAutoFormat& );
 
-    virtual ~SwUndoTblAutoFmt();
+    virtual ~SwUndoTableAutoFormat();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    void SaveBoxCntnt( const SwTableBox& rBox );
+    void SaveBoxContent( const SwTableBox& rBox );
 };
 
-class SwUndoTblNdsChg : public SwUndo, private boost::noncopyable
+class SwUndoTableNdsChg : public SwUndo, private boost::noncopyable
 {
-    _SaveTable* pSaveTbl;
+    _SaveTable* pSaveTable;
     std::set<sal_uLong> m_Boxes;
     struct _BoxMove
     {
@@ -182,23 +182,23 @@ class SwUndoTblNdsChg : public SwUndo, private boost::noncopyable
     bool bSameHeight;                   // only used for SplitRow
 
 public:
-    SwUndoTblNdsChg( SwUndoId UndoId,
+    SwUndoTableNdsChg( SwUndoId UndoId,
                     const SwSelBoxes& rBoxes,
-                    const SwTableNode& rTblNd,
+                    const SwTableNode& rTableNd,
                     long nMn, long nMx,
                     sal_uInt16 nCnt, bool bFlg, bool bSameHeight );
 
     // for SetColWidth
-    SwUndoTblNdsChg( SwUndoId UndoId, const SwSelBoxes& rBoxes,
-                    const SwTableNode& rTblNd );
+    SwUndoTableNdsChg( SwUndoId UndoId, const SwSelBoxes& rBoxes,
+                    const SwTableNode& rTableNd );
 
-    virtual ~SwUndoTblNdsChg();
+    virtual ~SwUndoTableNdsChg();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    void SaveNewBoxes( const SwTableNode& rTblNd, const SwTableSortBoxes& rOld );
-    void SaveNewBoxes( const SwTableNode& rTblNd, const SwTableSortBoxes& rOld,
+    void SaveNewBoxes( const SwTableNode& rTableNd, const SwTableSortBoxes& rOld );
+    void SaveNewBoxes( const SwTableNode& rTableNd, const SwTableSortBoxes& rOld,
                        const SwSelBoxes& rBoxes, const std::vector<sal_uLong> &rNodeCnts );
     void SaveSection( SwStartNode* pSttNd );
     void ReNewBoxes( const SwSelBoxes& rBoxes );
@@ -214,24 +214,24 @@ public:
     }
 };
 
-class SwUndoTblMerge : public SwUndo, private SwUndRng
+class SwUndoTableMerge : public SwUndo, private SwUndRng
 {
-    sal_uLong nTblNode;
-    _SaveTable* pSaveTbl;
+    sal_uLong nTableNode;
+    _SaveTable* pSaveTable;
     std::set<sal_uLong> m_Boxes;
     std::vector<sal_uLong> aNewSttNds;
     SwUndoMoves* pMoves;
     SwHistory* pHistory;
 
 public:
-    SwUndoTblMerge( const SwPaM& rTblSel );
+    SwUndoTableMerge( const SwPaM& rTableSel );
 
-    virtual ~SwUndoTblMerge();
+    virtual ~SwUndoTableMerge();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    void MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& rPos );
+    void MoveBoxContent( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& rPos );
 
     void SetSelBoxes( const SwSelBoxes& rBoxes );
 
@@ -241,40 +241,40 @@ public:
     void SaveCollection( const SwTableBox& rBox );
 };
 
-class SwUndoTblNumFmt : public SwUndo
+class SwUndoTableNumFormat : public SwUndo
 {
     SfxItemSet *pBoxSet;
     SwHistory* pHistory;
-    OUString aStr, aNewFml;
+    OUString aStr, aNewFormula;
 
-    sal_uLong nFmtIdx, nNewFmtIdx;
+    sal_uLong nFormatIdx, nNewFormatIdx;
     double fNum, fNewNum;
     sal_uLong nNode;
     sal_uLong nNdPos;
 
-    bool bNewFmt : 1;
-    bool bNewFml : 1;
+    bool bNewFormat : 1;
+    bool bNewFormula : 1;
     bool bNewValue : 1;
 
 public:
-    SwUndoTblNumFmt( const SwTableBox& rBox, const SfxItemSet* pNewSet = 0 );
+    SwUndoTableNumFormat( const SwTableBox& rBox, const SfxItemSet* pNewSet = 0 );
 
-    virtual ~SwUndoTblNumFmt();
+    virtual ~SwUndoTableNumFormat();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    void SetNumFmt( sal_uLong nNewNumFmtIdx, const double& rNewNumber )
-            { nFmtIdx = nNewNumFmtIdx; fNum = rNewNumber; }
+    void SetNumFormat( sal_uLong nNewNumFormatIdx, const double& rNewNumber )
+            { nFormatIdx = nNewNumFormatIdx; fNum = rNewNumber; }
     void SetBox( const SwTableBox& rBox );
 };
 
-class _UndoTblCpyTbl_Entries;
+class _UndoTableCpyTable_Entries;
 
-class SwUndoTblCpyTbl : public SwUndo
+class SwUndoTableCpyTable : public SwUndo
 {
-    _UndoTblCpyTbl_Entries* pArr;
-    SwUndoTblNdsChg* pInsRowUndo;
+    _UndoTableCpyTable_Entries* pArr;
+    SwUndoTableNdsChg* pInsRowUndo;
 
     //b6341295: When redlining is active, PrepareRedline has to create the
     //redlining attributes for the new and the old table cell content
@@ -282,75 +282,75 @@ class SwUndoTblCpyTbl : public SwUndo
                 const SwPosition& rPos, bool& rJoin, bool bRedo );
 
 public:
-    SwUndoTblCpyTbl();
+    SwUndoTableCpyTable();
 
-    virtual ~SwUndoTblCpyTbl();
+    virtual ~SwUndoTableCpyTable();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    void AddBoxBefore( const SwTableBox& rBox, bool bDelCntnt );
+    void AddBoxBefore( const SwTableBox& rBox, bool bDelContent );
     void AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx,
-                bool bDelCntnt );
+                bool bDelContent );
 
     bool IsEmpty() const;
-    bool InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );
+    bool InsertRow( SwTable& rTable, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );
 };
 
-class SwUndoCpyTbl : public SwUndo
+class SwUndoCpyTable : public SwUndo
 {
     SwUndoDelete* pDel;
-    sal_uLong nTblNode;
+    sal_uLong nTableNode;
 
 public:
-    SwUndoCpyTbl();
+    SwUndoCpyTable();
 
-    virtual ~SwUndoCpyTbl();
+    virtual ~SwUndoCpyTable();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    void SetTableSttIdx( sal_uLong nIdx )           { nTblNode = nIdx; }
+    void SetTableSttIdx( sal_uLong nIdx )           { nTableNode = nIdx; }
 };
 
-class SwUndoSplitTbl : public SwUndo
+class SwUndoSplitTable : public SwUndo
 {
-    sal_uLong nTblNode, nOffset;
+    sal_uLong nTableNode, nOffset;
     SwSaveRowSpan* mpSaveRowSpan; // stores row span values at the splitting row
-    _SaveTable* pSavTbl;
+    _SaveTable* pSavTable;
     SwHistory* pHistory;
-    sal_uInt16 nMode, nFmlEnd;
+    sal_uInt16 nMode, nFormulaEnd;
     bool bCalcNewSize;
 
 public:
-    SwUndoSplitTbl( const SwTableNode& rTblNd, SwSaveRowSpan* pRowSp,
+    SwUndoSplitTable( const SwTableNode& rTableNd, SwSaveRowSpan* pRowSp,
             sal_uInt16 nMode, bool bCalcNewSize );
 
-    virtual ~SwUndoSplitTbl();
+    virtual ~SwUndoSplitTable();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
-    void SetTblNodeOffset( sal_uLong nIdx )     { nOffset = nIdx - nTblNode; }
+    void SetTableNodeOffset( sal_uLong nIdx )     { nOffset = nIdx - nTableNode; }
     SwHistory* GetHistory()                 { return pHistory; }
     void SaveFormula( SwHistory& rHistory );
 };
 
-class SwUndoMergeTbl : public SwUndo
+class SwUndoMergeTable : public SwUndo
 {
     OUString aName;
-    sal_uLong nTblNode;
-    _SaveTable* pSavTbl, *pSavHdl;
+    sal_uLong nTableNode;
+    _SaveTable* pSavTable, *pSavHdl;
     SwHistory* pHistory;
     sal_uInt16 nMode;
     bool bWithPrev;
 
 public:
-    SwUndoMergeTbl( const SwTableNode& rTblNd, const SwTableNode& rDelTblNd,
+    SwUndoMergeTable( const SwTableNode& rTableNd, const SwTableNode& rDelTableNd,
                     bool bWithPrev, sal_uInt16 nMode );
 
-    virtual ~SwUndoMergeTbl();
+    virtual ~SwUndoMergeTable();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
@@ -359,14 +359,14 @@ public:
     void SaveFormula( SwHistory& rHistory );
 };
 
-class SwUndoTblHeadline : public SwUndo
+class SwUndoTableHeadline : public SwUndo
 {
-    sal_uLong nTblNd;
+    sal_uLong nTableNd;
     sal_uInt16 nOldHeadline;
     sal_uInt16 nNewHeadline;
 
 public:
-    SwUndoTblHeadline( const SwTable&, sal_uInt16 nOldHdl,  sal_uInt16 nNewHdl );
+    SwUndoTableHeadline( const SwTable&, sal_uInt16 nOldHdl,  sal_uInt16 nNewHdl );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;

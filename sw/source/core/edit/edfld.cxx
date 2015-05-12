@@ -42,19 +42,19 @@
 #include <IDocumentContentOperations.hxx>
 
 /// count field types with a ResId, if 0 count all
-sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, bool bUsed ) const
+sal_uInt16 SwEditShell::GetFieldTypeCount(sal_uInt16 nResId, bool bUsed ) const
 {
-    const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
+    const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
 
     if(nResId == USHRT_MAX)
     {
         if(!bUsed)
-            return static_cast<sal_uInt16>(pFldTypes->size());
+            return static_cast<sal_uInt16>(pFieldTypes->size());
 
         sal_uInt16 nUsed = 0;
-        for ( const auto pFldType : *pFldTypes )
+        for ( const auto pFieldType : *pFieldTypes )
         {
-            if(IsUsed(*pFldType))
+            if(IsUsed(*pFieldType))
                 nUsed++;
         }
         return nUsed;
@@ -62,32 +62,32 @@ sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, bool bUsed ) const
 
     // all types with the same ResId
     sal_uInt16 nIdx  = 0;
-    for(const auto pFldType : *pFldTypes)
+    for(const auto pFieldType : *pFieldTypes)
     {
         // same ResId -> increment index
-        if(pFldType->Which() == nResId)
+        if(pFieldType->Which() == nResId)
             nIdx++;
     }
     return nIdx;
 }
 
 /// get field types with a ResId, if 0 get all
-SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, bool bUsed ) const
+SwFieldType* SwEditShell::GetFieldType(sal_uInt16 nField, sal_uInt16 nResId, bool bUsed ) const
 {
-    const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
+    const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
 
-    if(nResId == USHRT_MAX && nFld < pFldTypes->size())
+    if(nResId == USHRT_MAX && nField < pFieldTypes->size())
     {
         if(!bUsed)
-            return (*pFldTypes)[nFld];
+            return (*pFieldTypes)[nField];
 
-        SwFldTypes::size_type nUsed = 0;
-        for ( const auto pFldType : *pFldTypes )
+        SwFieldTypes::size_type nUsed = 0;
+        for ( const auto pFieldType : *pFieldTypes )
         {
-            if(IsUsed(*pFldType))
+            if(IsUsed(*pFieldType))
             {
-                if(nUsed == nFld)
-                    return pFldType;
+                if(nUsed == nField)
+                    return pFieldType;
                 nUsed++;
             }
         }
@@ -95,15 +95,15 @@ SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, bool bU
     }
 
     sal_uInt16 nIdx = 0;
-    for(const auto pFldType : *pFldTypes)
+    for(const auto pFieldType : *pFieldTypes)
     {
         // same ResId -> increment index
-        if(pFldType->Which() == nResId)
+        if(pFieldType->Which() == nResId)
         {
-            if (!bUsed || IsUsed(*pFldType))
+            if (!bUsed || IsUsed(*pFieldType))
             {
-                if(nIdx == nFld)
-                    return pFldType;
+                if(nIdx == nField)
+                    return pFieldType;
                 nIdx++;
             }
         }
@@ -112,50 +112,50 @@ SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, bool bU
 }
 
 /// get first type with given ResId and name
-SwFieldType* SwEditShell::GetFldType(sal_uInt16 nResId, const OUString& rName) const
+SwFieldType* SwEditShell::GetFieldType(sal_uInt16 nResId, const OUString& rName) const
 {
-    return GetDoc()->getIDocumentFieldsAccess().GetFldType( nResId, rName, false );
+    return GetDoc()->getIDocumentFieldsAccess().GetFieldType( nResId, rName, false );
 }
 
 /// delete field type
-void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
+void SwEditShell::RemoveFieldType(sal_uInt16 nField, sal_uInt16 nResId)
 {
     if( USHRT_MAX == nResId )
     {
-        GetDoc()->getIDocumentFieldsAccess().RemoveFldType(nFld);
+        GetDoc()->getIDocumentFieldsAccess().RemoveFieldType(nField);
         return;
     }
 
-    const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
+    const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
     sal_uInt16 nIdx = 0;
-    const SwFldTypes::size_type nSize = pFldTypes->size();
-    for( SwFldTypes::size_type i = 0; i < nSize; ++i )
+    const SwFieldTypes::size_type nSize = pFieldTypes->size();
+    for( SwFieldTypes::size_type i = 0; i < nSize; ++i )
         // Gleiche ResId -> Index erhoehen
-        if( (*pFldTypes)[i]->Which() == nResId && nIdx++ == nFld )
+        if( (*pFieldTypes)[i]->Which() == nResId && nIdx++ == nField )
         {
-            GetDoc()->getIDocumentFieldsAccess().RemoveFldType( i );
+            GetDoc()->getIDocumentFieldsAccess().RemoveFieldType( i );
             return;
         }
 }
 
 /// delete field type based on its name
-void SwEditShell::RemoveFldType(sal_uInt16 nResId, const OUString& rStr)
+void SwEditShell::RemoveFieldType(sal_uInt16 nResId, const OUString& rStr)
 {
-    const SwFldTypes* pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
-    const SwFldTypes::size_type nSize = pFldTypes->size();
+    const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+    const SwFieldTypes::size_type nSize = pFieldTypes->size();
     const CharClass& rCC = GetAppCharClass();
 
     OUString aTmp( rCC.lowercase( rStr ));
 
-    for(SwFldTypes::size_type i = 0; i < nSize; ++i)
+    for(SwFieldTypes::size_type i = 0; i < nSize; ++i)
     {
         // same ResId -> increment index
-        SwFieldType* pFldType = (*pFldTypes)[i];
-        if( pFldType->Which() == nResId )
+        SwFieldType* pFieldType = (*pFieldTypes)[i];
+        if( pFieldType->Which() == nResId )
         {
-            if( aTmp == rCC.lowercase( pFldType->GetName() ) )
+            if( aTmp == rCC.lowercase( pFieldType->GetName() ) )
             {
-                GetDoc()->getIDocumentFieldsAccess().RemoveFldType(i);
+                GetDoc()->getIDocumentFieldsAccess().RemoveFieldType(i);
                 return;
             }
         }
@@ -187,11 +187,11 @@ void SwEditShell::FieldToText( SwFieldType* pType )
 }
 
 /// add a field at the cursor position
-void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
+void SwEditShell::Insert2(SwField& rField, const bool bForceExpandHints)
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    SwFmtFld aFld( rFld );
+    SwFormatField aField( rField );
 
     const SetAttrMode nInsertFlags = (bForceExpandHints)
         ? SetAttrMode::FORCEHINTEXPAND
@@ -199,7 +199,7 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
 
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer()) // for each PaM
     {
-        const bool bSuccess(GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, aFld, nInsertFlags));
+        const bool bSuccess(GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, aField, nInsertFlags));
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
     }
@@ -208,11 +208,11 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
 }
 
 /// Are the PaMs positioned on fields?
-static SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
+static SwTextField* lcl_FindInputField( SwDoc* pDoc, SwField& rField )
 {
     // Search field via its address. For input fields this needs to be done in protected fields.
-    SwTxtFld* pTFld = 0;
-    if( RES_INPUTFLD == rFld.Which() )
+    SwTextField* pTField = 0;
+    if( RES_INPUTFLD == rField.Which() )
     {
         const sal_uInt32 nMaxItems =
             pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );
@@ -220,15 +220,15 @@ static SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
         {
             const SfxPoolItem* pItem = NULL;
             if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n ) )
-                && static_cast<const SwFmtFld*>(pItem)->GetField() == &rFld )
+                && static_cast<const SwFormatField*>(pItem)->GetField() == &rField )
             {
-                pTFld = const_cast<SwFmtFld*>(static_cast<const SwFmtFld*>(pItem))->GetTxtFld();
+                pTField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem))->GetTextField();
                 break;
             }
         }
     }
-    else if( RES_SETEXPFLD == rFld.Which()
-        && static_cast<SwSetExpField&>(rFld).GetInputFlag() )
+    else if( RES_SETEXPFLD == rField.Which()
+        && static_cast<SwSetExpField&>(rField).GetInputFlag() )
     {
         const sal_uInt32 nMaxItems =
             pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
@@ -236,52 +236,52 @@ static SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
         {
             const SfxPoolItem* pItem = NULL;
             if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
-                && static_cast<const SwFmtFld*>(pItem)->GetField() == &rFld )
+                && static_cast<const SwFormatField*>(pItem)->GetField() == &rField )
             {
-                pTFld = const_cast<SwFmtFld*>(static_cast<const SwFmtFld*>(pItem))->GetTxtFld();
+                pTField = const_cast<SwFormatField*>(static_cast<const SwFormatField*>(pItem))->GetTextField();
                 break;
             }
         }
     }
-    return pTFld;
+    return pTField;
 }
 
-void SwEditShell::UpdateFlds( SwField &rFld )
+void SwEditShell::UpdateFields( SwField &rField )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
     {
         // // If there are no selections so take the value of the current cursor position.
-        SwMsgPoolItem* pMsgHnt = 0;
-        SwRefMarkFldUpdate aRefMkHt( GetOut() );
-        sal_uInt16 nFldWhich = rFld.GetTyp()->Which();
-        if( RES_GETREFFLD == nFldWhich )
-            pMsgHnt = &aRefMkHt;
+        SwMsgPoolItem* pMsgHint = 0;
+        SwRefMarkFieldUpdate aRefMkHt( GetOut() );
+        sal_uInt16 nFieldWhich = rField.GetTyp()->Which();
+        if( RES_GETREFFLD == nFieldWhich )
+            pMsgHint = &aRefMkHt;
 
         SwPaM* pCrsr = GetCrsr();
-        SwTxtFld *pTxtFld;
-        SwFmtFld *pFmtFld;
+        SwTextField *pTextField;
+        SwFormatField *pFormatField;
 
         if ( !pCrsr->IsMultiSelection() && !pCrsr->HasMark())
         {
-            pTxtFld = GetTxtFldAtPos( pCrsr->Start(), true );
+            pTextField = GetTextFieldAtPos( pCrsr->Start(), true );
 
-            if (!pTxtFld) // #i30221#
-                pTxtFld = lcl_FindInputFld( GetDoc(), rFld);
+            if (!pTextField) // #i30221#
+                pTextField = lcl_FindInputField( GetDoc(), rField);
 
-            if (pTxtFld != 0)
-                GetDoc()->getIDocumentFieldsAccess().UpdateFld(pTxtFld, rFld, pMsgHnt, true);
+            if (pTextField != 0)
+                GetDoc()->getIDocumentFieldsAccess().UpdateField(pTextField, rField, pMsgHint, true);
         }
 
         // bOkay (instead of return because of EndAllAction) becomes false,
         // 1) if only one PaM has more than one field or
         // 2) if there are mixed field types
         bool bOkay = true;
-        bool bTblSelBreak = false;
+        bool bTableSelBreak = false;
 
-        SwMsgPoolItem aFldHint( RES_TXTATR_FIELD );  // Search-Hint
-        SwMsgPoolItem aAnnotationFldHint( RES_TXTATR_ANNOTATION );
-        SwMsgPoolItem aInputFldHint( RES_TXTATR_INPUTFIELD );
+        SwMsgPoolItem aFieldHint( RES_TXTATR_FIELD );  // Search-Hint
+        SwMsgPoolItem aAnnotationFieldHint( RES_TXTATR_ANNOTATION );
+        SwMsgPoolItem aInputFieldHint( RES_TXTATR_INPUTFIELD );
         for(SwPaM& rPaM : GetCrsr()->GetRingContainer()) // for each PaM
         {
             if( rPaM.HasMark() && bOkay )    // ... with selection
@@ -298,36 +298,36 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                  * the loop terminates because Start = End.
                  */
 
-                // Search for SwTxtFld ...
+                // Search for SwTextField ...
                 while(  bOkay
                      && pCurStt->nContent != pCurEnd->nContent
-                     && ( aPam.Find( aFldHint, false, fnMoveForward, &aCurPam, true )
-                          || aPam.Find( aAnnotationFldHint, false, fnMoveForward, &aCurPam )
-                          || aPam.Find( aInputFldHint, false, fnMoveForward, &aCurPam ) ) )
+                     && ( aPam.Find( aFieldHint, false, fnMoveForward, &aCurPam, true )
+                          || aPam.Find( aAnnotationFieldHint, false, fnMoveForward, &aCurPam )
+                          || aPam.Find( aInputFieldHint, false, fnMoveForward, &aCurPam ) ) )
                 {
                     // if only one PaM has more than one field  ...
                     if( aPam.Start()->nContent != pCurStt->nContent )
                         bOkay = false;
 
-                    if( 0 != (pTxtFld = GetTxtFldAtPos( pCurStt, true )) )
+                    if( 0 != (pTextField = GetTextFieldAtPos( pCurStt, true )) )
                     {
-                        pFmtFld = const_cast<SwFmtFld*>(&pTxtFld->GetFmtFld());
-                        SwField *pCurFld = pFmtFld->GetField();
+                        pFormatField = const_cast<SwFormatField*>(&pTextField->GetFormatField());
+                        SwField *pCurField = pFormatField->GetField();
 
                         // if there are mixed field types
-                        if( pCurFld->GetTyp()->Which() !=
-                            rFld.GetTyp()->Which() )
+                        if( pCurField->GetTyp()->Which() !=
+                            rField.GetTyp()->Which() )
                             bOkay = false;
 
-                        bTblSelBreak = GetDoc()->getIDocumentFieldsAccess().UpdateFld(pTxtFld, rFld,
-                                                           pMsgHnt, false);
+                        bTableSelBreak = GetDoc()->getIDocumentFieldsAccess().UpdateField(pTextField, rField,
+                                                           pMsgHint, false);
                     }
                     // The search area is reduced by the found area:
                     ++pCurStt->nContent;
                 }
             }
 
-            if( bTblSelBreak ) // If table section and table formula are updated -> finish
+            if( bTableSelBreak ) // If table section and table formula are updated -> finish
                 break;
 
         }
@@ -364,11 +364,11 @@ void SwEditShell::ChangeDBFields( const std::vector<OUString>& rOldNames,
 }
 
 /// Update all expression fields
-void SwEditShell::UpdateExpFlds(bool bCloseDB)
+void SwEditShell::UpdateExpFields(bool bCloseDB)
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
+    GetDoc()->getIDocumentFieldsAccess().UpdateExpFields(NULL, true);
     if (bCloseDB)
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
@@ -388,27 +388,27 @@ SwDBManager* SwEditShell::GetDBManager() const
 }
 
 /// insert field type
-SwFieldType* SwEditShell::InsertFldType(const SwFieldType& rFldType)
+SwFieldType* SwEditShell::InsertFieldType(const SwFieldType& rFieldType)
 {
-    return GetDoc()->getIDocumentFieldsAccess().InsertFldType(rFldType);
+    return GetDoc()->getIDocumentFieldsAccess().InsertFieldType(rFieldType);
 }
 
-void SwEditShell::LockExpFlds()
+void SwEditShell::LockExpFields()
 {
-    GetDoc()->getIDocumentFieldsAccess().LockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().LockExpFields();
 }
 
-void SwEditShell::UnlockExpFlds()
+void SwEditShell::UnlockExpFields()
 {
-    GetDoc()->getIDocumentFieldsAccess().UnlockExpFlds();
+    GetDoc()->getIDocumentFieldsAccess().UnlockExpFields();
 }
 
-void SwEditShell::SetFldUpdateFlags( SwFldUpdateFlags eFlags )
+void SwEditShell::SetFieldUpdateFlags( SwFieldUpdateFlags eFlags )
 {
     getIDocumentSettingAccess()->setFieldUpdateFlags( eFlags );
 }
 
-SwFldUpdateFlags SwEditShell::GetFldUpdateFlags(bool bDocSettings) const
+SwFieldUpdateFlags SwEditShell::GetFieldUpdateFlags(bool bDocSettings) const
 {
     return getIDocumentSettingAccess()->getFieldUpdateFlags( !bDocSettings );
 }
@@ -430,25 +430,25 @@ void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)
 
 bool SwEditShell::IsAnyDatabaseFieldInDoc()const
 {
-    const SwFldTypes * pFldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
-    for(const auto pFldType : *pFldTypes)
+    const SwFieldTypes * pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+    for(const auto pFieldType : *pFieldTypes)
     {
-        if(IsUsed(*pFldType))
+        if(IsUsed(*pFieldType))
         {
-            switch(pFldType->Which())
+            switch(pFieldType->Which())
             {
                 case RES_DBFLD:
                 case RES_DBNEXTSETFLD:
                 case RES_DBNUMSETFLD:
                 case RES_DBSETNUMBERFLD:
                 {
-                    SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-                    SwFmtFld* pFld = aIter.First();
-                    while(pFld)
+                    SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
+                    SwFormatField* pField = aIter.First();
+                    while(pField)
                     {
-                        if(pFld->IsFldInDoc())
+                        if(pField->IsFieldInDoc())
                             return true;
-                        pFld = aIter.Next();
+                        pField = aIter.Next();
                     }
                 }
                 break;

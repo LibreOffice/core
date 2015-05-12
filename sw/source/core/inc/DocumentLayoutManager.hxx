@@ -49,9 +49,9 @@ public:
     virtual SwLayouter* GetLayouter() SAL_OVERRIDE;
     virtual void SetLayouter( SwLayouter* pNew ) SAL_OVERRIDE;
 
-    virtual SwFrmFmt* MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet ) SAL_OVERRIDE;
-    virtual void DelLayoutFmt( SwFrmFmt *pFmt ) SAL_OVERRIDE;
-    virtual SwFrmFmt* CopyLayoutFmt( const SwFrmFmt& rSrc, const SwFmtAnchor& rNewAnchor, bool bSetTxtFlyAtt, bool bMakeFrms ) SAL_OVERRIDE;
+    virtual SwFrameFormat* MakeLayoutFormat( RndStdIds eRequest, const SfxItemSet* pSet ) SAL_OVERRIDE;
+    virtual void DelLayoutFormat( SwFrameFormat *pFormat ) SAL_OVERRIDE;
+    virtual SwFrameFormat* CopyLayoutFormat( const SwFrameFormat& rSrc, const SwFormatAnchor& rNewAnchor, bool bSetTextFlyAtt, bool bMakeFrms ) SAL_OVERRIDE;
 
     //Non Interface methods
     void ClearSwLayouterEntries();

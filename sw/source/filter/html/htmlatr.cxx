@@ -122,7 +122,7 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
     if( nDefListLvl < nNewLvl )
     {
         // output </pre> for the previous(!) pararagraph, if required.
-        // Preferable, the <pre> is exported by OutHTML_SwFmtOff for the
+        // Preferable, the <pre> is exported by OutHTML_SwFormatOff for the
            // previous  paragraph already, but that's not possible, because a very
         // deep look at the next paragraph (this one) is required to figure
         // out that a def list starts here.
@@ -189,17 +189,17 @@ sal_uInt16 SwHTMLWriter::GetCSS1ScriptForScriptType( sal_uInt16 nScriptType )
  * Formate wie folgt ausgeben:
  * - fuer Formate, fuer die es entsprechende HTML-Tags gibt wird das
  *   Tag ausgegeben
- * - fuer alle anderen wird ein Absatz-Tag <P> ausgegeben und bUserFmt
+ * - fuer alle anderen wird ein Absatz-Tag <P> ausgegeben und bUserFormat
  *   gesetzt
  * - Wenn eine Absatz-Ausrichtung am uebergebenen Item-Set des Nodes
  *   oder im Item-Set des Format gesetzt ist, wird ein ALIGN=xxx ausgegeben,
  *   sofern HTML es zulaesst
  * - in jedem Fall wird harte Attributierung als STYLE-Option geschrieben.
- *   Wenn bUserFmt nicht gesetzt ist, wird nur der uebergebene Item-Set
+ *   Wenn bUserFormat nicht gesetzt ist, wird nur der uebergebene Item-Set
  *   betrachtet. Sonst werden auch Attribute des Formats ausgegeben.
  */
 
-struct SwHTMLTxtCollOutputInfo
+struct SwHTMLTextCollOutputInfo
 {
     OString aToken;        // auszugendens End-Token
     std::unique_ptr<SfxItemSet> pItemSet;       // harte Attributierung
@@ -209,29 +209,29 @@ struct SwHTMLTxtCollOutputInfo
     bool bOutPara;              // ein </P> soll ausgegeben werden
     bool bOutDiv;               // write a </DIV>
 
-    SwHTMLTxtCollOutputInfo() :
+    SwHTMLTextCollOutputInfo() :
         bInNumBulList( false ),
         bParaPossible( false ),
         bOutPara( false ),
         bOutDiv( false )
     {}
 
-    ~SwHTMLTxtCollOutputInfo();
+    ~SwHTMLTextCollOutputInfo();
 
     bool HasParaToken() const { return aToken.getLength()==1 && aToken[0]=='P'; }
     bool ShouldOutputToken() const { return bOutPara || !HasParaToken(); }
 };
 
-SwHTMLTxtCollOutputInfo::~SwHTMLTxtCollOutputInfo()
+SwHTMLTextCollOutputInfo::~SwHTMLTextCollOutputInfo()
 {
 }
 
-SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
+SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTemplate,
                               bool bOutStyles,
                               LanguageType eDfltLang,
                               sal_uInt16 nCSS1Script, bool bHardDrop )
-    : pFmt(pF)
-    , pRefFmt(0)
+    : pFormat(pF)
+    , pRefFormat(0)
     , pItemSet(0)
     , nLeftMargin(0)
     , nRightMargin(0)
@@ -242,17 +242,17 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
 {
     sal_uInt16 nRefPoolId = 0;
     // Den Selektor des Formats holen
-    sal_uInt16 nDeep = SwHTMLWriter::GetCSS1Selector( pFmt, aToken, aClass,
+    sal_uInt16 nDeep = SwHTMLWriter::GetCSS1Selector( pFormat, aToken, aClass,
                                                   nRefPoolId );
     OSL_ENSURE( nDeep ? !aToken.isEmpty() : aToken.isEmpty(),
             "Hier stimmt doch was mit dem Token nicht!" );
     OSL_ENSURE( nDeep ? nRefPoolId != 0 : nRefPoolId == 0,
             "Hier stimmt doch was mit der Vergleichs-Vorlage nicht!" );
 
-    bool bTxtColl = pFmt->Which() == RES_TXTFMTCOLL ||
-                    pFmt->Which() == RES_CONDTXTFMTCOLL;
+    bool bTextColl = pFormat->Which() == RES_TXTFMTCOLL ||
+                    pFormat->Which() == RES_CONDTXTFMTCOLL;
 
-    const SwFmt *pReferenceFmt = 0; // Vergleichs-Format
+    const SwFormat *pReferenceFormat = 0; // Vergleichs-Format
     bool bSetDefaults = true, bClearSame = true;
     if( nDeep != 0 )
     {
@@ -268,7 +268,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             case CSS1_FMT_CMPREF:
                 // fuer HTML-Tag-Vorlagen die Unterscheide zum Original
                 // (sofern verfuegbar)
-                pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId,
+                pReferenceFormat = SwHTMLWriter::GetTemplateFormat( nRefPoolId,
                                                         &pTemplate->getIDocumentStylePoolAccess() );
                 break;
 
@@ -276,38 +276,38 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                 // sonst die zur HTML-Tag-Vorlage des Originals oder des
                 // aktuellen Doks, wenn die nicht verfuegbar ist
                 if( pTemplate )
-                    pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId,
+                    pReferenceFormat = SwHTMLWriter::GetTemplateFormat( nRefPoolId,
                                                             &pTemplate->getIDocumentStylePoolAccess() );
                 else
-                    pReferenceFmt = SwHTMLWriter::GetParentFmt( *pFmt, nDeep );
+                    pReferenceFormat = SwHTMLWriter::GetParentFormat( *pFormat, nDeep );
                 break;
             }
         }
     }
-    else if( bTxtColl )
+    else if( bTextColl )
     {
         // Nicht von einer HTML-Tag-Vorlage abgeleitete Absatz-Vorlagen
         // muessen als harte Attributierung relativ zur Textkoerper-Volage
         // exportiert werden. Fuer Nicht-Styles-Export sollte die der
         // HTML-Vorlage als Referenz dienen
         if( !bOutStyles && pTemplate )
-            pReferenceFmt = pTemplate->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
+            pReferenceFormat = pTemplate->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT, false );
         else
-            pReferenceFmt = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
+            pReferenceFormat = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT, false );
     }
 
-    if( pReferenceFmt || nDeep==0 )
+    if( pReferenceFormat || nDeep==0 )
     {
-        pItemSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
-                                       pFmt->GetAttrSet().GetRanges() );
+        pItemSet = new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                       pFormat->GetAttrSet().GetRanges() );
         // wenn Unterschiede zu einer anderen Vorlage geschrieben werden
         // sollen ist harte Attributierung noetig. Fuer Vorlagen, die
         // nicht von HTML-Tag-Vorlagen abgeleitet sind, gilt das immer
 
-        pItemSet->Set( pFmt->GetAttrSet(), true );
+        pItemSet->Set( pFormat->GetAttrSet(), true );
 
-        if( pReferenceFmt )
-            SwHTMLWriter::SubtractItemSet( *pItemSet, pReferenceFmt->GetAttrSet(),
+        if( pReferenceFormat )
+            SwHTMLWriter::SubtractItemSet( *pItemSet, pReferenceFormat->GetAttrSet(),
                                            bSetDefaults, bClearSame );
 
         // einen leeren Item-Set gleich loeschen, das spart speater
@@ -319,7 +319,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         }
     }
 
-    if( bTxtColl )
+    if( bTextColl )
     {
         if( bOutStyles )
         {
@@ -357,15 +357,15 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             }
             for( sal_uInt16 i=0; i<4; i++ )
             {
-                const SfxPoolItem& rRef = pFmt->GetFmtAttr( aWhichIds[nRef][i] );
+                const SfxPoolItem& rRef = pFormat->GetFormatAttr( aWhichIds[nRef][i] );
                 for( sal_uInt16 j=0; j<2; j++ )
                 {
-                    const SfxPoolItem& rSet = pFmt->GetFmtAttr( aWhichIds[aSets[j]][i] );
+                    const SfxPoolItem& rSet = pFormat->GetFormatAttr( aWhichIds[aSets[j]][i] );
                     if( rSet != rRef )
                     {
                         if( !pItemSet )
-                            pItemSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
-                                                       pFmt->GetAttrSet().GetRanges() );
+                            pItemSet = new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                                       pFormat->GetAttrSet().GetRanges() );
                         pItemSet->Put( rSet );
                     }
                 }
@@ -376,24 +376,24 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         if( bOutStyles && bHardDrop && nDeep != 0 )
         {
             const SfxPoolItem *pItem;
-            if( SfxItemState::SET==pFmt->GetAttrSet().GetItemState(
+            if( SfxItemState::SET==pFormat->GetAttrSet().GetItemState(
                                     RES_PARATR_DROP, true, &pItem ) )
             {
                 bool bPut = true;
                 if( pTemplate )
                 {
-                    pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId, &pTemplate->getIDocumentStylePoolAccess() );
+                    pReferenceFormat = SwHTMLWriter::GetTemplateFormat( nRefPoolId, &pTemplate->getIDocumentStylePoolAccess() );
                     const SfxPoolItem *pRefItem;
                     bool bRefItemSet =
-                        SfxItemState::SET==pReferenceFmt->GetAttrSet().GetItemState(
+                        SfxItemState::SET==pReferenceFormat->GetAttrSet().GetItemState(
                                         RES_PARATR_DROP, true, &pRefItem );
                     bPut = !bRefItemSet || *pItem!=*pRefItem;
                 }
                 if( bPut )
                 {
                     if( !pItemSet )
-                        pItemSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
-                                                   pFmt->GetAttrSet().GetRanges() );
+                        pItemSet = new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                                   pFormat->GetAttrSet().GetRanges() );
                     pItemSet->Put( *pItem );
                 }
             }
@@ -402,13 +402,13 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         // Die diversen default-Abstaende aus der Vorlage oder der
         // Vergleischs-Vorlage merken
         const SvxLRSpaceItem &rLRSpace =
-            (pReferenceFmt ? pReferenceFmt : pFmt)->GetLRSpace();
-        nLeftMargin = rLRSpace.GetTxtLeft();
+            (pReferenceFormat ? pReferenceFormat : pFormat)->GetLRSpace();
+        nLeftMargin = rLRSpace.GetTextLeft();
         nRightMargin = rLRSpace.GetRight();
-        nFirstLineIndent = rLRSpace.GetTxtFirstLineOfst();
+        nFirstLineIndent = rLRSpace.GetTextFirstLineOfst();
 
         const SvxULSpaceItem &rULSpace =
-            (pReferenceFmt ? pReferenceFmt : pFmt)->GetULSpace();
+            (pReferenceFormat ? pReferenceFormat : pFormat)->GetULSpace();
         nTopMargin = rULSpace.GetUpper();
         nBottomMargin = rULSpace.GetLower();
 
@@ -416,13 +416,13 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         sal_uInt16 nWhichId =
             SwHTMLWriter::GetLangWhichIdFromScript( nCSS1Script );
         const SvxLanguageItem& rLang =
-            static_cast<const SvxLanguageItem&>(pFmt->GetFmtAttr( nWhichId ));
+            static_cast<const SvxLanguageItem&>(pFormat->GetFormatAttr( nWhichId ));
         LanguageType eLang = rLang.GetLanguage();
         if( eLang != eDfltLang )
         {
             if( !pItemSet )
-                pItemSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
-                                           pFmt->GetAttrSet().GetRanges() );
+                pItemSet = new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                           pFormat->GetAttrSet().GetRanges() );
             pItemSet->Put( rLang );
         }
 
@@ -434,12 +434,12 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             if( aWhichIds[i] != nWhichId )
             {
                 const SvxLanguageItem& rTmpLang =
-                    static_cast<const SvxLanguageItem&>(pFmt->GetFmtAttr(aWhichIds[i]));
+                    static_cast<const SvxLanguageItem&>(pFormat->GetFormatAttr(aWhichIds[i]));
                 if( rTmpLang.GetLanguage() != eLang )
                 {
                     if( !pItemSet )
-                        pItemSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
-                                                   pFmt->GetAttrSet().GetRanges() );
+                        pItemSet = new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                                   pFormat->GetAttrSet().GetRanges() );
                     pItemSet->Put( rTmpLang );
                 }
             }
@@ -447,16 +447,16 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
     }
 }
 
-SwHTMLFmtInfo::~SwHTMLFmtInfo()
+SwHTMLFormatInfo::~SwHTMLFormatInfo()
 {
     delete pItemSet;
 }
 
-void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
+void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                     const SfxItemSet *pNodeItemSet,
-                    SwHTMLTxtCollOutputInfo& rInfo )
+                    SwHTMLTextCollOutputInfo& rInfo )
 {
-    OSL_ENSURE( RES_CONDTXTFMTCOLL==rFmt.Which() || RES_TXTFMTCOLL==rFmt.Which(),
+    OSL_ENSURE( RES_CONDTXTFMTCOLL==rFormat.Which() || RES_TXTFMTCOLL==rFormat.Which(),
             "keine Absatz-Vorlage" );
 
     SwHTMLWriter & rHWrt = static_cast<SwHTMLWriter&>(rWrt);
@@ -477,7 +477,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     sal_uInt8 nBulletGrfLvl = 255;      // Die auszugebende Bullet-Grafik
 
     // Sind wir in einer Aufzaehlungs- oder Numerierungliste?
-    const SwTxtNode* pTxtNd = rWrt.pCurPam->GetNode().GetTxtNode();
+    const SwTextNode* pTextNd = rWrt.pCurPam->GetNode().GetTextNode();
 
     SwHTMLNumRuleInfo aNumInfo;
     if( rHWrt.GetNextNumInfo() )
@@ -487,7 +487,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     }
     else
     {
-        aNumInfo.Set( *pTxtNd );
+        aNumInfo.Set( *pTextNd );
     }
 
     if( aNumInfo.GetNumRule() )
@@ -499,9 +499,9 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         bNumbered = aNumInfo.IsNumbered();
         sal_uInt8 nLvl = aNumInfo.GetLevel();
 
-        OSL_ENSURE( pTxtNd->GetActualListLevel() == nLvl,
+        OSL_ENSURE( pTextNd->GetActualListLevel() == nLvl,
                 "Gemerkter Num-Level ist falsch" );
-        OSL_ENSURE( bNumbered == pTxtNd->IsCountedInList(),
+        OSL_ENSURE( bNumbered == pTextNd->IsCountedInList(),
                 "Gemerkter Numerierungs-Zustand ist falsch" );
 
         if( bNumbered )
@@ -512,9 +512,9 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             // - <nNumStart> has to contain the restart value, if the
             //   numbering is restarted at this text node. Value <USHRT_MAX>
             //   indicates, that no additional restart value has to be written.
-            if ( pTxtNd->IsListRestart() )
+            if ( pTextNd->IsListRestart() )
             {
-                nNumStart = static_cast< sal_uInt16 >(pTxtNd->GetActualListStartValue());
+                nNumStart = static_cast< sal_uInt16 >(pTextNd->GetActualListStartValue());
             }
             OSL_ENSURE( rHWrt.nLastParaToken == 0,
                 "<PRE> wurde nicht vor <LI> beendet." );
@@ -522,32 +522,32 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     }
 
     // Jetzt holen wir das Token und ggf. die Klasse
-    SwHTMLFmtInfo aFmtInfo( &rFmt );
-    SwHTMLFmtInfo *pFmtInfo;
-    SwHTMLFmtInfos::iterator it = rHWrt.aTxtCollInfos.find( aFmtInfo );
-    if( it != rHWrt.aTxtCollInfos.end() )
+    SwHTMLFormatInfo aFormatInfo( &rFormat );
+    SwHTMLFormatInfo *pFormatInfo;
+    SwHTMLFormatInfos::iterator it = rHWrt.aTextCollInfos.find( aFormatInfo );
+    if( it != rHWrt.aTextCollInfos.end() )
     {
-        pFmtInfo = &*it;
+        pFormatInfo = &*it;
     }
     else
     {
-        pFmtInfo = new SwHTMLFmtInfo( &rFmt, rWrt.pDoc, rHWrt.pTemplate,
+        pFormatInfo = new SwHTMLFormatInfo( &rFormat, rWrt.pDoc, rHWrt.pTemplate,
                                       rHWrt.bCfgOutStyles, rHWrt.eLang,
                                       rHWrt.nCSS1Script,
                                       false );
-        rHWrt.aTxtCollInfos.insert( pFmtInfo );
-        if( rHWrt.aScriptParaStyles.count( rFmt.GetName() ) )
-            pFmtInfo->bScriptDependent = true;
+        rHWrt.aTextCollInfos.insert( pFormatInfo );
+        if( rHWrt.aScriptParaStyles.count( rFormat.GetName() ) )
+            pFormatInfo->bScriptDependent = true;
     }
 
     // Jetzt wird festgelegt, was aufgrund des Tokens so moeglich ist
     sal_uInt16 nToken = 0;          // Token fuer Tag-Wechsel
     bool bOutNewLine = false;   // nur ein LF ausgeben?
-    if( !pFmtInfo->aToken.isEmpty() )
+    if( !pFormatInfo->aToken.isEmpty() )
     {
         // Es ist eine HTML-Tag-Vorlage oder die Vorlage ist von einer
         // solchen abgeleitet
-        rInfo.aToken = pFmtInfo->aToken;
+        rInfo.aToken = pFormatInfo->aToken;
 
         if (rInfo.aToken == OOO_STRING_SVTOOLS_HTML_address)
         {
@@ -594,10 +594,10 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     }
 
     // Falls noetig, die harte Attributierung der Vorlage uebernehmen
-    if( pFmtInfo->pItemSet )
+    if( pFormatInfo->pItemSet )
     {
         OSL_ENSURE( !rInfo.pItemSet.get(), "Wo kommt der Item-Set her?" );
-        rInfo.pItemSet.reset(new SfxItemSet( *pFmtInfo->pItemSet ));
+        rInfo.pItemSet.reset(new SfxItemSet( *pFormatInfo->pItemSet ));
     }
 
     // und noch die harte Attributierung des Absatzes dazunehmen
@@ -612,7 +612,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // den unteren Absatz-Abstand brauchen wir noch
     const SvxULSpaceItem& rULSpace =
         pNodeItemSet ? static_cast<const SvxULSpaceItem &>(pNodeItemSet->Get(RES_UL_SPACE))
-                     : rFmt.GetULSpace();
+                     : rFormat.GetULSpace();
 
     if( (rHWrt.bOutHeader &&
          rWrt.pCurPam->GetPoint()->nNode.GetIndex() ==
@@ -629,7 +629,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
             if (!rInfo.pItemSet.get())
             {
-                rInfo.pItemSet.reset(new SfxItemSet(*rFmt.GetAttrSet().GetPool(), RES_UL_SPACE, RES_UL_SPACE));
+                rInfo.pItemSet.reset(new SfxItemSet(*rFormat.GetAttrSet().GetPool(), RES_UL_SPACE, RES_UL_SPACE));
             }
             rInfo.pItemSet->Put( aULSpaceItem );
         }
@@ -667,15 +667,15 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // eine Definitions-Liste
     const SvxLRSpaceItem& rLRSpace =
         pNodeItemSet ? static_cast<const SvxLRSpaceItem &>(pNodeItemSet->Get(RES_LR_SPACE))
-                     : rFmt.GetLRSpace();
+                     : rFormat.GetLRSpace();
     if( (!rHWrt.bCfgOutStyles || bForceDL) && !rInfo.bInNumBulList )
     {
         sal_Int32 nLeftMargin;
         if( bForceDL )
-            nLeftMargin = rLRSpace.GetTxtLeft();
+            nLeftMargin = rLRSpace.GetTextLeft();
         else
-            nLeftMargin = rLRSpace.GetTxtLeft() > pFmtInfo->nLeftMargin
-                ? rLRSpace.GetTxtLeft() - pFmtInfo->nLeftMargin
+            nLeftMargin = rLRSpace.GetTextLeft() > pFormatInfo->nLeftMargin
+                ? rLRSpace.GetTextLeft() - pFormatInfo->nLeftMargin
                 : 0;
 
         if( nLeftMargin > 0 && rHWrt.nDefListMargin > 0 )
@@ -693,9 +693,9 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             nNewDefListLvl = (bForceDL&& !bDT) ? 1 : 0;
         }
 
-        bool bIsNextTxtNode =
+        bool bIsNextTextNode =
             rWrt.pDoc->GetNodes()[rWrt.pCurPam->GetPoint()->nNode.GetIndex()+1]
-                     ->IsTxtNode();
+                     ->IsTextNode();
 
         if( bForceDL && bDT )
         {
@@ -705,7 +705,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         }
         else if( !nNewDefListLvl && !rHWrt.bCfgOutStyles && bPara &&
                  rULSpace.GetLower()==0 &&
-                 ((bUseParSpace && bIsNextTxtNode) || rHWrt.nDefListLvl==1) &&
+                 ((bUseParSpace && bIsNextTextNode) || rHWrt.nDefListLvl==1) &&
                  (!pAdjItem || SVX_ADJUST_LEFT==
                     static_cast<const SvxAdjustItem *>(pAdjItem)->GetAdjust()) )
         {
@@ -737,17 +737,17 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     // Die Defaults aus der Vorlage merken, denn sie muessen nicht
     // exportiert werden
-    rHWrt.nDfltLeftMargin = pFmtInfo->nLeftMargin;
-    rHWrt.nDfltRightMargin = pFmtInfo->nRightMargin;
-    rHWrt.nDfltFirstLineIndent = pFmtInfo->nFirstLineIndent;
+    rHWrt.nDfltLeftMargin = pFormatInfo->nLeftMargin;
+    rHWrt.nDfltRightMargin = pFormatInfo->nRightMargin;
+    rHWrt.nDfltFirstLineIndent = pFormatInfo->nFirstLineIndent;
 
     if( rInfo.bInNumBulList )
     {
         if( !rHWrt.IsHTMLMode( HTMLMODE_LSPACE_IN_NUMBUL ) )
-            rHWrt.nDfltLeftMargin = rLRSpace.GetTxtLeft();
+            rHWrt.nDfltLeftMargin = rLRSpace.GetTextLeft();
 
         // In Numerierungs-Listen keinen Ertzeilen-Einzug ausgeben.
-        rHWrt.nFirstLineIndent = rLRSpace.GetTxtFirstLineOfst();
+        rHWrt.nFirstLineIndent = rLRSpace.GetTextFirstLineOfst();
     }
 
     if( rInfo.bInNumBulList && bNumbered && bPara && !rHWrt.bCfgOutStyles )
@@ -764,7 +764,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     }
     else
     {
-        rHWrt.nDfltTopMargin = pFmtInfo->nTopMargin;
+        rHWrt.nDfltTopMargin = pFormatInfo->nTopMargin;
         // Wenn im letzten Absatz einer Tabelle der
         // untere Absatz-Abstand veraendert wird, vertut sich
         // Netscape total. Deshalb exportieren wir hier erstmal
@@ -773,7 +773,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         if( rHWrt.bCfgNetscape4 && !bUseParSpace )
             rHWrt.nDfltBottomMargin = rULSpace.GetLower();
         else
-            rHWrt.nDfltBottomMargin = pFmtInfo->nBottomMargin;
+            rHWrt.nDfltBottomMargin = pFormatInfo->nBottomMargin;
     }
 
     if( rHWrt.nDefListLvl )
@@ -816,7 +816,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_division);
         rWrt.Strm().WriteOString( sOut );
 
-        rHWrt.bTxtAttr = false;
+        rHWrt.bTextAttr = false;
         rHWrt.bOutOpts = true;
         OutHTML_SvxAdjust( rWrt, *pAdjItem );
         rWrt.Strm().WriteChar( '>' );
@@ -868,7 +868,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     sal_uInt16 nDir = rHWrt.GetHTMLDirection(
             (pNodeItemSet ? static_cast < const SvxFrameDirectionItem& >(
                                     pNodeItemSet->Get( RES_FRAMEDIR ) )
-                          : rFmt.GetFrmDir() ).GetValue() );
+                          : rFormat.GetFrmDir() ).GetValue() );
 
     // Ein <P> wird nur geschrieben, wenn
     // - wir in keiner OL/UL/DL sind, oder
@@ -890,7 +890,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         rHWrt.bCfgOutStyles )
     {
         // jetzt werden Optionen ausgegeben
-        rHWrt.bTxtAttr = false;
+        rHWrt.bTextAttr = false;
         rHWrt.bOutOpts = true;
 
         OString sOut = "<" + aToken;
@@ -913,13 +913,13 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         }
 
         if( rHWrt.bCfgOutStyles &&
-            (!pFmtInfo->aClass.isEmpty() || pFmtInfo->bScriptDependent) )
+            (!pFormatInfo->aClass.isEmpty() || pFormatInfo->bScriptDependent) )
         {
             sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_class) + "=\"";
             rWrt.Strm().WriteOString( sOut );
             sOut = "";
-            OUString aClass( pFmtInfo->aClass );
-            if( pFmtInfo->bScriptDependent )
+            OUString aClass( pFormatInfo->aClass );
+            if( pFormatInfo->bScriptDependent )
             {
                 if( !aClass.isEmpty() )
                    aClass += "-";
@@ -948,7 +948,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             OutHTML_SvxAdjust( rWrt, *pAdjItem );
 
         rHWrt.bParaDotLeaders = bPara && rHWrt.bCfgPrintLayout && rHWrt.indexOfDotLeaders(
-                pTxtNd->GetAnyFmtColl().GetPoolFmtId(), pTxtNd->GetTxt()) > -1;
+                pTextNd->GetAnyFormatColl().GetPoolFormatId(), pTextNd->GetText()) > -1;
 
         // und nun ggf. noch die STYLE-Option
         if( rHWrt.bCfgOutStyles && rInfo.pItemSet && !bNoStyle)
@@ -981,8 +981,8 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     {
         OSL_ENSURE( aNumInfo.GetNumRule(), "Wo ist die Numerierung geblieben???" );
         OSL_ENSURE( nBulletGrfLvl < MAXLEVEL, "So viele Ebenen gibt's nicht" );
-        const SwNumFmt& rNumFmt = aNumInfo.GetNumRule()->Get(nBulletGrfLvl);
-        OutHTML_BulletImage( rWrt, OOO_STRING_SVTOOLS_HTML_image, rNumFmt.GetBrush() );
+        const SwNumFormat& rNumFormat = aNumInfo.GetNumRule()->Get(nBulletGrfLvl);
+        OutHTML_BulletImage( rWrt, OOO_STRING_SVTOOLS_HTML_image, rNumFormat.GetBrush() );
     }
 
     rHWrt.GetNumInfo() = aNumInfo;
@@ -997,7 +997,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     rHWrt.nFirstLineIndent = 0;
 }
 
-void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
+void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& rInfo )
 {
     SwHTMLWriter & rHWrt = static_cast<SwHTMLWriter&>(rWrt);
 
@@ -1116,7 +1116,7 @@ class HTMLEndPosLst
     SwDoc *pDoc;            // das aktuelle Dokument
     SwDoc* pTemplate;       // die HTML-Vorlage (oder 0)
     const Color* pDfltColor;// die Default-Vordergrund-Farbe
-    std::set<OUString>& rScriptTxtStyles;
+    std::set<OUString>& rScriptTextStyles;
 
     sal_uLong nHTMLMode;
     bool bOutStyles : 1;    // werden Styles exportiert
@@ -1155,11 +1155,11 @@ class HTMLEndPosLst
 
     // Insert without taking care of script
     void InsertNoScript( const SfxPoolItem& rItem, sal_Int32 nStart,
-                          sal_Int32 nEnd, SwHTMLFmtInfos& rFmtInfos,
+                          sal_Int32 nEnd, SwHTMLFormatInfos& rFormatInfos,
                          bool bParaAttrs=false );
 
-    const SwHTMLFmtInfo *GetFmtInfo( const SwFmt& rFmt,
-                                     SwHTMLFmtInfos& rFmtInfos );
+    const SwHTMLFormatInfo *GetFormatInfo( const SwFormat& rFormat,
+                                     SwHTMLFormatInfos& rFormatInfos );
 
 public:
 
@@ -1170,12 +1170,12 @@ public:
 
     // Ein Attribut einfuegen
     void Insert( const SfxPoolItem& rItem, sal_Int32 nStart,  sal_Int32 nEnd,
-                 SwHTMLFmtInfos& rFmtInfos, bool bParaAttrs=false );
+                 SwHTMLFormatInfos& rFormatInfos, bool bParaAttrs=false );
     void Insert( const SfxItemSet& rItemSet, sal_Int32 nStart, sal_Int32 nEnd,
-                 SwHTMLFmtInfos& rFmtInfos, bool bDeep,
+                 SwHTMLFormatInfos& rFormatInfos, bool bDeep,
                  bool bParaAttrs=false );
-    void Insert( const SwDrawFrmFmt& rFmt, sal_Int32 nPos,
-                 SwHTMLFmtInfos& rFmtInfos );
+    void Insert( const SwDrawFrameFormat& rFormat, sal_Int32 nPos,
+                 SwHTMLFormatInfos& rFormatInfos );
 
     sal_uInt16 GetScriptAtPos( sal_Int32 nPos,
                                sal_uInt16 nWeak=CSS1_OUTMODE_ANY_SCRIPT );
@@ -1611,26 +1611,26 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
     }
 }
 
-const SwHTMLFmtInfo *HTMLEndPosLst::GetFmtInfo( const SwFmt& rFmt,
-                                                SwHTMLFmtInfos& rFmtInfos )
+const SwHTMLFormatInfo *HTMLEndPosLst::GetFormatInfo( const SwFormat& rFormat,
+                                                SwHTMLFormatInfos& rFormatInfos )
 {
-    SwHTMLFmtInfo *pFmtInfo;
-    const SwHTMLFmtInfo aFmtInfo( &rFmt );
-    SwHTMLFmtInfos::iterator it = rFmtInfos.find( aFmtInfo );
-    if( it != rFmtInfos.end() )
+    SwHTMLFormatInfo *pFormatInfo;
+    const SwHTMLFormatInfo aFormatInfo( &rFormat );
+    SwHTMLFormatInfos::iterator it = rFormatInfos.find( aFormatInfo );
+    if( it != rFormatInfos.end() )
     {
-        pFmtInfo = &*it;
+        pFormatInfo = &*it;
     }
     else
     {
-        pFmtInfo = new SwHTMLFmtInfo( &rFmt, pDoc, pTemplate,
+        pFormatInfo = new SwHTMLFormatInfo( &rFormat, pDoc, pTemplate,
                                       bOutStyles );
-        rFmtInfos.insert( pFmtInfo );
-        if ( rScriptTxtStyles.count( rFmt.GetName() ) )
-            pFmtInfo->bScriptDependent = true;
+        rFormatInfos.insert( pFormatInfo );
+        if ( rScriptTextStyles.count( rFormat.GetName() ) )
+            pFormatInfo->bScriptDependent = true;
     }
 
-    return pFmtInfo;
+    return pFormatInfo;
 }
 
 HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
@@ -1640,7 +1640,7 @@ HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
     pDoc( pD ),
     pTemplate( pTempl ),
     pDfltColor( pDfltCol ),
-    rScriptTxtStyles( rStyles ),
+    rScriptTextStyles( rStyles ),
     nHTMLMode( nMode ),
     bOutStyles( bStyles )
 {
@@ -1663,7 +1663,7 @@ HTMLEndPosLst::~HTMLEndPosLst()
 
 void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                             sal_Int32 nStart, sal_Int32 nEnd,
-                            SwHTMLFmtInfos& rFmtInfos, bool bParaAttrs )
+                            SwHTMLFormatInfos& rFormatInfos, bool bParaAttrs )
 {
     // kein Bereich ?? dann nicht aufnehmen, wird nie wirksam !!
     if( nStart != nEnd )
@@ -1711,30 +1711,30 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             {
                 OSL_ENSURE( RES_TXTATR_CHARFMT == rItem.Which(),
                         "Doch keine Zeichen-Vorlage" );
-                const SwFmtCharFmt& rChrFmt = static_cast<const SwFmtCharFmt&>(rItem);
-                const SwCharFmt* pFmt = rChrFmt.GetCharFmt();
+                const SwFormatCharFormat& rChrFormat = static_cast<const SwFormatCharFormat&>(rItem);
+                const SwCharFormat* pFormat = rChrFormat.GetCharFormat();
 
-                const SwHTMLFmtInfo *pFmtInfo = GetFmtInfo( *pFmt, rFmtInfos );
-                if( !pFmtInfo->aToken.isEmpty() )
+                const SwHTMLFormatInfo *pFormatInfo = GetFormatInfo( *pFormat, rFormatInfos );
+                if( !pFormatInfo->aToken.isEmpty() )
                 {
                     // das Zeichenvorlagen-Tag muss vor den harten
                     // Attributen ausgegeben werden
                     InsertItem( rItem, nStart, nEnd );
                 }
-                if( pFmtInfo->pItemSet )
+                if( pFormatInfo->pItemSet )
                 {
-                    Insert( *pFmtInfo->pItemSet, nStart, nEnd,
-                            rFmtInfos, true, bParaAttrs );
+                    Insert( *pFormatInfo->pItemSet, nStart, nEnd,
+                            rFormatInfos, true, bParaAttrs );
                 }
             }
             break;
 
         case HTML_AUTOFMT_VALUE:
             {
-                const SwFmtAutoFmt& rAutoFmt = static_cast<const SwFmtAutoFmt&>(rItem);
-                const std::shared_ptr<SfxItemSet> pSet = rAutoFmt.GetStyleHandle();
+                const SwFormatAutoFormat& rAutoFormat = static_cast<const SwFormatAutoFormat&>(rItem);
+                const std::shared_ptr<SfxItemSet> pSet = rAutoFormat.GetStyleHandle();
                 if( pSet.get() )
-                    Insert( *pSet.get(), nStart, nEnd, rFmtInfos, true, bParaAttrs );
+                    Insert( *pSet.get(), nStart, nEnd, rFormatInfos, true, bParaAttrs );
             }
             break;
 
@@ -1756,16 +1756,16 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             {
                 OSL_ENSURE( RES_PARATR_DROP == rItem.Which(),
                         "Doch kein Drop-Cap" );
-                const SwFmtDrop& rDrop = static_cast<const SwFmtDrop&>(rItem);
+                const SwFormatDrop& rDrop = static_cast<const SwFormatDrop&>(rItem);
                 nEnd = nStart + rDrop.GetChars();
                 if( !bOutStyles )
                 {
                     // Zumindest die Attribute der Zeichenvorlage uebernehmen
-                    const SwCharFmt *pCharFmt = rDrop.GetCharFmt();
-                    if( pCharFmt )
+                    const SwCharFormat *pCharFormat = rDrop.GetCharFormat();
+                    if( pCharFormat )
                     {
-                        Insert( pCharFmt->GetAttrSet(), nStart, nEnd,
-                                rFmtInfos, true, bParaAttrs );
+                        Insert( pCharFormat->GetAttrSet(), nStart, nEnd,
+                                rFormatInfos, true, bParaAttrs );
                     }
                 }
                 else
@@ -1787,7 +1787,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
 
 void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
                             sal_Int32 nStart, sal_Int32 nEnd,
-                            SwHTMLFmtInfos& rFmtInfos, bool bParaAttrs )
+                            SwHTMLFormatInfos& rFormatInfos, bool bParaAttrs )
 {
     bool bDependsOnScript = false, bDependsOnAnyScript = false;
     sal_uInt16 nScript = i18n::ScriptType::LATIN;
@@ -1821,10 +1821,10 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
         break;
     case RES_TXTATR_CHARFMT:
         {
-            const SwFmtCharFmt& rChrFmt = static_cast<const SwFmtCharFmt&>(rItem);
-            const SwCharFmt* pFmt = rChrFmt.GetCharFmt();
-            const SwHTMLFmtInfo *pFmtInfo = GetFmtInfo( *pFmt, rFmtInfos );
-            if( pFmtInfo->bScriptDependent )
+            const SwFormatCharFormat& rChrFormat = static_cast<const SwFormatCharFormat&>(rItem);
+            const SwCharFormat* pFormat = rChrFormat.GetCharFormat();
+            const SwHTMLFormatInfo *pFormatInfo = GetFormatInfo( *pFormat, rFormatInfos );
+            if( pFormatInfo->bScriptDependent )
             {
                 bDependsOnScript = true;
                 bDependsOnAnyScript = true;
@@ -1833,10 +1833,10 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
         break;
     case RES_TXTATR_INETFMT:
         {
-            if( GetFmtInfo( *pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool(
-                     RES_POOLCHR_INET_NORMAL), rFmtInfos )->bScriptDependent ||
-                GetFmtInfo( *pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool(
-                     RES_POOLCHR_INET_VISIT), rFmtInfos )->bScriptDependent )
+            if( GetFormatInfo( *pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
+                     RES_POOLCHR_INET_NORMAL), rFormatInfos )->bScriptDependent ||
+                GetFormatInfo( *pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
+                     RES_POOLCHR_INET_VISIT), rFormatInfos )->bScriptDependent )
             {
                 bDependsOnScript = true;
                 bDependsOnAnyScript = true;
@@ -1863,7 +1863,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
                 // change, so we can insert it, but only if it belongs
                 // to the current script.
                 if( bDependsOnAnyScript || nScript == aScriptLst[i] )
-                    InsertNoScript( rItem, nPos, nEnd, rFmtInfos,
+                    InsertNoScript( rItem, nPos, nEnd, rFormatInfos,
                                     bParaAttrs );
                 break;
             }
@@ -1872,19 +1872,19 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
             // it, so we can insert a hint up to the next script change and
             // continue with the rest of the hint.
             if( bDependsOnAnyScript || nScript == aScriptLst[i] )
-                InsertNoScript( rItem, nPos, nChgPos, rFmtInfos, bParaAttrs );
+                InsertNoScript( rItem, nPos, nChgPos, rFormatInfos, bParaAttrs );
             nPos = nChgPos;
         }
     }
     else
     {
-        InsertNoScript( rItem, nStart, nEnd, rFmtInfos, bParaAttrs );
+        InsertNoScript( rItem, nStart, nEnd, rFormatInfos, bParaAttrs );
     }
 }
 
 void HTMLEndPosLst::Insert( const SfxItemSet& rItemSet,
                             sal_Int32 nStart, sal_Int32 nEnd,
-                            SwHTMLFmtInfos& rFmtInfos,
+                            SwHTMLFormatInfos& rFormatInfos,
                             bool bDeep, bool bParaAttrs )
 {
     SfxWhichIter aIter( rItemSet );
@@ -1895,30 +1895,30 @@ void HTMLEndPosLst::Insert( const SfxItemSet& rItemSet,
         const SfxPoolItem *pItem;
         if( SfxItemState::SET == rItemSet.GetItemState( nWhich, bDeep, &pItem ) )
         {
-            Insert( *pItem, nStart, nEnd, rFmtInfos, bParaAttrs );
+            Insert( *pItem, nStart, nEnd, rFormatInfos, bParaAttrs );
         }
 
         nWhich = aIter.NextWhich();
     }
 }
 
-void HTMLEndPosLst::Insert( const SwDrawFrmFmt& rFmt, sal_Int32 nPos,
-                            SwHTMLFmtInfos& rFmtInfos )
+void HTMLEndPosLst::Insert( const SwDrawFrameFormat& rFormat, sal_Int32 nPos,
+                            SwHTMLFormatInfos& rFormatInfos )
 {
-    const SdrObject* pTextObj = SwHTMLWriter::GetMarqueeTextObj( rFmt );
+    const SdrObject* pTextObj = SwHTMLWriter::GetMarqueeTextObj( rFormat );
 
     if( pTextObj )
     {
         // die Edit-Engine-Attribute des Objekts als SW-Attribute holen
         // und als Hints einsortieren. Wegen der Menge der Hints werden
         // Styles hierbei nicht beruecksichtigt!
-        const SfxItemSet& rFmtItemSet = rFmt.GetAttrSet();
-        SfxItemSet aItemSet( *rFmtItemSet.GetPool(), RES_CHRATR_BEGIN,
+        const SfxItemSet& rFormatItemSet = rFormat.GetAttrSet();
+        SfxItemSet aItemSet( *rFormatItemSet.GetPool(), RES_CHRATR_BEGIN,
                                                      RES_CHRATR_END );
         SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, pTextObj, true );
         bool bOutStylesOld = bOutStyles;
         bOutStyles = false;
-        Insert( aItemSet, nPos, nPos+1, rFmtInfos, false, false );
+        Insert( aItemSet, nPos, nPos+1, rFormatInfos, false, false );
         bOutStyles = bOutStylesOld;
     }
 }
@@ -2060,21 +2060,21 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
 }
 
 /* Ausgabe der Nodes */
-Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
+Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 {
-    const SwTxtNode * pNd = &static_cast<const SwTxtNode&>(rNode);
+    const SwTextNode * pNd = &static_cast<const SwTextNode&>(rNode);
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
-    const OUString& rStr = pNd->GetTxt();
+    const OUString& rStr = pNd->GetText();
     sal_Int32 nEnd = rStr.getLength();
 
     // Besonderheit: leere Node und HR-Vorlage (horizontaler Strich)
     //              nur ein <HR> ausgeben
-    sal_uInt16 nPoolId = pNd->GetAnyFmtColl().GetPoolFmtId();
+    sal_uInt16 nPoolId = pNd->GetAnyFormatColl().GetPoolFormatId();
 
     // Handle horizontal rule <hr>
     if (!nEnd &&
-        (RES_POOLCOLL_HTML_HR==nPoolId || pNd->GetAnyFmtColl().GetName() == OOO_STRING_SVTOOLS_HTML_horzrule))
+        (RES_POOLCOLL_HTML_HR==nPoolId || pNd->GetAnyFormatColl().GetName() == OOO_STRING_SVTOOLS_HTML_horzrule))
     {
         // dann die absatz-gebundenen Grafiken/OLE-Objekte im Absatz
         // MIB 8.7.97: Ein <PRE> spannen wir um die Linie auf. Dann stimmen
@@ -2106,25 +2106,25 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             sal_Int32 nRight = static_cast<const SvxLRSpaceItem*>(pItem)->GetRight();
             if( nLeft || nRight )
             {
-                const SwFrmFmt& rPgFmt =
+                const SwFrameFormat& rPgFormat =
                     rHTMLWrt.pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool
                     ( RES_POOLPAGE_HTML, false )->GetMaster();
-                const SwFmtFrmSize& rSz   = rPgFmt.GetFrmSize();
-                const SvxLRSpaceItem& rLR = rPgFmt.GetLRSpace();
-                const SwFmtCol& rCol = rPgFmt.GetCol();
+                const SwFormatFrmSize& rSz   = rPgFormat.GetFrmSize();
+                const SvxLRSpaceItem& rLR = rPgFormat.GetLRSpace();
+                const SwFormatCol& rCol = rPgFormat.GetCol();
 
                 long nPageWidth = rSz.GetWidth() - rLR.GetLeft() - rLR.GetRight();
 
                 if( 1 < rCol.GetNumCols() )
                     nPageWidth /= rCol.GetNumCols();
 
-                const SwTableNode* pTblNd = pNd->FindTableNode();
-                if( pTblNd )
+                const SwTableNode* pTableNd = pNd->FindTableNode();
+                if( pTableNd )
                 {
-                    const SwTableBox* pBox = pTblNd->GetTable().GetTblBox(
+                    const SwTableBox* pBox = pTableNd->GetTable().GetTableBox(
                                     pNd->StartOfSectionIndex() );
                     if( pBox )
-                        nPageWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
+                        nPageWidth = pBox->GetFrameFormat()->GetFrmSize().GetWidth();
                 }
 
                 OString sWidth = OString::number(SwHTMLWriter::ToPixel(nPageWidth - nLeft - nRight, false));
@@ -2217,13 +2217,13 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         if( pItemSet )
         {
             if( SfxItemState::SET == pItemSet->GetItemState( RES_PAGEDESC, true, &pItem ) &&
-                static_cast<const SwFmtPageDesc *>(pItem)->GetPageDesc() )
+                static_cast<const SwFormatPageDesc *>(pItem)->GetPageDesc() )
             {
                 bPageBreakBefore = true;
             }
             else if( SfxItemState::SET == pItemSet->GetItemState( RES_BREAK, true, &pItem ) )
             {
-                switch( static_cast<const SvxFmtBreakItem *>(pItem)->GetBreak() )
+                switch( static_cast<const SvxFormatBreakItem *>(pItem)->GetBreak() )
                 {
                 case SVX_BREAK_PAGE_BEFORE:
                     bPageBreakBefore = true;
@@ -2267,10 +2267,10 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     rHTMLWrt.bTagOn = true;
 
     // jetzt das Tag des Absatzes ausgeben
-    const SwFmt& rFmt = pNd->GetAnyFmtColl();
-    SwHTMLTxtCollOutputInfo aFmtInfo;
+    const SwFormat& rFormat = pNd->GetAnyFormatColl();
+    SwHTMLTextCollOutputInfo aFormatInfo;
     bool bOldLFPossible = rHTMLWrt.bLFPossible;
-    OutHTML_SwFmt( rWrt, rFmt, pNd->GetpSwAttrSet(), aFmtInfo );
+    OutHTML_SwFormat( rWrt, rFormat, pNd->GetpSwAttrSet(), aFormatInfo );
 
     // Wenn vor dem Absatz-Tag keine neue Zeile aufgemacht wurde, dann
     // tun wir das jetzt
@@ -2293,7 +2293,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
     // Text, der aus einer Outline-Numerierung kommt ermitteln
     sal_Int32 nOffset = 0;
-    OUString aOutlineTxt;
+    OUString aOutlineText;
     OUString aFullText;
 
     // export numbering string as plain text only for the outline numbering,
@@ -2301,14 +2301,14 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     if ( pNd->IsOutline() &&
          pNd->GetNumRule() == pNd->GetDoc()->GetOutlineNumRule() )
     {
-        aOutlineTxt = pNd->GetNumString();
-        nOffset = nOffset + aOutlineTxt.getLength();
-        aFullText = aOutlineTxt;
+        aOutlineText = pNd->GetNumString();
+        nOffset = nOffset + aOutlineText.getLength();
+        aFullText = aOutlineText;
     }
     OUString aFootEndNoteSym;
-    if( rHTMLWrt.pFmtFtn )
+    if( rHTMLWrt.pFormatFootnote )
     {
-        aFootEndNoteSym = rHTMLWrt.GetFootEndNoteSym( *rHTMLWrt.pFmtFtn );
+        aFootEndNoteSym = rHTMLWrt.GetFootEndNoteSym( *rHTMLWrt.pFormatFootnote );
         nOffset = nOffset + aFootEndNoteSym.getLength();
         aFullText += aFootEndNoteSym;
     }
@@ -2325,13 +2325,13 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                               rHTMLWrt.pDfltColor, rHTMLWrt.bCfgOutStyles,
                               rHTMLWrt.GetHTMLMode(), aFullText,
                                  rHTMLWrt.aScriptTextStyles );
-    if( aFmtInfo.pItemSet )
+    if( aFormatInfo.pItemSet )
     {
-        aEndPosLst.Insert( *aFmtInfo.pItemSet, 0, nEnd + nOffset,
-                           rHTMLWrt.aChrFmtInfos, false, true );
+        aEndPosLst.Insert( *aFormatInfo.pItemSet, 0, nEnd + nOffset,
+                           rHTMLWrt.aChrFormatInfos, false, true );
     }
 
-    if( !aOutlineTxt.isEmpty() || rHTMLWrt.pFmtFtn )
+    if( !aOutlineText.isEmpty() || rHTMLWrt.pFormatFootnote )
     {
         // Absatz-Attribute ausgeben, damit der Text die Attribute des
         // Absatzes bekommt.
@@ -2341,25 +2341,25 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         // beachten. Da man die ueber die UI nicht setzen kann, ignorieren
         // wir sie erstmal.
 
-        if( !aOutlineTxt.isEmpty() )
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aOutlineTxt,
+        if( !aOutlineText.isEmpty() )
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aOutlineText,
                                          rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters);
 
-        if( rHTMLWrt.pFmtFtn )
+        if( rHTMLWrt.pFormatFootnote )
         {
-            rHTMLWrt.OutFootEndNoteSym( *rHTMLWrt.pFmtFtn, aFootEndNoteSym,
-                                        aEndPosLst.GetScriptAtPos( aOutlineTxt.getLength(), rHTMLWrt.nCSS1Script ) );
-            rHTMLWrt.pFmtFtn = 0;
+            rHTMLWrt.OutFootEndNoteSym( *rHTMLWrt.pFormatFootnote, aFootEndNoteSym,
+                                        aEndPosLst.GetScriptAtPos( aOutlineText.getLength(), rHTMLWrt.nCSS1Script ) );
+            rHTMLWrt.pFormatFootnote = 0;
         }
     }
 
     // erstmal den Start berichtigen. D.h. wird nur ein Teil vom Satz
     // ausgegeben, so muessen auch da die Attribute stimmen!!
-    rHTMLWrt.bTxtAttr = true;
+    rHTMLWrt.bTextAttr = true;
 
     size_t nAttrPos = 0;
     sal_Int32 nStrPos = rHTMLWrt.pCurPam->GetPoint()->nContent.GetIndex();
-    const SwTxtAttr * pHt = 0;
+    const SwTextAttr * pHt = 0;
     const size_t nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
     if( nCntAttr && nStrPos > ( pHt = pNd->GetSwpHints()[ 0 ] )->GetStart() )
     {
@@ -2387,14 +2387,14 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 if( rHTMLWrt.bWriteAll )
                     aEndPosLst.Insert( pHt->GetAttr(), nHtStt + nOffset,
                                        nHtEnd + nOffset,
-                                       rHTMLWrt.aChrFmtInfos );
+                                       rHTMLWrt.aChrFormatInfos );
                 else
                 {
                     sal_Int32 nTmpStt = nHtStt < nStrPos ? nStrPos : nHtStt;
                     sal_Int32 nTmpEnd = nHtEnd < nEnd ? nHtEnd : nEnd;
                     aEndPosLst.Insert( pHt->GetAttr(), nTmpStt + nOffset,
                                        nTmpEnd + nOffset,
-                                       rHTMLWrt.aChrFmtInfos );
+                                       rHTMLWrt.aChrFormatInfos );
                 }
                 continue;
                 // aber nicht ausgeben, das erfolgt spaeter !!
@@ -2428,7 +2428,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             }
 
             bool bOutChar = true;
-            const SwTxtAttr * pTxtHt = 0;
+            const SwTextAttr * pTextHt = 0;
             if( nAttrPos < nCntAttr && pHt->GetStart() == nStrPos
                 && nStrPos != nEnd )
             {
@@ -2442,24 +2442,24 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                             // Bereich aufspannen werden ignoriert
                             aEndPosLst.Insert( pHt->GetAttr(), nStrPos + nOffset,
                                                *pHt->End() + nOffset,
-                                               rHTMLWrt.aChrFmtInfos );
+                                               rHTMLWrt.aChrFormatInfos );
                         }
                     }
                     else
                     {
                         // Hints ohne-Ende werden als letztes ausgebeben
-                        OSL_ENSURE( !pTxtHt, "Wieso gibt es da schon ein Attribut ohne Ende?" );
-                        if( rHTMLWrt.nTxtAttrsToIgnore>0 )
+                        OSL_ENSURE( !pTextHt, "Wieso gibt es da schon ein Attribut ohne Ende?" );
+                        if( rHTMLWrt.nTextAttrsToIgnore>0 )
                         {
-                            rHTMLWrt.nTxtAttrsToIgnore--;
+                            rHTMLWrt.nTextAttrsToIgnore--;
                         }
                         else
                         {
-                            pTxtHt = pHt;
-                            sal_uInt16 nFldWhich;
+                            pTextHt = pHt;
+                            sal_uInt16 nFieldWhich;
                             if( RES_TXTATR_FIELD != pHt->Which()
-                                || ( RES_POSTITFLD != (nFldWhich = static_cast<const SwFmtFld&>(pHt->GetAttr()).GetField()->Which())
-                                     && RES_SCRIPTFLD != nFldWhich ) )
+                                || ( RES_POSTITFLD != (nFieldWhich = static_cast<const SwFormatField&>(pHt->GetAttr()).GetField()->Which())
+                                     && RES_SCRIPTFLD != nFieldWhich ) )
                             {
                                 bWriteBreak = false;
                             }
@@ -2471,21 +2471,21 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             }
 
             // Manche Draw-Formate koennen auch noch Attribute mitbringen
-            if( pTxtHt && RES_TXTATR_FLYCNT == pTxtHt->Which() )
+            if( pTextHt && RES_TXTATR_FLYCNT == pTextHt->Which() )
             {
-                const SwFrmFmt* pFrmFmt =
-                    static_cast<const SwFmtFlyCnt &>(pTxtHt->GetAttr()).GetFrmFmt();
+                const SwFrameFormat* pFrameFormat =
+                    static_cast<const SwFormatFlyCnt &>(pTextHt->GetAttr()).GetFrameFormat();
 
-                if( RES_DRAWFRMFMT == pFrmFmt->Which() )
-                    aEndPosLst.Insert( *static_cast<const SwDrawFrmFmt *>(pFrmFmt),
+                if( RES_DRAWFRMFMT == pFrameFormat->Which() )
+                    aEndPosLst.Insert( *static_cast<const SwDrawFrameFormat *>(pFrameFormat),
                                         nStrPos + nOffset,
-                                        rHTMLWrt.aChrFmtInfos );
+                                        rHTMLWrt.aChrFormatInfos );
             }
 
             aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
             aEndPosLst.OutStartAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
 
-            if( pTxtHt )
+            if( pTextHt )
             {
                 rHTMLWrt.bLFPossible = !rHTMLWrt.nLastParaToken && nStrPos > 0 &&
                                        rStr[nStrPos-1] == ' ';
@@ -2493,7 +2493,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 rHTMLWrt.nCSS1Script = aEndPosLst.GetScriptAtPos(
                                                 nStrPos + nOffset, nCSS1Script );
                 HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
-                Out( aHTMLAttrFnTab, pTxtHt->GetAttr(), rHTMLWrt );
+                Out( aHTMLAttrFnTab, pTextHt->GetAttr(), rHTMLWrt );
                 rHTMLWrt.nCSS1Script = nCSS1Script;
                 rHTMLWrt.bLFPossible = false;
             }
@@ -2586,7 +2586,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                                        nEnd, HTML_POS_INSIDE );
     OSL_ENSURE( !bFlysLeft, "Es wurden nicht alle Rahmen gespeichert!" );
 
-    rHTMLWrt.bTxtAttr = false;
+    rHTMLWrt.bTextAttr = false;
 
     if( bWriteBreak )
     {
@@ -2656,7 +2656,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     }
 
     rHTMLWrt.bTagOn = false;
-    OutHTML_SwFmtOff( rWrt, aFmtInfo );
+    OutHTML_SwFormatOff( rWrt, aFormatInfo );
 
     // eventuell eine Form schliessen
     rHTMLWrt.OutForm( false );
@@ -2685,7 +2685,7 @@ static Writer& OutHTML_CSS1Attr( Writer& rWrt, const SfxPoolItem& rHt )
     // wenn gerade Hints geschrieben werden versuchen wir den Hint als
     // CSS1-Attribut zu schreiben
 
-    if( static_cast<SwHTMLWriter&>(rWrt).bCfgOutStyles && static_cast<SwHTMLWriter&>(rWrt).bTxtAttr )
+    if( static_cast<SwHTMLWriter&>(rWrt).bCfgOutStyles && static_cast<SwHTMLWriter&>(rWrt).bTextAttr )
         OutCSS1_HintSpanTag( rWrt, rHt );
 
     return rWrt;
@@ -2699,7 +2699,7 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    if( !rHTMLWrt.bTxtAttr && rHTMLWrt.bCfgOutStyles && rHTMLWrt.bCfgPreferStyles )
+    if( !rHTMLWrt.bTextAttr && rHTMLWrt.bCfgOutStyles && rHTMLWrt.bCfgPreferStyles )
     {
         // Font-Farbe nicht als Tag schreiben, wenn Styles normalen Tags
         // vorgezogen werden
@@ -2734,7 +2734,7 @@ static Writer& OutHTML_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_italic, rHTMLWrt.bTagOn );
     }
-    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
+    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTextAttr )
     {
         // vielleicht als CSS1-Attribut ?
         OutCSS1_HintSpanTag( rWrt, rHt );
@@ -2782,7 +2782,7 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
             OString::number(static_cast<sal_Int32>(nSize)) + "\"";
         rWrt.Strm().WriteOString( sOut );
 
-        if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
+        if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTextAttr )
         {
             // always export font size as CSS option, too
             OutCSS1_HintStyleOpt( rWrt, rHt );
@@ -2832,7 +2832,7 @@ static Writer& OutHTML_SwWeight( Writer& rWrt, const SfxPoolItem& rHt )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_bold, rHTMLWrt.bTagOn );
     }
-    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
+    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTextAttr )
     {
         // vielleicht als CSS1-Attribut ?
         OutCSS1_HintSpanTag( rWrt, rHt );
@@ -2853,7 +2853,7 @@ static Writer& OutHTML_SwCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_strike, rHTMLWrt.bTagOn );
     }
-    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
+    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTextAttr )
     {
         // vielleicht als CSS1-Attribut ?
         OutCSS1_HintSpanTag( rWrt, rHt );
@@ -2883,7 +2883,7 @@ static Writer& OutHTML_SvxEscapement( Writer& rWrt, const SfxPoolItem& rHt )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, rHTMLWrt.bTagOn );
     }
-    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
+    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTextAttr )
     {
         // vielleicht als CSS1-Attribut ?
         OutCSS1_HintSpanTag( rWrt, rHt );
@@ -2903,7 +2903,7 @@ static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_underline, rHTMLWrt.bTagOn );
     }
-    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
+    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTextAttr )
     {
         // vielleicht als CSS1-Attribut ?
         OutCSS1_HintSpanTag( rWrt, rHt );
@@ -2915,15 +2915,15 @@ static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-    const SwFmtFlyCnt& rFlyCnt = static_cast<const SwFmtFlyCnt&>(rHt);
+    const SwFormatFlyCnt& rFlyCnt = static_cast<const SwFormatFlyCnt&>(rHt);
 
-    const SwFrmFmt& rFmt = *rFlyCnt.GetFrmFmt();
+    const SwFrameFormat& rFormat = *rFlyCnt.GetFrameFormat();
     const SdrObject *pSdrObj = 0;
 
     SwHTMLFrmType eType =
-        (SwHTMLFrmType)rHTMLWrt.GuessFrmType( rFmt, pSdrObj );
+        (SwHTMLFrmType)rHTMLWrt.GuessFrmType( rFormat, pSdrObj );
     sal_uInt8 nMode = aHTMLOutFrmAsCharTable[eType][rHTMLWrt.nExportMode];
-    rHTMLWrt.OutFrmFmt( nMode, rFmt, pSdrObj );
+    rHTMLWrt.OutFrameFormat( nMode, rFormat, pSdrObj );
     return rWrt;
 }
 
@@ -2939,7 +2939,7 @@ static Writer& OutHTML_SwBlink( Writer& rWrt, const SfxPoolItem& rHt )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_blink, rHTMLWrt.bTagOn );
     }
-    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
+    else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTextAttr )
     {
         // vielleicht als CSS1-Attribut ?
         OutCSS1_HintSpanTag( rWrt, rHt );
@@ -2948,16 +2948,16 @@ static Writer& OutHTML_SwBlink( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, bool bOn )
+Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat, bool bOn )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
-    OUString aURL( rINetFmt.GetValue() );
-    const SvxMacroTableDtor *pMacTable = rINetFmt.GetMacroTbl();
+    OUString aURL( rINetFormat.GetValue() );
+    const SvxMacroTableDtor *pMacTable = rINetFormat.GetMacroTable();
     bool bEvents = pMacTable != 0 && !pMacTable->empty();
 
     // Anything to output at all?
-    if( aURL.isEmpty() && !bEvents && rINetFmt.GetName().isEmpty() )
+    if( aURL.isEmpty() && !bEvents && rINetFormat.GetName().isEmpty() )
         return rWrt;
 
     // bOn controls if we are writing the opening or closing tag
@@ -2971,22 +2971,22 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, bool bOn )
 
     bool bScriptDependent = false;
     {
-        const SwCharFmt* pFmt = rWrt.pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool(
+        const SwCharFormat* pFormat = rWrt.pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
                  RES_POOLCHR_INET_NORMAL );
-        SwHTMLFmtInfo aFmtInfo( pFmt );
-        SwHTMLFmtInfos::const_iterator it = rHTMLWrt.aChrFmtInfos.find( aFmtInfo );
-        if( it != rHTMLWrt.aChrFmtInfos.end() )
+        SwHTMLFormatInfo aFormatInfo( pFormat );
+        SwHTMLFormatInfos::const_iterator it = rHTMLWrt.aChrFormatInfos.find( aFormatInfo );
+        if( it != rHTMLWrt.aChrFormatInfos.end() )
         {
             bScriptDependent = it->bScriptDependent;
         }
     }
     if( !bScriptDependent )
     {
-        const SwCharFmt* pFmt = rWrt.pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool(
+        const SwCharFormat* pFormat = rWrt.pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
                  RES_POOLCHR_INET_VISIT );
-        SwHTMLFmtInfo aFmtInfo( pFmt );
-        SwHTMLFmtInfos::const_iterator it = rHTMLWrt.aChrFmtInfos.find( aFmtInfo );
-        if( it != rHTMLWrt.aChrFmtInfos.end() )
+        SwHTMLFormatInfo aFormatInfo( pFormat );
+        SwHTMLFormatInfos::const_iterator it = rHTMLWrt.aChrFormatInfos.find( aFormatInfo );
+        if( it != rHTMLWrt.aChrFormatInfos.end() )
         {
             bScriptDependent = it->bScriptDependent;
         }
@@ -3033,16 +3033,16 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, bool bOn )
         sOut = "\"";
     }
 
-    if( !rINetFmt.GetName().isEmpty() )
+    if( !rINetFormat.GetName().isEmpty() )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
         rWrt.Strm().WriteOString( sOut );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), rINetFmt.GetName(),
+        HTMLOutFuncs::Out_String( rWrt.Strm(), rINetFormat.GetName(),
                                   rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut = "\"";
     }
 
-    const OUString& rTarget = rINetFmt.GetTargetFrame();
+    const OUString& rTarget = rINetFormat.GetTargetFrame();
     if( !rTarget.isEmpty() )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_target) + "=\"";
@@ -3066,95 +3066,95 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, bool bOn )
     return rWrt;
 }
 
-static Writer& OutHTML_SwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
+static Writer& OutHTML_SwFormatINetFormat( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    const SwFmtINetFmt& rINetFmt = static_cast<const SwFmtINetFmt&>(rHt);
+    const SwFormatINetFormat& rINetFormat = static_cast<const SwFormatINetFormat&>(rHt);
 
     if( rHTMLWrt.bTagOn )
     {
         // ggf. ein noch offenes Attribut voruebergehend beenden
-        if( rHTMLWrt.aINetFmts.size() )
+        if( rHTMLWrt.aINetFormats.size() )
         {
-            SwFmtINetFmt *pINetFmt =
-                rHTMLWrt.aINetFmts.back();
-            OutHTML_INetFmt( rWrt, *pINetFmt, false );
+            SwFormatINetFormat *pINetFormat =
+                rHTMLWrt.aINetFormats.back();
+            OutHTML_INetFormat( rWrt, *pINetFormat, false );
         }
 
         // jetzt das neue aufmachen
-        OutHTML_INetFmt( rWrt, rINetFmt, true );
+        OutHTML_INetFormat( rWrt, rINetFormat, true );
 
         // und merken
-        SwFmtINetFmt *pINetFmt = new SwFmtINetFmt( rINetFmt );
-        rHTMLWrt.aINetFmts.push_back( pINetFmt );
+        SwFormatINetFormat *pINetFormat = new SwFormatINetFormat( rINetFormat );
+        rHTMLWrt.aINetFormats.push_back( pINetFormat );
     }
     else
     {
         // das
-        OutHTML_INetFmt( rWrt, rINetFmt, false );
+        OutHTML_INetFormat( rWrt, rINetFormat, false );
 
-        OSL_ENSURE( rHTMLWrt.aINetFmts.size(), "da fehlt doch ein URL-Attribut" );
-        if( rHTMLWrt.aINetFmts.size() )
+        OSL_ENSURE( rHTMLWrt.aINetFormats.size(), "da fehlt doch ein URL-Attribut" );
+        if( rHTMLWrt.aINetFormats.size() )
         {
             // das eigene Attribut vom Stack holen
-            SwFmtINetFmt *pINetFmt = rHTMLWrt.aINetFmts.back();
-            rHTMLWrt.aINetFmts.pop_back();
-            delete pINetFmt;
+            SwFormatINetFormat *pINetFormat = rHTMLWrt.aINetFormats.back();
+            rHTMLWrt.aINetFormats.pop_back();
+            delete pINetFormat;
         }
 
-        if( !rHTMLWrt.aINetFmts.empty() )
+        if( !rHTMLWrt.aINetFormats.empty() )
         {
             // es ist noch ein Attribut auf dem Stack, das wieder geoeffnet
             // werden muss
-            SwFmtINetFmt *pINetFmt = rHTMLWrt.aINetFmts.back();
-            OutHTML_INetFmt( rWrt, *pINetFmt, true );
+            SwFormatINetFormat *pINetFormat = rHTMLWrt.aINetFormats.back();
+            OutHTML_INetFormat( rWrt, *pINetFormat, true );
         }
     }
 
     return rWrt;
 }
 
-static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
+static Writer& OutHTML_SwTextCharFormat( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    const SwFmtCharFmt& rChrFmt = static_cast<const SwFmtCharFmt&>(rHt);
-    const SwCharFmt* pFmt = rChrFmt.GetCharFmt();
+    const SwFormatCharFormat& rChrFormat = static_cast<const SwFormatCharFormat&>(rHt);
+    const SwCharFormat* pFormat = rChrFormat.GetCharFormat();
 
-    if( !pFmt )
+    if( !pFormat )
     {
         return rWrt;
     }
 
-    SwHTMLFmtInfo aFmtInfo( pFmt );
-    SwHTMLFmtInfos::const_iterator it = rHTMLWrt.aChrFmtInfos.find( aFmtInfo );
-    if( it == rHTMLWrt.aChrFmtInfos.end())
+    SwHTMLFormatInfo aFormatInfo( pFormat );
+    SwHTMLFormatInfos::const_iterator it = rHTMLWrt.aChrFormatInfos.find( aFormatInfo );
+    if( it == rHTMLWrt.aChrFormatInfos.end())
         return rWrt;
 
-    const SwHTMLFmtInfo *pFmtInfo = &*it;
-    OSL_ENSURE( pFmtInfo, "Wieso gint es keine Infos ueber die Zeichenvorlage?" );
+    const SwHTMLFormatInfo *pFormatInfo = &*it;
+    OSL_ENSURE( pFormatInfo, "Wieso gint es keine Infos ueber die Zeichenvorlage?" );
 
     if( rHTMLWrt.bTagOn )
     {
         OString sOut = "<";
-        if( !pFmtInfo->aToken.isEmpty() )
-            sOut += pFmtInfo->aToken;
+        if( !pFormatInfo->aToken.isEmpty() )
+            sOut += pFormatInfo->aToken;
         else
             sOut += OString(OOO_STRING_SVTOOLS_HTML_span);
 
         if( rHTMLWrt.bCfgOutStyles &&
-            (!pFmtInfo->aClass.isEmpty() || pFmtInfo->bScriptDependent) )
+            (!pFormatInfo->aClass.isEmpty() || pFormatInfo->bScriptDependent) )
         {
             sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_class) + "=\"";
             rWrt.Strm().WriteOString( sOut );
-            OUString aClass( pFmtInfo->aClass );
-            if( pFmtInfo->bScriptDependent )
+            OUString aClass( pFormatInfo->aClass );
+            if( pFormatInfo->bScriptDependent )
             {
                 if( !aClass.isEmpty() )
                    aClass += "-";
@@ -3181,7 +3181,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
     else
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
-                !pFmtInfo->aToken.isEmpty() ? pFmtInfo->aToken.getStr()
+                !pFormatInfo->aToken.isEmpty() ? pFormatInfo->aToken.getStr()
                                        : OOO_STRING_SVTOOLS_HTML_span,
                 false );
     }
@@ -3275,16 +3275,16 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_TXTATR_META */               0,
 /* RES_TXTATR_METAFIELD */          0,
 /* RES_TXTATR_AUTOFMT */            0,
-/* RES_TXTATR_INETFMT */            OutHTML_SwFmtINetFmt,
-/* RES_TXTATR_CHARFMT */            OutHTML_SwTxtCharFmt,
+/* RES_TXTATR_INETFMT */            OutHTML_SwFormatINetFormat,
+/* RES_TXTATR_CHARFMT */            OutHTML_SwTextCharFormat,
 /* RES_TXTATR_CJK_RUBY */           0,
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
-/* RES_TXTATR_INPUTFIELD */         OutHTML_SwFmtFld,
+/* RES_TXTATR_INPUTFIELD */         OutHTML_SwFormatField,
 
-/* RES_TXTATR_FIELD */              OutHTML_SwFmtFld,
+/* RES_TXTATR_FIELD */              OutHTML_SwFormatField,
 /* RES_TXTATR_FLYCNT */             OutHTML_SwFlyCnt,
-/* RES_TXTATR_FTN */                OutHTML_SwFmtFtn,
-/* RES_TXTATR_ANNOTATION */         OutHTML_SwFmtFld,
+/* RES_TXTATR_FTN */                OutHTML_SwFormatFootnote,
+/* RES_TXTATR_ANNOTATION */         OutHTML_SwFormatField,
 /* RES_TXTATR_DUMMY3 */             0,
 /* RES_TXTATR_DUMMY1 */             0, // Dummy:
 /* RES_TXTATR_DUMMY2 */             0, // Dummy:

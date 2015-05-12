@@ -45,7 +45,7 @@ void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const OUString& rStr 
 
 /// convert current selection into text block and add to the text block document, incl. templates
 sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName, const OUString& rShortName,
-                                    bool bSaveRelFile, const OUString* pOnlyTxt )
+                                    bool bSaveRelFile, const OUString* pOnlyText )
 {
     SwDoc* pGDoc = rBlks.GetDoc();
 
@@ -57,8 +57,8 @@ sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName
     }
     rBlks.SetBaseURL( sBase );
 
-    if( pOnlyTxt )
-        return rBlks.PutText( rShortName, rName, *pOnlyTxt );
+    if( pOnlyText )
+        return rBlks.PutText( rShortName, rName, *pOnlyText );
 
     rBlks.ClearDoc();
     if( rBlks.BeginPutDoc( rShortName, rName ) )
@@ -76,7 +76,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
                                     const OUString& rName,
                                     const OUString& rShortName,
                                     bool bSaveRelFile,
-                                    bool bOnlyTxt )
+                                    bool bOnlyText )
 {
     StartAllAction();
 
@@ -92,28 +92,28 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
     rBlock.SetBaseURL( sBase );
     sal_uInt16 nRet = USHRT_MAX;
 
-    if( bOnlyTxt )
+    if( bOnlyText )
     {
         KillPams();
 
         SwPaM* pCrsr = GetCrsr();
 
         SwNodeIndex aStt( pMyDoc->GetNodes().GetEndOfExtras(), 1 );
-        SwCntntNode* pCntntNd = pMyDoc->GetNodes().GoNext( &aStt );
-        const SwNode* pNd = pCntntNd->FindTableNode();
+        SwContentNode* pContentNd = pMyDoc->GetNodes().GoNext( &aStt );
+        const SwNode* pNd = pContentNd->FindTableNode();
         if( !pNd )
-            pNd = pCntntNd;
+            pNd = pContentNd;
 
         pCrsr->GetPoint()->nNode = *pNd;
-        if( pNd == pCntntNd )
-            pCrsr->GetPoint()->nContent.Assign( pCntntNd, 0 );
+        if( pNd == pContentNd )
+            pCrsr->GetPoint()->nContent.Assign( pContentNd, 0 );
         pCrsr->SetMark();
 
         // then until the end of the Node array
         pCrsr->GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
-        pCntntNd = pCrsr->GetCntntNode();
-        if( pCntntNd )
-            pCrsr->GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
+        pContentNd = pCrsr->GetContentNode();
+        if( pContentNd )
+            pCrsr->GetPoint()->nContent.Assign( pContentNd, pContentNd->Len() );
 
         OUString sBuf;
         if( GetSelectedText( sBuf, GETSELTXT_PARABRK_TO_ONLYCR ) && !sBuf.isEmpty() )
@@ -125,21 +125,21 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
         if( rBlock.BeginPutDoc( rShortName, rName ) )
         {
             SwNodeIndex aStt( pMyDoc->GetNodes().GetEndOfExtras(), 1 );
-            SwCntntNode* pCntntNd = pMyDoc->GetNodes().GoNext( &aStt );
-            const SwNode* pNd = pCntntNd->FindTableNode();
-            if( !pNd ) pNd = pCntntNd;
+            SwContentNode* pContentNd = pMyDoc->GetNodes().GoNext( &aStt );
+            const SwNode* pNd = pContentNd->FindTableNode();
+            if( !pNd ) pNd = pContentNd;
             SwPaM aCpyPam( *pNd );
             aCpyPam.SetMark();
 
             // then until the end of the nodes array
             aCpyPam.GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
-            pCntntNd = aCpyPam.GetCntntNode();
+            pContentNd = aCpyPam.GetContentNode();
             aCpyPam.GetPoint()->nContent.Assign(
-                   pCntntNd, (pCntntNd) ? pCntntNd->Len() : 0);
+                   pContentNd, (pContentNd) ? pContentNd->Len() : 0);
 
             aStt = pGDoc->GetNodes().GetEndOfExtras();
-            pCntntNd = pGDoc->GetNodes().GoNext( &aStt );
-            SwPosition aInsPos( aStt, SwIndex( pCntntNd ));
+            pContentNd = pGDoc->GetNodes().GoNext( &aStt );
+            SwPosition aInsPos( aStt, SwIndex( pContentNd ));
             pMyDoc->getIDocumentContentOperations().CopyRange( aCpyPam, aInsPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
 
             nRet = rBlock.PutDoc();
@@ -157,7 +157,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     SwNodes& rNds = pInsDoc->GetNodes();
 
     SwNodeIndex aIdx( rNds.GetEndOfContent(), -1 );
-    SwCntntNode *const pContentNode = aIdx.GetNode().GetCntntNode();
+    SwContentNode *const pContentNode = aIdx.GetNode().GetContentNode();
     SwPosition aPos( aIdx,
         SwIndex(pContentNode, (pContentNode) ? pContentNode->Len() : 0));
 
@@ -171,7 +171,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     bool bRet = false;
     SET_CURR_SHELL( this );
 
-    pInsDoc->getIDocumentFieldsAccess().LockExpFlds();
+    pInsDoc->getIDocumentFieldsAccess().LockExpFields();
 
     if( IsTableMode() )
     {
@@ -179,26 +179,26 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
         // selected boxes. The sizes are corrected on a percentage basis.
 
         // search boxes using the layout
-        SwTableNode* pTblNd;
+        SwTableNode* pTableNd;
         SwSelBoxes aBoxes;
-        GetTblSel( *this, aBoxes );
-        if( !aBoxes.empty() && 0 != (pTblNd = const_cast<SwTableNode*>(aBoxes[0]
+        GetTableSel( *this, aBoxes );
+        if( !aBoxes.empty() && 0 != (pTableNd = const_cast<SwTableNode*>(aBoxes[0]
             ->GetSttNd()->FindTableNode()) ))
         {
             // check if the table name can be copied
-            bool bCpyTblNm = aBoxes.size() == pTblNd->GetTable().GetTabSortBoxes().size();
-            if( bCpyTblNm )
+            bool bCpyTableNm = aBoxes.size() == pTableNd->GetTable().GetTabSortBoxes().size();
+            if( bCpyTableNm )
             {
-                const OUString rTblName = pTblNd->GetTable().GetFrmFmt()->GetName();
-                const SwFrmFmts& rTblFmts = *pInsDoc->GetTblFrmFmts();
-                for( auto n = rTblFmts.size(); n; )
-                    if( rTblFmts[ --n ]->GetName() == rTblName )
+                const OUString rTableName = pTableNd->GetTable().GetFrameFormat()->GetName();
+                const SwFrameFormats& rTableFormats = *pInsDoc->GetTableFrameFormats();
+                for( auto n = rTableFormats.size(); n; )
+                    if( rTableFormats[ --n ]->GetName() == rTableName )
                     {
-                        bCpyTblNm = false;
+                        bCpyTableNm = false;
                         break;
                     }
             }
-            bRet = pInsDoc->InsCopyOfTbl( aPos, aBoxes, 0, bCpyTblNm, false );
+            bRet = pInsDoc->InsCopyOfTable( aPos, aBoxes, 0, bCpyTableNm, false );
         }
         else
             bRet = false;
@@ -214,12 +214,12 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
             {
                 if( !rPaM.HasMark() )
                 {
-                    SwCntntNode *const pNd = rPaM.GetCntntNode();
+                    SwContentNode *const pNd = rPaM.GetContentNode();
                     if (0 != pNd &&
-                        ( bColSel || !pNd->GetTxtNode() ) )
+                        ( bColSel || !pNd->GetTextNode() ) )
                     {
                         rPaM.SetMark();
-                        rPaM.Move( fnMoveForward, fnGoCntnt );
+                        rPaM.Move( fnMoveForward, fnGoContent );
                         bRet = GetDoc()->getIDocumentContentOperations().CopyRange( rPaM, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true )
                             || bRet;
                         rPaM.Exchange();
@@ -246,9 +246,9 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
         }
     }
 
-    pInsDoc->getIDocumentFieldsAccess().UnlockExpFlds();
-    if( !pInsDoc->getIDocumentFieldsAccess().IsExpFldsLocked() )
-        pInsDoc->getIDocumentFieldsAccess().UpdateExpFlds(NULL, true);
+    pInsDoc->getIDocumentFieldsAccess().UnlockExpFields();
+    if( !pInsDoc->getIDocumentFieldsAccess().IsExpFieldsLocked() )
+        pInsDoc->getIDocumentFieldsAccess().UpdateExpFields(NULL, true);
 
     // set the saved Node position back to the correct Node
     if( bRet && pSttNd )
@@ -266,7 +266,7 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
     GetCrsr();  // creates all cursors if needed
     if( IsSelOnePara() )
     {
-        rBuf = GetSelTxt();
+        rBuf = GetSelText();
         if( GETSELTXT_PARABRK_TO_BLANK == nHndlParaBrk )
         {
             rBuf = rBuf.replaceAll(OUString(0x0a), " ");

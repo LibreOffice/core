@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_APP_APPENV_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_APP_APPENV_HXX
 
-OUString InsertLabEnvText( SwWrtShell& , SwFldMgr& , const OUString& );
+OUString InsertLabEnvText( SwWrtShell& , SwFieldMgr& , const OUString& );
 
 
 #endif

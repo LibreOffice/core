@@ -32,9 +32,9 @@
 class SwDoc;
 class SwDocStyleSheetPool;
 class SwPageDesc;
-class SwCharFmt;
-class SwTxtFmtColl;
-class SwFrmFmt;
+class SwCharFormat;
+class SwTextFormatColl;
+class SwFrameFormat;
 class SwNumRule;
 
 // Temporary StyleSheet.
@@ -43,9 +43,9 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
     friend class SwDocStyleSheetPool;
     friend class SwStyleSheetIterator;
 
-    SwCharFmt*          pCharFmt;
-    SwTxtFmtColl*       pColl;
-    SwFrmFmt*           pFrmFmt;
+    SwCharFormat*          pCharFormat;
+    SwTextFormatColl*       pColl;
+    SwFrameFormat*           pFrameFormat;
     const SwPageDesc*   pDesc;
     const SwNumRule*    pNumRule;
 
@@ -125,9 +125,9 @@ public:
     virtual OUString        GetDescription() SAL_OVERRIDE;
     virtual OUString        GetDescription(SfxMapUnit eUnit) SAL_OVERRIDE;
 
-    SwCharFmt*              GetCharFmt();
-    SwTxtFmtColl*           GetCollection();
-    SwFrmFmt*               GetFrmFmt();
+    SwCharFormat*              GetCharFormat();
+    SwTextFormatColl*           GetCollection();
+    SwFrameFormat*               GetFrameFormat();
     const SwPageDesc*       GetPageDesc();
     const SwNumRule*        GetNumRule();
     void                    SetNumRule(const SwNumRule& rRule);
@@ -139,14 +139,14 @@ public:
 class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
 {
     // Local helper class.
-    class SwPoolFmtList
+    class SwPoolFormatList
     {
         std::vector<OUString> maImpl;
         typedef std::unordered_map<OUString, sal_uInt32, OUStringHash> UniqueHash;
         UniqueHash maUnique;
         void rehash();
     public:
-        SwPoolFmtList() {}
+        SwPoolFormatList() {}
         void Append( char cChar, const OUString& rStr );
         void clear() { maImpl.clear(); maUnique.clear(); }
         size_t size() { return maImpl.size(); }
@@ -158,7 +158,7 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
 
     rtl::Reference< SwDocStyleSheet > mxIterSheet;
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
-    SwPoolFmtList       aLst;
+    SwPoolFormatList       aLst;
     sal_uInt32          nLastPos;
     bool                bFirstCalled;
 

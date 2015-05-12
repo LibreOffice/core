@@ -31,7 +31,7 @@ protected:
     inline bool GetEatSpacing() const; // in hffrm.cxx
 
 public:
-    SwHeadFootFrm(SwFrmFmt * pFrm, SwFrm*, sal_uInt16 aType);
+    SwHeadFootFrm(SwFrameFormat * pFrm, SwFrm*, sal_uInt16 aType);
     virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual SwTwips GrowFrm( SwTwips,
                              bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
@@ -44,7 +44,7 @@ public:
 class SwHeaderFrm: public SwHeadFootFrm
 {
 public:
-    SwHeaderFrm( SwFrmFmt* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRM_HEADER) {};
+    SwHeaderFrm( SwFrameFormat* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRM_HEADER) {};
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwHeaderFrm)
 };
@@ -53,7 +53,7 @@ public:
 class SwFooterFrm: public SwHeadFootFrm
 {
 public:
-    SwFooterFrm( SwFrmFmt* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRM_FOOTER) {};
+    SwFooterFrm( SwFrameFormat* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRM_FOOTER) {};
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFooterFrm)
 };

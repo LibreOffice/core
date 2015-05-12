@@ -89,7 +89,7 @@ public:
     SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo );
 
     void Write( SwHTMLWriter& rWrt, sal_Int16 eAlign=text::HoriOrientation::NONE,
-                bool bTHead=false, const SwFrmFmt *pFrmFmt=0,
+                bool bTHead=false, const SwFrameFormat *pFrameFormat=0,
                 const OUString *pCaption=0, bool bTopCaption=false,
                 sal_uInt16 nHSpace=0, sal_uInt16 nVSpace=0 ) const;
 };
@@ -141,7 +141,7 @@ bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
     if( rBox.GetSttNd() )
     {
         SvxBrushItem aBrushItem =
-            rBox.GetFrmFmt()->makeBackgroundBrushItem();
+            rBox.GetFrameFormat()->makeBackgroundBrushItem();
 
         /// The table box has a background, if its background color is not "no fill"/
         /// "auto fill" or it has a background graphic.
@@ -171,7 +171,7 @@ bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
     OSL_ENSURE( bTop || bBottom || bLeft || bRight,
             "HasTabBackground: darf nicht aufgerufen werden" );
 
-    SvxBrushItem aBrushItem = rLine.GetFrmFmt()->makeBackgroundBrushItem();
+    SvxBrushItem aBrushItem = rLine.GetFrameFormat()->makeBackgroundBrushItem();
     /// The table line has a background, if its background color is not "no fill"/
     /// "auto fill" or it has a background graphic.
     bool bRet = aBrushItem.GetColor() != COL_TRANSPARENT ||
@@ -213,7 +213,7 @@ static bool lcl_TableBox_HasTabBorders( const SwTableBox* pBox, bool *pBorders )
     else
     {
         const SvxBoxItem& rBoxItem =
-            static_cast<const SvxBoxItem&>(pBox->GetFrmFmt()->GetFmtAttr( RES_BOX ));
+            static_cast<const SvxBoxItem&>(pBox->GetFrameFormat()->GetFormatAttr( RES_BOX ));
 
         *pBorders = rBoxItem.GetTop() || rBoxItem.GetBottom() ||
                     rBoxItem.GetLeft() || rBoxItem.GetRight();
@@ -282,22 +282,22 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         SwNode* pNd;
         while( !( pNd = rWrt.pDoc->GetNodes()[nNdPos])->IsEndNode() )
         {
-            if( pNd->IsTxtNode() )
+            if( pNd->IsTextNode() )
             {
                 // nur Absaetzte betrachten, an denen man was erkennt
                 // Das ist der Fall, wenn die Vorlage eine der Tabellen-Vorlagen
                 // ist oder von einer der beiden abgelitten ist.
-                const SwFmt *pFmt = &static_cast<SwTxtNode*>(pNd)->GetAnyFmtColl();
-                sal_uInt16 nPoolId = pFmt->GetPoolFmtId();
-                while( !pFmt->IsDefault() &&
+                const SwFormat *pFormat = &static_cast<SwTextNode*>(pNd)->GetAnyFormatColl();
+                sal_uInt16 nPoolId = pFormat->GetPoolFormatId();
+                while( !pFormat->IsDefault() &&
                        RES_POOLCOLL_TABLE_HDLN!=nPoolId &&
                        RES_POOLCOLL_TABLE!=nPoolId )
                 {
-                    pFmt = pFmt->DerivedFrom();
-                    nPoolId = pFmt->GetPoolFmtId();
+                    pFormat = pFormat->DerivedFrom();
+                    nPoolId = pFormat->GetPoolFormatId();
                 }
 
-                if( !pFmt->IsDefault() )
+                if( !pFormat->IsDefault() )
                 {
                     bHead = (RES_POOLCOLL_TABLE_HDLN==nPoolId);
                     break;
@@ -391,7 +391,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             .append("=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
     }
 
-    const SfxItemSet& rItemSet = pBox->GetFrmFmt()->GetAttrSet();
+    const SfxItemSet& rItemSet = pBox->GetFrameFormat()->GetAttrSet();
     const SfxPoolItem *pItem;
 
     // ALIGN wird jetzt nur noch an den Absaetzen ausgegeben
@@ -412,7 +412,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
-    rWrt.bTxtAttr = false;
+    rWrt.bTextAttr = false;
     rWrt.bOutOpts = true;
     const SvxBrushItem *pBrushItem = 0;
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
@@ -431,28 +431,28 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem );
     }
 
-    rWrt.OutCSS1_TableCellBorderHack(*pBox->GetFrmFmt());
+    rWrt.OutCSS1_TableCellBorderHack(*pBox->GetFrameFormat());
 
-    sal_uInt32 nNumFmt = 0;
+    sal_uInt32 nNumFormat = 0;
     double nValue = 0.0;
-    bool bNumFmt = false, bValue = false;
+    bool bNumFormat = false, bValue = false;
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
     {
-        nNumFmt = static_cast<const SwTblBoxNumFormat *>(pItem)->GetValue();
-        bNumFmt = true;
+        nNumFormat = static_cast<const SwTableBoxNumFormat *>(pItem)->GetValue();
+        bNumFormat = true;
     }
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BOXATR_VALUE, false, &pItem ) )
     {
-        nValue = static_cast<const SwTblBoxValue *>(pItem)->GetValue();
+        nValue = static_cast<const SwTableBoxValue *>(pItem)->GetValue();
         bValue = true;
-        if( !bNumFmt )
-            nNumFmt = pBox->GetFrmFmt()->GetTblBoxNumFmt().GetValue();
+        if( !bNumFormat )
+            nNumFormat = pBox->GetFrameFormat()->GetTableBoxNumFormat().GetValue();
     }
 
-    if( bNumFmt || bValue )
+    if( bNumFormat || bValue )
     {
         sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValue, nValue,
-            nNumFmt, *rWrt.pDoc->GetNumberFormatter(), rWrt.eDestEnc,
+            nNumFormat, *rWrt.pDoc->GetNumberFormatter(), rWrt.eDestEnc,
             &rWrt.aNonConvertableCharacters));
     }
     sOut.append('>');
@@ -534,7 +534,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     {
         rWrt.OutBackground( pBrushItem, false );
 
-        rWrt.bTxtAttr = false;
+        rWrt.bTextAttr = false;
         rWrt.bOutOpts = true;
         if( rWrt.bCfgOutStyles )
             OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem );
@@ -563,7 +563,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
 }
 
 void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
-                            bool bTHead, const SwFrmFmt *pFrmFmt,
+                            bool bTHead, const SwFrameFormat *pFrameFormat,
                             const OUString *pCaption, bool bTopCaption,
                             sal_uInt16 nHSpace, sal_uInt16 nVSpace ) const
 {
@@ -628,8 +628,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_table);
 
     sal_uInt16 nOldDirection = rWrt.nDirection;
-    if( pFrmFmt )
-        rWrt.nDirection = rWrt.GetHTMLDirection( pFrmFmt->GetAttrSet() );
+    if( pFrameFormat )
+        rWrt.nDirection = rWrt.GetHTMLDirection( pFrameFormat->GetAttrSet() );
     if( rWrt.bOutFlyFrame || nOldDirection != rWrt.nDirection )
     {
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
@@ -711,12 +711,12 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     // Hintergrund ausgeben
-    if( pFrmFmt )
+    if( pFrameFormat )
     {
-        rWrt.OutBackground( pFrmFmt->GetAttrSet(), false );
+        rWrt.OutBackground( pFrameFormat->GetAttrSet(), false );
 
-        if( rWrt.bCfgOutStyles && pFrmFmt )
-            rWrt.OutCSS1_TableFrmFmtOptions( *pFrmFmt );
+        if( rWrt.bCfgOutStyles && pFrameFormat )
+            rWrt.OutCSS1_TableFrameFormatOptions( *pFrameFormat );
     }
 
     sOut.append('>');
@@ -884,12 +884,12 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     rWrt.nDirection = nOldDirection;
 }
 
-Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
-                           const SwFrmFmt *pFlyFrmFmt,
+Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
+                           const SwFrameFormat *pFlyFrameFormat,
                            const OUString *pCaption, bool bTopCaption )
 {
 
-    SwTable& rTbl = rNode.GetTable();
+    SwTable& rTable = rNode.GetTable();
 
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     rHTMLWrt.bOutTable = true;
@@ -903,21 +903,21 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
     long nFlyWidth = 0;
     sal_uInt16 nFlyHSpace = 0;
     sal_uInt16 nFlyVSpace = 0;
-    if( pFlyFrmFmt )
+    if( pFlyFrameFormat )
     {
-        eSurround = pFlyFrmFmt->GetSurround().GetSurround();
-        const SwFmtFrmSize& rFrmSize = pFlyFrmFmt->GetFrmSize();
+        eSurround = pFlyFrameFormat->GetSurround().GetSurround();
+        const SwFormatFrmSize& rFrmSize = pFlyFrameFormat->GetFrmSize();
         nFlyPrcWidth = rFrmSize.GetWidthPercent();
         nFlyWidth = rFrmSize.GetSize().Width();
 
-        eFlyHoriOri = pFlyFrmFmt->GetHoriOrient().GetHoriOrient();
+        eFlyHoriOri = pFlyFrameFormat->GetHoriOrient().GetHoriOrient();
         if( text::HoriOrientation::NONE == eFlyHoriOri )
             eFlyHoriOri = text::HoriOrientation::LEFT;
 
-        const SvxLRSpaceItem& rLRSpace = pFlyFrmFmt->GetLRSpace();
+        const SvxLRSpaceItem& rLRSpace = pFlyFrameFormat->GetLRSpace();
         nFlyHSpace = static_cast< sal_uInt16 >((rLRSpace.GetLeft() + rLRSpace.GetRight()) / 2);
 
-        const SvxULSpaceItem& rULSpace = pFlyFrmFmt->GetULSpace();
+        const SvxULSpaceItem& rULSpace = pFlyFrameFormat->GetULSpace();
         nFlyVSpace = (rULSpace.GetUpper() + rULSpace.GetLower()) / 2;
     }
 
@@ -930,14 +930,14 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
         rHTMLWrt.bPreserveForm = bPreserveForm;
     }
 
-    SwFrmFmt *pFmt = rTbl.GetFrmFmt();
+    SwFrameFormat *pFormat = rTable.GetFrameFormat();
 
-    const SwFmtFrmSize& rFrmSize = pFmt->GetFrmSize();
+    const SwFormatFrmSize& rFrmSize = pFormat->GetFrmSize();
     long nWidth = rFrmSize.GetSize().Width();
     sal_uInt8 nPrcWidth = rFrmSize.GetWidthPercent();
     sal_uInt16 nBaseWidth = (sal_uInt16)nWidth;
 
-    sal_Int16 eTabHoriOri = pFmt->GetHoriOrient().GetHoriOrient();
+    sal_Int16 eTabHoriOri = pFormat->GetHoriOrient().GetHoriOrient();
 
     // text::HoriOrientation::NONE und text::HoriOrientation::FULL Tabellen benoetigen relative Breiten
     sal_uInt16 nNewDefListLvl = 0;
@@ -954,7 +954,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
         break;
     case text::HoriOrientation::NONE:
         {
-            const SvxLRSpaceItem& aLRItem = pFmt->GetLRSpace();
+            const SvxLRSpaceItem& aLRItem = pFormat->GetLRSpace();
             if( aLRItem.GetRight() )
             {
                 // Die Tabellenbreite wird anhand des linken und rechten
@@ -962,7 +962,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
                 // tatsaechliche Breite der Tabelle zu bestimmen. Wenn
                 // das nicht geht, machen wir eine 100% breite Tabelle
                 // draus.
-                nWidth = pFmt->FindLayoutRect(true).Width();
+                nWidth = pFormat->FindLayoutRect(true).Width();
                 if( !nWidth )
                 {
                     bRelWidths = true;
@@ -981,7 +981,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
                 // Ohne rechten Rand bleibt auch eine absolute Breite erhalten
                 // Wir versuchen aber trotzdem ueber das Layout die
                 // tatsachliche Breite zu ermitteln.
-                long nRealWidth = pFmt->FindLayoutRect(true).Width();
+                long nRealWidth = pFormat->FindLayoutRect(true).Width();
                 if( nRealWidth )
                     nWidth = nRealWidth;
             }
@@ -1008,7 +1008,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
         OSL_ENSURE( !rHTMLWrt.GetNumInfo().GetNumRule() ||
                 rHTMLWrt.GetNextNumInfo(),
                 "NumInfo fuer naechsten Absatz fehlt!" );
-        const SvxLRSpaceItem& aLRItem = pFmt->GetLRSpace();
+        const SvxLRSpaceItem& aLRItem = pFormat->GetLRSpace();
         if( aLRItem.GetLeft() > 0 && rHTMLWrt.nDefListMargin > 0 &&
             ( !rHTMLWrt.GetNumInfo().GetNumRule() ||
               ( rHTMLWrt.GetNextNumInfo() &&
@@ -1027,7 +1027,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
         }
     }
 
-    if( !pFlyFrmFmt && nNewDefListLvl != rHTMLWrt.nDefListLvl )
+    if( !pFlyFrameFormat && nNewDefListLvl != rHTMLWrt.nDefListLvl )
         rHTMLWrt.OutAndSetDefList( nNewDefListLvl );
 
     if( nNewDefListLvl )
@@ -1084,8 +1084,8 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
     if( text::HoriOrientation::NONE==eTabHoriOri )
         nFlyHSpace = nFlyVSpace = 0;
 
-    if( !pFmt->GetName().isEmpty() )
-        rHTMLWrt.OutImplicitMark( pFmt->GetName(), "table" );
+    if( !pFormat->GetName().isEmpty() )
+        rHTMLWrt.OutImplicitMark( pFormat->GetName(), "table" );
 
     if( text::HoriOrientation::NONE!=eDivHoriOri )
     {
@@ -1108,7 +1108,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
     if( text::HoriOrientation::NONE==eTabHoriOri )
         rHTMLWrt.bLFPossible = true;
 
-    const SwHTMLTableLayout *pLayout = rTbl.GetHTMLTableLayout();
+    const SwHTMLTableLayout *pLayout = rTable.GetHTMLTableLayout();
 
 #ifdef DBG_UTIL
     {
@@ -1121,16 +1121,16 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
     if( pLayout && pLayout->IsExportable() )
     {
         SwHTMLWrtTable aTableWrt( pLayout );
-        aTableWrt.Write( rHTMLWrt, eTabHoriOri, rTbl.GetRowsToRepeat() > 0,
-                         pFmt, pCaption, bTopCaption,
+        aTableWrt.Write( rHTMLWrt, eTabHoriOri, rTable.GetRowsToRepeat() > 0,
+                         pFormat, pCaption, bTopCaption,
                          nFlyHSpace, nFlyVSpace );
     }
     else
     {
-        SwHTMLWrtTable aTableWrt( rTbl.GetTabLines(), nWidth,
-                                  nBaseWidth, bRelWidths, 0, 0, rTbl.GetRowsToRepeat() );
-        aTableWrt.Write( rHTMLWrt, eTabHoriOri, rTbl.GetRowsToRepeat() > 0,
-                         pFmt, pCaption, bTopCaption,
+        SwHTMLWrtTable aTableWrt( rTable.GetTabLines(), nWidth,
+                                  nBaseWidth, bRelWidths, 0, 0, rTable.GetRowsToRepeat() );
+        aTableWrt.Write( rHTMLWrt, eTabHoriOri, rTable.GetRowsToRepeat() > 0,
+                         pFormat, pCaption, bTopCaption,
                          nFlyHSpace, nFlyVSpace );
     }
 

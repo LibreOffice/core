@@ -25,9 +25,9 @@
 #include <swdllapi.h>
 
 class SfxItemSet;
-class SwTxtNode;
+class SwTextNode;
 class SwSectionData;
-class SwSectionFmt;
+class SwSectionFormat;
 class SwTOXBase;
 
 class SwUndoInsSection : public SwUndo, private SwUndRng
@@ -42,7 +42,7 @@ private:
     sal_uLong m_nSectionNodePos;
     bool m_bSplitAtStart : 1;
     bool m_bSplitAtEnd : 1;
-    bool m_bUpdateFtn : 1;
+    bool m_bUpdateFootnote : 1;
 
     void Join( SwDoc& rDoc, sal_uLong nNode );
 
@@ -57,13 +57,13 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) SAL_OVERRIDE;
 
     void SetSectNdPos(sal_uLong const nPos)     { m_nSectionNodePos = nPos; }
-    void SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart);
-    void SetUpdtFtnFlag(bool const bFlag)   { m_bUpdateFtn = bFlag; }
+    void SaveSplitNode(SwTextNode *const pTextNd, bool const bAtStart);
+    void SetUpdateFootnoteFlag(bool const bFlag)   { m_bUpdateFootnote = bFlag; }
 };
 
-SwUndo * MakeUndoDelSection(SwSectionFmt const&);
+SwUndo * MakeUndoDelSection(SwSectionFormat const&);
 
-SwUndo * MakeUndoUpdateSection(SwSectionFmt const&, bool const);
+SwUndo * MakeUndoUpdateSection(SwSectionFormat const&, bool const);
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOSECTION_HXX
 

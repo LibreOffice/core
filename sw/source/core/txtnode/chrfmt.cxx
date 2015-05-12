@@ -22,21 +22,21 @@
 #include <charfmt.hxx>
 #include <docary.hxx>
 
-TYPEINIT1( SwCharFmt, SwFmt );  //rtti fuer SwCharFmt
+TYPEINIT1( SwCharFormat, SwFormat );  //rtti fuer SwCharFormat
 
-void SwCharFmt::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swCharFmt"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swCharFormat"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
     GetAttrSet().dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
 
-void SwCharFmts::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwCharFormats::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swCharFmts"));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swCharFormats"));
     for (size_t i = 0; i < size(); ++i)
-        GetFmt(i)->dumpAsXml(pWriter);
+        GetFormat(i)->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
 

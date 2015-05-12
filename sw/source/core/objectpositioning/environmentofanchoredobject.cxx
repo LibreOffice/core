@@ -80,7 +80,7 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
                 !pVertEnvironmentLayFrm->IsFlyFrm() &&
                 !pVertEnvironmentLayFrm->IsHeaderFrm() &&
                 !pVertEnvironmentLayFrm->IsFooterFrm() &&
-                !pVertEnvironmentLayFrm->IsFtnFrm() &&
+                !pVertEnvironmentLayFrm->IsFootnoteFrm() &&
                 !pVertEnvironmentLayFrm->IsPageBodyFrm() &&
                 !pVertEnvironmentLayFrm->IsPageFrm() )
         {

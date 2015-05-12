@@ -94,7 +94,7 @@ struct statistic {
 };
 
 static const struct statistic s_stats [] = {
-    { XML_TOK_META_STAT_TABLE, "TableCount",     &SwDocStat::nTbl, 0  },
+    { XML_TOK_META_STAT_TABLE, "TableCount",     &SwDocStat::nTable, 0  },
     { XML_TOK_META_STAT_IMAGE, "ImageCount",     &SwDocStat::nGrf, 0  },
     { XML_TOK_META_STAT_OLE,   "ObjectCount",    &SwDocStat::nOLE, 0  },
     { XML_TOK_META_STAT_PAGE,  "PageCount",      0, &SwDocStat::nPage },

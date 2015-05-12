@@ -30,7 +30,7 @@
 
 #include "fldpage.hxx"
 
-class SwFldDBPage : public SwFldPage
+class SwFieldDBPage : public SwFieldPage
 {
     VclPtr<ListBox>            m_pTypeLB;
     VclPtr<SwDBTreeList>       m_pDatabaseTLB;
@@ -62,15 +62,15 @@ class SwFldDBPage : public SwFldPage
 
     void                CheckInsert();
 
-    using SwFldPage::SetWrtShell;
+    using SwFieldPage::SetWrtShell;
 
 protected:
     virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
-                        SwFldDBPage(vcl::Window* pParent, const SfxItemSet& rSet);
+                        SwFieldDBPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
-                        virtual ~SwFldDBPage();
+                        virtual ~SwFieldDBPage();
     virtual void        dispose() SAL_OVERRIDE;
 
     static VclPtr<SfxTabPage>  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);

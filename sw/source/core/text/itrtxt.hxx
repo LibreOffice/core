@@ -22,18 +22,18 @@
 #include "itratr.hxx"
 #include "inftxt.hxx"
 
-class SwTxtFrm;
+class SwTextFrm;
 struct SwPosition;
 struct SwCrsrMoveState;
 class SwMarginPortion;
 class SwFlyPortion;
 
-class SwTxtIter : public SwAttrIter
+class SwTextIter : public SwAttrIter
 {
 protected:
     SwLineInfo aLineInf;
-    SwTxtFrm  *pFrm;
-    SwTxtInfo *pInf;
+    SwTextFrm  *pFrm;
+    SwTextInfo *pInf;
     SwLineLayout *pCurr;
     SwLineLayout *pPrev;
     SwTwips nFrameStart;
@@ -52,9 +52,9 @@ protected:
 
     // Reset in the first line
     void Init();
-    void CtorInitTxtIter( SwTxtFrm *pFrm, SwTxtInfo *pInf );
-    SwTxtIter(SwTxtNode* pTxtNode)
-        : SwAttrIter(pTxtNode)
+    void CtorInitTextIter( SwTextFrm *pFrm, SwTextInfo *pInf );
+    SwTextIter(SwTextNode* pTextNode)
+        : SwAttrIter(pTextNode)
         , pFrm(NULL)
         , pInf(NULL)
         , pCurr(NULL)
@@ -73,13 +73,13 @@ protected:
     {
     }
 public:
-    SwTxtIter(SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf)
-        : SwAttrIter(pTxtFrm->GetTxtNode())
+    SwTextIter(SwTextFrm *pTextFrm, SwTextInfo *pTextInf)
+        : SwAttrIter(pTextFrm->GetTextNode())
         , bOneBlock(false)
         , bLastBlock(false)
         , bLastCenter(false)
     {
-        CtorInitTxtIter(pTxtFrm, pTxtInf);
+        CtorInitTextIter(pTextFrm, pTextInf);
     }
     inline const SwLineLayout *GetCurr() const { return pCurr; } // NEVER 0!
     inline const SwLineLayout *GetNext() const { return pCurr->GetNext(); }
@@ -94,8 +94,8 @@ public:
     inline sal_uInt16 RegDiff() const { return nRegDiff; }
     inline bool IsRegisterOn() const { return bRegisterOn; }
 
-    inline SwTxtInfo &GetInfo() { return *pInf; }
-    inline const SwTxtInfo &GetInfo() const { return *pInf; }
+    inline SwTextInfo &GetInfo() { return *pInf; }
+    inline const SwTextInfo &GetInfo() const { return *pInf; }
 
     inline void Top() { Init(); }
     void Bottom();
@@ -118,8 +118,8 @@ public:
     void CalcAscentAndHeight( sal_uInt16 &rAscent, sal_uInt16 &rHeight ) const;
 
     // Lots of trouble for querying pCurr == pPara
-    inline bool IsFirstTxtLine() const
-    { return nStart == GetInfo().GetTxtStart() &&
+    inline bool IsFirstTextLine() const
+    { return nStart == GetInfo().GetTextStart() &&
         !( pCurr->IsDummy() && GetNextLine() ); }
 
     // Replacement for the old IsFirstLine()
@@ -128,18 +128,18 @@ public:
 
     const SwLineInfo &GetLineInfo() const { return aLineInf; }
     inline SwTwips GetFirstPos() const { return nFrameStart; }
-    inline bool SeekAndChg( SwTxtSizeInfo &rInf );
-    inline bool SeekAndChgBefore( SwTxtSizeInfo &rInf );
-    inline bool SeekStartAndChg( SwTxtSizeInfo &rInf, const bool bPara=false );
+    inline bool SeekAndChg( SwTextSizeInfo &rInf );
+    inline bool SeekAndChgBefore( SwTextSizeInfo &rInf );
+    inline bool SeekStartAndChg( SwTextSizeInfo &rInf, const bool bPara=false );
 
-    inline SwTxtFrm *GetTxtFrm() { return pFrm; }
-    inline const SwTxtFrm *GetTxtFrm() const { return pFrm; }
+    inline SwTextFrm *GetTextFrm() { return pFrm; }
+    inline const SwTextFrm *GetTextFrm() const { return pFrm; }
 
     // Counts consecutive hyphens in order to be within the boundary given by MaxHyphens
     void CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const;
 };
 
-class SwTxtMargin : public SwTxtIter
+class SwTextMargin : public SwTextIter
 {
 private:
           SwTwips nLeft;
@@ -159,9 +159,9 @@ protected:
     // For CalcFlyAdjust
     inline void SetDropLeft( const sal_uInt16 nNew ) { nDropLeft = nNew; }
 
-    void CtorInitTxtMargin( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
-    SwTxtMargin(SwTxtNode* pTxtNode)
-        : SwTxtIter(pTxtNode)
+    void CtorInitTextMargin( SwTextFrm *pFrm, SwTextSizeInfo *pInf );
+    SwTextMargin(SwTextNode* pTextNode)
+        : SwTextIter(pTextNode)
         , nLeft(0)
         , nRight(0)
         , nFirst(0)
@@ -174,10 +174,10 @@ protected:
     {
     }
 public:
-    SwTxtMargin(SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf)
-        : SwTxtIter(pTxtFrm->GetTxtNode())
+    SwTextMargin(SwTextFrm *pTextFrm, SwTextSizeInfo *pTextSizeInf)
+        : SwTextIter(pTextFrm->GetTextNode())
     {
-        CtorInitTxtMargin( pTxtFrm, pTxtSizeInf );
+        CtorInitTextMargin( pTextFrm, pTextSizeInf );
     }
     inline SwTwips GetLeftMargin() const;
     inline SwTwips Left() const;
@@ -211,19 +211,19 @@ public:
     inline void SetDropDescent( const sal_uInt16 nNew ) { nDropDescent = nNew; }
     void DropInit();
 
-    // Returns the TxtPos for start and end of the current line without whitespace
+    // Returns the TextPos for start and end of the current line without whitespace
     // Implemented in frminf.cxx
-    sal_Int32 GetTxtStart() const;
-    sal_Int32 GetTxtEnd() const;
+    sal_Int32 GetTextStart() const;
+    sal_Int32 GetTextEnd() const;
 
-    inline SwTxtSizeInfo &GetInfo()
-        { return static_cast<SwTxtSizeInfo&>(SwTxtIter::GetInfo()); }
-    inline const SwTxtSizeInfo &GetInfo() const
-        { return static_cast<const SwTxtSizeInfo&>(SwTxtIter::GetInfo()); }
+    inline SwTextSizeInfo &GetInfo()
+        { return static_cast<SwTextSizeInfo&>(SwTextIter::GetInfo()); }
+    inline const SwTextSizeInfo &GetInfo() const
+        { return static_cast<const SwTextSizeInfo&>(SwTextIter::GetInfo()); }
 
 };
 
-class SwTxtAdjuster : public SwTxtMargin
+class SwTextAdjuster : public SwTextMargin
 {
     // Adjusts the portion, if we have adjustment and FlyFrms
     void CalcFlyAdjust( SwLineLayout *pCurr );
@@ -239,23 +239,23 @@ class SwTxtAdjuster : public SwTxtMargin
                                   const SwRect &rCurrRect );
 
 protected:
-    inline SwTxtAdjuster(SwTxtNode* pTxtNode) : SwTxtMargin(pTxtNode) { }
+    inline SwTextAdjuster(SwTextNode* pTextNode) : SwTextMargin(pTextNode) { }
     // Creates the Glues for adjusted paragraphs
     void CalcNewBlock( SwLineLayout *pCurr, const SwLinePortion *pStopAt,
         SwTwips nReal = 0, bool bSkipKashida = false );
     SwTwips CalcKanaAdj( SwLineLayout *pCurr );
 public:
-    inline SwTxtAdjuster( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf ) : SwTxtMargin(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
-           { CtorInitTxtMargin( pTxtFrm, pTxtSizeInf ); }
+    inline SwTextAdjuster( SwTextFrm *pTextFrm, SwTextSizeInfo *pTextSizeInf ) : SwTextMargin(pTextFrm!=NULL?pTextFrm->GetTextNode():NULL)
+           { CtorInitTextMargin( pTextFrm, pTextSizeInf ); }
 
-    // Is overloaded by SwTxtFormatter due to UpdatePos
+    // Is overloaded by SwTextFormatter due to UpdatePos
     void CalcAdjLine( SwLineLayout *pCurr );
 
     // For adjusting afterwards
     inline void GetAdjusted() const
     {
         if( pCurr->IsFormatAdj() )
-            const_cast<SwTxtAdjuster*>(this)->CalcAdjLine( pCurr );
+            const_cast<SwTextAdjuster*>(this)->CalcAdjLine( pCurr );
     }
 
     // Special treatment for DropCaps
@@ -263,23 +263,23 @@ public:
     void CalcDropRepaint();
 };
 
-class SwTxtCursor : public SwTxtAdjuster
+class SwTextCursor : public SwTextAdjuster
 {
-    // A small helper-class to save SwTxtCursor member, manipulate them
+    // A small helper-class to save SwTextCursor member, manipulate them
     // and to restore them
-    friend class SwTxtCursorSave;
+    friend class SwTextCursorSave;
 
     // Ambiguities
     static bool bRightMargin;
     void _GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* );
 protected:
-    void CtorInitTxtCursor( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
-    SwTxtCursor(SwTxtNode* pTxtNode) : SwTxtAdjuster(pTxtNode) { }
+    void CtorInitTextCursor( SwTextFrm *pFrm, SwTextSizeInfo *pInf );
+    SwTextCursor(SwTextNode* pTextNode) : SwTextAdjuster(pTextNode) { }
 public:
-    SwTxtCursor( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf )
-        : SwTxtAdjuster(pTxtFrm->GetTxtNode())
+    SwTextCursor( SwTextFrm *pTextFrm, SwTextSizeInfo *pTextSizeInf )
+        : SwTextAdjuster(pTextFrm->GetTextNode())
     {
-        CtorInitTxtCursor(pTxtFrm, pTxtSizeInf);
+        CtorInitTextCursor(pTextFrm, pTextSizeInf);
     }
     bool GetCharRect(SwRect *, const sal_Int32, SwCrsrMoveState* = 0,
         const long nMax = 0 );
@@ -304,20 +304,20 @@ public:
 // formatting.
 class SwHookOut
 {
-    SwTxtSizeInfo* pInf;
+    SwTextSizeInfo* pInf;
     VclPtr<OutputDevice> pOut;
     bool bOnWin;
 public:
-    SwHookOut( SwTxtSizeInfo& rInfo );
+    SwHookOut( SwTextSizeInfo& rInfo );
     ~SwHookOut();
 };
 
-inline bool SwTxtIter::SeekAndChg( SwTxtSizeInfo &rInf )
+inline bool SwTextIter::SeekAndChg( SwTextSizeInfo &rInf )
 {
     return SeekAndChgAttrIter( rInf.GetIdx(), rInf.GetOut() );
 }
 
-inline bool SwTxtIter::SeekAndChgBefore( SwTxtSizeInfo &rInf )
+inline bool SwTextIter::SeekAndChgBefore( SwTextSizeInfo &rInf )
 {
     if ( rInf.GetIdx() )
         return SeekAndChgAttrIter( rInf.GetIdx()-1, rInf.GetOut() );
@@ -325,17 +325,17 @@ inline bool SwTxtIter::SeekAndChgBefore( SwTxtSizeInfo &rInf )
         return SeekAndChgAttrIter( rInf.GetIdx(), rInf.GetOut() );
 }
 
-inline bool SwTxtIter::SeekStartAndChg( SwTxtSizeInfo &rInf, const bool bPara )
+inline bool SwTextIter::SeekStartAndChg( SwTextSizeInfo &rInf, const bool bPara )
 {
     return SeekStartAndChgAttrIter( rInf.GetOut(), bPara );
 }
 
-inline SwTwips SwTxtMargin::GetLeftMargin() const
+inline SwTwips SwTextMargin::GetLeftMargin() const
 {
-    return IsFirstTxtLine() ? nFirst : Left();
+    return IsFirstTextLine() ? nFirst : Left();
 }
 
-inline SwTwips SwTxtMargin::Left() const
+inline SwTwips SwTextMargin::Left() const
 {
     return (nDropLines >= nLineNr && 1 != nLineNr) ? nFirst + nDropLeft : nLeft;
 }

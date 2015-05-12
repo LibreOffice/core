@@ -21,34 +21,34 @@
 
 #include <txatbase.hxx>
 
-class SwTxtNode;
+class SwTextNode;
 class SwDoc;
 
 // Attribute for indices/tables of contents.
-class SwTxtTOXMark : public SwTxtAttrEnd
+class SwTextTOXMark : public SwTextAttrEnd
 {
-    SwTxtNode * m_pTxtNode;
+    SwTextNode * m_pTextNode;
     sal_Int32 * m_pEnd;   // 0 if SwTOXMark without AlternativeText
 
 public:
-    SwTxtTOXMark( SwTOXMark& rAttr,
+    SwTextTOXMark( SwTOXMark& rAttr,
             sal_Int32 const nStart, sal_Int32 const*const pEnd = 0);
-    virtual ~SwTxtTOXMark();
+    virtual ~SwTextTOXMark();
 
-    virtual sal_Int32 *GetEnd() SAL_OVERRIDE;     // SwTxtAttr
+    virtual sal_Int32 *GetEnd() SAL_OVERRIDE;     // SwTextAttr
 
     void CopyTOXMark( SwDoc* pDestDoc );
 
-    // get and set TxtNode pointer
-    inline const SwTxtNode* GetpTxtNd() const { return m_pTxtNode; }
-    inline const SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
+    // get and set TextNode pointer
+    inline const SwTextNode* GetpTextNd() const { return m_pTextNode; }
+    inline const SwTextNode& GetTextNode() const;
+    void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }
 };
 
-inline const SwTxtNode& SwTxtTOXMark::GetTxtNode() const
+inline const SwTextNode& SwTextTOXMark::GetTextNode() const
 {
-    assert( m_pTxtNode );
-    return *m_pTxtNode;
+    assert( m_pTextNode );
+    return *m_pTextNode;
 }
 
 #endif

@@ -76,7 +76,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
             }
         }
     }
-    else if( rFrm.IsTxtFrm() )
+    else if( rFrm.IsTextFrm() )
     {
         const SwSortedObjs *pObjs = rFrm.GetDrawObjs();
         if ( pObjs )
@@ -153,7 +153,7 @@ bool SwAccessibleChildMap::IsSortingRequired( const SwFrm& rFrm )
 {
     return ( rFrm.IsPageFrm() &&
              static_cast< const SwPageFrm& >( rFrm ).GetSortedObjs() ) ||
-           ( rFrm.IsTxtFrm() &&
+           ( rFrm.IsTextFrm() &&
              rFrm.GetDrawObjs() );
 }
 

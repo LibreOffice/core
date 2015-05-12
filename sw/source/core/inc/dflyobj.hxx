@@ -24,7 +24,7 @@
 #include <svx/svdovirt.hxx>
 
 class SwFlyFrm;
-class SwFrmFmt;
+class SwFrameFormat;
 class SdrObjMacroHitRec;
 
 const sal_uInt32 SWGInventor =  sal_uInt32('S')*0x00000001 +
@@ -108,8 +108,8 @@ public:
     virtual       void       Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
     virtual       void       addCropHandles(SdrHdlList& rTarget) const SAL_OVERRIDE;
 
-    const SwFrmFmt *GetFmt() const;
-          SwFrmFmt *GetFmt();
+    const SwFrameFormat *GetFormat() const;
+          SwFrameFormat *GetFormat();
 
     // methods to get pointers for the Fly
           SwFlyFrm* GetFlyFrm()         { return pFlyFrm; }

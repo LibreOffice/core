@@ -20,7 +20,7 @@
 #include <docstat.hxx>
 
 SwDocStat::SwDocStat() :
-    nTbl(0),
+    nTable(0),
     nGrf(0),
     nOLE(0),
     nPage(1),
@@ -35,7 +35,7 @@ SwDocStat::SwDocStat() :
 
 void SwDocStat::Reset()
 {
-    nTbl    = 0;
+    nTable    = 0;
     nGrf    = 0;
     nOLE    = 0;
     nPage   = 1;

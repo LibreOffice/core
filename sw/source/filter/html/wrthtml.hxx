@@ -35,12 +35,12 @@
 
 // einige Forward Deklarationen
 class Color;
-class SwFrmFmt;
-class SwFlyFrmFmt;
-class SwDrawFrmFmt;
-class SwFmtINetFmt;
-class SwFmtVertOrient;
-class SwFmtFtn;
+class SwFrameFormat;
+class SwFlyFrameFormat;
+class SwDrawFrameFormat;
+class SwFormatINetFormat;
+class SwFormatVertOrient;
+class SwFormatFootnote;
 class SwStartNode;
 class SwTableNode;
 class SwPageDesc;
@@ -53,9 +53,9 @@ class SvxBrushItem;
 class SvxFontItem;
 class SwHTMLNumRuleInfo;
 class SwHTMLPosFlyFrms;
-class SwTxtFtn;
+class SwTextFootnote;
 
-typedef std::vector<SwTxtFtn*> SwHTMLTxtFtns;
+typedef std::vector<SwTextFootnote*> SwHTMLTextFootnotes;
 
 extern SwAttrFnTab aHTMLAttrFnTab;
 
@@ -208,12 +208,12 @@ public:
     ~HTMLControls() { DeleteAndDestroyAll(); }
 };
 
-typedef std::vector<SwFmtINetFmt*> INetFmts;
+typedef std::vector<SwFormatINetFormat*> INetFormats;
 
-struct SwHTMLFmtInfo
+struct SwHTMLFormatInfo
 {
-    const SwFmt *pFmt;      // das Format selbst
-    const SwFmt *pRefFmt;   // das Vergleichs-Format
+    const SwFormat *pFormat;      // das Format selbst
+    const SwFormat *pRefFormat;   // das Vergleichs-Format
 
     OString aToken;          // das auszugebende Token
     OUString aClass;          // die auszugebende Klasse
@@ -230,9 +230,9 @@ struct SwHTMLFmtInfo
     bool bScriptDependent;
 
     // Konstruktor fuer einen Dummy zum Suchen
-    SwHTMLFmtInfo( const SwFmt *pF ) :
-        pFmt( pF ),
-        pRefFmt(0),
+    SwHTMLFormatInfo( const SwFormat *pF ) :
+        pFormat( pF ),
+        pRefFormat(0),
         pItemSet( 0 ),
         nLeftMargin( 0 ),
         nRightMargin( 0 ),
@@ -243,27 +243,27 @@ struct SwHTMLFmtInfo
     {}
 
     // Konstruktor zum Erstellen der Format-Info
-    SwHTMLFmtInfo( const SwFmt *pFmt, SwDoc *pDoc, SwDoc *pTemlate,
+    SwHTMLFormatInfo( const SwFormat *pFormat, SwDoc *pDoc, SwDoc *pTemlate,
                    bool bOutStyles, LanguageType eDfltLang=LANGUAGE_DONTKNOW,
                    sal_uInt16 nScript=CSS1_OUTMODE_ANY_SCRIPT,
                    bool bHardDrop=false );
-    ~SwHTMLFmtInfo();
+    ~SwHTMLFormatInfo();
 
-    friend bool operator==( const SwHTMLFmtInfo& rInfo1,
-                            const SwHTMLFmtInfo& rInfo2 )
+    friend bool operator==( const SwHTMLFormatInfo& rInfo1,
+                            const SwHTMLFormatInfo& rInfo2 )
     {
-        return reinterpret_cast<sal_IntPtr>(rInfo1.pFmt) == reinterpret_cast<sal_IntPtr>(rInfo2.pFmt);
+        return reinterpret_cast<sal_IntPtr>(rInfo1.pFormat) == reinterpret_cast<sal_IntPtr>(rInfo2.pFormat);
     }
 
-    friend bool operator<( const SwHTMLFmtInfo& rInfo1,
-                            const SwHTMLFmtInfo& rInfo2 )
+    friend bool operator<( const SwHTMLFormatInfo& rInfo1,
+                            const SwHTMLFormatInfo& rInfo2 )
     {
-        return reinterpret_cast<sal_IntPtr>(rInfo1.pFmt) < reinterpret_cast<sal_IntPtr>(rInfo2.pFmt);
+        return reinterpret_cast<sal_IntPtr>(rInfo1.pFormat) < reinterpret_cast<sal_IntPtr>(rInfo2.pFormat);
     }
 
 };
 
-typedef boost::ptr_set<SwHTMLFmtInfo> SwHTMLFmtInfos;
+typedef boost::ptr_set<SwHTMLFormatInfo> SwHTMLFormatInfos;
 
 class IDocumentStylePoolAccess;
 
@@ -296,10 +296,10 @@ public:
     std::vector<OUString> aOutlineMarks;
     std::vector<sal_uInt32> aOutlineMarkPoss;
     HTMLControls aHTMLControls;     // die zu schreibenden Forms
-    SwHTMLFmtInfos aChrFmtInfos;
-    SwHTMLFmtInfos aTxtCollInfos;
-    INetFmts aINetFmts;             // die "offenen" INet-Attribute
-    SwHTMLTxtFtns *pFootEndNotes;
+    SwHTMLFormatInfos aChrFormatInfos;
+    SwHTMLFormatInfos aTextCollInfos;
+    INetFormats aINetFormats;             // die "offenen" INet-Attribute
+    SwHTMLTextFootnotes *pFootEndNotes;
 
     OUString aCSS1Selector;           // der Selektor eines Styles
     OUString aNonConvertableCharacters;
@@ -311,7 +311,7 @@ public:
     Color *pDfltColor;              // default Farbe
     SwNodeIndex *pStartNdIdx;       // Index des ersten Absatz
     const SwPageDesc *pCurrPageDesc;// Die aktuelle Seiten-Vorlage
-    const SwFmtFtn *pFmtFtn;
+    const SwFormatFootnote *pFormatFootnote;
 
     sal_uInt32 aFontHeights[7];         // die Font-Hoehen 1-7
 
@@ -336,7 +336,7 @@ public:
     sal_uInt16 nDefListLvl;             // welcher DL-Level existiert gerade
     sal_Int32  nDefListMargin;          // Wie weit wird in DL eingerueckt
     sal_uInt16 nHeaderFooterSpace;
-    sal_uInt16 nTxtAttrsToIgnore;
+    sal_uInt16 nTextAttrsToIgnore;
     sal_uInt16 nExportMode;
     sal_uInt16 nCSS1OutMode;
     sal_uInt16 nCSS1Script;         // contains default script (that's the one
@@ -360,14 +360,14 @@ public:
     bool bTagOn : 1;                // Tag an oder aus/Attr-Start oder -Ende
 
     // Die folgenden beiden Flags geben an, wir Attribute exportiert werden:
-    // bTxtAttr bOutOpts
+    // bTextAttr bOutOpts
     // 0        0           Style-Sheets
     // 1        0           Hints: Jedes Attribut wird als eignes Tag
     //                          geschrieben und es gibt ein End-Tag
     // 0        1           (Absatz-)Attribute: Das Attribut wird als Option
     //                          eines bereits geschrieben Tags exportiert. Es
     //                          gibt kein End-Tag.
-    bool bTxtAttr : 1;
+    bool bTextAttr : 1;
     // 8
     bool bOutOpts : 1;
 
@@ -423,9 +423,9 @@ public:
     void OutHyperlinkHRefValue( const OUString& rURL );
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
-    bool OutFlyFrm( sal_uLong nNdIdx, sal_Int32 nCntntIdx,
+    bool OutFlyFrm( sal_uLong nNdIdx, sal_Int32 nContentIdx,
                         sal_uInt8 nPos, HTMLOutContext *pContext = 0 );
-    void OutFrmFmt( sal_uInt8 nType, const SwFrmFmt& rFmt,
+    void OutFrameFormat( sal_uInt8 nType, const SwFrameFormat& rFormat,
                     const SdrObject *pSdrObj );
 
     void OutForm( bool bTagOn=true, const SwStartNode *pStNd=0 );
@@ -439,8 +439,8 @@ public:
 
     void OutFootEndNoteInfo();
     void OutFootEndNotes();
-    OUString GetFootEndNoteSym( const SwFmtFtn& rFmtFtn );
-    void OutFootEndNoteSym( const SwFmtFtn& rFmtFtn, const OUString& rNum,
+    OUString GetFootEndNoteSym( const SwFormatFootnote& rFormatFootnote );
+    void OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote, const OUString& rNum,
                              sal_uInt16 nScript );
 
     void OutBasic();
@@ -476,18 +476,18 @@ public:
     // ALT/ALIGN/WIDTH/HEIGHT/HSPACE/VSPACE-Optionen des aktuellen
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
     // rEndTags anhaengen
-    OString OutFrmFmtOptions( const SwFrmFmt& rFrmFmt, const OUString& rAltTxt,
+    OString OutFrameFormatOptions( const SwFrameFormat& rFrameFormat, const OUString& rAltText,
         sal_uInt32 nFrmOpts, const OString& rEndTags = OString() );
 
-    void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrmFmt& rFrmFmt, const OUString& rAltTxt, sal_uInt32 nFrmOpts);
+    void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAltText, sal_uInt32 nFrmOpts);
 
-    void OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt );
-    void OutCSS1_TableCellBorderHack(const SwFrmFmt& rFrmFmt);
-    void OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt, const SwFmtCol *pCol );
-    void OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt, sal_uInt32 nFrmOpts,
+    void OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameFormat );
+    void OutCSS1_TableCellBorderHack(const SwFrameFormat& rFrameFormat);
+    void OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameFormat, const SwFormatCol *pCol );
+    void OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat, sal_uInt32 nFrmOpts,
                                 const SdrObject *pSdrObj=0,
                                 const SfxItemSet *pItemSet=0 );
-    void OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt );
+    void OutCSS1_FrameFormatBackground( const SwFrameFormat& rFrameFormat );
 
     void ChangeParaToken( sal_uInt16 nNew );
 
@@ -513,7 +513,7 @@ public:
 
     static sal_uInt32 ToPixel( sal_uInt32 nVal, const bool bVert );
 
-    sal_uInt16 GuessFrmType( const SwFrmFmt& rFrmFmt,
+    sal_uInt16 GuessFrmType( const SwFrameFormat& rFrameFormat,
                          const SdrObject*& rpStrObj );
     static sal_uInt16 GuessOLENodeFrmType( const SwNode& rNd );
 
@@ -537,14 +537,14 @@ public:
     // Die Numerierungs-Information des naeschten Absatz loeschen.
     void ClearNextNumInfo();
 
-    static const SdrObject* GetHTMLControl( const SwDrawFrmFmt& rFmt );
-    static const SdrObject* GetMarqueeTextObj( const SwDrawFrmFmt& rFmt );
-    static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
+    static const SdrObject* GetHTMLControl( const SwDrawFrameFormat& rFormat );
+    static const SdrObject* GetMarqueeTextObj( const SwDrawFrameFormat& rFormat );
+    static sal_uInt16 GetCSS1Selector( const SwFormat *pFormat, OString& rToken,
                                    OUString& rClass, sal_uInt16& rRefPoolId,
                                    OUString *pPseudo=0 );
 
-    static const SwFmt *GetTemplateFmt( sal_uInt16 nPoolId, IDocumentStylePoolAccess* /*SwDoc*/ pTemplate );
-    static const SwFmt *GetParentFmt( const SwFmt& rFmt, sal_uInt16 nDeep );
+    static const SwFormat *GetTemplateFormat( sal_uInt16 nPoolId, IDocumentStylePoolAccess* /*SwDoc*/ pTemplate );
+    static const SwFormat *GetParentFormat( const SwFormat& rFormat, sal_uInt16 nDeep );
 
     static void SubtractItemSet( SfxItemSet& rItemSet,
                                  const SfxItemSet& rRefItemSet,
@@ -572,7 +572,7 @@ public:
     inline bool IsCSS1Source( sal_uInt16 n ) const;
     inline bool IsCSS1Script( sal_uInt16 n ) const;
 
-    static const sal_Char *GetNumFormat( sal_uInt16 nFmt );
+    static const sal_Char *GetNumFormat( sal_uInt16 nFormat );
     static void PrepareFontList( const SvxFontItem& rFontItem, OUString& rNames,
                                  sal_Unicode cQuote, bool bGeneric );
     static sal_uInt16 GetCSS1ScriptForScriptType( sal_uInt16 nScriptType );
@@ -580,7 +580,7 @@ public:
 
     FieldUnit GetCSS1Unit() const { return eCSS1Unit; }
 
-    sal_Int32 indexOfDotLeaders( sal_uInt16 nPoolId, const OUString& rTxt );
+    sal_Int32 indexOfDotLeaders( sal_uInt16 nPoolId, const OUString& rText );
 };
 
 inline bool SwHTMLWriter::IsCSS1Source( sal_uInt16 n ) const
@@ -631,34 +631,34 @@ struct HTMLSaveData
     bool bOldOutHeader : 1;
     bool bOldOutFooter : 1;
     bool bOldOutFlyFrame : 1;
-    const SwFlyFrmFmt* pOldFlyFmt;
+    const SwFlyFrameFormat* pOldFlyFormat;
 
     HTMLSaveData( SwHTMLWriter&, sal_uLong nStt, sal_uLong nEnd,
                   bool bSaveNum=true,
-                  const SwFrmFmt *pFrmFmt=0  );
+                  const SwFrameFormat *pFrameFormat=0  );
     ~HTMLSaveData();
 };
 
 // einige Funktions-Deklarationen
-Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFmt,
+Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFormat,
                                bool bInCntnr );
-Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFmt,
+Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFormat,
                                   bool bInCntnr );
 
-Writer& OutHTML_SwTxtNode( Writer&, const SwCntntNode& );
-Writer& OutHTML_SwTblNode( Writer& , SwTableNode &, const SwFrmFmt *,
+Writer& OutHTML_SwTextNode( Writer&, const SwContentNode& );
+Writer& OutHTML_SwTableNode( Writer& , SwTableNode &, const SwFrameFormat *,
                            const OUString* pCaption=0, bool bTopCaption=false );
 
-Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt, const SwDrawFrmFmt& rFmt,
+Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt, const SwDrawFrameFormat& rFormat,
                                      const SdrUnoObj& rSdrObj, bool bInCntnr );
-Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt, const SwDrawFrmFmt& rFmt,
+Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt, const SwDrawFrameFormat& rFormat,
                                      const SdrObject& rSdrObj );
 
-Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
+Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
                               bool bHeader );
 
-Writer& OutHTML_Image( Writer&, const SwFrmFmt& rFmt,
-                       Graphic& rGraphic, const OUString& rAlternateTxt,
+Writer& OutHTML_Image( Writer&, const SwFrameFormat& rFormat,
+                       Graphic& rGraphic, const OUString& rAlternateText,
                        const Size& rRealSize, sal_uInt32 nFrmOpts,
                        const sal_Char *pMarkType = 0,
                        const ImageMap *pGenImgMap = 0 );
@@ -666,9 +666,9 @@ Writer& OutHTML_Image( Writer&, const SwFrmFmt& rFmt,
 Writer& OutHTML_BulletImage( Writer& rWrt, const sal_Char *pTag,
                              const SvxBrushItem* pBrush );
 
-Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt );
-Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt );
-Writer& OutHTML_INetFmt( Writer&, const SwFmtINetFmt& rINetFmt, bool bOn );
+Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt );
+Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt );
+Writer& OutHTML_INetFormat( Writer&, const SwFormatINetFormat& rINetFormat, bool bOn );
 
 Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
 Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );

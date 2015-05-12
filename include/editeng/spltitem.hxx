@@ -24,22 +24,22 @@
 
 class SvXMLUnitConverter;
 
-// class SvxFmtSplitItem -------------------------------------------------
+// class SvxFormatSplitItem -------------------------------------------------
 
 /*  [Description]
 
     This item describes a logical variable "split paragraph yes or no".
 */
 
-class EDITENG_DLLPUBLIC SvxFmtSplitItem : public SfxBoolItem
+class EDITENG_DLLPUBLIC SvxFormatSplitItem : public SfxBoolItem
 {
 public:
     TYPEINFO_OVERRIDE();
-    virtual ~SvxFmtSplitItem();
+    virtual ~SvxFormatSplitItem();
 
-    inline SvxFmtSplitItem( const bool bSplit /*= true*/,
+    inline SvxFormatSplitItem( const bool bSplit /*= true*/,
                             const sal_uInt16 nWh  );
-    inline SvxFmtSplitItem& operator=( const SvxFmtSplitItem& rSplit );
+    inline SvxFormatSplitItem& operator=( const SvxFormatSplitItem& rSplit );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
@@ -52,12 +52,12 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 };
 
-inline SvxFmtSplitItem::SvxFmtSplitItem( const bool bSplit, const sal_uInt16 nWh ) :
+inline SvxFormatSplitItem::SvxFormatSplitItem( const bool bSplit, const sal_uInt16 nWh ) :
     SfxBoolItem( nWh, bSplit )
 {}
 
-inline SvxFmtSplitItem& SvxFmtSplitItem::operator=(
-    const SvxFmtSplitItem& rSplit )
+inline SvxFormatSplitItem& SvxFormatSplitItem::operator=(
+    const SvxFormatSplitItem& rSplit )
 {
     SetValue( rSplit.GetValue() );
     return *this;

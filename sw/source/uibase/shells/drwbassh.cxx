@@ -233,16 +233,16 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT, pSh->IsFrmVertical(true, bRTL, bVertL2R)));
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_IN_RTL_TEXT, bRTL));
 
-                        SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
+                        SwFrameFormat* pFrameFormat = FindFrameFormat( pObj );
 
-                        aSet.Put( pFrmFmt->GetFmtAttr(RES_FOLLOW_TEXT_FLOW) );
+                        aSet.Put( pFrameFormat->GetFormatAttr(RES_FOLLOW_TEXT_FLOW) );
 
-                        SwFmtVertOrient aVOrient(static_cast<const SwFmtVertOrient&>(pFrmFmt->GetFmtAttr(RES_VERT_ORIENT)));
+                        SwFormatVertOrient aVOrient(static_cast<const SwFormatVertOrient&>(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT)));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_ORIENT, aVOrient.GetVertOrient()));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_RELATION, aVOrient.GetRelationOrient() ));
                         aSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_VERT_POSITION, aVOrient.GetPos()));
 
-                        SwFmtHoriOrient aHOrient(static_cast<const SwFmtHoriOrient&>(pFrmFmt->GetFmtAttr(RES_HORI_ORIENT)));
+                        SwFormatHoriOrient aHOrient(static_cast<const SwFormatHoriOrient&>(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT)));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_ORIENT, aHOrient.GetHoriOrient()));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_RELATION, aHOrient.GetRelationOrient() ));
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, aHOrient.IsPosToggle()));
@@ -284,7 +284,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                             ->GetValue(), false, bPosCorr );
                                 else
                                 {
-                                    SwFmtAnchor aAnchor(pFrmFmt->GetAnchor());
+                                    SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
                                     aAnchor.SetType((RndStdIds)static_cast<const SfxInt16Item*>(pAnchorItem)->GetValue());
                                     aFrmAttrSet.Put( aAnchor );
                                 }
@@ -459,10 +459,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         {
                             pSh->StartAction();
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                            SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
-                            SwFmtVertOrient aVOrient(static_cast<const SwFmtVertOrient&>(pFrmFmt->GetFmtAttr(RES_VERT_ORIENT)));
+                            SwFrameFormat* pFrameFormat = FindFrameFormat( pObj );
+                            SwFormatVertOrient aVOrient(static_cast<const SwFormatVertOrient&>(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT)));
                             aVOrient.SetVertOrient( nVertOrient );
-                            pFrmFmt->SetFmtAttr(aVOrient);
+                            pFrameFormat->SetFormatAttr(aVOrient);
                             pSh->EndAction();
                         }
                         break;
@@ -761,20 +761,20 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
     // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
     //      aligned to page for fly frame anchored to paragraph or to character.
     const RndStdIds eAnchorType = static_cast<RndStdIds >(pValidation->nAnchorType);
-    const SwPosition* pCntntPos = 0;
+    const SwPosition* pContentPos = 0;
     SdrView*  pSdrView = pSh->GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
-        pCntntPos = pFrmFmt->GetAnchor().GetCntntAnchor();
+        SwFrameFormat* pFrameFormat = FindFrameFormat( pObj );
+        pContentPos = pFrameFormat->GetAnchor().GetContentAnchor();
     }
 
     pSh->CalcBoundRect( aBoundRect, eAnchorType,
                            pValidation->nHRelOrient,
                            pValidation->nVRelOrient,
-                           pCntntPos,
+                           pContentPos,
                            pValidation->bFollowTextFlow,
                            pValidation->bMirror, NULL, &pValidation->aPercentSize);
 

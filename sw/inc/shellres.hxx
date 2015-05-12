@@ -42,10 +42,10 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     OUString        aCalc_Error;
 
     // For GetRefField - up/down.
-    OUString        aGetRefFld_Up;
-    OUString        aGetRefFld_Down;
+    OUString        aGetRefField_Up;
+    OUString        aGetRefField_Down;
     // For GetRefField - referenced item not found.
-    OUString        aGetRefFld_RefItemNotFound;
+    OUString        aGetRefField_RefItemNotFound;
     // For dynamic menu - string "all".
     OUString        aStrAllPageHeadFoot;
     // For some list boxes - string "none"
@@ -71,7 +71,7 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     std::vector<OUString> aDocInfoLst;
 
     // The autoFormat-Redline comments.
-    inline const std::vector<OUString>& GetAutoFmtNameLst() const;
+    inline const std::vector<OUString>& GetAutoFormatNameLst() const;
 
     enum PageNameMode
     {
@@ -88,18 +88,18 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     ~ShellResource();
 
 private:
-    void _GetAutoFmtNameLst() const;
-    mutable std::vector<OUString> *pAutoFmtNameLst;
+    void _GetAutoFormatNameLst() const;
+    mutable std::vector<OUString> *pAutoFormatNameLst;
     OUString        sPageDescFirstName;
     OUString        sPageDescFollowName;
     OUString        sPageDescName;
 };
 
-inline const std::vector<OUString>& ShellResource::GetAutoFmtNameLst() const
+inline const std::vector<OUString>& ShellResource::GetAutoFormatNameLst() const
 {
-    if( !pAutoFmtNameLst )
-        _GetAutoFmtNameLst();
-    return *pAutoFmtNameLst;
+    if( !pAutoFormatNameLst )
+        _GetAutoFormatNameLst();
+    return *pAutoFormatNameLst;
 }
 
 #endif // INCLUDED_SW_INC_SHELLRES_HXX

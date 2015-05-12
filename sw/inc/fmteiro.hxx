@@ -26,10 +26,10 @@
 
 class IntlWrapper;
 
-class SW_DLLPUBLIC SwFmtEditInReadonly : public SfxBoolItem
+class SW_DLLPUBLIC SwFormatEditInReadonly : public SfxBoolItem
 {
 public:
-    SwFmtEditInReadonly( sal_uInt16 nId = RES_EDIT_IN_READONLY,
+    SwFormatEditInReadonly( sal_uInt16 nId = RES_EDIT_IN_READONLY,
                      bool bPrt = false ) : SfxBoolItem( nId, bPrt ) {}
 
     /// "pure virtual methos" of SfxPoolItem
@@ -42,10 +42,10 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
-inline const SwFmtEditInReadonly &SwAttrSet::GetEditInReadonly(bool bInP) const
-    { return static_cast<const SwFmtEditInReadonly&>(Get( RES_EDIT_IN_READONLY,bInP)); }
+inline const SwFormatEditInReadonly &SwAttrSet::GetEditInReadonly(bool bInP) const
+    { return static_cast<const SwFormatEditInReadonly&>(Get( RES_EDIT_IN_READONLY,bInP)); }
 
-inline const SwFmtEditInReadonly &SwFmt::GetEditInReadonly(bool bInP) const
+inline const SwFormatEditInReadonly &SwFormat::GetEditInReadonly(bool bInP) const
     { return m_aSet.GetEditInReadonly(bInP); }
 
 #endif

@@ -19,12 +19,12 @@
 #ifndef INCLUDED_SW_INC_FMTCOLFUNC_HXX
 #define INCLUDED_SW_INC_FMTCOLFUNC_HXX
 
-class SwFmt;
+class SwFormat;
 class SwNumRuleItem;
 
-// namespace <TxtFmtCollFunc> for functions and procedures working on
-// paragraph styles (instances of <SwTxtFmtColl>
-namespace TxtFmtCollFunc
+// namespace <TextFormatCollFunc> for functions and procedures working on
+// paragraph styles (instances of <SwTextFormatColl>
+namespace TextFormatCollFunc
 {
     /** Checks, if assignment of paragraph style to list level of outline style
         has to be deleted, and deletes the assignment, if needed.
@@ -36,43 +36,43 @@ namespace TxtFmtCollFunc
 
         @author OD
     */
-    void CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
-                                    SwFmt* pFmt,
+    void CheckTextFormatCollForDeletionOfAssignmentToOutlineStyle(
+                                    SwFormat* pFormat,
                                     const SwNumRuleItem* pNewNumRuleItem = 0L );
 
     /** determines the list style, which directly set at the given paragraph style
 
         @author OD
 
-        @param rTxtFmtColl
+        @param rTextFormatColl
         input parameter - paragraph style for which the list style should be retrieved
 
         @return pointer to <SwNumRule> instance, if the given paragraph style
         has directly set a list style, 0 otherwise
     */
-    SwNumRule* GetNumRule( SwTxtFmtColl& rTxtFmtColl );
+    SwNumRule* GetNumRule( SwTextFormatColl& rTextFormatColl );
 
     /** adds the given paragraph style at the directly set list style
 
         Note: If the given paragraph style has no directly set list style, nothing happens
 
-        @param rTxtFmtColl
+        @param rTextFormatColl
         input parameter - paragraph style which is added to its directly set list style
 
         @author OD
     */
-    void AddToNumRule( SwTxtFmtColl& rTxtFmtColl );
+    void AddToNumRule( SwTextFormatColl& rTextFormatColl );
 
     /** removes te given paragraph style from the directly set list style
 
         Note: If the given paragraph style has no directly set list style, nothing happens
 
-        @param rTxtFmtColl
+        @param rTextFormatColl
         input parameter - paragraph style which is removed from its directly set list style
 
         @author OD
     */
-    void RemoveFromNumRule( SwTxtFmtColl& rTxtFmtColl );
+    void RemoveFromNumRule( SwTextFormatColl& rTextFormatColl );
 }
 #endif
 

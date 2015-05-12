@@ -250,9 +250,9 @@ void ParaPropertyPanel::initial()
 IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl)
 {
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-    aMargin.SetTxtLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) );
+    aMargin.SetTextLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) );
     aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
-    aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
+    aMargin.SetTextFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
@@ -283,9 +283,9 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pCont
                     maTxtLeft += INDENT_STEP;
                     sal_Int64 nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
                     nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
-                    aMargin.SetTxtLeft( (const long)nVal );
+                    aMargin.SetTextLeft( (const long)nVal );
                     aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
-                    aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
+                    aMargin.SetTextFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
 
                     GetBindings()->GetDispatcher()->Execute(
                         SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
@@ -317,9 +317,9 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pCont
                     sal_Int64 nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
                     nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
 
-                    aMargin.SetTxtLeft( (const long)nVal );
+                    aMargin.SetTextLeft( (const long)nVal );
                     aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
-                    aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
+                    aMargin.SetTextFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
 
                     GetBindings()->GetDispatcher()->Execute(
                         SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
@@ -329,9 +329,9 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pCont
         else if (aCommand == UNO_HANGINGINDENT)
         {
             SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-            aMargin.SetTxtLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) + (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
+            aMargin.SetTextLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) + (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
             aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
-            aMargin.SetTxtFirstLineOfst( ((const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ))*(-1) );
+            aMargin.SetTextFirstLineOfst( ((const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ))*(-1) );
 
             GetBindings()->GetDispatcher()->Execute(
                 SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
@@ -353,9 +353,9 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl,
         else if (aCommand == UNO_HANGINGINDENT2)
         {
             SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-            aMargin.SetTxtLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) + (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
+            aMargin.SetTextLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) + (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
             aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
-            aMargin.SetTxtFirstLineOfst( ((const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ))*(-1) );
+            aMargin.SetTextFirstLineOfst( ((const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ))*(-1) );
 
             GetBindings()->GetDispatcher()->Execute( SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
         }
@@ -466,7 +466,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
     if( pState && eState >= SfxItemState::DEFAULT )
     {
         const SvxLRSpaceItem* pSpace = static_cast<const SvxLRSpaceItem*>(pState);
-        maTxtLeft = pSpace->GetTxtLeft();
+        maTxtLeft = pSpace->GetTextLeft();
         maTxtLeft = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)m_eLRSpaceUnit, MAP_100TH_MM );
         maTxtLeft = OutputDevice::LogicToLogic( maTxtLeft, MAP_100TH_MM, (MapUnit)(SFX_MAPUNIT_TWIP) );
 
@@ -474,7 +474,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         aTxtRight = OutputDevice::LogicToLogic( aTxtRight, (MapUnit)m_eLRSpaceUnit, MAP_100TH_MM );
         aTxtRight = OutputDevice::LogicToLogic( aTxtRight, MAP_100TH_MM, (MapUnit)(SFX_MAPUNIT_TWIP) );
 
-        long aTxtFirstLineOfst = pSpace->GetTxtFirstLineOfst();
+        long aTxtFirstLineOfst = pSpace->GetTextFirstLineOfst();
         aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, (MapUnit)m_eLRSpaceUnit, MAP_100TH_MM );
         aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MAP_100TH_MM, (MapUnit)(SFX_MAPUNIT_TWIP) );
 

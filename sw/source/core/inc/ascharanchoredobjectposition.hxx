@@ -25,8 +25,8 @@
 #include <swtypes.hxx>
 #include <swrect.hxx>
 
-class SwTxtFrm;
-class SwFmtVertOrient;
+class SwTextFrm;
+class SwFormatVertOrient;
 
 namespace objectpositioning
 {
@@ -70,7 +70,7 @@ namespace objectpositioning
         sal_uInt8   mnLineAlignment;
 
         // method to cast <SwAnchoredObjectPosition::GetAnchorFrm()>
-        const SwTxtFrm& GetAnchorTxtFrm() const;
+        const SwTextFrm& GetAnchorTextFrm() const;
 
         /** determine the relative position to base line for object position
 
@@ -84,7 +84,7 @@ namespace objectpositioning
             @return relative position to the base line
         */
         SwTwips _GetRelPosToBase( const SwTwips          _nObjBoundHeight,
-                                  const SwFmtVertOrient& _rVert );
+                                  const SwFormatVertOrient& _rVert );
 
     public:
         /** construtor; provided object to be positioned and needed data

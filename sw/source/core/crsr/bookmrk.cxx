@@ -44,22 +44,22 @@ namespace
     static void lcl_FixPosition(SwPosition& rPos)
     {
         // make sure the position has 1) the proper node, and 2) a proper index
-        SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
-        if(pTxtNode == NULL && rPos.nContent.GetIndex() > 0)
+        SwTextNode* pTextNode = rPos.nNode.GetNode().GetTextNode();
+        if(pTextNode == NULL && rPos.nContent.GetIndex() > 0)
         {
             SAL_INFO(
                 "sw.core",
                 "illegal position: " << rPos.nContent.GetIndex()
-                    << " without proper TxtNode");
+                    << " without proper TextNode");
             rPos.nContent.Assign(NULL, 0);
         }
-        else if(pTxtNode != NULL && rPos.nContent.GetIndex() > pTxtNode->Len())
+        else if(pTextNode != NULL && rPos.nContent.GetIndex() > pTextNode->Len())
         {
             SAL_INFO(
                 "sw.core",
                 "illegal position: " << rPos.nContent.GetIndex()
-                    << " is beyond " << pTxtNode->Len());
-            rPos.nContent.Assign(pTxtNode, pTxtNode->Len());
+                    << " is beyond " << pTextNode->Len());
+            rPos.nContent.Assign(pTextNode, pTextNode->Len());
         }
     }
 
@@ -71,9 +71,9 @@ namespace
         io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
 
         SwPosition rStart = pField->GetMarkStart();
-        SwTxtNode const*const pStartTxtNode = rStart.nNode.GetNode().GetTxtNode();
-        const sal_Unicode ch_start = ( rStart.nContent.GetIndex() >= pStartTxtNode->GetTxt().getLength() ) ? 0 :
-            pStartTxtNode->GetTxt()[rStart.nContent.GetIndex()];
+        SwTextNode const*const pStartTextNode = rStart.nNode.GetNode().GetTextNode();
+        const sal_Unicode ch_start = ( rStart.nContent.GetIndex() >= pStartTextNode->GetText().getLength() ) ? 0 :
+            pStartTextNode->GetText()[rStart.nContent.GetIndex()];
         if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
         {
             SwPaM aStartPaM(rStart);
@@ -83,10 +83,10 @@ namespace
         }
 
         SwPosition& rEnd = pField->GetMarkEnd();
-        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
+        SwTextNode const*const pEndTextNode = rEnd.nNode.GetNode().GetTextNode();
         const sal_Int32 nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 ) ?
             rEnd.nContent.GetIndex() : rEnd.nContent.GetIndex() - 1;
-        const sal_Unicode ch_end = nEndPos >= pEndTxtNode->GetTxt().getLength() ? 0 : pEndTxtNode->GetTxt()[nEndPos];
+        const sal_Unicode ch_end = nEndPos >= pEndTextNode->GetText().getLength() ? 0 : pEndTextNode->GetText()[nEndPos];
         if ( aEndMark && ( ch_end != aEndMark ) )
         {
             SwPaM aEndPaM(rEnd);
@@ -105,9 +105,9 @@ namespace
         io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
 
         const SwPosition& rStart = pField->GetMarkStart();
-        SwTxtNode const*const pStartTxtNode = rStart.nNode.GetNode().GetTxtNode();
+        SwTextNode const*const pStartTextNode = rStart.nNode.GetNode().GetTextNode();
         const sal_Unicode ch_start =
-            pStartTxtNode->GetTxt()[rStart.nContent.GetIndex()];
+            pStartTextNode->GetText()[rStart.nContent.GetIndex()];
 
         if( ch_start == aStartMark )
         {
@@ -117,11 +117,11 @@ namespace
         }
 
         const SwPosition& rEnd = pField->GetMarkEnd();
-        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
+        SwTextNode const*const pEndTextNode = rEnd.nNode.GetNode().GetTextNode();
         const sal_Int32 nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 )
                                    ? rEnd.nContent.GetIndex()
                                    : rEnd.nContent.GetIndex() - 1;
-        const sal_Unicode ch_end = pEndTxtNode->GetTxt()[nEndPos];
+        const sal_Unicode ch_end = pEndTextNode->GetText()[nEndPos];
         if ( ch_end == aEndMark )
         {
             SwPaM aEnd(rEnd, rEnd);

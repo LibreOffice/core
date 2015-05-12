@@ -167,7 +167,7 @@ void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
         pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
         if( !GetDoc()->getIDocumentDeviceAccess().getPrinter( false ) )
             pTempView->SetPrinter( GetDoc()->getIDocumentDeviceAccess().getPrinter( false ), SfxPrinterChangeFlags::PRINTER | SfxPrinterChangeFlags::JOBSETUP );
-        GetDoc()->CheckDefaultPageFmt();
+        GetDoc()->CheckDefaultPageFormat();
         SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, false);
         while (pTmpFrm)
         {
@@ -282,7 +282,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         switch( nAction )
         {
         case 2:
-            m_pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_FILENAMEFLD )->UpdateFlds();
+            m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_FILENAMEFLD )->UpdateFields();
             break;
         // #i38126# - own action for event LOADFINISHED
         // in order to avoid a modified document.
@@ -349,7 +349,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
     {
         case SID_AUTO_CORRECT_DLG:
         {
-            SvxSwAutoFmtFlags* pAFlags = &SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
+            SvxSwAutoFormatFlags* pAFlags = &SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
             SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
             bool bOldLocked = rACW.IsLockWordLstLocked(),
@@ -381,7 +381,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
             rACW.SetLockWordLstLocked( bOldLocked );
 
-            SwEditShell::SetAutoFmtFlags( pAFlags );
+            SwEditShell::SetAutoFormatFlags( pAFlags );
             rACW.SetMinWordLen( pAFlags->nAutoCmpltWordLen );
             rACW.SetMaxCount( pAFlags->nAutoCmpltListLen );
             if (pAFlags->m_pAutoCompleteList)  // any changes?
@@ -570,8 +570,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( !aFileName.isEmpty() )
                 {
                     SwgReaderOption aOpt;
-                    aOpt.SetTxtFmts(    bText  = bool(nFlags & SfxTemplateFlags::LOAD_TEXT_STYLES ));
-                    aOpt.SetFrmFmts(    bFrame = bool(nFlags & SfxTemplateFlags::LOAD_FRAME_STYLES));
+                    aOpt.SetTextFormats(    bText  = bool(nFlags & SfxTemplateFlags::LOAD_TEXT_STYLES ));
+                    aOpt.SetFrameFormats(    bFrame = bool(nFlags & SfxTemplateFlags::LOAD_FRAME_STYLES));
                     aOpt.SetPageDescs(  bPage  = bool(nFlags & SfxTemplateFlags::LOAD_PAGE_STYLES ));
                     aOpt.SetNumRules(   bNum   = bool(nFlags & SfxTemplateFlags::LOAD_NUM_STYLES  ));
                     //different meaning between SFX_MERGE_STYLES and aOpt.SetMerge!
@@ -839,7 +839,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             //pWrtShell is not set in page preview
             if (m_pWrtShell)
                 m_pWrtShell->StartAllAction();
-            m_pDoc->getIDocumentFieldsAccess().UpdateFlds( NULL, false );
+            m_pDoc->getIDocumentFieldsAccess().UpdateFields( NULL, false );
             m_pDoc->getIDocumentLinksAdministration().EmbedAllLinks();
             m_IsRemovedInvisibleContent
                 = officecfg::Office::Security::HiddenContent::RemoveHiddenContent::get();
@@ -966,7 +966,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         {
                             for(sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
                             {
-                                const int nLevel = rOutlNds[n]->GetTxtNode()->GetAttrOutlineLevel();
+                                const int nLevel = rOutlNds[n]->GetTextNode()->GetAttrOutlineLevel();
                                 if( nLevel > 0 && ! bOutline[nLevel-1] )
                                 {
                                     bOutline[nLevel-1] = true;
@@ -974,7 +974,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             }
                         }
 
-                        const sal_uInt16 nStyleCount = m_pDoc->GetTxtFmtColls()->size();
+                        const sal_uInt16 nStyleCount = m_pDoc->GetTextFormatColls()->size();
                         Sequence<OUString> aListBoxEntries( MAXLEVEL + nStyleCount);
                         OUString* pEntries = aListBoxEntries.getArray();
                         sal_Int32   nIdx = 0 ;
@@ -989,10 +989,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         OUString    sStyle( SW_RESSTR(STR_FDLG_STYLE) );
                         for(sal_uInt16 i = 0; i < nStyleCount; ++i)
                         {
-                            SwTxtFmtColl &rTxtColl = *(*m_pDoc->GetTxtFmtColls())[ i ];
-                            if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
+                            SwTextFormatColl &rTextColl = *(*m_pDoc->GetTextFormatColls())[ i ];
+                            if( !rTextColl.IsDefault() && rTextColl.IsAtDocNodeSet() )
                             {
-                                pEntries[nIdx++] = sStyle + rTxtColl.GetName();
+                                pEntries[nIdx++] = sStyle + rTextColl.GetName();
                             }
                         }
 
@@ -1064,9 +1064,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         }
                         else
                         {
-                            const SwTxtFmtColl* pSplitColl = 0;
+                            const SwTextFormatColl* pSplitColl = 0;
                             if ( !aTemplateName.isEmpty() )
-                                pSplitColl = m_pDoc->FindTxtFmtCollByName(aTemplateName);
+                                pSplitColl = m_pDoc->FindTextFormatCollByName(aTemplateName);
                             bDone = bCreateHtml
                                 ? m_pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
                                 : m_pDoc->GenerateGlobalDoc( aFileName, pSplitColl );
@@ -1241,12 +1241,12 @@ void SwDocShell::SetModified( bool bSet )
 
 void SwDocShell::UpdateChildWindows()
 {
-    // if necessary newly initialize Flddlg (i.e. for TYP_SETVAR)
+    // if necessary newly initialize Fielddlg (i.e. for TYP_SETVAR)
     if(!GetView())
         return;
     SfxViewFrame* pVFrame = GetView()->GetViewFrame();
-    SwFldDlgWrapper *pWrp = static_cast<SwFldDlgWrapper*>(pVFrame->
-            GetChildWindow( SwFldDlgWrapper::GetChildWindowId() ));
+    SwFieldDlgWrapper *pWrp = static_cast<SwFieldDlgWrapper*>(pVFrame->
+            GetChildWindow( SwFieldDlgWrapper::GetChildWindowId() ));
     if( pWrp )
         pWrp->ReInitDlg( this );
 
@@ -1440,8 +1440,8 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
             pReader.reset(new SwReader( aMed, rURL, *m_pWrtShell->GetCrsr() ));
         }
 
-        pRead->GetReaderOpt().SetTxtFmts( rOpt.IsTxtFmts() );
-        pRead->GetReaderOpt().SetFrmFmts( rOpt.IsFrmFmts() );
+        pRead->GetReaderOpt().SetTextFormats( rOpt.IsTextFormats() );
+        pRead->GetReaderOpt().SetFrameFormats( rOpt.IsFrameFormats() );
         pRead->GetReaderOpt().SetPageDescs( rOpt.IsPageDescs() );
         pRead->GetReaderOpt().SetNumRules( rOpt.IsNumRules() );
         pRead->GetReaderOpt().SetMerge( rOpt.IsMerge() );
@@ -1480,9 +1480,9 @@ SfxInPlaceClient* SwDocShell::GetIPClient( const ::svt::EmbeddedObjectRef& xObjR
 
 static bool lcl_MergePortions(SwNode *const& pNode, void *)
 {
-    if (pNode->IsTxtNode())
+    if (pNode->IsTextNode())
     {
-        pNode->GetTxtNode()->FileLoadedInitHints();
+        pNode->GetTextNode()->FileLoadedInitHints();
     }
     return true;
 }

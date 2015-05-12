@@ -30,7 +30,7 @@
 #include "numfmtlb.hxx"
 #include "fldpage.hxx"
 
-class SwFldDokPage : public SwFldPage
+class SwFieldDokPage : public SwFieldPage
 {
     VclPtr<ListBox>            m_pTypeLB;
     VclPtr<VclContainer>       m_pSelection;
@@ -61,9 +61,9 @@ protected:
     virtual sal_uInt16      GetGroup() SAL_OVERRIDE;
 
 public:
-                        SwFldDokPage(vcl::Window* pWindow, const SfxItemSet& rSet);
+                        SwFieldDokPage(vcl::Window* pWindow, const SfxItemSet& rSet);
 
-                        virtual ~SwFldDokPage();
+                        virtual ~SwFieldDokPage();
     virtual void        dispose() SAL_OVERRIDE;
 
     static VclPtr<SfxTabPage>  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);

@@ -186,7 +186,7 @@ class SW_DLLPUBLIC SwDBManager
 {
 friend class SwConnectionDisposedListener_Impl;
 
-    OUString            sEMailAddrFld;      ///< Mailing: Column name of email address.
+    OUString            sEMailAddrField;      ///< Mailing: Column name of email address.
     OUString            sSubject;           ///< Mailing: Subject
     OUString            sAttached;          ///< Mailing: Attached Files.
     bool            bCancel;            ///< Mail merge canceled.
@@ -251,7 +251,7 @@ public:
     void     SetSingleJobs(bool b)   { bSingleJobs = b;  }
 
     /// Mailing: Set email data.
-    inline void     SetEMailColumn(const OUString& sColName) { sEMailAddrFld = sColName; }
+    inline void     SetEMailColumn(const OUString& sColName) { sEMailAddrField = sColName; }
     inline void     SetSubject(const OUString& sSbj) { sSubject = sSbj; }
     inline void     SetAttachment(const OUString& sAtt) { sAttached = sAtt; }
 
@@ -265,16 +265,16 @@ public:
                             css::uno::Reference< css::sdbc::XConnection> xConnection,
                             const OUString& rTableName, bool bAppend = false);
 
-    static sal_uLong GetColumnFmt( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> xSource,
+    static sal_uLong GetColumnFormat( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> xSource,
                             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
                             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xColumn,
-                            SvNumberFormatter* pNFmtr,
+                            SvNumberFormatter* pNFormatr,
                             long nLanguage );
 
-    sal_uLong GetColumnFmt( const OUString& rDBName,
+    sal_uLong GetColumnFormat( const OUString& rDBName,
                             const OUString& rTableName,
                             const OUString& rColNm,
-                            SvNumberFormatter* pNFmtr,
+                            SvNumberFormatter* pNFormatr,
                             long nLanguage );
     sal_Int32 GetColumnType( const OUString& rDBName,
                           const OUString& rTableName,
@@ -301,7 +301,7 @@ public:
                             const OUString& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,
                             OUString& rResult, double* pNumber);
     /** create and store or find an already stored connection to a data source for use
-    in SwFldMgr and SwDBTreeList */
+    in SwFieldMgr and SwDBTreeList */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
                     RegisterConnection(OUString& rSource);
 

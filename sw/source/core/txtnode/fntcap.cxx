@@ -108,26 +108,26 @@ public:
 class SwDoGetCapitalSize : public SwDoCapitals
 {
 protected:
-    Size aTxtSize;
+    Size aTextSize;
 public:
     SwDoGetCapitalSize( SwDrawTextInfo &rInfo ) : SwDoCapitals ( rInfo ) { }
     virtual ~SwDoGetCapitalSize() {}
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont ) SAL_OVERRIDE;
     virtual void Do() SAL_OVERRIDE;
-    const Size &GetSize() const { return aTxtSize; }
+    const Size &GetSize() const { return aTextSize; }
 };
 
 void SwDoGetCapitalSize::Init( SwFntObj *, SwFntObj * )
 {
-    aTxtSize.Height() = 0;
-    aTxtSize.Width() = 0;
+    aTextSize.Height() = 0;
+    aTextSize.Width() = 0;
 }
 
 void SwDoGetCapitalSize::Do()
 {
-    aTxtSize.Width() += rInf.GetSize().Width();
+    aTextSize.Width() += rInf.GetSize().Width();
     if( rInf.GetUpper() )
-        aTxtSize.Height() = rInf.GetSize().Height();
+        aTextSize.Height() = rInf.GetSize().Height();
 }
 
 Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
@@ -141,27 +141,27 @@ Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
     rInf.SetDrawSpace( false );
     SwDoGetCapitalSize aDo( rInf );
     DoOnCapitals( aDo );
-    Size aTxtSize( aDo.GetSize() );
+    Size aTextSize( aDo.GetSize() );
 
     // End:
-    if( !aTxtSize.Height() )
+    if( !aTextSize.Height() )
     {
         SV_STAT( nGetTextSize );
-        aTxtSize.Height() = short ( rInf.GetpOut()->GetTextHeight() );
+        aTextSize.Height() = short ( rInf.GetpOut()->GetTextHeight() );
     }
     rInf.SetKern( nOldKern );
-    return aTxtSize;
+    return aTextSize;
 }
 
 class SwDoGetCapitalBreak : public SwDoCapitals
 {
 protected:
-    long nTxtWidth;
+    long nTextWidth;
     sal_Int32 m_nBreak;
 public:
     SwDoGetCapitalBreak( SwDrawTextInfo &rInfo, long const nWidth)
         :   SwDoCapitals ( rInfo )
-        ,   nTxtWidth( nWidth )
+        ,   nTextWidth( nWidth )
         ,   m_nBreak( -1 )
         { }
     virtual ~SwDoGetCapitalBreak() {}
@@ -176,14 +176,14 @@ void SwDoGetCapitalBreak::Init( SwFntObj *, SwFntObj * )
 
 void SwDoGetCapitalBreak::Do()
 {
-    if ( nTxtWidth )
+    if ( nTextWidth )
     {
-        if ( rInf.GetSize().Width() < nTxtWidth )
-            nTxtWidth -= rInf.GetSize().Width();
+        if ( rInf.GetSize().Width() < nTextWidth )
+            nTextWidth -= rInf.GetSize().Width();
         else
         {
             sal_Int32 nEnd = rInf.GetEnd();
-            m_nBreak = GetOut().GetTextBreak( rInf.GetText(), nTxtWidth,
+            m_nBreak = GetOut().GetTextBreak( rInf.GetText(), nTextWidth,
                                rInf.GetIdx(), rInf.GetLen(), rInf.GetKern() );
 
             if (m_nBreak > nEnd || m_nBreak < 0)
@@ -202,18 +202,18 @@ void SwDoGetCapitalBreak::Do()
                     m_nBreak = m_nBreak + GetCapInf()->nIdx;
             }
 
-            nTxtWidth = 0;
+            nTextWidth = 0;
         }
     }
 }
 
 sal_Int32 SwFont::GetCapitalBreak( SwViewShell const * pSh, const OutputDevice* pOut,
-    const SwScriptInfo* pScript, const OUString& rTxt, long const nTextWidth,
+    const SwScriptInfo* pScript, const OUString& rText, long const nTextWidth,
     const sal_Int32 nIdx, const sal_Int32 nLen )
 {
     // Start:
     Point aPos( 0, 0 );
-    SwDrawTextInfo aInfo(pSh, *const_cast<OutputDevice*>(pOut), pScript, rTxt, nIdx, nLen,
+    SwDrawTextInfo aInfo(pSh, *const_cast<OutputDevice*>(pOut), pScript, rText, nIdx, nLen,
         0, false);
     aInfo.SetPos( aPos );
     aInfo.SetSpace( 0 );
@@ -469,13 +469,13 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     OSL_ENSURE( pLastFont, "SwFont::DoOnCapitals: No LastFont?!" );
 
     long nKana = 0;
-    const OUString aTxt( CalcCaseMap( rDo.GetInf().GetText() ) );
+    const OUString aText( CalcCaseMap( rDo.GetInf().GetText() ) );
     sal_Int32 nMaxPos = std::min( rDo.GetInf().GetText().getLength() - rDo.GetInf().GetIdx(),
                              rDo.GetInf().GetLen() );
     rDo.GetInf().SetLen( nMaxPos );
 
     const OUString oldText = rDo.GetInf().GetText();
-    rDo.GetInf().SetText( aTxt );
+    rDo.GetInf().SetText( aText );
     sal_Int32 nPos = rDo.GetInf().GetIdx();
     sal_Int32 nOldPos = nPos;
     nMaxPos = nMaxPos + nPos;
@@ -485,7 +485,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     // text is different. If yes, do special handling.
     OUString aNewText;
     SwCapitalInfo aCapInf(oldText);
-    bool bCaseMapLengthDiffers(aTxt.getLength() != oldText.getLength());
+    bool bCaseMapLengthDiffers(aText.getLength() != oldText.getLength());
     if ( bCaseMapLengthDiffers )
         rDo.SetCapInf( aCapInf );
 

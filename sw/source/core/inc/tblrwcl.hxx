@@ -30,12 +30,12 @@ class SwDoc;
 class SwTableNode;
 class SwTableLine;
 class SwTableBox;
-class SwTableBoxFmt;
+class SwTableBoxFormat;
 class SwHistory;
-class SwCntntNode;
+class SwContentNode;
 class SfxPoolItem;
-class SwShareBoxFmts;
-class SwFmtFrmSize;
+class SwShareBoxFormats;
+class SwFormatFrmSize;
 struct _CpyPara;
 struct _InsULPara;
 
@@ -45,13 +45,13 @@ void sw_LineSetHeadCondColl( const SwTableLine* pLine );
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 #endif
 
-void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
-                SwTableLine* pLine, SwTableBoxFmt* pBoxFrmFmt,
+void _InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
+                SwTableLine* pLine, SwTableBoxFormat* pBoxFrameFormat,
                 SwTableBox* pBox, sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 );
 
-SW_DLLPUBLIC void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo = 0,
+SW_DLLPUBLIC void _DeleteBox( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo = 0,
                 bool bCalcNewSize = true, const bool bCorrBorder = true,
-                SwShareBoxFmts* pShareFmts = 0 );
+                SwShareBoxFormats* pShareFormats = 0 );
 
 /**
  * Class for SplitTable
@@ -60,7 +60,7 @@ SW_DLLPUBLIC void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo = 0
  *
  * @see implementation in im ndtbl.cxx
  */
-class SwCollectTblLineBoxes
+class SwCollectTableLineBoxes
 {
     std::vector<sal_uInt16> aPosArr;
     std::vector<SwTableBox*> m_Boxes;
@@ -70,7 +70,7 @@ class SwCollectTblLineBoxes
     bool bGetValues : 1;
 
 public:
-    SwCollectTblLineBoxes( bool bTop, sal_uInt16 nMd = 0, SwHistory* pHist=0 )
+    SwCollectTableLineBoxes( bool bTop, sal_uInt16 nMd = 0, SwHistory* pHist=0 )
         :
         pHst( pHist ), nMode( nMd ), nWidth( 0 ),
         bGetFromTop( bTop ), bGetValues( true )
@@ -79,7 +79,7 @@ public:
 
     void AddBox( const SwTableBox& rBox );
     const SwTableBox* GetBoxOfPos( const SwTableBox& rBox );
-    void AddToUndoHistory( const SwCntntNode& rNd );
+    void AddToUndoHistory( const SwContentNode& rNd );
 
     size_t Count() const                { return m_Boxes.size(); }
     const SwTableBox& GetBox( std::size_t nPos, sal_uInt16* pWidth = 0 ) const
@@ -100,10 +100,10 @@ public:
     bool Resize( sal_uInt16 nOffset, sal_uInt16 nWidth );
 };
 
-void sw_Box_CollectBox( const SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara );
+void sw_Box_CollectBox( const SwTableBox* pBox, SwCollectTableLineBoxes* pSplPara );
 bool sw_Line_CollectBox( const SwTableLine*& rpLine, void* pPara );
 
-void sw_BoxSetSplitBoxFmts( SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara );
+void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPara );
 
 /**
  * This structure is needed by Undo to restore row span attributes
@@ -119,14 +119,14 @@ struct SwSaveRowSpan
 struct _SwGCLineBorder
 {
     const SwTableLines* pLines;
-    SwShareBoxFmts* pShareFmts;
+    SwShareBoxFormats* pShareFormats;
     sal_uInt16 nLinePos;
 
     _SwGCLineBorder( const SwTable& rTable )
-        : pLines( &rTable.GetTabLines() ), pShareFmts(0), nLinePos( 0 )  {}
+        : pLines( &rTable.GetTabLines() ), pShareFormats(0), nLinePos( 0 )  {}
 
     _SwGCLineBorder( const SwTableBox& rBox )
-        : pLines( &rBox.GetTabLines() ), pShareFmts(0), nLinePos( 0 )  {}
+        : pLines( &rBox.GetTabLines() ), pShareFormats(0), nLinePos( 0 )  {}
     bool IsLastLine() const { return nLinePos + 1 >= (sal_uInt16)pLines->size(); }
 };
 
@@ -144,55 +144,55 @@ public:
      * Check whether the left Border is the same as the set one
      * @returns false if no Border was set
      */
-    bool CheckLeftBorderOfFormat( const SwFrmFmt& rFmt );
+    bool CheckLeftBorderOfFormat( const SwFrameFormat& rFormat );
 
     bool IsAnyBorderFound() const { return bAnyBorderFnd; }
 };
 
 void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara );
 
-class SwShareBoxFmt
+class SwShareBoxFormat
 {
-    const SwFrmFmt* pOldFmt;
-    std::vector<SwFrmFmt*> aNewFmts;
+    const SwFrameFormat* pOldFormat;
+    std::vector<SwFrameFormat*> aNewFormats;
 
 public:
-    SwShareBoxFmt( const SwFrmFmt& rFmt )
-        : pOldFmt( &rFmt )
+    SwShareBoxFormat( const SwFrameFormat& rFormat )
+        : pOldFormat( &rFormat )
     {}
 
-    const SwFrmFmt& GetOldFormat() const { return *pOldFmt; }
+    const SwFrameFormat& GetOldFormat() const { return *pOldFormat; }
 
-    SwFrmFmt* GetFormat( long nWidth ) const;
-    SwFrmFmt* GetFormat( const SfxPoolItem& rItem ) const;
-    void AddFormat( SwFrmFmt& rFmt );
+    SwFrameFormat* GetFormat( long nWidth ) const;
+    SwFrameFormat* GetFormat( const SfxPoolItem& rItem ) const;
+    void AddFormat( SwFrameFormat& rFormat );
     /// @returns true, if we can delete
-    bool RemoveFormat( const SwFrmFmt& rFmt );
+    bool RemoveFormat( const SwFrameFormat& rFormat );
 };
 
-typedef boost::ptr_vector<SwShareBoxFmt> _SwShareBoxFmts;
+typedef boost::ptr_vector<SwShareBoxFormat> _SwShareBoxFormats;
 
-class SwShareBoxFmts
+class SwShareBoxFormats
 {
-    _SwShareBoxFmts aShareArr;
-    bool Seek_Entry( const SwFrmFmt& rFmt, sal_uInt16* pPos ) const;
+    _SwShareBoxFormats aShareArr;
+    bool Seek_Entry( const SwFrameFormat& rFormat, sal_uInt16* pPos ) const;
 
-    void ChangeFrmFmt( SwTableBox* pBox, SwTableLine* pLn, SwFrmFmt& rFmt );
+    void ChangeFrameFormat( SwTableBox* pBox, SwTableLine* pLn, SwFrameFormat& rFormat );
 
 public:
-    SwShareBoxFmts() {}
-    ~SwShareBoxFmts();
+    SwShareBoxFormats() {}
+    ~SwShareBoxFormats();
 
-    SwFrmFmt* GetFormat( const SwFrmFmt& rFmt, long nWidth ) const;
-    SwFrmFmt* GetFormat( const SwFrmFmt& rFmt, const SfxPoolItem& ) const;
+    SwFrameFormat* GetFormat( const SwFrameFormat& rFormat, long nWidth ) const;
+    SwFrameFormat* GetFormat( const SwFrameFormat& rFormat, const SfxPoolItem& ) const;
 
-    void AddFormat( const SwFrmFmt& rOld, SwFrmFmt& rNew );
+    void AddFormat( const SwFrameFormat& rOld, SwFrameFormat& rNew );
 
-    void SetSize( SwTableBox& rBox, const SwFmtFrmSize& rSz );
+    void SetSize( SwTableBox& rBox, const SwFormatFrmSize& rSz );
     void SetAttr( SwTableBox& rBox, const SfxPoolItem& rItem );
     void SetAttr( SwTableLine& rLine, const SfxPoolItem& rItem );
 
-    void RemoveFormat( const SwFrmFmt& rFmt );
+    void RemoveFormat( const SwFrameFormat& rFormat );
 };
 
 #endif

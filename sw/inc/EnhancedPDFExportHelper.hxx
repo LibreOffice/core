@@ -38,10 +38,10 @@ class SwFrm;
 class SwLinePortion;
 class SwPageFrm;
 class SwPrintData;
-class SwTxtPainter;
+class SwTextPainter;
 class SwEditShell;
 class StringRangeEnumerator;
-class SwTxtNode;
+class SwTextNode;
 class SwNumRule;
 class SwTable;
 class SwNumberTreeNode;
@@ -59,19 +59,19 @@ class SvxLanguageItem;
  *                                          Part
  *                                          Art
  * SwSection                                Sect
- * SwFtnContFrm and SwFlyFrm                Div
- * SwFmt "Quotations"                       BlockQuote
- * SwFmt "Caption"                          Caption
+ * SwFootnoteContFrm and SwFlyFrm                Div
+ * SwFormat "Quotations"                       BlockQuote
+ * SwFormat "Caption"                          Caption
  * SwSection (TOC)                          TOC
- * SwTxtNode in TOC                         TOCI
+ * SwTextNode in TOC                         TOCI
  * SwSection (Index)                        Index
  *
  * Block-Level Structure Elements:
  *
- * SwTxtNode                                P
- * SwFmt "Heading"                          H
- * SwTxtNode with Outline                   H1 - H6
- * SwTxtNode with NumRule                   L, LI, LBody
+ * SwTextNode                                P
+ * SwFormat "Heading"                          H
+ * SwTextNode with Outline                   H1 - H6
+ * SwTextNode with NumRule                   L, LI, LBody
  * SwTable                                  Table
  * SwRowFrm                                 TR
  * SwCellFrm in Headline row or
@@ -80,18 +80,18 @@ class SvxLanguageItem;
  *
  * Inline-Level Structure Elements:
  *
- * SwTxtPortion                             Span
- * SwFmt "Quotation"                        Quote
- * SwFtnFrm                                 Note
+ * SwTextPortion                             Span
+ * SwFormat "Quotation"                        Quote
+ * SwFootnoteFrm                                 Note
  *                                          Form
  *                                          Reference
- * SwFldPortion (AuthorityField)            BibEntry
- * SwFmt "Source Text"                      Code
- * SwFtnPortion, SwFldPortion (RefField)    Link
+ * SwFieldPortion (AuthorityField)            BibEntry
+ * SwFormat "Source Text"                      Code
+ * SwFootnotePortion, SwFieldPortion (RefField)    Link
  *
  * Illustration elements:
  *
- * SwFlyFrm with SwNoTxtFrm                 Figure
+ * SwFlyFrm with SwNoTextFrm                 Figure
  * SwFlyFrm with Math OLE Object            Formula
  *
  */
@@ -111,9 +111,9 @@ struct Frm_Info
 struct Por_Info
 {
     const SwLinePortion& mrPor;
-    const SwTxtPainter& mrTxtPainter;
-    Por_Info( const SwLinePortion& rPor, const SwTxtPainter& rTxtPainer )
-            : mrPor( rPor ), mrTxtPainter( rTxtPainer ) {};
+    const SwTextPainter& mrTextPainter;
+    Por_Info( const SwLinePortion& rPor, const SwTextPainter& rTextPainer )
+            : mrPor( rPor ), mrTextPainter( rTextPainer ) {};
 };
 
 struct lt_TableColumn
@@ -224,7 +224,7 @@ class SwEnhancedPDFExportHelper
     std::vector< sal_Int32 > CalcOutputPageNums( const SwRect& rRect ) const;
 
     void MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rPDFExtOutDevData,
-                                const SwTxtNode& rTNd, const SwRect& rLinkRect,
+                                const SwTextNode& rTNd, const SwRect& rLinkRect,
                                 sal_Int32 nDestId, const OUString& rURL, bool bIntern ) const;
 
     public:

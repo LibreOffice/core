@@ -83,7 +83,7 @@ class SwXMLImport: public SvXMLImport
 
     void                    _InitItemImport();
     void                    _FinitItemImport();
-    void                    UpdateTxtCollConditions( SwDoc *pDoc );
+    void                    UpdateTextCollConditions( SwDoc *pDoc );
 
     void         setTextInsertMode(
                      const ::com::sun::star::uno::Reference<

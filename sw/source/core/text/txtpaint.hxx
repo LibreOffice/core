@@ -30,12 +30,12 @@ class SwSaveClip
           bool     bChg;
 protected:
     VclPtr<OutputDevice> pOut;
-    void _ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
+    void _ChgClip( const SwRect &rRect, const SwTextFrm* pFrm,
                    bool bEnlargeRect );
 public:
     inline SwSaveClip( OutputDevice* pOut );
     inline ~SwSaveClip();
-    inline void ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm = 0,
+    inline void ChgClip( const SwRect &rRect, const SwTextFrm* pFrm = 0,
                          bool bEnlargeRect = false)
              { if( pOut ) _ChgClip( rRect, pFrm, bEnlargeRect ); }
            void Reset();

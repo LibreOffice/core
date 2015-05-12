@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextSection; }
 } } }
 
-class SwSectionFmt;
+class SwSectionFormat;
 class SwDoc;
 class SwSection;
 class SwSectionNode;
@@ -162,7 +162,7 @@ public:
     TYPEINFO_OVERRIDE();     // rtti
 
     SwSection(SectionType const eType, OUString const& rName,
-                SwSectionFmt & rFormat);
+                SwSectionFormat & rFormat);
     virtual ~SwSection();
 
     bool DataEquals(SwSectionData const& rCmp) const;
@@ -174,8 +174,8 @@ public:
     SectionType GetType() const             { return m_Data.GetType(); }
     void SetType(SectionType const eType)   { return m_Data.SetType(eType); }
 
-    inline SwSectionFmt* GetFmt();
-    inline SwSectionFmt const * GetFmt() const;
+    inline SwSectionFormat* GetFormat();
+    inline SwSectionFormat const * GetFormat() const;
 
     // Set hidden/protected -> update the whole tree!
     // (Attributes/flags are set/get.)
@@ -256,34 +256,34 @@ public:
 class SwSectionFrmMoveAndDeleteHint : public SfxSimpleHint
 {
     public:
-        SwSectionFrmMoveAndDeleteHint( const bool bSaveCntnt )
+        SwSectionFrmMoveAndDeleteHint( const bool bSaveContent )
             : SfxSimpleHint( SFX_HINT_DYING )
-            , mbSaveCntnt( bSaveCntnt )
+            , mbSaveContent( bSaveContent )
         {}
 
         virtual ~SwSectionFrmMoveAndDeleteHint()
         {}
 
-        bool IsSaveCntnt() const
+        bool IsSaveContent() const
         {
-            return mbSaveCntnt;
+            return mbSaveContent;
         }
 
     private:
-        const bool mbSaveCntnt;
+        const bool mbSaveContent;
 };
 
 enum SectionSort { SORTSECT_NOT, SORTSECT_NAME, SORTSECT_POS };
 
-class SW_DLLPUBLIC SwSectionFmt
-    : public SwFrmFmt
+class SW_DLLPUBLIC SwSectionFormat
+    : public SwFrameFormat
     , public ::sfx2::Metadatable
 {
     friend class SwDoc;
 
-    /** Why does this exist in addition to the m_wXObject in SwFrmFmt?
+    /** Why does this exist in addition to the m_wXObject in SwFrameFormat?
         in case of an index, both a SwXDocumentIndex and a SwXTextSection
-        register at this SwSectionFmt, so we need to have two refs.
+        register at this SwSectionFormat, so we need to have two refs.
      */
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextSection> m_wXTextSection;
@@ -291,12 +291,12 @@ class SW_DLLPUBLIC SwSectionFmt
     SAL_DLLPRIVATE void UpdateParent();      // Parent has been changed.
 
 protected:
-    SwSectionFmt( SwFrmFmt* pDrvdFrm, SwDoc *pDoc );
+    SwSectionFormat( SwFrameFormat* pDrvdFrm, SwDoc *pDoc );
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();     // Already contained in base class client.
-    virtual ~SwSectionFmt();
+    virtual ~SwSectionFormat();
 
     // Deletes all Frms in aDepend (Frms are recognized via PTR_CAST).
     virtual void DelFrms() SAL_OVERRIDE;
@@ -308,7 +308,7 @@ public:
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
 
     SwSection* GetSection() const;
-    inline SwSectionFmt* GetParent() const;
+    inline SwSectionFormat* GetParent() const;
     inline SwSection* GetParentSection() const;
 
     //  All sections that are derived from this one:
@@ -323,7 +323,7 @@ public:
 
           SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false);
     const SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false) const
-        { return const_cast<SwSectionFmt *>(this)
+        { return const_cast<SwSectionFormat *>(this)
                 ->GetSectionNode(bEvenIfInUndo); }
 
     // Is section a valid one for global document?
@@ -347,36 +347,36 @@ public:
 
 };
 
-SwSectionFmt* SwSection::GetFmt()
+SwSectionFormat* SwSection::GetFormat()
 {
-    return static_cast<SwSectionFmt*>(GetRegisteredIn());
+    return static_cast<SwSectionFormat*>(GetRegisteredIn());
 }
 
-SwSectionFmt const * SwSection::GetFmt() const
+SwSectionFormat const * SwSection::GetFormat() const
 {
-    return static_cast<SwSectionFmt const *>(GetRegisteredIn());
+    return static_cast<SwSectionFormat const *>(GetRegisteredIn());
 }
 
 inline SwSection* SwSection::GetParent() const
 {
-    SwSectionFmt const * pFmt = GetFmt();
+    SwSectionFormat const * pFormat = GetFormat();
     SwSection* pRet = 0;
-    if( pFmt )
-        pRet = pFmt->GetParentSection();
+    if( pFormat )
+        pRet = pFormat->GetParentSection();
     return pRet;
 }
 
-inline SwSectionFmt* SwSectionFmt::GetParent() const
+inline SwSectionFormat* SwSectionFormat::GetParent() const
 {
-    SwSectionFmt* pRet = 0;
+    SwSectionFormat* pRet = 0;
     if( GetRegisteredIn() )
-        pRet = const_cast<SwSectionFmt*>(PTR_CAST( SwSectionFmt, GetRegisteredIn() ));
+        pRet = const_cast<SwSectionFormat*>(PTR_CAST( SwSectionFormat, GetRegisteredIn() ));
     return pRet;
 }
 
-inline SwSection* SwSectionFmt::GetParentSection() const
+inline SwSection* SwSectionFormat::GetParentSection() const
 {
-    SwSectionFmt* pParent = GetParent();
+    SwSectionFormat* pParent = GetParent();
     SwSection* pRet = 0;
     if( pParent )
     {

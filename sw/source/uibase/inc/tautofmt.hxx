@@ -30,12 +30,12 @@
 
 #include <vcl/virdev.hxx>
 
-class SwTableAutoFmt;
-class AutoFmtPreview;
-class SwTableAutoFmtTbl;
+class SwTableAutoFormat;
+class AutoFormatPreview;
+class SwTableAutoFormatTable;
 class SwWrtShell;
 
-enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
+enum AutoFormatLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 
 class SwAutoFormatDlg : public SfxModalDialog
 {
@@ -57,34 +57,34 @@ class SwAutoFormatDlg : public SfxModalDialog
     OUString        aStrDelTitle;
     OUString        aStrDelMsg;
     OUString        aStrRenameTitle;
-    OUString        aStrInvalidFmt;
-    VclPtr<AutoFmtPreview> m_pWndPreview;
+    OUString        aStrInvalidFormat;
+    VclPtr<AutoFormatPreview> m_pWndPreview;
 
     SwWrtShell*             pShell;
-    SwTableAutoFmtTbl*      pTableTbl;
+    SwTableAutoFormatTable*      pTableTable;
     sal_uInt8                   nIndex;
     sal_uInt8                   nDfltStylePos;
     bool                    bCoreDataChanged : 1;
-    bool                    bSetAutoFmt : 1;
+    bool                    bSetAutoFormat : 1;
 
-    void Init( const SwTableAutoFmt* pSelFmt );
-    void UpdateChecks( const SwTableAutoFmt&, bool bEnableBtn );
+    void Init( const SwTableAutoFormat* pSelFormat );
+    void UpdateChecks( const SwTableAutoFormat&, bool bEnableBtn );
 
     DECL_LINK( CheckHdl, Button * );
     DECL_LINK(OkHdl, void *);
     DECL_LINK( AddHdl, void * );
     DECL_LINK( RemoveHdl, void * );
     DECL_LINK( RenameHdl, void * );
-    DECL_LINK( SelFmtHdl, void * );
+    DECL_LINK( SelFormatHdl, void * );
 
 public:
     SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
-                        bool bSetAutoFmt = true,
-                        const SwTableAutoFmt* pSelFmt = 0 );
+                        bool bSetAutoFormat = true,
+                        const SwTableAutoFormat* pSelFormat = 0 );
     virtual ~SwAutoFormatDlg();
     virtual void dispose() SAL_OVERRIDE;
 
-    void FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const;
+    void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const;
 };
 
 #endif // SW_AUTOFMT_HXX

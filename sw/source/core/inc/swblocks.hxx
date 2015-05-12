@@ -36,8 +36,8 @@ public:
     OUString aShort;               /// Shortname
     OUString aLong;                /// Longname
     OUString aPackageName;         /// Package name
-    bool bIsOnlyTxtFlagInit : 1;   /// Is the Flag valid?
-    bool bIsOnlyTxt : 1;           /// Unformatted text
+    bool bIsOnlyTextFlagInit : 1;   /// Is the Flag valid?
+    bool bIsOnlyText : 1;           /// Unformatted text
     bool bInPutMuchBlocks : 1;     /// Put serveral block entries
 
     SwBlockName( const OUString& rShort, const OUString& rLong );
@@ -81,7 +81,7 @@ protected:
 
     virtual void   ClearDoc();          // Delete Doc content
     SwPaM* MakePaM();                   // Span PaM over Doc
-    virtual void   AddName( const OUString&, const OUString&, bool bOnlyTxt = false );
+    virtual void   AddName( const OUString&, const OUString&, bool bOnlyText = false );
     bool   IsFileChanged() const;
     void   Touch();
 
@@ -118,10 +118,10 @@ public:
 
     virtual bool IsOnlyTextBlock( const OUString& rShort ) const;
 
-    virtual sal_uLong GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTbl,
+    virtual sal_uLong GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTable,
                                  bool bFileAlreadyOpen = false );
     virtual sal_uLong SetMacroTable( sal_uInt16 nIdx,
-                                 const SvxMacroTableDtor& rMacroTbl,
+                                 const SvxMacroTableDtor& rMacroTable,
                                  bool bFileAlreadyOpen = false );
     virtual bool PutMuchEntries( bool bOn );
 };

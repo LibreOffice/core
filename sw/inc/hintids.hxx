@@ -24,7 +24,7 @@
 #include <svx/xdef.hxx>
 #include "swdllapi.h"
 
-// For SwTxtHints without end index the following char is added:
+// For SwTextHints without end index the following char is added:
 
 #define CH_TXTATR_BREAKWORD     ((sal_Unicode)0x01)
 #define CH_TXTATR_INWORD        ((sal_Unicode)0xFFF9)
@@ -109,7 +109,7 @@ RES_TXTATR_BEGIN = RES_CHRATR_END,
 
 /** text attributes with start and end.
    #i105453#:
-   Hints (SwTxtAttr) with the same start and end position are sorted by
+   Hints (SwTextAttr) with the same start and end position are sorted by
    WhichId, i.e., the TXTATR constants defined here.
    The text formatting (SwAttrIter) poses some requirements on TXTATR order:
    - AUTOFMT must precede CHARFMT, so that auto style can overwrite char style.
@@ -118,7 +118,7 @@ RES_TXTATR_BEGIN = RES_CHRATR_END,
       hints on insertion, but on exporting to ODF. if CHARFMT would precede
       INETFMT, then exporting and importing will effectively change precedence)
 
-   Nesting hints (SwTxtAttrNesting) also have requirements on TXTATR order,
+   Nesting hints (SwTextAttrNesting) also have requirements on TXTATR order,
    to ensure proper nesting (because CJK_RUBY and INETFMT have no CH_TXTATR):
    - INETFMT should precede CJK_RUBY (for UNO API it does not matter...)
    - META and METAFIELD must precede CJK_RUBY and INETFMT
@@ -438,35 +438,35 @@ SW_DLLPUBLIC sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript 
 // This function returns
 //      CH_TXTATR_BREAKWORD for Textattribute which breaks a word (default)
 //      CH_TXTATR_INWORD    for Textattribute which dont breaks a word
-class SwTxtAttr;
-sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr );
+class SwTextAttr;
+sal_Unicode GetCharOfTextAttr( const SwTextAttr& rAttr );
 
 // all Sets defined in init.cxx
 
 // AttrSet-Range for the 3 Break-Attribute
 extern sal_uInt16 aBreakSetRange[];
-// AttrSet-Range for TxtFmtColl
-extern sal_uInt16 aTxtFmtCollSetRange[];
-// AttrSet-Range for GrfFmtColl
-extern sal_uInt16 aGrfFmtCollSetRange[];
+// AttrSet-Range for TextFormatColl
+extern sal_uInt16 aTextFormatCollSetRange[];
+// AttrSet-Range for GrfFormatColl
+extern sal_uInt16 aGrfFormatCollSetRange[];
 // AttrSet-Range for TextNode
-SW_DLLPUBLIC extern sal_uInt16 aTxtNodeSetRange[];
-// AttrSet-Range for NoTxtNode
-extern sal_uInt16 aNoTxtNodeSetRange[];
+SW_DLLPUBLIC extern sal_uInt16 aTextNodeSetRange[];
+// AttrSet-Range for NoTextNode
+extern sal_uInt16 aNoTextNodeSetRange[];
 // AttrSet-Range for SwTable
 extern sal_uInt16 aTableSetRange[];
 // AttrSet-Range for SwTableLine
 extern sal_uInt16 aTableLineSetRange[];
 // AttrSet-Range for SwTableBox
 extern sal_uInt16 aTableBoxSetRange[];
-// AttrSet-Range for SwFrmFmt
-SW_DLLPUBLIC extern sal_uInt16 aFrmFmtSetRange[];
-// AttrSet-Range for SwCharFmt
-extern sal_uInt16 aCharFmtSetRange[];
+// AttrSet-Range for SwFrameFormat
+SW_DLLPUBLIC extern sal_uInt16 aFrameFormatSetRange[];
+// AttrSet-Range for SwCharFormat
+extern sal_uInt16 aCharFormatSetRange[];
 // AttrSet-Range for the autostyles
-extern sal_uInt16 aCharAutoFmtSetRange[];
-// AttrSet-Range for SwPageDescFmt
-extern sal_uInt16 aPgFrmFmtSetRange[];
+extern sal_uInt16 aCharAutoFormatSetRange[];
+// AttrSet-Range for SwPageDescFormat
+extern sal_uInt16 aPgFrameFormatSetRange[];
 
 // check if ID is InRange of AttrSet-Ids
 bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId );

@@ -47,7 +47,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     VclPtr<PushButton>     m_pNumberExtChar;
 
     // everything for the selection footnote/endnote
-    VclPtr<RadioButton>    m_pFtnBtn;
+    VclPtr<RadioButton>    m_pFootnoteBtn;
     VclPtr<RadioButton>    m_pEndNoteBtn;
 
     VclPtr<PushButton>     m_pOkBtn;

@@ -144,23 +144,23 @@ sal_uLong SwASCIIParser::CallParser()
     ::StartProgress( STR_STATSTR_W4WREAD, 0, nFileSize, pDoc->GetDocShell() );
 
     SwPaM* pInsPam = 0;
-    sal_Int32 nSttCntnt = 0;
+    sal_Int32 nSttContent = 0;
     if (!bNewDoc)
     {
         const SwNodeIndex& rTmp = pPam->GetPoint()->nNode;
         pInsPam = new SwPaM( rTmp, rTmp, 0, -1 );
-        nSttCntnt = pPam->GetPoint()->nContent.GetIndex();
+        nSttContent = pPam->GetPoint()->nContent.GetIndex();
     }
 
-    SwTxtFmtColl *pColl = 0;
+    SwTextFormatColl *pColl = 0;
 
     if (bNewDoc)
     {
-        pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_HTML_PRE, false);
+        pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HTML_PRE, false);
         if (!pColl)
-            pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD,false);
+            pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD,false);
         if (pColl)
-            pDoc->SetTxtFmtColl(*pPam, pColl);
+            pDoc->SetTextFormatColl(*pPam, pColl);
     }
 
     sal_uLong nError = ReadChars();
@@ -212,7 +212,7 @@ sal_uLong SwASCIIParser::CallParser()
                         if (SfxItemState::SET == pItemSet->GetItemState(*pWhichIds,
                             false, &pItem))
                         {
-                            pColl->SetFmtAttr( *pItem );
+                            pColl->SetFormatAttr( *pItem );
                             pItemSet->ClearItem( *pWhichIds );
                         }
                         ++pWhichIds;
@@ -227,7 +227,7 @@ sal_uLong SwASCIIParser::CallParser()
                 *pInsPam->GetMark() = *pPam->GetPoint();
                 ++pInsPam->GetPoint()->nNode;
                 pInsPam->GetPoint()->nContent.Assign(
-                                    pInsPam->GetCntntNode(), nSttCntnt );
+                                    pInsPam->GetContentNode(), nSttContent );
 
                 // !!!!!
                 OSL_ENSURE( false, "Have to change - hard attr. to para. style" );
@@ -428,7 +428,7 @@ sal_uLong SwASCIIParser::ReadChars()
                         }
                         pDoc->getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
                         pDoc->getIDocumentContentOperations().InsertPoolItem(
-                            *pPam, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
+                            *pPam, SvxFormatBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
                         pLastStt = pStt;
                         nLineLen = 0;
                         bIns = false;
@@ -489,7 +489,7 @@ void SwASCIIParser::InsertText( const OUString& rStr )
 {
     pDoc->getIDocumentContentOperations().InsertString( *pPam, rStr );
     pDoc->UpdateRsid( *pPam, rStr.getLength() );
-    pDoc->UpdateParRsid( pPam->GetPoint()->nNode.GetNode().GetTxtNode() );
+    pDoc->UpdateParRsid( pPam->GetPoint()->nNode.GetNode().GetTextNode() );
 
     if( pItemSet && g_pBreakIt && nScript != ( SvtScriptType::LATIN |
                                              SvtScriptType::ASIAN |

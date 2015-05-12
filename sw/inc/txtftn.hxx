@@ -24,34 +24,34 @@
 namespace rtl { class OUString; }
 
 class SwNodeIndex;
-class SwTxtNode;
+class SwTextNode;
 class SwNodes;
 class SwDoc;
 class SwFrm;
 
-class SW_DLLPUBLIC SwTxtFtn : public SwTxtAttr
+class SW_DLLPUBLIC SwTextFootnote : public SwTextAttr
 {
     SwNodeIndex * m_pStartNode;
-    SwTxtNode * m_pTxtNode;
+    SwTextNode * m_pTextNode;
     sal_uInt16 m_nSeqNo;
 
 public:
-    SwTxtFtn( SwFmtFtn& rAttr, sal_Int32 nStart );
-    virtual ~SwTxtFtn();
+    SwTextFootnote( SwFormatFootnote& rAttr, sal_Int32 nStart );
+    virtual ~SwTextFootnote();
 
     inline SwNodeIndex *GetStartNode() const { return m_pStartNode; }
     void SetStartNode( const SwNodeIndex *pNode, bool bDelNodes = true );
     void SetNumber( const sal_uInt16 nNumber, const OUString &sNumStr );
-    void CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const;
+    void CopyFootnote(SwTextFootnote & rDest, SwTextNode & rDestNode) const;
 
-    // Get and set TxtNode pointer.
-    inline const SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
+    // Get and set TextNode pointer.
+    inline const SwTextNode& GetTextNode() const;
+    void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }
 
     // Create a new empty TextSection for this footnote.
     void MakeNewTextSection( SwNodes& rNodes );
 
-    // Delete the FtnFrame from page.
+    // Delete the FootnoteFrame from page.
     void DelFrms( const SwFrm* );
 
     // Check conditional paragraph styles.
@@ -65,10 +65,10 @@ public:
     static void SetUniqueSeqRefNo( SwDoc& rDoc );
 };
 
-inline const SwTxtNode& SwTxtFtn::GetTxtNode() const
+inline const SwTextNode& SwTextFootnote::GetTextNode() const
 {
-    assert( m_pTxtNode );
-    return *m_pTxtNode;
+    assert( m_pTextNode );
+    return *m_pTextNode;
 }
 
 #endif
