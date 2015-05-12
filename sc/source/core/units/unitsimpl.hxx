@@ -144,6 +144,8 @@ private:
      * Retrieve the units for a given cell. This probes based on the usual rules
      * for cell annotation/column header.
      * Retrieving units for a formula cell is not yet supported.
+     *
+     * Units are undefined for any text cell (including header cells).
      */
     UtUnit getUnitForCell(const ScAddress& rCellAddress, ScDocument* pDoc);
     UtUnit getUnitForRef(formula::FormulaToken* pToken,
