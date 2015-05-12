@@ -1823,182 +1823,185 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
                 uno::Reference< awt::XControlModel > xControlModel =
                     pFormObj->GetUnoControlModel();
                 uno::Reference< lang::XServiceInfo > xInfo(xControlModel, uno::UNO_QUERY);
-                uno::Reference<beans::XPropertySet> xPropSet(xControlModel, uno::UNO_QUERY);
-                uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
-                OUString sName;
-                if (xInfo->supportsService("com.sun.star.form.component.CheckBox"))
+                if (xInfo.is())
                 {
-
-                    m_aRun->append(OUStringToOString(OUString(FieldString(ww::eFORMCHECKBOX)), m_rExport.eCurrentEncoding));
-                    m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
-                    m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFTYPE "1"); // 1 = checkbox
-                    // checkbox size in half points, this seems to be always 20, see WW8Export::DoCheckBox()
-                    m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFHPS "20");
-
-                    OUString aStr;
-                    sName = "Name";
-                    if (xPropSetInfo->hasPropertyByName(sName))
+                    uno::Reference<beans::XPropertySet> xPropSet(xControlModel, uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
+                    OUString sName;
+                    if (xInfo->supportsService("com.sun.star.form.component.CheckBox"))
                     {
-                        xPropSet->getPropertyValue(sName) >>= aStr;
-                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ");
-                        m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
-                        m_aRun->append('}');
-                    }
 
-                    sName = "HelpText";
-                    if (xPropSetInfo->hasPropertyByName(sName))
-                    {
-                        xPropSet->getPropertyValue(sName) >>= aStr;
-                        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNHELP);
-                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ");
-                        m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
-                        m_aRun->append('}');
-                    }
+                        m_aRun->append(OUStringToOString(OUString(FieldString(ww::eFORMCHECKBOX)), m_rExport.eCurrentEncoding));
+                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
+                        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFTYPE "1"); // 1 = checkbox
+                        // checkbox size in half points, this seems to be always 20, see WW8Export::DoCheckBox()
+                        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFHPS "20");
 
-                    sName = "HelpF1Text";
-                    if (xPropSetInfo->hasPropertyByName(sName))
-                    {
-                        xPropSet->getPropertyValue(sName) >>= aStr;
-                        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNSTAT);
-                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ");
-                        m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
-                        m_aRun->append('}');
-                    }
+                        OUString aStr;
+                        sName = "Name";
+                        if (xPropSetInfo->hasPropertyByName(sName))
+                        {
+                            xPropSet->getPropertyValue(sName) >>= aStr;
+                            m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ");
+                            m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
+                            m_aRun->append('}');
+                        }
 
-                    sal_Int16 nTemp = 0;
-                    xPropSet->getPropertyValue("DefaultState") >>= nTemp;
-                    m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
-                    m_aRun->append((sal_Int32)nTemp);
-                    xPropSet->getPropertyValue("State") >>= nTemp;
-                    m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFRES);
-                    m_aRun->append((sal_Int32)nTemp);
+                        sName = "HelpText";
+                        if (xPropSetInfo->hasPropertyByName(sName))
+                        {
+                            xPropSet->getPropertyValue(sName) >>= aStr;
+                            m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNHELP);
+                            m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ");
+                            m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
+                            m_aRun->append('}');
+                        }
 
-                    m_aRun->append("}}");
+                        sName = "HelpF1Text";
+                        if (xPropSetInfo->hasPropertyByName(sName))
+                        {
+                            xPropSet->getPropertyValue(sName) >>= aStr;
+                            m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNSTAT);
+                            m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ");
+                            m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
+                            m_aRun->append('}');
+                        }
 
-                    // field result is empty, ffres already contains the form result
-                    m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
-                }
-                else if (xInfo->supportsService("com.sun.star.form.component.TextField"))
-                {
-                    OStringBuffer aBuf;
-                    OString aStr;
-                    OUString aTmp;
-                    const sal_Char* pStr;
-
-                    m_aRun->append(OUStringToOString(OUString(FieldString(ww::eFORMTEXT)), m_rExport.eCurrentEncoding));
-                    m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_DATAFIELD " ");
-                    for (int i = 0; i < 8; i++) aBuf.append((sal_Char)0x00);
-                    xPropSet->getPropertyValue("Name") >>= aTmp;
-                    aStr = OUStringToOString(aTmp, m_rExport.eCurrentEncoding);
-                    aBuf.append((sal_Char)aStr.getLength());
-                    aBuf.append(aStr);
-                    aBuf.append((sal_Char)0x00);
-                    xPropSet->getPropertyValue("DefaultText") >>= aTmp;
-                    aStr = OUStringToOString(aTmp, m_rExport.eCurrentEncoding);
-                    aBuf.append((sal_Char)aStr.getLength());
-                    aBuf.append(aStr);
-                    for (int i = 0; i < 11; i++) aBuf.append((sal_Char)0x00);
-                    aStr = aBuf.makeStringAndClear();
-                    pStr = aStr.getStr();
-                    for (int i = 0; i < aStr.getLength(); i++, pStr++)
-                        m_aRun->append(msfilter::rtfutil::OutHex(*pStr, 2));
-                    m_aRun->append('}');
-                    m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
-                    xPropSet->getPropertyValue("Text") >>= aTmp;
-                    m_aRun->append(OUStringToOString(aTmp, m_rExport.eCurrentEncoding));
-                    m_aRun->append('}');
-                    m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
-                    sName = "HelpText";
-                    if (xPropSetInfo->hasPropertyByName(sName))
-                    {
-                        xPropSet->getPropertyValue(sName) >>= aTmp;
-                        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNHELP);
-                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ");
-                        m_aRun->append(OUStringToOString(aTmp, m_rExport.eCurrentEncoding));
-                        m_aRun->append('}');
-                    }
-
-                    sName = "HelpF1Text";
-                    if (xPropSetInfo->hasPropertyByName(sName))
-                    {
-                        xPropSet->getPropertyValue(sName) >>= aTmp;
-                        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNSTAT);
-                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ");
-                        m_aRun->append(OUStringToOString(aTmp, m_rExport.eCurrentEncoding));
-                        m_aRun->append('}');
-                    }
-                    m_aRun->append("}");
-                }
-                else if (xInfo->supportsService("com.sun.star.form.component.ListBox"))
-                {
-                    OUString aStr;
-                    uno::Sequence<sal_Int16> aIntSeq;
-                    uno::Sequence<OUString> aStrSeq;
-
-                    m_aRun->append(OUStringToOString(OUString(FieldString(ww::eFORMDROPDOWN)), m_rExport.eCurrentEncoding));
-                    m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
-                    m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFTYPE "2"); // 2 = list
-                    m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX);
-
-                    xPropSet->getPropertyValue("DefaultSelection") >>= aIntSeq;
-                    if (aIntSeq.getLength())
-                    {
+                        sal_Int16 nTemp = 0;
+                        xPropSet->getPropertyValue("DefaultState") >>= nTemp;
                         m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
-                        // a dropdown list can have only one 'selected item by default'
-                        m_aRun->append((sal_Int32)aIntSeq[0]);
-                    }
-
-                    xPropSet->getPropertyValue("SelectedItems") >>= aIntSeq;
-                    if (aIntSeq.getLength())
-                    {
+                        m_aRun->append((sal_Int32)nTemp);
+                        xPropSet->getPropertyValue("State") >>= nTemp;
                         m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFRES);
-                        // a dropdown list can have only one 'currently selected item'
-                        m_aRun->append((sal_Int32)aIntSeq[0]);
-                    }
+                        m_aRun->append((sal_Int32)nTemp);
 
-                    sName = "Name";
-                    if (xPropSetInfo->hasPropertyByName(sName))
+                        m_aRun->append("}}");
+
+                        // field result is empty, ffres already contains the form result
+                        m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
+                    }
+                    else if (xInfo->supportsService("com.sun.star.form.component.TextField"))
                     {
-                        xPropSet->getPropertyValue(sName) >>= aStr;
-                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ");
-                        m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
-                        m_aRun->append('}');
-                    }
+                        OStringBuffer aBuf;
+                        OString aStr;
+                        OUString aTmp;
+                        const sal_Char* pStr;
 
-                    sName = "HelpText";
-                    if (xPropSetInfo->hasPropertyByName(sName))
+                        m_aRun->append(OUStringToOString(OUString(FieldString(ww::eFORMTEXT)), m_rExport.eCurrentEncoding));
+                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_DATAFIELD " ");
+                        for (int i = 0; i < 8; i++) aBuf.append((sal_Char)0x00);
+                        xPropSet->getPropertyValue("Name") >>= aTmp;
+                        aStr = OUStringToOString(aTmp, m_rExport.eCurrentEncoding);
+                        aBuf.append((sal_Char)aStr.getLength());
+                        aBuf.append(aStr);
+                        aBuf.append((sal_Char)0x00);
+                        xPropSet->getPropertyValue("DefaultText") >>= aTmp;
+                        aStr = OUStringToOString(aTmp, m_rExport.eCurrentEncoding);
+                        aBuf.append((sal_Char)aStr.getLength());
+                        aBuf.append(aStr);
+                        for (int i = 0; i < 11; i++) aBuf.append((sal_Char)0x00);
+                        aStr = aBuf.makeStringAndClear();
+                        pStr = aStr.getStr();
+                        for (int i = 0; i < aStr.getLength(); i++, pStr++)
+                            m_aRun->append(msfilter::rtfutil::OutHex(*pStr, 2));
+                        m_aRun->append('}');
+                        m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
+                        xPropSet->getPropertyValue("Text") >>= aTmp;
+                        m_aRun->append(OUStringToOString(aTmp, m_rExport.eCurrentEncoding));
+                        m_aRun->append('}');
+                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
+                        sName = "HelpText";
+                        if (xPropSetInfo->hasPropertyByName(sName))
+                        {
+                            xPropSet->getPropertyValue(sName) >>= aTmp;
+                            m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNHELP);
+                            m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ");
+                            m_aRun->append(OUStringToOString(aTmp, m_rExport.eCurrentEncoding));
+                            m_aRun->append('}');
+                        }
+
+                        sName = "HelpF1Text";
+                        if (xPropSetInfo->hasPropertyByName(sName))
+                        {
+                            xPropSet->getPropertyValue(sName) >>= aTmp;
+                            m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNSTAT);
+                            m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ");
+                            m_aRun->append(OUStringToOString(aTmp, m_rExport.eCurrentEncoding));
+                            m_aRun->append('}');
+                        }
+                        m_aRun->append("}");
+                    }
+                    else if (xInfo->supportsService("com.sun.star.form.component.ListBox"))
                     {
-                        xPropSet->getPropertyValue(sName) >>= aStr;
-                        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNHELP);
-                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ");
-                        m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
-                        m_aRun->append('}');
+                        OUString aStr;
+                        uno::Sequence<sal_Int16> aIntSeq;
+                        uno::Sequence<OUString> aStrSeq;
+
+                        m_aRun->append(OUStringToOString(OUString(FieldString(ww::eFORMDROPDOWN)), m_rExport.eCurrentEncoding));
+                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
+                        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFTYPE "2"); // 2 = list
+                        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX);
+
+                        xPropSet->getPropertyValue("DefaultSelection") >>= aIntSeq;
+                        if (aIntSeq.getLength())
+                        {
+                            m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
+                            // a dropdown list can have only one 'selected item by default'
+                            m_aRun->append((sal_Int32)aIntSeq[0]);
+                        }
+
+                        xPropSet->getPropertyValue("SelectedItems") >>= aIntSeq;
+                        if (aIntSeq.getLength())
+                        {
+                            m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFRES);
+                            // a dropdown list can have only one 'currently selected item'
+                            m_aRun->append((sal_Int32)aIntSeq[0]);
+                        }
+
+                        sName = "Name";
+                        if (xPropSetInfo->hasPropertyByName(sName))
+                        {
+                            xPropSet->getPropertyValue(sName) >>= aStr;
+                            m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ");
+                            m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
+                            m_aRun->append('}');
+                        }
+
+                        sName = "HelpText";
+                        if (xPropSetInfo->hasPropertyByName(sName))
+                        {
+                            xPropSet->getPropertyValue(sName) >>= aStr;
+                            m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNHELP);
+                            m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ");
+                            m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
+                            m_aRun->append('}');
+                        }
+
+                        sName = "HelpF1Text";
+                        if (xPropSetInfo->hasPropertyByName(sName))
+                        {
+                            xPropSet->getPropertyValue(sName) >>= aStr;
+                            m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNSTAT);
+                            m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ");
+                            m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
+                            m_aRun->append('}');
+                        }
+
+                        xPropSet->getPropertyValue("StringItemList") >>= aStrSeq;
+                        sal_uInt32 nListItems = aStrSeq.getLength();
+                        for (sal_uInt32 i = 0; i < nListItems; i++)
+                            m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFL " ")
+                            .append(OUStringToOString(aStrSeq[i], m_rExport.eCurrentEncoding)).append('}');
+
+                        m_aRun->append("}}");
+
+                        // field result is empty, ffres already contains the form result
+                        m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
                     }
-
-                    sName = "HelpF1Text";
-                    if (xPropSetInfo->hasPropertyByName(sName))
-                    {
-                        xPropSet->getPropertyValue(sName) >>= aStr;
-                        m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNSTAT);
-                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ");
-                        m_aRun->append(OUStringToOString(aStr, m_rExport.eCurrentEncoding));
-                        m_aRun->append('}');
-                    }
-
-                    xPropSet->getPropertyValue("StringItemList") >>= aStrSeq;
-                    sal_uInt32 nListItems = aStrSeq.getLength();
-                    for (sal_uInt32 i = 0; i < nListItems; i++)
-                        m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFL " ")
-                        .append(OUStringToOString(aStrSeq[i], m_rExport.eCurrentEncoding)).append('}');
-
-                    m_aRun->append("}}");
-
-                    // field result is empty, ffres already contains the form result
-                    m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
+                    else
+                        SAL_INFO("sw.rtf", OSL_THIS_FUNC << " unhandled form control: '" << xInfo->getImplementationName()<< "'");
+                    m_aRun->append('}');
                 }
-                else
-                    SAL_INFO("sw.rtf", OSL_THIS_FUNC << " unhandled form control: '" << xInfo->getImplementationName()<< "'");
-                m_aRun->append('}');
             }
         }
 
