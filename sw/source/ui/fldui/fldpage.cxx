@@ -127,7 +127,7 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
     {
         SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator, bIsAutomaticLanguage );
         //#i26566# provide parent for SwWrtShell::StartInputFldDlg
-        aData.pParent = &GetTabDialog()->GetOKButton();
+        aData.m_pParent = &GetTabDialog()->GetOKButton();
         bRet = m_aMgr.InsertFld( aData );
 
         uno::Reference< frame::XDispatchRecorder > xRecorder =

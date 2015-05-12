@@ -65,36 +65,35 @@ struct SwFldGroupRgn
 // with command strings
 struct SwInsertFld_Data
 {
-    sal_uInt16 nTypeId;
-    sal_uInt16 nSubType;
-    const OUString sPar1;
-    const OUString sPar2;
-    sal_uLong nFormatId;
-    SwWrtShell* pSh;
-    sal_Unicode cSeparator;
-    bool bIsAutomaticLanguage;
-    ::com::sun::star::uno::Any aDBDataSource;
-    ::com::sun::star::uno::Any aDBConnection;
-    ::com::sun::star::uno::Any aDBColumn;
-    VclPtr<vcl::Window> pParent; // parent dialog used for SwWrtShell::StartInputFldDlg()
+    sal_uInt16 m_nTypeId;
+    sal_uInt16 m_nSubType;
+    const OUString m_sPar1;
+    const OUString m_sPar2;
+    sal_uLong m_nFormatId;
+    SwWrtShell* m_pSh;
+    sal_Unicode m_cSeparator;
+    bool m_bIsAutomaticLanguage;
+    ::com::sun::star::uno::Any m_aDBDataSource;
+    ::com::sun::star::uno::Any m_aDBConnection;
+    ::com::sun::star::uno::Any m_aDBColumn;
+    VclPtr<vcl::Window> m_pParent; // parent dialog used for SwWrtShell::StartInputFldDlg()
 
     SwInsertFld_Data(sal_uInt16 nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
                     sal_uLong nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :
-        nTypeId(nType),
-        nSubType(nSub),
-        sPar1(rPar1),
-        sPar2(rPar2),
-        nFormatId(nFmtId),
-        pSh(pShell),
-        cSeparator(cSep),
-        bIsAutomaticLanguage(bIsAutoLanguage),
-        pParent(0) {}
+        m_nTypeId(nType),
+        m_nSubType(nSub),
+        m_sPar1(rPar1),
+        m_sPar2(rPar2),
+        m_nFormatId(nFmtId),
+        m_pSh(pShell),
+        m_cSeparator(cSep),
+        m_bIsAutomaticLanguage(bIsAutoLanguage),
+        m_pParent(0) {}
 
     SwInsertFld_Data() :
-        pSh(0),
-        cSeparator(' '),
-        bIsAutomaticLanguage(true){}
-
+        m_pSh(0),
+        m_cSeparator(' '),
+        m_bIsAutomaticLanguage(true){}
 };
 
 class SW_DLLPUBLIC SwFldMgr
