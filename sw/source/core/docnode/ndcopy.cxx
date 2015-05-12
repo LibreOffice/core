@@ -120,18 +120,18 @@ static bool lcl_SrchNew( const _MapTblFrmFmt& rMap, SwFrmFmt** pPara )
 
 struct _CopyTable
 {
-    SwDoc* pDoc;
-    sal_uLong nOldTblSttIdx;
-    _MapTblFrmFmts& rMapArr;
-    SwTableLine* pInsLine;
-    SwTableBox* pInsBox;
-    SwTableNode *pTblNd;
-    const SwTable *pOldTable;
+    SwDoc* m_pDoc;
+    sal_uLong m_nOldTblSttIdx;
+    _MapTblFrmFmts& m_rMapArr;
+    SwTableLine* m_pInsLine;
+    SwTableBox* m_pInsBox;
+    SwTableNode *m_pTblNd;
+    const SwTable *m_pOldTable;
 
-    _CopyTable( SwDoc* pDc, _MapTblFrmFmts& rArr, sal_uLong nOldStt,
-                SwTableNode& rTblNd, const SwTable* pOldTbl )
-        : pDoc(pDc), nOldTblSttIdx(nOldStt), rMapArr(rArr),
-        pInsLine(0), pInsBox(0), pTblNd(&rTblNd), pOldTable( pOldTbl )
+    _CopyTable(SwDoc* pDc, _MapTblFrmFmts& rArr, sal_uLong nOldStt,
+               SwTableNode& rTblNd, const SwTable* pOldTable)
+        : m_pDoc(pDc), m_nOldTblSttIdx(nOldStt), m_rMapArr(rArr),
+          m_pInsLine(0), m_pInsBox(0), m_pTblNd(&rTblNd), m_pOldTable(pOldTable)
     {}
 };
 
@@ -140,24 +140,25 @@ static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT );
 static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
 {
     SwTableBoxFmt * pBoxFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
-    for( _MapTblFrmFmts::const_iterator it = pCT->rMapArr.begin(); it != pCT->rMapArr.end(); ++it )
+    for (_MapTblFrmFmts::const_iterator it = pCT->m_rMapArr.begin(); it != pCT->m_rMapArr.end(); ++it)
         if ( !lcl_SrchNew( *it, reinterpret_cast<SwFrmFmt**>(&pBoxFmt) ) )
             break;
-    if( pBoxFmt == pBox->GetFrmFmt() ) // Create a new one?
+
+    if (pBoxFmt == pBox->GetFrmFmt()) // Create a new one?
     {
         const SfxPoolItem* pItem;
         if( SfxItemState::SET == pBoxFmt->GetItemState( RES_BOXATR_FORMULA, false,
             &pItem ) && static_cast<const SwTblBoxFormula*>(pItem)->IsIntrnlName() )
         {
-            const_cast<SwTblBoxFormula*>(static_cast<const SwTblBoxFormula*>(pItem))->PtrToBoxNm( pCT->pOldTable );
+            const_cast<SwTblBoxFormula*>(static_cast<const SwTblBoxFormula*>(pItem))->PtrToBoxNm(pCT->m_pOldTable);
         }
 
-        pBoxFmt = pCT->pDoc->MakeTableBoxFmt();
+        pBoxFmt = pCT->m_pDoc->MakeTableBoxFmt();
         pBoxFmt->CopyAttrs( *pBox->GetFrmFmt() );
 
         if( pBox->GetSttIdx() )
         {
-            SvNumberFormatter* pN = pCT->pDoc->GetNumberFormatter( false );
+            SvNumberFormatter* pN = pCT->m_pDoc->GetNumberFormatter(false);
             if( pN && pN->HasMergeFmtTbl() && SfxItemState::SET == pBoxFmt->
                 GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
             {
@@ -169,60 +170,64 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
             }
         }
 
-        pCT->rMapArr.push_back( _MapTblFrmFmt( pBox->GetFrmFmt(), pBoxFmt ) );
+        pCT->m_rMapArr.push_back(_MapTblFrmFmt(pBox->GetFrmFmt(), pBoxFmt));
     }
 
     sal_uInt16 nLines = pBox->GetTabLines().size();
     SwTableBox* pNewBox;
     if( nLines )
-        pNewBox = new SwTableBox( pBoxFmt, nLines, pCT->pInsLine );
+        pNewBox = new SwTableBox(pBoxFmt, nLines, pCT->m_pInsLine);
     else
     {
-        SwNodeIndex aNewIdx( *pCT->pTblNd,
-                            pBox->GetSttIdx() - pCT->nOldTblSttIdx );
+        SwNodeIndex aNewIdx(*pCT->m_pTblNd, pBox->GetSttIdx() - pCT->m_nOldTblSttIdx);
         OSL_ENSURE( aNewIdx.GetNode().IsStartNode(), "Index is not on the start node" );
-        pNewBox = new SwTableBox( pBoxFmt, aNewIdx, pCT->pInsLine );
+
+        pNewBox = new SwTableBox(pBoxFmt, aNewIdx, pCT->m_pInsLine);
         pNewBox->setRowSpan( pBox->getRowSpan() );
     }
 
-    pCT->pInsLine->GetTabBoxes().push_back( pNewBox );
+    pCT->m_pInsLine->GetTabBoxes().push_back( pNewBox );
 
-    if( nLines )
+    if (nLines)
     {
-        _CopyTable aPara( *pCT );
-        aPara.pInsBox = pNewBox;
+        _CopyTable aPara(*pCT);
+        aPara.m_pInsBox = pNewBox;
         for( const SwTableLine* pLine : pBox->GetTabLines() )
             lcl_CopyTblLine( pLine, &aPara );
     }
-    else if( pNewBox->IsInHeadline( &pCT->pTblNd->GetTable() ))
+    else if (pNewBox->IsInHeadline(&pCT->m_pTblNd->GetTable()))
+    {
         // In the headline, the paragraphs must match conditional styles
         pNewBox->GetSttNd()->CheckSectionCondColl();
+    }
 }
 
 static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT )
 {
     SwTableLineFmt * pLineFmt = static_cast<SwTableLineFmt*>(pLine->GetFrmFmt());
-    for( _MapTblFrmFmts::const_iterator it = pCT->rMapArr.begin(); it != pCT->rMapArr.end(); ++it )
+    for (_MapTblFrmFmts::const_iterator it = pCT->m_rMapArr.begin(); it != pCT->m_rMapArr.end(); ++it)
         if ( !lcl_SrchNew( *it, reinterpret_cast<SwFrmFmt**>(&pLineFmt) ) )
             break;
+
     if( pLineFmt == pLine->GetFrmFmt() ) // Create a new one?
     {
-        pLineFmt = pCT->pDoc->MakeTableLineFmt();
+        pLineFmt = pCT->m_pDoc->MakeTableLineFmt();
         pLineFmt->CopyAttrs( *pLine->GetFrmFmt() );
-        pCT->rMapArr.push_back( _MapTblFrmFmt( pLine->GetFrmFmt(), pLineFmt ) );
+        pCT->m_rMapArr.push_back(_MapTblFrmFmt(pLine->GetFrmFmt(), pLineFmt));
     }
-    SwTableLine* pNewLine = new SwTableLine( pLineFmt,
-                            pLine->GetTabBoxes().size(), pCT->pInsBox );
+
+    SwTableLine* pNewLine = new SwTableLine(pLineFmt, pLine->GetTabBoxes().size(), pCT->m_pInsBox);
     // Insert the new row into the table
-    if( pCT->pInsBox )
+    if (pCT->m_pInsBox)
     {
-        pCT->pInsBox->GetTabLines().push_back( pNewLine );
+        pCT->m_pInsBox->GetTabLines().push_back(pNewLine);
     }
     else
     {
-        pCT->pTblNd->GetTable().GetTabLines().push_back( pNewLine );
+        pCT->m_pTblNd->GetTable().GetTabLines().push_back(pNewLine);
     }
-    pCT->pInsLine = pNewLine;
+
+    pCT->m_pInsLine = pNewLine;
     for( SwTableBoxes::iterator it = const_cast<SwTableLine*>(pLine)->GetTabBoxes().begin();
              it != const_cast<SwTableLine*>(pLine)->GetTabBoxes().end(); ++it)
         lcl_CopyTblBox(*it, pCT );
