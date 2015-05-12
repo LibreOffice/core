@@ -2270,6 +2270,24 @@ DECLARE_RTFIMPORT_TEST(testTdf91074, "tdf91074.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_LIGHTRED), getProperty<table::BorderLine2>(xShape, "TopBorder").Color);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf90260Nopar, "hello.rtf")
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("tdf90260-nopar.rtf", xEnd);
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+}
+
+DECLARE_RTFIMPORT_TEST(testTdf90260Par, "hello.rtf")
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("tdf90260-par.rtf", xEnd);
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
