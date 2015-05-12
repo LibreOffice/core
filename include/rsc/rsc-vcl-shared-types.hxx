@@ -46,6 +46,7 @@ enum class MenuItemBits : sal_Int16
     NOSELECT            = 0x0040,
     ICON                = 0x0080,
     TEXT                = 0x0100,
+    BOLD                = 0x0200
 };
 namespace o3tl
 {

@@ -1997,8 +1997,17 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                     {
                         nMaxItemTextWidth -= nFontHeight - nExtra;
                     }
+                    bool bSetTmpBoldFont = !IsMenuBar() && (pData->nBits & MenuItemBits::BOLD);
+                    if (bSetTmpBoldFont) {
+                        pWin->Push(PushFlags::FONT);
+                        vcl::Font aFont = pWin->GetFont();
+                        aFont.SetWeight(WEIGHT_BOLD);
+                        pWin->SetFont(aFont);
+                    }
                     OUString aItemText( getShortenedString( pData->aText, pWin, nMaxItemTextWidth ) );
                     pWin->DrawCtrlText( aTmpPos, aItemText, 0, aItemText.getLength(), nStyle, pVector, pDisplayText );
+                    if( bSetTmpBoldFont )
+                        pWin->Pop();
                     if( bSetTmpBackground )
                         pWin->SetBackground();
                 }
