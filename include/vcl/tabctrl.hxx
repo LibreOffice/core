@@ -34,6 +34,15 @@ class ListBox;
 #define TAB_PAGE_NOTFOUND   ((sal_uInt16)0xFFFF)
 #endif /* !TAB_APPEND */
 
+#define TAB_OFFSET          3
+#define TAB_TABOFFSET_X     3
+#define TAB_TABOFFSET_Y     3
+#define TAB_EXTRASPACE_X    6
+#define TAB_BORDER_LEFT     1
+#define TAB_BORDER_TOP      1
+#define TAB_BORDER_RIGHT    2
+#define TAB_BORDER_BOTTOM   2
+
 class VCL_DLLPUBLIC TabControl : public Control
 {
 private:

@@ -296,7 +296,10 @@ namespace svt
     {
         const ControlState nState( lcl_ItemToControlState( i_nItemFlags ) );
 
-        TabitemValue tiValue;
+        TabitemValue tiValue(Rectangle(i_rContentArea.Left() + TAB_TABOFFSET_X,
+                                       i_rContentArea.Right() - TAB_TABOFFSET_X,
+                                       i_rContentArea.Top() + TAB_TABOFFSET_Y,
+                                       i_rContentArea.Bottom() - TAB_TABOFFSET_Y));
 
         Rectangle aBoundingRegion, aContentRegion;
         bool bNativeOK = getTargetDevice().GetNativeControlRegion(
@@ -316,7 +319,11 @@ namespace svt
     {
         const ControlState nState = lcl_ItemToControlState( i_nItemFlags );
 
-        TabitemValue tiValue;
+        TabitemValue tiValue(Rectangle(i_rContentRect.Left() + TAB_TABOFFSET_X,
+                                       i_rContentRect.Right() - TAB_TABOFFSET_X,
+                                       i_rContentRect.Top() + TAB_TABOFFSET_Y,
+                                       i_rContentRect.Bottom() - TAB_TABOFFSET_Y));
+
         if ( i_nItemFlags & ITEM_POSITION_FIRST )
             tiValue.mnAlignment |= TABITEM_FIRST_IN_GROUP;
         if ( i_nItemFlags & ITEM_POSITION_LAST )

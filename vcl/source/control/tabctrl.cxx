@@ -70,15 +70,6 @@ struct ImplTabCtrlData
     VclPtr<ListBox>                 mpListBox;
 };
 
-#define TAB_OFFSET          3
-#define TAB_TABOFFSET_X     3
-#define TAB_TABOFFSET_Y     3
-#define TAB_EXTRASPACE_X    6
-#define TAB_BORDER_LEFT     1
-#define TAB_BORDER_TOP      1
-#define TAB_BORDER_RIGHT    2
-#define TAB_BORDER_BOTTOM   2
-
 // for the Tab positions
 #define TAB_PAGERECT        0xFFFF
 
