@@ -20,6 +20,8 @@
 #ifndef INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_VENDORBASE_HXX
 #define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_VENDORBASE_HXX
 
+#include "config_java.h"
+
 #include "rtl/ustring.hxx"
 #include "rtl/ref.hxx"
 #include "osl/endian.h"
@@ -31,7 +33,9 @@ namespace jfw_plugin
 
 
 //Used by subclasses of VendorBase to build paths to Java runtime
-#if defined(__sparcv9)
+#if defined(JAVA_ARCH)
+#define JFW_PLUGIN_ARCH JAVA_ARCH
+#elif defined(__sparcv9)
 #define JFW_PLUGIN_ARCH "sparcv9"
 #elif defined SPARC
 #define JFW_PLUGIN_ARCH "sparc"

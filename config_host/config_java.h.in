@@ -1,0 +1,6 @@
+#ifndef CONFIG_JAVA_H
+#define CONFIG_JAVA_H
+
+#undef JAVA_ARCH
+
+#endif

@@ -7002,6 +7002,7 @@ then
             ;;
         powerpc64le)
             AS_IF([test -d "$JAVA_HOME/jre/lib/ppc64le"], [my_java_arch=ppc64le], [my_java_arch=ppc64])
+            JAVA_ARCH=$my_java_arch
             ;;
         x86_64)
             my_java_arch=amd64
@@ -7011,6 +7012,7 @@ then
             ;;
         esac
         JAWTLIB="-L$JAVA_HOME/jre/lib/$my_java_arch -ljawt"
+        AS_IF([test "$JAVA_ARCH" != ""], [AC_DEFINE_UNQUOTED([JAVA_ARCH], ["$JAVA_ARCH"])])
     fi
     AC_MSG_RESULT([$JAWTLIB])
 fi
@@ -12988,6 +12990,7 @@ AC_CONFIG_HEADERS([config_host/config_folders.h])
 AC_CONFIG_HEADERS([config_host/config_gcc.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
+AC_CONFIG_HEADERS([config_host/config_java.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
 AC_CONFIG_HEADERS([config_host/config_locales.h])
