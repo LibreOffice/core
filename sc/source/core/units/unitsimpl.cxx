@@ -441,6 +441,11 @@ HeaderUnitDescriptor UnitsImpl::extractUnitFromHeaderString(const OUString& rsHe
 }
 
 UtUnit UnitsImpl::getUnitForCell(const ScAddress& rCellAddress, ScDocument* pDoc) {
+    CellType aType(pDoc->GetCellType(rCellAddress));
+    if (aType == CELLTYPE_STRING || aType == CELLTYPE_NONE) {
+        return UtUnit();
+    }
+
     OUString sUnitString = extractUnitStringForCell(rCellAddress, pDoc);
 
     UtUnit aUnit;
