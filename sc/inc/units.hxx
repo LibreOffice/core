@@ -107,7 +107,7 @@ public:
      * rsInputUnit overrides the automatic determination of input units, i.e. disables
      * input unit detection.
      */
-    virtual bool convertCellUnits(const ScRange& rRange,
+    virtual bool convertCellUnits(const ScRangeList& rRanges,
                                   ScDocument* pDoc,
                                   const OUString& rsOutputUnit) = 0;
 
