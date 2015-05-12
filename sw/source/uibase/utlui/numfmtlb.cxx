@@ -52,7 +52,7 @@ using namespace ::com::sun::star::lang;
 /**
  *  Description:
  *     nFormatType: Display the formats of this Type
- *     nDefFmt:     Select this format and possibly insert it
+ *     nDefaultFormat: Select this format and possibly insert it
  */
 
 NumFormatListBox::NumFormatListBox(vcl::Window* pWin, WinBits nStyle) :
@@ -270,11 +270,11 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
     }
 }
 
-void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
+void NumFormatListBox::SetDefFormat(const sal_uLong nDefaultFormat)
 {
-    if (nDefFmt == ULONG_MAX)
+    if (nDefaultFormat == ULONG_MAX)
     {
-        nDefFormat = nDefFmt;
+        nDefFormat = nDefaultFormat;
         return;
     }
 
@@ -291,11 +291,11 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
         pFormatter = rSh.GetNumberFormatter();
     }
 
-    short nType = pFormatter->GetType(nDefFmt);
+    short nType = pFormatter->GetType(nDefaultFormat);
 
     SetFormatType(nType);
 
-    sal_uLong nFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nDefFmt, eCurLanguage);
+    sal_uLong nFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nDefaultFormat, eCurLanguage);
 
     for (sal_Int32 i = 0; i < GetEntryCount(); i++)
     {
@@ -315,11 +315,11 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
 
     if (nType == css::util::NumberFormat::TEXT)
     {
-        pFormatter->GetOutputString("\"ABC\"", nDefFmt, sValue, &pCol);
+        pFormatter->GetOutputString("\"ABC\"", nDefaultFormat, sValue, &pCol);
     }
     else
     {
-        pFormatter->GetOutputString(fValue, nDefFmt, sValue, &pCol);
+        pFormatter->GetOutputString(fValue, nDefaultFormat, sValue, &pCol);
     }
 
     sal_Int32 nPos = 0;
@@ -337,15 +337,15 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
     sal_uLong nLongDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysLongDateFmt, LANGUAGE_SYSTEM );
 
     if (
-         nDefFmt == nSysNumFmt ||
-         nDefFmt == nSysShortDateFmt ||
-         nDefFmt == nSysLongDateFmt ||
+         nDefaultFormat == nSysNumFmt ||
+         nDefaultFormat == nSysShortDateFmt ||
+         nDefaultFormat == nSysLongDateFmt ||
          (
            bSysLang &&
            (
-             nDefFmt == nNumFormatForLanguage ||
-             nDefFmt == nShortDateFormatForLanguage ||
-             nDefFmt == nLongDateFormatForLanguage
+             nDefaultFormat == nNumFormatForLanguage ||
+             nDefaultFormat == nShortDateFormatForLanguage ||
+             nDefaultFormat == nLongDateFormatForLanguage
            )
          )
        )
@@ -354,7 +354,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
     }
 
     nPos = InsertEntry(sValue, nPos);   // Insert as first numeric entry
-    SetEntryData(nPos, reinterpret_cast<void*>(nDefFmt));
+    SetEntryData(nPos, reinterpret_cast<void*>(nDefaultFormat));
     SelectEntryPos(nPos);
     nDefFormat = GetFormat();
 }

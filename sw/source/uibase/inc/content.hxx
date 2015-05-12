@@ -95,10 +95,10 @@ class SwPostItContent : public SwContent
 public:
     SwPostItContent( const SwContentType* pCnt,
                             const OUString& rName,
-                            const SwFmtFld* pField,
+                            const SwFmtFld* pFormatField,
                             long nYPos )
         : SwContent(pCnt, rName, nYPos)
-        , pFld(pField)
+        , pFld(pFormatField)
         , pRedline(NULL)
         , mbPostIt(true)
     {}
