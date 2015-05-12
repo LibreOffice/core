@@ -98,6 +98,9 @@ public:
                                   ScDocument* pDoc,
                                   const OUString& rsOutputUnit) = 0;
 
+    virtual bool areUnitsCompatible(const OUString& rsUnit1,
+                                    const OUString& rsUnit2) = 0;
+
     virtual ~Units() {}
 };
 
