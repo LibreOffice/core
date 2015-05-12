@@ -12,6 +12,7 @@
 
 #include <rtl/ustring.hxx>
 
+#include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <udunits2.h>
@@ -38,12 +39,26 @@ class UtUnit {
 private:
     ::boost::shared_ptr< ut_unit > mpUnit;
 
+    /**
+     * The original input string used in createUnit.
+     * We can't necessarily convert a ut_unit back into the
+     * original representation (e.g. cm gets formatted as 0.01m
+     * by default), hence we should store the original string
+     * as may need to display it to the user again.
+     *
+     * There is no input string for units that are created when manipulating
+     * other units (i.e. multiplication/division of other UtUnits).
+     */
+    boost::optional< OUString > msInputString;
+
     static void freeUt(ut_unit* pUnit) {
         ut_free(pUnit);
     }
 
-    UtUnit(ut_unit* pUnit):
-        mpUnit(pUnit, &freeUt)
+    UtUnit(ut_unit* pUnit,
+           const boost::optional< OUString > rInputString = boost::optional< OUString >())
+        : mpUnit(pUnit, &freeUt)
+        , msInputString(rInputString)
     {}
 
     void reset(ut_unit* pUnit) {
@@ -55,6 +70,9 @@ private:
     }
 
 public:
+    /**
+     * return false if we try to create in invalid unit.
+     */
     static bool createUnit(const OUString& rUnitString, UtUnit& rUnitOut, const boost::shared_ptr< ut_system >& pUTSystem);
 
     /*
@@ -63,9 +81,14 @@ public:
      */
     UtUnit() {};
 
-    UtUnit(const UtUnit& rUnit):
-        mpUnit(rUnit.mpUnit)
+    UtUnit(const UtUnit& rUnit)
+        : mpUnit(rUnit.mpUnit)
+        , msInputString(rUnit.msInputString)
     {}
+
+    boost::optional< OUString > getInputString() const {
+        return msInputString;
+    }
 
     OUString getString() const;
 
