@@ -29,24 +29,24 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include "svx/sdrpaintwindow.hxx"
 
-using namespace com::sun::star;
+using namespace css;
 
-#define TRANSCOL Color( COL_WHITE )
+#define TRANSCOL Color(COL_WHITE)
 
-ContourWindow::ContourWindow( vcl::Window* pParent, WinBits nBits ) :
-            GraphCtrl       ( pParent, nBits ),
-            aWorkRect       ( 0, 0, 0, 0 ),
-            bPipetteMode    ( false ),
-            bWorkplaceMode  ( false ),
-            bClickValid     ( false )
+ContourWindow::ContourWindow(vcl::Window* pParent, WinBits nBits)
+    : GraphCtrl (pParent, nBits)
+    , aWorkRect(0, 0, 0, 0)
+    , bPipetteMode(false)
+    , bWorkplaceMode(false)
+    , bClickValid(false)
 {
-    SetWinStyle( WB_SDRMODE );
+    SetWinStyle(WB_SDRMODE);
 }
 
-void ContourWindow::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
+void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
 {
-    SdrPage*        pPage = pModel->GetPage( 0 );
-    const sal_uInt16    nPolyCount = rPolyPoly.Count();
+    SdrPage* pPage = pModel->GetPage(0);
+    const sal_uInt16 nPolyCount = rPolyPoly.Count();
 
     // First delete all drawing objects
     aPolyPoly = rPolyPoly;
@@ -57,30 +57,30 @@ void ContourWindow::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
     pPage->Clear();
 
-    for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
+    for (sal_uInt16 i = 0; i < nPolyCount; i++)
     {
         basegfx::B2DPolyPolygon aPolyPolygon;
         aPolyPolygon.append(aPolyPoly[ i ].getB2DPolygon());
         SdrPathObj* pPathObj = new SdrPathObj( OBJ_PATHFILL, aPolyPolygon );
 
-        SfxItemSet aSet( pModel->GetItemPool() );
+        SfxItemSet aSet(pModel->GetItemPool());
 
-        aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
-        aSet.Put( XFillColorItem( "", TRANSCOL ) );
-        aSet.Put( XFillTransparenceItem( 50 ) );
+        aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
+        aSet.Put(XFillColorItem("", TRANSCOL));
+        aSet.Put(XFillTransparenceItem(50) );
 
         pPathObj->SetMergedItemSetAndBroadcast(aSet);
 
         pPage->InsertObject( pPathObj );
     }
 
-    if ( nPolyCount )
+    if (nPolyCount)
     {
         pView->MarkAll();
-        pView->CombineMarkedObjects( false );
+        pView->CombineMarkedObjects(false);
     }
 
-    pModel->SetChanged( false );
+    pModel->SetChanged(false);
 }
 
 const tools::PolyPolygon& ContourWindow::GetPolyPolygon()
@@ -217,40 +217,33 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
         GraphCtrl::MouseButtonUp( rMEvt );
 }
 
-void ContourWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     // #i75482#
     // encapsulate the redraw using Begin/End and use the returned
     // data to get the target output device (e.g. when pre-rendering)
-    SdrPaintWindow* pPaintWindow = pView->BeginCompleteRedraw(this);
+    SdrPaintWindow* pPaintWindow = pView->BeginCompleteRedraw(&rRenderContext);
     OutputDevice& rTarget = pPaintWindow->GetTargetOutputDevice();
 
     const Graphic& rGraphic = GetGraphic();
-    const Color& rOldLineColor = GetLineColor();
-    const Color& rOldFillColor = GetFillColor();
-
-    rTarget.SetLineColor( Color( COL_BLACK ) );
-    rTarget.SetFillColor( Color( COL_WHITE ) );
-
+    rTarget.Push(PushFlags::LINECOLOR |PushFlags::FILLCOLOR);
+    rTarget.SetLineColor(Color(COL_BLACK));
+    rTarget.SetFillColor(Color(COL_WHITE));
     rTarget.DrawRect( Rectangle( Point(), GetGraphicSize() ) );
+    rTarget.Pop();
 
-    rTarget.SetLineColor( rOldLineColor );
-    rTarget.SetFillColor( rOldFillColor );
+    if (rGraphic.GetType() != GRAPHIC_NONE)
+        rGraphic.Draw(&rTarget, Point(), GetGraphicSize());
 
-    if ( rGraphic.GetType() != GRAPHIC_NONE )
-        rGraphic.Draw( &rTarget, Point(), GetGraphicSize() );
-
-    if ( aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom() )
+    if (aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom())
     {
-        tools::PolyPolygon _aPolyPoly( 2, 2 );
-        const Color aOldFillColor( GetFillColor() );
-
-        _aPolyPoly.Insert( Rectangle( Point(), GetGraphicSize() ) );
-        _aPolyPoly.Insert( aWorkRect );
-
-        rTarget.SetFillColor( COL_LIGHTRED );
-        rTarget.DrawTransparent( _aPolyPoly, 50 );
-        rTarget.SetFillColor( aOldFillColor );
+        tools::PolyPolygon _aPolyPoly(2, 2);
+        rTarget.Push(PushFlags::FILLCOLOR);
+        _aPolyPoly.Insert(Rectangle(Point(), GetGraphicSize()));
+        _aPolyPoly.Insert(aWorkRect);
+        rTarget.SetFillColor(COL_LIGHTRED);
+        rTarget.DrawTransparent(_aPolyPoly, 50);
+        rTarget.Pop();
     }
 
     // #i75482#
