@@ -153,7 +153,7 @@
                 <child>
                   <object class="GtkCheckButton" id="userautosave">
                     <property name="label" translatable="yes">Automatically save the document too</property>
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">12</property>
