@@ -207,9 +207,9 @@ void SvxXConnectionPreview::Construct()
     AdaptSize();
 }
 
-void SvxXConnectionPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    if( pObjList )
+    if (pObjList)
     {
         // #110094#
         // This will not work anymore. To not start at Adam and Eve, i will
@@ -221,7 +221,7 @@ void SvxXConnectionPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const
         // New stuff: Use a ObjectContactOfObjListPainter.
         sdr::contact::SdrObjectVector aObjectVector;
 
-        for(size_t a = 0; a < pObjList->GetObjCount(); ++a)
+        for (size_t a = 0; a < pObjList->GetObjCount(); ++a)
         {
             SdrObject* pObject = pObjList->GetObj(a);
             DBG_ASSERT(pObject,
@@ -229,7 +229,7 @@ void SvxXConnectionPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const
             aObjectVector.push_back(pObject);
         }
 
-        sdr::contact::ObjectContactOfObjListPainter aPainter(*this, aObjectVector, 0);
+        sdr::contact::ObjectContactOfObjListPainter aPainter(rRenderContext, aObjectVector, 0);
         sdr::contact::DisplayInfo aDisplayInfo;
 
         // do processing
@@ -322,7 +322,7 @@ void SvxXConnectionPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Control::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
+    if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         SetStyles();
     }
