@@ -156,6 +156,15 @@ private:
                          ScDocument* pDoc);
 
     /**
+     * Convert cells within a given range. The range MUST be restricted
+     * to being a group of cells within one column, in one sheet/tab.
+     * rOutputUnit MUST possess an input unit string.
+     */
+    bool convertCellUnitsForColumnRange(const ScRange& rRange,
+                                        ScDocument* pDoc,
+                                        const UtUnit& rOutputUnit);
+
+    /**
      * Return both the UtUnit and the String as we usually want the UtUnit
      * (which is created from the String, and has to be created to ensure
      * that there is a valid unit), but we might also need the original

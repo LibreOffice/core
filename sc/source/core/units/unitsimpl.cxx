@@ -715,6 +715,90 @@ bool UnitsImpl::convertCellToHeaderUnit(const ScAddress& rCellAddress,
     return false;
 }
 
+bool UnitsImpl::convertCellUnitsForColumnRange(const ScRange& rRange,
+                                               ScDocument* pDoc,
+                                               const UtUnit& rOutputUnit) {
+    assert(rRange.aStart.Row() <= rRange.aEnd.Row());
+    assert(rRange.aStart.Col() == rRange.aEnd.Col());
+    assert(rRange.aStart.Tab() == rRange.aEnd.Tab());
+    assert(rOutputUnit.getInputString());
+
+    HeaderUnitDescriptor aHeader = { false, UtUnit(), boost::optional< ScAddress >(), "", -1 };
+
+    SCCOL nCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCROW nEndRow = rRange.aEnd.Row();
+    SCTAB nTab = rRange.aStart.Tab();
+
+    bool bAllConverted = true;
+
+    for (SCROW nRow = nEndRow; nRow >= nStartRow; nRow--) {
+        ScAddress aCurrent(nCol, nRow, nTab);
+
+        // It's possible that the header refers to an incompatible unit, hence
+        // shouldn't be modified when we're converting.
+        if (aCurrent == aHeader.address &&
+            aHeader.unit.areConvertibleTo(rOutputUnit)) {
+            OUString sHeader = pDoc->GetString(aCurrent);
+            sHeader = sHeader.replaceAt(aHeader.unitStringPosition, aHeader.unitString.getLength(), *rOutputUnit.getInputString());
+            pDoc->SetString(aCurrent, sHeader);
+
+            aHeader.valid = false;
+        } else if (pDoc->GetCellType(aCurrent) != CELLTYPE_STRING) {
+            if (!aHeader.valid) {
+                aHeader = findHeaderUnitForCell(aCurrent, pDoc);
+
+                // If there is no header we get an invalid unit returned from findHeaderUnitForCell,
+                // and therfore assume the dimensionless unit 1.
+                if (!aHeader.valid) {
+                    UtUnit::createUnit("", aHeader.unit, mpUnitSystem);
+                    aHeader.valid = true;
+                }
+            }
+
+            OUString sLocalUnit(extractUnitStringForCell(aCurrent, pDoc));
+            UtUnit aLocalUnit;
+            if (sLocalUnit.isEmpty()) {
+                aLocalUnit = aHeader.unit;
+            } else { // override header unit with annotation unit
+                if (!UtUnit::createUnit(sLocalUnit, aLocalUnit, mpUnitSystem)) {
+                    // but assume dimensionless if invalid
+                    UtUnit::createUnit("", aLocalUnit, mpUnitSystem);
+                }
+            }
+
+            bool bLocalAnnotationRequired = (!rRange.In(*aHeader.address)) &&
+                (rOutputUnit != aHeader.unit);
+            double nValue = pDoc->GetValue(aCurrent);
+
+            if (!aLocalUnit.areConvertibleTo(rOutputUnit)) {
+                bAllConverted = false;
+            } else {
+                double nNewValue = aLocalUnit.convertValueTo(nValue, rOutputUnit);
+                pDoc->SetValue(aCurrent, nNewValue);
+
+                if (bLocalAnnotationRequired) {
+                    // All a local dirty hack too - needs to be refactored and improved.
+                    // And ideally we should reuse the existing format.
+                    OUString sNewFormat = "General\"" + *rOutputUnit.getInputString() + "\"";
+                    sal_uInt32 nFormatKey;
+                    short nType = css::util::NumberFormat::DEFINED;
+                    sal_Int32 nErrorPosition; // Unused, because we should be creating working number formats.
+
+                    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                    pFormatter->PutEntry(sNewFormat, nErrorPosition, nType, nFormatKey);
+                    pDoc->SetNumberFormat(aCurrent, nFormatKey);
+                } else {
+                    // The number formats will by definition be wrong once we've converted, so just reset completely.
+                    pDoc->SetNumberFormat(aCurrent, 0);
+                }
+            }
+        }
+
+    }
+    return bAllConverted;
+}
+
 bool UnitsImpl::convertCellUnits(const ScRange& rRange,
                                  ScDocument* pDoc,
                                  const OUString& rsOutputUnit) {
@@ -736,74 +820,14 @@ bool UnitsImpl::convertCellUnits(const ScRange& rRange,
     assert(nStartTab == nEndTab);
 
     // Each column is independent hence we are able to handle each separately.
+    bool bAllConverted = true;
     for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++) {
-        HeaderUnitDescriptor aHeader = { false, UtUnit(), boost::optional< ScAddress >(), "", -1 };
-
-        for (SCROW nRow = nEndRow; nRow >= nStartRow; nRow--) {
-            ScAddress aCurrent(nCol, nRow, nStartTab);
-
-            if (aCurrent == aHeader.address) {
-                OUString sHeader = pDoc->GetString(aCurrent);
-                sHeader = sHeader.replaceAt(aHeader.unitStringPosition, aHeader.unitString.getLength(), rsOutputUnit);
-                pDoc->SetString(aCurrent, sHeader);
-
-                aHeader.valid = false;
-            } else if (pDoc->GetCellType(aCurrent) != CELLTYPE_STRING) {
-                if (!aHeader.valid) {
-                    aHeader = findHeaderUnitForCell(aCurrent, pDoc);
-
-                    // If there is no header we get an invalid unit returned from findHeaderUnitForCell,
-                    // and therfore assume the dimensionless unit 1.
-                    if (!aHeader.valid) {
-                        UtUnit::createUnit("", aHeader.unit, mpUnitSystem);
-                        aHeader.valid = true;
-                    }
-                }
-
-                OUString sLocalUnit(extractUnitStringForCell(aCurrent, pDoc));
-                UtUnit aLocalUnit;
-                if (sLocalUnit.isEmpty()) {
-                    aLocalUnit = aHeader.unit;
-                } else { // override header unit with annotation unit
-                    if (!UtUnit::createUnit(sLocalUnit, aLocalUnit, mpUnitSystem)) {
-                        // but assume dimensionless if invalid
-                        UtUnit::createUnit("", aLocalUnit, mpUnitSystem);
-                    }
-                }
-
-                bool bLocalAnnotationRequired = (!aRange.In(*aHeader.address)) &&
-                                                (aOutputUnit != aHeader.unit);
-                double nValue = pDoc->GetValue(aCurrent);
-
-                if (!aLocalUnit.areConvertibleTo(aOutputUnit)) {
-                    // TODO: in future we should undo all our changes here.
-                    return false;
-                }
-
-                double nNewValue = aLocalUnit.convertValueTo(nValue, aOutputUnit);
-                pDoc->SetValue(aCurrent, nNewValue);
-
-                if (bLocalAnnotationRequired) {
-                    // All a local dirty hack too - needs to be refactored and improved.
-                    // And ideally we should reuse the existing format.
-                    OUString sNewFormat = "General\"" + rsOutputUnit + "\"";
-                    sal_uInt32 nFormatKey;
-                    short nType = css::util::NumberFormat::DEFINED;
-                    sal_Int32 nErrorPosition; // Unused, because we should be creating working number formats.
-
-                    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                    pFormatter->PutEntry(sNewFormat, nErrorPosition, nType, nFormatKey);
-                    pDoc->SetNumberFormat(aCurrent, nFormatKey);
-                } else {
-                    // The number formats will by definition be wrong once we've converted, so just reset completely.
-                    pDoc->SetNumberFormat(aCurrent, 0);
-                }
-            }
-
-        }
+        ScRange aSubRange(ScAddress(nCol, nStartRow, nStartTab), ScAddress(nCol, nEndRow, nStartTab));
+        bAllConverted = bAllConverted &&
+                        convertCellUnitsForColumnRange(aSubRange, pDoc, aOutputUnit);
     }
 
-    return true;
+    return bAllConverted;
 }
 
 bool UnitsImpl::areUnitsCompatible(const OUString& rsUnit1, const OUString& rsUnit2) {
