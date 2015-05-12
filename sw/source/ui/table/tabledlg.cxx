@@ -984,7 +984,7 @@ void   SwTableColumnPage::ModifyHdl( MetricField* pField )
         UpdateCols( aValueTbl[i] );
 }
 
-void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
+void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 {
     SwTwips nSum = 0;
 
@@ -994,10 +994,10 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
     SwTwips nDiff = nSum - nTableWidth;
 
-    bool bModifyTable = m_pModifyTableCB->IsChecked();
+    bool bModifyTableChecked = m_pModifyTableCB->IsChecked();
     bool bProp =    m_pProportionalCB->IsChecked();
 
-    if(!bModifyTable && !bProp )
+    if (!bModifyTableChecked && !bProp)
     {
         //The table width is constant, the difference is balanced with the other columns
         sal_uInt16 nLoopCount = 0;
@@ -1037,7 +1037,7 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
             }
         }
     }
-    else if(bModifyTable && !bProp)
+    else if (bModifyTableChecked && !bProp)
     {
         //Difference is balanced by the width of the table,
         //other columns remain unchanged.
@@ -1053,7 +1053,7 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
             nTableWidth += nDiff;
         }
     }
-    else if(bModifyTable && bProp)
+    else if (bModifyTableChecked && bProp)
     {
         //All columns will be changed proportionally with,
         //the table width is adjusted accordingly.

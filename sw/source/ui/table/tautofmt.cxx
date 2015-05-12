@@ -145,7 +145,7 @@ void SwStringInputDlg::dispose()
 // AutoFormat-Dialogue:
 
 SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
-                    bool bSetAutoFormat, const SwTableAutoFmt* pSelFmt )
+                    bool bAutoFormat, const SwTableAutoFmt* pSelFmt )
     : SfxModalDialog(pParent, "AutoFormatTableDialog", "modules/swriter/ui/autoformattable.ui")
     , aStrTitle(SW_RES(STR_ADD_AUTOFORMAT_TITLE))
     , aStrLabel(SW_RES(STR_ADD_AUTOFORMAT_LABEL))
@@ -158,7 +158,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
     , nIndex(0)
     , nDfltStylePos(0)
     , bCoreDataChanged(false)
-    , bSetAutoFmt(bSetAutoFormat)
+    , bSetAutoFmt(bAutoFormat)
 {
     get(m_pLbFormat, "formatlb");
     get(m_pFormatting, "formatting");

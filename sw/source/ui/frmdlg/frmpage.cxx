@@ -2358,10 +2358,10 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
         m_pRelHeightRelationLB->SelectEntryPos(0);
 }
 
-void SwFrmPage::SetFormatUsed(bool bFmt)
+void SwFrmPage::SetFormatUsed(bool bFormatUsed)
 {
-    bFormat = bFmt;
-    if(bFormat)
+    bFormat = bFormatUsed;
+    if (bFormat)
     {
         m_pAnchorFrame->Hide();
     }
@@ -3210,9 +3210,9 @@ IMPL_LINK_NOARG(SwFrmAddPage, EditModifyHdl)
     return 0;
 }
 
-void SwFrmAddPage::SetFormatUsed(bool bFmt)
+void SwFrmAddPage::SetFormatUsed(bool bFormatUsed)
 {
-    bFormat = bFmt;
+    bFormat = bFormatUsed;
     if (bFormat)
     {
         pNameFrame->Hide();

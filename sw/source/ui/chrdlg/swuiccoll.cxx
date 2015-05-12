@@ -295,9 +295,9 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     return 0;
 }
 
-void SwCondCollPage::SetCollection( SwFmt* pFormat, bool bNew )
+void SwCondCollPage::SetCollection(SwFmt* pNewFormat, bool bNew)
 {
-    pFmt = pFormat;
+    pFmt = pNewFormat;
     bNewTemplate = bNew;
 }
 

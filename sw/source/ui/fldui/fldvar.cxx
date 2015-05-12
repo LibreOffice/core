@@ -1024,14 +1024,14 @@ IMPL_LINK_TYPED( SwFldVarPage, TBClickHdl, ToolBox *, pBox, void )
                 {
                     if (nNumFormatPos != LISTBOX_ENTRY_NOTFOUND)
                     {
-                        sal_uLong nFmt = nNumFormatPos == 0 ? 0 : m_pNumFormatLB->GetFormat();
-                        if (nFmt)
+                        sal_uLong nNumberFormat = nNumFormatPos == 0 ? 0 : m_pNumFormatLB->GetFormat();
+                        if (nNumberFormat)
                         {   // Switch language to office-language because Kalkulator expects
                             // String in office format and it should be fed into dialog like
                             // that
-                            nFmt = SwValueField::GetSystemFormat(pSh->GetNumberFormatter(), nFmt);
+                            nNumberFormat = SwValueField::GetSystemFormat(pSh->GetNumberFormatter(), nNumberFormat);
                         }
-                        static_cast<SwUserFieldType*>(pType)->SetContent(m_pValueED->GetText(), nFmt);
+                        static_cast<SwUserFieldType*>(pType)->SetContent(m_pValueED->GetText(), nNumberFormat);
                         static_cast<SwUserFieldType*>(pType)->SetType(
                             nNumFormatPos == 0 ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR );
                     }
