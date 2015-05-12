@@ -117,6 +117,22 @@ namespace cssc = css::chart;
 
 namespace oox { namespace drawingml {
 
+namespace {
+
+sal_Int32 translateFromChart2AxisIndexToOox(sal_Int32 nIndex)
+{
+    assert(nIndex == 0 || nIndex == 1);
+    if (nIndex == 0)
+        return AXIS_PRIMARY_Y;
+    else if (nIndex == 1)
+        return AXIS_SECONDARY_Y;
+
+    // good default value for release builds
+    return AXIS_PRIMARY_Y;
+}
+
+}
+
 class lcl_MatchesRole : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {
 public:
@@ -2032,19 +2048,19 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
                     if( xLabelSeq.is() )
                         exportSeriesText( xLabelSeq );
 
+                    Reference<XPropertySet> xPropSet(xDataSeries, UNO_QUERY_THROW);
+                    if( GetProperty( xPropSet, "AttachedAxisIndex") )
+                    {
+                        sal_Int32 nLocalAttachedAxis;
+                        mAny >>= nLocalAttachedAxis;
+                        nAttachedAxis = translateFromChart2AxisIndexToOox(nLocalAttachedAxis);
+                    }
+
                     // export shape properties
                     Reference< XPropertySet > xOldPropSet = SchXMLSeriesHelper::createOldAPISeriesPropertySet(
                         rSeriesSeq[nSeriesIdx], getModel() );
                     if( xOldPropSet.is() )
                     {
-                        if( GetProperty( xOldPropSet, "Axis") )
-                        {
-                            mAny >>= nAttachedAxis;
-                            if( nAttachedAxis == css::chart::ChartAxisAssign::SECONDARY_Y )
-                                nAttachedAxis = AXIS_SECONDARY_Y;
-                            else
-                                nAttachedAxis = AXIS_PRIMARY_Y;
-                        }
                         exportShapeProps( xOldPropSet );
                     }
 
