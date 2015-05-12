@@ -23,6 +23,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class ToolBox;
 
@@ -30,24 +31,32 @@ class ToolBox;
 // - FloatingWindow-Types -
 
 
-#define FLOATWIN_POPUPMODE_ALLOWTEAROFF         ((sal_uLong)0x00000001)
-#define FLOATWIN_POPUPMODE_ANIMATIONSLIDE       ((sal_uLong)0x00000002)
-#define FLOATWIN_POPUPMODE_NOAUTOARRANGE        ((sal_uLong)0x00000004)
-#define FLOATWIN_POPUPMODE_NOANIMATION          ((sal_uLong)0x00000008)
-#define FLOATWIN_POPUPMODE_DOWN                 ((sal_uLong)0x00000010)
-#define FLOATWIN_POPUPMODE_UP                   ((sal_uLong)0x00000020)
-#define FLOATWIN_POPUPMODE_LEFT                 ((sal_uLong)0x00000040)
-#define FLOATWIN_POPUPMODE_RIGHT                ((sal_uLong)0x00000080)
-#define FLOATWIN_POPUPMODE_NOFOCUSCLOSE         ((sal_uLong)0x00000100)
-#define FLOATWIN_POPUPMODE_NOKEYCLOSE           ((sal_uLong)0x00000200)
-#define FLOATWIN_POPUPMODE_NOMOUSECLOSE         ((sal_uLong)0x00000400)
-#define FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE     ((sal_uLong)0x00000800)
-#define FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE  ((sal_uLong)0x00001000)
-#define FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE      ((sal_uLong)0x00002000)
-#define FLOATWIN_POPUPMODE_NEWLEVEL             ((sal_uLong)0x00004000)
-#define FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE       ((sal_uLong)0x00008000)
-#define FLOATWIN_POPUPMODE_GRABFOCUS            ((sal_uLong)0x00010000)
-#define FLOATWIN_POPUPMODE_NOHORZPLACEMENT      ((sal_uLong)0x00020000)
+enum class FloatWinPopupFlags
+{
+    NONE                 = 0x000000,
+    AllowTearOff         = 0x000001,
+    AnimationSlide       = 0x000002,
+    NoAutoArrange        = 0x000004,
+    NoAnimation          = 0x000008,
+    Down                 = 0x000010,
+    Up                   = 0x000020,
+    Left                 = 0x000040,
+    Right                = 0x000080,
+    NoFocusClose         = 0x000100,
+    NoKeyClose           = 0x000200,
+    NoMouseClose         = 0x000400,
+    NoMouseRectClose     = 0x000800,
+    AllMouseButtonClose  = 0x001000,
+    NoAppFocusClose      = 0x002000,
+    NewLevel             = 0x004000,
+    NoMouseUpClose       = 0x008000,
+    GrabFocus            = 0x010000,
+    NoHorzPlacement      = 0x020000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<FloatWinPopupFlags> : is_typed_flags<FloatWinPopupFlags, 0x03ffff> {};
+}
 
 #define FLOATWIN_POPUPMODEEND_CANCEL            ((sal_uInt16)0x0001)
 #define FLOATWIN_POPUPMODEEND_TEAROFF           ((sal_uInt16)0x0002)
@@ -78,7 +87,7 @@ private:
     ImplData*       mpImplData;
     Rectangle       maFloatRect;
     ImplSVEvent *   mnPostId;
-    sal_uLong           mnPopupModeFlags;
+    FloatWinPopupFlags   mnPopupModeFlags;
     sal_uInt16          mnTitle;
     sal_uInt16          mnOldTitle;
     bool            mbInPopupMode;
@@ -110,7 +119,7 @@ public:
     SAL_DLLPRIVATE void             ImplSetMouseDown() { mbMouseDown = true; }
     SAL_DLLPRIVATE bool             ImplIsMouseDown() const  { return mbMouseDown; }
     SAL_DLLPRIVATE static Point     ImplCalcPos( vcl::Window* pWindow,
-                                                 const Rectangle& rRect, sal_uLong nFlags,
+                                                 const Rectangle& rRect, FloatWinPopupFlags nFlags,
                                                  sal_uInt16& rArrangeIndex );
     SAL_DLLPRIVATE void             ImplEndPopupMode( sal_uInt16 nFlags = 0, sal_uLong nFocusId = 0 );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
@@ -133,12 +142,12 @@ public:
     void            SetTitleType( sal_uInt16 nTitle );
     sal_uInt16      GetTitleType() const { return mnTitle; }
 
-    void            StartPopupMode( const Rectangle& rRect, sal_uLong nFlags = 0 );
-    void            StartPopupMode( ToolBox* pBox, sal_uLong nFlags = 0  );
+    void            StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags nFlags = FloatWinPopupFlags::NONE );
+    void            StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags = FloatWinPopupFlags::NONE  );
     void            EndPopupMode( sal_uInt16 nFlags = 0 );
     void            AddPopupModeWindow( vcl::Window* pWindow );
-    sal_uLong           GetPopupModeFlags() const { return mnPopupModeFlags; }
-    void            SetPopupModeFlags( sal_uLong nFlags ) { mnPopupModeFlags = nFlags; }
+    FloatWinPopupFlags GetPopupModeFlags() const { return mnPopupModeFlags; }
+    void            SetPopupModeFlags( FloatWinPopupFlags nFlags ) { mnPopupModeFlags = nFlags; }
     bool            IsInPopupMode() const { return mbPopupMode; }
     bool            IsInCleanUp() const { return mbInCleanUp; }
     bool            IsPopupModeCanceled() const { return mbPopupModeCanceled; }
@@ -149,7 +158,7 @@ public:
 
     bool            GrabsFocus() const { return mbGrabFocus; }
 
-    static Point    CalcFloatingPosition( vcl::Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex );
+    static Point    CalcFloatingPosition( vcl::Window* pWindow, const Rectangle& rRect, FloatWinPopupFlags nFlags, sal_uInt16& rArrangeIndex );
 };
 
 #endif // INCLUDED_VCL_FLOATWIN_HXX

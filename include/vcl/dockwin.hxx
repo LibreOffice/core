@@ -143,7 +143,7 @@ public:
     void            Unlock();
     bool            IsLocked() const { return mbLocked;}
 
-    void            StartPopupMode( ToolBox* pParentToolBox, sal_uLong nPopupModeFlags );
+    void            StartPopupMode( ToolBox* pParentToolBox, FloatWinPopupFlags nPopupModeFlags );
     bool            IsInPopupMode() const;
 
     void            TitleButtonClick( sal_uInt16 nButton );
@@ -202,7 +202,7 @@ public:
     bool IsLocked( const vcl::Window *pWin );
 
     void    StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWin );
-    void    StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWin, sal_uLong nPopupModeFlags );
+    void    StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWin, FloatWinPopupFlags nPopupModeFlags );
 
     bool    IsInPopupMode( const vcl::Window *pWin );
     void    EndPopupMode( const vcl::Window *pWin );

@@ -582,7 +582,7 @@ void AnnotationTag::OpenPopup( bool bEdit )
             mpAnnotationWindow->setAnnotation(mxAnnotation);
 
             sal_uInt16 nArrangeIndex = 0;
-            Point aPopupPos( FloatingWindow::CalcFloatingPosition( mpAnnotationWindow.get(), aRect, FLOATWIN_POPUPMODE_RIGHT, nArrangeIndex ) );
+            Point aPopupPos( FloatingWindow::CalcFloatingPosition( mpAnnotationWindow.get(), aRect, FloatWinPopupFlags::Right, nArrangeIndex ) );
             Size aPopupSize( 320, 240 );
 
             mpAnnotationWindow->SetPosSizePixel( aPopupPos, aPopupSize );

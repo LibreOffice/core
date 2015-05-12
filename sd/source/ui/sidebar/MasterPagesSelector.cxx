@@ -229,7 +229,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
                 if (pMenuWindow != NULL)
                     pMenuWindow->SetPopupModeFlags(
-                        pMenuWindow->GetPopupModeFlags() | FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE);
+                        pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
                 pMenu->SetSelectHdl(LINK(this, MasterPagesSelector, OnMenuItemSelected));
 
                 ProcessPopupMenu(*pMenu);

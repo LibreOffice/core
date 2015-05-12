@@ -557,11 +557,11 @@ void ScMenuFloatingWindow::launchSubMenu(bool bSetMenuPos)
     if (!pSubMenu)
         return;
 
-    sal_uInt32 nOldFlags = GetPopupModeFlags();
-    SetPopupModeFlags(nOldFlags | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
+    FloatWinPopupFlags nOldFlags = GetPopupModeFlags();
+    SetPopupModeFlags(nOldFlags | FloatWinPopupFlags::NoAppFocusClose);
     pSubMenu->resizeToFitMenuItems(); // set the size before launching the popup to get it positioned correctly.
     pSubMenu->StartPopupMode(
-        Rectangle(aPos,aSize), (FLOATWIN_POPUPMODE_RIGHT | FLOATWIN_POPUPMODE_GRABFOCUS));
+        Rectangle(aPos,aSize), (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
     pSubMenu->AddPopupModeWindow(this);
     if (bSetMenuPos)
         pSubMenu->setSelectedMenuItem(0, false, false); // select menu item after the popup becomes fully visible.
@@ -809,11 +809,11 @@ void ScMenuFloatingWindow::ensureSubMenuVisible(ScMenuFloatingWindow* pSubMenu)
         Size aSize;
         getMenuItemPosSize(nMenuPos, aPos, aSize);
 
-        sal_uInt32 nOldFlags = GetPopupModeFlags();
-        SetPopupModeFlags(nOldFlags | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
+        FloatWinPopupFlags nOldFlags = GetPopupModeFlags();
+        SetPopupModeFlags(nOldFlags | FloatWinPopupFlags::NoAppFocusClose);
         pSubMenu->resizeToFitMenuItems(); // set the size before launching the popup to get it positioned correctly.
         pSubMenu->StartPopupMode(
-            Rectangle(aPos,aSize), (FLOATWIN_POPUPMODE_RIGHT | FLOATWIN_POPUPMODE_GRABFOCUS));
+            Rectangle(aPos,aSize), (FloatWinPopupFlags::Right | FloatWinPopupFlags::GrabFocus));
         pSubMenu->AddPopupModeWindow(this);
         SetPopupModeFlags(nOldFlags);
     }
@@ -1730,7 +1730,7 @@ void ScCheckListMenuWindow::launch(const Rectangle& rRect)
         aRect.Left() += nDiff;
     }
 
-    StartPopupMode(aRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
+    StartPopupMode(aRect, (FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus));
     cycleFocus(); // Set initial focus to the check list box.
 }
 

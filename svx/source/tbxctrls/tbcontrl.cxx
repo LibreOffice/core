@@ -2634,7 +2634,7 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
     }
 
     pColorWin->StartPopupMode( &GetToolBox(),
-        FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
+        FloatWinPopupFlags::AllowTearOff|FloatWinPopupFlags::NoAppFocusClose );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
     if ( !bSidebarType )
@@ -2778,9 +2778,9 @@ VclPtr<SfxPopupWindow> SvxFrameToolBoxControl::CreatePopupWindow()
                                         GetSlotId(), m_xFrame, &GetToolBox() );
 
     pFrameWin->StartPopupMode( &GetToolBox(),
-                               FLOATWIN_POPUPMODE_GRABFOCUS |
-                               FLOATWIN_POPUPMODE_ALLOWTEAROFF |
-                               FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
+                               FloatWinPopupFlags::GrabFocus |
+                               FloatWinPopupFlags::AllowTearOff |
+                               FloatWinPopupFlags::NoAppFocusClose );
     pFrameWin->StartSelection();
     SetPopupWindow( pFrameWin );
 
@@ -2818,9 +2818,9 @@ VclPtr<SfxPopupWindow> SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
 {
     VclPtr<SvxLineWindow_Impl> pLineWin = VclPtr<SvxLineWindow_Impl>::Create( GetSlotId(), m_xFrame, &GetToolBox() );
     pLineWin->StartPopupMode( &GetToolBox(),
-                              FLOATWIN_POPUPMODE_GRABFOCUS |
-                              FLOATWIN_POPUPMODE_ALLOWTEAROFF |
-                              FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
+                              FloatWinPopupFlags::GrabFocus |
+                              FloatWinPopupFlags::AllowTearOff |
+                              FloatWinPopupFlags::NoAppFocusClose );
     SetPopupWindow( pLineWin );
 
     return pLineWin;

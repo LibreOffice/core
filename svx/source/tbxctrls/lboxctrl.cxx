@@ -178,7 +178,7 @@ void SvxListBoxControl::StateChanged(
 
 IMPL_LINK_NOARG(SvxListBoxControl, PopupModeEndHdl)
 {
-    if( pPopupWin && 0 == pPopupWin->GetPopupModeFlags()  &&
+    if( pPopupWin && FloatWinPopupFlags::NONE == pPopupWin->GetPopupModeFlags()  &&
         pPopupWin->IsUserSelected() )
     {
         sal_uInt16 nCount = pPopupWin->GetListBox().GetSelectEntryCount();
@@ -308,7 +308,7 @@ VclPtr<SfxPopupWindow> SvxUndoRedoControl::CreatePopupWindow()
 
     // move focus in floating window without
     // closing it (GrabFocus() would close it!)
-    pPopupWin->StartPopupMode( &rBox, FLOATWIN_POPUPMODE_GRABFOCUS );
+    pPopupWin->StartPopupMode( &rBox, FloatWinPopupFlags::GrabFocus );
     //pPopupWin->GetListBox().GrabFocus();
 
     return pPopupWin;

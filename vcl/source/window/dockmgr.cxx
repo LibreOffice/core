@@ -368,7 +368,7 @@ void DockingManager::SetFloatingMode( const vcl::Window *pWindow, bool bFloating
         pWrapper->SetFloatingMode( bFloating );
 }
 
-void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWindow, sal_uLong nFlags )
+void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWindow, FloatWinPopupFlags nFlags )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
@@ -377,10 +377,10 @@ void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const vcl::Window 
 
 void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWindow )
 {
-    StartPopupMode( pParentToolBox, pWindow, FLOATWIN_POPUPMODE_ALLOWTEAROFF         |
-                    FLOATWIN_POPUPMODE_NOFOCUSCLOSE         |
-                    FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE  |
-                    FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );
+    StartPopupMode( pParentToolBox, pWindow, FloatWinPopupFlags::AllowTearOff         |
+                    FloatWinPopupFlags::NoFocusClose         |
+                    FloatWinPopupFlags::AllMouseButtonClose  |
+                    FloatWinPopupFlags::NoMouseUpClose );
 }
 
 bool DockingManager::IsInPopupMode( const vcl::Window *pWindow )
@@ -1098,7 +1098,7 @@ void ImplDockingWindowWrapper::ShowTitleButton( sal_uInt16 nButton, bool bVisibl
     }
 }
 
-void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, sal_uLong nFlags )
+void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWinPopupFlags nFlags )
 {
     // do nothing if window is floating
     if( IsFloatingMode() )
@@ -1113,7 +1113,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, sal_uLon
         mpOldBorderWin = NULL;  // no border window found
 
     // the new parent for popup mode
-    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, this, (nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF) != 0 );
+    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, this, bool(nFlags & FloatWinPopupFlags::AllowTearOff) );
 
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
     pWin->SetText( GetWindow()->GetText() );
@@ -1146,7 +1146,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, sal_uLon
     // if the subtoolbar was opened via keyboard make sure that key events
     // will go into subtoolbar
     if( pParentToolBox->IsKeyEvent() )
-        nFlags |= FLOATWIN_POPUPMODE_GRABFOCUS;
+        nFlags |= FloatWinPopupFlags::GrabFocus;
 
     mpFloatWin->StartPopupMode( pParentToolBox, nFlags );
     GetWindow()->Show();

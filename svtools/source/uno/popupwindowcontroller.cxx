@@ -215,10 +215,10 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
             pWin->EnableDocking(true);
             mxImpl->SetPopupWindow(pWin,pToolBox);
             vcl::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin,
-                                                           FLOATWIN_POPUPMODE_GRABFOCUS |
-                                                           FLOATWIN_POPUPMODE_NOFOCUSCLOSE |
-                                                           FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE |
-                                                           FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );
+                                                           FloatWinPopupFlags::GrabFocus |
+                                                           FloatWinPopupFlags::NoFocusClose |
+                                                           FloatWinPopupFlags::AllMouseButtonClose |
+                                                           FloatWinPopupFlags::NoMouseUpClose );
         }
     }
     return Reference< awt::XWindow >();

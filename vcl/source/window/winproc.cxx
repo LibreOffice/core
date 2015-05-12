@@ -76,7 +76,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
         HitTest         nHitTest = HITTEST_OUTSIDE;
         FloatingWindow* pFloat = pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( pChild, rMousePos, nHitTest );
         FloatingWindow* pLastLevelFloat;
-        sal_uLong           nPopupFlags;
+        FloatWinPopupFlags nPopupFlags;
         if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
         {
             if ( bMouseLeave )
@@ -105,7 +105,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                     }
                     else if ( nHitTest == HITTEST_RECT )
                     {
-                        if ( !(pFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE) )
+                        if ( !(pFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoMouseRectClose) )
                             pFloat->ImplSetMouseDown();
                         return true;
                     }
@@ -125,7 +125,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                     {
                         pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
                         nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
-                        if ( !(nPopupFlags & FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE) )
+                        if ( !(nPopupFlags & FloatWinPopupFlags::NoMouseUpClose) )
                         {
                             pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
                             return true;
@@ -139,9 +139,9 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                 {
                     pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
                     nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
-                    if ( nPopupFlags & FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE )
+                    if ( nPopupFlags & FloatWinPopupFlags::AllMouseButtonClose )
                     {
-                        if ( (nPopupFlags & FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE) &&
+                        if ( (nPopupFlags & FloatWinPopupFlags::NoMouseUpClose) &&
                              (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
                             return true;
                         pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
@@ -953,7 +953,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                 if ( pSVData->maWinData.mpFirstFloat )
                 {
                     FloatingWindow* pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
-                    if ( !(pLastLevelFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOKEYCLOSE) )
+                    if ( !(pLastLevelFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoKeyClose) )
                     {
                         sal_uInt16 nEscCode = aKeyCode.GetCode();
 
@@ -976,7 +976,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
         if ( pSVData->maWinData.mpFirstFloat )
         {
             FloatingWindow* pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
-            if ( !(pLastLevelFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOKEYCLOSE) )
+            if ( !(pLastLevelFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoKeyClose) )
             {
                 sal_uInt16 nCode = aKeyCode.GetCode();
 
@@ -1651,7 +1651,7 @@ static void KillOwnPopups( vcl::Window* pWindow )
     vcl::Window *pChild = pSVData->maWinData.mpFirstFloat;
     if ( pChild && pParent->ImplIsWindowOrChild( pChild, true ) )
     {
-        if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) )
+        if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose) )
             pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
     }
 }
@@ -1916,7 +1916,7 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
     // is set, such that we do not show windows during the switch
     if ( pSVData->maWinData.mpFirstFloat )
     {
-        if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) )
+        if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose) )
             pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
     }
 

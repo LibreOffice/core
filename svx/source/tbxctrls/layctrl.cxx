@@ -745,7 +745,7 @@ VclPtr<SfxPopupWindow> SvxTableToolBoxControl::CreatePopupWindow()
     {
         ToolBox& rTbx = GetToolBox();
         VclPtr<TableWindow> pWin = VclPtr<TableWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), rTbx, m_xFrame );
-        pWin->StartPopupMode( &rTbx, FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
+        pWin->StartPopupMode( &rTbx, FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoKeyClose );
         SetPopupWindow( pWin );
         return pWin;
     }
@@ -800,7 +800,7 @@ VclPtr<SfxPopupWindow> SvxColumnsToolBoxControl::CreatePopupWindow()
     {
             pWin = VclPtr<ColumnsWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), GetToolBox(), m_xFrame );
             pWin->StartPopupMode( &GetToolBox(),
-                                  FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOKEYCLOSE );
+                                  FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoKeyClose );
             SetPopupWindow( pWin );
     }
     return pWin;

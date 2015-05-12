@@ -336,7 +336,7 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
             // #99071# do not grab the focus, otherwise it will be restored to the menubar
             // when the frame is reactivated later
             //GrabFocus();
-            pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_NOHORZPLACEMENT, pMenu, bPreSelectFirst );
+            pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FloatWinPopupFlags::Down | FloatWinPopupFlags::NoHorzPlacement, pMenu, bPreSelectFirst );
             // does not have a window, if aborted before or if there are no entries
             if ( pActivePopup->ImplGetFloatingWindow() )
                 pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );

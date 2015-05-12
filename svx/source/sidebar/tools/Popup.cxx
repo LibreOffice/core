@@ -68,10 +68,10 @@ void Popup::Show (ToolBox& rToolBox)
 
         mxContainer->StartPopupMode(
             aRect,
-            FLOATWIN_POPUPMODE_NOFOCUSCLOSE|FLOATWIN_POPUPMODE_DOWN);
+            FloatWinPopupFlags::NoFocusClose|FloatWinPopupFlags::Down);
         mxContainer->SetPopupModeFlags(
             mxContainer->GetPopupModeFlags()
-                | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
+                | FloatWinPopupFlags::NoAppFocusClose);
 
         mxControl->GetFocus();
     }

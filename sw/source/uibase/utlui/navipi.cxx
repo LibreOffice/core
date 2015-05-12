@@ -433,7 +433,7 @@ void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, bool bSetFocus
     Point aT1 = aRect.TopLeft();
     aT1 = pPopup->GetParent()->OutputToScreenPixel(pPopup->GetParent()->AbsoluteScreenToOutputPixel(aContentToolBox->OutputToAbsoluteScreenPixel(aT1)));
     aRect.SetPos(aT1);
-    pPopup->StartPopupMode(aRect, FLOATWIN_POPUPMODE_RIGHT|FLOATWIN_POPUPMODE_ALLOWTEAROFF);
+    pPopup->StartPopupMode(aRect, FloatWinPopupFlags::Right|FloatWinPopupFlags::AllowTearOff);
     SetPopupWindow( pPopup );
     if(bSetFocus)
     {

@@ -282,8 +282,8 @@ IMPL_LINK_TYPED( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
     {
         if ( pActivePopup && ( pActivePopup != pItemData->pSubMenu ) )
         {
-            sal_uLong nOldFlags = GetPopupModeFlags();
-            SetPopupModeFlags( GetPopupModeFlags() | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
+            FloatWinPopupFlags nOldFlags = GetPopupModeFlags();
+            SetPopupModeFlags( GetPopupModeFlags() | FloatWinPopupFlags::NoAppFocusClose );
             KillActivePopup();
             SetPopupModeFlags( nOldFlags );
         }
@@ -321,9 +321,9 @@ IMPL_LINK_TYPED( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
             // were for long in Activate Rescheduled and which should not be
             // displayed now.
             Menu* pTest = pActivePopup;
-            sal_uLong nOldFlags = GetPopupModeFlags();
-            SetPopupModeFlags( GetPopupModeFlags() | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
-            sal_uInt16 nRet = pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FLOATWIN_POPUPMODE_RIGHT, pMenu, pTimer == nullptr );
+            FloatWinPopupFlags nOldFlags = GetPopupModeFlags();
+            SetPopupModeFlags( GetPopupModeFlags() | FloatWinPopupFlags::NoAppFocusClose );
+            sal_uInt16 nRet = pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FloatWinPopupFlags::Right, pMenu, pTimer == nullptr );
             SetPopupModeFlags( nOldFlags );
 
             // nRet != 0, wenn es waerend Activate() abgeschossen wurde...

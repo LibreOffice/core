@@ -1217,7 +1217,7 @@ namespace pcr
             ::Rectangle aRect(aMePos,aSize);
             aSize.Height() = STD_HEIGHT;
             m_pFloatingEdit->SetOutputSizePixel(aSize);
-            m_pFloatingEdit->StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
+            m_pFloatingEdit->StartPopupMode( aRect, FloatWinPopupFlags::Down );
 
             m_pFloatingEdit->Show();
             m_pFloatingEdit->getEdit().GrabFocus();

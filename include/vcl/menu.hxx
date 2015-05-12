@@ -48,6 +48,7 @@ namespace vcl { class Window; }
 class SalMenu;
 class IMenuBarWindow;
 struct SystemMenuData;
+enum class FloatWinPopupFlags;
 
 namespace com {
 namespace sun {
@@ -503,7 +504,7 @@ private:
     SAL_DLLPRIVATE MenuFloatingWindow * ImplGetFloatingWindow() const;
 
 protected:
-    SAL_DLLPRIVATE sal_uInt16                ImplExecute( vcl::Window* pWindow, const Rectangle& rRect, sal_uLong nPopupFlags, Menu* pStaredFrom, bool bPreSelectFirst );
+    SAL_DLLPRIVATE sal_uInt16                ImplExecute( vcl::Window* pWindow, const Rectangle& rRect, FloatWinPopupFlags nPopupFlags, Menu* pStaredFrom, bool bPreSelectFirst );
     SAL_DLLPRIVATE long                  ImplCalcHeight( sal_uInt16 nEntries ) const;
     SAL_DLLPRIVATE sal_uInt16                ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntry = 0, sal_uInt16* pLastVisible = NULL ) const;
 

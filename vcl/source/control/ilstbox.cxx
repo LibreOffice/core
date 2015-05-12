@@ -2973,7 +2973,7 @@ void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, 
             aPos.Y() = nY;
 
         sal_uInt16 nIndex;
-        SetPosPixel( ImplCalcPos( this, Rectangle( aPos, GetParent()->GetSizePixel() ), FLOATWIN_POPUPMODE_DOWN, nIndex ) );
+        SetPosPixel( ImplCalcPos( this, Rectangle( aPos, GetParent()->GetSizePixel() ), FloatWinPopupFlags::Down, nIndex ) );
     }
 
 //  if( !IsReallyVisible() )
@@ -3105,7 +3105,7 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
             pGrandparentOutDev->ReMirror( aRect );
 
         // mouse-button right: close the List-Box-Float-win and don't stop the handling fdo#84795
-        StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE );
+        StartPopupMode( aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::AllMouseButtonClose );
 
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
             mpImplLB->ShowProminentEntry( nPos );

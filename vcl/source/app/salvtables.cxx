@@ -130,7 +130,7 @@ SalMenu::~SalMenu()
 {
 }
 
-bool SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, sal_uLong )
+bool SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, FloatWinPopupFlags )
 {
     return false;
 }

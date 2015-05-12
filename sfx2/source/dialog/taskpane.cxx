@@ -1174,7 +1174,7 @@ namespace sfx2
         FloatingWindow* pMenuWindow = static_cast< FloatingWindow* >( pMenu->GetWindow() );
         if ( pMenuWindow != NULL )
         {
-            pMenuWindow->SetPopupModeFlags ( pMenuWindow->GetPopupModeFlags() | FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );
+            pMenuWindow->SetPopupModeFlags ( pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose );
         }
 
         // Add one entry for every tool panel element to individually make

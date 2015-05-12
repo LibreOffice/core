@@ -1070,7 +1070,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     }
 
     mpFilterFloat->SetOutputSizePixel( aSize );
-    mpFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN|FLOATWIN_POPUPMODE_GRABFOCUS );
+    mpFilterFloat->StartPopupMode( aCellRect, FloatWinPopupFlags::Down|FloatWinPopupFlags::GrabFocus );
 
     mpFilterBox->SetUpdateMode(true);
     mpFilterBox->GrabFocus();
@@ -1222,7 +1222,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
         mpFilterBox->SetUpdateMode(false);
 
         mpFilterFloat->SetOutputSizePixel(aSize);
-        mpFilterFloat->StartPopupMode(aCellRect, FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS);
+        mpFilterFloat->StartPopupMode(aCellRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus);
 
         //  Listbox fuellen
         bool bWait = aStrings.size() > 100;

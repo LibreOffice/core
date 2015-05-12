@@ -2811,28 +2811,28 @@ sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const Rectangle& rRect,
 {
     ENSURE_OR_RETURN( pExecWindow, "PopupMenu::Execute: need a non-NULL window!", 0 );
 
-    sal_uLong nPopupModeFlags = 0;
+    FloatWinPopupFlags nPopupModeFlags = FloatWinPopupFlags::NONE;
     if ( nFlags & POPUPMENU_EXECUTE_DOWN )
-        nPopupModeFlags = FLOATWIN_POPUPMODE_DOWN;
+        nPopupModeFlags = FloatWinPopupFlags::Down;
     else if ( nFlags & POPUPMENU_EXECUTE_UP )
-        nPopupModeFlags = FLOATWIN_POPUPMODE_UP;
+        nPopupModeFlags = FloatWinPopupFlags::Up;
     else if ( nFlags & POPUPMENU_EXECUTE_LEFT )
-        nPopupModeFlags = FLOATWIN_POPUPMODE_LEFT;
+        nPopupModeFlags = FloatWinPopupFlags::Left;
     else if ( nFlags & POPUPMENU_EXECUTE_RIGHT )
-        nPopupModeFlags = FLOATWIN_POPUPMODE_RIGHT;
+        nPopupModeFlags = FloatWinPopupFlags::Right;
     else
-        nPopupModeFlags = FLOATWIN_POPUPMODE_DOWN;
+        nPopupModeFlags = FloatWinPopupFlags::Down;
 
     if (nFlags & POPUPMENU_NOMOUSEUPCLOSE )                      // allow popup menus to stay open on mouse button up
-        nPopupModeFlags |= FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE;    // useful if the menu was opened on mousebutton down (eg toolbox configuration)
+        nPopupModeFlags |= FloatWinPopupFlags::NoMouseUpClose;    // useful if the menu was opened on mousebutton down (eg toolbox configuration)
 
     if (nFlags & POPUPMENU_NOHORZ_PLACEMENT)
-        nPopupModeFlags |= FLOATWIN_POPUPMODE_NOHORZPLACEMENT;
+        nPopupModeFlags |= FloatWinPopupFlags::NoHorzPlacement;
 
     return ImplExecute( pExecWindow, rRect, nPopupModeFlags, 0, false );
 }
 
-sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_uLong nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst )
+sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst )
 {
     if ( !pSFrom && ( PopupMenu::IsInExecute() || !GetItemCount() ) )
         return 0;
@@ -2866,11 +2866,11 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
 
     WinBits nStyle = WB_BORDER;
     if (bRealExecute)
-        nPopupModeFlags |= FLOATWIN_POPUPMODE_NEWLEVEL;
-    nPopupModeFlags |= FLOATWIN_POPUPMODE_NOKEYCLOSE | FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE;
+        nPopupModeFlags |= FloatWinPopupFlags::NewLevel;
+    nPopupModeFlags |= FloatWinPopupFlags::NoKeyClose | FloatWinPopupFlags::AllMouseButtonClose;
 
     // could be useful during debugging.
-    // nPopupModeFlags |= FLOATWIN_POPUPMODE_NOFOCUSCLOSE;
+    // nPopupModeFlags |= FloatWinPopupFlags::NoFocusClose;
 
     ImplDelData aDelData;
     pW->ImplAddDel( &aDelData );
@@ -2952,7 +2952,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
     //mode is to place it somewhere it will fit.  e.g. above, left, right. For
     //some cases, e.g. menubars, it's desirable to limit the options to
     //above/below and force the menu to scroll if it won't fit
-    if (nPopupModeFlags & FLOATWIN_POPUPMODE_NOHORZPLACEMENT)
+    if (nPopupModeFlags & FloatWinPopupFlags::NoHorzPlacement)
     {
         vcl::Window* pRef = pWin;
         if ( pRef->GetParent() )
@@ -2984,13 +2984,13 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
     // #102158# menus must never grab the focus, otherwise
     // they will be closed immediately
     // from now on focus grabbing is only prohibited automatically if
-    // FLOATWIN_POPUPMODE_GRABFOCUS was set (which is done below), because some
+    // FloatWinPopupFlags::GrabFocus was set (which is done below), because some
     // floaters (like floating toolboxes) may grab the focus
     // pWin->GrabFocus();
     if ( GetItemCount() )
     {
         SalMenu* pMenu = ImplGetSalMenu();
-        if( pMenu && bRealExecute && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS ) )
+        if( pMenu && bRealExecute && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FloatWinPopupFlags::GrabFocus ) )
         {
             pWin->StopExecute(0);
             pWin->doShutdown();
@@ -3000,7 +3000,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
         }
         else
         {
-            pWin->StartPopupMode( aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS );
+            pWin->StartPopupMode( aRect, nPopupModeFlags | FloatWinPopupFlags::GrabFocus );
         }
         if( pSFrom )
         {

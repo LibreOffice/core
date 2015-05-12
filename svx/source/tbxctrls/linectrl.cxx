@@ -634,9 +634,9 @@ VclPtr<SfxPopupWindow> SvxLineEndToolBoxControl::CreatePopupWindow()
     SvxLineEndWindow* pLineEndWin =
         VclPtr<SvxLineEndWindow>::Create( GetId(), m_xFrame, &GetToolBox(), SVX_RESSTR( RID_SVXSTR_LINEEND ) );
     pLineEndWin->StartPopupMode( &GetToolBox(),
-                                 FLOATWIN_POPUPMODE_GRABFOCUS |
-                                 FLOATWIN_POPUPMODE_ALLOWTEAROFF |
-                                 FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
+                                 FloatWinPopupFlags::GrabFocus |
+                                 FloatWinPopupFlags::AllowTearOff |
+                                 FloatWinPopupFlags::NoAppFocusClose );
     pLineEndWin->StartSelection();
     SetPopupWindow( pLineEndWin );
     return pLineEndWin;

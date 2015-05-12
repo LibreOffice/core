@@ -2988,7 +2988,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
         if ( pSVData->maWinData.mpFirstFloat )
         {
             static const char* pEnv = getenv( "SAL_FLOATWIN_NOAPPFOCUSCLOSE" );
-            if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) && !(pEnv && *pEnv) )
+            if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose) && !(pEnv && *pEnv) )
                 pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
         }
     }
@@ -3498,9 +3498,9 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
             if ((mpParent != NULL && nStyle_ == 0)
                 && pSVData->maWinData.mpFirstFloat )
             {
-                sal_uLong nMode = pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
+                FloatWinPopupFlags nMode = pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
                 pSVData->maWinData.mpFirstFloat->SetPopupModeFlags(
-                                        nMode & ~(FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE));
+                                        nMode & ~(FloatWinPopupFlags::NoAppFocusClose));
             }
             return nRet;
         }
