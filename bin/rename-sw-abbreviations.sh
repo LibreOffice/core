@@ -37,7 +37,7 @@ for I in "SvxSwAutoFmtFlags/SvxSwAutoFormatFlags" "GetCharFmtName/GetCharFormatN
     "etTxtSize/etTextSize"
 do
     S="${I%/*}"
-    git grep -l "$S" | grep -v '\.mk' | xargs sed -i "s/$I/g"
+    git grep -l "$S" | grep -v -e '\.mk' -e 'rename-sw-abbreviations.sh' | xargs sed -i "s/$I/g"
 done
 
 # vim: set noet sw=4 ts=4:
