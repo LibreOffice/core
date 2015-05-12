@@ -226,7 +226,7 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
             aObjDesc.maDisplayName = URIHelper::removePassword(
                                 rURLObj.GetMainURL( INetURLObject::NO_DECODE ),
                                 INetURLObject::WAS_ENCODED,
-                                   INetURLObject::DECODE_UNAMBIGUOUS );
+                                INetURLObject::DECODE_UNAMBIGUOUS );
         }
 
         PrepareOLE( aObjDesc );
@@ -486,7 +486,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         }
     }
 
-    bool    bOK = false;
+    bool bOK = false;
     if( TRNSFR_OLE == eBufferType )
     {
         //TODO/MBA: testing - is this the "single OLE object" case?!
@@ -518,8 +518,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         {
         case SotClipboardFormatId::LINK:
             if( refDdeLink.Is() )
-                bOK = SetObject( &refDdeLink,
-                                    SWTRANSFER_OBJECTTYPE_DDE, rFlavor );
+                bOK = SetObject( &refDdeLink, SWTRANSFER_OBJECTTYPE_DDE, rFlavor );
             break;
 
         case SotClipboardFormatId::OBJECTDESCRIPTOR:
@@ -957,11 +956,11 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
             if( pWrtShell->GetURLFromButton( sURL, sDesc ) )
             {
                 AddFormat( SotClipboardFormatId::STRING );
-                 AddFormat( SotClipboardFormatId::SOLK );
-                 AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
-                 AddFormat( SotClipboardFormatId::FILECONTENT );
-                 AddFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR );
-                 AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
+                AddFormat( SotClipboardFormatId::SOLK );
+                AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
+                AddFormat( SotClipboardFormatId::FILECONTENT );
+                AddFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR );
+                AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
                 eBufferType = (TransferBufferType)( TRNSFR_INETFLD | eBufferType );
                 nRet = 1;
             }
@@ -1041,8 +1040,7 @@ int SwTransferable::CalculateAndCopy()
     return 1;
 }
 
-int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
-                                    const OUString& rStr )
+int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr )
 {
     if(!pWrtShell)
         return 0;
@@ -1237,7 +1235,8 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         case SotExchangeDest::SWDOC_FREE_AREA_WEB:
             bDelSel = true;
             break;
-        default: break;
+        default:
+            break;
         }
 
         if( bDelSel )
@@ -1868,7 +1867,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             {
                 DataFlavor aDataFlavor;
                 SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
-                   xObjRef.SetGraphic( aGraphic, aDataFlavor.MimeType );
+                xObjRef.SetGraphic( aGraphic, aDataFlavor.MimeType );
             }
             else if ( aObjDesc.mnViewAspect == embed::Aspects::MSOLE_ICON )
             {
@@ -1879,7 +1878,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 MapMode aMapMode( MAP_100TH_MM );
                 aGraphic.SetPrefSize( Size( 2500, 2500 ) );
                 aGraphic.SetPrefMapMode( aMapMode );
-                   xObjRef.SetGraphic( aGraphic, aMimeType );
+                xObjRef.SetGraphic( aGraphic, aMimeType );
             }
 
             //set size. This is a hack because of handing over, size should be
@@ -1887,7 +1886,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             Size aSize;
             if ( aObjDesc.mnViewAspect == embed::Aspects::MSOLE_ICON )
             {
-                   if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
+                if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
                     aSize = aObjDesc.maSize;
                 else
                 {
@@ -3095,11 +3094,11 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
             if( pWrtShell->GetURLFromButton( sURL, sDesc ) )
             {
                 AddFormat( SotClipboardFormatId::STRING );
-                 AddFormat( SotClipboardFormatId::SOLK );
-                 AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
-                 AddFormat( SotClipboardFormatId::FILECONTENT );
-                 AddFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR );
-                 AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
+                AddFormat( SotClipboardFormatId::SOLK );
+                AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
+                AddFormat( SotClipboardFormatId::FILECONTENT );
+                AddFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR );
+                AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
                 eBufferType = (TransferBufferType)( TRNSFR_INETFLD | eBufferType );
             }
         }
@@ -3123,11 +3122,11 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         if( pWrtShell->GetContentAtPos( aPos, aContentAtPos ) )
         {
             AddFormat( SotClipboardFormatId::STRING );
-             AddFormat( SotClipboardFormatId::SOLK );
-             AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
-             AddFormat( SotClipboardFormatId::FILECONTENT );
-             AddFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR );
-             AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
+            AddFormat( SotClipboardFormatId::SOLK );
+            AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
+            AddFormat( SotClipboardFormatId::FILECONTENT );
+            AddFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR );
+            AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
             eBufferType = TRNSFR_INETFLD;
         }
     }
@@ -3256,7 +3255,7 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
     }
     if ( nSelection & nsSelectionType::SEL_DRW) //unselect hovering graphics
     {
-       rShell.ResetSelect(NULL,false);
+        rShell.ResetSelect(NULL,false);
     }
 
     bool bInWrd = false, bEndWrd = false, bSttWrd = false,
@@ -3271,7 +3270,7 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
             bSmart = bInWrd || bEndWrd;
             if( bSmart )
             {
-                 bSttWrd = rShell.IsSttWrd();
+                bSttWrd = rShell.IsSttWrd();
                 if( bSmart && !bSttWrd && (bInWrd || bEndWrd) )
                     rShell.SwEditShell::Insert(' ');
             }
@@ -3557,7 +3556,7 @@ void SwTransferable::CreateSelection( SwWrtShell& rSh,
     SwModule *pMod = SW_MOD();
     SwTransferable* pNew = new SwTransferable( rSh );
 
-     pNew->pCreatorView = _pCreatorView;
+    pNew->pCreatorView = _pCreatorView;
 
     uno::Reference< XTransferable > xRef( pNew );
     pMod->pXSelection = pNew;
