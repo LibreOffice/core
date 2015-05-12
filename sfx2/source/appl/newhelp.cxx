@@ -590,7 +590,7 @@ namespace sfx2 {
 }
 
 #define NEW_ENTRY( url, bool ) \
-    reinterpret_cast<void*>( new IndexEntry_Impl( url, bool ) )
+    new IndexEntry_Impl( url, bool )
 
 #define UNIFY_AND_INSERT_TOKEN( aToken )                                                            \
     it = aInfo.insert( sfx2::KeywordInfo::value_type( aToken, 0 ) ).first;                          \

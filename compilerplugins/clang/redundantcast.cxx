@@ -207,45 +207,59 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
 bool RedundantCast::VisitCXXReinterpretCastExpr(
     CXXReinterpretCastExpr const * expr)
 {
-    if (ignoreLocation(expr)
-        || !expr->getSubExpr()->getType()->isVoidPointerType())
-    {
+    if (ignoreLocation(expr)) {
         return true;
     }
-    auto t = expr->getType()->getAs<PointerType>();
-    if (t == nullptr || !t->getPointeeType()->isObjectType()) {
-        return true;
-    }
-    if (rewriter != nullptr) {
-        auto loc = expr->getLocStart();
-        while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
-            loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
-        }
-        if (compat::isMacroBodyExpansion(compiler, loc)) {
-            auto loc2 = expr->getLocEnd();
-            while (compiler.getSourceManager().isMacroArgExpansion(loc2)) {
-                loc2 = compiler.getSourceManager().getImmediateMacroCallerLoc(
-                    loc2);
-            }
-            if (compat::isMacroBodyExpansion(compiler, loc2)) {
-                //TODO: check loc, loc2 are in same macro body expansion
-                loc = compiler.getSourceManager().getSpellingLoc(loc);
-            }
-        }
-        auto s = compiler.getSourceManager().getCharacterData(loc);
-        auto n = Lexer::MeasureTokenLength(
-            loc, compiler.getSourceManager(), compiler.getLangOpts());
-        std::string tok(s, n);
-        if (tok == "reinterpret_cast" && replaceText(loc, n, "static_cast")) {
+    if (expr->getSubExpr()->getType()->isVoidPointerType()) {
+        auto t = expr->getType()->getAs<PointerType>();
+        if (t == nullptr || !t->getPointeeType()->isObjectType()) {
             return true;
         }
+        if (rewriter != nullptr) {
+            auto loc = expr->getLocStart();
+            while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
+                loc = compiler.getSourceManager().getImmediateMacroCallerLoc(
+                    loc);
+            }
+            if (compat::isMacroBodyExpansion(compiler, loc)) {
+                auto loc2 = expr->getLocEnd();
+                while (compiler.getSourceManager().isMacroArgExpansion(loc2)) {
+                    loc2 = compiler.getSourceManager()
+                        .getImmediateMacroCallerLoc(loc2);
+                }
+                if (compat::isMacroBodyExpansion(compiler, loc2)) {
+                    //TODO: check loc, loc2 are in same macro body expansion
+                    loc = compiler.getSourceManager().getSpellingLoc(loc);
+                }
+            }
+            auto s = compiler.getSourceManager().getCharacterData(loc);
+            auto n = Lexer::MeasureTokenLength(
+                loc, compiler.getSourceManager(), compiler.getLangOpts());
+            std::string tok(s, n);
+            if (tok == "reinterpret_cast" && replaceText(loc, n, "static_cast"))
+            {
+                return true;
+            }
+        }
+        report(
+            DiagnosticsEngine::Warning,
+            "reinterpret_cast from %0 to %1 can be simplified to static_cast",
+            expr->getExprLoc())
+            << expr->getSubExprAsWritten()->getType() << expr->getType()
+            << expr->getSourceRange();
+    } else if (expr->getType()->isVoidPointerType()) {
+        auto t = expr->getSubExpr()->getType()->getAs<PointerType>();
+        if (t == nullptr || !t->getPointeeType()->isObjectType()) {
+            return true;
+        }
+        report(
+            DiagnosticsEngine::Warning,
+            ("reinterpret_cast from %0 to %1 can be simplified to static_cast"
+             " or an implicit conversion"),
+            expr->getExprLoc())
+            << expr->getSubExprAsWritten()->getType() << expr->getType()
+            << expr->getSourceRange();
     }
-    report(
-        DiagnosticsEngine::Warning,
-        "reinterpret_cast from %0 to %1 can be simplified to static_cast",
-        expr->getExprLoc())
-        << expr->getSubExprAsWritten()->getType() << expr->getType()
-        << expr->getSourceRange();
     return true;
 }
 

@@ -242,7 +242,7 @@ extern "C" { static void s_releaseAndRevoke_v(va_list * pParam)
     uno_ExtEnvironment * pEnv  = va_arg(*pParam, uno_ExtEnvironment *);
     uno_Interface      * pUnoI = va_arg(*pParam, uno_Interface *);
 
-    pEnv->revokeInterface(pEnv, reinterpret_cast<void *>(pUnoI));
+    pEnv->revokeInterface(pEnv, pUnoI);
     pUnoI->release(pUnoI);
 }}
 

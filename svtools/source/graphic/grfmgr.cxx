@@ -396,7 +396,7 @@ OString GraphicObject::GetUniqueID() const
 SvStream* GraphicObject::GetSwapStream() const
 {
     if( HasSwapStreamHdl() )
-        return reinterpret_cast<SvStream*>( mpSwapStreamHdl->Call( const_cast<void*>(reinterpret_cast<const void*>(this)) ) );
+        return reinterpret_cast<SvStream*>( mpSwapStreamHdl->Call( const_cast<void*>(static_cast<const void*>(this)) ) );
     else
         return GRFMGR_AUTOSWAPSTREAM_NONE;
 }

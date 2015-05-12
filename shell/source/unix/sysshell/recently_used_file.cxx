@@ -108,7 +108,7 @@ void recently_used_file::truncate(off_t length)
 
 size_t recently_used_file::read(char* buffer, size_t size) const
 {
-    size_t  r = fread(reinterpret_cast<void*>(buffer), sizeof(char), size, file_);
+    size_t  r = fread(buffer, sizeof(char), size, file_);
 
     if ((r < size) && ferror(file_))
         throw "I/O error: read failed";
@@ -119,7 +119,7 @@ size_t recently_used_file::read(char* buffer, size_t size) const
 
 void recently_used_file::write(const char* buffer, size_t size) const
 {
-    if (size != fwrite(reinterpret_cast<const void*>(buffer), sizeof(char), size, file_))
+    if (size != fwrite(buffer, sizeof(char), size, file_))
         throw "I/O error: write failed";
 }
 

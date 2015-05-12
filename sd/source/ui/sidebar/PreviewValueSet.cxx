@@ -55,8 +55,7 @@ void PreviewValueSet::SetRightMouseClickHandler (const Link<>& rLink)
 void PreviewValueSet::MouseButtonDown (const MouseEvent& rEvent)
 {
     if (rEvent.IsRight())
-        maRightMouseClickHandler.Call(reinterpret_cast<void*>(
-            &const_cast<MouseEvent&>(rEvent)));
+        maRightMouseClickHandler.Call(&const_cast<MouseEvent&>(rEvent));
     else
         ValueSet::MouseButtonDown (rEvent);
 

@@ -496,7 +496,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
         for ( TaskEntryList::const_iterator pTask = _rList.begin(); pTask != aEnd; ++pTask, ++pImages )
         {
             SvTreeListEntry* pEntry = m_aCreation->InsertEntry( pTask->sTitle );
-            pEntry->SetUserData( reinterpret_cast< void* >( new TaskEntry( *pTask ) ) );
+            pEntry->SetUserData( new TaskEntry( *pTask ) );
 
             Image aImage = Image( *pImages );
             m_aCreation->SetExpandedEntryBmp(  pEntry, aImage );

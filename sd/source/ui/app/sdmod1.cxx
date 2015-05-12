@@ -927,7 +927,7 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
             const ErrCode nErrorCode (
                 rBytes.ReadAt(
                     nReadPosition,
-                    reinterpret_cast<void*>(pBuffer.get()),
+                    pBuffer.get(),
                     nBufferSize,
                     &nReadByteCount));
 
@@ -951,7 +951,7 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
             // Append the read bytes to the end of the memory stream.
             if (nReadByteCount > 0)
             {
-                mpStream->Write(reinterpret_cast<void*>(pBuffer.get()), nReadByteCount);
+                mpStream->Write(pBuffer.get(), nReadByteCount);
                 nReadPosition += nReadByteCount;
             }
         }

@@ -176,7 +176,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyVal
         DispatchHelper* pHelper = new DispatchHelper;
         pHelper->aArguments = Arguments;
         pHelper->aURL = _URL;
-        Application::PostUserEvent( LINK( this, OInterceptor, OnDispatch ), reinterpret_cast< void* >( pHelper ) );
+        Application::PostUserEvent( LINK( this, OInterceptor, OnDispatch ), pHelper );
         return;
     }
 }
