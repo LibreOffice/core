@@ -2545,7 +2545,7 @@ void Window::Enable( bool bEnable, bool bChild )
         // the tracking mode will be stopped or the capture will be stolen
         // when a window is disabled,
         if ( IsTracking() )
-            EndTracking( ENDTRACK_CANCEL );
+            EndTracking( TrackingEventFlags::Cancel );
         if ( IsMouseCaptured() )
             ReleaseMouse();
         // try to pass focus to the next control
@@ -2634,7 +2634,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
         if ( !bEnable )
         {
             if ( IsTracking() )
-                EndTracking( ENDTRACK_CANCEL );
+                EndTracking( TrackingEventFlags::Cancel );
             if ( IsMouseCaptured() )
                 ReleaseMouse();
         }

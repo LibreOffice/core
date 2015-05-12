@@ -949,7 +949,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
 
             if ( (nOrigCode == KEY_ESCAPE) && !(pSVData->maWinData.mnTrackFlags & STARTTRACK_NOKEYCANCEL) )
             {
-                pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL | ENDTRACK_KEY );
+                pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel | TrackingEventFlags::Key );
                 if ( pSVData->maWinData.mpFirstFloat )
                 {
                     FloatingWindow* pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
@@ -965,7 +965,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
             }
             else if ( nOrigCode == KEY_RETURN )
             {
-                pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_KEY );
+                pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Key );
                 return true;
             }
             else if ( !(pSVData->maWinData.mnTrackFlags & STARTTRACK_KEYINPUT) )
@@ -1909,7 +1909,7 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
     if ( pSVData->maWinData.mpTrackWin )
     {
         if ( pSVData->maWinData.mpTrackWin->ImplGetWindowImpl()->mpFrameWindow == pWindow )
-            pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
+            pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
     }
 
     // here we always terminate the popupmode, also when NOFOCUSCLOSE
@@ -1986,7 +1986,7 @@ void ImplHandleClose( vcl::Window* pWindow )
         pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
 
     if ( pSVData->maWinData.mpTrackWin )
-        pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL | ENDTRACK_KEY );
+        pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel | TrackingEventFlags::Key );
 
     if (bWasPopup)
         return;

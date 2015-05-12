@@ -122,6 +122,23 @@ namespace svt { class PopupWindowControllerImpl; }
 template<class T> class VclPtr;
 
 
+
+enum class TrackingEventFlags
+{
+    NONE           = 0x0000,
+    Cancel         = 0x0001,
+    Key            = 0x0002,
+    Focus          = 0x0004,
+    Repeat         = 0x0100,
+    End            = 0x1000,
+    DontCallHdl    = 0x8000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<TrackingEventFlags> : is_typed_flags<TrackingEventFlags, 0x9107> {};
+}
+
+
 // - WindowTypes -
 
 
@@ -1104,7 +1121,7 @@ public:
     void                                InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags = 0 );
 
     void                                StartTracking( sal_uInt16 nFlags = 0 );
-    void                                EndTracking( sal_uInt16 nFlags = 0 );
+    void                                EndTracking( TrackingEventFlags nFlags = TrackingEventFlags::NONE );
     bool                                IsTracking() const;
 
     void                                StartAutoScroll( sal_uInt16 nFlags );

@@ -1590,7 +1590,7 @@ void PushButton::SetPressed( bool bPressed )
 
 void PushButton::EndSelection()
 {
-    EndTracking( ENDTRACK_CANCEL );
+    EndTracking( TrackingEventFlags::Cancel );
     if ( !IsDisposed() &&
          ImplGetButtonState() & DrawButtonFlags::Pressed )
     {

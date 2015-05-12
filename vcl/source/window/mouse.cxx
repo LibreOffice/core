@@ -353,7 +353,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
         {
             if ( pOldFocusWindow->IsTracking() &&
                  (pSVData->maWinData.mnTrackFlags & STARTTRACK_FOCUSCANCEL) )
-                pOldFocusWindow->EndTracking( ENDTRACK_CANCEL | ENDTRACK_FOCUS );
+                pOldFocusWindow->EndTracking( TrackingEventFlags::Cancel | TrackingEventFlags::Focus );
             NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pOldFocusWindow );
             if ( !ImplCallPreNotify( aNEvt ) )
                 pOldFocusWindow->LoseFocus();
@@ -455,7 +455,7 @@ void Window::CaptureMouse()
     if ( pSVData->maWinData.mpTrackWin.get() != this )
     {
         if ( pSVData->maWinData.mpTrackWin )
-            pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
+            pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
     }
 
     if ( pSVData->maWinData.mpCaptureWin.get() != this )

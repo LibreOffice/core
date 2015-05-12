@@ -2104,7 +2104,7 @@ void ValueSet::EndSelection()
     if ( mbHighlight )
     {
         if ( IsTracking() )
-            EndTracking( ENDTRACK_CANCEL );
+            EndTracking( TrackingEventFlags::Cancel );
 
         ImplHighlightItem( mnSelItemId );
         mbHighlight = false;

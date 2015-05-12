@@ -365,7 +365,7 @@ IMPL_LINK_TYPED( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
                            mpWindowImpl->mpFrameData->mnClickCount, MouseEventModifiers::NONE,
                            mpWindowImpl->mpFrameData->mnMouseCode,
                            mpWindowImpl->mpFrameData->mnMouseCode );
-    TrackingEvent   aTEvt( aMEvt, TRACKING_REPEAT );
+    TrackingEvent   aTEvt( aMEvt, TrackingEventFlags::Repeat );
     Tracking( aTEvt );
 }
 
@@ -376,7 +376,7 @@ void Window::StartTracking( sal_uInt16 nFlags )
     if ( pSVData->maWinData.mpTrackWin.get() != this )
     {
         if ( pSVData->maWinData.mpTrackWin )
-            pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
+            pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
     }
 
     if ( nFlags & (STARTTRACK_SCROLLREPEAT | STARTTRACK_BUTTONREPEAT) )
@@ -396,7 +396,7 @@ void Window::StartTracking( sal_uInt16 nFlags )
     CaptureMouse();
 }
 
-void Window::EndTracking( sal_uInt16 nFlags )
+void Window::EndTracking( TrackingEventFlags nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -418,7 +418,7 @@ void Window::EndTracking( sal_uInt16 nFlags )
         }
 
         // call EndTracking if required
-        if ( !(nFlags & ENDTRACK_DONTCALLHDL) )
+        if ( !(nFlags & TrackingEventFlags::DontCallHdl) )
         {
             Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
             if( ImplIsAntiparallel() )
@@ -432,7 +432,7 @@ void Window::EndTracking( sal_uInt16 nFlags )
                                    mpWindowImpl->mpFrameData->mnClickCount, MouseEventModifiers::NONE,
                                    mpWindowImpl->mpFrameData->mnMouseCode,
                                    mpWindowImpl->mpFrameData->mnMouseCode );
-            TrackingEvent   aTEvt( aMEvt, nFlags | ENDTRACK_END );
+            TrackingEvent   aTEvt( aMEvt, nFlags | TrackingEventFlags::End );
             Tracking( aTEvt );
         }
     }

@@ -338,18 +338,6 @@ inline UserDrawEvent::UserDrawEvent( OutputDevice* pOut,
 }
 
 
-// - Tracking-Types -
-
-
-#define ENDTRACK_CANCEL         ((sal_uInt16)0x0001)
-#define ENDTRACK_KEY            ((sal_uInt16)0x0002)
-#define ENDTRACK_FOCUS          ((sal_uInt16)0x0004)
-#define ENDTRACK_END            ((sal_uInt16)0x1000)
-#define ENDTRACK_DONTCALLHDL    ((sal_uInt16)0x8000)
-
-#define TRACKING_REPEAT         ((sal_uInt16)0x0100)
-
-
 // - TrackingEvent -
 
 
@@ -357,32 +345,32 @@ class VCL_DLLPUBLIC TrackingEvent
 {
 private:
     MouseEvent          maMEvt;
-    sal_uInt16              mnFlags;
+    TrackingEventFlags  mnFlags;
 
 public:
     explicit            TrackingEvent();
     explicit            TrackingEvent( const MouseEvent&,
-                                       sal_uInt16 nTrackFlags = 0 );
+                                       TrackingEventFlags nTrackFlags = TrackingEventFlags::NONE );
 
     const MouseEvent&   GetMouseEvent() const { return maMEvt; }
 
     bool                IsTrackingRepeat() const
-                            { return ((mnFlags & TRACKING_REPEAT) != 0); }
+                            { return bool(mnFlags & TrackingEventFlags::Repeat); }
 
     bool                IsTrackingEnded() const
-                            { return ((mnFlags & ENDTRACK_END) != 0); }
+                            { return bool(mnFlags & TrackingEventFlags::End); }
     bool                IsTrackingCanceled() const
-                            { return ((mnFlags & ENDTRACK_CANCEL) != 0); }
-    sal_uInt16              GetTrackingFlags() const { return mnFlags; }
+                            { return bool(mnFlags & TrackingEventFlags::Cancel); }
+    TrackingEventFlags  GetTrackingFlags() const { return mnFlags; }
 };
 
 inline TrackingEvent::TrackingEvent()
 {
-    mnFlags = 0;
+    mnFlags = TrackingEventFlags::NONE;
 }
 
 inline TrackingEvent::TrackingEvent( const MouseEvent& rMEvt,
-                                     sal_uInt16 nTrackFlags ) :
+                                     TrackingEventFlags nTrackFlags ) :
             maMEvt( rMEvt )
 {
     mnFlags = nTrackFlags;

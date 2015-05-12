@@ -204,7 +204,7 @@ void ScViewFunctionSet::BeginDrag()
 
                 vcl::Window* pWindow = pViewData->GetActiveWin();
                 if ( pWindow->IsTracking() )
-                    pWindow->EndTracking( ENDTRACK_CANCEL );    // abort selecting
+                    pWindow->EndTracking( TrackingEventFlags::Cancel );    // abort selecting
 
                 SC_MOD()->SetDragObject( pTransferObj, NULL );      // for internal D&D
                 pTransferObj->StartDrag( pWindow, nDragActions );

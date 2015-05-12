@@ -777,7 +777,7 @@ bool Dialog::ImplStartExecuteModal()
 
     // stop capturing, in order to have control over the dialog
     if ( pSVData->maWinData.mpTrackWin )
-        pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
+        pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel );
     if ( pSVData->maWinData.mpCaptureWin )
         pSVData->maWinData.mpCaptureWin->ReleaseMouse();
     EnableInput( true, true );
