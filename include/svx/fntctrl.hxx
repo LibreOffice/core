@@ -27,26 +27,25 @@
 
 #include <rtl/ustring.hxx>
 
-// forward ---------------------------------------------------------------
-
 class SfxItemSet;
 class FontPrevWin_Impl;
-
-// class SvxFontPrevWindow -----------------------------------------------
 
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFontPrevWindow : public vcl::Window
 {
     using OutputDevice::SetFont;
 private:
-    FontPrevWin_Impl*   pImpl;
+    std::unique_ptr<FontPrevWin_Impl> pImpl;
+    bool mbResetForeground : 1;
+    bool mbResetBackground : 1;
 
-    SVX_DLLPRIVATE void InitSettings( bool bForeground, bool bBackground );
+    SVX_DLLPRIVATE void ResetSettings(bool bForeground, bool bBackground);
+    SVX_DLLPRIVATE void ApplySettings(vcl::RenderContext& rRenderContext);
     SVX_DLLPRIVATE void Init ();
     SVX_DLLPRIVATE void SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
     SVX_DLLPRIVATE void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
 
 public:
-                        SvxFontPrevWindow( vcl::Window* pParent, const ResId& rId );
+                        SvxFontPrevWindow(vcl::Window* pParent, const ResId& rId);
                         SvxFontPrevWindow(vcl::Window* pParent, WinBits nStyle);
     virtual             ~SvxFontPrevWindow();
     virtual void        dispose() SAL_OVERRIDE;
@@ -68,7 +67,7 @@ public:
     void                UseResourceText( bool bUse = true );
     void                Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
 
-    bool            IsTwoLines() const;
+    bool                IsTwoLines() const;
     void                SetTwoLines(bool bSet);
 
     void                SetBrackets(sal_Unicode cStart, sal_Unicode cEnd);
