@@ -443,6 +443,15 @@ public:
     /// Returns the string representation of the rectangle, format is "x, y, width, height".
     rtl::OString        toString() const;
 
+    /**
+     * Expands the rectangle in all directions by the input value.
+     */
+    inline void expand(long nExpandBy);
+    /**
+     * Contracts the rectangle in all directions by the input value.
+     */
+    inline void contract(long nContractBy);
+
 private:
     long                nLeft;
     long                nTop;
@@ -687,6 +696,22 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
                      (rRect.nRight  == RECT_EMPTY) ? RECT_EMPTY : rRect.nRight - rPt.X(),
                      (rRect.nBottom == RECT_EMPTY) ? RECT_EMPTY : rRect.nBottom - rPt.Y() );
     return aRect;
+}
+
+inline void Rectangle::expand(long nExpandBy)
+{
+    nLeft   -= nExpandBy;
+    nTop    -= nExpandBy;
+    nRight  += nExpandBy;
+    nBottom += nExpandBy;
+}
+
+inline void Rectangle::contract(long nContractBy)
+{
+    nLeft   += nContractBy;
+    nTop    += nContractBy;
+    nRight  -= nContractBy;
+    nBottom -= nContractBy;
 }
 
 template< typename charT, typename traits >
