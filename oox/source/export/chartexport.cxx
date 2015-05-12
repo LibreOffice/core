@@ -161,7 +161,7 @@ template< typename T >
     void lcl_SequenceToVectorAppend( const Sequence< T > & rSource, ::std::vector< T > & rDestination )
 {
     rDestination.reserve( rDestination.size() + rSource.getLength());
-    ::std::copy( rSource.getConstArray(), rSource.getConstArray() + rSource.getLength(),
+    ::std::copy( rSource.begin(), rSource.end(),
                  ::std::back_inserter( rDestination ));
 }
 
@@ -377,7 +377,7 @@ void lcl_fillCategoriesIntoStringVector(
     {
         rOutCategories.clear();
         Sequence< OUString > aTextData( xTextualDataSequence->getTextualData());
-        ::std::copy( aTextData.getConstArray(), aTextData.getConstArray() + aTextData.getLength(),
+        ::std::copy( aTextData.begin(), aTextData.end(),
                      ::std::back_inserter( rOutCategories ));
     }
     else
@@ -399,7 +399,7 @@ void lcl_fillCategoriesIntoStringVector(
     if( xNumSeq.is())
     {
         Sequence< double > aValues( xNumSeq->getNumericalData());
-        ::std::copy( aValues.getConstArray(), aValues.getConstArray() + aValues.getLength(),
+        ::std::copy( aValues.begin(), aValues.end(),
                      ::std::back_inserter( aResult ));
     }
     else if( xSeq.is())
