@@ -1660,9 +1660,10 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     // update the list of hidden tool items first
     pToolBar->UpdateCustomMenu();
 
-    ::PopupMenu *pMenu = pToolBar->GetMenu();
+    ::PopupMenu *pToolbarMenu = pToolBar->GetMenu();
     // remove all entries before inserting new ones
     ImplClearPopupMenu( pToolBar );
+
     // No config menu entries if command ".uno:ConfigureDialog" is not enabled
     Reference< XDispatch > xDisp;
     com::sun::star::util::URL aURL;
@@ -1685,7 +1686,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     if ( m_pToolBar->IsCustomize() )
     {
         sal_uInt16    nPos( 0 );
-        ::PopupMenu*  pItemMenu( aPopupMenu.GetPopupMenu( 1 ));
+        ::PopupMenu*  pVisibleButtonSubMenu( aPopupMenu.GetPopupMenu( 1 ));
 
         bool    bIsFloating( false );
 
@@ -1721,16 +1722,16 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
             {
                 sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
                 OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
-                pItemMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MenuItemBits::CHECKABLE );
-                pItemMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
-                pItemMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
-                pItemMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos,
+                pVisibleButtonSubMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MenuItemBits::CHECKABLE );
+                pVisibleButtonSubMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
+                pVisibleButtonSubMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
+                pVisibleButtonSubMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos,
                                          GetImageFromURL( m_xFrame, aCommandURL, false )
                                        );
             }
             else
             {
-                pItemMenu->InsertSeparator();
+                pVisibleButtonSubMenu->InsertSeparator();
             }
         }
     }
@@ -1742,15 +1743,15 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     }
 
     // copy all menu items to the toolbar menu
-    if( pMenu->GetItemCount() )
-        pMenu->InsertSeparator();
+    if( pToolbarMenu->GetItemCount() )
+        pToolbarMenu->InsertSeparator();
 
     sal_uInt16 i;
     for( i=0; i< aPopupMenu.GetItemCount(); i++)
     {
         sal_uInt16 nId = aPopupMenu.GetItemId( i );
         if ( MenuItemAllowed( nId ))
-            pMenu->CopyItem( aPopupMenu, i, MENU_APPEND );
+            pToolbarMenu->CopyItem( aPopupMenu, i, MENU_APPEND );
     }
 
     // set submenu to toolbar menu
@@ -1762,13 +1763,16 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
         for( i=0; i< aPopupMenu.GetPopupMenu( 1 )->GetItemCount(); i++)
             pItemMenu->CopyItem( *aPopupMenu.GetPopupMenu( 1 ), i, MENU_APPEND );
 
-        pMenu->SetPopupMenu( 1, pItemMenu );
+        pToolbarMenu->SetPopupMenu( 1, pItemMenu );
     }
 
-    if ( bHideDisabledEntries )
-        pMenu->RemoveDisabledEntries();
+    // Add toolbar name at top
+    pToolbarMenu->InsertItem( MENUITEM_TOOLBAR_NAME_PLACEHOLDER, pToolBar->GetText(), MenuItemBits::NOSELECT | MenuItemBits::BOLD, OString(), 0 );
 
-    return pMenu;
+    if ( bHideDisabledEntries )
+        pToolbarMenu->RemoveDisabledEntries();
+
+    return pToolbarMenu;
 }
 
 IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
