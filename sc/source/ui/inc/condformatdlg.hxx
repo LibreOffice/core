@@ -110,7 +110,7 @@ private:
     VclPtr<ScCondFormatList> mpCondFormList;
     sal_Int32 maKey;
 
-    sal_Bool mbManaged;
+    bool mbManaged;
     ScAddress maPos;
     ScViewData* mpViewData;
 
@@ -127,7 +127,7 @@ public:
     SC_DLLPUBLIC ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pWindow,
                                  ScViewData* pViewData, const ScConditionalFormat* pFormat,
                                  const ScRangeList& rRange, const ScAddress& rPos,
-                                 condformat::dialog::ScCondFormatDialogType eType, sal_Bool bManaged);
+                                 condformat::dialog::ScCondFormatDialogType eType, bool bManaged);
     virtual ~ScCondFormatDlg();
     virtual void dispose() SAL_OVERRIDE;
 

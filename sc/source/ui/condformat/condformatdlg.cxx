@@ -421,7 +421,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     vcl::Window* pParent, ScViewData* pViewData,
     const ScConditionalFormat* pFormat, const ScRangeList& rRange,
     const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType,
-    sal_Bool bManaged)
+    bool bManaged)
         : ScAnyRefDlg(pB, pCW, pParent, "ConditionalFormatDialog",
                         "modules/scalc/ui/conditionalformatdialog.ui")
     , mbManaged(bManaged)
