@@ -817,4 +817,44 @@ bool UnitsImpl::areUnitsCompatible(const OUString& rsUnit1, const OUString& rsUn
         && aUnit1.areConvertibleTo(aUnit2);
 }
 
+RangeUnits UnitsImpl::getUnitsForRange(const ScRangeList& rRangeList, ScDocument* pDoc) {
+    std::set< OUString > aUnits;
+
+    for (size_t i = 0; i < rRangeList.size(); i++) {
+        ScCellIterator aIt(pDoc, *rRangeList[i]);
+
+        if (!aIt.first())
+            continue;
+
+        do {
+            const ScAddress& aPos = aIt.GetPos();
+            UtUnit aUnit = getUnitForCell(aPos, pDoc);
+
+            // We ignore header cells (and comments too)
+            if (aUnit.isValid()) {
+                // Units retrieved directly must always have an input string
+                assert(aUnit.getInputString());
+                aUnits.insert(*aUnit.getInputString());
+            }
+        } while (aIt.next());
+    }
+
+    bool bCompatible = true;
+
+    if (aUnits.size() > 1) {
+        OUString sFirstUnit = *aUnits.cbegin();
+
+        // start iterating from the second item (++aUnits.cbegin())
+        for (auto aIt = ++aUnits.cbegin(); aIt != aUnits.cend(); aIt++) {
+            if (!areUnitsCompatible(sFirstUnit, *aIt)) {
+                bCompatible = false;
+                break;
+            }
+        }
+    }
+
+    std::vector< OUString > aUnitsList(aUnits.begin(), aUnits.end());
+    return { aUnitsList, bCompatible };
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
