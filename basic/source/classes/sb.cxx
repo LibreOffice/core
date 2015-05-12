@@ -24,6 +24,7 @@
 #include <tools/rcid.h>
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
+#include <tools/solarmutex.hxx>
 #include <basic/sbx.hxx>
 #include <tools/rc.hxx>
 #include <vcl/svapp.hxx>
@@ -109,10 +110,22 @@ DocBasicItem::DocBasicItem( StarBASIC& rDocBasic ) :
 
 DocBasicItem::~DocBasicItem()
 {
-    SolarMutexGuard g;
+    // tdf#90969 HACK: don't use SolarMutexGuard - there is a horrible global
+    // map GaDocBasicItems holding instances, and these get deleted from exit
+    // handlers, when the SolarMutex is already dead
+    tools::SolarMutex::Acquire();
 
-    stopListening();
-    mxClassModules.Clear(); // release with SolarMutex locked
+    try
+    {
+        stopListening();
+        mxClassModules.Clear(); // release with SolarMutex locked
+    }
+    catch (...)
+    {
+        assert(false);
+    }
+
+    tools::SolarMutex::Release();
 }
 
 void DocBasicItem::clearDependingVarsOnDelete( StarBASIC& rDeletedBasic )
