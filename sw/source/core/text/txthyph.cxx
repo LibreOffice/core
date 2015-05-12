@@ -296,8 +296,8 @@ bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
     else
     {
         // second case: no alternative spelling
-        SwHyphPortion aHyphPor;
-        aHyphPor.SetLen( 1 );
+        pHyphPor = new SwHyphPortion;
+        pHyphPor->SetLen( 1 );
 
         static const void* pLastMagicNo = 0;
         static sal_uInt16 aMiniCacheH = 0, aMiniCacheW = 0;
@@ -306,15 +306,14 @@ bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         rInf.GetFont()->GetMagic( pTmpMagic, nFntIdx, rInf.GetFont()->GetActual() );
         if( !pLastMagicNo || pLastMagicNo != pTmpMagic ) {
             pLastMagicNo = pTmpMagic;
-            (SwPosSize&)aHyphPor = aHyphPor.GetTxtSize( rInf );
-            aMiniCacheH = aHyphPor.Height(), aMiniCacheW = aHyphPor.Width();
+            (SwPosSize&)(*pHyphPor) = pHyphPor->GetTxtSize( rInf );
+            aMiniCacheH = pHyphPor->Height();
+            aMiniCacheW = pHyphPor->Width();
         } else {
-            aHyphPor.Height( aMiniCacheH ), aHyphPor.Width( aMiniCacheW );
+            pHyphPor->Height( aMiniCacheH );
+            pHyphPor->Width( aMiniCacheW );
         }
-        aHyphPor.SetLen( 0 );
-        pHyphPor = new SwHyphPortion( aHyphPor );
-
-        pHyphPor->SetWhichPor( POR_HYPH );
+        pHyphPor->SetLen( 0 );
 
         // values required for this
         nPorEnd = xHyphWord->getHyphenPos() + 1 + rGuess.BreakStart()
