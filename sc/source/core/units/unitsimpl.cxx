@@ -801,4 +801,15 @@ bool UnitsImpl::convertCellUnits(const ScRange& rRange,
     return true;
 }
 
+bool UnitsImpl::areUnitsCompatible(const OUString& rsUnit1, const OUString& rsUnit2) {
+    // TODO: in future we should have some sort of map< OUString, shared_ptr<set< OUString > >
+    // or similar to cache compatible units, as we may have a large number of such queries.
+
+    UtUnit aUnit1, aUnit2;
+
+    return UtUnit::createUnit(rsUnit1, aUnit1, mpUnitSystem)
+        && UtUnit::createUnit(rsUnit2, aUnit2, mpUnitSystem)
+        && aUnit1.areConvertibleTo(aUnit2);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

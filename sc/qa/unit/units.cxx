@@ -48,6 +48,7 @@ public:
 
     void testUnitFromHeaderExtraction();
 
+    void testUnitsCompatible();
     void testCellConversion();
     void testRangeConversion();
 
@@ -60,6 +61,7 @@ public:
     CPPUNIT_TEST(testUnitValueStringSplitting);
     CPPUNIT_TEST(testUnitFromHeaderExtraction);
 
+    CPPUNIT_TEST(testUnitsCompatible);
     CPPUNIT_TEST(testCellConversion);
     CPPUNIT_TEST(testRangeConversion);
 
@@ -469,6 +471,17 @@ void UnitsTest::testUnitFromHeaderExtraction() {
     CPPUNIT_ASSERT(aHeader.unit == aTestUnit);
     CPPUNIT_ASSERT(aHeader.unitString == "(t/h)");
     CPPUNIT_ASSERT_EQUAL(aHeader.unitStringPosition, 8);
+}
+
+void UnitsTest::testUnitsCompatible() {
+    // This test is primarily to ensure that our glue works correctly, it's
+    // assumed that UdUnits is able to correctly parse the units / determine
+    // their compatibility.
+    CPPUNIT_ASSERT(mpUnitsImpl->areUnitsCompatible("cm", "m"));
+    CPPUNIT_ASSERT(mpUnitsImpl->areUnitsCompatible("ft", "m")); // Sorry!
+
+    CPPUNIT_ASSERT(!mpUnitsImpl->areUnitsCompatible("m", "kg"));
+    CPPUNIT_ASSERT(!mpUnitsImpl->areUnitsCompatible("s", "J"));
 }
 
 void UnitsTest::testCellConversion() {
