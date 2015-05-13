@@ -123,6 +123,8 @@ XclExpExtDataBar::XclExpExtDataBar( const XclExpRoot& rRoot, const ScDataBarForm
 
     meAxisPosition = rFormatData.meAxisPosition;
     mbGradient = rFormatData.mbGradient;
+    mnMinLength = rFormatData.mnMinLength;
+    mnMaxLength = rFormatData.mnMaxLength;
 }
 
 namespace {
@@ -147,8 +149,8 @@ void XclExpExtDataBar::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElementNS( XML_x14, XML_dataBar,
-                                XML_minLength, OString::number(0).getStr(),
-                                XML_maxLength, OString::number(100).getStr(),
+                                XML_minLength, OString::number(mnMinLength).getStr(),
+                                XML_maxLength, OString::number(mnMaxLength).getStr(),
                                 XML_axisPosition, getAxisPosition(meAxisPosition),
                                 XML_gradient, XclXmlUtils::ToPsz(mbGradient),
                                 FSEND );

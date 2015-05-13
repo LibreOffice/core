@@ -78,6 +78,8 @@ public:
 private:
     databar::ScAxisPosition meAxisPosition;
     bool mbGradient;
+    double mnMinLength;
+    double mnMaxLength;
 
     std::unique_ptr<XclExpExtCfvo> mpLowerLimit;
     std::unique_ptr<XclExpExtCfvo> mpUpperLimit;
