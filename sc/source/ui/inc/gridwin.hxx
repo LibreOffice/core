@@ -293,8 +293,8 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
 
 protected:
-    virtual void    PrePaint() SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    PrePaint(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
 

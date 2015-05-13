@@ -715,8 +715,9 @@ public:
     virtual void                        MouseButtonUp( const MouseEvent& rMEvt );
     virtual void                        KeyInput( const KeyEvent& rKEvt );
     virtual void                        KeyUp( const KeyEvent& rKEvt );
-    virtual void                        PrePaint();
+    virtual void                        PrePaint(vcl::RenderContext& rRenderContext);
     virtual void                        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    virtual void                        PostPaint(vcl::RenderContext& rRenderContext);
     virtual void                        Erase() SAL_OVERRIDE;
     virtual void                        Erase( const Rectangle& rRect ) SAL_OVERRIDE { ::OutputDevice::Erase( rRect ); }
 

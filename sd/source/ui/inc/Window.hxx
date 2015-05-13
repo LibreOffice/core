@@ -171,7 +171,7 @@ protected:
     bool mbUseDropScroll;
 
     virtual void Resize() SAL_OVERRIDE;
-    virtual void PrePaint() SAL_OVERRIDE;
+    virtual void PrePaint(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;

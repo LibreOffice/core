@@ -93,12 +93,12 @@ void ChartWindow::clear()
     this->ReleaseMouse();
 }
 
-void ChartWindow::PrePaint()
+void ChartWindow::PrePaint(vcl::RenderContext& /*rRenderContext*/)
 {
     // forward VCLs PrePaint window event to DrawingLayer
-    if( m_pWindowController )
+    if (m_pWindowController)
     {
-        m_pWindowController->PrePaint();
+       m_pWindowController->PrePaint();
     }
 }
 

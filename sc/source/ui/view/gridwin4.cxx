@@ -283,7 +283,7 @@ void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
     UpdateHeaderOverlay();      // uses aInvertRect
 }
 
-void ScGridWindow::PrePaint()
+void ScGridWindow::PrePaint(vcl::RenderContext& /*rRenderContext*/)
 {
     // forward PrePaint to DrawingLayer
     ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
@@ -292,7 +292,7 @@ void ScGridWindow::PrePaint()
     {
         SdrView* pDrawView = pTabViewShell->GetSdrView();
 
-        if(pDrawView)
+        if (pDrawView)
         {
             pDrawView->PrePaint();
         }

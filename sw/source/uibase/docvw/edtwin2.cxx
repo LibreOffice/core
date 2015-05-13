@@ -434,7 +434,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         Window::RequestHelp( rEvt );
 }
 
-void SwEditWin::PrePaint()
+void SwEditWin::PrePaint(vcl::RenderContext& /*rRenderContext*/)
 {
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
 

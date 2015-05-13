@@ -207,7 +207,7 @@ void Window::Resize()
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
-void Window::PrePaint()
+void Window::PrePaint(vcl::RenderContext& /*rRenderContext*/)
 {
     if ( mpViewShell )
         mpViewShell->PrePaint();
