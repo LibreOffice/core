@@ -65,6 +65,7 @@ odk_idl_PREFIX := $(SRCDIR)/udkapi/ $(SRCDIR)/offapi/
 # otherwise spurious references to it will appear in the output
 odk_idl_DOXY_INPUT := $(SRCDIR)/odk/docs/idl/main.dox \
 	$(addsuffix com,$(odk_idl_PREFIX)) \
+	$(addsuffix org,$(odk_idl_PREFIX)) \
 	$(SRCDIR)/odk/docs/idl/generated_idl_chapter_refs.idl
 odk_idl_DOXY_WORKDIR := $(call gb_CustomTarget_get_workdir,odk/docs/idl)/ref
 
