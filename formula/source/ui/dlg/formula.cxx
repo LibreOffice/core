@@ -1749,7 +1749,13 @@ FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     SetText(m_pImpl->aTitle1);
 }
 
-FormulaDlg::~FormulaDlg() {}
+FormulaDlg::~FormulaDlg() {disposeOnce();}
+
+void FormulaDlg::dispose()
+{
+    m_pImpl.reset();
+    SfxModelessDialog::dispose();
+}
 
 void FormulaDlg::Update(const OUString& _sExp)
 {
@@ -1823,7 +1829,8 @@ void FormulaDlg::SetFocusWin(vcl::Window *pWin,const OString& nUniqueId)
 
 bool FormulaDlg::PreNotify( NotifyEvent& rNEvt )
 {
-    m_pImpl->PreNotify( rNEvt );
+    if (m_pImpl)
+        m_pImpl->PreNotify( rNEvt );
     return SfxModelessDialog::PreNotify(rNEvt);
 }
 
