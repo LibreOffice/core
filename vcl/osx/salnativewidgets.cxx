@@ -1319,9 +1319,10 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             break;
         case CTRL_FRAME:
             {
-                DrawFrameFlags nStyle = static_cast<DrawFrameFlags>(aValue.getNumericVal());
+                DrawFrameStyle nStyle = static_cast<DrawFrameStyle>(aValue.getNumericVal() & 0x000f);
+                DrawFrameFlags nFlags = static_cast<DrawFrameFlags>(aValue.getNumericVal() & 0xfff0);
                 if(  ( nPart == PART_BORDER ) &&
-                    !( nStyle & (DrawFrameFlags::Menu | DrawFrameFlags::WindowBorder | DrawFrameFlags::BorderWindowBorder) ) )
+                    !( nFlags & (DrawFrameFlags::Menu | DrawFrameFlags::WindowBorder | DrawFrameFlags::BorderWindowBorder) ) )
                 {
                     Rectangle aRect(aCtrlBoundRect);
                     if( nStyle & DrawFrameStyle::DoubleIn )
