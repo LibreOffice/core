@@ -638,19 +638,12 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     Rectangle    aButtonRect;
     gint        nArrowWidth;
     gint        nButtonWidth;
-    gint        nFocusWidth;
-    gint        nFocusPad;
     GtkBorder   padding;
 
-    // Grab some button style attributes
-    gtk_style_context_get_style( mpButtonStyle,
-                                 "focus-line-width", &nFocusWidth,
-                                 "focus-padding", &nFocusPad,
-                                 NULL );
     gtk_style_context_get_padding( mpButtonStyle, GTK_STATE_FLAG_NORMAL, &padding);
 
     nArrowWidth = ARROW_SIZE;
-    nButtonWidth = nArrowWidth + padding.left + padding.right + (2 * (nFocusWidth+nFocusPad));
+    nButtonWidth = nArrowWidth + padding.left + padding.right;
     if( nPart == PART_BUTTON_DOWN )
     {
         aButtonRect.SetSize( Size( nButtonWidth, aAreaRect.GetHeight() ) );
@@ -659,10 +652,10 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     }
     else if( nPart == PART_SUB_EDIT )
     {
-        gint adjust_left = padding.left + nFocusWidth + nFocusPad;
-        gint adjust_top = padding.top + nFocusWidth + nFocusPad;
-        gint adjust_right = padding.right + nFocusWidth + nFocusPad;
-        gint adjust_bottom = padding.bottom + nFocusWidth + nFocusPad;
+        gint adjust_left = padding.left;
+        gint adjust_top = padding.top;
+        gint adjust_right = padding.right;
+        gint adjust_bottom = padding.bottom;
 
         aButtonRect.SetSize( Size( aAreaRect.GetWidth() - nButtonWidth - (adjust_left + adjust_right),
                                    aAreaRect.GetHeight() - (adjust_top + adjust_bottom)) );
