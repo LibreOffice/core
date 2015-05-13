@@ -41,16 +41,19 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::text;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::style;
-using namespace com::sun::star::view;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
+using namespace css::uno;
+using namespace css::frame;
+using namespace css::text;
+using namespace css::beans;
+using namespace css::style;
+using namespace css::view;
+using namespace css::lang;
+using namespace css::container;
 
-SFX_IMPL_CHILDWINDOW( SvxRubyChildWindow, SID_RUBY_DIALOG );
+SFX_IMPL_CHILDWINDOW(SvxRubyChildWindow, SID_RUBY_DIALOG);
+
+namespace
+{
 
 static const sal_Char cRubyBaseText[] = "RubyBaseText";
 static const sal_Char cRubyText[] = "RubyText";
@@ -61,19 +64,20 @@ static const sal_Char cDisplayName[] = "DisplayName";
 static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
 static const sal_Char cRubies[] = "Rubies";
 
-SvxRubyChildWindow::SvxRubyChildWindow( vcl::Window* _pParent, sal_uInt16 nId,
-    SfxBindings* pBindings, SfxChildWinInfo* pInfo) :
-    SfxChildWindow(_pParent, nId)
+} // end anonymous namespace
+
+SvxRubyChildWindow::SvxRubyChildWindow(vcl::Window* _pParent, sal_uInt16 nId,SfxBindings* pBindings, SfxChildWinInfo* pInfo)
+    : SfxChildWindow(_pParent, nId)
 {
     VclPtr<SvxRubyDialog> pDlg = VclPtr<SvxRubyDialog>::Create(pBindings, this, _pParent);
     pWindow = pDlg;
 
-    if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
+    if (pInfo->nFlags & SfxChildWindowFlags::ZOOMIN)
         pDlg->RollUp();
 
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
-    pDlg->Initialize( pInfo );
+    pDlg->Initialize(pInfo);
 }
 
 SfxChildWinInfo SvxRubyChildWindow::GetInfo() const
@@ -81,51 +85,59 @@ SfxChildWinInfo SvxRubyChildWindow::GetInfo() const
     return SfxChildWindow::GetInfo();
 }
 
-class SvxRubyData_Impl : public cppu::WeakImplHelper1
-                                <  ::com::sun::star::view::XSelectionChangeListener >
+class SvxRubyData_Impl : public cppu::WeakImplHelper1<css::view::XSelectionChangeListener>
 {
-    Reference<XModel>               xModel;
-    Reference<XRubySelection>       xSelection;
-    Sequence<PropertyValues>        aRubyValues;
-    Reference<XController>          xController;
-    bool                            bHasSelectionChanged;
-    public:
-        SvxRubyData_Impl();
-        virtual ~SvxRubyData_Impl();
+    Reference<XModel> xModel;
+    Reference<XRubySelection> xSelection;
+    Sequence<PropertyValues> aRubyValues;
+    Reference<XController> xController;
+    bool bHasSelectionChanged;
 
-    void    SetController(Reference<XController> xCtrl);
-    Reference<XModel>               GetModel()
-                                    {
-                                        if(!xController.is())
-                                            xModel = 0;
-                                        else
-                                            xModel = xController->getModel();
-                                        return xModel;
-                                    }
-    bool                            HasSelectionChanged() const{return bHasSelectionChanged;}
-    Reference<XRubySelection>       GetRubySelection()
-                                    {
-                                        xSelection = Reference<XRubySelection>(xController, UNO_QUERY);
-                                        return xSelection;
-                                    }
-    void                            UpdateRubyValues()
-                                    {
-                                        if(!xSelection.is())
-                                            aRubyValues.realloc(0);
-                                        else
-                                            aRubyValues = xSelection->getRubyList(false);
-                                        bHasSelectionChanged = false;
-                                    }
-    Sequence<PropertyValues>&       GetRubyValues() {return aRubyValues;}
-    void                            AssertOneEntry();
+public:
+    SvxRubyData_Impl();
+    virtual ~SvxRubyData_Impl();
 
-    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    void SetController(Reference<XController> xCtrl);
+    Reference<XModel> GetModel()
+    {
+        if (!xController.is())
+            xModel = 0;
+        else
+            xModel = xController->getModel();
+        return xModel;
+    }
+    bool HasSelectionChanged() const
+    {
+        return bHasSelectionChanged;
+    }
+    Reference<XRubySelection> GetRubySelection()
+    {
+        xSelection = Reference<XRubySelection>(xController, UNO_QUERY);
+        return xSelection;
+    }
+    void UpdateRubyValues()
+    {
+        if (!xSelection.is())
+            aRubyValues.realloc(0);
+        else
+            aRubyValues = xSelection->getRubyList(false);
+        bHasSelectionChanged = false;
+    }
+    Sequence<PropertyValues>& GetRubyValues()
+    {
+        return aRubyValues;
+    }
+    void AssertOneEntry();
+
+    virtual void SAL_CALL selectionChanged(const css::lang::EventObject& aEvent)
+                            throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source)
+                            throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
-SvxRubyData_Impl::SvxRubyData_Impl() :
-    bHasSelectionChanged(false)
+SvxRubyData_Impl::SvxRubyData_Impl()
+    : bHasSelectionChanged(false)
 {
 }
 
@@ -133,20 +145,20 @@ SvxRubyData_Impl::~SvxRubyData_Impl()
 {
 }
 
-void    SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
+void SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
 {
-    if(xCtrl.get() != xController.get())
+    if (xCtrl.get() != xController.get())
     {
         try
         {
             Reference<XSelectionSupplier> xSelSupp(xController, UNO_QUERY);
-            if(xSelSupp.is())
+            if (xSelSupp.is())
                 xSelSupp->removeSelectionChangeListener(this);
 
             bHasSelectionChanged = true;
             xController = xCtrl;
             xSelSupp = Reference<XSelectionSupplier>(xController, UNO_QUERY);
-            if(xSelSupp.is())
+            if (xSelSupp.is())
                 xSelSupp->addSelectionChangeListener(this);
         }
         catch (const Exception&)
@@ -155,17 +167,17 @@ void    SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
     }
 }
 
-void SvxRubyData_Impl::selectionChanged( const EventObject& ) throw (RuntimeException, std::exception)
+void SvxRubyData_Impl::selectionChanged(const EventObject& ) throw (RuntimeException, std::exception)
 {
     bHasSelectionChanged = true;
 }
 
-void SvxRubyData_Impl::disposing( const EventObject&) throw (RuntimeException, std::exception)
+void SvxRubyData_Impl::disposing(const EventObject&) throw (RuntimeException, std::exception)
 {
     try
     {
         Reference<XSelectionSupplier> xSelSupp(xController, UNO_QUERY);
-        if(xSelSupp.is())
+        if (xSelSupp.is())
             xSelSupp->removeSelectionChangeListener(this);
     }
     catch (const Exception&)
@@ -174,10 +186,10 @@ void SvxRubyData_Impl::disposing( const EventObject&) throw (RuntimeException, s
     xController = 0;
 }
 
-void  SvxRubyData_Impl::AssertOneEntry()
+void SvxRubyData_Impl::AssertOneEntry()
 {
     //create one entry
-    if(!aRubyValues.getLength())
+    if (!aRubyValues.getLength())
     {
         aRubyValues.realloc(1);
         Sequence<PropertyValue>& rValues = aRubyValues.getArray()[0];
@@ -191,10 +203,8 @@ void  SvxRubyData_Impl::AssertOneEntry()
     }
 }
 
-SvxRubyDialog::SvxRubyDialog(SfxBindings *pBind, SfxChildWindow *pCW,
-                                    vcl::Window* _pParent)
-    : SfxModelessDialog(pBind, pCW, _pParent, "AsianPhoneticGuideDialog",
-        "svx/ui/asianphoneticguidedialog.ui")
+SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, vcl::Window* _pParent)
+    : SfxModelessDialog(pBind, pCW, _pParent, "AsianPhoneticGuideDialog", "svx/ui/asianphoneticguidedialog.ui")
     , nLastPos(0)
     , nCurrentEdit(0)
     , bModified(false)
@@ -237,17 +247,17 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings *pBind, SfxChildWindow *pCW,
     m_pCharStyleLB->SetSelectHdl(LINK(this, SvxRubyDialog, CharStyleHdl_Impl));
 
     Link<> aScrLk(LINK(this, SvxRubyDialog, ScrollHdl_Impl));
-    m_pScrollSB->SetScrollHdl( aScrLk );
-    m_pScrollSB->SetEndScrollHdl( aScrLk );
+    m_pScrollSB->SetScrollHdl(aScrLk);
+    m_pScrollSB->SetEndScrollHdl(aScrLk);
 
     Link<> aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
     Link<> aScrollLk(LINK(this, SvxRubyDialog, EditScrollHdl_Impl));
     Link<> aJumpLk(LINK(this, SvxRubyDialog, EditJumpHdl_Impl));
-    for(sal_uInt16 i = 0; i < 8; i++)
+    for (sal_uInt16 i = 0; i < 8; i++)
     {
         aEditArr[i]->SetModifyHdl(aEditLk);
         aEditArr[i]->SetJumpHdl(aJumpLk);
-        if(!i || 7 == i)
+        if (!i || 7 == i)
             aEditArr[i]->SetScrollHdl(aScrollLk);
     }
 
@@ -282,7 +292,7 @@ void SvxRubyDialog::dispose()
     m_pRight3ED.clear();
     m_pLeft4ED.clear();
     m_pRight4ED.clear();
-    for (int i=0; i<7; i++)
+    for (int i = 0; i < 7; i++)
         aEditArr[i].clear();
     m_pScrolledWindow.clear();
     m_pScrollSB.clear();
@@ -299,7 +309,7 @@ void SvxRubyDialog::dispose()
 
 void SvxRubyDialog::ClearCharStyleList()
 {
-    for(sal_uInt16 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
+    for (sal_uInt16 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
     {
         void* pData = m_pCharStyleLB->GetEntryData(i);
         delete static_cast<OUString*>(pData);
@@ -307,7 +317,7 @@ void SvxRubyDialog::ClearCharStyleList()
     m_pCharStyleLB->Clear();
 }
 
-bool    SvxRubyDialog::Close()
+bool SvxRubyDialog::Close()
 {
     pBindings->GetDispatcher()->Execute( SID_RUBY_DIALOG,
                               SfxCallMode::ASYNCHRON |
@@ -327,19 +337,19 @@ void SvxRubyDialog::Activate()
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
     Reference< XController > xCtrl = pCurFrm->GetFrame().GetController();
     pImpl->SetController(xCtrl);
-    if(pImpl->HasSelectionChanged())
+    if (pImpl->HasSelectionChanged())
     {
 
         Reference< XRubySelection > xRubySel = pImpl->GetRubySelection();
         pImpl->UpdateRubyValues();
         EnableControls(xRubySel.is());
-        if(xRubySel.is())
+        if (xRubySel.is())
         {
             Reference< XModel > xModel = pImpl->GetModel();
             const OUString sCharStyleSelect = m_pCharStyleLB->GetSelectEntry();
             ClearCharStyleList();
             Reference<XStyleFamiliesSupplier> xSupplier(xModel, UNO_QUERY);
-            if(xSupplier.is())
+            if (xSupplier.is())
             {
                 try
                 {
@@ -348,32 +358,32 @@ void SvxRubyDialog::Activate()
                     Reference<XNameContainer> xChar;
                     aChar >>= xChar;
                     Reference<XIndexAccess> xCharIdx(xChar, UNO_QUERY);
-                    if(xCharIdx.is())
+                    if (xCharIdx.is())
                     {
                         OUString sUIName(cDisplayName);
-                        for(sal_Int32 nStyle = 0; nStyle < xCharIdx->getCount(); nStyle++)
+                        for (sal_Int32 nStyle = 0; nStyle < xCharIdx->getCount(); nStyle++)
                         {
                             Any aStyle = xCharIdx->getByIndex(nStyle);
                             Reference<XStyle> xStyle;
                             aStyle >>= xStyle;
                             Reference<XPropertySet> xPrSet(xStyle, UNO_QUERY);
                             OUString sName, sCoreName;
-                            if(xPrSet.is())
+                            if (xPrSet.is())
                             {
                                 Reference<XPropertySetInfo> xInfo = xPrSet->getPropertySetInfo();
-                                if(xInfo->hasPropertyByName(sUIName))
+                                if (xInfo->hasPropertyByName(sUIName))
                                 {
                                     Any aName = xPrSet->getPropertyValue(sUIName);
                                     aName >>= sName;
                                 }
                             }
-                            if(xStyle.is())
+                            if (xStyle.is())
                             {
                                 sCoreName = xStyle->getName();
-                                if(sName.isEmpty())
+                                if (sName.isEmpty())
                                     sName = sCoreName;
                             }
-                            if(!sName.isEmpty())
+                            if (!sName.isEmpty())
                             {
                                 sal_uInt16 nPos = m_pCharStyleLB->InsertEntry(sName);
                                 m_pCharStyleLB->SetEntryData( nPos, new OUString(sCoreName) );
@@ -397,7 +407,7 @@ void SvxRubyDialog::Activate()
     }
 }
 
-void    SvxRubyDialog::Deactivate()
+void SvxRubyDialog::Deactivate()
 {
     SfxModelessDialog::Deactivate();
 }
@@ -407,20 +417,22 @@ void SvxRubyDialog::SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
     OUString sLeft, sRight;
     const Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
     bool bEnable = aRubyValues.getLength() > nPos;
-    if(bEnable)
+    if (bEnable)
     {
         const Sequence<PropertyValue> aProps = aRubyValues.getConstArray()[nPos];
         const PropertyValue* pProps = aProps.getConstArray();
-        for(sal_Int32 nProp = 0; nProp < aProps.getLength(); nProp++)
+        for (sal_Int32 nProp = 0; nProp < aProps.getLength(); nProp++)
         {
-            if ( pProps[nProp].Name == cRubyBaseText )
+            if (pProps[nProp].Name == cRubyBaseText)
                 pProps[nProp].Value >>= sLeft;
-            else if ( pProps[nProp].Name == cRubyText )
+            else if (pProps[nProp].Name == cRubyText)
                 pProps[nProp].Value >>= sRight;
         }
     }
-    else if(!nPos)
+    else if (!nPos)
+    {
         bEnable = true;
+    }
     rLeft.Enable(bEnable);
     rRight.Enable(bEnable);
     rLeft.SetText(sLeft);
@@ -432,22 +444,21 @@ void SvxRubyDialog::SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
 void SvxRubyDialog::GetRubyText()
 {
     long nTempLastPos = GetLastPos();
-    for(int i = 0; i < 8; i+=2)
+    for (int i = 0; i < 8; i+=2)
     {
-        if(aEditArr[i]->IsEnabled() &&
-           (aEditArr[i]->IsValueChangedFromSaved() ||
-            aEditArr[i + 1]->IsValueChangedFromSaved()))
+        if (aEditArr[i]->IsEnabled() &&
+            (aEditArr[i]->IsValueChangedFromSaved() || aEditArr[i + 1]->IsValueChangedFromSaved()))
         {
             Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
             DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index" );
             SetModified(true);
-            Sequence<PropertyValue> &rProps = aRubyValues.getArray()[i / 2 + nTempLastPos];
+            Sequence<PropertyValue>& rProps = aRubyValues.getArray()[i / 2 + nTempLastPos];
             PropertyValue* pProps = rProps.getArray();
-            for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
+            for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
             {
-                if ( pProps[nProp].Name == cRubyBaseText )
+                if (pProps[nProp].Name == cRubyBaseText)
                     pProps[nProp].Value <<= OUString(aEditArr[i]->GetText());
-                else if ( pProps[nProp].Name == cRubyText )
+                else if (pProps[nProp].Name == cRubyText)
                     pProps[nProp].Value <<= OUString(aEditArr[i + 1]->GetText());
             }
         }
@@ -468,59 +479,59 @@ void SvxRubyDialog::Update()
     sal_Int16 nPosition = -1;
     OUString sCharStyleName, sTmp;
     bool bCharStyleEqual = true;
-    for(sal_Int32 nRuby = 0; nRuby < nLen; nRuby++)
+    for (sal_Int32 nRuby = 0; nRuby < nLen; nRuby++)
     {
         const Sequence<PropertyValue> &rProps = aRubyValues.getConstArray()[nRuby];
         const PropertyValue* pProps = rProps.getConstArray();
-        for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
+        for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
-            if(nAdjust > -2 && pProps[nProp].Name == cRubyAdjust )
+            if (nAdjust > -2 && pProps[nProp].Name == cRubyAdjust)
             {
                 sal_Int16 nTmp = sal_Int16();
                 pProps[nProp].Value >>= nTmp;
-                if(!nRuby)
+                if (!nRuby)
                     nAdjust = nTmp;
                 else if(nAdjust != nTmp)
                     nAdjust = -2;
             }
-            if(nPosition > -2 && pProps[nProp].Name == cRubyIsAbove )
+            if (nPosition > -2 && pProps[nProp].Name == cRubyIsAbove)
             {
                 bool bTmp = *static_cast<sal_Bool const *>(pProps[nProp].Value.getValue());
-                if(!nRuby)
+                if (!nRuby)
                     nPosition = bTmp ? 0 : 1;
-                else if( (!nPosition && !bTmp) || (nPosition == 1 && bTmp)  )
+                else if ((!nPosition && !bTmp) || (nPosition == 1 && bTmp))
                     nPosition = -2;
             }
-            if(bCharStyleEqual && pProps[nProp].Name == cRubyCharStyleName )
+            if (bCharStyleEqual && pProps[nProp].Name == cRubyCharStyleName)
             {
                 pProps[nProp].Value >>= sTmp;
-                if(!nRuby)
+                if (!nRuby)
                     sCharStyleName = sTmp;
-                else if(sCharStyleName != sTmp)
+                else if (sCharStyleName != sTmp)
                     bCharStyleEqual = false;
             }
         }
     }
-    if(!nLen)
+    if (!nLen)
     {
         //enable selection if the ruby list is empty
         nAdjust = 0;
         nPosition = 0;
     }
-    if(nAdjust > -1)
+    if (nAdjust > -1)
         m_pAdjustLB->SelectEntryPos(nAdjust);
     else
         m_pAdjustLB->SetNoSelection();
-    if(nPosition > -1)
+    if (nPosition > -1)
         m_pPositionLB->SelectEntryPos(nPosition ? 1 : 0);
-    if(!nLen || (bCharStyleEqual && sCharStyleName.isEmpty()))
+    if (!nLen || (bCharStyleEqual && sCharStyleName.isEmpty()))
         sCharStyleName = cRubies;
-    if(!sCharStyleName.isEmpty())
+    if (!sCharStyleName.isEmpty())
     {
-        for(sal_uInt16 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
+        for (sal_uInt16 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
         {
             const OUString* pCoreName = static_cast<const OUString*>(m_pCharStyleLB->GetEntryData(i));
-            if(pCoreName && sCharStyleName == *pCoreName)
+            if (pCoreName && sCharStyleName == *pCoreName)
             {
                 m_pCharStyleLB->SelectEntryPos(i);
                 break;
@@ -533,7 +544,7 @@ void SvxRubyDialog::Update()
     ScrollHdl_Impl(m_pScrollSB);
 }
 
-void    SvxRubyDialog::GetCurrentText(OUString& rBase, OUString& rRuby)
+void SvxRubyDialog::GetCurrentText(OUString& rBase, OUString& rRuby)
 {
     rBase = aEditArr[nCurrentEdit * 2]->GetText();
     rRuby = aEditArr[nCurrentEdit * 2 + 1]->GetText();
@@ -542,7 +553,7 @@ void    SvxRubyDialog::GetCurrentText(OUString& rBase, OUString& rRuby)
 IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
 {
     long nPos = pScroll->GetThumbPos();
-    if(GetLastPos() != nPos)
+    if (GetLastPos() != nPos)
     {
         GetRubyText();
     }
@@ -557,8 +568,8 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
 
 IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl)
 {
-    const Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
-    if(!aRubyValues.getLength())
+    const Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
+    if (!aRubyValues.getLength())
     {
         AssertOneEntry();
         PositionHdl_Impl(m_pPositionLB);
@@ -569,8 +580,8 @@ IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl)
     //reset all edit fields - SaveValue is called
     ScrollHdl_Impl(m_pScrollSB);
 
-    Reference<XRubySelection>  xSelection = pImpl->GetRubySelection();
-    if(IsModified() && xSelection.is())
+    Reference<XRubySelection> xSelection = pImpl->GetRubySelection();
+    if (IsModified() && xSelection.is())
     {
         try
         {
@@ -592,13 +603,12 @@ IMPL_LINK_NOARG(SvxRubyDialog, CloseHdl_Impl)
 
 IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl)
 {
-    SfxPoolItem* pState = 0;
-    SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
-    if(eState <= SfxItemState::SET || !pState || !static_cast<SfxBoolItem*>(pState)->GetValue())
+    SfxPoolItem* pState = nullptr;
+    SfxItemState eState = pBindings->QueryState(SID_STYLE_DESIGNER, pState);
+    if (eState <= SfxItemState::SET || !pState || !static_cast<SfxBoolItem*>(pState)->GetValue())
     {
-        pBindings->GetDispatcher()->Execute( SID_STYLE_DESIGNER,
-                              SfxCallMode::ASYNCHRON |
-                              SfxCallMode::RECORD);
+        pBindings->GetDispatcher()->Execute(SID_STYLE_DESIGNER,
+                                            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
     }
     delete pState;
     return 0;
@@ -609,13 +619,13 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
     AssertOneEntry();
     sal_Int16 nAdjust = pBox->GetSelectEntryPos();
     Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
-    for(sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
+    for (sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
     {
         Sequence<PropertyValue> &rProps = aRubyValues.getArray()[nRuby];
         PropertyValue* pProps = rProps.getArray();
-        for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
+        for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
-            if ( pProps[nProp].Name == cRubyAdjust )
+            if (pProps[nProp].Name == cRubyAdjust)
                 pProps[nProp].Value <<= nAdjust;
         }
         SetModified(true);
@@ -630,13 +640,13 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
     sal_Bool bAbove = !pBox->GetSelectEntryPos();
     const Type& rType = cppu::UnoType<bool>::get();
     Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
-    for(sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
+    for (sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
     {
         Sequence<PropertyValue> &rProps = aRubyValues.getArray()[nRuby];
         PropertyValue* pProps = rProps.getArray();
-        for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
+        for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
-            if ( pProps[nProp].Name == cRubyIsAbove )
+            if (pProps[nProp].Name == cRubyIsAbove)
                 pProps[nProp].Value.setValue(&bAbove, rType);
         }
         SetModified(true);
@@ -649,16 +659,16 @@ IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl)
 {
     AssertOneEntry();
     OUString sStyleName;
-    if(LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectEntryPos())
+    if (LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectEntryPos())
         sStyleName = *static_cast<OUString*>(m_pCharStyleLB->GetSelectEntryData());
     Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
-    for(sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
+    for (sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
     {
         Sequence<PropertyValue> &rProps = aRubyValues.getArray()[nRuby];
         PropertyValue* pProps = rProps.getArray();
-        for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
+        for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
-            if ( pProps[nProp].Name == cRubyCharStyleName )
+            if (pProps[nProp].Name == cRubyCharStyleName)
             {
                 pProps[nProp].Value <<= sStyleName;
             }
@@ -670,9 +680,9 @@ IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl)
 
 IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)
 {
-    for(sal_uInt16 i = 0; i < 8; i++)
+    for (sal_uInt16 i = 0; i < 8; i++)
     {
-        if(pEdit == aEditArr[i])
+        if (pEdit == aEditArr[i])
         {
             nCurrentEdit = i / 2;
             break;
@@ -685,12 +695,12 @@ IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)
 IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
 {
     long nRet = 0;
-    if(m_pScrollSB->IsEnabled())
+    if (m_pScrollSB->IsEnabled())
     {
         //scroll forward
-        if(*pParam > 0 && (aEditArr[7]->HasFocus() || aEditArr[6]->HasFocus() ))
+        if (*pParam > 0 && (aEditArr[7]->HasFocus() || aEditArr[6]->HasFocus() ))
         {
-            if(m_pScrollSB->GetRangeMax() > m_pScrollSB->GetThumbPos())
+            if (m_pScrollSB->GetRangeMax() > m_pScrollSB->GetThumbPos())
             {
                 m_pScrollSB->SetThumbPos(m_pScrollSB->GetThumbPos() + 1);
                 aEditArr[6]->GrabFocus();
@@ -698,13 +708,13 @@ IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
             }
         }
         //scroll backward
-        else if(m_pScrollSB->GetThumbPos() && (aEditArr[0]->HasFocus()||aEditArr[1]->HasFocus()) )
+        else if (m_pScrollSB->GetThumbPos() && (aEditArr[0]->HasFocus()||aEditArr[1]->HasFocus()) )
         {
             m_pScrollSB->SetThumbPos(m_pScrollSB->GetThumbPos() - 1);
             aEditArr[1]->GrabFocus();
             nRet = 1;
         }
-        if(nRet)
+        if (nRet)
             ScrollHdl_Impl(m_pScrollSB);
     }
     return nRet;
@@ -713,23 +723,23 @@ IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
 IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32*, pParam)
 {
     sal_uInt16 nIndex = USHRT_MAX;
-    for(sal_uInt16 i = 0; i < 8; i++)
+    for (sal_uInt16 i = 0; i < 8; i++)
     {
         if(aEditArr[i]->HasFocus())
             nIndex = i;
     }
-    if(nIndex < 8)
+    if (nIndex < 8)
     {
-        if(*pParam > 0)
+        if (*pParam > 0)
         {
-            if(nIndex < 6)
+            if (nIndex < 6)
                 aEditArr[nIndex + 2]->GrabFocus();
             else if( EditScrollHdl_Impl(pParam))
                 aEditArr[nIndex]->GrabFocus();
         }
         else
         {
-            if(nIndex > 1)
+            if (nIndex > 1)
                 aEditArr[nIndex - 2]->GrabFocus();
             else if( EditScrollHdl_Impl(pParam))
                 aEditArr[nIndex]->GrabFocus();
@@ -743,36 +753,32 @@ void SvxRubyDialog::AssertOneEntry()
     pImpl->AssertOneEntry();
 }
 
-
-
 void SvxRubyDialog::UpdateColors()
 {
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    svtools::ColorConfig        aColorConfig;
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    svtools::ColorConfig aColorConfig;
 
-    vcl::Font               aFnt( m_pPreviewWin->GetFont() );
+    vcl::Font aFont(m_pPreviewWin->GetFont());
 
-    Color                   aNewTextCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-    Color                   aNewFillCol( rStyleSettings.GetWindowColor() );
+    Color aNewTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
+    Color aNewFillColor(rStyleSettings.GetWindowColor());
 
-    if( aNewFillCol != aFnt.GetFillColor() || aNewTextCol != aFnt.GetColor() )
+    if (aNewFillColor != aFont.GetFillColor() || aNewTextColor != aFont.GetColor())
     {
-        aFnt.SetFillColor( aNewFillCol );
-        aFnt.SetColor( aNewTextCol );
-        m_pPreviewWin->SetFont( aFnt );
-
-        m_pPreviewWin->Invalidate();
+        aFont.SetFillColor(aNewFillColor);
+        aFont.SetColor(aNewTextColor);
+        m_pPreviewWin->SetFont(aFont);
     }
 }
-
-
 
 void SvxRubyDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxModelessDialog::DataChanged( rDCEvt );
 
-    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
+    if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
+    {
         UpdateColors();
+    }
 }
 
 void SvxRubyDialog::EnableControls(bool bEnable)
@@ -785,8 +791,7 @@ RubyPreview::RubyPreview(vcl::Window *pParent)
     : Window(pParent, WB_BORDER)
     , m_pParentDlg(NULL)
 {
-    SetMapMode(MAP_TWIP);
-    SetBorderStyle( WindowBorderStyle::MONO );
+    SetBorderStyle(WindowBorderStyle::MONO);
 }
 
 RubyPreview::~RubyPreview()
@@ -802,34 +807,38 @@ void RubyPreview::dispose()
 
 VCL_BUILDER_FACTORY(RubyPreview)
 
-void RubyPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /* rRect */ )
+void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    Size aWinSize = GetOutputSize();
+    rRenderContext.Push(PushFlags::MAPMODE);
 
-    vcl::Font aSaveFont = GetFont();
+    rRenderContext.SetMapMode(MAP_TWIP);
+
+    Size aWinSize = rRenderContext.GetOutputSize();
+
+    vcl::Font aSaveFont = rRenderContext.GetFont();
     aSaveFont.SetHeight(aWinSize.Height() / 4);
-    SetFont(aSaveFont);
+    rRenderContext.SetFont(aSaveFont);
 
     Rectangle aRect(Point(0, 0), aWinSize);
-    SetLineColor();
-    SetFillColor( aSaveFont.GetFillColor() );
-    DrawRect(aRect);
+    rRenderContext.SetLineColor();
+    rRenderContext.SetFillColor(aSaveFont.GetFillColor());
+    rRenderContext.DrawRect(aRect);
 
     OUString sBaseText, sRubyText;
     m_pParentDlg->GetCurrentText(sBaseText, sRubyText);
 
-    long nTextHeight = GetTextHeight();
-    long nBaseWidth = GetTextWidth(sBaseText);
+    long nTextHeight = rRenderContext.GetTextHeight();
+    long nBaseWidth = rRenderContext.GetTextWidth(sBaseText);
 
     vcl::Font aRubyFont(aSaveFont);
     aRubyFont.SetHeight(aRubyFont.GetHeight() * 70 / 100);
-    SetFont(aRubyFont);
-    long nRubyWidth = GetTextWidth(sRubyText);
-    SetFont(aSaveFont);
+    rRenderContext.SetFont(aRubyFont);
+    long nRubyWidth = rRenderContext.GetTextWidth(sRubyText);
+    rRenderContext.SetFont(aSaveFont);
 
     sal_uInt16 nAdjust = m_pParentDlg->m_pAdjustLB->GetSelectEntryPos();
     //use center if no adjustment is available
-    if(nAdjust > 4)
+    if (nAdjust > 4)
         nAdjust = 1;
 
     //which part is stretched ?
@@ -844,46 +853,47 @@ void RubyPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle
 
     //use above also if no selection is set
     bool bAbove = m_pParentDlg->m_pPositionLB->GetSelectEntryPos() != 1;
-    if(!bAbove)
+    if (!bAbove)
     {
         long nTmp = nYRuby;
         nYRuby = nYBase;
         nYBase = nTmp;
     }
-    long nYOutput, nOutTextWidth;
+
+    long nYOutput;
+    long nOutTextWidth;
     OUString sOutputText;
 
-
-    if(bRubyStretch)
+    if (bRubyStretch)
     {
-        DrawText( Point( nLeftStart , nYBase),  sBaseText );
+        rRenderContext.DrawText(Point(nLeftStart , nYBase),  sBaseText);
         nYOutput = nYRuby;
         sOutputText = sRubyText;
         nOutTextWidth = nRubyWidth;
-        SetFont(aRubyFont);
+        rRenderContext.SetFont(aRubyFont);
     }
     else
     {
-        SetFont(aRubyFont);
-        DrawText( Point( nLeftStart , nYRuby),  sRubyText );
+        rRenderContext.SetFont(aRubyFont);
+        rRenderContext.DrawText(Point(nLeftStart , nYRuby),  sRubyText);
         nYOutput = nYBase;
         sOutputText = sBaseText;
         nOutTextWidth = nBaseWidth;
-        SetFont(aSaveFont);
+        rRenderContext.SetFont(aSaveFont);
     }
 
-    switch(nAdjust)
+    switch (nAdjust)
     {
         case RubyAdjust_LEFT:
-            DrawText( Point( nLeftStart , nYOutput),  sOutputText );
+            rRenderContext.DrawText(Point(nLeftStart , nYOutput),  sOutputText);
         break;
         case RubyAdjust_RIGHT:
-            DrawText( Point( nRightEnd - nOutTextWidth, nYOutput),  sOutputText );
+            rRenderContext.DrawText(Point(nRightEnd - nOutTextWidth, nYOutput), sOutputText);
         break;
         case RubyAdjust_INDENT_BLOCK:
         {
             long nCharWidth = GetTextWidth(OUString("X"));
-            if(nOutTextWidth < (nRightEnd - nLeftStart - nCharWidth))
+            if (nOutTextWidth < (nRightEnd - nLeftStart - nCharWidth))
             {
                 nCharWidth /= 2;
                 nLeftStart += nCharWidth;
@@ -892,25 +902,28 @@ void RubyPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle
         }
         // no break!
         case RubyAdjust_BLOCK:
-        if(sOutputText.getLength() > 1)
         {
-            sal_Int32 nCount = sOutputText.getLength();
-            long nSpace = ((nRightEnd - nLeftStart) - GetTextWidth(sOutputText)) / (nCount - 1);
-            for(sal_Int32 i = 0; i < nCount; i++)
+            if (sOutputText.getLength() > 1)
             {
-                OUString sChar(sOutputText[i]);
-                DrawText( Point( nLeftStart , nYOutput),  sChar);
-                long nCharWidth = GetTextWidth(sChar);
-                nLeftStart += nCharWidth + nSpace;
+                sal_Int32 nCount = sOutputText.getLength();
+                long nSpace = ((nRightEnd - nLeftStart) - GetTextWidth(sOutputText)) / (nCount - 1);
+                for (sal_Int32 i = 0; i < nCount; i++)
+                {
+                    OUString sChar(sOutputText[i]);
+                    rRenderContext.DrawText(Point(nLeftStart , nYOutput),  sChar);
+                    long nCharWidth = GetTextWidth(sChar);
+                    nLeftStart += nCharWidth + nSpace;
+                }
+                break;
             }
-            break;
         }
         //no break;
         case RubyAdjust_CENTER:
-            DrawText( Point( nCenter - nOutTextWidth / 2 , nYOutput),  sOutputText );
+            rRenderContext.DrawText(Point(nCenter - nOutTextWidth / 2 , nYOutput),  sOutputText);
         break;
     }
-    SetFont(aSaveFont);
+    rRenderContext.SetFont(aSaveFont);
+    rRenderContext.Pop();
 }
 
 Size RubyPreview::GetOptimalSize() const
@@ -924,28 +937,28 @@ void RubyEdit::GetFocus()
     Edit::GetFocus();
 }
 
-bool RubyEdit::PreNotify( NotifyEvent& rNEvt )
+bool RubyEdit::PreNotify(NotifyEvent& rNEvt)
 {
     bool nHandled = false;
-    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rKeyCode = pKEvt->GetKeyCode();
         sal_uInt16 nMod = rKeyCode.GetModifier();
         sal_uInt16 nCode = rKeyCode.GetCode();
-        if( nCode == KEY_TAB && (!nMod || KEY_SHIFT == nMod))
+        if (nCode == KEY_TAB && (!nMod || KEY_SHIFT == nMod))
         {
             sal_Int32 nParam = KEY_SHIFT == nMod ? -1 : 1;
             if(aScrollHdl.IsSet() && aScrollHdl.Call(&nParam))
                 nHandled = true;
         }
-        else if(KEY_UP == nCode || KEY_DOWN == nCode)
+        else if (KEY_UP == nCode || KEY_DOWN == nCode)
         {
             sal_Int32 nParam = KEY_UP == nCode ? -1 : 1;
             aJumpHdl.Call(&nParam);
         }
     }
-    if(!nHandled)
+    if (!nHandled)
         nHandled = Edit::PreNotify(rNEvt);
     return nHandled;
 }
