@@ -135,6 +135,7 @@ private:
     VclEventListeners   maChildEventListeners;
 
     OUString            aTitleText;         // PopupMenu text
+    sal_uInt16          nTitleHeight;
 
     ImplSVEvent *       nEventId;
     sal_uInt16          mnHighlightedItemPos; // for native menus: keeps track of the highlighted item
@@ -158,7 +159,7 @@ protected:
     SAL_DLLPRIVATE Menu*            ImplGetStartMenu();
     SAL_DLLPRIVATE Menu*            ImplFindSelectMenu();
     SAL_DLLPRIVATE Menu*            ImplFindMenu( sal_uInt16 nId );
-    SAL_DLLPRIVATE Size             ImplCalcSize( const vcl::Window* pWin );
+    SAL_DLLPRIVATE Size             ImplCalcSize( vcl::Window* pWin );
     SAL_DLLPRIVATE bool             ImplIsVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE bool             ImplIsSelectable( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16           ImplGetVisibleItemCount() const;
@@ -166,6 +167,7 @@ protected:
     SAL_DLLPRIVATE sal_uInt16           ImplGetPrevVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16           ImplGetNextVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE void             ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = 0, bool bHighlighted = false, bool bLayout = false, bool bRollover = false ) const;
+    SAL_DLLPRIVATE void             ImplPaintMenuTitle( vcl::Window* pWin, const Rectangle& rRect ) const;
     SAL_DLLPRIVATE void             ImplSelect();
     SAL_DLLPRIVATE void             ImplCallHighlight( sal_uInt16 nHighlightItem );
     SAL_DLLPRIVATE void             ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos );
@@ -330,6 +332,8 @@ public:
     const Link<>&       GetSelectHdl() const                    { return aSelectHdl; }
 
     bool                HasLogo() const { return pLogo != nullptr; }
+
+    sal_uInt16          GetTitleHeight() { return nTitleHeight; }
 
     void                AddEventListener( const Link<>& rEventListener );
     void                RemoveEventListener( const Link<>& rEventListener );

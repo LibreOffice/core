@@ -126,6 +126,7 @@ long MenuFloatingWindow::ImplGetStartY() const
     {
         for ( sal_uInt16 n = 0; n < nFirstEntry; n++ )
             nY += pMenu->GetItemList()->GetDataFromPos( n )->aSz.Height();
+        nY -= pMenu->GetTitleHeight();
     }
     return -nY;
 }

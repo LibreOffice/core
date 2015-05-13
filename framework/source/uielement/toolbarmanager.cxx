@@ -1765,6 +1765,9 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
         pMenu->SetPopupMenu( 1, pItemMenu );
     }
 
+    // Set the title of the menu
+    pMenu->SetText( pToolBar->GetText() );
+
     if ( bHideDisabledEntries )
         pMenu->RemoveDisabledEntries();
 

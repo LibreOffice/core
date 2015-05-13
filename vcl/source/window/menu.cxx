@@ -83,6 +83,7 @@ using namespace ::com::sun::star;
 using namespace vcl;
 
 #define EXTRAITEMHEIGHT     4
+#define SPACE_AROUND_TITLE  2
 
 static bool ImplAccelDisabled()
 {
@@ -116,6 +117,7 @@ Menu::Menu()
       pLogo(NULL),
       pStartedFrom(NULL),
       pWindow(NULL),
+      nTitleHeight(0),
       nEventId(0),
       mnHighlightedItemPos(ITEMPOS_INVALID),
       nMenuFlags(0),
@@ -1261,6 +1263,7 @@ Menu& Menu::operator=( const Menu& rMenu )
     aHighlightHdl = rMenu.aHighlightHdl;
     aSelectHdl = rMenu.aSelectHdl;
     aTitleText = rMenu.aTitleText;
+    nTitleHeight = rMenu.nTitleHeight;
 
     return *this;
 }
@@ -1502,7 +1505,7 @@ void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
     }
 }
 
-Size Menu::ImplCalcSize( const vcl::Window* pWin )
+Size Menu::ImplCalcSize( vcl::Window* pWin )
 {
     // | Check/Radio/Image| Text| Accel/Popup|
 
@@ -1560,7 +1563,7 @@ Size Menu::ImplCalcSize( const vcl::Window* pWin )
             // Separator
             if (!IsMenuBar()&& (pData->eType == MenuItemType::SEPARATOR))
             {
-                DBG_ASSERT( !IsMenuBar(), "Separator in MenuBar ?! " );
+                //Useless: DBG_ASSERT( !IsMenuBar(), "Separator in MenuBar ?! " );
                 pData->aSz.Height() = 4;
             }
 
@@ -1639,6 +1642,24 @@ Size Menu::ImplCalcSize( const vcl::Window* pWin )
                 nMaxWidth = nWidth;
 
         }
+    }
+
+    // Additional space for title
+    nTitleHeight = 0;
+    if (!IsMenuBar() && aTitleText.getLength() > 0) {
+        // Vertically, one height of char + extra space for decoration
+        nTitleHeight = nFontHeight + 4 * SPACE_AROUND_TITLE ;
+        aSz.Height() += nTitleHeight;
+
+        // Horizontally, compute text width with bold font
+        pWin->Push(PushFlags::FONT);
+        vcl::Font aFont = pWin->GetFont();
+        aFont.SetWeight(WEIGHT_BOLD);
+        pWin->SetFont(aFont);
+        long nWidth = pWin->GetTextWidth( aTitleText ) + 4 * SPACE_AROUND_TITLE;
+        pWin->Pop();
+        if ( nWidth > nMaxWidth )
+            nMaxWidth = nWidth;
     }
 
     if (!IsMenuBar())
@@ -1756,6 +1777,38 @@ static OUString getShortenedString( const OUString& i_rLong, vcl::Window* i_pWin
     return aNonMnem;
 }
 
+void Menu::ImplPaintMenuTitle( vcl::Window* pWin, const Rectangle& rRect ) const
+{
+    // Save previous graphical settings, set new one
+    pWin->Push( PushFlags::FONT | PushFlags::FILLCOLOR );
+    Color aBg = pWin->GetSettings().GetStyleSettings().GetMenuBarColor();
+    pWin->SetBackground( Wallpaper( aBg ) );
+    pWin->SetFillColor( aBg );
+    vcl::Font aFont = pWin->GetFont();
+    aFont.SetWeight(WEIGHT_BOLD);
+    pWin->SetFont(aFont);
+
+    // Draw background rectangle
+    Rectangle aBgRect( rRect );
+    int nOuterSpaceX = ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
+    aBgRect.setX( aBgRect.getX() + SPACE_AROUND_TITLE);
+    aBgRect.setWidth( aBgRect.getWidth() - 2 * SPACE_AROUND_TITLE - 2 * nOuterSpaceX );
+    aBgRect.setY( aBgRect.getY() + SPACE_AROUND_TITLE );
+    aBgRect.setHeight( nTitleHeight - 2 * SPACE_AROUND_TITLE );
+    pWin->DrawRect( aBgRect );
+
+    // Draw the text centered
+    Point aTextTopLeft( rRect.TopLeft() );
+    long textWidth = pWin->GetTextWidth(aTitleText);
+    aTextTopLeft.X() += ( aBgRect.getWidth() - textWidth ) / 2;
+    aTextTopLeft.Y() += SPACE_AROUND_TITLE;
+    pWin->DrawText( aTextTopLeft, aTitleText, 0, aTitleText.getLength() );
+
+    // Restore
+    pWin->SetBackground();
+    pWin->Pop();
+}
+
 void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemData* pThisItemOnly, bool bHighlighted, bool bLayout, bool bRollover ) const
 {
     // for symbols: nFontHeight x nFontHeight
@@ -1785,6 +1838,10 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
     size_t nCount = pItemList->size();
     if( bLayout )
         mpLayoutData->m_aVisibleItemBoundRects.clear();
+
+    // Paint title
+    if ( !pThisItemOnly && !IsMenuBar() && nTitleHeight > 0 )
+        ImplPaintMenuTitle( pWin, Rectangle( aTopLeft, aOutSz ) );
 
     for ( size_t n = 0; n < nCount; n++ )
     {
