@@ -3516,7 +3516,10 @@ void CheckAnchoredFlyConsistency(SwDoc const& rDoc)
             SwFmtAnchor const& rAnchor((**it).GetAnchor(false));
             if (FLY_AT_PAGE == rAnchor.GetAnchorId())
             {
-                assert(!rAnchor.GetCntntAnchor());
+                assert(!rAnchor.GetCntntAnchor()
+                    // for invalid documents that lack text:anchor-page-number
+                    // it may have an anchor before MakeFrms() is called
+                    || (!SwIterator<SwFrm, SwFrmFmt>(**it).First()));
             }
             else
             {
