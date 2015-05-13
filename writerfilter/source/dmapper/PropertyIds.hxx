@@ -19,6 +19,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYIDS_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYIDS_HXX
 
+#include <memory>
 
 namespace writerfilter {
 namespace dmapper{
@@ -380,7 +381,7 @@ enum PropertyIds
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
 {
-    PropertyNameSupplier_Impl* m_pImpl;
+    std::unique_ptr<PropertyNameSupplier_Impl> m_pImpl;
 public:
     PropertyNameSupplier();
     ~PropertyNameSupplier();

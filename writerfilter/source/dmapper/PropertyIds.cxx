@@ -34,14 +34,13 @@ struct PropertyNameSupplier_Impl
 
 
 PropertyNameSupplier::PropertyNameSupplier() :
-    m_pImpl(new PropertyNameSupplier_Impl)
+    m_pImpl(new PropertyNameSupplier_Impl())
 {
 }
 
 
 PropertyNameSupplier::~PropertyNameSupplier()
 {
-    delete m_pImpl;
 }
 
 
