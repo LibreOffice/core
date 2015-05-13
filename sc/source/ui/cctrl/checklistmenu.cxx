@@ -912,6 +912,7 @@ ScCheckListMenuWindow::~ScCheckListMenuWindow()
 
 void ScCheckListMenuWindow::dispose()
 {
+    maEdSearch.disposeAndClear();
     maChecks.disposeAndClear();
     maChkToggleAll.disposeAndClear();
     maBtnSelectSingle.disposeAndClear();
