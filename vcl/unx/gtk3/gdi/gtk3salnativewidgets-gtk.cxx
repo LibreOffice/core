@@ -659,14 +659,16 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     }
     else if( nPart == PART_SUB_EDIT )
     {
-        gint adjust_x = (gint) ((padding.left + padding.right) / 2) + nFocusWidth + nFocusPad;
-        gint adjust_y = (gint) ((padding.top + padding.bottom) / 2) + nFocusWidth + nFocusPad;
+        gint adjust_left = padding.left + nFocusWidth + nFocusPad;
+        gint adjust_top = padding.top + nFocusWidth + nFocusPad;
+        gint adjust_right = padding.right + nFocusWidth + nFocusPad;
+        gint adjust_bottom = padding.bottom + nFocusWidth + nFocusPad;
 
-        aButtonRect.SetSize( Size( aAreaRect.GetWidth() - nButtonWidth - 2 * adjust_x,
-                                   aAreaRect.GetHeight() - 2 * adjust_y ) );
+        aButtonRect.SetSize( Size( aAreaRect.GetWidth() - nButtonWidth - (adjust_left + adjust_right),
+                                   aAreaRect.GetHeight() - (adjust_top + adjust_bottom)) );
         Point aEditPos = aAreaRect.TopLeft();
-        aEditPos.X() += adjust_x;
-        aEditPos.Y() += adjust_y;
+        aEditPos.X() += adjust_left;
+        aEditPos.Y() += adjust_top;
         aButtonRect.SetPos( aEditPos );
     }
 
