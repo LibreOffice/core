@@ -8,7 +8,7 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Elements Dock</property>
+    <property name="title" translatable="yes">Elements</property>
     <property name="type_hint">dock</property>
     <child>
       <object class="GtkGrid" id="grid1">

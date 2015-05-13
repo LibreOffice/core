@@ -151,14 +151,9 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:ToolBox" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Elements</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ElementsDockingWindow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Elements Dock</value>
+          <value xml:lang="en-US">Elements</value>
         </prop>
       </node>
       <node oor:name=".uno:FormelCursor" oor:op="replace">

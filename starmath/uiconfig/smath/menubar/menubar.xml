@@ -80,7 +80,6 @@
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
       <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
-      <menu:menuitem menu:id=".uno:ToolBox"/>
       <menu:menuitem menu:id=".uno:ElementsDockingWindow"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:TaskPane"/>
