@@ -346,7 +346,9 @@ void SwFrm::OptPrepareMake()
     if ( GetUpper() && !GetUpper()->IsFooterFrm() &&
          !GetUpper()->IsFlyFrm() )
     {
+        ForbidDelete();
         GetUpper()->Calc();
+        AllowDelete();
         OSL_ENSURE( GetUpper(), ":-( Layout unstable (Upper gone)." );
         if ( !GetUpper() )
             return;
@@ -1045,6 +1047,7 @@ void SwCntntFrm::MakeAll()
         return;
     }
 
+    bool const bDeleteForbidden(IsDeleteForbidden());
     ForbidDelete();
     LockJoin();
     long nFormatCount = 0;
@@ -1675,7 +1678,8 @@ void SwCntntFrm::MakeAll()
     delete pSaveFtn;
 
     UnlockJoin();
-    AllowDelete();
+    if (!bDeleteForbidden)
+        AllowDelete();
     if ( bMovedFwd || bMovedBwd )
         pNotify->SetInvaKeep();
     // OD 2004-02-26 #i25029#
