@@ -1013,7 +1013,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_FRAME:
         {
-            sal_uInt16 nStyle = aValue.getNumericVal();
+            DrawFrameFlags nStyle = static_cast<DrawFrameFlags>(aValue.getNumericVal());
             if( nPart == PART_BORDER ) {
                 if(!( nStyle & DrawFrameFlags::Menu ) && !(nStyle & DrawFrameFlags::WindowBorder) )
                 {
@@ -1319,7 +1319,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             break;
         case CTRL_FRAME:
             {
-                sal_uInt16 nStyle = aValue.getNumericVal();
+                DrawFrameFlags nStyle = static_cast<DrawFrameFlags>(aValue.getNumericVal());
                 if(  ( nPart == PART_BORDER ) &&
                     !( nStyle & (DrawFrameFlags::Menu | DrawFrameFlags::WindowBorder | DrawFrameFlags::BorderWindowBorder) ) )
                 {
