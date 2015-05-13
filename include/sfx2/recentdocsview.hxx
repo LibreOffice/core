@@ -72,9 +72,6 @@ protected:
 
     bool isAcceptedFile(const OUString &rURL) const;
 
-    /// Set (larger) font for the Welcome message.
-    void SetMessageFont(vcl::RenderContext& rRenderContext);
-
     long mnItemMaxSize;
     long mnTextHeight;
     long mnItemPadding;

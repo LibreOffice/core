@@ -38,6 +38,18 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 
+namespace {
+
+/// Set (larger) font for the Welcome message.
+void SetMessageFont(vcl::RenderContext& rRenderContext)
+{
+    vcl::Font aFont(rRenderContext.GetFont());
+    aFont.SetHeight(aFont.GetHeight() * 1.3);
+    rRenderContext.SetFont(aFont);
+}
+
+}
+
 RecentDocsView::RecentDocsView( vcl::Window* pParent )
     : ThumbnailView(pParent)
     , mnFileTypes(TYPE_NONE)
@@ -108,13 +120,6 @@ bool RecentDocsView::isAcceptedFile(const OUString &rURL) const
            (mnFileTypes & TYPE_DATABASE && typeMatchesExtension(TYPE_DATABASE,aExt)) ||
            (mnFileTypes & TYPE_MATH     && typeMatchesExtension(TYPE_MATH,    aExt)) ||
            (mnFileTypes & TYPE_OTHER    && typeMatchesExtension(TYPE_OTHER,   aExt));
-}
-
-void RecentDocsView::SetMessageFont(vcl::RenderContext& rRenderContext)
-{
-    vcl::Font aFont(rRenderContext.GetFont());
-    aFont.SetHeight(aFont.GetHeight() * 1.3);
-    rRenderContext.SetFont(aFont);
 }
 
 BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
