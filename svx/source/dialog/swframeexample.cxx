@@ -35,6 +35,18 @@ using namespace ::com::sun::star::text;
 #define FLYINFLY_BORDER 3
 #define DEMOTEXT        "Ij"
 
+namespace {
+
+void DrawRect_Impl(vcl::RenderContext& rRenderContext, const Rectangle &rRect,
+                   const Color &rFillColor, const Color &rLineColor)
+{
+    rRenderContext.SetFillColor(rFillColor);
+    rRenderContext.SetLineColor(rLineColor);
+    rRenderContext.DrawRect(rRect);
+}
+
+}
+
 SvxSwFrameExample::SvxSwFrameExample( vcl::Window *pParent, WinBits nStyle ) :
 
     Window(pParent, nStyle),
@@ -704,15 +716,5 @@ void SvxSwFrameExample::SetRelPos(const Point& rP)
     if (aRelPos.Y() < 0)
         aRelPos.Y() = -5;
 }
-
-void SvxSwFrameExample::DrawRect_Impl(vcl::RenderContext& rRenderContext, const Rectangle &rRect,
-                                      const Color &rFillColor, const Color &rLineColor)
-{
-    rRenderContext.SetFillColor(rFillColor);
-    rRenderContext.SetLineColor(rLineColor);
-    rRenderContext.DrawRect(rRect);
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
