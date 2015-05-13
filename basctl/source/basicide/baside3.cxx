@@ -83,8 +83,9 @@ DialogWindow::DialogWindow(DialogWindowLayout* pParent, ScriptDocument const& rD
 {
     InitSettings( true, true, true );
 
-    aOldNotifyUndoActionHdl = pEditor->GetModel().GetNotifyUndoActionHdl();
-    pEditor->GetModel().SetNotifyUndoActionHdl(LINK(this, DialogWindow, NotifyUndoActionHdl));
+    pEditor->GetModel().SetNotifyUndoActionHdl(
+        LINK(this, DialogWindow, NotifyUndoActionHdl)
+    );
 
     SetHelpId( HID_BASICIDE_DIALOGWINDOW );
 

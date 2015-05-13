@@ -237,7 +237,7 @@ protected:
     DECL_LINK( ButtonHdl, ImageButton * );
     DECL_LINK(TreeListHdl, void *);
     DECL_LINK( implEndDragHdl, HeaderBar * );
-    DECL_LINK( EditAccHdl, Accelerator * );
+    DECL_LINK_TYPED( EditAccHdl, Accelerator *, void );
 
 
 public:
