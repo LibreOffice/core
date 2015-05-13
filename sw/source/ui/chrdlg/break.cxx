@@ -148,8 +148,8 @@ SwBreakDlg::SwBreakDlg( vcl::Window *pParent, SwWrtShell &rS )
     m_pPageNumEdit->SetModifyHdl(LINK(this,SwBreakDlg,PageNumModifyHdl));
 
     // Insert page description to Listbox
-    const sal_uInt16 nCount = rSh.GetPageDescCnt();
-    for( sal_uInt16 i = 0; i < nCount; ++i)
+    const size_t nCount = rSh.GetPageDescCnt();
+    for( size_t i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = rSh.GetPageDesc(i);
         ::InsertStringSorted(rPageDesc.GetName(), *m_pPageCollBox, 1 );

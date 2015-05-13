@@ -659,7 +659,7 @@ public:
     bool GotoHeaderTxt();       ///< jump from the content to the header
     bool GotoFooterTxt();       ///< jump from the content to the footer
     // jump to the header/footer of the given or current PageDesc
-    bool SetCrsrInHdFt( sal_uInt16 nDescNo = USHRT_MAX,
+    bool SetCrsrInHdFt( size_t nDescNo = SIZE_MAX,
                         bool bInHeader = true );
     // is point of cursor in header/footer. pbInHeader return true if it is
     // in a headerframe otherwise in a footerframe

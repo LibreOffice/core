@@ -967,7 +967,7 @@ SfxPoolItem* SwFltTOX::Clone(SfxItemPool*) const
 
 // UpdatePageDescs needs to be called at end of parsing to make Writer actually
 // accept Pagedescs contents
-void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset)
+void UpdatePageDescs(SwDoc &rDoc, size_t nInPageDescOffset)
 {
     // Update document page descriptors (only this way also left pages
     // get adjusted)
@@ -976,7 +976,7 @@ void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset)
     rDoc.ChgPageDesc(0, rDoc.GetPageDesc(0));
 
     // PageDescs "Convert..."
-    for (sal_uInt16 i = nInPageDescOffset; i < rDoc.GetPageDescCnt(); ++i)
+    for (size_t i = nInPageDescOffset; i < rDoc.GetPageDescCnt(); ++i)
         rDoc.ChgPageDesc(i, rDoc.GetPageDesc(i));
 }
 

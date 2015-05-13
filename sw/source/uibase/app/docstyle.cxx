@@ -1147,7 +1147,7 @@ bool   SwDocStyleSheet::SetFollow( const OUString& rStr)
             const SwPageDesc* pFollowDesc = !rStr.isEmpty()
                                             ? lcl_FindPageDesc(rDoc, rStr)
                                             : 0;
-            sal_uInt16 nId = 0;
+            size_t nId = 0;
             if (pFollowDesc != pDesc->GetFollow() && rDoc.FindPageDesc(pDesc->GetName(), &nId))
             {
                 SwPageDesc aDesc( *pDesc );
@@ -1313,7 +1313,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
     SwFmt* pFmt = 0;
     SwPageDesc* pNewDsc = 0;
-    sal_uInt16 nPgDscPos = 0;
+    size_t nPgDscPos = 0;
 
     switch(nFamily)
     {
@@ -1581,7 +1581,7 @@ static void lcl_SaveStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc&
     case SFX_STYLE_FAMILY_CHAR:
         {
             const SwCharFmts& rTbl = *rDoc.GetCharFmts();
-            for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
+            for( size_t n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 rArr.push_back( rTbl[ n ] );
             }
@@ -1590,7 +1590,7 @@ static void lcl_SaveStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc&
     case SFX_STYLE_FAMILY_PARA:
         {
             const SwTxtFmtColls& rTbl = *rDoc.GetTxtFmtColls();
-            for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
+            for( size_t n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 rArr.push_back( rTbl[ n ] );
             }
@@ -1599,7 +1599,7 @@ static void lcl_SaveStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc&
     case SFX_STYLE_FAMILY_FRAME:
         {
             const SwFrmFmts& rTbl = *rDoc.GetFrmFmts();
-            for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
+            for( size_t n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 rArr.push_back( rTbl[ n ] );
             }
@@ -1608,7 +1608,7 @@ static void lcl_SaveStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc&
 
     case SFX_STYLE_FAMILY_PAGE:
         {
-            for( sal_uInt16 n = 0, nCnt = rDoc.GetPageDescCnt(); n < nCnt; ++n )
+            for( size_t n = 0, nCnt = rDoc.GetPageDescCnt(); n < nCnt; ++n )
             {
                 rArr.push_back( &rDoc.GetPageDesc( n ) );
             }
@@ -1618,7 +1618,7 @@ static void lcl_SaveStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc&
     case SFX_STYLE_FAMILY_PSEUDO:
         {
             const SwNumRuleTbl& rTbl = rDoc.GetNumRuleTbl();
-            for( sal_uInt16 n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
+            for( size_t n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
             {
                 rArr.push_back( rTbl[ n ] );
             }
@@ -1634,7 +1634,7 @@ static bool lcl_Contains(const std::vector<void*>& rArr, const void* p)
 
 static void lcl_DeleteInfoStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
 {
-    sal_uInt16 n, nCnt;
+    size_t n, nCnt;
     switch( nFamily )
     {
     case SFX_STYLE_FAMILY_CHAR:
@@ -1681,7 +1681,7 @@ static void lcl_DeleteInfoStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, 
 
     case SFX_STYLE_FAMILY_PAGE:
         {
-            std::deque<sal_uInt16> aDelArr;
+            std::deque<size_t> aDelArr;
             for( n = 0, nCnt = rDoc.GetPageDescCnt(); n < nCnt; ++n )
             {
                 if( !lcl_Contains( rArr, &rDoc.GetPageDesc( n ) ))
@@ -2281,7 +2281,7 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
     {
         const SwFmt *pSourceFmt = 0;
         SwFmt *pTargetFmt = 0;
-        sal_uInt16 nPgDscPos = USHRT_MAX;
+        size_t nPgDscPos = SIZE_MAX;
         switch( eFamily )
         {
         case SFX_STYLE_FAMILY_CHAR :
@@ -2319,15 +2319,14 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
         {
             if( pSourceFmt )
                 pTargetFmt->DelDiffs( *pSourceFmt );
-            else if( USHRT_MAX != nPgDscPos )
+            else if( SIZE_MAX != nPgDscPos )
                 pTargetFmt->ResetFmtAttr( RES_PAGEDESC, RES_FRMATR_END-1 );
             else
             {
                 // #i73790# - method renamed
                 pTargetFmt->ResetAllFmtAttr();
             }
-
-            if( USHRT_MAX != nPgDscPos )
+            if( SIZE_MAX != nPgDscPos )
                 rDoc.ChgPageDesc( nPgDscPos,
                                   rDoc.GetPageDesc(nPgDscPos) );
         }
@@ -2593,8 +2592,8 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     if( nSearchFamily == SFX_STYLE_FAMILY_CHAR
      || nSearchFamily == SFX_STYLE_FAMILY_ALL )
     {
-        const sal_uInt16 nArrLen = rDoc.GetCharFmts()->size();
-        for( sal_uInt16 i = 0; i < nArrLen; i++ )
+        const size_t nArrLen = rDoc.GetCharFmts()->size();
+        for( size_t i = 0; i < nArrLen; i++ )
         {
             SwCharFmt* pFmt = (*rDoc.GetCharFmts())[ i ];
 
@@ -2676,8 +2675,8 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 nSMask = SWSTYLEBIT_HTML;
         }
 
-        const sal_uInt16 nArrLen = rDoc.GetTxtFmtColls()->size();
-        for( sal_uInt16 i = 0; i < nArrLen; i++ )
+        const size_t nArrLen = rDoc.GetTxtFmtColls()->size();
+        for( size_t i = 0; i < nArrLen; i++ )
         {
             SwTxtFmtColl* pColl = (*rDoc.GetTxtFmtColls())[ i ];
 
@@ -2822,8 +2821,8 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     if( nSearchFamily == SFX_STYLE_FAMILY_FRAME ||
         nSearchFamily == SFX_STYLE_FAMILY_ALL )
     {
-        const sal_uInt16 nArrLen = rDoc.GetFrmFmts()->size();
-        for( sal_uInt16 i = 0; i < nArrLen; i++ )
+        const size_t nArrLen = rDoc.GetFrmFmts()->size();
+        for( size_t i = 0; i < nArrLen; i++ )
         {
             const SwFrmFmt* pFmt = (*rDoc.GetFrmFmts())[ i ];
 
@@ -2858,8 +2857,8 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     if( nSearchFamily == SFX_STYLE_FAMILY_PAGE ||
         nSearchFamily == SFX_STYLE_FAMILY_ALL )
     {
-        const sal_uInt16 nCount = rDoc.GetPageDescCnt();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        const size_t nCount = rDoc.GetPageDescCnt();
+        for(size_t i = 0; i < nCount; ++i)
         {
             const SwPageDesc& rDesc = rDoc.GetPageDesc(i);
             const sal_uInt16 nId = rDesc.GetPoolFmtId();

@@ -1187,8 +1187,8 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
         case SwFooterStartNode:
         {
             const bool bHeader = (SwHeaderStartNode == eType);
-            const sal_uInt16 nPDescCount = rDoc.GetPageDescCnt();
-            for(sal_uInt16 i = 0; i < nPDescCount; i++)
+            const size_t nPDescCount = rDoc.GetPageDescCnt();
+            for(size_t i = 0; i < nPDescCount; i++)
             {
                 const SwPageDesc& rDesc = rDoc.GetPageDesc( i );
                 const SwFrmFmt* pFrmFmtMaster = &rDesc.GetMaster();

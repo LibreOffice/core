@@ -231,7 +231,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     const sal_uInt16 nSlot      = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
-    const sal_uInt16 nDescId    = rSh.GetCurPageDesc();
+    const size_t nDescId    = rSh.GetCurPageDesc();
     const SwPageDesc& rDesc = rSh.GetPageDesc( nDescId );
 
     const bool bVerticalWriting = rSh.IsInVerticalText();

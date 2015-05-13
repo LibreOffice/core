@@ -235,8 +235,8 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     for( sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i )
         m_pPageTemplBox->InsertEntry(SwStyleNameMapper::GetUIName( i, OUString() ));
 
-    const sal_uInt16 nCount = pSh->GetPageDescCnt();
-    for(sal_uInt16 i = 0; i < nCount; ++i)
+    const size_t nCount = pSh->GetPageDescCnt();
+    for(size_t i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = pSh->GetPageDesc(i);
         if(LISTBOX_ENTRY_NOTFOUND == m_pPageTemplBox->GetEntryPos(rPageDesc.GetName()))

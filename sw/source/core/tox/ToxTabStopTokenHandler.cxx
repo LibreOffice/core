@@ -83,7 +83,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
 long
 DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTxtNode& targetNode) const
 {
-    sal_uInt32 nPgDescNdIdx = targetNode.GetIndex() + 1;
+    size_t nPgDescNdIdx = targetNode.GetIndex() + 1;
     const SwPageDesc *pPageDesc = targetNode.FindPageDesc(false, &nPgDescNdIdx);
     if (!pPageDesc || nPgDescNdIdx < mIndexOfSectionNode) {
         // Use default page description, if none is found or the found one is given by a Node before the

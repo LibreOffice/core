@@ -455,7 +455,7 @@ bool SwNode::IsProtect() const
 /// Find the PageDesc that is used to format this node. If the Layout is available,
 /// we search through that. Else we can only do it the hard way by searching onwards through the nodes.
 const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
-                                        sal_uInt32* pPgDescNdIdx ) const
+                                        size_t* pPgDescNdIdx ) const
 {
     if ( !GetNodes().IsDocNodes() )
     {
@@ -599,7 +599,7 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
                         eAskUse = nsUseOnPage::PD_FOOTERSHARE;
                     }
 
-                    for( sal_uInt16 n = pDoc->GetPageDescCnt(); n && !pPgDesc; )
+                    for( size_t n = pDoc->GetPageDescCnt(); n && !pPgDesc; )
                     {
                         const SwPageDesc& rPgDsc = pDoc->GetPageDesc( --n );
                         const SwFrmFmt* pFmt = &rPgDsc.GetMaster();

@@ -573,15 +573,15 @@ public:
 
     /// PageDescriptor-interface
     void   ChgCurPageDesc( const SwPageDesc& );
-    sal_uInt16 GetCurPageDesc( const bool bCalcFrm = true ) const;
-    sal_uInt16 GetMousePageDesc( const Point &rPt ) const;
-    sal_uInt16 GetPageDescCnt() const;
+    size_t GetCurPageDesc( const bool bCalcFrm = true ) const;
+    size_t GetMousePageDesc( const Point &rPt ) const;
+    size_t GetPageDescCnt() const;
     SwPageDesc* FindPageDescByName( const OUString& rName,
                                     bool bGetFromPool = false,
-                                    sal_uInt16* pPos = 0 );
+                                    size_t* pPos = 0 );
 
-    const SwPageDesc& GetPageDesc( sal_uInt16 i ) const;
-    void  ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
+    const SwPageDesc& GetPageDesc( size_t i ) const;
+    void  ChgPageDesc( size_t i, const SwPageDesc& );
     /** if inside all selection only one PageDesc, @return this.
      Otherwise @return 0 pointer */
     const SwPageDesc* GetSelectedPageDescs() const;

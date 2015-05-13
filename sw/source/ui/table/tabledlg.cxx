@@ -1497,9 +1497,9 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
     if(bFlowAllowed)
     {
         //Inserting of the existing page templates in the list box
-        const sal_uInt16 nCount = pShell->GetPageDescCnt();
+        const size_t nCount = pShell->GetPageDescCnt();
 
-        for( sal_uInt16 i = 0; i < nCount; ++i)
+        for( size_t i = 0; i < nCount; ++i)
         {
             const SwPageDesc &rPageDesc = pShell->GetPageDesc(i);
             m_pPageCollLB->InsertEntry(rPageDesc.GetName());

@@ -743,7 +743,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if (pArgs)
             {
                 // Determine the current PageDescriptor and fill the set with that.
-                const sal_uInt16 nCurIdx = rSh.GetCurPageDesc();
+                const size_t nCurIdx = rSh.GetCurPageDesc();
                 SwPageDesc aPageDesc(rSh.GetPageDesc(nCurIdx));
 
                 SwFrmFmt &rFmt = aPageDesc.GetMaster();
@@ -2374,7 +2374,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         {
             if( !bBackground )
             {
-                const sal_uInt16 nCurIdx = rSh.GetCurPageDesc();
+                const size_t nCurIdx = rSh.GetCurPageDesc();
                 const SwPageDesc& rPageDesc = rSh.GetPageDesc( nCurIdx );
                 // Temporary view, because the shell does not need to be valid after the dialogue
                 // for example disable header

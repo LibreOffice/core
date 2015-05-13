@@ -939,13 +939,13 @@ public:
             sal_Int32 nDocPageCount );
 
     // PageDescriptor interface.
-    sal_uInt16 GetPageDescCnt() const { return maPageDescs.size(); }
-    const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return maPageDescs[i]; }
-    SwPageDesc& GetPageDesc( sal_uInt16 i ) { return maPageDescs[i]; }
-    SwPageDesc* FindPageDesc(const OUString& rName, sal_uInt16* pPos = NULL);
-    SwPageDesc* FindPageDesc(const OUString& rName, sal_uInt16* pPos = NULL) const;
+    size_t GetPageDescCnt() const { return maPageDescs.size(); }
+    const SwPageDesc& GetPageDesc( const size_t i ) const { return maPageDescs[i]; }
+    SwPageDesc& GetPageDesc( size_t i ) { return maPageDescs[i]; }
+    SwPageDesc* FindPageDesc(const OUString& rName, size_t* pPos = NULL);
+    SwPageDesc* FindPageDesc(const OUString& rName, size_t* pPos = NULL) const;
     // Just searches the pointer in the maPageDescs vector!
-    bool        ContainsPageDesc(const SwPageDesc *pDesc, sal_uInt16* pPos = NULL);
+    bool        ContainsPageDesc(const SwPageDesc *pDesc, size_t* pPos = NULL);
 
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFmtId, -HlpId can be prevented. */
@@ -964,9 +964,9 @@ public:
 
     // For Reader
     void ChgPageDesc( const OUString & rName, const SwPageDesc& );
-    void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
+    void ChgPageDesc( size_t i, const SwPageDesc& );
     void DelPageDesc( const OUString & rName, bool bBroadcast = false);
-    void DelPageDesc( sal_uInt16 i, bool bBroadcast = false );
+    void DelPageDesc( size_t i, bool bBroadcast = false );
     void PreDelPageDesc(SwPageDesc * pDel);
     SwPageDesc* MakePageDesc(const OUString &rName, const SwPageDesc* pCpy = 0,
                              bool bRegardLanguage = true,

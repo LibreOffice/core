@@ -685,7 +685,7 @@ void SwDoc::ClearDoc()
     mpOutlineRule->SetCountPhantoms( !GetDocumentSettingManager().get(DocumentSettingId::OLD_NUMBERING) );
 
     // remove the dummy pagedesc from the array and delete all the old ones
-    sal_uInt16 nDummyPgDsc = 0;
+    size_t nDummyPgDsc = 0;
     if (FindPageDesc(pDummyPgDsc->GetName(), &nDummyPgDsc))
         pDummyPgDsc = maPageDescs.release(maPageDescs.begin() + nDummyPgDsc).release();
     maPageDescs.clear();

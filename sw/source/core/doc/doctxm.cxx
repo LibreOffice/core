@@ -783,8 +783,8 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         if ( !_bNewTOX && !pDefaultPageDesc )
         {
             // determine page description of table-of-content
-            sal_uInt32 nPgDescNdIdx = pSectNd->GetIndex() + 1;
-            sal_uInt32* pPgDescNdIdx = &nPgDescNdIdx;
+            size_t nPgDescNdIdx = pSectNd->GetIndex() + 1;
+            size_t* pPgDescNdIdx = &nPgDescNdIdx;
             pDefaultPageDesc = pSectNd->FindPageDesc( false, pPgDescNdIdx );
             if ( nPgDescNdIdx < pSectNd->GetIndex() )
             {

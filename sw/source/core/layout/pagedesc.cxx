@@ -331,9 +331,9 @@ void SwPageDesc::ChgFirstShare( bool bNew )
 
 SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
 {
-    const sal_uInt16 nDCount = rDoc.GetPageDescCnt();
+    const size_t nDCount = rDoc.GetPageDescCnt();
 
-    for( sal_uInt16 i = 0; i < nDCount; i++ )
+    for( size_t i = 0; i < nDCount; i++ )
     {
         SwPageDesc* pDsc = &rDoc.GetPageDesc( i );
         if(pDsc->GetName() == rName)

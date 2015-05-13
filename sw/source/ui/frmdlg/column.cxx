@@ -348,7 +348,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
     if(pPageSet && SfxItemState::SET == pPageSet->GetItemState(RES_COL) && bPageChanged)
     {
         // deterine current PageDescriptor and fill the Set with it
-        const sal_uInt16 nCurIdx = rWrtShell.GetCurPageDesc();
+        const size_t nCurIdx = rWrtShell.GetCurPageDesc();
         SwPageDesc aPageDesc(rWrtShell.GetPageDesc(nCurIdx));
         SwFrmFmt &rFmt = aPageDesc.GetMaster();
         rFmt.SetFmtAttr(pPageSet->Get(RES_COL));

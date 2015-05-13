@@ -52,7 +52,7 @@ namespace
     void lcl_ChangePage(SwWrtShell *pSh, sal_uInt16 nNewNumber,
         const SwPageDesc *pNewDesc)
     {
-        const sal_uInt16 nCurIdx = pSh->GetCurPageDesc();
+        const size_t nCurIdx = pSh->GetCurPageDesc();
         const SwPageDesc &rCurrentDesc = pSh->GetPageDesc( nCurIdx );
 
         const SwFmtPageDesc *pPageFmtDesc(0);
@@ -193,7 +193,7 @@ SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
         {
             while (mpSh->SttNxtPg())
             {
-                const sal_uInt16 nCurIdx = mpSh->GetCurPageDesc();
+                const size_t nCurIdx = mpSh->GetCurPageDesc();
                 const SwPageDesc &rPageDesc = mpSh->GetPageDesc( nCurIdx );
 
                 if (mpIndexDesc != &rPageDesc)

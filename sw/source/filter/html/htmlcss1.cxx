@@ -89,7 +89,7 @@ static struct SwCSS1ItemIds
 void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
                                 const SwPageDesc& rNewPageDesc )
 {
-    sal_uInt16 pos;
+    size_t pos;
     bool found = pDoc->ContainsPageDesc( pPageDesc, &pos );
     OSL_ENSURE( found, "Seitenvorlage nicht gefunden" );
     if (found)
@@ -1343,8 +1343,8 @@ SwPageDesc *SwCSS1Parser::GetMasterPageDesc()
 
 static SwPageDesc *FindPageDesc(SwDoc *pDoc, sal_uInt16 nPoolId)
 {
-    sal_uInt16 nPageDescs = pDoc->GetPageDescCnt();
-    sal_uInt16 nPage;
+    size_t nPageDescs = pDoc->GetPageDescCnt();
+    size_t nPage;
     for (nPage=0; nPage < nPageDescs &&
          pDoc->GetPageDesc(nPage).GetPoolFmtId() != nPoolId; ++nPage)
          ;

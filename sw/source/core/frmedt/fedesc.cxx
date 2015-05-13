@@ -33,7 +33,7 @@
 #include <edimp.hxx>
 #include <SwStyleNameMapper.hxx>
 
-sal_uInt16 SwFEShell::GetPageDescCnt() const
+size_t SwFEShell::GetPageDescCnt() const
 {
     return GetDoc()->GetPageDescCnt();
 }
@@ -44,7 +44,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     // SS does not change PageDesc, but only sets the attibute.
     // The Pagedesc should be available in the document
     bool bFound = false;
-    for ( sal_uInt16 nTst = 0; nTst < GetPageDescCnt(); ++nTst )
+    for ( size_t nTst = 0; nTst < GetPageDescCnt(); ++nTst )
         if ( &rDesc == &GetPageDesc( nTst ) )
             bFound = true;
     OSL_ENSURE( bFound, "ChgCurPageDesc with invalid descriptor." );
@@ -102,7 +102,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     EndAllActionAndCall();
 }
 
-void SwFEShell::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
+void SwFEShell::ChgPageDesc( size_t i, const SwPageDesc &rChged )
 {
     StartAllAction();
     SET_CURR_SHELL( this );
@@ -117,14 +117,14 @@ void SwFEShell::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     EndAllActionAndCall();
 }
 
-const SwPageDesc& SwFEShell::GetPageDesc( sal_uInt16 i ) const
+const SwPageDesc& SwFEShell::GetPageDesc( size_t i ) const
 {
     return GetDoc()->GetPageDesc( i );
 }
 
 SwPageDesc* SwFEShell::FindPageDescByName( const OUString& rName,
                                             bool bGetFromPool,
-                                            sal_uInt16* pPos )
+                                            size_t* pPos )
 {
     SwPageDesc* pDesc = GetDoc()->FindPageDesc(rName, pPos);
     if( !pDesc && bGetFromPool )
@@ -139,7 +139,7 @@ SwPageDesc* SwFEShell::FindPageDescByName( const OUString& rName,
     return pDesc;
 }
 
-sal_uInt16 SwFEShell::GetMousePageDesc( const Point &rPt ) const
+size_t SwFEShell::GetMousePageDesc( const Point &rPt ) const
 {
     if( GetLayout() )
     {
@@ -150,7 +150,7 @@ sal_uInt16 SwFEShell::GetMousePageDesc( const Point &rPt ) const
             while( pPage->GetNext() && rPt.Y() > pPage->Frm().Bottom() )
                 pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
             SwDoc *pMyDoc = GetDoc();
-            sal_uInt16 nPos;
+            size_t nPos;
             if (pMyDoc->ContainsPageDesc( pPage->GetPageDesc(), &nPos ) )
                 return nPos;
         }
@@ -158,7 +158,7 @@ sal_uInt16 SwFEShell::GetMousePageDesc( const Point &rPt ) const
     return 0;
 }
 
-sal_uInt16 SwFEShell::GetCurPageDesc( const bool bCalcFrm ) const
+size_t SwFEShell::GetCurPageDesc( const bool bCalcFrm ) const
 {
     const SwFrm *pFrm = GetCurrFrm( bCalcFrm );
     if ( pFrm )
@@ -166,7 +166,7 @@ sal_uInt16 SwFEShell::GetCurPageDesc( const bool bCalcFrm ) const
         const SwPageFrm *pPage = pFrm->FindPageFrm();
         if ( pPage )
         {
-            sal_uInt16 nPos;
+            size_t nPos;
             if (GetDoc()->ContainsPageDesc( pPage->GetPageDesc(), &nPos ))
                 return nPos;
         }

@@ -1752,7 +1752,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
     StartUndo( UNDO_HEADER_FOOTER ); // #i7983#
     bool bExecute = true;
     bool bCrsrSet = false;
-    for( sal_uInt16 nFrom = 0, nTo = GetPageDescCnt();
+    for( size_t nFrom = 0, nTo = GetPageDescCnt();
             nFrom < nTo; ++nFrom )
     {
         SwPageDesc aDesc( GetPageDesc( nFrom ));
@@ -1805,7 +1805,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
                     if ( !IsHeaderFooterEdit() )
                         ToggleHeaderFooterEdit();
                     bCrsrSet = SetCrsrInHdFt(
-                            rStyleName.isEmpty() ? (sal_uInt16)0xFFFF : nFrom,
+                            rStyleName.isEmpty() ? SIZE_MAX : nFrom,
                             bHeader );
                 }
             }

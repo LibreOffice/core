@@ -293,8 +293,8 @@ void SwDoc::RemoveAllFmtLanguageDependencies()
 
     SvxFrameDirectionItem aFrameDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
 
-    sal_uInt16 nCount = GetPageDescCnt();
-    for( sal_uInt16 i=0; i<nCount; ++i )
+    size_t nCount = GetPageDescCnt();
+    for( size_t i=0; i<nCount; ++i )
     {
         SwPageDesc& rDesc = GetPageDesc( i );
         rDesc.GetMaster().SetFmtAttr( aFrameDir );

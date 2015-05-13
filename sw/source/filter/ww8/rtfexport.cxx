@@ -444,14 +444,14 @@ void RtfExport::WriteInfo()
 void RtfExport::WritePageDescTable()
 {
     // Write page descriptions (page styles)
-    sal_uInt16 nSize = m_pDoc->GetPageDescCnt();
+    size_t nSize = m_pDoc->GetPageDescCnt();
     if (!nSize)
         return;
 
     Strm().WriteCharPtr(SAL_NEWLINE_STRING);
     m_bOutPageDescs = true;
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCTBL);
-    for (sal_uInt16 n = 0; n < nSize; ++n)
+    for (size_t n = 0; n < nSize; ++n)
     {
         const SwPageDesc& rPageDesc = m_pDoc->GetPageDesc(n);
 
@@ -462,7 +462,7 @@ void RtfExport::WritePageDescTable()
         OutPageDescription(rPageDesc, false, false);
 
         // search for the next page description
-        sal_uInt16 i = nSize;
+        size_t i = nSize;
         while (i)
             if (rPageDesc.GetFollow() == &m_pDoc->GetPageDesc(--i))
                 break;
@@ -570,13 +570,14 @@ void RtfExport::ExportDocument_Impl()
             else if (rSttNd.IsTableNode())
                 pSet = &rSttNd.GetTableNode()->GetTable().
                        GetFrmFmt()->GetAttrSet();
+
             else if (rSttNd.IsSectionNode())
                 pSet = &rSttNd.GetSectionNode()->GetSection().
                        GetFmt()->GetAttrSet();
 
             if (pSet)
             {
-                sal_uInt16 nPosInDoc;
+                size_t nPosInDoc;
                 pSttPgDsc = static_cast<const SwFmtPageDesc*>(&pSet->Get(RES_PAGEDESC));
                 if (!pSttPgDsc->GetPageDesc())
                     pSttPgDsc = 0;

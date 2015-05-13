@@ -186,7 +186,7 @@ bool SwCrsrShell::GotoFooterTxt()
     return 0 != pFrm;
 }
 
-bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, bool bInHeader )
+bool SwCrsrShell::SetCrsrInHdFt( size_t nDescNo, bool bInHeader )
 {
     bool bRet = false;
     SwDoc *pMyDoc = GetDoc();
@@ -194,7 +194,7 @@ bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, bool bInHeader )
 
     SET_CURR_SHELL( this );
 
-    if( USHRT_MAX == nDescNo )
+    if( SIZE_MAX == nDescNo )
     {
         // take the current one
         const SwPageFrm* pPage = GetCurrFrm()->FindPageFrm();

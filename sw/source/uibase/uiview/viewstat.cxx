@@ -148,7 +148,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case RES_PAPER_BIN:
             case FN_PARAM_FTN_INFO:
             {
-                const sal_uInt16 nCurIdx = m_pWrtShell->GetCurPageDesc();
+                const size_t nCurIdx = m_pWrtShell->GetCurPageDesc();
                 const SwPageDesc& rDesc = m_pWrtShell->GetPageDesc( nCurIdx );
 
                 //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
@@ -165,7 +165,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case RES_BACKGROUND:
             case SID_ATTR_BRUSH:
             {
-                const sal_uInt16 nCurIdx = m_pWrtShell->GetCurPageDesc();
+                const size_t nCurIdx = m_pWrtShell->GetCurPageDesc();
                 const SwPageDesc& rDesc = m_pWrtShell->GetPageDesc( nCurIdx );
                 const SwFrmFmt& rMaster = rDesc.GetMaster();
                 const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>(

@@ -268,7 +268,7 @@ public:
     /** Search PageDesc with which this node is formatted. If layout is existent
        search over layout, else only the hard way is left: search over the nodes
        to the front!! */
-    const SwPageDesc* FindPageDesc( bool bCalcLay, sal_uInt32* pPgDescNdIdx = 0 ) const;
+    const SwPageDesc* FindPageDesc( bool bCalcLay, size_t* pPgDescNdIdx = 0 ) const;
 
     /// If node is in a fly return the respective format.
     SwFrmFmt* GetFlyFmt() const;

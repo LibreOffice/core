@@ -404,7 +404,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
         // Apply page description
 
-        sal_uInt16 nPos;
+        size_t nPos;
         pSh->FindPageDescByName( pDesc->GetName(),
                                     false,
                                     &nPos );

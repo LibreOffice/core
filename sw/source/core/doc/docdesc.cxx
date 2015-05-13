@@ -376,7 +376,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
     }
 }
 
-void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
+void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
 {
     OSL_ENSURE( i < maPageDescs.size(), "PageDescs is out of range." );
 
@@ -611,7 +611,7 @@ void SwDoc::BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamil
     }
 }
 
-void SwDoc::DelPageDesc( sal_uInt16 i, bool bBroadcast )
+void SwDoc::DelPageDesc( size_t i, bool bBroadcast )
 {
     OSL_ENSURE( i < maPageDescs.size(), "PageDescs is out of range." );
     OSL_ENSURE( i != 0, "You cannot delete the default Pagedesc.");
@@ -816,7 +816,7 @@ struct CompareSwPageDescName {
 
 template <class UnaryPredicate>
 static SwPageDesc* lcl_FindPageDesc( SwPageDescs *pPageDescs,
-                                     sal_uInt16 *pPos, UnaryPredicate pred )
+                                     size_t *pPos, UnaryPredicate pred )
 {
     SwPageDescs::iterator it = std::find_if(
         pPageDescs->begin(), pPageDescs->end(), pred);
@@ -828,17 +828,17 @@ static SwPageDesc* lcl_FindPageDesc( SwPageDescs *pPageDescs,
             *pPos = std::distance( pPageDescs->begin(), it );
     }
     else if( pPos )
-        *pPos = USHRT_MAX;
+        *pPos = SIZE_MAX;
     return res;
 }
 
-SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, sal_uInt16* pPos )
+SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, size_t* pPos )
 {
     return lcl_FindPageDesc<CompareSwPageDescName>(
         &maPageDescs, pPos, CompareSwPageDescName(rName) );
 }
 
-SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, sal_uInt16* pPos ) const
+SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, size_t* pPos ) const
 {
     return lcl_FindPageDesc<CompareSwPageDescName>(
         const_cast <SwPageDescs *>( &maPageDescs ), pPos,
@@ -851,7 +851,7 @@ struct CompareSwPageDescToPtr {
     const SwPageDesc *mPtr;
 };
 
-bool SwDoc::ContainsPageDesc( const SwPageDesc *pDesc, sal_uInt16* pPos )
+bool SwDoc::ContainsPageDesc( const SwPageDesc *pDesc, size_t* pPos )
 {
     if (pDesc == NULL)
         return false;
@@ -863,7 +863,7 @@ bool SwDoc::ContainsPageDesc( const SwPageDesc *pDesc, sal_uInt16* pPos )
 
 void SwDoc::DelPageDesc( const OUString & rName, bool bBroadcast )
 {
-    sal_uInt16 nI;
+    size_t nI;
 
     if (FindPageDesc(rName, &nI))
         DelPageDesc(nI, bBroadcast);
@@ -871,7 +871,7 @@ void SwDoc::DelPageDesc( const OUString & rName, bool bBroadcast )
 
 void SwDoc::ChgPageDesc( const OUString & rName, const SwPageDesc & rDesc)
 {
-    sal_uInt16 nI;
+    size_t nI;
 
     if (FindPageDesc(rName, &nI))
         ChgPageDesc(nI, rDesc);
@@ -884,7 +884,7 @@ void SwDoc::ChgPageDesc( const OUString & rName, const SwPageDesc & rDesc)
  */
 void SwDoc::CheckDefaultPageFmt()
 {
-    for ( sal_uInt16 i = 0; i < GetPageDescCnt(); ++i )
+    for ( size_t i = 0; i < GetPageDescCnt(); ++i )
     {
         SwPageDesc& rDesc = GetPageDesc( i );
 
@@ -916,7 +916,7 @@ void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
     aNewGrid.Init();
     SetDefault(aNewGrid);
 
-    for ( sal_uInt16 i = 0; i < GetPageDescCnt(); ++i )
+    for ( size_t i = 0; i < GetPageDescCnt(); ++i )
     {
         SwPageDesc& rDesc = GetPageDesc( i );
 

@@ -882,7 +882,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             if(pArgs)
             {
-                const sal_uInt16 nCurIdx = m_pWrtShell->GetCurPageDesc();
+                const size_t nCurIdx = m_pWrtShell->GetCurPageDesc();
                 SwPageDesc aPageDesc( m_pWrtShell->GetPageDesc( nCurIdx ) );
                 ::ItemSetToPageDesc( *pArgs, aPageDesc );
                 // change the descriptor of the core
@@ -973,7 +973,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             if(pArgs && SfxItemState::SET == pArgs->GetItemState(RES_BACKGROUND, false, &pItem))
             {
-                const sal_uInt16 nCurIdx = m_pWrtShell->GetCurPageDesc();
+                const size_t nCurIdx = m_pWrtShell->GetCurPageDesc();
                 SwPageDesc aDesc( m_pWrtShell->GetPageDesc( nCurIdx ));
                 SwFrmFmt& rMaster = aDesc.GetMaster();
                 rMaster.SetFmtAttr(*pItem);
@@ -2019,11 +2019,11 @@ bool SwView::JumpToSwMark( const OUString& rMark )
 // Undo "Insert form file" crashes with documents imported from binary filter (.sdw) => disabled
 // Undo "Insert form file" crashes with (.odt) documents crashes if these documents contains
 // page styles with active header/footer => disabled for those documents
-static sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
+static size_t lcl_PageDescWithHeader( const SwDoc& rDoc )
 {
-    sal_uInt16 nRet = 0;
-    sal_uInt16 nCnt = rDoc.GetPageDescCnt();
-    for( sal_uInt16 i = 0; i < nCnt; ++i )
+    size_t nRet = 0;
+    size_t nCnt = rDoc.GetPageDescCnt();
+    for( size_t i = 0; i < nCnt; ++i )
     {
         const SwPageDesc& rPageDesc = rDoc.GetPageDesc( i );
         const SwFrmFmt& rMaster = rPageDesc.GetMaster();
@@ -2152,7 +2152,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
             if( pRead ||
                 (pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER) )
             {
-                sal_uInt16 nUndoCheck = 0;
+                size_t nUndoCheck = 0;
                 SwDoc *pDoc = pDocSh->GetDoc();
                 if( pRead && pDocSh->GetDoc() )
                     nUndoCheck = lcl_PageDescWithHeader( *pDoc );

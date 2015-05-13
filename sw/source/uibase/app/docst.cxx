@@ -211,7 +211,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    sal_uInt16 n = pShell->GetCurPageDesc( false );
+                    size_t n = pShell->GetCurPageDesc( false );
                     if( n < pShell->GetPageDescCnt() )
                         aName = pShell->GetPageDesc( n ).GetName();
 
@@ -1205,7 +1205,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
         case SFX_STYLE_FAMILY_PAGE:
         {
             pCurrWrtShell->StartAllAction();
-            sal_uInt16 nPgDsc = pCurrWrtShell->GetCurPageDesc();
+            size_t nPgDsc = pCurrWrtShell->GetCurPageDesc();
             SwPageDesc& rSrc = (SwPageDesc&)pCurrWrtShell->GetPageDesc( nPgDsc );
             SwPageDesc& rDest = *const_cast<SwPageDesc*>(pStyle->GetPageDesc());
 
