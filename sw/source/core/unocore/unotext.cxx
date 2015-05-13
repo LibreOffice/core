@@ -415,10 +415,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 IDocumentContentOperations::INS_EMPTYEXPAND)
         : IDocumentContentOperations::INS_EMPTYEXPAND;
 
-    SwPaM aTmp(*aPam.Start());
     if (bAbsorb && aPam.HasMark())
     {
         m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
+        aPam.DeleteMark();
     }
 
     sal_Unicode cIns = 0;
@@ -426,13 +426,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
         case text::ControlCharacter::PARAGRAPH_BREAK :
             // a table cell now becomes an ordinary text cell!
-            m_pImpl->m_pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
-            m_pImpl->m_pDoc->getIDocumentContentOperations().SplitNode( *aTmp.GetPoint(), false );
+            m_pImpl->m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->nNode);
+            m_pImpl->m_pDoc->getIDocumentContentOperations().SplitNode(*aPam.GetPoint(), false);
             break;
         case text::ControlCharacter::APPEND_PARAGRAPH:
         {
-            m_pImpl->m_pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
-            m_pImpl->m_pDoc->getIDocumentContentOperations().AppendTxtNode( *aTmp.GetPoint() );
+            m_pImpl->m_pDoc->ClearBoxNumAttrs(aPam.GetPoint()->nNode);
+            m_pImpl->m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPam.GetPoint());
 
             const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
                     xTextRange, uno::UNO_QUERY);
@@ -443,12 +443,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                             xRangeTunnel);
             if (pRange)
             {
-                pRange->SetPositions(aTmp);
+                pRange->SetPositions(aPam);
             }
             else if (pCursor)
             {
                 SwPaM *const pCrsr = pCursor->GetPaM();
-                *pCrsr->GetPoint() = *aTmp.GetPoint();
+                *pCrsr->GetPoint() = *aPam.GetPoint();
                 pCrsr->DeleteMark();
             }
         }
@@ -460,7 +460,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
     if (cIns)
     {
-        m_pImpl->m_pDoc->getIDocumentContentOperations().InsertString( aTmp, OUString(cIns), nInsertFlags );
+        m_pImpl->m_pDoc->getIDocumentContentOperations().InsertString(
+                aPam, OUString(cIns), nInsertFlags);
     }
 
     if (bAbsorb)
@@ -472,7 +473,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         OTextCursorHelper *const pCursor =
             ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
 
-        SwCursor aCrsr(*aTmp.GetPoint(),0,false);
+        SwCursor aCrsr(*aPam.GetPoint(), 0, false);
         SwUnoCursorHelper::SelectPam(aCrsr, true);
         aCrsr.Left(1, CRSR_SKIP_CHARS, false, false);
         // here, the PaM needs to be moved:
