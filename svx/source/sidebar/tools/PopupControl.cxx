@@ -35,15 +35,15 @@ PopupControl::PopupControl (
     SetBackground(Theme::GetWallpaper(Theme::Paint_DropDownBackground));
 }
 
-void PopupControl::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rBox)
+void PopupControl::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    Control::Paint(rRenderContext, rBox);
+    Control::Paint(rRenderContext, rRect);
 
     // The background is taken care of by setting the background color
     // in the constructor.  Here we just paint the border.
-    SetFillColor();
-    SetLineColor(Theme::GetColor(Theme::Color_DropDownBorder));
-    DrawRect(Rectangle(Point(0,0), GetOutputSizePixel()));
+    rRenderContext.SetFillColor();
+    rRenderContext.SetLineColor(Theme::GetColor(Theme::Color_DropDownBorder));
+    rRenderContext.DrawRect(Rectangle(Point(0,0), GetOutputSizePixel()));
 }
 
 } } // end of namespace svx::sidebar
