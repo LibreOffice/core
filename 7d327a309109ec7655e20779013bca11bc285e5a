@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_c79ac0c5",
+        "filename": "sc/source/ui/Accessibility/AccessibleContextBase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-05-13T10:01:13Z",
+      "side": 1,
+      "message": "You’ve removed the initial // here and until svtools/source/control/accessibleruler.cxx. ;-)",
+      "revId": "7d327a309109ec7655e20779013bca11bc285e5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
