@@ -790,9 +790,9 @@ void GtkSalGraphics::PaintCheckOrRadio(GtkStyleContext *context,
 }
 
 #if GTK_CHECK_VERSION(3,14,0)
-#   define CHECKED_AND_ACTIVE (GTK_STATE_FLAG_CHECKED | GTK_STATE_FLAG_ACTIVE)
+#   define CHECKED GTK_STATE_FLAG_CHECKED
 #else
-#   define CHECKED_AND_ACTIVE GTK_STATE_FLAG_ACTIVE
+#   define CHECKED GTK_STATE_FLAG_ACTIVE
 #endif
 
 bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
@@ -889,7 +889,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case CTRL_CHECKBOX:
         flags = (GtkStateFlags)(flags |
-                ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED_AND_ACTIVE :
+                ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED :
                   (rValue.getTristateVal() == BUTTONVALUE_MIXED) ? GTK_STATE_FLAG_INCONSISTENT :
                   GTK_STATE_FLAG_NORMAL));
         context = mpCheckButtonStyle;
@@ -898,7 +898,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case CTRL_RADIOBUTTON:
         flags = (GtkStateFlags)(flags |
-                ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED_AND_ACTIVE : GTK_STATE_FLAG_NORMAL));
+                ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED : GTK_STATE_FLAG_NORMAL));
         context = mpCheckButtonStyle;
         styleClass = GTK_STYLE_CLASS_RADIO;
         renderType = RENDER_RADIO;
