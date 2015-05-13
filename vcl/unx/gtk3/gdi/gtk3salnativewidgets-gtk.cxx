@@ -14,6 +14,7 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
+#include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include "fontmanager.hxx"
 #include "gtk3cairotextrender.hxx"
@@ -37,6 +38,8 @@ GtkStyleContext* GtkSalGraphics::mpComboboxButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpListboxStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpListboxButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpNoteBookStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpFrameInStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpFrameOutStyle = NULL;
 
 bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
@@ -227,20 +230,20 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                     const Rectangle& rControlRectangle,
                                     ControlType nType,
                                     ControlPart nPart,
-                                    const ImplControlValue& aValue )
+                                    const ImplControlValue& rValue )
 {
     (void)nType;
-    OSL_ASSERT( aValue.getType() == CTRL_SCROLLBAR );
-    const ScrollbarValue* pScrollbarVal = static_cast<const ScrollbarValue *>(&aValue);
+    OSL_ASSERT( rValue.getType() == CTRL_SCROLLBAR );
+    const ScrollbarValue& rScrollbarVal = static_cast<const ScrollbarValue&>(rValue);
     Rectangle        scrollbarRect;
     GtkStateFlags    stateFlags;
     GtkShadowType    shadowType;
     GtkOrientation    scrollbarOrientation;
-    Rectangle        thumbRect = pScrollbarVal->maThumbRect;
-    Rectangle        button11BoundRect = pScrollbarVal->maButton1Rect;   // backward
-    Rectangle        button22BoundRect = pScrollbarVal->maButton2Rect;   // forward
-    Rectangle        button12BoundRect = pScrollbarVal->maButton1Rect;   // secondary forward
-    Rectangle        button21BoundRect = pScrollbarVal->maButton2Rect;   // secondary backward
+    Rectangle        thumbRect = rScrollbarVal.maThumbRect;
+    Rectangle        button11BoundRect = rScrollbarVal.maButton1Rect;   // backward
+    Rectangle        button22BoundRect = rScrollbarVal.maButton2Rect;   // forward
+    Rectangle        button12BoundRect = rScrollbarVal.maButton1Rect;   // secondary forward
+    Rectangle        button21BoundRect = rScrollbarVal.maButton2Rect;   // secondary backward
     gdouble          arrow1Angle;                                        // backward
     gdouble          arrow2Angle;                                        // forward
     Rectangle        arrowRect;
@@ -388,8 +391,8 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     // ----------------- THUMB
     if ( has_slider )
     {
-        NWConvertVCLStateToGTKState( pScrollbarVal->mnThumbState, &stateFlags, &shadowType );
-        if ( pScrollbarVal->mnThumbState & ControlState::PRESSED )
+        NWConvertVCLStateToGTKState( rScrollbarVal.mnThumbState, &stateFlags, &shadowType );
+        if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
             stateFlags = (GtkStateFlags) (stateFlags | GTK_STATE_PRELIGHT);
 
         gtk_style_context_save(context);
@@ -404,14 +407,14 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     }
 
     bool backwardButtonInsensitive =
-        pScrollbarVal->mnCur == pScrollbarVal->mnMin;
-    bool forwardButtonInsensitive = pScrollbarVal->mnMax == 0 ||
-        pScrollbarVal->mnCur + pScrollbarVal->mnVisibleSize >= pScrollbarVal->mnMax;
+        rScrollbarVal.mnCur == rScrollbarVal.mnMin;
+    bool forwardButtonInsensitive = rScrollbarVal.mnMax == 0 ||
+        rScrollbarVal.mnCur + rScrollbarVal.mnVisibleSize >= rScrollbarVal.mnMax;
 
     // ----------------- BUTTON 1
     if ( has_backward )
     {
-        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateFlags, &shadowType );
+        NWConvertVCLStateToGTKState( rScrollbarVal.mnButton1State, &stateFlags, &shadowType );
         if ( backwardButtonInsensitive )
             stateFlags = GTK_STATE_FLAG_INSENSITIVE;
 
@@ -438,7 +441,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     }
     if ( has_forward2 )
     {
-        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateFlags, &shadowType );
+        NWConvertVCLStateToGTKState( rScrollbarVal.mnButton2State, &stateFlags, &shadowType );
         if ( forwardButtonInsensitive )
             stateFlags = GTK_STATE_FLAG_INSENSITIVE;
 
@@ -466,7 +469,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     // ----------------- BUTTON 2
     if ( has_backward2 )
     {
-        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateFlags, &shadowType );
+        NWConvertVCLStateToGTKState( rScrollbarVal.mnButton1State, &stateFlags, &shadowType );
         if ( backwardButtonInsensitive )
             stateFlags = GTK_STATE_FLAG_INSENSITIVE;
 
@@ -493,7 +496,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     }
     if ( has_forward )
     {
-        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateFlags, &shadowType );
+        NWConvertVCLStateToGTKState( rScrollbarVal.mnButton2State, &stateFlags, &shadowType );
         if ( forwardButtonInsensitive )
             stateFlags = GTK_STATE_FLAG_INSENSITIVE;
 
@@ -573,12 +576,12 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
                                      const Rectangle& rControlRectangle,
                                      ControlType nType,
                                      ControlPart nPart,
-                                     const ImplControlValue& aValue )
+                                     const ImplControlValue& rValue )
 {
     (void)nPart;
     Rectangle            areaRect;
     GtkShadowType        shadowType;
-    const SpinbuttonValue *    pSpinVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&aValue) : NULL;
+    const SpinbuttonValue *    pSpinVal = (rValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&rValue) : NULL;
     ControlPart        upBtnPart = PART_BUTTON_UP;
     ControlState        upBtnState = ControlState::ENABLED;
     ControlPart        downBtnPart = PART_BUTTON_DOWN;
@@ -674,9 +677,8 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
                                     const Rectangle& rControlRectangle,
                                     ControlType nType,
                                     ControlPart nPart,
-                                    const ImplControlValue& aValue )
+                                    const ImplControlValue& /*rValue*/ )
 {
-    (void)aValue;
     Rectangle        areaRect;
     Rectangle        buttonRect;
     Rectangle        arrowRect;
@@ -799,7 +801,7 @@ void GtkSalGraphics::PaintCheckOrRadio(GtkStyleContext *context,
 #endif
 
 bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                            ControlState nState, const ImplControlValue& aValue,
+                                            ControlState nState, const ImplControlValue& rValue,
                                             const OUString& )
 {
     GtkStateFlags flags;
@@ -879,7 +881,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         case PART_BUTTON:
             /* For all checkbuttons in the toolbars */
             flags = (GtkStateFlags)(flags |
-                    ( (aValue.getTristateVal() == BUTTONVALUE_ON) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
+                    ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
             context = mpToolButtonStyle;
             break;
         case PART_SEPARATOR_VERT:
@@ -892,8 +894,8 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case CTRL_CHECKBOX:
         flags = (GtkStateFlags)(flags |
-                ( (aValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED_AND_ACTIVE :
-                  (aValue.getTristateVal() == BUTTONVALUE_MIXED) ? GTK_STATE_FLAG_INCONSISTENT :
+                ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED_AND_ACTIVE :
+                  (rValue.getTristateVal() == BUTTONVALUE_MIXED) ? GTK_STATE_FLAG_INCONSISTENT :
                   GTK_STATE_FLAG_NORMAL));
         context = mpCheckButtonStyle;
         styleClass = GTK_STYLE_CLASS_CHECK;
@@ -901,7 +903,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case CTRL_RADIOBUTTON:
         flags = (GtkStateFlags)(flags |
-                ( (aValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED_AND_ACTIVE : GTK_STATE_FLAG_NORMAL));
+                ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED_AND_ACTIVE : GTK_STATE_FLAG_NORMAL));
         context = mpCheckButtonStyle;
         styleClass = GTK_STYLE_CLASS_RADIO;
         renderType = RENDER_RADIO;
@@ -939,6 +941,15 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     case CTRL_WINDOW_BACKGROUND:
         context = gtk_widget_get_style_context(mpWindow);
         break;
+    case CTRL_FRAME:
+    {
+        DrawFrameStyle nStyle = static_cast<DrawFrameStyle>(rValue.getNumericVal() & 0x0f);
+        if (nStyle == DrawFrameStyle::In)
+            context = mpFrameOutStyle;
+        else
+            context = mpFrameInStyle;
+        break;
+    }
     default:
         return false;
     }
@@ -957,7 +968,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     if (nType == CTRL_TAB_ITEM)
     {
 
-        const TabitemValue& rTabitemValue = static_cast<const TabitemValue&>(aValue);
+        const TabitemValue& rTabitemValue = static_cast<const TabitemValue&>(rValue);
 
         GtkRegionFlags eFlags(GTK_REGION_EVEN);
         if (rTabitemValue.isFirst() && rTabitemValue.isLast())
@@ -1020,13 +1031,13 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                          MIN(rControlRegion.GetWidth(), 1 + rControlRegion.GetHeight()));
         break;
     case RENDER_SCROLLBAR:
-        PaintScrollbar(context, cr, rControlRegion, nType, nPart, aValue);
+        PaintScrollbar(context, cr, rControlRegion, nType, nPart, rValue);
         break;
     case RENDER_SPINBUTTON:
-        PaintSpinButton(context, cr, rControlRegion, nType, nPart, aValue);
+        PaintSpinButton(context, cr, rControlRegion, nType, nPart, rValue);
         break;
     case RENDER_COMBOBOX:
-        PaintCombobox(flags, cr, rControlRegion, nType, nPart, aValue);
+        PaintCombobox(flags, cr, rControlRegion, nType, nPart, rValue);
         break;
     default:
         break;
@@ -1080,6 +1091,8 @@ static GtkWidget* gComboBoxButtonWidget;
 static GtkWidget* gComboBoxEntryWidget;
 static GtkWidget* gListBox;
 static GtkWidget* gListBoxButtonWidget;
+static GtkWidget* gFrameIn;
+static GtkWidget* gFrameOut;
 
 bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
                                                 const ImplControlValue& rValue, const OUString&,
@@ -1202,6 +1215,35 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                                                     rTabitemRect.GetHeight(), rControlRegion);
 
         gtk_style_context_restore(mpNoteBookStyle);
+    }
+    else if (nType == CTRL_FRAME && nPart == PART_BORDER)
+    {
+        aEditRect = rControlRegion;
+        DrawFrameFlags nStyle = static_cast<DrawFrameFlags>(rValue.getNumericVal() & 0xfff0);
+        if (nStyle & DrawFrameFlags::NoDraw)
+        {
+            gtk_style_context_save(mpFrameInStyle);
+            gtk_style_context_add_class(mpFrameInStyle, GTK_STYLE_CLASS_FRAME);
+
+            GtkBorder padding;
+            gtk_style_context_get_padding(mpFrameInStyle, GTK_STATE_FLAG_NORMAL, &padding);
+
+            int x1 = aEditRect.Left();
+            int y1 = aEditRect.Top();
+            int x2 = aEditRect.Right();
+            int y2 = aEditRect.Bottom();
+
+            rNativeBoundingRegion = aEditRect;
+            rNativeContentRegion = Rectangle(x1 + padding.left,
+                                             y1 + padding.top,
+                                             x2 - padding.right,
+                                             y2 - padding.bottom);
+
+            gtk_style_context_restore(mpFrameInStyle);
+            return true;
+        }
+        else
+            rNativeContentRegion = rControlRegion;
     }
     else
     {
@@ -1616,7 +1658,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 //                return true;
 //            break;
 
-//        case CTRL_FRAME:
+        case CTRL_FRAME:
         case CTRL_WINDOW_BACKGROUND:
             return true;
 
@@ -1849,6 +1891,16 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
                          get_combo_box_inner_button,
                          NULL);
     mpListboxButtonStyle = gtk_widget_get_style_context(gListBoxButtonWidget);
+
+    /* Frames */
+    gFrameIn = gtk_frame_new(NULL);
+    gtk_frame_set_shadow_type(GTK_FRAME(gFrameIn), GTK_SHADOW_IN);
+
+    gFrameOut = gtk_frame_new(NULL);
+    gtk_frame_set_shadow_type(GTK_FRAME(gFrameOut), GTK_SHADOW_OUT);
+
+    getStyleContext(&mpFrameInStyle, gFrameIn);
+    getStyleContext(&mpFrameOutStyle, gFrameOut);
 
     gtk_widget_show_all(gDumbContainer);
 }
