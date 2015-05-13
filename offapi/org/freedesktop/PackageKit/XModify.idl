@@ -20,6 +20,10 @@ module PackageKit
 {
 /**
  *  The interface used for modifying the package database.
+ *
+ * @sa
+ * https://git.gnome.org/browse/gnome-software/tree/src/org.freedesktop.PackageKit.xml
+ * for documentation of the corresponding D-Bus interface
  */
 interface XModify : com::sun::star::uno::XInterface
 {
