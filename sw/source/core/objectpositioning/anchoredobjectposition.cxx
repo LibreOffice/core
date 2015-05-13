@@ -19,6 +19,7 @@
 
 #include <anchoredobjectposition.hxx>
 #include <environmentofanchoredobject.hxx>
+#include <doc.hxx>
 #include <flyfrm.hxx>
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
@@ -29,6 +30,7 @@
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <fmtornt.hxx>
+#include <fmtfsize.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -471,8 +473,28 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
         {
             nAdjustedRelPosY = aPgAlignArea.Top() - nTopOfAnch;
         }
-    }
 
+        // tdf#91260 - allow textboxes extending beyond the page bottom
+        if ( nAdjustedRelPosY < nProposedRelPosY )
+        {
+            const SwFrmFmt* pFmt = &(GetFrmFmt());
+            if ( SwTextBoxHelper::isTextBox(&GetObject()) )
+            {
+                // shrink textboxes to extend beyond the page bottom
+                SwFrmFmt* pFrmFmt = ::FindFrmFmt(&GetObject());
+                SfxItemSet aTextBoxSet(pFrmFmt->GetDoc()->GetAttrPool(), aFrmFmtSetRange);
+                SwFmtFrmSize aSize(pFmt->GetFrmSize());
+                SwTwips nShrinked = aSize.GetHeight() - (nProposedRelPosY - nAdjustedRelPosY);
+                aSize.SetHeight( nShrinked > 0 ? nShrinked : 0 );
+                aTextBoxSet.Put(aSize);
+                if (aTextBoxSet.Count())
+                    pFrmFmt->GetDoc()->SetFlyFrmAttr(*pFrmFmt, aTextBoxSet);
+                nAdjustedRelPosY = nProposedRelPosY;
+            } else if ( SwTextBoxHelper::findTextBox(pFmt) )
+                // when the shape has a textbox, use only the proposed vertical position
+                nAdjustedRelPosY = nProposedRelPosY;
+        }
+    }
     return nAdjustedRelPosY;
 }
 

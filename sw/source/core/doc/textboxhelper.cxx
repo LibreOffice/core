@@ -636,6 +636,14 @@ void SwTextBoxHelper::syncFlyFrmAttr(SwFrmFmt& rShape, SfxItemSet& rSet)
                     aOrient.SetPos(aOrient.GetPos() + aRect.getY());
 
                 aTextBoxSet.Put(aOrient);
+
+                // restore height (shrinked for extending beyond the page bottom - tdf#91260)
+                SwFmtFrmSize aSize(pFmt->GetFrmSize());
+                if (!aRect.IsEmpty())
+                {
+                    aSize.SetHeight(aRect.getHeight());
+                    aTextBoxSet.Put(aSize);
+                }
             }
             break;
             case RES_HORI_ORIENT:
