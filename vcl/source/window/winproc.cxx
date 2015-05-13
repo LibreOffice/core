@@ -100,7 +100,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                     {
                         pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
                         nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
-                        pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+                        pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
                         return true;
                     }
                     else if ( nHitTest == HITTEST_RECT )
@@ -117,7 +117,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                         if ( nHitTest == HITTEST_RECT )
                         {
                             if ( pFloat->ImplIsMouseDown() )
-                                pFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
+                                pFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel );
                             return true;
                         }
                     }
@@ -127,7 +127,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                         nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
                         if ( !(nPopupFlags & FloatWinPopupFlags::NoMouseUpClose) )
                         {
-                            pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+                            pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
                             return true;
                         }
                     }
@@ -144,7 +144,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                         if ( (nPopupFlags & FloatWinPopupFlags::NoMouseUpClose) &&
                              (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
                             return true;
-                        pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+                        pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
                         return true;
                     }
                     else
@@ -958,7 +958,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                         sal_uInt16 nEscCode = aKeyCode.GetCode();
 
                         if ( nEscCode == KEY_ESCAPE )
-                            pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+                            pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
                     }
                 }
                 return true;
@@ -982,7 +982,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
 
                 if ( (nCode == KEY_ESCAPE) || bCtrlF6)
                 {
-                    pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+                    pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
                     if( !bCtrlF6 )
                         return true;
                 }
@@ -1652,7 +1652,7 @@ static void KillOwnPopups( vcl::Window* pWindow )
     if ( pChild && pParent->ImplIsWindowOrChild( pChild, true ) )
     {
         if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose) )
-            pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+            pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
     }
 }
 
@@ -1727,7 +1727,7 @@ static void ImplHandleMove( vcl::Window* pWindow )
 {
     if( pWindow->ImplGetWindowImpl()->mbFrame && pWindow->ImplIsFloatingWindow() && pWindow->IsReallyVisible() )
     {
-        static_cast<FloatingWindow*>(pWindow)->EndPopupMode( FLOATWIN_POPUPMODEEND_TEAROFF );
+        static_cast<FloatingWindow*>(pWindow)->EndPopupMode( FloatWinPopupEndFlags::TearOff );
         pWindow->ImplCallMove();
     }
 
@@ -1917,7 +1917,7 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
     if ( pSVData->maWinData.mpFirstFloat )
     {
         if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose) )
-            pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+            pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
     }
 
     pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus = false;
@@ -1975,7 +1975,7 @@ void ImplHandleClose( vcl::Window* pWindow )
     {
         FloatingWindow* pLastLevelFloat;
         pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
-        pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+        pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
     }
     if ( pSVData->maHelpData.mbExtHelpMode )
         Help::EndExtHelp();

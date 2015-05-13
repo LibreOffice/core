@@ -595,7 +595,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                 if ( pBorderWindow->ImplGetClientWindow()->ImplIsFloatingWindow() )
                 {
                     if ( static_cast<FloatingWindow*>(pBorderWindow->ImplGetClientWindow())->IsInPopupMode() )
-                        static_cast<FloatingWindow*>(pBorderWindow->ImplGetClientWindow())->EndPopupMode( FLOATWIN_POPUPMODEEND_TEAROFF );
+                        static_cast<FloatingWindow*>(pBorderWindow->ImplGetClientWindow())->EndPopupMode( FloatWinPopupEndFlags::TearOff );
                 }
             }
         }

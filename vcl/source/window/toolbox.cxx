@@ -1588,7 +1588,7 @@ void ToolBox::dispose()
     // terminate popupmode if the floating window is
     // still connected
     if ( mpFloatWin )
-        mpFloatWin->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
+        mpFloatWin->EndPopupMode( FloatWinPopupEndFlags::Cancel );
     mpFloatWin = NULL;
 
     // delete private data
@@ -4988,7 +4988,7 @@ bool ImplCloseLastPopup( vcl::Window *pParent )
         // only close the floater if it is not our direct parent, which would kill ourself
         if( pLastLevelFloat && pLastLevelFloat != pParent )
         {
-            pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+            pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
             return true;
         }
     }

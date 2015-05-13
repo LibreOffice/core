@@ -2365,7 +2365,7 @@ bool CalendarField::ShowDropDown( bool bShow )
     }
     else
     {
-        mpFloatWin->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
+        mpFloatWin->EndPopupMode( FloatWinPopupEndFlags::Cancel );
         mpCalendar->EndSelection();
         EndDropDown();
     }

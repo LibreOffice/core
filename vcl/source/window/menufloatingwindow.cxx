@@ -392,7 +392,7 @@ void MenuFloatingWindow::StopExecute( sal_uLong nFocusId )
             ImplGetSVData()->maWinData.mbNoDeactivate = false;
         }
     }
-    ImplEndPopupMode( 0, nFocusId );
+    ImplEndPopupMode( FloatWinPopupEndFlags::NONE, nFocusId );
 
     aHighlightChangedTimer.Stop();
     bInExecute = false;

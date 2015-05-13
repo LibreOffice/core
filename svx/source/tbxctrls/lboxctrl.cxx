@@ -225,7 +225,7 @@ IMPL_LINK_NOARG(SvxListBoxControl, SelectHdl)
         else
         {
             pPopupWin->SetUserSelected( true );
-            pPopupWin->EndPopupMode( 0 );
+            pPopupWin->EndPopupMode();
         }
     }
     return 0;

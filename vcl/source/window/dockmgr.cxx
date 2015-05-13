@@ -778,7 +778,7 @@ void ImplPopupFloatWin::Tracking( const TrackingEvent& rTEvt )
         if ( rTEvt.IsTrackingEnded() )
         {
             mbMoving = false;
-            EndPopupMode( FLOATWIN_POPUPMODEEND_TEAROFF );
+            EndPopupMode( FloatWinPopupEndFlags::TearOff );
         }
         else if ( !rTEvt.GetMouseEvent().IsSynthetic() )
         {

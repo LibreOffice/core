@@ -2857,7 +2857,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
     {
         // assure that only one menu is open at a time
         if (pStartedFrom->IsMenuBar() && pSVData->maWinData.mpFirstFloat)
-            pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+            pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
     }
 
     DBG_ASSERT( !ImplGetWindow(), "Win?!" );
@@ -3060,7 +3060,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
             pWin->SetFocusId( 0 );
             pSVData->maWinData.mbNoDeactivate = false;
         }
-        pWin->ImplEndPopupMode( 0, nFocusId );
+        pWin->ImplEndPopupMode( FloatWinPopupEndFlags::NONE, nFocusId );
 
         if ( nSelectedId )  // then clean up .. ( otherwise done by TH )
         {

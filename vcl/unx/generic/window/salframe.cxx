@@ -2989,7 +2989,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
         {
             static const char* pEnv = getenv( "SAL_FLOATWIN_NOAPPFOCUSCLOSE" );
             if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose) && !(pEnv && *pEnv) )
-                pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+                pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
         }
     }
 

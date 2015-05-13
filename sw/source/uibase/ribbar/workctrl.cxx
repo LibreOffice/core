@@ -524,7 +524,7 @@ void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
     ToolBox::MouseButtonUp(rMEvt);
     if (m_pNaviPopup->IsInPopupMode())
-        m_pNaviPopup->EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL);
+        m_pNaviPopup->EndPopupMode(FloatWinPopupEndFlags::CloseAll);
 }
 
 void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )

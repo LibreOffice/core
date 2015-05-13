@@ -58,10 +58,18 @@ namespace o3tl
     template<> struct typed_flags<FloatWinPopupFlags> : is_typed_flags<FloatWinPopupFlags, 0x03ffff> {};
 }
 
-#define FLOATWIN_POPUPMODEEND_CANCEL            ((sal_uInt16)0x0001)
-#define FLOATWIN_POPUPMODEEND_TEAROFF           ((sal_uInt16)0x0002)
-#define FLOATWIN_POPUPMODEEND_DONTCALLHDL       ((sal_uInt16)0x0004)
-#define FLOATWIN_POPUPMODEEND_CLOSEALL          ((sal_uInt16)0x0008)
+enum class FloatWinPopupEndFlags
+{
+    NONE              = 0x00,
+    Cancel            = 0x01,
+    TearOff           = 0x02,
+    DontCallHdl       = 0x04,
+    CloseAll          = 0x08,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<FloatWinPopupEndFlags> : is_typed_flags<FloatWinPopupEndFlags, 0x0f> {};
+}
 
 #define FLOATWIN_TITLE_NORMAL                   ((sal_uInt16)0x0001)
 #define FLOATWIN_TITLE_TEAROFF                  ((sal_uInt16)0x0002)
@@ -121,7 +129,7 @@ public:
     SAL_DLLPRIVATE static Point     ImplCalcPos( vcl::Window* pWindow,
                                                  const Rectangle& rRect, FloatWinPopupFlags nFlags,
                                                  sal_uInt16& rArrangeIndex );
-    SAL_DLLPRIVATE void             ImplEndPopupMode( sal_uInt16 nFlags = 0, sal_uLong nFocusId = 0 );
+    SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags = FloatWinPopupEndFlags::NONE, sal_uLong nFocusId = 0 );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
     virtual        void             doDeferredInit(WinBits nBits) SAL_OVERRIDE;
@@ -144,7 +152,7 @@ public:
 
     void            StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags nFlags = FloatWinPopupFlags::NONE );
     void            StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags = FloatWinPopupFlags::NONE  );
-    void            EndPopupMode( sal_uInt16 nFlags = 0 );
+    void            EndPopupMode( FloatWinPopupEndFlags nFlags = FloatWinPopupEndFlags::NONE );
     void            AddPopupModeWindow( vcl::Window* pWindow );
     FloatWinPopupFlags GetPopupModeFlags() const { return mnPopupModeFlags; }
     void            SetPopupModeFlags( FloatWinPopupFlags nFlags ) { mnPopupModeFlags = nFlags; }

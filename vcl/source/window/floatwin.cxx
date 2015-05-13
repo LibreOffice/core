@@ -203,7 +203,7 @@ void FloatingWindow::dispose()
             SetDialogControlFlags( GetDialogControlFlags() | WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL );
 
         if ( IsInPopupMode() )
-            EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL | FLOATWIN_POPUPMODEEND_DONTCALLHDL );
+            EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll | FloatWinPopupEndFlags::DontCallHdl );
 
         if ( mnPostId )
             Application::RemoveUserEvent( mnPostId );
@@ -745,7 +745,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
     StartPopupMode( aRect, nFlags );
 }
 
-void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
+void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, sal_uLong nFocusId )
 {
     if ( !mbInPopupMode )
         return;
@@ -756,7 +756,7 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
 
     // stop the PopupMode also for all following PopupMode windows
     while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat.get() != this )
-        pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
+        pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel );
 
     // delete window from the list
     pSVData->maWinData.mpFirstFloat = mpNextFloat;
@@ -765,7 +765,7 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
     FloatWinPopupFlags nPopupModeFlags = mnPopupModeFlags;
 
     // hide window again if it was not deleted
-    if ( !(nFlags & FLOATWIN_POPUPMODEEND_TEAROFF) ||
+    if ( !(nFlags & FloatWinPopupEndFlags::TearOff) ||
          !(nPopupModeFlags & FloatWinPopupFlags::AllowTearOff) )
     {
         Show( false, SHOW_NOFOCUSCHANGE );
@@ -786,7 +786,7 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
     }
     EnableSaveBackground( mbOldSaveBackMode );
 
-    mbPopupModeCanceled = (nFlags & FLOATWIN_POPUPMODEEND_CANCEL) != 0;
+    mbPopupModeCanceled = bool(nFlags & FloatWinPopupEndFlags::Cancel);
 
     // redo title
     SetTitleType( mnOldTitle );
@@ -799,18 +799,18 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
     }
 
     // call PopupModeEnd-Handler depending on parameter
-    if ( !(nFlags & FLOATWIN_POPUPMODEEND_DONTCALLHDL) )
+    if ( !(nFlags & FloatWinPopupEndFlags::DontCallHdl) )
         ImplCallPopupModeEnd();
 
     // close all other windows depending on parameter
-    if ( nFlags & FLOATWIN_POPUPMODEEND_CLOSEALL )
+    if ( nFlags & FloatWinPopupEndFlags::CloseAll )
     {
         if ( !(nPopupModeFlags & FloatWinPopupFlags::NewLevel) )
         {
             if ( pSVData->maWinData.mpFirstFloat )
             {
                 FloatingWindow* pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
-                pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+                pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
             }
         }
     }
@@ -818,7 +818,7 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
     mbInCleanUp = false;
 }
 
-void FloatingWindow::EndPopupMode( sal_uInt16 nFlags )
+void FloatingWindow::EndPopupMode( FloatWinPopupEndFlags nFlags )
 {
     ImplEndPopupMode( nFlags );
 }

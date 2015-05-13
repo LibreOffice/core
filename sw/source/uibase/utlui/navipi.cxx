@@ -437,7 +437,7 @@ void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, bool bSetFocus
     SetPopupWindow( pPopup );
     if(bSetFocus)
     {
-        pPopup->EndPopupMode(FLOATWIN_POPUPMODEEND_TEAROFF);
+        pPopup->EndPopupMode(FloatWinPopupEndFlags::TearOff);
         pPopup->GrabFocus();
     }
 }

@@ -203,7 +203,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
                 if ( nNewLine > 1 )
                     nNewLine--;
                 else
-                    EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
+                    EndPopupMode( FloatWinPopupEndFlags::Cancel );
                 break;
             case KEY_DOWN:
                 if ( nNewLine < TABLE_CELLS_VERT )
@@ -215,7 +215,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
                 if ( nNewCol > 1 )
                     nNewCol--;
                 else
-                    EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
+                    EndPopupMode( FloatWinPopupEndFlags::Cancel );
                 break;
             case KEY_RIGHT:
                 if ( nNewCol < TABLE_CELLS_HORIZ )
@@ -224,10 +224,10 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
                     CloseAndShowTableDialog();
                 break;
             case KEY_ESCAPE:
-                EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
+                EndPopupMode( FloatWinPopupEndFlags::Cancel );
                 break;
             case KEY_RETURN:
-                EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
+                EndPopupMode( FloatWinPopupEndFlags::CloseAll );
                 break;
             case KEY_TAB:
                 CloseAndShowTableDialog();
@@ -252,7 +252,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
     else if(KEY_MOD1 == nModifier && KEY_RETURN == nKey)
     {
         m_bMod1 = true;
-        EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
+        EndPopupMode( FloatWinPopupEndFlags::CloseAll );
     }
 
     if(!bHandled)
@@ -264,7 +264,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
 void TableWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     SfxPopupWindow::MouseButtonUp( rMEvt );
-    EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
+    EndPopupMode( FloatWinPopupEndFlags::CloseAll );
 }
 
 
@@ -401,7 +401,7 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
 void TableWindow::CloseAndShowTableDialog()
 {
     // close the toolbar tool
-    EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
+    EndPopupMode( FloatWinPopupEndFlags::Cancel );
 
     // and open the table dialog instead
     TableDialog( Sequence< PropertyValue >() );
@@ -595,11 +595,11 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
                 case KEY_RETURN :
                     if(IsMouseCaptured())
                         ReleaseMouse();
-                    EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL );
+                    EndPopupMode(FloatWinPopupEndFlags::CloseAll );
                 break;
                 case KEY_ESCAPE :
                 case KEY_UP :
-                    EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL);
+                    EndPopupMode( FloatWinPopupEndFlags::Cancel);
                 break;
             }
             //make sure that a table can initially be created
@@ -617,7 +617,7 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
         m_bMod1 = true;
         if(IsMouseCaptured())
             ReleaseMouse();
-        EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL );
+        EndPopupMode(FloatWinPopupEndFlags::CloseAll );
     }
     if(!bHandled)
         SfxPopupWindow::KeyInput(rKEvt);
@@ -631,7 +631,7 @@ void ColumnsWindow::MouseButtonUp( const MouseEvent& rMEvt )
     ReleaseMouse();
 
     if ( IsInPopupMode() )
-        EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
+        EndPopupMode( FloatWinPopupEndFlags::CloseAll );
 }
 
 
