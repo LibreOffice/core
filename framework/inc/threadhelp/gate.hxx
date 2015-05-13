@@ -32,7 +32,6 @@ namespace framework{
     @short          implement a gate to block multiple threads at same time or unblock all
     @descr          A gate can be used as a negative-condition! You can open a "door" - wait() will not block ...
                     or you can close it - wait() blocks till open() is called again.
-                    As a special feature you can open the gate a little bit by sing openGap().
                     Then all currently waiting threads are running immediately - but new ones are blocked!
 
     @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are marked private!
@@ -56,7 +55,6 @@ class Gate : public  IGate
         *//*-*****************************************************************************************************/
         inline Gate()
             :   m_bClosed   ( false )
-            ,   m_bGapOpen  ( false )
         {
             open();
         }
@@ -110,31 +108,9 @@ class Gate : public  IGate
 
         /*-****************************************************************************************************
             @interface  IGate
-            @short      open gate for current waiting threads
-            @descr      All current waiting threads stand in wait() at line "m_aPassage.wait()" ...
-                        With this call you can open the passage for these waiting ones.
-                        The "gap" is closed by any new thread which call wait() automatically!
-
-            @seealso    method wait()
-            @seealso    method open()
-        *//*-*****************************************************************************************************/
-        virtual void openGap() SAL_OVERRIDE
-        {
-            // We must safe access to our internal member!
-            ::osl::MutexGuard aLock( m_aAccessLock );
-            // Open passage for current waiting threads.
-            m_aPassage.set();
-            // Check state of condition.
-            // If condition is set check() returns true => m_bGapOpen will be true too => we can use it as return value.
-            m_bGapOpen = m_aPassage.check();
-        }
-
-        /*-****************************************************************************************************
-            @interface  IGate
             @short      must be called to pass the gate
             @descr      If gate "open"   => wait() will not block.
                         If gate "closed" => wait() will block till somewhere open it again.
-                        If gap  "open"   => currently waiting threads unblocked, new ones blocked
 
             @seealso    method wait()
             @seealso    method open()
@@ -153,12 +129,6 @@ class Gate : public  IGate
             bool bSuccessful = true;
             if( m_bClosed )
             {
-                // Otherwise first new thread must close an open gap!
-                if( m_bGapOpen )
-                {
-                    m_bGapOpen = false;
-                    m_aPassage.reset();
-                }
                 // Then we must release used access lock -
                 // because next call will block ...
                 // and if we hold the access lock nobody else can use this object without a dadlock!
@@ -177,7 +147,6 @@ class Gate : public  IGate
         ::osl::Mutex        m_aAccessLock;
         ::osl::Condition    m_aPassage;
         bool                m_bClosed;
-        bool                m_bGapOpen;
 
 };      //  class Gate
 

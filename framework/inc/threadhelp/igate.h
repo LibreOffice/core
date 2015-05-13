@@ -38,12 +38,10 @@ class IGate
             @descr      These functions must be supported by a derived class!
                             open()      -open access for all waiting threads
                             close()     -close access for all further coming threads
-                            openGap()   -open access for current waiting threads only
                             wait()      -must be called to pass the gate
         *//*-*****************************************************************************************************/
         virtual void     open    (                                   ) = 0;
         virtual void     close   (                                   ) = 0;
-        virtual void     openGap (                                   ) = 0;
         virtual bool wait    ( const TimeValue* pTimeOut = NULL  ) = 0;
 
     protected:
