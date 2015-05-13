@@ -819,7 +819,7 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
         }
         break;
     }
-    UpdateExample_Impl( true );
+    UpdateExample_Impl();
     return 0;
 }
 
@@ -856,7 +856,7 @@ void SvxStdParagraphTabPage::Init_Impl()
     m_pLineDistAtMetricBox->SetMax( m_pLineDistAtMetricBox->Normalize( nAbst ), eUnit );
 }
 
-void SvxStdParagraphTabPage::UpdateExample_Impl( bool bAll )
+void SvxStdParagraphTabPage::UpdateExample_Impl()
 {
     m_pExampleWin->SetFirstLineOfst( (short)m_pFLineIndent->Denormalize( m_pFLineIndent->GetValue( FUNIT_TWIP ) ) );
     m_pExampleWin->SetLeftMargin( static_cast<long>(m_pLeftIndent->Denormalize( m_pLeftIndent->GetValue( FUNIT_TWIP ) ) ) );
@@ -886,7 +886,7 @@ void SvxStdParagraphTabPage::UpdateExample_Impl( bool bAll )
                 (sal_uInt16)GetCoreValue( *m_pLineDistAtMetricBox, SFX_MAPUNIT_TWIP ) );
             break;
     }
-    m_pExampleWin->Draw( bAll );
+    m_pExampleWin->Invalidate();
 }
 
 void SvxStdParagraphTabPage::EnableRegisterMode()
@@ -1260,7 +1260,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     m_pLastLineLB->SaveValue();
     m_pExpandCB->SaveValue();
 
-    UpdateExample_Impl(true);
+    UpdateExample_Impl();
 }
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl)
@@ -1270,7 +1270,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl)
     m_pLastLineLB->Enable(bJustify);
     bool bLastLineIsBlock = m_pLastLineLB->GetSelectEntryPos() == 2;
     m_pExpandCB->Enable(bJustify && bLastLineIsBlock);
-    UpdateExample_Impl(false);
+    UpdateExample_Impl();
     return 0;
 }
 
@@ -1279,7 +1279,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl)
     //fdo#41350 only enable 'Expand last word' if last line is also justified
     bool bLastLineIsBlock = m_pLastLineLB->GetSelectEntryPos() == 2;
     m_pExpandCB->Enable(bLastLineIsBlock);
-    UpdateExample_Impl(false);
+    UpdateExample_Impl();
     return 0;
 }
 
@@ -1301,7 +1301,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl)
     return 0;
 }
 
-void SvxParaAlignTabPage::UpdateExample_Impl( bool bAll )
+void SvxParaAlignTabPage::UpdateExample_Impl()
 {
     if ( m_pLeft->IsChecked() )
         m_pExampleWin->SetAdjust( SVX_ADJUST_LEFT );
@@ -1321,7 +1321,7 @@ void SvxParaAlignTabPage::UpdateExample_Impl( bool bAll )
         m_pExampleWin->SetLastLine( eLastBlock );
     }
 
-    m_pExampleWin->Draw( bAll );
+    m_pExampleWin->Invalidate();
 }
 
 void SvxParaAlignTabPage::EnableJustifyExt()

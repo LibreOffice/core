@@ -87,7 +87,7 @@ private:
 
     void                    SetLineSpacing_Impl( const SvxLineSpacingItem& rAttr );
     void                    Init_Impl();
-    void                    UpdateExample_Impl( bool bAll = false );
+    void                    UpdateExample_Impl();
 
     DECL_LINK( LineDistHdl_Impl, ListBox* );
     DECL_LINK(ModifyHdl_Impl, void *);
@@ -154,7 +154,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     DECL_LINK(LastLineHdl_Impl, void *);
     DECL_LINK(TextDirectionHdl_Impl, void *);
 
-    void                    UpdateExample_Impl( bool bAll = false );
+    void                    UpdateExample_Impl();
 
                             SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
