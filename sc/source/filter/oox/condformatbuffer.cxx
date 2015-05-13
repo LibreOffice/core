@@ -171,9 +171,7 @@ namespace {
     return ::Color(ornA, ornR, ornG, ornB);
 }
 
-}
-
-void ColorScaleRule::importColor( const AttributeList& rAttribs )
+::Color importOOXColor(const AttributeList& rAttribs, ThemeBuffer& rThemeBuffer, GraphicHelper& rGraphicHelper)
 {
     sal_uInt32 nColor = 0;
     if( rAttribs.hasAttribute( XML_rgb ) )
@@ -181,7 +179,7 @@ void ColorScaleRule::importColor( const AttributeList& rAttribs )
     else if( rAttribs.hasAttribute( XML_theme ) )
     {
         sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );
-        nColor = getTheme().getColorByIndex( nThemeIndex );
+        nColor = rThemeBuffer.getColorByIndex( nThemeIndex );
 
     }
 
@@ -192,11 +190,22 @@ void ColorScaleRule::importColor( const AttributeList& rAttribs )
         oox::drawingml::Color aDMColor;
         aDMColor.setSrgbClr(nColor);
         aDMColor.addExcelTintTransformation(nTint);
-        nColor = aDMColor.getColor(getBaseFilter().getGraphicHelper());
+        nColor = aDMColor.getColor(rGraphicHelper);
         aColor = ::Color(nColor);
     }
     else
         aColor = ARgbToARgbComponents( nColor );
+
+    return aColor;
+}
+
+}
+
+void ColorScaleRule::importColor( const AttributeList& rAttribs )
+{
+    ThemeBuffer& rThemeBuffer = getTheme();
+    GraphicHelper& rGraphicHelper = getBaseFilter().getGraphicHelper();
+    ::Color aColor = importOOXColor(rAttribs, rThemeBuffer, rGraphicHelper);
 
     if(mnCol >= maColorScaleRuleEntries.size())
         maColorScaleRuleEntries.push_back(ColorScaleRuleModelEntry());
@@ -1075,7 +1084,7 @@ CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm
 
 ExtCfRuleRef CondFormatBuffer::createExtCfRule(ScDataBarFormatData* pTarget)
 {
-    ExtCfRuleRef extRule( new ExtCfRule( pTarget ) );
+    ExtCfRuleRef extRule( new ExtCfRule( pTarget, *this ) );
     maCfRules.push_back( extRule );
     return extRule;
 }
@@ -1124,6 +1133,13 @@ CondFormatRef CondFormatBuffer::createCondFormat()
     return xCondFmt;
 }
 
+ExtCfRule::ExtCfRule(ScDataBarFormatData* pTarget, WorksheetHelper& rParent):
+    WorksheetHelper(rParent),
+    mnRuleType( ExtCfRule::UNKNOWN ),
+    mpTarget(pTarget)
+{
+}
+
 void ExtCfRule::finalizeImport()
 {
     switch ( mnRuleType )
@@ -1143,13 +1159,13 @@ void ExtCfRule::finalizeImport()
         case AXISCOLOR:
         {
             ScDataBarFormatData* pDataBar = mpTarget;
-            pDataBar->maAxisColor = ARgbToARgbComponents(maModel.mnAxisColor);
+            pDataBar->maAxisColor = maModel.mnAxisColor;
             break;
         }
         case NEGATIVEFILLCOLOR:
         {
             ScDataBarFormatData* pDataBar = mpTarget;
-            pDataBar->mpNegativeColor.reset( new ::Color( ARgbToARgbComponents(maModel.mnNegativeColor) ) );
+            pDataBar->mpNegativeColor.reset( new ::Color(maModel.mnNegativeColor) );
             pDataBar->mbNeg = true;
             break;
         }
@@ -1193,14 +1209,20 @@ void ExtCfRule::importDataBar( const AttributeList& rAttribs )
 
 void ExtCfRule::importNegativeFillColor( const AttributeList& rAttribs )
 {
-     mnRuleType = NEGATIVEFILLCOLOR;
-     maModel.mnNegativeColor = rAttribs.getUnsignedHex( XML_rgb, UNSIGNED_RGB_TRANSPARENT );
+    mnRuleType = NEGATIVEFILLCOLOR;
+    ThemeBuffer& rThemeBuffer = getTheme();
+    GraphicHelper& rGraphicHelper = getBaseFilter().getGraphicHelper();
+    ::Color aColor = importOOXColor(rAttribs, rThemeBuffer, rGraphicHelper);
+    maModel.mnNegativeColor = aColor;
 }
 
 void ExtCfRule::importAxisColor( const AttributeList& rAttribs )
 {
     mnRuleType = AXISCOLOR;
-    maModel.mnAxisColor = rAttribs.getUnsignedHex( XML_rgb, UNSIGNED_RGB_TRANSPARENT );
+    ThemeBuffer& rThemeBuffer = getTheme();
+    GraphicHelper& rGraphicHelper = getBaseFilter().getGraphicHelper();
+    ::Color aColor = importOOXColor(rAttribs, rThemeBuffer, rGraphicHelper);
+    maModel.mnAxisColor = aColor;
 }
 
 void ExtCfRule::importCfvo( const AttributeList& rAttribs )

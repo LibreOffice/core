@@ -224,15 +224,15 @@ struct ExCfRuleModel
     bool mbGradient;
     OUString maAxisPosition;
     // AxisColor
-    sal_uInt32 mnAxisColor;
+    ::Color mnAxisColor;
     // NegativeFillColor
-    sal_uInt32 mnNegativeColor;
+    ::Color mnNegativeColor;
     // Cfvo
     bool mbIsLower;
     OUString maColorScaleType;
 };
 
-class ExtCfRule
+class ExtCfRule : public WorksheetHelper
 {
     enum RuleType
     {
@@ -246,7 +246,8 @@ class ExtCfRule
     RuleType mnRuleType;
     ScDataBarFormatData* mpTarget;
 public:
-    ExtCfRule(ScDataBarFormatData* pTarget = NULL ) : mnRuleType( ExtCfRule::UNKNOWN ), mpTarget(pTarget) {}
+
+    ExtCfRule(ScDataBarFormatData* pTarget, WorksheetHelper& rParent);
     void finalizeImport();
     void importDataBar(  const AttributeList& rAttribs );
     void importNegativeFillColor(  const AttributeList& rAttribs );
