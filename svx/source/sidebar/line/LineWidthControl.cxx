@@ -83,27 +83,25 @@ void LineWidthControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle
 {
     svx::sidebar::PopupControl::Paint(rRenderContext, rect);
 
-    Color aOldLineColor = GetLineColor();
-    Color aOldFillColor = GetFillColor();
+    rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
 
-    Point aPos( LogicToPixel( Point( CUSTOM_X, CUSTOM_Y), MAP_APPFONT ));
-    Size aSize( LogicToPixel( Size(  CUSTOM_W, CUSTOM_H ), MAP_APPFONT ));
-    Rectangle aRect( aPos, aSize );
+    Point aPos(rRenderContext.LogicToPixel(Point(CUSTOM_X, CUSTOM_Y), MAP_APPFONT));
+    Size aSize(rRenderContext.LogicToPixel(Size(CUSTOM_W, CUSTOM_H), MAP_APPFONT));
+    Rectangle aRect(aPos, aSize);
     aRect.Left() -= 1;
     aRect.Top() -= 1;
     aRect.Right() += 1;
     aRect.Bottom() += 1;
 
-    Color aLineColor(189,201,219);
-    if(!GetSettings().GetStyleSettings().GetHighContrastMode())
-        SetLineColor(aLineColor);
+    Color aLineColor(189, 201, 219);
+    if (!GetSettings().GetStyleSettings().GetHighContrastMode())
+        rRenderContext.SetLineColor(aLineColor);
     else
-        SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
-    SetFillColor(COL_TRANSPARENT);
-    DrawRect(aRect);
+        rRenderContext.SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
+    rRenderContext.SetFillColor(COL_TRANSPARENT);
+    rRenderContext.DrawRect(aRect);
 
-    SetLineColor(aOldLineColor);
-    SetFillColor(aOldFillColor);
+    rRenderContext.Pop();
 }
 
 

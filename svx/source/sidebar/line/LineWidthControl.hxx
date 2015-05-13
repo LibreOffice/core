@@ -32,8 +32,7 @@ namespace svx { namespace sidebar {
 
 class LinePropertyPanel;
 
-class LineWidthControl
-    : public svx::sidebar::PopupControl
+class LineWidthControl : public svx::sidebar::PopupControl
 {
 public:
     LineWidthControl (vcl::Window* pParent, LinePropertyPanel& rPanel);
@@ -41,30 +40,36 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     virtual void GetFocus() SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& aRect) SAL_OVERRIDE;
 
     void SetWidthSelect( long lValue, bool bValuable, SfxMapUnit eMapUnit);
-    bool IsCloseByEdit() { return mbCloseByEdit;}
-    long GetTmpCustomWidth() { return mnTmpCustomWidth;}
+    bool IsCloseByEdit()
+    {
+        return mbCloseByEdit;
+    }
+    long GetTmpCustomWidth()
+    {
+        return mnTmpCustomWidth;
+    }
 
 private:
-    LinePropertyPanel&                  mrLinePropertyPanel;
-    SfxBindings*                        mpBindings;
-    VclPtr<LineWidthValueSet>           maVSWidth;
-    VclPtr<FixedText>                   maFTCus;
-    VclPtr<FixedText>                   maFTWidth;
-    VclPtr<MetricField>                 maMFWidth;
-    SfxMapUnit                          meMapUnit;
-    OUString*                           rStr;
-    OUString                            mstrPT;
-    long                                mnCustomWidth;
-    bool                                mbCustom;
-    bool                                mbCloseByEdit;
-    long                                mnTmpCustomWidth;
-    bool                                mbVSFocus;
+    LinePropertyPanel& mrLinePropertyPanel;
+    SfxBindings* mpBindings;
+    VclPtr<LineWidthValueSet> maVSWidth;
+    VclPtr<FixedText> maFTCus;
+    VclPtr<FixedText> maFTWidth;
+    VclPtr<MetricField> maMFWidth;
+    SfxMapUnit meMapUnit;
+    OUString* rStr;
+    OUString mstrPT;
+    long mnCustomWidth;
+    bool mbCustom;
+    bool mbCloseByEdit;
+    long mnTmpCustomWidth;
+    bool mbVSFocus;
 
-    Image                               maIMGCus;
-    Image                               maIMGCusGray;
+    Image maIMGCus;
+    Image maIMGCusGray;
 
     void Initialize();
     DECL_LINK(VSSelectHdl, void *);
