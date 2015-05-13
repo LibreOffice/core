@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 
 #include <unordered_map>
 #include <vector>
@@ -95,14 +96,13 @@ namespace vcl
         virtual ~LazyDeletorBase();
     };
 
-    template < typename T >
     class VCL_DLLPUBLIC LazyDeletor : public LazyDeletorBase
     {
-        static LazyDeletor< T >*     s_pOneInstance;
+        static LazyDeletor*     s_pOneInstance;
 
         struct DeleteObjectEntry
         {
-            VclPtr<T> m_pObject;
+            VclPtr<vcl::Window> m_pObject;
             bool      m_bDeleted;
 
             DeleteObjectEntry() :
@@ -110,7 +110,7 @@ namespace vcl
                 m_bDeleted( false )
             {}
 
-            DeleteObjectEntry( T* i_pObject ) :
+            DeleteObjectEntry( vcl::Window* i_pObject ) :
                 m_pObject( i_pObject ),
                 m_bDeleted( false )
             {}
@@ -123,7 +123,7 @@ namespace vcl
         /** strict weak ordering function to bring objects to be destroyed lazily
         in correct order, e.g. for Window objects children before parents
         */
-        static bool is_less( T* left, T* right );
+        static bool is_less( vcl::Window* left, vcl::Window* right );
 
         LazyDeletor()  { LazyDelete::addDeletor( this ); }
         virtual ~LazyDeletor()
@@ -137,7 +137,7 @@ namespace vcl
 
             // do the actual work
             unsigned int nCount = m_aObjects.size();
-            std::vector< VclPtr < T > > aRealDelete;
+            std::vector< VclPtr < vcl::Window > > aRealDelete;
             aRealDelete.reserve( nCount );
             for( unsigned int i = 0; i < nCount; i++ )
             {
@@ -167,10 +167,10 @@ namespace vcl
         public:
         /** mark an object for lazy deletion
         */
-        static void Delete( T* i_pObject )
+        static void Delete( vcl::Window* i_pObject )
         {
             if( s_pOneInstance == NULL )
-                s_pOneInstance = new LazyDeletor<T>();
+                s_pOneInstance = new LazyDeletor();
 
             // is this object already in the list ?
             // if so mark it as not to be deleted; else insert it
@@ -187,7 +187,7 @@ namespace vcl
         }
         /** unmark an object already marked for lazy deletion
         */
-        static void Undelete( T* i_pObject )
+        static void Undelete( vcl::Window* i_pObject )
         {
             if( s_pOneInstance )
             {

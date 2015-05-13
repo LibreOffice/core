@@ -578,7 +578,7 @@ void Window::dispose()
 Window::~Window()
 {
     // FIXME: we should kill all LazyDeletor usage.
-    vcl::LazyDeletor<vcl::Window>::Undelete( this );
+    vcl::LazyDeletor::Undelete( this );
     disposeOnce();
 }
 
@@ -1892,7 +1892,7 @@ void Window::doLazyDelete()
         Show( false );
         SetParent( ImplGetDefaultWindow() );
     }
-    vcl::LazyDeletor<vcl::Window>::Delete( this );
+    vcl::LazyDeletor::Delete( this );
 }
 
 KeyIndicatorState Window::GetIndicatorState() const

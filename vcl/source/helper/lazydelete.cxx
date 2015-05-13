@@ -33,7 +33,7 @@ LazyDeletorBase::~LazyDeletorBase()
 }
 
 // instantiate instance pointer for LazyDeletor<Window>
-template<> LazyDeletor<vcl::Window>* LazyDeletor<vcl::Window>::s_pOneInstance = NULL;
+LazyDeletor* LazyDeletor::s_pOneInstance = NULL;
 
 // a list for all LazyeDeletor<T> singletons
 static std::vector< LazyDeletorBase* > lcl_aDeletors;
@@ -54,7 +54,7 @@ void LazyDelete::flush()
 }
 
 // specialized is_less function for Window
-template<> bool LazyDeletor<vcl::Window>::is_less( vcl::Window* left, vcl::Window* right )
+bool LazyDeletor::is_less( vcl::Window* left, vcl::Window* right )
 {
     return left != right && right->IsChild( left, true );
 }
