@@ -609,7 +609,7 @@ void ScTabView::TestHintWindow()
         {
             //! Abfrage, ob an gleicher Stelle !!!!
 
-            mpInputHintWindow.reset();
+            mpInputHintWindow.disposeAndClear();
 
             ScSplitPos eWhich = aViewData.GetActivePart();
             ScGridWindow* pWin = pGridWin[eWhich];
@@ -638,7 +638,7 @@ void ScTabView::TestHintWindow()
             }
         }
         else
-            mpInputHintWindow.reset();
+            mpInputHintWindow.disposeAndClear();
 
         // list drop-down button
         if ( pData && pData->HasSelectionList() )
@@ -648,7 +648,7 @@ void ScTabView::TestHintWindow()
         }
     }
     else
-        mpInputHintWindow.reset();
+        mpInputHintWindow.disposeAndClear();
 
     for ( sal_uInt16 i=0; i<4; i++ )
         if ( pGridWin[i] && pGridWin[i]->IsVisible() )
