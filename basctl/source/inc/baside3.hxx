@@ -58,7 +58,6 @@ private:
     DialogWindowLayout& rLayout;
     boost::scoped_ptr<DlgEditor> pEditor; // never nullptr
     boost::scoped_ptr<SfxUndoManager> pUndoMgr; // never nullptr
-    Link<>              aOldNotifyUndoActionHdl;
     OUString            aCurPath;
 
 protected:

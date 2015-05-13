@@ -84,7 +84,6 @@ DialogWindow::DialogWindow (
 {
     InitSettings( true, true, true );
 
-    aOldNotifyUndoActionHdl = pEditor->GetModel().GetNotifyUndoActionHdl();
     pEditor->GetModel().SetNotifyUndoActionHdl(
         LINK(this, DialogWindow, NotifyUndoActionHdl)
     );

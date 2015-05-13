@@ -1856,7 +1856,7 @@ IMPL_LINK( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
     return 0;
 }
 
-IMPL_LINK( WatchWindow, EditAccHdl, Accelerator *, pAcc )
+IMPL_LINK_TYPED( WatchWindow, EditAccHdl, Accelerator *, pAcc, void )
 {
     switch ( pAcc->GetCurKeyCode().GetCode() )
     {
@@ -1876,8 +1876,6 @@ IMPL_LINK( WatchWindow, EditAccHdl, Accelerator *, pAcc )
         }
         break;
     }
-
-    return 0;
 }
 
 void WatchWindow::UpdateWatches( bool bBasicStopped )
