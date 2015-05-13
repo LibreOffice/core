@@ -1325,7 +1325,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     !( nFlags & (DrawFrameFlags::Menu | DrawFrameFlags::WindowBorder | DrawFrameFlags::BorderWindowBorder) ) )
                 {
                     Rectangle aRect(aCtrlBoundRect);
-                    if( nStyle & DrawFrameStyle::DoubleIn )
+                    if( nStyle == DrawFrameStyle::DoubleIn )
                     {
                         aRect.Left()    += 1;
                         aRect.Top()     += 1;
