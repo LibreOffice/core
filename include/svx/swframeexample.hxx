@@ -62,11 +62,11 @@ class SVX_DLLPUBLIC SvxSwFrameExample : public vcl::Window
     Point       aRelPos;
 
     void InitColors_Impl();
-    void InitAllRects_Impl();
+    void InitAllRects_Impl(vcl::RenderContext& rRenderContext);
     void CalcBoundRect_Impl(Rectangle &rRect);
-    Rectangle DrawInnerFrame_Impl(const Rectangle &rRect, const Color &rFillColor, const Color &rBorderColor);
+    Rectangle DrawInnerFrame_Impl(vcl::RenderContext& rRenderContext, const Rectangle &rRect, const Color &rFillColor, const Color &rBorderColor);
 
-    void DrawRect_Impl(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor);
+    void DrawRect_Impl(vcl::RenderContext& rRenderContext, const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor);
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 protected:

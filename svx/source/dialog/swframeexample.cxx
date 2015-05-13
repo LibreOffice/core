@@ -49,7 +49,6 @@ SvxSwFrameExample::SvxSwFrameExample( vcl::Window *pParent, WinBits nStyle ) :
     aRelPos     (Point(0,0))
 {
     InitColors_Impl();
-    SetMapMode(MAP_PIXEL);
 }
 
 VCL_BUILDER_FACTORY_ARGS(SvxSwFrameExample, 0)
@@ -79,17 +78,17 @@ void SvxSwFrameExample::InitColors_Impl()
     m_aBlankFrameCol = bHC? m_aTxtCol : Color( COL_GRAY );
 }
 
-void SvxSwFrameExample::DataChanged( const DataChangedEvent& rDCEvt )
+void SvxSwFrameExample::DataChanged(const DataChangedEvent& rDCEvt)
 {
-    Window::DataChanged( rDCEvt );
+    Window::DataChanged(rDCEvt);
 
-    if( rDCEvt.GetType() == DataChangedEventType::SETTINGS && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
         InitColors_Impl();
 }
 
-void SvxSwFrameExample::InitAllRects_Impl()
+void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
 {
-    aPage.SetSize( GetOutputSizePixel() );
+    aPage.SetSize(rRenderContext.GetOutputSizePixel());
 
     sal_uIntPtr nOutWPix = aPage.GetWidth();
     sal_uIntPtr nOutHPix = aPage.GetHeight();
@@ -171,7 +170,7 @@ void SvxSwFrameExample::InitAllRects_Impl()
         else
         {
             aFont.SetSize(Size(0, aParaPrtArea.GetHeight() / 2));
-            SetFont(aFont);
+            rRenderContext.SetFont(aFont);
             aAutoCharFrame.SetSize(Size(GetTextWidth(OUString('A')), GetTextHeight()));
             aAutoCharFrame.SetPos(Point(aParaPrtArea.Left() + (aParaPrtArea.GetWidth() - aAutoCharFrame.GetWidth()) / 2,
                 aParaPrtArea.Top() + (aParaPrtArea.GetHeight() - aAutoCharFrame.GetHeight()) / 2));
@@ -433,9 +432,10 @@ void SvxSwFrameExample::CalcBoundRect_Impl(Rectangle &rRect)
     }
 }
 
-Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(const Rectangle &rRect, const Color &rFillColor, const Color &rBorderColor)
+Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRenderContext, const Rectangle &rRect,
+                                                 const Color &rFillColor, const Color &rBorderColor)
 {
-    DrawRect_Impl(rRect, rFillColor, rBorderColor);
+    DrawRect_Impl(rRenderContext, rRect, rFillColor, rBorderColor);
 
     // Bereich, zu dem relativ positioniert wird, bestimmen
     Rectangle aRect(rRect); // aPagePrtArea = Default
@@ -446,13 +446,13 @@ Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(const Rectangle &rRect, const C
         // Testabsatz zeichnen
         Rectangle aTxt(aTextLine);
         sal_Int32 nStep = aTxt.GetHeight() + 2;
-        sal_uInt16 nLines = (sal_uInt16)(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
+        sal_uInt16 nLines = static_cast<sal_uInt16>(aParaPrtArea.GetHeight() / (aTextLine.GetHeight() + 2));
 
         for (sal_uInt16 i = 0; i < nLines; i++)
         {
             if (i == nLines - 1)
                 aTxt.SetSize(Size(aTxt.GetWidth() / 2, aTxt.GetHeight()));
-            DrawRect_Impl(aTxt, m_aTxtCol, m_aTransColor);
+            DrawRect_Impl(rRenderContext, aTxt, m_aTxtCol, m_aTransColor);
             aTxt.Move(0, nStep);
         }
     }
@@ -460,21 +460,23 @@ Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(const Rectangle &rRect, const C
     return aRect;
 }
 
-void SvxSwFrameExample::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
+void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    InitAllRects_Impl();
+    rRenderContext.SetMapMode(MAP_PIXEL);
+
+    InitAllRects_Impl(rRenderContext);
 
     // Draw page
-    DrawRect_Impl( aPage, m_aBgCol, m_aBorderCol );
+    DrawRect_Impl(rRenderContext, aPage, m_aBgCol, m_aBorderCol);
 
     // Draw PrintArea
-    Rectangle aRect = DrawInnerFrame_Impl( aPagePrtArea, m_aTransColor, m_aPrintAreaCol );
+    Rectangle aRect = DrawInnerFrame_Impl(rRenderContext, aPagePrtArea, m_aTransColor, m_aPrintAreaCol);
 
     if (nAnchor == TextContentAnchorType_AT_FRAME)
-        aRect = DrawInnerFrame_Impl( aFrameAtFrame, m_aBgCol, m_aBorderCol );
+        aRect = DrawInnerFrame_Impl(rRenderContext, aFrameAtFrame, m_aBgCol, m_aBorderCol);
 
-    long lXPos    = 0;
-    long lYPos    = 0;
+    long lXPos = 0;
+    long lYPos = 0;
 
     // Horizontal alignment
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
@@ -503,7 +505,9 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& /*rRenderContext*/, const Rect
         }
     }
     else
+    {
        lXPos = aRect.Right() + 2;
+    }
 
     // Vertical Alignment
     if (nAnchor != TextContentAnchorType_AS_CHARACTER)
@@ -576,7 +580,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& /*rRenderContext*/, const Rect
 
     Rectangle aFrmRect(Point(lXPos, lYPos), aFrmSize);
 
-    Rectangle *pOuterFrame = &aPage;
+    Rectangle* pOuterFrame = &aPage;
 
     if (nAnchor == TextContentAnchorType_AT_FRAME)
         pOuterFrame = &aFrameAtFrame;
@@ -649,7 +653,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& /*rRenderContext*/, const Rect
                 }
             }
             if (pOuterFrame->IsInside(aTxt))
-                DrawRect_Impl( aTxt, m_aTxtCol, m_aTransColor );
+                DrawRect_Impl(rRenderContext, aTxt, m_aTxtCol, m_aTransColor );
 
             aTxt.Move(0, nStep);
             aTxt.Right() = nOldR;
@@ -670,20 +674,20 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& /*rRenderContext*/, const Rect
             aPara.Bottom() -= nDiff;
         }
         if (nAnchor == TextContentAnchorType_AT_CHARACTER && bIgnoreWrap)
-            DrawText(aAutoCharFrame, OUString('A'));
+            rRenderContext.DrawText(aAutoCharFrame, OUString('A'));
     }
     else
     {
-        DrawText(aParaPrtArea, OUString(DEMOTEXT));
-        DrawRect_Impl(aDrawObj, m_aBlankCol, m_aBlankFrameCol );
+        rRenderContext.DrawText(aParaPrtArea, OUString(DEMOTEXT));
+        DrawRect_Impl(rRenderContext, aDrawObj, m_aBlankCol, m_aBlankFrameCol );
     }
 
     // Draw rectangle on which the frame is aligned:
-    DrawRect_Impl(aRect, m_aTransColor, m_aAlignColor);
+    DrawRect_Impl(rRenderContext, aRect, m_aTransColor, m_aAlignColor);
 
     // Frame View
     bool bDontFill = (nAnchor == TextContentAnchorType_AT_CHARACTER && aFrmRect.IsOver(aAutoCharFrame)) || bTrans;
-    DrawRect_Impl( aFrmRect, bDontFill? m_aTransColor : m_aBgCol, m_aFrameColor );
+    DrawRect_Impl(rRenderContext, aFrmRect, bDontFill? m_aTransColor : m_aBgCol, m_aFrameColor);
 }
 
 void SvxSwFrameExample::SetRelPos(const Point& rP)
@@ -701,11 +705,12 @@ void SvxSwFrameExample::SetRelPos(const Point& rP)
         aRelPos.Y() = -5;
 }
 
-void SvxSwFrameExample::DrawRect_Impl(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor)
+void SvxSwFrameExample::DrawRect_Impl(vcl::RenderContext& rRenderContext, const Rectangle &rRect,
+                                      const Color &rFillColor, const Color &rLineColor)
 {
-    SetFillColor(rFillColor);
-    SetLineColor(rLineColor);
-    Window::DrawRect(rRect);
+    rRenderContext.SetFillColor(rFillColor);
+    rRenderContext.SetLineColor(rLineColor);
+    rRenderContext.DrawRect(rRect);
 }
 
 
