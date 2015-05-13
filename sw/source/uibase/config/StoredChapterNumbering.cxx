@@ -154,15 +154,15 @@ public:
                     static_cast< ::cppu::OWeakObject*>(this), 1);
 
         SolarMutexGuard g;
-        SwNumFmt numFmt;
+        SwNumFmt aNumberFormat;
         OUString charStyleName;
         SwXNumberingRules::SetPropertiesToNumFmt(
-            numFmt,
+            aNumberFormat,
             charStyleName,
             0, 0, 0, 0, 0,
             props);
         SwNumRulesWithName *const pRules(GetOrCreateRules());
-        pRules->SetNumFmt(nIndex, numFmt, charStyleName);
+        pRules->SetNumFmt(nIndex, aNumberFormat, charStyleName);
     }
 };
 
