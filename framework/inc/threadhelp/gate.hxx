@@ -20,9 +20,8 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
 
-#include <threadhelp/igate.h>
-
 #include <boost/noncopyable.hpp>
+#include <osl/time.h>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 
@@ -36,13 +35,9 @@ namespace framework{
 
     @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are marked private!
 
-    @implements     IGate
-    @base           IGate
-
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class Gate : public  IGate
-           , private boost::noncopyable
+class Gate : private boost::noncopyable
 {
 
     //  public methods
@@ -65,19 +60,18 @@ class Gate : public  IGate
                         blocked threads can running ... but I don't know
                         if it's right - we are destroyed yet!?
         *//*-*****************************************************************************************************/
-        inline virtual ~Gate()
+        inline ~Gate()
         {
             open();
         }
 
         /*-****************************************************************************************************
-            @interface  IGate
             @short      open the gate
             @descr      A wait() call will not block then.
 
             @seealso    method close()
         *//*-*****************************************************************************************************/
-        virtual void open() SAL_OVERRIDE
+        void open()
         {
             // We must safe access to our internal member!
             ::osl::MutexGuard aLock( m_aAccessLock );
@@ -89,13 +83,12 @@ class Gate : public  IGate
         }
 
         /*-****************************************************************************************************
-            @interface  IGate
             @short      close the gate
             @descr      A wait() call will block then.
 
             @seealso    method open()
         *//*-*****************************************************************************************************/
-        virtual void close() SAL_OVERRIDE
+        void close()
         {
             // We must safe access to our internal member!
             ::osl::MutexGuard aLock( m_aAccessLock );
@@ -107,7 +100,6 @@ class Gate : public  IGate
         }
 
         /*-****************************************************************************************************
-            @interface  IGate
             @short      must be called to pass the gate
             @descr      If gate "open"   => wait() will not block.
                         If gate "closed" => wait() will block till somewhere open it again.
@@ -121,7 +113,7 @@ class Gate : public  IGate
 
             @onerror    We return false.
         *//*-*****************************************************************************************************/
-        virtual bool wait( const TimeValue* pTimeOut = NULL ) SAL_OVERRIDE
+        bool wait(const TimeValue* pTimeOut = nullptr)
         {
             // We must safe access to our internal member!
             ::osl::ClearableMutexGuard aLock( m_aAccessLock );
