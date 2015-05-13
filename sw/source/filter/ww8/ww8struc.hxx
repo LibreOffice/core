@@ -697,6 +697,20 @@ struct WW8_DO
     SVBT16 cb;              // 2    size (count of bytes) of the entire DO
     sal_uInt8  bx;              // 4    x position relative to anchor CP
     sal_uInt8  by;              // 5    y position relative to anchor CP
+
+    /*
+     bx and by above are apparently better described by this info from the rtf standard...
+
+    \dobxpage   The drawing object is page relative in the x-direction.
+    \dobxcolumn The drawing object is column relative in the x-direction.
+    \dobxmargin The drawing object is margin relative in the x-direction.
+
+    \dobypage   The drawing object is page relative in the y-direction.
+    \dobypara   The drawing object is paragraph relative in the y-direction.
+    \dobymargin The drawing object is margin relative in the y-direction.
+
+    */
+
     SVBT16 dhgt;                // 6    height of DO
     SVBT16 aBits1;
 //  sal_uInt16 fAnchorLock : 1; // 8    1 if the DO anchor is locked
