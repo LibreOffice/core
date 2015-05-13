@@ -30,10 +30,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::view;
 
-
-//= OSelectionChangeListener
-
-
 OSelectionChangeListener::~OSelectionChangeListener()
 {
     if (m_pAdapter)
@@ -64,10 +60,6 @@ void OSelectionChangeListener::setAdapter(OSelectionChangeMultiplexer* pAdapter)
         m_pAdapter->acquire();
     }
 }
-
-
-//= OSelectionChangeMultiplexer
-
 
 OSelectionChangeMultiplexer::OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  Reference< XSelectionSupplier>& _rxSet, bool _bAutoReleaseSet)
             :m_xSet(_rxSet)

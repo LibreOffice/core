@@ -59,8 +59,6 @@
 
 using namespace connectivity;
 
-//=============================================================================
-//
 // Erzeugung der Blaetter fuer die Token
 // Blaetter werden generell vom Lexer erzeugt
 
@@ -90,9 +88,6 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 {                                                   \
     xxx_pGLOBAL_SQLSCAN->SQLyyerror(msg);           \
 }
-
-//
-//=============================================================================
 
 %}
 

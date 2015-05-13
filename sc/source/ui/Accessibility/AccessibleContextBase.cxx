@@ -453,7 +453,7 @@ void SAL_CALL ScAccessibleContextBase::notifyEvent(
 {
 }
 
-//=====  XServiceInfo  ========================================================
+// XServiceInfo
 OUString SAL_CALL ScAccessibleContextBase::getImplementationName()
     throw (uno::RuntimeException, std::exception)
 {

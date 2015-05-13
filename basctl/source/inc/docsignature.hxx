@@ -30,8 +30,6 @@ namespace basctl
 
     class ScriptDocument;
 
-    //= DocumentSignature
-
     /// encapsulates (actions on) the signature/state of a document
     class DocumentSignature
     {

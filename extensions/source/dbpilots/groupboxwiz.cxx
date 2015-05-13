@@ -43,10 +43,6 @@ namespace dbp
     using namespace ::com::sun::star::form;
     using namespace ::svt;
 
-
-    //= OGroupBoxWizard
-
-
     OGroupBoxWizard::OGroupBoxWizard( vcl::Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, _rxObjectModel, _rxContext)
@@ -181,10 +177,6 @@ namespace dbp
 
         return OControlWizard::onFinish();
     }
-
-
-    //= ORadioSelectionPage
-
 
     ORadioSelectionPage::ORadioSelectionPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, "GroupRadioSelectionPage", "modules/sabpilot/ui/groupradioselectionpage.ui")
@@ -337,10 +329,6 @@ namespace dbp
         }
     }
 
-
-    //= ODefaultFieldSelectionPage
-
-
     ODefaultFieldSelectionPage::ODefaultFieldSelectionPage( OControlWizard* _pParent )
         :OMaybeListSelectionPage(_pParent, "DefaultFieldSelectionPage", "modules/sabpilot/ui/defaultfieldselectionpage.ui")
     {
@@ -396,10 +384,6 @@ namespace dbp
 
         return true;
     }
-
-
-    //= OOptionValuesPage
-
 
     OOptionValuesPage::OOptionValuesPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, "OptionValuesPage", "modules/sabpilot/ui/optionvaluespage.ui")
@@ -496,10 +480,6 @@ namespace dbp
         return true;
     }
 
-
-    //= OOptionDBFieldPage
-
-
     OOptionDBFieldPage::OOptionDBFieldPage( OControlWizard* _pParent )
         :ODBFieldPage(_pParent)
     {
@@ -511,10 +491,6 @@ namespace dbp
     {
         return getSettings().sDBField;
     }
-
-
-    //= OFinalizeGBWPage
-
 
     OFinalizeGBWPage::OFinalizeGBWPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, "OptionsFinalPage", "modules/sabpilot/ui/optionsfinalpage.ui")

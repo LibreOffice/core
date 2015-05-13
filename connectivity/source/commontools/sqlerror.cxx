@@ -53,8 +53,6 @@ namespace connectivity
     }
 
 
-    //= SQLError_Impl - declaration
-
     class SQLError_Impl
     {
     public:
@@ -94,10 +92,6 @@ namespace connectivity
         ::std::unique_ptr< ::comphelper::OfficeResourceBundle > m_pResources;
         bool                                                    m_bAttemptedInit;
     };
-
-
-    //= SQLError_Impl - implementation
-
 
     SQLError_Impl::SQLError_Impl( const Reference<XComponentContext> & _rxContext )
         :m_aContext( _rxContext )
@@ -281,10 +275,6 @@ namespace connectivity
         m_pResources.reset( new ::comphelper::OfficeResourceBundle( m_aContext, "sdberr" ) );
         return m_pResources.get() != NULL;
     }
-
-
-    //= SQLError
-
 
     SQLError::SQLError( const Reference<XComponentContext> & _rxContext )
         :m_pImpl( new SQLError_Impl( _rxContext ) )

@@ -58,9 +58,6 @@ namespace comphelper
     typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any >     MapInt2Any;
     typedef ::std::set< ::com::sun::star::uno::Type, UnoTypeLess >  TypeBag;
 
-
-    //= OPropertyBag
-
     typedef ::cppu::WeakAggImplHelper5  <   ::com::sun::star::beans::XPropertyBag
                                         ,   ::com::sun::star::util::XModifiable
                                         ,   ::com::sun::star::lang::XServiceInfo

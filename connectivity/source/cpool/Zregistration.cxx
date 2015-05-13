@@ -28,8 +28,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace connectivity;
 
-//= registration
-
 extern "C"
 {
 

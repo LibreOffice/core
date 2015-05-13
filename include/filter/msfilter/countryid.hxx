@@ -302,7 +302,7 @@ MSFILTER_DLLPUBLIC LanguageType ConvertCountryToLanguage( CountryId eCountry );
 
 
 
-} // namespace svx
+}
 
 
 

@@ -41,9 +41,6 @@ namespace svx
         virtual void Resize() SAL_OVERRIDE;
     };
 
-
-    //= class WebConnectionIfoDialog
-
     class WebConnectionInfoDialog : public ModalDialog
     {
     private:
@@ -68,7 +65,7 @@ namespace svx
     };
 
 
-}   // namespace svx
+}
 
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_WEBCONNINFO_HXX

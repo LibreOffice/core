@@ -69,7 +69,7 @@ void VCLXAccessibleDropDownListBox::ProcessWindowEvent( const VclWindowEvent& rV
 
 
 
-//=====  XServiceInfo  ========================================================
+// XServiceInfo
 
 OUString VCLXAccessibleDropDownListBox::getImplementationName()
     throw (RuntimeException, std::exception)

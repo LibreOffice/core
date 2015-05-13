@@ -396,7 +396,7 @@ void Bridge::call_java(
 #endif
 }
 
-//==== a uno proxy wrapping a java interface ===================================
+// an UNO proxy wrapping a Java interface
 struct UNO_proxy : public uno_Interface
 {
     mutable oslInterlockedCount         m_ref;

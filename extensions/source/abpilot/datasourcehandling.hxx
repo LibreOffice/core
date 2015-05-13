@@ -39,10 +39,6 @@ namespace vcl { class Window; }
 namespace abp
 {
 
-
-
-    //= ODataSourceContext
-
     struct ODataSourceContextImpl;
     class ODataSource;
     /// a non-UNO wrapper for the data source context
@@ -96,9 +92,6 @@ namespace abp
         /// creates a new dBase data source
         ODataSource createNewDBase( const OUString& _rName );
     };
-
-
-    //= ODataSource
 
     struct ODataSourceImpl;
     struct PackageAccessControl;

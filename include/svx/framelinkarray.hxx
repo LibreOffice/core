@@ -383,8 +383,8 @@ private:
     ArrayImplPtr        mxImpl;
 };
 
-} // namespace frame
-} // namespace svx
+}
+}
 
 #endif
 

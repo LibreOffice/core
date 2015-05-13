@@ -23,9 +23,6 @@
 namespace connectivity
 {
 
-    //= QuotedTokenizedString
-
-
     sal_Int32 QuotedTokenizedString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) const
     {
         const sal_Int32 nLen = m_sString.getLength();

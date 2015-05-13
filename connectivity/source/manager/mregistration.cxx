@@ -27,9 +27,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-
-//= registration
-
 extern "C"
 {
 

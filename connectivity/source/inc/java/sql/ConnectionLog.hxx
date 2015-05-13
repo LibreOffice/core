@@ -58,10 +58,6 @@ namespace connectivity
 
 namespace connectivity { namespace java { namespace sql {
 
-
-
-    //= ConnectionLog
-
     typedef ::comphelper::ResourceBasedEventLogger  ConnectionLog_Base;
     class ConnectionLog : public ConnectionLog_Base
     {

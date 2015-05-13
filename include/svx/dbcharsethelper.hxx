@@ -33,8 +33,8 @@ namespace svxform { namespace charset_helper
     */
     SVX_DLLPUBLIC sal_Int32 getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs );
 
-}   // namespace charset_helper
-}   // namespace svxform
+}
+}
 
 
 #endif // SVX_DBCHARSETCLIENT_HXX

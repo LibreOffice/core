@@ -31,8 +31,6 @@
 
 namespace dbp
 {
-    //= OUnoAutoPilot
-
     typedef ::svt::OGenericUnoDialog    OUnoAutoPilot_Base;
     template <class TYPE, class SERVICEINFO>
     class OUnoAutoPilot

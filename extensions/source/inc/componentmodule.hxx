@@ -53,9 +53,6 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
             rtl_ModuleCount*
         );
 
-
-    //= OModule
-
     class OModuleImpl;
     class OModule
     {
@@ -140,10 +137,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
     };
 
 
-    //= OModuleResourceClient
-
-    /** base class for objects which uses any global module-specific resources
-    */
+    // base class for objects which uses any global module-specific resources
     class OModuleResourceClient
     {
     public:
@@ -152,18 +146,13 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
     };
 
 
-    //= ModuleRes
-
-    /** specialized ResId, using the resource manager provided by the global module
-    */
+    // specialized ResId, using the resource manager provided by the global module
     class ModuleRes : public ::ResId
     {
     public:
         ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
 
-
-    //= OMultiInstanceAutoRegistration
 
     template <class TYPE>
     class OMultiInstanceAutoRegistration
@@ -203,9 +192,6 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
     {
         OModule::revokeComponent(TYPE::getImplementationName_Static());
     }
-
-
-    //= OOneInstanceAutoRegistration
 
     template <class TYPE>
     class OOneInstanceAutoRegistration

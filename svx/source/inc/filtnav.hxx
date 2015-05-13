@@ -349,7 +349,7 @@ public:
 };
 
 
-}   // namespace svxform
+}
 
 
 #endif // INCLUDED_SVX_SOURCE_INC_FILTNAV_HXX

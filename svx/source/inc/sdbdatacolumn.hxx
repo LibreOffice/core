@@ -128,7 +128,7 @@ namespace svxform
 #endif // INCLUDED_SVX_SOURCE_INC_SDBDATACOLUMN_HXX
 
 
-}   // namespace svxform
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

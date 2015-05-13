@@ -29,10 +29,6 @@
 namespace abp
 {
 
-
-
-    //= OAddessBookSourcePilot
-
     typedef ::svt::RoadmapWizard OAddessBookSourcePilot_Base;
     class OAddessBookSourcePilot : public OAddessBookSourcePilot_Base
     {

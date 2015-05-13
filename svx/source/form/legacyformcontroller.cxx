@@ -197,7 +197,7 @@ namespace svxform
         return aServices;
     }
 
-} // namespace svxform
+}
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     LegacyFormController_NewInstance_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB )

@@ -49,10 +49,6 @@ namespace dbp
     using namespace ::com::sun::star::awt;
     using namespace ::svt;
 
-
-    //= OGridWizard
-
-
     OGridWizard::OGridWizard( vcl::Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, _rxObjectModel, _rxContext)
@@ -290,10 +286,6 @@ namespace dbp
 
         return true;
     }
-
-
-    //= OGridFieldsSelection
-
 
     OGridFieldsSelection::OGridFieldsSelection( OGridWizard* _pParent )
         :OGridPage(_pParent, "GridFieldsSelection", "modules/sabpilot/ui/gridfieldsselectionpage.ui")

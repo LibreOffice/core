@@ -61,7 +61,7 @@
 // please adjust RID_ERRORBOX_END (below) when adding new error boxes
 #define RID_ERRORBOX_END                    RID_ERR_INVALID_FORM_CONNECTION
 
-//= range checks
+// range checks
 
 #if RID_STRING_END > RID_DBP_END
     #error "please adjust the resource id ranges!!"

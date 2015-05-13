@@ -74,7 +74,7 @@ namespace svxform
     };
 
 
-} // namespace svxform
+}
 
 
 #endif // INCLUDED_SVX_SOURCE_INC_DELAYEDEVENT_HXX

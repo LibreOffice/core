@@ -118,7 +118,7 @@ namespace svx
     };
 
 
-}   // namespace svx
+}
 
 
 #endif

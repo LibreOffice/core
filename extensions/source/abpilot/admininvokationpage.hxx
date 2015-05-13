@@ -25,7 +25,6 @@
 
 namespace abp
 {
-    //= AdminDialogInvokationPage
     class AdminDialogInvokationPage : public AddressBookSourcePage
     {
     protected:

@@ -26,12 +26,7 @@
 
 namespace dbp
 {
-
-
-
-    //= OGroupBoxSI
-
-    /// service info for the group box wizard
+    // service info for the group box wizard
     struct OGroupBoxSI
     {
     public:
@@ -40,10 +35,7 @@ namespace dbp
                                 getServiceNames();
     };
 
-
-    //= OListComboSI
-
-    /// service info for the list/combo box wizard
+    // service info for the list/combo box wizard
     struct OListComboSI
     {
     public:
@@ -53,9 +45,7 @@ namespace dbp
     };
 
 
-    //= OGridSI
-
-    /// service info for the grid wizard
+    // service info for the grid wizard
     struct OGridSI
     {
     public:

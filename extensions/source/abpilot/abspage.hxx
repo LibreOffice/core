@@ -34,9 +34,6 @@ namespace abp
     class OAddessBookSourcePilot;
     struct AddressSettings;
 
-
-    //= AddressBookSourcePage
-
     typedef ::svt::OWizardPage AddressBookSourcePage_Base;
     /// the base class for all tab pages in the address book source wizard
     class AddressBookSourcePage : public AddressBookSourcePage_Base

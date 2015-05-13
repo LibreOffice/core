@@ -113,7 +113,7 @@ private:
 
 
 
-} // namespace svx
+}
 
 #endif
 

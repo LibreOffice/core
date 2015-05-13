@@ -27,10 +27,6 @@
 namespace pcr
 {
 
-
-
-    //= OBrowserPage
-
     class OBrowserPage : public TabPage
     {
     private:

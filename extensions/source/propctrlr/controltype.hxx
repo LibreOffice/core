@@ -25,10 +25,6 @@
 namespace pcr
 {
 
-
-
-    //= control types, analogous to FormComponentType
-
     namespace ControlType
     {
         static const sal_Int16 FIXEDLINE      = (sal_Int16)100;

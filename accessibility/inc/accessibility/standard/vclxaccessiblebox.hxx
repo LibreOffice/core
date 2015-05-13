@@ -123,7 +123,7 @@ public:
     */
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    //=====  XAccessibleValue  ================================================
+    // XAccessibleValue
 
     virtual ::com::sun::star::uno::Any SAL_CALL getCurrentValue( )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

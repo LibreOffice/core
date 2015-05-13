@@ -83,9 +83,6 @@ namespace comphelper
     using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::lang::DisposedException;
 
-
-    //= MapData
-
     class IMapModificationListener;
     typedef ::std::vector< IMapModificationListener* > MapListeners;
 
@@ -118,8 +115,6 @@ namespace comphelper
     };
 
 
-    //= IMapModificationListener
-
     /** implemented by components who want to be notified of modifications in the MapData they work with
     */
     class SAL_NO_VTABLE IMapModificationListener
@@ -131,10 +126,6 @@ namespace comphelper
         {
         }
     };
-
-
-    //= MapData helpers
-
 
     static void lcl_registerMapModificationListener( MapData& _mapData, IMapModificationListener& _listener )
     {
@@ -180,7 +171,7 @@ namespace comphelper
     }
 
 
-    //= EnumerableMap
+    // EnumerableMap
 
     typedef ::cppu::WeakAggComponentImplHelper3 <   XInitialization
                                                 ,   XEnumerableMap
@@ -245,15 +236,11 @@ namespace comphelper
     };
 
 
-    //= EnumerationType
-
     enum EnumerationType
     {
         eKeys, eValues, eBoth
     };
 
-
-    //= MapEnumerator
 
     class MapEnumerator:
         public IMapModificationListener, private boost::noncopyable
@@ -299,8 +286,6 @@ namespace comphelper
     };
 
 
-    //= MapEnumeration
-
     typedef ::cppu::WeakImplHelper1 <   XEnumeration
                                     >   MapEnumeration_Base;
     class MapEnumeration :public ComponentBase
@@ -337,9 +322,6 @@ namespace comphelper
         ::std::unique_ptr< MapData > m_pMapDataCopy;
         MapEnumerator               m_aEnumerator;
     };
-
-
-    //= EnumerableMap
 
 
     EnumerableMap::EnumerableMap()
@@ -721,9 +703,6 @@ namespace comphelper
     }
 
 
-    //= MapEnumerator
-
-
     bool MapEnumerator::hasMoreElements()
     {
         if ( m_disposed )
@@ -755,9 +734,6 @@ namespace comphelper
     {
         m_disposed = true;
     }
-
-
-    //= MapEnumeration - implementation
 
 
     sal_Bool SAL_CALL MapEnumeration::hasMoreElements(  ) throw (RuntimeException, std::exception)

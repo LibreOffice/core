@@ -61,10 +61,6 @@ namespace
     };
 }
 
-
-//= OPropertyContainerHelper
-
-
 OPropertyContainerHelper::OPropertyContainerHelper()
 {
 }

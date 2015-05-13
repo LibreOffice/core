@@ -127,8 +127,8 @@ private:
 
 
 
-} // namespace a11y
-} // namespace svx
+}
+}
 
 #endif
 

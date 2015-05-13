@@ -28,10 +28,6 @@
 namespace logging
 {
 
-
-
-    //= helper
-
     ::com::sun::star::logging::LogRecord createLogRecord(
         const OUString& _rLoggerName,
         const OUString& _rClassName,

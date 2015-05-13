@@ -545,6 +545,6 @@ void MSCodec_Std97::GetDocId( sal_uInt8 pDocId[16] )
 
 
 
-} // namespace svx
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

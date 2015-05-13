@@ -34,7 +34,7 @@ namespace svx
     */
     sal_uInt16  SVX_DLLPUBLIC  administrateDatabaseRegistration( vcl::Window* _parentWindow );
 
-}   // namespace svx
+}
 
 #endif // INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
 

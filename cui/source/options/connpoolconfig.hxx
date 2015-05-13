@@ -25,10 +25,6 @@ class SfxItemSet;
 namespace offapp
 {
 
-
-
-    //= ConnectionPoolConfig
-
     class ConnectionPoolConfig
     {
 

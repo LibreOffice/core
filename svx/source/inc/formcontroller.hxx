@@ -570,7 +570,7 @@ namespace svxform
         DECL_LINK( OnDeactivated, void* );
     };
 
-}   // namespace svxform
+}
 
 #endif // INCLUDED_SVX_SOURCE_INC_FORMCONTROLLER_HXX
 

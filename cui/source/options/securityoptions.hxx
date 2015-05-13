@@ -30,10 +30,6 @@ class SvtSecurityOptions;
 namespace svx
 {
 
-
-
-    //= class SecurityOptionsDialog
-
     class SecurityOptionsDialog : public ModalDialog
     {
     private:
@@ -63,7 +59,7 @@ namespace svx
     };
 
 
-}   // namespace svx
+}
 
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_SECURITYOPTIONS_HXX

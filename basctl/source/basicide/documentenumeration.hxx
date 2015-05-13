@@ -45,8 +45,6 @@ namespace basctl { namespace docs {
     typedef ::std::vector< DocumentDescriptor > Documents;
 
 
-    //= IDocumentDescriptorFilter
-
     /// allows pre-filtering when enumerating document descriptors
     class SAL_NO_VTABLE IDocumentDescriptorFilter
     {
@@ -57,8 +55,6 @@ namespace basctl { namespace docs {
         ~IDocumentDescriptorFilter() {}
     };
 
-
-    //= DocumentEnumeration
 
     struct DocumentEnumeration_Data;
     /** is a helper class for enumerating documents in OOo

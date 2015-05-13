@@ -27,10 +27,6 @@
 namespace abp
 {
 
-
-
-    //= AddressSourceType
-
     enum AddressSourceType
     {
         AST_MORK,
@@ -48,9 +44,6 @@ namespace abp
 
         AST_INVALID
     };
-
-
-    //= AddressSettings
 
     struct AddressSettings
     {

@@ -291,6 +291,6 @@ sfx::ItemConnectionBase* CreateShadowConnection( const SfxItemSet& rItemSet,
 
 
 
-} // namespace svx
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

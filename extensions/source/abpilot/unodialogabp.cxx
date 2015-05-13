@@ -41,10 +41,6 @@ namespace abp
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::ui::dialogs;
 
-
-    //= OABSPilotUno
-
-
     OABSPilotUno::OABSPilotUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {

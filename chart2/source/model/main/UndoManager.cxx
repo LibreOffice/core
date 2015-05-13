@@ -56,7 +56,6 @@ namespace chart
 
     namespace impl
     {
-        //= UndoManager_Impl
         class UndoManager_Impl : public ::framework::IUndoManagerImplementation
         {
         public:
@@ -133,7 +132,6 @@ namespace chart
                 throw DisposedException( OUString(), getThis() );
         }
 
-        //= UndoManagerMethodGuard
         /** guard for public UNO methods of the UndoManager
 
             The only purpose of this guard is to check for the instance being disposed already. Everything else,
@@ -179,7 +177,6 @@ namespace chart
         }
     }
 
-    //= UndoManager
     using impl::UndoManagerMethodGuard;
 
     UndoManager::UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex )

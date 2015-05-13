@@ -399,7 +399,7 @@ namespace svx
     }
 
 
-}   // namespace svx
+}
 
 
 

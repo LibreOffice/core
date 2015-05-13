@@ -415,7 +415,7 @@ void SAL_CALL
     AccessibleContextBase::release ();
 }
 
-//=====  XServiceInfo  ========================================================
+// XServiceInfo
 
 OUString SAL_CALL
     AccessibleDocumentViewBase::getImplementationName()

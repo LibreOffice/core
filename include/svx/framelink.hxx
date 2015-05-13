@@ -681,8 +681,8 @@ SVX_DLLPUBLIC void DrawDiagFrameBorders(
 
 
 
-} // namespace frame
-} // namespace svx
+}
+}
 
 /* Yes, I love ASCII art. :-) -DR- */
 

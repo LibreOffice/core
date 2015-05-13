@@ -28,11 +28,6 @@
 
 namespace connectivity { namespace jdbc
 {
-
-
-
-    //= GlobalRef
-
     /** helper class to hold a local ref to a JNI object
     */
     template< typename T >
