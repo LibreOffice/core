@@ -97,6 +97,7 @@ public:
                                     , IFunctionManager* _pFunctionMgr
                                     , IControlReferenceHandler* _pDlg = NULL );
     virtual ~FormulaDlg();
+    virtual void dispose() SAL_OVERRIDE;
 private:
     ::std::unique_ptr<FormulaDlg_Impl> m_pImpl;
 
