@@ -26,39 +26,38 @@
 
 namespace sfx2 { namespace sidebar {
 
-class TitleBar
-    : public vcl::Window
+class TitleBar : public vcl::Window
 {
 public:
-    TitleBar (
-        const ::rtl::OUString& rsTitle,
-        vcl::Window* pParentWindow,
-        const sidebar::Paint& rInitialBackgroundPaint);
+    TitleBar (const OUString& rsTitle,
+              vcl::Window* pParentWindow,
+              const sidebar::Paint& rInitialBackgroundPaint);
     virtual ~TitleBar();
     virtual void dispose() SAL_OVERRIDE;
 
     void SetTitle (const ::rtl::OUString& rsTitle);
     void SetIcon (const Image& rIcon);
 
-    virtual void Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
-    virtual void setPosSizePixel (
-        long nX,
-        long nY,
-        long nWidth,
-        long nHeight,
-        sal_uInt16 nFlags = WINDOW_POSSIZE_ALL) SAL_OVERRIDE;
+    virtual void setPosSizePixel (long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL) SAL_OVERRIDE;
 
-    ToolBox& GetToolBox() { return *maToolBox.get();}
-    const ToolBox& GetToolBox() const { return *maToolBox.get();}
+    ToolBox& GetToolBox()
+    {
+        return *maToolBox.get();
+    }
+    const ToolBox& GetToolBox() const
+    {
+        return *maToolBox.get();
+    }
 
 protected:
     VclPtr<SidebarToolBox> maToolBox;
-    ::rtl::OUString msTitle;
+    OUString msTitle;
 
     virtual Rectangle GetTitleArea (const Rectangle& rTitleBarBox) = 0;
-    virtual void PaintDecoration (const Rectangle& rTitleBarBox) = 0;
-    void PaintFocus (const Rectangle& rFocusBox);
+    virtual void PaintDecoration (vcl::RenderContext& rRenderContext, const Rectangle& rTitleBarBox) = 0;
+    void PaintFocus(vcl::RenderContext& rRenderContext, const Rectangle& rFocusBox);
     virtual sidebar::Paint GetBackgroundPaint() = 0;
     virtual Color GetTextColor() = 0;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);
@@ -67,7 +66,7 @@ protected:
 private:
     Image maIcon;
 
-    void PaintTitle (const Rectangle& rTitleBox);
+    void PaintTitle(vcl::RenderContext& rRenderContext, const Rectangle& rTitleBox);
     DECL_LINK_TYPED(SelectionHandler, ToolBox*, void);
 };
 

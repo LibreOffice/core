@@ -42,9 +42,9 @@ TabItem::TabItem (vcl::Window* pParentWindow)
 #endif
 }
 
-void TabItem::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
+void TabItem::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
 {
-    switch(mePaintType)
+    switch (mePaintType)
     {
         case PT_Theme:
         default:
@@ -52,7 +52,7 @@ void TabItem::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdat
             const bool bIsSelected (IsChecked());
             const bool bIsHighlighted (IsMouseOver() || HasFocus());
             DrawHelper::DrawRoundedRectangle(
-                *this,
+                rRenderContext,
                 Rectangle(Point(0,0), GetSizePixel()),
                 Theme::GetInteger(Theme::Int_ButtonCornerRadius),
                 bIsHighlighted||bIsSelected
@@ -64,13 +64,9 @@ void TabItem::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdat
 
             const Image aIcon(Button::GetModeImage());
             const Size aIconSize (aIcon.GetSizePixel());
-            const Point aIconLocation(
-                (GetSizePixel().Width() - aIconSize.Width())/2,
-                (GetSizePixel().Height() - aIconSize.Height())/2);
-            DrawImage(
-                aIconLocation,
-                aIcon,
-                IsEnabled() ? 0 : IMAGE_DRAW_DISABLE);
+            const Point aIconLocation((GetSizePixel().Width() - aIconSize.Width()) / 2,
+                                      (GetSizePixel().Height() - aIconSize.Height()) / 2);
+            rRenderContext.DrawImage(aIconLocation, aIcon, IsEnabled() ? 0 : IMAGE_DRAW_DISABLE);
             break;
         }
         case PT_Native:
@@ -79,14 +75,14 @@ void TabItem::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdat
     }
 }
 
-void TabItem::MouseMove (const MouseEvent& rEvent)
+void TabItem::MouseMove(const MouseEvent& rEvent)
 {
     if (rEvent.IsEnterWindow() || rEvent.IsLeaveWindow())
         Invalidate();
     ImageRadioButton::MouseMove(rEvent);
 }
 
-void TabItem::MouseButtonDown (const MouseEvent& rMouseEvent)
+void TabItem::MouseButtonDown(const MouseEvent& rMouseEvent)
 {
     if (rMouseEvent.IsLeft())
     {
@@ -96,7 +92,7 @@ void TabItem::MouseButtonDown (const MouseEvent& rMouseEvent)
     }
 }
 
-void TabItem::MouseButtonUp (const MouseEvent& rMouseEvent)
+void TabItem::MouseButtonUp(const MouseEvent& rMouseEvent)
 {
     if (IsMouseCaptured())
         ReleaseMouse();

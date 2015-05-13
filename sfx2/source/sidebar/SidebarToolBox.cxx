@@ -31,7 +31,6 @@
 
 using namespace css;
 using namespace css::uno;
-using ::rtl::OUString;
 
 namespace sfx2 { namespace sidebar {
 
@@ -85,7 +84,7 @@ void SidebarToolBox::dispose()
 }
 
 void SidebarToolBox::InsertItem(const OUString& rCommand,
-        const com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rFrame,
+        const css::uno::Reference<css::frame::XFrame>& rFrame,
         ToolBoxItemBits nBits, const Size& rRequestedSize, sal_uInt16 nPos)
 {
     ToolBox::InsertItem(rCommand, rFrame, nBits, rRequestedSize, nPos);
@@ -94,24 +93,23 @@ void SidebarToolBox::InsertItem(const OUString& rCommand,
     RegisterHandlers();
 }
 
-void SidebarToolBox::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SidebarToolBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     ToolBox::Paint(rRenderContext, rRect);
 
     if (Theme::GetBoolean(Theme::Bool_UseToolBoxItemSeparator))
     {
-        const sal_Int32 nSeparatorY ((GetSizePixel().Height() - maItemSeparator.GetSizePixel().Height())/2);
-        const sal_uInt16 nItemCount (GetItemCount());
-        int nLastRight (-1);
-        for (sal_uInt16 nIndex=0; nIndex<nItemCount; ++nIndex)
+        const sal_Int32 nSeparatorY((GetSizePixel().Height() - maItemSeparator.GetSizePixel().Height()) / 2);
+        const sal_uInt16 nItemCount(GetItemCount());
+        int nLastRight(-1);
+        for (sal_uInt16 nIndex = 0; nIndex < nItemCount; ++nIndex)
         {
             const Rectangle aItemBoundingBox (GetItemPosRect(nIndex));
             if (nLastRight >= 0)
             {
-                const int nSeparatorX ((nLastRight + aItemBoundingBox.Left() - 1) / 2);
-                DrawImage(Point(nSeparatorX,nSeparatorY), maItemSeparator);
+                const int nSeparatorX((nLastRight + aItemBoundingBox.Left() - 1) / 2);
+                rRenderContext.DrawImage(Point(nSeparatorX, nSeparatorY), maItemSeparator);
             }
-
             nLastRight = aItemBoundingBox.Right();
         }
     }
@@ -142,18 +140,14 @@ void SidebarToolBox::CreateController (
     const OUString sCommandName (GetItemCommand(nItemId));
 
     aDescriptor.mxController = sfx2::sidebar::ControllerFactory::CreateToolBoxController(
-        this,
-        nItemId,
-        sCommandName,
-        rxFrame,
-        VCLUnoHelper::GetInterface(this),
-        nItemWidth);
+                                                this, nItemId, sCommandName, rxFrame,
+                                                VCLUnoHelper::GetInterface(this), nItemWidth);
     if (aDescriptor.mxController.is())
     {
         aDescriptor.maURL = sfx2::sidebar::Tools::GetURL(sCommandName);
         aDescriptor.msCurrentCommand = sCommandName;
 
-        maControllers.insert(::std::make_pair(nItemId, aDescriptor));
+        maControllers.insert(std::make_pair(nItemId, aDescriptor));
     }
 }
 
@@ -166,10 +160,9 @@ Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (con
         return NULL;
 }
 
-void SidebarToolBox::SetController(
-    const sal_uInt16 nItemId,
-    const css::uno::Reference<css::frame::XToolbarController>& rxController,
-    const ::rtl::OUString& rsCommandName)
+void SidebarToolBox::SetController(const sal_uInt16 nItemId,
+                                   const css::uno::Reference<css::frame::XToolbarController>& rxController,
+                                   const OUString& rsCommandName)
 {
     ItemDescriptor aDescriptor;
     aDescriptor.mxController = rxController;

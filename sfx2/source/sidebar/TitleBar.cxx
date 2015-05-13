@@ -36,10 +36,9 @@ namespace
 
 namespace sfx2 { namespace sidebar {
 
-TitleBar::TitleBar (
-    const ::rtl::OUString& rsTitle,
-    vcl::Window* pParentWindow,
-    const sidebar::Paint& rInitialBackgroundPaint)
+TitleBar::TitleBar(const OUString& rsTitle,
+                   vcl::Window* pParentWindow,
+                   const sidebar::Paint& rInitialBackgroundPaint)
     : Window(pParentWindow),
       maToolBox(VclPtr<SidebarToolBox>::Create(this)),
       msTitle(rsTitle),
@@ -61,35 +60,28 @@ void TitleBar::dispose()
     vcl::Window::dispose();
 }
 
-void TitleBar::SetTitle (const ::rtl::OUString& rsTitle)
+void TitleBar::SetTitle(const OUString& rsTitle)
 {
     msTitle = rsTitle;
     Invalidate();
 }
 
-void TitleBar::SetIcon (const Image& rIcon)
+void TitleBar::SetIcon(const Image& rIcon)
 {
     maIcon = rIcon;
     Invalidate();
 }
 
-void TitleBar::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
+void TitleBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rUpdateArea*/)
 {
-    (void)rUpdateArea;
-
     // Paint title bar background.
-    Size aWindowSize (GetOutputSizePixel());
-    Rectangle aTitleBarBox(
-        0,
-        0,
-        aWindowSize.Width(),
-        aWindowSize.Height()
-        );
+    Size aWindowSize (GetSizePixel());
+    Rectangle aTitleBarBox(0,0, aWindowSize.Width(), aWindowSize.Height());
 
-    PaintDecoration(aTitleBarBox);
-    const Rectangle aTitleBox (GetTitleArea(aTitleBarBox));
-    PaintTitle(aTitleBox);
-    PaintFocus(aTitleBox);
+    PaintDecoration(rRenderContext, aTitleBarBox);
+    const Rectangle aTitleBox(GetTitleArea(aTitleBarBox));
+    PaintTitle(rRenderContext, aTitleBox);
+    PaintFocus(rRenderContext, aTitleBox);
 }
 
 void TitleBar::DataChanged (const DataChangedEvent& rEvent)
@@ -99,24 +91,18 @@ void TitleBar::DataChanged (const DataChangedEvent& rEvent)
     SetBackground(GetBackgroundPaint().GetWallpaper());
 }
 
-void TitleBar::setPosSizePixel (
-    long nX,
-    long nY,
-    long nWidth,
-    long nHeight,
-    sal_uInt16 nFlags)
+void TitleBar::setPosSizePixel (long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
 {
-    Window::setPosSizePixel(nX,nY,nWidth,nHeight,nFlags);
+    Window::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
 
     // Place the toolbox.
     const sal_Int32 nToolBoxWidth (maToolBox->GetItemPosRect(0).GetWidth());
-    maToolBox->setPosSizePixel(nWidth-nToolBoxWidth,0, nToolBoxWidth,nHeight, WINDOW_POSSIZE_POSSIZE);
+    maToolBox->setPosSizePixel(nWidth - nToolBoxWidth,0, nToolBoxWidth, nHeight, WINDOW_POSSIZE_POSSIZE);
     maToolBox->Show();
 }
 
-void TitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
+void TitleBar::HandleToolBoxItemClick(const sal_uInt16 /*nItemIndex*/)
 {
-    (void)nItemIndex;
     // Any real processing has to be done in derived class.
 }
 
@@ -126,63 +112,53 @@ css::uno::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible(
     return AccessibleTitleBar::Create(*this);
 }
 
-void TitleBar::PaintTitle (const Rectangle& rTitleBox)
+void TitleBar::PaintTitle(vcl::RenderContext& rRenderContext, const Rectangle& rTitleBox)
 {
-    Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
+    rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
-    Rectangle aTitleBox (rTitleBox);
+    Rectangle aTitleBox(rTitleBox);
 
     // When there is an icon then paint it at the left of the given
     // box.
-    if ( !! maIcon)
+    if (!!maIcon)
     {
-        DrawImage(
-            Point(
-                aTitleBox.Left() + gnLeftIconSpace,
-                aTitleBox.Top() + (aTitleBox.GetHeight()-maIcon.GetSizePixel().Height())/2),
-            maIcon);
+        rRenderContext.DrawImage(Point(aTitleBox.Left() + gnLeftIconSpace,
+                                       aTitleBox.Top() + (aTitleBox.GetHeight() - maIcon.GetSizePixel().Height()) / 2),
+                                 maIcon);
         aTitleBox.Left() += gnLeftIconSpace + maIcon.GetSizePixel().Width() + gnRightIconSpace;
     }
 
-    vcl::Font aFont(GetFont());
+    vcl::Font aFont(rRenderContext.GetFont());
     aFont.SetWeight(WEIGHT_BOLD);
-    SetFont(aFont);
+    rRenderContext.SetFont(aFont);
 
     // Paint title bar text.
-    SetTextColor(GetTextColor());
-    DrawText(
-        aTitleBox,
-        msTitle,
-        TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER);
-
-    Pop();
+    rRenderContext.SetTextColor(rRenderContext.GetTextColor());
+    rRenderContext.DrawText(aTitleBox, msTitle, TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER);
+    rRenderContext.Pop();
 }
 
-void TitleBar::PaintFocus (const Rectangle& rFocusBox)
+void TitleBar::PaintFocus(vcl::RenderContext& rRenderContext, const Rectangle& rFocusBox)
 {
-    Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
+    rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
 
-    vcl::Font aFont(GetFont());
+    vcl::Font aFont(rRenderContext.GetFont());
     aFont.SetWeight(WEIGHT_BOLD);
-    SetFont(aFont);
+    rRenderContext.SetFont(aFont);
 
-    const Rectangle aTextBox (
-        GetTextRect(
-            rFocusBox,
-            msTitle,
-            TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER));
-    const Rectangle aLargerTextBox (
-        aTextBox.Left() - 2,
-        aTextBox.Top() - 2,
-        aTextBox.Right() + 2,
-        aTextBox.Bottom() + 2);
+    const Rectangle aTextBox(rRenderContext.GetTextRect(rFocusBox, msTitle, TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER));
+
+    const Rectangle aLargerTextBox(aTextBox.Left() - 2,
+                                   aTextBox.Top() - 2,
+                                   aTextBox.Right() + 2,
+                                   aTextBox.Bottom() + 2);
 
     if (HasFocus())
         Window::ShowFocus(aLargerTextBox);
     else
         Window::HideFocus();
 
-    Pop();
+    rRenderContext.Pop();
 }
 
 IMPL_LINK_TYPED(TitleBar, SelectionHandler, ToolBox*, pToolBox, void)

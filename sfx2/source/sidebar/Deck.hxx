@@ -38,22 +38,26 @@ class DeckTitleBar;
 /** This is the parent window of the panels.
     It displays the deck title.
 */
-class Deck
-    : public vcl::Window
+class Deck : public vcl::Window
 {
 public:
-    Deck (
-        const DeckDescriptor& rDeckDescriptor,
-        vcl::Window* pParentWindow,
-        const ::boost::function<void()>& rCloserAction);
+    Deck(const DeckDescriptor& rDeckDescriptor,
+         vcl::Window* pParentWindow,
+         const boost::function<void()>& rCloserAction);
     virtual ~Deck();
     virtual void dispose() SAL_OVERRIDE;
 
-    const ::rtl::OUString& GetId() const { return msId;}
+    const OUString& GetId() const
+    {
+        return msId;
+    }
     DeckTitleBar* GetTitleBar() const;
     Rectangle GetContentArea() const;
     void ResetPanels (const SharedPanelContainer& rPanels);
-    const SharedPanelContainer& GetPanels() const { return maPanels;}
+    const SharedPanelContainer& GetPanels() const
+    {
+        return maPanels;
+    }
     void RequestLayout();
     vcl::Window* GetPanelParentWindow();
 
@@ -63,7 +67,7 @@ public:
     */
     void ShowPanel (const Panel& rPanel);
 
-    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
     virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 
@@ -74,15 +78,15 @@ public:
     class ScrollContainerWindow : public vcl::Window
     {
     public:
-        ScrollContainerWindow (vcl::Window* pParentWindow);
-        virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
-        void SetSeparators (const ::std::vector<sal_Int32>& rSeparators);
+        ScrollContainerWindow(vcl::Window* pParentWindow);
+        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
+        void SetSeparators(const ::std::vector<sal_Int32>& rSeparators);
     private:
-        ::std::vector<sal_Int32> maSeparators;
+        std::vector<sal_Int32> maSeparators;
     };
 
 private:
-    const ::rtl::OUString msId;
+    const OUString msId;
     Image maIcon;
     sal_Int32 mnMinimalWidth;
     SharedPanelContainer maPanels;

@@ -32,24 +32,20 @@ class PanelTitleBar
     : public TitleBar
 {
 public:
-    PanelTitleBar (
-        const ::rtl::OUString& rsTitle,
-        vcl::Window* pParentWindow,
-        Panel* pPanel );
+    PanelTitleBar(const OUString& rsTitle, vcl::Window* pParentWindow, Panel* pPanel);
     virtual ~PanelTitleBar();
     virtual void dispose() SAL_OVERRIDE;
 
-    void SetMoreOptionsCommand (
-        const ::rtl::OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    void SetMoreOptionsCommand(const OUString& rsCommandName,
+                               const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
-    virtual void MouseButtonDown (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
-    virtual void MouseButtonUp (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
+    virtual void DataChanged(const DataChangedEvent& rEvent) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
+    virtual void MouseButtonUp(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
 
 protected:
-    virtual Rectangle GetTitleArea (const Rectangle& rTitleBarBox) SAL_OVERRIDE;
-    virtual void PaintDecoration (const Rectangle& rTitleBarBox) SAL_OVERRIDE;
+    virtual Rectangle GetTitleArea(const Rectangle& rTitleBarBox) SAL_OVERRIDE;
+    virtual void PaintDecoration(vcl::RenderContext& rRenderContext, const Rectangle& rTitleBarBox) SAL_OVERRIDE;
     virtual sidebar::Paint GetBackgroundPaint() SAL_OVERRIDE;
     virtual Color GetTextColor() SAL_OVERRIDE;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex) SAL_OVERRIDE;
@@ -60,7 +56,7 @@ private:
     VclPtr<Panel> mpPanel;
     const sal_uInt16 mnMenuItemIndex;
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    ::rtl::OUString msMoreOptionsCommand;
+    OUString msMoreOptionsCommand;
 };
 
 } } // end of namespace sfx2::sidebar

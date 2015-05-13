@@ -33,10 +33,9 @@ namespace sfx2 { namespace sidebar {
 static const sal_Int32 gaLeftGripPadding (3);
 static const sal_Int32 gaRightGripPadding (3);
 
-DeckTitleBar::DeckTitleBar (
-    const ::rtl::OUString& rsTitle,
-    vcl::Window* pParentWindow,
-    const ::boost::function<void()>& rCloserAction)
+DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
+                            vcl::Window* pParentWindow,
+                            const boost::function<void()>& rCloserAction)
     : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint()),
       mnCloserItemIndex(1),
       maCloserAction(rCloserAction),
@@ -83,9 +82,8 @@ Rectangle DeckTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
         rTitleBarBox.Bottom());
 }
 
-void DeckTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
+void DeckTitleBar::PaintDecoration(vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rTitleBarBox*/)
 {
-    (void)rTitleBarBox;
 }
 
 sidebar::Paint DeckTitleBar::GetBackgroundPaint()
@@ -107,7 +105,7 @@ void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 
 css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessible()
 {
-    const ::rtl::OUString sAccessibleName(msTitle);
+    const OUString sAccessibleName(msTitle);
     SetAccessibleName(sAccessibleName);
     SetAccessibleDescription(sAccessibleName);
     return TitleBar::CreateAccessible();

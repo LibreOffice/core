@@ -39,10 +39,9 @@ namespace sfx2 { namespace sidebar {
 static const sal_Int32 gaLeftIconPadding (5);
 static const sal_Int32 gaRightIconPadding (5);
 
-PanelTitleBar::PanelTitleBar (
-    const ::rtl::OUString& rsTitle,
-    vcl::Window* pParentWindow,
-    Panel* pPanel)
+PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
+                             vcl::Window* pParentWindow,
+                             Panel* pPanel)
     : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint()),
       mbIsLeftButtonDown(false),
       mpPanel(pPanel),
@@ -68,11 +67,10 @@ void PanelTitleBar::dispose()
     TitleBar::dispose();
 }
 
-void PanelTitleBar::SetMoreOptionsCommand (
-    const ::rtl::OUString& rsCommandName,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
+                                          const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
-    if ( ! rsCommandName.equals(msMoreOptionsCommand))
+    if (!rsCommandName.equals(msMoreOptionsCommand))
     {
         if (msMoreOptionsCommand.getLength() > 0)
             maToolBox->RemoveItem(maToolBox->GetItemPos(mnMenuItemIndex));
@@ -119,19 +117,16 @@ Rectangle PanelTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
         return rTitleBarBox;
 }
 
-void PanelTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
+void PanelTitleBar::PaintDecoration (vcl::RenderContext& rRenderContext, const Rectangle& /*rTitleBarBox*/)
 {
-    (void)rTitleBarBox;
-
     if (mpPanel != nullptr)
     {
         Image aImage (mpPanel->IsExpanded()
             ? Theme::GetImage(Theme::Image_Collapse)
             : Theme::GetImage(Theme::Image_Expand));
-        const Point aTopLeft (
-            gaLeftIconPadding,
-            (GetSizePixel().Height()-aImage.GetSizePixel().Height())/2);
-        DrawImage(aTopLeft, aImage);
+        const Point aTopLeft(gaLeftIconPadding,
+                             (GetSizePixel().Height() - aImage.GetSizePixel().Height()) / 2);
+        rRenderContext.DrawImage(aTopLeft, aImage);
     }
 }
 

@@ -43,18 +43,14 @@ using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
 
-Panel::Panel (
-    const PanelDescriptor& rPanelDescriptor,
-    vcl::Window* pParentWindow,
-    const bool bIsInitiallyExpanded,
-    const ::boost::function<void()>& rDeckLayoutTrigger,
-    const ::boost::function<Context()>& rContextAccess)
+Panel::Panel(const PanelDescriptor& rPanelDescriptor,
+             vcl::Window* pParentWindow,
+             const bool bIsInitiallyExpanded,
+             const boost::function<void()>& rDeckLayoutTrigger,
+             const boost::function<Context()>& rContextAccess)
     : Window(pParentWindow),
       msPanelId(rPanelDescriptor.msId),
-      mpTitleBar(VclPtr<PanelTitleBar>::Create(
-              rPanelDescriptor.msTitle,
-              pParentWindow,
-              this)),
+      mpTitleBar(VclPtr<PanelTitleBar>::Create(rPanelDescriptor.msTitle, pParentWindow, this)),
       mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional),
       mxElement(),
       mxPanelComponent(),
@@ -141,15 +137,11 @@ void Panel::Resize()
 
     // Forward new size to window of XUIElement.
     Reference<awt::XWindow> xElementWindow (GetElementWindow());
-    if (xElementWindow.is())
+    if(xElementWindow.is())
     {
-        const Size aSize (GetSizePixel());
+        const Size aSize(GetSizePixel());
         xElementWindow->setPosSize(
-            0,
-            0,
-            aSize.Width(),
-            aSize.Height(),
-            awt::PosSize::POSSIZE);
+            0, 0, aSize.Width(), aSize.Height(), awt::PosSize::POSSIZE);
     }
 }
 

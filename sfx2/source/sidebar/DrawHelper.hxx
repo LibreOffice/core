@@ -34,35 +34,17 @@ class Paint;
 class DrawHelper
 {
 public:
-    static void DrawBorder (
-        OutputDevice& rDevice,
-        const Rectangle& rBox,
-        const SvBorder& rBorderSize,
-        const Paint& rHorizontalPaint,
-        const Paint& rVerticalPaint);
-    static void DrawHorizontalLine(
-        OutputDevice& rDevice,
-        const sal_Int32 nLeft,
-        const sal_Int32 nRight,
-        const sal_Int32 nY,
-        const sal_Int32 nHeight,
-        const Paint& rPaint);
-    static void DrawVerticalLine(
-        OutputDevice& rDevice,
-        const sal_Int32 nTop,
-        const sal_Int32 nBottom,
-        const sal_Int32 nX,
-        const sal_Int32 nWidth,
-        const Paint& rPaint);
-    static void DrawRoundedRectangle (
-        OutputDevice& rDevice,
-        const Rectangle& rBox,
-        const sal_Int32 nCornerRadius,
-        const Color& rBorderColor,
-        const Paint& rFillPaint);
+    static void DrawBorder(vcl::RenderContext& rRenderContext, const Rectangle& rBox, const SvBorder& rBorderSize,
+                           const Paint& rHorizontalPaint, const Paint& rVerticalPaint);
+    static void DrawHorizontalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nLeft, const sal_Int32 nRight,
+                                   const sal_Int32 nY, const sal_Int32 nHeight, const Paint& rPaint);
+    static void DrawVerticalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nTop, const sal_Int32 nBottom,
+                                 const sal_Int32 nX, const sal_Int32 nWidth, const Paint& rPaint);
+    static void DrawRoundedRectangle(vcl::RenderContext& rRenderContext, const Rectangle& rBox, const sal_Int32 nCornerRadius,
+                                     const Color& rBorderColor, const Paint& rFillPaint);
 };
 
-} } // end of namespace sfx2::sidebar
+}} // end of namespace sfx2::sidebar
 
 #endif
 

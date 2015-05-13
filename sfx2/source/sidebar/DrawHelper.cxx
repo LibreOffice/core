@@ -24,146 +24,100 @@
 
 namespace sfx2 { namespace sidebar {
 
-void DrawHelper::DrawBorder (
-    OutputDevice& rDevice,
-    const Rectangle& rBox,
-    const SvBorder& rBorderSize,
-    const Paint& rHorizontalPaint,
-    const Paint& rVerticalPaint)
+void DrawHelper::DrawBorder(vcl::RenderContext& rRenderContext, const Rectangle& rBox, const SvBorder& rBorderSize,
+                            const Paint& rHorizontalPaint, const Paint& rVerticalPaint)
 {
     // Draw top line.
-    DrawHorizontalLine(
-        rDevice,
-        rBox.Left(),
-        rBox.Right(),
-        rBox.Top(),
-        rBorderSize.Top(),
-        rHorizontalPaint);
+    DrawHorizontalLine(rRenderContext, rBox.Left(), rBox.Right(),
+                       rBox.Top(), rBorderSize.Top(), rHorizontalPaint);
+
     // Draw bottom line.
-    DrawHorizontalLine(
-        rDevice,
-        rBox.Left()+rBorderSize.Left(),
-        rBox.Right(),
-        rBox.Bottom()-rBorderSize.Bottom()+1,
-        rBorderSize.Bottom(),
-        rHorizontalPaint);
+    DrawHorizontalLine(rRenderContext, rBox.Left() + rBorderSize.Left(), rBox.Right(),
+                       rBox.Bottom() - rBorderSize.Bottom() + 1, rBorderSize.Bottom(),
+                       rHorizontalPaint);
     // Draw left line.
-    DrawVerticalLine(
-        rDevice,
-        rBox.Top()+rBorderSize.Top(),
-        rBox.Bottom(),
-        rBox.Left(),
-        rBorderSize.Left(),
-        rVerticalPaint);
+    DrawVerticalLine(rRenderContext, rBox.Top() + rBorderSize.Top(), rBox.Bottom(),
+                     rBox.Left(), rBorderSize.Left(), rVerticalPaint);
     // Draw right line.
-    DrawVerticalLine(
-        rDevice,
-        rBox.Top()+rBorderSize.Top(),
-        rBox.Bottom()-rBorderSize.Bottom(),
-        rBox.Right()-rBorderSize.Right()+1,
-        rBorderSize.Right(),
-        rVerticalPaint);
+    DrawVerticalLine(rRenderContext, rBox.Top() + rBorderSize.Top(), rBox.Bottom() - rBorderSize.Bottom(),
+                     rBox.Right() - rBorderSize.Right() + 1, rBorderSize.Right(), rVerticalPaint);
 }
 
-void DrawHelper::DrawHorizontalLine(
-    OutputDevice& rDevice,
-    const sal_Int32 nLeft,
-    const sal_Int32 nRight,
-    const sal_Int32 nY,
-    const sal_Int32 nHeight,
-    const Paint& rPaint)
+void DrawHelper::DrawHorizontalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nLeft, const sal_Int32 nRight,
+                                    const sal_Int32 nY, const sal_Int32 nHeight, const Paint& rPaint)
 {
     switch (rPaint.GetType())
     {
-        case Paint::NoPaint:
-        default:
-            break;
-
         case Paint::ColorPaint:
         {
-            const Color aColor (rPaint.GetColor());
-            rDevice.SetLineColor(aColor);
-            for (sal_Int32 nYOffset=0; nYOffset<nHeight; ++nYOffset)
-                rDevice.DrawLine(
-                    Point(nLeft,nY+nYOffset),
-                    Point(nRight,nY+nYOffset));
+            const Color aColor(rPaint.GetColor());
+            rRenderContext.SetLineColor(aColor);
+            for (sal_Int32 nYOffset = 0; nYOffset < nHeight; ++nYOffset)
+            {
+                rRenderContext.DrawLine(Point(nLeft, nY + nYOffset),
+                                        Point(nRight, nY + nYOffset));
+            }
             break;
         }
         case Paint::GradientPaint:
-            rDevice.DrawGradient(
-                Rectangle(
-                    nLeft,
-                    nY,
-                    nRight,
-                    nY+nHeight-1),
-                rPaint.GetGradient());
+            rRenderContext.DrawGradient(Rectangle(nLeft, nY, nRight, nY + nHeight - 1),
+                                        rPaint.GetGradient());
+            break;
+
+        case Paint::NoPaint:
+        default:
             break;
     }
 }
 
-void DrawHelper::DrawVerticalLine(
-    OutputDevice& rDevice,
-    const sal_Int32 nTop,
-    const sal_Int32 nBottom,
-    const sal_Int32 nX,
-    const sal_Int32 nWidth,
-    const Paint& rPaint)
+void DrawHelper::DrawVerticalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nTop, const sal_Int32 nBottom,
+                                  const sal_Int32 nX, const sal_Int32 nWidth, const Paint& rPaint)
 {
     switch (rPaint.GetType())
     {
-        case Paint::NoPaint:
-        default:
-            break;
-
         case Paint::ColorPaint:
         {
-            const Color aColor (rPaint.GetColor());
-            rDevice.SetLineColor(aColor);
-            for (sal_Int32 nXOffset=0; nXOffset<nWidth; ++nXOffset)
-                rDevice.DrawLine(
-                    Point(nX+nXOffset, nTop),
-                    Point(nX+nXOffset, nBottom));
+            const Color aColor(rPaint.GetColor());
+            rRenderContext.SetLineColor(aColor);
+            for (sal_Int32 nXOffset = 0; nXOffset < nWidth; ++nXOffset)
+            {
+                rRenderContext.DrawLine(Point(nX + nXOffset, nTop),
+                                        Point(nX + nXOffset, nBottom));
+            }
             break;
         }
         case Paint::GradientPaint:
-            rDevice.DrawGradient(
-                Rectangle(
-                    nX,
-                    nTop,
-                    nX+nWidth-1,
-                    nBottom),
-                rPaint.GetGradient());
+            rRenderContext.DrawGradient(Rectangle(nX, nTop, nX + nWidth - 1, nBottom),
+                                        rPaint.GetGradient());
+            break;
+
+        case Paint::NoPaint:
+        default:
             break;
     }
 }
 
-void DrawHelper::DrawRoundedRectangle (
-    OutputDevice& rDevice,
-    const Rectangle& rBox,
-    const sal_Int32 nCornerRadius,
-    const Color& rBorderColor,
-    const Paint& rFillPaint)
+void DrawHelper::DrawRoundedRectangle(vcl::RenderContext& rRenderContext, const Rectangle& rBox, const sal_Int32 nCornerRadius,
+                                      const Color& rBorderColor, const Paint& rFillPaint)
 {
-    rDevice.SetLineColor(rBorderColor);
-    switch(rFillPaint.GetType())
+    rRenderContext.SetLineColor(rBorderColor);
+    switch (rFillPaint.GetType())
     {
-        case Paint::NoPaint:
-        default:
-            rDevice.SetFillColor();
-            rDevice.DrawRect(rBox, nCornerRadius, nCornerRadius);
-            break;
-
         case Paint::ColorPaint:
-            rDevice.SetFillColor(rFillPaint.GetColor());
-            rDevice.DrawRect(rBox, nCornerRadius, nCornerRadius);
+            rRenderContext.SetFillColor(rFillPaint.GetColor());
+            rRenderContext.DrawRect(rBox, nCornerRadius, nCornerRadius);
             break;
 
         case Paint::GradientPaint:
-            rDevice.DrawGradient(
-                rBox,
-                rFillPaint.GetGradient());
-            rDevice.SetFillColor();
-            rDevice.DrawRect(rBox, nCornerRadius, nCornerRadius);
+            rRenderContext.DrawGradient(rBox, rFillPaint.GetGradient());
+            rRenderContext.SetFillColor();
+            rRenderContext.DrawRect(rBox, nCornerRadius, nCornerRadius);
+            break;
+
+        case Paint::NoPaint:
+        default:
+            rRenderContext.SetFillColor();
+            rRenderContext.DrawRect(rBox, nCornerRadius, nCornerRadius);
             break;
     }
 }

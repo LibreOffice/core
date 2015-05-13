@@ -115,43 +115,33 @@ Rectangle Deck::GetContentArea() const
         aWindowSize.Height() - 1 - Theme::GetInteger(Theme::Int_DeckBottomPadding) - nBorderSize);
 }
 
-void Deck::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
+void Deck::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
 {
     (void) rUpdateArea;
 
     const Size aWindowSize (GetSizePixel());
-    const SvBorder aPadding (
-            Theme::GetInteger(Theme::Int_DeckLeftPadding),
-            Theme::GetInteger(Theme::Int_DeckTopPadding),
-            Theme::GetInteger(Theme::Int_DeckRightPadding),
-            Theme::GetInteger(Theme::Int_DeckBottomPadding));
+    const SvBorder aPadding(Theme::GetInteger(Theme::Int_DeckLeftPadding),
+                            Theme::GetInteger(Theme::Int_DeckTopPadding),
+                            Theme::GetInteger(Theme::Int_DeckRightPadding),
+                            Theme::GetInteger(Theme::Int_DeckBottomPadding));
 
     // Paint deck background outside the border.
-    Rectangle aBox(
-        0,
-        0,
-        aWindowSize.Width() - 1,
-        aWindowSize.Height() - 1);
-    DrawHelper::DrawBorder(
-        *this,
-        aBox,
-        aPadding,
-        Theme::GetPaint(Theme::Paint_DeckBackground),
-        Theme::GetPaint(Theme::Paint_DeckBackground));
+    Rectangle aBox(0, 0, aWindowSize.Width() - 1, aWindowSize.Height() - 1);
+    DrawHelper::DrawBorder(rRenderContext, aBox, aPadding,
+                           Theme::GetPaint(Theme::Paint_DeckBackground),
+                           Theme::GetPaint(Theme::Paint_DeckBackground));
 
     // Paint the border.
-    const int nBorderSize (Theme::GetInteger(Theme::Int_DeckBorderSize));
+    const int nBorderSize(Theme::GetInteger(Theme::Int_DeckBorderSize));
     aBox.Left() += aPadding.Left();
     aBox.Top() += aPadding.Top();
     aBox.Right() -= aPadding.Right();
     aBox.Bottom() -= aPadding.Bottom();
-    const sfx2::sidebar::Paint& rHorizontalBorderPaint (Theme::GetPaint(Theme::Paint_HorizontalBorder));
-    DrawHelper::DrawBorder(
-        *this,
-        aBox,
-        SvBorder(nBorderSize, nBorderSize, nBorderSize, nBorderSize),
-        rHorizontalBorderPaint,
-        Theme::GetPaint(Theme::Paint_VerticalBorder));
+    const sfx2::sidebar::Paint& rHorizontalBorderPaint(Theme::GetPaint(Theme::Paint_HorizontalBorder));
+    DrawHelper::DrawBorder(rRenderContext, aBox,
+                           SvBorder(nBorderSize, nBorderSize, nBorderSize, nBorderSize),
+                           rHorizontalBorderPaint,
+                           Theme::GetPaint(Theme::Paint_VerticalBorder));
 }
 
 void Deck::DataChanged (const DataChangedEvent& rEvent)
@@ -206,7 +196,7 @@ bool Deck::ProcessWheelEvent(CommandEvent* pCommandEvent)
  * This container may contain existing panels that are
  * being re-used, and new ones too.
  */
-void Deck::ResetPanels (const SharedPanelContainer& rPanels)
+void Deck::ResetPanels(const SharedPanelContainer& rPanels)
 {
     // First dispose old panels we no longer need.
     for (size_t i = 0; i < maPanels.size(); i++)
@@ -226,15 +216,9 @@ void Deck::RequestLayout()
 {
     mnMinimalWidth = 0;
 
-    DeckLayouter::LayoutDeck(
-        GetContentArea(),
-        mnMinimalWidth,
-        maPanels,
-        *GetTitleBar(),
-        *mpScrollClipWindow,
-        *mpScrollContainer,
-        *mpFiller,
-        *mpVerticalScrollBar);
+    DeckLayouter::LayoutDeck(GetContentArea(), mnMinimalWidth, maPanels,
+                             *GetTitleBar(), *mpScrollClipWindow, *mpScrollContainer,
+                             *mpFiller, *mpVerticalScrollBar);
 }
 
 vcl::Window* Deck::GetPanelParentWindow()
@@ -242,7 +226,7 @@ vcl::Window* Deck::GetPanelParentWindow()
     return mpScrollContainer.get();
 }
 
-void Deck::ShowPanel (const Panel& rPanel)
+void Deck::ShowPanel(const Panel& rPanel)
 {
     if (mpVerticalScrollBar && mpVerticalScrollBar->IsVisible())
     {
@@ -271,7 +255,7 @@ void Deck::ShowPanel (const Panel& rPanel)
     }
 }
 
-const OUString GetWindowClassification (const vcl::Window* pWindow)
+const OUString GetWindowClassification(const vcl::Window* pWindow)
 {
     const OUString& rsName (pWindow->GetText());
     if (!rsName.isEmpty())
@@ -284,31 +268,29 @@ const OUString GetWindowClassification (const vcl::Window* pWindow)
     }
 }
 
-void Deck::PrintWindowSubTree (vcl::Window* pRoot, int nIndentation)
+void Deck::PrintWindowSubTree(vcl::Window* pRoot, int nIndentation)
 {
     static const char* sIndentation = "                                                                  ";
     const Point aLocation (pRoot->GetPosPixel());
     const Size aSize (pRoot->GetSizePixel());
     SAL_INFO(
         "sfx.sidebar",
-        sIndentation+strlen(sIndentation)-nIndentation*4 << pRoot << " "
+        sIndentation + strlen(sIndentation) - nIndentation * 4 << pRoot << " "
             << GetWindowClassification(pRoot) << " "
             << (pRoot->IsVisible() ? "visible" : "hidden") << " +"
             << aLocation.X() << "+" << aLocation.Y() << " x" << aSize.Width()
             << "x" << aSize.Height());
 
-    const sal_uInt16 nChildCount (pRoot->GetChildCount());
-    for (sal_uInt16 nIndex=0; nIndex<nChildCount; ++nIndex)
-        PrintWindowSubTree(pRoot->GetChild(nIndex), nIndentation+1);
+    const sal_uInt16 nChildCount(pRoot->GetChildCount());
+    for (sal_uInt16 nIndex = 0; nIndex < nChildCount; ++nIndex)
+        PrintWindowSubTree(pRoot->GetChild(nIndex), nIndentation + 1);
 }
 
 IMPL_LINK_NOARG(Deck, HandleVerticalScrollBarChange)
 {
     const sal_Int32 nYOffset (-mpVerticalScrollBar->GetThumbPos());
-    mpScrollContainer->SetPosPixel(
-        Point(
-            mpScrollContainer->GetPosPixel().X(),
-            nYOffset));
+    mpScrollContainer->SetPosPixel(Point(mpScrollContainer->GetPosPixel().X(),
+                                         nYOffset));
     return sal_IntPtr(true);
 }
 
@@ -323,26 +305,17 @@ Deck::ScrollContainerWindow::ScrollContainerWindow (vcl::Window* pParentWindow)
 #endif
 }
 
-void Deck::ScrollContainerWindow::Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rUpdateArea)
+void Deck::ScrollContainerWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rUpdateArea*/)
 {
-    (void)rUpdateArea;
-
     // Paint the separators.
-    const sal_Int32 nSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
-    const sal_Int32 nLeft  (0);
-    const sal_Int32 nRight (GetSizePixel().Width()-1);
-    const sfx2::sidebar::Paint& rHorizontalBorderPaint (Theme::GetPaint(Theme::Paint_HorizontalBorder));
-    for (::std::vector<sal_Int32>::const_iterator iY(maSeparators.begin()), iEnd(maSeparators.end());
-         iY!=iEnd;
-         ++iY)
+    const sal_Int32 nSeparatorHeight(Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
+    const sal_Int32 nLeft(0);
+    const sal_Int32 nRight(GetSizePixel().Width() - 1);
+    const sfx2::sidebar::Paint& rHorizontalBorderPaint(Theme::GetPaint(Theme::Paint_HorizontalBorder));
+    for (std::vector<sal_Int32>::const_iterator iY(maSeparators.begin()); iY != maSeparators.end(); ++iY)
     {
-        DrawHelper::DrawHorizontalLine(
-            *this,
-            nLeft,
-            nRight,
-            *iY,
-            nSeparatorHeight,
-            rHorizontalBorderPaint);
+        DrawHelper::DrawHorizontalLine(rRenderContext, nLeft, nRight, *iY,
+                                       nSeparatorHeight, rHorizontalBorderPaint);
     }
 }
 

@@ -39,11 +39,10 @@ using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
 
-TabBar::TabBar (
-    vcl::Window* pParentWindow,
-    const Reference<frame::XFrame>& rxFrame,
-    const ::boost::function<void(const ::rtl::OUString&)>& rDeckActivationFunctor,
-    const PopupMenuProvider& rPopupMenuProvider)
+TabBar::TabBar(vcl::Window* pParentWindow,
+               const Reference<frame::XFrame>& rxFrame,
+               const boost::function<void(const OUString&)>& rDeckActivationFunctor,
+               const PopupMenuProvider& rPopupMenuProvider)
     : Window(pParentWindow, WB_DIALOGCONTROL),
       mxFrame(rxFrame),
       mpMenuButton(ControlFactory::CreateMenuButton(this)),
@@ -79,15 +78,14 @@ void TabBar::dispose()
     vcl::Window::dispose();
 }
 
-void TabBar::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
+void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
 {
     Window::Paint(rRenderContext, rUpdateArea);
 
-    const sal_Int32 nHorizontalPadding (Theme::GetInteger(Theme::Int_TabMenuSeparatorPadding));
-    SetLineColor(Theme::GetColor(Theme::Color_TabMenuSeparator));
-    DrawLine(
-        Point(nHorizontalPadding, mnMenuSeparatorY),
-        Point(GetSizePixel().Width()-nHorizontalPadding, mnMenuSeparatorY));
+    const sal_Int32 nHorizontalPadding(Theme::GetInteger(Theme::Int_TabMenuSeparatorPadding));
+    rRenderContext.SetLineColor(Theme::GetColor(Theme::Color_TabMenuSeparator));
+    rRenderContext.DrawLine(Point(nHorizontalPadding, mnMenuSeparatorY),
+                            Point(GetSizePixel().Width() - nHorizontalPadding, mnMenuSeparatorY));
 }
 
 sal_Int32 TabBar::GetDefaultWidth()
@@ -97,15 +95,11 @@ sal_Int32 TabBar::GetDefaultWidth()
         + Theme::GetInteger(Theme::Int_TabBarRightPadding);
 }
 
-void TabBar::SetDecks (
-    const ResourceManager::DeckContextDescriptorContainer& rDecks)
+void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDecks)
 {
     // Remove the current buttons.
     {
-        for(ItemContainer::iterator
-                iItem(maItems.begin()), iEnd(maItems.end());
-            iItem!=iEnd;
-            ++iItem)
+        for(ItemContainer::iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
         {
             iItem->mpButton.disposeAndClear();
         }
@@ -114,10 +108,7 @@ void TabBar::SetDecks (
     maItems.resize(rDecks.size());
     sal_Int32 nIndex (0);
     for (ResourceManager::DeckContextDescriptorContainer::const_iterator
-             iDeck(rDecks.begin()),
-             iEnd(rDecks.end());
-         iDeck!=iEnd;
-         ++iDeck)
+             iDeck(rDecks.begin()); iDeck != rDecks.end(); ++iDeck)
     {
         const DeckDescriptor* pDescriptor = ResourceManager::Instance().GetDeckDescriptor(iDeck->msId);
         if (pDescriptor == NULL)
@@ -223,11 +214,9 @@ void TabBar::Layout()
     Invalidate();
 }
 
-void TabBar::HighlightDeck (const ::rtl::OUString& rsDeckId)
+void TabBar::HighlightDeck (const OUString& rsDeckId)
 {
-    for (ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());
-         iItem!=iEnd;
-         ++iItem)
+    for (ItemContainer::iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
     {
         if (iItem->msDeckId.equals(rsDeckId))
             iItem->mpButton->Check(true);
@@ -259,7 +248,7 @@ bool TabBar::Notify (NotifyEvent&)
     return false;
 }
 
-VclPtr<RadioButton> TabBar::CreateTabItem (const DeckDescriptor& rDeckDescriptor)
+VclPtr<RadioButton> TabBar::CreateTabItem(const DeckDescriptor& rDeckDescriptor)
 {
     VclPtr<RadioButton> pItem = ControlFactory::CreateTabItem(this);
     pItem->SetAccessibleName(rDeckDescriptor.msTitle);
@@ -269,7 +258,7 @@ VclPtr<RadioButton> TabBar::CreateTabItem (const DeckDescriptor& rDeckDescriptor
     return pItem;
 }
 
-Image TabBar::GetItemImage (const DeckDescriptor& rDeckDescriptor) const
+Image TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
 {
     return Tools::GetImage(
         rDeckDescriptor.msIconURL,
@@ -283,7 +272,8 @@ IMPL_LINK(TabBar::Item, HandleClick, Button*,)
     {
         maDeckActivationFunctor(msDeckId);
     }
-    catch( const ::com::sun::star::uno::Exception&) {} // workaround for #i123198#
+    catch(const css::uno::Exception&)
+    {} // workaround for #i123198#
 
     return 1;
 }
@@ -298,7 +288,7 @@ const ::rtl::OUString TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
 
 void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
 {
-    if (nIndex<0 || static_cast<size_t>(nIndex)>=maItems.size())
+    if (nIndex<0 || static_cast<size_t>(nIndex) >= maItems.size())
         throw RuntimeException();
     else
     {
@@ -312,10 +302,8 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
 
 void TabBar::RestoreHideFlags()
 {
-    bool bNeedsLayout (false);
-    for(ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());
-        iItem!=iEnd;
-        ++iItem)
+    bool bNeedsLayout(false);
+    for (ItemContainer::iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
     {
         if (iItem->mbIsHidden != iItem->mbIsHiddenByDefault)
         {
@@ -327,16 +315,13 @@ void TabBar::RestoreHideFlags()
         Layout();
 }
 
-void TabBar::UpdateFocusManager (FocusManager& rFocusManager)
+void TabBar::UpdateFocusManager(FocusManager& rFocusManager)
 {
-    ::std::vector<Button*> aButtons;
+    std::vector<Button*> aButtons;
     aButtons.reserve(maItems.size()+1);
 
     aButtons.push_back(mpMenuButton.get());
-    for(ItemContainer::const_iterator
-            iItem(maItems.begin()), iEnd(maItems.end());
-        iItem!=iEnd;
-        ++iItem)
+    for (ItemContainer::const_iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
     {
         aButtons.push_back(iItem->mpButton.get());
     }
@@ -345,14 +330,12 @@ void TabBar::UpdateFocusManager (FocusManager& rFocusManager)
 
 IMPL_LINK_NOARG(TabBar, OnToolboxClicked)
 {
-    if ( ! mpMenuButton)
+    if (!mpMenuButton)
         return 0;
 
-    ::std::vector<DeckMenuData> aMenuData;
+    std::vector<DeckMenuData> aMenuData;
 
-    for(ItemContainer::const_iterator iItem(maItems.begin()),iEnd(maItems.end());
-        iItem!=iEnd;
-        ++iItem)
+    for (ItemContainer::const_iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
     {
         const DeckDescriptor* pDeckDescriptor = ResourceManager::Instance().GetDeckDescriptor(iItem->msDeckId);
         if (pDeckDescriptor != NULL)
