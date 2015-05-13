@@ -2585,7 +2585,7 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
 
             nAxisType = XML_valAx;
             // FIXME: axPos, need to check axis direction
-            sAxPos = "l";
+            sAxPos = "r";
             break;
         }
     }
