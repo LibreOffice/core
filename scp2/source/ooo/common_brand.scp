@@ -1411,7 +1411,7 @@ File gid_License_Txt
 End
 
 File gid_Eula_Odt
-    BIN_FILE_BODY;
+    TXT_FILE_BODY;
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
     Dir = gid_Dir_Bundle_Contents_Resources;
 #elif defined MACOSX
@@ -1424,7 +1424,7 @@ File gid_Eula_Odt
 End
 
 File gid_License_Odt
-    BIN_FILE_BODY;
+    TXT_FILE_BODY;
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
     Dir = gid_Dir_Bundle_Contents_Resources;
 #elif defined MACOSX
@@ -1437,7 +1437,7 @@ File gid_License_Odt
 End
 
 File gid_Credits_Odt
-    BIN_FILE_BODY;
+    TXT_FILE_BODY;
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
     Dir = gid_Dir_Bundle_Contents_Resources;
 #elif defined MACOSX
@@ -1450,7 +1450,7 @@ File gid_Credits_Odt
 End
 
 File gid_Apache_Notice
-    BIN_FILE_BODY;
+    TXT_FILE_BODY;
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
     Dir = gid_Dir_Bundle_Contents_Resources;
 #elif defined MACOSX
