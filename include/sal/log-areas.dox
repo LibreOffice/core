@@ -482,6 +482,7 @@ certain functionality.
 @section avmedia
 
 @li @c avmedia
+@li @c avmedia.gstreamer
 @li @c avmedia.opengl - OpenGL models
 
 @section other

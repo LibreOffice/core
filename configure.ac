@@ -10220,7 +10220,7 @@ if test "$build_gstreamer_1_0" = "yes"; then
     if test "$enable_avmedia" = yes -a "$enable_gstreamer_1_0" != no; then
         ENABLE_GSTREAMER_1_0="TRUE"
         AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( [GSTREAMER_1_0], [gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-video-1.0] )
+        PKG_CHECK_MODULES( [GSTREAMER_1_0], [gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-pbutils-1.0 gstreamer-video-1.0] )
         GSTREAMER_1_0_CFLAGS=$(printf '%s' "$GSTREAMER_1_0_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     else
         AC_MSG_RESULT([no])
@@ -10238,8 +10238,8 @@ if test "$build_gstreamer_0_10" = "yes"; then
     if test "$enable_avmedia" = yes -a "$enable_gstreamer_0_10" != no; then
         ENABLE_GSTREAMER_0_10="TRUE"
         AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-interfaces-0.10],, [
-            PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10] )
+        PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-pbutils-0.10 gstreamer-interfaces-0.10],, [
+            PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-pbutils-0.10] )
         ])
         GSTREAMER_0_10_CFLAGS=$(printf '%s' "$GSTREAMER_0_10_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     else

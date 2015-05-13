@@ -17,12 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+#include <cstring>
+#include <set>
 #include <math.h>
 
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/string.hxx>
-
+#include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
@@ -38,6 +43,9 @@
 #  define AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer"
 #  define AVMEDIA_GST_PLAYER_SERVICENAME        "com.sun.star.media.Player_GStreamer"
 #endif
+
+#include <gst/pbutils/missing-plugins.h>
+#include <gst/pbutils/pbutils.h>
 
 #if !defined DBG
 # if OSL_DEBUG_LEVEL > 2
@@ -56,6 +64,56 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace gstreamer {
 
+namespace {
+
+class MissingPluginInstaller {
+public:
+    void report(GstMessage * message);
+
+private:
+    DECL_STATIC_LINK(MissingPluginInstaller, install, rtl_String *);
+
+    std::set<OString> reported_;
+};
+
+void MissingPluginInstaller::report(GstMessage * message) {
+    // assert(gst_is_missing_plugin_message(message));
+    gchar * det = gst_missing_plugin_message_get_installer_detail(message);
+    if (det != nullptr) {
+        std::size_t len = std::strlen(det);
+        if (len <= sal_uInt32(SAL_MAX_INT32)) {
+            OString detStr(det, len);
+            if (reported_.insert(detStr).second) {
+                rtl_string_acquire(detStr.pData);
+                Application::PostUserEvent(
+                    LINK(nullptr, MissingPluginInstaller, install),
+                    detStr.pData);
+            }
+        } else {
+            SAL_WARN(
+            "avmedia.gstreamer", "detail string too long");
+        }
+        g_free(det);
+    } else {
+        SAL_WARN(
+            "avmedia.gstreamer",
+            "gst_missing_plugin_message_get_installer_detail failed");
+    }
+}
+
+IMPL_STATIC_LINK(MissingPluginInstaller, install, rtl_String *, data) {
+    OString res(data, SAL_NO_ACQUIRE);
+    gst_pb_utils_init(); // not thread safe
+    char * args[]{const_cast<char *>(res.getStr()), nullptr};
+    gst_install_plugins_sync(args, nullptr);
+    return 0;
+}
+
+struct TheMissingPluginInstaller:
+    public rtl::Static<MissingPluginInstaller, TheMissingPluginInstaller>
+{};
+
+}
 
 // - Player -
 
@@ -328,6 +386,8 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
             }
         }
 #endif
+    } else if (gst_is_missing_plugin_message(message)) {
+        TheMissingPluginInstaller::get().report(message);
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
         DBG( "Error !\n" );
         if( mnWidth == 0 ) {
