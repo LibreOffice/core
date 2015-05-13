@@ -207,7 +207,7 @@ FontMetric OutputDevice::GetFontMetric() const
     else
         aMetric.SetOrientation( pMetric->mnOrientation );
     if( !pEntry->maMetric.mbKernableFont )
-         aMetric.SetKerning( maFont.GetKerning() & ~KERNING_FONTSPECIFIC );
+         aMetric.SetKerning( maFont.GetKerning() & ~FontKerning::FontSpecific );
 
     // set remaining metric fields
     aMetric.mpImplMetric->mnMiscFlags   = 0;
@@ -1584,7 +1584,7 @@ bool OutputDevice::ImplNewFont() const
     }
 
     // enable kerning array if requested
-    if ( maFont.GetKerning() & KERNING_FONTSPECIFIC )
+    if ( maFont.GetKerning() & FontKerning::FontSpecific )
     {
         // TODO: test if physical font supports kerning and disable if not
         if( pFontEntry->maMetric.mbKernableFont )
@@ -1592,7 +1592,7 @@ bool OutputDevice::ImplNewFont() const
     }
     else
         mbKerning = false;
-    if ( maFont.GetKerning() & KERNING_ASIAN )
+    if ( maFont.GetKerning() & FontKerning::Asian )
         mbKerning = true;
 
     // calculate EmphasisArea

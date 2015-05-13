@@ -47,7 +47,7 @@ void SvxUnoFontDescriptor::ConvertToFont( const awt::FontDescriptor& rDesc, vcl:
     rFont.SetCharSet( (rtl_TextEncoding)rDesc.CharSet );
     rFont.SetPitch( (FontPitch)rDesc.Pitch );
     rFont.SetOrientation( (short)(rDesc.Orientation*10) );
-    rFont.SetKerning( rDesc.Kerning );
+    rFont.SetKerning( rDesc.Kerning ? FontKerning::FontSpecific : FontKerning::NONE );
     rFont.SetWeight( VCLUnoHelper::ConvertFontWeight(rDesc.Weight) );
     rFont.SetItalic( (FontItalic)rDesc.Slant );
     rFont.SetUnderline( (FontUnderline)rDesc.Underline );

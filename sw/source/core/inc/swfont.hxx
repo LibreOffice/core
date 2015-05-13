@@ -98,7 +98,7 @@ class SwSubFont : public SvxFont
     inline void SetOutline( const bool bOutline );
     inline void SetVertical( const sal_uInt16 nDir, const bool bVertFormat );
     inline void SetShadow( const bool bShadow );
-    inline void SetAutoKern( const sal_uInt8 nAutoKern );
+    inline void SetAutoKern( FontKerning nAutoKern );
     inline void SetWordLineMode( const bool bWordLineMode );
     inline void SetEmphasisMark( const FontEmphasisMark eValue );
     inline void SetRelief( const FontRelief eNew );
@@ -224,7 +224,7 @@ public:
     inline void SetOutline( const bool bOutline );
            void SetVertical( sal_uInt16 nDir, const bool nVertLayout = false );
     inline void SetShadow( const bool bShadow );
-    inline void SetAutoKern( sal_uInt8 nAutoKern );
+    inline void SetAutoKern( FontKerning nAutoKern );
     inline void SetTransparent( const bool bTrans );
     inline void SetWordLineMode( const bool bWordLineMode );
     inline void SetFixKerning( const short nNewKern );
@@ -668,18 +668,18 @@ inline void SwFont::SetShadow( const bool bShadow )
 }
 
 // encapsulated SV-Font-method
-inline void SwSubFont::SetAutoKern( const sal_uInt8 nAutoKern )
+inline void SwSubFont::SetAutoKern( FontKerning nAutoKern )
 {
     pMagic = 0;
     Font::SetKerning( nAutoKern );
 }
 
-inline void SwFont::SetAutoKern( sal_uInt8 nAutoKern )
+inline void SwFont::SetAutoKern( FontKerning nAutoKern )
 {
     bFntChg = true;
     aSub[1].SetAutoKern( nAutoKern );
-    if( nAutoKern )
-        nAutoKern = KERNING_FONTSPECIFIC;
+    if( nAutoKern != FontKerning::NONE )
+        nAutoKern = FontKerning::FontSpecific;
     aSub[0].SetAutoKern( nAutoKern );
     aSub[2].SetAutoKern( nAutoKern );
 }

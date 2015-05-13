@@ -21,12 +21,20 @@
 #define INCLUDED_VCL_FNTSTYLE_HXX
 
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 
 enum FontRelief { RELIEF_NONE, RELIEF_EMBOSSED, RELIEF_ENGRAVED, FontRelief_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
 
-typedef sal_uInt8 FontKerning;
-#define KERNING_FONTSPECIFIC        ((FontKerning)0x01)
-#define KERNING_ASIAN               ((FontKerning)0x02)
+enum class FontKerning
+{
+    NONE                = 0x00,
+    FontSpecific        = 0x01,
+    Asian               = 0x02,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<FontKerning> : is_typed_flags<FontKerning, 0x03> {};
+}
 
 #endif // INCLUDED_VCL_FNTSTYLE_HXX
 

@@ -626,11 +626,11 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             {
                 SetAutoKern( ( !pIDocumentSettingAccess ||
                                !pIDocumentSettingAccess->get(DocumentSettingId::KERN_ASIAN_PUNCTUATION) ) ?
-                                KERNING_FONTSPECIFIC :
-                                KERNING_ASIAN );
+                                FontKerning::FontSpecific :
+                                FontKerning::Asian );
             }
             else
-                SetAutoKern( 0 );
+                SetAutoKern( FontKerning::NONE );
         }
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_WORDLINEMODE,
             true, &pItem ))
@@ -826,11 +826,11 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     {
         SetAutoKern( ( !pIDocumentSettingAccess ||
                        !pIDocumentSettingAccess->get(DocumentSettingId::KERN_ASIAN_PUNCTUATION) ) ?
-                        KERNING_FONTSPECIFIC :
-                        KERNING_ASIAN );
+                        FontKerning::FontSpecific :
+                        FontKerning::Asian );
     }
     else
-        SetAutoKern( 0 );
+        SetAutoKern( FontKerning::NONE );
     SetWordLineMode( pAttrSet->GetWordLineMode().GetValue() );
     const SvxEscapementItem &rEsc = pAttrSet->GetEscapement();
     SetEscapement( rEsc.GetEsc() );

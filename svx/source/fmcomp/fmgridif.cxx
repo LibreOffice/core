@@ -117,7 +117,7 @@ vcl::Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
     aFont.SetUnderline( (::FontUnderline)rDescr.Underline );
     aFont.SetStrikeout( (::FontStrikeout)rDescr.Strikeout );
     aFont.SetOrientation( (sal_Int16)rDescr.Orientation );
-    aFont.SetKerning( rDescr.Kerning );
+    aFont.SetKerning( static_cast<FontKerning>(rDescr.Kerning) );
     aFont.SetWordLineMode( rDescr.WordLineMode );
     return aFont;
 }

@@ -2646,8 +2646,8 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
     rFont.SetCJKContextLanguage( pCJKLanguageItem->GetLanguage() );
 
-    if ( rFont.GetKerning() && IsKernAsianPunctuation() && ( nScriptTypeI18N == i18n::ScriptType::ASIAN ) )
-        rFont.SetKerning( rFont.GetKerning() | KERNING_ASIAN );
+    if ( (rFont.GetKerning() != FontKerning::NONE) && IsKernAsianPunctuation() && ( nScriptTypeI18N == i18n::ScriptType::ASIAN ) )
+        rFont.SetKerning( rFont.GetKerning() | FontKerning::Asian );
 
     if ( aStatus.DoNotUseColors() )
     {

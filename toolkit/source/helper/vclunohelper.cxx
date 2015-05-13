@@ -412,7 +412,7 @@ vcl::Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor&
 
     // Kein DONTKNOW
     aFont.SetOrientation( (short)rDescr.Orientation );
-    aFont.SetKerning( rDescr.Kerning );
+    aFont.SetKerning( static_cast<FontKerning>(rDescr.Kerning) );
     aFont.SetWordLineMode( rDescr.WordLineMode );
 
     return aFont;

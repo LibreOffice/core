@@ -56,7 +56,7 @@ Impl_Font::Impl_Font() :
     meRelief            = RELIEF_NONE;
     meEmphasisMark      = EMPHASISMARK_NONE;
     mnOrientation       = 0;
-    mnKerning           = 0;
+    mnKerning           = FontKerning::NONE;
     mbWordLine          = false;
     mbOutline           = false;
     mbShadow            = false;
@@ -450,7 +450,7 @@ void Font::SetKerning( FontKerning nKerning )
 
 bool Font::IsKerning() const
 {
-    return (mpImplFont->mnKerning & KERNING_FONTSPECIFIC) != 0;
+    return bool(mpImplFont->mnKerning & FontKerning::FontSpecific);
 }
 
 void Font::SetWeight( FontWeight eWeight )
@@ -637,7 +637,7 @@ void Font::Merge( const vcl::Font& rFont )
     SetOrientation( rFont.GetOrientation() );
     SetVertical( rFont.IsVertical() );
     SetEmphasisMark( rFont.GetEmphasisMark() );
-    SetKerning( rFont.IsKerning() ? KERNING_FONTSPECIFIC : 0 );
+    SetKerning( rFont.IsKerning() ? FontKerning::FontSpecific : FontKerning::NONE );
     SetOutline( rFont.IsOutline() );
     SetShadow( rFont.IsShadow() );
     SetRelief( rFont.GetRelief() );
@@ -681,7 +681,7 @@ SvStream& ReadImpl_Font( SvStream& rIStm, Impl_Font& rImpl_Font )
     rIStm.ReadCharAsBool( bTmp ); rImpl_Font.mbWordLine = bTmp;
     rIStm.ReadCharAsBool( bTmp ); rImpl_Font.mbOutline = bTmp;
     rIStm.ReadCharAsBool( bTmp ); rImpl_Font.mbShadow = bTmp;
-    rIStm.ReadUChar( nTmp8 ); rImpl_Font.mnKerning = nTmp8;
+    rIStm.ReadUChar( nTmp8 ); rImpl_Font.mnKerning = static_cast<FontKerning>(nTmp8);
 
     if( aCompat.GetVersion() >= 2 )
     {
@@ -722,7 +722,7 @@ SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm.WriteBool( rImpl_Font.mbWordLine );
     rOStm.WriteBool( rImpl_Font.mbOutline );
     rOStm.WriteBool( rImpl_Font.mbShadow );
-    rOStm.WriteUChar( rImpl_Font.mnKerning );
+    rOStm.WriteUChar( static_cast<sal_uInt8>(rImpl_Font.mnKerning) );
 
     // new in version 2
     rOStm.WriteUChar( rImpl_Font.meRelief );

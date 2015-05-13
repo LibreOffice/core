@@ -1229,7 +1229,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
 
     if( mbKerning )
         nLayoutFlags |= SAL_LAYOUT_KERNING_PAIRS;
-    if( maFont.GetKerning() & KERNING_ASIAN )
+    if( maFont.GetKerning() & FontKerning::Asian )
         nLayoutFlags |= SAL_LAYOUT_KERNING_ASIAN;
     if( maFont.IsVertical() )
         nLayoutFlags |= SAL_LAYOUT_VERTICAL;

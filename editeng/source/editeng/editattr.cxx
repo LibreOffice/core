@@ -411,7 +411,7 @@ EditCharAttribPairKerning::EditCharAttribPairKerning( const SvxAutoKernItem& rAt
 
 void EditCharAttribPairKerning::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetKerning( static_cast<const SvxAutoKernItem*>(GetItem())->GetValue() ? KERNING_FONTSPECIFIC : 0 );
+    rFont.SetKerning( static_cast<const SvxAutoKernItem*>(GetItem())->GetValue() ? FontKerning::FontSpecific : FontKerning::NONE );
 }
 
 

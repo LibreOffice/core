@@ -1574,7 +1574,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             // In case of Pair Kerning the printer influence on the positioning
             // grows
-            const int nMul = pPrtFont->GetKerning() ? 1 : 3;
+            const int nMul = pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
             const int nDiv = nMul+1;
 
             // nSpaceSum contains the sum of the intermediate space distributed
@@ -1927,7 +1927,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
             // In case of Pair Kerning the printer influence on the positioning
             // grows
-            const int nMul = pPrtFont->GetKerning() ? 1 : 3;
+            const int nMul = pPrtFont->GetKerning() != FontKerning::NONE ? 1 : 3;
             const int nDiv = nMul+1;
             for( sal_Int32 i = 1; i<nCnt; i++ )
             {

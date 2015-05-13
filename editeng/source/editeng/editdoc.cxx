@@ -2083,7 +2083,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
         rFont.SetEscapement( nEsc );
     }
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_PAIRKERNING ) == SfxItemState::SET ) )
-        rFont.SetKerning( static_cast<const SvxAutoKernItem&>(rSet.Get( EE_CHAR_PAIRKERNING )).GetValue() ? KERNING_FONTSPECIFIC : 0 );
+        rFont.SetKerning( static_cast<const SvxAutoKernItem&>(rSet.Get( EE_CHAR_PAIRKERNING )).GetValue() ? FontKerning::FontSpecific : FontKerning::NONE );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_KERNING ) == SfxItemState::SET ) )
         rFont.SetFixKerning( static_cast<const SvxKerningItem&>(rSet.Get( EE_CHAR_KERNING )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_WLM ) == SfxItemState::SET ) )

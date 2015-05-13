@@ -727,11 +727,11 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             {
                 rFnt.SetAutoKern( ( !mpIDocumentSettingAccess ||
                                     !mpIDocumentSettingAccess->get(DocumentSettingId::KERN_ASIAN_PUNCTUATION) ) ?
-                                     KERNING_FONTSPECIFIC :
-                                     KERNING_ASIAN );
+                                     FontKerning::FontSpecific :
+                                     FontKerning::Asian );
             }
             else
-                rFnt.SetAutoKern( 0 );
+                rFnt.SetAutoKern( FontKerning::NONE );
             break;
         case RES_CHRATR_BLINK :
             rFnt.SetBlink( static_cast<const SvxBlinkItem&>(rItem).GetValue() );
