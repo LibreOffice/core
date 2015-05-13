@@ -839,7 +839,8 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             if( part == PART_BORDER )
             {
                 int nFrameWidth = static_cast< KDESalInstance* >(GetSalData()->m_pInstance)->getFrameWidth();
-                auto nStyle = static_cast<DrawFrameFlags>(val.getNumericVal());
+                auto nStyle = static_cast<DrawFrameFlags>(
+                    val.getNumericVal() & 0xFFF0);
                 if( nStyle & DrawFrameFlags::NoDraw )
                 {
                     // in this case the question is: how thick would a frame be
