@@ -26,7 +26,7 @@ private:
     virtual void DataChanged (DataChangedEvent const& rDCEvt) SAL_OVERRIDE;
 
 protected:
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 
 public:
     LineNumberWindow (vcl::Window* pParent, ModulWindow* pModulWin);

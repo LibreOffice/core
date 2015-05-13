@@ -36,24 +36,24 @@ void LineNumberWindow::dispose()
     Window::dispose();
 }
 
-void LineNumberWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void LineNumberWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     if(SyncYOffset())
         return;
 
     ExtTextEngine* txtEngine = m_pModulWindow->GetEditEngine();
-    if(!txtEngine)
+    if (!txtEngine)
         return;
 
     TextView* txtView = m_pModulWindow->GetEditView();
-    if(!txtView)
+    if (!txtView)
         return;
 
     GetParent()->Resize();
 
-    int windowHeight = GetOutputSize().Height();
-    int nLineHeight = GetTextHeight();
-    if(!nLineHeight)
+    int windowHeight = rRenderContext.GetOutputSize().Height();
+    int nLineHeight = rRenderContext.GetTextHeight();
+    if (!nLineHeight)
     {
         return;
     }
@@ -62,7 +62,7 @@ void LineNumberWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rect
     int nStartLine = startY / nLineHeight + 1;
     int nEndLine = (startY + windowHeight) / nLineHeight + 1;
 
-    if(txtEngine->GetParagraphCount() + 1 < (unsigned int)nEndLine)
+    if (txtEngine->GetParagraphCount() + 1 < (unsigned int)nEndLine)
         nEndLine = txtEngine->GetParagraphCount() + 1;
 
     // FIXME: it would be best if we could get notified of a font change
@@ -72,15 +72,15 @@ void LineNumberWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rect
     // reserve enough for 3 sigit minimum, with a bit to spare for confort
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
     int i = (nEndLine + 1) / 1000;
-    while(i)
+    while (i)
     {
         i /= 10;
         m_nWidth += m_nBaseWidth;
     }
 
     sal_Int64 y = (nStartLine - 1) * (sal_Int64)nLineHeight;
-    for(sal_Int32 n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
-        DrawText(Point(0, y - m_nCurYOffset), OUString::number(n));
+    for (sal_Int32 n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
+        rRenderContext.DrawText(Point(0, y - m_nCurYOffset), OUString::number(n));
 }
 
 void LineNumberWindow::DataChanged(DataChangedEvent const & rDCEvt)

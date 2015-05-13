@@ -119,21 +119,21 @@ void setTextEngineText (ExtTextEngine& rEngine, OUString const& aStr)
 namespace
 {
 
-void lcl_DrawIDEWindowFrame( DockingWindow* pWin )
+void lcl_DrawIDEWindowFrame(DockingWindow* pWin, vcl::RenderContext& rRenderContext)
 {
-    if ( pWin->IsFloatingMode() )
+    if (pWin->IsFloatingMode())
         return;
 
-    Size aSz = pWin->GetOutputSizePixel();
-    const Color aOldLineColor( pWin->GetLineColor() );
-    pWin->SetLineColor( Color( COL_WHITE ) );
+    Size aSz = rRenderContext.GetOutputSizePixel();
+    const Color aOldLineColor(rRenderContext.GetLineColor());
+    rRenderContext.SetLineColor(Color(COL_WHITE));
     // White line on top
-    pWin->DrawLine( Point( 0, 0 ), Point( aSz.Width(), 0 ) );
+    rRenderContext.DrawLine(Point(0, 0), Point(aSz.Width(), 0));
     // Black line at bottom
-    pWin->SetLineColor( Color( COL_BLACK ) );
-    pWin->DrawLine( Point( 0, aSz.Height() - 1 ),
-                    Point( aSz.Width(), aSz.Height() - 1 ) );
-    pWin->SetLineColor( aOldLineColor );
+    rRenderContext.SetLineColor(Color(COL_BLACK));
+    rRenderContext.DrawLine(Point(0, aSz.Height() - 1),
+                            Point(aSz.Width(), aSz.Height() - 1));
+    rRenderContext.SetLineColor(aOldLineColor);
 }
 
 void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString& rIndex )
@@ -965,7 +965,7 @@ sal_Int32 searchEOL( const OUString& rStr, sal_Int32 fromIndex )
 
 void EditorWindow::CreateEditEngine()
 {
-    if ( pEditEngine )
+    if (pEditEngine)
         return;
 
     pEditEngine.reset(new ExtTextEngine);
@@ -989,35 +989,32 @@ void EditorWindow::CreateEditEngine()
         nLines++;
         nIndex = searchEOL( aOUSource, nIndex+1 );
     }
-    while ( nIndex >= 0 );
+    while (nIndex >= 0);
 
     // nLines*4: SetText+Formatting+DoHighlight+Formatting
     // it could be cut down on one formatting but you would wait even longer
     // for the text then if the source code is long...
-    pProgress.reset(new ProgressInfo(
-        GetShell()->GetViewFrame()->GetObjectShell(),
-        IDEResId(RID_STR_GENERATESOURCE).toString(),
-        nLines*4
-    ));
+    pProgress.reset(new ProgressInfo(GetShell()->GetViewFrame()->GetObjectShell(),
+                                     IDEResId(RID_STR_GENERATESOURCE).toString(),
+                                     nLines * 4));
     setTextEngineText(*pEditEngine, aOUSource);
 
-    pEditView->SetStartDocPos( Point( 0, 0 ) );
-    pEditView->SetSelection( TextSelection() );
+    pEditView->SetStartDocPos(Point(0, 0));
+    pEditView->SetSelection(TextSelection());
     rModulWindow.GetBreakPointWindow().GetCurYOffset() = 0;
     rModulWindow.GetLineNumberWindow().GetCurYOffset() = 0;
     pEditEngine->SetUpdateMode(true);
     rModulWindow.Update();   // has only been invalidated at UpdateMode = true
 
-    pEditView->ShowCursor( true, true );
+    pEditView->ShowCursor(true, true);
 
-    StartListening( *pEditEngine );
+    StartListening(*pEditEngine);
 
     aSyntaxIdle.Stop();
     bDoSyntaxHighlight = bWasDoSyntaxHighlight;
 
-
-    for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
-        aSyntaxLineTable.insert( nLine );
+    for (sal_uInt16 nLine = 0; nLine < nLines; nLine++)
+        aSyntaxLineTable.insert(nLine);
     ForceSyntaxTimeout();
 
     pProgress.reset();
@@ -1030,22 +1027,24 @@ void EditorWindow::CreateEditEngine()
 
     if (SfxBindings* pBindings = GetBindingsPtr())
     {
-        pBindings->Invalidate( SID_BASICIDE_STAT_POS );
-        pBindings->Invalidate( SID_BASICIDE_STAT_TITLE );
+        pBindings->Invalidate(SID_BASICIDE_STAT_POS);
+        pBindings->Invalidate(SID_BASICIDE_STAT_TITLE);
     }
 
-    DBG_ASSERT( rModulWindow.GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: Brechpunkte verschoben?" );
+    DBG_ASSERT(rModulWindow.GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: Brechpunkte verschoben?");
 
     // set readonly mode for readonly libraries
     ScriptDocument aDocument(rModulWindow.GetDocument());
     OUString aOULibName(rModulWindow.GetLibName());
     Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) )
+    if (xModLibContainer.is()
+     && xModLibContainer->hasByName(aOULibName)
+     && xModLibContainer->isLibraryReadOnly(aOULibName))
     {
         rModulWindow.SetReadOnly(true);
     }
 
-    if ( aDocument.isDocument() && aDocument.isReadOnly() )
+    if (aDocument.isDocument() && aDocument.isReadOnly())
         rModulWindow.SetReadOnly(true);
 }
 
@@ -1181,23 +1180,23 @@ void EditorWindow::SetScrollBarRanges()
 
 void EditorWindow::InitScrollBars()
 {
-    if ( !pEditEngine )
+    if (!pEditEngine)
         return;
 
     SetScrollBarRanges();
-    Size aOutSz( GetOutputSizePixel() );
-    rModulWindow.GetEditVScrollBar().SetVisibleSize( aOutSz.Height() );
-    rModulWindow.GetEditVScrollBar().SetPageSize( aOutSz.Height() * 8 / 10 );
-    rModulWindow.GetEditVScrollBar().SetLineSize( GetTextHeight() );
-    rModulWindow.GetEditVScrollBar().SetThumbPos( pEditView->GetStartDocPos().Y() );
+    Size aOutSz(GetOutputSizePixel());
+    rModulWindow.GetEditVScrollBar().SetVisibleSize(aOutSz.Height());
+    rModulWindow.GetEditVScrollBar().SetPageSize(aOutSz.Height() * 8 / 10);
+    rModulWindow.GetEditVScrollBar().SetLineSize(GetTextHeight());
+    rModulWindow.GetEditVScrollBar().SetThumbPos(pEditView->GetStartDocPos().Y());
     rModulWindow.GetEditVScrollBar().Show();
 
-    if ( rModulWindow.GetHScrollBar() )
+    if (rModulWindow.GetHScrollBar())
     {
-        rModulWindow.GetHScrollBar()->SetVisibleSize( aOutSz.Width() );
-        rModulWindow.GetHScrollBar()->SetPageSize( aOutSz.Width() * 8 / 10 );
-        rModulWindow.GetHScrollBar()->SetLineSize( GetTextWidth( "x" ) );
-        rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
+        rModulWindow.GetHScrollBar()->SetVisibleSize(aOutSz.Width());
+        rModulWindow.GetHScrollBar()->SetPageSize(aOutSz.Width() * 8 / 10);
+        rModulWindow.GetHScrollBar()->SetLineSize(GetTextWidth( "x" ) );
+        rModulWindow.GetHScrollBar()->SetThumbPos(pEditView->GetStartDocPos().X());
         rModulWindow.GetHScrollBar()->Show();
     }
 }
@@ -1216,10 +1215,10 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
              i != aPortions.end(); ++i)
         {
             Color const aColor = rModulWindow.GetLayout().GetSyntaxColor(i->tokenType);
-            pEditEngine->SetAttrib( TextAttribFontColor(aColor), nLine, i->nBegin, i->nEnd, true );
+            pEditEngine->SetAttrib(TextAttribFontColor(aColor), nLine, i->nBegin, i->nEnd, true);
         }
 
-        pEditEngine->SetModified( bWasModified );
+        pEditEngine->SetModified(bWasModified);
     }
 }
 
@@ -1232,28 +1231,28 @@ void EditorWindow::UpdateSyntaxHighlighting ()
 
 void EditorWindow::ImplSetFont()
 {
-    OUString sFontName(
-        officecfg::Office::Common::Font::SourceViewFont::FontName::get().
-        get_value_or( OUString() ) );
-    if ( sFontName.isEmpty() )
+    OUString sFontName(officecfg::Office::Common::Font::SourceViewFont::FontName::get().get_value_or(OUString()));
+    if (sFontName.isEmpty())
     {
-        vcl::Font aTmpFont( OutputDevice::GetDefaultFont( DefaultFontType::FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), 0 , this ) );
+        vcl::Font aTmpFont(OutputDevice::GetDefaultFont(DefaultFontType::FIXED,
+                                                        Application::GetSettings().GetUILanguageTag().getLanguageType(),
+                                                        0 , this));
         sFontName = aTmpFont.GetName();
     }
     Size aFontSize(0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get());
-    vcl::Font aFont( sFontName, aFontSize );
-    aFont.SetColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
-    SetPointFont( aFont );
+    vcl::Font aFont(sFontName, aFontSize);
+    aFont.SetColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
+    SetPointFont(aFont);
     aFont = GetFont();
 
-    rModulWindow.GetBreakPointWindow().SetFont( aFont );
-    rModulWindow.GetLineNumberWindow().SetFont( aFont );
+    rModulWindow.GetBreakPointWindow().SetFont(aFont);
+    rModulWindow.GetLineNumberWindow().SetFont(aFont);
 
-    if ( pEditEngine )
+    if (pEditEngine)
     {
         bool const bModified = pEditEngine->IsModified();
-        pEditEngine->SetFont( aFont );
-        pEditEngine->SetModified( bModified );
+        pEditEngine->SetFont(aFont);
+        pEditEngine->SetModified(bModified);
     }
 }
 
@@ -1364,11 +1363,7 @@ void EditorWindow::ForceSyntaxTimeout()
     aSyntaxIdle.GetIdleHdl().Call(&aSyntaxIdle);
 }
 
-
-
 // BreakPointWindow
-
-
 
 BreakPointWindow::BreakPointWindow (vcl::Window* pParent, ModulWindow* pModulWindow)
     : Window(pParent, WB_BORDER)
@@ -1381,32 +1376,34 @@ BreakPointWindow::BreakPointWindow (vcl::Window* pParent, ModulWindow* pModulWin
     SetHelpId(HID_BASICIDE_BREAKPOINTWINDOW);
 }
 
-void BreakPointWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
+void BreakPointWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    if ( SyncYOffset() )
+    if (SyncYOffset())
         return;
 
-    Size const aOutSz = GetOutputSize();
-    long const nLineHeight = GetTextHeight();
+    Size const aOutSz = rRenderContext.GetOutputSize();
+    long const nLineHeight = rRenderContext.GetTextHeight();
 
-    Image const aBrk[2] = { GetImage(IMGID_BRKDISABLED), GetImage(IMGID_BRKENABLED) };
-    Size const aBmpSz = PixelToLogic(aBrk[1].GetSizePixel());
-    Point const aBmpOff(
-        (aOutSz.Width() - aBmpSz.Width()) / 2,
-        (nLineHeight - aBmpSz.Height()) / 2
-    );
+    Image const aBrk[2] =
+    {
+        GetImage(IMGID_BRKDISABLED),
+        GetImage(IMGID_BRKENABLED)
+    };
+
+    Size const aBmpSz = rRenderContext.PixelToLogic(aBrk[1].GetSizePixel());
+    Point const aBmpOff((aOutSz.Width() - aBmpSz.Width()) / 2,
+                        (nLineHeight - aBmpSz.Height()) / 2);
 
     for (size_t i = 0, n = GetBreakPoints().size(); i < n; ++i)
     {
         BreakPoint& rBrk = *GetBreakPoints().at(i);
         size_t const nLine = rBrk.nLine - 1;
         size_t const nY = nLine*nLineHeight - nCurYOffset;
-        DrawImage(Point(0, nY) + aBmpOff, aBrk[rBrk.bEnabled]);
+        rRenderContext.DrawImage(Point(0, nY) + aBmpOff, aBrk[rBrk.bEnabled]);
     }
-    ShowMarker(true);
+
+    Invalidate();
 }
-
-
 
 void BreakPointWindow::DoScroll( long nHorzScroll, long nVertScroll )
 {
@@ -1414,17 +1411,14 @@ void BreakPointWindow::DoScroll( long nHorzScroll, long nVertScroll )
     Window::Scroll( nHorzScroll, nVertScroll );
 }
 
-
-
 void BreakPointWindow::SetMarkerPos( sal_uInt16 nLine, bool bError )
 {
     if ( SyncYOffset() )
         Update();
 
-    ShowMarker( false );
     nMarkerPos = nLine;
     bErrorMarker = bError;
-    ShowMarker( true );
+    Invalidate();
 }
 
 void BreakPointWindow::SetNoMarker ()
@@ -1432,9 +1426,9 @@ void BreakPointWindow::SetNoMarker ()
     SetMarkerPos(NoMarker);
 }
 
-void BreakPointWindow::ShowMarker( bool bShow )
+void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
 {
-    if ( nMarkerPos == NoMarker )
+    if (nMarkerPos == NoMarker)
         return;
 
     Size const aOutSz = GetOutputSize();
@@ -1442,23 +1436,18 @@ void BreakPointWindow::ShowMarker( bool bShow )
 
     Image aMarker = GetImage(bErrorMarker ? IMGID_ERRORMARKER : IMGID_STEPMARKER);
 
-    Size aMarkerSz( aMarker.GetSizePixel() );
-    aMarkerSz = PixelToLogic( aMarkerSz );
-    Point aMarkerOff( 0, 0 );
-    aMarkerOff.X() = ( aOutSz.Width() - aMarkerSz.Width() ) / 2;
-    aMarkerOff.Y() = ( nLineHeight - aMarkerSz.Height() ) / 2;
+    Size aMarkerSz(aMarker.GetSizePixel());
+    aMarkerSz = rRenderContext.PixelToLogic(aMarkerSz);
+    Point aMarkerOff(0, 0);
+    aMarkerOff.X() = (aOutSz.Width() - aMarkerSz.Width()) / 2;
+    aMarkerOff.Y() = (nLineHeight - aMarkerSz.Height()) / 2;
 
-    sal_uLong nY = nMarkerPos*nLineHeight - nCurYOffset;
-    Point aPos( 0, nY );
+    sal_uLong nY = nMarkerPos * nLineHeight - nCurYOffset;
+    Point aPos(0, nY);
     aPos += aMarkerOff;
-    if ( bShow )
-        DrawImage( aPos, aMarker );
-    else
-        Invalidate( Rectangle( aPos, aMarkerSz ) );
+
+    rRenderContext.DrawImage(aPos, aMarker);
 }
-
-
-
 
 BreakPoint* BreakPointWindow::FindBreakPoint( const Point& rMousePos )
 {
@@ -1492,8 +1481,6 @@ void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
         }
     }
 }
-
-
 
 void BreakPointWindow::Command( const CommandEvent& rCEvt )
 {
@@ -1580,12 +1567,6 @@ void BreakPointWindow::setBackgroundColor(Color aColor)
 {
     SetBackground(Wallpaper(aColor));
 }
-
-
-
-// WatchWindow
-
-
 
 namespace
 {
@@ -1687,15 +1668,11 @@ void WatchWindow::dispose()
     DockingWindow::dispose();
 }
 
-
-
-void WatchWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void WatchWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    DrawText( Point( DWBORDER, 7 ), aWatchStr );
-    lcl_DrawIDEWindowFrame( this );
+    rRenderContext.DrawText(Point(DWBORDER, 7), aWatchStr);
+    lcl_DrawIDEWindowFrame(this, rRenderContext);
 }
-
-
 
 void WatchWindow::Resize()
 {
@@ -1927,20 +1904,16 @@ void StackWindow::dispose()
     DockingWindow::dispose();
 }
 
-
-
-void StackWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void StackWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    DrawText( Point( DWBORDER, 7 ), aStackStr );
-    lcl_DrawIDEWindowFrame( this );
+    rRenderContext.DrawText(Point(DWBORDER, 7), aStackStr);
+    lcl_DrawIDEWindowFrame(this, rRenderContext);
 }
-
-
 
 void StackWindow::Resize()
 {
     Size aSz = GetOutputSizePixel();
-    Size aBoxSz( aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER );
+    Size aBoxSz(aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER);
 
     if ( aBoxSz.Width() < 4 )
         aBoxSz.Width() = 0;
@@ -1957,7 +1930,7 @@ void StackWindow::UpdateCalls()
     aTreeListBox->SetUpdateMode(false);
     aTreeListBox->Clear();
 
-    if ( StarBASIC::IsRunning() )
+    if (StarBASIC::IsRunning())
     {
         SbxError eOld = SbxBase::GetError();
         aTreeListBox->SetSelectionMode( SINGLE_SELECTION );
@@ -2027,12 +2000,6 @@ void StackWindow::UpdateCalls()
     aTreeListBox->SetUpdateMode(true);
 }
 
-
-
-// ComplexEditorWindow
-
-
-
 ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     Window( pParent, WB_3DLOOK | WB_CLIPCHILDREN ),
     aBrkWindow(VclPtr<BreakPointWindow>::Create(this, pParent)),
@@ -2048,7 +2015,6 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     aEWVScrollBar->SetScrollHdl( LINK( this, ComplexEditorWindow, ScrollHdl ) );
     aEWVScrollBar->Show();
 }
-
 
 ComplexEditorWindow::~ComplexEditorWindow()
 {
@@ -2067,7 +2033,7 @@ void ComplexEditorWindow::dispose()
 void ComplexEditorWindow::Resize()
 {
     Size aOutSz = GetOutputSizePixel();
-    Size aSz( aOutSz );
+    Size aSz(aOutSz);
     aSz.Width() -= 2*DWBORDER;
     aSz.Height() -= 2*DWBORDER;
     long nBrkWidth = 20;
@@ -2094,9 +2060,9 @@ void ComplexEditorWindow::Resize()
     aEWVScrollBar->SetPosSizePixel( Point( aOutSz.Width() - DWBORDER - nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
 }
 
-IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
+IMPL_LINK(ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 {
-    if ( aEdtWindow->GetEditView() )
+    if (aEdtWindow->GetEditView())
     {
         DBG_ASSERT( pCurScrollBar == aEWVScrollBar.get(), "Wer scrollt hier ?" );
         long nDiff = aEdtWindow->GetEditView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();

@@ -31,6 +31,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -184,7 +185,7 @@ public:
     void            MouseButtonDown( const MouseEvent& rMEvt );
     void            MouseButtonUp( const MouseEvent& rMEvt );
     void            MouseMove( const MouseEvent& rMEvt );
-    void            Paint( const Rectangle& rRect );
+    void            Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     bool            KeyInput( const KeyEvent& rKEvt );
 
     void            SetMode (Mode eMode);

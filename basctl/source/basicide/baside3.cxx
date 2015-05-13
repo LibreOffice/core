@@ -71,23 +71,20 @@ char const FilterMask_All[] = "*";
 
 TYPEINIT1( DialogWindow, BaseWindow );
 
-DialogWindow::DialogWindow (
-    DialogWindowLayout* pParent,
-    ScriptDocument const& rDocument,
-    const OUString& aLibName, const OUString& aName,
-    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel
-) :
-    BaseWindow(pParent, rDocument, aLibName, aName),
-    rLayout(*pParent),
-    pEditor(new DlgEditor(*this, rLayout, rDocument.isDocument() ? rDocument.getDocument() : Reference<frame::XModel>(), xDialogModel)),
-    pUndoMgr(new SfxUndoManager)
+DialogWindow::DialogWindow(DialogWindowLayout* pParent, ScriptDocument const& rDocument,
+                           const OUString& aLibName, const OUString& aName,
+                           css::uno::Reference<css::container::XNameContainer> const& xDialogModel)
+    : BaseWindow(pParent, rDocument, aLibName, aName)
+    ,rLayout(*pParent)
+    ,pEditor(new DlgEditor(*this, rLayout, rDocument.isDocument()
+                                            ? rDocument.getDocument()
+                                            : Reference<frame::XModel>(), xDialogModel))
+    ,pUndoMgr(new SfxUndoManager)
 {
     InitSettings( true, true, true );
 
     aOldNotifyUndoActionHdl = pEditor->GetModel().GetNotifyUndoActionHdl();
-    pEditor->GetModel().SetNotifyUndoActionHdl(
-        LINK(this, DialogWindow, NotifyUndoActionHdl)
-    );
+    pEditor->GetModel().SetNotifyUndoActionHdl(LINK(this, DialogWindow, NotifyUndoActionHdl));
 
     SetHelpId( HID_BASICIDE_DIALOGWINDOW );
 
@@ -108,23 +105,18 @@ void DialogWindow::LoseFocus()
     Window::LoseFocus();
 }
 
-
-
-void DialogWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void DialogWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    pEditor->Paint( rRect );
+    pEditor->Paint(rRenderContext, rRect);
 }
-
-
 
 void DialogWindow::Resize()
 {
-    if ( GetHScrollBar() && GetVScrollBar() ) {
+    if (GetHScrollBar() && GetVScrollBar())
+    {
         pEditor->SetScrollBars( GetHScrollBar(), GetVScrollBar() );
     }
 }
-
-
 
 void DialogWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -133,8 +125,6 @@ void DialogWindow::MouseButtonDown( const MouseEvent& rMEvt )
     if (SfxBindings* pBindings = GetBindingsPtr())
         pBindings->Invalidate( SID_SHOW_PROPERTYBROWSER );
 }
-
-
 
 void DialogWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -155,14 +145,10 @@ void DialogWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-
-
 void DialogWindow::MouseMove( const MouseEvent& rMEvt )
 {
     pEditor->MouseMove( rMEvt );
 }
-
-
 
 void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 {
@@ -238,16 +224,12 @@ IMPL_STATIC_LINK(
     return 0;
 }
 
-
-
 void DialogWindow::DoInit()
 {
     GetHScrollBar()->Show();
     GetVScrollBar()->Show();
     pEditor->SetScrollBars( GetHScrollBar(), GetVScrollBar() );
 }
-
-
 
 void DialogWindow::DoScroll( ScrollBar* pCurScrollBar )
 {

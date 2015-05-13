@@ -78,7 +78,7 @@ char const FilterMask_All[] = "*";
 char const FilterMask_All[] = "*.*";
 #endif
 
-} // namespace
+} // end anonymous namespace
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -179,22 +179,13 @@ bool bSourceLinesEnabled = false;
 
 } // namespace
 
-
-
-// ModulWindow
-
-
-
-ModulWindow::ModulWindow (
-    ModulWindowLayout* pParent,
-    ScriptDocument const& rDocument,
-    const OUString& aLibName, const OUString& aName, OUString& aModule
-) :
-    BaseWindow(pParent, rDocument, aLibName, aName),
-    rLayout(*pParent),
-    nValid(ValidWindow),
-    aXEditorWindow(VclPtr<ComplexEditorWindow>::Create(this)),
-    m_aModule(aModule)
+ModulWindow::ModulWindow (ModulWindowLayout* pParent, ScriptDocument const& rDocument,
+                          const OUString& aLibName, const OUString& aName, OUString& aModule)
+    : BaseWindow(pParent, rDocument, aLibName, aName)
+    , rLayout(*pParent)
+    , nValid(ValidWindow)
+    , aXEditorWindow(VclPtr<ComplexEditorWindow>::Create(this))
+    , m_aModule(aModule)
 {
     aXEditorWindow->Show();
     SetBackground();
@@ -250,14 +241,13 @@ void ModulWindow::GetFocus()
 
 void ModulWindow::DoInit()
 {
-    if ( GetVScrollBar() )
+    if (GetVScrollBar())
         GetVScrollBar()->Hide();
     GetHScrollBar()->Show();
     GetEditorWindow().InitScrollBars();
 }
 
-
-void ModulWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void ModulWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
 {
 }
 
@@ -266,7 +256,6 @@ void ModulWindow::Resize()
     aXEditorWindow->SetPosSizePixel( Point( 0, 0 ),
                                     Size( GetOutputSizePixel() ) );
 }
-
 
 void ModulWindow::CheckCompileBasic()
 {
@@ -775,7 +764,6 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
     }
 }
 
-
 void ModulWindow::StoreData()
 {
     // StoreData is called when the BasicManager is destroyed or
@@ -789,12 +777,10 @@ bool ModulWindow::CanClose()
     return true;
 }
 
-
 bool ModulWindow::AllowUndo()
 {
     return GetEditorWindow().CanModify();
 }
-
 
 void ModulWindow::UpdateData()
 {
@@ -900,7 +886,6 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 
     return nCurPage;
 }
-
 
 void ModulWindow::ExecuteCommand (SfxRequest& rReq)
 {
@@ -1179,7 +1164,6 @@ void ModulWindow::GetState( SfxItemSet &rSet )
     }
 }
 
-
 void ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
 {
     if ( ( pCurScrollBar == GetHScrollBar() ) && GetEditView() )
@@ -1193,13 +1177,10 @@ void ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
     }
 }
 
-
 bool ModulWindow::IsModified()
 {
     return GetEditEngine() && GetEditEngine()->IsModified();
 }
-
-
 
 void ModulWindow::GoOnTop()
 {
@@ -1233,7 +1214,6 @@ void ModulWindow::ShowCursor( bool bOn )
         }
     }
 }
-
 
 void ModulWindow::AssertValidEditEngine()
 {
@@ -1295,7 +1275,7 @@ sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem,
     return nFound;
 }
 
-::svl::IUndoManager* ModulWindow::GetUndoManager()
+svl::IUndoManager* ModulWindow::GetUndoManager()
 {
     if ( GetEditEngine() )
         return &GetEditEngine()->GetUndoManager();
@@ -1462,12 +1442,6 @@ void ModulWindow::UpdateModule ()
     MarkDocumentModified(m_aDocument);
 }
 
-
-
-// ModulWindowLayout
-
-
-
 ModulWindowLayout::ModulWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
     pChild(0),
@@ -1495,9 +1469,9 @@ void ModulWindowLayout::UpdateDebug (bool bBasicStopped)
     aStackWindow->UpdateCalls();
 }
 
-void ModulWindowLayout::Paint (vcl::RenderContext& /*rRenderContext*/, Rectangle const&)
+void ModulWindowLayout::Paint (vcl::RenderContext& rRenderContext, Rectangle const&)
 {
-    DrawText(Point(), IDEResId(RID_STR_NOMODULE).toString());
+    rRenderContext.DrawText(Point(), IDEResId(RID_STR_NOMODULE).toString());
 }
 
 // virtual
@@ -1507,7 +1481,6 @@ void ModulWindowLayout::DataChanged (DataChangedEvent const& rDCEvt)
     if (rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
         aSyntaxColors.SettingsChanged();
 }
-
 
 void ModulWindowLayout::Activating (BaseWindow& rChild)
 {
@@ -1562,12 +1535,6 @@ void ModulWindowLayout::OnFirstSize (long const nWidth, long const nHeight)
     AddToBottom(aWatchWindow.get(), Size(nWidth * 0.67, nHeight * 0.25));
     AddToBottom(aStackWindow.get(), Size(nWidth * 0.33, nHeight * 0.25));
 }
-
-
-
-// SyntaxColors
-
-
 
 ModulWindowLayout::SyntaxColors::SyntaxColors () :
     pEditor(0)

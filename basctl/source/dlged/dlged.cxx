@@ -472,31 +472,29 @@ bool DlgEditor::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-void DlgEditor::Paint( const Rectangle& rRect )
+void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     aPaintRect = rRect;
     mnPaintGuard++;
 
     Size aMacSize;
-    if( bFirstDraw &&
-        rWindow.IsVisible() &&
-        (rWindow.GetOutputSize() != aMacSize) )
+    if (bFirstDraw && rWindow.IsVisible() && (rRenderContext.GetOutputSize() != aMacSize))
     {
         bFirstDraw = false;
 
         // get property set
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet(pDlgEdForm->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+        css::uno::Reference<css::beans::XPropertySet> xPSet(pDlgEdForm->GetUnoControlModel(), css::uno::UNO_QUERY);
 
-        if ( xPSet.is() )
+        if (xPSet.is())
         {
             // get dialog size from properties
             sal_Int32 nWidth = 0, nHeight = 0;
             xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nWidth;
             xPSet->getPropertyValue( DLGED_PROP_HEIGHT ) >>= nHeight;
 
-            if ( nWidth == 0 && nHeight == 0 )
+            if (nWidth == 0 && nHeight == 0)
             {
-                Size   aSize = rWindow.PixelToLogic( Size( 400, 300 ) );
+                Size   aSize = rRenderContext.PixelToLogic( Size( 400, 300 ) );
 
                 // align with grid
                 Size aGridSize_(long(pDlgEdView->GetSnapGridWidthX()), long(pDlgEdView->GetSnapGridWidthY()));
@@ -504,7 +502,7 @@ void DlgEditor::Paint( const Rectangle& rRect )
                 aSize.Height() -= aSize.Height() % aGridSize_.Height();
 
                 Point  aPos;
-                Size   aOutSize = rWindow.GetOutputSize();
+                Size   aOutSize = rRenderContext.GetOutputSize();
                 aPos.X() = (aOutSize.Width()>>1)  -  (aSize.Width()>>1);
                 aPos.Y() = (aOutSize.Height()>>1) -  (aSize.Height()>>1);
 
@@ -513,7 +511,7 @@ void DlgEditor::Paint( const Rectangle& rRect )
                 aPos.Y() -= aPos.Y() % aGridSize_.Height();
 
                 // don't put in the corner
-                Point aMinPos = rWindow.PixelToLogic( Point( 30, 20 ) );
+                Point aMinPos = rRenderContext.PixelToLogic( Point( 30, 20 ) );
                 if( (aPos.X() < aMinPos.X()) || (aPos.Y() < aMinPos.Y()) )
                 {
                     aPos = aMinPos;
@@ -531,10 +529,16 @@ void DlgEditor::Paint( const Rectangle& rRect )
                 // set position and size of controls
                 if (const size_t nObjCount = pDlgEdPage->GetObjCount())
                 {
-                    for ( size_t i = 0 ; i < nObjCount ; ++i )
+                    for (size_t i = 0 ; i < nObjCount ; ++i)
+                    {
                         if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pDlgEdPage->GetObj(i)))
+                        {
                             if (!dynamic_cast<DlgEdForm*>(pDlgEdObj))
+                            {
                                 pDlgEdObj->SetRectFromProps();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -544,27 +548,26 @@ void DlgEditor::Paint( const Rectangle& rRect )
     SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
     const vcl::Region aPaintRectRegion(aPaintRect);
 
-
     // #i74769#
     SdrPaintWindow* pTargetPaintWindow = 0;
 
     // mark repaint start
-    if(pPgView)
+    if (pPgView)
     {
-        pTargetPaintWindow = pPgView->GetView().BeginDrawLayers(&rWindow, aPaintRectRegion);
+        pTargetPaintWindow = pPgView->GetView().BeginDrawLayers(&rRenderContext, aPaintRectRegion);
         OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
     }
 
     // draw background self using wallpaper
     // #i79128# ...and use correct OutDev for that
-    if(pTargetPaintWindow)
+    if (pTargetPaintWindow)
     {
         OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();
         rTargetOutDev.DrawWallpaper(aPaintRect, Wallpaper(Color(COL_WHITE)));
     }
 
     // do paint (unbuffered) and mark repaint end
-    if(pPgView)
+    if (pPgView)
     {
         // paint of control layer is done in EndDrawLayers anyway...
         pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, true);
@@ -608,9 +611,6 @@ void DlgEditor::SetInsertObj( sal_uInt16 eObj )
 
     pDlgEdView->SetCurrentObj( eActObj, DlgInventor );
 }
-
-
-
 
 void DlgEditor::CreateDefaultObject()
 {

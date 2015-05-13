@@ -62,7 +62,7 @@ private:
     OUString            aCurPath;
 
 protected:
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
+    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
