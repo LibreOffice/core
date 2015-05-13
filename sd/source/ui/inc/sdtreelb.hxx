@@ -73,8 +73,7 @@ public:
             SdPageObjsTLB& rParent,
             const INetBookmark& rBookmark,
             ::sd::DrawDocShell& rDocShell,
-            NavigatorDragType eDragType,
-            const ::com::sun::star::uno::Any& rTreeListBoxData );
+            NavigatorDragType eDragType );
         ::sd::DrawDocShell&     GetDocShell() const { return mrDocShell;}
         NavigatorDragType   GetDragType() const { return meDragType;}
 
@@ -96,7 +95,6 @@ public:
         INetBookmark        maBookmark;
         ::sd::DrawDocShell&     mrDocShell;
         NavigatorDragType   meDragType;
-        const ::com::sun::star::uno::Any maTreeListBoxData;
         SAL_DLLPRIVATE virtual               ~SdPageObjsTransferable();
 
         SAL_DLLPRIVATE virtual void      AddSupportedFormats() SAL_OVERRIDE;

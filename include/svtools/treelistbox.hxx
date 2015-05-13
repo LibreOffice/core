@@ -587,6 +587,7 @@ protected:
 
 protected:
 
+    void            SetupDragOrigin();
     void            EditItemText( SvTreeListEntry* pEntry, SvLBoxString* pItem,
                         const Selection& );
     void            EditedText(const OUString&);
@@ -817,15 +818,6 @@ public:
 };
 
 #define SV_LBOX_DD_FORMAT "SV_LBOX_DD_FORMAT"
-struct SvLBoxDDInfo
-{
-    Application*    pApp;
-    VclPtr<SvTreeListBox>         pSource;
-    SvTreeListEntry*    pDDStartEntry;
-    // Relative position in the Entry at DragBeginn (IconView)
-    long            nMouseRelX,nMouseRelY;
-    sal_uLong           nRes1,nRes2,nRes3,nRes4;
-};
 
 class SvInplaceEdit2
 {

@@ -87,15 +87,14 @@ SdPageObjsTLB::SdPageObjsTransferable::SdPageObjsTransferable(
     SdPageObjsTLB& rParent,
         const INetBookmark& rBookmark,
     ::sd::DrawDocShell& rDocShell,
-    NavigatorDragType eDragType,
-    const ::com::sun::star::uno::Any& rTreeListBoxData )
+    NavigatorDragType eDragType)
     : SdTransferable(rDocShell.GetDoc(), NULL, true),
       mrParent( rParent ),
       maBookmark( rBookmark ),
       mrDocShell( rDocShell ),
-      meDragType( eDragType ),
-      maTreeListBoxData( rTreeListBoxData )
+      meDragType( eDragType )
 {
+    rParent.SetupDragOrigin();
 }
 
 VCL_BUILDER_DECL_FACTORY(SdPageObjsTLB)
@@ -128,8 +127,11 @@ bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const css::datatransfer::Da
             return true;
 
         case SotClipboardFormatId::TREELISTBOX:
-            SetAny(maTreeListBoxData, rFlavor);
+        {
+            css::uno::Any aTreeListBoxData; // empty for now
+            SetAny(aTreeListBoxData, rFlavor);
             return true;
+        }
 
         default:
             return false;
@@ -1204,18 +1206,10 @@ void SdPageObjsTLB::DoDrag()
 
         bIsInDrag = true;
 
-        SvLBoxDDInfo aDDInfo;
-        memset(&aDDInfo,0,sizeof(SvLBoxDDInfo));
-        aDDInfo.pApp = GetpApp();
-        aDDInfo.pSource = this;
-        //            aDDInfo.pDDStartEntry = pEntry;
-        ::com::sun::star::uno::Sequence<sal_Int8> aSequence (sizeof(SvLBoxDDInfo));
-        memcpy(aSequence.getArray(), &aDDInfo, sizeof(SvLBoxDDInfo));
-        ::com::sun::star::uno::Any aTreeListBoxData (aSequence);
-
         // object is destroyed by internal reference mechanism
-        SdTransferable* pTransferable = new SdPageObjsTLB::SdPageObjsTransferable(
-            *this, aBookmark, *pDocShell, eDragType, aTreeListBoxData);
+        SdTransferable* pTransferable =
+                new SdPageObjsTLB::SdPageObjsTransferable(
+                            *this, aBookmark, *pDocShell, eDragType);
 
         // Get the view.
         ::sd::ViewShell* pViewShell = GetViewShellForDocShell(*pDocShell);

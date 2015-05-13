@@ -1234,27 +1234,19 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
 
 sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox* pSourceView )
 {
-    sal_Int8 nRet = DND_ACTION_NONE;
-
     DBG_ASSERT( pSourceView, "SvTreeListBox::ExecuteDrop(): no source view" );
     pSourceView->EnableSelectionAsDropTarget( true, true );
 
     ImplShowTargetEmphasis( pTargetEntry, false );
     pDDTarget = this;
 
-    SvLBoxDDInfo aDDInfo;
-    memset( &aDDInfo, 0, sizeof(SvLBoxDDInfo) );
-
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
+
+    sal_Int8 nRet;
     if( aData.HasFormat( SotClipboardFormatId::TREELISTBOX ))
-    {
-        css::uno::Sequence<sal_Int8> aSeq = aData.GetSequence(SotClipboardFormatId::TREELISTBOX, OUString());
-        if (sizeof(SvLBoxDDInfo) == aSeq.getLength())
-        {
-            memcpy( &aDDInfo, aSeq.getConstArray(), sizeof(SvLBoxDDInfo) );
-            nRet = rEvt.mnAction;
-        }
-    }
+        nRet = rEvt.mnAction;
+    else
+        nRet = DND_ACTION_NONE;
 
     if( DND_ACTION_NONE != nRet )
     {
@@ -1262,20 +1254,19 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
 
         SvTreeListEntry* pTarget = pTargetEntry; // may be 0!
 
-
         if( DND_ACTION_COPY == rEvt.mnAction )
         {
-            if ( CopySelection( aDDInfo.pSource, pTarget ) )
+            if ( CopySelection( pDDSource, pTarget ) )
                 nRet = rEvt.mnAction;
         }
         else if( DND_ACTION_MOVE == rEvt.mnAction )
         {
-            if ( MoveSelection( aDDInfo.pSource, pTarget ) )
+            if ( MoveSelection( pDDSource, pTarget ) )
                 nRet = rEvt.mnAction;
         }
         else if( DND_ACTION_COPYMOVE == rEvt.mnAction )
         {
-            if ( MoveSelectionCopyFallbackPossible( aDDInfo.pSource, pTarget, true ) )
+            if ( MoveSelectionCopyFallbackPossible( pDDSource, pTarget, true ) )
                 nRet = rEvt.mnAction;
         }
     }
@@ -1285,6 +1276,16 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
 sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     return ExecuteDrop( rEvt, GetSourceView() );
+}
+
+/**
+ * This sets the global variables used to determine the
+ * in-process drag source.
+ */
+void SvTreeListBox::SetupDragOrigin()
+{
+    pDDSource = this;
+    pDDTarget = 0;
 }
 
 void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
@@ -1310,25 +1311,20 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     TransferDataContainer* pContainer = new TransferDataContainer;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::datatransfer::XTransferable > xRef( pContainer );
-
     nDragDropMode = NotifyStartDrag( *pContainer, pEntry );
     if( nDragDropMode == DragDropMode::NONE || 0 == GetSelectionCount() )
     {
         nDragDropMode = nOldDragMode;
         DragFinished( DND_ACTION_NONE );
+        delete pContainer;
         return;
     }
 
-    SvLBoxDDInfo aDDInfo;
-    memset(&aDDInfo,0,sizeof(SvLBoxDDInfo));
-    aDDInfo.pApp = GetpApp();
-    aDDInfo.pSource = this;
-    aDDInfo.pDDStartEntry = pEntry;
+    SetupDragOrigin();
 
+    // apparently some (unused) content is needed
     pContainer->CopyAnyData( SotClipboardFormatId::TREELISTBOX,
-                        reinterpret_cast<char*>(&aDDInfo), sizeof(SvLBoxDDInfo) );
-    pDDSource = this;
-    pDDTarget = 0;
+                             "unused", SAL_N_ELEMENTS("unused") );
 
     bool bOldUpdateMode = Control::IsUpdateMode();
     Control::SetUpdateMode( true );
