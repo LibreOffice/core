@@ -348,7 +348,7 @@ sal_Int32 removeUnusedItemsRunner(NSMenu * pMenu)
     return drawnItems;
 }
 
-bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags)
+bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags)
 {
     // do not use native popup menu when AQUA_NATIVE_MENUS is set to false
     if( ! VisibleMenuBar() ) {

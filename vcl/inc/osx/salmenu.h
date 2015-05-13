@@ -69,7 +69,7 @@ public:
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage) SAL_OVERRIDE;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) SAL_OVERRIDE;
     virtual void GetSystemMenuData( SystemMenuData* pData ) SAL_OVERRIDE;
-    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags) SAL_OVERRIDE;
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, FloatWinPopupFlags nFlags) SAL_OVERRIDE;
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ) SAL_OVERRIDE;
     virtual void RemoveMenuBarButton( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame ) SAL_OVERRIDE;
