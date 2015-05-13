@@ -28,157 +28,147 @@
 namespace com { namespace sun { namespace star { namespace media {
     class XPlayer;
     class XPlayerWindow;
-} } } }
+}}}}
+
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
-} } } }
+}}}}
+
 class BitmapEx;
 
 namespace avmedia
 {
-    class MediaWindow;
 
-    namespace priv
-    {
+class MediaWindow;
 
-        // - MediaWindowControl -
+namespace priv
+{
 
+class MediaWindowControl : public MediaControl
+{
+public:
 
-        class MediaWindowControl : public MediaControl
-        {
-        public:
+    explicit MediaWindowControl( vcl::Window* pParent );
 
-            explicit MediaWindowControl( vcl::Window* pParent );
+protected:
 
-        protected:
+    void    update() SAL_OVERRIDE;
+    void    execute( const MediaItem& rItem ) SAL_OVERRIDE;
+};
 
-            void    update() SAL_OVERRIDE;
-            void    execute( const MediaItem& rItem ) SAL_OVERRIDE;
-        };
+class MediaChildWindow : public SystemChildWindow
+{
+public:
 
+    explicit MediaChildWindow( vcl::Window* pParent );
+    MediaChildWindow( vcl::Window* pParent, SystemWindowData* pData );
 
-        // - MediaChildWindow -
+protected:
 
+    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+};
 
-        class MediaChildWindow : public SystemChildWindow
-        {
-        public:
+class MediaEventListenersImpl;
 
-            explicit MediaChildWindow( vcl::Window* pParent );
-            MediaChildWindow( vcl::Window* pParent, SystemWindowData* pData );
+class MediaWindowImpl : public Control, public DropTargetHelper, public DragSourceHelper
+{
+public:
+    MediaWindowImpl(vcl::Window* parent, MediaWindow* pMediaWindow, bool bInternalMediaControl);
+    virtual ~MediaWindowImpl();
 
-        protected:
+    virtual void dispose() SAL_OVERRIDE;
 
-            virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-            virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-            virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-            virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-            virtual void    KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-            virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-        };
+    static css::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = 0);
 
-        // ------------------.
-        // - MediaWindowImpl -
+    void setURL(const OUString& rURL, OUString const& rTempURL, OUString const& rReferer);
 
+    const OUString& getURL() const;
 
-        class MediaEventListenersImpl;
+    bool isValid() const;
 
-        class MediaWindowImpl : public Control,
-                                public DropTargetHelper,
-                                public DragSourceHelper
+    Size getPreferredSize() const;
 
-        {
-        public:
+    bool start();
 
-                            MediaWindowImpl( vcl::Window* parent, MediaWindow* pMediaWindow, bool bInternalMediaControl );
-            virtual         ~MediaWindowImpl();
-            virtual void dispose() SAL_OVERRIDE;
+    void updateMediaItem( MediaItem& rItem ) const;
+    void executeMediaItem( const MediaItem& rItem );
 
-            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = 0 );
+    void setPosSize( const Rectangle& rRect );
 
-            void    setURL( const OUString& rURL, OUString const& rTempURL, OUString const& rReferer );
+    void setPointer( const Pointer& rPointer );
 
-            const   OUString&  getURL() const;
+private:
 
-            bool    isValid() const;
+    // Window
+    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void StateChanged( StateChangedType ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE; // const
+    virtual void GetFocus() SAL_OVERRIDE;
 
-            Size    getPreferredSize() const;
+    // DropTargetHelper
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
-            bool    start();
+    // DragSourceHelper
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
-            void    updateMediaItem( MediaItem& rItem ) const;
-            void    executeMediaItem( const MediaItem& rItem );
+    bool setZoom(css::media::ZoomLevel eLevel);
+    css::media::ZoomLevel getZoom() const;
 
-            void            setPosSize( const Rectangle& rRect );
+    void stop();
 
-            void            setPointer( const Pointer& rPointer );
+    bool isPlaying() const;
 
-        private:
+    double getDuration() const;
 
-            // Window
-            virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-            virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-            virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-            virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-            virtual void    KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-            virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-            virtual void    Resize() SAL_OVERRIDE;
-            virtual void    StateChanged( StateChangedType ) SAL_OVERRIDE;
-            virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) SAL_OVERRIDE; // const
-            virtual void    GetFocus() SAL_OVERRIDE;
+    void setMediaTime( double fTime );
+    double getMediaTime() const;
 
-            // DropTargetHelper
-            virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-            virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    void setPlaybackLoop( bool bSet );
+    bool isPlaybackLoop() const;
 
-            // DragSourceHelper
-            virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+    void setMute( bool bSet );
+    bool isMute() const;
 
-            bool    setZoom( ::com::sun::star::media::ZoomLevel eLevel );
-            ::com::sun::star::media::ZoomLevel getZoom() const;
+    void setVolumeDB( sal_Int16 nVolumeDB );
+    sal_Int16 getVolumeDB() const;
 
-            void    stop();
+    void stopPlayingInternal( bool );
 
-            bool    isPlaying() const;
+    void onURLChanged();
 
-            double  getDuration() const;
+    static css::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rManagerServName,
+                                                                 css::uno::Reference<css::uno::XComponentContext> xContext);
 
-            void    setMediaTime( double fTime );
-            double  getMediaTime() const;
+    OUString maFileURL;
+    OUString mTempFileURL;
+    OUString maReferer;
+    OUString m_sMimeType;
+    css::uno::Reference<css::media::XPlayer> mxPlayer;
+    css::uno::Reference<css::media::XPlayerWindow> mxPlayerWindow;
+    MediaWindow* mpMediaWindow;
 
-            void    setPlaybackLoop( bool bSet );
-            bool    isPlaybackLoop() const;
+    css::uno::Reference<css::uno::XInterface> mxEventsIf;
+    MediaEventListenersImpl* mpEvents;
+    bool mbEventTransparent;
+    VclPtr<MediaChildWindow> mpChildWindow;
+    VclPtr<MediaWindowControl> mpMediaWindowControl;
+    BitmapEx* mpEmptyBmpEx;
+    BitmapEx* mpAudioBmpEx;
+};
 
-            void    setMute( bool bSet );
-            bool    isMute() const;
-
-            void    setVolumeDB( sal_Int16 nVolumeDB );
-            sal_Int16 getVolumeDB() const;
-
-            void    stopPlayingInternal( bool );
-
-            void            onURLChanged();
-
-            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rManagerServName, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext);
-
-            OUString                                                                    maFileURL;
-            OUString                                                                    mTempFileURL;
-            OUString                                                                    maReferer;
-            OUString                                                                    m_sMimeType;
-            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
-            ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
-            MediaWindow*                                                                mpMediaWindow;
-
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   mxEventsIf;
-            MediaEventListenersImpl*                                                mpEvents;
-            bool                                                                    mbEventTransparent;
-            VclPtr<MediaChildWindow>                                                mpChildWindow;
-            VclPtr<MediaWindowControl>                                              mpMediaWindowControl;
-            BitmapEx*                                                               mpEmptyBmpEx;
-            BitmapEx*                                                               mpAudioBmpEx;
-        };
-    }
-}
+}} // end namespace avmedia::priv
 
 #endif
 
