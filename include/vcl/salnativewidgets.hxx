@@ -482,19 +482,6 @@ public:
     bool            mbSingleLine:1;
 };
 
-/*  EditBoxValue:
- *
- *  Value container for editbox specifying additional drawing hints
- */
-class VCL_DLLPUBLIC EditBoxValue : public ImplControlValue
-{
-public:
-    EditBoxValue(long nTextHeight)
-        : ImplControlValue(CTRL_EDITBOX, BUTTONVALUE_DONTKNOW, nTextHeight)
-    {
-    }
-    virtual EditBoxValue* clone() const SAL_OVERRIDE;
-};
 
 #endif
 

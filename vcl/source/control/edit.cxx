@@ -2739,7 +2739,6 @@ void Edit::SetSubEdit( Edit* pEdit )
 Size Edit::CalcMinimumSizeForText(const OUString &rString) const
 {
     int eCtrlType = ImplGetNativeControlType();
-    auto nTextHeight = GetTextHeight();
 
     Size aSize;
     if (mnWidthInChars != -1)
@@ -2756,7 +2755,7 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
         else
             aString = rString;
 
-        aSize.Height() = nTextHeight;
+        aSize.Height() = GetTextHeight();
         aSize.Width() = GetTextWidth(aString);
         aSize.Width() += ImplGetExtraXOffset() * 2;
 
@@ -2775,7 +2774,7 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
     aSize = CalcWindowSize( aSize );
 
     // ask NWF what if it has an opinion, too
-    EditBoxValue aControlValue(nTextHeight);
+    ImplControlValue aControlValue;
     Rectangle aRect( Point( 0, 0 ), aSize );
     Rectangle aContent, aBound;
     if( GetNativeControlRegion(

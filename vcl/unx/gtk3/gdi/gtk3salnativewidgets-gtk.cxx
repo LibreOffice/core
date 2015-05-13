@@ -1040,25 +1040,12 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     return true;
 }
 
-Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContentHeight, const Rectangle& rControlRegion)
+Rectangle GetWidgetSize(const Rectangle& rControlRegion, GtkWidget* widget)
 {
-    gtk_style_context_save(pStyle);
-
-    GtkBorder border;
-    gtk_style_context_get_border(pStyle, GTK_STATE_FLAG_NORMAL, &border);
-
-    GtkBorder padding;
-    gtk_style_context_get_padding(pStyle, GTK_STATE_FLAG_NORMAL, &padding);
-
-    gint nWidgetHeight = nContentHeight + padding.top + padding.bottom + border.top + border.bottom;
-
-    nWidgetHeight = std::max<gint>(nWidgetHeight, rControlRegion.GetHeight());
-
-    Rectangle aEditRect(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nWidgetHeight));
-
-    gtk_style_context_restore(pStyle);
-
-    return aEditRect;
+    GtkRequisition aReq;
+    gtk_widget_get_preferred_size(widget, NULL, &aReq);
+    long nHeight = (rControlRegion.GetHeight() > aReq.height) ? rControlRegion.GetHeight() : aReq.height;
+    return Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nHeight));
 }
 
 Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContentWidth, long nContentHeight, const Rectangle& rControlRegion)
@@ -1086,6 +1073,8 @@ Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContent
 
 static GtkWidget* gCacheWindow;
 static GtkWidget* gDumbContainer;
+static GtkWidget* gSpinBox;
+static GtkWidget* gEntryBox;
 static GtkWidget* gComboBox;
 static GtkWidget* gComboBoxButtonWidget;
 static GtkWidget* gComboBoxEntryWidget;
@@ -1170,7 +1159,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
               ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN) ||
                (nPart==PART_SUB_EDIT)) )
     {
-        Rectangle aControlRegion(AdjustRectForTextBordersPadding(mpSpinStyle, rValue.getNumericVal(), rControlRegion));
+        Rectangle aControlRegion(GetWidgetSize(rControlRegion, gSpinBox));
         aEditRect = NWGetSpinButtonRect(nPart, aControlRegion);
     }
     else if ( (nType==CTRL_COMBOBOX) &&
@@ -1185,25 +1174,19 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     }
     else if (nType == CTRL_EDITBOX && nPart == PART_ENTIRE_CONTROL)
     {
-        aEditRect = AdjustRectForTextBordersPadding(mpEntryStyle, rValue.getNumericVal(), rControlRegion);
+        aEditRect = GetWidgetSize(rControlRegion, gEntryBox);
     }
     else if (nType == CTRL_LISTBOX && nPart == PART_ENTIRE_CONTROL)
     {
-        GtkRequisition aReq;
-        gtk_widget_get_preferred_size(gComboBox, NULL, &aReq);
-        long nHeight = (rControlRegion.GetHeight() > aReq.height) ? rControlRegion.GetHeight() : aReq.height;
-        aEditRect = Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nHeight));
+        aEditRect = GetWidgetSize(rControlRegion, gListBox);
     }
     else if (nType == CTRL_COMBOBOX && nPart == PART_ENTIRE_CONTROL)
     {
-        GtkRequisition aReq;
-        gtk_widget_get_preferred_size(gComboBox, NULL, &aReq);
-        long nHeight = (rControlRegion.GetHeight() > aReq.height) ? rControlRegion.GetHeight() : aReq.height;
-        aEditRect = Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nHeight));
+        aEditRect = GetWidgetSize(rControlRegion, gComboBox);
     }
     else if (nType == CTRL_SPINBOX && nPart == PART_ENTIRE_CONTROL)
     {
-        aEditRect = AdjustRectForTextBordersPadding(mpSpinStyle, rValue.getNumericVal(), rControlRegion);
+        aEditRect = GetWidgetSize(rControlRegion, gSpinBox);
     }
     else if (nType == CTRL_TAB_ITEM && nPart == PART_ENTIRE_CONTROL)
     {
@@ -1791,7 +1774,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_widget_realize(gDumbContainer);
     gtk_widget_realize(gCacheWindow);
 
-    getStyleContext(&mpEntryStyle, gtk_entry_new());
+    gEntryBox = gtk_entry_new();
+    getStyleContext(&mpEntryStyle, gEntryBox);
     getStyleContext(&mpButtonStyle, gtk_button_new());
 
     getStyleContext(&mpToolbarStyle, gtk_toolbar_new());
@@ -1840,7 +1824,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_style_context_add_class(mpMenuBarStyle, GTK_STYLE_CLASS_MENU);
 
     /* Spinbutton */
-    getStyleContext(&mpSpinStyle, gtk_spin_button_new(NULL, 0, 0));
+    gSpinBox = gtk_spin_button_new(NULL, 0, 0);
+    getStyleContext(&mpSpinStyle, gSpinBox);
 
     /* NoteBook */
     getStyleContext(&mpNoteBookStyle, gtk_notebook_new());
@@ -1857,6 +1842,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     /* Listbox */
     gListBox = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gListBox), "sample");
     getStyleContext(&mpListboxStyle, gListBox);
     /* Get ComboBox Button */
     gtk_container_forall(GTK_CONTAINER(gListBox),

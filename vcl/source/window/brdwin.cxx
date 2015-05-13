@@ -1040,11 +1040,8 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             // for native widget drawing we must find out what
             // control this border belongs to
             ControlType aCtrlType = 0;
-            std::unique_ptr<ImplControlValue> xControlValue(new ImplControlValue());
             if (pCtrl)
             {
-                xControlValue.reset(new EditBoxValue(pCtrl->GetTextHeight()));
-
                 switch( pCtrl->GetType() )
                 {
                     case WINDOW_LISTBOX:
@@ -1087,11 +1084,12 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             }
             if( mbNWFBorder )
             {
+                ImplControlValue aControlValue;
                 Rectangle aCtrlRegion( (const Point&)Point(), Size( mnWidth < 10 ? 10 : mnWidth, mnHeight < 10 ? 10 : mnHeight ) );
                 Rectangle aBounds( aCtrlRegion );
                 Rectangle aContent( aCtrlRegion );
                 if( pWin->GetNativeControlRegion( aCtrlType, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                                  ControlState::ENABLED, *xControlValue, OUString(),
+                                                  ControlState::ENABLED, aControlValue, OUString(),
                                                   aBounds, aContent ) )
                 {
                     mnLeftBorder    = aContent.Left() - aBounds.Left();
@@ -1199,10 +1197,8 @@ void ImplSmallBorderWindowView::DrawWindow(sal_uInt16 nDrawFlags, OutputDevice*,
 
     ControlType aCtrlType = 0;
     ControlPart aCtrlPart = PART_ENTIRE_CONTROL;
-    std::unique_ptr<ImplControlValue> xControlValue(new ImplControlValue());
     if (pWin && (pCtrl = mpBorderWindow->GetWindow(WINDOW_CLIENT)) != NULL)
     {
-        xControlValue.reset(new EditBoxValue(pCtrl->GetTextHeight()));
         switch (pCtrl->GetType())
         {
             case WINDOW_MULTILINEEDIT:
@@ -1266,6 +1262,7 @@ void ImplSmallBorderWindowView::DrawWindow(sal_uInt16 nDrawFlags, OutputDevice*,
 
     if (aCtrlType && pCtrl->IsNativeControlSupported(aCtrlType, aCtrlPart))
     {
+        ImplControlValue aControlValue;
         ControlState nState = ControlState::ENABLED;
 
         if (!pWin->IsEnabled())
@@ -1299,13 +1296,13 @@ void ImplSmallBorderWindowView::DrawWindow(sal_uInt16 nDrawFlags, OutputDevice*,
         Rectangle aContentRgn(aCtrlRegion);
         if (!ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
             pWin->GetNativeControlRegion(aCtrlType, aCtrlPart, aCtrlRegion,
-                                         nState, *xControlValue, OUString(),
+                                         nState, aControlValue, OUString(),
                                          aBoundingRgn, aContentRgn))
         {
             aCtrlRegion=aContentRgn;
         }
 
-        bNativeOK = pWin->DrawNativeControl(aCtrlType, aCtrlPart, aCtrlRegion, nState, *xControlValue, OUString());
+        bNativeOK = pWin->DrawNativeControl(aCtrlType, aCtrlPart, aCtrlRegion, nState, aControlValue, OUString());
 
         // if the native theme draws the spinbuttons in one call, make sure the proper settings
         // are passed, this might force a redraw though.... (TODO: improve)

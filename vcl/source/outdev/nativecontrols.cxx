@@ -150,12 +150,6 @@ PushButtonValue* PushButtonValue::clone() const
     return new PushButtonValue( *this );
 }
 
-EditBoxValue* EditBoxValue::clone() const
-{
-    assert( typeid( const EditBoxValue ) == typeid( *this ));
-    return new EditBoxValue( *this );
-}
-
 // These functions are mainly passthrough functions that allow access to
 // the SalFrame behind a Window object for native widget rendering purposes.
 
@@ -254,6 +248,9 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
             aResult.reset( pNew );
         }
         break;
+    case CTRL_GENERIC:
+            aResult.reset( new ImplControlValue( rVal ) );
+            break;
     case CTRL_MENU_POPUP:
         {
             const MenupopupValue* pMVal = static_cast<const MenupopupValue*>(&rVal);
@@ -261,16 +258,6 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
             pNew->maItemRect = rDev.ImplLogicToDevicePixel( pMVal->maItemRect );
             aResult.reset( pNew );
         }
-        break;
-    case CTRL_EDITBOX:
-        {
-            auto nTextHeight = rDev.ImplLogicToDevicePixel(Rectangle(0, 0, 0, rVal.getNumericVal())).GetHeight();
-            EditBoxValue* pNew = new EditBoxValue(nTextHeight);
-            aResult.reset(pNew);
-        }
-        break;
-    case CTRL_GENERIC:
-        aResult.reset( new ImplControlValue( rVal ) );
         break;
     default:
         OSL_FAIL( "unknown ImplControlValue type !" );

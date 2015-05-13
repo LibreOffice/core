@@ -670,7 +670,7 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
             vcl::Window *pBorder = pWin->GetWindow( WINDOW_BORDER );
 
             // get the system's spin button size
-            EditBoxValue aControlValue(pWin->GetTextHeight());
+            ImplControlValue aControlValue;
             Rectangle aBound;
             Point aPoint;
 
@@ -724,7 +724,7 @@ void SpinField::Resize()
         {
             ImplCalcButtonAreas( this, aSize, maDropDownRect, maUpperRect, maLowerRect );
 
-            EditBoxValue aControlValue(GetTextHeight());
+            ImplControlValue aControlValue;
             Point aPoint;
             Rectangle aContent, aBound;
 
@@ -923,7 +923,7 @@ Size SpinField::CalcMinimumSizeForText(const OUString &rString) const
         aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
     if ( GetStyle() & WB_SPIN )
     {
-        EditBoxValue aControlValue(GetTextHeight());
+        ImplControlValue aControlValue;
         Rectangle aArea( Point(), Size(100, aSz.Height()));
         Rectangle aEntireBound, aEntireContent, aEditBound, aEditContent;
         if (
