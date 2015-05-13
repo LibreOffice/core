@@ -66,19 +66,19 @@ protected:
 
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) SAL_OVERRIDE;
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 
     virtual void LoseFocus() SAL_OVERRIDE;
 
     bool isAcceptedFile(const OUString &rURL) const;
 
     /// Set (larger) font for the Welcome message.
-    void SetMessageFont();
+    void SetMessageFont(vcl::RenderContext& rRenderContext);
 
-    long    mnItemMaxSize;
-    long    mnTextHeight;
-    long    mnItemPadding;
-    long    mnItemMaxTextLength;
+    long mnItemMaxSize;
+    long mnTextHeight;
+    long mnItemPadding;
+    long mnItemMaxTextLength;
     size_t mnLastMouseDownItem;
 
     /// Image that appears when there is no recent document.

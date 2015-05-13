@@ -110,11 +110,11 @@ bool RecentDocsView::isAcceptedFile(const OUString &rURL) const
            (mnFileTypes & TYPE_OTHER    && typeMatchesExtension(TYPE_OTHER,   aExt));
 }
 
-void RecentDocsView::SetMessageFont()
+void RecentDocsView::SetMessageFont(vcl::RenderContext& rRenderContext)
 {
-    vcl::Font aFont(GetFont());
-    aFont.SetHeight(aFont.GetHeight()*1.3);
-    SetFont(aFont);
+    vcl::Font aFont(rRenderContext.GetFont());
+    aFont.SetHeight(aFont.GetHeight() * 1.3);
+    rRenderContext.SetFont(aFont);
 }
 
 BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
@@ -193,19 +193,6 @@ void RecentDocsView::Reload()
 
     CalculateItemPositions();
     Invalidate();
-
-    // Set preferred width
-    if (mFilteredItemList.empty())
-    {
-        vcl::Font aOldFont(GetFont());
-        SetMessageFont();
-        set_width_request(std::max(GetTextWidth(maWelcomeLine1), GetTextWidth(maWelcomeLine2)));
-        SetFont(aOldFont);
-    }
-    else
-    {
-        set_width_request(mnTextHeight + mnItemMaxSize + 2*mnItemPadding);
-    }
 }
 
 void RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
@@ -251,19 +238,33 @@ void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
 
 void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const Rectangle &aRect)
 {
-    if ( mItemList.size() == 0 )
+    // Set preferred width
+    if (mFilteredItemList.empty())
+    {
+        rRenderContext.Push(PushFlags::FONT);
+        SetMessageFont(rRenderContext);
+        set_width_request(std::max(rRenderContext.GetTextWidth(maWelcomeLine1),
+                                   rRenderContext.GetTextWidth(maWelcomeLine2)));
+        rRenderContext.Pop();
+    }
+    else
+    {
+        set_width_request(mnTextHeight + mnItemMaxSize + 2 * mnItemPadding);
+    }
+
+    if (mItemList.size() == 0)
     {
         // No recent files to be shown yet. Show a welcome screen.
-        vcl::Font aOldFont(GetFont());
-        SetMessageFont();
+        rRenderContext.Push(PushFlags::FONT);
+        SetMessageFont(rRenderContext);
 
-        long nTextHeight = GetTextHeight();
+        long nTextHeight = rRenderContext.GetTextHeight();
 
-        long nTextWidth1 = GetTextWidth(maWelcomeLine1);
-        long nTextWidth2 = GetTextWidth(maWelcomeLine2);
+        long nTextWidth1 = rRenderContext.GetTextWidth(maWelcomeLine1);
+        long nTextWidth2 = rRenderContext.GetTextWidth(maWelcomeLine2);
 
-        const Size & rImgSize = maWelcomeImage.GetSizePixel();
-        const Size & rSize = GetSizePixel();
+        const Size& rImgSize = maWelcomeImage.GetSizePixel();
+        const Size& rSize = GetSizePixel();
 
         const int nX = (rSize.Width() - rImgSize.Width())/2;
         const int nY = (rSize.Height() - 3 * nTextHeight - rImgSize.Height())/2;
@@ -272,14 +273,16 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const Rectangle &
         Point aStr1Point((rSize.Width() - nTextWidth1)/2, nY + rImgSize.Height() + 0.7 * nTextHeight);
         Point aStr2Point((rSize.Width() - nTextWidth2)/2, nY + rImgSize.Height() + 1.7 * nTextHeight);
 
-        DrawImage(aImgPoint, rImgSize, maWelcomeImage, IMAGE_DRAW_SEMITRANSPARENT);
-        DrawText(aStr1Point, maWelcomeLine1);
-        DrawText(aStr2Point, maWelcomeLine2);
+        rRenderContext.DrawImage(aImgPoint, rImgSize, maWelcomeImage, IMAGE_DRAW_SEMITRANSPARENT);
+        rRenderContext.DrawText(aStr1Point, maWelcomeLine1);
+        rRenderContext.DrawText(aStr2Point, maWelcomeLine2);
 
-        SetFont(aOldFont);
+        rRenderContext.Pop();
     }
     else
+    {
         ThumbnailView::Paint(rRenderContext, aRect);
+    }
 }
 
 void RecentDocsView::LoseFocus()
@@ -292,11 +295,7 @@ void RecentDocsView::LoseFocus()
 
 void RecentDocsView::Clear()
 {
-    vcl::Font aOldFont(GetFont());
-    SetMessageFont();
-    set_width_request(std::max(GetTextWidth(maWelcomeLine1), GetTextWidth(maWelcomeLine2)));
-    SetFont(aOldFont);
-
+    Invalidate();
     ThumbnailView::Clear();
 }
 
