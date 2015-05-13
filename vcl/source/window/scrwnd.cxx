@@ -57,7 +57,7 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
     mnMaxWidth = (sal_uLong) ( 0.4 * hypot( (double) aSize.Width(), aSize.Height() ) );
 
     // create wheel window
-    SetTitleType( FLOATWIN_TITLE_NONE );
+    SetTitleType( FloatWinTitleType::NONE );
     ImplCreateImageList();
     ResMgr* pResMgr = ImplGetResMgr();
     Bitmap aBmp;

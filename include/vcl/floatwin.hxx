@@ -71,11 +71,14 @@ namespace o3tl
     template<> struct typed_flags<FloatWinPopupEndFlags> : is_typed_flags<FloatWinPopupEndFlags, 0x0f> {};
 }
 
-#define FLOATWIN_TITLE_NORMAL                   ((sal_uInt16)0x0001)
-#define FLOATWIN_TITLE_TEAROFF                  ((sal_uInt16)0x0002)
-#define FLOATWIN_TITLE_POPUP                    ((sal_uInt16)0x0004)
-#define FLOATWIN_TITLE_NONE                     ((sal_uInt16)0x0008)
-
+enum class FloatWinTitleType
+{
+    Unknown                  = 0,
+    Normal                   = 1,
+    TearOff                  = 2,
+    Popup                    = 3,
+    NONE                     = 4,
+};
 
 enum HitTest
 {
@@ -96,8 +99,8 @@ private:
     Rectangle       maFloatRect;
     ImplSVEvent *   mnPostId;
     FloatWinPopupFlags   mnPopupModeFlags;
-    sal_uInt16          mnTitle;
-    sal_uInt16          mnOldTitle;
+    FloatWinTitleType    mnTitle;
+    FloatWinTitleType    mnOldTitle;
     bool            mbInPopupMode;
     bool            mbPopupMode;
     bool            mbPopupModeCanceled;
@@ -147,8 +150,8 @@ public:
 
     virtual void    PopupModeEnd();
 
-    void            SetTitleType( sal_uInt16 nTitle );
-    sal_uInt16      GetTitleType() const { return mnTitle; }
+    void            SetTitleType( FloatWinTitleType nTitle );
+    FloatWinTitleType GetTitleType() const { return mnTitle; }
 
     void            StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags nFlags = FloatWinPopupFlags::NONE );
     void            StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags = FloatWinPopupFlags::NONE  );

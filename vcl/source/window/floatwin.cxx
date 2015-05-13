@@ -121,7 +121,7 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mpNextFloat             = NULL;
     mpFirstPopupModeWin     = NULL;
     mnPostId                = 0;
-    mnTitle                 = (nStyle & (WB_MOVEABLE | WB_POPUP)) ? FLOATWIN_TITLE_NORMAL : FLOATWIN_TITLE_NONE;
+    mnTitle                 = (nStyle & (WB_MOVEABLE | WB_POPUP)) ? FloatWinTitleType::Normal : FloatWinTitleType::NONE;
     mnOldTitle              = mnTitle;
     mnPopupModeFlags        = FloatWinPopupFlags::NONE;
     mbInPopupMode           = false;
@@ -160,8 +160,8 @@ FloatingWindow::FloatingWindow(vcl::Window* pParent, const OString& rID, const O
     , mpImplData(0)
     , mnPostId(0)
     , mnPopupModeFlags(FloatWinPopupFlags::NONE)
-    , mnTitle(0)
-    , mnOldTitle(0)
+    , mnTitle(FloatWinTitleType::Unknown)
+    , mnOldTitle(FloatWinTitleType::Unknown)
     , mbInPopupMode(false)
     , mbPopupMode(false)
     , mbPopupModeCanceled(false)
@@ -599,20 +599,20 @@ void FloatingWindow::PopupModeEnd()
     maPopupModeEndHdl.Call( this );
 }
 
-void FloatingWindow::SetTitleType( sal_uInt16 nTitle )
+void FloatingWindow::SetTitleType( FloatWinTitleType nTitle )
 {
     if ( (mnTitle != nTitle) && mpWindowImpl->mpBorderWindow )
     {
         mnTitle = nTitle;
         Size aOutSize = GetOutputSizePixel();
         sal_uInt16 nTitleStyle;
-        if ( nTitle == FLOATWIN_TITLE_NORMAL )
+        if ( nTitle == FloatWinTitleType::Normal )
             nTitleStyle = BORDERWINDOW_TITLE_SMALL;
-        else if ( nTitle == FLOATWIN_TITLE_TEAROFF )
+        else if ( nTitle == FloatWinTitleType::TearOff )
             nTitleStyle = BORDERWINDOW_TITLE_TEAROFF;
-        else if ( nTitle == FLOATWIN_TITLE_POPUP )
+        else if ( nTitle == FloatWinTitleType::Popup )
             nTitleStyle = BORDERWINDOW_TITLE_POPUP;
-        else // nTitle == FLOATWIN_TITLE_NONE
+        else // nTitle == FloatWinTitleType::NONE
             nTitleStyle = BORDERWINDOW_TITLE_NONE;
         static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetTitleType( nTitleStyle, aOutSize );
         static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
@@ -631,11 +631,11 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
     // remove title
     mnOldTitle = mnTitle;
     if ( ( mpWindowImpl->mnStyle & WB_POPUP ) && !GetText().isEmpty() )
-        SetTitleType( FLOATWIN_TITLE_POPUP );
+        SetTitleType( FloatWinTitleType::Popup );
     else if ( nFlags & FloatWinPopupFlags::AllowTearOff )
-        SetTitleType( FLOATWIN_TITLE_TEAROFF );
+        SetTitleType( FloatWinTitleType::TearOff );
     else
-        SetTitleType( FLOATWIN_TITLE_NONE );
+        SetTitleType( FloatWinTitleType::NONE );
 
     // avoid close on focus change for decorated floating windows only
     if( mpWindowImpl->mbFrame && (GetStyle() & WB_MOVEABLE) )
