@@ -32,7 +32,7 @@ namespace svx
     protected:
         ~ISlotInvalidator() {}
     };
-} // namespace svx
+}
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
 

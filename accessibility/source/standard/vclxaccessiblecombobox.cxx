@@ -55,8 +55,7 @@ void VCLXAccessibleComboBox::ProcessWindowEvent (const VclWindowEvent& rVclWindo
 
 
 
-
-//=====  XServiceInfo  ========================================================
+// XServiceInfo
 
 OUString VCLXAccessibleComboBox::getImplementationName()
     throw (RuntimeException, std::exception)

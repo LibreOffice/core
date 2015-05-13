@@ -145,7 +145,7 @@ namespace svx
     }
 
 
-}   // namespace svx
+}
 
 
 

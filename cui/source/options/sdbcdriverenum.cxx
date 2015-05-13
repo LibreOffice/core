@@ -34,9 +34,6 @@ namespace offapp
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbc;
 
-
-    //= ODriverEnumerationImpl
-
     class ODriverEnumerationImpl
     {
     protected:
@@ -73,10 +70,6 @@ namespace offapp
             OSL_FAIL("ODriverEnumerationImpl::ODriverEnumerationImpl: caught an exception while enumerating the drivers!");
         }
     }
-
-
-    //= ODriverEnumeration
-
 
     ODriverEnumeration::ODriverEnumeration() throw()
         :m_pImpl(new ODriverEnumerationImpl)

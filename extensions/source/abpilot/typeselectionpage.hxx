@@ -29,10 +29,6 @@
 namespace abp
 {
 
-
-
-    //= TypeSelectionPage
-
     class TypeSelectionPage : public AddressBookSourcePage
     {
     protected:

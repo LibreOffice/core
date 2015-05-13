@@ -56,10 +56,6 @@ namespace comphelper
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::container;
 
-
-    //= OPropertyBag
-
-
     OPropertyBag::OPropertyBag()
         :OPropertyBag_PBase( GetBroadcastHelper(), this )
         ,::cppu::IEventNotificationHook()

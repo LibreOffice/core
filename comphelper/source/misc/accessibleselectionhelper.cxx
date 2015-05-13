@@ -29,10 +29,6 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
-
-    //= OCommonAccessibleSelection
-
-
     OCommonAccessibleSelection::OCommonAccessibleSelection( )
     {
     }
@@ -104,10 +100,6 @@ namespace comphelper
     {
         implSelect( nSelectedChildIndex, false );
     }
-
-
-    //= OAccessibleSelectionHelper
-
 
     OAccessibleSelectionHelper::OAccessibleSelectionHelper( IMutex* _pExternalLock ) : OAccessibleComponentHelper(_pExternalLock)
     {

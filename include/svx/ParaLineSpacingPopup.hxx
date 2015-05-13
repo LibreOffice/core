@@ -42,7 +42,7 @@ public:
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
 };
 
-} // namespace svx
+}
 
 #endif
 

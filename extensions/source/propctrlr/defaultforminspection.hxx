@@ -30,8 +30,6 @@ namespace pcr
 
     class OPropertyInfoService;
 
-    //= DefaultFormComponentInspectorModel
-
     class DefaultFormComponentInspectorModel : public ImplInspectorModel
     {
     private:

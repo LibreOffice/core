@@ -27,10 +27,6 @@
 namespace abp
 {
 
-
-
-    //= FieldMappingPage
-
     class FieldMappingPage : public AddressBookSourcePage
     {
     protected:

@@ -72,9 +72,6 @@ namespace dbtools
 
     namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 
-
-    //= DatabaseMetaData_Impl
-
     struct DatabaseMetaData_Impl
     {
         Reference< XConnection >        xConnection;
@@ -179,10 +176,6 @@ namespace dbtools
             return *_cachedSetting;
         }
     }
-
-
-    //= DatabaseMetaData
-
 
     DatabaseMetaData::DatabaseMetaData()
         :m_pImpl( new DatabaseMetaData_Impl )

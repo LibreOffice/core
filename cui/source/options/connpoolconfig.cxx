@@ -72,10 +72,6 @@ namespace offapp
         return OUString("Timeout");
     }
 
-
-    //= ConnectionPoolConfig
-
-
     void ConnectionPoolConfig::GetOptions(SfxItemSet& _rFillItems)
     {
         // the config node where all pooling relevant info are stored under

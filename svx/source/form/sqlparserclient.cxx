@@ -47,7 +47,7 @@ namespace svxform
         return std::shared_ptr< OSQLParseNode >(m_pParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField));
     }
 
-}   // namespace svxform
+}
 
 
 

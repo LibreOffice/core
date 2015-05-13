@@ -30,10 +30,6 @@
 namespace offapp
 {
 
-
-
-    //= ODriverEnumeration
-
     class ODriverEnumerationImpl;
     /** simple class for accessing SDBC drivers registered within the office
         <p>Rather small, introduced to not contaminate other instances with the

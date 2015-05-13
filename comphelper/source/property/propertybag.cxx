@@ -46,9 +46,6 @@ namespace comphelper
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-
-    //= PropertyBag_Impl
-
     typedef ::std::map< sal_Int32, Any >    MapInt2Any;
     struct PropertyBag_Impl
     {
@@ -56,10 +53,6 @@ namespace comphelper
         MapInt2Any  aDefaults;
         bool m_bAllowEmptyPropertyName;
     };
-
-
-    //= PropertyBag
-
 
     PropertyBag::PropertyBag()
         :m_pImpl( new PropertyBag_Impl )

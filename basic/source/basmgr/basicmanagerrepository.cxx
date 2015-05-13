@@ -73,8 +73,6 @@ namespace basic
 
     typedef ::std::vector< BasicManagerCreationListener* >  CreationListeners;
 
-    //= ImplRepository
-
     class ImplRepository : public ::utl::OEventListenerAdapter, public SfxListener
     {
     private:
@@ -192,8 +190,6 @@ namespace basic
     };
 
 
-    //= CreateImplRepository
-
     struct CreateImplRepository
     {
         ImplRepository* operator()()
@@ -202,10 +198,6 @@ namespace basic
             return pRepository;
         }
     };
-
-
-
-    //= ImplRepository
 
 
     ImplRepository::ImplRepository()
@@ -597,9 +589,6 @@ namespace basic
             }
         }
     }
-
-
-    //= BasicManagerRepository
 
 
     BasicManager* BasicManagerRepository::getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel )

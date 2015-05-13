@@ -32,9 +32,6 @@ namespace bib
 
     class OComponentAdapterBase;
 
-
-    //= OComponentListener
-
     class OComponentListener
     {
         friend class OComponentAdapterBase;
@@ -54,9 +51,6 @@ namespace bib
     protected:
         void setAdapter( OComponentAdapterBase* _pAdapter );
     };
-
-
-    //= OComponentAdapterBase
 
     class OComponentAdapterBase
     {
@@ -111,9 +105,6 @@ namespace bib
         virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException, std::exception);
     };
 
-
-    //= OLoadListener
-
     class OLoadListener : public OComponentListener
     {
         friend class OLoadListenerAdapter;
@@ -128,9 +119,6 @@ namespace bib
         virtual void _reloading( const ::com::sun::star::lang::EventObject& aEvent ) = 0;
         virtual void _reloaded( const ::com::sun::star::lang::EventObject& aEvent ) = 0;
     };
-
-
-    //= OLoadListenerAdapter
 
     typedef ::cppu::WeakImplHelper1< ::com::sun::star::form::XLoadListener >    OLoadListenerAdapter_Base;
     class OLoadListenerAdapter

@@ -31,10 +31,6 @@
 namespace offapp
 {
 
-
-
-    //= DriverPooling
-
     struct DriverPooling
     {
         OUString            sName;
@@ -46,9 +42,6 @@ namespace offapp
         bool operator == (const DriverPooling& _rR) const;
         bool operator != (const DriverPooling& _rR) const { return !operator ==(_rR); }
     };
-
-
-    //= DriverPoolingSettings
 
     class DriverPoolingSettings
     {
@@ -73,9 +66,6 @@ namespace offapp
 
         void push_back(const DriverPooling& _rElement) { m_aDrivers.push_back(_rElement); }
     };
-
-
-    //= DriverPoolingSettingsItem
 
     class DriverPoolingSettingsItem : public SfxPoolItem
     {

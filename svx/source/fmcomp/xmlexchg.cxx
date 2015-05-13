@@ -57,6 +57,6 @@ namespace svx
         return rThis.m_aDescriptor;
     }
 
-}   // namespace svx
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4268,6 +4268,6 @@ void SAL_CALL FormController::columnChanged( const EventObject& /*_event*/ ) thr
     implInvalidateCurrentControlDependentFeatures();
 }
 
-}   // namespace svxform
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

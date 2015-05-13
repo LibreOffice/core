@@ -33,10 +33,6 @@
 
 namespace connectivity { namespace mozab {
 
-
-
-    //= helper
-
     namespace
     {
         typedef NS_STDCALL_FUNCPROTO(nsresult, CardPropertyGetter, nsIAbCard, GetFirstName, (PRUnichar**));
@@ -131,15 +127,9 @@ namespace connectivity { namespace mozab {
     }
 
 
-    //= AttributeMap_Data
-
     struct AttributeMap_Data
     {
     };
-
-
-    //= MLdapAttributeMap
-
 
     MLdapAttributeMap::MLdapAttributeMap()
         :m_pData( new AttributeMap_Data )

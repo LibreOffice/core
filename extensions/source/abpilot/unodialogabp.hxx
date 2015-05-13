@@ -30,10 +30,6 @@
 namespace abp
 {
 
-
-
-    //= OABSPilotUno
-
     class OABSPilotUno;
     typedef ::svt::OGenericUnoDialog                                OABSPilotUno_DBase;
     typedef ::cppu::ImplHelper1< ::com::sun::star::task::XJob >     OABSPilotUno_JBase;

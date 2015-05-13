@@ -36,7 +36,7 @@ namespace cli_uno
 {
 
 
-//==== holds environments and mappings =============================================================
+// holds environments and mappings
 struct Bridge;
 struct Mapping : public uno_Mapping
 {

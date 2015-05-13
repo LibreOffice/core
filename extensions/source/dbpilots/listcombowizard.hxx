@@ -34,9 +34,6 @@ namespace dbp
 #define LCW_STATE_FIELDLINK             3
 #define LCW_STATE_COMBODBFIELD          4
 
-
-    //= OListComboSettings
-
     struct OListComboSettings : public OControlWizardSettings
     {
         OUString          sListContentTable;
@@ -44,9 +41,6 @@ namespace dbp
         OUString          sLinkedFormField;
         OUString          sLinkedListField;
     };
-
-
-    //= OListComboWizard
 
     class OListComboWizard : public OControlWizard
     {
@@ -82,7 +76,6 @@ namespace dbp
         void implApplySettings();
     };
 
-    //= OLCPage
     class OLCPage : public OControlWizardPage
     {
     public:
@@ -101,9 +94,6 @@ namespace dbp
         ::com::sun::star::uno::Sequence< OUString >
             getTableFields(bool _bNeedIt);
     };
-
-
-    //= OContentTableSelection
 
     class OContentTableSelection : public OLCPage
     {
@@ -128,9 +118,6 @@ namespace dbp
         DECL_LINK( OnTableDoubleClicked, ListBox* );
         DECL_LINK( OnTableSelected, ListBox* );
     };
-
-
-    //= OContentFieldSelection
 
     class OContentFieldSelection : public OLCPage
     {
@@ -158,9 +145,6 @@ namespace dbp
         virtual bool        canAdvance() const SAL_OVERRIDE;
     };
 
-
-    //= OLinkFieldsPage
-
     class OLinkFieldsPage : public OLCPage
     {
     protected:
@@ -187,9 +171,6 @@ namespace dbp
 
         DECL_LINK(OnSelectionModified, void*);
     };
-
-
-    //= OComboDBFieldPage
 
     class OComboDBFieldPage : public ODBFieldPage
     {

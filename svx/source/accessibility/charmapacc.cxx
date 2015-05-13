@@ -854,7 +854,7 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getBackground(  ) throw (RuntimeException,
 
 
 
-} // namespace svx
+}
 
 
 

@@ -24,11 +24,6 @@
 namespace comphelper
 {
 
-
-
-//= OEnumerationByName
-
-
 OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container::XNameAccess>& _rxAccess)
     :m_aNames(_rxAccess->getElementNames())
     ,m_nPos(0)
@@ -140,10 +135,6 @@ void OEnumerationByName::impl_stopDisposeListening()
     --m_refCount;
 }
 
-
-//= OEnumerationByIndex
-
-
 OEnumerationByIndex::OEnumerationByIndex(const css::uno::Reference< css::container::XIndexAccess >& _rxAccess)
     :m_nPos(0)
     ,m_xAccess(_rxAccess)
@@ -242,11 +233,6 @@ void OEnumerationByIndex::impl_stopDisposeListening()
     }
     --m_refCount;
 }
-
-
-//= OAnyEnumeration
-
-
 
 OAnyEnumeration::OAnyEnumeration(const css::uno::Sequence< css::uno::Any >& lItems)
     :m_nPos(0)

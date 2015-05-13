@@ -32,9 +32,6 @@ namespace pcr
 
     class OPropertyEditor;
 
-
-    //=
-
     class OPropertyBrowserView : public vcl::Window
     {
         VclPtr<OPropertyEditor>        m_pPropBox;

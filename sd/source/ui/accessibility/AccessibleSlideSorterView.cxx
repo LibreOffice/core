@@ -618,7 +618,7 @@ void SAL_CALL AccessibleSlideSorterView::deselectAccessibleChild (sal_Int32 nChi
         throw lang::IndexOutOfBoundsException();
 }
 
-//=====  XServiceInfo  ========================================================
+// XServiceInfo
 OUString SAL_CALL
        AccessibleSlideSorterView::getImplementationName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)

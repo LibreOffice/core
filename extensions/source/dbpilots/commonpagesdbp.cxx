@@ -55,10 +55,6 @@ namespace dbp
     using namespace ::com::sun::star::task;
     using namespace ::comphelper;
 
-
-    //= OTableSelectionPage
-
-
     OTableSelectionPage::OTableSelectionPage(OControlWizard* _pParent)
         :OControlWizardPage(_pParent, "TableSelectionPage", "modules/sabpilot/ui/tableselectionpage.ui")
     {
@@ -461,10 +457,6 @@ namespace dbp
         else
             m_pNo->GrabFocus();
     }
-
-
-    //= ODBFieldPage
-
 
     ODBFieldPage::ODBFieldPage( OControlWizard* _pParent )
         :OMaybeListSelectionPage(_pParent, "OptionDBField", "modules/sabpilot/ui/optiondbfieldpage.ui")

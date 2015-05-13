@@ -558,7 +558,7 @@ void VCLXAccessibleList::HandleChangedItemList (bool /*bItemInserted*/, sal_Int3
 IMPLEMENT_FORWARD_XINTERFACE2(VCLXAccessibleList, VCLXAccessibleComponent, VCLXAccessibleList_BASE)
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleList, VCLXAccessibleComponent, VCLXAccessibleList_BASE)
 
-//=====  XAccessible  =========================================================
+// XAccessible
 
 Reference<XAccessibleContext> SAL_CALL
     VCLXAccessibleList::getAccessibleContext()
@@ -568,7 +568,7 @@ Reference<XAccessibleContext> SAL_CALL
 }
 
 
-//=====  XAccessibleContext  ==================================================
+// XAccessibleContext
 
 sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleChildCount()
     throw (RuntimeException, std::exception)
@@ -629,7 +629,7 @@ sal_Int16 SAL_CALL VCLXAccessibleList::getAccessibleRole()
     return AccessibleRole::LIST;
 }
 
-//===== XServiceInfo ==========================================================
+// XServiceInfo
 OUString VCLXAccessibleList::getImplementationName()
     throw (RuntimeException, std::exception)
 {

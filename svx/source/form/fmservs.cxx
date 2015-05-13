@@ -67,6 +67,6 @@ namespace svxform
         REGISTER_SERVICE(FmXGridControl, FM_SUN_CONTROL_GRIDCONTROL);
     };
 
-}   // namespace svxform
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

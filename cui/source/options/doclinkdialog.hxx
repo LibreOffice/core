@@ -31,10 +31,6 @@
 namespace svx
 {
 
-
-
-    //= ODocumentLinkDialog
-
     /** dialog for editing document links associated with data sources
     */
     class ODocumentLinkDialog : public ModalDialog
@@ -72,7 +68,7 @@ namespace svx
     };
 
 
-}   // namespace svx
+}
 
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_DOCLINKDIALOG_HXX

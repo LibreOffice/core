@@ -31,13 +31,8 @@ namespace svt
     class PanelTabBar;
 }
 
-
 namespace accessibility
 {
-
-
-
-    //= AccessibleToolPanelDeckTabBarItem
 
     class AccessibleToolPanelDeckTabBarItem_Impl;
     typedef ::comphelper::OAccessibleExtendedComponentHelper AccessibleToolPanelDeckTabBarItem_Base;

@@ -103,7 +103,7 @@ namespace svxform
     };
 
 
-} // namespace svxform
+}
 
 
 #endif // INCLUDED_SVX_SOURCE_INC_FORMDISPATCHINTERCEPTOR_HXX

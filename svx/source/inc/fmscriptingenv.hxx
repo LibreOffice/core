@@ -83,7 +83,7 @@ namespace svxform
     PFormScriptingEnvironment   createDefaultFormScriptingEnvironment( FmFormModel& _rFormModel );
 
 
-} // namespace svxform
+}
 
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMSCRIPTINGENV_HXX

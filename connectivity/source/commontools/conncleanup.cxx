@@ -34,10 +34,6 @@ namespace dbtools
 
     static const char ACTIVE_CONNECTION_PROPERTY_NAME[] = "ActiveConnection";
 
-
-    //= OAutoConnectionDisposer
-
-
     OAutoConnectionDisposer::OAutoConnectionDisposer(const Reference< XRowSet >& _rxRowSet, const Reference< XConnection >& _rxConnection)
         :m_xRowSet( _rxRowSet )
         ,m_bRSListening( false )

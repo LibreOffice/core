@@ -31,10 +31,6 @@
 namespace connectivity { namespace hsqldb
 {
 
-
-
-    //= HView
-
     typedef ::connectivity::sdbcx::OView                                HView_Base;
     typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XAlterView >  HView_IBASE;
     class HView :public HView_Base

@@ -55,10 +55,6 @@ namespace dbp
 
     using namespace ::com::sun::star::uno;
 
-
-    //= OGroupBoxSI
-
-
     OUString OGroupBoxSI::getImplementationName()
     {
         return OUString("org.openoffice.comp.dbp.OGroupBoxWizard");
@@ -72,10 +68,6 @@ namespace dbp
         return aReturn;
     }
 
-
-    //= OListComboSI
-
-
     OUString OListComboSI::getImplementationName()
     {
         return OUString("org.openoffice.comp.dbp.OListComboWizard");
@@ -88,10 +80,6 @@ namespace dbp
         aReturn[0] = "com.sun.star.sdb.ListComboBoxAutoPilot";
         return aReturn;
     }
-
-
-    //= OGridSI
-
 
     OUString OGridSI::getImplementationName()
     {

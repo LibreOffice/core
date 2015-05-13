@@ -59,10 +59,6 @@ namespace comphelper
         }
     }
 
-//= OPropertyArrayAggregationHelper
-
-
-
 OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
         const  Sequence< Property >& _rProperties, const  Sequence< Property >& _rAggProperties,
         IPropertyInfoService* _pInfoService, sal_Int32 _nFirstAggregateId )
@@ -350,9 +346,6 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
     return nHitCount;
 }
 
-
-//= PropertyForwarder
-
 namespace internal
 {
     class PropertyForwarder
@@ -435,11 +428,6 @@ namespace internal
         }
     }
 }
-
-
-//= OPropertySetAggregationHelper
-
-
 
 OPropertySetAggregationHelper::OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHlp )
     :OPropertyStateHelper( rBHlp )

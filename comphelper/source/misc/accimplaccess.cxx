@@ -40,19 +40,11 @@ namespace comphelper
     using ::com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::accessibility::XAccessibleContext;
 
-
-    //= OAccImpl_Impl
-
     struct OAccImpl_Impl
     {
         Reference< XAccessible >    m_xAccParent;
         sal_Int64                   m_nForeignControlledStates;
     };
-
-
-
-    //= OAccessibleImplementationAccess
-
 
     OAccessibleImplementationAccess::OAccessibleImplementationAccess( )
         :m_pImpl( new OAccImpl_Impl )

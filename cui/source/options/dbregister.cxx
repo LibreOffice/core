@@ -451,7 +451,7 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, OUString*, _pName )
     return 1L;
 }
 
-}   // namespace svx
+}
 
 
 

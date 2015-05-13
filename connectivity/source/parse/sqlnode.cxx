@@ -191,10 +191,6 @@ namespace
 namespace connectivity
 {
 
-
-//= SQLParseNodeParameter
-
-
 SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _rxConnection,
         const Reference< XNumberFormatter >& _xFormatter, const Reference< XPropertySet >& _xField,
         const OUString &_sPredicateTableAlias,
@@ -220,10 +216,6 @@ SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _r
 SQLParseNodeParameter::~SQLParseNodeParameter()
 {
 }
-
-
-//= OSQLParseNode
-
 
 OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, const OUString& rString)
 {
