@@ -187,8 +187,8 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     SAL_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
 protected:
-    static ShellResource*   mpShellRes;      ///< Resources for the Shell.
-    static vcl::Window*     mpCareWindow;    ///< Avoid this window.
+    static ShellResource*      mpShellRes;      ///< Resources for the Shell.
+    static VclPtr<vcl::Window> mpCareWindow;    ///< Avoid this window.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.
     SwDoc                   *mpDoc;          ///< The document; never 0.
@@ -440,9 +440,9 @@ public:
     static ShellResource* GetShellRes();
 
     static void           SetCareWin( vcl::Window* pNew );
-    static vcl::Window*        GetCareWin(SwViewShell& rVSh)
-                          { return mpCareWindow ? mpCareWindow : CareChildWin(rVSh); }
-    static vcl::Window*        CareChildWin(SwViewShell& rVSh);
+    static vcl::Window*   GetCareWin(SwViewShell& rVSh)
+                          { return mpCareWindow ? mpCareWindow.get() : CareChildWin(rVSh); }
+    static vcl::Window*   CareChildWin(SwViewShell& rVSh);
 
     inline SfxViewShell   *GetSfxViewShell() { return mpSfxViewShell; }
     inline void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }

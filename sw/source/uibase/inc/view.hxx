@@ -153,14 +153,14 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     friend class SwClipboardChangeListener;
 
     // search & replace
-    static SvxSearchDialog *m_pSrchDlg;
-    static SvxSearchItem   *m_pSrchItem;
+    static VclPtr<SvxSearchDialog>  m_pSrchDlg;
+    static SvxSearchItem           *m_pSrchItem;
 
-    static sal_uInt16           m_nInsertCtrlState;
-    static sal_uInt16           m_nWebInsertCtrlState;
-    static sal_uInt16           m_nInsertObjectCtrlState;
-    static sal_uInt16           m_nInsertFieldCtrlState;
-    static sal_uInt16           m_nMoveType; // for buttons below the scrollbar (viewmdi)
+    static sal_uInt16       m_nInsertCtrlState;
+    static sal_uInt16       m_nWebInsertCtrlState;
+    static sal_uInt16       m_nInsertObjectCtrlState;
+    static sal_uInt16       m_nInsertFieldCtrlState;
+    static sal_uInt16       m_nMoveType; // for buttons below the scrollbar (viewmdi)
     static sal_Int32        m_nActMark; // current jump mark for unknown mark
 
     static bool             m_bExtra;

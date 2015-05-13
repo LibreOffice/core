@@ -36,6 +36,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
 #include <svx/ruler.hxx>
+#include <svx/srchdlg.hxx>
 #include <editeng/protitem.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/extrusionbar.hxx>
@@ -135,9 +136,9 @@ bool            SwView::m_bExtra      = false;
 bool            SwView::m_bFound      = false;
 bool            SwView::m_bJustOpened = false;
 
-SvxSearchDialog*    SwView::m_pSrchDlg    = 0;
-SearchAttrItemList* SwView::m_pSrchList   = 0;
-SearchAttrItemList* SwView::m_pReplList   = 0;
+VclPtr<SvxSearchDialog> SwView::m_pSrchDlg    = nullptr;
+SearchAttrItemList*     SwView::m_pSrchList   = 0;
+SearchAttrItemList*     SwView::m_pReplList   = 0;
 
 inline SfxDispatcher &SwView::GetDispatcher()
 {

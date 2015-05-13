@@ -85,7 +85,7 @@
 
 bool SwViewShell::mbLstAct = false;
 ShellResource *SwViewShell::mpShellRes = 0;
-vcl::Window *SwViewShell::mpCareWindow = 0;
+VclPtr<vcl::Window> SwViewShell::mpCareWindow = nullptr;
 BitmapEx* SwViewShell::mpErrorBmp = NULL;
 BitmapEx* SwViewShell::mpReplaceBmp = NULL;
 

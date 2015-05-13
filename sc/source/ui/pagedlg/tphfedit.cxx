@@ -48,7 +48,7 @@
 #include <boost/scoped_ptr.hpp>
 
 // STATIC DATA -----------------------------------------------------------
-static ScEditWindow* pActiveEdWnd = NULL;
+static VclPtr<ScEditWindow> pActiveEdWnd = NULL;
 
 ScEditWindow* GetScEditWindow ()
 {

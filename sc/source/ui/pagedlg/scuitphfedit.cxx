@@ -51,7 +51,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static ScEditWindow* pActiveEdWnd = NULL;
+static VclPtr<ScEditWindow> pActiveEdWnd = NULL;
 
 // class ScHFEditPage
 
