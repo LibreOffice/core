@@ -1518,6 +1518,10 @@ void ScTextWnd::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
 {
     if (pEditView)
     {
+        Size aSize = rRenderContext.GetOutputSizePixel();
+        long nDiff = aSize.Height() - rRenderContext.LogicToPixel(Size(0, rRenderContext.GetTextHeight())).Height();
+        pEditView->SetOutputArea(rRenderContext.PixelToLogic(Rectangle(Point(0, (nDiff > 0) ? nDiff / 2 : 1), aSize)));
+
         pEditView->Paint(rRect, &rRenderContext);
     }
     else
@@ -1544,14 +1548,7 @@ void ScTextWnd::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
 
 void ScTextWnd::Resize()
 {
-    if (pEditView)
-    {
-        Size aSize = GetOutputSizePixel();
-        long nDiff =  aSize.Height() - LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
-
-        pEditView->SetOutputArea(PixelToLogic( Rectangle( Point( 0, (nDiff > 0) ? nDiff/2 : 1 ),
-                                     aSize ) ) );
-    }
+    Invalidate();
 }
 
 void ScTextWnd::MouseMove( const MouseEvent& rMEvt )
