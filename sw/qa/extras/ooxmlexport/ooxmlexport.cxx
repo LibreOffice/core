@@ -613,6 +613,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf88583, "tdf88583.odt")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00cc00), getProperty<sal_Int32>(getParagraph(1), "FillColor"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf91261, "tdf91261.docx")
+{
+    bool snapToGrid = true;
+    uno::Reference< text::XTextRange > xPara = getParagraph( 2 );
+    uno::Reference< beans::XPropertySet > properties( xPara, uno::UNO_QUERY);
+    properties->getPropertyValue("SnapToGrid") >>= snapToGrid ;
+    CPPUNIT_ASSERT_EQUAL(false, snapToGrid);
+
+    uno::Reference< beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    sal_Int16 nGridMode;
+    xStyle->getPropertyValue("GridMode") >>= nGridMode;
+    CPPUNIT_ASSERT_EQUAL( sal_Int16(2), nGridMode);
+
+    bool bGridSnapToChars;
+    xStyle->getPropertyValue("GridSnapToChars") >>= bGridSnapToChars;
+    CPPUNIT_ASSERT_EQUAL(true, bGridSnapToChars);
+
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
