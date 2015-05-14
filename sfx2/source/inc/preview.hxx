@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_PREVIEW_HXX
 #define INCLUDED_SFX2_SOURCE_INC_PREVIEW_HXX
 
-
 #include <sfx2/doctempl.hxx>
 #include <sfx2/basedlgs.hxx>
 
@@ -40,14 +39,13 @@ public:
 class SfxPreviewWin_Impl: public SfxPreviewBase_Impl
 {
 protected:
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 public:
     SfxPreviewWin_Impl(vcl::Window* pParent, WinBits nStyle)
         : SfxPreviewBase_Impl(pParent, nStyle)
-    {
-    }
-    static void     ImpPaint(
-        const Rectangle& rRect, GDIMetaFile* pFile, vcl::Window* pWindow );
+    {}
+
+    static void ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect, GDIMetaFile* pFile);
 };
 
 #endif

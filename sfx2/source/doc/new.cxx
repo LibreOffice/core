@@ -40,7 +40,7 @@
 #include <sfx2/printer.hxx>
 #include <vcl/waitobj.hxx>
 
-void SfxPreviewBase_Impl::SetObjectShell( SfxObjectShell* pObj )
+void SfxPreviewBase_Impl::SetObjectShell(SfxObjectShell* pObj)
 {
     std::shared_ptr<GDIMetaFile> xFile = pObj
         ? pObj->GetPreviewMetaFile()
@@ -49,8 +49,7 @@ void SfxPreviewBase_Impl::SetObjectShell( SfxObjectShell* pObj )
     Invalidate();
 }
 
-SfxPreviewBase_Impl::SfxPreviewBase_Impl(
-    vcl::Window* pParent, WinBits nStyle)
+SfxPreviewBase_Impl::SfxPreviewBase_Impl(vcl::Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
     , xMetaFile()
 {
@@ -66,59 +65,59 @@ Size SfxPreviewBase_Impl::GetOptimalSize() const
     return LogicToPixel(Size(127, 129), MAP_APPFONT);
 }
 
-void SfxPreviewWin_Impl::ImpPaint(
-    const Rectangle&, GDIMetaFile* pFile, vcl::Window* pWindow )
+void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/, GDIMetaFile* pFile)
 {
-    pWindow->SetLineColor();
-    Color aLightGrayCol( COL_LIGHTGRAY );
-    pWindow->SetFillColor( aLightGrayCol );
-    pWindow->DrawRect( Rectangle( Point( 0,0 ), pWindow->GetOutputSize() ) );
+    rRenderContext.SetLineColor();
+    Color aLightGrayCol(COL_LIGHTGRAY);
+    rRenderContext.SetFillColor(aLightGrayCol);
+    rRenderContext.DrawRect(Rectangle(Point(0,0), rRenderContext.GetOutputSize()));
 
-    Size aTmpSize = pFile ? pFile->GetPrefSize() : Size(1,1 );
-    DBG_ASSERT( aTmpSize.Height()*aTmpSize.Width(),
-        "size of first page is 0, override GetFirstPageSize or set vis-area!" );
+    Size aTmpSize = pFile ? pFile->GetPrefSize() : Size(1, 1);
+    DBG_ASSERT(aTmpSize.Height() * aTmpSize.Width(), "size of first page is 0, override GetFirstPageSize or set vis-area!");
+
 #define FRAME 4
-    long nWidth = pWindow->GetOutputSize().Width() - 2*FRAME;
-    long nHeight = pWindow->GetOutputSize().Height() - 2*FRAME;
+
+    long nWidth = rRenderContext.GetOutputSize().Width() - 2 * FRAME;
+    long nHeight = rRenderContext.GetOutputSize().Height() - 2 * FRAME;
     if (nWidth <= 0 || nHeight <= 0)
         return;
 
-    double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
-    double dRatioPreV=((double) nWidth ) / nHeight;
+    double dRatio = double(aTmpSize.Width()) / aTmpSize.Height();
+    double dRatioPreV = double(nWidth) / nHeight;
     Size aSize;
     Point aPoint;
-    if (dRatio>dRatioPreV)
+    if (dRatio > dRatioPreV)
     {
-        aSize=Size(nWidth, (sal_uInt16)(nWidth/dRatio));
-        aPoint=Point( 0, (sal_uInt16)((nHeight-aSize.Height())/2));
+        aSize = Size(nWidth, sal_uInt16(nWidth / dRatio));
+        aPoint = Point(0, sal_uInt16((nHeight - aSize.Height()) / 2));
     }
     else
     {
-        aSize=Size((sal_uInt16)(nHeight*dRatio), nHeight);
-        aPoint=Point((sal_uInt16)((nWidth-aSize.Width())/2),0);
+        aSize = Size(sal_uInt16(nHeight * dRatio), nHeight);
+        aPoint = Point(sal_uInt16((nWidth - aSize.Width()) / 2), 0);
     }
-    Point bPoint=Point(nWidth,nHeight)-aPoint;
+    Point bPoint = Point(nWidth, nHeight) - aPoint;
 
-    if ( pFile )
+    if (pFile)
     {
-        Color aBlackCol( COL_BLACK );
-        Color aWhiteCol( COL_WHITE );
-        pWindow->SetLineColor( aBlackCol );
-        pWindow->SetFillColor( aWhiteCol );
-        pWindow->DrawRect( Rectangle( aPoint + Point( FRAME, FRAME ), bPoint + Point( FRAME, FRAME ) ) );
+        Color aBlackCol(COL_BLACK);
+        Color aWhiteCol(COL_WHITE);
+        rRenderContext.SetLineColor(aBlackCol);
+        rRenderContext.SetFillColor(aWhiteCol);
+        rRenderContext.DrawRect(Rectangle(aPoint + Point(FRAME, FRAME), bPoint + Point(FRAME, FRAME)));
         pFile->WindStart();
-        pFile->Play( pWindow, aPoint + Point( FRAME, FRAME ), aSize  );
+        pFile->Play(&rRenderContext, aPoint + Point(FRAME, FRAME), aSize);
     }
 }
 
-void SfxPreviewWin_Impl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void SfxPreviewWin_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    ImpPaint( rRect, xMetaFile.get(), this );
+    ImpPaint(rRenderContext, rRect, xMetaFile.get());
 }
 
 VCL_BUILDER_DECL_FACTORY(SfxPreviewWin)
 {
-    (void)rMap;
+    (void) rMap;
     rRet = VclPtr<SfxPreviewWin_Impl>::Create(pParent, 0);
 }
 
@@ -148,21 +147,21 @@ class SfxNewFileDialog_Impl
 
     DECL_LINK_TYPED( Update, Idle *, void );
 
-    DECL_LINK( RegionSelect, ListBox * );
-    DECL_LINK(TemplateSelect, void *);
-    DECL_LINK( DoubleClick, ListBox * );
-    DECL_LINK( Expand, void * );
-    DECL_LINK(LoadFile, void *);
+    DECL_LINK(RegionSelect, ListBox*);
+    DECL_LINK(TemplateSelect, void*);
+    DECL_LINK(DoubleClick, ListBox*);
+    DECL_LINK(Expand, void*);
+    DECL_LINK(LoadFile, void*);
     sal_uInt16  GetSelectedTemplatePos() const;
 
 public:
 
-    SfxNewFileDialog_Impl( SfxNewFileDialog* pAntiImplP, sal_uInt16 nFlags );
+    SfxNewFileDialog_Impl(SfxNewFileDialog* pAntiImplP, sal_uInt16 nFlags);
     ~SfxNewFileDialog_Impl();
 
-        // Returns sal_False if '- No -' is set as a template
-        // Template name can only be obtained if IsTemplate() is TRUE
-        // erfragt werden
+    // Returns sal_False if '- No -' is set as a template
+    // Template name can only be obtained if IsTemplate() is TRUE
+    // erfragt werden
     bool IsTemplate() const;
     OUString GetTemplateFileName() const;
 
@@ -170,29 +169,29 @@ public:
     void             SetTemplateFlags(SfxTemplateFlags nSet);
 };
 
-IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle*, void)
 {
-    if ( xDocShell.Is() )
+    if (xDocShell.Is())
     {
-        if ( xDocShell->GetProgress() )
+        if (xDocShell->GetProgress())
             return;
         xDocShell.Clear();
     }
 
     const sal_uInt16 nEntry = GetSelectedTemplatePos();
-    if(!nEntry)
+    if (!nEntry)
     {
         m_pPreviewWin->Invalidate();
         m_pPreviewWin->SetObjectShell( 0);
         return;
     }
 
-    if ( m_pMoreBt->get_expanded() && (nFlags & SFXWB_PREVIEW) == SFXWB_PREVIEW)
+    if (m_pMoreBt->get_expanded() && (nFlags & SFXWB_PREVIEW) == SFXWB_PREVIEW)
     {
 
-        OUString aFileName = aTemplates.GetPath( m_pRegionLb->GetSelectEntryPos(), nEntry-1);
-        INetURLObject aTestObj( aFileName );
-        if( aTestObj.GetProtocol() == INetProtocol::NotValid )
+        OUString aFileName = aTemplates.GetPath(m_pRegionLb->GetSelectEntryPos(), nEntry - 1);
+        INetURLObject aTestObj(aFileName);
+        if (aTestObj.GetProtocol() == INetProtocol::NotValid)
         {
             // temp. fix until Templates are managed by UCB compatible service
             // does NOT work with locally cached components !
@@ -201,51 +200,47 @@ IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle *, void)
             aFileName = aTemp;
         }
 
-        INetURLObject aObj( aFileName );
-        for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst();
-              pTmp;
-              pTmp = SfxObjectShell::GetNext(*pTmp) )
+        INetURLObject aObj(aFileName);
+        for (SfxObjectShell* pTmp = SfxObjectShell::GetFirst(); pTmp; pTmp = SfxObjectShell::GetNext(*pTmp))
         {
             //! fsys bug op==
-            if ( pTmp->GetMedium())
+            if (pTmp->GetMedium())
                 // ??? HasName() MM
-                if( INetURLObject( pTmp->GetMedium()->GetName() ) == aObj )
+                if (INetURLObject( pTmp->GetMedium()->GetName() ) == aObj)
                 {
                     xDocShell = pTmp;
                     break;
                 }
         }
 
-        if ( !xDocShell.Is() )
+        if (!xDocShell.Is())
         {
             vcl::Window *pParent = Application::GetDefDialogParent();
-            Application::SetDefDialogParent( pAntiImpl );
+            Application::SetDefDialogParent(pAntiImpl);
             SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,pAntiImpl);
             SfxApplication *pSfxApp = SfxGetpApp();
             sal_uIntPtr lErr;
-            SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
-            pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
-            pSet->Put( SfxBoolItem( SID_PREVIEW, true ) );
-            lErr = pSfxApp->LoadTemplate( xDocShell, aFileName, true, pSet );
-            if( lErr )
+            SfxItemSet* pSet = new SfxAllItemSet(pSfxApp->GetPool());
+            pSet->Put(SfxBoolItem(SID_TEMPLATE, true));
+            pSet->Put(SfxBoolItem(SID_PREVIEW, true));
+            lErr = pSfxApp->LoadTemplate(xDocShell, aFileName, true, pSet);
+            if (lErr)
                 ErrorHandler::HandleError(lErr);
-            Application::SetDefDialogParent( pParent );
-            if ( !xDocShell.Is() )
+            Application::SetDefDialogParent(pParent);
+            if (!xDocShell.Is())
             {
-                m_pPreviewWin->SetObjectShell( 0 );
+                m_pPreviewWin->SetObjectShell(0);
                 return;
             }
         }
 
-        m_pPreviewWin->SetObjectShell( xDocShell );
+        m_pPreviewWin->SetObjectShell(xDocShell);
     }
 }
 
-
-
-IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
+IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox*, pBox )
 {
-    if ( xDocShell.Is() && xDocShell->GetProgress() )
+    if (xDocShell.Is() && xDocShell->GetProgress())
         return 0;
 
     const sal_uInt16 nRegion = pBox->GetSelectEntryPos();
@@ -316,8 +311,6 @@ sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
         nEntry = 0;
     return nEntry;
 }
-
-
 
 bool SfxNewFileDialog_Impl::IsTemplate() const
 {
