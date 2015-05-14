@@ -895,7 +895,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                   GTK_STATE_FLAG_NORMAL));
         context = mpCheckButtonStyle;
         styleClass = GTK_STYLE_CLASS_CHECK;
-        renderType = RENDER_CHECK;
+        renderType = nPart == PART_FOCUS ? RENDER_FOCUS : RENDER_CHECK;
         break;
     case CTRL_RADIOBUTTON:
         flags = (GtkStateFlags)(flags |
@@ -1037,14 +1037,17 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case RENDER_FOCUS:
     {
-        GtkBorder border;
+        if (nType != CTRL_CHECKBOX)
+        {
+            GtkBorder border;
 
-        gtk_style_context_get_border(context, flags, &border);
+            gtk_style_context_get_border(context, flags, &border);
 
-        nX += border.left;
-        nY += border.top;
-        nWidth -= border.left + border.right;
-        nHeight -= border.top + border.bottom;
+            nX += border.left;
+            nY += border.top;
+            nWidth -= border.left + border.right;
+            nHeight -= border.top + border.bottom;
+        }
 
         gtk_render_focus(context, cr, nX, nY, nWidth, nHeight);
 

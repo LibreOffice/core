@@ -495,6 +495,7 @@ public:
     void            SetLegacyNoTextAlign( bool bVal ) { mbLegacyNoTextAlign = bVal; }
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual void ShowFocus(const Rectangle& rRect) SAL_OVERRIDE;
 };
 
 inline void CheckBox::Check( bool bCheck )

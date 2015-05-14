@@ -1659,16 +1659,14 @@ bool PushButton::set_property(const OString &rKey, const OString &rValue)
 
 void PushButton::ShowFocus(const Rectangle& rRect)
 {
-    bool bNativeOK;
-    if ((bNativeOK = IsNativeControlSupported(CTRL_PUSHBUTTON, PART_FOCUS)))
+    if (IsNativeControlSupported(CTRL_PUSHBUTTON, PART_FOCUS))
     {
         ImplControlValue aControlValue;
         Rectangle aInRect(Point(), GetOutputSizePixel());
-        bNativeOK = GetOutDev()->DrawNativeControl(CTRL_PUSHBUTTON, PART_FOCUS, aInRect,
-                                                   ControlState::FOCUSED, aControlValue, OUString());
+        GetOutDev()->DrawNativeControl(CTRL_PUSHBUTTON, PART_FOCUS, aInRect,
+                                       ControlState::FOCUSED, aControlValue, OUString());
     }
-    if (!bNativeOK)
-        Button::ShowFocus(rRect);
+    Button::ShowFocus(rRect);
 }
 
 void OKButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -3753,6 +3751,27 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
 Size CheckBox::GetOptimalSize() const
 {
     return CalcMinimumSize();
+}
+
+void CheckBox::ShowFocus(const Rectangle& rRect)
+{
+    if (IsNativeControlSupported(CTRL_CHECKBOX, PART_FOCUS))
+    {
+        ImplControlValue aControlValue;
+        Rectangle aInRect(Point(0, 0), GetSizePixel());
+
+        aInRect.Left() = rRect.Left();  // exclude the checkbox itself from the focusrect
+
+        //to-do, figure out a better solution here
+        aInRect.Left()-=2;
+        aInRect.Right()+=2;
+        aInRect.Top()-=2;
+        aInRect.Bottom()+=2;
+
+        DrawNativeControl(CTRL_CHECKBOX, PART_FOCUS, aInRect,
+                          ControlState::FOCUSED, aControlValue, OUString());
+    }
+    Button::ShowFocus(rRect);
 }
 
 ImageButton::ImageButton( vcl::Window* pParent, WinBits nStyle ) :
