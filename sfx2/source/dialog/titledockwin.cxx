@@ -141,25 +141,47 @@ namespace sfx2
     }
 
 
-    void TitledDockingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rArea )
+    void TitledDockingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rArea)
     {
-        if ( m_bLayoutPending )
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+        // Setup defaults
+        {
+            // Font
+            vcl::Font aFont = rStyleSettings.GetAppFont();
+            if (IsControlFont())
+                aFont.Merge(GetControlFont());
+            SetZoomedPointFont(aFont);
+
+            // Color.
+            Color aColor;
+
+            if (IsControlForeground())
+                aColor = GetControlForeground();
+            else
+                aColor = rStyleSettings.GetButtonTextColor();
+
+            rRenderContext.SetTextColor(aColor);
+            rRenderContext.SetTextFillColor();
+        }
+
+        if (m_bLayoutPending)
             impl_layout();
 
         SfxDockingWindow::Paint(rRenderContext, i_rArea);
 
-        Push( PushFlags::FONT | PushFlags::FILLCOLOR | PushFlags::LINECOLOR );
+        rRenderContext.Push(PushFlags::FONT | PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
 
-        SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
-        SetLineColor();
+        rRenderContext.SetFillColor(rStyleSettings.GetDialogColor());
+        rRenderContext.SetLineColor();
 
         // bold font
-        vcl::Font aFont( GetFont() );
-        aFont.SetWeight( WEIGHT_BOLD );
-        SetFont( aFont );
+        vcl::Font aFont(rRenderContext.GetFont());
+        aFont.SetWeight(WEIGHT_BOLD);
+        rRenderContext.SetFont(aFont);
 
         // Set border values.
-        Size aWindowSize( GetOutputSizePixel() );
+        Size aWindowSize(rRenderContext.GetOutputSizePixel());
         int nOuterLeft = 0;
         int nInnerLeft = nOuterLeft + m_aBorder.Left() - 1;
         int nOuterRight = aWindowSize.Width() - 1;
@@ -169,42 +191,38 @@ namespace sfx2
         int nInnerBottom = nOuterBottom - m_aBorder.Bottom() + 1;
 
         // Paint title bar background.
-        Rectangle aTitleBarBox( Rectangle(
-            nOuterLeft,
-            0,
-            nOuterRight,
-            nInnerTop-1
-        ) );
-        DrawRect( aTitleBarBox );
+        Rectangle aTitleBarBox(Rectangle(nOuterLeft, 0, nOuterRight, nInnerTop - 1));
+        rRenderContext.DrawRect(aTitleBarBox);
 
-        if ( nInnerLeft > nOuterLeft )
-            DrawRect( Rectangle( nOuterLeft, nInnerTop, nInnerLeft, nInnerBottom ) );
-        if ( nOuterRight > nInnerRight )
-            DrawRect( Rectangle( nInnerRight, nInnerTop, nOuterRight, nInnerBottom ) );
-        if ( nInnerBottom < nOuterBottom )
-            DrawRect( Rectangle( nOuterLeft, nInnerBottom, nOuterRight, nOuterBottom ) );
+        if (nInnerLeft > nOuterLeft)
+            rRenderContext.DrawRect(Rectangle(nOuterLeft, nInnerTop, nInnerLeft, nInnerBottom));
+        if (nOuterRight > nInnerRight)
+            rRenderContext.DrawRect(Rectangle(nInnerRight, nInnerTop, nOuterRight, nInnerBottom));
+        if (nInnerBottom < nOuterBottom)
+            rRenderContext.DrawRect(Rectangle(nOuterLeft, nInnerBottom, nOuterRight, nOuterBottom));
 
         // Paint bevel border.
-        SetFillColor();
-        SetLineColor( GetSettings().GetStyleSettings().GetShadowColor() );
-        if ( m_aBorder.Top() > 0 )
-            DrawLine( Point( nInnerLeft, nInnerTop ), Point( nInnerLeft, nInnerBottom ) );
-        if ( m_aBorder.Left() > 0 )
-            DrawLine( Point( nInnerLeft, nInnerTop ), Point( nInnerRight, nInnerTop ) );
+        rRenderContext.SetFillColor();
+        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+        if (m_aBorder.Top() > 0)
+            rRenderContext.DrawLine(Point(nInnerLeft, nInnerTop), Point(nInnerLeft, nInnerBottom));
+        if (m_aBorder.Left() > 0)
+            rRenderContext.DrawLine(Point(nInnerLeft, nInnerTop), Point(nInnerRight, nInnerTop));
 
-        SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
-        if ( m_aBorder.Bottom() > 0 )
-            DrawLine( Point( nInnerRight, nInnerBottom ), Point( nInnerLeft, nInnerBottom ) );
-        if ( m_aBorder.Right() > 0 )
-            DrawLine( Point( nInnerRight, nInnerBottom ), Point( nInnerRight, nInnerTop ) );
+        rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+        if (m_aBorder.Bottom() > 0)
+            rRenderContext.DrawLine(Point(nInnerRight, nInnerBottom), Point(nInnerLeft, nInnerBottom));
+        if (m_aBorder.Right() > 0)
+            rRenderContext.DrawLine(Point(nInnerRight, nInnerBottom), Point(nInnerRight, nInnerTop));
 
         // Paint title bar text.
-        SetLineColor( GetSettings().GetStyleSettings().GetActiveTextColor() );
+        rRenderContext.SetLineColor(rStyleSettings.GetActiveTextColor());
         aTitleBarBox.Left() += 3;
-        DrawText( aTitleBarBox, impl_getTitle(), TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+        rRenderContext.DrawText(aTitleBarBox, impl_getTitle(),
+                               TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK);
 
         // Restore original values of the output device.
-        Pop();
+        rRenderContext.Pop();
     }
 
 
@@ -276,7 +294,6 @@ namespace sfx2
         SfxDockingWindow::StateChanged( i_nType );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void TitledDockingWindow::EndDocking( const Rectangle& i_rRect, bool i_bFloatMode )
     {
         SfxDockingWindow::EndDocking( i_rRect, i_bFloatMode );
@@ -299,23 +316,6 @@ namespace sfx2
             case DataChangedEventType::FONTS:
             case DataChangedEventType::FONTSUBSTITUTION:
             {
-                const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-                // Font.
-                vcl::Font aFont = rStyleSettings.GetAppFont();
-                if ( IsControlFont() )
-                    aFont.Merge( GetControlFont() );
-                SetZoomedPointFont( aFont );
-
-                // Color.
-                Color aColor;
-                if ( IsControlForeground() )
-                    aColor = GetControlForeground();
-                else
-                    aColor = rStyleSettings.GetButtonTextColor();
-                SetTextColor( aColor );
-                SetTextFillColor();
-
                 impl_scheduleLayout();
                 Invalidate();
             }
