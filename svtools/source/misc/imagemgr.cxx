@@ -533,33 +533,31 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
     if ( !bFolder )
     {
         bool bDetected = false;
-        if ( !bDetected )
-        {
-            if ( rObject.GetProtocol() == INetProtocol::PrivSoffice )
-            {
-                OUString aURLPath = sURL.copy( URL_PREFIX_PRIV_SOFFICE_LEN );
-                OUString aType = aURLPath.getToken( 0, '/' );
-                if ( aType == "factory" )
-                {
-                    sDescription = GetDescriptionByFactory_Impl( aURLPath.copy( aURLPath.indexOf( '/' ) + 1 ) );
-                    bDetected = true;
-                }
-            }
 
-            if ( !bDetected )
+        if ( rObject.GetProtocol() == INetProtocol::PrivSoffice )
+        {
+            OUString aURLPath = sURL.copy( URL_PREFIX_PRIV_SOFFICE_LEN );
+            OUString aType = aURLPath.getToken( 0, '/' );
+            if ( aType == "factory" )
             {
-                // search a description by extension
-                bool bExt = !sExtension.isEmpty();
-                if ( bExt )
-                {
-                    sExtension = sExtension.toAsciiLowerCase();
-                    nResId = GetDescriptionId_Impl( sExtension, bShowExt );
-                }
-                if ( !nResId )
-                {
-                    nResId = STR_DESCRIPTION_FILE;
-                    bOnlyFile = bExt;
-                }
+                sDescription = GetDescriptionByFactory_Impl( aURLPath.copy( aURLPath.indexOf( '/' ) + 1 ) );
+                bDetected = true;
+            }
+        }
+
+        if (!bDetected)
+        {
+            // search a description by extension
+            bool bExt = !sExtension.isEmpty();
+            if ( bExt )
+            {
+                sExtension = sExtension.toAsciiLowerCase();
+                nResId = GetDescriptionId_Impl( sExtension, bShowExt );
+            }
+            if ( !nResId )
+            {
+                nResId = STR_DESCRIPTION_FILE;
+                bOnlyFile = bExt;
             }
         }
     }
