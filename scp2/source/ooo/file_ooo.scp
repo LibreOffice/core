@@ -213,7 +213,7 @@ End
 
 #endif
 
-#if defined UNX
+#if defined UNX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 File gid_File_Bin_Senddoc
     BIN_FILE_BODY;
     Dir = FILELIST_DIR;
