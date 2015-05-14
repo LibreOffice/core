@@ -202,28 +202,28 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
     OSL_ENSURE( pViewSh, "no view shell for input window" );
 
     // Position window, 3 buttons, input window
-    InsertWindow    ( 1, aWndPos.get(), ToolBoxItemBits::NONE,                                0 );
-    InsertSeparator (                                                     1 );
-    InsertItem      ( SID_INPUT_FUNCTION, IMAGE( SID_INPUT_FUNCTION ), ToolBoxItemBits::NONE, 2 );
-    InsertItem      ( SID_INPUT_SUM,      IMAGE( SID_INPUT_SUM ), ToolBoxItemBits::NONE,      3 );
-    InsertItem      ( SID_INPUT_EQUAL,    IMAGE( SID_INPUT_EQUAL ), ToolBoxItemBits::NONE,    4 );
-    InsertSeparator (                                                     5 );
-    InsertWindow    ( 7, &aTextWindow, ToolBoxItemBits::NONE,                                 6 );
+    InsertWindow    (1, aWndPos.get(), ToolBoxItemBits::NONE, 0);
+    InsertSeparator (1);
+    InsertItem      (SID_INPUT_FUNCTION, IMAGE(SID_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
+    InsertItem      (SID_INPUT_SUM,      IMAGE(SID_INPUT_SUM), ToolBoxItemBits::NONE, 3);
+    InsertItem      (SID_INPUT_EQUAL,    IMAGE(SID_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
+    InsertSeparator (5);
+    InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 6);
 
-    aWndPos   ->SetQuickHelpText( ScResId( SCSTR_QHELP_POSWND ) );
-    aWndPos   ->SetHelpId       ( HID_INSWIN_POS );
-    aTextWindow.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
-    aTextWindow.SetHelpId       ( HID_INSWIN_INPUT );
+    aWndPos   ->SetQuickHelpText(ScResId(SCSTR_QHELP_POSWND));
+    aWndPos   ->SetHelpId       (HID_INSWIN_POS);
+    aTextWindow.SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
+    aTextWindow.SetHelpId       (HID_INSWIN_INPUT);
 
     // No SetHelpText: the helptexts come from the Help
-    SetItemText ( SID_INPUT_FUNCTION, ScResId( SCSTR_QHELP_BTNCALC ) );
-    SetHelpId   ( SID_INPUT_FUNCTION, HID_INSWIN_CALC );
+    SetItemText (SID_INPUT_FUNCTION, ScResId(SCSTR_QHELP_BTNCALC));
+    SetHelpId   (SID_INPUT_FUNCTION, HID_INSWIN_CALC);
 
-    SetItemText ( SID_INPUT_SUM, aTextSum );
-    SetHelpId   ( SID_INPUT_SUM, HID_INSWIN_SUMME );
+    SetItemText (SID_INPUT_SUM, aTextSum);
+    SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUMME);
 
-    SetItemText ( SID_INPUT_EQUAL, aTextEqual );
-    SetHelpId   ( SID_INPUT_EQUAL, HID_INSWIN_FUNC );
+    SetItemText (SID_INPUT_EQUAL, aTextEqual);
+    SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
 
     SetHelpId( HID_SC_INPUTWIN ); // For the whole input row
 
@@ -241,7 +241,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         // Also show selection (remember at the InputHdl)
         aTextWindow.SetTextString( pInputHdl->GetFormString() );
     }
-    else if ( pInputHdl && pInputHdl->IsInputMode() )
+    else if (pInputHdl && pInputHdl->IsInputMode())
     {
         // If the input row was hidden while editing (e.g. when editing a formula
         // and then switching to another document or the help), display the text
@@ -250,10 +250,10 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         if ( pInputHdl->IsTopMode() )
             pInputHdl->SetMode( SC_INPUT_TABLE ); // Focus ends up at the bottom anyways
     }
-    else if ( pViewSh )
-        pViewSh->UpdateInputHandler( true ); // Absolutely necessary update
+    else if (pViewSh)
+        pViewSh->UpdateInputHandler(true); // Absolutely necessary update
 
-    pImgMgr->RegisterToolBox( this );
+    pImgMgr->RegisterToolBox(this);
     SetAccessibleName(ScResId(STR_ACC_TOOLBAR_FORMULA));
 }
 
@@ -562,11 +562,12 @@ void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& r
 
     // draw a line at the bottom to distinguish that from the grid
     // (we have space for that thanks to ADDITIONAL_BORDER)
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    SetLineColor( rStyleSettings.GetShadowColor() );
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
 
     Size aSize = GetSizePixel();
-    DrawLine( Point( 0, aSize.Height() - 1 ), Point( aSize.Width() - 1, aSize.Height() - 1 ) );
+    rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
+                            Point(aSize.Width() - 1, aSize.Height() - 1));
 }
 
 void ScInputWindow::Resize()
@@ -967,11 +968,11 @@ void ScInputBarGroup::SetTextString( const OUString& rString )
 
 void ScInputBarGroup::Resize()
 {
-    vcl::Window *w=GetParent();
+    vcl::Window*w = GetParent();
     ScInputWindow *pParent;
-    pParent=dynamic_cast<ScInputWindow*>(w);
+    pParent = dynamic_cast<ScInputWindow*>(w);
 
-    if(pParent==NULL)
+    if (pParent == NULL)
     {
         OSL_FAIL("The parent window pointer pParent is null");
         return;
@@ -981,7 +982,7 @@ void ScInputBarGroup::Resize()
     long nLeft  = GetPosPixel().X();
 
     Size aSize  = GetSizePixel();
-    aSize.Width() = std::max( ((long)(nWidth - nLeft - LEFT_OFFSET)), (long)0 );
+    aSize.Width() = std::max(long(nWidth - nLeft - LEFT_OFFSET), long(0));
 
     aScrollBar->SetPosPixel(Point( aSize.Width() - aButton->GetSizePixel().Width(), aButton->GetSizePixel().Height() ) );
 
@@ -995,7 +996,7 @@ void ScInputBarGroup::Resize()
 
     SetSizePixel(aSize);
 
-    if( aMultiTextWnd->GetNumLines() > 1 )
+    if (aMultiTextWnd->GetNumLines() > 1)
     {
         aButton->SetSymbol( SymbolType::SPIN_UP  );
         aButton->SetQuickHelpText( ScResId( SCSTR_QHELP_COLLAPSE_FORMULA ) );
@@ -1072,22 +1073,22 @@ void ScInputBarGroup::DecrementVerticalSize()
 
 IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl)
 {
-    vcl::Window *w=GetParent();
-    ScInputWindow *pParent;
-    pParent=dynamic_cast<ScInputWindow*>(w);
+    vcl::Window* w = GetParent();
+    ScInputWindow* pParent;
+    pParent = dynamic_cast<ScInputWindow*>(w);
 
-    if(pParent==NULL)
+    if (pParent == NULL)
     {
         OSL_FAIL("The parent window pointer pParent is null");
         return 1;
     }
-    if( aMultiTextWnd->GetNumLines() > 1 )
+    if (aMultiTextWnd->GetNumLines() > 1)
     {
-        aMultiTextWnd->SetNumLines( 1 );
+        aMultiTextWnd->SetNumLines(1);
     }
     else
     {
-        aMultiTextWnd->SetNumLines( aMultiTextWnd->GetLastNumExpandedLines() );
+        aMultiTextWnd->SetNumLines(aMultiTextWnd->GetLastNumExpandedLines());
     }
     TriggerToolboxLayout();
 
@@ -1160,15 +1161,14 @@ void ScInputBarGroup::TextGrabFocus()
 }
 
 ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh )
-    :
-        ScTextWnd( pParen, pViewSh ),
-        mrGroupBar(* pParen ),
-        mnLines( 1 ),
-        mnLastExpandedLines( INPUTWIN_MULTILINES ),
-        mbInvalidate( false )
+    : ScTextWnd( pParen, pViewSh ),
+      mrGroupBar(* pParen ),
+      mnLines( 1 ),
+      mnLastExpandedLines( INPUTWIN_MULTILINES ),
+      mbInvalidate( false )
 {
     Size aBorder;
-    aBorder = CalcWindowSize( aBorder);
+    aBorder = CalcWindowSize(aBorder);
     mnBorderHeight = aBorder.Height();
 }
 
@@ -1176,17 +1176,17 @@ ScMultiTextWnd::~ScMultiTextWnd()
 {
 }
 
-void ScMultiTextWnd::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ScMultiTextWnd::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
     EditView* pView = GetEditView();
-    if ( pView )
+    if (pView)
     {
-        if ( mbInvalidate )
+        if (mbInvalidate)
         {
             pView->Invalidate();
             mbInvalidate = false;
         }
-        pEditView->Paint( rRect );
+        pEditView->Paint(rRect, &rRenderContext);
     }
 }
 
@@ -1455,45 +1455,45 @@ void ScMultiTextWnd::SetTextString( const OUString& rNewString )
 }
 
 ScTextWnd::ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh )
-    :   ScTextWndBase        ( pParent, WinBits(WB_HIDE | WB_BORDER) ),
-        DragSourceHelper( this ),
-        pEditEngine  ( NULL ),
-        pEditView    ( NULL ),
-        bIsInsertMode( true ),
-        bFormulaMode ( false ),
-        bInputMode   ( false ),
+    :   ScTextWndBase(pParent, WinBits(WB_HIDE | WB_BORDER)),
+        DragSourceHelper(this),
+        pEditEngine  (NULL),
+        pEditView    (NULL),
+        bIsInsertMode(true),
+        bFormulaMode (false),
+        bInputMode   (false),
         mpViewShell(pViewSh)
 {
-    EnableRTL( false ); // EditEngine can't be used with VCL EnableRTL
+    EnableRTL(false); // EditEngine can't be used with VCL EnableRTL
 
     bIsRTL = AllSettings::GetLayoutRTL();
 
     //  always use application font, so a font with cjk chars can be installed
     vcl::Font aAppFont = GetFont();
     aTextFont = aAppFont;
-    aTextFont.SetSize( PixelToLogic( aAppFont.GetSize(), MAP_TWIP ) );  // AppFont is in pixels
+    aTextFont.SetSize(PixelToLogic(aAppFont.GetSize(), MAP_TWIP));  // AppFont is in pixels
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    Color aBgColor= rStyleSettings.GetWindowColor();
-    Color aTxtColor= rStyleSettings.GetWindowTextColor();
+    Color aBgColor = rStyleSettings.GetWindowColor();
+    Color aTxtColor = rStyleSettings.GetWindowTextColor();
 
-    aTextFont.SetTransparent ( true );
-    aTextFont.SetFillColor   ( aBgColor );
-    //aTextFont.SetColor         ( COL_FIELDTEXT );
-    aTextFont.SetColor       (aTxtColor);
-    aTextFont.SetWeight      ( WEIGHT_NORMAL );
+    aTextFont.SetTransparent(true);
+    aTextFont.SetFillColor(aBgColor);
+    aTextFont.SetColor(aTxtColor);
+    aTextFont.SetWeight(WEIGHT_NORMAL);
 
     Size aSize(1,TBX_WINDOW_HEIGHT);
     Size aMinEditSize( Edit::GetMinimumEditSize() );
     if( aMinEditSize.Height() > aSize.Height() )
         aSize.Height() = aMinEditSize.Height();
-    SetSizePixel        ( aSize );
-    SetBackground       ( aBgColor );
-    SetLineColor        ( COL_BLACK );
-    SetMapMode          ( MAP_TWIP );
-    SetPointer          ( POINTER_TEXT );
-    SetFont( aTextFont );
+
+    SetSizePixel(aSize);
+    SetBackground(aBgColor);
+    SetLineColor(COL_BLACK);
+    SetMapMode(MAP_TWIP);
+    SetPointer(POINTER_TEXT);
+    SetFont(aTextFont);
 }
 
 ScTextWnd::~ScTextWnd()
@@ -1514,30 +1514,32 @@ void ScTextWnd::dispose()
     ScTextWndBase::dispose();
 }
 
-void ScTextWnd::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ScTextWnd::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     if (pEditView)
-        pEditView->Paint( rRect );
+    {
+        pEditView->Paint(rRect, &rRenderContext);
+    }
     else
     {
-        SetFont( aTextFont );
+        Size aSize = GetOutputSizePixel();
+        SetFont(aTextFont);
 
-        long nDiff =  GetOutputSizePixel().Height()
-                    - LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
+        long nDiff = aSize.Height() - rRenderContext.LogicToPixel(Size(0, rRenderContext.GetTextHeight())).Height();
+
 //      if (nDiff<2) nDiff=2;       // At least 1 pixel
 
         long nStartPos = 0;
-        if ( bIsRTL )
+        if (bIsRTL)
         {
             //  right-align
-            nStartPos += GetOutputSizePixel().Width() -
-                        LogicToPixel( Size( GetTextWidth( aString ), 0 ) ).Width();
+            nStartPos += aSize.Width() - rRenderContext.LogicToPixel(Size(rRenderContext.GetTextWidth(aString), 0)).Width();
 
             //  LayoutMode isn't changed as long as ModifyRTLDefaults doesn't include SvxFrameDirectionItem
         }
-
-        DrawText( PixelToLogic( Point( nStartPos, nDiff/2 ) ), aString );
+        rRenderContext.DrawText(rRenderContext.PixelToLogic(Point(nStartPos, nDiff / 2)), aString);
     }
+    rRenderContext.Pop();
 }
 
 void ScTextWnd::Resize()
@@ -1545,11 +1547,9 @@ void ScTextWnd::Resize()
     if (pEditView)
     {
         Size aSize = GetOutputSizePixel();
-        long nDiff =  aSize.Height()
-                    - LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
+        long nDiff =  aSize.Height() - LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
 
-        pEditView->SetOutputArea(
-            PixelToLogic( Rectangle( Point( 0, (nDiff > 0) ? nDiff/2 : 1 ),
+        pEditView->SetOutputArea(PixelToLogic( Rectangle( Point( 0, (nDiff > 0) ? nDiff/2 : 1 ),
                                      aSize ) ) );
     }
 }
