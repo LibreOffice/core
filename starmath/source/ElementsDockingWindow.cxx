@@ -254,16 +254,16 @@ void SmElementsControl::setVerticalMode(bool bVerticalMode)
     mbVerticalMode = bVerticalMode;
 }
 
-void SmElementsControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
+void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    Push();
+    rRenderContext.Push();
 
     bool bOldVisibleState = mxScroll->IsVisible();
 
     sal_Int32 nScrollbarWidth = bOldVisibleState ? GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
 
-    sal_Int32 nControlWidth = GetOutputSizePixel().Width() - nScrollbarWidth;
-    sal_Int32 nControlHeight = GetOutputSizePixel().Height();
+    sal_Int32 nControlWidth = rRenderContext.GetOutputSizePixel().Width() - nScrollbarWidth;
+    sal_Int32 nControlHeight = rRenderContext.GetOutputSizePixel().Height();
 
     sal_Int32 boxX = maMaxElementDimensions.Width()  + 10;
     sal_Int32 boxY = maMaxElementDimensions.Height() + 10;
@@ -278,7 +278,8 @@ void SmElementsControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rect
     else
         perLine = nControlWidth / boxX;
 
-    if(perLine <= 0) {
+    if (perLine <= 0)
+    {
         perLine = 1;
     }
 
@@ -297,11 +298,10 @@ void SmElementsControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rect
                 x += boxX;
                 y = 0;
 
-                Rectangle aSelectionRectangle(
-                    x+5-1, y+5,
-                    x+5+1, nControlHeight - 5);
+                Rectangle aSelectionRectangle(x + 5 - 1, y + 5,
+                                              x + 5 + 1, nControlHeight - 5);
 
-                DrawRect(PixelToLogic(aSelectionRectangle));
+                rRenderContext.DrawRect(PixelToLogic(aSelectionRectangle));
                 x += 10;
             }
             else
@@ -309,20 +309,20 @@ void SmElementsControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rect
                 x = 0;
                 y += boxY;
 
-                Rectangle aSelectionRectangle(
-                    x+5,                              y+5-1,
-                    nControlWidth - 5, y+5+1);
+                Rectangle aSelectionRectangle(x + 5, y + 5 - 1,
+                                              nControlWidth - 5, y + 5 + 1);
 
-                DrawRect(PixelToLogic(aSelectionRectangle));
+                rRenderContext.DrawRect(PixelToLogic(aSelectionRectangle));
                 y += 10;
             }
         }
         else
         {
-            Size aSizePixel = LogicToPixel(Size(element->getNode()->GetWidth(), element->getNode()->GetHeight()));
-            if(mbVerticalMode)
+            Size aSizePixel = rRenderContext.LogicToPixel(Size(element->getNode()->GetWidth(),
+                                                               element->getNode()->GetHeight()));
+            if (mbVerticalMode)
             {
-                if ( y + boxY > nControlHeight)
+                if (y + boxY > nControlHeight)
                 {
                     x += boxX;
                     y = 0;
@@ -339,21 +339,23 @@ void SmElementsControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rect
 
             if (mpCurrentElement == element)
             {
-                Push();
-                SetFillColor( Color(230, 230, 230) );
-                SetLineColor( Color(230, 230, 230) );
+                rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+                rRenderContext.SetFillColor(Color(230, 230, 230));
+                rRenderContext.SetLineColor(Color(230, 230, 230));
 
-                DrawRect(PixelToLogic(Rectangle(x+2, y+2, x+boxX-2, y+boxY-2)));
-                Pop();
+                rRenderContext.DrawRect(PixelToLogic(Rectangle(x + 2, y + 2, x + boxX - 2, y + boxY - 2)));
+                rRenderContext.Pop();
             }
 
-            Point location(x + ((boxX-aSizePixel.Width())/2), y + ((boxY-aSizePixel.Height())/2));
-            SmDrawingVisitor(*this, PixelToLogic(location), element->getNode().get());
+            Point location(x + ((boxX - aSizePixel.Width()) / 2),
+                           y + ((boxY - aSizePixel.Height()) / 2));
+
+            SmDrawingVisitor(rRenderContext, PixelToLogic(location), element->getNode().get());
 
             element->mBoxLocation = Point(x,y);
-            element->mBoxSize     = Size(boxX, boxY);
+            element->mBoxSize = Size(boxX, boxY);
 
-            if(mbVerticalMode)
+            if (mbVerticalMode)
                 y += boxY;
             else
                 x += boxX;
@@ -380,7 +382,7 @@ void SmElementsControl::Paint(vcl::RenderContext& /*rRenderContext*/, const Rect
     if (bOldVisibleState != mxScroll->IsVisible())
         Invalidate();
 
-    Pop();
+    rRenderContext.Pop();
 }
 
 void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
@@ -735,7 +737,7 @@ IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, ListBox*, pList)
 
 SmViewShell* SmElementsDockingWindow::GetView()
 {
-    SfxViewShell *pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
+    SfxViewShell* pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
     return PTR_CAST(SmViewShell, pView);
 }
 
@@ -743,21 +745,7 @@ void SmElementsDockingWindow::Resize()
 {
     bool bVertical = ( GetAlignment() == SfxChildAlignment::TOP || GetAlignment() == SfxChildAlignment::BOTTOM );
     mpElementsControl->setVerticalMode(bVertical);
-#if 0
-    sal_uInt32 aWidth  = GetOutputSizePixel().Width();
-    sal_uInt32 aHeight = GetOutputSizePixel().Height();
 
-    sal_uInt32 aElementsSetsHeight = 23;
-    sal_uInt32 aPadding = 5;
-
-    Rectangle aRect1 = Rectangle(aPadding, aPadding, aWidth - aPadding, aElementsSetsHeight + aPadding);
-
-    mpElementListBox->SetPosSizePixel(aRect1.TopLeft(), aRect1.GetSize());
-
-    Rectangle aRect = Rectangle(aPadding, aElementsSetsHeight + aPadding + aPadding, aWidth - aPadding, aHeight - aPadding);
-
-    mpElementsControl->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
-#endif
     SfxDockingWindow::Resize();
     Invalidate();
 }
