@@ -55,10 +55,9 @@ protected:
     virtual void Resize() SAL_OVERRIDE;
 
 private:
-    ScAutoFormatData*       pCurData;
+    ScAutoFormatData* pCurData;
     ScopedVclPtrInstance<VirtualDevice> aVD;
-    SvtScriptedTextHelper   aScriptedText;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBreakIter;
+    css::uno::Reference<css::i18n::XBreakIterator> xBreakIter;
     bool                    bFitWidth;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     bool                    mbRTL;
@@ -76,40 +75,33 @@ private:
     const OUString          aStrSum;
     SvNumberFormatter*      pNumFmt;
 
-    SAL_DLLPRIVATE void  Init            ();
-    SAL_DLLPRIVATE void  DoPaint         ( const Rectangle& rRect );
-    SAL_DLLPRIVATE void  CalcCellArray   ( bool bFitWidth );
-    SAL_DLLPRIVATE void  CalcLineMap     ();
-    SAL_DLLPRIVATE void  PaintCells      ();
+    SAL_DLLPRIVATE void Init();
+    SAL_DLLPRIVATE void DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    SAL_DLLPRIVATE void CalcCellArray(bool bFitWidth);
+    SAL_DLLPRIVATE void CalcLineMap();
+    SAL_DLLPRIVATE void PaintCells(vcl::RenderContext& rRenderContext);
 
 /*  Usage of type size_t instead of SCCOL/SCROW is correct here - used in
     conjunction with class svx::frame::Array (svx/framelinkarray.hxx), which
     expects size_t coordinates. */
 
-    SAL_DLLPRIVATE sal_uInt16              GetFormatIndex( size_t nCol, size_t nRow ) const;
-    SAL_DLLPRIVATE const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
-    SAL_DLLPRIVATE const SvxLineItem&  GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const;
+    SAL_DLLPRIVATE sal_uInt16 GetFormatIndex( size_t nCol, size_t nRow ) const;
+    SAL_DLLPRIVATE const SvxBoxItem& GetBoxItem( size_t nCol, size_t nRow ) const;
+    SAL_DLLPRIVATE const SvxLineItem& GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const;
 
-    SAL_DLLPRIVATE void                DrawString( size_t nCol, size_t nRow );
-    SAL_DLLPRIVATE void                DrawStrings();
-    SAL_DLLPRIVATE void                DrawBackground();
+    SAL_DLLPRIVATE void DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow);
+    SAL_DLLPRIVATE void DrawStrings(vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void DrawBackground(vcl::RenderContext& rRenderContext);
 
-    SAL_DLLPRIVATE void    MakeFonts       ( sal_uInt16 nIndex,
-                              vcl::Font& rFont,
-                              vcl::Font& rCJKFont,
-                              vcl::Font& rCTLFont );
+    SAL_DLLPRIVATE void MakeFonts(sal_uInt16 nIndex, vcl::Font& rFont,
+                                  vcl::Font& rCJKFont, vcl::Font& rCTLFont );
 
-    SAL_DLLPRIVATE void CheckPriority    ( sal_uInt16            nCurLine,
-                              AutoFmtLine       eLine,
-                              ::editeng::SvxBorderLine& rLine );
-    SAL_DLLPRIVATE void  GetLines        ( sal_uInt16 nIndex, AutoFmtLine eLine,
-                              ::editeng::SvxBorderLine& rLineD,
-                              ::editeng::SvxBorderLine& rLineLT,
-                              ::editeng::SvxBorderLine& rLineL,
-                              ::editeng::SvxBorderLine& rLineLB,
-                              ::editeng::SvxBorderLine& rLineRT,
-                              ::editeng::SvxBorderLine& rLineR,
-                              ::editeng::SvxBorderLine& rLineRB );
+    SAL_DLLPRIVATE void CheckPriority(sal_uInt16 nCurLine, AutoFmtLine eLine, editeng::SvxBorderLine& rLine);
+    SAL_DLLPRIVATE void GetLines(sal_uInt16 nIndex, AutoFmtLine eLine,
+                                 editeng::SvxBorderLine& rLineD, editeng::SvxBorderLine& rLineLT,
+                                 editeng::SvxBorderLine& rLineL, editeng::SvxBorderLine& rLineLB,
+                                 editeng::SvxBorderLine& rLineRT, editeng::SvxBorderLine& rLineR,
+                                 editeng::SvxBorderLine& rLineRB);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_AUTOFMT_HXX
