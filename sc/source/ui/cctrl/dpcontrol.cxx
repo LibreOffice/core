@@ -95,9 +95,6 @@ void ScDPFieldButton::setPopupLeft(bool b)
 
 void ScDPFieldButton::draw()
 {
-    bool bOldMapEnablaed = mpOutDev->IsMapModeEnabled();
-    mpOutDev->EnableMapMode(false);
-
     if (mbBaseButton)
     {
         // Background
@@ -144,8 +141,6 @@ void ScDPFieldButton::draw()
 
     if (mbPopupButton)
         drawPopupButton();
-
-    mpOutDev->EnableMapMode(bOldMapEnablaed);
 }
 
 void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
