@@ -212,8 +212,8 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     SetHideNotDelete( true );
 }
 
-SfxChildWindow*  SfxDockingWrapper::CreateImpl(
-vcl::Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo )
+SfxChildWindow* SfxDockingWrapper::CreateImpl(vcl::Window *pParent, sal_uInt16 nId,
+                                              SfxBindings *pBindings, SfxChildWinInfo* pInfo)
 {
     SfxChildWindow *pWin = new SfxDockingWrapper(pParent, nId, pBindings, pInfo);
     return pWin;
@@ -239,15 +239,10 @@ SfxChildWinInfo  SfxDockingWrapper::GetInfo() const
     return aInfo;
 };
 
-SfxTitleDockingWindow::SfxTitleDockingWindow( SfxBindings* pBind ,
-                                              SfxChildWindow* pChildWin ,
-                                              vcl::Window* pParent ,
-                                              WinBits nBits ) :
-                          SfxDockingWindow( pBind ,
-                                            pChildWin ,
-                                            pParent ,
-                                            nBits ),
-                          m_pWrappedWindow(0)
+SfxTitleDockingWindow::SfxTitleDockingWindow(SfxBindings* pBind, SfxChildWindow* pChildWin,
+                                             vcl::Window* pParent, WinBits nBits)
+    : SfxDockingWindow(pBind, pChildWin, pParent, nBits)
+    , m_pWrappedWindow(nullptr)
 {
 }
 
@@ -349,8 +344,7 @@ static SfxWorkWindow* lcl_getWorkWindowFromXFrame( const uno::Reference< frame::
         return NULL;
 }
 
-/*
-    Factory function used by the framework layout manager to "create" a docking window with a special name.
+/** Factory function used by the framework layout manager to "create" a docking window with a special name.
     The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot range located
     in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
 */
@@ -375,8 +369,7 @@ void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rF
     }
 }
 
-/*
-    Function used by the framework layout manager to determine the visibility state of a docking window with
+/** Function used by the framework layout manager to determine the visibility state of a docking window with
     a special name. The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot
     range located in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
 */
@@ -437,16 +430,13 @@ friend class SfxDockingWindow;
                         { eDockAlignment = eAlign; }
 };
 
-
-
-void SfxDockingWindow::Resize()
-
 /*  [Description]
 
     This virtual method of the class FloatingWindow keeps track of changes in
     FloatingSize. If this method is overridden by a derived class,
     then the SfxFloatingWindow: Resize() must also be called.
 */
+void SfxDockingWindow::Resize()
 {
     DockingWindow::Resize();
     Invalidate();
@@ -487,10 +477,6 @@ void SfxDockingWindow::Resize()
     }
 }
 
-
-
-bool SfxDockingWindow::PrepareToggleFloatingMode()
-
 /*  [Description]
 
     This virtual method of the class DockingWindow makes it possible to
@@ -499,7 +485,7 @@ bool SfxDockingWindow::PrepareToggleFloatingMode()
     then the SfxDockingWindow::PrepareToggleFloatingMode() must be called
     afterwards, if not FALSE is returned.
 */
-
+bool SfxDockingWindow::PrepareToggleFloatingMode()
 {
     if (!pImp || !pImp->bConstructed)
         return true;
@@ -540,10 +526,6 @@ bool SfxDockingWindow::PrepareToggleFloatingMode()
     return true;
 }
 
-
-
-void SfxDockingWindow::ToggleFloatingMode()
-
 /*  [Description]
 
     This virtual method of the DockingWindow class sets the internal data of
@@ -553,6 +535,7 @@ void SfxDockingWindow::ToggleFloatingMode()
     method is overridden by a derived class, then first the
     SfxDockingWindow::ToggleFloatingMode() must be called.
 */
+void SfxDockingWindow::ToggleFloatingMode()
 {
     if ( !pImp || !pImp->bConstructed || !pMgr )
         return;                                 // No Handler call
@@ -626,10 +609,6 @@ void SfxDockingWindow::ToggleFloatingMode()
     pWorkWin->ConfigChild_Impl( eIdent, SfxDockingConfig::TOGGLEFLOATMODE, pMgr->GetType() );
 }
 
-
-
-void SfxDockingWindow::StartDocking()
-
 /*  [Description]
 
     This virtual method of the DockingWindow class takes the inner and outer
@@ -637,6 +616,7 @@ void SfxDockingWindow::StartDocking()
     a derived class, then SfxDockingWindow:StartDocking() has to be called at
     the end.
 */
+void SfxDockingWindow::StartDocking()
 {
     if ( !pImp || !pImp->bConstructed || !pMgr )
         return;
@@ -657,10 +637,6 @@ void SfxDockingWindow::StartDocking()
     }
 }
 
-
-
-bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
-
 /*  [Description]
 
     This virtual method of the DockingWindow class calculates the current
@@ -668,6 +644,7 @@ bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
     is used, the behavior can be influenced by the derived classes (see below).
     This method should if possible not be overwritten.
 */
+bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 {
     if ( Application::IsInModalMode() )
         return true;
@@ -760,16 +737,11 @@ bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
     return bFloatMode;
 }
 
-
-
-void SfxDockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
-
-/*  [Description]
-
-    Virtual method of the DockingWindow class ensures the correct alignment on
+/** Virtual method of the DockingWindow class ensures the correct alignment on
     the parent window. If this method is overridden by a derived class, then
     SfxDockingWindow::EndDocking() must be called first.
 */
+void SfxDockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
 {
     if ( !pImp || !pImp->bConstructed || IsDockingCanceled() || !pMgr )
         return;
@@ -833,10 +805,6 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
     SetAlignment( IsFloatingMode() ? SfxChildAlignment::NOALIGNMENT : pImp->GetDockAlignment() );
 }
 
-
-
-void SfxDockingWindow::Resizing( Size& /*rSize*/ )
-
 /*  [Description]
 
     Virtual method of the DockingWindow class. Here, the interactive resize in
@@ -844,26 +812,22 @@ void SfxDockingWindow::Resizing( Size& /*rSize*/ )
     values for width and / or height. The base implementation prevents that the
     output size is smaller than one set with SetMinOutputSizePixel().
 */
-
+void SfxDockingWindow::Resizing( Size& /*rSize*/ )
 {
 
 }
 
+/*  [Description]
 
-
+    Constructor for the SfxDockingWindow class. A SfxChildWindow will be
+    required because the docking is implemented in Sfx through SfxChildWindows.
+*/
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     vcl::Window* pParent, WinBits nWinBits) :
     DockingWindow (pParent, nWinBits),
     pBindings(pBindinx),
     pMgr(pCW),
     pImp(NULL)
-
-/*  [Description]
-
-    Constructor for the SfxDockingWindow class. A SfxChildWindow will be
-    required because the docking is implemented in Sfx through SfxChildWindows.
-*/
-
 {
     if ( !GetHelpId().isEmpty() )
     {
@@ -900,21 +864,15 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
 }
 
-
-
+/** Constructor for the SfxDockingWindow class. A SfxChildWindow will be
+    required because the docking is implemented in Sfx through SfxChildWindows.
+*/
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     vcl::Window* pParent, const ResId& rResId) :
     DockingWindow(pParent, rResId),
     pBindings(pBindinx),
     pMgr(pCW),
     pImp(NULL)
-
-/*  [Description]
-
-    Constructor for the SfxDockingWindow class. A SfxChildWindow will be
-    required because the docking is implemented in Sfx through SfxChildWindows.
-*/
-
 {
     if ( !GetHelpId().isEmpty() )
     {
@@ -951,18 +909,15 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
 }
 
+/** Constructor for the SfxDockingWindow class. A SfxChildWindow will be
+    required because the docking is implemented in Sfx through SfxChildWindows.
+*/
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : DockingWindow(pParent, rID, rUIXMLDescription)
     , pBindings(pBindinx)
     , pMgr(pCW)
     , pImp(NULL)
-
-/*  [Description]
-
-    Constructor for the SfxDockingWindow class. A SfxChildWindow will be
-    required because the docking is implemented in Sfx through SfxChildWindows.
-*/
 {
     if ( !GetHelpId().isEmpty() )
     {
@@ -999,14 +954,12 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
 }
 
-void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
-/*  [Description]
-
-    Initialization of the SfxDockingDialog class via a SfxChildWinInfo.
+/** Initialization of the SfxDockingDialog class via a SfxChildWinInfo.
     The initialization is done only in a 2nd step after the constructor, this
     constructor should be called from the derived class or from the
     SfxChildWindows.
 */
+void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 {
     if ( !pMgr )
     {
@@ -1227,17 +1180,13 @@ void SfxDockingWindow::Initialize_Impl()
     pImp->bConstructed = true;
 }
 
-void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
-
-/*  [Description]
-
-    Fills a SfxChildWinInfo with specific data from SfxDockingWindow,
+/** Fills a SfxChildWinInfo with specific data from SfxDockingWindow,
     so that it can be written in the INI file. It is assumed that rinfo
     receives all other possible relevant data in the ChildWindow class.
     Insertions are marked with size and the ZoomIn flag.
     If this method is overridden, the base implementation must be called first.
 */
-
+void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 {
     if (!pMgr || !pImp)
         return;
@@ -1270,8 +1219,6 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
     rInfo.aExtraString += ")";
 }
 
-
-
 SfxDockingWindow::~SfxDockingWindow()
 {
     disposeOnce();
@@ -1295,13 +1242,7 @@ void SfxDockingWindow::ReleaseChildWindow_Impl()
     pMgr=NULL;
 }
 
-
-
-SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& rRect)
-
-/*  [Description]
-
-    This method calculates a resulting alignment for the given mouse position
+/** This method calculates a resulting alignment for the given mouse position
     and tracking rectangle. When changing the alignment it can also be that
     the tracking rectangle is changed, so that an altered rectangle is
     returned. The user of this class can influence behaviour of this method,
@@ -1312,7 +1253,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
 
     is overridden (see below).
 */
-
+SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& rRect)
 {
     // calculate hypothetical sizes for different modes
     Size aFloatingSize(CalcDockingSize(SfxChildAlignment::NOALIGNMENT));
@@ -1654,13 +1595,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
     return eDockAlign;
 }
 
-
-
-Size SfxDockingWindow::CalcDockingSize(SfxChildAlignment eAlign)
-
-/*  [Description]
-
-    Virtual method of the SfxDockingWindow class. This method determines how
+/** Virtual method of the SfxDockingWindow class. This method determines how
     the size of the DockingWindows changes depending on the alignment. The base
     implementation uses the floating mode, the size of the marked Floating
     Size. For horizontal alignment, the width will be the width of the outer
@@ -1670,7 +1605,7 @@ Size SfxDockingWindow::CalcDockingSize(SfxChildAlignment eAlign)
     this could changed by a to intervening derived class. The docking size must
     be the same for Left/Right and Top/Bottom.
 */
-
+Size SfxDockingWindow::CalcDockingSize(SfxChildAlignment eAlign)
 {
     // Note: if the resizing is also possible in the docked state, then the
     // Floating-size does also have to be adjusted?
@@ -1703,33 +1638,22 @@ Size SfxDockingWindow::CalcDockingSize(SfxChildAlignment eAlign)
     return aSize;
 }
 
-
-
-SfxChildAlignment SfxDockingWindow::CheckAlignment(SfxChildAlignment,
-    SfxChildAlignment eAlign)
-
-/*  [Description]
-
-    Virtual method of the SfxDockingWindow class. Here a derived class can
+/** Virtual method of the SfxDockingWindow class. Here a derived class can
     disallow certain alignments. The base implementation does not
     prohibit alignment.
 */
-
+SfxChildAlignment SfxDockingWindow::CheckAlignment(SfxChildAlignment,
+    SfxChildAlignment eAlign)
 {
     return eAlign;
 }
 
-
-
-bool SfxDockingWindow::Close()
-
-/*  [Description]
-
-    The window is closed when the ChildWindow is destroyed by running the
+/** The window is closed when the ChildWindow is destroyed by running the
     ChildWindow-slots. If this is method is overridden by a derived class
     method, then the SfxDockingDialogWindow: Close() must be called afterwards
     if the Close() was not cancelled with "return sal_False".
 */
+bool SfxDockingWindow::Close()
 {
     // Execute with Parameters, since Toggle is ignored by some ChildWindows.
     if ( !pMgr )
@@ -1741,88 +1665,67 @@ bool SfxDockingWindow::Close()
     return true;
 }
 
-
-
-void SfxDockingWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/)
-
-/*  [Description]
-
-    Returns a boundary line to the docked edge and a frame when the Window is in
+/** Returns a boundary line to the docked edge and a frame when the Window is in
     a docked state. In this way SVLOOK is considered.
 */
-
+void SfxDockingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    if ( pImp->bSplitable || IsFloatingMode() )
+    if (pImp->bSplitable || IsFloatingMode())
         return;
 
-    Rectangle aRect = Rectangle(Point(0, 0),
-                                GetOutputSizePixel());
+    Rectangle aRect = Rectangle(Point(0, 0), rRenderContext.GetOutputSizePixel());
     switch (GetAlignment())
     {
         case SfxChildAlignment::TOP:
         {
-            DrawLine(aRect.BottomLeft(), aRect.BottomRight());
+            rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
             aRect.Bottom()--;
             break;
         }
 
         case SfxChildAlignment::BOTTOM:
         {
-            DrawLine(aRect.TopLeft(), aRect.TopRight());
+            rRenderContext.DrawLine(aRect.TopLeft(), aRect.TopRight());
             aRect.Top()++;
             break;
         }
 
         case SfxChildAlignment::LEFT:
         {
-            DrawLine(aRect.TopRight(), aRect.BottomRight());
+            rRenderContext.DrawLine(aRect.TopRight(), aRect.BottomRight());
             aRect.Right()--;
             break;
         }
 
         case SfxChildAlignment::RIGHT:
         {
-            DrawLine(aRect.TopLeft(), aRect.BottomLeft());
+            rRenderContext.DrawLine(aRect.TopLeft(), aRect.BottomLeft());
             aRect.Left()++;
             break;
         }
-              default:
-                  break;
+
+        default:
+            break;
     }
 
-    DecorationView aView( this );
-    aView.DrawFrame( aRect, DrawFrameStyle::Out );
+    DecorationView aView(&rRenderContext);
+    aView.DrawFrame(aRect, DrawFrameStyle::Out);
 }
 
-
-
-void SfxDockingWindow::SetMinOutputSizePixel( const Size& rSize )
-
-/*  [Description]
-
-    With this method, a minimal OutputSize be can set, that is queried in
+/** With this method, a minimal OutputSize be can set, that is queried in
     the Resizing()-Handler.
 */
-
+void SfxDockingWindow::SetMinOutputSizePixel( const Size& rSize )
 {
     pImp->aMinSize = rSize;
     DockingWindow::SetMinOutputSizePixel( rSize );
 }
 
-
-
+/** Set the minimum size which is returned.*/
 Size SfxDockingWindow::GetMinOutputSizePixel() const
-
-/*  [Description]
-
-    Set the minimum size which is returned.
-*/
-
 {
     return pImp->aMinSize;
 }
-
-
 
 bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
 {
