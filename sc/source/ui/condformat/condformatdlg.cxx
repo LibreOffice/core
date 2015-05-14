@@ -446,13 +446,6 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     get(mpCondFormList, "list");
     mpCondFormList->init(mpViewData->GetDocument(), this, pFormat, rRange, rPos, eType);
 
-    OUStringBuffer aTitle( GetText() );
-    aTitle.append(" ");
-    OUString aRangeString;
-    rRange.Format(aRangeString, SCA_VALID, pViewData->GetDocument(),
-                    pViewData->GetDocument()->GetAddressConvention());
-    aTitle.append(aRangeString);
-    SetText(aTitle.makeStringAndClear());
     mpBtnOk->SetClickHdl(LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
     mpBtnAdd->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, AddBtnHdl ) );
     mpBtnRemove->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, RemoveBtnHdl ) );
@@ -461,7 +454,20 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     mpEdRange->SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
     mpEdRange->SetLoseFocusHdl( LINK( this, ScCondFormatDlg, RangeLoseFocusHdl ) );
 
+    OUString aRangeString;
+    rRange.Format(aRangeString, SCA_VALID, pViewData->GetDocument(),
+                    pViewData->GetDocument()->GetAddressConvention());
     mpEdRange->SetText(aRangeString);
+
+    msBaseTitle = GetText();
+    updateTitle();
+}
+
+void ScCondFormatDlg::updateTitle()
+{
+    OUString aTitle = msBaseTitle + " " + mpEdRange->GetText();
+
+    SetText(aTitle);
 }
 
 ScCondFormatDlg::~ScCondFormatDlg()
@@ -497,6 +503,17 @@ void ScCondFormatDlg::SetActive()
 void ScCondFormatDlg::RefInputDone( bool bForced )
 {
     ScAnyRefDlg::RefInputDone(bForced);
+
+    // ScAnyRefModalDlg::RefInputDone resets the title back
+    // to it's original state.
+    // I.e. if we open the dialog normally, and then click into the sheet
+    // to modify the selection, the title is updated such that the range
+    // is only a single cell (e.g. $A$1), after which the dialog switches
+    // into the RefInput mode. During the RefInput mode the title is updated
+    // as expected, however at the end RefInputDone overwrites the title
+    // with the initial (now incorrect) single cell range. Hence we correct
+    // it here.
+    updateTitle();
 }
 
 bool ScCondFormatDlg::IsTableLocked() const
@@ -538,6 +555,7 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
         OUString aRefStr(rRef.Format(n, mpViewData->GetDocument(),
             ScAddress::Details(mpViewData->GetDocument()->GetAddressConvention(), 0, 0)));
         pEdit->SetRefString( aRefStr );
+        updateTitle();
     }
 }
 
@@ -763,6 +781,8 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
         pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
     else
         pEdit->SetControlBackground(COL_LIGHTRED);
+
+    updateTitle();
     return 0;
 }
 
