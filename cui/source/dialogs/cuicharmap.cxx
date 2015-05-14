@@ -182,29 +182,29 @@ SvxShowText::SvxShowText(vcl::Window* pParent, bool bCenter)
 
 VCL_BUILDER_FACTORY(SvxShowText)
 
-void SvxShowText::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
+void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    Color aTextCol = GetTextColor();
+    Color aTextCol = rRenderContext.GetTextColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const Color aWindowTextColor( rStyleSettings.GetDialogTextColor() );
-    SetTextColor( aWindowTextColor );
+    const Color aWindowTextColor(rStyleSettings.GetDialogTextColor());
+    rRenderContext.SetTextColor(aWindowTextColor);
 
     const OUString aText = GetText();
-    const Size aSize = GetOutputSizePixel();
+    const Size aSize = rRenderContext.GetOutputSizePixel();
 
     long nAvailWidth = aSize.Width();
-    long nWinHeight = GetOutputSizePixel().Height();
+    long nWinHeight = rRenderContext.GetOutputSizePixel().Height();
 
     bool bGotBoundary = true;
     bool bShrankFont = false;
-    vcl::Font aOrigFont(GetFont());
+    vcl::Font aOrigFont(rRenderContext.GetFont());
     Size aFontSize(aOrigFont.GetSize());
     Rectangle aBoundRect;
 
     for (long nFontHeight = aFontSize.Height(); nFontHeight > 0; nFontHeight -= 5)
     {
-        if( !GetTextBoundRect( aBoundRect, aText ) || aBoundRect.IsEmpty() )
+        if (!rRenderContext.GetTextBoundRect( aBoundRect, aText ) || aBoundRect.IsEmpty())
         {
             bGotBoundary = false;
             break;
@@ -218,15 +218,15 @@ void SvxShowText::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&
         vcl::Font aFont(aOrigFont);
         aFontSize.Height() = nFontHeight;
         aFont.SetSize(aFontSize);
-        Control::SetFont(aFont);
-        mnY = ( nWinHeight - GetTextHeight() ) / 2;
+        rRenderContext.SetFont(aFont);
+        mnY = (nWinHeight - GetTextHeight()) / 2;
         bShrankFont = true;
     }
 
-    Point aPoint( 2, mnY );
+    Point aPoint(2, mnY);
     // adjust position using ink boundary if possible
-    if( !bGotBoundary )
-        aPoint.X() = (aSize.Width() - GetTextWidth( aText )) / 2;
+    if (!bGotBoundary)
+        aPoint.X() = (aSize.Width() - rRenderContext.GetTextWidth(aText)) / 2;
     else
     {
         // adjust position before it gets out of bounds
@@ -240,11 +240,10 @@ void SvxShowText::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&
         else if( nYHDelta <= 0 )
             aPoint.Y() += nYHDelta - 1;
 
-        if( mbCenter )
+        if (mbCenter)
         {
             // move glyph to middle of cell
-            aPoint.X() = -aBoundRect.Left()
-                       + (aSize.Width() - aBoundRect.GetWidth()) / 2;
+            aPoint.X() = -aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2;
         }
         else
         {
@@ -258,10 +257,10 @@ void SvxShowText::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&
         }
     }
 
-    DrawText( aPoint, aText );
-    SetTextColor( aTextCol );
+    rRenderContext.DrawText(aPoint, aText);
+    rRenderContext.SetTextColor(aTextCol);
     if (bShrankFont)
-        Control::SetFont(aOrigFont);
+        rRenderContext.SetFont(aOrigFont);
 }
 
 
