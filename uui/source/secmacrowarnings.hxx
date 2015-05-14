@@ -47,6 +47,7 @@ private:
     FixedImage*         mpSymbolImg;
     FixedText*          mpDocNameFI;
     FixedText*          mpDescr1FI;
+    FixedText*          mpDescr1aFI;
     FixedText*          mpSignsFI;
     PushButton*         mpViewSignsBtn;
     FixedText*          mpDescr2FI;
