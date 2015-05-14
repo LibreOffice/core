@@ -182,7 +182,7 @@ class SwSidebarWin : public vcl::Window
     protected:
         virtual void    DataChanged( const DataChangedEvent& aEvent) SAL_OVERRIDE;
         virtual void    LoseFocus() SAL_OVERRIDE;
-        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+        virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
         virtual void    GetFocus() SAL_OVERRIDE;
         virtual VclPtr<MenuButton> CreateMenuButton() = 0;
 

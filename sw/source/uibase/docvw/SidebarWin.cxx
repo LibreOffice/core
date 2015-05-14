@@ -89,14 +89,14 @@ namespace sw { namespace sidebarwindows {
 #define POSTIT_META_HEIGHT  (sal_Int32)     30
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
 
-SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
-                            WinBits nBits,
-                            SwPostItMgr& aMgr,
-                            SwPostItBits aBits,
-                            SwSidebarItem& rSidebarItem )
+SwSidebarWin::SwSidebarWin(SwEditWin& rEditWin,
+                           WinBits nBits,
+                           SwPostItMgr& aMgr,
+                           SwPostItBits aBits,
+                           SwSidebarItem& rSidebarItem)
     : Window(&rEditWin, nBits)
     , mrMgr(aMgr)
-    , mrView( rEditWin.GetView() )
+    , mrView(rEditWin.GetView())
     , nFlags(aBits)
     , mnEventId(0)
     , mpOutlinerView(0)
@@ -106,23 +106,23 @@ SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
     , mpMetadataAuthor(0)
     , mpMetadataDate(0)
     , mpMenuButton(0)
-    , mpAnchor( NULL )
-    , mpShadow( NULL )
-    , mpTextRangeOverlay( NULL )
+    , mpAnchor(NULL)
+    , mpShadow(NULL)
+    , mpTextRangeOverlay(NULL)
     , mColorAnchor()
     , mColorDark()
     , mColorLight()
     , mChangeColor()
-    , meSidebarPosition( sw::sidebarwindows::SidebarPosition::NONE )
+    , meSidebarPosition(sw::sidebarwindows::SidebarPosition::NONE)
     , mPosSize()
     , mAnchorRect()
-    , mPageBorder( 0 )
-    , mbMouseOver( false )
-    , mLayoutStatus( SwPostItHelper::INVISIBLE )
-    , mbReadonly( false )
-    , mbIsFollow( false )
-    , mrSidebarItem( rSidebarItem )
-    , mpAnchorFrm( rSidebarItem.maLayoutInfo.mpAnchorFrm )
+    , mPageBorder(0)
+    , mbMouseOver(false)
+    , mLayoutStatus(SwPostItHelper::INVISIBLE)
+    , mbReadonly(false)
+    , mbIsFollow(false)
+    , mrSidebarItem(rSidebarItem)
+    , mpAnchorFrm(rSidebarItem.maLayoutInfo.mpAnchorFrm)
 {
     mpShadow = ShadowOverlayObject::CreateShadowOverlayObject( mrView );
     if ( mpShadow )
@@ -208,29 +208,29 @@ void SwSidebarWin::dispose()
     vcl::Window::dispose();
 }
 
-void SwSidebarWin::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void SwSidebarWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
 
-    if (mpMetadataAuthor->IsVisible() )
+    if (mpMetadataAuthor->IsVisible())
     {
         //draw left over space
-        if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         {
-            SetFillColor(COL_BLACK);
+            rRenderContext.SetFillColor(COL_BLACK);
         }
         else
         {
-            SetFillColor(mColorDark);
+            rRenderContext.SetFillColor(mColorDark);
         }
-        SetLineColor();
-        DrawRect( PixelToLogic(
-                Rectangle( Point( mpMetadataAuthor->GetPosPixel().X() +
-                                    mpMetadataAuthor->GetSizePixel().Width(),
-                                  mpMetadataAuthor->GetPosPixel().Y() ),
-                           Size( GetMetaButtonAreaWidth(),
-                                 mpMetadataAuthor->GetSizePixel().Height() +
-                                    mpMetadataDate->GetSizePixel().Height() ) ) ) );
+
+        rRenderContext.SetLineColor();
+        Rectangle aRectangle(Point(mpMetadataAuthor->GetPosPixel().X() + mpMetadataAuthor->GetSizePixel().Width(),
+                                   mpMetadataAuthor->GetPosPixel().Y()),
+                             Size(GetMetaButtonAreaWidth(),
+                                  mpMetadataAuthor->GetSizePixel().Height() + mpMetadataDate->GetSizePixel().Height()));
+
+        rRenderContext.DrawRect(PixelToLogic(aRectangle));
     }
 }
 
@@ -302,12 +302,8 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, s
     }
 }
 
-void SwSidebarWin::SetPosSizePixelRect( long nX,
-                                        long nY,
-                                        long nWidth,
-                                        long nHeight,
-                                        const SwRect& aAnchorRect,
-                                        const long aPageBorder)
+void SwSidebarWin::SetPosSizePixelRect(long nX, long nY, long nWidth, long nHeight,
+                                       const SwRect& aAnchorRect, const long aPageBorder)
 {
     mPosSize = Rectangle(Point(nX,nY),Size(nWidth,nHeight));
     mAnchorRect = aAnchorRect;

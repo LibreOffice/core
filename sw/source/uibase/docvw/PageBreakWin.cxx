@@ -135,86 +135,86 @@ void SwPageBreakWin::dispose()
     MenuButton::dispose();
 }
 
-void SwPageBreakWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
+    const Rectangle aRect(Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
 
     // Properly paint the control
     BColor aColor = SwViewOption::GetPageBreakColor().getBColor();
 
-    BColor aHslLine = rgb2hsl( aColor );
+    BColor aHslLine = rgb2hsl(aColor);
     double nLuminance = aHslLine.getZ();
-    nLuminance += ( 1.0 - nLuminance ) * 0.75;
+    nLuminance += (1.0 - nLuminance) * 0.75;
     if ( aHslLine.getZ() > 0.7 )
         nLuminance = aHslLine.getZ() * 0.7;
-    aHslLine.setZ( nLuminance );
-    BColor aOtherColor = hsl2rgb( aHslLine );
+    aHslLine.setZ(nLuminance);
+    BColor aOtherColor = hsl2rgb(aHslLine);
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    if ( rSettings.GetHighContrastMode( ) )
+    if (rSettings.GetHighContrastMode())
     {
         aColor = rSettings.GetDialogTextColor().getBColor();
-        aOtherColor = rSettings.GetDialogColor( ).getBColor();
+        aOtherColor = rSettings.GetDialogColor().getBColor();
     }
 
     bool bRtl = AllSettings::GetLayoutRTL();
 
-    drawinglayer::primitive2d::Primitive2DSequence aSeq( 3 );
-    B2DRectangle aBRect( double( aRect.Left() ), double( aRect.Top( ) ),
-           double( aRect.Right() ), double( aRect.Bottom( ) ) );
-    B2DPolygon aPolygon = createPolygonFromRect( aBRect, 3.0 / BUTTON_WIDTH, 3.0 / BUTTON_HEIGHT );
+    drawinglayer::primitive2d::Primitive2DSequence aSeq(3);
+    B2DRectangle aBRect(double(aRect.Left()), double(aRect.Top()),
+                        double(aRect.Right()), double(aRect.Bottom()));
+    B2DPolygon aPolygon = createPolygonFromRect(aBRect, 3.0 / BUTTON_WIDTH, 3.0 / BUTTON_HEIGHT);
 
     // Create the polygon primitives
-    aSeq[0] = Primitive2DReference( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-            B2DPolyPolygon( aPolygon ), aOtherColor ) );
-    aSeq[1] = Primitive2DReference( new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-            aPolygon, aColor ) );
+    aSeq[0] = Primitive2DReference(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                                        B2DPolyPolygon(aPolygon), aOtherColor));
+    aSeq[1] = Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                                        aPolygon, aColor));
 
     // Create the primitive for the image
-    Image aImg( SW_RES( IMG_PAGE_BREAK ) );
+    Image aImg(SW_RES(IMG_PAGE_BREAK));
     double nImgOfstX = 3.0;
-    if ( bRtl )
+    if (bRtl)
         nImgOfstX = aRect.Right() - aImg.GetSizePixel().Width() - 3.0;
-    aSeq[2] = Primitive2DReference( new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
-            aImg.GetBitmapEx(), B2DPoint( nImgOfstX, 1.0 ) ) );
+    aSeq[2] = Primitive2DReference(new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
+                                        aImg.GetBitmapEx(), B2DPoint(nImgOfstX, 1.0)));
 
-    double nTop = double( aRect.getHeight() ) / 2.0;
+    double nTop = double(aRect.getHeight()) / 2.0;
     double nBottom = nTop + 4.0;
-    double nLeft = aRect.getWidth( ) - ARROW_WIDTH - 6.0;
-    if ( bRtl )
+    double nLeft = aRect.getWidth() - ARROW_WIDTH - 6.0;
+    if (bRtl)
         nLeft = ARROW_WIDTH - 2.0;
     double nRight = nLeft + 8.0;
 
     B2DPolygon aTriangle;
-    aTriangle.append( B2DPoint( nLeft, nTop ) );
-    aTriangle.append( B2DPoint( nRight, nTop ) );
-    aTriangle.append( B2DPoint( ( nLeft + nRight ) / 2.0, nBottom ) );
-    aTriangle.setClosed( true );
+    aTriangle.append(B2DPoint(nLeft, nTop));
+    aTriangle.append(B2DPoint(nRight, nTop));
+    aTriangle.append(B2DPoint((nLeft + nRight) / 2.0, nBottom));
+    aTriangle.setClosed(true);
 
-    BColor aTriangleColor = Color( COL_BLACK ).getBColor( );
-    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-        aTriangleColor = Color( COL_WHITE ).getBColor( );
+    BColor aTriangleColor = Color(COL_BLACK).getBColor();
+    if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+        aTriangleColor = Color(COL_WHITE).getBColor();
 
-    aSeq.realloc( aSeq.getLength() + 1 );
-    aSeq[ aSeq.getLength() - 1 ] = Primitive2DReference( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-               B2DPolyPolygon( aTriangle ), aTriangleColor ) );
+    aSeq.realloc(aSeq.getLength() + 1);
+    aSeq[aSeq.getLength() - 1] = Primitive2DReference(
+                                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                                        B2DPolyPolygon(aTriangle), aTriangleColor));
 
-    Primitive2DSequence aGhostedSeq( 1 );
-    double nFadeRate = double( m_nFadeRate ) / 100.0;
+    Primitive2DSequence aGhostedSeq(1);
+    double nFadeRate = double(m_nFadeRate) / 100.0;
     const basegfx::BColorModifierSharedPtr aBColorModifier(
-        new basegfx::BColorModifier_interpolate(
-            Color( COL_WHITE ).getBColor(),
-            1.0 - nFadeRate));
-    aGhostedSeq[0] = Primitive2DReference( new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
-                aSeq, aBColorModifier ) );
+                new basegfx::BColorModifier_interpolate(Color(COL_WHITE).getBColor(),
+                                                        1.0 - nFadeRate));
+    aGhostedSeq[0] = Primitive2DReference(
+                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                            aSeq, aBColorModifier));
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
-                    *this, aNewViewInfos ));
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
-    pProcessor->process( aGhostedSeq );
+    pProcessor->process(aGhostedSeq);
 }
 
 void SwPageBreakWin::Select( )
@@ -466,7 +466,7 @@ IMPL_LINK_NOARG_TYPED(SwPageBreakWin, FadeHandler, Timer *, void)
         Invalidate();
     }
 
-    if ( IsVisible( ) && m_nFadeRate > 0 && m_nFadeRate < 100 )
+    if (IsVisible( ) && m_nFadeRate > 0 && m_nFadeRate < 100)
         m_aFadeTimer.Start();
 }
 

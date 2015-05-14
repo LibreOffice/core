@@ -36,24 +36,22 @@
 
 namespace sw { namespace annotation {
 
-Color ColorFromAlphaColor( const sal_uInt8 aTransparency,
-                           const Color &aFront,
-                           const Color &aBack )
+Color ColorFromAlphaColor(const sal_uInt8 aTransparency, const Color& aFront, const Color& aBack)
 {
-    return Color((sal_uInt8)(aFront.GetRed()    * aTransparency/(double)255 + aBack.GetRed()    * (1-aTransparency/(double)255)),
-                 (sal_uInt8)(aFront.GetGreen()  * aTransparency/(double)255 + aBack.GetGreen()  * (1-aTransparency/(double)255)),
-                 (sal_uInt8)(aFront.GetBlue()   * aTransparency/(double)255 + aBack.GetBlue()   * (1-aTransparency/(double)255)));
+    return Color(sal_uInt8(aFront.GetRed()   * aTransparency / 255.0 + aBack.GetRed()   * (1 - aTransparency / 255.0)),
+                 sal_uInt8(aFront.GetGreen() * aTransparency / 255.0 + aBack.GetGreen() * (1 - aTransparency / 255.0)),
+                 sal_uInt8(aFront.GetBlue()  * aTransparency / 255.0 + aBack.GetBlue()  * (1 - aTransparency / 255.0)));
 }
 
-AnnotationMenuButton::AnnotationMenuButton( sw::sidebarwindows::SwSidebarWin& rSidebarWin )
-    : MenuButton( &rSidebarWin )
-    , mrSidebarWin( rSidebarWin )
+AnnotationMenuButton::AnnotationMenuButton(sw::sidebarwindows::SwSidebarWin& rSidebarWin)
+    : MenuButton(&rSidebarWin)
+    , mrSidebarWin(rSidebarWin)
 {
-    AddEventListener( LINK( &mrSidebarWin, sw::sidebarwindows::SwSidebarWin, WindowEventListener ) );
+    AddEventListener(LINK(&mrSidebarWin, sw::sidebarwindows::SwSidebarWin, WindowEventListener));
 
-    SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_BUTTON_NAME ) );
-    SetAccessibleDescription( SW_RES( STR_ACCESS_ANNOTATION_BUTTON_DESC ) );
-    SetQuickHelpText( GetAccessibleDescription() );
+    SetAccessibleName(SW_RES(STR_ACCESS_ANNOTATION_BUTTON_NAME));
+    SetAccessibleDescription(SW_RES(STR_ACCESS_ANNOTATION_BUTTON_DESC));
+    SetQuickHelpText(GetAccessibleDescription());
 }
 
 AnnotationMenuButton::~AnnotationMenuButton()
@@ -63,7 +61,7 @@ AnnotationMenuButton::~AnnotationMenuButton()
 
 void AnnotationMenuButton::dispose()
 {
-    RemoveEventListener( LINK( &mrSidebarWin, sw::sidebarwindows::SwSidebarWin, WindowEventListener ) );
+    RemoveEventListener(LINK(&mrSidebarWin, sw::sidebarwindows::SwSidebarWin, WindowEventListener));
     MenuButton::dispose();
 }
 
@@ -74,138 +72,135 @@ void AnnotationMenuButton::Select()
 
 void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    PopupMenu* pButtonPopup( GetPopupMenu() );
-    if ( mrSidebarWin.IsReadOnly() )
+    PopupMenu* pButtonPopup(GetPopupMenu());
+    if (mrSidebarWin.IsReadOnly())
     {
-        pButtonPopup->EnableItem( FN_REPLY, false );
-        pButtonPopup->EnableItem( FN_DELETE_COMMENT, false );
-        pButtonPopup->EnableItem( FN_DELETE_NOTE_AUTHOR, false );
-        pButtonPopup->EnableItem( FN_DELETE_ALL_NOTES, false );
-        pButtonPopup->EnableItem( FN_FORMAT_ALL_NOTES, false );
+        pButtonPopup->EnableItem(FN_REPLY, false );
+        pButtonPopup->EnableItem(FN_DELETE_COMMENT, false );
+        pButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR, false );
+        pButtonPopup->EnableItem(FN_DELETE_ALL_NOTES, false );
+        pButtonPopup->EnableItem(FN_FORMAT_ALL_NOTES, false );
     }
     else
     {
-        pButtonPopup->EnableItem( FN_DELETE_COMMENT, !mrSidebarWin.IsProtected() );
-        pButtonPopup->EnableItem( FN_DELETE_NOTE_AUTHOR, true );
-        pButtonPopup->EnableItem( FN_DELETE_ALL_NOTES, true );
-        pButtonPopup->EnableItem( FN_FORMAT_ALL_NOTES, true );
+        pButtonPopup->EnableItem(FN_DELETE_COMMENT, !mrSidebarWin.IsProtected() );
+        pButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR, true );
+        pButtonPopup->EnableItem(FN_DELETE_ALL_NOTES, true );
+        pButtonPopup->EnableItem(FN_FORMAT_ALL_NOTES, true );
     }
 
-    if ( mrSidebarWin.IsProtected() )
+    if (mrSidebarWin.IsProtected())
     {
-        pButtonPopup->EnableItem( FN_REPLY, false );
+        pButtonPopup->EnableItem(FN_REPLY, false);
     }
     else
     {
         SvtUserOptions aUserOpt;
         OUString sAuthor;
-        if ( (sAuthor = aUserOpt.GetFullName()).isEmpty() )
+        if ((sAuthor = aUserOpt.GetFullName()).isEmpty())
         {
-            if ( (sAuthor = aUserOpt.GetID()).isEmpty() )
+            if ((sAuthor = aUserOpt.GetID()).isEmpty())
             {
-                sAuthor = SW_RES( STR_REDLINE_UNKNOWN_AUTHOR );
+                sAuthor = SW_RES(STR_REDLINE_UNKNOWN_AUTHOR);
             }
         }
         // do not allow to reply to ourself and no answer possible if this note is in a protected section
-        if ( sAuthor == mrSidebarWin.GetAuthor() )
+        if (sAuthor == mrSidebarWin.GetAuthor())
         {
-            pButtonPopup->EnableItem( FN_REPLY, false );
+            pButtonPopup->EnableItem(FN_REPLY, false);
         }
         else
         {
-            pButtonPopup->EnableItem( FN_REPLY, true );
+            pButtonPopup->EnableItem(FN_REPLY, true);
         }
     }
 
-    MenuButton::MouseButtonDown( rMEvt );
+    MenuButton::MouseButtonDown(rMEvt);
 }
 
-void AnnotationMenuButton::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
+void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-        SetFillColor(COL_BLACK);
-    else
-        SetFillColor( mrSidebarWin.ColorDark() );
-    SetLineColor();
-    const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
-    DrawRect( aRect );
+    bool bHighContrast = rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+    if (bHighContrast)
+        rRenderContext.SetFillColor(COL_BLACK);
+    else
+        rRenderContext.SetFillColor(mrSidebarWin.ColorDark());
+    rRenderContext.SetLineColor();
+    const Rectangle aRect(Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
+    rRenderContext.DrawRect(aRect);
+
+    if (bHighContrast)
     {
         //draw rect around button
-        SetFillColor(COL_BLACK);
-        SetLineColor(COL_WHITE);
+        rRenderContext.SetFillColor(COL_BLACK);
+        rRenderContext.SetLineColor(COL_WHITE);
     }
     else
     {
         //draw button
         Gradient aGradient;
-        if ( IsMouseOver() )
-            aGradient = Gradient( GradientStyle_LINEAR,
-                                  ColorFromAlphaColor( 80, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark() ),
-                                  ColorFromAlphaColor( 15, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark() ));
+        if (IsMouseOver())
+            aGradient = Gradient(GradientStyle_LINEAR,
+                                 ColorFromAlphaColor(80, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()),
+                                 ColorFromAlphaColor(15, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()));
         else
-            aGradient = Gradient( GradientStyle_LINEAR,
-                                  ColorFromAlphaColor( 15, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark() ),
-                                  ColorFromAlphaColor( 80, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark() ));
-        DrawGradient( aRect, aGradient );
+            aGradient = Gradient(GradientStyle_LINEAR,
+                                 ColorFromAlphaColor(15, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()),
+                                 ColorFromAlphaColor(80, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()));
+        rRenderContext.DrawGradient(aRect, aGradient);
 
         //draw rect around button
-        SetFillColor();
-        SetLineColor( ColorFromAlphaColor( 90, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark() ));
+        rRenderContext.SetFillColor();
+        rRenderContext.SetLineColor(ColorFromAlphaColor(90, mrSidebarWin.ColorAnchor(), mrSidebarWin.ColorDark()));
     }
-    DrawRect( aRect );
+    rRenderContext.DrawRect(aRect);
 
-    if ( mrSidebarWin.IsPreview() )
+    if (mrSidebarWin.IsPreview())
     {
-        vcl::Font aOldFont( mrSidebarWin.GetFont() );
+        vcl::Font aOldFont(mrSidebarWin.GetFont());
         vcl::Font aFont(aOldFont);
-        Color aCol( COL_BLACK);
-        aFont.SetColor( aCol );
+        Color aCol(COL_BLACK);
+        aFont.SetColor(aCol);
         aFont.SetHeight(200);
         aFont.SetWeight(WEIGHT_MEDIUM);
-        SetFont( aFont );
-        DrawText(  aRect ,
-                   OUString("Edit Note"),
-                   TEXT_DRAW_CENTER );
-        SetFont( aOldFont );
+        rRenderContext.SetFont(aFont);
+        rRenderContext.DrawText(aRect, OUString("Edit Note"), TEXT_DRAW_CENTER);
+        rRenderContext.SetFont(aOldFont);
     }
     else
     {
-        Rectangle aSymbolRect( aRect );
+        Rectangle aSymbolRect(aRect);
         // 25% distance to the left and right button border
-        const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth()*250)+500)/1000;
-        aSymbolRect.Left()+=nBorderDistanceLeftAndRight;
-        aSymbolRect.Right()-=nBorderDistanceLeftAndRight;
+        const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth() * 250) + 500) / 1000;
+        aSymbolRect.Left() += nBorderDistanceLeftAndRight;
+        aSymbolRect.Right() -= nBorderDistanceLeftAndRight;
         // 40% distance to the top button border
-        const long nBorderDistanceTop = ((aSymbolRect.GetHeight()*400)+500)/1000;
+        const long nBorderDistanceTop = ((aSymbolRect.GetHeight() * 400) + 500) / 1000;
         aSymbolRect.Top()+=nBorderDistanceTop;
         // 15% distance to the bottom button border
-        const long nBorderDistanceBottom = ((aSymbolRect.GetHeight()*150)+500)/1000;
-        aSymbolRect.Bottom()-=nBorderDistanceBottom;
-        DecorationView aDecoView( this );
-        aDecoView.DrawSymbol( aSymbolRect, SymbolType::SPIN_DOWN,
-                              ( Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                                ? Color( COL_WHITE )
-                                : Color( COL_BLACK ) ) );
+        const long nBorderDistanceBottom = ((aSymbolRect.GetHeight() * 150) + 500) / 1000;
+        aSymbolRect.Bottom() -= nBorderDistanceBottom;
+        DecorationView aDecoView(&rRenderContext);
+        aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, (bHighContrast ? Color(COL_WHITE) : Color(COL_BLACK)));
     }
 }
 
-void AnnotationMenuButton::KeyInput( const KeyEvent& rKeyEvt )
+void AnnotationMenuButton::KeyInput(const KeyEvent& rKeyEvt)
 {
     const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     const sal_uInt16 nKey = rKeyCode.GetCode();
-    if ( nKey == KEY_TAB )
+    if (nKey == KEY_TAB)
     {
         mrSidebarWin.ActivatePostIt();
         mrSidebarWin.GrabFocus();
     }
     else
     {
-        MenuButton::KeyInput( rKeyEvt );
+        MenuButton::KeyInput(rKeyEvt);
     }
 }
 
-} } // end of namespace sw::annotation
+}} // end of namespace sw::annotation
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

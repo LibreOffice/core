@@ -151,43 +151,37 @@ void SidebarTxtControl::Draw(OutputDevice* pDev, const Point& rPt, const Size& r
     }
 }
 
-void SidebarTxtControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void SidebarTxtControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    if (!rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())
     {
-        if ( mrSidebarWin.IsMouseOverSidebarWin() ||
-             HasFocus() )
+        if (mrSidebarWin.IsMouseOverSidebarWin() || HasFocus())
         {
-            DrawGradient( Rectangle( Point(0,0), PixelToLogic(GetSizePixel()) ),
-                          Gradient( GradientStyle_LINEAR,
-                                    mrSidebarWin.ColorDark(),
-                                    mrSidebarWin.ColorDark() ) );
+            rRenderContext.DrawGradient(Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
+                                        Gradient(GradientStyle_LINEAR, mrSidebarWin.ColorDark(), mrSidebarWin.ColorDark()));
         }
         else
         {
-            DrawGradient( Rectangle( Point(0,0), PixelToLogic(GetSizePixel()) ),
-                          Gradient( GradientStyle_LINEAR,
-                                    mrSidebarWin.ColorLight(),
-                                    mrSidebarWin.ColorDark()));
+            rRenderContext.DrawGradient(Rectangle(Point(0,0), rRenderContext.PixelToLogic(GetSizePixel())),
+                           Gradient(GradientStyle_LINEAR, mrSidebarWin.ColorLight(), mrSidebarWin.ColorDark()));
         }
     }
 
-    if ( GetTextView() )
+    if (GetTextView())
     {
-        GetTextView()->Paint( rRect );
+        GetTextView()->Paint(rRect, &rRenderContext);
     }
 
-    if ( mrSidebarWin.GetLayoutStatus()==SwPostItHelper::DELETED )
+    if (mrSidebarWin.GetLayoutStatus() == SwPostItHelper::DELETED)
     {
-        SetLineColor(mrSidebarWin.GetChangeColor());
-        DrawLine( PixelToLogic( GetPosPixel() ),
-                  PixelToLogic( GetPosPixel() +
-                                Point( GetSizePixel().Width(),
-                                       GetSizePixel().Height() ) ) );
-        DrawLine( PixelToLogic( GetPosPixel() +
-                                Point( GetSizePixel().Width(),0) ),
-                  PixelToLogic( GetPosPixel() +
-                                Point( 0, GetSizePixel().Height() ) ) );
+        rRenderContext.SetLineColor(mrSidebarWin.GetChangeColor());
+        rRenderContext.DrawLine(rRenderContext.PixelToLogic(GetPosPixel()),
+                                rRenderContext.PixelToLogic(GetPosPixel() + Point(GetSizePixel().Width(),
+                                                                                  GetSizePixel().Height())));
+        rRenderContext.DrawLine(rRenderContext.PixelToLogic(GetPosPixel() + Point(GetSizePixel().Width(),
+                                                                                  0)),
+                                rRenderContext.PixelToLogic(GetPosPixel() + Point(0,
+                                                                                  GetSizePixel().Height())));
     }
 }
 
