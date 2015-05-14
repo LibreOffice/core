@@ -24,11 +24,11 @@
 #include <vcl/settings.hxx>
 
 ScTabSplitter::ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle, ScViewData* pData ) :
-    Splitter( pParent, nWinStyle ),
+    Splitter(pParent, nWinStyle),
     pViewData(pData)
 {
     SetFixed(false);
-    EnableRTL( false );
+    EnableRTL(false);
 }
 
 ScTabSplitter::~ScTabSplitter()
@@ -54,10 +54,10 @@ void ScTabSplitter::SetFixed(bool bSet)
         SetPointer(POINTER_VSPLIT);
 }
 
-void ScTabSplitter::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
-    const Color oldFillCol = GetFillColor();
-    const Color oldLineCol = GetLineColor();
+    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     if (IsHorizontal())
     {
@@ -65,24 +65,25 @@ void ScTabSplitter::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectang
         {
             case SC_SPLIT_NONE:
             {
-                SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
-                SetFillColor(GetSettings().GetStyleSettings().GetShadowColor());
-                DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
+                rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+                rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
+                rRenderContext.DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
 
                 // Draw handle
-                SetLineColor(Color(COL_BLACK));
-                SetFillColor(Color(COL_BLACK));
-                const long xc = rRect.Right()+rRect.Left();
-                const long h4 = rRect.GetHeight()/4;
+                rRenderContext.SetLineColor(Color(COL_BLACK));
+                rRenderContext.SetFillColor(Color(COL_BLACK));
+                const long xc = rRect.Right() + rRect.Left();
+                const long h4 = rRect.GetHeight() / 4;
                 // First xc fraction is truncated, second one is rounded. This will draw a centered line
                 // in handlers with odd width and a centered rectangle in those with even width.
-                DrawRect(Rectangle(Point(xc/2, rRect.Top()+h4), Point((xc+1)/2, rRect.Bottom()-h4)));
+                rRenderContext.DrawRect(Rectangle(Point(xc / 2, rRect.Top() + h4),
+                                                  Point((xc + 1) / 2, rRect.Bottom() - h4)));
                 break;
             }
             case SC_SPLIT_NORMAL:
-                SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
-                SetFillColor(GetSettings().GetStyleSettings().GetShadowColor());
-                DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
+                rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+                rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
+                rRenderContext.DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
                 break;
             case SC_SPLIT_FIX:
                 // Nothing to draw
@@ -95,24 +96,25 @@ void ScTabSplitter::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectang
         {
             case SC_SPLIT_NONE:
             {
-                SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
-                SetFillColor(GetSettings().GetStyleSettings().GetShadowColor());
-                DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
+                rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+                rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
+                rRenderContext.DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
 
                  // Draw handle
-                SetLineColor(Color(COL_BLACK));
-                SetFillColor(Color(COL_BLACK));
-                const long yc = rRect.Top()+rRect.Bottom();
-                const long w4 = rRect.GetWidth()/4;
+                rRenderContext.SetLineColor(Color(COL_BLACK));
+                rRenderContext.SetFillColor(Color(COL_BLACK));
+                const long yc = rRect.Top() + rRect.Bottom();
+                const long w4 = rRect.GetWidth() / 4;
                 // First yc fraction is truncated, second one is rounded. This will draw a centered line
                 // in handlers with odd height and a centered rectangle in those with even height.
-                DrawRect(Rectangle(Point(rRect.Left()+w4, yc/2), Point(rRect.Right()-w4, (yc+1)/2)));
+                DrawRect(Rectangle(Point(rRect.Left() + w4, yc / 2),
+                                   Point(rRect.Right() - w4, (yc + 1) / 2)));
                 break;
             }
             case SC_SPLIT_NORMAL:
-                SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
-                SetFillColor(GetSettings().GetStyleSettings().GetShadowColor());
-                DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
+                rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+                rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
+                rRenderContext.DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
                 break;
             case SC_SPLIT_FIX:
                 // Nothing to draw
@@ -120,8 +122,7 @@ void ScTabSplitter::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectang
         }
     }
 
-    SetFillColor(oldFillCol);
-    SetLineColor(oldLineCol);
+    rRenderContext.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
