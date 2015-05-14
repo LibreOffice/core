@@ -119,26 +119,27 @@ namespace svx
     }
 
 
-    void PseudoRubyText::Paint( OutputDevice& _rDevice, const Rectangle& _rRect, sal_uInt16 _nTextStyle,
-        Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation, vcl::ControlLayoutData* _pLayoutData )
+    void PseudoRubyText::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect, sal_uInt16 _nTextStyle,
+                               Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation,
+                               vcl::ControlLayoutData* _pLayoutData )
     {
-        bool            bLayoutOnly  = NULL != _pLayoutData;
-        MetricVector*   pTextMetrics = bLayoutOnly ? &_pLayoutData->m_aUnicodeBoundRects : NULL;
-        OUString*       pDisplayText = bLayoutOnly ? &_pLayoutData->m_aDisplayText       : NULL;
+        bool bLayoutOnly  = (NULL != _pLayoutData);
+        MetricVector* pTextMetrics = bLayoutOnly ? &_pLayoutData->m_aUnicodeBoundRects : NULL;
+        OUString* pDisplayText = bLayoutOnly ? &_pLayoutData->m_aDisplayText       : NULL;
 
-        Size aPlaygroundSize( _rRect.GetSize() );
+        Size aPlaygroundSize(_rRect.GetSize());
 
         // the font for the secondary text:
-        vcl::Font aSmallerFont( _rDevice.GetFont() );
+        vcl::Font aSmallerFont(rRenderContext.GetFont());
         // heuristic: 80% of the original size
         aSmallerFont.SetHeight( (long)( 0.8 * aSmallerFont.GetHeight() ) );
 
         // let's calculate the size of our two texts
-        Rectangle aPrimaryRect = _rDevice.GetTextRect( _rRect, m_sPrimaryText, _nTextStyle );
+        Rectangle aPrimaryRect = rRenderContext.GetTextRect( _rRect, m_sPrimaryText, _nTextStyle );
         Rectangle aSecondaryRect;
         {
-            FontSwitch aFontRestore( _rDevice, aSmallerFont );
-            aSecondaryRect = _rDevice.GetTextRect( _rRect, m_sSecondaryText, _nTextStyle );
+            FontSwitch aFontRestore(rRenderContext, aSmallerFont);
+            aSecondaryRect = rRenderContext.GetTextRect(_rRect, m_sSecondaryText, _nTextStyle);
         }
 
         // position these rectangles properly
@@ -148,13 +149,13 @@ namespace svx
             // widest of both text rects
         aPrimaryRect.Left() = aSecondaryRect.Left() = _rRect.Left();
         aPrimaryRect.Right() = aSecondaryRect.Right() = _rRect.Left() + nCombinedWidth;
-        if ( TEXT_DRAW_RIGHT & _nTextStyle )
+        if (TEXT_DRAW_RIGHT & _nTextStyle)
         {
             // move the rectangles to the right
             aPrimaryRect.Move( aPlaygroundSize.Width() - nCombinedWidth, 0 );
             aSecondaryRect.Move( aPlaygroundSize.Width() - nCombinedWidth, 0 );
         }
-        else if ( TEXT_DRAW_CENTER & _nTextStyle )
+        else if (TEXT_DRAW_CENTER & _nTextStyle)
         {
             // center the rectangles
             aPrimaryRect.Move( ( aPlaygroundSize.Width() - nCombinedWidth ) / 2, 0 );
@@ -166,13 +167,13 @@ namespace svx
         // align to the top, for the moment
         aPrimaryRect.Move( 0, _rRect.Top() - aPrimaryRect.Top() );
         aSecondaryRect.Move( 0, aPrimaryRect.Top() + aPrimaryRect.GetHeight() - aSecondaryRect.Top() );
-        if ( TEXT_DRAW_BOTTOM & _nTextStyle )
+        if (TEXT_DRAW_BOTTOM & _nTextStyle)
         {
             // move the rects to the bottom
             aPrimaryRect.Move( 0, aPlaygroundSize.Height() - nCombinedHeight );
             aSecondaryRect.Move( 0, aPlaygroundSize.Height() - nCombinedHeight );
         }
-        else if ( TEXT_DRAW_VCENTER & _nTextStyle )
+        else if (TEXT_DRAW_VCENTER & _nTextStyle)
         {
             // move the rects to the bottom
             aPrimaryRect.Move( 0, ( aPlaygroundSize.Height() - nCombinedHeight ) / 2 );
@@ -181,7 +182,7 @@ namespace svx
 
         // 'til here, everything we did assumes that the secondary text is painted _below_ the primary
         // text. If this isn't the case, we need to correct the rectangles
-        if ( eAbove == m_ePosition )
+        if (eAbove == m_ePosition)
         {
             sal_Int32 nVertDistance = aSecondaryRect.Top() - aPrimaryRect.Top();
             aSecondaryRect.Move( 0, -nVertDistance );
@@ -195,22 +196,22 @@ namespace svx
         nDrawTextStyle &= ~( TEXT_DRAW_RIGHT | TEXT_DRAW_LEFT | TEXT_DRAW_BOTTOM | TEXT_DRAW_TOP );
         nDrawTextStyle |= TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER;
 
-        _rDevice.DrawText( aPrimaryRect, m_sPrimaryText, nDrawTextStyle, pTextMetrics, pDisplayText );
+        rRenderContext.DrawText( aPrimaryRect, m_sPrimaryText, nDrawTextStyle, pTextMetrics, pDisplayText );
         {
-            FontSwitch aFontRestore( _rDevice, aSmallerFont );
-            _rDevice.DrawText( aSecondaryRect, m_sSecondaryText, nDrawTextStyle, pTextMetrics, pDisplayText );
+            FontSwitch aFontRestore(rRenderContext, aSmallerFont);
+            rRenderContext.DrawText( aSecondaryRect, m_sSecondaryText, nDrawTextStyle, pTextMetrics, pDisplayText );
         }
 
         // outta here
-        if ( _pPrimaryLocation )
+        if (_pPrimaryLocation)
             *_pPrimaryLocation = aPrimaryRect;
-        if ( _pSecondaryLocation )
+        if (_pSecondaryLocation)
             *_pSecondaryLocation = aSecondaryRect;
     }
 
     //= RubyRadioButton
 
-    class RubyRadioButton   :public RadioButton
+    class RubyRadioButton : public RadioButton
     {
 
     public:
@@ -236,15 +237,15 @@ namespace svx
     }
 
 
-    void RubyRadioButton::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
+    void RubyRadioButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     {
         HideFocus();
 
         // calculate the size of the radio image - we're to paint our text _after_ this image
         DBG_ASSERT( !GetModeRadioImage(), "RubyRadioButton::Paint: images not supported!" );
-        Size aImageSize = GetRadioImage( GetSettings(), DrawButtonFlags::NONE ).GetSizePixel();
-        aImageSize.Width()  = CalcZoom( aImageSize.Width() ) + 2;   // + 2 because otherwise the radiobuttons
-        aImageSize.Height()  = CalcZoom( aImageSize.Height() ) + 2; // appear a bit cut from right and top.
+        Size aImageSize = GetRadioImage(rRenderContext.GetSettings(), DrawButtonFlags::NONE).GetSizePixel();
+        aImageSize.Width() = CalcZoom( aImageSize.Width() ) + 2;   // + 2 because otherwise the radiobuttons
+        aImageSize.Height() = CalcZoom( aImageSize.Height() ) + 2; // appear a bit cut from right and top.
 
         Rectangle aOverallRect( Point( 0, 0 ), GetOutputSizePixel() );
         aOverallRect.Left() += aImageSize.Width() + 4;  // 4 is the separator between the image and the text
@@ -276,13 +277,15 @@ namespace svx
             nTextStyle |= TEXT_DRAW_MNEMONIC;
 
         // paint the ruby text
-        Rectangle aPrimaryTextLocation, aSecondaryTextLocation;
-        m_aRubyText.Paint( *this, aTextRect, nTextStyle, &aPrimaryTextLocation, &aSecondaryTextLocation );
+        Rectangle aPrimaryTextLocation;
+        Rectangle aSecondaryTextLocation;
+
+        m_aRubyText.Paint(rRenderContext, aTextRect, nTextStyle, &aPrimaryTextLocation, &aSecondaryTextLocation);
 
         // the focus rectangle is to be painted around both texts
-        Rectangle aCombinedRect( aPrimaryTextLocation );
-        aCombinedRect.Union( aSecondaryTextLocation );
-        SetFocusRect( aCombinedRect );
+        Rectangle aCombinedRect(aPrimaryTextLocation);
+        aCombinedRect.Union(aSecondaryTextLocation);
+        SetFocusRect(aCombinedRect);
 
         // let the base class paint the radio button
         // for this, give it the proper location to paint the image (vertically centered, relative to our text)
@@ -295,13 +298,16 @@ namespace svx
 
         // mouse clicks should be recognized in a rect which is one pixel larger in each direction, plus
         // includes the image
-        aCombinedRect.Left() = aImageLocation.Left(); ++aCombinedRect.Right();
-        --aCombinedRect.Top(); ++aCombinedRect.Bottom();
-        SetMouseRect( aCombinedRect );
+        aCombinedRect.Left() = aImageLocation.Left();
+        ++aCombinedRect.Right();
+        --aCombinedRect.Top();
+        ++aCombinedRect.Bottom();
+
+        SetMouseRect(aCombinedRect);
 
         // paint the focus rect, if necessary
-        if ( HasFocus() )
-            ShowFocus( aTextRect );
+        if (HasFocus())
+            ShowFocus(aTextRect);
     }
 
     Size RubyRadioButton::GetOptimalSize() const
