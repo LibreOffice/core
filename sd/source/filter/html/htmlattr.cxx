@@ -22,8 +22,8 @@
 #include <vcl/decoview.hxx>
 #include <vcl/builderfactory.hxx>
 
-SdHtmlAttrPreview::SdHtmlAttrPreview( vcl::Window* pParent, WinBits nStyle )
-:Control( pParent, nStyle )
+SdHtmlAttrPreview::SdHtmlAttrPreview(vcl::Window* pParent, WinBits nStyle)
+    : Control(pParent, nStyle)
 {
 }
 
@@ -42,43 +42,39 @@ SdHtmlAttrPreview::~SdHtmlAttrPreview()
 {
 }
 
-void SdHtmlAttrPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void SdHtmlAttrPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    DecorationView aDecoView( this );
+    DecorationView aDecoView(&rRenderContext);
 
     Rectangle aTextRect;
     aTextRect.SetSize(GetOutputSize());
 
-    SetLineColor(m_aBackColor);
-    SetFillColor(m_aBackColor);
-    DrawRect(rRect);
-    SetFillColor();
+    rRenderContext.SetLineColor(m_aBackColor);
+    rRenderContext.SetFillColor(m_aBackColor);
+    rRenderContext.DrawRect(rRect);
+    rRenderContext.SetFillColor();
 
     int nHeight = (aTextRect.Bottom() - aTextRect.Top()) >> 2;
     aTextRect.Bottom() =  nHeight + aTextRect.Top();
 
-    SetTextColor(m_aTextColor);
-    DrawText( aTextRect, SD_RESSTR(STR_HTMLATTR_TEXT),
-                         TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER );
+    rRenderContext.SetTextColor(m_aTextColor);
+    rRenderContext.DrawText(aTextRect, SD_RESSTR(STR_HTMLATTR_TEXT), TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER);
 
     aTextRect.Move(0,nHeight);
-    SetTextColor(m_aLinkColor);
-    DrawText( aTextRect, SD_RESSTR(STR_HTMLATTR_LINK),
-                         TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER );
+    rRenderContext.SetTextColor(m_aLinkColor);
+    rRenderContext.DrawText(aTextRect, SD_RESSTR(STR_HTMLATTR_LINK), TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER);
 
     aTextRect.Move(0,nHeight);
-    SetTextColor(m_aALinkColor);
-    DrawText( aTextRect, SD_RESSTR(STR_HTMLATTR_ALINK),
-                         TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER );
+    rRenderContext.SetTextColor(m_aALinkColor);
+    rRenderContext.DrawText(aTextRect, SD_RESSTR(STR_HTMLATTR_ALINK), TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER);
 
     aTextRect.Move(0,nHeight);
-    SetTextColor(m_aVLinkColor);
-    DrawText( aTextRect, SD_RESSTR(STR_HTMLATTR_VLINK),
-                         TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER );
+    rRenderContext.SetTextColor(m_aVLinkColor);
+    rRenderContext.DrawText(aTextRect, SD_RESSTR(STR_HTMLATTR_VLINK), TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER);
 }
 
-void SdHtmlAttrPreview::SetColors( Color& aBack, Color& aText, Color& aLink,
-                                   Color& aVLink, Color& aALink )
+void SdHtmlAttrPreview::SetColors(Color& aBack, Color& aText, Color& aLink,
+                                  Color& aVLink, Color& aALink)
 {
     m_aBackColor = aBack;
     m_aTextColor = aText;
