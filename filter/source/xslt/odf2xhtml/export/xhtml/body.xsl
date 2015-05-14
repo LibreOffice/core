@@ -430,6 +430,13 @@
 					</xsl:apply-templates>
 				</xsl:element>
 			</xsl:when>
+			<xsl:when test="text:tab and text:a and ancestor::text:index-body">
+				<xsl:element name="p">
+					<xsl:apply-templates select="attribute::* | child::text:a">
+						<xsl:with-param name="globalData" select="$globalData" />
+					</xsl:apply-templates>
+				</xsl:element>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:choose>
 					<!-- !!Check if paragraph is empty!!
