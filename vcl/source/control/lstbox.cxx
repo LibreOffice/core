@@ -1130,12 +1130,12 @@ void* ListBox::GetEntryData( sal_Int32 nPos ) const
     return mpImplLB->GetEntryList()->GetEntryData( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
-void ListBox::SetEntryFlags( sal_Int32 nPos, long nFlags )
+void ListBox::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
 {
     mpImplLB->SetEntryFlags( nPos + mpImplLB->GetEntryList()->GetMRUCount(), nFlags );
 }
 
-long ListBox::GetEntryFlags( sal_Int32 nPos ) const
+ListBoxEntryFlags ListBox::GetEntryFlags( sal_Int32 nPos ) const
 {
     return mpImplLB->GetEntryList()->GetEntryFlags( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }

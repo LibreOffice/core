@@ -557,7 +557,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         sal_Int32 nPos = pNumFmtShell->GetCurrencySymbol();
         if (nPos == 0)
             // Enable "Automatically" if currently used so it is selectable.
-            m_pLbCurrency->SetEntryFlags( nPos, 0);
+            m_pLbCurrency->SetEntryFlags( nPos, ListBoxEntryFlags::NONE );
 
         m_pLbCurrency->SelectEntryPos(nPos);
     }
@@ -1738,7 +1738,7 @@ void SvxNumberFormatTabPage::FillCurrencyBox()
     // is selected, else if the to be disabled (first) entry was selected it
     // would be sticky when disabled and could not be deselected!
     m_pLbCurrency->SetNoSelection();
-    m_pLbCurrency->SetEntryFlags( 0, LISTBOX_ENTRY_FLAG_DISABLE_SELECTION | LISTBOX_ENTRY_FLAG_DRAW_DISABLED);
+    m_pLbCurrency->SetEntryFlags( 0, ListBoxEntryFlags::DisableSelection | ListBoxEntryFlags::DrawDisabled);
     m_pLbCurrency->SelectEntryPos(nSelPos);
 }
 

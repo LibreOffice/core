@@ -145,21 +145,21 @@ public:
     void*               GetSelectEntryData() const { return GetEntryData(GetSelectEntryPos()); }
 
     /** this methods stores a combination of flags from the
-        LISTBOX_ENTRY_FLAG_* defines at the given entry.
-        See description of the possible LISTBOX_ENTRY_FLAG_* flags
+        ListBoxEntryFlags::* defines at the given entry.
+        See description of the possible ListBoxEntryFlags::* flags
         for details.
         Do not use these flags for user data as they are reserved
         to change the internal behaviour of the ListBox implementation
         for specific entries.
     */
-    void                SetEntryFlags( sal_Int32  nPos, long nFlags );
+    void                SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
 
     /** this methods gets the current combination of flags from the
-        LISTBOX_ENTRY_FLAG_* defines from the given entry.
-        See description of the possible LISTBOX_ENTRY_FLAG_* flags
+        ListBoxEntryFlags::* defines from the given entry.
+        See description of the possible ListBoxEntryFlags::* flags
         for details.
     */
-    long                GetEntryFlags( sal_Int32  nPos ) const;
+    ListBoxEntryFlags   GetEntryFlags( sal_Int32  nPos ) const;
 
     void                SetTopEntry( sal_Int32  nPos );
     sal_Int32           GetTopEntry() const;

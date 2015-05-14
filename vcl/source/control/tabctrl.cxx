@@ -1775,7 +1775,7 @@ void TabControl::EnablePage( sal_uInt16 i_nPageId, bool i_bEnable )
         mbFormat = true;
         if( mpTabCtrlData->mpListBox )
             mpTabCtrlData->mpListBox->SetEntryFlags( GetPagePos( i_nPageId ),
-                                                     i_bEnable ? 0 : (LISTBOX_ENTRY_FLAG_DISABLE_SELECTION | LISTBOX_ENTRY_FLAG_DRAW_DISABLED) );
+                                                     i_bEnable ? ListBoxEntryFlags::NONE : (ListBoxEntryFlags::DisableSelection | ListBoxEntryFlags::DrawDisabled) );
         if( pItem->mnId == mnCurPageId )
         {
              // SetCurPageId will change to an enabled page

@@ -100,7 +100,7 @@ sal_Int32  CategoryListBox::InsertCategory( const OUString& rStr, sal_Int32  nPo
 {
     sal_Int32  n = ListBox::InsertEntry( rStr, nPos );
     if( n != LISTBOX_ENTRY_NOTFOUND )
-        ListBox::SetEntryFlags( n, ListBox::GetEntryFlags(n) | LISTBOX_ENTRY_FLAG_DISABLE_SELECTION );
+        ListBox::SetEntryFlags( n, ListBox::GetEntryFlags(n) | ListBoxEntryFlags::DisableSelection );
 
     return n;
 }
@@ -109,7 +109,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
     const sal_uInt16 nItem = rUDEvt.GetItemId();
 
-    if( ListBox::GetEntryFlags(nItem) & LISTBOX_ENTRY_FLAG_DISABLE_SELECTION )
+    if( ListBox::GetEntryFlags(nItem) & ListBoxEntryFlags::DisableSelection )
     {
         Rectangle aOutRect( rUDEvt.GetRect() );
         OutputDevice* pDev = rUDEvt.GetDevice();

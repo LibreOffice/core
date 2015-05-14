@@ -52,13 +52,13 @@ struct ImplEntryType
     Image       maImage;
     void*       mpUserData;
     bool    mbIsSelected;
-    long        mnFlags;
+    ListBoxEntryFlags mnFlags;
     long        mnHeight;
 
     ImplEntryType( const OUString& rStr, const Image& rImage ) :
         maStr( rStr ),
         maImage( rImage ),
-        mnFlags( 0 ),
+        mnFlags( ListBoxEntryFlags::NONE ),
         mnHeight( 0 )
     {
         mbIsSelected = false;
@@ -67,7 +67,7 @@ struct ImplEntryType
 
     ImplEntryType( const OUString& rStr ) :
         maStr( rStr ),
-        mnFlags( 0 ),
+        mnFlags( ListBoxEntryFlags::NONE ),
         mnHeight( 0 )
     {
         mbIsSelected = false;
@@ -76,7 +76,7 @@ struct ImplEntryType
 
     ImplEntryType( const Image& rImage ) :
         maImage( rImage ),
-        mnFlags( 0 ),
+        mnFlags( ListBoxEntryFlags::NONE ),
         mnHeight( 0 )
     {
         mbIsSelected = false;
@@ -138,8 +138,8 @@ public:
     void            SetEntryData( sal_Int32  nPos, void* pNewData );
     void*           GetEntryData( sal_Int32  nPos ) const;
 
-    void            SetEntryFlags( sal_Int32  nPos, long nFlags );
-    long            GetEntryFlags( sal_Int32  nPos ) const;
+    void              SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
+    ListBoxEntryFlags GetEntryFlags( sal_Int32  nPos ) const;
 
     void            SelectEntry( sal_Int32  nPos, bool bSelect );
 
@@ -164,7 +164,7 @@ public:
     sal_Int32       GetMaxMRUCount() const      { return mnMaxMRUCount; }
 
     /** An Entry is selectable if its mnFlags does not have the
-        LISTBOX_ENTRY_FLAG_DISABLE_SELECTION flag set. */
+        ListBoxEntryFlags::DisableSelection flag set. */
     bool            IsEntrySelectable( sal_Int32  nPos ) const;
 
     /** @return the first entry found from the given position nPos that is selectable
@@ -277,7 +277,7 @@ public:
     void            ResetCurrentPos()               { mnCurrentPos = LISTBOX_ENTRY_NOTFOUND; }
     sal_Int32       GetCurrentPos() const           { return mnCurrentPos; }
     sal_uInt16      GetDisplayLineCount() const;
-    void            SetEntryFlags( sal_Int32  nPos, long nFlags );
+    void            SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
 
     void            DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32  nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false, bool bLayout = false);
 
@@ -428,7 +428,7 @@ public:
     void            SetEntryData( sal_Int32  nPos, void* pNewData ) { maLBWindow->GetEntryList()->SetEntryData( nPos, pNewData ); }
     void            Clear();
 
-    void            SetEntryFlags( sal_Int32  nPos, long nFlags );
+    void            SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
 
     void            SelectEntry( sal_Int32  nPos, bool bSelect );
     void            SetNoSelection();

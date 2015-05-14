@@ -359,7 +359,7 @@ void SpellDialog::UpdateBoxes_Impl()
         if ( LISTBOX_ENTRY_NOTFOUND == m_pSuggestionLB->GetEntryPos( aTmp ) )
         {
             m_pSuggestionLB->InsertEntry( aTmp );
-            m_pSuggestionLB->SetEntryFlags(m_pSuggestionLB->GetEntryCount() - 1, LISTBOX_ENTRY_FLAG_MULTILINE);
+            m_pSuggestionLB->SetEntryFlags(m_pSuggestionLB->GetEntryCount() - 1, ListBoxEntryFlags::MultiLine);
         }
     }
     if(!nSize)

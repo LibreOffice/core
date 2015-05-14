@@ -118,7 +118,7 @@ void ImplEntryList::SelectEntry( sal_Int32 nPos, bool bSelect )
         boost::ptr_vector<ImplEntryType>::iterator iter = maEntries.begin()+nPos;
 
         if ( ( iter->mbIsSelected != bSelect ) &&
-           ( (iter->mnFlags & LISTBOX_ENTRY_FLAG_DISABLE_SELECTION) == 0  ) )
+           ( (iter->mnFlags & ListBoxEntryFlags::DisableSelection) == ListBoxEntryFlags::NONE  ) )
         {
             iter->mbIsSelected = bSelect;
             if ( mbCallSelectionChangedHdl )
@@ -398,17 +398,17 @@ void* ImplEntryList::GetEntryData( sal_Int32 nPos ) const
     return pImplEntry ? pImplEntry->mpUserData : NULL;
 }
 
-void ImplEntryList::SetEntryFlags( sal_Int32 nPos, long nFlags )
+void ImplEntryList::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
 {
     ImplEntryType* pImplEntry = GetEntry( nPos );
     if ( pImplEntry )
         pImplEntry->mnFlags = nFlags;
 }
 
-long ImplEntryList::GetEntryFlags( sal_Int32 nPos ) const
+ListBoxEntryFlags ImplEntryList::GetEntryFlags( sal_Int32 nPos ) const
 {
     ImplEntryType* pImplEntry = GetEntry( nPos );
-    return pImplEntry ? pImplEntry->mnFlags : 0;
+    return pImplEntry ? pImplEntry->mnFlags : ListBoxEntryFlags::NONE;
 }
 
 sal_Int32 ImplEntryList::GetSelectEntryCount() const
@@ -460,7 +460,7 @@ bool ImplEntryList::IsEntryPosSelected( sal_Int32 nIndex ) const
 bool ImplEntryList::IsEntrySelectable( sal_Int32 nPos ) const
 {
     ImplEntryType* pImplEntry = GetEntry( nPos );
-    return pImplEntry == nullptr || ((pImplEntry->mnFlags & LISTBOX_ENTRY_FLAG_DISABLE_SELECTION) == 0);
+    return pImplEntry == nullptr || ((pImplEntry->mnFlags & ListBoxEntryFlags::DisableSelection) == ListBoxEntryFlags::NONE);
 }
 
 sal_Int32 ImplEntryList::FindFirstSelectable( sal_Int32 nPos, bool bForward /* = true */ )
@@ -638,7 +638,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
 
     if ( aMetrics.bText )
     {
-        if( (rEntry.mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE) )
+        if( (rEntry.mnFlags & ListBoxEntryFlags::MultiLine) )
         {
             // multiline case
             Size aCurSize( PixelToLogic( GetSizePixel() ) );
@@ -757,7 +757,7 @@ sal_Int32 ImplListBoxWindow::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEnt
     sal_Int32 nNewPos = mpEntryList->InsertEntry( nPos, pNewEntry, mbSort );
 
     if( (GetStyle() & WB_WORDBREAK) )
-        pNewEntry->mnFlags |= LISTBOX_ENTRY_FLAG_MULTILINE;
+        pNewEntry->mnFlags |= ListBoxEntryFlags::MultiLine;
 
     ImplUpdateEntryMetrics( *pNewEntry );
     return nNewPos;
@@ -772,7 +772,7 @@ void ImplListBoxWindow::RemoveEntry( sal_Int32 nPos )
     ImplCalcMetrics();
 }
 
-void ImplListBoxWindow::SetEntryFlags( sal_Int32 nPos, long nFlags )
+void ImplListBoxWindow::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
 {
     mpEntryList->SetEntryFlags( nPos, nFlags );
     ImplEntryType* pEntry = mpEntryList->GetMutableEntryPtr( nPos );
@@ -1825,7 +1825,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         {
             long nMaxWidth = std::max(static_cast< long >(mnMaxWidth), rRenderContext.GetOutputSizePixel().Width() - 2 * mnBorder);
             // a multiline entry should only be as wide a the window
-            if ((pEntry->mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE))
+            if ((pEntry->mnFlags & ListBoxEntryFlags::MultiLine))
                 nMaxWidth = rRenderContext.GetOutputSizePixel().Width() - 2 * mnBorder;
 
             Rectangle aTextRect(Point(mnBorder - mnLeft, nY),
@@ -1850,9 +1850,9 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             }
 
             sal_uInt16 nDrawStyle = ImplGetTextStyle();
-            if ((pEntry->mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE))
+            if ((pEntry->mnFlags & ListBoxEntryFlags::MultiLine))
                 nDrawStyle |= MULTILINE_ENTRY_DRAW_FLAGS;
-            if ((pEntry->mnFlags & LISTBOX_ENTRY_FLAG_DRAW_DISABLED))
+            if ((pEntry->mnFlags & ListBoxEntryFlags::DrawDisabled))
                 nDrawStyle |= TEXT_DRAW_DISABLE;
 
             rRenderContext.DrawText(aTextRect, aStr, nDrawStyle, pVector, pDisplayText);
@@ -1920,7 +1920,7 @@ void ImplListBoxWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 
 sal_uInt16 ImplListBoxWindow::GetDisplayLineCount() const
 {
-    // FIXME: LISTBOX_ENTRY_FLAG_MULTILINE
+    // FIXME: ListBoxEntryFlags::MultiLine
 
     sal_Int32 nCount = mpEntryList->GetEntryCount();
     long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
@@ -2050,7 +2050,7 @@ void ImplListBoxWindow::ScrollHorz( long n )
 
 Size ImplListBoxWindow::CalcSize(sal_Int32 nMaxLines) const
 {
-    // FIXME: LISTBOX_ENTRY_FLAG_MULTILINE
+    // FIXME: ListBoxEntryFlags::MultiLine
 
     Size aSz;
     aSz.Height() =  nMaxLines * mnMaxHeight;
@@ -2225,7 +2225,7 @@ void ImplListBox::RemoveEntry( sal_Int32 nPos )
     StateChanged( StateChangedType::Data );
 }
 
-void ImplListBox::SetEntryFlags( sal_Int32 nPos, long nFlags )
+void ImplListBox::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
 {
     maLBWindow->SetEntryFlags( nPos, nFlags );
 }
