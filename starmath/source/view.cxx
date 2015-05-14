@@ -86,26 +86,22 @@
 #define SmViewShell
 #include "smslots.hxx"
 
-using namespace com::sun::star;
-using namespace com::sun::star::accessibility;
-using namespace com::sun::star::uno;
+using namespace css;
+using namespace css::accessibility;
+using namespace css::uno;
 
-
-
-SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
-    ScrollableWindow(&pShell->GetViewFrame()->GetWindow(), 0),
-    pAccessible(0),
-    pViewShell(pShell),
-    nZoom(100)
+SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell)
+    : ScrollableWindow(&pShell->GetViewFrame()->GetWindow(), 0)
+    , pAccessible(0)
+    , pViewShell(pShell)
+    , nZoom(100)
 {
     // docking windows are usually hidden (often already done in the
     // resource) and will be shown by the sfx framework.
     Hide();
 
-    const Fraction aFraction (1,1);
-    SetMapMode( MapMode(MAP_100TH_MM, Point(), aFraction, aFraction));
-
-    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
+    const Fraction aFraction(1, 1);
+    SetMapMode(MapMode(MAP_100TH_MM, Point(), aFraction, aFraction));
 
     SetTotalSize();
 
@@ -131,30 +127,27 @@ void SmGraphicWindow::dispose()
     ScrollableWindow::dispose();
 }
 
-void SmGraphicWindow::StateChanged( StateChangedType eType )
+void SmGraphicWindow::StateChanged(StateChangedType eType)
 {
-    if ( eType == StateChangedType::InitShow )
+    if (eType == StateChangedType::InitShow)
         Show();
-    ScrollableWindow::StateChanged( eType );
+    ScrollableWindow::StateChanged(eType);
 }
 
 
-void SmGraphicWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
+void SmGraphicWindow::ApplyColorConfigValues(const svtools::ColorConfig &rColorCfg)
 {
     // Note: SetTextColor not necessary since the nodes that
     // get painted have the color information.
 #if OSL_DEBUG_LEVEL > 1
 //   ColorData nVal = rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor;
 #endif
-    SetBackground( Color( (ColorData) rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor ) );
-    Invalidate();
+    SetBackground(Color( (ColorData) rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor));
 }
 
 
 void SmGraphicWindow::DataChanged( const DataChangedEvent& rEvt )
 {
-    ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
-
     ScrollableWindow::DataChanged( rEvt );
 }
 
@@ -164,7 +157,6 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
     ScrollableWindow::MouseButtonDown(rMEvt);
 
     GrabFocus();
-
 
     // set formula-cursor and selection of edit window according to the
     // position clicked at
@@ -267,7 +259,7 @@ void SmGraphicWindow::LoseFocus()
 
 void SmGraphicWindow::RepaintViewShellDoc()
 {
-    SmDocShell *pDoc = pViewShell->GetDoc();
+    SmDocShell* pDoc = pViewShell->GetDoc();
     if (pDoc)
         pDoc->Repaint();
 }
@@ -292,7 +284,7 @@ void SmGraphicWindow::CaretBlinkStart()
 {
     if (!IsInlineEditEnabled())
         return;
-    if ( aCaretBlinkTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )
+    if (aCaretBlinkTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME)
         aCaretBlinkTimer.Start();
 }
 
@@ -383,27 +375,29 @@ const SmNode * SmGraphicWindow::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
     return pNode;
 }
 
-void SmGraphicWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
+void SmGraphicWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    SAL_WARN_IF( !pViewShell, "starmath", "view shell missing" );
+    SAL_WARN_IF(!pViewShell, "starmath", "view shell missing");
 
-    SmDocShell &rDoc = *pViewShell->GetDoc();
+    ApplyColorConfigValues(SM_MOD()->GetColorConfig());
+
+    SmDocShell& rDoc = *pViewShell->GetDoc();
     Point aPoint;
 
-    rDoc.DrawFormula(*this, aPoint, true);  //! modifies aPoint to be the topleft
+    rDoc.DrawFormula(rRenderContext, aPoint, true);  //! modifies aPoint to be the topleft
                                 //! corner of the formula
     SetFormulaDrawPos(aPoint);
-    if(IsInlineEditEnabled())
+    if (IsInlineEditEnabled())
     {
         //Draw cursor if any...
-        if(pViewShell->GetDoc()->HasCursor() && IsLineVisible())
-            pViewShell->GetDoc()->GetCursor().Draw(*this, aPoint, IsCursorVisible());
+        if (pViewShell->GetDoc()->HasCursor() && IsLineVisible())
+            pViewShell->GetDoc()->GetCursor().Draw(rRenderContext, aPoint, IsCursorVisible());
     }
     else
     {
         SetIsCursorVisible(false);  // (old) cursor must be drawn again
 
-        const SmEditWindow *pEdit = pViewShell->GetEditWindow();
+        const SmEditWindow* pEdit = pViewShell->GetEditWindow();
         if (pEdit)
         {   // get new position for formula-cursor (for possible altered formula)
             sal_Int32  nRow;
@@ -413,7 +407,7 @@ void SmGraphicWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectan
             nCol++;
             const SmNode *pFound = SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
 
-            SmModule  *pp = SM_MOD();
+            SmModule *pp = SM_MOD();
             if (pFound && pp->GetConfig()->IsShowFormulaCursor())
                 ShowCursor(true);
         }
@@ -718,7 +712,7 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
     SetSizePixel(LogicToPixel(Size(292 , 94), MapMode(MAP_APPFONT)));
     SetText(SM_RESSTR(STR_CMDBOXWINDOW));
 
-    Hide ();
+    Hide();
 
     aInitialFocusTimer.SetTimeoutHdl(LINK(this, SmCmdBoxWindow, InitialFocusTimerHdl));
     aInitialFocusTimer.SetTimeout(100);
@@ -746,29 +740,21 @@ SmViewShell * SmCmdBoxWindow::GetView()
 
 void SmCmdBoxWindow::Resize()
 {
-    Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
-    aRect.Left()   += CMD_BOX_PADDING;
-    aRect.Top()    += CMD_BOX_PADDING_TOP;
-    aRect.Right()  -= CMD_BOX_PADDING;
-    aRect.Bottom() -= CMD_BOX_PADDING;
-
-    DecorationView aView(this);
-    aRect = aView.DrawFrame( aRect, DrawFrameStyle::In, DrawFrameFlags::NoDraw );
-
-    aEdit->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
     SfxDockingWindow::Resize();
     Invalidate();
 }
 
-void SmCmdBoxWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/)
+void SmCmdBoxWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
+    Rectangle aRect = Rectangle(Point(0, 0), rRenderContext.GetOutputSizePixel());
     aRect.Left()   += CMD_BOX_PADDING;
     aRect.Top()    += CMD_BOX_PADDING_TOP;
     aRect.Right()  -= CMD_BOX_PADDING;
     aRect.Bottom() -= CMD_BOX_PADDING;
 
-    DecorationView aView(this);
+    aEdit->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
+
+    DecorationView aView(&rRenderContext);
     aView.DrawFrame( aRect, DrawFrameStyle::In );
 }
 
@@ -913,9 +899,6 @@ SmCmdBoxWrapper::~SmCmdBoxWrapper()
 }
 #endif
 
-
-/**************************************************************************/
-
 struct SmViewShell_Impl
 {
     std::unique_ptr<sfx2::DocumentInserter> pDocInserter;
@@ -1018,7 +1001,6 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const OUString& rLine)
 
     return aSize;
 }
-
 
 Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long MaxWidth)
 {
@@ -1167,10 +1149,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
     }
 }
 
-void SmViewShell::Impl_Print(
-        OutputDevice &rOutDev,
-        const SmPrintUIOptions &rPrintUIOptions,
-        Rectangle aOutRect, Point aZeroPoint )
+void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions, Rectangle aOutRect, Point aZeroPoint )
 {
     const bool bIsPrintTitle = rPrintUIOptions.getBoolValue( PRTUIOPT_TITLE_ROW, true );
     const bool bIsPrintFrame = rPrintUIOptions.getBoolValue( PRTUIOPT_BORDER, true );
@@ -1353,21 +1332,19 @@ VclPtr<SfxTabPage> SmViewShell::CreatePrintOptionsPage(vcl::Window *pParent,
     return SmPrintOptionsTabPage::Create(pParent, rOptions);
 }
 
-
 SmEditWindow *SmViewShell::GetEditWindow()
 {
-    SmCmdBoxWrapper *pWrapper = static_cast<SmCmdBoxWrapper *>( GetViewFrame()->
-            GetChildWindow( SmCmdBoxWrapper::GetChildWindowId() ) );
+    SmCmdBoxWrapper* pWrapper = static_cast<SmCmdBoxWrapper*>(
+                                    GetViewFrame()->GetChildWindow(SmCmdBoxWrapper::GetChildWindowId()));
 
-    if (pWrapper != NULL)
+    if (pWrapper != nullptr)
     {
         SmEditWindow& rEditWin = pWrapper->GetEditWindow();
         return &rEditWin;
     }
 
-    return NULL;
+    return nullptr;
 }
-
 
 void SmViewShell::SetStatusText(const OUString& rText)
 {
@@ -1375,8 +1352,7 @@ void SmViewShell::SetStatusText(const OUString& rText)
     GetViewFrame()->GetBindings().Invalidate(SID_TEXTSTATUS);
 }
 
-
-void SmViewShell::ShowError( const SmErrorDesc *pErrorDesc )
+void SmViewShell::ShowError(const SmErrorDesc* pErrorDesc)
 {
     SAL_WARN_IF( !GetDoc(), "starmath", "Document missing" );
     if (pErrorDesc || 0 != (pErrorDesc = GetDoc()->GetParser().GetError(0)) )
@@ -1386,7 +1362,6 @@ void SmViewShell::ShowError( const SmErrorDesc *pErrorDesc )
                                            pErrorDesc->pNode->GetRow()));
     }
 }
-
 
 void SmViewShell::NextError()
 {
@@ -1413,11 +1388,11 @@ void SmViewShell::Insert( SfxMedium& rMedium )
     SmDocShell *pDoc = GetDoc();
     bool bRet = false;
 
-    uno::Reference < embed::XStorage > xStorage = rMedium.GetStorage();
-    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
-    if ( xNameAccess.is() && xNameAccess->getElementNames().getLength() )
+    uno::Reference <embed::XStorage> xStorage = rMedium.GetStorage();
+    uno::Reference <container::XNameAccess> xNameAccess(xStorage, uno::UNO_QUERY);
+    if (xNameAccess.is() && xNameAccess->getElementNames().getLength())
     {
-        if ( xNameAccess->hasByName( OUString("content.xml") ) || xNameAccess->hasByName( OUString("Content.xml") ))
+        if (xNameAccess->hasByName(OUString("content.xml")) || xNameAccess->hasByName(OUString("Content.xml")))
         {
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(pDoc->GetModel());
@@ -1426,7 +1401,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
         }
     }
 
-    if( bRet )
+    if (bRet)
     {
         OUString aText = pDoc->GetText();
         SmEditWindow *pEditWin = GetEditWindow();
@@ -1448,34 +1423,34 @@ void SmViewShell::Insert( SfxMedium& rMedium )
 
 void SmViewShell::InsertFrom(SfxMedium &rMedium)
 {
-    bool        bSuccess = false;
-    SmDocShell *pDoc = GetDoc();
-    SvStream   *pStream = rMedium.GetInStream();
+    bool bSuccess = false;
+    SmDocShell* pDoc = GetDoc();
+    SvStream* pStream = rMedium.GetInStream();
 
     if (pStream)
     {
         const OUString& rFltName = rMedium.GetFilter()->GetFilterName();
         if ( rFltName == MATHML_XML )
         {
-            Reference<com::sun::star::frame::XModel> xModel( pDoc->GetModel() );
+            Reference<css::frame::XModel> xModel(pDoc->GetModel());
             SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
             bSuccess = 0 == aEquation.Import(rMedium);
         }
     }
 
-    if( bSuccess )
+    if (bSuccess)
     {
         OUString aText = pDoc->GetText();
         SmEditWindow *pEditWin = GetEditWindow();
         if (pEditWin)
-            pEditWin->InsertText( aText );
+            pEditWin->InsertText(aText);
         else
             SAL_WARN( "starmath", "EditWindow missing" );
 
         pDoc->Parse();
         pDoc->SetModified(true);
 
-        SfxBindings &rBnd = GetViewFrame()->GetBindings();
+        SfxBindings& rBnd = GetViewFrame()->GetBindings();
         rBnd.Invalidate(SID_GAPHIC_SM);
         rBnd.Invalidate(SID_TEXT);
     }

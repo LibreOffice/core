@@ -40,30 +40,25 @@ class SmCmdBoxWindow;
 class SmEditAccessible;
 class CommandEvent;
 
-/**************************************************************************/
-
-    void SmGetLeftSelectionPart(const ESelection &rSelection,
-                                sal_Int32 &nPara, sal_uInt16 &nPos);
-
-/**************************************************************************/
+void SmGetLeftSelectionPart(const ESelection &rSelection, sal_Int32 &nPara, sal_uInt16 &nPos);
 
 class SmEditWindow : public vcl::Window, public DropTargetHelper
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >  xAccessible;
-    SmEditAccessible *                                          pAccessible;
+    css::uno::Reference<css::accessibility::XAccessible> xAccessible;
+    SmEditAccessible* pAccessible;
 
-    SmCmdBoxWindow &rCmdBox;
+    SmCmdBoxWindow& rCmdBox;
     std::unique_ptr<EditView> pEditView;
-    VclPtr<ScrollBar>      pHScrollBar,
-                           pVScrollBar;
-    VclPtr<ScrollBarBox>   pScrollBox;
-    Idle            aModifyIdle,
-                    aCursorMoveIdle;
-    ESelection      aOldSelection;
+    VclPtr<ScrollBar> pHScrollBar;
+    VclPtr<ScrollBar> pVScrollBar;
+    VclPtr<ScrollBarBox> pScrollBox;
+    Idle aModifyIdle;
+    Idle aCursorMoveIdle;
+    ESelection aOldSelection;
 
     virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+
     DECL_LINK(MenuSelectHdl, Menu *);
     DECL_LINK_TYPED(ModifyTimerHdl, Idle *, void);
     DECL_LINK_TYPED(CursorMoveTimerHdl, Idle *, void);
@@ -74,70 +69,72 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     virtual void MouseButtonUp(const MouseEvent &rEvt) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent &rEvt) SAL_OVERRIDE;
 
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 
     DECL_LINK(EditStatusHdl ,EditStatus *);
     DECL_LINK(ScrollHdl, ScrollBar *);
 
-    void        CreateEditView();
-
-    Rectangle   AdjustScrollBars();
-    void        SetScrollBarRanges();
-    void        InitScrollBars();
-    void        InvalidateSlots();
-    void        UpdateStatus( bool bSetDocModified = false );
+    void CreateEditView();
+    Rectangle AdjustScrollBars();
+    void SetScrollBarRanges();
+    void InitScrollBars();
+    void InvalidateSlots();
+    void UpdateStatus(bool bSetDocModified = false);
 
 public:
-    SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin );
+    SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin);
     virtual ~SmEditWindow();
-    virtual void         dispose() SAL_OVERRIDE;
+    virtual void dispose() SAL_OVERRIDE;
 
-    SmDocShell *    GetDoc();
-    SmViewShell *   GetView();
-    EditView *      GetEditView();
-    EditEngine *    GetEditEngine();
-    SfxItemPool *   GetEditEngineItemPool();
+    SmDocShell* GetDoc();
+    SmViewShell* GetView();
+    EditView* GetEditView();
+    EditEngine* GetEditEngine();
+    SfxItemPool* GetEditEngineItemPool();
 
     // Window
-    virtual void        SetText(const OUString &rText) SAL_OVERRIDE;
-    virtual OUString    GetText() const SAL_OVERRIDE;
-    virtual void        GetFocus() SAL_OVERRIDE;
-    virtual void        LoseFocus() SAL_OVERRIDE;
+    virtual void SetText(const OUString& rText) SAL_OVERRIDE;
+    virtual OUString GetText() const SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
 
-    ESelection          GetSelection() const;
-    void                SetSelection(const ESelection &rSel);
+    ESelection GetSelection() const;
+    void SetSelection(const ESelection& rSel);
 
-    bool                IsEmpty() const;
-    bool                IsSelected() const;
-    bool                IsAllSelected() const;
-    void                Cut();
-    void                Copy();
-    void                Paste();
-    void                Delete();
-    void                SelectAll();
-    void                InsertText(const OUString &rText);
-    void                InsertCommand(sal_uInt16 nCommand);
-    void                MarkError(const Point &rPos);
-    void                SelNextMark();
-    void                SelPrevMark();
-    static bool         HasMark(const OUString &rText);
+    bool IsEmpty() const;
+    bool IsSelected() const;
+    bool IsAllSelected() const;
+    void Cut();
+    void Copy();
+    void Paste();
+    void Delete();
+    void SelectAll();
+    void InsertText(const OUString& rText);
+    void InsertCommand(sal_uInt16 nCommand);
+    void MarkError(const Point &rPos);
+    void SelNextMark();
+    void SelPrevMark();
+    static bool HasMark(const OUString &rText);
 
-    void                Flush();
-    void                DeleteEditView( SmViewShell &rView );
+    void Flush();
+    void DeleteEditView(SmViewShell& rView);
 
-    void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
+    void ApplyColorConfigValues(const svtools::ColorConfig& rColorCfg);
 
-    bool                HandleWheelCommands( const CommandEvent &rCEvt );
-    bool                IsInlineEditEnabled();
-    void                StartCursorMove();
+    bool HandleWheelCommands(const CommandEvent& rCEvt);
+    bool IsInlineEditEnabled();
+    void StartCursorMove();
 
     // for Accessibility
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
     using Window::GetAccessible;
-    SmEditAccessible *   GetAccessible()  { return pAccessible; }
+    SmEditAccessible* GetAccessible()
+    {
+        return pAccessible;
+    }
 };
 
 

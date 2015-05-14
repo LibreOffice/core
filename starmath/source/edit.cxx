@@ -503,20 +503,20 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         }
 
         // get the current char of the key event
-        sal_Unicode charCode = rKEvt.GetCharCode();
-        OUString close;
+        sal_Unicode cCharCode = rKEvt.GetCharCode();
+        OUString sClose;
 
-        if (charCode == '{')
-            close = "  }";
-        else if (charCode == '[')
-            close = "  ]";
-        else if (charCode == '(')
-            close = "  )";
+        if (cCharCode == '{')
+            sClose = "  }";
+        else if (cCharCode == '[')
+            sClose = "  ]";
+        else if (cCharCode == '(')
+            sClose = "  )";
 
         // auto close the current character only when needed
-        if (!close.isEmpty() && autoClose)
+        if (!sClose.isEmpty() && autoClose)
         {
-            pEditView->InsertText(close);
+            pEditView->InsertText(sClose);
             // position it at center of brackets
             aSelection.nStartPos += 2;
             aSelection.nEndPos = aSelection.nStartPos;
@@ -527,11 +527,11 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
     }
 }
 
-void SmEditWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
+void SmEditWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     if (!pEditView)
         CreateEditView();
-    pEditView->Paint(rRect);
+    pEditView->Paint(rRect, &rRenderContext);
 }
 
 void SmEditWindow::CreateEditView()
@@ -542,7 +542,7 @@ void SmEditWindow::CreateEditView()
     //! For example when the program is used by the document-converter
     if (!pEditView && pEditEngine)
     {
-        pEditView.reset(new EditView( pEditEngine, this ));
+        pEditView.reset(new EditView(pEditEngine, this));
         pEditEngine->InsertView( pEditView.get() );
 
         if (!pVScrollBar)
