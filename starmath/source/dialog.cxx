@@ -236,24 +236,20 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
     m_pSaveOnlyUsedSymbols->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
 }
 
-
 VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(vcl::Window* pWindow, const SfxItemSet& rSet)
 {
     return VclPtr<SmPrintOptionsTabPage>::Create(pWindow, rSet).get();
 }
 
-/**************************************************************************/
-
-
 void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
     Window::Paint(rRenderContext, rRect);
 
-    OUString   Text (GetFont().GetName());
-    Size    TextSize(GetTextWidth(Text), GetTextHeight());
+    OUString sText(rRenderContext.GetFont().GetName());
+    Size TextSize(rRenderContext.GetTextWidth(sText), rRenderContext.GetTextHeight());
 
-    DrawText(Point((GetOutputSize().Width()  - TextSize.Width())  / 2,
-                   (GetOutputSize().Height() - TextSize.Height()) / 2), Text);
+    rRenderContext.DrawText(Point((GetOutputSize().Width()  - TextSize.Width())  / 2,
+                                  (GetOutputSize().Height() - TextSize.Height()) / 2), sText);
 }
 
 VCL_BUILDER_DECL_FACTORY(SmShowFont)
@@ -320,7 +316,6 @@ IMPL_LINK( SmFontDialog, AttrChangeHdl, CheckBox *, /*pCheckBox*/ )
     m_pShowFont->SetFont(Face);
     return 0;
 }
-
 
 void SmFontDialog::SetFont(const vcl::Font &rFont)
 {
@@ -1167,39 +1162,39 @@ Point SmShowSymbolSetWindow::OffsetPoint(const Point &rPoint) const
     return Point(rPoint.X() + nXOffset, rPoint.Y() + nYOffset);
 }
 
-void SmShowSymbolSetWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
+void SmShowSymbolSetWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    Push(PushFlags::MAPMODE);
+    rRenderContext.Push(PushFlags::MAPMODE);
 
     // set MapUnit for which 'nLen' has been calculated
-    SetMapMode(MapMode(MAP_PIXEL));
+    rRenderContext.SetMapMode(MapMode(MAP_PIXEL));
 
-    sal_uInt16 v        = sal::static_int_cast< sal_uInt16 >((m_pVScrollBar->GetThumbPos() * nColumns));
+    sal_uInt16 v = sal::static_int_cast< sal_uInt16 >((m_pVScrollBar->GetThumbPos() * nColumns));
     size_t nSymbols = aSymbolSet.size();
 
-    Color aTxtColor( GetTextColor() );
+    Color aTxtColor(rRenderContext.GetTextColor());
     for (sal_uInt16 i = v; i < nSymbols ; i++)
     {
-        SmSym     aSymbol (*aSymbolSet[i]);
-        vcl::Font aFont   (aSymbol.GetFace());
+        SmSym aSymbol(*aSymbolSet[i]);
+        vcl::Font aFont(aSymbol.GetFace());
         aFont.SetAlign(ALIGN_TOP);
 
         // taking a FontSize which is a bit smaller (compared to nLen) in order to have a buffer
         // (hopefully enough for left and right, too)
         aFont.SetSize(Size(0, nLen - (nLen / 3)));
-        SetFont(aFont);
+        rRenderContext.SetFont(aFont);
         // keep text color
-        SetTextColor( aTxtColor );
+        rRenderContext.SetTextColor(aTxtColor);
 
-        int   nIV   = i - v;
+        int nIV = i - v;
         sal_UCS4 cChar = aSymbol.GetCharacter();
         OUString aText(&cChar, 1);
-        Size  aSize( GetTextWidth( aText ), GetTextHeight());
+        Size  aSize(rRenderContext.GetTextWidth( aText ), rRenderContext.GetTextHeight());
 
         Point aPoint((nIV % nColumns) * nLen + (nLen - aSize.Width()) / 2,
-                       (nIV / nColumns) * nLen + (nLen - aSize.Height()) / 2);
+                     (nIV / nColumns) * nLen + (nLen - aSize.Height()) / 2);
 
-        DrawText(OffsetPoint(aPoint), aText);
+        rRenderContext.DrawText(OffsetPoint(aPoint), aText);
     }
 
     if (nSelectSymbol != SYMBOL_NONE)
@@ -1211,7 +1206,7 @@ void SmShowSymbolSetWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const 
 
     }
 
-    Pop();
+    rRenderContext.Pop();
 }
 
 
@@ -1423,15 +1418,15 @@ void SmShowSymbol::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rR
 {
     Control::Paint(rRenderContext, rRect);
 
-    vcl::Font aFont(GetFont());
+    vcl::Font aFont(rRenderContext.GetFont());
     setFontSize(aFont);
-    SetFont(aFont);
+    rRenderContext.SetFont(aFont);
 
     const OUString &rText = GetText();
-    Size            aTextSize(GetTextWidth(rText), GetTextHeight());
+    Size aTextSize(GetTextWidth(rText), GetTextHeight());
 
-    DrawText(Point((GetOutputSize().Width()  - aTextSize.Width())  / 2,
-                   (GetOutputSize().Height() * 7/10)), rText);
+    rRenderContext.DrawText(Point((GetOutputSize().Width()  - aTextSize.Width())  / 2,
+                                  (GetOutputSize().Height() * 7/10)), rText);
 }
 
 
@@ -1713,10 +1708,10 @@ void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRec
         sal_UCS4 cChar = aText.iterateCodePoints( &nPos );
         (void) cChar;
 #endif
-        Size aTextSize(GetTextWidth(aText), GetTextHeight());
+        Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
 
-        DrawText(Point((GetOutputSize().Width()  - aTextSize.Width())  / 2,
-                       (GetOutputSize().Height() * 7/10)), aText);
+        rRenderContext.DrawText(Point((GetOutputSize().Width()  - aTextSize.Width())  / 2,
+                                      (GetOutputSize().Height() * 7/10)), aText);
     }
 }
 
