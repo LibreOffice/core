@@ -179,6 +179,13 @@ namespace {
     else if( rAttribs.hasAttribute( XML_theme ) )
     {
         sal_uInt32 nThemeIndex = rAttribs.getUnsigned( XML_theme, 0 );
+
+        // looks like an Excel bug
+        if (nThemeIndex == 0)
+            nThemeIndex = 1;
+        else if (nThemeIndex == 1)
+            nThemeIndex = 0;
+
         nColor = rThemeBuffer.getColorByIndex( nThemeIndex );
 
     }
