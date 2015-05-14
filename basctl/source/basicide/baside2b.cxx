@@ -179,7 +179,7 @@ class EditorWindow::ChangesListener:
     public cppu::WeakImplHelper1< beans::XPropertiesChangeListener >
 {
 public:
-    ChangesListener(EditorWindow & editor): editor_(editor) {}
+    explicit ChangesListener(EditorWindow & editor): editor_(editor) {}
 
 private:
     virtual ~ChangesListener() {}
@@ -1708,7 +1708,7 @@ struct WatchItem
 
     WatchItem*      mpArrayParentItem;
 
-    WatchItem (OUString const& rName):
+    explicit WatchItem (OUString const& rName):
         maName(rName),
         nDimLevel(0),
         nDimCount(0),

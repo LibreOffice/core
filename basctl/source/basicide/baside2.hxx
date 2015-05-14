@@ -242,8 +242,8 @@ protected:
 
 
 public:
-                    WatchWindow (Layout* pParent);
-                    virtual ~WatchWindow();
+    explicit WatchWindow (Layout* pParent);
+    virtual ~WatchWindow();
     virtual void    dispose() SAL_OVERRIDE;
 
     void            AddWatch( const OUString& rVName );
@@ -265,8 +265,8 @@ protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
 public:
-                    StackWindow (Layout* pParent);
-                    virtual ~StackWindow();
+    explicit StackWindow (Layout* pParent);
+    virtual ~StackWindow();
     virtual void    dispose() SAL_OVERRIDE;
 
     void            UpdateCalls();
@@ -288,7 +288,7 @@ protected:
     DECL_LINK( ScrollHdl, ScrollBar * );
 
 public:
-                        ComplexEditorWindow( ModulWindow* pParent );
+    explicit ComplexEditorWindow( ModulWindow* pParent );
     virtual             ~ComplexEditorWindow();
     virtual void        dispose() SAL_OVERRIDE;
     BreakPointWindow&   GetBrkWindow()      { return *aBrkWindow.get(); }
@@ -496,7 +496,7 @@ private:
     ExtTextView* GetParentEditView();
 
 public:
-    CodeCompleteListBox( CodeCompleteWindow* pPar );
+    explicit CodeCompleteListBox( CodeCompleteWindow* pPar );
     virtual ~CodeCompleteListBox();
     virtual void dispose() SAL_OVERRIDE;
     void InsertSelectedEntry(); //insert the selected entry
@@ -519,7 +519,7 @@ private:
     void InitListBox(); // initialize the ListBox
 
 public:
-    CodeCompleteWindow( EditorWindow* pPar );
+    explicit CodeCompleteWindow( EditorWindow* pPar );
     virtual ~CodeCompleteWindow();
     virtual void dispose() SAL_OVERRIDE;
 

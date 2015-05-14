@@ -38,7 +38,7 @@ class Renderable :
 
     VclPtr<Printer> getPrinter();
 public:
-    Renderable (BaseWindow*);
+    explicit Renderable (BaseWindow*);
     virtual ~Renderable();
 
     // XRenderable
