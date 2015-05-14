@@ -722,27 +722,29 @@ void DbGridControl::NavigationBar::Paint(vcl::RenderContext& rRenderContext, con
     Point aAbsolutePos = m_aAbsolute->GetPosPixel();
     Size  aAbsoluteSize = m_aAbsolute->GetSizePixel();
 
-    DrawLine(Point(aAbsolutePos.X() - 1, 0 ),
-             Point(aAbsolutePos.X() - 1, aAbsolutePos.Y() + aAbsoluteSize.Height()));
+    rRenderContext.DrawLine(Point(aAbsolutePos.X() - 1, 0 ),
+                            Point(aAbsolutePos.X() - 1, aAbsolutePos.Y() + aAbsoluteSize.Height()));
 
-    DrawLine(Point(aAbsolutePos.X() + aAbsoluteSize.Width() + 1, 0 ),
-             Point(aAbsolutePos.X() + aAbsoluteSize.Width() + 1, aAbsolutePos.Y() + aAbsoluteSize.Height()));
+    rRenderContext.DrawLine(Point(aAbsolutePos.X() + aAbsoluteSize.Width() + 1, 0 ),
+                            Point(aAbsolutePos.X() + aAbsoluteSize.Width() + 1, aAbsolutePos.Y() + aAbsoluteSize.Height()));
 }
 
 void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
 
-    vcl::Window* pWindows[] = {  m_aRecordText.get(),
-                            m_aAbsolute.get(),
-                            m_aRecordOf.get(),
-                            m_aRecordCount.get(),
-                            m_aFirstBtn.get(),
-                            m_aPrevBtn.get(),
-                            m_aNextBtn.get(),
-                            m_aLastBtn.get(),
-                            m_aNewBtn.get()
-                        };
+    vcl::Window* pWindows[] =
+    {
+        m_aRecordText.get(),
+        m_aAbsolute.get(),
+        m_aRecordOf.get(),
+        m_aRecordCount.get(),
+        m_aFirstBtn.get(),
+        m_aPrevBtn.get(),
+        m_aNextBtn.get(),
+        m_aLastBtn.get(),
+        m_aNewBtn.get()
+    };
 
     switch ( nType )
     {
@@ -759,9 +761,9 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
             Fraction aZoom = GetZoom();
 
             // not all of these controls need to know the new zoom, but to be sure ...
-            vcl::Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
-            if ( IsControlFont() )
-                aFont.Merge( GetControlFont() );
+            vcl::Font aFont(GetSettings().GetStyleSettings().GetFieldFont());
+            if (IsControlFont())
+                aFont.Merge(GetControlFont());
 
             for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
             {
