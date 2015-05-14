@@ -828,7 +828,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case CTRL_LISTBOX:
         context = mpListboxStyle;
-        renderType = RENDER_COMBOBOX;
+        renderType = nPart == PART_FOCUS ? RENDER_FOCUS : RENDER_COMBOBOX;
         break;
     case CTRL_MENU_POPUP:
 
@@ -1682,7 +1682,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             break;
 
         case CTRL_LISTBOX:
-            if (nPart==PART_ENTIRE_CONTROL || nPart==PART_WINDOW || nPart==HAS_BACKGROUND_TEXTURE)
+            if (nPart==PART_ENTIRE_CONTROL || nPart==PART_WINDOW || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_FOCUS)
                 return true;
             break;
 

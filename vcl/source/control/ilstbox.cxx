@@ -2889,6 +2889,22 @@ void ImplWin::LoseFocus()
     Control::LoseFocus();
 }
 
+void ImplWin::ShowFocus(const Rectangle& rRect)
+{
+    bool bNativeOK;
+    if ((bNativeOK = IsNativeControlSupported(CTRL_LISTBOX, PART_FOCUS)))
+    {
+        ImplControlValue aControlValue;
+
+        vcl::Window *pWin = GetParent();
+        Rectangle aParentRect(Point(0, 0), pWin->GetSizePixel());
+        bNativeOK = pWin->DrawNativeControl(CTRL_LISTBOX, PART_FOCUS, aParentRect,
+                                            ControlState::FOCUSED, aControlValue, OUString());
+    }
+    if (!bNativeOK)
+        Control::ShowFocus(rRect);
+}
+
 ImplBtn::ImplBtn( vcl::Window* pParent, WinBits nWinStyle ) :
     PushButton(  pParent, nWinStyle ),
     mbDown  ( false )

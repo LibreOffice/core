@@ -600,6 +600,8 @@ public:
 
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
+
+    virtual void    ShowFocus(const Rectangle& rRect) SAL_OVERRIDE;
 };
 
 class ImplBtn : public PushButton
