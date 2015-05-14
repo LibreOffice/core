@@ -96,7 +96,9 @@ void ScDPFieldButton::setPopupLeft(bool b)
 void ScDPFieldButton::draw()
 {
     bool bOldMapEnablaed = mpOutDev->IsMapModeEnabled();
-    mpOutDev->EnableMapMode(false);
+
+    if (mpOutDev->GetMapMode().GetMapUnit() != MAP_PIXEL )
+        mpOutDev->EnableMapMode(false);
 
     if (mbBaseButton)
     {
