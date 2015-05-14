@@ -25,6 +25,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <sal/types.h>
 
 #include <window.h>
@@ -117,11 +118,75 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         pWindowImpl->maInvalidateRegion.Intersect( *pWinChildClipRegion );
     }
     pWindowImpl->mnPaintFlags = 0;
-    if ( !pWindowImpl->maInvalidateRegion.IsEmpty() )
+    if (!pWindowImpl->maInvalidateRegion.IsEmpty())
     {
         m_pWindow->BeginPaint();
         m_pWindow->PushPaintHelper(this);
-        m_pWindow->Paint(*m_pWindow, m_aPaintRect);
+
+        // double-buffering - so far an experimental feature
+        if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+        {
+            ScopedVclPtrInstance<VirtualDevice> pDevice;
+
+            // transfer various settings
+            // FIXME: this must disappear as we move to RenderContext only,
+            // the painting must become state-less, so that no actual
+            // vcl::Window setting affects this
+            pDevice->SetBackground(m_pWindow->GetBackground());
+            pDevice->SetClipRegion(m_pWindow->GetClipRegion());
+            pDevice->SetFillColor(m_pWindow->GetFillColor());
+            pDevice->SetFont(m_pWindow->GetFont());
+            pDevice->SetLineColor(m_pWindow->GetLineColor());
+            pDevice->SetMapMode(m_pWindow->GetMapMode());
+            pDevice->SetRefPoint(m_pWindow->GetRefPoint());
+            pDevice->SetSettings(m_pWindow->GetSettings());
+
+            // update the output size now, after all the settings were copied
+            pDevice->SetOutputSize(m_pWindow->GetOutputSize());
+
+            // copy the underlying content to be able to handle trasparency
+            pDevice->DrawOutDev(m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), *m_pWindow);
+
+            // paint to the VirtualDevice first
+            m_pWindow->Paint(*pDevice.get(), m_aPaintRect);
+
+            // debugging of the areas - show where we are painting
+            // export VCL_DOUBLEBUFFERING_REGIONS=1 to see where are we
+            // painting
+            if (getenv("VCL_DOUBLEBUFFERING_DEBUG"))
+            {
+                Rectangle aTestRect(m_aPaintRect);
+                aTestRect.Right() -= 1;
+                aTestRect.Bottom() -= 1;
+                pDevice->SetLineColor(Color(COL_LIGHTRED));
+                pDevice->SetFillColor();
+                pDevice->DrawRect(aTestRect);
+
+                pDevice->SetFillColor(Color(COL_LIGHTRED));
+                aTestRect = Rectangle(m_aPaintRect.TopLeft(), Size(10, 10));
+                pDevice->DrawRect(aTestRect);
+                aTestRect = Rectangle(Point(m_aPaintRect.Right() - 10, m_aPaintRect.Top()), Size(10, 10));
+                pDevice->DrawRect(aTestRect);
+                aTestRect = Rectangle(Point(m_aPaintRect.Right() - 10, m_aPaintRect.Bottom() - 10), Size(10, 10));
+                pDevice->DrawRect(aTestRect);
+                aTestRect = Rectangle(Point(m_aPaintRect.Left(), m_aPaintRect.Bottom() - 10), Size(10, 10));
+                pDevice->DrawRect(aTestRect);
+            }
+
+            // and then copy that to the actual window
+            // export VCL_DOUBLEBUFFERING_AVOID_PAINT=1 to see where we are
+            // painting directly instead of using Invalidate()
+            // [ie. everything you can see was painted directly to the
+            // window either above or in eg. an event handler]
+            if (!getenv("VCL_DOUBLEBUFFERING_AVOID_PAINT"))
+                m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), *pDevice.get());
+        }
+        else
+        {
+            // direct painting
+            m_pWindow->Paint(*m_pWindow, m_aPaintRect);
+        }
+
         m_pWindow->EndPaint();
     }
 }
