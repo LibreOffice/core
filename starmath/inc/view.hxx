@@ -44,47 +44,55 @@ class SmViewShell;
 class SmPrintUIOptions;
 class SmGraphicAccessible;
 
-/**************************************************************************/
-
 class SmGraphicWindow : public ScrollableWindow
 {
-    Point     aFormulaDrawPos;
-
+    Point aFormulaDrawPos;
     // old style editing pieces
     Rectangle aCursorRect;
-    bool      bIsCursorVisible;
-    bool      bIsLineVisible;
+    bool bIsCursorVisible;
+    bool bIsLineVisible;
     AutoTimer aCaretBlinkTimer;
 public:
-    bool IsCursorVisible() const { return bIsCursorVisible; }
+    bool IsCursorVisible() const
+    {
+        return bIsCursorVisible;
+    }
     void ShowCursor(bool bShow);
-    bool IsLineVisible() const { return bIsLineVisible; }
+    bool IsLineVisible() const
+    {
+        return bIsLineVisible;
+    }
     void ShowLine(bool bShow);
     const SmNode * SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol);
 protected:
-    void        SetIsCursorVisible(bool bVis) { bIsCursorVisible = bVis; }
-    using   Window::SetCursor;
-    void        SetCursor(const SmNode *pNode);
-    void        SetCursor(const Rectangle &rRect);
-    bool        IsInlineEditEnabled() const;
+    void SetIsCursorVisible(bool bVis)
+    {
+        bIsCursorVisible = bVis;
+    }
+    using Window::SetCursor;
+    void SetCursor(const SmNode *pNode);
+    void SetCursor(const Rectangle &rRect);
+    bool IsInlineEditEnabled() const;
 
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >  xAccessible;
-    SmGraphicAccessible *                                       pAccessible;
+    css::uno::Reference<css::accessibility::XAccessible> xAccessible;
+    SmGraphicAccessible* pAccessible;
 
-    SmViewShell    *pViewShell;
-    sal_uInt16          nZoom;
+    SmViewShell* pViewShell;
+    sal_uInt16 nZoom;
 
 protected:
-    void        SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
+    void SetFormulaDrawPos(const Point &rPos)
+    {
+        aFormulaDrawPos = rPos;
+    }
 
     virtual void DataChanged( const DataChangedEvent& ) SAL_OVERRIDE;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
     virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
     virtual void StateChanged( StateChangedType eChanged ) SAL_OVERRIDE;
-    DECL_LINK(MenuSelectHdl, Menu *);
+    DECL_LINK(MenuSelectHdl, Menu*);
 
 private:
     void RepaintViewShellDoc();
@@ -98,34 +106,44 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     // Window
-    virtual void    MouseButtonDown(const MouseEvent &rMEvt) SAL_OVERRIDE;
-    virtual void    MouseMove(const MouseEvent &rMEvt) SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent &rMEvt) SAL_OVERRIDE;
+    virtual void MouseMove(const MouseEvent &rMEvt) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
 
-    SmViewShell *   GetView()   { return pViewShell; }
+    SmViewShell* GetView()
+    {
+        return pViewShell;
+    }
 
-    using   Window::SetZoom;
-    void   SetZoom(sal_uInt16 Factor);
-    using   Window::GetZoom;
-    sal_uInt16 GetZoom() const { return nZoom; }
+    using Window::SetZoom;
+    void SetZoom(sal_uInt16 Factor);
+    using Window::GetZoom;
+    sal_uInt16 GetZoom() const
+    {
+        return nZoom;
+    }
 
-    const Point &   GetFormulaDrawPos() const { return aFormulaDrawPos; }
+    const Point& GetFormulaDrawPos() const
+    {
+        return aFormulaDrawPos;
+    }
 
     void ZoomToFitInWindow();
-    using   ScrollableWindow::SetTotalSize;
+    using ScrollableWindow::SetTotalSize;
     void SetTotalSize();
 
-    void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
+    void ApplyColorConfigValues(const svtools::ColorConfig &rColorCfg);
 
     // for Accessibility
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
-    using   Window::GetAccessible;
-    SmGraphicAccessible *   GetAccessible_Impl()  { return pAccessible; }
+    using Window::GetAccessible;
+    SmGraphicAccessible* GetAccessible_Impl()
+    {
+        return pAccessible;
+    }
 };
-
-/**************************************************************************/
 
 class SmGraphicController: public SfxControllerItem
 {
@@ -138,8 +156,6 @@ public:
                               const SfxPoolItem* pState) SAL_OVERRIDE;
 };
 
-/**************************************************************************/
-
 class SmEditController: public SfxControllerItem
 {
 protected:
@@ -151,12 +167,8 @@ public:
     virtual ~SmEditController();
 #endif
 
-    virtual void StateChanged(sal_uInt16             nSID,
-                              SfxItemState       eState,
-                              const SfxPoolItem* pState) SAL_OVERRIDE;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
 };
-
-/**************************************************************************/
 
 class SmCmdBoxWindow : public SfxDockingWindow
 {
@@ -192,21 +204,19 @@ public:
 
     void AdjustPosition();
 
-    SmEditWindow& GetEditWindow() { return *aEdit.get(); }
-    SmViewShell  *GetView();
+    SmEditWindow& GetEditWindow()
+    {
+        return *aEdit.get();
+    }
+    SmViewShell* GetView();
 };
-
-/**************************************************************************/
 
 class SmCmdBoxWrapper : public SfxChildWindow
 {
     SFX_DECL_CHILDWINDOW_WITHID(SmCmdBoxWrapper);
 
 protected:
-    SmCmdBoxWrapper(vcl::Window   *pParentWindow,
-                    sal_uInt16       nId,
-                    SfxBindings     *pBindings,
-                    SfxChildWinInfo *pInfo);
+    SmCmdBoxWrapper(vcl::Window* pParentWindow, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo);
 
 #if OSL_DEBUG_LEVEL > 1
     virtual ~SmCmdBoxWrapper();
@@ -218,10 +228,7 @@ public:
     {
         return static_cast<SmCmdBoxWindow *>(pWindow.get())->GetEditWindow();
     }
-
 };
-
-/**************************************************************************/
 
 namespace sfx2 { class FileDialogHelper; }
 struct SmViewShell_Impl;
@@ -233,11 +240,11 @@ class SmViewShell: public SfxViewShell
 
     std::unique_ptr<SmViewShell_Impl> pImpl;
 
-    VclPtr<SmGraphicWindow>     aGraphic;
+    VclPtr<SmGraphicWindow> aGraphic;
     SmGraphicController aGraphicController;
-    OUString            aStatusText;
+    OUString aStatusText;
 
-    bool                bPasteState;
+    bool bPasteState;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
@@ -292,8 +299,15 @@ public:
     }
 
     SmEditWindow * GetEditWindow();
-          SmGraphicWindow & GetGraphicWindow()       { return *aGraphic.get(); }
-    const SmGraphicWindow & GetGraphicWindow() const { return *aGraphic.get(); }
+
+    SmGraphicWindow& GetGraphicWindow()
+    {
+        return *aGraphic.get();
+    }
+    const SmGraphicWindow& GetGraphicWindow() const
+    {
+        return *aGraphic.get();
+    }
 
     void        SetStatusText(const OUString& rText);
 

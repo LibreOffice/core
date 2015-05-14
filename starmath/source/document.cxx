@@ -567,53 +567,48 @@ SmPrinterAccess::~SmPrinterAccess()
         pRefDev->Pop();
 }
 
-
-
 Printer* SmDocShell::GetPrt()
 {
-    if ( SfxObjectCreateMode::EMBEDDED == GetCreateMode() )
+    if (SfxObjectCreateMode::EMBEDDED == GetCreateMode())
     {
         // Normally the server provides the printer. But if it doesn't provide one (e.g. because
         // there is no connection) it still can be the case that we know the printer because it
         // has been passed on by the server in OnDocumentPrinterChanged and being kept temporarily.
-        Printer *pPrt = GetDocumentPrinter();
-        if ( !pPrt && pTmpPrinter )
+        Printer* pPrt = GetDocumentPrinter();
+        if (!pPrt && pTmpPrinter)
             pPrt = pTmpPrinter;
         return pPrt;
     }
-    else if ( !pPrinter )
+    else if (!pPrinter)
     {
-        SfxItemSet *pOptions =
-            new SfxItemSet(GetPool(),
-                           SID_PRINTSIZE,       SID_PRINTSIZE,
-                           SID_PRINTZOOM,       SID_PRINTZOOM,
-                           SID_PRINTTITLE,      SID_PRINTTITLE,
-                           SID_PRINTTEXT,       SID_PRINTTEXT,
-                           SID_PRINTFRAME,      SID_PRINTFRAME,
-                           SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
-                           SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
-                           0);
-
+        SfxItemSet* pOptions = new SfxItemSet(GetPool(),
+                                              SID_PRINTSIZE,       SID_PRINTSIZE,
+                                              SID_PRINTZOOM,       SID_PRINTZOOM,
+                                              SID_PRINTTITLE,      SID_PRINTTITLE,
+                                              SID_PRINTTEXT,       SID_PRINTTEXT,
+                                              SID_PRINTFRAME,      SID_PRINTFRAME,
+                                              SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
+                                              SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
+                                              0);
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
         pPrinter = VclPtr<SfxPrinter>::Create(pOptions);
-        pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
+        pPrinter->SetMapMode(MapMode(MAP_100TH_MM));
     }
     return pPrinter;
 }
 
 OutputDevice* SmDocShell::GetRefDev()
 {
-    if ( SfxObjectCreateMode::EMBEDDED == GetCreateMode() )
+    if (SfxObjectCreateMode::EMBEDDED == GetCreateMode())
     {
         OutputDevice* pOutDev = GetDocumentRefDev();
-        if ( pOutDev )
+        if (pOutDev)
             return pOutDev;
     }
 
     return GetPrt();
 }
-
 
 void SmDocShell::SetPrinter( SfxPrinter *pNew )
 {
@@ -638,31 +633,30 @@ void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
 void SmDocShell::Repaint()
 {
     bool bIsEnabled = IsEnableSetModified();
-    if ( bIsEnabled )
+    if (bIsEnabled)
         EnableSetModified( false );
 
-    SetFormulaArranged( false );
+    SetFormulaArranged(false);
 
     Size aVisSize = GetSize();
-    SetVisAreaSize( aVisSize );
-    SmViewShell *pViewSh = SmGetActiveView();
+    SetVisAreaSize(aVisSize);
+    SmViewShell* pViewSh = SmGetActiveView();
     if (pViewSh)
         pViewSh->GetGraphicWindow().Invalidate();
 
-    if ( bIsEnabled )
-        EnableSetModified( bIsEnabled );
+    if (bIsEnabled)
+        EnableSetModified(bIsEnabled);
 }
 
-
-SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags ) :
-    SfxObjectShell( i_nSfxCreationFlags ),
-    pTree               ( 0 ),
-    pEditEngineItemPool ( 0 ),
-    pEditEngine         ( 0 ),
-    pPrinter            ( 0 ),
-    pTmpPrinter         ( 0 ),
-    nModifyCount        ( 0 ),
-    bIsFormulaArranged  ( false )
+SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
+    : SfxObjectShell(i_nSfxCreationFlags)
+    , pTree(0)
+    , pEditEngineItemPool(0)
+    , pEditEngine(0)
+    , pPrinter(0)
+    , pTmpPrinter(0)
+    , nModifyCount(0)
+    , bIsFormulaArranged(false)
 {
     pCursor = NULL;
 
@@ -674,10 +668,8 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags ) :
     StartListening(aFormat);
     StartListening(*pp->GetConfig());
 
-    SetBaseModel( new SmModel(this) );
+    SetBaseModel(new SmModel(this));
 }
-
-
 
 SmDocShell::~SmDocShell()
 {

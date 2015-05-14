@@ -787,7 +787,6 @@ SfxChildAlignment SmCmdBoxWindow::CheckAlignment(SfxChildAlignment eActual,
     return eActual;
 }
 
-
 void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 {
     if (StateChangedType::InitShow == nStateChange)
@@ -803,7 +802,6 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 
     SfxDockingWindow::StateChanged( nStateChange );
 }
-
 
 IMPL_LINK_NOARG_TYPED( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
 {
@@ -844,7 +842,6 @@ IMPL_LINK_NOARG_TYPED( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
     }
 }
 
-
 void SmCmdBoxWindow::AdjustPosition()
 {
     Point aPt;
@@ -859,7 +856,6 @@ void SmCmdBoxWindow::AdjustPosition()
     SetPosPixel( aPos );
 }
 
-
 void SmCmdBoxWindow::ToggleFloatingMode()
 {
     SfxDockingWindow::ToggleFloatingMode();
@@ -868,15 +864,11 @@ void SmCmdBoxWindow::ToggleFloatingMode()
         GetFloatingWindow()->SetMinOutputSizePixel(Size (200, 50));
 }
 
-
 void SmCmdBoxWindow::GetFocus()
 {
     if (!bExiting)
         aEdit->GrabFocus();
 }
-
-/**************************************************************************/
-
 
 SFX_IMPL_DOCKINGWINDOW_WITHID(SmCmdBoxWrapper, SID_CMDBOXWINDOW);
 
@@ -892,7 +884,6 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(vcl::Window *pParentWindow, sal_uInt16 nId,
     static_cast<SfxDockingWindow *>(pWindow.get())->Initialize(pInfo);
 }
 
-
 #if OSL_DEBUG_LEVEL > 1
 SmCmdBoxWrapper::~SmCmdBoxWrapper()
 {
@@ -906,7 +897,7 @@ struct SmViewShell_Impl
     SvtMiscOptions          aOpts;
 };
 
-TYPEINIT1( SmViewShell, SfxViewShell );
+TYPEINIT1(SmViewShell, SfxViewShell);
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SmViewShell, SfxViewShell)
 
@@ -931,7 +922,6 @@ void SmViewShell::AdjustPosSizePixel(const Point &rPos, const Size &rSize)
     aGraphic->SetPosSizePixel(rPos, rSize);
 }
 
-
 void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize)
 {
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
@@ -947,7 +937,6 @@ void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize)
     GetGraphicWindow().SetTotalSize();
 }
 
-
 void SmViewShell::OuterResizePixel(const Point &rOfs, const Size &rSize)
 {
     SmGraphicWindow &rWin = GetGraphicWindow();
@@ -957,12 +946,10 @@ void SmViewShell::OuterResizePixel(const Point &rOfs, const Size &rSize)
     rWin.Update();
 }
 
-
 void SmViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
 {
     rRect.SetSize( GetGraphicWindow().GetSizePixel() );
 }
-
 
 void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 {
@@ -973,7 +960,6 @@ void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
     //if necessary
     SfxViewShell::SetZoomFactor( rX, rY );
 }
-
 
 Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const OUString& rLine)
 {
@@ -1004,9 +990,9 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const OUString& rLine)
 
 Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long MaxWidth)
 {
-    Size    aSize;
-    Size    TextSize;
-    sal_uInt16  nLines = comphelper::string::getTokenCount(rText, '\n');
+    Size aSize;
+    Size aTextSize;
+    sal_uInt16 nLines = comphelper::string::getTokenCount(rText, '\n');
 
     for (sal_uInt16 i = 0; i < nLines; i++)
     {
@@ -1041,8 +1027,8 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long
                 aText = aLine.copy(0, m);
                 aLine = aLine.replaceAt(0, m, "");
                 aSize = GetTextLineSize(rDevice, aText);
-                TextSize.Height() += aSize.Height();
-                TextSize.Width() = std::max(TextSize.Width(), std::min(aSize.Width(), MaxWidth));
+                aTextSize.Height() += aSize.Height();
+                aTextSize.Width() = std::max(aTextSize.Width(), std::min(aSize.Width(), MaxWidth));
 
                 aLine = comphelper::string::stripStart(aLine, ' ');
                 aLine = comphelper::string::stripStart(aLine, '\t');
@@ -1052,18 +1038,17 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long
         }
         else
         {
-            TextSize.Height() += aSize.Height();
-            TextSize.Width() = std::max(TextSize.Width(), aSize.Width());
+            aTextSize.Height() += aSize.Height();
+            aTextSize.Width() = std::max(aTextSize.Width(), aSize.Width());
         }
     }
 
-    return TextSize;
+    return aTextSize;
 }
-
 
 void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, const OUString& rLine)
 {
-    Point   aPoint (rPosition);
+    Point aPoint(rPosition);
 
     sal_uInt16 nTabs = comphelper::string::getTokenCount(rLine, '\t');
     long nTabPos = 0;
@@ -1092,8 +1077,8 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const OUString& rText, sal_uInt16 MaxWidth)
 {
     sal_uInt16 nLines = comphelper::string::getTokenCount(rText, '\n');
-    Point   aPoint (rPosition);
-    Size    aSize;
+    Point aPoint(rPosition);
+    Size aSize;
 
     for (sal_uInt16 i = 0; i < nLines; i++)
     {
@@ -1298,8 +1283,8 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
 
 SfxPrinter* SmViewShell::GetPrinter(bool bCreate)
 {
-    SmDocShell *pDoc = GetDoc();
-    if ( pDoc->HasPrinter() || bCreate )
+    SmDocShell* pDoc = GetDoc();
+    if (pDoc->HasPrinter() || bCreate)
         return pDoc->GetPrinter();
     return 0;
 }
@@ -1372,7 +1357,6 @@ void SmViewShell::NextError()
         ShowError( pErrorDesc );
 }
 
-
 void SmViewShell::PrevError()
 {
     SAL_WARN_IF( !GetDoc(), "starmath", "Document missing" );
@@ -1381,7 +1365,6 @@ void SmViewShell::PrevError()
     if (pErrorDesc)
         ShowError( pErrorDesc );
 }
-
 
 void SmViewShell::Insert( SfxMedium& rMedium )
 {
@@ -1890,7 +1873,6 @@ void SmViewShell::GetState(SfxItemSet &rSet)
     }
 }
 
-
 SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
     : SfxViewShell(pFrame_, SfxViewShellFlags::HAS_PRINTOPTIONS | SfxViewShellFlags::CAN_PRINT)
     , pImpl(new SmViewShell_Impl)
@@ -1926,7 +1908,6 @@ void SmViewShell::Deactivate( bool bIsMDIActivate )
 
     SfxViewShell::Deactivate( bIsMDIActivate );
 }
-
 
 void SmViewShell::Activate( bool bIsMDIActivate )
 {
