@@ -57,27 +57,25 @@ void GraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const Recta
 {
     Control::Paint(rRenderContext, rRect);
 
-    const Size  aOutputSize( GetOutputSizePixel() );
+    const Size  aOutputSize(rRenderContext.GetOutputSizePixel());
 
-    if( maPreview.IsAnimated() )
+    if (maPreview.IsAnimated())
     {
-        const Size  aGraphicSize( LogicToPixel( maPreview.GetPrefSize(), maPreview.GetPrefMapMode() ) );
-        const Point aGraphicPosition( ( aOutputSize.Width()  - aGraphicSize.Width()  ) >> 1,
-                                      ( aOutputSize.Height() - aGraphicSize.Height() ) >> 1 );
-        maPreview.StartAnimation( this, aGraphicPosition, aGraphicSize );
+        const Size aGraphicSize(rRenderContext.LogicToPixel(maPreview.GetPrefSize(), maPreview.GetPrefMapMode()));
+        const Point aGraphicPosition((aOutputSize.Width()  - aGraphicSize.Width()  ) >> 1,
+                                     (aOutputSize.Height() - aGraphicSize.Height() ) >> 1);
+        maPreview.StartAnimation(&rRenderContext, aGraphicPosition, aGraphicSize);
     }
     else
     {
-        const Size  aGraphicSize( maPreview.GetSizePixel() );
-        const Point aGraphicPosition( ( aOutputSize.Width()  - aGraphicSize.Width()  ) >> 1,
-                                      ( aOutputSize.Height() - aGraphicSize.Height() ) >> 1 );
-        maPreview.Draw( this, aGraphicPosition, aGraphicSize );
+        const Size  aGraphicSize(maPreview.GetSizePixel());
+        const Point aGraphicPosition((aOutputSize.Width()  - aGraphicSize.Width())  >> 1,
+                                     (aOutputSize.Height() - aGraphicSize.Height()) >> 1);
+        maPreview.Draw(&rRenderContext, aGraphicPosition, aGraphicSize);
     }
 }
 
-
-
-void GraphicPreviewWindow::SetPreview( const Graphic& rGraphic )
+void GraphicPreviewWindow::SetPreview(const Graphic& rGraphic)
 {
     maPreview = rGraphic;
     Invalidate();
