@@ -528,10 +528,11 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
     OUString sExtension(rObject.getExtension());
     OUString sDescription, sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
     sal_uInt16 nResId = 0;
-    bool bShowExt = false, bDetected = false, bOnlyFile = false;
+    bool bShowExt = false, bOnlyFile = false;
     bool bFolder = bDetectFolder && CONTENT_HELPER::IsFolder( sURL );
     if ( !bFolder )
     {
+        bool bDetected = false;
         if ( !bDetected )
         {
             if ( rObject.GetProtocol() == INetProtocol::PrivSoffice )
