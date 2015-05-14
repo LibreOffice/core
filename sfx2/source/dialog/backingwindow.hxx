@@ -48,69 +48,66 @@
 
 class ToolBox;
 
-class BackingWindow
-    : public vcl::Window
-    , public VclBuilderContainer
+class BackingWindow : public vcl::Window, public VclBuilderContainer
 {
-    typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >         mxContext;
-    com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
-    com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
-    com::sun::star::uno::Reference< com::sun::star::frame::XDesktop2 >               mxDesktop;
+    typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*, const ThumbnailViewItem*);
+    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<css::frame::XDispatchProvider> mxDesktopDispatchProvider;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
+    css::uno::Reference<css::frame::XDesktop2> mxDesktop;
 
     /** helper for drag&drop. */
-    com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
+    css::uno::Reference<css::datatransfer::dnd::XDropTargetListener> mxDropTargetListener;
 
-    VclPtr<PushButton>                     mpOpenButton;
-    VclPtr<PushButton>                     mpRecentButton;
-    VclPtr<MenuButton>                     mpTemplateButton;
+    VclPtr<PushButton> mpOpenButton;
+    VclPtr<PushButton> mpRecentButton;
+    VclPtr<MenuButton> mpTemplateButton;
 
-    VclPtr<FixedText>                      mpCreateLabel;
+    VclPtr<FixedText>  mpCreateLabel;
 
-    VclPtr<PushButton>                     mpWriterAllButton;
-    VclPtr<PushButton>                     mpCalcAllButton;
-    VclPtr<PushButton>                     mpImpressAllButton;
-    VclPtr<PushButton>                     mpDrawAllButton;
-    VclPtr<PushButton>                     mpDBAllButton;
-    VclPtr<PushButton>                     mpMathAllButton;
+    VclPtr<PushButton> mpWriterAllButton;
+    VclPtr<PushButton> mpCalcAllButton;
+    VclPtr<PushButton> mpImpressAllButton;
+    VclPtr<PushButton> mpDrawAllButton;
+    VclPtr<PushButton> mpDBAllButton;
+    VclPtr<PushButton> mpMathAllButton;
 
-    VclPtr<PushButton>                     mpHelpButton;
-    VclPtr<PushButton>                     mpExtensionsButton;
+    VclPtr<PushButton> mpHelpButton;
+    VclPtr<PushButton> mpExtensionsButton;
 
-    VclPtr<VclBox>                         mpAllButtonsBox;
-    VclPtr<VclBox>                         mpButtonsBox;
-    VclPtr<VclBox>                         mpSmallButtonsBox;
-    VclPtr<VclBox>                         mpThinBox1;
-    VclPtr<VclBox>                         mpThinBox2;
-    VclPtr<VclBox>                         mpHelpBox;
-    VclPtr<VclBox>                         mpExtensionsBox;
+    VclPtr<VclBox> mpAllButtonsBox;
+    VclPtr<VclBox> mpButtonsBox;
+    VclPtr<VclBox> mpSmallButtonsBox;
+    VclPtr<VclBox> mpThinBox1;
+    VclPtr<VclBox> mpThinBox2;
+    VclPtr<VclBox> mpHelpBox;
+    VclPtr<VclBox> mpExtensionsBox;
 
-    VclPtr<RecentDocsView>                 mpAllRecentThumbnails;
-    VclPtr<TemplateDefaultView>            mpLocalView;
-    bool                                   mbLocalViewInitialized;
+    VclPtr<RecentDocsView> mpAllRecentThumbnails;
+    VclPtr<TemplateDefaultView> mpLocalView;
+    bool mbLocalViewInitialized;
 
-    std::vector<VclPtr<vcl::Window> >      maDndWindows;
+    std::vector< VclPtr<vcl::Window> > maDndWindows;
 
-    Rectangle                       maStartCentButtons;
+    Rectangle maStartCentButtons;
 
-    bool                            mbIsSaveMode;
-    bool                            mbInitControls;
-    sal_Int32                       mnHideExternalLinks;
-    svt::AcceleratorExecute*        mpAccExec;
+    bool mbIsSaveMode;
+    bool  mbInitControls;
+    sal_Int32 mnHideExternalLinks;
+    svt::AcceleratorExecute* mpAccExec;
 
-    void setupButton( PushButton* pButton );
-    void setupButton( MenuButton* pButton );
+    void setupButton(PushButton* pButton);
+    void setupButton(MenuButton* pButton);
     //Template Manager
-    void OnTemplateOpen ();
+    void OnTemplateOpen();
 
-    void dispatchURL( const OUString& i_rURL,
-                      const OUString& i_rTarget = OUString( "_default" ),
-                      const com::sun::star::uno::Reference< com::sun::star::frame::XDispatchProvider >& i_xProv = com::sun::star::uno::Reference< com::sun::star::frame::XDispatchProvider >(),
-                      const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& = com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >()
-                      );
+    void dispatchURL(const OUString& i_rURL,
+                     const OUString& i_rTarget = OUString("_default"),
+                     const css::uno::Reference<css::frame::XDispatchProvider >& i_xProv = css::uno::Reference<css::frame::XDispatchProvider>(),
+                     const css::uno::Sequence<css::beans::PropertyValue >& = css::uno::Sequence<css::beans::PropertyValue>());
 
-    std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelTemplates;
-    std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelFolders;
+    std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelTemplates;
+    std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelFolders;
 
     DECL_LINK(ClickHdl, Button*);
     DECL_LINK_TYPED(MenuSelectHdl, MenuButton*, void);
@@ -123,19 +120,19 @@ class BackingWindow
     void initializeLocalView();
 
 public:
-    BackingWindow( vcl::Window* pParent );
+    BackingWindow(vcl::Window* pParent);
     virtual ~BackingWindow();
-    virtual void        dispose() SAL_OVERRIDE;
+    virtual void dispose() SAL_OVERRIDE;
 
-    virtual void        Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void        GetFocus() SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
+    virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
-    void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
+    void setOwningFrame(const css::uno::Reference<css::frame::XFrame>& xFrame );
 
     void clearRecentFileList();
 };

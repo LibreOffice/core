@@ -381,29 +381,29 @@ void BackingWindow::setupButton( MenuButton* pButton )
     pButton->SetSelectHdl(LINK(this, BackingWindow, MenuSelectHdl));
 }
 
-void BackingWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void BackingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     Resize();
 
-    Wallpaper aBack( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor );
-    vcl::Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+    Wallpaper aBack(svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
+    vcl::Region aClip(Rectangle(Point(0, 0), rRenderContext.GetOutputSizePixel()));
 
-    aClip.Exclude( maStartCentButtons );
+    aClip.Exclude(maStartCentButtons);
 
-    Push( PushFlags::CLIPREGION );
-    IntersectClipRegion( aClip );
-    DrawWallpaper( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ), aBack );
-    Pop();
+    rRenderContext.Push(PushFlags::CLIPREGION);
+    rRenderContext.IntersectClipRegion(aClip);
+    rRenderContext.DrawWallpaper(Rectangle(Point(0, 0), rRenderContext.GetOutputSizePixel()), aBack);
+    rRenderContext.Pop();
 
-    ScopedVclPtrInstance< VirtualDevice > pVDev( *this );
-    pVDev->EnableRTL( IsRTLEnabled() );
-    pVDev->SetOutputSizePixel( maStartCentButtons.GetSize() );
-    Point aOffset( Point( 0, 0 ) - maStartCentButtons.TopLeft());
-    pVDev->DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
+    ScopedVclPtrInstance<VirtualDevice> pVDev(rRenderContext);
+    pVDev->EnableRTL(rRenderContext.IsRTLEnabled());
+    pVDev->SetOutputSizePixel(maStartCentButtons.GetSize());
+    Point aOffset(Point(0, 0) - maStartCentButtons.TopLeft());
+    pVDev->DrawWallpaper(Rectangle(aOffset, rRenderContext.GetOutputSizePixel()), aBack);
 
-    DrawOutDev( maStartCentButtons.TopLeft(), maStartCentButtons.GetSize(),
-                Point( 0, 0 ), maStartCentButtons.GetSize(),
-                *pVDev.get() );
+    rRenderContext.DrawOutDev(maStartCentButtons.TopLeft(), maStartCentButtons.GetSize(),
+                              Point(0, 0), maStartCentButtons.GetSize(),
+                              *pVDev.get());
 }
 
 bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
@@ -510,7 +510,7 @@ void BackingWindow::Resize()
         VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD),
             maStartCentButtons.TopLeft(), maStartCentButtons.GetSize());
 
-    if( !IsInPaint())
+    if (!IsInPaint())
         Invalidate();
 }
 
