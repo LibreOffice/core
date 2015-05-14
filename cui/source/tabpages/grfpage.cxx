@@ -799,29 +799,29 @@ VCL_BUILDER_DECL_FACTORY(SvxCropExample)
     rRet = VclPtr<SvxCropExample>::Create(pParent, nWinStyle);
 }
 
-void SvxCropExample::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    Size aWinSize( PixelToLogic(GetOutputSizePixel() ));
-    SetLineColor();
-    SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
-    SetRasterOp( ROP_OVERPAINT );
-    DrawRect( Rectangle( Point(), aWinSize ) );
+    Size aWinSize(rRenderContext.PixelToLogic(rRenderContext.GetOutputSizePixel()));
+    rRenderContext.SetLineColor();
+    rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
+    rRenderContext.SetRasterOp(ROP_OVERPAINT);
+    rRenderContext.DrawRect(Rectangle(Point(), aWinSize));
 
-    SetLineColor( Color( COL_WHITE ) );
+    rRenderContext.SetLineColor(Color(COL_WHITE));
     Rectangle aRect(Point((aWinSize.Width() - aFrameSize.Width())/2,
                           (aWinSize.Height() - aFrameSize.Height())/2),
-                          aFrameSize );
-    aGrf.Draw( this,  aRect.TopLeft(), aRect.GetSize() );
+                          aFrameSize);
+    aGrf.Draw(&rRenderContext, aRect.TopLeft(), aRect.GetSize());
 
-    Size aSz( 2, 0 );
-    aSz = PixelToLogic( aSz );
-    SetFillColor( Color( COL_TRANSPARENT ) );
-    SetRasterOp( ROP_INVERT );
+    Size aSz(2, 0);
+    aSz = rRenderContext.PixelToLogic(aSz);
+    rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
+    rRenderContext.SetRasterOp(ROP_INVERT);
     aRect.Left()    += aTopLeft.Y();
     aRect.Top()     += aTopLeft.X();
     aRect.Right()   -= aBottomRight.Y();
     aRect.Bottom()  -= aBottomRight.X();
-    DrawRect( aRect );
+    rRenderContext.DrawRect(aRect);
 }
 
 void SvxCropExample::Resize()
