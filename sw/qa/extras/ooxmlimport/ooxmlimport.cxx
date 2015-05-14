@@ -882,6 +882,17 @@ DECLARE_OOXMLIMPORT_TEST(testTDF91122, "tdf91122.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", text::VertOrientation::TOP, nValue);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTDF91260, "tdf91260.docx")
+{
+    /*
+     * textbox can't extend beyond the page bottom
+     * solution: shrinking textbox (its text frame) height, if needed
+     */
+    uno::Reference<text::XTextRange> xFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame->getString().startsWith( "Lorem ipsum" ) );
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3454), getProperty<sal_Int32>(xFrame, "Height"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo74357, "fdo74357.docx")
 {
     // Floating table wasn't converted to a textframe.
