@@ -3523,7 +3523,7 @@ void ScGridWindow::StopMarking()
 void ScGridWindow::UpdateInputContext()
 {
     bool bReadOnly = pViewData->GetDocShell()->IsReadOnly();
-    sal_uLong nOptions = bReadOnly ? 0 : ( INPUTCONTEXT_TEXT | INPUTCONTEXT_EXTTEXTINPUT );
+    InputContextFlags nOptions = bReadOnly ? InputContextFlags::NONE : ( InputContextFlags::Text | InputContextFlags::ExtText );
 
     //  when font from InputContext is used,
     //  it must be taken from the cursor position's cell attributes

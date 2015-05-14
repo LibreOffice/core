@@ -422,11 +422,11 @@ void SwView::SelectShell()
             InputContext aCntxt( GetEditWin().GetInputContext() );
             aCntxt.SetOptions( bSetExtInpCntxt
                                 ? (aCntxt.GetOptions() |
-                                        ( INPUTCONTEXT_TEXT |
-                                            INPUTCONTEXT_EXTTEXTINPUT ))
+                                        ( InputContextFlags::Text |
+                                            InputContextFlags::ExtText ))
                                 : (aCntxt.GetOptions() & ~
-                                        ( INPUTCONTEXT_TEXT |
-                                            INPUTCONTEXT_EXTTEXTINPUT )) );
+                                        InputContextFlags( InputContextFlags::Text |
+                                            InputContextFlags::ExtText )) );
             GetEditWin().SetInputContext( aCntxt );
         }
 
@@ -665,11 +665,11 @@ void SwView::_CheckReadonlySelection()
                 InputContext aCntxt( GetEditWin().GetInputContext() );
                 aCntxt.SetOptions( SW_DISABLE_ON_PROTECTED_CURSOR & nDisableFlags
                                     ? (aCntxt.GetOptions() & ~
-                                            ( INPUTCONTEXT_TEXT |
-                                                INPUTCONTEXT_EXTTEXTINPUT ))
+                                            InputContextFlags( InputContextFlags::Text |
+                                                InputContextFlags::ExtText ))
                                     : (aCntxt.GetOptions() |
-                                            ( INPUTCONTEXT_TEXT |
-                                                INPUTCONTEXT_EXTTEXTINPUT )) );
+                                            ( InputContextFlags::Text |
+                                                InputContextFlags::ExtText )) );
                 GetEditWin().SetInputContext( aCntxt );
             }
             break;

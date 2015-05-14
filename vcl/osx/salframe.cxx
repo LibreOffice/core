@@ -76,7 +76,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, sal_uLong salFrameStyle ) :
     mePointerStyle( POINTER_ARROW ),
     mnTrackingRectTag( 0 ),
     mrClippingPath( 0 ),
-    mnICOptions( 0 )
+    mnICOptions( InputContextFlags::NONE )
 {
     maSysData.nSize     = sizeof( SystemEnvData );
 
@@ -919,13 +919,13 @@ void AquaSalFrame::SetInputContext( SalInputContext* pContext )
 {
     if (!pContext)
     {
-        mnICOptions = 0;
+        mnICOptions = InputContextFlags::NONE;
         return;
     }
 
     mnICOptions = pContext->mnOptions;
 
-    if(!(pContext->mnOptions & SAL_INPUTCONTEXT_TEXT))
+    if(!(pContext->mnOptions & InputContextFlags::Text))
         return;
 }
 

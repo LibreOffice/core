@@ -23,15 +23,24 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 
 // - InputContext-Flags -
 
 
-#define INPUTCONTEXT_TEXT               ((sal_uLong)0x00000001)
-#define INPUTCONTEXT_EXTTEXTINPUT       ((sal_uLong)0x00000002)
-#define INPUTCONTEXT_EXTTEXTINPUT_ON    ((sal_uLong)0x00000004)
-#define INPUTCONTEXT_EXTTEXTINPUT_OFF   ((sal_uLong)0x00000008)
+enum class InputContextFlags
+{
+    NONE         = 0x0000,
+    Text         = 0x0001,
+    ExtText      = 0x0002,
+    ExtTextOn    = 0x0004,
+    ExtTextOff   = 0x0008,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<InputContextFlags> : is_typed_flags<InputContextFlags, 0x000f> {};
+}
 
 
 // - InputContext -
@@ -40,23 +49,23 @@
 class VCL_DLLPUBLIC InputContext
 {
 private:
-    vcl::Font       maFont;
-    sal_uLong       mnOptions;
+    vcl::Font          maFont;
+    InputContextFlags  mnOptions;
 
 public:
-                    InputContext() { mnOptions = 0; }
+                    InputContext() { mnOptions = InputContextFlags::NONE; }
                     InputContext( const InputContext& rInputContext ) :
                         maFont( rInputContext.maFont )
                     { mnOptions = rInputContext.mnOptions; }
-                    InputContext( const vcl::Font& rFont, sal_uLong nOptions = 0 ) :
+                    InputContext( const vcl::Font& rFont, InputContextFlags nOptions = InputContextFlags::NONE ) :
                         maFont( rFont )
                     { mnOptions = nOptions; }
 
     void            SetFont( const vcl::Font& rFont ) { maFont = rFont; }
     const vcl::Font& GetFont() const { return maFont; }
 
-    void            SetOptions( sal_uLong nOptions ) { mnOptions = nOptions; }
-    sal_uLong           GetOptions() const { return mnOptions; }
+    void              SetOptions( InputContextFlags nOptions ) { mnOptions = nOptions; }
+    InputContextFlags GetOptions() const { return mnOptions; }
 
     InputContext&   operator=( const InputContext& rInputContext );
     bool            operator==( const InputContext& rInputContext ) const;

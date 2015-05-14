@@ -2219,7 +2219,7 @@ void WinSalFrame::Sync()
 static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pContext )
 {
     WinSalFrame*   pFrame = GetWindowPtr( hWnd );
-    bool        bIME = (pContext->mnOptions & SAL_INPUTCONTEXT_TEXT) != 0;
+    bool           bIME(pContext->mnOptions & InputContextFlags::Text);
     if ( bIME )
     {
         if ( !pFrame->mbIME )
@@ -2238,7 +2238,7 @@ static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pCont
 
         // When the application can't handle IME messages, then the
         // System should handle the IME handling
-        if ( !(pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT) )
+        if ( !(pContext->mnOptions & InputContextFlags::ExtText) )
             pFrame->mbHandleIME = FALSE;
 
         // Set the Font for IME Handling

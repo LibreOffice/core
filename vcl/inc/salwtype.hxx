@@ -30,6 +30,7 @@ class SalObject;
 namespace vcl { class Window; }
 
 class FontSelectPattern;
+enum class InputContextFlags;
 
 // - SalEvent -
 
@@ -266,18 +267,11 @@ struct SalFrameState
 
 // - SalInputContext -
 
-// Have to match DEFINEs in inputctx.hxx, as these are not converted
-#define SAL_INPUTCONTEXT_TEXT               ((sal_uLong)0x00000001)
-#define SAL_INPUTCONTEXT_EXTTEXTINPUT       ((sal_uLong)0x00000002)
-#define SAL_INPUTCONTEXT_EXTTEXTINPUT_ON    ((sal_uLong)0x00000004)
-#define SAL_INPUTCONTEXT_EXTTEXTINPUT_OFF   ((sal_uLong)0x00000008)
-#define SAL_INPUTCONTEXT_CHANGELANGUAGE     ((sal_uLong)0x00000010)
-
 struct SalInputContext
 {
     FontSelectPattern*     mpFont;
     LanguageType           meLanguage;
-    sal_uLong              mnOptions;
+    InputContextFlags      mnOptions;
 };
 
 struct SalSwipeEvent

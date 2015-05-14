@@ -2463,13 +2463,13 @@ void X11SalFrame::Sync()
 
 void X11SalFrame::SetInputContext( SalInputContext* pContext )
 {
-      if (pContext == NULL)
+    if (pContext == NULL)
         return;
 
-      // 1. We should create an input context for this frame
-      //    only when SAL_INPUTCONTEXT_TEXT is set.
+    // 1. We should create an input context for this frame
+    //    only when InputContextFlags::Text is set.
 
-      if (!(pContext->mnOptions & SAL_INPUTCONTEXT_TEXT))
+    if (!(pContext->mnOptions & InputContextFlags::Text))
     {
         if( mpInputContext )
             mpInputContext->Unmap( this );
@@ -2477,9 +2477,9 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
     }
 
     // 2. We should use on-the-spot inputstyle
-      //    only when SAL_INPUTCONTEXT_EXTTEXTINPUT is set.
+    //    only when InputContextFlags::ExtTExt is set.
 
-      if (mpInputContext == NULL)
+    if (mpInputContext == NULL)
     {
         vcl::I18NStatus& rStatus( vcl::I18NStatus::get() );
         rStatus.setParent( this );
@@ -2490,10 +2490,10 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
             if (mbInputFocus)
                 mpInputContext->SetICFocus( this );
         }
-      }
+    }
     else
         mpInputContext->Map( this );
-      return;
+    return;
 }
 
 void X11SalFrame::EndExtTextInput( sal_uInt16 nFlags )

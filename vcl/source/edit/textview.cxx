@@ -208,7 +208,7 @@ TextView::TextView( TextEngine* pEng, vcl::Window* pWindow ) :
     mpImpl->mpCursor = new vcl::Cursor;
     mpImpl->mpCursor->Show();
     pWindow->SetCursor( mpImpl->mpCursor );
-    pWindow->SetInputContext( InputContext( pEng->GetFont(), INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT ) );
+    pWindow->SetInputContext( InputContext( pEng->GetFont(), InputContextFlags::Text|InputContextFlags::ExtText ) );
 
     if ( pWindow->GetSettings().GetStyleSettings().GetSelectionOptions() & SELECTION_OPTION_INVERT )
         mpImpl->mbHighlightSelection = true;
@@ -1227,7 +1227,7 @@ void TextView::SetReadOnly( bool bReadOnly )
         else
             HideCursor();
 
-        GetWindow()->SetInputContext( InputContext( mpImpl->mpTextEngine->GetFont(), bReadOnly ? INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT : 0 ) );
+        GetWindow()->SetInputContext( InputContext( mpImpl->mpTextEngine->GetFont(), bReadOnly ? InputContextFlags::Text|InputContextFlags::ExtText : InputContextFlags::NONE ) );
     }
 }
 

@@ -2915,7 +2915,7 @@ void GtkSalFrame::SetInputContext( SalInputContext* pContext )
     if( ! pContext )
         return;
 
-    if( ! (pContext->mnOptions & SAL_INPUTCONTEXT_TEXT) )
+    if( ! (pContext->mnOptions & InputContextFlags::Text) )
         return;
 
     // create a new im context

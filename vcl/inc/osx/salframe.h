@@ -90,7 +90,7 @@ public:
 
     Rectangle                       maInvalidRect;
 
-    sal_uLong                           mnICOptions;
+    InputContextFlags               mnICOptions;
 
     // To prevent display sleep during presentation
     IOPMAssertionID                 mnAssertionID;

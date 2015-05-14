@@ -260,11 +260,11 @@ void SwWebView::SelectShell()
             InputContext aCntxt( GetEditWin().GetInputContext() );
             aCntxt.SetOptions( bSetExtInpCntxt
                                 ? (aCntxt.GetOptions() |
-                                        ( INPUTCONTEXT_TEXT |
-                                            INPUTCONTEXT_EXTTEXTINPUT ))
+                                        ( InputContextFlags::Text |
+                                            InputContextFlags::ExtText ))
                                 : (aCntxt.GetOptions() & ~
-                                        ( INPUTCONTEXT_TEXT |
-                                            INPUTCONTEXT_EXTTEXTINPUT )) );
+                                        InputContextFlags( InputContextFlags::Text |
+                                            InputContextFlags::ExtText )) );
             GetEditWin().SetInputContext( aCntxt );
         }
 

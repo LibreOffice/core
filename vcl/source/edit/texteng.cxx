@@ -210,7 +210,7 @@ void TextEngine::SetFont( const vcl::Font& rFont )
         for ( sal_uInt16 nView = mpViews->size(); nView; )
         {
             TextView* pView = (*mpViews)[ --nView ];
-            pView->GetWindow()->SetInputContext( InputContext( GetFont(), !pView->IsReadOnly() ? INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT : 0 ) );
+            pView->GetWindow()->SetInputContext( InputContext( GetFont(), !pView->IsReadOnly() ? InputContextFlags::Text|InputContextFlags::ExtText : InputContextFlags::NONE ) );
         }
     }
 }

@@ -4966,8 +4966,8 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     if( !rMyView.GetDocShell()->IsReadOnly() )
     {
         vcl::Font aFont;
-        SetInputContext( InputContext( aFont, INPUTCONTEXT_TEXT |
-                                            INPUTCONTEXT_EXTTEXTINPUT ) );
+        SetInputContext( InputContext( aFont, InputContextFlags::Text |
+                                            InputContextFlags::ExtText ) );
     }
 }
 

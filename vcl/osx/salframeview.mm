@@ -1684,7 +1684,7 @@ private:
         #if OSL_DEBUG_LEVEL > 1
         // fprintf( stderr, "SalFrameView: doCommandBySelector %s\n", (char*)aSelector );
         #endif
-        if( (mpFrame->mnICOptions & SAL_INPUTCONTEXT_TEXT) != 0 &&
+        if( (mpFrame->mnICOptions & InputContextFlags::Text) &&
             aSelector != NULL && [self respondsToSelector: aSelector] )
         {
             [self performSelector: aSelector];
