@@ -939,6 +939,16 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aSeq.getLength());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testPictureGrayscale, "picture_grayscale.docx")
+{
+    // THe problem was that the grayscale was not exported
+    xmlDocPtr pXmlDoc = parseExport ("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:grayscl", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testExportShadow, "bnc637947.odt")
 {
     // The problem was that shadows of shapes from non-OOXML origin were not exported to DrawingML
