@@ -203,6 +203,7 @@ public:
     void            SetToggleHdl( const Link<>& rLink ) { maToggleHdl = rLink; }
     const Link<>&   GetToggleHdl() const { return maToggleHdl; }
     virtual bool    set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual void    ShowFocus(const Rectangle& rRect) SAL_OVERRIDE;
 };
 
 inline void PushButton::Check( bool bCheck )

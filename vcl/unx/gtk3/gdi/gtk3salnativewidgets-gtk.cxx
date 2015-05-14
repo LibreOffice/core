@@ -82,6 +82,7 @@ enum {
     RENDER_SPINBUTTON = 9,
     RENDER_COMBOBOX = 10,
     RENDER_EXTENSION = 11,
+    RENDER_FOCUS = 12,
 };
 
 static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
@@ -801,7 +802,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 {
     GtkStateFlags flags;
     GtkShadowType shadow;
-    gint renderType = RENDER_BACKGROUND_AND_FRAME;
+    gint renderType = nPart == PART_FOCUS ? RENDER_FOCUS : RENDER_BACKGROUND_AND_FRAME;
     GtkStyleContext *context = NULL;
     const gchar *styleClass = NULL;
 
@@ -1034,6 +1035,21 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     case RENDER_COMBOBOX:
         PaintCombobox(flags, cr, rControlRegion, nType, nPart, rValue);
         break;
+    case RENDER_FOCUS:
+    {
+        GtkBorder border;
+
+        gtk_style_context_get_border(context, flags, &border);
+
+        nX += border.left;
+        nY += border.top;
+        nWidth -= border.left + border.right;
+        nHeight -= border.top + border.bottom;
+
+        gtk_render_focus(context, cr, nX, nY, nWidth, nHeight);
+
+        break;
+    }
     default:
         break;
     }
@@ -1626,7 +1642,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 //        case CTRL_PROGRESS:
 //        case CTRL_LISTNODE:
 //        case CTRL_LISTNET:
-            if(nPart==PART_ENTIRE_CONTROL)
+            if (nPart==PART_ENTIRE_CONTROL || nPart == PART_FOCUS)
                 return true;
             break;
 
@@ -1760,6 +1776,7 @@ void GtkData::initNWF()
     pSVData->maNWFData.mbCheckBoxNeedsErase = true;
     pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
     pSVData->maNWFData.mbDDListBoxNoTextArea = true;
+    pSVData->maNWFData.mbNoFocusRects = true;
 }
 
 void GtkData::deInitNWF()

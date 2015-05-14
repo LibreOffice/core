@@ -1657,6 +1657,20 @@ bool PushButton::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
+void PushButton::ShowFocus(const Rectangle& rRect)
+{
+    bool bNativeOK;
+    if ((bNativeOK = IsNativeControlSupported(CTRL_PUSHBUTTON, PART_FOCUS)))
+    {
+        ImplControlValue aControlValue;
+        Rectangle aInRect(Point(), GetOutputSizePixel());
+        bNativeOK = GetOutDev()->DrawNativeControl(CTRL_PUSHBUTTON, PART_FOCUS, aInRect,
+                                                   ControlState::FOCUSED, aControlValue, OUString());
+    }
+    if (!bNativeOK)
+        Button::ShowFocus(rRect);
+}
+
 void OKButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     PushButton::ImplInit( pParent, nStyle );

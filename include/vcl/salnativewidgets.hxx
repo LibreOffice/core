@@ -225,6 +225,9 @@ typedef sal_uInt32      ControlPart;
 //to draw natively the border of frames
 #define PART_BORDER             7000
 
+//to draw natively the focus rects
+#define PART_FOCUS              8000
+
 /* Control State:
  *
  *   Specify how a particular part of the control

@@ -1100,7 +1100,7 @@ public:
     /// Add all children to @rAllChildren recursively.
     SAL_DLLPRIVATE void                 CollectChildren(::std::vector<vcl::Window *>& rAllChildren );
 
-    void                                ShowFocus( const Rectangle& rRect );
+    virtual void                        ShowFocus(const Rectangle& rRect);
     void                                HideFocus();
 
     void                                Invert( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
