@@ -1889,7 +1889,7 @@ void ToolBox::ImplExecuteCustomMenu()
 
         // make sure all disabled entries will be shown
         GetMenu()->SetMenuFlags(
-            GetMenu()->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+            GetMenu()->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
         // toolbox might be destroyed during execute
         ImplDelData aDelData;

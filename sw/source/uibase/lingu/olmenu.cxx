@@ -272,7 +272,7 @@ SwSpellPopup::SwSpellPopup(
 {
     OSL_ENSURE(m_xSpellAlt.is(), "no spelling alternatives available");
 
-    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+    SetMenuFlags(MenuFlags::NoAutoMnemonics);
     bool bUseImagesInMenus = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
 
     m_nCheckedLanguage = LANGUAGE_NONE;
@@ -286,7 +286,7 @@ SwSpellPopup::SwSpellPopup(
     SvtLinguConfig aCfg;
 
     PopupMenu *pMenu = GetPopupMenu(MN_AUTOCORR);
-    pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+    pMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);
     bool bEnable = false;
     if( nStringCount )
     {
@@ -350,7 +350,7 @@ SwSpellPopup::SwSpellPopup(
     }
 
     pMenu = GetPopupMenu(MN_ADD_TO_DIC);
-    pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);     //! necessary to retrieve the correct dictionary name in 'Execute' below
+    pMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);     //! necessary to retrieve the correct dictionary name in 'Execute' below
     uno::Reference< linguistic2::XSearchableDictionaryList >    xDicList( SvxGetDictionaryList() );
     sal_uInt16 nItemId = MN_DICTIONARIES_START;
     if (xDicList.is())
@@ -494,7 +494,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
         InsertItem(MN_EXPLANATION_LINK, SW_RESSTR(STR_EXPLANATION_LINK), MenuItemBits::TEXT | MenuItemBits::HELP, OString(), nPos++);
     }
 
-    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+    SetMenuFlags(MenuFlags::NoAutoMnemonics);
 
     InsertSeparator(OString(), nPos++);
     sal_Int32 nStringCount = m_aSuggestions.getLength();

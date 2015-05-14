@@ -375,7 +375,7 @@ void BackingWindow::setupButton( MenuButton* pButton )
     pButton->SetControlForeground(aButtonsText);
 
     PopupMenu* pMenu = pButton->GetPopupMenu();
-    pMenu->SetMenuFlags(pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES);
+    pMenu->SetMenuFlags(pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries);
 
     pButton->SetClickHdl(LINK(this, BackingWindow, ClickHdl));
     pButton->SetSelectHdl(LINK(this, BackingWindow, MenuSelectHdl));

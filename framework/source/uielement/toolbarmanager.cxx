@@ -1798,7 +1798,7 @@ IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
         pManagerMenu->SetDeactivateHdl( LINK( this, ToolBarManager, MenuDeactivate ) );
 
         // make sure all disabled entries will be shown
-        pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+        pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
         ::Point aPoint( pCmdEvt->GetMousePosPixel() );
         pMenu->Execute( m_pToolBar, aPoint );
 

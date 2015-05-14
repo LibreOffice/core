@@ -710,9 +710,9 @@ throw (css::uno::RuntimeException, std::exception)
     if ( mpMenu )
     {
         if ( bHide )
-            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES );
+            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() | MenuFlags::HideDisabledEntries );
         else
-            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() & ~MENU_FLAG_HIDEDISABLEDENTRIES );
+            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() & ~MenuFlags::HideDisabledEntries );
     }
 }
 
@@ -750,9 +750,9 @@ throw (css::uno::RuntimeException, std::exception)
     if ( mpMenu )
     {
         if ( !bEnable )
-            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
+            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics );
         else
-            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() & ~MENU_FLAG_NOAUTOMNEMONICS );
+            mpMenu->SetMenuFlags( mpMenu->GetMenuFlags() & ~MenuFlags::NoAutoMnemonics );
     }
 }
 

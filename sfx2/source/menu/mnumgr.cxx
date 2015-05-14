@@ -74,7 +74,7 @@ void TryToHideDisabledEntries_Impl( Menu* pMenu )
     DBG_ASSERT( pMenu, "invalid menu" );
     if( ! SvtMenuOptions().IsEntryHidingEnabled() )
     {
-        pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES );
+        pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MenuFlags::HideDisabledEntries );
     }
 }
 
@@ -157,7 +157,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         (void) bHasMoreSynonyms;
 
         pThesSubMenu = new PopupMenu;
-        pThesSubMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+        pThesSubMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);
         const size_t nNumSynonyms = aSynonyms.size();
         if (nNumSynonyms > 0)
         {

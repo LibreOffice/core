@@ -1701,7 +1701,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl)
     {
         ScPopupMenu aPopup(ScResId(RID_POPUP_CHANGES));
 
-        aPopup.SetMenuFlags(MENU_FLAG_HIDEDISABLEDENTRIES);
+        aPopup.SetMenuFlags(MenuFlags::HideDisabledEntries);
 
         SvTreeListEntry* pEntry=pTheView->GetCurEntry();
         if(pEntry!=NULL)

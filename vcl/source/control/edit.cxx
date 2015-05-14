@@ -2848,9 +2848,9 @@ PopupMenu* Edit::CreatePopupMenu()
     PopupMenu* pPopup = new PopupMenu( ResId( SV_RESID_MENU_EDIT, *pResMgr ) );
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if ( rStyleSettings.GetHideDisabledMenuItems() )
-        pPopup->SetMenuFlags( MENU_FLAG_HIDEDISABLEDENTRIES );
+        pPopup->SetMenuFlags( MenuFlags::HideDisabledEntries );
     else
-        pPopup->SetMenuFlags ( MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+        pPopup->SetMenuFlags ( MenuFlags::AlwaysShowDisabledEntries );
     if ( rStyleSettings.GetAcceleratorsInContextMenus() )
     {
         pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, vcl::KeyCode( KeyFuncType::UNDO ) );

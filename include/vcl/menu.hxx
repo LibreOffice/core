@@ -88,11 +88,19 @@ namespace o3tl
     template<> struct typed_flags<PopupMenuFlags> : is_typed_flags<PopupMenuFlags, 0x003f> {};
 }
 
-#define MENU_FLAG_NOAUTOMNEMONICS       0x0001
-#define MENU_FLAG_HIDEDISABLEDENTRIES   0x0002
+enum class MenuFlags
+{
+    NONE                      = 0x0000,
+    NoAutoMnemonics           = 0x0001,
+    HideDisabledEntries       = 0x0002,
+    // overrides default hiding of disabled entries in popup menus
+    AlwaysShowDisabledEntries = 0x0004,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<MenuFlags> : is_typed_flags<MenuFlags, 0x0007> {};
+}
 
-// overrides default hiding of disabled entries in popup menus
-#define MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES 0x0004
 
 /// Invalid menu item id
 #define ITEMPOS_INVALID     0xFFFF
@@ -150,7 +158,7 @@ private:
 
     ImplSVEvent *       nEventId;
     sal_uInt16          mnHighlightedItemPos; // for native menus: keeps track of the highlighted item
-    sal_uInt16          nMenuFlags;
+    MenuFlags           nMenuFlags;
     sal_uInt16          nDefaultItem;       // Id of default item
     sal_uInt16          nSelectedId;
 
@@ -260,8 +268,8 @@ public:
 
     void                CreateAutoMnemonics();
 
-    void                SetMenuFlags( sal_uInt16 nFlags ) { nMenuFlags = nFlags; }
-    sal_uInt16          GetMenuFlags() const { return nMenuFlags; }
+    void                SetMenuFlags( MenuFlags nFlags ) { nMenuFlags = nFlags; }
+    MenuFlags           GetMenuFlags() const { return nMenuFlags; }
 
     sal_uInt16          GetItemCount() const;
     sal_uInt16          GetItemId(sal_uInt16 nPos) const;

@@ -501,7 +501,7 @@ bool OAccessibleMenuItemComponent::IsMenuHideDisabledEntries()
 {
     if (m_pParent )
     {
-        if( m_pParent->GetMenuFlags() & MENU_FLAG_HIDEDISABLEDENTRIES)
+        if( m_pParent->GetMenuFlags() & MenuFlags::HideDisabledEntries)
         {
             return true;
         }

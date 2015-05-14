@@ -866,7 +866,7 @@ int SpellDialog::InitUserDicts()
     PopupMenu* pMenu = m_pAddToDictMB->GetPopupMenu();
     assert(pMenu);
     pMenu->Clear();
-    pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+    pMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);
     sal_uInt16 nItemId = 1;     // menu items should be enumerated from 1 and not 0
     for (sal_Int32 i = 0; i < nSize; ++i)
     {

@@ -591,7 +591,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 //  angezeigtes Dokument
 
                 ScPopupMenu aDocMenu;
-                aDocMenu.SetMenuFlags( aDocMenu.GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
+                aDocMenu.SetMenuFlags( aDocMenu.GetMenuFlags() | MenuFlags::NoAutoMnemonics );
                 sal_uInt16 i=0;
                 sal_uInt16 nPos=0;
                 //  geladene Dokumente

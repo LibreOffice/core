@@ -2475,7 +2475,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             }
 
             if( ! SvtMenuOptions().IsEntryHidingEnabled() )
-                aMenu.SetMenuFlags( aMenu.GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES );
+                aMenu.SetMenuFlags( aMenu.GetMenuFlags() | MenuFlags::HideDisabledEntries );
 
             sal_uInt16 nId = aMenu.Execute( this, aPos );
             pHelpWin->DoAction( nId );

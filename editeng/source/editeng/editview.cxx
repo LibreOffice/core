@@ -773,7 +773,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack )
         PopupMenu aPopupMenu( EditResId( RID_MENU_SPELL ) );
         PopupMenu *pAutoMenu = aPopupMenu.GetPopupMenu( MN_AUTOCORR );
         PopupMenu *pInsertMenu = aPopupMenu.GetPopupMenu( MN_INSERT );  // add word to user-dictionaries
-        pInsertMenu->SetMenuFlags( MENU_FLAG_NOAUTOMNEMONICS );         //! necessary to retrieve the correct dictionary names later
+        pInsertMenu->SetMenuFlags( MenuFlags::NoAutoMnemonics );         //! necessary to retrieve the correct dictionary names later
 
         EditPaM aPaM2( aPaM );
         aPaM2.SetIndex( aPaM2.GetIndex()+1 );
@@ -846,7 +846,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack )
         if ( Application::IsAutoMnemonicEnabled() )
         {
             aPopupMenu.CreateAutoMnemonics();
-            aPopupMenu.SetMenuFlags( aPopupMenu.GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
+            aPopupMenu.SetMenuFlags( aPopupMenu.GetMenuFlags() | MenuFlags::NoAutoMnemonics );
         }
 
         // Replace suggestions...

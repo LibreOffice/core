@@ -78,7 +78,7 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     mpEditEngine->SetRefMapMode( MapMode( MAP_PIXEL ) );
     maEdEngSize = mpEditEngine->GetPaperSize();
 
-    maPopup.SetMenuFlags( maPopup.GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
+    maPopup.SetMenuFlags( maPopup.GetMenuFlags() | MenuFlags::NoAutoMnemonics );
 
     EnableRTL( false ); // RTL
     InitFonts();

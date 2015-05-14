@@ -718,11 +718,11 @@ IMPL_LINK_TYPED( MenuManager, Activate, Menu *, pMenu, bool )
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
 
-        sal_uInt16 nFlag = pMenu->GetMenuFlags();
+        MenuFlags nFlag = pMenu->GetMenuFlags();
         if ( bDontHide )
-            nFlag &= ~MENU_FLAG_HIDEDISABLEDENTRIES;
+            nFlag &= ~MenuFlags::HideDisabledEntries;
         else
-            nFlag |= MENU_FLAG_HIDEDISABLEDENTRIES;
+            nFlag |= MenuFlags::HideDisabledEntries;
         pMenu->SetMenuFlags( nFlag );
 
         if ( m_bActive )

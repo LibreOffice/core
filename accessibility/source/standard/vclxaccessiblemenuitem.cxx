@@ -471,7 +471,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
     if ( m_pParent )
     {
         // create auto mnemonics
-        if ( Application::GetSettings().GetStyleSettings().GetAutoMnemonic() && !( m_pParent->GetMenuFlags() & MENU_FLAG_NOAUTOMNEMONICS ) )
+        if ( Application::GetSettings().GetStyleSettings().GetAutoMnemonic() && !( m_pParent->GetMenuFlags() & MenuFlags::NoAutoMnemonics ) )
             m_pParent->CreateAutoMnemonics();
 
         // activation key

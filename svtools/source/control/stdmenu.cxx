@@ -26,7 +26,7 @@
 
 FontNameMenu::FontNameMenu()
 {
-    SetMenuFlags( GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
+    SetMenuFlags( GetMenuFlags() | MenuFlags::NoAutoMnemonics );
 }
 
 FontNameMenu::~FontNameMenu()
@@ -109,7 +109,7 @@ FontSizeMenu::FontSizeMenu()
 :    mpHeightAry( NULL )
 ,    mnCurHeight( 100 )
 {
-    SetMenuFlags( GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
+    SetMenuFlags( GetMenuFlags() | MenuFlags::NoAutoMnemonics );
 }
 
 FontSizeMenu::~FontSizeMenu()

@@ -48,7 +48,7 @@ struct MenuItemData
     vcl::KeyCode    aAccelKey;              // Accelerator-Key
     bool            bChecked;               // Checked
     bool            bEnabled;               // Enabled
-    bool            bVisible;               // Visible (note: this flag will not override MENU_FLAG_HIDEDISABLEDENTRIES when true)
+    bool            bVisible;               // Visible (note: this flag will not override MenuFlags::HideDisabledEntries when true)
     bool            bIsTemporary;           // Temporary inserted ('No selection possible')
     bool            bMirrorMode;
     long            nItemImageAngle;

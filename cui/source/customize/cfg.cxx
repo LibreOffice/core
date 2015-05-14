@@ -2231,14 +2231,14 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
 
     PopupMenu* pMenu = m_pModifyTopLevelButton->GetPopupMenu();
     pMenu->SetMenuFlags(
-        pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+        pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
     m_pModifyTopLevelButton->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, MenuSelectHdl ) );
 
     PopupMenu* pEntry = m_pModifyCommandButton->GetPopupMenu();
     pEntry->SetMenuFlags(
-        pEntry->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+        pEntry->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
     m_pModifyCommandButton->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, EntrySelectHdl ) );
@@ -2924,7 +2924,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
     PopupMenu* pMenu = new PopupMenu( CUI_RES( MODIFY_TOOLBAR ) );
     pMenu->SetMenuFlags(
-        pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+        pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
     m_pModifyTopLevelButton->SetPopupMenu( pMenu );
     m_pModifyTopLevelButton->SetSelectHdl(
@@ -2933,7 +2933,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     PopupMenu* pEntry = new PopupMenu(
         CUI_RES( MODIFY_TOOLBAR_CONTENT ) );
     pEntry->SetMenuFlags(
-        pEntry->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+        pEntry->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
     m_pModifyCommandButton->SetPopupMenu( pEntry );
     m_pModifyCommandButton->SetSelectHdl(

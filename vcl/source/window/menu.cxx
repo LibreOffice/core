@@ -122,7 +122,7 @@ Menu::Menu()
       nTitleHeight(0),
       nEventId(0),
       mnHighlightedItemPos(ITEMPOS_INVALID),
-      nMenuFlags(0),
+      nMenuFlags(MenuFlags::NONE),
       nDefaultItem(0),
       nSelectedId(0),
       nImgOrChkPos(0),
@@ -1324,8 +1324,8 @@ bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
 
     // not allowed for menubar, as I do not know
     // whether a menu-entry will disappear or will appear
-    if (bVisible && !IsMenuBar() && (nMenuFlags & MENU_FLAG_HIDEDISABLEDENTRIES) &&
-        !(nMenuFlags & MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES))
+    if (bVisible && !IsMenuBar() && (nMenuFlags & MenuFlags::HideDisabledEntries) &&
+        !(nMenuFlags & MenuFlags::AlwaysShowDisabledEntries))
     {
         if( !pData ) // e.g. nPos == ITEMPOS_INVALID
             bVisible = false;
@@ -2953,17 +2953,17 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
     if ( !GetItemCount() )
         return 0;
 
-    // The flag MENU_FLAG_HIDEDISABLEDENTRIES is inherited.
+    // The flag MenuFlags::HideDisabledEntries is inherited.
     if ( pSFrom )
     {
-        if ( pSFrom->nMenuFlags & MENU_FLAG_HIDEDISABLEDENTRIES )
-            nMenuFlags |= MENU_FLAG_HIDEDISABLEDENTRIES;
+        if ( pSFrom->nMenuFlags & MenuFlags::HideDisabledEntries )
+            nMenuFlags |= MenuFlags::HideDisabledEntries;
         else
-            nMenuFlags &= ~MENU_FLAG_HIDEDISABLEDENTRIES;
+            nMenuFlags &= ~MenuFlags::HideDisabledEntries;
     }
     else
         // #102790# context menus shall never show disabled entries
-        nMenuFlags |= MENU_FLAG_HIDEDISABLEDENTRIES;
+        nMenuFlags |= MenuFlags::HideDisabledEntries;
 
     sal_uInt16 nVisibleEntries = ImplGetVisibleItemCount();
     if ( !nVisibleEntries )
@@ -2984,7 +2984,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, Floa
             ImplCallEventListeners(VCLEVENT_MENU_SUBMENUCHANGED, nPos);
         }
     }
-    else if ( Application::GetSettings().GetStyleSettings().GetAutoMnemonic() && !( nMenuFlags & MENU_FLAG_NOAUTOMNEMONICS ) )
+    else if ( Application::GetSettings().GetStyleSettings().GetAutoMnemonic() && !( nMenuFlags & MenuFlags::NoAutoMnemonics ) )
     {
         CreateAutoMnemonics();
     }
