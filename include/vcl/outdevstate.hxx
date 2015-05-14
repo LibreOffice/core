@@ -95,9 +95,6 @@ inline ComplexTextLayoutMode& operator&= (ComplexTextLayoutMode& lhs, ComplexTex
     return lhs;
 }
 
-
-
-
 class OutDevState
 {
 public:
