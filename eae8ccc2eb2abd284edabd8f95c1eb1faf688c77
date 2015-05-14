@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_c703a075",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4196,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2015-05-14T19:58:54Z",
+      "side": 1,
+      "message": "Not sure I have to \u0027reset\u0027 pItem at all?",
+      "revId": "eae8ccc2eb2abd284edabd8f95c1eb1faf688c77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
