@@ -934,14 +934,18 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 switch( nIntValue )
                 {
                     case NS_ooxml::LN_Value_doc_ST_DocGrid_default:
-                    case NS_ooxml::LN_Value_doc_ST_DocGrid_snapToChars:
-                        pSectionContext->SetGridType( 0 );
+                        pSectionContext->SetGridType(text::TextGridMode::NONE);
                         break;
                     case NS_ooxml::LN_Value_doc_ST_DocGrid_lines:
-                        pSectionContext->SetGridType( 1 );
+                        pSectionContext->SetGridType(text::TextGridMode::LINES);
                         break;
                     case NS_ooxml::LN_Value_doc_ST_DocGrid_linesAndChars:
-                        pSectionContext->SetGridType( 2 );
+                        pSectionContext->SetGridType(text::TextGridMode::LINES_AND_CHARS);
+                        pSectionContext->SetGridSnapToChars( false );
+                        break;
+                    case NS_ooxml::LN_Value_doc_ST_DocGrid_snapToChars:
+                        pSectionContext->SetGridType(text::TextGridMode::LINES_AND_CHARS);
+                        pSectionContext->SetGridSnapToChars( true );
                         break;
                     default :
                         OSL_FAIL("unknown SwTextGrid value");
@@ -2005,7 +2009,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     break;
 
     case NS_ooxml::LN_CT_PPrBase_snapToGrid:
-        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "snapToGrid", OUString::number(nIntValue));
+        if (!IsStyleSheetImport()||!m_pImpl->isInteropGrabBagEnabled())
+        {
+            rContext->Insert( PROP_SNAP_TO_GRID, uno::makeAny(bool(nIntValue)));
+        }
+        else
+        {
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "snapToGrid", OUString::number(nIntValue));
+        }
     break;
     case NS_ooxml::LN_CT_PPrBase_pStyle:
     {

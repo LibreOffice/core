@@ -230,6 +230,7 @@ class SectionPropertyMap : public PropertyMap
     sal_Int32                               m_nGridType;
     sal_Int32                               m_nGridLinePitch;
     sal_Int32                               m_nDxtCharSpace;
+    bool                                    m_bGridSnapToChars;
 
     //line numbering
     sal_Int32                               m_nLnnMod;
@@ -312,6 +313,7 @@ public:
 
     void SetGridType(sal_Int32 nSet) { m_nGridType = nSet; }
     void SetGridLinePitch( sal_Int32 nSet ) { m_nGridLinePitch = nSet; }
+    void SetGridSnapToChars( bool bSet) { m_bGridSnapToChars = bSet; }
     void SetDxtCharSpace( sal_Int32 nSet ) { m_nDxtCharSpace = nSet; }
 
     void SetLnnMod( sal_Int32 nValue ) { m_nLnnMod = nValue; }
