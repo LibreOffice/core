@@ -37,7 +37,6 @@
 #include <osl/diagnose.h>
 #include <svx/ucsubset.hxx>
 
-
 #include "dialog.hxx"
 #include "starmath.hrc"
 #include "config.hxx"
@@ -47,6 +46,26 @@
 #include "document.hxx"
 #include "unomodel.hxx"
 
+
+namespace
+{
+
+void lclGetSettingColors(Color& rBackgroundColor, Color& rTextColor)
+{
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    if (rStyleSettings.GetHighContrastMode())
+    {
+        rBackgroundColor = rStyleSettings.GetFieldColor().GetColor();
+        rTextColor = rStyleSettings.GetFieldTextColor().GetColor();
+    }
+    else
+    {
+        rBackgroundColor = COL_WHITE;
+        rTextColor = COL_BLACK;
+    }
+}
+
+} // end anonymous namespace
 
 // Since it's better to set/query the FontStyle via its attributes rather
 // than via the StyleName we create a way to translate
@@ -68,7 +87,6 @@ public:
     const OUString& GetStyleName(sal_uInt16 nIdx) const;
 };
 
-
 SmFontStyles::SmFontStyles() :
     aNormal (ResId(RID_FONTREGULAR, *SM_MOD()->GetResMgr())),
     aBold   (ResId(RID_FONTBOLD,    *SM_MOD()->GetResMgr())),
@@ -79,7 +97,6 @@ SmFontStyles::SmFontStyles() :
     aBoldItalic += ", ";
     aBoldItalic += aItalic;
 }
-
 
 const OUString& SmFontStyles::GetStyleName(const vcl::Font& rFont) const
 {
@@ -95,7 +112,6 @@ const OUString& SmFontStyles::GetStyleName(const vcl::Font& rFont) const
         return aBold;
     return aNormal;
 }
-
 
 const OUString& SmFontStyles::GetStyleName( sal_uInt16 nIdx ) const
 {
@@ -115,14 +131,11 @@ const OUString& SmFontStyles::GetStyleName( sal_uInt16 nIdx ) const
     return aEmpty;
 }
 
-
 const SmFontStyles & GetFontStyles()
 {
     static const SmFontStyles aImpl;
     return aImpl;
 }
-
-
 
 void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
 {
@@ -242,14 +255,17 @@ void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
 {
     Window::Paint(rRenderContext, rRect);
 
-    Color aTxtColor(rRenderContext.GetTextColor());
+    Color aBackColor;
+    Color aTextColor;
+    lclGetSettingColors(aBackColor, aTextColor);
+
+    rRenderContext.SetBackground(Wallpaper(aBackColor));
+
     vcl::Font aFont(maFont);
     aFont.SetSize(Size(0, 24 * rRenderContext.GetDPIScaleFactor()));
     aFont.SetAlign(ALIGN_TOP);
     rRenderContext.SetFont(aFont);
-
-    // keep old text color (new font may have different color)
-    rRenderContext.SetTextColor(aTxtColor);
+    rRenderContext.SetTextColor(aTextColor);
 
     OUString sText(rRenderContext.GetFont().GetName());
     Size aTextSize(rRenderContext.GetTextWidth(sText), rRenderContext.GetTextHeight());
@@ -282,8 +298,8 @@ void SmShowFont::SetFont(const vcl::Font& rFont)
 
 IMPL_LINK( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )
 {
-    Face.SetName(pComboBox->GetText());
-    m_pShowFont->SetFont(Face);
+    maFont.SetName(pComboBox->GetText());
+    m_pShowFont->SetFont(maFont);
     return 0;
 }
 
@@ -298,32 +314,30 @@ IMPL_LINK( SmFontDialog, FontModifyHdl, ComboBox *, pComboBox )
     return 0;
 }
 
-
 IMPL_LINK( SmFontDialog, AttrChangeHdl, CheckBox *, /*pCheckBox*/ )
 {
     if (m_pBoldCheckBox->IsChecked())
-        Face.SetWeight(FontWeight(WEIGHT_BOLD));
+        maFont.SetWeight(FontWeight(WEIGHT_BOLD));
     else
-        Face.SetWeight(FontWeight(WEIGHT_NORMAL));
+        maFont.SetWeight(FontWeight(WEIGHT_NORMAL));
 
     if (m_pItalicCheckBox->IsChecked())
-        Face.SetItalic(ITALIC_NORMAL);
+        maFont.SetItalic(ITALIC_NORMAL);
     else
-        Face.SetItalic(ITALIC_NONE);
+        maFont.SetItalic(ITALIC_NONE);
 
-    m_pShowFont->SetFont(Face);
+    m_pShowFont->SetFont(maFont);
     return 0;
 }
 
 void SmFontDialog::SetFont(const vcl::Font &rFont)
 {
-    Face = rFont;
+    maFont = rFont;
 
-    m_pFontBox->SetText( Face.GetName() );
-    m_pBoldCheckBox->Check( IsBold( Face ) );
-    m_pItalicCheckBox->Check( IsItalic( Face ) );
-
-    m_pShowFont->SetFont(Face);
+    m_pFontBox->SetText(maFont.GetName());
+    m_pBoldCheckBox->Check(IsBold(maFont));
+    m_pItalicCheckBox->Check(IsItalic(maFont));
+    m_pShowFont->SetFont(maFont);
 }
 
 SmFontDialog::SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes)
@@ -343,17 +357,16 @@ SmFontDialog::SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, 
 
         sal_uInt16  nCount = aFontList.GetFontNameCount();
         for (sal_uInt16 i = 0;  i < nCount; ++i)
+        {
             m_pFontBox->InsertEntry( aFontList.GetFontName(i).GetName() );
-
-        Face.SetSize(Size(0, 24));
-        Face.SetWeight(WEIGHT_NORMAL);
-        Face.SetItalic(ITALIC_NONE);
-        Face.SetFamily(FAMILY_DONTKNOW);
-        Face.SetPitch(PITCH_DONTKNOW);
-        Face.SetCharSet(RTL_TEXTENCODING_DONTKNOW);
-        Face.SetTransparent(true);
-
-        InitColor_Impl();
+        }
+        maFont.SetSize(Size(0, 24));
+        maFont.SetWeight(WEIGHT_NORMAL);
+        maFont.SetItalic(ITALIC_NONE);
+        maFont.SetFamily(FAMILY_DONTKNOW);
+        maFont.SetPitch(PITCH_DONTKNOW);
+        maFont.SetCharSet(RTL_TEXTENCODING_DONTKNOW);
+        maFont.SetTransparent(true);
 
         // preview like controls should have a 2D look
         m_pShowFont->SetBorderStyle( WindowBorderStyle::MONO );
@@ -389,41 +402,10 @@ void SmFontDialog::dispose()
     ModalDialog::dispose();
 }
 
-namespace
-{
-    void getColors(vcl::RenderContext &rRef, ColorData &rBgCol, ColorData &rTxtCol)
-    {
-        const StyleSettings &rS = rRef.GetSettings().GetStyleSettings();
-        if (rS.GetHighContrastMode())
-        {
-            rBgCol  = rS.GetFieldColor().GetColor();
-            rTxtCol = rS.GetFieldTextColor().GetColor();
-        }
-        else
-        {
-            rBgCol  = COL_WHITE;
-            rTxtCol = COL_BLACK;
-        }
-    }
-}
-
-void SmFontDialog::InitColor_Impl()
-{
-    ColorData nBgCol, nTxtCol;
-    getColors(*this, nBgCol, nTxtCol);
-
-    Color aTmpColor( nBgCol );
-    Wallpaper aWall( aTmpColor );
-    Color aTxtColor( nTxtCol );
-    m_pShowFont->SetBackground( aWall );
-    m_pShowFont->SetTextColor( aTxtColor );
-}
-
 void SmFontDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS  &&
-         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-            InitColor_Impl();
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS  && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
+        m_pShowFont->Invalidate();
 
     ModalDialog::DataChanged( rDCEvt );
 }
@@ -512,10 +494,6 @@ void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
 
     rFormat.RequestApplyChanges();
 }
-
-
-/**************************************************************************/
-
 
 IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
 {
@@ -1134,14 +1112,6 @@ SmShowSymbolSetWindow::SmShowSymbolSetWindow(vcl::Window *pParent, WinBits nStyl
     , nYOffset(0)
     , nSelectSymbol(SYMBOL_NONE)
 {
-    ColorData nBgCol, nTxtCol;
-    getColors(*this, nBgCol, nTxtCol);
-
-    Color aTmpColor( nBgCol );
-    Wallpaper aWall( aTmpColor );
-    Color aTxtColor( nTxtCol );
-    SetBackground( aWall );
-    SetTextColor( aTxtColor );
 }
 
 SmShowSymbolSetWindow::~SmShowSymbolSetWindow()
@@ -1162,6 +1132,13 @@ Point SmShowSymbolSetWindow::OffsetPoint(const Point &rPoint) const
 
 void SmShowSymbolSetWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
+    Color aBackgroundColor;
+    Color aTextColor;
+    lclGetSettingColors(aBackgroundColor, aTextColor);
+
+    rRenderContext.SetBackground(Wallpaper(aBackgroundColor));
+    rRenderContext.SetTextColor(aTextColor);
+
     rRenderContext.Push(PushFlags::MAPMODE);
 
     // set MapUnit for which 'nLen' has been calculated
@@ -1416,17 +1393,22 @@ void SmShowSymbol::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rR
 {
     Control::Paint(rRenderContext, rRect);
 
+    Color aBackgroundColor;
+    Color aTextColor;
+    lclGetSettingColors(aBackgroundColor, aTextColor);
+    SetBackground(Wallpaper(aBackgroundColor));
+    SetTextColor(aTextColor);
+
     vcl::Font aFont(rRenderContext.GetFont());
     setFontSize(aFont);
     rRenderContext.SetFont(aFont);
 
     const OUString &rText = GetText();
-    Size aTextSize(GetTextWidth(rText), GetTextHeight());
+    Size aTextSize(rRenderContext.GetTextWidth(rText), rRenderContext.GetTextHeight());
 
-    rRenderContext.DrawText(Point((GetOutputSize().Width()  - aTextSize.Width())  / 2,
-                                  (GetOutputSize().Height() * 7/10)), rText);
+    rRenderContext.DrawText(Point((rRenderContext.GetOutputSize().Width()  - aTextSize.Width())  / 2,
+                                  (rRenderContext.GetOutputSize().Height() * 7 / 10)), rText);
 }
-
 
 void SmShowSymbol::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -1435,7 +1417,6 @@ void SmShowSymbol::MouseButtonDown(const MouseEvent& rMEvt)
     else
         Control::MouseButtonDown (rMEvt);
 }
-
 
 void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
 {
@@ -1580,8 +1561,6 @@ SmSymbolDialog::SmSymbolDialog(vcl::Window *pParent, OutputDevice *pFntListDevic
     if (m_pSymbolSets->GetEntryCount() > 0)
         SelectSymbolSet(m_pSymbolSets->GetEntry(0));
 
-    InitColor_Impl();
-
     // preview like controls should have a 2D look
     m_pSymbolDisplay->SetBorderStyle( WindowBorderStyle::MONO );
 
@@ -1609,35 +1588,21 @@ void SmSymbolDialog::dispose()
     ModalDialog::dispose();
 }
 
-void SmSymbolDialog::InitColor_Impl()
-{
-    ColorData nBgCol, nTxtCol;
-    getColors(*this, nBgCol, nTxtCol);
-
-    Color aTmpColor( nBgCol );
-    Wallpaper aWall( aTmpColor );
-    Color aTxtColor( nTxtCol );
-    m_pSymbolDisplay->SetBackground( aWall );
-    m_pSymbolDisplay->SetTextColor( aTxtColor );
-    m_pSymbolSetDisplay->SetBackground( aWall );
-    m_pSymbolSetDisplay->SetTextColor( aTxtColor );
-}
-
-
 void SmSymbolDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS  &&
-         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-            InitColor_Impl();
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS  && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
+    {
+        m_pSymbolDisplay->Invalidate();
+        m_pSymbolSetDisplay->Invalidate();
+    }
 
     ModalDialog::DataChanged( rDCEvt );
 }
 
-
 bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
 {
-    bool    bRet = false;
-    sal_Int32  nPos = m_pSymbolSets->GetEntryPos(rSymbolSetName);
+    bool bRet = false;
+    sal_Int32 nPos = m_pSymbolSets->GetEntryPos(rSymbolSetName);
 
     aSymbolSetName.clear();
     aSymbolSet.clear();
@@ -1663,7 +1628,6 @@ bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
     return bRet;
 }
 
-
 void SmSymbolDialog::SelectSymbol(sal_uInt16 nSymbolNo)
 {
     const SmSym *pSym = NULL;
@@ -1675,8 +1639,7 @@ void SmSymbolDialog::SelectSymbol(sal_uInt16 nSymbolNo)
     m_pSymbolName->SetText(pSym ? pSym->GetName() : OUString());
 }
 
-
-const SmSym * SmSymbolDialog::GetSymbol() const
+const SmSym* SmSymbolDialog::GetSymbol() const
 {
     sal_uInt16 nSymbolNo = m_pSymbolSetDisplay->GetSelectSymbol();
     bool bValid = !aSymbolSetName.isEmpty()  &&  nSymbolNo < static_cast< sal_uInt16 >(aSymbolSet.size());
@@ -2128,8 +2091,6 @@ SmSymDefineDialog::SmSymDefineDialog(vcl::Window * pParent,
     if (pFonts->GetEntryCount() > 0)
         SelectFont(pFonts->GetEntry(0));
 
-    InitColor_Impl();
-
     SetSymbolSetManager(rSymbolMgr);
 
     pOldSymbols     ->SetSelectHdl(LINK(this, SmSymDefineDialog, OldSymbolChangeHdl));
@@ -2182,36 +2143,12 @@ void SmSymDefineDialog::dispose()
     ModalDialog::dispose();
 }
 
-void SmSymDefineDialog::InitColor_Impl()
-{
-    ColorData   nBgCol  = COL_WHITE,
-                nTxtCol = COL_BLACK;
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-    if (bHighContrast)
-    {
-        const StyleSettings &rS = GetSettings().GetStyleSettings();
-        nBgCol  = rS.GetFieldColor().GetColor();
-        nTxtCol = rS.GetFieldTextColor().GetColor();
-    }
-
-    Color aTmpColor( nBgCol );
-    Wallpaper aWall( aTmpColor );
-    Color aTxtColor( nTxtCol );
-    pCharsetDisplay  ->SetBackground( aWall );
-    pCharsetDisplay  ->SetTextColor( aTxtColor );
-    pOldSymbolDisplay->SetBackground( aWall );
-    pOldSymbolDisplay->SetTextColor( aTxtColor );
-    pSymbolDisplay   ->SetBackground( aWall );
-    pSymbolDisplay   ->SetTextColor( aTxtColor );
-}
-
-
 void SmSymDefineDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS  &&
-         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-            InitColor_Impl();
-
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS  && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
+    {
+        Invalidate();
+    }
     ModalDialog::DataChanged( rDCEvt );
 }
 

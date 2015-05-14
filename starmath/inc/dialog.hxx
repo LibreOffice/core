@@ -100,23 +100,24 @@ class SmFontDialog : public ModalDialog
     VclPtr<CheckBox>       m_pItalicCheckBox;
     VclPtr<SmShowFont>     m_pShowFont;
 
-    vcl::Font       Face;
+    vcl::Font maFont;
 
     DECL_LINK(FontSelectHdl, ComboBox *);
     DECL_LINK(FontModifyHdl, ComboBox *);
     DECL_LINK(AttrChangeHdl, CheckBox *);
 
-    void            InitColor_Impl();
-
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 public:
     SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes);
     virtual ~SmFontDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    const vcl::Font& GetFont() const { return Face; }
-    void        SetFont(const vcl::Font &rFont);
+    const vcl::Font& GetFont() const
+    {
+        return maFont;
+    }
+    void SetFont(const vcl::Font &rFont);
 };
 
 /**************************************************************************/
@@ -372,7 +373,6 @@ class SmSymbolDialog : public ModalDialog
     void            FillSymbolSets(bool bDeleteText = true);
     void            SetSymbolSetManager(SmSymbolManager &rMgr);
     const SmSym    *GetSymbol() const;
-    void            InitColor_Impl();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
@@ -466,8 +466,6 @@ class SmSymDefineDialog : public ModalDialog
     {
         return const_cast<SmSymDefineDialog *>(this)->GetSymbol(rComboBox);
     }
-
-    void            InitColor_Impl();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
