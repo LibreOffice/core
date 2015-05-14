@@ -98,7 +98,7 @@ Size SvxHlmarkTreeLBox::GetOptimalSize() const
     return LogicToPixel(Size(103, 162), MAP_APPFONT);
 }
 
-void SvxHlmarkTreeLBox::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     if (!mpParentWnd || mpParentWnd->mnError == LERR_NOERROR)
     {
@@ -106,13 +106,13 @@ void SvxHlmarkTreeLBox::Paint( vcl::RenderContext& rRenderContext, const Rectang
     }
     else
     {
-        Erase();
+        rRenderContext.Erase();
 
-        Rectangle aDrawRect( Point( 0, 0 ), GetSizePixel() );
+        Rectangle aDrawRect(Point( 0, 0 ), GetSizePixel());
 
         OUString aStrMessage;
 
-        switch( mpParentWnd->mnError )
+        switch (mpParentWnd->mnError)
         {
         case LERR_NOENTRIES :
             aStrMessage = CUI_RESSTR( RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES );
@@ -122,9 +122,8 @@ void SvxHlmarkTreeLBox::Paint( vcl::RenderContext& rRenderContext, const Rectang
             break;
         }
 
-        DrawText( aDrawRect, aStrMessage, TEXT_DRAW_LEFT | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+        rRenderContext.DrawText(aDrawRect, aStrMessage, TEXT_DRAW_LEFT | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK);
     }
-
 }
 
 
@@ -139,8 +138,7 @@ void SvxHlmarkTreeLBox::Paint( vcl::RenderContext& rRenderContext, const Rectang
 |*
 |************************************************************************/
 SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
-    : ModalDialog(pParent, "HyperlinkMark",
-        "cui/ui/hyperlinkmarkdialog.ui")
+    : ModalDialog(pParent, "HyperlinkMark", "cui/ui/hyperlinkmarkdialog.ui")
     , mbUserMoved(false)
     , mpParent(pParent)
     , mnError(LERR_NOERROR)
