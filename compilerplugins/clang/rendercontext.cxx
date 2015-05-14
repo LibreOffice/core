@@ -37,6 +37,7 @@ private:
     bool        mbChecking = false;
 };
 
+// We use Traverse to set a flag so we can easily ignore certain method calls
 bool RenderContext::TraverseFunctionDecl(const FunctionDecl * pFunctionDecl)
 {
     if (ignoreLocation(pFunctionDecl)) {
@@ -48,11 +49,17 @@ bool RenderContext::TraverseFunctionDecl(const FunctionDecl * pFunctionDecl)
     if ( pFunctionDecl != pFunctionDecl->getCanonicalDecl() ) {
         return true;
     }
+    // Ignore methods inside the OutputDevice class
     const CXXMethodDecl *pCXXMethodDecl = dyn_cast<CXXMethodDecl>(pFunctionDecl);
     if (pCXXMethodDecl) {
         std::string aParentName = pCXXMethodDecl->getParent()->getQualifiedNameAsString();
         if (aParentName == "OutputDevice")
             return true;
+    }
+    // we are only currently interested in methods where the first parameter is RenderContext
+    string arg0 = pFunctionDecl->getParamDecl( 0 )->getType().getAsString();
+    if ( arg0.find("RenderContext") != std::string::npos ) {
+        return true;
     }
     mbChecking = true;
     TraverseStmt(pFunctionDecl->getBody());
