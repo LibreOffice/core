@@ -145,35 +145,34 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
 #*
 #************************************************************************/
 
-void SvxNumberPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    vcl::Font aDrawFont   = GetFont();
-    Size      aSzWnd      = GetOutputSizePixel();
-    OUString  aTmpStr( aPrevStr );
-    long      nLeadSpace = (aSzWnd.Width()  - GetTextWidth( aTmpStr )) /2;
+    vcl::Font aDrawFont = rRenderContext.GetFont();
+    Size aSzWnd = rRenderContext.GetOutputSizePixel();
+    OUString aTmpStr( aPrevStr );
+    long nLeadSpace = (aSzWnd.Width() - rRenderContext.GetTextWidth(aTmpStr)) / 2;
 
-    aDrawFont.SetColor( aPrevCol );
-    SetFont( aDrawFont );
+    aDrawFont.SetColor(aPrevCol);
+    rRenderContext.SetFont(aDrawFont);
 
-    if ( mnPos != -1 )
+    if (mnPos != -1)
     {
-        long nCharWidth = GetTextWidth( OUString( mnChar ) );
+        long nCharWidth = rRenderContext.GetTextWidth(OUString(mnChar));
 
         int nNumCharsToInsert = 0;
-        if (nCharWidth > 0) nNumCharsToInsert = nLeadSpace / nCharWidth;
+        if (nCharWidth > 0)
+            nNumCharsToInsert = nLeadSpace / nCharWidth;
 
-        if ( nNumCharsToInsert > 0)
+        if (nNumCharsToInsert > 0)
         {
-            for ( int i = 0; i < nNumCharsToInsert; ++i )
-                aTmpStr = aTmpStr.replaceAt( mnPos, 0, OUString(mnChar) );
+            for (int i = 0; i < nNumCharsToInsert; ++i)
+                aTmpStr = aTmpStr.replaceAt(mnPos, 0, OUString(mnChar));
         }
     }
-    Point   aPosText    = Point( ( mnPos != -1 ) ? 0 : nLeadSpace,
-                                 (aSzWnd.Height() - GetTextHeight())/2 );
-    DrawText( aPosText, aTmpStr );
+    Point aPosText = Point((mnPos != -1) ? 0 : nLeadSpace,
+                           (aSzWnd.Height() - GetTextHeight()) / 2);
+    rRenderContext.DrawText(aPosText, aTmpStr);
 }
-
-
 
 void SvxNumberPreview::InitSettings( bool bForeground, bool bBackground )
 {

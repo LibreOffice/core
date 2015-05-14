@@ -37,11 +37,6 @@
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 
-// table background
-#define TBL_DEST_CELL   0
-#define TBL_DEST_ROW    1
-#define TBL_DEST_TBL    2
-
 #include <editeng/brushitem.hxx>
 #include "backgrnd.hxx"
 
@@ -58,8 +53,12 @@
 #include <svtools/grfmgr.hxx>
 #include <boost/scoped_ptr.hpp>
 
-using namespace ::com::sun::star;
-// static ----------------------------------------------------------------
+using namespace css;
+
+// table background
+#define TBL_DEST_CELL   0
+#define TBL_DEST_ROW    1
+#define TBL_DEST_TBL    2
 
 const sal_uInt16 SvxBackgroundTabPage::pPageRanges[] =
 {
@@ -142,13 +141,14 @@ static drawing::FillStyle lcl_getFillStyle(ListBox* pLbSelect)
 static void lcl_setFillStyle(ListBox* pLbSelect, drawing::FillStyle eStyle)
 {
     for (int i = 0; i < pLbSelect->GetEntryCount(); ++i)
+    {
         if ((drawing::FillStyle)reinterpret_cast<sal_uLong>(pLbSelect->GetEntryData(i)) == eStyle)
         {
             pLbSelect->SelectEntryPos(i);
             return;
         }
+    }
 }
-
 
 sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
 {
@@ -170,13 +170,8 @@ sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
     return bFound ? n : 0;
 }
 
-// class BackgroundPreview -----------------------------------------------
 
-/*  [Description]
-
-    preview window for brush or bitmap
-*/
-
+/** Preview window for brush or bitmap */
 class BackgroundPreviewImpl : public vcl::Window
 {
 public:
@@ -228,8 +223,6 @@ void BackgroundPreviewImpl::setBmp(bool bBmp)
     Invalidate();
 }
 
-
-
 BackgroundPreviewImpl::~BackgroundPreviewImpl()
 {
     disposeOnce();
@@ -255,29 +248,27 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
     }
 }
 
-
-
 void BackgroundPreviewImpl::NotifyChange( const Bitmap* pNewBitmap )
 {
-    if ( bIsBmp && (pNewBitmap || pBitmap) )
+    if (bIsBmp && (pNewBitmap || pBitmap))
     {
-        if ( pNewBitmap && pBitmap )
+        if (pNewBitmap && pBitmap)
             *pBitmap = *pNewBitmap;
-        else if ( pNewBitmap && !pBitmap )
-            pBitmap = new Bitmap( *pNewBitmap );
-        else if ( !pNewBitmap )
-            DELETEZ( pBitmap );
+        else if (pNewBitmap && !pBitmap)
+            pBitmap = new Bitmap(*pNewBitmap);
+        else if (!pNewBitmap)
+            DELETEZ(pBitmap);
 
         recalcDrawPos();
 
-        Invalidate( aDrawRect );
+        Invalidate(aDrawRect);
         Update();
     }
 }
 
 void BackgroundPreviewImpl::recalcDrawPos()
 {
-    if ( pBitmap )
+    if (pBitmap)
     {
         Size aSize = GetOutputSizePixel();
         // InnerSize == Size without one pixel border
@@ -287,10 +278,10 @@ void BackgroundPreviewImpl::recalcDrawPos()
         aDrawSize = pBitmap->GetSizePixel();
 
         // bitmap bigger than preview window?
-        if ( aDrawSize.Width() > aInnerSize.Width() )
+        if (aDrawSize.Width() > aInnerSize.Width())
         {
             aDrawSize.Height() = aDrawSize.Height() * aInnerSize.Width() / aDrawSize.Width();
-            if ( aDrawSize.Height() > aInnerSize.Height() )
+            if (aDrawSize.Height() > aInnerSize.Height())
             {
                 aDrawSize.Width() = aDrawSize.Height();
                 aDrawSize.Height() = aInnerSize.Height();
@@ -298,10 +289,10 @@ void BackgroundPreviewImpl::recalcDrawPos()
             else
                 aDrawSize.Width() = aInnerSize.Width();
         }
-        else if ( aDrawSize.Height() > aInnerSize.Height() )
+        else if (aDrawSize.Height() > aInnerSize.Height())
         {
             aDrawSize.Width() = aDrawSize.Width() * aInnerSize.Height() / aDrawSize.Height();
-            if ( aDrawSize.Width() > aInnerSize.Width() )
+            if (aDrawSize.Width() > aInnerSize.Width())
             {
                 aDrawSize.Height() = aDrawSize.Width();
                 aDrawSize.Width() = aInnerSize.Width();
@@ -322,25 +313,27 @@ void BackgroundPreviewImpl::Resize()
     recalcDrawPos();
 }
 
-
-
-void BackgroundPreviewImpl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void BackgroundPreviewImpl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
-    SetLineColor();
-    if(bIsBmp)
-        SetFillColor( Color(COL_TRANSPARENT) );
-    DrawRect( aDrawRect );
-    if ( bIsBmp )
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    rRenderContext.SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
+    rRenderContext.SetLineColor();
+
+    if (bIsBmp)
     {
-        if ( pBitmap )
-            DrawBitmap( aDrawPos, aDrawSize, *pBitmap );
+        rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
+    }
+    rRenderContext.DrawRect(aDrawRect);
+
+    if (bIsBmp)
+    {
+        if (pBitmap)
+            rRenderContext.DrawBitmap(aDrawPos, aDrawSize, *pBitmap);
         else
         {
-            Size aSize = GetOutputSizePixel();
-            DrawLine( Point(0,0),               Point(aSize.Width(),aSize.Height()) );
-            DrawLine( Point(0,aSize.Height()),  Point(aSize.Width(),0) );
+            Size aSize = rRenderContext.GetOutputSizePixel();
+            rRenderContext.DrawLine(Point(0, 0), Point(aSize.Width(), aSize.Height()));
+            rRenderContext.DrawLine(Point(0, aSize.Height()), Point(aSize.Width(), 0));
         }
     }
 }
@@ -354,8 +347,6 @@ void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
     }
     Window::DataChanged( rDCEvt );
 }
-
-// class SvxBackgroundTabPage --------------------------------------------
 
 #define HDL(hdl) LINK(this,SvxBackgroundTabPage,hdl)
 
@@ -426,8 +417,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     m_pBackgroundColorSet->SetText(SVX_RESSTR(RID_SVXSTR_TRANSPARENT));
 }
 
-
-
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
 {
     disposeOnce();
@@ -491,15 +480,10 @@ void SvxBackgroundTabPage::dispose()
     SvxTabPage::dispose();
 }
 
-
-
-VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( vcl::Window* pParent,
-                                                 const SfxItemSet* rAttrSet )
+VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return VclPtr<SfxTabPage>( new SvxBackgroundTabPage( pParent, *rAttrSet ), SAL_NO_ACQUIRE );
 }
-
-
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
 {
@@ -728,25 +712,17 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     m_pBtnLink->Show( false );
 }
 
-
-
-
-
-void SvxBackgroundTabPage::FillUserData()
-
-/*  [Description]
-
-    When destroying a SfxTabPage this virtual method is called,
+/** When destroying a SfxTabPage this virtual method is called,
     so that the TabPage can save internal information.
 
     In this case the condition of the preview button is saved.
 */
+void SvxBackgroundTabPage::FillUserData()
+
 
 {
     SetUserData( m_pBtnPreview->IsChecked() ? OUString('1') : OUString('0') );
 }
-
-
 
 bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
@@ -1078,15 +1054,8 @@ bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, s
     return bModified;
 }
 
-
-
+/** virtual method; is called on deactivation */
 SfxTabPage::sfxpg SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
-
-/*  [Description]
-
-    virtual method; is called on deactivation
-*/
-
 {
     if ( pPageImpl->bIsImportDlgInExecute )
         return KEEP_PAGE;
@@ -1097,14 +1066,10 @@ SfxTabPage::sfxpg SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-
-
 void SvxBackgroundTabPage::PointChanged( vcl::Window* , RECT_POINT  )
 {
     // has to be implemented so that position control can work
 }
-
-
 
 void SvxBackgroundTabPage::ShowSelector()
 {
@@ -1136,9 +1101,6 @@ void SvxBackgroundTabPage::ShowSelector()
     }
 }
 
-
-
-
 void SvxBackgroundTabPage::RaiseLoadError_Impl()
 {
     SfxErrorContext aContext( ERRCTX_SVX_BACKGROUND,
@@ -1152,8 +1114,6 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
                               aBgdGraphicPath ) );
 }
 
-
-
 bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
 {
     bool bResult = ( !aBgdGraphicPath.isEmpty() ) &&
@@ -1162,9 +1122,6 @@ bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
                                                  aBgdGraphic ) );
     return bResult;
 }
-
-
-
 
 void SvxBackgroundTabPage::FillColorValueSets_Impl()
 {
@@ -1190,20 +1147,10 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     m_pBackgroundColorSet->SetColCount(SvxColorValueSet::getColumnCount());
 }
 
-
-
-
-
-
-
-void SvxBackgroundTabPage::ShowColorUI_Impl()
-
-/*  [Description]
-
-    Hide the controls for editing the bitmap
+/** Hide the controls for editing the bitmap
     and show the controls for color settings instead.
 */
-
+void SvxBackgroundTabPage::ShowColorUI_Impl()
 {
     if (!m_pBackGroundColorFrame->IsVisible())
     {
@@ -1223,16 +1170,10 @@ void SvxBackgroundTabPage::HideColorUI_Impl()
         m_pBackGroundColorFrame->Hide();
 }
 
-
-
-void SvxBackgroundTabPage::ShowBitmapUI_Impl()
-
-/*  [Description]
-
-    Hide the controls for color settings
+/** Hide the controls for color settings
     and show controls for editing the bitmap instead.
 */
-
+void SvxBackgroundTabPage::ShowBitmapUI_Impl()
 {
     if (m_pLbSelect->IsVisible() &&
          (m_pBackGroundColorFrame->IsVisible() || !m_pFileFrame->IsVisible()))
@@ -1310,8 +1251,6 @@ void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
     m_pWndPosition->Invalidate();
 }
 
-
-
 SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
 {
     if ( m_pBtnTile->IsChecked() )
@@ -1339,11 +1278,8 @@ SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
 
 // Handler
 
-
+/** Handler, called when color selection is changed */
 IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
-/*
-    Handler, called when color selection is changed
-*/
 {
     sal_uInt16 nItemId = m_pBackgroundColorSet->GetSelectItemId();
     Color aColor = nItemId ? ( m_pBackgroundColorSet->GetItemColor( nItemId ) ) : Color( COL_TRANSPARENT );
@@ -1354,8 +1290,6 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
     m_pColTransMF->Enable(bEnableTransp);
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
 {
@@ -1371,8 +1305,6 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
     }
     return 0;
 }
-
-
 
 IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
 {
@@ -1421,8 +1353,6 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
     return 0;
 }
 
-
-
 IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
 {
     if (pBtn == m_pBtnPosition)
@@ -1441,14 +1371,10 @@ IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
-
-/*  [Description]
-
-    Handler, called by pressing the browse button.
+/** Handler, called by pressing the browse button.
     Create graphic/insert dialog, set path and start.
 */
-
+IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
 {
     if ( pPageImpl->pLoadIdle->IsActive() )
         return 0;
@@ -1481,17 +1407,11 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
     return 0;
 }
 
-
-
-IMPL_LINK_TYPED( SvxBackgroundTabPage, LoadIdleHdl_Impl, Idle* , pIdle, void )
-
-/*  [Description]
-
-    Delayed loading of the graphic.
+/** Delayed loading of the graphic.
     Graphic is only loaded, if it's
     different to the current graphic.
 */
-
+IMPL_LINK_TYPED( SvxBackgroundTabPage, LoadIdleHdl_Impl, Idle* , pIdle, void )
 {
     if ( pIdle == pPageImpl->pLoadIdle )
     {
@@ -1541,8 +1461,6 @@ IMPL_LINK_TYPED( SvxBackgroundTabPage, LoadIdleHdl_Impl, Idle* , pIdle, void )
     }
 }
 
-
-
 void SvxBackgroundTabPage::ShowTblControl()
 {
     m_pTblLBox->SetSelectHdl( HDL(TblDestinationHdl_Impl) );
@@ -1551,8 +1469,6 @@ void SvxBackgroundTabPage::ShowTblControl()
     m_pTblLBox->Show();
     m_pAsGrid->Show();
 }
-
-
 
 void SvxBackgroundTabPage::ShowParaControl(bool bCharOnly)
 {
@@ -1566,7 +1482,6 @@ void SvxBackgroundTabPage::ShowParaControl(bool bCharOnly)
     }
     m_pParaLBox->SetData(m_pParaLBox); // here it can be recognized that this mode is turned on
 }
-
 
 IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
 {
@@ -1656,8 +1571,6 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
     return 0;
 }
 
-
-
 IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
 {
     sal_Int32 nSelPos = pBox->GetSelectEntryPos();
@@ -1719,8 +1632,6 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
     }
     return 0;
 }
-
-
 
 void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
                                               const OUString& rUserData )
@@ -1798,7 +1709,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             m_pBtnLink->Disable();
         }
 
-        if(bGraphTransparency)
+        if (bGraphTransparency)
         {
             const GraphicObject* pObject = rBgdAttr.GetGraphicObject();
             if(pObject)

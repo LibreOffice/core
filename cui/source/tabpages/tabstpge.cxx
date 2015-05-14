@@ -54,7 +54,7 @@ public:
     virtual ~TabWin_Impl() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE { mpPage.clear(); vcl::Window::dispose(); }
 
-    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 
     void SetTabulatorTabPage(SvxTabulatorTabPage* pPage) { mpPage = pPage; }
     void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }
@@ -62,16 +62,12 @@ public:
 
 VCL_BUILDER_FACTORY_ARGS(TabWin_Impl, 0)
 
-// static ----------------------------------------------------------------
-
 const sal_uInt16 SvxTabulatorTabPage::pRanges[] =
 {
     SID_ATTR_TABSTOP,
     SID_ATTR_TABSTOP_OFFSET,
     0
 };
-
-// C function ------------------------------------------------------------
 
 void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
 {
@@ -83,8 +79,6 @@ void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
     }
 }
 
-// class TabWin_Impl -----------------------------------------------------
-
 void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     // Paint tabulators
@@ -95,18 +89,13 @@ void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     Ruler::DrawTab(rRenderContext, rRenderContext.GetSettings().GetStyleSettings().GetFontColor(), aPoint, nTabStyle);
 }
 
-// class SvxTabulatorTabPage ---------------------------------------------
-
-SvxTabulatorTabPage::SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet& rAttr ):
-
-    SfxTabPage( pParent, "ParagraphTabsPage","cui/ui/paratabspage.ui", &rAttr ),
-
-    aAktTab     ( 0 ),
-    aNewTabs    ( 0, 0, SVX_TAB_ADJUST_LEFT, GetWhich( SID_ATTR_TABSTOP ) ),
-    nDefDist    ( 0 ),
-    eDefUnit    ( FUNIT_100TH_MM ),
-    bCheck      ( false )
-
+SvxTabulatorTabPage::SvxTabulatorTabPage(vcl::Window* pParent, const SfxItemSet& rAttr)
+    : SfxTabPage(pParent, "ParagraphTabsPage","cui/ui/paratabspage.ui", &rAttr)
+    , aAktTab(0)
+    , aNewTabs(0, 0, SVX_TAB_ADJUST_LEFT, GetWhich(SID_ATTR_TABSTOP))
+    , nDefDist(0)
+    , eDefUnit(FUNIT_100TH_MM)
+    , bCheck(false)
 {
     get(m_pTabBox,"ED_TABPOS");
     //the tab images
@@ -218,125 +207,115 @@ void SvxTabulatorTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-bool SvxTabulatorTabPage::FillItemSet( SfxItemSet* rSet )
+bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
 {
     bool bModified = false;
 
     // Put the controls' values in here
-    if ( m_pNewBtn->IsEnabled() )
+    if (m_pNewBtn->IsEnabled())
         NewHdl_Impl( 0 );
 
     // Call the LoseFocus-Handler first
-    GetDezCharHdl_Impl( m_pDezChar );
-    GetFillCharHdl_Impl( m_pFillChar );
+    GetDezCharHdl_Impl(m_pDezChar);
+    GetFillCharHdl_Impl(m_pFillChar);
 
-    FillUpWithDefTabs_Impl( nDefDist, aNewTabs );
+    FillUpWithDefTabs_Impl(nDefDist, aNewTabs);
     SfxItemPool* pPool = rSet->GetPool();
-    MapUnit eUnit = (MapUnit)pPool->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
-    const SfxPoolItem* pOld = GetOldItem( *rSet, SID_ATTR_TABSTOP );
+    MapUnit eUnit = (MapUnit)pPool->GetMetric(GetWhich(SID_ATTR_TABSTOP));
+    const SfxPoolItem* pOld = GetOldItem(*rSet, SID_ATTR_TABSTOP);
 
-    if ( MAP_100TH_MM != eUnit )
+    if (MAP_100TH_MM != eUnit)
     {
         // If the ItemSet contains a LRSpaceItem with negative first line indent,
         // the TabStopItem needs to have a DefTab at position 0.
         const SfxPoolItem* pLRSpace;
         // If not in the new set, then maybe in the old one
-        if ( SfxItemState::SET != rSet->GetItemState( GetWhich( SID_ATTR_LRSPACE ), true, &pLRSpace ) )
-            pLRSpace = GetOldItem( *rSet, SID_ATTR_LRSPACE );
+        if (SfxItemState::SET != rSet->GetItemState(GetWhich(SID_ATTR_LRSPACE), true, &pLRSpace))
+            pLRSpace = GetOldItem(*rSet, SID_ATTR_LRSPACE);
 
-        if ( pLRSpace && static_cast<const SvxLRSpaceItem*>(pLRSpace)->GetTxtFirstLineOfst() < 0 )
+        if (pLRSpace && static_cast<const SvxLRSpaceItem*>(pLRSpace)->GetTxtFirstLineOfst() < 0)
         {
-            SvxTabStop aNull( 0, SVX_TAB_ADJUST_DEFAULT );
-            aNewTabs.Insert( aNull );
+            SvxTabStop aNull(0, SVX_TAB_ADJUST_DEFAULT);
+            aNewTabs.Insert(aNull);
         }
 
-        SvxTabStopItem aTmp( aNewTabs );
-        aTmp.Remove( 0, aTmp.Count() );
+        SvxTabStopItem aTmp(aNewTabs);
+        aTmp.Remove(0, aTmp.Count());
 
-        for ( sal_uInt16 i = 0; i < aNewTabs.Count(); ++i )
+        for (sal_uInt16 i = 0; i < aNewTabs.Count(); ++i)
         {
             SvxTabStop aTmpStop = aNewTabs[i];
-            aTmpStop.GetTabPos() =
-                LogicToLogic( aTmpStop.GetTabPos(), MAP_100TH_MM, eUnit );
-            aTmp.Insert( aTmpStop );
+            aTmpStop.GetTabPos() = LogicToLogic(aTmpStop.GetTabPos(), MAP_100TH_MM, eUnit);
+            aTmp.Insert(aTmpStop);
         }
 
-        if ( !pOld || !( *static_cast<const SvxTabStopItem*>(pOld) == aTmp ) )
+        if (!pOld || !(*static_cast<const SvxTabStopItem*>(pOld) == aTmp))
         {
-            rSet->Put( aTmp );
+            rSet->Put(aTmp);
             bModified = true;
         }
     }
-    else if ( !pOld || !( *static_cast<const SvxTabStopItem*>(pOld) == aNewTabs ) )
+    else if (!pOld || !( *static_cast<const SvxTabStopItem*>(pOld) == aNewTabs))
     {
-        rSet->Put( aNewTabs );
+        rSet->Put(aNewTabs);
         bModified = true;
     }
     return bModified;
 }
 
-
-
-VclPtr<SfxTabPage> SvxTabulatorTabPage::Create( vcl::Window* pParent,
-                                         const SfxItemSet* rSet)
+VclPtr<SfxTabPage> SvxTabulatorTabPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<SfxTabPage>( new SvxTabulatorTabPage( pParent, *rSet ),
-                               SAL_NO_ACQUIRE );
+    return VclPtr<SfxTabPage>(new SvxTabulatorTabPage(pParent, *rSet), SAL_NO_ACQUIRE);
 }
 
-
-
-void SvxTabulatorTabPage::Reset( const SfxItemSet* rSet )
+void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)
 {
     SfxItemPool* pPool = rSet->GetPool();
-    MapUnit eUnit = (MapUnit)pPool->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
+    MapUnit eUnit = (MapUnit)pPool->GetMetric(GetWhich(SID_ATTR_TABSTOP));
 
     // Current tabs
-    const SfxPoolItem* pItem = GetItem( *rSet, SID_ATTR_TABSTOP );
+    const SfxPoolItem* pItem = GetItem(*rSet, SID_ATTR_TABSTOP);
 
-    if ( pItem )
+    if (pItem)
     {
-        if ( MAP_100TH_MM != eUnit )
+        if (MAP_100TH_MM != eUnit)
         {
-            SvxTabStopItem aTmp( *static_cast<const SvxTabStopItem*>(pItem) );
-            aNewTabs.Remove( 0, aNewTabs.Count() );
+            SvxTabStopItem aTmp(*static_cast<const SvxTabStopItem*>(pItem));
+            aNewTabs.Remove(0, aNewTabs.Count());
 
-            for ( sal_uInt16 i = 0; i < aTmp.Count(); ++i )
+            for (sal_uInt16 i = 0; i < aTmp.Count(); ++i)
             {
                 SvxTabStop aTmpStop = aTmp[i];
-                aTmpStop.GetTabPos() = LogicToLogic( aTmpStop.GetTabPos(), eUnit, MAP_100TH_MM );
-                aNewTabs.Insert( aTmpStop );
+                aTmpStop.GetTabPos() = LogicToLogic(aTmpStop.GetTabPos(), eUnit, MAP_100TH_MM);
+                aNewTabs.Insert(aTmpStop);
             }
         }
         else
             aNewTabs = *static_cast<const SvxTabStopItem*>(pItem);
     }
     else
-        aNewTabs.Remove( 0, aNewTabs.Count() );
+        aNewTabs.Remove(0, aNewTabs.Count());
 
     // Defaul tab distance
     nDefDist = SVX_TAB_DEFDIST;
-    pItem = GetItem( *rSet, SID_ATTR_TABSTOP_DEFAULTS );
+    pItem = GetItem(*rSet, SID_ATTR_TABSTOP_DEFAULTS);
 
-    if ( pItem )
-        nDefDist = LogicToLogic(
-            (long)static_cast<const SfxUInt16Item*>(pItem)->GetValue(), eUnit, MAP_100TH_MM );
+    if (pItem)
+        nDefDist = LogicToLogic(long(static_cast<const SfxUInt16Item*>(pItem)->GetValue()), eUnit, MAP_100TH_MM);
 
     // Tab pos currently selected
     sal_uInt16 nTabPos = 0;
-    pItem = GetItem( *rSet, SID_ATTR_TABSTOP_POS );
+    pItem = GetItem(*rSet, SID_ATTR_TABSTOP_POS);
 
-    if ( pItem )
+    if (pItem)
         nTabPos = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
-    InitTabPos_Impl( nTabPos );
+    InitTabPos_Impl(nTabPos);
 }
 
-
-
-void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
+void SvxTabulatorTabPage::DisableControls(const sal_uInt16 nFlag)
 {
-    if ( ( TABTYPE_LEFT & nFlag ) == TABTYPE_LEFT )
+    if ((TABTYPE_LEFT & nFlag) == TABTYPE_LEFT)
     {
         m_pLeftTab->Disable();
         m_pLeftWin->Disable();
@@ -358,7 +337,7 @@ void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
         m_pDezCharLabel->Disable();
         m_pDezChar->Disable();
     }
-     if ( ( TABTYPE_ALL & nFlag ) == TABTYPE_ALL )
+    if ( ( TABTYPE_ALL & nFlag ) == TABTYPE_ALL )
          m_pTypeFrame->Disable();
     if ( ( TABFILL_NONE & nFlag ) == TABFILL_NONE )
         m_pNoFillChar->Disable();
@@ -377,8 +356,6 @@ void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
          m_pFillFrame->Disable();
 }
 
-
-
 SfxTabPage::sfxpg SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
@@ -386,20 +363,17 @@ SfxTabPage::sfxpg SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-
-
 void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
 {
     m_pTabBox->Clear();
 
     long nOffset = 0;
     const SfxPoolItem* pItem = 0;
-    if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, true, &pItem )
-            == SfxItemState::SET )
+    if (GetItemSet().GetItemState(SID_ATTR_TABSTOP_OFFSET, true, &pItem) == SfxItemState::SET)
     {
         nOffset = static_cast<const SfxInt32Item*>(pItem)->GetValue();
-        MapUnit eUnit = (MapUnit)GetItemSet().GetPool()->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
-        nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MAP_100TH_MM  );
+        MapUnit eUnit = (MapUnit)GetItemSet().GetPool()->GetMetric(GetWhich(SID_ATTR_TABSTOP));
+        nOffset = OutputDevice::LogicToLogic(nOffset, eUnit, MAP_100TH_MM);
     }
 
     // Correct current TabPos and default tabs
@@ -441,8 +415,6 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
         m_pDelBtn->Disable();
     }
 }
-
-
 
 void SvxTabulatorTabPage::SetFillAndTabType_Impl()
 {
@@ -488,8 +460,6 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
     }
     pFillBtn->Check();
 }
-
-
 
 IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
 {
@@ -547,8 +517,6 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
 {
     sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue() );
@@ -590,8 +558,6 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl)
 {
     if ( aNewTabs.Count() )
@@ -604,8 +570,6 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl)
     }
     return 0;
 }
-
-
 
 IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
 {
@@ -640,8 +604,6 @@ IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
     return 0;
 }
 
-
-
 IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
 {
     bCheck = true;
@@ -671,8 +633,6 @@ IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
     return 0;
 }
 
-
-
 IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
 {
     OUString aChar( pEdit->GetText() );
@@ -689,8 +649,6 @@ IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
     return 0;
 }
 
-
-
 IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
 {
     OUString aChar( pEdit->GetText() );
@@ -706,8 +664,6 @@ IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)
 {
     sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
@@ -719,8 +675,6 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)
     }
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl)
 {
