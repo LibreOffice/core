@@ -2867,29 +2867,29 @@ void PopupMenu::SetSelectedEntry( sal_uInt16 nId )
 
 sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const Point& rPopupPos )
 {
-    return Execute( pExecWindow, Rectangle( rPopupPos, rPopupPos ), POPUPMENU_EXECUTE_DOWN );
+    return Execute( pExecWindow, Rectangle( rPopupPos, rPopupPos ), PopupMenuFlags::ExecuteDown );
 }
 
-sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const Rectangle& rRect, sal_uInt16 nFlags )
+sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const Rectangle& rRect, PopupMenuFlags nFlags )
 {
     ENSURE_OR_RETURN( pExecWindow, "PopupMenu::Execute: need a non-NULL window!", 0 );
 
     FloatWinPopupFlags nPopupModeFlags = FloatWinPopupFlags::NONE;
-    if ( nFlags & POPUPMENU_EXECUTE_DOWN )
+    if ( nFlags & PopupMenuFlags::ExecuteDown )
         nPopupModeFlags = FloatWinPopupFlags::Down;
-    else if ( nFlags & POPUPMENU_EXECUTE_UP )
+    else if ( nFlags & PopupMenuFlags::ExecuteUp )
         nPopupModeFlags = FloatWinPopupFlags::Up;
-    else if ( nFlags & POPUPMENU_EXECUTE_LEFT )
+    else if ( nFlags & PopupMenuFlags::ExecuteLeft )
         nPopupModeFlags = FloatWinPopupFlags::Left;
-    else if ( nFlags & POPUPMENU_EXECUTE_RIGHT )
+    else if ( nFlags & PopupMenuFlags::ExecuteRight )
         nPopupModeFlags = FloatWinPopupFlags::Right;
     else
         nPopupModeFlags = FloatWinPopupFlags::Down;
 
-    if (nFlags & POPUPMENU_NOMOUSEUPCLOSE )                      // allow popup menus to stay open on mouse button up
+    if (nFlags & PopupMenuFlags::NoMouseUpClose )                      // allow popup menus to stay open on mouse button up
         nPopupModeFlags |= FloatWinPopupFlags::NoMouseUpClose;    // useful if the menu was opened on mousebutton down (eg toolbox configuration)
 
-    if (nFlags & POPUPMENU_NOHORZ_PLACEMENT)
+    if (nFlags & PopupMenuFlags::NoHorzPlacement)
         nPopupModeFlags |= FloatWinPopupFlags::NoHorzPlacement;
 
     return ImplExecute( pExecWindow, rRect, nPopupModeFlags, 0, false );

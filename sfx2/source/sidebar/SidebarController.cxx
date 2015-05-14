@@ -816,7 +816,7 @@ void SidebarController::ShowPopupMenu (
     // pass toolbox button rect so the menu can stay open on button up
     Rectangle aBox (rButtonBox);
     aBox.Move(mpTabBar->GetPosPixel().X(), 0);
-    pMenu->Execute(mpParentWindow, aBox, POPUPMENU_EXECUTE_DOWN);
+    pMenu->Execute(mpParentWindow, aBox, PopupMenuFlags::ExecuteDown);
 }
 
 ::boost::shared_ptr<PopupMenu> SidebarController::CreatePopupMenu (

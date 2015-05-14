@@ -392,7 +392,7 @@ IMPL_LINK_NOARG_TYPED(CommandToolBox, ToolBoxDropdownClickHdl, ToolBox *, void)
     {
         ScPopupMenu aPop( ScResId( RID_POPUP_DROPMODE ) );
         aPop.CheckItem( RID_DROPMODE_URL + rDlg.GetDropMode() );
-        aPop.Execute( this, GetItemRect(IID_DROPMODE), POPUPMENU_EXECUTE_DOWN );
+        aPop.Execute( this, GetItemRect(IID_DROPMODE), PopupMenuFlags::ExecuteDown );
         sal_uInt16 nId = aPop.GetSelected();
 
         EndSelection();     // bevore SetDropMode (SetDropMode calls SetItemImage)

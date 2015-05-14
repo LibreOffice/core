@@ -348,7 +348,7 @@ IMPL_LINK_NOARG_TYPED(SwInputWindow, DropdownClickHdl, ToolBox *, void)
     {
         case FN_FORMULA_CALC :
         {
-            aPopMenu.Execute( this, GetItemRect( FN_FORMULA_CALC ), POPUPMENU_NOMOUSEUPCLOSE );
+            aPopMenu.Execute( this, GetItemRect( FN_FORMULA_CALC ), PopupMenuFlags::NoMouseUpClose );
             break;
         default:
             break;

@@ -216,7 +216,7 @@ VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
 
         pPopup->Execute( pToolBox, pToolBox->GetItemRect( nId ),
             (pToolBox->GetAlign() == WINDOWALIGN_TOP || pToolBox->GetAlign() == WINDOWALIGN_BOTTOM) ?
-                POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
+                PopupMenuFlags::ExecuteDown : PopupMenuFlags::ExecuteRight );
 
         pToolBox->SetItemDown( nId, false );
     }
@@ -313,7 +313,7 @@ VclPtr<SfxPopupWindow> SwTbxFieldCtrl::CreatePopupWindow()
 
         pPopup->Execute( pToolBox, pToolBox->GetItemRect( nId ),
                 (pToolBox->GetAlign() == WINDOWALIGN_TOP || pToolBox->GetAlign() == WINDOWALIGN_BOTTOM) ?
-                 POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
+                 PopupMenuFlags::ExecuteDown : PopupMenuFlags::ExecuteRight );
 
         pToolBox->SetItemDown( nId, false );
     }

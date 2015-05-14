@@ -508,7 +508,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox, void)
     {
         pBox->SetItemDown( nCurItemId, true );
 
-        mpActionMenu->Execute(pBox, pBox->GetItemRect(nCurItemId), POPUPMENU_EXECUTE_DOWN);
+        mpActionMenu->Execute(pBox, pBox->GetItemRect(nCurItemId), PopupMenuFlags::ExecuteDown);
 
         pBox->SetItemDown( nCurItemId, false );
         pBox->EndSelection();
@@ -533,7 +533,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox, void)
 
         pMoveMenu->InsertItem(MNI_MOVE_NEW, SfxResId(STR_MOVE_NEW));
 
-        pMoveMenu->Execute(pBox, pBox->GetItemRect(nCurItemId), POPUPMENU_EXECUTE_DOWN);
+        pMoveMenu->Execute(pBox, pBox->GetItemRect(nCurItemId), PopupMenuFlags::ExecuteDown);
 
         delete pMoveMenu;
 
@@ -545,7 +545,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox, void)
     {
         pBox->SetItemDown( nCurItemId, true );
 
-        mpRepositoryMenu->Execute(pBox, pBox->GetItemRect(nCurItemId), POPUPMENU_EXECUTE_DOWN);
+        mpRepositoryMenu->Execute(pBox, pBox->GetItemRect(nCurItemId), PopupMenuFlags::ExecuteDown);
 
         pBox->SetItemDown( nCurItemId, false );
         pBox->EndSelection();

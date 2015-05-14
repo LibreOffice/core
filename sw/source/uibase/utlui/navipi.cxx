@@ -378,7 +378,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
             pBox->SetItemDown( nCurrItemId, true );
             pMenu->Execute( pBox,
                     pBox->GetItemRect(FN_DROP_REGION),
-                    POPUPMENU_EXECUTE_DOWN );
+                    PopupMenuFlags::ExecuteDown );
             pBox->SetItemDown( nCurrItemId, false );
             pBox->EndSelection();
             pMenu.reset();
@@ -398,7 +398,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
             pBox->SetItemDown( nCurrItemId, true );
             pMenu->Execute( pBox,
                     pBox->GetItemRect(FN_OUTLINE_LEVEL),
-                    POPUPMENU_EXECUTE_DOWN );
+                    PopupMenuFlags::ExecuteDown );
             pBox->SetItemDown( nCurrItemId, false );
             pMenu.reset();
             pBox->EndSelection();

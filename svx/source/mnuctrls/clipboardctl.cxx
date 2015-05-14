@@ -87,7 +87,7 @@ VclPtr<SfxPopupWindow> SvxClipBoardControl::CreatePopupWindow()
 
         pPopup->Execute( &rBox, rBox.GetItemRect( nId ),
             (rBox.GetAlign() == WINDOWALIGN_TOP || rBox.GetAlign() == WINDOWALIGN_BOTTOM) ?
-                POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
+                PopupMenuFlags::ExecuteDown : PopupMenuFlags::ExecuteRight );
 
         rBox.SetItemDown( nId, false );
 

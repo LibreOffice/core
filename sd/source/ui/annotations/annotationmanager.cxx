@@ -997,7 +997,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
         }
     }
 
-    nId = pMenu->Execute( pParent, rContextRect, POPUPMENU_EXECUTE_DOWN|POPUPMENU_NOMOUSEUPCLOSE );
+    nId = pMenu->Execute( pParent, rContextRect, PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose );
     switch( nId )
     {
     case SID_REPLYTO_POSTIT:

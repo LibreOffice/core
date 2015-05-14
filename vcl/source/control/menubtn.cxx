@@ -57,7 +57,7 @@ void MenuButton::ExecuteMenu()
         Rectangle aRect( aPos, aSize );
         SetPressed( true );
         EndSelection();
-        mnCurItemId = mpMenu->Execute( this, aRect, POPUPMENU_EXECUTE_DOWN );
+        mnCurItemId = mpMenu->Execute( this, aRect, PopupMenuFlags::ExecuteDown );
         SetPressed( false );
         if ( mnCurItemId )
         {

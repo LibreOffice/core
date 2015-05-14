@@ -235,7 +235,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
                 ProcessPopupMenu(*pMenu);
 
                 // Show the menu.
-                pMenu->Execute(this, Rectangle(aPosition,Size(1,1)), POPUPMENU_EXECUTE_DOWN);
+                pMenu->Execute(this, Rectangle(aPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
             }
         }
         break;

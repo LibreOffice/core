@@ -31,6 +31,7 @@
 #include <vcl/vclevent.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 struct ImplSVEvent;
 struct MenuItemData;
@@ -66,17 +67,26 @@ namespace vcl { struct MenuLayoutData; }
 #define MENU_APPEND             ((sal_uInt16)0xFFFF)
 #define MENU_ITEM_NOTFOUND      ((sal_uInt16)0xFFFF)
 
-#define POPUPMENU_EXECUTE_DOWN     ((sal_uInt16)0x0001)
-#define POPUPMENU_EXECUTE_UP       ((sal_uInt16)0x0002)
-#define POPUPMENU_EXECUTE_LEFT     ((sal_uInt16)0x0004)
-#define POPUPMENU_EXECUTE_RIGHT    ((sal_uInt16)0x0008)
-#define POPUPMENU_NOMOUSEUPCLOSE   ((sal_uInt16)0x0010)
+// Must match the definitions in css::awt::PopupMenuDirection.idl
+enum class PopupMenuFlags
+{
+    NONE            = 0x0000,
+    ExecuteDown     = 0x0001,
+    ExecuteUp       = 0x0002,
+    ExecuteLeft     = 0x0004,
+    ExecuteRight    = 0x0008,
+    NoMouseUpClose  = 0x0010,
 //If there isn't enough space to put the menu where it wants
 //to go, then they will be autoplaced. Toggle this bit
 //on to force menus to be placed either above or below
 //the starting rectangle and shrunk to fit and then scroll rather than place
 //the menu beside that rectangle
-#define POPUPMENU_NOHORZ_PLACEMENT ((sal_uInt16)0x0020)
+    NoHorzPlacement = 0x0020,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<PopupMenuFlags> : is_typed_flags<PopupMenuFlags, 0x003f> {};
+}
 
 #define MENU_FLAG_NOAUTOMNEMONICS       0x0001
 #define MENU_FLAG_HIDEDISABLEDENTRIES   0x0002
@@ -526,8 +536,8 @@ public:
     void                SetText( const OUString& rTitle )  { aTitleText = rTitle; }
     const OUString&     GetText() const                     { return aTitleText; }
 
-    sal_uInt16              Execute( vcl::Window* pWindow, const Point& rPopupPos );
-    sal_uInt16              Execute( vcl::Window* pWindow, const Rectangle& rRect, sal_uInt16 nFlags = 0 );
+    sal_uInt16          Execute( vcl::Window* pWindow, const Point& rPopupPos );
+    sal_uInt16          Execute( vcl::Window* pWindow, const Rectangle& rRect, PopupMenuFlags nFlags = PopupMenuFlags::NONE );
 
     // Fuer das TestTool
     void                EndExecute( sal_uInt16 nSelect = 0 );

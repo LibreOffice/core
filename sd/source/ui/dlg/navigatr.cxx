@@ -361,7 +361,7 @@ IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
             pMenu->CheckItem( (sal_uInt16)meDragType );
             pMenu->SetSelectHdl( LINK( this, SdNavigatorWin, MenuSelectHdl ) );
 
-            pMenu->Execute( this, maToolbox->GetItemRect( nId ), POPUPMENU_EXECUTE_DOWN );
+            pMenu->Execute( this, maToolbox->GetItemRect( nId ), PopupMenuFlags::ExecuteDown );
             pBox->EndSelection();
             delete pMenu;
         }
@@ -384,7 +384,7 @@ IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
                 pMenu->CheckItem(nShowNamedShapesFilter);
             pMenu->SetSelectHdl( LINK( this, SdNavigatorWin, ShapeFilterCallback ) );
 
-            pMenu->Execute( this, maToolbox->GetItemRect( nId ), POPUPMENU_EXECUTE_DOWN );
+            pMenu->Execute( this, maToolbox->GetItemRect( nId ), PopupMenuFlags::ExecuteDown );
             pBox->EndSelection();
             delete pMenu;
         }

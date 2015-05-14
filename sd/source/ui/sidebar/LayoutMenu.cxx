@@ -626,7 +626,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                     pMenu->EnableItem(SID_INSERTPAGE_LAYOUT_MENU, false);
 
                 // Show the menu.
-                pMenu->Execute(this, Rectangle(aMenuPosition,Size(1,1)), POPUPMENU_EXECUTE_DOWN);
+                pMenu->Execute(this, Rectangle(aMenuPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
             }
             break;
 

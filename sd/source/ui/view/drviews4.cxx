@@ -924,7 +924,7 @@ void DrawViewShell::ShowSnapLineContextMenu (
     const sal_uInt16 nResult = pMenu->Execute(
         GetActiveWindow(),
         Rectangle(rMouseLocation, Size(10,10)),
-        POPUPMENU_EXECUTE_DOWN);
+        PopupMenuFlags::ExecuteDown);
     switch (nResult)
     {
         case SID_SET_SNAPITEM:

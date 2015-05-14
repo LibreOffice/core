@@ -2502,7 +2502,7 @@ IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
             pMenu->SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, MenuSelectHdl));
             pMenu->Execute( pBox,
                             pBox->GetItemRect(nEntry),
-                            POPUPMENU_EXECUTE_DOWN );
+                            PopupMenuFlags::ExecuteDown );
             pBox->EndSelection();
         }
         catch(uno::Exception&)

@@ -975,7 +975,7 @@ namespace sfx2
             // pass toolbox button rect so the menu can stay open on button up
             Rectangle aMenuRect( i_pToolBox->GetItemRect( m_nViewMenuID ) );
             aMenuRect.SetPos( i_pToolBox->GetPosPixel() );
-            pMenu->Execute( &m_rDockingWindow, aMenuRect, POPUPMENU_EXECUTE_DOWN );
+            pMenu->Execute( &m_rDockingWindow, aMenuRect, PopupMenuFlags::ExecuteDown );
         }
     }
 

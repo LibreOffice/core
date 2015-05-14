@@ -539,7 +539,7 @@ throw(css::uno::RuntimeException, std::exception)
     {
         nRet = static_cast<PopupMenu*>(mpMenu)->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ),
                                               VCLRectangle( rPos ),
-                                              nFlags | POPUPMENU_NOMOUSEUPCLOSE );
+                                              static_cast<PopupMenuFlags>(nFlags) | PopupMenuFlags::NoMouseUpClose );
     }
     return nRet;
 }

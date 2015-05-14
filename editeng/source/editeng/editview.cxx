@@ -931,7 +931,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack )
         aScreenPos = pImpEditView->GetWindow()->OutputToScreenPixel( aScreenPos );
         aTempRect = pImpEditView->GetWindow()->LogicToPixel( Rectangle(aScreenPos, aTempRect.GetSize() ));
 
-        sal_uInt16 nId = aPopupMenu.Execute( pImpEditView->GetWindow(), aTempRect, POPUPMENU_NOMOUSEUPCLOSE );
+        sal_uInt16 nId = aPopupMenu.Execute( pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose );
         if ( nId == MN_IGNORE )
         {
             OUString aWord = pImpEditView->SpellIgnoreOrAddWord( false );

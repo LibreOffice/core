@@ -231,7 +231,7 @@ namespace dbaui
         VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()).get());
         ::std::unique_ptr<PopupMenu> pMenu = getMenu();
 
-        sal_uInt16 nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),POPUPMENU_EXECUTE_DOWN);
+        sal_uInt16 nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),PopupMenuFlags::ExecuteDown);
         // "cleanup" the toolbox state
         Point aPoint = pToolBox->GetItemRect( m_nToolBoxId ).TopLeft();
         MouseEvent aLeave( aPoint, 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );

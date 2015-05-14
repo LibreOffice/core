@@ -1913,7 +1913,7 @@ void ToolBox::ImplExecuteCustomMenu()
         }
 
         sal_uInt16 uId = GetMenu()->Execute( pWin, Rectangle( ImplGetPopupPosition( aMenuRect, Size() ), Size() ),
-                                POPUPMENU_EXECUTE_DOWN | POPUPMENU_NOMOUSEUPCLOSE );
+                                PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose );
 
         if ( aDelData.IsDead() )
             return;

@@ -256,7 +256,7 @@ IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn )
     }
 
     pFormMenu->SetSelectHdl(LINK(this, SwOutlineTabDialog, MenuSelectHdl));
-    pFormMenu->Execute(pBtn, Rectangle(Point(0,0), pBtn->GetSizePixel()), POPUPMENU_EXECUTE_DOWN);
+    pFormMenu->Execute(pBtn, Rectangle(Point(0,0), pBtn->GetSizePixel()), PopupMenuFlags::ExecuteDown);
     return 0;
 }
 
