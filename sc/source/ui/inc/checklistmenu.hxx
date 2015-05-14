@@ -56,7 +56,7 @@ public:
     virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
     void addMenuItem(const OUString& rText, bool bEnabled, Action* pAction);
     void addSeparator();
@@ -80,10 +80,13 @@ protected:
     virtual void handlePopupEnd();
 
     Size getMenuSize() const;
-    void drawMenuItem(size_t nPos);
-    void drawSeparator(size_t nPos);
-    void drawAllMenuItems();
-    const vcl::Font& getLabelFont() const { return maLabelFont;}
+    void drawMenuItem(vcl::RenderContext& rRenderContext, size_t nPos);
+    void drawSeparator(vcl::RenderContext& rRenderContext, size_t nPos);
+    void drawAllMenuItems(vcl::RenderContext& rRenderContext);
+    const vcl::Font& getLabelFont() const
+    {
+        return maLabelFont;
+    }
 
     void queueLaunchSubMenu(size_t nPos, ScMenuFloatingWindow* pMenu);
     void queueCloseSubMenu();
@@ -95,15 +98,14 @@ protected:
     ScDocument* getDoc() { return mpDoc;}
 
 protected:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > mxAccessible;
+    css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
 
 private:
     struct SubMenuItemData;
     void handleMenuTimeout(SubMenuItemData* pTimer);
 
     void resizeToFitMenuItems();
-    void highlightMenuItem(size_t nPos, bool bSelected);
+    void highlightMenuItem(vcl::RenderContext& rRenderContext, size_t nPos, bool bSelected);
 
     size_t getEnclosingMenuItem(const Point& rPos) const;
     size_t getSubMenuPos(ScMenuFloatingWindow* pSubMenu);

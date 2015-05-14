@@ -82,16 +82,14 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDo
     mpParentMenu(dynamic_cast<ScMenuFloatingWindow*>(pParent))
 {
     SetMenuStackLevel(nMenuStackLevel);
+    SetText(OUString("ScMenuFloatingWindow"));
 
-    // TODO: How do we get the right font to use here ?
+    const StyleSettings& rStyle = GetSettings().GetStyleSettings();
+
     sal_Int32 nScaleFactor = GetDPIScaleFactor();
     const sal_uInt16 nPopupFontHeight = 12 * nScaleFactor;
-    const StyleSettings& rStyle = GetSettings().GetStyleSettings();
     maLabelFont = rStyle.GetLabelFont();
     maLabelFont.SetHeight(nPopupFontHeight);
-    SetFont(maLabelFont);
-
-    SetText( OUString("ScMenuFloatingWindow") );
 }
 
 ScMenuFloatingWindow::~ScMenuFloatingWindow()
@@ -238,36 +236,38 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
         Window::KeyInput(rKEvt);
 }
 
-void ScMenuFloatingWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/)
+void ScMenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
+
+    SetFont(maLabelFont);
+
     Color aBackColor = rStyle.GetMenuColor();
     Color aBorderColor = rStyle.GetShadowColor();
 
-    Rectangle aCtrlRect(Point(0, 0), GetOutputSizePixel());
+    Rectangle aCtrlRect(Point(0, 0), rRenderContext.GetOutputSizePixel());
 
     // Window background
     bool bNativeDrawn = true;
-    if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
     {
-        SetClipRegion();
-        bNativeDrawn = DrawNativeControl(
-            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, ControlState::ENABLED,
-            ImplControlValue(), OUString());
+        rRenderContext.SetClipRegion();
+        bNativeDrawn = rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect,
+                                                        ControlState::ENABLED, ImplControlValue(), OUString());
     }
     else
         bNativeDrawn = false;
 
     if (!bNativeDrawn)
     {
-        SetFillColor(aBackColor);
-        SetLineColor(aBorderColor);
-        DrawRect(aCtrlRect);
+        rRenderContext.SetFillColor(aBackColor);
+        rRenderContext.SetLineColor(aBorderColor);
+        rRenderContext.DrawRect(aCtrlRect);
     }
 
     // Menu items
-    SetTextColor(rStyle.GetMenuTextColor());
-    drawAllMenuItems();
+    rRenderContext.SetTextColor(rStyle.GetMenuTextColor());
+    drawAllMenuItems(rRenderContext);
 }
 
 Reference<XAccessible> ScMenuFloatingWindow::CreateAccessible()
@@ -348,7 +348,7 @@ Size ScMenuFloatingWindow::getMenuSize() const
     return Size(aPos.X(), aPos.Y());
 }
 
-void ScMenuFloatingWindow::drawMenuItem(size_t nPos)
+void ScMenuFloatingWindow::drawMenuItem(vcl::RenderContext& rRenderContext, size_t nPos)
 {
     if (nPos >= maMenuItems.size())
         return;
@@ -357,82 +357,84 @@ void ScMenuFloatingWindow::drawMenuItem(size_t nPos)
     Size aSize;
     getMenuItemPosSize(nPos, aPos, aSize);
 
-    DecorationView aDecoView(this);
+    DecorationView aDecoView(&rRenderContext);
     long nXOffset = 5;
     long nYOffset = (aSize.Height() - maLabelFont.GetHeight())/2;
-    DrawCtrlText(Point(aPos.X()+nXOffset, aPos.Y() + nYOffset), maMenuItems[nPos].maText, 0,
-                 maMenuItems[nPos].maText.getLength(),
-                 maMenuItems[nPos].mbEnabled ? TEXT_DRAW_MNEMONIC : TEXT_DRAW_DISABLE);
+    rRenderContext. DrawCtrlText(Point(aPos.X()+nXOffset, aPos.Y() + nYOffset), maMenuItems[nPos].maText, 0,
+                                 maMenuItems[nPos].maText.getLength(),
+                                 maMenuItems[nPos].mbEnabled ? TEXT_DRAW_MNEMONIC : TEXT_DRAW_DISABLE);
 
     if (maMenuItems[nPos].mpSubMenuWin)
     {
         long nFontHeight = maLabelFont.GetHeight();
         Point aMarkerPos = aPos;
-        aMarkerPos.Y() += aSize.Height()/2 - nFontHeight/4 + 1;
-        aMarkerPos.X() += aSize.Width() - nFontHeight + nFontHeight/4;
-        Size aMarkerSize(nFontHeight/2, nFontHeight/2);
-        aDecoView.DrawSymbol(Rectangle(aMarkerPos, aMarkerSize),
-                             SymbolType::SPIN_RIGHT, GetTextColor());
+        aMarkerPos.Y() += aSize.Height() / 2 - nFontHeight / 4 + 1;
+        aMarkerPos.X() += aSize.Width() - nFontHeight + nFontHeight / 4;
+        Size aMarkerSize(nFontHeight / 2, nFontHeight / 2);
+        aDecoView.DrawSymbol(Rectangle(aMarkerPos, aMarkerSize), SymbolType::SPIN_RIGHT, GetTextColor());
     }
 }
 
-void ScMenuFloatingWindow::drawSeparator(size_t nPos)
+void ScMenuFloatingWindow::drawSeparator(vcl::RenderContext& rRenderContext, size_t nPos)
 {
     Point aPos;
     Size aSize;
     getMenuItemPosSize(nPos, aPos, aSize);
     Rectangle aRegion(aPos,aSize);
 
-    if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
     {
-        Push(PushFlags::CLIPREGION);
-        IntersectClipRegion(aRegion);
+        rRenderContext.Push(PushFlags::CLIPREGION);
+        rRenderContext.IntersectClipRegion(aRegion);
         Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
-        DrawNativeControl(
-            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, ControlState::ENABLED,
-            ImplControlValue(), OUString());
+        rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect,
+                                         ControlState::ENABLED, ImplControlValue(), OUString());
 
-        Pop();
+        rRenderContext.Pop();
     }
 
     bool bNativeDrawn = false;
-    if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_SEPARATOR))
+    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_SEPARATOR))
     {
         ControlState nState = ControlState::NONE;
         const MenuItemData& rData = maMenuItems[nPos];
         if (rData.mbEnabled)
             nState |= ControlState::ENABLED;
 
-        bNativeDrawn = DrawNativeControl(
-            CTRL_MENU_POPUP, PART_MENU_SEPARATOR,
-            aRegion, nState, ImplControlValue(), OUString());
+        bNativeDrawn = rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_SEPARATOR,
+                                                        aRegion, nState, ImplControlValue(), OUString());
     }
 
     if (!bNativeDrawn)
     {
-        const StyleSettings& rStyle = GetSettings().GetStyleSettings();
+        const StyleSettings& rStyle = rRenderContext.GetSettings().GetStyleSettings();
         Point aTmpPos = aPos;
-        aTmpPos.Y() += aSize.Height()/2;
-        SetLineColor(rStyle.GetShadowColor());
-        DrawLine(aTmpPos, Point(aSize.Width()+aTmpPos.X(), aTmpPos.Y()));
+        aTmpPos.Y() += aSize.Height() / 2;
+        rRenderContext.SetLineColor(rStyle.GetShadowColor());
+        rRenderContext.DrawLine(aTmpPos, Point(aSize.Width() + aTmpPos.X(), aTmpPos.Y()));
         ++aTmpPos.Y();
-        SetLineColor(rStyle.GetLightColor());
-        DrawLine(aTmpPos, Point(aSize.Width()+aTmpPos.X(), aTmpPos.Y()));
-        SetLineColor();
+        rRenderContext.SetLineColor(rStyle.GetLightColor());
+        rRenderContext.DrawLine(aTmpPos, Point(aSize.Width() + aTmpPos.X(), aTmpPos.Y()));
+        rRenderContext.SetLineColor();
     }
 }
 
-void ScMenuFloatingWindow::drawAllMenuItems()
+void ScMenuFloatingWindow::drawAllMenuItems(vcl::RenderContext& rRenderContext)
 {
     size_t n = maMenuItems.size();
+
     for (size_t i = 0; i < n; ++i)
     {
         if (maMenuItems[i].mbSeparator)
+        {
             // Separator
-            drawSeparator(i);
+            drawSeparator(rRenderContext, i);
+        }
         else
+        {
             // Normal menu item
-            highlightMenuItem(i, i == mnSelectedMenu);
+            highlightMenuItem(rRenderContext, i, i == mnSelectedMenu);
+        }
     }
 }
 
@@ -503,7 +505,7 @@ void ScMenuFloatingWindow::handleMenuTimeout(SubMenuItemData* pTimer)
             maCloseTimer.mpSubMenu->EndPopupMode();
             maCloseTimer.mpSubMenu = NULL;
 
-            highlightMenuItem(maOpenTimer.mnMenuPos, false);
+            Invalidate();
             maOpenTimer.mnMenuPos = MENU_NOT_SELECTED;
         }
     }
@@ -579,8 +581,8 @@ void ScMenuFloatingWindow::endSubMenu(ScMenuFloatingWindow* pSubMenu)
     size_t nMenuPos = getSubMenuPos(pSubMenu);
     if (nMenuPos != MENU_NOT_SELECTED)
     {
-        highlightMenuItem(nMenuPos, true);
         mnSelectedMenu = nMenuPos;
+        Invalidate();
         fireMenuHighlightedEvent();
     }
 }
@@ -614,7 +616,7 @@ void ScMenuFloatingWindow::selectMenuItem(size_t nPos, bool bSelected, bool bSub
         return;
     }
 
-    highlightMenuItem(nPos, bSelected);
+    Invalidate();
 
     if (bSelected)
     {
@@ -658,41 +660,39 @@ void ScMenuFloatingWindow::setName(const OUString& rName)
     maName = rName;
 }
 
-void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
+void ScMenuFloatingWindow::highlightMenuItem(vcl::RenderContext& rRenderContext, size_t nPos, bool bSelected)
 {
     if (nPos == MENU_NOT_SELECTED)
         return;
 
-    const StyleSettings& rStyle = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyle = rRenderContext.GetSettings().GetStyleSettings();
     Color aBackColor = rStyle.GetMenuColor();
-    SetFillColor(aBackColor);
-    SetLineColor(aBackColor);
+    rRenderContext.SetFillColor(aBackColor);
+    rRenderContext.SetLineColor(aBackColor);
 
     Point aPos;
     Size aSize;
     getMenuItemPosSize(nPos, aPos, aSize);
     Rectangle aRegion(aPos,aSize);
 
-    if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
     {
-        Push(PushFlags::CLIPREGION);
-        IntersectClipRegion(Rectangle(aPos, aSize));
+        rRenderContext.Push(PushFlags::CLIPREGION);
+        rRenderContext.IntersectClipRegion(Rectangle(aPos, aSize));
         Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
-        DrawNativeControl(
-            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, ControlState::ENABLED,
-            ImplControlValue(), OUString());
-
-        Pop();
+        rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, ControlState::ENABLED,
+                                         ImplControlValue(), OUString());
+        rRenderContext.Pop();
     }
 
     bool bNativeDrawn = true;
-    if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM))
+    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM))
     {
         ControlState nState = bSelected ? ControlState::SELECTED : ControlState::NONE;
         if (maMenuItems[nPos].mbEnabled)
             nState |= ControlState::ENABLED;
-        bNativeDrawn = DrawNativeControl(
-            CTRL_MENU_POPUP, PART_MENU_ITEM, aRegion, nState, ImplControlValue(), OUString());
+        bNativeDrawn = rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_ITEM,
+                                                        aRegion, nState, ImplControlValue(), OUString());
     }
     else
         bNativeDrawn = false;
@@ -702,15 +702,15 @@ void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
         if (bSelected)
         {
             aBackColor = rStyle.GetMenuHighlightColor();
-            SetFillColor(aBackColor);
-            SetLineColor(aBackColor);
+            rRenderContext.SetFillColor(aBackColor);
+            rRenderContext.SetLineColor(aBackColor);
         }
-        DrawRect(Rectangle(aPos,aSize));
+        rRenderContext.DrawRect(Rectangle(aPos,aSize));
     }
 
     Color aTextColor = bSelected ? rStyle.GetMenuHighlightTextColor() : rStyle.GetMenuTextColor();
-    SetTextColor(aTextColor);
-    drawMenuItem(nPos);
+    rRenderContext.SetTextColor(aTextColor);
+    drawMenuItem(rRenderContext, nPos);
 }
 
 void ScMenuFloatingWindow::getMenuItemPosSize(size_t nPos, Point& rPos, Size& rSize) const
@@ -786,8 +786,8 @@ void ScMenuFloatingWindow::setSubMenuFocused(ScMenuFloatingWindow* pSubMenu)
     size_t nMenuPos = getSubMenuPos(pSubMenu);
     if (mnSelectedMenu != nMenuPos)
     {
-        highlightMenuItem(nMenuPos, true);
         mnSelectedMenu = nMenuPos;
+        Invalidate();
     }
 }
 
@@ -1320,14 +1320,14 @@ void ScCheckListMenuWindow::Paint(vcl::RenderContext& rRenderContext, const Rect
     getSectionPosSize(aPos, aSize, LISTBOX_AREA_OUTER);
 
     // Member list box background
-    SetFillColor(aMemberBackColor);
-    SetLineColor(aBorderColor);
-    DrawRect(Rectangle(aPos,aSize));
+    rRenderContext.SetFillColor(aMemberBackColor);
+    rRenderContext.SetLineColor(aBorderColor);
+    rRenderContext.DrawRect(Rectangle(aPos,aSize));
 
     // Single-action button box
     getSectionPosSize(aPos, aSize, SINGLE_BTN_AREA);
-    SetFillColor(rStyle.GetMenuColor());
-    DrawRect(Rectangle(aPos,aSize));
+    rRenderContext.SetFillColor(rStyle.GetMenuColor());
+    rRenderContext.DrawRect(Rectangle(aPos,aSize));
 }
 
 vcl::Window* ScCheckListMenuWindow::GetPreferredKeyInputWindow()
