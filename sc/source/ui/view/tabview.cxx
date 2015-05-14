@@ -71,8 +71,6 @@ ScCornerButton::ScCornerButton( vcl::Window* pParent, ScViewData* pData, bool bA
     pViewData( pData ),
     bAdd( bAdditional )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    SetBackground( rStyleSettings.GetFaceColor() );
     EnableRTL( false );
 }
 
@@ -80,49 +78,51 @@ ScCornerButton::~ScCornerButton()
 {
 }
 
-void ScCornerButton::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    Size aSize = GetOutputSizePixel();
-    long nPosX = aSize.Width()-1;
-    long nPosY = aSize.Height()-1;
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    SetBackground(rStyleSettings.GetFaceColor());
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    Size aSize = rRenderContext.GetOutputSizePixel();
+    long nPosX = aSize.Width() - 1;
+    long nPosY = aSize.Height() - 1;
+
 
     Window::Paint(rRenderContext, rRect);
 
     bool bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
     long nDarkX = bLayoutRTL ? 0 : nPosX;
 
-    if ( !bAdd )
+    if (!bAdd)
     {
         // match the shaded look of column/row headers
 
-        Color aFace( rStyleSettings.GetFaceColor() );
-        Color aWhite( COL_WHITE );
-        Color aCenter( aFace );
-        aCenter.Merge( aWhite, 0xd0 );          // lighten up a bit
-        Color aOuter( aFace );
-        aOuter.Merge( aWhite, 0xa0 );           // lighten up more
+        Color aFace(rStyleSettings.GetFaceColor());
+        Color aWhite(COL_WHITE);
+        Color aCenter(aFace);
+        aCenter.Merge(aWhite, 0xd0);          // lighten up a bit
+        Color aOuter(aFace );
+        aOuter.Merge(aWhite, 0xa0);           // lighten up more
 
         long nCenterX = (aSize.Width() / 2) - 1;
         long nCenterY = (aSize.Height() / 2) - 1;
 
-        SetLineColor();
-        SetFillColor(aCenter);
-        DrawRect( Rectangle( nCenterX, nCenterY, nCenterX, nPosY ) );
-        DrawRect( Rectangle( nCenterX, nCenterY, nDarkX, nCenterY ) );
-        SetFillColor(aOuter);
-        DrawRect( Rectangle( 0, 0, nPosX, nCenterY-1 ) );
-        if ( bLayoutRTL )
-            DrawRect( Rectangle( nCenterX+1, nCenterY, nPosX, nPosY ) );
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(aCenter);
+        rRenderContext.DrawRect(Rectangle(nCenterX, nCenterY, nCenterX, nPosY));
+        rRenderContext.DrawRect(Rectangle(nCenterX, nCenterY, nDarkX, nCenterY));
+        rRenderContext.SetFillColor(aOuter);
+        rRenderContext.DrawRect(Rectangle(0, 0, nPosX, nCenterY - 1));
+        if (bLayoutRTL)
+            rRenderContext.DrawRect(Rectangle(nCenterX + 1, nCenterY, nPosX, nPosY));
         else
-            DrawRect( Rectangle( 0, nCenterY, nCenterX-1, nPosY ) );
+            rRenderContext.DrawRect(Rectangle(0, nCenterY, nCenterX - 1, nPosY));
     }
 
     //  both buttons have the same look now - only dark right/bottom lines
-    SetLineColor( rStyleSettings.GetDarkShadowColor() );
-    DrawLine( Point(0,nPosY), Point(nPosX,nPosY) );
-    DrawLine( Point(nDarkX,0), Point(nDarkX,nPosY) );
+    rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+    rRenderContext.DrawLine(Point(0, nPosY), Point(nPosX, nPosY));
+    rRenderContext.DrawLine(Point(nDarkX, 0), Point(nDarkX, nPosY));
 }
 
 void ScCornerButton::StateChanged( StateChangedType nType )
