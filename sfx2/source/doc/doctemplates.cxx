@@ -82,10 +82,7 @@
 
 #include <vector>
 
-
-
-
-#define SERVICENAME_TYPEDETECTION           "com.sun.star.document.TypeDetection"
+#define SERVICENAME_TYPEDETECTION "com.sun.star.document.TypeDetection"
 
 #define TEMPLATE_ROOT_URL       "vnd.sun.star.hier:/templates"
 #define TITLE                   "Title"
@@ -110,8 +107,6 @@
 
 #define C_DELIM                 ';'
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
@@ -132,15 +127,15 @@ namespace {
 
 class WaitWindow_Impl : public WorkWindow
 {
-    Rectangle   _aRect;
-    sal_uInt16  _nTextStyle;
-    OUString    _aText;
+    Rectangle   maRect;
+    sal_uInt16  mnTextStyle;
+    OUString    maText;
 
-    public:
-                     WaitWindow_Impl();
-    virtual          ~WaitWindow_Impl();
-    virtual void     dispose() SAL_OVERRIDE;
-    virtual void     Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
+public:
+    WaitWindow_Impl();
+    virtual ~WaitWindow_Impl();
+    virtual void dispose() SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 };
 
 #define X_OFFSET 15
@@ -1048,9 +1043,7 @@ bool SfxDocTplService_Impl::setProperty( Content& rContent,
 }
 
 
-bool SfxDocTplService_Impl::getProperty( Content& rContent,
-                                             const OUString& rPropName,
-                                             Any& rPropValue )
+bool SfxDocTplService_Impl::getProperty(Content& rContent, const OUString& rPropName, Any& rPropValue)
 {
     bool bGotProperty = false;
 
@@ -1106,7 +1099,7 @@ bool SfxDocTplService_Impl::getProperty( Content& rContent,
 }
 
 SfxDocTplService_Impl::SfxDocTplService_Impl( const uno::Reference< XComponentContext > & xContext )
-: maRelocator( xContext )
+    : maRelocator(xContext)
 {
     mxContext       = xContext;
     mpUpdater       = NULL;
@@ -2429,18 +2422,18 @@ void SAL_CALL Updater_Impl::onTerminated()
 }
 
 
-WaitWindow_Impl::WaitWindow_Impl()
-    : WorkWindow( NULL, WB_BORDER | WB_3DLOOK )
+WaitWindow_Impl::WaitWindow_Impl() : WorkWindow(NULL, WB_BORDER | WB_3DLOOK)
 {
-    Rectangle aRect = Rectangle( 0, 0, 300, 30000 );
-    _nTextStyle = TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE;
-    _aText = SfxResId( RID_CNT_STR_WAITING ).toString();
-    _aRect = GetTextRect( aRect, _aText, _nTextStyle );
-    aRect = _aRect;
-    aRect.Right() += 2*X_OFFSET;
-    aRect.Bottom() += 2*Y_OFFSET;
-    _aRect.SetPos( Point( X_OFFSET, Y_OFFSET ) );
-    SetOutputSizePixel( aRect.GetSize() );
+    Rectangle aRect = Rectangle(0, 0, 300, 30000);
+    mnTextStyle = TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE;
+    maText = SfxResId(RID_CNT_STR_WAITING).toString();
+    maRect = GetTextRect(aRect, maText, mnTextStyle);
+    aRect = maRect;
+    aRect.Right() += 2 * X_OFFSET;
+    aRect.Bottom() += 2 * Y_OFFSET;
+    maRect.SetPos(Point(X_OFFSET, Y_OFFSET));
+    SetOutputSizePixel(aRect.GetSize());
+
     Show();
     Update();
     Flush();
@@ -2459,36 +2452,35 @@ void  WaitWindow_Impl::dispose()
 }
 
 
-void WaitWindow_Impl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
+void WaitWindow_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    DrawText( _aRect, _aText, _nTextStyle );
+    rRenderContext.DrawText(maRect, maText, mnTextStyle);
 }
-
 
 void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                                           const OUString& rTitle,
                                           const OUString& rOwnURL )
 {
     // now get the content of the Group
-    Content                 aContent;
-    uno::Reference< XResultSet > xResultSet;
-    Sequence< OUString >    aProps(3);
+    Content aContent;
+    uno::Reference<XResultSet> xResultSet;
+    Sequence<OUString> aProps(3);
 
-    aProps[0] = TITLE ;
+    aProps[0] = TITLE;
     aProps[1] = TARGET_URL;
     aProps[2] = PROPERTY_TYPE;
 
     try
     {
-        aContent = Content( rOwnURL, maCmdEnv, comphelper::getProcessComponentContext() );
+        aContent = Content(rOwnURL, maCmdEnv, comphelper::getProcessComponentContext());
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         xResultSet = aContent.createCursor( aProps, eInclude );
     }
-    catch ( ContentCreationException& )
+    catch (ContentCreationException&)
     {
         SAL_WARN( "sfx.doc", "addHierGroup: ContentCreationException" );
     }
-    catch ( Exception& ) {}
+    catch (Exception&) {}
 
     if ( xResultSet.is() )
     {
