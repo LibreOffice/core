@@ -164,7 +164,7 @@ void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt, const OUString &rFixed)
 
 // ReadGrafStart liest die ObjektDaten ein und erzeugt falls noetig einen Anker
 bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
-    WW8_DPHEAD* pHd, const WW8_DO* pDo, SfxAllItemSet &rSet)
+    WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     if (SVBT16ToShort(pHd->cb) < sizeof(WW8_DPHEAD) + nDataSiz)
     {
@@ -178,25 +178,12 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     if (!bCouldRead)
         return false;
 
-    RndStdIds eAnchor = (pDo->by < 2) ? FLY_AT_PAGE : FLY_AT_PARA;
-    rSet.Put(SwFmtAnchor(eAnchor));
+    SwFmtAnchor aAnchor( FLY_AT_CHAR );
+    aAnchor.SetAnchor( m_pPaM->GetPoint() );
+    rSet.Put( aAnchor );
 
     m_nDrawXOfs2 = m_nDrawXOfs;
     m_nDrawYOfs2 = m_nDrawYOfs;
-
-    if (eAnchor == FLY_AT_PARA)
-    {
-        if( pDo->bx == 1 )       // Position: actually left
-            m_nDrawXOfs2 = static_cast< short >(m_nDrawXOfs2 - m_aSectionManager.GetPageLeft());
-        if( m_nInTable )                          // Object in table
-            m_nDrawXOfs2 = m_nDrawXOfs2 - GetTableLeft();       // -> see comment
-                                                // at GetTableLeft()
-    }
-    else
-    {
-        if( pDo->bx != 1 )
-            m_nDrawXOfs2 = static_cast< short >(m_nDrawXOfs2 + m_aSectionManager.GetPageLeft());
-    }
 
     return true;
 }
@@ -315,12 +302,11 @@ static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND& rLe,
 }
 
 // Ab hier folgen die Routinen fuer die einzelnen Objekte
-SdrObject* SwWW8ImplReader::ReadLine( WW8_DPHEAD* pHd, const WW8_DO* pDo,
-    SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_LINE aLine;
 
-    if( !ReadGrafStart( (void*)&aLine, sizeof( aLine ), pHd, pDo, rSet ) )
+    if( !ReadGrafStart( (void*)&aLine, sizeof( aLine ), pHd, rSet ) )
         return 0;
 
     Point aP[2];
@@ -348,12 +334,11 @@ SdrObject* SwWW8ImplReader::ReadLine( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadRect( WW8_DPHEAD* pHd, const WW8_DO* pDo,
-    SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadRect(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_RECT aRect;
 
-    if( !ReadGrafStart( (void*)&aRect, sizeof( aRect ), pHd, pDo, rSet ) )
+    if( !ReadGrafStart( (void*)&aRect, sizeof( aRect ), pHd, rSet ) )
         return 0;
 
     Point aP0( (sal_Int16)SVBT16ToShort( pHd->xa ) + m_nDrawXOfs2,
@@ -370,12 +355,11 @@ SdrObject* SwWW8ImplReader::ReadRect( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadElipse( WW8_DPHEAD* pHd, const WW8_DO* pDo,
-    SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadElipse(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_ELIPSE aElipse;
 
-    if( !ReadGrafStart( (void*)&aElipse, sizeof( aElipse ), pHd, pDo, rSet ) )
+    if( !ReadGrafStart( (void*)&aElipse, sizeof( aElipse ), pHd, rSet ) )
         return 0;
 
     Point aP0( (sal_Int16)SVBT16ToShort( pHd->xa ) + m_nDrawXOfs2,
@@ -392,12 +376,11 @@ SdrObject* SwWW8ImplReader::ReadElipse( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadArc( WW8_DPHEAD* pHd, const WW8_DO* pDo,
-    SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadArc(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_ARC aArc;
 
-    if( !ReadGrafStart( (void*)&aArc, sizeof( aArc ), pHd, pDo, rSet ) )
+    if( !ReadGrafStart( (void*)&aArc, sizeof( aArc ), pHd, rSet ) )
         return 0;
 
     Point aP0( (sal_Int16)SVBT16ToShort( pHd->xa ) + m_nDrawXOfs2,
@@ -426,12 +409,11 @@ SdrObject* SwWW8ImplReader::ReadArc( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadPolyLine( WW8_DPHEAD* pHd, const WW8_DO* pDo,
-    SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     WW8_DP_POLYLINE aPoly;
 
-    if( !ReadGrafStart( (void*)&aPoly, sizeof( aPoly ), pHd, pDo, rSet ) )
+    if( !ReadGrafStart( (void*)&aPoly, sizeof( aPoly ), pHd, rSet ) )
         return 0;
 
     sal_uInt16 nCount = SVBT16ToShort( aPoly.aBits1 ) >> 1 & 0x7fff;
@@ -1171,13 +1153,12 @@ bool SwWW8ImplReader::TxbxChainContainsRealText(sal_uInt16 nTxBxS, long& rStartC
 }
 
 // TextBoxes only for Ver67 !!
-SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
-    SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadTxtBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     bool bDummy;
     WW8_DP_TXTBOX aTxtB;
 
-    if( !ReadGrafStart( (void*)&aTxtB, sizeof( aTxtB ), pHd, pDo, rSet ) )
+    if( !ReadGrafStart( (void*)&aTxtB, sizeof( aTxtB ), pHd, rSet ) )
         return 0;
 
     Point aP0( (sal_Int16)SVBT16ToShort( pHd->xa ) + m_nDrawXOfs2,
@@ -1211,15 +1192,14 @@ SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
-    SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     static const SdrCaptionType aCaptA[] = { SDRCAPT_TYPE1, SDRCAPT_TYPE2,
                                        SDRCAPT_TYPE3, SDRCAPT_TYPE4 };
 
     WW8_DP_CALLOUT_TXTBOX aCallB;
 
-    if( !ReadGrafStart( (void*)&aCallB, sizeof( aCallB ), pHd, pDo, rSet ) )
+    if( !ReadGrafStart( (void*)&aCallB, sizeof( aCallB ), pHd, rSet ) )
         return 0;
 
     sal_uInt16 nCount = SVBT16ToShort( aCallB.dpPolyLine.aBits1 ) >> 1 & 0x7fff;
@@ -1268,12 +1248,11 @@ SdrObject* SwWW8ImplReader::ReadCaptionBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     return pObj;
 }
 
-SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
-    SfxAllItemSet &rSet)
+SdrObject *SwWW8ImplReader::ReadGroup(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 {
     sal_Int16 nGrouped;
 
-    if( !ReadGrafStart( (void*)&nGrouped, sizeof( nGrouped ), pHd, pDo, rSet ) )
+    if( !ReadGrafStart( (void*)&nGrouped, sizeof( nGrouped ), pHd, rSet ) )
         return 0;
 
 #ifdef OSL_BIGENDIAN
@@ -1289,7 +1268,7 @@ SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     for (int i = 0; i < nGrouped; i++)
     {
         SfxAllItemSet aSet(m_pDrawModel->GetItemPool());
-        if (SdrObject *pObject = ReadGrafPrimitive(nLeft, pDo, aSet))
+        if (SdrObject *pObject = ReadGrafPrimitive(nLeft, aSet))
         {
             // first add and then set ItemSet
             SdrObjList *pSubGroup = pObj->GetSubList();
@@ -1306,8 +1285,7 @@ SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     return pObj;
 }
 
-SdrObject* SwWW8ImplReader::ReadGrafPrimitive( short& rLeft, const WW8_DO* pDo,
-    SfxAllItemSet &rSet)
+SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
 {
     // cmc: This whole archaic word 6 graphic import can probably be refactored
     // into an object hierarachy with a little effort.
@@ -1327,28 +1305,28 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive( short& rLeft, const WW8_DO* pDo,
         switch (SVBT16ToShort(aHd.dpk) & 0xff )
         {
             case 0:
-                pRet = ReadGroup( &aHd, pDo, rSet );
+                pRet = ReadGroup(&aHd, rSet);
                 break;
             case 1:
-                pRet = ReadLine( &aHd, pDo, rSet );
+                pRet = ReadLine(&aHd, rSet);
                 break;
             case 2:
-                pRet = ReadTxtBox( &aHd, pDo, rSet );
+                pRet = ReadTxtBox(&aHd, rSet);
                 break;
             case 3:
-                pRet = ReadRect( &aHd, pDo, rSet );
+                pRet = ReadRect(&aHd, rSet);
                 break;
             case 4:
-                pRet = ReadElipse( &aHd, pDo, rSet );
+                pRet = ReadElipse(&aHd, rSet);
                 break;
             case 5:
-                pRet = ReadArc( &aHd, pDo, rSet );
+                pRet = ReadArc(&aHd, rSet);
                 break;
             case 6:
-                pRet = ReadPolyLine( &aHd, pDo, rSet );
+                pRet = ReadPolyLine(&aHd, rSet);
                 break;
             case 7:
-                pRet = ReadCaptionBox( &aHd, pDo, rSet );
+                pRet = ReadCaptionBox(&aHd, rSet);
                 break;
             default:    // unbekannt
                 m_pStrm->SeekRel(SVBT16ToShort(aHd.cb) - sizeof(WW8_DPHEAD));
@@ -1396,12 +1374,47 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
     while (nLeft > static_cast<short>(sizeof(WW8_DPHEAD)))
     {
         SfxAllItemSet aSet( m_pDrawModel->GetItemPool() );
-        if (SdrObject *pObject = ReadGrafPrimitive( nLeft, &aDo, aSet ))
+        if (SdrObject *pObject = ReadGrafPrimitive(nLeft, aSet))
         {
             m_pWWZOrder->InsertDrawingObject(pObject, SVBT16ToShort(aDo.dhgt));
+
+            Rectangle aRect(pObject->GetSnapRect());
+
+            const sal_uInt32 nCntRelTo = 3;
+
+            // Adjustment is horizontally relative to...
+            static const sal_Int16 aHoriRelOriTab[nCntRelTo] =
+            {
+                text::RelOrientation::PAGE_PRINT_AREA, // 0 is page textarea margin
+                text::RelOrientation::PAGE_FRAME,   // 1 is page margin
+                text::RelOrientation::FRAME,          // 2 is relative to paragraph
+            };
+
+            // Adjustment is vertically relative to...
+            static const sal_Int16 aVertRelOriTab[nCntRelTo] =
+            {
+                text::RelOrientation::PAGE_PRINT_AREA, // 0 is page textarea margin
+                text::RelOrientation::PAGE_FRAME,   // 1 is page margin
+                text::RelOrientation::FRAME,          // 2 is relative to paragraph
+            };
+
+            const int nXAlign = aDo.bx < nCntRelTo ? aDo.bx : 0;
+            const int nYAlign = aDo.by < nCntRelTo ? aDo.by : 0;
+
+            aSet.Put(SwFmtHoriOrient(aRect.Left(), text::HoriOrientation::NONE,
+                aHoriRelOriTab[ nXAlign ]));
+            aSet.Put(SwFmtVertOrient(aRect.Top(), text::VertOrientation::NONE,
+                aVertRelOriTab[ nYAlign ]));
+
             SwFrmFmt *pFrm = m_rDoc.getIDocumentContentOperations().InsertDrawObj( *m_pPaM, *pObject, aSet );
             pObject->SetMergedItemSet(aSet);
-            m_pAnchorStck->AddAnchor(*m_pPaM->GetPoint(), pFrm);
+
+            if (pFrm->ISA(SwDrawFrmFmt))
+            {
+                static_cast<SwDrawFrmFmt*>(pFrm)->PosAttrSet();
+            }
+
+            AddAutoAnchor(pFrm);
         }
     }
 }

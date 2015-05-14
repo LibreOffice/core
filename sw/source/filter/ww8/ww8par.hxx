@@ -1574,17 +1574,12 @@ private:
 // GrafikLayer
 
     bool ReadGrafStart(void* pData, short nDataSiz, WW8_DPHEAD* pHd,
-        const WW8_DO* pDo, SfxAllItemSet &rSet);
-    SdrObject *ReadLine(WW8_DPHEAD* pHd, const WW8_DO* pDo,
         SfxAllItemSet &rSet);
-    SdrObject *ReadRect(WW8_DPHEAD* pHd, const WW8_DO* pDo,
-        SfxAllItemSet &rSet);
-    SdrObject *ReadElipse(WW8_DPHEAD* pHd, const WW8_DO* pDo,
-        SfxAllItemSet &rSet);
-    SdrObject *ReadArc(WW8_DPHEAD* pHd, const WW8_DO* pDo,
-        SfxAllItemSet &rSet);
-    SdrObject *ReadPolyLine(WW8_DPHEAD* pHd, const WW8_DO* pDo,
-        SfxAllItemSet &rSet);
+    SdrObject *ReadLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadRect(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadElipse(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadArc(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadPolyLine(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
     ESelection GetESelection( long nCpStart, long nCpEnd );
     void InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl );
     void InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp, ManTypes eType, bool bONLYnPicLocFc=false);
@@ -1602,14 +1597,10 @@ private:
     bool TxbxChainContainsRealText( sal_uInt16 nTxBxS,
                                     long&  rStartCp,
                                     long&  rEndCp );
-    SdrObject *ReadTxtBox(WW8_DPHEAD* pHd, const WW8_DO* pDo,
-        SfxAllItemSet &rSet);
-    SdrObject *ReadCaptionBox(WW8_DPHEAD* pHd, const WW8_DO* pDo,
-        SfxAllItemSet &rSet);
-    SdrObject *ReadGroup(WW8_DPHEAD* pHd, const WW8_DO* pDo,
-        SfxAllItemSet &rSet);
-    SdrObject *ReadGrafPrimitive(short& rLeft, const WW8_DO* pDo,
-        SfxAllItemSet &rSet);
+    SdrObject *ReadTxtBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadCaptionBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadGroup(WW8_DPHEAD* pHd, SfxAllItemSet &rSet);
+    SdrObject *ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet);
     void ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp );
     SdrObject* CreateContactObject(SwFrmFmt* pFlyFmt);
     RndStdIds ProcessEscherAlign(SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
