@@ -2007,7 +2007,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     break;
 
     case NS_ooxml::LN_CT_PPrBase_snapToGrid:
-        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "snapToGrid", OUString::number(nIntValue));
+        rContext->Insert( PROP_SNAP_TO_GRID, uno::makeAny(bool(nIntValue)));
     break;
     case NS_ooxml::LN_CT_PPrBase_pStyle:
     {

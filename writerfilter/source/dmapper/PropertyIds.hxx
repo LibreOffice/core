@@ -377,6 +377,7 @@ enum PropertyIds
         ,PROP_FOLLOW_TEXT_FLOW
         ,PROP_FILL_STYLE
         ,PROP_FILL_COLOR
+        ,PROP_SNAP_TO_GRID
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

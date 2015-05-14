@@ -676,6 +676,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89791, "tdf89791.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf91261, "tdf91261.docx")
+{
+    bool snapToGrid = true;
+    uno::Reference< text::XTextRange > xPara = getParagraph( 2 );
+    uno::Reference< beans::XPropertySet > properties( xPara, uno::UNO_QUERY);
+    properties->getPropertyValue("SnapToGrid") >>= snapToGrid ;
+    CPPUNIT_ASSERT_EQUAL(false, snapToGrid);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
