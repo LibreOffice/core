@@ -160,23 +160,25 @@ void AboutDialog::StyleControls()
     m_pDescriptionText->SetPaintTransparent(true);
     m_pCopyrightText->SetPaintTransparent(true);
 
-    vcl::Font aLabelFont = GetSettings().GetStyleSettings().GetLabelFont();
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    vcl::Font aLabelFont = rStyleSettings.GetLabelFont();
     vcl::Font aLargeFont = aLabelFont;
-    aLargeFont.SetSize( Size( 0, aLabelFont.GetSize().Height() * 3 ) );
+    aLargeFont.SetSize(Size( 0, aLabelFont.GetSize().Height() * 3));
 
     // Logo Replacement Text
-    m_pLogoReplacement->SetControlFont( aLargeFont );
+    m_pLogoReplacement->SetControlFont(aLargeFont);
 
     // Description Text
-    aLargeFont.SetSize( Size( 0, aLabelFont.GetSize().Height() * 1.3 ) );
+    aLargeFont.SetSize(Size(0, aLabelFont.GetSize().Height() * 1.3));
     m_pDescriptionText->SetControlFont(aLargeFont);
 
     // Version Text
-    aLargeFont.SetSize( Size( 0, aLabelFont.GetSize().Height() * 1.2 ) );
+    aLargeFont.SetSize(Size(0, aLabelFont.GetSize().Height() * 1.2));
     m_pVersion->SetControlFont(aLargeFont);
 
     // If not in high-contrast mode, hard-code colors
-    if ( !(Application::GetSettings().GetStyleSettings().GetHighContrastMode()) )
+    if (!rStyleSettings.GetHighContrastMode())
     {
         m_pLogoReplacement->SetControlForeground(Color(51, 51, 51));
         m_pVersion->SetControlForeground(Color(102, 102, 102));
@@ -195,8 +197,8 @@ void AboutDialog::SetLogo()
     aDrawOpt.SetAntiAliasing(true);
 
     // load svg logo, specify desired width, scale height isotrophically
-    if( SfxApplication::loadBrandSvg("flat_logo", aLogoBitmap, nWidth) &&
-        !aLogoBitmap.IsEmpty() )
+    if (SfxApplication::loadBrandSvg("flat_logo", aLogoBitmap, nWidth) &&
+        !aLogoBitmap.IsEmpty())
     {
         m_pLogoImage->SetImage(Image(aLogoBitmap));
         m_pLogoReplacement->Hide();
@@ -213,21 +215,23 @@ void AboutDialog::SetLogo()
 void AboutDialog::Resize()
 {
     SfxModalDialog::Resize();
+
     // Load background image
     if (isInitialLayout(this) && !(Application::GetSettings().GetStyleSettings().GetHighContrastMode()))
     {
-        SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, GetOutputSizePixel().Width());
+        SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, GetSizePixel().Width());
     }
 }
 
-void AboutDialog::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void AboutDialog::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    SetClipRegion(vcl::Region(rRect));
+    rRenderContext.SetClipRegion(vcl::Region(rRect));
 
-    Size aSize(GetOutputSizePixel());
+    Size aSize(rRenderContext.GetOutputSizePixel());
     Point aPos(aSize.Width() - aBackgroundBitmap.GetSizePixel().Width(),
-                aSize.Height() - aBackgroundBitmap.GetSizePixel().Height());
-    DrawBitmapEx(aPos, aBackgroundBitmap);
+               aSize.Height() - aBackgroundBitmap.GetSizePixel().Height());
+
+    rRenderContext.DrawBitmapEx(aPos, aBackgroundBitmap);
 }
 
 OUString AboutDialog::GetBuildId()
@@ -274,9 +278,7 @@ OUString AboutDialog::GetVersionString()
     OUString sVersion = m_aVersionTextStr;
 
 #ifdef _WIN64
-
     sVersion += " (x64)";
-
 #endif
 
     OUString sBuildId = GetBuildId();
