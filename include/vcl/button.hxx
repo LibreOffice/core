@@ -402,6 +402,7 @@ public:
      * Group this RadioButton with another
      */
     void group(RadioButton &rOther);
+    virtual void ShowFocus(const Rectangle& rRect) SAL_OVERRIDE;
 };
 
 

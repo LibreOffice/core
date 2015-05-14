@@ -902,7 +902,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                 ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED : GTK_STATE_FLAG_NORMAL));
         context = mpCheckButtonStyle;
         styleClass = GTK_STYLE_CLASS_RADIO;
-        renderType = RENDER_RADIO;
+        renderType = nPart == PART_FOCUS ? RENDER_FOCUS : RENDER_RADIO;
         break;
     case CTRL_PUSHBUTTON:
         context = mpButtonStyle;

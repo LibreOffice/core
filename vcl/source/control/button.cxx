@@ -2916,6 +2916,27 @@ Size RadioButton::GetOptimalSize() const
     return CalcMinimumSize();
 }
 
+void RadioButton::ShowFocus(const Rectangle& rRect)
+{
+    if (IsNativeControlSupported(CTRL_RADIOBUTTON, PART_FOCUS))
+    {
+        ImplControlValue aControlValue;
+        Rectangle aInRect(Point(0, 0), GetSizePixel());
+
+        aInRect.Left() = rRect.Left();  // exclude the radio element itself from the focusrect
+
+        //to-do, figure out a better solution here
+        aInRect.Left()-=2;
+        aInRect.Right()+=2;
+        aInRect.Top()-=2;
+        aInRect.Bottom()+=2;
+
+        DrawNativeControl(CTRL_RADIOBUTTON, PART_FOCUS, aInRect,
+                          ControlState::FOCUSED, aControlValue, OUString());
+    }
+    Button::ShowFocus(rRect);
+}
+
 void CheckBox::ImplInitCheckBoxData()
 {
     meState         = TRISTATE_FALSE;
