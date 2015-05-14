@@ -60,14 +60,14 @@ public:
 
     virtual ~SfxCloseButton() {}
 
-    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 };
 
-void SfxCloseButton::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
+void SfxCloseButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     const ViewInformation2D aNewViewInfos;
     const unique_ptr<BaseProcessor2D> pProcessor(
-        createBaseProcessor2DFromOutputDevice(*this, aNewViewInfos));
+                createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
     const Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
 
@@ -163,7 +163,7 @@ void SfxInfoBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle
 {
     const ViewInformation2D aNewViewInfos;
     const unique_ptr<BaseProcessor2D> pProcessor(
-        createBaseProcessor2DFromOutputDevice(*this, aNewViewInfos));
+                createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
     const Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
 
