@@ -1724,7 +1724,7 @@ bool SbModule::ExceedsLegacyModuleSize()
 
 class ErrorHdlResetter
 {
-    Link<>  mErrHandler;
+    Link<StarBASIC*,bool> mErrHandler;
     bool    mbError;
 public:
     ErrorHdlResetter() : mbError( false )
@@ -1739,14 +1739,14 @@ public:
         // restore error handler
         StarBASIC::SetGlobalErrorHdl(mErrHandler);
     }
-    DECL_LINK( BasicErrorHdl, StarBASIC * );
+    DECL_LINK_TYPED( BasicErrorHdl, StarBASIC *, bool );
     bool HasError() { return mbError; }
 };
 
-IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/)
+IMPL_LINK_TYPED( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
 {
     mbError = true;
-    return 0;
+    return false;
 }
 
 void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)

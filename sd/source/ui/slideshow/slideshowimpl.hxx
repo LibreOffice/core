@@ -349,7 +349,7 @@ private:
     Pointer         maPencil;
     std::vector< VclPtr< ::sd::Window> > maDrawModeWindows;
     VclPtr< ::sd::Window>   mpOldActiveWindow;
-    Link<>          maStarBASICGlobalErrorHdl;
+    Link<StarBASIC*,bool>   maStarBASICGlobalErrorHdl;
     unsigned long   mnChildMask;
     bool            mbGridVisible;
     bool            mbBordVisible;

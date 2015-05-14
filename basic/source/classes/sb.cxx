@@ -1486,7 +1486,7 @@ sal_uInt16 StarBASIC::BreakPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
     bBreak = true;
     if( GetSbData()->aBreakHdl.IsSet() )
     {
-        return (sal_uInt16) GetSbData()->aBreakHdl.Call( this );
+        return GetSbData()->aBreakHdl.Call( this );
     }
     else
     {
@@ -1500,7 +1500,7 @@ sal_uInt16 StarBASIC::StepPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
     bBreak = false;
     if( GetSbData()->aBreakHdl.IsSet() )
     {
-        return (sal_uInt16) GetSbData()->aBreakHdl.Call( this );
+        return GetSbData()->aBreakHdl.Call( this );
     }
     else
     {
@@ -1510,7 +1510,7 @@ sal_uInt16 StarBASIC::StepPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 
 sal_uInt16 StarBASIC::BreakHdl()
 {
-    return (sal_uInt16) ( aBreakHdl.IsSet() ? aBreakHdl.Call( this ) : SbDEBUG_CONTINUE );
+    return aBreakHdl.IsSet() ? aBreakHdl.Call( this ) : SbDEBUG_CONTINUE;
 }
 
 // Calls for error handler and break handler
@@ -1721,7 +1721,7 @@ bool StarBASIC::CError( SbError code, const OUString& rMsg,
     bool bRet;
     if( GetSbData()->aErrHdl.IsSet() )
     {
-        bRet = (bool) GetSbData()->aErrHdl.Call( this );
+        bRet = GetSbData()->aErrHdl.Call( this );
     }
     else
     {
@@ -1769,7 +1769,7 @@ bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_In
     SetErrorData( code, l, c1, c2 );
     if( GetSbData()->aErrHdl.IsSet() )
     {
-        return (bool) GetSbData()->aErrHdl.Call( this );
+        return GetSbData()->aErrHdl.Call( this );
     }
     else
     {
@@ -1848,17 +1848,17 @@ bool StarBASIC::ErrorHdl()
     return aErrorHdl.IsSet() && aErrorHdl.Call( this );
 }
 
-Link<> StarBASIC::GetGlobalErrorHdl()
+Link<StarBASIC*,bool> StarBASIC::GetGlobalErrorHdl()
 {
     return GetSbData()->aErrHdl;
 }
 
-void StarBASIC::SetGlobalErrorHdl( const Link<>& rLink )
+void StarBASIC::SetGlobalErrorHdl( const Link<StarBASIC*,bool>& rLink )
 {
     GetSbData()->aErrHdl = rLink;
 }
 
-void StarBASIC::SetGlobalBreakHdl( const Link<>& rLink )
+void StarBASIC::SetGlobalBreakHdl( const Link<StarBASIC*,sal_uInt16>& rLink )
 {
     GetSbData()->aBreakHdl = rLink;
 }

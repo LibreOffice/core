@@ -481,11 +481,11 @@ extern "C" void *basicide_macro_organizer(sal_Int16);
 
 #endif
 
-IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
+IMPL_LINK_TYPED( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic, bool )
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) pStarBasic;
-    return 0;
+    return false;
 #else
 
 #ifndef DISABLE_DYNLOADING
@@ -499,11 +499,11 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
     aMod.release();
 
     // call basicide_handle_basic_error in basctl
-    long nRet = pSymbol ? pSymbol( pStarBasic ) : 0;
+    bool nRet = pSymbol && pSymbol( pStarBasic );
 
 #else
 
-    long nRet = basicide_handle_basic_error( pStarBasic );
+    bool nRet = basicide_handle_basic_error( pStarBasic );
 
 #endif
 

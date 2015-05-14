@@ -125,7 +125,7 @@ class MacroSnippet
         return !mbError;
     }
 
-    DECL_LINK( BasicErrorHdl, StarBASIC * );
+    DECL_LINK_TYPED( BasicErrorHdl, StarBASIC *, bool );
 
     static ErrorDetail GetError()
     {
@@ -140,18 +140,18 @@ class MacroSnippet
 
     void ResetError()
     {
-        StarBASIC::SetGlobalErrorHdl( Link<>() );
+        StarBASIC::SetGlobalErrorHdl( Link<StarBASIC*,bool>() );
         mbError = false;
     }
 };
 
-IMPL_LINK( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/)
+IMPL_LINK_TYPED( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
 {
     fprintf(stderr,"(%d:%d)\n",
             StarBASIC::GetLine(), StarBASIC::GetCol1());
     fprintf(stderr,"Basic error: %s\n", OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
     mbError = true;
-    return 0;
+    return false;
 }
 #endif
 

@@ -669,7 +669,7 @@ void SAL_CALL SlideshowImpl::disposing()
 #if HAVE_FEATURE_SCRIPTING
         // restore StarBASICErrorHdl
         StarBASIC::SetGlobalErrorHdl(maStarBASICGlobalErrorHdl);
-        maStarBASICGlobalErrorHdl = Link<>();
+        maStarBASICGlobalErrorHdl = Link<StarBASIC*,bool>();
 #endif
     }
     else
@@ -983,7 +983,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 #if HAVE_FEATURE_SCRIPTING
                 // disable basic ide error handling
                 maStarBASICGlobalErrorHdl = StarBASIC::GetGlobalErrorHdl();
-                StarBASIC::SetGlobalErrorHdl( Link<>() );
+                StarBASIC::SetGlobalErrorHdl( Link<StarBASIC*,bool>() );
 #endif
             }
 

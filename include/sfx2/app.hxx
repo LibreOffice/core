@@ -118,7 +118,7 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
 
     SfxAppData_Impl*            pAppData_Impl;
 
-    DECL_DLLPRIVATE_LINK(       GlobalBasicErrorHdl_Impl, StarBASIC* );
+    DECL_DLLPRIVATE_LINK_TYPED( GlobalBasicErrorHdl_Impl, StarBASIC*, bool );
 
     static SfxApplication*      Create();
     void                        SettingsChange( sal_uInt16, const AppSettings & );
