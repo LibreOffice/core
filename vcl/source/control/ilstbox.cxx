@@ -31,6 +31,7 @@
 #include <ilstbox.hxx>
 #include <controldata.hxx>
 #include <svdata.hxx>
+#include <window.h>
 
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -2610,6 +2611,8 @@ ImplWin::ImplWin( vcl::Window* pParent, WinBits nWinStyle ) :
         SetBackground();
     else
         SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
+
+    ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
 
     mbInUserDraw = false;
     mbUserDrawEnabled = false;
