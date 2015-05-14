@@ -335,7 +335,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
 IMPL_LINK_NOARG( ScDataBarSettingsDlg, PosSelectHdl )
 {
     sal_Int32 axisPos = mpLbAxisPos->GetSelectEntryPos();
-    if(axisPos != 2) // disable if axis vertical position is anything other than none
+    if(axisPos != 2 && axisPos != 1) // disable if axis vertical position is automatic
     {
         mpLenMin->Disable();
         mpLenMax->Disable();
