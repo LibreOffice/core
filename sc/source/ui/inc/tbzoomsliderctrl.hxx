@@ -26,41 +26,41 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/zoomslideritem.hxx>
 
-class ScZoomSliderControl: public SfxToolBoxControl
+class ScZoomSliderControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     ScZoomSliderControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~ScZoomSliderControl();
 
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
+    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
 };
 
 class ScZoomSliderWnd: public vcl::Window
 {
 private:
-    struct                  ScZoomSliderWnd_Impl;
-    ScZoomSliderWnd_Impl*   mpImpl;
-    Size                    aLogicalSize;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xDispatchProvider;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >            m_xFrame;
+    struct ScZoomSliderWnd_Impl;
+    ScZoomSliderWnd_Impl* mpImpl;
+    Size aLogicalSize;
+    css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
+    css::uno::Reference<css::frame::XFrame> m_xFrame;
 
-    sal_uInt16          Offset2Zoom( long nOffset ) const;
-    long            Zoom2Offset( sal_uInt16 nZoom ) const;
-    void            DoPaint( const Rectangle& rRect );
+    sal_uInt16 Offset2Zoom(long nOffset) const;
+    long Zoom2Offset(sal_uInt16 nZoom) const;
+    void DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
 
 public:
-    ScZoomSliderWnd( vcl::Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame , sal_uInt16 nCurrentZoom );
+    ScZoomSliderWnd(vcl::Window* pParent, const css::uno::Reference<css::frame::XDispatchProvider >& rDispatchProvider,
+                    const css::uno::Reference<css::frame::XFrame>& _xFrame, sal_uInt16 nCurrentZoom);
     virtual ~ScZoomSliderWnd();
     virtual void dispose() SAL_OVERRIDE;
-    void            UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem );
+    void UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem );
 
 protected:
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 };
 #endif
 

@@ -388,102 +388,102 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
        Invalidate(aRect);
 }
 
-void ScZoomSliderWnd::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void ScZoomSliderWnd::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    DoPaint( rRect );
+    DoPaint(rRenderContext, rRect);
 }
 
-void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
+void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    if( mpImpl->mbOmitPaint )
+    if (mpImpl->mbOmitPaint)
         return;
 
-    Size aSliderWindowSize = GetOutputSizePixel();
-    Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
+    Size aSliderWindowSize = rRenderContext.GetOutputSizePixel();
+    Rectangle aRect(Point(0, 0), aSliderWindowSize);
 
-    ScopedVclPtrInstance< VirtualDevice > pVDev( *this );
-    pVDev->SetOutputSizePixel( aSliderWindowSize );
+    ScopedVclPtrInstance< VirtualDevice > pVDev(rRenderContext);
+    pVDev->SetOutputSizePixel(aSliderWindowSize);
 
-    Rectangle   aSlider = aRect;
+    Rectangle aSlider = aRect;
 
-    aSlider.Top()     += ( aSliderWindowSize.Height() - nSliderHeight )/2 - 1;
-    aSlider.Bottom()   = aSlider.Top() + nSliderHeight;
-    aSlider.Left()    += nSliderXOffset;
-    aSlider.Right()   -= nSliderXOffset;
+    aSlider.Top() += (aSliderWindowSize.Height() - nSliderHeight) / 2 - 1;
+    aSlider.Bottom() = aSlider.Top() + nSliderHeight;
+    aSlider.Left() += nSliderXOffset;
+    aSlider.Right() -= nSliderXOffset;
 
-    Rectangle aFirstLine( aSlider );
+    Rectangle aFirstLine(aSlider);
     aFirstLine.Bottom() = aFirstLine.Top();
 
-    Rectangle aSecondLine( aSlider );
+    Rectangle aSecondLine(aSlider);
     aSecondLine.Top() = aSecondLine.Bottom();
 
-    Rectangle aLeft( aSlider );
+    Rectangle aLeft(aSlider);
     aLeft.Right() = aLeft.Left();
 
-    Rectangle aRight( aSlider );
+    Rectangle aRight(aSlider);
     aRight.Left() = aRight.Right();
 
     // draw VirtualDevice's background color
-    Color  aStartColor,aEndColor;
-    aStartColor = GetSettings().GetStyleSettings().GetFaceColor();
-    aEndColor   = GetSettings().GetStyleSettings().GetFaceColor();
-    if( aEndColor.IsDark() )
+    Color aStartColor = rRenderContext.GetSettings().GetStyleSettings().GetFaceColor();
+    Color aEndColor   = rRenderContext.GetSettings().GetStyleSettings().GetFaceColor();
+
+    if (aEndColor.IsDark())
         aStartColor = aEndColor;
 
-    Gradient g;
-    g.SetAngle( 0 );
-    g.SetStyle( GradientStyle_LINEAR );
+    Gradient aGradient;
+    aGradient.SetAngle(0);
+    aGradient.SetStyle(GradientStyle_LINEAR);
 
-    g.SetStartColor( aStartColor );
-    g.SetEndColor( aEndColor );
-    pVDev->DrawGradient( aRect, g );
+    aGradient.SetStartColor(aStartColor);
+    aGradient.SetEndColor(aEndColor);
+    pVDev->DrawGradient(aRect, aGradient);
 
     // draw slider
-    pVDev->SetLineColor( Color ( COL_WHITE ) );
-    pVDev->DrawRect( aSecondLine );
-    pVDev->DrawRect( aRight );
+    pVDev->SetLineColor(Color(COL_WHITE));
+    pVDev->DrawRect(aSecondLine);
+    pVDev->DrawRect(aRight);
 
-    pVDev->SetLineColor( Color( COL_GRAY ) );
-    pVDev->DrawRect( aFirstLine );
-    pVDev->DrawRect( aLeft );
+    pVDev->SetLineColor(Color(COL_GRAY));
+    pVDev->DrawRect(aFirstLine);
+    pVDev->DrawRect(aLeft);
 
     // draw snapping points:
-    std::vector< long >::iterator aSnappingPointIter;
-    for ( aSnappingPointIter = mpImpl->maSnappingPointOffsets.begin();
+    std::vector<long>::iterator aSnappingPointIter;
+    for (aSnappingPointIter = mpImpl->maSnappingPointOffsets.begin();
         aSnappingPointIter != mpImpl->maSnappingPointOffsets.end();
-        ++aSnappingPointIter )
+        ++aSnappingPointIter)
     {
-        pVDev->SetLineColor( Color( COL_GRAY ) );
-        Rectangle aSnapping( aRect );
+        pVDev->SetLineColor(Color(COL_GRAY));
+        Rectangle aSnapping(aRect);
         aSnapping.Bottom()   = aSlider.Top();
         aSnapping.Top() = aSnapping.Bottom() - nSnappingHeight;
         aSnapping.Left() += *aSnappingPointIter;
         aSnapping.Right() = aSnapping.Left();
-        pVDev->DrawRect( aSnapping );
+        pVDev->DrawRect(aSnapping);
 
         aSnapping.Top() += nSnappingHeight + nSliderHeight;
         aSnapping.Bottom() += nSnappingHeight + nSliderHeight;
-        pVDev->DrawRect( aSnapping );
+        pVDev->DrawRect(aSnapping);
     }
 
     // draw slider button
     Point aImagePoint = aRect.TopLeft();
-    aImagePoint.X() += Zoom2Offset( mpImpl->mnCurrentZoom );
-    aImagePoint.X() -= nButtonWidth/2;
-    aImagePoint.Y() += ( aSliderWindowSize.Height() - nButtonHeight)/2;
-    pVDev->DrawImage( aImagePoint, mpImpl->maSliderButton );
+    aImagePoint.X() += Zoom2Offset(mpImpl->mnCurrentZoom);
+    aImagePoint.X() -= nButtonWidth / 2;
+    aImagePoint.Y() += (aSliderWindowSize.Height() - nButtonHeight) / 2;
+    pVDev->DrawImage(aImagePoint, mpImpl->maSliderButton);
 
     // draw decrease button
     aImagePoint = aRect.TopLeft();
-    aImagePoint.X() += (nSliderXOffset - nIncDecWidth)/2;
-    aImagePoint.Y() += ( aSliderWindowSize.Height() - nIncDecHeight)/2;
-    pVDev->DrawImage( aImagePoint, mpImpl->maDecreaseButton );
+    aImagePoint.X() += (nSliderXOffset - nIncDecWidth) / 2;
+    aImagePoint.Y() += (aSliderWindowSize.Height() - nIncDecHeight) / 2;
+    pVDev->DrawImage(aImagePoint, mpImpl->maDecreaseButton);
 
     // draw increase button
-    aImagePoint.X() = aRect.TopLeft().X() + aSliderWindowSize.Width() - nIncDecWidth - (nSliderXOffset - nIncDecWidth)/2;
-    pVDev->DrawImage( aImagePoint, mpImpl->maIncreaseButton );
+    aImagePoint.X() = aRect.TopLeft().X() + aSliderWindowSize.Width() - nIncDecWidth - (nSliderXOffset - nIncDecWidth) / 2;
+    pVDev->DrawImage(aImagePoint, mpImpl->maIncreaseButton);
 
-    DrawOutDev( Point(0, 0), aSliderWindowSize, Point(0, 0), aSliderWindowSize, *pVDev );
+    rRenderContext.DrawOutDev(Point(0, 0), aSliderWindowSize, Point(0, 0), aSliderWindowSize, *pVDev);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
