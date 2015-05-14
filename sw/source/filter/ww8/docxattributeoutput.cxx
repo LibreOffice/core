@@ -4186,12 +4186,23 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
    completely discarding it.
 */
     if ( aRelId.isEmpty() )
-        m_pSerializer->singleElementNS( XML_a, XML_blip,
+        m_pSerializer->startElementNS( XML_a, XML_blip,
             FSEND );
     else
-        m_pSerializer->singleElementNS( XML_a, XML_blip,
+        m_pSerializer->startElementNS( XML_a, XML_blip,
             FSNS( XML_r, nImageType ), aRelId.getStr(),
             FSEND );
+
+    pItem = 0;
+    sal_uInt32 nMode = GRAPHICDRAWMODE_STANDARD;
+
+    if ( pGrfNode && SfxItemState::SET == pGrfNode->GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE, true, &pItem))
+    {
+        nMode = static_cast<const SfxEnumItem*>(pItem)->GetValue();
+        if (nMode == GRAPHICDRAWMODE_GREYS)
+            m_pSerializer->singleElementNS (XML_a, XML_grayscl, FSEND);
+    }
+    m_pSerializer->endElementNS( XML_a, XML_blip );
 
     if (pSdrObj){
         WriteSrcRect(pSdrObj);
