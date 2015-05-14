@@ -915,24 +915,41 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
                 nMinPositive = nMin;
             if (mpFormatData->mpUpperLimit->GetType() == COLORSCALE_MAX && nMax < 0)
                 nMaxNegative = nMax;
+
+            //calculate the length
+            if(nValue < 0)
+            {
+                if (nValue < nMin)
+                    pInfo->mnLength = -100;
+                else
+                    pInfo->mnLength = -100 * (nValue-nMaxNegative)/(nMin-nMaxNegative);
+            }
+            else
+            {
+                if ( nValue > nMax )
+                    pInfo->mnLength = 100;
+                else
+                    pInfo->mnLength = (nValue-nMinPositive)/(nMax-nMinPositive)*100;
+            }
         }
         else if( mpFormatData->meAxisPosition == databar::MIDDLE)
+        {
             pInfo->mnZero = 50;
-
-        //calculate the length
-        if(nValue < 0)
-        {
-            if (nValue < nMin)
-                pInfo->mnLength = -100;
+            double nAbsMax = std::max(std::abs(nMin), std::abs(nMax));
+            if (nValue < 0)
+            {
+                if (nValue < nMin)
+                    pInfo->mnLength = -nMaxLength;
+                else
+                    pInfo->mnLength = nMaxLength * (nValue/nAbsMax);
+            }
             else
-                pInfo->mnLength = -100 * (nValue-nMaxNegative)/(nMin-nMaxNegative);
-        }
-        else
-        {
-            if ( nValue > nMax )
-                pInfo->mnLength = 100;
-            else
-                pInfo->mnLength = (nValue-nMinPositive)/(nMax-nMinPositive)*100;
+            {
+                if (nValue > nMax)
+                    pInfo->mnLength = nMaxLength;
+                else
+                    pInfo->mnLength = nMaxLength * (nValue/nAbsMax);
+            }
         }
     }
 
