@@ -88,10 +88,7 @@ protected:
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
-
-
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
 private:
     typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
@@ -100,8 +97,8 @@ private:
     Link<>          aSelectHdl;
     Link<>          aHighHdl;
     Link<>          aPreSelectHdl;
-    svx::SvxShowCharSetVirtualAcc*    m_pAccessible;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAccessible;
+    svx::SvxShowCharSetVirtualAcc* m_pAccessible;
+    css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     long            nX;
     long            nY;
     long            m_nXGap;
