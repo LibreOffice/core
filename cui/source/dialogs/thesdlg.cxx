@@ -260,14 +260,13 @@ void ThesaurusAlternativesCtrl::Paint(vcl::RenderContext& rRenderContext, const 
 {
     if (!m_pDialog->WordFound())
     {
-        Size aTextSize( GetTextWidth( m_pDialog->getErrStr() ), GetTextHeight() );
-        aTextSize  = LogicToPixel( aTextSize );
+        Size aTextSize(rRenderContext.GetTextWidth(m_pDialog->getErrStr()), rRenderContext.GetTextHeight());
+        aTextSize  = rRenderContext.LogicToPixel(aTextSize);
         Point aPos;
         aPos.X() += GetSizePixel().Width() / 2  - aTextSize.Width() / 2;
         aPos.Y() += GetSizePixel().Height() / 2;
-        aPos = PixelToLogic( aPos );
-        DrawText( aPos, m_pDialog->getErrStr() );
-
+        aPos = rRenderContext.PixelToLogic(aPos);
+        rRenderContext.DrawText(aPos, m_pDialog->getErrStr());
     }
     else
         SvxCheckListBox::Paint(rRenderContext, rRect);
