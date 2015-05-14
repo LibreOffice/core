@@ -21,12 +21,13 @@
 #define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEG_HXX
 
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/fltcall.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
+bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, GraphicFilterImportFlags nImportFlags );
 
 bool ExportJPEG(SvStream& rOutputStream,
                     const Graphic& rGraphic,

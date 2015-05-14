@@ -602,7 +602,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
             aURLObj.SetSmartURL( sImgUrl );
         }
 
-        sal_uInt32 nFilterImportFlags = GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG;
+        GraphicFilterImportFlags nFilterImportFlags = GraphicFilterImportFlags::SetLogsizeForJpeg;
         // remote?
         if ( INetProtocol::File != aURLObj.GetProtocol() )
         {

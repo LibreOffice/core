@@ -1309,7 +1309,7 @@ sal_uInt16 GraphicFilter::CanImportGraphic( const OUString& rMainUrl, SvStream& 
 
 //SJ: TODO, we need to create a GraphicImporter component
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
-                                     sal_uInt16 nFormat, sal_uInt16 * pDeterminedFormat, sal_uInt32 nImportFlags )
+                                     sal_uInt16 nFormat, sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags )
 {
     sal_uInt16 nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INetProtocol::NotValid, "GraphicFilter::ImportGraphic() : ProtType == INetProtocol::NotValid" );
@@ -1324,13 +1324,13 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject&
 }
 
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
-                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags, WMF_EXTERNALHEADER *pExtHeader )
+                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags, WMF_EXTERNALHEADER *pExtHeader )
 {
     return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, NULL, pExtHeader );
 }
 
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
-                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags,
+                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData,
                                      WMF_EXTERNALHEADER *pExtHeader )
 {
@@ -1365,18 +1365,18 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 {
                     aPreviewSizeHint = Size( aSize.Width, aSize.Height );
                     if ( aSize.Width || aSize.Height )
-                        nImportFlags |= GRFILTER_I_FLAGS_FOR_PREVIEW;
+                        nImportFlags |= GraphicFilterImportFlags::ForPreview;
                     else
-                        nImportFlags &=~GRFILTER_I_FLAGS_FOR_PREVIEW;
+                        nImportFlags &=~GraphicFilterImportFlags::ForPreview;
                 }
             }
             else if ( (*pFilterData)[ i ].Name == "AllowPartialStreamRead" )
             {
                 (*pFilterData)[ i ].Value >>= bAllowPartialStreamRead;
                 if ( bAllowPartialStreamRead )
-                    nImportFlags |= GRFILTER_I_FLAGS_ALLOW_PARTIAL_STREAMREAD;
+                    nImportFlags |= GraphicFilterImportFlags::AllowPartialStreamRead;
                 else
-                    nImportFlags &=~GRFILTER_I_FLAGS_ALLOW_PARTIAL_STREAMREAD;
+                    nImportFlags &=~GraphicFilterImportFlags::AllowPartialStreamRead;
             }
             else if ( (*pFilterData)[ i ].Name == "CreateNativeLink" )
             {
@@ -1496,8 +1496,8 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
 
             // set LOGSIZE flag always, if not explicitly disabled
             // (see #90508 and #106763)
-            if( 0 == ( nImportFlags & GRFILTER_I_FLAGS_DONT_SET_LOGSIZE_FOR_JPEG ) )
-                nImportFlags |= GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG;
+            if( !( nImportFlags & GraphicFilterImportFlags::DontSetLogsizeForJpeg ) )
+                nImportFlags |= GraphicFilterImportFlags::SetLogsizeForJpeg;
 
             if( !ImportJPEG( rIStream, rGraphic, NULL, nImportFlags ) )
                 nStatus = GRFILTER_FILTERERROR;

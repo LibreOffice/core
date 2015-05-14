@@ -763,7 +763,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
 
     ErrCode nRet = ERRCODE_NONE;
 
-    sal_uInt32 nFilterImportFlags = GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG;
+    GraphicFilterImportFlags nFilterImportFlags = GraphicFilterImportFlags::SetLogsizeForJpeg;
     // non-local?
     if ( INetProtocol::File != aURLObj.GetProtocol() )
     {

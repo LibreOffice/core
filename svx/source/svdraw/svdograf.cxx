@@ -99,7 +99,7 @@ const Graphic ImpLoadLinkedGraphic( const OUString& aFileName, const OUString& a
         // to interpret included links may fail.
         // Alternatively the path may be set at the result after this call when it is known
         // that it is a SVG graphic, but only because no one yet tried to interpret it.
-        rGF.ImportGraphic( aGraphic, aFileName, *pInStrm, nFilter, NULL, 0, &aFilterData );
+        rGF.ImportGraphic( aGraphic, aFileName, *pInStrm, nFilter, NULL, GraphicFilterImportFlags::NONE, &aFilterData );
     }
     return aGraphic;
 }
@@ -1346,7 +1346,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
                     if(!GraphicFilter::GetGraphicFilter().ImportGraphic(
                         aGraphic, aUserData, *pStream,
-                        GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData.get()))
+                        GRFILTER_FORMAT_DONTKNOW, NULL, GraphicFilterImportFlags::NONE, pFilterData.get()))
                     {
                         const OUString aNewUserData( pGraphic->GetUserData() );
                         pGraphic->SetGraphic( aGraphic );

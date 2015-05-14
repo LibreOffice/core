@@ -25,7 +25,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 
-bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags )
+bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, GraphicFilterImportFlags nImportFlags )
 {
     ReadState   eReadState;
     bool        bReturn = true;
@@ -34,10 +34,10 @@ bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, s
 
     if( !pJPEGReader )
     {
-        pJPEGReader = new JPEGReader( rInputStream, pCallerData, ( nImportFlags & GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG ) != 0 );
+        pJPEGReader = new JPEGReader( rInputStream, pCallerData, bool( nImportFlags & GraphicFilterImportFlags::SetLogsizeForJpeg ) );
     }
 
-    if( nImportFlags & GRFILTER_I_FLAGS_FOR_PREVIEW )
+    if( nImportFlags & GraphicFilterImportFlags::ForPreview )
     {
         pJPEGReader->SetPreviewSize( Size(128,128) );
     }

@@ -486,7 +486,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
                 pExtHeader = &aExtHeader;
 
             if( ( rFilter.ImportGraphic( aVCLGraphic, aPath, *pIStm,
-                                         GRFILTER_FORMAT_DONTKNOW, NULL, 0, pExtHeader ) == GRFILTER_OK ) &&
+                                         GRFILTER_FORMAT_DONTKNOW, NULL, GraphicFilterImportFlags::NONE, pExtHeader ) == GRFILTER_OK ) &&
                 ( aVCLGraphic.GetType() != GRAPHIC_NONE ) )
             {
                 ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
