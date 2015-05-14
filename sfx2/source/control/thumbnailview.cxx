@@ -80,7 +80,6 @@ void ThumbnailView::dispose()
 
     mpScrBar.disposeAndClear();
     delete mpItemAttrs;
-    delete mpProcessor;
 
     ImplDeleteItems();
     Control::dispose();
@@ -134,28 +133,24 @@ void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)
 
 void ThumbnailView::ImplInit()
 {
-    mpScrBar            = NULL;
-    mnHeaderHeight      = 0;
-    mnItemWidth         = 0;
-    mnItemHeight        = 0;
-    mnItemPadding       = 0;
-    mnVisLines          = 0;
-    mnLines             = 0;
-    mnFineness          = 5;
-    mnFirstLine         = 0;
-    mnCols              = 0;
-    mbScroll            = false;
-    mbHasVisibleItems   = false;
-    mbShowTooltips      = false;
+    mpScrBar = NULL;
+    mnHeaderHeight = 0;
+    mnItemWidth = 0;
+    mnItemHeight = 0;
+    mnItemPadding = 0;
+    mnVisLines = 0;
+    mnLines = 0;
+    mnFineness = 5;
+    mnFirstLine = 0;
+    mnCols = 0;
+    mbScroll = false;
+    mbHasVisibleItems = false;
+    mbShowTooltips = false;
     maFilterFunc = ViewFilterAll();
     maColor = GetSettings().GetStyleSettings().GetFieldColor();
     mpStartSelRange = mFilteredItemList.end();
 
-    // Create the processor and process the primitives
-    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    mpProcessor = drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*this, aNewViewInfos );
-
-    ImplInitSettings( true, true, true );
+    ImplInitSettings(true, true, true);
 }
 
 void ThumbnailView::ImplDeleteItems()
@@ -248,14 +243,14 @@ void ThumbnailView::ImplInitScrollBar()
     }
 }
 
-void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
+void ThumbnailView::DrawItem(ThumbnailViewItem *pItem)
 {
     if (pItem->isVisible())
     {
         Rectangle aRect = pItem->getDrawArea();
 
-        if ( (aRect.GetHeight() > 0) && (aRect.GetWidth() > 0) )
-            pItem->Paint(mpProcessor,mpItemAttrs);
+        if ((aRect.GetHeight() > 0) && (aRect.GetWidth() > 0))
+            pItem->Paint(mpProcessor.get(), mpItemAttrs);
     }
 }
 
@@ -858,14 +853,14 @@ void ThumbnailView::Command( const CommandEvent& rCEvt )
     Control::Command( rCEvt );
 }
 
-void ThumbnailView::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &aRect)
+void ThumbnailView::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect)
 {
     size_t nItemCount = mItemList.size();
 
     // Draw background
     drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
     aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(new PolyPolygonColorPrimitive2D(
-                B2DPolyPolygon(Polygon(aRect, 5, 5).getB2DPolygon()),
+                B2DPolyPolygon(Polygon(rRect, 5, 5).getB2DPolygon()),
                 maColor.getBColor()));
 
     mpProcessor->process(aSeq);
@@ -876,11 +871,25 @@ void ThumbnailView::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangl
         ThumbnailViewItem *const pItem = mItemList[i];
 
         if (pItem->isVisible())
+        {
             DrawItem(pItem);
+        }
     }
 
     if (mpScrBar && mpScrBar->IsVisible())
-        mpScrBar->Invalidate(aRect);
+        mpScrBar->Invalidate(rRect);
+}
+
+void ThumbnailView::PrePaint(vcl::RenderContext& rRenderContext)
+{
+    // Create the processor and process the primitives
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    mpProcessor.reset(drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
+}
+
+void ThumbnailView::PostPaint(vcl::RenderContext& /*rRenderContext*/)
+{
+    mpProcessor.reset();
 }
 
 void ThumbnailView::GetFocus()

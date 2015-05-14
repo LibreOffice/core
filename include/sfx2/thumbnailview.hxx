@@ -259,7 +259,11 @@ protected:
 
     virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+
+    virtual void PrePaint(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+
+    virtual void PostPaint(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
     virtual void GetFocus() SAL_OVERRIDE;
 
@@ -330,9 +334,11 @@ protected:
     Color maColor;
 
     Link<> maItemStateHdl;
-    ThumbnailItemAttributes *mpItemAttrs;
-    drawinglayer::processor2d::BaseProcessor2D *mpProcessor;
-    boost::function<bool (const ThumbnailViewItem*) > maFilterFunc;
+    ThumbnailItemAttributes* mpItemAttrs;
+
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> mpProcessor;
+
+    boost::function<bool (const ThumbnailViewItem*)> maFilterFunc;
 };
 
 #endif // INCLUDED_SFX2_THUMBNAILVIEW_HXX

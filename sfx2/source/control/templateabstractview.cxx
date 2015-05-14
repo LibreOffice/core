@@ -305,7 +305,8 @@ void TemplateAbstractView::Paint(vcl::RenderContext& rRenderContext, const Recta
     ThumbnailView::Paint(rRenderContext, rRect);
 
     Rectangle aRect(rRect.TopLeft(),
-        Point(rRect.BottomRight().X(), mnHeaderHeight));
+                    Point(rRect.BottomRight().X(),
+                          mnHeaderHeight));
 
     drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
     aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
