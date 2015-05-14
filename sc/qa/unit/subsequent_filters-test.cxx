@@ -135,6 +135,7 @@ public:
     void testNewCondFormatODS();
     void testNewCondFormatXLSX();
     void testCondFormatThemeColorXLSX();
+    void testCondFormatThemeColor2XLSX(); // negative bar color and axis color
 
     void testLiteralInFormulaXLS();
 
@@ -242,6 +243,7 @@ public:
     CPPUNIT_TEST(testNewCondFormatODS);
     CPPUNIT_TEST(testNewCondFormatXLSX);
     CPPUNIT_TEST(testCondFormatThemeColorXLSX);
+    CPPUNIT_TEST(testCondFormatThemeColor2XLSX);
     CPPUNIT_TEST(testLiteralInFormulaXLS);
 
     CPPUNIT_TEST(testNumberFormatHTML);
@@ -2378,6 +2380,27 @@ void ScFiltersTest::testCondFormatThemeColorXLSX()
     pColorScaleEntry = pColorScale->GetEntry(1);
     CPPUNIT_ASSERT(pColorScaleEntry);
     CPPUNIT_ASSERT_EQUAL(Color(157, 195, 230), pColorScaleEntry->GetColor());
+}
+
+void ScFiltersTest::testCondFormatThemeColor2XLSX()
+{
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "cond_format_theme_color2.", XLSX );
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load cond_format_theme_color2.xlsx", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(5, 5, 0);
+    CPPUNIT_ASSERT(pFormat);
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), condformat::DATABAR);
+    const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pEntry);
+    const ScDataBarFormatData* pDataBarFormatData = pDataBar->GetDataBarData();
+
+    CPPUNIT_ASSERT_EQUAL(Color(99, 142, 198), pDataBarFormatData->maPositiveColor);
+    CPPUNIT_ASSERT(pDataBarFormatData->mpNegativeColor.get());
+    CPPUNIT_ASSERT_EQUAL(Color(217, 217, 217), *pDataBarFormatData->mpNegativeColor.get());
+    CPPUNIT_ASSERT_EQUAL(Color(197, 90, 17), pDataBarFormatData->maAxisColor);
 }
 
 void ScFiltersTest::testLiteralInFormulaXLS()
