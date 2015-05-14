@@ -127,6 +127,8 @@ public:
         bool bResetListAttrs; // #i62575#
         bool bResetAll;
         bool bInclRefToxMark;
+        /// From the attributes included in the range, delete only the ones which have exactly same range. Don't delete the ones which are simply included in the range.
+        bool bExactRange;
 
         ParaRstFmt(const SwPosition* pStt, const SwPosition* pEnd,
                    SwHistory* pHst, sal_uInt16 nWhch = 0, const SfxItemSet* pSet = 0)
@@ -140,6 +142,7 @@ public:
             , bResetListAttrs(false)
             , bResetAll(true)
             , bInclRefToxMark(false)
+            , bExactRange(false)
         {
         }
     };

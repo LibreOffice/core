@@ -28,6 +28,7 @@
 #include <swacorr.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
+#include <charatr.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <unotools/streamwrap.hxx>
 #include <test/mtfxmldump.hxx>
@@ -90,6 +91,7 @@ public:
     void testSearchWithTransliterate();
     void testTdf90362();
     void testUndoCharAttribute();
+    void testTdf86639();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -125,6 +127,7 @@ public:
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
+    CPPUNIT_TEST(testTdf86639);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -946,6 +949,17 @@ void SwUiWriterTest::testUndoCharAttribute()
     pCrsr->GetNode().GetTxtNode()->GetAttr(aSet, 10, 19);
     aPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
     CPPUNIT_ASSERT_EQUAL((*aPoolItem == ampPoolItem), false);
+}
+
+void SwUiWriterTest::testTdf86639()
+{
+    SwDoc* pDoc = createDoc("tdf86639.rtf");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName("Heading");
+    pWrtShell->SetTxtFmtColl(pColl);
+    OUString aExpected = pColl->GetAttrSet().GetFont().GetFamilyName();
+    // This was Calibri, should be Liberation Sans.
+    CPPUNIT_ASSERT_EQUAL(aExpected, getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

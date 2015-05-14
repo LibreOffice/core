@@ -63,7 +63,17 @@ void SwEditShell::SetTxtFmtColl(SwTxtFmtColl *pFmt,
 
         if ( !rPaM.HasReadonlySel( GetViewOptions()->IsFormView() ) )
         {
+            // Change the paragraph style to pLocal and remove all direct paragraph formatting.
             GetDoc()->SetTxtFmtColl( rPaM, pLocal, true, bResetListAttrs );
+
+            // If there are hints on the nodes which cover the whole node, then remove those, too.
+            SwPaM aPaM(*rPaM.Start(), *rPaM.End());
+            if (SwTxtNode* pEndTxtNode = aPaM.End()->nNode.GetNode().GetTxtNode())
+            {
+                aPaM.Start()->nContent = 0;
+                aPaM.End()->nContent = pEndTxtNode->GetTxt().getLength();
+            }
+            GetDoc()->RstTxtAttrs(aPaM, /*bInclRefToxMark=*/false, /*bExactRange=*/true);
         }
 
     }

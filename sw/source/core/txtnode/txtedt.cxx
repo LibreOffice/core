@@ -376,7 +376,8 @@ void SwTxtNode::RstTxtAttr(
     const sal_Int32 nLen,
     const sal_uInt16 nWhich,
     const SfxItemSet* pSet,
-    const bool bInclRefToxMark )
+    const bool bInclRefToxMark,
+    const bool bExactRange )
 {
     if ( !GetpSwpHints() )
         return;
@@ -421,7 +422,7 @@ void SwTxtNode::RstTxtAttr(
     SwTxtAttr *pHt = NULL;
     while ( (i < m_pSwpHints->Count())
             && ( ( ( nAttrStart = (*m_pSwpHints)[i]->GetStart()) < nEnd )
-                 || nLen==0 ) )
+                 || nLen==0 ) && !bExactRange)
     {
         pHt = m_pSwpHints->GetTextHint(i);
 
@@ -597,6 +598,23 @@ void SwTxtNode::RstTxtAttr(
             }
         }
         ++i;
+    }
+
+    if (bExactRange)
+    {
+        // Only delete the hints which start at nStt and end at nEnd.
+        for (i = 0; i < m_pSwpHints->Count(); ++i)
+        {
+            SwTxtAttr* pHint = m_pSwpHints->GetTextHint(i);
+            if (pHint->GetStart() != nStt)
+                continue;
+
+            const sal_Int32* pHintEnd = pHint->GetEnd();
+            if (!pHintEnd || *pHintEnd != nEnd)
+                continue;
+
+            delAttributes.push_back(pHint);
+        }
     }
 
     if (bChanged && !delAttributes.empty())

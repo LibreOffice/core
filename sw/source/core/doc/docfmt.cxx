@@ -219,7 +219,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
     return true;
 }
 
-void SwDoc::RstTxtAttrs(const SwPaM &rRg, bool bInclRefToxMark )
+void SwDoc::RstTxtAttrs(const SwPaM &rRg, bool bInclRefToxMark, bool bExactRange )
 {
     SwHistory* pHst = 0;
     SwDataChanged aTmp( rRg );
@@ -232,6 +232,7 @@ void SwDoc::RstTxtAttrs(const SwPaM &rRg, bool bInclRefToxMark )
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
     sw::DocumentContentOperationsManager::ParaRstFmt aPara( pStt, pEnd, pHst );
     aPara.bInclRefToxMark = bInclRefToxMark;
+    aPara.bExactRange = bExactRange;
     GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
                         sw::DocumentContentOperationsManager::lcl_RstTxtAttr, &aPara );
     getIDocumentState().SetModified();

@@ -3453,13 +3453,13 @@ bool DocumentContentOperationsManager::lcl_RstTxtAttr( const SwNodePtr& rpNd, vo
             SwRegHistory aRHst( *pTxtNode, pPara->pHistory );
             pTxtNode->GetpSwpHints()->Register( &aRHst );
             pTxtNode->RstTxtAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
-                                  pPara->pDelSet, pPara->bInclRefToxMark );
+                                  pPara->pDelSet, pPara->bInclRefToxMark, pPara->bExactRange );
             if( pTxtNode->GetpSwpHints() )
                 pTxtNode->GetpSwpHints()->DeRegister();
         }
         else
             pTxtNode->RstTxtAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
-                                  pPara->pDelSet, pPara->bInclRefToxMark );
+                                  pPara->pDelSet, pPara->bInclRefToxMark, pPara->bExactRange );
     }
     return true;
 }

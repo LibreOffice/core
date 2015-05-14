@@ -266,13 +266,17 @@ public:
         @param bInclRefToxMark
             refmarks, toxmarks, and metas will be ignored unless this is true
         ATTENTION: setting bInclRefToxMark is only allowed from UNDO!
+        @param bExactRange From the attributes included in the range, delete
+        only the ones which have exactly same range. Don't delete the ones
+        which are simply included in the range.
      */
     void RstTxtAttr(
         const SwIndex &rIdx,
         const sal_Int32 nLen,
         const sal_uInt16 nWhich = 0,
         const SfxItemSet* pSet = 0,
-        const bool bInclRefToxMark = false );
+        const bool bInclRefToxMark = false,
+        const bool bExactRange = false );
     void    GCAttr();
 
     // Delete text attribute (needs to be deregistered at Pool!)

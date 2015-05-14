@@ -763,7 +763,7 @@ public:
                      bool bTxtAttr = true,
                      const std::set<sal_uInt16> &rAttrs = std::set<sal_uInt16>(),
                      const bool bSendDataChangedEvents = true );
-    void RstTxtAttrs(const SwPaM &rRg, bool bInclRefToxMark = false );
+    void RstTxtAttrs(const SwPaM &rRg, bool bInclRefToxMark = false, bool bExactRange = false );
 
     /** Set attribute in given format.1y
      *  If Undo is enabled, the old values is added to the Undo history. */
