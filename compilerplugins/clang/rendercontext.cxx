@@ -57,6 +57,8 @@ bool RenderContext::TraverseFunctionDecl(const FunctionDecl * pFunctionDecl)
             return true;
     }
     // we are only currently interested in methods where the first parameter is RenderContext
+    if (pFunctionDecl->getNumParams() == 0)
+        return true;
     string arg0 = pFunctionDecl->getParamDecl( 0 )->getType().getAsString();
     if ( arg0.find("RenderContext") != std::string::npos ) {
         return true;
