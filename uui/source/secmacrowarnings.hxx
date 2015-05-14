@@ -47,6 +47,7 @@ private:
     VclPtr<FixedImage>         mpSymbolImg;
     VclPtr<FixedText>          mpDocNameFI;
     VclPtr<FixedText>          mpDescr1FI;
+    VclPtr<FixedText>          mpDescr1aFI;
     VclPtr<FixedText>          mpSignsFI;
     VclPtr<PushButton>         mpViewSignsBtn;
     VclPtr<FixedText>          mpDescr2FI;

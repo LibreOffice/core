@@ -73,6 +73,7 @@ MacroWarning::MacroWarning( vcl::Window* _pParent, bool _bWithSignatures, ResMgr
     get(mpSymbolImg, "symbolImage");
     get(mpDocNameFI, "docNameLabel");
     get(mpDescr1FI, "descr1Label");
+    get(mpDescr1aFI, "descr1aLabel");
     get(mpSignsFI, "signsLabel");
     get(mpViewSignsBtn, "viewSignsButton");
     get(mpDescr2FI, "descr2Label");
@@ -191,7 +192,8 @@ void MacroWarning::InitControls()
     }
     else
     {
-        mpDescr1FI->SetText("The document contains document macros.");
+        mpDescr1FI->Hide();
+        mpDescr1aFI->Show();
         mpSignsFI->Hide();
         mpViewSignsBtn->Hide();
         mpAlwaysTrustCB->Hide();
