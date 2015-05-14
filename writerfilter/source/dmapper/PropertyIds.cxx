@@ -403,6 +403,8 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_FOLLOW_TEXT_FLOW: sName = "IsFollowingTextFlow"; break;
             case PROP_FILL_STYLE: sName = "FillStyle"; break;
             case PROP_FILL_COLOR: sName = "FillColor"; break;
+            case PROP_SNAP_TO_GRID: sName = "SnapToGrid"; break;
+            case PROP_GRID_SNAP_TO_CHARS: sName = "GridSnapToChars"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));
