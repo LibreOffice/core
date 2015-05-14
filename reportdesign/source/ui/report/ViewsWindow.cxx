@@ -172,13 +172,13 @@ bool lcl_getNewRectSize(const Rectangle& _aObjRect,long& _nXMov, long& _nYMov,Sd
 
 
 OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
-: Window( _pReportWindow,WB_DIALOGCONTROL)
-,m_pParent(_pReportWindow)
-,m_bInUnmark(false)
+    : Window( _pReportWindow,WB_DIALOGCONTROL)
+    , m_pParent(_pReportWindow)
+    , m_bInUnmark(false)
 {
     SetPaintTransparent(true);
     SetUniqueId(UID_RPT_VIEWSWINDOW);
-    SetMapMode( MapMode( MAP_100TH_MM ) );
+    SetMapMode(MapMode(MAP_100TH_MM));
     m_aColorConfig.AddListener(this);
     ImplInitSettings();
 }
@@ -265,24 +265,25 @@ void OViewsWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rR
 {
     Window::Paint(rRenderContext, rRect);
 
-    Size aOut = GetOutputSizePixel();
+    rRenderContext.SetBackground();
+    rRenderContext.SetFillColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
+    rRenderContext.SetTextFillColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
+
+    Size aOut = rRenderContext.GetOutputSizePixel();
     Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
-    aStartWidth *= GetMapMode().GetScaleX();
+    aStartWidth *= rRenderContext.GetMapMode().GetScaleX();
 
-    aOut.Width() -= (long)aStartWidth;
-    aOut = PixelToLogic(aOut);
+    aOut.Width() -= long(aStartWidth);
+    aOut = rRenderContext.PixelToLogic(aOut);
 
-    Rectangle aRect(PixelToLogic(Point(aStartWidth,0)),aOut);
-    Wallpaper aWall( m_aColorConfig.GetColorValue(::svtools::APPBACKGROUND).nColor );
-    DrawWallpaper(aRect,aWall);
+    Rectangle aRect(rRenderContext.PixelToLogic(Point(aStartWidth,0)), aOut);
+    Wallpaper aWall(m_aColorConfig.GetColorValue(::svtools::APPBACKGROUND).nColor);
+    rRenderContext.DrawWallpaper(aRect, aWall);
 }
 
 void OViewsWindow::ImplInitSettings()
 {
-    EnableChildTransparentMode( true );
-    SetBackground( );
-    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+    EnableChildTransparentMode(true);
 }
 
 void OViewsWindow::DataChanged( const DataChangedEvent& rDCEvt )
