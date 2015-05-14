@@ -951,9 +951,9 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLa
             break;
     }
 
-    bool bDropDown = ( IsSymbol() && (GetSymbol()==SymbolType::SPIN_DOWN) && GetText().isEmpty() );
+    bool bDropDown = (IsSymbol() && (GetSymbol() == SymbolType::SPIN_DOWN) && GetText().isEmpty());
 
-    if( bDropDown && (aCtrlType == CTRL_COMBOBOX || aCtrlType == CTRL_LISTBOX ) )
+    if( bDropDown && (aCtrlType == CTRL_COMBOBOX || aCtrlType == CTRL_LISTBOX))
     {
         if (GetParent()->IsNativeControlSupported(aCtrlType, PART_ENTIRE_CONTROL))
         {
@@ -1007,7 +1007,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLa
         if (!bRollOver && !HasFocus())
             bDrawMenuSep = false;
     }
-    if ((bNativeOK = IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL)))
+    if ((bNativeOK = rRenderContext.IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL)))
     {
         PushButtonValue aControlValue;
         Rectangle aCtrlRegion(aInRect);
@@ -1045,8 +1045,8 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLa
         // prepare single line hint (needed on mac to decide between normal push button and
         // rectangular bevel button look)
         Size aFontSize(Application::GetSettings().GetStyleSettings().GetPushButtonFont().GetSize());
-        aFontSize = LogicToPixel(aFontSize, MapMode(MAP_POINT));
-        Size aInRectSize(LogicToPixel(Size(aInRect.GetWidth(), aInRect.GetHeight())));
+        aFontSize = rRenderContext.LogicToPixel(aFontSize, MapMode(MAP_POINT));
+        Size aInRectSize(rRenderContext.LogicToPixel(Size(aInRect.GetWidth(), aInRect.GetHeight())));
         aControlValue.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height());
 
         if (((nState & ControlState::ROLLOVER)) || !(GetStyle() & WB_FLATBUTTON))
@@ -1060,7 +1060,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLa
         }
 
         // draw content using the same aInRect as non-native VCL would do
-        ImplDrawPushButtonContent(this, (nState&ControlState::ROLLOVER) ? WINDOW_DRAW_ROLLOVER : 0,
+        ImplDrawPushButtonContent(&rRenderContext, (nState&ControlState::ROLLOVER) ? WINDOW_DRAW_ROLLOVER : 0,
                                   aInRect, bLayout, bDrawMenuSep);
 
         if (HasFocus())
