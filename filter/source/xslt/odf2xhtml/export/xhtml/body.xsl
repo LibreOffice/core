@@ -2909,7 +2909,7 @@
 
 	<xsl:template match="text:bookmark|text:bookmark-start">
 		<xsl:element name="a">
-			<xsl:attribute name="name">
+			<xsl:attribute name="id">
 				<xsl:value-of select="@text:name"/>
 			</xsl:attribute>
 		</xsl:element>
