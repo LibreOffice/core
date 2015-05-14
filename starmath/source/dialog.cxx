@@ -64,15 +64,15 @@ public:
     SmFontStyles();
 
     static sal_uInt16 GetCount() { return 4; }
-    const OUString&  GetStyleName( const vcl::Font &rFont ) const;
-    const OUString&  GetStyleName( sal_uInt16 nIdx ) const;
+    const OUString& GetStyleName(const vcl::Font& rFont) const;
+    const OUString& GetStyleName(sal_uInt16 nIdx) const;
 };
 
 
 SmFontStyles::SmFontStyles() :
-    aNormal ( ResId( RID_FONTREGULAR, *SM_MOD()->GetResMgr() ) ),
-    aBold   ( ResId( RID_FONTBOLD,    *SM_MOD()->GetResMgr() ) ),
-    aItalic ( ResId( RID_FONTITALIC,  *SM_MOD()->GetResMgr() ) )
+    aNormal (ResId(RID_FONTREGULAR, *SM_MOD()->GetResMgr())),
+    aBold   (ResId(RID_FONTBOLD,    *SM_MOD()->GetResMgr())),
+    aItalic (ResId(RID_FONTITALIC,  *SM_MOD()->GetResMgr()))
 {
 
     aBoldItalic = aBold;
@@ -81,7 +81,7 @@ SmFontStyles::SmFontStyles() :
 }
 
 
-const OUString& SmFontStyles::GetStyleName( const vcl::Font &rFont ) const
+const OUString& SmFontStyles::GetStyleName(const vcl::Font& rFont) const
 {
     //! compare also SmSpecialNode::Prepare
     bool bBold   = IsBold( rFont ),
@@ -146,16 +146,13 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
     rFont.SetWeight((nIndex & 0x2) ? WEIGHT_BOLD : WEIGHT_NORMAL);
 }
 
-
-/**************************************************************************/
-
 IMPL_LINK( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *,/*pButton*/ )
 {
     m_pZoom->Enable(m_pSizeZoomed->IsChecked());
     return 0;
 }
 
-SmPrintOptionsTabPage::SmPrintOptionsTabPage(vcl::Window *pParent, const SfxItemSet &rOptions)
+SmPrintOptionsTabPage::SmPrintOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rOptions)
     : SfxTabPage(pParent, "SmathSettings", "modules/smath/ui/smathsettings.ui", &rOptions)
 {
     get( m_pTitle,               "title");
@@ -241,15 +238,24 @@ VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(vcl::Window* pWindow, const Sfx
     return VclPtr<SmPrintOptionsTabPage>::Create(pWindow, rSet).get();
 }
 
-void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
 
-    OUString sText(rRenderContext.GetFont().GetName());
-    Size TextSize(rRenderContext.GetTextWidth(sText), rRenderContext.GetTextHeight());
+    Color aTxtColor(rRenderContext.GetTextColor());
+    vcl::Font aFont(maFont);
+    aFont.SetSize(Size(0, 24 * rRenderContext.GetDPIScaleFactor()));
+    aFont.SetAlign(ALIGN_TOP);
+    rRenderContext.SetFont(aFont);
 
-    rRenderContext.DrawText(Point((GetOutputSize().Width()  - TextSize.Width())  / 2,
-                                  (GetOutputSize().Height() - TextSize.Height()) / 2), sText);
+    // keep old text color (new font may have different color)
+    rRenderContext.SetTextColor(aTxtColor);
+
+    OUString sText(rRenderContext.GetFont().GetName());
+    Size aTextSize(rRenderContext.GetTextWidth(sText), rRenderContext.GetTextHeight());
+
+    rRenderContext.DrawText(Point((rRenderContext.GetOutputSize().Width()  - aTextSize.Width())  / 2,
+                                  (rRenderContext.GetOutputSize().Height() - aTextSize.Height()) / 2), sText);
 }
 
 VCL_BUILDER_DECL_FACTORY(SmShowFont)
@@ -270,16 +276,8 @@ Size SmShowFont::GetOptimalSize() const
 
 void SmShowFont::SetFont(const vcl::Font& rFont)
 {
-    Color aTxtColor( GetTextColor() );
-    vcl::Font aFont (rFont);
-
+    maFont = rFont;
     Invalidate();
-    aFont.SetSize(Size(0, 24));
-    aFont.SetAlign(ALIGN_TOP);
-    Window::SetFont(aFont);
-
-    // keep old text color (new font may have different color)
-    SetTextColor( aTxtColor );
 }
 
 IMPL_LINK( SmFontDialog, FontSelectHdl, ComboBox *, pComboBox )

@@ -81,6 +81,8 @@ class SmShowFont : public vcl::Window
 {
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
 
+    vcl::Font maFont;
+
 public:
     SmShowFont(vcl::Window *pParent, WinBits nStyle)
         : Window(pParent, nStyle)
