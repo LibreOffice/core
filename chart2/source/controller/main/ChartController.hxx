@@ -82,19 +82,19 @@ class WindowController
 public:
     virtual ~WindowController() {};
 
-    virtual void PrePaint()=0;
-    virtual void execute_Paint( const Rectangle& rRect )=0;
-    virtual void execute_MouseButtonDown( const MouseEvent& rMEvt )=0;
-    virtual void execute_MouseMove( const MouseEvent& rMEvt )=0;
-    virtual void execute_Tracking( const TrackingEvent& rTEvt )=0;
-    virtual void execute_MouseButtonUp( const MouseEvent& rMEvt )=0;
-    virtual void execute_Resize()=0;
-    virtual void execute_Activate()=0;
-    virtual void execute_Deactivate()=0;
-    virtual void execute_GetFocus()=0;
-    virtual void execute_LoseFocus()=0;
-    virtual void execute_Command( const CommandEvent& rCEvt )=0;
-    virtual bool execute_KeyInput( const KeyEvent& rKEvt )=0;
+    virtual void PrePaint(vcl::RenderContext& rRenderContext) = 0;
+    virtual void execute_Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) = 0;
+    virtual void execute_MouseButtonDown( const MouseEvent& rMEvt ) = 0;
+    virtual void execute_MouseMove( const MouseEvent& rMEvt ) = 0;
+    virtual void execute_Tracking( const TrackingEvent& rTEvt ) = 0;
+    virtual void execute_MouseButtonUp( const MouseEvent& rMEvt ) = 0;
+    virtual void execute_Resize() = 0;
+    virtual void execute_Activate() = 0;
+    virtual void execute_Deactivate() = 0;
+    virtual void execute_GetFocus() = 0;
+    virtual void execute_LoseFocus() = 0;
+    virtual void execute_Command( const CommandEvent& rCEvt ) = 0;
+    virtual bool execute_KeyInput( const KeyEvent& rKEvt ) = 0;
 
     /** get help text to be shown in a quick help
 
@@ -406,8 +406,8 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // chart2::WindowController
-    virtual void PrePaint() SAL_OVERRIDE;
-    virtual void execute_Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void PrePaint(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void execute_Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void execute_MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void execute_MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void execute_Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;

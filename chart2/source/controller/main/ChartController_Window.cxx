@@ -449,34 +449,34 @@ void SAL_CALL ChartController::removePaintListener(
 }
 
 // impl vcl window controller methods
-void ChartController::PrePaint()
+void ChartController::PrePaint(vcl::RenderContext& /*rRenderContext*/)
 {
     // forward VCLs PrePaint window event to DrawingLayer
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
 
-    if(pDrawViewWrapper)
+    if (pDrawViewWrapper)
     {
         pDrawViewWrapper->PrePaint();
     }
 }
 
-void ChartController::execute_Paint( const Rectangle& rRect )
+void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     try
     {
-        uno::Reference< frame::XModel > xModel( getModel() );
+        uno::Reference<frame::XModel> xModel(getModel());
         //OSL_ENSURE( xModel.is(), "ChartController::execute_Paint: have no model to paint");
-        if( !xModel.is() )
+        if (!xModel.is())
             return;
 
         //better performance for big data
-        uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
-        if( xProp.is() )
+        uno::Reference<beans::XPropertySet> xProp(m_xChartView, uno::UNO_QUERY);
+        if (xProp.is())
         {
             awt::Size aResolution(1000, 1000);
             {
                 SolarMutexGuard aGuard;
-                if( m_pChartWindow )
+                if (m_pChartWindow)
                 {
                     aResolution.Width = m_pChartWindow->GetSizePixel().Width();
                     aResolution.Height = m_pChartWindow->GetSizePixel().Height();
@@ -486,14 +486,14 @@ void ChartController::execute_Paint( const Rectangle& rRect )
         }
 
         uno::Reference< util::XUpdatable > xUpdatable( m_xChartView, uno::UNO_QUERY );
-        if( xUpdatable.is() )
+        if (xUpdatable.is())
             xUpdatable->update();
 
         {
             SolarMutexGuard aGuard;
             DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
-            if(pDrawViewWrapper)
-                pDrawViewWrapper->CompleteRedraw(m_pChartWindow, vcl::Region(rRect) );
+            if (pDrawViewWrapper)
+                pDrawViewWrapper->CompleteRedraw(&rRenderContext, vcl::Region(rRect));
         }
     }
     catch( const uno::Exception & ex )

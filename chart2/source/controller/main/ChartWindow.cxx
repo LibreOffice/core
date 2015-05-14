@@ -93,12 +93,12 @@ void ChartWindow::clear()
     this->ReleaseMouse();
 }
 
-void ChartWindow::PrePaint(vcl::RenderContext& /*rRenderContext*/)
+void ChartWindow::PrePaint(vcl::RenderContext& rRenderContext)
 {
     // forward VCLs PrePaint window event to DrawingLayer
     if (m_pWindowController)
     {
-       m_pWindowController->PrePaint();
+       m_pWindowController->PrePaint(rRenderContext);
     }
 }
 
@@ -111,7 +111,7 @@ void ChartWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRe
     }
     else if (m_pWindowController)
     {
-        m_pWindowController->execute_Paint(rRect);
+        m_pWindowController->execute_Paint(rRenderContext, rRect);
     }
     else
     {
