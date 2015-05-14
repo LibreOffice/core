@@ -756,11 +756,23 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if ( bLogicText )
         aOutputData.DrawStrings(true);      // in logic MapMode if bLogicText is set
     aOutputData.DrawEdit(true);
-    pContentDev->SetMapMode(MAP_PIXEL);
+
+    // the buttons are painted in absolute coordinates
+    if (bIsTiledRendering)
+    {
+        // Tiled offset nScrX, nScrY
+        MapMode aMap( MAP_PIXEL );
+        aMap.SetOrigin(Point(nScrX, nScrY));
+        pContentDev->SetMapMode(aMap);
+    }
+    else
+        pContentDev->SetMapMode(MAP_PIXEL);
 
         // Autofilter- und Pivot-Buttons
 
     DrawButtons(nX1, nX2, rTableInfo, pContentDev);          // Pixel
+
+    pContentDev->SetMapMode(MAP_PIXEL);
 
     aOutputData.DrawClipMarks();
 
