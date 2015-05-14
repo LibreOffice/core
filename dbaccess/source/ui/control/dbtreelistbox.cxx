@@ -302,7 +302,7 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
                 Rectangle aScreenRect( OutputToScreenPixel( GetEntryPosition( pEntry ) ), aSize );
 
                 Help::ShowQuickHelp( this, aScreenRect,
-                                     sQuickHelpText, QUICKHELP_LEFT | QUICKHELP_VCENTER );
+                                     sQuickHelpText, QuickHelpFlags::Left | QuickHelpFlags::VCenter );
                 return;
             }
         }

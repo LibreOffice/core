@@ -5840,7 +5840,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
         aPt.Y() -= 3;
         nTipId = Help::ShowTip( &rWin, Rectangle( aPt, Size( 1, 1 )),
                         m_aHelpStrings[ nCurArrPos ],
-                        QUICKHELP_LEFT | QUICKHELP_BOTTOM );
+                        QuickHelpFlags::Left | QuickHelpFlags::Bottom );
     }
     else
     {

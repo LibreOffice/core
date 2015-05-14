@@ -1979,7 +1979,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
             OUString      aHelpText;
             if ( !rStr.isEmpty() )
                 aHelpText = GetHelpText();
-            Help::ShowQuickHelp( this, aRect, rStr, aHelpText, QUICKHELP_CTRLTEXT );
+            Help::ShowQuickHelp( this, aRect, rStr, aHelpText, QuickHelpFlags::CtrlText );
         }
     }
     else

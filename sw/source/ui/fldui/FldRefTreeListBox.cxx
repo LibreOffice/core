@@ -62,7 +62,7 @@ void SwFldRefTreeListBox::RequestHelp( const HelpEvent& rHEvt )
                 aPos = OutputToScreenPixel(aPos);
                 Rectangle aItemRect( aPos, aSize );
                 Help::ShowQuickHelp( this, aItemRect, sEntry,
-                    QUICKHELP_LEFT|QUICKHELP_VCENTER );
+                    QuickHelpFlags::Left|QuickHelpFlags::VCenter );
                 bCallBase = false;
             }
         }

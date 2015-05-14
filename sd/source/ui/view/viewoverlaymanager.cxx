@@ -201,7 +201,7 @@ void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 
                 OUString aHelpText( aResId );
                 Rectangle aScreenRect( pDev->LogicToPixel( GetPos() ), maImageSize );
-                mnTip = Help::ShowTip( static_cast< vcl::Window* >( pHdlList->GetView()->GetFirstOutputDevice() ), aScreenRect, aHelpText, 0 ) ;
+                mnTip = Help::ShowTip( static_cast< vcl::Window* >( pHdlList->GetView()->GetFirstOutputDevice() ), aScreenRect, aHelpText ) ;
             }
             Touch();
         }

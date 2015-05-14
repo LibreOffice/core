@@ -1084,7 +1084,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 
             OUString aHelpStr;
             Rectangle aRect;
-            sal_uInt16 nAlign;
+            QuickHelpFlags nAlign;
             if (bHoriz)
             {
                 aHelpStr = ScGlobal::GetRscString(STR_COLUMN) +
@@ -1092,7 +1092,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 
                 aRect.Left() = aMousePos.X();
                 aRect.Top()  = aPos.Y() - 4;
-                nAlign       = QUICKHELP_BOTTOM|QUICKHELP_CENTER;
+                nAlign       = QuickHelpFlags::Bottom|QuickHelpFlags::Center;
             }
             else
             {
@@ -1102,7 +1102,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
                 // show quicktext always inside sheet area
                 aRect.Left() = bLayoutRTL ? (aPos.X() + aSize.Width() + 8) : (aPos.X() - 8);
                 aRect.Top()  = aMousePos.Y();
-                nAlign       = (bLayoutRTL ? QUICKHELP_LEFT : QUICKHELP_RIGHT) | QUICKHELP_VCENTER;
+                nAlign       = (bLayoutRTL ? QuickHelpFlags::Left : QuickHelpFlags::Right) | QuickHelpFlags::VCenter;
             }
             aRect.Right()   = aRect.Left();
             aRect.Bottom()  = aRect.Top();

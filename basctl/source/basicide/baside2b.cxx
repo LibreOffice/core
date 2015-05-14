@@ -382,7 +382,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                     }
                 }
             }
-            Help::ShowQuickHelp( this, Rectangle( aTopLeft, Size( 1, 1 ) ), aHelpText, QUICKHELP_TOP|QUICKHELP_LEFT);
+            Help::ShowQuickHelp( this, Rectangle( aTopLeft, Size( 1, 1 ) ), aHelpText, QuickHelpFlags::Top|QuickHelpFlags::Left);
             bDone = true;
         }
     }

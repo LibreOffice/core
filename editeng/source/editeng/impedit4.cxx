@@ -2697,7 +2697,7 @@ void ImpEditEngine::SetAutoCompleteText(const OUString& rStr, bool bClearTipWind
 {
     aAutoCompleteText = rStr;
     if ( bClearTipWindow && pActiveView )
-        Help::ShowQuickHelp( pActiveView->GetWindow(), Rectangle(), OUString(), 0 );
+        Help::ShowQuickHelp( pActiveView->GetWindow(), Rectangle(), OUString() );
 }
 
 namespace

@@ -910,7 +910,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
             else
                 sMsg = *static_cast<OUString*>(pEntry->GetUserData());
             Help::ShowQuickHelp( this, aItemRect, sMsg,
-                        QUICKHELP_LEFT|QUICKHELP_VCENTER );
+                        QuickHelpFlags::Left|QuickHelpFlags::VCenter );
         }
     }
 }

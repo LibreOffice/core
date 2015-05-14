@@ -170,7 +170,7 @@ void MyFixedText::RequestHelp( const HelpEvent& rHEvt )
     Point   aShowPoint= OutputToScreenPixel(Point(0,0));
     if ( ( rHEvt.GetMode() & HELPMODE_QUICK ) == HELPMODE_QUICK &&
          aTxtSize.Width()>GetSizePixel().Width())
-        Help::ShowQuickHelp( Rectangle(aShowPoint,aTxtSize), aTxtStr, QUICKHELP_TOP|QUICKHELP_LEFT );
+        Help::ShowQuickHelp( Rectangle(aShowPoint,aTxtSize), aTxtStr, QuickHelpFlags::Top|QuickHelpFlags::Left );
     else
         FixedText::RequestHelp( rHEvt );
 }

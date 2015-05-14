@@ -2888,13 +2888,13 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                     }
                     else
                         Help::ShowQuickHelp( this, aItemRect, sEntry,
-                            QUICKHELP_LEFT|QUICKHELP_VCENTER );
+                            QuickHelpFlags::Left|QuickHelpFlags::VCenter );
                     bCallBase = false;
                 }
             }
             else
             {
-                Help::ShowQuickHelp( this, Rectangle(), OUString(), 0 );
+                Help::ShowQuickHelp( this, Rectangle(), OUString() );
                 bCallBase = false;
             }
         }

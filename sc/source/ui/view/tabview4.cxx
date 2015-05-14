@@ -75,8 +75,8 @@ void ScTabView::ShowRefTip()
 
                 Point aPos( bLeft ? aStart.X() : ( aEnd.X() + 3 ),
                             bTop ? aStart.Y() : ( aEnd.Y() + 3 ) );
-                sal_uInt16 nFlags = ( bLeft ? QUICKHELP_RIGHT : QUICKHELP_LEFT ) |
-                                ( bTop ? QUICKHELP_BOTTOM : QUICKHELP_TOP );
+                QuickHelpFlags nFlags = ( bLeft ? QuickHelpFlags::Right : QuickHelpFlags::Left ) |
+                                ( bTop ? QuickHelpFlags::Bottom : QuickHelpFlags::Top );
 
                 // nicht ueber die editierte Formel
                 if ( !bTop && aViewData.HasEditView( eWhich ) &&
@@ -84,7 +84,7 @@ void ScTabView::ShowRefTip()
                 {
                     //  dann an der oberen Kante der editierten Zelle ausrichten
                     aPos.Y() -= 2;      // die 3 von oben
-                    nFlags = ( nFlags & ~QUICKHELP_TOP ) | QUICKHELP_BOTTOM;
+                    nFlags = ( nFlags & ~QuickHelpFlags::Top ) | QuickHelpFlags::Bottom;
                 }
 
                 Rectangle aRect( pWin->OutputToScreenPixel( aPos ), Size(1,1) );
@@ -275,7 +275,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             aPos.Y() += 4;
             aPos = pWin->OutputToScreenPixel( aPos );
             Rectangle aRect( aPos, aPos );
-            sal_uInt16 nAlign = QUICKHELP_LEFT|QUICKHELP_TOP;
+            QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Top;
             Help::ShowQuickHelp(pWin, aRect, aHelpStr, nAlign);
         }
     }

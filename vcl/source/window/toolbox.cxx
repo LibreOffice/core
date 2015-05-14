@@ -4250,7 +4250,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
                 Help::ShowBalloon( this, aHelpPos, aTempRect, aStr );
             }
             else
-                Help::ShowQuickHelp( this, aTempRect, aStr, rHelpStr, QUICKHELP_CTRLTEXT );
+                Help::ShowQuickHelp( this, aTempRect, aStr, rHelpStr, QuickHelpFlags::CtrlText );
             return;
         }
         else if ( rHEvt.GetMode() & HelpEventMode::EXTENDED )

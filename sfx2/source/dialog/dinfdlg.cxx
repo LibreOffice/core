@@ -1339,7 +1339,7 @@ void CustomPropertiesDurationField::RequestHelp( const HelpEvent& rHEvt )
             Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), GetText() );
         else
             Help::ShowQuickHelp( this, aItemRect, GetText(),
-                QUICKHELP_LEFT|QUICKHELP_VCENTER );
+                QuickHelpFlags::Left|QuickHelpFlags::VCenter );
     }
 }
 

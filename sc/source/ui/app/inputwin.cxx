@@ -2365,7 +2365,7 @@ void ScPosWnd::Modify()
             Rectangle aRect( aPos, aPos );
 
             OUString aText = ScGlobal::GetRscString( nStrId );
-            sal_uInt16 nAlign = QUICKHELP_LEFT|QUICKHELP_BOTTOM;
+            QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
             nTipVisible = Help::ShowTip(pWin, aRect, aText, nAlign);
         }
     }

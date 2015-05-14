@@ -23,6 +23,8 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>
 
+enum class QuickHelpFlags;
+
 // - HelpTextWindow -
 
 class HelpTextWindow : public FloatingWindow
@@ -39,7 +41,7 @@ private:
     Timer               maHideTimer;
 
     sal_uInt16          mnHelpWinStyle;
-    sal_uInt16          mnStyle;
+    QuickHelpFlags      mnStyle;
 
 protected:
                         DECL_LINK_TYPED( TimerHdl, Timer*, void );
@@ -49,14 +51,14 @@ protected:
     void                ImplShow();
 
 public:
-                        HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle );
+                        HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle );
     virtual             ~HelpTextWindow();
     virtual void        dispose() SAL_OVERRIDE;
 
     const OUString&     GetHelpText() const { return maHelpText; }
     void                SetHelpText( const OUString& rHelpText );
     sal_uInt16          GetWinStyle() const { return mnHelpWinStyle; }
-    sal_uInt16          GetStyle() const { return mnStyle; }
+    QuickHelpFlags      GetStyle() const { return mnStyle; }
 
     // Nur merken:
     void                SetStatusText( const OUString& rStatusText ) { maStatusText = rStatusText; }
@@ -70,11 +72,11 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };
 
-void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
+void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
         const OUString& rHelpText, const OUString& rStatusText,
         const Point& rScreenPos, const Rectangle* pHelpArea = NULL );
 void ImplDestroyHelpWindow( bool bUpdateHideTime );
-void ImplSetHelpWindowPos( vcl::Window* pHelpWindow, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
+void ImplSetHelpWindowPos( vcl::Window* pHelpWindow, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
                             const Point& rPos, const Rectangle* pHelpArea );
 
 #endif // INCLUDED_VCL_INC_HELPWIN_HXX

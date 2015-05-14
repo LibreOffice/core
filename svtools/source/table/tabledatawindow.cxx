@@ -74,7 +74,7 @@ namespace svt { namespace table
         }
 
         OUString sHelpText;
-        sal_uInt16 nHelpStyle = 0;
+        QuickHelpFlags nHelpStyle = QuickHelpFlags::NONE;
 
         Point const aMousePos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
         RowPos const hitRow = m_rTableControl.getRowAtPoint( aMousePos );
@@ -112,7 +112,7 @@ namespace svt { namespace table
                 pTableModel->getRenderer()->GetFormattedCellString( aCellToolTip, hitCol, hitRow, sHelpText );
 
                 if ( sHelpText.indexOf( '\n' ) >= 0 )
-                    nHelpStyle = QUICKHELP_TIP_STYLE_BALLOON;
+                    nHelpStyle = QuickHelpFlags::TipStyleBalloon;
             }
         }
 

@@ -3210,7 +3210,7 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
                 aItemRect.Bottom() = aPt.Y();
 
                 Help::ShowQuickHelp( pView, aItemRect,
-                                     static_cast<SvLBoxString*>(pItem)->GetText(), QUICKHELP_LEFT | QUICKHELP_VCENTER );
+                                     static_cast<SvLBoxString*>(pItem)->GetText(), QuickHelpFlags::Left | QuickHelpFlags::VCenter );
                 return true;
             }
         }

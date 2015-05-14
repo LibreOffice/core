@@ -1797,7 +1797,7 @@ void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
                     aPos = OutputToScreenPixel(aPos);
                      Rectangle aItemRect( aPos, aSize );
                     Help::ShowQuickHelp( this, aItemRect, sEntry,
-                            QUICKHELP_LEFT|QUICKHELP_VCENTER );
+                            QuickHelpFlags::Left|QuickHelpFlags::VCenter );
                 }
             }
         }
@@ -3464,7 +3464,7 @@ bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
         }
         else
             Help::ShowQuickHelp( this, aItemRect, sEntry,
-                QUICKHELP_LEFT|QUICKHELP_VCENTER );
+                QuickHelpFlags::Left|QuickHelpFlags::VCenter );
         bRet = true;
     }
     return bRet;

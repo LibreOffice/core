@@ -138,7 +138,7 @@ void ToolTip::DoShow()
             pWindow,
             aBox,
             msCurrentHelpText,
-            QUICKHELP_CENTER | QUICKHELP_TOP);
+            QuickHelpFlags::Center | QuickHelpFlags::Top);
     }
 }
 

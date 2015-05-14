@@ -1425,7 +1425,7 @@ IMPL_LINK( SwPagePreview, ScrollHdl, SwScrollbar *, pScrollbar )
         aRect.Bottom()  = aRect.Top();
 
         Help::ShowQuickHelp(pScrollbar, aRect, sStateStr,
-                QUICKHELP_RIGHT|QUICKHELP_VCENTER);
+                QuickHelpFlags::Right|QuickHelpFlags::VCenter);
 
     }
     else
@@ -1444,7 +1444,7 @@ IMPL_LINK( SwPagePreview, EndScrollHdl, SwScrollbar *, pScrollbar )
     if( !pScrollbar->IsHoriScroll() )       // scroll vertically
     {
         if ( Help::IsQuickHelpEnabled() )
-            Help::ShowQuickHelp(pScrollbar, Rectangle(), OUString(), 0);
+            Help::ShowQuickHelp(pScrollbar, Rectangle(), OUString());
         if ( GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow() )
         {
             // Scroll how many pages ??

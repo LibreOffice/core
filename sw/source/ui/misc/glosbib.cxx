@@ -434,7 +434,7 @@ void SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
                                 + SwGlossaries::GetExtension();
 
             Help::ShowQuickHelp( this, aItemRect, sMsg,
-                        QUICKHELP_LEFT|QUICKHELP_VCENTER );
+                        QuickHelpFlags::Left|QuickHelpFlags::VCenter );
         }
     }
 }

@@ -1342,7 +1342,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                                     aPos = pEditView->pImpEditView->GetWindow()->LogicToPixel( aPos );
                                     aPos = pEditView->GetWindow()->OutputToScreenPixel( aPos );
                                     aPos.Y() -= 3;
-                                    Help::ShowQuickHelp( pEditView->GetWindow(), Rectangle( aPos, Size( 1, 1 ) ), aComplete, QUICKHELP_BOTTOM|QUICKHELP_LEFT );
+                                    Help::ShowQuickHelp( pEditView->GetWindow(), Rectangle( aPos, Size( 1, 1 ) ), aComplete, QuickHelpFlags::Bottom|QuickHelpFlags::Left );
                                 }
                             }
                         }

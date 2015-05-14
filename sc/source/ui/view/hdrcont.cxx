@@ -900,20 +900,20 @@ void ScHeaderControl::ShowDragHelp()
         Point aMousePos = OutputToScreenPixel(GetPointerPosPixel());
 
         Rectangle aRect;
-        sal_uInt16 nAlign;
+        QuickHelpFlags nAlign;
         if (!bVertical)
         {
             // above
             aRect.Left() = aMousePos.X();
             aRect.Top()  = aPos.Y() - 4;
-            nAlign       = QUICKHELP_BOTTOM|QUICKHELP_CENTER;
+            nAlign       = QuickHelpFlags::Bottom|QuickHelpFlags::Center;
         }
         else
         {
             // top right
             aRect.Left() = aPos.X() + aSize.Width() + 8;
             aRect.Top()  = aMousePos.Y() - 2;
-            nAlign       = QUICKHELP_LEFT|QUICKHELP_BOTTOM;
+            nAlign       = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
         }
 
         aRect.Right()   = aRect.Left();

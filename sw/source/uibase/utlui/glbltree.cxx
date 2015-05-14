@@ -497,7 +497,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
                 }
                 else
                     Help::ShowQuickHelp( this, aItemRect, sEntry,
-                        QUICKHELP_LEFT|QUICKHELP_VCENTER );
+                        QuickHelpFlags::Left|QuickHelpFlags::VCenter );
             }
         }
     }

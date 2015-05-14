@@ -147,7 +147,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
         if( rSh.GetContentAtPos( aPos, aCntntAtPos, false, &aFldRect ) )
         {
-            sal_uInt16 nStyle = 0; // style of quick help
+            QuickHelpFlags nStyle = QuickHelpFlags::NONE; // style of quick help
             switch( aCntntAtPos.eCntntAtPos )
             {
             case SwContentAtPos::SW_TABLEBOXFML:
@@ -255,7 +255,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     ? STR_ENDNOTE : STR_FTNNOTE ) + sTmp;
                     bBalloon = true;
                     if( aCntntAtPos.IsInRTLText() )
-                        nStyle |= QUICKHELP_BIDI_RTL;
+                        nStyle |= QuickHelpFlags::BiDiRtl;
                 }
                 break;
 

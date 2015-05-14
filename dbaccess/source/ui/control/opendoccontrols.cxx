@@ -297,7 +297,7 @@ namespace dbaui
                 OutputToScreenPixel( aItemRect.TopLeft() ),
                 OutputToScreenPixel( aItemRect.BottomRight() ) );
             OUString sHelpText = impl_getDocumentAtIndex( nItemIndex, true ).first;
-            Help::ShowQuickHelp( this, aItemRect, sHelpText, QUICKHELP_LEFT | QUICKHELP_VCENTER );
+            Help::ShowQuickHelp( this, aItemRect, sHelpText, QuickHelpFlags::Left | QuickHelpFlags::VCenter );
         }
     }
 

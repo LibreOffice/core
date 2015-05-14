@@ -446,7 +446,7 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
             Point  aPos      = pScroll->GetParent()->OutputToNormalizedScreenPixel( pScroll->GetPosPixel() );
             OUString aHelpStr;
             Rectangle aRect;
-            sal_uInt16   nAlign;
+            QuickHelpFlags nAlign;
 
             if( nDelta < 0 )
             {
@@ -474,7 +474,7 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
             aRect.Top()     = aMousePos.Y();
             aRect.Right()   = aRect.Left();
             aRect.Bottom()  = aRect.Top();
-            nAlign          = QUICKHELP_BOTTOM|QUICKHELP_CENTER;
+            nAlign          = QuickHelpFlags::Bottom|QuickHelpFlags::Center;
             Help::ShowQuickHelp( pScroll->GetParent(), aRect, aHelpStr, nAlign );
         }
     }
