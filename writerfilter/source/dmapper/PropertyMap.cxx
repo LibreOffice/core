@@ -427,6 +427,7 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     ,m_bSFBiDi( false )
     ,m_nGridType(0)
     ,m_nGridLinePitch( 1 )
+    ,m_bGridSnapToChars(true)
     ,m_nDxtCharSpace( 0 )
     ,m_nLnnMod( 0 )
     ,m_nLnc( 0 )
@@ -1169,6 +1170,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         // PROP_GRID_MODE
         Insert( PROP_GRID_MODE, uno::makeAny( static_cast<sal_Int16> (m_nGridType) ));
+        if (m_nGridType == text::TextGridMode::LINES_AND_CHARS)
+        {
+            Insert( PROP_GRID_SNAP_TO_CHARS, uno::makeAny(m_bGridSnapToChars));
+        }
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
         //todo: is '0' the right index here?
