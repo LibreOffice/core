@@ -69,11 +69,11 @@ namespace pcr
         m_aFtTitle->Show();
     }
 
-
     OBrowserLine::~OBrowserLine()
     {
         implHideBrowseButton( true, false );
         implHideBrowseButton( false, false );
+        m_aFtTitle.disposeAndClear();
     }
 
 
