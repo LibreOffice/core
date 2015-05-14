@@ -939,6 +939,36 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aSeq.getLength());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testPictureColormodeGrayscale, "picture_colormode_grayscale.docx")
+{
+    // THe problem was that the grayscale was not exported
+    xmlDocPtr pXmlDoc = parseExport ("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:grayscl", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testPictureColormodeBlackWhite, "picture_colormode_black_white.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport ("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:biLevel", "thresh", "50000");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testPictureColormodeWatermark, "picture_colormode_watermark.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport ("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:lum", "bright", "50000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:lum", "contrast", "-70000");
+}
+
+
 DECLARE_OOXMLEXPORT_TEST(testExportShadow, "bnc637947.odt")
 {
     // The problem was that shadows of shapes from non-OOXML origin were not exported to DrawingML
