@@ -61,7 +61,7 @@ private:
 
 protected:
     virtual bool Close() SAL_OVERRIDE;
-    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 
 public:

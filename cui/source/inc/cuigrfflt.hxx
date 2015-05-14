@@ -91,11 +91,6 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
 
-
-
-// - GraphicFilterSmooth -
-
-
 class GraphicFilterSmooth : public GraphicFilterDialog
 {
 private:
@@ -110,10 +105,6 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     double          GetRadius() const { return mpMtrRadius->GetValue() / 10.0; }
 };
-
-
-// - GraphicFilterMosaic -
-
 
 class GraphicFilterMosaic : public GraphicFilterDialog
 {
@@ -135,10 +126,6 @@ public:
     bool        IsEnhanceEdges() const { return mpCbxEdges->IsChecked(); }
 };
 
-
-// - GraphicFilterSolarize -
-
-
 class GraphicFilterSolarize : public GraphicFilterDialog
 {
 private:
@@ -157,10 +144,6 @@ public:
     bool            IsInvert() const { return mpCbxInvert->IsChecked(); }
 };
 
-
-// - GraphicFilterSepia -
-
-
 class GraphicFilterSepia : public GraphicFilterDialog
 {
 private:
@@ -177,10 +160,6 @@ public:
     }
 };
 
-
-// - GraphicFilterPoster -
-
-
 class GraphicFilterPoster : public GraphicFilterDialog
 {
 private:
@@ -194,10 +173,6 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     sal_uInt16      GetPosterColorCount() const { return( (sal_uInt16) mpNumPoster->GetValue() ); }
 };
-
-
-// - GraphicFilterEmboss -
-
 
 class EmbossControl : public SvxRectCtl
 {

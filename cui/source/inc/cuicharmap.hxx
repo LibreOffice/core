@@ -39,8 +39,7 @@ namespace svx
 class SvxShowText : public Control
 {
 public:
-                    SvxShowText( vcl::Window* pParent,
-                                 bool bCenter = false );
+    SvxShowText(vcl::Window* pParent, bool bCenter = false);
 
     void            SetFont( const vcl::Font& rFont );
     void            SetText( const OUString& rText ) SAL_OVERRIDE;
@@ -51,7 +50,7 @@ public:
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
 protected:
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) SAL_OVERRIDE;
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
 
 private:
     long            mnY;
