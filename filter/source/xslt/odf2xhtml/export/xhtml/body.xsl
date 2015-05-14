@@ -1262,7 +1262,7 @@
 		<!-- REFERENCE HANDLING - ANCHOR -->
 		<xsl:element namespace="{$namespace}" name="a">
 			<xsl:attribute name="id">
-				<xsl:value-of select="translate(concat('a_',normalize-space($headingNumber), '_', normalize-space($title)), '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+				<xsl:value-of select="translate(concat('a_',normalize-space($headingNumber), '_', normalize-space($title)), '&#xA;&amp;&lt;&gt;–.,;: %()[]/\+', '____________________________')" disable-output-escaping="yes"/>
 			</xsl:attribute>
 
 			<xsl:element name="span">
