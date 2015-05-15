@@ -2515,104 +2515,104 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, Any &
 OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const Any &aURLAny, const uno::Reference< beans::XPropertySet > *pSettings,
                                                 const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir)
 {
-        INetURLObject aURL( rURI );
-        OUString sExt( aURL.GetExtension() );
-        Any aTableFilterAny;
-        Any aSuppressVersionsAny;
-        Any aInfoAny;
-        bool bStore = true;
-        OUString sFind;
-        Sequence<OUString> aFilters(1);
+    INetURLObject aURL( rURI );
+    OUString sExt( aURL.GetExtension() );
+    Any aTableFilterAny;
+    Any aSuppressVersionsAny;
+    Any aInfoAny;
+    bool bStore = true;
+    OUString sFind;
+    Sequence<OUString> aFilters(1);
 
-        switch (type) {
-        case DBCONN_UNKNOWN:
-        case DBCONN_CALC:
-            break;
-        case DBCONN_ODB:
-            bStore = false;
-            break;
-        case DBCONN_FLAT:
-        case DBCONN_DBASE:
-            //set the filter to the file name without extension
-            aFilters[0] = aURL.getBase();
-            aTableFilterAny <<= aFilters;
-            break;
-        case DBCONN_MSJET:
-        case DBCONN_MSACE:
-            aSuppressVersionsAny <<= makeAny(true);
-            break;
-        }
+    switch (type) {
+    case DBCONN_UNKNOWN:
+    case DBCONN_CALC:
+        break;
+    case DBCONN_ODB:
+        bStore = false;
+        break;
+    case DBCONN_FLAT:
+    case DBCONN_DBASE:
+        //set the filter to the file name without extension
+        aFilters[0] = aURL.getBase();
+        aTableFilterAny <<= aFilters;
+        break;
+    case DBCONN_MSJET:
+    case DBCONN_MSACE:
+        aSuppressVersionsAny <<= makeAny(true);
+        break;
+    }
 
-        try
+    try
+    {
+        Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+        Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
+
+        OUString sNewName = INetURLObject::decode( aURL.getName(),
+                                                 INetURLObject::DECODE_UNAMBIGUOUS,
+                                                 RTL_TEXTENCODING_UTF8 );
+        sal_Int32 nExtLen = aURL.GetExtension().getLength();
+        sNewName = sNewName.replaceAt( sNewName.getLength() - nExtLen - 1, nExtLen + 1, "" );
+        if (pPrefix)
+            sNewName = *pPrefix + sNewName;
+
+        //find a unique name if sNewName already exists
+        sFind = sNewName;
+        sal_Int32 nIndex = 0;
+        while(xDBContext->hasByName(sFind))
         {
-            Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-            Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
-
-            OUString sNewName = INetURLObject::decode( aURL.getName(),
-                                                     INetURLObject::DECODE_UNAMBIGUOUS,
-                                                     RTL_TEXTENCODING_UTF8 );
-            sal_Int32 nExtLen = aURL.GetExtension().getLength();
-            sNewName = sNewName.replaceAt( sNewName.getLength() - nExtLen - 1, nExtLen + 1, "" );
-            if (pPrefix)
-                sNewName = *pPrefix + sNewName;
-
-            //find a unique name if sNewName already exists
             sFind = sNewName;
-            sal_Int32 nIndex = 0;
-            while(xDBContext->hasByName(sFind))
-            {
-                sFind = sNewName;
-                sFind += OUString::number(++nIndex);
-            }
-
-            Reference<XInterface> xNewInstance;
-            if(!bStore)
-            {
-                //odb-file
-                Any aDataSource = xDBContext->getByName(aURL.GetMainURL(INetURLObject::NO_DECODE));
-                aDataSource >>= xNewInstance;
-            }
-            else
-            {
-                xNewInstance = xDBContext->createInstance();
-                Reference<XPropertySet> xDataProperties(xNewInstance, UNO_QUERY);
-
-                if(aURLAny.hasValue())
-                    xDataProperties->setPropertyValue("URL", aURLAny);
-                if(aTableFilterAny.hasValue())
-                    xDataProperties->setPropertyValue("TableFilter", aTableFilterAny);
-                if(aSuppressVersionsAny.hasValue())
-                    xDataProperties->setPropertyValue("SuppressVersionColumns", aSuppressVersionsAny);
-                if(aInfoAny.hasValue())
-                    xDataProperties->setPropertyValue("Info", aInfoAny);
-
-                if( DBCONN_FLAT == type && pSettings )
-                {
-                        uno::Any aSettings = xDataProperties->getPropertyValue( "Settings" );
-                        uno::Reference < beans::XPropertySet > xDSSettings;
-                        aSettings >>= xDSSettings;
-                        ::comphelper::copyProperties( *pSettings, xDSSettings );
-                        xDSSettings->setPropertyValue( "Extension", uno::makeAny( sExt ));
-                }
-
-                Reference<XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
-                Reference<XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
-                OUString sOutputExt = ".odb";
-                OUString sTmpName;
-                {
-                    OUString sHomePath(SvtPathOptions().GetWorkPath());
-                    utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
-                    aTempFile.EnableKillingFile(true);
-                    sTmpName = aTempFile.GetURL();
-                }
-                xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());
-            }
-            xDBContext->registerObject( sFind, xNewInstance );
+            sFind += OUString::number(++nIndex);
         }
-        catch(const Exception&)
+
+        Reference<XInterface> xNewInstance;
+        if(!bStore)
         {
-            sFind.clear();
+            //odb-file
+            Any aDataSource = xDBContext->getByName(aURL.GetMainURL(INetURLObject::NO_DECODE));
+            aDataSource >>= xNewInstance;
         }
+        else
+        {
+            xNewInstance = xDBContext->createInstance();
+            Reference<XPropertySet> xDataProperties(xNewInstance, UNO_QUERY);
+
+            if(aURLAny.hasValue())
+                xDataProperties->setPropertyValue("URL", aURLAny);
+            if(aTableFilterAny.hasValue())
+                xDataProperties->setPropertyValue("TableFilter", aTableFilterAny);
+            if(aSuppressVersionsAny.hasValue())
+                xDataProperties->setPropertyValue("SuppressVersionColumns", aSuppressVersionsAny);
+            if(aInfoAny.hasValue())
+                xDataProperties->setPropertyValue("Info", aInfoAny);
+
+            if( DBCONN_FLAT == type && pSettings )
+            {
+                    uno::Any aSettings = xDataProperties->getPropertyValue( "Settings" );
+                    uno::Reference < beans::XPropertySet > xDSSettings;
+                    aSettings >>= xDSSettings;
+                    ::comphelper::copyProperties( *pSettings, xDSSettings );
+                    xDSSettings->setPropertyValue( "Extension", uno::makeAny( sExt ));
+            }
+
+            Reference<XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
+            Reference<XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
+            OUString sOutputExt = ".odb";
+            OUString sTmpName;
+            {
+                OUString sHomePath(SvtPathOptions().GetWorkPath());
+                utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
+                aTempFile.EnableKillingFile(true);
+                sTmpName = aTempFile.GetURL();
+            }
+            xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());
+        }
+        xDBContext->registerObject( sFind, xNewInstance );
+    }
+    catch(const Exception&)
+    {
+        sFind.clear();
+    }
     return sFind;
 }
 
