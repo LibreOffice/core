@@ -87,7 +87,7 @@ private:
 
     std::map< sal_uInt16, AddButtonEntry > m_aAddButtons;
 
-    void            HighlightItem( sal_uInt16 nPos, bool bHighlight );
+    void            HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight);
     virtual void    ChangeHighlightItem(sal_uInt16 n, bool bSelectPopupEntry, bool bAllowRestoreFocus = true, bool bDefaultToDocument = true) SAL_OVERRIDE;
 
     sal_uInt16      ImplFindEntry( const Point& rMousePos ) const;
@@ -131,7 +131,7 @@ public:
     virtual void    KillActivePopup() SAL_OVERRIDE;
     virtual void    PopupClosed(Menu* pMenu) SAL_OVERRIDE;
     virtual sal_uInt16 GetHighlightedItem() const SAL_OVERRIDE { return nHighlightedItem; }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
     virtual void    SetAutoPopup(bool bAuto) SAL_OVERRIDE { mbAutoPopup = bAuto; }
     virtual void    LayoutChanged() SAL_OVERRIDE;

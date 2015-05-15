@@ -1820,7 +1820,7 @@ void Menu::ImplPaint(vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuIt
 {
     // for symbols: nFontHeight x nFontHeight
     long nFontHeight = pWin->GetTextHeight();
-    long nExtra = nFontHeight/4;
+    long nExtra = nFontHeight / 4;
 
     long nCheckHeight = 0, nRadioHeight = 0;
     ImplGetNativeCheckAndRadioSize( pWin, nCheckHeight, nRadioHeight );

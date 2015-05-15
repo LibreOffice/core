@@ -36,86 +36,87 @@ class MenuFloatingWindow : public FloatingWindow, public MenuWindow
     friend Menu::~Menu();
 
 private:
-    Menu*           pMenu;
-    PopupMenu*      pActivePopup;
-    Timer           aHighlightChangedTimer;
-    Timer           aSubmenuCloseTimer;
-    Timer           aScrollTimer;
-    sal_uLong           nSaveFocusId;
-    sal_uInt16          nHighlightedItem;       // highlighted/selected Item
-    sal_uInt16          nMBDownPos;
-    sal_uInt16          nScrollerHeight;
-    sal_uInt16          nFirstEntry;
-    sal_uInt16          nBorder;
-    sal_uInt16          nPosInParent;
-    bool            bInExecute;
+    Menu* pMenu;
+    PopupMenu* pActivePopup;
+    Timer aHighlightChangedTimer;
+    Timer aSubmenuCloseTimer;
+    Timer aScrollTimer;
+    sal_uLong nSaveFocusId;
+    sal_uInt16 nHighlightedItem; // highlighted/selected Item
+    sal_uInt16 nMBDownPos;
+    sal_uInt16 nScrollerHeight;
+    sal_uInt16 nFirstEntry;
+    sal_uInt16 nBorder;
+    sal_uInt16 nPosInParent;
 
-    bool            bScrollMenu;
-    bool            bScrollUp;
-    bool            bScrollDown;
-    bool            bIgnoreFirstMove;
-    bool            bKeyInput;
+    bool bInExecute : 1;
 
-                    DECL_LINK(PopupEnd, void *);
-                    DECL_LINK_TYPED( HighlightChanged, Timer*, void );
-                    DECL_LINK_TYPED(SubmenuClose, Timer *, void);
-                    DECL_LINK_TYPED(AutoScroll, Timer *, void);
-                    DECL_LINK( ShowHideListener, VclWindowEvent* );
+    bool bScrollMenu : 1;
+    bool bScrollUp : 1;
+    bool bScrollDown : 1;
+    bool bIgnoreFirstMove : 1;
+    bool bKeyInput : 1;
 
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    DECL_LINK(PopupEnd, void *);
+    DECL_LINK_TYPED( HighlightChanged, Timer*, void );
+    DECL_LINK_TYPED(SubmenuClose, Timer *, void);
+    DECL_LINK_TYPED(AutoScroll, Timer *, void);
+    DECL_LINK( ShowHideListener, VclWindowEvent* );
 
-    void            InitMenuClipRegion();
+    virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
+    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+
+    void InitMenuClipRegion(vcl::RenderContext& rRenderContext);
 
 protected:
-    vcl::Region          ImplCalcClipRegion( bool bIncludeLogo = true ) const;
-    void            ImplDrawScroller( bool bUp );
+    vcl::Region ImplCalcClipRegion( bool bIncludeLogo = true ) const;
+    void ImplDrawScroller(vcl::RenderContext& rRenderContext, bool bUp);
     using Window::ImplScroll;
-    void            ImplScroll( const Point& rMousePos );
-    void            ImplScroll( bool bUp );
-    void            ImplCursorUpDown( bool bUp, bool bHomeEnd = false );
-    void            ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDown );
-    long            ImplGetStartY() const;
-    Rectangle       ImplGetItemRect( sal_uInt16 nPos );
+    void ImplScroll( const Point& rMousePos );
+    void ImplScroll( bool bUp );
+    void ImplCursorUpDown( bool bUp, bool bHomeEnd = false );
+    void ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDown );
+    long ImplGetStartY() const;
+    Rectangle ImplGetItemRect( sal_uInt16 nPos );
 
 public:
                     MenuFloatingWindow( Menu* pMenu, vcl::Window* pParent, WinBits nStyle );
     virtual         ~MenuFloatingWindow();
-    virtual void    dispose() SAL_OVERRIDE;
 
-            void    doShutdown();
+    virtual void dispose() SAL_OVERRIDE;
+    void doShutdown();
 
-    virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
+    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
+    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
-    void            SetFocusId( sal_uLong nId ) { nSaveFocusId = nId; }
-    sal_uLong           GetFocusId() const      { return nSaveFocusId; }
+    void SetFocusId( sal_uLong nId ) { nSaveFocusId = nId; }
+    sal_uLong GetFocusId() const      { return nSaveFocusId; }
 
-    void            EnableScrollMenu( bool b );
-    bool            IsScrollMenu() const        { return bScrollMenu; }
-    sal_uInt16          GetScrollerHeight() const   { return nScrollerHeight; }
+    void EnableScrollMenu( bool b );
+    bool IsScrollMenu() const        { return bScrollMenu; }
+    sal_uInt16 GetScrollerHeight() const   { return nScrollerHeight; }
 
-    void            Execute();
-    void            StopExecute( sal_uLong nFocusId = 0 );
-    void            EndExecute();
-    void            EndExecute( sal_uInt16 nSelectId );
+    void Execute();
+    void StopExecute( sal_uLong nFocusId = 0 );
+    void EndExecute();
+    void EndExecute( sal_uInt16 nSelectId );
 
-    PopupMenu*      GetActivePopup() const  { return pActivePopup; }
-    void            KillActivePopup( PopupMenu* pThisOnly = NULL );
+    PopupMenu* GetActivePopup() const  { return pActivePopup; }
+    void KillActivePopup( PopupMenu* pThisOnly = NULL );
 
-    void            HighlightItem( sal_uInt16 nPos, bool bHighlight );
-    void            ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTimer );
-    sal_uInt16          GetHighlightedItem() const { return nHighlightedItem; }
+    void  HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHighlight);
+    void ChangeHighlightItem(sal_uInt16 n, bool bStartPopupTimer);
+    sal_uInt16 GetHighlightedItem() const { return nHighlightedItem; }
 
-    void            SetPosInParent( sal_uInt16 nPos ) { nPosInParent = nPos; }
+    void SetPosInParent( sal_uInt16 nPos ) { nPosInParent = nPos; }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_SOURCE_WINDOW_MENUFLOATINGWINDOW_HXX
