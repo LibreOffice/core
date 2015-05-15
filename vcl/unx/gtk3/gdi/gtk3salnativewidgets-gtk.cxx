@@ -22,6 +22,7 @@
 
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpEntryStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpTextViewStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpVScrollbarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpHScrollbarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpToolbarStyle = NULL;
@@ -839,6 +840,9 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case CTRL_EDITBOX:
         context = mpEntryStyle;
+        break;
+    case CTRL_MULTILINE_EDITBOX:
+        context = mpTextViewStyle;
         break;
     case CTRL_COMBOBOX:
         context = mpComboboxStyle;
@@ -1709,9 +1713,13 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             break;
 
         case CTRL_EDITBOX:
-//        case CTRL_MULTILINE_EDITBOX:
+        case CTRL_MULTILINE_EDITBOX:
+            if (nPart==PART_ENTIRE_CONTROL || nPart==HAS_BACKGROUND_TEXTURE)
+                return true;
+            break;
+
         case CTRL_COMBOBOX:
-            if(nPart==PART_ENTIRE_CONTROL || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_ALL_BUTTONS)
+            if (nPart==PART_ENTIRE_CONTROL || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_ALL_BUTTONS)
                 return true;
             break;
 
@@ -1886,6 +1894,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     gEntryBox = gtk_entry_new();
     getStyleContext(&mpEntryStyle, gEntryBox);
+    getStyleContext(&mpTextViewStyle, gtk_text_view_new());
     getStyleContext(&mpButtonStyle, gtk_button_new());
 
     getStyleContext(&mpToolbarStyle, gtk_toolbar_new());
