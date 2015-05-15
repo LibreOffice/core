@@ -165,6 +165,7 @@ public:
     void testNumberFormatCSV();
 
     void testCellAnchoredShapesODS();
+    void testCellAnchoredHiddenShapesXLSX();
 
     void testPivotTableBasicODS();
     void testPivotTableNamedRangeSourceODS();
@@ -250,6 +251,7 @@ public:
     CPPUNIT_TEST(testNumberFormatCSV);
 
     CPPUNIT_TEST(testCellAnchoredShapesODS);
+    CPPUNIT_TEST(testCellAnchoredHiddenShapesXLSX);
 
     CPPUNIT_TEST(testPivotTableBasicODS);
     CPPUNIT_TEST(testPivotTableNamedRangeSourceODS);
@@ -1675,6 +1677,27 @@ void ScFiltersTest::testCellAnchoredShapesODS()
     }
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCellAnchoredHiddenShapesXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("cell-anchored-hidden-shapes.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load cell-anchored-shapes.ods", xDocSh.Is());
+
+    // There are two cell-anchored objects on the first sheet.
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc.GetTableCount() > 0);
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+    const size_t nCount = pPage->GetObjCount();
+    CPPUNIT_ASSERT_MESSAGE("There should be 2 shapes.", !(nCount == 2));
+
+    SdrObject* pObj = pPage->GetObj(1);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+    CPPUNIT_ASSERT_MESSAGE("The shape having same twocellanchor from and to attribute values, is visible.", !pObj->IsVisible());
 }
 
 namespace {
