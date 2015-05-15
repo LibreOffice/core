@@ -71,7 +71,7 @@ namespace dbaui
     };
     /// unary_function Functor object for class OConnectionLine returntype is void
     /// draws a connectionline object on outputdevice
-    struct TConnectionLineDrawFunctor : ::std::unary_function<OConnectionLine*,void>
+    struct TConnectionLineDrawFunctor : std::unary_function<OConnectionLine*, void>
     {
         VclPtr<OutputDevice> pDevice;
         TConnectionLineDrawFunctor(OutputDevice* _pDevice)

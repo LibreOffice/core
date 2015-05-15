@@ -103,18 +103,18 @@ void OTableFieldDescWin::SaveData( OFieldDescription* pFieldDescr )
     getGenPage()->SaveData( pFieldDescr );
 }
 
-void OTableFieldDescWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
+void OTableFieldDescWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
     // 3D-line at the top window border
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    SetLineColor( rStyleSettings.GetLightColor() );
-    DrawLine( Point(0,0), Point(GetSizePixel().Width(),0) );
+    rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+    rRenderContext.DrawLine(Point(0,0), Point(GetSizePixel().Width(), 0));
 
     // 3D-line for the separation of the header
-    DrawLine( Point(3, DETAILS_HEADER_HEIGHT), Point(GetSizePixel().Width()-6, DETAILS_HEADER_HEIGHT) );
-    SetLineColor( rStyleSettings.GetShadowColor() );
-    DrawLine( Point(3, DETAILS_HEADER_HEIGHT-1), Point(GetSizePixel().Width()-6, DETAILS_HEADER_HEIGHT-1) );
+    rRenderContext.DrawLine(Point(3, DETAILS_HEADER_HEIGHT), Point(GetSizePixel().Width() - 6, DETAILS_HEADER_HEIGHT));
+    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+    rRenderContext.DrawLine(Point(3, DETAILS_HEADER_HEIGHT - 1), Point(GetSizePixel().Width() - 6, DETAILS_HEADER_HEIGHT - 1));
 }
 
 void OTableFieldDescWin::Resize()

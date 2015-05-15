@@ -193,10 +193,10 @@ namespace dbaui
         return aBoundingRect;
     }
 
-    void OTableConnection::Draw( const Rectangle& /*rRect*/ )
+    void OTableConnection::Draw(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
     {
         // Draw line
-        ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),TConnectionLineDrawFunctor(m_pParent));
+        std::for_each(m_vConnLine.begin(), m_vConnLine.end(), TConnectionLineDrawFunctor(&rRenderContext));
     }
 }
 

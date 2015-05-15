@@ -129,7 +129,7 @@ namespace dbaui
         ScrollBar& GetVScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetVScrollBar(); }
         DECL_LINK( ScrollHdl, ScrollBar* );
 
-        void DrawConnections( const Rectangle& rRect );
+        void DrawConnections(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
         void InvalidateConnections();
 
         void BeginChildMove( OTableWindow* pTabWin, const Point& rMousePos );

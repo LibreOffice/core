@@ -312,33 +312,33 @@ void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
     }
 }
 
-void OTableWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void OTableWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     Rectangle aRect(Point(0,0), GetOutputSizePixel());
     Window::Paint(rRenderContext, rRect);
-    Draw3DBorder( aRect );
+    Draw3DBorder(rRenderContext, aRect);
 }
 
-void OTableWindow::Draw3DBorder(const Rectangle& rRect)
+void OTableWindow::Draw3DBorder(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     // Use the System Style-Settings for my colours
     const StyleSettings& aSystemStyle = Application::GetSettings().GetStyleSettings();
 
     // Black lines for bottom and right
-    SetLineColor(aSystemStyle.GetDarkShadowColor());
-    DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
-    DrawLine( rRect.BottomRight(), rRect.TopRight() );
+    rRenderContext.SetLineColor(aSystemStyle.GetDarkShadowColor());
+    rRenderContext.DrawLine(rRect.BottomLeft(), rRect.BottomRight());
+    rRenderContext.DrawLine(rRect.BottomRight(), rRect.TopRight());
 
     // Dark grey lines over the black lines
-    SetLineColor(aSystemStyle.GetShadowColor());
-    Point aEHvector(1,1);
-    DrawLine( rRect.BottomLeft()+Point(1,-1), rRect.BottomRight() - aEHvector );
-    DrawLine( rRect.BottomRight() - aEHvector, rRect.TopRight()+Point(-1,1) );
+    rRenderContext.SetLineColor(aSystemStyle.GetShadowColor());
+    Point aEHvector(1, 1);
+    rRenderContext.DrawLine(rRect.BottomLeft() + Point(1, -1), rRect.BottomRight() - aEHvector);
+    rRenderContext.DrawLine(rRect.BottomRight() - aEHvector, rRect.TopRight() + Point(-1, 1));
 
     // Light grey lines for top and left
-    SetLineColor(aSystemStyle.GetLightColor());
-    DrawLine( rRect.BottomLeft()+Point(1,-2), rRect.TopLeft() + aEHvector );
-    DrawLine( rRect.TopLeft() + aEHvector, rRect.TopRight()+Point(-2,1) );
+    rRenderContext.SetLineColor(aSystemStyle.GetLightColor());
+    rRenderContext.DrawLine(rRect.BottomLeft() + Point(1, -2), rRect.TopLeft() + aEHvector);
+    rRenderContext.DrawLine(rRect.TopLeft() + aEHvector, rRect.TopRight() + Point(-2, 1));
 }
 
 Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSize) const

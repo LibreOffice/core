@@ -38,27 +38,6 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::frame;
 
-    // ColorChanger
-    class ColorChanger
-    {
-    protected:
-        VclPtr<OutputDevice> m_pDev;
-
-    public:
-        ColorChanger( OutputDevice* _pDev, const ::Color& _rNewLineColor, const ::Color& _rNewFillColor )
-            :m_pDev( _pDev )
-        {
-            m_pDev->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-            m_pDev->SetLineColor( _rNewLineColor );
-            m_pDev->SetFillColor( _rNewFillColor );
-        }
-
-        ~ColorChanger()
-        {
-            m_pDev->Pop();
-        }
-    };
-
     ODataView::ODataView(   vcl::Window* pParent,
                             IController& _rController,
                             const Reference< XComponentContext >& _rxContext,
@@ -97,8 +76,11 @@ namespace dbaui
     {
         // draw the background
         {
-            ColorChanger aColors( this, COL_TRANSPARENT, GetSettings().GetStyleSettings().GetFaceColor() );
-            DrawRect( _rRect );
+            rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+            rRenderContext.SetLineColor(COL_TRANSPARENT);
+            rRenderContext.SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
+            rRenderContext.DrawRect(_rRect);
+            rRenderContext.Pop();
         }
 
         // let the base class do anything it needs

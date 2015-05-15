@@ -50,15 +50,15 @@ void OMarkableTreeListBox::Paint(vcl::RenderContext& rRenderContext, const Recta
 {
     if (!IsEnabled())
     {
-        vcl::Font aOldFont = GetFont();
+        vcl::Font aOldFont = rRenderContext.GetFont();
         vcl::Font aNewFont(aOldFont);
 
         StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
         aNewFont.SetColor(aSystemStyle.GetDisableColor());
 
-        SetFont(aNewFont);
+        rRenderContext.SetFont(aNewFont);
         DBTreeListBox::Paint(rRenderContext, _rRect);
-        SetFont(aOldFont);
+        rRenderContext.SetFont(aOldFont);
     }
     else
         DBTreeListBox::Paint(rRenderContext, _rRect);

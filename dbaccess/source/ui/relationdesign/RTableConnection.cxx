@@ -48,11 +48,11 @@ ORelationTableConnection& ORelationTableConnection::operator=( const ORelationTa
     return *this;
 }
 
-void ORelationTableConnection::Draw( const Rectangle& rRect )
+void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
-    OTableConnection::Draw( rRect );
+    OTableConnection::Draw(rRenderContext, rRect);
     ORelationTableConnectionData* pData = static_cast< ORelationTableConnectionData* >(GetData().get());
-    if ( pData && (pData->GetCardinality() == CARDINAL_UNDEFINED) )
+    if (pData && (pData->GetCardinality() == CARDINAL_UNDEFINED))
         return;
 
     // search lines for top line
@@ -62,15 +62,16 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
 
     const OConnectionLine* pTopLine = NULL;
     const ::std::vector<OConnectionLine*>& rConnLineList = GetConnLineList();
-    ::std::vector<OConnectionLine*>::const_iterator aIter = rConnLineList.begin();
-    ::std::vector<OConnectionLine*>::const_iterator aEnd = rConnLineList.end();
+    std::vector<OConnectionLine*>::const_iterator aIter = rConnLineList.begin();
+    std::vector<OConnectionLine*>::const_iterator aEnd = rConnLineList.end();
+
     for(;aIter != aEnd;++aIter)
     {
         if( (*aIter)->IsValid() )
         {
             aBoundingRect = (*aIter)->GetBoundingRect();
             nTemp = aBoundingRect.Top();
-            if( nTemp<nTop )
+            if(nTemp < nTop)
             {
                 nTop = nTemp;
                 pTopLine = (*aIter);
@@ -79,7 +80,7 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     }
 
     // cardinality
-    if( !pTopLine )
+    if (!pTopLine)
         return;
 
     Rectangle aSourcePos = pTopLine->GetSourceTextPos();
@@ -88,7 +89,7 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     OUString aSourceText;
     OUString aDestText;
 
-    switch( pData->GetCardinality() )
+    switch (pData->GetCardinality())
     {
     case CARDINAL_ONE_MANY:
         aSourceText = "1";
@@ -107,12 +108,12 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     }
 
     if (IsSelected())
-        GetParent()->SetTextColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+        rRenderContext.SetTextColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
     else
-        GetParent()->SetTextColor(Application::GetSettings().GetStyleSettings().GetWindowTextColor());
+        rRenderContext.SetTextColor(Application::GetSettings().GetStyleSettings().GetWindowTextColor());
 
-    GetParent()->DrawText( aSourcePos, aSourceText, TEXT_DRAW_CLIP | TEXT_DRAW_CENTER | TEXT_DRAW_BOTTOM);
-    GetParent()->DrawText( aDestPos, aDestText, TEXT_DRAW_CLIP | TEXT_DRAW_CENTER | TEXT_DRAW_BOTTOM);
+    rRenderContext.DrawText(aSourcePos, aSourceText, TEXT_DRAW_CLIP | TEXT_DRAW_CENTER | TEXT_DRAW_BOTTOM);
+    rRenderContext.DrawText(aDestPos, aDestText, TEXT_DRAW_CLIP | TEXT_DRAW_CENTER | TEXT_DRAW_BOTTOM);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

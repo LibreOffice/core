@@ -87,15 +87,15 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
 
 void OCreationList::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect )
 {
-    if ( m_pMouseDownEntry )
-        m_aOriginalFont = GetFont();
+    if (m_pMouseDownEntry)
+        m_aOriginalFont = rRenderContext.GetFont();
 
-    m_aOriginalBackgroundColor = GetBackground().GetColor();
+    m_aOriginalBackgroundColor = rRenderContext.GetBackground().GetColor();
     SvTreeListBox::Paint(rRenderContext, _rRect);
-    SetBackground( m_aOriginalBackgroundColor );
+    rRenderContext.SetBackground(m_aOriginalBackgroundColor);
 
-    if ( m_pMouseDownEntry )
-        Control::SetFont( m_aOriginalFont );
+    if (m_pMouseDownEntry)
+        rRenderContext.SetFont(m_aOriginalFont);
 }
 
 void OCreationList::PreparePaint( SvTreeListEntry* _pEntry )

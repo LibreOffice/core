@@ -935,26 +935,26 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
     }
 }
 
-void OJoinTableView::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void OJoinTableView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    DrawConnections( rRect );
+    DrawConnections(rRenderContext, rRect);
 }
 
 void OJoinTableView::InvalidateConnections()
 {
     // draw Joins
-    for(auto & conn : m_vTableConnection)
+    for (auto & conn : m_vTableConnection)
         conn->InvalidateConnection();
 }
 
-void OJoinTableView::DrawConnections( const Rectangle& rRect )
+void OJoinTableView::DrawConnections(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     // draw Joins
-    for(auto conn : m_vTableConnection)
-        conn->Draw(rRect);
+    for(auto connection : m_vTableConnection)
+        connection->Draw(rRenderContext, rRect);
     // finally redraw the selected one above all others
     if (GetSelectedConn())
-        GetSelectedConn()->Draw( rRect );
+        GetSelectedConn()->Draw(rRenderContext, rRect);
 }
 
 ::std::vector<VclPtr<OTableConnection> >::const_iterator OJoinTableView::getTableConnections(const OTableWindow* _pFromWin) const
