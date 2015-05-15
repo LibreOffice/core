@@ -3353,6 +3353,9 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
 {
     Point aMousePos = rMEvt.GetPosPixel();
 
+    if ( !mpData )
+        return false;
+
     // ToolBox active?
     if ( mbDrag && mnCurPos != TOOLBOX_ITEM_NOTFOUND )
     {
@@ -3413,6 +3416,9 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
 bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
 {
     ImplDisableFlatButtons();
+
+    if ( !mpData )
+        return false;
 
     // stop eventual running dropdown timer
     if( mnCurPos < mpData->m_aItems.size() &&
@@ -5563,7 +5569,7 @@ void ToolBox::ImplHideFocus()
     if( mnHighItemId )
     {
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
-        if( pItem->mpWindow )
+        if( pItem && pItem->mpWindow )
         {
             vcl::Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
             pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = false;
@@ -5571,7 +5577,7 @@ void ToolBox::ImplHideFocus()
         }
     }
 
-    if ( mpData->mbMenubuttonSelected )
+    if ( mpData && mpData->mbMenubuttonSelected )
     {
         // remove highlight from menubutton
         InvalidateMenuButton(false);
