@@ -39,10 +39,10 @@ constants Type
 
     const long DOCINFO_TITLE = 10;
 
-    const long PRESENTATION_HEADER     = 11;
-    const long PRESENTATION_FOOTER     = 12;
-    const long PRESENTATION_DATE_TIME  = 13;
-    const long PRESENTATION_PAGE_TITLE = 14;
+    const long PRESENTATION_HEADER    = 11;
+    const long PRESENTATION_FOOTER    = 12;
+    const long PRESENTATION_DATE_TIME = 13;
+    const long PAGE_NAME    = 14;
 };
 
 }; }; }; }; };

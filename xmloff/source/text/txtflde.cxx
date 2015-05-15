@@ -141,6 +141,7 @@ static sal_Char const FIELD_SERVICE_OBJECT_COUNT[] = "EmbeddedObjectCount";
 static sal_Char const FIELD_SERVICE_REFERENCE_PAGE_SET[] = "ReferencePageSet";
 static sal_Char const FIELD_SERVICE_REFERENCE_PAGE_GET[] = "ReferencePageGet";
 static sal_Char const FIELD_SERVICE_SHEET_NAME[] = "SheetName";
+static sal_Char const FIELD_SERVICE_PAGE_NAME[] = "PageName";
 static sal_Char const FIELD_SERVICE_MACRO[] = "Macro";
 static sal_Char const FIELD_SERVICE_GET_REFERENCE[] = "GetReference";
 static sal_Char const FIELD_SERVICE_DDE[] = "DDE";
@@ -234,6 +235,7 @@ SvXMLEnumStringMapEntry const aFieldServiceNameMapping[] =
 
     // non-writer fields
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_SHEET_NAME, FIELD_ID_SHEET_NAME ),
+    ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_PAGE_NAME, FIELD_ID_PAGENAME ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_URL, FIELD_ID_URL ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_MEASURE, FIELD_ID_MEASURE ),
 
@@ -413,10 +415,6 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
             else if( sFieldName == "DateTime" )
             {
                 return FIELD_ID_DRAW_DATE_TIME;
-            }
-            else if( sFieldName == "PageTitle" )
-            {
-                return FIELD_ID_DRAW_PAGETITLE;
             }
         }
     }
@@ -615,6 +613,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_FILE_NAME:
         case FIELD_ID_META:
         case FIELD_ID_SHEET_NAME:
+        case FIELD_ID_PAGENAME:
         case FIELD_ID_MEASURE:
         case FIELD_ID_URL:
         case FIELD_ID_TABLE_FORMULA:
@@ -722,6 +721,7 @@ bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_TEXT_INPUT:
     case FIELD_ID_SENDER:
     case FIELD_ID_AUTHOR:
+    case FIELD_ID_PAGENAME:
     case FIELD_ID_PAGESTRING:
     case FIELD_ID_SHEET_NAME:
     case FIELD_ID_MEASURE:
@@ -742,7 +742,6 @@ bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_DRAW_HEADER:
     case FIELD_ID_DRAW_FOOTER:
     case FIELD_ID_DRAW_DATE_TIME:
-    case FIELD_ID_DRAW_PAGETITLE:
     default:
         OSL_FAIL("unknown field type/field has no content");
         return true; // invalid info; string in case of doubt
@@ -937,6 +936,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_DOCINFO_REVISION:
     case FIELD_ID_DOCINFO_SAVE_AUTHOR:
     case FIELD_ID_SEQUENCE:
+    case FIELD_ID_PAGENAME:
     case FIELD_ID_PAGENUMBER:
     case FIELD_ID_PAGESTRING:
     case FIELD_ID_AUTHOR:
@@ -958,7 +958,6 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_DRAW_DATE_TIME:
     case FIELD_ID_DRAW_FOOTER:
     case FIELD_ID_DRAW_HEADER:
-    case FIELD_ID_DRAW_PAGETITLE:
         ; // no formats for these fields!
         break;
 
@@ -1675,6 +1674,16 @@ void XMLTextFieldExport::ExportFieldHelper(
         ExportElement(XML_SHEET_NAME, sPresentation);
         break;
 
+    case FIELD_ID_PAGENAME:
+    {
+        if (SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        {
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT, XML_PAGE_NAME, false, false );
+            GetExport().Characters( sPresentation );
+        }
+        break;
+    }
+
     case FIELD_ID_URL:
     {
         // this field is a special case because it gets mapped onto a
@@ -1851,16 +1860,6 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_DRAW_DATE_TIME:
     {
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_PRESENTATION, XML_DATE_TIME, false, false );
-    }
-    break;
-
-    case FIELD_ID_DRAW_PAGETITLE:
-    {
-        if (SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
-        {
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT, XML_PAGE_TITLE, false, false );
-            GetExport().Characters( sPresentation );
-        }
     }
     break;
 

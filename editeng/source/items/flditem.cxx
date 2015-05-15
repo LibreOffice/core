@@ -117,6 +117,8 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                 return new SvxPageField();
             case text::textfield::Type::PAGES:
                 return new SvxPagesField();
+            case text::textfield::Type::PAGE_NAME:
+                return new SvxPageTitleField();
             case text::textfield::Type::DOCINFO_TITLE:
                 return new SvxFileField();
             case text::textfield::Type::TABLE:
@@ -208,8 +210,6 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                 return new SvxFooterField();
             case text::textfield::Type::PRESENTATION_DATE_TIME:
                 return new SvxDateTimeField();
-            case text::textfield::Type::PRESENTATION_PAGE_TITLE:
-                return new SvxPageTitleField();
             default:
                 ;
         };

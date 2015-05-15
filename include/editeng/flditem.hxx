@@ -194,7 +194,7 @@ public:
 class EDITENG_DLLPUBLIC SvxPageTitleField : public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxPageTitleField, SvxFieldData, com::sun::star::text::textfield::Type::PRESENTATION_PAGE_TITLE )
+    SV_DECL_PERSIST1( SvxPageTitleField, SvxFieldData, com::sun::star::text::textfield::Type::PAGE_NAME )
     SvxPageTitleField();
 
     virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
