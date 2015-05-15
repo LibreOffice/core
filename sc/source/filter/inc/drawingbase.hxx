@@ -92,6 +92,11 @@ public:
     /** Imports the client anchor settings from a VML element. */
     void                importVmlAnchor( const OUString& rAnchor );
 
+    /** Checks whether the shape is visible based on the anchor */
+    /** if From and To anchor has the same attribute values, the shape will not have width and height */
+    /** and thus we can assume that such kind of shape will be not be visible */
+    bool isAnchorValid();
+
     /** Calculates the resulting shape anchor in EMUs. */
     ::oox::drawingml::EmuRectangle calcAnchorRectEmu(
                             const ::com::sun::star::awt::Size& rPageSizeHmm ) const;

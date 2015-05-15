@@ -256,6 +256,7 @@ void DrawingFragment::onEndElement()
                 if ( getCurrentElement() == XDR_TOKEN( twoCellAnchor ) )
                     mxShape->setRotation(0);
                 EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( getDrawPageSize() );
+                bool isShapeVisible = mxAnchor->isAnchorValid();
                 if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
                 {
                     // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
@@ -270,6 +271,9 @@ void DrawingFragment::onEndElement()
                     mxShape->setSize(Size(aShapeRectEmu.Width, aShapeRectEmu.Height));
 
                     basegfx::B2DHomMatrix aTransformation;
+                    if ( !isShapeVisible)
+                        mxShape->setHidden(true);
+
                     mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, mxShape->getFillProperties(), &aShapeRectEmu32 );
 
                     /*  Collect all shape positions in the WorksheetHelper base
