@@ -665,7 +665,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                         rRenderContext.Erase(aRect);
                 }
                 rRenderContext.Pop();
-                pMenu->ImplPaint(this, 0, 0, pData, bHighlight, false, bRollover);
+                pMenu->ImplPaint(rRenderContext, 0, 0, pData, bHighlight, false, bRollover);
             }
             return;
         }
@@ -900,7 +900,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     }
     rRenderContext.SetFillColor(rStyleSettings.GetMenuColor());
 
-    pMenu->ImplPaint(this, 0);
+    pMenu->ImplPaint(rRenderContext, 0);
     if (nHighlightedItem != ITEMPOS_INVALID)
         HighlightItem(rRenderContext, nHighlightedItem, true);
 

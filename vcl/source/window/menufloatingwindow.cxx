@@ -791,7 +791,7 @@ void MenuFloatingWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_u
 
                     rRenderContext.DrawRect(aItemRect);
                 }
-                pMenu->ImplPaint(this, nScrollerHeight, nStartY, pData, bHighlight);
+                pMenu->ImplPaint(rRenderContext, nScrollerHeight, nStartY, pData, bHighlight);
                 if (bRestoreLineColor)
                     rRenderContext.SetLineColor(oldLineColor);
             }
@@ -1103,7 +1103,7 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectang
         ImplDrawScroller(rRenderContext, false);
     }
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuColor());
-    pMenu->ImplPaint(this, nScrollerHeight, ImplGetStartY());
+    pMenu->ImplPaint(rRenderContext, nScrollerHeight, ImplGetStartY());
     if (nHighlightedItem != ITEMPOS_INVALID)
         HighlightItem(rRenderContext, nHighlightedItem, true);
 }
