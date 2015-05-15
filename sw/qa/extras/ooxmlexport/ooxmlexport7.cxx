@@ -851,6 +851,15 @@ DECLARE_OOXMLEXPORT_TEST(testDashedLine_CustDashPercentage, "dashed_line_custdas
     assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[3]", "sp", "300000");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCommentInitials, "comment_initials.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/comments.xml");
+    if (!pXmlDoc)
+      return;
+
+    assertXPath(pXmlDoc,"/w:comments/w:comment", "w:initials", "ABC");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
