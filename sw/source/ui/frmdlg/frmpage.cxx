@@ -2663,24 +2663,25 @@ Size BmpWindow::GetOptimalSize() const
 
 VCL_BUILDER_FACTORY_ARGS(BmpWindow, 0)
 
-void BmpWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     Point aPntPos;
-    Size  aPntSz( GetSizePixel() );
-    Size  aGrfSize;
-    if(bGraphic)
-        aGrfSize = ::GetGraphicSizeTwip(aGraphic, this);
+    Size aPntSz(GetSizePixel());
+    Size aGrfSize;
+    if (bGraphic)
+        aGrfSize = ::GetGraphicSizeTwip(aGraphic, &rRenderContext);
     //it should show the default bitmap also if no graphic can be found
-    if(!aGrfSize.Width() && !aGrfSize.Height())
-        aGrfSize = PixelToLogic(aBmp.GetSizePixel());
+    if (!aGrfSize.Width() && !aGrfSize.Height())
+        aGrfSize = rRenderContext.PixelToLogic(aBmp.GetSizePixel());
 
     long nRelGrf = aGrfSize.Width() * 100L / aGrfSize.Height();
     long nRelWin = aPntSz.Width() * 100L / aPntSz.Height();
-    if(nRelGrf < nRelWin)
+    if (nRelGrf < nRelWin)
     {
         const long nWidth = aPntSz.Width();
         // if we use a replacement preview, try to draw at original size
-        if ( !bGraphic && ( aGrfSize.Width() <= aPntSz.Width() ) && ( aGrfSize.Height() <= aPntSz.Height() ) )
+        if (!bGraphic && (aGrfSize.Width() <= aPntSz.Width())
+                      && (aGrfSize.Height() <= aPntSz.Height()))
         {
             const long nHeight = aPntSz.Height();
             aPntSz.Width() = aGrfSize.Width();
@@ -2690,12 +2691,12 @@ void BmpWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& 
         else
             aPntSz.Width() = aPntSz.Height() * nRelGrf /100;
 
-        if(!bLeftAlign)
+        if (!bLeftAlign)
             aPntPos.X() += nWidth - aPntSz.Width() ;
     }
 
     // #i119307# clear window background, the graphic might have transparency
-    DrawRect(Rectangle(aPntPos, aPntSz));
+    rRenderContext.DrawRect(Rectangle(aPntPos, aPntSz));
 
     if (bHorz || bVert)
     {
@@ -2706,15 +2707,15 @@ void BmpWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& 
         if (bVert)
             nMirrorFlags |= BmpMirrorFlags::Horizontal;
         aTmpBmp.Mirror(nMirrorFlags);
-        DrawBitmapEx( aPntPos, aPntSz, aTmpBmp );
+        rRenderContext.DrawBitmapEx(aPntPos, aPntSz, aTmpBmp);
     }
     else if (bGraphic)  //draw unmirrored preview graphic
     {
-        aGraphic.Draw( this, aPntPos, aPntSz );
+        aGraphic.Draw(&rRenderContext, aPntPos, aPntSz);
     }
     else    //draw unmirrored stock sample image
     {
-        DrawBitmapEx( aPntPos, aPntSz, aBmp );
+        rRenderContext.DrawBitmapEx(aPntPos, aPntSz, aBmp);
     }
 }
 
@@ -2722,11 +2723,11 @@ BmpWindow::~BmpWindow()
 {
 }
 
-void BmpWindow::SetGraphic(const Graphic& rGrf)
+void BmpWindow::SetGraphic(const Graphic& rGraphic)
 {
-    aGraphic = rGrf;
-    Size aGrfSize = ::GetGraphicSizeTwip(aGraphic, this);
-    bGraphic = aGrfSize.Width() && aGrfSize.Height();
+    aGraphic = rGraphic;
+    Size aSize = aGraphic.GetPrefSize();
+    bGraphic = aSize.Width() && aSize.Height();
     Invalidate();
 }
 
