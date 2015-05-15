@@ -367,6 +367,38 @@ void IconSetRule::importFormula(const OUString& rFormula)
         rEntry.maFormula = rFormula;
 }
 
+namespace {
+
+ScIconSetType getType(const OUString& rName)
+{
+    ScIconSetType eIconSetType = IconSet_3TrafficLights1;
+    ScIconSetMap* pIconSetMap = ScIconSetFormat::getIconSetMap();
+    for(size_t i = 0; pIconSetMap[i].pName; ++i)
+    {
+        if(OUString::createFromAscii(pIconSetMap[i].pName) == rName)
+        {
+            eIconSetType = pIconSetMap[i].eType;
+            break;
+        }
+    }
+
+    return eIconSetType;
+}
+
+}
+
+void IconSetRule::importIcon(const AttributeList& rAttribs)
+{
+    OUString aIconSet = rAttribs.getString(XML_iconSet, OUString());
+    sal_Int32 nIndex = rAttribs.getInteger(XML_iconId, -1);
+    if (aIconSet == "NoIcons")
+    {
+        nIndex = -1;
+    }
+
+    ScIconSetType eIconSetType = getType(aIconSet);
+    mxFormatData->maCustomVector.push_back(std::pair<ScIconSetType, sal_Int32>(eIconSetType, nIndex));
+}
 
 void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rPos )
 {
@@ -376,17 +408,8 @@ void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScA
         mxFormatData->maEntries.push_back(pModelEntry);
     }
 
-    ScIconSetType eIconSetType = IconSet_3TrafficLights1;
-    ScIconSetMap* pIconSetMap = ScIconSetFormat::getIconSetMap();
-    for(size_t i = 0; pIconSetMap[i].pName; ++i)
-    {
-        if(OUString::createFromAscii(pIconSetMap[i].pName) == maIconSetType)
-        {
-            eIconSetType = pIconSetMap[i].eType;
-            break;
-        }
-    }
-    mxFormatData->eIconSetType = eIconSetType;
+    mxFormatData->eIconSetType = getType(maIconSetType);
+    mxFormatData->mbCustom = mbCustom;
     pFormat->SetIconSetData(mxFormatData.release());
 }
 

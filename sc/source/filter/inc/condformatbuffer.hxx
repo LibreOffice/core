@@ -131,6 +131,7 @@ public:
     void importCfvo( const AttributeList& rAttribs );
     void importAttribs( const AttributeList& rAttribs );
     void importFormula(const OUString& rFormula);
+    void importIcon(const AttributeList& rAttribs);
 
     void SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
 

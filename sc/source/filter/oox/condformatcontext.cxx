@@ -143,6 +143,7 @@ void IconSetContext::onStartElement( const AttributeList& rAttribs )
             mpIconSet->importCfvo( rAttribs );
         break;
         case XLS14_TOKEN(cfIcon):
+            mpIconSet->importIcon(rAttribs);
         break;
     }
 }
