@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_878288c7",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4196,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2015-05-15T11:36:50Z",
+      "side": 1,
+      "message": "Not sure I have to \u0027reset\u0027 this?",
+      "revId": "c096bc761a4160267e1d02ea1620d5383685fb90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
