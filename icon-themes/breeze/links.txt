@@ -73,11 +73,9 @@ cmd/lc_exporttopdf.png cmd/lc_exportdirecttopdf.png
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 
 # sort
-cmd/lc_datasort.png cmd/lc_sortascending.png
 cmd/lc_sortdown.png cmd/lc_sortdescending.png
 cmd/lc_sortup.png cmd/lc_sortascending.png
 cmd/lc_tablesort.png cmd/lc_sortascending.png
-cmd/sc_datasort.png cmd/sc_sortascending.png
 cmd/sc_sortdown.png cmd/sc_sortdescending.png
 cmd/sc_sortup.png cmd/sc_sortascending.png
 cmd/sc_tablesort.png cmd/sc_sortascending.png
