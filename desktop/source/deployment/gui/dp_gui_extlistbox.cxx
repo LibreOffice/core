@@ -491,97 +491,99 @@ void ExtensionBox_Impl::selectEntry( const long nPos )
 }
 
 
-void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl& rEntry )
+void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, const TEntry_Impl& rEntry)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    if ( rEntry->m_bActive )
-        SetTextColor( rStyleSettings.GetHighlightTextColor() );
-    else if ( ( rEntry->m_eState != REGISTERED ) && ( rEntry->m_eState != NOT_AVAILABLE ) )
-        SetTextColor( rStyleSettings.GetDisableColor() );
-    else if ( IsControlForeground() )
-        SetTextColor( GetControlForeground() );
+    if (rEntry->m_bActive)
+        rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
+    else if ((rEntry->m_eState != REGISTERED) && (rEntry->m_eState != NOT_AVAILABLE))
+        rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+    else if (IsControlForeground())
+        rRenderContext.SetTextColor(GetControlForeground());
     else
-        SetTextColor( rStyleSettings.GetFieldTextColor() );
+        rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
 
-    if ( rEntry->m_bActive )
+    if (rEntry->m_bActive)
     {
-        SetLineColor();
-        SetFillColor( rStyleSettings.GetHighlightColor() );
-        DrawRect( rRect );
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
+        rRenderContext.DrawRect(rRect);
     }
     else
     {
-        if( IsControlBackground() )
-            SetBackground( GetControlBackground() );
+        if (IsControlBackground())
+            rRenderContext.SetBackground(GetControlBackground());
         else
-            SetBackground( rStyleSettings.GetFieldColor() );
+            rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
 
-        SetTextFillColor();
-        Erase( rRect );
+        rRenderContext.SetTextFillColor();
+        rRenderContext.Erase(rRect);
     }
 
     // Draw extension icon
     Point aPos( rRect.TopLeft() );
-    aPos += Point( TOP_OFFSET, TOP_OFFSET );
+    aPos += Point(TOP_OFFSET, TOP_OFFSET);
     Image aImage;
-    if ( ! rEntry->m_aIcon )
+    if (!rEntry->m_aIcon)
         aImage = m_aDefaultImage;
     else
         aImage = rEntry->m_aIcon;
     Size aImageSize = aImage.GetSizePixel();
-    if ( ( aImageSize.Width() <= ICON_WIDTH ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
-        DrawImage( Point( aPos.X()+((ICON_WIDTH-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
+    if ((aImageSize.Width() <= ICON_WIDTH ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
+        rRenderContext.DrawImage(Point(aPos.X() + ((ICON_WIDTH - aImageSize.Width()) / 2),
+                                       aPos.Y() + ((ICON_HEIGHT - aImageSize.Height()) / 2)),
+                                 aImage);
     else
-        DrawImage( aPos, Size( ICON_WIDTH, ICON_HEIGHT ), aImage );
+        rRenderContext.DrawImage(aPos, Size(ICON_WIDTH, ICON_HEIGHT), aImage);
 
     // Setup fonts
-    vcl::Font aStdFont( GetFont() );
-    vcl::Font aBoldFont( aStdFont );
-    aBoldFont.SetWeight( WEIGHT_BOLD );
-    SetFont( aBoldFont );
-    long aTextHeight = GetTextHeight();
+    vcl::Font aStdFont(rRenderContext.GetFont());
+    vcl::Font aBoldFont(aStdFont);
+    aBoldFont.SetWeight(WEIGHT_BOLD);
+    rRenderContext.SetFont(aBoldFont);
+    long aTextHeight = rRenderContext.GetTextHeight();
 
     // Init publisher link here
-    if ( !rEntry->m_pPublisher && !rEntry->m_sPublisher.isEmpty() )
+    if (!rEntry->m_pPublisher && !rEntry->m_sPublisher.isEmpty())
     {
-        rEntry->m_pPublisher = VclPtr<FixedHyperlink>::Create( this );
+        rEntry->m_pPublisher = VclPtr<FixedHyperlink>::Create(this);
         rEntry->m_pPublisher->SetBackground();
-        rEntry->m_pPublisher->SetPaintTransparent( true );
-        rEntry->m_pPublisher->SetURL( rEntry->m_sPublisherURL );
-        rEntry->m_pPublisher->SetText( rEntry->m_sPublisher );
-        Size aSize = FixedText::CalcMinimumTextSize( rEntry->m_pPublisher );
-        rEntry->m_pPublisher->SetSizePixel( aSize );
+        rEntry->m_pPublisher->SetPaintTransparent(true);
+        rEntry->m_pPublisher->SetURL(rEntry->m_sPublisherURL);
+        rEntry->m_pPublisher->SetText(rEntry->m_sPublisher);
+        Size aSize = FixedText::CalcMinimumTextSize(rEntry->m_pPublisher);
+        rEntry->m_pPublisher->SetSizePixel(aSize);
 
-        if ( m_aClickHdl.IsSet() )
+        if (m_aClickHdl.IsSet())
             rEntry->m_pPublisher->SetClickHdl( m_aClickHdl );
     }
 
     // Get max title width
     long nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
-    nMaxTitleWidth -= ( 2 * SMALL_ICON_SIZE ) + ( 4 * SPACE_BETWEEN );
-    if ( rEntry->m_pPublisher )
+    nMaxTitleWidth -= (2 * SMALL_ICON_SIZE) + (4 * SPACE_BETWEEN);
+    if (rEntry->m_pPublisher)
     {
-        nMaxTitleWidth -= rEntry->m_pPublisher->GetSizePixel().Width() + (2*SPACE_BETWEEN);
+        nMaxTitleWidth -= rEntry->m_pPublisher->GetSizePixel().Width() + (2 * SPACE_BETWEEN);
     }
 
-    long aVersionWidth = GetTextWidth( rEntry->m_sVersion );
-    long aTitleWidth = GetTextWidth( rEntry->m_sTitle ) + (aTextHeight / 3);
+    long aVersionWidth = rRenderContext.GetTextWidth(rEntry->m_sVersion);
+    long aTitleWidth = rRenderContext.GetTextWidth(rEntry->m_sTitle) + (aTextHeight / 3);
 
-    aPos = rRect.TopLeft() + Point( ICON_OFFSET, TOP_OFFSET );
+    aPos = rRect.TopLeft() + Point(ICON_OFFSET, TOP_OFFSET);
 
-    if ( aTitleWidth > nMaxTitleWidth - aVersionWidth )
+    if (aTitleWidth > nMaxTitleWidth - aVersionWidth)
     {
         aTitleWidth = nMaxTitleWidth - aVersionWidth - (aTextHeight / 3);
-        OUString aShortTitle = GetEllipsisString( rEntry->m_sTitle, aTitleWidth );
-        DrawText( aPos, aShortTitle );
+        OUString aShortTitle = rRenderContext.GetEllipsisString(rEntry->m_sTitle, aTitleWidth);
+        rRenderContext.DrawText(aPos, aShortTitle);
         aTitleWidth += (aTextHeight / 3);
     }
     else
-        DrawText( aPos, rEntry->m_sTitle );
+        rRenderContext.DrawText(aPos, rEntry->m_sTitle);
 
-    SetFont( aStdFont );
-    DrawText( Point( aPos.X() + aTitleWidth, aPos.Y() ), rEntry->m_sVersion );
+    rRenderContext.SetFont(aStdFont);
+    rRenderContext.DrawText(Point(aPos.X() + aTitleWidth, aPos.Y()), rEntry->m_sVersion);
 
     long nIconHeight = TOP_OFFSET + SMALL_ICON_SIZE;
     long nTitleHeight = TOP_OFFSET + GetTextHeight();
@@ -592,9 +594,9 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl& rEnt
 
     // draw description
     OUString sDescription;
-    if ( !rEntry->m_sErrorText.isEmpty() )
+    if (!rEntry->m_sErrorText.isEmpty())
     {
-        if ( rEntry->m_bActive )
+        if (rEntry->m_bActive)
             sDescription = rEntry->m_sErrorText + "\n" + rEntry->m_sDescription;
         else
             sDescription = rEntry->m_sErrorText;
@@ -603,51 +605,51 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl& rEnt
         sDescription = rEntry->m_sDescription;
 
     aPos.Y() += aTextHeight;
-    if ( rEntry->m_bActive )
+    if (rEntry->m_bActive)
     {
         long nExtraHeight = 0;
 
-        if ( rEntry->m_bHasButtons )
+        if (rEntry->m_bHasButtons)
             nExtraHeight = m_nExtraHeight;
 
-        DrawText( Rectangle( aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight ),
-                  sDescription, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+        rRenderContext.DrawText(Rectangle(aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight),
+                                sDescription, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     }
     else
     {
         //replace LF to space, so words do not stick together in one line view
         sDescription = sDescription.replace(0x000A, ' ');
         const long nWidth = GetTextWidth( sDescription );
-        if ( nWidth > rRect.GetWidth() - aPos.X() )
-            sDescription = GetEllipsisString( sDescription, rRect.GetWidth() - aPos.X() );
-        DrawText( aPos, sDescription );
+        if (nWidth > rRect.GetWidth() - aPos.X())
+            sDescription = rRenderContext.GetEllipsisString(sDescription, rRect.GetWidth() - aPos.X());
+        rRenderContext.DrawText(aPos, sDescription);
     }
 
     // Draw publisher link
-    if ( rEntry->m_pPublisher )
+    if (rEntry->m_pPublisher)
     {
         rEntry->m_pPublisher->Show();
         aPos = rRect.TopLeft() + Point( ICON_OFFSET + nMaxTitleWidth + (2*SPACE_BETWEEN), TOP_OFFSET );
-        rEntry->m_pPublisher->SetPosPixel( aPos );
+        rEntry->m_pPublisher->SetPosPixel(aPos);
     }
 
     // Draw status icons
-    if ( !rEntry->m_bUser )
+    if (!rEntry->m_bUser)
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SMALL_ICON_SIZE), TOP_OFFSET );
-        if ( rEntry->m_bLocked )
-            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aLockedImage );
+        if (rEntry->m_bLocked)
+            rRenderContext.DrawImage(aPos, Size(SMALL_ICON_SIZE, SMALL_ICON_SIZE), m_aLockedImage);
         else
-            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aSharedImage );
+            rRenderContext.DrawImage(aPos, Size(SMALL_ICON_SIZE, SMALL_ICON_SIZE), m_aSharedImage);
     }
-    if ( ( rEntry->m_eState == AMBIGUOUS ) || rEntry->m_bMissingDeps || rEntry->m_bMissingLic )
+    if ((rEntry->m_eState == AMBIGUOUS ) || rEntry->m_bMissingDeps || rEntry->m_bMissingLic)
     {
-        aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2*SMALL_ICON_SIZE), TOP_OFFSET );
-        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aWarningImage );
+        aPos = rRect.TopRight() + Point(-(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2 * SMALL_ICON_SIZE), TOP_OFFSET);
+        rRenderContext.DrawImage(aPos, Size(SMALL_ICON_SIZE, SMALL_ICON_SIZE), m_aWarningImage);
     }
 
-    SetLineColor( Color( COL_LIGHTGRAY ) );
-    DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
+    rRenderContext.SetLineColor(Color(COL_LIGHTGRAY));
+    rRenderContext.DrawLine(rRect.BottomLeft(), rRect.BottomRight());
 }
 
 
@@ -747,7 +749,7 @@ bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
 }
 
 
-void ExtensionBox_Impl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle &/*rPaintRect*/ )
+void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rPaintRect*/)
 {
     if ( !m_bInDelete )
         DeleteRemoved();
@@ -756,7 +758,7 @@ void ExtensionBox_Impl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rec
         RecalcAll();
 
     Point aStart( 0, -m_nTopIndex );
-    Size aSize( GetOutputSizePixel() );
+    Size aSize(rRenderContext.GetOutputSizePixel());
 
     if ( m_bHasScrollBar )
         aSize.Width() -= m_pScrollBar->GetSizePixel().Width();
@@ -764,11 +766,11 @@ void ExtensionBox_Impl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rec
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
     typedef std::vector< TEntry_Impl >::iterator ITER;
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
+    for (ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex)
     {
         aSize.Height() = (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight;
         Rectangle aEntryRect( aStart, aSize );
-        DrawRow( aEntryRect, *iIndex );
+        DrawRow(rRenderContext, aEntryRect, *iIndex);
         aStart.Y() += aSize.Height();
     }
 }

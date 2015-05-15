@@ -49,9 +49,6 @@ namespace dp_gui {
 class TheExtensionManager;
 
 
-
-//                          struct Entry_Impl
-
 struct Entry_Impl;
 
 typedef ::boost::shared_ptr< Entry_Impl > TEntry_Impl;
@@ -80,24 +77,20 @@ struct Entry_Impl
     Image           m_aIconHC;
     VclPtr<FixedHyperlink> m_pPublisher;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> m_xPackage;
+    css::uno::Reference<css::deployment::XPackage> m_xPackage;
 
-    Entry_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
-                const PackageState eState, const bool bReadOnly );
+    Entry_Impl(const css::uno::Reference<css::deployment::XPackage> &xPackage,
+               const PackageState eState, const bool bReadOnly);
    ~Entry_Impl();
 
-    sal_Int32     CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl& rEntry ) const;
-    void          checkDependencies();
+    sal_Int32 CompareTo(const CollatorWrapper *pCollator, const TEntry_Impl& rEntry) const;
+    void checkDependencies();
 };
-
-
-//                          class ExtensionBox_Impl
-
 
 class ExtensionBox_Impl;
 
 
-class ExtensionRemovedListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
+class ExtensionRemovedListener : public ::cppu::WeakImplHelper1<css::lang::XEventListener>
 {
     VclPtr<ExtensionBox_Impl>   m_pParent;
 
@@ -108,35 +101,36 @@ public:
 
 
     // XEventListener
-    virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(css::lang::EventObject const& evt)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
 class ExtensionBox_Impl : public ::svt::IExtensionListBox
 {
-    bool            m_bHasScrollBar;
-    bool            m_bHasActive;
-    bool            m_bNeedsRecalc;
-    bool            m_bInCheckMode;
-    bool            m_bAdjustActive;
-    bool            m_bInDelete;
+    bool m_bHasScrollBar : 1;
+    bool m_bHasActive : 1;
+    bool m_bNeedsRecalc : 1;
+    bool m_bInCheckMode : 1;
+    bool m_bAdjustActive : 1;
+    bool m_bInDelete : 1;
     //Must be guarded together with m_vEntries to ensure a valid index at all times.
     //Use m_entriesMutex as guard.
-    long            m_nActive;
-    long            m_nTopIndex;
-    long            m_nStdHeight;
-    long            m_nActiveHeight;
-    long            m_nExtraHeight;
-    Image           m_aSharedImage;
-    Image           m_aLockedImage;
-    Image           m_aWarningImage;
-    Image           m_aDefaultImage;
-    Link<>          m_aClickHdl;
+    long m_nActive;
+    long m_nTopIndex;
+    long m_nStdHeight;
+    long m_nActiveHeight;
+    long m_nExtraHeight;
+    Image m_aSharedImage;
+    Image m_aLockedImage;
+    Image m_aWarningImage;
+    Image m_aDefaultImage;
+
+    Link<> m_aClickHdl;
 
     VclPtr<ScrollBar>      m_pScrollBar;
 
-    com::sun::star::uno::Reference< ExtensionRemovedListener > m_xRemoveListener;
+    css::uno::Reference<ExtensionRemovedListener> m_xRemoveListener;
 
     TheExtensionManager      *m_pManager;
     //This mutex is used for synchronizing access to m_vEntries.
@@ -158,17 +152,16 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
         ::com::sun::star::deployment::XPackage> > m_vListenerAdded;
     //Removes the dead weak references from m_vListenerAdded
     void cleanVecListenerAdded();
-    void addEventListenerOnce( ::com::sun::star::uno::Reference<
-                               ::com::sun::star::deployment::XPackage> const & extension);
+    void addEventListenerOnce(css::uno::Reference<css::deployment::XPackage> const & extension);
 
-    void            CalcActiveHeight( const long nPos );
-    long            GetTotalHeight() const;
-    void            SetupScrollBar();
-    void            DrawRow( const Rectangle& rRect, const TEntry_Impl& rEntry );
-    bool            HandleTabKey( bool bReverse );
-    bool            HandleCursorKey( sal_uInt16 nKeyCode );
-    bool            FindEntryPos( const TEntry_Impl& rEntry, long nStart, long nEnd, long &nFound );
-    void            DeleteRemoved();
+    void CalcActiveHeight( const long nPos );
+    long GetTotalHeight() const;
+    void SetupScrollBar();
+    void DrawRow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, const TEntry_Impl& rEntry);
+    bool HandleTabKey( bool bReverse );
+    bool HandleCursorKey( sal_uInt16 nKeyCode );
+    bool FindEntryPos( const TEntry_Impl& rEntry, long nStart, long nEnd, long &nFound );
+    void DeleteRemoved();
 
 
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar * );
@@ -184,11 +177,11 @@ public:
     virtual ~ExtensionBox_Impl();
     virtual void dispose() SAL_OVERRIDE;
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
     TEntry_Impl     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
@@ -203,16 +196,16 @@ public:
     void            RemoveUnlocked();
 
 
-    virtual void    selectEntry( const long nPos );
-    long            addEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
+    virtual void selectEntry( const long nPos );
+    long addEntry(const css::uno::Reference<css::deployment::XPackage> &xPackage,
                               bool bLicenseMissing = false );
-    void            updateEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
-    void            removeEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    void updateEntry(const css::uno::Reference<css::deployment::XPackage> &xPackage );
+    void removeEntry(const css::uno::Reference<css::deployment::XPackage> &xPackage );
 
-    void            prepareChecking();
-    void            checkEntries();
+    void prepareChecking();
+    void checkEntries();
 
-    TheExtensionManager*    getExtensionManager() const { return m_pManager; }
+    TheExtensionManager* getExtensionManager() const { return m_pManager; }
     void setExtensionManager(TheExtensionManager* pManager) { m_pManager = pManager; }
 
 

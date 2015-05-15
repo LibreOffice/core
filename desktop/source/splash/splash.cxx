@@ -605,32 +605,32 @@ void SplashScreen::determineProgressRatioValues(
     }
 }
 
-void SplashScreenWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
+void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     if (!pSpl || !pSpl->_bVisible)
         return;
 
     //native drawing
     // in case of native controls we need to draw directly to the window
-    if( pSpl->_bNativeProgress && IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
+    if (pSpl->_bNativeProgress && rRenderContext.IsNativeControlSupported(CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL))
     {
-        DrawBitmapEx( Point(), pSpl->_aIntroBmp );
+        rRenderContext.DrawBitmapEx(Point(), pSpl->_aIntroBmp);
 
         ImplControlValue aValue( pSpl->_iProgress * pSpl->_barwidth / pSpl->_iMax);
-        Rectangle aDrawRect( Point(pSpl->_tlx, pSpl->_tly), Size( pSpl->_barwidth, pSpl->_barheight ) );
+        Rectangle aDrawRect( Point(pSpl->_tlx, pSpl->_tly), Size( pSpl->_barwidth, pSpl->_barheight));
         Rectangle aNativeControlRegion, aNativeContentRegion;
 
-        if( GetNativeControlRegion( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
-                                             ControlState::ENABLED, aValue, OUString(),
-                                             aNativeControlRegion, aNativeContentRegion ) )
+        if (rRenderContext.GetNativeControlRegion(CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
+                                                  ControlState::ENABLED, aValue, OUString(),
+                                                  aNativeControlRegion, aNativeContentRegion))
         {
               long nProgressHeight = aNativeControlRegion.GetHeight();
               aDrawRect.Top() -= (nProgressHeight - pSpl->_barheight)/2;
               aDrawRect.Bottom() += (nProgressHeight - pSpl->_barheight)/2;
         }
 
-        if( (DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
-                                ControlState::ENABLED, aValue, pSpl->_sProgressText )) )
+        if ((rRenderContext.DrawNativeControl(CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
+                                              ControlState::ENABLED, aValue, pSpl->_sProgressText)))
         {
             return;
         }
@@ -639,7 +639,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rec
     // non native drawing
     // draw bitmap
     if (pSpl->_bPaintBitmap)
-        _vdev->DrawBitmapEx( Point(), pSpl->_aIntroBmp );
+        _vdev->DrawBitmapEx(Point(), pSpl->_aIntroBmp);
 
     if (pSpl->_bPaintProgress) {
         // draw progress...
@@ -660,7 +660,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rec
         _vdev->SetTextColor(pSpl->_cProgressTextColor);
         _vdev->DrawText(Point(pSpl->_tlx, pSpl->_textBaseline), pSpl->_sProgressText);
     }
-    DrawOutDev(Point(), GetOutputSizePixel(), Point(), _vdev->GetOutputSizePixel(), *_vdev.get() );
+    rRenderContext.DrawOutDev(Point(), rRenderContext.GetOutputSizePixel(), Point(), _vdev->GetOutputSizePixel(), *_vdev.get());
 }
 
 
