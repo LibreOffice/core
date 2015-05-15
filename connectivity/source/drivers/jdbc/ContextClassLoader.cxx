@@ -30,10 +30,6 @@ namespace connectivity { namespace jdbc
 
     using ::connectivity::java_lang_Object;
 
-
-    //= ContextClassLoaderScope
-
-
     ContextClassLoaderScope::ContextClassLoaderScope( JNIEnv& environment, const GlobalRef< jobject >& newClassLoader,
         const ::comphelper::ResourceBasedEventLogger& _rLoggerForErrors, const Reference< XInterface >& _rxErrorContext )
         :m_environment( environment )

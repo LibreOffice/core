@@ -26,10 +26,6 @@
 namespace connectivity { namespace hsqldb
 {
 
-
-
-    //= HTools
-
     class HTools
     {
     public:

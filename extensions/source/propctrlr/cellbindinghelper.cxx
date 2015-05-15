@@ -76,9 +76,6 @@ namespace pcr
     }
 
 
-    //= CellBindingHelper
-
-
     CellBindingHelper::CellBindingHelper( const Reference< XPropertySet >& _rxControlModel, const Reference< XModel >& _rxContextDocument )
         :m_xControlModel( _rxControlModel )
     {
@@ -102,7 +99,7 @@ namespace pcr
     {
         sal_Int16 nSheetIndex = -1;
         // every sheet has a draw page, and every draw page has a forms collection.
-        // Our control, OTOH, belongs to a forms collection. Match these ...
+        // Our control, OTOH, belongs to a forms collection. Match these...
         try
         {
             // for determining the draw page, we need the forms collection which

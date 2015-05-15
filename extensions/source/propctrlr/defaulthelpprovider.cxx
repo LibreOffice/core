@@ -58,10 +58,6 @@ namespace pcr
     using ::com::sun::star::awt::XWindow;
     using ::com::sun::star::awt::XVclWindowPeer;
 
-
-    //= DefaultHelpProvider
-
-
     DefaultHelpProvider::DefaultHelpProvider()
         :m_bConstructed( false )
     {

@@ -29,10 +29,6 @@
 namespace dbp
 {
 
-
-
-    //= OTableSelectionPage
-
     class OTableSelectionPage : public OControlWizardPage
     {
     protected:
@@ -70,9 +66,6 @@ namespace dbp
         virtual bool    canAdvance() const SAL_OVERRIDE;
     };
 
-
-    //= OMaybeListSelectionPage
-
     class OMaybeListSelectionPage : public OControlWizardPage
     {
     protected:
@@ -102,9 +95,6 @@ namespace dbp
         void implInitialize(const OUString& _rSelection);
         void implCommit(OUString& _rSelection);
     };
-
-
-    //= ODBFieldPage
 
     class ODBFieldPage : public OMaybeListSelectionPage
     {

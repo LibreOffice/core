@@ -251,7 +251,7 @@ namespace svxform
     }
 
 
-}   // namespace svxform
+}
 
 
 #endif

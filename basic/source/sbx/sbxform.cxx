@@ -40,10 +40,6 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
 #include <float.h>
 #include <math.h>
 
-
-//=========================== DEFINES =============================
-
-
 #define _NO_DIGIT                   -1
 
 #define MAX_NO_OF_DIGITS            DBL_DIG
@@ -96,9 +92,6 @@ double get_number_of_digits( double dNumber )
     else
         return floor( log10( fabs( dNumber ) ) );
 }
-
-
-//======================= IMPLEMENTATION ==========================
 
 
 SbxBasicFormater::SbxBasicFormater( sal_Unicode _cDecPoint, sal_Unicode _cThousandSep,

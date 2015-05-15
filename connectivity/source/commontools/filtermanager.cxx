@@ -38,10 +38,6 @@ namespace dbtools
     using namespace ::com::sun::star::beans;
     using namespace connectivity;
 
-
-    //= FilterManager
-
-
     FilterManager::FilterManager( )
         :m_aFilterComponents( FC_COMPONENT_COUNT )
         ,m_bApplyPublicFilter( true )

@@ -24,11 +24,6 @@
 namespace comphelper
 {
 
-
-
-    //= SharedMutex
-
-
     SharedMutex::SharedMutex()
         :m_pMutexImpl( new ::osl::Mutex )
     {

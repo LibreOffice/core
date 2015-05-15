@@ -33,10 +33,6 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::reflection;
 
-
-    //= OProxyAggregation
-
-
     OProxyAggregation::OProxyAggregation( const Reference< XComponentContext >& _rxContext )
         :m_xContext( _rxContext )
     {
@@ -96,10 +92,6 @@ namespace comphelper
             // this should remove the _two_only_ "real" references (means not delegated to
             // ourself) to this proxy, and thus delete it
     }
-
-
-    //= OComponentProxyAggregationHelper
-
 
     OComponentProxyAggregationHelper::OComponentProxyAggregationHelper( const Reference< XComponentContext >& _rxContext,
         ::cppu::OBroadcastHelper& _rBHelper )
@@ -184,10 +176,6 @@ namespace comphelper
             xComp.clear();
         }
     }
-
-
-    //= OComponentProxyAggregation
-
 
     OComponentProxyAggregation::OComponentProxyAggregation( const Reference< XComponentContext >& _rxContext,
             const Reference< XComponent >& _rxComponent )

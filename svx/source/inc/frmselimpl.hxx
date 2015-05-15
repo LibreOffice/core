@@ -292,7 +292,7 @@ typedef FrameBorderIterBase< const FrameBorderPtrVec, FrameBorderPtrVec::const_i
 typedef FrameBorderIterBase< FrameBorderPtrVec, FrameBorderPtrVec::iterator, FrameBorderSelected_Pred >
     SelFrameBorderIter;
 
-} // namespace svx
+}
 
 #endif
 

@@ -317,6 +317,6 @@ LanguageType ConvertCountryToLanguage( CountryId eCountry )
     return (pEntry != pEnd) ? pEntry->meLanguage : LANGUAGE_DONTKNOW;
 }
 
-} // namespace svx
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

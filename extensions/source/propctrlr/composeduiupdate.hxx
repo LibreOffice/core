@@ -32,11 +32,6 @@
 namespace pcr
 {
 
-
-
-    //= some helper types
-
-
     struct MapHandlerToUI;
 
     /** callback for an ComposedPropertyUIUpdate checking a given property for existence
@@ -49,9 +44,6 @@ namespace pcr
     protected:
         ~IPropertyExistenceCheck() {}
     };
-
-
-    //= ComposedPropertyUIUpdate
 
     /** helper class composing requests to a ->XObjectInspectorUI interface, coming
         from multiple sources
@@ -195,9 +187,6 @@ namespace pcr
         ComposedPropertyUIUpdate( const ComposedPropertyUIUpdate& ) SAL_DELETED_FUNCTION;
         ComposedPropertyUIUpdate& operator=( const ComposedPropertyUIUpdate& ) SAL_DELETED_FUNCTION;
     };
-
-
-    //= ComposedUIAutoFireGuard
 
     class ComposedUIAutoFireGuard
     {

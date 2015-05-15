@@ -39,10 +39,6 @@ namespace svx
     using namespace ::com::sun::star::ucb;
     using namespace ::svt;
 
-
-    //= ODocumentLinkDialog
-
-
     ODocumentLinkDialog::ODocumentLinkDialog( vcl::Window* _pParent, bool _bCreateNew )
         : ModalDialog(_pParent, "DatabaseLinkDialog",
             "cui/ui/databaselinkdialog.ui")
@@ -217,7 +213,7 @@ namespace svx
     }
 
 
-}   // namespace svx
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

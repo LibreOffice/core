@@ -23,9 +23,6 @@
 namespace connectivity { namespace hsqldb
 {
 
-    //= HTools
-
-
     void HTools::appendTableFilterCrit( OUStringBuffer& _inout_rBuffer, const OUString& _rCatalog,
         const OUString& _rSchema, const OUString& _rName, bool _bShortForm )
     {

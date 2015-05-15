@@ -52,9 +52,6 @@ namespace dbtools
 
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
-
-    //= StatementComposer_Data
-
     struct StatementComposer_Data
     {
         const Reference< XConnection >          xConnection;
@@ -232,10 +229,6 @@ namespace dbtools
             return _rData.xComposer.is();
         }
     }
-
-
-    //= StatementComposer
-
 
     StatementComposer::StatementComposer( const Reference< XConnection >& _rxConnection,
         const OUString&  _rCommand, const sal_Int32 _nCommandType, const bool _bEscapeProcessing )

@@ -195,7 +195,7 @@ private:
 
 
 
-} // namespace svx
+}
 
 #endif
 

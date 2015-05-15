@@ -31,8 +31,6 @@ namespace connectivity
 
     typedef sal_uInt16  ResourceId;
 
-    //= SharedResources
-
     /** helper class for accessing resources shared by different libraries
         in the connectivity module
     */

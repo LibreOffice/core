@@ -34,7 +34,7 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
 
-//=====  internal  ============================================================
+// internal
 
 AccessibleComponentBase::AccessibleComponentBase()
 {
@@ -47,10 +47,7 @@ AccessibleComponentBase::~AccessibleComponentBase()
 {
 }
 
-
-
-
-//=====  XAccessibleComponent  ================================================
+// XAccessibleComponent
 
 sal_Bool SAL_CALL AccessibleComponentBase::containsPoint (
         const ::com::sun::star::awt::Point& aPoint)
@@ -171,7 +168,7 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground()
 
 
 
-//=====  XAccessibleExtendedComponent  ========================================
+// XAccessibleExtendedComponent
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL
         AccessibleComponentBase::getFont()
@@ -196,10 +193,7 @@ OUString SAL_CALL AccessibleComponentBase::getToolTipText()
     return OUString();
 }
 
-
-
-
-//=====  XTypeProvider  ===================================================
+// XTypeProvider
 
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleComponentBase::getTypes()

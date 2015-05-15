@@ -68,9 +68,6 @@ namespace logging
     using ::com::sun::star::util::XStringSubstitution;
     using ::com::sun::star::beans::NamedValue;
 
-
-    //= FileHandler - declaration
-
     typedef ::cppu::WeakComponentImplHelper3    <   XLogHandler
                                                 ,   XServiceInfo
                                                 ,   XInitialization
@@ -144,10 +141,6 @@ namespace logging
         */
         void    impl_doStringsubstitution_nothrow( OUString& _inout_rURL );
     };
-
-
-    //= FileHandler - implementation
-
 
     FileHandler::FileHandler( const Reference< XComponentContext >& _rxContext )
         :FileHandler_Base( m_aMutex )

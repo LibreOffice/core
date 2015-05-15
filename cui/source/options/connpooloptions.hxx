@@ -30,8 +30,6 @@
 namespace offapp
 {
 
-    //= ConnectionPoolOptionsPage
-
     class DriverListControl;
     class ConnectionPoolOptionsPage : public SfxTabPage
     {

@@ -30,7 +30,6 @@
 
 namespace comphelper
 {
-    //= AnyEvent
     AnyEvent::AnyEvent()
     {
     }
@@ -38,8 +37,6 @@ namespace comphelper
     AnyEvent::~AnyEvent()
     {
     }
-
-    //= ProcessableEvent
 
     struct ProcessableEvent
     {
@@ -73,8 +70,6 @@ namespace comphelper
     };
 
 
-    //= EventNotifierImpl
-
     struct EventNotifierImpl
     {
         ::osl::Mutex        aMutex;
@@ -87,10 +82,6 @@ namespace comphelper
         {
         }
     };
-
-
-    //= AsyncEventNotifier
-
 
     AsyncEventNotifier::AsyncEventNotifier(char const * name):
         Thread(name), m_xImpl(new EventNotifierImpl)

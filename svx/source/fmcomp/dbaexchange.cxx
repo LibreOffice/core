@@ -686,7 +686,7 @@ namespace svx
     }
 
 
-}   // namespace svx
+}
 
 
 

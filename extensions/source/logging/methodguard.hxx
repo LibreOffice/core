@@ -23,11 +23,6 @@
 
 namespace logging
 {
-
-
-
-    //= ComponentMethodGuard
-
     template < class COMPONENT >
     class ComponentMethodGuard
     {

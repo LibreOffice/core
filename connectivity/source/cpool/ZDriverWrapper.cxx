@@ -30,10 +30,6 @@ namespace connectivity
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::beans;
 
-
-    //= ODriverWrapper
-
-
     ODriverWrapper::ODriverWrapper( Reference< XAggregation >& _rxAggregateDriver, OConnectionPool* _pPool )
         :m_pConnectionPool(_pPool)
     {

@@ -26,11 +26,7 @@
 #undef STRINGCONSTANTS_INCLUDED_INDIRECT
 #include "stringconstants.inc"
 
-    //= SQLSTATE
-
     #define SQLSTATE_GENERAL "01000"
-
-    //= Properties
 
     #define  PROPERTY_APPLYFORMDESIGNMODE "ApplyFormDesignMode"
     #define  PROPERTY_IS_FORM             "IsForm"

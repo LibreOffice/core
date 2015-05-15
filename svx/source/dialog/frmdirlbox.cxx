@@ -110,6 +110,6 @@ void FrameDirListBoxWrapper::SetControlValue( SvxFrameDirection eValue )
 
 
 
-} // namespace svx
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

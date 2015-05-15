@@ -962,7 +962,7 @@ namespace svxform
     }
 
 
-}   // namespace svxform
+}
 
 
 

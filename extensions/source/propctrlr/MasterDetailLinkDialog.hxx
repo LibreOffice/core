@@ -29,9 +29,6 @@ namespace pcr
     typedef ::svt::OGenericUnoDialog                                            MasterDetailLinkDialog_DBase;
     typedef ::comphelper::OPropertyArrayUsageHelper< MasterDetailLinkDialog >   MasterDetailLinkDialog_PBase;
 
-
-    //= MasterDetailLinkDialog
-
     class MasterDetailLinkDialog :   public MasterDetailLinkDialog_DBase
                                     ,public MasterDetailLinkDialog_PBase
                                     ,public PcrClient

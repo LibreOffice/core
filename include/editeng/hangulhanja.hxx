@@ -278,7 +278,7 @@ namespace editeng
         return MsLangId::isChinese(nLang);
     }
 
-}   // namespace svx
+}
 
 
 #endif // INCLUDED_EDITENG_HANGULHANJA_HXX

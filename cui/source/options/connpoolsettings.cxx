@@ -23,11 +23,6 @@
 namespace offapp
 {
 
-
-
-    //= DriverPooling
-
-
     DriverPooling::DriverPooling( const OUString& _rName, bool _bEnabled, const sal_Int32 _nTimeout )
         :sName(_rName)
         ,bEnabled(_bEnabled)
@@ -43,16 +38,9 @@ namespace offapp
             &&  (nTimeoutSeconds == _rR.nTimeoutSeconds);
     }
 
-
-    //= DriverPoolingSettings
-
-
     DriverPoolingSettings::DriverPoolingSettings()
     {
     }
-
-
-    //= DriverPoolingSettingsItem
 
     TYPEINIT1( DriverPoolingSettingsItem, SfxPoolItem )
 
