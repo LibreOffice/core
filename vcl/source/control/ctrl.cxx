@@ -422,22 +422,22 @@ void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( _bFont )
+    if (_bFont)
     {
-        Font aFont( GetCanonicalFont( rStyleSettings ) );
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
+        Font aFont(GetCanonicalFont(rStyleSettings));
+        if (IsControlFont())
+            aFont.Merge(GetControlFont());
         SetZoomedPointFont( aFont );
     }
 
-    if ( _bForeground || _bFont )
+    if (_bForeground || _bFont)
     {
         Color aColor;
-        if ( IsControlForeground() )
+        if (IsControlForeground())
             aColor = GetControlForeground();
         else
-            aColor = GetCanonicalTextColor( rStyleSettings );
-        SetTextColor( aColor );
+            aColor = GetCanonicalTextColor(rStyleSettings);
+        SetTextColor(aColor);
         SetTextFillColor();
     }
 }
