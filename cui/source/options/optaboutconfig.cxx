@@ -700,7 +700,8 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                       static_cast< SvLBoxString* >( entry.GetItem(2) )->GetText().equals( sPropertyName );
           }
         );
-        it->ReplaceItem( new SvLBoxString( &(*it), 0, sDialogValue ), 4 );
+        if (it != m_prefBoxEntries.end())
+            it->ReplaceItem( new SvLBoxString( &(*it), 0, sDialogValue ), 4 );
     }
     catch( uno::Exception& )
     {
