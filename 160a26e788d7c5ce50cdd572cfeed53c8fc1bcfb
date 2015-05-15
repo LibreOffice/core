@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_876cc809",
+        "filename": "sw/source/core/view/viewimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-05-15T19:55:32Z",
+      "side": 1,
+      "message": "3886 is a magic number, unlikely to work well with different form factor...\nbased on the description of the issue you prolly should aim at a % of the visible space or something like that\n(think about what 2886 may means on an android device, vs a 4K 30\" monitor",
+      "revId": "160a26e788d7c5ce50cdd572cfeed53c8fc1bcfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
