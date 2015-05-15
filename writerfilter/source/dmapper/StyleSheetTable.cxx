@@ -1083,7 +1083,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         pEntry->pProperties->Insert(PROP_PARA_ADJUST, uno::makeAny( sal_Int16(style::ParagraphAdjust_LEFT) ), false);
                     }
 
-                    uno::Sequence< beans::PropertyValue > aPropValues = pEntry->pProperties->GetPropertyValues();
+                    auto aPropValues = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pEntry->pProperties->GetPropertyValues());
                     bool bAddFollowStyle = false;
                     if(bParaStyle && !pEntry->sNextStyleIdentifier.isEmpty() )
                     {
@@ -1097,12 +1097,10 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
                         if ( pStyleSheetProperties )
                         {
-                            aPropValues.realloc( aPropValues.getLength( ) + 1 );
-
                             beans::PropertyValue aLvlVal( rPropNameSupplier.GetName( PROP_OUTLINE_LEVEL ), 0,
                                     uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
                                     beans::PropertyState_DIRECT_VALUE );
-                            aPropValues[ aPropValues.getLength( ) - 1 ] = aLvlVal;
+                            aPropValues.push_back(aLvlVal);
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
@@ -1139,17 +1137,17 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         }
                     }
 
-                    if(bAddFollowStyle || aPropValues.getLength())
+                    if(bAddFollowStyle || !aPropValues.empty())
                     {
                         PropValVector aSortedPropVals;
-                        for( sal_Int32 nProp = 0; nProp < aPropValues.getLength(); ++nProp)
+                        for (const beans::PropertyValue& rValue : aPropValues)
                         {
                             // Don't add the style name properties
-                            bool bIsParaStyleName = aPropValues[nProp].Name == "ParaStyleName";
-                            bool bIsCharStyleName = aPropValues[nProp].Name == "CharStyleName";
+                            bool bIsParaStyleName = rValue.Name == "ParaStyleName";
+                            bool bIsCharStyleName = rValue.Name == "CharStyleName";
                             if ( !bIsParaStyleName && !bIsCharStyleName )
                             {
-                                aSortedPropVals.Insert( aPropValues[nProp] );
+                                aSortedPropVals.Insert(rValue);
                             }
                         }
                         if(bAddFollowStyle)
