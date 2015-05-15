@@ -193,6 +193,7 @@ void MapMode::SetScaleX( const Fraction& rScaleX )
 
     ImplMakeUnique();
     mpImplMapMode->maScaleX = rScaleX;
+    mpImplMapMode->maScaleX.ReduceInaccurate(44);
 }
 
 void MapMode::SetScaleY( const Fraction& rScaleY )
@@ -200,6 +201,7 @@ void MapMode::SetScaleY( const Fraction& rScaleY )
 
     ImplMakeUnique();
     mpImplMapMode->maScaleY = rScaleY;
+    mpImplMapMode->maScaleY.ReduceInaccurate(44);
 }
 
 MapMode& MapMode::operator=( const MapMode& rMapMode )
