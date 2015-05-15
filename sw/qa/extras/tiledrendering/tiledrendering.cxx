@@ -163,6 +163,11 @@ void SwTiledRenderingTest::testSetTextSelection()
     pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_START, aStart.getX(), aStart.getY());
     // The new selection must include the first word, too -- but not the ending dot.
     CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb"), pShellCrsr->GetTxt());
+
+    // Next: test that LOK_SETTEXTSELECTION_RESET + LOK_SETTEXTSELECTION_END can be used to create a selection.
+    pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_RESET, aStart.getX(), aStart.getY());
+    pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_END, aStart.getX() + 1000, aStart.getY());
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa b"), pShellCrsr->GetTxt());
 }
 
 void SwTiledRenderingTest::testSetGraphicSelection()

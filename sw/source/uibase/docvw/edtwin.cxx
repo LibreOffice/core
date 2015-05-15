@@ -6247,16 +6247,29 @@ void SwEditWin::SetCursorTwipPosition(const Point& rPosition, bool bPoint, bool 
 
     // Not an SwWrtShell, as that would make SwCrsrShell::GetCrsr() inaccessible.
     SwEditShell& rShell = m_rView.GetWrtShell();
-    SwMvContext aMvContext(&rShell);
-    if (bClearMark)
-        rShell.ClearMark();
-    // If the mark is to be updated, then exchange the point and mark before
-    // and after, as we can't easily set the mark.
-    if (!bPoint)
-        rShell.getShellCrsr(/*bBlock=*/false)->Exchange();
-    rShell.SetCrsr(rPosition);
-    if (!bPoint)
-        rShell.getShellCrsr(/*bBlock=*/false)->Exchange();
+
+    bool bCreateSelection = false;
+    {
+        SwMvContext aMvContext(&rShell);
+        if (bClearMark)
+            rShell.ClearMark();
+        else
+            bCreateSelection = !rShell.HasMark();
+
+        if (bCreateSelection)
+            m_rView.GetWrtShell().SttSelect();
+
+        // If the mark is to be updated, then exchange the point and mark before
+        // and after, as we can't easily set the mark.
+        if (!bPoint)
+            rShell.getShellCrsr(/*bBlock=*/false)->Exchange();
+        rShell.SetCrsr(rPosition);
+        if (!bPoint)
+            rShell.getShellCrsr(/*bBlock=*/false)->Exchange();
+    }
+
+    if (bCreateSelection)
+        m_rView.GetWrtShell().EndSelect();
 }
 
 void SwEditWin::SetGraphicTwipPosition(bool bStart, const Point& rPosition)
