@@ -99,7 +99,7 @@ namespace
 
             // force alpha part of color to
             // opaque. transparent painting is done
-            // explicitly via MetaActionType::TRANSPARENT
+            // explicitly via MetaActionType::Transparent
             aColor.SetTransparency(0);
             //aColor.SetTransparency(128);
 
@@ -1242,7 +1242,7 @@ namespace cppcanvas
                 // execute every action, to keep VDev state up-to-date
                 // currently used only for
                 // - the map mode
-                // - the line/fill color when processing a MetaActionType::TRANSPARENT
+                // - the line/fill color when processing a MetaActionType::Transparent
                 // - SetFont to process font metric specific actions
                 pCurrAct->Execute( &rVDev );
 
@@ -1431,7 +1431,7 @@ namespace cppcanvas
 
                             // force alpha part of color to
                             // opaque. transparent painting is done
-                            // explicitly via MetaActionType::TRANSPARENT
+                            // explicitly via MetaActionType::Transparent
                             aColor.SetTransparency(0);
 
                             rStates.getState().textColor =
@@ -2408,7 +2408,7 @@ namespace cppcanvas
                         // TODO(F2): NYI
                         break;
 
-                    case MetaActionType::TRANSPARENT:
+                    case MetaActionType::Transparent:
                     {
                         const OutDevState& rState( rStates.getState() );
                         if( rState.lineColor.getLength() ||

@@ -1218,7 +1218,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             }
             break;
 
-            case MetaActionType::TRANSPARENT:
+            case MetaActionType::Transparent:
             {
 //              ImplLine( ( (const MetaTransparentAction*) pMA )->GetPolyPolygon() );
             }

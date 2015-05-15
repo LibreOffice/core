@@ -2073,7 +2073,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case MetaActionType::TRANSPARENT:
+            case MetaActionType::Transparent:
             {
                 const tools::PolyPolygon& rPolyPoly = static_cast<const MetaTransparentAction*>(pMA)->GetPolyPolygon();
 

@@ -2164,7 +2164,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( MetaActionType::TRANSPARENT ):
+            case( MetaActionType::Transparent ):
             {
                 const tools::PolyPolygon& rPolyPoly = static_cast<const MetaTransparentAction*>(pAction)->GetPolyPolygon();
                 const sal_Int16           nTrans = static_cast<const MetaTransparentAction*>(pAction)->GetTransparence();

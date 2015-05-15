@@ -1334,7 +1334,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 case MetaActionType::WALLPAPER:
                     // FALLTHROUGH intended
 
-                case MetaActionType::TRANSPARENT:
+                case MetaActionType::Transparent:
                     // FALLTHROUGH intended
                 case MetaActionType::EPS:
                     // FALLTHROUGH intended

@@ -199,7 +199,7 @@ OString convertLineStyleToString(const MetaActionType nActionType)
         case MetaActionType::PUSH:                  return "push";
         case MetaActionType::POP:                   return "pop";
         case MetaActionType::RASTEROP:              return "rasterop";
-        case MetaActionType::TRANSPARENT:           return "transparent";
+        case MetaActionType::Transparent:           return "transparent";
         case MetaActionType::FLOATTRANSPARENT:      return "floattransparent";
         case MetaActionType::EPS:                   return "eps";
         case MetaActionType::REFPOINT:              return "refpoint";

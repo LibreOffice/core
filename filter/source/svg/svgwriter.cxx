@@ -2907,7 +2907,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( MetaActionType::TRANSPARENT ):
+            case( MetaActionType::Transparent ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {

@@ -75,7 +75,7 @@ bool IsTransparentAction( const MetaAction& rAct )
 {
     switch( rAct.GetType() )
     {
-        case MetaActionType::TRANSPARENT:
+        case MetaActionType::Transparent:
             return true;
 
         case MetaActionType::FLOATTRANSPARENT:
@@ -111,7 +111,7 @@ bool DoesActionHandleTransparency( const MetaAction& rAct )
     // white background.
     switch( rAct.GetType() )
     {
-        case MetaActionType::TRANSPARENT:
+        case MetaActionType::Transparent:
         case MetaActionType::BMPEX:
         case MetaActionType::BMPEXSCALE:
         case MetaActionType::BMPEXSCALEPART:
@@ -157,7 +157,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
                                           const OutputDevice& rStateOutDev,
                                           Color               aBgColor )
 {
-    if( rAct.GetType() == MetaActionType::TRANSPARENT )
+    if( rAct.GetType() == MetaActionType::Transparent )
     {
         const MetaTransparentAction* pTransAct = static_cast<const MetaTransparentAction*>(&rAct);
         sal_uInt16                       nTransparency( pTransAct->GetTransparence() );
@@ -204,7 +204,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
                 aBmpEx = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx();
                 break;
 
-            case MetaActionType::TRANSPARENT:
+            case MetaActionType::Transparent:
 
             default:
                 OSL_FAIL("Printer::GetPreparedMetafile impossible state reached");
@@ -375,7 +375,7 @@ bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rOut )
         case MetaActionType::GRADIENTEX:
         case MetaActionType::HATCH:
         case MetaActionType::WALLPAPER:
-        case MetaActionType::TRANSPARENT:
+        case MetaActionType::Transparent:
         case MetaActionType::FLOATTRANSPARENT:
         case MetaActionType::EPS:
         case MetaActionType::TEXTRECT:
@@ -546,7 +546,7 @@ Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut
             aActionBounds = static_cast<const MetaWallpaperAction&>(rAct).GetRect();
             break;
 
-        case MetaActionType::TRANSPARENT:
+        case MetaActionType::Transparent:
             aActionBounds = static_cast<const MetaTransparentAction&>(rAct).GetPolyPolygon().GetBoundRect();
             break;
 

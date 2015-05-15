@@ -2833,7 +2833,7 @@ namespace
 
                     break;
                 }
-                case MetaActionType::TRANSPARENT :
+                case MetaActionType::Transparent :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaTransparentAction* pA = static_cast<const MetaTransparentAction*>(pAction);

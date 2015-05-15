@@ -186,7 +186,7 @@ void ImpSdrGDIMetaFileImport::DoLoopActions(GDIMetaFile& rMtf, SvdProgressInfo* 
             case MetaActionType::MASKSCALEPART  : DoAction(static_cast<MetaMaskScalePartAction&>(*pAct)); break;
             case MetaActionType::GRADIENT       : DoAction(static_cast<MetaGradientAction&>(*pAct)); break;
             case MetaActionType::WALLPAPER      : DoAction(static_cast<MetaWallpaperAction&>(*pAct)); break;
-            case MetaActionType::TRANSPARENT    : DoAction(static_cast<MetaTransparentAction&>(*pAct)); break;
+            case MetaActionType::Transparent    : DoAction(static_cast<MetaTransparentAction&>(*pAct)); break;
             case MetaActionType::EPS            : DoAction(static_cast<MetaEPSAction&>(*pAct)); break;
             case MetaActionType::REFPOINT       : DoAction(static_cast<MetaRefPointAction&>(*pAct)); break;
             case MetaActionType::TEXTLINECOLOR  : DoAction(static_cast<MetaTextLineColorAction&>(*pAct)); break;

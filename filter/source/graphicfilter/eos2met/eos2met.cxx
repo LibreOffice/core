@@ -2267,7 +2267,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case MetaActionType::TRANSPARENT:
+            case MetaActionType::Transparent:
             {
                 if( aGDIFillColor != Color( COL_TRANSPARENT ) )
                 {

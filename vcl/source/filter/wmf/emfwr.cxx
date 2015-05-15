@@ -1206,7 +1206,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case MetaActionType::TRANSPARENT:
+            case MetaActionType::Transparent:
             {
                 const tools::PolyPolygon& rPolyPoly = static_cast<const MetaTransparentAction*>(pAction)->GetPolyPolygon();
                 if( rPolyPoly.Count() )

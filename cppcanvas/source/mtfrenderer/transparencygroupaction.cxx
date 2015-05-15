@@ -311,7 +311,7 @@ namespace cppcanvas
                                 case MetaActionType::MASKSCALEPART:
                                 case MetaActionType::GRADIENTEX:
                                 case MetaActionType::WALLPAPER:
-                                case MetaActionType::TRANSPARENT:
+                                case MetaActionType::Transparent:
                                 case MetaActionType::FLOATTRANSPARENT:
                                 case MetaActionType::TEXT:
                                 case MetaActionType::TEXTARRAY:

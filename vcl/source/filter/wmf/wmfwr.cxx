@@ -1552,7 +1552,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 }
                 break;
 
-                case MetaActionType::TRANSPARENT:
+                case MetaActionType::Transparent:
                 {
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();

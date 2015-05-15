@@ -65,7 +65,7 @@ enum class MetaActionType
     PUSH                    = 139,
     POP                     = 140,
     RASTEROP                = 141,
-    TRANSPARENT             = 142,
+    Transparent             = 142,
     EPS                     = 143,
     REFPOINT                = 144,
     TEXTLINECOLOR           = 145,

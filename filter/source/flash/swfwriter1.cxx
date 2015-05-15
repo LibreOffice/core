@@ -1543,7 +1543,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( MetaActionType::TRANSPARENT ):
+            case( MetaActionType::Transparent ):
             {
                 const MetaTransparentAction*    pA = static_cast<const MetaTransparentAction*>(pAction);
                 const tools::PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();

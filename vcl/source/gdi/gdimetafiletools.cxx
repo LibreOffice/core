@@ -1017,7 +1017,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 // MetaActionType::TEXTALIGN
                 // MetaActionType::MAPMODE
                 // MetaActionType::FONT
-                // MetaActionType::TRANSPARENT
+                // MetaActionType::Transparent
                 // MetaActionType::EPS
                 // MetaActionType::REFPOINT
                 // MetaActionType::TEXTLINECOLOR

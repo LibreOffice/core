@@ -1244,7 +1244,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( MetaActionType::TRANSPARENT ):
+                case( MetaActionType::Transparent ):
                 {
                     MetaTransparentAction* pAct = static_cast<MetaTransparentAction*>(pAction);
                     aMtf.AddAction( new MetaTransparentAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
@@ -1659,7 +1659,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
         }
         break;
 
-        case( MetaActionType::TRANSPARENT ):
+        case( MetaActionType::Transparent ):
         {
             MetaTransparentAction* pAct = static_cast<MetaTransparentAction*>(pAction);
             Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );

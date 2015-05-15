@@ -86,7 +86,7 @@ meta_action_name(MetaActionType nMetaAction)
     case MetaActionType::PUSH: return "PUSH";
     case MetaActionType::POP: return "POP";
     case MetaActionType::RASTEROP: return "RASTEROP";
-    case MetaActionType::TRANSPARENT: return "TRANSPARENT";
+    case MetaActionType::Transparent: return "TRANSPARENT";
     case MetaActionType::EPS: return "EPS";
     case MetaActionType::REFPOINT: return "REFPOINT";
     case MetaActionType::TEXTLINECOLOR: return "TEXTLINECOLOR";
@@ -252,7 +252,7 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
         case MetaActionType::PUSH: pAction = new MetaPushAction; break;
         case MetaActionType::POP: pAction = new MetaPopAction; break;
         case MetaActionType::RASTEROP: pAction = new MetaRasterOpAction; break;
-        case MetaActionType::TRANSPARENT: pAction = new MetaTransparentAction; break;
+        case MetaActionType::Transparent: pAction = new MetaTransparentAction; break;
         case MetaActionType::FLOATTRANSPARENT: pAction = new MetaFloatTransparentAction; break;
         case MetaActionType::EPS: pAction = new MetaEPSAction; break;
         case MetaActionType::REFPOINT: pAction = new MetaRefPointAction; break;
@@ -3230,7 +3230,7 @@ void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
 }
 
 MetaTransparentAction::MetaTransparentAction() :
-    MetaAction      ( MetaActionType::TRANSPARENT ),
+    MetaAction      ( MetaActionType::Transparent ),
     mnTransPercent  ( 0 )
 {}
 
@@ -3238,7 +3238,7 @@ MetaTransparentAction::~MetaTransparentAction()
 {}
 
 MetaTransparentAction::MetaTransparentAction( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent ) :
-    MetaAction      ( MetaActionType::TRANSPARENT ),
+    MetaAction      ( MetaActionType::Transparent ),
     maPolyPoly      ( rPolyPoly ),
     mnTransPercent  ( nTransPercent )
 {}

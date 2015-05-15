@@ -388,7 +388,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( MetaActionType::TRANSPARENT ):
+                case( MetaActionType::Transparent ):
                 {
                     const MetaTransparentAction* pA = static_cast<const MetaTransparentAction*>(pAction);
                     m_rOuterFace.DrawTransparent( pA->GetPolyPolygon(), pA->GetTransparence() );
