@@ -1841,6 +1841,31 @@ void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm )
     } while( true );
 }
 
+Point SwTableBox::GetCoordinates() const
+{
+    if( !pSttNd )       // box without content?
+    {
+        // search for the next first box?
+        return Point( 0, 0 );
+    }
+
+    const SwTable& rTbl = pSttNd->FindTableNode()->GetTable();
+    sal_uInt16 nX, nY;
+    const SwTableBox* pBox = this;
+    do {
+        const SwTableBoxes* pBoxes = &pBox->GetUpper()->GetTabBoxes();
+        const SwTableLine* pLine = pBox->GetUpper();
+        // at the first level?
+        const SwTableLines* pLines = pLine->GetUpper()
+                ? &pLine->GetUpper()->GetTabLines() : &rTbl.GetTabLines();
+
+        nY = pLines->GetPos( pLine ) + 1 ;
+        nX = pBoxes->GetPos( pBox ) + 1 ;
+        pBox = pLine->GetUpper();
+    } while( pBox );
+    return Point( nX, nY );
+}
+
 OUString SwTableBox::GetName() const
 {
     if( !pSttNd )       // box without content?

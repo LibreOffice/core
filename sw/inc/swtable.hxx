@@ -433,6 +433,10 @@ public:
     // Return "value" of box (for calculating in table).
     double GetValue( SwTblCalcPara& rPara ) const;
 
+    // Computes "coordinates" of a box, used to computed selection
+    // width or height when inserting cols or rows
+    Point GetCoordinates() const;
+
     bool IsInHeadline( const SwTable* pTbl = 0 ) const;
 
     // Contains box contents, that can be formatted as a number?
