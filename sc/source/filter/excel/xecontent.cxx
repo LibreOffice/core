@@ -1125,6 +1125,40 @@ void XclExpColScaleCol::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_color );
 }
 
+namespace {
+
+OString createHexStringFromDigit(sal_uInt8 nDigit)
+{
+    OString aString = OString::number( nDigit, 16 );
+    if(aString.getLength() == 1)
+        aString = aString + OString::number(0);
+    return aString;
+}
+
+OString createGuidStringFromInt(sal_uInt8 nGuid[16])
+{
+    OStringBuffer aBuffer;
+    aBuffer.append('{');
+    for(size_t i = 0; i < 16; ++i)
+    {
+        aBuffer.append(createHexStringFromDigit(nGuid[i]));
+        if(i == 3|| i == 5 || i == 7 || i == 9 )
+            aBuffer.append('-');
+    }
+    aBuffer.append('}');
+    OString aString = aBuffer.makeStringAndClear();
+    return aString.toAsciiUpperCase();
+}
+
+OString generateGUIDString()
+{
+    sal_uInt8 nGuid[16];
+    rtl_createUuid(nGuid, NULL, true);
+    return createGuidStringFromInt(nGuid);
+}
+
+}
+
 XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst, sal_Int32& rIndex ) :
     XclExpRecord( EXC_ID_CONDFMT ),
     XclExpRoot( rRoot )
@@ -1133,6 +1167,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     GetAddressConverter().ConvertRangeList( maXclRanges, aScRanges, true );
     if( !maXclRanges.empty() )
     {
+        std::vector<XclExpExtCondFormatData> aExtEntries;
         for( size_t nIndex = 0, nCount = rCondFormat.size(); nIndex < nCount; ++nIndex )
             if( const ScFormatEntry* pFormatEntry = rCondFormat.GetEntry( nIndex ) )
             {
@@ -1141,13 +1176,65 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
                 else if(pFormatEntry->GetType() == condformat::COLORSCALE)
                     maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), ++rIndex ) );
                 else if(pFormatEntry->GetType() == condformat::DATABAR)
-                    maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), static_cast<const ScDataBarFormat&>(*pFormatEntry), ++rIndex, xExtLst ) );
+                {
+                    const ScDataBarFormat& rFormat = static_cast<const ScDataBarFormat&>(*pFormatEntry);
+                    XclExpExtCondFormatData aExtEntry;
+                    aExtEntry.nPriority = -1;
+                    aExtEntry.aGUID = generateGUIDString();
+                    aExtEntry.pEntry = &rFormat;
+                    aExtEntries.push_back(aExtEntry);
+
+                    maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), rFormat, ++rIndex, aExtEntry.aGUID));
+                }
                 else if(pFormatEntry->GetType() == condformat::ICONSET)
-                    maCFList.AppendNewRecord( new XclExpIconSet( GetRoot(), static_cast<const ScIconSetFormat&>(*pFormatEntry), ++rIndex ) );
+                {
+                    // don't export iconSet entries that are not in OOXML
+                    const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
+                    bool bNeedsExt = false;
+                    switch (rIconSet.GetIconSetData()->eIconSetType)
+                    {
+                        case IconSet_3Smilies:
+                        case IconSet_3ColorSmilies:
+                        case IconSet_3Stars:
+                        case IconSet_3Triangles:
+                        case IconSet_5Boxes:
+                        {
+                            bNeedsExt = true;
+                        }
+                        break;
+                        default:
+                            break;
+                    }
+
+                    bNeedsExt |= rIconSet.GetIconSetData()->mbCustom;
+
+                    if (bNeedsExt)
+                    {
+                        XclExpExtCondFormatData aExtEntry;
+                        aExtEntry.nPriority = ++rIndex;
+                        aExtEntry.aGUID = generateGUIDString();
+                        aExtEntry.pEntry = &rIconSet;
+                        aExtEntries.push_back(aExtEntry);
+                    }
+                    else
+                        maCFList.AppendNewRecord( new XclExpIconSet( GetRoot(), rIconSet, ++rIndex ) );
+                }
                 else if(pFormatEntry->GetType() == condformat::DATE)
                     maCFList.AppendNewRecord( new XclExpDateFormat( GetRoot(), static_cast<const ScCondDateFormatEntry&>(*pFormatEntry), ++rIndex ) );
             }
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
+
+        if(!aExtEntries.empty() && xExtLst.get())
+        {
+            XclExpExtRef pParent = xExtLst->GetItem( XclExpExtDataBarType );
+            if( !pParent.get() )
+            {
+                xExtLst->AddRecord( XclExpExtRef(new XclExpExtCondFormat( *xExtLst.get() )) );
+                pParent = xExtLst->GetItem( XclExpExtDataBarType );
+            }
+            static_cast<XclExpExtCondFormat*>(xExtLst->GetItem( XclExpExtDataBarType ).get())->AddRecord(
+                    XclExpExtConditionalFormattingRef(new XclExpExtConditionalFormatting( *pParent, aExtEntries, aScRanges)));
+        }
     }
 }
 
@@ -1234,38 +1321,12 @@ void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_cfRule );
 }
 
-namespace {
-
-OString createHexStringFromDigit(sal_uInt8 nDigit)
-{
-    OString aString = OString::number( nDigit, 16 );
-    if(aString.getLength() == 1)
-        aString = aString + OString::number(0);
-    return aString;
-}
-
-OString createGuidStringFromInt(sal_uInt8 nGuid[16])
-{
-    OStringBuffer aBuffer;
-    aBuffer.append('{');
-    for(size_t i = 0; i < 16; ++i)
-    {
-        aBuffer.append(createHexStringFromDigit(nGuid[i]));
-        if(i == 3|| i == 5 || i == 7 || i == 9 )
-            aBuffer.append('-');
-    }
-    aBuffer.append('}');
-    OString aString = aBuffer.makeStringAndClear();
-    return aString.toAsciiUpperCase();
-}
-
-}
-
-XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, XclExtLstRef xExtLst ):
+XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, const OString& rGUID):
     XclExpRecord(),
     XclExpRoot( rRoot ),
     mrFormat( rFormat ),
-    mnPriority( nPriority )
+    mnPriority( nPriority ),
+    maGUID(rGUID)
 {
     const ScRange* pRange = rFormat.GetRange().front();
     ScAddress aAddr = pRange->aStart;
@@ -1274,19 +1335,6 @@ XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rF
     mpCfvoUpperLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpUpperLimit.get(), aAddr, false ) );
 
     mpCol.reset( new XclExpColScaleCol( GetRoot(), mrFormat.GetDataBarData()->maPositiveColor ) );
-    if(xExtLst.get())
-    {
-        XclExpExtRef pParent = xExtLst->GetItem( XclExpExtDataBarType );
-        if( !pParent.get() )
-        {
-            xExtLst->AddRecord( XclExpExtRef(new XclExpExtCondFormat( *xExtLst.get() )) );
-            pParent = xExtLst->GetItem( XclExpExtDataBarType );
-        }
-        sal_uInt8 nGuid[16];
-        rtl_createUuid(nGuid, NULL, true);
-        maGuid = createGuidStringFromInt(nGuid);
-        static_cast<XclExpExtCondFormat*>(xExtLst->GetItem( XclExpExtDataBarType ).get())->AddRecord( XclExpExtConditionalFormattingRef(new XclExpExtConditionalFormatting( *pParent, rFormat, aAddr, maGuid) ));
-    }
 }
 
 void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
@@ -1318,7 +1366,7 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
                                 FSEND );
 
     rWorksheet->startElementNS( XML_x14, XML_id, FSEND );
-    rWorksheet->write( maGuid.getStr() );
+    rWorksheet->write( maGUID.getStr() );
     rWorksheet->endElementNS( XML_x14, XML_id );
 
     rWorksheet->endElement( XML_ext );

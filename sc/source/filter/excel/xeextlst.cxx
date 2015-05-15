@@ -17,6 +17,22 @@
 
 using namespace ::oox;
 
+namespace {
+
+const char* getIconSetName( ScIconSetType eType )
+{
+    ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
+    for(; pMap->pName; ++pMap)
+    {
+        if(pMap->eType == eType)
+            return pMap->pName;
+    }
+
+    return "";
+}
+
+}
+
 XclExpExt::XclExpExt( const XclExpRoot& rRoot ):
     XclExpRoot(rRoot)
 {
@@ -49,6 +65,29 @@ void XclExpExtAxisColor::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->singleElementNS( XML_x14, XML_axisColor,
                                                 XML_rgb, XclXmlUtils::ToOString( maAxisColor ).getStr(),
                                                 FSEND );
+}
+
+XclExpExtIcon::XclExpExtIcon(const XclExpRoot& rRoot, const std::pair<ScIconSetType, sal_Int32>& rCustomEntry):
+    XclExpRoot(rRoot),
+    nIndex(rCustomEntry.second)
+{
+    pIconSetName = getIconSetName(rCustomEntry.first);
+}
+
+void XclExpExtIcon::SaveXml(XclExpXmlStream& rStrm)
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    if (nIndex == -1)
+    {
+        nIndex = 0;
+        pIconSetName = "NoIcons";
+    }
+
+    rWorksheet->singleElementNS(XML_x14, XML_cfIcon,
+            XML_iconSet, pIconSetName,
+            XML_iconId, OString::number(nIndex).getStr(),
+            FSEND);
 }
 
 XclExpExtCfvo::XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rSrcPos, bool bFirst ):
@@ -103,10 +142,21 @@ const char* getColorScaleType( ScColorScaleEntryType eType, bool bFirst )
 void XclExpExtCfvo::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-    rWorksheet->singleElementNS( XML_x14, XML_cfvo,
+    rWorksheet->startElementNS( XML_x14, XML_cfvo,
                                 XML_type, getColorScaleType(meType, mbFirst),
-                                XML_value, maValue.getStr(),
                                 FSEND );
+
+    if (meType == COLORSCALE_FORMULA ||
+            meType == COLORSCALE_PERCENT ||
+            meType == COLORSCALE_PERCENTILE ||
+            meType == COLORSCALE_VALUE)
+    {
+        rWorksheet->startElementNS(XML_xm, XML_f, FSEND);
+        rWorksheet->writeEscaped(maValue.getStr());
+        rWorksheet->endElementNS(XML_xm, XML_f);
+    }
+
+    rWorksheet->endElementNS(XML_x14, XML_cfvo);
 }
 
 XclExpExtDataBar::XclExpExtDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos ):
@@ -163,32 +213,135 @@ void XclExpExtDataBar::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElementNS( XML_x14, XML_dataBar );
 }
 
-XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const OString& rId ):
-    XclExpRoot(rRoot),
-    maId(rId)
+XclExpExtIconSet::XclExpExtIconSet(const XclExpRoot& rRoot, const ScIconSetFormat& rFormat, const ScAddress& rPos):
+    XclExpRoot(rRoot)
 {
-    maDataBar.reset( new XclExpExtDataBar( *this, rFormat, rPos ) );
+    const ScIconSetFormatData& rData = *rFormat.GetIconSetData();
+    for (auto itr = rData.maEntries.begin(); itr != rData.maEntries.end(); ++itr)
+    {
+        maCfvos.AppendNewRecord(new XclExpExtCfvo(*this, *itr, rPos, false));
+    }
+    mbCustom = rData.mbCustom;
+    mbReverse = rData.mbReverse;
+    mbShowValue = rData.mbShowValue;
+    mpIconSetName = getIconSetName(rData.eIconSetType);
+
+    if (mbCustom)
+    {
+        for (auto itr = rData.maCustomVector.begin(); itr != rData.maCustomVector.end(); ++itr)
+        {
+            maCustom.AppendNewRecord(new XclExpExtIcon(*this, *itr));
+        }
+    }
+}
+
+void XclExpExtIconSet::SaveXml(XclExpXmlStream& rStrm)
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    rWorksheet->startElementNS(XML_x14, XML_iconSet,
+            XML_iconSet, mpIconSetName,
+            XML_custom, mbCustom ? XclXmlUtils::ToPsz10(mbCustom) : NULL,
+            XML_reverse, XclXmlUtils::ToPsz10(mbReverse),
+            XML_showValue, XclXmlUtils::ToPsz10(mbShowValue),
+            FSEND);
+
+    maCfvos.SaveXml(rStrm);
+
+    if (mbCustom)
+    {
+        maCustom.SaveXml(rStrm);
+    }
+
+    rWorksheet->endElementNS(XML_x14, XML_iconSet);
+}
+
+XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& rFormat, const ScAddress& rPos, const OString& rId, sal_Int32 nPriority ):
+    XclExpRoot(rRoot),
+    maId(rId),
+    mnPriority(nPriority)
+{
+    switch (rFormat.GetType())
+    {
+        case condformat::DATABAR:
+        {
+            const ScDataBarFormat& rDataBar = static_cast<const ScDataBarFormat&>(rFormat);
+            mxEntry.reset( new XclExpExtDataBar( *this, rDataBar, rPos ) );
+            pType = "dataBar";
+        }
+        break;
+        case condformat::ICONSET:
+        {
+            const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(rFormat);
+            mxEntry.reset(new XclExpExtIconSet(*this, rIconSet, rPos));
+            pType = "iconSet";
+        }
+        default:
+        break;
+    }
 }
 
 void XclExpExtCfRule::SaveXml( XclExpXmlStream& rStrm )
 {
+    if (!mxEntry)
+        return;
+
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElementNS( XML_x14, XML_cfRule,
-                                XML_type, "dataBar",
+                                XML_type, pType,
+                                XML_priority, mnPriority == -1 ? NULL : OString::number(mnPriority).getStr(),
                                 XML_id, maId.getStr(),
                                 FSEND );
 
-    maDataBar->SaveXml( rStrm );
+    mxEntry->SaveXml( rStrm );
 
     rWorksheet->endElementNS( XML_x14, XML_cfRule );
 
 }
 
-XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const OString& rId ):
-    XclExpRoot(rRoot)
+XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot& rRoot,
+        std::vector<XclExpExtCondFormatData>& rData, const ScRangeList& rRange):
+    XclExpRoot(rRoot),
+    maRange(rRange)
 {
-    maCfRule.reset( new XclExpExtCfRule( *this, rFormat, rPos, rId ) );
-    maRange = rFormat.GetRange();
+    ScAddress aAddr = maRange.front()->aStart;
+    for (auto itr = rData.begin(), itrEnd = rData.end(); itr != itrEnd; ++itr)
+    {
+        const ScFormatEntry* pEntry = itr->pEntry;
+        switch (pEntry->GetType())
+        {
+            case condformat::ICONSET:
+            {
+                const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pEntry);
+                bool bNeedsExt = false;
+                switch (rIconSet.GetIconSetData()->eIconSetType)
+                {
+                    case IconSet_3Triangles:
+                    case IconSet_3Smilies:
+                    case IconSet_3ColorSmilies:
+                    case IconSet_5Boxes:
+                        bNeedsExt = true;
+                    break;
+                    default:
+                    break;
+                }
+
+                if (rIconSet.GetIconSetData()->mbCustom)
+                    bNeedsExt = true;
+
+                if (bNeedsExt)
+                {
+                    maCfRules.AppendNewRecord(new XclExpExtCfRule(*this, *pEntry, aAddr, itr->aGUID, itr->nPriority));
+                }
+            }
+            break;
+            case condformat::DATABAR:
+                maCfRules.AppendNewRecord(new XclExpExtCfRule( *this, *pEntry, aAddr, itr->aGUID, itr->nPriority));
+            break;
+            default:
+            break;
+        }
+    }
 }
 
 void XclExpExtConditionalFormatting::SaveXml( XclExpXmlStream& rStrm )
@@ -198,7 +351,7 @@ void XclExpExtConditionalFormatting::SaveXml( XclExpXmlStream& rStrm )
                                 FSNS( XML_xmlns, XML_xm ), "http://schemas.microsoft.com/office/excel/2006/main",
                                 FSEND );
 
-    maCfRule->SaveXml( rStrm );
+    maCfRules.SaveXml( rStrm );
     rWorksheet->startElementNS( XML_xm, XML_sqref, FSEND );
     rWorksheet->write(XclXmlUtils::ToOString(maRange).getStr());
 

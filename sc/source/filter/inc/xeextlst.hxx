@@ -22,6 +22,14 @@ enum XclExpExtType
     XclExpExtDataBarType
 };
 
+struct XclExpExtCondFormatData
+{
+    // -1 means don't write priority
+    sal_Int32 nPriority;
+    OString aGUID;
+    const ScFormatEntry* pEntry;
+};
+
 /**
  * Base class for ext entries. Extend this class to provide the needed functionality
  *
@@ -69,6 +77,17 @@ private:
     Color maAxisColor;
 };
 
+class XclExpExtIcon : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    explicit XclExpExtIcon( const XclExpRoot& rRoot, const std::pair<ScIconSetType, sal_Int32>& rCustomEntry);
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+
+private:
+    const char* pIconSetName;
+    sal_Int32 nIndex;
+};
+
 class XclExpExtDataBar : public XclExpRecordBase, protected XclExpRoot
 {
 public:
@@ -88,17 +107,34 @@ private:
 
 };
 
+class XclExpExtIconSet : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    explicit XclExpExtIconSet(const XclExpRoot& rRoot, const ScIconSetFormat& rFormat, const ScAddress& rPos);
+    virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+
+private:
+    XclExpRecordList<XclExpExtCfvo> maCfvos;
+    XclExpRecordList<XclExpExtIcon> maCustom;
+    bool mbCustom;
+    bool mbReverse;
+    bool mbShowValue;
+    const char* mpIconSetName;
+};
+
 typedef std::shared_ptr<XclExpExtDataBar> XclExpExtDataBarRef;
 
 class XclExpExtCfRule : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    XclExpExtCfRule( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const OString& rId );
+    XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& rFormat, const ScAddress& rPos, const OString& rId, sal_Int32 nPriority );
     virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    XclExpExtDataBarRef maDataBar;
+    XclExpRecordRef mxEntry;
     OString maId;
+    const char* pType;
+    sal_Int32 mnPriority;
 };
 
 typedef std::shared_ptr<XclExpExt> XclExpExtRef;
@@ -107,11 +143,11 @@ typedef std::shared_ptr<XclExpExtCfRule> XclExpExtCfRuleRef;
 class XclExpExtConditionalFormatting : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    explicit XclExpExtConditionalFormatting( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const OString& rId );
+    explicit XclExpExtConditionalFormatting( const XclExpRoot& rRoot, std::vector<XclExpExtCondFormatData>& rData, const ScRangeList& rRange);
     virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    XclExpExtCfRuleRef maCfRule;
+    XclExpRecordList<XclExpExtCfRule> maCfRules;
     ScRangeList maRange;
 };
 

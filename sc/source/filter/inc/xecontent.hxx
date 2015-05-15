@@ -269,7 +269,7 @@ private:
 class XclExpDataBar : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, XclExtLstRef xExtLst );
+    explicit XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, sal_Int32 nPriority, const OString& rGUID);
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
@@ -279,7 +279,7 @@ private:
 
     const ScDataBarFormat& mrFormat;
     sal_Int32 mnPriority;
-    OString maGuid;
+    OString maGUID;
 };
 
 class XclExpIconSet : public XclExpRecord, protected XclExpRoot
