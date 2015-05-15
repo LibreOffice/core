@@ -1783,39 +1783,40 @@ static OUString getShortenedString( const OUString& i_rLong, vcl::Window* i_pWin
     return aNonMnem;
 }
 
-void Menu::ImplPaintMenuTitle( vcl::Window* pWin, const Rectangle& rRect ) const
+void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const Rectangle& rRect ) const
 {
     // Save previous graphical settings, set new one
-    pWin->Push( PushFlags::FONT | PushFlags::FILLCOLOR );
-    Color aBg = pWin->GetSettings().GetStyleSettings().GetMenuBarColor();
-    pWin->SetBackground( Wallpaper( aBg ) );
-    pWin->SetFillColor( aBg );
-    vcl::Font aFont = pWin->GetFont();
+    rRenderContext.Push(PushFlags::FONT | PushFlags::FILLCOLOR);
+    Color aBackgroundColor = rRenderContext.GetSettings().GetStyleSettings().GetMenuBarColor();
+    rRenderContext.SetBackground(Wallpaper(aBackgroundColor));
+    rRenderContext.SetFillColor(aBackgroundColor);
+    vcl::Font aFont = rRenderContext.GetFont();
     aFont.SetWeight(WEIGHT_BOLD);
-    pWin->SetFont(aFont);
+    rRenderContext.SetFont(aFont);
 
     // Draw background rectangle
-    Rectangle aBgRect( rRect );
+    Rectangle aBgRect(rRect);
     int nOuterSpaceX = ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
-    aBgRect.setX( aBgRect.getX() + SPACE_AROUND_TITLE);
-    aBgRect.setWidth( aBgRect.getWidth() - 2 * SPACE_AROUND_TITLE - 2 * nOuterSpaceX );
-    aBgRect.setY( aBgRect.getY() + SPACE_AROUND_TITLE );
-    aBgRect.setHeight( nTitleHeight - 2 * SPACE_AROUND_TITLE );
-    pWin->DrawRect( aBgRect );
+    aBgRect.setX(aBgRect.getX() + SPACE_AROUND_TITLE);
+    aBgRect.setWidth(aBgRect.getWidth() - 2 * SPACE_AROUND_TITLE - 2 * nOuterSpaceX);
+    aBgRect.setY(aBgRect.getY() + SPACE_AROUND_TITLE);
+    aBgRect.setHeight(nTitleHeight - 2 * SPACE_AROUND_TITLE);
+    rRenderContext.DrawRect(aBgRect);
 
     // Draw the text centered
-    Point aTextTopLeft( rRect.TopLeft() );
-    long textWidth = pWin->GetTextWidth(aTitleText);
-    aTextTopLeft.X() += ( aBgRect.getWidth() - textWidth ) / 2;
+    Point aTextTopLeft(rRect.TopLeft());
+    long textWidth = rRenderContext.GetTextWidth(aTitleText);
+    aTextTopLeft.X() += (aBgRect.getWidth() - textWidth) / 2;
     aTextTopLeft.Y() += SPACE_AROUND_TITLE;
-    pWin->DrawText( aTextTopLeft, aTitleText, 0, aTitleText.getLength() );
+    rRenderContext.DrawText(aTextTopLeft, aTitleText, 0, aTitleText.getLength());
 
     // Restore
-    pWin->SetBackground();
-    pWin->Pop();
+    rRenderContext.SetBackground();
+    rRenderContext.Pop();
 }
 
-void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemData* pThisItemOnly, bool bHighlighted, bool bLayout, bool bRollover ) const
+void Menu::ImplPaint(vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemData* pThisItemOnly,
+                     bool bHighlighted, bool bLayout, bool bRollover) const
 {
     // for symbols: nFontHeight x nFontHeight
     long nFontHeight = pWin->GetTextHeight();
@@ -1846,8 +1847,8 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
         mpLayoutData->m_aVisibleItemBoundRects.clear();
 
     // Paint title
-    if ( !pThisItemOnly && !IsMenuBar() && nTitleHeight > 0 )
-        ImplPaintMenuTitle( pWin, Rectangle( aTopLeft, aOutSz ) );
+    if (!pThisItemOnly && !IsMenuBar() && nTitleHeight > 0)
+        ImplPaintMenuTitle(*pWin/*rRenderContext*/, Rectangle(aTopLeft, aOutSz));
 
     for ( size_t n = 0; n < nCount; n++ )
     {

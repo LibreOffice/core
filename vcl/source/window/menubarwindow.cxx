@@ -563,23 +563,25 @@ static int ImplGetTopDockingAreaHeight( vcl::Window *pWindow )
     return 0;
 }
 
-static void ImplAddNWFSeparator( vcl::Window *pThis, const MenubarValue& rMenubarValue )
+static void ImplAddNWFSeparator( vcl::RenderContext& rRenderContext, const MenubarValue& rMenubarValue )
 {
     // add a separator if
     // - we have an adjacent docking area
     // - and if toolbars would draw them as well (mbDockingAreaSeparateTB must not be set, see dockingarea.cxx)
-    if( rMenubarValue.maTopDockingAreaHeight && !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB && !ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
+    if (rMenubarValue.maTopDockingAreaHeight
+      && !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB
+      && !ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames)
     {
         // note: the menubar only provides the upper (dark) half of it, the rest (bright part) is drawn by the docking area
 
-        pThis->SetLineColor( pThis->GetSettings().GetStyleSettings().GetSeparatorColor() );
+        rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetSeparatorColor());
         Point aPt;
-        Rectangle aRect( aPt, pThis->GetOutputSizePixel() );
-        pThis->DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+        Rectangle aRect(aPt, rRenderContext.GetOutputSizePixel());
+        rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
     }
 }
 
-void MenuBarWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
+void MenuBarWindow::HighlightItem(sal_uInt16 nPos, bool bHighlight)
 {
     if( ! pMenu )
         return;
@@ -620,7 +622,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
                                     OUString() );
                         }
 
-                        ImplAddNWFSeparator( this, aControlValue );
+                        ImplAddNWFSeparator(*this, aControlValue); // FIXME
 
                         // draw selected item
                         ControlState nState = ControlState::ENABLED;
@@ -663,7 +665,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
                             DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRect, ControlState::ENABLED, aMenubarValue, OUString() );
                         }
 
-                        ImplAddNWFSeparator( this, aMenubarValue );
+                        ImplAddNWFSeparator(*this, aMenubarValue); // FIXME
                     }
                     else
                         Erase( aRect );
@@ -870,52 +872,56 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     return bDone;
 }
 
-void MenuBarWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    if( ! pMenu )
+    if (!pMenu)
         return;
 
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
     // no VCL paint if native menus
-    if( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() )
+    if (pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar())
     {
         ImplGetFrame()->DrawMenuBar();
         return;
     }
 
-    if( IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) )
+    if (rRenderContext.IsNativeControlSupported(CTRL_MENUBAR, PART_ENTIRE_CONTROL))
     {
         MenubarValue aMenubarValue;
-        aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
+        aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight(this);
 
-        if ( !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )
-            Erase();
+        if (!rStyleSettings.GetPersonaHeader().IsEmpty())
+            rRenderContext.Erase();
         else
         {
             Point aPt;
             Rectangle aCtrlRegion( aPt, GetOutputSizePixel() );
 
-            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, ControlState::ENABLED, aMenubarValue, OUString() );
+            rRenderContext.DrawNativeControl(CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                             ControlState::ENABLED, aMenubarValue, OUString());
         }
 
-        ImplAddNWFSeparator( this, aMenubarValue );
+        ImplAddNWFSeparator(rRenderContext, aMenubarValue);
     }
-    SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
-    pMenu->ImplPaint( this, 0 );
-    if ( nHighlightedItem != ITEMPOS_INVALID )
-        HighlightItem( nHighlightedItem, true );
+    rRenderContext.SetFillColor(rStyleSettings.GetMenuColor());
+
+    pMenu->ImplPaint(this, 0);
+    if (nHighlightedItem != ITEMPOS_INVALID)
+        HighlightItem(nHighlightedItem, true );
 
     // in high contrast mode draw a separating line on the lower edge
-    if( ! IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) &&
-        GetSettings().GetStyleSettings().GetHighContrastMode() )
+    if (!rRenderContext.IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) &&
+        rStyleSettings.GetHighContrastMode())
     {
-        Push( PushFlags::LINECOLOR | PushFlags::MAPMODE );
-        SetLineColor( Color( COL_WHITE ) );
-        SetMapMode( MapMode( MAP_PIXEL ) );
+        rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::MAPMODE);
+        rRenderContext.SetLineColor(Color(COL_WHITE));
+        rRenderContext.SetMapMode(MapMode(MAP_PIXEL));
         Size aSize = GetSizePixel();
-        DrawLine( Point( 0, aSize.Height()-1 ), Point( aSize.Width()-1, aSize.Height()-1 ) );
-        Pop();
+        rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
+                                Point(aSize.Width() - 1, aSize.Height() - 1));
+        rRenderContext.Pop();
     }
-
 }
 
 void MenuBarWindow::Resize()
@@ -1069,11 +1075,11 @@ void MenuBarWindow::GetFocus()
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > MenuBarWindow::CreateAccessible()
+css::uno::Reference<css::accessibility::XAccessible> MenuBarWindow::CreateAccessible()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
+    css::uno::Reference<css::accessibility::XAccessible> xAcc;
 
-    if ( pMenu )
+    if (pMenu)
         xAcc = pMenu->GetAccessible();
 
     return xAcc;

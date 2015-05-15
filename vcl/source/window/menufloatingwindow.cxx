@@ -1083,34 +1083,32 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
     }
 }
 
-void MenuFloatingWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    if( ! pMenu )
+    if (!pMenu)
         return;
 
-    if( IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
+    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
     {
-        SetClipRegion();
+        rRenderContext.SetClipRegion();
         long nX = pMenu->pLogo ? pMenu->pLogo->aBitmap.GetSizePixel().Width() : 0;
-        Size aPxSize( GetOutputSizePixel() );
+        Size aPxSize(rRenderContext.GetOutputSizePixel());
         aPxSize.Width() -= nX;
-        ImplControlValue aVal( pMenu->nTextPos-GUTTERBORDER );
-        DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
-                           Rectangle( Point( nX, 0 ), aPxSize ),
-                           ControlState::ENABLED,
-                           aVal,
-                           OUString() );
+        ImplControlValue aVal(pMenu->nTextPos - GUTTERBORDER);
+        rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
+                                         Rectangle(Point(nX, 0), aPxSize),
+                                         ControlState::ENABLED, aVal, OUString());
         InitMenuClipRegion();
     }
-    if ( IsScrollMenu() )
+    if (IsScrollMenu())
     {
         ImplDrawScroller( true );
         ImplDrawScroller( false );
     }
-    SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
-    pMenu->ImplPaint( this, nScrollerHeight, ImplGetStartY() );
-    if ( nHighlightedItem != ITEMPOS_INVALID )
-        HighlightItem( nHighlightedItem, true );
+    rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetMenuColor());
+    pMenu->ImplPaint(this, nScrollerHeight, ImplGetStartY());
+    if (nHighlightedItem != ITEMPOS_INVALID)
+        HighlightItem(nHighlightedItem, true);
 }
 
 void MenuFloatingWindow::ImplDrawScroller( bool bUp )

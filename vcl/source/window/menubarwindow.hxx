@@ -119,7 +119,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 

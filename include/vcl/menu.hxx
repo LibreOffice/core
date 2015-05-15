@@ -186,7 +186,7 @@ protected:
     SAL_DLLPRIVATE sal_uInt16           ImplGetPrevVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16           ImplGetNextVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE void             ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = 0, bool bHighlighted = false, bool bLayout = false, bool bRollover = false ) const;
-    SAL_DLLPRIVATE void             ImplPaintMenuTitle( vcl::Window* pWin, const Rectangle& rRect ) const;
+    SAL_DLLPRIVATE void             ImplPaintMenuTitle(vcl::RenderContext&, const Rectangle& rRect) const;
     SAL_DLLPRIVATE void             ImplSelect();
     SAL_DLLPRIVATE void             ImplCallHighlight( sal_uInt16 nHighlightItem );
     SAL_DLLPRIVATE void             ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos );
