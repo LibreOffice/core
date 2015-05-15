@@ -66,36 +66,35 @@ void SwEnvPreview::DataChanged( const DataChangedEvent& rDCEvt )
         SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
 }
 
-void SwEnvPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &)
+void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &)
 {
-    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     const SwEnvItem& rItem =
-        static_cast<SwEnvDlg*>( GetParentDialog())->aEnvItem;
+        static_cast<SwEnvDlg*>(GetParentDialog())->aEnvItem;
 
     const long nPageW = std::max(rItem.lWidth, rItem.lHeight);
     const long nPageH = std::min(rItem.lWidth, rItem.lHeight);
 
     const float f = 0.8 * std::min(
-        static_cast<float>(GetOutputSizePixel().Width())/static_cast<float>(nPageW),
-        static_cast<float>(GetOutputSizePixel().Height())/static_cast<float>(nPageH));
+        float(rRenderContext.GetOutputSizePixel().Width()) / float(nPageW),
+        float(rRenderContext.GetOutputSizePixel().Height()) / float(nPageH));
 
     Color aBack = rSettings.GetWindowColor( );
     Color aFront = SwViewOption::GetFontColor();
-    Color aMedium = Color(  ( aBack.GetRed() + aFront.GetRed() ) / 2,
-                            ( aBack.GetGreen() + aFront.GetGreen() ) / 2,
-                            ( aBack.GetBlue() + aFront.GetBlue() ) / 2
-                        );
+    Color aMedium = Color((aBack.GetRed() + aFront.GetRed()) / 2,
+                          (aBack.GetGreen() + aFront.GetGreen()) / 2,
+                          (aBack.GetBlue() + aFront.GetBlue()) / 2);
 
-    SetLineColor( aFront );
+    rRenderContext.SetLineColor(aFront);
 
     // Envelope
     const long nW = static_cast<long>(f * nPageW);
     const long nH = static_cast<long>(f * nPageH);
-    const long nX = (GetOutputSizePixel().Width () - nW) / 2;
-    const long nY = (GetOutputSizePixel().Height() - nH) / 2;
-    SetFillColor( aBack );
-    DrawRect(Rectangle(Point(nX, nY), Size(nW, nH)));
+    const long nX = (rRenderContext.GetOutputSizePixel().Width () - nW) / 2;
+    const long nY = (rRenderContext.GetOutputSizePixel().Height() - nH) / 2;
+    rRenderContext.SetFillColor(aBack);
+    rRenderContext.DrawRect(Rectangle(Point(nX, nY), Size(nW, nH)));
 
     // Sender
     if (rItem.bSend)
@@ -104,9 +103,9 @@ void SwEnvPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle
         const long nSendY = nY + static_cast<long>(f * rItem.lSendFromTop );
         const long nSendW = static_cast<long>(f * (rItem.lAddrFromLeft - rItem.lSendFromLeft));
         const long nSendH = static_cast<long>(f * (rItem.lAddrFromTop  - rItem.lSendFromTop  - 566));
-        SetFillColor( aMedium );
+        rRenderContext.SetFillColor(aMedium);
 
-        DrawRect(Rectangle(Point(nSendX, nSendY), Size(nSendW, nSendH)));
+        rRenderContext.DrawRect(Rectangle(Point(nSendX, nSendY), Size(nSendW, nSendH)));
     }
 
     // Addressee
@@ -114,8 +113,8 @@ void SwEnvPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle
     const long nAddrY = nY + static_cast<long>(f * rItem.lAddrFromTop );
     const long nAddrW = static_cast<long>(f * (nPageW - rItem.lAddrFromLeft - 566));
     const long nAddrH = static_cast<long>(f * (nPageH - rItem.lAddrFromTop  - 566));
-    SetFillColor( aMedium );
-    DrawRect(Rectangle(Point(nAddrX, nAddrY), Size(nAddrW, nAddrH)));
+    rRenderContext.SetFillColor(aMedium);
+    rRenderContext.DrawRect(Rectangle(Point(nAddrX, nAddrY), Size(nAddrW, nAddrH)));
 
     // Stamp
     const long nStmpW = static_cast<long>(f * 1417 /* 2,5 cm */);
@@ -123,8 +122,8 @@ void SwEnvPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle
     const long nStmpX = nX + nW - static_cast<long>(f * 566) - nStmpW;
     const long nStmpY = nY + static_cast<long>(f * 566);
 
-    SetFillColor( aBack );
-    DrawRect(Rectangle(Point(nStmpX, nStmpY), Size(nStmpW, nStmpH)));
+    rRenderContext.SetFillColor(aBack);
+    rRenderContext.DrawRect(Rectangle(Point(nStmpX, nStmpY), Size(nStmpW, nStmpH)));
 }
 
 SwEnvDlg::SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet,
