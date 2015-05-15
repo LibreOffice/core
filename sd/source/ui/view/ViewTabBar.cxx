@@ -57,20 +57,17 @@ namespace sd {
 namespace {
 bool IsEqual (const TabBarButton& rButton1, const TabBarButton& rButton2)
 {
-    return (
-        (rButton1.ResourceId.is()
-            && rButton2.ResourceId.is()
-            && rButton1.ResourceId->compareTo(rButton2.ResourceId)==0)
+    return ((rButton1.ResourceId.is()
+                && rButton2.ResourceId.is()
+                && rButton1.ResourceId->compareTo(rButton2.ResourceId) == 0)
         || rButton1.ButtonLabel == rButton2.ButtonLabel);
 }
 
 class TabBarControl : public ::TabControl
 {
 public:
-    TabBarControl (
-        vcl::Window* pParentWindow,
-        const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
-    virtual void Paint (vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
+    TabBarControl (vcl::Window* pParentWindow, const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
+    virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void ActivatePage() SAL_OVERRIDE;
 private:
     ::rtl::Reference<ViewTabBar> mpViewTabBar;
@@ -568,20 +565,21 @@ TabBarControl::TabBarControl (
 
 void TabBarControl::Paint (vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    Color aOriginalFillColor (GetFillColor());
-    Color aOriginalLineColor (GetLineColor());
+    Color aOriginalFillColor(rRenderContext.GetFillColor());
+    Color aOriginalLineColor(rRenderContext.GetLineColor());
 
     // Because the actual window background is transparent--to avoid
     // flickering due to multiple background paintings by this and by child
     // windows--we have to paint the background for this control explicitly:
     // the actual control is not painted over its whole bounding box.
-    SetFillColor (GetSettings().GetStyleSettings().GetDialogColor());
-    SetLineColor ();
-    DrawRect (rRect);
+    rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
+    rRenderContext.SetLineColor();
+    rRenderContext.DrawRect(rRect);
+
     ::TabControl::Paint(rRenderContext, rRect);
 
-    SetFillColor (aOriginalFillColor);
-    SetLineColor (aOriginalLineColor);
+    rRenderContext.SetFillColor(aOriginalFillColor);
+    rRenderContext.SetLineColor(aOriginalLineColor);
 }
 
 void TabBarControl::ActivatePage()
