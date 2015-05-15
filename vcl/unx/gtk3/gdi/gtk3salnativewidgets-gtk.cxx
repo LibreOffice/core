@@ -41,6 +41,8 @@ GtkStyleContext* GtkSalGraphics::mpListboxButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpNoteBookStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpFrameInStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpFrameOutStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpFixedHoriLineStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpFixedVertLineStyle = NULL;
 
 bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
@@ -77,13 +79,14 @@ enum {
     RENDER_BACKGROUND = 3,
     RENDER_MENU_SEPERATOR = 4,
     RENDER_TOOLBAR_SEPERATOR = 5,
-    RENDER_ARROW = 6,
-    RENDER_RADIO = 7,
-    RENDER_SCROLLBAR = 8,
-    RENDER_SPINBUTTON = 9,
-    RENDER_COMBOBOX = 10,
-    RENDER_EXTENSION = 11,
-    RENDER_FOCUS = 12,
+    RENDER_SEPERATOR = 6,
+    RENDER_ARROW = 7,
+    RENDER_RADIO = 8,
+    RENDER_SCROLLBAR = 9,
+    RENDER_SPINBUTTON = 10,
+    RENDER_COMBOBOX = 11,
+    RENDER_EXTENSION = 12,
+    RENDER_FOCUS = 13,
 };
 
 static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
@@ -977,6 +980,9 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             styleClass = GTK_STYLE_CLASS_BACKGROUND;
         }
         break;
+    case CTRL_FIXEDLINE:
+        context = nPart == PART_SEPARATOR_HORZ ? mpFixedHoriLineStyle : mpFixedVertLineStyle;
+        renderType = RENDER_SEPERATOR;
     default:
         return false;
     }
@@ -1051,6 +1057,12 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         gtk_render_line(context, cr,
                         rControlRegion.GetWidth() / 2, rControlRegion.GetHeight() * 0.2,
                         rControlRegion.GetWidth() / 2, rControlRegion.GetHeight() * 0.8 );
+        break;
+    case RENDER_SEPERATOR:
+        if (nPart == PART_SEPARATOR_HORZ)
+            gtk_render_line(context, cr, 0, nHeight / 2, nWidth - 1, nHeight / 2);
+        else
+            gtk_render_line(context, cr, nWidth / 2, 0, nWidth / 2, nHeight - 1);
         break;
     case RENDER_ARROW:
         gtk_render_arrow(context, cr,
@@ -1764,10 +1776,10 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 //                return true;
 //            break;
 
-//        case CTRL_FIXEDLINE:
-//            if(nPart == PART_SEPARATOR_VERT || nPart == PART_SEPARATOR_HORZ)
-//                return true;
-//            break;
+        case CTRL_FIXEDLINE:
+            if (nPart == PART_SEPARATOR_VERT || nPart == PART_SEPARATOR_HORZ)
+                return true;
+            break;
 
 //        case CTRL_LISTHEADER:
 //            if(nPart == PART_BUTTON || nPart == PART_ARROW)
@@ -1960,6 +1972,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 
     getStyleContext(&mpFrameInStyle, gFrameIn);
     getStyleContext(&mpFrameOutStyle, gFrameOut);
+    getStyleContext(&mpFixedHoriLineStyle, gtk_separator_new(GTK_ORIENTATION_HORIZONTAL));
+    getStyleContext(&mpFixedVertLineStyle, gtk_separator_new(GTK_ORIENTATION_VERTICAL));
 
     gtk_widget_show_all(gDumbContainer);
 }

@@ -85,6 +85,8 @@ private:
     static GtkStyleContext *mpNoteBookStyle;
     static GtkStyleContext *mpFrameInStyle;
     static GtkStyleContext *mpFrameOutStyle;
+    static GtkStyleContext *mpFixedHoriLineStyle;
+    static GtkStyleContext *mpFixedVertLineStyle;
 
     static Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
     static Rectangle NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect);
