@@ -1324,15 +1324,28 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetCheckedColorSpecialCase( );
 
     // tooltip colors
-    GdkRGBA tooltip_bg_color, tooltip_fg_color;
-    gtk_style_context_save (pStyle);
-    gtk_style_context_add_class (pStyle, GTK_STYLE_CLASS_TOOLTIP);
-    gtk_style_context_get_color (pStyle, GTK_STATE_FLAG_NORMAL, &tooltip_fg_color);
-    gtk_style_context_get_background_color (pStyle, GTK_STATE_FLAG_NORMAL, &tooltip_bg_color);
-    gtk_style_context_restore (pStyle);
+    {
+        GtkStyleContext *pCStyle = gtk_style_context_new();
+        gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
+        GtkWidgetPath *pCPath = gtk_widget_path_new();
+        guint pos = gtk_widget_path_append_type(pCPath, GTK_TYPE_WINDOW);
+        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_TOOLTIP);
+        pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
+#if GTK_CHECK_VERSION(3,16,0)
+        gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
+#endif
+        pCStyle = gtk_style_context_new();
+        gtk_style_context_set_path(pCStyle, pCPath);
+        gtk_widget_path_free(pCPath);
 
-    aStyleSet.SetHelpColor( getColor( tooltip_bg_color ));
-    aStyleSet.SetHelpTextColor( getColor( tooltip_fg_color ));
+        GdkRGBA tooltip_bg_color, tooltip_fg_color;
+        gtk_style_context_get_color(pCStyle, GTK_STATE_FLAG_NORMAL, &tooltip_fg_color);
+        gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_NORMAL, &tooltip_bg_color);
+        g_object_unref( pCStyle );
+
+        aStyleSet.SetHelpColor( getColor( tooltip_bg_color ));
+        aStyleSet.SetHelpTextColor( getColor( tooltip_fg_color ));
+    }
 
     {
         // construct style context for text view
@@ -1442,8 +1455,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         pos = gtk_widget_path_append_type (pCPath, GTK_TYPE_LABEL);
 #if GTK_CHECK_VERSION(3,16,0)
         gtk_widget_path_iter_add_class(pCPath, pos, GTK_STYLE_CLASS_LABEL);
-#else
-        gtk_widget_path_iter_set_name(pCPath, pos, "first tab label");
 #endif
         pCStyle = gtk_style_context_new();
         gtk_style_context_set_path(pCStyle, pCPath);
