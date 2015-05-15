@@ -78,6 +78,7 @@
 #include <tox.hxx>
 #include <misc.hrc>
 #include <cnttab.hxx>
+#include <unotools/useroptions.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -773,13 +774,14 @@ bool SwFldMgr::InsertFld(
     {   // ATTENTION this field is inserted by a separate dialog
         case TYP_POSTITFLD:
         {
+            SvtUserOptions aUserOpt;
             SwPostItFieldType* pType = static_cast<SwPostItFieldType*>(pCurShell->GetFldType(0, RES_POSTITFLD));
             SwPostItField* pPostItField =
                 new SwPostItField(
                     pType,
                     rData.m_sPar1, // author
                     rData.m_sPar2, // content
-                    OUString(), // author's initials
+                    aUserOpt.GetID(), // author's initials
                     OUString(), // name
                     DateTime(DateTime::SYSTEM) );
             pFld = pPostItField;
