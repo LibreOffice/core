@@ -40,25 +40,25 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
     {
         case XLS14_TOKEN( dataBar ):
         {
-            ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
+            ExtCfDataBarRuleRef xRule = getCondFormats().createExtCfDataBarRule(mpTarget);
             xRule->importDataBar( rAttribs );
             break;
         }
         case XLS14_TOKEN( negativeFillColor ):
         {
-            ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
+            ExtCfDataBarRuleRef xRule = getCondFormats().createExtCfDataBarRule(mpTarget);
             xRule->importNegativeFillColor( rAttribs );
             break;
         }
         case XLS14_TOKEN( axisColor ):
         {
-            ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
+            ExtCfDataBarRuleRef xRule = getCondFormats().createExtCfDataBarRule(mpTarget);
             xRule->importAxisColor( rAttribs );
             break;
         }
         case XLS14_TOKEN( cfvo ):
         {
-            ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
+            ExtCfDataBarRuleRef xRule = getCondFormats().createExtCfDataBarRule(mpTarget);
             xRule->importCfvo( rAttribs );
             xRule->getModel().mbIsLower = mbFirstEntry;
             mbFirstEntry = false;

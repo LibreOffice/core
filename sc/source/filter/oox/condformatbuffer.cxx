@@ -1116,8 +1116,8 @@ void CondFormatBuffer::finalizeImport()
         if ( (*it).get() )
             (*it).get()->finalizeImport();
     }
-    ExtCfRuleVec::iterator ext_it = maCfRules.begin();
-    ExtCfRuleVec::iterator ext_end = maCfRules.end();
+    ExtCfDataBarRuleVec::iterator ext_it = maCfRules.begin();
+    ExtCfDataBarRuleVec::iterator ext_end = maCfRules.end();
     for ( ; ext_it != ext_end; ++ext_it )
     {
         if ( (*ext_it).get() )
@@ -1132,9 +1132,9 @@ CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm
     return xCondFmt;
 }
 
-ExtCfRuleRef CondFormatBuffer::createExtCfRule(ScDataBarFormatData* pTarget)
+ExtCfDataBarRuleRef CondFormatBuffer::createExtCfDataBarRule(ScDataBarFormatData* pTarget)
 {
-    ExtCfRuleRef extRule( new ExtCfRule( pTarget, *this ) );
+    ExtCfDataBarRuleRef extRule( new ExtCfDataBarRule( pTarget, *this ) );
     maCfRules.push_back( extRule );
     return extRule;
 }
@@ -1183,14 +1183,14 @@ CondFormatRef CondFormatBuffer::createCondFormat()
     return xCondFmt;
 }
 
-ExtCfRule::ExtCfRule(ScDataBarFormatData* pTarget, WorksheetHelper& rParent):
+ExtCfDataBarRule::ExtCfDataBarRule(ScDataBarFormatData* pTarget, WorksheetHelper& rParent):
     WorksheetHelper(rParent),
-    mnRuleType( ExtCfRule::UNKNOWN ),
+    mnRuleType( ExtCfDataBarRule::UNKNOWN ),
     mpTarget(pTarget)
 {
 }
 
-void ExtCfRule::finalizeImport()
+void ExtCfDataBarRule::finalizeImport()
 {
     switch ( mnRuleType )
     {
@@ -1250,14 +1250,14 @@ void ExtCfRule::finalizeImport()
     }
 }
 
-void ExtCfRule::importDataBar( const AttributeList& rAttribs )
+void ExtCfDataBarRule::importDataBar( const AttributeList& rAttribs )
 {
     mnRuleType = DATABAR;
     maModel.mbGradient = rAttribs.getBool( XML_gradient, true );
     maModel.maAxisPosition = rAttribs.getString( XML_axisPosition, "automatic" );
 }
 
-void ExtCfRule::importNegativeFillColor( const AttributeList& rAttribs )
+void ExtCfDataBarRule::importNegativeFillColor( const AttributeList& rAttribs )
 {
     mnRuleType = NEGATIVEFILLCOLOR;
     ThemeBuffer& rThemeBuffer = getTheme();
@@ -1266,7 +1266,7 @@ void ExtCfRule::importNegativeFillColor( const AttributeList& rAttribs )
     maModel.mnNegativeColor = aColor;
 }
 
-void ExtCfRule::importAxisColor( const AttributeList& rAttribs )
+void ExtCfDataBarRule::importAxisColor( const AttributeList& rAttribs )
 {
     mnRuleType = AXISCOLOR;
     ThemeBuffer& rThemeBuffer = getTheme();
@@ -1275,7 +1275,7 @@ void ExtCfRule::importAxisColor( const AttributeList& rAttribs )
     maModel.mnAxisColor = aColor;
 }
 
-void ExtCfRule::importCfvo( const AttributeList& rAttribs )
+void ExtCfDataBarRule::importCfvo( const AttributeList& rAttribs )
 {
     mnRuleType = CFVO;
     maModel.maColorScaleType = rAttribs.getString( XML_type, OUString() );

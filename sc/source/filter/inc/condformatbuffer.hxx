@@ -237,7 +237,7 @@ struct ExCfRuleModel
     OUString maColorScaleType;
 };
 
-class ExtCfRule : public WorksheetHelper
+class ExtCfDataBarRule : public WorksheetHelper
 {
     enum RuleType
     {
@@ -252,7 +252,7 @@ class ExtCfRule : public WorksheetHelper
     ScDataBarFormatData* mpTarget;
 public:
 
-    ExtCfRule(ScDataBarFormatData* pTarget, WorksheetHelper& rParent);
+    ExtCfDataBarRule(ScDataBarFormatData* pTarget, WorksheetHelper& rParent);
     void finalizeImport();
     void importDataBar(  const AttributeList& rAttribs );
     void importNegativeFillColor(  const AttributeList& rAttribs );
@@ -262,7 +262,7 @@ public:
 };
 
 typedef std::shared_ptr< CondFormat > CondFormatRef;
-typedef std::shared_ptr< ExtCfRule > ExtCfRuleRef;
+typedef std::shared_ptr< ExtCfDataBarRule > ExtCfDataBarRuleRef;
 
 class CondFormatBuffer : public WorksheetHelper
 {
@@ -273,7 +273,7 @@ public:
     CondFormatRef       importConditionalFormatting( const AttributeList& rAttribs );
     /** Imports settings from the CONDFORMATTING record. */
     CondFormatRef       importCondFormatting( SequenceInputStream& rStrm );
-    ExtCfRuleRef        createExtCfRule(ScDataBarFormatData* pTarget);
+    ExtCfDataBarRuleRef createExtCfDataBarRule(ScDataBarFormatData* pTarget);
 
     /** Converts an OOXML condition operator token to the API constant. */
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
@@ -284,9 +284,9 @@ private:
 
 private:
     typedef RefVector< CondFormat > CondFormatVec;
-    typedef RefVector< ExtCfRule > ExtCfRuleVec;
+    typedef RefVector< ExtCfDataBarRule > ExtCfDataBarRuleVec;
     CondFormatVec       maCondFormats;      /// All conditional formatting in a sheet.
-    ExtCfRuleVec        maCfRules;          /// All external conditional formatting rules in a sheet.
+    ExtCfDataBarRuleVec        maCfRules;          /// All external conditional formatting rules in a sheet.
 };
 
 } // namespace xls
