@@ -439,6 +439,6 @@ IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableHdl)
 
 
 
-} // namespace svx
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

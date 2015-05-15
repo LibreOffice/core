@@ -32,8 +32,6 @@ namespace connectivity
 
     class OConnectionPool;
 
-    //= ODriverWrapper
-
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::sdbc::XDriver
                                     >   ODriverWrapper_BASE;
 

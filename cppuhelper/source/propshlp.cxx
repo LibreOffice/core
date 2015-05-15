@@ -1001,10 +1001,6 @@ void OPropertySetHelper2::enableChangeListenerNotification( sal_Bool bEnable )
     m_pReserved->m_bFireEvents = bEnable;
 }
 
-
-//== OPropertyArrayHelper ================================================
-
-
 extern "C" {
 
 static int compare_Property_Impl( const void *arg1, const void *arg2 )

@@ -55,10 +55,6 @@ namespace dbtools
     using namespace ::comphelper;
     using namespace ::connectivity;
 
-
-    //= ParameterManager
-
-
     ParameterManager::ParameterManager( ::osl::Mutex& _rMutex, const Reference< XComponentContext >& _rxContext )
         :m_rMutex             ( _rMutex )
         ,m_aParameterListeners( _rMutex )
@@ -1082,10 +1078,6 @@ namespace dbtools
         if ( m_xInnerParamUpdate.is() )
             m_xInnerParamUpdate->clearParameters( );
     }
-
-
-    //= OParameterContinuation
-
 
     void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw( RuntimeException, std::exception )
     {

@@ -57,9 +57,6 @@ namespace comphelper
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;
 
-
-    //= DatePredicateLess
-
     class DatePredicateLess : public IKeyPredicateLess
     {
     public:
@@ -87,9 +84,6 @@ namespace comphelper
             return false;
         }
     };
-
-
-    //= TimePredicateLess
 
     class TimePredicateLess : public IKeyPredicateLess
     {
@@ -123,9 +117,6 @@ namespace comphelper
             return false;
         }
     };
-
-
-    //= DateTimePredicateLess
 
     class DateTimePredicateLess : public IKeyPredicateLess
     {

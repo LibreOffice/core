@@ -1377,7 +1377,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
     }
 }
 
-    }   // namespace DocRecovery
-}   // namespace svx
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

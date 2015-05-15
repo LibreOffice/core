@@ -45,10 +45,6 @@ namespace dbp
     using namespace ::svt;
     using namespace ::dbtools;
 
-
-    //= OListComboWizard
-
-
     OListComboWizard::OListComboWizard( vcl::Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, _rxObjectModel, _rxContext)
@@ -219,10 +215,6 @@ namespace dbp
         return true;
     }
 
-
-    //= OLCPage
-
-
     Reference< XNameAccess > OLCPage::getTables(bool _bNeedIt)
     {
         Reference< XConnection > xConn = getFormConnection();
@@ -269,10 +261,6 @@ namespace dbp
         }
         return aColumnNames;
     }
-
-
-    //= OContentTableSelection
-
 
     OContentTableSelection::OContentTableSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, "TableSelectionPage", "modules/sabpilot/ui/contenttablepage.ui")
@@ -364,10 +352,6 @@ namespace dbp
         return true;
     }
 
-
-    //= OContentFieldSelection
-
-
     OContentFieldSelection::OContentFieldSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, "FieldSelectionPage", "modules/sabpilot/ui/contentfieldpage.ui")
     {
@@ -444,10 +428,6 @@ namespace dbp
 
         return true;
     }
-
-
-    //= OLinkFieldsPage
-
 
     OLinkFieldsPage::OLinkFieldsPage( OListComboWizard* _pParent )
         :OLCPage(_pParent, "FieldLinkPage", "modules/sabpilot/ui/fieldlinkpage.ui")
@@ -529,10 +509,6 @@ namespace dbp
 
         return true;
     }
-
-
-    //= OComboDBFieldPage
-
 
     OComboDBFieldPage::OComboDBFieldPage( OControlWizard* _pParent )
         :ODBFieldPage(_pParent)

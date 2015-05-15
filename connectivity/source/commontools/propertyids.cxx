@@ -84,7 +84,7 @@ namespace dbtools
                 case PROPERTY_ID_DBASEPRECISIONCHANGED:     pStr = "DbasePrecisionChanged"; break;
                 case PROPERTY_ID_ISCURRENCY:                pStr = "IsCurrency"; break;
                 case PROPERTY_ID_ISBOOKMARKABLE:            pStr = "IsBookmarkable"; break;
-                case PROPERTY_ID_HY010:                     pStr = "HY010"; break; //= error messages
+                case PROPERTY_ID_HY010:                     pStr = "HY010"; break; // error messages
                 case PROPERTY_ID_DELIMITER:                 pStr = "/"; break;
                 case PROPERTY_ID_FORMATKEY:                 pStr = "FormatKey"; break;
                 case PROPERTY_ID_LOCALE:                    pStr = "Locale"; break;

@@ -307,7 +307,7 @@ sal_Int32 SvtRulerAccessible::getBackground(  )
     return mpRepr->GetControlBackground().GetColor();
 }
 
-//=====  XServiceInfo  ========================================================
+// XServiceInfo
 OUString SAL_CALL SvtRulerAccessible::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.SvtRulerAccessible" ) );

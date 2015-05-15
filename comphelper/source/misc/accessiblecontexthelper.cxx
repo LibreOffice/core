@@ -35,9 +35,6 @@ namespace comphelper
 
     IMutex::~IMutex() {}
 
-
-    //= OContextHelper_Impl
-
     /** implementation class for OAccessibleContextHelper. No own thread safety!
     */
     class OContextHelper_Impl
@@ -74,10 +71,6 @@ namespace comphelper
     {
         m_aCreator = _rAcc;
     }
-
-
-    //= OAccessibleContextHelper
-
 
     OAccessibleContextHelper::OAccessibleContextHelper( IMutex* _pExternalLock )
         :OAccessibleContextHelper_Base( GetMutex() )

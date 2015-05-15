@@ -613,8 +613,8 @@ class BrokenRecoveryDialog : public ModalDialog
         /** @short TODO */
         void impl_askForSavePath();
 };
-    }   // namespace DocRecovery
-}   // namespace svx
+    }
+}
 
 #endif
 

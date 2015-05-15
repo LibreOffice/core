@@ -76,6 +76,6 @@ void OptHeaderTabListBox::InitEntry( SvTreeListEntry* pEntry, const OUString& rT
     }
 }
 
-} // namespace svx
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

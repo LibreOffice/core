@@ -4303,10 +4303,6 @@ connectivity::OSQLInternalNode* newNode(const OUString& _NewValue,
     return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
 }
 
-
-//= OParseContext
-
-
 OParseContext::OParseContext()
 {
 }
@@ -4422,9 +4418,6 @@ const Locale& OParseContext::getDefaultLocale()
 	return impl_getLocaleInstance();
 }
 
-
-//= misc
-
 // Der (leider globale) yylval fuer die Uebergabe von
 // Werten vom Scanner an den Parser. Die globale Variable
 // wird nur kurzzeitig verwendet, der Parser liest die Variable
@@ -4489,10 +4482,6 @@ OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const OSQLParseNode* 
 	}
 	return aMatchStr.makeStringAndClear();
 }
-
-
-//= OSQLParser
-
 
 sal_uInt32			    OSQLParser::s_nRuleIDs[OSQLParseNode::rule_count + 1];
 OSQLParser::RuleIDMap   OSQLParser::s_aReverseRuleIDLookup;

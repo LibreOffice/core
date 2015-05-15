@@ -43,7 +43,7 @@ namespace svx
     };
 
 
-} // namespace svx
+}
 
 
 #endif // INCLUDED_SVX_SHAPEPROPERTY_HXX

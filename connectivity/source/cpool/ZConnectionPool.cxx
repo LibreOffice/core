@@ -41,18 +41,12 @@ using namespace connectivity;
 
 #include <algorithm>
 
-
-//= OPoolTimer
-
 void SAL_CALL OPoolTimer::onShot()
 {
     m_pPool->invalidatePooledConnections();
 }
 
 static const char TIMEOUT_NODENAME[] = "Timeout";
-
-//= OConnectionPool
-
 
 OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
                                  const Reference< XInterface >& _xDriverNode,

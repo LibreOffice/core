@@ -27,10 +27,6 @@
 namespace dbp
 {
 
-
-
-    //= OOptionGroupSettings
-
     struct OOptionGroupSettings : public OControlWizardSettings
     {
         StringArray     aLabels;
@@ -39,9 +35,6 @@ namespace dbp
         OUString        sDBField;
         OUString        sName;
     };
-
-
-    //= OGroupBoxWizard
 
     class OGroupBoxWizard : public OControlWizard
     {
@@ -73,9 +66,6 @@ namespace dbp
         void createRadios();
     };
 
-
-    //= OGBWPage
-
     class OGBWPage : public OControlWizardPage
     {
     public:
@@ -87,9 +77,6 @@ namespace dbp
     protected:
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
     };
-
-
-    //= ORadioSelectionPage
 
     class ORadioSelectionPage : public OGBWPage
     {
@@ -120,9 +107,6 @@ namespace dbp
         void implCheckMoveButtons();
     };
 
-
-    //= ODefaultFieldSelectionPage
-
     class ODefaultFieldSelectionPage : public OMaybeListSelectionPage
     {
     protected:
@@ -142,9 +126,6 @@ namespace dbp
 
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
     };
-
-
-    //= OOptionValuesPage
 
     class OOptionValuesPage : public OGBWPage
     {
@@ -174,9 +155,6 @@ namespace dbp
         DECL_LINK( OnOptionSelected, ListBox* );
     };
 
-
-    //= OOptionDBFieldPage
-
     class OOptionDBFieldPage : public ODBFieldPage
     {
     public:
@@ -188,9 +166,6 @@ namespace dbp
         // ODBFieldPage overridables
         virtual OUString& getDBFieldSetting() SAL_OVERRIDE;
     };
-
-
-    //= OFinalizeGBWPage
 
     class OFinalizeGBWPage : public OGBWPage
     {

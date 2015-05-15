@@ -39,11 +39,7 @@ namespace COMPMOD_NAMESPACE
     using namespace ::comphelper;
     using namespace ::cppu;
 
-
-    //= OModuleImpl
-
-    /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by its owner
-    */
+    // implementation for <type>OModule</type>. not threadsafe, has to be guarded by its owner
     class OModuleImpl
     {
         ResMgr*     m_pResources;
@@ -93,8 +89,6 @@ namespace COMPMOD_NAMESPACE
         return m_pResources;
     }
 
-
-    //= OModule
 
     ::osl::Mutex    OModule::s_aMutex;
     sal_Int32       OModule::s_nClients = 0;

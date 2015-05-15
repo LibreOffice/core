@@ -32,10 +32,6 @@ namespace logging
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::util::DateTime;
 
-
-    //= helper
-
-
     namespace
     {
         /** returns a string representation of the current thread

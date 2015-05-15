@@ -71,9 +71,6 @@ VclPtr<vcl::Window> LibBoxControl::CreateItemWindow( vcl::Window *pParent )
 }
 
 
-//= DocListenerBox
-
-
 DocListenerBox::DocListenerBox( vcl::Window* pParent )
     :ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) )
     ,m_aNotifier( *this )
@@ -135,9 +132,6 @@ void DocListenerBox::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/
 {
     // not interested in
 }
-
-
-//= basctl::LibBox
 
 LibBox::LibBox( vcl::Window* pParent, const uno::Reference< frame::XFrame >& rFrame ) :
     DocListenerBox( pParent ),

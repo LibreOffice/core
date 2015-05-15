@@ -39,7 +39,6 @@ namespace chart
                                     >   UndoManager_Base;
     }
 
-    //= UndoManager
     class UndoManager : public impl::UndoManager_Base
     {
     public:

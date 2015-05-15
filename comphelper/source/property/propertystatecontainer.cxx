@@ -45,10 +45,6 @@ namespace comphelper
         }
     }
 
-
-    //= OPropertyStateContainer
-
-
     OPropertyStateContainer::OPropertyStateContainer( ::cppu::OBroadcastHelper& _rBHelper )
         :OPropertyContainer( _rBHelper )
     {

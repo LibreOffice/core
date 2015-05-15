@@ -76,8 +76,6 @@ namespace svx
         };
     }
 
-    //= PseudoRubyText
-
     /** a class which allows to draw two texts in a pseudo-ruby way (which basically
         means one text above or below the other, and a little bit smaller)
     */
@@ -209,8 +207,6 @@ namespace svx
             *_pSecondaryLocation = aSecondaryRect;
     }
 
-    //= RubyRadioButton
-
     class RubyRadioButton : public RadioButton
     {
 
@@ -332,8 +328,6 @@ namespace svx
 
     VCL_BUILDER_FACTORY_ARGS(RubyRadioButton, WB_LEFT|WB_VCENTER)
 
-    //= SuggestionSet
-
     SuggestionSet::SuggestionSet( vcl::Window* pParent )
                     : ValueSet( pParent, pParent->GetStyle() | WB_BORDER )
 
@@ -368,10 +362,6 @@ namespace svx
             delete static_cast< OUString* >( GetItemData(i) );
         Clear();
     }
-
-
-    //= SuggestionDisplay
-
 
     SuggestionDisplay::SuggestionDisplay( vcl::Window* pParent, WinBits nBits )
         : Control( pParent, nBits )
@@ -552,9 +542,6 @@ namespace svx
     }
 
     VCL_BUILDER_FACTORY_ARGS( SuggestionDisplay, WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
-
-
-    //= HangulHanjaConversionDialog
 
     HangulHanjaConversionDialog::HangulHanjaConversionDialog( vcl::Window* _pParent, HHC::ConversionDirection _ePrimaryDirection )
         :ModalDialog( _pParent, "HangulHanjaConversionDialog", "cui/ui/hangulhanjaconversiondialog.ui" )
@@ -946,11 +933,6 @@ namespace svx
     }
 
 
-
-    //= HangulHanjaOptionsDialog
-
-
-
     void HangulHanjaOptionsDialog::Init()
     {
         if( !m_xConversionDictionaryList.is() )
@@ -1212,11 +1194,6 @@ namespace svx
         pEntry->SetUserData( new OUString( _rName ) );
     }
 
-
-    //= HangulHanjaNewDictDialog
-
-
-
     IMPL_LINK_NOARG(HangulHanjaNewDictDialog, OKHdl)
     {
         OUString  aName(comphelper::string::stripEnd(m_pDictNameED->GetText(), ' '));
@@ -1268,11 +1245,6 @@ namespace svx
 
         return m_bEntered;
     }
-
-
-    //= HangulHanjaEditDictDialog
-
-
 
     class SuggestionList
     {
@@ -1885,7 +1857,7 @@ namespace svx
     }
 
 
-}   // namespace svx
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

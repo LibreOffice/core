@@ -30,13 +30,8 @@ namespace svt
     class ToolPanelDeck;
 }
 
-
 namespace accessibility
 {
-
-
-
-    //= AccessibleToolPanelDeck
 
     class AccessibleToolPanelDeck_Impl;
     typedef VCLXAccessibleComponent   AccessibleToolPanelDeck_Base;

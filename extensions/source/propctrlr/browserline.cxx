@@ -51,8 +51,6 @@ namespace pcr
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-    //= OBrowserLine
-
     OBrowserLine::OBrowserLine( const OUString& _rEntryName, vcl::Window* pParent )
             :m_sEntryName( _rEntryName )
             ,m_aFtTitle(VclPtr<FixedText>::Create(pParent))

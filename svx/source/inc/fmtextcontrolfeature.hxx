@@ -84,7 +84,7 @@ namespace svx
     };
 
 
-} // namespace svx
+}
 
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX

@@ -28,13 +28,8 @@ class SvTreeListBox;
 class VclSimpleEvent;
 class VclWindowEvent;
 
-
 namespace accessibility
 {
-
-
-
-    //= ListBoxAccessibleBase
 
     /** helper class which couples its life time to the life time of an
         SvTreeListBox

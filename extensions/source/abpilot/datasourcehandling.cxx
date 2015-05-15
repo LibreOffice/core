@@ -158,9 +158,6 @@ namespace abp
         }
     }
 
-
-    //= ODataSourceContextImpl
-
     struct ODataSourceContextImpl: private boost::noncopyable
     {
         Reference< XComponentContext >      xORB;
@@ -169,10 +166,6 @@ namespace abp
 
         ODataSourceContextImpl( const Reference< XComponentContext >& _rxORB ) : xORB( _rxORB ) { }
     };
-
-
-    //= ODataSourceContext
-
 
     ODataSourceContext::ODataSourceContext(const Reference< XComponentContext >& _rxORB)
         :m_pImpl( new ODataSourceContextImpl( _rxORB ) )
@@ -294,9 +287,6 @@ namespace abp
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:dbase:" );
     }
 
-
-    //= ODataSourceImpl
-
     struct ODataSourceImpl
     {
     public:
@@ -327,10 +317,6 @@ namespace abp
         ,bTablesUpToDate( _rSource.bTablesUpToDate )
     {
     }
-
-
-    //= ODataSource
-
 
     ODataSource::ODataSource( const ODataSource& _rSource )
         :m_pImpl( NULL )

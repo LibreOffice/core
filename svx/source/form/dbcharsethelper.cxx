@@ -43,8 +43,8 @@ namespace svxform { namespace charset_helper
         return _rEncs.size();
     }
 
-}   // namespace charset_helper
-}   // namespace svxform
+}
+}
 
 
 

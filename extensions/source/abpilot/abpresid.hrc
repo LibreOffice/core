@@ -65,7 +65,7 @@
 
 #define RID_BITMAP_END                  BMP_HEADERIMAGE
 
-//= range checks
+// range checks
 
 #if RID_STRING_END > RID_ABP_END
     #error "please adjust the resource id ranges!!"

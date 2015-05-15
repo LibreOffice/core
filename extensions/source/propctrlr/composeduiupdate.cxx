@@ -46,9 +46,6 @@ namespace pcr
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-
-    //= helper
-
     namespace
     {
         struct HandlerLess : public ::std::binary_function  <   Reference< XPropertyHandler >
@@ -68,12 +65,9 @@ namespace pcr
     }
 
 
-    //= callbacks for CachedInspectorUI
+    // callbacks for CachedInspectorUI
 
     typedef void (ComposedPropertyUIUpdate::*FNotifySingleUIChange)();
-
-
-    //= CachedInspectorUI
 
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::inspection::XObjectInspectorUI
                                     >   CachedInspectorUI_Base;
@@ -377,7 +371,7 @@ namespace pcr
     }
 
 
-    //= HandlerMap
+    // HandlerMap
 
     typedef ::std::map  <   Reference< XPropertyHandler >
                         ,   ::rtl::Reference< CachedInspectorUI >
@@ -387,10 +381,6 @@ namespace pcr
     {
         ImplMapHandlerToUI aHandlers;
     };
-
-
-    //= ComposedPropertyUIUpdate
-
 
     ComposedPropertyUIUpdate::ComposedPropertyUIUpdate( const Reference< XObjectInspectorUI >& _rxDelegatorUI,
         IPropertyExistenceCheck* _pPropertyCheck )
@@ -423,10 +413,7 @@ namespace pcr
     namespace
     {
 
-        //= StringBagCollector
-
-        /** an STL-compatible structure which collects strings from a CachedInspectorUI instances
-        */
+        // an STL-compatible structure which collects strings from a CachedInspectorUI instances
         struct StringBagCollector : public ::std::unary_function< ImplMapHandlerToUI::value_type, void >
         {
         private:
@@ -449,10 +436,7 @@ namespace pcr
         };
 
 
-        //= StringBagClearer
-
-        /** an STL-compatible structure which cleans a certain string bag in a CachedInspectorUI instances
-        */
+        // an STL-compatible structure which cleans a certain string bag in a CachedInspectorUI instances
         struct StringBagClearer : public ::std::unary_function< ImplMapHandlerToUI::value_type, void >
         {
         private:
@@ -472,19 +456,12 @@ namespace pcr
             }
         };
 
-
-        //= FPropertyUISetter
-
-        /** a typedef for a ->XObjectInspectorUI member function taking a string
-        */
+        // a typedef for a ->XObjectInspectorUI member function taking a string
         typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUISetter )( const OUString& );
 
 
-        //= PropertyUIOperator
-
-        /** an STL-compatible struct which calls a certain member method (taking a string) at a
-            given ->XObjectInspectorUI instance
-        */
+        // an STL-compatible struct which calls a certain member method (taking a string) at a
+        //    given ->XObjectInspectorUI instance
         struct PropertyUIOperator : public ::std::unary_function< OUString, void >
         {
         private:
@@ -510,11 +487,8 @@ namespace pcr
         };
 
 
-        //= IStringKeyBooleanUIUpdate
-
-        /** an interface which encapsulates access to a single aspect of the ->XObjectInspectorUI,
-            where this aspect is given by a string key, and has a boolean value.
-        */
+        // an interface which encapsulates access to a single aspect of the ->XObjectInspectorUI,
+        //    where this aspect is given by a string key, and has a boolean value.
         class IStringKeyBooleanUIUpdate
         {
         public:
@@ -524,7 +498,7 @@ namespace pcr
         };
 
 
-        //= FPropertyUIFlagSetter
+        // FPropertyUIFlagSetter
 
         /** an implementation of the ->IStringKeyBooleanUIUpdate interface which,
             for a fixed ->XObjectInspectorUI instance and a fixed UI element (->PropertyLineElement),
@@ -554,18 +528,12 @@ namespace pcr
         }
 
 
-        //= FPropertyUIFlagSetter
-
-        /** a ->XObjectInspectorUI method taking a string and a boolean
-        */
+        // a ->XObjectInspectorUI method taking a string and a boolean
         typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUIFlagSetter )( const OUString&, sal_Bool );
 
 
-        //= DefaultStringKeyBooleanUIUpdate
-
-        /** an implementaiton of the ->IStringKeyBooleanUIUpdate interface which calls
-            am arbitrary ->XObjectInspectorUI method taking a string and a boolean flag
-        */
+        // an implementaiton of the ->IStringKeyBooleanUIUpdate interface which calls
+        // am arbitrary ->XObjectInspectorUI method taking a string and a boolean flag
         class DefaultStringKeyBooleanUIUpdate : public IStringKeyBooleanUIUpdate
         {
         private:
@@ -592,11 +560,8 @@ namespace pcr
         }
 
 
-        //= BooleanUIAspectUpdate
-
-        /** an STL-compatible structure which applies a ->IStringKeyBooleanUIUpdate::updateUIForKey
-            operation with a fixed boolean value, for a given string value
-        */
+        // an STL-compatible structure which applies a ->IStringKeyBooleanUIUpdate::updateUIForKey
+        // operation with a fixed boolean value, for a given string value
         struct BooleanUIAspectUpdate : public ::std::unary_function< OUString, void >
         {
         private:
@@ -622,10 +587,9 @@ namespace pcr
         };
 
 
-        //= BooleanUIAspectUpdate
+        // BooleanUIAspectUpdate
 
-        /** an STL-compatible structure subtracting a given string from a fixed ->StringBag
-        */
+        // an STL-compatible structure subtracting a given string from a fixed ->StringBag
         struct StringBagComplement : public ::std::unary_function< OUString, void >
         {
         private:
@@ -646,7 +610,7 @@ namespace pcr
         };
 
 
-        //= BooleanUIAspectUpdate
+        // BooleanUIAspectUpdate
 
         void lcl_fireUIStateFlag(
                 const IStringKeyBooleanUIUpdate& _rUIUpdate,

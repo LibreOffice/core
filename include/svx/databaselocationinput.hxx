@@ -79,7 +79,7 @@ namespace svx
     };
 
 
-} // namespace svx
+}
 
 
 #endif // INCLUDED_SVX_DATABASELOCATIONINPUT_HXX

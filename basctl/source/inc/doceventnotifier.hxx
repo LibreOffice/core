@@ -34,8 +34,6 @@ namespace basctl
     class ScriptDocument;
 
 
-    //= DocumentEventListener
-
     class SAL_NO_VTABLE DocumentEventListener : ::boost::noncopyable
     {
     public:
@@ -52,8 +50,6 @@ namespace basctl
         virtual ~DocumentEventListener();
     };
 
-
-    //= DocumentEventNotifier
 
     /** allows registering at theGlobalEventBroadcaster for global document events
     */

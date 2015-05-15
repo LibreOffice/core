@@ -35,8 +35,6 @@ namespace dbp
     struct OControlWizardContext;
     struct OOptionGroupSettings;
 
-    //= OOptionGroupLayouter
-
     class OOptionGroupLayouter
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >

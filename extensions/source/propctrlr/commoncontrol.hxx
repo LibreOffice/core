@@ -35,8 +35,6 @@ namespace pcr
 
     class ControlHelper;
 
-    //= ControlWindow
-
     template< class WINDOW >
     class ControlWindow : public WINDOW
     {

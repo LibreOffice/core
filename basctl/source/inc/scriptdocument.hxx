@@ -36,10 +36,6 @@ class BasicManager;
 namespace basctl
 {
 
-
-
-    //= LibraryContainerType
-
     enum LibraryContainerType
     {
         E_SCRIPTS,
@@ -61,9 +57,6 @@ namespace basctl
         LIBRARY_TYPE_DIALOG,
         LIBRARY_TYPE_ALL
     };
-
-
-    //= ScriptDocument
 
     class ScriptDocument;
     typedef ::std::vector< ScriptDocument >  ScriptDocuments;

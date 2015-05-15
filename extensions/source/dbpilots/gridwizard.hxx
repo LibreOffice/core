@@ -26,18 +26,10 @@
 
 namespace dbp
 {
-
-
-
-    //= OGridSettings
-
     struct OGridSettings : public OControlWizardSettings
     {
         ::com::sun::star::uno::Sequence< OUString >      aSelectedFields;
     };
-
-
-    //= OGridWizard
 
     class OGridWizard : public OControlWizard
     {
@@ -68,7 +60,6 @@ namespace dbp
         void implApplySettings();
     };
 
-    //= OGridPage
     class OGridPage : public OControlWizardPage
     {
     public:
@@ -78,7 +69,6 @@ namespace dbp
         OGridSettings& getSettings() { return static_cast<OGridWizard*>(getDialog())->getSettings(); }
     };
 
-    //= OGridFieldsSelection
     class OGridFieldsSelection : public OGridPage
     {
     protected:

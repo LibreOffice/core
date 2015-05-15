@@ -49,10 +49,6 @@ namespace pcr
     using namespace ::com::sun::star::form::binding;
     using namespace ::comphelper;
 
-
-    //= CellBindingPropertyHandler
-
-
     CellBindingPropertyHandler::CellBindingPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :CellBindingPropertyHandler_Base( _rxContext )
         ,m_pCellExchangeConverter( new DefaultEnumRepresentation( *m_pInfoService, ::cppu::UnoType<sal_Int16>::get(), PROPERTY_ID_CELL_EXCHANGE_TYPE ) )

@@ -543,6 +543,6 @@ void DialControlWrapper::SetControlValue( sal_Int32 nValue )
 
 
 
-} // namespace svx
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

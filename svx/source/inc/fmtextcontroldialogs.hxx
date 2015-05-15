@@ -49,7 +49,7 @@ namespace svx
         TextControlParaAttribDialog(vcl::Window* _pParent, const SfxItemSet& _rCoreSet);
     };
 
-} // namespace svx
+}
 
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLDIALOGS_HXX

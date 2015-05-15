@@ -63,9 +63,6 @@ namespace svx
 
     typedef ::std::map< OUString, DatabaseRegistration > DatabaseRegistrations;
 
-
-    //= DatabaseMapItem
-
     class DatabaseMapItem : public SfxPoolItem
     {
     protected:
@@ -84,7 +81,7 @@ namespace svx
     };
 
 
-}   // namespace svx
+}
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTERSETTINGS_HXX
 

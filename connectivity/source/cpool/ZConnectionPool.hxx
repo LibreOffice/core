@@ -56,8 +56,8 @@ namespace connectivity
     };
 
 
-    //= OConnectionPool - the one-instance service for PooledConnections
-    //= manages the active connections and the connections in the pool
+    // OConnectionPool - the one-instance service for PooledConnections
+    // manages the active connections and the connections in the pool
 
     typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>  OConnectionPool_Base;
 

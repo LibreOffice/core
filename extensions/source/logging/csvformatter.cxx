@@ -49,8 +49,7 @@ namespace logging
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::XInterface;
 
-    //= CsvFormatter - declaration
-    //= formats for csv files as defined by RFC4180
+    // formats for csv files as defined by RFC4180
     typedef ::cppu::WeakImplHelper2 <   XCsvLogFormatter
                                     ,   XServiceInfo
                                     >   CsvFormatter_Base;
@@ -101,7 +100,7 @@ namespace logging
     };
 } // namespace logging
 
-//= private helpers
+// private helpers
 namespace
 {
     const sal_Unicode quote_char = '"';
@@ -152,7 +151,6 @@ namespace
     };
 }
 
-//= CsvFormatter - implementation
 namespace logging
 {
     CsvFormatter::CsvFormatter()

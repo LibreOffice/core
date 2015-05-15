@@ -28,10 +28,6 @@ namespace comphelper
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::task;
 
-
-    //= OInteractionPassword
-
-
     void SAL_CALL OInteractionPassword::setPassword( const OUString& _Password ) throw (RuntimeException, std::exception)
     {
         m_sPassword = _Password;
@@ -42,10 +38,6 @@ namespace comphelper
     {
         return m_sPassword;
     }
-
-
-    //= OInteractionRequest
-
 
     OInteractionRequest::OInteractionRequest(const Any& _rRequestDescription)
         :m_aRequest(_rRequestDescription)

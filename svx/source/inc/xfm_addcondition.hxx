@@ -72,7 +72,7 @@ namespace svxform
     };
 
 
-} // namespace svxform
+}
 
 
 #endif // INCLUDED_SVX_SOURCE_INC_XFM_ADDCONDITION_HXX

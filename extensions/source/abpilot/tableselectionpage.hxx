@@ -28,10 +28,6 @@
 namespace abp
 {
 
-
-
-    //= TableSelectionPage
-
     class TableSelectionPage : public AddressBookSourcePage
     {
     protected:

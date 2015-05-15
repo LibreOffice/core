@@ -1343,7 +1343,7 @@ void Array::DrawArray( OutputDevice& rDev, const Color* pForceColor ) const
 
 
 
-} // namespace frame
-} // namespace svx
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

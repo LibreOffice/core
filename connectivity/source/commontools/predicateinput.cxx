@@ -73,10 +73,6 @@ namespace dbtools
         return nReturn;
     }
 
-
-    //= OPredicateInputController
-
-
     bool OPredicateInputController::getSeparatorChars( const Locale& _rLocale, sal_Unicode& _rDecSep, sal_Unicode& _rThdSep ) const
     {
         _rDecSep = '.';

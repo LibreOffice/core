@@ -99,8 +99,6 @@ namespace svx
 
     class RubyRadioButton;
 
-    //= HangulHanjaConversionDialog
-
     class HangulHanjaConversionDialog : public  ModalDialog
     {
     private:
@@ -326,7 +324,7 @@ namespace svx
     };
 
 
-}   // namespace svx
+}
 
 
 #endif // SVX_HANGUL_HANJA_HXX

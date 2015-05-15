@@ -178,7 +178,7 @@ public:
 /** An item<->control connection for a DialControl. */
 typedef sfx::ItemControlConnection< sfx::Int32ItemWrapper, DialControlWrapper > DialControlConnection;
 
-} // namespace svx
+}
 
 #endif
 

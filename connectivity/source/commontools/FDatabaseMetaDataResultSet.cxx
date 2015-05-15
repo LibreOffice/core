@@ -896,8 +896,6 @@ namespace
     };
 }
 
-//= registration
-
 extern "C"
 {
 
@@ -907,6 +905,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbtools_component_getFactory(const sal_Char*
     return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);
 }
 
-}   // extern "C"
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

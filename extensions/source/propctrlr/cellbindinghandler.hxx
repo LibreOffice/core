@@ -35,8 +35,6 @@ namespace pcr
     class CellBindingHelper;
     class IPropertyEnumRepresentation;
 
-    //= CellBindingPropertyHandler
-
     class CellBindingPropertyHandler;
     typedef HandlerComponentBase< CellBindingPropertyHandler > CellBindingPropertyHandler_Base;
     class CellBindingPropertyHandler : public CellBindingPropertyHandler_Base

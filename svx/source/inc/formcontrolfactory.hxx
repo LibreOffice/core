@@ -102,7 +102,7 @@ namespace svxform
     };
 
 
-} // namespace svxform
+}
 
 
 #endif // INCLUDED_SVX_SOURCE_INC_FORMCONTROLFACTORY_HXX

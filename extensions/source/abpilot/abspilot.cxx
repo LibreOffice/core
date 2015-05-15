@@ -54,10 +54,6 @@ namespace abp
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-
-    //= OAddessBookSourcePilot
-
-
     OAddessBookSourcePilot::OAddessBookSourcePilot(vcl::Window* _pParent, const Reference< XComponentContext >& _rxORB)
         :OAddessBookSourcePilot_Base( _pParent,
             WizardButtonFlags::HELP | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS )

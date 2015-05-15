@@ -90,7 +90,7 @@ void SecurityOptionsDialog::dispose()
     ModalDialog::dispose();
 }
 
-}   // namespace svx
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

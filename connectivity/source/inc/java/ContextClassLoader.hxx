@@ -30,13 +30,6 @@ namespace comphelper
 
 namespace connectivity { namespace jdbc
 {
-
-
-
-    //= ContextClassLoaderScope
-
-    /**
-    */
     class ContextClassLoaderScope
     {
     public:

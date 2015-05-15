@@ -22,11 +22,7 @@
 
 #include <svl/solar.hrc>
 
-//= bases
-
 #define RID_DBMM_STRING_START       RID_DBACCESS_START + 0
-
-//= strings
 
 #define STR_FORM                    ( RID_DBMM_STRING_START +  0 )
 #define STR_REPORT                  ( RID_DBMM_STRING_START +  1 )

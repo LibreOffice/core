@@ -28,9 +28,6 @@ namespace pcr
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //= class OPropertyBrowserView
-
-
     OPropertyBrowserView::OPropertyBrowserView(vcl::Window* _pParent, WinBits nBits)
                   :Window(_pParent, nBits | WB_3DLOOK)
                   ,m_nActivePage(0)

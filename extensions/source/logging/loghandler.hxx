@@ -32,10 +32,6 @@
 namespace logging
 {
 
-
-
-    //=
-
     class LogHandlerHelper
     {
     private:

@@ -84,7 +84,7 @@ namespace svx
         AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
     }
 
-}   // namespace svx
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
