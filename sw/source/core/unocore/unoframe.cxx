@@ -254,8 +254,13 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     const uno::Any* pXFillBackgroundItem = 0; GetProperty(XATTR_FILLBACKGROUND, 0, pXFillBackgroundItem);
     const uno::Any* pOwnAttrFillBmpItem = 0; GetProperty(OWN_ATTR_FILLBMP_MODE, 0, pOwnAttrFillBmpItem);
 
+    // tdf#91140: ignore SOLID fill style for determining if fill style is used
+    // but there is a GraphicURL
+    const bool bFillStyleUsed(pXFillStyleItem && pXFillStyleItem->hasValue() &&
+        (pXFillStyleItem->get<drawing::FillStyle>() != drawing::FillStyle_SOLID
+         || !pGrURL));
     const bool bXFillStyleItemUsed(
-        pXFillStyleItem ||
+        bFillStyleUsed ||
         pXFillColorItem ||
         pXFillGradientItem || pXFillGradientNameItem ||
         pXFillHatchItem || pXFillHatchNameItem ||
