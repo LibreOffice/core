@@ -439,7 +439,7 @@ bool ImpGraphic::ImplIsEPS() const
 {
     return( ( meType == GRAPHIC_GDIMETAFILE ) &&
             ( maMetaFile.GetActionSize() > 0 ) &&
-            ( maMetaFile.GetAction( 0 )->GetType() == META_EPS_ACTION ) );
+            ( maMetaFile.GetAction( 0 )->GetType() == MetaActionType::EPS ) );
 }
 
 Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters) const

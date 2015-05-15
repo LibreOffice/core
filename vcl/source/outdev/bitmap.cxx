@@ -36,18 +36,18 @@
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
     const Size aSizePix( rBitmap.GetSizePixel() );
-    DrawBitmap( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, META_BMP_ACTION );
+    DrawBitmap( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, MetaActionType::BMP );
 }
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
 {
-    DrawBitmap( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, META_BMPSCALE_ACTION );
+    DrawBitmap( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, MetaActionType::BMPSCALE );
 }
 
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                   const Bitmap& rBitmap, const sal_uLong nAction )
+                                   const Bitmap& rBitmap, const MetaActionType nAction )
 {
     if( ImplIsRecordLayout() )
         return;
@@ -98,18 +98,20 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     {
         switch( nAction )
         {
-            case( META_BMP_ACTION ):
+            case( MetaActionType::BMP ):
                 mpMetaFile->AddAction( new MetaBmpAction( rDestPt, aBmp ) );
             break;
 
-            case( META_BMPSCALE_ACTION ):
+            case( MetaActionType::BMPSCALE ):
                 mpMetaFile->AddAction( new MetaBmpScaleAction( rDestPt, rDestSize, aBmp ) );
             break;
 
-            case( META_BMPSCALEPART_ACTION ):
+            case( MetaActionType::BMPSCALEPART ):
                 mpMetaFile->AddAction( new MetaBmpScalePartAction(
                     rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp ) );
             break;
+
+            default: break;
         }
     }
 
@@ -142,7 +144,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
 
             if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
             {
-                if ( nAction == META_BMPSCALE_ACTION )
+                if ( nAction == MetaActionType::BMPSCALE )
                     ScaleBitmap (aBmp, aPosAry);
 
                 mpGraphics->DrawBitmap( aPosAry, *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
@@ -237,7 +239,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt,
     else
     {
         const Size aSizePix( rBitmapEx.GetSizePixel() );
-        DrawBitmapEx( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmapEx, META_BMPEX_ACTION );
+        DrawBitmapEx( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmapEx, MetaActionType::BMPEX );
     }
 }
 
@@ -253,14 +255,14 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     }
     else
     {
-        DrawBitmapEx( rDestPt, rDestSize, Point(), rBitmapEx.GetSizePixel(), rBitmapEx, META_BMPEXSCALE_ACTION );
+        DrawBitmapEx( rDestPt, rDestSize, Point(), rBitmapEx.GetSizePixel(), rBitmapEx, MetaActionType::BMPEXSCALE );
     }
 }
 
 
 void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                 const BitmapEx& rBitmapEx, const sal_uLong nAction )
+                                 const BitmapEx& rBitmapEx, const MetaActionType nAction )
 {
 
     if( ImplIsRecordLayout() )
@@ -328,18 +330,20 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
         {
             switch( nAction )
             {
-                case( META_BMPEX_ACTION ):
+                case( MetaActionType::BMPEX ):
                     mpMetaFile->AddAction( new MetaBmpExAction( rDestPt, aBmpEx ) );
                 break;
 
-                case( META_BMPEXSCALE_ACTION ):
+                case( MetaActionType::BMPEXSCALE ):
                     mpMetaFile->AddAction( new MetaBmpExScaleAction( rDestPt, rDestSize, aBmpEx ) );
                 break;
 
-                case( META_BMPEXSCALEPART_ACTION ):
+                case( MetaActionType::BMPEXSCALEPART ):
                     mpMetaFile->AddAction( new MetaBmpExScalePartAction( rDestPt, rDestSize,
                                                                          rSrcPtPixel, rSrcSizePixel, aBmpEx ) );
                 break;
+
+                default: break;
             }
         }
 

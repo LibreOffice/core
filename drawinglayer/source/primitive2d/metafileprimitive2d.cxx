@@ -1596,7 +1596,7 @@ namespace
     /** This is the main interpreter method. It is designed to handle the given Metafile
         completely inside the given context and target. It may use and modify the context and
         target. This design allows to call itself recursively which adapted contexts and
-        targets as e.g. needed for the META_FLOATTRANSPARENT_ACTION where the content is expressed
+        targets as e.g. needed for the MetaActionType::FLOATTRANSPARENT where the content is expressed
         as a metafile as sub-content.
 
         This interpreter is as free of VCL functionality as possible. It uses VCL data classes
@@ -1643,18 +1643,18 @@ namespace
 
             switch(pAction->GetType())
             {
-                case META_NULL_ACTION :
+                case MetaActionType::NONE :
                 {
                     /** SIMPLE, DONE */
                     break;
                 }
-                case META_PIXEL_ACTION :
+                case MetaActionType::PIXEL :
                 {
                     /** CHECKED, WORKS WELL */
                     std::vector< basegfx::B2DPoint > aPositions;
                     Color aLastColor(COL_BLACK);
 
-                    while(META_PIXEL_ACTION == pAction->GetType() && nAction < nCount)
+                    while(MetaActionType::PIXEL == pAction->GetType() && nAction < nCount)
                     {
                         const MetaPixelAction* pA = static_cast<const MetaPixelAction*>(pAction);
 
@@ -1683,14 +1683,14 @@ namespace
 
                     break;
                 }
-                case META_POINT_ACTION :
+                case MetaActionType::POINT :
                 {
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineColorActive())
                     {
                         std::vector< basegfx::B2DPoint > aPositions;
 
-                        while(META_POINT_ACTION == pAction->GetType() && nAction < nCount)
+                        while(MetaActionType::POINT == pAction->GetType() && nAction < nCount)
                         {
                             const MetaPointAction* pA = static_cast<const MetaPointAction*>(pAction);
                             const Point& rPoint = pA->GetPoint();
@@ -1708,7 +1708,7 @@ namespace
 
                     break;
                 }
-                case META_LINE_ACTION :
+                case MetaActionType::LINE :
                 {
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineColorActive())
@@ -1716,7 +1716,7 @@ namespace
                         basegfx::B2DPolygon aLinePolygon;
                         LineInfo aLineInfo;
 
-                        while(META_LINE_ACTION == pAction->GetType() && nAction < nCount)
+                        while(MetaActionType::LINE == pAction->GetType() && nAction < nCount)
                         {
                             const MetaLineAction* pA = static_cast<const MetaLineAction*>(pAction);
                             const Point& rStartPoint = pA->GetStartPoint();
@@ -1762,7 +1762,7 @@ namespace
 
                     break;
                 }
-                case META_RECT_ACTION :
+                case MetaActionType::RECT :
                 {
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
@@ -1784,7 +1784,7 @@ namespace
 
                     break;
                 }
-                case META_ROUNDRECT_ACTION :
+                case MetaActionType::ROUNDRECT :
                 {
                     /** CHECKED, WORKS WELL */
                     /** The original OutputDevice::DrawRect paints nothing when nHor or nVer is zero; but just
@@ -1828,7 +1828,7 @@ namespace
 
                     break;
                 }
-                case META_ELLIPSE_ACTION :
+                case MetaActionType::ELLIPSE :
                 {
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
@@ -1852,7 +1852,7 @@ namespace
 
                     break;
                 }
-                case META_ARC_ACTION :
+                case MetaActionType::ARC :
                 {
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineColorActive())
@@ -1866,7 +1866,7 @@ namespace
 
                     break;
                 }
-                case META_PIE_ACTION :
+                case MetaActionType::PIE :
                 {
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
@@ -1880,7 +1880,7 @@ namespace
 
                     break;
                 }
-                case META_CHORD_ACTION :
+                case MetaActionType::CHORD :
                 {
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
@@ -1894,7 +1894,7 @@ namespace
 
                     break;
                 }
-                case META_POLYLINE_ACTION :
+                case MetaActionType::POLYLINE :
                 {
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineColorActive())
@@ -1905,7 +1905,7 @@ namespace
 
                     break;
                 }
-                case META_POLYGON_ACTION :
+                case MetaActionType::POLYGON :
                 {
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
@@ -1926,7 +1926,7 @@ namespace
 
                     break;
                 }
-                case META_POLYPOLYGON_ACTION :
+                case MetaActionType::POLYPOLYGON :
                 {
                     /** CHECKED, WORKS WELL */
                     if(rPropertyHolders.Current().getLineOrFillActive())
@@ -1953,7 +1953,7 @@ namespace
 
                     break;
                 }
-                case META_TEXT_ACTION :
+                case MetaActionType::TEXT :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaTextAction* pA = static_cast<const MetaTextAction*>(pAction);
@@ -1981,7 +1981,7 @@ namespace
 
                     break;
                 }
-                case META_TEXTARRAY_ACTION :
+                case MetaActionType::TEXTARRAY :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaTextArrayAction* pA = static_cast<const MetaTextArrayAction*>(pAction);
@@ -2022,7 +2022,7 @@ namespace
 
                     break;
                 }
-                case META_STRETCHTEXT_ACTION :
+                case MetaActionType::STRETCHTEXT :
                 {
                     // #i108440# StarMath uses MetaStretchTextAction, thus support is needed.
                     // It looks as if it pretty never really uses a width different from
@@ -2085,10 +2085,10 @@ namespace
 
                     break;
                 }
-                case META_TEXTRECT_ACTION :
+                case MetaActionType::TEXTRECT :
                 {
                     /** CHECKED, WORKS WELL */
-                    // OSL_FAIL("META_TEXTRECT_ACTION requested (!)");
+                    // OSL_FAIL("MetaActionType::TEXTRECT requested (!)");
                     const MetaTextRectAction* pA = static_cast<const MetaTextRectAction*>(pAction);
                     const Rectangle& rRectangle = pA->GetRect();
                     const sal_uInt32 nStringLength(pA->GetText().getLength());
@@ -2145,7 +2145,7 @@ namespace
 
                     break;
                 }
-                case META_BMP_ACTION :
+                case MetaActionType::BMP :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaBmpAction* pA = static_cast<const MetaBmpAction*>(pAction);
@@ -2155,7 +2155,7 @@ namespace
 
                     break;
                 }
-                case META_BMPSCALE_ACTION :
+                case MetaActionType::BMPSCALE :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
@@ -2165,7 +2165,7 @@ namespace
 
                     break;
                 }
-                case META_BMPSCALEPART_ACTION :
+                case MetaActionType::BMPSCALEPART :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
@@ -2187,9 +2187,9 @@ namespace
 
                     break;
                 }
-                case META_BMPEX_ACTION :
+                case MetaActionType::BMPEX :
                 {
-                    /** CHECKED, WORKS WELL: Simply same as META_BMP_ACTION */
+                    /** CHECKED, WORKS WELL: Simply same as MetaActionType::BMP */
                     const MetaBmpExAction* pA = static_cast<const MetaBmpExAction*>(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
 
@@ -2197,9 +2197,9 @@ namespace
 
                     break;
                 }
-                case META_BMPEXSCALE_ACTION :
+                case MetaActionType::BMPEXSCALE :
                 {
-                    /** CHECKED, WORKS WELL: Simply same as META_BMPSCALE_ACTION */
+                    /** CHECKED, WORKS WELL: Simply same as MetaActionType::BMPSCALE */
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
 
@@ -2207,9 +2207,9 @@ namespace
 
                     break;
                 }
-                case META_BMPEXSCALEPART_ACTION :
+                case MetaActionType::BMPEXSCALEPART :
                 {
-                    /** CHECKED, WORKS WELL: Simply same as META_BMPSCALEPART_ACTION */
+                    /** CHECKED, WORKS WELL: Simply same as MetaActionType::BMPSCALEPART */
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
 
@@ -2228,9 +2228,9 @@ namespace
 
                     break;
                 }
-                case META_MASK_ACTION :
+                case MetaActionType::MASK :
                 {
-                    /** CHECKED, WORKS WELL: Simply same as META_BMP_ACTION */
+                    /** CHECKED, WORKS WELL: Simply same as MetaActionType::BMP */
                     /** Huh, no it isn't!? */
                     const MetaMaskAction* pA = static_cast<const MetaMaskAction*>(pAction);
                     const BitmapEx aBitmapEx(createMaskBmpEx(pA->GetBitmap(), pA->GetColor()));
@@ -2239,9 +2239,9 @@ namespace
 
                     break;
                 }
-                case META_MASKSCALE_ACTION :
+                case MetaActionType::MASKSCALE :
                 {
-                    /** CHECKED, WORKS WELL: Simply same as META_BMPSCALE_ACTION */
+                    /** CHECKED, WORKS WELL: Simply same as MetaActionType::BMPSCALE */
                     const MetaMaskScaleAction* pA = static_cast<const MetaMaskScaleAction*>(pAction);
                     const BitmapEx aBitmapEx(createMaskBmpEx(pA->GetBitmap(), pA->GetColor()));
 
@@ -2249,9 +2249,9 @@ namespace
 
                     break;
                 }
-                case META_MASKSCALEPART_ACTION :
+                case MetaActionType::MASKSCALEPART :
                 {
-                    /** CHECKED, WORKS WELL: Simply same as META_BMPSCALEPART_ACTION */
+                    /** CHECKED, WORKS WELL: Simply same as MetaActionType::BMPSCALEPART */
                     const MetaMaskScalePartAction* pA = static_cast<const MetaMaskScalePartAction*>(pAction);
                     const Bitmap& rBitmap = pA->GetBitmap();
 
@@ -2271,7 +2271,7 @@ namespace
 
                     break;
                 }
-                case META_GRADIENT_ACTION :
+                case MetaActionType::GRADIENT :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaGradientAction* pA = static_cast<const MetaGradientAction*>(pAction);
@@ -2333,7 +2333,7 @@ namespace
 
                     break;
                 }
-                case META_HATCH_ACTION :
+                case MetaActionType::HATCH :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaHatchAction* pA = static_cast<const MetaHatchAction*>(pAction);
@@ -2361,7 +2361,7 @@ namespace
 
                     break;
                 }
-                case META_WALLPAPER_ACTION :
+                case MetaActionType::WALLPAPER :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaWallpaperAction* pA = static_cast<const MetaWallpaperAction*>(pAction);
@@ -2411,7 +2411,7 @@ namespace
 
                     break;
                 }
-                case META_CLIPREGION_ACTION :
+                case MetaActionType::CLIPREGION :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaClipRegionAction* pA = static_cast<const MetaClipRegionAction*>(pAction);
@@ -2434,7 +2434,7 @@ namespace
 
                     break;
                 }
-                case META_ISECTRECTCLIPREGION_ACTION :
+                case MetaActionType::ISECTRECTCLIPREGION :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pAction);
@@ -2502,7 +2502,7 @@ namespace
 
                     break;
                 }
-                case META_ISECTREGIONCLIPREGION_ACTION :
+                case MetaActionType::ISECTREGIONCLIPREGION :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaISectRegionClipRegionAction* pA = static_cast<const MetaISectRegionClipRegionAction*>(pAction);
@@ -2558,7 +2558,7 @@ namespace
 
                     break;
                 }
-                case META_MOVECLIPREGION_ACTION :
+                case MetaActionType::MOVECLIPREGION :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaMoveClipRegionAction* pA = static_cast<const MetaMoveClipRegionAction*>(pAction);
@@ -2594,7 +2594,7 @@ namespace
 
                     break;
                 }
-                case META_LINECOLOR_ACTION :
+                case MetaActionType::LINECOLOR :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaLineColorAction* pA = static_cast<const MetaLineColorAction*>(pAction);
@@ -2606,7 +2606,7 @@ namespace
 
                     break;
                 }
-                case META_FILLCOLOR_ACTION :
+                case MetaActionType::FILLCOLOR :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaFillColorAction* pA = static_cast<const MetaFillColorAction*>(pAction);
@@ -2618,7 +2618,7 @@ namespace
 
                     break;
                 }
-                case META_TEXTCOLOR_ACTION :
+                case MetaActionType::TEXTCOLOR :
                 {
                     /** SIMPLE, DONE */
                     const MetaTextColorAction* pA = static_cast<const MetaTextColorAction*>(pAction);
@@ -2629,7 +2629,7 @@ namespace
 
                     break;
                 }
-                case META_TEXTFILLCOLOR_ACTION :
+                case MetaActionType::TEXTFILLCOLOR :
                 {
                     /** SIMPLE, DONE */
                     const MetaTextFillColorAction* pA = static_cast<const MetaTextFillColorAction*>(pAction);
@@ -2650,7 +2650,7 @@ namespace
 
                     break;
                 }
-                case META_TEXTALIGN_ACTION :
+                case MetaActionType::TEXTALIGN :
                 {
                     /** SIMPLE, DONE */
                     const MetaTextAlignAction* pA = static_cast<const MetaTextAlignAction*>(pAction);
@@ -2668,7 +2668,7 @@ namespace
 
                     break;
                 }
-                case META_MAPMODE_ACTION :
+                case MetaActionType::MAPMODE :
                 {
                     /** CHECKED, WORKS WELL */
                     // the most necessary MapMode to be interpreted is MAP_RELATIVE,
@@ -2708,7 +2708,7 @@ namespace
                             }
                             default :
                             {
-                                OSL_FAIL("interpretMetafile: META_MAPMODE_ACTION with unsupported MapUnit (!)");
+                                OSL_FAIL("interpretMetafile: MetaActionType::MAPMODE with unsupported MapUnit (!)");
                                 break;
                             }
                         }
@@ -2725,7 +2725,7 @@ namespace
 
                     break;
                 }
-                case META_FONT_ACTION :
+                case MetaActionType::FONT :
                 {
                     /** SIMPLE, DONE */
                     const MetaFontAction* pA = static_cast<const MetaFontAction*>(pAction);
@@ -2749,7 +2749,7 @@ namespace
                         rPropertyHolders.Current().setFont(aCorrectedFont);
                     }
 
-                    // older Metafiles have no META_TEXTCOLOR_ACTION which defines
+                    // older Metafiles have no MetaActionType::TEXTCOLOR which defines
                     // the FontColor now, so use the Font's color when not transparent
                     const Color& rFontColor = pA->GetFont().GetColor();
                     const bool bActivate(COL_TRANSPARENT != rFontColor.GetColor());
@@ -2778,7 +2778,7 @@ namespace
 
                     break;
                 }
-                case META_PUSH_ACTION :
+                case MetaActionType::PUSH :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaPushAction* pA = static_cast<const MetaPushAction*>(pAction);
@@ -2786,7 +2786,7 @@ namespace
 
                     break;
                 }
-                case META_POP_ACTION :
+                case MetaActionType::POP :
                 {
                     /** CHECKED, WORKS WELL */
                     const bool bRegionMayChange(rPropertyHolders.Current().getPushFlags() & PushFlags::CLIPREGION);
@@ -2823,7 +2823,7 @@ namespace
 
                     break;
                 }
-                case META_RASTEROP_ACTION :
+                case MetaActionType::RASTEROP :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaRasterOpAction* pA = static_cast<const MetaRasterOpAction*>(pAction);
@@ -2833,7 +2833,7 @@ namespace
 
                     break;
                 }
-                case META_TRANSPARENT_ACTION :
+                case MetaActionType::TRANSPARENT :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaTransparentAction* pA = static_cast<const MetaTransparentAction*>(pAction);
@@ -2877,7 +2877,7 @@ namespace
 
                     break;
                 }
-                case META_EPS_ACTION :
+                case MetaActionType::EPS :
                 {
                     /** CHECKED, WORKS WELL */
                     // To support this action, i have added a EpsPrimitive2D which will
@@ -2910,7 +2910,7 @@ namespace
 
                     break;
                 }
-                case META_REFPOINT_ACTION :
+                case MetaActionType::REFPOINT :
                 {
                     /** SIMPLE, DONE */
                     // only used for hatch and line pattern offsets, pretty much no longer
@@ -2918,7 +2918,7 @@ namespace
                     // const MetaRefPointAction* pA = (const MetaRefPointAction*)pAction;
                     break;
                 }
-                case META_TEXTLINECOLOR_ACTION :
+                case MetaActionType::TEXTLINECOLOR :
                 {
                     /** SIMPLE, DONE */
                     const MetaTextLineColorAction* pA = static_cast<const MetaTextLineColorAction*>(pAction);
@@ -2930,7 +2930,7 @@ namespace
 
                     break;
                 }
-                case META_TEXTLINE_ACTION :
+                case MetaActionType::TEXTLINE :
                 {
                     /** CHECKED, WORKS WELL */
                     // actually creates overline, underline and strikeouts, so
@@ -2949,7 +2949,7 @@ namespace
 
                     break;
                 }
-                case META_FLOATTRANSPARENT_ACTION :
+                case MetaActionType::FLOATTRANSPARENT :
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaFloatTransparentAction* pA = static_cast<const MetaFloatTransparentAction*>(pAction);
@@ -3050,29 +3050,29 @@ namespace
 
                     break;
                 }
-                case META_GRADIENTEX_ACTION :
+                case MetaActionType::GRADIENTEX :
                 {
                     /** SIMPLE, DONE */
                     // This is only a data holder which is interpreted inside comment actions,
-                    // see META_COMMENT_ACTION for more info
+                    // see MetaActionType::COMMENT for more info
                     // const MetaGradientExAction* pA = (const MetaGradientExAction*)pAction;
                     break;
                 }
-                case META_LAYOUTMODE_ACTION :
+                case MetaActionType::LAYOUTMODE :
                 {
                     /** SIMPLE, DONE */
                     const MetaLayoutModeAction* pA = static_cast<const MetaLayoutModeAction*>(pAction);
                     rPropertyHolders.Current().setLayoutMode(pA->GetLayoutMode());
                     break;
                 }
-                case META_TEXTLANGUAGE_ACTION :
+                case MetaActionType::TEXTLANGUAGE :
                 {
                     /** SIMPLE, DONE */
                     const MetaTextLanguageAction* pA = static_cast<const MetaTextLanguageAction*>(pAction);
                     rPropertyHolders.Current().setLanguageType(pA->GetTextLanguage());
                     break;
                 }
-                case META_OVERLINECOLOR_ACTION :
+                case MetaActionType::OVERLINECOLOR :
                 {
                     /** SIMPLE, DONE */
                     const MetaOverlineColorAction* pA = static_cast<const MetaOverlineColorAction*>(pAction);
@@ -3084,7 +3084,7 @@ namespace
 
                     break;
                 }
-                case META_COMMENT_ACTION :
+                case MetaActionType::COMMENT :
                 {
                     /** CHECKED, WORKS WELL */
                     // I already implemented
@@ -3108,11 +3108,11 @@ namespace
                         {
                             pAction = rMetaFile.GetAction(b);
 
-                            if(META_GRADIENTEX_ACTION == pAction->GetType())
+                            if(MetaActionType::GRADIENTEX == pAction->GetType())
                             {
                                 pMetaGradientExAction = static_cast<const MetaGradientExAction*>(pAction);
                             }
-                            else if(META_COMMENT_ACTION == pAction->GetType())
+                            else if(MetaActionType::COMMENT == pAction->GetType())
                             {
                                 if (static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END"))
                                 {

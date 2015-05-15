@@ -425,11 +425,11 @@ bool ObjectRepresentation::operator==( const ObjectRepresentation& rPresentation
 sal_uLong GetBitmapChecksum( const MetaAction* pAction )
 {
     sal_uLong nChecksum = 0;
-    const sal_uInt16 nType = pAction->GetType();
+    const MetaActionType nType = pAction->GetType();
 
     switch( nType )
     {
-        case( META_BMPSCALE_ACTION ):
+        case( MetaActionType::BMPSCALE ):
         {
             const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
             if( pA  )
@@ -438,7 +438,7 @@ sal_uLong GetBitmapChecksum( const MetaAction* pAction )
                 OSL_FAIL( "GetBitmapChecksum: MetaBmpScaleAction pointer is null." );
         }
         break;
-        case( META_BMPEXSCALE_ACTION ):
+        case( MetaActionType::BMPEXSCALE ):
         {
             const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
             if( pA )
@@ -447,6 +447,7 @@ sal_uLong GetBitmapChecksum( const MetaAction* pAction )
                 OSL_FAIL( "GetBitmapChecksum: MetaBmpExScaleAction pointer is null." );
         }
         break;
+        default: break;
     }
     return nChecksum;
 }
@@ -454,10 +455,10 @@ sal_uLong GetBitmapChecksum( const MetaAction* pAction )
 
 void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
 {
-    const sal_uInt16 nType = pAction->GetType();
+    const MetaActionType nType = pAction->GetType();
     switch( nType )
     {
-        case( META_BMPSCALE_ACTION ):
+        case( MetaActionType::BMPSCALE ):
         {
             const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
             if( pA  )
@@ -466,7 +467,7 @@ void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
                 OSL_FAIL( "MetaBitmapActionGetPoint: MetaBmpScaleAction pointer is null." );
         }
         break;
-        case( META_BMPEXSCALE_ACTION ):
+        case( MetaActionType::BMPEXSCALE ):
         {
             const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
             if( pA )
@@ -475,6 +476,7 @@ void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
                 OSL_FAIL( "MetaBitmapActionGetPoint: MetaBmpExScaleAction pointer is null." );
         }
         break;
+        default: break;
     }
 
 }
@@ -1997,9 +1999,9 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPag
                                     for( sal_uLong nCurAction = 0; nCurAction < nCount; ++nCurAction )
                                     {
                                         pAction = rMtf.GetAction( nCurAction );
-                                        const sal_uInt16    nType = pAction->GetType();
+                                        const MetaActionType nType = pAction->GetType();
 
-                                        if( nType == META_COMMENT_ACTION )
+                                        if( nType == MetaActionType::COMMENT )
                                         {
                                             const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
                                             if( ( pA->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTSHAPE_BEGIN") ) )
@@ -2011,7 +2013,7 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPag
                                                 bIsTextShapeStarted = false;
                                             }
                                         }
-                                        if( bIsTextShapeStarted && ( nType == META_BMPSCALE_ACTION  || nType == META_BMPEXSCALE_ACTION ) )
+                                        if( bIsTextShapeStarted && ( nType == MetaActionType::BMPSCALE  || nType == MetaActionType::BMPEXSCALE ) )
                                         {
                                             GDIMetaFile aEmbeddedBitmapMtf;
                                             pAction->Duplicate();

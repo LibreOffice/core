@@ -315,25 +315,26 @@ void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
 
         switch (pMA->GetType())
         {
-            case META_EPS_ACTION :
+            case MetaActionType::EPS :
             {
                 const GDIMetaFile aGDIMetaFile( static_cast<const MetaEPSAction*>(pMA)->GetSubstitute() );
                 size_t nCount = aGDIMetaFile.GetActionSize();
                 size_t i;
                 for ( i = 0; i < nCount; i++ )
-                    if ( ((const MetaAction*)aGDIMetaFile.GetAction( i ))->GetType() == META_BMPSCALE_ACTION )
+                    if ( ((const MetaAction*)aGDIMetaFile.GetAction( i ))->GetType() == MetaActionType::BMPSCALE )
                         break;
                 if ( i == nCount)
                     break;
             }
-            case META_BMP_ACTION:
-            case META_BMPSCALE_ACTION:
-            case META_BMPSCALEPART_ACTION:
-            case META_BMPEX_ACTION:
-            case META_BMPEXSCALE_ACTION:
-            case META_BMPEXSCALEPART_ACTION:
+            case MetaActionType::BMP:
+            case MetaActionType::BMPSCALE:
+            case MetaActionType::BMPSCALEPART:
+            case MetaActionType::BMPEX:
+            case MetaActionType::BMPEXSCALE:
+            case MetaActionType::BMPEXSCALEPART:
                 nNumberOfBitmaps++;
             break;
+            default: break;
         }
         nNumberOfActions++;
     }
@@ -409,12 +410,13 @@ void METWriter::CreateChrSets(const GDIMetaFile * pMTF)
 
         switch (pMA->GetType())
         {
-            case META_FONT_ACTION:
+            case MetaActionType::FONT:
             {
                 const MetaFontAction* pA = static_cast<const MetaFontAction*>(pMA);
                 CreateChrSet( pA->GetFont() );
             }
             break;
+            default: break;
         }
     }
 }
@@ -741,49 +743,49 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
 
         switch (pMA->GetType())
         {
-            case META_BMP_ACTION:
+            case MetaActionType::BMP:
             {
                 METSetMix( eGDIRasterOp );
                 WriteImageObject( static_cast<const MetaBmpAction*>(pMA)->GetBitmap() );
             }
             break;
 
-            case META_BMPSCALE_ACTION:
+            case MetaActionType::BMPSCALE:
             {
                 METSetMix( eGDIRasterOp );
                 WriteImageObject( static_cast<const MetaBmpScaleAction*>(pMA)->GetBitmap() );
             }
             break;
 
-            case META_BMPSCALEPART_ACTION:
+            case MetaActionType::BMPSCALEPART:
             {
                 METSetMix( eGDIRasterOp );
                 WriteImageObject( static_cast<const MetaBmpScalePartAction*>(pMA)->GetBitmap() );
             }
             break;
 
-            case META_BMPEX_ACTION:
+            case MetaActionType::BMPEX:
             {
                 METSetMix( eGDIRasterOp );
                 WriteImageObject( Graphic( static_cast<const MetaBmpExAction*>(pMA)->GetBitmapEx() ).GetBitmap() );
             }
             break;
 
-            case META_BMPEXSCALE_ACTION:
+            case MetaActionType::BMPEXSCALE:
             {
                 METSetMix( eGDIRasterOp );
                 WriteImageObject( Graphic( static_cast<const MetaBmpExScaleAction*>(pMA)->GetBitmapEx() ).GetBitmap() );
             }
             break;
 
-            case META_BMPEXSCALEPART_ACTION:
+            case MetaActionType::BMPEXSCALEPART:
             {
                 METSetMix( eGDIRasterOp );
                 WriteImageObject( Graphic( static_cast<const MetaBmpExScalePartAction*>(pMA)->GetBitmapEx() ).GetBitmap() );
             }
             break;
 
-            case META_EPS_ACTION :
+            case MetaActionType::EPS :
             {
                 const MetaEPSAction* pA = static_cast<const MetaEPSAction*>(pMA);
                 const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
@@ -792,7 +794,7 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
                 for ( size_t i = 0; i < nCount; i++ )
                 {
                     const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
-                    if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )
+                    if ( pMetaAct->GetType() == MetaActionType::BMPSCALE )
                     {
                         const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pMetaAct);
                         METSetMix( eGDIRasterOp );
@@ -802,6 +804,7 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
                 }
             }
             break;
+            default: break;
         }
 
         if (!bStatus)
@@ -1492,7 +1495,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
         switch (pMA->GetType())
         {
-            case META_PIXEL_ACTION:
+            case MetaActionType::PIXEL:
             {
                 const MetaPixelAction* pA = static_cast<const MetaPixelAction*>(pMA);
                 METSetMix( eGDIRasterOp );
@@ -1501,7 +1504,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_POINT_ACTION:
+            case MetaActionType::POINT:
             {
                 const MetaPointAction* pA = static_cast<const MetaPointAction*>(pMA);
 
@@ -1514,7 +1517,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_LINE_ACTION:
+            case MetaActionType::LINE:
             {
                 const MetaLineAction* pA = static_cast<const MetaLineAction*>(pMA);
 
@@ -1537,7 +1540,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_RECT_ACTION:
+            case MetaActionType::RECT:
             {
                 const MetaRectAction* pA = static_cast<const MetaRectAction*>(pMA);
 
@@ -1558,7 +1561,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_ROUNDRECT_ACTION:
+            case MetaActionType::ROUNDRECT:
             {
                 const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pMA);
 
@@ -1579,7 +1582,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_ELLIPSE_ACTION:
+            case MetaActionType::ELLIPSE:
             {
                 const MetaEllipseAction*    pA = static_cast<const MetaEllipseAction*>(pMA);
                 Point                       aCenter;
@@ -1608,7 +1611,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_ARC_ACTION:
+            case MetaActionType::ARC:
             {
                 const MetaArcAction*    pA = static_cast<const MetaArcAction*>(pMA);
                 Point                   aStartPos,aCenter;
@@ -1645,7 +1648,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_PIE_ACTION:
+            case MetaActionType::PIE:
             {
                 const MetaPieAction*    pA = static_cast<const MetaPieAction*>(pMA);
                 Point                   aCenter;
@@ -1695,7 +1698,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_CHORD_ACTION:
+            case MetaActionType::CHORD:
             {
                 const MetaChordAction*  pA = static_cast<const MetaChordAction*>(pMA);
                 Point                   aStartPos,aCenter;
@@ -1745,7 +1748,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_POLYLINE_ACTION:
+            case MetaActionType::POLYLINE:
             {
                 const MetaPolyLineAction* pA = static_cast<const MetaPolyLineAction*>(pMA);
 
@@ -1774,7 +1777,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_POLYGON_ACTION:
+            case MetaActionType::POLYGON:
             {
                 const MetaPolygonAction* pA = static_cast<const MetaPolygonAction*>(pMA);
                 Polygon aSimplePoly;
@@ -1806,7 +1809,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_POLYPOLYGON_ACTION:
+            case MetaActionType::POLYPOLYGON:
             {
                 const MetaPolyPolygonAction* pA = static_cast<const MetaPolyPolygonAction*>(pMA);
 
@@ -1844,7 +1847,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_TEXT_ACTION:
+            case MetaActionType::TEXT:
             {
                 const MetaTextAction*   pA = static_cast<const MetaTextAction*>(pMA);
                 Point                   aPt( pA->GetPoint() );
@@ -1869,7 +1872,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_TEXTARRAY_ACTION:
+            case MetaActionType::TEXTARRAY:
             {
                 const MetaTextArrayAction*  pA = static_cast<const MetaTextArrayAction*>(pMA);
                 sal_uInt16                  i;
@@ -1920,7 +1923,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_STRETCHTEXT_ACTION:
+            case MetaActionType::STRETCHTEXT:
             {
                 const MetaStretchTextAction*    pA = static_cast<const MetaStretchTextAction*>(pMA);
                 ScopedVclPtrInstance< VirtualDevice > pVDev;
@@ -1970,13 +1973,13 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_TEXTRECT_ACTION:
+            case MetaActionType::TEXTRECT:
             {
-//              OSL_FAIL( "Unsupported MET-Action: META_TEXTRECT_ACTION!" );
+//              OSL_FAIL( "Unsupported MET-Action: MetaActionType::TEXTRECT!" );
             }
             break;
 
-            case META_BMP_ACTION:
+            case MetaActionType::BMP:
             {
                 const MetaBmpAction*    pA = static_cast<const MetaBmpAction*>(pMA);
                 const Size              aSizePixel( pA->GetBitmap().GetSizePixel() );
@@ -1986,7 +1989,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_BMPSCALE_ACTION:
+            case MetaActionType::BMPSCALE:
             {
                 const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pMA);
 
@@ -1995,7 +1998,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_BMPSCALEPART_ACTION:
+            case MetaActionType::BMPSCALEPART:
             {
                 const MetaBmpScalePartAction*   pA = static_cast<const MetaBmpScalePartAction*>(pMA);
                 Bitmap                          aTmp( pA->GetBitmap() );
@@ -2006,7 +2009,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_BMPEX_ACTION:
+            case MetaActionType::BMPEX:
             {
                 const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pMA);
                 const Size              aSizePixel( pA->GetBitmapEx().GetSizePixel() );
@@ -2016,7 +2019,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_BMPEXSCALE_ACTION:
+            case MetaActionType::BMPEXSCALE:
             {
                 const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pMA);
                 const Size                  aSizePixel( pA->GetBitmapEx().GetSizePixel() );
@@ -2026,7 +2029,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_BMPEXSCALEPART_ACTION:
+            case MetaActionType::BMPEXSCALEPART:
             {
                 const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pMA);
                 Bitmap                          aTmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
@@ -2037,7 +2040,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_EPS_ACTION :
+            case MetaActionType::EPS :
             {
                 const MetaEPSAction* pA = static_cast<const MetaEPSAction*>(pMA);
                 const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
@@ -2046,7 +2049,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 for ( size_t i = 0; i < nCount; i++ )
                 {
                     const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
-                    if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )
+                    if ( pMetaAct->GetType() == MetaActionType::BMPSCALE )
                     {
                         const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pMetaAct);
                         METSetMix(eGDIRasterOp);
@@ -2057,16 +2060,16 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_MASK_ACTION:
+            case MetaActionType::MASK:
             break;
 
-            case META_MASKSCALE_ACTION:
+            case MetaActionType::MASKSCALE:
             break;
 
-            case META_MASKSCALEPART_ACTION:
+            case MetaActionType::MASKSCALEPART:
             break;
 
-            case META_GRADIENT_ACTION:
+            case MetaActionType::GRADIENT:
             {
                 ScopedVclPtrInstance< VirtualDevice > pVDev;
                 GDIMetaFile                 aTmpMtf;
@@ -2078,7 +2081,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_HATCH_ACTION:
+            case MetaActionType::HATCH:
             {
                 ScopedVclPtrInstance< VirtualDevice > pVDev;
                 GDIMetaFile             aTmpMtf;
@@ -2090,26 +2093,26 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_WALLPAPER_ACTION:
+            case MetaActionType::WALLPAPER:
             break;
 
-            case META_CLIPREGION_ACTION:
+            case MetaActionType::CLIPREGION:
             break;
 
-            case META_ISECTRECTCLIPREGION_ACTION:
+            case MetaActionType::ISECTRECTCLIPREGION:
             {
                 const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pMA);
                 WriteClipRect( pA->GetRect() );
             }
             break;
 
-            case META_ISECTREGIONCLIPREGION_ACTION:
+            case MetaActionType::ISECTREGIONCLIPREGION:
             break;
 
-            case META_MOVECLIPREGION_ACTION:
+            case MetaActionType::MOVECLIPREGION:
             break;
 
-            case META_LINECOLOR_ACTION:
+            case MetaActionType::LINECOLOR:
             {
                 const MetaLineColorAction* pA = static_cast<const MetaLineColorAction*>(pMA);
 
@@ -2120,7 +2123,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_FILLCOLOR_ACTION:
+            case MetaActionType::FILLCOLOR:
             {
                 const MetaFillColorAction* pA = static_cast<const MetaFillColorAction*>(pMA);
 
@@ -2131,14 +2134,14 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_TEXTCOLOR_ACTION:
+            case MetaActionType::TEXTCOLOR:
             {
                 const MetaTextColorAction* pA = static_cast<const MetaTextColorAction*>(pMA);
                 aGDIFont.SetColor( pA->GetColor() );
             }
             break;
 
-            case META_TEXTFILLCOLOR_ACTION:
+            case MetaActionType::TEXTFILLCOLOR:
             {
                 const MetaTextFillColorAction* pA = static_cast<const MetaTextFillColorAction*>(pMA);
 
@@ -2149,10 +2152,10 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_TEXTALIGN_ACTION:
+            case MetaActionType::TEXTALIGN:
             break;
 
-            case META_MAPMODE_ACTION:
+            case MetaActionType::MAPMODE:
             {
                 const MetaMapModeAction* pA = static_cast<const MetaMapModeAction*>(pMA);
 
@@ -2219,13 +2222,13 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_FONT_ACTION:
+            case MetaActionType::FONT:
             {
                 aGDIFont = static_cast<const MetaFontAction*>(pMA)->GetFont();
             }
             break;
 
-            case META_PUSH_ACTION:
+            case MetaActionType::PUSH:
             {
                 METGDIStackMember* pGS = new METGDIStackMember;
 
@@ -2239,7 +2242,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_POP_ACTION:
+            case MetaActionType::POP:
             {
                 METGDIStackMember* pGS;
 
@@ -2258,13 +2261,13 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_RASTEROP_ACTION:
+            case MetaActionType::RASTEROP:
             {
                 eGDIRasterOp = static_cast<const MetaRasterOpAction*>(pMA)->GetRasterOp();
             }
             break;
 
-            case META_TRANSPARENT_ACTION:
+            case MetaActionType::TRANSPARENT:
             {
                 if( aGDIFillColor != Color( COL_TRANSPARENT ) )
                 {
@@ -2289,7 +2292,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case META_FLOATTRANSPARENT_ACTION:
+            case MetaActionType::FLOATTRANSPARENT:
             {
                 const MetaFloatTransparentAction* pA = static_cast<const MetaFloatTransparentAction*>(pMA);
 
@@ -2316,6 +2319,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 WriteOrders( &aTmpMtf );
             }
             break;
+            default: break;
       }
 
       nWrittenActions++;

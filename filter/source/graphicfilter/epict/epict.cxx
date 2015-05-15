@@ -204,14 +204,15 @@ void PictWriter::CountActionsAndBitmaps(const GDIMetaFile & rMTF)
 
         switch( pMA->GetType() )
         {
-            case META_BMP_ACTION:
-            case META_BMPSCALE_ACTION:
-            case META_BMPSCALEPART_ACTION:
-            case META_BMPEX_ACTION:
-            case META_BMPEXSCALE_ACTION:
-            case META_BMPEXSCALEPART_ACTION:
+            case MetaActionType::BMP:
+            case MetaActionType::BMPSCALE:
+            case MetaActionType::BMPSCALEPART:
+            case MetaActionType::BMPEX:
+            case MetaActionType::BMPEXSCALE:
+            case MetaActionType::BMPEXSCALEPART:
                 nNumberOfBitmaps++;
             break;
+            default: break;
         }
 
         nNumberOfActions++;
@@ -1405,7 +1406,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
         switch (pMA->GetType())
         {
-            case META_PIXEL_ACTION:
+            case MetaActionType::PIXEL:
             {
                 const MetaPixelAction* pA = static_cast<const MetaPixelAction*>(pMA);
                 WriteOpcode_PnMode(eSrcRasterOp);
@@ -1416,7 +1417,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_POINT_ACTION:
+            case MetaActionType::POINT:
             {
                 const MetaPointAction* pA = static_cast<const MetaPointAction*>(pMA);
 
@@ -1428,7 +1429,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_LINE_ACTION:
+            case MetaActionType::LINE:
             {
                 const MetaLineAction* pA = static_cast<const MetaLineAction*>(pMA);
 
@@ -1451,7 +1452,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 break;
             }
 
-            case META_RECT_ACTION:
+            case MetaActionType::RECT:
             {
                 const MetaRectAction* pA = static_cast<const MetaRectAction*>(pMA);
 
@@ -1473,7 +1474,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_ROUNDRECT_ACTION:
+            case MetaActionType::ROUNDRECT:
             {
                 const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pMA);
 
@@ -1497,7 +1498,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_ELLIPSE_ACTION:
+            case MetaActionType::ELLIPSE:
             {
                 const MetaEllipseAction* pA = static_cast<const MetaEllipseAction*>(pMA);
 
@@ -1519,7 +1520,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_ARC_ACTION:
+            case MetaActionType::ARC:
             {
                 const MetaArcAction* pA = static_cast<const MetaArcAction*>(pMA);
 
@@ -1531,7 +1532,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_PIE_ACTION:
+            case MetaActionType::PIE:
             {
                 const MetaPieAction* pA = static_cast<const MetaPieAction *>(pMA);
 
@@ -1585,13 +1586,13 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_CHORD_ACTION:
+            case MetaActionType::CHORD:
             {
-                // OSL_FAIL( "Unsupported PICT-Action: META_CHORD_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: MetaActionType::CHORD!" );
             }
             break;
 
-            case META_POLYLINE_ACTION:
+            case MetaActionType::POLYLINE:
             {
                 const MetaPolyLineAction* pA = static_cast<const MetaPolyLineAction*>(pMA);
 
@@ -1634,7 +1635,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_POLYGON_ACTION:
+            case MetaActionType::POLYGON:
             {
                 const MetaPolygonAction* pA = static_cast<const MetaPolygonAction*>(pMA);
 
@@ -1659,7 +1660,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_POLYPOLYGON_ACTION:
+            case MetaActionType::POLYPOLYGON:
             {
                 const MetaPolyPolygonAction* pA = static_cast<const MetaPolyPolygonAction*>(pMA);
 
@@ -1692,7 +1693,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_TEXT_ACTION:
+            case MetaActionType::TEXT:
             {
                 const MetaTextAction*   pA = static_cast<const MetaTextAction*>(pMA);
                 Point                   aPt( pA->GetPoint() );
@@ -1712,7 +1713,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_TEXTARRAY_ACTION:
+            case MetaActionType::TEXTARRAY:
             {
                 const MetaTextArrayAction*  pA = static_cast<const MetaTextArrayAction*>(pMA);
                 Point                       aPt( pA->GetPoint() );
@@ -1732,7 +1733,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 break;
             }
 
-            case META_STRETCHTEXT_ACTION:
+            case MetaActionType::STRETCHTEXT:
             {
                 const MetaStretchTextAction*    pA = static_cast<const MetaStretchTextAction*>(pMA);
                 Point                           aPt( pA->GetPoint() );
@@ -1763,13 +1764,13 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_TEXTRECT_ACTION:
+            case MetaActionType::TEXTRECT:
             {
-                // OSL_FAIL( "Unsupported PICT-Action: META_TEXTRECT_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: MetaActionType::TEXTRECT!" );
             }
             break;
 
-            case META_BMP_ACTION:
+            case MetaActionType::BMP:
             {
                 const MetaBmpAction*    pA = static_cast<const MetaBmpAction*>(pMA);
                 const Bitmap            aBmp( pA->GetBitmap() );
@@ -1779,14 +1780,14 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_BMPSCALE_ACTION:
+            case MetaActionType::BMPSCALE:
             {
                 const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pMA);
                 WriteOpcode_BitsRect( pA->GetPoint(), pA->GetSize(), pA->GetBitmap() );
             }
             break;
 
-            case META_BMPSCALEPART_ACTION:
+            case MetaActionType::BMPSCALEPART:
             {
                 const MetaBmpScalePartAction*   pA = static_cast<const MetaBmpScalePartAction*>(pMA);
                 Bitmap                          aBmp( pA->GetBitmap() );
@@ -1796,7 +1797,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_BMPEX_ACTION:
+            case MetaActionType::BMPEX:
             {
                 const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pMA);
                 const Bitmap            aBmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
@@ -1806,7 +1807,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_BMPEXSCALE_ACTION:
+            case MetaActionType::BMPEXSCALE:
             {
                 const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pMA);
                 const Bitmap                aBmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
@@ -1815,7 +1816,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_BMPEXSCALEPART_ACTION:
+            case MetaActionType::BMPEXSCALEPART:
             {
                 const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pMA);
                 Bitmap                          aBmp( Graphic( pA->GetBitmapEx() ).GetBitmap() );
@@ -1825,7 +1826,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_EPS_ACTION :
+            case MetaActionType::EPS :
             {
                 const MetaEPSAction* pA = static_cast<const MetaEPSAction*>(pMA);
                 const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
@@ -1834,7 +1835,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 for ( size_t i = 0; i < nCount; i++ )
                 {
                     const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
-                    if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )
+                    if ( pMetaAct->GetType() == MetaActionType::BMPSCALE )
                     {
                         const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pMetaAct);
                         WriteOpcode_BitsRect( pA->GetPoint(), pA->GetSize(), pBmpScaleAction->GetBitmap() );
@@ -1844,15 +1845,15 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_MASK_ACTION:
-            case META_MASKSCALE_ACTION:
-            case META_MASKSCALEPART_ACTION:
+            case MetaActionType::MASK:
+            case MetaActionType::MASKSCALE:
+            case MetaActionType::MASKSCALEPART:
             {
                 // OSL_FAIL( "Unsupported PICT-Action: META_MASK..._ACTION!" );
             }
             break;
 
-            case META_GRADIENT_ACTION:
+            case MetaActionType::GRADIENT:
             {
                 ScopedVclPtrInstance<VirtualDevice> aVDev;
                 GDIMetaFile                 aTmpMtf;
@@ -1864,7 +1865,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_HATCH_ACTION:
+            case MetaActionType::HATCH:
             {
                 ScopedVclPtrInstance<VirtualDevice> aVDev;
                 GDIMetaFile             aTmpMtf;
@@ -1876,38 +1877,38 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_WALLPAPER_ACTION:
+            case MetaActionType::WALLPAPER:
             {
-                // OSL_FAIL( "Unsupported PICT-Action: META_WALLPAPER_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: MetaActionType::WALLPAPER!" );
             }
             break;
 
-            case META_CLIPREGION_ACTION:
+            case MetaActionType::CLIPREGION:
             {
-                // OSL_FAIL( "Unsupported PICT-Action: META_CLIPREGION_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: MetaActionType::CLIPREGION!" );
             }
             break;
 
-            case META_ISECTRECTCLIPREGION_ACTION:
+            case MetaActionType::ISECTRECTCLIPREGION:
             {
                 const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pMA);
                 WriteOpcode_ClipRect( pA->GetRect() );
             }
             break;
 
-            case META_ISECTREGIONCLIPREGION_ACTION:
+            case MetaActionType::ISECTREGIONCLIPREGION:
             {
-                // OSL_FAIL( "Unsupported PICT-Action: META_ISECTREGIONCLIPREGION_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: MetaActionType::ISECTREGIONCLIPREGION!" );
             }
             break;
 
-            case META_MOVECLIPREGION_ACTION:
+            case MetaActionType::MOVECLIPREGION:
             {
-                // OSL_FAIL( "Unsupported PICT-Action: META_MOVECLIPREGION_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: MetaActionType::MOVECLIPREGION!" );
             }
             break;
 
-            case META_LINECOLOR_ACTION:
+            case MetaActionType::LINECOLOR:
             {
                 const MetaLineColorAction* pA = static_cast<const MetaLineColorAction*>(pMA);
 
@@ -1918,7 +1919,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_FILLCOLOR_ACTION:
+            case MetaActionType::FILLCOLOR:
             {
                 const MetaFillColorAction* pA = static_cast<const MetaFillColorAction*>(pMA);
 
@@ -1929,14 +1930,14 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_TEXTCOLOR_ACTION:
+            case MetaActionType::TEXTCOLOR:
             {
                 const MetaTextColorAction* pA = static_cast<const MetaTextColorAction*>(pMA);
                 aSrcFont.SetColor( pA->GetColor() );
             }
             break;
 
-            case META_TEXTFILLCOLOR_ACTION:
+            case MetaActionType::TEXTFILLCOLOR:
             {
                 const MetaTextFillColorAction* pA = static_cast<const MetaTextFillColorAction*>(pMA);
 
@@ -1947,13 +1948,13 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_TEXTALIGN_ACTION:
+            case MetaActionType::TEXTALIGN:
             {
-                // OSL_FAIL( "Unsupported PICT-Action: META_TEXTALIGN_ACTION!" );
+                // OSL_FAIL( "Unsupported PICT-Action: MetaActionType::TEXTALIGN!" );
             }
             break;
 
-            case META_MAPMODE_ACTION:
+            case MetaActionType::MAPMODE:
             {
                 const MetaMapModeAction* pA = static_cast<const MetaMapModeAction*>(pMA);
 
@@ -2018,14 +2019,14 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_FONT_ACTION:
+            case MetaActionType::FONT:
             {
                 const MetaFontAction* pA = static_cast<const MetaFontAction*>(pMA);
                 aSrcFont=pA->GetFont();
             }
             break;
 
-            case META_PUSH_ACTION:
+            case MetaActionType::PUSH:
             {
                 PictWriterAttrStackMember * pAt = new PictWriterAttrStackMember;
                 pAt->aLineColor=aLineColor;
@@ -2039,7 +2040,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_POP_ACTION:
+            case MetaActionType::POP:
             {
                 PictWriterAttrStackMember* pAt=pAttrStack;
 
@@ -2065,14 +2066,14 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_RASTEROP_ACTION:
+            case MetaActionType::RASTEROP:
             {
                 const MetaRasterOpAction* pA = static_cast<const MetaRasterOpAction*>(pMA);
                 eSrcRasterOp=pA->GetRasterOp();
             }
             break;
 
-            case META_TRANSPARENT_ACTION:
+            case MetaActionType::TRANSPARENT:
             {
                 const tools::PolyPolygon& rPolyPoly = static_cast<const MetaTransparentAction*>(pMA)->GetPolyPolygon();
 
@@ -2091,7 +2092,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             }
             break;
 
-            case META_FLOATTRANSPARENT_ACTION:
+            case MetaActionType::FLOATTRANSPARENT:
             {
                 const MetaFloatTransparentAction* pA = static_cast<const MetaFloatTransparentAction*>(pMA);
 
@@ -2118,6 +2119,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 WriteOpcodes( aTmpMtf );
             }
             break;
+            default: break;
         }
 
         nWrittenActions++;

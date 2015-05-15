@@ -765,7 +765,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
             switch( pAction->GetType() )
             {
-                case( META_PIXEL_ACTION ):
+                case( MetaActionType::PIXEL ):
                 {
                     MetaPixelAction* pAct = static_cast<MetaPixelAction*>(pAction);
 
@@ -781,7 +781,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_LINECOLOR_ACTION ):
+                case( MetaActionType::LINECOLOR ):
                 {
                     MetaLineColorAction* pAct = static_cast<MetaLineColorAction*>(pAction);
 
@@ -797,7 +797,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_FILLCOLOR_ACTION ):
+                case( MetaActionType::FILLCOLOR ):
                 {
                     MetaFillColorAction* pAct = static_cast<MetaFillColorAction*>(pAction);
 
@@ -813,7 +813,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_TEXTCOLOR_ACTION ):
+                case( MetaActionType::TEXTCOLOR ):
                 {
                     MetaTextColorAction* pAct = static_cast<MetaTextColorAction*>(pAction);
 
@@ -829,7 +829,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_TEXTFILLCOLOR_ACTION ):
+                case( MetaActionType::TEXTFILLCOLOR ):
                 {
                     MetaTextFillColorAction* pAct = static_cast<MetaTextFillColorAction*>(pAction);
 
@@ -845,7 +845,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_FONT_ACTION ):
+                case( MetaActionType::FONT ):
                 {
                     MetaFontAction* pAct = static_cast<MetaFontAction*>(pAction);
                     vcl::Font       aFont( pAct->GetFont() );
@@ -865,7 +865,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_WALLPAPER_ACTION ):
+                case( MetaActionType::WALLPAPER ):
                 {
                     MetaWallpaperAction*    pAct = static_cast<MetaWallpaperAction*>(pAction);
                     Wallpaper               aWall( pAct->GetWallpaper() );
@@ -885,7 +885,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_BMP_ACTION ):
+                case( MetaActionType::BMP ):
                 {
                     MetaBmpAction*  pAct = static_cast<MetaBmpAction*>(pAction);
                     const Bitmap    aBmp( Mask( pAct->GetBitmap() ).GetBitmap() );
@@ -895,7 +895,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_BMPSCALE_ACTION ):
+                case( MetaActionType::BMPSCALE ):
                 {
                     MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
                     const Bitmap        aBmp( Mask( pAct->GetBitmap() ).GetBitmap() );
@@ -905,7 +905,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_BMPSCALEPART_ACTION ):
+                case( MetaActionType::BMPSCALEPART ):
                 {
                     MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
                     const Bitmap            aBmp( Mask( pAct->GetBitmap() ).GetBitmap() );
@@ -916,7 +916,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_BMPEX_ACTION ):
+                case( MetaActionType::BMPEX ):
                 {
                     MetaBmpExAction*    pAct = static_cast<MetaBmpExAction*>(pAction);
                     const BitmapEx      aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );
@@ -926,7 +926,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_BMPEXSCALE_ACTION ):
+                case( MetaActionType::BMPEXSCALE ):
                 {
                     MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
                     const BitmapEx          aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );
@@ -936,7 +936,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 }
                 break;
 
-                case( META_BMPEXSCALEPART_ACTION ):
+                case( MetaActionType::BMPEXSCALEPART ):
                 {
                     MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
                     const BitmapEx              aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );

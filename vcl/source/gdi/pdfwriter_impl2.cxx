@@ -258,26 +258,26 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
     {
         if ( !i_pOutDevData || !i_pOutDevData->PlaySyncPageAct( m_rOuterFace, i ) )
         {
-            const MetaAction*   pAction = aMtf.GetAction( i );
-            const sal_uInt16        nType = pAction->GetType();
+            const MetaAction*    pAction = aMtf.GetAction( i );
+            const MetaActionType nType = pAction->GetType();
 
             switch( nType )
             {
-                case( META_PIXEL_ACTION ):
+                case( MetaActionType::PIXEL ):
                 {
                     const MetaPixelAction* pA = static_cast<const MetaPixelAction*>(pAction);
                     m_rOuterFace.DrawPixel( pA->GetPoint(), pA->GetColor() );
                 }
                 break;
 
-                case( META_POINT_ACTION ):
+                case( MetaActionType::POINT ):
                 {
                     const MetaPointAction* pA = static_cast<const MetaPointAction*>(pAction);
                     m_rOuterFace.DrawPixel( pA->GetPoint() );
                 }
                 break;
 
-                case( META_LINE_ACTION ):
+                case( MetaActionType::LINE ):
                 {
                     const MetaLineAction* pA = static_cast<const MetaLineAction*>(pAction);
                     if ( pA->GetLineInfo().IsDefault() )
@@ -287,56 +287,56 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_RECT_ACTION ):
+                case( MetaActionType::RECT ):
                 {
                     const MetaRectAction* pA = static_cast<const MetaRectAction*>(pAction);
                     m_rOuterFace.DrawRect( pA->GetRect() );
                 }
                 break;
 
-                case( META_ROUNDRECT_ACTION ):
+                case( MetaActionType::ROUNDRECT ):
                 {
                     const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pAction);
                     m_rOuterFace.DrawRect( pA->GetRect(), pA->GetHorzRound(), pA->GetVertRound() );
                 }
                 break;
 
-                case( META_ELLIPSE_ACTION ):
+                case( MetaActionType::ELLIPSE ):
                 {
                     const MetaEllipseAction* pA = static_cast<const MetaEllipseAction*>(pAction);
                     m_rOuterFace.DrawEllipse( pA->GetRect() );
                 }
                 break;
 
-                case( META_ARC_ACTION ):
+                case( MetaActionType::ARC ):
                 {
                     const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
                     m_rOuterFace.DrawArc( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint() );
                 }
                 break;
 
-                case( META_PIE_ACTION ):
+                case( MetaActionType::PIE ):
                 {
                     const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
                     m_rOuterFace.DrawPie( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint() );
                 }
                 break;
 
-                case( META_CHORD_ACTION ):
+                case( MetaActionType::CHORD ):
                 {
                     const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
                     m_rOuterFace.DrawChord( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint() );
                 }
                 break;
 
-                case( META_POLYGON_ACTION ):
+                case( MetaActionType::POLYGON ):
                 {
                     const MetaPolygonAction* pA = static_cast<const MetaPolygonAction*>(pAction);
                     m_rOuterFace.DrawPolygon( pA->GetPolygon() );
                 }
                 break;
 
-                case( META_POLYLINE_ACTION ):
+                case( MetaActionType::POLYLINE ):
                 {
                     const MetaPolyLineAction* pA = static_cast<const MetaPolyLineAction*>(pAction);
                     if ( pA->GetLineInfo().IsDefault() )
@@ -346,14 +346,14 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_POLYPOLYGON_ACTION ):
+                case( MetaActionType::POLYPOLYGON ):
                 {
                     const MetaPolyPolygonAction* pA = static_cast<const MetaPolyPolygonAction*>(pAction);
                     m_rOuterFace.DrawPolyPolygon( pA->GetPolyPolygon() );
                 }
                 break;
 
-                case( META_GRADIENT_ACTION ):
+                case( MetaActionType::GRADIENT ):
                 {
                     const MetaGradientAction* pA = static_cast<const MetaGradientAction*>(pAction);
                     const Gradient& rGradient = pA->GetGradient();
@@ -369,7 +369,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_GRADIENTEX_ACTION ):
+                case( MetaActionType::GRADIENTEX ):
                 {
                     const MetaGradientExAction* pA = static_cast<const MetaGradientExAction*>(pAction);
                     const Gradient& rGradient = pA->GetGradient();
@@ -381,21 +381,21 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case META_HATCH_ACTION:
+                case MetaActionType::HATCH:
                 {
                     const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pAction);
                     m_rOuterFace.DrawHatch( pA->GetPolyPolygon(), pA->GetHatch() );
                 }
                 break;
 
-                case( META_TRANSPARENT_ACTION ):
+                case( MetaActionType::TRANSPARENT ):
                 {
                     const MetaTransparentAction* pA = static_cast<const MetaTransparentAction*>(pAction);
                     m_rOuterFace.DrawTransparent( pA->GetPolyPolygon(), pA->GetTransparence() );
                 }
                 break;
 
-                case( META_FLOATTRANSPARENT_ACTION ):
+                case( MetaActionType::FLOATTRANSPARENT ):
                 {
                     const MetaFloatTransparentAction* pA = static_cast<const MetaFloatTransparentAction*>(pAction);
 
@@ -488,7 +488,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_EPS_ACTION ):
+                case( MetaActionType::EPS ):
                 {
                     const MetaEPSAction*    pA = static_cast<const MetaEPSAction*>(pAction);
                     const GDIMetaFile       aSubstitute( pA->GetSubstitute() );
@@ -510,7 +510,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_COMMENT_ACTION ):
+                case( MetaActionType::COMMENT ):
                 if( ! i_rContext.m_bTransparenciesWereRemoved )
                 {
                     const MetaCommentAction*    pA = static_cast<const MetaCommentAction*>(pAction);
@@ -524,9 +524,9 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         {
                             pAction = aMtf.GetAction( i );
 
-                            if( pAction->GetType() == META_GRADIENTEX_ACTION )
+                            if( pAction->GetType() == MetaActionType::GRADIENTEX )
                                 pGradAction = static_cast<const MetaGradientExAction*>(pAction);
-                            else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
+                            else if( ( pAction->GetType() == MetaActionType::COMMENT ) &&
                                      ( static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END")) )
                             {
                                 bDone = true;
@@ -747,7 +747,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 while( ++i < nCount )
                                 {
                                     pAction = aMtf.GetAction( i );
-                                    if ( pAction->GetType() == META_COMMENT_ACTION )
+                                    if ( pAction->GetType() == MetaActionType::COMMENT )
                                     {
                                         OString sComment( static_cast<const MetaCommentAction*>(pAction)->GetComment() );
                                         if (sComment == sSeqEnd)
@@ -757,7 +757,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     // the replacement action for stroke is a filled rectangle
                                     // the set fillcolor of the replacement is part of the graphics
                                     // state and must not be skipped
-                                    else if( pAction->GetType() == META_FILLCOLOR_ACTION )
+                                    else if( pAction->GetType() == MetaActionType::FILLCOLOR )
                                     {
                                         const MetaFillColorAction* pMA = static_cast<const MetaFillColorAction*>(pAction);
                                         if( pMA->IsSetting() )
@@ -772,7 +772,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_BMP_ACTION ):
+                case( MetaActionType::BMP ):
                 {
                     const MetaBmpAction* pA = static_cast<const MetaBmpAction*>(pAction);
                     BitmapEx aBitmapEx( pA->GetBitmap() );
@@ -784,14 +784,14 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_BMPSCALE_ACTION ):
+                case( MetaActionType::BMPSCALE ):
                 {
                     const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
                     implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), BitmapEx( pA->GetBitmap() ), pDummyVDev, i_rContext );
                 }
                 break;
 
-                case( META_BMPSCALEPART_ACTION ):
+                case( MetaActionType::BMPSCALEPART ):
                 {
                     const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
                     BitmapEx aBitmapEx( pA->GetBitmap() );
@@ -800,7 +800,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_BMPEX_ACTION ):
+                case( MetaActionType::BMPEX ):
                 {
                     const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pAction);
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
@@ -810,14 +810,14 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_BMPEXSCALE_ACTION ):
+                case( MetaActionType::BMPEXSCALE ):
                 {
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                     implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), pA->GetBitmapEx(), pDummyVDev, i_rContext );
                 }
                 break;
 
-                case( META_BMPEXSCALEPART_ACTION ):
+                case( MetaActionType::BMPEXSCALEPART ):
                 {
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
@@ -826,43 +826,43 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_MASK_ACTION ):
-                case( META_MASKSCALE_ACTION ):
-                case( META_MASKSCALEPART_ACTION ):
+                case( MetaActionType::MASK ):
+                case( MetaActionType::MASKSCALE ):
+                case( MetaActionType::MASKSCALEPART ):
                 {
                     OSL_TRACE( "MetaMask...Action not supported yet" );
                 }
                 break;
 
-                case( META_TEXT_ACTION ):
+                case( MetaActionType::TEXT ):
                 {
                     const MetaTextAction* pA = static_cast<const MetaTextAction*>(pAction);
                     m_rOuterFace.DrawText( pA->GetPoint(), pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) ) );
                 }
                 break;
 
-                case( META_TEXTRECT_ACTION ):
+                case( MetaActionType::TEXTRECT ):
                 {
                     const MetaTextRectAction* pA = static_cast<const MetaTextRectAction*>(pAction);
                     m_rOuterFace.DrawText( pA->GetRect(), pA->GetText(), pA->GetStyle() );
                 }
                 break;
 
-                case( META_TEXTARRAY_ACTION ):
+                case( MetaActionType::TEXTARRAY ):
                 {
                     const MetaTextArrayAction* pA = static_cast<const MetaTextArrayAction*>(pAction);
                     m_rOuterFace.DrawTextArray( pA->GetPoint(), pA->GetText(), pA->GetDXArray(), pA->GetIndex(), pA->GetLen() );
                 }
                 break;
 
-                case( META_STRETCHTEXT_ACTION ):
+                case( MetaActionType::STRETCHTEXT ):
                 {
                     const MetaStretchTextAction* pA = static_cast<const MetaStretchTextAction*>(pAction);
                     m_rOuterFace.DrawStretchText( pA->GetPoint(), pA->GetWidth(), pA->GetText(), pA->GetIndex(), pA->GetLen() );
                 }
                 break;
 
-                case( META_TEXTLINE_ACTION ):
+                case( MetaActionType::TEXTLINE ):
                 {
                     const MetaTextLineAction* pA = static_cast<const MetaTextLineAction*>(pAction);
                     m_rOuterFace.DrawTextLine( pA->GetStartPoint(), pA->GetWidth(), pA->GetStrikeout(), pA->GetUnderline(), pA->GetOverline() );
@@ -870,7 +870,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_CLIPREGION_ACTION ):
+                case( MetaActionType::CLIPREGION ):
                 {
                     const MetaClipRegionAction* pA = static_cast<const MetaClipRegionAction*>(pAction);
 
@@ -889,14 +889,14 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_ISECTRECTCLIPREGION_ACTION ):
+                case( MetaActionType::ISECTRECTCLIPREGION ):
                 {
                     const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pAction);
                     m_rOuterFace.IntersectClipRegion( pA->GetRect() );
                 }
                 break;
 
-                case( META_ISECTREGIONCLIPREGION_ACTION ):
+                case( MetaActionType::ISECTREGIONCLIPREGION ):
                 {
                     const MetaISectRegionClipRegionAction* pA = static_cast<const MetaISectRegionClipRegionAction*>(pAction);
                     vcl::Region aReg( pA->GetRegion() );
@@ -904,21 +904,21 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_MOVECLIPREGION_ACTION ):
+                case( MetaActionType::MOVECLIPREGION ):
                 {
                     const MetaMoveClipRegionAction* pA = static_cast<const MetaMoveClipRegionAction*>(pAction);
                     m_rOuterFace.MoveClipRegion( pA->GetHorzMove(), pA->GetVertMove() );
                 }
                 break;
 
-                case( META_MAPMODE_ACTION ):
+                case( MetaActionType::MAPMODE ):
                 {
                     const_cast< MetaAction* >( pAction )->Execute( pDummyVDev );
                     m_rOuterFace.SetMapMode( pDummyVDev->GetMapMode() );
                 }
                 break;
 
-                case( META_LINECOLOR_ACTION ):
+                case( MetaActionType::LINECOLOR ):
                 {
                     const MetaLineColorAction* pA = static_cast<const MetaLineColorAction*>(pAction);
 
@@ -929,7 +929,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_FILLCOLOR_ACTION ):
+                case( MetaActionType::FILLCOLOR ):
                 {
                     const MetaFillColorAction* pA = static_cast<const MetaFillColorAction*>(pAction);
 
@@ -940,7 +940,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_TEXTLINECOLOR_ACTION ):
+                case( MetaActionType::TEXTLINECOLOR ):
                 {
                     const MetaTextLineColorAction* pA = static_cast<const MetaTextLineColorAction*>(pAction);
 
@@ -951,7 +951,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_OVERLINECOLOR_ACTION ):
+                case( MetaActionType::OVERLINECOLOR ):
                 {
                     const MetaOverlineColorAction* pA = static_cast<const MetaOverlineColorAction*>(pAction);
 
@@ -962,7 +962,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_TEXTFILLCOLOR_ACTION ):
+                case( MetaActionType::TEXTFILLCOLOR ):
                 {
                     const MetaTextFillColorAction* pA = static_cast<const MetaTextFillColorAction*>(pAction);
 
@@ -973,28 +973,28 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_TEXTCOLOR_ACTION ):
+                case( MetaActionType::TEXTCOLOR ):
                 {
                     const MetaTextColorAction* pA = static_cast<const MetaTextColorAction*>(pAction);
                     m_rOuterFace.SetTextColor( pA->GetColor() );
                 }
                 break;
 
-                case( META_TEXTALIGN_ACTION ):
+                case( MetaActionType::TEXTALIGN ):
                 {
                     const MetaTextAlignAction* pA = static_cast<const MetaTextAlignAction*>(pAction);
                     m_rOuterFace.SetTextAlign( pA->GetTextAlign() );
                 }
                 break;
 
-                case( META_FONT_ACTION ):
+                case( MetaActionType::FONT ):
                 {
                     const MetaFontAction* pA = static_cast<const MetaFontAction*>(pAction);
                     m_rOuterFace.SetFont( pA->GetFont() );
                 }
                 break;
 
-                case( META_PUSH_ACTION ):
+                case( MetaActionType::PUSH ):
                 {
                     const MetaPushAction* pA = static_cast<const MetaPushAction*>(pAction);
 
@@ -1003,41 +1003,41 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 }
                 break;
 
-                case( META_POP_ACTION ):
+                case( MetaActionType::POP ):
                 {
                     pDummyVDev->Pop();
                     m_rOuterFace.Pop();
                 }
                 break;
 
-                case( META_LAYOUTMODE_ACTION ):
+                case( MetaActionType::LAYOUTMODE ):
                 {
                     const MetaLayoutModeAction* pA = static_cast<const MetaLayoutModeAction*>(pAction);
                     m_rOuterFace.SetLayoutMode( pA->GetLayoutMode() );
                 }
                 break;
 
-                case META_TEXTLANGUAGE_ACTION:
+                case MetaActionType::TEXTLANGUAGE:
                 {
                     const  MetaTextLanguageAction* pA = static_cast<const MetaTextLanguageAction*>(pAction);
                     m_rOuterFace.SetDigitLanguage( pA->GetTextLanguage() );
                 }
                 break;
 
-                case( META_WALLPAPER_ACTION ):
+                case( MetaActionType::WALLPAPER ):
                 {
                     const MetaWallpaperAction* pA = static_cast<const MetaWallpaperAction*>(pAction);
                     m_rOuterFace.DrawWallpaper( pA->GetRect(), pA->GetWallpaper() );
                 }
                 break;
 
-                case( META_RASTEROP_ACTION ):
+                case( MetaActionType::RASTEROP ):
                 {
                     // !!! >>> we don't want to support this actions
                 }
                 break;
 
-                case( META_REFPOINT_ACTION ):
+                case( MetaActionType::REFPOINT ):
                 {
                     // !!! >>> we don't want to support this actions
                 }

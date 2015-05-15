@@ -651,29 +651,29 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                 switch( pAction->GetType() )
                 {
                     // only optimizing common bitmap actions:
-                    case( META_MAPMODE_ACTION ):
+                    case( MetaActionType::MAPMODE ):
                     {
                         const_cast< MetaAction* >( pAction )->Execute( aDummyVDev.get() );
                         break;
                     }
-                    case( META_PUSH_ACTION ):
+                    case( MetaActionType::PUSH ):
                     {
                         const MetaPushAction* pA = static_cast<const MetaPushAction*>(pAction);
                         aDummyVDev->Push( pA->GetFlags() );
                         break;
                     }
-                    case( META_POP_ACTION ):
+                    case( MetaActionType::POP ):
                     {
                         aDummyVDev->Pop();
                         break;
                     }
-                    case( META_BMPSCALE_ACTION ):
-                    case( META_BMPEXSCALE_ACTION ):
+                    case( MetaActionType::BMPSCALE ):
+                    case( MetaActionType::BMPEXSCALE ):
                     {
                         BitmapEx aBmpEx;
                         Point aPos;
                         Size aSize;
-                        if ( pAction->GetType() == META_BMPSCALE_ACTION )
+                        if ( pAction->GetType() == MetaActionType::BMPSCALE )
                         {
                             MetaBmpScaleAction* pScaleAction = dynamic_cast< MetaBmpScaleAction* >( pAction );
                             aBmpEx = pScaleAction->GetBitmap();
@@ -695,7 +695,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                             aGraphic.GetSizePixel(), awt::Size( aSize100thmm2.Width(), aSize100thmm2.Height() ) );
 
                         MetaAction* pNewAction;
-                        if ( pAction->GetType() == META_BMPSCALE_ACTION )
+                        if ( pAction->GetType() == MetaActionType::BMPSCALE )
                             pNewAction = new MetaBmpScaleAction ( aPos, aSize, aGraphic.GetBitmap() );
                         else
                             pNewAction = new MetaBmpExScaleAction( aPos, aSize, aGraphic.GetBitmapEx() );
@@ -706,12 +706,12 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                         break;
                     }
                     default:
-                    case( META_BMP_ACTION ):
-                    case( META_BMPSCALEPART_ACTION ):
-                    case( META_BMPEX_ACTION ):
-                    case( META_BMPEXSCALEPART_ACTION ):
-                    case( META_MASK_ACTION ):
-                    case( META_MASKSCALE_ACTION ):
+                    case( MetaActionType::BMP ):
+                    case( MetaActionType::BMPSCALEPART ):
+                    case( MetaActionType::BMPEX ):
+                    case( MetaActionType::BMPEXSCALEPART ):
+                    case( MetaActionType::MASK ):
+                    case( MetaActionType::MASKSCALE ):
                     break;
                 }
             }

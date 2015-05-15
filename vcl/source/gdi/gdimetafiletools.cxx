@@ -282,7 +282,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
     for(sal_uLong i(0); i < nObjCount; ++i)
     {
         const MetaAction* pAction(rSource.GetAction(i));
-        const sal_uInt16 nType(pAction->GetType());
+        const MetaActionType nType(pAction->GetType());
         bool bDone(false);
 
         // basic operation takes care of clipregion actions (four) and push/pop of these
@@ -291,7 +291,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
         // below
         switch(nType)
         {
-            case META_CLIPREGION_ACTION :
+            case MetaActionType::CLIPREGION :
             {
                 const MetaClipRegionAction* pA = static_cast< const MetaClipRegionAction* >(pAction);
 
@@ -310,7 +310,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 break;
             }
 
-            case META_ISECTRECTCLIPREGION_ACTION :
+            case MetaActionType::ISECTRECTCLIPREGION :
             {
                 const MetaISectRectClipRegionAction* pA = static_cast< const MetaISectRectClipRegionAction* >(pAction);
                 const Rectangle& rRect = pA->GetRect();
@@ -330,7 +330,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 break;
             }
 
-            case META_ISECTREGIONCLIPREGION_ACTION :
+            case MetaActionType::ISECTREGIONCLIPREGION :
             {
                 const MetaISectRegionClipRegionAction* pA = static_cast< const MetaISectRegionClipRegionAction* >(pAction);
                 const vcl::Region& rRegion = pA->GetRegion();
@@ -348,7 +348,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 break;
             }
 
-            case META_MOVECLIPREGION_ACTION :
+            case MetaActionType::MOVECLIPREGION :
             {
                 const MetaMoveClipRegionAction* pA = static_cast< const MetaMoveClipRegionAction* >(pAction);
                 const long aHorMove(pA->GetHorzMove());
@@ -364,7 +364,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 break;
             }
 
-            case META_PUSH_ACTION :
+            case MetaActionType::PUSH :
             {
                 const MetaPushAction* pA = static_cast< const MetaPushAction* >(pAction);
                 const PushFlags nFlags(pA->GetFlags());
@@ -383,7 +383,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 break;
             }
 
-            case META_POP_ACTION :
+            case MetaActionType::POP :
             {
 
                 if(aPushFlags.size())
@@ -423,7 +423,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 break;
             }
 
-            case META_MAPMODE_ACTION :
+            case MetaActionType::MAPMODE :
             {
                 const MetaMapModeAction* pA = static_cast< const MetaMapModeAction* >(pAction);
 
@@ -448,7 +448,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 // pixel actions, just check on inside
 
-                case META_PIXEL_ACTION :
+                case MetaActionType::PIXEL :
                 {
                     const MetaPixelAction* pA = static_cast< const MetaPixelAction* >(pAction);
                     const Point& rPoint = pA->GetPoint();
@@ -463,7 +463,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_POINT_ACTION :
+                case MetaActionType::POINT :
                 {
                     const MetaPointAction* pA = static_cast< const MetaPointAction* >(pAction);
                     const Point& rPoint = pA->GetPoint();
@@ -480,7 +480,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 // geometry actions
 
-                case META_LINE_ACTION :
+                case MetaActionType::LINE :
                 {
                     const MetaLineAction* pA = static_cast< const MetaLineAction* >(pAction);
                     const Point& rStart(pA->GetStartPoint());
@@ -498,7 +498,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_RECT_ACTION :
+                case MetaActionType::RECT :
                 {
                     const MetaRectAction* pA = static_cast< const MetaRectAction* >(pAction);
                     const Rectangle& rRect = pA->GetRect();
@@ -523,7 +523,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_ROUNDRECT_ACTION :
+                case MetaActionType::ROUNDRECT :
                 {
                     const MetaRoundRectAction* pA = static_cast< const MetaRoundRectAction* >(pAction);
                     const Rectangle& rRect = pA->GetRect();
@@ -562,7 +562,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_ELLIPSE_ACTION :
+                case MetaActionType::ELLIPSE :
                 {
                     const MetaEllipseAction* pA = static_cast< const MetaEllipseAction* >(pAction);
                     const Rectangle& rRect = pA->GetRect();
@@ -588,7 +588,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_ARC_ACTION :
+                case MetaActionType::ARC :
                 {
                     const MetaArcAction* pA = static_cast< const MetaArcAction* >(pAction);
                     const Rectangle& rRect = pA->GetRect();
@@ -614,7 +614,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_PIE_ACTION :
+                case MetaActionType::PIE :
                 {
                     const MetaPieAction* pA = static_cast< const MetaPieAction* >(pAction);
                     const Rectangle& rRect = pA->GetRect();
@@ -640,7 +640,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_CHORD_ACTION :
+                case MetaActionType::CHORD :
                 {
                     const MetaChordAction* pA = static_cast< const MetaChordAction* >(pAction);
                     const Rectangle& rRect = pA->GetRect();
@@ -666,7 +666,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_POLYLINE_ACTION :
+                case MetaActionType::POLYLINE :
                 {
                     const MetaPolyLineAction* pA = static_cast< const MetaPolyLineAction* >(pAction);
 
@@ -678,7 +678,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_POLYGON_ACTION :
+                case MetaActionType::POLYGON :
                 {
                     const MetaPolygonAction* pA = static_cast< const MetaPolygonAction* >(pAction);
 
@@ -690,7 +690,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_POLYPOLYGON_ACTION :
+                case MetaActionType::POLYPOLYGON :
                 {
                     const MetaPolyPolygonAction* pA = static_cast< const MetaPolyPolygonAction* >(pAction);
                     const tools::PolyPolygon& rPoly = pA->GetPolyPolygon();
@@ -706,7 +706,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 // bitmap actions, create BitmapEx with alpha channel derived
                 // from clipping
 
-                case META_BMPEX_ACTION :
+                case MetaActionType::BMPEX :
                 {
                     const MetaBmpExAction* pA = static_cast< const MetaBmpExAction* >(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
@@ -733,7 +733,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_BMP_ACTION :
+                case MetaActionType::BMP :
                 {
                     const MetaBmpAction* pA = static_cast< const MetaBmpAction* >(pAction);
                     const Bitmap& rBitmap = pA->GetBitmap();
@@ -760,7 +760,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_BMPEXSCALE_ACTION :
+                case MetaActionType::BMPEXSCALE :
                 {
                     const MetaBmpExScaleAction* pA = static_cast< const MetaBmpExScaleAction* >(pAction);
 
@@ -773,7 +773,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_BMPSCALE_ACTION :
+                case MetaActionType::BMPSCALE :
                 {
                     const MetaBmpScaleAction* pA = static_cast< const MetaBmpScaleAction* >(pAction);
 
@@ -786,7 +786,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_BMPEXSCALEPART_ACTION :
+                case MetaActionType::BMPEXSCALEPART :
                 {
                     const MetaBmpExScalePartAction* pA = static_cast< const MetaBmpExScalePartAction* >(pAction);
                     const BitmapEx& rBitmapEx = pA->GetBitmapEx();
@@ -820,7 +820,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_BMPSCALEPART_ACTION :
+                case MetaActionType::BMPSCALEPART :
                 {
                     const MetaBmpScalePartAction* pA = static_cast< const MetaBmpScalePartAction* >(pAction);
                     const Bitmap& rBitmap = pA->GetBitmap();
@@ -856,7 +856,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 // need to handle all those 'hacks' which hide data in comments
 
-                case META_COMMENT_ACTION :
+                case MetaActionType::COMMENT :
                 {
                     const MetaCommentAction* pA = static_cast< const MetaCommentAction* >(pAction);
                     const OString& rComment = pA->GetComment();
@@ -864,9 +864,9 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     if(rComment.equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN"))
                     {
                         // nothing to do; this just means that between here and XGRAD_SEQ_END
-                        // exists a META_GRADIENTEX_ACTION mixed with Xor-tricked painiting
+                        // exists a MetaActionType::GRADIENTEX mixed with Xor-tricked painiting
                         // commands. This comment is used to scan over these and filter for
-                        // the gradient action. It is needed to support META_GRADIENTEX_ACTION
+                        // the gradient action. It is needed to support MetaActionType::GRADIENTEX
                         // in this processor to solve usages.
                     }
                     else if(rComment.equalsIgnoreAsciiCase("XPATHFILL_SEQ_BEGIN"))
@@ -961,7 +961,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 // need to handle gradient fills (hopefully only unroated ones)
 
-                case META_GRADIENT_ACTION :
+                case MetaActionType::GRADIENT :
                 {
                     const MetaGradientAction* pA = static_cast< const MetaGradientAction* >(pAction);
                     const Rectangle& rRect = pA->GetRect();
@@ -986,7 +986,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     break;
                 }
 
-                case META_GRADIENTEX_ACTION :
+                case MetaActionType::GRADIENTEX :
                 {
                     const MetaGradientExAction* pA = static_cast< const MetaGradientExAction* >(pAction);
                     const tools::PolyPolygon& rPolyPoly = pA->GetPolyPolygon();
@@ -1001,31 +1001,31 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 // not (yet) supported actions
 
-                // META_NULL_ACTION
-                // META_TEXT_ACTION
-                // META_TEXTARRAY_ACTION
-                // META_STRETCHTEXT_ACTION
-                // META_TEXTRECT_ACTION
-                // META_MASK_ACTION
-                // META_MASKSCALE_ACTION
-                // META_MASKSCALEPART_ACTION
-                // META_HATCH_ACTION
-                // META_WALLPAPER_ACTION
-                // META_FILLCOLOR_ACTION
-                // META_TEXTCOLOR_ACTION
-                // META_TEXTFILLCOLOR_ACTION
-                // META_TEXTALIGN_ACTION
-                // META_MAPMODE_ACTION
-                // META_FONT_ACTION
-                // META_TRANSPARENT_ACTION
-                // META_EPS_ACTION
-                // META_REFPOINT_ACTION
-                // META_TEXTLINECOLOR_ACTION
-                // META_TEXTLINE_ACTION
-                // META_FLOATTRANSPARENT_ACTION
-                // META_LAYOUTMODE_ACTION
-                // META_TEXTLANGUAGE_ACTION
-                // META_OVERLINECOLOR_ACTION
+                // MetaActionType::NONE
+                // MetaActionType::TEXT
+                // MetaActionType::TEXTARRAY
+                // MetaActionType::STRETCHTEXT
+                // MetaActionType::TEXTRECT
+                // MetaActionType::MASK
+                // MetaActionType::MASKSCALE
+                // MetaActionType::MASKSCALEPART
+                // MetaActionType::HATCH
+                // MetaActionType::WALLPAPER
+                // MetaActionType::FILLCOLOR
+                // MetaActionType::TEXTCOLOR
+                // MetaActionType::TEXTFILLCOLOR
+                // MetaActionType::TEXTALIGN
+                // MetaActionType::MAPMODE
+                // MetaActionType::FONT
+                // MetaActionType::TRANSPARENT
+                // MetaActionType::EPS
+                // MetaActionType::REFPOINT
+                // MetaActionType::TEXTLINECOLOR
+                // MetaActionType::TEXTLINE
+                // MetaActionType::FLOATTRANSPARENT
+                // MetaActionType::LAYOUTMODE
+                // MetaActionType::TEXTLANGUAGE
+                // MetaActionType::OVERLINECOLOR
 
                 // if an action is not handled at all, it will simply get copied to the
                 // target (see below). This is the default for all non-implemented actions
@@ -1064,14 +1064,14 @@ bool usesClipActions(const GDIMetaFile& rSource)
     for(sal_uLong i(0); i < nObjCount; ++i)
     {
         const MetaAction* pAction(rSource.GetAction(i));
-        const sal_uInt16 nType(pAction->GetType());
+        const MetaActionType nType(pAction->GetType());
 
         switch(nType)
         {
-            case META_CLIPREGION_ACTION :
-            case META_ISECTRECTCLIPREGION_ACTION :
-            case META_ISECTREGIONCLIPREGION_ACTION :
-            case META_MOVECLIPREGION_ACTION :
+            case MetaActionType::CLIPREGION :
+            case MetaActionType::ISECTRECTCLIPREGION :
+            case MetaActionType::ISECTREGIONCLIPREGION :
+            case MetaActionType::MOVECLIPREGION :
             {
                 return true;
             }

@@ -82,7 +82,7 @@ bool hasUnsupportedActions( const GDIMetaFile& rMtf )
     {
         switch( pCurrAct->GetType() )
         {
-            case META_RASTEROP_ACTION:
+            case MetaActionType::RASTEROP:
                 // overpaint is okay - that's the default, anyway
                 if( ROP_OVERPAINT ==
                     static_cast<MetaRasterOpAction*>(pCurrAct)->GetRasterOp() )
@@ -90,13 +90,14 @@ bool hasUnsupportedActions( const GDIMetaFile& rMtf )
                     break;
                 }
                 // FALLTHROUGH intended
-            case META_MOVECLIPREGION_ACTION:
+            case MetaActionType::MOVECLIPREGION:
                 // FALLTHROUGH intended
-            case META_REFPOINT_ACTION:
+            case MetaActionType::REFPOINT:
                 // FALLTHROUGH intended
-            case META_WALLPAPER_ACTION:
+            case MetaActionType::WALLPAPER:
                 return true; // at least one unsupported
                              // action encountered
+            default: break;
         }
     }
 
@@ -236,24 +237,24 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
     // ===========================================
 
     switch (pCurrAct->GetType()) {
-    case META_TEXT_ACTION: {
+    case MetaActionType::TEXT: {
         MetaTextAction * pAct = static_cast<MetaTextAction *>(pCurrAct);
         sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
         return nLen;
     }
-    case META_TEXTARRAY_ACTION: {
+    case MetaActionType::TEXTARRAY: {
         MetaTextArrayAction * pAct =
             static_cast<MetaTextArrayAction *>(pCurrAct);
         sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
         return nLen;
     }
-    case META_STRETCHTEXT_ACTION: {
+    case MetaActionType::STRETCHTEXT: {
         MetaStretchTextAction * pAct =
             static_cast<MetaStretchTextAction *>(pCurrAct);
         sal_Int32 nLen = std::min(pAct->GetLen(), pAct->GetText().getLength() - pAct->GetIndex());
         return nLen;
     }
-    case META_FLOATTRANSPARENT_ACTION: {
+    case MetaActionType::FLOATTRANSPARENT: {
         MetaFloatTransparentAction * pAct =
             static_cast<MetaFloatTransparentAction*>(pCurrAct);
         // TODO(F2): Recurse into action metafile
@@ -443,7 +444,7 @@ bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
     for ( MetaAction * pCurrAct = rMtf->FirstAction();
           pCurrAct != 0; pCurrAct = rMtf->NextAction() )
     {
-        if (pCurrAct->GetType() == META_COMMENT_ACTION)
+        if (pCurrAct->GetType() == MetaActionType::COMMENT)
         {
             MetaCommentAction * pAct =
                 static_cast<MetaCommentAction *>(pCurrAct);

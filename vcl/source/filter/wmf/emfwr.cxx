@@ -997,12 +997,12 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 {
     for( size_t j = 0, nActionCount = rMtf.GetActionSize(); j < nActionCount; j++ )
     {
-        const MetaAction*   pAction = rMtf.GetAction( j );
-        const sal_uInt16        nType = pAction->GetType();
+        const MetaAction*    pAction = rMtf.GetAction( j );
+        const MetaActionType nType = pAction->GetType();
 
         switch( nType )
         {
-            case( META_PIXEL_ACTION ):
+            case( MetaActionType::PIXEL ):
             {
                 const MetaPixelAction* pA = static_cast<const MetaPixelAction*>(pAction);
 
@@ -1014,7 +1014,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_POINT_ACTION ):
+            case( MetaActionType::POINT ):
             {
                 if( maVDev->IsLineColor() )
                 {
@@ -1029,7 +1029,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_LINE_ACTION ):
+            case( MetaActionType::LINE ):
             {
                 if( maVDev->IsLineColor() )
                 {
@@ -1064,7 +1064,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_RECT_ACTION ):
+            case( MetaActionType::RECT ):
             {
                 if( maVDev->IsLineColor() || maVDev->IsFillColor() )
                 {
@@ -1080,7 +1080,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_ROUNDRECT_ACTION ):
+            case( MetaActionType::ROUNDRECT ):
             {
                 if( maVDev->IsLineColor() || maVDev->IsFillColor() )
                 {
@@ -1097,7 +1097,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_ELLIPSE_ACTION ):
+            case( MetaActionType::ELLIPSE ):
             {
                 if( maVDev->IsLineColor() || maVDev->IsFillColor() )
                 {
@@ -1113,10 +1113,10 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_ARC_ACTION ):
-            case( META_PIE_ACTION ):
-            case( META_CHORD_ACTION ):
-            case( META_POLYGON_ACTION ):
+            case( MetaActionType::ARC ):
+            case( MetaActionType::PIE ):
+            case( MetaActionType::CHORD ):
+            case( MetaActionType::POLYGON ):
             {
                 if( maVDev->IsLineColor() || maVDev->IsFillColor() )
                 {
@@ -1124,38 +1124,39 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
                     switch( nType )
                     {
-                        case( META_ARC_ACTION ):
+                        case( MetaActionType::ARC ):
                         {
                             const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
                         }
                         break;
 
-                        case( META_PIE_ACTION ):
+                        case( MetaActionType::PIE ):
                         {
                             const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
                         }
                         break;
 
-                        case( META_CHORD_ACTION ):
+                        case( MetaActionType::CHORD ):
                         {
                             const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
                         }
                         break;
 
-                        case( META_POLYGON_ACTION ):
+                        case( MetaActionType::POLYGON ):
                             aPoly = static_cast<const MetaPolygonAction*>(pAction)->GetPolygon();
                         break;
+                        default: break;
                     }
 
-                    ImplWritePolygonRecord( aPoly, nType != META_ARC_ACTION );
+                    ImplWritePolygonRecord( aPoly, nType != MetaActionType::ARC );
                 }
             }
             break;
 
-            case( META_POLYLINE_ACTION ):
+            case( MetaActionType::POLYLINE ):
             {
                 if( maVDev->IsLineColor() )
                 {
@@ -1178,14 +1179,14 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_POLYPOLYGON_ACTION ):
+            case( MetaActionType::POLYPOLYGON ):
             {
                 if( maVDev->IsLineColor() || maVDev->IsFillColor() )
                     ImplWritePolyPolygonRecord( static_cast<const MetaPolyPolygonAction*>(pAction)->GetPolyPolygon() );
             }
             break;
 
-            case( META_GRADIENT_ACTION ):
+            case( MetaActionType::GRADIENT ):
             {
                 const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pAction);
                 GDIMetaFile                 aTmpMtf;
@@ -1195,7 +1196,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case META_HATCH_ACTION:
+            case MetaActionType::HATCH:
             {
                 const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pAction);
                 GDIMetaFile             aTmpMtf;
@@ -1205,7 +1206,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case META_TRANSPARENT_ACTION:
+            case MetaActionType::TRANSPARENT:
             {
                 const tools::PolyPolygon& rPolyPoly = static_cast<const MetaTransparentAction*>(pAction)->GetPolyPolygon();
                 if( rPolyPoly.Count() )
@@ -1220,7 +1221,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case META_FLOATTRANSPARENT_ACTION:
+            case MetaActionType::FLOATTRANSPARENT:
             {
                 const MetaFloatTransparentAction* pA = static_cast<const MetaFloatTransparentAction*>(pAction);
 
@@ -1251,7 +1252,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_EPS_ACTION ):
+            case( MetaActionType::EPS ):
             {
                 const MetaEPSAction*    pA = static_cast<const MetaEPSAction*>(pAction);
                 const GDIMetaFile       aSubstitute( pA->GetSubstitute() );
@@ -1259,7 +1260,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 for( size_t i = 0, nCount = aSubstitute.GetActionSize(); i < nCount; i++ )
                 {
                     const MetaAction* pSubstAct = aSubstitute.GetAction( i );
-                    if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
+                    if( pSubstAct->GetType() == MetaActionType::BMPSCALE )
                     {
                         maVDev->Push( PushFlags::ALL );
                         ImplBeginRecord( WIN_EMR_SAVEDC );
@@ -1283,21 +1284,21 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case META_BMP_ACTION:
+            case MetaActionType::BMP:
             {
                 const MetaBmpAction* pA = static_cast<const MetaBmpAction *>(pAction);
                 ImplWriteBmpRecord( pA->GetBitmap(), pA->GetPoint(), maVDev->PixelToLogic( pA->GetBitmap().GetSizePixel() ), WIN_SRCCOPY );
             }
             break;
 
-            case META_BMPSCALE_ACTION:
+            case MetaActionType::BMPSCALE:
             {
                 const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
                 ImplWriteBmpRecord( pA->GetBitmap(), pA->GetPoint(), pA->GetSize(), WIN_SRCCOPY );
             }
             break;
 
-            case META_BMPSCALEPART_ACTION:
+            case MetaActionType::BMPSCALEPART:
             {
                 const MetaBmpScalePartAction*   pA = static_cast<const MetaBmpScalePartAction*>(pAction);
                 Bitmap                          aTmp( pA->GetBitmap() );
@@ -1307,7 +1308,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case META_BMPEX_ACTION:
+            case MetaActionType::BMPEX:
             {
                 const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction *>(pAction);
                 Bitmap                  aBmp( pA->GetBitmapEx().GetBitmap() );
@@ -1325,7 +1326,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case META_BMPEXSCALE_ACTION:
+            case MetaActionType::BMPEXSCALE:
             {
                 const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                 Bitmap                      aBmp( pA->GetBitmapEx().GetBitmap() );
@@ -1343,7 +1344,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case META_BMPEXSCALEPART_ACTION:
+            case MetaActionType::BMPEXSCALEPART:
             {
                 const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
                 BitmapEx                        aBmpEx( pA->GetBitmapEx() );
@@ -1363,7 +1364,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case META_TEXT_ACTION:
+            case MetaActionType::TEXT:
             {
                 const MetaTextAction*   pA = static_cast<const MetaTextAction*>(pAction);
                 const OUString          aText = pA->GetText().copy( pA->GetIndex(), std::min(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
@@ -1373,7 +1374,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case META_TEXTRECT_ACTION:
+            case MetaActionType::TEXTRECT:
             {
                 const MetaTextRectAction*   pA = static_cast<const MetaTextRectAction*>(pAction);
                 const OUString              aText( pA->GetText() );
@@ -1383,7 +1384,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case META_TEXTARRAY_ACTION:
+            case MetaActionType::TEXTARRAY:
             {
                 const MetaTextArrayAction*  pA = static_cast<const MetaTextArrayAction*>(pAction);
                 const OUString              aText = pA->GetText().copy( pA->GetIndex(), std::min(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
@@ -1393,7 +1394,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case META_STRETCHTEXT_ACTION:
+            case MetaActionType::STRETCHTEXT:
             {
                 const MetaStretchTextAction*    pA = static_cast<const MetaStretchTextAction*>(pAction);
                 const OUString                  aText = pA->GetText().copy( pA->GetIndex(), std::min(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
@@ -1403,32 +1404,32 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_LINECOLOR_ACTION ):
+            case( MetaActionType::LINECOLOR ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( maVDev );
                 mbLineChanged = true;
             }
             break;
 
-            case( META_FILLCOLOR_ACTION ):
+            case( MetaActionType::FILLCOLOR ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( maVDev );
                 mbFillChanged = true;
             }
             break;
 
-            case( META_TEXTCOLOR_ACTION ):
-            case( META_TEXTLINECOLOR_ACTION ):
-            case( META_TEXTFILLCOLOR_ACTION ):
-            case( META_TEXTALIGN_ACTION ):
-            case( META_FONT_ACTION ):
+            case( MetaActionType::TEXTCOLOR ):
+            case( MetaActionType::TEXTLINECOLOR ):
+            case( MetaActionType::TEXTFILLCOLOR ):
+            case( MetaActionType::TEXTALIGN ):
+            case( MetaActionType::FONT ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( maVDev );
                 mbTextChanged = true;
             }
             break;
 
-            case( META_ISECTRECTCLIPREGION_ACTION ):
+            case( MetaActionType::ISECTRECTCLIPREGION ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( maVDev );
 
@@ -1438,20 +1439,20 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_CLIPREGION_ACTION ):
-            case( META_ISECTREGIONCLIPREGION_ACTION ):
-            case( META_MOVECLIPREGION_ACTION ):
+            case( MetaActionType::CLIPREGION ):
+            case( MetaActionType::ISECTREGIONCLIPREGION ):
+            case( MetaActionType::MOVECLIPREGION ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( maVDev );
             }
             break;
 
-            case( META_REFPOINT_ACTION ):
-            case( META_MAPMODE_ACTION ):
+            case( MetaActionType::REFPOINT ):
+            case( MetaActionType::MAPMODE ):
                 const_cast<MetaAction*>(pAction)->Execute( maVDev );
             break;
 
-            case( META_PUSH_ACTION ):
+            case( MetaActionType::PUSH ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( maVDev );
 
@@ -1460,7 +1461,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_POP_ACTION ):
+            case( MetaActionType::POP ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( maVDev );
 
@@ -1473,14 +1474,14 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_RASTEROP_ACTION ):
+            case( MetaActionType::RASTEROP ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( maVDev );
                 ImplWriteRasterOp( static_cast<const MetaRasterOpAction*>(pAction)->GetRasterOp() );
             }
             break;
 
-            case( META_LAYOUTMODE_ACTION ):
+            case( MetaActionType::LAYOUTMODE ):
             {
                 ComplexTextLayoutMode nLayoutMode = static_cast<const MetaLayoutModeAction*>(pAction)->GetLayoutMode();
                 mnHorTextAlign = 0;
@@ -1495,7 +1496,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 break;
             }
 
-            case( META_COMMENT_ACTION ):
+            case( MetaActionType::COMMENT ):
             {
                 MetaCommentAction const*const pCommentAction(
                         static_cast<MetaCommentAction const*>(pAction));
@@ -1509,12 +1510,12 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
-            case( META_MASK_ACTION ):
-            case( META_MASKSCALE_ACTION ):
-            case( META_MASKSCALEPART_ACTION ):
-            case( META_WALLPAPER_ACTION ):
-            case( META_TEXTLINE_ACTION ):
-            case( META_GRADIENTEX_ACTION ):
+            case( MetaActionType::MASK ):
+            case( MetaActionType::MASKSCALE ):
+            case( MetaActionType::MASKSCALEPART ):
+            case( MetaActionType::WALLPAPER ):
+            case( MetaActionType::TEXTLINE ):
+            case( MetaActionType::GRADIENTEX ):
             {
                 // !!! >>> we don't want to support these actions
             }

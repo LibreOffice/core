@@ -60,17 +60,17 @@ struct ImplMetaWriteData
 class VCL_DLLPUBLIC MetaAction
 {
 private:
-    sal_uLong               mnRefCount;
-    sal_uInt16              mnType;
+    sal_uLong            mnRefCount;
+    MetaActionType       mnType;
 
-    virtual bool    Compare( const MetaAction& ) const;
+    virtual bool         Compare( const MetaAction& ) const;
 
 protected:
     virtual             ~MetaAction();
 
 public:
                         MetaAction();
-    explicit            MetaAction( sal_uInt16 nType );
+    explicit            MetaAction( MetaActionType nType );
 
     virtual void        Execute( OutputDevice* pOut );
 
@@ -82,8 +82,8 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData );
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData );
 
-    sal_uInt16              GetType() const { return mnType; }
-    sal_uLong               GetRefCount() const { return mnRefCount; }
+    MetaActionType      GetType() const { return mnType; }
+    sal_uLong           GetRefCount() const { return mnRefCount; }
     void                ResetRefCount() { mnRefCount = 1; }
     void                Duplicate()  { mnRefCount++; }
     void                Delete() { if ( 0 == --mnRefCount ) delete this; }
@@ -98,7 +98,7 @@ private:
     Point               maPt;
     Color               maColor;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaPixelAction();
@@ -124,7 +124,7 @@ class VCL_DLLPUBLIC MetaPointAction : public MetaAction
 private:
     Point               maPt;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaPointAction();
@@ -152,7 +152,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaLineAction();
@@ -182,7 +182,7 @@ private:
 
     Rectangle           maRect;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 public:
                         MetaRectAction();
 protected:
@@ -209,7 +209,7 @@ private:
     sal_uInt32          mnHorzRound;
     sal_uInt32          mnVertRound;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaRoundRectAction();
@@ -238,7 +238,7 @@ private:
 
     Rectangle           maRect;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaEllipseAction();
@@ -266,7 +266,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaArcAction();
@@ -297,7 +297,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaPieAction();
@@ -328,7 +328,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaChordAction();
@@ -358,7 +358,7 @@ private:
     LineInfo            maLineInfo;
     Polygon             maPoly;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaPolyLineAction();
@@ -386,7 +386,7 @@ private:
 
     Polygon             maPoly;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaPolygonAction();
@@ -412,7 +412,7 @@ private:
 
     tools::PolyPolygon  maPolyPoly;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaPolyPolygonAction();
@@ -441,7 +441,7 @@ private:
     sal_Int32       mnIndex;
     sal_Int32       mnLen;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaTextAction();
@@ -475,7 +475,7 @@ private:
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 protected:
     virtual             ~MetaTextArrayAction();
@@ -514,7 +514,7 @@ private:
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaStretchTextAction();
@@ -545,10 +545,10 @@ class VCL_DLLPUBLIC MetaTextRectAction : public MetaAction
 private:
 
     Rectangle           maRect;
-    OUString       maStr;
+    OUString            maStr;
     sal_uInt16          mnStyle;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaTextRectAction();
@@ -581,7 +581,7 @@ private:
     FontUnderline       meUnderline;
     FontUnderline       meOverline;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaTextLineAction();
@@ -614,7 +614,7 @@ private:
     Bitmap              maBmp;
     Point               maPt;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaBmpAction();
@@ -643,7 +643,7 @@ private:
     Point               maPt;
     Size                maSz;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaBmpScaleAction();
@@ -676,7 +676,7 @@ private:
     Point               maSrcPt;
     Size                maSrcSz;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaBmpScalePartAction();
@@ -709,7 +709,7 @@ private:
     BitmapEx            maBmpEx;
     Point               maPt;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaBmpExAction();
@@ -738,7 +738,7 @@ private:
     Point               maPt;
     Size                maSz;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaBmpExScaleAction();
@@ -771,7 +771,7 @@ private:
     Point               maSrcPt;
     Size                maSrcSz;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaBmpExScalePartAction();
@@ -805,7 +805,7 @@ private:
     Color               maColor;
     Point               maPt;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaMaskAction();
@@ -838,7 +838,7 @@ private:
     Point               maPt;
     Size                maSz;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaMaskScaleAction();
@@ -874,7 +874,7 @@ private:
     Point               maSrcPt;
     Size                maSrcSz;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaMaskScalePartAction();
@@ -909,7 +909,7 @@ private:
     Rectangle           maRect;
     Gradient            maGradient;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaGradientAction();
@@ -937,7 +937,7 @@ private:
     tools::PolyPolygon  maPolyPoly;
     Gradient            maGradient;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaGradientExAction();
@@ -965,7 +965,7 @@ private:
     tools::PolyPolygon  maPolyPoly;
     Hatch               maHatch;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaHatchAction();
@@ -993,7 +993,7 @@ private:
     Rectangle           maRect;
     Wallpaper           maWallpaper;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaWallpaperAction();
@@ -1019,10 +1019,10 @@ class VCL_DLLPUBLIC MetaClipRegionAction : public MetaAction
 {
 private:
 
-    vcl::Region              maRegion;
+    vcl::Region         maRegion;
     bool                mbClip;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaClipRegionAction();
@@ -1039,7 +1039,7 @@ public:
     virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    const vcl::Region&       GetRegion() const { return maRegion; }
+    const vcl::Region&  GetRegion() const { return maRegion; }
     bool                IsClipping() const { return mbClip; }
 };
 
@@ -1049,7 +1049,7 @@ private:
 
     Rectangle           maRect;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaISectRectClipRegionAction();
@@ -1073,9 +1073,9 @@ class VCL_DLLPUBLIC MetaISectRegionClipRegionAction : public MetaAction
 {
 private:
 
-    vcl::Region              maRegion;
+    vcl::Region          maRegion;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaISectRegionClipRegionAction();
@@ -1092,7 +1092,7 @@ public:
     virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    const vcl::Region&       GetRegion() const { return maRegion; }
+    const vcl::Region&  GetRegion() const { return maRegion; }
 };
 
 class VCL_DLLPUBLIC MetaMoveClipRegionAction : public MetaAction
@@ -1102,7 +1102,7 @@ private:
     long                mnHorzMove;
     long                mnVertMove;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaMoveClipRegionAction();
@@ -1129,7 +1129,7 @@ private:
     Color               maColor;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaLineColorAction();
@@ -1154,7 +1154,7 @@ private:
     Color               maColor;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaFillColorAction();
@@ -1178,7 +1178,7 @@ private:
 
     Color               maColor;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaTextColorAction();
@@ -1202,7 +1202,7 @@ private:
     Color               maColor;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaTextFillColorAction();
@@ -1227,7 +1227,7 @@ private:
     Color               maColor;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaTextLineColorAction();
@@ -1252,7 +1252,7 @@ private:
     Color               maColor;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaOverlineColorAction();
@@ -1276,7 +1276,7 @@ private:
 
     TextAlign           maAlign;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaTextAlignAction();
@@ -1299,7 +1299,7 @@ private:
 
     MapMode             maMapMode;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaMapModeAction();
@@ -1347,9 +1347,9 @@ class VCL_DLLPUBLIC MetaPushAction : public MetaAction
 {
 private:
 
-    PushFlags              mnFlags;
+    PushFlags           mnFlags;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaPushAction();
@@ -1386,7 +1386,7 @@ private:
 
     RasterOp            meRasterOp;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaRasterOpAction();
@@ -1407,10 +1407,10 @@ class VCL_DLLPUBLIC MetaTransparentAction : public MetaAction
 {
 private:
 
-    tools::PolyPolygon      maPolyPoly;
-    sal_uInt16              mnTransPercent;
+    tools::PolyPolygon  maPolyPoly;
+    sal_uInt16          mnTransPercent;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaTransparentAction();
@@ -1440,7 +1440,7 @@ private:
     Size                maSize;
     Gradient            maGradient;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaFloatTransparentAction();
@@ -1473,7 +1473,7 @@ private:
     Point               maPoint;
     Size                maSize;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaEPSAction();
@@ -1504,7 +1504,7 @@ private:
     Point               maRefPoint;
     bool                mbSet;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaRefPointAction();
@@ -1526,7 +1526,7 @@ class VCL_DLLPUBLIC MetaCommentAction : public MetaAction
 {
 private:
 
-    OString        maComment;
+    OString             maComment;
     sal_Int32           mnValue;
     sal_uInt32          mnDataSize;
     sal_uInt8*          mpData;
@@ -1550,10 +1550,10 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-    const OString& GetComment() const { return maComment; }
+    const OString&      GetComment() const { return maComment; }
     sal_Int32           GetValue() const { return mnValue; }
     sal_uInt32          GetDataSize() const { return mnDataSize; }
-    const sal_uInt8*        GetData() const { return mpData; }
+    const sal_uInt8*    GetData() const { return mpData; }
 };
 
 class VCL_DLLPUBLIC MetaLayoutModeAction : public MetaAction
@@ -1561,7 +1561,7 @@ class VCL_DLLPUBLIC MetaLayoutModeAction : public MetaAction
 private:
 
     ComplexTextLayoutMode  mnLayoutMode;
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaLayoutModeAction();
@@ -1583,7 +1583,7 @@ class VCL_DLLPUBLIC MetaTextLanguageAction : public MetaAction
 private:
 
     LanguageType        meTextLanguage;
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaTextLanguageAction();

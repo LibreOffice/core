@@ -1858,7 +1858,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, s
         return;
 
     // temporarily disable mtf action generation (ImplDrawText _does_
-    // create META_TEXT_ACTIONs otherwise)
+    // create MetaActionType::TEXTs otherwise)
     GDIMetaFile* pMtf = mpMetaFile;
     if ( !bDecomposeTextRectAction )
         mpMetaFile = NULL;

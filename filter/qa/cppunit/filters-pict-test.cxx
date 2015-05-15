@@ -86,7 +86,7 @@ void PictFilterTest::testDontClipTooMuch()
 
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
-    dumper.filterActionType(META_CLIPREGION_ACTION, false);
+    dumper.filterActionType(MetaActionType::CLIPREGION, false);
     xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);

@@ -74,7 +74,7 @@ namespace slideshow
                 // check for one of our special text doctree comments
                 switch( pCurrAct->GetType() )
                 {
-                    case META_COMMENT_ACTION:
+                    case MetaActionType::COMMENT:
                     {
                         MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pCurrAct);
 
@@ -152,9 +152,9 @@ namespace slideshow
                         ++nActionIndex;
                         break;
                     }
-                    case META_TEXT_ACTION:
-                    case META_TEXTARRAY_ACTION:
-                    case META_STRETCHTEXT_ACTION:
+                    case MetaActionType::TEXT:
+                    case MetaActionType::TEXTARRAY:
+                    case MetaActionType::STRETCHTEXT:
                         nLastTextActionIndex = nActionIndex;
 #if OSL_DEBUG_LEVEL > 1
                         {

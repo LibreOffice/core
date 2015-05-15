@@ -75,19 +75,19 @@ bool IsTransparentAction( const MetaAction& rAct )
 {
     switch( rAct.GetType() )
     {
-        case META_TRANSPARENT_ACTION:
+        case MetaActionType::TRANSPARENT:
             return true;
 
-        case META_FLOATTRANSPARENT_ACTION:
+        case MetaActionType::FLOATTRANSPARENT:
             return true;
 
-        case META_BMPEX_ACTION:
+        case MetaActionType::BMPEX:
             return static_cast<const MetaBmpExAction&>(rAct).GetBitmapEx().IsTransparent();
 
-        case META_BMPEXSCALE_ACTION:
+        case MetaActionType::BMPEXSCALE:
             return static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx().IsTransparent();
 
-        case META_BMPEXSCALEPART_ACTION:
+        case MetaActionType::BMPEXSCALEPART:
             return static_cast<const MetaBmpExScalePartAction&>(rAct).GetBitmapEx().IsTransparent();
 
         default:
@@ -102,7 +102,7 @@ bool IsTransparentAction( const MetaAction& rAct )
  */
 bool DoesActionHandleTransparency( const MetaAction& rAct )
 {
-    // META_FLOATTRANSPARENT_ACTION can contain a whole metafile,
+    // MetaActionType::FLOATTRANSPARENT can contain a whole metafile,
     // which is to be rendered with the given transparent gradient. We
     // currently cannot emulate transparent painting on a white
     // background reliably.
@@ -111,10 +111,10 @@ bool DoesActionHandleTransparency( const MetaAction& rAct )
     // white background.
     switch( rAct.GetType() )
     {
-        case META_TRANSPARENT_ACTION:
-        case META_BMPEX_ACTION:
-        case META_BMPEXSCALE_ACTION:
-        case META_BMPEXSCALEPART_ACTION:
+        case MetaActionType::TRANSPARENT:
+        case MetaActionType::BMPEX:
+        case MetaActionType::BMPEXSCALE:
+        case MetaActionType::BMPEXSCALEPART:
             return true;
 
         default:
@@ -157,7 +157,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
                                           const OutputDevice& rStateOutDev,
                                           Color               aBgColor )
 {
-    if( rAct.GetType() == META_TRANSPARENT_ACTION )
+    if( rAct.GetType() == MetaActionType::TRANSPARENT )
     {
         const MetaTransparentAction* pTransAct = static_cast<const MetaTransparentAction*>(&rAct);
         sal_uInt16                       nTransparency( pTransAct->GetTransparence() );
@@ -192,19 +192,19 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
 
         switch( rAct.GetType() )
         {
-            case META_BMPEX_ACTION:
+            case MetaActionType::BMPEX:
                 aBmpEx = static_cast<const MetaBmpExAction&>(rAct).GetBitmapEx();
                 break;
 
-            case META_BMPEXSCALE_ACTION:
+            case MetaActionType::BMPEXSCALE:
                 aBmpEx = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx();
                 break;
 
-            case META_BMPEXSCALEPART_ACTION:
+            case MetaActionType::BMPEXSCALEPART:
                 aBmpEx = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx();
                 break;
 
-            case META_TRANSPARENT_ACTION:
+            case MetaActionType::TRANSPARENT:
 
             default:
                 OSL_FAIL("Printer::GetPreparedMetafile impossible state reached");
@@ -252,18 +252,18 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
         // add corresponding action
         switch( rAct.GetType() )
         {
-            case META_BMPEX_ACTION:
+            case MetaActionType::BMPEX:
                 o_rMtf.AddAction( new MetaBmpAction(
                                        static_cast<const MetaBmpExAction&>(rAct).GetPoint(),
                                        aBmp ));
                 break;
-            case META_BMPEXSCALE_ACTION:
+            case MetaActionType::BMPEXSCALE:
                 o_rMtf.AddAction( new MetaBmpScaleAction(
                                        static_cast<const MetaBmpExScaleAction&>(rAct).GetPoint(),
                                        static_cast<const MetaBmpExScaleAction&>(rAct).GetSize(),
                                        aBmp ));
                 break;
-            case META_BMPEXSCALEPART_ACTION:
+            case MetaActionType::BMPEXSCALEPART:
                 o_rMtf.AddAction( new MetaBmpScalePartAction(
                                        static_cast<const MetaBmpExScalePartAction&>(rAct).GetDestPoint(),
                                        static_cast<const MetaBmpExScalePartAction&>(rAct).GetDestSize(),
@@ -288,62 +288,62 @@ bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rOut )
 
     switch( rAct.GetType() )
     {
-        case META_POINT_ACTION:
+        case MetaActionType::POINT:
             if( !bLineTransparency )
                 bRet = true;
             break;
 
-        case META_LINE_ACTION:
+        case MetaActionType::LINE:
             if( !bLineTransparency )
                 bRet = true;
             break;
 
-        case META_RECT_ACTION:
+        case MetaActionType::RECT:
             if( !bLineTransparency || !bFillTransparency )
                 bRet = true;
             break;
 
-        case META_ROUNDRECT_ACTION:
+        case MetaActionType::ROUNDRECT:
             if( !bLineTransparency || !bFillTransparency )
                 bRet = true;
             break;
 
-        case META_ELLIPSE_ACTION:
+        case MetaActionType::ELLIPSE:
             if( !bLineTransparency || !bFillTransparency )
                 bRet = true;
             break;
 
-        case META_ARC_ACTION:
+        case MetaActionType::ARC:
             if( !bLineTransparency || !bFillTransparency )
                 bRet = true;
             break;
 
-        case META_PIE_ACTION:
+        case MetaActionType::PIE:
             if( !bLineTransparency || !bFillTransparency )
                 bRet = true;
             break;
 
-        case META_CHORD_ACTION:
+        case MetaActionType::CHORD:
             if( !bLineTransparency || !bFillTransparency )
                 bRet = true;
             break;
 
-        case META_POLYLINE_ACTION:
+        case MetaActionType::POLYLINE:
             if( !bLineTransparency )
                 bRet = true;
             break;
 
-        case META_POLYGON_ACTION:
+        case MetaActionType::POLYGON:
             if( !bLineTransparency || !bFillTransparency )
                 bRet = true;
             break;
 
-        case META_POLYPOLYGON_ACTION:
+        case MetaActionType::POLYPOLYGON:
             if( !bLineTransparency || !bFillTransparency )
                 bRet = true;
             break;
 
-        case META_TEXT_ACTION:
+        case MetaActionType::TEXT:
         {
             const MetaTextAction& rTextAct = static_cast<const MetaTextAction&>(rAct);
             const OUString aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
@@ -352,7 +352,7 @@ bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rOut )
         }
         break;
 
-        case META_TEXTARRAY_ACTION:
+        case MetaActionType::TEXTARRAY:
         {
             const MetaTextArrayAction& rTextAct = static_cast<const MetaTextArrayAction&>(rAct);
             const OUString aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
@@ -361,26 +361,26 @@ bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rOut )
         }
         break;
 
-        case META_PIXEL_ACTION:
-        case META_BMP_ACTION:
-        case META_BMPSCALE_ACTION:
-        case META_BMPSCALEPART_ACTION:
-        case META_BMPEX_ACTION:
-        case META_BMPEXSCALE_ACTION:
-        case META_BMPEXSCALEPART_ACTION:
-        case META_MASK_ACTION:
-        case META_MASKSCALE_ACTION:
-        case META_MASKSCALEPART_ACTION:
-        case META_GRADIENT_ACTION:
-        case META_GRADIENTEX_ACTION:
-        case META_HATCH_ACTION:
-        case META_WALLPAPER_ACTION:
-        case META_TRANSPARENT_ACTION:
-        case META_FLOATTRANSPARENT_ACTION:
-        case META_EPS_ACTION:
-        case META_TEXTRECT_ACTION:
-        case META_STRETCHTEXT_ACTION:
-        case META_TEXTLINE_ACTION:
+        case MetaActionType::PIXEL:
+        case MetaActionType::BMP:
+        case MetaActionType::BMPSCALE:
+        case MetaActionType::BMPSCALEPART:
+        case MetaActionType::BMPEX:
+        case MetaActionType::BMPEXSCALE:
+        case MetaActionType::BMPEXSCALEPART:
+        case MetaActionType::MASK:
+        case MetaActionType::MASKSCALE:
+        case MetaActionType::MASKSCALEPART:
+        case MetaActionType::GRADIENT:
+        case MetaActionType::GRADIENTEX:
+        case MetaActionType::HATCH:
+        case MetaActionType::WALLPAPER:
+        case MetaActionType::TRANSPARENT:
+        case MetaActionType::FLOATTRANSPARENT:
+        case MetaActionType::EPS:
+        case MetaActionType::TEXTRECT:
+        case MetaActionType::STRETCHTEXT:
+        case MetaActionType::TEXTLINE:
             // all other actions: generate non-transparent output
             bRet = true;
             break;
@@ -399,15 +399,15 @@ Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut
 
     switch( rAct.GetType() )
     {
-        case META_PIXEL_ACTION:
+        case MetaActionType::PIXEL:
             aActionBounds = Rectangle( static_cast<const MetaPixelAction&>(rAct).GetPoint(), Size( 1, 1 ) );
             break;
 
-        case META_POINT_ACTION:
+        case MetaActionType::POINT:
             aActionBounds = Rectangle( static_cast<const MetaPointAction&>(rAct).GetPoint(), Size( 1, 1 ) );
             break;
 
-        case META_LINE_ACTION:
+        case MetaActionType::LINE:
         {
             const MetaLineAction& rMetaLineAction = static_cast<const MetaLineAction&>(rAct);
             aActionBounds = Rectangle( rMetaLineAction.GetStartPoint(),  rMetaLineAction.GetEndPoint() );
@@ -424,17 +424,17 @@ Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut
             break;
         }
 
-        case META_RECT_ACTION:
+        case MetaActionType::RECT:
             aActionBounds = static_cast<const MetaRectAction&>(rAct).GetRect();
             break;
 
-        case META_ROUNDRECT_ACTION:
+        case MetaActionType::ROUNDRECT:
             aActionBounds = Polygon( static_cast<const MetaRoundRectAction&>(rAct).GetRect(),
                                      static_cast<const MetaRoundRectAction&>(rAct).GetHorzRound(),
                                      static_cast<const MetaRoundRectAction&>(rAct).GetVertRound() ).GetBoundRect();
             break;
 
-        case META_ELLIPSE_ACTION:
+        case MetaActionType::ELLIPSE:
         {
             const Rectangle& rRect = static_cast<const MetaEllipseAction&>(rAct).GetRect();
             aActionBounds = Polygon( rRect.Center(),
@@ -443,25 +443,25 @@ Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut
             break;
         }
 
-        case META_ARC_ACTION:
+        case MetaActionType::ARC:
             aActionBounds = Polygon( static_cast<const MetaArcAction&>(rAct).GetRect(),
                                      static_cast<const MetaArcAction&>(rAct).GetStartPoint(),
                                      static_cast<const MetaArcAction&>(rAct).GetEndPoint(), POLY_ARC ).GetBoundRect();
             break;
 
-        case META_PIE_ACTION:
+        case MetaActionType::PIE:
             aActionBounds = Polygon( static_cast<const MetaPieAction&>(rAct).GetRect(),
                                      static_cast<const MetaPieAction&>(rAct).GetStartPoint(),
                                      static_cast<const MetaPieAction&>(rAct).GetEndPoint(), POLY_PIE ).GetBoundRect();
             break;
 
-        case META_CHORD_ACTION:
+        case MetaActionType::CHORD:
             aActionBounds = Polygon( static_cast<const MetaChordAction&>(rAct).GetRect(),
                                      static_cast<const MetaChordAction&>(rAct).GetStartPoint(),
                                      static_cast<const MetaChordAction&>(rAct).GetEndPoint(), POLY_CHORD ).GetBoundRect();
             break;
 
-        case META_POLYLINE_ACTION:
+        case MetaActionType::POLYLINE:
         {
             const MetaPolyLineAction& rMetaPolyLineAction = static_cast<const MetaPolyLineAction&>(rAct);
             aActionBounds = rMetaPolyLineAction.GetPolygon().GetBoundRect();
@@ -477,90 +477,90 @@ Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut
             break;
         }
 
-        case META_POLYGON_ACTION:
+        case MetaActionType::POLYGON:
             aActionBounds = static_cast<const MetaPolygonAction&>(rAct).GetPolygon().GetBoundRect();
             break;
 
-        case META_POLYPOLYGON_ACTION:
+        case MetaActionType::POLYPOLYGON:
             aActionBounds = static_cast<const MetaPolyPolygonAction&>(rAct).GetPolyPolygon().GetBoundRect();
             break;
 
-        case META_BMP_ACTION:
+        case MetaActionType::BMP:
             aActionBounds = Rectangle( static_cast<const MetaBmpAction&>(rAct).GetPoint(),
                                        rOut.PixelToLogic( static_cast<const MetaBmpAction&>(rAct).GetBitmap().GetSizePixel() ) );
             break;
 
-        case META_BMPSCALE_ACTION:
+        case MetaActionType::BMPSCALE:
             aActionBounds = Rectangle( static_cast<const MetaBmpScaleAction&>(rAct).GetPoint(),
                                        static_cast<const MetaBmpScaleAction&>(rAct).GetSize() );
             break;
 
-        case META_BMPSCALEPART_ACTION:
+        case MetaActionType::BMPSCALEPART:
             aActionBounds = Rectangle( static_cast<const MetaBmpScalePartAction&>(rAct).GetDestPoint(),
                                        static_cast<const MetaBmpScalePartAction&>(rAct).GetDestSize() );
             break;
 
-        case META_BMPEX_ACTION:
+        case MetaActionType::BMPEX:
             aActionBounds = Rectangle( static_cast<const MetaBmpExAction&>(rAct).GetPoint(),
                                        rOut.PixelToLogic( static_cast<const MetaBmpExAction&>(rAct).GetBitmapEx().GetSizePixel() ) );
             break;
 
-        case META_BMPEXSCALE_ACTION:
+        case MetaActionType::BMPEXSCALE:
             aActionBounds = Rectangle( static_cast<const MetaBmpExScaleAction&>(rAct).GetPoint(),
                                        static_cast<const MetaBmpExScaleAction&>(rAct).GetSize() );
             break;
 
-        case META_BMPEXSCALEPART_ACTION:
+        case MetaActionType::BMPEXSCALEPART:
             aActionBounds = Rectangle( static_cast<const MetaBmpExScalePartAction&>(rAct).GetDestPoint(),
                                        static_cast<const MetaBmpExScalePartAction&>(rAct).GetDestSize() );
             break;
 
-        case META_MASK_ACTION:
+        case MetaActionType::MASK:
             aActionBounds = Rectangle( static_cast<const MetaMaskAction&>(rAct).GetPoint(),
                                        rOut.PixelToLogic( static_cast<const MetaMaskAction&>(rAct).GetBitmap().GetSizePixel() ) );
             break;
 
-        case META_MASKSCALE_ACTION:
+        case MetaActionType::MASKSCALE:
             aActionBounds = Rectangle( static_cast<const MetaMaskScaleAction&>(rAct).GetPoint(),
                                        static_cast<const MetaMaskScaleAction&>(rAct).GetSize() );
             break;
 
-        case META_MASKSCALEPART_ACTION:
+        case MetaActionType::MASKSCALEPART:
             aActionBounds = Rectangle( static_cast<const MetaMaskScalePartAction&>(rAct).GetDestPoint(),
                                        static_cast<const MetaMaskScalePartAction&>(rAct).GetDestSize() );
             break;
 
-        case META_GRADIENT_ACTION:
+        case MetaActionType::GRADIENT:
             aActionBounds = static_cast<const MetaGradientAction&>(rAct).GetRect();
             break;
 
-        case META_GRADIENTEX_ACTION:
+        case MetaActionType::GRADIENTEX:
             aActionBounds = static_cast<const MetaGradientExAction&>(rAct).GetPolyPolygon().GetBoundRect();
             break;
 
-        case META_HATCH_ACTION:
+        case MetaActionType::HATCH:
             aActionBounds = static_cast<const MetaHatchAction&>(rAct).GetPolyPolygon().GetBoundRect();
             break;
 
-        case META_WALLPAPER_ACTION:
+        case MetaActionType::WALLPAPER:
             aActionBounds = static_cast<const MetaWallpaperAction&>(rAct).GetRect();
             break;
 
-        case META_TRANSPARENT_ACTION:
+        case MetaActionType::TRANSPARENT:
             aActionBounds = static_cast<const MetaTransparentAction&>(rAct).GetPolyPolygon().GetBoundRect();
             break;
 
-        case META_FLOATTRANSPARENT_ACTION:
+        case MetaActionType::FLOATTRANSPARENT:
             aActionBounds = Rectangle( static_cast<const MetaFloatTransparentAction&>(rAct).GetPoint(),
                                        static_cast<const MetaFloatTransparentAction&>(rAct).GetSize() );
             break;
 
-        case META_EPS_ACTION:
+        case MetaActionType::EPS:
             aActionBounds = Rectangle( static_cast<const MetaEPSAction&>(rAct).GetPoint(),
                                        static_cast<const MetaEPSAction&>(rAct).GetSize() );
             break;
 
-        case META_TEXT_ACTION:
+        case MetaActionType::TEXT:
         {
             const MetaTextAction& rTextAct = static_cast<const MetaTextAction&>(rAct);
             const OUString aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
@@ -578,7 +578,7 @@ Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut
         }
         break;
 
-        case META_TEXTARRAY_ACTION:
+        case MetaActionType::TEXTARRAY:
         {
             const MetaTextArrayAction&  rTextAct = static_cast<const MetaTextArrayAction&>(rAct);
             const OUString              aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
@@ -599,11 +599,11 @@ Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut
         }
         break;
 
-        case META_TEXTRECT_ACTION:
+        case MetaActionType::TEXTRECT:
             aActionBounds = static_cast<const MetaTextRectAction&>(rAct).GetRect();
             break;
 
-        case META_STRETCHTEXT_ACTION:
+        case MetaActionType::STRETCHTEXT:
         {
             const MetaStretchTextAction& rTextAct = static_cast<const MetaStretchTextAction&>(rAct);
             const OUString               aString( rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()) );
@@ -629,8 +629,8 @@ Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevice& rOut
         }
         break;
 
-        case META_TEXTLINE_ACTION:
-            OSL_FAIL("META_TEXTLINE_ACTION not supported");
+        case MetaActionType::TEXTLINE:
+            OSL_FAIL("MetaActionType::TEXTLINE not supported");
         break;
 
         default:
@@ -760,7 +760,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         {
             switch( pCurrAct->GetType() )
             {
-                case META_RECT_ACTION:
+                case MetaActionType::RECT:
                 {
                     if( !checkRect(
                             aBackgroundComponent.aBounds,
@@ -772,7 +772,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         nLastBgAction=nActionNum; // this _is_ background
                     break;
                 }
-                case META_POLYGON_ACTION:
+                case MetaActionType::POLYGON:
                 {
                     const Polygon aPoly(
                         static_cast<const MetaPolygonAction*>(pCurrAct)->GetPolygon());
@@ -788,7 +788,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         nLastBgAction=nActionNum; // this _is_ background
                     break;
                 }
-                case META_POLYPOLYGON_ACTION:
+                case MetaActionType::POLYPOLYGON:
                 {
                     const tools::PolyPolygon aPoly(
                         static_cast<const MetaPolyPolygonAction*>(pCurrAct)->GetPolyPolygon());
@@ -805,7 +805,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         nLastBgAction=nActionNum; // this _is_ background
                     break;
                 }
-                case META_WALLPAPER_ACTION:
+                case MetaActionType::WALLPAPER:
                 {
                     if( !checkRect(
                             aBackgroundComponent.aBounds,
@@ -1203,9 +1203,9 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                             aPaintVDev->EnableOutput(true);
 
                                         // but process every action
-                                        const sal_uInt16 nType( pCurrAct->GetType() );
+                                        const MetaActionType nType( pCurrAct->GetType() );
 
-                                        if( META_MAPMODE_ACTION == nType )
+                                        if( MetaActionType::MAPMODE == nType )
                                         {
                                             pCurrAct->Execute( aMapVDev.get() );
 
@@ -1215,12 +1215,12 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                             aMtfMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
                                             aPaintVDev->SetMapMode( aMtfMap );
                                         }
-                                        else if( ( META_PUSH_ACTION == nType ) || ( META_POP_ACTION ) == nType )
+                                        else if( ( MetaActionType::PUSH == nType ) || ( MetaActionType::POP ) == nType )
                                         {
                                             pCurrAct->Execute( aMapVDev.get() );
                                             pCurrAct->Execute( aPaintVDev.get() );
                                         }
-                                        else if( META_GRADIENT_ACTION == nType )
+                                        else if( MetaActionType::GRADIENT == nType )
                                         {
                                             MetaGradientAction* pGradientAction = static_cast<MetaGradientAction*>(pCurrAct);
                                             Printer* pPrinter = dynamic_cast< Printer* >(this);

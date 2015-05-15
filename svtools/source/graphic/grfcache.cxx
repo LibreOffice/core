@@ -510,40 +510,40 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
         {
             switch( pAct->GetType() )
             {
-                case META_FONT_ACTION:
+                case MetaActionType::FONT:
                     // FALLTHROUGH intended
-                case META_NULL_ACTION:
+                case MetaActionType::NONE:
                     // FALLTHROUGH intended
 
                     // OutDev state changes (which don't affect bitmap
                     // output)
-                case META_LINECOLOR_ACTION:
+                case MetaActionType::LINECOLOR:
                     // FALLTHROUGH intended
-                case META_FILLCOLOR_ACTION:
+                case MetaActionType::FILLCOLOR:
                     // FALLTHROUGH intended
-                case META_TEXTCOLOR_ACTION:
+                case MetaActionType::TEXTCOLOR:
                     // FALLTHROUGH intended
-                case META_TEXTFILLCOLOR_ACTION:
+                case MetaActionType::TEXTFILLCOLOR:
                     // FALLTHROUGH intended
-                case META_TEXTALIGN_ACTION:
+                case MetaActionType::TEXTALIGN:
                     // FALLTHROUGH intended
-                case META_TEXTLINECOLOR_ACTION:
+                case MetaActionType::TEXTLINECOLOR:
                     // FALLTHROUGH intended
-                case META_TEXTLINE_ACTION:
+                case MetaActionType::TEXTLINE:
                     // FALLTHROUGH intended
-                case META_PUSH_ACTION:
+                case MetaActionType::PUSH:
                     // FALLTHROUGH intended
-                case META_POP_ACTION:
+                case MetaActionType::POP:
                     // FALLTHROUGH intended
-                case META_LAYOUTMODE_ACTION:
+                case MetaActionType::LAYOUTMODE:
                     // FALLTHROUGH intended
-                case META_TEXTLANGUAGE_ACTION:
+                case MetaActionType::TEXTLANGUAGE:
                     // FALLTHROUGH intended
-                case META_COMMENT_ACTION:
+                case MetaActionType::COMMENT:
                     break;
 
                     // bitmap output methods
-                case META_BMP_ACTION:
+                case MetaActionType::BMP:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
                         MetaBmpAction* pAction = static_cast<MetaBmpAction*>(pAct);
@@ -560,7 +560,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                     ++nNumBitmaps;
                     break;
 
-                case META_BMPSCALE_ACTION:
+                case MetaActionType::BMPSCALE:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
                         MetaBmpScaleAction* pAction = static_cast<MetaBmpScaleAction*>(pAct);
@@ -578,7 +578,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                     ++nNumBitmaps;
                     break;
 
-                case META_BMPSCALEPART_ACTION:
+                case MetaActionType::BMPSCALEPART:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
                         MetaBmpScalePartAction* pAction = static_cast<MetaBmpScalePartAction*>(pAct);
@@ -596,7 +596,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                     ++nNumBitmaps;
                     break;
 
-                case META_BMPEX_ACTION:
+                case MetaActionType::BMPEX:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
                         MetaBmpExAction* pAction = static_cast<MetaBmpExAction*>(pAct);
@@ -613,7 +613,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                     ++nNumBitmaps;
                     break;
 
-                case META_BMPEXSCALE_ACTION:
+                case MetaActionType::BMPEXSCALE:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
                         MetaBmpExScaleAction* pAction = static_cast<MetaBmpExScaleAction*>(pAct);
@@ -631,7 +631,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                     ++nNumBitmaps;
                     break;
 
-                case META_BMPEXSCALEPART_ACTION:
+                case MetaActionType::BMPEXSCALEPART:
                     if( !nNumBitmaps && !bNonBitmapActionEncountered )
                     {
                         MetaBmpExScalePartAction* pAction = static_cast<MetaBmpExScalePartAction*>(pAct);
@@ -651,81 +651,81 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
 
                     // these actions actually output something (that's
                     // different from a bitmap)
-                case META_RASTEROP_ACTION:
+                case MetaActionType::RASTEROP:
                     if( static_cast<MetaRasterOpAction*>(pAct)->GetRasterOp() == ROP_OVERPAINT )
                         break;
                     // FALLTHROUGH intended
-                case META_PIXEL_ACTION:
+                case MetaActionType::PIXEL:
                     // FALLTHROUGH intended
-                case META_POINT_ACTION:
+                case MetaActionType::POINT:
                     // FALLTHROUGH intended
-                case META_LINE_ACTION:
+                case MetaActionType::LINE:
                     // FALLTHROUGH intended
-                case META_RECT_ACTION:
+                case MetaActionType::RECT:
                     // FALLTHROUGH intended
-                case META_ROUNDRECT_ACTION:
+                case MetaActionType::ROUNDRECT:
                     // FALLTHROUGH intended
-                case META_ELLIPSE_ACTION:
+                case MetaActionType::ELLIPSE:
                     // FALLTHROUGH intended
-                case META_ARC_ACTION:
+                case MetaActionType::ARC:
                     // FALLTHROUGH intended
-                case META_PIE_ACTION:
+                case MetaActionType::PIE:
                     // FALLTHROUGH intended
-                case META_CHORD_ACTION:
+                case MetaActionType::CHORD:
                     // FALLTHROUGH intended
-                case META_POLYLINE_ACTION:
+                case MetaActionType::POLYLINE:
                     // FALLTHROUGH intended
-                case META_POLYGON_ACTION:
+                case MetaActionType::POLYGON:
                     // FALLTHROUGH intended
-                case META_POLYPOLYGON_ACTION:
-                    // FALLTHROUGH intended
-
-                case META_TEXT_ACTION:
-                    // FALLTHROUGH intended
-                case META_TEXTARRAY_ACTION:
-                    // FALLTHROUGH intended
-                case META_STRETCHTEXT_ACTION:
-                    // FALLTHROUGH intended
-                case META_TEXTRECT_ACTION:
+                case MetaActionType::POLYPOLYGON:
                     // FALLTHROUGH intended
 
-                case META_MASK_ACTION:
+                case MetaActionType::TEXT:
                     // FALLTHROUGH intended
-                case META_MASKSCALE_ACTION:
+                case MetaActionType::TEXTARRAY:
                     // FALLTHROUGH intended
-                case META_MASKSCALEPART_ACTION:
+                case MetaActionType::STRETCHTEXT:
                     // FALLTHROUGH intended
-
-                case META_GRADIENT_ACTION:
-                    // FALLTHROUGH intended
-                case META_HATCH_ACTION:
-                    // FALLTHROUGH intended
-                case META_WALLPAPER_ACTION:
+                case MetaActionType::TEXTRECT:
                     // FALLTHROUGH intended
 
-                case META_TRANSPARENT_ACTION:
+                case MetaActionType::MASK:
                     // FALLTHROUGH intended
-                case META_EPS_ACTION:
+                case MetaActionType::MASKSCALE:
                     // FALLTHROUGH intended
-                case META_FLOATTRANSPARENT_ACTION:
+                case MetaActionType::MASKSCALEPART:
                     // FALLTHROUGH intended
-                case META_GRADIENTEX_ACTION:
+
+                case MetaActionType::GRADIENT:
+                    // FALLTHROUGH intended
+                case MetaActionType::HATCH:
+                    // FALLTHROUGH intended
+                case MetaActionType::WALLPAPER:
+                    // FALLTHROUGH intended
+
+                case MetaActionType::TRANSPARENT:
+                    // FALLTHROUGH intended
+                case MetaActionType::EPS:
+                    // FALLTHROUGH intended
+                case MetaActionType::FLOATTRANSPARENT:
+                    // FALLTHROUGH intended
+                case MetaActionType::GRADIENTEX:
                     // FALLTHROUGH intended
 
                     // OutDev state changes that _do_ affect bitmap
                     // output
-                case META_CLIPREGION_ACTION:
+                case MetaActionType::CLIPREGION:
                     // FALLTHROUGH intended
-                case META_ISECTRECTCLIPREGION_ACTION:
+                case MetaActionType::ISECTRECTCLIPREGION:
                     // FALLTHROUGH intended
-                case META_ISECTREGIONCLIPREGION_ACTION:
+                case MetaActionType::ISECTREGIONCLIPREGION:
                     // FALLTHROUGH intended
-                case META_MOVECLIPREGION_ACTION:
+                case MetaActionType::MOVECLIPREGION:
                     // FALLTHROUGH intended
 
-                case META_MAPMODE_ACTION:
+                case MetaActionType::MAPMODE:
                     // FALLTHROUGH intended
-                case META_REFPOINT_ACTION:
+                case MetaActionType::REFPOINT:
                     // FALLTHROUGH intended
                 default:
                     bNonBitmapActionEncountered = true;

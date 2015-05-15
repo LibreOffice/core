@@ -138,64 +138,65 @@ void ImpSdrGDIMetaFileImport::DoLoopActions(GDIMetaFile& rMtf, SvdProgressInfo* 
 
         switch (pAct->GetType())
         {
-            case META_PIXEL_ACTION          : break;
-            case META_POINT_ACTION          : break;
-            case META_LINE_ACTION           : DoAction(static_cast<MetaLineAction           &>(*pAct)); break;
-            case META_RECT_ACTION           : DoAction(static_cast<MetaRectAction           &>(*pAct)); break;
-            case META_ROUNDRECT_ACTION      : DoAction(static_cast<MetaRoundRectAction      &>(*pAct)); break;
-            case META_ELLIPSE_ACTION        : DoAction(static_cast<MetaEllipseAction        &>(*pAct)); break;
-            case META_ARC_ACTION            : DoAction(static_cast<MetaArcAction            &>(*pAct)); break;
-            case META_PIE_ACTION            : DoAction(static_cast<MetaPieAction            &>(*pAct)); break;
-            case META_CHORD_ACTION          : DoAction(static_cast<MetaChordAction          &>(*pAct)); break;
-            case META_POLYLINE_ACTION       : DoAction(static_cast<MetaPolyLineAction       &>(*pAct)); break;
-            case META_POLYGON_ACTION        : DoAction(static_cast<MetaPolygonAction        &>(*pAct)); break;
-            case META_POLYPOLYGON_ACTION    : DoAction(static_cast<MetaPolyPolygonAction    &>(*pAct)); break;
-            case META_TEXT_ACTION           : DoAction(static_cast<MetaTextAction           &>(*pAct)); break;
-            case META_TEXTARRAY_ACTION      : DoAction(static_cast<MetaTextArrayAction      &>(*pAct)); break;
-            case META_STRETCHTEXT_ACTION    : DoAction(static_cast<MetaStretchTextAction    &>(*pAct)); break;
-            case META_BMP_ACTION            : DoAction(static_cast<MetaBmpAction            &>(*pAct)); break;
-            case META_BMPSCALE_ACTION       : DoAction(static_cast<MetaBmpScaleAction       &>(*pAct)); break;
-            case META_BMPEX_ACTION          : DoAction(static_cast<MetaBmpExAction          &>(*pAct)); break;
-            case META_BMPEXSCALE_ACTION     : DoAction(static_cast<MetaBmpExScaleAction     &>(*pAct)); break;
-            case META_LINECOLOR_ACTION      : DoAction(static_cast<MetaLineColorAction      &>(*pAct)); break;
-            case META_FILLCOLOR_ACTION      : DoAction(static_cast<MetaFillColorAction      &>(*pAct)); break;
-            case META_TEXTCOLOR_ACTION      : DoAction(static_cast<MetaTextColorAction      &>(*pAct)); break;
-            case META_TEXTFILLCOLOR_ACTION  : DoAction(static_cast<MetaTextFillColorAction  &>(*pAct)); break;
-            case META_FONT_ACTION           : DoAction(static_cast<MetaFontAction           &>(*pAct)); break;
-            case META_TEXTALIGN_ACTION      : DoAction(static_cast<MetaTextAlignAction      &>(*pAct)); break;
-            case META_MAPMODE_ACTION        : DoAction(static_cast<MetaMapModeAction        &>(*pAct)); break;
-            case META_CLIPREGION_ACTION     : DoAction(static_cast<MetaClipRegionAction     &>(*pAct)); break;
-            case META_MOVECLIPREGION_ACTION : DoAction(static_cast<MetaMoveClipRegionAction &>(*pAct)); break;
-            case META_ISECTRECTCLIPREGION_ACTION: DoAction(static_cast<MetaISectRectClipRegionAction&>(*pAct)); break;
-            case META_ISECTREGIONCLIPREGION_ACTION: DoAction(static_cast<MetaISectRegionClipRegionAction&>(*pAct)); break;
-            case META_RASTEROP_ACTION       : DoAction(static_cast<MetaRasterOpAction       &>(*pAct)); break;
-            case META_PUSH_ACTION           : DoAction(static_cast<MetaPushAction           &>(*pAct)); break;
-            case META_POP_ACTION            : DoAction(static_cast<MetaPopAction            &>(*pAct)); break;
-            case META_HATCH_ACTION          : DoAction(static_cast<MetaHatchAction          &>(*pAct)); break;
+            case MetaActionType::PIXEL          : break;
+            case MetaActionType::POINT          : break;
+            case MetaActionType::LINE           : DoAction(static_cast<MetaLineAction           &>(*pAct)); break;
+            case MetaActionType::RECT           : DoAction(static_cast<MetaRectAction           &>(*pAct)); break;
+            case MetaActionType::ROUNDRECT      : DoAction(static_cast<MetaRoundRectAction      &>(*pAct)); break;
+            case MetaActionType::ELLIPSE        : DoAction(static_cast<MetaEllipseAction        &>(*pAct)); break;
+            case MetaActionType::ARC            : DoAction(static_cast<MetaArcAction            &>(*pAct)); break;
+            case MetaActionType::PIE            : DoAction(static_cast<MetaPieAction            &>(*pAct)); break;
+            case MetaActionType::CHORD          : DoAction(static_cast<MetaChordAction          &>(*pAct)); break;
+            case MetaActionType::POLYLINE       : DoAction(static_cast<MetaPolyLineAction       &>(*pAct)); break;
+            case MetaActionType::POLYGON        : DoAction(static_cast<MetaPolygonAction        &>(*pAct)); break;
+            case MetaActionType::POLYPOLYGON    : DoAction(static_cast<MetaPolyPolygonAction    &>(*pAct)); break;
+            case MetaActionType::TEXT           : DoAction(static_cast<MetaTextAction           &>(*pAct)); break;
+            case MetaActionType::TEXTARRAY      : DoAction(static_cast<MetaTextArrayAction      &>(*pAct)); break;
+            case MetaActionType::STRETCHTEXT    : DoAction(static_cast<MetaStretchTextAction    &>(*pAct)); break;
+            case MetaActionType::BMP            : DoAction(static_cast<MetaBmpAction            &>(*pAct)); break;
+            case MetaActionType::BMPSCALE       : DoAction(static_cast<MetaBmpScaleAction       &>(*pAct)); break;
+            case MetaActionType::BMPEX          : DoAction(static_cast<MetaBmpExAction          &>(*pAct)); break;
+            case MetaActionType::BMPEXSCALE     : DoAction(static_cast<MetaBmpExScaleAction     &>(*pAct)); break;
+            case MetaActionType::LINECOLOR      : DoAction(static_cast<MetaLineColorAction      &>(*pAct)); break;
+            case MetaActionType::FILLCOLOR      : DoAction(static_cast<MetaFillColorAction      &>(*pAct)); break;
+            case MetaActionType::TEXTCOLOR      : DoAction(static_cast<MetaTextColorAction      &>(*pAct)); break;
+            case MetaActionType::TEXTFILLCOLOR  : DoAction(static_cast<MetaTextFillColorAction  &>(*pAct)); break;
+            case MetaActionType::FONT           : DoAction(static_cast<MetaFontAction           &>(*pAct)); break;
+            case MetaActionType::TEXTALIGN      : DoAction(static_cast<MetaTextAlignAction      &>(*pAct)); break;
+            case MetaActionType::MAPMODE        : DoAction(static_cast<MetaMapModeAction        &>(*pAct)); break;
+            case MetaActionType::CLIPREGION     : DoAction(static_cast<MetaClipRegionAction     &>(*pAct)); break;
+            case MetaActionType::MOVECLIPREGION : DoAction(static_cast<MetaMoveClipRegionAction &>(*pAct)); break;
+            case MetaActionType::ISECTRECTCLIPREGION: DoAction(static_cast<MetaISectRectClipRegionAction&>(*pAct)); break;
+            case MetaActionType::ISECTREGIONCLIPREGION: DoAction(static_cast<MetaISectRegionClipRegionAction&>(*pAct)); break;
+            case MetaActionType::RASTEROP       : DoAction(static_cast<MetaRasterOpAction       &>(*pAct)); break;
+            case MetaActionType::PUSH           : DoAction(static_cast<MetaPushAction           &>(*pAct)); break;
+            case MetaActionType::POP            : DoAction(static_cast<MetaPopAction            &>(*pAct)); break;
+            case MetaActionType::HATCH          : DoAction(static_cast<MetaHatchAction          &>(*pAct)); break;
 
             // #i125211# MetaCommentAction may change index, thus hand it over
-            case META_COMMENT_ACTION        : DoAction(static_cast<MetaCommentAction&>(*pAct), rMtf, a);
+            case MetaActionType::COMMENT        : DoAction(static_cast<MetaCommentAction&>(*pAct), rMtf, a);
                 break;
 
             // missing actions added
-            case META_TEXTRECT_ACTION       : DoAction(static_cast<MetaTextRectAction&>(*pAct)); break;
-            case META_BMPSCALEPART_ACTION   : DoAction(static_cast<MetaBmpScalePartAction&>(*pAct)); break;
-            case META_BMPEXSCALEPART_ACTION : DoAction(static_cast<MetaBmpExScalePartAction&>(*pAct)); break;
-            case META_MASK_ACTION           : DoAction(static_cast<MetaMaskAction&>(*pAct)); break;
-            case META_MASKSCALE_ACTION      : DoAction(static_cast<MetaMaskScaleAction&>(*pAct)); break;
-            case META_MASKSCALEPART_ACTION  : DoAction(static_cast<MetaMaskScalePartAction&>(*pAct)); break;
-            case META_GRADIENT_ACTION       : DoAction(static_cast<MetaGradientAction&>(*pAct)); break;
-            case META_WALLPAPER_ACTION      : DoAction(static_cast<MetaWallpaperAction&>(*pAct)); break;
-            case META_TRANSPARENT_ACTION    : DoAction(static_cast<MetaTransparentAction&>(*pAct)); break;
-            case META_EPS_ACTION            : DoAction(static_cast<MetaEPSAction&>(*pAct)); break;
-            case META_REFPOINT_ACTION       : DoAction(static_cast<MetaRefPointAction&>(*pAct)); break;
-            case META_TEXTLINECOLOR_ACTION  : DoAction(static_cast<MetaTextLineColorAction&>(*pAct)); break;
-            case META_TEXTLINE_ACTION       : DoAction(static_cast<MetaTextLineAction&>(*pAct)); break;
-            case META_FLOATTRANSPARENT_ACTION : DoAction(static_cast<MetaFloatTransparentAction&>(*pAct)); break;
-            case META_GRADIENTEX_ACTION     : DoAction(static_cast<MetaGradientExAction&>(*pAct)); break;
-            case META_LAYOUTMODE_ACTION     : DoAction(static_cast<MetaLayoutModeAction&>(*pAct)); break;
-            case META_TEXTLANGUAGE_ACTION   : DoAction(static_cast<MetaTextLanguageAction&>(*pAct)); break;
-            case META_OVERLINECOLOR_ACTION  : DoAction(static_cast<MetaOverlineColorAction&>(*pAct)); break;
+            case MetaActionType::TEXTRECT       : DoAction(static_cast<MetaTextRectAction&>(*pAct)); break;
+            case MetaActionType::BMPSCALEPART   : DoAction(static_cast<MetaBmpScalePartAction&>(*pAct)); break;
+            case MetaActionType::BMPEXSCALEPART : DoAction(static_cast<MetaBmpExScalePartAction&>(*pAct)); break;
+            case MetaActionType::MASK           : DoAction(static_cast<MetaMaskAction&>(*pAct)); break;
+            case MetaActionType::MASKSCALE      : DoAction(static_cast<MetaMaskScaleAction&>(*pAct)); break;
+            case MetaActionType::MASKSCALEPART  : DoAction(static_cast<MetaMaskScalePartAction&>(*pAct)); break;
+            case MetaActionType::GRADIENT       : DoAction(static_cast<MetaGradientAction&>(*pAct)); break;
+            case MetaActionType::WALLPAPER      : DoAction(static_cast<MetaWallpaperAction&>(*pAct)); break;
+            case MetaActionType::TRANSPARENT    : DoAction(static_cast<MetaTransparentAction&>(*pAct)); break;
+            case MetaActionType::EPS            : DoAction(static_cast<MetaEPSAction&>(*pAct)); break;
+            case MetaActionType::REFPOINT       : DoAction(static_cast<MetaRefPointAction&>(*pAct)); break;
+            case MetaActionType::TEXTLINECOLOR  : DoAction(static_cast<MetaTextLineColorAction&>(*pAct)); break;
+            case MetaActionType::TEXTLINE       : DoAction(static_cast<MetaTextLineAction&>(*pAct)); break;
+            case MetaActionType::FLOATTRANSPARENT : DoAction(static_cast<MetaFloatTransparentAction&>(*pAct)); break;
+            case MetaActionType::GRADIENTEX     : DoAction(static_cast<MetaGradientExAction&>(*pAct)); break;
+            case MetaActionType::LAYOUTMODE     : DoAction(static_cast<MetaLayoutModeAction&>(*pAct)); break;
+            case MetaActionType::TEXTLANGUAGE   : DoAction(static_cast<MetaTextLanguageAction&>(*pAct)); break;
+            case MetaActionType::OVERLINECOLOR  : DoAction(static_cast<MetaOverlineColorAction&>(*pAct)); break;
+            default: break;
         }
 
         if(pProgrInfo && pActionsToReport)
@@ -1007,7 +1008,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     pText->SetMergedItem ( makeSdrTextRightDistItem (0));
     pText->SetMergedItem ( makeSdrTextLeftDistItem (0));
 
-    if ( aFnt.GetWidth() || ( rAct.GetType() == META_STRETCHTEXT_ACTION ) )
+    if ( aFnt.GetWidth() || ( rAct.GetType() == MetaActionType::STRETCHTEXT ) )
     {
         pText->ClearMergedItem( SDRATTR_TEXT_AUTOGROWWIDTH );
         pText->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
@@ -1210,7 +1211,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile& rM
         // #i125211# Check if next action is a MetaGradientExAction
         MetaGradientExAction* pAct = dynamic_cast< MetaGradientExAction* >(rMtf.GetAction(a + 1));
 
-        if( pAct && pAct->GetType() == META_GRADIENTEX_ACTION )
+        if( pAct && pAct->GetType() == MetaActionType::GRADIENTEX )
         {
             // #i73407# reformulation to use new B2DPolygon classes
             basegfx::B2DPolyPolygon aSource(pAct->GetPolyPolygon().getB2DPolyPolygon());
@@ -1241,7 +1242,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile& rM
                     // SetAttributes(pPath);
 
                     // switch line off; if there was one there will be a
-                    // META_POLYLINE_ACTION following creating another object
+                    // MetaActionType::POLYLINE following creating another object
                     aGradAttr.Put(XLineStyleItem(drawing::LineStyle_NONE));
 
                     // add detected gradient fillstyle
@@ -1264,7 +1265,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile& rM
         MetaAction* pSkipAct = rMtf.GetAction(++a);
 
         while( pSkipAct
-            && ((pSkipAct->GetType() != META_COMMENT_ACTION )
+            && ((pSkipAct->GetType() != MetaActionType::COMMENT )
                 || !(static_cast<MetaCommentAction*>(pSkipAct)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END"))))
         {
             pSkipAct = rMtf.GetAction(++a);

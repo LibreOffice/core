@@ -1420,7 +1420,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
         switch( pAction->GetType() )
         {
-            case( META_PIXEL_ACTION ):
+            case( MetaActionType::PIXEL ):
             {
                 const MetaPixelAction* pAct = static_cast<const MetaPixelAction*>(pAction);
 
@@ -1432,7 +1432,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_POINT_ACTION ):
+            case( MetaActionType::POINT ):
             {
                 const MetaPointAction* pAct = static_cast<const MetaPointAction*>(pAction);
 
@@ -1443,7 +1443,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_LINE_ACTION ):
+            case( MetaActionType::LINE ):
             {
                 const MetaLineAction* pAct = static_cast<const MetaLineAction*>(pAction);
                 const LineInfo& rInfo = pAct->GetLineInfo();
@@ -1512,7 +1512,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_RECT_ACTION ):
+            case( MetaActionType::RECT ):
             {
                 const MetaRectAction* pAct = static_cast<const MetaRectAction*>(pAction);
 
@@ -1525,7 +1525,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_ROUNDRECT_ACTION ):
+            case( MetaActionType::ROUNDRECT ):
             {
                 const MetaRoundRectAction* pAct = static_cast<const MetaRoundRectAction*>(pAction);
 
@@ -1538,7 +1538,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_ELLIPSE_ACTION ):
+            case( MetaActionType::ELLIPSE ):
             {
                 const MetaEllipseAction* pAct = static_cast<const MetaEllipseAction*>(pAction);
 
@@ -1549,7 +1549,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_ARC_ACTION ):
+            case( MetaActionType::ARC ):
             {
                 const MetaArcAction* pAct = static_cast<const MetaArcAction*>(pAction);
 
@@ -1562,7 +1562,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_PIE_ACTION ):
+            case( MetaActionType::PIE ):
             {
                 const MetaPieAction* pAct = static_cast<const MetaPieAction*>(pAction);
 
@@ -1575,7 +1575,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_CHORD_ACTION ):
+            case( MetaActionType::CHORD ):
             {
                 const MetaChordAction* pAct = static_cast<const MetaChordAction*>(pAction);
                 Polygon                aChordPoly( pAct->GetRect(), pAct->GetStartPoint(),
@@ -1592,7 +1592,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_POLYLINE_ACTION ):
+            case( MetaActionType::POLYLINE ):
             {
                 // #i102224#
                 const MetaPolyLineAction* pAct = static_cast<const MetaPolyLineAction*>(pAction);
@@ -1679,7 +1679,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_POLYGON_ACTION ):
+            case( MetaActionType::POLYGON ):
             {
                 const MetaPolygonAction* pAct = static_cast<const MetaPolygonAction*>(pAction);
                 // #i102224# Here the possible curved nature of Polygon was
@@ -1706,7 +1706,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_POLYPOLYGON_ACTION ):
+            case( MetaActionType::POLYPOLYGON ):
             {
                 const MetaPolyPolygonAction* pAct = static_cast<const MetaPolyPolygonAction*>(pAction);
                 ImplWritePolyPolyAction( rOStm, pAct->GetPolyPolygon() );
@@ -1719,7 +1719,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TEXT_ACTION ):
+            case( MetaActionType::TEXT ):
             {
                 const MetaTextAction* pAct = static_cast<const MetaTextAction*>(pAction);
                 OUString aUniText( pAct->GetText() );
@@ -1740,7 +1740,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TEXTARRAY_ACTION ):
+            case( MetaActionType::TEXTARRAY ):
             {
                 const MetaTextArrayAction* pAct = static_cast<const MetaTextArrayAction*>(pAction);
                 OString aText(OUStringToOString(pAct->GetText(), rActualCharSet));
@@ -1784,7 +1784,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_STRETCHTEXT_ACTION ):
+            case( MetaActionType::STRETCHTEXT ):
             {
                 const MetaStretchTextAction* pAct = static_cast<const MetaStretchTextAction*>(pAction);
                 OUString aUniText( pAct->GetText() );
@@ -1806,7 +1806,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMP_ACTION ):
+            case( MetaActionType::BMP ):
             {
                 const MetaBmpAction* pAct = static_cast<const MetaBmpAction*>(pAction);
 
@@ -1818,7 +1818,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMPSCALE_ACTION ):
+            case( MetaActionType::BMPSCALE ):
             {
                 const MetaBmpScaleAction* pAct = static_cast<const MetaBmpScaleAction*>(pAction);
 
@@ -1831,7 +1831,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMPSCALEPART_ACTION ):
+            case( MetaActionType::BMPSCALEPART ):
             {
                 const MetaBmpScalePartAction* pAct = static_cast<const MetaBmpScalePartAction*>(pAction);
 
@@ -1846,7 +1846,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMPEX_ACTION ):
+            case( MetaActionType::BMPEX ):
             {
                 const MetaBmpExAction* pAct = static_cast<const MetaBmpExAction*>(pAction);
                 const Bitmap           aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
@@ -1859,7 +1859,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMPEXSCALE_ACTION ):
+            case( MetaActionType::BMPEXSCALE ):
             {
                 const MetaBmpExScaleAction* pAct = static_cast<const MetaBmpExScaleAction*>(pAction);
                 const Bitmap                aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
@@ -1873,7 +1873,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMPEXSCALEPART_ACTION ):
+            case( MetaActionType::BMPEXSCALEPART ):
             {
                 const MetaBmpExScalePartAction* pAct = static_cast<const MetaBmpExScalePartAction*>(pAction);
                 const Bitmap                    aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
@@ -1889,7 +1889,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_GRADIENT_ACTION ):
+            case( MetaActionType::GRADIENT ):
             {
                 const MetaGradientAction* pAct = static_cast<const MetaGradientAction*>(pAction);
                 const Gradient&           rGrad = pAct->GetGradient();
@@ -1910,7 +1910,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_GRADIENTEX_ACTION ):
+            case( MetaActionType::GRADIENTEX ):
             {
                 const MetaGradientExAction* pA = static_cast<const MetaGradientExAction*>(pAction);
                 sal_uLong                   nOldPos, nNewPos;
@@ -1937,7 +1937,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_WALLPAPER_ACTION ):
+            case( MetaActionType::WALLPAPER ):
             {
                 const MetaWallpaperAction* pAct = static_cast<const MetaWallpaperAction*>(pAction);
                 const Color&               rColor = pAct->GetWallpaper().GetColor();
@@ -1957,7 +1957,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_CLIPREGION_ACTION ):
+            case( MetaActionType::CLIPREGION ):
             {
                 const MetaClipRegionAction* pAct = static_cast<const MetaClipRegionAction*>(pAction);
                 const vcl::Region&          rRegion = pAct->GetRegion();
@@ -1984,7 +1984,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_ISECTRECTCLIPREGION_ACTION ):
+            case( MetaActionType::ISECTRECTCLIPREGION ):
             {
                 const MetaISectRectClipRegionAction* pAct = static_cast<const MetaISectRectClipRegionAction*>(pAction);
 
@@ -1995,7 +1995,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_MOVECLIPREGION_ACTION ):
+            case( MetaActionType::MOVECLIPREGION ):
             {
                 const MetaMoveClipRegionAction* pAct = static_cast<const MetaMoveClipRegionAction*>(pAction);
 
@@ -2007,7 +2007,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_LINECOLOR_ACTION ):
+            case( MetaActionType::LINECOLOR ):
             {
                 const MetaLineColorAction* pAct = static_cast<const MetaLineColorAction*>(pAction);
                 ImplWriteLineColor( rOStm, rLineCol = pAct->GetColor(), pAct->IsSetting() ? 1 : 0 );
@@ -2015,7 +2015,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_FILLCOLOR_ACTION ):
+            case( MetaActionType::FILLCOLOR ):
             {
                 const MetaFillColorAction* pAct = static_cast<const MetaFillColorAction*>(pAction);
                 ImplWriteFillColor( rOStm, pAct->GetColor(), pAct->IsSetting() ? 1 : 0 );
@@ -2023,7 +2023,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_FONT_ACTION ):
+            case( MetaActionType::FONT ):
             {
                 rSaveVDev.SetFont( static_cast<const MetaFontAction*>(pAction)->GetFont() );
                 ImplWriteFont( rOStm, rSaveVDev.GetFont(), rActualCharSet );
@@ -2031,7 +2031,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TEXTCOLOR_ACTION ):
+            case( MetaActionType::TEXTCOLOR ):
             {
                 vcl::Font aSaveFont( rSaveVDev.GetFont() );
 
@@ -2042,7 +2042,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TEXTFILLCOLOR_ACTION ):
+            case( MetaActionType::TEXTFILLCOLOR ):
             {
                 const MetaTextFillColorAction* pAct = static_cast<const MetaTextFillColorAction*>(pAction);
                 vcl::Font                      aSaveFont( rSaveVDev.GetFont() );
@@ -2058,7 +2058,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TEXTALIGN_ACTION ):
+            case( MetaActionType::TEXTALIGN ):
             {
                 vcl::Font aSaveFont( rSaveVDev.GetFont() );
 
@@ -2069,7 +2069,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_MAPMODE_ACTION ):
+            case( MetaActionType::MAPMODE ):
             {
                 const MetaMapModeAction* pAct = static_cast<const MetaMapModeAction*>(pAction);
 
@@ -2080,7 +2080,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_PUSH_ACTION ):
+            case( MetaActionType::PUSH ):
             {
                 ImplWritePushAction( rOStm );
                 rLineColStack.push( new Color( rLineCol ) );
@@ -2089,7 +2089,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_POP_ACTION ):
+            case( MetaActionType::POP ):
             {
                 Color* pCol;
                 if (rLineColStack.empty())
@@ -2112,7 +2112,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_RASTEROP_ACTION ):
+            case( MetaActionType::RASTEROP ):
             {
                 const MetaRasterOpAction* pAct = static_cast<const MetaRasterOpAction*>(pAction);
 
@@ -2164,7 +2164,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TRANSPARENT_ACTION ):
+            case( MetaActionType::TRANSPARENT ):
             {
                 const tools::PolyPolygon& rPolyPoly = static_cast<const MetaTransparentAction*>(pAction)->GetPolyPolygon();
                 const sal_Int16           nTrans = static_cast<const MetaTransparentAction*>(pAction)->GetTransparence();
@@ -2223,7 +2223,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_FLOATTRANSPARENT_ACTION ):
+            case( MetaActionType::FLOATTRANSPARENT ):
             {
                 const MetaFloatTransparentAction*   pA = static_cast<const MetaFloatTransparentAction*>(pAction);
                 const GDIMetaFile&                  rTransMtf = pA->GetGDIMetaFile();
@@ -2285,7 +2285,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_HATCH_ACTION ):
+            case( MetaActionType::HATCH ):
             {
                 const MetaHatchAction*    pA = static_cast<const MetaHatchAction*>(pAction);
                 const tools::PolyPolygon& rPolyPoly = pA->GetPolyPolygon();
@@ -2328,7 +2328,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_REFPOINT_ACTION ):
+            case( MetaActionType::REFPOINT ):
             {
                 const MetaRefPointAction*   pA = static_cast<const MetaRefPointAction*>(pAction);
                 const Point&                rRefPoint = pA->GetRefPoint();
@@ -2357,7 +2357,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TEXTLINECOLOR_ACTION ):
+            case( MetaActionType::TEXTLINECOLOR ):
             {
                 const MetaTextLineColorAction*  pA = static_cast<const MetaTextLineColorAction*>(pAction);
                 const Color&                    rColor = pA->GetColor();
@@ -2386,7 +2386,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TEXTLINE_ACTION ):
+            case( MetaActionType::TEXTLINE ):
             {
                 const MetaTextLineAction*   pA = static_cast<const MetaTextLineAction*>(pAction);
                 const Point&                rStartPt = pA->GetStartPoint();
@@ -2417,10 +2417,10 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_EPS_ACTION ):
+            case( MetaActionType::EPS ):
             break;
 
-            case( META_COMMENT_ACTION ):
+            case( MetaActionType::COMMENT ):
             {
                 const MetaCommentAction*    pA = static_cast<const MetaCommentAction*>(pAction);
                 const sal_uInt32            nDataSize = pA->GetDataSize();

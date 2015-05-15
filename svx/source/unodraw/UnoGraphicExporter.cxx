@@ -771,7 +771,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 aMtf.SetPrefMapMode( aMap );
                 aMtf.SetPrefSize( aNewSize );
 
-                // AW: Here the current version was filtering out the META_CLIPREGION_ACTIONs
+                // AW: Here the current version was filtering out the MetaActionType::CLIPREGIONs
                 // from the metafile. I asked some other developers why this was done, but no
                 // one knew a direct reason. Since it's in for long time, it may be an old
                 // piece of code. MetaFiles save and load ClipRegions with polygons with preserving

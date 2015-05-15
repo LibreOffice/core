@@ -62,7 +62,7 @@ void WmfTest::testNonPlaceableWmf()
 
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
-    dumper.filterActionType(META_POLYLINE_ACTION, false);
+    dumper.filterActionType(MetaActionType::POLYLINE, false);
     xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
@@ -91,7 +91,7 @@ void WmfTest::testSine()
 
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
-    dumper.filterActionType(META_ISECTRECTCLIPREGION_ACTION, false);
+    dumper.filterActionType(MetaActionType::ISECTRECTCLIPREGION, false);
     xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
@@ -107,7 +107,7 @@ void WmfTest::testEmfProblem()
 
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
-    dumper.filterActionType(META_ISECTRECTCLIPREGION_ACTION, false);
+    dumper.filterActionType(MetaActionType::ISECTRECTCLIPREGION, false);
     xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
@@ -126,7 +126,7 @@ void WmfTest::testWorldTransformFontSize()
 
     MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
-    dumper.filterActionType(META_FONT_ACTION, false);
+    dumper.filterActionType(MetaActionType::FONT, false);
     xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);

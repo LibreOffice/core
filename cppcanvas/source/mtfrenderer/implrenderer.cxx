@@ -99,7 +99,7 @@ namespace
 
             // force alpha part of color to
             // opaque. transparent painting is done
-            // explicitly via META_TRANSPARENT_ACTION
+            // explicitly via MetaActionType::TRANSPARENT
             aColor.SetTransparency(0);
             //aColor.SetTransparency(128);
 
@@ -430,7 +430,7 @@ namespace cppcanvas
                 // increment action index, we've skipped an action.
                 ++io_rCurrActionIndex;
 
-                if( pCurrAct->GetType() == META_COMMENT_ACTION &&
+                if( pCurrAct->GetType() == MetaActionType::COMMENT &&
                     static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCase(
                         pCommentString) )
                 {
@@ -443,9 +443,9 @@ namespace cppcanvas
             return;
         }
 
-        bool ImplRenderer::isActionContained( GDIMetaFile& rMtf,
-                                              const char*  pCommentString,
-                                              sal_uInt16       nType )
+        bool ImplRenderer::isActionContained( GDIMetaFile&   rMtf,
+                                              const char*    pCommentString,
+                                              MetaActionType nType )
         {
             ENSURE_OR_THROW( pCommentString,
                               "ImplRenderer::isActionContained(): NULL string given" );
@@ -465,7 +465,7 @@ namespace cppcanvas
                     break;
                 }
 
-                if( pCurrAct->GetType() == META_COMMENT_ACTION &&
+                if( pCurrAct->GetType() == MetaActionType::COMMENT &&
                     static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCase(
                         pCommentString) )
                 {
@@ -1242,11 +1242,11 @@ namespace cppcanvas
                 // execute every action, to keep VDev state up-to-date
                 // currently used only for
                 // - the map mode
-                // - the line/fill color when processing a META_TRANSPARENT_ACTION
+                // - the line/fill color when processing a MetaActionType::TRANSPARENT
                 // - SetFont to process font metric specific actions
                 pCurrAct->Execute( &rVDev );
 
-                SAL_INFO("cppcanvas.emf", "MTF\trecord type: 0x" << pCurrAct->GetType() << " (" << pCurrAct->GetType() << ")");
+                SAL_INFO("cppcanvas.emf", "MTF\trecord type: 0x" << static_cast<sal_uInt16>(pCurrAct->GetType()) << " (" << static_cast<sal_uInt16>(pCurrAct->GetType()) << ")");
 
                 switch( pCurrAct->GetType() )
                 {
@@ -1258,24 +1258,24 @@ namespace cppcanvas
 
 
 
-                    case META_PUSH_ACTION:
+                    case MetaActionType::PUSH:
                     {
                         MetaPushAction* pPushAction = static_cast<MetaPushAction*>(pCurrAct);
                         rStates.pushState(pPushAction->GetFlags());
                     }
                     break;
 
-                    case META_POP_ACTION:
+                    case MetaActionType::POP:
                         rStates.popState();
                         break;
 
-                    case META_TEXTLANGUAGE_ACTION:
+                    case MetaActionType::TEXTLANGUAGE:
                         // FALLTHROUGH intended
-                    case META_REFPOINT_ACTION:
+                    case MetaActionType::REFPOINT:
                         // handled via pCurrAct->Execute( &rVDev )
                         break;
 
-                    case META_MAPMODE_ACTION:
+                    case MetaActionType::MAPMODE:
                         // modify current mapModeTransformation
                         // transformation, such that subsequent
                         // coordinates map correctly
@@ -1284,7 +1284,7 @@ namespace cppcanvas
                         break;
 
                     // monitor clip regions, to assemble clip polygon on our own
-                    case META_CLIPREGION_ACTION:
+                    case MetaActionType::CLIPREGION:
                     {
                         MetaClipRegionAction* pClipAction = static_cast<MetaClipRegionAction*>(pCurrAct);
 
@@ -1330,7 +1330,7 @@ namespace cppcanvas
                         break;
                     }
 
-                    case META_ISECTRECTCLIPREGION_ACTION:
+                    case MetaActionType::ISECTRECTCLIPREGION:
                     {
                         MetaISectRectClipRegionAction* pClipAction = static_cast<MetaISectRectClipRegionAction*>(pCurrAct);
 
@@ -1347,7 +1347,7 @@ namespace cppcanvas
                         break;
                     }
 
-                    case META_ISECTREGIONCLIPREGION_ACTION:
+                    case MetaActionType::ISECTREGIONCLIPREGION:
                     {
                         MetaISectRegionClipRegionAction* pClipAction = static_cast<MetaISectRegionClipRegionAction*>(pCurrAct);
 
@@ -1383,11 +1383,11 @@ namespace cppcanvas
                         break;
                     }
 
-                    case META_MOVECLIPREGION_ACTION:
+                    case MetaActionType::MOVECLIPREGION:
                         // TODO(F2): NYI
                         break;
 
-                    case META_LINECOLOR_ACTION:
+                    case MetaActionType::LINECOLOR:
                         if( !rParms.maLineColor.is_initialized() )
                         {
                             setStateColor( static_cast<MetaLineColorAction*>(pCurrAct),
@@ -1404,7 +1404,7 @@ namespace cppcanvas
                         }
                         break;
 
-                    case META_FILLCOLOR_ACTION:
+                    case MetaActionType::FILLCOLOR:
                         if( !rParms.maFillColor.is_initialized() )
                         {
                             setStateColor( static_cast<MetaFillColorAction*>(pCurrAct),
@@ -1421,7 +1421,7 @@ namespace cppcanvas
                         }
                         break;
 
-                    case META_TEXTCOLOR_ACTION:
+                    case MetaActionType::TEXTCOLOR:
                     {
                         if( !rParms.maTextColor.is_initialized() )
                         {
@@ -1431,7 +1431,7 @@ namespace cppcanvas
 
                             // force alpha part of color to
                             // opaque. transparent painting is done
-                            // explicitly via META_TRANSPARENT_ACTION
+                            // explicitly via MetaActionType::TRANSPARENT
                             aColor.SetTransparency(0);
 
                             rStates.getState().textColor =
@@ -1442,7 +1442,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_TEXTFILLCOLOR_ACTION:
+                    case MetaActionType::TEXTFILLCOLOR:
                         if( !rParms.maTextColor.is_initialized() )
                         {
                             setStateColor( static_cast<MetaTextFillColorAction*>(pCurrAct),
@@ -1459,7 +1459,7 @@ namespace cppcanvas
                         }
                         break;
 
-                    case META_TEXTLINECOLOR_ACTION:
+                    case MetaActionType::TEXTLINECOLOR:
                         if( !rParms.maTextColor.is_initialized() )
                         {
                             setStateColor( static_cast<MetaTextLineColorAction*>(pCurrAct),
@@ -1476,7 +1476,7 @@ namespace cppcanvas
                         }
                         break;
 
-                    case META_TEXTALIGN_ACTION:
+                    case MetaActionType::TEXTALIGN:
                     {
                         ::cppcanvas::internal::OutDevState& rState = rStates.getState();
                         const TextAlign eTextAlign( static_cast<MetaTextAlignAction*>(pCurrAct)->GetTextAlign() );
@@ -1485,7 +1485,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_FONT_ACTION:
+                    case MetaActionType::FONT:
                     {
                         ::cppcanvas::internal::OutDevState& rState = rStates.getState();
                         const vcl::Font& rFont( static_cast<MetaFontAction*>(pCurrAct)->GetFont() );
@@ -1508,11 +1508,11 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_RASTEROP_ACTION:
+                    case MetaActionType::RASTEROP:
                         // TODO(F2): NYI
                         break;
 
-                    case META_LAYOUTMODE_ACTION:
+                    case MetaActionType::LAYOUTMODE:
                     {
                         // TODO(F2): A lot is missing here
                         ComplexTextLayoutMode nLayoutMode = static_cast<MetaLayoutModeAction*>(pCurrAct)->GetLayoutMode();
@@ -1546,7 +1546,7 @@ namespace cppcanvas
 
 
 
-                    case META_GRADIENT_ACTION:
+                    case MetaActionType::GRADIENT:
                     {
                         MetaGradientAction* pGradAct = static_cast<MetaGradientAction*>(pCurrAct);
                         createGradientAction( ::Polygon( pGradAct->GetRect() ),
@@ -1557,7 +1557,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_HATCH_ACTION:
+                    case MetaActionType::HATCH:
                     {
                         // TODO(F2): use native Canvas hatches here
                         GDIMetaFile aTmpMtf;
@@ -1570,7 +1570,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_EPS_ACTION:
+                    case MetaActionType::EPS:
                     {
                         MetaEPSAction*      pAct = static_cast<MetaEPSAction*>(pCurrAct);
                         const GDIMetaFile&  rSubstitute = pAct->GetSubstitute();
@@ -1614,7 +1614,7 @@ namespace cppcanvas
                     // handle metafile comments, to retrieve
                     // meta-information for gradients, fills and
                     // strokes. May skip actions, and may recurse.
-                    case META_COMMENT_ACTION:
+                    case MetaActionType::COMMENT:
                     {
                         MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pCurrAct);
 
@@ -1629,12 +1629,12 @@ namespace cppcanvas
                                 switch( pCurrAct->GetType() )
                                 {
                                     // extract gradient info
-                                    case META_GRADIENTEX_ACTION:
+                                    case MetaActionType::GRADIENTEX:
                                         pGradAction = static_cast<MetaGradientExAction*>(pCurrAct);
                                         break;
 
                                     // skip broken-down rendering, output gradient when sequence is ended
-                                    case META_COMMENT_ACTION:
+                                    case MetaActionType::COMMENT:
                                         if( static_cast<MetaCommentAction*>(pCurrAct)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END") )
                                         {
                                             bDone = true;
@@ -1649,6 +1649,7 @@ namespace cppcanvas
                                             }
                                         }
                                         break;
+                                    default: break;
                                 }
                             }
                         }
@@ -1677,7 +1678,7 @@ namespace cppcanvas
                                 if( aFill.getFillType() == SvtGraphicFill::fillTexture &&
                                     !isActionContained( rMtf,
                                                        "XPATHFILL_SEQ_END",
-                                                        META_FLOATTRANSPARENT_ACTION ) )
+                                                        MetaActionType::FLOATTRANSPARENT ) )
                                 {
                                     rendering::Texture aTexture;
 
@@ -1810,7 +1811,7 @@ namespace cppcanvas
 
 
 
-                    case META_POINT_ACTION:
+                    case MetaActionType::POINT:
                     {
                         const OutDevState& rState( rStates.getState() );
                         if( rState.lineColor.getLength() )
@@ -1835,7 +1836,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_PIXEL_ACTION:
+                    case MetaActionType::PIXEL:
                     {
                         const OutDevState& rState( rStates.getState() );
                         if( rState.lineColor.getLength() )
@@ -1861,7 +1862,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_LINE_ACTION:
+                    case MetaActionType::LINE:
                     {
                         const OutDevState& rState( rStates.getState() );
                         if( rState.lineColor.getLength() )
@@ -1934,7 +1935,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_RECT_ACTION:
+                    case MetaActionType::RECT:
                     {
                         const Rectangle& rRect(
                             static_cast<MetaRectAction*>(pCurrAct)->GetRect() );
@@ -1959,7 +1960,7 @@ namespace cppcanvas
                         break;
                     }
 
-                    case META_ROUNDRECT_ACTION:
+                    case MetaActionType::ROUNDRECT:
                     {
                         const Rectangle& rRect(
                             static_cast<MetaRoundRectAction*>(pCurrAct)->GetRect());
@@ -1982,7 +1983,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_ELLIPSE_ACTION:
+                    case MetaActionType::ELLIPSE:
                     {
                         const Rectangle& rRect(
                             static_cast<MetaEllipseAction*>(pCurrAct)->GetRect() );
@@ -2007,7 +2008,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_ARC_ACTION:
+                    case MetaActionType::ARC:
                     {
                         // TODO(F1): Missing basegfx functionality. Mind empty rects!
                         const Polygon aToolsPoly( static_cast<MetaArcAction*>(pCurrAct)->GetRect(),
@@ -2021,7 +2022,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_PIE_ACTION:
+                    case MetaActionType::PIE:
                     {
                         // TODO(F1): Missing basegfx functionality. Mind empty rects!
                         const Polygon aToolsPoly( static_cast<MetaPieAction*>(pCurrAct)->GetRect(),
@@ -2035,7 +2036,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_CHORD_ACTION:
+                    case MetaActionType::CHORD:
                     {
                         // TODO(F1): Missing basegfx functionality. Mind empty rects!
                         const Polygon aToolsPoly( static_cast<MetaChordAction*>(pCurrAct)->GetRect(),
@@ -2049,7 +2050,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_POLYLINE_ACTION:
+                    case MetaActionType::POLYLINE:
                     {
                         const OutDevState& rState( rStates.getState() );
                         if( rState.lineColor.getLength() ||
@@ -2114,7 +2115,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_POLYGON_ACTION:
+                    case MetaActionType::POLYGON:
                     {
                         ::basegfx::B2DPolygon aPoly( static_cast<MetaPolygonAction*>(pCurrAct)->GetPolygon().getB2DPolygon() );
                         aPoly.transform( rStates.getState().mapModeTransform );
@@ -2123,7 +2124,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_POLYPOLYGON_ACTION:
+                    case MetaActionType::POLYPOLYGON:
                     {
                         ::basegfx::B2DPolyPolygon aPoly( static_cast<MetaPolyPolygonAction*>(pCurrAct)->GetPolyPolygon().getB2DPolyPolygon() );
                         aPoly.transform( rStates.getState().mapModeTransform );
@@ -2132,7 +2133,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_BMP_ACTION:
+                    case MetaActionType::BMP:
                     {
                         MetaBmpAction* pAct = static_cast<MetaBmpAction*>(pCurrAct);
 
@@ -2156,7 +2157,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_BMPSCALE_ACTION:
+                    case MetaActionType::BMPSCALE:
                     {
                         MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pCurrAct);
 
@@ -2182,7 +2183,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_BMPSCALEPART_ACTION:
+                    case MetaActionType::BMPSCALEPART:
                     {
                         MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pCurrAct);
 
@@ -2215,7 +2216,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_BMPEX_ACTION:
+                    case MetaActionType::BMPEX:
                     {
                         MetaBmpExAction* pAct = static_cast<MetaBmpExAction*>(pCurrAct);
 
@@ -2239,7 +2240,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_BMPEXSCALE_ACTION:
+                    case MetaActionType::BMPEXSCALE:
                     {
                         MetaBmpExScaleAction* pAct = static_cast<MetaBmpExScaleAction*>(pCurrAct);
 
@@ -2265,7 +2266,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_BMPEXSCALEPART_ACTION:
+                    case MetaActionType::BMPEXSCALEPART:
                     {
                         MetaBmpExScalePartAction* pAct = static_cast<MetaBmpExScalePartAction*>(pCurrAct);
 
@@ -2298,7 +2299,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_MASK_ACTION:
+                    case MetaActionType::MASK:
                     {
                         MetaMaskAction* pAct = static_cast<MetaMaskAction*>(pCurrAct);
 
@@ -2328,7 +2329,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_MASKSCALE_ACTION:
+                    case MetaActionType::MASKSCALE:
                     {
                         MetaMaskScaleAction* pAct = static_cast<MetaMaskScaleAction*>(pCurrAct);
 
@@ -2360,7 +2361,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_MASKSCALEPART_ACTION:
+                    case MetaActionType::MASKSCALEPART:
                     {
                         MetaMaskScalePartAction* pAct = static_cast<MetaMaskScalePartAction*>(pCurrAct);
 
@@ -2398,16 +2399,16 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_GRADIENTEX_ACTION:
+                    case MetaActionType::GRADIENTEX:
                         // TODO(F1): use native Canvas gradients here
-                        // action is ignored here, because redundant to META_GRADIENT_ACTION
+                        // action is ignored here, because redundant to MetaActionType::GRADIENT
                         break;
 
-                    case META_WALLPAPER_ACTION:
+                    case MetaActionType::WALLPAPER:
                         // TODO(F2): NYI
                         break;
 
-                    case META_TRANSPARENT_ACTION:
+                    case MetaActionType::TRANSPARENT:
                     {
                         const OutDevState& rState( rStates.getState() );
                         if( rState.lineColor.getLength() ||
@@ -2437,7 +2438,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_FLOATTRANSPARENT_ACTION:
+                    case MetaActionType::FLOATTRANSPARENT:
                     {
                         MetaFloatTransparentAction* pAct = static_cast<MetaFloatTransparentAction*>(pCurrAct);
 
@@ -2474,7 +2475,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_TEXT_ACTION:
+                    case MetaActionType::TEXT:
                     {
                         MetaTextAction* pAct = static_cast<MetaTextAction*>(pCurrAct);
                         OUString sText = pAct->GetText();
@@ -2495,7 +2496,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_TEXTARRAY_ACTION:
+                    case MetaActionType::TEXTARRAY:
                     {
                         MetaTextArrayAction* pAct = static_cast<MetaTextArrayAction*>(pCurrAct);
                         OUString sText = pAct->GetText();
@@ -2516,7 +2517,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_TEXTLINE_ACTION:
+                    case MetaActionType::TEXTLINE:
                     {
                         MetaTextLineAction*      pAct = static_cast<MetaTextLineAction*>(pCurrAct);
 
@@ -2552,7 +2553,7 @@ namespace cppcanvas
                     }
                     break;
 
-                    case META_TEXTRECT_ACTION:
+                    case MetaActionType::TEXTRECT:
                     {
                         MetaTextRectAction* pAct = static_cast<MetaTextRectAction*>(pCurrAct);
 
@@ -2575,7 +2576,7 @@ namespace cppcanvas
                         break;
                     }
 
-                    case META_STRETCHTEXT_ACTION:
+                    case MetaActionType::STRETCHTEXT:
                     {
                         MetaStretchTextAction* pAct = static_cast<MetaStretchTextAction*>(pCurrAct);
                         OUString sText = pAct->GetText();

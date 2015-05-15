@@ -909,7 +909,7 @@ namespace slideshow
             for ( MetaAction * pCurrAct = mpCurrMtf->FirstAction();
                   pCurrAct != 0; pCurrAct = mpCurrMtf->NextAction() )
             {
-                if (pCurrAct->GetType() == META_COMMENT_ACTION) {
+                if (pCurrAct->GetType() == MetaActionType::COMMENT) {
                     MetaCommentAction * pAct =
                         static_cast<MetaCommentAction *>(pCurrAct);
                     // skip comment if not a special XTEXT comment

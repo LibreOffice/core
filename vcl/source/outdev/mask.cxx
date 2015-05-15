@@ -34,19 +34,19 @@ void OutputDevice::DrawMask( const Point& rDestPt,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
     const Size aSizePix( rBitmap.GetSizePixel() );
-    DrawMask( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, rMaskColor, META_MASK_ACTION );
+    DrawMask( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, rMaskColor, MetaActionType::MASK );
 }
 
 void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
-    DrawMask( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, rMaskColor, META_MASKSCALE_ACTION );
+    DrawMask( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, rMaskColor, MetaActionType::MASKSCALE );
 }
 
 void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                              const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                              const Bitmap& rBitmap, const Color& rMaskColor,
-                             const sal_uLong nAction )
+                             const MetaActionType nAction )
 {
     if( ImplIsRecordLayout() )
         return;
@@ -61,20 +61,22 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
     {
         switch( nAction )
         {
-            case( META_MASK_ACTION ):
+            case( MetaActionType::MASK ):
                 mpMetaFile->AddAction( new MetaMaskAction( rDestPt,
                     rBitmap, rMaskColor ) );
             break;
 
-            case( META_MASKSCALE_ACTION ):
+            case( MetaActionType::MASKSCALE ):
                 mpMetaFile->AddAction( new MetaMaskScaleAction( rDestPt,
                     rDestSize, rBitmap, rMaskColor ) );
             break;
 
-            case( META_MASKSCALEPART_ACTION ):
+            case( MetaActionType::MASKSCALEPART ):
                 mpMetaFile->AddAction( new MetaMaskScalePartAction( rDestPt, rDestSize,
                     rSrcPtPixel, rSrcSizePixel, rBitmap, rMaskColor ) );
             break;
+
+            default: break;
         }
     }
 

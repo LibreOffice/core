@@ -131,7 +131,7 @@ acts as a prototype for other actions.
 CONSTRUCTORS AND DESTRUCTORS
 
 - MetaAction()                              - default constructor, sets mnRefCount to 1 and
-                                              mnType, in this case META_NULL_ACTION
+                                              mnType, in this case MetaActionType::NONE
 - MetaAction(sal_uInt16 nType)              - virtual constructor, sets mnType to nType, and
                                               mnRefCount to 1
 - ~MetaAction

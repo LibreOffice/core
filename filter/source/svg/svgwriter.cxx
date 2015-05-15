@@ -551,42 +551,42 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
     sal_uLong nActionIndex = nCurAction + 1;
     for( ; nActionIndex < nCount; ++nActionIndex )
     {
-        const MetaAction*   pAction = rMtf.GetAction( nActionIndex );
-        const sal_uInt16    nType = pAction->GetType();
+        const MetaAction*    pAction = rMtf.GetAction( nActionIndex );
+        const MetaActionType nType = pAction->GetType();
 
         switch( nType )
         {
-            case( META_TEXT_ACTION ):
+            case( MetaActionType::TEXT ):
             {
                 bConfigured = implGetTextPosition<MetaTextAction>( pAction, aPos, bEmpty );
             }
             break;
 
-            case( META_TEXTRECT_ACTION ):
+            case( MetaActionType::TEXTRECT ):
             {
                 bConfigured = implGetTextPosition<MetaTextRectAction>( pAction, aPos, bEmpty );
             }
             break;
 
-            case( META_TEXTARRAY_ACTION ):
+            case( MetaActionType::TEXTARRAY ):
             {
                 bConfigured = implGetTextPosition<MetaTextArrayAction>( pAction, aPos, bEmpty );
             }
             break;
 
-            case( META_STRETCHTEXT_ACTION ):
+            case( MetaActionType::STRETCHTEXT ):
             {
                 bConfigured = implGetTextPosition<MetaStretchTextAction>( pAction, aPos, bEmpty );
             }
             break;
 
-            case( META_BMPSCALE_ACTION ):
+            case( MetaActionType::BMPSCALE ):
             {
                 bConfigured = implGetTextPositionFromBitmap<MetaBmpScaleAction>( pAction, aPos, bEmpty );
             }
             break;
 
-            case( META_BMPEXSCALE_ACTION ):
+            case( MetaActionType::BMPEXSCALE ):
             {
                 bConfigured = implGetTextPositionFromBitmap<MetaBmpExScaleAction>( pAction, aPos, bEmpty );
             }
@@ -594,7 +594,7 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
 
             // If we reach the end of the current line, paragraph or text shape
             // without finding any text we stop searching
-            case( META_COMMENT_ACTION ):
+            case( MetaActionType::COMMENT ):
             {
                 const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
                 const OString& rsComment = pA->GetComment();
@@ -643,6 +643,7 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
                 }
             }
             break;
+            default: break;
         }
         if( bConfigured || bEOL || bEOP || bETS ) break;
     }
@@ -666,43 +667,43 @@ void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAc
     bool bConfigured = false;
     for( sal_uLong nActionIndex = nCurAction + 1; nActionIndex < nCount; ++nActionIndex )
     {
-        const MetaAction*   pAction = rMtf.GetAction( nActionIndex );
-        const sal_uInt16    nType = pAction->GetType();
+        const MetaAction*    pAction = rMtf.GetAction( nActionIndex );
+        const MetaActionType nType = pAction->GetType();
         switch( nType )
         {
-            case( META_TEXTLINECOLOR_ACTION ):
-            case( META_TEXTFILLCOLOR_ACTION ):
-            case( META_TEXTCOLOR_ACTION ):
-            case( META_TEXTALIGN_ACTION ):
-            case( META_FONT_ACTION ):
-            case( META_LAYOUTMODE_ACTION ):
+            case( MetaActionType::TEXTLINECOLOR ):
+            case( MetaActionType::TEXTFILLCOLOR ):
+            case( MetaActionType::TEXTCOLOR ):
+            case( MetaActionType::TEXTALIGN ):
+            case( MetaActionType::FONT ):
+            case( MetaActionType::LAYOUTMODE ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( mpVDev );
             }
             break;
 
-            case( META_TEXT_ACTION ):
+            case( MetaActionType::TEXT ):
             {
                 const MetaTextAction* pA = static_cast<const MetaTextAction*>(pAction);
                 if( pA->GetLen() > 2 )
                     bConfigured = true;
             }
             break;
-            case( META_TEXTRECT_ACTION ):
+            case( MetaActionType::TEXTRECT ):
             {
                 const MetaTextRectAction* pA = static_cast<const MetaTextRectAction*>(pAction);
                 if( pA->GetText().getLength() > 2 )
                     bConfigured = true;
             }
             break;
-            case( META_TEXTARRAY_ACTION ):
+            case( MetaActionType::TEXTARRAY ):
             {
                 const MetaTextArrayAction* pA = static_cast<const MetaTextArrayAction*>(pAction);
                 if( pA->GetLen() > 2 )
                     bConfigured = true;
             }
             break;
-            case( META_STRETCHTEXT_ACTION ):
+            case( MetaActionType::STRETCHTEXT ):
             {
                 const MetaStretchTextAction* pA = static_cast<const MetaStretchTextAction*>(pAction);
                 if( pA->GetLen() > 2 )
@@ -711,7 +712,7 @@ void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAc
             break;
             // If we reach the end of the paragraph without finding any text
             // we stop searching
-            case( META_COMMENT_ACTION ):
+            case( MetaActionType::COMMENT ):
             {
                 const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
                 const OString& rsComment = pA->GetComment();
@@ -721,6 +722,7 @@ void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAc
                 }
             }
             break;
+            default: break;
         }
         if( bConfigured || bEOP ) break;
     }
@@ -1388,12 +1390,12 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
         for( sal_uLong nCurAction = 0; nCurAction < nCount; nCurAction++ )
         {
 
-            const MetaAction* pAction = rMtf.GetAction( nCurAction );
-            const sal_uInt16 nType = pAction->GetType();
+            const MetaAction*    pAction = rMtf.GetAction( nCurAction );
+            const MetaActionType nType = pAction->GetType();
 
             switch( nType )
             {
-                case( META_BMPSCALE_ACTION ):
+                case( MetaActionType::BMPSCALE ):
                 {
                     const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
                     nChecksum = pA->GetBitmap().GetChecksum();
@@ -1401,7 +1403,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
                     aSz = pA->GetSize();
                 }
                 break;
-                case( META_BMPEXSCALE_ACTION ):
+                case( MetaActionType::BMPEXSCALE ):
                 {
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                     nChecksum = pA->GetBitmapEx().GetChecksum();
@@ -1409,6 +1411,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
                     aSz = pA->GetSize();
                 }
                 break;
+                default: break;
             }
 
             // <g id="?" > (used by animations)
@@ -2667,8 +2670,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
     for( sal_uLong nCurAction = 0, nCount = rMtf.GetActionSize(); nCurAction < nCount; nCurAction++ )
     {
-        const MetaAction*   pAction = rMtf.GetAction( nCurAction );
-        const sal_uInt16        nType = pAction->GetType();
+        const MetaAction*    pAction = rMtf.GetAction( nCurAction );
+        const MetaActionType nType = pAction->GetType();
 
 #if OSL_DEBUG_LEVEL > 0
         if( bIsTextShape )
@@ -2677,8 +2680,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
                 SvXMLElementExport aElem( mrExport,
                         XML_NAMESPACE_NONE, "desc", false, false );
-                OUStringBuffer sType(OUString::number(nType));
-                if (pAction && (nType == META_COMMENT_ACTION))
+                OUStringBuffer sType(OUString::number(static_cast<sal_uInt16>(nType)));
+                if (pAction && (nType == MetaActionType::COMMENT))
                 {
                     sType.append(": ");
                     const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
@@ -2720,7 +2723,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 #endif
         switch( nType )
         {
-            case( META_PIXEL_ACTION ):
+            case( MetaActionType::PIXEL ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2732,7 +2735,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_POINT_ACTION ):
+            case( MetaActionType::POINT ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2744,7 +2747,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_LINE_ACTION ):
+            case( MetaActionType::LINE ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2756,7 +2759,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_RECT_ACTION ):
+            case( MetaActionType::RECT ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2766,7 +2769,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_ROUNDRECT_ACTION ):
+            case( MetaActionType::ROUNDRECT ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2778,7 +2781,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_ELLIPSE_ACTION ):
+            case( MetaActionType::ELLIPSE ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2791,10 +2794,10 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_ARC_ACTION ):
-            case( META_PIE_ACTION ):
-            case( META_CHORD_ACTION ):
-            case( META_POLYGON_ACTION ):
+            case( MetaActionType::ARC ):
+            case( MetaActionType::PIE ):
+            case( MetaActionType::CHORD ):
+            case( MetaActionType::POLYGON ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2802,30 +2805,31 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     switch( nType )
                     {
-                        case( META_ARC_ACTION ):
+                        case( MetaActionType::ARC ):
                         {
                             const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
                         }
                         break;
 
-                        case( META_PIE_ACTION ):
+                        case( MetaActionType::PIE ):
                         {
                             const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
                         }
                         break;
 
-                        case( META_CHORD_ACTION ):
+                        case( MetaActionType::CHORD ):
                         {
                             const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
                         }
                         break;
 
-                        case( META_POLYGON_ACTION ):
+                        case( MetaActionType::POLYGON ):
                             aPoly = static_cast<const MetaPolygonAction*>(pAction)->GetPolygon();
                         break;
+                        default: break;
                     }
 
                     if( aPoly.GetSize() )
@@ -2837,7 +2841,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_POLYLINE_ACTION ):
+            case( MetaActionType::POLYLINE ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2854,7 +2858,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_POLYPOLYGON_ACTION ):
+            case( MetaActionType::POLYPOLYGON ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2870,7 +2874,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_GRADIENT_ACTION ):
+            case( MetaActionType::GRADIENT ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2883,7 +2887,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_GRADIENTEX_ACTION ):
+            case( MetaActionType::GRADIENTEX ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2893,7 +2897,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case META_HATCH_ACTION:
+            case MetaActionType::HATCH:
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2903,7 +2907,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TRANSPARENT_ACTION ):
+            case( MetaActionType::TRANSPARENT ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2924,7 +2928,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_FLOATTRANSPARENT_ACTION ):
+            case( MetaActionType::FLOATTRANSPARENT ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2936,7 +2940,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_EPS_ACTION ):
+            case( MetaActionType::EPS ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -2948,7 +2952,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         const MetaAction* pSubstAct = aGDIMetaFile.GetAction( k );
 
-                        if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
+                        if( pSubstAct->GetType() == MetaActionType::BMPSCALE )
                         {
                             bFound = true;
                             const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pSubstAct);
@@ -2961,7 +2965,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_COMMENT_ACTION ):
+            case( MetaActionType::COMMENT ):
             {
                 const MetaCommentAction*    pA = static_cast<const MetaCommentAction*>(pAction);
 
@@ -2975,9 +2979,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         pAction = rMtf.GetAction( nCurAction );
 
-                        if( pAction->GetType() == META_GRADIENTEX_ACTION )
+                        if( pAction->GetType() == MetaActionType::GRADIENTEX )
                             pGradAction = static_cast<const MetaGradientExAction*>(pAction);
-                        else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
+                        else if( ( pAction->GetType() == MetaActionType::COMMENT ) &&
                                  ( static_cast<const MetaCommentAction*>( pAction )->GetComment().
                                         equalsIgnoreAsciiCase("XGRAD_SEQ_END") ) )
                         {
@@ -3035,18 +3039,18 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                                 {
                                     pAction = rMtf.GetAction( nCurAction );
 
-                                    if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
+                                    if( ( pAction->GetType() == MetaActionType::COMMENT ) &&
                                         ( static_cast<const MetaCommentAction*>(pAction)->GetComment().
                                                equalsIgnoreAsciiCase("XPATHFILL_SEQ_END") ) )
                                     {
                                         bSkip = false;
                                     }
-                                    else if( pAction->GetType() == META_GRADIENTEX_ACTION )
+                                    else if( pAction->GetType() == MetaActionType::GRADIENTEX )
                                     {
                                         mapCurShape->mapShapeGradient.reset( new Gradient(
                                             static_cast< const MetaGradientExAction* >( pAction )->GetGradient() ) );
                                     }
-                                    else if( pAction->GetType() == META_GRADIENT_ACTION )
+                                    else if( pAction->GetType() == MetaActionType::GRADIENT )
                                     {
                                         mapCurShape->mapShapeGradient.reset( new Gradient(
                                             static_cast< const MetaGradientAction* >( pAction )->GetGradient() ) );
@@ -3063,7 +3067,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         pAction = rMtf.GetAction( nCurAction );
 
-                        if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
+                        if( ( pAction->GetType() == MetaActionType::COMMENT ) &&
                                     ( static_cast<const MetaCommentAction*>( pAction )->GetComment().
                                             equalsIgnoreAsciiCase("XPATHFILL_SEQ_END") ) )
                         {
@@ -3211,7 +3215,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         pAction = rMtf.GetAction( nCurAction );
 
-                        if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
+                        if( ( pAction->GetType() == MetaActionType::COMMENT ) &&
                                     ( static_cast<const MetaCommentAction*>(pAction)->GetComment().
                                     equalsIgnoreAsciiCase("XPATHSTROKE_SEQ_END") ) )
                         {
@@ -3263,7 +3267,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     else if( ( pA->GetComment().equalsIgnoreAsciiCase( "XTEXT_EOP" ) ) )
                     {
                         const MetaAction* pNextAction = rMtf.GetAction( nCurAction + 1 );
-                        if( !( ( pNextAction->GetType() == META_COMMENT_ACTION ) &&
+                        if( !( ( pNextAction->GetType() == MetaActionType::COMMENT ) &&
                                ( static_cast<const MetaCommentAction*>(pNextAction)->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTSHAPE_END") )  ))
                         {
                             // nTextFound == -1 => no text found and end of paragraph reached
@@ -3296,7 +3300,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     else if( ( pA->GetComment().equalsIgnoreAsciiCase( "XTEXT_EOL" ) ) )
                     {
                         const MetaAction* pNextAction = rMtf.GetAction( nCurAction + 1 );
-                        if( !( ( pNextAction->GetType() == META_COMMENT_ACTION ) &&
+                        if( !( ( pNextAction->GetType() == MetaActionType::COMMENT ) &&
                                ( static_cast<const MetaCommentAction*>(pNextAction)->GetComment().equalsIgnoreAsciiCase("XTEXT_EOP") ) ) )
                         {
                             // nTextFound == -2 => no text found and end of line reached
@@ -3328,7 +3332,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMP_ACTION ):
+            case( MetaActionType::BMP ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -3341,7 +3345,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMPSCALE_ACTION ):
+            case( MetaActionType::BMPSCALE ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -3362,7 +3366,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMPSCALEPART_ACTION ):
+            case( MetaActionType::BMPSCALEPART ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -3375,7 +3379,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMPEX_ACTION ):
+            case( MetaActionType::BMPEX ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -3388,7 +3392,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMPEXSCALE_ACTION ):
+            case( MetaActionType::BMPEXSCALE ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -3409,7 +3413,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_BMPEXSCALEPART_ACTION ):
+            case( MetaActionType::BMPEXSCALEPART ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
@@ -3422,7 +3426,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TEXT_ACTION ):
+            case( MetaActionType::TEXT ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
@@ -3463,7 +3467,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TEXTRECT_ACTION ):
+            case( MetaActionType::TEXTRECT ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
@@ -3500,7 +3504,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_TEXTARRAY_ACTION ):
+            case( MetaActionType::TEXTARRAY ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
@@ -3541,7 +3545,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_STRETCHTEXT_ACTION ):
+            case( MetaActionType::STRETCHTEXT ):
             {
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
@@ -3582,39 +3586,39 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_CLIPREGION_ACTION ):
-            case( META_ISECTRECTCLIPREGION_ACTION ):
-            case( META_ISECTREGIONCLIPREGION_ACTION ):
-            case( META_MOVECLIPREGION_ACTION ):
+            case( MetaActionType::CLIPREGION ):
+            case( MetaActionType::ISECTRECTCLIPREGION ):
+            case( MetaActionType::ISECTREGIONCLIPREGION ):
+            case( MetaActionType::MOVECLIPREGION ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( mpVDev );
                 mbClipAttrChanged = true;
             }
             break;
 
-            case( META_REFPOINT_ACTION ):
-            case( META_MAPMODE_ACTION ):
-            case( META_LINECOLOR_ACTION ):
-            case( META_FILLCOLOR_ACTION ):
-            case( META_TEXTLINECOLOR_ACTION ):
-            case( META_TEXTFILLCOLOR_ACTION ):
-            case( META_TEXTCOLOR_ACTION ):
-            case( META_TEXTALIGN_ACTION ):
-            case( META_FONT_ACTION ):
-            case( META_PUSH_ACTION ):
-            case( META_POP_ACTION ):
-            case( META_LAYOUTMODE_ACTION ):
+            case( MetaActionType::REFPOINT ):
+            case( MetaActionType::MAPMODE ):
+            case( MetaActionType::LINECOLOR ):
+            case( MetaActionType::FILLCOLOR ):
+            case( MetaActionType::TEXTLINECOLOR ):
+            case( MetaActionType::TEXTFILLCOLOR ):
+            case( MetaActionType::TEXTCOLOR ):
+            case( MetaActionType::TEXTALIGN ):
+            case( MetaActionType::FONT ):
+            case( MetaActionType::PUSH ):
+            case( MetaActionType::POP ):
+            case( MetaActionType::LAYOUTMODE ):
             {
                 const_cast<MetaAction*>(pAction)->Execute( mpVDev );
             }
             break;
 
-            case( META_RASTEROP_ACTION ):
-            case( META_MASK_ACTION ):
-            case( META_MASKSCALE_ACTION ):
-            case( META_MASKSCALEPART_ACTION ):
-            case( META_WALLPAPER_ACTION ):
-            case( META_TEXTLINE_ACTION ):
+            case( MetaActionType::RASTEROP ):
+            case( MetaActionType::MASK ):
+            case( MetaActionType::MASKSCALE ):
+            case( MetaActionType::MASKSCALEPART ):
+            case( MetaActionType::WALLPAPER ):
+            case( MetaActionType::TEXTLINE ):
             {
                 // !!! >>> we don't want to support these actions
             }

@@ -1180,7 +1180,7 @@ namespace drawinglayer
                         SvtGraphicStroke* pSvtGraphicStroke = 0;
 
                         // #i121267# Not needed, does not give better quality compared with
-                        // the META_POLYPOLYGON_ACTION written by RenderPolygonHairlinePrimitive2D
+                        // the MetaActionType::POLYPOLYGON written by RenderPolygonHairlinePrimitive2D
                         // below
                         bool bSupportSvtGraphicStroke(false);
 
@@ -1686,7 +1686,7 @@ namespace drawinglayer
                     SvtGraphicFill* pSvtGraphicFill = 0;
 
                     // #i121267# Not needed, does not give better quality compared with
-                    // the META_POLYPOLYGON_ACTION written by the DrawPolyPolygon command
+                    // the MetaActionType::POLYPOLYGON written by the DrawPolyPolygon command
                     // below
                     bool bSupportSvtGraphicFill(false);
 
@@ -1864,7 +1864,7 @@ namespace drawinglayer
                                 SvtGraphicFill* pSvtGraphicFill = 0;
 
                                 // #i121267# Not needed, does not give better quality compared with
-                                // the META_POLYPOLYGON_ACTION written by the DrawPolyPolygon command
+                                // the MetaActionType::POLYPOLYGON written by the DrawPolyPolygon command
                                 // below
                                 bool bSupportSvtGraphicFill(false);
 

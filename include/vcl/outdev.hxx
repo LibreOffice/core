@@ -1318,7 +1318,7 @@ public:
                 const Point& rSrcPtPixel,
                 const Size& rSecSizePixel,
                 const Bitmap& rBitmap,
-                sal_uLong nAction = META_BMPSCALEPART_ACTION)
+                MetaActionType nAction = MetaActionType::BMPSCALEPART)
       */
     void                        DrawBitmap(
                                     const Point& rDestPt,
@@ -1331,7 +1331,7 @@ public:
                 const Point& rSrcPtPixel,
                 const Size& rSecSizePixel,
                 const Bitmap& rBitmap,
-                sal_uLong nAction = META_BMPSCALEPART_ACTION)
+                MetaActionType nAction = MetaActionType::BMPSCALEPART)
       */
     void                        DrawBitmap(
                                     const Point& rDestPt,
@@ -1344,7 +1344,7 @@ public:
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel,
                                     const Bitmap& rBitmap,
-                                    sal_uLong nAction = META_BMPSCALEPART_ACTION );
+                                    MetaActionType nAction = MetaActionType::BMPSCALEPART );
 
     /** @overload
         void DrawBitmapEx(
@@ -1353,7 +1353,7 @@ public:
                 const Point& rSrcPtPixel,
                 const Size& rSecSizePixel,
                 const BitmapEx& rBitmapEx,
-                sal_uLong nAction = META_BMPEXSCALEPART_ACTION)
+                MetaActionType nAction = MetaActionType::BMPEXSCALEPART)
      */
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
@@ -1367,7 +1367,7 @@ public:
                 const Point& rSrcPtPixel,
                 const Size& rSecSizePixel,
                 const BitmapEx& rBitmapEx,
-                sal_uLong nAction = META_BMPEXSCALEPART_ACTION)
+                MetaActionType nAction = MetaActionType::BMPEXSCALEPART)
      */
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
@@ -1380,7 +1380,7 @@ public:
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel,
                                     const BitmapEx& rBitmapEx,
-                                    sal_uLong nAction = META_BMPEXSCALEPART_ACTION );
+                                    MetaActionType nAction = MetaActionType::BMPEXSCALEPART );
 
     /** @overload
         virtual void DrawImage(
@@ -1603,7 +1603,7 @@ public:
     void                        DrawMask( const Point& rDestPt, const Size& rDestSize,
                                           const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                           const Bitmap& rBitmap, const Color& rMaskColor,
-                                          sal_uLong nAction );
+                                          MetaActionType nAction );
 
 protected:
 

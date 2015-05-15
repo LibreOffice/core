@@ -163,71 +163,73 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
         {
             switch( pAction->GetType() )
             {
-                case META_POINT_ACTION:
-                case META_LINE_ACTION:
-                case META_RECT_ACTION:
-                case META_ROUNDRECT_ACTION:
-                case META_ELLIPSE_ACTION:
-                case META_ARC_ACTION:
-                case META_PIE_ACTION:
-                case META_CHORD_ACTION:
-                case META_POLYLINE_ACTION:
-                case META_POLYGON_ACTION:
-                case META_POLYPOLYGON_ACTION:
-                case META_TEXT_ACTION:
-                case META_TEXTARRAY_ACTION:
-                case META_STRETCHTEXT_ACTION:
-                case META_TEXTRECT_ACTION:
-                case META_GRADIENT_ACTION:
-                case META_HATCH_ACTION:
-                case META_WALLPAPER_ACTION:
-                case META_EPS_ACTION:
-                case META_TEXTLINE_ACTION:
-                case META_FLOATTRANSPARENT_ACTION:
-                case META_GRADIENTEX_ACTION:
-                case META_BMPSCALEPART_ACTION:
-                case META_BMPEXSCALEPART_ACTION:
+                case MetaActionType::POINT:
+                case MetaActionType::LINE:
+                case MetaActionType::RECT:
+                case MetaActionType::ROUNDRECT:
+                case MetaActionType::ELLIPSE:
+                case MetaActionType::ARC:
+                case MetaActionType::PIE:
+                case MetaActionType::CHORD:
+                case MetaActionType::POLYLINE:
+                case MetaActionType::POLYGON:
+                case MetaActionType::POLYPOLYGON:
+                case MetaActionType::TEXT:
+                case MetaActionType::TEXTARRAY:
+                case MetaActionType::STRETCHTEXT:
+                case MetaActionType::TEXTRECT:
+                case MetaActionType::GRADIENT:
+                case MetaActionType::HATCH:
+                case MetaActionType::WALLPAPER:
+                case MetaActionType::EPS:
+                case MetaActionType::TEXTLINE:
+                case MetaActionType::FLOATTRANSPARENT:
+                case MetaActionType::GRADIENTEX:
+                case MetaActionType::BMPSCALEPART:
+                case MetaActionType::BMPEXSCALEPART:
                     bVector = true;
                     break;
-                case META_BMP_ACTION:
-                case META_BMPSCALE_ACTION:
-                case META_BMPEX_ACTION:
-                case META_BMPEXSCALE_ACTION:
+                case MetaActionType::BMP:
+                case MetaActionType::BMPSCALE:
+                case MetaActionType::BMPEX:
+                case MetaActionType::BMPEXSCALE:
                     if( aGraphic.GetType() != GRAPHIC_NONE )
                     {
                         bVector = true;
                     }
                     else switch( pAction->GetType() )
                     {
-                        case META_BMP_ACTION:
+                        case MetaActionType::BMP:
                             {
                                 MetaBmpAction* pBmpAction = dynamic_cast< MetaBmpAction* >( pAction );
                                 if( pBmpAction )
                                     aGraphic = Graphic( pBmpAction->GetBitmap() );
                             }
                             break;
-                        case META_BMPSCALE_ACTION:
+                        case MetaActionType::BMPSCALE:
                             {
                                 MetaBmpScaleAction* pBmpScaleAction = dynamic_cast< MetaBmpScaleAction* >( pAction );
                                 if( pBmpScaleAction )
                                     aGraphic = Graphic( pBmpScaleAction->GetBitmap() );
                             }
                             break;
-                        case META_BMPEX_ACTION:
+                        case MetaActionType::BMPEX:
                             {
                                 MetaBmpExAction* pBmpExAction = dynamic_cast< MetaBmpExAction* >( pAction );
                                 if( pBmpExAction )
                                     aGraphic = Graphic( pBmpExAction->GetBitmapEx() );
                             }
                             break;
-                        case META_BMPEXSCALE_ACTION:
+                        case MetaActionType::BMPEXSCALE:
                             {
                                 MetaBmpExScaleAction* pBmpExScaleAction = dynamic_cast< MetaBmpExScaleAction* >( pAction );
                                 if( pBmpExScaleAction )
                                     aGraphic = Graphic( pBmpExScaleAction->GetBitmapEx() );
                             }
                             break;
+                        default: break;
                     }
+                default: break;
             }
 
             pAction = aMtf.NextAction();

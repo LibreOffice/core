@@ -20,8 +20,6 @@
 namespace
 {
 
-const size_t constMaxActionType = 513;
-
 OUString flagToString(PushFlags nFlag)
 {
     if (nFlag & PushFlags::LINECOLOR)
@@ -150,85 +148,86 @@ OUString convertFontWeigthToString(FontWeight eFontWeight)
     return OUString();
 }
 
-OString convertLineStyleToString(const sal_uInt16 nActionType)
+OString convertLineStyleToString(const MetaActionType nActionType)
 {
     switch (nActionType)
     {
-        case META_NULL_ACTION:                  return "null";
-        case META_PIXEL_ACTION:                 return "pixel";
-        case META_POINT_ACTION:                 return "point";
-        case META_LINE_ACTION:                  return "line";
-        case META_RECT_ACTION:                  return "rect";
-        case META_ROUNDRECT_ACTION:             return "roundrect";
-        case META_ELLIPSE_ACTION:               return "ellipse";
-        case META_ARC_ACTION:                   return "arc";
-        case META_PIE_ACTION:                   return "pie";
-        case META_CHORD_ACTION:                 return "chord";
-        case META_POLYLINE_ACTION:              return "polyline";
-        case META_POLYGON_ACTION:               return "polygon";
-        case META_POLYPOLYGON_ACTION:           return "polypolygon";
-        case META_TEXT_ACTION:                  return "text";
-        case META_TEXTARRAY_ACTION:             return "textarray";
-        case META_STRETCHTEXT_ACTION:           return "stretchtext";
-        case META_TEXTRECT_ACTION:              return "textrect";
-        case META_TEXTLINE_ACTION:              return "textline";
-        case META_BMP_ACTION:                   return "bmp";
-        case META_BMPSCALE_ACTION:              return "bmpscale";
-        case META_BMPSCALEPART_ACTION:          return "bmpscalepart";
-        case META_BMPEX_ACTION:                 return "bmpex";
-        case META_BMPEXSCALE_ACTION:            return "bmpexscale";
-        case META_BMPEXSCALEPART_ACTION:        return "bmpexscalepart";
-        case META_MASK_ACTION:                  return "mask";
-        case META_MASKSCALE_ACTION:             return "maskscale";
-        case META_MASKSCALEPART_ACTION:         return "maskscalepart";
-        case META_GRADIENT_ACTION:              return "gradient";
-        case META_GRADIENTEX_ACTION:            return "gradientex";
-        case META_HATCH_ACTION:                 return "hatch";
-        case META_WALLPAPER_ACTION:             return "wallpaper";
-        case META_CLIPREGION_ACTION:            return "clipregion";
-        case META_ISECTRECTCLIPREGION_ACTION:   return "sectrectclipregion";
-        case META_ISECTREGIONCLIPREGION_ACTION: return "sectregionclipregion";
-        case META_MOVECLIPREGION_ACTION:        return "moveclipregion";
-        case META_LINECOLOR_ACTION:             return "linecolor";
-        case META_FILLCOLOR_ACTION:             return "fillcolor";
-        case META_TEXTCOLOR_ACTION:             return "textcolor";
-        case META_TEXTFILLCOLOR_ACTION:         return "textfillcolor";
-        case META_TEXTLINECOLOR_ACTION:         return "textlinecolor";
-        case META_OVERLINECOLOR_ACTION:         return "overlinecolor";
-        case META_TEXTALIGN_ACTION:             return "textalign";
-        case META_MAPMODE_ACTION:               return "mapmode";
-        case META_FONT_ACTION:                  return "font";
-        case META_PUSH_ACTION:                  return "push";
-        case META_POP_ACTION:                   return "pop";
-        case META_RASTEROP_ACTION:              return "rasterop";
-        case META_TRANSPARENT_ACTION:           return "transparent";
-        case META_FLOATTRANSPARENT_ACTION:      return "floattransparent";
-        case META_EPS_ACTION:                   return "eps";
-        case META_REFPOINT_ACTION:              return "refpoint";
-        case META_COMMENT_ACTION:               return "comment";
-        case META_LAYOUTMODE_ACTION:            return "layoutmode";
-        case META_TEXTLANGUAGE_ACTION:          return "textlanguage";
+        case MetaActionType::NONE:                  return "null";
+        case MetaActionType::PIXEL:                 return "pixel";
+        case MetaActionType::POINT:                 return "point";
+        case MetaActionType::LINE:                  return "line";
+        case MetaActionType::RECT:                  return "rect";
+        case MetaActionType::ROUNDRECT:             return "roundrect";
+        case MetaActionType::ELLIPSE:               return "ellipse";
+        case MetaActionType::ARC:                   return "arc";
+        case MetaActionType::PIE:                   return "pie";
+        case MetaActionType::CHORD:                 return "chord";
+        case MetaActionType::POLYLINE:              return "polyline";
+        case MetaActionType::POLYGON:               return "polygon";
+        case MetaActionType::POLYPOLYGON:           return "polypolygon";
+        case MetaActionType::TEXT:                  return "text";
+        case MetaActionType::TEXTARRAY:             return "textarray";
+        case MetaActionType::STRETCHTEXT:           return "stretchtext";
+        case MetaActionType::TEXTRECT:              return "textrect";
+        case MetaActionType::TEXTLINE:              return "textline";
+        case MetaActionType::BMP:                   return "bmp";
+        case MetaActionType::BMPSCALE:              return "bmpscale";
+        case MetaActionType::BMPSCALEPART:          return "bmpscalepart";
+        case MetaActionType::BMPEX:                 return "bmpex";
+        case MetaActionType::BMPEXSCALE:            return "bmpexscale";
+        case MetaActionType::BMPEXSCALEPART:        return "bmpexscalepart";
+        case MetaActionType::MASK:                  return "mask";
+        case MetaActionType::MASKSCALE:             return "maskscale";
+        case MetaActionType::MASKSCALEPART:         return "maskscalepart";
+        case MetaActionType::GRADIENT:              return "gradient";
+        case MetaActionType::GRADIENTEX:            return "gradientex";
+        case MetaActionType::HATCH:                 return "hatch";
+        case MetaActionType::WALLPAPER:             return "wallpaper";
+        case MetaActionType::CLIPREGION:            return "clipregion";
+        case MetaActionType::ISECTRECTCLIPREGION:   return "sectrectclipregion";
+        case MetaActionType::ISECTREGIONCLIPREGION: return "sectregionclipregion";
+        case MetaActionType::MOVECLIPREGION:        return "moveclipregion";
+        case MetaActionType::LINECOLOR:             return "linecolor";
+        case MetaActionType::FILLCOLOR:             return "fillcolor";
+        case MetaActionType::TEXTCOLOR:             return "textcolor";
+        case MetaActionType::TEXTFILLCOLOR:         return "textfillcolor";
+        case MetaActionType::TEXTLINECOLOR:         return "textlinecolor";
+        case MetaActionType::OVERLINECOLOR:         return "overlinecolor";
+        case MetaActionType::TEXTALIGN:             return "textalign";
+        case MetaActionType::MAPMODE:               return "mapmode";
+        case MetaActionType::FONT:                  return "font";
+        case MetaActionType::PUSH:                  return "push";
+        case MetaActionType::POP:                   return "pop";
+        case MetaActionType::RASTEROP:              return "rasterop";
+        case MetaActionType::TRANSPARENT:           return "transparent";
+        case MetaActionType::FLOATTRANSPARENT:      return "floattransparent";
+        case MetaActionType::EPS:                   return "eps";
+        case MetaActionType::REFPOINT:              return "refpoint";
+        case MetaActionType::COMMENT:               return "comment";
+        case MetaActionType::LAYOUTMODE:            return "layoutmode";
+        case MetaActionType::TEXTLANGUAGE:          return "textlanguage";
     }
     return "";
 }
 
 } // anonymous namespace
 
-MetafileXmlDump::MetafileXmlDump() :
-    maFilter(constMaxActionType, false)
-{}
+MetafileXmlDump::MetafileXmlDump()
+{
+    maFilter.fill(false);
+}
 
 MetafileXmlDump::~MetafileXmlDump()
 {}
 
-void MetafileXmlDump::filterActionType(const sal_uInt16 nActionType, bool bShouldFilter)
+void MetafileXmlDump::filterActionType(const MetaActionType nActionType, bool bShouldFilter)
 {
     maFilter[nActionType] = bShouldFilter;
 }
 
 void MetafileXmlDump::filterAllActionTypes()
 {
-    maFilter.assign(constMaxActionType, true);
+    maFilter.fill(true);
 }
 
 xmlDocPtr MetafileXmlDump::dumpAndParse(const GDIMetaFile& rMetaFile, const OUString& rTempStreamName)
@@ -261,7 +260,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
     for(size_t nAction = 0; nAction < rMetaFile.GetActionSize(); ++nAction)
     {
         MetaAction* pAction = rMetaFile.GetAction(nAction);
-        const sal_uInt16 nActionType = pAction->GetType();
+        const MetaActionType nActionType = pAction->GetType();
         if (maFilter[nActionType])
             continue;
 
@@ -269,7 +268,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
 
         switch (nActionType)
         {
-            case META_LINE_ACTION:
+            case MetaActionType::LINE:
             {
                 MetaLineAction* pMetaLineAction = static_cast<MetaLineAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -290,7 +289,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_PUSH_ACTION:
+            case MetaActionType::PUSH:
             {
                 MetaPushAction* pMetaPushAction = static_cast<MetaPushAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -299,13 +298,13 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_POP_ACTION:
+            case MetaActionType::POP:
             {
                 rWriter.endElement();
             }
             break;
 
-            case META_RASTEROP_ACTION:
+            case MetaActionType::RASTEROP:
             {
                 MetaRasterOpAction* pMetaRasterOpAction = static_cast<MetaRasterOpAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -318,7 +317,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_TEXTLINECOLOR_ACTION:
+            case MetaActionType::TEXTLINECOLOR:
             {
                 MetaTextLineColorAction* pMetaTextLineColorAction = static_cast<MetaTextLineColorAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -328,7 +327,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_TEXTFILLCOLOR_ACTION:
+            case MetaActionType::TEXTFILLCOLOR:
             {
                 MetaTextFillColorAction* pMetaTextFillColorAction = static_cast<MetaTextFillColorAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -342,7 +341,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_FONT_ACTION:
+            case MetaActionType::FONT:
             {
                 MetaFontAction* pMetaFontAction = static_cast<MetaFontAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -362,7 +361,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_TEXTALIGN_ACTION:
+            case MetaActionType::TEXTALIGN:
             {
                 MetaTextAlignAction* pMetaTextAlignAction = static_cast<MetaTextAlignAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -373,7 +372,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_TEXTCOLOR_ACTION:
+            case MetaActionType::TEXTCOLOR:
             {
                 MetaTextColorAction* pMetaTextColorAction = static_cast<MetaTextColorAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -383,7 +382,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_TEXTARRAY_ACTION:
+            case MetaActionType::TEXTARRAY:
             {
                 MetaTextArrayAction* pMetaTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -414,7 +413,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_LINECOLOR_ACTION:
+            case MetaActionType::LINECOLOR:
             {
                 MetaLineColorAction* pMetaLineColorAction = static_cast<MetaLineColorAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -424,7 +423,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_FILLCOLOR_ACTION:
+            case MetaActionType::FILLCOLOR:
             {
                 MetaFillColorAction* pMetaFillColorAction = static_cast<MetaFillColorAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -434,7 +433,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_CLIPREGION_ACTION:
+            case MetaActionType::CLIPREGION:
             {
                 const MetaClipRegionAction* pA = static_cast< const MetaClipRegionAction* >(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -452,7 +451,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_ISECTRECTCLIPREGION_ACTION:
+            case MetaActionType::ISECTRECTCLIPREGION:
             {
                 MetaISectRectClipRegionAction* pMetaISectRectClipRegionAction = static_cast<MetaISectRectClipRegionAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -467,7 +466,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_POLYLINE_ACTION:
+            case MetaActionType::POLYLINE:
             {
                 MetaPolyLineAction* pMetaPolyLineAction = static_cast<MetaPolyLineAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -492,7 +491,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_POLYGON_ACTION:
+            case MetaActionType::POLYGON:
             {
                 MetaPolygonAction* pMetaPolygonAction = static_cast<MetaPolygonAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
@@ -510,7 +509,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
             }
             break;
 
-            case META_COMMENT_ACTION:
+            case MetaActionType::COMMENT:
             {
                 MetaCommentAction* pMetaCommentAction = static_cast<MetaCommentAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);

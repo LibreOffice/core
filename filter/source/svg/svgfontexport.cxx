@@ -93,13 +93,13 @@ void SVGFontExport::implCollectGlyphs()
 
             for( size_t i = 0, nCount = rMtf.GetActionSize(); i < nCount; ++i )
             {
-                OUString     aText;
-                MetaAction*         pAction = rMtf.GetAction( i );
-                const sal_uInt16    nType = pAction->GetType();
+                OUString             aText;
+                MetaAction*          pAction = rMtf.GetAction( i );
+                const MetaActionType nType = pAction->GetType();
 
                 switch( nType )
                 {
-                    case( META_TEXT_ACTION ):
+                    case( MetaActionType::TEXT ):
                     {
                         const MetaTextAction* pA = static_cast<const MetaTextAction*>(pAction);
                         sal_Int32             aLength=std::min( pA->GetText().getLength(), pA->GetLen() );
@@ -107,14 +107,14 @@ void SVGFontExport::implCollectGlyphs()
                     }
                     break;
 
-                    case( META_TEXTRECT_ACTION ):
+                    case( MetaActionType::TEXTRECT ):
                     {
                         const MetaTextRectAction* pA = static_cast<const MetaTextRectAction*>(pAction);
                         aText = pA->GetText();
                     }
                     break;
 
-                    case( META_TEXTARRAY_ACTION ):
+                    case( MetaActionType::TEXTARRAY ):
                     {
                         const MetaTextArrayAction*  pA = static_cast<const MetaTextArrayAction*>(pAction);
                         sal_Int32                   aLength=std::min( pA->GetText().getLength(), pA->GetLen() );
@@ -122,7 +122,7 @@ void SVGFontExport::implCollectGlyphs()
                     }
                     break;
 
-                    case( META_STRETCHTEXT_ACTION ):
+                    case( MetaActionType::STRETCHTEXT ):
                     {
                         const MetaStretchTextAction* pA = static_cast<const MetaStretchTextAction*>(pAction);
                         sal_Int32                    aLength=std::min( pA->GetText().getLength(), pA->GetLen() );

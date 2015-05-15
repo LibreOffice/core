@@ -15,13 +15,15 @@
 
 #include <libxml/tree.h>
 #include <vcl/gdimtf.hxx>
-#include <vector>
+#include <vcl/metaactiontypes.hxx>
+#include <o3tl/enumarray.hxx>
 
 class XmlWriter;
+enum class MetaActionType;
 
 class OOO_DLLPUBLIC_TEST MetafileXmlDump
 {
-    std::vector<bool> maFilter;
+    o3tl::enumarray<MetaActionType, bool> maFilter;
 
     void writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter);
 
@@ -29,7 +31,7 @@ public:
     MetafileXmlDump();
     virtual ~MetafileXmlDump();
 
-    void filterActionType(const sal_uInt16 nActionType, bool bShouldFilter);
+    void filterActionType(const MetaActionType nActionType, bool bShouldFilter);
     void filterAllActionTypes();
 
     /** The actual result that will be used for testing.
