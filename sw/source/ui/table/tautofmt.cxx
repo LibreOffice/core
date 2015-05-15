@@ -58,12 +58,11 @@ public:
 
     virtual void Resize() SAL_OVERRIDE;
 protected:
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
     SwTableAutoFmt          aCurData;
     ScopedVclPtr<VirtualDevice> aVD;
-    SvtScriptedTextHelper   aScriptedText;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     bool                    bFitWidth;
     bool                    mbRTL;
@@ -81,38 +80,36 @@ private:
     const OUString          aStrSum;
     SvNumberFormatter*      pNumFmt;
 
-    uno::Reference< i18n::XBreakIterator >       m_xBreak;
+    uno::Reference<i18n::XBreakIterator> m_xBreak;
 
-    void    Init            ();
-    void    DoPaint         ( const Rectangle& rRect );
-    void    CalcCellArray   ( bool bFitWidth );
-    void    CalcLineMap     ();
-    void    PaintCells      ();
+    void    Init();
+    void    DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
+    void    CalcCellArray(bool bFitWidth);
+    void    CalcLineMap();
+    void    PaintCells(vcl::RenderContext& rRenderContext);
 
     sal_uInt8           GetFormatIndex( size_t nCol, size_t nRow ) const;
     const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
 
-    void                DrawString( size_t nCol, size_t nRow );
-    void                DrawStrings();
-    void                DrawBackground();
+    void DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow);
+    void DrawStrings(vcl::RenderContext& rRenderContext);
+    void DrawBackground(vcl::RenderContext& rRenderContext);
 
-    void                MakeFonts( sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont );
+    void MakeFonts(sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont);
 };
 
 class SwStringInputDlg : public ModalDialog
 {
 public:
-            SwStringInputDlg(     vcl::Window* pParent,
-                            const OUString& rTitle,
-                            const OUString& rEditTitle,
-                            const OUString& rDefault );
-            virtual ~SwStringInputDlg();
+    SwStringInputDlg(vcl::Window* pParent, const OUString& rTitle,
+                     const OUString& rEditTitle, const OUString& rDefault );
+    virtual ~SwStringInputDlg();
     virtual void dispose() SAL_OVERRIDE;
 
     OUString GetInputString() const;
 
 private:
-    VclPtr<Edit>           m_pEdInput;   // Edit obtains the focus.
+    VclPtr<Edit> m_pEdInput; // Edit obtains the focus.
 };
 
 SwStringInputDlg::SwStringInputDlg(vcl::Window* pParent, const OUString& rTitle,
@@ -515,7 +512,6 @@ AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent, WinBits nStyle) :
         Window          ( pParent, nStyle ),
         aCurData        ( OUString() ),
         aVD             ( VclPtr<VirtualDevice>::Create(*this) ),
-        aScriptedText   ( *aVD.get() ),
         bFitWidth       ( false ),
         mbRTL           ( false ),
         aStrJan         ( SW_RES( STR_JAN ) ),
@@ -630,93 +626,124 @@ const SvxBoxItem& AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
     return aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBox();
 }
 
-void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
+void AutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow)
 {
     // Output of the cell text:
-    sal_uLong   nNum;
-    double  nVal;
+    sal_uLong nNum;
+    double nVal;
     OUString cellString;
-    sal_uInt8    nIndex = static_cast< sal_uInt8 >( maArray.GetCellIndex( nCol, nRow, mbRTL ) );
+    sal_uInt8 nIndex = static_cast<sal_uInt8>(maArray.GetCellIndex(nCol, nRow, mbRTL));
 
-    switch( nIndex )
+    switch(nIndex)
     {
-    case  1: cellString = aStrJan;          break;
-    case  2: cellString = aStrFeb;          break;
-    case  3: cellString = aStrMar;          break;
-    case  5: cellString = aStrNorth;        break;
-    case 10: cellString = aStrMid;          break;
-    case 15: cellString = aStrSouth;        break;
+    case 1:
+        cellString = aStrJan;
+        break;
+    case 2:
+        cellString = aStrFeb;
+        break;
+    case 3:
+        cellString = aStrMar;
+        break;
+    case 5:
+        cellString = aStrNorth;
+        break;
+    case 10:
+        cellString = aStrMid;
+        break;
+    case 15:
+        cellString = aStrSouth;
+        break;
     case  4:
-    case 20: cellString = aStrSum;          break;
-
-    case  6:
-    case  8:
+    case 20:
+        cellString = aStrSum;
+        break;
+    case 6:
+    case 8:
     case 16:
-    case 18:    nVal = nIndex;
+    case 18:
+        nVal = nIndex;
         nNum = 5;
         goto MAKENUMSTR;
     case 17:
-    case  7:    nVal = nIndex;
+    case 7:
+        nVal = nIndex;
         nNum = 6;
         goto MAKENUMSTR;
     case 11:
     case 12:
-    case 13:    nVal = nIndex;
+    case 13:
+        nVal = nIndex;
         nNum = 12 == nIndex ? 10 : 9;
         goto MAKENUMSTR;
+    case 9:
+        nVal = 21; nNum = 7;
+        goto MAKENUMSTR;
+    case 14:
+        nVal = 36; nNum = 11;
+        goto MAKENUMSTR;
+    case 19:
+        nVal = 51; nNum = 7;
+        goto MAKENUMSTR;
+    case 21:
+        nVal = 33; nNum = 13;
+        goto MAKENUMSTR;
+    case 22:
+        nVal = 36; nNum = 14;
+        goto MAKENUMSTR;
+    case 23:
+        nVal = 39; nNum = 13;
+        goto MAKENUMSTR;
+    case 24:
+        nVal = 108; nNum = 15;
+        goto MAKENUMSTR;
 
-    case  9:    nVal = 21; nNum = 7;    goto MAKENUMSTR;
-    case 14:    nVal = 36; nNum = 11;   goto MAKENUMSTR;
-    case 19:    nVal = 51; nNum = 7;    goto MAKENUMSTR;
-    case 21:    nVal = 33; nNum = 13;   goto MAKENUMSTR;
-    case 22:    nVal = 36; nNum = 14;   goto MAKENUMSTR;
-    case 23:    nVal = 39; nNum = 13;   goto MAKENUMSTR;
-    case 24:    nVal = 108; nNum = 15;  goto MAKENUMSTR;
 MAKENUMSTR:
-        if( aCurData.IsValueFormat() )
+        if (aCurData.IsValueFormat())
         {
             OUString sFmt;
             LanguageType eLng, eSys;
-            aCurData.GetBoxFmt( (sal_uInt8)nNum ).GetValueFormat( sFmt, eLng, eSys );
+            aCurData.GetBoxFmt(sal_uInt8(nNum)).GetValueFormat(sFmt, eLng, eSys);
 
             short nType;
             bool bNew;
             sal_Int32 nCheckPos;
-            sal_uInt32 nKey = pNumFmt->GetIndexPuttingAndConverting( sFmt, eLng,
-                                                                     eSys, nType, bNew, nCheckPos);
+            sal_uInt32 nKey = pNumFmt->GetIndexPuttingAndConverting(sFmt, eLng,
+                                                                    eSys, nType, bNew, nCheckPos);
             Color* pDummy;
-            pNumFmt->GetOutputString( nVal, nKey, cellString, &pDummy );
+            pNumFmt->GetOutputString(nVal, nKey, cellString, &pDummy);
         }
         else
-            cellString = OUString::number((sal_Int32)nVal);
+            cellString = OUString::number(sal_Int32(nVal));
         break;
 
     }
 
-    if( !cellString.isEmpty() )
+    if (!cellString.isEmpty())
     {
-        Size                aStrSize;
-        sal_uInt8           nFmtIndex       = GetFormatIndex( nCol, nRow );
-        Rectangle           cellRect        = maArray.GetCellRect( nCol, nRow );
-        Point               aPos            = cellRect.TopLeft();
-        long                nRightX         = 0;
+        SvtScriptedTextHelper aScriptedText(rRenderContext);
+        Size aStrSize;
+        sal_uInt8 nFmtIndex = GetFormatIndex( nCol, nRow );
+        Rectangle cellRect = maArray.GetCellRect( nCol, nRow );
+        Point aPos = cellRect.TopLeft();
+        long nRightX = 0;
 
-        Size theMaxStrSize( cellRect.GetWidth() - FRAME_OFFSET,
-                            cellRect.GetHeight() - FRAME_OFFSET );
-        if( aCurData.IsFont() )
+        Size theMaxStrSize(cellRect.GetWidth() - FRAME_OFFSET,
+                           cellRect.GetHeight() - FRAME_OFFSET);
+        if (aCurData.IsFont())
         {
             vcl::Font aFont, aCJKFont, aCTLFont;
-            MakeFonts( nFmtIndex, aFont, aCJKFont, aCTLFont );
-            aScriptedText.SetFonts( &aFont, &aCJKFont, &aCTLFont );
+            MakeFonts(nFmtIndex, aFont, aCJKFont, aCTLFont);
+            aScriptedText.SetFonts(&aFont, &aCJKFont, &aCTLFont);
         }
         else
             aScriptedText.SetDefaultFont();
 
-        aScriptedText.SetText( cellString, m_xBreak );
+        aScriptedText.SetText(cellString, m_xBreak);
         aStrSize = aScriptedText.GetTextSize();
 
-        if( aCurData.IsFont() &&
-            theMaxStrSize.Height() < aStrSize.Height() )
+        if (aCurData.IsFont() &&
+            theMaxStrSize.Height() < aStrSize.Height())
         {
                 // If the string in this font does not
                 // fit into the cell, the standard font
@@ -725,11 +752,11 @@ MAKENUMSTR:
                 aStrSize = aScriptedText.GetTextSize();
         }
 
-        while( theMaxStrSize.Width() <= aStrSize.Width() &&
-                cellString.getLength() > 1 )
+        while (theMaxStrSize.Width() <= aStrSize.Width() &&
+               cellString.getLength() > 1)
         {
-            cellString = cellString.copy(0, cellString.getLength() - 1 );
-            aScriptedText.SetText( cellString, m_xBreak );
+            cellString = cellString.copy(0, cellString.getLength() - 1);
+            aScriptedText.SetText(cellString, m_xBreak);
             aStrSize = aScriptedText.GetTextSize();
         }
 
@@ -739,12 +766,12 @@ MAKENUMSTR:
         aPos.Y() += (nRowHeight - aStrSize.Height()) / 2;
 
         // horizontal
-        if( mbRTL )
+        if (mbRTL)
             aPos.X() += nRightX;
         else if (aCurData.IsJustify())
         {
             const SvxAdjustItem& rAdj = aCurData.GetBoxFmt(nFmtIndex).GetAdjust();
-            switch ( rAdj.GetAdjust() )
+            switch (rAdj.GetAdjust())
             {
                 case SVX_ADJUST_LEFT:
                     aPos.X() += FRAME_OFFSET;
@@ -753,67 +780,67 @@ MAKENUMSTR:
                     aPos.X() += nRightX;
                     break;
                 default:
-                    aPos.X() += (cellRect.GetWidth() - aStrSize.Width())/2;
+                    aPos.X() += (cellRect.GetWidth() - aStrSize.Width()) / 2;
                     break;
             }
         }
         else
         {
             // Standard align:
-            if ( (nCol == 0) || (nIndex == 4) )
+            if (nCol == 0 || nIndex == 4)
             {
                 // Text-Label left or sum left aligned
                 aPos.X() += FRAME_OFFSET;
             }
             else
             {
-                    // numbers/dates right aligned
+                // numbers/dates right aligned
                 aPos.X() += nRightX;
             }
         }
 
-        aScriptedText.DrawText( aPos );
+        aScriptedText.DrawText(aPos);
     }
 }
 
 #undef FRAME_OFFSET
 
-void AutoFmtPreview::DrawStrings()
+void AutoFmtPreview::DrawStrings(vcl::RenderContext& rRenderContext)
 {
-    for( size_t nRow = 0; nRow < 5; ++nRow )
-        for( size_t nCol = 0; nCol < 5; ++nCol )
-            DrawString( nCol, nRow );
+    for (size_t nRow = 0; nRow < 5; ++nRow)
+        for (size_t nCol = 0; nCol < 5; ++nCol)
+            DrawString(rRenderContext, nCol, nRow);
 }
 
-void AutoFmtPreview::DrawBackground()
+void AutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
 {
-    for( size_t nRow = 0; nRow < 5; ++nRow )
+    for (size_t nRow = 0; nRow < 5; ++nRow)
     {
-        for( size_t nCol = 0; nCol < 5; ++nCol )
+        for (size_t nCol = 0; nCol < 5; ++nCol)
         {
-            SvxBrushItem aBrushItem( aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBackground() );
+            SvxBrushItem aBrushItem(aCurData.GetBoxFmt(GetFormatIndex(nCol, nRow)).GetBackground());
 
-            aVD->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-            aVD->SetLineColor();
-            aVD->SetFillColor( aBrushItem.GetColor() );
-            aVD->DrawRect( maArray.GetCellRect( nCol, nRow ) );
-            aVD->Pop();
+            rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
+            rRenderContext.SetLineColor();
+            rRenderContext.SetFillColor(aBrushItem.GetColor());
+            rRenderContext.DrawRect(maArray.GetCellRect(nCol, nRow));
+            rRenderContext.Pop();
         }
     }
 }
 
-void AutoFmtPreview::PaintCells()
+void AutoFmtPreview::PaintCells(vcl::RenderContext& rRenderContext)
 {
     // 1) background
-    if ( aCurData.IsBackground() )
-        DrawBackground();
+    if (aCurData.IsBackground())
+        DrawBackground(rRenderContext);
 
     // 2) values
-    DrawStrings();
+    DrawStrings(rRenderContext);
 
     // 3) border
-    if ( aCurData.IsFrame() )
-        maArray.DrawArray( *aVD.get() );
+    if (aCurData.IsFrame())
+        maArray.DrawArray(rRenderContext);
 }
 
 void AutoFmtPreview::Init()
@@ -877,56 +904,58 @@ void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
     bFitWidth = aCurData.IsJustify();  // true;  //???
     CalcCellArray( bFitWidth );
     CalcLineMap();
-    DoPaint( Rectangle( Point(0,0), GetSizePixel() ) );
+    Invalidate(Rectangle(Point(0,0), GetSizePixel()));
 }
 
-void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
+void AutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
     sal_uInt32 nOldDrawMode = aVD->GetDrawMode();
-    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        aVD->SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+    if (rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())
+        aVD->SetDrawMode(DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT);
 
-    Bitmap  thePreview;
-    Point   aCenterPos;
-    Size    theWndSize = GetSizePixel();
-    Color   oldColor;
+    Bitmap thePreview;
+    Point aCenterPos;
+    Size theWndSize = GetSizePixel();
+    Color oldColor;
     vcl::Font aFont;
 
     aFont = aVD->GetFont();
     aFont.SetTransparent( true );
 
-    aVD->SetFont          ( aFont );
-    aVD->SetLineColor     ();
-    const Color& rWinColor = GetSettings().GetStyleSettings().GetWindowColor();
-    aVD->SetBackground    ( Wallpaper(rWinColor) );
-    aVD->SetFillColor     ( rWinColor );
-    aVD->SetOutputSizePixel  ( aPrvSize );
+    aVD->SetFont(aFont);
+    aVD->SetLineColor();
+    const Color& rWinColor = rRenderContext.GetSettings().GetStyleSettings().GetWindowColor();
+    aVD->SetBackground(Wallpaper(rWinColor));
+    aVD->SetFillColor(rWinColor);
+    aVD->SetOutputSizePixel(aPrvSize);
 
     // Draw cells on virtual device
     // and save the result
-    PaintCells();
-    thePreview = aVD->GetBitmap( Point(0,0), aPrvSize );
+    PaintCells(*aVD.get());
+    thePreview = aVD->GetBitmap(Point(0,0), aPrvSize);
 
     // Draw the Frame and center the preview:
     // (virtual Device for window output)
-    aVD->SetOutputSizePixel( theWndSize );
+    aVD->SetOutputSizePixel(theWndSize);
     oldColor = aVD->GetLineColor();
     aVD->SetLineColor();
-    aVD->DrawRect( Rectangle( Point(0,0), theWndSize ) );
-    SetLineColor( oldColor );
-    aCenterPos  = Point( (theWndSize.Width()  - aPrvSize.Width() ) / 2,
-                         (theWndSize.Height() - aPrvSize.Height()) / 2 );
-    aVD->DrawBitmap( aCenterPos, thePreview );
+    aVD->DrawRect(Rectangle(Point(0,0), theWndSize));
+
+    rRenderContext.SetLineColor(oldColor);
+
+    aCenterPos = Point((theWndSize.Width()  - aPrvSize.Width())  / 2,
+                       (theWndSize.Height() - aPrvSize.Height()) / 2);
+    aVD->DrawBitmap(aCenterPos, thePreview);
 
     // Output in the preview window:
-    DrawBitmap( Point(0,0), aVD->GetBitmap( Point(0,0), theWndSize ) );
+    rRenderContext.DrawBitmap(Point(0, 0), aVD->GetBitmap(Point(0,0), theWndSize));
 
-    aVD->SetDrawMode( nOldDrawMode );
+    aVD->SetDrawMode(nOldDrawMode);
 }
 
-void AutoFmtPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void AutoFmtPreview::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
-    DoPaint( rRect );
+    DoPaint(rRenderContext, rRect);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
