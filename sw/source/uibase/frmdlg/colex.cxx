@@ -336,49 +336,49 @@ SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
 
 VCL_BUILDER_FACTORY(SwColumnOnlyExample)
 
-void SwColumnOnlyExample::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
+void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color& rFieldColor = rStyleSettings.GetFieldColor();
     const Color& rDlgColor = rStyleSettings.GetDialogColor();
     const Color& rFieldTextColor = SwViewOption::GetFontColor();
     Color aGrayColor(COL_LIGHTGRAY);
-    if(rFieldColor == aGrayColor)
+    if (rFieldColor == aGrayColor)
         aGrayColor.Invert();
 
-    Size aLogSize(PixelToLogic(GetOutputSizePixel()));
+    Size aLogSize(rRenderContext.PixelToLogic(rRenderContext.GetOutputSizePixel()));
     Rectangle aCompleteRect(Point(0,0), aLogSize);
-    SetLineColor(rDlgColor);
-    SetFillColor(rDlgColor);
-    DrawRect(aCompleteRect);
+    rRenderContext.SetLineColor(rDlgColor);
+    rRenderContext.SetFillColor(rDlgColor);
+    rRenderContext.DrawRect(aCompleteRect);
 
-    SetLineColor( rFieldTextColor );
-    Point aTL(  (aLogSize.Width() - m_aFrmSize.Width()) / 2,
-                (aLogSize.Height() - m_aFrmSize.Height()) / 2);
+    rRenderContext.SetLineColor(rFieldTextColor);
+    Point aTL((aLogSize.Width() - m_aFrmSize.Width()) / 2,
+              (aLogSize.Height() - m_aFrmSize.Height()) / 2);
     Rectangle aRect(aTL, m_aFrmSize);
 
     //draw a shadow rectangle
-    SetFillColor( Color(COL_GRAY) );
+    rRenderContext.SetFillColor(Color(COL_GRAY));
     Rectangle aShadowRect(aRect);
     aShadowRect.Move(aTL.Y(), aTL.Y());
-    DrawRect(aShadowRect);
+    rRenderContext.DrawRect(aShadowRect);
 
-    SetFillColor( rFieldColor );
-    DrawRect(aRect);
+    rRenderContext.SetFillColor(rFieldColor);
+    rRenderContext.DrawRect(aRect);
 
-    SetFillColor( aGrayColor );
+    rRenderContext.SetFillColor(aGrayColor);
 
     //column separator?
     long nLength = aLogSize.Height() - 2 * aTL.Y();
-    Point aUp( aTL );
-    Point aDown( aTL.X(), nLength );
+    Point aUp(aTL);
+    Point aDown(aTL.X(), nLength);
     bool bLines = false;
-    if(m_aCols.GetLineAdj() != COLADJ_NONE)
+    if (m_aCols.GetLineAdj() != COLADJ_NONE)
     {
         bLines = true;
 
         sal_uInt16 nPercent = m_aCols.GetLineHeight();
-        if( nPercent != 100 )
+        if (nPercent != 100)
         {
             nLength -= nLength * nPercent / 100;
             switch(m_aCols.GetLineAdj())
@@ -389,36 +389,37 @@ void SwColumnOnlyExample::Paint( vcl::RenderContext& /*rRenderContext*/, const R
                         aUp.Y() += nLength / 2;
                         aDown.Y() -= nLength / 2;
                 break;
-                default:; //prevent warning
+                default:
+                    break; //prevent warning
             }
         }
 
     }
     const SwColumns& rCols = m_aCols.GetColumns();
     sal_uInt16 nColCount = rCols.size();
-    if( nColCount )
+    if (nColCount)
     {
-        DrawRect(aRect);
-        SetFillColor( rFieldColor );
+        rRenderContext.DrawRect(aRect);
+        rRenderContext.SetFillColor(rFieldColor);
         Rectangle aFrmRect(aTL, m_aFrmSize);
         long nSum = aTL.X();
-        for(sal_uInt16 i = 0; i < nColCount; i++)
+        for (sal_uInt16 i = 0; i < nColCount; i++)
         {
             const SwColumn* pCol = &rCols[i];
-            aFrmRect.Left()    = nSum + pCol->GetLeft();//nSum + pCol->GetLeft() + aTL.X();
-            nSum              += pCol->GetWishWidth();
-            aFrmRect.Right()   = nSum - pCol->GetRight();
-            DrawRect(aFrmRect);
+            aFrmRect.Left() = nSum + pCol->GetLeft(); //nSum + pCol->GetLeft() + aTL.X();
+            nSum += pCol->GetWishWidth();
+            aFrmRect.Right() = nSum - pCol->GetRight();
+            rRenderContext.DrawRect(aFrmRect);
         }
-        if(bLines )
+        if (bLines)
         {
             nSum = aTL.X();
-            for(sal_uInt16 i = 0; i < nColCount - 1; i++)
+            for (sal_uInt16 i = 0; i < nColCount - 1; i++)
             {
                 nSum += rCols[i].GetWishWidth();
                 aUp.X() = nSum;
                 aDown.X() = nSum;
-                DrawLine(aUp, aDown);
+                rRenderContext.DrawLine(aUp, aDown);
             }
         }
     }
@@ -488,6 +489,7 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
                                  const bool bSecond, const bool bEnabled)
 {
     SwPageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
+
     if (pGridItem && pGridItem->GetGridType())
     {
         //paint the grid now
@@ -549,7 +551,7 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
             aCharRect.Move(0, nYStart);
         }
 
-        if(pGridItem->IsRubyTextBelow())
+        if (pGridItem->IsRubyTextBelow())
             m_bVertical ? aRubyRect.Move(nBaseHeight, 0) : aRubyRect.Move(0, nBaseHeight);
         else
             m_bVertical ? aCharRect.Move(nRubyHeight, 0) : aCharRect.Move(0, nRubyHeight);
@@ -567,7 +569,7 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
             {
                 Point aStart = aCharRect.TopLeft();
                 Point aEnd = m_bVertical ? aCharRect.TopRight() : aCharRect.BottomLeft();
-                while(m_bVertical ? aStart.Y() < aRect.Bottom(): aStart.X() < aRect.Right())
+                while (m_bVertical ? aStart.Y() < aRect.Bottom(): aStart.X() < aRect.Right())
                 {
                     rRenderContext.DrawLine(aStart, aEnd);
                     if(m_bVertical)
