@@ -740,6 +740,16 @@ SmViewShell * SmCmdBoxWindow::GetView()
 
 void SmCmdBoxWindow::Resize()
 {
+     Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
+     aRect.Left()   += CMD_BOX_PADDING;
+     aRect.Top()    += CMD_BOX_PADDING_TOP;
+     aRect.Right()  -= CMD_BOX_PADDING;
+     aRect.Bottom() -= CMD_BOX_PADDING;
+
+    DecorationView aView(this);
+    aRect = aView.DrawFrame(aRect, DrawFrameStyle::In, DrawFrameFlags::NoDraw);
+
+    aEdit->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
     SfxDockingWindow::Resize();
     Invalidate();
 }
