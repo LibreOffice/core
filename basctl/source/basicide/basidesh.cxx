@@ -225,6 +225,12 @@ Shell::~Shell()
     SetWindow( 0 );
     SetCurWindow( 0 );
 
+    pTabBar.disposeAndClear();
+    aObjectCatalog.disposeAndClear();
+    aScrollBarBox.disposeAndClear();
+    aVScrollBar.disposeAndClear();
+    aHScrollBar.disposeAndClear();
+
     for (WindowTable::iterator it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
     {
         // no store; does already happen when the BasicManagers are destroyed
