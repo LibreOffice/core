@@ -87,45 +87,48 @@ Size SwLabPreview::GetOptimalSize() const
 
 VCL_BUILDER_FACTORY(SwLabPreview)
 
-void SwLabPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &)
+void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    const Size aSz(GetOutputSizePixel());
+    const Size aSz(rRenderContext.GetOutputSizePixel());
 
-    const long lOutWPix   = aSz.Width ();
-    const long lOutHPix   = aSz.Height();
+    const long lOutWPix = aSz.Width ();
+    const long lOutHPix = aSz.Height();
 
     // Scale factor
-    const float fxpix = (float)(lOutWPix - (2 * (lLeftWidth + 15))) / (float)lOutWPix;
+    const double fxpix = double(lOutWPix - (2 * (lLeftWidth + 15))) / double(lOutWPix);
 
-    const long lOutWPix23 = (long)((float)lOutWPix * fxpix);
-    const long lOutHPix23 = (long)((float)lOutHPix * fxpix);
+    const long lOutWPix23 = long(double(lOutWPix) * fxpix);
+    const long lOutHPix23 = long(double(lOutHPix) * fxpix);
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
     const Color& rFieldTextColor = SwViewOption::GetFontColor();
 
-    vcl::Font aFont = GetFont();
-    aFont.SetFillColor( rWinColor );
+    vcl::Font aFont = rRenderContext.GetFont();
+    aFont.SetFillColor(rWinColor);
     aFont.SetColor(rFieldTextColor);
-    SetFont(aFont);
+    rRenderContext.SetFont(aFont);
 
-    SetBackground(Wallpaper(rWinColor));
+    rRenderContext.SetBackground(Wallpaper(rWinColor));
 
-    SetLineColor(rWinColor);
-    SetFillColor(aGrayColor);
-    vcl::Font aPaintFont(GetFont());
+    rRenderContext.SetLineColor(rWinColor);
+    rRenderContext.SetFillColor(aGrayColor);
+    vcl::Font aPaintFont(rRenderContext.GetFont());
     aPaintFont.SetTransparent(false);
-    SetFont(aPaintFont);
+    rRenderContext.SetFont(aPaintFont);
 
     // size of region to be displayed
-    const long lDispW = aItem.lLeft + aItem.lHDist
-        + ((aItem.nCols == 1) ? aItem.lLeft : ROUND(aItem.lHDist/10.0));
-    const long lDispH = aItem.lUpper + aItem.lVDist
-        + ((aItem.nRows == 1) ? aItem.lUpper : ROUND(aItem.lVDist/10.0));
+    const long lDispW = aItem.lLeft + aItem.lHDist + ((aItem.nCols == 1)
+                            ? aItem.lLeft
+                            : ROUND(aItem.lHDist / 10.0));
+
+    const long lDispH = aItem.lUpper + aItem.lVDist + ((aItem.nRows == 1)
+                            ? aItem.lUpper
+                            : ROUND(aItem.lVDist / 10.0));
 
     // Scale factor
-    const float fx = (float) lOutWPix23 / std::max(1L, lDispW);
-    const float fy = (float) lOutHPix23 / std::max(1L, lDispH);
+    const float fx = float(lOutWPix23) / std::max(1L, lDispW);
+    const float fy = float(lOutHPix23) / std::max(1L, lDispH);
     const float f  = fx < fy ? fx : fy;
 
     // zero point
@@ -142,45 +145,44 @@ void SwLabPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle
     const long lY3 = lY0 + ROUND(f * (aItem.lUpper + aItem.lVDist ));
 
     // draw outline (area)
-    DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
+    rRenderContext.DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
 
     // draw outline (border)
-    SetLineColor(rFieldTextColor);
-    DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Up
-    DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Left
+    rRenderContext.SetLineColor(rFieldTextColor);
+    rRenderContext.DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Up
+    rRenderContext.DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Left
     if (aItem.nCols == 1)
-        DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Right
+        rRenderContext.DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Right
     if (aItem.nRows == 1)
-        DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
+        rRenderContext.DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
 
     // Labels
-    SetClipRegion(vcl::Region(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
-    SetFillColor( COL_LIGHTGRAYBLUE );
+    rRenderContext.SetClipRegion(vcl::Region(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH))));
+    rRenderContext.SetFillColor(COL_LIGHTGRAYBLUE);
     const sal_Int32 nRows = std::min<sal_Int32>(2, aItem.nRows);
     const sal_Int32 nCols = std::min<sal_Int32>(2, aItem.nCols);
     for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
         for (sal_Int32 nCol = 0; nCol < nCols; ++nCol)
-            DrawRect(Rectangle(
-              Point(lX0 + ROUND(f * (aItem.lLeft  + nCol * aItem.lHDist)),
-                    lY0 + ROUND(f * (aItem.lUpper + nRow * aItem.lVDist))),
-              Size (ROUND(f * aItem.lWidth ),
-                    ROUND(f * aItem.lHeight))));
-    SetClipRegion();
+            rRenderContext.DrawRect(Rectangle(Point(lX0 + ROUND(f * (aItem.lLeft  + nCol * aItem.lHDist)),
+                                                    lY0 + ROUND(f * (aItem.lUpper + nRow * aItem.lVDist))),
+                                              Size(ROUND(f * aItem.lWidth),
+                                                   ROUND(f * aItem.lHeight))));
+    rRenderContext.SetClipRegion();
 
     // annotation: left border
     if (aItem.lLeft)
     {
         long lX = (lX0 + lX1) / 2;
-        DrawArrow(Point(lX0, lY0 - 5), Point(lX1, lY0 - 5), false);
-        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), true);
-        DrawText(Point(lX1 - lLeftWidth, lY0 - 10 - lXHeight), aLeftStr);
+        DrawArrow(rRenderContext, Point(lX0, lY0 - 5), Point(lX1, lY0 - 5), false);
+        DrawArrow(rRenderContext, Point(lX, lY0 - 10), Point(lX, lY0 - 5), true);
+        rRenderContext.DrawText(Point(lX1 - lLeftWidth, lY0 - 10 - lXHeight), aLeftStr);
     }
 
     // annotation: upper border
     if (aItem.lUpper)
     {
-        DrawArrow(Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), false);
-        DrawText(Point(lX0 - 10 - lUpperWidth, lY0 + ROUND(f*aItem.lUpper/2.0 - lXHeight/2.0)), aUpperStr);
+        DrawArrow(rRenderContext, Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), false);
+        rRenderContext.DrawText(Point(lX0 - 10 - lUpperWidth, lY0 + ROUND(f*aItem.lUpper/2.0 - lXHeight/2.0)), aUpperStr);
     }
 
     // annotation: width and height
@@ -188,48 +190,48 @@ void SwLabPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle
         long lX = lX2 - lXWidth / 2 - lHeightWidth / 2;
         long lY = lY1 + lXHeight;
 
-        DrawLine(Point(lX1, lY), Point(lX2 - 1, lY));
-        DrawLine(Point(lX, lY1), Point(lX, lY2 - 1));
+        rRenderContext.DrawLine(Point(lX1, lY), Point(lX2 - 1, lY));
+        rRenderContext.DrawLine(Point(lX, lY1), Point(lX, lY2 - 1));
 
-        DrawText(Point(lX1 + lXWidth / 2, lY - lXHeight / 2), aWidthStr);
-        DrawText(Point(lX - lHeightWidth / 2, lY2 - lXHeight - lXHeight / 2), aHeightStr);
+        rRenderContext.DrawText(Point(lX1 + lXWidth / 2, lY - lXHeight / 2), aWidthStr);
+        rRenderContext.DrawText(Point(lX - lHeightWidth / 2, lY2 - lXHeight - lXHeight / 2), aHeightStr);
     }
 
     // annotation: horizontal gap
     if (aItem.nCols > 1)
     {
         long lX = (lX1 + lX3) / 2;
-        DrawArrow(Point(lX1, lY0 - 5), Point(lX3, lY0 - 5), false);
-        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), true);
-        DrawText(Point(lX - lHDistWidth / 2, lY0 - 10 - lXHeight), aHDistStr);
+        DrawArrow(rRenderContext, Point(lX1, lY0 - 5), Point(lX3, lY0 - 5), false);
+        DrawArrow(rRenderContext, Point(lX, lY0 - 10), Point(lX, lY0 - 5), true);
+        rRenderContext.DrawText(Point(lX - lHDistWidth / 2, lY0 - 10 - lXHeight), aHDistStr);
     }
 
     // annotation: vertical gap
     if (aItem.nRows > 1)
     {
-        DrawArrow(Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), false);
-        DrawText(Point(lX0 - 10 - lVDistWidth, lY1 + ROUND(f*aItem.lVDist/2.0 - lXHeight/2.0)), aVDistStr);
+        DrawArrow(rRenderContext, Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), false);
+        rRenderContext.DrawText(Point(lX0 - 10 - lVDistWidth, lY1 + ROUND(f*aItem.lVDist/2.0 - lXHeight/2.0)), aVDistStr);
     }
 
     // annotation: columns
     {
         long lY = lY0 + lOutlineH + 4;
-        DrawArrow(Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), true);
-        DrawText(Point((lX0 + lX0 + lOutlineW - 1) / 2 - lColsWidth / 2, lY + 5), aColsStr);
+        DrawArrow(rRenderContext, Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), true);
+        rRenderContext.DrawText(Point((lX0 + lX0 + lOutlineW - 1) / 2 - lColsWidth / 2, lY + 5), aColsStr);
     }
 
     // annotation: lines
     {
         long lX = lX0 + lOutlineW + 4;
-        DrawArrow(Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), true);
-        DrawText(Point(lX + 5, (lY0 + lY0 + lOutlineH - 1 - lXHeight / 2) / 2), aRowsStr);
+        DrawArrow(rRenderContext, Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), true);
+        rRenderContext.DrawText(Point(lX + 5, (lY0 + lY0 + lOutlineH - 1 - lXHeight / 2) / 2), aRowsStr);
     }
 }
 
 // Arrow or interval character
-void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, bool bArrow)
+void SwLabPreview::DrawArrow(vcl::RenderContext& rRenderContext, const Point &rP1, const Point &rP2, bool bArrow)
 {
-    DrawLine(rP1, rP2);
+    rRenderContext.DrawLine(rP1, rP2);
     if (bArrow)
     {
         Point aArr[3];
@@ -257,8 +259,8 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, bool bArrow)
         }
 
         const Color& rFieldTextColor = SwViewOption::GetFontColor();
-        SetFillColor(rFieldTextColor);
-        DrawPolygon(Polygon(3, aArr));
+        rRenderContext.SetFillColor(rFieldTextColor);
+        rRenderContext.DrawPolygon(Polygon(3, aArr));
     }
     else
     {
@@ -266,14 +268,14 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, bool bArrow)
         if (rP1.Y() == rP2.Y())
         {
             // Horizontal
-            DrawLine(Point(rP1.X(), rP1.Y() - 2), Point(rP1.X(), rP1.Y() + 2));
-            DrawLine(Point(rP2.X(), rP2.Y() - 2), Point(rP2.X(), rP2.Y() + 2));
+            rRenderContext.DrawLine(Point(rP1.X(), rP1.Y() - 2), Point(rP1.X(), rP1.Y() + 2));
+            rRenderContext.DrawLine(Point(rP2.X(), rP2.Y() - 2), Point(rP2.X(), rP2.Y() + 2));
         }
         else
         {
             // Vertical
-            DrawLine(Point(rP1.X() - 2, rP1.Y()), Point(rP1.X() + 2, rP1.Y()));
-            DrawLine(Point(rP2.X() - 2, rP2.Y()), Point(rP2.X() + 2, rP2.Y()));
+            rRenderContext.DrawLine(Point(rP1.X() - 2, rP1.Y()), Point(rP1.X() + 2, rP1.Y()));
+            rRenderContext.DrawLine(Point(rP2.X() - 2, rP2.Y()), Point(rP2.X() + 2, rP2.Y()));
         }
     }
 }
