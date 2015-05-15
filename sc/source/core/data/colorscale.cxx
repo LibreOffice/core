@@ -1067,11 +1067,28 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
     if(mpFormatData->mbReverse)
     {
         sal_Int32 nMaxIndex = mpFormatData->maEntries.size() - 1;
-        pInfo->nIconIndex = nMaxIndex - nIndex;
+        nIndex = nMaxIndex - nIndex;
+    }
+
+    if (mpFormatData->mbCustom && sal_Int32(mpFormatData->maCustomVector.size()) > nIndex)
+    {
+        ScIconSetType eCustomType = mpFormatData->maCustomVector[nIndex].first;
+        sal_Int32 nCustomIndex = mpFormatData->maCustomVector[nIndex].second;
+        if (nCustomIndex == -1)
+        {
+            delete pInfo;
+            return NULL;
+        }
+
+        pInfo->eIconSetType = eCustomType;
+        pInfo->nIconIndex = nCustomIndex;
     }
     else
+    {
         pInfo->nIconIndex = nIndex;
-    pInfo->eIconSetType = mpFormatData->eIconSetType;
+        pInfo->eIconSetType = mpFormatData->eIconSetType;
+    }
+
     pInfo->mbShowValue = mpFormatData->mbShowValue;
     return pInfo;
 }

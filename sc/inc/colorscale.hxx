@@ -338,6 +338,10 @@ struct ScIconSetFormatData
      */
     bool mbReverse;
     boost::ptr_vector<ScColorScaleEntry> maEntries;
+    bool mbCustom;
+    // the std::pair points to exactly one image
+    // std..pair::second == -1 means no image
+    std::vector<std::pair<ScIconSetType, sal_Int32> > maCustomVector;
 
     ScIconSetFormatData():
         eIconSetType(IconSet_3Arrows),
