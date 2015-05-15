@@ -60,6 +60,8 @@ Layout::~Layout()
 
 void Layout::dispose()
 {
+    aLeftSide.dispose();
+    aBottomSide.dispose();
     pChild.clear();
     Window::dispose();
 }
@@ -178,6 +180,12 @@ Layout::SplittedSide::SplittedSide (Layout* pParent, Side eSide) :
     InitSplitter(*aSplitter.get());
 }
 
+void Layout::SplittedSide::dispose()
+{
+    aSplitter.disposeAndClear();
+    for (auto i = vItems.begin(); i != vItems.end(); ++i)
+        i->pSplit.disposeAndClear();
+}
 
 // Add() -- adds a new window to the side (after construction)
 void Layout::SplittedSide::Add (DockingWindow* pWin, Size const& rSize)

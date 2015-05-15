@@ -129,12 +129,12 @@ void Shell::SetMDITitle()
     }
 }
 
-ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )
+VclPtr<ModulWindow> Shell::CreateBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )
 {
     bCreatingWindow = true;
 
     sal_uLong nKey = 0;
-    ModulWindow* pWin = 0;
+    VclPtr<ModulWindow> pWin;
 
     OUString aLibName( rLibName );
     OUString aModName( rModName );
@@ -203,14 +203,14 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUStrin
     return pWin;
 }
 
-ModulWindow* Shell::FindBasWin (
+VclPtr<ModulWindow> Shell::FindBasWin (
     ScriptDocument const& rDocument,
     OUString const& rLibName, OUString const& rName,
     bool bCreateIfNotExist, bool bFindSuspended
 )
 {
     if (BaseWindow* pWin = FindWindow(rDocument, rLibName, rName, TYPE_MODULE, bFindSuspended))
-        return static_cast<ModulWindow*>(pWin);
+        return VclPtr<ModulWindow>(static_cast<ModulWindow*>(pWin));
     return bCreateIfNotExist ? CreateBasWin(rDocument, rLibName, rName) : 0;
 }
 

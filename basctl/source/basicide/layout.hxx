@@ -86,6 +86,7 @@ private:
         bool IsEmpty () const;
         long GetSize () const;
         void ArrangeIn (Rectangle const&);
+        void dispose();
 
     private:
         // the layout window

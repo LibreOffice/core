@@ -485,14 +485,14 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_NEWMODULE:
         {
-            ModulWindow* pWin = CreateBasWin( m_aCurDocument, m_aCurLibName, OUString() );
+            VclPtr<ModulWindow> pWin = CreateBasWin( m_aCurDocument, m_aCurLibName, OUString() );
             DBG_ASSERT( pWin, "New Module: Konnte Fenster nicht erzeugen!" );
             SetCurWindow( pWin, true );
         }
         break;
         case SID_BASICIDE_NEWDIALOG:
         {
-            DialogWindow* pWin = CreateDlgWin( m_aCurDocument, m_aCurLibName, OUString() );
+            VclPtr<DialogWindow> pWin = CreateDlgWin( m_aCurDocument, m_aCurLibName, OUString() );
             DBG_ASSERT( pWin, "New Module: Konnte Fenster nicht erzeugen!" );
             SetCurWindow( pWin, true );
         }
@@ -1088,12 +1088,12 @@ void Shell::ManageToolbars()
     }
 }
 
-BaseWindow* Shell::FindApplicationWindow()
+VclPtr<BaseWindow> Shell::FindApplicationWindow()
 {
     return FindWindow( ScriptDocument::getApplicationScriptDocument() );
 }
 
-BaseWindow* Shell::FindWindow(
+VclPtr<BaseWindow> Shell::FindWindow(
     ScriptDocument const& rDocument,
     OUString const& rLibName, OUString const& rName,
     ItemType eType, bool bFindSuspended
@@ -1147,7 +1147,7 @@ long Shell::CallBasicBreakHdl( StarBASIC* pBasic )
     return nRet;
 }
 
-ModulWindow* Shell::ShowActiveModuleWindow( StarBASIC* pBasic )
+VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC* pBasic )
 {
     SetCurLib( ScriptDocument::getApplicationScriptDocument(), OUString(), false );
 
@@ -1158,7 +1158,7 @@ ModulWindow* Shell::ShowActiveModuleWindow( StarBASIC* pBasic )
     DBG_ASSERT( pActiveModule, "Kein aktives Modul im ErrorHdl?!" );
     if ( pActiveModule )
     {
-        ModulWindow* pWin = 0;
+        VclPtr<ModulWindow> pWin;
         SbxObject* pParent = pActiveModule->GetParent();
         if (StarBASIC* pLib = dynamic_cast<StarBASIC*>(pParent))
         {

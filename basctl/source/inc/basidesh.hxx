@@ -120,10 +120,10 @@ private:
     void                ManageToolbars();
     void                ArrangeTabBar();
 
-    ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName );
-    DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
+    VclPtr<ModulWindow>  CreateBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName );
+    VclPtr<DialogWindow> CreateDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
 
-    ModulWindow*        ShowActiveModuleWindow( StarBASIC* pBasic );
+    VclPtr<ModulWindow>  ShowActiveModuleWindow( StarBASIC* pBasic );
 
     virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                                 const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
@@ -193,11 +193,11 @@ public:
     bool                CallBasicErrorHdl( StarBASIC* pBasic );
     long                CallBasicBreakHdl( StarBASIC* pBasic );
 
-    BaseWindow*         FindWindow( const ScriptDocument& rDocument, const OUString& rLibName = OUString(), const OUString& rName = OUString(), ItemType nType = TYPE_UNKNOWN, bool bFindSuspended = false );
-    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
-    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
-    BaseWindow*         FindApplicationWindow();
-    bool                NextPage( bool bPrev = false );
+    VclPtr<BaseWindow>   FindWindow( const ScriptDocument& rDocument, const OUString& rLibName = OUString(), const OUString& rName = OUString(), ItemType nType = TYPE_UNKNOWN, bool bFindSuspended = false );
+    VclPtr<DialogWindow> FindDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
+    VclPtr<ModulWindow>  FindBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName, bool bCreateIfNotExist = false, bool bFindSuspended = false );
+    VclPtr<BaseWindow>   FindApplicationWindow();
+    bool                 NextPage( bool bPrev = false );
 
     bool                IsAppBasicModified () const { return m_bAppBasicModified; }
     void                SetAppBasicModified (bool bModified = true) { m_bAppBasicModified = bModified; }

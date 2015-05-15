@@ -35,12 +35,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
-DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName )
+VclPtr<DialogWindow> Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName )
 {
     bCreatingWindow = true;
 
     sal_uLong nKey = 0;
-    DialogWindow* pWin = 0;
+    VclPtr<DialogWindow> pWin;
     OUString aLibName( rLibName );
     OUString aDlgName( rDlgName );
 
@@ -107,7 +107,7 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUStri
     return pWin;
 }
 
-DialogWindow* Shell::FindDlgWin (
+VclPtr<DialogWindow> Shell::FindDlgWin (
     ScriptDocument const& rDocument,
     OUString const& rLibName, OUString const& rName,
     bool bCreateIfNotExist, bool bFindSuspended

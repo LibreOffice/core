@@ -225,7 +225,6 @@ Shell::~Shell()
     SetWindow( 0 );
     SetCurWindow( 0 );
 
-    pTabBar.disposeAndClear();
     aObjectCatalog.disposeAndClear();
     aScrollBarBox.disposeAndClear();
     aVScrollBar.disposeAndClear();
@@ -247,6 +246,10 @@ Shell::~Shell()
     GetExtraData()->ShellInCriticalSection() = false;
 
     nShellCount--;
+
+    pDialogLayout.disposeAndClear();
+    pModulLayout.disposeAndClear();
+    pTabBar.disposeAndClear();
 }
 
 void Shell::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
@@ -761,7 +764,7 @@ void Shell::UpdateWindows()
                                 OUString aDlgName = pDlgNames[ j ];
                                 // this find only looks for non-suspended windows;
                                 // suspended windows are handled in CreateDlgWin
-                                DialogWindow* pWin = FindDlgWin( *doc, aLibName, aDlgName, false );
+                                VclPtr<DialogWindow> pWin = FindDlgWin( *doc, aLibName, aDlgName, false );
                                 if ( !pWin )
                                     pWin = CreateDlgWin( *doc, aLibName, aDlgName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aDlgName &&

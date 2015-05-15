@@ -1200,7 +1200,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
             bool bSuccess = rDocument.insertDialog( aLibName, aNewDlgName, xISP );
             if( bSuccess )
             {
-                DialogWindow* pNewDlgWin = pShell->CreateDlgWin( rDocument, aLibName, aNewDlgName );
+                VclPtr<DialogWindow> pNewDlgWin = pShell->CreateDlgWin( rDocument, aLibName, aNewDlgName );
                 pShell->SetCurWindow( pNewDlgWin, true );
             }
 
