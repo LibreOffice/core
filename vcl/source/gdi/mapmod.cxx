@@ -33,6 +33,10 @@ struct MapMode::ImplMapMode
     sal_uLong       mnRefCount;
     MapUnit         meUnit;
     Point           maOrigin;
+    // NOTE: these Fraction must NOT have more than 32 bits precision
+    // because ReadFraction / WriteFraction do only 32 bits, so more than
+    // that cannot be stored in MetaFiles!
+    // => call ReduceInaccurate whenever setting these
     Fraction        maScaleX;
     Fraction        maScaleY;
     bool            mbSimple;
@@ -158,6 +162,8 @@ MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
     mpImplMapMode->maOrigin = rLogicOrg;
     mpImplMapMode->maScaleX = rScaleX;
     mpImplMapMode->maScaleY = rScaleY;
+    mpImplMapMode->maScaleX.ReduceInaccurate(32);
+    mpImplMapMode->maScaleY.ReduceInaccurate(32);
 }
 
 MapMode::~MapMode()
@@ -193,6 +199,7 @@ void MapMode::SetScaleX( const Fraction& rScaleX )
 
     ImplMakeUnique();
     mpImplMapMode->maScaleX = rScaleX;
+    mpImplMapMode->maScaleX.ReduceInaccurate(32);
 }
 
 void MapMode::SetScaleY( const Fraction& rScaleY )
@@ -200,6 +207,7 @@ void MapMode::SetScaleY( const Fraction& rScaleY )
 
     ImplMakeUnique();
     mpImplMapMode->maScaleY = rScaleY;
+    mpImplMapMode->maScaleY.ReduceInaccurate(32);
 }
 
 MapMode& MapMode::operator=( const MapMode& rMapMode )

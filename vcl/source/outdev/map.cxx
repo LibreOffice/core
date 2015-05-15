@@ -74,6 +74,7 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
         aF = Fraction( i*nN1, nD1 ) * Fraction( nN2, nD2 );
     }
 
+    aF.ReduceInaccurate(32);
     return aF;
 }
 
