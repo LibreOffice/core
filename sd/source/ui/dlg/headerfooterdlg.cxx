@@ -72,17 +72,17 @@ private:
     Rectangle maOutRect;
 
 private:
-    void Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisible, bool bDotted = false );
+    void Paint(vcl::RenderContext& rRenderContext, SdrTextObj* pObj, bool bVisible, bool bDotted = false);
 
 public:
-    PresLayoutPreview( vcl::Window* pParent );
+    PresLayoutPreview(vcl::Window* pParent);
     virtual ~PresLayoutPreview();
 
-    virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
-    void init( SdPage* pMaster );
-    void update( HeaderFooterSettings& rSettings );
+    void init(SdPage* pMaster);
+    void update(HeaderFooterSettings& rSettings);
 };
 
 }
@@ -735,7 +735,7 @@ void PresLayoutPreview::update( HeaderFooterSettings& rSettings )
     Invalidate();
 }
 
-void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisible, bool bDotted /* = false*/ )
+void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj* pObj, bool bVisible, bool bDotted /* = false*/ )
 {
     // get object transformation
     basegfx::B2DHomMatrix aObjectTransform;
@@ -754,9 +754,9 @@ void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisib
     aGeometry.transform(aObjectTransform);
 
     // apply line pattern if wanted
-    if(bDotted)
+    if (bDotted)
     {
-        ::std::vector<double> aPattern;
+        std::vector<double> aPattern;
         static double fFactor(1.0);
         aPattern.push_back(3.0 * fFactor);
         aPattern.push_back(1.0 * fFactor);
@@ -771,20 +771,20 @@ void PresLayoutPreview::Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisib
     svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( bVisible ? svtools::FONTCOLOR : svtools::OBJECTBOUNDARIES ) );
 
     // paint at OutDev
-    aOut.SetLineColor(Color(aColor.nColor));
-    aOut.SetFillColor();
+    rRenderContext.SetLineColor(Color(aColor.nColor));
+    rRenderContext.SetFillColor();
 
-    for(sal_uInt32 a(0); a < aGeometry.count(); a++)
+    for (sal_uInt32 a(0); a < aGeometry.count(); a++)
     {
-        aOut.DrawPolyLine(aGeometry.getB2DPolygon(a));
+        rRenderContext.DrawPolyLine(aGeometry.getB2DPolygon(a));
     }
 }
 
-void PresLayoutPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& )
+void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    Push();
+    rRenderContext.Push();
 
-    maOutRect = Rectangle( Point(0,0), GetOutputSize() );
+    maOutRect = Rectangle(Point(0,0), rRenderContext.GetOutputSize());
 
     // calculate page size with correct aspect ratio
     int nWidth, nHeight;
@@ -805,12 +805,12 @@ void PresLayoutPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rec
     maOutRect.Bottom() = maOutRect.Top() + nHeight - 1;
 
     // draw decoration frame
-    DecorationView aDecoView( this );
-    maOutRect = aDecoView.DrawFrame( maOutRect, DrawFrameStyle::In );
+    DecorationView aDecoView(&rRenderContext);
+    maOutRect = aDecoView.DrawFrame(maOutRect, DrawFrameStyle::In);
 
     // draw page background
-    SetFillColor( Color(COL_WHITE) );
-    DrawRect( maOutRect );
+    rRenderContext.SetFillColor(Color(COL_WHITE));
+    rRenderContext.DrawRect(maOutRect);
 
     // paint presentation objects from masterpage
     SdrTextObj* pMasterTitle = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_TITLE ));
@@ -820,20 +820,20 @@ void PresLayoutPreview::Paint( vcl::RenderContext& /*rRenderContext*/, const Rec
     SdrTextObj* pDate   = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_DATETIME ));
     SdrTextObj* pNumber = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_SLIDENUMBER ));
 
-    if( pMasterTitle )
-        Paint( *this, pMasterTitle, true, true );
-    if( pMasterOutline )
-        Paint( *this, pMasterOutline, true, true );
-    if( pHeader )
-        Paint( *this, pHeader, maSettings.mbHeaderVisible );
-    if( pFooter )
-        Paint( *this, pFooter, maSettings.mbFooterVisible );
-    if( pDate )
-        Paint( *this, pDate, maSettings.mbDateTimeVisible );
-    if( pNumber )
-        Paint( *this, pNumber, maSettings.mbSlideNumberVisible );
+    if (pMasterTitle)
+        Paint(rRenderContext, pMasterTitle, true, true);
+    if (pMasterOutline)
+        Paint(rRenderContext, pMasterOutline, true, true);
+    if (pHeader)
+        Paint(rRenderContext, pHeader, maSettings.mbHeaderVisible);
+    if (pFooter)
+        Paint(rRenderContext, pFooter, maSettings.mbFooterVisible);
+    if (pDate)
+        Paint(rRenderContext, pDate, maSettings.mbDateTimeVisible);
+    if (pNumber)
+        Paint(rRenderContext, pNumber, maSettings.mbSlideNumberVisible);
 
-    Pop();
+    rRenderContext.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
