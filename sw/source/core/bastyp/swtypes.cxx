@@ -78,21 +78,19 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwTableLineFmt )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableBoxFmt )
 IMPL_FIXEDMEMPOOL_NEWDEL( _SwCursor_SavePos )
 
-Size GetGraphicSizeTwip( const Graphic& rGraphic, vcl::RenderContext* pOutDev )
+Size GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
 {
-    const MapMode aMapTwip( MAP_TWIP );
-    Size aSize( rGraphic.GetPrefSize() );
-    if( MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit() )
+    const MapMode aMapTwip(MAP_TWIP);
+    Size aSize(rGraphic.GetPrefSize());
+    if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
     {
-        if( !pOutDev )
+        if (!pOutDev)
             pOutDev = Application::GetDefaultDevice();
-        aSize = pOutDev->PixelToLogic( aSize, aMapTwip );
+        aSize = pOutDev->PixelToLogic(aSize, aMapTwip);
     }
     else
     {
-        aSize = OutputDevice::LogicToLogic( aSize,
-                                            rGraphic.GetPrefMapMode(),
-                                            aMapTwip );
+        aSize = OutputDevice::LogicToLogic(aSize, rGraphic.GetPrefMapMode(), aMapTwip);
     }
     return aSize;
 }
