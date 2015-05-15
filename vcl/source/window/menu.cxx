@@ -1857,10 +1857,18 @@ void Menu::ImplPaint(vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuIt
         {
             if ( pThisItemOnly )
             {
-                if (IsMenuBar()&& bRollover )
-                    pWin->SetTextColor( rSettings.GetMenuBarRolloverTextColor() );
-                else if ( bHighlighted )
-                    pWin->SetTextColor( rSettings.GetMenuHighlightTextColor() );
+                if (IsMenuBar())
+                {
+                    if (bRollover)
+                        pWin->SetTextColor(rSettings.GetMenuBarRolloverTextColor());
+                    else if (bHighlighted)
+                        pWin->SetTextColor(rSettings.GetMenuBarHighlightTextColor());
+                }
+                else
+                {
+                    if (bHighlighted)
+                        pWin->SetTextColor(rSettings.GetMenuHighlightTextColor());
+                }
             }
 
             Point aPos( aTopLeft );

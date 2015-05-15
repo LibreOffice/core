@@ -328,6 +328,9 @@ public:
     void                            SetMenuBarRolloverTextColor( const Color& rColor );
     const Color&                    GetMenuBarRolloverTextColor() const;
 
+    void                            SetMenuBarHighlightTextColor( const Color& rColor );
+    const Color&                    GetMenuBarHighlightTextColor() const;
+
     void                            SetMenuHighlightColor( const Color& rColor );
     const Color&                    GetMenuHighlightColor() const;
 

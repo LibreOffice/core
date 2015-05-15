@@ -29,6 +29,7 @@ GtkStyleContext* GtkSalGraphics::mpToolButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpToolbarSeperatorStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpCheckButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuBarStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpMenuBarItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpSpinStyle = NULL;
@@ -796,6 +797,20 @@ void GtkSalGraphics::PaintCheckOrRadio(GtkStyleContext *context,
 #   define CHECKED GTK_STATE_FLAG_ACTIVE
 #endif
 
+static GtkWidget* gCacheWindow;
+static GtkWidget* gDumbContainer;
+static GtkWidget* gSpinBox;
+static GtkWidget* gEntryBox;
+static GtkWidget* gComboBox;
+static GtkWidget* gComboBoxButtonWidget;
+static GtkWidget* gComboBoxEntryWidget;
+static GtkWidget* gListBox;
+static GtkWidget* gListBoxButtonWidget;
+static GtkWidget* gFrameIn;
+static GtkWidget* gFrameOut;
+static GtkWidget* gMenuBarWidget;
+static GtkWidget* gMenuItemMenuBarWidget;
+
 bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                             ControlState nState, const ImplControlValue& rValue,
                                             const OUString& )
@@ -946,6 +961,22 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             context = mpFrameInStyle;
         break;
     }
+    case CTRL_MENUBAR:
+        if (nPart == PART_MENU_ITEM)
+        {
+            context = mpMenuBarItemStyle;
+            styleClass = GTK_STYLE_CLASS_MENUBAR;
+
+            flags = (!(nState & ControlState::ENABLED)) ? GTK_STATE_FLAG_INSENSITIVE : GTK_STATE_FLAG_NORMAL;
+            if (nState & ControlState::SELECTED)
+                flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_PRELIGHT);
+        }
+        else
+        {
+            context = gtk_widget_get_style_context(gMenuBarWidget);
+            styleClass = GTK_STYLE_CLASS_BACKGROUND;
+        }
+        break;
     default:
         return false;
     }
@@ -1096,18 +1127,6 @@ Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContent
     return aEditRect;
 }
 
-static GtkWidget* gCacheWindow;
-static GtkWidget* gDumbContainer;
-static GtkWidget* gSpinBox;
-static GtkWidget* gEntryBox;
-static GtkWidget* gComboBox;
-static GtkWidget* gComboBoxButtonWidget;
-static GtkWidget* gComboBoxEntryWidget;
-static GtkWidget* gListBox;
-static GtkWidget* gListBoxButtonWidget;
-static GtkWidget* gFrameIn;
-static GtkWidget* gFrameOut;
-
 bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
                                                 const ImplControlValue& rValue, const OUString&,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
@@ -1181,6 +1200,10 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             aEditRect.Right() = aEditRect.Left() + 1;
         if (!aEditRect.GetHeight())
             aEditRect.Bottom() = aEditRect.Top() + 1;
+    }
+    if( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL) )
+    {
+        aEditRect = GetWidgetSize(rControlRegion, gMenuBarWidget);
     }
     else if ( (nType==CTRL_SPINBOX) &&
               ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN) ||
@@ -1391,10 +1414,14 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuBarColor( aBackColor );
     aStyleSet.SetMenuBarRolloverColor( aBackColor );
 
-    gtk_style_context_get_color( mpMenuBarStyle, GTK_STATE_FLAG_NORMAL, &text_color );
+    gtk_style_context_get_color( mpMenuBarItemStyle, GTK_STATE_FLAG_NORMAL, &text_color );
     aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( text_color ) );
     aStyleSet.SetMenuBarTextColor( aTextColor );
     aStyleSet.SetMenuBarRolloverTextColor( aTextColor );
+
+    gtk_style_context_get_color( mpMenuBarItemStyle, GTK_STATE_FLAG_PRELIGHT, &text_color );
+    aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( text_color ) );
+    aStyleSet.SetMenuBarHighlightTextColor( aTextColor );
 
     // menu items
     gtk_style_context_get_color( mpMenuStyle, GTK_STATE_FLAG_NORMAL, &color );
@@ -1418,12 +1445,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     gtk_style_context_get_background_color( mpMenuItemStyle, GTK_STATE_FLAG_PRELIGHT, &background_color );
     ::Color aHighlightColor = getColor( background_color );
+    aStyleSet.SetMenuHighlightColor( aHighlightColor );
 
     gtk_style_context_get_color( mpMenuItemStyle, GTK_STATE_FLAG_PRELIGHT, &color );
     ::Color aHighlightTextColor = getColor( color );
-    if( aHighlightColor == aHighlightTextColor )
-        aHighlightTextColor = (aHighlightColor.GetLuminance() < 128) ? ::Color( COL_WHITE ) : ::Color( COL_BLACK );
-    aStyleSet.SetMenuHighlightColor( aHighlightColor );
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
     // hyperlink colors
@@ -1718,10 +1743,10 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 return true;
             break;
 
-//        case CTRL_MENUBAR:
-//            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_MENU_ITEM)
-//                return true;
-//            break;
+        case CTRL_MENUBAR:
+            if (nPart==PART_ENTIRE_CONTROL || nPart==PART_MENU_ITEM)
+                return true;
+            break;
 
         case CTRL_MENU_POPUP:
             if (nPart==PART_ENTIRE_CONTROL
@@ -1893,8 +1918,11 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_widget_path_free(path);
 
     /* Menu bar */
-    getStyleContext(&mpMenuBarStyle, gtk_menu_bar_new());
-    gtk_style_context_add_class(mpMenuBarStyle, GTK_STYLE_CLASS_MENU);
+    gMenuBarWidget = gtk_menu_bar_new();
+    gMenuItemMenuBarWidget = gtk_menu_item_new_with_label( "b" );
+    gtk_menu_shell_append(GTK_MENU_SHELL(gMenuBarWidget), gMenuItemMenuBarWidget);
+    getStyleContext(&mpMenuBarStyle, gMenuBarWidget);
+    mpMenuBarItemStyle = gtk_widget_get_style_context(gMenuItemMenuBarWidget);
 
     /* Spinbutton */
     gSpinBox = gtk_spin_button_new(NULL, 0, 0);

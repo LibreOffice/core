@@ -323,6 +323,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             style.SetMenuBarRolloverColor( aMenuBack );
             style.SetMenuBarRolloverTextColor( aMenuFore );
         }
+        style.SetMenuBarHighlightTextColor(style.GetMenuHighlightTextColor());
 
         // Font
         aFont = toFont( pMenuBar->font(), rSettings.GetUILanguageTag().getLocale() );

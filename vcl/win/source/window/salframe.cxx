@@ -2723,6 +2723,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetMenuBarTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
         aStyleSettings.SetMenuBarRolloverTextColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHTTEXT ) ) );
     }
+    aStyleSettings.SetMenuBarHighlightTextColor(aStyleSettings.GetMenuHighlightTextColor());
     aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
     aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
     aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );

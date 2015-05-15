@@ -125,6 +125,7 @@ struct ImplStyleData
     Color                           maMenuTextColor;
     Color                           maMenuBarTextColor;
     Color                           maMenuBarRolloverTextColor;
+    Color                           maMenuBarHighlightTextColor;
     Color                           maMonoColor;
     Color                           maRadioCheckTextColor;
     Color                           maShadowColor;
@@ -600,6 +601,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maMenuTextColor( rData.maMenuTextColor ),
     maMenuBarTextColor( rData.maMenuBarTextColor ),
     maMenuBarRolloverTextColor( rData.maMenuBarRolloverTextColor ),
+    maMenuBarHighlightTextColor( rData.maMenuBarHighlightTextColor ),
     maMonoColor( rData.maMonoColor ),
     maRadioCheckTextColor( rData.maRadioCheckTextColor ),
     maShadowColor( rData.maShadowColor ),
@@ -734,6 +736,7 @@ void ImplStyleData::SetStandardStyles()
     maMenuTextColor             = Color( COL_BLACK );
     maMenuBarTextColor          = Color( COL_BLACK );
     maMenuBarRolloverTextColor  = Color( COL_WHITE );
+    maMenuBarHighlightTextColor = Color( COL_BLUE );
     maMenuHighlightColor        = Color( COL_BLUE );
     maMenuHighlightTextColor    = Color( COL_WHITE );
     maHighlightColor            = Color( COL_BLUE );
@@ -1268,6 +1271,19 @@ const Color&
 StyleSettings::GetMenuBarRolloverTextColor() const
 {
     return mxData->maMenuBarRolloverTextColor;
+}
+
+void
+StyleSettings::SetMenuBarHighlightTextColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maMenuBarHighlightTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetMenuBarHighlightTextColor() const
+{
+    return mxData->maMenuBarHighlightTextColor;
 }
 
 void

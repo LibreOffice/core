@@ -4018,6 +4018,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( pMenubarStyle->fg[GTK_STATE_NORMAL] ) );
     aStyleSet.SetMenuBarTextColor( aTextColor );
     aStyleSet.SetMenuBarRolloverTextColor( aTextColor );
+    aStyleSet.SetMenuBarHighlightTextColor(aStyleSet.GetMenuHighlightTextColor());
 
 #if OSL_DEBUG_LEVEL > 1
     std::fprintf( stderr, "==\n" );

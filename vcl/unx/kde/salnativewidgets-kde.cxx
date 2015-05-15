@@ -2018,6 +2018,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             aStyleSettings.SetMenuBarRolloverColor( aMenuBack );
             aStyleSettings.SetMenuBarRolloverTextColor( aMenuFore );
         }
+        aStyleSettings.SetMenuBarHighlightTextColor(aStyleSettings.GetMenuHighlightTextColor());
 
         // Font
         aFont = toFont( pMenuBar->font(), rSettings.GetUILanguageTag().getLocale() );

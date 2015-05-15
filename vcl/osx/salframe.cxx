@@ -1199,6 +1199,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetMenuTextColor( aMenuTextColor );
     aStyleSettings.SetMenuBarTextColor( aMenuTextColor );
     aStyleSettings.SetMenuBarRolloverTextColor( aMenuTextColor );
+    aStyleSettings.SetMenuBarHighlightTextColor(aStyleSettings.GetMenuHighlightTextColor());
 
     aStyleSettings.SetCursorBlinkTime( 500 );
 
