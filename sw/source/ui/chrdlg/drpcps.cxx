@@ -130,7 +130,7 @@ public:
     void SetDistance( sal_uInt16 nD );
     void SetValues( const OUString& rText, sal_uInt8 nLines, sal_uInt16 nDistance );
 
-    void        DrawPrev( const Point& rPt );
+    void DrawPrev(vcl::RenderContext& rRenderContext, const Point& rPt);
 };
 
 VCL_BUILDER_FACTORY_ARGS(SwDropCapsPict, WB_BORDER)
@@ -343,71 +343,77 @@ void SwDropCapsPict::UpdatePaintSettings()
     Invalidate();
 }
 
-void  SwDropCapsPict::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &/*rRect*/)
+void  SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/*rRect*/)
 {
     if (!IsVisible())
         return;
 
-    SetMapMode(MapMode(MAP_PIXEL));
-    SetLineColor();
+    rRenderContext.SetMapMode(MapMode(MAP_PIXEL));
+    rRenderContext.SetLineColor();
 
-    SetFillColor( maBackColor );
+    rRenderContext.SetFillColor(maBackColor);
 
-    Size aOutputSizePixel( GetOutputSizePixel() );
+    Size aOutputSizePixel(rRenderContext.GetOutputSizePixel());
 
     DrawRect(Rectangle(Point(0, 0), aOutputSizePixel ));
-    SetClipRegion(vcl::Region(Rectangle(
-        Point(BORDER, BORDER),
-        Size (aOutputSizePixel.Width () - 2 * BORDER,
-              aOutputSizePixel.Height() - 2 * BORDER))));
+    rRenderContext.SetClipRegion(vcl::Region(Rectangle(Point(BORDER, BORDER),
+                                                       Size (aOutputSizePixel.Width () - 2 * BORDER,
+                                                             aOutputSizePixel.Height() - 2 * BORDER))));
 
     OSL_ENSURE(mnLineH > 0, "We cannot make it that small");
     long nY0 = (aOutputSizePixel.Height() - (LINES * mnTotLineH)) / 2;
-    SetFillColor( maTextLineColor );
+
+    rRenderContext.SetFillColor(maTextLineColor);
+
     for (int i = 0; i < LINES; ++i)
-        DrawRect(Rectangle(Point(BORDER, nY0 + i * mnTotLineH), Size(aOutputSizePixel.Width() - 2 * BORDER, mnLineH)));
+    {
+        rRenderContext.DrawRect(Rectangle(Point(BORDER, nY0 + i * mnTotLineH),
+                                Size(aOutputSizePixel.Width() - 2 * BORDER, mnLineH)));
+    }
 
     // Text background with gap (240 twips ~ 1 line height)
     const long nDistW = (((static_cast<long>(mnDistance) * 100) / 240) * mnTotLineH) / 100;
-    SetFillColor( maBackColor );
+    rRenderContext.SetFillColor(maBackColor);
     if (mpPage && mpPage->m_pDropCapsBox->IsChecked())
     {
-        const Size aTextSize( maTextSize.Width()+nDistW, maTextSize.Height() );
-        DrawRect( Rectangle( Point( BORDER, nY0 ), aTextSize ) );
+        const Size aTextSize(maTextSize.Width() + nDistW, maTextSize.Height());
+        rRenderContext.DrawRect(Rectangle(Point(BORDER, nY0), aTextSize));
 
         // draw Text
-        DrawPrev( Point( BORDER, nY0 ) );
+        DrawPrev(rRenderContext, Point(BORDER, nY0));
     }
-
-    SetClipRegion();
+    rRenderContext.SetClipRegion();
 }
 
-void SwDropCapsPict::DrawPrev( const Point& rPt )
+void SwDropCapsPict::DrawPrev(vcl::RenderContext& rRenderContext, const Point& rPt)
 {
     Point aPt(rPt);
     InitPrinter();
 
-    vcl::Font   aOldFont = mpPrinter->GetFont();
-    sal_uInt16      nScript;
-    size_t      nIdx = 0;
-    sal_Int32  nStart;
-    sal_Int32  nEnd;
+    vcl::Font aOldFont = mpPrinter->GetFont();
+    sal_uInt16 nScript;
+    size_t nIdx = 0;
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
+
     GetFirstScriptSegment(nStart, nEnd, nScript);
+
     do
     {
-        SvxFont&    rFnt = (nScript==css::i18n::ScriptType::ASIAN) ? maCJKFont : ((nScript==css::i18n::ScriptType::COMPLEX) ? maCTLFont : maFont);
-        mpPrinter->SetFont( rFnt );
+        SvxFont& rFnt = (nScript==css::i18n::ScriptType::ASIAN) ? maCJKFont : ((nScript==css::i18n::ScriptType::COMPLEX) ? maCTLFont : maFont);
+        mpPrinter->SetFont(rFnt);
 
-        rFnt.DrawPrev( this, mpPrinter, aPt, maText, nStart, nEnd - nStart );
+        rFnt.DrawPrev(&rRenderContext, mpPrinter, aPt, maText, nStart, nEnd - nStart);
 
         if (!maScriptChanges.empty())
-            aPt.X() += maScriptChanges[ nIdx ].textWidth;
+            aPt.X() += maScriptChanges[nIdx].textWidth;
 
-        if ( !GetNextScriptSegment(nIdx, nStart, nEnd, nScript) )
+        if (!GetNextScriptSegment(nIdx, nStart, nEnd, nScript))
             break;
     }
-    while( true );
-    mpPrinter->SetFont( aOldFont );
+    while(true);
+
+    mpPrinter->SetFont(aOldFont);
 }
 
 void SwDropCapsPict::CheckScript()
