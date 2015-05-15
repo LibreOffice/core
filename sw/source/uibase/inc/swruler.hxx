@@ -87,7 +87,7 @@ protected:
     /**
      * Paint the comment control on VirtualDevice.
      */
-    void DrawCommentControl();
+    void DrawCommentControl(vcl::RenderContext& rRenderContext);
     /**
      * Draw a little horizontal arrow tip on VirtualDevice.
      * \param nX left coordinate of arrow
@@ -95,7 +95,7 @@ protected:
      * \param Color arrow color
      * \param bPointRight if arrow should point to right. Otherwise, it will point left.
      */
-    void ImplDrawArrow(long nX, long nY, const Color& rColor, bool bPointRight);
+    void ImplDrawArrow(vcl::RenderContext& rRenderContext, long nX, long nY, const Color& rColor, bool bPointRight);
 
     /**
      * Update the tooltip text.
