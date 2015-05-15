@@ -2238,12 +2238,17 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
         for (sal_Int32 nCell = 0; nCell < nCells; ++nCell)
         {
-            SwNodeRange *const pLastCell(
-                (nCell == 0)
-                    ? ((nRow == 0) ? nullptr : &*aTableNodes.rbegin()->rbegin())
-                    : &*aRowNodes.rbegin());
-            m_pImpl->ConvertCell(pRow[nCell],
-                aRowNodes, pLastCell, bExcept);
+            SwNodeRange *pLastCell;
+            if (nCell == 0 && nRow == 0)
+            {
+                pLastCell = nullptr;
+            }
+            else
+            {
+                std::vector<SwNodeRange>& rRowOfPrevCell = nCell ? aRowNodes : *aTableNodes.rbegin();
+                pLastCell = !rRowOfPrevCell.empty() ? &*rRowOfPrevCell.rbegin() : nullptr;
+            }
+            m_pImpl->ConvertCell(pRow[nCell], aRowNodes, pLastCell, bExcept);
         }
         aTableNodes.push_back(aRowNodes);
     }
