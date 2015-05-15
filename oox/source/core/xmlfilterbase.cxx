@@ -58,7 +58,6 @@
 #include <tools/datetime.hxx>
 #include <com/sun/star/util/Duration.hpp>
 #include <sax/tools/converter.hxx>
-#include <unotools/configmgr.hxx>
 
 using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
@@ -693,9 +692,9 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     writeElement( pAppProps, XML_HyperlinksChanged,     "hyperlinks changed" );
     writeElement( pAppProps, XML_DigSig,                "digital signature" );
 #endif  /* def OOXTODO */
-    writeElement( pAppProps, XML_Application,           utl::ConfigManager::getProductName() );
-    writeElement( pAppProps, XML_AppVersion,            utl::DocInfoHelper::GetVersionString() );
+    writeElement( pAppProps, XML_Application,           utl::DocInfoHelper::GetGeneratorString() );
 #ifdef OOXTODO
+    writeElement( pAppProps, XML_AppVersion,            "app version" );
     writeElement( pAppProps, XML_DocSecurity,           "doc security" );
 #endif  /* def OOXTODO */
 
