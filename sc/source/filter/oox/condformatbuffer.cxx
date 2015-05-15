@@ -118,9 +118,10 @@ void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttrib
         double nVal = rAttribs.getDouble( XML_val, 0.0 );
         pEntry->mnVal = nVal;
     }
+
     if (aType == "num")
     {
-        // nothing to do
+        pEntry->mbNum = true;
     }
     else if( aType == "min" )
     {
@@ -235,6 +236,8 @@ ScColorScaleEntry* ConvertToModel( const ColorScaleRuleModelEntry& rEntry, ScDoc
             pEntry->SetType(COLORSCALE_PERCENT);
         if(rEntry.mbPercentile)
             pEntry->SetType(COLORSCALE_PERCENTILE);
+        if (rEntry.mbNum)
+            pEntry->SetType(COLORSCALE_VALUE);
 
         if(!rEntry.maFormula.isEmpty())
         {
@@ -327,9 +330,10 @@ void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScA
     pFormat->SetDataBarData(mxFormat.release());
 }
 
-IconSetRule::IconSetRule( const CondFormat& rFormat ):
-    WorksheetHelper( rFormat ),
-    mxFormatData( new ScIconSetFormatData )
+IconSetRule::IconSetRule( const WorksheetHelper& rParent ):
+    WorksheetHelper( rParent ),
+    mxFormatData( new ScIconSetFormatData ),
+    mbCustom(false)
 {
 }
 
@@ -346,7 +350,23 @@ void IconSetRule::importAttribs( const AttributeList& rAttribs )
     maIconSetType = rAttribs.getString( XML_iconSet, OUString("3TrafficLights1") );
     mxFormatData->mbShowValue = rAttribs.getBool( XML_showValue, true );
     mxFormatData->mbReverse = rAttribs.getBool( XML_reverse, false );
+    mbCustom = rAttribs.getBool(XML_custom, false);
 }
+
+void IconSetRule::importFormula(const OUString& rFormula)
+{
+    ColorScaleRuleModelEntry& rEntry = maEntries.back();
+    if (rEntry.mbNum ||
+            rEntry.mbPercent ||
+            rEntry.mbPercentile)
+    {
+        double nVal = rFormula.toDouble();
+        rEntry.mnVal = nVal;
+    }
+    else if (!rFormula.isEmpty())
+        rEntry.maFormula = rFormula;
+}
+
 
 void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rPos )
 {

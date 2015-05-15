@@ -75,6 +75,7 @@ struct ColorScaleRuleModelEntry
     bool mbMax;
     bool mbPercent;
     bool mbPercentile;
+    bool mbNum;
     OUString maFormula;
 
     ColorScaleRuleModelEntry():
@@ -83,7 +84,8 @@ struct ColorScaleRuleModelEntry
         mbMin(false),
         mbMax(false),
         mbPercent(false),
-        mbPercentile(false) {}
+        mbPercentile(false),
+        mbNum(false) {}
 };
 
 class ColorScaleRule : public WorksheetHelper
@@ -125,9 +127,10 @@ private:
 class IconSetRule : public WorksheetHelper
 {
 public:
-    IconSetRule( const CondFormat& rFormat );
+    IconSetRule( const WorksheetHelper& rParent );
     void importCfvo( const AttributeList& rAttribs );
     void importAttribs( const AttributeList& rAttribs );
+    void importFormula(const OUString& rFormula);
 
     void SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
 
@@ -135,6 +138,7 @@ private:
     std::vector< ColorScaleRuleModelEntry > maEntries;
     std::unique_ptr<ScIconSetFormatData> mxFormatData;
     OUString maIconSetType;
+    bool mbCustom;
 };
 
 /** Represents a single rule in a conditional formatting. */

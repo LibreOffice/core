@@ -23,6 +23,8 @@
 #include "condformatbuffer.hxx"
 #include "excelhandlers.hxx"
 
+class IconSetRule;
+
 namespace oox {
 namespace xls {
 
@@ -55,12 +57,16 @@ private:
 class IconSetContext : public WorksheetContextBase
 {
 public:
-    explicit IconSetContext( CondFormatContext& rFormat, CondFormatRuleRef xRule );
+    explicit IconSetContext( WorksheetContextBase& rParent, IconSetRule* pIconSet );
 
     virtual oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
     virtual void onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void onCharacters(const OUString& rChars) SAL_OVERRIDE;
+    virtual void onEndElement() SAL_OVERRIDE;
+
 private:
-    CondFormatRuleRef mxRule;
+    IconSetRule* mpIconSet;
+    OUString maChars;
 };
 
 class CondFormatContext : public WorksheetContextBase

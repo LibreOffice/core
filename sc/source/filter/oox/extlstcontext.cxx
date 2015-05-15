@@ -12,6 +12,10 @@
 #include <oox/core/contexthandler.hxx>
 #include "colorscale.hxx"
 #include "condformatbuffer.hxx"
+#include "condformatcontext.hxx"
+#include "document.hxx"
+
+#include "rangeutl.hxx"
 
 using ::oox::core::ContextHandlerRef;
 
@@ -34,25 +38,25 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
-        case XLS_EXT_TOKEN( dataBar ):
+        case XLS14_TOKEN( dataBar ):
         {
             ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
             xRule->importDataBar( rAttribs );
             break;
         }
-        case XLS_EXT_TOKEN( negativeFillColor ):
+        case XLS14_TOKEN( negativeFillColor ):
         {
             ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
             xRule->importNegativeFillColor( rAttribs );
             break;
         }
-        case XLS_EXT_TOKEN( axisColor ):
+        case XLS14_TOKEN( axisColor ):
         {
             ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
             xRule->importAxisColor( rAttribs );
             break;
         }
-        case XLS_EXT_TOKEN( cfvo ):
+        case XLS14_TOKEN( cfvo ):
         {
             ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
             xRule->importCfvo( rAttribs );
@@ -62,6 +66,143 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
         }
         default:
             break;
+    }
+}
+
+ExtConditionalFormattingContext::ExtConditionalFormattingContext(WorksheetContextBase& rFragment):
+    WorksheetContextBase(rFragment),
+    mpCurrentRule(NULL)
+{
+}
+
+ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs)
+{
+    if (mpCurrentRule)
+    {
+        ScFormatEntry& rFormat = *maEntries.rbegin();
+        assert(rFormat.GetType() == condformat::ICONSET);
+        ScIconSetFormat& rIconSet = static_cast<ScIconSetFormat&>(rFormat);
+        ScDocument* pDoc = &getScDocument();
+        SCTAB nTab = getCurrentSheetIndex();
+        ScAddress aPos(0, 0, nTab);
+        mpCurrentRule->SetData(&rIconSet, pDoc, aPos);
+        delete mpCurrentRule;
+        mpCurrentRule = NULL;
+    }
+    if (nElement == XLS14_TOKEN(cfRule))
+    {
+        OUString aType = rAttribs.getString(XML_type, OUString());
+        OUString aId = rAttribs.getString(XML_id, OUString());
+        if (aType == "dataBar")
+        {
+            // an ext entry does not need to have an existing corresponding entry
+            ExtLst::const_iterator aExt = getExtLst().find( aId );
+            if(aExt == getExtLst().end())
+                return NULL;
+
+            ScDataBarFormatData* pInfo = aExt->second;
+            if (!pInfo)
+            {
+                return NULL;
+            }
+            return new ExtCfRuleContext( *this, pInfo );
+        }
+        else if (aType == "iconSet")
+        {
+            ScDocument* pDoc = &getScDocument();
+            mpCurrentRule = new IconSetRule(*this);
+            ScIconSetFormat* pIconSet = new ScIconSetFormat(pDoc);
+            maEntries.push_back(pIconSet);
+            return new IconSetContext(*this, mpCurrentRule);
+        }
+        else
+        {
+            SAL_WARN("sc", "unhandled XLS14_TOKEN(cfRule) with type: " << aType);
+        }
+    }
+    else if (nElement == XM_TOKEN(sqref))
+    {
+        return this;
+    }
+
+    return NULL;
+}
+
+namespace {
+
+ScConditionalFormat* findFormatByRange(const ScRangeList& rRange, ScDocument* pDoc, SCTAB nTab)
+{
+    ScConditionalFormatList* pList = pDoc->GetCondFormList(nTab);
+    for (auto itr = pList->begin(); itr != pList->end(); ++itr)
+    {
+        if (itr->GetRange() == rRange)
+        {
+            return &(*itr);
+        }
+    }
+
+    return NULL;
+}
+
+}
+
+void ExtConditionalFormattingContext::onStartElement(const AttributeList& /*rAttribs*/)
+{
+    switch (getCurrentElement())
+    {
+        case XM_TOKEN(sqref):
+        {
+        }
+        break;
+    }
+}
+
+void ExtConditionalFormattingContext::onCharacters(const OUString& rCharacters)
+{
+    aChars = rCharacters;
+}
+
+void ExtConditionalFormattingContext::onEndElement()
+{
+    switch (getCurrentElement())
+    {
+        case XM_TOKEN(sqref):
+        {
+            if (maEntries.empty())
+                break;
+
+            ScDocument* pDoc = &getScDocument();
+            assert(pDoc);
+            SCTAB nTab = getCurrentSheetIndex();
+            ScRangeList aRange;
+            bool bSuccess = ScRangeStringConverter::GetRangeListFromString(aRange, aChars, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
+            if (!bSuccess)
+                break;
+
+            ScConditionalFormat* pFormat = findFormatByRange(aRange, pDoc, nTab);
+            if (!pFormat)
+            {
+                // create new conditional format and insert it
+                pFormat = new ScConditionalFormat(1, pDoc);
+                pFormat->SetRange(aRange);
+                sal_uLong nKey = pDoc->AddCondFormat(pFormat, nTab);
+                pDoc->AddCondFormatData(aRange, nTab, nKey);
+            }
+
+            for (auto itr = maEntries.begin(), itrEnd = maEntries.end();
+                    itr != itrEnd; ++itr)
+            {
+                pFormat->AddEntry(itr->Clone(pDoc));
+            }
+        }
+        break;
+        case XLS14_TOKEN(cfRule):
+            if (mpCurrentRule)
+            {
+            }
+        break;
+        default:
+        break;
     }
 }
 
@@ -82,7 +223,7 @@ ContextHandlerRef ExtLstLocalContext::onCreateContext( sal_Int32 nElement, const
                 return 0;
             break;
         case XLS_TOKEN( ext ):
-            if (nElement == XLS_EXT_TOKEN( id ))
+            if (nElement == XLS14_TOKEN( id ))
                 return this;
             else
                 return 0;
@@ -94,14 +235,14 @@ void ExtLstLocalContext::onStartElement( const AttributeList& )
 {
     switch( getCurrentElement() )
     {
-        case XLS_EXT_TOKEN( id ):
+        case XLS14_TOKEN( id ):
         break;
     }
 }
 
 void ExtLstLocalContext::onCharacters( const OUString& rChars )
 {
-    if (getCurrentElement() == XLS_EXT_TOKEN( id ))
+    if (getCurrentElement() == XLS14_TOKEN( id ))
     {
         getExtLst().insert( std::pair< OUString, ScDataBarFormatData*>(rChars, mpTarget) );
     }
@@ -112,31 +253,12 @@ ExtGlobalContext::ExtGlobalContext( WorksheetContextBase& rFragment ):
 {
 }
 
-ContextHandlerRef ExtGlobalContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef ExtGlobalContext::onCreateContext( sal_Int32 nElement, const AttributeList& /*rAttribs*/ )
 {
-    if(!rAttribs.hasAttribute( XML_id))
-        return this;
-    else
-    {
-        if(nElement == XLS_EXT_TOKEN( cfRule ))
-        {
-            OUString aId = rAttribs.getString( XML_id, OUString() );
+    if (nElement == XLS14_TOKEN(conditionalFormatting))
+        return new ExtConditionalFormattingContext(*this);
 
-            // an ext entrie does not need to have an existing corresponding entry
-            ExtLst::const_iterator aExt = getExtLst().find( aId );
-            if(aExt == getExtLst().end())
-                return NULL;
-
-            ScDataBarFormatData* pInfo = aExt->second;
-            if (!pInfo)
-            {
-                return NULL;
-            }
-            return new ExtCfRuleContext( *this, pInfo );
-        }
-        else
-            return this;
-    }
+    return this;
 }
 
 void ExtGlobalContext::onStartElement( const AttributeList& /*rAttribs*/ )

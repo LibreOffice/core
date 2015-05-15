@@ -20,6 +20,8 @@
 #include "condformatcontext.hxx"
 #include "extlstcontext.hxx"
 
+#include "condformatbuffer.hxx"
+
 namespace oox {
 namespace xls {
 
@@ -100,9 +102,9 @@ void DataBarContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-IconSetContext::IconSetContext( CondFormatContext& rFragment, CondFormatRuleRef xRule ) :
-    WorksheetContextBase( rFragment ),
-    mxRule( xRule )
+IconSetContext::IconSetContext(WorksheetContextBase& rParent, IconSetRule* pIconSet) :
+    WorksheetContextBase(rParent),
+    mpIconSet(pIconSet)
 {
 }
 
@@ -111,12 +113,19 @@ ContextHandlerRef IconSetContext::onCreateContext( sal_Int32 nElement, const Att
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( cfRule ):
-            return (nElement == XLS_TOKEN( iconSet )) ? this : 0;
+        case XLS14_TOKEN( cfRule ):
+            return (nElement == XLS_TOKEN( iconSet ) || nElement == XLS14_TOKEN(iconSet)) ? this : 0;
         case XLS_TOKEN( iconSet ):
-            if (nElement == XLS_TOKEN( cfvo ))
+        case XLS14_TOKEN(iconSet):
+            if (nElement == XLS_TOKEN( cfvo ) ||
+                    nElement == XLS14_TOKEN(cfvo) ||
+                    nElement == XLS14_TOKEN(cfIcon))
                 return this;
             else
                 return 0;
+        case XLS14_TOKEN(cfvo):
+            if (nElement == XM_TOKEN(f))
+                return this;
     }
     return 0;
 }
@@ -126,10 +135,30 @@ void IconSetContext::onStartElement( const AttributeList& rAttribs )
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( iconSet ):
-            mxRule->getIconSet()->importAttribs( rAttribs );
+        case XLS14_TOKEN( iconSet ):
+            mpIconSet->importAttribs( rAttribs );
         break;
         case XLS_TOKEN( cfvo ):
-            mxRule->getIconSet()->importCfvo( rAttribs );
+        case XLS14_TOKEN( cfvo ):
+            mpIconSet->importCfvo( rAttribs );
+        break;
+        case XLS14_TOKEN(cfIcon):
+        break;
+    }
+}
+
+void IconSetContext::onCharacters(const OUString& rChars)
+{
+    maChars = rChars;
+}
+
+void IconSetContext::onEndElement()
+{
+    switch(getCurrentElement())
+    {
+        case XM_TOKEN(f):
+            mpIconSet->importFormula(maChars);
+            maChars = OUString();
         break;
     }
 }
@@ -153,7 +182,7 @@ ContextHandlerRef CondFormatContext::onCreateContext( sal_Int32 nElement, const 
             else if (nElement == XLS_TOKEN( dataBar ) )
                 return new DataBarContext( *this, mxRule );
             else if (nElement == XLS_TOKEN( iconSet ) )
-                return new IconSetContext( *this, mxRule );
+                return new IconSetContext(*this, mxRule->getIconSet());
             else if (nElement == XLS_TOKEN( extLst ) )
                 return new ExtLstLocalContext( *this, mxRule->getDataBar()->getDataBarFormatData() );
             else

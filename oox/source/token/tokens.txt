@@ -1136,6 +1136,7 @@ centerGroup
 centered
 certificateBanner
 cf
+cfIcon
 cfRule
 cfvo
 ch

@@ -146,7 +146,7 @@ struct NamespaceIds: public rtl::StaticWithInit<
             NMSP_mce,
             NMSP_mceTest,
             NMSP_dsp,
-            NMSP_xlsExtLst
+            NMSP_xls14Lst
         };
 
         Sequence< beans::Pair< OUString, sal_Int32 > > aRet(SAL_N_ELEMENTS(namespaceIds));

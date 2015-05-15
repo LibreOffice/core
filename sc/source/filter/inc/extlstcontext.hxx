@@ -13,10 +13,15 @@
 #include "excelhandlers.hxx"
 #include "worksheetfragment.hxx"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 struct ScDataBarFormatData;
+class ScFormatEntry;
 
 namespace oox {
 namespace xls {
+
+class IconSetRule;
 
 class ExtCfRuleContext : public WorksheetContextBase
 {
@@ -30,6 +35,22 @@ private:
     ScDataBarFormatData* mpTarget;
 
     bool mbFirstEntry;
+};
+
+class ExtConditionalFormattingContext : public WorksheetContextBase
+{
+public:
+    explicit ExtConditionalFormattingContext(WorksheetContextBase& rFragment);
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void onCharacters(const OUString& rCharacters) SAL_OVERRIDE;
+    virtual void onEndElement() SAL_OVERRIDE;
+
+private:
+    OUString aChars;
+    boost::ptr_vector<ScFormatEntry> maEntries;
+    IconSetRule* mpCurrentRule;
 };
 
 /**

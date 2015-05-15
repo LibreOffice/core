@@ -78,5 +78,5 @@ a14                     http://schemas.microsoft.com/office/drawingml/2010/main
 
 # extlst namespaces
 
-# xlsExtLst for features introduced by excel 2010
-xlsExtLst               http://schemas.microsoft.com/office/spreadsheetml/2009/9/main
+# xls14Lst for features introduced by excel 2010
+xls14Lst               http://schemas.microsoft.com/office/spreadsheetml/2009/9/main
