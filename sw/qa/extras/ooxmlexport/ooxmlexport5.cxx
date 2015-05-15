@@ -797,13 +797,6 @@ DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf89790, "tdf89790.docx")
-{
-    if (xmlDocPtr pXmlDoc = parseExport("docProps/app.xml"))
-
-         assertXPath(pXmlDoc, "/extended-properties:Properties/extended-properties:AppVersion");
-}
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
