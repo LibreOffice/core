@@ -103,6 +103,9 @@ struct LOKDocView_Impl
     bool m_bInDragGraphicHandles[8];
     ///@}
 
+    /// If text selection is adjusted -> then mouse up event is a NOP.
+    bool m_bTextSelectionAdjusted;
+
     /// Callback data, allocated in lok_docview_callback_worker(), released in lok_docview_callback().
     struct CallbackData
     {
@@ -222,8 +225,8 @@ LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
     m_pHandleEnd(0),
     m_aHandleEndRect({0, 0, 0, 0}),
     m_bInDragEndHandle(false),
-
-    m_pGraphicHandle(0)
+    m_pGraphicHandle(0),
+    m_bTextSelectionAdjusted(false)
 {
     memset(&m_aGraphicHandleRects, 0, sizeof(m_aGraphicHandleRects));
     memset(&m_bInDragGraphicHandles, 0, sizeof(m_bInDragGraphicHandles));
@@ -415,16 +418,20 @@ gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
         if ((pEvent->time - m_nLastButtonPressTime) < 250)
             nCount++;
         m_nLastButtonPressTime = pEvent->time;
+        m_bTextSelectionAdjusted = false;
         m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
         break;
     }
     case GDK_BUTTON_RELEASE:
     {
-        int nCount = 1;
-        if ((pEvent->time - m_nLastButtonReleaseTime) < 250)
-            nCount++;
-        m_nLastButtonReleaseTime = pEvent->time;
-        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
+        if (!m_bTextSelectionAdjusted)
+        {
+            int nCount = 1;
+            if ((pEvent->time - m_nLastButtonReleaseTime) < 250)
+                nCount++;
+            m_nLastButtonReleaseTime = pEvent->time;
+            m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
+        }
         break;
     }
     default:
@@ -504,6 +511,10 @@ gboolean LOKDocView_Impl::signalMotionImpl(GdkEventButton* pEvent)
         m_pDocument->pClass->setGraphicSelection(m_pDocument, LOK_SETGRAPHICSELECTION_START, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
         return FALSE;
     }
+
+    // Otherwise adjust the text selection, as on the desktop.
+    m_pDocument->pClass->setTextSelection(m_pDocument, LOK_SETTEXTSELECTION_END, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
+    m_bTextSelectionAdjusted = true;
 
     return FALSE;
 }
