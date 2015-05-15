@@ -192,6 +192,8 @@ enum ScIconSetType
     IconSet_3Symbols,
     IconSet_3Symbols2,
     IconSet_3Smilies,
+    IconSet_3Stars,
+    IconSet_3Triangles,
     IconSet_3ColorSmilies,
     IconSet_4Arrows,
     IconSet_4ArrowsGray,
@@ -201,7 +203,8 @@ enum ScIconSetType
     IconSet_5Arrows,
     IconSet_5ArrowsGray,
     IconSet_5Ratings,
-    IconSet_5Quarters
+    IconSet_5Quarters,
+    IconSet_5Boxes
 };
 
 struct ScIconSetMap {

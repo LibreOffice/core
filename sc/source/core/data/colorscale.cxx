@@ -1231,6 +1231,8 @@ ScIconSetMap aIconSetMap[] = {
     { "3Symbols2", IconSet_3Symbols2, 3 },
     { "3Smilies", IconSet_3Smilies, 3 },
     { "3ColorSmilies", IconSet_3ColorSmilies, 3 },
+    { "3Stars", IconSet_3Stars, 3 },
+    { "3Triangles", IconSet_3Triangles, 3 },
     { "4Arrows", IconSet_4Arrows, 4 },
     { "4ArrowsGray", IconSet_4ArrowsGray, 4 },
     { "4RedToBlack", IconSet_4RedToBlack, 4 },
@@ -1240,6 +1242,7 @@ ScIconSetMap aIconSetMap[] = {
     { "5ArrowsGray", IconSet_5ArrowsGray, 5 },
     { "5Rating", IconSet_5Ratings, 5 },
     { "5Quarters", IconSet_5Quarters, 5 },
+    { "5Boxes", IconSet_5Boxes, 5 },
     { NULL, IconSet_3Arrows, 0 }
 };
 
@@ -1286,6 +1289,14 @@ const sal_Int32 a3ColorSmilies[] = {
     BMP_ICON_SET_POSITIVE_GREEN_SMILIE, BMP_ICON_SET_NEUTRAL_YELLOW_SMILIE, BMP_ICON_SET_NEGATIVE_RED_SMILIE
 };
 
+const sal_Int32 a3Stars[] = {
+    BMP_ICON_SET_STARS_EMPTY, BMP_ICON_SET_STARS_HALF, BMP_ICON_SET_STARS_FULL
+};
+
+const sal_Int32 a3Triangles[] = {
+    BMP_ICON_SET_TRIANGLES_DOWN, BMP_ICON_SET_TRIANGLES_SAME, BMP_ICON_SET_TRIANGLES_UP
+};
+
 const sal_Int32 a4Arrows[] = {
     BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP, BMP_ICON_SET_COLORARROWS_UP
 };
@@ -1312,6 +1323,12 @@ const sal_Int32 a4TrafficLights[] = {
 const sal_Int32 a5Quarters[] = {
     BMP_ICON_SET_PIES_EMPTY, BMP_ICON_SET_PIES_ONE_QUARTER, BMP_ICON_SET_PIES_HALF,
     BMP_ICON_SET_PIES_THREE_QUARTER, BMP_ICON_SET_PIES_FULL,
+};
+
+const sal_Int32 a5Boxes[] = {
+    BMP_ICON_SET_SQUARES_EMPTY, BMP_ICON_SET_SQUARES_ONE_QUARTER,
+    BMP_ICON_SET_SQUARES_HALF, BMP_ICON_SET_SQUARES_THREE_QUARTER,
+    BMP_ICON_SET_SQUARES_FULL
 };
 
 const sal_Int32 a3Symbols1[] = {
@@ -1353,6 +1370,8 @@ static const ScIconSetBitmapMap aBitmapMap[] = {
     { IconSet_3TrafficLights2, a3TrafficLights2 },
     { IconSet_3Smilies, a3Smilies },
     { IconSet_3ColorSmilies, a3ColorSmilies },
+    { IconSet_3Triangles, a3Triangles },
+    { IconSet_3Stars, a3Stars },
     { IconSet_4Arrows, a4Arrows },
     { IconSet_4ArrowsGray, a4ArrowsGray },
     { IconSet_4Rating, a4Ratings },
@@ -1361,7 +1380,8 @@ static const ScIconSetBitmapMap aBitmapMap[] = {
     { IconSet_5Arrows, a5Arrows },
     { IconSet_5ArrowsGray, a5ArrowsGray },
     { IconSet_5Quarters, a5Quarters },
-    { IconSet_5Ratings, a5Ratings }
+    { IconSet_5Ratings, a5Ratings },
+    { IconSet_5Boxes, a5Boxes }
 };
 
 }

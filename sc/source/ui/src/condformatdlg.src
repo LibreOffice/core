@@ -286,6 +286,8 @@ Control RID_COND_ENTRY
             "3 Symbols 1";
             "3 Symbols 2";
             "3 Smilies";
+            "3 Stars";
+            "3 Triangles";
             "3 Colored Smilies";
             "4 Arrows";
             "4 Gray Arrows";
@@ -296,6 +298,7 @@ Control RID_COND_ENTRY
             "5 Gray Arrows";
             "5 Ratings";
             "5 Quarters";
+            "5 Boxes";
         };
     };
 };
