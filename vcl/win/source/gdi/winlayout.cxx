@@ -264,14 +264,14 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     // prepare layout
     // TODO: fix case when recyclying old SimpleWinLayout object
-    mbDisableGlyphs |= ((rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) != 0);
+    mbDisableGlyphs |= ((rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) != 0);
     mnCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
 
     if( !mbDisableGlyphs )
     {
         // Win32 glyph APIs have serious problems with vertical layout
         // => workaround is to use the unicode methods then
-        if( rArgs.mnFlags & SAL_LAYOUT_VERTICAL )
+        if( rArgs.mnFlags & SalLayoutFlags::Vertical )
             mbDisableGlyphs = true;
         else
             // use cached value from font face
@@ -279,19 +279,19 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     // TODO: use a cached value for bDisableAsianKern from upper layers
-    if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
+    if( rArgs.mnFlags & SalLayoutFlags::KerningAsian )
     {
         TEXTMETRICA aTextMetricA;
         if( ::GetTextMetricsA( mhDC, &aTextMetricA )
         && !(aTextMetricA.tmPitchAndFamily & TMPF_FIXED_PITCH) && !(aTextMetricA.tmCharSet == 0x86) )
-            rArgs.mnFlags &= ~SAL_LAYOUT_KERNING_ASIAN;
+            rArgs.mnFlags &= ~SalLayoutFlags::KerningAsian;
     }
 
     // layout text
     int i, j;
 
     mnGlyphCount = 0;
-    bool bVertical = (rArgs.mnFlags & SAL_LAYOUT_VERTICAL) != 0;
+    bool bVertical = (rArgs.mnFlags & SalLayoutFlags::Vertical) != 0;
 
     // count the number of chars to process if no RTL run
     rArgs.ResetPos();
@@ -357,7 +357,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     mpOutGlyphs     = new WCHAR[ mnGlyphCount ];
     mpGlyphAdvances = new int[ mnGlyphCount ];
 
-    if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_PAIRS | SAL_LAYOUT_KERNING_ASIAN) )
+    if( rArgs.mnFlags & (SalLayoutFlags::KerningPairs | SalLayoutFlags::KerningAsian) )
         mpGlyphOrigAdvs = new int[ mnGlyphCount ];
 
     for( i = 0; i < mnGlyphCount; ++i )
@@ -417,7 +417,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             rArgs.NeedFallback( nCharPos+1, bRTL );
 
         // replace the current glyph shape with the NotDef glyph shape
-        if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
+        if( rArgs.mnFlags & SalLayoutFlags::ForFallback )
         {
             // when we already are layouting for glyph fallback
             // then a new unresolved glyph is not interesting
@@ -450,7 +450,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     // apply kerning if the layout engine has not yet done it
-    if( rArgs.mnFlags & (SAL_LAYOUT_KERNING_ASIAN|SAL_LAYOUT_KERNING_PAIRS) )
+    if( rArgs.mnFlags & (SalLayoutFlags::KerningAsian|SalLayoutFlags::KerningPairs) )
     {
         for( i = 0; i < mnGlyphCount; ++i )
             mpGlyphOrigAdvs[i] = mpGlyphAdvances[i];
@@ -461,13 +461,13 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             ++nLen;
         for( i = 1; i < nLen; ++i )
         {
-            if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
+            if( rArgs.mnFlags & SalLayoutFlags::KerningPairs )
             {
                 int nKernAmount = mrWinFontEntry.GetKerning( pBidiStr[i-1], pBidiStr[i] );
                 mpGlyphAdvances[ i-1 ] += nKernAmount;
                 mnWidth += nKernAmount;
             }
-            else if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
+            else if( rArgs.mnFlags & SalLayoutFlags::KerningAsian )
 
             if( ( (0x3000 == (0xFF00 & pBidiStr[i-1])) || (0x2010 == (0xFFF0 & pBidiStr[i-1])) || (0xFF00 == (0xFF00 & pBidiStr[i-1])))
             &&  ( (0x3000 == (0xFF00 & pBidiStr[i])) || (0x2010 == (0xFFF0 & pBidiStr[i])) || (0xFF00 == (0xFF00 & pBidiStr[i])) ) )
@@ -547,7 +547,7 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIds, Point& rPo
         sal_GlyphId aGlyphId = mpOutGlyphs[ nStart ];
         if( mbDisableGlyphs )
         {
-            if( mnLayoutFlags & SAL_LAYOUT_VERTICAL )
+            if( mnLayoutFlags & SalLayoutFlags::Vertical )
             {
                 const sal_UCS4 cChar = static_cast<sal_UCS4>(aGlyphId & GF_IDXMASK);
                 if( mrWinFontData.HasGSUBstitutions( mhDC )
@@ -1044,7 +1044,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     // => when the whole string is involved there is no extra context
     typedef std::vector<int> TIntVector;
     TIntVector aDropChars;
-    if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
+    if( rArgs.mnFlags & SalLayoutFlags::ForFallback )
     {
         // calculate superfluous context char positions
         aDropChars.push_back( 0 );
@@ -1071,14 +1071,14 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     // prepare itemization
     // TODO: try to avoid itemization since it costs a lot of performance
     SCRIPT_STATE aScriptState = {0,false,false,false,false,false,false,false,false,0,0};
-    aScriptState.uBidiLevel         = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
-    aScriptState.fOverrideDirection = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG));
-    aScriptState.fDigitSubstitute   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
+    aScriptState.uBidiLevel         = (0 != (rArgs.mnFlags & SalLayoutFlags::BiDiRtl));
+    aScriptState.fOverrideDirection = (0 != (rArgs.mnFlags & SalLayoutFlags::BidiStrong));
+    aScriptState.fDigitSubstitute   = (0 != (rArgs.mnFlags & SalLayoutFlags::SubstituteDigits));
     aScriptState.fArabicNumContext  = aScriptState.fDigitSubstitute & aScriptState.uBidiLevel;
     DWORD nLangId = 0;  // TODO: get language from font
     SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,false,false,false,0};
     aScriptControl.fNeutralOverride = aScriptState.fOverrideDirection;
-    aScriptControl.fContextDigits   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
+    aScriptControl.fContextDigits   = (0 != (rArgs.mnFlags & SalLayoutFlags::SubstituteDigits));
 #if HAVE_FMERGENEUTRALITEMS
     aScriptControl.fMergeNeutralItems = true;
 #endif
@@ -1137,10 +1137,10 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     // reorder visual item order if needed
-    if( rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG )
+    if( rArgs.mnFlags & SalLayoutFlags::BidiStrong )
     {
         // force RTL item ordering if requested
-        if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL )
+        if( rArgs.mnFlags & SalLayoutFlags::BiDiRtl )
         {
             VisualItem* pVI0 = &mpVisualItems[ 0 ];
             VisualItem* pVI1 = &mpVisualItems[ mnItemCount ];
@@ -1234,7 +1234,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
 
         // override bidi analysis if requested
-        if( rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG )
+        if( rArgs.mnFlags & SalLayoutFlags::BidiStrong )
         {
             // FIXME: is this intended ?
             rVisualItem.mpScriptItem->a.fRTL                 = (aScriptState.uBidiLevel & 1);
@@ -1265,7 +1265,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                 rVisualItem.IsRTL() );
 
             // don't bother to do a default layout in a fallback level
-            if( 0 != (rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK) )
+            if( 0 != (rArgs.mnFlags & SalLayoutFlags::ForFallback) )
                 continue;
 
             // the primitive layout engine is good enough for the default layout
@@ -2113,7 +2113,7 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
         if( rVisualItem.IsEmpty() )
             continue;
 
-        if (mnLayoutFlags & SAL_LAYOUT_FOR_FALLBACK)
+        if (mnLayoutFlags & SalLayoutFlags::ForFallback)
         {
             nXPos = rVisualItem.mnXOffset;
         }
@@ -2150,7 +2150,7 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
         }
     }
 
-    if (!(mnLayoutFlags & SAL_LAYOUT_FOR_FALLBACK))
+    if (!(mnLayoutFlags & SalLayoutFlags::ForFallback))
     {
         nXPos = 0;
         // fixup unknown character positions to neighbor
@@ -2638,7 +2638,7 @@ void  GraphiteWinLayout::AdjustLayout(ImplLayoutArgs& rArgs)
     WinLayout::AdjustLayout(rArgs);
     maImpl.DrawBase() = WinLayout::maDrawBase;
     maImpl.DrawOffset() = WinLayout::maDrawOffset;
-    if ( (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) && rArgs.mpDXArray)
+    if ( (rArgs.mnFlags & SalLayoutFlags::BiDiRtl) && rArgs.mpDXArray)
     {
         mrWinFontEntry.InitKashidaHandling(mhDC);
     }
@@ -2722,7 +2722,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
     bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled();
 
-    if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
+    if( !(rArgs.mnFlags & SalLayoutFlags::ComplexDisabled)
     &&   (bUspInited || InitUSP()) )   // CTL layout engine
     {
 #if ENABLE_GRAPHITE
@@ -2740,7 +2740,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     }
     else
     {
-        if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) && !rFontInstance.HasKernData() )
+        if( (rArgs.mnFlags & SalLayoutFlags::KerningPairs) && !rFontInstance.HasKernData() )
         {
             // TODO: directly cache kerning info in the rFontInstance
             // TODO: get rid of kerning methods+data in WinSalGraphics object

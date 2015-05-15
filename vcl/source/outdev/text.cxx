@@ -959,7 +959,7 @@ float OutputDevice::approximate_char_width() const
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   const long* pDXAry,
-                                  sal_Int32 nIndex, sal_Int32 nLen, int flags )
+                                  sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags )
 {
     if(nLen == 0x0FFFF)
     {
@@ -1012,7 +1012,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
     }
     // do layout
     SalLayout *const pSalLayout = ImplLayout(rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, 0, pLayoutCache);
+            Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
     if( !pSalLayout )
         return 0;
 #if VCL_FLOAT_DEVICE_PIXEL
@@ -1194,7 +1194,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
 ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
                                                     const sal_Int32 nMinIndex, const sal_Int32 nLen,
                                                     DeviceCoordinate nPixelWidth, const DeviceCoordinate* pDXArray,
-                                                    int nLayoutFlags,
+                                                    SalLayoutFlags nLayoutFlags,
          vcl::TextLayoutCache const*const pLayoutCache) const
 {
     assert(nMinIndex >= 0);
@@ -1210,9 +1210,9 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         nEndIndex = nMinIndex;
 
     if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL )
-        nLayoutFlags |= SAL_LAYOUT_BIDI_RTL;
+        nLayoutFlags |= SalLayoutFlags::BiDiRtl;
     if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_STRONG )
-        nLayoutFlags |= SAL_LAYOUT_BIDI_STRONG;
+        nLayoutFlags |= SalLayoutFlags::BiDiStrong;
     else if( !(mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
     {
         // disable Bidi if no RTL hint and no RTL codes used
@@ -1224,20 +1224,20 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
             ||  ((*pStr >= 0xFE70) && (*pStr < 0xFEFF)) ) // arabic presentation forms B
                 break;
         if( pStr >= pEnd )
-            nLayoutFlags |= SAL_LAYOUT_BIDI_STRONG;
+            nLayoutFlags |= SalLayoutFlags::BiDiStrong;
     }
 
     if( mbKerning )
-        nLayoutFlags |= SAL_LAYOUT_KERNING_PAIRS;
+        nLayoutFlags |= SalLayoutFlags::KerningPairs;
     if( maFont.GetKerning() & FontKerning::Asian )
-        nLayoutFlags |= SAL_LAYOUT_KERNING_ASIAN;
+        nLayoutFlags |= SalLayoutFlags::KerningAsian;
     if( maFont.IsVertical() )
-        nLayoutFlags |= SAL_LAYOUT_VERTICAL;
+        nLayoutFlags |= SalLayoutFlags::Vertical;
 
     if( mnTextLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES )
-        nLayoutFlags |= SAL_LAYOUT_ENABLE_LIGATURES;
+        nLayoutFlags |= SalLayoutFlags::EnableLigatures;
     else if( mnTextLayoutMode & TEXT_LAYOUT_COMPLEX_DISABLED )
-        nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
+        nLayoutFlags |= SalLayoutFlags::ComplexDisabled;
     else
     {
         // disable CTL for non-CTL text
@@ -1255,7 +1255,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
             )
                 break;
         if( pStr >= pEnd )
-            nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
+            nLayoutFlags |= SalLayoutFlags::ComplexDisabled;
     }
 
     if( meTextLanguage ) //TODO: (mnTextLayoutMode & TEXT_LAYOUT_SUBSTITUTE_DIGITS)
@@ -1291,7 +1291,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     bool bRTLWindow = IsRTLEnabled();
     bRightAlign ^= bRTLWindow;
     if( bRightAlign )
-        nLayoutFlags |= SAL_LAYOUT_RIGHT_ALIGN;
+        nLayoutFlags |= SalLayoutFlags::RightAlign;
 
     // set layout options
     ImplLayoutArgs aLayoutArgs( rStr.getStr(), rStr.getLength(), nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguageTag(), pLayoutCache );
@@ -1308,7 +1308,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
 SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, long nLogicalWidth,
-                                    const long* pDXArray, int flags,
+                                    const long* pDXArray, SalLayoutFlags flags,
          vcl::TextLayoutCache const* pLayoutCache) const
 {
     // we need a graphics
@@ -1399,7 +1399,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
     pSalLayout->AdjustLayout( aLayoutArgs );
     pSalLayout->DrawBase() = ImplLogicToDevicePixel( rLogicalPos );
     // adjust to right alignment if necessary
-    if( aLayoutArgs.mnFlags & SAL_LAYOUT_RIGHT_ALIGN )
+    if( aLayoutArgs.mnFlags & SalLayoutFlags::RightAlign )
     {
         DeviceCoordinate nRTLOffset;
         if( pDXPixelArray )
@@ -1421,7 +1421,7 @@ std::shared_ptr<vcl::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
         return nullptr;
     OUString copyBecausePrepareModifiesIt(rString);
     ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs(copyBecausePrepareModifiesIt,
-            0, rString.getLength(), 0, nullptr, 0, nullptr);
+            0, rString.getLength(), 0, nullptr, SalLayoutFlags::NONE, nullptr);
 
     SalLayout *const pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
     if (!pSalLayout)
@@ -1449,7 +1449,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
          vcl::TextLayoutCache const*const pLayoutCache) const
 {
     SalLayout *const pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, 0, pLayoutCache);
+            Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
@@ -1484,7 +1484,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
     rHyphenPos = -1;
 
     SalLayout *const pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, 0, pLayoutCache);
+            Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {

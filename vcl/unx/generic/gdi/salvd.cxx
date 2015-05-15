@@ -150,7 +150,7 @@ X11SalVirtualDevice::X11SalVirtualDevice( SalGraphics* pGraphics,
         bDeleteColormap = true;
     }
 
-    pGraphics_->SetLayout( 0 ); // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
+    pGraphics_->SetLayout( SalLayoutFlags::NONE ); // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
     pGraphics_->Init( this, pColormap, bDeleteColormap );
 }
 

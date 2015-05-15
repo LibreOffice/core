@@ -41,7 +41,7 @@ typedef unsigned short LanguageType;
 
 class SalGraphics;
 class PhysicalFontFace;
-
+enum class SalLayoutFlags;
 namespace vcl {
     class TextLayoutCache;
 }
@@ -74,7 +74,7 @@ class ImplLayoutArgs
 public:
     // string related inputs
     LanguageTag         maLanguageTag;
-    int                 mnFlags;
+    SalLayoutFlags      mnFlags;
     int                 mnLength;
     int                 mnMinCharPos;
     int                 mnEndCharPos;
@@ -94,7 +94,7 @@ public:
 
 public:
                 ImplLayoutArgs( const sal_Unicode* pStr, int nLength,
-                                int nMinCharPos, int nEndCharPos, int nFlags,
+                                int nMinCharPos, int nEndCharPos, SalLayoutFlags nFlags,
                                 const LanguageTag& rLanguageTag,
                                 vcl::TextLayoutCache const* pLayoutCache);
 
@@ -224,7 +224,7 @@ private:
 protected:
     int             mnMinCharPos;
     int             mnEndCharPos;
-    int             mnLayoutFlags;
+    SalLayoutFlags  mnLayoutFlags;
 
     int             mnUnitsPerPixel;
     int             mnOrientation;

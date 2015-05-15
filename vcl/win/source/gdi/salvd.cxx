@@ -117,7 +117,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         WinSalVirtualDevice*    pVDev = new WinSalVirtualDevice;
         SalData*                pSalData = GetSalData();
         WinSalGraphics*         pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE, pGraphics->isScreen(), 0, pVDev);
-        pVirGraphics->SetLayout( 0 );   // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
+        pVirGraphics->SetLayout( SalLayoutFlags::NONE );   // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
         pVirGraphics->setHDC(hDC);
         if ( pSalData->mhDitherPal && pVirGraphics->isScreen() )
         {

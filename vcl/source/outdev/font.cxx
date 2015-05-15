@@ -2072,7 +2072,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     MultiSalLayout* pMultiSalLayout = NULL;
     ImplLayoutRuns aLayoutRuns = rLayoutArgs.maRuns;
     rLayoutArgs.PrepareFallback();
-    rLayoutArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
+    rLayoutArgs.mnFlags |= SalLayoutFlags::ForFallback;
 
     // get list of unicodes that need glyph fallback
     int nCharPos = -1;

@@ -56,13 +56,13 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     GenericSalLayout::AdjustLayout( rArgs );
 
     // apply asian kerning if the glyphs are not already formatted
-    if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
-    && !(rArgs.mnFlags & SAL_LAYOUT_VERTICAL) )
+    if( (rArgs.mnFlags & SalLayoutFlags::KerningAsian)
+    && !(rArgs.mnFlags & SalLayoutFlags::Vertical) )
         if( (rArgs.mpDXArray != NULL) || (rArgs.mnLayoutWidth != 0) )
             ApplyAsianKerning( rArgs.mpStr, rArgs.mnLength );
 
     // insert kashidas where requested by the formatting array
-    if( (rArgs.mnFlags & SAL_LAYOUT_KASHIDA_JUSTIFICATON) && rArgs.mpDXArray )
+    if( (rArgs.mnFlags & SalLayoutFlags::KashidaJustification) && rArgs.mpDXArray )
     {
         int nKashidaIndex = mrServerFont.GetGlyphIndex( 0x0640 );
         if( nKashidaIndex != 0 )
@@ -492,7 +492,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 if (!nGlyphIndex)
                 {
                     rLayout.SetNeedFallback(rArgs, nCharPos, bRightToLeft);
-                    if (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags)
+                    if (SalLayoutFlags::ForFallback & rArgs.mnFlags)
                         continue;
                 }
 
@@ -580,7 +580,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
     // determine need for kashida justification
     if((rArgs.mpDXArray || rArgs.mnLayoutWidth)
     && ((maHbScript == HB_SCRIPT_ARABIC) || (maHbScript == HB_SCRIPT_SYRIAC)))
-        rArgs.mnFlags |= SAL_LAYOUT_KASHIDA_JUSTIFICATON;
+        rArgs.mnFlags |= SalLayoutFlags::KashidaJustification;
 
     return true;
 }

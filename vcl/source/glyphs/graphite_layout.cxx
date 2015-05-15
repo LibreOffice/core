@@ -171,7 +171,7 @@ static void findFirstClusterSlot(const gr_slot* base, gr_slot const** first, gr_
 void
 GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fScaling)
 {
-    bool bRtl = (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL);
+    bool bRtl(rArgs.mnFlags & SalLayoutFlags::BiDiRtl);
     int nCharRequested = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
     int nChar = gr_seg_n_cinfo(pSegment);
     float fMinX = gr_seg_advance_X(pSegment);
@@ -391,7 +391,7 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     const gr_slot * gi, float gOrigin, float nextGlyphOrigin, float scaling, long & rDXOffset,
     bool bIsBase, int baseChar)
 {
-    bool bRtl = (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL);
+    bool bRtl(rArgs.mnFlags & SalLayoutFlags::BiDiRtl);
     float nextOrigin;
     assert(gi);
     assert(gr_slot_before(gi) <= gr_slot_after(gi));
@@ -424,14 +424,14 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     if (glyphId == 0)
     {
         rArgs.NeedFallback(firstChar, bRtl);
-        if( (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags ))
+        if( (SalLayoutFlags::ForFallback & rArgs.mnFlags ))
         {
             glyphId = GF_DROPPED;
             deltaOffset -= glyphWidth;
             glyphWidth = 0;
         }
     }
-    else if(rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK)
+    else if(rArgs.mnFlags & SalLayoutFlags::ForFallback)
     {
 #ifdef GRLAYOUT_DEBUG
         fprintf(grLog(),"fallback c%d %x in run %d\n", firstChar, rArgs.mpStr[firstChar],
@@ -544,7 +544,7 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
 
     // Clear out any previous buffers
     clear();
-    bool bRtl = mnLayoutFlags & SAL_LAYOUT_BIDI_RTL;
+    bool bRtl(mnLayoutFlags & SalLayoutFlags::BiDiRtl);
     try
     {
         // Don't set RTL if font doesn't support it otherwise it forces rtl on
@@ -559,7 +559,7 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
         // a hyphenation point, so disable if CTL is disabled.
         mnSegCharOffset = rArgs.mnMinCharPos;
         int limit = rArgs.mnEndCharPos;
-        if (!(SAL_LAYOUT_COMPLEX_DISABLED & rArgs.mnFlags))
+        if (!(SalLayoutFlags::ComplexDisabled & rArgs.mnFlags))
         {
             int nSegCharMin = maximum<int>(0, mnMinCharPos - EXTRA_CONTEXT_LENGTH);
             int nSegCharLimit = minimum(rArgs.mnLength, mnEndCharPos + EXTRA_CONTEXT_LENGTH);
@@ -643,7 +643,7 @@ bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr_segment * pSegment)
         // Discover all the clusters.
         try
         {
-            bool bRtl = mnLayoutFlags & SAL_LAYOUT_BIDI_RTL;
+            bool bRtl(mnLayoutFlags & SalLayoutFlags::BiDiRtl);
             fillFrom(pSegment, rArgs, mfScaling);
 
             if (bRtl)
@@ -777,8 +777,8 @@ void  GraphiteLayout::AdjustLayout(ImplLayoutArgs& rArgs)
         std::vector<int> vDeltaWidths(mvGlyphs.size(), 0);
         ApplyDXArray(rArgs, vDeltaWidths);
 
-        if( (mnLayoutFlags & SAL_LAYOUT_BIDI_RTL) &&
-           !(rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK) )
+        if( (mnLayoutFlags & SalLayoutFlags::BiDiRtl) &&
+           !(rArgs.mnFlags & SalLayoutFlags::ForFallback) )
         {
             // check if this is a kashida script
             bool bKashidaScript = false;
@@ -895,7 +895,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
          fprintf(grLog(),"%d,%d,%ld ", (int)iDx, (int)mvCharDxs[iDx], args.mpDXArray[iDx]);
     fprintf(grLog(),"ApplyDx\n");
 #endif
-    bool bRtl = mnLayoutFlags & SAL_LAYOUT_BIDI_RTL;
+    bool bRtl(mnLayoutFlags & SalLayoutFlags::BiDiRtl);
     int nXOffset = 0;
     if (bRtl)
     {
@@ -1097,7 +1097,7 @@ void GraphiteLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) con
     std::fill(pCaretXArray, pCaretXArray + nArraySize, -1);
     // the layout method doesn't modify the layout even though it isn't
     // const in the interface
-    bool bRtl = (mnLayoutFlags & SAL_LAYOUT_BIDI_RTL);//const_cast<GraphiteLayout*>(this)->maLayout.rightToLeft();
+    bool bRtl(mnLayoutFlags & SalLayoutFlags::BiDiRtl);//const_cast<GraphiteLayout*>(this)->maLayout.rightToLeft();
     int prevBase = -1;
     long prevClusterWidth = 0;
     for (int i = 0, nCharSlot = 0; i < nArraySize && nCharSlot < static_cast<int>(mvCharDxs.size()); ++nCharSlot, i+=2)

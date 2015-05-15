@@ -25,6 +25,7 @@
 #include <tools/rc.hxx>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
@@ -55,12 +56,6 @@
 
 #include <memory>
 #include <vector>
-
-#if defined UNX
-#define GLYPH_FONT_HEIGHT   128
-#else
-#define GLYPH_FONT_HEIGHT   256
-#endif
 
 struct ImplOutDevData;
 class ImplFontEntry;
@@ -93,23 +88,25 @@ class SalLayout;
 class ImplLayoutArgs;
 class ImplFontAttributes;
 class VirtualDevice;
-namespace vcl { class Window; }
 struct SalTwoRect;
+class VirtualDevice;
+class Printer;
+class FontSelectPattern;
+class ImplFontMetricData;
+class VCLXGraphics;
+class OutDevStateStack;
+struct BitmapSystemData;
 
-// Layout options
-#define SAL_LAYOUT_BIDI_RTL                 (1<<0)
-#define SAL_LAYOUT_BIDI_STRONG              (1<<1)
-#define SAL_LAYOUT_RIGHT_ALIGN              (1<<2)
-#define SAL_LAYOUT_KERNING_PAIRS            (1<<4)
-#define SAL_LAYOUT_KERNING_ASIAN            (1<<5)
-#define SAL_LAYOUT_VERTICAL                 (1<<6)
-#define SAL_LAYOUT_COMPLEX_DISABLED         (1<<8)
-#define SAL_LAYOUT_ENABLE_LIGATURES         (1<<9)
-#define SAL_LAYOUT_SUBSTITUTE_DIGITS        (1<<10)
-#define SAL_LAYOUT_KASHIDA_JUSTIFICATON     (1<<11)
-#define SAL_LAYOUT_DISABLE_GLYPH_PROCESSING (1<<12)
-#define SAL_LAYOUT_FOR_FALLBACK             (1<<13)
-#define SAL_LAYOUT_DRAW_BULLET              (1<<14)
+namespace vcl
+{
+    class PDFWriterImpl;
+    class ExtOutDevData;
+    class ITextLayout;
+    struct FontCapabilities;
+    class TextLayoutCache;
+    class Window;
+    class FontInfo;
+}
 
 namespace com { namespace sun { namespace star { namespace rendering {
     class XCanvas;
@@ -127,16 +124,36 @@ namespace com { namespace sun { namespace star { namespace awt {
     class XGraphics;
 } } } }
 
-typedef std::vector< Rectangle > MetricVector;
+#if defined UNX
+#define GLYPH_FONT_HEIGHT   128
+#else
+#define GLYPH_FONT_HEIGHT   256
+#endif
 
-namespace vcl
+// Text Layout options
+enum class SalLayoutFlags
 {
-    class PDFWriterImpl;
-    class ExtOutDevData;
-    class ITextLayout;
-    struct FontCapabilities;
-    class TextLayoutCache;
+    NONE                    = 0x0000,
+    BiDiRtl                 = 0x0001,
+    BiDiStrong              = 0x0002,
+    RightAlign              = 0x0004,
+    KerningPairs            = 0x0010,
+    KerningAsian            = 0x0020,
+    Vertical                = 0x0040,
+    ComplexDisabled         = 0x0100,
+    EnableLigatures         = 0x0200,
+    SubstituteDigits        = 0x0400,
+    KashidaJustification    = 0x0800,
+    DisableGlyphProcessing  = 0x1000,
+    ForFallback             = 0x2000,
+    DrawBullet              = 0x4000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0x7f77> {};
 }
+
+typedef std::vector< Rectangle > MetricVector;
 
 // OutputDevice-Types
 
@@ -226,19 +243,7 @@ enum OutDevViewType { OUTDEV_VIEWTYPE_DONTKNOW, OUTDEV_VIEWTYPE_PRINTPREVIEW, OU
 
 // OutputDevice
 
-class VirtualDevice;
-class Printer;
-class FontSelectPattern;
-class ImplFontMetricData;
-class VCLXGraphics;
-class OutDevStateStack;
-struct BitmapSystemData;
-
 typedef boost::intrusive_ptr< FontCharMap > FontCharMapPtr;
-
-namespace vcl {
-    class FontInfo;
-}
 
 BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
 void AdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
@@ -1113,7 +1118,7 @@ public:
                                                const long* pDXAry = NULL,
                                                sal_Int32 nIndex = 0,
                                                sal_Int32 nLen = -1,
-                                               int flags = 0);
+                                               SalLayoutFlags flags = SalLayoutFlags::NONE);
     long                        GetTextArray( const OUString& rStr, long* pDXAry = NULL,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                               vcl::TextLayoutCache const* = nullptr) const;
@@ -1285,11 +1290,12 @@ public:
     virtual bool                HasMirroredGraphics() const;
     SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
-                                            const long* pLogicDXArray=NULL, int flags=0,
+                                            const long* pLogicDXArray=NULL, SalLayoutFlags flags = SalLayoutFlags::NONE,
                                             vcl::TextLayoutCache const* = nullptr) const;
     SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
-                                                         DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray, int flags = 0,
-                vcl::TextLayoutCache const* = nullptr) const;
+                                                         DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray,
+                                                         SalLayoutFlags flags = SalLayoutFlags::NONE,
+                                                         vcl::TextLayoutCache const* = nullptr) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE SalLayout*   getFallbackFont(ImplFontEntry &rFallbackFont,

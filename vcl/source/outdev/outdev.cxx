@@ -723,7 +723,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
         // mirroring may be required
         // because only windows have a SalGraphicsLayout
         // mirroring is performed here
-        if( (GetOutDevType() != OUTDEV_WINDOW) && pSrcGraphics && (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+        if( (GetOutDevType() != OUTDEV_WINDOW) && pSrcGraphics && (pSrcGraphics->GetLayout() & SalLayoutFlags::BiDiRtl) )
         {
             SalTwoRect aPosAry2 = rPosAry;
             pSrcGraphics->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcDev );
@@ -749,8 +749,8 @@ bool OutputDevice::ImplIsAntiparallel() const
     bool bRet = false;
     if( AcquireGraphics() )
     {
-        if( ( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && ! IsRTLEnabled() ) ||
-            ( ! (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) && IsRTLEnabled() ) )
+        if( ( (mpGraphics->GetLayout() & SalLayoutFlags::BiDiRtl) && ! IsRTLEnabled() ) ||
+            ( ! (mpGraphics->GetLayout() & SalLayoutFlags::BiDiRtl) && IsRTLEnabled() ) )
         {
             bRet = true;
         }
@@ -794,7 +794,7 @@ void OutputDevice::ReMirror( vcl::Region &rRegion ) const
 
 bool OutputDevice::HasMirroredGraphics() const
 {
-   return ( AcquireGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
+   return ( AcquireGraphics() && (mpGraphics->GetLayout() & SalLayoutFlags::BiDiRtl) );
 }
 
 bool OutputDevice::ImplIsRecordLayout() const

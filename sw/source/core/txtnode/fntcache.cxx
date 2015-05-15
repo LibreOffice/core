@@ -1559,7 +1559,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
 #if defined(MACOSX) || defined(IOS)
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                         pKernArray, rInf.GetIdx(), 1, bBullet ? SAL_LAYOUT_DRAW_BULLET : 0 );
+                                         pKernArray, rInf.GetIdx(), 1, bBullet ? SalLayoutFlags::DrawBullet : 0 );
 #else
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                          pKernArray, rInf.GetIdx(), 1 );
@@ -1749,7 +1749,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
 #if defined(MACOSX) || defined(IOS)
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray + nOffs,
-                                             rInf.GetIdx() + nOffs , nLen - nOffs, bBullet ? SAL_LAYOUT_DRAW_BULLET : 0 );
+                                             rInf.GetIdx() + nOffs , nLen - nOffs, bBullet ? SalLayoutFlags::DrawBullet : 0 );
 #else
                 // If we paint bullets instead of spaces, we use a copy of
                 // the paragraph string. For the layout engine, the copy

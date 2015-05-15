@@ -548,7 +548,7 @@ SalLayout* CairoTextRender::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackL
     SalLayout* pLayout = NULL;
 
     if( mpServerFont[ nFallbackLevel ]
-    && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
+    && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
     {
 #if ENABLE_GRAPHITE
         // Is this a Graphite font?

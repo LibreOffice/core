@@ -217,7 +217,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
     DeviceCoordinate nPixelWidth = 0;
 
-    if(rArgs.mpDXArray && !(rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) )
+    if(rArgs.mpDXArray && !(rArgs.mnFlags & SalLayoutFlags::BiDiRtl) )
     {
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
         if( nPixelWidth <= 0)
@@ -238,7 +238,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     {
         nPixelWidth = rArgs.mnLayoutWidth;
 
-        if( nPixelWidth <= 0 && rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
+        if( nPixelWidth <= 0 && rArgs.mnFlags & SalLayoutFlags::BiDiRtl)
         {
             nPixelWidth = GetTextWidth();
         }
@@ -278,7 +278,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
             // in RTL-layouts trailing spaces are leftmost
             // TODO: use BiDi-algorithm to thoroughly check this assumption
-            if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
+            if( rArgs.mnFlags & SalLayoutFlags::BiDiRtl)
             {
                 mfBaseAdv = mfTrailingSpaceWidth;
             }
@@ -316,7 +316,7 @@ CGPoint CTLayout::GetTextDrawPosition() const
 {
     CGFloat fPosX, fPosY;
 
-    if (mnLayoutFlags & SAL_LAYOUT_RIGHT_ALIGN)
+    if (mnLayoutFlags & SalLayoutFlags::RightAlign)
     {
         // text is always drawn at its leftmost point
         const Point aPos = DrawBase();
@@ -425,7 +425,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
      * Otherwise we just use CoreText to display the whole line
      */
 
-    if(!(mnLayoutFlags & SAL_LAYOUT_VERTICAL))
+    if(!(mnLayoutFlags & SalLayoutFlags::Vertical))
     {
         boost::ptr_vector<CTRunData>::const_iterator iter = m_vRunData.begin();
         if(iter != m_vRunData.end())
@@ -448,7 +448,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
                         CGContextSetFont(context, cgFont);
                         CGContextSetFontSize(context, CTFontGetSize(runFont));
                         CGContextSetFillColor( context, rAquaGraphics.maTextColor.AsArray() );
-                        if(mnLayoutFlags & SAL_LAYOUT_VERTICAL)
+                        if(mnLayoutFlags & SalLayoutFlags::Vertical)
                         {
                             CGContextRotateCTM( context,  -F_PI/2 );
                         }
@@ -462,7 +462,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
                         CFRelease(cgFont);
                     }
                     /* Do we want to show 'space' as 'bullet' */
-                    if(mnLayoutFlags & SAL_LAYOUT_DRAW_BULLET)
+                    if(mnLayoutFlags & SalLayoutFlags::DrawBullet)
                     {
                         for(int i = 0 ; i < iter->m_nGlyphs; i++)
                         {
@@ -510,7 +510,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     // draw the text
     CTLineDraw( ctline, context );
 
-    if(mnLayoutFlags & SAL_LAYOUT_DRAW_BULLET)
+    if(mnLayoutFlags & SalLayoutFlags::DrawBullet)
     {
         CFArrayRef runArray = CTLineGetGlyphRuns(ctline);
         CFIndex runCount = CFArrayGetCount(runArray);
@@ -542,7 +542,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
                     CTRunGetPositions(run, glyphRange, &position);
                     CTRunGetAdvances(run, glyphRange, &advance);
                     CGRect bulletRect;
-                    if(mnLayoutFlags & SAL_LAYOUT_VERTICAL)
+                    if(mnLayoutFlags & SalLayoutFlags::Vertical)
                     {
                         bulletRect = CGRectMake(position.x - advance.width / 4,
                                                 -position.y,  baseSize / 5, baseSize / 5 );
@@ -558,7 +558,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
                     RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
                     CGContextSetFillColor( context, bulletColor.AsArray() );
                     CGContextSetStrokeColor(context, bulletColor.AsArray());
-                    if(mnLayoutFlags & SAL_LAYOUT_VERTICAL)
+                    if(mnLayoutFlags & SalLayoutFlags::Vertical)
                     {
                         CGContextRotateCTM( context,  -F_PI/2 );
                     }

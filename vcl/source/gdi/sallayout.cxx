@@ -81,24 +81,24 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
     s << "ImplLayoutArgs{";
 
     s << "Flags=";
-    if (rArgs.mnFlags == 0)
+    if (rArgs.mnFlags == SalLayoutFlags::NONE)
         s << 0;
     else {
         bool need_or = false;
         s << "{";
-#define TEST(x) if (rArgs.mnFlags & SAL_LAYOUT_##x) { if (need_or) s << "|"; s << #x; need_or = true; }
-        TEST(BIDI_RTL);
-        TEST(BIDI_STRONG);
-        TEST(RIGHT_ALIGN);
-        TEST(KERNING_PAIRS);
-        TEST(KERNING_ASIAN);
-        TEST(VERTICAL);
-        TEST(COMPLEX_DISABLED);
-        TEST(ENABLE_LIGATURES);
-        TEST(SUBSTITUTE_DIGITS);
-        TEST(KASHIDA_JUSTIFICATON);
-        TEST(DISABLE_GLYPH_PROCESSING);
-        TEST(FOR_FALLBACK);
+#define TEST(x) if (rArgs.mnFlags & SalLayoutFlags::x) { if (need_or) s << "|"; s << #x; need_or = true; }
+        TEST(BiDiRtl);
+        TEST(BiDiStrong);
+        TEST(RightAlign);
+        TEST(KerningPairs);
+        TEST(KerningAsian);
+        TEST(Vertical);
+        TEST(ComplexDisabled);
+        TEST(EnableLigatures);
+        TEST(SubstituteDigits);
+        TEST(KashidaJustification);
+        TEST(DisableGlyphProcessing);
+        TEST(ForFallback);
 #undef TEST
         s << "}";
     }
@@ -486,7 +486,7 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
 }
 
 ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
-    int nMinCharPos, int nEndCharPos, int nFlags, const LanguageTag& rLanguageTag,
+    int nMinCharPos, int nEndCharPos, SalLayoutFlags nFlags, const LanguageTag& rLanguageTag,
     vcl::TextLayoutCache const*const pLayoutCache)
 :
     maLanguageTag( rLanguageTag ),
@@ -500,14 +500,14 @@ ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
     mnLayoutWidth( 0 ),
     mnOrientation( 0 )
 {
-    if( mnFlags & SAL_LAYOUT_BIDI_STRONG )
+    if( mnFlags & SalLayoutFlags::BiDiStrong )
     {
         // handle strong BiDi mode
 
         // do not bother to BiDi analyze strong LTR/RTL
         // TODO: can we assume these strings do not have unicode control chars?
         //       if not remove the control characters from the runs
-        bool bRTL = ((mnFlags & SAL_LAYOUT_BIDI_RTL) != 0);
+        bool bRTL(mnFlags & SalLayoutFlags::BiDiRtl);
         AddRun( mnMinCharPos, mnEndCharPos, bRTL );
     }
     else
@@ -515,7 +515,7 @@ ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
         // handle weak BiDi mode
 
         UBiDiLevel nLevel = UBIDI_DEFAULT_LTR;
-        if( mnFlags & SAL_LAYOUT_BIDI_RTL )
+        if( mnFlags & SalLayoutFlags::BiDiRtl )
             nLevel = UBIDI_DEFAULT_RTL;
 
         // prepare substring for BiDi analysis
@@ -646,7 +646,7 @@ bool ImplLayoutArgs::GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRTL )
 SalLayout::SalLayout()
 :   mnMinCharPos( -1 ),
     mnEndCharPos( -1 ),
-    mnLayoutFlags( 0 ),
+    mnLayoutFlags( SalLayoutFlags::NONE ),
     mnUnitsPerPixel( 1 ),
     mnOrientation( 0 ),
     mnRefCount( 1 ),
@@ -1036,7 +1036,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     size_t i;
     int n,p;
     long nBasePointX = -1;
-    if( mnLayoutFlags & SAL_LAYOUT_FOR_FALLBACK )
+    if( mnLayoutFlags & SalLayoutFlags::ForFallback )
         nBasePointX = 0;
     for(p = 0; p < nCharCount; ++p )
         pLogCluster[ p ] = -1;
@@ -1670,7 +1670,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         if( n > 0 )
         {
             aMultiArgs.maRuns = maFallbackRuns[ n-1 ];
-            aMultiArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
+            aMultiArgs.mnFlags |= SalLayoutFlags::ForFallback;
         }
         mpLayouts[n]->AdjustLayout( aMultiArgs );
 

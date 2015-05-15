@@ -229,9 +229,9 @@ public:
 
     virtual bool                supportsOperation( OutDevSupportType ) const = 0;
 
-    // mirroring specifica
-    int                         GetLayout() { return m_nLayout; }
-    void                        SetLayout( int aLayout ) { m_nLayout = aLayout;}
+    // mirroring specifics
+    SalLayoutFlags              GetLayout() { return m_nLayout; }
+    void                        SetLayout( SalLayoutFlags aLayout ) { m_nLayout = aLayout;}
 
     void                        mirror( long& nX, const OutputDevice *pOutDev, bool bBack = false ) const;
     void                        mirror( long& nX, long& nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
@@ -614,7 +614,7 @@ protected:
                                     sal_uInt8 nTransparency ) = 0;
 
 private:
-    int                         m_nLayout; //< 0: mirroring off, 1: mirror x-axis
+    SalLayoutFlags              m_nLayout; //< 0: mirroring off, 1: mirror x-axis
 
 protected:
     /// flags which hold the SetAntialiasing() value from OutputDevice

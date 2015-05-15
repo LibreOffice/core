@@ -54,7 +54,7 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
     mnWidth    = nDX;
     mnHeight   = nDY;
     mpGraphics = new X11SalGraphics();
-    mpGraphics->SetLayout( 0 );
+    mpGraphics->SetLayout( SalLayoutFlags::NONE );
     mpGraphics->Init( this );
 }
 

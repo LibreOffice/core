@@ -282,7 +282,7 @@ void GenPspGraphics::Init(psp::JobData* pJob, psp::PrinterGfx* pGfx,
     m_pJobData = pJob;
     m_pPrinterGfx = pGfx;
     m_pInfoPrinter = pInfoPrinter;
-    SetLayout( 0 );
+    SetLayout( SalLayoutFlags::NONE );
 }
 
 GenPspGraphics::~GenPspGraphics()
@@ -613,7 +613,7 @@ PspFontLayout::PspFontLayout( ::psp::PrinterGfx& rGfx )
 
 bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    mbVertical = ((rArgs.mnFlags & SAL_LAYOUT_VERTICAL) != 0);
+    mbVertical = bool(rArgs.mnFlags & SalLayoutFlags::Vertical);
 
     long nUnitsPerPixel = 1;
     sal_GlyphId aOldGlyphId( GF_DROPPED);
@@ -960,14 +960,14 @@ SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     // workaround for printers not handling glyph indexing for non-TT fonts
     int nFontId = m_pPrinterGfx->GetFontID();
     if( psp::fonttype::TrueType != psp::PrintFontManager::get().getFontType( nFontId ) )
-        rArgs.mnFlags |= SAL_LAYOUT_DISABLE_GLYPH_PROCESSING;
+        rArgs.mnFlags |= SalLayoutFlags::DisableGlyphProcessing;
     else if( nFallbackLevel > 0 )
-        rArgs.mnFlags &= ~SAL_LAYOUT_DISABLE_GLYPH_PROCESSING;
+        rArgs.mnFlags &= ~SalLayoutFlags::DisableGlyphProcessing;
 
     GenericSalLayout* pLayout = NULL;
 
     if( m_pServerFont[ nFallbackLevel ]
-        && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
+        && !(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) )
     {
 #if ENABLE_GRAPHITE
         // Is this a Graphite font?

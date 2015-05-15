@@ -434,7 +434,7 @@ void VirtualDevice::EnableRTL( bool bEnable )
     // because each virdev has its own SalGraphics we can safely switch the SalGraphics here
     // ...hopefully
     if( AcquireGraphics() )
-        mpGraphics->SetLayout( bEnable ? SAL_LAYOUT_BIDI_RTL : 0 );
+        mpGraphics->SetLayout( bEnable ? SalLayoutFlags::BiDiRtl : SalLayoutFlags::NONE );
 
     OutputDevice::EnableRTL(bEnable);
 }
