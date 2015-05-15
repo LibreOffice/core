@@ -833,7 +833,30 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     bAfter = static_cast<const SfxBoolItem* >(pItem)->GetValue();
             }
             else if( !rReq.IsAPI() )
-                ++nCount;
+            {
+                SwSelBoxes aBoxes;
+                ::GetTblSel( rSh, aBoxes );
+                if ( !aBoxes.empty() )
+                {
+                    long maxX = 0;
+                    long maxY = 0;
+                    long minX = std::numeric_limits<long>::max();
+                    long minY = std::numeric_limits<long>::max();
+                    long nbBoxes = aBoxes.size();
+                    for ( int i = 0; i < nbBoxes; i++ )
+                    {
+                        Point aCoord ( aBoxes[i]->GetCoordinates() );
+                        if ( aCoord.X() < minX ) minX = aCoord.X();
+                        if ( aCoord.X() > maxX ) maxX = aCoord.X();
+                        if ( aCoord.Y() < minY ) minY = aCoord.Y();
+                        if ( aCoord.Y() > maxY ) maxY = aCoord.Y();
+                    }
+                    if (bColumn)
+                        nCount = maxX - minX + 1;
+                    else
+                        nCount = maxY - minY + 1;
+                 }
+            }
 
             if( nCount )
             {

@@ -92,6 +92,7 @@ public:
     void testTdf90362();
     void testUndoCharAttribute();
     void testTdf86639();
+    void testTdf90883TableBoxGetCoordinates();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -128,6 +129,7 @@ public:
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
     CPPUNIT_TEST(testTdf86639);
+    CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -960,6 +962,22 @@ void SwUiWriterTest::testTdf86639()
     OUString aExpected = pColl->GetAttrSet().GetFont().GetFamilyName();
     // This was Calibri, should be Liberation Sans.
     CPPUNIT_ASSERT_EQUAL(aExpected, getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+}
+
+void SwUiWriterTest::testTdf90883TableBoxGetCoordinates()
+{
+    SwDoc* pDoc = createDoc("tdf90883.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(true);
+    SwSelBoxes aBoxes;
+    ::GetTblSel( *pWrtShell, aBoxes );
+    CPPUNIT_ASSERT_EQUAL( 2, (int)aBoxes.size() );
+    Point pos ( aBoxes[0]->GetCoordinates() );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pos.X() );
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pos.Y() );
+    pos = aBoxes[1]->GetCoordinates();
+    CPPUNIT_ASSERT_EQUAL( 1, (int)pos.X() );
+    CPPUNIT_ASSERT_EQUAL( 2, (int)pos.Y() );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
