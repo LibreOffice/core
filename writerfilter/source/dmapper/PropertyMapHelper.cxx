@@ -28,49 +28,48 @@ namespace dmapper
 
 using namespace ::com::sun::star;
 
-void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t& pLogger, const uno::Any & rTableColumnSeparators)
+void lcl_DumpTableColumnSeparators(const uno::Any & rTableColumnSeparators)
 {
-    (void) pLogger;
     (void) rTableColumnSeparators;
 #ifdef DEBUG_WRITERFILTER
     uno::Sequence<text::TableColumnSeparator> aSeq;
     rTableColumnSeparators >>= aSeq;
 
-    pLogger->startElement("property.TableColumnSeparators");
+    TagLogger::getInstance().startElement("property.TableColumnSeparators");
 
     sal_uInt32 nLength = aSeq.getLength();
     for (sal_uInt32 n = 0; n < nLength; ++n)
     {
-        pLogger->startElement("separator");
+        TagLogger::getInstance().startElement("separator");
 
-        pLogger->attribute("position", aSeq[n].Position);
-        pLogger->attribute("visible", sal_uInt32(aSeq[n].IsVisible));
+        TagLogger::getInstance().attribute("position", aSeq[n].Position);
+        TagLogger::getInstance().attribute("visible", sal_uInt32(aSeq[n].IsVisible));
 
-        pLogger->endElement();
+        TagLogger::getInstance().endElement();
     }
 
-    pLogger->endElement();
+    TagLogger::getInstance().endElement();
 #endif // DEBUG_WRITERFILTER
 }
 
 #ifdef DEBUG_WRITERFILTER
-void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger, beans::PropertyValues & rValues)
+void lcl_DumpPropertyValues(beans::PropertyValues & rValues)
 {
-    pLogger->startElement("propertyValues");
+    TagLogger::getInstance().startElement("propertyValues");
 
     beans::PropertyValue * pValues = rValues.getArray();
 
     for (sal_Int32 n = 0; n < rValues.getLength(); ++n)
     {
-        pLogger->startElement("propertyValue");
+        TagLogger::getInstance().startElement("propertyValue");
 
-        pLogger->attribute("name", pValues[n].Name);
+        TagLogger::getInstance().attribute("name", pValues[n].Name);
 
         try
         {
             sal_Int32 aInt = 0;
             pValues[n].Value >>= aInt;
-            pLogger->attribute("value", aInt);
+            TagLogger::getInstance().attribute("value", aInt);
         }
         catch (...)
         {
@@ -78,26 +77,26 @@ void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger, beans::PropertyV
 
         if ( pValues[n].Name == "TableColumnSeparators" )
         {
-            lcl_DumpTableColumnSeparators(pLogger, pValues[n].Value);
+            lcl_DumpTableColumnSeparators(pValues[n].Value);
         }
 
-        pLogger->endElement();
+        TagLogger::getInstance().endElement();
     }
-    pLogger->endElement();
+    TagLogger::getInstance().endElement();
 }
 
-void lcl_DumpPropertyValueSeq(const TagLogger::Pointer_t pLogger, PropertyValueSeq_t & rPropValSeq)
+void lcl_DumpPropertyValueSeq(PropertyValueSeq_t & rPropValSeq)
 {
-    pLogger->startElement("PropertyValueSeq");
+    TagLogger::getInstance().startElement("PropertyValueSeq");
 
     beans::PropertyValues * pValues = rPropValSeq.getArray();
 
     for (sal_Int32 n = 0; n < rPropValSeq.getLength(); ++n)
     {
-        lcl_DumpPropertyValues(pLogger, pValues[n]);
+        lcl_DumpPropertyValues(pValues[n]);
     }
 
-    pLogger->endElement();
+    TagLogger::getInstance().endElement();
 }
 #endif // DEBUG_WRITERFILTER
 

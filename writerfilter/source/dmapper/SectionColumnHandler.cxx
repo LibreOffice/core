@@ -22,8 +22,6 @@
 #include <ooxml/resourceids.hxx>
 #include <osl/diagnose.h>
 
-#include "dmapperLoggers.hxx"
-
 namespace writerfilter {
 namespace dmapper {
 
@@ -31,7 +29,7 @@ using namespace ::com::sun::star;
 
 
 SectionColumnHandler::SectionColumnHandler()
-    : LoggedProperties(dmapper_logger, "SectionColumnHandler")
+    : LoggedProperties("SectionColumnHandler")
     , bEqualWidth(false)
     , nSpace(0)
     , nNum(0)

@@ -36,8 +36,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
 
-#include "dmapperLoggers.hxx"
-
 using namespace com::sun::star;
 
 #define MAKE_PROPVAL(NameId, Value) \
@@ -695,8 +693,8 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
 ListsManager::ListsManager(DomainMapper& rDMapper,
     const uno::Reference<lang::XMultiServiceFactory> & xFactory)
-    : LoggedProperties(dmapper_logger, "ListsManager")
-    , LoggedTable(dmapper_logger, "ListsManager")
+    : LoggedProperties("ListsManager")
+    , LoggedTable("ListsManager")
     , m_rDMapper(rDMapper)
     , m_xFactory(xFactory)
     , m_bIsLFOImport(false)

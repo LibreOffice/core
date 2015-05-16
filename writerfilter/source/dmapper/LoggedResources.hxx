@@ -31,7 +31,7 @@ namespace writerfilter
 class LoggedResourcesHelper
 {
 public:
-    explicit LoggedResourcesHelper(TagLogger::Pointer_t pLogger, const std::string & sPrefix);
+    explicit LoggedResourcesHelper(const std::string & sPrefix);
     virtual ~LoggedResourcesHelper();
 
     void startElement(const std::string & sElement);
@@ -42,7 +42,6 @@ public:
     void attribute(const std::string & rName, sal_uInt32 nValue);
 
 private:
-    TagLogger::Pointer_t mpLogger;
     std::string msPrefix;
 };
 #endif
@@ -50,7 +49,7 @@ private:
 class LoggedStream : public Stream
 {
 public:
-    explicit LoggedStream(TagLogger::Pointer_t pLogger, const std::string & sPrefix);
+    explicit LoggedStream(const std::string & sPrefix);
     virtual ~LoggedStream();
 
     void startSectionGroup() SAL_OVERRIDE;
@@ -99,7 +98,7 @@ protected:
 class LoggedProperties : public Properties
 {
 public:
-    explicit LoggedProperties(TagLogger::Pointer_t pLogger, const std::string & sPrefix);
+    explicit LoggedProperties(const std::string & sPrefix);
     virtual ~LoggedProperties();
 
     void attribute(Id name, Value & val) SAL_OVERRIDE;
@@ -117,7 +116,7 @@ protected:
 class LoggedTable : public Table
 {
 public:
-    explicit LoggedTable(TagLogger::Pointer_t pLogger, const std::string & sPrefix);
+    explicit LoggedTable(const std::string & sPrefix);
     virtual ~LoggedTable();
 
     void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;

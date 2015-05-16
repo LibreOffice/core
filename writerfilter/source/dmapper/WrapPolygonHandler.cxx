@@ -24,7 +24,6 @@
 
 #include "ConversionHelper.hxx"
 #include "WrapPolygonHandler.hxx"
-#include "dmapperLoggers.hxx"
 #include "util.hxx"
 
 namespace writerfilter {
@@ -131,7 +130,7 @@ drawing::PointSequenceSequence WrapPolygon::getPointSequenceSequence() const
 }
 
 WrapPolygonHandler::WrapPolygonHandler()
-    : LoggedProperties(dmapper_logger, "WrapPolygonHandler")
+    : LoggedProperties("WrapPolygonHandler")
     , mpPolygon(new WrapPolygon)
     , mnX(0)
     , mnY(0)

@@ -17,7 +17,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
 #include <ooxml/resourceids.hxx>
-#include "dmapperLoggers.hxx"
 
 namespace writerfilter {
 namespace dmapper
@@ -481,7 +480,7 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
 }
 
 TextEffectsHandler::TextEffectsHandler(sal_uInt32 aElementId) :
-    LoggedProperties(dmapper_logger, "TextEffectsHandler"),
+    LoggedProperties("TextEffectsHandler"),
     mpGrabBagStack(nullptr)
 {
     convertElementIdToPropertyId(aElementId);

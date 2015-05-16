@@ -172,7 +172,7 @@ public:
 
     void printProperties();
 #ifdef DEBUG_WRITERFILTER
-    void dumpXml( const TagLogger::Pointer_t pLogger ) const;
+    void dumpXml() const;
 #endif
     static css::table::ShadowFormat getShadowFromBorder(const css::table::BorderLine2& rBorder);
 

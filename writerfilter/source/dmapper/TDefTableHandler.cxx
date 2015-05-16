@@ -25,8 +25,6 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
-#include "dmapperLoggers.hxx"
-
 namespace writerfilter {
 namespace dmapper {
 
@@ -35,7 +33,7 @@ using namespace ::com::sun::star;
 
 
 TDefTableHandler::TDefTableHandler() :
-LoggedProperties(dmapper_logger, "TDefTableHandler"),
+LoggedProperties("TDefTableHandler"),
 m_nLineWidth(0),
 m_nLineType(0),
 m_nLineColor(0),

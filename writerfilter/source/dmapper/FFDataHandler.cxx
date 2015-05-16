@@ -19,7 +19,6 @@
 #include "FFDataHandler.hxx"
 
 #include <ooxml/resourceids.hxx>
-#include "dmapperLoggers.hxx"
 
 namespace writerfilter {
 namespace dmapper {
@@ -29,7 +28,7 @@ namespace dmapper {
  ************************/
 
 FFDataHandler::FFDataHandler() :
-LoggedProperties(dmapper_logger, "FFDataHandler"),
+LoggedProperties("FFDataHandler"),
 m_nCheckboxHeight(0),
 m_bCheckboxAutoHeight(false),
 m_nCheckboxChecked(-1),
@@ -131,7 +130,7 @@ void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
         break;
     default:
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->element("unhandled");
+        TagLogger::getInstance().element("unhandled");
 #endif
         break;
     }
@@ -160,7 +159,7 @@ void FFDataHandler::lcl_attribute(Id name, Value & val)
         break;
     default:
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->element("unhandled");
+        TagLogger::getInstance().element("unhandled");
 #endif
         break;
     }

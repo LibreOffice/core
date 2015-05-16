@@ -28,15 +28,12 @@ namespace writerfilter
 namespace dmapper
 {
 
-void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t& rLogger,
-        const css::uno::Any & rTableColumnSeparators);
+void lcl_DumpTableColumnSeparators(const css::uno::Any & rTableColumnSeparators);
 #ifdef DEBUG_WRITERFILTER
-void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger,
-        css::beans::PropertyValues & rValues);
+void lcl_DumpPropertyValues(css::beans::PropertyValues & rValues);
 
 typedef css::uno::Sequence<css::beans::PropertyValues> PropertyValueSeq_t;
-void lcl_DumpPropertyValueSeq(const TagLogger::Pointer_t pLogger,
-     PropertyValueSeq_t & rPropValSeq);
+void lcl_DumpPropertyValueSeq(PropertyValueSeq_t & rPropValSeq);
 #endif // DEBUG_WRITERFILTER
 }
 }

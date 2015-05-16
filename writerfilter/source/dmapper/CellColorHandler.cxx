@@ -26,7 +26,6 @@
 #include <sal/macros.h>
 #include <filter/msfilter/util.hxx>
 #include <comphelper/sequence.hxx>
-#include "dmapperLoggers.hxx"
 
 namespace writerfilter {
 namespace dmapper {
@@ -34,7 +33,7 @@ namespace dmapper {
 using namespace ::com::sun::star;
 
 CellColorHandler::CellColorHandler() :
-LoggedProperties(dmapper_logger, "CellColorHandler"),
+LoggedProperties("CellColorHandler"),
 m_nShadingPattern( drawing::ShadingPattern::CLEAR ),
 m_nColor( 0xffffffff ),
 m_nFillColor( 0xffffffff ),

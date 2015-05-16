@@ -44,9 +44,8 @@
 #include <comphelper/string.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <dmapperLoggers.hxx>
-
 using namespace ::com::sun::star;
+
 namespace writerfilter {
 namespace dmapper
 {
@@ -383,8 +382,8 @@ void StyleSheetTable_Impl::AppendLatentStyleProperty(const OUString& aName, Valu
 StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper,
         uno::Reference< text::XTextDocument> const& xTextDocument,
         bool const bIsNewDoc)
-: LoggedProperties(dmapper_logger, "StyleSheetTable")
-, LoggedTable(dmapper_logger, "StyleSheetTable")
+: LoggedProperties("StyleSheetTable")
+, LoggedTable("StyleSheetTable")
 , m_pImpl( new StyleSheetTable_Impl(rDMapper, xTextDocument, bIsNewDoc) )
 {
 }
@@ -514,7 +513,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         default:
         {
 #ifdef DEBUG_WRITERFILTER
-            dmapper_logger->element("unhandled");
+            TagLogger::getInstance().element("unhandled");
 #endif
         }
         break;

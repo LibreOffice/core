@@ -101,10 +101,6 @@ protected:
  */
 class TableManager
 {
-#ifdef DEBUG_WRITERFILTER
-    TagLogger::Pointer_t mpTableLogger;
-#endif
-
     class TableManagerState
     {
         /**
@@ -610,12 +606,6 @@ public:
     bool isIgnore() const;
 
 
-#ifdef DEBUG_WRITERFILTER
-    void setTagLogger(TagLogger::Pointer_t _tagLogger)
-    {
-        mpTableLogger = _tagLogger;
-    }
-#endif
 };
 
 }
