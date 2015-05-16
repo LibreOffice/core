@@ -892,8 +892,12 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     }
     else if (mpFormatData->meAxisPosition == databar::AUTOMATIC)
     {
-        double nMaxNegative = 0;
-        double nMinPositive = 0;
+        // if auto is used we may need to adjust it
+        // for the length calculation
+        if (mpFormatData->mpLowerLimit->GetType() == COLORSCALE_AUTO && nMin > 0)
+            nMin = 0;
+        if (mpFormatData->mpUpperLimit->GetType() == COLORSCALE_MAX && nMax < 0)
+            nMax = 0;
 
         //calculate the zero position first
         if(nMin < 0)
@@ -908,27 +912,20 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
         else
             pInfo->mnZero = 0;
 
-        // if max or min is used we may need to adjust it
-        // for the length calculation
-        if (mpFormatData->mpLowerLimit->GetType() == COLORSCALE_MIN && nMin > 0)
-            nMinPositive = nMin;
-        if (mpFormatData->mpUpperLimit->GetType() == COLORSCALE_MAX && nMax < 0)
-            nMaxNegative = nMax;
-
         //calculate the length
         if(nValue < 0)
         {
             if (nValue < nMin)
                 pInfo->mnLength = -100;
             else
-                pInfo->mnLength = -100 * (nValue-nMaxNegative)/(nMin-nMaxNegative);
+                pInfo->mnLength = -100 * (nValue-nMax)/(nMin-nMax);
         }
         else
         {
             if ( nValue > nMax )
                 pInfo->mnLength = 100;
             else
-                pInfo->mnLength = (nValue-nMinPositive)/(nMax-nMinPositive)*100;
+                pInfo->mnLength = 100 * (nValue-nMin)/(nMax-nMin);
         }
     }
     else if( mpFormatData->meAxisPosition == databar::MIDDLE)
