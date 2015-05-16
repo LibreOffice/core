@@ -57,9 +57,9 @@ private:
     long                mnMSplitPos;
     WinBits             mnWinStyle;
     WindowAlign         meAlign;
-    sal_uInt16              mnSplitTest;
-    sal_uInt16              mnSplitPos;
-    sal_uInt16              mnMouseModifier;
+    sal_uInt16          mnSplitTest;
+    sal_uInt16          mnSplitPos;
+    sal_uInt16          mnMouseModifier;
     bool                mbDragFull:1,
                         mbHorz:1,
                         mbBottomRight:1,
@@ -145,10 +145,10 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     void                InsertItem( sal_uInt16 nId, vcl::Window* pWindow, long nSize,
-                                    sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nSetId = 0,
+                                    sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nIntoSetId = 0,
                                     SplitWindowItemBits nBits = 0 );
     void                InsertItem( sal_uInt16 nId, long nSize,
-                                    sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nSetId = 0,
+                                    sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nIntoSetId = 0,
                                     SplitWindowItemBits nBits = 0 );
     void                RemoveItem( sal_uInt16 nId, bool bHide = true );
     void                Clear();
