@@ -28,6 +28,7 @@
 #include <memory>
 
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <iterator>
 
 
 using namespace osl;
@@ -36,32 +37,6 @@ using namespace com::sun::star::lang;
 
 namespace cppu
 {
-/**
- * Reallocate the sequence.
- */
-static void realloc( Sequence< Reference< XInterface > > & rSeq, sal_Int32 nNewLen )
-{
-    rSeq.realloc( nNewLen );
-}
-
-/**
- * Remove an element from an interface sequence.
- */
-static void sequenceRemoveElementAt( Sequence< Reference< XInterface > > & rSeq, sal_Int32 index )
-{
-    sal_Int32 nNewLen = rSeq.getLength() - 1;
-
-    Sequence< Reference< XInterface > > aDestSeq( rSeq.getLength() - 1 );
-    // getArray on a const sequence is faster
-    const Reference< XInterface > * pSource = ((const Sequence< Reference< XInterface > > &)rSeq).getConstArray();
-    Reference< XInterface > * pDest = aDestSeq.getArray();
-    sal_Int32 i = 0;
-    for( ; i < index; i++ )
-        pDest[i] = pSource[i];
-    for( sal_Int32 j = i ; j < nNewLen; j++ )
-        pDest[j] = pSource[j+1];
-    rSeq = aDestSeq;
-}
 
 #ifdef _MSC_VER
 #pragma warning( disable: 4786 )
@@ -79,7 +54,7 @@ OInterfaceIteratorHelper::OInterfaceIteratorHelper( OInterfaceContainerHelper & 
     if( bIsList )
     {
         rCont.bInUse = sal_True;
-        nRemain = aData.pAsSequence->getLength();
+        nRemain = aData.pAsVector->size();
     }
     else if( aData.pAsInterface )
     {
@@ -96,7 +71,7 @@ OInterfaceIteratorHelper::~OInterfaceIteratorHelper()
     {
     MutexGuard aGuard( rCont.rMutex );
     // bResetInUse protect the iterator against recursion
-    bShared = aData.pAsSequence == rCont.aData.pAsSequence && rCont.bIsList;
+    bShared = aData.pAsVector == rCont.aData.pAsVector && rCont.bIsList;
     if( bShared )
     {
         OSL_ENSURE( rCont.bInUse, "OInterfaceContainerHelper must be in use" );
@@ -108,7 +83,7 @@ OInterfaceIteratorHelper::~OInterfaceIteratorHelper()
     {
         if( bIsList )
             // Sequence owned by the iterator
-            delete aData.pAsSequence;
+            delete aData.pAsVector;
         else if( aData.pAsInterface )
             // Interface is acquired by the iterator
             aData.pAsInterface->release();
@@ -121,8 +96,7 @@ XInterface * OInterfaceIteratorHelper::next()
     {
         nRemain--;
         if( bIsList )
-            // typecase to const,so the getArray method is faster
-            return aData.pAsSequence->getConstArray()[nRemain].get();
+            return (*aData.pAsVector)[nRemain].get();
         else if( aData.pAsInterface )
             return aData.pAsInterface;
     }
@@ -135,8 +109,8 @@ void OInterfaceIteratorHelper::remove()
     if( bIsList )
     {
         OSL_ASSERT( nRemain >= 0 &&
-                    nRemain < aData.pAsSequence->getLength() );
-        XInterface * p = aData.pAsSequence->getConstArray()[nRemain].get();
+                    nRemain < static_cast<sal_Int32>(aData.pAsVector->size()) );
+        XInterface * p = (*aData.pAsVector)[nRemain].get();
         rCont.removeInterface( * reinterpret_cast< const Reference< XInterface > * >( &p ) );
     }
     else
@@ -157,7 +131,7 @@ OInterfaceContainerHelper::~OInterfaceContainerHelper()
 {
     OSL_ENSURE( !bInUse, "~OInterfaceContainerHelper but is in use" );
     if( bIsList )
-        delete aData.pAsSequence;
+        delete aData.pAsVector;
     else if( aData.pAsInterface )
         aData.pAsInterface->release();
 }
@@ -166,17 +140,30 @@ sal_Int32 OInterfaceContainerHelper::getLength() const
 {
     MutexGuard aGuard( rMutex );
     if( bIsList )
-        return aData.pAsSequence->getLength();
+        return aData.pAsVector->size();
     else if( aData.pAsInterface )
         return 1;
     return 0;
 }
 
-Sequence< Reference<XInterface> > OInterfaceContainerHelper::getElements() const
+std::vector< Reference<XInterface> > OInterfaceContainerHelper::getElementsAsVector() const
 {
     MutexGuard aGuard( rMutex );
     if( bIsList )
-        return *aData.pAsSequence;
+        return *aData.pAsVector;
+    else if( aData.pAsInterface )
+    {
+        Reference<XInterface> x( aData.pAsInterface );
+        return { x };
+    }
+    return std::vector< Reference< XInterface > >();
+}
+
+css::uno::Sequence< Reference<XInterface> > OInterfaceContainerHelper::getElements() const
+{
+    MutexGuard aGuard( rMutex );
+    if( bIsList )
+        return css::uno::Sequence< Reference<XInterface> >( aData.pAsVector->data(), static_cast<sal_Int32>(aData.pAsVector->size()) );
     else if( aData.pAsInterface )
     {
         Reference<XInterface> x( aData.pAsInterface );
@@ -193,7 +180,7 @@ void OInterfaceContainerHelper::copyAndResetInUse()
         // this should be the worst case. If a iterator is active
         // and a new Listener is added.
         if( bIsList )
-            aData.pAsSequence = new Sequence< Reference< XInterface > >( *aData.pAsSequence );
+            aData.pAsVector = new std::vector< Reference< XInterface > >( *aData.pAsVector );
         else if( aData.pAsInterface )
             aData.pAsInterface->acquire();
 
@@ -210,19 +197,16 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
 
     if( bIsList )
     {
-        sal_Int32 nLen = aData.pAsSequence->getLength();
-        realloc( *aData.pAsSequence, nLen +1 );
-        aData.pAsSequence->getArray()[ nLen ] = rListener;
-        return nLen +1;
+        aData.pAsVector->push_back( rListener );
+        return aData.pAsVector->size();
     }
     else if( aData.pAsInterface )
     {
-        Sequence< Reference< XInterface > > * pSeq = new Sequence< Reference< XInterface > >( 2 );
-        Reference<XInterface> * pArray = pSeq->getArray();
-        pArray[0] = aData.pAsInterface;
-        pArray[1] = rListener;
+        std::vector< Reference< XInterface > > * pSeq = new std::vector< Reference< XInterface > >( 2 );
+        (*pSeq)[0] = aData.pAsInterface;
+        (*pSeq)[1] = rListener;
         aData.pAsInterface->release();
-        aData.pAsSequence = pSeq;
+        aData.pAsVector = pSeq;
         bIsList = sal_True;
         return 2;
     }
@@ -244,43 +228,41 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
 
     if( bIsList )
     {
-        const Reference<XInterface> * pL = aData.pAsSequence->getConstArray();
-        sal_Int32 nLen = aData.pAsSequence->getLength();
-        sal_Int32 i;
-        for( i = 0; i < nLen; i++ )
+        // It is not valid to compare the pointer directly, but it's faster.
+        bool bFound = false;
+        for( auto it = std::begin(*aData.pAsVector); it != std::end(*aData.pAsVector); ++it )
         {
-            // It is not valid to compare the pointer directly, but it's faster.
-            if( pL[i].get() == rListener.get() )
+            if( (*it).get() == rListener.get() )
             {
-                sequenceRemoveElementAt( *aData.pAsSequence, i );
+                aData.pAsVector->erase(it);
+                bFound = true;
                 break;
             }
         }
-
-        if( i == nLen )
+        if (!bFound)
         {
             // interface not found, use the correct compare method
-            for( i = 0; i < nLen; i++ )
+            for( auto it = std::begin(*aData.pAsVector); it != std::end(*aData.pAsVector); ++it )
             {
-                if( pL[i] == rListener )
+                if( *it == rListener )
                 {
-                    sequenceRemoveElementAt(*aData.pAsSequence, i );
+                    aData.pAsVector->erase(it);
                     break;
                 }
             }
         }
 
-        if( aData.pAsSequence->getLength() == 1 )
+        if( aData.pAsVector->size() == 1 )
         {
-            XInterface * p = aData.pAsSequence->getConstArray()[0].get();
+            XInterface * p = (*aData.pAsVector)[0].get();
             p->acquire();
-            delete aData.pAsSequence;
+            delete aData.pAsVector;
             aData.pAsInterface = p;
             bIsList = sal_False;
             return 1;
         }
         else
-            return aData.pAsSequence->getLength();
+            return aData.pAsVector->size();
     }
     else if( aData.pAsInterface && Reference<XInterface>( aData.pAsInterface ) == rListener )
     {
