@@ -146,7 +146,7 @@ awt::Rectangle lcl_parseRectangle(const OString& rValue)
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedHeightPrefix));
     nIndex = strlen(aExpectedHeightPrefix);
-    aRectangle.Width = static_cast<sal_Int32>(aToken.copy(nIndex).toInt32());
+    aRectangle.Height = static_cast<sal_Int32>(aToken.copy(nIndex).toInt32());
 
     return aRectangle;
 }
