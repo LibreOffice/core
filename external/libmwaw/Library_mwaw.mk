@@ -40,6 +40,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/BeagleWksSSParser \
 	UnpackedTarball/libmwaw/src/lib/BeagleWksStructManager \
 	UnpackedTarball/libmwaw/src/lib/BeagleWksText \
+	UnpackedTarball/libmwaw/src/lib/ClarisDrawGraph \
+	UnpackedTarball/libmwaw/src/lib/ClarisDrawParser \
+	UnpackedTarball/libmwaw/src/lib/ClarisDrawStyleManager \
+	UnpackedTarball/libmwaw/src/lib/ClarisDrawText \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksBMParser \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksDatabase \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksDbaseContent \
@@ -113,6 +117,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/MWAWTable \
 	UnpackedTarball/libmwaw/src/lib/MWAWTextListener \
 	UnpackedTarball/libmwaw/src/lib/MacDocParser \
+	UnpackedTarball/libmwaw/src/lib/MacDraftParser \
 	UnpackedTarball/libmwaw/src/lib/MacDrawParser \
 	UnpackedTarball/libmwaw/src/lib/MacDrawProParser \
 	UnpackedTarball/libmwaw/src/lib/MacDrawProStyleManager \
@@ -145,6 +150,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/NisusWrtParser \
 	UnpackedTarball/libmwaw/src/lib/NisusWrtStruct \
 	UnpackedTarball/libmwaw/src/lib/NisusWrtText \
+	UnpackedTarball/libmwaw/src/lib/RagTime5ClusterManager \
+	UnpackedTarball/libmwaw/src/lib/RagTime5Graph \
+	UnpackedTarball/libmwaw/src/lib/RagTime5Parser \
+	UnpackedTarball/libmwaw/src/lib/RagTime5Spreadsheet \
+	UnpackedTarball/libmwaw/src/lib/RagTime5StructManager \
+	UnpackedTarball/libmwaw/src/lib/RagTime5Text \
 	UnpackedTarball/libmwaw/src/lib/RagTimeParser \
 	UnpackedTarball/libmwaw/src/lib/RagTimeSpreadsheet \
 	UnpackedTarball/libmwaw/src/lib/RagTimeStruct \
