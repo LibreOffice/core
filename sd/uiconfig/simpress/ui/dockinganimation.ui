@@ -115,24 +115,24 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Loop Count</property>
                         <items>
-                          <item translatable="yes">1</item>
-                          <item translatable="yes">2</item>
-                          <item translatable="yes">3</item>
-                          <item translatable="yes">4</item>
-                          <item translatable="yes">5</item>
-                          <item translatable="yes">6</item>
-                          <item translatable="yes">7</item>
-                          <item translatable="yes">8</item>
-                          <item translatable="yes">9</item>
-                          <item translatable="yes">10</item>
-                          <item translatable="yes">12</item>
-                          <item translatable="yes">15</item>
-                          <item translatable="yes">20</item>
-                          <item translatable="yes">25</item>
-                          <item translatable="yes">50</item>
-                          <item translatable="yes">100</item>
-                          <item translatable="yes">500</item>
-                          <item translatable="yes">1000</item>
+                          <item translatable="no">1</item>
+                          <item translatable="no">2</item>
+                          <item translatable="no">3</item>
+                          <item translatable="no">4</item>
+                          <item translatable="no">5</item>
+                          <item translatable="no">6</item>
+                          <item translatable="no">7</item>
+                          <item translatable="no">8</item>
+                          <item translatable="no">9</item>
+                          <item translatable="no">10</item>
+                          <item translatable="no">12</item>
+                          <item translatable="no">15</item>
+                          <item translatable="no">20</item>
+                          <item translatable="no">25</item>
+                          <item translatable="no">50</item>
+                          <item translatable="no">100</item>
+                          <item translatable="no">500</item>
+                          <item translatable="no">1000</item>
                           <item translatable="yes">Max.</item>
                         </items>
                       </object>
@@ -162,7 +162,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">Image Number</property>
-                        <property name="text" translatable="yes">1</property>
+                        <property name="text" translatable="no">1</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="value">1</property>
                       </object>
@@ -490,7 +490,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">67</property>
+                                <property name="label" translatable="no">67</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
