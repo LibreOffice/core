@@ -1765,6 +1765,8 @@ void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const Rectangl
 {
     // Save previous graphical settings, set new one
     rRenderContext.Push(PushFlags::FONT | PushFlags::FILLCOLOR);
+    Wallpaper aOldBackground = rRenderContext.GetBackground();
+
     Color aBackgroundColor = rRenderContext.GetSettings().GetStyleSettings().GetMenuBarColor();
     rRenderContext.SetBackground(Wallpaper(aBackgroundColor));
     rRenderContext.SetFillColor(aBackgroundColor);
@@ -1789,8 +1791,8 @@ void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const Rectangl
     rRenderContext.DrawText(aTextTopLeft, aTitleText, 0, aTitleText.getLength());
 
     // Restore
-    rRenderContext.SetBackground();
     rRenderContext.Pop();
+    rRenderContext.SetBackground(aOldBackground);
 }
 
 void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
