@@ -112,12 +112,11 @@ namespace cppu_ifcontainer
                 pContainer->addInterface(xRef);
                 aListeners.push_back(xRef);
             }
-            Sequence< Reference< XInterface > > aElements;
-            aElements = pContainer->getElements();
+            std::vector< Reference< XInterface > > aElements = pContainer->getElementsAsVector();
 
             CPPUNIT_ASSERT_MESSAGE("query contents",
-                                   (int)aElements.getLength() == nTests);
-            if ((int)aElements.getLength() == nTests)
+                                   (int)aElements.size() == nTests);
+            if ((int)aElements.size() == nTests)
             {
                 for (i = 0; i < nTests; i++)
                 {
@@ -157,8 +156,8 @@ namespace cppu_ifcontainer
                 pHelper = pContainer->getContainer(pTypes[i]);
 
                 CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != NULL);
-                Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 2);
+                std::vector<Reference< XInterface > > aSeq = pHelper->getElementsAsVector();
+                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.size() == 2);
                 CPPUNIT_ASSERT_MESSAGE("match", aSeq[0] == xRefs[i*2]);
                 CPPUNIT_ASSERT_MESSAGE("match", aSeq[1] == xRefs[i*2+1]);
             }
@@ -175,8 +174,8 @@ namespace cppu_ifcontainer
                 pHelper = pContainer->getContainer(pTypes[i]);
 
                 CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != NULL);
-                Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 1);
+                std::vector<Reference< XInterface > > aSeq = pHelper->getElementsAsVector();
+                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.size() == 1);
                 CPPUNIT_ASSERT_MESSAGE("match", aSeq[0] == xRefs[i*2]);
             }
 
@@ -191,8 +190,8 @@ namespace cppu_ifcontainer
 
                 pHelper = pContainer->getContainer(pTypes[i]);
                 CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != NULL);
-                Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 0);
+                std::vector<Reference< XInterface > > aSeq = pHelper->getElementsAsVector();
+                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.size() == 0);
             }
 
             delete pContainer;
