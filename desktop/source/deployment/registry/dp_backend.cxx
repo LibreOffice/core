@@ -596,10 +596,10 @@ void Package::fireModified()
     ::cppu::OInterfaceContainerHelper * container = rBHelper.getContainer(
         cppu::UnoType<util::XModifyListener>::get() );
     if (container != 0) {
-        Sequence< Reference<XInterface> > elements(
+        std::vector< Reference<XInterface> > elements(
             container->getElements() );
         lang::EventObject evt( static_cast<OWeakObject *>(this) );
-        for ( sal_Int32 pos = 0; pos < elements.getLength(); ++pos )
+        for ( sal_Int32 pos = 0; pos < (sal_Int32)elements.size(); ++pos )
         {
             Reference<util::XModifyListener> xListener(
                 elements[ pos ], UNO_QUERY );

@@ -345,14 +345,13 @@ bool SdStyleSheet::IsUsed() const
         OInterfaceContainerHelper * pContainer = mrBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
         if( pContainer )
         {
-            Sequence< Reference< XInterface > > aModifyListeners( pContainer->getElements() );
-            Reference< XInterface > *p = aModifyListeners.getArray();
-            sal_Int32 nCount = aModifyListeners.getLength();
-            while( nCount-- && !bResult )
+            for( auto & x : pContainer->getElements() )
             {
-                Reference< XStyle > xStyle( *p++, UNO_QUERY );
-                if( xStyle.is() )
+                Reference< XStyle > xStyle( x, UNO_QUERY );
+                if( xStyle.is() ) {
                     bResult = xStyle->isInUse();
+                    break;
+                }
             }
         }
     }
