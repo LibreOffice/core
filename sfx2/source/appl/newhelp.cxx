@@ -1097,7 +1097,12 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl)
 void SearchTabPage_Impl::ActivatePage()
 {
     if ( !m_pIdxWin->WasCursorLeftOrRight() )
-        m_pSearchED->GrabFocus();
+    {
+        if (m_pSearchED)
+            m_pSearchED->GrabFocus();
+        else
+            vcl::Window::GetFocus();
+    }
 }
 
 Control* SearchTabPage_Impl::GetLastFocusControl()
@@ -1676,12 +1681,18 @@ bool SfxHelpIndexWindow_Impl::PreNotify(NotifyEvent& rNEvt)
             bool bCtrl = rKeyCode.IsMod1();
             if ( !bCtrl && bShift && m_pActiveLB->HasChildPathFocus() )
             {
-                pControl->GrabFocus();
+                if (pControl)
+                    pControl->GrabFocus();
+                else
+                    vcl::Window::GetFocus();
                 nDone = true;
             }
             else if ( !bCtrl && !bShift && pControl->HasChildPathFocus() )
             {
-                m_pActiveLB->GrabFocus();
+                if (m_pActiveLB)
+                    m_pActiveLB->GrabFocus();
+                else
+                    vcl::Window::GetFocus();
                 nDone = true;
             }
             else if ( bCtrl )
@@ -2501,7 +2512,8 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         }
         else if ( KEY_TAB == nKey && aOnStartupCB->HasChildPathFocus() )
         {
-            aToolBox->GrabFocus();
+            if (aToolBox)
+                aToolBox->GrabFocus();
             nDone = true;
         }
     }
