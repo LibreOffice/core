@@ -83,7 +83,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         assert(rFormat.GetType() == condformat::ICONSET);
         ScIconSetFormat& rIconSet = static_cast<ScIconSetFormat&>(rFormat);
         ScDocument* pDoc = &getScDocument();
-        SCTAB nTab = getCurrentSheetIndex();
+        SCTAB nTab = getSheetIndex();
         ScAddress aPos(0, 0, nTab);
         mpCurrentRule->SetData(&rIconSet, pDoc, aPos);
         delete mpCurrentRule;
@@ -156,7 +156,7 @@ void ExtConditionalFormattingContext::onEndElement()
             if (!bSuccess || aRange.empty())
                 break;
 
-            SCTAB nTab = getCurrentSheetIndex();
+            SCTAB nTab = getSheetIndex();
             for (size_t i = 0; i < aRange.size(); ++i)
             {
                 aRange[i]->aStart.SetTab(nTab);
