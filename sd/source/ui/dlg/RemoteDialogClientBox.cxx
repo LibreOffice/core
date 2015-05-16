@@ -282,73 +282,71 @@ void ClientBox::selectEntry( const long nPos )
     guard.clear();
 }
 
-void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry& rEntry )
+void ClientBox::DrawRow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, const TClientBoxEntry& rEntry)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    if ( rEntry->m_bActive )
-        SetTextColor( rStyleSettings.GetHighlightTextColor() );
+    if (rEntry->m_bActive)
+        SetTextColor(rStyleSettings.GetHighlightTextColor());
     else
-        SetTextColor( rStyleSettings.GetFieldTextColor() );
+        SetTextColor(rStyleSettings.GetFieldTextColor());
 
-    if ( rEntry->m_bActive )
+    if (rEntry->m_bActive)
     {
-        SetLineColor();
-        SetFillColor( rStyleSettings.GetHighlightColor() );
-        DrawRect( rRect );
+        rRenderContext.SetLineColor();
+        rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
+        rRenderContext.DrawRect(rRect);
     }
     else
     {
-        if( IsControlBackground() )
-            SetBackground( GetControlBackground() );
+        if(IsControlBackground())
+            SetBackground(GetControlBackground());
         else
-            SetBackground( rStyleSettings.GetFieldColor() );
+            SetBackground(rStyleSettings.GetFieldColor());
 
-        SetTextFillColor();
-        Erase( rRect );
+        rRenderContext.SetTextFillColor();
+        rRenderContext.Erase(rRect);
     }
 
     // FIXME: draw bluetooth or wifi icon
-     Point aPos( rRect.TopLeft() );
+     Point aPos(rRect.TopLeft());
 
     // Setup fonts
-    vcl::Font aStdFont( GetFont() );
-    vcl::Font aBoldFont( aStdFont );
-    aBoldFont.SetWeight( WEIGHT_BOLD );
-    SetFont( aBoldFont );
-    long aTextHeight = GetTextHeight();
+    vcl::Font aStdFont(rRenderContext.GetFont());
+    vcl::Font aBoldFont(aStdFont);
+    aBoldFont.SetWeight(WEIGHT_BOLD);
+    rRenderContext.SetFont(aBoldFont);
+    long aTextHeight = rRenderContext.GetTextHeight();
 
     // Get max title width
     long nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
     nMaxTitleWidth -= ( 2 * SMALL_ICON_SIZE ) + ( 4 * SPACE_BETWEEN );
 
-    long aTitleWidth = GetTextWidth( rEntry->m_pClientInfo->mName ) + (aTextHeight / 3);
+    long aTitleWidth = rRenderContext.GetTextWidth(rEntry->m_pClientInfo->mName) + (aTextHeight / 3);
 
-    aPos = rRect.TopLeft() + Point( ICON_OFFSET, TOP_OFFSET );
+    aPos = rRect.TopLeft() + Point(ICON_OFFSET, TOP_OFFSET);
 
-    if ( aTitleWidth > nMaxTitleWidth )
+    if (aTitleWidth > nMaxTitleWidth)
     {
         aTitleWidth = nMaxTitleWidth - (aTextHeight / 3);
-        OUString aShortTitle = GetEllipsisString( rEntry->m_pClientInfo->mName,
-                                                  aTitleWidth );
-        DrawText( aPos, aShortTitle );
+        OUString aShortTitle = rRenderContext.GetEllipsisString(rEntry->m_pClientInfo->mName, aTitleWidth );
+        rRenderContext.DrawText(aPos, aShortTitle);
         aTitleWidth += (aTextHeight / 3);
     }
     else
-        DrawText( aPos, rEntry->m_pClientInfo->mName );
+        rRenderContext.DrawText(aPos, rEntry->m_pClientInfo->mName);
 
-    SetFont( aStdFont );
+    SetFont(aStdFont);
 
     aPos.Y() += aTextHeight;
-    if ( rEntry->m_bActive )
+    if (rEntry->m_bActive)
     {
       OUString sPinText(SD_RESSTR(STR_ENTER_PIN));
-      DrawText( m_sPinTextRect,
-                sPinText, 0 );
+      DrawText(m_sPinTextRect, sPinText, 0);
     }
 
-    SetLineColor( Color( COL_LIGHTGRAY ) );
-    DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
+    rRenderContext.SetLineColor(Color(COL_LIGHTGRAY));
+    rRenderContext.DrawLine(rRect.BottomLeft(), rRect.BottomRight());
 }
 
 void ClientBox::RecalcAll()
@@ -486,28 +484,28 @@ bool ClientBox::HandleCursorKey( sal_uInt16 nKeyCode )
     return true;
 }
 
-void ClientBox::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle &/*rPaintRect*/ )
+void ClientBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/*rPaintRect*/)
 {
-    if ( !m_bInDelete )
+    if (!m_bInDelete)
         DeleteRemoved();
 
-    if ( m_bNeedsRecalc )
+    if (m_bNeedsRecalc)
         RecalcAll();
 
-    Point aStart( 0, -m_nTopIndex );
-    Size aSize( GetOutputSizePixel() );
+    Point aStart(0, -m_nTopIndex);
+    Size aSize(rRenderContext.GetOutputSizePixel());
 
-    if ( m_bHasScrollBar )
+    if (m_bHasScrollBar)
         aSize.Width() -= m_aScrollBar->GetSizePixel().Width();
 
-    const ::osl::MutexGuard aGuard( m_entriesMutex );
+    const ::osl::MutexGuard aGuard(m_entriesMutex);
 
     typedef std::vector< TClientBoxEntry >::iterator ITER;
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
+    for (ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex)
     {
         aSize.Height() = (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight;
-        Rectangle aEntryRect( aStart, aSize );
-        DrawRow( aEntryRect, *iIndex );
+        Rectangle aEntryRect(aStart, aSize);
+        DrawRow(rRenderContext, aEntryRect, *iIndex);
         aStart.Y() += aSize.Height();
     }
 }

@@ -52,14 +52,14 @@ namespace sd {
 struct ClientBoxEntry;
 struct ClientInfo;
 
-typedef ::boost::shared_ptr< ClientBoxEntry > TClientBoxEntry;
+typedef boost::shared_ptr<ClientBoxEntry> TClientBoxEntry;
 
 struct ClientBoxEntry
 {
-    bool            m_bActive       :1;
-    ::boost::shared_ptr<ClientInfo>     m_pClientInfo;
+    bool m_bActive :1;
+    boost::shared_ptr<ClientInfo> m_pClientInfo;
 
-    ClientBoxEntry( ::boost::shared_ptr<ClientInfo> pClientInfo );
+    ClientBoxEntry(boost::shared_ptr<ClientInfo> pClientInfo);
    ~ClientBoxEntry();
 
 };
@@ -67,47 +67,49 @@ struct ClientBoxEntry
 // class ExtensionBox_Impl
 class ClientBox;
 
-class ClientRemovedListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
+class ClientRemovedListener : public ::cppu::WeakImplHelper1<css::lang::XEventListener>
 {
-    VclPtr<ClientBox>   m_pParent;
+    VclPtr<ClientBox> m_pParent;
 
 public:
 
-    ClientRemovedListener( ClientBox *pParent ) { m_pParent = pParent; }
-   virtual ~ClientRemovedListener();
+    ClientRemovedListener(ClientBox *pParent)
+    {
+        m_pParent = pParent;
+    }
+    virtual ~ClientRemovedListener();
 
     // XEventListener
-    virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(css::lang::EventObject const & evt)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ClientBox:
-    public Control
+class ClientBox : public Control
 {
-    bool            m_bHasScrollBar;
-    bool            m_bHasActive;
-    bool            m_bNeedsRecalc;
-    bool            m_bInCheckMode;
-    bool            m_bAdjustActive;
-    bool            m_bInDelete;
+    bool m_bHasScrollBar : 1;
+    bool m_bHasActive : 1;
+    bool m_bNeedsRecalc : 1;
+    bool m_bInCheckMode : 1;
+    bool m_bAdjustActive : 1;
+    bool m_bInDelete : 1;
     //Must be guarded together with m_vEntries to ensure a valid index at all times.
     //Use m_entriesMutex as guard.
-    long            m_nActive;
-    long            m_nTopIndex;
-    long            m_nStdHeight;
-    long            m_nActiveHeight;
-    long            m_nExtraHeight;
+    long m_nActive;
+    long m_nTopIndex;
+    long m_nStdHeight;
+    long m_nActiveHeight;
+    long m_nExtraHeight;
     Size            m_aOutputSize;
     Link<>          m_aClickHdl;
     Link<>          m_aDeauthoriseHdl;
 
-    VclPtr<NumericBox>      m_aPinBox;
-    VclPtr<PushButton>      m_aDeauthoriseButton;
-    Rectangle               m_sPinTextRect;
+    VclPtr<NumericBox> m_aPinBox;
+    VclPtr<PushButton> m_aDeauthoriseButton;
+    Rectangle m_sPinTextRect;
 
-    VclPtr<ScrollBar>       m_aScrollBar;
+    VclPtr<ScrollBar> m_aScrollBar;
 
-    com::sun::star::uno::Reference< ClientRemovedListener > m_xRemoveListener;
+    css::uno::Reference< ClientRemovedListener > m_xRemoveListener;
 
     //This mutex is used for synchronizing access to m_vEntries.
     //Currently it is used to synchronize adding, removing entries and
@@ -120,13 +122,13 @@ class ClientBox:
     std::vector< TClientBoxEntry > m_vEntries;
     std::vector< TClientBoxEntry > m_vRemovedEntries;
 
-    void            CalcActiveHeight( const long nPos );
-    long            GetTotalHeight() const;
-    void            SetupScrollBar();
-    void            DrawRow(const Rectangle& rRect, const TClientBoxEntry& rEntry);
-    bool            HandleTabKey( bool bReverse );
-    bool            HandleCursorKey( sal_uInt16 nKeyCode );
-    void            DeleteRemoved();
+    void CalcActiveHeight( const long nPos );
+    long GetTotalHeight() const;
+    void SetupScrollBar();
+    void DrawRow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, const TClientBoxEntry& rEntry);
+    bool HandleTabKey( bool bReverse );
+    bool HandleCursorKey( sal_uInt16 nKeyCode );
+    void DeleteRemoved();
 
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar* );
     DECL_DLLPRIVATE_LINK( DeauthoriseHdl, void * );
@@ -135,42 +137,42 @@ class ClientBox:
     void checkIndex(sal_Int32 pos) const;
 
 public:
-                    ClientBox( vcl::Window* pParent, WinBits nStyle );
-    virtual         ~ClientBox();
-    virtual void    dispose() SAL_OVERRIDE;
+    ClientBox( vcl::Window* pParent, WinBits nStyle );
+    virtual ~ClientBox();
+    virtual void dispose() SAL_OVERRIDE;
 
-    void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    void    Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) SAL_OVERRIDE;
-    void    Resize() SAL_OVERRIDE;
-    Size    GetOptimalSize() const SAL_OVERRIDE;
-    bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    void Paint( vcl::RenderContext& rRenderContext, const Rectangle &rPaintRect ) SAL_OVERRIDE;
+    void Resize() SAL_OVERRIDE;
+    Size GetOptimalSize() const SAL_OVERRIDE;
+    bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    const Size      GetMinOutputSizePixel() const;
-    void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
-    TClientBoxEntry     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
-    long            GetActiveEntryIndex();
-    long            GetEntryCount() { return (long) m_vEntries.size(); }
-    Rectangle       GetEntryRect( const long nPos ) const;
-    bool            HasActive() { return m_bHasActive; }
-    long            PointToPos( const Point& rPos );
-    void            SetScrollHdl( const Link<>& rLink );
-    void            DoScroll( long nDelta );
-    void            SetHyperlinkHdl( const Link<>& rLink ){ m_aClickHdl = rLink; }
-    void    RecalcAll();
-    void            RemoveUnlocked();
+    const Size GetMinOutputSizePixel() const;
+    void SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
+    TClientBoxEntry GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
+    long GetActiveEntryIndex();
+    long GetEntryCount() { return (long) m_vEntries.size(); }
+    Rectangle GetEntryRect( const long nPos ) const;
+    bool HasActive() { return m_bHasActive; }
+    long PointToPos( const Point& rPos );
+    void SetScrollHdl( const Link<>& rLink );
+    void DoScroll( long nDelta );
+    void SetHyperlinkHdl( const Link<>& rLink ){ m_aClickHdl = rLink; }
+    void RecalcAll();
+    void RemoveUnlocked();
 
-    void    selectEntry( const long nPos );
-    long            addEntry( ::boost::shared_ptr<ClientInfo> pClientInfo );
-    void            clearEntries();
+    void selectEntry( const long nPos );
+    long addEntry(boost::shared_ptr<ClientInfo> pClientInfo);
+    void clearEntries();
 
-    void            prepareChecking();
-    void            checkEntries();
+    void prepareChecking();
+    void checkEntries();
 
     OUString getPin();
-    void            populateEntries();
+    void populateEntries();
 };
 
-}
+} // end namespace sd
 
 #endif // INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOGCLIENTBOX_HXX
 
