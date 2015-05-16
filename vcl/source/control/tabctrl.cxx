@@ -756,15 +756,15 @@ void TabControl::ImplShowFocus()
     ShowFocus( aRect );
 }
 
-void TabControl::ImplDrawItem(vcl::RenderContext& /*rRenderContext*/, ImplTabItem* pItem, const Rectangle& rCurRect,
+void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* pItem, const Rectangle& rCurRect,
                               bool bLayout, bool bFirstInGroup, bool bLastInGroup, bool /* bIsCurrentItem */ )
 {
-    if ( pItem->maRect.IsEmpty() )
+    if (pItem->maRect.IsEmpty())
         return;
 
-    if( bLayout )
+    if (bLayout)
     {
-        if( !HasLayoutData() )
+        if (!HasLayoutData())
         {
             mpControlData->mpLayoutData = new vcl::ControlLayoutData();
             mpTabCtrlData->maLayoutLineToPageId.clear();
@@ -773,70 +773,70 @@ void TabControl::ImplDrawItem(vcl::RenderContext& /*rRenderContext*/, ImplTabIte
         }
     }
 
-    const StyleSettings&    rStyleSettings  = GetSettings().GetStyleSettings();
-    Rectangle               aRect = pItem->maRect;
-    long                    nLeftBottom = aRect.Bottom();
-    long                    nRightBottom = aRect.Bottom();
-    bool                    bLeftBorder = true;
-    bool                    bRightBorder = true;
-    sal_uInt16                  nOff;
-    bool                    bNativeOK = false;
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    Rectangle aRect = pItem->maRect;
+    long nLeftBottom = aRect.Bottom();
+    long nRightBottom = aRect.Bottom();
+    bool bLeftBorder = true;
+    bool bRightBorder = true;
+    sal_uInt16 nOff;
+    bool bNativeOK = false;
 
     sal_uInt16 nOff2 = 0;
     sal_uInt16 nOff3 = 0;
 
-    if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+    if (!(rStyleSettings.GetOptions() & STYLE_OPTION_MONO))
         nOff = 1;
     else
         nOff = 0;
 
     // if this is the active Page, we have to draw a little more
-    if ( pItem->mnId == mnCurPageId )
+    if (pItem->mnId == mnCurPageId)
     {
         nOff2 = 2;
-        if( ! ImplGetSVData()->maNWFData.mbNoActiveTabTextRaise )
+        if (!ImplGetSVData()->maNWFData.mbNoActiveTabTextRaise)
             nOff3 = 1;
     }
     else
     {
         Point aLeftTestPos = aRect.BottomLeft();
         Point aRightTestPos = aRect.BottomRight();
-        if ( aLeftTestPos.Y() == rCurRect.Bottom() )
+        if (aLeftTestPos.Y() == rCurRect.Bottom())
         {
             aLeftTestPos.X() -= 2;
-            if ( rCurRect.IsInside( aLeftTestPos ) )
+            if (rCurRect.IsInside(aLeftTestPos))
                 bLeftBorder = false;
             aRightTestPos.X() += 2;
-            if ( rCurRect.IsInside( aRightTestPos ) )
+            if (rCurRect.IsInside(aRightTestPos))
                 bRightBorder = false;
         }
         else
         {
-            if ( rCurRect.IsInside( aLeftTestPos ) )
+            if (rCurRect.IsInside(aLeftTestPos))
                 nLeftBottom -= 2;
-            if ( rCurRect.IsInside( aRightTestPos ) )
+            if (rCurRect.IsInside(aRightTestPos))
                 nRightBottom -= 2;
         }
     }
 
     ControlState nState = ControlState::NONE;
 
-    if( pItem->mnId == mnCurPageId )
+    if (pItem->mnId == mnCurPageId)
     {
         nState |= ControlState::SELECTED;
         // only the selected item can be focussed
-        if ( HasFocus() )
+        if (HasFocus())
             nState |= ControlState::FOCUSED;
     }
-    if ( IsEnabled() )
+    if (IsEnabled())
         nState |= ControlState::ENABLED;
-    if( IsMouseOver() && pItem->maRect.IsInside( GetPointerPosPixel() ) )
+    if (IsMouseOver() && pItem->maRect.IsInside(GetPointerPosPixel()))
     {
         nState |= ControlState::ROLLOVER;
-        for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-             it != mpTabCtrlData->maItemList.end(); ++it )
+        for (std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
+             it != mpTabCtrlData->maItemList.end(); ++it)
         {
-            if( (&(*it) != pItem) && (it->maRect.IsInside( GetPointerPosPixel() ) ) )
+            if( (&(*it) != pItem) && (it->maRect.IsInside(GetPointerPosPixel())))
             {
                 nState &= ~ControlState::ROLLOVER; // avoid multiple highlighted tabs
                 break;
@@ -844,7 +844,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& /*rRenderContext*/, ImplTabIte
         }
     }
 
-    if( !bLayout && (bNativeOK = IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)) )
+    if (!bLayout && (bNativeOK = rRenderContext.IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)))
     {
         TabitemValue tiValue(Rectangle(pItem->maRect.Left() + TAB_TABOFFSET_X,
                                        pItem->maRect.Right() - TAB_TABOFFSET_X,
@@ -860,56 +860,56 @@ void TabControl::ImplDrawItem(vcl::RenderContext& /*rRenderContext*/, ImplTabIte
             tiValue.mnAlignment |= TABITEM_LAST_IN_GROUP;
 
         Rectangle aCtrlRegion( pItem->maRect );
-        bNativeOK = DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
-                    tiValue, OUString() );
+        bNativeOK = rRenderContext.DrawNativeControl(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL,
+                                                     aCtrlRegion, nState, tiValue, OUString() );
     }
 
-    if( ! bLayout && !bNativeOK )
+    if (!bLayout && !bNativeOK)
     {
-        if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+        if (!(rStyleSettings.GetOptions() & STYLE_OPTION_MONO))
         {
-            SetLineColor( rStyleSettings.GetLightColor() );
-            DrawPixel( Point( aRect.Left()+1-nOff2, aRect.Top()+1-nOff2 ) );    // diagonally indented top-left pixel
-            if ( bLeftBorder )
+            rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
+            rRenderContext.DrawPixel(Point(aRect.Left() + 1 - nOff2, aRect.Top() + 1 - nOff2)); // diagonally indented top-left pixel
+            if (bLeftBorder)
             {
-                DrawLine( Point( aRect.Left()-nOff2, aRect.Top()+2-nOff2 ),
-                          Point( aRect.Left()-nOff2, nLeftBottom-1 ) );
+                rRenderContext.DrawLine(Point(aRect.Left() - nOff2, aRect.Top() + 2 - nOff2),
+                                        Point(aRect.Left() - nOff2, nLeftBottom - 1));
             }
-            DrawLine( Point( aRect.Left()+2-nOff2, aRect.Top()-nOff2 ),         // top line starting 2px from left border
-                      Point( aRect.Right()+nOff2-3, aRect.Top()-nOff2 ) );      // ending 3px from right border
+            rRenderContext.DrawLine(Point(aRect.Left() + 2 - nOff2, aRect.Top() - nOff2),   // top line starting 2px from left border
+                                    Point(aRect.Right() + nOff2 - 3, aRect.Top() - nOff2)); // ending 3px from right border
 
-            if ( bRightBorder )
+            if (bRightBorder)
             {
-                SetLineColor( rStyleSettings.GetShadowColor() );
-                DrawLine( Point( aRect.Right()+nOff2-2, aRect.Top()+1-nOff2 ),
-                          Point( aRect.Right()+nOff2-2, nRightBottom-1 ) );
+                rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+                rRenderContext.DrawLine(Point(aRect.Right() + nOff2 - 2, aRect.Top() + 1 - nOff2),
+                                        Point(aRect.Right() + nOff2 - 2, nRightBottom - 1));
 
-                SetLineColor( rStyleSettings.GetDarkShadowColor() );
-                DrawLine( Point( aRect.Right()+nOff2-1, aRect.Top()+3-nOff2 ),
-                          Point( aRect.Right()+nOff2-1, nRightBottom-1 ) );
+                rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+                rRenderContext.DrawLine(Point(aRect.Right() + nOff2 - 1, aRect.Top() + 3 - nOff2),
+                                        Point(aRect.Right() + nOff2 - 1, nRightBottom - 1));
             }
         }
         else
         {
-            SetLineColor( Color( COL_BLACK ) );
-            DrawPixel( Point( aRect.Left()+1-nOff2, aRect.Top()+1-nOff2 ) );
-            DrawPixel( Point( aRect.Right()+nOff2-2, aRect.Top()+1-nOff2 ) );
-            if ( bLeftBorder )
+            rRenderContext.SetLineColor(Color(COL_BLACK));
+            rRenderContext.DrawPixel(Point(aRect.Left() + 1 - nOff2, aRect.Top() + 1 - nOff2));
+            rRenderContext.DrawPixel(Point(aRect.Right() + nOff2 - 2, aRect.Top() + 1 - nOff2));
+            if (bLeftBorder)
             {
-                DrawLine( Point( aRect.Left()-nOff2, aRect.Top()+2-nOff2 ),
-                          Point( aRect.Left()-nOff2, nLeftBottom-1 ) );
+                rRenderContext.DrawLine(Point(aRect.Left() - nOff2, aRect.Top() + 2 - nOff2),
+                                        Point(aRect.Left() - nOff2, nLeftBottom - 1));
             }
-            DrawLine( Point( aRect.Left()+2-nOff2, aRect.Top()-nOff2 ),
-                      Point( aRect.Right()-3, aRect.Top()-nOff2 ) );
-            if ( bRightBorder )
+            rRenderContext.DrawLine(Point(aRect.Left() + 2 - nOff2, aRect.Top() - nOff2),
+                                    Point(aRect.Right() - 3, aRect.Top() - nOff2));
+            if (bRightBorder)
             {
-            DrawLine( Point( aRect.Right()+nOff2-1, aRect.Top()+2-nOff2 ),
-                      Point( aRect.Right()+nOff2-1, nRightBottom-1 ) );
+                rRenderContext.DrawLine(Point(aRect.Right() + nOff2 - 1, aRect.Top() + 2 - nOff2),
+                                        Point(aRect.Right() + nOff2 - 1, nRightBottom - 1));
             }
         }
     }
 
-    if( bLayout )
+    if (bLayout)
     {
         int nLine = mpControlData->mpLayoutData->m_aLineIndices.size();
         mpControlData->mpLayoutData->m_aLineIndices.push_back( mpControlData->mpLayoutData->m_aDisplayText.getLength() );
@@ -920,26 +920,26 @@ void TabControl::ImplDrawItem(vcl::RenderContext& /*rRenderContext*/, ImplTabIte
 
     // set font accordingly, current item is painted bold
     // we set the font attributes always before drawing to be re-entrant (DrawNativeControl may trigger additional paints)
-    vcl::Font aFont( GetFont() );
-    aFont.SetTransparent( true );
-    SetFont( aFont );
+    vcl::Font aFont(rRenderContext.GetFont());
+    aFont.SetTransparent(true);
+    rRenderContext.SetFont(aFont);
 
     Size aTabSize = aRect.GetSize();
-    Size aImageSize( 0, 0 );
-    long nTextHeight = GetTextHeight();
-    long nTextWidth = GetCtrlTextWidth( pItem->maFormatText );
-    if( !! pItem->maTabImage )
+    Size aImageSize(0, 0);
+    long nTextHeight = rRenderContext.GetTextHeight();
+    long nTextWidth = rRenderContext.GetCtrlTextWidth(pItem->maFormatText);
+    if (!!pItem->maTabImage)
     {
         aImageSize = pItem->maTabImage.GetSizePixel();
-        if( !pItem->maFormatText.isEmpty() )
-            aImageSize.Width() += GetTextHeight()/4;
+        if (!pItem->maFormatText.isEmpty())
+            aImageSize.Width() += GetTextHeight() / 4;
     }
-    long nXPos = aRect.Left()+((aTabSize.Width()-nTextWidth-aImageSize.Width())/2)-nOff-nOff3;
-    long nYPos = aRect.Top()+((aTabSize.Height()-nTextHeight)/2)-nOff3;
-    if( !pItem->maFormatText.isEmpty() )
+    long nXPos = aRect.Left() + ((aTabSize.Width() - nTextWidth - aImageSize.Width()) / 2) - nOff - nOff3;
+    long nYPos = aRect.Top() + ((aTabSize.Height() - nTextHeight) / 2) - nOff3;
+    if (!pItem->maFormatText.isEmpty())
     {
         sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC;
-        if( ! pItem->mbEnabled )
+        if (!pItem->mbEnabled)
             nStyle |= TEXT_DRAW_DISABLE;
 
         Color aColor(rStyleSettings.GetTabTextColor());
@@ -948,27 +948,24 @@ void TabControl::ImplDrawItem(vcl::RenderContext& /*rRenderContext*/, ImplTabIte
         else if (nState & ControlState::ROLLOVER)
             aColor = rStyleSettings.GetTabRolloverTextColor();
 
-        OutputDevice* pDev = GetOutDev();
-        Color aOldColor(pDev->GetTextColor());
-        pDev->SetTextColor(aColor);
+        Color aOldColor(rRenderContext.GetTextColor());
+        rRenderContext.SetTextColor(aColor);
 
         Rectangle aOutRect(nXPos + aImageSize.Width(), nYPos,
                            nXPos + aImageSize.Width() + nTextWidth, nYPos + nTextHeight);
-        DrawControlText( *pDev, aOutRect,
-                      pItem->maFormatText, nStyle,
-                      bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL,
-                      bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL
-                      );
+        DrawControlText(rRenderContext, aOutRect, pItem->maFormatText, nStyle,
+                        bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL,
+                        bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL);
 
-        pDev->SetTextColor(aOldColor);
+        rRenderContext.SetTextColor(aOldColor);
     }
 
-    if( !! pItem->maTabImage )
+    if (!!pItem->maTabImage)
     {
         Point aImgTL( nXPos, aRect.Top() );
-        if( aImageSize.Height() < aRect.GetHeight() )
-            aImgTL.Y() += (aRect.GetHeight() - aImageSize.Height())/2;
-        DrawImage( aImgTL, pItem->maTabImage, pItem->mbEnabled ? 0 : IMAGE_DRAW_DISABLE );
+        if (aImageSize.Height() < aRect.GetHeight())
+            aImgTL.Y() += (aRect.GetHeight() - aImageSize.Height()) / 2;
+        rRenderContext.DrawImage(aImgTL, pItem->maTabImage, pItem->mbEnabled ? 0 : IMAGE_DRAW_DISABLE );
     }
 }
 
