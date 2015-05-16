@@ -104,22 +104,15 @@ com_sun_star_comp_dba_ORowSet_get_implementation(css::uno::XComponentContext* co
 }
 
 #define NOTIFY_LISTERNERS_CHECK(_rListeners,T,method)                             \
-    Sequence< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
-                                                                                  \
-    const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();     \
-    const Reference< XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength(); \
+    std::vector< Reference< XInterface > > aListenerSeq = _rListeners.getElementsAsVector(); \
                                                                                   \
     _rGuard.clear();                                                              \
     bool bCheck = true;                                                           \
-    while( pxInt > pxIntBegin && bCheck )                                         \
+    for( auto iter = aListenerSeq.rbegin(); iter != aListenerSeq.rend() && bCheck; ++iter ) \
     {                                                                             \
         try                                                                       \
         {                                                                         \
-            while( pxInt > pxIntBegin && bCheck )                                 \
-            {                                                                     \
-                --pxInt;                                                          \
-                bCheck = static_cast< T* >( pxInt->get() )->method(aEvt);         \
-            }                                                                     \
+            bCheck = static_cast< T* >( (*iter).get() )->method(aEvt);         \
         }                                                                         \
         catch( RuntimeException& )                                                \
         {                                                                         \
