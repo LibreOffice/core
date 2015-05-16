@@ -1276,7 +1276,7 @@ BaseContent::cDEL()
         p = new ContentEventNotifier( m_pMyShell,
                                       this,
                                       m_xContentIdentifier,
-                                      m_pContentEventListeners->getElements() );
+                                      m_pContentEventListeners->getElementsAsSequence() );
     else
         p = 0;
 
@@ -1300,7 +1300,7 @@ BaseContent::cEXC( const OUString& aNewName )
                                       this,
                                       m_xContentIdentifier,
                                       xOldRef,
-                                      m_pContentEventListeners->getElements() );
+                                      m_pContentEventListeners->getElementsAsSequence() );
 
     return p;
 }
@@ -1315,7 +1315,7 @@ BaseContent::cCEL()
         p = new ContentEventNotifier( m_pMyShell,
                                       this,
                                       m_xContentIdentifier,
-                                      m_pContentEventListeners->getElements() );
+                                      m_pContentEventListeners->getElementsAsSequence() );
 
     return p;
 }
@@ -1328,7 +1328,7 @@ BaseContent::cPSL()
     if( m_pPropertySetInfoChangeListeners  )
         p = new PropertySetInfoChangeNotifier( this,
                                                m_xContentIdentifier,
-                                               m_pPropertySetInfoChangeListeners->getElements() );
+                                               m_pPropertySetInfoChangeListeners->getElementsAsSequence() );
 
     return p;
 }
@@ -1357,7 +1357,7 @@ BaseContent::cPCL()
             cppu::OInterfaceContainerHelper* pContainer = m_pPropertyListener->getContainer(seqNames[i]);
             if (!pContainer)
                 continue;
-            (*listener)[seqNames[i]] = pContainer->getElements();
+            (*listener)[seqNames[i]] = pContainer->getElementsAsSequence();
         }
 
         p = new PropertyChangeNotifier( this,
