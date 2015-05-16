@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_ca9ac7c5",
+        "filename": "oox/source/drawingml/customshapeproperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2015-05-16T14:15:48Z",
+      "side": 1,
+      "message": "Comment 2: Or do we have to convert over here from EMU to 1/100mm?",
+      "revId": "4f86b2e836e3524c05bca7427b00e2029a6290f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_2a5fdb0f",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2015-05-16T14:15:48Z",
+      "side": 1,
+      "message": "Comment 1: I choose to convert here from EMU to 1/100mm. Is that correct?",
+      "revId": "4f86b2e836e3524c05bca7427b00e2029a6290f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
