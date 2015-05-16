@@ -2367,7 +2367,10 @@ void ScFiltersTest::testCondFormatThemeColorXLSX()
     CPPUNIT_ASSERT(pDataBarFormatData->mpNegativeColor.get());
     CPPUNIT_ASSERT_EQUAL(Color(COL_LIGHTRED), *pDataBarFormatData->mpNegativeColor.get());
 
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rDoc.GetCondFormList(1)->size());
     pFormat = rDoc.GetCondFormat(0, 0, 1);
+    CPPUNIT_ASSERT(pFormat);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
     pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
     CPPUNIT_ASSERT_EQUAL(pEntry->GetType(), condformat::COLORSCALE);
