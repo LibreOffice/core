@@ -8,7 +8,6 @@
  */
 #include <LatentStyleHandler.hxx>
 #include <ooxml/resourceids.hxx>
-#include "dmapperLoggers.hxx"
 
 namespace writerfilter
 {
@@ -18,7 +17,7 @@ namespace dmapper
 using namespace ::com::sun::star;
 
 LatentStyleHandler::LatentStyleHandler() :
-    LoggedProperties(dmapper_logger, "LatentStyleHandler")
+    LoggedProperties("LatentStyleHandler")
 {
 }
 
@@ -53,7 +52,7 @@ void LatentStyleHandler::lcl_attribute(Id rName, Value& rVal)
     default:
         bFound = false;
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->element("unhandled");
+        TagLogger::getInstance().element("unhandled");
 #endif
         break;
     }

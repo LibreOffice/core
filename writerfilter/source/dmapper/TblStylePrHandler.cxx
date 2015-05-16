@@ -22,7 +22,6 @@
 #include <ooxml/resourceids.hxx>
 #include <comphelper/sequence.hxx>
 
-#include "dmapperLoggers.hxx"
 
 using namespace css;
 
@@ -30,7 +29,7 @@ namespace writerfilter {
 namespace dmapper {
 
 TblStylePrHandler::TblStylePrHandler( DomainMapper & rDMapper ) :
-LoggedProperties(dmapper_logger, "TblStylePrHandler"),
+LoggedProperties("TblStylePrHandler"),
 m_rDMapper( rDMapper ),
 m_pTablePropsHandler(new TablePropertiesHandler()),
 m_nType( TBL_STYLE_UNKNOWN ),
@@ -122,8 +121,8 @@ void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
 void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
 {
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("TblStylePrHandler.sprm");
-    dmapper_logger->attribute("sprm", rSprm.toString());
+    TagLogger::getInstance().startElement("TblStylePrHandler.sprm");
+    TagLogger::getInstance().attribute("sprm", rSprm.toString());
 #endif
 
     Value::Pointer_t pValue = rSprm.getValue();
@@ -181,7 +180,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
     }
 
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 

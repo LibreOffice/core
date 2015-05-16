@@ -27,8 +27,6 @@
 #include <unotools/fontdefs.hxx>
 #include <com/sun/star/awt/FontPitch.hpp>
 
-#include "dmapperLoggers.hxx"
-
 using namespace com::sun::star;
 
 namespace writerfilter {
@@ -43,9 +41,9 @@ struct FontTable_Impl
 };
 
 FontTable::FontTable()
-: LoggedProperties(dmapper_logger, "FontTable")
-, LoggedTable(dmapper_logger, "FontTable")
-, LoggedStream(dmapper_logger, "FontTable")
+: LoggedProperties("FontTable")
+, LoggedTable("FontTable")
+, LoggedStream("FontTable")
 , m_pImpl( new FontTable_Impl )
 {
 }
@@ -237,7 +235,7 @@ sal_uInt32 FontTable::size()
 }
 
 EmbeddedFontHandler::EmbeddedFontHandler( const OUString& _fontName, const char* _style )
-: LoggedProperties(dmapper_logger, "EmbeddedFontHandler")
+: LoggedProperties("EmbeddedFontHandler")
 , fontName( _fontName )
 , style( _style )
 {

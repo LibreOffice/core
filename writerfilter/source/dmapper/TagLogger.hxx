@@ -32,19 +32,17 @@ namespace writerfilter
 
     class TagLogger
     {
-    public:
-        typedef std::shared_ptr<TagLogger> Pointer_t;
-
     private:
+        static std::shared_ptr<TagLogger> instance;
+
         xmlTextWriterPtr pWriter;
         const char* pName;
 
-        explicit TagLogger(const char* name);
-
     public:
+        explicit TagLogger();
         ~TagLogger();
 
-        static Pointer_t getInstance(const char * name);
+        static TagLogger& getInstance();
 
 #ifdef DEBUG_WRITERFILTER
         void setFileName(const std::string & filename);

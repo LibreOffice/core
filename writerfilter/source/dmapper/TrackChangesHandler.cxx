@@ -12,7 +12,6 @@
 #include <ooxml/resourceids.hxx>
 #include <oox/token/tokens.hxx>
 #include <osl/diagnose.h>
-#include "dmapperLoggers.hxx"
 
 namespace writerfilter {
 namespace dmapper {
@@ -22,7 +21,7 @@ using namespace oox;
 
 
 TrackChangesHandler::TrackChangesHandler( sal_Int32 nToken ) :
-LoggedProperties(dmapper_logger, "TrackChangesHandler")
+LoggedProperties("TrackChangesHandler")
 {
     m_pRedlineParams = RedlineParamsPtr( new RedlineParams() );
     m_pRedlineParams->m_nToken = nToken;

@@ -20,7 +20,6 @@
 #include <PropertyMap.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
-#include "dmapperLoggers.hxx"
 #include <osl/diagnose.h>
 
 namespace writerfilter {
@@ -30,7 +29,7 @@ using namespace ::com::sun::star;
 using namespace ::writerfilter;
 
 CellMarginHandler::CellMarginHandler() :
-LoggedProperties(dmapper_logger, "CellMarginHandler"),
+LoggedProperties("CellMarginHandler"),
 m_nValue( 0 ),
 m_nWidth( 0 ),
 m_nType( 0 ),

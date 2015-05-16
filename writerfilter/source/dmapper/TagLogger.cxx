@@ -27,8 +27,8 @@ using namespace css;
 
 namespace writerfilter
 {
-    TagLogger::TagLogger(const char* name)
-        : pWriter( nullptr ), pName( name )
+    TagLogger::TagLogger()
+        : pWriter( nullptr ), pName( "DOMAINMAPPER" )
     {
     }
 
@@ -90,25 +90,13 @@ namespace writerfilter
 
 #endif
 
-    TagLogger::Pointer_t TagLogger::getInstance(const char * name)
+struct TheTagLogger:
+    public rtl::Static<TagLogger, TheTagLogger>
+{};
+
+    TagLogger& TagLogger::getInstance()
     {
-        typedef std::unordered_map<std::string, TagLogger::Pointer_t> TagLoggerHashMap_t;
-        static TagLoggerHashMap_t tagLoggers;
-
-        TagLoggerHashMap_t::iterator aIt = tagLoggers.end();
-
-        std::string sName = name;
-        if (! tagLoggers.empty())
-            aIt = tagLoggers.find(sName);
-
-        if (aIt == tagLoggers.end())
-        {
-            TagLogger::Pointer_t pTagLogger(new TagLogger(name));
-            std::pair<std::string, TagLogger::Pointer_t> entry(sName, pTagLogger);
-            aIt = tagLoggers.insert(entry).first;
-        }
-
-        return aIt->second;
+        return TheTagLogger::get();
     }
 
 #ifdef DEBUG_WRITERFILTER

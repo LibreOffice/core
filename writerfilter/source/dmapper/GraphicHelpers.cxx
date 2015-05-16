@@ -28,7 +28,6 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
-#include "dmapperLoggers.hxx"
 #include <oox/drawingml/drawingmltypes.hxx>
 
 #include <iostream>
@@ -39,7 +38,7 @@ namespace dmapper {
 using namespace com::sun::star;
 
 PositionHandler::PositionHandler( std::pair<OUString, OUString>& rPositionOffsets, std::pair<OUString, OUString>& rAligns ) :
-LoggedProperties(dmapper_logger, "PositionHandler"),
+LoggedProperties("PositionHandler"),
 m_nOrient(text::VertOrientation::NONE),
 m_nPosition(0),
 m_rPositionOffsets(rPositionOffsets),
@@ -111,7 +110,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
             break;
         default:
 #ifdef DEBUG_WRITERFILTER
-            dmapper_logger->element("unhandled");
+            TagLogger::getInstance().element("unhandled");
 #endif
             break;
     }
@@ -176,7 +175,7 @@ sal_Int16 PositionHandler::orientation() const
 }
 
 WrapHandler::WrapHandler( ) :
-LoggedProperties(dmapper_logger, "WrapHandler"),
+LoggedProperties("WrapHandler"),
     m_nType( 0 ),
     m_nSide( 0 )
 {

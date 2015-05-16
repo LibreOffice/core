@@ -42,7 +42,6 @@
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
 #include <comphelper/sequence.hxx>
-#include "dmapperLoggers.hxx"
 #include "PropertyMapHelper.hxx"
 
 using namespace ::com::sun::star;
@@ -228,25 +227,25 @@ static void lcl_AnyToTag(const uno::Any & rAny)
     try {
         sal_Int32 aInt = 0;
         if (rAny >>= aInt) {
-            dmapper_logger->attribute("value", rAny);
+            TagLogger::getInstance().attribute("value", rAny);
         } else {
-            dmapper_logger->attribute("unsignedValue", 0);
+            TagLogger::getInstance().attribute("unsignedValue", 0);
         }
 
         sal_uInt32 auInt = 0;
         rAny >>= auInt;
-        dmapper_logger->attribute("unsignedValue", auInt);
+        TagLogger::getInstance().attribute("unsignedValue", auInt);
 
         float aFloat = 0.0f;
         if (rAny >>= aFloat) {
-            dmapper_logger->attribute("floatValue", rAny);
+            TagLogger::getInstance().attribute("floatValue", rAny);
         } else {
-            dmapper_logger->attribute("unsignedValue", 0);
+            TagLogger::getInstance().attribute("unsignedValue", 0);
         }
 
         OUString aStr;
         rAny >>= aStr;
-        dmapper_logger->attribute("stringValue", aStr);
+        TagLogger::getInstance().attribute("stringValue", aStr);
     }
     catch (...) {
     }
@@ -259,10 +258,10 @@ void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite
     const OUString& rInsert = PropertyNameSupplier::
         GetPropertyNameSupplier().GetName(eId);
 
-    dmapper_logger->startElement("propertyMap.insert");
-    dmapper_logger->attribute("name", rInsert);
+    TagLogger::getInstance().startElement("propertyMap.insert");
+    TagLogger::getInstance().attribute("name", rInsert);
     lcl_AnyToTag(rAny);
-    dmapper_logger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 
     if (!bOverwrite)
@@ -296,41 +295,41 @@ bool PropertyMap::isSet( PropertyIds eId) const
 }
 
 #ifdef DEBUG_WRITERFILTER
-void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
+void PropertyMap::dumpXml() const
 {
-    pLogger->startElement("PropertyMap");
+    TagLogger::getInstance().startElement("PropertyMap");
 
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     MapIterator aMapIter = m_vMap.begin();
     while (aMapIter != m_vMap.end())
     {
-        pLogger->startElement("property");
+        TagLogger::getInstance().startElement("property");
 
-        pLogger->attribute("name", rPropNameSupplier.GetName( aMapIter->first ));
+        TagLogger::getInstance().attribute("name", rPropNameSupplier.GetName( aMapIter->first ));
 
         switch (aMapIter->first)
         {
             case PROP_TABLE_COLUMN_SEPARATORS:
-               lcl_DumpTableColumnSeparators(pLogger, aMapIter->second.getValue());
+               lcl_DumpTableColumnSeparators(aMapIter->second.getValue());
                 break;
             default:
             {
                 try {
                     sal_Int32 aInt = 0;
                     aMapIter->second.getValue() >>= aInt;
-                    pLogger->attribute("value", aInt);
+                    TagLogger::getInstance().attribute("value", aInt);
 
                     sal_uInt32 auInt = 0;
                     aMapIter->second.getValue() >>= auInt;
-                    pLogger->attribute("unsignedValue", auInt);
+                    TagLogger::getInstance().attribute("unsignedValue", auInt);
 
                     float aFloat = 0.0;
                     aMapIter->second.getValue() >>= aFloat;
-                    pLogger->attribute("floatValue", aFloat);
+                    TagLogger::getInstance().attribute("floatValue", aFloat);
 
                     OUString aStr;
                     aMapIter->second.getValue() >>= auInt;
-                    pLogger->attribute("stringValue", aStr);
+                    TagLogger::getInstance().attribute("stringValue", aStr);
                 }
                 catch (...) {
                 }
@@ -338,12 +337,12 @@ void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
                 break;
         }
 
-        pLogger->endElement();
+        TagLogger::getInstance().endElement();
 
         ++aMapIter;
     }
 
-    pLogger->endElement();
+    TagLogger::getInstance().endElement();
 }
 #endif
 
@@ -364,14 +363,14 @@ void PropertyMap::InsertProps(const PropertyMapPtr& rMap)
 void PropertyMap::insertTableProperties( const PropertyMap* )
 {
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->element("PropertyMap.insertTableProperties");
+    TagLogger::getInstance().element("PropertyMap.insertTableProperties");
 #endif
 }
 
 void PropertyMap::printProperties()
 {
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("properties");
+    TagLogger::getInstance().startElement("properties");
 
     MapIterator aMapIter = m_vMap.begin();
     MapIterator aEndIter = m_vMap.end();
@@ -384,21 +383,21 @@ void PropertyMap::printProperties()
         sal_Int32 nColor;
         if ( aMapIter->second.getValue() >>= aLine )
         {
-            dmapper_logger->startElement("borderline");
-            dmapper_logger->attribute("color", aLine.Color);
-            dmapper_logger->attribute("inner", aLine.InnerLineWidth);
-            dmapper_logger->attribute("outer", aLine.OuterLineWidth);
-            dmapper_logger->endElement();
+            TagLogger::getInstance().startElement("borderline");
+            TagLogger::getInstance().attribute("color", aLine.Color);
+            TagLogger::getInstance().attribute("inner", aLine.InnerLineWidth);
+            TagLogger::getInstance().attribute("outer", aLine.OuterLineWidth);
+            TagLogger::getInstance().endElement();
         }
         else if ( aMapIter->second.getValue() >>= nColor )
         {
-            dmapper_logger->startElement("color");
-            dmapper_logger->attribute("number", nColor);
-            dmapper_logger->endElement();
+            TagLogger::getInstance().startElement("color");
+            TagLogger::getInstance().attribute("number", nColor);
+            TagLogger::getInstance().endElement();
         }
     }
 
-    dmapper_logger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 
@@ -1585,8 +1584,8 @@ void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
 void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
 {
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("TablePropertyMap.insertTableProperties");
-    pMap->dumpXml(dmapper_logger);
+    TagLogger::getInstance().startElement("TablePropertyMap.insertTableProperties");
+    pMap->dumpXml();
 #endif
 
     const TablePropertyMap* pSource = dynamic_cast< const TablePropertyMap* >(pMap);
@@ -1603,8 +1602,8 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
         }
     }
 #ifdef DEBUG_WRITERFILTER
-    dumpXml( dmapper_logger );
-    dmapper_logger->endElement();
+    dumpXml();
+    TagLogger::getInstance().endElement();
 #endif
 }
 

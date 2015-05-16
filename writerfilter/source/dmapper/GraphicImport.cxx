@@ -62,7 +62,6 @@
 #include "GraphicImport.hxx"
 #include "PropertyMap.hxx"
 #include "WrapPolygonHandler.hxx"
-#include "dmapperLoggers.hxx"
 #include "util.hxx"
 
 namespace writerfilter {
@@ -449,9 +448,9 @@ GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> const& xComp
                              std::pair<OUString, OUString>& rPositionOffsets,
                              std::pair<OUString, OUString>& rAligns,
                              std::queue<OUString>& rPositivePercentages)
-: LoggedProperties(dmapper_logger, "GraphicImport")
-, LoggedTable(dmapper_logger, "GraphicImport")
-, LoggedStream(dmapper_logger, "GraphicImport")
+: LoggedProperties("GraphicImport")
+, LoggedTable("GraphicImport")
+, LoggedStream("GraphicImport")
 , m_pImpl(new GraphicImport_Impl(eImportType, rDMapper, rPositionOffsets, rAligns, rPositivePercentages))
 , m_xComponentContext(xComponentContext)
 , m_xTextFactory(xTextFactory)
@@ -936,7 +935,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             break;
         default:
 #ifdef DEBUG_WRITERFILTER
-            dmapper_logger->element("unhandled");
+            TagLogger::getInstance().element("unhandled");
 #endif
             break;
     }
