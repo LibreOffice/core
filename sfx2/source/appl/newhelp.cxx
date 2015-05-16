@@ -2719,14 +2719,13 @@ void SfxHelpWindow_Impl::Split()
     InitSizes();
 }
 
-
-
 void SfxHelpWindow_Impl::GetFocus()
 {
-    pTextWin->GrabFocus();
+    if( pTextWin )
+        pTextWin->GrabFocus();
+    else
+        vcl::Window::GetFocus();
 }
-
-
 
 void SfxHelpWindow_Impl::MakeLayout()
 {
