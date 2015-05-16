@@ -202,11 +202,12 @@ static OUString getDescription( const Any& rTarget, bool bWithText = true )
 class CustomAnimationListEntryItem : public SvLBoxString
 {
 public:
-                    CustomAnimationListEntryItem( SvTreeListEntry*,sal_uInt16 nFlags, const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  );
-    virtual         ~CustomAnimationListEntryItem();
-    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
-    SvLBoxItem*     Create() const SAL_OVERRIDE;
-    void            Clone( SvLBoxItem* pSource ) SAL_OVERRIDE;
+    CustomAnimationListEntryItem(SvTreeListEntry*, sal_uInt16 nFlags, const OUString& aDescription,
+                                 CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent);
+    virtual ~CustomAnimationListEntryItem();
+    void InitViewData(SvTreeListBox*,SvTreeListEntry*,SvViewDataItem*) SAL_OVERRIDE;
+    SvLBoxItem* Create() const SAL_OVERRIDE;
+    void Clone(SvLBoxItem* pSource) SAL_OVERRIDE;
 
     virtual void Paint(const Point&, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                        const SvViewDataEntry* pView,const SvTreeListEntry* pEntry) SAL_OVERRIDE;
@@ -938,21 +939,21 @@ void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const Rectan
     // draw help text if list box is still empty
     if( First() == 0 )
     {
-        Color aOldColor( GetTextColor() );
-        SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
-        ::Point aOffset( LogicToPixel( Point( 6, 6 ), MAP_APPFONT ) );
+        Color aOldColor(rRenderContext.GetTextColor());
+        rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetDisableColor());
+        ::Point aOffset(rRenderContext.LogicToPixel(Point(6, 6), MAP_APPFONT));
 
-        Rectangle aRect( Point( 0,0 ), GetOutputSizePixel() );
+        Rectangle aRect(Point(0,0), rRenderContext.GetOutputSizePixel());
 
         aRect.Left() += aOffset.X();
         aRect.Top() += aOffset.Y();
         aRect.Right() -= aOffset.X();
         aRect.Bottom() -= aOffset.Y();
 
-        DrawText( aRect, SD_RESSTR(STR_CUSTOMANIMATION_LIST_HELPTEXT),
-            TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK | TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER );
+        rRenderContext.DrawText(aRect, SD_RESSTR(STR_CUSTOMANIMATION_LIST_HELPTEXT),
+                                TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK | TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER );
 
-        SetTextColor( aOldColor );
+        rRenderContext.SetTextColor(aOldColor);
     }
 }
 
