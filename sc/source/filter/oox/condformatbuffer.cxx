@@ -164,12 +164,13 @@ namespace {
 
 ::Color ARgbToARgbComponents( sal_uInt32& nRgb )
 {
-    sal_Int32 ornA = 255 - ((nRgb >> 24) & 0xFF);
+    // sal_Int32 ornA = 255 - ((nRgb >> 24) & 0xFF);
+    //
     sal_Int32 ornR = (nRgb >> 16) & 0xFF;
     sal_Int32 ornG = (nRgb >> 8) & 0xFF;
     sal_Int32 ornB = nRgb & 0xFF;
 
-    return ::Color(ornA, ornR, ornG, ornB);
+    return ::Color(/*ornA*/ 0, ornR, ornG, ornB);
 }
 
 ::Color importOOXColor(const AttributeList& rAttribs, ThemeBuffer& rThemeBuffer, GraphicHelper& rGraphicHelper)
