@@ -24,7 +24,7 @@
 #include <vcl/dockwin.hxx>
 
 class Wallpaper;
-struct ImplSplitSet;
+class ImplSplitSet;
 
 typedef sal_uInt16 SplitWindowItemBits;
 
