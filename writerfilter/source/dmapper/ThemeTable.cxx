@@ -19,7 +19,6 @@
 
 #include <ThemeTable.hxx>
 #include <ooxml/resourceids.hxx>
-#include "dmapperLoggers.hxx"
 
 using namespace com::sun::star;
 
@@ -44,8 +43,8 @@ struct ThemeTable_Impl
 };
 
 ThemeTable::ThemeTable()
-: LoggedProperties(dmapper_logger, "ThemeTable")
-, LoggedTable(dmapper_logger, "ThemeTable")
+: LoggedProperties("ThemeTable")
+, LoggedTable("ThemeTable")
 , m_pImpl( new ThemeTable_Impl )
 {
 
@@ -81,7 +80,7 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
         default:
         {
 #ifdef DEBUG_WRITERFILTER
-            dmapper_logger->element("unhandled");
+            TagLogger::getInstance().element("unhandled");
 #endif
         }
     }
@@ -96,8 +95,8 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
 void ThemeTable::lcl_sprm(Sprm& rSprm)
 {
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("ThemeTable.sprm");
-    dmapper_logger->chars(rSprm.toString());
+    TagLogger::getInstance().startElement("ThemeTable.sprm");
+    TagLogger::getInstance().chars(rSprm.toString());
 #endif
 
     m_pImpl->m_supplementalFontName.clear();
@@ -143,25 +142,25 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     default:
         {
 #ifdef DEBUG_WRITERFILTER
-            dmapper_logger->element("unhandled");
+            TagLogger::getInstance().element("unhandled");
 #endif
         }
     }
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 
 void ThemeTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("ThemeTable.entry");
+    TagLogger::getInstance().startElement("ThemeTable.entry");
 #endif
 
     ref->resolve(*this);
 
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 

@@ -12,7 +12,6 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-#include "dmapperLoggers.hxx"
 #include <comphelper/sequenceashashmap.hxx>
 
 namespace writerfilter
@@ -23,7 +22,7 @@ namespace dmapper
 using namespace ::com::sun::star;
 
 TablePositionHandler::TablePositionHandler() :
-    LoggedProperties(dmapper_logger, "TablePositionHandler"),
+    LoggedProperties("TablePositionHandler"),
     m_aVertAnchor("margin"),
     m_aYSpec(),
     m_aHorzAnchor("text"),
@@ -78,7 +77,7 @@ void TablePositionHandler::lcl_attribute(Id rName, Value& rVal)
         break;
     default:
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->element("unhandled");
+        TagLogger::getInstance().element("unhandled");
 #endif
         break;
     }

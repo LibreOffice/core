@@ -32,9 +32,9 @@ void TableManager::clearData()
 void TableManager::openCell(const css::uno::Reference<css::text::XTextRange>& rHandle, TablePropertyMapPtr pProps)
 {
 #ifdef DEBUG_WRITERFILTER
-    mpTableLogger->startElement("tablemanager.openCell");
-    mpTableLogger->chars(XTextRangeToString(rHandle));
-    mpTableLogger->endElement();
+    TagLogger::getInstance().startElement("tablemanager.openCell");
+    TagLogger::getInstance().chars(XTextRangeToString(rHandle));
+    TagLogger::getInstance().endElement();
 #endif
 
     if (mTableDataStack.size() > 0)
@@ -61,8 +61,7 @@ void TableManager::endOfCellAction()
 void TableManager::insertTableProps(TablePropertyMapPtr pProps)
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.insertTableProps");
+    TagLogger::getInstance().startElement("tablemanager.insertTableProps");
 #endif
 
     if (getTableProps().get() && getTableProps() != pProps)
@@ -71,16 +70,14 @@ void TableManager::insertTableProps(TablePropertyMapPtr pProps)
         setTableProps(pProps);
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 
 void TableManager::insertRowProps(TablePropertyMapPtr pProps)
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.insertRowProps");
+    TagLogger::getInstance().startElement("tablemanager.insertRowProps");
 #endif
 
     if (getRowProps().get())
@@ -89,31 +86,27 @@ void TableManager::insertRowProps(TablePropertyMapPtr pProps)
         setRowProps(pProps);
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 
 void TableManager::cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps)
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.cellPropsByCell");
+    TagLogger::getInstance().startElement("tablemanager.cellPropsByCell");
 #endif
 
     mTableDataStack.top()->insertCellProperties(i, pProps);
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 
 void TableManager::cellProps(TablePropertyMapPtr pProps)
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.cellProps");
+    TagLogger::getInstance().startElement("tablemanager.cellProps");
 #endif
 
     if (getCellProps().get())
@@ -122,8 +115,7 @@ void TableManager::cellProps(TablePropertyMapPtr pProps)
         setCellProps(pProps);
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 
@@ -152,8 +144,7 @@ void TableManager::text(const sal_uInt8* data, size_t len)
 void TableManager::handle0x7()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.handle0x7");
+    TagLogger::getInstance().startElement("tablemanager.handle0x7");
 #endif
 
     if (mnTableDepthNew < 1)
@@ -165,8 +156,7 @@ void TableManager::handle0x7()
         endRow();
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 
@@ -200,9 +190,9 @@ bool TableManager::sprm(Sprm& rSprm)
 void TableManager::closeCell(const css::uno::Reference<css::text::XTextRange>& rHandle)
 {
 #ifdef DEBUG_WRITERFILTER
-    mpTableLogger->startElement("tablemanager.closeCell");
-    mpTableLogger->chars(XTextRangeToString(rHandle));
-    mpTableLogger->endElement();
+    TagLogger::getInstance().startElement("tablemanager.closeCell");
+    TagLogger::getInstance().chars(XTextRangeToString(rHandle));
+    TagLogger::getInstance().endElement();
 #endif
 
     if (mTableDataStack.size() > 0)
@@ -216,7 +206,7 @@ void TableManager::closeCell(const css::uno::Reference<css::text::XTextRange>& r
 void TableManager::ensureOpenCell(TablePropertyMapPtr pProps)
 {
 #ifdef DEBUG_WRITERFILTER
-    mpTableLogger->startElement("tablemanager.ensureOpenCell");
+    TagLogger::getInstance().startElement("tablemanager.ensureOpenCell");
 #endif
 
     if (mTableDataStack.size() > 0)
@@ -232,7 +222,7 @@ void TableManager::ensureOpenCell(TablePropertyMapPtr pProps)
         }
     }
 #ifdef DEBUG_WRITERFILTER
-    mpTableLogger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 
@@ -292,8 +282,7 @@ void TableManager::startParagraphGroup()
 void TableManager::resolveCurrentTable()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.resolveCurrentTable");
+    TagLogger::getInstance().startElement("tablemanager.resolveCurrentTable");
 #endif
 
     if (mpTableDataHandler.get() != nullptr)
@@ -335,8 +324,7 @@ void TableManager::resolveCurrentTable()
     clearData();
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 
@@ -352,58 +340,52 @@ void TableManager::endLevel()
     mTableDataStack.pop();
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-    {
-        TableData::Pointer_t pTableData;
+    TableData::Pointer_t pTableData;
 
-        if (mTableDataStack.size() > 0)
-            pTableData = mTableDataStack.top();
+    if (mTableDataStack.size() > 0)
+        pTableData = mTableDataStack.top();
 
-        mpTableLogger->startElement("tablemanager.endLevel");
-        mpTableLogger->attribute("level", mTableDataStack.size());
+    TagLogger::getInstance().startElement("tablemanager.endLevel");
+    TagLogger::getInstance().attribute("level", mTableDataStack.size());
 
-        if (pTableData.get() != nullptr)
-            mpTableLogger->attribute("openCell", pTableData->isCellOpen() ? "yes" : "no");
+    if (pTableData.get() != nullptr)
+        TagLogger::getInstance().attribute("openCell", pTableData->isCellOpen() ? "yes" : "no");
 
-        mpTableLogger->endElement();
-    }
+    TagLogger::getInstance().endElement();
 #endif
 }
 
 void TableManager::startLevel()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-    {
-        TableData::Pointer_t pTableData;
+    TableData::Pointer_t pTableData;
 
-        if (mTableDataStack.size() > 0)
-            pTableData = mTableDataStack.top();
+    if (mTableDataStack.size() > 0)
+        pTableData = mTableDataStack.top();
 
-        mpTableLogger->startElement("tablemanager.startLevel");
-        mpTableLogger->attribute("level", mTableDataStack.size());
+    TagLogger::getInstance().startElement("tablemanager.startLevel");
+    TagLogger::getInstance().attribute("level", mTableDataStack.size());
 
-        if (pTableData.get() != nullptr)
-            mpTableLogger->attribute("openCell", pTableData->isCellOpen() ? "yes" : "no");
+    if (pTableData.get() != nullptr)
+        TagLogger::getInstance().attribute("openCell", pTableData->isCellOpen() ? "yes" : "no");
 
-        mpTableLogger->endElement();
-    }
+    TagLogger::getInstance().endElement();
 #endif
 
-    TableData::Pointer_t pTableData(new TableData(mTableDataStack.size()));
+    TableData::Pointer_t pTableData2(new TableData(mTableDataStack.size()));
 
     // If we have an unfinished row stored here, then push it to the new TableData
     if (mpUnfinishedRow)
     {
         for (unsigned int i = 0; i < mpUnfinishedRow->getCellCount(); ++i)
         {
-            pTableData->addCell(mpUnfinishedRow->getCellStart(i), mpUnfinishedRow->getCellProperties(i));
-            pTableData->endCell(mpUnfinishedRow->getCellEnd(i));
+            pTableData2->addCell(mpUnfinishedRow->getCellStart(i), mpUnfinishedRow->getCellProperties(i));
+            pTableData2->endCell(mpUnfinishedRow->getCellEnd(i));
         }
         mpUnfinishedRow.reset();
     }
 
-    mTableDataStack.push(pTableData);
+    mTableDataStack.push(pTableData2);
     mState.startLevel();
 }
 
@@ -418,12 +400,9 @@ bool TableManager::isInTable()
 void TableManager::handle(const css::uno::Reference<css::text::XTextRange>& rHandle)
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger)
-    {
-        mpTableLogger->startElement("tablemanager.handle");
-        mpTableLogger->chars(XTextRangeToString(rHandle));
-        mpTableLogger->endElement();
-    }
+    TagLogger::getInstance().startElement("tablemanager.handle");
+    TagLogger::getInstance().chars(XTextRangeToString(rHandle));
+    TagLogger::getInstance().endElement();
 #endif
 
     setHandle(rHandle);
@@ -437,8 +416,7 @@ void TableManager::setHandler(TableDataHandler::Pointer_t pTableDataHandler)
 void TableManager::endRow()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->element("tablemanager.endRow");
+    TagLogger::getInstance().element("tablemanager.endRow");
 #endif
 
     setRowEnd(true);
@@ -447,8 +425,7 @@ void TableManager::endRow()
 void TableManager::endCell()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->element("tablemanager.endCell");
+    TagLogger::getInstance().element("tablemanager.endCell");
 #endif
 
     setCellEnd(true);
@@ -457,8 +434,7 @@ void TableManager::endCell()
 void TableManager::inCell()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->element("tablemanager.inCell");
+    TagLogger::getInstance().element("tablemanager.inCell");
 #endif
     setInCell(true);
 
@@ -469,12 +445,9 @@ void TableManager::inCell()
 void TableManager::cellDepth(sal_uInt32 nDepth)
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-    {
-        mpTableLogger->startElement("tablemanager.cellDepth");
-        mpTableLogger->attribute("depth", nDepth);
-        mpTableLogger->endElement();
-    }
+    TagLogger::getInstance().startElement("tablemanager.cellDepth");
+    TagLogger::getInstance().attribute("depth", nDepth);
+    TagLogger::getInstance().endElement();
 #endif
 
     mnTableDepthNew = nDepth;

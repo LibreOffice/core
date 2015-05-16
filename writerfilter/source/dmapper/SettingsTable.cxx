@@ -30,7 +30,6 @@
 #include <comphelper/sequence.hxx>
 #include <ooxml/resourceids.hxx>
 #include <ConversionHelper.hxx>
-#include "dmapperLoggers.hxx"
 #include "util.hxx"
 
 using namespace com::sun::star;
@@ -121,8 +120,8 @@ struct SettingsTable_Impl
 };
 
 SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > & xTextFactory)
-: LoggedProperties(dmapper_logger, "SettingsTable")
-, LoggedTable(dmapper_logger, "SettingsTable")
+: LoggedProperties("SettingsTable")
+, LoggedTable("SettingsTable")
 , m_pImpl( new SettingsTable_Impl(rDMapper, xTextFactory) )
 {
 
@@ -173,7 +172,7 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
     default:
     {
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->element("unhandled");
+        TagLogger::getInstance().element("unhandled");
 #endif
     }
     }
@@ -292,7 +291,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     default:
     {
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->element("unhandled");
+        TagLogger::getInstance().element("unhandled");
 #endif
     }
     }

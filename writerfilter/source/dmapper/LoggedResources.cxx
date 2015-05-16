@@ -29,8 +29,8 @@ namespace writerfilter
 #ifdef DEBUG_WRITERFILTER
 // class: LoggedResourcesHelper
 
-LoggedResourcesHelper::LoggedResourcesHelper(TagLogger::Pointer_t pLogger, const std::string & sPrefix)
-: mpLogger(pLogger), msPrefix(sPrefix)
+LoggedResourcesHelper::LoggedResourcesHelper(const std::string & sPrefix)
+: msPrefix(sPrefix)
 {
 }
 
@@ -40,32 +40,32 @@ LoggedResourcesHelper::~LoggedResourcesHelper()
 
 void LoggedResourcesHelper::startElement(const std::string & sElement)
 {
-    mpLogger->startElement(msPrefix + "." + sElement);
+    TagLogger::getInstance().startElement(msPrefix + "." + sElement);
 }
 
 void LoggedResourcesHelper::endElement(const std::string & /*sElement*/)
 {
-    mpLogger->endElement();
+    TagLogger::getInstance().endElement();
 }
 
 void LoggedResourcesHelper::chars(const OUString & rChars)
 {
-    mpLogger->chars(rChars);
+    TagLogger::getInstance().chars(rChars);
 }
 
 void LoggedResourcesHelper::chars(const std::string & rChars)
 {
-    mpLogger->chars(rChars);
+    TagLogger::getInstance().chars(rChars);
 }
 
 void LoggedResourcesHelper::attribute(const std::string & rName, const std::string & rValue)
 {
-    mpLogger->attribute(rName, rValue);
+    TagLogger::getInstance().attribute(rName, rValue);
 }
 
 void LoggedResourcesHelper::attribute(const std::string & rName, sal_uInt32 nValue)
 {
-    mpLogger->attribute(rName, nValue);
+    TagLogger::getInstance().attribute(rName, nValue);
 }
 
 #endif
@@ -74,11 +74,9 @@ void LoggedResourcesHelper::attribute(const std::string & rName, sal_uInt32 nVal
 
 LoggedStream::LoggedStream(
 #ifdef DEBUG_WRITERFILTER
-    TagLogger::Pointer_t pLogger,
     const std::string & sPrefix
-) : mHelper(pLogger, sPrefix)
+) : mHelper(sPrefix)
 #else
-    TagLogger::Pointer_t,
     const std::string&
 )
 #endif
@@ -306,11 +304,9 @@ void LoggedStream::info(const std::string & _info)
 // class LoggedProperties
 LoggedProperties::LoggedProperties(
 #ifdef DEBUG_WRITERFILTER
-    TagLogger::Pointer_t pLogger,
     const std::string & sPrefix
-) : mHelper(pLogger, sPrefix)
+) : mHelper(sPrefix)
 #else
-    TagLogger::Pointer_t,
     const std::string&
 )
 #endif
@@ -350,11 +346,9 @@ void LoggedProperties::sprm(Sprm & rSprm)
 
 LoggedTable::LoggedTable(
 #ifdef DEBUG_WRITERFILTER
-    TagLogger::Pointer_t pLogger,
     const std::string & sPrefix
-) : mHelper(pLogger, sPrefix)
+) : mHelper(sPrefix)
 #else
-    TagLogger::Pointer_t,
     const std::string&
 )
 #endif

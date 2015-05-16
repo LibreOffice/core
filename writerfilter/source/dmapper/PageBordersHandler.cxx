@@ -21,8 +21,6 @@
 
 #include <ooxml/resourceids.hxx>
 
-#include "dmapperLoggers.hxx"
-
 namespace writerfilter {
 namespace dmapper {
 
@@ -38,7 +36,7 @@ _PgBorder::~_PgBorder( )
 }
 
 PageBordersHandler::PageBordersHandler( ) :
-LoggedProperties(dmapper_logger, "PageBordersHandler"),
+LoggedProperties("PageBordersHandler"),
 m_nDisplay( 0 ),
 m_nOffset( 0 )
 {

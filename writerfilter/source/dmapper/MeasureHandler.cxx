@@ -22,7 +22,6 @@
 #include <ooxml/resourceids.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/text/SizeType.hpp>
-#include "dmapperLoggers.hxx"
 
 namespace writerfilter {
 namespace dmapper {
@@ -32,7 +31,7 @@ using namespace ::com::sun::star;
 
 
 MeasureHandler::MeasureHandler() :
-LoggedProperties(dmapper_logger, "MeasureHandler"),
+LoggedProperties("MeasureHandler"),
 m_nMeasureValue( 0 ),
 m_nUnit( -1 ),
 m_nRowHeightSizeType( text::SizeType::MIN )

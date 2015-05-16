@@ -22,7 +22,6 @@
 #include <ConversionHelper.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <ooxml/resourceids.hxx>
-#include <dmapperLoggers.hxx>
 #include <filter/msfilter/util.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -34,7 +33,7 @@ using namespace ::com::sun::star;
 
 
 BorderHandler::BorderHandler( bool bOOXML ) :
-LoggedProperties(dmapper_logger, "BorderHandler"),
+LoggedProperties("BorderHandler"),
 m_nCurrentBorderPosition( BORDER_TOP ),
 m_nLineWidth(15), // Word default, in twips
 m_nLineType(0),

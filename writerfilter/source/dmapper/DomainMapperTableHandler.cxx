@@ -32,7 +32,6 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <dmapperLoggers.hxx>
 #include <TablePositionHandler.hxx>
 #include <ConversionHelper.hxx>
 #include <util.hxx>
@@ -74,11 +73,11 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
     m_nRowIndex = 0;
 
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("tablehandler.table");
-    dmapper_logger->attribute("rows", nRows);
+    TagLogger::getInstance().startElement("tablehandler.table");
+    TagLogger::getInstance().attribute("rows", nRows);
 
     if (pProps.get() != nullptr)
-        pProps->dumpXml( dmapper_logger );
+        pProps->dumpXml();
 #endif
 }
 
@@ -207,32 +206,32 @@ void lcl_computeCellBorders( PropertyMapPtr pTableBorders, PropertyMapPtr pCellP
 
 void lcl_debug_BorderLine(table::BorderLine & rLine)
 {
-    dmapper_logger->startElement("BorderLine");
-    dmapper_logger->attribute("Color", rLine.Color);
-    dmapper_logger->attribute("InnerLineWidth", rLine.InnerLineWidth);
-    dmapper_logger->attribute("OuterLineWidth", rLine.OuterLineWidth);
-    dmapper_logger->attribute("LineDistance", rLine.LineDistance);
-    dmapper_logger->endElement();
+    TagLogger::getInstance().startElement("BorderLine");
+    TagLogger::getInstance().attribute("Color", rLine.Color);
+    TagLogger::getInstance().attribute("InnerLineWidth", rLine.InnerLineWidth);
+    TagLogger::getInstance().attribute("OuterLineWidth", rLine.OuterLineWidth);
+    TagLogger::getInstance().attribute("LineDistance", rLine.LineDistance);
+    TagLogger::getInstance().endElement();
 }
 
 void lcl_debug_TableBorder(table::TableBorder & rBorder)
 {
-    dmapper_logger->startElement("TableBorder");
+    TagLogger::getInstance().startElement("TableBorder");
     lcl_debug_BorderLine(rBorder.TopLine);
-    dmapper_logger->attribute("IsTopLineValid", sal_uInt32(rBorder.IsTopLineValid));
+    TagLogger::getInstance().attribute("IsTopLineValid", sal_uInt32(rBorder.IsTopLineValid));
     lcl_debug_BorderLine(rBorder.BottomLine);
-    dmapper_logger->attribute("IsBottomLineValid", sal_uInt32(rBorder.IsBottomLineValid));
+    TagLogger::getInstance().attribute("IsBottomLineValid", sal_uInt32(rBorder.IsBottomLineValid));
     lcl_debug_BorderLine(rBorder.LeftLine);
-    dmapper_logger->attribute("IsLeftLineValid", sal_uInt32(rBorder.IsLeftLineValid));
+    TagLogger::getInstance().attribute("IsLeftLineValid", sal_uInt32(rBorder.IsLeftLineValid));
     lcl_debug_BorderLine(rBorder.RightLine);
-    dmapper_logger->attribute("IsRightLineValid", sal_uInt32(rBorder.IsRightLineValid));
+    TagLogger::getInstance().attribute("IsRightLineValid", sal_uInt32(rBorder.IsRightLineValid));
     lcl_debug_BorderLine(rBorder.VerticalLine);
-    dmapper_logger->attribute("IsVerticalLineValid", sal_uInt32(rBorder.IsVerticalLineValid));
+    TagLogger::getInstance().attribute("IsVerticalLineValid", sal_uInt32(rBorder.IsVerticalLineValid));
     lcl_debug_BorderLine(rBorder.HorizontalLine);
-    dmapper_logger->attribute("IsHorizontalLineValid", sal_uInt32(rBorder.IsHorizontalLineValid));
-    dmapper_logger->attribute("Distance", rBorder.Distance);
-    dmapper_logger->attribute("IsDistanceValid", sal_uInt32(rBorder.IsDistanceValid));
-    dmapper_logger->endElement();
+    TagLogger::getInstance().attribute("IsHorizontalLineValid", sal_uInt32(rBorder.IsHorizontalLineValid));
+    TagLogger::getInstance().attribute("Distance", rBorder.Distance);
+    TagLogger::getInstance().attribute("IsDistanceValid", sal_uInt32(rBorder.IsDistanceValid));
+    TagLogger::getInstance().endElement();
 }
 #endif
 
@@ -417,19 +416,19 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 }
 
 #ifdef DEBUG_WRITERFILTER
-                dmapper_logger->startElement("mergedProps");
+                TagLogger::getInstance().startElement("mergedProps");
                 if (pMergedProperties)
-                    pMergedProperties->dumpXml( dmapper_logger );
-                dmapper_logger->endElement();
+                    pMergedProperties->dumpXml();
+                TagLogger::getInstance().endElement();
 #endif
 
                 m_aTableProperties->InsertProps(pMergedProperties);
                 m_aTableProperties->InsertProps(pTableProps);
 
 #ifdef DEBUG_WRITERFILTER
-                dmapper_logger->startElement("TableProperties");
-                m_aTableProperties->dumpXml( dmapper_logger );
-                dmapper_logger->endElement();
+                TagLogger::getInstance().startElement("TableProperties");
+                m_aTableProperties->dumpXml();
+                TagLogger::getInstance().endElement();
 #endif
             }
         }
@@ -454,9 +453,9 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         rInfo.pTableDefaults->InsertProps(m_aTableProperties);
 
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->startElement("TableDefaults");
-        rInfo.pTableDefaults->dumpXml( dmapper_logger );
-        dmapper_logger->endElement();
+        TagLogger::getInstance().startElement("TableDefaults");
+        rInfo.pTableDefaults->dumpXml();
+        TagLogger::getInstance().endElement();
 #endif
 
         if (!aGrabBag.empty())
@@ -584,9 +583,9 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         rInfo.aTableProperties = m_aTableProperties->GetPropertyValues();
 
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->startElement("debug.tableprops");
-        m_aTableProperties->dumpXml( dmapper_logger );
-        dmapper_logger->endElement();
+        TagLogger::getInstance().startElement("debug.tableprops");
+        m_aTableProperties->dumpXml();
+        TagLogger::getInstance().endElement();
 #endif
 
     }
@@ -610,7 +609,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(TableInfo & rInfo, std::vector<HorizontallyMergedCell>& rMerges)
 {
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("getCellProperties");
+    TagLogger::getInstance().startElement("getCellProperties");
 #endif
 
     CellPropertyValuesSeq_t aCellProperties( m_aCellProperties.size() );
@@ -618,7 +617,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
     if ( !m_aCellProperties.size() )
     {
         #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->endElement();
+        TagLogger::getInstance().endElement();
         #endif
         return aCellProperties;
     }
@@ -772,9 +771,9 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 std::swap(*(*aCellIterator), *pAllCellProps );
 
 #ifdef DEBUG_WRITERFILTER
-                dmapper_logger->startElement("cell");
-                dmapper_logger->attribute("cell", nCell);
-                dmapper_logger->attribute("row", nRow);
+                TagLogger::getInstance().startElement("cell");
+                TagLogger::getInstance().attribute("cell", nCell);
+                TagLogger::getInstance().attribute("row", nRow);
 #endif
 
                 lcl_computeCellBorders( rInfo.pTableBorders, *aCellIterator, nCell, nRow, bIsEndCol, bIsEndRow );
@@ -825,7 +824,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
                 pSingleCellProperties[nCell] = (*aCellIterator)->GetPropertyValues();
 #ifdef DEBUG_WRITERFILTER
-                dmapper_logger->endElement();
+                TagLogger::getInstance().endElement();
 #endif
             }
             ++nCell;
@@ -860,7 +859,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
     }
 
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 
     return aCellProperties;
@@ -912,7 +911,7 @@ bool lcl_emptyRow(TableSequence_t& rTableSeq, sal_Int32 nRow)
 RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
 {
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("getRowProperties");
+    TagLogger::getInstance().startElement("getRowProperties");
 #endif
 
     static const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
@@ -923,7 +922,7 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
     while( aRowIter != aRowIterEnd )
     {
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->startElement("rowProps.row");
+        TagLogger::getInstance().startElement("rowProps.row");
 #endif
         if( aRowIter->get() )
         {
@@ -942,19 +941,19 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
 
             aRowProperties[nRow] = (*aRowIter)->GetPropertyValues();
 #ifdef DEBUG_WRITERFILTER
-            ((*aRowIter)->dumpXml( dmapper_logger ));
-            lcl_DumpPropertyValues(dmapper_logger, aRowProperties[nRow]);
+            (*aRowIter)->dumpXml();
+            lcl_DumpPropertyValues(aRowProperties[nRow]);
 #endif
         }
         ++nRow;
         ++aRowIter;
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->endElement();
+        TagLogger::getInstance().endElement();
 #endif
     }
 
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 
     return aRowProperties;
@@ -980,7 +979,7 @@ static void lcl_ApplyCellParaProps(uno::Reference<table::XCell> const& xCell,
 void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
 {
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("tablehandler.endTable");
+    TagLogger::getInstance().startElement("tablehandler.endTable");
 #endif
 
     // If we want to make this table a floating one.
@@ -997,7 +996,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
     RowPropertyValuesSeq_t aRowProperties = endTableGetRowProperties();
 
 #ifdef DEBUG_WRITERFILTER
-    lcl_DumpPropertyValueSeq(dmapper_logger, aRowProperties);
+    lcl_DumpPropertyValueSeq(aRowProperties);
 #endif
 
     if (m_pTableSeq->getLength() > 0)
@@ -1071,7 +1070,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             SAL_INFO("writerfilter.dmapper",
                     "Conversion to table error: " << e.Message);
 #ifdef DEBUG_WRITERFILTER
-            dmapper_logger->chars(std::string("failed to import table!"));
+            TagLogger::getInstance().chars(std::string("failed to import table!"));
 #endif
         }
         catch ( const uno::Exception &e )
@@ -1128,8 +1127,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
     m_aRowProperties.clear();
 
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->endElement();
-    dmapper_logger->endElement();
+    TagLogger::getInstance().endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 
@@ -1140,10 +1139,10 @@ void DomainMapperTableHandler::startRow(unsigned int nCells,
     m_aCellProperties.push_back( PropertyMapVector1() );
 
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("table.row");
-    dmapper_logger->attribute("cells", nCells);
+    TagLogger::getInstance().startElement("table.row");
+    TagLogger::getInstance().attribute("cells", nCells);
     if (pProps != nullptr)
-        pProps->dumpXml(dmapper_logger);
+        pProps->dumpXml();
 #endif
 
     m_pRowSeq = RowSequencePointer_t(new RowSequence_t(nCells));
@@ -1156,7 +1155,7 @@ void DomainMapperTableHandler::endRow()
     ++m_nRowIndex;
     m_nCellIndex = 0;
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->endElement();
+    TagLogger::getInstance().endElement();
 #endif
 }
 
@@ -1175,10 +1174,10 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
     }
 
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("table.cell");
-    dmapper_logger->startElement("table.cell.start");
-    dmapper_logger->chars(XTextRangeToString(start));
-    dmapper_logger->endElement();
+    TagLogger::getInstance().startElement("table.cell");
+    TagLogger::getInstance().startElement("table.cell.start");
+    TagLogger::getInstance().chars(XTextRangeToString(start));
+    TagLogger::getInstance().endElement();
     if (pProps.get())
         pProps->printProperties();
 #endif
@@ -1193,10 +1192,10 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
 void DomainMapperTableHandler::endCell(const Handle_t & end)
 {
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("table.cell.end");
-    dmapper_logger->chars(XTextRangeToString(end));
-    dmapper_logger->endElement();
-    dmapper_logger->endElement();
+    TagLogger::getInstance().startElement("table.cell.end");
+    TagLogger::getInstance().chars(XTextRangeToString(end));
+    TagLogger::getInstance().endElement();
+    TagLogger::getInstance().endElement();
 #endif
 
     if (!end.get())

@@ -31,7 +31,6 @@
 
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-#include <dmapperLoggers.hxx>
 #include <oox/token/tokens.hxx>
 #include <DomainMapper.hxx>
 
@@ -57,8 +56,8 @@ namespace dmapper {
     bool TablePropertiesHandler::sprm(Sprm & rSprm)
     {
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->startElement("TablePropertiesHandler.sprm");
-        dmapper_logger->attribute("sprm", rSprm.toString());
+        TagLogger::getInstance().startElement("TablePropertiesHandler.sprm");
+        TagLogger::getInstance().attribute("sprm", rSprm.toString());
 #endif
 
         bool bRet = true;
@@ -218,7 +217,7 @@ namespace dmapper {
                     pTablePropMap->InsertProps(pBorderHandler->getProperties());
 
 #ifdef DEBUG_WRITERFILTER
-                    pTablePropMap->dumpXml( dmapper_logger );
+                    pTablePropMap->dumpXml();
 #endif
                     insertTableProps( pTablePropMap );
                 }
@@ -380,7 +379,7 @@ namespace dmapper {
         }
 
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->endElement();
+        TagLogger::getInstance().endElement();
 #endif
 
         return bRet;

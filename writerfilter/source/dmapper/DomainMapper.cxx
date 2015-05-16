@@ -80,8 +80,6 @@ namespace writerfilter {
 
 namespace dmapper{
 
-TagLogger::Pointer_t dmapper_logger(TagLogger::getInstance("DOMAINMAPPER"));
-
 struct _PageSz
 {
     sal_Int32 code;
@@ -98,9 +96,9 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                             SourceDocumentType eDocumentType,
                             uno::Reference<text::XTextRange> const& xInsertTextRange,
                             utl::MediaDescriptor& rMediaDesc) :
-LoggedProperties(dmapper_logger, "DomainMapper"),
-LoggedTable(dmapper_logger, "DomainMapper"),
-LoggedStream(dmapper_logger, "DomainMapper"),
+    LoggedProperties("DomainMapper"),
+    LoggedTable("DomainMapper"),
+    LoggedStream("DomainMapper"),
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType, xInsertTextRange, !rMediaDesc.getUnpackedValueOrDefault("InsertMode", false))),
     mbIsSplitPara(false)
 {
@@ -194,7 +192,7 @@ DomainMapper::~DomainMapper()
     delete m_pImpl;
 
 #ifdef DEBUG_WRITERFILTER
-        dmapper_logger->endDocument();
+        TagLogger::getInstance().endDocument();
 #endif
 }
 
@@ -2548,10 +2546,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     default:
         {
 #ifdef DEBUG_WRITERFILTER
-            dmapper_logger->startElement("unhandled");
-            dmapper_logger->attribute("id", nSprmId);
-            dmapper_logger->attribute("name", rSprm.getName());
-            dmapper_logger->endElement();
+            TagLogger::getInstance().startElement("unhandled");
+            TagLogger::getInstance().attribute("id", nSprmId);
+            TagLogger::getInstance().attribute("name", rSprm.getName());
+            TagLogger::getInstance().endElement();
 #endif
         }
     }
@@ -2832,9 +2830,9 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
     //TODO: Determine the right text encoding (FIB?)
     OUString sText( reinterpret_cast<const char*>(data_), len, RTL_TEXTENCODING_MS_1252 );
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("text");
-    dmapper_logger->chars(sText);
-    dmapper_logger->endElement();
+    TagLogger::getInstance().startElement("text");
+    TagLogger::getInstance().chars(sText);
+    TagLogger::getInstance().endElement();
 #endif
 
     try
