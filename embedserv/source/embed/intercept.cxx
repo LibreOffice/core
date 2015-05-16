@@ -221,10 +221,10 @@ void Interceptor::generateFeatureStateEvent()
 
             cppu::OInterfaceContainerHelper* pICH =
                 m_pStatCL->getContainer(m_aInterceptedURL[i]);
-            uno::Sequence<uno::Reference<uno::XInterface> > aSeq;
+            std::vector<uno::Reference<uno::XInterface> > aSeq;
             if(pICH)
-                aSeq = pICH->getElements();
-            if(!aSeq.getLength())
+                aSeq = pICH->getElementsAsVector();
+            if(aSeq.empty())
                 continue;
 
             frame::FeatureStateEvent aStateEvent;
@@ -252,13 +252,11 @@ void Interceptor::generateFeatureStateEvent()
 
             }
 
-            for(sal_Int32 k = 0; k < aSeq.getLength(); ++k)
+            for(uno::Reference<uno::XInterface> & x : aSeq)
             {
-                uno::Reference<frame::XStatusListener>
-                    Control(aSeq[k],uno::UNO_QUERY);
+                uno::Reference<frame::XStatusListener> Control(x,uno::UNO_QUERY);
                 if(Control.is())
                     Control->statusChanged(aStateEvent);
-
             }
         }
     }

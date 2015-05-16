@@ -1735,13 +1735,13 @@ void VCLXToolkit::callTopWindowListeners(
           = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
     if (pWindow->IsTopWindow())
     {
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >
-              aListeners(m_aTopWindowListeners.getElements());
-        if (aListeners.hasElements())
+        std::vector< css::uno::Reference< css::uno::XInterface > >
+              aListeners(m_aTopWindowListeners.getElementsAsVector());
+        if (!aListeners.empty())
         {
             css::lang::EventObject aAwtEvent(
                 static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()));
-            for (::sal_Int32 i = 0; i < aListeners.getLength(); ++i)
+            for (::sal_Int32 i = 0; i < (sal_Int32)aListeners.size(); ++i)
             {
                 css::uno::Reference< css::awt::XTopWindowListener >
                       xListener(aListeners[i], css::uno::UNO_QUERY);
@@ -1764,10 +1764,10 @@ void VCLXToolkit::callTopWindowListeners(
 long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
                                   bool bPressed)
 {
-    css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >
-          aHandlers(m_aKeyHandlers.getElements());
+    std::vector< css::uno::Reference< css::uno::XInterface > >
+          aHandlers(m_aKeyHandlers.getElementsAsVector());
 
-    if (aHandlers.hasElements())
+    if (!aHandlers.empty())
     {
         vcl::Window * pWindow = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
 
@@ -1787,7 +1787,7 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
             sal::static_int_cast< sal_Int16 >(
                 pKeyEvent->GetKeyCode().GetFunction()));
-        for (::sal_Int32 i = 0; i < aHandlers.getLength(); ++i)
+        for (::sal_Int32 i = 0; i < (sal_Int32)aHandlers.size(); ++i)
         {
             css::uno::Reference< css::awt::XKeyHandler > xHandler(
                 aHandlers[i], css::uno::UNO_QUERY);
@@ -1816,9 +1816,9 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
           = static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow();
     if (pWindow->IsTopWindow())
     {
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >
-              aListeners(m_aFocusListeners.getElements());
-        if (aListeners.hasElements())
+        std::vector< css::uno::Reference< css::uno::XInterface > >
+              aListeners(m_aFocusListeners.getElementsAsVector());
+        if (!aListeners.empty())
         {
             // Ignore the interior of compound controls when determining the
             // window that gets the focus next (see implementation in
@@ -1836,7 +1836,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
             css::awt::FocusEvent aAwtEvent(
                 static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()),
                 pWindow->GetGetFocusFlags(), xNext, false);
-            for (::sal_Int32 i = 0; i < aListeners.getLength(); ++i)
+            for (::sal_Int32 i = 0; i < (sal_Int32)aListeners.size(); ++i)
             {
                 css::uno::Reference< css::awt::XFocusListener > xListener(
                     aListeners[i], css::uno::UNO_QUERY);

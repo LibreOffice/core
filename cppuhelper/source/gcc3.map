@@ -430,6 +430,12 @@ global:
     _ZN4cppu15supportsServiceEPN3com3sun4star4lang12XServiceInfoERKN3rtl8OUStringE; # cppu::supportsService(com::sun::star::lang::XServiceInfo*, rtl::OUString const&)
 } UDK_3.8;
 
+
+LIBO_UDK_3.12 { # LibO 5.1
+global:
+    _ZNK4cppu25OInterfaceContainerHelper19getElementsAsVectorEv; # std::vector< Reference<XInterface> > OInterfaceContainerHelper::getElementsAsVector() const
+} LIBO_UDK_3.9;
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:
