@@ -90,17 +90,18 @@ cmd/sc_browseforward.png cmd/sc_pagedown.png
 database/linked_text_table.png cmd/sc_dataimport.png
 
 # language support for rtl
-cmd/lc_redo.png cmd/ar/lc_undo.png
-cmd/lc_undo.png cmd/ar/lc_redo.png
-cmd/sc_redo.png cmd/ar/sc_undo.png
-cmd/sc_undo.png cmd/ar/sc_redo.png
+# doesn't work for all other languages
+#cmd/lc_redo.png cmd/ar/lc_undo.png
+#cmd/lc_undo.png cmd/ar/lc_redo.png
+#cmd/sc_redo.png cmd/ar/sc_undo.png
+#cmd/sc_undo.png cmd/ar/sc_redo.png
 
-cmd/lc_redo.png cmd/fa/lc_undo.png
-cmd/lc_undo.png cmd/fa/lc_redo.png
-cmd/sc_redo.png cmd/fa/sc_undo.png
-cmd/sc_undo.png cmd/fa/sc_redo.png
+#cmd/lc_redo.png cmd/fa/lc_undo.png
+#cmd/lc_undo.png cmd/fa/lc_redo.png
+#cmd/sc_redo.png cmd/fa/sc_undo.png
+#cmd/sc_undo.png cmd/fa/sc_redo.png
 
-cmd/lc_redo.png cmd/he/lc_undo.png
-cmd/lc_undo.png cmd/he/lc_redo.png
-cmd/sc_redo.png cmd/he/sc_undo.png
-cmd/sc_undo.png cmd/he/sc_redo.png
+#cmd/lc_redo.png cmd/he/lc_undo.png
+#cmd/lc_undo.png cmd/he/lc_redo.png
+#cmd/sc_redo.png cmd/he/sc_undo.png
+#cmd/sc_undo.png cmd/he/sc_redo.png
