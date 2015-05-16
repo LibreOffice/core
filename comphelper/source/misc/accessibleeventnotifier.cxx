@@ -255,7 +255,7 @@ namespace comphelper
 
     void AccessibleEventNotifier::addEvent( const TClientId _nClient, const AccessibleEventObject& _rEvent )
     {
-        Sequence< Reference< XInterface > > aListeners;
+        std::vector< Reference< XInterface > > aListeners;
 
         // --- <mutex lock> -------------------------------
         {
@@ -267,25 +267,22 @@ namespace comphelper
                 return;
 
             // since we're synchronous, again, we want to notify immediately
-            aListeners = aClientPos->second->getElements();
+            aListeners = aClientPos->second->getElementsAsVector();
         }
         // --- </mutex lock> ------------------------------
 
-            // default handling: loop through all listeners, and notify them
-        const Reference< XInterface >* pListeners = aListeners.getConstArray();
-        const Reference< XInterface >* pListenersEnd = pListeners + aListeners.getLength();
-        while ( pListeners != pListenersEnd )
+        // default handling: loop through all listeners, and notify them
+        for ( const Reference< XInterface > & rL : aListeners )
         {
             try
             {
-                static_cast< XAccessibleEventListener* >( pListeners->get() )->notifyEvent( _rEvent );
+                static_cast< XAccessibleEventListener* >( rL.get() )->notifyEvent( _rEvent );
             }
             catch( const Exception& )
             {
                 // no assertion, because a broken access remote bridge or something like this
                 // can cause this exception
             }
-            ++pListeners;
         }
     }
 
