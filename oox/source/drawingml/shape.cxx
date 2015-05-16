@@ -1039,6 +1039,8 @@ Reference< XShape > Shape::createAndInsert(
 
             SAL_INFO("oox.cscode", "==cscode== shape name: '" << msName << "'");
             SAL_INFO("oox.csdata", "==csdata== shape name: '" << msName << "'");
+            maSize.Width = maSize.Width / EMU_PER_HMM;
+            maSize.Height = maSize.Height / EMU_PER_HMM;
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape, maSize );
         }
         else if( getTextBody() )

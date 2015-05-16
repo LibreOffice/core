@@ -32,6 +32,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <basegfx/numeric/ftools.hxx>
 #include <osl/diagnose.h>
+#include "oox/drawingml/drawingmltypes.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -153,6 +154,10 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
         aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextRotateAngle );
         aPropertyMap.setProperty( PROP_IsPostRotateAngle, true); // For OpenXML Imports
+
+        awt::Rectangle aViewBox( 0, 0,/* oox::drawingml::convertEmuToHmm(*/aSize.Width/*)*/,/*oox::drawingml::convertEmuToHmm( */aSize.Height/*)*/ );
+        aPropertyMap.setProperty( PROP_ViewBox, aViewBox);
+
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
 
