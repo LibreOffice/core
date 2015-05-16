@@ -136,6 +136,7 @@ public:
     void testNewCondFormatXLSX();
     void testCondFormatThemeColorXLSX();
     void testCondFormatThemeColor2XLSX(); // negative bar color and axis color
+    void testComplexIconSetsXLSX();
 
     void testLiteralInFormulaXLS();
 
@@ -244,6 +245,7 @@ public:
     CPPUNIT_TEST(testNewCondFormatXLSX);
     CPPUNIT_TEST(testCondFormatThemeColorXLSX);
     CPPUNIT_TEST(testCondFormatThemeColor2XLSX);
+    CPPUNIT_TEST(testComplexIconSetsXLSX);
     CPPUNIT_TEST(testLiteralInFormulaXLS);
 
     CPPUNIT_TEST(testNumberFormatHTML);
@@ -2404,6 +2406,35 @@ void ScFiltersTest::testCondFormatThemeColor2XLSX()
     CPPUNIT_ASSERT(pDataBarFormatData->mpNegativeColor.get());
     CPPUNIT_ASSERT_EQUAL(Color(217, 217, 217), *pDataBarFormatData->mpNegativeColor.get());
     CPPUNIT_ASSERT_EQUAL(Color(197, 90, 17), pDataBarFormatData->maAxisColor);
+}
+
+namespace {
+
+void testComplexIconSetsXLSX_Impl(ScDocument& rDoc, SCCOL nCol, ScIconSetType eType)
+{
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(nCol, 1, 0);
+    CPPUNIT_ASSERT(pFormat);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(condformat::ICONSET, pEntry->GetType());
+    const ScIconSetFormat* pIconSet = static_cast<const ScIconSetFormat*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL(eType, pIconSet->GetIconSetData()->eIconSetType);
+}
+
+}
+
+void ScFiltersTest::testComplexIconSetsXLSX()
+{
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "complex_icon_set.", XLSX );
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load complex_icon_set.xlsx", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rDoc.GetCondFormList(0)->size());
+    testComplexIconSetsXLSX_Impl(rDoc, 1, IconSet_3Triangles);
+    testComplexIconSetsXLSX_Impl(rDoc, 3, IconSet_3Stars);
+    testComplexIconSetsXLSX_Impl(rDoc, 5, IconSet_5Boxes);
 }
 
 void ScFiltersTest::testLiteralInFormulaXLS()
