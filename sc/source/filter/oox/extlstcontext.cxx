@@ -128,24 +128,6 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
     return NULL;
 }
 
-namespace {
-
-ScConditionalFormat* findFormatByRange(const ScRangeList& rRange, ScDocument* pDoc, SCTAB nTab)
-{
-    ScConditionalFormatList* pList = pDoc->GetCondFormList(nTab);
-    for (auto itr = pList->begin(); itr != pList->end(); ++itr)
-    {
-        if (itr->GetRange() == rRange)
-        {
-            return &(*itr);
-        }
-    }
-
-    return NULL;
-}
-
-}
-
 void ExtConditionalFormattingContext::onStartElement(const AttributeList& /*rAttribs*/)
 {
     switch (getCurrentElement())
@@ -168,32 +150,14 @@ void ExtConditionalFormattingContext::onEndElement()
     {
         case XM_TOKEN(sqref):
         {
-            if (maEntries.empty())
-                break;
-
-            ScDocument* pDoc = &getScDocument();
-            assert(pDoc);
-            SCTAB nTab = getCurrentSheetIndex();
             ScRangeList aRange;
+            ScDocument* pDoc = &getScDocument();
             bool bSuccess = ScRangeStringConverter::GetRangeListFromString(aRange, aChars, pDoc, formula::FormulaGrammar::CONV_XL_OOX);
-            if (!bSuccess)
+            if (!bSuccess || aRange.empty())
                 break;
 
-            ScConditionalFormat* pFormat = findFormatByRange(aRange, pDoc, nTab);
-            if (!pFormat)
-            {
-                // create new conditional format and insert it
-                pFormat = new ScConditionalFormat(1, pDoc);
-                pFormat->SetRange(aRange);
-                sal_uLong nKey = pDoc->AddCondFormat(pFormat, nTab);
-                pDoc->AddCondFormatData(aRange, nTab, nKey);
-            }
-
-            for (auto itr = maEntries.begin(), itrEnd = maEntries.end();
-                    itr != itrEnd; ++itr)
-            {
-                pFormat->AddEntry(itr->Clone(pDoc));
-            }
+            boost::ptr_vector<ExtCfCondFormat>& rExtFormats =  getCondFormats().importExtCondFormat();
+            rExtFormats.push_back(new ExtCfCondFormat(aRange, maEntries));
         }
         break;
         case XLS14_TOKEN(cfRule):

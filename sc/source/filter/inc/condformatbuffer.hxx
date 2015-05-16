@@ -23,13 +23,18 @@
 #include "formulaparser.hxx"
 #include "worksheethelper.hxx"
 #include <tools/color.hxx>
+#include "rangelst.hxx"
+
 #include <memory>
+
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScColorScaleFormat;
 class ScDataBarFormat;
 struct ScDataBarFormatData;
 class ScConditionalFormat;
 class ScIconSetFormat;
+class ScFormatEntry;
 struct ScIconSetFormatData;
 
 namespace oox {
@@ -261,6 +266,20 @@ public:
     ExCfRuleModel& getModel() { return maModel; }
 };
 
+class ExtCfCondFormat
+{
+public:
+    ExtCfCondFormat(const ScRangeList& aRange, boost::ptr_vector<ScFormatEntry>& rEntries);
+    ~ExtCfCondFormat();
+
+    const ScRangeList& getRange();
+    const boost::ptr_vector<ScFormatEntry>& getEntries();
+
+private:
+    boost::ptr_vector<ScFormatEntry> maEntries;
+    ScRangeList maRange;
+};
+
 typedef std::shared_ptr< CondFormat > CondFormatRef;
 typedef std::shared_ptr< ExtCfDataBarRule > ExtCfDataBarRuleRef;
 
@@ -274,6 +293,7 @@ public:
     /** Imports settings from the CONDFORMATTING record. */
     CondFormatRef       importCondFormatting( SequenceInputStream& rStrm );
     ExtCfDataBarRuleRef createExtCfDataBarRule(ScDataBarFormatData* pTarget);
+    boost::ptr_vector<ExtCfCondFormat>& importExtCondFormat();
 
     /** Converts an OOXML condition operator token to the API constant. */
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
@@ -287,6 +307,7 @@ private:
     typedef RefVector< ExtCfDataBarRule > ExtCfDataBarRuleVec;
     CondFormatVec       maCondFormats;      /// All conditional formatting in a sheet.
     ExtCfDataBarRuleVec        maCfRules;          /// All external conditional formatting rules in a sheet.
+    boost::ptr_vector<ExtCfCondFormat> maExtCondFormats;
 };
 
 } // namespace xls

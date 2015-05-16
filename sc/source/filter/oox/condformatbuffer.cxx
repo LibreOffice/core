@@ -1107,6 +1107,24 @@ CondFormatRef CondFormatBuffer::importConditionalFormatting( const AttributeList
     return xCondFmt;
 }
 
+namespace {
+
+ScConditionalFormat* findFormatByRange(const ScRangeList& rRange, ScDocument* pDoc, SCTAB nTab)
+{
+    ScConditionalFormatList* pList = pDoc->GetCondFormList(nTab);
+    for (auto itr = pList->begin(); itr != pList->end(); ++itr)
+    {
+        if (itr->GetRange() == rRange)
+        {
+            return &(*itr);
+        }
+    }
+
+    return NULL;
+}
+
+}
+
 void CondFormatBuffer::finalizeImport()
 {
     CondFormatVec::iterator it = maCondFormats.begin();
@@ -1123,6 +1141,29 @@ void CondFormatBuffer::finalizeImport()
         if ( (*ext_it).get() )
             (*ext_it).get()->finalizeImport();
     }
+
+    for (auto itr = maExtCondFormats.begin(); itr != maExtCondFormats.end(); ++itr)
+    {
+        SCTAB nTab = this->getCurrentSheetIndex();
+        ScDocument* pDoc = &getScDocument();
+
+        const ScRangeList& rRange = itr->getRange();
+        ScConditionalFormat* pFormat = findFormatByRange(rRange, pDoc, nTab);
+        if (!pFormat)
+        {
+            // create new conditional format and insert it
+            pFormat = new ScConditionalFormat(0, pDoc);
+            pFormat->SetRange(rRange);
+            sal_uLong nKey = pDoc->AddCondFormat(pFormat, nTab);
+            pDoc->AddCondFormatData(rRange, nTab, nKey);
+        }
+
+        const boost::ptr_vector<ScFormatEntry>& rEntries = itr->getEntries();
+        for (auto i = rEntries.begin(); i != rEntries.end(); ++i)
+        {
+            pFormat->AddEntry(i->Clone(pDoc));
+        }
+    }
 }
 
 CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm )
@@ -1137,6 +1178,11 @@ ExtCfDataBarRuleRef CondFormatBuffer::createExtCfDataBarRule(ScDataBarFormatData
     ExtCfDataBarRuleRef extRule( new ExtCfDataBarRule( pTarget, *this ) );
     maCfRules.push_back( extRule );
     return extRule;
+}
+
+boost::ptr_vector<ExtCfCondFormat>& CondFormatBuffer::importExtCondFormat()
+{
+    return maExtCondFormats;
 }
 
 sal_Int32 CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
@@ -1279,6 +1325,26 @@ void ExtCfDataBarRule::importCfvo( const AttributeList& rAttribs )
 {
     mnRuleType = CFVO;
     maModel.maColorScaleType = rAttribs.getString( XML_type, OUString() );
+}
+
+ExtCfCondFormat::ExtCfCondFormat(const ScRangeList& rRange, boost::ptr_vector<ScFormatEntry>& rEntries):
+    maRange(rRange)
+{
+    maEntries.transfer(maEntries.begin(), rEntries.begin(), rEntries.end(), rEntries);
+}
+
+ExtCfCondFormat::~ExtCfCondFormat()
+{
+}
+
+const ScRangeList& ExtCfCondFormat::getRange()
+{
+    return maRange;
+}
+
+const boost::ptr_vector<ScFormatEntry>& ExtCfCondFormat::getEntries()
+{
+    return maEntries;
 }
 
 } // namespace xls
