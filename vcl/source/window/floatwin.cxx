@@ -65,55 +65,58 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbInCleanUp = false;
     mbGrabFocus = false;
 
-    DBG_ASSERT( pParent, "FloatWindow::FloatingWindow(): - pParent == NULL!" );
+    DBG_ASSERT(pParent, "FloatWindow::FloatingWindow(): - pParent == NULL!");
 
-    if ( !pParent )
+    if (!pParent)
         pParent = ImplGetSVData()->maWinData.mpAppWin;
 
-    DBG_ASSERT( pParent, "FloatWindow::FloatingWindow(): - pParent == NULL and no AppWindow exists" );
+    DBG_ASSERT(pParent, "FloatWindow::FloatingWindow(): - pParent == NULL and no AppWindow exists");
 
     // no Border, then we dont need a border window
-    if ( !nStyle )
+    if (!nStyle)
     {
         mpWindowImpl->mbOverlapWin = true;
         nStyle |= WB_DIALOGCONTROL;
-        SystemWindow::ImplInit( pParent, nStyle, NULL );
+        SystemWindow::ImplInit(pParent, nStyle, NULL);
     }
     else
     {
-        if ( !(nStyle & WB_NODIALOGCONTROL) )
+        if (!(nStyle & WB_NODIALOGCONTROL))
             nStyle |= WB_DIALOGCONTROL;
 
-        if( nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE)
-            && !(nStyle & WB_OWNERDRAWDECORATION) )
+        if (nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE)
+            && !(nStyle & WB_OWNERDRAWDECORATION))
         {
             WinBits nFloatWinStyle = nStyle;
             // #99154# floaters are not closeable by default anymore, eg fullscreen floater
             // nFloatWinStyle |= WB_CLOSEABLE;
             mpWindowImpl->mbFrame = true;
             mpWindowImpl->mbOverlapWin = true;
-            SystemWindow::ImplInit( pParent, nFloatWinStyle & ~WB_BORDER, NULL );
+            SystemWindow::ImplInit(pParent, nFloatWinStyle & ~WB_BORDER, NULL);
         }
         else
         {
-            ImplBorderWindow*   pBorderWin;
-            sal_uInt16              nBorderStyle = BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
+            ImplBorderWindow* pBorderWin;
+            sal_uInt16 nBorderStyle = BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
 
-            if( nStyle & WB_OWNERDRAWDECORATION ) nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
-            else                                  nBorderStyle |= BORDERWINDOW_STYLE_OVERLAP;
+            if (nStyle & WB_OWNERDRAWDECORATION)
+                nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
+            else
+                nBorderStyle |= BORDERWINDOW_STYLE_OVERLAP;
 
-            if ( (nStyle & WB_SYSTEMWINDOW) && !(nStyle & (WB_MOVEABLE | WB_SIZEABLE)) )
+            if ((nStyle & WB_SYSTEMWINDOW) && !(nStyle & (WB_MOVEABLE | WB_SIZEABLE)))
             {
                 nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
                 nStyle |= WB_CLOSEABLE; // make undecorated floaters closeable
             }
-            pBorderWin  = VclPtr<ImplBorderWindow>::Create( pParent, nStyle, nBorderStyle );
-            SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
+            pBorderWin  = VclPtr<ImplBorderWindow>::Create(pParent, nStyle, nBorderStyle);
+            SystemWindow::ImplInit(pBorderWin, nStyle & ~WB_BORDER, NULL);
             pBorderWin->mpWindowImpl->mpClientWindow = this;
-            pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
-            pBorderWin->SetDisplayActive( true );
-            mpWindowImpl->mpBorderWindow  = pBorderWin;
-            mpWindowImpl->mpRealParent    = pParent;
+            pBorderWin->GetBorder(mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder,
+                                  mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder);
+            pBorderWin->SetDisplayActive(true);
+            mpWindowImpl->mpBorderWindow = pBorderWin;
+            mpWindowImpl->mpRealParent = pParent;
         }
     }
     SetActivateMode( 0 );
@@ -138,19 +141,19 @@ void FloatingWindow::ImplInitSettings()
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     Color aColor;
-    if ( IsControlBackground() )
+    if (IsControlBackground())
         aColor = GetControlBackground();
-    else if ( Window::GetStyle() & WB_3DLOOK )
+    else if (Window::GetStyle() & WB_3DLOOK)
         aColor = rStyleSettings.GetFaceColor();
     else
         aColor = rStyleSettings.GetWindowColor();
-    SetBackground( aColor );
+    SetBackground(aColor);
 }
 
-FloatingWindow::FloatingWindow( vcl::Window* pParent, WinBits nStyle ) :
-    SystemWindow( WINDOW_FLOATINGWINDOW )
+FloatingWindow::FloatingWindow(vcl::Window* pParent, WinBits nStyle) :
+    SystemWindow(WINDOW_FLOATINGWINDOW)
 {
-    ImplInit( pParent, nStyle );
+    ImplInit(pParent, nStyle);
 }
 
 FloatingWindow::FloatingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
