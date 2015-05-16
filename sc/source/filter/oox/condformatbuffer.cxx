@@ -1144,10 +1144,10 @@ void CondFormatBuffer::finalizeImport()
 
     for (auto itr = maExtCondFormats.begin(); itr != maExtCondFormats.end(); ++itr)
     {
-        SCTAB nTab = this->getCurrentSheetIndex();
         ScDocument* pDoc = &getScDocument();
 
         const ScRangeList& rRange = itr->getRange();
+        SCTAB nTab = rRange.front()->aStart.Tab();
         ScConditionalFormat* pFormat = findFormatByRange(rRange, pDoc, nTab);
         if (!pFormat)
         {

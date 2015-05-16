@@ -156,6 +156,13 @@ void ExtConditionalFormattingContext::onEndElement()
             if (!bSuccess || aRange.empty())
                 break;
 
+            SCTAB nTab = getCurrentSheetIndex();
+            for (size_t i = 0; i < aRange.size(); ++i)
+            {
+                aRange[i]->aStart.SetTab(nTab);
+                aRange[i]->aEnd.SetTab(nTab);
+            }
+
             boost::ptr_vector<ExtCfCondFormat>& rExtFormats =  getCondFormats().importExtCondFormat();
             rExtFormats.push_back(new ExtCfCondFormat(aRange, maEntries));
         }
