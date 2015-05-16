@@ -47,7 +47,7 @@ namespace detail {
     */
     union element_alias
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > *pAsSequence;
+        std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > *pAsSequence;
         ::com::sun::star::uno::XInterface * pAsInterface;
         element_alias() : pAsInterface(0) {}
     };
@@ -158,7 +158,12 @@ public:
     /**
       Return all interfaces added to this container.
      **/
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > SAL_CALL getElements() const;
+    std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > SAL_CALL getElements() const;
+
+    /**
+      Return all interfaces added to this container.
+     **/
+    css::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > SAL_CALL getElementsAsSequence() const;
 
     /** Inserts an element into the container.  The position is not specified, thus it is not
         specified in which order events are fired.
@@ -236,14 +241,14 @@ public:
 private:
 friend class OInterfaceIteratorHelper;
     /**
-      bIsList == TRUE -> aData.pAsSequence of type Sequence< XInterfaceSequence >,
+      bIsList == TRUE -> aData.pAsSequence of type std::vector< XInterface >,
       otherwise aData.pAsInterface == of type (XEventListener *)
      */
     detail::element_alias   aData;
     ::osl::Mutex &          rMutex;
     /** TRUE -> used by an iterator. */
     sal_Bool                bInUse;
-    /** TRUE -> aData.pAsSequence is of type Sequence< XInterfaceSequence >. */
+    /** TRUE -> aData.pAsSequence is of type std::vector< XInterface >. */
     sal_Bool                bIsList;
 
     OInterfaceContainerHelper( const OInterfaceContainerHelper & )

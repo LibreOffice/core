@@ -199,7 +199,7 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
     // Get elements of searched type, if somelse exist.
     if ( pSpecialContainer != NULL )
     {
-        seqReturnConnections = pSpecialContainer->getElements();
+        seqReturnConnections = pSpecialContainer->getElementsAsSequence();
     }
     // Don't forget this!
     impl_UnlockContainer();
