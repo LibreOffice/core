@@ -755,7 +755,7 @@ DeviceCoordinate GraphiteLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
                 if (i > 0) pDXArray[i] -= mvCharDxs[i-1];
             }
 #ifdef GRLAYOUT_DEBUG
-            fprintf(grLog(),"%d,%d,%d ", (int)i, (int)mvCharDxs[i], pDXArray[i]);
+            fprintf(grLog(),"%d,%d,%ld ", (int)i, (int)mvCharDxs[i], pDXArray[i]);
 #endif
         }
         //std::adjacent_difference(mvCharDxs.begin(), mvCharDxs.end(), pDXArray);
@@ -892,7 +892,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
 
 #ifdef GRLAYOUT_DEBUG
     for (size_t iDx = 0; iDx < mvCharDxs.size(); iDx++)
-         fprintf(grLog(),"%d,%d,%d ", (int)iDx, (int)mvCharDxs[iDx], args.mpDXArray[iDx]);
+         fprintf(grLog(),"%d,%d,%ld ", (int)iDx, (int)mvCharDxs[iDx], args.mpDXArray[iDx]);
     fprintf(grLog(),"ApplyDx\n");
 #endif
     bool bRtl = mnLayoutFlags & SAL_LAYOUT_BIDI_RTL;
@@ -1010,7 +1010,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
     std::copy(args.mpDXArray, args.mpDXArray + nChars,
       mvCharDxs.begin() + (args.mnMinCharPos - mnMinCharPos));
 #ifdef GRLAYOUT_DEBUG
-    fprintf(grLog(),"ApplyDx %d(%ld)\n", args.mpDXArray[nChars - 1], mnWidth);
+    fprintf(grLog(),"ApplyDx %ld(%ld)\n", args.mpDXArray[nChars - 1], mnWidth);
 #endif
     mnWidth = args.mpDXArray[nChars - 1];
 }
@@ -1189,7 +1189,7 @@ void GraphiteLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) con
             pCaretXArray[i] = pCaretXArray[i+1] = 0;
         }
 #ifdef GRLAYOUT_DEBUG
-        fprintf(grLog(),"%d,%d-%d\t", nCharSlot, pCaretXArray[i], pCaretXArray[i+1]);
+        fprintf(grLog(),"%d,%ld-%ld\t", nCharSlot, pCaretXArray[i], pCaretXArray[i+1]);
 #endif
     }
 #ifdef GRLAYOUT_DEBUG
