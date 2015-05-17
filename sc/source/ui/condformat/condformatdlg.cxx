@@ -324,6 +324,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
                 case condformat::entry::ICONSET:
                     return 0;
             }
+            itr->disposeAndClear();
             *itr = VclPtr<ScColorScale3FrmtEntry>::Create(this, mpDoc, maPos);
             mpDialogParent->InvalidateRefData();
             (*itr)->SetActive();
@@ -332,6 +333,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
             if((*itr)->GetType() == condformat::entry::CONDITION)
                 return 0;
 
+            itr->disposeAndClear();
             *itr = VclPtr<ScConditionFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
             mpDialogParent->InvalidateRefData();
             (*itr)->SetActive();
@@ -340,6 +342,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
             if((*itr)->GetType() == condformat::entry::FORMULA)
                 return 0;
 
+            itr->disposeAndClear();
             *itr = VclPtr<ScFormulaFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
             mpDialogParent->InvalidateRefData();
             (*itr)->SetActive();
@@ -348,6 +351,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
             if((*itr)->GetType() == condformat::entry::DATE)
                 return 0;
 
+            itr->disposeAndClear();
             *itr = VclPtr<ScDateFrmtEntry>::Create( this, mpDoc );
             mpDialogParent->InvalidateRefData();
             (*itr)->SetActive();
