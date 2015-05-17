@@ -159,6 +159,7 @@ protected:
     // For CalcFlyAdjust
     inline void SetDropLeft( const sal_uInt16 nNew ) { nDropLeft = nNew; }
 
+    long CalculateFirstLineOffset ( const SwTxtNode *pNode, const SvxLRSpaceItem &rSpace);
     void CtorInitTxtMargin( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
     SwTxtMargin(SwTxtNode* pTxtNode)
         : SwTxtIter(pTxtNode)

@@ -7182,6 +7182,9 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
             pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_right : XML_end ) ), OString::number(  rLRSpace.GetRight() ) );
         }
         sal_Int32 nFirstLineAdjustment = rLRSpace.GetTxtFirstLineOfst();
+        if (rLRSpace.IsAutoFirst())
+            nFirstLineAdjustment = 0 /*calculation based on CalculateFirstLineOffset*/;
+
         if (nFirstLineAdjustment > 0)
             pLRSpaceAttrList->add( FSNS( XML_w, XML_firstLine ), OString::number( nFirstLineAdjustment ) );
         else

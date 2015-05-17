@@ -157,6 +157,65 @@ namespace {
     }
 } // end of anonymous namespace
 
+long SwTxtMargin::CalculateFirstLineOffset (const SwTxtNode *pNode, const SvxLRSpaceItem &rSpace)
+{
+        short nFLOfst = 0;
+        long nFirstLineOfs = 0;
+        if( !pNode->GetFirstLineOfsWithNum( nFLOfst ) &&
+            rSpace.IsAutoFirst() )
+        {
+            nFirstLineOfs = GetFnt()->GetSize( GetFnt()->GetActual() ).Height();
+            const SvxLineSpacingItem *pSpace = aLineInf.GetLineSpacing();
+            if( pSpace )
+            {
+                switch( pSpace->GetLineSpaceRule() )
+                {
+                    case SVX_LINE_SPACE_AUTO:
+                    break;
+                    case SVX_LINE_SPACE_MIN:
+                    {
+                        if( nFirstLineOfs < pSpace->GetLineHeight() )
+                            nFirstLineOfs = pSpace->GetLineHeight();
+                        break;
+                    }
+                    case SVX_LINE_SPACE_FIX:
+                        nFirstLineOfs = pSpace->GetLineHeight();
+                    break;
+                    default: OSL_FAIL( ": unknown LineSpaceRule" );
+                }
+                switch( pSpace->GetInterLineSpaceRule() )
+                {
+                    case SVX_INTER_LINE_SPACE_OFF:
+                    break;
+                    case SVX_INTER_LINE_SPACE_PROP:
+                    {
+                        long nTmp = pSpace->GetPropLineSpace();
+                        // 50% is the minimumm, at 0% we switch to
+                        // the default value 100% ...
+                        if( nTmp < 50 )
+                            nTmp = nTmp ? 50 : 100;
+
+                        nTmp *= nFirstLineOfs;
+                        nTmp /= 100;
+                        if( !nTmp )
+                            ++nTmp;
+                        nFirstLineOfs = nTmp;
+                        break;
+                    }
+                    case SVX_INTER_LINE_SPACE_FIX:
+                    {
+                        nFirstLineOfs += pSpace->GetInterLineSpace();
+                        break;
+                    }
+                    default: OSL_FAIL( ": unknown InterLineSpaceRule" );
+                }
+            }
+        }
+        else
+            nFirstLineOfs = nFLOfst;
+    return nFirstLineOfs;
+}
+
 void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 {
     CtorInitTxtIter( pNewFrm, pNewInf );
@@ -241,60 +300,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         nFirst = nLeft;
     else
     {
-        short nFLOfst = 0;
-        long nFirstLineOfs = 0;
-        if( !pNode->GetFirstLineOfsWithNum( nFLOfst ) &&
-            rSpace.IsAutoFirst() )
-        {
-            nFirstLineOfs = GetFnt()->GetSize( GetFnt()->GetActual() ).Height();
-            const SvxLineSpacingItem *pSpace = aLineInf.GetLineSpacing();
-            if( pSpace )
-            {
-                switch( pSpace->GetLineSpaceRule() )
-                {
-                    case SVX_LINE_SPACE_AUTO:
-                    break;
-                    case SVX_LINE_SPACE_MIN:
-                    {
-                        if( nFirstLineOfs < pSpace->GetLineHeight() )
-                            nFirstLineOfs = pSpace->GetLineHeight();
-                        break;
-                    }
-                    case SVX_LINE_SPACE_FIX:
-                        nFirstLineOfs = pSpace->GetLineHeight();
-                    break;
-                    default: OSL_FAIL( ": unknown LineSpaceRule" );
-                }
-                switch( pSpace->GetInterLineSpaceRule() )
-                {
-                    case SVX_INTER_LINE_SPACE_OFF:
-                    break;
-                    case SVX_INTER_LINE_SPACE_PROP:
-                    {
-                        long nTmp = pSpace->GetPropLineSpace();
-                        // 50% is the minimumm, at 0% we switch to
-                        // the default value 100% ...
-                        if( nTmp < 50 )
-                            nTmp = nTmp ? 50 : 100;
-
-                        nTmp *= nFirstLineOfs;
-                        nTmp /= 100;
-                        if( !nTmp )
-                            ++nTmp;
-                        nFirstLineOfs = nTmp;
-                        break;
-                    }
-                    case SVX_INTER_LINE_SPACE_FIX:
-                    {
-                        nFirstLineOfs += pSpace->GetInterLineSpace();
-                        break;
-                    }
-                    default: OSL_FAIL( ": unknown InterLineSpaceRule" );
-                }
-            }
-        }
-        else
-            nFirstLineOfs = nFLOfst;
+        long nFirstLineOfs = CalculateFirstLineOffset(pNode, rSpace);
 
         // #i95907#
         // #i111284#
