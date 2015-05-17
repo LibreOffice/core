@@ -425,12 +425,13 @@ public:
     sal_Int32               m_nLastParaEnd;
     bool                    m_bFirstParagraph;
     uno::Reference< text::XTextContent >    m_xNextPara;
+    std::shared_ptr<SwUnoCrsr> m_pCrsr;
 
     Impl(   uno::Reference< text::XText > const& xParent,
-            ::std::unique_ptr<SwUnoCrsr> && pCursor,
+            ::std::shared_ptr<SwUnoCrsr> pCursor,
             const CursorType eType,
             SwStartNode const*const pStartNode, SwTable const*const pTable)
-        : SwClient( pCursor.release() )
+        : SwClient( nullptr )
         , m_xParentText( xParent )
         , m_eCursorType( eType )
         // remember table and start node for later travelling
@@ -439,11 +440,13 @@ public:
         // for import of tables in tables we have to remember the actual
         // table and start node of the current position in the enumeration.
         , m_pOwnTable( pTable )
-        , m_nEndIndex( GetCursor()->End()->nNode.GetIndex() )
+        , m_nEndIndex( pCursor->End()->nNode.GetIndex() )
         , m_nFirstParaStart( -1 )
         , m_nLastParaEnd( -1 )
         , m_bFirstParagraph( true )
+        , m_pCrsr(pCursor)
     {
+        m_pCrsr->Add(this);
         OSL_ENSURE(m_xParentText.is(), "SwXParagraphEnumeration: no parent?");
         OSL_ENSURE(GetRegisteredIn(),  "SwXParagraphEnumeration: no cursor?");
         OSL_ENSURE(   !((CURSOR_SELECTION_IN_TABLE == eType) ||
@@ -463,8 +466,8 @@ public:
     }
 
     virtual ~Impl() {
-        // Impl owns the cursor; delete it here: SolarMutex is locked
-        delete GetRegisteredIn();
+        if(m_pCrsr)
+            m_pCrsr->Remove(this);
     }
 
     SwUnoCrsr * GetCursor() {
@@ -478,19 +481,32 @@ public:
 protected:
     // SwClient
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
+    assert(m_pCrsr->m_bSaneOwnership);
     ClientModify(this, pOld, pNew);
+}
+
+void SwXParagraphEnumeration::Impl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    assert(m_pCrsr->m_bSaneOwnership);
+    SwClient::SwClientNotify(rModify, rHint);
+    if(m_pCrsr && typeid(rHint) == typeid(sw::DocDisposingHint))
+    {
+        m_pCrsr->Remove(this);
+        m_pCrsr.reset();
+    }
 }
 
 SwXParagraphEnumeration::SwXParagraphEnumeration(
         uno::Reference< text::XText > const& xParent,
-        ::std::unique_ptr<SwUnoCrsr> && pCursor,
+        ::std::shared_ptr<SwUnoCrsr> pCursor,
         const CursorType eType,
         SwStartNode const*const pStartNode, SwTable const*const pTable)
-    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, std::move(pCursor), eType,
+    : m_pImpl( new SwXParagraphEnumeration::Impl(xParent, pCursor, eType,
                     pStartNode, pTable) )
 {
 }
@@ -1290,8 +1306,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
-    ::std::unique_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
+    auto pNewCrsr(m_pImpl->m_rDoc.CreateUnoCrsr2(aPos, false));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1303,9 +1318,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException, std::exception)
 
     const CursorType eSetType = (RANGE_IN_CELL == m_pImpl->m_eRangePosition)
             ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
-    const uno::Reference< container::XEnumeration > xRet =
-        new SwXParagraphEnumeration(m_pImpl->m_xParentText, std::move(pNewCrsr), eSetType);
-    return xRet;
+    return new SwXParagraphEnumeration(m_pImpl->m_xParentText, pNewCrsr, eSetType);
 }
 
 uno::Type SAL_CALL SwXTextRange::getElementType() throw (uno::RuntimeException, std::exception)

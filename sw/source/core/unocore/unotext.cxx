@@ -2564,12 +2564,9 @@ throw (uno::RuntimeException, std::exception)
 
     SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
     SwPosition aPos(rNode);
-    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
-        GetDoc()->CreateUnoCrsr(aPos, false));
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr2(aPos, false));
     pUnoCursor->Move(fnMoveBackward, fnGoDoc);
-    const uno::Reference< container::XEnumeration > xRet
-        = new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_BODY);
-    return xRet;
+    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_BODY);
 }
 
 uno::Type SAL_CALL
@@ -2829,13 +2826,10 @@ throw (uno::RuntimeException, std::exception)
     const SwFormatContent& rFlyContent = rHeadFootFormat.GetContent();
     const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
-    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
-        GetDoc()->CreateUnoCrsr(aPos, false));
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr2(aPos, false));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
-    aRef = new SwXParagraphEnumeration(this, std::move(pUnoCursor),
+    return new SwXParagraphEnumeration(this, pUnoCursor,
                 (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER);
-
-    return aRef;
 }
 
 uno::Type SAL_CALL

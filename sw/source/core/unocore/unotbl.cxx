@@ -1112,12 +1112,12 @@ uno::Reference<container::XEnumeration> SwXCell::createEnumeration() throw( uno:
         return uno::Reference<container::XEnumeration>();
     const SwStartNode* pSttNd = pBox->GetSttNd();
     SwPosition aPos(*pSttNd);
-    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr2(aPos, false));
     pUnoCursor->Move(fnMoveForward, fnGoNode);
     // remember table and start node for later travelling
     // (used in export of tables in tables)
     SwTable const*const pTable(&pSttNd->FindTableNode()->GetTable());
-    return new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_TBLTEXT, pSttNd, pTable);
+    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_TBLTEXT, pSttNd, pTable);
 }
 
 uno::Type SAL_CALL SwXCell::getElementType() throw( uno::RuntimeException, std::exception )

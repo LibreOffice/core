@@ -161,9 +161,8 @@ uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration()
     SolarMutexGuard aGuard;
     SwPaM aPam(aNodeIndex);
     aPam.Move(fnMoveForward, fnGoNode);
-    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
-        GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
-    return new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_REDLINE);
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr2(*aPam.Start(), false));
+    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
 }
 
 uno::Type SwXRedlineText::getElementType(  ) throw(uno::RuntimeException, std::exception)
@@ -535,15 +534,12 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration() throw
         throw uno::RuntimeException();
 
     SwNodeIndex* pNodeIndex = pRedline->GetContentIdx();
-    if(pNodeIndex)
-    {
-        SwPaM aPam(*pNodeIndex);
-        aPam.Move(fnMoveForward, fnGoNode);
-        ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
-            GetDoc()->CreateUnoCrsr(*aPam.Start(), false));
-        xRet = new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_REDLINE);
-    }
-    return xRet;
+    if(!pNodeIndex)
+        return nullptr;
+    SwPaM aPam(*pNodeIndex);
+    aPam.Move(fnMoveForward, fnGoNode);
+    auto pUnoCursor(GetDoc()->CreateUnoCrsr2(*aPam.Start(), false));
+    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
 }
 
 uno::Type SwXRedline::getElementType(  ) throw(uno::RuntimeException, std::exception)
