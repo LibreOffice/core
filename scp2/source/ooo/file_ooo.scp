@@ -122,7 +122,7 @@ File gid_File_Basic_Tutorials
     Name = "wizards_basicsrvtutorials.filelist";
 End
 
-#if defined UNX
+#if defined UNX && ! defined ENABLE_MACOSX_SANDBOX
 
 File gid_File_Script_Gengal
     BIN_FILE_BODY;
