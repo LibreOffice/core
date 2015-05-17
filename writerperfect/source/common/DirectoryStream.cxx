@@ -117,50 +117,50 @@ DirectoryStream::~DirectoryStream()
 
 DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent)
 {
-try
-{
-    if (!xContent.is())
-        return 0;
-
-    DirectoryStream *pDir(0);
-
-    const uno::Reference<container::XChild> xChild(xContent, uno::UNO_QUERY);
-    if (xChild.is())
+    try
     {
-        const uno::Reference<ucb::XContent> xDirContent(xChild->getParent(), uno::UNO_QUERY);
-        if (xDirContent.is())
+        if (!xContent.is())
+            return 0;
+
+        DirectoryStream *pDir(0);
+
+        const uno::Reference<container::XChild> xChild(xContent, uno::UNO_QUERY);
+        if (xChild.is())
         {
-            pDir = new writerperfect::DirectoryStream(xDirContent);
-            if (!pDir->isStructured())
+            const uno::Reference<ucb::XContent> xDirContent(xChild->getParent(), uno::UNO_QUERY);
+            if (xDirContent.is())
             {
-                delete pDir;
-                pDir = 0;
+                pDir = new writerperfect::DirectoryStream(xDirContent);
+                if (!pDir->isStructured())
+                {
+                    delete pDir;
+                    pDir = 0;
+                }
             }
         }
-    }
 
-    return pDir;
-}
-catch (...)
-{
-    return 0;
-}
+        return pDir;
+    }
+    catch (...)
+    {
+        return 0;
+    }
 }
 
 bool DirectoryStream::isDirectory(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent)
 {
-try
-{
-    if (!xContent.is())
-        return false;
+    try
+    {
+        if (!xContent.is())
+            return false;
 
-    ucbhelper::Content aContent(xContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
-    return aContent.isFolder();
-}
-catch (...)
-{
-    return false;
-}
+        ucbhelper::Content aContent(xContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
+        return aContent.isFolder();
+    }
+    catch (...)
+    {
+        return false;
+    }
 }
 
 bool DirectoryStream::isStructured()
