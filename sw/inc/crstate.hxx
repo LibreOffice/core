@@ -49,18 +49,21 @@ struct SwFillCrsrPos
 
 // Multiportion types: two lines, bidirectional, 270 degrees rotation,
 //                     ruby portion and 90 degrees rotation
-#define MT_TWOLINE  0
-#define MT_BIDI     1
-#define MT_ROT_270  3
-#define MT_RUBY     4
-#define MT_ROT_90   7
+enum class MultiPortionType : sal_uInt8
+{
+        TWOLINE  = 0,
+        BIDI     = 1,
+        ROT_270  = 3,
+        RUBY     = 4,
+        ROT_90   = 7,
+};
 
 struct Sw2LinesPos
 {
     SwRect aLine;           ///< Position and size of the line
     SwRect aPortion;        ///< Position and size of the multi portion
     SwRect aPortion2;       ///< needed for nested multi portions
-    sal_uInt8 nMultiType;        ///< Multiportion type
+    MultiPortionType nMultiType;  ///< Multiportion type
 };
 
 /**
