@@ -677,16 +677,16 @@ void SwTextCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                             if( static_cast<SwMultiPortion*>(pPor)->HasRotation() )
                             {
                                 if( static_cast<SwMultiPortion*>(pPor)->IsRevers() )
-                                    pCMS->p2Lines->nMultiType = MT_ROT_270;
+                                    pCMS->p2Lines->nMultiType = MultiPortionType::ROT_270;
                                 else
-                                    pCMS->p2Lines->nMultiType = MT_ROT_90;
+                                    pCMS->p2Lines->nMultiType = MultiPortionType::ROT_90;
                             }
                             else if( static_cast<SwMultiPortion*>(pPor)->IsDouble() )
-                                pCMS->p2Lines->nMultiType = MT_TWOLINE;
+                                pCMS->p2Lines->nMultiType = MultiPortionType::TWOLINE;
                             else if( static_cast<SwMultiPortion*>(pPor)->IsBidi() )
-                                pCMS->p2Lines->nMultiType = MT_BIDI;
+                                pCMS->p2Lines->nMultiType = MultiPortionType::BIDI;
                             else
-                                pCMS->p2Lines->nMultiType = MT_RUBY;
+                                pCMS->p2Lines->nMultiType = MultiPortionType::RUBY;
 
                             SwTwips nTmpWidth = pPor->Width();
                             if( nSpaceAdd )

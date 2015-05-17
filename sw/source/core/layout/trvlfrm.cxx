@@ -2145,11 +2145,11 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
             SwRect aTmp( aStRect );
 
             // BiDi-Portions are swimming against the current.
-            const bool bPorR2L = ( MT_BIDI == pSt2Pos->nMultiType ) ?
+            const bool bPorR2L = ( MultiPortionType::BIDI == pSt2Pos->nMultiType ) ?
                 ! bR2L :
             bR2L;
 
-            if( MT_BIDI == pSt2Pos->nMultiType &&
+            if( MultiPortionType::BIDI == pSt2Pos->nMultiType &&
                 (pSt2Pos->aPortion2.*fnRect->fnGetWidth)() )
             {
                 // nested bidi portion
@@ -2177,7 +2177,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
                         (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
             }
 
-            if( MT_ROT_90 == pSt2Pos->nMultiType ||
+            if( MultiPortionType::ROT_90 == pSt2Pos->nMultiType ||
                 (pSt2Pos->aPortion.*fnRect->fnGetTop)() ==
                 (aTmp.*fnRect->fnGetTop)() )
             {
@@ -2189,7 +2189,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
             Sub( aRegion, aTmp );
 
             SwTwips nTmp = (pSt2Pos->aLine.*fnRect->fnGetBottom)();
-            if( MT_ROT_90 != pSt2Pos->nMultiType &&
+            if( MultiPortionType::ROT_90 != pSt2Pos->nMultiType &&
                 (aStRect.*fnRect->fnBottomDist)( nTmp ) > 0 )
             {
                 (aTmp.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetBottom)() );
@@ -2221,11 +2221,11 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
             SwRect aTmp( aEndRect );
 
             // BiDi-Portions are swimming against the current.
-            const bool bPorR2L = ( MT_BIDI == pEnd2Pos->nMultiType ) ?
+            const bool bPorR2L = ( MultiPortionType::BIDI == pEnd2Pos->nMultiType ) ?
                                        ! bEndR2L :
                                          bEndR2L;
 
-            if( MT_BIDI == pEnd2Pos->nMultiType &&
+            if( MultiPortionType::BIDI == pEnd2Pos->nMultiType &&
                 (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)() )
             {
                 // nested bidi portion
@@ -2253,7 +2253,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
                         (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
             }
 
-            if( MT_ROT_90 == pEnd2Pos->nMultiType ||
+            if( MultiPortionType::ROT_90 == pEnd2Pos->nMultiType ||
                 (pEnd2Pos->aPortion.*fnRectX->fnGetBottom)() ==
                 (aEndRect.*fnRectX->fnGetBottom)() )
             {
@@ -2265,7 +2265,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
             Sub( aRegion, aTmp );
 
             // The next statement means neither ruby nor rotate(90):
-            if( !( MT_RUBY & pEnd2Pos->nMultiType ) )
+            if( !( MultiPortionType::RUBY == pEnd2Pos->nMultiType ) )
             {
                 SwTwips nTmp = (pEnd2Pos->aLine.*fnRectX->fnGetTop)();
                 if( (aEndRect.*fnRectX->fnGetTop)() != nTmp )
@@ -2296,8 +2296,8 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
         }
     }
     else if( pSt2Pos && pEnd2Pos &&
-             MT_BIDI == pSt2Pos->nMultiType &&
-             MT_BIDI == pEnd2Pos->nMultiType &&
+             MultiPortionType::BIDI == pSt2Pos->nMultiType &&
+             MultiPortionType::BIDI == pEnd2Pos->nMultiType &&
              pSt2Pos->aPortion == pEnd2Pos->aPortion &&
              pSt2Pos->aPortion2 != pEnd2Pos->aPortion2 )
     {
@@ -2363,7 +2363,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
     if( pStartFrm == pEndFrm )
     {
         bool bSameRotatedOrBidi = pSt2Pos && pEnd2Pos &&
-            ( MT_BIDI & pSt2Pos->nMultiType ) &&
+            ( MultiPortionType::BIDI == pSt2Pos->nMultiType ) &&
             pSt2Pos->aPortion == pEnd2Pos->aPortion;
         //case 1: (Same frame and same row)
         if( bSameRotatedOrBidi ||
