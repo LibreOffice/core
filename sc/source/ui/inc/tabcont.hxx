@@ -61,6 +61,8 @@ protected:
     virtual void    EndRenaming() SAL_OVERRIDE;
     virtual void    Mirror() SAL_OVERRIDE;
 
+    virtual void    AddTabClick() SAL_OVERRIDE;
+
 public:
                     ScTabControl( vcl::Window* pParent, ScViewData* pData );
                     virtual ~ScTabControl();

@@ -166,20 +166,6 @@ public:
         }
     }
 
-    void drawPlusImage()
-    {
-        DecorationView aDecorationView(&mrRenderContext);
-        sal_Int32 aScaleFactor = mrRenderContext.GetDPIScaleFactor();
-        Size aSize(12 * aScaleFactor, 12 * aScaleFactor);
-
-        Point aPosition = maRect.TopLeft();
-        long nXOffSet = (maRect.GetWidth() - aSize.Width()) / 2;
-        long nYOffset = (maRect.GetHeight() - aSize.Height()) / 2;
-        aPosition += Point(nXOffSet, nYOffset);
-
-        aDecorationView.DrawSymbol(Rectangle(aPosition, aSize), SymbolType::PLUS, mrStyleSettings.GetDarkShadowColor());
-    }
-
     void setRect(const Rectangle& rRect)
     {
         maRect = rRect;
@@ -513,6 +499,7 @@ struct TabBar_Impl
     ScopedVclPtr<ImplTabButton> mpPrevButton;
     ScopedVclPtr<ImplTabButton> mpNextButton;
     ScopedVclPtr<ImplTabButton> mpLastButton;
+    ScopedVclPtr<ImplTabButton> mpAddButton;
     ScopedVclPtr<TabBarEdit>    mpEdit;
     ImplTabBarList              mpItemList;
 
@@ -556,7 +543,6 @@ void TabBar::dispose()
 
 const sal_uInt16 TabBar::APPEND         = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 TabBar::PAGE_NOT_FOUND = ::std::numeric_limits<sal_uInt16>::max();
-const sal_uInt16 TabBar::INSERT_TAB_POS = ::std::numeric_limits<sal_uInt16>::max() - 1;
 
 void TabBar::ImplInit( WinBits nWinStyle )
 {
@@ -602,6 +588,9 @@ void TabBar::ImplInit( WinBits nWinStyle )
         mpImpl->mpNextButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVERIGHT));
     if (mpImpl->mpLastButton)
         mpImpl->mpLastButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVETOEND));
+
+    if (mpImpl->mpAddButton)
+        mpImpl->mpAddButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_ADDTAB));
 
     SetSizePixel( Size( 100, CalcWindowSizePixel().Height() ) );
     ImplInitSettings( true, true );
@@ -835,6 +824,15 @@ void TabBar::ImplInitControls()
     else
         mpImpl->mpSizer.disposeAndClear();
 
+    if (mbHasInsertTab && !mpImpl->mpAddButton)
+    {
+        Link<> aLink = LINK(this, TabBar, ImplAddClickHandler);
+        mpImpl->mpAddButton.reset(VclPtr<ImplTabButton>::Create(this, WB_REPEAT));
+        mpImpl->mpAddButton->SetClickHdl(aLink);
+        mpImpl->mpAddButton->SetSymbol(SymbolType::PLUS);
+        mpImpl->mpAddButton->Show();
+    }
+
     Link<> aLink = LINK( this, TabBar, ImplClickHdl );
 
     if ( mnWinStyle & (WB_MINSCROLL | WB_SCROLL) )
@@ -972,6 +970,12 @@ IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
     if (nNewPos != mnFirstPos)
         SetFirstPageId(GetPageId(nNewPos));
 
+    return 0;
+}
+
+IMPL_LINK_NOARG(TabBar, ImplAddClickHandler)
+{
+    AddTabClick();
     return 0;
 }
 
@@ -1228,15 +1232,6 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
     // Now, start drawing the tabs.
 
     ImplTabBarItem* pItem = ImplGetLastTabBarItem(nItemCount);
-
-    if (pItem && mbHasInsertTab)
-    {
-        // Draw the insert tab at the right end.
-        Rectangle aRect = ImplGetInsertTabRect(pItem);
-        aDrawer.setRect(aRect);
-        aDrawer.drawPlusImage();
-    }
-
     ImplTabBarItem* pCurItem = NULL;
     while (pItem)
     {
@@ -1365,6 +1360,16 @@ void TabBar::Resize()
     if (mpImpl->mpLastButton)
     {
         mpImpl->mpLastButton->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
+        nX += nXDiff;
+        nButtonWidth += nHeight;
+    }
+
+    nButtonWidth += nButtonMargin;
+    nX += mbMirrored ? -nButtonMargin : nButtonMargin;
+
+    if (mpImpl->mpAddButton)
+    {
+        mpImpl->mpAddButton->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
         nX += nXDiff;
         nButtonWidth += nHeight;
     }
@@ -1538,6 +1543,8 @@ void TabBar::StateChanged( StateChangedType nType )
             mpImpl->mpLastButton->EnableRTL(IsRTLEnabled());
         if (mpImpl->mpSizer)
             mpImpl->mpSizer->EnableRTL(IsRTLEnabled());
+        if (mpImpl->mpAddButton)
+            mpImpl->mpAddButton->EnableRTL(IsRTLEnabled());
         if (mpImpl->mpEdit)
             mpImpl->mpEdit->EnableRTL(IsRTLEnabled());
     }
@@ -1692,6 +1699,11 @@ void TabBar::EndRenaming()
 }
 
 void TabBar::Mirror()
+{
+
+}
+
+void TabBar::AddTabClick()
 {
 
 }
@@ -1907,20 +1919,13 @@ sal_uInt16 TabBar::GetPagePos( sal_uInt16 nPageId ) const
     return PAGE_NOT_FOUND;
 }
 
-sal_uInt16 TabBar::GetPageId( const Point& rPos, bool bCheckInsTab ) const
+sal_uInt16 TabBar::GetPageId( const Point& rPos ) const
 {
     for (size_t i = 0; i < mpImpl->mpItemList.size(); ++i)
     {
         ImplTabBarItem* pItem = mpImpl->mpItemList[i];
         if (pItem->maRect.IsInside(rPos))
             return pItem->mnId;
-    }
-
-    if (bCheckInsTab && mbHasInsertTab && !mpImpl->mpItemList.empty())
-    {
-        ImplTabBarItem* pItem = mpImpl->mpItemList.back();
-        if (ImplGetInsertTabRect(pItem).IsInside(rPos))
-            return INSERT_TAB_POS;
     }
 
     return 0;

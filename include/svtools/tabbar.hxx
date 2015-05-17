@@ -374,16 +374,20 @@ private:
     SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( sal_uInt16 nItemCount );
     SVT_DLLPRIVATE Rectangle       ImplGetInsertTabRect(ImplTabBarItem* pItem) const;
 
-    DECL_DLLPRIVATE_LINK( ImplClickHdl, ImplTabButton* );
+    DECL_DLLPRIVATE_LINK(ImplClickHdl, ImplTabButton*);
+
+    DECL_DLLPRIVATE_LINK(ImplAddClickHandler, void*);
 
     ImplTabBarItem* seek( size_t i );
     ImplTabBarItem* prev();
     ImplTabBarItem* next();
 
+protected:
+    virtual void AddTabClick();
+
 public:
     static const sal_uInt16 APPEND;
     static const sal_uInt16 PAGE_NOT_FOUND;
-    static const sal_uInt16 INSERT_TAB_POS;
 
                     TabBar( vcl::Window* pParent, WinBits nWinStyle = WB_STDTABBAR );
     virtual         ~TabBar();
@@ -429,7 +433,7 @@ public:
     sal_uInt16      GetPageCount() const;
     sal_uInt16      GetPageId( sal_uInt16 nPos ) const;
     sal_uInt16      GetPagePos( sal_uInt16 nPageId ) const;
-    sal_uInt16      GetPageId( const Point& rPos, bool bCheckInsTab = false ) const;
+    sal_uInt16      GetPageId( const Point& rPos ) const;
     Rectangle       GetPageRect( sal_uInt16 nPageId ) const;
     // returns the rectangle in which page tabs are drawn
     Rectangle       GetPageArea() const;

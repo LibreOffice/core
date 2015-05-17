@@ -174,13 +174,8 @@ void ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
         pViewData->GetView()->ActiveGrabFocus();
     }
 
-    /*  Click into free area -> insert new sheet (like in Draw).
-        Needing clean left click without modifiers (may be context menu).
-        Remember clicks to all pages, to be able to move mouse pointer later. */
-    if( rMEvt.IsLeft() && (rMEvt.GetModifier() == 0) )
-        nMouseClickPageId = GetPageId( rMEvt.GetPosPixel(), true );
-    else
-        nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
+    if (rMEvt.IsLeft() && rMEvt.GetModifier() == 0)
+        nMouseClickPageId = GetPageId(rMEvt.GetPosPixel());
 
     TabBar::MouseButtonDown( rMEvt );
 }
@@ -190,22 +185,8 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
 
     // mouse button down and up on same page?
-    if( nMouseClickPageId != GetPageId( aPos, true ) )
+    if( nMouseClickPageId != GetPageId(aPos))
         nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
-
-    if (nMouseClickPageId == TabBar::INSERT_TAB_POS)
-    {
-        // Insert a new sheet at the right end, with default name.
-        ScDocument* pDoc = pViewData->GetDocument();
-        ScModule* pScMod = SC_MOD();
-        if (!pDoc->IsDocEditable() || pScMod->IsTableLocked())
-            return;
-        OUString aName;
-        pDoc->CreateValidTabName(aName);
-        SCTAB nTabCount = pDoc->GetTableCount();
-        pViewData->GetViewShell()->InsertTable(aName, nTabCount);
-        return;
-    }
 
     if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && nMouseClickPageId != 0 && nMouseClickPageId != TAB_PAGE_NOTFOUND )
     {
@@ -227,6 +208,21 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     }
 
     TabBar::MouseButtonUp( rMEvt );
+}
+
+void ScTabControl::AddTabClick()
+{
+    TabBar::AddTabClick();
+
+    // Insert a new sheet at the right end, with default name.
+    ScDocument* pDoc = pViewData->GetDocument();
+    ScModule* pScMod = SC_MOD();
+    if (!pDoc->IsDocEditable() || pScMod->IsTableLocked())
+        return;
+    OUString aName;
+    pDoc->CreateValidTabName(aName);
+    SCTAB nTabCount = pDoc->GetTableCount();
+    pViewData->GetViewShell()->InsertTable(aName, nTabCount);
 }
 
 void ScTabControl::Select()
