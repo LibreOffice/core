@@ -621,6 +621,9 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void            InitSettings(bool bFont, bool bForeground, bool bBackground);
+
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+
     bool            IsCellFocusEnabled() const;
     bool            SetCurrentTabPos( sal_uInt16 _nNewPos );
     sal_uInt16      GetCurrentTabPos() const;

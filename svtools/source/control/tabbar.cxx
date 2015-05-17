@@ -625,36 +625,31 @@ ImplTabBarItem* TabBar::next()
 
 void TabBar::ImplInitSettings( bool bFont, bool bBackground )
 {
+    // FIXME RenderContext
+
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( bFont )
+    if (bFont)
     {
         vcl::Font aToolFont;
         aToolFont = rStyleSettings.GetToolFont();
-        if ( IsControlFont() )
-            aToolFont.Merge( GetControlFont() );
         aToolFont.SetWeight( WEIGHT_BOLD );
-        SetZoomedPointFont( aToolFont );
+        ApplyControlFont(*this, aToolFont);
 
         // Adapt font size if window too small?
-        while ( GetTextHeight() > (GetOutputSizePixel().Height()-1) )
+        while (GetTextHeight() > (GetOutputSizePixel().Height() - 1))
         {
             vcl::Font aFont = GetFont();
-            if ( aFont.GetHeight() <= 6 )
+            if (aFont.GetHeight() <= 6)
                 break;
-            aFont.SetHeight( aFont.GetHeight()-1 );
-            SetFont( aFont );
+            aFont.SetHeight(aFont.GetHeight() - 1);
+            SetFont(aFont);
         }
     }
 
-    if ( bBackground )
+    if (bBackground)
     {
-        Color aColor;
-        if ( IsControlBackground() )
-            aColor = GetControlBackground();
-        else
-            aColor = rStyleSettings.GetFaceColor();
-        SetBackground( aColor );
+        ApplyControlBackground(*this, rStyleSettings.GetFaceColor());
     }
 }
 
@@ -2173,7 +2168,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
         }
         mpImpl->mpEdit->SetText(GetPageText(mnEditId));
         mpImpl->mpEdit->setPosSizePixel(nX, aRect.Top() + mnOffY + 1, nWidth, aRect.GetHeight() - 3);
-        vcl::Font aFont = GetPointFont();
+        vcl::Font aFont = GetPointFont(*this); // FIXME RenderContext
 
         Color   aForegroundColor;
         Color   aBackgroundColor;

@@ -2483,20 +2483,20 @@ void SvxIconChoiceCtrl_Impl::SetDefaultTextSize()
     long nDY = nGridDY;
     nDY -= aImageSize.Height();
     nDY -= VER_DIST_BMP_STRING;
-    nDY -= 2*TBOFFS_BOUND;
-    if( nDY <= 0 )
+    nDY -= 2 * TBOFFS_BOUND;
+    if (nDY <= 0)
         nDY = 2;
 
     long nDX = nGridDX;
-    nDX -= 2*LROFFS_BOUND;
+    nDX -= 2 * LROFFS_BOUND;
     nDX -= 2;
-    if( nDX <= 0 )
+    if (nDX <= 0)
         nDX = 2;
 
     long nHeight = pView->GetTextHeight();
-    if( nDY < nHeight )
+    if (nDY < nHeight)
         nDY = nHeight;
-    aDefaultTextSize = Size( nDX, nDY );
+    aDefaultTextSize = Size(nDX, nDY);
 }
 
 
@@ -2535,7 +2535,7 @@ void SvxIconChoiceCtrl_Impl::Scroll( long nDeltaX, long nDeltaY, bool bScrollBar
 const Size& SvxIconChoiceCtrl_Impl::GetItemSize( SvxIconChoiceCtrlEntry*,
     IcnViewFieldType eItem ) const
 {
-    if( eItem == IcnViewFieldTypeText )
+    if (eItem == IcnViewFieldTypeText)
         return aDefaultTextSize;
     return aImageSize;
 }
@@ -3153,14 +3153,15 @@ IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPo
     bAlreadyInCallback( false ),
     bGrabFocus( false )
 {
-    vcl::Font aFont( pParent->GetPointFont() );
+    // FIXME: Outside of Paint Hierarchy
+    vcl::Font aFont(pParent->GetPointFont(*this));
     aFont.SetTransparent( false );
-    SetControlFont( aFont );
-    SetControlBackground( aFont.GetFillColor() );
-    SetControlForeground( aFont.GetColor() );
-    SetPosPixel( rPos );
-    SetSizePixel( CalcAdjustedSize(rSize) );
-    SetText( rData );
+    SetControlFont(aFont);
+    SetControlBackground(aFont.GetFillColor());
+    SetControlForeground(aFont.GetColor());
+    SetPosPixel(rPos);
+    SetSizePixel(CalcAdjustedSize(rSize));
+    SetText(rData);
     SaveValue();
 
     aAccReturn.InsertItem( IMPICNVIEW_ACC_RETURN, vcl::KeyCode(KEY_RETURN) );

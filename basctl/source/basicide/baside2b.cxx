@@ -1242,7 +1242,7 @@ void EditorWindow::ImplSetFont()
     Size aFontSize(0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get());
     vcl::Font aFont(sFontName, aFontSize);
     aFont.SetColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
-    SetPointFont(aFont);
+    SetPointFont(*this, aFont); // FIXME RenderContext
     aFont = GetFont();
 
     rModulWindow.GetBreakPointWindow().SetFont(aFont);

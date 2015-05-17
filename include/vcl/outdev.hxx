@@ -111,12 +111,10 @@ struct SalTwoRect;
 #define SAL_LAYOUT_FOR_FALLBACK             (1<<13)
 #define SAL_LAYOUT_DRAW_BULLET              (1<<14)
 
-namespace com {
-namespace sun {
-namespace star {
-namespace rendering {
+namespace com { namespace sun { namespace star { namespace rendering {
     class XCanvas;
 }}}}
+
 namespace basegfx {
     class B2DHomMatrix;
     class B2DPolygon;
@@ -125,10 +123,7 @@ namespace basegfx {
     typedef B2IVector B2ISize;
 }
 
-namespace com {
-namespace sun {
-namespace star {
-namespace awt {
+namespace com { namespace sun { namespace star { namespace awt {
     class XGraphics;
 } } } }
 
@@ -253,6 +248,12 @@ extern const sal_uLong nVCLGLut[ 6 ];
 extern const sal_uLong nVCLBLut[ 6 ];
 extern const sal_uLong nVCLDitherLut[ 256 ];
 extern const sal_uLong nVCLLut[ 256 ];
+
+class OutputDevice;
+
+namespace vcl {
+    typedef OutputDevice RenderContext;
+}
 
 class VCL_DLLPUBLIC OutputDevice
 {
@@ -1999,7 +2000,6 @@ public:
                                     const Point& rPt, const Size& rSz,
                                     const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
     ///@}
-
 };
 
 #endif // INCLUDED_VCL_OUTDEV_HXX

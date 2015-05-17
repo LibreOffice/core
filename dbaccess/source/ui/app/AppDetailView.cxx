@@ -391,13 +391,14 @@ void OTasksWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void OTasksWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
+    // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
         vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont( aFont );
+        SetPointFont(*this, aFont);
     }
 
     if( bForeground || bFont )
@@ -581,13 +582,14 @@ void OApplicationDetailView::dispose()
 
 void OApplicationDetailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
+    // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
         vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont( aFont );
+        SetPointFont(*this, aFont);
     }
 
     if( bForeground || bFont )

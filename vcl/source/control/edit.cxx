@@ -394,44 +394,70 @@ void Edit::ImplModified()
     Modify();
 }
 
-void Edit::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
+void Edit::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    vcl::Font aFont = rStyleSettings.GetFieldFont();
+    ApplyControlFont(rRenderContext, aFont);
+
+    ImplClearLayoutData();
+
+    Color aTextColor = rStyleSettings.GetFieldTextColor();
+    ApplyControlForeground(rRenderContext, aTextColor);
+
+    if (ImplUseNativeBorder(GetStyle()) || IsPaintTransparent())
+    {
+        // Transparent background
+        rRenderContext.SetBackground();
+        rRenderContext.SetFillColor();
+    }
+    else if (IsControlBackground())
+    {
+        rRenderContext.SetBackground(GetControlBackground());
+        rRenderContext.SetFillColor(GetControlBackground());
+    }
+    else
+    {
+        rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
+        rRenderContext.SetFillColor(rStyleSettings.GetFieldColor());
+    }
+}
+
+void Edit::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( bFont )
+    if (bFont)
     {
         vcl::Font aFont = rStyleSettings.GetFieldFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
+        ApplyControlFont(*this, aFont);
         ImplClearLayoutData();
     }
 
-    if ( bFont || bForeground )
+    if (bFont || bForeground)
     {
         Color aTextColor = rStyleSettings.GetFieldTextColor();
-        if ( IsControlForeground() )
-            aTextColor = GetControlForeground();
-        SetTextColor( aTextColor );
+        ApplyControlForeground(*this, aTextColor);
     }
 
-    if ( bBackground )
+    if (bBackground)
     {
-        if ( ImplUseNativeBorder( GetStyle() ) || IsPaintTransparent() )
+        if (ImplUseNativeBorder(GetStyle()) || IsPaintTransparent())
         {
             // Transparent background
             SetBackground();
             SetFillColor();
         }
-        else if ( IsControlBackground() )
+        else if (IsControlBackground())
         {
-            SetBackground( GetControlBackground() );
-            SetFillColor( GetControlBackground() );
+            SetBackground(GetControlBackground());
+            SetFillColor(GetControlBackground());
         }
         else
         {
-            SetBackground( rStyleSettings.GetFieldColor() );
-            SetFillColor( rStyleSettings.GetFieldColor() );
+            SetBackground(rStyleSettings.GetFieldColor());
+            SetFillColor(rStyleSettings.GetFieldColor());
         }
     }
 }

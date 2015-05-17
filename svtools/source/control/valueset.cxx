@@ -161,42 +161,48 @@ void ValueSet::ImplDeleteItems()
     mItemList.clear();
 }
 
-void ValueSet::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
+void ValueSet::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    ApplyControlFont(rRenderContext, rStyleSettings.GetAppFont());
+    ApplyControlForeground(rRenderContext, rStyleSettings.GetButtonTextColor());
+    SetTextFillColor();
+    Color aColor;
+    if (GetStyle() & WB_MENUSTYLEVALUESET)
+        aColor = rStyleSettings.GetMenuColor();
+    else if (IsEnabled() && (GetStyle() & WB_FLATVALUESET))
+        aColor = rStyleSettings.GetWindowColor();
+    else
+        aColor = rStyleSettings.GetFaceColor();
+    ApplyControlBackground(rRenderContext, aColor);
+}
+
+void ValueSet::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( bFont )
+    if (bFont)
     {
-        vcl::Font aFont;
-        aFont = rStyleSettings.GetAppFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
+        ApplyControlFont(*this, rStyleSettings.GetAppFont());
     }
 
-    if ( bForeground || bFont )
+    if (bForeground || bFont)
     {
-        Color aColor;
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        else
-            aColor = rStyleSettings.GetButtonTextColor();
-        SetTextColor( aColor );
+        ApplyControlForeground(*this, rStyleSettings.GetButtonTextColor());
         SetTextFillColor();
     }
 
-    if ( bBackground )
+    if (bBackground)
     {
         Color aColor;
-        if ( IsControlBackground() )
-            aColor = GetControlBackground();
-        else if ( GetStyle() & WB_MENUSTYLEVALUESET )
+        if (GetStyle() & WB_MENUSTYLEVALUESET)
             aColor = rStyleSettings.GetMenuColor();
-        else if ( IsEnabled() && (GetStyle() & WB_FLATVALUESET) )
+        else if (IsEnabled() && (GetStyle() & WB_FLATVALUESET))
             aColor = rStyleSettings.GetWindowColor();
         else
             aColor = rStyleSettings.GetFaceColor();
-        SetBackground( aColor );
+        ApplyControlBackground(*this, aColor);
     }
 }
 

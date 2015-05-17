@@ -30,8 +30,9 @@ void MenuWindow::ImplInitMenuWindow(vcl::Window* pWin, bool bFont, bool bMenuBar
 {
     const StyleSettings& rStyleSettings = pWin->GetSettings().GetStyleSettings();
 
-    if ( bFont )
-        pWin->SetPointFont( rStyleSettings.GetMenuFont() );
+    // FIXME RenderContext
+    if (bFont)
+        pWin->SetPointFont(*pWin, rStyleSettings.GetMenuFont());
     if( bMenuBar )
     {
         const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();

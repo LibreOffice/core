@@ -110,6 +110,9 @@ private:
     SAL_DLLPRIVATE Rectangle ImplGetItemRectPos( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16    ImplGetFirstVisiblePos() const;
 
+protected:
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+
 public:
                         StatusBar( vcl::Window* pParent,
                                    WinBits nWinStyle = WB_BORDER | WB_RIGHT );

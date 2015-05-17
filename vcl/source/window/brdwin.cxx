@@ -175,7 +175,7 @@ Rectangle ImplBorderWindowView::GetMenuRect() const
     return Rectangle();
 }
 
-void ImplBorderWindowView::ImplInitTitle( ImplBorderFrameData* pData )
+void ImplBorderWindowView::ImplInitTitle(ImplBorderFrameData* pData)
 {
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
 
@@ -188,22 +188,23 @@ void ImplBorderWindowView::ImplInitTitle( ImplBorderFrameData* pData )
     else
     {
         const StyleSettings& rStyleSettings = pData->mpOutDev->GetSettings().GetStyleSettings();
-        if ( pData->mnTitleType == BORDERWINDOW_TITLE_TEAROFF )
+        if (pData->mnTitleType == BORDERWINDOW_TITLE_TEAROFF)
             pData->mnTitleHeight = rStyleSettings.GetTearOffTitleHeight();
         else
         {
-            if ( pData->mnTitleType == BORDERWINDOW_TITLE_SMALL )
+            if (pData->mnTitleType == BORDERWINDOW_TITLE_SMALL)
             {
-                pBorderWindow->SetPointFont( rStyleSettings.GetFloatTitleFont() );
+                pBorderWindow->SetPointFont(*pBorderWindow, rStyleSettings.GetFloatTitleFont() );
                 pData->mnTitleHeight = rStyleSettings.GetFloatTitleHeight();
             }
             else // pData->mnTitleType == BORDERWINDOW_TITLE_NORMAL
             {
-                pBorderWindow->SetPointFont( rStyleSettings.GetTitleFont() );
+                // FIXME RenderContext
+                pBorderWindow->SetPointFont(*pBorderWindow, rStyleSettings.GetTitleFont());
                 pData->mnTitleHeight = rStyleSettings.GetTitleHeight();
             }
             long nTextHeight = pBorderWindow->GetTextHeight();
-            if ( nTextHeight > pData->mnTitleHeight )
+            if (nTextHeight > pData->mnTitleHeight)
                 pData->mnTitleHeight = nTextHeight;
         }
     }
@@ -1426,8 +1427,8 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
     pData->mnBottomBorder  += pData->mnBorderSize;
     pData->mnNoTitleTop     = pData->mnTopBorder;
 
-    ImplInitTitle( &maFrameData );
-    if ( pData->mnTitleHeight )
+    ImplInitTitle(&maFrameData);
+    if (pData->mnTitleHeight)
     {
         // to improve symbol display force a minum title height
         if( pData->mnTitleHeight < MIN_CAPTION_HEIGHT )

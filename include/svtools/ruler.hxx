@@ -690,6 +690,8 @@ private:
     SVT_DLLPRIVATE void ImplDrawExtra(vcl::RenderContext& rRenderContext, bool bPaint = false);
     SVT_DLLPRIVATE void ImplUpdate( bool bMustCalc = false );
 
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext);
+
     using Window::ImplHitTest;
     SVT_DLLPRIVATE bool ImplHitTest( const Point& rPosition,
                                          RulerSelection* pHitTest,

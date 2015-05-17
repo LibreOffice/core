@@ -224,12 +224,14 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 {
     const StyleSettings aSettings( GetSettings().GetStyleSettings() );
 
+    // FIXME RenderContext
+
     ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
     SetBackground( aSettings.GetWindowColor() );
 
     // edit fields in other Applications use this font instead of
     // the application font thus we use this one too
-    SetPointFont( aSettings.GetFieldFont() /*aSettings.GetAppFont()*/ );
+    SetPointFont(*this, aSettings.GetFieldFont() /*aSettings.GetAppFont()*/);
 
     EditEngine  *pEditEngine = GetEditEngine();
     SfxItemPool *pEditEngineItemPool = GetEditEngineItemPool();

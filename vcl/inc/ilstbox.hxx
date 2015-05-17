@@ -359,8 +359,6 @@ public:
     void            SetReadOnly( bool bReadOnly )   { mbReadOnly = bReadOnly; }
     bool            IsReadOnly() const              { return mbReadOnly; }
 
-    using Control::ImplInitSettings;
-    void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     sal_uInt16      ImplGetTextStyle() const;
 
     /// pb: #106948# explicit mirroring for calc
@@ -370,6 +368,10 @@ public:
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
     void EnableQuickSelection( const bool& b );
+
+    using Control::ImplInitSettings;
+    void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
 protected:
     // ISearchableStringList
@@ -602,6 +604,11 @@ public:
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }
 
     virtual void    ShowFocus(const Rectangle& rRect) SAL_OVERRIDE;
+
+    using Control::ImplInitSettings;
+    void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+
 };
 
 class ImplBtn : public PushButton

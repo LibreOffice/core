@@ -67,6 +67,7 @@ IMPL_LINK( OSplitterView, SplitHdl, Splitter*, /*pSplit*/ )
 
 void OSplitterView::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
+    // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     if ( bFont )
@@ -74,7 +75,7 @@ void OSplitterView::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
         vcl::Font aFont = rStyleSettings.GetAppFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
-        SetPointFont( aFont );
+        SetPointFont(*this, aFont);
 //      Set/*Zoomed*/PointFont( aFont );
     }
 

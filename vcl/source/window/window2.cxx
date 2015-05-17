@@ -521,42 +521,44 @@ inline long WinFloatRound( double fVal )
     return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
 }
 
-void Window::SetZoomedPointFont( const vcl::Font& rFont )
+void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
 {
     const Fraction& rZoom = GetZoom();
-    if ( rZoom.GetNumerator() != rZoom.GetDenominator() )
+    if (rZoom.GetNumerator() != rZoom.GetDenominator())
     {
-        vcl::Font aFont( rFont );
+        vcl::Font aFont(rFont);
         Size aSize = aFont.GetSize();
-        double n = (double)aSize.Width();
-        n *= (double)rZoom.GetNumerator();
-        n /= (double)rZoom.GetDenominator();
-        aSize.Width() = WinFloatRound( n );
-        n = (double)aSize.Height();
-        n *= (double)rZoom.GetNumerator();
-        n /= (double)rZoom.GetDenominator();
-        aSize.Height() = WinFloatRound( n );
-        aFont.SetSize( aSize );
-        SetPointFont( aFont );
+        double n = double(aSize.Width());
+        n *= double(rZoom.GetNumerator());
+        n /= double(rZoom.GetDenominator());
+        aSize.Width() = WinFloatRound(n);
+        n = double(aSize.Height());
+        n *= double(rZoom.GetNumerator());
+        n /= double(rZoom.GetDenominator());
+        aSize.Height() = WinFloatRound(n);
+        aFont.SetSize(aSize);
+        SetPointFont(rRenderContext, aFont);
 
         // Use another font if the representation is to be scaled,
         // and the actual font is not scalable
-        FontMetric aMetric = GetFontMetric();
-        long       nFontDiff = std::abs( GetFont().GetSize().Height()-aMetric.GetSize().Height() );
-        if ( (aMetric.GetType() == TYPE_RASTER) && (nFontDiff >= 2) )
+        FontMetric aMetric = rRenderContext.GetFontMetric();
+        long nFontDiff = std::abs(rRenderContext.GetFont().GetSize().Height() - aMetric.GetSize().Height());
+        if ((aMetric.GetType() == TYPE_RASTER) && (nFontDiff >= 2))
         {
             DefaultFontType nType;
-            if ( aMetric.GetPitch() == PITCH_FIXED )
+            if (aMetric.GetPitch() == PITCH_FIXED)
                 nType = DefaultFontType::FIXED;
             else
                 nType = DefaultFontType::UI_SANS;
-            vcl::Font aTempFont = GetDefaultFont( nType, GetSettings().GetLanguageTag().getLanguageType(), 0 );
-            aFont.SetName( aTempFont.GetName() );
-            SetPointFont( aFont );
+            vcl::Font aTempFont = OutputDevice::GetDefaultFont(nType, rRenderContext.GetSettings().GetLanguageTag().getLanguageType(), 0);
+            aFont.SetName(aTempFont.GetName());
+            SetPointFont(rRenderContext, aFont);
         }
     }
     else
-        SetPointFont( rFont );
+    {
+        SetPointFont(rRenderContext, rFont);
+    }
 }
 
 long Window::CalcZoom( long nCalc ) const
@@ -575,37 +577,37 @@ long Window::CalcZoom( long nCalc ) const
 
 void Window::SetControlFont()
 {
-    if ( mpWindowImpl->mpControlFont )
+    if (mpWindowImpl->mpControlFont)
     {
         delete mpWindowImpl->mpControlFont;
         mpWindowImpl->mpControlFont = NULL;
-        StateChanged( StateChangedType::ControlFont );
+        StateChanged(StateChangedType::ControlFont);
     }
 }
 
-void Window::SetControlFont( const vcl::Font& rFont )
+void Window::SetControlFont(const vcl::Font& rFont)
 {
-    if ( rFont == vcl::Font() )
+    if (rFont == vcl::Font())
     {
         SetControlFont();
         return;
     }
 
-    if ( mpWindowImpl->mpControlFont )
+    if (mpWindowImpl->mpControlFont)
     {
-        if ( *mpWindowImpl->mpControlFont == rFont )
+        if (*mpWindowImpl->mpControlFont == rFont)
             return;
         *mpWindowImpl->mpControlFont = rFont;
     }
     else
-        mpWindowImpl->mpControlFont = new vcl::Font( rFont );
+        mpWindowImpl->mpControlFont = new vcl::Font(rFont);
 
-    StateChanged( StateChangedType::ControlFont );
+    StateChanged(StateChangedType::ControlFont);
 }
 
 vcl::Font Window::GetControlFont() const
 {
-    if ( mpWindowImpl->mpControlFont )
+    if (mpWindowImpl->mpControlFont)
         return *mpWindowImpl->mpControlFont;
     else
     {
@@ -614,68 +616,92 @@ vcl::Font Window::GetControlFont() const
     }
 }
 
+void Window::ApplyControlFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
+{
+    vcl::Font aFont(rFont);
+    if (IsControlFont())
+        aFont.Merge(GetControlFont());
+    SetZoomedPointFont(rRenderContext, aFont);
+}
+
 void Window::SetControlForeground()
 {
-    if ( mpWindowImpl->mbControlForeground )
+    if (mpWindowImpl->mbControlForeground)
     {
-        mpWindowImpl->maControlForeground = Color( COL_TRANSPARENT );
+        mpWindowImpl->maControlForeground = Color(COL_TRANSPARENT);
         mpWindowImpl->mbControlForeground = false;
-        StateChanged( StateChangedType::ControlForeground );
+        StateChanged(StateChangedType::ControlForeground);
     }
 }
 
-void Window::SetControlForeground( const Color& rColor )
+void Window::SetControlForeground(const Color& rColor)
 {
-    if ( rColor.GetTransparency() )
+    if (rColor.GetTransparency())
     {
-        if ( mpWindowImpl->mbControlForeground )
+        if (mpWindowImpl->mbControlForeground)
         {
-            mpWindowImpl->maControlForeground = Color( COL_TRANSPARENT );
+            mpWindowImpl->maControlForeground = Color(COL_TRANSPARENT);
             mpWindowImpl->mbControlForeground = false;
-            StateChanged( StateChangedType::ControlForeground );
+            StateChanged(StateChangedType::ControlForeground);
         }
     }
     else
     {
-        if ( mpWindowImpl->maControlForeground != rColor )
+        if (mpWindowImpl->maControlForeground != rColor)
         {
             mpWindowImpl->maControlForeground = rColor;
             mpWindowImpl->mbControlForeground = true;
-            StateChanged( StateChangedType::ControlForeground );
+            StateChanged(StateChangedType::ControlForeground);
         }
     }
+}
+
+void Window::ApplyControlForeground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor)
+{
+    Color aTextColor(rDefaultColor);
+    if (IsControlForeground())
+        aTextColor = GetControlForeground();
+    rRenderContext.SetTextColor(aTextColor);
 }
 
 void Window::SetControlBackground()
 {
-    if ( mpWindowImpl->mbControlBackground )
+    if (mpWindowImpl->mbControlBackground)
     {
-        mpWindowImpl->maControlBackground = Color( COL_TRANSPARENT );
+        mpWindowImpl->maControlBackground = Color(COL_TRANSPARENT);
         mpWindowImpl->mbControlBackground = false;
-        StateChanged( StateChangedType::ControlBackground );
+        StateChanged(StateChangedType::ControlBackground);
     }
 }
 
-void Window::SetControlBackground( const Color& rColor )
+void Window::SetControlBackground(const Color& rColor)
 {
-    if ( rColor.GetTransparency() )
+    if (rColor.GetTransparency())
     {
-        if ( mpWindowImpl->mbControlBackground )
+        if (mpWindowImpl->mbControlBackground)
         {
-            mpWindowImpl->maControlBackground = Color( COL_TRANSPARENT );
+            mpWindowImpl->maControlBackground = Color(COL_TRANSPARENT);
             mpWindowImpl->mbControlBackground = false;
-            StateChanged( StateChangedType::ControlBackground );
+            StateChanged(StateChangedType::ControlBackground);
         }
     }
     else
     {
-        if ( mpWindowImpl->maControlBackground != rColor )
+        if (mpWindowImpl->maControlBackground != rColor)
         {
             mpWindowImpl->maControlBackground = rColor;
             mpWindowImpl->mbControlBackground = true;
-            StateChanged( StateChangedType::ControlBackground );
+            StateChanged(StateChangedType::ControlBackground);
         }
     }
+}
+
+void Window::ApplyControlBackground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor)
+{
+    Color aColor(rDefaultColor);
+    if (IsControlBackground())
+        aColor = GetControlBackground();
+    rRenderContext.SetBackground(aColor);
 }
 
 Size Window::CalcWindowSize( const Size& rOutSz ) const
@@ -694,11 +720,11 @@ Size Window::CalcOutputSize( const Size& rWinSz ) const
     return aSz;
 }
 
-vcl::Font Window::GetDrawPixelFont( OutputDevice* pDev ) const
+vcl::Font Window::GetDrawPixelFont(OutputDevice* pDev) const
 {
-    vcl::Font aFont = GetPointFont();
-    Size    aFontSize = aFont.GetSize();
-    MapMode aPtMapMode( MAP_POINT );
+    vcl::Font aFont = GetPointFont(*const_cast<Window*>(this));
+    Size aFontSize = aFont.GetSize();
+    MapMode aPtMapMode(MAP_POINT);
     aFontSize = pDev->LogicToPixel( aFontSize, aPtMapMode );
     aFont.SetSize( aFontSize );
     return aFont;

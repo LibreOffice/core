@@ -257,36 +257,18 @@ void BrowserDataWin::LeaveUpdateLock()
     }
 }
 
-
-void InitSettings_Impl( vcl::Window *pWin,
-                        bool bFont, bool bForeground, bool bBackground )
+void InitSettings_Impl(vcl::Window* pWin, bool bFont, bool bForeground, bool bBackground)
 {
-    const StyleSettings& rStyleSettings =
-            pWin->GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = pWin->GetSettings().GetStyleSettings();
 
-    if ( bFont )
-    {
-        vcl::Font aFont = rStyleSettings.GetFieldFont();
-        if ( pWin->IsControlFont() )
-            aFont.Merge( pWin->GetControlFont() );
-        pWin->SetZoomedPointFont( aFont );
-    }
+    if (bFont)
+        pWin->ApplyControlFont(*pWin, rStyleSettings.GetFieldFont());
 
-    if ( bFont || bForeground )
-    {
-        Color aTextColor = rStyleSettings.GetWindowTextColor();
-        if ( pWin->IsControlForeground() )
-            aTextColor = pWin->GetControlForeground();
-        pWin->SetTextColor( aTextColor );
-    }
+    if (bFont || bForeground)
+        pWin->ApplyControlForeground(*pWin, rStyleSettings.GetWindowTextColor());
 
-    if ( bBackground )
-    {
-        if( pWin->IsControlBackground() )
-            pWin->SetBackground( pWin->GetControlBackground() );
-        else
-            pWin->SetBackground( rStyleSettings.GetWindowColor() );
-    }
+    if (bBackground)
+        pWin->ApplyControlBackground(*pWin, rStyleSettings.GetWindowColor());
 }
 
 
@@ -306,9 +288,9 @@ void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
     {
         if( !bOwnDataChangedHdl )
         {
-            InitSettings_Impl( this, true, true, true );
+            InitSettings_Impl(this, true, true, true);
             Invalidate();
-            InitSettings_Impl( GetParent(), true, true, true );
+            InitSettings_Impl(GetParent(), true, true, true);
             GetParent()->Invalidate();
             GetParent()->Resize();
         }

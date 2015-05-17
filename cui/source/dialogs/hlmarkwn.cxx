@@ -106,7 +106,7 @@ void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     }
     else
     {
-        rRenderContext.Erase();
+        Erase(rRenderContext);
 
         Rectangle aDrawRect(Point( 0, 0 ), GetSizePixel());
 

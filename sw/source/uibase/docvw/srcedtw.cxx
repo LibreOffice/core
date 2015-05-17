@@ -485,6 +485,8 @@ void TextViewOutWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& 
 
 void SwSrcEditWindow::CreateTextEngine()
 {
+    // FIXME RenderContext
+
     const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
     pOutWin = VclPtr<TextViewOutWin>::Create(this, 0);
     pOutWin->SetBackground(Wallpaper(rCol));
@@ -514,7 +516,7 @@ void SwSrcEditWindow::CreateTextEngine()
     vcl::Font aFont;
     aFont.SetTransparent( false );
     aFont.SetFillColor( rCol );
-    SetPointFont( aFont );
+    SetPointFont(*this, aFont);
     aFont = GetFont();
     aFont.SetFillColor( rCol );
     pOutWin->SetFont( aFont );

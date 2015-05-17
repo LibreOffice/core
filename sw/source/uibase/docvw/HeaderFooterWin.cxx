@@ -135,9 +135,11 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     m_nFadeRate( 100 ),
     m_aFadeTimer( )
 {
+    //FIXME RenderContext
+
     // Get the font and configure it
     vcl::Font aFont = Application::GetSettings().GetStyleSettings().GetToolFont();
-    SetZoomedPointFont(aFont);
+    SetZoomedPointFont(*this, aFont);
 
     // Create the line control
     m_pLine = VclPtr<SwDashedLine>::Create(GetEditWin(), &SwViewOption::GetHeaderFooterMarkColor);

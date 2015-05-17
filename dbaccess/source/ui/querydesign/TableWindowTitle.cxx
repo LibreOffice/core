@@ -182,7 +182,7 @@ void OTableWindowTitle::StateChanged( StateChangedType nType )
         vcl::Font aFont = rStyleSettings.GetGroupFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
+        SetZoomedPointFont(*this, aFont);
 
         Resize();
     }

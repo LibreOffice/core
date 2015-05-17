@@ -178,7 +178,7 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         const bool isFooter = GetAlign() == WINDOWALIGN_BOTTOM && !rSetting.GetPersonaFooter().IsEmpty();
 
         if ((GetAlign() == WINDOWALIGN_TOP && !rSetting.GetPersonaHeader().IsEmpty() ) || isFooter)
-            rRenderContext.Erase();
+            Erase(rRenderContext);
         else if (!ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB)
         {
             // draw a single toolbar background covering the whole docking area

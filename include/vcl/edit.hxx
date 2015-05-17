@@ -155,10 +155,10 @@ protected:
     virtual void        dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void        dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    protected:
+protected:
+    Edit(WindowType nType);
     virtual void FillLayoutData() const SAL_OVERRIDE;
-                        Edit( WindowType nType );
-
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 public:
     // public because needed in button.cxx
     SAL_DLLPRIVATE bool        ImplUseNativeBorder( WinBits nStyle );

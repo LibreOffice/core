@@ -27,14 +27,8 @@
 #include <vcl/vclptr.hxx>
 #include <tools/svborder.hxx>
 
-
 namespace sfx2
 {
-
-
-
-    //= TitledDockingWindow
-
     class SFX2_DLLPUBLIC TitledDockingWindow : public SfxDockingWindow
     {
     public:
@@ -92,18 +86,19 @@ namespace sfx2
 
     protected:
         // Window overridables
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& i_rArea ) SAL_OVERRIDE;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rArea) SAL_OVERRIDE;
         virtual void Resize() SAL_OVERRIDE;
         virtual void StateChanged( StateChangedType i_nType ) SAL_OVERRIDE;
         virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent ) SAL_OVERRIDE;
         virtual void SetText( const OUString& i_rText ) SAL_OVERRIDE;
 
         // DockingWindow overridables
-        void EndDocking( const Rectangle& rRect, bool bFloatMode ) SAL_OVERRIDE;
+        void EndDocking(const Rectangle& rRect, bool bFloatMode) SAL_OVERRIDE;
 
         // own overridables
         virtual void onLayoutDone();
 
+        virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
     protected:
         /** internal version of ResetToolBox
         */

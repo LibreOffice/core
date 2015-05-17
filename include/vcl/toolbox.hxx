@@ -283,7 +283,11 @@ public:
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }
 
 protected:
-    void                SetCurItemId(sal_uInt16 nSet) { mnCurItemId = nSet; }
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    void SetCurItemId(sal_uInt16 nSet)
+    {
+        mnCurItemId = nSet;
+    }
 
 public:
                         ToolBox( vcl::Window* pParent, WinBits nStyle = 0 );

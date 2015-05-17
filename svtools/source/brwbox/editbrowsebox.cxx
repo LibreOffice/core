@@ -818,40 +818,21 @@ namespace svt
         }
     }
 
-
     void EditBrowseBox::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
         if (bFont)
         {
-            vcl::Font aFont = rStyleSettings.GetFieldFont();
-            if (IsControlFont())
-            {
-                GetDataWindow().SetControlFont(GetControlFont());
-                aFont.Merge(GetControlFont());
-            }
-            else
-                GetDataWindow().SetControlFont();
-
-            GetDataWindow().SetZoomedPointFont(aFont);
+            GetDataWindow().ApplyControlFont(GetDataWindow(), rStyleSettings.GetFieldFont());
         }
 
-        if ( bFont || bForeground )
+        if (bFont || bForeground)
         {
-            Color aTextColor = rStyleSettings.GetFieldTextColor();
-            if (IsControlForeground())
-            {
-                aTextColor = GetControlForeground();
-                GetDataWindow().SetControlForeground(aTextColor);
-            }
-            else
-                GetDataWindow().SetControlForeground();
-
-            GetDataWindow().SetTextColor( aTextColor );
+            GetDataWindow().ApplyControlForeground(GetDataWindow(), rStyleSettings.GetFieldTextColor());
         }
 
-        if ( bBackground )
+        if (bBackground) // FIXME: Outside of Paint Hierarchy
         {
             if (GetDataWindow().IsControlBackground())
             {
@@ -862,8 +843,8 @@ namespace svt
             else
             {
                 GetDataWindow().SetControlBackground();
-                GetDataWindow().SetBackground( rStyleSettings.GetFieldColor() );
-                GetDataWindow().SetFillColor( rStyleSettings.GetFieldColor() );
+                GetDataWindow().SetBackground(rStyleSettings.GetFieldColor());
+                GetDataWindow().SetFillColor(rStyleSettings.GetFieldColor());
             }
         }
     }

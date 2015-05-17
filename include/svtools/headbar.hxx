@@ -281,6 +281,8 @@ private:
     SVT_DLLPRIVATE void             ImplDrag( const Point& rPos );
     SVT_DLLPRIVATE void             ImplEndDrag( bool bCancel );
 
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+
 public:
     HeaderBar( vcl::Window* pParent, WinBits nWinBits = WB_STDHEADERBAR );
     virtual ~HeaderBar();

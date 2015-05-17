@@ -98,6 +98,7 @@ inline ComplexTextLayoutMode& operator&= (ComplexTextLayoutMode& lhs, ComplexTex
 class OutDevState
 {
 public:
+    OutDevState();
     ~OutDevState();
 
     MapMode*        mpMapMode;

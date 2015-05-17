@@ -147,6 +147,8 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
             // copy the underlying content to be able to handle trasparency
             pDevice->DrawOutDev(m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), *m_pWindow);
 
+            m_pWindow->ApplySettings(*pDevice.get());
+
             // paint to the VirtualDevice first
             m_pWindow->Paint(*pDevice.get(), m_aPaintRect);
 
@@ -1384,37 +1386,37 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
         SetParent( pRealParent );
 }
 
-void Window::Erase()
+void Window::Erase(vcl::RenderContext& rRenderContext)
 {
-    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
+    if (!IsDeviceOutputNecessary() || ImplIsRecordLayout())
         return;
 
     bool bNativeOK = false;
 
     ControlPart aCtrlPart = ImplGetWindowImpl()->mnNativeBackground;
-    if( aCtrlPart != 0 && ! IsControlBackground() )
+    if (aCtrlPart != 0 && ! IsControlBackground())
     {
-        Rectangle           aCtrlRegion( Point(), GetOutputSizePixel() );
-        ControlState        nState = ControlState::NONE;
+        Rectangle aCtrlRegion(Point(), rRenderContext.GetOutputSizePixel());
+        ControlState nState = ControlState::NONE;
 
-        if( IsEnabled() )
+        if (IsEnabled())
             nState |= ControlState::ENABLED;
 
-        bNativeOK = DrawNativeControl( CTRL_WINDOW_BACKGROUND, aCtrlPart, aCtrlRegion,
-                                       nState, ImplControlValue(), OUString() );
+        bNativeOK = rRenderContext.DrawNativeControl(CTRL_WINDOW_BACKGROUND, aCtrlPart, aCtrlRegion,
+                                                     nState, ImplControlValue(), OUString());
     }
 
-    if ( mbBackground && ! bNativeOK )
+    if (mbBackground && !bNativeOK)
     {
         RasterOp eRasterOp = GetRasterOp();
-        if ( eRasterOp != ROP_OVERPAINT )
-            SetRasterOp( ROP_OVERPAINT );
-        DrawWallpaper( 0, 0, mnOutWidth, mnOutHeight, maBackground );
-        if ( eRasterOp != ROP_OVERPAINT )
-            SetRasterOp( eRasterOp );
+        if (eRasterOp != ROP_OVERPAINT)
+            SetRasterOp(ROP_OVERPAINT);
+        rRenderContext.DrawWallpaper(0, 0, mnOutWidth, mnOutHeight, maBackground);
+        if (eRasterOp != ROP_OVERPAINT)
+            rRenderContext.SetRasterOp(eRasterOp);
     }
 
-    if( mpAlphaVDev )
+    if (mpAlphaVDev)
         mpAlphaVDev->Erase();
 }
 

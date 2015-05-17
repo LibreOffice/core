@@ -425,7 +425,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl)
 void ScContentTree::MouseButtonDown( const MouseEvent& rMEvt )
 {
     SvTreeListBox::MouseButtonDown( rMEvt );
-    StoreSettings();
+    StoreNavigatorSettings();
 }
 
 void ScContentTree::KeyInput( const KeyEvent& rKEvt )
@@ -531,13 +531,13 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
     {
         if(aCode.GetCode() == KEY_F5 )
         {
-            StoreSettings();
+            StoreNavigatorSettings();
             SvTreeListBox::KeyInput(rKEvt);
         }
         else
         {
             SvTreeListBox::KeyInput(rKEvt);
-            StoreSettings();
+            StoreNavigatorSettings();
         }
     }
 }
@@ -739,7 +739,7 @@ void ScContentTree::ObjectFresh( sal_uInt16 nType, SvTreeListEntry* pEntry )
         ClearType( nType );
         GetDrawNames( nType/*, nId*/ );
         if( !pEntry )
-            ApplySettings();
+            ApplyNavigatorSettings();
         SetUpdateMode(true);
         if( pEntry )
         {
@@ -808,7 +808,7 @@ void ScContentTree::Refresh( sal_uInt16 nType )
     if ( !nType || nType == SC_CONTENT_AREALINK )
         GetLinkNames();
 
-    ApplySettings();
+    ApplyNavigatorSettings();
     SetUpdateMode(true);
 }
 
@@ -1622,7 +1622,7 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName wie im Menue/
     }
 }
 
-void ScContentTree::ApplySettings()
+void ScContentTree::ApplyNavigatorSettings()
 {
     const ScNavigatorSettings* pSettings = ScNavigatorDlg::GetNavigatorSettings();
     if( pSettings )
@@ -1657,7 +1657,7 @@ void ScContentTree::ApplySettings()
     }
 }
 
-void ScContentTree::StoreSettings() const
+void ScContentTree::StoreNavigatorSettings() const
 {
     ScNavigatorSettings* pSettings = ScNavigatorDlg::GetNavigatorSettings();
     if( pSettings )

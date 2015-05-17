@@ -1342,12 +1342,13 @@ void DialogWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void DialogWindow::InitSettings(bool bFont, bool bForeground, bool bBackground)
 {
+    // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
         vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
-        SetPointFont( aFont );
+        SetPointFont(*this, aFont);
     }
 
     if( bForeground || bFont )

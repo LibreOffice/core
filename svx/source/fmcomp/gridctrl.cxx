@@ -729,9 +729,9 @@ void DbGridControl::NavigationBar::Paint(vcl::RenderContext& rRenderContext, con
                             Point(aAbsolutePos.X() + aAbsoluteSize.Width() + 1, aAbsolutePos.Y() + aAbsoluteSize.Height()));
 }
 
-void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
+void DbGridControl::NavigationBar::StateChanged(StateChangedType nType)
 {
-    Control::StateChanged( nType );
+    Control::StateChanged(nType);
 
     vcl::Window* pWindows[] =
     {
@@ -751,7 +751,7 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
         case StateChangedType::Mirroring:
         {
             bool bIsRTLEnabled = IsRTLEnabled();
-            for ( size_t i=0; i < (sizeof (pWindows) / sizeof(pWindows[0])); ++i )
+            for (size_t i=0; i < (sizeof (pWindows) / sizeof(pWindows[0])); ++i)
                 pWindows[i]->EnableRTL( bIsRTLEnabled );
         }
         break;
@@ -768,10 +768,10 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
             for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
             {
                 pWindows[i]->SetZoom(aZoom);
-                pWindows[i]->SetZoomedPointFont(aFont);
+                pWindows[i]->SetZoomedPointFont(*pWindows[i], aFont);
             }
 
-            SetZoomedPointFont( aFont );
+            SetZoomedPointFont(*this, aFont);
 
             // rearrange the controls
             m_nDefaultWidth = ArrangeControls();

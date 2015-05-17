@@ -64,7 +64,7 @@ namespace svt
                 return m_bExpanded;
         }
 
-        void    Paint(vcl::RenderContext& rRenderContext);
+        void Paint(vcl::RenderContext& rRenderContext);
 
     protected:
         // Window overridables
@@ -76,6 +76,8 @@ namespace svt
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
                      GetComponentInterface( bool i_bCreate ) SAL_OVERRIDE;
+
+        virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
     private:
         Rectangle   impl_calcTextBoundingBox() const;

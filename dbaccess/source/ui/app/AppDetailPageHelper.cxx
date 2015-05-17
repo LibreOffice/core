@@ -164,13 +164,14 @@ namespace
     }
     void OTablePreviewWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
     {
+        //FIXME RenderContext
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         if( bFont )
         {
             vcl::Font aFont;
             aFont = rStyleSettings.GetFieldFont();
             aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-            SetPointFont( aFont );
+            SetPointFont(*this, aFont);
         }
 
         if( bForeground || bFont )
@@ -1234,12 +1235,13 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
 
 void OAppDetailPageHelper::ImplInitSettings()
 {
+    // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     vcl::Font aFont;
     aFont = rStyleSettings.GetFieldFont();
     aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-    SetPointFont( aFont );
-    m_aTBPreview->SetPointFont( aFont );
+    SetPointFont(*this, aFont);
+    m_aTBPreview->SetPointFont(*m_aTBPreview, aFont);
 
     SetTextColor( rStyleSettings.GetFieldTextColor() );
     SetTextFillColor();
@@ -1324,13 +1326,14 @@ void OPreviewWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void OPreviewWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
+    // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
         vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont( aFont );
+        SetPointFont(*this, aFont);
     }
 
     if( bForeground || bFont )

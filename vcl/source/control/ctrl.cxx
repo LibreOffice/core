@@ -418,6 +418,18 @@ const Color& Control::GetCanonicalTextColor( const StyleSettings& _rStyle ) cons
     return _rStyle.GetLabelTextColor();
 }
 
+void Control::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    vcl::Font rFont(GetCanonicalFont(rStyleSettings));
+    ApplyControlFont(rRenderContext, rFont);
+
+    ApplyControlForeground(rRenderContext, GetCanonicalTextColor(rStyleSettings));
+
+    rRenderContext.SetTextFillColor();
+}
+
 void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -427,7 +439,7 @@ void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
         Font aFont(GetCanonicalFont(rStyleSettings));
         if (IsControlFont())
             aFont.Merge(GetControlFont());
-        SetZoomedPointFont( aFont );
+        SetZoomedPointFont(*this, aFont);
     }
 
     if (_bForeground || _bFont)
@@ -460,9 +472,9 @@ void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRec
 Font
 Control::GetUnzoomedControlPointFont() const
 {
-    Font aFont( GetCanonicalFont( GetSettings().GetStyleSettings() ) );
-    if ( IsControlFont() )
-        aFont.Merge( GetControlFont() );
+    Font aFont(GetCanonicalFont(GetSettings().GetStyleSettings()));
+    if (IsControlFont())
+        aFont.Merge(GetControlFont());
     return aFont;
 }
 

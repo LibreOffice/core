@@ -3779,30 +3779,48 @@ void SvTreeListBox::StateChanged( StateChangedType eType )
         ImplInitStyle();
 }
 
+void SvTreeListBox::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    vcl::Font aFont;
+    aFont = rStyleSettings.GetFieldFont();
+    aFont.SetColor(rStyleSettings.GetWindowTextColor());
+    SetPointFont(rRenderContext, aFont);
+    AdjustEntryHeightAndRecalc(aFont);
+
+    rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
+    rRenderContext.SetTextFillColor();
+    rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
+
+    // always try to re-create default-SvLBoxButtonData
+    if (pCheckButtonData && pCheckButtonData->HasDefaultImages())
+        pCheckButtonData->SetDefaultImages(this);
+}
+
 void SvTreeListBox::InitSettings(bool bFont, bool bForeground, bool bBackground)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if( bFont )
+    if (bFont)
     {
         vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
-        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont( aFont );
-        AdjustEntryHeightAndRecalc( aFont );
+        aFont.SetColor(rStyleSettings.GetWindowTextColor());
+        SetPointFont(*this, aFont);
+        AdjustEntryHeightAndRecalc(aFont);
     }
 
-    if( bForeground || bFont )
+    if (bForeground || bFont)
     {
-        SetTextColor( rStyleSettings.GetFieldTextColor() );
+        SetTextColor(rStyleSettings.GetFieldTextColor());
         SetTextFillColor();
     }
 
-    if( bBackground )
-        SetBackground( rStyleSettings.GetFieldColor() );
+    if (bBackground)
+        SetBackground(rStyleSettings.GetFieldColor());
 
     // always try to re-create default-SvLBoxButtonData
     if( pCheckButtonData && pCheckButtonData->HasDefaultImages() )
-        pCheckButtonData->SetDefaultImages( this );
+        pCheckButtonData->SetDefaultImages(this);
 }
 
 bool SvTreeListBox::IsCellFocusEnabled() const

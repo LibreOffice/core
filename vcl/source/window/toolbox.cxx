@@ -1420,52 +1420,107 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         ImplGetWindowImpl()->mnStyle &= ~WB_DIALOGCONTROL;
     }
 
-    ImplInitSettings( true, true, true );
+    ImplInitSettings(true, true, true);
 }
 
-void ToolBox::ImplInitSettings( bool bFont,
-                                bool bForeground, bool bBackground )
+void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    mpData->mbNativeButtons = rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_BUTTON);
+
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    // Font
+    vcl::Font aFont = rStyleSettings.GetToolFont();
+    if (IsControlFont())
+        aFont.Merge(GetControlFont());
+    SetZoomedPointFont(rRenderContext, aFont);
+
+    // ControlForeground
+    Color aColor;
+    if (IsControlForeground())
+        aColor = GetControlForeground();
+    else if (Window::GetStyle() & WB_3DLOOK)
+        aColor = rStyleSettings.GetButtonTextColor();
+    else
+        aColor = rStyleSettings.GetWindowTextColor();
+    rRenderContext.SetTextColor(aColor);
+    rRenderContext.SetTextFillColor();
+
+    if (IsControlBackground())
+    {
+        aColor = GetControlBackground();
+        SetBackground( aColor );
+        SetPaintTransparent(false);
+        SetParentClipMode( 0 );
+    }
+    else
+    {
+        if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL)
+            || (GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty())
+            || (GetAlign() == WINDOWALIGN_BOTTOM && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()))
+        {
+            rRenderContext.SetBackground();
+            rRenderContext.SetTextColor(rStyleSettings.GetMenuBarTextColor());
+            SetPaintTransparent(true);
+            SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+            mpData->maDisplayBackground = Wallpaper(rStyleSettings.GetFaceColor());
+        }
+        else
+        {
+            if (Window::GetStyle() & WB_3DLOOK)
+                aColor = rStyleSettings.GetFaceColor();
+            else
+                aColor = rStyleSettings.GetWindowColor();
+
+            rRenderContext.SetBackground(aColor);
+            SetPaintTransparent(false);
+            SetParentClipMode(0);
+        }
+    }
+}
+
+void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
 {
     mpData->mbNativeButtons = IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( bFont )
+    if (bFont)
     {
         vcl::Font aFont = rStyleSettings.GetToolFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
+        if (IsControlFont())
+            aFont.Merge(GetControlFont());
+        SetZoomedPointFont(*this, aFont);
     }
 
-    if ( bForeground || bFont )
+    if (bForeground || bFont)
     {
         Color aColor;
-        if ( IsControlForeground() )
+        if (IsControlForeground())
             aColor = GetControlForeground();
-        else if ( Window::GetStyle() & WB_3DLOOK )
+        else if (Window::GetStyle() & WB_3DLOOK)
             aColor = rStyleSettings.GetButtonTextColor();
         else
             aColor = rStyleSettings.GetWindowTextColor();
-        SetTextColor( aColor );
+        SetTextColor(aColor);
         SetTextFillColor();
     }
 
-    if ( bBackground )
+    if (bBackground)
     {
         Color aColor;
-        if ( IsControlBackground() )
+        if (IsControlBackground())
         {
             aColor = GetControlBackground();
             SetBackground( aColor );
-            SetPaintTransparent( false );
+            SetPaintTransparent(false);
             SetParentClipMode( 0 );
         }
         else
         {
-            if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) ||
-                ( GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )||
-                ( GetAlign() == WINDOWALIGN_BOTTOM && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()) )
+            if (IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL)
+                || (GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty())
+                || (GetAlign() == WINDOWALIGN_BOTTOM && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()))
             {
                 SetBackground();
                 SetTextColor(rStyleSettings.GetMenuBarTextColor());
@@ -1475,14 +1530,14 @@ void ToolBox::ImplInitSettings( bool bFont,
             }
             else
             {
-                if ( Window::GetStyle() & WB_3DLOOK )
+                if (Window::GetStyle() & WB_3DLOOK)
                     aColor = rStyleSettings.GetFaceColor();
                 else
                     aColor = rStyleSettings.GetWindowColor();
 
-                SetBackground( aColor );
-                SetPaintTransparent( false );
-                SetParentClipMode( 0 );
+                SetBackground(aColor);
+                SetPaintTransparent(false);
+                SetParentClipMode(0);
             }
         }
     }
@@ -3014,7 +3069,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         vcl::Font aOldFont = rRenderContext.GetFont();
         Color     aOldTextColor = rRenderContext.GetTextColor();
 
-        SetZoomedPointFont( rStyleSettings.GetAppFont() );
+        SetZoomedPointFont(rRenderContext, rStyleSettings.GetAppFont());
         rRenderContext.SetLineColor(Color(COL_BLACK));
         rRenderContext.SetFillColor(rStyleSettings.GetFieldColor());
         rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());

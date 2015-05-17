@@ -213,13 +213,22 @@ void Calendar::ImplInit( WinBits nWinStyle )
     ImplInitSettings();
 }
 
+void Calendar::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    maSelColor = rStyleSettings.GetHighlightTextColor();
+    SetPointFont(rRenderContext, rStyleSettings.GetToolFont());
+    rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
+    rRenderContext.SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
+}
+
 void Calendar::ImplInitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     maSelColor = rStyleSettings.GetHighlightTextColor();
-    SetPointFont( rStyleSettings.GetToolFont() );
-    SetTextColor( rStyleSettings.GetFieldTextColor() );
-    SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
+    SetPointFont(*this, rStyleSettings.GetToolFont());
+    SetTextColor(rStyleSettings.GetFieldTextColor());
+    SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
 }
 
 Calendar::Calendar( vcl::Window* pParent, WinBits nWinStyle ) :

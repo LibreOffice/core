@@ -47,35 +47,6 @@
 
 using namespace ::com::sun::star;
 
-void ImplInitFieldSettings( vcl::Window* pWin, bool bFont, bool bForeground, bool bBackground )
-{
-    const StyleSettings& rStyleSettings = pWin->GetSettings().GetStyleSettings();
-
-    if ( bFont )
-    {
-        vcl::Font aFont = rStyleSettings.GetFieldFont();
-        if ( pWin->IsControlFont() )
-            aFont.Merge( pWin->GetControlFont() );
-        pWin->SetZoomedPointFont( aFont );
-    }
-
-    if ( bFont || bForeground )
-    {
-        Color aTextColor = rStyleSettings.GetFieldTextColor();
-        if ( pWin->IsControlForeground() )
-            aTextColor = pWin->GetControlForeground();
-        pWin->SetTextColor( aTextColor );
-    }
-
-    if ( bBackground )
-    {
-        if( pWin->IsControlBackground() )
-            pWin->SetBackground( pWin->GetControlBackground() );
-        else
-            pWin->SetBackground( rStyleSettings.GetFieldColor() );
-    }
-}
-
 void ImplInitDropDownButton( PushButton* pButton )
 {
     if ( pButton->GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN )
@@ -546,9 +517,53 @@ void ImplListBoxWindow::dispose()
     Control::dispose();
 }
 
-void ImplListBoxWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
+void ImplListBoxWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    ImplInitFieldSettings( this, bFont, bForeground, bBackground );
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    vcl::Font aFont = rStyleSettings.GetFieldFont();
+    if (IsControlFont())
+        aFont.Merge(GetControlFont());
+    SetZoomedPointFont(rRenderContext, aFont);
+
+    Color aTextColor = rStyleSettings.GetFieldTextColor();
+    if (IsControlForeground())
+        aTextColor = GetControlForeground();
+    rRenderContext.SetTextColor(aTextColor);
+
+    if (IsControlBackground())
+        rRenderContext.SetBackground(GetControlBackground());
+    else
+        rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
+}
+
+void ImplListBoxWindow::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+    if (bFont)
+    {
+        vcl::Font aFont = rStyleSettings.GetFieldFont();
+        if (IsControlFont())
+            aFont.Merge(GetControlFont());
+        SetZoomedPointFont(*this, aFont);
+    }
+
+    if (bFont || bForeground)
+    {
+        Color aTextColor = rStyleSettings.GetFieldTextColor();
+        if (IsControlForeground())
+            aTextColor = GetControlForeground();
+        SetTextColor( aTextColor );
+    }
+
+    if (bBackground)
+    {
+        if (IsControlBackground())
+            SetBackground(GetControlBackground());
+        else
+            SetBackground(rStyleSettings.GetFieldColor());
+    }
 }
 
 void ImplListBoxWindow::ImplCalcMetrics()
@@ -2767,6 +2782,55 @@ void ImplWin::ImplDraw( bool bLayout )
     else
     {
         DrawEntry( true, true, false, bLayout );
+    }
+}
+
+void ImplWin::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    vcl::Font aFont = rStyleSettings.GetFieldFont();
+    if (IsControlFont())
+        aFont.Merge(GetControlFont());
+    SetZoomedPointFont(rRenderContext, aFont);
+
+    Color aTextColor = rStyleSettings.GetFieldTextColor();
+    if (IsControlForeground())
+        aTextColor = GetControlForeground();
+    rRenderContext.SetTextColor(aTextColor);
+
+    if (IsControlBackground())
+        rRenderContext.SetBackground(GetControlBackground());
+    else
+        rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
+}
+
+void ImplWin::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+    if (bFont)
+    {
+        vcl::Font aFont = rStyleSettings.GetFieldFont();
+        if (IsControlFont())
+            aFont.Merge(GetControlFont());
+        SetZoomedPointFont(*this, aFont);
+    }
+
+    if (bFont || bForeground)
+    {
+        Color aTextColor = rStyleSettings.GetFieldTextColor();
+        if (IsControlForeground())
+            aTextColor = GetControlForeground();
+        SetTextColor( aTextColor );
+    }
+
+    if (bBackground)
+    {
+        if (IsControlBackground())
+            SetBackground(GetControlBackground());
+        else
+            SetBackground(rStyleSettings.GetFieldColor());
     }
 }
 

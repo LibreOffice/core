@@ -246,6 +246,13 @@ namespace svt
         (void)i_rMouseEvent;
     }
 
+    void ToolPanelDrawer::ApplySettings(vcl::RenderContext& rRenderContext)
+    {
+        const StyleSettings& rStyleSettings(rRenderContext.GetSettings().GetStyleSettings());
+        ApplyControlFont(rRenderContext, rStyleSettings.GetAppFont());
+        ApplyControlForeground(rRenderContext, rStyleSettings.GetButtonTextColor());
+        rRenderContext.SetTextFillColor();
+    }
 
     void ToolPanelDrawer::DataChanged( const DataChangedEvent& i_rEvent )
     {
@@ -265,22 +272,9 @@ namespace svt
             case DataChangedEventType::FONTSUBSTITUTION:
             {
                 const StyleSettings& rStyleSettings( GetSettings().GetStyleSettings() );
-
-                // Font.
-                vcl::Font aFont = rStyleSettings.GetAppFont();
-                if ( IsControlFont() )
-                    aFont.Merge( GetControlFont() );
-                SetZoomedPointFont( aFont );
-
-                // Color.
-                Color aColor;
-                if ( IsControlForeground() )
-                    aColor = GetControlForeground();
-                else
-                    aColor = rStyleSettings.GetButtonTextColor();
-                SetTextColor( aColor );
+                ApplyControlFont(*this, rStyleSettings.GetAppFont());
+                ApplyControlForeground(*this, rStyleSettings.GetButtonTextColor());
                 SetTextFillColor();
-
                 Invalidate();
             }
             break;

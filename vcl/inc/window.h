@@ -36,14 +36,19 @@
 #include <vcl/idle.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/rendersettings.hxx>
 #include <vector>
 
 struct SalPaintEvent;
 struct ImplDelData;
 struct ImplAccessibleInfos;
 
+namespace vcl {
+    class Window;
+    struct ControlLayoutData;
+}
+
 class FixedText;
-namespace vcl { class Window; }
 class VclSizeGroup;
 class VirtualDevice;
 class PhysicalFontCollection;
@@ -54,23 +59,16 @@ class SalObject;
 enum class MouseEventModifiers;
 enum class MouseNotifyEvent;
 
-namespace com {
-namespace sun {
-namespace star {
+namespace com { namespace sun { namespace star {
+
 namespace accessibility {
     class XAccessible;
-}}}}
+}
 
-namespace com {
-namespace sun {
-namespace star {
 namespace rendering {
     class XCanvas;
-}}}}
+}
 
-namespace com {
-namespace sun {
-namespace star {
 namespace awt {
     class XWindowPeer;
     class XWindow;
@@ -79,8 +77,7 @@ namespace uno {
     class Any;
     class XInterface;
 }
-namespace datatransfer {
-namespace clipboard {
+namespace datatransfer { namespace clipboard {
     class XClipboard;
 }
 
@@ -89,11 +86,7 @@ namespace dnd {
     class XDragGestureRecognizer;
     class XDragSource;
     class XDropTarget;
-} } } } }
-
-namespace vcl {
-    struct ControlLayoutData;
-}
+}}}}}
 
 bool ImplWindowFrameProc( vcl::Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, const void* pEvent );
 
@@ -376,6 +369,8 @@ public:
                         mbFill:1,
                         mbSecondary:1,
                         mbNonHomogeneous:1;
+
+    vcl::RenderSettings maRenderSettings;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };

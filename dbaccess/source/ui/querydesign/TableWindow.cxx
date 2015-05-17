@@ -560,6 +560,8 @@ void OTableWindow::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
+    // FIXME RenderContext
+
     if ( nType == StateChangedType::Zoom )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -567,7 +569,7 @@ void OTableWindow::StateChanged( StateChangedType nType )
         vcl::Font aFont = rStyleSettings.GetGroupFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
+        SetZoomedPointFont(*this, aFont);
 
         m_aTitle->SetZoom(GetZoom());
         m_pListBox->SetZoom(GetZoom());

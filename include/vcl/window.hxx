@@ -69,31 +69,17 @@ class SalFrame;
 class MenuFloatingWindow;
 class VCLXWindow;
 
-namespace com {
-namespace sun {
-namespace star {
+namespace com { namespace sun { namespace star {
 namespace accessibility {
     class XAccessible;
-}}}}
-
-namespace com {
-namespace sun {
-namespace star {
+}
 namespace beans {
     struct PropertyValue;
-}}}}
-
-namespace com {
-namespace sun {
-namespace star {
+}
 namespace rendering {
     class XCanvas;
     class XSpriteCanvas;
-}}}}
-
-namespace com {
-namespace sun {
-namespace star {
+}
 namespace awt {
     class XWindowPeer;
     class XWindow;
@@ -102,26 +88,23 @@ namespace uno {
     class Any;
     class XInterface;
 }
-namespace datatransfer {
-namespace clipboard {
+namespace datatransfer { namespace clipboard {
     class XClipboard;
 }
-
 namespace dnd {
     class XDragGestureRecognizer;
     class XDragSource;
     class XDropTarget;
-} } } } }
+}}}}}
 
 namespace vcl {
     struct ControlLayoutData;
+    class RenderSettings;
 }
 
 namespace svt { class PopupWindowControllerImpl; }
 
 template<class T> class VclPtr;
-
-
 
 enum class TrackingEventFlags
 {
@@ -133,6 +116,7 @@ enum class TrackingEventFlags
     End            = 0x1000,
     DontCallHdl    = 0x8000,
 };
+
 namespace o3tl
 {
     template<> struct typed_flags<TrackingEventFlags> : is_typed_flags<TrackingEventFlags, 0x9107> {};
@@ -393,8 +377,6 @@ struct WindowResHeader
 
 namespace vcl {
 
-typedef OutputDevice RenderContext;
-
 class VCL_DLLPUBLIC RenderTools
 {
 public:
@@ -598,8 +580,8 @@ private:
 
     SAL_DLLPRIVATE void                 ImplInitResolutionSettings();
 
-    SAL_DLLPRIVATE void                 ImplPointToLogic( vcl::Font& rFont ) const;
-    SAL_DLLPRIVATE void                 ImplLogicToPoint( vcl::Font& rFont ) const;
+    SAL_DLLPRIVATE void                 ImplPointToLogic(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const;
+    SAL_DLLPRIVATE void                 ImplLogicToPoint(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const;
 
     SAL_DLLPRIVATE bool                 ImplSysObjClip( const vcl::Region* pOldRegion );
     SAL_DLLPRIVATE void                 ImplUpdateSysObjChildrenClip();
@@ -711,8 +693,16 @@ protected:
     virtual void                        ClipToPaintRegion( Rectangle& rDstRect ) SAL_OVERRIDE;
     virtual bool                        UsePolyPolygonForComplexGradient() SAL_OVERRIDE;
 
-    virtual void                        DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper ) SAL_OVERRIDE;
+    virtual void DrawGradientWallpaper(long nX, long nY, long nWidth, long nHeight,
+                                       const Wallpaper& rWallpaper) SAL_OVERRIDE
+    {
+        OutputDevice::DrawGradientWallpaper(nX, nY, nWidth, nHeight, rWallpaper);
+    }
 
+    virtual void DrawGradientWallpaper(vcl::RenderContext& rRenderContext, long nX, long nY,
+                                       long nWidth, long nHeight, const Wallpaper& rWallpaper);
+
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext);
 public:
     bool                                HasMirroredGraphics() const SAL_OVERRIDE;
 
@@ -735,8 +725,17 @@ public:
     virtual void                        PrePaint(vcl::RenderContext& rRenderContext);
     virtual void                        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     virtual void                        PostPaint(vcl::RenderContext& rRenderContext);
-    virtual void                        Erase() SAL_OVERRIDE;
-    virtual void                        Erase( const Rectangle& rRect ) SAL_OVERRIDE { ::OutputDevice::Erase( rRect ); }
+    virtual void                        Erase(vcl::RenderContext& rRenderContext);
+
+    virtual void Erase() SAL_OVERRIDE
+    {
+        OutputDevice::Erase();
+    }
+
+    virtual void Erase(const Rectangle& rRect) SAL_OVERRIDE
+    {
+        OutputDevice::Erase(rRect);
+    }
 
     virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void                        Move();
@@ -835,24 +834,29 @@ public:
     void                                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                                NotifyAllChildren( DataChangedEvent& rDCEvt );
 
-    void                                SetPointFont( const vcl::Font& rFont );
-    vcl::Font                           GetPointFont() const;
-    void                                SetZoomedPointFont( const vcl::Font& rFont );
+    void                                SetPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
+    vcl::Font                           GetPointFont(vcl::RenderContext& rRenderContext) const;
+    void                                SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
     long                                GetDrawPixel( ::OutputDevice* pDev, long nPixels ) const;
     vcl::Font                           GetDrawPixelFont( ::OutputDevice* pDev ) const;
 
-    void                                SetControlFont();
-    void                                SetControlFont( const vcl::Font& rFont );
-    vcl::Font                           GetControlFont() const;
-    bool                                IsControlFont() const;
-    void                                SetControlForeground();
-    void                                SetControlForeground( const Color& rColor );
-    Color                               GetControlForeground() const;
-    bool                                IsControlForeground() const;
-    void                                SetControlBackground();
-    void                                SetControlBackground( const Color& rColor );
-    Color                               GetControlBackground() const;
-    bool                                IsControlBackground() const;
+    void SetControlFont();
+    void SetControlFont( const vcl::Font& rFont );
+    vcl::Font GetControlFont() const;
+    bool IsControlFont() const;
+    void ApplyControlFont(vcl::RenderContext& rRenderContext, const vcl::Font& rDefaultFont);
+
+    void SetControlForeground();
+    void SetControlForeground(const Color& rColor);
+    Color GetControlForeground() const;
+    bool IsControlForeground() const;
+    void ApplyControlForeground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor);
+
+    void SetControlBackground();
+    void SetControlBackground( const Color& rColor );
+    Color GetControlBackground() const;
+    bool IsControlBackground() const;
+    void ApplyControlBackground(vcl::RenderContext& rRenderContext, const Color& rDefaultColor);
 
     void                                SetParentClipMode( sal_uInt16 nMode = 0 );
     sal_uInt16                          GetParentClipMode() const;
@@ -889,6 +893,8 @@ public:
     void                                EnableInput( bool bEnable, bool bChild, bool bSysWin,
                                                      const vcl::Window* pExcludeWindow = NULL );
     bool                                IsInputEnabled() const;
+
+    vcl::RenderSettings&                GetRenderSettings();
 
     /** Override <code>EnableInput</code>. This can be necessary due to other people
         using EnableInput for whole window hierarchies.

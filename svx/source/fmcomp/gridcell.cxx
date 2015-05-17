@@ -729,52 +729,50 @@ void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet 
 {
     vcl::Window* pWindows[] = { m_pPainter, m_pWindow };
 
-    if ( ( _eInitWhat & InitWritingMode ) != 0 )
+    if ((_eInitWhat & InitWritingMode) != 0)
     {
-        for ( size_t i=0; i < sizeof( pWindows ) / sizeof( pWindows[0] ); ++i )
+        for (size_t i = 0; i < sizeof(pWindows) / sizeof(pWindows[0]); ++i)
         {
-            if ( pWindows[i] )
-                pWindows[i]->EnableRTL( rParent.IsRTLEnabled() );
+            if (pWindows[i])
+                pWindows[i]->EnableRTL(rParent.IsRTLEnabled());
         }
     }
 
-    if ( ( _eInitWhat & InitFontFacet ) != 0 )
+    if ((_eInitWhat & InitFontFacet) != 0)
     {
-        for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+        for (size_t i = 0; i < sizeof(pWindows) / sizeof(pWindows[0]); ++i)
         {
-            if ( !pWindows[i] )
+            if (!pWindows[i])
                 continue;
 
-            pWindows[i]->SetZoom( rParent.GetZoom() );
+            pWindows[i]->SetZoom(rParent.GetZoom());
 
             const StyleSettings& rStyleSettings = pWindows[i]->GetSettings().GetStyleSettings();
             vcl::Font aFont = rStyleSettings.GetFieldFont();
-            aFont.SetTransparent( isTransparent() );
+            aFont.SetTransparent(isTransparent());
 
-            if ( rParent.IsControlFont() )
+            if (rParent.IsControlFont())
             {
-                pWindows[i]->SetControlFont( rParent.GetControlFont() );
-                aFont.Merge( rParent.GetControlFont() );
+                pWindows[i]->SetControlFont(rParent.GetControlFont());
+                aFont.Merge(rParent.GetControlFont());
             }
             else
                 pWindows[i]->SetControlFont();
 
-            pWindows[i]->SetZoomedPointFont( aFont );
+            pWindows[i]->SetZoomedPointFont(*pWindows[i], aFont); // FIXME RenderContext
         }
     }
 
-    if  (   ( ( _eInitWhat & InitFontFacet ) != 0 )
-        ||  ( ( _eInitWhat & InitForeground ) != 0 )
-        )
+    if (((_eInitWhat & InitFontFacet) != 0) || ((_eInitWhat & InitForeground) != 0))
     {
-        Color aTextColor( rParent.IsControlForeground() ? rParent.GetControlForeground() : rParent.GetTextColor() );
+        Color aTextColor(rParent.IsControlForeground() ? rParent.GetControlForeground() : rParent.GetTextColor());
 
         bool bTextLineColor = rParent.IsTextLineColor();
-        Color aTextLineColor( rParent.GetTextLineColor() );
+        Color aTextLineColor(rParent.GetTextLineColor());
 
-        for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+        for (size_t i=0; i < sizeof(pWindows) / sizeof(pWindows[0]); ++i)
         {
-            if ( pWindows[i] )
+            if (pWindows[i])
             {
                 pWindows[i]->SetTextColor(aTextColor);
                 if (rParent.IsControlForeground())
@@ -788,16 +786,16 @@ void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet 
         }
     }
 
-    if ( ( _eInitWhat & InitBackground ) != 0 )
+    if ((_eInitWhat & InitBackground) != 0)
     {
         if (rParent.IsControlBackground())
         {
-            Color aColor( rParent.GetControlBackground());
-            for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+            Color aColor(rParent.GetControlBackground());
+            for (size_t i=0; i < sizeof(pWindows) / sizeof(pWindows[0]); ++i)
             {
-                if ( pWindows[i] )
+                if (pWindows[i])
                 {
-                    if ( isTransparent() )
+                    if (isTransparent())
                         pWindows[i]->SetBackground();
                     else
                     {
@@ -812,7 +810,7 @@ void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet 
         {
             if (m_pPainter)
             {
-                if ( isTransparent() )
+                if (isTransparent())
                     m_pPainter->SetBackground();
                 else
                     m_pPainter->SetBackground(rParent.GetBackground());
@@ -821,7 +819,7 @@ void DbCellControl::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet 
 
             if (m_pWindow)
             {
-                if ( isTransparent() )
+                if (isTransparent())
                     m_pWindow->SetBackground(rParent.GetBackground());
                 else
                     m_pWindow->SetFillColor(rParent.GetFillColor());

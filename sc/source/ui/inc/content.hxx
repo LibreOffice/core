@@ -152,9 +152,9 @@ public:
     const OUString& GetHiddenTitle() const    { return aHiddenTitle; }
 
     /** Applies the navigator settings to the listbox. */
-    void                        ApplySettings();
+    void ApplyNavigatorSettings();
     /** Stores the current listbox state in the navigator settings. */
-    void                        StoreSettings() const;
+    void StoreNavigatorSettings() const;
 
     static bool IsInDrag()  { return bIsInDrag; }
 };

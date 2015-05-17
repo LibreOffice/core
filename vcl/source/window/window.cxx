@@ -1143,7 +1143,8 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     mnDPIX          = (mpWindowImpl->mpFrameData->mnDPIX*nScreenZoom)/100;
     mnDPIY          = (mpWindowImpl->mpFrameData->mnDPIY*nScreenZoom)/100;
     maFont          = rStyleSettings.GetAppFont();
-    ImplPointToLogic( maFont );
+
+    ImplPointToLogic(*this, maFont);
 
     if ( nStyle & WB_3DLOOK )
     {
@@ -1412,7 +1413,7 @@ void Window::ImplRemoveDel( ImplDelData* pDel ) // TODO: make "const" when incom
 void Window::ImplInitResolutionSettings()
 {
     // recalculate AppFont-resolution and DPI-resolution
-    if ( mpWindowImpl->mbFrame )
+    if (mpWindowImpl->mbFrame)
     {
         const StyleSettings& rStyleSettings = mxSettings->GetStyleSettings();
         sal_uInt16 nScreenZoom = rStyleSettings.GetScreenZoom();
@@ -1421,7 +1422,7 @@ void Window::ImplInitResolutionSettings()
 
         // setup the scale factor for Hi-DPI displays
         mnDPIScaleFactor = CountDPIScaleFactor(mpWindowImpl->mpFrameData->mnDPIY);
-        SetPointFont( rStyleSettings.GetAppFont() );
+        SetPointFont(*this, rStyleSettings.GetAppFont());
     }
     else if ( mpWindowImpl->mpParent )
     {
@@ -1440,15 +1441,15 @@ void Window::ImplInitResolutionSettings()
     }
 }
 
-void Window::ImplPointToLogic( vcl::Font& rFont ) const
+void Window::ImplPointToLogic(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const
 {
-    Size    aSize = rFont.GetSize();
-    sal_uInt16  nScreenFontZoom = mxSettings->GetStyleSettings().GetScreenFontZoom();
+    Size aSize = rFont.GetSize();
+    sal_uInt16 nScreenFontZoom = rRenderContext.GetSettings().GetStyleSettings().GetScreenFontZoom();
 
-    if ( aSize.Width() )
+    if (aSize.Width())
     {
         aSize.Width() *= mpWindowImpl->mpFrameData->mnDPIX;
-        aSize.Width() += 72/2;
+        aSize.Width() += 72 / 2;
         aSize.Width() /= 72;
         aSize.Width() *= nScreenFontZoom;
         aSize.Width() /= 100;
@@ -1459,35 +1460,35 @@ void Window::ImplPointToLogic( vcl::Font& rFont ) const
     aSize.Height() *= nScreenFontZoom;
     aSize.Height() /= 100;
 
-    if ( IsMapModeEnabled() )
-        aSize = PixelToLogic( aSize );
+    if (rRenderContext.IsMapModeEnabled())
+        aSize = rRenderContext.PixelToLogic(aSize);
 
-    rFont.SetSize( aSize );
+    rFont.SetSize(aSize);
 }
 
-void Window::ImplLogicToPoint( vcl::Font& rFont ) const
+void Window::ImplLogicToPoint(vcl::RenderContext& rRenderContext, vcl::Font& rFont) const
 {
-    Size    aSize = rFont.GetSize();
-    sal_uInt16  nScreenFontZoom = mxSettings->GetStyleSettings().GetScreenFontZoom();
+    Size aSize = rFont.GetSize();
+    sal_uInt16 nScreenFontZoom = rRenderContext.GetSettings().GetStyleSettings().GetScreenFontZoom();
 
-    if ( IsMapModeEnabled() )
-        aSize = LogicToPixel( aSize );
+    if (rRenderContext.IsMapModeEnabled())
+        aSize = rRenderContext.LogicToPixel(aSize);
 
-    if ( aSize.Width() )
+    if (aSize.Width())
     {
         aSize.Width() *= 100;
         aSize.Width() /= nScreenFontZoom;
         aSize.Width() *= 72;
-        aSize.Width() += mpWindowImpl->mpFrameData->mnDPIX/2;
+        aSize.Width() += mpWindowImpl->mpFrameData->mnDPIX / 2;
         aSize.Width() /= mpWindowImpl->mpFrameData->mnDPIX;
     }
     aSize.Height() *= 100;
     aSize.Height() /= nScreenFontZoom;
     aSize.Height() *= 72;
-    aSize.Height() += mpWindowImpl->mpFrameData->mnDPIY/2;
+    aSize.Height() += mpWindowImpl->mpFrameData->mnDPIY / 2;
     aSize.Height() /= mpWindowImpl->mpFrameData->mnDPIY;
 
-    rFont.SetSize( aSize );
+    rFont.SetSize(aSize);
 }
 
 bool Window::ImplUpdatePos()
@@ -2165,7 +2166,7 @@ long Window::CalcTitleWidth() const
         // border of external dialogs
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         vcl::Font aFont = GetFont();
-        const_cast<vcl::Window*>(this)->SetPointFont( rStyleSettings.GetTitleFont() );
+        const_cast<vcl::Window*>(this)->SetPointFont(*const_cast<Window*>(this), rStyleSettings.GetTitleFont());
         long nTitleWidth = GetTextWidth( GetText() );
         const_cast<vcl::Window*>(this)->SetFont( aFont );
         nTitleWidth += rStyleSettings.GetTitleHeight() * 3;
@@ -2257,23 +2258,21 @@ void Window::CollectChildren(::std::vector<vcl::Window *>& rAllChildren )
     }
 }
 
-void Window::SetPointFont( const vcl::Font& rFont )
+void Window::SetPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
 {
-
     vcl::Font aFont = rFont;
-    ImplPointToLogic( aFont );
-    SetFont( aFont );
+    ImplPointToLogic(rRenderContext, aFont);
+    rRenderContext.SetFont(aFont);
 }
 
-vcl::Font Window::GetPointFont() const
+vcl::Font Window::GetPointFont(vcl::RenderContext& rRenderContext) const
 {
-
-    vcl::Font aFont = GetFont();
-    ImplLogicToPoint( aFont );
+    vcl::Font aFont = rRenderContext.GetFont();
+    ImplLogicToPoint(rRenderContext, aFont);
     return aFont;
 }
 
-void Window::Show( bool bVisible, sal_uInt16 nFlags )
+void Window::Show(bool bVisible, sal_uInt16 nFlags)
 {
     if ( IsDisposed() || mpWindowImpl->mbVisible == bVisible )
         return;
@@ -3870,42 +3869,46 @@ bool Window::UsePolyPolygonForComplexGradient()
     return false;
 }
 
-void Window::DrawGradientWallpaper( long nX, long nY,
-                                    long nWidth, long nHeight,
-                                    const Wallpaper& rWallpaper )
+void Window::ApplySettings(vcl::RenderContext& /*rRenderContext*/)
 {
-    Rectangle       aBound;
-    GDIMetaFile*    pOldMetaFile = mpMetaFile;
-    const bool      bOldMap = mbMap;
-    bool            bNeedGradient = true;
+}
 
-    aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
+void Window::DrawGradientWallpaper(vcl::RenderContext& rRenderContext,
+                                   long nX, long nY, long nWidth, long nHeight,
+                                   const Wallpaper& rWallpaper)
+{
+    Rectangle aBound;
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    const bool bOldMap = mbMap;
+    bool bNeedGradient = true;
+
+    aBound = Rectangle(Point(nX, nY), Size(nWidth, nHeight));
 
     mpMetaFile = NULL;
-    EnableMapMode( false );
-    Push( PushFlags::CLIPREGION );
-    IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
+    rRenderContext.EnableMapMode(false);
+    rRenderContext.Push(PushFlags::CLIPREGION);
+    rRenderContext.IntersectClipRegion(Rectangle(Point(nX, nY), Size(nWidth, nHeight)));
 
-    if( rWallpaper.GetStyle() == WALLPAPER_APPLICATIONGRADIENT )
+    if (rWallpaper.GetStyle() == WALLPAPER_APPLICATIONGRADIENT)
     {
         // limit gradient to useful size, so that it still can be noticed
         // in maximized windows
         long gradientWidth = GetDesktopRectPixel().GetSize().Width();
-        if( gradientWidth > 1024 )
+        if (gradientWidth > 1024)
             gradientWidth = 1024;
-        if( mnOutOffX+nWidth > gradientWidth )
-            DrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper.GetGradient().GetEndColor() );
-        if( mnOutOffX > gradientWidth )
+        if (mnOutOffX + nWidth > gradientWidth)
+            rRenderContext.DrawColorWallpaper(nX, nY, nWidth, nHeight, rWallpaper.GetGradient().GetEndColor());
+        if (mnOutOffX > gradientWidth)
             bNeedGradient = false;
         else
-            aBound = Rectangle( Point( -mnOutOffX, nY ), Size( gradientWidth, nHeight ) );
+            aBound = Rectangle(Point(-mnOutOffX, nY), Size(gradientWidth, nHeight));
     }
 
-    if( bNeedGradient )
-        DrawGradient( aBound, rWallpaper.GetGradient() );
+    if (bNeedGradient)
+        rRenderContext.DrawGradient(aBound, rWallpaper.GetGradient());
 
-    Pop();
-    EnableMapMode( bOldMap );
+    rRenderContext.Pop();
+    rRenderContext.EnableMapMode(bOldMap);
     mpMetaFile = pOldMetaFile;
 }
 
@@ -3925,6 +3928,11 @@ Any Window::GetSystemDataAny() const
         aRet <<= aSeq;
     }
     return aRet;
+}
+
+vcl::RenderSettings& Window::GetRenderSettings()
+{
+    return mpWindowImpl->maRenderSettings;
 }
 
 } /* namespace vcl */

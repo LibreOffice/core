@@ -56,6 +56,7 @@ protected:
     ExtTextView*    GetTextView() const;
     ScrollBar*      GetVScrollBar() const;
 
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 public:
                     VclMultiLineEdit( vcl::Window* pParent,
                                       WinBits nWinStyle = WB_LEFT | WB_BORDER );

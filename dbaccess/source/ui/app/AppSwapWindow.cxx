@@ -77,13 +77,14 @@ void OApplicationSwapWindow::Resize()
 
 void OApplicationSwapWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
+    // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
         vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont( aFont );
+        SetPointFont(*this, aFont);
     }
 
     if( bForeground || bFont )

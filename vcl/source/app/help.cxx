@@ -250,8 +250,9 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
 //  EnableAlwaysOnTop();
     EnableSaveBackground();
 
+    // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    SetPointFont( rStyleSettings.GetHelpFont() );
+    SetPointFont(*this, rStyleSettings.GetHelpFont());
     SetTextColor( rStyleSettings.GetHelpTextColor() );
     SetTextAlign( ALIGN_TOP );
     if ( IsNativeControlSupported( CTRL_TOOLTIP, PART_ENTIRE_CONTROL ) )

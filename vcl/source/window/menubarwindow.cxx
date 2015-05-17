@@ -610,7 +610,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                         aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
                         if (!Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )
-                            rRenderContext.Erase();
+                            Erase(rRenderContext);
                         else
                         {
                             Rectangle aBgRegion(Point(), rRenderContext.GetOutputSizePixel());
@@ -886,7 +886,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight(this);
 
         if (!rStyleSettings.GetPersonaHeader().IsEmpty())
-            rRenderContext.Erase();
+            Erase(rRenderContext);
         else
         {
             Point aPt;

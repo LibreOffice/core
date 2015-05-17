@@ -134,6 +134,7 @@ void OTitleWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void OTitleWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
+    // FIXME RenderContext
     AllSettings aAllSettings = GetSettings();
     StyleSettings aStyle = aAllSettings.GetStyleSettings();
     aStyle.SetMonoColor(aStyle.GetActiveBorderColor());//GetMenuBorderColor());
@@ -146,7 +147,7 @@ void OTitleWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackgro
         vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont( aFont );
+        SetPointFont(*this, aFont);
     }
 
     if( bForeground || bFont )

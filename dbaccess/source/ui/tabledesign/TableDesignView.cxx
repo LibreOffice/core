@@ -119,12 +119,14 @@ void OTableBorderWindow::ImplInitSettings( bool bFont, bool bForeground, bool bB
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
+    // FIXME RenderContext
+
     if ( bFont )
     {
         vcl::Font aFont = rStyleSettings.GetAppFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
-        SetPointFont( aFont );
+        SetPointFont(*this,  aFont);
     }
 
     if ( bFont || bForeground )

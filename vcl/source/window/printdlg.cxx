@@ -176,7 +176,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
         // replacement is active
         rRenderContext.Push();
         Font aFont(rRenderContext.GetSettings().GetStyleSettings().GetLabelFont());
-        SetZoomedPointFont(aFont);
+        SetZoomedPointFont(rRenderContext, aFont);
         Rectangle aTextRect(aOffset + Point(2, 2), Size(maPreviewSize.Width() - 4, maPreviewSize.Height() - 4));
         rRenderContext.DrawText(aTextRect, maReplacementString,
                                 TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER |

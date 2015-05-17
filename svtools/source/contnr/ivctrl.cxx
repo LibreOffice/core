@@ -221,23 +221,24 @@ void SvtIconChoiceCtrl::LoseFocus()
     Control::LoseFocus();
 }
 
-void SvtIconChoiceCtrl::SetFont( const vcl::Font& rFont )
+void SvtIconChoiceCtrl::SetFont(const vcl::Font& rFont)
 {
-    if( rFont != GetFont() )
+    if (rFont != GetFont())
     {
-        Control::SetFont( rFont );
+        Control::SetFont(rFont);
         _pImp->FontModified();
     }
 }
 
-void SvtIconChoiceCtrl::SetPointFont( const vcl::Font& rFont )
+void SvtIconChoiceCtrl::SetPointFont(const vcl::Font& rFont)
 {
-    if( rFont != GetPointFont() )
+    if (rFont != GetPointFont(*this)) //FIXME
     {
-        Control::SetPointFont( rFont );
+        Control::SetPointFont(*this, rFont); //FIXME
         _pImp->FontModified();
     }
 }
+
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( const Point& rPixPos, bool bHit ) const
 {
     Point aPos( rPixPos );

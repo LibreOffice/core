@@ -101,6 +101,8 @@ protected:
 
     void ImplInitSettings( const bool _bFont, const bool _bForeground );
 
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+
 public:
     SAL_DLLPRIVATE void ImplClearLayoutData() const;
     /** draws a frame around the give rectangle, onto the given device

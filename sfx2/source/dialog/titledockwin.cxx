@@ -140,30 +140,21 @@ namespace sfx2
         onLayoutDone();
     }
 
+    void TitledDockingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+    {
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+        // Font
+        ApplyControlFont(rRenderContext, rStyleSettings.GetAppFont());
+
+        // Color
+        ApplyControlForeground(rRenderContext, rStyleSettings.GetButtonTextColor());
+        rRenderContext.SetTextFillColor();
+    }
 
     void TitledDockingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& i_rArea)
     {
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-
-        // Setup defaults
-        {
-            // Font
-            vcl::Font aFont = rStyleSettings.GetAppFont();
-            if (IsControlFont())
-                aFont.Merge(GetControlFont());
-            SetZoomedPointFont(aFont);
-
-            // Color.
-            Color aColor;
-
-            if (IsControlForeground())
-                aColor = GetControlForeground();
-            else
-                aColor = rStyleSettings.GetButtonTextColor();
-
-            rRenderContext.SetTextColor(aColor);
-            rRenderContext.SetTextFillColor();
-        }
 
         if (m_bLayoutPending)
             impl_layout();

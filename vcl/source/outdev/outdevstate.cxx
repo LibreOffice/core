@@ -39,6 +39,11 @@
 #include "salgdi.hxx"
 #include "sallayout.hxx"
 
+OutDevState::OutDevState() :
+    mnFlags(PushFlags::NONE)
+{
+}
+
 OutDevState::~OutDevState()
 {
     if ( mnFlags & PushFlags::LINECOLOR )

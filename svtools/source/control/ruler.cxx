@@ -1045,58 +1045,64 @@ static int adjustSize(int nOrig)
     return ( (3*nOrig) / 8) * 2 + 1;
 }
 
-void Ruler::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
+void Ruler::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    vcl::Font aFont = rStyleSettings.GetToolFont();
+    // make the font a bit smaller than default
+    Size aSize(adjustSize(aFont.GetSize().Width()), adjustSize(aFont.GetSize().Height()));
+    aFont.SetSize(aSize);
+
+    ApplyControlFont(rRenderContext, aFont);
+
+    ApplyControlForeground(*this, rStyleSettings.GetDarkShadowColor());
+    SetTextFillColor();
+
+    Color aColor;
+    svtools::ColorConfig aColorConfig;
+    aColor = Color(aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor);
+    ApplyControlBackground(rRenderContext, aColor);
+}
+
+void Ruler::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( bFont )
+    if (bFont)
     {
-        vcl::Font aFont;
-        aFont = rStyleSettings.GetToolFont();
-
+        vcl::Font aFont = rStyleSettings.GetToolFont();
         // make the font a bit smaller than default
         Size aSize(adjustSize(aFont.GetSize().Width()), adjustSize(aFont.GetSize().Height()));
         aFont.SetSize(aSize);
 
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
+        ApplyControlFont(*this, aFont);
     }
 
-    if ( bForeground || bFont )
+    if (bForeground || bFont)
     {
-        Color aColor;
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        else
-            aColor = rStyleSettings.GetDarkShadowColor();
-        SetTextColor( aColor );
+        ApplyControlForeground(*this, rStyleSettings.GetDarkShadowColor());
         SetTextFillColor();
     }
 
-    if ( bBackground )
+    if (bBackground)
     {
         Color aColor;
-        if ( IsControlBackground() )
-            aColor = GetControlBackground();
-        else
-        {
-            svtools::ColorConfig aColorConfig;
-            aColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
-        }
-        SetBackground( aColor );
+        svtools::ColorConfig aColorConfig;
+        aColor = Color(aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor);
+        ApplyControlBackground(*this, aColor);
     }
 
     maVirDev->SetSettings( GetSettings() );
     maVirDev->SetBackground( GetBackground() );
     vcl::Font aFont = GetFont();
 
-    if ( mnWinStyle & WB_VERT )
-        aFont.SetOrientation( 900 );
+    if (mnWinStyle & WB_VERT)
+        aFont.SetOrientation(900);
 
-    maVirDev->SetFont( aFont );
-    maVirDev->SetTextColor( GetTextColor() );
-    maVirDev->SetTextFillColor( GetTextFillColor() );
+    maVirDev->SetFont(aFont);
+    maVirDev->SetTextColor(GetTextColor());
+    maVirDev->SetTextFillColor(GetTextFillColor());
 }
 
 void Ruler::ImplCalc()

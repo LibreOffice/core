@@ -1464,6 +1464,7 @@ void OJoinTableView::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
+    // FIXME RenderContext
     if ( nType == StateChangedType::Zoom )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -1471,7 +1472,7 @@ void OJoinTableView::StateChanged( StateChangedType nType )
         vcl::Font aFont = rStyleSettings.GetGroupFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
+        SetZoomedPointFont(*this, aFont);
 
         OTableWindowMap::iterator aIter = m_aTableMap.begin();
         OTableWindowMap::iterator aEnd = m_aTableMap.end();

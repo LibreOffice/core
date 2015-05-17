@@ -150,13 +150,14 @@ void OAppBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void OAppBorderWindow::ImplInitSettings()
 {
+    // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( true )
     {
         vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont( aFont );
+        SetPointFont(*this, aFont);
     }
 
     if( true )
@@ -548,13 +549,14 @@ void OApplicationView::_disposing( const ::com::sun::star::lang::EventObject& /*
 
 void OApplicationView::ImplInitSettings()
 {
+    // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( true )
     {
         vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont( aFont );
+        SetPointFont(*this, aFont);
     }
 
     if( true )

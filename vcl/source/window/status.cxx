@@ -173,29 +173,64 @@ void StatusBar::AdjustItemWidthsForHiDPI(bool bAdjustHiDPI)
     mbAdjustHiDPI = bAdjustHiDPI;
 }
 
-void StatusBar::ImplInitSettings( bool bFont,
-                                  bool bForeground, bool bBackground )
+void StatusBar::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    vcl::Font aFont = rStyleSettings.GetToolFont();
+    if (IsControlFont())
+        aFont.Merge(GetControlFont());
+    SetZoomedPointFont(rRenderContext, aFont);
+
+    Color aColor;
+    if (IsControlForeground())
+        aColor = GetControlForeground();
+    else if (GetStyle() & WB_3DLOOK)
+        aColor = rStyleSettings.GetButtonTextColor();
+    else
+        aColor = rStyleSettings.GetWindowTextColor();
+
+    rRenderContext.SetTextColor(aColor);
+    rRenderContext.SetTextFillColor();
+
+    if (IsControlBackground())
+        aColor = GetControlBackground();
+    else if (GetStyle() & WB_3DLOOK)
+        aColor = rStyleSettings.GetFaceColor();
+    else
+        aColor = rStyleSettings.GetWindowColor();
+    rRenderContext.SetBackground(aColor);
+
+    // NWF background
+    if (!IsControlBackground() &&
+          rRenderContext.IsNativeControlSupported(CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_WINDOW))
+    {
+        ImplGetWindowImpl()->mnNativeBackground = PART_BACKGROUND_WINDOW;
+        EnableChildTransparentMode(true);
+    }
+}
+
+void StatusBar::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( bFont )
+    if (bFont)
     {
         vcl::Font aFont = rStyleSettings.GetToolFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
+        if (IsControlFont())
+            aFont.Merge(GetControlFont());
+        SetZoomedPointFont(*this, aFont);
     }
 
-    if ( bForeground || bFont )
+    if (bForeground || bFont)
     {
         Color aColor;
-        if ( IsControlForeground() )
+        if (IsControlForeground())
             aColor = GetControlForeground();
         else if ( GetStyle() & WB_3DLOOK )
             aColor = rStyleSettings.GetButtonTextColor();
         else
             aColor = rStyleSettings.GetWindowTextColor();
-        SetTextColor( aColor );
+        SetTextColor(aColor);
         SetTextFillColor();
 
         mpImplData->mpVirDev->SetFont( GetFont() );

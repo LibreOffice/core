@@ -551,7 +551,7 @@ void ListBox::DataChanged( const DataChangedEvent& rDCEvt )
         if ( mpImplWin )
         {
             mpImplWin->SetSettings( GetSettings() ); // If not yet set...
-            ImplInitFieldSettings( mpImplWin, true, true, true );
+            mpImplWin->ImplInitSettings(true, true, true);
 
             mpBtn->SetSettings( GetSettings() );
             ImplInitDropDownButton( mpBtn );

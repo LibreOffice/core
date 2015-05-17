@@ -567,9 +567,10 @@ void ToolbarMenu::initWindow()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    SetPointFont( rStyleSettings.GetMenuFont() );
-    SetBackground( Wallpaper( GetControlBackground() ) );
-    SetTextColor( rStyleSettings.GetMenuTextColor() );
+    // FIXME RenderContext
+    SetPointFont(*this, rStyleSettings.GetMenuFont());
+    SetBackground(Wallpaper(GetControlBackground()));
+    SetTextColor(rStyleSettings.GetMenuTextColor());
     SetTextFillColor();
     SetLineColor();
 

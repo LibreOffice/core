@@ -121,40 +121,33 @@ void HeaderBar::dispose()
     Window::dispose();
 }
 
-void HeaderBar::ImplInitSettings( bool bFont,
-                                  bool bForeground, bool bBackground )
+void HeaderBar::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( bFont )
-    {
-        vcl::Font aFont;
-        aFont = rStyleSettings.GetToolFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
-    }
+    ApplyControlFont(rRenderContext, rStyleSettings.GetToolFont());
 
-    if ( bForeground || bFont )
+    ApplyControlForeground(rRenderContext, rStyleSettings.GetButtonTextColor());
+    SetTextFillColor();
+
+    ApplyControlBackground(rRenderContext, rStyleSettings.GetFaceColor());
+}
+
+void HeaderBar::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
+    if (bFont)
+        ApplyControlFont(*this, rStyleSettings.GetToolFont());
+
+    if (bForeground || bFont)
     {
-        Color aColor;
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        else
-            aColor = rStyleSettings.GetButtonTextColor();
-        SetTextColor( aColor );
+        ApplyControlForeground(*this, rStyleSettings.GetButtonTextColor());
         SetTextFillColor();
     }
 
-    if ( bBackground )
-    {
-        Color aColor;
-        if ( IsControlBackground() )
-            aColor = GetControlBackground();
-        else
-            aColor = rStyleSettings.GetFaceColor();
-        SetBackground( aColor );
-    }
+    if (bBackground)
+        ApplyControlBackground(*this, rStyleSettings.GetFaceColor());
 }
 
 long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const

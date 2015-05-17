@@ -187,34 +187,36 @@ void ThumbnailView::ImplDeleteItems()
     mpStartSelRange = mFilteredItemList.end();
 }
 
+void ThumbnailView::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    ApplyControlFont(*this, rStyleSettings.GetAppFont());
+    ApplyControlForeground(*this, rStyleSettings.GetButtonTextColor());
+    rRenderContext.SetTextFillColor();
+    Color aColor = rStyleSettings.GetFieldColor();
+    rRenderContext.SetBackground(aColor);
+}
+
 void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( bFont )
+    if (bFont)
     {
-        vcl::Font aFont;
-        aFont = rStyleSettings.GetAppFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont( aFont );
+        ApplyControlFont(*this, rStyleSettings.GetAppFont());
     }
 
-    if ( bForeground || bFont )
+    if (bForeground || bFont)
     {
-        Color aColor;
-        if ( IsControlForeground() )
-            aColor = GetControlForeground();
-        else
-            aColor = rStyleSettings.GetButtonTextColor();
-        SetTextColor( aColor );
+        ApplyControlForeground(*this, rStyleSettings.GetButtonTextColor());
         SetTextFillColor();
     }
 
-    if ( bBackground )
+    if (bBackground)
     {
         Color aColor = rStyleSettings.GetFieldColor();
-        SetBackground( aColor );
+        SetBackground(aColor);
     }
 
     delete mpItemAttrs;
