@@ -259,8 +259,8 @@
            {\
                     MenuItem\
                     {\
-                        Identifier = FN_TABLE_INSERT_ROW ; \
-                        Text [ en-US ] = "Row Below" ; \
+                        Identifier = FN_TABLE_INSERT_ROW_BEFORE ; \
+                        Text [ en-US ] = "Row Before" ; \
                     };\
                     MenuItem\
                     {\
@@ -268,17 +268,27 @@
                         HelpId = CMD_FN_TABLE_INSERT_ROW_DLG ; \
                         Text [ en-US ] = "~Rows..." ; \
                     };\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_INSERT_ROW_AFTER ; \
+                        Text [ en-US ] = "Row After" ; \
+                    };\
                     SEPARATOR ; \
                     MenuItem\
                     {\
-                        Identifier = FN_TABLE_INSERT_COL ; \
-                        Text [ en-US ] = "Column Right" ; \
+                        Identifier = FN_TABLE_INSERT_COL_BEFORE ; \
+                        Text [ en-US ] = "Column Before" ; \
                     };\
                     MenuItem\
                     {\
                         Identifier = FN_TABLE_INSERT_COL_DLG ; \
                         HelpId = CMD_FN_TABLE_INSERT_COL_DLG ; \
                         Text [ en-US ] = "~Columns..." ; \
+                    };\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_INSERT_COL_AFTER ; \
+                        Text [ en-US ] = "Column After" ; \
                     };\
            };\
        };\

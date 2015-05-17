@@ -334,8 +334,8 @@
 
 #define FN_TABLE_REP                (FN_FORMAT + 99)  /* TableRepresentation */
 #define FN_CONVERT_TEXT_TABLE       (FN_FORMAT + 100)  /* convert text <-> table */
-#define FN_TABLE_INSERT_ROW         (FN_FORMAT + 101)  /* */
-#define FN_TABLE_INSERT_COL         (FN_FORMAT + 102)  /* */
+#define FN_TABLE_INSERT_ROW_AFTER   (FN_FORMAT + 101)  /* */
+#define FN_TABLE_INSERT_COL_AFTER   (FN_FORMAT + 102)  /* */
 #define FN_TABLE_DELETE_ROW         (FN_FORMAT + 103)  /* */
 #define FN_TABLE_DELETE_COL         (FN_FORMAT + 104)  /* */
 #define FN_TABLE_SPLIT_CELLS        (FN_FORMAT + 105)  /* */
@@ -343,6 +343,8 @@
 #define FN_TABLE_SET_ROW_HEIGHT     (FN_FORMAT + 107)  /* */
 #define FN_TABLE_SET_COL_WIDTH      (FN_FORMAT + 108)  /* */
 #define FN_OPTIMIZE_TABLE           (FN_FORMAT + 110)  /* ToolBoxItem for optimizing tables */
+#define FN_TABLE_INSERT_ROW_BEFORE  (FN_FORMAT + 111)  /* */
+#define FN_TABLE_INSERT_COL_BEFORE  (FN_FORMAT + 112)  /* */
 #define FN_TABLE_SELECT_ROW         (FN_FORMAT + 113)  /* */
 #define FN_TABLE_SELECT_COL         (FN_FORMAT + 114)  /* */
 #define FN_TABLE_SELECT_ALL         (FN_FORMAT + 115)  /* */
