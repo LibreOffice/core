@@ -5909,12 +5909,12 @@ void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const S
     pFormatData->mpUpperLimit->SetType(eMaxType);
     pDatabar->SetDataBarData(pFormatData);
 
-    for (size_t i = 0; pData[i].nVal != 0; ++i)
+    for (size_t i = 0; pData[i].nLength != -200; ++i)
     {
         pDoc->SetValue(nCol, i, 0, pData[i].nVal);
     }
 
-    for (size_t i = 0; pData[i].nVal != 0; ++i)
+    for (size_t i = 0; pData[i].nLength != -200; ++i)
     {
         ScDataBarInfo* pInfo = pDatabar->GetDataBarInfo(ScAddress(nCol, i, 0));
         CPPUNIT_ASSERT(pInfo);
@@ -5937,11 +5937,34 @@ void Test::testDataBarLength()
         { 6, 75.0 },
         { 7, 100.0 },
         { 8, 100.0 },
-        { 0, 0 }
+        { 9, 100.0 },
+        { 0, -200 }
     };
 
     testDataBarLengthImpl(m_pDoc, aValues, ScRange(0,0,0,0,7,0),
             3, COLORSCALE_VALUE, 7, COLORSCALE_VALUE);
+
+    ScDataBarLengthData aValues2[] = {
+        { -6, -100 },
+        { -5, -100 },
+        { -4, -100 },
+        { -3, -75.0 },
+        { -2, -50.0 },
+        { -1, -25.0 },
+        { 0, 0.0 },
+        { 1, 12.5 },
+        { 2, 25.0 },
+        { 3, 37.5 },
+        { 4, 50.0 },
+        { 5, 62.5 },
+        { 6, 75.0 },
+        { 7, 87.5 },
+        { 8, 100.0 },
+        { 9, 100.0 },
+        { 0, -200 }
+    };
+    testDataBarLengthImpl(m_pDoc, aValues2, ScRange(1,0,0,1,15,0),
+            -4, COLORSCALE_VALUE, 8, COLORSCALE_VALUE);
 
     m_pDoc->DeleteTab(0);
 }
