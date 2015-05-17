@@ -5890,7 +5890,7 @@ struct ScDataBarLengthData
 void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const ScRange& rRange,
         double nMinVal, ScColorScaleEntryType eMinType,
         double nMaxVal, ScColorScaleEntryType eMaxType,
-        double nZeroPos)
+        double nZeroPos, databar::ScAxisPosition eAxisPos)
 {
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, pDoc);
     ScRangeList aRangeList(rRange);
@@ -5902,6 +5902,8 @@ void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const S
     pFormat->AddEntry(pDatabar);
 
     ScDataBarFormatData* pFormatData = new ScDataBarFormatData();
+    pFormatData->meAxisPosition = eAxisPos;
+
     pFormatData->mpLowerLimit.reset(new ScColorScaleEntry());
     pFormatData->mpLowerLimit->SetValue(nMinVal);
     pFormatData->mpLowerLimit->SetType(eMinType);
@@ -5927,7 +5929,7 @@ void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const S
 
 }
 
-void Test::testDataBarLength()
+void Test::testDataBarLengthAutomaticAxis()
 {
     m_pDoc->InsertTab(0, "Test");
 
@@ -5944,7 +5946,7 @@ void Test::testDataBarLength()
     };
 
     testDataBarLengthImpl(m_pDoc, aValues, ScRange(0,0,0,0,7,0),
-            3, COLORSCALE_VALUE, 7, COLORSCALE_VALUE, 0.0);
+            3, COLORSCALE_VALUE, 7, COLORSCALE_VALUE, 0.0, databar::AUTOMATIC);
 
     ScDataBarLengthData aValues2[] = {
         { -6, -100 },
@@ -5966,7 +5968,52 @@ void Test::testDataBarLength()
         { 0, -200 }
     };
     testDataBarLengthImpl(m_pDoc, aValues2, ScRange(1,0,0,1,15,0),
-            -4, COLORSCALE_VALUE, 8, COLORSCALE_VALUE, 1.0/3.0 * 100);
+            -4, COLORSCALE_VALUE, 8, COLORSCALE_VALUE, 1.0/3.0 * 100, databar::AUTOMATIC);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testDataBarLengthMiddleAxis()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScDataBarLengthData aValues[] = {
+        { 1, 25.0 },
+        { 2, 25.0 },
+        { 3, 37.5 },
+        { 4, 50.0 },
+        { 5, 62.5 },
+        { 6, 75.0 },
+        { 7, 87.5 },
+        { 8, 100.0 },
+        { 9, 100.0 },
+        { 0, -200 }
+    };
+
+    testDataBarLengthImpl(m_pDoc, aValues, ScRange(0,0,0,0,8,0),
+            2, COLORSCALE_VALUE, 8, COLORSCALE_VALUE, 50.0, databar::MIDDLE);
+
+    ScDataBarLengthData aValues2[] = {
+        { -6, -50 },
+        { -5, -50 },
+        { -4, -50 },
+        { -3, -37.5 },
+        { -2, -25.0 },
+        { -1, -12.5 },
+        { 0, 0.0 },
+        { 1, 12.5 },
+        { 2, 25.0 },
+        { 3, 37.5 },
+        { 4, 50.0 },
+        { 5, 62.5 },
+        { 6, 75.0 },
+        { 7, 87.5 },
+        { 8, 100.0 },
+        { 9, 100.0 },
+        { 0, -200 }
+    };
+    testDataBarLengthImpl(m_pDoc, aValues2, ScRange(1,0,0,1,15,0),
+            -4, COLORSCALE_VALUE, 8, COLORSCALE_VALUE, 50.0, databar::MIDDLE);
 
     m_pDoc->DeleteTab(0);
 }
