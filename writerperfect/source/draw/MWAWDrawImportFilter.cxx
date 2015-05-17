@@ -67,6 +67,9 @@ bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
             case MWAWDocument::MWAW_T_GREATWORKS:
                 rTypeName = "draw_Great_Works";
                 break;
+            case MWAWDocument::MWAW_T_MACDRAFT:
+                rTypeName = "draw_MacDraft";
+                break;
             case MWAWDocument::MWAW_T_MACDRAW:
                 rTypeName = "draw_MacDraw";
                 break;
@@ -81,6 +84,9 @@ bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
                 break;
             case MWAWDocument::MWAW_T_SUPERPAINT:
                 rTypeName = "draw_SuperPaint";
+                break;
+            case MWAWDocument::MWAW_T_RESERVED1:
+                rTypeName = "draw_ClarisDraw";
                 break;
 
             case MWAWDocument::MWAW_T_ACTA:
@@ -102,7 +108,6 @@ bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
             case MWAWDocument::MWAW_T_HANMACWORDK:
             case MWAWDocument::MWAW_T_LIGHTWAYTEXT:
             case MWAWDocument::MWAW_T_MACDOC:
-            case MWAWDocument::MWAW_T_MACDRAFT:
             case MWAWDocument::MWAW_T_MACWRITE:
             case MWAWDocument::MWAW_T_MACWRITEPRO:
             case MWAWDocument::MWAW_T_MARINERWRITE:
@@ -128,7 +133,6 @@ bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, O
             case MWAWDocument::MWAW_T_ZWRITE:
             case MWAWDocument::MWAW_T_4DIMENSION:
 
-            case MWAWDocument::MWAW_T_RESERVED1:
             case MWAWDocument::MWAW_T_RESERVED2:
             case MWAWDocument::MWAW_T_RESERVED3:
             case MWAWDocument::MWAW_T_RESERVED4:

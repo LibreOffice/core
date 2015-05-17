@@ -570,8 +570,10 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,f
 	draw_Freehand_Document \
 	draw_Visio_Document \
 	draw_Beagle_Works \
+	draw_ClarisDraw \
 	draw_ClarisWorks \
 	draw_Great_Works \
+	draw_MacDraft \
 	draw_MacDraw \
 	draw_MacDrawPro \
 	draw_Mac_Works \
@@ -594,8 +596,10 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.x
 	CorelPresentationExchange \
 	FreehandDocument \
 	Beagle_Works_Draw \
+	ClarisDraw \
 	ClarisWorks_Draw \
 	Great_Works_Draw \
+	MacDraft \
 	MacDraw_Draw \
 	MacDrawPro_Draw \
 	Mac_Works_Draw \
