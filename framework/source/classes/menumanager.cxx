@@ -119,8 +119,6 @@ MenuManager::MenuManager(
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
 
-    sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
-
     sal_uInt16 nItemCount = pMenu->GetItemCount();
     m_aMenuItemHandlerVector.reserve(nItemCount);
     OUString aItemCommand;
@@ -140,8 +138,7 @@ MenuManager::MenuManager(
         if ( pPopupMenu )
         {
             AddMenu(pPopupMenu,aItemCommand,nItemId,bDeleteChildren,bDeleteChildren);
-            if (! ( aItemCommand.getLength() > nAddonsURLPrefixLength  &&
-                    aItemCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX ) ) )
+            if (! ( aItemCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX_STR ) ) )
             {
 
                 // Create addon popup menu if there exist elements and this is the tools popup menu

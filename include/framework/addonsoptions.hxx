@@ -41,8 +41,6 @@
 
 #define ADDONSPOPUPMENU_URL_PREFIX_STR                  "private:menu/Addon"
 
-#define ADDONSPOPUPMENU_URL_PREFIX                      OUString( ADDONSPOPUPMENU_URL_PREFIX_STR )
-
 namespace framework
 {
 

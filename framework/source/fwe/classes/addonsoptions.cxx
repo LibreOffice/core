@@ -317,7 +317,7 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     : ConfigItem( ROOTNODE_ADDONMENU ),
     m_nRootAddonPopupMenuId( 0 ),
     m_aPathDelimiter( PATHDELIMITER ),
-    m_aRootAddonPopupMenuURLPrexfix( ADDONSPOPUPMENU_URL_PREFIX )
+    m_aRootAddonPopupMenuURLPrexfix( ADDONSPOPUPMENU_URL_PREFIX_STR )
 {
     // initialize array with fixed property names
     m_aPropNames[ INDEX_URL             ] = PROPERTYNAME_URL;

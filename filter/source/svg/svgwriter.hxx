@@ -72,10 +72,10 @@ using namespace ::com::sun::star::xml::sax;
 
 
 
-#define SVG_DTD_STRING            OUString( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" )
+#define SVG_DTD_STRING          "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"
 
-#define SVGWRITER_WRITE_FILL    0x00000001
-#define SVGWRITER_WRITE_TEXT    0x00000002
+#define SVGWRITER_WRITE_FILL        0x00000001
+#define SVGWRITER_WRITE_TEXT        0x00000002
 #define SVGWRITER_NO_SHAPE_COMMENTS 0x01000000
 
 

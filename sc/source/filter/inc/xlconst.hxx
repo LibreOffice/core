@@ -76,13 +76,13 @@ const SCTAB SCTAB_GLOBAL                    = SCTAB_MAX;        /// A Calc sheet
 
 // Storage/stream names -------------------------------------------------------
 
-#define EXC_STORAGE_OLE_LINKED              OUString( "LNK" )
-#define EXC_STORAGE_OLE_EMBEDDED            OUString( "MBD" )
-#define EXC_STORAGE_VBA_PROJECT             OUString( "_VBA_PROJECT_CUR" )
+#define EXC_STORAGE_OLE_LINKED              "LNK"
+#define EXC_STORAGE_OLE_EMBEDDED            "MBD"
+#define EXC_STORAGE_VBA_PROJECT             "_VBA_PROJECT_CUR"
 
 #define EXC_STREAM_BOOK                     "Book"
 #define EXC_STREAM_WORKBOOK                 "Workbook"
-#define EXC_STREAM_CTLS                     OUString( "Ctls" )
+#define EXC_STREAM_CTLS                     "Ctls"
 
 // Encoded URLs ---------------------------------------------------------------
 

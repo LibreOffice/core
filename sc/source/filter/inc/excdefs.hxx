@@ -59,8 +59,8 @@ const sal_uInt8 EXC_AFOPER_GREATEREQUAL     = 0x06;
 
 // defines for change tracking ================================================
 
-#define EXC_STREAM_USERNAMES        OUString( "User Names" )
-#define EXC_STREAM_REVLOG           OUString( "Revision Log" )
+#define EXC_STREAM_USERNAMES        "User Names"
+#define EXC_STREAM_REVLOG           "Revision Log"
 
 // opcodes
 #define EXC_CHTR_OP_COLFLAG         0x0001
