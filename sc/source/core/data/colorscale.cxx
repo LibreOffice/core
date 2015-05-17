@@ -912,13 +912,15 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
         else
             pInfo->mnZero = 0;
 
+        double nMinNonNegative = std::max(0.0, nMin);
+        double nMaxNonPositive = std::min(0.0, nMax);
         //calculate the length
         if(nValue < 0 && nMin < 0)
         {
             if (nValue < nMin)
                 pInfo->mnLength = -100;
             else
-                pInfo->mnLength = -100 * (nValue-nMax)/(nMin-nMax);
+                pInfo->mnLength = -100 * (nValue-nMaxNonPositive)/(nMin-nMaxNonPositive);
         }
         else
         {
@@ -927,7 +929,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
             else if (nValue <= nMin)
                 pInfo->mnLength = 0;
             else
-                pInfo->mnLength = 100 * (nValue-nMin)/(nMax-nMin);
+                pInfo->mnLength = 100 * (nValue-nMinNonNegative)/(nMax-nMinNonNegative);
         }
     }
     else if( mpFormatData->meAxisPosition == databar::MIDDLE)
