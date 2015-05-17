@@ -22,7 +22,9 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	InstallModule_math \
 	InstallModule_onlineupdate \
 	InstallModule_ooo \
-	InstallModule_python \
+	$(if $(filter TRUE,$(DISABLE_PYTHON)),,\
+		InstallModule_python \
+	) \
 	InstallModule_ure \
 	InstallModule_writer \
 	InstallModule_xsltfilter \
