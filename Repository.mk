@@ -147,7 +147,9 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 	$(if $(filter TRUE-TRUE,$(USING_X11)-$(ENABLE_NPAPI_FROM_BROWSER)),pluginapp.bin) \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
-	ui-previewer \
+	$(if $(ENABLE_MACOSX_SANDBOX),, \
+		ui-previewer \
+	) \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
 	) \
