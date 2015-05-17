@@ -259,8 +259,13 @@
            {\
                     MenuItem\
                     {\
-                        Identifier = FN_TABLE_INSERT_ROW ; \
-                        Text [ en-US ] = "Row Below" ; \
+                        Identifier = FN_TABLE_INSERT_ROW_BEFORE ; \
+                        Text [ en-US ] = "Rows Above" ; \
+                    };\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_INSERT_ROW_AFTER ; \
+                        Text [ en-US ] = "Rows Below" ; \
                     };\
                     MenuItem\
                     {\
@@ -271,8 +276,13 @@
                     SEPARATOR ; \
                     MenuItem\
                     {\
-                        Identifier = FN_TABLE_INSERT_COL ; \
-                        Text [ en-US ] = "Column Right" ; \
+                        Identifier = FN_TABLE_INSERT_COL_BEFORE ; \
+                        Text [ en-US ] = "Columns Left" ; \
+                    };\
+                    MenuItem\
+                    {\
+                        Identifier = FN_TABLE_INSERT_COL_AFTER ; \
+                        Text [ en-US ] = "Columns Right" ; \
                     };\
                     MenuItem\
                     {\

@@ -820,10 +820,13 @@ void SwTableShell::Execute(SfxRequest &rReq)
             OSL_ENSURE( false, "function may not be called now." );
             break;
 
-        case FN_TABLE_INSERT_COL:
-        case FN_TABLE_INSERT_ROW:
+        case FN_TABLE_INSERT_COL_BEFORE:
+        case FN_TABLE_INSERT_ROW_BEFORE:
+        case FN_TABLE_INSERT_COL_AFTER:
+        case FN_TABLE_INSERT_ROW_AFTER:
         {
-            bool bColumn = rReq.GetSlot() == FN_TABLE_INSERT_COL;
+            bool bColumn = rReq.GetSlot() == FN_TABLE_INSERT_COL_BEFORE
+                           || rReq.GetSlot() == FN_TABLE_INSERT_COL_AFTER;
             sal_uInt16 nCount = 0;
             bool bAfter = true;
             if (pItem)
@@ -855,7 +858,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         nCount = maxX - minX + 1;
                     else
                         nCount = maxY - minY + 1;
-                 }
+                }
+                bAfter = rReq.GetSlot() == FN_TABLE_INSERT_COL_AFTER
+                         || rReq.GetSlot() == FN_TABLE_INSERT_ROW_AFTER;
             }
 
             if( nCount )
@@ -914,7 +919,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 if( pDlg.get() && (pDlg->Execute() == 1) )
                 {
                     const sal_uInt16 nDispatchSlot = (nSlot == FN_TABLE_INSERT_COL_DLG)
-                        ? FN_TABLE_INSERT_COL : FN_TABLE_INSERT_ROW;
+                        ? FN_TABLE_INSERT_COL_AFTER : FN_TABLE_INSERT_ROW_AFTER;
                     SfxUInt16Item aCountItem( nDispatchSlot, static_cast< sal_uInt16 >(pDlg->getInsertCount()) );
                     SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() );
                     SfxViewFrame* pVFrame = GetView().GetViewFrame();
@@ -1246,7 +1251,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 }
                 break;
             }
-            case FN_TABLE_INSERT_ROW:
+            case FN_TABLE_INSERT_ROW_AFTER:
             case FN_TABLE_INSERT_ROW_DLG:
                 if ( rSh.IsInRepeatedHeadline() )
                     rSet.DisableItem( nSlot );
