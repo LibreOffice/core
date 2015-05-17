@@ -14,7 +14,9 @@ $(eval $(call gb_Package_add_file,ure_install,$(LIBO_URE_BIN_FOLDER)/uno,uno))
 endif
 
 ifeq (MACOSX,$(OS))
+ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
 $(eval $(call gb_Package_add_symbolic_link,ure_install,MacOS/urelibs,../Frameworks))
+endif
 endif
 
 # vim:set noet sw=4 ts=4:
