@@ -3610,7 +3610,31 @@ SfxVoidItem InsertColumnDialog FN_TABLE_INSERT_COL_DLG
     GroupId = GID_TABLE;
 ]
 
-SfxVoidItem InsertColumns FN_TABLE_INSERT_COL
+SfxVoidItem InsertColumnsBefore FN_TABLE_INSERT_COL_BEFORE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_TABLE;
+]
+
+SfxVoidItem InsertColumns FN_TABLE_INSERT_COL_AFTER
 ()
 [
     /* flags: */
@@ -4356,7 +4380,31 @@ SfxVoidItem InsertRowDialog FN_TABLE_INSERT_ROW_DLG
     GroupId = GID_TABLE;
 ]
 
-SfxVoidItem InsertRows FN_TABLE_INSERT_ROW
+SfxVoidItem InsertRowsBefore FN_TABLE_INSERT_ROW_BEFORE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_TABLE;
+]
+
+SfxVoidItem InsertRows FN_TABLE_INSERT_ROW_AFTER
 ()
 [
     /* flags: */
