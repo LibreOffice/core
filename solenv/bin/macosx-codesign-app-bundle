@@ -58,7 +58,7 @@ done
 find "$APP_BUNDLE/Contents/MacOS" -type f |
 while read file; do
     id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file"
+    codesign --force --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file"
 done
 
 # Sign included bundles. First .app ones (i.e. the Python.app inside
