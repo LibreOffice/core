@@ -15,7 +15,9 @@ $(eval $(call gb_Package_add_symbolic_link,ure_install,$(LIBO_URE_BIN_FOLDER)/un
 endif
 
 ifeq (MACOSX,$(OS))
+ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
 $(eval $(call gb_Package_add_symbolic_link,ure_install,MacOS/urelibs,../Frameworks))
+endif
 else ifeq (WNT,$(OS))
 $(eval $(call gb_Package_add_file,ure_install,ure-link,ure-link))
 else
