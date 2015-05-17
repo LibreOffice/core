@@ -25,11 +25,13 @@ $(eval $(call gb_Module_add_targets,vcl,\
 	Package_opengl \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
-        Executable_ui-previewer \
-		$(if $(filter LINUX MACOSX WNT,$(OS)), \
-			Executable_icontest \
-			Executable_outdevgrind \
-			Executable_vcldemo )) \
+	$(if $(ENABLE_MACOSX_SANDBOX),, \
+        	Executable_ui-previewer \
+	) \
+	$(if $(filter LINUX MACOSX WNT,$(OS)), \
+		Executable_icontest \
+		Executable_outdevgrind \
+		Executable_vcldemo )) \
     $(if $(filter-out ANDROID IOS WNT,$(OS)), \
         Executable_svdemo \
         Executable_svptest \
