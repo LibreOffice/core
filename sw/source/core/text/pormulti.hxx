@@ -85,7 +85,7 @@ class SwMultiPortion : public SwLinePortion
     bool bFlyInCntnt:1;     // Fly as character inside
     sal_uInt8 nDirection:2; // Direction (0/90/180/270 degrees)
 protected:
-    SwMultiPortion(sal_Int32 nEnd)
+    explicit SwMultiPortion(sal_Int32 nEnd)
         : pFldRest(0)
         , bTab1(false)
         , bTab2(false)

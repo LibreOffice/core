@@ -29,7 +29,7 @@ class SwTxtFormatInfo;
 class SwTmpEndPortion : public SwLinePortion
 {
 public:
-            SwTmpEndPortion( const SwLinePortion &rPortion );
+    explicit SwTmpEndPortion( const SwLinePortion &rPortion );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     OUTPUT_OPERATOR_OVERRIDE
 };
@@ -37,7 +37,7 @@ public:
 class SwBreakPortion : public SwLinePortion
 {
 public:
-            SwBreakPortion( const SwLinePortion &rPortion );
+    explicit SwBreakPortion( const SwLinePortion &rPortion );
     // Returns 0 if we have no usable data
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
@@ -69,7 +69,7 @@ public:
 
     // This constructor only sets the height and ascent to the values
     // of rPortion. It is only used for kerning portions for grid mode
-    SwKernPortion( const SwLinePortion &rPortion );
+    explicit SwKernPortion( const SwLinePortion &rPortion );
 
     virtual void FormatEOL( SwTxtFormatInfo &rInf ) SAL_OVERRIDE;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
@@ -82,8 +82,8 @@ class SwArrowPortion : public SwLinePortion
     Point aPos;
     bool bLeft;
 public:
-            SwArrowPortion( const SwLinePortion &rPortion );
-            SwArrowPortion( const SwTxtPaintInfo &rInf );
+    explicit SwArrowPortion( const SwLinePortion &rPortion );
+    explicit SwArrowPortion( const SwTxtPaintInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
     inline bool IsLeft() const { return bLeft; }
@@ -99,17 +99,17 @@ class SwHangingPortion : public SwTxtPortion
 {
     sal_uInt16 nInnerWidth;
 public:
-    inline SwHangingPortion( SwPosSize aSize ) : nInnerWidth( aSize.Width() )
+    explicit SwHangingPortion( SwPosSize aSize ) : nInnerWidth( aSize.Width() )
         { SetWhichPor( POR_HNG );  SetLen( 1 ); Height( aSize.Height() ); }
 
-    inline sal_uInt16 GetInnerWidth() const { return nInnerWidth; }
+    sal_uInt16 GetInnerWidth() const { return nInnerWidth; }
 };
 
 // Used to hide text
 class SwHiddenTextPortion : public SwLinePortion
 {
 public:
-    inline SwHiddenTextPortion( sal_Int32 nLen )
+    explicit SwHiddenTextPortion( sal_Int32 nLen )
         { SetWhichPor( POR_HIDDEN_TXT );  SetLen( nLen ); }
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const SAL_OVERRIDE;
@@ -126,7 +126,7 @@ private:
 
 public:
 
-    inline SwControlCharPortion( sal_Unicode cChar )
+    explicit SwControlCharPortion( sal_Unicode cChar )
         : mnViewWidth( 0 ), mnHalfCharWidth( 0 ), mcChar( cChar )
     {
         SetWhichPor( POR_CONTROLCHAR ); SetLen( 1 );
