@@ -33,8 +33,6 @@
 #define MIMETYPE_VND_SUN_XML_MATH_ASCII                 "application/vnd.sun.xml.math"
 #define MIMETYPE_VND_SUN_XML_BASE_ASCII                 "application/vnd.sun.xml.base"
 
-#define MIMETYPE_VND_SUN_XML_CHART                      OUString( MIMETYPE_VND_SUN_XML_CHART_ASCII )
-
 // template formats of SO6/7
 #define MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE_ASCII      "application/vnd.sun.xml.writer.template"
 #define MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE_ASCII        "application/vnd.sun.xml.draw.template"
@@ -53,10 +51,6 @@
 #define MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII      "application/vnd.oasis.opendocument.base"
 #define MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII        "application/vnd.sun.xml.report"
 #define MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART_ASCII  "application/vnd.sun.xml.report.chart"
-
-#define MIMETYPE_OASIS_OPENDOCUMENT_CHART               OUString( MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII )
-#define MIMETYPE_OASIS_OPENDOCUMENT_DATABASE            OUString( MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII )
-#define MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART        OUString( MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART_ASCII )
 
 // template formats of SO8
 #define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII          "application/vnd.oasis.opendocument.text-template"

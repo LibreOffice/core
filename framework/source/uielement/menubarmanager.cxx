@@ -1127,8 +1127,6 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
     m_bRetrieveImages   = false;
 
-    sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
-
     // Add root as ui configuration listener
     RetrieveImageManagers();
 
@@ -1219,8 +1217,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 }
                 lcl_CheckForChildren(pMenu, nItemId);
             }
-            else if (( aItemCommand.getLength() > nAddonsURLPrefixLength ) &&
-                     ( aItemCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX ) ))
+            else if ( aItemCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX_STR ) )
             {
                 // A special addon popup menu, must be created with a different ctor
                 MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,

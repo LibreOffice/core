@@ -623,7 +623,6 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
     // Search , as SV with 'sal_uInt16 nSID = pSVMenu->GetCurItemId();' always
     // returns 0. It is like this, since the Event-Forwarding has nothing to do
     // with the Parent-Menus CurItem.
-    sal_uInt32 nAddonsPopupPrefixLen = ADDONSPOPUPMENU_URL_PREFIX.getLength();
 
     for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
     {
@@ -646,8 +645,7 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
                 OUString aCommand = pSVMenu->GetItemCommand( nSID );
                 if ( ( nSID == SID_ADDONS ) ||
                      ( nSID == SID_ADDONHELP ) ||
-                     (( (sal_uInt32)aCommand.getLength() > nAddonsPopupPrefixLen ) &&
-                      ( aCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX ) ) ) )
+                     ( aCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX_STR ) ) )
                     bIsAddonPopupMenu = true;
 
                 // Create VirtualMenu for Sub-Menu

@@ -44,25 +44,25 @@
 #define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          "/doEmergencySave"
 #define RECOVERY_CMDPART_DO_RECOVERY                "/doAutoRecovery"
 
-#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      OUString( "vnd.sun.star.autorecovery:/doPrepareEmergencySave")
+#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      "vnd.sun.star.autorecovery:/doPrepareEmergencySave"
 #define RECOVERY_CMD_DO_EMERGENCY_SAVE              "vnd.sun.star.autorecovery:/doEmergencySave"
 #define RECOVERY_CMD_DO_RECOVERY                    "vnd.sun.star.autorecovery:/doAutoRecovery"
-#define RECOVERY_CMD_DO_ENTRY_BACKUP                OUString( "vnd.sun.star.autorecovery:/doEntryBackup"         )
-#define RECOVERY_CMD_DO_ENTRY_CLEANUP               OUString( "vnd.sun.star.autorecovery:/doEntryCleanUp"        )
+#define RECOVERY_CMD_DO_ENTRY_BACKUP                "vnd.sun.star.autorecovery:/doEntryBackup"
+#define RECOVERY_CMD_DO_ENTRY_CLEANUP               "vnd.sun.star.autorecovery:/doEntryCleanUp"
 
 #define PROP_STATUSINDICATOR                        "StatusIndicator"
 #define PROP_DISPATCHASYNCHRON                      "DispatchAsynchron"
 #define PROP_SAVEPATH                               "SavePath"
 #define PROP_ENTRYID                                "EntryID"
 
-#define STATEPROP_ID                                OUString( "ID"           )
-#define STATEPROP_STATE                             OUString( "DocumentState")
-#define STATEPROP_ORGURL                            OUString( "OriginalURL"  )
-#define STATEPROP_TEMPURL                           OUString( "TempURL"      )
-#define STATEPROP_FACTORYURL                        OUString( "FactoryURL"   )
-#define STATEPROP_TEMPLATEURL                       OUString( "TemplateURL"  )
-#define STATEPROP_TITLE                             OUString( "Title"        )
-#define STATEPROP_MODULE                            OUString( "Module"       )
+#define STATEPROP_ID                                "ID"
+#define STATEPROP_STATE                             "DocumentState"
+#define STATEPROP_ORGURL                            "OriginalURL"
+#define STATEPROP_TEMPURL                           "TempURL"
+#define STATEPROP_FACTORYURL                        "FactoryURL"
+#define STATEPROP_TEMPLATEURL                       "TemplateURL"
+#define STATEPROP_TITLE                             "Title"
+#define STATEPROP_MODULE                            "Module"
 
 #define RECOVERY_OPERATIONSTATE_START               "start"
 #define RECOVERY_OPERATIONSTATE_STOP                "stop"

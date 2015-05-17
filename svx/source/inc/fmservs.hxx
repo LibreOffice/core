@@ -52,27 +52,27 @@ namespace com { namespace sun { namespace star { namespace lang {
 #define FM_COMPONENT_IMAGECONTROL       "stardiv.one.form.component.ImageControl"
 #define FM_CONTROL_GRID                 "stardiv.one.form.control.Grid"
 #define FM_CONTROL_GRIDCONTROL          "stardiv.one.form.control.GridControl"
-#define SRV_SDB_CONNECTION              OUString( "com.sun.star.sdb.Connection" )
-#define FM_SUN_COMPONENT_FORM           OUString( "com.sun.star.form.component.Form" )
-#define FM_SUN_COMPONENT_TEXTFIELD      OUString( "com.sun.star.form.component.TextField" )
-#define FM_SUN_COMPONENT_LISTBOX        OUString( "com.sun.star.form.component.ListBox" )
-#define FM_SUN_COMPONENT_COMBOBOX       OUString( "com.sun.star.form.component.ComboBox" )
-#define FM_SUN_COMPONENT_RADIOBUTTON    OUString( "com.sun.star.form.component.RadioButton" )
-#define FM_SUN_COMPONENT_GROUPBOX       OUString( "com.sun.star.form.component.GroupBox" )
-#define FM_SUN_COMPONENT_FIXEDTEXT      OUString( "com.sun.star.form.component.FixedText" )
-#define FM_SUN_COMPONENT_COMMANDBUTTON  OUString( "com.sun.star.form.component.CommandButton" )
+#define SRV_SDB_CONNECTION              "com.sun.star.sdb.Connection"
+#define FM_SUN_COMPONENT_FORM           "com.sun.star.form.component.Form"
+#define FM_SUN_COMPONENT_TEXTFIELD      "com.sun.star.form.component.TextField"
+#define FM_SUN_COMPONENT_LISTBOX        "com.sun.star.form.component.ListBox"
+#define FM_SUN_COMPONENT_COMBOBOX       "com.sun.star.form.component.ComboBox"
+#define FM_SUN_COMPONENT_RADIOBUTTON    "com.sun.star.form.component.RadioButton"
+#define FM_SUN_COMPONENT_GROUPBOX       "com.sun.star.form.component.GroupBox"
+#define FM_SUN_COMPONENT_FIXEDTEXT      "com.sun.star.form.component.FixedText"
+#define FM_SUN_COMPONENT_COMMANDBUTTON  "com.sun.star.form.component.CommandButton"
 #define FM_SUN_COMPONENT_CHECKBOX       "com.sun.star.form.component.CheckBox"
-#define FM_SUN_COMPONENT_GRIDCONTROL    OUString( "com.sun.star.form.component.GridControl" )
-#define FM_SUN_COMPONENT_IMAGEBUTTON    OUString( "com.sun.star.form.component.ImageButton" )
-#define FM_SUN_COMPONENT_FILECONTROL    OUString( "com.sun.star.form.component.FileControl" )
-#define FM_SUN_COMPONENT_TIMEFIELD      OUString( "com.sun.star.form.component.TimeField" )
-#define FM_SUN_COMPONENT_DATEFIELD      OUString( "com.sun.star.form.component.DateField" )
+#define FM_SUN_COMPONENT_GRIDCONTROL    "com.sun.star.form.component.GridControl"
+#define FM_SUN_COMPONENT_IMAGEBUTTON    "com.sun.star.form.component.ImageButton"
+#define FM_SUN_COMPONENT_FILECONTROL    "com.sun.star.form.component.FileControl"
+#define FM_SUN_COMPONENT_TIMEFIELD      "com.sun.star.form.component.TimeField"
+#define FM_SUN_COMPONENT_DATEFIELD      "com.sun.star.form.component.DateField"
 #define FM_SUN_COMPONENT_NUMERICFIELD   "com.sun.star.form.component.NumericField"
-#define FM_SUN_COMPONENT_CURRENCYFIELD  OUString( "com.sun.star.form.component.CurrencyField" )
-#define FM_SUN_COMPONENT_PATTERNFIELD   OUString( "com.sun.star.form.component.PatternField" )
-#define FM_SUN_COMPONENT_HIDDENCONTROL  OUString( "com.sun.star.form.component.HiddenControl" )
-#define FM_SUN_COMPONENT_IMAGECONTROL   OUString( "com.sun.star.form.component.DatabaseImageControl" )
-#define FM_SUN_COMPONENT_FORMATTEDFIELD OUString( "com.sun.star.form.component.FormattedField" )
+#define FM_SUN_COMPONENT_CURRENCYFIELD  "com.sun.star.form.component.CurrencyField"
+#define FM_SUN_COMPONENT_PATTERNFIELD   "com.sun.star.form.component.PatternField"
+#define FM_SUN_COMPONENT_HIDDENCONTROL  "com.sun.star.form.component.HiddenControl"
+#define FM_SUN_COMPONENT_IMAGECONTROL   "com.sun.star.form.component.DatabaseImageControl"
+#define FM_SUN_COMPONENT_FORMATTEDFIELD "com.sun.star.form.component.FormattedField"
 #define FM_SUN_COMPONENT_SCROLLBAR      "com.sun.star.form.component.ScrollBar"
 #define FM_SUN_COMPONENT_SPINBUTTON     "com.sun.star.form.component.SpinButton"
 #define FM_SUN_COMPONENT_NAVIGATIONBAR  "com.sun.star.form.component.NavigationToolBar"
