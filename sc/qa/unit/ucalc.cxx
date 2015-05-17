@@ -5879,50 +5879,70 @@ void Test::testIconSet()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testDataBarLength()
-{
-    m_pDoc->InsertTab(0, "Test");
+namespace {
 
-    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
-    ScRangeList aRangeList(ScRange(0,0,0,0,7,0));
+struct ScDataBarLengthData
+{
+    double nVal;
+    double nLength;
+};
+
+void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const ScRange& rRange,
+        double nMinVal, ScColorScaleEntryType eMinType,
+        double nMaxVal, ScColorScaleEntryType eMaxType)
+{
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, pDoc);
+    ScRangeList aRangeList(rRange);
     pFormat->SetRange(aRangeList);
 
-    ScDataBarFormat* pDatabar = new ScDataBarFormat(m_pDoc);
+    SCCOL nCol = rRange.aStart.Col();
+
+    ScDataBarFormat* pDatabar = new ScDataBarFormat(pDoc);
     pFormat->AddEntry(pDatabar);
 
     ScDataBarFormatData* pFormatData = new ScDataBarFormatData();
     pFormatData->mpLowerLimit.reset(new ScColorScaleEntry());
-    pFormatData->mpLowerLimit->SetValue(3);
-    pFormatData->mpLowerLimit->SetType(COLORSCALE_VALUE);
+    pFormatData->mpLowerLimit->SetValue(nMinVal);
+    pFormatData->mpLowerLimit->SetType(eMinType);
     pFormatData->mpUpperLimit.reset(new ScColorScaleEntry());
-    pFormatData->mpUpperLimit->SetValue(7);
-    pFormatData->mpUpperLimit->SetType(COLORSCALE_VALUE);
+    pFormatData->mpUpperLimit->SetValue(nMaxVal);
+    pFormatData->mpUpperLimit->SetType(eMaxType);
     pDatabar->SetDataBarData(pFormatData);
 
-    struct {
-        double nVal; double nLength;
-    } aValues[] = {
+    for (size_t i = 0; pData[i].nVal != 0; ++i)
+    {
+        pDoc->SetValue(nCol, i, 0, pData[i].nVal);
+    }
+
+    for (size_t i = 0; pData[i].nVal != 0; ++i)
+    {
+        ScDataBarInfo* pInfo = pDatabar->GetDataBarInfo(ScAddress(nCol, i, 0));
+        CPPUNIT_ASSERT(pInfo);
+        ASSERT_DOUBLES_EQUAL(pData[i].nLength, pInfo->mnLength);
+    }
+    delete pFormat;
+}
+
+}
+
+void Test::testDataBarLength()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScDataBarLengthData aValues[] = {
         { 2, 0 },
         { 3, 0 },
         { 4, 25.0 },
         { 5, 50.0 },
         { 6, 75.0 },
         { 7, 100.0 },
-        { 8, 100.0 }
+        { 8, 100.0 },
+        { 0, 0 }
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aValues); ++i)
-    {
-        m_pDoc->SetValue(0, i, 0, aValues[i].nVal);
-    }
+    testDataBarLengthImpl(m_pDoc, aValues, ScRange(0,0,0,0,7,0),
+            3, COLORSCALE_VALUE, 7, COLORSCALE_VALUE);
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aValues); ++i)
-    {
-        ScDataBarInfo* pInfo = pDatabar->GetDataBarInfo(ScAddress(0, i, 0));
-        CPPUNIT_ASSERT(pInfo);
-        ASSERT_DOUBLES_EQUAL(aValues[i].nLength, pInfo->mnLength);
-    }
-    delete pFormat;
     m_pDoc->DeleteTab(0);
 }
 

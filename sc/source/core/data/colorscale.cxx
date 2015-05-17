@@ -913,7 +913,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
             pInfo->mnZero = 0;
 
         //calculate the length
-        if(nValue < 0)
+        if(nValue < 0 && nMin < 0)
         {
             if (nValue < nMin)
                 pInfo->mnLength = -100;
