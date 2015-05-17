@@ -514,7 +514,7 @@ File gid_Brand_File_Desktophelper_Txt
 End
 #endif
 
-#if !defined WNT
+#if !defined WNT && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 File gid_Brand_File_Bin_Unoinfo
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
