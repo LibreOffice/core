@@ -75,8 +75,8 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <comphelper/anytostring.hxx>
 #include <ooo/vba/VbQueryClose.hpp>
-#include "sbcomp.hxx"
 #include "sbxmod.hxx"
+#include "parser.hxx"
 
 using namespace com::sun::star;
 using namespace com::sun::star::lang;

@@ -19,8 +19,9 @@
 
 
 #include <basic/sbx.hxx>
-#include "sbcomp.hxx"
 #include "image.hxx"
+#include "codegen.hxx"
+#include "parser.hxx"
 #include <limits>
 #include <algorithm>
 #include <osl/diagnose.h>

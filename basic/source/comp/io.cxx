@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sbcomp.hxx"
+#include "parser.hxx"
 #include "iosys.hxx"
 #include <boost/scoped_ptr.hpp>
 

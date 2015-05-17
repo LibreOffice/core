@@ -19,7 +19,7 @@
 
 #include <osl/thread.h>
 #include "buffer.hxx"
-#include "sbcomp.hxx"
+#include "parser.hxx"
 
 const static sal_uInt32 UP_LIMIT=0xFFFFFF00L;
 

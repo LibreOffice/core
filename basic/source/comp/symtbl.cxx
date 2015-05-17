@@ -18,7 +18,7 @@
  */
 
 
-#include "sbcomp.hxx"
+#include "parser.hxx"
 
 #include <osl/diagnose.h>
 

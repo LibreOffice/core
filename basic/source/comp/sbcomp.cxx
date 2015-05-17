@@ -19,7 +19,7 @@
 
 
 #include <basic/sbx.hxx>
-#include "sbcomp.hxx"
+#include "parser.hxx"
 #include "image.hxx"
 #include "sbobjmod.hxx"
 #include <svtools/miscopt.hxx>

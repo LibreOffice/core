@@ -19,7 +19,7 @@
 
 
 #include "basiccharclass.hxx"
-#include "sbcomp.hxx"
+#include "token.hxx"
 
 struct TokenTable { SbiToken t; const char *s; };
 

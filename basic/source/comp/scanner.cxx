@@ -18,7 +18,8 @@
  */
 
 #include "basiccharclass.hxx"
-#include "sbcomp.hxx"
+#include "scanner.hxx"
+#include "sbintern.hxx"
 
 #include <vcl/svapp.hxx>
 

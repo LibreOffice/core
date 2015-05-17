@@ -18,7 +18,7 @@
  */
 
 
-#include "sbcomp.hxx"
+#include "parser.hxx"
 #include <boost/scoped_ptr.hpp>
 
 // Single-line IF and Multiline IF

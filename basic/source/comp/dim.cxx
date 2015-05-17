@@ -18,8 +18,8 @@
  */
 
 #include <basic/sbx.hxx>
-#include "sbcomp.hxx"
 #include "sbunoobj.hxx"
+#include "parser.hxx"
 #include <svtools/miscopt.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/reflection/theCoreReflection.hpp>

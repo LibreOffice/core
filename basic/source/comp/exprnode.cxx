@@ -21,7 +21,8 @@
 #include <math.h>
 
 #include <rtl/math.hxx>
-#include "sbcomp.hxx"
+#include "codegen.hxx"
+#include "parser.hxx"
 #include "expr.hxx"
 
 
