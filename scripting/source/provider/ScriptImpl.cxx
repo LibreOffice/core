@@ -18,8 +18,6 @@
  */
 
 
-#include <stdio.h>
-
 #include "ScriptImpl.hxx"
 #include "sal/log.hxx"
 

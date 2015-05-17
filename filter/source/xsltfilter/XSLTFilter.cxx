@@ -18,8 +18,6 @@
  */
 
 
-#include <stdio.h>
-
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase4.hxx>
 

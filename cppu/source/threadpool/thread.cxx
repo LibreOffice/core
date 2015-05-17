@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <cstdlib>
-#include <stdio.h>
 #include <osl/diagnose.h>
 #include <uno/threadpool.h>
 

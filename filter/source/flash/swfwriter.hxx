@@ -38,8 +38,6 @@
 #include <stack>
 #include <map>
 
-#include <stdio.h>
-
 class GDIMetaFile;
 class BitmapEx;
 namespace tools { class PolyPolygon; }

@@ -23,8 +23,6 @@
 #include "gio_provider.hxx"
 #include "gio_content.hxx"
 
-#include <stdio.h>
-
 using namespace com::sun::star;
 
 namespace gio
@@ -36,12 +34,7 @@ ContentProvider::queryContent(
     throw( com::sun::star::ucb::IllegalIdentifierException,
            uno::RuntimeException, std::exception )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "QueryContent: '%s'",
-       OUStringToOString
-       (Identifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
-#endif
-
+    SAL_INFO("ucb.ucp.gio", "QueryContent: " << Identifier->getContentIdentifier());
     osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...

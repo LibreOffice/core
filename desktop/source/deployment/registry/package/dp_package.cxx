@@ -66,7 +66,6 @@
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <boost/optional.hpp>
 #include <vector>
-#include <stdio.h>
 
 #include "dp_extbackenddb.hxx"
 using namespace ::dp_misc;
@@ -1534,7 +1533,8 @@ void BackendImpl::PackageImpl::scanBundle(
         }
         else
         {
-            fprintf(stderr, "manifest.xml contains a duplicate entry!\n");
+            SAL_WARN(
+                "desktop.deployment", "manifest.xml contains a duplicate entry!\n");
         }
     }
 

@@ -18,8 +18,6 @@
  */
 
 
-#include <stdio.h>
-
 #include <tools/solar.h>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>

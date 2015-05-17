@@ -37,7 +37,6 @@
 #include <dialmgr.hxx>
 #include <svtools/sores.hxx>
 
-#include <stdio.h>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <svl/urihelper.hxx>

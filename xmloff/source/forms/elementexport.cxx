@@ -60,7 +60,6 @@
 #include <comphelper/extract.hxx>
 #include <sal/macros.h>
 
-#include <stdio.h>
 #include <algorithm>
 
 namespace xmloff

@@ -45,7 +45,6 @@
 #include <iostream>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <string>

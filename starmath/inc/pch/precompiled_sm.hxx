@@ -129,7 +129,6 @@
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <stack>
-#include <stdio.h>
 #include <svl/eitem.hxx>
 #include <svl/fstathelper.hxx>
 #include <svl/hint.hxx>

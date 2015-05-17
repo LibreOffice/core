@@ -10,7 +10,6 @@
 #include "oox/mathml/importutils.hxx"
 
 #include <assert.h>
-#include <stdio.h>
 
 #include <oox/token/namespacemap.hxx>
 #include <oox/token/tokenmap.hxx>

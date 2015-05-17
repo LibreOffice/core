@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <ostream>
-#include <stdio.h>
 
 #include "types.hxx"
 #include "token.hxx"
