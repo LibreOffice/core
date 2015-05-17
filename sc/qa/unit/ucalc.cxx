@@ -5876,6 +5876,7 @@ void Test::testIconSet()
     }
 
     delete pEntry;
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testImportStream()
