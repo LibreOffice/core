@@ -263,7 +263,7 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
     SdrEdgeKind eKind = static_cast<const SdrEdgeKindItem&>(rSet.Get(SDRATTR_EDGEKIND)).GetValue();
-    sal_Int32 nValAnz = static_cast<const SdrEdgeLineDeltaAnzItem&>(rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
+    sal_Int32 nValCount = static_cast<const SdrEdgeLineDeltaAnzItem&>(rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
     sal_Int32 nVal1 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
     sal_Int32 nVal2 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
     sal_Int32 nVal3 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
@@ -312,10 +312,10 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
         nVals[1] = bHor2 ? aEdgeInfo.aObj2Line2.X() : aEdgeInfo.aObj2Line2.Y();
     }
 
-    if(n != nValAnz || nVals[0] != nVal1 || nVals[1] != nVal2 || nVals[2] != nVal3)
+    if(n != nValCount || nVals[0] != nVal1 || nVals[1] != nVal2 || nVals[2] != nVal3)
     {
         // Here no more notifying is necessary, just local changes are OK.
-        if(n != nValAnz)
+        if(n != nValCount)
         {
             GetProperties().SetObjectItemDirect(SdrEdgeLineDeltaAnzItem(n));
         }
@@ -413,18 +413,18 @@ bool SdrEdgeObj::IsNode() const
 SdrGluePoint SdrEdgeObj::GetVertexGluePoint(sal_uInt16 nNum) const
 {
     Point aPt;
-    sal_uInt16 nPntAnz=pEdgeTrack->GetPointCount();
-    if (nPntAnz>0)
+    sal_uInt16 nPntCount=pEdgeTrack->GetPointCount();
+    if (nPntCount>0)
     {
         Point aOfs = GetSnapRect().Center();
         if (nNum==2 && GetConnectedNode(true)==NULL) aPt=(*pEdgeTrack)[0];
-        else if (nNum==3 && GetConnectedNode(false)==NULL) aPt=(*pEdgeTrack)[nPntAnz-1];
+        else if (nNum==3 && GetConnectedNode(false)==NULL) aPt=(*pEdgeTrack)[nPntCount-1];
         else {
-            if ((nPntAnz & 1) ==1) {
-                aPt=(*pEdgeTrack)[nPntAnz/2];
+            if ((nPntCount & 1) ==1) {
+                aPt=(*pEdgeTrack)[nPntCount/2];
             } else {
-                Point aPt1((*pEdgeTrack)[nPntAnz/2-1]);
-                Point aPt2((*pEdgeTrack)[nPntAnz/2]);
+                Point aPt1((*pEdgeTrack)[nPntCount/2-1]);
+                Point aPt2((*pEdgeTrack)[nPntCount/2]);
                 aPt1+=aPt2;
                 aPt1.X()/=2;
                 aPt1.Y()/=2;
@@ -1266,16 +1266,16 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         nNum--;
         aXP1.Insert(XPOLY_APPEND,aXP2[nNum],XPOLY_NORMAL);
     }
-    sal_uInt16 nPntAnz=aXP1.GetPointCount();
+    sal_uInt16 nPntCount=aXP1.GetPointCount();
     char cForm=0;
     if (bInfo || pnQuality!=NULL) {
         cForm='?';
-        if (nPntAnz==2) cForm='I';
-        else if (nPntAnz==3) cForm='L';
-        else if (nPntAnz==4) { // Z or U
+        if (nPntCount==2) cForm='I';
+        else if (nPntCount==3) cForm='L';
+        else if (nPntCount==4) { // Z or U
             if (nAngle1==nAngle2) cForm='U';
             else cForm='Z';
-        } else if (nPntAnz==6) { // S or C or ...
+        } else if (nPntCount==6) { // S or C or ...
             if (nAngle1!=nAngle2) {
                 // For type S, line 2 has the same direction as line 4.
                 // For type C, the opposite is true.
@@ -1315,7 +1315,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         sal_uIntPtr nQual0=nQual; // prevent overruns
         bool bOverflow = false;
         Point aPt0(aXP1[0]);
-        for (sal_uInt16 nPntNum=1; nPntNum<nPntAnz; nPntNum++) {
+        for (sal_uInt16 nPntNum=1; nPntNum<nPntCount; nPntNum++) {
             Point aPt1b(aXP1[nPntNum]);
             nQual+=std::abs(aPt1b.X()-aPt0.X())+std::abs(aPt1b.Y()-aPt0.Y());
             if (nQual<nQual0) bOverflow = true;
@@ -1323,7 +1323,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             aPt0=aPt1b;
         }
 
-        sal_uInt16 nTmp=nPntAnz;
+        sal_uInt16 nTmp=nPntCount;
         if (cForm=='Z') {
             nTmp=2; // Z shape with good quality (nTmp=2 instead of 4)
             sal_uIntPtr n1=std::abs(aXP1[1].X()-aXP1[0].X())+std::abs(aXP1[1].Y()-aXP1[0].Y());
@@ -1344,9 +1344,9 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             nQual+=(sal_uIntPtr)nTmp*0x01000000;
             if (nQual<nQual0 || nTmp>15) bOverflow = true;
         }
-        if (nPntAnz>=2) { // check exit angle again
+        if (nPntCount>=2) { // check exit angle again
             Point aP1(aXP1[1]); aP1-=aXP1[0];
-            Point aP2(aXP1[nPntAnz-2]); aP2-=aXP1[nPntAnz-1];
+            Point aP2(aXP1[nPntCount-2]); aP2-=aXP1[nPntCount-1];
             long nAng1=0; if (aP1.X()<0) nAng1=18000; if (aP1.Y()>0) nAng1=27000;
             if (aP1.Y()<0) nAng1=9000; if (aP1.X()!=0 && aP1.Y()!=0) nAng1=1; // slant?!
             long nAng2=0; if (aP2.X()<0) nAng2=18000; if (aP2.Y()>0) nAng2=27000;
@@ -1361,14 +1361,14 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         aBewareRect1=rBewareRect1;
         aBewareRect2=rBewareRect2;
 
-        for (sal_uInt16 i=0; i<nPntAnz; i++) {
+        for (sal_uInt16 i=0; i<nPntCount; i++) {
             Point aPt1b(aXP1[i]);
             bool b1=aPt1b.X()>aBewareRect1.Left() && aPt1b.X()<aBewareRect1.Right() &&
                         aPt1b.Y()>aBewareRect1.Top() && aPt1b.Y()<aBewareRect1.Bottom();
             bool b2=aPt1b.X()>aBewareRect2.Left() && aPt1b.X()<aBewareRect2.Right() &&
                         aPt1b.Y()>aBewareRect2.Top() && aPt1b.Y()<aBewareRect2.Bottom();
             sal_uInt16 nInt0=nIntersections;
-            if (i==0 || i==nPntAnz-1) {
+            if (i==0 || i==nPntCount-1) {
                 if (b1 && b2) nIntersections++;
             } else {
                 if (b1) nIntersections++;
@@ -1394,7 +1394,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             }
             aPt0=aPt1b;
         }
-        if (nPntAnz<=1) nIntersections++;
+        if (nPntCount<=1) nIntersections++;
         nQual0=nQual;
         nQual+=(sal_uIntPtr)nIntersections*0x10000000;
         if (nQual<nQual0 || nIntersections>15) bOverflow = true;
@@ -1455,37 +1455,37 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         }
     }
     // make the connector a bezier curve, if appropriate
-    if (eKind==SDREDGE_BEZIER && nPntAnz>2) {
+    if (eKind==SDREDGE_BEZIER && nPntCount>2) {
         Point* pPt1=&aXP1[0];
         Point* pPt2=&aXP1[1];
-        Point* pPt3=&aXP1[nPntAnz-2];
-        Point* pPt4=&aXP1[nPntAnz-1];
+        Point* pPt3=&aXP1[nPntCount-2];
+        Point* pPt4=&aXP1[nPntCount-1];
         long dx1=pPt2->X()-pPt1->X();
         long dy1=pPt2->Y()-pPt1->Y();
         long dx2=pPt3->X()-pPt4->X();
         long dy2=pPt3->Y()-pPt4->Y();
-        if (cForm=='L') { // nPntAnz==3
+        if (cForm=='L') { // nPntCount==3
             aXP1.SetFlags(1,XPOLY_CONTROL);
             Point aPt3(*pPt2);
             aXP1.Insert(2,aPt3,XPOLY_CONTROL);
-            nPntAnz=aXP1.GetPointCount();
+            nPntCount=aXP1.GetPointCount();
             pPt2=&aXP1[1];
-            pPt3=&aXP1[nPntAnz-2];
+            pPt3=&aXP1[nPntCount-2];
             pPt2->X()-=dx1/3;
             pPt2->Y()-=dy1/3;
             pPt3->X()-=dx2/3;
             pPt3->Y()-=dy2/3;
-        } else if (nPntAnz>=4 && nPntAnz<=6) { // Z or U or ...
+        } else if (nPntCount>=4 && nPntCount<=6) { // Z or U or ...
             // To all others, the end points of the original lines become control
-            // points for now. Thus, we need to do some more work for nPntAnz>4!
+            // points for now. Thus, we need to do some more work for nPntCount>4!
             aXP1.SetFlags(1,XPOLY_CONTROL);
-            aXP1.SetFlags(nPntAnz-2,XPOLY_CONTROL);
+            aXP1.SetFlags(nPntCount-2,XPOLY_CONTROL);
             // distance x1.5
             pPt2->X()+=dx1/2;
             pPt2->Y()+=dy1/2;
             pPt3->X()+=dx2/2;
             pPt3->Y()+=dy2/2;
-            if (nPntAnz==5) {
+            if (nPntCount==5) {
                 // add a control point before and after center
                 Point aCenter(aXP1[2]);
                 long dx1b=aCenter.X()-aXP1[1].X();
@@ -1502,7 +1502,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 aXP1[4].X()-=dx2b/2;
                 aXP1[4].Y()-=dy2b/2;
             }
-            if (nPntAnz==6) {
+            if (nPntCount==6) {
                 Point aPt1b(aXP1[2]);
                 Point aPt2b(aXP1[3]);
                 aXP1.Insert(2,aPt1b,XPOLY_CONTROL);
@@ -1719,20 +1719,20 @@ sal_uInt32 SdrEdgeObj::GetHdlCount() const
 {
     SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
     sal_uInt32 nHdlAnz(0L);
-    sal_uInt32 nPntAnz(pEdgeTrack->GetPointCount());
+    sal_uInt32 nPntCount(pEdgeTrack->GetPointCount());
 
-    if(nPntAnz)
+    if(nPntCount)
     {
         nHdlAnz = 2L;
 
-        if ((eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) && nPntAnz >= 4L)
+        if ((eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) && nPntCount >= 4L)
         {
             sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0L ? aEdgeInfo.nObj1Lines - 1L : 0L);
             sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0L ? aEdgeInfo.nObj2Lines - 1L : 0L);
             sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1L : 0L);
             nHdlAnz += nO1 + nO2 + nM;
         }
-        else if (eKind==SDREDGE_THREELINES && nPntAnz == 4L)
+        else if (eKind==SDREDGE_THREELINES && nPntCount == 4L)
         {
             if(GetConnectedNode(true))
                 nHdlAnz++;
@@ -1748,13 +1748,13 @@ sal_uInt32 SdrEdgeObj::GetHdlCount() const
 SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pHdl=NULL;
-    sal_uInt32 nPntAnz(pEdgeTrack->GetPointCount());
-    if (nPntAnz!=0) {
+    sal_uInt32 nPntCount(pEdgeTrack->GetPointCount());
+    if (nPntCount!=0) {
         if (nHdlNum==0) {
             pHdl=new ImpEdgeHdl((*pEdgeTrack)[0],HDL_POLY);
             if (aCon1.pObj!=NULL && aCon1.bBestVertex) pHdl->Set1PixMore(true);
         } else if (nHdlNum==1) {
-            pHdl=new ImpEdgeHdl((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],HDL_POLY);
+            pHdl=new ImpEdgeHdl((*pEdgeTrack)[sal_uInt16(nPntCount-1)],HDL_POLY);
             if (aCon2.pObj!=NULL && aCon2.bBestVertex) pHdl->Set1PixMore(true);
         } else {
             SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
@@ -1772,7 +1772,7 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
                 } else {
                     nNum=nNum-nO1;
                     if (nNum<nO2) {
-                        nPt=nPntAnz-3-nNum;
+                        nPt=nPntCount-3-nNum;
                         if (nNum==0) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(OBJ2LINE2);
                         if (nNum==1) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(OBJ2LINE3);
                     } else {
@@ -2298,8 +2298,8 @@ void SdrEdgeObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 
         if(!bCon2 && pEdgeTrack)
         {
-            sal_uInt16 nPntAnz = pEdgeTrack->GetPointCount();
-            RotatePoint((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],rRef,sn,cs);
+            sal_uInt16 nPntCount = pEdgeTrack->GetPointCount();
+            RotatePoint((*pEdgeTrack)[sal_uInt16(nPntCount-1)],rRef,sn,cs);
             ImpDirtyEdgeTrack();
         }
     }
@@ -2329,8 +2329,8 @@ void SdrEdgeObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 
         if(!bCon2 && pEdgeTrack)
         {
-            sal_uInt16 nPntAnz = pEdgeTrack->GetPointCount();
-            MirrorPoint((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],rRef1,rRef2);
+            sal_uInt16 nPntCount = pEdgeTrack->GetPointCount();
+            MirrorPoint((*pEdgeTrack)[sal_uInt16(nPntCount-1)],rRef1,rRef2);
             ImpDirtyEdgeTrack();
         }
     }
@@ -2360,8 +2360,8 @@ void SdrEdgeObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShea
 
         if(!bCon2 && pEdgeTrack)
         {
-            sal_uInt16 nPntAnz = pEdgeTrack->GetPointCount();
-            ShearPoint((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],rRef,tn,bVShear);
+            sal_uInt16 nPntCount = pEdgeTrack->GetPointCount();
+            ShearPoint((*pEdgeTrack)[sal_uInt16(nPntCount-1)],rRef,tn,bVShear);
             ImpDirtyEdgeTrack();
         }
     }
