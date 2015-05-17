@@ -419,6 +419,7 @@ public:
     void testCondCopyPasteSheetBetweenDoc();
     void testCondCopyPasteSheet();
     void testIconSet();
+    void testDataBarLength();
 
     void testImportStream();
     void testDeleteContents();
@@ -631,6 +632,7 @@ public:
     CPPUNIT_TEST(testCondCopyPasteSheetBetweenDoc);
     CPPUNIT_TEST(testCondCopyPasteSheet);
     CPPUNIT_TEST(testIconSet);
+    CPPUNIT_TEST(testDataBarLength);
     CPPUNIT_TEST(testImportStream);
     CPPUNIT_TEST(testDeleteContents);
     CPPUNIT_TEST(testTransliterateText);

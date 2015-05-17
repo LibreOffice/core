@@ -5879,6 +5879,53 @@ void Test::testIconSet()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testDataBarLength()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRangeList aRangeList(ScRange(0,0,0,0,7,0));
+    pFormat->SetRange(aRangeList);
+
+    ScDataBarFormat* pDatabar = new ScDataBarFormat(m_pDoc);
+    pFormat->AddEntry(pDatabar);
+
+    ScDataBarFormatData* pFormatData = new ScDataBarFormatData();
+    pFormatData->mpLowerLimit.reset(new ScColorScaleEntry());
+    pFormatData->mpLowerLimit->SetValue(3);
+    pFormatData->mpLowerLimit->SetType(COLORSCALE_VALUE);
+    pFormatData->mpUpperLimit.reset(new ScColorScaleEntry());
+    pFormatData->mpUpperLimit->SetValue(7);
+    pFormatData->mpUpperLimit->SetType(COLORSCALE_VALUE);
+    pDatabar->SetDataBarData(pFormatData);
+
+    struct {
+        double nVal; double nLength;
+    } aValues[] = {
+        { 2, 0 },
+        { 3, 0 },
+        { 4, 25.0 },
+        { 5, 50.0 },
+        { 6, 75.0 },
+        { 7, 100.0 },
+        { 8, 100.0 }
+    };
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aValues); ++i)
+    {
+        m_pDoc->SetValue(0, i, 0, aValues[i].nVal);
+    }
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aValues); ++i)
+    {
+        ScDataBarInfo* pInfo = pDatabar->GetDataBarInfo(ScAddress(0, i, 0));
+        CPPUNIT_ASSERT(pInfo);
+        ASSERT_DOUBLES_EQUAL(aValues[i].nLength, pInfo->mnLength);
+    }
+    delete pFormat;
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testImportStream()
 {
     sc::AutoCalcSwitch aAC(*m_pDoc, true); // turn on auto calc.
