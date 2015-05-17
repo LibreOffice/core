@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a57f1b5_ea7d43e8",
+        "filename": "sw/sdi/swriter.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 3637,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-17T23:17:28Z",
+      "side": 1,
+      "message": "This should be changed to InsertColumnsAfter",
+      "range": {
+        "startLine": 3637,
+        "startChar": 12,
+        "endLine": 3637,
+        "endChar": 25
+      },
+      "revId": "6a26b1b7d535580b71d0800f299f43514d3e6bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_8a828fc7",
+        "filename": "sw/sdi/swriter.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 4407,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-17T23:17:28Z",
+      "side": 1,
+      "message": "This should be changed to InsertRowsAfter",
+      "range": {
+        "startLine": 4407,
+        "startChar": 12,
+        "endLine": 4407,
+        "endChar": 22
+      },
+      "revId": "6a26b1b7d535580b71d0800f299f43514d3e6bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_aa874bd6",
+        "filename": "sw/source/ui/app/mn.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-17T23:17:28Z",
+      "side": 1,
+      "message": "Above, Below, Left and Right are the standardly used words for column and row insertion.",
+      "range": {
+        "startLine": 263,
+        "startChar": 42,
+        "endLine": 263,
+        "endChar": 52
+      },
+      "revId": "6a26b1b7d535580b71d0800f299f43514d3e6bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_4a6d7731",
+        "filename": "sw/source/ui/app/mn.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-17T23:17:28Z",
+      "side": 1,
+      "message": "Above should be placed before Below.",
+      "range": {
+        "startLine": 271,
+        "startChar": 20,
+        "endLine": 275,
+        "endChar": 23
+      },
+      "revId": "6a26b1b7d535580b71d0800f299f43514d3e6bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a57f1b5_6a6ab31c",
+        "filename": "sw/source/ui/app/mn.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2015-05-17T23:17:28Z",
+      "side": 1,
+      "message": "Left should be placed before Right.",
+      "range": {
+        "startLine": 288,
+        "startChar": 20,
+        "endLine": 292,
+        "endChar": 23
+      },
+      "revId": "6a26b1b7d535580b71d0800f299f43514d3e6bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
