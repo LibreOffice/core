@@ -1734,7 +1734,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
 
             // #i27615#,#i30453#
             SwSpecialPos aSpecialPos;
-            aSpecialPos.nExtendRange = SP_EXTEND_RANGE_BEFORE;
+            aSpecialPos.nExtendRange = SwSPExtendRange::BEFORE;
             if (pShellCrsr->IsInFrontOfLabel())
             {
                 aTmpState.pSpecialPos = &aSpecialPos;

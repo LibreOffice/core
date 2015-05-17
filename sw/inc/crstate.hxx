@@ -94,19 +94,20 @@ struct Sw2LinesPos
  *          Call SwTextFrm:::GetCharRect with core string position 33.
  */
 
-#define SP_EXTEND_RANGE_NONE    0
-#define SP_EXTEND_RANGE_BEFORE  1
-#define SP_EXTEND_RANGE_BEHIND  2
+enum class SwSPExtendRange : sal_uInt8
+{
+    NONE, BEFORE, BEHIND
+};
 
 struct SwSpecialPos
 {
     sal_Int32 nCharOfst;
     sal_uInt16 nLineOfst;
-    sal_uInt8 nExtendRange;
+    SwSPExtendRange nExtendRange;
 
     // #i27615#
     SwSpecialPos() : nCharOfst(0), nLineOfst(0),
-                     nExtendRange(SP_EXTEND_RANGE_NONE)
+                     nExtendRange(SwSPExtendRange::NONE)
     {}
 };
 
