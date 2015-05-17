@@ -18,10 +18,10 @@
 
 #include "macros.inc"
 
+#ifndef DISABLE_PYUNO
+
 #include "AutoInstall/python"
 #include "AutoInstall/python_scriptprovider"
-
-#ifndef DISABLE_PYUNO
 
 Module gid_Module_Pyuno
     PackageInfo = "packinfo_office.txt";
