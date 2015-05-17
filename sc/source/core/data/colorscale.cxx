@@ -924,6 +924,8 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
         {
             if ( nValue > nMax )
                 pInfo->mnLength = 100;
+            else if (nValue <= nMin)
+                pInfo->mnLength = 0;
             else
                 pInfo->mnLength = 100 * (nValue-nMin)/(nMax-nMin);
         }
