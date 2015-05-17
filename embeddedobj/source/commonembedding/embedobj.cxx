@@ -421,7 +421,6 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
                 uno::Exception,
                 uno::RuntimeException, std::exception )
 {
-    uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ), uno::UNO_QUERY);
     {
         ::osl::ResettableMutexGuard aGuard( m_aMutex );
         if ( m_bDisposed )

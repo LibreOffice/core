@@ -972,18 +972,16 @@ void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
     }
     if (it == m_OleObjects.end())
     {
-        m_OleObjects.push_front( pObj );
-
         // try to remove objects if necessary
-        // (of course not the freshly inserted one at nPos=0)
         sal_Int32 nCount = m_OleObjects.size();
         sal_Int32 nPos = nCount-1;
-        while (nPos && nCount > m_nLRU_InitSize)
+        while (nPos >= 0 && nCount >= m_nLRU_InitSize)
         {
             pObj = m_OleObjects[ nPos-- ];
             if ( pObj->UnloadObject() )
                 nCount--;
         }
+        m_OleObjects.push_front(&rObj);
     }
 }
 
