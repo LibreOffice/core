@@ -21,7 +21,7 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
-	<!-- UTI declarations for OS X >= 10.4	-->
+
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<!-- Writer documents -->
@@ -48,6 +48,8 @@
 					<string>application/vnd.stardivision.writer</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>text.icns</string>
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -70,28 +72,8 @@
 					<string>application/vnd.oasis.opendocument.text</string>
 				</array>
 			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeIdentifier</key>
-			<string>vnd.oasis.opendocument.text-flat-xml</string>
-			<key>UTTypeDescription</key>
-			<string>OpenDocument Text (Flat XML)</string>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-				<string>public.content</string>
-			</array>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>fodt</string>
-				</array>
-				<key>public.mime-type</key>
-				<array>
-					<string>application/vnd.oasis.opendocument.text-flat-xml</string>
-				</array>
-			</dict>
+			<key>UTTypeIconFile</key>
+			<string>oasis-text.icns</string>
 		</dict>
 
 		<!-- Calc documents -->
@@ -118,6 +100,8 @@
 					<string>application/vnd.stardivision.calc</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>spreadsheet.icns</string>
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -140,28 +124,8 @@
 					<string>application/vnd.oasis.opendocument.spreadsheet</string>
 				</array>
 			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeIdentifier</key>
-			<string>vnd.oasis.opendocument.spreadsheet-flat-xml</string>
-			<key>UTTypeDescription</key>
-			<string>OpenDocument Spreadsheet (Flat XML)</string>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-				<string>public.content</string>
-			</array>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>fods</string>
-				</array>
-				<key>public.mime-type</key>
-				<array>
-					<string>application/vnd.oasis.opendocument.spreadsheet-flat-xml</string>
-				</array>
-			</dict>
+			<key>UTTypeIconFile</key>
+			<string>oasis-spreadsheet.icns</string>
 		</dict>
 
 		<!-- Impress documents -->
@@ -190,6 +154,8 @@
 					<string>application/vnd.stardivision.impress-packed</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>presentation.icns</string>
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -212,28 +178,8 @@
 					<string>application/vnd.oasis.opendocument.presentation</string>
 				</array>
 			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeIdentifier</key>
-			<string>vnd.oasis.opendocument.presentation-flat-xml</string>
-			<key>UTTypeDescription</key>
-			<string>OpenDocument Presentation</string>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-				<string>public.content</string>
-			</array>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>fodp</string>
-				</array>
-				<key>public.mime-type</key>
-				<array>
-					<string>application/vnd.oasis.opendocument.presentation-flat-xml</string>
-				</array>
-			</dict>
+			<key>UTTypeIconFile</key>
+			<string>oasis-presentation.icns</string>
 		</dict>
 
 		<!-- Draw documents -->
@@ -260,6 +206,8 @@
 					<string>application/vnd.stardivision.draw</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>drawing.icns</string>
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -282,12 +230,16 @@
 					<string>application/vnd.oasis.opendocument.graphics</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>oasis-drawing.icns</string>
 		</dict>
+
+		<!-- Chart documents -->
 		<dict>
 			<key>UTTypeIdentifier</key>
-			<string>vnd.oasis.opendocument.graphics-flat-xml</string>
+			<string>org.oasis-open.opendocument.chart</string>
 			<key>UTTypeDescription</key>
-			<string>OpenDocument Drawing (Flat XML)</string>
+			<string>OpenDocument Chart</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -297,11 +249,11 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>fodg</string>
+					<string>odc</string>
 				</array>
 				<key>public.mime-type</key>
 				<array>
-					<string>application/vnd.oasis.opendocument.graphics-flat-xml</string>
+					<string>application/vnd.oasis.opendocument.chart</string>
 				</array>
 			</dict>
 		</dict>
@@ -328,6 +280,8 @@
 					<string>application/vnd.sun.xml.writer.global</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>master-document.icns</string>
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -350,6 +304,8 @@
 					<string>application/vnd.oasis.opendocument.text-master</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>oasis-master-document.icns</string>
 		</dict>
 
 		<!-- Math documents -->
@@ -376,6 +332,8 @@
 					<string>application/vnd.stardivision.math</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>formula.icns</string>
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -398,6 +356,8 @@
 					<string>application/vnd.oasis.opendocument.formula</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>oasis-formula.icns</string>
 		</dict>
 
 		<!-- Text template documents -->
@@ -422,6 +382,8 @@
 					<string>application/vnd.sun.xml.writer.template</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>text-template.icns</string>
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -444,30 +406,8 @@
 					<string>application/vnd.oasis.opendocument.text-template</string>
 				</array>
 			</dict>
-		</dict>
-
-		<!-- Writer master document templates -->
-		<dict>
-			<key>UTTypeIdentifier</key>
-			<string>org.oasis-open.opendocument.text-master-template</string>
-			<key>UTTypeDescription</key>
-			<string>OpenDocument Text Master Template</string>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-				<string>public.content</string>
-			</array>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>otm</string>
-				</array>
-				<key>public.mime-type</key>
-				<array>
-					<string>application/vnd.oasis.opendocument.text-master-template</string>
-				</array>
-			</dict>
+			<key>UTTypeIconFile</key>
+			<string>oasis-text-template.icns</string>
 		</dict>
 
 		<!-- Spreadsheet template documents -->
@@ -492,6 +432,8 @@
 					<string>application/vnd.sun.xml.calc.template</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>spreadsheet-template.icns</string>
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -514,6 +456,8 @@
 					<string>application/vnd.oasis.opendocument.spreadsheet-template</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>oasis-spreadsheet-template.icns</string>
 		</dict>
 
 		<!-- Presentation template documents -->
@@ -538,6 +482,8 @@
 					<string>application/vnd.sun.xml.impress.template</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>presentation-template.icns</string>
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -560,6 +506,8 @@
 					<string>application/vnd.oasis.opendocument.presentation-template</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>oasis-presentation-template.icns</string>
 		</dict>
 
 		<!-- Drawing template documents -->
@@ -584,6 +532,8 @@
 					<string>application/vnd.sun.xml.draw.template</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>drawing-template.icns</string>
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -606,6 +556,8 @@
 					<string>application/vnd.oasis.opendocument.graphics-template</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>oasis-drawing-template.icns</string>
 		</dict>
 
 		<!-- Base documents -->
@@ -630,6 +582,8 @@
 					<string>application/vnd.oasis.opendocument.database</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>oasis-database.icns</string>
 		</dict>
 
 		<!-- Extensions -->
@@ -654,12 +608,36 @@
 					<string>application/vnd.openofficeorg.extension</string>
 				</array>
 			</dict>
+			<key>UTTypeIconFile</key>
+			<string>extension.icns</string>
 		</dict>
 	</array>
 
 	<key>UTImportedTypeDeclarations</key>
 	<array>
-		<!-- Microsoft Word XML -->
+		<!-- Microsoft Word Template -->
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.composite-content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Microsoft Word Template</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.microsoft.word.dot</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>dot</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/msword</string> <!-- ??? -->
+				</array>
+			</dict>
+		</dict>
+		<!-- OOXML wordprocessing -->
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
@@ -751,7 +729,7 @@
 			</dict>
 		</dict>
 
-		<!-- Microsoft Excel XML -->
+		<!-- OOXML spreadsheet -->
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
@@ -866,7 +844,7 @@
 			</dict>
 		</dict>
 
-		<!-- Microsoft Powerpoint XML -->
+		<!-- OOXML presentation -->
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
@@ -917,7 +895,6 @@
 			<array>
 				<string>org.openxmlformats.openxml</string>
 				<string>public.presentation</string>
-				<string>public.executable</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Office Open XML presentation template</string>
@@ -958,581 +935,1013 @@
 				</array>
 			</dict>
 		</dict>
+
+		<!-- Others -->
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>WordPerfect Document</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.wpd-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>wpd</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.wordperfect</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>PalmDoc eBook </string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.pdb-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>pdb</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-aportisdoc</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Hangul WP 97 Document</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.hwp-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>hwp</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-hwp-document</string> <!-- ??? -->
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Microsoft Works for Mac Document (v1 - v4)</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.wks-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>wps</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.ms-works</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Data Interchange Format</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.dif-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>dif</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-dif-document</string> <!-- ??? -->
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>SYLK Document</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.slk-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>slk</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-slk-document</string> <!-- ??? -->
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Comma-Separated Value Document</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.csv-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>csv</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-csv-document</string> <!-- ??? -->
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>dBASE Document</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.dbf-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>dbf</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-dbf-document</string> <!-- ??? -->
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Lotus 1-2-3 Spreadsheet</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.123-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>wk1</string>
+					<string>wks</string>
+					<string>123</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.lotus-1-2-3</string>
+					<string>application/vnd.lotus-1-2-3</string>
+					<string>application/vnd.lotus-1-2-3</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+				<string>public.image</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Computer Graphics Metafile</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.cgm-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>cgm</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>image/cgm</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+				<string>public.image</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>AutoCAD Interchange Format</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.dxf-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>dxf</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>image/vnd.dxf</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+				<string>public.image</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Windows Enhanced Metafile</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.emf-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>emf</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>image/x-emf</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+				<string>public.image</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Windows Metafile</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.libreoffice.wmf-document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>wmf</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>image/x-wmf</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Plain Text File</string>
+			<key>UTTypeIdentifier</key>
+			<string>public.plain-text</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>txt</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>text/plain</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Rich Text Format</string>
+			<key>UTTypeIdentifier</key>
+			<string>public.rtf</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>rtf</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/rtf</string>
+				</array>
+			</dict>
+		</dict>
+
 	</array>
 
-	<!-- Document type declaration for OS X < 10.4 -->
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>sxw</string>
-				<string>sdw</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.sun.xml.writer</string>
-				<string>application/vnd.stardivision.writer</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>text.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenOffice.org 1.0 Text</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.text</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>odt</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.text</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>oasis-text.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenDocument Text</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.oasis-open.opendocument.text</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>sxc</string>
-				<string>sdc</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.sun.xml.calc</string>
-				<string>application/vnd.stardivision.calc</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>spreadsheet.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenOffice.org 1.0 Spreadsheet</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.spreadsheet</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>ods</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.spreadsheet</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>oasis-spreadsheet.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenDocument Spreadsheet</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.oasis-open.opendocument.spreadsheet</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>sxi</string>
-				<string>sdd</string>
-				<string>sdp</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.sun.xml.impress</string>
-				<string>application/vnd.stardivision.impress</string>
-				<string>application/vnd.stardivision.impress-packed</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>presentation.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenOffice.org 1.0 Presentation</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.presentation</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>odp</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.presentation</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>oasis-presentation.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenDocument Presentation</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.oasis-open.opendocument.presentation</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>sxd</string>
-				<string>sda</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.sun.xml.draw</string>
-				<string>application/vnd.stardivision.draw</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>drawing.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenOffice.org 1.0 Drawing</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.graphics</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>odg</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.graphics</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>oasis-drawing.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenDocument Drawing</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.oasis-open.opendocument.graphics</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Chart</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
 			<array>
-				<string>sxg</string>
+				<string>org.oasis-open.opendocument.chart</string>
 			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.sun.xml.writer.global</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>master-document.icns</string>
+		</dict>
+		<dict>
 			<key>CFBundleTypeName</key>
 			<string>OpenOffice.org 1.0 Master</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.text-master</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>odm</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.text-master</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>oasis-master-document.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenDocument Master</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.oasis-open.opendocument.text-master</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>sxm</string>
-				<string>smf</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.sun.xml.math</string>
-				<string>application/vnd.stardivision.math</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>formula.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenOffice.org 1.0 Formula</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.formula</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>odf</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.formula</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>oasis-formula.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenDocument Formula</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.oasis-open.opendocument.formula</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>stw</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.sun.xml.writer.template</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>text-template.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenOffice.org 1.0 Text Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.text-template</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>ott</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.text-template</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>oasis-text-template.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenDocument Text Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.oasis-open.opendocument.text-template</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>otm</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.text-master-template</string>
-			</array>
-            <key>CFBundleTypeIconFile</key>
-            <string>oasis-master-template.icns</string>
-            <key>CFBundleTypeName</key>
-            <string>OpenDocument Master Template</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>LSIsAppleDefaultForType</key>
-			<true/>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>stc</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.sun.xml.calc.template</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>spreadsheet-template.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenOffice.org 1.0 Spreadsheet Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.spreadsheet-template</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>ots</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.spreadsheet-template</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>oasis-spreadsheet-template.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenDocument Spreadsheet Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.oasis-open.opendocument.spreadsheet-template</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>sti</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.sun.xml.impress.template</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>presentation-template.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenOffice.org 1.0 Presentation Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.presentation-template</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>otp</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.presentation-template</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>oasis-presentation-template.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenDocument Presentation Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.oasis-open.opendocument.presentation-template</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>std</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.sun.xml.draw.template</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>drawing-template.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenOffice.org 1.0 Drawing Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.graphics-template</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>otg</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.graphics-template</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>oasis-drawing-template.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenDocument Drawing Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.oasis-open.opendocument.graphics-template</string>
+			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>odb</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.oasis.opendocument.database</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>oasis-database.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenDocument Database</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>doc</string>
-				<string>dot</string>
-				<string>rtf</string>
-				<string>html</string>
-				<string>htm</string>
-				<string>pdb</string>
-				<string>xml</string>
-				<string>psw</string>
-				<string>wpd</string>
-				<string>jtd</string>
-				<string>jtt</string>
-				<string>hwp</string>
-				<string>wps</string>
-				<string>dif</string>
-				<string>dbf</string>
-				<string>xls</string>
-				<string>xlw</string>
-				<string>xlt</string>
-				<string>slk</string>
-				<string>csv</string>
-				<string>wk1</string>
-				<string>wk2</string>
-				<string>123</string>
-				<string>pxl</string>
-				<string>ppt</string>
-				<string>pps</string>
-				<string>pot</string>
-				<string>cgm</string>
-				<string>dxf</string>
-				<string>emf</string>
-				<string>eps</string>
-				<string>met</string>
-				<string>pct</string>
-				<string>sgf</string>
-				<string>sgv</string>
-				<string>svm</string>
-				<string>wmf</string>
-				<string>bmp</string>
-				<string>gif</string>
-				<string>jpg</string>
-				<string>jpeg</string>
-				<string>jfif</string>
-				<string>jif</string>
-				<string>jpe</string>
-				<string>pbm</string>
-				<string>pcx</string>
-				<string>pgm</string>
-				<string>png</string>
-				<string>ppm</string>
-				<string>psd</string>
-				<string>ras</string>
-				<string>tga</string>
-				<string>tif</string>
-				<string>tiff</string>
-				<string>xbm</string>
-				<string>xpm</string>
-				<string>pcd</string>
-				<string>oth</string>
-				<string>mml</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>txt</string>
-				<string>TXT</string>
-				<string>text</string>
-				<string>*</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>TEXT</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>TEXT</string>
-				<string>sEXT</string>
-				<string>ttro</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-		</dict>
-		<dict>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>org.openoffice.text</string>
-				<string>org.oasis-open.opendocument.text</string>
-				<string>vnd.oasis.opendocument.text-flat-xml</string>
-				<string>org.openoffice.spreadsheet</string>
-				<string>org.oasis-open.opendocument.spreadsheet</string>
-				<string>vnd.oasis.opendocument.spreadsheet-flat-xml</string>
-				<string>org.openoffice.presentation</string>
-				<string>org.oasis-open.opendocument.presentation</string>
-				<string>vnd.oasis.opendocument.presentation-flat-xml</string>
-				<string>org.openoffice.graphics</string>
-				<string>org.oasis-open.opendocument.graphics</string>
-				<string>vnd.oasis.opendocument.graphics-flat-xml</string>
-				<string>org.openoffice.text-master</string>
-				<string>org.oasis-open.opendocument.text-master</string>
-				<string>org.openoffice.formula</string>
-				<string>org.oasis-open.opendocument.formula</string>
-				<string>org.openoffice.text-template</string>
-				<string>org.oasis-open.opendocument.text-template</string>
-				<string>org.oasis-open.opendocument.text-master-template</string>
-				<string>org.openoffice.spreadsheet-template</string>
-				<string>org.oasis-open.opendocument.spreadsheet-template</string>
-				<string>org.openoffice.presentation-template</string>
-				<string>org.oasis-open.opendocument.presentation-template</string>
-				<string>org.openoffice.graphics-template</string>
-				<string>org.oasis-open.opendocument.graphics-template</string>
 				<string>org.oasis-open.opendocument.database</string>
-				<string>org.oasis-open.opendocument.chart</string>
-				<string>public.rtf</string>
-				<string>public.html</string>
-				<string>public.jpeg</string>
-				<string>public.tiff</string>
-				<string>public.png</string>
-				<string>public.xbitmap-image</string>
-				<string>com.adobe.encapsulated-postscript</string>
-				<string>com.microsoft.bmp</string>
-				<string>com.microsoft.word.doc</string>
-				<string>com.microsoft.excel.xls</string>
-				<string>com.microsoft.powerpoint.ppt</string>
-				<string>org.openxmlformats.wordprocessingml.document</string>
-				<string>org.openxmlformats.wordprocessingml.document.macroenabled</string>
-				<string>org.openxmlformats.wordprocessingml.template</string>
-				<string>org.openxmlformats.wordprocessingml.template.macroenabled</string>
-				<string>org.openxmlformats.spreadsheetml.sheet</string>
-				<string>org.openxmlformats.spreadsheetml.sheet.macroenabled</string>
-				<string>com.microsoft.excel.sheet.binary.macroenabled</string>
-				<string>org.openxmlformats.spreadsheetml.template</string>
-				<string>org.openxmlformats.spreadsheetml.template.macroenabled</string>
-				<string>org.openxmlformats.presentationml.presentation</string>
-				<string>org.openxmlformats.presentationml.presentation.macroenabled</string>
-				<string>org.openxmlformats.presentationml.template</string>
-				<string>org.openxmlformats.presentationml.template.macroenabled</string>
 			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
 		</dict>
 		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>oxt</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>application/vnd.openofficeorg.extension</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>extension.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>@PRODUCTNAME@ Extension</string>
 			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-			<key>LSIsAppleDefaultForType</key>
-			<true/>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.extension</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Word Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.word.doc</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Word Template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.word.dot</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML word processing document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.wordprocessingml.document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML word processing document (macros enabled)</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.wordprocessingml.document.macroenabled</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML word processing template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.wordprocessingml.template</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML word processing template (macros enabled)</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.wordprocessingml.template.macroenabled</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Excel Spreadsheet</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.excel.xls</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML spreadsheet template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.spreadsheetml.template</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML spreadsheet template (macros enabled)</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.spreadsheetml.template.macroenabled</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML spreadsheet</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.spreadsheetml.sheet</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Excel 2007 spreadsheet (macros enabled)</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.excel.sheet.binary.macroenabled</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML spreadsheet (macros enabled)</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.spreadsheetml.sheet.macroenabled</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Powerpoint Presentation</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.powerpoint.ppt</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML presentation</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.presentationml.presentation</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML presentation (macros enabled)</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.presentationml.presentation.macroenabled</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML presentation template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.presentationml.template</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML presentation template (macros enabled)</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openxmlformats.presentationml.template.macroenabled</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>WordPerfect Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.wpd-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>PalmDoc eBook </string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.pdb-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Hangul WP 97 Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.hwp-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Works for Mac Document (v1 - v4)</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.wks-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Data Interchange Format</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.dif-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>SYLK Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.slk-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Comma-Separated Value Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.csv-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>dBASE Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.dbf-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Lotus 1-2-3 Spreadsheet</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.123-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Computer Graphics Metafile</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.cgm-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>AutoCAD Interchange Format</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.dxf-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Windows Enhanced Metafile</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.emf-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Windows Metafile</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.libreoffice.wmf-document</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Plain Text File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Rich Text Format</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.rtf</string>
+			</array>
 		</dict>
 	</array>
+
 	<key>CFBundleExecutable</key>
 	<string>soffice</string>
 	<key>CFBundleGetInfoString</key>
