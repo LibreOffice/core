@@ -43,6 +43,62 @@ using namespace ::com::sun::star::beans;
 
 #define ROUND(x) static_cast<long>((x) + .5)
 
+namespace {
+
+// Arrow or interval character
+void DrawArrow(vcl::RenderContext& rRenderContext, const Point &rP1, const Point &rP2, bool bArrow)
+{
+    rRenderContext.DrawLine(rP1, rP2);
+    if (bArrow)
+    {
+        Point aArr[3];
+
+        // Arrow character
+        if (rP1.Y() == rP2.Y())
+        {
+            // Horizontal
+            aArr[0].X() = rP2.X() - 5;
+            aArr[0].Y() = rP2.Y() - 2;
+            aArr[1].X() = rP2.X();
+            aArr[1].Y() = rP2.Y();
+            aArr[2].X() = rP2.X() - 5;
+            aArr[2].Y() = rP2.Y() + 2;
+        }
+        else
+        {
+            // Vertical
+            aArr[0].X() = rP2.X() - 2;
+            aArr[0].Y() = rP2.Y() - 5;
+            aArr[1].X() = rP2.X() + 2;
+            aArr[1].Y() = rP2.Y() - 5;
+            aArr[2].X() = rP2.X();
+            aArr[2].Y() = rP2.Y();
+        }
+
+        const Color& rFieldTextColor = SwViewOption::GetFontColor();
+        rRenderContext.SetFillColor(rFieldTextColor);
+        rRenderContext.DrawPolygon(Polygon(3, aArr));
+    }
+    else
+    {
+        // Interval symbol
+        if (rP1.Y() == rP2.Y())
+        {
+            // Horizontal
+            rRenderContext.DrawLine(Point(rP1.X(), rP1.Y() - 2), Point(rP1.X(), rP1.Y() + 2));
+            rRenderContext.DrawLine(Point(rP2.X(), rP2.Y() - 2), Point(rP2.X(), rP2.Y() + 2));
+        }
+        else
+        {
+            // Vertical
+            rRenderContext.DrawLine(Point(rP1.X() - 2, rP1.Y()), Point(rP1.X() + 2, rP1.Y()));
+            rRenderContext.DrawLine(Point(rP2.X() - 2, rP2.Y()), Point(rP2.X() + 2, rP2.Y()));
+        }
+    }
+}
+
+}
+
 SwLabPreview::SwLabPreview(vcl::Window* pParent)
     : Window(pParent, 0)
     , aGrayColor(COL_LIGHTGRAY)
@@ -225,58 +281,6 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         long lX = lX0 + lOutlineW + 4;
         DrawArrow(rRenderContext, Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), true);
         rRenderContext.DrawText(Point(lX + 5, (lY0 + lY0 + lOutlineH - 1 - lXHeight / 2) / 2), aRowsStr);
-    }
-}
-
-// Arrow or interval character
-void SwLabPreview::DrawArrow(vcl::RenderContext& rRenderContext, const Point &rP1, const Point &rP2, bool bArrow)
-{
-    rRenderContext.DrawLine(rP1, rP2);
-    if (bArrow)
-    {
-        Point aArr[3];
-
-        // Arrow character
-        if (rP1.Y() == rP2.Y())
-        {
-            // Horizontal
-            aArr[0].X() = rP2.X() - 5;
-            aArr[0].Y() = rP2.Y() - 2;
-            aArr[1].X() = rP2.X();
-            aArr[1].Y() = rP2.Y();
-            aArr[2].X() = rP2.X() - 5;
-            aArr[2].Y() = rP2.Y() + 2;
-        }
-        else
-        {
-            // Vertical
-            aArr[0].X() = rP2.X() - 2;
-            aArr[0].Y() = rP2.Y() - 5;
-            aArr[1].X() = rP2.X() + 2;
-            aArr[1].Y() = rP2.Y() - 5;
-            aArr[2].X() = rP2.X();
-            aArr[2].Y() = rP2.Y();
-        }
-
-        const Color& rFieldTextColor = SwViewOption::GetFontColor();
-        rRenderContext.SetFillColor(rFieldTextColor);
-        rRenderContext.DrawPolygon(Polygon(3, aArr));
-    }
-    else
-    {
-        // Interval symbol
-        if (rP1.Y() == rP2.Y())
-        {
-            // Horizontal
-            rRenderContext.DrawLine(Point(rP1.X(), rP1.Y() - 2), Point(rP1.X(), rP1.Y() + 2));
-            rRenderContext.DrawLine(Point(rP2.X(), rP2.Y() - 2), Point(rP2.X(), rP2.Y() + 2));
-        }
-        else
-        {
-            // Vertical
-            rRenderContext.DrawLine(Point(rP1.X() - 2, rP1.Y()), Point(rP1.X() + 2, rP1.Y()));
-            rRenderContext.DrawLine(Point(rP2.X() - 2, rP2.Y()), Point(rP2.X() + 2, rP2.Y()));
-        }
     }
 }
 

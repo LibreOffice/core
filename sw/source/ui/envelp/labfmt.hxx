@@ -58,8 +58,6 @@ class SwLabPreview : public vcl::Window
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
-    void DrawArrow(vcl::RenderContext& rRenderContext, const Point& rP1, const Point& rP2, bool bArrow);
-
 public:
 
     SwLabPreview(vcl::Window* pParent);

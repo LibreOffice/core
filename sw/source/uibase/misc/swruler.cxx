@@ -34,6 +34,37 @@
 #define CONTROL_TRIANGLE_WIDTH  4
 #define CONTROL_TRIANGLE_PAD    3
 
+namespace {
+
+/**
+ * Draw a little horizontal arrow tip on VirtualDevice.
+ * \param nX left coordinate of arrow
+ * \param nY top coordinate of arrow
+ * \param Color arrow color
+ * \param bPointRight if arrow should point to right. Otherwise, it will point left.
+ */
+void ImplDrawArrow(vcl::RenderContext& rRenderContext, long nX, long nY, const Color& rColor, bool bPointRight)
+{
+    rRenderContext.SetLineColor();
+    rRenderContext.SetFillColor(rColor);
+    if (bPointRight)
+    {
+        rRenderContext.DrawRect(Rectangle(nX + 0, nY + 0, nX + 0, nY + 6) );
+        rRenderContext.DrawRect(Rectangle(nX + 1, nY + 1, nX + 1, nY + 5) );
+        rRenderContext.DrawRect(Rectangle(nX + 2, nY + 2, nX + 2, nY + 4) );
+        rRenderContext.DrawRect(Rectangle(nX + 3, nY + 3, nX + 3, nY + 3) );
+    }
+    else
+    {
+        rRenderContext.DrawRect(Rectangle(nX + 0, nY + 3, nX + 0, nY + 3));
+        rRenderContext.DrawRect(Rectangle(nX + 1, nY + 2, nX + 1, nY + 4));
+        rRenderContext.DrawRect(Rectangle(nX + 2, nY + 1, nX + 2, nY + 5));
+        rRenderContext.DrawRect(Rectangle(nX + 3, nY + 0, nX + 3, nY + 6));
+    }
+}
+
+}
+
 // Constructor
 SwCommentRuler::SwCommentRuler( SwViewShell* pViewSh, vcl::Window* pParent, SwEditWin* pWin, SvxRulerSupportFlags nRulerFlags,  SfxBindings& rBindings, WinBits nWinStyle)
 : SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle | WB_HSCROLL)
@@ -153,26 +184,6 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
 
     // Blit comment control
     rRenderContext.DrawOutDev(aControlRect.TopLeft(), aControlRect.GetSize(), Point(), aControlRect.GetSize(), *maVirDev.get());
-}
-
-void SwCommentRuler::ImplDrawArrow(vcl::RenderContext& rRenderContext, long nX, long nY, const Color& rColor, bool bPointRight)
-{
-    rRenderContext.SetLineColor();
-    rRenderContext.SetFillColor(rColor);
-    if (bPointRight)
-    {
-        rRenderContext.DrawRect(Rectangle(nX + 0, nY + 0, nX + 0, nY + 6) );
-        rRenderContext.DrawRect(Rectangle(nX + 1, nY + 1, nX + 1, nY + 5) );
-        rRenderContext.DrawRect(Rectangle(nX + 2, nY + 2, nX + 2, nY + 4) );
-        rRenderContext.DrawRect(Rectangle(nX + 3, nY + 3, nX + 3, nY + 3) );
-    }
-    else
-    {
-        rRenderContext.DrawRect(Rectangle(nX + 0, nY + 3, nX + 0, nY + 3));
-        rRenderContext.DrawRect(Rectangle(nX + 1, nY + 2, nX + 1, nY + 4));
-        rRenderContext.DrawRect(Rectangle(nX + 2, nY + 1, nX + 2, nY + 5));
-        rRenderContext.DrawRect(Rectangle(nX + 3, nY + 0, nX + 3, nY + 6));
-    }
 }
 
 // Just accept double-click outside comment control
