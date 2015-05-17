@@ -295,7 +295,7 @@ bool SalYieldMutex::tryToAcquire()
 
 bool ImplSalYieldMutexTryToAcquire()
 {
-    AquaSalInstance* pInst = (AquaSalInstance*) GetSalData()->mpFirstInstance;
+    AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( pInst )
         return pInst->mpSalYieldMutex->tryToAcquire();
     else
@@ -304,7 +304,7 @@ bool ImplSalYieldMutexTryToAcquire()
 
 void ImplSalYieldMutexRelease()
 {
-    AquaSalInstance* pInst = (AquaSalInstance*) GetSalData()->mpFirstInstance;
+    AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( pInst )
         pInst->mpSalYieldMutex->release();
 }

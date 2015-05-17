@@ -805,7 +805,7 @@ bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
                                    void* pEpsData, sal_uLong nByteCount )
 {
     // convert the raw data to an NSImageRef
-    NSData* xNSData = [NSData dataWithBytes:(void*)pEpsData length:(int)nByteCount];
+    NSData* xNSData = [NSData dataWithBytes:pEpsData length:(int)nByteCount];
     NSImageRep* xEpsImage = [NSEPSImageRep imageRepWithData: xNSData];
     if( !xEpsImage )
     {
