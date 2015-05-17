@@ -936,19 +936,19 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     {
         pInfo->mnZero = 50;
         double nAbsMax = std::max(std::abs(nMin), std::abs(nMax));
-        if (nValue < 0)
+        if (nValue < 0 && nMin < 0)
         {
             if (nValue < nMin)
-                pInfo->mnLength = -nMaxLength;
+                pInfo->mnLength = nMaxLength * (nMin/nAbsMax);
             else
                 pInfo->mnLength = nMaxLength * (nValue/nAbsMax);
         }
         else
         {
             if (nValue > nMax)
-                pInfo->mnLength = nMaxLength;
+                pInfo->mnLength = nMaxLength * (nMax/nAbsMax);
             else
-                pInfo->mnLength = nMaxLength * (nValue/nAbsMax);
+                pInfo->mnLength = nMaxLength * (std::max(nValue, nMin)/nAbsMax);
         }
     }
 
