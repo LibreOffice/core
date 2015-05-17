@@ -65,6 +65,32 @@ namespace DatabaseObject = css::sdb::application::DatabaseObject;
 #define TABWIN_WIDTH_MIN    90
 #define TABWIN_HEIGHT_MIN   80
 
+namespace {
+
+void Draw3DBorder(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+{
+    // Use the System Style-Settings for my colours
+    const StyleSettings& aSystemStyle = Application::GetSettings().GetStyleSettings();
+
+    // Black lines for bottom and right
+    rRenderContext.SetLineColor(aSystemStyle.GetDarkShadowColor());
+    rRenderContext.DrawLine(rRect.BottomLeft(), rRect.BottomRight());
+    rRenderContext.DrawLine(rRect.BottomRight(), rRect.TopRight());
+
+    // Dark grey lines over the black lines
+    rRenderContext.SetLineColor(aSystemStyle.GetShadowColor());
+    Point aEHvector(1, 1);
+    rRenderContext.DrawLine(rRect.BottomLeft() + Point(1, -1), rRect.BottomRight() - aEHvector);
+    rRenderContext.DrawLine(rRect.BottomRight() - aEHvector, rRect.TopRight() + Point(-1, 1));
+
+    // Light grey lines for top and left
+    rRenderContext.SetLineColor(aSystemStyle.GetLightColor());
+    rRenderContext.DrawLine(rRect.BottomLeft() + Point(1, -2), rRect.TopLeft() + aEHvector);
+    rRenderContext.DrawLine(rRect.TopLeft() + aEHvector, rRect.TopRight() + Point(-2, 1));
+}
+
+}
+
 // class OTableWindow
 OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData )
           : ::comphelper::OContainerListener(m_aMutex)
@@ -317,28 +343,6 @@ void OTableWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rR
     Rectangle aRect(Point(0,0), GetOutputSizePixel());
     Window::Paint(rRenderContext, rRect);
     Draw3DBorder(rRenderContext, aRect);
-}
-
-void OTableWindow::Draw3DBorder(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
-{
-    // Use the System Style-Settings for my colours
-    const StyleSettings& aSystemStyle = Application::GetSettings().GetStyleSettings();
-
-    // Black lines for bottom and right
-    rRenderContext.SetLineColor(aSystemStyle.GetDarkShadowColor());
-    rRenderContext.DrawLine(rRect.BottomLeft(), rRect.BottomRight());
-    rRenderContext.DrawLine(rRect.BottomRight(), rRect.TopRight());
-
-    // Dark grey lines over the black lines
-    rRenderContext.SetLineColor(aSystemStyle.GetShadowColor());
-    Point aEHvector(1, 1);
-    rRenderContext.DrawLine(rRect.BottomLeft() + Point(1, -1), rRect.BottomRight() - aEHvector);
-    rRenderContext.DrawLine(rRect.BottomRight() - aEHvector, rRect.TopRight() + Point(-1, 1));
-
-    // Light grey lines for top and left
-    rRenderContext.SetLineColor(aSystemStyle.GetLightColor());
-    rRenderContext.DrawLine(rRect.BottomLeft() + Point(1, -2), rRect.TopLeft() + aEHvector);
-    rRenderContext.DrawLine(rRect.TopLeft() + aEHvector, rRect.TopRight() + Point(-2, 1));
 }
 
 Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSize) const

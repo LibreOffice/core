@@ -69,7 +69,6 @@ namespace dbaui
         sal_uInt16              m_nSizingFlags;
         bool                m_bActive;
 
-        void Draw3DBorder(vcl::RenderContext& rRenderContext,const Rectangle& rRect);
         // OContainerListener
         virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
