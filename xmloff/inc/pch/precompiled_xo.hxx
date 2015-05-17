@@ -532,7 +532,6 @@
 #include <sax/tools/converter.hxx>
 #include <set>
 #include <stack>
-#include <stdio.h>
 #include <string.h>
 #include <svl/itemset.hxx>
 #include <svl/nfsymbol.hxx>

@@ -33,8 +33,6 @@
 #include <vector>
 #include <map>
 
-#include <stdio.h>
-
 typedef ::std::map<sal_uInt32, sal_uInt16> ChecksumCache;
 
 class GDIMetaFile;

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
-
 #include <avmedia/mediawindow.hxx>
 #include "mediawindow_impl.hxx"
 #include "mediamisc.hxx"

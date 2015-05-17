@@ -90,9 +90,7 @@ Content::Content(
     : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_pProvider( pProvider ), mpFile (NULL), mpInfo( NULL ), mbTransient(false)
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "New Content ('%s')\n", OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
-#endif
+    SAL_INFO("ucb.ucp.gio", "New Content ('" << m_xIdentifier->getContentIdentifier() << "')\n");
 }
 
 Content::Content(
@@ -104,9 +102,7 @@ Content::Content(
     : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_pProvider( pProvider ), mpFile (NULL), mpInfo( NULL ), mbTransient(true)
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "Create Content ('%s')\n", OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
-#endif
+    SAL_INFO("ucb.ucp.gio", "Create Content ('" << m_xIdentifier->getContentIdentifier() << "')\n");
     mpInfo = g_file_info_new();
     g_file_info_set_file_type(mpInfo, bIsFolder ? G_FILE_TYPE_DIRECTORY : G_FILE_TYPE_REGULAR);
 }
@@ -744,9 +740,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else
         {
-#ifdef DEBUG
-            fprintf(stderr, "Unknown property %s\n", OUStringToOString(rValue.Name, RTL_TEXTENCODING_UTF8).getStr());
-#endif
+            SAL_WARN("ucb.ucp.gio", "Unknown property " << rValue.Name << "\n");
             aRet[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
             //TODO
         }
@@ -942,9 +936,7 @@ uno::Any SAL_CALL Content::execute(
            ucb::CommandAbortedException,
            uno::RuntimeException, std::exception )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "Content::execute %s\n", OUStringToOString(aCommand.Name, RTL_TEXTENCODING_UTF8).getStr());
-#endif
+    SAL_INFO("ucb.ucp.gio", "Content::execute " << aCommand.Name << "\n");
     uno::Any aRet;
 
     if ( aCommand.Name == "getPropertyValues" )
@@ -1015,10 +1007,7 @@ uno::Any SAL_CALL Content::execute(
     }
     else
     {
-#ifdef DEBUG
-        fprintf(stderr, "UNKNOWN COMMAND\n");
-        //TODO
-#endif
+        SAL_WARN("ucb.ucp.gio", "Unknown command " << aCommand.Name << "\n");
 
         ucbhelper::cancelCommandExecution
             ( uno::makeAny( ucb::UnsupportedCommandException

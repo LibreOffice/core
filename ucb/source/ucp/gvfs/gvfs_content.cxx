@@ -274,8 +274,6 @@ uno::Any Content::getBadArgExcept()
                    -1 ) );
 }
 
-#include <stdio.h>
-
 uno::Any SAL_CALL Content::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,

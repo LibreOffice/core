@@ -21,7 +21,6 @@
 
 #include <cassert>
 #include <unordered_map>
-#include <stdio.h>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -55,12 +54,7 @@ namespace cppu_threadpool
 
     DisposedCallerAdmin::~DisposedCallerAdmin()
     {
-#if OSL_DEBUG_LEVEL > 1
-        if( !m_lst.empty() )
-        {
-            printf( "DisposedCallerList : %lu left\n" , static_cast<unsigned long>(m_lst.size( )));
-        }
-#endif
+        SAL_WARN_IF( !m_lst.empty(), "cppu.threadpool", "DisposedCallerList :  " << m_lst.size() << " left\n");
     }
 
     void DisposedCallerAdmin::dispose( sal_Int64 nDisposeId )
@@ -109,12 +103,7 @@ namespace cppu_threadpool
 
     ThreadPool::~ThreadPool()
     {
-#if OSL_DEBUG_LEVEL > 1
-        if( m_mapQueue.size() )
-        {
-            printf( "ThreadIdHashMap : %lu left\n" , static_cast<unsigned long>(m_mapQueue.size()) );
-        }
-#endif
+        SAL_WARN_IF( m_mapQueue.size(), "cppu.threadpool", "ThreadIdHashMap:  " << m_mapQueue.size() << " left\n");
     }
 
     void ThreadPool::dispose( sal_Int64 nDisposeId )

@@ -47,7 +47,6 @@
 #include <outdevstate.hxx>
 #include <polypolyaction.hxx>
 #include <textaction.hxx>
-#include <stdio.h>
 
 namespace
 {

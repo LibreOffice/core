@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <stdio.h>
 #include <osl/time.h>
 #include <com/sun/star/util/DateTime.hpp>
 #include "DateTimeHelper.hxx"

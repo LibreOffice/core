@@ -8,7 +8,6 @@
  */
 #include "DummyXShape.hxx"
 
-#include <stdio.h>
 #include <string>
 #include <vector>
 #include <iostream>

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
-
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <i18nlangtag/lang.h>
 #include <unotools/charclass.hxx>

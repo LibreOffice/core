@@ -28,8 +28,6 @@
 #include "gio_content.hxx"
 #include "gio_provider.hxx"
 
-#include <stdio.h>
-
 using namespace com::sun::star;
 
 using namespace gio;

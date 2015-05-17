@@ -19,7 +19,6 @@
 
 #include "gio_mount.hxx"
 #include <ucbhelper/simpleauthenticationrequest.hxx>
-#include <stdio.h>
 #include <string.h>
 
 #ifdef __GNUC__

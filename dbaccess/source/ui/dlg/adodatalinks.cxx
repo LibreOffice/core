@@ -31,7 +31,6 @@
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
-#include "stdio.h"
 
 #include <initguid.h>
 #include <adoid.h>

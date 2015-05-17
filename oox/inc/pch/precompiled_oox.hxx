@@ -392,7 +392,6 @@
 #include <set>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
-#include <stdio.h>
 #include <string.h>
 #include <svl/languageoptions.hxx>
 #include <svl/outstrm.hxx>

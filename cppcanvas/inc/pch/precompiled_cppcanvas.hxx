@@ -74,7 +74,6 @@
 #include <sal/alloca.h>
 #include <sal/config.h>
 #include <sal/types.h>
-#include <stdio.h>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/poly.hxx>

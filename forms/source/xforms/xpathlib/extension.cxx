@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <com/sun/star/xml/xpath/Libxml2ExtensionHandle.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include "extension.hxx"
