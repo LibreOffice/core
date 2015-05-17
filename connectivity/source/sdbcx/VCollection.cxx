@@ -19,7 +19,6 @@
 
 
 #include <algorithm>
-#include <stdio.h>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbexception.hxx>

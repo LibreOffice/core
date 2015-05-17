@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <connectivity/sdbcx/VGroup.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>

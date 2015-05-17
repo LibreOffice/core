@@ -41,6 +41,5 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
-#include <stdio.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

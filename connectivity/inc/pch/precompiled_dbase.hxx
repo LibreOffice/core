@@ -50,7 +50,6 @@
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/config.h>
-#include <stdio.h>
 #include <svl/converter.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/config.hxx>

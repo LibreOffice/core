@@ -19,7 +19,6 @@
 
 
 #include <string.h>
-#include <stdio.h>
 #include <connectivity/FValue.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbconversion.hxx>

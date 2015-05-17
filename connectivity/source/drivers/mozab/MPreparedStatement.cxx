@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
 #include <osl/diagnose.h>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include "MPreparedStatement.hxx"

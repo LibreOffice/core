@@ -26,7 +26,6 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <connectivity/odbc.hxx>
-#include "stdio.h"
 #include "TPrivilegesResultSet.hxx"
 #include <connectivity/dbexception.hxx>
 #include <rtl/ustrbuf.hxx>

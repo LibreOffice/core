@@ -34,8 +34,6 @@
  *
  ************************************************************************/
 
-#include <stdio.h>
-
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/compbase1.hxx>

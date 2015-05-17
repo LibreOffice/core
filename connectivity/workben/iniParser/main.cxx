@@ -18,7 +18,6 @@
  */
 
 #include <rtl/ustring.hxx>
-#include <stdio.h>
 #include <com/sun/star/io/IOException.hpp>
 #include <osl/process.h>
 

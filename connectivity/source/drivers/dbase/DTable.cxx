@@ -34,7 +34,6 @@
 #include <svl/zforlist.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
-#include <stdio.h>
 #include <ucbhelper/content.hxx>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>

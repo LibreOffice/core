@@ -58,7 +58,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uuid.h>
-#include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include <vector>
