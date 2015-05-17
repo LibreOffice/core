@@ -484,9 +484,9 @@ void SwTextCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     // more than one line we may not skip any "empty portions" at the
     // beginning of a line
     const bool bInsideFirstField = pCMS && pCMS->pSpecialPos &&
-                                       ( pCMS->pSpecialPos->nLineOfst ||
-                                         SP_EXTEND_RANGE_BEFORE ==
-                                         pCMS->pSpecialPos->nExtendRange );
+                                    ( pCMS->pSpecialPos->nLineOfst ||
+                                      SwSPExtendRange::BEFORE ==
+                                      pCMS->pSpecialPos->nExtendRange );
 
     bool bWidth = pCMS && pCMS->bRealWidth;
     if( !pCurr->GetLen() && !pCurr->Width() )
@@ -1176,13 +1176,13 @@ bool SwTextCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
 
     if ( bSpecialPos )
     {
-        const sal_uInt8 nExtendRange = pCMS->pSpecialPos->nExtendRange;
+        const SwSPExtendRange nExtendRange = pCMS->pSpecialPos->nExtendRange;
 
-        OSL_ENSURE( ! pCMS->pSpecialPos->nLineOfst || SP_EXTEND_RANGE_BEFORE != nExtendRange,
+        OSL_ENSURE( ! pCMS->pSpecialPos->nLineOfst || SwSPExtendRange::BEFORE != nExtendRange,
                 "LineOffset AND Number Portion?" );
 
         // portions which are behind the string
-        if ( SP_EXTEND_RANGE_BEHIND == nExtendRange )
+        if ( SwSPExtendRange::BEHIND == nExtendRange )
             ++nFindOfst;
 
         // skip lines for fields which cover more than one line

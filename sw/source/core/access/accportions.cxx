@@ -582,13 +582,13 @@ sal_Int32 SwAccessiblePortionData::FillSpecialPos(
 {
     size_t nPortionNo = FindLastBreak( aAccessiblePositions, nPos );
 
-    sal_uInt8 nExtend(SP_EXTEND_RANGE_NONE);
+    SwSPExtendRange nExtend(SwSPExtendRange::NONE);
     sal_Int32 nRefPos(0);
     sal_Int32 nModelPos(0);
 
     if( nPortionNo < nBeforePortions )
     {
-        nExtend = SP_EXTEND_RANGE_BEFORE;
+        nExtend = SwSPExtendRange::BEFORE;
         rpPos = &rPos;
     }
     else
@@ -620,7 +620,7 @@ sal_Int32 SwAccessiblePortionData::FillSpecialPos(
             // reference position is the first accessibilty for our
             // core portion
             nRefPos = aAccessiblePositions[ nCorePortionNo ];
-            nExtend = SP_EXTEND_RANGE_NONE;
+            nExtend = SwSPExtendRange::NONE;
             rpPos = &rPos;
         }
         else if(nPortionNo != nCorePortionNo)
@@ -630,7 +630,7 @@ sal_Int32 SwAccessiblePortionData::FillSpecialPos(
             // reference position is the first character of the next
             // portion, and we are 'behind'
             nRefPos = aAccessiblePositions[ nCorePortionNo+1 ];
-            nExtend = SP_EXTEND_RANGE_BEHIND;
+            nExtend = SwSPExtendRange::BEHIND;
             rpPos = &rPos;
         }
         else
@@ -649,9 +649,6 @@ sal_Int32 SwAccessiblePortionData::FillSpecialPos(
     {
         OSL_ENSURE( rpPos == &rPos, "Yes!" );
         OSL_ENSURE( nRefPos <= nPos, "wrong reference" );
-        OSL_ENSURE( (nExtend == SP_EXTEND_RANGE_NONE) ||
-                    (nExtend == SP_EXTEND_RANGE_BEFORE) ||
-                    (nExtend == SP_EXTEND_RANGE_BEHIND), "need extend" );
 
         // get the line number, and adjust nRefPos for the line
         // (if necessary)
