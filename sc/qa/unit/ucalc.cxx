@@ -5970,6 +5970,26 @@ void Test::testDataBarLengthAutomaticAxis()
     testDataBarLengthImpl(m_pDoc, aValues2, ScRange(1,0,0,1,15,0),
             -4, COLORSCALE_VALUE, 8, COLORSCALE_VALUE, 1.0/3.0 * 100, databar::AUTOMATIC);
 
+    ScDataBarLengthData aValues3[] = {
+        { 2, 0.0 },
+        { 3, 25.0 },
+        { 4, 50.0 },
+        { 6, 100.0 },
+        { 0, -200 }
+    };
+    testDataBarLengthImpl(m_pDoc, aValues3, ScRange(2,0,0,2,3,0),
+            0, COLORSCALE_MIN, 0, COLORSCALE_MAX, 0, databar::AUTOMATIC);
+
+    ScDataBarLengthData aValues4[] = {
+        { 2, 40.0 },
+        { 3, 60.0 },
+        { 4, 80.0 },
+        { 5, 100.0 },
+        { 0, -200 }
+    };
+    testDataBarLengthImpl(m_pDoc, aValues4, ScRange(3,0,0,3,3,0),
+            0, COLORSCALE_AUTO, 0, COLORSCALE_AUTO, 0, databar::AUTOMATIC);
+
     m_pDoc->DeleteTab(0);
 }
 
