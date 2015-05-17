@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <osl/diagnose.h>
 #include "odbc/OStatement.hxx"
 #include "odbc/OConnection.hxx"

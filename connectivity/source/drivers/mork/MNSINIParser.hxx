@@ -27,10 +27,6 @@
 #include <map>
 #include <list>
 
-#if OSL_DEBUG_LEVEL > 0
-#include <stdio.h>
-#endif
-
 struct ini_NameValue
 {
     OUString sName;

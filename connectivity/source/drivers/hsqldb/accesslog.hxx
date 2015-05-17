@@ -22,7 +22,6 @@
 
 #ifdef HSQLDB_DBG
 
-#include <stdio.h>
 #include <jni.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>

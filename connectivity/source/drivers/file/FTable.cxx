@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include "file/FTable.hxx"
 #include "file/FColumns.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>

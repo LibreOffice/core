@@ -20,7 +20,6 @@
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbcharset.hxx>
 #include <osl/diagnose.h>
-#include <stdio.h>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>

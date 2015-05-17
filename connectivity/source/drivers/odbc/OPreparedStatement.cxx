@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <string.h>
 #include <osl/diagnose.h>
 #include "diagnose_ex.h"

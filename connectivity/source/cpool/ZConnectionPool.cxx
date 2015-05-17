@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include "ZConnectionPool.hxx"
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>

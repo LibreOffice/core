@@ -22,8 +22,6 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include <stdio.h>
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 

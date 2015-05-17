@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <cppuhelper/factory.hxx>
 #include "ZPoolCollection.hxx"
 

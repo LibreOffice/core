@@ -60,7 +60,6 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
-#include <stdio.h>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>

@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <stdio.h>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/util/Date.hpp>

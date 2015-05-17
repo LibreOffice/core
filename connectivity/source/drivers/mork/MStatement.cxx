@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <osl/diagnose.h>
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>

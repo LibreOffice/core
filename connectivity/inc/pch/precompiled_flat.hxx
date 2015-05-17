@@ -46,7 +46,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/thread.h>
 #include <rtl/math.hxx>
-#include <stdio.h>
 #include <svl/converter.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/configmgr.hxx>

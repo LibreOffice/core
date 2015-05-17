@@ -18,7 +18,6 @@
  */
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
-#include <stdio.h>
 #define  DECLARE_FN_POINTERS 1
 #include "EApi.h"
 static const char *eBookLibNames[] = {

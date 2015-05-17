@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <osl/diagnose.h>
 #include "file/FPreparedStatement.hxx"

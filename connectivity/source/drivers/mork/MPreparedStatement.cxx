@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <stdio.h>
 #include <osl/diagnose.h>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include "MPreparedStatement.hxx"

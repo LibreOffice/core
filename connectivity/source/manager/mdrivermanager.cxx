@@ -18,8 +18,6 @@
  */
 
 
-#include <stdio.h>
-
 #include "mdrivermanager.hxx"
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>

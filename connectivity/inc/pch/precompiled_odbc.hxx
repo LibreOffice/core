@@ -14,7 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "stdio.h"
 #include <algorithm>
 #include <boost/scoped_ptr.hpp>
 #include <boost/type_traits/is_same.hpp>
