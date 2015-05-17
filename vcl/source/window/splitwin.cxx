@@ -137,11 +137,11 @@ namespace {
     }
 }
 
-#define SPLITWIN_SPLITSIZE              3
+#define SPLITWIN_SPLITSIZE              4
 #define SPLITWIN_SPLITSIZEEX            4
-#define SPLITWIN_SPLITSIZEEXLN          6
-#define SPLITWIN_SPLITSIZEAUTOHIDE      36
-#define SPLITWIN_SPLITSIZEFADE          36
+#define SPLITWIN_SPLITSIZEEXLN          7
+#define SPLITWIN_SPLITSIZEAUTOHIDE      72
+#define SPLITWIN_SPLITSIZEFADE          72
 
 #define SPLIT_HORZ              ((sal_uInt16)0x0001)
 #define SPLIT_VERT              ((sal_uInt16)0x0002)
@@ -1850,118 +1850,85 @@ void SplitWindow::ImplDrawAutoHide(vcl::RenderContext& rRenderContext, bool bInP
     }
 }
 
-void SplitWindow::ImplDrawFadeArrow(vcl::RenderContext& rRenderContext, const Point& rPt, bool bHorz, bool bLeft)
+void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bHorizontal, bool bLeft)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    int x(rPt.X());
-    int y(rPt.Y());
-
-    Color aCol;
-    if (!bHorz)
-    {
-        int dx = 1;
-        if (bLeft)
-        {
-            x++;
-            dx = -1;
-        }
-
-        x++;
-        y++;
-        aCol = Color( COL_WHITE );
-        rRenderContext.DrawPixel( Point(x, y), aCol );
-        rRenderContext.DrawPixel( Point(x, y+1), aCol );
-        rRenderContext.DrawPixel( Point(x, y+2), aCol );
-        rRenderContext.DrawPixel( Point(x+dx, y+1), aCol );
-
-        x--; y--;
-        aCol = rStyleSettings.GetDarkShadowColor();
-        rRenderContext.DrawPixel( Point(x, y), rStyleSettings.GetDarkShadowColor() );
-        rRenderContext.DrawPixel( Point(x, y+1), rStyleSettings.GetDarkShadowColor() );
-        rRenderContext.DrawPixel( Point(x, y+2), rStyleSettings.GetDarkShadowColor() );
-        rRenderContext.DrawPixel( Point(x+dx, y+1), rStyleSettings.GetDarkShadowColor() );
-    }
-    else
-    {
-        int dy = 1;
-        if (bLeft)
-        {
-            y++;
-            dy = -1;
-        }
-
-        x++; y++;
-        aCol = Color( COL_WHITE );
-        rRenderContext.DrawPixel( Point(x, y), aCol );
-        rRenderContext.DrawPixel( Point(x+1, y), aCol );
-        rRenderContext.DrawPixel( Point(x+2, y), aCol );
-        rRenderContext.DrawPixel( Point(x+1, y+dy), aCol );
-
-        x--; y--;
-        aCol = rStyleSettings.GetDarkShadowColor();
-        rRenderContext.DrawPixel( Point(x, y), aCol );
-        rRenderContext.DrawPixel( Point(x+1, y), aCol );
-        rRenderContext.DrawPixel( Point(x+2, y), aCol );
-        rRenderContext.DrawPixel( Point(x+1, y+dy), aCol );
-    }
-}
-
-void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bHorz, bool bLeft )
-{
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    Color aColor;
 
     if (rRect.IsInside(GetPointerPosPixel()))
     {
-        rRenderContext.DrawWallpaper(rRect, Wallpaper(Color(COL_WHITE)));
         vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, rRect, 2, false, false, false);
-    }
 
-    if (bHorz)
-    {
-        int width = (int) (0.5 * rRect.getWidth() + 0.5);
-        int i = rRect.Left() + (rRect.getWidth() - width) / 2;
-        width += i;
-        const int y = rRect.Top() + 1;
-        ImplDrawFadeArrow(rRenderContext, Point( i-8, y), bHorz, bLeft);
-        while( i <= width )
-        {
-
-            rRenderContext.DrawPixel(Point(i, y), rStyleSettings.GetDarkShadowColor());
-            rRenderContext.DrawPixel(Point(i+1, y), rStyleSettings.GetShadowColor());
-
-            rRenderContext.DrawPixel(Point(i, y+1), rStyleSettings.GetShadowColor());
-            rRenderContext.DrawPixel(Point(i+1, y+1), rStyleSettings.GetFaceColor());
-            rRenderContext.DrawPixel(Point(i+2, y+1), Color(COL_WHITE));
-
-            rRenderContext.DrawPixel(Point(i+1, y+2), Color(COL_WHITE));
-            rRenderContext.DrawPixel(Point(i+2, y+2), Color(COL_WHITE));
-            i+=4;
-        }
-        ImplDrawFadeArrow(rRenderContext, Point(i + 3, y), bHorz, bLeft);
+        aColor = rStyleSettings.GetDarkShadowColor();
     }
     else
     {
-        int height = (int) (0.5 * rRect.getHeight() + 0.5);
-        int i = rRect.Top() + (rRect.getHeight() - height) / 2;
-        height += i;
-        const int x = rRect.Left() + 2;
-        ImplDrawFadeArrow(rRenderContext, Point(x, i - 8), bHorz, bLeft);
-        while (i <= height)
-        {
-            DrawPixel(Point(x, i), rStyleSettings.GetDarkShadowColor());
-            DrawPixel(Point(x+1, i), rStyleSettings.GetShadowColor());
+        rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
+        rRenderContext.SetFillColor(rStyleSettings.GetDarkShadowColor());
 
-            DrawPixel(Point(x, i+1), rStyleSettings.GetShadowColor());
-            DrawPixel(Point(x+1, i+1), rStyleSettings.GetFaceColor());
-            DrawPixel(Point(x+2, i+1), Color(COL_WHITE));
+        rRenderContext.DrawRect(rRect);
 
-            DrawPixel(Point(x+1, i+2), Color(COL_WHITE));
-            DrawPixel(Point(x+2, i+2), Color(COL_WHITE));
-            i+=4;
-        }
-        ImplDrawFadeArrow(rRenderContext, Point(x, i + 3), bHorz, bLeft);
+        aColor = rStyleSettings.GetFaceColor();
     }
+
+    sal_uInt16 nAA = rRenderContext.GetAntialiasing();
+    rRenderContext.SetAntialiasing(nAA | ANTIALIASING_PIXELSNAPHAIRLINE | ANTIALIASING_ENABLE_B2DDRAW);
+
+    long nWidth = rRect.getWidth();
+    long nWidthHalf = nWidth / 2;
+    long nHeight = rRect.getHeight();
+    long nHeightHalf = nHeight / 2;
+
+    long nLeft = rRect.Left();
+    long nRight = rRect.Right();
+    long nTop = rRect.Top();
+    long nBottom = rRect.Bottom();
+    long nMargin = 1;
+
+    rRenderContext.SetLineColor(aColor);
+    rRenderContext.SetFillColor(aColor);
+
+    Polygon aPoly(3);
+
+    if (bHorizontal)
+    {
+        long nCenter = nLeft + nWidthHalf;
+
+        if (bLeft)
+        {
+            aPoly.SetPoint(Point(nCenter,               nTop    + nMargin), 0);
+            aPoly.SetPoint(Point(nCenter - nHeightHalf, nBottom - nMargin), 1);
+            aPoly.SetPoint(Point(nCenter - nHeightHalf, nBottom - nMargin), 2);
+        }
+        else
+        {
+            aPoly.SetPoint(Point(nCenter,               nBottom - nMargin), 0);
+            aPoly.SetPoint(Point(nCenter - nHeightHalf, nTop    + nMargin), 1);
+            aPoly.SetPoint(Point(nCenter + nHeightHalf, nTop    + nMargin), 2);
+        }
+        rRenderContext.DrawPolygon(aPoly);
+    }
+    else
+    {
+        long nCenter = nTop + nHeightHalf;
+
+        if (bLeft)
+        {
+            aPoly.SetPoint(Point(nLeft  + nMargin, nCenter), 0);
+            aPoly.SetPoint(Point(nRight - nMargin, nCenter - nWidthHalf), 1);
+            aPoly.SetPoint(Point(nRight - nMargin, nCenter + nWidthHalf), 2);
+        }
+        else
+        {
+            aPoly.SetPoint(Point(nRight - nMargin, nCenter), 0);
+            aPoly.SetPoint(Point(nLeft  + nMargin, nCenter - nWidthHalf), 1);
+            aPoly.SetPoint(Point(nLeft  + nMargin, nCenter + nWidthHalf), 2);
+        }
+        rRenderContext.DrawPolygon(aPoly);
+    }
+
+    rRenderContext.SetAntialiasing(nAA);
 }
 
 void SplitWindow::ImplDrawFadeIn(vcl::RenderContext& rRenderContext, bool bInPaint)
