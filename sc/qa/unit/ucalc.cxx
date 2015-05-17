@@ -5889,7 +5889,8 @@ struct ScDataBarLengthData
 
 void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const ScRange& rRange,
         double nMinVal, ScColorScaleEntryType eMinType,
-        double nMaxVal, ScColorScaleEntryType eMaxType)
+        double nMaxVal, ScColorScaleEntryType eMaxType,
+        double nZeroPos)
 {
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, pDoc);
     ScRangeList aRangeList(rRange);
@@ -5919,6 +5920,7 @@ void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const S
         ScDataBarInfo* pInfo = pDatabar->GetDataBarInfo(ScAddress(nCol, i, 0));
         CPPUNIT_ASSERT(pInfo);
         ASSERT_DOUBLES_EQUAL(pData[i].nLength, pInfo->mnLength);
+        ASSERT_DOUBLES_EQUAL(nZeroPos, pInfo->mnZero);
     }
     delete pFormat;
 }
@@ -5942,7 +5944,7 @@ void Test::testDataBarLength()
     };
 
     testDataBarLengthImpl(m_pDoc, aValues, ScRange(0,0,0,0,7,0),
-            3, COLORSCALE_VALUE, 7, COLORSCALE_VALUE);
+            3, COLORSCALE_VALUE, 7, COLORSCALE_VALUE, 0.0);
 
     ScDataBarLengthData aValues2[] = {
         { -6, -100 },
@@ -5964,7 +5966,7 @@ void Test::testDataBarLength()
         { 0, -200 }
     };
     testDataBarLengthImpl(m_pDoc, aValues2, ScRange(1,0,0,1,15,0),
-            -4, COLORSCALE_VALUE, 8, COLORSCALE_VALUE);
+            -4, COLORSCALE_VALUE, 8, COLORSCALE_VALUE, 1.0/3.0 * 100);
 
     m_pDoc->DeleteTab(0);
 }
