@@ -172,11 +172,9 @@ public:
 const ::com::sun::star::uno::Any& MultiPropertySetHelper::getValue(
     sal_Int16 nValueNo )
 {
-    DBG_ASSERT( pValues != NULL,
-                "called getValue() without calling getValues() before");
-    DBG_ASSERT( pSequenceIndex != NULL,
-                "called getValue() without calling hasProperties() before" );
-    DBG_ASSERT( nValueNo < nLength, "index out of range" );
+    assert(pValues && "called getValue() without calling getValues()");
+    assert(pSequenceIndex && "called getValue() without calling hasProperties()");
+    assert(nValueNo < nLength);
 
     sal_Int16 nIndex = pSequenceIndex[ nValueNo ];
     return ( nIndex != -1 ) ? pValues[ nIndex ] : aEmptyAny;
@@ -184,9 +182,8 @@ const ::com::sun::star::uno::Any& MultiPropertySetHelper::getValue(
 
 bool MultiPropertySetHelper::hasProperty( sal_Int16 nValueNo )
 {
-    DBG_ASSERT( pSequenceIndex != NULL,
-                "called getValue() without calling hasProperties() before" );
-    DBG_ASSERT( nValueNo < nLength, "index out of range" );
+    assert(pSequenceIndex && "called hasProperty() without calling hasProperties()");
+    assert(nValueNo < nLength);
 
     return pSequenceIndex[ nValueNo ] != -1;
 }
