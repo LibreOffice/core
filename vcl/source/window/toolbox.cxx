@@ -3164,10 +3164,10 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         aImageSize = pImage->GetSizePixel();
 
         // determine drawing flags
-        sal_uInt16 nImageStyle = 0;
+        DrawImageFlags nImageStyle = DrawImageFlags::NONE;
 
         if ( !pItem->mbEnabled || !IsEnabled() )
-            nImageStyle |= IMAGE_DRAW_DISABLE;
+            nImageStyle |= DrawImageFlags::Disable;
 
         // #i35563# the dontknow state indicates different states at the same time
         // which should not be rendered disabled but normal
@@ -3198,7 +3198,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
             if( nHighlight != 0 )
             {
                 if( bHighContrastWhite )
-                    nImageStyle |= IMAGE_DRAW_COLORTRANSFORM;
+                    nImageStyle |= DrawImageFlags::ColorTransform;
             }
         }
         rRenderContext.DrawImage(Point( nImageOffX, nImageOffY ), *pImage, nImageStyle);

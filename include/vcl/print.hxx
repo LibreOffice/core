@@ -401,9 +401,9 @@ public:
                                           const Point& rSrcPt,  const Size& rSrcSize,
                                           bool bWindowInvalidate = false ) SAL_OVERRIDE;
 
-    virtual void                DrawImage( const Point&, const Image&, sal_uInt16 ) SAL_OVERRIDE;
+    virtual void                DrawImage( const Point&, const Image&, DrawImageFlags ) SAL_OVERRIDE;
     virtual void                DrawImage( const Point&, const Size&,
-                                           const Image&, sal_uInt16 ) SAL_OVERRIDE;
+                                           const Image&, DrawImageFlags ) SAL_OVERRIDE;
 
 
     // These 3 together are more modular PrintJob(), allowing printing more documents as one print job

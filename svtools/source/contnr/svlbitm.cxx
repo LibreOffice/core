@@ -273,7 +273,7 @@ void SvLBoxBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
 void SvLBoxBmp::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                       const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
-    sal_uInt16 nStyle = rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+    DrawImageFlags nStyle = rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
     rRenderContext.DrawImage(rPos, aBmp ,nStyle);
 }
 
@@ -341,7 +341,7 @@ void SvLBoxButton::Paint(
     const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
     SvBmp nIndex = eKind == SvLBoxButtonKind_staticImage ? SvBmp::STATICIMAGE : SvLBoxButtonData::GetIndex(nItemFlags);
-    sal_uInt16 nStyle = eKind != SvLBoxButtonKind_disabledCheckbox && rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+    DrawImageFlags nStyle = eKind != SvLBoxButtonKind_disabledCheckbox && rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
 
     //Native drawing
     bool bNativeOK = false;
@@ -358,7 +358,7 @@ void SvLBoxButton::Paint(
         //states ControlState::DEFAULT, ControlState::PRESSED and ControlState::ROLLOVER are not implemented
         if (IsStateHilighted())
             nState |= ControlState::FOCUSED;
-        if (nStyle != IMAGE_DRAW_DISABLE)
+        if (nStyle != DrawImageFlags::Disable)
             nState |= ControlState::ENABLED;
         if (IsStateChecked())
             aControlValue.setTristateVal(BUTTONVALUE_ON);
@@ -514,9 +514,9 @@ void SvLBoxContextBmp::Paint(
 
     bool _bSemiTransparent = pEntry && bool( SvTLEntryFlags::SEMITRANSPARENT  & pEntry->GetFlags( ) );
     // draw
-    sal_uInt16 nStyle = _rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+    DrawImageFlags nStyle = _rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
     if (_bSemiTransparent)
-        nStyle |= IMAGE_DRAW_SEMITRANSPARENT;
+        nStyle |= DrawImageFlags::SemiTransparent;
     rRenderContext.DrawImage(_rPos, rImage, nStyle);
 }
 

@@ -3141,9 +3141,9 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
                 }
                 aPos.Y() += (nTempEntryHeight - pImg->GetSizePixel().Height()) / 2;
 
-                sal_uInt16 nStyle = 0;
+                DrawImageFlags nStyle = DrawImageFlags::NONE;
                 if (!IsEnabled())
-                    nStyle |= IMAGE_DRAW_DISABLE;
+                    nStyle |= DrawImageFlags::Disable;
 
                 //native
                 bool bNativeOK = false;

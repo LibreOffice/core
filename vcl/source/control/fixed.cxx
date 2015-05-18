@@ -919,11 +919,11 @@ FixedImage::FixedImage( vcl::Window* pParent, const ResId& rResId ) :
 void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                            const Point& rPos, const Size& rSize )
 {
-    sal_uInt16 nStyle = 0;
+    DrawImageFlags nStyle = DrawImageFlags::NONE;
     if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
     {
         if ( !IsEnabled() )
-            nStyle |= IMAGE_DRAW_DISABLE;
+            nStyle |= DrawImageFlags::Disable;
     }
 
     Image *pImage = &maImage;

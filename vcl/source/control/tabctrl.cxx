@@ -965,7 +965,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
         Point aImgTL( nXPos, aRect.Top() );
         if (aImageSize.Height() < aRect.GetHeight())
             aImgTL.Y() += (aRect.GetHeight() - aImageSize.Height()) / 2;
-        rRenderContext.DrawImage(aImgTL, pItem->maTabImage, pItem->mbEnabled ? 0 : IMAGE_DRAW_DISABLE );
+        rRenderContext.DrawImage(aImgTL, pItem->maTabImage, pItem->mbEnabled ? DrawImageFlags::NONE : DrawImageFlags::Disable );
     }
 }
 

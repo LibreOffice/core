@@ -1601,7 +1601,7 @@ void UnoTreeListItem::Paint(
         Size aSize(GetSize(&rDev, pEntry));
         if (!!maImage)
         {
-            rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE);
+            rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable);
             int nWidth = maImage.GetSizePixel().Width() + 6;
             aPos.X() += nWidth;
             aSize.Width() -= nWidth;
@@ -1612,7 +1612,7 @@ void UnoTreeListItem::Paint(
     {
         if (!!maImage)
         {
-            rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE);
+            rRenderContext.DrawImage(aPos, maImage, rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable);
             aPos.X() += maImage.GetSizePixel().Width() + 6;
         }
         rRenderContext.DrawText(aPos, maText);

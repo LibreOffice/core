@@ -170,7 +170,7 @@ void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHe
 }
 
 void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
-                         const Point& rPos, sal_uInt16 nStyle,
+                         const Point& rPos, DrawImageFlags nStyle,
                          const Size* pSize )
 {
     if( pOutDev->IsDeviceOutputNecessary() )
@@ -180,15 +180,15 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
 
         aOutSize = ( pSize ? *pSize : pOutDev->PixelToLogic( maSize ) );
 
-        if( nStyle & IMAGE_DRAW_DISABLE )
+        if( nStyle & DrawImageFlags::Disable )
         {
             ImplUpdateDisabledBmpEx( nPos);
             pOutDev->DrawBitmapEx( rPos, aOutSize, aSrcPos, maSize, maDisabledBmpEx );
         }
         else
         {
-            if( nStyle & ( IMAGE_DRAW_COLORTRANSFORM |
-                           IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE | IMAGE_DRAW_SEMITRANSPARENT ) )
+            if( nStyle & ( DrawImageFlags::ColorTransform |
+                           DrawImageFlags::Highlight | DrawImageFlags::Deactive | DrawImageFlags::SemiTransparent ) )
             {
                 BitmapEx        aTmpBmpEx;
                 const Rectangle aCropRect( aSrcPos, maSize );
@@ -202,7 +202,7 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
 
                 Bitmap aTmpBmp( aTmpBmpEx.GetBitmap() );
 
-                if( nStyle & ( IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE ) )
+                if( nStyle & ( DrawImageFlags::Highlight | DrawImageFlags::Deactive ) )
                 {
                     BitmapWriteAccess* pAcc = aTmpBmp.AcquireWriteAccess();
 
@@ -218,7 +218,7 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
                         boost::scoped_array<sal_uInt8> pMapB(new sal_uInt8[ 256 ]);
                         long                    nX, nY;
 
-                        if( nStyle & IMAGE_DRAW_HIGHLIGHT )
+                        if( nStyle & DrawImageFlags::Highlight )
                             aColor = rSettings.GetHighlightColor();
                         else
                             aColor = rSettings.GetDeactiveColor();
@@ -278,7 +278,7 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
                     }
                 }
 
-                if( nStyle & IMAGE_DRAW_SEMITRANSPARENT )
+                if( nStyle & DrawImageFlags::SemiTransparent )
                 {
                     if( aTmpBmpEx.IsTransparent()  )
                     {

@@ -1331,13 +1331,13 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
 
                 DrawTextFlags   nTextStyle   = DrawTextFlags::NONE;
                 DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
-                sal_uInt16  nImageStyle  = 0;
+                DrawImageFlags  nImageStyle  = DrawImageFlags::NONE;
 
                 if (!pEntry->mbEnabled)
                 {
                     nTextStyle   |= DrawTextFlags::Disable;
                     nSymbolStyle |= DrawSymbolFlags::Disable;
-                    nImageStyle  |= IMAGE_DRAW_DISABLE;
+                    nImageStyle  |= DrawImageFlags::Disable;
                 }
 
                 Rectangle aOuterCheckRect(Point(aPos.X() + mpImpl->mnCheckPos, aPos.Y()),

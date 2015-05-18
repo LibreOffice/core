@@ -377,9 +377,9 @@ namespace svt
                 aPos.Y() += ( rRect.GetHeight() - aImageSize.Height() ) / 2;
 
             if ( IsZoom() )
-                rDev.DrawImage( aPos, aImageSize, aImage, 0 );
+                rDev.DrawImage( aPos, aImageSize, aImage );
             else
-                rDev.DrawImage( aPos, aImage, 0 );
+                rDev.DrawImage( aPos, aImage );
 
             if (rDev.IsClipRegion())
                 rDev.SetClipRegion();

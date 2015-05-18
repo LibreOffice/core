@@ -278,7 +278,7 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const Rectangle &
         Point aStr1Point((rSize.Width() - nTextWidth1)/2, nY + rImgSize.Height() + 0.7 * nTextHeight);
         Point aStr2Point((rSize.Width() - nTextWidth2)/2, nY + rImgSize.Height() + 1.7 * nTextHeight);
 
-        rRenderContext.DrawImage(aImgPoint, rImgSize, maWelcomeImage, IMAGE_DRAW_SEMITRANSPARENT);
+        rRenderContext.DrawImage(aImgPoint, rImgSize, maWelcomeImage, DrawImageFlags::SemiTransparent);
         rRenderContext.DrawText(aStr1Point, maWelcomeLine1);
         rRenderContext.DrawText(aStr2Point, maWelcomeLine2);
 

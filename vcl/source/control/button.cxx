@@ -485,11 +485,11 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
         }
     }
 
-    sal_uInt16 nStyle = 0;
+    DrawImageFlags nStyle = DrawImageFlags::NONE;
 
     if ( ! ( nDrawFlags & WINDOW_DRAW_NODISABLE ) &&
          ! IsEnabled() )
-        nStyle |= IMAGE_DRAW_DISABLE;
+        nStyle |= DrawImageFlags::Disable;
 
     if ( IsZoom() )
         pDev->DrawImage( aImagePos, aImageSize, *pImage, nStyle );
@@ -1937,9 +1937,9 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
             rRenderContext.DrawRect(aImageRect);
 
             // display image
-            sal_uInt16 nImageStyle = 0;
+            DrawImageFlags nImageStyle = DrawImageFlags::NONE;
             if (!bEnabled)
-                nImageStyle |= IMAGE_DRAW_DISABLE;
+                nImageStyle |= DrawImageFlags::Disable;
 
             Image* pImage = &maImage;
 
@@ -3890,9 +3890,9 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
         if (!pImg)
             return;
 
-        sal_uInt16 nStyle = 0;
+        DrawImageFlags nStyle = DrawImageFlags::NONE;
         if (!IsEnabled())
-            nStyle |= IMAGE_DRAW_DISABLE;
+            nStyle |= DrawImageFlags::Disable;
 
         Size aSize(aStateRect.GetSize());
         Size aImgSize(pImg->GetSizePixel());

@@ -69,11 +69,11 @@ namespace
 
 void ImageControl::ImplDraw(OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize) const
 {
-    sal_uInt16 nStyle = 0;
+    DrawImageFlags nStyle = DrawImageFlags::NONE;
     if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
     {
         if ( !IsEnabled() )
-            nStyle |= IMAGE_DRAW_DISABLE;
+            nStyle |= DrawImageFlags::Disable;
     }
 
     const Image& rImage( GetModeImage() );

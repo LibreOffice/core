@@ -529,9 +529,9 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
         }
         if (nImagePos + aImageSize.Width() <= aRect.Right())
         {
-            sal_uInt16 nStyle = 0;
+            DrawImageFlags nStyle = DrawImageFlags::NONE;
             if (!IsEnabled())
-                nStyle |= IMAGE_DRAW_DISABLE;
+                nStyle |= DrawImageFlags::Disable;
             rRenderContext.DrawImage(Point(nImagePos, nImagePosY), pItem->maImage, nStyle);
         }
     }

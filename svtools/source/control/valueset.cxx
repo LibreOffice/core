@@ -310,9 +310,9 @@ void ValueSet::ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* 
                 aPos.X() += (aRectSize.Width() - aImageSize.Width()) / 2;
                 aPos.Y() += (aRectSize.Height() - aImageSize.Height()) / 2;
 
-                sal_uInt16  nImageStyle  = 0;
+                DrawImageFlags  nImageStyle  = DrawImageFlags::NONE;
                 if (!IsEnabled())
-                    nImageStyle  |= IMAGE_DRAW_DISABLE;
+                    nImageStyle  |= DrawImageFlags::Disable;
 
                 if (aImageSize.Width()  > aRectSize.Width() ||
                     aImageSize.Height() > aRectSize.Height())

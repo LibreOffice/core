@@ -66,7 +66,7 @@ void TabItem::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdate
             const Size aIconSize (aIcon.GetSizePixel());
             const Point aIconLocation((GetSizePixel().Width() - aIconSize.Width()) / 2,
                                       (GetSizePixel().Height() - aIconSize.Height()) / 2);
-            rRenderContext.DrawImage(aIconLocation, aIcon, IsEnabled() ? 0 : IMAGE_DRAW_DISABLE);
+            rRenderContext.DrawImage(aIconLocation, aIcon, IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable);
             break;
         }
         case PT_Native:

@@ -2847,7 +2847,7 @@ void ImplWin::DrawEntry( bool bDrawImage, bool bDrawText, bool bDrawTextAtImageP
     bool bImage = !!maImage;
     if( bDrawImage && bImage && !bLayout )
     {
-        sal_uInt16 nStyle = 0;
+        DrawImageFlags nStyle = DrawImageFlags::NONE;
         Size aImgSz = maImage.GetSizePixel();
         Point aPtImg( nBorder, ( ( aOutSz.Height() - aImgSz.Height() ) / 2 ) );
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();

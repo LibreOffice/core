@@ -492,7 +492,7 @@ namespace svt { namespace table
         }
         else
             imageSize.Height() = i_context.aContentArea.GetHeight() - 1;
-        sal_uInt16 const nStyle = m_pImpl->rModel.isEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+        DrawImageFlags const nStyle = m_pImpl->rModel.isEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
         i_context.rDevice.DrawImage( imagePos, imageSize, i_image, nStyle );
     }
 

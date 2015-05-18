@@ -35,7 +35,7 @@ public:
 
     void        Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight,sal_uInt16 nInitSize );
     void        ColorTransform();
-    void        Draw( sal_uInt16 nPos, OutputDevice* pDev, const Point& rPos, sal_uInt16 nStyle, const Size* pSize = NULL );
+    void        Draw( sal_uInt16 nPos, OutputDevice* pDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize = NULL );
 
 private:
 

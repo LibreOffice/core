@@ -514,7 +514,7 @@ void VCLXGraphics::drawImage( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int
         if ( !!aImage )
         {
             InitOutputDevice( InitOutDevFlags::CLIPREGION|InitOutDevFlags::RASTEROP|InitOutDevFlags::COLORS );
-            mpOutputDevice->DrawImage( Point( x, y ), Size( width, height ), aImage, nStyle );
+            mpOutputDevice->DrawImage( Point( x, y ), Size( width, height ), aImage, static_cast<DrawImageFlags>(nStyle) );
         }
     }
 }

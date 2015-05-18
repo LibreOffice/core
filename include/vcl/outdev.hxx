@@ -186,12 +186,20 @@ namespace o3tl
     template<> struct typed_flags<DrawTextFlags> : is_typed_flags<DrawTextFlags, 0xffff> {};
 }
 
-// Flags for DrawImage()
-#define IMAGE_DRAW_DISABLE              ((sal_uInt16)0x0001)
-#define IMAGE_DRAW_HIGHLIGHT            ((sal_uInt16)0x0002)
-#define IMAGE_DRAW_DEACTIVE             ((sal_uInt16)0x0004)
-#define IMAGE_DRAW_COLORTRANSFORM       ((sal_uInt16)0x0008)
-#define IMAGE_DRAW_SEMITRANSPARENT      ((sal_uInt16)0x0010)
+// Flags for DrawImage(), these must match the definitions in css::awt::ImageDrawMode
+enum class DrawImageFlags
+{
+    NONE                 = 0x0000,
+    Disable              = 0x0001,
+    Highlight            = 0x0002,
+    Deactive             = 0x0004,
+    ColorTransform       = 0x0008,
+    SemiTransparent      = 0x0010,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DrawImageFlags> : is_typed_flags<DrawImageFlags, 0x001f> {};
+}
 
 // Grid
 #define GRID_DOTS                       ((sal_uLong)0x00000001)
@@ -1403,13 +1411,13 @@ public:
     virtual void                DrawImage(
                                     const Point& rPos,
                                     const Image& rImage,
-                                    sal_uInt16 nStyle = 0 );
+                                    DrawImageFlags nStyle = DrawImageFlags::NONE );
 
     virtual void                DrawImage(
                                     const Point& rPos,
                                     const Size& rSize,
                                     const Image& rImage,
-                                    sal_uInt16 nStyle = 0 );
+                                    DrawImageFlags nStyle = DrawImageFlags::NONE );
 
 
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const;

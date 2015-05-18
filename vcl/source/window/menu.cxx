@@ -1863,7 +1863,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                     nTextOffsetY += (aOutSz.Height()-pData->aSz.Height()) / 2;
                 DrawTextFlags   nTextStyle   = DrawTextFlags::NONE;
                 DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
-                sal_uInt16  nImageStyle = 0;
+                DrawImageFlags  nImageStyle  = DrawImageFlags::NONE;
 
                 // submenus without items are not disabled when no items are
                 // contained. The application itself should check for this!
@@ -1873,7 +1873,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                 {
                     nTextStyle   |= DrawTextFlags::Disable;
                     nSymbolStyle |= DrawSymbolFlags::Disable;
-                    nImageStyle  |= IMAGE_DRAW_DISABLE;
+                    nImageStyle  |= DrawImageFlags::Disable;
                 }
 
                 // Separator

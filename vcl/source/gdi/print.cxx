@@ -1851,13 +1851,13 @@ void Printer::SetFontOrientation( ImplFontEntry* const pFontEntry ) const
     pFontEntry->mnOrientation = pFontEntry->maMetric.mnOrientation;
 }
 
-void Printer::DrawImage( const Point&, const Image&, sal_uInt16 )
+void Printer::DrawImage( const Point&, const Image&, DrawImageFlags )
 {
     SAL_WARN ("vcl.gdi", "DrawImage(): Images can't be drawn on any Printer instance");
     assert(false);
 }
 
-void Printer::DrawImage( const Point&, const Size&, const Image&, sal_uInt16 )
+void Printer::DrawImage( const Point&, const Size&, const Image&, DrawImageFlags )
 {
     SAL_WARN ("vcl.gdi", "DrawImage(): Images can't be drawn on any Printer instance");
     assert(false);

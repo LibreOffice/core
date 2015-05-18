@@ -1306,13 +1306,13 @@ namespace
     }
 }
 
-void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, sal_uInt16 nStyle )
+void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, DrawImageFlags nStyle )
 {
     DrawImage( rPos, Size(), rImage, nStyle );
 }
 
 void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
-                              const Image& rImage, sal_uInt16 nStyle )
+                              const Image& rImage, DrawImageFlags nStyle )
 {
     bool bIsSizeValid = rSize.getWidth() != 0 && rSize.getHeight() != 0;
 
@@ -1323,7 +1323,7 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
             case IMAGETYPE_BITMAP:
             {
                 const Bitmap &rBitmap = *static_cast< Bitmap* >( rImage.mpImplData->mpData );
-                if( nStyle & IMAGE_DRAW_DISABLE )
+                if( nStyle & DrawImageFlags::Disable )
                 {
                     if ( bIsSizeValid )
                         DrawBitmapEx( rPos, rSize, makeDisabledBitmap(rBitmap) );
