@@ -32,7 +32,6 @@
 #include <sfx2/dispatch.hxx>
 #include "svx/sidebar/PopupContainer.hxx"
 
-
 namespace svx { namespace sidebar {
 
 LineWidthControl::LineWidthControl (
@@ -76,9 +75,6 @@ void LineWidthControl::dispose()
     svx::sidebar::PopupControl::dispose();
 }
 
-
-
-
 void LineWidthControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
 {
     svx::sidebar::PopupControl::Paint(rRenderContext, rect);
@@ -103,9 +99,6 @@ void LineWidthControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle
 
     rRenderContext.Pop();
 }
-
-
-
 
 void LineWidthControl::Initialize()
 {
@@ -197,9 +190,6 @@ void LineWidthControl::GetFocus()
         maVSWidth->GrabFocus();
 }
 
-
-
-
 void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit eMapUnit)
 {
     mbVSFocus = true;
@@ -207,10 +197,10 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
     mbCloseByEdit = false;
     meMapUnit = eMapUnit;
     SvtViewOptions aWinOpt( E_WINDOW, SIDEBAR_LINE_WIDTH_GLOBAL_VALUE );
-    if ( aWinOpt.Exists() )
+    if (aWinOpt.Exists())
     {
-        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt.GetUserData();
-        ::rtl::OUString aTmp;
+        css::uno::Sequence <css::beans::NamedValue> aSeq = aWinOpt.GetUserData();
+        OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
 
@@ -235,10 +225,10 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
         maVSWidth->SetItemText(9, rStr[8]);
     }
 
-    if(bValuable)
+    if (bValuable)
     {
-        sal_Int64 nVal = OutputDevice::LogicToLogic( lValue, (MapUnit)eMapUnit, MAP_100TH_MM );
-        nVal = maMFWidth->Normalize( nVal );
+        sal_Int64 nVal = OutputDevice::LogicToLogic(lValue, (MapUnit) eMapUnit, MAP_100TH_MM );
+        nVal = maMFWidth->Normalize(nVal);
         maMFWidth->SetValue( nVal, FUNIT_100TH_MM );
     }
     else
@@ -253,11 +243,14 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
     OUString strCurrValue = maMFWidth->GetText();
     sal_uInt16 i = 0;
     for(; i < 8; i++)
+    {
         if(strCurrValue == rStr[i])
         {
             maVSWidth->SetSelItem(i+1);
             break;
         }
+    }
+
     if (i>=8)
     {
         mbVSFocus = false;
@@ -268,15 +261,12 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
     maVSWidth->StartSelection();
 }
 
-
-
-
 IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
 {
-    if(pControl == &maVSWidth)
+    if (pControl == &maVSWidth)
     {
         sal_uInt16 iPos = maVSWidth->GetSelectItemId();
-        if(iPos >= 1 && iPos <= 8)
+        if (iPos >= 1 && iPos <= 8)
         {
             sal_IntPtr nVal = LogicToLogic(reinterpret_cast<sal_IntPtr>(maVSWidth->GetItemData( iPos )), MAP_POINT, (MapUnit)meMapUnit);
             nVal = maMFWidth->Denormalize(nVal);
@@ -287,10 +277,10 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             mbCloseByEdit = false;
             mnTmpCustomWidth = 0;
         }
-        else if(iPos == 9)
+        else if (iPos == 9)
         {//last custom
             //modified
-            if(mbCustom)
+            if (mbCustom)
             {
                 long nVal = LogicToLogic(mnCustomWidth , MAP_POINT, (MapUnit)meMapUnit);
                 nVal = maMFWidth->Denormalize(nVal);
@@ -310,14 +300,11 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             }
             //modify end
         }
-        if((iPos >= 1 && iPos <= 8) || (iPos == 9 && mbCustom)) //add
+        if ((iPos >= 1 && iPos <= 8) || (iPos == 9 && mbCustom)) //add
             mrLinePropertyPanel.EndLineWidthPopupMode();
     }
     return 0L;
 }
-
-
-
 
 IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
 {
