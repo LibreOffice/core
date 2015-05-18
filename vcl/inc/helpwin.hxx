@@ -44,11 +44,15 @@ private:
     QuickHelpFlags      mnStyle;
 
 protected:
-                        DECL_LINK_TYPED( TimerHdl, Timer*, void );
-    virtual void        Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) SAL_OVERRIDE;
-    virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual OUString    GetText() const SAL_OVERRIDE;
-    void                ImplShow();
+    DECL_LINK_TYPED( TimerHdl, Timer*, void );
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
+    virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+
+    virtual OUString GetText() const SAL_OVERRIDE;
+    void ImplShow();
+
 
 public:
                         HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle );

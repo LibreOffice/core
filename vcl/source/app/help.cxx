@@ -253,17 +253,18 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
     // FIXME RenderContext
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetPointFont(*this, rStyleSettings.GetHelpFont());
-    SetTextColor( rStyleSettings.GetHelpTextColor() );
-    SetTextAlign( ALIGN_TOP );
-    if ( IsNativeControlSupported( CTRL_TOOLTIP, PART_ENTIRE_CONTROL ) )
+    SetTextColor(rStyleSettings.GetHelpTextColor());
+    SetTextAlign(ALIGN_TOP);
+    if (IsNativeControlSupported(CTRL_TOOLTIP, PART_ENTIRE_CONTROL))
     {
-        EnableChildTransparentMode( true );
-        SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( true );
+        EnableChildTransparentMode(true);
+        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        SetPaintTransparent(true);
         SetBackground();
     }
     else
-        SetBackground( Wallpaper( rStyleSettings.GetHelpColor() ) );
+        SetBackground(Wallpaper(rStyleSettings.GetHelpColor()));
+
     if( rStyleSettings.GetHelpColor().IsDark() )
         SetLineColor( COL_WHITE );
     else
@@ -287,6 +288,30 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
     maShowTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
     maHideTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
     maHideTimer.SetTimeout( rHelpSettings.GetTipTimeout() );
+}
+
+void HelpTextWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    SetPointFont(rRenderContext, rStyleSettings.GetHelpFont());
+    rRenderContext.SetTextColor(rStyleSettings.GetHelpTextColor());
+    rRenderContext.SetTextAlign(ALIGN_TOP);
+
+    if (rRenderContext.IsNativeControlSupported(CTRL_TOOLTIP, PART_ENTIRE_CONTROL))
+    {
+        EnableChildTransparentMode(true);
+        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        SetPaintTransparent(true);
+        rRenderContext.SetBackground();
+    }
+    else
+        rRenderContext.SetBackground(Wallpaper(rStyleSettings.GetHelpColor()));
+
+    if (rStyleSettings.GetHelpColor().IsDark())
+        rRenderContext.SetLineColor(COL_WHITE);
+    else
+        rRenderContext.SetLineColor(COL_BLACK);
+    rRenderContext.SetFillColor();
 }
 
 HelpTextWindow::~HelpTextWindow()

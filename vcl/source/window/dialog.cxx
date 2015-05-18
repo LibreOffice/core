@@ -432,20 +432,40 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
     ImplInitSettings();
 }
 
+void Dialog::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    if (IsControlBackground())
+    {
+        // user override
+        SetBackground(GetControlBackground());
+    }
+    else if (rRenderContext.IsNativeControlSupported(CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_DIALOG))
+    {
+        // NWF background
+        mpWindowImpl->mnNativeBackground = PART_BACKGROUND_DIALOG;
+        EnableChildTransparentMode(true);
+    }
+    else
+    {
+        // fallback to settings color
+        rRenderContext.SetBackground(GetSettings().GetStyleSettings().GetDialogColor());
+    }
+}
+
 void Dialog::ImplInitSettings()
 {
     // user override
-    if ( IsControlBackground() )
-        SetBackground( GetControlBackground() );
+    if (IsControlBackground())
+        SetBackground(GetControlBackground());
     // NWF background
-    else if( IsNativeControlSupported( CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_DIALOG ) )
+    else if( IsNativeControlSupported(CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_DIALOG))
     {
         mpWindowImpl->mnNativeBackground = PART_BACKGROUND_DIALOG;
         EnableChildTransparentMode( true );
     }
     // fallback to settings color
     else
-        SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
+        SetBackground(GetSettings().GetStyleSettings().GetDialogColor());
 }
 
 Dialog::Dialog( WindowType nType )
