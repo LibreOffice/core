@@ -2565,7 +2565,7 @@ void SvTreeListBox::AdjustEntryHeightAndRecalc( const vcl::Font& rFont )
 void SvTreeListBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     Control::Paint(rRenderContext, rRect);
-    if(nTreeFlags & SvTreeFlags::RECALCTABS)
+    if (nTreeFlags & SvTreeFlags::RECALCTABS)
         SetTabs();
     pImp->Paint(rRenderContext, rRect);
 
@@ -2837,21 +2837,20 @@ SvTreeListEntry* SvTreeListBox::GetCurEntry() const
 
 void SvTreeListBox::ImplInitStyle()
 {
-
     const WinBits nWindowStyle = GetStyle();
 
     nTreeFlags |= SvTreeFlags::RECALCTABS;
-    if( nWindowStyle & WB_SORT )
+    if (nWindowStyle & WB_SORT)
     {
-        GetModel()->SetSortMode( SortAscending );
-        GetModel()->SetCompareHdl( LINK(this,SvTreeListBox,DefaultCompare));
+        GetModel()->SetSortMode(SortAscending);
+        GetModel()->SetCompareHdl(LINK(this, SvTreeListBox, DefaultCompare));
     }
     else
     {
-        GetModel()->SetSortMode( SortNone );
-        GetModel()->SetCompareHdl( Link<>() );
+        GetModel()->SetSortMode(SortNone);
+        GetModel()->SetCompareHdl(Link<>());
     }
-    pImp->SetStyle( nWindowStyle );
+    pImp->SetStyle(nWindowStyle);
     pImp->Resize();
     Invalidate();
 }
@@ -2884,7 +2883,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
     Rectangle aRect; // multi purpose
 
     bool bHorSBar = pImp->HasHorScrollBar();
-    PreparePaint(pEntry);
+    PreparePaint(rRenderContext, pEntry);
 
     pImp->UpdateContextBmpWidthMax(pEntry);
 
@@ -2986,7 +2985,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
                 {
                     // if the face color is bright then the deactive color is also bright
                     // -> so you can't see any deactive selection
-                    if (  bHideSelection && !rSettings.GetFaceColor().IsBright()
+                    if (bHideSelection && !rSettings.GetFaceColor().IsBright()
                        && aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright())
                     {
                         aNewWallColor = rSettings.GetDeactiveColor();
@@ -3054,7 +3053,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
             // A custom selection that starts at a tab position > 0, do not fill
             // the background of the 0th item, else e.g. we might not be able to
             // realize tab listboxes with lines.
-            if (!(nCurTab==0 && (nTreeFlags & SvTreeFlags::USESEL) && nFirstSelTab))
+            if (!(nCurTab == 0 && (nTreeFlags & SvTreeFlags::USESEL) && nFirstSelTab))
             {
                 rRenderContext.SetFillColor(aWallpaper.GetColor());
                 // this case may occur for smaller horizontal resizes
@@ -3087,7 +3086,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
         // cursor emphasis
         rRenderContext.SetFillColor();
         Color aOldLineColor = rRenderContext.GetLineColor();
-        SetLineColor(Color(COL_BLACK));
+        rRenderContext.SetLineColor(Color(COL_BLACK));
         aRect = GetFocusRect(pEntry, nLine);
         aRect.Top()++;
         aRect.Bottom()--;
@@ -3197,7 +3196,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry, long nLine, vcl::Render
     return 0; // nRowLen;
 }
 
-void SvTreeListBox::PreparePaint( SvTreeListEntry* )
+void SvTreeListBox::PreparePaint(vcl::RenderContext& /*rRenderContext*/, SvTreeListEntry* /*pEntry*/)
 {
 }
 

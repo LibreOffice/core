@@ -61,7 +61,7 @@ namespace dbaui
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-        virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
         virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
         virtual void LoseFocus() SAL_OVERRIDE;
@@ -71,7 +71,7 @@ namespace dbaui
         void    updateHelpText();
 
     protected:
-        virtual void        PreparePaint( SvTreeListEntry* _pEntry ) SAL_OVERRIDE;
+        virtual void        PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry* _pEntry) SAL_OVERRIDE;
         virtual Rectangle   GetFocusRect( SvTreeListEntry* _pEntry, long _nLine ) SAL_OVERRIDE;
         virtual void        ModelHasCleared() SAL_OVERRIDE;
 

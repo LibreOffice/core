@@ -617,7 +617,7 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual void    PreparePaint( SvTreeListEntry* );
+    virtual void    PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry* pEntry);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void            InitSettings(bool bFont, bool bForeground, bool bBackground);

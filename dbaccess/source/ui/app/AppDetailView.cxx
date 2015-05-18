@@ -98,31 +98,32 @@ void OCreationList::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _
         rRenderContext.SetFont(m_aOriginalFont);
 }
 
-void OCreationList::PreparePaint( SvTreeListEntry* _pEntry )
+void OCreationList::PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry* _pEntry)
 {
-    Wallpaper aEntryBackground( m_aOriginalBackgroundColor );
-    if ( _pEntry )
+    Wallpaper aEntryBackground(m_aOriginalBackgroundColor);
+    if (_pEntry)
     {
-        if ( _pEntry == GetCurEntry() )
+        if (_pEntry == GetCurEntry())
         {
             // draw a selection background
             bool bIsMouseDownEntry = ( _pEntry == m_pMouseDownEntry );
-            DrawSelectionBackground( GetBoundingRect( _pEntry ), bIsMouseDownEntry ? 1 : 2, false, true, false );
+            vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, GetBoundingRect(_pEntry),
+                                                      bIsMouseDownEntry ? 1 : 2, false, true, false );
 
-            if ( bIsMouseDownEntry )
+            if (bIsMouseDownEntry)
             {
-                vcl::Font aFont( GetFont() );
-                aFont.SetColor( GetSettings().GetStyleSettings().GetHighlightTextColor() );
-                Control::SetFont( aFont );
+                vcl::Font aFont(rRenderContext.GetFont());
+                aFont.SetColor(rRenderContext.GetSettings().GetStyleSettings().GetHighlightTextColor());
+                rRenderContext.SetFont(aFont);
             }
 
             // and temporary set a transparent background, for all the other
             // paint operations the SvTreeListBox is going to do
-            aEntryBackground = Wallpaper( Color( COL_TRANSPARENT ) );
+            aEntryBackground = Wallpaper(Color(COL_TRANSPARENT));
         }
     }
 
-    SetBackground( aEntryBackground );
+    rRenderContext.SetBackground(aEntryBackground);
 }
 
 void OCreationList::SelectSearchEntry( const void* _pEntry )
