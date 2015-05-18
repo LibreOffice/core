@@ -22,6 +22,10 @@
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <svx/svdview.hxx>
+#include <svl/srchitem.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <editeng/outliner.hxx>
 
 #include <editsh.hxx>
 #include <txatritr.hxx>
@@ -290,6 +294,26 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             SwDocShell *const pDocShell = pNode->GetDoc()->GetDocShell();
             SwViewShell *const pWrtShell = (pDocShell) ? pDocShell->GetEditShell() : 0;
             SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : 0;
+
+            // If there is an active text edit, then search there.
+            if (SdrView* pSdrView = pWrtShell->GetDrawView())
+            {
+                if (pSdrView->GetTextEditObject())
+                {
+                    SvxSearchItem aSearchItem(SID_SEARCH_ITEM);
+                    aSearchItem.SetSearchOptions(rSearchOpt);
+                    aSearchItem.SetBackward(!bSrchForward);
+                    sal_uInt16 nResult = pSdrView->GetTextEditOutlinerView()->StartSearchAndReplace(aSearchItem);
+                    if (!nResult)
+                        // If not found, end the text edit.
+                        pSdrView->SdrEndTextEdit();
+                    else
+                    {
+                        bFound = true;
+                        break;
+                    }
+                }
+            }
 
             sal_Int32 aStart = 0;
             // do we need to finish a note?
