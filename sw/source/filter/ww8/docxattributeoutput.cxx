@@ -4392,6 +4392,11 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath)
 {
     uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode*>(pPostponedMath)->GetOLEObj().GetOleRef());
     uno::Reference< uno::XInterface > xInterface( xObj->getComponent(), uno::UNO_QUERY );
+    if (!xInterface.is())
+    {
+        SAL_WARN("sw.ww8", "Broken math object");
+        return;
+    }
 // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
 // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
 // to RTLD_GLOBAL, so most probably a gcc bug.
