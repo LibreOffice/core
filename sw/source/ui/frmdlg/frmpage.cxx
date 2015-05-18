@@ -2648,12 +2648,6 @@ BmpWindow::BmpWindow(vcl::Window* pPar, WinBits nStyle)
     , bGraphic(false)
     , bLeftAlign(false)
 {
-    SetBackground();
-    SetPaintTransparent(true);
-    // #i119307# the graphic might have transparency, set up white as the color
-    // to use when drawing a rectangle under the image
-    SetLineColor(COL_WHITE);
-    SetFillColor(COL_WHITE);
 }
 
 Size BmpWindow::GetOptimalSize() const
@@ -2665,6 +2659,15 @@ VCL_BUILDER_FACTORY_ARGS(BmpWindow, 0)
 
 void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
+    // Setup
+    rRenderContext.SetBackground();
+    SetPaintTransparent(true);
+    // #i119307# the graphic might have transparency, set up white as the color
+    // to use when drawing a rectangle under the image
+    rRenderContext.SetLineColor(COL_WHITE);
+    rRenderContext.SetFillColor(COL_WHITE);
+
+    // Paint
     Point aPntPos;
     Size aPntSz(GetSizePixel());
     Size aGrfSize;
