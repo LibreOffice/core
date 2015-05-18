@@ -329,11 +329,11 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
 
     if( !pIndices && bCreateIndex && !aStyles.empty() )
     {
-        SAL_WARN_IF(0 != m_nIndexCreated, "xmloff.style",
-                    "Performance warning: sdbcx::Index created multiple times");
         pIndices = new IndicesType(aStyles.begin(), aStyles.end());
         SAL_WARN_IF(pIndices->size() != aStyles.size(), "xmloff", "Here is a duplicate Style");
 #if OSL_DEBUG_LEVEL > 0
+        SAL_WARN_IF(0 != m_nIndexCreated, "xmloff.style",
+                    "Performance warning: sdbcx::Index created multiple times");
         ++m_nIndexCreated;
 #endif
     }
