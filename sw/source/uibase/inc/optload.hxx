@@ -95,10 +95,13 @@ class SwCaptionPreview : public vcl::Window
 {
 private:
     OUString maText;
-    Point    maDrawPos;
+    bool mbFontInitialized;
+    vcl::Font maFont;
+    Point maDrawPos;
 public:
-    SwCaptionPreview( vcl::Window* pParent, WinBits nStyle );
+    SwCaptionPreview(vcl::Window* pParent, WinBits nStyle);
     void Init();
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext);
     void SetPreviewText( const OUString& rText );
     virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -130,25 +133,25 @@ private:
     VclPtr<ListBox>          m_pCharStyleLB;
     VclPtr<CheckBox>         m_pApplyBorderCB;
 
-    OUString        m_sSWTable;
-    OUString        m_sSWFrame;
-    OUString        m_sSWGraphic;
-    OUString        m_sOLE;
+    OUString m_sSWTable;
+    OUString m_sSWFrame;
+    OUString m_sSWGraphic;
+    OUString m_sOLE;
 
-    OUString        m_sIllustration;
-    OUString        m_sTable;
-    OUString        m_sText;
-    OUString        m_sDrawing;
+    OUString m_sIllustration;
+    OUString m_sTable;
+    OUString m_sText;
+    OUString m_sDrawing;
 
-    OUString        m_sBegin;
-    OUString        m_sEnd;
-    OUString        m_sAbove;
-    OUString        m_sBelow;
+    OUString m_sBegin;
+    OUString m_sEnd;
+    OUString m_sAbove;
+    OUString m_sBelow;
 
-    OUString        m_sNone;
+    OUString m_sNone;
 
-    SwFldMgr        *pMgr;
-    bool            bHTMLMode;
+    SwFldMgr* pMgr;
+    bool bHTMLMode;
 
     DECL_LINK(SelectHdl, void *);
     DECL_LINK(ModifyHdl, void * = 0);
@@ -156,12 +159,10 @@ private:
     DECL_LINK(ShowEntryHdl, void *);
     DECL_LINK(SaveEntryHdl, void *);
 
-    void                DelUserData();
-    void                SetOptions( const sal_uLong nPos,
-                                    const SwCapObjType eType,
-                                    const SvGlobalName *pOleId = 0);
-    void                SaveEntry( SvTreeListEntry* pEntry );
-    void                DrawSample();
+    void DelUserData();
+    void SetOptions(const sal_uLong nPos, const SwCapObjType eType, const SvGlobalName *pOleId = 0);
+    void SaveEntry(SvTreeListEntry* pEntry);
+    void InvalidatePreview();
 
 public:
                         SwCaptionOptPage( vcl::Window* pParent,

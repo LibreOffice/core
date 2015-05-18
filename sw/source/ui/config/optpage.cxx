@@ -1643,9 +1643,9 @@ void SwMarkPreview::DataChanged( const DataChangedEvent& rDCEvt )
         InitColors();
 }
 
-void SwMarkPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle &/*rRect*/)
+void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/*rRect*/)
 {
-    const Size aSz(GetOutputSizePixel());
+    const Size aSz(rRenderContext.GetOutputSizePixel());
 
     // Page
     aPage.SetSize(Size(aSz.Width() - 3, aSz.Height() - 3));
@@ -1670,19 +1670,19 @@ void SwMarkPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangl
     // draw shadow
     Rectangle aShadow(aPage);
     aShadow += Point(3, 3);
-    DrawRect( aShadow, m_aShadowCol, m_aTransCol );
+    DrawRect(rRenderContext, aShadow, m_aShadowCol, m_aTransCol);
 
     // draw page
-    DrawRect( aPage, m_aBgCol, m_aLineCol );
+    DrawRect(rRenderContext, aPage, m_aBgCol, m_aLineCol);
 
     // draw separator
     Rectangle aPageSeparator(aPage);
     aPageSeparator.SetSize(Size(2, aPageSeparator.GetHeight()));
     aPageSeparator.Move(aPage.GetWidth() / 2 - 1, 0);
-    DrawRect( aPageSeparator, m_aLineCol, m_aTransCol );
+    DrawRect(rRenderContext, aPageSeparator, m_aLineCol, m_aTransCol);
 
-    PaintPage(aLeftPagePrtArea);
-    PaintPage(aRightPagePrtArea);
+    PaintPage(rRenderContext, aLeftPagePrtArea);
+    PaintPage(rRenderContext, aRightPagePrtArea);
 
     Rectangle aLeftMark(Point(aPage.Left() + 2, aLeftPagePrtArea.Top() + 4), Size(aLeftPagePrtArea.Left() - 4, 2));
     Rectangle aRightMark(Point(aRightPagePrtArea.Right() + 2, aRightPagePrtArea.Bottom() - 6), Size(aLeftPagePrtArea.Left() - 4, 2));
@@ -1709,14 +1709,14 @@ void SwMarkPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangl
         default:
             return;
     }
-    DrawRect( aLeftMark, m_aMarkCol, m_aTransCol );
-    DrawRect( aRightMark, m_aMarkCol, m_aTransCol );
+    DrawRect(rRenderContext, aLeftMark, m_aMarkCol, m_aTransCol);
+    DrawRect(rRenderContext, aRightMark, m_aMarkCol, m_aTransCol);
 }
 
-void SwMarkPreview::PaintPage(const Rectangle &rRect)
+void SwMarkPreview::PaintPage(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
 {
     // draw PrintArea
-    DrawRect(rRect, m_aTransCol, m_aPrintAreaCol );
+    DrawRect(rRenderContext, rRect, m_aTransCol, m_aPrintAreaCol);
 
     // draw Testparagraph
     sal_uLong nLTxtBorder = 4;
@@ -1739,18 +1739,18 @@ void SwMarkPreview::PaintPage(const Rectangle &rRect)
             aTextLine.SetSize(Size(aTextLine.GetWidth() / 2, aTextLine.GetHeight()));
 
         if (aPage.IsInside(aTextLine))
-            DrawRect(aTextLine, m_aTxtCol, m_aTransCol );
+            DrawRect(rRenderContext, aTextLine, m_aTxtCol, m_aTransCol);
 
         aTextLine.Move(0, nStep);
     }
     aTextLine.Move(0, -nStep);
 }
 
-void SwMarkPreview::DrawRect(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor)
+void SwMarkPreview::DrawRect(vcl::RenderContext& rRenderContext, const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor)
 {
-    SetFillColor(rFillColor);
-    SetLineColor(rLineColor);
-    Window::DrawRect(rRect);
+    rRenderContext.SetFillColor(rFillColor);
+    rRenderContext.SetLineColor(rLineColor);
+    rRenderContext.DrawRect(rRect);
 }
 
 Size SwMarkPreview::GetOptimalSize() const

@@ -63,8 +63,7 @@ using namespace ::com::sun::star;
 #include <svl/eitem.hxx>
 
 SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptGeneralPage",
-        "modules/swriter/ui/optgeneralpage.ui", &rSet)
+    : SfxTabPage(pParent, "OptGeneralPage", "modules/swriter/ui/optgeneralpage.ui", &rSet)
     , m_pWrtShell(NULL)
     , m_nLastTab(0)
     , m_nOldLinkMode(MANUAL)
@@ -107,7 +106,7 @@ SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pMetricLB->SetSelectHdl(LINK(this, SwLoadOptPage, MetricHdl));
 
     const SfxPoolItem* pItem;
-    if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem )
+    if (SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem)
         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
     {
         m_pTabFT->Hide();
@@ -382,8 +381,9 @@ SwCaptionOptDlg::SwCaptionOptDlg(vcl::Window* pParent, const SfxItemSet& rSet)
     SetTabPage(SwCaptionOptPage::Create(get_content_area(), &rSet));
 }
 
-SwCaptionPreview::SwCaptionPreview( vcl::Window* pParent, WinBits nStyle )
-    : Window( pParent, nStyle )
+SwCaptionPreview::SwCaptionPreview(vcl::Window* pParent, WinBits nStyle)
+    : Window(pParent, nStyle)
+    , mbFontInitialized(false)
 {
     Init();
 }
@@ -399,21 +399,30 @@ VCL_BUILDER_DECL_FACTORY(SwCaptionPreview)
 
 void SwCaptionPreview::Init()
 {
-    maDrawPos = Point( 4, 6 );
-
-    Wallpaper   aBack( GetSettings().GetStyleSettings().GetWindowColor() );
-    SetBackground( aBack );
-    SetFillColor( aBack.GetColor() );
-    SetLineColor( aBack.GetColor() );
-    SetBorderStyle( WindowBorderStyle::MONO );
-    vcl::Font aFont(GetFont());
-    aFont.SetHeight(aFont.GetHeight() * 120 / 100 );
-    SetFont(aFont);
+    maDrawPos = Point(4, 6);
 }
 
-void SwCaptionPreview::SetPreviewText( const OUString& rText )
+void SwCaptionPreview::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    if( rText != maText )
+    Wallpaper aBack(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
+    rRenderContext.SetBackground(aBack);
+    rRenderContext.SetFillColor(aBack.GetColor());
+    rRenderContext.SetLineColor(aBack.GetColor());
+
+    if (!mbFontInitialized)
+    {
+        maFont = vcl::Font(rRenderContext.GetFont());
+        maFont.SetHeight(maFont.GetHeight() * 120 / 100);
+        mbFontInitialized = true;
+    }
+    rRenderContext.SetFont(maFont);
+
+    SetBorderStyle(WindowBorderStyle::MONO);
+}
+
+void SwCaptionPreview::SetPreviewText(const OUString& rText)
+{
+    if (rText != maText)
     {
         maText = rText;
         Invalidate();
@@ -429,11 +438,11 @@ void SwCaptionPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
 {
     Window::Paint(rRenderContext, rRect);
 
-    DrawRect( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
-    DrawText( Point( 4, 6 ), maText );
+    rRenderContext.DrawRect(Rectangle(Point(0, 0), GetSizePixel()));
+    rRenderContext.DrawText(Point(4, 6), maText);
 }
 
-SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet )
+SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptCaptionPage", "modules/swriter/ui/optcaptionpage.ui", &rSet)
     , m_sSWTable(SW_RESSTR(STR_CAPTION_TABLE))
     , m_sSWFrame(SW_RESSTR(STR_CAPTION_FRAME))
@@ -466,15 +475,12 @@ SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet
     get(m_pCharStyleLB, "charstyle");
     get(m_pApplyBorderCB, "applyborder");
 
-    Wallpaper   aBack( GetSettings().GetStyleSettings().GetWindowColor() );
-    m_pPreview->SetBackground( aBack );
-
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_ABB, m_sIllustration);
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_TABLE, m_sTable);
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_FRAME, m_sText);
     SwStyleNameMapper::FillUIName(RES_POOLCOLL_LABEL_DRAWING, m_sDrawing);
 
-    SwWrtShell *pSh = ::GetActiveWrtShell();
+    SwWrtShell* pSh = ::GetActiveWrtShell();
 
     // m_pFormatBox
     sal_uInt16 nSelFmt = SVX_NUM_ARABIC;
@@ -839,19 +845,19 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
     m_pTextText->Enable(bEnable);
     m_pTextEdit->Enable(bEnable);
 
-    DrawSample();
+    InvalidatePreview();
     return 0;
 }
 
 IMPL_LINK_NOARG(SwCaptionOptPage, SelectHdl)
 {
-    DrawSample();
+    InvalidatePreview();
     return 0;
 }
 
 IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
 {
-    DrawSample();
+    InvalidatePreview();
 
     SvTreeListEntry* pSelEntry = m_pCheckLB->FirstSelected();
     bool bChecked = false;
@@ -866,7 +872,7 @@ IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
     return 0;
 }
 
-void SwCaptionOptPage::DrawSample()
+void SwCaptionOptPage::InvalidatePreview()
 {
     OUString aStr;
 
@@ -924,13 +930,13 @@ void SwCaptionOptPage::DrawSample()
         }
         aStr += m_pTextEdit->GetText();
     }
-    m_pPreview->SetPreviewText( aStr );
+    m_pPreview->SetPreviewText(aStr);
 }
 
 // Description: ComboBox without Spaces
 void CaptionComboBox::KeyInput(const KeyEvent& rEvt)
 {
-    if( rEvt.GetKeyCode().GetCode() != KEY_SPACE )
+    if (rEvt.GetKeyCode().GetCode() != KEY_SPACE)
         SwComboBox::KeyInput(rEvt);
 }
 
