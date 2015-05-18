@@ -73,7 +73,7 @@ void E3dPolygonObj::CreateDefaultNormals()
         basegfx::B3DPolygon aNormals;
 
         // Get normal (and invert)
-        basegfx::B3DVector aNormal(-basegfx::tools::getNormal(aPolygon));
+        basegfx::B3DVector aNormal(aPolygon.getNormal());
 
         // Fill new polygon
         for(sal_uInt32 b(0L); b < aPolygon.count(); b++)
@@ -104,7 +104,7 @@ void E3dPolygonObj::CreateDefaultTexture()
         basegfx::B3DRange aVolume(basegfx::tools::getRange(aPolygon));
 
         // Get normal
-        basegfx::B3DVector aNormal(basegfx::tools::getNormal(aPolygon));
+        basegfx::B3DVector aNormal(aPolygon.getNormal());
         aNormal.setX(fabs(aNormal.getX()));
         aNormal.setY(fabs(aNormal.getY()));
         aNormal.setZ(fabs(aNormal.getZ()));

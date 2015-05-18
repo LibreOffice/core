@@ -131,7 +131,7 @@ drawing::Direction3D Stripe::getNormal() const
         aPolygon3D.append(Position3DToB3DPoint( m_aPoint2 ));
         aPolygon3D.append(Position3DToB3DPoint( m_aPoint3 ));
         aPolygon3D.append(Position3DToB3DPoint( m_aPoint4 ));
-        ::basegfx::B3DVector aNormal(::basegfx::tools::getNormal(aPolygon3D));
+        ::basegfx::B3DVector aNormal(aPolygon3D.getNormal());
         aRet = B3DVectorToDirection3D(aNormal);
     }
 

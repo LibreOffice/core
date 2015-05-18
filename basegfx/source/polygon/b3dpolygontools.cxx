@@ -72,11 +72,6 @@ namespace basegfx
             return aRetval;
         }
 
-        B3DVector getNormal(const B3DPolygon& rCandidate)
-        {
-            return rCandidate.getNormal();
-        }
-
         double getLength(const B3DPolygon& rCandidate)
         {
             double fRetval(0.0);
