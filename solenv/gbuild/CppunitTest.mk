@@ -74,8 +74,7 @@ $(if $(URE),\
 $(if $(VCL),\
 	--protector $(call gb_Library_get_target,vclbootstrapprotector) vclbootstrapprotector \
  ) \
-$(ARGS) \
-$(CPPUNITTEST_ARGS)
+$(ARGS)
 endef
 
 .PHONY : $(call gb_CppunitTest_get_clean_target,%)
