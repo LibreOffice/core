@@ -34,6 +34,36 @@
 #define PREVIEW_WIDTH       113
 #define PREVIEW_HEIGHT      160
 
+#define RECT_SIZE_PIX 7
+
+namespace {
+
+void DrawRectangles(vcl::RenderContext& rRenderContext, Point& rUL, Point& rBR)
+{
+    int nMiddleX, nMiddleY;
+    Point aBL, aUR;
+
+    aUR = Point(rBR.X(), rUL.Y());
+    aBL = Point(rUL.X(), rBR.Y());
+    nMiddleX = (rBR.X() - rUL.X()) / 2 + rUL.X();
+    nMiddleY = (rBR.Y() - rUL.Y()) / 2 + rUL.Y();
+
+    rRenderContext.DrawLine(rUL, aBL);
+    rRenderContext.DrawLine(aBL, rBR);
+    rRenderContext.DrawLine(rBR, aUR);
+    rRenderContext.DrawLine(aUR, rUL);
+    rRenderContext.DrawRect(Rectangle(rUL, Size(RECT_SIZE_PIX,RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(aBL, Size(RECT_SIZE_PIX, -RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(rBR, Size(-RECT_SIZE_PIX, -RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(aUR, Size(-RECT_SIZE_PIX, RECT_SIZE_PIX )));
+    rRenderContext.DrawRect(Rectangle(Point(nMiddleX - RECT_SIZE_PIX / 2, rUL.Y()), Size(RECT_SIZE_PIX, RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(Point(nMiddleX - RECT_SIZE_PIX / 2, rBR.Y()), Size(RECT_SIZE_PIX, -RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(Point(rUL.X(), nMiddleY - RECT_SIZE_PIX / 2), Size(RECT_SIZE_PIX, RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(Point(rBR.X(), nMiddleY - RECT_SIZE_PIX / 2), Size(-RECT_SIZE_PIX, RECT_SIZE_PIX)));
+}
+
+}
+
 class ScanPreview : public vcl::Window
 {
 private:
@@ -50,7 +80,6 @@ private:
     bool      mbDragDrawn;
     bool      mbIsDragging;
 
-    void DrawRectangles(vcl::RenderContext& rRenderContext, Point& rUL, Point& rBR);
 public:
     ScanPreview(vcl::Window* pParent, WinBits nStyle)
         : Window(pParent, nStyle)
@@ -1074,8 +1103,6 @@ void SaneDlg::EstablishButtonOption()
     mpButtonOption->Show( true );
 }
 
-#define RECT_SIZE_PIX 7
-
 void ScanPreview::MouseMove(const MouseEvent& rMEvt)
 {
     if( mbIsDragging )
@@ -1215,30 +1242,6 @@ void ScanPreview::MouseButtonUp( const MouseEvent& rMEvt )
     mbIsDragging = false;
 
     Window::MouseButtonUp( rMEvt );
-}
-
-void ScanPreview::DrawRectangles(vcl::RenderContext& rRenderContext, Point& rUL, Point& rBR)
-{
-    int nMiddleX, nMiddleY;
-    Point aBL, aUR;
-
-    aUR = Point(rBR.X(), rUL.Y());
-    aBL = Point(rUL.X(), rBR.Y());
-    nMiddleX = (rBR.X() - rUL.X()) / 2 + rUL.X();
-    nMiddleY = (rBR.Y() - rUL.Y()) / 2 + rUL.Y();
-
-    rRenderContext.DrawLine(rUL, aBL);
-    rRenderContext.DrawLine(aBL, rBR);
-    rRenderContext.DrawLine(rBR, aUR);
-    rRenderContext.DrawLine(aUR, rUL);
-    rRenderContext.DrawRect(Rectangle(rUL, Size(RECT_SIZE_PIX,RECT_SIZE_PIX)));
-    rRenderContext.DrawRect(Rectangle(aBL, Size(RECT_SIZE_PIX, -RECT_SIZE_PIX)));
-    rRenderContext.DrawRect(Rectangle(rBR, Size(-RECT_SIZE_PIX, -RECT_SIZE_PIX)));
-    rRenderContext.DrawRect(Rectangle(aUR, Size(-RECT_SIZE_PIX, RECT_SIZE_PIX )));
-    rRenderContext.DrawRect(Rectangle(Point(nMiddleX - RECT_SIZE_PIX / 2, rUL.Y()), Size(RECT_SIZE_PIX, RECT_SIZE_PIX)));
-    rRenderContext.DrawRect(Rectangle(Point(nMiddleX - RECT_SIZE_PIX / 2, rBR.Y()), Size(RECT_SIZE_PIX, -RECT_SIZE_PIX)));
-    rRenderContext.DrawRect(Rectangle(Point(rUL.X(), nMiddleY - RECT_SIZE_PIX / 2), Size(RECT_SIZE_PIX, RECT_SIZE_PIX)));
-    rRenderContext.DrawRect(Rectangle(Point(rBR.X(), nMiddleY - RECT_SIZE_PIX / 2), Size(-RECT_SIZE_PIX, RECT_SIZE_PIX)));
 }
 
 void ScanPreview::DrawDrag(vcl::RenderContext& rRenderContext)
