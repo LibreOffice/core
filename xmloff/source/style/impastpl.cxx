@@ -484,7 +484,7 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
     }
 
     // copy the families + names into the sequence types
-    DBG_ASSERT( aFamilies.size() == aNames.size(), "families != names" );
+    assert(aFamilies.size() == aNames.size());
 
     rFamilies.realloc( aFamilies.size() );
     std::copy( aFamilies.begin(), aFamilies.end(), rFamilies.getArray() );
@@ -638,15 +638,10 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
             XMLAutoStylePoolProperties* pProperties =
                 &rParent.GetPropertiesList()[j];
             sal_uLong nPos = pProperties->GetPos();
-            DBG_ASSERT( nPos < nCount,
-                    "SvXMLAutoStylePool_Impl::exportXML: wrong position" );
-            if( nPos < nCount )
-            {
-                DBG_ASSERT( !aExpStyles[nPos].mpProperties,
-                    "SvXMLAutoStylePool_Impl::exportXML: double position" );
-                aExpStyles[nPos].mpProperties = pProperties;
-                aExpStyles[nPos].mpParent = &rParent.GetParent();
-            }
+            assert(nPos < nCount);
+            assert(!aExpStyles[nPos].mpProperties);
+            aExpStyles[nPos].mpProperties = pProperties;
+            aExpStyles[nPos].mpParent = &rParent.GetParent();
         }
     }
 
@@ -674,8 +669,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
     for( size_t i = 0; i < nCount; i++ )
     {
-        DBG_ASSERT( aExpStyles[i].mpProperties,
-                    "SvXMLAutoStylePool_Impl::exportXML: empty position" );
+        assert(aExpStyles[i].mpProperties);
 
         if( aExpStyles[i].mpProperties )
         {
