@@ -78,7 +78,7 @@ namespace rptui
         void startListening();
     };
 
-}   // namespace rptui
+}
 
 #endif // INCLUDED_REPORTDESIGN_INC_PROPERTYFORWARD_HXX
 

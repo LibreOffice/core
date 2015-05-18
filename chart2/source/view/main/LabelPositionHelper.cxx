@@ -466,6 +466,6 @@ void LabelPositionHelper::correctPositionForRotation( const uno::Reference< draw
         , static_cast<sal_Int32>(aOldPos.Y + fYCorrection ) ) );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

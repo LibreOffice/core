@@ -403,7 +403,7 @@ namespace __cxxabiv1
   // null if there is none.
   extern "C" std::type_info*
   __cxa_current_exception_type();
-} // namespace __cxxabiv1
+}
 
 // User programs should use the alias `abi'. 
 namespace abi = __cxxabiv1;

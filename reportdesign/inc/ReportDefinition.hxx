@@ -413,7 +413,7 @@ namespace reportdesign
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager2 > getUIConfigurationManager2(  ) throw (::com::sun::star::uno::RuntimeException);
       };
 
-} // namespace reportdesign
+}
 
 #endif // INCLUDED_REPORTDESIGN_INC_REPORTDEFINITION_HXX
 

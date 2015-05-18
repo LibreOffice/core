@@ -200,7 +200,7 @@ DECL_COLUMN(FormattedFieldColumn)
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
 
 
-}   // namespace frm
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

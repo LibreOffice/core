@@ -266,6 +266,6 @@ Window* Window::getLegacyNonLayoutAccessibleRelationMemberOf() const
     return pWindow;
 }
 
-} /* namespace vcl */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

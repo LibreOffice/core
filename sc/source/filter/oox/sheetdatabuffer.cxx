@@ -765,7 +765,7 @@ void SheetDataBuffer::applyCellMerging( const CellRangeAddress& rRange )
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

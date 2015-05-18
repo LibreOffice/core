@@ -129,7 +129,7 @@ public:
     virtual void SAL_CALL closeOutput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-} // namespace comphelper
+}
 
 #endif // INCLUDED_COMPHELPER_SEQSTREAM_HXX
 

@@ -318,6 +318,6 @@ namespace dbmm
         m_pChanges->SetText(_rSummary);
     }
 
-} // namespace dbmm
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

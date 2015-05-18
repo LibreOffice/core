@@ -45,8 +45,8 @@ private:
     StringVector        maStrings;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

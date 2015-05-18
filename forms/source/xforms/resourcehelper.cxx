@@ -61,6 +61,6 @@ OUString getResource( sal_uInt16 nResourceId,
     return sString;
 }
 
-}   // namespace xforms
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

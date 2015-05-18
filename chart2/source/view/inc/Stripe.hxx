@@ -72,7 +72,7 @@ private:
     ::com::sun::star::drawing::Direction3D m_aManualNormal;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

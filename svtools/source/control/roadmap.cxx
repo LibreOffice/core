@@ -844,6 +844,6 @@ void IDLabel::DataChanged(const DataChangedEvent& rDCEvt)
     }
 }
 
-}   // namespace svt
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

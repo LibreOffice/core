@@ -150,7 +150,7 @@ class FWI_DLLPUBLIC HandlerCFGAccess : public ::utl::ConfigItem
         virtual void Notify(const css::uno::Sequence< OUString >& lPropertyNames) SAL_OVERRIDE;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_CLASSES_PROTOCOLHANDLERCACHE_HXX
 

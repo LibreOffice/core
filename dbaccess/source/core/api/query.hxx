@@ -151,7 +151,7 @@ private:
     void registerProperties();
 };
 
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_API_QUERY_HXX
 

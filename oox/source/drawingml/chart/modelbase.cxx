@@ -54,8 +54,8 @@ LayoutModel::~LayoutModel()
 {
 }
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

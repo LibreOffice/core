@@ -85,7 +85,7 @@ private:
 //     DataSourceTabPage *   m_pDataSourceTabPage;
     bool                  m_bCanTravel;
 };
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

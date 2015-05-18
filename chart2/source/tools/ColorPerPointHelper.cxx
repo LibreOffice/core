@@ -77,6 +77,6 @@ bool ColorPerPointHelper::hasPointOwnProperties(
     return false;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

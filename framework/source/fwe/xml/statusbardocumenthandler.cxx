@@ -655,6 +655,6 @@ throw ( SAXException, RuntimeException )
     m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_STATUSBARITEM ) );
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

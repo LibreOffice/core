@@ -903,7 +903,7 @@ int GrindApp::Main()
     return 0;
 }
 
-} // namespace
+}
 
 
 SAL_IMPLEMENT_MAIN()

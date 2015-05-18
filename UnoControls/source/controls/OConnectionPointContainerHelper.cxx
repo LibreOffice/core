@@ -136,6 +136,6 @@ void SAL_CALL OConnectionPointContainerHelper::unadvise(    const   Type&       
     m_aMultiTypeContainer.removeInterface( aType, xListener );
 }
 
-}   // namespace unocontrols
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

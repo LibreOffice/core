@@ -41,7 +41,7 @@ const Type* lclGetStyleElement( const RefVector< Type >& rVector, sal_Int32 nInd
         rVector.get( ::std::min( static_cast< sal_Int32 >( nIndex - 1 ), static_cast< sal_Int32 >( rVector.size() - 1 ) ) ).get();
 }
 
-} // namespace
+}
 
 const FillProperties* Theme::getFillStyle( sal_Int32 nIndex ) const
 {
@@ -106,7 +106,7 @@ const TextFont* Theme::resolveFont( const OUString& rName ) const
     return 0;
 }
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

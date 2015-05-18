@@ -131,7 +131,7 @@ namespace sdbtools
         }
     };
 
-} // namespace sdbtools
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_CONNECTIONDEPENDENT_HXX
 

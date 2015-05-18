@@ -298,7 +298,7 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
 
 }; // class StatusIndicatorFactory
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATORFACTORY_HXX
 

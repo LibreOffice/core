@@ -40,7 +40,7 @@ private:
     BarGeometryResources*   m_pGeometryResources;
 };
 
-} //namespace chart
+}
 
 #endif
 

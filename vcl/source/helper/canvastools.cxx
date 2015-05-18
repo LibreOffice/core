@@ -626,8 +626,8 @@ namespace vcl
                           toByteColor(aARGBColor.Blue) );
         }
 
-    } // namespace vcltools
+    }
 
-} // namespace canvas
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

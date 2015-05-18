@@ -203,6 +203,6 @@ bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdent
     return sIdentifier == "0";
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

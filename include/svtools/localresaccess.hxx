@@ -67,7 +67,7 @@ namespace svt
     };
 
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_LOCALRESACCESS_HXX

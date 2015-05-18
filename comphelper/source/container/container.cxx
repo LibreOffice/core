@@ -134,7 +134,7 @@ IndexAccessIterator::~IndexAccessIterator() {}
 }
 
 
-}   // namespace comphelper
+}
 
 
 

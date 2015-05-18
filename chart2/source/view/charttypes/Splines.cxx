@@ -938,6 +938,6 @@ void SplineCalculater::CalculateBSplines(
     } // next piece of the series
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

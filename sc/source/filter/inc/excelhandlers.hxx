@@ -162,8 +162,8 @@ protected:
                             bool bCloneDecoder = false );
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

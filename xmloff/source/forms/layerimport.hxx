@@ -175,7 +175,7 @@ namespace xmloff
         void documentDone( );
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_LAYERIMPORT_HXX
 

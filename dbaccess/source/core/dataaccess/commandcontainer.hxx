@@ -70,7 +70,7 @@ protected:
     virtual OUString determineContentType() const SAL_OVERRIDE;
 };
 
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMMANDCONTAINER_HXX
 

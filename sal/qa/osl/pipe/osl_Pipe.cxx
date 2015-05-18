@@ -613,7 +613,7 @@ namespace osl_Pipe
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getError);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getHandle);
 
-} // namespace osl_Pipe
+}
 
 namespace osl_StreamPipe
 {
@@ -901,7 +901,7 @@ namespace osl_StreamPipe
 //CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::assign);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::recv);
 
-} // namespace osl_StreamPipe
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

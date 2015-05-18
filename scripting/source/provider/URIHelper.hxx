@@ -94,7 +94,7 @@ public:
             throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-} // namespace func_provider
+}
 #endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_URIHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

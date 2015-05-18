@@ -45,7 +45,7 @@ public:
 
 };
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_AUTHENTICATIONFALLBACK_HXX*/
 

@@ -853,7 +853,7 @@ private:
  *
  *======================================================================*/
 
-} // namespace store
+}
 
 #endif // INCLUDED_STORE_SOURCE_STORDATA_HXX
 

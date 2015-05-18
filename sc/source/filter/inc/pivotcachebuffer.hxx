@@ -477,8 +477,8 @@ private:
     PivotCacheIdVector  maCacheIds;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

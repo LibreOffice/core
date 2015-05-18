@@ -587,6 +587,6 @@ void OListValueContext::StartElement( const Reference< XAttributeList >& _rxAttr
     }
 }
 
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

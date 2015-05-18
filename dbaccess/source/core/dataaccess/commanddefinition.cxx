@@ -203,6 +203,6 @@ void SAL_CALL OCommandDefinition::rename( const OUString& newName ) throw (SQLEx
     }
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

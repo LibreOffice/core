@@ -98,7 +98,7 @@ public:
             void                changeReadToWrite();
 };
 
-}   // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_READWRITEMUTEXGUARD_HXX
 

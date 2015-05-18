@@ -158,6 +158,6 @@ rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encod
 }
 
 
-} /* namespace */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

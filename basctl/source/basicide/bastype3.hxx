@@ -48,7 +48,7 @@ public:
     Accelerator&    GetAccelerator()                        { return aAcc; }
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BASTYPE3_HXX
 

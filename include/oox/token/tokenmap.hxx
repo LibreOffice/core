@@ -87,7 +87,7 @@ struct StaticTokenMap : public ::rtl::Static< TokenMap, StaticTokenMap > {};
 
 
 
-} // namespace oox
+}
 
 #endif
 

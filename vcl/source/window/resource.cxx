@@ -157,5 +157,5 @@ void Window::ImplLoadRes( const ResId& rResId )
     }
 }
 
-} /* namespace vcl */
+}
 

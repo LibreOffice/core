@@ -108,6 +108,6 @@ namespace dbmm
         m_pData->xHandler->handle( pRequest.get() );
     }
 
-} // namespace dbmm
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

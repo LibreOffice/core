@@ -59,7 +59,7 @@ namespace
 
         return  result;
     }
-} // namespace
+}
 
 extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
 {

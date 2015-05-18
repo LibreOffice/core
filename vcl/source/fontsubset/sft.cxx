@@ -2826,6 +2826,6 @@ void getTTScripts(std::vector< sal_uInt32 > &rScriptTags, const unsigned char* p
     rScriptTags.erase(std::unique(rScriptTags.begin(), rScriptTags.end()), rScriptTags.end());
 }
 
-} // namespace vcl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -360,7 +360,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getSymbol);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::optr_oslModule);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getFunctionSymbol);
 
-} // namespace osl_Module
+}
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

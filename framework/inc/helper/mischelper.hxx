@@ -304,7 +304,7 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper1<com::sun::star:
         }
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_MISCHELPER_HXX
 

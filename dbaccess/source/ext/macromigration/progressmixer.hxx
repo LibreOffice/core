@@ -80,7 +80,7 @@ namespace dbmm
         ::std::unique_ptr< ProgressMixer_Data >   m_pData;
     };
 
-} // namespace dbmm
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_PROGRESSMIXER_HXX
 

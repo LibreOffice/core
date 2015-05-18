@@ -102,7 +102,7 @@ namespace dbaui
         DECL_LINK(OnValueLoseFocus, Control*);
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_PARAMDIALOG_HXX
 

@@ -112,7 +112,7 @@ public:
 };
 
 
-}   // namespace toolkit_namecontainer
+}
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_EVENTCONTAINER_HXX
 

@@ -59,7 +59,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     return eConvStatus == rtl_math_ConversionStatus_Ok;
 }
 
-} // namespace
+}
 
 bool ConversionHelper::separatePair( OUString& orValue1, OUString& orValue2,
         const OUString& rValue, sal_Unicode cSep )
@@ -615,7 +615,7 @@ sal_Int32 lclGetDmlLineJoint( const OptValue< sal_Int32 >& roJoinStyle )
     return XML_round;
 }
 
-} // namespace
+}
 
 void StrokeArrowModel::assignUsed( const StrokeArrowModel& rSource )
 {
@@ -882,7 +882,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, uno::Reference<dra
     }
 }
 
-} // namespace vml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

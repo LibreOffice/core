@@ -197,7 +197,7 @@ namespace /* private */
         return false;
     }
 
-} // namespace private
+}
 
 
 

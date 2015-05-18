@@ -35,7 +35,7 @@ namespace svt
     };
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_TABITEMCONTENT_HXX

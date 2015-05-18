@@ -43,6 +43,6 @@ namespace dbmm
         return nResId ? OUString( MacroMigrationResId( nResId ) ) : OUString();
     }
 
-} // namespace dbmm
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

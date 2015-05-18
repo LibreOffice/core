@@ -110,7 +110,7 @@ class QuietInteraction : public  ::cppu::WeakImplHelper1<
         bool wasUsed() const;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_INTERACTION_QUIETINTERACTION_HXX
 

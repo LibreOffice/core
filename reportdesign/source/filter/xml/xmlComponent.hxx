@@ -46,7 +46,7 @@ namespace rptxml
         virtual ~OXMLComponent();
     };
 
-} // namespace rptxml
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLCOMPONENT_HXX

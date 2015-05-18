@@ -235,7 +235,7 @@ bool replaceParamterInString( OUString & rInOutResourceString,
                             const OUString & rParamToReplace,
                             const OUString & rReplaceWith );
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

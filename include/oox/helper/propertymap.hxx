@@ -122,7 +122,7 @@ protected:
 
 
 
-} // namespace oox
+}
 
 #endif
 

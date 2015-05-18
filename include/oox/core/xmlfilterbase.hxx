@@ -263,8 +263,8 @@ private:
 
 typedef ::rtl::Reference< XmlFilterBase > XmlFilterRef;
 
-} // namespace core
-} // namespace oox
+}
+}
 
 #endif
 

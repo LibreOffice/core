@@ -189,7 +189,7 @@ SwRead GetReader( const OUString& rFltName )
     return pRead;
 }
 
-} // namespace SwReaderWriter
+}
 
 bool Writer::IsStgWriter() const { return false; }
 

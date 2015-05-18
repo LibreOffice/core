@@ -109,7 +109,7 @@ bool AxFontData::importGuidAndFont( BinaryInputStream& rInStrm )
     return false;
 }
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

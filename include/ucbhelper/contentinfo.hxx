@@ -175,7 +175,7 @@ public:
     void reset();
 };
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_CONTENTINFO_HXX */
 

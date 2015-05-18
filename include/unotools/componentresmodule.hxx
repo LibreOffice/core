@@ -167,7 +167,7 @@ namespace utl
             create( CreateModuleClass(), ::osl::GetGlobalMutex() ); \
     } \
 
-} // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_COMPONENTRESMODULE_HXX
 

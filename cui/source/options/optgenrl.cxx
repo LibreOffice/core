@@ -154,7 +154,7 @@ const vFieldInfo[] =
 };
 
 
-} // namespace
+}
 
 
 

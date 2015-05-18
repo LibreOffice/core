@@ -2500,6 +2500,6 @@ void ORowSetValue::fill(const Any& _rValue)
     }
 }
 
-}   // namespace connectivity
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

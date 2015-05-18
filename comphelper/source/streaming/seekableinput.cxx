@@ -252,6 +252,6 @@ sal_Int64 SAL_CALL OSeekableInputWrapper::getLength()
     return m_xCopySeek->getLength();
 }
 
-}   // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

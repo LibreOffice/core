@@ -71,7 +71,7 @@ namespace accessibility
     };
 
 
-} // namespace accessibility
+}
 
 
 #endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETOOLPANELDECKTABBAR_HXX

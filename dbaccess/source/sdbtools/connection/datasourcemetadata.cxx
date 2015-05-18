@@ -57,6 +57,6 @@ namespace sdbtools
         return aMeta.supportsSubqueriesInFrom();
     }
 
-} // namespace sdbtools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

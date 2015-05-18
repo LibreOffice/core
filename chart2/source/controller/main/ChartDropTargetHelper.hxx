@@ -53,7 +53,7 @@ private:
             ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTDROPTARGETHELPER_HXX
 #endif

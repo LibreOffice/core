@@ -81,8 +81,8 @@ private:
     bool m_bWall;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WALLFLOORWRAPPER_HXX
 #endif

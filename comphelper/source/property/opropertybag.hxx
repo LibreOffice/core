@@ -225,7 +225,7 @@ namespace comphelper
     };
 
 
-} // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_SOURCE_PROPERTY_OPROPERTYBAG_HXX

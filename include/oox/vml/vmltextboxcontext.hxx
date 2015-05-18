@@ -77,8 +77,8 @@ private:
 
 
 
-} // namespace vml
-} // namespace oox
+}
+}
 
 #endif
 

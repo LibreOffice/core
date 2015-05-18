@@ -69,7 +69,7 @@ namespace FillProperties
     OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 }
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_FILLPROPERTIES_HXX
 #endif

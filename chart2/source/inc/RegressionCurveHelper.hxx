@@ -182,7 +182,7 @@ namespace RegressionCurveHelper
     OOO_DLLPUBLIC_CHARTTOOLS bool hasEquation(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 }
 
-} //  namespace chart
+}
 
 #endif // INCLUDED_CHART2_SOURCE_INC_REGRESSIONCURVEHELPER_HXX
 

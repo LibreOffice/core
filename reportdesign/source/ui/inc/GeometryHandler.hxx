@@ -307,7 +307,7 @@ namespace rptui
         bool                                                                                m_bIn;
     };
 
-} // namespace rptui
+}
 
 
 #endif // RPT_GeometryHandler_HXX

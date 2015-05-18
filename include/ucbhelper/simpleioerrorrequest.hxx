@@ -62,7 +62,7 @@ public:
                          );
 };
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_SIMPLEIOERRORREQUEST_HXX */
 

@@ -405,7 +405,7 @@ css::uno::Sequence< css::beans::PropertyValue > Shape3DProperties::getShape3DAtt
     return aSeq;
 }
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

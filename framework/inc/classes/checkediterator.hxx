@@ -248,7 +248,7 @@ class CheckedIterator
         typename TContainer::const_iterator  m_pPosition;   // point to actual element in container
 };
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_CLASSES_CHECKEDITERATOR_HXX
 

@@ -115,8 +115,8 @@ typedef ::rtl::Reference< FragmentHandler2 > FragmentHandler2Ref;
 
 
 
-} // namespace core
-} // namespace oox
+}
+}
 
 #endif
 

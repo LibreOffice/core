@@ -44,7 +44,7 @@ struct CommandInfo
 
 typedef BaseHash< CommandInfo > CommandToInfoMap;
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_COMMANDINFO_HXX
 

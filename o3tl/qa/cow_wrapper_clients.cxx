@@ -219,6 +219,6 @@ bool cow_wrapper_client4::operator<( const cow_wrapper_client4& rRHS ) const
     return maImpl < rRHS.maImpl;
 }
 
-} // namespace o3tltests
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

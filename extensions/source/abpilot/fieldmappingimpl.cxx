@@ -277,7 +277,7 @@ namespace abp
         }
 
 
-    }   // namespace fieldmapping
+    }
 
 
 
@@ -320,11 +320,11 @@ namespace abp
         }
 
 
-    }   // namespace addressconfig
+    }
 
 
 
-}   // namespace abp
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

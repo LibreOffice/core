@@ -495,8 +495,8 @@ namespace basegfx
                                         ceil(rRange.getMaxY()) );
         }
 
-    } // namespace bgfxtools
+    }
 
-} // namespace canvas
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

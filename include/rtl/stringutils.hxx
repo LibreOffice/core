@@ -169,9 +169,9 @@ struct Enable< T, true >
     };
 
 
-} /* Namespace */
+}
 
-} /* Namespace */
+}
 
 #endif // INCLUDED_RTL_STRINGUTILS_HXX
 

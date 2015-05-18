@@ -49,7 +49,7 @@ inline void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt32 nX
     rScPos.SetTab( nScTab );
 }
 
-} // namespace
+}
 
 XclImpAddressConverter::XclImpAddressConverter( const XclImpRoot& rRoot ) :
     XclAddressConverterBase( rRoot.GetTracer(), rRoot.GetScMaxPos() )
@@ -212,7 +212,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
     return pTextObj;
 }
 
-} // namespace
+}
 
 EditTextObject* XclImpStringHelper::CreateTextObject(
         const XclImpRoot& rRoot, const XclImpString& rString )
@@ -603,7 +603,7 @@ void lclAppendUrlChar( OUString& rUrl, sal_Unicode cChar )
     }
 }
 
-} // namespace
+}
 
 void XclImpUrlHelper::DecodeUrl(
         OUString& rUrl, OUString& rTabName, bool& rbSameWb,

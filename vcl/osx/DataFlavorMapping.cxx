@@ -140,7 +140,7 @@ namespace // private
     return (theType == cppu::UnoType<OUString>::get() );
   }
 
-} // namespace private
+}
 
 /* A base class for other data provider.
  */

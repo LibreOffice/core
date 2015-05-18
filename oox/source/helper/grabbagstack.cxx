@@ -88,6 +88,6 @@ void GrabBagStack::addString(const OUString& aElementName, const OUString& aStri
     appendElement(aElementName, makeAny(aStringValue));
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

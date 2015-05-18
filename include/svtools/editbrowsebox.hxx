@@ -681,7 +681,7 @@ namespace svt
     };
 
 
-}   // namespace svt
+}
 
 
 #undef SVTOOLS_IN_EDITBROWSEBOX_HXX

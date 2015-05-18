@@ -150,7 +150,7 @@ OUString ServiceDecl::getImplementationName() const
     return OUString::createFromAscii(m_pImplName);
 }
 
-} // namespace service_decl
-} // namespace comphelper
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

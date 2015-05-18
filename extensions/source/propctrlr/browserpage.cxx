@@ -71,6 +71,6 @@ namespace pcr
         return m_aListBox->GetMinimumHeight() + LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;
     }
 
-} // namespace pcr
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

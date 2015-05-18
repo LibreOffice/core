@@ -40,7 +40,7 @@ namespace svt
     }
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_BINDABLECONTROLHELPER_HXX

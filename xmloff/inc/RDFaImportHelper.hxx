@@ -87,7 +87,7 @@ public:
         ::com::sun::star::rdf::XRepositorySupplier > const & i_xModel);
 };
 
-} // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_INC_RDFAIMPORTHELPER_HXX
 

@@ -82,7 +82,7 @@ typename enumrange<T>::Iterator end( enumrange<T> )
     return typename enumrange<T>::Iterator( (static_cast<int>(T::LAST)) + 1 );
 }
 
-}; // namespace o3tl
+};
 
 #endif /* INCLUDED_O3TL_ENUMRANGE_HXX */
 

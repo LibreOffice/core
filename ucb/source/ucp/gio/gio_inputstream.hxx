@@ -82,7 +82,7 @@ public:
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-} // namespace gio
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

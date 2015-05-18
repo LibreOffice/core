@@ -82,7 +82,7 @@ struct ProppatchValue
     : operation( o ), name( n ), value( v ) {}
 };
 
-} // namespace webdav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVTYPES_HXX
 

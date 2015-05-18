@@ -71,7 +71,7 @@ public:
     const OUString getNewName() const;
 };
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_SIMPLENAMECLASHRESOLVEREQUEST_HXX */
 

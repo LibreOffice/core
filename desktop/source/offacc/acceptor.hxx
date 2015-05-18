@@ -110,7 +110,7 @@ public:
 };
 
 
-} //namespace desktop
+}
 
 #endif // INCLUDED_DESKTOP_SOURCE_OFFACC_ACCEPTOR_HXX
 

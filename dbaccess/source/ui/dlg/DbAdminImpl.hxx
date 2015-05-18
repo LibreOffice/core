@@ -172,7 +172,7 @@ namespace dbaui
 #endif
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_DBADMINIMPL_HXX
 

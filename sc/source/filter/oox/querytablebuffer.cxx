@@ -124,7 +124,7 @@ Reference< XAreaLink > lclFindAreaLink(
     return Reference< XAreaLink >();
 }
 
-} // namespace
+}
 
 QueryTableModel::QueryTableModel() :
     mnConnId( -1 ),
@@ -276,7 +276,7 @@ void QueryTableBuffer::finalizeImport()
     maQueryTables.forEachMem( &QueryTable::finalizeImport );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,7 +40,7 @@ namespace framework
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rToolbarStorage );
     };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_CONFIGIMPORTER_HXX
 

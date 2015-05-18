@@ -231,6 +231,6 @@ LockFileEntry LockFileCommon::GenerateOwnEntry()
     return aResult;
 }
 
-} // namespace svt
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

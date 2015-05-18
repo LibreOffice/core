@@ -43,7 +43,7 @@ namespace sd { namespace colortoolpanel
     };
 
 
-} } // namespace sd::colortoolpanel
+} }
 
 
 extern "C"

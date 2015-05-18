@@ -1484,7 +1484,7 @@ double lclGetCorrectedColWidth( const XclExpRoot& rRoot, sal_uInt16 nXclColWidth
     return nXclColWidth - XclTools::GetXclDefColWidthCorrection( nFontHt );
 }
 
-} // namespace
+}
 
 XclExpDefcolwidth::XclExpDefcolwidth( const XclExpRoot& rRoot ) :
     XclExpUInt16Record( EXC_ID_DEFCOLWIDTH, EXC_DEFCOLWIDTH_DEF ),

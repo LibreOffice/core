@@ -81,7 +81,7 @@ namespace svt { namespace table
     };
 
 
-} } // namespace svt::table
+} }
 
 
 #endif // INCLUDED_SVTOOLS_TABLE_TABLESORT_HXX

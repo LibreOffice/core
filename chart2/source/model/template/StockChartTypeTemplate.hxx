@@ -121,7 +121,7 @@ private:
     StockVariant  m_eStockVariant;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_STOCKCHARTTYPETEMPLATE_HXX
 #endif

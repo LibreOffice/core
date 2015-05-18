@@ -70,8 +70,8 @@ private:
     boost::shared_ptr<Chart2ModelContact> m_pChart2ModelContact;
 };
 
-} //namespace wrapper
-} //namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDNUMBERFORMATPROPERTY_HXX
 #endif

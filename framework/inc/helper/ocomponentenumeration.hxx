@@ -166,7 +166,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
 };      //  class OComponentEnumeration
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTENUMERATION_HXX
 

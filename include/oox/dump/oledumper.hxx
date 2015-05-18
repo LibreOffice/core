@@ -895,8 +895,8 @@ protected:
 
 
 
-} // namespace dump
-} // namespace oox
+}
+}
 
 #endif
 #endif

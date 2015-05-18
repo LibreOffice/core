@@ -145,7 +145,7 @@ private:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testupdate::Test);
-} // namespace testupdate
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

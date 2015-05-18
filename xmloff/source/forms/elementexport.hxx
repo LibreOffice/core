@@ -307,7 +307,7 @@ namespace xmloff
         virtual void exportSubTags() SAL_OVERRIDE;
         virtual void exportAttributes() SAL_OVERRIDE;
     };
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_ELEMENTEXPORT_HXX
 

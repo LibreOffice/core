@@ -134,7 +134,7 @@ namespace basic
     };
 
 
-} // namespace basic
+}
 
 
 #endif // INCLUDED_BASIC_BASICMANAGERREPOSITORY_HXX

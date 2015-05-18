@@ -45,7 +45,7 @@ struct StaticNamespaceMap : public ::rtl::Static< NamespaceMap, StaticNamespaceM
 
 
 
-} // namespace oox
+}
 
 #endif
 

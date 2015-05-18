@@ -61,9 +61,9 @@ protected:
 
 
 
-} // namespace pptx
-} // namespace dump
-} // namespace oox
+}
+}
+}
 
 #endif
 #endif

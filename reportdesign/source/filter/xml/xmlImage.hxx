@@ -39,7 +39,7 @@ namespace rptxml
         virtual ~OXMLImage();
     };
 
-} // namespace rptxml
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLIMAGE_HXX

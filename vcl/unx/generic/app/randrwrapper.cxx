@@ -245,7 +245,7 @@ void RandRWrapper::releaseWrapper()
 
 #endif
 
-} // namespace
+}
 
 #endif
 

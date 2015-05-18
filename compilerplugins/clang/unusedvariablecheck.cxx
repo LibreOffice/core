@@ -135,7 +135,7 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
 
 static Plugin::Registration< UnusedVariableCheck > X( "unusedvariablecheck" );
 
-} // namespace
+}
 
 #endif
 

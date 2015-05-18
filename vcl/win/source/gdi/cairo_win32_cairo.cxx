@@ -178,7 +178,7 @@ namespace cairo
         return VclPtr<VirtualDevice>::Create( &aSystemGraphicsData, Size(1, 1), sal::static_int_cast<USHORT>( getDepth() ) );
     }
 
-}  // namespace cairo
+}
 
 #endif   // #ENABLE_CAIRO_CANVAS
 

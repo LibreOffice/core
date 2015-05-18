@@ -147,7 +147,7 @@ class ToolBarMerger
         ToolBarMerger& operator=( const ToolBarMerger& ) SAL_DELETED_FUNCTION;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_TOOLBARMERGER_HXX
 

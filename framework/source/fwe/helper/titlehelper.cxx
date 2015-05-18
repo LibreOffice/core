@@ -640,6 +640,6 @@ OUString TitleHelper::impl_convertURL2Title(const OUString& sURL)
     return sTitle;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

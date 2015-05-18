@@ -633,7 +633,7 @@ class FilterCFGAccess : public ::utl::ConfigItem
         OUString m_sFormatVersion;
 };
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_CLASSES_FILTERCACHEDATA_HXX
 

@@ -47,7 +47,7 @@ namespace svt
     };
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TABLE_CELLVALUECONVERSION_HXX

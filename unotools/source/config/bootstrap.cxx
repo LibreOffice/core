@@ -750,6 +750,6 @@ bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rValue,
     return true;
 }
 
-} // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

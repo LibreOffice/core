@@ -404,7 +404,7 @@ namespace xmloff
     #define DBG_CHECK_PROPERTY_ASCII_NO_TYPE( name )
 #endif
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTYEXPORT_HXX
 

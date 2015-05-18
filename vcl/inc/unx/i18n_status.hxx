@@ -98,7 +98,7 @@ public:
     void toggleStatusWindow();
 };
 
-} // namespace
+}
 
 #endif // INCLUDED_VCL_INC_UNX_I18N_STATUS_HXX
 

@@ -124,7 +124,7 @@ public:
     beans::Optional< OUString >            m_aResult;
 };
 
-} /* namespace */
+}
 
 UUIInteractionHelper::UUIInteractionHelper(
     uno::Reference< uno::XComponentContext > const & rxContext,
@@ -1067,7 +1067,7 @@ NameClashResolveDialogResult executeSimpleNameClashResolveDialog( vcl::Window *p
     return eResult;
 }
 
-} // namespace
+}
 
 void
 UUIInteractionHelper::handleNameClashResolveRequest(

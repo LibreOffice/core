@@ -850,8 +850,8 @@ private:
 SAL_DLLPUBLIC_EXPORT boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
     lcl_SplitFieldCommand(const OUString& rCommand);
 
-} //namespace dmapper
-} //namespace writerfilter
+}
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

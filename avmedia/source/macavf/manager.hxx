@@ -50,8 +50,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 };
 
-} // namespace macavf
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_MACAVF_MANAGER_HXX
 

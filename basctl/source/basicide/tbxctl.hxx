@@ -52,7 +52,7 @@ public:
     void                        Select( sal_uInt16 nModifier ) SAL_OVERRIDE;
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_TBXCTL_HXX
 

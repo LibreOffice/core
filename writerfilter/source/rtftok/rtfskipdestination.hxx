@@ -30,8 +30,8 @@ private:
     /// If false, the destructor is a noop, required by the \* symbol itself.
     bool m_bReset;
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSKIPDESTINATION_HXX
 

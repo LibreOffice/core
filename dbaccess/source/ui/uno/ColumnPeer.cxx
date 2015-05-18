@@ -142,6 +142,6 @@ Any OColumnPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeExc
     return aProp;
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

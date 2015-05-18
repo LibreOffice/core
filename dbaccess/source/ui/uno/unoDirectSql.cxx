@@ -120,6 +120,6 @@ namespace dbaui
         }
         ODirectSQLDialog_BASE::implInitialize(_rValue);
     }
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

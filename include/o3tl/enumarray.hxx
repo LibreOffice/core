@@ -99,7 +99,7 @@ public:
     bool        operator==(const self_type& other) { return m_buf == other.m_buf && m_pos == other.m_pos; }
 };
 
-}; // namespace o3tl
+};
 
 #endif /* INCLUDED_O3TL_ENUMARRAY_HXX */
 

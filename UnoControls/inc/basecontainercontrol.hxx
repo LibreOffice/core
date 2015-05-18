@@ -276,7 +276,7 @@ private:
 
 };  // class BaseContainerControl
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_INC_BASECONTAINERCONTROL_HXX
 

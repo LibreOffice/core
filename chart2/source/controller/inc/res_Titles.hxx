@@ -58,7 +58,7 @@ private:
     VclPtr<Edit> m_pEd_SecondaryYAxis;
 };
 
-} //namespace chart
+}
 
 #endif
 

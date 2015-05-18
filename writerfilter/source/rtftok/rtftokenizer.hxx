@@ -71,8 +71,8 @@ private:
     sal_Size m_nLineStartPos;
     sal_Size m_nGroupStart;
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFTOKENIZER_HXX
 

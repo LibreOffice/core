@@ -221,7 +221,7 @@ namespace dbtools
 
 
 
-}   // namespace dbtools
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

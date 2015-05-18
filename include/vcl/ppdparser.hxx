@@ -306,7 +306,7 @@ public:
     void getPageSize( OUString& rPaper, int& rWidth, int& rHeight ) const;
 };
 
-} // namespace
+}
 
 #endif // INCLUDED_VCL_PPDPARSER_HXX
 

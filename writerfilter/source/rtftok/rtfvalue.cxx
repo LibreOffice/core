@@ -259,7 +259,7 @@ RTFSprms& RTFValue::getSprms()
     return *m_pSprms;
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

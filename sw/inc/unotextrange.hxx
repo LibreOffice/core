@@ -67,7 +67,7 @@ namespace sw {
     bool GetDefaultTextContentValue(::com::sun::star::uno::Any& rAny,
         const OUString& rPropertyName, sal_uInt16 nWID = 0);
 
-} // namespace sw
+}
 
 typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::lang::XUnoTunnel

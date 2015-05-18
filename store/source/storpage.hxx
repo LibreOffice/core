@@ -210,7 +210,7 @@ SAL_CALL query (IStoreHandle *pHandle, SAL_UNUSED_PARAMETER OStorePageManager*)
  *
  *======================================================================*/
 
-} // namespace store
+}
 
 #endif // INCLUDED_STORE_SOURCE_STORPAGE_HXX
 

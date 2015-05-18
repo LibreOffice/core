@@ -106,7 +106,7 @@ namespace comphelper
     };
 
 
-}   // namespace dbaui
+}
 
 
 #endif // INCLUDED_COMPHELPER_CONTAINERMULTIPLEXER_HXX

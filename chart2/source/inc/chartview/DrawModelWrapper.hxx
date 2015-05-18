@@ -95,7 +95,7 @@ public:
     static bool removeShape( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >& xShape );
 };
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

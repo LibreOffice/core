@@ -337,7 +337,7 @@ bool Digest::sha512(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
     return aResult;
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

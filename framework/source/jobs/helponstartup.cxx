@@ -350,6 +350,6 @@ OUString HelpOnStartup::ist_createHelpURL(const OUString& sBaseURL,
     return sHelpURL.makeStringAndClear();
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,8 +37,8 @@ public:
 };
 
 typedef std::shared_ptr<LatentStyleHandler> LatentStyleHandlerPtr;
-} // namespace dmapper
-} // namespace writerfilter
+}
+}
 
 #endif
 

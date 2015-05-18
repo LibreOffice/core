@@ -170,6 +170,6 @@ void OTitleWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackgro
     }
 }
 
-} // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -187,7 +187,7 @@ sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rProper
     return maPropMap.find( rPropertyName ) != maPropMap.end();
 }
 
-} // namespace
+}
 
 PropertyMap::PropertyMap() :
     mpPropNames( &StaticPropertyNameVector::get() ) // pointer instead reference to get compiler generated copy c'tor and operator=
@@ -954,6 +954,6 @@ void PropertyMap::dumpData()
 }
 #endif
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

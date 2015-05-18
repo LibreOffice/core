@@ -97,9 +97,9 @@ inline bool closeIt(const css::uno::Reference< css::uno::XInterface >& xResource
     return true;
 }
 
-        } // namespace frame
-    } // namespace pattern
-} // namespace framework
+        }
+    }
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_FRAME_HXX
 

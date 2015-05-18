@@ -116,7 +116,7 @@ namespace dbaui
         ::std::unique_ptr< SubComponentManager_Data > m_pData;
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_SUBCOMPONENTMANAGER_HXX
 

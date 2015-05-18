@@ -89,7 +89,7 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
 
 };
 
-}       // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_SERVICES_MEDIATYPEDETECTIONHELPER_HXX
 

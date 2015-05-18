@@ -69,7 +69,7 @@ namespace dbaccess
         const ::std::unique_ptr< DatabaseDocumentRecovery_Data >  m_pData;
     };
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_RECOVERY_DBDOCRECOVERY_HXX
 

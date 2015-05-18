@@ -43,8 +43,8 @@ protected:
     PropertyMap&        maProperties;
 };
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

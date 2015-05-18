@@ -92,6 +92,6 @@ OUString OCommandContainer::determineContentType() const
     return OUString( "application/vnd.org.openoffice.DatabaseCommandDefinitionContainer" );
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

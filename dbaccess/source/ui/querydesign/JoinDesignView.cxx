@@ -112,6 +112,6 @@ void OJoinDesignView::KeyInput( const KeyEvent& rEvt )
         ODataView::KeyInput(rEvt);
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -183,7 +183,7 @@ private:
     DECL_LINK_TYPED(ImplModifiedHdl, OGenericAdministrationPage const *, void);
 };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DBWIZSETUP_HXX
 

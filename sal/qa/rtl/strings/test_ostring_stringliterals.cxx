@@ -256,7 +256,7 @@ void test::ostring::StringLiterals::checkBuffer()
 
 #undef CONST_CTOR_USED
 
-}} // namespace
+}}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::ostring::StringLiterals);
 

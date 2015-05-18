@@ -59,7 +59,7 @@ namespace comphelper
         inline OUString convertLogArgToString( bool    _bValue ) { return OUString::boolean( _bValue ); }
         void convertLogArgToString(sal_Bool) SAL_DELETED_FUNCTION;
 
-    } } // namespace log::convert
+    } }
 
 
     //= EventLogger
@@ -718,7 +718,7 @@ namespace comphelper
     };
 
 
-} // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_LOGGING_HXX

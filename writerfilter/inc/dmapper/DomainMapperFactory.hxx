@@ -44,8 +44,8 @@ public:
                  css::uno::Reference<css::text::XTextRange> const& xInsertTextRange,
                  utl::MediaDescriptor& rMediaDesc);
 };
-} // namespace dmapper
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPERFACTORY_HXX
 

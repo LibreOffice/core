@@ -58,7 +58,7 @@ private:
     static sal_uInt16 m_nLastPageId;
 };
 
-} //namespace chart
+}
 
 #endif
 

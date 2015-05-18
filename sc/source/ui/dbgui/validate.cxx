@@ -310,7 +310,7 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
     return bIsStringList;
 }
 
-} // namespace
+}
 
 ScTPValidationValue::ScTPValidationValue( vcl::Window* pParent, const SfxItemSet& rArgSet )
     : SfxTabPage( pParent, "ValidationCriteriaPage",

@@ -484,7 +484,7 @@ void SAL_CALL OImageControl::setPreserveIRI( sal_Bool _preserveiri ) throw (uno:
     set(PROPERTY_PRESERVEIRI,_preserveiri,m_bPreserveIRI);
 }
 
-} // namespace reportdesign
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

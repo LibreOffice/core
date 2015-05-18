@@ -358,6 +358,6 @@ sal_Bool SAL_CALL PropertySetHelper::hasPropertyByName(const OUString& sName)
     return bExist;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

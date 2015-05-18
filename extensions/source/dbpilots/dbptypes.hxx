@@ -36,7 +36,7 @@ namespace dbp
     typedef std::map<sal_uInt32, OUString> MapInt2String;
 
 
-}   // namespace dbp
+}
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPTYPES_HXX
 

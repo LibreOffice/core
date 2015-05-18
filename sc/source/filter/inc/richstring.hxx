@@ -284,8 +284,8 @@ private:
 
 typedef std::shared_ptr< RichString > RichStringRef;
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

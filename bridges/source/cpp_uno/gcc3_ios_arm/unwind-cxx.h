@@ -320,7 +320,7 @@ __gxx_caught_object(_Unwind_Exception* eo)
 }
 #endif // !__ARM_EABI_UNWINDER__
 
-} /* namespace __cxxabiv1 */
+}
 
 #pragma GCC visibility pop
 

@@ -187,7 +187,7 @@ namespace tdoc_ucp {
         ::rtl::Reference<OfficeDocumentsCloseListener> m_xDocCloseListener;
     };
 
-} // namespace tdoc_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_DOCMGR_HXX
 

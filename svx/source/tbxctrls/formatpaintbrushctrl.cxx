@@ -101,7 +101,7 @@ void FormatPaintBrushToolBoxControl::StateChanged( sal_uInt16 nSID, SfxItemState
 }
 
 
-} //namespace svx
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

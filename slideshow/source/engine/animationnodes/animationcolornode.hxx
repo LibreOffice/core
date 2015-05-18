@@ -48,8 +48,8 @@ private:
         ::com::sun::star::animations::XAnimateColor > mxColorNode;
 };
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOLORNODE_HXX
 

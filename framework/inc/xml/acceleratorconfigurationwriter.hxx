@@ -86,7 +86,7 @@ class AcceleratorConfigurationWriter
                                          const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig );
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONWRITER_HXX
 

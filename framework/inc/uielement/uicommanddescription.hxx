@@ -105,7 +105,7 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >        m_xModuleManager;
 };
 
-} // namespace framework
+}
 
 #endif // __FRAMEWORK_SERVICES_UICOMMANDDESCRPTION_HXX_
 

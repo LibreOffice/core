@@ -168,7 +168,7 @@ sal_Int32 SAL_CALL AccessibleGridControlHeaderCell::getAccessibleIndexInParent()
     return nIndex;
 }
 
-} // namespace accessibility
+}
 
 
 

@@ -55,7 +55,7 @@ private:
 };
 
 
-} //namespace svx
+}
 
 #endif
 

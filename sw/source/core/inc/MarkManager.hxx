@@ -34,7 +34,6 @@ namespace sw {
     {
         public:
             MarkManager(/*[in/out]*/ SwDoc& rDoc);
-            // IDocumentMarkAccess
             virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM, const OUString& rName, IDocumentMarkAccess::MarkType eMark) SAL_OVERRIDE;
 
             virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
@@ -118,7 +117,7 @@ namespace sw {
 
             SwDoc * const m_pDoc;
     };
-    } // namespace mark
+    }
 }
 
 #endif

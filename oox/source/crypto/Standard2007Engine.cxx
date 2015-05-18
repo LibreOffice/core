@@ -36,7 +36,7 @@ void lclRandomGenerateValues(sal_uInt8* aArray, sal_uInt32 aSize)
 
 static const OUString lclCspName = "Microsoft Enhanced RSA and AES Cryptographic Provider";
 
-} // namespace
+}
 
 EncryptionStandardHeader::EncryptionStandardHeader()
 {
@@ -262,7 +262,7 @@ bool Standard2007Engine::encrypt(
     return true;
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

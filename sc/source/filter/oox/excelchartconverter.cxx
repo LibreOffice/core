@@ -119,7 +119,7 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
     return xDataSeq;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,8 +35,8 @@ namespace connectivity
             // IRefreshableUsers
             virtual void refreshUsers() SAL_OVERRIDE;
         };
-    } // namespace firebird
-} // namespace connectivity
+    }
+}
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CATALOG_HXX
 

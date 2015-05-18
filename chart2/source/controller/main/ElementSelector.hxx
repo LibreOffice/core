@@ -113,7 +113,7 @@ private:
     VclPtr< SelectorListBox > m_apSelectorListBox;
 };
 
-} //namespace chart
+}
 
 #endif
 

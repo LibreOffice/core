@@ -89,7 +89,7 @@ namespace frm
 
     css::uno::Any translateControlIntToExternalDoubleValue( const css::uno::Any& _rControlIntValue );
 
-} // namespacefrm
+}
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_SCROLLBAR_HXX
 

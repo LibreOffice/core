@@ -218,6 +218,6 @@ namespace accessibility
         // NO dispose of the inner object there: it is the XAccessible of an window, and disposing
         // it would delete the respective VCL window
     }
-} // namespace accessibility
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

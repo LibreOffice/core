@@ -374,7 +374,7 @@ void ODisposingListener::waitFor( const Reference< XComponent > & xComp )
     pListener->cDisposed.wait();
 }
 
-} // namespace unoexe
+}
 
 using namespace unoexe;
 

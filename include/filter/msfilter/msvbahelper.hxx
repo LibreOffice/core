@@ -106,8 +106,8 @@ VBAMacroResolver_createInstance(
     css::uno::Reference<css::uno::XComponentContext > const & rxContext)
     throw (css::uno::Exception);
 
-} // namespace vba
-} // namespace ooo
+}
+}
 
 #endif
 

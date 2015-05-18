@@ -101,7 +101,7 @@ class ServiceHandler : public  ::cppu::WeakImplHelper3<
 
 };      //  class ServiceHandler
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_SERVICEHANDLER_HXX
 

@@ -100,6 +100,6 @@ namespace dbmm
         OSL_FAIL( "ProgressCapture::reset: not implemented!" );
     }
 
-} // namespace dbmm
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -416,6 +416,6 @@ namespace pcr
         return cppu::supportsService(this, ServiceName);
     }
 
-}   // namespace pcr
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -116,7 +116,7 @@ struct UIElement
 
 typedef std::vector< UIElement > UIElementVector;
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_UIELEMENT_HXX
 

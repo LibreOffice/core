@@ -2979,7 +2979,7 @@ static const struct ::cppu::ImplementationEntry s_component_entries [] =
 
 
 
-}   // namespace dlgprov
+}
 
 
 

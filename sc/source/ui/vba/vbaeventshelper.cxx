@@ -105,7 +105,7 @@ uno::Reference< awt::XWindow > lclGetWindowForController( const uno::Reference< 
     return 0;
 }
 
-} // namespace
+}
 
 typedef ::cppu::WeakImplHelper4< awt::XTopWindowListener, awt::XWindowListener, frame::XBorderResizeListener, util::XChangesListener > ScVbaEventListener_BASE;
 
@@ -831,7 +831,7 @@ bool lclSelectionChanged( const ScRangeList& rLeft, const ScRangeList& rRight )
     return rLeft != rRight;
 }
 
-} // namespace
+}
 
 bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {

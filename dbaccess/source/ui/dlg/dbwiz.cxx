@@ -349,6 +349,6 @@ bool ODbTypeWizDialog::onFinish()
     return m_pImpl->saveChanges(*m_pOutSet) && OWizardMachine::onFinish();
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

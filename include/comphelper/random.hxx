@@ -37,9 +37,9 @@ COMPHELPER_DLLPUBLIC unsigned int uniform_uint_distribution(unsigned int a, unsi
 /// uniform distribution in [a,b]
 COMPHELPER_DLLPUBLIC size_t uniform_size_distribution(size_t a, size_t b);
 
-} // namespace
+}
 
-} // namespace
+}
 
 #endif
 

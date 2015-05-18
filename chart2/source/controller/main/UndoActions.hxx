@@ -111,8 +111,8 @@ private:
     SdrUndoAction*  m_pAction;
 };
 
-} // namespace impl
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_UNDOACTIONS_HXX
 #endif

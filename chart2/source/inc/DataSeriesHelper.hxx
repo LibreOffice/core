@@ -200,8 +200,8 @@ OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromSeriesAndAllPoints( const ::co
 OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromPoint( const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >& xPointPropertySet );
 
-} //  namespace DataSeriesHelper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_INC_DATASERIESHELPER_HXX
 #endif

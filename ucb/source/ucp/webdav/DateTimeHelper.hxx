@@ -51,7 +51,7 @@ public:
         ::com::sun::star::util::DateTime& );
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif
 

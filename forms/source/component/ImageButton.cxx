@@ -220,7 +220,7 @@ void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/) thr
 {
 }
 
-}   // namespace frm
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_OImageButtonModel_get_implementation(::com::sun::star::uno::XComponentContext* component,

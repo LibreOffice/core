@@ -100,7 +100,7 @@ public:
 
 };
 
-} //namespace cli_uno
+}
 
 
 #endif

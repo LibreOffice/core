@@ -58,8 +58,8 @@ private:
     void renderComb( double t, const ViewEntry& rViewEntry ) const;
 };
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_COMBTRANSITION_HXX
 

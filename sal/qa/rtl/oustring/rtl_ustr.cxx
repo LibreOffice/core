@@ -1359,7 +1359,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_compareIgnoreAsciiCase);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_compareIgnoreAsciiCase_WithLength);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_shortenedCompareIgnoreAsciiCase_WithLength);
 
-} // namespace rtl_ustr
+}
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions("")
 // to let the user the possibility to also register some functions by hand.

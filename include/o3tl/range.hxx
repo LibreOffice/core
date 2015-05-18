@@ -177,7 +177,7 @@ range<T>::distance_to(const self & i_other) const
 
 
 
-}   // namespace o3tl
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

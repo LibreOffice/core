@@ -137,7 +137,7 @@ private: // members
     AccessibleChartView();
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

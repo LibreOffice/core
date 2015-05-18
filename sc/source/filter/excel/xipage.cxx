@@ -211,7 +211,7 @@ void lclPutMarginItem( SfxItemSet& rItemSet, sal_uInt16 nRecId, double fMarginIn
     }
 }
 
-} // namespace
+}
 
 void XclImpPageSettings::Finalize()
 {

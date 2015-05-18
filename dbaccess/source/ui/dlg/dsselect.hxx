@@ -69,7 +69,7 @@ protected:
     void fillListBox(const StringBag& _rDatasources);
 };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_DSSELECT_HXX
 

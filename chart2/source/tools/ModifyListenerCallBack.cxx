@@ -101,6 +101,6 @@ void ModifyListenerCallBack::stopListening()
     pModifyListener_impl->stopListening();
 }
 
-} // namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

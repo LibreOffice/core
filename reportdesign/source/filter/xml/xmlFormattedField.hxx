@@ -41,7 +41,7 @@ namespace rptxml
         virtual ~OXMLFormattedField();
     };
 
-} // namespace rptxml
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLFORMATTEDFIELD_HXX

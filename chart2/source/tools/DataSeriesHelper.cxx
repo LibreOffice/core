@@ -903,7 +903,7 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
     }
 }
 
-} //  namespace DataSeriesHelper
-} //  namespace chart
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

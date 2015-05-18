@@ -396,7 +396,7 @@ namespace comphelper
     };
 
 
-}   // namespace accessibility
+}
 
 
 #endif // INCLUDED_COMPHELPER_ACCESSIBLEWRAPPER_HXX

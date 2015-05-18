@@ -432,7 +432,7 @@ inline bool PlottingPositionHelper::maySkipPointsInRegressionCalculation() const
     return m_bMaySkipPointsInRegressionCalculation;
 }
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

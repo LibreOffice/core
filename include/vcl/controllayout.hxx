@@ -70,7 +70,7 @@ struct VCL_DLLPUBLIC ControlLayoutData
     long ToRelativeLineIndex( long nIndex ) const;
 };
 
-} // namespace vcl
+}
 
 #endif // INCLUDED_VCL_CONTROLLAYOUT_HXX
 

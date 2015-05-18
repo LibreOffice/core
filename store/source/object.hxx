@@ -102,7 +102,7 @@ SAL_CALL query (IStoreHandle *pHandle, OStoreObject*)
  *
  *======================================================================*/
 
-} // namespace store
+}
 
 #endif // INCLUDED_STORE_SOURCE_OBJECT_HXX
 

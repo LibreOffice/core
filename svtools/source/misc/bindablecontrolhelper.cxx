@@ -141,7 +141,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno
 }
 
 
-} // namespace svt
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

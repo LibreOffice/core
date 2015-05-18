@@ -118,7 +118,7 @@ namespace basprov
     };
 
 
-}   // namespace basprov
+}
 
 
 #endif // INCLUDED_SCRIPTING_SOURCE_BASPROV_BASMETHNODE_HXX

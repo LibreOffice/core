@@ -84,7 +84,7 @@ const sal_uInt16 BIFF12_CHARTPAGESETUP_DEFAULTORIENT= 0x0008;
 const sal_uInt16 BIFF12_CHARTPAGESETUP_USEFIRSTPAGE = 0x0010;
 const sal_uInt16 BIFF12_CHARTPAGESETUP_DRAFTQUALITY = 0x0020;
 
-} // namespace
+}
 
 PageSettingsModel::PageSettingsModel() :
     mfLeftMargin( OOX_MARGIN_DEFAULT_LR ),
@@ -462,7 +462,7 @@ static const sal_Char* const sppcItalicNames[] =
     "schr\303\244g"     // German 'oblique' with lowercase A umlaut
 };
 
-} // namespace
+}
 
 HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -1051,7 +1051,7 @@ sal_Int32 PageSettingsConverter::writeHeaderFooter(
     return nHeight;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

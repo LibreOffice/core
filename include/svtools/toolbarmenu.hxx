@@ -131,7 +131,7 @@ private:
     ToolbarMenu_Impl*   mpImpl;
 };
 
-} // namespace svtools
+}
 
 #endif
 

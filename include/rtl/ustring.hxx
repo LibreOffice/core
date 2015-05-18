@@ -2659,7 +2659,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
         // (stray surrogate halves) and embedded null characters
 }
 
-} // namespace
+}
 
 #ifdef RTL_STRING_UNITTEST
 namespace rtl

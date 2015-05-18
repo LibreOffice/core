@@ -204,6 +204,6 @@ void MergedMinimumAndMaximumSupplier::setTimeResolutionOnXAxis( long nTimeResolu
         (*aIt)->setTimeResolutionOnXAxis( nTimeResolution, rNullDate );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

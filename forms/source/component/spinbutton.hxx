@@ -84,7 +84,7 @@ namespace frm
 
     };
 
-} // namespacefrm
+}
 
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX

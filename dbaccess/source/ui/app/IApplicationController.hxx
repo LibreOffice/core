@@ -83,7 +83,7 @@ namespace dbaui
         ~IApplicationController() {}
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_IAPPLICATIONCONTROLLER_HXX
 

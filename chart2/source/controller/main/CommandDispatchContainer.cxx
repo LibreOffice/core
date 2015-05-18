@@ -193,6 +193,6 @@ void CommandDispatchContainer::setShapeController( ShapeController* pController 
     m_aToBeDisposedDispatches.push_back( Reference< frame::XDispatch >( pController ) );
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

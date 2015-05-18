@@ -115,7 +115,7 @@ SvxCellVerJustify lclConvertSlotToVAlign( sal_uInt16 nSlot )
     return eVJustify;
 }
 
-} // namespace
+}
 
 TYPEINIT1( ScFormatShell, SfxShell );
 

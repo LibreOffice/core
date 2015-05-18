@@ -60,7 +60,7 @@ protected: //member
     CuboidPlanePosition m_eBottomPos;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

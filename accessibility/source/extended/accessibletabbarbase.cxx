@@ -99,7 +99,7 @@ void AccessibleTabBarBase::ClearTabBarPointer()
 }
 
 
-}   // namespace accessibility
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

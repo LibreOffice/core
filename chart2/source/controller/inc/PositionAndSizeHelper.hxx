@@ -43,7 +43,7 @@ public:
             , const ::com::sun::star::awt::Rectangle& rPageRectangle );
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

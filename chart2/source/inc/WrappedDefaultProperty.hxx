@@ -52,7 +52,7 @@ private:
     ::com::sun::star::uno::Any m_aOuterDefaultValue;
 };
 
-} //  namespace chart
+}
 
 // CHART2_WRAPPEDPROPERTYNEWDEFAULT_HXX
 #endif

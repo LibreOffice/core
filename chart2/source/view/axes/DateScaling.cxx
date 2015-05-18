@@ -237,6 +237,6 @@ css::uno::Sequence< OUString > SAL_CALL InverseDateScaling::getSupportedServiceN
     return getSupportedServiceNames_Static();
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

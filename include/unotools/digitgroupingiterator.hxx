@@ -187,7 +187,7 @@ public:
     }
 };
 
-} // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_DIGITGROUPINGITERATOR_HXX
 

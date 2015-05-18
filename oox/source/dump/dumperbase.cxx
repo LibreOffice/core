@@ -60,7 +60,7 @@ const sal_Unicode OOX_DUMP_ITEMSEP      = '=';
 const sal_Int32 OOX_DUMP_BYTESPERLINE   = 16;
 const sal_Int64 OOX_DUMP_MAXARRAY       = 16;
 
-} // namespace
+}
 
 // file names -----------------------------------------------------------------
 
@@ -602,7 +602,7 @@ OUString lclTrimQuotedStringList( const OUString& rStr )
     return aBuffer.makeStringAndClear();
 }
 
-} // namespace
+}
 
 OUString StringHelper::trimSpaces( const OUString& rStr )
 {
@@ -2589,8 +2589,8 @@ void DumperBase::construct( const ConfigRef& rxConfig )
         ObjectBase::construct( rxConfig );
 }
 
-} // namespace dump
-} // namespace oox
+}
+}
 
 #endif
 

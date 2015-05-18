@@ -3068,7 +3068,7 @@ void lclAppendBlock( OStringBuffer& rText, sal_Int32 nValue )
     }
 }
 
-} // namespace
+}
 
 void ScInterpreter::ScBahtText()
 {

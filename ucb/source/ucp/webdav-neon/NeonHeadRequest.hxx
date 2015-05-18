@@ -49,7 +49,7 @@ public:
         ~NeonHeadRequest();
 };
 
-} // namespace webdav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONHEADREQUEST_HXX
 

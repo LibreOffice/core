@@ -220,7 +220,7 @@ class PropHelper
     }
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_PROPERTIES_H
 

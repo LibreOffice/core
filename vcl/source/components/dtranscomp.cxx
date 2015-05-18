@@ -507,7 +507,7 @@ Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMu
     return xResult;
 }
 
-} // namespace vcl
+}
 
 /*
 *   SalInstance generic

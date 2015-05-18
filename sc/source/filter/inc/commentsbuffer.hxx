@@ -94,8 +94,8 @@ private:
     CommentVector       maComments;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

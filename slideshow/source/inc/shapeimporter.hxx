@@ -143,8 +143,8 @@ private:
     bool                                      mbConvertingMasterPage;
 };
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif
 

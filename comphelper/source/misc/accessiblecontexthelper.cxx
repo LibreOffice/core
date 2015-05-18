@@ -296,7 +296,7 @@ namespace comphelper
     }
 
 
-}   // namespace comphelper
+}
 
 
 

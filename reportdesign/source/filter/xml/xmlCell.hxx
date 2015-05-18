@@ -60,7 +60,7 @@ namespace rptxml
         void setContainsShape(bool _bContainsShapes);
     };
 
-} // namespace rptxml
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLCELL_HXX

@@ -78,6 +78,6 @@ bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
     return bResult;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -141,8 +141,8 @@ template <class AnimationT> AnimationActivitySharedPtr makeSetActivity(
         new SetActivity<AnimationT>(rParms,rAnimation,rToValue) );
 }
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_SETACTIVITY_HXX
 

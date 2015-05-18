@@ -471,6 +471,6 @@ void RDFaImportHelper::InsertRDFa(
         ::boost::bind(&RDFaInserter::InsertRDFaEntry, &inserter, _1));
 }
 
-} // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

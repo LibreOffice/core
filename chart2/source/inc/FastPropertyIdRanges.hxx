@@ -44,7 +44,7 @@ enum FastPropertyIdRanges
     FAST_PROPERTY_ID_START_GL_3D = FAST_PROPERTY_ID_START + 19000
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_FASTPROPERTYIDRANGES_HXX
 #endif

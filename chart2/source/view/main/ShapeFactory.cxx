@@ -2291,6 +2291,6 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

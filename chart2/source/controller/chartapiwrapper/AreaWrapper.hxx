@@ -97,8 +97,8 @@ private:
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_AREAWRAPPER_HXX
 #endif

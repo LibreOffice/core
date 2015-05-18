@@ -61,7 +61,7 @@ namespace dbaui
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue) SAL_OVERRIDE;
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_UNODIRECTSQL_HXX
 

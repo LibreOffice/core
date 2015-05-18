@@ -154,6 +154,6 @@ bool ImageButtonToolbarController::ReadImageFromURL( bool bBigImage, const OUStr
     return false;
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

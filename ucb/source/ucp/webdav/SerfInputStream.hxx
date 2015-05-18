@@ -114,7 +114,7 @@ class SerfInputStream : public ::com::sun::star::io::XInputStream,
                ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFINPUTSTREAM_HXX
 

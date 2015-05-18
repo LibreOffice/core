@@ -457,7 +457,7 @@ inline void AccessibleBrowseBoxBase::implSetName(
     maName = rName;
 }
 
-} // namespace accessibility
+}
 
 
 

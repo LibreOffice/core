@@ -167,7 +167,7 @@ class AcceleratorConfigurationReader : public ::cppu::WeakImplHelper1< css::xml:
         OUString implts_getErrorLineString();
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONREADER_HXX
 

@@ -276,9 +276,9 @@ public:
         bool m_bInitialized;
 };
 
-} // namespace vista
-} // namespace win32
-} // namespace fpicker
+}
+}
+}
 
 #endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKER_HXX
 

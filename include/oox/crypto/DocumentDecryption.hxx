@@ -63,8 +63,8 @@ public:
 
 };
 
-} // namespace core
-} // namespace oox
+}
+}
 
 #endif
 

@@ -299,7 +299,7 @@ namespace xmlscript
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
-}   // namespace xmlscript
+}
 
 #endif // INCLUDED_XMLSCRIPT_SOURCE_XMLFLAT_IMEXP_XMLBAS_IMPORT_HXX
 

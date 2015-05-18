@@ -3523,7 +3523,7 @@ void DomainMapper::HandleRedline( Sprm& rSprm )
     m_pImpl->SetCurrentRedlineIsRead();
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

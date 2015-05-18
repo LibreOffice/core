@@ -862,6 +862,6 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxSeparator() throw
     m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_TOOLBARSEPARATOR ) );
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

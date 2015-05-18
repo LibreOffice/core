@@ -61,7 +61,7 @@ public:
 
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BASICRENDERABLE_HXX
 

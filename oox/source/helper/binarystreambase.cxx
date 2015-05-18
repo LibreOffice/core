@@ -140,6 +140,6 @@ void SequenceSeekableStream::close()
     mbEof = true;
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

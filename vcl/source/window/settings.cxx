@@ -308,6 +308,6 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
         GetpApp()->OverrideSystemSettings( rSettings );
 }
 
-} /*namespace vcl*/
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

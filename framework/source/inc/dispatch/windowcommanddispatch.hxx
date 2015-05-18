@@ -112,7 +112,7 @@ class WindowCommandDispatch
 
 }; // class MACDispatch
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_WINDOWCOMMANDDISPATCH_HXX
 

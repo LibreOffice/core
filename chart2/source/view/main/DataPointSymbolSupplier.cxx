@@ -42,6 +42,6 @@ uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
     return xGroupShapes;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

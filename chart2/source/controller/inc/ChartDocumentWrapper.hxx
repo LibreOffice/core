@@ -230,8 +230,8 @@ private: //member
     bool                                                                    m_bIsDisposed;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 // CHART_CHARTDOCUMENT_HXX
 #endif

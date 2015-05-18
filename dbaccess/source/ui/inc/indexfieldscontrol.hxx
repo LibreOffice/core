@@ -91,7 +91,7 @@ namespace dbaui
         using ::svt::EditBrowseBox::Init;
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXFIELDSCONTROL_HXX
 

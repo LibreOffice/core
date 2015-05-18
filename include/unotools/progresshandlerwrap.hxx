@@ -43,7 +43,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-}   // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_PROGRESSHANDLERWRAP_HXX
 

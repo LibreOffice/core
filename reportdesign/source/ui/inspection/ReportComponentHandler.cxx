@@ -210,7 +210,7 @@ sal_Bool SAL_CALL ReportComponentHandler::suspend(sal_Bool Suspend) throw (uno::
 }
 
 
-} // namespace rptui
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

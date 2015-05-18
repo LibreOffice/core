@@ -628,6 +628,6 @@ namespace pcr
 
     IMPLEMENT_FORWARD_XCOMPONENT( GenericPropertyHandler, GenericPropertyHandler_Base );
 
-}   // namespace pcr
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

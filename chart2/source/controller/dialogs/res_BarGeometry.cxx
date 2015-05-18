@@ -60,6 +60,6 @@ void BarGeometryResources::SelectEntryPos(sal_Int32 nPos)
         m_pLB_Geometry->SelectEntryPos( nPos );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

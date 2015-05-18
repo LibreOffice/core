@@ -195,7 +195,7 @@ void WaitSymbol::viewsChanged()
     }
 }
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

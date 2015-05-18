@@ -611,7 +611,7 @@ handlePasswordRequest_(
     }
 }
 
-} // namespace
+}
 
 bool
 UUIInteractionHelper::handleAuthenticationRequest(

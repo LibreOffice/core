@@ -108,7 +108,7 @@ class SVT_DLLPUBLIC ContextMenuHelper
         bool                                                                            m_bUICfgMgrAssociated;
 };
 
-} // namespace svt
+}
 
 #endif // INCLUDED_SVTOOLS_CONTEXTMENUHELPER_HXX
 

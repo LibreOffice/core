@@ -57,6 +57,6 @@ SfxItemSet NumberFormatDialog::CreateEmptyItemSetForNumberFormatDialog( SfxItemP
     return SfxItemSet( rItemPool, nWhichPairs );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

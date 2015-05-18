@@ -96,7 +96,7 @@ class TargetHelper
         static bool isValidNameForFrame(const OUString& sName);
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_TARGETHELPER_HXX
 

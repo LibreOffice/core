@@ -62,6 +62,6 @@ namespace accessibility
     {
         return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, false );
     }
-}   // namespace accessibility
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

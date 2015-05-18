@@ -43,7 +43,7 @@ struct ValueRangeComp
     }
 };
 
-} // namespace
+}
 
 void ValueRangeSet::insert( const ValueRange& rRange )
 {
@@ -140,6 +140,6 @@ OUString ContainerHelper::insertByUnusedName(
     return aNewName;
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

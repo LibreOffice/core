@@ -116,7 +116,7 @@ class JobResult
         css::frame::DispatchResultEvent              getDispatchResult(                   ) const;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_JOBS_JOBRESULT_HXX
 

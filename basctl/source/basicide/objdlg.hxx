@@ -54,7 +54,7 @@ private:
     void ArrangeWindows ();
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_OBJDLG_HXX
 

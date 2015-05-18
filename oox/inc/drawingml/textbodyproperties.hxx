@@ -51,8 +51,8 @@ struct TextBodyProperties
 
 
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

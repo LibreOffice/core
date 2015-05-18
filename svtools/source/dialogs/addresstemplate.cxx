@@ -1283,7 +1283,7 @@ void AssignmentPersistentData::ImplCommit()
         return ModalDialog::PreNotify(_rNEvt);
     }
 
-}   // namespace svt
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

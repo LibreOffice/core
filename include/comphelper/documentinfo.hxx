@@ -39,7 +39,7 @@ namespace comphelper {
     }
 
 
-}   // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_DOCUMENTINFO_HXX

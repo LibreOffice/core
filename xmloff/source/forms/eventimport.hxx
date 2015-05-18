@@ -77,7 +77,7 @@ namespace xmloff
         virtual ~ODefaultEventAttacherManager();
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_EVENTIMPORT_HXX
 

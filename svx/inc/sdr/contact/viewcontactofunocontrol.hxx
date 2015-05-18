@@ -83,7 +83,7 @@ namespace sdr { namespace contact {
     };
 
 
-} } // namespace sdr::contact
+} }
 
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFUNOCONTROL_HXX

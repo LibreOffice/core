@@ -39,7 +39,7 @@ protected:
     ~FormulaImportBase() {}
 };
 
-} // namespace
+}
 
 #endif
 

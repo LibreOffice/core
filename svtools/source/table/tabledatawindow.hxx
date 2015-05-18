@@ -68,7 +68,7 @@ namespace svt { namespace table
         void    impl_hideTipWindow();
     };
 
-} } // namespace svt::table
+} }
 
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX

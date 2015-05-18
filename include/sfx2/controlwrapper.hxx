@@ -633,7 +633,7 @@ void ValueSetWrapper< ValueT >::SetControlValue( ValueT nValue )
 
 
 
-} // namespace sfx
+}
 
 #endif
 

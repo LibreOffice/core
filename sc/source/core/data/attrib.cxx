@@ -992,7 +992,7 @@ void lclAppendScalePageCount( OUString& rText, sal_uInt16 nPages )
     else
         rText += ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_AUTO );
 }
-} // namespace
+}
 
 bool ScPageScaleToItem::GetPresentation(
         SfxItemPresentation ePres, SfxMapUnit, SfxMapUnit, OUString& rText, const IntlWrapper* ) const

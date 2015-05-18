@@ -32,7 +32,7 @@ namespace basebmp
         typedef vigra::VigraFalseType pointer;
     };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_NONSTANDARDITERATOR_HXX */
 

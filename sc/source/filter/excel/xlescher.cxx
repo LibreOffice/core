@@ -131,7 +131,7 @@ sal_uInt16 lclGetEmbeddedScale( long nPageSize, sal_Int32 nPageScale, long nPos,
     return static_cast< sal_uInt16 >( nPos * fPosScale / nPageSize * nPageScale + 0.5 );
 }
 
-} // namespace
+}
 
 XclObjAnchor::XclObjAnchor() :
     mnLX( 0 ),
@@ -316,7 +316,7 @@ spTbxListenerData[] =
     /*EXC_TBX_EVENT_CHANGE*/    { "XChangeListener",     "changed"                }
 };
 
-} // namespace
+}
 
 bool XclControlHelper::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor,
         XclTbxEventType eEventType, const OUString& rXclMacroName, SfxObjectShell* pDocShell )

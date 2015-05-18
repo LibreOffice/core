@@ -113,6 +113,6 @@ namespace dbaui
         OSL_FAIL( "SetItemPropertyStorage::setPropertyValue: unsupported item type!" );
     }
 
-} // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

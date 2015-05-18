@@ -78,7 +78,7 @@ uno::Sequence<beans::PropertyValue> LatentStyleHandler::getAttributes() const
     return aAttributes;
 }
 
-} // namespace dmapper
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,6 +53,6 @@ namespace dbaui
         return new OptionalBoolItem( *this );
     }
 
-} // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

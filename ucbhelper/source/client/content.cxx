@@ -1391,6 +1391,6 @@ void SAL_CALL ContentEventListener_Impl::disposing( const EventObject& Source )
     m_rContent.disposing(Source);
 }
 
-} /* namespace ucbhelper */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -53,8 +53,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
 };
 
-} // namespace docprop
-} // namespace oox
+}
+}
 
 #endif
 

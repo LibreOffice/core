@@ -206,7 +206,7 @@ uno::Sequence< OUString > ChartFrameLoader::getSupportedServiceNames_Static()
     m_bCancelRequired = false;
 }
 
-} //namespace chart
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_chart2_ChartFrameLoader_get_implementation(css::uno::XComponentContext *context,

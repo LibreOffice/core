@@ -84,6 +84,6 @@ void SAL_CALL ProgressHandlerWrap::pop()
         m_xStatusIndicator->end();
 }
 
-} // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

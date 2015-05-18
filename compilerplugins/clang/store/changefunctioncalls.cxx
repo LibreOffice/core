@@ -87,6 +87,6 @@ bool ChangeFunctionCalls::VisitCallExpr( const CallExpr* call )
 
 static Plugin::Registration< ChangeFunctionCalls > X( "changefunctioncalls" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -70,6 +70,6 @@ const char* getTokenName( sal_Int32 nTokenId )
     return NULL;
 }
 
-} // namespace svgi
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

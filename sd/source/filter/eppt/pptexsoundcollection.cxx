@@ -209,6 +209,6 @@ void ExSoundCollection::Write( SvStream& rSt ) const
     }
 }
 
-} // namespace ppt;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

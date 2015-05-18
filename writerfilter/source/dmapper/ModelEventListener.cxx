@@ -118,7 +118,7 @@ void ModelEventListener::disposing( const lang::EventObject& rEvent ) throw (uno
     }
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

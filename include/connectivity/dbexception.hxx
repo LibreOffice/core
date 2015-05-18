@@ -344,7 +344,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
     throw (::com::sun::star::sdbc::SQLException);
 
 
-}   // namespace dbtools
+}
 
 
 #endif // INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX

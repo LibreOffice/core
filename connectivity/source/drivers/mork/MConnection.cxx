@@ -430,6 +430,6 @@ void OConnection::throwSQLException( const sal_uInt16 _nErrorResourceId, const R
     throwSQLException( aError, _rxContext );
 }
 
-} } // namespace connectivity::mork
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

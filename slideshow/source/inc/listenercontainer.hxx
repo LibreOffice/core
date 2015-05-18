@@ -472,8 +472,8 @@ class ThreadUnsafeListenerContainer : public ListenerContainerBase<ListenerT,
 {
 };
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_LISTENERCONTAINER_HXX
 

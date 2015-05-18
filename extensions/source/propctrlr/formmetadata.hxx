@@ -329,7 +329,7 @@ namespace pcr
     #define PROPERTY_ID_SCROLL_LEFT                 206
 
 
-} // namespace pcr
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMMETADATA_HXX

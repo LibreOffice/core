@@ -291,8 +291,8 @@ ContextHandlerRef ValAxisContext::onCreateContext( sal_Int32 nElement, const Att
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

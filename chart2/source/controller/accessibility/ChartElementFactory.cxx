@@ -66,6 +66,6 @@ AccessibleBase* ChartElementFactory::CreateChartElement( const AccessibleElement
     return 0;
 }
 
-} // namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

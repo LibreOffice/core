@@ -99,7 +99,7 @@ class SystemExec :     public  ::cppu::WeakImplHelper3<
 
 };      //  class SystemExec
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_SYSTEMEXEC_HXX
 

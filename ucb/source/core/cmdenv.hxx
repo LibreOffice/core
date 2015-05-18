@@ -89,7 +89,7 @@ private:
     //    com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
 };
 
-} // namespace ucb_cmdenv
+}
 
 #endif // INCLUDED_UCB_SOURCE_CORE_CMDENV_HXX
 

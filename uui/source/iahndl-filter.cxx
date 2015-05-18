@@ -282,7 +282,7 @@ handleFilterOptionsRequest_(
     xAbort->select();
 }
 
-} // namespace
+}
 
 bool
 UUIInteractionHelper::handleNoSuchFilterRequest(

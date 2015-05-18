@@ -98,7 +98,7 @@ public:
         const OUString &rWord, sal_Int16 nLang, sal_Int16 nTypeP, const ::com::sun::star::uno::Sequence< OUString > &rAlt );
 };
 
-}   // namespace linguistic
+}
 
 #endif
 

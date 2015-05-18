@@ -50,7 +50,7 @@ public:
     virtual SvTreeListEntry* CreateEntry() const SAL_OVERRIDE;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_DATASOURCECONTROLS_HXX
 #endif

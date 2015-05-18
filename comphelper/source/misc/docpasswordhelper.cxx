@@ -426,6 +426,6 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     return (eResult == DocPasswordVerifierResult_OK) ? aEncData : uno::Sequence< beans::NamedValue >();
 }
 
-} // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

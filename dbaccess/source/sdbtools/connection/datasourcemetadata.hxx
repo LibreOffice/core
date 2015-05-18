@@ -68,7 +68,7 @@ namespace sdbtools
         DataSourceMetaData& operator=( const DataSourceMetaData& ) SAL_DELETED_FUNCTION;
     };
 
-} // namespace sdbtools
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_DATASOURCEMETADATA_HXX
 

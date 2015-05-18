@@ -127,6 +127,6 @@ namespace linguistic
         // when it gets called with the text
         return comphelper::string::strip(aText, ' ');
     }
-} // namespace linguistic
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

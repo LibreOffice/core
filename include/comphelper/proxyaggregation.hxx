@@ -213,7 +213,7 @@ namespace comphelper
     };
 
 
-}   // namespace comphelper
+}
 
 
 

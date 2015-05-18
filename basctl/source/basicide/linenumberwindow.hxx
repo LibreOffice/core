@@ -41,7 +41,7 @@ public:
     int GetWidth() { return m_nWidth;}
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_LINENUMBERWINDOW_HXX
 

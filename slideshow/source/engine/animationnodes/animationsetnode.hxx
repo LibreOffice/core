@@ -43,8 +43,8 @@ private:
     void implScheduleDeactivationEvent();
 };
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONSETNODE_HXX
 

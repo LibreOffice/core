@@ -58,7 +58,7 @@ const sal_Int16 API_SHOWMODE_SHOW               = 0;        /// Show drawing obj
 const sal_Int16 API_SHOWMODE_HIDE               = 1;        /// Hide drawing objects.
 const sal_Int16 API_SHOWMODE_PLACEHOLDER        = 2;        /// Show placeholders for drawing objects.
 
-} // namespace
+}
 
 FileSharingModel::FileSharingModel() :
     mnPasswordHash( 0 ),
@@ -271,7 +271,7 @@ void WorkbookSettings::setDateMode( bool bDateMode1904, bool bDateCompatibility 
     getUnitConverter().finalizeNullDate( getNullDate() );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

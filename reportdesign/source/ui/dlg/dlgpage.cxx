@@ -71,7 +71,7 @@ ORptPageDialog::ORptPageDialog( vcl::Window* pParent, const SfxItemSet* pAttr, c
         RemoveTabPage("asianlayout");
 }
 
-} // namespace rptui
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

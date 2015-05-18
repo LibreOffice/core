@@ -60,7 +60,7 @@ namespace svt { namespace uno
     };
 
 
-} } // namespace svt::uno
+} }
 
 
 #endif // INCLUDED_SVTOOLS_SOURCE_UNO_WIZARD_WIZARDPAGECONTROLLER_HXX

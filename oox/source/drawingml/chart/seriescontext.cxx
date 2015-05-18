@@ -84,7 +84,7 @@ void lclDataLabelSharedCharacters( ContextHandler2& rContext, const OUString& rC
         orModel.moaSeparator = rChars;
 }
 
-} // namespace
+}
 
 DataLabelContext::DataLabelContext( ContextHandler2Helper& rParent, DataLabelModel& rModel ) :
     ContextBase< DataLabelModel >( rParent, rModel )
@@ -701,8 +701,8 @@ ContextHandlerRef SurfaceSeriesContext::onCreateContext( sal_Int32 nElement, con
     return SeriesContextBase::onCreateContext( nElement, rAttribs );
 }
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

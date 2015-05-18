@@ -581,6 +581,6 @@ namespace utl
         return OConfigurationTreeRoot();
     }
 
-}   // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

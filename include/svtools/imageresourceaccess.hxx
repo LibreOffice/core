@@ -69,7 +69,7 @@ namespace svt
     }
 
 
-} // namespace svt
+}
 
 
 #endif // DBA14_ INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX

@@ -180,7 +180,7 @@ namespace basegfx
 
             rStr.append(fValue);
         }
-    } // namespace internal
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -89,7 +89,7 @@ const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css:
 }
 
 
-}   // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_BASICIO_HXX

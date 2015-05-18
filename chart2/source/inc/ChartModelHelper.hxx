@@ -102,7 +102,7 @@ public:
     static bool setIncludeHiddenCells( bool bIncludeHiddenCells, ChartModel& rModel);
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

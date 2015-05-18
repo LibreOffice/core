@@ -753,6 +753,6 @@ namespace dbaui
         return 0L;
     }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

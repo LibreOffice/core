@@ -627,6 +627,6 @@ IMPL_STATIC_LINK( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo
     return 0;
 }
 
-} // namespace svt
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

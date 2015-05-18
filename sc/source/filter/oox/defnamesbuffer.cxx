@@ -174,7 +174,7 @@ Any lclConvertReference( const Any& rRefAny, const CellAddress& rBaseAddr, sal_u
     return Any();
 }
 
-} // namespace
+}
 
 DefinedNameModel::DefinedNameModel() :
     mnSheet( -1 ),
@@ -524,7 +524,7 @@ DefinedNameRef DefinedNamesBuffer::createDefinedName()
     return xDefName;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

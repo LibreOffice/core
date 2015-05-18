@@ -50,8 +50,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 };
 
-} // namespace gstreamer
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTMANAGER_HXX
 

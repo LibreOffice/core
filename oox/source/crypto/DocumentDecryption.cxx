@@ -186,7 +186,7 @@ public:
     {}
 };
 
-} // namespace
+}
 
 DocumentDecryption::DocumentDecryption(oox::ole::OleStorage& rOleStorage, Reference<XComponentContext> xContext) :
     mxContext(xContext),
@@ -383,7 +383,7 @@ bool DocumentDecryption::decrypt(Reference<XStream> xDocumentStream)
     return aResult;
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

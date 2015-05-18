@@ -63,7 +63,7 @@ public:
     bool        getRememberPassword() const { return m_bRemberPassword; }
 };
 
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_INC_OAUTHENTICATIONCONTINUATION_HXX
 

@@ -43,7 +43,7 @@ namespace dbaui
         );
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_ASYNCMODALDIALOG_HXX
 

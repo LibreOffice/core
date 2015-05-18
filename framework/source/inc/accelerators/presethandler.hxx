@@ -451,7 +451,7 @@ class PresetHandler
         ::std::vector< OUString > impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder);
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_PRESETHANDLER_HXX
 

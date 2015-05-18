@@ -117,7 +117,7 @@ private:
     SdrObject*      m_pMarkObj;//object that is marked instead to have more pretty handles
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

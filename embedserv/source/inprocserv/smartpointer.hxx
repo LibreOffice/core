@@ -169,7 +169,7 @@ public:
     }
 };
 
-} // namespace inprocserv
+}
 
 #endif
 

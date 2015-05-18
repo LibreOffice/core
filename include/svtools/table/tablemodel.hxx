@@ -533,7 +533,7 @@ namespace svt { namespace table
     typedef std::shared_ptr< ITableModel > PTableModel;
 
 
-} } // namespace svt::table
+} }
 
 
 #endif // INCLUDED_SVTOOLS_TABLE_TABLEMODEL_HXX

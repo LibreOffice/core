@@ -119,7 +119,7 @@ SAL_CALL query (IStoreHandle *pHandle, SAL_UNUSED_PARAMETER OStoreDirectory_Impl
  *
  *======================================================================*/
 
-} // namespace store
+}
 
 #endif // INCLUDED_STORE_SOURCE_STORDIR_HXX
 

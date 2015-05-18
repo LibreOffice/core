@@ -302,6 +302,6 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     return uno::Reference< awt::XWindow >();
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

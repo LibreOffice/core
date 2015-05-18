@@ -200,9 +200,9 @@ class AsyncRequests : private ::cppu::BaseMutex
         osl::Condition maWait;
 };
 
-} // namespace vista
-} // namespace win32
-} // namespace fpicker
+}
+}
+}
 
 #endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_ASYNCREQUESTS_HXX
 

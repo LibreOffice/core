@@ -59,7 +59,7 @@ namespace connectivity { namespace mozab {
     };
 
 
-} } // namespace connectivity::mozab
+} }
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MLDAPATTRIBUTEMAP_HXX

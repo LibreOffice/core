@@ -260,7 +260,7 @@ namespace dbaui
         }
     }
 
-} // namespace dbaui
+}
 
 extern "C" void SAL_CALL createRegistryInfo_OTextConnectionSettingsDialog()
 {

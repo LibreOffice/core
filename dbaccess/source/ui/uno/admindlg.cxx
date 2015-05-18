@@ -103,6 +103,6 @@ VclPtr<Dialog> ODataSourcePropertyDialog::createDialog(vcl::Window* _pParent)
     return pDialog;
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

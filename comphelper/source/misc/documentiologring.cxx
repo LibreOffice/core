@@ -155,7 +155,7 @@ uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames() th
     return getSupportedServiceNames_static();
 }
 
-} // namespace comphelper
+}
 
 void createRegistryInfo_OSimpleLogRing()
 {

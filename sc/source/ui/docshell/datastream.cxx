@@ -592,6 +592,6 @@ IMPL_LINK_NOARG_TYPED(DataStream, ImportTimerHdl, Timer *, void)
         maImportTimer.Start();
 }
 
-} // namespace sc
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

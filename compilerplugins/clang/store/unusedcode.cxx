@@ -73,6 +73,6 @@ bool UnusedCode::VisitFunctionDecl( const FunctionDecl* declaration )
 
 static Plugin::Registration< UnusedCode > X( "unusedcode" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -703,6 +703,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return static_cast< lang::XTypeProvider * >( new XMLOasisBasicImporter( xContext ) );
     }
 
-}   // namespace xmlscript
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

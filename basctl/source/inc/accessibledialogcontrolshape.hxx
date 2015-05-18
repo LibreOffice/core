@@ -135,7 +135,7 @@ public:
     virtual OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_ACCESSIBLEDIALOGCONTROLSHAPE_HXX
 

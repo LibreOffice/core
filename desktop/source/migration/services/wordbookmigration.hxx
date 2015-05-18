@@ -87,7 +87,7 @@ namespace migration
     };
 
 
-}   // namespace migration
+}
 
 
 #endif // _DESKTOP_AUTOCORRMIGRATION_HXX_

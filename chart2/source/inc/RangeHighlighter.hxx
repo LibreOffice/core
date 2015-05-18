@@ -102,7 +102,7 @@ private:
     bool m_bIncludeHiddenCells;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_RANGEHIGHLIGHTER_HXX
 #endif

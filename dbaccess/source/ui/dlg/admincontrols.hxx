@@ -64,7 +64,7 @@ namespace dbaui
         bool canAdvance() const;
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ADMINCONTROLS_HXX
 

@@ -143,7 +143,7 @@ bool Options::printUsage() const
     return false;
 }
 
-} // namespace tools
-} // namespace registry
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

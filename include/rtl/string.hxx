@@ -1737,7 +1737,7 @@ operator <<(
         // best effort; potentially loses data due to embedded null characters
 }
 
-} /* Namespace */
+}
 
 #ifdef RTL_STRING_UNITTEST
 namespace rtl

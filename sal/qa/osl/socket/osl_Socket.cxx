@@ -1453,7 +1453,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getLocalHostname, "osl_Soc
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::resolveHostname, "osl_SocketAddr");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::gettheServicePort, "osl_SocketAddr");
 
-} // namespace osl_SocketAddr
+}
 
 namespace osl_Socket
 {
@@ -2712,7 +2712,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Socket::clearError, "osl_Socket");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Socket::getError, "osl_Socket");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Socket::getHandle, "osl_Socket");
 
-} // namespace osl_Socket
+}
 
 namespace osl_StreamSocket
 {
@@ -3093,7 +3093,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::send_recv, "osl_StreamSo
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::shutdown, "osl_StreamSocket");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::isExceptionPending, "osl_StreamSocket");
 
-} // namespace osl_StreamSocket
+}
 
 namespace osl_ConnectorSocket
 {
@@ -3247,7 +3247,7 @@ namespace osl_ConnectorSocket
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ConnectorSocket::ctors, "osl_ConnectorSocket");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ConnectorSocket::connect, "osl_ConnectorSocket");
 
-} // namespace osl_ConnectorSocket
+}
 
 namespace osl_AcceptorSocket
 {
@@ -3371,7 +3371,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::ctors, "osl_AcceptorSo
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::operator_assign, "osl_AcceptorSocket");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::listen_accept, "osl_AcceptorSocket");
 
-} // namespace osl_AcceptorSocket
+}
 
 namespace osl_DatagramSocket
 {
@@ -3576,7 +3576,7 @@ public:
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom);
 
-} // namespace osl_DatagramSocket
+}
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

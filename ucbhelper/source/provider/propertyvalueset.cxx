@@ -114,7 +114,7 @@ struct PropertyValue
           nDouble(0.0)
         {}
 };
-} // namespace ucbhelper_impl
+}
 
 using namespace ucbhelper_impl;
 
@@ -131,7 +131,7 @@ typedef std::vector< ucbhelper_impl::PropertyValue > PropertyValuesVector;
 
 class PropertyValues : public PropertyValuesVector {};
 
-} // namespace ucbhelper
+}
 
 
 
@@ -784,6 +784,6 @@ bool PropertyValueSet::appendPropertySetValue(
     return false;
 }
 
-} // namespace ucbhelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

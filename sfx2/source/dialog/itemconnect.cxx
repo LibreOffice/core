@@ -38,7 +38,7 @@ TriState lclConvertToTriState( bool bKnown, bool bIsKnownFlag, bool bIsUnknownFl
     return (bKnown && bIsKnownFlag) ? TRISTATE_TRUE : ((!bKnown && bIsUnknownFlag) ? TRISTATE_FALSE : TRISTATE_INDET);
 }
 
-} // namespace
+}
 
 
 
@@ -360,6 +360,6 @@ bool ItemConnectionArray::FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& r
 
 
 
-} // namespace sfx
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

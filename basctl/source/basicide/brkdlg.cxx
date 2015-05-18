@@ -59,7 +59,7 @@ bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
     return true;
 }
 
-} // namespace
+}
 
 BreakPointDialog::BreakPointDialog( vcl::Window* pParent, BreakPointList& rBrkPntList )
     : ModalDialog(pParent, "ManageBreakpointsDialog",
@@ -261,6 +261,6 @@ BreakPoint* BreakPointDialog::GetSelectedBreakPoint()
     return pBrk;
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

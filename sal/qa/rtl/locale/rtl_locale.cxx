@@ -301,7 +301,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::getCountry);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::getVariant);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::hashCode);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_locale::equals);
-} // namespace rtl_locale
+}
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

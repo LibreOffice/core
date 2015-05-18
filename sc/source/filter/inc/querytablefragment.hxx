@@ -44,8 +44,8 @@ private:
     QueryTable&         mrQueryTable;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

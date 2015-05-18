@@ -255,7 +255,7 @@ void ContextHandler2::onEndRecord()
 {
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

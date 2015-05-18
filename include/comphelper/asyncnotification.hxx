@@ -167,7 +167,7 @@ namespace comphelper
     };
 
 
-} // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_ASYNCNOTIFICATION_HXX

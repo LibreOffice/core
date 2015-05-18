@@ -54,7 +54,7 @@ RTFEncoding aRTFEncodings[] =
 
 int nRTFEncodings = SAL_N_ELEMENTS(aRTFEncodings);
 
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

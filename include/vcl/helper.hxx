@@ -53,7 +53,7 @@ enum whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
 // note: gcc 3.4.1 warns about visibility if we retunr a const OUString& here
 // seems to be a bug in gcc, now we return an object instead of a reference
 OUString VCL_DLLPUBLIC getOfficePath( enum whichOfficePath ePath );
-} // namespace
+}
 
 
 bool VCL_DLLPUBLIC GetMenuInvalidateListeners();

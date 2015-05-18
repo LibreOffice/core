@@ -56,7 +56,7 @@ enum NfSymbolType
     NF_SYMBOLTYPE_FRAC_FDIV     = -21   // forced divisors
 };
 
-}   // namespace svt
+}
 
 #endif // INCLUDED_SVL_NFSYMBOL_HXX
 

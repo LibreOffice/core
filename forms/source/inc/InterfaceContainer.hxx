@@ -312,7 +312,7 @@ public:
     using OInterfaceContainer::disposing;
 };
 
-}   // namespace frm
+}
 
 
 #endif // INCLUDED_FORMS_SOURCE_INC_INTERFACECONTAINER_HXX

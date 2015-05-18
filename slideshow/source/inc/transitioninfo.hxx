@@ -146,8 +146,8 @@ struct TransitionInfo
     };
 };
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_TRANSITIONINFO_HXX
 

@@ -115,7 +115,7 @@ void ExportStoredChapterNumberingRules(
 void ImportStoredChapterNumberingRules(
         SwChapterNumRules & rRules, SvStream & rStream, OUString const&);
 
-} // namespace sw
+}
 
 #endif
 

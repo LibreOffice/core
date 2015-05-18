@@ -931,7 +931,7 @@ oslFileError readLine( oslFileHandle pFile, OStringBuffer& line )
     return nRes;
 }
 
-} // namespace
+}
 
 static bool checkEncryption( const OUString&                               i_rPath,
                              const uno::Reference< task::XInteractionHandler >& i_xIHdl,

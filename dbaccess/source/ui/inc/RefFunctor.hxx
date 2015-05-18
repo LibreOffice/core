@@ -39,7 +39,7 @@ namespace dbaui
             m_aFunction(_aType.get());
         }
     };
-} // namespace dbaui
+}
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_REFFUNCTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

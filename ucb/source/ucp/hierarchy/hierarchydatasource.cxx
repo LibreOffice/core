@@ -216,7 +216,7 @@ public:
         throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-} // namespace hcp_impl
+}
 
 using namespace hcp_impl;
 

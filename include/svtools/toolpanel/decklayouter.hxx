@@ -92,7 +92,7 @@ namespace svt
     typedef ::rtl::Reference< IDeckLayouter >   PDeckLayouter;
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_DECKLAYOUTER_HXX

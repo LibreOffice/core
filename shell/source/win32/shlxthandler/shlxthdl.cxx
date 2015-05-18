@@ -295,7 +295,7 @@ namespace /* private */
         return rc == ERROR_SUCCESS ? S_OK : E_FAIL;
     }
 
-} // namespace /* private */
+}
 
 
 

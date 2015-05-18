@@ -801,7 +801,7 @@ throw( RuntimeException, std::exception )
     return Sequence< OUString >( names, 3 );
 }
 
-} // namespace func_provider
+}
 
 
 namespace scripting_runtimemgr

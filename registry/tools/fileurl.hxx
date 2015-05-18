@@ -29,8 +29,8 @@ namespace tools
 
 OUString convertToFileUrl(char const * filename, sal_Int32 length);
 
-} // namespace tools
-} // namespace registry
+}
+}
 
 #endif /* INCLUDED_REGISTRY_TOOLS_FILEURL_HXX */
 

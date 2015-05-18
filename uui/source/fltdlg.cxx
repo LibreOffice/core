@@ -219,6 +219,6 @@ OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
     return sShortName;
 }
 
-}   // namespace uui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

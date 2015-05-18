@@ -39,8 +39,8 @@ public:
                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
-} //namespace wrapper
-} //namespace chart
+}
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,7 +62,7 @@ class TaskCreator
 
 }; // class TaskCreator
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_CLASSES_TASKCREATOR_HXX
 

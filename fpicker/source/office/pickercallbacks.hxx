@@ -53,7 +53,7 @@ namespace svt
     };
 
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_FPICKER_SOURCE_OFFICE_PICKERCALLBACKS_HXX

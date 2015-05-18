@@ -97,7 +97,7 @@ void Window::ImplCalcSymbolRect( Rectangle& rRect )
     rRect.Bottom()  -= nExtraHeight;
 }
 
-} /* namespace vcl */
+}
 
 static void ImplDrawBrdWinSymbol( vcl::RenderContext* pDev,
                                   const Rectangle& rRect, SymbolType eSymbol )

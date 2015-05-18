@@ -71,6 +71,6 @@ bool SbxItem::operator==(const SfxPoolItem& rCmp) const
         m_eType == pSbxItem->m_eType;
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

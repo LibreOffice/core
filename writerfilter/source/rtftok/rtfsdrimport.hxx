@@ -75,8 +75,8 @@ private:
     bool m_bFakePict;
     writerfilter::dmapper::GraphicZOrderHelper m_aGraphicZOrderHelper;
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSDRIMPORT_HXX
 

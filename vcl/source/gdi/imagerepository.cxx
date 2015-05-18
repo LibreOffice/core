@@ -40,6 +40,6 @@ namespace vcl
         return aImplImageTree->loadDefaultImage( sIconTheme,_out_rImage);
     }
 
-} // namespace vcl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

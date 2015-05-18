@@ -146,8 +146,8 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer 
 
 };
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FRAMELOADERFACTORY_HXX
 

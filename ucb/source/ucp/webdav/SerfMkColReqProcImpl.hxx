@@ -44,7 +44,7 @@ protected:
     void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket ) SAL_OVERRIDE;
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFMKCOLREQPROCIMPL_HXX
 

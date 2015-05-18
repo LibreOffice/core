@@ -81,7 +81,7 @@ private:
 
 
 
-} // namespace oox
+}
 
 #endif
 

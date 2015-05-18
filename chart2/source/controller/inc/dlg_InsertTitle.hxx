@@ -37,7 +37,7 @@ public:
     void getResult( TitleDialogData& rOutput );
 };
 
-} //namespace chart
+}
 
 #endif
 

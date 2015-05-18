@@ -89,8 +89,8 @@ public:
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) SAL_OVERRIDE;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

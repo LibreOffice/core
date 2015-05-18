@@ -63,7 +63,7 @@ public:
     void                SetPrinter( SfxPrinter* pPrinter );
 };
 
-} // namespace basctl
+}
 
 // This typedef helps baside.sdi,
 // because I don't know how to use nested names in it.

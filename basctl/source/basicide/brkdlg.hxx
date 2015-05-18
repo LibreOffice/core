@@ -59,7 +59,7 @@ public:
     void    SetCurrentBreakPoint( BreakPoint* pBrk );
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BRKDLG_HXX
 

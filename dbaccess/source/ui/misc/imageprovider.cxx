@@ -214,6 +214,6 @@ namespace dbaui
         return Image( ModuleRes( DATABASE_TREE_ICON ) );
     }
 
-} // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

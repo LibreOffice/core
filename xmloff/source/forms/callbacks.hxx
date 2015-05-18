@@ -76,7 +76,7 @@ namespace xmloff
         ~IEventAttacher() {}
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_CALLBACKS_HXX
 

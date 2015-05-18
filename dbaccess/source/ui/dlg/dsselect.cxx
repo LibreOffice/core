@@ -164,6 +164,6 @@ void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
     }
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

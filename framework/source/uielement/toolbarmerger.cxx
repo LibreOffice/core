@@ -681,6 +681,6 @@ void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, CommandToInfoMap& rCom
     pToolbar->SetItemData( nItemId, pAddonParams );
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -273,7 +273,7 @@ void AccessibleGridControlTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
 
 
 
-} // namespace accessibility
+}
 
 
 

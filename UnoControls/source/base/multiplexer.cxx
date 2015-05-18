@@ -440,6 +440,6 @@ void OMRCListenerMultiplexerHelper::impl_unadviseFromPeer(  const   Reference< X
     }
 }
 
-} // namespace unocontrols
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

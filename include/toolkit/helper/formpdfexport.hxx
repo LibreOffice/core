@@ -46,7 +46,7 @@ namespace toolkitform
         );
 
 
-} // namespace toolkitform
+}
 
 
 #endif // INCLUDED_TOOLKIT_HELPER_FORMPDFEXPORT_HXX

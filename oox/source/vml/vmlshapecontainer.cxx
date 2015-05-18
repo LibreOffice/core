@@ -48,7 +48,7 @@ void lclMapShapesById( RefMap< OUString, ShapeType >& orMap, const RefVector< Sh
     }
 }
 
-} // namespace
+}
 
 ShapeContainer::ShapeContainer( Drawing& rDrawing ) :
     mrDrawing( rDrawing )
@@ -131,7 +131,7 @@ void ShapeContainer::convertAndInsert( const Reference< XShapes >& rxShapes, con
         (*aIt)->convertAndInsert( rxShapes, pParentAnchor );
 }
 
-} // namespace vml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,7 +60,7 @@ namespace xmloff
         static const SvXMLEnumMapEntry* getEnumMap(EnumProperties _eProperty);
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_FORMENUMS_HXX
 

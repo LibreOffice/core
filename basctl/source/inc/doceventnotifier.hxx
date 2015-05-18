@@ -75,7 +75,7 @@ namespace basctl
     };
 
 
-} // namespace basctl
+}
 
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_DOCEVENTNOTIFIER_HXX

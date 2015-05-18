@@ -53,8 +53,8 @@ RichStringContext::RichStringContext( ParentType& rParent, RichStringRef xString
     OSL_ENSURE( mxString.get(), "RichStringContext::RichStringContext - missing string object" );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

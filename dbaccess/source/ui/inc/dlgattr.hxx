@@ -39,7 +39,7 @@ namespace dbaui
 
         virtual void  PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) SAL_OVERRIDE;
     };
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DLGATTR_HXX
 

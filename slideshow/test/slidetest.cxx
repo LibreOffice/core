@@ -362,7 +362,7 @@ public:
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LayerManagerTest);
-} // namespace
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -155,6 +155,6 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
     return E_NOT_INTERCEPTED;
 }
 
-} // namespace ucbhelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

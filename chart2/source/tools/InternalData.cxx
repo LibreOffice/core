@@ -550,6 +550,6 @@ void InternalData::dump() const
 void InternalData::dump() const {}
 #endif
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

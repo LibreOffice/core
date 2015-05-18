@@ -85,7 +85,7 @@ typedef PixelFormatTraitsTemplate_RGBValue<
 BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGR24::getter_type,
                                   PixelFormatTraits_BGR24::setter_type);
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_RGB24PIXELFORMATS_HXX */
 

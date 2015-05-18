@@ -57,7 +57,7 @@ namespace dbaui
         DECL_LINK( OnOK, PushButton* );
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TEXTCONNECTIONSETTINGS_HXX
 

@@ -508,7 +508,7 @@ void SAL_CALL OShape::setCustomShapeGeometry( const uno::Sequence< beans::Proper
 
 
 
-}// namespace reportdesign
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

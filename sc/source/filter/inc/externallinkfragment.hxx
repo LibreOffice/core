@@ -98,8 +98,8 @@ private:
     sal_Int32           mnResultType;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

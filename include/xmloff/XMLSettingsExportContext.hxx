@@ -54,7 +54,7 @@ namespace xmloff
     };
 
 
-} // namespace xmloff
+}
 
 
 #endif // INCLUDED_XMLOFF_XMLSETTINGSEXPORTCONTEXT_HXX

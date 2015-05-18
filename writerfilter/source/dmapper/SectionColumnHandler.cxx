@@ -92,7 +92,7 @@ void SectionColumnHandler::lcl_sprm(Sprm & rSprm)
             OSL_FAIL( "SectionColumnHandler: unknown sprm");
     }
 }
-} //namespace dmapper
-} //namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

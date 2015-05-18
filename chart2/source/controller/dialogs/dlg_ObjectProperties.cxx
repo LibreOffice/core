@@ -646,6 +646,6 @@ IMPL_LINK_NOARG(SchAttribTabDlg, OKPressed)
     return m_aOriginalOKClickHdl.Call( this );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

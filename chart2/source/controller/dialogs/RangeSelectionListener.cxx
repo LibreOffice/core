@@ -60,6 +60,6 @@ void SAL_CALL RangeSelectionListener::disposing( const lang::EventObject& /*Sour
     m_rParent.disposingRangeSelection();
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

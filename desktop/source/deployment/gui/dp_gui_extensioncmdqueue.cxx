@@ -1119,6 +1119,6 @@ void handleInteractionRequest( const uno::Reference< uno::XComponentContext > & 
     xCmdEnv->handle( xRequest );
 }
 
-} //namespace dp_gui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

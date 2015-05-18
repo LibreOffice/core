@@ -155,7 +155,7 @@ inline  bool OBookmarkContainer::checkExistence(const OUString& _rName)
     return m_aBookmarks.find(_rName) != m_aBookmarks.end();
 }
 
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_BOOKMARKCONTAINER_HXX
 

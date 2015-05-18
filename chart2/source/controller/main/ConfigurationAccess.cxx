@@ -96,8 +96,8 @@ namespace ConfigurationAccess
         FieldUnit aUnit( theCalcConfigItem::get().getFieldUnit() );
         return aUnit;
     }
-} //namespace ConfigurationAccess
+}
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -138,7 +138,7 @@ namespace svt
 
 
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX

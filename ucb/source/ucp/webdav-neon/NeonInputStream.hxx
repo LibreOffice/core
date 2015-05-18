@@ -119,7 +119,7 @@ class NeonInputStream : public ::com::sun::star::io::XInputStream,
                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-} // namespace webdav_ucp
+}
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_NEONINPUTSTREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

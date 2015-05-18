@@ -182,6 +182,6 @@ OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
     return m_pImpl->m_aProviderScheme;
 }
 
-} /* namespace ucbhelper */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

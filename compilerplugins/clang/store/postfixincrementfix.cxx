@@ -127,6 +127,6 @@ bool PostfixIncrementFix::shouldDoChange( const Expr* operand )
 
 static Plugin::Registration< PostfixIncrementFix > X( "postfixincrementfix" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -317,6 +317,6 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
         m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, OUString("S1000"), 0, Any()));
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -84,8 +84,8 @@ struct TextCharacterProperties
 
 
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

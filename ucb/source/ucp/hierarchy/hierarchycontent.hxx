@@ -306,7 +306,7 @@ public:
                        const OUString& rContentId );
 };
 
-} // namespace hierarchy_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYCONTENT_HXX
 

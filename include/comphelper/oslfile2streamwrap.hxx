@@ -69,7 +69,7 @@ private:
     ::osl::File&        rFile;
 };
 
-}   // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_OSLFILE2STREAMWRAP_HXX

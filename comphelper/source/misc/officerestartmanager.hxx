@@ -77,7 +77,7 @@ public:
 
 };
 
-} // namespace comphelper
+}
 
 #endif
 

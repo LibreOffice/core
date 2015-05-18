@@ -128,7 +128,7 @@ namespace xmloff
     };
 
 
-}   // namespace xmloff
+}
 
 
 #endif // INCLUDED_XMLOFF_CONTROLPROPERTYHDL_HXX

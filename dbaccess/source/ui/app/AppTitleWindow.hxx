@@ -68,7 +68,7 @@ namespace dbaui
         */
         long GetWidthPixel() const;
     };
-} // namespace dbaui
+}
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPTITLEWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,7 +45,7 @@ namespace dbaui
 
         ::dbaccess::ODsnTypeCollection* getCollection() const { return m_pCollection; }
     };
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_DSNITEM_HXX
 

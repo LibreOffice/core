@@ -223,7 +223,7 @@ inline T * get_pointer( Reference<T> const& r )
 }
 /// @endcond
 
-} // namespace rtl
+}
 
 #endif /* ! INCLUDED_RTL_REF_HXX */
 

@@ -4267,6 +4267,6 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     return aRes.pushResultToDocument(rDoc, rTopPos);
 }
 
-}} // namespace sc::opencl
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

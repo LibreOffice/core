@@ -68,7 +68,7 @@ public:
     typedef typename C< sizeof (f(H(), 0)) == 1, void *, void >::t t;
 };
 
-}; }; // namespace detail, namespace vcl
+}; };
 
 namespace vcl { class Window; }
 

@@ -225,7 +225,7 @@ bool lclConvertTimeInterval( sal_uInt16& rnValue, sal_uInt16& rnTimeUnit, const 
     return bAuto;
 }
 
-} // namespace
+}
 
 // Common =====================================================================
 
@@ -572,7 +572,7 @@ XclExpChLineFormatRef lclCreateLineFormat( const XclExpChRoot& rRoot,
     return xLineFmt;
 }
 
-} // namespace
+}
 
 XclExpChAreaFormat::XclExpChAreaFormat( const XclExpChRoot& rRoot ) :
     XclExpRecord( EXC_ID_CHAREAFORMAT, (rRoot.GetBiff() == EXC_BIFF8) ? 16 : 12 ),
@@ -848,7 +848,7 @@ XclExpChFrameRef lclCreateFrame( const XclExpChRoot& rRoot,
     return xFrame;
 }
 
-} // namespace
+}
 
 // Source links ===============================================================
 
@@ -875,7 +875,7 @@ void lclAddDoubleRefData(
         orArray.AddDoubleReference( aComplexRef );
 }
 
-} // namespace
+}
 
 XclExpChSourceLink::XclExpChSourceLink( const XclExpChRoot& rRoot, sal_uInt8 nDestType ) :
     XclExpRecord( EXC_ID_CHSOURCELINK ),
@@ -1825,7 +1825,7 @@ ScfPropertySet lclGetPointPropSet( Reference< XDataSeries > xDataSeries, sal_Int
     return aPropSet;
 }
 
-} // namespace
+}
 
 XclExpChSeries::XclExpChSeries( const XclExpChRoot& rRoot, sal_uInt16 nSeriesIdx ) :
     XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_SERIES, EXC_ID_CHSERIES, (rRoot.GetBiff() == EXC_BIFF8) ? 12 : 8 ),
@@ -2806,7 +2806,7 @@ sal_uInt8 lclGetXclTickPos( sal_Int32 nApiTickmarks )
     return nXclTickPos;
 }
 
-} // namespace
+}
 
 XclExpChTick::XclExpChTick( const XclExpChRoot& rRoot ) :
     XclExpRecord( EXC_ID_CHTICK, (rRoot.GetBiff() == EXC_BIFF8) ? 30 : 26 ),
@@ -2924,7 +2924,7 @@ Reference< cssc::XAxis > lclGetApiChart1Axis( Reference< XChartDocument > xChart
     return xChart1Axis;
 }
 
-} // namespace
+}
 
 XclExpChAxis::XclExpChAxis( const XclExpChRoot& rRoot, sal_uInt16 nAxisType ) :
     XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_AXIS, EXC_ID_CHAXIS, 18 ),

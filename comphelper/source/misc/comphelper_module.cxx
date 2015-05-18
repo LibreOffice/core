@@ -45,7 +45,7 @@ namespace comphelper { namespace module
     }
 
 
-} } // namespace comphelper::module
+} }
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,6 +45,6 @@ void BoolExpression::setExpression( const OUString& rExpression )
 }
 
 
-} // namespace xforms
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

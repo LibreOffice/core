@@ -157,7 +157,7 @@ public:
     void UpdateData( );
 };
 
-} // namespace rptui
+}
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_GROUPSSORTING_HXX
 

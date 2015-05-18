@@ -659,7 +659,7 @@ void RegisteredDb::addEntry(OUString const & url)
     }
 }
 
-} // namespace backend
-} // namespace dp_registry
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

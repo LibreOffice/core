@@ -44,7 +44,7 @@ namespace vcl
         }
     };
 
-} // namespace vcl
+}
 
 #endif // INCLUDED_VCL_INC_CONTROLDATA_HXX
 

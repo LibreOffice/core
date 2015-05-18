@@ -75,7 +75,7 @@ public:
     bool            operator !=( const KeyCode& rKeyCode ) const;
 };
 
-} // namespace vcl
+}
 
 inline vcl::KeyCode::KeyCode( sal_uInt16 nKey, sal_uInt16 nModifier )
 {

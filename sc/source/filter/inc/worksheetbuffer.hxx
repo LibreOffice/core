@@ -110,8 +110,8 @@ private:
     SheetInfoMap        maSheetInfosByName;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

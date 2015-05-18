@@ -638,6 +638,6 @@ void OTableTreeListBox::removedTable( const OUString& _rName )
     }
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

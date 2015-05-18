@@ -249,7 +249,7 @@ namespace svt { namespace table
     };
 
 
-} } // namespace svt::table
+} }
 
 
 #endif // INCLUDED_SVTOOLS_INC_TABLE_TABLECONTROLINTERFACE_HXX

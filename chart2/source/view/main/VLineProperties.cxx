@@ -87,6 +87,6 @@ bool VLineProperties::isLineVisible() const
     return bRet;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

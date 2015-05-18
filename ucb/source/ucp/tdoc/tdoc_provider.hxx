@@ -157,7 +157,7 @@ private:
     rtl::Reference< StorageElementFactory >  m_xStgElemFac;
 };
 
-} // namespace tdoc_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_PROVIDER_HXX
 

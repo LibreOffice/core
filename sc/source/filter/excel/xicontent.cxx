@@ -212,7 +212,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
     }
 }
 
-} // namespace
+}
 
 void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
 {
@@ -1126,7 +1126,7 @@ XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
     return xDecr;
 }
 
-} // namespace
+}
 
 ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
 {

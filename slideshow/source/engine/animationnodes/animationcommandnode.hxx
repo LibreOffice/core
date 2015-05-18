@@ -55,8 +55,8 @@ private:
         ::com::sun::star::animations::XCommand > mxCommandNode;
 };
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONCOMMANDNODE_HXX
 

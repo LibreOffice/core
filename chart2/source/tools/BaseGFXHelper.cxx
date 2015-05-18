@@ -204,7 +204,7 @@ double Rad2Deg( double fRadians )
     return fRadians * ( 180.0 / F_PI );
 }
 
-} //  namespace BaseGFXHelper
-} //  namespace chart
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

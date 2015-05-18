@@ -186,7 +186,7 @@ void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const Graphic
     rPropSet.setProperty(PROP_LabelBorderColor, uno::makeAny(nColor));
 }
 
-} // namespace
+}
 
 DataLabelConverter::DataLabelConverter( const ConverterRoot& rParent, DataLabelModel& rModel ) :
     ConverterBase< DataLabelModel >( rParent, rModel )
@@ -705,8 +705,8 @@ Reference< XLabeledDataSequence > SeriesConverter::createLabeledDataSequence(
     return lclCreateLabeledDataSequence( *this, pValues, rRole, pTitle );
 }
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

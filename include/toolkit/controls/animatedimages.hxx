@@ -83,7 +83,7 @@ namespace toolkit
     };
 
 
-} // namespace toolkit
+}
 
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_ANIMATEDIMAGES_HXX

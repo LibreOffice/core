@@ -37,7 +37,7 @@ namespace svt
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxPicker );
 
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_SVL_PICKERHISTORYACCESS_HXX

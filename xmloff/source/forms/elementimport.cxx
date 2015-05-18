@@ -2118,6 +2118,6 @@ namespace xmloff
         return OUString("com.sun.star.form.component.Form");
     }
 
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -101,7 +101,7 @@ private:
     void fillSupportedFeatures();
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_FEATURECOMMANDDISPATCHBASE_HXX
 #endif

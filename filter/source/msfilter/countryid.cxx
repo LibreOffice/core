@@ -282,7 +282,7 @@ inline bool CountryEntryPred_Language::operator()( const CountryEntry& rCmp ) co
                 ((meLanguage & 0x03FF) == (rCmp.meLanguage & 0x03FF));
 }
 
-} // namespace
+}
 
 // Country ID <-> Language type conversion ====================================
 

@@ -165,7 +165,7 @@ class ProtocolCheck
     }
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_PROTOCOLS_H
 

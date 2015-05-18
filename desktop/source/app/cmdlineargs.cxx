@@ -677,6 +677,6 @@ OUString CommandLineArgs::GetConversionOut() const
     return translateExternalUris(m_conversionout);
 }
 
-} // namespace desktop
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

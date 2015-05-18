@@ -180,7 +180,7 @@ namespace dbtools
     };
 
 
-} // namespace dbtools
+}
 
 
 #endif // INCLUDED_CONNECTIVITY_DBMETADATA_HXX

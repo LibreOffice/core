@@ -583,8 +583,8 @@ public:
     virtual void insertTableProperties( const PropertyMap* ) SAL_OVERRIDE;
 };
 typedef std::shared_ptr<TablePropertyMap>  TablePropertyMapPtr;
-} //namespace dmapper
-} //namespace writerfilter
+}
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

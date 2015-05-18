@@ -98,7 +98,7 @@ class VCLStatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIn
                                       vcl::Window* pParentWindow);
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_VCLSTATUSINDICATOR_HXX
 

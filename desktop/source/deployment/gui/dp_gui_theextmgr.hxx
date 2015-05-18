@@ -127,7 +127,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-} // namespace dp_gui
+}
 
 #endif
 

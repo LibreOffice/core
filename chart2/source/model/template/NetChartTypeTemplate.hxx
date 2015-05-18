@@ -70,7 +70,7 @@ private:
     bool                                 m_bHasFilledArea;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_NETCHARTTYPETEMPLATE_HXX
 #endif

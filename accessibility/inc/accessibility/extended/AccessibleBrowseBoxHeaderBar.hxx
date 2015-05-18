@@ -261,7 +261,7 @@ inline bool AccessibleBrowseBoxHeaderBar::isColumnBar() const
 
 
 
-} // namespace accessibility
+}
 
 
 

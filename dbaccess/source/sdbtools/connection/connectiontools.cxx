@@ -148,6 +148,6 @@ namespace sdbtools
         setWeakConnection( xConnection );
     }
 
-} // namespace sdbtools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

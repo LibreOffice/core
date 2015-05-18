@@ -1165,7 +1165,7 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-}} // namespace ::sw::mark
+}}
 
 namespace
 {

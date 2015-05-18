@@ -450,6 +450,6 @@ OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName 
 }
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -91,8 +91,8 @@ BASIC_DLLPUBLIC void registerCurrentDirectory(
 
 
 
-} // namespace vba
-} // namespace basic
+}
+}
 
 #endif
 

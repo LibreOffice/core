@@ -115,7 +115,7 @@ namespace detail
         std::stable_sort( rAETDest.begin(), rAETDest.end(), aComp );
     }
 
-} // namespace detail
-} // namespace basebmp
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

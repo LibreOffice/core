@@ -40,7 +40,7 @@ protected:
     bool m_bDirectState;
 };
 
-} //namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDTEXTROTATIONPROPERTY_HXX
 #endif

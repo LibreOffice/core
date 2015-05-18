@@ -694,7 +694,7 @@ public:
 };
 
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_INTERACTIONREQUEST_HXX */
 

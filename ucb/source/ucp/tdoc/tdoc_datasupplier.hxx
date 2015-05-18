@@ -68,7 +68,7 @@ public:
         throw( com::sun::star::ucb::ResultSetException ) SAL_OVERRIDE;
 };
 
-} // namespace tdoc_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_DATASUPPLIER_HXX
 

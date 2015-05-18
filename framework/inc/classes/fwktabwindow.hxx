@@ -120,7 +120,7 @@ public:
     virtual void        Resize() SAL_OVERRIDE;
 };
 
-} // namespace framework
+}
 
 #endif
 

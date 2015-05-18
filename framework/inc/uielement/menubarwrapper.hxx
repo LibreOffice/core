@@ -80,7 +80,7 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
         com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >              m_xContext;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_MENUBARWRAPPER_HXX
 

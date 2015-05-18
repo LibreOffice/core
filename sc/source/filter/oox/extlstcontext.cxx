@@ -249,7 +249,7 @@ ContextHandlerRef ExtLstGlobalContext::onCreateContext( sal_Int32 nElement, cons
     return this;
 }
 
-} //namespace oox
-} //namespace xls
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

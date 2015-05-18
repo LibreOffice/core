@@ -279,7 +279,7 @@ namespace svt { namespace table
     typedef std::shared_ptr< ITableRenderer > PTableRenderer;
 
 
-} } // namespace svt::table
+} }
 
 
 #endif // INCLUDED_SVTOOLS_TABLE_TABLERENDERER_HXX

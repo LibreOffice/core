@@ -194,6 +194,6 @@ void TranslateString16(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
     aCC.convertStr( 6, src, dst, n);
 }
 
-} // namespace vcl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

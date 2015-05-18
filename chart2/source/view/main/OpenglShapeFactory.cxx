@@ -481,8 +481,8 @@ void OpenglShapeFactory::clearPage(uno::Reference< drawing::XShapes > xRootShape
     rChart.clear();
 }
 
-} //namespace dummy
+}
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

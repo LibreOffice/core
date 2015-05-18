@@ -115,8 +115,8 @@ public:
     }
 };
 
-} //  namespace RegressionCalculationHelper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_INC_REGRESSIONCALCULATIONHELPER_HXX
 #endif

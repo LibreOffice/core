@@ -301,7 +301,7 @@ namespace xmloff
         void excludeFromExport( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxControl );
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_LAYEREXPORT_HXX
 

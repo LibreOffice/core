@@ -25,7 +25,7 @@ namespace comphelper
     COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< OUString> getEventMethodsForType(const ::com::sun::star::uno::Type& type);
 
 
-}   // namespace comphelper
+}
 
 #endif // COMPHELPER_EVENTMEHODHELPER_HXX
 

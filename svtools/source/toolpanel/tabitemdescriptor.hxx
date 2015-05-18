@@ -77,7 +77,7 @@ namespace svt
 
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TABITEMDESCRIPTOR_HXX

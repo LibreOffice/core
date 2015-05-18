@@ -44,7 +44,7 @@ private:
     RelativeSizeHelper() SAL_DELETED_FUNCTION;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_RELATIVESIZEHELPER_HXX
 #endif

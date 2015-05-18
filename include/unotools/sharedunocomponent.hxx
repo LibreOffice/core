@@ -328,7 +328,7 @@ namespace utl
         return is();
     }
 
-}   // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_SHAREDUNOCOMPONENT_HXX
 

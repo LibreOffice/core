@@ -30,7 +30,7 @@ namespace pcr
     DEFINE_MODULE( PcrModule, PcrClient, PcrRes )
 
 
-} // namespace pcr
+}
 
 
 #endif // _ INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MODULEPCR_HXX_

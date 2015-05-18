@@ -419,6 +419,6 @@ void AxisLabelProperties::autoRotate45()
     eStaggering = SIDE_BY_SIDE;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

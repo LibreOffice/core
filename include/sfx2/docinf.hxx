@@ -67,7 +67,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
 ::com::sun::star::uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(
     GDIMetaFile* i_pThumb);
 
-} // namespace sfx2
+}
 
 #endif
 

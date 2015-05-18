@@ -129,7 +129,7 @@ private:
     bool      m_bUseAutoScale;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_REFERENCESIZEPROVIDER_HXX
 #endif

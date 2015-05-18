@@ -53,7 +53,7 @@ void SAL_CALL OOutputStreamWrapper::closeOutput() throw( css::io::NotConnectedEx
 {
 }
 
-} // namespace utl
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

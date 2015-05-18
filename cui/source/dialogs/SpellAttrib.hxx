@@ -161,7 +161,7 @@ public:
     virtual TextAttrib*     Clone() const SAL_OVERRIDE;
     virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;
 };
-}//namespace svx
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

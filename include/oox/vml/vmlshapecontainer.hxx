@@ -145,8 +145,8 @@ const ShapeBase* ShapeContainer::findShape( const Functor& rFunctor ) const
 
 
 
-} // namespace vml
-} // namespace oox
+}
+}
 
 #endif
 

@@ -110,7 +110,7 @@ namespace salhelper
     };
 
 
-}   // namespace salhelper
+}
 
 
 #endif

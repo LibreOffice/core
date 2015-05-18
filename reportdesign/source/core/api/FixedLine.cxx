@@ -568,7 +568,7 @@ void SAL_CALL OFixedLine::setPrintRepeatedValues( sal_Bool /*_printrepeatedvalue
 
 
 
-} // namespace reportdesign
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

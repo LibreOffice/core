@@ -74,7 +74,7 @@ protected:
     virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) SAL_OVERRIDE;
 };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_UNOSQLMESSAGE_HXX
 

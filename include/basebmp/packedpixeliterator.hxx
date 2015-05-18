@@ -663,7 +663,7 @@ template< class Accessor,
         type;
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_PACKEDPIXELITERATOR_HXX */
 

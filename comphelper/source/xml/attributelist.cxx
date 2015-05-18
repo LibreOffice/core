@@ -120,6 +120,6 @@ void AttributeList::AddAttribute(   const OUString &sName ,
     m_pImpl->vecAttribute.push_back( TagAttribute_Impl( sName , sType , sValue ) );
 }
 
-} // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -629,8 +629,8 @@ extern sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.help.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
 
-} // namespace help
-} // namespace backend
-} // namespace dp_registry
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

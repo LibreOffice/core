@@ -653,7 +653,7 @@ namespace dxcanvas
                                     Gdiplus::ColorAdjustTypeDefault );
         }
 
-    } // namespace tools
-} // namespace dxcanvas
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

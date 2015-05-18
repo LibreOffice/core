@@ -46,7 +46,7 @@ namespace utl
         std::unique_ptr< CloseVeto_Data >   m_xData;
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_UNOTOOLS_CLOSEVETO_HXX
 

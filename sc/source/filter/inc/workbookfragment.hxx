@@ -59,8 +59,8 @@ private:
     DefinedNameRef      mxCurrName;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

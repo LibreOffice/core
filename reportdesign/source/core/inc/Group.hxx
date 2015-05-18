@@ -163,7 +163,7 @@ namespace reportdesign
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext(){ return m_xContext; }
     };
 
-} // namespace reportdesign
+}
 
 #endif
 

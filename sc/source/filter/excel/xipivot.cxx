@@ -89,7 +89,7 @@ void lclSetValue( XclImpRoot& rRoot, const ScAddress& rScPos, double fValue, sho
         rScPos.Col(), rScPos.Row(), rScPos.Tab(), SfxUInt32Item(ATTR_VALUE_FORMAT, nScNumFmt));
 }
 
-} // namespace
+}
 
 void XclImpPCItem::WriteToSource( XclImpRoot& rRoot, const ScAddress& rScPos ) const
 {

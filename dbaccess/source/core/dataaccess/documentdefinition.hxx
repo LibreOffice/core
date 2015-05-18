@@ -368,7 +368,7 @@ private:
     void    impl_fireEvent_throw( const bool i_bVetoable );
 };
 
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTDEFINITION_HXX
 

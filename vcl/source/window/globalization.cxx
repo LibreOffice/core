@@ -34,6 +34,6 @@ bool Window::HasMirroredGraphics() const
     return pOutDev->OutputDevice::HasMirroredGraphics();
 }
 
-} /* namespace vcl */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

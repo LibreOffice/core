@@ -129,7 +129,7 @@ css::uno::Reference< css::uno::XInterface > ConfigFlush::impl_createInstance(con
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::util::XRefreshable* >(pNew), css::uno::UNO_QUERY);
 }
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

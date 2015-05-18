@@ -394,6 +394,6 @@ void RangeChooserTabPage::setDirty()
         m_bIsDirty = true;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

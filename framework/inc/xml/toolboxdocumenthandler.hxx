@@ -188,7 +188,7 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler
         OUString                                                                     m_aAttributeURL;
 };
 
-} // namespace framework
+}
 
 #endif
 

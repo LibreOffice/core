@@ -73,7 +73,7 @@ private:
         m_xRangeSelectionListener;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RANGESELECTIONHELPER_HXX
 #endif

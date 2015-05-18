@@ -969,7 +969,7 @@ boost::shared_ptr<Activity> createDrawingLayerAnimActivity(
     return pActivity;
 }
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -80,7 +80,7 @@ private:
     };
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_DRAWERLAYOUTER_HXX

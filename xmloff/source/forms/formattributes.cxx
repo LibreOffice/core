@@ -288,6 +288,6 @@ namespace xmloff
         return m_aKnownProperties[sAttributeName] = aAssignment;
     }
 
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

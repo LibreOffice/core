@@ -27,7 +27,7 @@ class ReferenceCasting
         bool VisitCXXConstructExpr( CXXConstructExpr* cce );
     };
 
-} // namespace
+}
 
 #endif // REFERENCECASTING_H
 

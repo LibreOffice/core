@@ -245,6 +245,6 @@ void SpellCache::AddWord( const OUString& rWord, LanguageType nLang )
     rList.insert( rWord );
 }
 
-}   // namespace linguistic
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

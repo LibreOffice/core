@@ -110,7 +110,7 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
-}  // namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_INC_POLARCOORDINATESYSTEM_HXX
 #endif

@@ -129,7 +129,7 @@ void BitmapTest::testScale()
     }
 }
 
-} // namespace
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BitmapTest);
 

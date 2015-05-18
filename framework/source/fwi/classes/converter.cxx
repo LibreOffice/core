@@ -109,6 +109,6 @@ OUString Converter::convert_DateTime2ISO8601( const DateTime& aSource )
     return sBuffer.makeStringAndClear();
 }
 
-}       //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

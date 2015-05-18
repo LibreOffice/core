@@ -79,7 +79,7 @@ AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer,
     return true;
 }
 
-} // namespace psp
+}
 
 /*
  * private convenience routines for file handling

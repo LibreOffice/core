@@ -829,6 +829,6 @@ void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::
     // Do nothing else here. Our internal resources was released ...
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

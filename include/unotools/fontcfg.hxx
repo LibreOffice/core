@@ -180,7 +180,7 @@ public:
     static void getMapName( const OUString& rOrgName, OUString& rShortName, OUString& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, ImplFontAttrs& rType );
 };
 
-} // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_FONTCFG_HXX
 

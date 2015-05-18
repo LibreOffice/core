@@ -94,6 +94,6 @@ void DeleteOnDeinitBase::ImplDeleteOnDeInit()
     }
 }
 
-} // namespace vcl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

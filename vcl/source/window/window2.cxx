@@ -2085,7 +2085,7 @@ std::vector<VclPtr<FixedText> > Window::list_mnemonic_labels() const
     return mpWindowImpl->m_aMnemonicLabels;
 }
 
-} /* namespace vcl */
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

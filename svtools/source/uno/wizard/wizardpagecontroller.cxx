@@ -175,7 +175,7 @@ namespace svt { namespace uno
     }
 
 
-} } // namespace svt::uno
+} }
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -219,6 +219,6 @@ SourceLocation SvStreamOutputOperators::after( const SourceLocation& loc )
 
 static Plugin::Registration< SvStreamOutputOperators > X( "svstreamoutputoperators" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

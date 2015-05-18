@@ -351,7 +351,7 @@ class QueryAnalyzer
 
 };      // class QueryAnalyzer
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_QUERIES_H
 

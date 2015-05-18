@@ -251,6 +251,6 @@ void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< c
     // not supported yet
 }
 
-}       //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

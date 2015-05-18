@@ -239,7 +239,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         Timer                                                                                  m_aAsyncSettingsTimer;
 };
 
-} // namespace
+}
 
 #endif
 

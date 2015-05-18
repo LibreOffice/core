@@ -2015,8 +2015,8 @@ struct RTFMathSymbol
 extern RTFMathSymbol aRTFMathControlWords[];
 extern int nRTFMathControlWords;
 
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCONTROLWORDS_HXX
 

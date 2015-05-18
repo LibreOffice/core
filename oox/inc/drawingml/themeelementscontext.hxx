@@ -38,8 +38,8 @@ private:
     Theme& mrTheme;
 };
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

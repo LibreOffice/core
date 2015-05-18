@@ -145,6 +145,6 @@ void DragMethod_PieSegment::createSdrDragEntries()
         addSdrDragEntry(new SdrDragEntryPolyPolygon(aNewPolyPolygon));
     }
 }
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -400,7 +400,7 @@ namespace dbtools
     };
 
 
-} // namespacefrm
+}
 
 
 #endif // INCLUDED_CONNECTIVITY_PARAMETERS_HXX

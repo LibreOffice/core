@@ -771,7 +771,7 @@ void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
     aCnt.setPropertyValue("IsHidden", aAny );
 }
 
-}; // namespace end
+};
 
 Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMultiServiceFactory > & xSMgr )
 {

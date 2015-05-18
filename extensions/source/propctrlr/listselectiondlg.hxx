@@ -61,7 +61,7 @@ namespace pcr
     };
 
 
-} // namespacepcr
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX

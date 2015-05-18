@@ -105,7 +105,7 @@ struct Bridge
 
 };
 
-} //namespace cli_uno
+}
 
 
 #endif

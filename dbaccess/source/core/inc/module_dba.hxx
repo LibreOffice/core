@@ -27,7 +27,7 @@ namespace dba
 
     DEFINE_MODULE( DbaModule, DbaClient, DbaRes )
 
-} // namespace sdbtools
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_MODULE_DBA_HXX
 

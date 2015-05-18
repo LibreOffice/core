@@ -273,6 +273,6 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     #endif // FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -95,7 +95,7 @@ template< class Accessor > struct AccessorTraits<                 \
     { typedef vigra::VigraFalseType type; };                      \
 }
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_PIXELFORMATADAPTERS_HXX */
 

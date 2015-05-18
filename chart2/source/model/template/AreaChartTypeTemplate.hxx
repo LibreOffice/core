@@ -85,7 +85,7 @@ private:
     StackMode          m_eStackMode;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_AREACHARTTYPETEMPLATE_HXX
 #endif

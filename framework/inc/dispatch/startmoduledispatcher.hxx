@@ -144,7 +144,7 @@ class StartModuleDispatcher : public  ::cppu::WeakImplHelper2<
 
 }; // class StartModuleDispatcher
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_STARTMODULEDISPATCHER_HXX
 

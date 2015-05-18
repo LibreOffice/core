@@ -82,7 +82,7 @@ namespace {
 
 const double PROGRESS_LENGTH_GLOBALS        = 0.1;      /// 10% of progress bar for globals import.
 
-} // namespace
+}
 
 WorkbookFragment::WorkbookFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
     WorkbookFragmentBase( rHelper, rFragmentPath )
@@ -548,7 +548,7 @@ void WorkbookFragment::importPivotCacheDefFragment( const OUString& rRelId, sal_
     getPivotCaches().registerPivotCacheFragment( nCacheId, getFragmentPathFromRelId( rRelId ) );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -89,7 +89,7 @@ private:
     ControllerLockHelper & m_rHelper;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_CONTROLLERLOCKGUARD_HXX
 #endif

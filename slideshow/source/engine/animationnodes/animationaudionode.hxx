@@ -63,8 +63,8 @@ private:
     void resetPlayer() const;
 };
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONAUDIONODE_HXX
 

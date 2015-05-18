@@ -192,6 +192,6 @@ extern sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.ProgressLog",
     "com.sun.star.comp.deployment.ProgressLog" );
 
-} // namespace dp_log
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

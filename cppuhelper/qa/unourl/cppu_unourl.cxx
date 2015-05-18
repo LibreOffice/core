@@ -465,7 +465,7 @@ namespace cppu_unourl
         CPPUNIT_TEST(testUrlObjectName);
         CPPUNIT_TEST_SUITE_END();
     };
-} // namespace cppu_ifcontainer
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(cppu_unourl::UrlTest);
 

@@ -329,7 +329,7 @@ void AccessibleBrowseBoxTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
 
 
 
-} // namespace accessibility
+}
 
 
 

@@ -72,6 +72,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL basctl_component_getFactory( const sal_Char*
 
 } // extern "C"
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

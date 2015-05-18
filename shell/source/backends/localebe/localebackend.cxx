@@ -149,7 +149,7 @@ namespace /* private */
         return aLocaleBuffer.makeStringAndClear();
     }
 
-} // namespace /* private */
+}
 
 #else
 

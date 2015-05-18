@@ -106,7 +106,7 @@ awt::Rectangle lclGetAbsRect( const awt::Rectangle& rRelRect, const awt::Rectang
     return aAbsRect;
 }
 
-} // namespace
+}
 
 ShapeTypeModel::ShapeTypeModel():
     mbAutoHeight( false ),
@@ -1167,7 +1167,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     return xGroupShape;
 }
 
-} // namespace vml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

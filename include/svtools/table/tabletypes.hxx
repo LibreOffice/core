@@ -56,7 +56,7 @@ namespace svt { namespace table
 
 
 
-} } // namespace svt::table
+} }
 
 
 #endif // INCLUDED_SVTOOLS_TABLE_TABLETYPES_HXX

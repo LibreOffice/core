@@ -255,6 +255,6 @@ IndexedStyleSheets::GetStyleSheetPositionsByFamily(SfxStyleFamily e) const
     return mStyleSheetPositionsByFamily.at(position);
 }
 
-} /* namespace svl */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -130,7 +130,7 @@ bool lclDecodeVmlxBool( const OUString& rValue, bool bDefaultForEmpty )
     return (nToken == XML_t) || (nToken == XML_True);
 }
 
-} // namespace
+}
 
 ShapeLayoutContext::ShapeLayoutContext( ContextHandler2Helper& rParent, Drawing& rDrawing ) :
     ContextHandler2( rParent ),
@@ -533,7 +533,7 @@ ContextHandlerRef RectangleShapeContext::onCreateContext( sal_Int32 nElement, co
     return ShapeContext::onCreateContext( nElement, rAttribs );
 }
 
-} // namespace vml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

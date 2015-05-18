@@ -75,6 +75,6 @@ void SAL_CALL DlgEdEvtContListenerImpl::elementRemoved(const ::com::sun::star::c
     rDlgEdObj._elementRemoved( Event );
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

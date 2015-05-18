@@ -40,8 +40,8 @@ namespace connectivity
             virtual void refreshGroups() SAL_OVERRIDE;
         };
 
-    } // namespace firebird
-} // namespace connectivity
+    }
+}
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USER_HXX

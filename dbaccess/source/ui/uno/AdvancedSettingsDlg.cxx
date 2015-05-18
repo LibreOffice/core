@@ -124,7 +124,7 @@ namespace dbaui
         return VclPtr<AdvancedSettingsDialog>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
     }
 
-}   // namespace dbaui
+}
 
 extern "C" void SAL_CALL createRegistryInfo_OAdvancedSettingsDialog()
 {

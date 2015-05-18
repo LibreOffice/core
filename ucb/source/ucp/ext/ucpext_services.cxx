@@ -54,7 +54,7 @@ namespace ucb { namespace ucp { namespace ext
     };
 
 
-} } }   // namespace ucb::ucp::ext
+} } }
 
 
 extern "C"

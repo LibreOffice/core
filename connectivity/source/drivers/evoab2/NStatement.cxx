@@ -636,6 +636,6 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& /*sql*/ ) throw(SQ
     return 0;
 }
 
-} } // namespace ::connectivity::evoab
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

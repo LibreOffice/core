@@ -265,6 +265,6 @@ namespace dbaui
         }
         m_pCurrentlyDisplayed = NULL;
     }
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

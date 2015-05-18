@@ -119,7 +119,7 @@ protected:
                 getChartTypeForIndex( sal_Int32 nChartTypeIndex ) SAL_OVERRIDE;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_PIECHARTTYPETEMPLATE_HXX
 #endif

@@ -62,7 +62,7 @@ namespace sd { namespace colortoolpanel
     };
 
 
-} } // namespace sd::colortoolpanel
+} }
 
 
 #endif // INCLUDED_EXAMPLES_CUSTOMPANEL_CTP_FACTORY_HXX

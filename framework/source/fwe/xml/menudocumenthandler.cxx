@@ -911,6 +911,6 @@ void OWriteMenuDocumentHandler::WriteMenuSeparator()
     m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENUSEPARATOR ) );
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,7 +51,7 @@ public:
     virtual ~DropDownFieldDialog();
     virtual void dispose() SAL_OVERRIDE;
 };
-} //namespace sw
+}
 
 #endif
 

@@ -37,7 +37,7 @@ namespace rptui
         virtual void handle( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) = 0;
     };
 
-} // namespace rptui
+}
 
 #endif
 

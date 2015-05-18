@@ -58,7 +58,7 @@ private:
     virtual void execute() SAL_OVERRIDE;
 };
 
-} // namespace webdav_ucp
+}
 
 void TickerThread::execute()
 {

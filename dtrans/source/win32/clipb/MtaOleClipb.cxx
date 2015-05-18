@@ -159,7 +159,7 @@ namespace /* private */
         HRESULT         hr;
     };
 
-} /* namespace private */
+}
 
 //  static member initialization
 

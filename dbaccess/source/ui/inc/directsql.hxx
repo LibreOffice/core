@@ -122,7 +122,7 @@ namespace dbaui
 #define CHECK_INVARIANTS(methodname)
 #endif
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DIRECTSQL_HXX
 

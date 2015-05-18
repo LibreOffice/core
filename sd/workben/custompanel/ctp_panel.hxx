@@ -79,7 +79,7 @@ namespace sd { namespace colortoolpanel
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                      m_xWindow;
     };
 
-} } // namespace sd::colortoolpanel
+} }
 
 #endif // INCLUDED_SD_WORKBEN_CUSTOMPANEL_CTP_PANEL_HXX
 

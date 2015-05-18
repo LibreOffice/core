@@ -118,7 +118,7 @@ bool RTFLookahead::isSubstream() const
 }
 
 
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -295,7 +295,7 @@ namespace frm
     #define URL_FORM_REMOVE_FILTER ".uno:FormController/removeFilterOrder"
 
 
-}   // namespace frm
+}
 
 
 

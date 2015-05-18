@@ -36,6 +36,6 @@ PropertyNameVector::PropertyNameVector()
         push_back( OUString::createFromAscii( sppcPropertyNames[ nIndex ] ) );
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

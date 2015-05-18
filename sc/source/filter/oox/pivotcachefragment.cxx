@@ -333,7 +333,7 @@ bool lclSeekToPCDField( BiffInputStream& rStrm )
     return false;
 }
 
-} // namespace
+}
 
 BiffPivotCacheFragment::BiffPivotCacheFragment(
         const WorkbookHelper& rHelper, const OUString& rStrmName, PivotCache& rPivotCache ) :
@@ -451,7 +451,7 @@ void BiffPivotCacheRecordsContext::startNextRow()
     mbInRow = true;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

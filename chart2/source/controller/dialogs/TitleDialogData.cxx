@@ -106,6 +106,6 @@ bool TitleDialogData::writeDifferenceToModel(
     return bChanged;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

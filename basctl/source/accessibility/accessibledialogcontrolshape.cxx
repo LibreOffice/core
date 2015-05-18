@@ -575,6 +575,6 @@ OUString AccessibleDialogControlShape::getToolTipText(  ) throw (RuntimeExceptio
 
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

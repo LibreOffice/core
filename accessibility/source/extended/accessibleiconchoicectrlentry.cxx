@@ -694,7 +694,7 @@ throw(RuntimeException, std::exception)
         return xRet;
     }
 
-}// namespace accessibility
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,7 +60,7 @@ private:
     std::vector<double> mCoefficients;
 };
 
-} //  namespace chart
+}
 
 #endif // INCLUDED_CHART2_SOURCE_INC_POLYNOMIALREGRESSIONCURVECALCULATOR_HXX
 

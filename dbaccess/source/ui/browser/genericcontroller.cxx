@@ -1517,6 +1517,6 @@ void SAL_CALL OGenericUnoController::dispose() throw(::com::sun::star::uno::Runt
     OGenericUnoController_Base::dispose();
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

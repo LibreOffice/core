@@ -40,8 +40,8 @@ protected:
     bool                mbtxXfrm;
 };
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

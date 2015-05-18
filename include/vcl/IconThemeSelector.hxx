@@ -94,7 +94,7 @@ private:
     friend class ::IconThemeSelectorTest;
 };
 
-} /* namespace vcl */
+}
 
 #endif // INCLUDED_VCL_ICONTHEMESELECTOR_HXX
 

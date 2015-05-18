@@ -127,8 +127,8 @@ HelpBackendDb::getEntry(OUString const & url)
     return getOneChildFromAllEntries("data-url");
 }
 
-} // namespace help
-} // namespace backend
-} // namespace dp_registry
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

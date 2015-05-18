@@ -745,6 +745,6 @@ bool ErrorBarResources::isRangeFieldContentValid( Edit & rEdit )
     return bIsValid;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

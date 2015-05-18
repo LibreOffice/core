@@ -101,7 +101,7 @@ private:
     internal_type* current_;
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_STRIDEDARRAYITERATOR_HXX */
 

@@ -206,7 +206,7 @@ namespace pcr
     };
 
 
-} // namespace pcr
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_SQLCOMMANDDESIGN_HXX

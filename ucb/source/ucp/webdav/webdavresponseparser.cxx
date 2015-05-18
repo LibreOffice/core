@@ -909,6 +909,6 @@ namespace http_dav_ucp
         parseWebDAVResponse< DAVResourceInfo >(xInputStream, aResult, WebDAVResponseParserMode_PropName);
         return aResult;
     }
-} // namespace http_dav_ucp
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

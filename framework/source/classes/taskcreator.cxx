@@ -115,6 +115,6 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     return xTask;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

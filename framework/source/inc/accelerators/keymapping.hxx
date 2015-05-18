@@ -127,7 +127,7 @@ class KeyMapping
                                                                 sal_uInt16&      rCode      );
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_KEYMAPPING_HXX
 

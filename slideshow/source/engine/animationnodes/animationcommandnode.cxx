@@ -118,7 +118,7 @@ bool AnimationCommandNode::hasPendingAnimation() const
     return mxCommandNode->getCommand() == EffectCommands::STOPAUDIO || mpShape;
 }
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

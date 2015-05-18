@@ -83,7 +83,7 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-} } }   // namespace ucp::ext
+} } }
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

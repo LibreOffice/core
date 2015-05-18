@@ -47,7 +47,7 @@ inline sal_Int32 lclEmuToHmm( sal_Int64 nValue )
     return (nValue < 0) ? -1 : convertEmuToHmm( nValue );
 }
 
-} // namespace
+}
 
 CellAnchorModel::CellAnchorModel() :
     mnCol( -1 ),
@@ -291,7 +291,7 @@ EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
     return aEmuPoint;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

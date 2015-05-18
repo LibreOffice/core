@@ -298,6 +298,6 @@ bool GlobalSettings::GetStateInfo( UIElementType eElementType, StateInfo eStateI
         return false;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

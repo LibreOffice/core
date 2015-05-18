@@ -304,6 +304,6 @@ OUString OCollectionView::getName() const
     return m_pName->GetText();
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -178,7 +178,7 @@ namespace utl
         void    implRegisterExchangeLocation( const NodeValueAccessor& _rAccessor );
     };
 
-}   // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
 

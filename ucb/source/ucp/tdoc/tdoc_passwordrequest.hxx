@@ -86,7 +86,7 @@ namespace tdoc_ucp {
             const OUString & rDocumentName );
     };
 
-} // namespace tdoc_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_PASSWORDREQUEST_HXX
 

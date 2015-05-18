@@ -1723,7 +1723,7 @@ static void writeShapes( StatePool&                                        rStat
     visitElements(aVisitor, rElem, SHAPE_WRITER);
 }
 
-} // namespace
+}
 
 struct OfficeStylesWritingVisitor
 {
@@ -2097,6 +2097,6 @@ bool SVGReader::parseAndConvert()
     return true;
 }
 
-} // namespace svgi
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

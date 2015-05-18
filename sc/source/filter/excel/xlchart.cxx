@@ -497,7 +497,7 @@ static const XclChTypeInfo spTypeInfos[] =
     { EXC_CHTYPEID_UNKNOWN,   EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,    EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  true,  false, true,  false, true,  false, true  }
 };
 
-} // namespace
+}
 
 XclChExtTypeInfo::XclChExtTypeInfo( const XclChTypeInfo& rTypeInfo ) :
     XclChTypeInfo( rTypeInfo ),
@@ -642,7 +642,7 @@ const sal_Char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Colo
 /** Property names for bitmap area style. */
 const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", 0 };
 
-} // namespace
+}
 
 XclChPropSetHelper::XclChPropSetHelper() :
     maLineHlpCommon( sppcLineNamesCommon ),
@@ -1217,7 +1217,7 @@ EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 #undef EXC_DEFINEFUNC_GETAXISTITLESHAPE
 #undef EXC_IMPLEMENT_GETTITLESHAPE
 
-} // namespace
+}
 
 XclChRootData::XclChRootData()
     : mxTypeInfoProv(new XclChTypeInfoProvider)

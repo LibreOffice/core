@@ -159,7 +159,7 @@ namespace editeng {
 
 EDITENG_DLLPUBLIC bool operator!=( const SvxBorderLine& rLeft, const SvxBorderLine& rRight );
 
-} // namespace editeng
+}
 
 #endif
 

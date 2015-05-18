@@ -121,6 +121,6 @@ void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)
     }
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

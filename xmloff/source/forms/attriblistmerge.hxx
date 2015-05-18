@@ -67,7 +67,7 @@ namespace xmloff
         bool seekToName(const OUString& _rName, ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex);
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_ATTRIBLISTMERGE_HXX
 

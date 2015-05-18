@@ -185,7 +185,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xListener;
 };
 
-} //  namespace impl
+}
 
 template< class InterfaceRef >
 void addListener(
@@ -279,8 +279,8 @@ void removeListenerFromAllSequenceElements(
                          impl::removeListenerFunctor< T >( xListener ));
 }
 
-} //  namespace ModifyListenerHelper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_INC_MODIFYLISTENERHELPER_HXX
 #endif

@@ -150,7 +150,7 @@ namespace dbmm
         VclPtr<VclMultiLineEdit> m_pChanges;
     };
 
-} // namespace dbmm
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MACROMIGRATIONPAGES_HXX
 

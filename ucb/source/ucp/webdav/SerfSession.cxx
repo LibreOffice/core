@@ -1000,7 +1000,7 @@ namespace
         return lastChanceToSendRefreshRequest;
     }
 
-} // namespace
+}
 */
 
 // LOCK (set new lock)
@@ -1182,7 +1182,7 @@ bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
     return false;
 }
 
-} // namespace
+}
 */
 
 

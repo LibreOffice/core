@@ -348,7 +348,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
     return aDate;
 }
 
-} // namespace rptxml
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

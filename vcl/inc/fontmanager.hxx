@@ -535,7 +535,7 @@ public:
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );
 };
 
-} // namespace
+}
 
 #endif // INCLUDED_VCL_INC_FONTMANAGER_HXX
 

@@ -51,7 +51,7 @@ private: //member
         ::com::sun::star::util::XModifyListener >   m_xModifyListener;
 };
 
-} // namespace chart
+}
 
 #endif
 

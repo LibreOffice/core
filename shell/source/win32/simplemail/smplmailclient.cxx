@@ -150,7 +150,7 @@ namespace /* private */
         osl_freeProcessHandle(proc);
         return (procInfo.Code == SUCCESS_SUCCESS);
     }
-} // namespace private
+}
 
 Reference<XSimpleMailMessage> SAL_CALL CSmplMailClient::createSimpleMailMessage()
     throw (RuntimeException)

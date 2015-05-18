@@ -121,8 +121,8 @@ public:
     sal_Int32 getInteropGrabBagSize();
 };
 
-} // namespace dmapper
-} // namespace writerfilter
+}
+}
 
 #endif
 

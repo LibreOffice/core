@@ -46,7 +46,7 @@ public:
     virtual SdrPage*  AllocPage(bool bMasterPage) SAL_OVERRIDE;
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_DLGEDMOD_HXX
 

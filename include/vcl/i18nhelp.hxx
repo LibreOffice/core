@@ -80,7 +80,7 @@ public:
     static OUString filterFormattingChars( const OUString& );
 };
 
-}   // namespace vcl
+}
 
 #endif // INCLUDED_VCL_I18NHELP_HXX
 

@@ -32,7 +32,7 @@ bool hashCalc( std::vector<sal_uInt8>& output,
     return false;
 }
 
-} // namespace
+}
 
 AgileEngine::AgileEngine() :
     CryptoEngine()
@@ -206,7 +206,7 @@ bool AgileEngine::encrypt(
     return false; // Agile encrypting is not supported for now
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

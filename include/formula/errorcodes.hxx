@@ -111,7 +111,7 @@ inline sal_uInt16 GetDoubleErrorValue( double fVal )
     return (sal_uInt16)(nErr & 0x0000ffff);     // any other error
 }
 
-} // namespace ScErrorCodes
+}
 
 // yes, exceptionally we put a "using namespace" in a header file..
 using namespace ScErrorCodes;

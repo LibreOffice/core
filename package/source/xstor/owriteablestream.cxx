@@ -95,7 +95,7 @@ bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1,
     return bResult;
 }
 
-} // namespace package
+}
 
 namespace
 {

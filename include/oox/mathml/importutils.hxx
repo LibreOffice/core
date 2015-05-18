@@ -246,8 +246,8 @@ sal_Unicode XmlStream::Tag::attribute( int t, sal_Unicode def ) const
     return attributes.attribute( t, def );
 }
 
-} // namespace
-} // namespace
+}
+}
 
 #endif
 

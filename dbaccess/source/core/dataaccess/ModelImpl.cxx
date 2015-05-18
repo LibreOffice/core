@@ -1383,6 +1383,6 @@ ModelDependentComponent::~ModelDependentComponent()
 {
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

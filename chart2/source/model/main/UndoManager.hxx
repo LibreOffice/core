@@ -88,7 +88,7 @@ namespace chart
         ::boost::scoped_ptr< impl::UndoManager_Impl >   m_pImpl;
     };
 
-} // namespace chart
+}
 
 #endif // INCLUDED_CHART2_SOURCE_MODEL_MAIN_UNDOMANAGER_HXX
 

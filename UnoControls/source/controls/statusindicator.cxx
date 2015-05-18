@@ -473,6 +473,6 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
     m_xProgressBar->setPosSize( nX_ProgressBar, nY_ProgressBar, nWidth_ProgressBar, nHeight_ProgressBar, 15 );
 }
 
-}   // namespace unocontrols
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

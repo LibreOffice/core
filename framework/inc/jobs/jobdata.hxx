@@ -218,7 +218,7 @@ class JobData
         void impl_reset();
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_JOBS_JOBDATA_HXX
 

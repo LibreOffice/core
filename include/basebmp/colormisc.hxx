@@ -148,7 +148,7 @@ template<bool polarity> struct ColorTraits< Color >::blend_functor< Color, polar
     typedef ColorBlendFunctor32<polarity> type;
 };
 
-} // namespace basebmp
+}
 
 namespace vigra
 {
@@ -178,7 +178,7 @@ struct NumericTraits<basebmp::Color>
     static Type fromRealPromote(const RealPromote& v) { return v; }
 };
 
-} // namespace vigra
+}
 
 #endif /* INCLUDED_BASEBMP_COLORMISC_HXX */
 

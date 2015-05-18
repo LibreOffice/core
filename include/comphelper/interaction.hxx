@@ -152,7 +152,7 @@ namespace comphelper
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
-}   // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_INTERACTION_HXX

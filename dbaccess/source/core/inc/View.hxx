@@ -67,7 +67,7 @@ namespace dbaccess
         using View_Base::getFastPropertyValue;
     };
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_VIEW_HXX
 

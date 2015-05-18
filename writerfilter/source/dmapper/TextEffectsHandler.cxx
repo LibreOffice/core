@@ -751,7 +751,7 @@ beans::PropertyValue TextEffectsHandler::getInteropGrabBag()
     return aReturn;
 }
 
-}//namespace dmapper
-} //namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

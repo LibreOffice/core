@@ -56,7 +56,7 @@ namespace dbaccess
 
     }
 
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_SDBCORETOOLS_HXX
 

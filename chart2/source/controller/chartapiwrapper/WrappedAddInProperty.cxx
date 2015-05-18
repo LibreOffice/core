@@ -125,8 +125,8 @@ Any WrappedRefreshAddInAllowedProperty::getPropertyValue( const Reference< beans
     return uno::makeAny( m_rChartDocumentWrapper.getUpdateAddIn() );
 }
 
-} //namespace wrapper
+}
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

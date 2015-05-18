@@ -55,7 +55,7 @@ private:
     TextApiObject( TextAPIEditSource* pEditSource );
 };
 
-} // namespace sd
+}
 
 #endif // INCLUDED_SD_INC_TEXTAPI_HXX
 

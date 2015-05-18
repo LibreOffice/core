@@ -183,7 +183,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
 };      //  class MenuDispatcher
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_MENUDISPATCHER_HXX
 

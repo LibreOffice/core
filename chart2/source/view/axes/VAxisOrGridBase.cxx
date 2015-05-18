@@ -68,6 +68,6 @@ TickFactory* VAxisOrGridBase::createTickFactory()
     return new TickFactory( m_aScale, m_aIncrement );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

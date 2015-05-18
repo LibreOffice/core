@@ -76,9 +76,9 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 #endif
 

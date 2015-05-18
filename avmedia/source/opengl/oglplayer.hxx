@@ -75,8 +75,8 @@ private:
     bool m_bIsRendering;
 };
 
-} // namespace ogl
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLPLAYER_HXX
 

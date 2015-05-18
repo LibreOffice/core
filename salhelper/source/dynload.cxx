@@ -108,6 +108,6 @@ void* ORealDynamicLoader::getApi() const
     return m_pApi;
 }
 
-} // namespace salhelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

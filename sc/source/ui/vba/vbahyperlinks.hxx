@@ -42,7 +42,7 @@ struct ScVbaHlinkContainerMember
     ~ScVbaHlinkContainerMember();
 };
 
-} // namespace detail
+}
 
 class ScVbaHyperlinks;
 typedef ::rtl::Reference< ScVbaHyperlinks > ScVbaHyperlinksRef;

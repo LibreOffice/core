@@ -354,6 +354,6 @@ namespace accessibility
             i_rStateSet.AddState( AccessibleStateType::FOCUSABLE );
         }
     }
-} // namespace accessibility
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

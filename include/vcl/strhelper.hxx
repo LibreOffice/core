@@ -65,7 +65,7 @@ namespace psp
         return nLen;
     }
 
-} // namespace
+}
 
 #endif // INCLUDED_VCL_STRHELPER_HXX
 

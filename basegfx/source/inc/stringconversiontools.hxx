@@ -87,8 +87,8 @@ namespace basegfx
         {
             return bUseRelativeCoordinates ? cLowerCaseCommand : cUpperCaseCommand;
         }
-    } // namespace internal
-} // namespace basegfx
+    }
+}
 
 #endif // INCLUDED_BASEGFX_SOURCE_INC_STRINGCONVERSIONTOOLS_HXX
 

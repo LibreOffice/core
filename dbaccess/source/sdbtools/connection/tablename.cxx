@@ -231,6 +231,6 @@ namespace sdbtools
             lcl_translateCompositionType_throw( _Type ) );
     }
 
-} // namespace sdbtools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

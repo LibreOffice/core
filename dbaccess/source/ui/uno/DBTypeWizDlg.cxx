@@ -97,6 +97,6 @@ VclPtr<Dialog> ODBTypeWizDialog::createDialog(vcl::Window* _pParent)
     return VclPtr<ODbTypeWizDialog>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

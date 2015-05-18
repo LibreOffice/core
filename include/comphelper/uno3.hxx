@@ -180,7 +180,7 @@ namespace comphelper
         }
         return _rxOut.is();
     }
-}   // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_UNO3_HXX

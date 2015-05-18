@@ -174,6 +174,6 @@ namespace basctl { namespace docs {
         }
     }
 
-} } // namespace basctl::docs
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

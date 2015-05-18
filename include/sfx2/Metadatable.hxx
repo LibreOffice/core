@@ -175,7 +175,7 @@ protected:
 
 };
 
-} // namespace sfx2
+}
 
 #endif // INCLUDED_SFX2_METADATABLE_HXX
 

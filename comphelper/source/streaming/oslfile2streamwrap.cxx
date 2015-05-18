@@ -165,7 +165,7 @@ void SAL_CALL OSLOutputStreamWrapper::closeOutput() throw( css::io::NotConnected
     rFile.close();
 }
 
-} // namespace comphelper
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

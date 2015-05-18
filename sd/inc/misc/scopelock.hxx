@@ -47,7 +47,7 @@ private:
     ScopeLock& mrScopeLock;
 };
 
-} // namespace sd
+}
 
 #endif // INCLUDED_SD_INC_MISC_SCOPELOCK_HXX
 

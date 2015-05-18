@@ -425,6 +425,6 @@ void SAL_CALL OInterceptor::disposing( const ::com::sun::star::lang::EventObject
 {
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -217,6 +217,6 @@ namespace sd { namespace colortoolpanel
         m_xWindow.clear();
     }
 
-} } // namespace sd::colortoolpanel
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

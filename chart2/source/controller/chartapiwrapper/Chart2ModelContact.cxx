@@ -305,7 +305,7 @@ awt::Point Chart2ModelContact::GetAxisPosition( const uno::Reference<
     return aPoint;
 }
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

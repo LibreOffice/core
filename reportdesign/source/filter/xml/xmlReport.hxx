@@ -56,7 +56,7 @@ namespace rptxml
         void    impl_initRuntimeDefaults() const;
     };
 
-} // namespace rptxml
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLREPORT_HXX

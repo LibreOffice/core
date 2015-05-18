@@ -26,6 +26,6 @@ namespace dbmm
 
     IMPLEMENT_MODULE( MacroMigrationModule, "dbmm" );
 
-} // namespace dbmm
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

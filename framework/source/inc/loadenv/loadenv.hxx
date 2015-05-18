@@ -581,7 +581,7 @@ private:
                          const css::util::URL&                            aURL  );
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_LOADENV_HXX
 

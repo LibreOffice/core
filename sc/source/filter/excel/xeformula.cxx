@@ -288,7 +288,7 @@ XclExpCompData::XclExpCompData( const XclExpCompConfig* pCfg ) :
     OSL_ENSURE( pCfg, "XclExpFmlaCompImpl::Init - unknown formula type" );
 }
 
-} // namespace
+}
 
 /** Implementation class of the export formula compiler. */
 class XclExpFmlaCompImpl : protected XclExpRoot, protected XclTokenArrayHelper
@@ -916,7 +916,7 @@ inline sal_uInt8 lclGetRangeTokenId( OpCode eOpCode )
     return (eOpCode == ocRange) ? EXC_TOKID_RANGE : EXC_TOKID_NONE;
 }
 
-} // namespace
+}
 
 XclExpScToken XclExpFmlaCompImpl::Expression( XclExpScToken aTokData, bool bInParentheses, bool bStopAtSep )
 {
@@ -1222,7 +1222,7 @@ inline bool lclGetTokenString( OUString& rString, const XclExpScToken& rTokData 
     return bIsStr;
 }
 
-} // namespace
+}
 
 void XclExpFmlaCompImpl::ProcessDdeLink( const XclExpScToken& rTokData )
 {
@@ -1785,7 +1785,7 @@ inline bool lclIsRefDel2D( const ScComplexRefData& rRefData )
     return lclIsRefDel2D( rRefData.Ref1 ) || lclIsRefDel2D( rRefData.Ref2 );
 }
 
-} // namespace
+}
 
 SCTAB XclExpFmlaCompImpl::GetScTab( const ScSingleRefData& rRefData ) const
 {
@@ -2220,7 +2220,7 @@ inline void lclAppend( ScfUInt8Vec& orVector, const XclExpRoot& rRoot, const OUS
     xXclStr->WriteToMem( &orVector[ nSize ] );
 }
 
-} // namespace
+}
 
 void XclExpFmlaCompImpl::Append( sal_uInt8 nData )
 {
@@ -2578,7 +2578,7 @@ void lclPutRangeToTokenArray( ScTokenArray& rScTokArr, const ScRange& rScRange, 
     }
 }
 
-} // namespace
+}
 
 XclExpFormulaCompiler::XclExpFormulaCompiler( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),

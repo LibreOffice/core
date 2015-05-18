@@ -106,7 +106,7 @@ void ScenariosContext::onStartRecord( SequenceInputStream& rStrm )
         mrSheetScenarios.importScenarios( rStrm );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

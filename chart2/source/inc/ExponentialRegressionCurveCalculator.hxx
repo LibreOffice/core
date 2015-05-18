@@ -62,7 +62,7 @@ private:
     double m_fLogIntercept;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_EXPONENTIALREGRESSIONCURVECALCULATOR_HXX
 #endif

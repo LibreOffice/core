@@ -132,8 +132,8 @@ ComponentBackendDb::Data ComponentBackendDb::getEntry(OUString const & url)
 }
 
 
-} // namespace bundle
-} // namespace backend
-} // namespace dp_registry
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

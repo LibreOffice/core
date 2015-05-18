@@ -750,7 +750,7 @@ namespace comphelper
     }
 
 
-} // namespace comphelper
+}
 
 
 void createRegistryInfo_Map()

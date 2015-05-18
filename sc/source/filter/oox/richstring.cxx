@@ -45,7 +45,7 @@ inline bool lclNeedsRichTextFormat( const oox::xls::Font* pFont )
     return pFont && pFont->needsRichTextFormat();
 }
 
-} // namespace
+}
 
 RichStringPortion::RichStringPortion( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -491,7 +491,7 @@ void RichString::createPhoneticPortions( const OUString& rText, PhoneticPortionM
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

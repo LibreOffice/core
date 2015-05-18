@@ -313,8 +313,8 @@ namespace ActivitiesFactory
         bool                            bDirectionForward );
 }
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ACTIVITIESFACTORY_HXX
 

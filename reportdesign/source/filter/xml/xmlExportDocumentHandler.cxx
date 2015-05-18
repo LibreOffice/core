@@ -432,7 +432,7 @@ void ExportDocumentHandler::exportTableRows()
     m_xDelegatee->endElement(sRow);
 }
 
-} // namespace rptxml
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

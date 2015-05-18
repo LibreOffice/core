@@ -44,7 +44,7 @@ union DecodedDouble
     inline explicit     DecodedDouble( double fValue ) : mfValue( fValue ) {}
 };
 
-} // namespace
+}
 
 // conversion -----------------------------------------------------------------
 
@@ -128,7 +128,7 @@ union DecodedDouble
     return !rStrm.isEof() && (rStrm.getRecId() == nEndRecId);
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -348,7 +348,7 @@ namespace tools_urlobj
 
 
     CPPUNIT_TEST_SUITE_REGISTRATION( urlobjTest );
-}                               // namespace rtl_random
+}
 
 
 

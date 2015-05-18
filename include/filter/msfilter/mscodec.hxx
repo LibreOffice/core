@@ -363,7 +363,7 @@ private:
 
 
 
-} // namespace msfilter
+}
 
 #endif
 

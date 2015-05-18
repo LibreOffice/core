@@ -156,6 +156,6 @@ void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&
     }
 }
 
-}   // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

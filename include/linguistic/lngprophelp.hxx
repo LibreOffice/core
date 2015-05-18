@@ -346,7 +346,7 @@ public:
             throw(::com::sun::star::uno::RuntimeException);
 };
 
-}   // namespace linguistic
+}
 
 #endif
 

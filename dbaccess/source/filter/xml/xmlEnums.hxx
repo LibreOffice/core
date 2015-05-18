@@ -158,7 +158,7 @@ namespace dbaxml
         XML_TOK_COLUMN_VISIBLE,
         XML_TOK_DEFAULT_CELL_STYLE_NAME
     };
-} // namespace dbaxml
+}
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLENUMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

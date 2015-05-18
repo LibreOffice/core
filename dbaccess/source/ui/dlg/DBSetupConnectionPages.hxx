@@ -293,7 +293,7 @@ namespace dbaui
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
     };
 
-}   // namespace dbaui
+}
 
 #endif
 

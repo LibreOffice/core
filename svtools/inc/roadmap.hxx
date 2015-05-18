@@ -107,7 +107,7 @@ private:
     void                 UpdatefollowingHyperLabels( ItemIndex _Index );
 };
 
-}   // namespace svt
+}
 
 #endif
 

@@ -315,7 +315,7 @@ protected:
     virtual ~FileLockBytes();
 };
 
-} // namespace store
+}
 
 FileLockBytes::FileLockBytes (FileHandle & rFile)
     : m_hFile (rFile.m_handle), m_nSize (SAL_MAX_UINT32), m_xAllocator()
@@ -540,7 +540,7 @@ protected:
     virtual ~MappedLockBytes();
 };
 
-} // namespace store
+}
 
 MappedLockBytes::MappedLockBytes (FileMapping & rMapping)
     : m_pData (rMapping.m_pAddr), m_nSize (rMapping.m_nSize), m_nPageSize(0), m_hFile (rMapping.m_hFile)
@@ -673,7 +673,7 @@ protected:
     virtual ~MemoryLockBytes();
 };
 
-} // namespace store
+}
 
 MemoryLockBytes::MemoryLockBytes()
     : m_pData (0), m_nSize (0), m_xAllocator()
@@ -882,6 +882,6 @@ MemoryLockBytes_createInstance (
     return store_E_None;
 }
 
-} // namespace store
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

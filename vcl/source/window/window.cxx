@@ -598,7 +598,7 @@ Window::~Window()
     return this;
 }
 
-} /* namespace vcl */
+}
 
 WindowImpl::WindowImpl( WindowType nType )
 {
@@ -3935,6 +3935,6 @@ vcl::RenderSettings& Window::GetRenderSettings()
     return mpWindowImpl->maRenderSettings;
 }
 
-} /* namespace vcl */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

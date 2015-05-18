@@ -533,6 +533,6 @@ OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
     }
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,7 +31,7 @@ namespace comphelper
         }
         return vResult;
     }
-}   // namespace comphelper
+}
 
 
 

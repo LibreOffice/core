@@ -97,6 +97,6 @@ VclPtr<Dialog> OUserSettingsDialog::createDialog(vcl::Window* _pParent)
     return VclPtr<OUserAdminDlg>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection, m_xActiveConnection);
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

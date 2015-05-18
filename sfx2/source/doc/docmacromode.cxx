@@ -436,7 +436,7 @@ namespace sfx2
     }
 
 
-} // namespace sfx2
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -126,7 +126,7 @@ private:
     };
 
 
-}// namespace accessibility
+}
 
 
 #endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLELISTBOX_HXX

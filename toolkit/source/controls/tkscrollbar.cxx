@@ -310,7 +310,7 @@ namespace toolkit
         return s;
     }
 
-}  // namespace toolkit
+}
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

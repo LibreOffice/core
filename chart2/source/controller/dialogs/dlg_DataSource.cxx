@@ -223,6 +223,6 @@ void DataSourceDialog::setValidPage( TabPage * pTabPage )
     }
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

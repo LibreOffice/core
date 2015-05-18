@@ -130,6 +130,6 @@ bool QuietInteraction::wasUsed() const
     return m_aRequest.hasValue();
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

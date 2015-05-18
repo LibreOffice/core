@@ -71,7 +71,7 @@ namespace tdoc_ucp
         osl::Mutex m_aMutex;
         OUString m_aPassword;
     };
-} // namespace tdoc_ucp
+}
 
 
 

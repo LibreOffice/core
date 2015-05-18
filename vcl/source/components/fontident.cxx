@@ -185,6 +185,6 @@ Sequence< OUString > SAL_CALL FontIdentificator::getSupportedServiceNames() thro
     return FontIdentificator_getSupportedServiceNames();
 }
 
-} // namespace vcl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

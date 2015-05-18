@@ -611,7 +611,7 @@ sal_uLong lclGetCellFormat( ScDocument& rDoc, const ScAddress& rPos )
     return pPattern->GetNumberFormat( rDoc.GetFormatTable() );
 }
 
-} // namespace
+}
 
 bool ScValidationData::HasSelectionList() const
 {

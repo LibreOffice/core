@@ -47,7 +47,7 @@ private:
     ErrorBarResources   m_aErrorBarResources;
 };
 
-} //namespace chart
+}
 
 #endif
 

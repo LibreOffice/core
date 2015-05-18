@@ -130,7 +130,7 @@ GetSupportedServiceNamesImpl(
     return ret;
 }
 
-} // namespace sw
+}
 
 namespace sw {
 
@@ -153,7 +153,7 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
     }
 }
 
-} // namespace sw
+}
 
 struct FrameDependSortListLess
 {
@@ -1125,7 +1125,7 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode *const pSttNode,
     return bRet;
 }
 
-} // namespace sw
+}
 
 uno::Reference< text::XTextRange >
 SwXTextRange::CreateXTextRange(
@@ -1250,7 +1250,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
     return xParentText;
 }
 
-} // namespace sw
+}
 
 uno::Reference< container::XEnumeration > SAL_CALL
 SwXTextRange::createContentEnumeration(const OUString& rServiceName)

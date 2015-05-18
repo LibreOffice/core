@@ -33,8 +33,8 @@ boost::shared_ptr<Activity> createDrawingLayerAnimActivity(
     SlideShowContext const&                 rContext,
     boost::shared_ptr<DrawShape> const&     pDrawShape );
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // ! defined INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_DRAWINGLAYERANIMATION_HXX
 

@@ -148,7 +148,7 @@ void LookupTreeTest::testTrieGetAllEntries()
     entries.clear();
 }
 
-} // namespace end
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

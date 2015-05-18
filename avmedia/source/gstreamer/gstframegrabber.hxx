@@ -56,8 +56,8 @@ private:
     explicit FrameGrabber( const OUString &aURL );
 };
 
-} // namespace gst
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTFRAMEGRABBER_HXX
 

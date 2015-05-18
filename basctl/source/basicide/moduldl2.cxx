@@ -132,7 +132,7 @@ void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::Rende
         rRenderContext.DrawText(rPos, GetText());
 }
 
-} // namespace
+}
 
 //  basctl::CheckBox
 CheckBox::CheckBox(vcl::Window* pParent, WinBits nStyle)
@@ -1583,6 +1583,6 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
         }
     }
 }
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

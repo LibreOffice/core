@@ -124,7 +124,7 @@ bool isPercent( const RefVector<TypeGroupConverter>& rTypeGroups )
     return true;
 }
 
-} // namespace
+}
 
 AxisConverter::AxisConverter( const ConverterRoot& rParent, AxisModel& rModel ) :
     ConverterBase< AxisModel >( rParent, rModel )
@@ -394,8 +394,8 @@ void AxisDispUnitsConverter::convertFromModel( const Reference< XAxis >& rxAxis 
     }
 }
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

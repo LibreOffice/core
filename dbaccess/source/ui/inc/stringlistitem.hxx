@@ -46,7 +46,7 @@ public:
     ::com::sun::star::uno::Sequence< OUString >  getList() const { return m_aList; }
 };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_STRINGLISTITEM_HXX
 

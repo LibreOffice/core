@@ -98,7 +98,7 @@ class FrameContainer
 
 }; // class FrameContainer
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_CLASSES_FRAMECONTAINER_HXX
 

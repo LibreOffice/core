@@ -2655,6 +2655,6 @@ bool SbaXDataBrowserController::InitializeGridModel(const Reference< ::com::sun:
     return true;
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

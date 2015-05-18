@@ -118,7 +118,7 @@ private:
     static void dump( const char * pText, const OUString& rString );
 };
 
-} // namespace ppt
+}
 
 #endif
 

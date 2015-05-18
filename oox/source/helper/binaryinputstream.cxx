@@ -37,7 +37,7 @@ namespace {
 
 const sal_Int32 INPUTSTREAM_BUFFERSIZE      = 0x8000;
 
-} // namespace
+}
 
 OUString BinaryInputStream::readNulUnicodeArray()
 {
@@ -320,6 +320,6 @@ void RelativeInputStream::skip( sal_Int32 nBytes, size_t nAtomSize )
     }
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

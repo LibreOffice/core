@@ -53,7 +53,7 @@ private:
     MapMode m_aMapMode;
 };
 
-}  // namespace chart
+}
 
 #endif
 

@@ -174,7 +174,7 @@ namespace comphelper
     }
 
 
-}   // namespace comphelper
+}
 
 
 

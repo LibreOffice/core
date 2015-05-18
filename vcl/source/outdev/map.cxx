@@ -2141,7 +2141,7 @@ long Window::ImplLogicUnitToPixelY( long nY, MapUnit eUnit )
     return nY;
 }
 
-} /* namespace vcl */
+}
 
 DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( long nWidth ) const
 {

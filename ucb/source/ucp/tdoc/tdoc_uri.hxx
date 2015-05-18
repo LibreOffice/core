@@ -122,7 +122,7 @@ inline bool Uri::isFolder() const
     return m_aPath.isEmpty() || m_aPath.endsWith( "/" );
 }
 
-} // namespace tdoc_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_URI_HXX
 

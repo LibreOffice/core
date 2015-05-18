@@ -49,7 +49,7 @@ namespace chart
 // accessibility
 #define CHART_ACCESSIBLE_TEXT_SERVICE_NAME "com.sun.star.accessibility.AccessibleTextComponent"
 
-} //namespace chart
+}
 
 #endif
 

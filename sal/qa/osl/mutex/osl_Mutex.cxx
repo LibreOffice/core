@@ -517,7 +517,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::acquire, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::tryToAcquire, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::release, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::getGlobalMutex, "osl_Mutex");
-} // namespace osl_Mutex
+}
 
 // Beginning of the test cases for osl_Guard class
 
@@ -596,7 +596,7 @@ namespace osl_Guard
     }; // class ctor
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Guard::ctor, "osl_Guard");
-} // namespace osl_Guard
+}
 
 // Beginning of the test cases for osl_ClearableGuard class
 
@@ -733,7 +733,7 @@ namespace osl_ClearableGuard
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_ClearableGuard::ctor, "osl_ClearableGuard" );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_ClearableGuard::clear, "osl_ClearableGuard" );
-} // namespace osl_ClearableGuard
+}
 
 // Beginning of the test cases for osl_ResettableGuard class
 
@@ -855,7 +855,7 @@ namespace osl_ResettableGuard
 
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::ctor);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::reset);
-} // namespace osl_ResettableGuard
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

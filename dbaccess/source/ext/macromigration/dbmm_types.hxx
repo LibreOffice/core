@@ -46,7 +46,7 @@ namespace dbmm
     // helper
     OUString getScriptTypeDisplayName( const ScriptType _eType );
 
-} // namespace dbmm
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_DBMM_TYPES_HXX
 

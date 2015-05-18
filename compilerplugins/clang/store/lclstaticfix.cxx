@@ -49,6 +49,6 @@ bool LclStaticFix::VisitFunctionDecl( const FunctionDecl* declaration )
 
 static Plugin::Registration< LclStaticFix > X( "lclstaticfix" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

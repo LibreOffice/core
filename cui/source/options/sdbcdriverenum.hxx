@@ -51,7 +51,7 @@ namespace offapp
     };
 
 
-}   // namespace offapp
+}
 
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_SDBCDRIVERENUM_HXX

@@ -143,9 +143,9 @@ private:
     std::shared_ptr< ObjectFormatterData > mxData;
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 #endif
 

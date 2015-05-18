@@ -652,6 +652,6 @@ bool DrawCommandDispatch::parseCommandURL( const OUString& rCommandURL, sal_uInt
     return bFound;
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -85,7 +85,7 @@ namespace abp
         );
 
 
-    }   // namespace fieldmapping
+    }
 
 
 
@@ -110,11 +110,11 @@ namespace abp
         );
 
 
-    }   // namespace addressconfig
+    }
 
 
 
-}   // namespace abp
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_FIELDMAPPINGIMPL_HXX

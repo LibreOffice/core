@@ -465,7 +465,7 @@ namespace basegfx
         {
             return getSquareGradientAlpha(rUV, rGradInfo); // only matrix setup differs
         }
-    } // namespace tools
-} // namespace basegfx
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

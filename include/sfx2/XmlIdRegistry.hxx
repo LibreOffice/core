@@ -77,7 +77,7 @@ public:
 
 };
 
-} // namespace sfx2
+}
 
 #endif // INCLUDED_SFX2_XMLIDREGISTRY_HXX
 

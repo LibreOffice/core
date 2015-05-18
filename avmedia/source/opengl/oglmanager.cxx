@@ -60,7 +60,7 @@ uno::Sequence< OUString > SAL_CALL OGLManager::getSupportedServiceNames()
     return aRet;
 }
 
-} // namespace ogl
-} // namespace avmedia
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

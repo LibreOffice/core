@@ -150,8 +150,8 @@ private:
         ::com::sun::star::chart2::XDataSeries >     m_xDataSeries;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_DATASERIESPOINTWRAPPER_HXX
 #endif

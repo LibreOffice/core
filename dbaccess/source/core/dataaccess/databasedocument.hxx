@@ -744,7 +744,7 @@ private:
     const ODatabaseDocument& m_document;
 };
 
-}   // namespace dbaccess
+}
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASEDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

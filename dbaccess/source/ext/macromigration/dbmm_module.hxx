@@ -27,7 +27,7 @@ namespace dbmm
 
     DEFINE_MODULE( MacroMigrationModule, MacroMigrationModuleClient, MacroMigrationResId )
 
-} // namespace dbmm
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_DBMM_MODULE_HXX
 

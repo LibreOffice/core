@@ -29,7 +29,7 @@ namespace pcr
     #define PROPERTY_TABBINGMODEL           "TabbingModel"
 
 
-} // namespace pcr
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PCRSTRINGS_HXX

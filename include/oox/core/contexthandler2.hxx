@@ -258,8 +258,8 @@ public:
     virtual void        onEndRecord() SAL_OVERRIDE;
 };
 
-} // namespace core
-} // namespace oox
+}
+}
 
 #endif
 

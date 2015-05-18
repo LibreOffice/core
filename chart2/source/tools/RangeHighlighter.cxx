@@ -396,6 +396,6 @@ void SAL_CALL RangeHighlighter::disposing()
     m_aSelectedRanges.realloc( 0 );
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

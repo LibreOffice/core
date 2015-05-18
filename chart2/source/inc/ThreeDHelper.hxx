@@ -143,7 +143,7 @@ public:
             , sal_Int32 nRoundedEdges, sal_Int32 nObjectLines );
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -175,6 +175,6 @@ bool ShellJob::impl_execute(const OUString&                       sCommand      
     return bRet;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

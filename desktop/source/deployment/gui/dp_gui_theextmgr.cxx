@@ -501,6 +501,6 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     return s_ExtMgr;
 }
 
-} //namespace dp_gui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

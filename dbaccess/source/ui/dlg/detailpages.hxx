@@ -266,7 +266,7 @@ namespace dbaui
     private:
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_DETAILPAGES_HXX
 

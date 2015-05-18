@@ -806,7 +806,7 @@ namespace pcr
     }
 
 
-} // namespace pcr
+}
 
 
 extern "C" void SAL_CALL createRegistryInfo_FormGeometryHandler()

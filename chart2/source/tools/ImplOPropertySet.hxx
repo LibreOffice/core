@@ -81,8 +81,8 @@ private:
         m_xStyle;
 };
 
-} //  namespace impl
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_TOOLS_IMPLOPROPERTYSET_HXX
 #endif

@@ -94,7 +94,7 @@ namespace offapp
         return m_pImpl->getDriverImplNames().end();
     }
 
-}   // namespace offapp
+}
 
 
 

@@ -108,7 +108,7 @@ private:
                             const ::comphelper::mem_fun1_t<TaskPaneList, vcl::Window*>& rMemFunc);
 };
 
-} // namespace chart
+}
 
 #endif // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
 

@@ -621,6 +621,6 @@ bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL )
     return ( eType == LoadEnv::E_CAN_BE_LOADED );
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -114,7 +114,7 @@ namespace StatisticsHelper
         bool bYError = true );
 }
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_STATISTICSHELPER_HXX
 #endif

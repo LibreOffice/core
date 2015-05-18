@@ -196,7 +196,7 @@ namespace dbaui
     };
 
 
-}   // namespace dbaui
+}
 
 
 #endif // INCLUDED_DBACCESS_DBSUBCOMPONENTCONTROLLER_HXX

@@ -68,7 +68,7 @@ public:
     virtual sal_Int64 SAL_CALL getLength(  ) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-}   // namespace utl
+}
 
 #endif // _UNOTOOLS_STREAM_WRAPPER_HXX_
 

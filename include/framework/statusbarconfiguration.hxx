@@ -46,7 +46,7 @@ class FWE_DLLPUBLIC StatusBarConfiguration
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rStatusbarConfiguration );
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_STATUSBARCONFIGURATION_HXX
 

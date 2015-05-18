@@ -806,6 +806,6 @@ void OWriteImagesDocumentHandler::WriteExternalImage( const ExternalImageItemDes
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

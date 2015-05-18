@@ -73,7 +73,7 @@ public:
     ::osl::FileBase::RC sync() const;
 };
 
-} // namespace fileaccess
+}
 #endif // INCLUDED_UCB_SOURCE_UCP_FILE_FILREC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
