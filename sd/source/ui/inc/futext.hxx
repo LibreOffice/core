@@ -78,16 +78,15 @@ protected:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
+private:
     virtual void disposing() SAL_OVERRIDE;
 
     SdrObjectWeakRef    mxTextObj;
-    Link<>              aOldLink;
     bool                bFirstObjCreated;
     bool                bJustEndedEdit;
 
     SfxRequest&         rRequest;
 
-private:
     void ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSize(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj);
