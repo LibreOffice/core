@@ -3281,11 +3281,11 @@ namespace xmloff { namespace token {
             s_bChecked = true; // it's all static, checking once is enough
         }
 #endif
-        DBG_ASSERT( eToken > XML_TOKEN_INVALID, "token value too low!" );
-        DBG_ASSERT( eToken < XML_TOKEN_END, "token value too high!" );
-        DBG_ASSERT(sal_uInt16(eToken) < sizeof(aTokenList)/sizeof(aTokenList[0]),"Illegal position!");
+        assert(XML_TOKEN_INVALID < eToken);
+        assert(eToken < XML_TOKEN_END);
+        assert(sal_uInt16(eToken) < SAL_N_ELEMENTS(aTokenList));
 
-        XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
+        XMLTokenEntry* pToken = &aTokenList[static_cast<sal_uInt16>(eToken)];
         if (!pToken->pOUString)
            pToken->pOUString = new OUString( pToken->pChar, pToken->nLength,
                                              RTL_TEXTENCODING_ASCII_US );
@@ -3297,8 +3297,8 @@ namespace xmloff { namespace token {
         const OUString& rString,
         enum XMLTokenEnum eToken )
     {
-        DBG_ASSERT( eToken > XML_TOKEN_INVALID, "token value too low!" );
-        DBG_ASSERT( eToken < XML_TOKEN_END, "token value too high!" );
+        assert(XML_TOKEN_INVALID < eToken);
+        assert(eToken < XML_TOKEN_END);
 
         const XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
         return rString.equalsAsciiL( pToken->pChar, pToken->nLength );
