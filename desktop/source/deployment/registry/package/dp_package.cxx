@@ -65,6 +65,8 @@
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <boost/optional.hpp>
+
+#include <algorithm>
 #include <vector>
 
 #include "dp_extbackenddb.hxx"
@@ -1524,7 +1526,7 @@ void BackendImpl::PackageImpl::scanBundle(
         //We make sure that we only create one XPackage for a particular URL.
         //Sometime programmers insert the same URL several times in the manifest
         //which may lead to DisposedExceptions.
-        if (bundle.end() == std::find_if(bundle.begin(), bundle.end(), XPackage_eq(url)))
+        if (std::none_of(bundle.begin(), bundle.end(), XPackage_eq(url)))
         {
             const Reference<deployment::XPackage> xPackage(
                 bindBundleItem( url, mediaType, false, OUString(), xCmdEnv ) );

@@ -32,6 +32,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <algorithm>
 
 #define USER_PACKAGE_MANAGER    "user"
 #define SHARED_PACKAGE_MANAGER  "shared"
@@ -982,9 +983,8 @@ void ExtensionBox_Impl::addEventListenerOnce(
 {
     //make sure to only add the listener once
     cleanVecListenerAdded();
-    if ( ::std::find_if(m_vListenerAdded.begin(), m_vListenerAdded.end(),
-                        FindWeakRef(extension))
-         == m_vListenerAdded.end())
+    if ( ::std::none_of(m_vListenerAdded.begin(), m_vListenerAdded.end(),
+                        FindWeakRef(extension)) )
     {
         extension->addEventListener( uno::Reference< lang::XEventListener > (
                                          m_xRemoveListener, uno::UNO_QUERY ) );
