@@ -39,7 +39,7 @@ private:
     bool mbResetBackground : 1;
 
     SVX_DLLPRIVATE void ResetSettings(bool bForeground, bool bBackground);
-    SVX_DLLPRIVATE void ApplySettings(vcl::RenderContext& rRenderContext);
+    SVX_DLLPRIVATE void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
     SVX_DLLPRIVATE void Init ();
     SVX_DLLPRIVATE void SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
     SVX_DLLPRIVATE void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
