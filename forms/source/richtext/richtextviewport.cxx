@@ -20,17 +20,14 @@
 #include "richtextviewport.hxx"
 #include <editeng/editview.hxx>
 
-
 namespace frm
 {
-
     RichTextViewPort::RichTextViewPort( vcl::Window* _pParent )
-        :Control ( _pParent )
-        ,m_pView(NULL)
-        ,m_bHideInactiveSelection( true )
+        : Control ( _pParent )
+        , m_pView(NULL)
+        , m_bHideInactiveSelection( true )
     {
     }
-
 
     void RichTextViewPort::setView( EditView& _rView )
     {
@@ -38,12 +35,10 @@ namespace frm
         SetPointer( _rView.GetPointer() );
     }
 
-
-    void RichTextViewPort::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& _rRect )
+    void RichTextViewPort::Paint( vcl::RenderContext& rRenderContext, const Rectangle& _rRect )
     {
-        m_pView->Paint( _rRect );
+        m_pView->Paint(_rRect, &rRenderContext);
     }
-
 
     void RichTextViewPort::GetFocus()
     {
@@ -55,7 +50,6 @@ namespace frm
         }
     }
 
-
     void RichTextViewPort::LoseFocus()
     {
         if (m_pView)
@@ -66,7 +60,6 @@ namespace frm
         Control::LoseFocus();
     }
 
-
     void RichTextViewPort::KeyInput( const KeyEvent& _rKEvt )
     {
         if ( !m_pView->PostKeyEvent( _rKEvt ) )
@@ -75,13 +68,11 @@ namespace frm
             implInvalidateAttributes();
     }
 
-
     void RichTextViewPort::MouseMove( const MouseEvent& _rMEvt )
     {
         Control::MouseMove( _rMEvt );
         m_pView->MouseMove( _rMEvt );
     }
-
 
     void RichTextViewPort::MouseButtonDown( const MouseEvent& _rMEvt )
     {
@@ -90,14 +81,12 @@ namespace frm
         GrabFocus();
     }
 
-
     void RichTextViewPort::MouseButtonUp( const MouseEvent& _rMEvt )
     {
         Control::MouseButtonUp( _rMEvt );
         m_pView->MouseButtonUp( _rMEvt );
         implInvalidateAttributes();
     }
-
 
     void RichTextViewPort::SetHideInactiveSelection( bool _bHide )
     {
@@ -108,10 +97,6 @@ namespace frm
             m_pView->SetSelectionMode( m_bHideInactiveSelection ? EE_SELMODE_HIDDEN : EE_SELMODE_STD );
     }
 
-
-
-
 }   // namespace frm
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
