@@ -245,7 +245,7 @@ bool RecoveryUI::impl_doEmergencySave()
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
     // create dialog for this operation and bind it to the used core service
-    VclPtrInstance<svxdr::SaveDialog> xDialog(m_pParentWindow, pCore);
+    ScopedVclPtrInstance<svxdr::SaveDialog> xDialog(m_pParentWindow, pCore);
 
     // start the dialog
     short nRet = xDialog->Execute();
@@ -260,7 +260,7 @@ void RecoveryUI::impl_doRecovery()
 
     // create all needed dialogs for this operation
     // and bind it to the used core service
-    VclPtrInstance<svxdr::RecoveryDialog> xDialog(m_pParentWindow, pCore);
+    ScopedVclPtrInstance<svxdr::RecoveryDialog> xDialog(m_pParentWindow, pCore);
 
     // start the dialog
     xDialog->Execute();
