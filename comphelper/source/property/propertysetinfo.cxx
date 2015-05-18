@@ -20,7 +20,6 @@
 
 #include <comphelper/propertysetinfo.hxx>
 
-#include <osl/diagnose.h>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -64,13 +63,8 @@ void PropertyMapImpl::add(PropertyMapEntry const * pMap) throw()
 {
     while (!pMap->maName.isEmpty())
     {
-#ifdef DBG_UTIL
-        PropertyMap::iterator aIter = maPropertyMap.find( pMap->maName );
-        if( aIter != maPropertyMap.end() )
-        {
-            OSL_FAIL( "Warning: PropertyMapEntry added twice, possible error!");
-        }
-#endif
+        // check for duplicates
+        assert(maPropertyMap.find(pMap->maName) == maPropertyMap.end());
 
         maPropertyMap[pMap->maName] = pMap;
 
