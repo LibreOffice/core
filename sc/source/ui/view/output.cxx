@@ -1000,9 +1000,14 @@ void ScOutputData::DrawBackground()
                 const Color* pOldColor = NULL;
                 const ScDataBarInfo* pOldDataBarInfo = NULL;
                 const ScIconSetInfo* pOldIconSetInfo = NULL;
-                for (SCCOL nX=nX1; nX<=nX2; nX++)
+                SCCOL nMergedCells = 1;
+                SCCOL nOldMerged = 0;
+
+                for (SCCOL nX=nX1; nX + nMergedCells <= nX2 + 1; nX += nOldMerged)
                 {
-                    CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
+                    CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+nMergedCells];
+
+                    nOldMerged = nMergedCells;
 
                     if (bCellContrast)
                     {
@@ -1043,7 +1048,19 @@ void ScOutputData::DrawBackground()
                     const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet.get();
                     drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo );
 
-                    nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+                    // extend for all merged cells
+                    nMergedCells = 1;
+                    if (pInfo->bMerged && pInfo->pPatternAttr)
+                    {
+                            const ScMergeAttr* pMerge =
+                                    static_cast<const ScMergeAttr*>(&pInfo->pPatternAttr->GetItem(ATTR_MERGE));
+                            nMergedCells = std::max<SCCOL>(1, pMerge->GetColMerge());
+                    }
+
+                    for (SCCOL nMerged = 0; nMerged < nMergedCells; ++nMerged)
+                    {
+                        nPosX += pRowInfo[0].pCellInfo[nX+nOldMerged+nMerged].nWidth * nLayoutSign;
+                    }
                 }
                 drawCells( NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo );
 
