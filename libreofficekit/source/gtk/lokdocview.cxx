@@ -179,12 +179,20 @@ struct LOKDocView_Impl
     static const char* callbackTypeToString(int nType);
     /// Invoked on the main thread if callbackWorker() requests so.
     static gboolean callback(gpointer pData);
+    /// Invoked on the main thread if globalCallbackWorker() requests so.
+    static gboolean globalCallback(gpointer pData);
     /// Implementation of the callback handler, invoked by callback();
     gboolean callbackImpl(CallbackData* pCallbackData);
+    /// Implementation of the global callback handler, invoked by globalCallback();
+    gboolean globalCallbackImpl(CallbackData* pCallbackData);
     /// Our LOK callback, runs on the LO thread.
     static void callbackWorker(int nType, const char* pPayload, void* pData);
     /// Implementation of the callback worder handler, invoked by callbackWorker().
     void callbackWorkerImpl(int nType, const char* pPayload);
+    /// Our global LOK callback, runs on the LO thread.
+    static void globalCallbackWorker(int nType, const char* pPayload, void* pData);
+    /// Implementation of the global callback worder handler, invoked by globalCallbackWorker().
+    void globalCallbackWorkerImpl(int nType, const char* pPayload);
     /// Command state (various buttons like bold are toggled or not) is changed.
     void commandChanged(const std::string& rPayload);
 };
@@ -872,6 +880,12 @@ const char* LOKDocView_Impl::callbackTypeToString(int nType)
         return "LOK_CALLBACK_HYPERLINK_CLICKED";
     case LOK_CALLBACK_STATE_CHANGED:
         return "LOK_CALLBACK_STATE_CHANGED";
+    case LOK_CALLBACK_STATUS_INDICATOR_START:
+        return "LOK_CALLBACK_STATUS_INDICATOR_START";
+    case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+        return "LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE";
+    case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
+        return "LOK_CALLBACK_STATUS_INDICATOR_FINISH";
     }
     return 0;
 }
@@ -880,6 +894,12 @@ gboolean LOKDocView_Impl::callback(gpointer pData)
 {
     LOKDocView_Impl::CallbackData* pCallback = static_cast<LOKDocView_Impl::CallbackData*>(pData);
     return pCallback->m_pDocView->m_pImpl->callbackImpl(pCallback);
+}
+
+gboolean LOKDocView_Impl::globalCallback(gpointer pData)
+{
+    LOKDocView_Impl::CallbackData* pCallback = static_cast<LOKDocView_Impl::CallbackData*>(pData);
+    return pCallback->m_pDocView->m_pImpl->globalCallbackImpl(pCallback);
 }
 
 gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
@@ -967,10 +987,41 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     return G_SOURCE_REMOVE;
 }
 
+gboolean LOKDocView_Impl::globalCallbackImpl(CallbackData* pCallback)
+{
+    switch (pCallback->m_nType)
+    {
+    case LOK_CALLBACK_STATUS_INDICATOR_START:
+    {
+    }
+    break;
+    case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+    {
+    }
+    break;
+    case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
+    {
+    }
+    break;
+    default:
+        g_assert(false);
+        break;
+    }
+    delete pCallback;
+
+    return G_SOURCE_REMOVE;
+}
+
 void LOKDocView_Impl::callbackWorker(int nType, const char* pPayload, void* pData)
 {
     LOKDocView* pDocView = static_cast<LOKDocView*>(pData);
     pDocView->m_pImpl->callbackWorkerImpl(nType, pPayload);
+}
+
+void LOKDocView_Impl::globalCallbackWorker(int nType, const char* pPayload, void* pData)
+{
+    LOKDocView* pDocView = static_cast<LOKDocView*>(pData);
+    pDocView->m_pImpl->globalCallbackWorkerImpl(nType, pPayload);
 }
 
 void LOKDocView_Impl::callbackWorkerImpl(int nType, const char* pPayload)
@@ -979,6 +1030,15 @@ void LOKDocView_Impl::callbackWorkerImpl(int nType, const char* pPayload)
     g_info("lok_docview_callback_worker: %s, '%s'", LOKDocView_Impl::callbackTypeToString(nType), pPayload);
 #if GTK_CHECK_VERSION(2,12,0)
     gdk_threads_add_idle(LOKDocView_Impl::callback, pCallback);
+#endif
+}
+
+void LOKDocView_Impl::globalCallbackWorkerImpl(int nType, const char* pPayload)
+{
+    LOKDocView_Impl::CallbackData* pCallback = new LOKDocView_Impl::CallbackData(nType, pPayload ? pPayload : "(nil)", m_pDocView);
+    g_info("LOKDocView_Impl::globalCallbackWorkerImpl: %s, '%s'", LOKDocView_Impl::callbackTypeToString(nType), pPayload);
+#if GTK_CHECK_VERSION(2,12,0)
+    gdk_threads_add_idle(LOKDocView_Impl::globalCallback, pCallback);
 #endif
 }
 
@@ -1085,6 +1145,7 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
         pDocView->m_pImpl->m_pDocument = 0;
     }
 
+    pDocView->m_pImpl->m_pOffice->pClass->registerCallback(pDocView->m_pImpl->m_pOffice, &LOKDocView_Impl::globalCallbackWorker, pDocView);
     pDocView->m_pImpl->m_pDocument = pDocView->m_pImpl->m_pOffice->pClass->documentLoad( pDocView->m_pImpl->m_pOffice,
                                                                    pPath );
     if ( !pDocView->m_pImpl->m_pDocument )
