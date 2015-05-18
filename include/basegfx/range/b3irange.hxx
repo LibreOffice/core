@@ -23,7 +23,6 @@
 #include <basegfx/point/b3ipoint.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/tuple/b3ituple.hxx>
-#include <basegfx/tuple/b3i64tuple.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/basegfxdllapi.h>
 
@@ -157,15 +156,6 @@ namespace basegfx
                 maRangeX.getMaximum(),
                 maRangeY.getMaximum(),
                 maRangeZ.getMaximum()
-                );
-        }
-
-        B3I64Tuple getRange() const
-        {
-            return B3I64Tuple(
-                maRangeX.getRange(),
-                maRangeY.getRange(),
-                maRangeZ.getRange()
                 );
         }
 
