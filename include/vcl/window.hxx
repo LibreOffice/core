@@ -785,6 +785,11 @@ public:
     bool                                IsDisposed() const;
     SystemWindow*                       GetSystemWindow() const;
 
+    /// Can the widget derived from this Window do the double-buffering via RenderContext properly?
+    bool                                SupportsDoubleBuffering() const;
+    /// Mark this window / widget derived from this window as working with double-buffering via RenderContext.
+    void                                SetDoubleBuffering(bool bDoubleBuffering = true);
+
     void                                EnableAllResize( bool bEnable = true );
 
     void                                SetBorderStyle( WindowBorderStyle nBorderStyle );

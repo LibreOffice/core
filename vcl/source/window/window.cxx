@@ -751,6 +751,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbFill                              = true;
     mbSecondary                         = false;
     mbNonHomogeneous                    = false;
+    mbDoubleBuffering                   = false; // when we are not sure, assume it cannot do double-buffering via RenderContext
 }
 
 WindowImpl::~WindowImpl()
@@ -3933,6 +3934,16 @@ Any Window::GetSystemDataAny() const
 vcl::RenderSettings& Window::GetRenderSettings()
 {
     return mpWindowImpl->maRenderSettings;
+}
+
+bool Window::SupportsDoubleBuffering() const
+{
+    return mpWindowImpl->mbDoubleBuffering;
+}
+
+void Window::SetDoubleBuffering(bool bDoubleBuffering)
+{
+    mpWindowImpl->mbDoubleBuffering = bDoubleBuffering;
 }
 
 } /* namespace vcl */

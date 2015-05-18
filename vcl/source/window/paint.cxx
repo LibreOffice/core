@@ -124,8 +124,8 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
     {
         m_pWindow->BeginPaint();
 
-        // double-buffering - so far an experimental feature
-        if (officecfg::Office::Common::Misc::ExperimentalMode::get())
+        // double-buffering: normally just a selected subset
+        if (m_pWindow->SupportsDoubleBuffering() || officecfg::Office::Common::Misc::ExperimentalMode::get())
         {
             m_pWindow->PushPaintHelper(this, *m_pWindow);
 
