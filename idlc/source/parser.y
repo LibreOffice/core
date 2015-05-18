@@ -332,7 +332,7 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 
 %type <exval>   expression const_expr or_expr xor_expr and_expr
 %type <exval>   add_expr mult_expr unary_expr primary_expr shift_expr
-%type <exval>   literal positive_int_expr
+%type <exval>   literal
 
 %type <fdval>   declarator
 %type <dlval>   declarators at_least_one_declarator
@@ -464,7 +464,7 @@ module_dcl :
                     }
                 }
                 delete(pModule);
-                pModule = (AstModule*)pExists;
+                pModule = static_cast<AstModule*>(pExists);
             } else
             {
                 pScope->addDeclaration(pModule);
@@ -573,7 +573,7 @@ interface_dcl :
                  */
                 if (pDecl->getNodeType() == NT_interface)
                 {
-                    pForward = (AstInterface*)pDecl;
+                    pForward = static_cast<AstInterface*>(pDecl);
                     if ( !pForward->isDefined() )
                     {
                         /*
@@ -946,7 +946,7 @@ operation :
          */
         if ( pScope && $1 )
         {
-            AstType *pType = (AstType*)$1;
+            AstType const *pType = static_cast<AstType const *>($1);
             if ( !pType || (pType->getNodeType() == NT_exception) )
             {
                 // type ERROR
@@ -990,7 +990,7 @@ operation :
          */
         if ( pScope && pScope->getScopeNodeType() == NT_operation)
         {
-            pOp = (AstOperation*)pScope;
+            pOp = static_cast<AstOperation*>(pScope);
 
             if ( pOp )
                 pOp->setExceptions($11);
@@ -1288,7 +1288,7 @@ constants_dcl :
             {
                 pExists->setInMainfile(idlc()->isInMainFile());
                 delete(pConstants);
-                pConstants = (AstConstants*)pExists;
+                pConstants = static_cast<AstConstants*>(pExists);
             } else
             {
                 pScope->addDeclaration(pConstants);
@@ -1431,19 +1431,6 @@ literal :
     | IDL_FALSE
     {
         $$ = new AstExpression((sal_Int32)0, ET_boolean);
-    }
-    ;
-
-positive_int_expr :
-    const_expr
-    {
-        $1->evaluate(EK_const);
-        if ( !$1->coerce(ET_ulong) )
-        {
-            ErrorHandler::coercionError($1, ET_ulong);
-            delete $1;
-            $$ = NULL;
-        }
     }
     ;
 
@@ -1652,7 +1639,7 @@ service_export :
                         if ( ErrorHandler::checkPublished(pDecl, bOptional) )
                         {
                             pIMember = new AstInterfaceMember(
-                                $1, (AstInterface*)pDecl, *iter, pScope);
+                                $1, static_cast<AstInterface*>(pDecl), *iter, pScope);
                             pScope->addDeclaration(pIMember);
                         }
                     } else
@@ -1694,7 +1681,7 @@ service_export :
                     else if ( ErrorHandler::checkPublished(pDecl) )
                     {
                         pSMember = new AstServiceMember(
-                            $1, (AstService*)pDecl, *iter, pScope);
+                            $1, static_cast<AstService*>(pDecl), *iter, pScope);
                         pScope->addDeclaration(pSMember);
                     }
                 } else
@@ -1735,7 +1722,7 @@ service_export :
                     pDecl = pScope->lookupByName(*iter);
                     if ( pDecl && (pDecl->getNodeType() == NT_interface) )
                     {
-                        pObserves = new AstObserves((AstInterface*)pDecl, *iter, pScope);
+                        pObserves = new AstObserves(static_cast<AstInterface*>(pDecl), *iter, pScope);
                         pScope->addDeclaration(pObserves);
                     } else
                     {
@@ -1776,7 +1763,7 @@ service_export :
                     pDecl = pScope->lookupByName(*iter);
                     if ( pDecl && (pDecl->getNodeType() == NT_service) )
                     {
-                        pNeeds = new AstNeeds((AstService*)pDecl, *iter, pScope);
+                        pNeeds = new AstNeeds(static_cast<AstService*>(pDecl), *iter, pScope);
                         pScope->addDeclaration(pNeeds);
                     } else
                     {
@@ -2405,7 +2392,7 @@ sequence_type_spec :
 
         if ( $5 )
         {
-            AstType *pType = (AstType*)$5;
+            AstType const *pType = static_cast<AstType const *>($5);
             if ( pType )
             {
                 pSeq = new AstSequence(pType, pScope);
@@ -2672,7 +2659,7 @@ enum_type :
             $$ = NULL;
         else
         {
-            $$ = (AstEnum*)idlc()->scopes()->topNonNull();
+            $$ = static_cast<AstEnum*>(idlc()->scopes()->topNonNull());
             idlc()->scopes()->pop();
         }
     }
@@ -2706,7 +2693,7 @@ enumerator :
 
         if ( pScope && pScope->getScopeNodeType() == NT_enum)
         {
-            pEnum = (AstEnum*)pScope;
+            pEnum = static_cast<AstEnum*>(pScope);
             if (pEnum && $1)
             {
                 AstExpression* pExpr = new AstExpression(pEnum->getEnumValueCount());
@@ -2735,7 +2722,7 @@ enumerator :
             $3->evaluate(EK_const);
             if ( $3->coerce(ET_long) )
             {
-                pEnum = (AstEnum*)pScope;
+                pEnum = static_cast<AstEnum*>(pScope);
                 if (pEnum)
                 {
                     pEnumVal = new AstConstant(ET_long , NT_enum_val,

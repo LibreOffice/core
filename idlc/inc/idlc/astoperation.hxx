@@ -30,7 +30,7 @@ class AstOperation : public AstDeclaration
                    , public AstScope
 {
 public:
-    AstOperation(AstType* pReturnType, const OString& name, AstScope* pScope)
+    AstOperation(AstType const * pReturnType, const OString& name, AstScope* pScope)
         : AstDeclaration(NT_operation, name, pScope)
         , AstScope(NT_operation)
         , m_pReturnType(pReturnType)
@@ -52,7 +52,7 @@ public:
     // scope management
     virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl) SAL_OVERRIDE;
 private:
-    AstType*    m_pReturnType;
+    AstType const * m_pReturnType;
     DeclList    m_exceptions;
 };
 

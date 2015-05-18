@@ -105,7 +105,7 @@ static int asciiToInteger(char const * s, sal_Int64  * sval, sal_uInt64 * uval) 
         // std::numeric_limits<sal_uInt64>::max() == SAL_MAX_UINT64:
         sal_uInt64 nval = val * base + n;
         if (nval < val) {
-            idlc()->error()->syntaxError(
+            ErrorHandler::syntaxError(
                 PS_NoState, idlc()->getLineNumber(),
                 "integral constant too large");
             val = 0;
@@ -120,7 +120,7 @@ static int asciiToInteger(char const * s, sal_Int64  * sval, sal_uInt64 * uval) 
         } else if (val == SAL_CONST_UINT64(0x8000000000000000)) {
             *sval = SAL_MIN_INT64;
         } else {
-            idlc()->error()->syntaxError(
+            ErrorHandler::syntaxError(
                 PS_NoState, idlc()->getLineNumber(),
                 "negative integral constant too large");
             *sval = 0;
@@ -233,7 +233,7 @@ static void parseLineAndFile(sal_Char* pBuf)
 	else
 		idlc()->setFileName(::rtl::OString(h));
 
-	bIsInMain = (idlc()->getFileName() == idlc()->getRealFileName()) ? sal_True : sal_False;
+	bIsInMain = idlc()->getFileName() == idlc()->getRealFileName();
 	idlc()->setInMainfile(bIsInMain);		
 }	
 
@@ -439,7 +439,7 @@ published       return IDL_PUBLISHED;
 				{
                     if ( 0 != nIndex &&
                          (docu.getStr()[nIndex - 1] != '"' && docu.getStr()[nIndex - 1] != ':') )
-                        idlc()->error()->syntaxError(PS_NoState, idlc()->getLineNumber(),
+                        ErrorHandler::syntaxError(PS_NoState, idlc()->getLineNumber(),
                                                      "nested documentation strings are not allowed!");
 				}
 				idlc()->setDocumentation(docu);
@@ -456,7 +456,7 @@ published       return IDL_PUBLISHED;
 				{
                     if ( 0 != nIndex &&
                          (docu.getStr()[nIndex - 1] != '"' && docu.getStr()[nIndex - 1] != ':') )
-                        idlc()->error()->syntaxError(PS_NoState, idlc()->getLineNumber(),
+                        ErrorHandler::syntaxError(PS_NoState, idlc()->getLineNumber(),
                                                      "nested documentation strings are not allowed!");
 				}
 				idlc()->setDocumentation(docu);
