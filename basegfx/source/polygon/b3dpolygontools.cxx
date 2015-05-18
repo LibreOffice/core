@@ -642,8 +642,6 @@ namespace basegfx
 
                 if(areParallel(aEdgeVector, aTestVector))
                 {
-                    const double fZero(0.0);
-                    const double fOne(1.0);
                     double fParamTestOnCurr(0.0);
 
                     if(aEdgeVector.getX() > aEdgeVector.getY())
@@ -673,7 +671,7 @@ namespace basegfx
                         }
                     }
 
-                    if(fTools::more(fParamTestOnCurr, fZero) && fTools::less(fParamTestOnCurr, fOne))
+                    if(fTools::more(fParamTestOnCurr, 0.0) && fTools::less(fParamTestOnCurr, 1.0))
                     {
                         return true;
                     }
