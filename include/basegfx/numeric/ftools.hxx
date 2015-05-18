@@ -151,13 +151,10 @@ namespace basegfx
     class BASEGFX_DLLPUBLIC fTools
     {
     public:
-        /// Get threshold value for equalZero and friends
-        static double getSmallValue() { return 0.000000001f; }
-
         /// Compare against small value
         static bool equalZero(const double& rfVal)
         {
-            return (fabs(rfVal) <= getSmallValue());
+            return (fabs(rfVal) <= 0.000000001f);
         }
 
         /// Compare against given small value
