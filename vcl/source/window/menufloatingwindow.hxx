@@ -80,20 +80,22 @@ protected:
     Rectangle ImplGetItemRect( sal_uInt16 nPos );
 
 public:
-                    MenuFloatingWindow( Menu* pMenu, vcl::Window* pParent, WinBits nStyle );
-    virtual         ~MenuFloatingWindow();
+    MenuFloatingWindow(Menu* pMenu, vcl::Window* pParent, WinBits nStyle);
+    virtual ~MenuFloatingWindow();
 
     virtual void dispose() SAL_OVERRIDE;
     void doShutdown();
 
-    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent& rKEvent ) SAL_OVERRIDE;
-    virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
-    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rKEvent) SAL_OVERRIDE;
+    virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
+
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
     void SetFocusId( sal_uLong nId ) { nSaveFocusId = nId; }
     sal_uLong GetFocusId() const      { return nSaveFocusId; }

@@ -120,10 +120,10 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
 MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     Window( pParent, 0 ),
     aCloseBtn(VclPtr<DecoToolBox>::Create(this)),
-    aFloatBtn(VclPtr<PushButton>::Create( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE )),
-    aHideBtn(VclPtr<PushButton>::Create(this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ))
+    aFloatBtn(VclPtr<PushButton>::Create(this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE)),
+    aHideBtn(VclPtr<PushButton>::Create(this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE))
 {
-    SetType( WINDOW_MENUBARWINDOW );
+    SetType(WINDOW_MENUBARWINDOW);
     pMenu = NULL;
     pActivePopup = NULL;
     nSaveFocusId = 0;
@@ -136,9 +136,9 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
 
     ResMgr* pResMgr = ImplGetResMgr();
 
-    if( pResMgr )
+    if(pResMgr)
     {
-        BitmapEx aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
+        BitmapEx aBitmap(ResId(SV_RESID_BITMAP_CLOSEDOC, *pResMgr));
         aCloseBtn->maImage = Image(aBitmap);
 
         aCloseBtn->SetOutStyle(TOOLBOX_STYLE_FLAT);
@@ -162,7 +162,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
 
     ImplInitStyleSettings();
 
-    AddEventListener( LINK( this, MenuBarWindow, ShowHideListener ) );
+    AddEventListener(LINK(this, MenuBarWindow, ShowHideListener));
 }
 
 MenuBarWindow::~MenuBarWindow()
@@ -187,8 +187,8 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     pMenu = pMen;
     KillActivePopup();
     nHighlightedItem = ITEMPOS_INVALID;
-    ImplInitMenuWindow( this, true, true );
-    if ( pMen )
+    ImplInitMenuWindow(this, true, true);
+    if (pMen)
     {
         aCloseBtn->ShowItem(IID_DOCUMENTCLOSE, pMen->HasCloseButton());
         aCloseBtn->Show(pMen->HasCloseButton() || !m_aAddButtons.empty());
@@ -988,55 +988,93 @@ void MenuBarWindow::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
-    if ( ( nType == StateChangedType::ControlForeground ) ||
-         ( nType == StateChangedType::ControlBackground ) )
+    if (nType == StateChangedType::ControlForeground ||
+        nType == StateChangedType::ControlBackground)
     {
-        ImplInitMenuWindow( this, false, true );
+        ImplInitMenuWindow(this, false, true);
         Invalidate();
     }
-    else if( pMenu )
+    else if(pMenu)
+    {
         pMenu->ImplKillLayoutData();
-
+    }
 }
 
 void MenuBarWindow::LayoutChanged()
 {
-    if( pMenu )
+    if (!pMenu)
+        return;
+
+    ImplInitMenuWindow(this, true, true);
+
+    // if the font was changed.
+    long nHeight = pMenu->ImplCalcSize(this).Height();
+
+    // depending on the native implementation or the displayable flag
+    // the menubar windows is suppressed (ie, height=0)
+    if (!static_cast<MenuBar*>(pMenu)->IsDisplayable() ||
+        (pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar()))
     {
-        ImplInitMenuWindow( this, true, true );
-        // if the font was changed.
-        long nHeight = pMenu->ImplCalcSize( this ).Height();
-
-        // depending on the native implementation or the displayable flag
-        // the menubar windows is suppressed (ie, height=0)
-        if( !static_cast<MenuBar*>(pMenu)->IsDisplayable() ||
-            ( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() ) )
-            nHeight = 0;
-
-        setPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
-        GetParent()->Resize();
-        Invalidate();
-        Resize();
-        if( pMenu )
-            pMenu->ImplKillLayoutData();
+        nHeight = 0;
     }
+    setPosSizePixel(0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT);
+    GetParent()->Resize();
+    Invalidate();
+    Resize();
+
+    pMenu->ImplKillLayoutData();
+}
+
+void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    SetPointFont(rRenderContext, rStyleSettings.GetMenuFont());
+
+    const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
+    if (!rPersonaBitmap.IsEmpty())
+    {
+        Wallpaper aWallpaper(rPersonaBitmap);
+        aWallpaper.SetStyle(WALLPAPER_TOPRIGHT);
+        aWallpaper.SetColor(Application::GetSettings().GetStyleSettings().GetWorkspaceColor());
+
+        rRenderContext.SetBackground(aWallpaper);
+        SetPaintTransparent(false);
+        SetParentClipMode(0);
+    }
+    else if (rRenderContext.IsNativeControlSupported(CTRL_MENUBAR, PART_ENTIRE_CONTROL))
+    {
+        rRenderContext.SetBackground(); // background will be drawn by NWF
+    }
+    else
+    {
+        Wallpaper aWallpaper;
+        aWallpaper.SetStyle(WALLPAPER_APPLICATIONGRADIENT);
+        rRenderContext.SetBackground(aWallpaper);
+        SetPaintTransparent(false);
+        SetParentClipMode(0);
+    }
+
+    rRenderContext.SetTextColor(rStyleSettings.GetMenuBarTextColor());
+    rRenderContext.SetTextFillColor();
+    rRenderContext.SetLineColor();
 }
 
 void MenuBarWindow::ImplInitStyleSettings()
 {
-    if( IsNativeControlSupported( CTRL_MENUBAR, PART_MENU_ITEM ) &&
-        IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
+    if (IsNativeControlSupported(CTRL_MENUBAR, PART_MENU_ITEM) &&
+        IsNativeControlSupported(CTRL_MENUBAR, PART_ENTIRE_CONTROL))
     {
-        AllSettings aSettings( GetSettings() );
-        ImplGetFrame()->UpdateSettings( aSettings ); // to update persona
-        StyleSettings aStyle( aSettings.GetStyleSettings() );
+        AllSettings aSettings(GetSettings());
+        ImplGetFrame()->UpdateSettings(aSettings); // to update persona
+        StyleSettings aStyle(aSettings.GetStyleSettings());
         Color aHighlightTextColor = ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor;
-        if( aHighlightTextColor != Color( COL_TRANSPARENT ) )
+        if (aHighlightTextColor != Color(COL_TRANSPARENT))
         {
-            aStyle.SetMenuHighlightTextColor( aHighlightTextColor );
+            aStyle.SetMenuHighlightTextColor(aHighlightTextColor);
         }
-        aSettings.SetStyleSettings( aStyle );
-        OutputDevice::SetSettings( aSettings );
+        aSettings.SetStyleSettings(aStyle);
+        OutputDevice::SetSettings(aSettings);
     }
 }
 

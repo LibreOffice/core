@@ -97,11 +97,13 @@ private:
 
     void            ImplInitStyleSettings();
 
-                    DECL_LINK_TYPED(CloseHdl, ToolBox *, void);
-                    DECL_LINK(FloatHdl, void *);
-                    DECL_LINK(HideHdl, void *);
-                    DECL_LINK( ToolboxEventHdl, VclWindowEvent* );
-                    DECL_LINK( ShowHideListener, VclWindowEvent* );
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+
+    DECL_LINK_TYPED(CloseHdl, ToolBox *, void);
+    DECL_LINK(FloatHdl, void *);
+    DECL_LINK(HideHdl, void *);
+    DECL_LINK( ToolboxEventHdl, VclWindowEvent* );
+    DECL_LINK( ShowHideListener, VclWindowEvent* );
 
     void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

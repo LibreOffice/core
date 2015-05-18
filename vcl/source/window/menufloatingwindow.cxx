@@ -119,6 +119,24 @@ void MenuFloatingWindow::Resize()
     InitMenuClipRegion(*this); // FIXME
 }
 
+void MenuFloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    SetPointFont(rRenderContext, rStyleSettings.GetMenuFont());
+
+    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
+    {
+        rRenderContext.SetBackground(); // background will be drawn by NWF
+    }
+    else
+        rRenderContext.SetBackground(Wallpaper(rStyleSettings.GetMenuColor()));
+
+    rRenderContext.SetTextColor(rStyleSettings.GetMenuTextColor());
+    rRenderContext.SetTextFillColor();
+    rRenderContext.SetLineColor();
+}
+
 long MenuFloatingWindow::ImplGetStartY() const
 {
     long nY = 0;
@@ -1110,7 +1128,7 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectang
 
 void MenuFloatingWindow::ImplDrawScroller(vcl::RenderContext& rRenderContext, bool bUp)
 {
-    if( ! pMenu )
+    if (!pMenu)
         return;
 
     rRenderContext.SetClipRegion();
