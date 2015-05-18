@@ -1795,15 +1795,8 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
                 bDelete = true;
             else
             {
-                // search for the first filter which matches
-                ::std::vector< WildCard >::const_iterator pMatchingFilter =
-                    ::std::find_if(
-                        aFilters.begin(),
-                        aFilters.end(),
-                        FilterMatch( sCompareString )
-                    );
-
-                bDelete = aFilters.end() == pMatchingFilter;
+                bDelete = ::std::none_of( aFilters.begin(), aFilters.end(),
+                                          FilterMatch( sCompareString ) );
             }
 
             if( bDelete )

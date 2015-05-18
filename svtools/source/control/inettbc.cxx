@@ -241,14 +241,9 @@ IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl )
         {
             OUString sUpperURL( sURL.toAsciiUpperCase() );
 
-            ::std::vector< WildCard >::const_iterator aMatchingFilter =
-                ::std::find_if(
-                    pBox->pImp->m_aFilters.begin(),
-                    pBox->pImp->m_aFilters.end(),
-                    FilterMatch( sUpperURL )
-                );
-            if ( aMatchingFilter == pBox->pImp->m_aFilters.end() )
-
+            if ( ::std::none_of( pBox->pImp->m_aFilters.begin(),
+                                 pBox->pImp->m_aFilters.end(),
+                                 FilterMatch( sUpperURL ) ) )
             {   // this URL is not allowed
                 bValidCompletionsFiltered = true;
                 continue;
@@ -988,12 +983,9 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
                             OUString aUpperURL( aURL );
                             aUpperURL = aUpperURL.toAsciiUpperCase();
 
-                            bFound
-                                = (::std::find_if(
-                                    pImp->m_aFilters.begin(),
-                                    pImp->m_aFilters.end(),
-                                    FilterMatch( aUpperURL ) )
-                                        != pImp->m_aFilters.end());
+                            bFound = ::std::any_of(pImp->m_aFilters.begin(),
+                                                   pImp->m_aFilters.end(),
+                                                   FilterMatch( aUpperURL ) );
                         }
                         if ( bFound )
                         {
