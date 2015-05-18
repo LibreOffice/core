@@ -508,6 +508,8 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,f
 	calc_OOXML \
 	calc_OOXML_Template \
 	calc_MS_Works_Document \
+	calc_WPS_Lotus_Document \
+	calc_WPS_QPro_Document \
 	calc_Beagle_Works \
 	calc_ClarisWorks \
 	calc_Claris_Resolve \
@@ -546,6 +548,8 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	calc_OOXML \
 	calc_OOXML_Template \
 	MS_Works_Calc \
+	WPS_Lotus_Calc \
+	WPS_QPro_Calc \
 	Beagle_Works_Calc \
 	ClarisWorks_Calc \
 	Claris_Resolve_Calc \

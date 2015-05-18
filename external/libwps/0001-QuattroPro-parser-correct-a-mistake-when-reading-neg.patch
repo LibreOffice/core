@@ -1,0 +1,26 @@
+From 45a3dd5393e07340d5a63d8a8735789d73a61b17 Mon Sep 17 00:00:00 2001
+From: osnola <alonso@loria.fr>
+Date: Mon, 18 May 2015 08:27:59 +0200
+Subject: [PATCH] QuattroPro parser: correct a mistake when reading negative
+ cell's position
+
+---
+ src/lib/QuattroSpreadsheet.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/QuattroSpreadsheet.cpp b/src/lib/QuattroSpreadsheet.cpp
+index cb0f4f5..ce5e20a 100644
+--- a/src/lib/QuattroSpreadsheet.cpp
++++ b/src/lib/QuattroSpreadsheet.cpp
+@@ -1668,7 +1668,7 @@ bool QuattroSpreadsheet::readCell
+ 			else
+ 			{
+ 				val &= 0x3FFF;
+-				if (val & 0x2000) val = val - 0x4000;
++				if (val>0x1000) val = val - 0x2000;
+ 			}
+ 			if (dim==2)
+ 				val += sheetId;
+-- 
+2.3.2 (Apple Git-55)
+

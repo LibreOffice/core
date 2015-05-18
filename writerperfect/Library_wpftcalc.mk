@@ -34,8 +34,10 @@ $(eval $(call gb_Library_use_libraries,wpftcalc,\
 	cppuhelper \
 	sal \
 	sot \
+	svx \
 	tl \
 	utl \
+	vcl \
 	writerperfect \
 	xo \
 	$(gb_UWINAPI) \
