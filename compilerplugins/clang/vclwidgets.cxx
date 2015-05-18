@@ -44,8 +44,11 @@ public:
 
     bool VisitCXXDeleteExpr(const CXXDeleteExpr *);
 
+    bool VisitCallExpr(const CallExpr *);
+    bool VisitDeclRefExpr(const DeclRefExpr* pDeclRefExpr);
 private:
     bool isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl);
+    bool mbCheckingMemcpy = false;
 };
 
 static bool startsWith(const std::string& s, const char* other)
@@ -472,6 +475,111 @@ bool VCLWidgets::isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodD
     return true;
 }
 
+bool containsVclPtr(const Type* pType0);
+
+bool containsVclPtr(const QualType& qType) {
+    auto t = qType->getAs<RecordType>();
+    if (t != nullptr) {
+        auto d = dyn_cast<ClassTemplateSpecializationDecl>(t->getDecl());
+        if (d != nullptr) {
+            std::string name(d->getQualifiedNameAsString());
+            if (name == "ScopedVclPtr" || name == "ScopedVclPtrInstance"
+                || name == "VclPtr" || name == "VclPtrInstance")
+            {
+                return true;
+            }
+        }
+    }
+    return containsVclPtr(qType.getTypePtr());
+}
+
+bool containsVclPtr(const Type* pType0) {
+    if (!pType0)
+        return false;
+    const Type* pType = pType0->getUnqualifiedDesugaredType();
+    if (!pType)
+        return false;
+    if (pType->isPointerType()) {
+        return false;
+    } else if (pType->isArrayType()) {
+        const ArrayType* pArrayType = dyn_cast<ArrayType>(pType);
+        QualType elementType = pArrayType->getElementType();
+        return containsVclPtr(elementType);
+    } else {
+        const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
+        if (pRecordDecl)
+        {
+            std::string name(pRecordDecl->getQualifiedNameAsString());
+            if (name == "ScopedVclPtr" || name == "ScopedVclPtrInstance"
+                || name == "VclPtr" || name == "VclPtrInstance")
+            {
+                return true;
+            }
+            for(auto fieldDecl = pRecordDecl->field_begin();
+                fieldDecl != pRecordDecl->field_end(); ++fieldDecl)
+            {
+                const RecordType *pFieldRecordType = fieldDecl->getType()->getAs<RecordType>();
+                if (pFieldRecordType && containsVclPtr(pFieldRecordType)) {
+                    return true;
+                }
+            }
+            for(auto baseSpecifier = pRecordDecl->bases_begin();
+                baseSpecifier != pRecordDecl->bases_end(); ++baseSpecifier)
+            {
+                const RecordType *pFieldRecordType = baseSpecifier->getType()->getAs<RecordType>();
+                if (pFieldRecordType && containsVclPtr(pFieldRecordType)) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool VCLWidgets::VisitCallExpr(const CallExpr* pCallExpr)
+{
+    if (ignoreLocation(pCallExpr)) {
+        return true;
+    }
+    FunctionDecl const * fdecl = pCallExpr->getDirectCallee();
+    if (fdecl == nullptr) {
+        return true;
+    }
+    std::string qname { fdecl->getQualifiedNameAsString() };
+    if (qname.find("memcpy") == std::string::npos
+         && qname.find("bcopy") == std::string::npos
+         && qname.find("memmove") == std::string::npos
+         && qname.find("rtl_copy") == std::string::npos) {
+        return true;
+    }
+    mbCheckingMemcpy = true;
+    Stmt * pStmt = const_cast<Stmt*>(static_cast<const Stmt*>(pCallExpr->getArg(0)));
+    TraverseStmt(pStmt);
+    mbCheckingMemcpy = false;
+    return true;
+}
+
+bool VCLWidgets::VisitDeclRefExpr(const DeclRefExpr* pDeclRefExpr)
+{
+    if (!mbCheckingMemcpy) {
+        return true;
+    }
+    if (ignoreLocation(pDeclRefExpr)) {
+        return true;
+    }
+    QualType pType = pDeclRefExpr->getDecl()->getType();
+    if (pType->isPointerType()) {
+        pType = pType->getPointeeType();
+    }
+    if (!containsVclPtr(pType)) {
+        return true;
+    }
+    report(
+        DiagnosticsEngine::Warning,
+        "Calling memcpy on a type which contains a VclPtr",
+        pDeclRefExpr->getExprLoc());
+    return true;
+}
 
 
 loplugin::Plugin::Registration< VCLWidgets > X("vclwidgets");
