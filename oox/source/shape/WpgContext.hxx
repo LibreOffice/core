@@ -22,7 +22,7 @@ namespace shape
 class WpgContext : public oox::core::ContextHandler2
 {
 public:
-    WpgContext(oox::core::ContextHandler2Helper& rParent);
+    explicit WpgContext(oox::core::ContextHandler2Helper& rParent);
     virtual ~WpgContext();
 
     virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs) SAL_OVERRIDE;

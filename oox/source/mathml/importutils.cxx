@@ -36,7 +36,7 @@ class AttributeListBuilder
     : public XmlStream::AttributeList
 {
 public:
-    AttributeListBuilder( const uno::Reference< xml::sax::XFastAttributeList >& a );
+    explicit AttributeListBuilder( const uno::Reference< xml::sax::XFastAttributeList >& a );
 };
 
 AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFastAttributeList >& a )

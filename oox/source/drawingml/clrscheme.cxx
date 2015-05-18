@@ -45,7 +45,7 @@ void ClrMap::setColorMap( sal_Int32 nClrToken, sal_Int32 nMappedClrToken )
 
 struct find_by_token
 {
-    find_by_token(sal_Int32 token):
+    explicit find_by_token(sal_Int32 token):
         m_token(token)
     {
     }

@@ -63,7 +63,7 @@ class AgileDocumentHandler : public ::cppu::WeakImplHelper1< XFastDocumentHandle
     AgileEncryptionInfo& mInfo;
 
 public:
-    AgileDocumentHandler(AgileEncryptionInfo& rInfo) :
+    explicit AgileDocumentHandler(AgileEncryptionInfo& rInfo) :
         mInfo(rInfo)
     {}
 

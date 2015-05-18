@@ -571,7 +571,7 @@ class ShallowPresNameVisitor : public LayoutAtomVisitor
     virtual void visit(LayoutNode& rAtom) SAL_OVERRIDE;
 
 public:
-    ShallowPresNameVisitor(const Diagram& rDgm) :
+    explicit ShallowPresNameVisitor(const Diagram& rDgm) :
         mrDgm(rDgm),
         mnCnt(0)
     {}

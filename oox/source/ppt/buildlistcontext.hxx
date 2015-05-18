@@ -29,7 +29,7 @@ namespace oox { namespace ppt {
         : public ::oox::core::FragmentHandler2
     {
     public:
-        BuildListContext( ::oox::core::FragmentHandler2& rParent );
+        explicit BuildListContext( ::oox::core::FragmentHandler2& rParent );
 
         virtual ~BuildListContext( );
 
