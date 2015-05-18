@@ -86,7 +86,6 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/vector/b2dvector \
     basegfx/source/vector/b2ivector \
     basegfx/source/vector/b3dvector \
-    basegfx/source/vector/b3ivector \
 ))
 
 
