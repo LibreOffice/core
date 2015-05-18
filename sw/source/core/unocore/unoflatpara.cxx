@@ -26,6 +26,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <unotextmarkup.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
@@ -45,6 +46,7 @@
 #include <IGrammarContact.hxx>
 #include <viewopt.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/propertysetinfo.hxx>
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -78,8 +80,12 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXFlatParagraph::getPropertySetInfo()
 throw (uno::RuntimeException, std::exception)
 {
-    throw uno::RuntimeException("SwXFlatParagraph::getPropertySetInfo(): "
-            "not implemented", static_cast< ::cppu::OWeakObject*>(this));
+    static comphelper::PropertyMapEntry s_Entries[] = {
+        { OUString("FieldPositions"), -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("FootnotePositions"), -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString(), -1, css::uno::Type(), 0, 0 }
+    };
+    return new comphelper::PropertySetInfo(s_Entries);
 }
 
 void SAL_CALL
