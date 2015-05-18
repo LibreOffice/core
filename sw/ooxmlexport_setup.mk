@@ -30,6 +30,7 @@ define sw_ooxmlexport_components
 	chart2/source/controller/chartcontroller \
 	comphelper/util/comphelp \
 	configmgr/source/configmgr \
+	dbaccess/util/dba \
 	drawinglayer/drawinglayer \
 	embeddedobj/util/embobj \
 	filter/source/config/cache/filterconfig1 \

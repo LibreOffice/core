@@ -736,6 +736,14 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
 
         if ( bEndCell )
         {
+            while (pInner->getDepth() < m_tableReference->m_nTableDepth)
+            {
+                //we expect that the higher depth row was closed, and
+                //we are just missing the table close
+                assert(lastOpenCell.back() == -1 && lastClosedCell.back() == -1);
+                EndTable();
+            }
+
             SyncNodelessCells(pInner, nCell, nRow);
 
             sal_Int32 nClosedCell = lastClosedCell.back();

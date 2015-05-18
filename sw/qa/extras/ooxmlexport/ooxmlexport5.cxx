@@ -262,6 +262,14 @@ DECLARE_OOXMLEXPORT_TEST(testOldComplexMergeleft, "tdf90681-2.odt")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:vMerge", "val", "continue");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testOldComplexMergeTableInTable, "ooo96040-2.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
