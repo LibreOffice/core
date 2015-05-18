@@ -88,7 +88,9 @@ enum {
     RENDER_SPINBUTTON = 10,
     RENDER_COMBOBOX = 11,
     RENDER_EXTENSION = 12,
-    RENDER_FOCUS = 13,
+    RENDER_EXPANDER = 13,
+    RENDER_ICON = 14,
+    RENDER_FOCUS = 15,
 };
 
 static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
@@ -826,6 +828,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     gint renderType = nPart == PART_FOCUS ? RENDER_FOCUS : RENDER_BACKGROUND_AND_FRAME;
     GtkStyleContext *context = NULL;
     const gchar *styleClass = NULL;
+    GdkPixbuf *pixbuf = NULL;
 
     NWConvertVCLStateToGTKState(nState, &flags, &shadow);
 
@@ -992,6 +995,17 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case CTRL_LISTHEADER:
         context = mpTreeHeaderButtonStyle;
+        if (nPart == PART_ARROW)
+        {
+            const char* icon = (rValue.getNumericVal() & 1) ? "pan-down-symbolic" : "pan-up-symbolic";
+            GtkIconTheme *pIconTheme = gtk_icon_theme_get_for_screen(gtk_widget_get_screen(mpWindow));
+            pixbuf = gtk_icon_theme_load_icon(pIconTheme, icon,
+                                              std::max(rControlRegion.GetWidth(), rControlRegion.GetHeight()),
+                                              static_cast<GtkIconLookupFlags>(0), NULL);
+            flags = GTK_STATE_FLAG_SELECTED;
+            renderType = RENDER_ICON;
+            styleClass = GTK_STYLE_CLASS_ARROW;
+        }
         break;
     default:
         return false;
@@ -1079,6 +1093,9 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                          G_PI / 2, 0, 0,
                          MIN(rControlRegion.GetWidth(), 1 + rControlRegion.GetHeight()));
         break;
+    case RENDER_EXPANDER:
+        gtk_render_expander(context, cr, 0, 0, nWidth, nHeight);
+        break;
     case RENDER_SCROLLBAR:
         PaintScrollbar(context, cr, rControlRegion, nType, nPart, rValue);
         break;
@@ -1087,6 +1104,10 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case RENDER_COMBOBOX:
         PaintCombobox(flags, cr, rControlRegion, nType, nPart, rValue);
+        break;
+    case RENDER_ICON:
+        gtk_render_icon(context, cr, pixbuf, nX, nY);
+        g_object_unref(pixbuf);
         break;
     case RENDER_FOCUS:
     {
@@ -1796,7 +1817,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             break;
 
         case CTRL_LISTHEADER:
-            if (nPart == PART_BUTTON /*|| nPart == PART_ARROW*/)
+            if (nPart == PART_BUTTON || nPart == PART_ARROW)
                 return true;
             break;
     }
@@ -2002,6 +2023,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     GtkTreeViewColumn* middleTreeViewColumn = gtk_tree_view_column_new();
     gtk_tree_view_column_set_title(middleTreeViewColumn, "M");
     gtk_tree_view_append_column(GTK_TREE_VIEW(gTreeViewWidget), middleTreeViewColumn);
+    gtk_tree_view_set_expander_column(GTK_TREE_VIEW(gTreeViewWidget), middleTreeViewColumn);
 
     GtkTreeViewColumn* lastTreeViewColumn = gtk_tree_view_column_new();
     gtk_tree_view_column_set_title(lastTreeViewColumn, "M");
