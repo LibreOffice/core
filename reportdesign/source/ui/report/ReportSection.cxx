@@ -162,7 +162,7 @@ void OReportSection::Paint( vcl::RenderContext& rRenderContext, const Rectangle&
         if(pPgView)
         {
             pPgView->DrawLayer(0, &rRenderContext);
-            pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, &rRenderContext);
+            pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, true);
         }
 
         m_pView->CompleteRedraw(&rRenderContext, aPaintRectRegion);
