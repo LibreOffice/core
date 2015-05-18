@@ -282,18 +282,18 @@ void SystemWindow::SetIcon( sal_uInt16 nIcon )
     }
 }
 
-void SystemWindow::EnableSaveBackground( bool bSave )
+void SystemWindow::EnableSaveBackground(bool bSave)
 {
     if( ImplGetSVData()->maWinData.mbNoSaveBackground )
         bSave = false;
 
     vcl::Window* pWindow = this;
-    while ( pWindow->mpWindowImpl->mpBorderWindow )
+    while (pWindow->mpWindowImpl->mpBorderWindow)
         pWindow = pWindow->mpWindowImpl->mpBorderWindow;
-    if ( pWindow->mpWindowImpl->mbOverlapWin && !pWindow->mpWindowImpl->mbFrame )
+    if (pWindow->mpWindowImpl->mbOverlapWin && !pWindow->mpWindowImpl->mbFrame)
     {
         pWindow->mpWindowImpl->mpOverlapData->mbSaveBack = bSave;
-        if ( !bSave )
+        if (!bSave)
             pWindow->ImplDeleteOverlapBackground();
     }
 }
