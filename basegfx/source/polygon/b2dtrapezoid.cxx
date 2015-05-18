@@ -143,9 +143,9 @@ namespace basegfx
             // operator for sort support. Sort by Y, X and slope (in that order)
             bool operator<(const TrDeEdgeEntry& rComp) const
             {
-                if(fTools::equal(getStart().getY(), rComp.getStart().getY(), fTools::getSmallValue()))
+                if(fTools::equal(getStart().getY(), rComp.getStart().getY()))
                 {
-                    if(fTools::equal(getStart().getX(), rComp.getStart().getX(), fTools::getSmallValue()))
+                    if(fTools::equal(getStart().getX(), rComp.getStart().getX()))
                     {
                         // when start points are equal, use the direction the edge is pointing
                         // to. That value is created on demand and derived from atan2 in the
@@ -274,13 +274,13 @@ namespace basegfx
                 TrDeEdgeEntries::iterator aCurrent)
             {
                 // do not create edges without deltaY: do not split when start is identical
-                if(aEdge.getStart().equal(rCutPoint, fTools::getSmallValue()))
+                if(aEdge.getStart().equal(rCutPoint))
                 {
                     return false;
                 }
 
                 // do not create edges without deltaY: do not split when end is identical
-                if(aEdge.getEnd().equal(rCutPoint, fTools::getSmallValue()))
+                if(aEdge.getEnd().equal(rCutPoint))
                 {
                     return false;
                 }
@@ -326,33 +326,33 @@ namespace basegfx
                 TrDeEdgeEntries::iterator aCurrent)
             {
                 // Exclude simple cases: same start or end point
-                if(aEdgeA.getStart().equal(aEdgeB.getStart(), fTools::getSmallValue()))
+                if(aEdgeA.getStart().equal(aEdgeB.getStart()))
                 {
                     return false;
                 }
 
-                if(aEdgeA.getStart().equal(aEdgeB.getEnd(), fTools::getSmallValue()))
+                if(aEdgeA.getStart().equal(aEdgeB.getEnd()))
                 {
                     return false;
                 }
 
-                if(aEdgeA.getEnd().equal(aEdgeB.getStart(), fTools::getSmallValue()))
+                if(aEdgeA.getEnd().equal(aEdgeB.getStart()))
                 {
                     return false;
                 }
 
-                if(aEdgeA.getEnd().equal(aEdgeB.getEnd(), fTools::getSmallValue()))
+                if(aEdgeA.getEnd().equal(aEdgeB.getEnd()))
                 {
                     return false;
                 }
 
                 // Exclude simple cases: one of the edges has no length anymore
-                if(aEdgeA.getStart().equal(aEdgeA.getEnd(), fTools::getSmallValue()))
+                if(aEdgeA.getStart().equal(aEdgeA.getEnd()))
                 {
                     return false;
                 }
 
-                if(aEdgeB.getStart().equal(aEdgeB.getEnd(), fTools::getSmallValue()))
+                if(aEdgeB.getStart().equal(aEdgeB.getEnd()))
                 {
                     return false;
                 }
@@ -551,10 +551,10 @@ namespace basegfx
                                 // get next point
                                 B2DPoint* pCurr(&maPoints[nStartIndex++]);
 
-                                if(fTools::equal(pPrev->getY(), pCurr->getY(), fTools::getSmallValue()))
+                                if(fTools::equal(pPrev->getY(), pCurr->getY()))
                                 {
                                     // horizontal edge, check for single point
-                                    if(!fTools::equal(pPrev->getX(), pCurr->getX(), fTools::getSmallValue()))
+                                    if(!fTools::equal(pPrev->getX(), pCurr->getX()))
                                     {
                                         // X-order not needed, just add
                                         aTrDeSimpleEdges.push_back(TrDeSimpleEdge(pPrev, pCurr));
@@ -646,7 +646,7 @@ namespace basegfx
                     // get second edge
                     TrDeEdgeEntries::reference aRight(*aCurrent++);
 
-                    if(!fTools::equal(aLeft.getStart().getY(), aRight.getStart().getY(), fTools::getSmallValue()))
+                    if(!fTools::equal(aLeft.getStart().getY(), aRight.getStart().getY()))
                     {
                         // Should not happen: We have a 2nd edge, but YStart is on another
                         // line; consume the single edge to not have an endless loop and start
@@ -668,7 +668,7 @@ namespace basegfx
 
                     // check if end points are on the same line. If yes, no adaption
                     // needs to be prepared. Also remember which one actually is longer.
-                    const bool bEndOnSameLine(fTools::equal(aLeftEnd.getY(), aRightEnd.getY(), fTools::getSmallValue()));
+                    const bool bEndOnSameLine(fTools::equal(aLeftEnd.getY(), aRightEnd.getY()));
                     bool bLeftIsLonger(false);
 
                     if(!bEndOnSameLine)
@@ -687,8 +687,8 @@ namespace basegfx
                     }
 
                     // check for same start and end points
-                    const bool bSameStartPoint(aLeft.getStart().equal(aRight.getStart(), fTools::getSmallValue()));
-                    const bool bSameEndPoint(aLeftEnd.equal(aRightEnd, fTools::getSmallValue()));
+                    const bool bSameStartPoint(aLeft.getStart().equal(aRight.getStart()));
+                    const bool bSameEndPoint(aLeftEnd.equal(aRightEnd));
 
                     // check the simple case that the edges form a 'blind' edge (deadend)
                     if(bSameStartPoint && bSameEndPoint)
@@ -775,7 +775,7 @@ namespace basegfx
                             // avoid edges using the same start point as one of
                             // the edges. These can neither have their start point
                             // in the thought trapezoid nor cut with one of the edges
-                            if(aCompare.getStart().equal(aRight.getStart(), fTools::getSmallValue()))
+                            if(aCompare.getStart().equal(aRight.getStart()))
                             {
                                 continue;
                             }
@@ -967,7 +967,7 @@ namespace basegfx
                 return;
             }
 
-            if(rPointA.equal(rPointB, fTools::getSmallValue()))
+            if(rPointA.equal(rPointB))
             {
                 // points are equal, no edge
                 return;
@@ -975,7 +975,7 @@ namespace basegfx
 
             const double fHalfLineWidth(0.5 * fLineWidth);
 
-            if(fTools::equal(rPointA.getX(), rPointB.getX(), fTools::getSmallValue()))
+            if(fTools::equal(rPointA.getX(), rPointB.getX()))
             {
                 // vertical line
                 const double fLeftX(rPointA.getX() - fHalfLineWidth);
@@ -990,7 +990,7 @@ namespace basegfx
                         fRightX,
                         std::max(rPointA.getY(), rPointB.getY())));
             }
-            else if(fTools::equal(rPointA.getY(), rPointB.getY(), fTools::getSmallValue()))
+            else if(fTools::equal(rPointA.getY(), rPointB.getY()))
             {
                 // horizontal line
                 const double fLeftX(std::min(rPointA.getX(), rPointB.getX()));
@@ -1034,7 +1034,7 @@ namespace basegfx
                 basegfx::trapezoidhelper::TrDeEdgeEntries::iterator aCurrent(aTrDeEdgeEntries.begin());
                 basegfx::trapezoidhelper::TrDeEdgeEntries::reference aLeft(*aCurrent++);
                 basegfx::trapezoidhelper::TrDeEdgeEntries::reference aRight(*aCurrent++);
-                const bool bEndOnSameLine(fTools::equal(aLeft.getEnd().getY(), aRight.getEnd().getY(), fTools::getSmallValue()));
+                const bool bEndOnSameLine(fTools::equal(aLeft.getEnd().getY(), aRight.getEnd().getY()));
 
                 if(bEndOnSameLine)
                 {
