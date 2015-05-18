@@ -50,7 +50,7 @@ private:
     bool      mbDragDrawn;
     bool      mbIsDragging;
 
-    void DrawRectangles(Point& rUL, Point& rBR);
+    void DrawRectangles(vcl::RenderContext& rRenderContext, Point& rUL, Point& rBR);
 public:
     ScanPreview(vcl::Window* pParent, WinBits nStyle)
         : Window(pParent, nStyle)
@@ -62,16 +62,23 @@ public:
         , mbIsDragging(false)
     {
     }
-    virtual ~ScanPreview() { disposeOnce(); }
+
+    virtual ~ScanPreview()
+    {
+        disposeOnce();
+    }
+
     virtual void dispose() SAL_OVERRIDE
     {
         mpParentDialog.clear();
         vcl::Window::dispose();
     }
+
     void Init(SaneDlg *pParent)
     {
         mpParentDialog = pParent;
     }
+
     void ResetForNewScanner()
     {
         maTopLeft = Point();
@@ -79,15 +86,27 @@ public:
         maMinTopLeft = Point();
         maMaxBottomRight = Point(PREVIEW_WIDTH,  PREVIEW_HEIGHT);
     }
-    void EnableDrag() { mbDragEnable = true; }
-    void DisableDrag() { mbDragEnable = false; }
-    bool IsDragEnabled() { return mbDragEnable; }
-    virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
+
+    void EnableDrag()
+    {
+        mbDragEnable = true;
+    }
+    void DisableDrag()
+    {
+        mbDragEnable = false;
+    }
+    bool IsDragEnabled()
+    {
+        return mbDragEnable;
+    }
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
     Point GetPixelPos(const Point& rIn) const;
     Point GetLogicPos(const Point& rIn) const;
+
     void GetPreviewLogicRect(Point& rTopLeft, Point &rBottomRight) const
     {
         rTopLeft = GetLogicPos(maTopLeft);
@@ -127,17 +146,16 @@ public:
     {
         maTopLeft = GetPixelPos(rTopLeft);
         maBottomRight = GetPixelPos(rBottomRight);
-        maPreviewRect = Rectangle( maTopLeft,
-                                   Size( maBottomRight.X() - maTopLeft.X(),
-                                         maBottomRight.Y() - maTopLeft.Y() )
-                                   );
+        maPreviewRect = Rectangle(maTopLeft,
+                                  Size(maBottomRight.X() - maTopLeft.X(),
+                                       maBottomRight.Y() - maTopLeft.Y()));
     }
     void SetPreviewMaxRect(const Point& rTopLeft, const Point &rBottomRight)
     {
         maMinTopLeft = rTopLeft;
         maMaxBottomRight = rBottomRight;
     }
-    void DrawDrag();
+    void DrawDrag(vcl::RenderContext& rRenderContext);
     void UpdatePreviewBounds();
     void SetBitmap(SvStream &rStream)
     {
@@ -233,14 +251,10 @@ SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
     maOldLink = mrSane.SetReloadOptionsHdl( LINK( this, SaneDlg, ReloadSaneOptionsHdl ) );
 
     mpOptionBox->SetNodeBitmaps(get<FixedImage>("plus")->GetImage(),
-        get<FixedImage>("minus")->GetImage());
-    mpOptionBox->SetStyle( mpOptionBox->GetStyle()|
-                          WB_HASLINES           |
-                          WB_HASBUTTONS         |
-                          WB_NOINITIALSELECTION |
-                          WB_HASBUTTONSATROOT   |
-                          WB_HASLINESATROOT
-                        );
+                                get<FixedImage>("minus")->GetImage());
+    mpOptionBox->SetStyle(mpOptionBox->GetStyle() |
+                          WB_HASLINES | WB_HASBUTTONS | WB_NOINITIALSELECTION |
+                          WB_HASBUTTONSATROOT | WB_HASLINESATROOT);
 }
 
 SaneDlg::~SaneDlg()
@@ -250,7 +264,7 @@ SaneDlg::~SaneDlg()
 
 void SaneDlg::dispose()
 {
-    mrSane.SetReloadOptionsHdl( maOldLink );
+    mrSane.SetReloadOptionsHdl(maOldLink);
     mpOKButton.clear();
     mpCancelButton.clear();
     mpDeviceInfoButton.clear();
@@ -811,22 +825,22 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
         else if( pEdit == mpTopField )
         {
             mpPreview->ChangePreviewLogicTopLeftY(mpTopField->GetValue());
-            mpPreview->DrawDrag();
+            mpPreview->Invalidate();
         }
         else if( pEdit == mpLeftField )
         {
             mpPreview->ChangePreviewLogicTopLeftX(mpLeftField->GetValue());
-            mpPreview->DrawDrag();
+            mpPreview->Invalidate();
         }
         else if( pEdit == mpBottomField )
         {
             mpPreview->ChangePreviewLogicBottomRightY(mpBottomField->GetValue());
-            mpPreview->DrawDrag();
+            mpPreview->Invalidate();
         }
         else if( pEdit == mpRightField )
         {
             mpPreview->ChangePreviewLogicBottomRightX(mpRightField->GetValue());
-            mpPreview->DrawDrag();
+            mpPreview->Invalidate();
         }
     }
     return 0;
@@ -918,18 +932,17 @@ void ScanPreview::UpdatePreviewBounds()
 void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
-    SetMapMode(MAP_APPFONT);
-    SetFillColor( Color( COL_WHITE ) );
-    SetLineColor( Color( COL_WHITE ) );
-    DrawRect( Rectangle( Point( 0, 0 ),
-                         Size( PREVIEW_WIDTH, PREVIEW_HEIGHT ) ) );
-    SetMapMode( MapMode( MAP_PIXEL ) );
+    rRenderContext.SetMapMode(MAP_APPFONT);
+    rRenderContext.SetFillColor(Color(COL_WHITE));
+    rRenderContext.SetLineColor(Color(COL_WHITE));
+    rRenderContext.DrawRect(Rectangle(Point(0, 0),
+                                      Size(PREVIEW_WIDTH, PREVIEW_HEIGHT)));
+    rRenderContext.SetMapMode(MapMode(MAP_PIXEL));
     // check for sane values
-    DrawBitmap( maPreviewRect.TopLeft(), maPreviewRect.GetSize(),
-                maPreviewBitmap );
+    rRenderContext.DrawBitmap(maPreviewRect.TopLeft(), maPreviewRect.GetSize(), maPreviewBitmap);
 
     mbDragDrawn = false;
-    DrawDrag();
+    DrawDrag(rRenderContext);
 }
 
 void SaneDlg::DisableOption()
@@ -1102,7 +1115,7 @@ void ScanPreview::MouseMove(const MouseEvent& rMEvt)
             maTopLeft.Y() = maBottomRight.Y();
             maBottomRight.Y() = nSwap;
         }
-        DrawDrag();
+        Invalidate();
         mpParentDialog->UpdateScanArea(false);
     }
     Window::MouseMove( rMEvt );
@@ -1188,7 +1201,7 @@ void ScanPreview::MouseButtonDown( const MouseEvent& rMEvt )
     if( mbIsDragging )
     {
         SetPointerPosPixel( aMousePixel );
-        DrawDrag();
+        Invalidate();
     }
     Window::MouseButtonDown( rMEvt );
 }
@@ -1204,51 +1217,51 @@ void ScanPreview::MouseButtonUp( const MouseEvent& rMEvt )
     Window::MouseButtonUp( rMEvt );
 }
 
-void ScanPreview::DrawRectangles( Point& rUL, Point& rBR )
+void ScanPreview::DrawRectangles(vcl::RenderContext& rRenderContext, Point& rUL, Point& rBR)
 {
     int nMiddleX, nMiddleY;
     Point aBL, aUR;
 
-    aUR = Point( rBR.X(), rUL.Y() );
-    aBL = Point( rUL.X(), rBR.Y() );
-    nMiddleX = ( rBR.X() - rUL.X() ) / 2 + rUL.X();
-    nMiddleY = ( rBR.Y() - rUL.Y() ) / 2 + rUL.Y();
+    aUR = Point(rBR.X(), rUL.Y());
+    aBL = Point(rUL.X(), rBR.Y());
+    nMiddleX = (rBR.X() - rUL.X()) / 2 + rUL.X();
+    nMiddleY = (rBR.Y() - rUL.Y()) / 2 + rUL.Y();
 
-    DrawLine( rUL, aBL );
-    DrawLine( aBL, rBR );
-    DrawLine( rBR, aUR );
-    DrawLine( aUR, rUL );
-    DrawRect( Rectangle( rUL, Size( RECT_SIZE_PIX,RECT_SIZE_PIX ) ) );
-    DrawRect( Rectangle( aBL, Size( RECT_SIZE_PIX, -RECT_SIZE_PIX ) ) );
-    DrawRect( Rectangle( rBR, Size( -RECT_SIZE_PIX, -RECT_SIZE_PIX ) ) );
-    DrawRect( Rectangle( aUR, Size( -RECT_SIZE_PIX, RECT_SIZE_PIX ) ) );
-    DrawRect( Rectangle( Point( nMiddleX - RECT_SIZE_PIX/2, rUL.Y() ), Size( RECT_SIZE_PIX, RECT_SIZE_PIX ) ) );
-    DrawRect( Rectangle( Point( nMiddleX - RECT_SIZE_PIX/2, rBR.Y() ), Size( RECT_SIZE_PIX, -RECT_SIZE_PIX ) ) );
-    DrawRect( Rectangle( Point( rUL.X(), nMiddleY - RECT_SIZE_PIX/2 ), Size( RECT_SIZE_PIX, RECT_SIZE_PIX ) ) );
-    DrawRect( Rectangle( Point( rBR.X(), nMiddleY - RECT_SIZE_PIX/2 ), Size( -RECT_SIZE_PIX, RECT_SIZE_PIX ) ) );
+    rRenderContext.DrawLine(rUL, aBL);
+    rRenderContext.DrawLine(aBL, rBR);
+    rRenderContext.DrawLine(rBR, aUR);
+    rRenderContext.DrawLine(aUR, rUL);
+    rRenderContext.DrawRect(Rectangle(rUL, Size(RECT_SIZE_PIX,RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(aBL, Size(RECT_SIZE_PIX, -RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(rBR, Size(-RECT_SIZE_PIX, -RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(aUR, Size(-RECT_SIZE_PIX, RECT_SIZE_PIX )));
+    rRenderContext.DrawRect(Rectangle(Point(nMiddleX - RECT_SIZE_PIX / 2, rUL.Y()), Size(RECT_SIZE_PIX, RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(Point(nMiddleX - RECT_SIZE_PIX / 2, rBR.Y()), Size(RECT_SIZE_PIX, -RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(Point(rUL.X(), nMiddleY - RECT_SIZE_PIX / 2), Size(RECT_SIZE_PIX, RECT_SIZE_PIX)));
+    rRenderContext.DrawRect(Rectangle(Point(rBR.X(), nMiddleY - RECT_SIZE_PIX / 2), Size(-RECT_SIZE_PIX, RECT_SIZE_PIX)));
 }
 
-void ScanPreview::DrawDrag()
+void ScanPreview::DrawDrag(vcl::RenderContext& rRenderContext)
 {
     static Point aLastUL, aLastBR;
 
-    if( ! mbDragEnable )
+    if (!mbDragEnable)
         return;
 
-    RasterOp eROP = GetRasterOp();
-    SetRasterOp( ROP_INVERT );
-    SetMapMode( MapMode( MAP_PIXEL ) );
+    RasterOp eROP = rRenderContext.GetRasterOp();
+    rRenderContext.SetRasterOp(ROP_INVERT);
+    rRenderContext.SetMapMode(MapMode(MAP_PIXEL));
 
-    if( mbDragDrawn )
-        DrawRectangles( aLastUL, aLastBR );
+    if (mbDragDrawn)
+        DrawRectangles(rRenderContext, aLastUL, aLastBR);
 
     aLastUL = maTopLeft;
     aLastBR = maBottomRight;
-    DrawRectangles( maTopLeft, maBottomRight );
+    DrawRectangles(rRenderContext, maTopLeft, maBottomRight);
 
     mbDragDrawn = true;
-    SetRasterOp( eROP );
-    SetMapMode(MAP_APPFONT);
+    rRenderContext.SetRasterOp(eROP);
+    rRenderContext.SetMapMode(MAP_APPFONT);
 }
 
 Point ScanPreview::GetPixelPos( const Point& rIn) const

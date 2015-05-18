@@ -50,10 +50,10 @@ class GridWindow : public vcl::Window
             return (maPos.X() < rComp.maPos.X());
         }
 
-        void draw(vcl::Window& rWin, const BitmapEx& rBitmapEx)
+        void draw(vcl::RenderContext& rRenderContext, const BitmapEx& rBitmapEx)
         {
-            const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
-            rWin.DrawBitmapEx(maPos - aOffset, rBitmapEx);
+            const Point aOffset(rRenderContext.PixelToLogic(Point(mnOffX, mnOffY)));
+            rRenderContext.DrawBitmapEx(maPos - aOffset, rBitmapEx);
         }
 
         bool isHit(vcl::Window& rWin, const Point& rPos)
@@ -100,10 +100,10 @@ class GridWindow : public vcl::Window
     double findMaxX();
     double findMaxY();
 
-    void drawGrid();
-    void drawOriginal();
-    void drawNew();
-    void drawHandles();
+    void drawGrid(vcl::RenderContext& rRenderContext);
+    void drawOriginal(vcl::RenderContext& rRenderContext);
+    void drawNew(vcl::RenderContext& rRenderContext);
+    void drawHandles(vcl::RenderContext& rRenderContext);
 
     void computeExtremes();
     static void computeChunk( double fMin, double fMax, double& fChunkOut, double& fMinChunkOut );
@@ -116,7 +116,7 @@ class GridWindow : public vcl::Window
     void onResize();
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
-    void drawLine( double x1, double y1, double x2, double y2 );
+    void drawLine(vcl::RenderContext& rRenderContext, double x1, double y1, double x2, double y2);
 public:
     GridWindow(vcl::Window* pParent);
     void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap);
@@ -336,9 +336,9 @@ void GridWindow::transform( const Point& rOriginal, double& x, double& y )
     y = ( m_aGridArea.Bottom() - rOriginal.Y() ) * (m_fMaxY - m_fMinY) / (double)nHeight + m_fMinY;
 }
 
-void GridWindow::drawLine( double x1, double y1, double x2, double y2 )
+void GridWindow::drawLine(vcl::RenderContext& rRenderContext, double x1, double y1, double x2, double y2 )
 {
-    DrawLine( transform( x1, y1 ), transform( x2, y2 ) );
+    rRenderContext.DrawLine(transform(x1, y1), transform(x2, y2));
 }
 
 void GridWindow::computeChunk( double fMin, double fMax, double& fChunkOut, double& fMinChunkOut )
@@ -455,87 +455,89 @@ void GridWindow::setBoundings(double fMinX, double fMinY, double fMaxX, double f
     computeChunk( m_fMinY, m_fMaxY, m_fChunkY, m_fMinChunkY );
 }
 
-void GridWindow::drawGrid()
+void GridWindow::drawGrid(vcl::RenderContext& rRenderContext)
 {
     char pBuf[256];
-    SetLineColor( Color( COL_BLACK ) );
+    rRenderContext.SetLineColor(Color(COL_BLACK));
     // draw vertical lines
-    for( double fX = m_fMinChunkX; fX < m_fMaxX; fX += m_fChunkX )
+    for (double fX = m_fMinChunkX; fX < m_fMaxX; fX += m_fChunkX)
     {
-        drawLine( fX, m_fMinY, fX, m_fMaxY );
+        drawLine(rRenderContext, fX, m_fMinY, fX, m_fMaxY);
         // draw tickmarks
-        Point aPt = transform( fX, m_fMinY );
-        std::sprintf( pBuf, "%g", fX );
-        OUString aMark( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
-        Size aTextSize( GetTextWidth( aMark ), GetTextHeight() );
-        aPt.X() -= aTextSize.Width()/2;
-        aPt.Y() += aTextSize.Height()/2;
-        DrawText( aPt, aMark );
+        Point aPt = transform(fX, m_fMinY);
+        std::sprintf(pBuf, "%g", fX);
+        OUString aMark(pBuf, strlen(pBuf), osl_getThreadTextEncoding());
+        Size aTextSize(rRenderContext.GetTextWidth(aMark), rRenderContext.GetTextHeight());
+        aPt.X() -= aTextSize.Width() / 2;
+        aPt.Y() += aTextSize.Height() / 2;
+        rRenderContext.DrawText(aPt, aMark);
     }
     // draw horizontal lines
-    for( double fY = m_fMinChunkY; fY < m_fMaxY; fY += m_fChunkY )
+    for (double fY = m_fMinChunkY; fY < m_fMaxY; fY += m_fChunkY)
     {
-        drawLine( m_fMinX, fY, m_fMaxX, fY );
+        drawLine(rRenderContext, m_fMinX, fY, m_fMaxX, fY);
         // draw tickmarks
-        Point aPt = transform( m_fMinX, fY );
-        std::sprintf( pBuf, "%g", fY );
-        OUString aMark( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
-        Size aTextSize( GetTextWidth( aMark ), GetTextHeight() );
+        Point aPt = transform(m_fMinX, fY);
+        std::sprintf(pBuf, "%g", fY);
+        OUString aMark(pBuf, strlen(pBuf), osl_getThreadTextEncoding());
+        Size aTextSize(rRenderContext.GetTextWidth(aMark), rRenderContext.GetTextHeight());
         aPt.X() -= aTextSize.Width() + 2;
-        aPt.Y() -= aTextSize.Height()/2;
-        DrawText( aPt, aMark );
+        aPt.Y() -= aTextSize.Height() / 2;
+        rRenderContext.DrawText(aPt, aMark);
     }
 
     // draw boundings
-    drawLine( m_fMinX, m_fMinY, m_fMaxX, m_fMinY );
-    drawLine( m_fMinX, m_fMaxY, m_fMaxX, m_fMaxY );
-    drawLine( m_fMinX, m_fMinY, m_fMinX, m_fMaxY );
-    drawLine( m_fMaxX, m_fMinY, m_fMaxX, m_fMaxY );
+    drawLine(rRenderContext, m_fMinX, m_fMinY, m_fMaxX, m_fMinY);
+    drawLine(rRenderContext, m_fMinX, m_fMaxY, m_fMaxX, m_fMaxY);
+    drawLine(rRenderContext, m_fMinX, m_fMinY, m_fMinX, m_fMaxY);
+    drawLine(rRenderContext, m_fMaxX, m_fMinY, m_fMaxX, m_fMaxY);
 }
 
-void GridWindow::drawOriginal()
+void GridWindow::drawOriginal(vcl::RenderContext& rRenderContext)
 {
-    if( m_nValues && m_pXValues && m_pOrigYValues )
+    if (m_nValues && m_pXValues && m_pOrigYValues)
     {
-        SetLineColor( Color( COL_RED ) );
-        for( int i = 0; i < m_nValues-1; i++ )
+        rRenderContext.SetLineColor(Color(COL_RED));
+        for (int i = 0; i < m_nValues - 1; i++)
         {
-            drawLine( m_pXValues[ i   ], m_pOrigYValues[ i   ],
-                      m_pXValues[ i+1 ], m_pOrigYValues[ i+1 ] );
+            drawLine(rRenderContext,
+                      m_pXValues[i],     m_pOrigYValues[i],
+                      m_pXValues[i + 1], m_pOrigYValues[i + 1]);
         }
     }
 }
 
-void GridWindow::drawNew()
+void GridWindow::drawNew(vcl::RenderContext& rRenderContext)
 {
-    if( m_nValues && m_pXValues && m_pNewYValues )
+    if (m_nValues && m_pXValues && m_pNewYValues)
     {
-        SetClipRegion(vcl::Region(m_aGridArea));
-        SetLineColor( Color( COL_YELLOW ) );
-        for( int i = 0; i < m_nValues-1; i++ )
+        rRenderContext.SetClipRegion(vcl::Region(m_aGridArea));
+        rRenderContext.SetLineColor(Color(COL_YELLOW));
+        for (int i = 0; i < m_nValues - 1; i++)
         {
-            drawLine( m_pXValues[ i   ], m_pNewYValues[ i   ],
-                      m_pXValues[ i+1 ], m_pNewYValues[ i+1 ] );
+            drawLine(rRenderContext,
+                     m_pXValues[i],     m_pNewYValues[i],
+                     m_pXValues[i + 1], m_pNewYValues[i + 1]);
         }
-        SetClipRegion();
+        rRenderContext.SetClipRegion();
     }
 }
 
-void GridWindow::drawHandles()
+void GridWindow::drawHandles(vcl::RenderContext& rRenderContext)
 {
     for(sal_uInt32 i(0L); i < m_aHandles.size(); i++)
     {
-        m_aHandles[i].draw(*this, m_aMarkerBitmap);
+        m_aHandles[i].draw(rRenderContext, m_aMarkerBitmap);
     }
 }
 
-void GridWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void GridWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
-    drawGrid();
-    drawOriginal();
-    drawNew();
-    drawHandles();
+    drawGrid(rRenderContext);
+    drawOriginal(rRenderContext);
+    drawNew(rRenderContext);
+    drawHandles(rRenderContext);
 }
 
 void GridWindow::MouseMove( const MouseEvent& rEvt )
