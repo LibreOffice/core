@@ -62,25 +62,25 @@ VCL_BUILDER_FACTORY_ARGS(SwEnvPreview, 0)
 void SwEnvPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
-    if ( DataChangedEventType::SETTINGS == rDCEvt.GetType() )
-        SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
+    if (DataChangedEventType::SETTINGS == rDCEvt.GetType())
+        Invalidate();
 }
 
 void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &)
 {
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
+    SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
 
-    const SwEnvItem& rItem =
-        static_cast<SwEnvDlg*>(GetParentDialog())->aEnvItem;
+    const SwEnvItem& rItem = static_cast<SwEnvDlg*>(GetParentDialog())->aEnvItem;
 
     const long nPageW = std::max(rItem.lWidth, rItem.lHeight);
     const long nPageH = std::min(rItem.lWidth, rItem.lHeight);
 
-    const float f = 0.8 * std::min(
-        float(rRenderContext.GetOutputSizePixel().Width()) / float(nPageW),
-        float(rRenderContext.GetOutputSizePixel().Height()) / float(nPageH));
+    const double f = 0.8 * std::min(
+        double(rRenderContext.GetOutputSizePixel().Width()) / double(nPageW),
+        double(rRenderContext.GetOutputSizePixel().Height()) / double(nPageH));
 
-    Color aBack = rSettings.GetWindowColor( );
+    Color aBack = rSettings.GetWindowColor();
     Color aFront = SwViewOption::GetFontColor();
     Color aMedium = Color((aBack.GetRed() + aFront.GetRed()) / 2,
                           (aBack.GetGreen() + aFront.GetGreen()) / 2,
