@@ -62,9 +62,12 @@ done
 
 for i in gengal python senddoc unoinfo
 do
-    codesign --verbose --identifier="$MACOSX_BUNDLE_IDENTIFIER.$i" \
-        --sign "$MACOSX_CODESIGNING_IDENTITY" "$APP_BUNDLE/Contents/MacOS/$i" \
-    || exit 1
+    if [ -f "$APP_BUNDLE/Contents/MacOS/$i" ]
+    then
+        codesign --verbose --identifier="$MACOSX_BUNDLE_IDENTIFIER.$i" \
+            --sign "$MACOSX_CODESIGNING_IDENTITY" "$APP_BUNDLE/Contents/MacOS/$i" \
+        || exit 1
+    fi
 done
 
 # Sign frameworks.
