@@ -36,7 +36,7 @@ public:
     PropertyMapImpl() throw();
     virtual ~PropertyMapImpl() throw();
 
-    void add( PropertyMapEntry const * pMap, sal_Int32 nCount = -1 ) throw();
+    void add(PropertyMapEntry const * pMap) throw();
     void remove( const OUString& aName ) throw();
 
     Sequence< Property > getProperties() throw();
@@ -60,13 +60,9 @@ PropertyMapImpl::~PropertyMapImpl() throw()
 {
 }
 
-void PropertyMapImpl::add( PropertyMapEntry const * pMap, sal_Int32 nCount ) throw()
+void PropertyMapImpl::add(PropertyMapEntry const * pMap) throw()
 {
-    // nCount < 0   => add all
-    // nCount == 0  => add nothing
-    // nCount > 0   => add at most nCount entries
-
-    while( !pMap->maName.isEmpty() && ( ( nCount < 0) || ( nCount-- > 0 ) ) )
+    while (!pMap->maName.isEmpty())
     {
 #ifdef DBG_UTIL
         PropertyMap::iterator aIter = maPropertyMap.find( pMap->maName );
