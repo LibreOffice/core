@@ -343,7 +343,7 @@ void SwDropCapsPict::UpdatePaintSettings()
     Invalidate();
 }
 
-void  SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/*rRect*/)
+void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
     if (!IsVisible())
         return;
@@ -355,10 +355,10 @@ void  SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const Rectangle 
 
     Size aOutputSizePixel(rRenderContext.GetOutputSizePixel());
 
-    DrawRect(Rectangle(Point(0, 0), aOutputSizePixel ));
+    DrawRect(Rectangle(Point(0, 0), aOutputSizePixel));
     rRenderContext.SetClipRegion(vcl::Region(Rectangle(Point(BORDER, BORDER),
-                                                       Size (aOutputSizePixel.Width () - 2 * BORDER,
-                                                             aOutputSizePixel.Height() - 2 * BORDER))));
+                                                       Size(aOutputSizePixel.Width () - 2 * BORDER,
+                                                            aOutputSizePixel.Height() - 2 * BORDER))));
 
     OSL_ENSURE(mnLineH > 0, "We cannot make it that small");
     long nY0 = (aOutputSizePixel.Height() - (LINES * mnTotLineH)) / 2;
@@ -400,7 +400,11 @@ void SwDropCapsPict::DrawPrev(vcl::RenderContext& rRenderContext, const Point& r
 
     do
     {
-        SvxFont& rFnt = (nScript==css::i18n::ScriptType::ASIAN) ? maCJKFont : ((nScript==css::i18n::ScriptType::COMPLEX) ? maCTLFont : maFont);
+        SvxFont& rFnt = (nScript == css::i18n::ScriptType::ASIAN)
+                            ? maCJKFont
+                            : ((nScript == css::i18n::ScriptType::COMPLEX)
+                                    ? maCTLFont
+                                    : maFont);
         mpPrinter->SetFont(rFnt);
 
         rFnt.DrawPrev(&rRenderContext, mpPrinter, aPt, maText, nStart, nEnd - nStart);
@@ -453,68 +457,73 @@ Size SwDropCapsPict::CalcTextSize()
 {
     InitPrinter();
 
-    sal_uInt16      nScript;
-    size_t      nIdx = 0;
-    sal_Int32  nStart;
-    sal_Int32  nEnd;
+    sal_uInt16 nScript;
+    size_t nIdx = 0;
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
     GetFirstScriptSegment(nStart, nEnd, nScript);
-    long        nTxtWidth = 0;
-    long        nCJKHeight = 0;
-    long        nCTLHeight = 0;
-    long        nHeight = 0;
-    long        nAscent = 0;
-    long        nCJKAscent = 0;
-    long        nCTLAscent = 0;
+    long nTxtWidth = 0;
+    long nCJKHeight = 0;
+    long nCTLHeight = 0;
+    long nHeight = 0;
+    long nAscent = 0;
+    long nCJKAscent = 0;
+    long nCTLAscent = 0;
     do
     {
-        SvxFont&    rFnt = ( nScript == css::i18n::ScriptType::ASIAN )? maCJKFont :
-                                ( ( nScript == css::i18n::ScriptType::COMPLEX )? maCTLFont : maFont );
-        sal_uLong       nWidth = rFnt.GetTxtSize( mpPrinter, maText, nStart, nEnd-nStart ).Width();
+        SvxFont& rFnt = (nScript == css::i18n::ScriptType::ASIAN)
+                            ? maCJKFont
+                            : ((nScript == css::i18n::ScriptType::COMPLEX)
+                                    ? maCTLFont
+                                    : maFont);
 
-        if( nIdx < maScriptChanges.size() )
-            maScriptChanges[ nIdx ].textWidth = nWidth;
+        sal_uLong nWidth = rFnt.GetTxtSize(mpPrinter, maText, nStart, nEnd-nStart ).Width();
+
+        if (nIdx < maScriptChanges.size())
+            maScriptChanges[nIdx].textWidth = nWidth;
         nTxtWidth += nWidth;
         switch(nScript)
         {
             case css::i18n::ScriptType::ASIAN:
-                calcFontHeightAnyAscent( this, maCJKFont, nCJKHeight, nCJKAscent );
+                calcFontHeightAnyAscent(this, maCJKFont, nCJKHeight, nCJKAscent);
                 break;
             case css::i18n::ScriptType::COMPLEX:
-                calcFontHeightAnyAscent( this, maCTLFont, nCTLHeight, nCTLAscent );
+                calcFontHeightAnyAscent(this, maCTLFont, nCTLHeight, nCTLAscent);
                 break;
             default:
-                calcFontHeightAnyAscent( this, maFont, nHeight, nAscent );
+                calcFontHeightAnyAscent(this, maFont, nHeight, nAscent);
         }
 
-        if ( !GetNextScriptSegment(nIdx, nStart, nEnd, nScript) )
+        if (!GetNextScriptSegment(nIdx, nStart, nEnd, nScript))
             break;
     }
-    while( true );
+    while(true);
+
     nHeight -= nAscent;
     nCJKHeight -= nCJKAscent;
     nCTLHeight -= nCTLAscent;
-    if( nHeight < nCJKHeight )
+    if (nHeight < nCJKHeight)
         nHeight = nCJKHeight;
-    if( nAscent < nCJKAscent )
+    if (nAscent < nCJKAscent)
         nAscent = nCJKAscent;
-    if( nHeight < nCTLHeight )
+    if (nHeight < nCTLHeight)
         nHeight = nCTLHeight;
-    if( nAscent < nCTLAscent )
+    if (nAscent < nCTLAscent)
         nAscent = nCTLAscent;
     nHeight += nAscent;
 
-    Size aTxtSize( nTxtWidth, nHeight );
+    Size aTxtSize(nTxtWidth, nHeight);
     return aTxtSize;
 }
 
 void SwDropCapsPict::_InitPrinter()
 {
-    SfxViewShell*   pSh = SfxViewShell::Current();
+    SfxViewShell* pSh = SfxViewShell::Current();
 
-    if ( pSh )
+    if (pSh)
         mpPrinter = pSh->GetPrinter();
 
-    if ( !mpPrinter )
+    if (!mpPrinter)
     {
         mpPrinter = new Printer;
         mbDelPrinter = true;
@@ -603,8 +612,8 @@ void SwDropCapsPage::dispose()
 
 SfxTabPage::sfxpg SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
 {
-    if ( _pSet )
-        FillSet( *_pSet );
+    if (_pSet)
+        FillSet(*_pSet);
 
     return LEAVE_PAGE;
 }
@@ -617,7 +626,7 @@ VclPtr<SfxTabPage> SwDropCapsPage::Create(vcl::Window *pParent,
 
 bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)
 {
-    if(bModified)
+    if (bModified)
         FillSet(*rSet);
     return bModified;
 }
@@ -662,9 +671,9 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
     }
 
     // Preview
-    m_pPict->SetValues( m_pTextEdit->GetText(),
-                        sal_uInt8( m_pLinesField->GetValue() ),
-                        sal_uInt16( m_pDistanceField->Denormalize( m_pDistanceField->GetValue( FUNIT_TWIP ) ) ) );
+    m_pPict->SetValues(m_pTextEdit->GetText(),
+                       sal_uInt8(m_pLinesField->GetValue()),
+                       sal_uInt16(m_pDistanceField->Denormalize(m_pDistanceField->GetValue(FUNIT_TWIP))));
 
     ClickHdl(m_pDropCapsBox);
     bModified = false;
@@ -798,24 +807,22 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 
         // set attributes
         const SfxPoolItem* pOldItem;
-        if(0 == (pOldItem = GetOldItem( rSet, FN_FORMAT_DROPCAPS )) ||
-                    aFmt != *pOldItem )
+        if (0 == (pOldItem = GetOldItem(rSet, FN_FORMAT_DROPCAPS)) || aFmt != *pOldItem)
             rSet.Put(aFmt);
 
         // hard text formatting
         // Bug 24974: in designer/template catalog this doesn't make sense!!
-        if( !bFormat && m_pDropCapsBox->IsChecked() )
+        if (!bFormat && m_pDropCapsBox->IsChecked())
         {
             OUString sText(m_pTextEdit->GetText());
 
             if (!m_pWholeWordCB->IsChecked())
             {
-                sText = sText.copy( 0, std::min<sal_Int32>(
-                    sText.getLength(), m_pDropCapsField->GetValue()) );
+                sText = sText.copy(0, std::min<sal_Int32>(sText.getLength(), m_pDropCapsField->GetValue()));
             }
 
             SfxStringItem aStr(FN_PARAM_1, sText);
-            rSet.Put( aStr );
+            rSet.Put(aStr);
         }
     }
 }
