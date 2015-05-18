@@ -183,8 +183,6 @@ struct LOKDocView_Impl
     static gboolean globalCallback(gpointer pData);
     /// Implementation of the callback handler, invoked by callback();
     gboolean callbackImpl(CallbackData* pCallbackData);
-    /// Implementation of the global callback handler, invoked by globalCallback();
-    gboolean globalCallbackImpl(CallbackData* pCallbackData);
     /// Our LOK callback, runs on the LO thread.
     static void callbackWorker(int nType, const char* pPayload, void* pData);
     /// Implementation of the callback worder handler, invoked by callbackWorker().
@@ -196,6 +194,36 @@ struct LOKDocView_Impl
     /// Command state (various buttons like bold are toggled or not) is changed.
     void commandChanged(const std::string& rPayload);
 };
+
+namespace {
+
+/// Implementation of the global callback handler, invoked by globalCallback();
+gboolean globalCallbackImpl(LOKDocView_Impl::CallbackData* pCallback)
+{
+    switch (pCallback->m_nType)
+    {
+    case LOK_CALLBACK_STATUS_INDICATOR_START:
+    {
+    }
+    break;
+    case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+    {
+    }
+    break;
+    case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
+    {
+    }
+    break;
+    default:
+        g_assert(false);
+        break;
+    }
+    delete pCallback;
+
+    return G_SOURCE_REMOVE;
+}
+
+}
 
 LOKDocView_Impl::CallbackData::CallbackData(int nType, const std::string& rPayload, LOKDocView* pDocView)
     : m_nType(nType),
@@ -899,7 +927,7 @@ gboolean LOKDocView_Impl::callback(gpointer pData)
 gboolean LOKDocView_Impl::globalCallback(gpointer pData)
 {
     LOKDocView_Impl::CallbackData* pCallback = static_cast<LOKDocView_Impl::CallbackData*>(pData);
-    return pCallback->m_pDocView->m_pImpl->globalCallbackImpl(pCallback);
+    return globalCallbackImpl(pCallback);
 }
 
 gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
@@ -976,31 +1004,6 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     case LOK_CALLBACK_STATE_CHANGED:
     {
         commandChanged(pCallback->m_aPayload);
-    }
-    break;
-    default:
-        g_assert(false);
-        break;
-    }
-    delete pCallback;
-
-    return G_SOURCE_REMOVE;
-}
-
-gboolean LOKDocView_Impl::globalCallbackImpl(CallbackData* pCallback)
-{
-    switch (pCallback->m_nType)
-    {
-    case LOK_CALLBACK_STATUS_INDICATOR_START:
-    {
-    }
-    break;
-    case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
-    {
-    }
-    break;
-    case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
-    {
     }
     break;
     default:
