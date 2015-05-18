@@ -53,7 +53,7 @@ private:
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext);
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
     SAL_DLLPRIVATE         Dialog (const Dialog &) SAL_DELETED_FUNCTION;
     SAL_DLLPRIVATE         Dialog & operator= (const Dialog &) SAL_DELETED_FUNCTION;
