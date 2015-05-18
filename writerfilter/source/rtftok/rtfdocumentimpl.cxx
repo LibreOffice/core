@@ -415,6 +415,32 @@ void RTFDocumentImpl::setNeedSect(bool bNeedSect)
     }
 }
 
+/// Copy rProps to rStyleAttributes and rStyleSprms, but in case of nested sprms, copy their children as toplevel sprms/attributes.
+static void lcl_copyFlatten(RTFReferenceProperties& rProps, RTFSprms& rStyleAttributes, RTFSprms& rStyleSprms)
+{
+    for (RTFSprms::Iterator_t it = rProps.getSprms().begin(); it != rProps.getSprms().end(); ++it)
+    {
+        // createStyleProperties() puts properties to rPr, but here we need a flat list.
+        if (it->first == NS_ooxml::LN_CT_Style_rPr)
+        {
+            // rPr can have both attributes and SPRMs, copy over both types.
+            RTFSprms& rRPrSprms = it->second->getSprms();
+            for (RTFSprms::Iterator_t itRPrSprm = rRPrSprms.begin(); itRPrSprm != rRPrSprms.end(); ++itRPrSprm)
+                rStyleSprms.set(itRPrSprm->first, itRPrSprm->second);
+
+            RTFSprms& rRPrAttributes = it->second->getAttributes();
+            for (RTFSprms::Iterator_t itRPrAttribute = rRPrAttributes.begin(); itRPrAttribute != rRPrAttributes.end(); ++itRPrAttribute)
+                rStyleAttributes.set(itRPrAttribute->first, itRPrAttribute->second);
+        }
+        else
+            rStyleSprms.set(it->first, it->second);
+    }
+
+    RTFSprms& rAttributes = rProps.getAttributes();
+    for (RTFSprms::Iterator_t itAttr = rAttributes.begin(); itAttr != rAttributes.end(); ++itAttr)
+        rStyleAttributes.set(itAttr->first, itAttr->second);
+}
+
 writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms)
 {
     int nStyle = 0;
@@ -429,34 +455,17 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
         // let's merge paragraph and character style properties here.
         int nCharStyle = m_aStates.top().nCurrentCharacterStyleIndex;
         RTFReferenceTable::Entries_t::iterator itChar = m_aStyleTableEntries.find(nCharStyle);
-        RTFSprms aStyleSprms = rProps.getSprms();
-        RTFSprms aStyleAttributes = rProps.getAttributes();
+        RTFSprms aStyleSprms;
+        RTFSprms aStyleAttributes;
+
+        // Ensure the paragraph style is a flat list.
+        lcl_copyFlatten(rProps, aStyleAttributes, aStyleSprms);
+
         if (itChar != m_aStyleTableEntries.end())
         {
             // Found active character style, then update aStyleSprms/Attributes.
             RTFReferenceProperties& rCharProps = *static_cast<RTFReferenceProperties*>(itChar->second.get());
-            RTFSprms& rCharStyleSprms = rCharProps.getSprms();
-            for (RTFSprms::Iterator_t itSprm = rCharStyleSprms.begin(); itSprm != rCharStyleSprms.end(); ++itSprm)
-            {
-                // createStyleProperties() puts properties to rPr, but here we need a flat list.
-                if (itSprm->first == NS_ooxml::LN_CT_Style_rPr)
-                {
-                    // rPr can have both attributes and SPRM's, copy over both types.
-                    RTFSprms& rRPrSprms = itSprm->second->getSprms();
-                    for (RTFSprms::Iterator_t itRPrSprm = rRPrSprms.begin(); itRPrSprm != rRPrSprms.end(); ++itRPrSprm)
-                        aStyleSprms.set(itRPrSprm->first, itRPrSprm->second);
-
-                    RTFSprms& rRPrAttributes = itSprm->second->getAttributes();
-                    for (RTFSprms::Iterator_t itRPrAttribute = rRPrAttributes.begin(); itRPrAttribute != rRPrAttributes.end(); ++itRPrAttribute)
-                        aStyleAttributes.set(itRPrAttribute->first, itRPrAttribute->second);
-                }
-                else
-                    aStyleSprms.set(itSprm->first, itSprm->second);
-            }
-
-            RTFSprms& rCharStyleAttributes = rCharProps.getAttributes();
-            for (RTFSprms::Iterator_t itAttr = rCharStyleAttributes.begin(); itAttr != rCharStyleAttributes.end(); ++itAttr)
-                aStyleAttributes.set(itAttr->first, itAttr->second);
+            lcl_copyFlatten(rCharProps, aStyleAttributes, aStyleSprms);
         }
 
         // Get rid of direct formatting what is already in the style.

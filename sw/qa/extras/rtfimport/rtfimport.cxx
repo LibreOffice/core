@@ -2286,6 +2286,12 @@ DECLARE_RTFIMPORT_TEST(testTdf90260Par, "hello.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf86814, "tdf86814.rtf")
+{
+    // This was awt::FontWeight::NORMAL, i.e. the first run wasn't bold, when it should be bold (applied paragraph style with direct formatting).
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
