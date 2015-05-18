@@ -53,7 +53,6 @@
 #include <unocrsr.hxx>
 #include <viscrs.hxx>
 #include <edimp.hxx>
-#include <stdio.h>
 #include <tools/datetimeutils.hxx>
 
 using namespace ::boost;

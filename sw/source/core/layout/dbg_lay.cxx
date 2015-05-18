@@ -97,7 +97,6 @@
 
 #include "dbg_lay.hxx"
 
-#include <stdio.h>
 #include "flyfrm.hxx"
 #include "txtfrm.hxx"
 #include <fntcache.hxx>

@@ -70,10 +70,6 @@
 
 #include <unomid.h>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
@@ -1126,10 +1122,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
             bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetTxt()[GetIdx()]);
             if(pFieldmark) {
                 OSL_TRACE("Found Fieldmark");
-#if OSL_DEBUG_LEVEL > 1
-                OUString str = pFieldmark->ToString( );
-                fprintf( stderr, "%s\n", OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr( ) );
-#endif
+                SAL_INFO("sw.core", pFieldmark->ToString() << "\n");
             }
             if(bIsStartMark) OSL_TRACE("Found StartMark");
             if (OnWin() && (pFieldmark!=NULL || bIsStartMark) &&

@@ -19,7 +19,6 @@
 
 #include <cstdarg>
 
-#include <stdio.h>
 #include <unotxdoc.hxx>
 #include <com/sun/star/text/NotePrintMode.hpp>
 #include <sfx2/app.hxx>

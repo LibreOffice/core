@@ -25,10 +25,6 @@
 #include <osl/endian.h>
 #include <rtl/ustrbuf.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 namespace ww8
 {
     WW8Struct::WW8Struct(SvStream& rSt, sal_uInt32 nPos, sal_uInt32 nSize)

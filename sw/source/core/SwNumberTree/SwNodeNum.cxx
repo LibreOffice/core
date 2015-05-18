@@ -22,7 +22,6 @@
 #include <SwNodeNum.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
-#include <stdio.h>
 #include <IDocumentListItems.hxx>
 #include <doc.hxx>
 

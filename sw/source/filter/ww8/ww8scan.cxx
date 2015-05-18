@@ -48,7 +48,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
+#ifdef DEBUGSPRMREADER
 #include <stdio.h>
+#endif
 
 #define ASSERT_RET_ON_FAIL( aCon, aError, aRet ) \
     OSL_ENSURE(aCon, aError); \
