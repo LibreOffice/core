@@ -98,24 +98,26 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
 {
     WindowImpl* pWindowImpl = m_pWindow->ImplGetWindowImpl();
     vcl::Region* pWinChildClipRegion = m_pWindow->ImplGetWinChildClipRegion();
-    if ( pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
+    if (pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL)
+    {
         pWindowImpl->maInvalidateRegion = *pWinChildClipRegion;
+    }
     else
     {
-        if ( pRegion )
+        if (pRegion)
             pWindowImpl->maInvalidateRegion.Union( *pRegion );
 
-        if( pWindowImpl->mpWinData && pWindowImpl->mbTrackVisible )
+        if (pWindowImpl->mpWinData && pWindowImpl->mbTrackVisible)
             /* #98602# need to repaint all children within the
            * tracking rectangle, so the following invert
            * operation takes places without traces of the previous
            * one.
            */
-            pWindowImpl->maInvalidateRegion.Union( *pWindowImpl->mpWinData->mpTrackRect );
+           pWindowImpl->maInvalidateRegion.Union(*pWindowImpl->mpWinData->mpTrackRect);
 
-        if ( pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN )
-            m_pChildRegion = new vcl::Region( pWindowImpl->maInvalidateRegion );
-        pWindowImpl->maInvalidateRegion.Intersect( *pWinChildClipRegion );
+        if (pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN)
+            m_pChildRegion = new vcl::Region(pWindowImpl->maInvalidateRegion);
+        pWindowImpl->maInvalidateRegion.Intersect(*pWinChildClipRegion);
     }
     pWindowImpl->mnPaintFlags = 0;
     if (!pWindowImpl->maInvalidateRegion.IsEmpty())
@@ -141,6 +143,15 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
             pDevice->SetMapMode(m_pWindow->GetMapMode());
             pDevice->SetRefPoint(m_pWindow->GetRefPoint());
             pDevice->SetSettings(m_pWindow->GetSettings());
+            pDevice->SetTextColor(m_pWindow->GetTextColor());
+            pDevice->SetTextLineColor(m_pWindow->GetTextLineColor());
+            pDevice->SetOverlineColor(m_pWindow->GetOverlineColor());
+            pDevice->SetTextFillColor(m_pWindow->GetTextFillColor());
+            pDevice->SetTextAlign(m_pWindow->GetTextAlign());
+            pDevice->SetRasterOp(m_pWindow->GetRasterOp());
+            pDevice->SetRefPoint(m_pWindow->GetRefPoint());
+            pDevice->SetLayoutMode(m_pWindow->GetLayoutMode());
+            pDevice->SetDigitLanguage(m_pWindow->GetDigitLanguage());
 
             // update the output size now, after all the settings were copied
             pDevice->SetOutputSize(m_pWindow->GetOutputSize());
@@ -154,7 +165,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
             m_pWindow->Paint(*pDevice.get(), m_aPaintRect);
 
             // debugging of the areas - show where we are painting
-            // export VCL_DOUBLEBUFFERING_REGIONS=1 to see where are we
+            // export VCL_DOUBLEBUFFERING_DEBUG=1 to see where are we
             // painting
             if (getenv("VCL_DOUBLEBUFFERING_DEBUG"))
             {
