@@ -174,6 +174,12 @@
 	/>
 	
 	<key
+		name="text:table-of-content-entry-ref"
+		match="//text:table-of-content-entry-template"
+		use="@text:style-name"
+	/>
+
+	<key
 		name="reference-resolution"
 		match="//text:reference-mark | //text:reference-mark-start"
 		use="@text:name"
@@ -699,6 +705,21 @@
 		</choose>
 	</template>
 
+        <!--
+		Function for generating tabulations in TOC entries.
+
+		@param style
+			The style of the TOC entry
+	-->
+	<template name="mk-tab-toc">
+		<param name="style"/>
+		<if test="number($style/@text:outline-level) &gt; 0">
+			<call-template name="mk-token">
+				<with-param name="level" select="number($style/@text:outline-level) - 1"/>
+				<with-param name="char" select="':'"/>
+			</call-template>
+		</if>
+	</template>
 
 	<!-- 
 		== WikiLink == 
@@ -726,6 +747,16 @@
 	 -->
 
 	<template match="text:p">
+		<!-- TOC tabs -->
+		<if test="ancestor::text:index-body and boolean(@text:style-name)">
+			<variable name="style" select="key('style-ref', @text:style-name)"/>
+			<if test="boolean($style/@style:parent-style-name)">
+				<call-template name="mk-tab-toc">
+					<with-param name="style" select="key('text:table-of-content-entry-ref', $style/@style:parent-style-name)"/>
+				</call-template>
+			</if>
+		</if>
+
 		<variable name="alignment">
 			<call-template name="mk-style-set">
 				<with-param name="node" select="."/>
