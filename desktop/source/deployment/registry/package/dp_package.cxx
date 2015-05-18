@@ -67,6 +67,7 @@
 #include <boost/optional.hpp>
 #include <vector>
 #include <stdio.h>
+#include <algorithm>
 
 #include "dp_extbackenddb.hxx"
 using namespace ::dp_misc;
@@ -1525,7 +1526,7 @@ void BackendImpl::PackageImpl::scanBundle(
         //We make sure that we only create one XPackage for a particular URL.
         //Sometime programmers insert the same URL several times in the manifest
         //which may lead to DisposedExceptions.
-        if (bundle.end() == std::find_if(bundle.begin(), bundle.end(), XPackage_eq(url)))
+        if (std::none_of(bundle.begin(), bundle.end(), XPackage_eq(url)))
         {
             const Reference<deployment::XPackage> xPackage(
                 bindBundleItem( url, mediaType, false, OUString(), xCmdEnv ) );

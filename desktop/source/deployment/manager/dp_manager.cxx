@@ -62,6 +62,7 @@
 #include "dp_descriptioninfoset.hxx"
 #include "dp_commandenvironments.hxx"
 #include "dp_properties.hxx"
+#include <algorithm>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -214,8 +215,7 @@ void PackageManagerImpl::initActivationLayer(
             {
                 OUString const & tempEntry = tempEntries[ pos ];
                 const MatchTempDir match( tempEntry );
-                if (::std::find_if( id2temp.begin(), id2temp.end(), match ) ==
-                    id2temp.end())
+                if (::std::none_of( id2temp.begin(), id2temp.end(), match ))
                 {
                     const OUString url(
                         makeURL(m_activePackages_expanded, tempEntry ) );
@@ -1336,8 +1336,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
             //installed the extension it was already checked if there is one with the
             //same identifier.
             const MatchTempDir match(titleEncoded);
-            if (::std::find_if( id2temp.begin(), id2temp.end(), match ) ==
-                id2temp.end())
+            if (::std::none_of( id2temp.begin(), id2temp.end(), match ))
             {
 
                 // The folder was not found in the data base, so it must be
