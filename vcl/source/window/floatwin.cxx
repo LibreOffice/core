@@ -186,6 +186,19 @@ void FloatingWindow::doDeferredInit(WinBits nBits)
     mbIsDefferedInit = false;
 }
 
+void FloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+
+    Color aColor;
+    if (Window::GetStyle() & WB_3DLOOK)
+        aColor = rStyleSettings.GetFaceColor();
+    else
+        aColor = rStyleSettings.GetWindowColor();
+
+    ApplyControlBackground(rRenderContext, aColor);
+}
+
 FloatingWindow::~FloatingWindow()
 {
     disposeOnce();

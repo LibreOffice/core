@@ -123,6 +123,8 @@ protected:
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
 
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+
 public:
     SAL_DLLPRIVATE FloatingWindow*  ImplFloatHitTest( vcl::Window* pReference, const Point& rPos, HitTest& rHitTest );
     SAL_DLLPRIVATE FloatingWindow*  ImplFindLastLevelFloat();
