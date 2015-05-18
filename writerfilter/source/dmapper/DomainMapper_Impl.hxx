@@ -398,7 +398,7 @@ private:
     bool                            m_bIsCustomFtnMark;
 
     //registered frame properties
-    css::uno::Sequence<css::beans::PropertyValue> m_aFrameProperties;
+    std::vector<css::beans::PropertyValue> m_aFrameProperties;
     css::uno::Reference<css::text::XTextRange> m_xFrameStartRange;
     css::uno::Reference<css::text::XTextRange> m_xFrameEndRange;
 

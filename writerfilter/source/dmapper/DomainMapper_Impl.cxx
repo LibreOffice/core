@@ -4722,9 +4722,9 @@ void DomainMapper_Impl::RegisterFrameConversion(
         )
 {
     OSL_ENSURE(
-        !m_aFrameProperties.getLength() && !m_xFrameStartRange.is() && !m_xFrameEndRange.is(),
+        m_aFrameProperties.empty() && !m_xFrameStartRange.is() && !m_xFrameEndRange.is(),
         "frame properties not removed");
-    m_aFrameProperties = aFrameProperties;
+    m_aFrameProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aFrameProperties);
     m_xFrameStartRange = xFrameStartRange;
     m_xFrameEndRange   = xFrameEndRange;
 }
@@ -4742,7 +4742,7 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
             xTextAppendAndConvert->convertToTextFrame(
                 m_xFrameStartRange,
                 m_xFrameEndRange,
-                m_aFrameProperties );
+                comphelper::containerToSequence(m_aFrameProperties) );
         }
         catch( const uno::Exception& rEx)
         {
@@ -4752,7 +4752,7 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
     }
     m_xFrameStartRange = nullptr;
     m_xFrameEndRange = nullptr;
-    m_aFrameProperties.realloc( 0 );
+    m_aFrameProperties.clear();
     return bRet;
 }
 
