@@ -17,40 +17,10 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Library_Library,writerperfect))
+$(eval $(call gb_UIConfig_UIConfig,writerperfect))
 
-$(eval $(call gb_Library_add_defs,writerperfect,\
-	-DWRITERPERFECT_DLLIMPLEMENTATION \
-))
-
-$(eval $(call gb_Library_use_externals,writerperfect,\
-	boost_headers \
-	odfgen \
-	revenge \
-))
-
-$(eval $(call gb_Library_use_sdk_api,writerperfect))
-
-$(eval $(call gb_Library_use_libraries,writerperfect,\
-	comphelper \
-	cppu \
-	cppuhelper \
-	sal \
-	sot \
-	svx \
-	tl \
-	ucbhelper \
-	utl \
-	vcl \
-	xo \
-	$(gb_UWINAPI) \
-))
-
-$(eval $(call gb_Library_add_exception_objects,writerperfect,\
-	writerperfect/source/common/DirectoryStream \
-	writerperfect/source/common/DocumentHandler \
-	writerperfect/source/common/WPFTEncodingDialog \
-	writerperfect/source/common/WPXSvInputStream \
+$(eval $(call gb_UIConfig_add_uifiles,writerperfect,\
+	writerperfect/uiconfig/ui/wpftencodingdialog \
 ))
 
 # vim: set noet sw=4 ts=4:

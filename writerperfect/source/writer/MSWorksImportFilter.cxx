@@ -9,11 +9,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <libwps/libwps.h>
 
+#include "writerperfect/WPFTEncodingDialog.hxx"
 #include "MSWorksImportFilter.hxx"
 
 using com::sun::star::uno::Sequence;
@@ -33,13 +35,41 @@ static bool handleEmbeddedWKSObject(const librevenge::RVNGBinaryData &data, OdfD
 
 bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdtGenerator &rGenerator, utl::MediaDescriptor &)
 {
-    return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator);
+    libwps::WPSKind kind = libwps::WPS_TEXT;
+    libwps::WPSCreator creator;
+    bool needEncoding;
+    const libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(&rInput, kind, creator, needEncoding);
+
+    std::string fileEncoding("");
+    try
+    {
+        if ((kind == libwps::WPS_TEXT) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT) && needEncoding)
+        {
+            OUString title("Import MsWorks files(libwps)");
+            OUString encoding("CP850");
+            const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(nullptr, &title, &encoding);
+            if (pDlg->Execute() == RET_OK)
+            {
+                if (!pDlg->GetEncoding().isEmpty())
+                    fileEncoding=pDlg->GetEncoding().toUtf8().getStr();
+            }
+            // we can fail because we are in headless mode, the user has cancelled conversion, ...
+            else if (pDlg->hasUserCalledCancel())
+                return false;
+        }
+    }
+    catch (...)
+    {
+    }
+    return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator, "", fileEncoding.c_str());
 }
 
 bool MSWorksImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
     libwps::WPSKind kind = libwps::WPS_TEXT;
-    const libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(&rInput, kind);
+    libwps::WPSCreator creator;
+    bool needEncoding;
+    const libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(&rInput, kind, creator, needEncoding);
 
     if ((kind == libwps::WPS_TEXT) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT))
     {

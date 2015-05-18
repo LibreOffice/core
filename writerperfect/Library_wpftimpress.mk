@@ -34,9 +34,11 @@ $(eval $(call gb_Library_use_libraries,wpftimpress,\
 	cppuhelper \
 	sal \
 	sot \
+	svx \
 	tl \
 	ucbhelper \
 	utl \
+	vcl \
 	writerperfect \
 	xo \
 	$(gb_UWINAPI) \

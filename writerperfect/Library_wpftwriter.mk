@@ -36,9 +36,11 @@ $(eval $(call gb_Library_use_libraries,wpftwriter,\
 	sal \
 	sfx \
 	sot \
+	svx \
 	tl \
 	ucbhelper \
 	utl \
+	vcl \
 	writerperfect \
 	xo \
 	$(gb_UWINAPI) \

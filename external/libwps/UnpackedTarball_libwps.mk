@@ -11,4 +11,9 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libwps))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libwps,$(WPS_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libwps,1))
+
+$(eval $(call gb_UnpackedTarball_add_patches,libwps,\
+	external/libwps/0001-QuattroPro-parser-correct-a-mistake-when-reading-neg.patch \
+))
 # vim: set noet sw=4 ts=4:

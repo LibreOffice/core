@@ -33,6 +33,12 @@ $(eval $(call gb_Library_add_defs,wps,\
 $(eval $(call gb_Library_set_generated_cxx_suffix,wps,cpp))
 
 $(eval $(call gb_Library_add_generated_exception_objects,wps,\
+	UnpackedTarball/libwps/src/lib/Lotus \
+	UnpackedTarball/libwps/src/lib/LotusGraph \
+	UnpackedTarball/libwps/src/lib/LotusSpreadsheet \
+	UnpackedTarball/libwps/src/lib/LotusStyleManager \
+	UnpackedTarball/libwps/src/lib/Quattro \
+	UnpackedTarball/libwps/src/lib/QuattroSpreadsheet \
 	UnpackedTarball/libwps/src/lib/WKS4 \
 	UnpackedTarball/libwps/src/lib/WKS4Spreadsheet \
 	UnpackedTarball/libwps/src/lib/WKSContentListener \
@@ -52,6 +58,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,wps,\
 	UnpackedTarball/libwps/src/lib/WPSDebug \
 	UnpackedTarball/libwps/src/lib/WPSDocument \
 	UnpackedTarball/libwps/src/lib/WPSFont \
+	UnpackedTarball/libwps/src/lib/WPSGraphicShape \
+	UnpackedTarball/libwps/src/lib/WPSGraphicStyle \
 	UnpackedTarball/libwps/src/lib/WPSHeader \
 	UnpackedTarball/libwps/src/lib/WPSList \
 	UnpackedTarball/libwps/src/lib/WPSOLEParser \

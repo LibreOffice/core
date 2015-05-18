@@ -2164,7 +2164,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,libwps)/src/lib/.libs -lwps-0.3 \
+	-L$(call gb_UnpackedTarball_get_dir,libwps)/src/lib/.libs -lwps-0.4 \
 )
 
 endef

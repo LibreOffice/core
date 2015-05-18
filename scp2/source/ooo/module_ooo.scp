@@ -125,6 +125,7 @@ Module gid_Module_Root
 #endif
              gid_File_Share_Config_Sofficecfg_uiconfig_uui,
              gid_File_Share_Config_Sofficecfg_uiconfig_vcl,
+             gid_File_Share_Config_Sofficecfg_uiconfig_writerperfect,
              gid_File_Share_Config_Sofficecfg_uiconfig_xmlsec,
              gid_File_Share_Registry_Main_Xcd,
              gid_File_Share_Registry_Forcedefault_Xcd,
