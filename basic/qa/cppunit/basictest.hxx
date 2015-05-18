@@ -46,7 +46,7 @@ class MacroSnippet
         int nLine;
         int nCol;
         ErrorDetail() : nLine(0), nCol(0) {}
-    }
+    };
 
     explicit MacroSnippet(const OUString& sSource)
         : mbError(false)
