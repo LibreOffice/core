@@ -67,6 +67,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <paratr.hxx>
 
 using namespace ::com::sun::star;
@@ -75,12 +76,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
-
-template<typename T>
-PropertyValue makePropertyValue(T const& rValue, OUString const& rName)
-{
-   return PropertyValue(rName, -1, makeAny(rValue), PropertyState_DIRECT_VALUE);
-}
 
 // Constants for the css::text::ColumnSeparatorStyle
 #define API_COL_LINE_NONE               0
@@ -1357,47 +1352,44 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
     //adjust
     SvxAdjust eAdj = rFmt.GetNumAdjust();
     sal_Int16 nINT16 = aSvxToUnoAdjust[eAdj];
-    aPropertyValues.push_back(makePropertyValue(nINT16, "Adjust"));
+    aPropertyValues.push_back(comphelper::makePropertyValue("Adjust", nINT16));
 
     //parentnumbering
     nINT16 = rFmt.GetIncludeUpperLevels();
-    aPropertyValues.push_back(makePropertyValue(nINT16, "ParentNumbering"));
+    aPropertyValues.push_back(comphelper::makePropertyValue("ParentNumbering", nINT16));
 
     //prefix
     OUString aUString = rFmt.GetPrefix();
-    aPropertyValues.push_back(makePropertyValue(aUString, "Prefix"));
+    aPropertyValues.push_back(comphelper::makePropertyValue("Prefix", aUString));
 
     //suffix
     aUString = rFmt.GetSuffix();
-    aPropertyValues.push_back(makePropertyValue(aUString, "Suffix"));
+    aPropertyValues.push_back(comphelper::makePropertyValue("Suffix", aUString));
 
     //char style name
     OUString CharStyleName(rCharFormatName);
 
     aUString.clear();
     SwStyleNameMapper::FillProgName( CharStyleName, aUString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-    aPropertyValues.push_back(makePropertyValue(aUString, "CharStyleName"));
+    aPropertyValues.push_back(comphelper::makePropertyValue("CharStyleName", aUString));
 
     //startvalue
     nINT16 = rFmt.GetStart();
-    aPropertyValues.push_back(makePropertyValue(nINT16, "StartWith"));
+    aPropertyValues.push_back(comphelper::makePropertyValue("StartWith", nINT16));
 
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         //leftmargin
         sal_Int32 nINT32 = convertTwipToMm100(rFmt.GetAbsLSpace());
-        aPropertyValues.push_back(
-                makePropertyValue(nINT32, UNO_NAME_LEFT_MARGIN));
+        aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_LEFT_MARGIN, nINT32));
 
         //chartextoffset
         nINT32 = convertTwipToMm100(rFmt.GetCharTextDistance());
-        aPropertyValues.push_back(
-                makePropertyValue(nINT32, UNO_NAME_SYMBOL_TEXT_DISTANCE));
+        aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_SYMBOL_TEXT_DISTANCE, nINT32));
 
         //firstlineoffset
         nINT32 = convertTwipToMm100(rFmt.GetFirstLineOffset());
-        aPropertyValues.push_back(
-                makePropertyValue(nINT32, UNO_NAME_FIRST_LINE_OFFSET));
+        aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_FIRST_LINE_OFFSET, nINT32));
     }
 
     // PositionAndSpaceMode
@@ -1406,8 +1398,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
     {
         nINT16 = PositionAndSpaceMode::LABEL_ALIGNMENT;
     }
-    aPropertyValues.push_back(
-            makePropertyValue(nINT16, UNO_NAME_POSITION_AND_SPACE_MODE));
+    aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_POSITION_AND_SPACE_MODE, nINT16));
 
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
@@ -1421,28 +1412,24 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
         {
             nINT16 = LabelFollow::NOTHING;
         }
-        aPropertyValues.push_back(
-                makePropertyValue(nINT16, UNO_NAME_LABEL_FOLLOWED_BY));
+        aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_LABEL_FOLLOWED_BY, nINT16));
 
         // ListtabStopPosition
         sal_Int32 nINT32 = convertTwipToMm100(rFmt.GetListtabPos());
-        aPropertyValues.push_back(
-                makePropertyValue(nINT32, UNO_NAME_LISTTAB_STOP_POSITION));
+        aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_LISTTAB_STOP_POSITION, nINT32));
 
         // FirstLineIndent
         nINT32 = convertTwipToMm100(rFmt.GetFirstLineIndent());
-        aPropertyValues.push_back(
-                makePropertyValue(nINT32, UNO_NAME_FIRST_LINE_INDENT));
+        aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_FIRST_LINE_INDENT, nINT32));
 
         // IndentAt
         nINT32 = convertTwipToMm100(rFmt.GetIndentAt());
-        aPropertyValues.push_back(
-                makePropertyValue(nINT32, UNO_NAME_INDENT_AT));
+        aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_INDENT_AT, nINT32));
     }
 
     //numberingtype
     nINT16 = rFmt.GetNumberingType();
-    aPropertyValues.push_back(makePropertyValue(nINT16, "NumberingType"));
+    aPropertyValues.push_back(comphelper::makePropertyValue("NumberingType", nINT16));
 
     if(!bChapterNum)
     {
@@ -1450,25 +1437,24 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
         {
             //BulletId
             nINT16 = rFmt.GetBulletChar();
-            aPropertyValues.push_back(makePropertyValue(nINT16, "BulletId"));
+            aPropertyValues.push_back(comphelper::makePropertyValue("BulletId", nINT16));
 
             const vcl::Font* pFont = rFmt.GetBulletFont();
 
             //BulletChar
             aUString = OUString(rFmt.GetBulletChar());
-            aPropertyValues.push_back(makePropertyValue(aUString, "BulletChar"));
+            aPropertyValues.push_back(comphelper::makePropertyValue("BulletChar", aUString));
 
             //BulletFontName
             aUString = pFont ? pFont->GetStyleName() : OUString();
-            aPropertyValues.push_back(makePropertyValue(aUString, "BulletFontName"));
+            aPropertyValues.push_back(comphelper::makePropertyValue("BulletFontName", aUString));
 
             //BulletFont
             if(pFont)
             {
                  awt::FontDescriptor aDesc;
                 SvxUnoFontDescriptor::ConvertFromFont( *pFont, aDesc );
-                aPropertyValues.push_back(
-                        makePropertyValue(aDesc, UNO_NAME_BULLET_FONT));
+                aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_BULLET_FONT, aDesc));
             }
         }
         if(SVX_NUM_BITMAP == rFmt.GetNumberingType())
@@ -1483,8 +1469,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
             }
             else
                 aUString.clear();
-            aPropertyValues.push_back(
-                    makePropertyValue(aUString, UNO_NAME_GRAPHIC_URL));
+            aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC_URL, aUString));
 
             //graphicbitmap
             const Graphic* pGraphic = 0;
@@ -1493,15 +1478,13 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
             if(pGraphic)
             {
                 uno::Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( pGraphic->GetBitmapEx() );
-                aPropertyValues.push_back(
-                        makePropertyValue(xBmp, UNO_NAME_GRAPHIC_BITMAP));
+                aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC_BITMAP, xBmp));
             }
              Size aSize = rFmt.GetGraphicSize();
             // #i101131#
             // adjust conversion due to type mismatch between <Size> and <awt::Size>
             awt::Size aAwtSize(convertTwipToMm100(aSize.Width()), convertTwipToMm100(aSize.Height()));
-            aPropertyValues.push_back(
-                    makePropertyValue(aAwtSize, UNO_NAME_GRAPHIC_SIZE));
+            aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_GRAPHIC_SIZE, aAwtSize));
 
             const SwFmtVertOrient* pOrient = rFmt.GetGraphicOrientation();
             if(pOrient)
@@ -1516,8 +1499,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
     else
     {
         aUString = *pHeadingStyleName;
-        aPropertyValues.push_back(
-                makePropertyValue(aUString, UNO_NAME_HEADING_STYLE_NAME));
+        aPropertyValues.push_back(comphelper::makePropertyValue(UNO_NAME_HEADING_STYLE_NAME, aUString));
     }
 
     return ::comphelper::containerToSequence(aPropertyValues);
