@@ -103,6 +103,7 @@ class __Doc__:
         self.fontheight = 12
         self.fontweight = 100
         self.fontstyle = 0
+        self.points = []
 
 from math import pi, sin, cos, asin, sqrt, log10
 
@@ -930,6 +931,8 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
                 return
     if not _.pen and not dot:
         return
+    if _.pen and not dot:
+        _.points = [] # new line drawing: forget the points
     shape = __draw__("PolyLineShape")
     shape.RotateAngle = 0
     shape.PolyPolygon = tuple([tuple([__Point__(0, 0)])])
@@ -964,8 +967,21 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
 
 def __fillit__(filled = True):
     oldshape = __getshape__(__ACTUAL__)
-    if oldshape and oldshape.LineStartCenter:
-        __removeshape__(__ACTUAL__)  # FIXME close dotted polyline
+    if (oldshape and oldshape.LineStartCenter) or _.points:
+        if oldshape:
+            __removeshape__(__ACTUAL__)  # FIXME close dotted polyline
+        if _.points:
+            p = position()
+            h = heading()
+            for i in _.points:
+                position(i)
+                __pen__(1)
+                __checkhalt__()
+            _.points = []
+            __fillit__(filled)
+            __pen__(0)
+            position(p)
+            heading(h)
         return
     if oldshape and "LineShape" in oldshape.ShapeType:
         shape = __draw__("PolyPolygonShape", False)
@@ -1016,6 +1032,7 @@ def point():
     oldstyle, _.linestyle = _.linestyle, __LineStyle_DOTTED__
     __go__(__TURTLE__, 0, True)
     _.pen, _.linestyle = oldpen, oldstyle
+    _.points.append(position())
 
 def __boxshape__(shapetype, l):
     turtle = __getshape__(__TURTLE__)
