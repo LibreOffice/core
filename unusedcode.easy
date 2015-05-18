@@ -86,7 +86,6 @@ dbaccess::StorageInputStream::close()
 dbaui::OTableRowView::SetUpdatable(bool)
 oglcanvas::CanvasHelper::drawPoint(com::sun::star::rendering::XCanvas const*, com::sun::star::geometry::RealPoint2D const&, com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&)
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
-oox::AttributeConversion::decodeUnsignedHex(rtl::OUString const&)
 oox::drawingml::TextListStyle::dump() const
 sc::CLBuildKernelThread::CLBuildKernelThread()
 sc::CLBuildKernelThread::consume()
@@ -99,6 +98,7 @@ sc::FormulaGroupAreaListener::getRange() const
 sc::FormulaGroupAreaListener::getTopCellPos() const
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
+std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_M_move_data(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&, std::integral_constant<bool, true>)
 std::__cxx1998::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::allocator<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread> > >::reserve(unsigned long)
 vcl::IsWindowSystemAvailable()
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)

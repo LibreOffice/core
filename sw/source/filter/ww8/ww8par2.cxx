@@ -3488,14 +3488,6 @@ void SwWW8ImplReader::StopTable()
     }
 }
 
-// GetTableLeft() is needed for graphic objects bound to paragraphs in tables.
-// For indented tables the base for WW is the margin that would be used without
-// the table; SW uses the left table margin.
-short SwWW8ImplReader::GetTableLeft()
-{
-    return (m_pTableDesc) ? m_pTableDesc->GetMinLeft() : 0;
-}
-
 bool SwWW8ImplReader::IsInvalidOrToBeMergedTabCell() const
 {
     if( !m_pTableDesc )

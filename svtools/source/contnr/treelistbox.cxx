@@ -2855,13 +2855,6 @@ void SvTreeListBox::ImplInitStyle()
     Invalidate();
 }
 
-void SvTreeListBox::PaintEntry(SvTreeListEntry* pEntry, vcl::RenderContext& rRenderContext)
-{
-    DBG_ASSERT(pEntry,"PaintEntry:No Entry");
-    if (pEntry)
-        pImp->PaintEntry(pEntry, rRenderContext);
-}
-
 void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
 {
     DBG_ASSERT(pEntry,"InvalidateEntry:No Entry");

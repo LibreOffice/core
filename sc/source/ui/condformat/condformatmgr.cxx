@@ -92,13 +92,6 @@ ScConditionalFormat* ScCondFormatManagerWindow::GetSelection()
     return mpFormatList->GetFormat(nIndex);
 }
 
-void ScCondFormatManagerWindow::Update()
-{
-    Clear();
-    maMapLBoxEntryToCondIndex.clear();
-    Init();
-}
-
 void ScCondFormatManagerWindow::setColSizes()
 {
     HeaderBar &rBar = GetTheHeaderBar();

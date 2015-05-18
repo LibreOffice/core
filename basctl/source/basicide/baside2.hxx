@@ -179,7 +179,6 @@ private:
 protected:
     virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
     BreakPoint*     FindBreakPoint( const Point& rMousePos );
-    void            ShowMarker(vcl::RenderContext& rRenderContext);
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 

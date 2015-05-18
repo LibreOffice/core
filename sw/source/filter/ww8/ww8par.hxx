@@ -1548,7 +1548,6 @@ private:
     bool InAnyApo() const { return InEqualOrHigherApo(1); }
     void TabCellEnd();
     void StopTable();
-    short GetTableLeft();
     bool IsInvalidOrToBeMergedTabCell() const;
 
 // Nummerierungen / Aufzaehlungen ( Autonumbered List Data Descriptor )

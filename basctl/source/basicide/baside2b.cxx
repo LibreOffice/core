@@ -1426,29 +1426,6 @@ void BreakPointWindow::SetNoMarker ()
     SetMarkerPos(NoMarker);
 }
 
-void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
-{
-    if (nMarkerPos == NoMarker)
-        return;
-
-    Size const aOutSz = GetOutputSize();
-    long const nLineHeight = GetTextHeight();
-
-    Image aMarker = GetImage(bErrorMarker ? IMGID_ERRORMARKER : IMGID_STEPMARKER);
-
-    Size aMarkerSz(aMarker.GetSizePixel());
-    aMarkerSz = rRenderContext.PixelToLogic(aMarkerSz);
-    Point aMarkerOff(0, 0);
-    aMarkerOff.X() = (aOutSz.Width() - aMarkerSz.Width()) / 2;
-    aMarkerOff.Y() = (nLineHeight - aMarkerSz.Height()) / 2;
-
-    sal_uLong nY = nMarkerPos * nLineHeight - nCurYOffset;
-    Point aPos(0, nY);
-    aPos += aMarkerOff;
-
-    rRenderContext.DrawImage(aPos, aMarker);
-}
-
 BreakPoint* BreakPointWindow::FindBreakPoint( const Point& rMousePos )
 {
     size_t nLineHeight = GetTextHeight();

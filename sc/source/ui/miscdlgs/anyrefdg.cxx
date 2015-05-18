@@ -1016,10 +1016,4 @@ void ScRefHdlModalImpl::StateChanged( StateChangedType nStateChange )
     ScRefHandler::stateChanged( nStateChange, true );
 }
 
-ScAnyRefModalDlg::ScAnyRefModalDlg(vcl::Window* pParent, const OUString& rID,
-    const OUString& rUIXMLDescription)
-    : ScRefHdlModalImpl(pParent, rID, rUIXMLDescription)
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

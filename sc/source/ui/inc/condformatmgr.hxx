@@ -41,7 +41,6 @@ public:
 
     void DeleteSelection();
     ScConditionalFormat* GetSelection();
-    void Update();
     virtual void Resize() SAL_OVERRIDE;
 };
 

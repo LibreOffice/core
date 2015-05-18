@@ -60,9 +60,6 @@ protected:
     void            CreateLayoutData() const;
     /// determines whether we currently have layout data
     bool            HasLayoutData() const;
-    /// returns the current layout data
-    vcl::ControlLayoutData*
-                    GetLayoutData() const;
 
     /** this calls both our event listeners, and a specified handler
 

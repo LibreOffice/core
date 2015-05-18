@@ -1518,11 +1518,6 @@ void SvxIconChoiceCtrl_Impl::SetUpdateMode( bool bUpdate )
     }
 }
 
-void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, bool /*bIsBackgroundPainted*/)
-{
-    pView->Invalidate(CalcFocusRect(pEntry));
-}
-
 // priorities of the emphasis:  bDropTarget => bCursored => bSelected
 void SvxIconChoiceCtrl_Impl::PaintEmphasis(const Rectangle& rTextRect, const Rectangle& rImageRect, bool bSelected,
                                            bool bDropTarget, bool bCursored, vcl::RenderContext& rRenderContext, bool bIsBackgroundPainted)
@@ -1820,11 +1815,6 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetEntry( const Point& rDocPos, 
         }
     }
     return 0;
-}
-
-Point SvxIconChoiceCtrl_Impl::GetEntryPos( SvxIconChoiceCtrlEntry* pEntry )
-{
-    return pEntry->aRect.TopLeft();
 }
 
 void SvxIconChoiceCtrl_Impl::MakeEntryVisible( SvxIconChoiceCtrlEntry* pEntry, bool bBound )

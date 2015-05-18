@@ -1604,17 +1604,12 @@ bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             assert(pRefDlg);
             bIsModal = pChildWnd->IsVisible() && pRefDlg &&
                 !( pRefDlg->IsRefInputMode() && pRefDlg->IsDocAllowed(pDocSh) );
-        }
-        else if(pModalDlg)
-        {
-            bIsModal = pModalDlg->IsVisible() && !(pModalDlg->IsRefInputMode() && pModalDlg->IsDocAllowed(pDocSh) );
         }
         else
         {
@@ -1646,7 +1641,6 @@ bool ScModule::IsTableLocked()
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg(dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow()));
@@ -1656,8 +1650,6 @@ bool ScModule::IsTableLocked()
                 bLocked = pRefDlg->IsTableLocked();
             }
         }
-        else if( pModalDlg )
-            bLocked = pModalDlg->IsTableLocked();
         else
             bLocked = true;     // for other views, see IsModalMode
     }
@@ -1674,11 +1666,8 @@ bool ScModule::IsRefDialogOpen()
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
         if ( pChildWnd )
             bIsOpen = pChildWnd->IsVisible();
-        else if(pModalDlg)
-            bIsOpen = pModalDlg->IsVisible();
         else
             bIsOpen = true;     // for other views, see IsModalMode
     }
@@ -1695,16 +1684,11 @@ bool ScModule::IsFormulaMode()
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             assert(pRefDlg);
             bIsFormula = pChildWnd->IsVisible() && pRefDlg && pRefDlg->IsRefInputMode();
-        }
-        else if(pModalDlg)
-        {
-            bIsFormula = pModalDlg->IsVisible() && pModalDlg->IsRefInputMode();
         }
         else
             bIsFormula = true;
@@ -1744,8 +1728,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
     if( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
-        OSL_ENSURE( pChildWnd || pModalDlg, "NoChildWin" );
+        OSL_ENSURE( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
             if ( nCurRefDlgId == SID_OPENDLG_CONSOLIDATE && pMarkData )
@@ -1766,13 +1749,6 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
                 pRefDlg->HideReference( false );
                 pRefDlg->SetReference( aNew, pDoc );
             }
-        }
-        else if(pModalDlg)
-        {
-            // hide the (color) selection now instead of later from LoseFocus,
-            // don't abort the ref input that causes this call (bDoneRefMode = sal_False)
-            pModalDlg->HideReference( false );
-            pModalDlg->SetReference( aNew, pDoc );
         }
     }
     else
@@ -1797,8 +1773,7 @@ void ScModule::AddRefEntry()
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
-        OSL_ENSURE( pChildWnd || pModalDlg, "NoChildWin" );
+        OSL_ENSURE( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
@@ -1808,8 +1783,6 @@ void ScModule::AddRefEntry()
                 pRefDlg->AddRefEntry();
             }
         }
-        else if(pModalDlg)
-            pModalDlg->AddRefEntry();
     }
     else
     {
@@ -1830,8 +1803,7 @@ void ScModule::EndReference()
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
-        ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
-        OSL_ENSURE( pChildWnd || pModalDlg, "NoChildWin" );
+        OSL_ENSURE( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
@@ -1841,8 +1813,6 @@ void ScModule::EndReference()
                 pRefDlg->SetActive();
             }
         }
-        else if (pModalDlg)
-            pModalDlg->SetActive();
     }
 }
 
@@ -2268,57 +2238,6 @@ vcl::Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAn
             return *i;
 
     return NULL;
-}
-
-ScAnyRefModalDlg* ScModule::GetCurrentAnyRefDlg()
-{
-    if(!maAnyRefDlgStack.empty())
-        return maAnyRefDlgStack.top();
-
-    return NULL;
-}
-
-void ScModule::PushNewAnyRefDlg( ScAnyRefModalDlg* pNewDlg )
-{
-    maAnyRefDlgStack.push( pNewDlg );
-
-    // prevent mismatch between calls to
-    // SetInRefMode(true) and SetInRefMode(false)
-    if(maAnyRefDlgStack.size() != 1)
-        return;
-
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-    while(pViewShell)
-    {
-        if ( pViewShell->ISA(ScTabViewShell) )
-        {
-            ScTabViewShell* pViewSh = static_cast<ScTabViewShell*>(pViewShell);
-            pViewSh->SetInRefMode( true );
-        }
-        pViewShell = SfxViewShell::GetNext( *pViewShell );
-    }
-}
-
-void ScModule::PopAnyRefDlg()
-{
-    maAnyRefDlgStack.pop();
-
-    if(maAnyRefDlgStack.empty())
-    {
-        // no modal ref dlg any more
-        // disable the flag in ScGridWindow
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while(pViewShell)
-        {
-            if ( pViewShell->ISA(ScTabViewShell) )
-            {
-                ScTabViewShell* pViewSh = static_cast<ScTabViewShell*>(pViewShell);
-                pViewSh->SetInRefMode( false );
-            }
-            pViewShell = SfxViewShell::GetNext( *pViewShell );
-        }
-
-    }
 }
 
 using namespace com::sun::star;

@@ -364,7 +364,6 @@ public:
     void                LoseFocus();
     void                SetUpdateMode( bool bUpdate );
     bool                GetUpdateMode() const { return bUpdateMode; }
-    void                PaintEntry(SvxIconChoiceCtrlEntry* pEntry, bool bIsBackgroundPainted = false);
     void                PaintEntry(SvxIconChoiceCtrlEntry*, const Point&, vcl::RenderContext& rRenderContext, bool bIsBackgroundPainted = false);
 
     void                SetEntryPos(
@@ -389,7 +388,6 @@ public:
 
     SvxIconChoiceCtrlEntry* GetEntry( const Point& rDocPos, bool bHit = false );
 
-    static Point        GetEntryPos( SvxIconChoiceCtrlEntry* );
     void                MakeEntryVisible( SvxIconChoiceCtrlEntry* pEntry, bool bBound = true );
 
     void                Arrange(

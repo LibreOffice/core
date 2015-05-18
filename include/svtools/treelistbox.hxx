@@ -757,7 +757,6 @@ public:
 
     SvTreeListEntry*    GetEntry( const Point& rPos, bool bHit = false ) const;
 
-    void            PaintEntry(SvTreeListEntry* pEntry, vcl::RenderContext& rRenderContext);
     long            PaintEntry(SvTreeListEntry* pEntry, long nLine, vcl::RenderContext& rRenderContext,
                                 SvLBoxTabFlags nTabFlagMask = SvLBoxTabFlags::ALL);
     virtual Rectangle GetFocusRect( SvTreeListEntry*, long nLine );

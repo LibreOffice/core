@@ -261,13 +261,6 @@ void ScRefHdlrImplBase<TWindow, bBindRef>::StateChanged( StateChangedType nState
     ScRefHandler::stateChanged( nStateChange, bBindRef );
 }
 
-class ScAnyRefModalDlg : public ScRefHdlModalImpl
-{
-public:
-    ScAnyRefModalDlg(vcl::Window* pParent, const OUString& rID,
-        const OUString& rUIXMLDescription);
-};
-
 template<class TDerived, class TBase, bool bBindRef = true>
 struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
 {

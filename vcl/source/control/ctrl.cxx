@@ -116,11 +116,6 @@ bool Control::HasLayoutData() const
     return mpControlData && mpControlData->mpLayoutData != NULL;
 }
 
-vcl::ControlLayoutData* Control::GetLayoutData() const
-{
-    return mpControlData->mpLayoutData;
-}
-
 void Control::SetText( const OUString& rStr )
 {
     ImplClearLayoutData();

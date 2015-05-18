@@ -73,7 +73,6 @@ class ScFormEditData;
 class ScMarkData;
 struct ScDragData;
 struct ScClipData;
-class ScAnyRefModalDlg;
 
 //      for internal Drag&Drop:
 
@@ -113,7 +112,6 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     bool                mbIsInSharedDocSaving:1;
 
     std::map<sal_uInt16, std::list<VclPtr<vcl::Window> > > m_mapRefWindow;
-    std::stack<VclPtr<ScAnyRefModalDlg> > maAnyRefDlgStack;
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 
@@ -257,10 +255,6 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     SC_DLLPUBLIC bool   RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
     SC_DLLPUBLIC bool   UnregisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd );
     SC_DLLPUBLIC vcl::Window * Find1RefWindow( sal_uInt16 nSlotId, vcl::Window *pWndAncestor );
-
-    ScAnyRefModalDlg* GetCurrentAnyRefDlg();
-    void PushNewAnyRefDlg( ScAnyRefModalDlg* pDlg );
-    void PopAnyRefDlg();
 };
 
 #define SC_MOD() ( *reinterpret_cast<ScModule**>(GetAppData(SHL_CALC)) )

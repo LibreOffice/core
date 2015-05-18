@@ -1657,23 +1657,6 @@ ImplTabBarItem* TabBar::ImplGetLastTabBarItem( sal_uInt16 nItemCount )
     return pItem;
 }
 
-Rectangle TabBar::ImplGetInsertTabRect(ImplTabBarItem* pItem) const
-{
-    if (mbHasInsertTab && pItem)
-    {
-        sal_Int32 aScaleFactor = GetDPIScaleFactor();
-        sal_Int32 nInsertTabWidth = aScaleFactor * INSERT_TAB_WIDTH;
-        Rectangle aInsTabRect = pItem->maRect;
-        if (!mbMirrored)
-            aInsTabRect.setX(aInsTabRect.getX() + aInsTabRect.getWidth());
-        else
-            aInsTabRect.setX(aInsTabRect.getX() - nInsertTabWidth);
-        aInsTabRect.setWidth(nInsertTabWidth);
-        return aInsTabRect;
-    }
-    return Rectangle();
-}
-
 bool TabBar::DeactivatePage()
 {
     return true;
