@@ -19,7 +19,6 @@
 
 #include <ctype.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <limits.h>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>

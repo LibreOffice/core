@@ -82,8 +82,6 @@
 #include <rtl/character.hxx>
 #include <xmloff/odffields.hxx>
 
-#include <stdio.h>
-
 using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;

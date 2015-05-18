@@ -67,10 +67,6 @@
 #include <cstdio>
 #include <o3tl/enumrange.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 using namespace ::com::sun::star;
 using namespace nsFieldFlags;
 

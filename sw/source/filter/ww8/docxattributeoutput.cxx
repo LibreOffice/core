@@ -128,10 +128,6 @@
 
 #include <algorithm>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 using ::editeng::SvxBorderLine;
 
 using namespace oox;
@@ -3670,9 +3666,7 @@ void DocxAttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_
 
 void DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "TODO: DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )\n" );
-#endif
+    OSL_TRACE( "TODO: DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )\n" );
 }
 
 void DocxAttributeOutput::TableRowEnd( sal_uInt32 /*nDepth*/ )
