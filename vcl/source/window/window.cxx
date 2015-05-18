@@ -1292,12 +1292,12 @@ ImplWinData* Window::ImplGetWinData() const
 }
 
 
-void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
+void Window::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
 {
     if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
         return;
 
-    if (nFlags & COPYAREA_WINDOWINVALIDATE)
+    if (bWindowInvalidate)
     {
         const Rectangle aSrcRect(Point(aPosAry.mnSrcX, aPosAry.mnSrcY),
                 Size(aPosAry.mnSrcWidth, aPosAry.mnSrcHeight));
@@ -1315,7 +1315,7 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
         return;
     }
 
-    OutputDevice::CopyDeviceArea(aPosAry, nFlags);
+    OutputDevice::CopyDeviceArea(aPosAry, bWindowInvalidate);
 }
 
 SalGraphics* Window::ImplGetFrameGraphics() const

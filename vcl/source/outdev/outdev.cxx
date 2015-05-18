@@ -611,7 +611,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
 void OutputDevice::CopyArea( const Point& rDestPt,
                              const Point& rSrcPt,  const Size& rSrcSize,
-                             sal_uInt16 nFlags )
+                             bool bWindowInvalidate )
 {
     if ( ImplIsRecordLayout() )
         return;
@@ -646,18 +646,18 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 
         AdjustTwoRect( aPosAry, aSrcOutRect );
 
-        CopyDeviceArea ( aPosAry, nFlags );
+        CopyDeviceArea( aPosAry, bWindowInvalidate );
     }
 
     SetRasterOp( eOldRop );
 
     if( mpAlphaVDev )
-        mpAlphaVDev->CopyArea( rDestPt, rSrcPt, rSrcSize, nFlags );
+        mpAlphaVDev->CopyArea( rDestPt, rSrcPt, rSrcSize, bWindowInvalidate );
 }
 
 // Direct OutputDevice drawing protected function
 
-void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 /*nFlags*/)
+void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool /*bWindowInvalidate*/)
 {
     if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
         return;

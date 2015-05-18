@@ -186,9 +186,6 @@ namespace o3tl
     template<> struct typed_flags<DrawTextFlags> : is_typed_flags<DrawTextFlags, 0xffff> {};
 }
 
-// Flags for CopyArea()
-#define COPYAREA_WINDOWINVALIDATE       ((sal_uInt16)0x0001)
-
 // Flags for DrawImage()
 #define IMAGE_DRAW_DISABLE              ((sal_uInt16)0x0001)
 #define IMAGE_DRAW_HIGHLIGHT            ((sal_uInt16)0x0002)
@@ -555,7 +552,7 @@ public:
     virtual void                CopyArea(
                                     const Point& rDestPt,
                                     const Point& rSrcPt,  const Size& rSrcSize,
-                                    sal_uInt16 nFlags = 0 );
+                                    bool bWindowInvalidate = false );
 
     // Call before and after a paint operation to reduce flushing
     void                        BeginPaint();
@@ -563,7 +560,7 @@ public:
 
 protected:
 
-    virtual void                CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags);
+    virtual void                CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate = false);
 
     SAL_DLLPRIVATE void         drawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
 

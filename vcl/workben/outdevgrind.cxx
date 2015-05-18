@@ -341,7 +341,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             &OutputDevice::CopyArea,
             _1,
-            aPt1,aPt3,aRect2.GetSize(),(sal_uInt16)0 ));
+            aPt1, aPt3, aRect2.GetSize(), false ));
 
 #ifdef NEEDS_QUALIY_PARAMTER
     /* void DrawBitmap( const Point& rDestPt,

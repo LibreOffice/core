@@ -339,7 +339,7 @@ void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
 
 void Printer::CopyArea( const Point& /*rDestPt*/,
                         const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/,
-                        sal_uInt16 /*nFlags*/ )
+                        bool /*bWindowInvalidate*/ )
 {
     DBG_ASSERT( false, "Don't use OutputDevice::CopyArea(...) with printer devices!" );
 }

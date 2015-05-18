@@ -399,7 +399,7 @@ public:
                                             const OutputDevice& rOutDev ) SAL_OVERRIDE;
     virtual void                CopyArea( const Point& rDestPt,
                                           const Point& rSrcPt,  const Size& rSrcSize,
-                                          sal_uInt16 nFlags = 0 ) SAL_OVERRIDE;
+                                          bool bWindowInvalidate = false ) SAL_OVERRIDE;
 
     virtual void                DrawImage( const Point&, const Image&, sal_uInt16 ) SAL_OVERRIDE;
     virtual void                DrawImage( const Point&, const Size&,
