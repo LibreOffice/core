@@ -10,12 +10,11 @@
 #include <SyncDbusSessionHelper.hxx>
 
 #include <gio/gio.h>
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::std;
 
 namespace
 {
@@ -166,9 +165,9 @@ void SyncDbusSessionHelper::InstallPrinterDrivers(
     {
         const OString sPackagenameAscii = OUStringToOString(sPackagename, RTL_TEXTENCODING_ASCII_US);
         const OString sInteractionAscii = OUStringToOString(sInteraction, RTL_TEXTENCODING_ASCII_US);
-        boost::shared_ptr<GDBusProxy> proxy(lcl_GetPackageKitProxy("Query"), GObjectDeleter<GDBusProxy>());
+        std::shared_ptr<GDBusProxy> proxy(lcl_GetPackageKitProxy("Query"), GObjectDeleter<GDBusProxy>());
         GErrorWrapper error(NULL);
-        boost::shared_ptr<GVariant> result(g_dbus_proxy_call_sync (proxy.get(),
+        std::shared_ptr<GVariant> result(g_dbus_proxy_call_sync (proxy.get(),
                          "IsInstalled",
                          g_variant_new ("(ss)",
                                 sPackagenameAscii.getStr(),
