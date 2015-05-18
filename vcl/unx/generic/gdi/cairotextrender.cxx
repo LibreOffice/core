@@ -22,10 +22,12 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/svapp.hxx>
 
 #include "generic/printergfx.hxx"
 #include "generic/genpspgraphics.h"
 #include "generic/geninst.h"
+#include "generic/glyphcache.hxx"
 #include "PhysicalFontFace.hxx"
 #include "impfont.hxx"
 
