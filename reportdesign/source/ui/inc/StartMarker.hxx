@@ -39,12 +39,15 @@ namespace rptui
         static Image*               s_pDefExpanded;
         static oslInterlockedCount  s_nImageRefCount; /// When 0 all static images will be destroyed
 
-        bool                    m_bShowRuler;
+        bool m_bShowRuler;
 
         void changeImage();
         void initDefaultNodeImages();
         void setColor();
+
         virtual void ImplInitSettings() SAL_OVERRIDE;
+        virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+
         OStartMarker(OStartMarker&) SAL_DELETED_FUNCTION;
         void operator =(OStartMarker&) SAL_DELETED_FUNCTION;
     public:
@@ -53,26 +56,26 @@ namespace rptui
         virtual void dispose() SAL_OVERRIDE;
 
         // SfxListener
-        virtual void    Notify(SfxBroadcaster & rBc, SfxHint const & rHint) SAL_OVERRIDE;
+        virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint) SAL_OVERRIDE;
         // Window overrides
-        virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-        virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-        virtual void    Resize() SAL_OVERRIDE;
-        virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
+        virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+        virtual void MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
+        virtual void Resize() SAL_OVERRIDE;
+        virtual void RequestHelp(const HelpEvent& rHEvt) SAL_OVERRIDE;
         using Window::Notify;
 
-        void            setTitle(const OUString& _sTitle);
-        sal_Int32       getMinHeight() const;
+        void setTitle(const OUString& _sTitle);
+        sal_Int32 getMinHeight() const;
 
         /** shows or hides the ruler.
         */
-        void            showRuler(bool _bShow);
+        void showRuler(bool _bShow);
 
-        virtual void    setCollapsed(bool _bCollapsed) SAL_OVERRIDE;
+        virtual void setCollapsed(bool _bCollapsed) SAL_OVERRIDE;
 
         /** zoom the ruler and view windows
         */
-        void            zoom(const Fraction& _aZoom);
+        void zoom(const Fraction& _aZoom);
     };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_STARTMARKER_HXX

@@ -43,10 +43,10 @@ OEndMarker::~OEndMarker()
 {
 }
 
-void OEndMarker::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& /*rRect*/ )
+void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
     Fraction aCornerSpace(long(CORNER_SPACE));
-    aCornerSpace *= GetMapMode().GetScaleX();
+    aCornerSpace *= rRenderContext.GetMapMode().GetScaleX();
     const long nCornerSpace = aCornerSpace;
 
     Size aSize = GetSizePixel();
@@ -63,16 +63,17 @@ void OEndMarker::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle&
     aStartColor.RGBtoHSB(nHue, nSat, nBri);
     nSat += 40;
     Color aEndColor(Color::HSBtoRGB(nHue, nSat, nBri));
-    Gradient aGradient(GradientStyle_LINEAR,aStartColor,aEndColor);
+    Gradient aGradient(GradientStyle_LINEAR, aStartColor, aEndColor);
     aGradient.SetSteps(static_cast<sal_uInt16>(aSize.Height()));
 
-    DrawGradient(PixelToLogic(aPoly) ,aGradient);
-    if ( m_bMarked )
+    rRenderContext.DrawGradient(PixelToLogic(aPoly), aGradient);
+    if (m_bMarked)
     {
-        Rectangle aRect( Point(-nCornerSpace,nCornerSpace),
-                         Size(aSize.Width()- nCornerSpace,aSize.Height() - nCornerSpace- nCornerSpace));
-        ColorChanger aColors( this, COL_WHITE, COL_WHITE );
-        DrawPolyLine(Polygon(PixelToLogic(aRect)),LineInfo(LINE_SOLID,2));
+        Rectangle aRect(Point(-nCornerSpace, nCornerSpace),
+                         Size(aSize.Width() - nCornerSpace,
+                              aSize.Height() - nCornerSpace - nCornerSpace));
+        ColorChanger aColors(this, COL_WHITE, COL_WHITE);
+        rRenderContext.DrawPolyLine(Polygon(PixelToLogic(aRect)), LineInfo(LINE_SOLID, 2));
     }
 }
 

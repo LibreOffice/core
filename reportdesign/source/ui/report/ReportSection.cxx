@@ -76,23 +76,23 @@ sal_Int32 lcl_getOverlappedControlColor(/*const uno::Reference <lang::XMultiServ
 }
 
 OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< report::XSection >& _xSection)
-: Window(_pParent,WB_DIALOGCONTROL)
-, ::comphelper::OPropertyChangeListener(m_aMutex)
-, DropTargetHelper(this)
-,m_pPage(NULL)
-,m_pView(NULL)
-,m_pParent(_pParent)
-,m_pMulti(NULL)
-,m_pReportListener(NULL)
-,m_xSection(_xSection)
-,m_nPaintEntranceCount(0)
-,m_eMode(RPTUI_SELECT)
-,m_bDialogModelChanged(false)
+    : Window(_pParent,WB_DIALOGCONTROL)
+    , ::comphelper::OPropertyChangeListener(m_aMutex)
+    , DropTargetHelper(this)
+    , m_pPage(NULL)
+    , m_pView(NULL)
+    , m_pParent(_pParent)
+    , m_pMulti(NULL)
+    , m_pReportListener(NULL)
+    , m_xSection(_xSection)
+    , m_nPaintEntranceCount(0)
+    , m_eMode(RPTUI_SELECT)
+    , m_bDialogModelChanged(false)
 {
     //EnableChildTransparentMode();
     SetHelpId(HID_REPORTSECTION);
-    SetMapMode( MapMode( MAP_100TH_MM ) );
-    SetParentClipMode( PARENTCLIPMODE_CLIP );
+    SetMapMode(MapMode(MAP_100TH_MM));
+    SetParentClipMode(PARENTCLIPMODE_CLIP);
     EnableChildTransparentMode( false );
     SetPaintTransparent( false );
 
@@ -149,7 +149,7 @@ void OReportSection::Paint( vcl::RenderContext& rRenderContext, const Rectangle&
         SdrPaintWindow* pTargetPaintWindow = 0;
 
         // mark repaint start
-        if(pPgView)
+        if (pPgView)
         {
             pTargetPaintWindow = pPgView->GetView().BeginDrawLayers(this, aPaintRectRegion);
             OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
@@ -161,11 +161,11 @@ void OReportSection::Paint( vcl::RenderContext& rRenderContext, const Rectangle&
         // do paint (unbuffered) and mark repaint end
         if(pPgView)
         {
-            pPgView->DrawLayer(0, this);
-            pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, true);
+            pPgView->DrawLayer(0, &rRenderContext);
+            pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, &rRenderContext);
         }
 
-        m_pView->CompleteRedraw(this,aPaintRectRegion);
+        m_pView->CompleteRedraw(&rRenderContext, aPaintRectRegion);
         --m_nPaintEntranceCount;
     }
 }

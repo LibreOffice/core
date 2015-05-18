@@ -99,33 +99,33 @@ void OStartMarker::dispose()
 
 sal_Int32 OStartMarker::getMinHeight() const
 {
-    Fraction aExtraWidth(long(2*REPORT_EXTRA_SPACE));
+    Fraction aExtraWidth(long(2 * REPORT_EXTRA_SPACE));
     aExtraWidth *= GetMapMode().GetScaleX();
-    return LogicToPixel(Size(0,m_aText->GetTextHeight())).Height() + (long)aExtraWidth;
+    return LogicToPixel(Size(0, m_aText->GetTextHeight())).Height() + long(aExtraWidth);
 }
 
-void OStartMarker::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    (void)rRect;
-    Size aSize = GetOutputSizePixel();
+    Size aSize = rRenderContext.GetOutputSizePixel();
     long nSize = aSize.Width();
-    const long nCornerWidth = long(CORNER_SPACE * (double)GetMapMode().GetScaleX());
+    const long nCornerWidth = long(CORNER_SPACE * double(GetMapMode().GetScaleX()));
 
-    if ( isCollapsed() )
+    if (isCollapsed())
     {
-        SetClipRegion();
+        rRenderContext.SetClipRegion();
     }
     else
     {
         const long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
         nSize = aSize.Width() - nVRulerWidth;
         aSize.Width() += nCornerWidth;
-        SetClipRegion(vcl::Region(PixelToLogic(Rectangle(Point(),Size(nSize,aSize.Height())))));
+        rRenderContext.SetClipRegion(vcl::Region(rRenderContext.PixelToLogic(Rectangle(Point(),
+                                                                             Size(nSize, aSize.Height())))));
     }
 
-    Rectangle aWholeRect(Point(),aSize);
+    Rectangle aWholeRect(Point(), aSize);
     {
-        const ColorChanger aColors( this, m_nTextBoundaries, m_nColor );
+        const ColorChanger aColors(&rRenderContext, m_nTextBoundaries, m_nColor);
         tools::PolyPolygon aPoly;
         aPoly.Insert(Polygon(aWholeRect,nCornerWidth,nCornerWidth));
 
@@ -140,15 +140,17 @@ void OStartMarker::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangl
         Gradient aGradient(GradientStyle_LINEAR,aStartColor,aEndColor);
         aGradient.SetSteps(static_cast<sal_uInt16>(aSize.Height()));
 
-        DrawGradient(PixelToLogic(aPoly) ,aGradient);
+        rRenderContext.DrawGradient(PixelToLogic(aPoly) ,aGradient);
     }
-    if ( m_bMarked )
+    if (m_bMarked)
     {
-        const long nCornerHeight = long(CORNER_SPACE * (double)GetMapMode().GetScaleY());
-        Rectangle aRect( Point(nCornerWidth,nCornerHeight),
-                         Size(aSize.Width() - nCornerWidth - nCornerWidth,aSize.Height() - nCornerHeight - nCornerHeight));
-        ColorChanger aColors( this, COL_WHITE, COL_WHITE );
-        DrawPolyLine(Polygon(PixelToLogic(aRect)),LineInfo(LINE_SOLID,2 ));
+        const long nCornerHeight = long(CORNER_SPACE * double(GetMapMode().GetScaleY()));
+        Rectangle aRect(Point(nCornerWidth, nCornerHeight),
+                        Size(aSize.Width() - nCornerWidth - nCornerWidth,
+                             aSize.Height() - nCornerHeight - nCornerHeight));
+        ColorChanger aColors(&rRenderContext, COL_WHITE, COL_WHITE);
+        rRenderContext.DrawPolyLine(Polygon(rRenderContext.PixelToLogic(aRect)),
+                                    LineInfo(LINE_SOLID, 2));
     }
 }
 
@@ -209,11 +211,16 @@ void OStartMarker::initDefaultNodeImages()
     m_aText->SetMouseTransparent(true);
 }
 
+void OStartMarker::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    rRenderContext.SetBackground();
+    rRenderContext.SetFillColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
+    setColor();
+}
+
 void OStartMarker::ImplInitSettings()
 {
-    SetBackground( );
-    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    setColor();
+    ApplySettings(*this);
 }
 
 void OStartMarker::Resize()
