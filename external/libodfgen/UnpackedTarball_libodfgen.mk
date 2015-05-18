@@ -13,11 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libodfgen,$(ODFGEN_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libodfgen,0))
 
-$(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
-	external/libodfgen/missing-ifdef.patch \
-	external/libodfgen/rtti.patch \
-))
-
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
