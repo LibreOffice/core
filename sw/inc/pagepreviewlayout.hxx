@@ -362,7 +362,7 @@ public:
 
         @return boolean, indicating, if paint of preview was performed
     */
-    bool Paint( const Rectangle& rOutRect ) const;
+    bool Paint(vcl::RenderContext& rRenderContext, const Rectangle& rOutRect) const;
 
     /** repaint pages on page preview
 

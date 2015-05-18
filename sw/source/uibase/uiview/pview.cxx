@@ -210,31 +210,31 @@ SwPagePreviewWin::~SwPagePreviewWin()
 {
 }
 
-void  SwPagePreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
+void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    if( !mpViewShell || !mpViewShell->GetLayout() )
+    if (!mpViewShell || !mpViewShell->GetLayout())
         return;
 
-    if( USHRT_MAX == mnSttPage )        // was never calculated ? (Init-Phase!)
+    if (USHRT_MAX == mnSttPage)        // was never calculated ? (Init-Phase!)
     {
         // This is the size to which I always relate.
-        if( !maPxWinSize.Height() || !maPxWinSize.Width() )
-            maPxWinSize = GetOutputSizePixel();
+        if (!maPxWinSize.Height() || !maPxWinSize.Width())
+            maPxWinSize = rRenderContext.GetOutputSizePixel();
 
-        Rectangle aRect( LogicToPixel( rRect ));
-        mpPgPreviewLayout->Prepare( 1, Point(0,0), maPxWinSize,
-                                  mnSttPage, maPaintedPreviewDocRect );
-        SetSelectedPage( 1 );
-        mpPgPreviewLayout->Paint( PixelToLogic( aRect ) );
+        Rectangle aRect(rRenderContext.LogicToPixel(rRect));
+        mpPgPreviewLayout->Prepare(1, Point(0,0), maPxWinSize,
+                                   mnSttPage, maPaintedPreviewDocRect);
+        SetSelectedPage(1);
+        mpPgPreviewLayout->Paint(rRenderContext, rRenderContext.PixelToLogic(aRect));
         SetPagePreview(mnRow, mnCol);
     }
     else
     {
-        MapMode aMM( GetMapMode() );
-        aMM.SetScaleX( maScale );
-        aMM.SetScaleY( maScale );
-        SetMapMode( aMM );
-        mpPgPreviewLayout->Paint( rRect );
+        MapMode aMM(rRenderContext.GetMapMode());
+        aMM.SetScaleX(maScale);
+        aMM.SetScaleY(maScale);
+        rRenderContext.SetMapMode(aMM);
+        mpPgPreviewLayout->Paint(rRenderContext, rRect);
     }
 }
 

@@ -986,22 +986,22 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
 
     OD 12.12.2002 #103492#
 */
-bool SwPagePreviewLayout::Paint(const Rectangle& rOutRect) const
+bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rOutRect) const
 {
     // check environment and parameters
     {
-        if ( !mrParentViewShell.GetWin() &&
-             !mrParentViewShell.GetOut()->GetConnectMetaFile() )
+        if (!mrParentViewShell.GetWin() && !mrParentViewShell.GetOut()->GetConnectMetaFile())
+        {
             return false;
+        }
 
-        OSL_ENSURE( mbPaintInfoValid,
-                "invalid preview settings - no paint of preview" );
-        if ( !mbPaintInfoValid )
+        OSL_ENSURE(mbPaintInfoValid, "invalid preview settings - no paint of preview");
+        if (!mbPaintInfoValid)
             return false;
     }
 
     // OD 17.11.2003 #i22014# - no paint, if <superfluous> flag is set at layout
-    if ( mrLayoutRootFrm.IsSuperfluous() )
+    if (mrLayoutRootFrm.IsSuperfluous())
     {
         return true;
     }
@@ -1009,13 +1009,13 @@ bool SwPagePreviewLayout::Paint(const Rectangle& rOutRect) const
     // environment and parameter ok
 
     // OD 07.11.2003 #i22014#
-    if ( mbInPaint )
+    if (mbInPaint)
     {
         return false;
     }
     mbInPaint = true;
 
-    OutputDevice* pOutputDev = mrParentViewShell.GetOut();
+    OutputDevice* pOutputDev = &rRenderContext; //mrParentViewShell.GetOut();
 
     // prepare paint
     if ( maPreviewPages.size() > 0 )

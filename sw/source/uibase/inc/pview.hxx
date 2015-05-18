@@ -45,14 +45,15 @@ class SwPagePreviewLayout;
 // Delete member <mnVirtPage> and its accessor
 class SwPagePreviewWin : public vcl::Window
 {
-    SwViewShell*          mpViewShell;
-    sal_uInt16              mnSttPage;
-    sal_uInt8                mnRow, mnCol;
-    Size                maPxWinSize;
-    Fraction            maScale;
-    SwPagePreview&      mrView;
-    bool                mbCalcScaleForPreviewLayout;
-    Rectangle           maPaintedPreviewDocRect;
+    SwViewShell* mpViewShell;
+    sal_uInt16 mnSttPage;
+    sal_uInt8 mnRow;
+    sal_uInt8 mnCol;
+    Size maPxWinSize;
+    Fraction maScale;
+    SwPagePreview& mrView;
+    bool mbCalcScaleForPreviewLayout;
+    Rectangle maPaintedPreviewDocRect;
     SwPagePreviewLayout* mpPgPreviewLayout;
 
     void SetPagePreview( sal_uInt8 nRow, sal_uInt8 nCol );
@@ -72,16 +73,41 @@ public:
 
     void SetViewShell( SwViewShell* pShell );
 
-    SwViewShell* GetViewShell() const { return mpViewShell; }
+    SwViewShell* GetViewShell() const
+    {
+        return mpViewShell;
+    }
 
-    sal_uInt8    GetRow() const      { return mnRow; }
-    void    SetRow( sal_uInt8 n )    { if( n ) mnRow = n; }
+    sal_uInt8 GetRow() const
+    {
+        return mnRow;
+    }
 
-    sal_uInt8    GetCol() const      { return mnCol; }
-    void    SetCol( sal_uInt8 n )    { if( n ) mnCol = n; }
+    void SetRow(sal_uInt8 n)
+    {
+        if(n)
+        mnRow = n;
+    }
 
-    sal_uInt16  GetSttPage() const      { return mnSttPage; }
-    void    SetSttPage( sal_uInt16 n )  { mnSttPage = n; }
+    sal_uInt8 GetCol() const
+    {
+        return mnCol;
+    }
+    void SetCol(sal_uInt8 n)
+    {
+        if(n)
+            mnCol = n;
+    }
+
+    sal_uInt16 GetSttPage() const
+    {
+        return mnSttPage;
+    }
+
+    void SetSttPage(sal_uInt16 n)
+    {
+        mnSttPage = n;
+    }
 
     /** get selected page number of document preview
 
@@ -97,7 +123,7 @@ public:
     void SetSelectedPage( sal_uInt16 _nSelectedPageNum );
 
     // If we only have one column we do not have a oth page
-    sal_uInt16  GetDefSttPage() const   { return 1 == mnCol ? 1 : 0; }
+    sal_uInt16 GetDefSttPage() const   { return 1 == mnCol ? 1 : 0; }
 
     void CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol );
 
@@ -138,9 +164,7 @@ public:
     */
     bool SetBookPreviewMode( const bool _bBookPreview );
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>
-                    CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 };
 
 /**
@@ -152,48 +176,47 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     // current dispatcher shell
     VclPtr<SwPagePreviewWin> pViewWin;
     //viewdata of the previous SwView and the new crsrposition
-    OUString                sSwViewData;
+    OUString sSwViewData;
     //and the new cursor position if the user double click in the PagePreview
-    OUString                sNewCrsrPos;
+    OUString sNewCrsrPos;
     // to support keyboard the number of the page to go to can be set too
-    sal_uInt16                  nNewPage;
+    sal_uInt16 nNewPage;
     // visible range
-    OUString                sPageStr;
-    Size                    aDocSz;
+    OUString sPageStr;
+    Size aDocSz;
     Rectangle               aVisArea;
 
     // MDI control elements
-    VclPtr<SwScrollbar>      pHScrollbar;
-    VclPtr<SwScrollbar>     pVScrollbar;
-    bool                    mbHScrollbarEnabled;
-    bool                    mbVScrollbarEnabled;
-    VclPtr<ImageButton>     pPageUpBtn,
-                            pPageDownBtn;
+    VclPtr<SwScrollbar> pHScrollbar;
+    VclPtr<SwScrollbar> pVScrollbar;
+    bool mbHScrollbarEnabled : 1;
+    bool mbVScrollbarEnabled : 1;
+    VclPtr<ImageButton> pPageUpBtn;
+    VclPtr<ImageButton> pPageDownBtn;
     // dummy window for filling the lower right edge when both scrollbars are active
-    VclPtr<vcl::Window>   pScrollFill;
+    VclPtr<vcl::Window> pScrollFill;
 
-    sal_uInt16              mnPageCount;
-    bool                    bNormalPrint;
+    sal_uInt16 mnPageCount;
+    bool bNormalPrint;
 
     // New members to reset design mode at draw view for form shell on switching
     // back from writer page preview to normal view.
-    bool                mbResetFormDesignMode:1;
-    bool                mbFormDesignModeToReset:1;
+    bool mbResetFormDesignMode:1;
+    bool mbFormDesignModeToReset:1;
 
-    SAL_DLLPRIVATE void            Init(const SwViewOption* = 0);
-    SAL_DLLPRIVATE Point           AlignToPixel(const Point& rPt) const;
+    SAL_DLLPRIVATE void Init(const SwViewOption* = 0);
+    SAL_DLLPRIVATE Point AlignToPixel(const Point& rPt) const;
 
-    SAL_DLLPRIVATE int             _CreateScrollbar( bool bHori );
-    DECL_DLLPRIVATE_LINK( ScrollHdl, SwScrollbar * );
-    DECL_DLLPRIVATE_LINK( EndScrollHdl, SwScrollbar * );
-    DECL_DLLPRIVATE_LINK( BtnPage, Button * );
-    SAL_DLLPRIVATE bool            ChgPage( int eMvMode, bool bUpdateScrollbar = true );
+    SAL_DLLPRIVATE int _CreateScrollbar( bool bHori);
+    DECL_DLLPRIVATE_LINK(ScrollHdl, SwScrollbar*);
+    DECL_DLLPRIVATE_LINK(EndScrollHdl, SwScrollbar*);
+    DECL_DLLPRIVATE_LINK(BtnPage, Button*);
+    SAL_DLLPRIVATE bool ChgPage( int eMvMode, bool bUpdateScrollbar = true );
 
     SAL_DLLPRIVATE virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual bool            HasPrintOptionsPage() const SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,
-                                                const SfxItemSet &rOptions ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(vcl::Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
 
     SAL_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, bool bInner );
 
@@ -225,45 +248,50 @@ private:
     static void InitInterface_Impl();
 
 public:
-    inline vcl::Window&          GetFrameWindow() const { return GetViewFrame()->GetWindow(); }
-    inline SwViewShell*     GetViewShell() const { return pViewWin->GetViewShell(); }
-    inline const Rectangle& GetVisArea() const { return aVisArea; }
-    inline void             GrabFocusViewWin() { pViewWin->GrabFocus(); }
-    inline void             RepaintCoreRect( const SwRect& rRect )
-                                { pViewWin->RepaintCoreRect( rRect ); }
+    inline vcl::Window& GetFrameWindow() const
+    { return GetViewFrame()->GetWindow(); }
+    inline SwViewShell* GetViewShell() const
+    { return pViewWin->GetViewShell(); }
+    inline const Rectangle& GetVisArea() const
+    { return aVisArea; }
+    inline void GrabFocusViewWin()
+    { pViewWin->GrabFocus(); }
+    inline void RepaintCoreRect( const SwRect& rRect )
+    { pViewWin->RepaintCoreRect( rRect ); }
 
-    void            DocSzChgd(const Size& rNewSize);
-    const Size&     GetDocSz() const { return aDocSz; }
+    void DocSzChgd(const Size& rNewSize);
+    const Size& GetDocSz() const
+    { return aDocSz; }
 
-    void            SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
+    void SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
 
-    inline void     AdjustEditWin();
+    inline void AdjustEditWin();
 
-    void            ScrollViewSzChg();
-    void            ScrollDocSzChg();
-    void            ShowHScrollbar(bool bShow);
-    void            ShowVScrollbar(bool bShow);
-    void            EnableHScrollbar(bool bEnable);
-    void            EnableVScrollbar(bool bEnable);
+    void ScrollViewSzChg();
+    void ScrollDocSzChg();
+    void ShowHScrollbar(bool bShow);
+    void ShowVScrollbar(bool bShow);
+    void EnableHScrollbar(bool bEnable);
+    void EnableVScrollbar(bool bEnable);
 
-    sal_uInt16      GetPageCount() const        { return mnPageCount; }
-    sal_uInt16      GetSelectedPage() const {return pViewWin->SelectedPage();}
+    sal_uInt16 GetPageCount() const        { return mnPageCount; }
+    sal_uInt16 GetSelectedPage() const {return pViewWin->SelectedPage();}
 
-    bool            HandleWheelCommands( const CommandEvent& );
+    bool HandleWheelCommands( const CommandEvent& );
 
-    OUString        GetPrevSwViewData() const       { return sSwViewData; }
-    void            SetNewCrsrPos( const OUString& rStr ) { sNewCrsrPos = rStr; }
+    OUString GetPrevSwViewData() const       { return sSwViewData; }
+    void SetNewCrsrPos( const OUString& rStr ) { sNewCrsrPos = rStr; }
     const OUString& GetNewCrsrPos() const           { return sNewCrsrPos; }
 
-    sal_uInt16          GetNewPage() const {return nNewPage;}
-    void            SetNewPage(sal_uInt16 nSet)  {nNewPage = nSet;}
+    sal_uInt16 GetNewPage() const {return nNewPage;}
+    void SetNewPage(sal_uInt16 nSet)  {nNewPage = nSet;}
 
     // Handler
-    void            Execute(SfxRequest&);
-    void            GetState(SfxItemSet&);
-    static void     StateUndo(SfxItemSet&);
+    void Execute(SfxRequest&);
+    void GetState(SfxItemSet&);
+    static void StateUndo(SfxItemSet&);
 
-    SwDocShell*     GetDocShell();
+    SwDocShell* GetDocShell();
 
     // apply Accessiblity options
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
