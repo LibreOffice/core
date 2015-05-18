@@ -240,17 +240,13 @@ bool XMLStyleExport::exportStyle(
                             {
                                 Reference< XIndexReplace > xNumRule
                                     ( xCNSupplier->getChapterNumberingRules() );
-                                DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
+                                assert(xNumRule.is());
 
-                                if (xNumRule.is())
-                                {
-                                    Reference< XPropertySet > xNumRulePropSet
-                                        (xNumRule, UNO_QUERY);
-                                    xNumRulePropSet->getPropertyValue(
-                                        OUString("Name") )
-                                        >>= sOutlineName;
-                                    bSuppressListStyle = ( sListName == sOutlineName );
-                                }
+                                Reference< XPropertySet > xNumRulePropSet
+                                    (xNumRule, UNO_QUERY);
+                                xNumRulePropSet->getPropertyValue("Name")
+                                    >>= sOutlineName;
+                                bSuppressListStyle = sListName == sOutlineName;
                             }
                         }
                     }
@@ -379,7 +375,7 @@ void XMLStyleExport::exportStyleFamily(
     const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
     bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
-    DBG_ASSERT( GetExport().GetModel().is(), "There is the model?" );
+    assert(GetExport().GetModel().is());
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(), UNO_QUERY );
     if( !xFamiliesSupp.is() )
         return; // family not available in current model
@@ -418,38 +414,35 @@ void XMLStyleExport::exportStyleFamily(
             continue;
         }
 
-        DBG_ASSERT( xStyle.is(), "Style not found for export!" );
-        if( xStyle.is() )
+        assert(xStyle.is());
+        if (!bUsed || xStyle->isInUse())
         {
-            if( !bUsed || xStyle->isInUse() )
+            bool bExported = exportStyle( xStyle, rXMLFamily, rPropMapper,
+                                          xStyleCont,pPrefix );
+            if (bUsed && bFirstStyle && bExported)
             {
-                bool bExported = exportStyle( xStyle, rXMLFamily, rPropMapper,
-                                              xStyleCont,pPrefix );
-                if( bUsed && bFirstStyle && bExported  )
-                {
-                    // If this is the first style, find out whether next styles
-                    // are supported.
-                    Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
-                    Reference< XPropertySetInfo > xPropSetInfo =
-                        xPropSet->getPropertySetInfo();
+                // If this is the first style, find out whether next styles
+                // are supported.
+                Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
+                Reference< XPropertySetInfo > xPropSetInfo =
+                    xPropSet->getPropertySetInfo();
 
-                    if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )
-                        pExportedStyles.reset(new std::set<OUString>());
-                    bFirstStyle = false;
-                }
-
-                if( pExportedStyles && bExported )
-                {
-                    // If next styles are supported, remember this style's name.
-                    pExportedStyles->insert( xStyle->getName() );
-                }
+                if (xPropSetInfo->hasPropertyByName( sFollowStyle ))
+                    pExportedStyles.reset(new std::set<OUString>());
+                bFirstStyle = false;
             }
 
-            // if an auto style pool is given, remember this style's name as a
-            // style name that must not be used by automatic styles.
-            if( pAutoStylePool )
-                pAutoStylePool->RegisterName( nFamily, xStyle->getName() );
+            if (pExportedStyles && bExported)
+            {
+                // If next styles are supported, remember this style's name.
+                pExportedStyles->insert( xStyle->getName() );
+            }
         }
+
+        // if an auto style pool is given, remember this style's name as a
+        // style name that must not be used by automatic styles.
+        if (pAutoStylePool)
+            pAutoStylePool->RegisterName( nFamily, xStyle->getName() );
     }
 
     if( pExportedStyles )
@@ -462,43 +455,40 @@ void XMLStyleExport::exportStyleFamily(
             Reference< XStyle > xStyle;
             xStyleCont->getByName( *pIter ) >>= xStyle;
 
-            DBG_ASSERT( xStyle.is(), "Style not found for export!" );
-            if( xStyle.is() )
+            assert(xStyle.is());
+
+            Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
+            Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+
+            // styles that aren't existing really are ignored.
+            if (xPropSetInfo->hasPropertyByName( sIsPhysical ))
             {
-                Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
-                Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-
-                // styles that aren't existing really are ignored.
-                if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
-                {
-                    Any aAny( xPropSet->getPropertyValue( sIsPhysical ) );
-                    if( !*static_cast<sal_Bool const *>(aAny.getValue()) )
-                        continue;
-                }
-
-                if( !xStyle->isInUse() )
+                Any aAny( xPropSet->getPropertyValue( sIsPhysical ) );
+                if (!*static_cast<sal_Bool const *>(aAny.getValue()))
                     continue;
+            }
 
-                if( !xPropSetInfo->hasPropertyByName( sFollowStyle ) )
-                {
-                    DBG_ASSERT( sFollowStyle.isEmpty(), "no follow style???" );
-                    continue;
-                }
+            if (!xStyle->isInUse())
+                continue;
 
-                OUString sNextName;
-                xPropSet->getPropertyValue( sFollowStyle ) >>= sNextName;
-                OUString sTmp( sNextName );
-                // if the next style hasn't been exported by now, export it now
-                // and remember its name.
-                if( xStyle->getName() != sNextName &&
-                    0 == pExportedStyles->count( sTmp ) )
-                {
-                    xStyleCont->getByName( sNextName ) >>= xStyle;
-                    DBG_ASSERT( xStyle.is(), "Style not found for export!" );
+            if (!xPropSetInfo->hasPropertyByName( sFollowStyle ))
+            {
+                continue;
+            }
 
-                    if( xStyle.is() && exportStyle( xStyle, rXMLFamily, rPropMapper, xStyleCont, pPrefix ) )
-                        pExportedStyles->insert( sTmp );
-                }
+            OUString sNextName;
+            xPropSet->getPropertyValue( sFollowStyle ) >>= sNextName;
+            OUString sTmp( sNextName );
+            // if the next style hasn't been exported by now, export it now
+            // and remember its name.
+            if (xStyle->getName() != sNextName &&
+                0 == pExportedStyles->count( sTmp ))
+            {
+                xStyleCont->getByName( sNextName ) >>= xStyle;
+                assert(xStyle.is());
+
+                if (exportStyle(xStyle, rXMLFamily, rPropMapper, xStyleCont, pPrefix))
+                    pExportedStyles->insert( sTmp );
             }
         }
     }
