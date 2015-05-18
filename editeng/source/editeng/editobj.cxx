@@ -49,6 +49,7 @@
 #include <tools/tenccvt.hxx>
 
 #include <libxml/xmlwriter.h>
+#include <algorithm>
 
 #if DEBUG_EDIT_ENGINE
 #include <iostream>
@@ -1191,11 +1192,8 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
             for ( sal_uInt16 nChar = 0; nChar < rC.GetText().getLength(); nChar++ )
             {
                 const ContentInfo::XEditAttributesType& rAttribs = rC.aAttribs;
-                ContentInfo::XEditAttributesType::const_iterator it =
-                    std::find_if(rAttribs.begin(), rAttribs.end(),
-                                 FindAttribByChar(EE_CHAR_FONTINFO, nChar));
-
-                if (it == rAttribs.end())
+                if ( std::none_of(rAttribs.begin(), rAttribs.end(),
+                                  FindAttribByChar(EE_CHAR_FONTINFO, nChar)) )
                 {
                     sal_Unicode cOld = rC.GetText()[ nChar ];
                     char cConv = OUStringToOString(OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
@@ -1454,11 +1452,8 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 for ( sal_uInt16 nChar = 0; nChar < pC->GetText().getLength(); nChar++ )
                 {
                     const ContentInfo::XEditAttributesType& rAttribs = pC->aAttribs;
-                    ContentInfo::XEditAttributesType::const_iterator it =
-                        std::find_if(rAttribs.begin(), rAttribs.end(),
-                                     FindAttribByChar(EE_CHAR_FONTINFO, nChar));
-
-                    if (it == rAttribs.end())
+                    if ( std::none_of(rAttribs.begin(), rAttribs.end(),
+                                      FindAttribByChar(EE_CHAR_FONTINFO, nChar)) )
                     {
                         sal_Unicode cOld = pC->GetText()[ nChar ];
                         DBG_ASSERT( cOld >= 0xF000, "cOld not converted?!" );

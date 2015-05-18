@@ -981,8 +981,8 @@ namespace accessibility
         {
             const beans::PropertyValue* pItr = aIntersectionSeq.getConstArray();
             const beans::PropertyValue* pEnd  = pItr + aIntersectionSeq.getLength();
-            const beans::PropertyValue* pFind = ::std::find_if( pItr, pEnd, ::std::bind2nd( PropertyValueEqualFunctor(), boost::cref( pDefAttr[i] ) ) );
-            if ( pFind == pEnd && pDefAttr[i].Handle != 0)
+            bool bNone = ::std::none_of( pItr, pEnd, ::std::bind2nd( PropertyValueEqualFunctor(), boost::cref( pDefAttr[i] ) ) );
+            if ( bNone && pDefAttr[i].Handle != 0)
             {
                 aDiffVec.push_back( pDefAttr[i] );
             }
