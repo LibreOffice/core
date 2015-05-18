@@ -77,8 +77,8 @@ private:
     AutoFilter&         mrAutoFilter;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

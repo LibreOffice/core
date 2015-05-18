@@ -221,6 +221,6 @@ void SAL_CALL MailToDispatcher::removeStatusListener( const css::uno::Reference<
     // not supported yet
 }
 
-} //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

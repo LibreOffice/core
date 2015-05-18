@@ -592,6 +592,6 @@ void ThreeD_SceneIllumination_TabPage::updatePreview()
     }
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

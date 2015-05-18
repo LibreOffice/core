@@ -179,7 +179,7 @@ private:
 
 
 
-} // namespace oox
+}
 
 #endif
 

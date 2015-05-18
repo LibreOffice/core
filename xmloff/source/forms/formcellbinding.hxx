@@ -260,7 +260,7 @@ namespace xmloff
                         ) const;
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_FORMCELLBINDING_HXX
 

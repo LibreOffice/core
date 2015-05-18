@@ -41,7 +41,7 @@ public:
 
 #define DPGUI_RESSTR(i)   DpGuiResId(i).toString()
 
-} // namespace dp_gui
+}
 
 #endif
 

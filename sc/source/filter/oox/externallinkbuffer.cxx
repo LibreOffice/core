@@ -63,7 +63,7 @@ const sal_uInt16 BIFF12_EXTNAME_STDDOCNAME  = 0x0008;
 const sal_uInt16 BIFF12_EXTNAME_OLEOBJECT   = 0x0010;
 const sal_uInt16 BIFF12_EXTNAME_ICONIFIED   = 0x0020;
 
-} // namespace
+}
 
 ExternalNameModel::ExternalNameModel() :
     mbBuiltIn( false ),
@@ -785,7 +785,7 @@ const RefSheetsModel* ExternalLinkBuffer::getRefSheets( sal_Int32 nRefId ) const
         &maRefSheets[ static_cast< size_t >( nRefId ) ] : 0;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,8 +43,8 @@ public:
             const oox::drawingml::chart::DataSequenceModel& rDataSeq, const OUString& rRole ) SAL_OVERRIDE;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

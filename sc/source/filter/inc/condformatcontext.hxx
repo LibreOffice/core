@@ -89,8 +89,8 @@ private:
     CondFormatRuleRef   mxRule;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

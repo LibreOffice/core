@@ -108,6 +108,6 @@ double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
     return fStepWidth;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

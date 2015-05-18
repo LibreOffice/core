@@ -53,7 +53,7 @@ namespace unohelper
 VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > CreateBreakIterator();
 VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification> CreateCharacterClassification();
 VCL_DLLPUBLIC void NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject );
-}}  // namespace vcl::unohelper
+}}
 
 #endif // INCLUDED_VCL_UNOHELP_HXX
 

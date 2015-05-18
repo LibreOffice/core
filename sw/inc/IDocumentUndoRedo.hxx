@@ -264,7 +264,7 @@ private:
     bool const m_bDrawUndoWasEnabled;
 };
 
-} // namespace sw
+}
 
 #endif
 

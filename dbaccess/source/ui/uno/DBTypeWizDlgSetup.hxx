@@ -61,7 +61,7 @@ protected:
     virtual void executedDialog(sal_Int16 _nExecutionResult) SAL_OVERRIDE;
 };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_DBTYPEWIZDLGSETUP_HXX
 

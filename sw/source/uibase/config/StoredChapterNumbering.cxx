@@ -491,6 +491,6 @@ void ImportStoredChapterNumberingRules(SwChapterNumRules & rRules,
     }
 }
 
-} // namespace sw
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

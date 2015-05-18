@@ -39,7 +39,7 @@ namespace dbaxml
 
         virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
     };
-} // namespace dbaxml
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLTABLEFILTERPATTERN_HXX
 

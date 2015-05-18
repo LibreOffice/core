@@ -275,7 +275,7 @@ private:
     bool m_bDataInColumns;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_INTERNALDATAPROVIDER_HXX
 #endif

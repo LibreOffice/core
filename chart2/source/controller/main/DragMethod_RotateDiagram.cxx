@@ -218,6 +218,6 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
         addToOverlayObjectList(*pNew);
     }
 }
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

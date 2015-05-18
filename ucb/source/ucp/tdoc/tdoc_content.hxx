@@ -342,7 +342,7 @@ public:
     { return rtl::Reference< ContentProvider >( m_pProvider ); }
 };
 
-} // namespace tdoc_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_CONTENT_HXX
 

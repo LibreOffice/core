@@ -90,7 +90,7 @@ namespace basctl { namespace docs {
     };
 
 
-} } // namespace basctl::docs
+} }
 
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_DOCUMENTENUMERATION_HXX

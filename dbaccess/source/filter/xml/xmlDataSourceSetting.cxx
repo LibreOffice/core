@@ -228,6 +228,6 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
     return aReturn;
 }
 
-} // namespace dbaxml
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

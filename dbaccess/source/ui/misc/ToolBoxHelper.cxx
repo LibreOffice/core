@@ -101,6 +101,6 @@ namespace dbaui
                 adjustToolBoxSize(m_pToolBox);
         }
     }
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

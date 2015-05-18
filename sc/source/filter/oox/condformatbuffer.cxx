@@ -1348,7 +1348,7 @@ const boost::ptr_vector<ScFormatEntry>& ExtCfCondFormat::getEntries()
     return maEntries;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

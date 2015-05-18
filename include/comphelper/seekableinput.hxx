@@ -70,7 +70,7 @@ public:
 
 };
 
-}   // namespace comphelper
+}
 
 #endif
 

@@ -52,8 +52,8 @@ public:
        , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
-} //namespace wrapper
-} //namespace chart
+}
+}
 
 #endif // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDAXISANDGRIDEXISTENCEPROPERTIES_HXX
 

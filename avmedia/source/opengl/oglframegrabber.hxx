@@ -40,8 +40,8 @@ private:
     libgltf::glTFHandle& m_rHandle;
 };
 
-} // namespace ogl
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLFRAMEGRABBER_HXX
 

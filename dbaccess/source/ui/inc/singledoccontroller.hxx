@@ -73,7 +73,7 @@ namespace dbaui
         ::std::unique_ptr< OSingleDocumentController_Data >   m_pData;
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_SINGLEDOCCONTROLLER_HXX
 

@@ -29,7 +29,7 @@ namespace dbmm
         createRegistryInfo_MacroMigrationDialogService();
     }
 
-} // namespace dbmm
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbmm_component_getFactory(
     const sal_Char* pImplementationName, SAL_UNUSED_PARAMETER void*,

@@ -263,6 +263,6 @@ void FrameListAnalyzer::impl_analyze()
     m_lModelFrames.realloc(nModelStep);
 }
 
-} //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

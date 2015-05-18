@@ -70,7 +70,7 @@ private:
     ControllerLockHelper & m_rControllerLockHelper;
 };
 
-} //namespace chart
+}
 
 #endif
 

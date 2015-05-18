@@ -175,7 +175,7 @@ namespace dbaui
         void checkControls();
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXDIALOG_HXX
 

@@ -144,7 +144,7 @@ beans::PropertyValue MeasureHandler::getInteropGrabBag()
     return aRet;
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

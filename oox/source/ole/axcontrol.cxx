@@ -210,7 +210,7 @@ void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rx
     rConverter.setProperty( PROP_ReferenceSheet, nRefSheet );
 }
 
-} // namespace
+}
 
 ControlConverter::ControlConverter( const Reference< XModel >& rxDocModel,
         const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
@@ -2741,7 +2741,7 @@ Reference< XIndexContainer > EmbeddedForm::createXForm()
     return mxFormIC;
 }
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

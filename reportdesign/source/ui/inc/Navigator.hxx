@@ -40,7 +40,7 @@ namespace rptui
         virtual void GetFocus() SAL_OVERRIDE;
     };
 
-} // namespace rptui
+}
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_NAVIGATOR_HXX
 

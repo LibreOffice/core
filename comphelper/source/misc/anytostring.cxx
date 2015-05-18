@@ -316,6 +316,6 @@ OUString anyToString( uno::Any const & value )
     return buf.makeStringAndClear();
 }
 
-} // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

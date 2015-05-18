@@ -161,7 +161,7 @@ namespace comphelper
     { return css::uno::Any(&_b, cppu::UnoType<bool>::get()); }
 
 
-}   // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_TYPES_HXX

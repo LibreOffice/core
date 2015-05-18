@@ -55,8 +55,8 @@ struct EffectProperties
                             const GraphicHelper& rGraphicHelper ) const;
 };
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

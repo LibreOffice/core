@@ -137,7 +137,7 @@ public:
     TOOLS_DLLPUBLIC friend Time     operator -( const tools::Time& rTime1, const tools::Time& rTime2 );
 };
 
-} /* namespace tools */
+}
 
 #endif
 

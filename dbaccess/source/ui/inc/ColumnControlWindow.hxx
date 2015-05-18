@@ -63,7 +63,7 @@ namespace dbaui
         virtual const OTypeInfoMap* getTypeInfo() const SAL_OVERRIDE;
         TOTypeInfoSP getDefaultTyp() const;
     };
-}   // namespace dbaui
+}
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_COLUMNCONTROLWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

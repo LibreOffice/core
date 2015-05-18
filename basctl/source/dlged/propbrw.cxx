@@ -77,7 +77,7 @@ const long STD_MIN_SIZE_Y = 250;
 
 const long WIN_BORDER = 2;
 
-} // namespace
+}
 
 PropBrw::PropBrw (DialogWindowLayout& rLayout_):
     DockingWindow(&rLayout_),
@@ -518,6 +518,6 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
     }
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

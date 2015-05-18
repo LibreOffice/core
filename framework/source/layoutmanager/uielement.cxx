@@ -126,6 +126,6 @@ UIElement& UIElement::operator= ( const UIElement& rUIElement )
     return *this;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

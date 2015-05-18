@@ -51,7 +51,7 @@ namespace framework
     };
 
 
-} // namespace framework
+}
 
 
 #endif // INCLUDED_FRAMEWORK_DOCUMENTUNDOGUARD_HXX

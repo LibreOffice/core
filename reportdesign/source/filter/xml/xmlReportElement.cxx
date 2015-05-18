@@ -127,7 +127,7 @@ ORptFilter& OXMLReportElement::GetOwnImport()
     return static_cast<ORptFilter&>(GetImport());
 }
 
-} // namespace rptxml
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -66,8 +66,8 @@ public:
     virtual void finishSubstream() = 0;
     virtual bool isSubstream() const = 0;
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLISTENER_HXX
 

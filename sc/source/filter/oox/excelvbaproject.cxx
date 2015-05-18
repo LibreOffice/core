@@ -65,7 +65,7 @@ struct SheetCodeNameInfo
 typedef ::std::set< OUString >              CodeNameSet;
 typedef ::std::list< SheetCodeNameInfo >    SheetCodeNameInfoList;
 
-} // namespace
+}
 
 void ExcelVbaProject::prepareImport()
 {
@@ -127,7 +127,7 @@ void ExcelVbaProject::prepareImport()
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

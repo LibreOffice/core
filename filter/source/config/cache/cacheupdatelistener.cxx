@@ -192,7 +192,7 @@ void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEven
     // <- SAFE
 }
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -162,6 +162,6 @@ System::String^ Cli_environment::getObjectIdentifier(System::Object^ obj)
     }
     return oId;
 }
-} //namespace cli_uno
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

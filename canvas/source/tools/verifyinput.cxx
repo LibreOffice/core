@@ -739,8 +739,8 @@ namespace canvas
         }
 
 
-    } // namespace tools
+    }
 
-} // namespace canvas
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

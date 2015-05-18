@@ -52,8 +52,8 @@ private:
     CommentRef          mxComment;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

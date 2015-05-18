@@ -94,8 +94,8 @@ private:
     tGridType           m_eType;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_GRIDWRAPPER_HXX
 #endif

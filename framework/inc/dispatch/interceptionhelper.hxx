@@ -263,7 +263,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper3<
 
 }; // class InterceptionHelper
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_INTERCEPTIONHELPER_HXX
 

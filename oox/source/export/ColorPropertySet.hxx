@@ -111,8 +111,8 @@ private:
     sal_Int32        m_nDefaultColor;
 };
 
-} //  namespace chart
-} //  namespace xmloff
+}
+}
 
 // XMLOFF_COLORPROPERTYSET_HXX
 #endif

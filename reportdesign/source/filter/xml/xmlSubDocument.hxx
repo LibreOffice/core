@@ -56,7 +56,7 @@ namespace rptxml
         virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair) SAL_OVERRIDE;
     };
 
-} // namespace rptxml
+}
 
 
 #endif // RPT_XMLSubDocument_HXX

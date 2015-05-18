@@ -99,7 +99,7 @@ public:
     Mode                GetMode () const { return nMode; }
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_MACRODLG_HXX
 

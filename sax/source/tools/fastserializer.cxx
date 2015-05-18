@@ -504,6 +504,6 @@ namespace sax_fastparser {
     }
 #endif
 
-} // namespace sax_fastparser
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

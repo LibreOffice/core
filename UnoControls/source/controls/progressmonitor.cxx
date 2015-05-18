@@ -900,6 +900,6 @@ bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, bool /
 
 #endif  // #ifdef DBG_UTIL
 
-}   // namespace unocontrols
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

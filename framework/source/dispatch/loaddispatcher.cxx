@@ -151,6 +151,6 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     return aRet;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

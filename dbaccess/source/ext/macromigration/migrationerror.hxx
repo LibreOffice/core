@@ -152,7 +152,7 @@ namespace dbmm
         }
     };
 
-} // namespace dbmm
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONERROR_HXX
 

@@ -62,7 +62,7 @@ void Shorten (OUString& rString)
     }
 }
 
-} // namespace
+}
 
 TextUndoManager::TextUndoManager( TextEngine* p )
 {

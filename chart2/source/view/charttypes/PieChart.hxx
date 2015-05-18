@@ -140,7 +140,7 @@ private: //member
 
     double m_fMaxOffset;    /// cached max offset value (init'ed to NaN)
 };
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

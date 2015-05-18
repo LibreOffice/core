@@ -218,6 +218,6 @@ uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
     return xResult;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

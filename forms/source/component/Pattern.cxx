@@ -222,7 +222,7 @@ void OPatternModel::resetNoBroadcast()
     m_aLastKnownValue.clear();
 }
 
-}   // namespace frm
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_OPatternModel_get_implementation(::com::sun::star::uno::XComponentContext* component,

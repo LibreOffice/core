@@ -58,6 +58,6 @@ inline sal_Int32 getNamespace( sal_Int32 nToken ) { return nToken & NMSP_MASK; }
 
 
 
-} // namespace oox
+}
 
 #endif

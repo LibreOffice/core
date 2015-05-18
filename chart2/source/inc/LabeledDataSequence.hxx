@@ -109,7 +109,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >       m_xModifyEventForwarder;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_LABELEDDATASEQUENCE_HXX
 #endif

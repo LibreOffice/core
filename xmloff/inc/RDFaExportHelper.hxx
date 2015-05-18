@@ -64,7 +64,7 @@ public:
         ::com::sun::star::rdf::XMetadatable> const & i_xMetadatable);
 };
 
-} // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_INC_RDFAEXPORTHELPER_HXX
 

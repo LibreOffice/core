@@ -1981,7 +1981,7 @@ public:
     }
 };
 
-} /* namespace osl */
+}
 
 #endif // INCLUDED_OSL_FILE_HXX
 

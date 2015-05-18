@@ -696,6 +696,6 @@ namespace xmloff
     }
 #endif // DBG_UTIL - dbg_implCheckProperty
 
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -209,7 +209,7 @@ css::uno::Sequence< OUString > SAL_CALL GridWrapper::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

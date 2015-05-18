@@ -268,7 +268,7 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
 void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     CheckBox* pLibBox, TreeListBox* pBasicBox );
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_MODULDLG_HXX
 

@@ -45,7 +45,7 @@ sal_Int16 lclGetFontFamily( sal_Int32 nOoxValue )
     return STATIC_ARRAY_SELECT( spnFontFamily, nOoxValue, DONTKNOW );
 }
 
-} // namespace
+}
 
 TextFont::TextFont() :
     mnPitch( 0 ),
@@ -91,7 +91,7 @@ bool TextFont::implGetFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal
     return !rFontName.isEmpty();
 }
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

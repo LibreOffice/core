@@ -348,7 +348,7 @@ BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGRX32_8888::getter_type,
                                   PixelFormatTraits_BGRX32_8888::setter_type);
 
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_RGBMASKPIXELFORMATS_HXX */
 

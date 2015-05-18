@@ -30,6 +30,6 @@ MutexContainer::~MutexContainer()
     return m_aMutex;
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,7 +51,7 @@ namespace dbaxml
         virtual ~OXMLColumn();
         virtual void EndElement() SAL_OVERRIDE;
     };
-} // namespace dbaxml
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLCOLUMN_HXX
 

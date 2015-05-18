@@ -107,7 +107,7 @@ class Oxt_Handler  :    public  ::cppu::WeakImplHelper3<
 
 };      //  class Oxt_Handler
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_OXT_HANDLER_HXX
 

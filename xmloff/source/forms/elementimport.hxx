@@ -714,7 +714,7 @@ namespace xmloff
 #include "elementimport_impl.hxx"
 #undef _INCLUDING_FROM_ELEMENTIMPORT_HXX_
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_ELEMENTIMPORT_HXX
 

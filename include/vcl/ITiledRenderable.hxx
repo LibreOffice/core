@@ -134,6 +134,6 @@ public:
     virtual void resetSelection() = 0;
 };
 
-} // namespace vcl
+}
 
 #endif // INCLUDED_VCL_ITILEDRENDERABLE_HXX

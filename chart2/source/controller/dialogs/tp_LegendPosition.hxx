@@ -45,7 +45,7 @@ public:
     virtual void Reset(const SfxItemSet* rInAttrs) SAL_OVERRIDE;
 };
 
-} //namespace chart
+}
 
 #endif
 

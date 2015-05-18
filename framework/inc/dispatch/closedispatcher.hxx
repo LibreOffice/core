@@ -272,7 +272,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
 
 }; // class CloseDispatcher
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_CLOSEDISPATCHER_HXX
 

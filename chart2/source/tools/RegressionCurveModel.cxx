@@ -681,7 +681,7 @@ uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::create
     return uno::Reference< util::XCloneable >( new MovingAverageRegressionCurve( *this ));
 }
 
-} //  namespace chart
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_chart2_ExponentialRegressionCurve_get_implementation(css::uno::XComponentContext *context,

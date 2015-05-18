@@ -230,7 +230,7 @@ Reference< XInterface > SAL_CALL UNOMemoryStream::Create(
     return static_cast<OWeakObject*>(new UNOMemoryStream());
 }
 
-} // namespace comphelper
+}
 
 void createRegistryInfo_UNOMemoryStream()
 {

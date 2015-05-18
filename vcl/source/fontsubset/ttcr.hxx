@@ -212,7 +212,7 @@ namespace vcl
  */
     void nameAdd(TrueTypeTable *, NameRecord *nr);
 
-} // namespace
+}
 
 extern "C"
 {

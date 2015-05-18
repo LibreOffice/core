@@ -63,7 +63,7 @@ uno::Reference< util::XCloneable > cloneObject(const uno::Reference< report::XRe
 
 
 
-} // namespace reportdesign
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

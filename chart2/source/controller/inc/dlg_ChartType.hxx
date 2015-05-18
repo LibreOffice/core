@@ -49,7 +49,7 @@ private:
                        ::com::sun::star::uno::XComponentContext>    m_xCC;
 };
 
-} //namespace chart
+}
 
 #endif
 

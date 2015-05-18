@@ -113,8 +113,8 @@ private:
     void                                        ImplLayoutVideoWindow();
 };
 
-} // namespace macavf
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_MACAVF_WINDOW_HXX
 

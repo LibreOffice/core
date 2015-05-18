@@ -61,7 +61,7 @@ struct DAVProperties
                                       OUString & rParsedName );
 };
 
-} // namespace webdav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVPROPERTIES_HXX
 

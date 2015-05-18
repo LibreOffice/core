@@ -142,6 +142,6 @@ void VCLStatusIndicator::impl_recalcLayout(vcl::Window* pStatusBar   ,
                                 aParentSize.Height());
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

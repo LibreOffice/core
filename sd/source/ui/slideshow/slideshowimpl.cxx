@@ -3576,6 +3576,6 @@ void SAL_CALL SlideShowListenerProxy::click( const Reference< XShape >& xShape, 
         mxController->click(xShape, aOriginalEvent );
 }
 
-} // namespace ::sd
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

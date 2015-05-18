@@ -184,7 +184,7 @@ static Reference< XInterface > SAL_CALL ServiceImpl1_create(
     return (OWeakObject *)new ServiceImpl1( xContext );
 }
 
-} // namespace cfg_test
+}
 
 static const struct ImplementationEntry g_entries[] =
 {

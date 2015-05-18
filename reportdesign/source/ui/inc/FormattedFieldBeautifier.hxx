@@ -53,7 +53,7 @@ namespace rptui
         void    handle( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement ) SAL_OVERRIDE;
     };
 
-} // namespace rptui
+}
 
 
 #endif

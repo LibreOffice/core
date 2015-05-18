@@ -58,7 +58,7 @@ namespace rptxml
         virtual void EndElement() SAL_OVERRIDE;
     };
 
-} // namespace rptxml
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLFIXEDCONTENT_HXX

@@ -116,7 +116,7 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
     return 0;
 }
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

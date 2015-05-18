@@ -58,8 +58,8 @@ private:
     WorkbookGlobals*    mpBookGlob;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

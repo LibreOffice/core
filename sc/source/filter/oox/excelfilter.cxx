@@ -180,8 +180,8 @@ OUString ExcelFilter::getImplementationName() throw (css::uno::RuntimeException,
     return OUString( "com.sun.star.comp.oox.xls.ExcelFilter" );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL

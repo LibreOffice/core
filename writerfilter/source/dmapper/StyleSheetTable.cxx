@@ -1612,7 +1612,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
     return sListLabel;
 }
 
-}//namespace dmapper
-}//namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

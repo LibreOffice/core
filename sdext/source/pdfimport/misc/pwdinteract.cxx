@@ -146,7 +146,7 @@ private:
     }
 };
 
-} // namespace
+}
 
 namespace pdfi
 {

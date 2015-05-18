@@ -312,6 +312,6 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
     }
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

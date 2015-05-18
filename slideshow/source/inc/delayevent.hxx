@@ -133,8 +133,8 @@ inline EventSharedPtr makeDelay_(
 
 #endif // OSL_DEBUG_LEVEL <= 1
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_DELAYEVENT_HXX
 

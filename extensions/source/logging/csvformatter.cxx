@@ -98,7 +98,7 @@ namespace logging
         bool m_MultiColumn;
         ::com::sun::star::uno::Sequence< OUString > m_Columnnames;
     };
-} // namespace logging
+}
 
 // private helpers
 namespace
@@ -347,6 +347,6 @@ namespace logging
     {
         static OAutoRegistration< CsvFormatter > aAutoRegistration;
     }
-} // namespace logging
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

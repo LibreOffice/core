@@ -33,7 +33,7 @@ class BodyNotInBlock
         void checkBody( const Stmt* body, SourceLocation stmtLocation, int stmtType, bool dontGoUp = false );
     };
 
-} // namespace
+}
 
 #endif // BODYNOTINBLOCK_H
 

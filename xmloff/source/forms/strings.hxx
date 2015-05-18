@@ -203,7 +203,7 @@ namespace xmloff
     #define EVENT_STARBASIC "StarBasic"
     #define EVENT_APPLICATION "application"
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_STRINGS_HXX
 

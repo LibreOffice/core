@@ -123,8 +123,8 @@ typedef ::rtl::Reference< FragmentHandler > FragmentHandlerRef;
 
 
 
-} // namespace core
-} // namespace oox
+}
+}
 
 #endif
 

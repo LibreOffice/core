@@ -86,8 +86,8 @@ template< class Map >
     ::std::for_each( rContainer.begin(), rContainer.end(), DisposeSecondOfPairFunctor< typename Map::value_type >());
 }
 
-} //  namespace DisposeHelper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_INC_DISPOSEHELPER_HXX
 #endif

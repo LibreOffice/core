@@ -164,7 +164,7 @@ private:
     data_holder * const m_holder;
 };
 
-} // namespace detail
+}
 
 /** Makes a copy back reference wrapper to be used for inout parameters.
     Only use for syncExecute(), the returned wrapper relies on its
@@ -246,8 +246,8 @@ inline typename FuncT::result_type syncExecute( FuncT const& func )
         FuncT, typename FuncT::result_type>::exec(func);
 }
 
-} // namespace solarthread
-} // namespace vcl
+}
+}
 
 #endif // INCLUDED_VCL_THREADEX_HXX
 

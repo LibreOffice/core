@@ -367,7 +367,7 @@ IMPL_LINK_TYPED(OGLPlayer,TimerHandler,Timer*,pTimer,void)
     }
 }
 
-} // namespace ogl
-} // namespace avmedia
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

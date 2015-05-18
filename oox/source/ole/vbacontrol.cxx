@@ -152,7 +152,7 @@ VbaDummyFormControl::VbaDummyFormControl( const OUString& rName )
     mxCtrlModel->importProperty( XML_Size, "10;10" );
 }
 
-} // namespace
+}
 
 VbaSiteModel::VbaSiteModel() :
     maPos( 0, 0 ),
@@ -764,7 +764,7 @@ bool lclEatKeyword( OUString& rCodeLine, const OUString& rKeyword )
     return false;
 }
 
-} // namespace
+}
 
 VbaUserForm::VbaUserForm( const Reference< XComponentContext >& rxContext,
         const Reference< XModel >& rxDocModel, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
@@ -856,7 +856,7 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
     }
 }
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

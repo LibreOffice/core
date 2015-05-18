@@ -30,7 +30,7 @@ namespace detail {
 template <typename T> struct ReleaseFunc : ::std::unary_function<T *, void> {
     void operator()( T * p ) const { p->release(); }
 };
-} // namespace detail
+}
 
 /** Makes a boost::shared_ptr from a ref-counted UNO object pointer.
     This makes sense if the object is used via UNO (implementing some X
@@ -61,7 +61,7 @@ inline ::boost::shared_ptr<T> make_shared_from_UNO( T * p )
     return ::boost::shared_ptr<T>( p, detail::ReleaseFunc<T>() );
 }
 
-} // namespace comphelper
+}
 
 #endif // ! defined(INCLUDED_COMPHELPER_MAKE_SHARED_FROM_UNO_HXX)
 

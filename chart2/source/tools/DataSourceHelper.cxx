@@ -540,6 +540,6 @@ Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference<
     return ContainerHelper::ContainerToSequence( aResult );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

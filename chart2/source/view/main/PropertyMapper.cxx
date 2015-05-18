@@ -494,6 +494,6 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -338,7 +338,7 @@ struct StateHash
 typedef std::unordered_set<State, StateHash> StatePool;
 typedef std::unordered_map<sal_Int32, State> StateMap;
 
-} // namespace svgi
+}
 
 #endif
 

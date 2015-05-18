@@ -145,7 +145,7 @@ void AutoFilterContext::onStartRecord( SequenceInputStream& rStrm )
     mrAutoFilter.importAutoFilter( rStrm, getSheetIndex() );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

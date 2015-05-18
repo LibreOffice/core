@@ -61,7 +61,7 @@ sal_Unicode lclGetXChar( const sal_Unicode*& rpcStr, const sal_Unicode* pcEnd )
     return *rpcStr++;
 }
 
-} // namespace
+}
 
 sal_Int32 AttributeConversion::decodeToken( const OUString& rValue )
 {
@@ -311,6 +311,6 @@ util::DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const util::Dat
     return getDateTime( nAttrToken ).get( rDefault );
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

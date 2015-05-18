@@ -93,8 +93,8 @@ private:
     void                                        ImplLayoutVideoWindow();
 };
 
-} // namespace gstreamer
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTWINDOW_HXX
 

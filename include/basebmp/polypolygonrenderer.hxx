@@ -109,7 +109,7 @@ namespace basebmp
             }
         };
 
-    } // namespace detail
+    }
 
 
     /** Raster-convert a poly-polygon.
@@ -353,7 +353,7 @@ namespace basebmp
         }
     }
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_POLYPOLYGONRENDERER_HXX */
 

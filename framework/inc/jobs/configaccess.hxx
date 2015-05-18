@@ -87,7 +87,7 @@ class FWI_DLLPUBLIC ConfigAccess
         const css::uno::Reference< css::uno::XInterface >& cfg();
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_JOBS_CONFIGACCESS_HXX
 

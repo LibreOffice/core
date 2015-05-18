@@ -185,7 +185,7 @@ bool lcl_IsFontwork( const SdrObject* pObj )
     return bIsFontwork;
 }
 
-} // namespace
+}
 
 EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape, const Rectangle* pChildAnchor )
 {

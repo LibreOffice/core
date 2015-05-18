@@ -124,6 +124,6 @@ beans::PropertyState WrappedProperty::getPropertyState( const Reference< beans::
     return aState;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

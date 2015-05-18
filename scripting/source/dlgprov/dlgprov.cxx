@@ -788,7 +788,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
 
 
 
-}   // namespace dlgprov
+}
 
 
 

@@ -538,7 +538,7 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
     return ( xDialog->execute() != 0 );
 }
 
-} // namespace rptui
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

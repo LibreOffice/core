@@ -46,8 +46,8 @@ public:
                    css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
                    bool bIsNewDoc);
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_INC_RTFTOK_RTFDOCUMENT_HXX
 

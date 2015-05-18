@@ -148,7 +148,7 @@ private:
                         m_xContext;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_TOOLS_REGRESSIONEQUATION_HXX
 #endif

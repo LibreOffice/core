@@ -32,7 +32,7 @@ class Tutorial2
         bool isReturnFalse( const Stmt* stmt );
     };
 
-} // namespace
+}
 
 #endif // POSTFIXINCREMENTFIX_H
 

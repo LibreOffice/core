@@ -48,7 +48,7 @@ namespace dbaui
         virtual void dispose() SAL_OVERRIDE;
         sal_Int32 GetValue();
     };
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSIZE_HXX
 

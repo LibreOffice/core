@@ -43,7 +43,7 @@ namespace rptxml
 
     };
 
-} // namespace rptxml
+}
 
 
 #endif // RPT_XMLMasterFields_HXX

@@ -135,6 +135,6 @@ void SalLogAreas::readLogAreas()
 
 static Plugin::Registration< SalLogAreas > X( "sallogareas" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

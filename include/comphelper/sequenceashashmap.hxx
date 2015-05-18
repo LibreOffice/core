@@ -304,7 +304,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
         void update(const SequenceAsHashMap& rSource);
 };
 
-} // namespace comphelper
+}
 
 #endif // INCLUDED_COMPHELPER_SEQUENCEASHASHMAP_HXX
 

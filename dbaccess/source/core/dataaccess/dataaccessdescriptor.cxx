@@ -292,7 +292,7 @@ namespace dbaccess
         return new DataAccessDescriptor( m_xContext );
     }
 
-} // namespace dbaccess
+}
 
 extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory()
 {

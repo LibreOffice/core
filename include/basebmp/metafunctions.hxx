@@ -210,7 +210,7 @@ template< typename T > inline T shiftRight( T v, int shift )
     return shift > 0 ? v >> shift : v << (-shift);
 }
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_METAFUNCTIONS_HXX */
 

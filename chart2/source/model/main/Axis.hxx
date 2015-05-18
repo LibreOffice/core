@@ -175,7 +175,7 @@ private: //member
         ::com::sun::star::chart2::XTitle >          m_xTitle;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_MAIN_AXIS_HXX
 #endif

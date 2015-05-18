@@ -141,6 +141,6 @@ namespace dbaui
         return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_aPosition == rhs.m_aPosition);
     }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

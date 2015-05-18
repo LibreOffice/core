@@ -385,7 +385,7 @@ void AccessibleBrowseBoxHeaderBar::ensureIsValidHeaderIndex( sal_Int32 nIndex )
 
 
 
-} // namespace accessibility
+}
 
 
 

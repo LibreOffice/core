@@ -34,7 +34,7 @@ public:
 
 #define SCH_RESSTR(x) SchResId(x).toString()
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_RESID_HXX
 #endif

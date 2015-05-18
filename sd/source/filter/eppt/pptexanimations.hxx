@@ -130,7 +130,7 @@ public:
     static const sal_Char* FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const bool bDirection );
     static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTargetElementShape( const ::com::sun::star::uno::Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, bool& rParagraphTarget );
 };
-} // namespace ppt
+}
 
 #endif
 

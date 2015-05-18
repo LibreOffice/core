@@ -22,8 +22,8 @@ typedef struct
 } RTFEncoding;
 extern RTFEncoding aRTFEncodings[];
 extern int nRTFEncodings;
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFCHARSETS_HXX
 

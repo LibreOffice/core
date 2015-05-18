@@ -234,6 +234,6 @@ OUString bootstrap_expandUri(OUString const & uri) {
         : uri;
 }
 
-} // namespace cppu
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

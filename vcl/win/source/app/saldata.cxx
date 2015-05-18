@@ -83,6 +83,6 @@ bool IsWindowSystemAvailable()
                  // to some Cygwin ssh session for instance
 }
 
-} // namespace vcl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

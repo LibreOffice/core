@@ -119,7 +119,7 @@ public:
     void SAL_CALL dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-}}  // namespace vcl::unohelper
+}}
 
 #endif // INCLUDED_VCL_DNDHELP_HXX
 

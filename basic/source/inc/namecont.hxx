@@ -787,7 +787,7 @@ protected:
 
 
 
-}   // namespace basic
+}
 
 #endif
 

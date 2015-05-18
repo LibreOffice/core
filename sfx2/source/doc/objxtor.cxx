@@ -143,7 +143,7 @@ OString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
 
 #endif
 
-} // namespace
+}
 
 
 

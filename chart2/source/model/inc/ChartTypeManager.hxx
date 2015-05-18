@@ -92,7 +92,7 @@ private:
         m_xContext;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_INC_CHARTTYPEMANAGER_HXX
 #endif

@@ -151,7 +151,7 @@ namespace dlgprov
      };
 
 
-}   // namespace dlgprov
+}
 
 
 
@@ -162,7 +162,7 @@ namespace comp_DialogModelProvider {
 OUString SAL_CALL _getImplementationName();
 css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 
-} // namespace comp_DialogModelProvider
+}
 
 
 

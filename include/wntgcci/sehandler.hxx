@@ -123,6 +123,6 @@ private:
     jmp_buf m_jmpbuf;
 };
 
-} // namespace {
+}
 
 #endif // INCLUDED_WNTGCCI_SEHANDLER_HXX

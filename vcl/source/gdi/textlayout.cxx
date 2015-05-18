@@ -323,6 +323,6 @@ namespace vcl
         return m_pImpl->DrawText( _rRect, _rText, _nStyle, _pVector, _pDisplayText );
     }
 
-} // namespace vcl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

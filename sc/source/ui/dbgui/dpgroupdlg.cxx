@@ -53,7 +53,7 @@ static const sal_uInt16 nDatePartResIds[] =
     STR_DPFIELD_GROUP_BY_YEARS
 };
 
-} // namespace
+}
 
 ScDPGroupEditHelper::ScDPGroupEditHelper( RadioButton* pRbAuto, RadioButton* pRbMan, Edit* pEdValue ) :
     mpRbAuto( pRbAuto ),

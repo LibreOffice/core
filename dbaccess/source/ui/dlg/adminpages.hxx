@@ -259,7 +259,7 @@ namespace dbaui
             // why is CalcMinimumSize not a virtual method of vcl::Window?
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ADMINPAGES_HXX
 

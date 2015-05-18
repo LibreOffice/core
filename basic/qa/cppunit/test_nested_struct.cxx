@@ -302,7 +302,7 @@ void Nested_Struct::testUnoAccess()
 
   // Put the test suite in the registry
   CPPUNIT_TEST_SUITE_REGISTRATION(Nested_Struct);
-} // namespace
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

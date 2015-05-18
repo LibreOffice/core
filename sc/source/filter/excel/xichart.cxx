@@ -201,7 +201,7 @@ void lclConvertTimeInterval( Any& rInterval, sal_uInt16 nValue, bool bAuto, sal_
         rInterval <<= cssc::TimeInterval( nValue, lclGetApiTimeUnit( nTimeUnit ) );
 }
 
-} // namespace
+}
 
 // Common =====================================================================
 
@@ -727,7 +727,7 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
     return xLabeledSeq;
 }
 
-} // namespace
+}
 
 XclImpChSourceLink::XclImpChSourceLink( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot )
@@ -1260,7 +1260,7 @@ void lclFinalizeTitle( XclImpChTextRef& rxTitle, const XclImpChText* pDefText, c
     }
 }
 
-} // namespace
+}
 
 // Data series ================================================================
 
@@ -1994,7 +1994,7 @@ ScfPropertySet lclGetPointPropSet( Reference< XDataSeries > xDataSeries, sal_uIn
     return aPropSet;
 }
 
-} // namespace
+}
 
 Reference< XLabeledDataSequence > XclImpChSeries::CreateValueSequence( const OUString& rValueRole ) const
 {
@@ -3158,7 +3158,7 @@ cssc::ChartAxisLabelPosition lclGetApiLabelPosition( sal_Int8 nXclLabelPos )
     return ChartAxisLabelPosition_NEAR_AXIS;
 }
 
-} // namespace
+}
 
 XclImpChTick::XclImpChTick( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot )

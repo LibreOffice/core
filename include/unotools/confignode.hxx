@@ -311,7 +311,7 @@ namespace utl
         virtual void clear() throw() SAL_OVERRIDE;
     };
 
-}   // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_CONFIGNODE_HXX
 

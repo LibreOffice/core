@@ -508,7 +508,7 @@ void inflate_rc_template_to_file(
     }
 }
 
-} // namespace /* private */
+}
 
 /* MAIN
    The file names provided via command line should be

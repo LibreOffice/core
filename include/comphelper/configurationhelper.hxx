@@ -232,7 +232,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
                                      sal_Int32                                              eMode   );
 };
 
-} // namespace comphelper
+}
 
 #endif // INCLUDED_COMPHELPER_CONFIGURATIONHELPER_HXX
 

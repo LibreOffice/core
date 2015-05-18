@@ -233,7 +233,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
     }
 
 
-}   // namespace COMPMOD_NAMESPACE
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_INC_COMPONENTMODULE_HXX

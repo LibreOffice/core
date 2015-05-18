@@ -120,7 +120,7 @@ static bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
 
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_PATTERN_WINDOW_HXX
 

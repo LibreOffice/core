@@ -116,6 +116,6 @@ namespace utl
         BaseClass::onLastClient();
     }
 
-} // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

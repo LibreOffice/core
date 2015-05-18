@@ -72,7 +72,7 @@ namespace psp
         // sets changed status to false; therefore not const
         void getSystemQueues( std::list< PrinterInfoManager::SystemPrintQueue >& rQueues );
     };
-} // namespace
+}
 
 /*
 *  class PrinterInfoManager

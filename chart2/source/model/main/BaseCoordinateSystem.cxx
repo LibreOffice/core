@@ -394,6 +394,6 @@ using impl::BaseCoordinateSystem_Base;
 IMPLEMENT_FORWARD_XINTERFACE2( BaseCoordinateSystem, BaseCoordinateSystem_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( BaseCoordinateSystem, BaseCoordinateSystem_Base, ::property::OPropertySet )
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

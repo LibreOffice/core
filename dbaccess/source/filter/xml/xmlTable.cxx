@@ -251,6 +251,6 @@ void OXMLTable::fillAttributes(sal_uInt16 /*nPrfx*/
     }
 }
 
-} // namespace dbaxml
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

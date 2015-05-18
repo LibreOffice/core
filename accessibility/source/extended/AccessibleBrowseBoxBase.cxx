@@ -576,7 +576,7 @@ BrowseBoxAccessibleElement::~BrowseBoxAccessibleElement( )
 
 
 
-} // namespace accessibility
+}
 
 
 

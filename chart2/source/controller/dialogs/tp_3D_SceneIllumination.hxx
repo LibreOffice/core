@@ -104,7 +104,7 @@ private:
         ::com::sun::star::frame::XModel >       m_xChartModel;
 };
 
-} //namespace chart
+}
 
 #endif
 

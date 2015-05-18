@@ -334,7 +334,7 @@ extern sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.PackageInformationProvider",
     "com.sun.star.comp.deployment.PackageInformationProvider" );
 
-} // namespace dp_info
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

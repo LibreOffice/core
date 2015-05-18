@@ -71,7 +71,7 @@ namespace connectivity
     };
 
 
-}   // namespace connectivity
+}
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZDRIVERWRAPPER_HXX

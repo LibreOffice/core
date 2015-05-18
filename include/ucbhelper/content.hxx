@@ -714,7 +714,7 @@ public:
                ::com::sun::star::uno::Exception );
 };
 
-} /* namespace ucbhelper */
+}
 
 #endif /* ! INCLUDED_UCBHELPER_CONTENT_HXX */
 

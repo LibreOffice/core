@@ -90,7 +90,7 @@ private:
     ::accessibility::AccessibleShapeTreeInfo m_aShapeTreeInfo;
 };
 
-}  // namespace chart
+}
 
 #endif
 

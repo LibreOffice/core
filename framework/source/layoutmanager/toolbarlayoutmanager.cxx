@@ -4153,6 +4153,6 @@ void ToolbarLayoutManager::setToolbarPosSize( const OUString& rResourceURL, cons
     setToolbarSize( rResourceURL, aSize );
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

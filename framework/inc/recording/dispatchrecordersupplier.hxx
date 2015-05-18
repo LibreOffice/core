@@ -86,7 +86,7 @@ class DispatchRecorderSupplier  :   public  ::cppu::WeakImplHelper2<
 
 };      //  class DispatchRecorderSupplier
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_RECORDING_DISPATCHRECORDERSUPPLIER_HXX
 

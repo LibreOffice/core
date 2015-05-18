@@ -61,7 +61,7 @@ enum ForDom {
     Foreign  = 1
 };
 
-} // namespace types
+}
 
 
 // binary option cash (domestic)
@@ -138,10 +138,10 @@ double prob_in_money(double S, double vol, double mu,
                      types::PutCall pc);
 
 
-} // namespace bs
+}
 
-} // namespace pricing
-} // namespace sca
+}
+}
 
 
 #endif

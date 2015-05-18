@@ -144,7 +144,7 @@ namespace connectivity
     };
 
 
-} // namespace connectivity
+}
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_RESOURCE_SHAREDRESOURCES_HXX

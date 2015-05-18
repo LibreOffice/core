@@ -241,8 +241,8 @@ private:
     std::map< sal_Int32, std::vector< ValueRange > > maXfIdRowRangeList; /// Cached XF identifiers for a ranges of rows, we try and process rowranges with the same XF id together
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

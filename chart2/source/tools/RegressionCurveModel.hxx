@@ -365,7 +365,7 @@ public:
     }
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_TOOLS_REGRESSIONCURVEMODEL_HXX
 #endif

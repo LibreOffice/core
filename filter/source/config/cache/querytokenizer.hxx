@@ -94,8 +94,8 @@ class QueryTokenizer : public std::unordered_map< OUString                    ,
         bool valid() const;
 };
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_QUERYTOKENIZER_HXX
 

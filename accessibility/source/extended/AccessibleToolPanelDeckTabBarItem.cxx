@@ -389,6 +389,6 @@ namespace accessibility
         ItemMethodGuard aGuard( *m_xImpl );
         m_xImpl->dispose();
     }
-} // namespace accessibility
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

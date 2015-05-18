@@ -184,7 +184,7 @@ namespace utl
 
             ConfigItemMode GetMode() const { return m_nMode;}
     };
-}//namespace utl
+}
 #endif // INCLUDED_UNOTOOLS_CONFIGITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

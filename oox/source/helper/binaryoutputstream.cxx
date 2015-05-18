@@ -33,7 +33,7 @@ namespace {
 
 const sal_Int32 OUTPUTSTREAM_BUFFERSIZE     = 0x8000;
 
-} // namespace
+}
 
 BinaryXOutputStream::BinaryXOutputStream( const Reference< XOutputStream >& rxOutStrm, bool bAutoClose ) :
     BinaryStreamBase( Reference< XSeekable >( rxOutStrm, UNO_QUERY ).is() ),
@@ -156,6 +156,6 @@ void SequenceOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size
     }
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

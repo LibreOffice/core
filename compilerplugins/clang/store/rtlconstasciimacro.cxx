@@ -148,6 +148,6 @@ bool RtlConstAsciiMacro::VisitStringLiteral( const StringLiteral* literal )
 
 static Plugin::Registration< RtlConstAsciiMacro > X( "rtlconstasciimacro" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -69,8 +69,8 @@ struct OOX_DLLPUBLIC LineProperties
     sal_Int32           getLineWidth() const;
 };
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

@@ -69,7 +69,7 @@ public:
         throw( com::sun::star::ucb::ResultSetException ) SAL_OVERRIDE;
 };
 
-} // namespace hierarchy_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYDATASUPPLIER_HXX
 

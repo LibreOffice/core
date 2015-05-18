@@ -101,7 +101,7 @@ inline unary_compose<F1, F2> compose1(const F1& fnction1, const F2& fnction2)
     return unary_compose<F1, F2>(fnction1, fnction2);
 }
 
-}   // namespace o3tl
+}
 
 #endif
 

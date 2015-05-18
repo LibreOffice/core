@@ -969,6 +969,6 @@ void Shell::ImplStartListening( StarBASIC* pBasic )
     StartListening( pBasic->GetBroadcaster(), true /* log on only once */ );
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

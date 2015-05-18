@@ -94,7 +94,7 @@ private:
     sal_Int16 m_nDefaultWritingMode;//to be used when writing mode is set to page
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

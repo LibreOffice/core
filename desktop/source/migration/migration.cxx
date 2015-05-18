@@ -1357,6 +1357,6 @@ void NewVersionUIInfo::init(const ::std::vector< MigrationModuleInfo >& vModules
     }
 }
 
-} // namespace desktop
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

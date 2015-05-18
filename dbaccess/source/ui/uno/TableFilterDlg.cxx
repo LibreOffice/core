@@ -97,6 +97,6 @@ VclPtr<Dialog> OTableFilterDialog::createDialog(vcl::Window* _pParent)
     return VclPtr<OTableSubscriptionDialog>::Create(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

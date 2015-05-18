@@ -95,9 +95,9 @@ private:
 
 
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 #endif
 

@@ -97,7 +97,7 @@ private:
     bool                mbValidHeader;          /// True = valid record header.
 };
 
-} // namespace prv
+}
 
 /** This class is used to read BIFF record streams.
 
@@ -353,8 +353,8 @@ public:
                         ~BiffInputStreamPosGuard();
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

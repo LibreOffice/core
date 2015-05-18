@@ -326,6 +326,6 @@ uno::Sequence<sal_uInt8> convertMetaFile(GDIMetaFile* i_pThumb)
     return uno::Sequence<sal_uInt8>();
 }
 
-} // namespace sfx2
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

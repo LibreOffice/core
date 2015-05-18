@@ -73,6 +73,6 @@ void BarPositionHelper::setScaledCategoryWidth( double fScaledCategoryWidth )
     m_fScaledCategoryWidth = fScaledCategoryWidth;
     CategoryPositionHelper::setCategoryWidth( m_fScaledCategoryWidth );
 }
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

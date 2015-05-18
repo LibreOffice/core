@@ -180,7 +180,7 @@ protected:
 
 
 
-} // namespace oox
+}
 
 #endif
 

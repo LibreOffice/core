@@ -64,7 +64,7 @@ protected:
 
 
 
-}   // namespace accessibility
+}
 
 
 #endif

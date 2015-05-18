@@ -343,6 +343,6 @@ void ShareControlFile::RemoveFile()
     xSimpleFileAccess->kill( m_aURL );
 }
 
-} // namespace svt
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

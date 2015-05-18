@@ -596,6 +596,6 @@ bool parseXlinkHref( const char* sXlinkHref, std::string& data )
     return false;
 }
 
-} // namespace svgi
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

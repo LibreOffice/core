@@ -184,6 +184,6 @@ void ConfigurationHelper::flush(const css::uno::Reference< css::uno::XInterface 
     xBatch->commitChanges();
 }
 
-} // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

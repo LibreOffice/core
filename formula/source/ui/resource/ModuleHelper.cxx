@@ -123,7 +123,7 @@ void OModule::ensureImpl()
 }
 
 
-}   // namespace formula
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,7 +60,7 @@ private:
     css::uno::Reference< SerfInputStream > m_xInputStream;
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFLOCKREQPROCIMPL_HXX
 

@@ -77,7 +77,7 @@ private:
     bool    m_bRightAngledAxes;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_DRAGMETHOD_ROTATEDIAGRAM_HXX
 #endif

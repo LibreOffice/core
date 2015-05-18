@@ -529,7 +529,7 @@ private:
         com::sun::star::lang::XTypeProvider >   m_xWrappedTypeProv;
 };
 
-} // namespace tdoc_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_STGELEMS_HXX
 

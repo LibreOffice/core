@@ -69,7 +69,7 @@ namespace dbmm
         sal_uInt32  m_nRange;
     };
 
-} // namespace dbmm
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_RANGEPROGRESSBAR_HXX
 

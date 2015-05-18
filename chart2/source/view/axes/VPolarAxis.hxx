@@ -52,7 +52,7 @@ protected: //member
     ::std::vector< ExplicitIncrementData >   m_aIncrements;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1058,6 +1058,6 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
 }
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

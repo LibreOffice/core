@@ -75,7 +75,7 @@ namespace dbaui
             // nControlFlags is a combination of the CBTP_xxx-constants
     };
 
-}   // namespace dbaui
+}
 
 #endif
 

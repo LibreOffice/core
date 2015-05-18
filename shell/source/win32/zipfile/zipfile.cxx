@@ -341,7 +341,7 @@ struct stricmp : public std::unary_function<std::string, bool>
 
     std::string str_;
 };
-} // namespace internal
+}
 
 /** Checks whether a file is a zip file or not
 

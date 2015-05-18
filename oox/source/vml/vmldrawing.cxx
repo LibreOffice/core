@@ -65,7 +65,7 @@ sal_Int32 lclGetShapeId( const OUString& rShapeId )
     return ((rShapeId.getLength() >= 3) && (rShapeId[ 0 ] == '\0') && (rShapeId[ 1 ] == 's')) ? rShapeId.copy( 2 ).toInt32() : -1;
 }
 
-} // namespace
+}
 
 OleObjectInfo::OleObjectInfo( bool bDmlShape ) :
     mbAutoLoad( false ),
@@ -281,7 +281,7 @@ void Drawing::notifyXShapeInserted( const Reference< XShape >& /*rxShape*/,
 {
 }
 
-} // namespace vml
+}
 } // namespave oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

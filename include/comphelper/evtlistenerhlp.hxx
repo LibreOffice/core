@@ -43,7 +43,7 @@ namespace comphelper
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
-}   // namespace comphelper
+}
 
 #endif // INCLUDED_COMPHELPER_EVTLISTENERHLP_HXX
 

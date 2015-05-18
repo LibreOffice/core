@@ -155,7 +155,7 @@ namespace bib
     };
 
 
-}   // namespace bib
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_LOADLISTENERADAPTER_HXX

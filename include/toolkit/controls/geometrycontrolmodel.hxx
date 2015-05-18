@@ -256,7 +256,7 @@ namespace com { namespace sun { namespace star {
 #include <toolkit/controls/geometrycontrolmodel_impl.hxx>
 
 
-// }    // namespace toolkit
+// }
 
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_GEOMETRYCONTROLMODEL_HXX

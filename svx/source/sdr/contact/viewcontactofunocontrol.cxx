@@ -161,7 +161,7 @@ namespace sdr { namespace contact {
     }
 
 
-} } // namespace sdr::contact
+} }
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

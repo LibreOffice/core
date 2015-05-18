@@ -101,7 +101,7 @@ class ImagesConfiguration
             const ImageListsDescriptor& rItems );
 };
 
-} // namespace framework
+}
 
 #endif // __FRAMEWORK_CLASSES_IMAGES
 

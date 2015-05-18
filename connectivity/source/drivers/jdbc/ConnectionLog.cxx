@@ -64,7 +64,7 @@ namespace connectivity { namespace java { namespace sql {
     }
 
 
-} } } // namespace connectivity::java::sql
+} } }
 
 
 

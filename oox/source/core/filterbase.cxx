@@ -107,7 +107,7 @@ DocumentOpenedGuard::~DocumentOpenedGuard()
         rUrlPool.maUrls.erase( maUrl );
 }
 
-} // namespace
+}
 
 /** Specifies whether this filter is an import or export filter. */
 enum FilterDirection
@@ -268,7 +268,7 @@ inline bool lclIsDosDrive( const OUString& rUrl, sal_Int32 nPos = 0 )
         (rUrl[ nPos + 2 ] == '/');
 }
 
-} // namespace
+}
 
 OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
 {
@@ -553,7 +553,7 @@ GraphicHelper* FilterBase::implCreateGraphicHelper() const
     return new GraphicHelper( mxImpl->mxComponentContext, mxImpl->mxTargetFrame, mxImpl->mxStorage );
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

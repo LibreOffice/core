@@ -27,7 +27,7 @@ namespace xmloff
     //= event translation table
     extern const XMLEventNameTranslation* g_pFormsEventTranslation;
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_FORMEVENTS_HXX
 

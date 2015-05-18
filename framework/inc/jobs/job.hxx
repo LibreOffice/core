@@ -209,7 +209,7 @@ class Job : public  ::cppu::WeakImplHelper3<
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_JOBS_JOB_HXX
 

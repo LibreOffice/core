@@ -832,6 +832,6 @@ IMPL_LINK_NOARG( OApplicationController, OnAsyncDrop )
     return 0L;
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

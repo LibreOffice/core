@@ -322,7 +322,7 @@ bool VmlFindNoteFunc::operator()( const ::oox::vml::ShapeBase& rShape ) const
     return pClientData && (pClientData->mnCol == mnCol) && (pClientData->mnRow == mnRow);
 }
 
-} // namespace
+}
 
 VmlControlMacroAttacher::VmlControlMacroAttacher( const OUString& rMacroName,
         const Reference< XIndexContainer >& rxCtrlFormIC, sal_Int32 nCtrlIndex, sal_Int32 nCtrlType, sal_Int32 nDropStyle ) :
@@ -760,7 +760,7 @@ void VmlDrawingFragment::finalizeImport()
     getVmlDrawing().convertAndInsert();
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

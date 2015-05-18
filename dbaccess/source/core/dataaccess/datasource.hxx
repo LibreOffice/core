@@ -217,7 +217,7 @@ protected:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 };
 
-}   // namespace dbaccess
+}
 
 #endif // _DBA_COREDATAACCESS_DATALINK_HXX_
 

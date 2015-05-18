@@ -67,7 +67,7 @@ namespace pcr
         sal_uInt16 m_nCharsId;
     };
 
-}   // namespace pcr
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FONTDIALOG_HXX

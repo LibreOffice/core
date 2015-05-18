@@ -146,7 +146,7 @@ void OXMLSubDocument::addMasterDetailPair(const ::std::pair< OUString,OUString >
     m_aDetailFields.push_back(_aPair.second);
 }
 
-} // namespace rptxml
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

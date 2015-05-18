@@ -328,7 +328,7 @@ private:
  *
  *======================================================================*/
 
-} // namespace store
+}
 
 #endif // INCLUDED_STORE_SOURCE_STORTREE_HXX
 

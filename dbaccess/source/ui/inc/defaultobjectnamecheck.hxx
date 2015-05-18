@@ -120,7 +120,7 @@ namespace dbaui
         DynamicTableOrQueryNameCheck();                                                // never implemented
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
 

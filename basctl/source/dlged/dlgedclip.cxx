@@ -105,6 +105,6 @@ void SAL_CALL DlgEdTransferableImpl::lostOwnership( const Reference< XClipboard 
     m_SeqFlavors = Sequence< DataFlavor >();
     m_SeqData = Sequence< Any >();
 }
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -351,7 +351,7 @@ handleCertificateValidationRequest_(
     }
 }
 
-} // namespace
+}
 
 bool
 UUIInteractionHelper::handleCertificateValidationRequest(

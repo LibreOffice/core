@@ -147,7 +147,7 @@ bool ViewMonitor::onSetCurrentController( const Reference< XController >& _rxCon
     return bLoadFinished;
 }
 
-} // namespace dbaccess
+}
 
 // ODatabaseDocument
 
@@ -2221,6 +2221,6 @@ OUString SAL_CALL ODatabaseDocument::getUntitledPrefix()    throw (uno::RuntimeE
     return OUString();
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

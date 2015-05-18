@@ -69,7 +69,7 @@ private:
             ::com::sun::star::document::XUndoManager > m_xUndoManager;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_UNDOCOMMANDDISPATCH_HXX
 #endif

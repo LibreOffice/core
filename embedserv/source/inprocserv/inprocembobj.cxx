@@ -1809,6 +1809,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::DiscardCache( DWORD
     return E_FAIL;
 }
 
-}; // namespace inprocserv
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -212,6 +212,6 @@ void FillLangItems( std::set< OUString > &rLangItems,
     }
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

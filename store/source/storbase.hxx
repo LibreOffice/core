@@ -881,7 +881,7 @@ inline void OStorePageObject::location (sal_uInt32 nAddr)
  *
  *======================================================================*/
 
-} // namespace store
+}
 
 #endif // INCLUDED_STORE_SOURCE_STORBASE_HXX
 

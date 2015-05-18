@@ -285,8 +285,8 @@ private:
     WorkbookGlobals&    mrBookGlob;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

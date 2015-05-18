@@ -223,7 +223,7 @@ protected:
 inline ODsnTypeCollection::TypeIterator ODsnTypeCollection::begin() const { return ODsnTypeCollection::TypeIterator(this, 0);}
 inline ODsnTypeCollection::TypeIterator ODsnTypeCollection::end() const { return ODsnTypeCollection::TypeIterator(this, m_aDsnTypesDisplayNames.size());}
 
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_INC_DSNTYPES_HXX
 

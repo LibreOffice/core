@@ -50,6 +50,6 @@ IMPL_LINK_NOARG_TYPED(TimerTriggeredControllerLock, TimerTimeout, Timer *, void)
     m_apControllerLockGuard.reset();
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

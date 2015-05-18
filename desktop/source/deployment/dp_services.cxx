@@ -51,8 +51,8 @@ namespace executable {
 extern sdecl::ServiceDecl const serviceDecl;
 }
 
-} // namespace backend
-} // namespace dp_registry
+}
+}
 
 namespace dp_manager {
 namespace factory {

@@ -270,7 +270,7 @@ void TextBoxContext::onEndElement()
     }
 }
 
-} // namespace vml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -113,7 +113,7 @@ public:
 };
 
 
-}   // namespace linguistic
+}
 
 #endif
 

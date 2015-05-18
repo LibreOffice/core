@@ -166,7 +166,7 @@ private:
 
 
 
-} // namespace oox
+}
 
 #endif
 

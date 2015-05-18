@@ -1245,7 +1245,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TypeDetection::impl_createI
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::document::XTypeDetection* >(pNew), css::uno::UNO_QUERY);
 }
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

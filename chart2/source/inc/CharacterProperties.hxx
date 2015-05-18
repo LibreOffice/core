@@ -131,7 +131,7 @@ namespace CharacterProperties
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > & xMultiPropSet );
 }
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_CHARACTERPROPERTIES_HXX
 #endif

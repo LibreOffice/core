@@ -104,7 +104,7 @@ namespace vcl
         ::std::unique_ptr< ReferenceDeviceTextLayout >   m_pImpl;
     };
 
-} // namespace vcl
+}
 
 #endif // INCLUDED_VCL_INC_TEXTLAYOUT_HXX
 

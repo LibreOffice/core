@@ -104,7 +104,7 @@ uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )
     return aValues[0];
 }
 
-} // namespace impl
+}
 
 // explicit
 ConfigColorScheme::ConfigColorScheme(
@@ -201,7 +201,7 @@ css::uno::Sequence< OUString > SAL_CALL ConfigColorScheme::getSupportedServiceNa
     return getSupportedServiceNames_Static();
 }
 
-} //  namespace chart
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_chart2_ConfigDefaultColorScheme_get_implementation(css::uno::XComponentContext *context,

@@ -598,6 +598,6 @@ void JobData::impl_reset()
     m_lArguments   = css::uno::Sequence< css::beans::NamedValue >();
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

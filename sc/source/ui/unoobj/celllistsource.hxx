@@ -147,7 +147,7 @@ namespace calc
         OCellListSource& operator=( const OCellListSource& ) SAL_DELETED_FUNCTION;
     };
 
-}   // namespace calc
+}
 
 #endif // INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLLISTSOURCE_HXX
 

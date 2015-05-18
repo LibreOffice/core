@@ -263,7 +263,7 @@ public:
     virtual sal_Int16 SAL_CALL    execute() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-} // namespace dp_gui
+}
 
 #endif
 

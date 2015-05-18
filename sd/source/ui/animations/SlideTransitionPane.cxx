@@ -216,8 +216,8 @@ struct TransitionEffect
     bool mbLoopSoundAmbiguous;
 };
 
-} // namespace impl
-} // namespace sd
+}
+}
 
 // Local Helper Functions
 namespace
@@ -1105,6 +1105,6 @@ vcl::Window * createSlideTransitionPanel( vcl::Window* pParent, ViewShellBase& r
     return pWindow;
 }
 
-} //  namespace sd
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

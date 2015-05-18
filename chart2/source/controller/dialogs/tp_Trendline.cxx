@@ -65,6 +65,6 @@ void TrendlineTabPage::SetNbPoints( sal_Int32 nNbPoints )
     m_aTrendlineResources.SetNbPoints( nNbPoints );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

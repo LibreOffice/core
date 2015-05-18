@@ -1968,7 +1968,7 @@ void getBooleanComparisonPredicate( const OUString& _rExpression, const bool _bV
     }
 }
 
-}   // namespace dbtools
+}
 
 namespace connectivity
 {
@@ -2044,6 +2044,6 @@ OSQLColumns::Vector::const_iterator find(OSQLColumns::Vector::const_iterator __f
         ++__first;
     return __first;
 }
-} //namespace connectivity
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

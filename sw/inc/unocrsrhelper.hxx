@@ -240,7 +240,7 @@ namespace SwUnoCursorHelper
         ::com::sun::star::text::XFlatParagraphIterator>
             CreateFlatParagraphIterator(SwDoc &, sal_Int32,  bool);
 
-} // namespace SwUnoCursorHelper
+}
 
 #endif
 

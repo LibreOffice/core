@@ -215,6 +215,6 @@ SfxItemPool* ChartItemPool::CreateChartItemPool()
     return new ChartItemPool();
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -360,7 +360,7 @@ private:
     volatile bool          m_bStateSetInitialized;
 };
 
-}  // namespace chart
+}
 
 #endif
 

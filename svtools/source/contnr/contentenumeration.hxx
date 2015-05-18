@@ -262,7 +262,7 @@ namespace svt
     };
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX

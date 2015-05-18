@@ -80,7 +80,7 @@ public:
 
 
 
-} // namespace sfx2
+}
 
 
 

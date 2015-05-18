@@ -138,9 +138,9 @@ private:
     void AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle, bool rbAbsolutePos = true );
 };
 
-} // namespace vml
+}
 
-} // namespace oox
+}
 
 #endif
 

@@ -164,7 +164,7 @@ MemoryLockBytes_createInstance (
  *
  *======================================================================*/
 
-} // namespace store
+}
 
 #endif // INCLUDED_STORE_SOURCE_LOCKBYTE_HXX
 

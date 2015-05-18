@@ -78,7 +78,7 @@ public:
     void              SetAddLibFilter( const OUString& rFilter )  { aAddLibFilter = rFilter; }
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_IDERDLL2_HXX
 

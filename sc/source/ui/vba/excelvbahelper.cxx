@@ -374,8 +374,8 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangesBase* pRangeObj )
     return pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : 0;
 }
 
-} // namespace excel
-} // namespace vba
-} // namespace ooo
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

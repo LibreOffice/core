@@ -389,7 +389,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
     return 0;
 }
 
-} // namespace ogl
-} // namespace avmedia
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

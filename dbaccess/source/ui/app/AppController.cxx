@@ -2937,6 +2937,6 @@ void OApplicationController::impl_migrateScripts_nothrow()
     }
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -125,7 +125,7 @@ namespace svt { namespace uno
     };
 
 
-} } // namespace svt::uno
+} }
 
 
 #endif // SVT_UNO_WIZARD_SHELL

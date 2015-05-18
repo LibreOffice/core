@@ -128,6 +128,6 @@ namespace xmloff
         delete m_pImpl;
     }
 
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

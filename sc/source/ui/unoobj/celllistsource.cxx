@@ -362,6 +362,6 @@ namespace calc
         m_bInitialized = true;
     }
 
-}   // namespace calc
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

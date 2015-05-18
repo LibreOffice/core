@@ -56,7 +56,7 @@ namespace svt
     };
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELCOLLECTION_HXX

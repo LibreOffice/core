@@ -291,7 +291,7 @@ private:
 
 };  // class StatusIndicator
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_SOURCE_INC_STATUSINDICATOR_HXX
 

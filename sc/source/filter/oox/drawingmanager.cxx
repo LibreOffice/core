@@ -69,7 +69,7 @@ void BiffSheetDrawing::notifyShapeInserted( const Reference< XShape >& /*rxShape
     extendShapeBoundingBox( rShapeRect );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

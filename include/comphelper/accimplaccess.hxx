@@ -123,7 +123,7 @@ namespace comphelper
         COMPHELPER_DLLPRIVATE static const ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 
-} // namespace comphelper
+}
 
 #endif // INCLUDED_COMPHELPER_ACCIMPLACCESS_HXX
 

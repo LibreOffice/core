@@ -2223,6 +2223,6 @@ namespace xmloff
             OAttributeMetaData::getFormAttributeName(faDetailFiels),
             PROPERTY_DETAILFIELDS);
     }
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

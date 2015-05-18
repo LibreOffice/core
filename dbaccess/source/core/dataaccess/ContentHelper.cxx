@@ -625,6 +625,6 @@ void OContentHelper::notifyDataSourceModified()
     ::dbaccess::notifyDataSourceModified(m_xParentContainer,true);
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

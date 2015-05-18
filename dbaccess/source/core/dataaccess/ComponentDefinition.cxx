@@ -297,6 +297,6 @@ void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxS
     notifyDataSourceModified();
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

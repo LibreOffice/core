@@ -33,7 +33,7 @@ class Tutorial1
         bool VisitReturnStmt( const ReturnStmt* returnstmt );
     };
 
-} // namespace
+}
 
 #endif // POSTFIXINCREMENTFIX_H
 

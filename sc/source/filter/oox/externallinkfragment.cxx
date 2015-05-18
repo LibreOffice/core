@@ -329,7 +329,7 @@ const RecordInfo* ExternalLinkFragment::getRecordInfos() const
     return spRecInfos;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3550,6 +3550,6 @@ void CheckAnchoredFlyConsistency(SwDoc const& rDoc)
 #endif
 }
 
-} // namespace sw
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

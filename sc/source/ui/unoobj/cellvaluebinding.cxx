@@ -568,6 +568,6 @@ namespace calc
         // TODO: place your code here
     }
 
-}   // namespace calc
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,7 +62,7 @@ namespace pcr
     };
 
 
-} // namespace pcr
+}
 
 
 #endif // HELPWINDOW_HXX

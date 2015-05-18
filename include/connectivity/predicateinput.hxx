@@ -129,7 +129,7 @@ namespace dbtools
     };
 
 
-}   // namespace dbtools
+}
 
 
 #endif // INCLUDED_CONNECTIVITY_PREDICATEINPUT_HXX

@@ -169,7 +169,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
         css::uno::WeakReference< css::uno::XInterface > m_xOwner;
 };
 
-} // namespace comphelper
+}
 
 #endif // INCLUDED_COMPHELPER_NUMBEREDCOLLECTION_HXX
 

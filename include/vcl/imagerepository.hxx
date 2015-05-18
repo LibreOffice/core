@@ -60,7 +60,7 @@ namespace vcl
     };
 
 
-} // namespace vcl
+}
 
 
 #endif // INCLUDED_VCL_IMAGEREPOSITORY_HXX

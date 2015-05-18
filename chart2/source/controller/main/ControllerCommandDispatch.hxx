@@ -122,7 +122,7 @@ private:
     CommandDispatchContainer* m_pDispatchContainer;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CONTROLLERCOMMANDDISPATCH_HXX
 #endif

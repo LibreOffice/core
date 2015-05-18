@@ -482,7 +482,7 @@ AttributableShapeSharedPtr AnimationBaseNode::getShape() const
         return mpShape; // nope, plain shape always
 }
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

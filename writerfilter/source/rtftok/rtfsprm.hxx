@@ -118,8 +118,8 @@ private:
     Id m_nKeyword;
     RTFValue::Pointer_t& m_pValue;
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSPRM_HXX
 

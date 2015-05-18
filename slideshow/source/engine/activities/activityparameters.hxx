@@ -128,8 +128,8 @@ struct ActivityParameters
     const bool                                  mbAutoReverse;
 };
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYPARAMETERS_HXX
 

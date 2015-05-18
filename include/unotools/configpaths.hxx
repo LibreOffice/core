@@ -155,7 +155,7 @@ namespace utl
     OUString wrapConfigurationElementName(OUString const& _sElementName,
                                                  OUString const& _sTypeName);
 
-}   // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_CONFIGPATHS_HXX
 

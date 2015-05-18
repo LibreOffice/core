@@ -150,6 +150,6 @@ VclPtr<SfxPopupWindow> TbxControls::CreatePopupWindow()
 }
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

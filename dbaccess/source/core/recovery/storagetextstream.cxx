@@ -79,6 +79,6 @@ namespace dbaccess
         m_pData->xTextOutput->writeString( sLineFeed );
     }
 
-} // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

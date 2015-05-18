@@ -119,8 +119,8 @@ private:
     TableNameMap        maNameTables;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

@@ -1512,7 +1512,7 @@ const char* lcl_GetOperatorType( sal_uInt32 nFlags )
     return NULL;
 }
 
-} // namespace
+}
 
 XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
     XclExpRecord( EXC_ID_DV ),

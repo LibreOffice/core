@@ -176,7 +176,7 @@ const sal_uInt16 CODEPAGE_UNICODE       = 1200;
 
 const sal_uInt32 AX_STRING_COMPRESSED   = 0x80000000;
 
-} // namespace
+}
 
 OlePropertyStreamObject::OlePropertyStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
@@ -1525,7 +1525,7 @@ const sal_uInt32 VBA_FORMSITE_OBJSTREAM         = 0x0010;
 const sal_uInt16 VBA_FORMSITE_CLASSTABLEINDEX   = 0x8000;
 const sal_uInt16 VBA_FORMSITE_CLASSTABLEMASK    = 0x7FFF;
 
-} // namespace
+}
 
 VbaFormSiteObject::VbaFormSiteObject( const InputObjectBase& rParent, VbaFormSharedData& rFormData ) :
     mrFormData( rFormData )
@@ -1592,7 +1592,7 @@ const sal_uInt32 AX_FORM_SKIPCLASSTABLE         = 0x00008000;
 const sal_uInt8 AX_FORM_SITECOUNTTYPE_COUNT     = 0x80;
 const sal_uInt8 AX_FORM_SITECOUNTTYPE_MASK      = 0x7F;
 
-} // namespace
+}
 
 VbaFStreamObject::VbaFStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName, VbaFormSharedData& rFormData ) :
     mrFormData( rFormData )
@@ -2080,8 +2080,8 @@ void ActiveXStorageObject::implDumpBaseStream( const BinaryInputStreamRef& rxStr
     FormControlStreamObject( *this, rxStrm, rSysFileName ).dump();
 }
 
-} // namespace dump
-} // namespace oox
+}
+}
 
 #endif
 

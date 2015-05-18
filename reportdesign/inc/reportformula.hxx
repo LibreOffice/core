@@ -118,7 +118,7 @@ namespace rptui
     }
 
 
-} // namespace rptui
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_INC_REPORTFORMULA_HXX

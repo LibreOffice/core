@@ -277,7 +277,7 @@ private:
                       bool bCreate );
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_CHARTTYPETEMPLATE_HXX
 #endif

@@ -181,6 +181,6 @@ bool RangeSelectionHelper::verifyArguments( const Sequence< beans::PropertyValue
     return xDataProvider->createDataSourcePossible( rArguments );
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

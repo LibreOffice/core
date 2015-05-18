@@ -54,8 +54,8 @@ void statusIndicatorFinish()
         pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0);
 }
 
-} // namespace LibreOfficeKit
+}
 
-} // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

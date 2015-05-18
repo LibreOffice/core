@@ -111,6 +111,6 @@ public:
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FractionTest);
-} // namespace tools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

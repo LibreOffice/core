@@ -349,7 +349,7 @@ private:
 
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_DIAGRAMHELPER_HXX
 #endif

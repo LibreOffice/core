@@ -195,8 +195,8 @@ private:
     DefNameTokenIdMap   maTokenIdMap;       /// Maps all defined names by API token index.
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

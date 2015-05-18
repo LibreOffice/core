@@ -200,7 +200,7 @@ bool SdtHelper::containedInInteropGrabBag(const OUString& rValueName)
     return false;
 }
 
-} // namespace dmapper
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

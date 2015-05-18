@@ -40,8 +40,8 @@ protected:
     virtual void        finalizeImport() SAL_OVERRIDE;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

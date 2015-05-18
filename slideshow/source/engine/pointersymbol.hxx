@@ -94,8 +94,8 @@ private:
     bool                                       mbVisible;
 };
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif
 

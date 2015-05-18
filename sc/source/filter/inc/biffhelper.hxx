@@ -638,8 +638,8 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, OUString& or
     return rStrm;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

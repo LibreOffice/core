@@ -157,8 +157,8 @@ private: //member
     tTableMap   m_aTableMap;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_CHART2MODELCONTACT_HXX
 #endif

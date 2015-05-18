@@ -47,7 +47,7 @@ public:
         throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-} /* namespace ucbhelper */
+}
 
 #endif /* ! INCLUDED_UCBHELPER_ACTIVEDATASINK_HXX */
 

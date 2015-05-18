@@ -110,8 +110,8 @@ template< class Interface >
                       CreateRefClone< Interface >());
 }
 
-} //  namespace CloneHelper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_INC_CLONEHELPER_HXX
 #endif

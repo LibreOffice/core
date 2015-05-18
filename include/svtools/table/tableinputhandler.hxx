@@ -65,7 +65,7 @@ namespace svt { namespace table
     typedef std::shared_ptr< ITableInputHandler >   PTableInputHandler;
 
 
-} } // namespace svt::table
+} }
 
 
 #endif // INCLUDED_SVTOOLS_TABLE_TABLEINPUTHANDLER_HXX

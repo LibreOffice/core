@@ -256,7 +256,7 @@ void CondFormatContext::onEndRecord()
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

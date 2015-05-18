@@ -36,7 +36,7 @@ namespace dbaxml
                     const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
     };
-} // namespace dbaxml
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLDATASOURCESETTINGS_HXX
 

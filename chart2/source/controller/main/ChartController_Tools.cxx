@@ -950,6 +950,6 @@ void ChartController::impl_switchDiagramPositioningToExcludingPositioning()
         aUndoGuard.commit();
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

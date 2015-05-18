@@ -187,7 +187,7 @@ class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XS
                                                  const OUString& sSystem );
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
 

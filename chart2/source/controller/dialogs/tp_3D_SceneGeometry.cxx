@@ -288,6 +288,6 @@ IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled)
     return 0;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -204,6 +204,6 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     return xResult;
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

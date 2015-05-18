@@ -63,7 +63,7 @@ public:
     inline OUString         GetFilter() const { return m_sFilter; }
 };
 
-} // namespace sfx2
+}
 
 #endif // INCLUDED_SFX2_DOCINSERT_HXX
 

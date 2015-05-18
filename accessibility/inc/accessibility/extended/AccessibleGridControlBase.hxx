@@ -377,7 +377,7 @@ inline void AccessibleGridControlBase::implSetDescription(
 
 
 
-} // namespace accessibility
+}
 
 
 

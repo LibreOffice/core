@@ -130,7 +130,7 @@ class ShellJob : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServic
                                       bool                             bCheckExitCode);
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_JOBS_SHELLJOB_HXX
 

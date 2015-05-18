@@ -42,7 +42,7 @@ namespace dbaui
         OCharsetDisplay     m_aCharSets;
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_CHARSETLISTBOX_HXX
 

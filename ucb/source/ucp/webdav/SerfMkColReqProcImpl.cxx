@@ -62,6 +62,6 @@ void SerfMkColReqProcImpl::handleEndOfResponseData( serf_bucket_t * /*inSerfResp
     // nothing to do;
 }
 
-} // namespace http_dav_ucp
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

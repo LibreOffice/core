@@ -70,7 +70,7 @@ namespace dbaccess
         ::std::unique_ptr< DocumentEvents_Data >  m_pData;
     };
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTEVENTS_HXX
 

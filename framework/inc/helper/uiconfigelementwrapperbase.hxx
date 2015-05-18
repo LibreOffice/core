@@ -139,7 +139,7 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
         ::cppu::OMultiTypeInterfaceContainerHelper                                              m_aListenerContainer;   /// container for ALL Listener
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_UICONFIGELEMENTWRAPPERBASE_HXX
 

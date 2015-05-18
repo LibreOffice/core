@@ -73,7 +73,7 @@ private:
         com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
 };
 
-} // namespace tdoc_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_DOCUMENTCONTENTFACTORY_HXX
 

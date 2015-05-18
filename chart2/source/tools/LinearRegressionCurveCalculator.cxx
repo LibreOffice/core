@@ -74,6 +74,6 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL LinearRegressionCurveCalculator:
     return RegressionCurveCalculator::getCurveValues( min, max, nPointCount, xScalingX, xScalingY, bMaySkipPointsInCalculation );
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

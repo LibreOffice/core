@@ -548,7 +548,7 @@ inline void ODatabaseForm::submitNBC(const ::com::sun::star::uno::Reference< ::c
 }
 
 
-}   // namespace frm
+}
 
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_DATABASEFORM_HXX

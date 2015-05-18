@@ -76,7 +76,7 @@ public:
     virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_DLGEDLIST_HXX
 

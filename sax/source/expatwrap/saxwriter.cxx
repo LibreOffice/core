@@ -1378,7 +1378,7 @@ void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeExc
     }
 }
 
-} // namespace
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_extensions_xml_sax_Writer_get_implementation(

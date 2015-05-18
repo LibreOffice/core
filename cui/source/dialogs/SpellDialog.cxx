@@ -153,7 +153,7 @@ public:
     void                    SetOffset(long nSet) {m_nOffset = nSet;}
     long                    GetOffset() const {return m_nOffset;}
 };
-}//namespace svx
+}
 using namespace ::svx;
 
 

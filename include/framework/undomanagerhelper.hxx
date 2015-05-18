@@ -154,7 +154,7 @@ namespace framework
     };
 
 
-} // namespace framework
+}
 
 
 #endif // INCLUDED_FRAMEWORK_UNDOMANAGERHELPER_HXX

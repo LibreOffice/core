@@ -44,7 +44,7 @@ typedef std::list< AfterEffectNode > AfterEffectNodeList;
     in the timing hierarchy of its master */
 SD_DLLPUBLIC void stl_process_after_effect_node_func(AfterEffectNode& rNode);
 
-} // namespace sd;
+}
 
 #endif
 

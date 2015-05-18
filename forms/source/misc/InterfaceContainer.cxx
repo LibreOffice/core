@@ -1338,7 +1338,7 @@ InterfaceRef OFormComponents::getParent() throw( RuntimeException, std::exceptio
 }
 
 
-}   // namespace frm
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

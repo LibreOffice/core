@@ -85,7 +85,7 @@ ________________________________________________________________________________
         return pReturn;                                                                                                                \
     }
 
-//}     //  namespace framework
+//}
 
 #endif // INCLUDED_FRAMEWORK_INC_MACROS_REGISTRATION_HXX
 

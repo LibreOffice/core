@@ -1770,6 +1770,6 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         {}
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

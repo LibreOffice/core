@@ -52,7 +52,7 @@ protected:
     double m_fOuterDistance; //>=0 m_fOuterDistance=1 --> distance == width
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

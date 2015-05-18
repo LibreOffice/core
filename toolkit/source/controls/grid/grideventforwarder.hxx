@@ -70,7 +70,7 @@ namespace toolkit
     };
 
 
-} // namespace toolkit
+}
 
 
 #endif // INCLUDED_TOOLKIT_SOURCE_CONTROLS_GRID_GRIDEVENTFORWARDER_HXX

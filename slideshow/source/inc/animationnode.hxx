@@ -148,8 +148,8 @@ public:
 
 typedef ::boost::shared_ptr< AnimationNode > AnimationNodeSharedPtr;
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONNODE_HXX
 

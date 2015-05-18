@@ -403,7 +403,7 @@ template< typename MatrixType >
 
 
 
-} // namespace oox
+}
 
 #endif
 

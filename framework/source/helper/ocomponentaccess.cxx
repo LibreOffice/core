@@ -182,6 +182,6 @@ bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   css:
     return xOwner.is();
 }
 
-}       //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

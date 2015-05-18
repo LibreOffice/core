@@ -138,7 +138,7 @@ sal_Int32 lclGetRcfOffset( sal_Int64 nStreamPos )
     return static_cast< sal_Int32 >( nStreamPos % BIFF_RCF_BLOCKSIZE );
 }
 
-} // namespace
+}
 
 BiffDecoder_RCF::BiffDecoder_RCF( const BiffDecoder_RCF& rDecoder ) :
     BiffDecoderBase(),  // must be called to prevent compiler warning
@@ -232,7 +232,7 @@ void BiffCodecHelper::cloneDecoder( BiffInputStream& rStrm )
         rStrm.setDecoder( BiffDecoderRef( mxDecoder->clone() ) );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

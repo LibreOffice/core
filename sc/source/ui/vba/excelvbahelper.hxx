@@ -79,9 +79,9 @@ template < typename ImplObject >
         return pObj;
     }
 
-} // namespace excel
-} // namespace vba
-} // namespace ooo
+}
+}
+}
 
 #endif
 

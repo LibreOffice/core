@@ -246,7 +246,7 @@ private:
 
 };  // class OConnectionPointHelper
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_SOURCE_INC_OCONNECTIONPOINTHELPER_HXX
 

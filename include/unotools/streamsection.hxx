@@ -67,7 +67,7 @@ public:
     ~OStreamSection();
 };
 
-}   // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_STREAMSECTION_HXX
 

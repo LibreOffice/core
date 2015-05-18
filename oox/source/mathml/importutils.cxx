@@ -88,7 +88,7 @@ static OString tokenToString( int token )
     return namespacename + ":" + tokenname;
 }
 
-} // namespace
+}
 
 OUString& XmlStream::AttributeList::operator[] (int token)
 {
@@ -338,7 +338,7 @@ void XmlStreamBuilder::appendCharacters( const OUString& chars )
     tags.back().text += chars;
 }
 
-} // namespace
-} // namespace
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -71,7 +71,7 @@ public:
     BreakPoint* remove(BreakPoint* ptr);
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BREAKPOINT_HXX
 

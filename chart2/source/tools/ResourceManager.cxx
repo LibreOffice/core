@@ -34,6 +34,6 @@ ResMgr & ResourceManager::getResourceManager()
     return *pResourceManager;
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

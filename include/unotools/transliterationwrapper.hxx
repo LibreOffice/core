@@ -122,7 +122,7 @@ public:
 
 };
 
-}       // namespace utl
+}
 
 #endif
 

@@ -144,7 +144,7 @@ public:
     bool DialogWasClosedWithOK() const { return m_bOKPressed;}
 };
 
-} //namespace chart
+}
 
 #endif
 

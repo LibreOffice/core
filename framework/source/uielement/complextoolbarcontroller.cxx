@@ -328,6 +328,6 @@ void ComplexToolbarController::notifyTextChanged( const OUString& aText )
                    aInfo );
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

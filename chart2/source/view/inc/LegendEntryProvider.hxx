@@ -85,7 +85,7 @@ protected:
     ~LegendEntryProvider() {}
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_VIEW_INC_LEGENDENTRYPROVIDER_HXX
 #endif

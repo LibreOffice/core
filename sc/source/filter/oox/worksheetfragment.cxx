@@ -73,7 +73,7 @@ const sal_Int32 BIFF12_OLEOBJECT_ALWAYS     = 1;
 const sal_uInt16 BIFF12_OLEOBJECT_LINKED    = 0x0001;
 const sal_uInt16 BIFF12_OLEOBJECT_AUTOLOAD  = 0x0002;
 
-} // namespace
+}
 
 DataValidationsContext::DataValidationsContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment )
@@ -750,7 +750,7 @@ void WorksheetFragment::importEmbeddedOleData( StreamDataSequence& orEmbeddedDat
         getBaseFilter().importBinaryData( orEmbeddedData, aFragmentPath );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

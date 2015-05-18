@@ -619,7 +619,7 @@ ObjectHierarchy::tOID ImplObjectHierarchy::getParent(
     return getParentImpl( ObjectHierarchy::getRootNodeOID(), rOID );
 }
 
-} // namespace impl
+}
 
 ObjectHierarchy::ObjectHierarchy(
     const Reference< XChartDocument > & xChartDocument,
@@ -852,6 +852,6 @@ bool ObjectKeyNavigation::veryLast()
     return bResult;
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

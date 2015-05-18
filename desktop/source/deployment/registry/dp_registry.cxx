@@ -556,6 +556,6 @@ Reference<deployment::XPackageRegistry> SAL_CALL create(
         context, cachePath, readOnly, xComponentContext );
 }
 
-} // namespace dp_registry
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -898,6 +898,6 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem(
         comphelper::copyProperties( xSource, xDestination );
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

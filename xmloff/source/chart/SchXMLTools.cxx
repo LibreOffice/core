@@ -867,6 +867,6 @@ Reference< chart2::data::XDataProvider > getDataProviderFromParent( const Refere
     return xRet;
 }
 
-} // namespace SchXMLTools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

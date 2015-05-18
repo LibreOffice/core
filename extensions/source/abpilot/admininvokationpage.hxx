@@ -53,7 +53,7 @@ namespace abp
     };
 
 
-}   // namespace abp
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ADMININVOKATIONPAGE_HXX

@@ -47,8 +47,8 @@ private:
     FontModelPtr        mxDefFontModel;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

@@ -292,7 +292,7 @@ namespace pcr
     #define SERVICE_RANGEADDRESS_CONVERSION "com.sun.star.table.CellRangeAddressConversion"
 
 
-} // namespace pcr
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMSTRINGS_HXX

@@ -532,7 +532,7 @@ namespace pcr
     }
 
 
-} // namespace pcr
+}
 
 
 

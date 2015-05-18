@@ -522,6 +522,6 @@ OUStringList StorageHolder::impl_st_parsePath(const OUString& sPath)
     return lToken;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

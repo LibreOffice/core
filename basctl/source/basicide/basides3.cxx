@@ -141,6 +141,6 @@ void Shell::ExecuteDialog( SfxRequest& rReq )
         pCurWin->ExecuteCommand(rReq);
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

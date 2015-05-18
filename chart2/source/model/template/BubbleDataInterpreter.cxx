@@ -293,6 +293,6 @@ sal_Bool SAL_CALL BubbleDataInterpreter::isDataCompatible(
     return sal_True;
 }
 
-} // namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

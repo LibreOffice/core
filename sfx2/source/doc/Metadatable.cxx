@@ -1663,7 +1663,7 @@ throw (uno::RuntimeException, std::exception)
     return pObject->EnsureMetadataReference();
 }
 
-} // namespace sfx2
+}
 
 
 

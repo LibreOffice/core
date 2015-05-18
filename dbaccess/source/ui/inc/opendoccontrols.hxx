@@ -70,7 +70,7 @@ namespace dbaui
         void    impl_init( const sal_Char* _pAsciiModuleName );
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_OPENDOCCONTROLS_HXX
 

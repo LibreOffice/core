@@ -155,7 +155,7 @@ SAL_CALL query (IStoreHandle *pHandle, SAL_UNUSED_PARAMETER OStoreLockBytes*)
  *
  *======================================================================*/
 
-} // namespace store
+}
 
 #endif // INCLUDED_STORE_SOURCE_STORLCKB_HXX
 

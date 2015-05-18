@@ -55,7 +55,7 @@ void oldtests::test_profile()
     CPPUNIT_ASSERT_EQUAL(oslProfile(0), osl_openProfile( rtl::OUString(baseUrl + "/not_existing_path/soffice.ini").pData, osl_Profile_WRITELOCK ));
 }
 
-} // namespace osl_Profile
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION( osl_Profile::oldtests );
 

@@ -48,7 +48,7 @@ public:
     void FillItemSet(SfxItemSet& rOutAttrs);
 };
 
-} //namespace chart
+}
 
 #endif
 

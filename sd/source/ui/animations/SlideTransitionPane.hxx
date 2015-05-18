@@ -136,7 +136,7 @@ private:
     Timer maLateInitTimer;
 };
 
-} //  namespace sd
+}
 
 // INCLUDED_SD_SOURCE_UI_ANIMATIONS_SLIDETRANSITIONPANE_HXX
 #endif

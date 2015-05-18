@@ -601,7 +601,7 @@ void AnimationNodeFactory::showTree( AnimationNodeSharedPtr& pRootNode )
 }
 #endif
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -172,8 +172,8 @@ protected:
     tSeriesOrDiagramPropertyType               m_ePropertyType;
 };
 
-} //namespace wrapper
-} //namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDSERIESORDIAGRAMPROPERTY_HXX
 #endif

@@ -129,7 +129,7 @@ namespace dbaccess
 
         inline bool isInitialized() const { return m_bConstructed; }
     };
-} // namespace
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_FILTEREDCONTAINER_HXX
 

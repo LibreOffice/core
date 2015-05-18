@@ -759,6 +759,6 @@ namespace xmloff
         OSL_ENSURE( aPos.second, "OFormLayerXMLExport_Impl::excludeFromExport: element already exists in the ignore list!" );
     }
 
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

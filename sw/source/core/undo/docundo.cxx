@@ -580,6 +580,6 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
     return true;
 }
 
-} // namespace sw
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

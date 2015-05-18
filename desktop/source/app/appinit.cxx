@@ -313,6 +313,6 @@ void Desktop::RemoveTemporaryDirectory()
     }
 }
 
-} // namespace desktop
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -145,7 +145,7 @@ private:
     void registerProperties();
 };
 
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMMANDDEFINITION_HXX
 

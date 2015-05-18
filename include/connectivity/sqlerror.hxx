@@ -307,7 +307,7 @@ namespace connectivity
     };
 
 
-} // namespace connectivity
+}
 
 
 #endif // INCLUDED_CONNECTIVITY_SQLERROR_HXX

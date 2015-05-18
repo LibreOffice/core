@@ -155,6 +155,6 @@ IconThemeSelector::ReturnFallback(const std::vector<IconThemeInfo>& installedThe
     }
 }
 
-} /* namespace vcl */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -414,7 +414,7 @@ struct XclCodePageEntry_TEPred
     rtl_TextEncoding    meTextEnc;
 };
 
-} // namespace
+}
 
 rtl_TextEncoding XclTools::GetTextEncoding( sal_uInt16 nCodePage )
 {

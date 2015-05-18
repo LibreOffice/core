@@ -2177,6 +2177,6 @@ void AnimationExporter::exportIterate( SvStream& rStrm, const Reference< XAnimat
     }
 }
 
-} // namespace ppt;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -119,6 +119,6 @@ void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt:
     xConfig->ignorableWhitespace(OUString());
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

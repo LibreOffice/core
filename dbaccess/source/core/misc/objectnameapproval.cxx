@@ -72,6 +72,6 @@ namespace dbaccess
         xObjectNames->checkNameForCreate( m_pImpl->nCommandType, _rName );
     }
 
-} // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

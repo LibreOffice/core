@@ -105,7 +105,7 @@ OUString encodeBase64( const sal_Int8* i_pBuffer, const sal_uInt32 i_nBufferLeng
     return aBuf.makeStringAndClear();
 }
 
-} // namespace
+}
 
 ImageContainer::ImageContainer() :
     m_aImages()

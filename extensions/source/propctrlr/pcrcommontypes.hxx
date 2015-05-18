@@ -34,7 +34,7 @@ namespace pcr
         PropertyMap;
 
 
-} // namespace pcr
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_PCRCOMMONTYPES_HXX

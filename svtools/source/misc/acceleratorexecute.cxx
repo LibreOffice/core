@@ -476,6 +476,6 @@ IMPL_LINK_NOARG(AsyncAccelExec, impl_ts_asyncCallback)
     return 0;
 }
 
-} // namespace svt
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

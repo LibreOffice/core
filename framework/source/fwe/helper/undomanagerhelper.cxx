@@ -1092,6 +1092,6 @@ namespace framework
             m_xImpl->removeModifyListener( i_listener );
     }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

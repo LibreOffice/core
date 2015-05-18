@@ -157,6 +157,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::clipstate);
-} // namespace basegfx2d
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

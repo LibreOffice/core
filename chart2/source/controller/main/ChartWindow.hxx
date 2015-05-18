@@ -73,7 +73,7 @@ private:
     void adjustHighContrastMode();
 };
 
-} //namespace chart
+}
 
 #endif
 

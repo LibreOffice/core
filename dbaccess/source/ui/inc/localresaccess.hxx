@@ -40,7 +40,7 @@ public:
     }
 };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_LOCALRESACCESS_HXX
 

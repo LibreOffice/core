@@ -137,6 +137,6 @@ void OXMLDatabase::EndElement()
     GetOwnImport().setPropertyInfo();
 }
 
-} // namespace dbaxml
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

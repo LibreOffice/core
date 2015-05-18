@@ -627,8 +627,8 @@ private:
     bool                mbTabOverflow;                  /// Flag for "tables overflow".
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

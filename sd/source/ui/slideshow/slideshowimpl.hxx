@@ -394,7 +394,7 @@ private:
     ::rtl::Reference< SlideShowListenerProxy > mxListenerProxy;
 };
 
-} // namespace ::sd
+}
 
 #endif
 

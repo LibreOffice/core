@@ -632,7 +632,7 @@ private:
     };
 };
 #endif
-} // namespace rtl
+}
 
 #endif // INCLUDED_RTL_INSTANCE_HXX
 

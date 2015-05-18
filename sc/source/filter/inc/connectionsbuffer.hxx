@@ -153,8 +153,8 @@ private:
     sal_Int32           mnUnusedId;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

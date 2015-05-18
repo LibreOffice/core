@@ -197,7 +197,7 @@ private:
 };
 
 
-}   // namespace frm
+}
 
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_IMAGECONTROL_HXX

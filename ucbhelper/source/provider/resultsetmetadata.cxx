@@ -576,6 +576,6 @@ OUString SAL_CALL ResultSetMetaData::getColumnServiceName( sal_Int32 column )
     return m_pImpl->m_aColumnData[ column - 1 ].columnServiceName;
 }
 
-} // namespace ucbhelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

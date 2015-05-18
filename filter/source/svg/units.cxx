@@ -98,6 +98,6 @@ double convLength( const OUString& sValue, const State& rState, char dir )
     return convLength(nVal,eUnit,rState,dir);
 }
 
-} // namespace svgi
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -121,7 +121,7 @@ private:
     void HideAllControls();
 };
 
-} //namespace chart
+}
 
 #endif
 

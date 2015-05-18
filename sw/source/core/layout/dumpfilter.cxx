@@ -160,7 +160,7 @@ namespace sw
         return aSeq;
     }
 
-} // Namespace sw
+}
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL

@@ -76,7 +76,7 @@ bool lclReadConfigItem( const Reference< XInterface >& rxConfigAccess, const OUS
     return false;
 }
 
-} // namespace
+}
 
 VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContext, const OUString& rConfigCompName )
 {
@@ -543,7 +543,7 @@ void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
     }
 }
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

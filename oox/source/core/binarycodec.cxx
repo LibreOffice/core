@@ -103,7 +103,7 @@ sal_uInt16 lclGetHash( const sal_uInt8* pnPassData, sal_Int32 nBufferSize )
     return nHash;
 }
 
-} // namespace
+}
 
 sal_uInt16 CodecHelper::getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement )
 {
@@ -406,7 +406,7 @@ bool BinaryCodec_RCF::skip( sal_Int32 nBytes )
     return bResult;
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

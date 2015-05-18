@@ -377,6 +377,6 @@ SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
     return pRet;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

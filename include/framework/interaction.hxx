@@ -95,7 +95,7 @@ public:
 };
 
 
-}       //  namespace framework
+}
 
 #endif  // #define INCLUDED_FRAMEWORK_INTERACTION_HXX
 

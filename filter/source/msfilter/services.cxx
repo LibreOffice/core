@@ -35,7 +35,7 @@ static ::cppu::ImplementationEntry const spServices[] =
 
 #undef IMPLEMENTATION_ENTRY
 
-} // namespace
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL msfilter_component_getFactory( const char* pImplName, void* pServiceManager, void* pRegistryKey )
 {

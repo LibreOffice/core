@@ -42,7 +42,7 @@ namespace {
 #pragma GCC diagnostic pop
 #endif
 #endif
-} // namespace
+}
 
 TokenMap::TokenMap() :
     maTokenNames( static_cast< size_t >( XML_TOKEN_COUNT ) )
@@ -86,6 +86,6 @@ sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength )
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

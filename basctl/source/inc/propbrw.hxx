@@ -88,7 +88,7 @@ private:
     void    ImplReCreateController();
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_PROPBRW_HXX
 

@@ -1090,7 +1090,7 @@ uno::Reference< excel::XRange > lclCreateVbaRange(
     return 0;
 }
 
-} // namespace
+}
 
 uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Intersect(
         const uno::Reference< excel::XRange >& rArg1, const uno::Reference< excel::XRange >& rArg2,

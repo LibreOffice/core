@@ -125,7 +125,7 @@ public:
     bool        EndPage ();
 };
 
-}  // namespace psp
+}
 
 #endif // INCLUDED_VCL_INC_GENERIC_PRINTERJOB_HXX
 

@@ -1547,7 +1547,7 @@ void CopyTableWizard::executedDialog( sal_Int16 _nExecutionResult )
     impl_dialogToAttributes_nothrow( impl_getDialog_throw() );
 }
 
-} // namespace dbaui
+}
 
 extern "C" void SAL_CALL createRegistryInfo_CopyTableWizard()
 {

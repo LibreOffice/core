@@ -64,7 +64,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_BASIDECTRLR_HXX
 

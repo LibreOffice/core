@@ -251,7 +251,7 @@ inline bool OStorePageBIOS::ScanContext::isValid() const
  *
  *======================================================================*/
 
-} // namespace store
+}
 
 #endif // INCLUDED_STORE_SOURCE_STORBIOS_HXX
 

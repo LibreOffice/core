@@ -58,7 +58,7 @@ namespace comphelper { namespace module
     }
 
 
-} } // namespace comphelper::module
+} }
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL comphelp_component_getFactory(

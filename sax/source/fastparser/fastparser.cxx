@@ -194,7 +194,7 @@ struct Entity : public ParserData
     Event& getEvent( CallbackType aType );
 };
 
-} // namespace
+}
 
 namespace sax_fastparser {
 
@@ -263,7 +263,7 @@ private:
     OUString pendingCharacters;             /// Data from characters() callback that needs to be sent.
 };
 
-} // namespace sax_fastparser
+}
 
 namespace {
 
@@ -603,7 +603,7 @@ void Entity::saveException( const Any & e )
     maSavedException = e;
 }
 
-} // namespace
+}
 
 namespace sax_fastparser {
 
@@ -1366,7 +1366,7 @@ bool FastSaxParser::hasNamespaceURL( const OUString& rPrefix ) const
     return mpImpl->hasNamespaceURL(rPrefix);
 }
 
-} // namespace sax_fastparser
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation(

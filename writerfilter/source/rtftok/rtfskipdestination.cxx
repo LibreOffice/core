@@ -46,7 +46,7 @@ void RTFSkipDestination::setReset(bool bReset)
     m_bReset = bReset;
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

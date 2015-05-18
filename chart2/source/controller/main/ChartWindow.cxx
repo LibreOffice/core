@@ -307,6 +307,6 @@ void ChartWindow::Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags )
     }
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,7 +32,7 @@ namespace xmloff
         static PPropertyHandler getFormPropertyHandler( const PropertyId i_propertyId );
     };
 
-} // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_INC_FORMS_FORM_HANDLER_FACTORY_HXX
 

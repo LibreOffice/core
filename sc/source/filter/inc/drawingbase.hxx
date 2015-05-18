@@ -123,8 +123,8 @@ private:
     AnchorType          meEditAs;           /// Anchor mode as shown in the UI.
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

@@ -2339,7 +2339,7 @@ bool FilterCache::impl_isModuleInstalled(const OUString& sModule)
     return false;
 }
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

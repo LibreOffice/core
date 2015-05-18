@@ -45,6 +45,6 @@ public:
 
 static OGlobalTimer aGlobalTimer;
 
-} // namespace osl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

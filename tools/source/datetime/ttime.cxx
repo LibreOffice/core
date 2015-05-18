@@ -437,6 +437,6 @@ sal_uInt64 tools::Time::GetSystemTicks()
 #endif
 }
 
-} /* namespace tools */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

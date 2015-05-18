@@ -43,9 +43,9 @@ private:
     TableStyleList&              mrTableStyleList;
 };
 
-} // namespace table
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 #endif
 

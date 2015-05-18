@@ -776,7 +776,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
     }
 }
 
-} // namespace proxydecider_impl
+}
 
 
 
@@ -823,6 +823,6 @@ const InternetProxyServer & InternetProxyDecider::getProxy(
     return m_pImpl->getProxy( rProtocol, rHost, nPort );
 }
 
-} // namespace ucbhelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

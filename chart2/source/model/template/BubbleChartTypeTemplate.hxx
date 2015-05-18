@@ -79,7 +79,7 @@ protected:
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const SAL_OVERRIDE;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_BUBBLECHARTTYPETEMPLATE_HXX
 #endif

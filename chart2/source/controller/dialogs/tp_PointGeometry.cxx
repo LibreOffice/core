@@ -87,6 +87,6 @@ void SchLayoutTabPage::Reset(const SfxItemSet* rInAttrs)
     }
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

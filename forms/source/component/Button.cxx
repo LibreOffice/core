@@ -747,7 +747,7 @@ void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Referenc
     OFormNavigationHelper::releaseDispatchProviderInterceptor( _rxInterceptor );
 }
 
-}   // namespace frm
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_OButtonModel_get_implementation(::com::sun::star::uno::XComponentContext* component,

@@ -730,8 +730,8 @@ private:
     boost::scoped_ptr<EventMultiplexerImpl> mpImpl;
 };
 
-} // namespace internal
-} // namespace Presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_EVENTMULTIPLEXER_HXX
 

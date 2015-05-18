@@ -202,7 +202,7 @@ void lclAppendHex( OUStringBuffer& orBuffer, Type nValue )
         orBuffer[nCharIdx] = spcHexChars[ nValue & 0xF ];
 }
 
-} // namespace
+}
 
 StdFontInfo::StdFontInfo() :
     mnHeight( 0 ),
@@ -606,7 +606,7 @@ bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, t
     return true;
 }
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

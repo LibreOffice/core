@@ -500,7 +500,7 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
 }
 
 
-}   // namespace comphelper
+}
 
 
 

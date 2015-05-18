@@ -607,8 +607,8 @@ util::DateTime ConvertDateStringToDateTime( const OUString& rDateTime )
 }
 
 
-} // namespace ConversionHelper
-} //namespace dmapper
-} //namespace writerfilter
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -49,7 +49,7 @@ RichStringRef SharedStringsBuffer::getString( sal_Int32 nStringId ) const
     return maStrings.get( nStringId );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

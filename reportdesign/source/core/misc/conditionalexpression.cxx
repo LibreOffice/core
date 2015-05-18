@@ -186,7 +186,7 @@ namespace rptui
         return _out_rCondExp.size();
     }
 
-} // namespace rptui
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

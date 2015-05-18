@@ -82,7 +82,7 @@ private:
     DECL_LINK( ChangeValue, void *);
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_TRENDLINE_HXX
 #endif

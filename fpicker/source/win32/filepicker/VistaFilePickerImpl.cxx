@@ -1239,9 +1239,9 @@ bool VistaFilePickerImpl::onFileTypeChanged( UINT /*nTypeIndex*/ )
     return true;
 }
 
-} // namespace vista
-} // namespace win32
-} // namespace fpicker
+}
+}
+}
 
 #endif // __IFileDialogCustomize_INTERFACE_DEFINED__
 

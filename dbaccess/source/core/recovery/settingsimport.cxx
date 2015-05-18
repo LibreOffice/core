@@ -233,6 +233,6 @@ namespace dbaccess
         o_rValue <<= m_aChildSettings.getPropertyValues();
     }
 
-} // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

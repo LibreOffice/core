@@ -137,7 +137,7 @@ template< typename ColorType > struct ColorTraits
     }
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_COLORTRAITS_HXX */
 

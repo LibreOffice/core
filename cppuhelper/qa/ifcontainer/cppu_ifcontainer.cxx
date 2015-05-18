@@ -256,7 +256,7 @@ namespace cppu_ifcontainer
         CPPUNIT_TEST(testOMultiTypeInterfaceContainerHelperInt32);
         CPPUNIT_TEST_SUITE_END();
     };
-} // namespace cppu_ifcontainer
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(cppu_ifcontainer::IfTest);
 

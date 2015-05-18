@@ -1282,6 +1282,6 @@ void BubbleChartDialogController::adjustParameterToSubType( ChartTypeParameter& 
     rParameter.b3DLook = false;
     rParameter.eStackMode = GlobalStackMode_NONE;
 }
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

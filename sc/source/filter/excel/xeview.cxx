@@ -277,7 +277,7 @@ sal_uInt16 lclGetXclZoom( long nScZoom, sal_uInt16 nDefXclZoom )
     return (nXclZoom == nDefXclZoom) ? 0 : nXclZoom;
 }
 
-} // namespace
+}
 
 XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nScTab ) :
     XclExpRoot( rRoot ),

@@ -128,8 +128,8 @@ private:
     ::chart::TitleHelper::eTitleType        m_eTitleType;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_TITLEWRAPPER_HXX
 #endif

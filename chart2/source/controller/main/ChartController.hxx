@@ -675,7 +675,7 @@ private:
     void impl_switchDiagramPositioningToExcludingPositioning();
 };
 
-}  // namespace chart
+}
 
 #endif
 

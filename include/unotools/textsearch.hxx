@@ -170,7 +170,7 @@ public:
 
 };
 
-}   // namespace utl
+}
 
 #endif
 

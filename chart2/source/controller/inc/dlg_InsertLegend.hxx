@@ -46,7 +46,7 @@ public:
                        ::com::sun::star::frame::XModel >& xChartModel ) const;
 };
 
-} //namespace chart
+}
 
 #endif
 

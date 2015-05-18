@@ -126,7 +126,7 @@ namespace drivermanager
         void bootstrapDrivers();
     };
 
-}   // namespace drivermanager
+}
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_MANAGER_MDRIVERMANAGER_HXX
 

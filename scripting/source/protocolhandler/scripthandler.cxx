@@ -503,7 +503,7 @@ const Reference< XMultiServiceFactory >& xServiceManager )
     return xReturn;
 }
 
-} // namespace scripting_protocolhandler
+}
 
 extern "C"
 {

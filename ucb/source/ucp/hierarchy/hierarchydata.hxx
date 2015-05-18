@@ -137,7 +137,7 @@ public:
     bool next ( iterator& it );
 };
 
-} // namespace hierarchy_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYDATA_HXX
 

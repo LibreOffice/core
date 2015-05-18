@@ -58,8 +58,8 @@ private:
     IMediaDet* implCreateMediaDet( const OUString& rURL ) const;
 };
 
-} // namespace win
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_WIN_FRAMEGRABBER_HXX
 

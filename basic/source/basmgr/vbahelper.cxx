@@ -178,7 +178,7 @@ struct CurrDirPool
 
 struct StaticCurrDirPool : public ::rtl::Static< CurrDirPool, StaticCurrDirPool > {};
 
-} // namespace
+}
 
 
 
@@ -217,7 +217,7 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
 
 
 
-} // namespace vba
-} // namespace basic
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

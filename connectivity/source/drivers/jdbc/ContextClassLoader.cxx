@@ -108,7 +108,7 @@ namespace connectivity { namespace jdbc
         }
     }
 
-} } // namespace connectivity::jdbc
+} }
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

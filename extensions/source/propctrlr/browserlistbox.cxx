@@ -1276,7 +1276,7 @@ namespace pcr
     }
 
 
-} // namespace pcr
+}
 
 
 

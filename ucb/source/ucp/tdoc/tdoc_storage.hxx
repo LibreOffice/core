@@ -159,7 +159,7 @@ namespace tdoc_ucp {
             com::sun::star::uno::XComponentContext > m_xContext;
     };
 
-} // namespace tdoc_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_TDOC_TDOC_STORAGE_HXX
 

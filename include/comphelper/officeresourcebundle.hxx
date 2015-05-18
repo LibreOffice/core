@@ -86,7 +86,7 @@ namespace comphelper
     };
 
 
-} // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_OFFICERESOURCEBUNDLE_HXX

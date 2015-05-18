@@ -170,7 +170,7 @@ namespace frm
     };
 
 
-} // namespace frm
+}
 
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_RTATTRIBUTEHANDLER_HXX

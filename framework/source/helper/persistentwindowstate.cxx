@@ -285,6 +285,6 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     // <- SOLAR SAFE ------------------------
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

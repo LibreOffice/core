@@ -391,7 +391,7 @@ void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const OUString
     OSL_FAIL("not implemented");
 }
 
-} //namespace chart
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_chart2_WizardDialog_get_implementation(css::uno::XComponentContext *context,

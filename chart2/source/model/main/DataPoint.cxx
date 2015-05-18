@@ -320,6 +320,6 @@ css::uno::Sequence< OUString > SAL_CALL DataPoint::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

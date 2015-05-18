@@ -401,7 +401,7 @@ void SAL_CALL OReportEngineJFree::setMaxRows( ::sal_Int32 _MaxRows ) throw (uno:
     set(PROPERTY_MAXROWS,_MaxRows,m_nMaxRows);
 }
 
-} // namespace reportdesign
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

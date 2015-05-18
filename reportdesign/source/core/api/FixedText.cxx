@@ -325,7 +325,7 @@ OUString SAL_CALL OFixedText::getShapeType(  ) throw (uno::RuntimeException, std
 
 
 
-} // namespace reportdesign
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

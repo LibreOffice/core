@@ -68,7 +68,7 @@ com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SIDEM
                 const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rSMgr )
                     throw( com::sun::star::uno::Exception );
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_UNOMODEL_HXX
 

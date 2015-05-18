@@ -183,6 +183,6 @@ Sequence< Reference< XInteractionContinuation > > SAL_CALL DocPasswordRequest::g
 
 
 
-} // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

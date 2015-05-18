@@ -63,7 +63,7 @@ namespace xmloff
             sal_Char const * & _rpDefaultValuePropertyName);
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_VALUEPROPERTIES_HXX
 

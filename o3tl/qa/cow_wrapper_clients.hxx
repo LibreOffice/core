@@ -139,7 +139,7 @@ private:
     o3tl::cow_wrapper< int > maImpl;
 };
 
-} // namespace o3tltests
+}
 
 #endif // INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
 

@@ -248,7 +248,7 @@ bool lclProcessCharacters( OStringBuffer& rBuffer, const OString& rChars )
     return bHasBracket;
 }
 
-} // namespace
+}
 
 InputStream::InputStream( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm ) :
     // use single-byte ISO-8859-1 encoding which maps all byte characters to the first 256 Unicode characters
@@ -379,7 +379,7 @@ OString InputStream::readToElementEnd() throw (IOException, RuntimeException)
     return aText;
 }
 
-} // namespace vml
+}
 } // namespave oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

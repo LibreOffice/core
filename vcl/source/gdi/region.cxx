@@ -1813,6 +1813,6 @@ vcl::Region vcl::Region::GetRegionFromPolyPolygon( const tools::PolyPolygon& rPo
     return aResult;
 }
 
-} /* namespace vcl */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

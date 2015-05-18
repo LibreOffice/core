@@ -17,7 +17,7 @@ namespace {
 
 const sal_uInt32 AX_STRING_COMPRESSED       = 0x80000000;
 
-} // namespace
+}
 
 AxAlignedOutputStream::AxAlignedOutputStream( BinaryOutputStream& rOutStrm ) :
     BinaryStreamBase( false ),
@@ -92,7 +92,7 @@ void lclWriteString( AxAlignedOutputStream& rOutStrm, OUString& rValue, sal_uInt
     rOutStrm.writeCompressedUnicodeArray( rValue, bCompressed || bArrayString );
 }
 
-} // namespace
+}
 
 AxBinaryPropertyWriter::ComplexProperty::~ComplexProperty()
 {
@@ -202,7 +202,7 @@ bool AxBinaryPropertyWriter::startNextProperty( bool bSkip )
     return true;
 }
 
-} // namespace exp
-} // namespace ole
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

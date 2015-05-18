@@ -101,7 +101,7 @@ PageCache_createInstance (
  *
  *======================================================================*/
 
-} // namespace store
+}
 
 #endif // INCLUDED_STORE_SOURCE_STORCACH_HXX
 

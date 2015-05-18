@@ -58,7 +58,7 @@ public:
     static bool hasLegend( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > & xDiagram );
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

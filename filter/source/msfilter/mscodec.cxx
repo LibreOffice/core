@@ -113,7 +113,7 @@ sal_uInt16 lclGetHash( const sal_uInt8* pnPassData, sal_Size nBufferSize )
 }
 
 
-} // namespace
+}
 
 
 

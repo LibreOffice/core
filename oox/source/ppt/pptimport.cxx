@@ -214,7 +214,7 @@ sal_Int32 PptGraphicHelper::getDefaultChartAreaFillStyle() const
     return XML_noFill;
 }
 
-} // namespace
+}
 
 GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
 {

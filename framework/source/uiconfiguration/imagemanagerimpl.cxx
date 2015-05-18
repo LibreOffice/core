@@ -1397,6 +1397,6 @@ void ImageManagerImpl::clear()
         m_pUserImageList[n] = 0;
     }
 }
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

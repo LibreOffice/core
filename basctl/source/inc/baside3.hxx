@@ -160,7 +160,7 @@ private:
 };
 
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_BASIDE3_HXX
 

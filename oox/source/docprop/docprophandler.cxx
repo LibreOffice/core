@@ -653,7 +653,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     }
 }
 
-} // namespace docprop
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

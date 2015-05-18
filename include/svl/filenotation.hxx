@@ -56,7 +56,7 @@ namespace svt
     };
 
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_SVL_FILENOTATION_HXX

@@ -218,7 +218,7 @@ private:
 
 };  // class FrameControl
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
 

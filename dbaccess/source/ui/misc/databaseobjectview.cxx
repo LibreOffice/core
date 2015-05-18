@@ -300,6 +300,6 @@ namespace dbaui
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< OUString >( URL_COMPONENT_RELATIONDESIGN ) )
     {
     }
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -148,8 +148,8 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper1< BaseContain
 
 };
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONTENTHANDLERFACTORY_HXX
 

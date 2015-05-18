@@ -38,6 +38,6 @@ void SchTitleDlg::getResult( TitleDialogData& rOutput )
     m_xTitleResources->readFromResources( rOutput );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

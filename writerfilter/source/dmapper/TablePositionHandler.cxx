@@ -172,7 +172,7 @@ bool TablePositionHandler::operator== (const TablePositionHandler& rHandler) con
            m_nX == rHandler.m_nX;
 }
 
-} // namespace dmapper
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -317,7 +317,7 @@ protected:
 };
 
 
-}   // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_PROPAGG_HXX

@@ -187,7 +187,7 @@ void ImplOPropertySet::cloneInterfaceProperties()
                      lcl_replaceInterfacePropertiesByClones());
 }
 
-} //  namespace impl
-} //  namespace chart
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

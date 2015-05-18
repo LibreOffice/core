@@ -96,6 +96,6 @@ Reference< XComponentContext > getProcessComponentContext()
     return getComponentContext( getProcessServiceFactory() );
 }
 
-} // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

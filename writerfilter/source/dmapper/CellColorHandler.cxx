@@ -319,7 +319,7 @@ bool CellColorHandler::isInteropGrabBagEnabled()
     return !(m_aInteropGrabBagName.isEmpty());
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

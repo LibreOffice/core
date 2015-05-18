@@ -177,7 +177,7 @@ namespace svt
     };
 
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_ACCESSIBLEFACTORY_HXX

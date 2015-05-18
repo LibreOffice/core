@@ -169,7 +169,7 @@ namespace toolkit
     };
 
 
-} // namespace toolkit
+}
 
 
 #endif // INCLUDED_TOOLKIT_SOURCE_AWT_STYLESETTINGS_HXX

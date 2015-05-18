@@ -122,7 +122,7 @@ namespace connectivity { namespace java { namespace sql {
     };
 
 
-} } } // namespace connectivity::java::sql
+} } }
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CONNECTIONLOG_HXX

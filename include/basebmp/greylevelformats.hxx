@@ -122,7 +122,7 @@ typedef PixelFormatTraitsTemplate_Greylevel<
 BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_GREY8::getter_type,
                                   PixelFormatTraits_GREY8::setter_type);
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_GREYLEVELFORMATS_HXX */
 

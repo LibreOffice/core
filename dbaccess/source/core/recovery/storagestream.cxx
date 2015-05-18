@@ -99,6 +99,6 @@ namespace dbaccess
         // (legitimately) do not call this method here.
     }
 
-} // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

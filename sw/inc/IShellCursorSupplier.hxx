@@ -36,7 +36,7 @@ public:
     virtual SwPaM & GetCurrentShellCursor() = 0;
 };
 
-} // namespace sw
+}
 
 #endif // INCLUDED_SW_INC_ISHELLCURSORSUPPLIER_HXX
 

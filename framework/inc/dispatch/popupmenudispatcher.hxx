@@ -135,7 +135,7 @@ class PopupMenuDispatcher :     public  ::cppu::WeakImplHelper5<
 
 }; //  class PopupMenuDispatcher
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_POPUPMENUDISPATCHER_HXX
 

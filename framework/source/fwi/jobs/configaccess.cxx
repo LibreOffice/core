@@ -183,6 +183,6 @@ const css::uno::Reference< css::uno::XInterface >& ConfigAccess::cfg()
     return m_xConfig;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -77,7 +77,7 @@ namespace SceneProperties
     OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 }
 
-} //  namespace chart
+}
 
 #endif // INCLUDED_CHART2_SOURCE_INC_SCENEPROPERTIES_HXX
 

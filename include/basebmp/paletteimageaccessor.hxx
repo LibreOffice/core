@@ -155,7 +155,7 @@ public:
     }
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_PALETTEIMAGEACCESSOR_HXX */
 

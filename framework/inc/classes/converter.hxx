@@ -44,7 +44,7 @@ class FWI_DLLPUBLIC Converter
         static OUString                                 convert_DateTime2ISO8601        ( const DateTime&                                        aSource );
 };
 
-}       // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_CLASSES_CONVERTER_HXX
 

@@ -301,7 +301,7 @@ bool IsUserWordbook( const OUString& rFile )
 
 
 
-}   // namespace migration
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

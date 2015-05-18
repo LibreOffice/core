@@ -177,7 +177,7 @@ void lcl_ConvertTabsToSpaces( OUString& rLine )
 // persist this value for the process lifetime
 bool bSourceLinesEnabled = false;
 
-} // namespace
+}
 
 ModulWindow::ModulWindow (ModulWindowLayout* pParent, ScriptDocument const& rDocument,
                           const OUString& aLibName, const OUString& aName, OUString& aModule)
@@ -1609,6 +1609,6 @@ void ModulWindowLayout::SyntaxColors::NewConfig (bool bFirst)
 }
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

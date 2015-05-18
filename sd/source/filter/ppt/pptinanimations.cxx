@@ -3758,6 +3758,6 @@ void AnimationImporter::dump( const char * , const OUString&  )
 
 #endif
 
-} // namespace ppt;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

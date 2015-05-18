@@ -66,6 +66,6 @@ bool VPolarAxis::isAnythingToDraw()
     return ( 2==m_nDimension && VAxisBase::isAnythingToDraw() );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

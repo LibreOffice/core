@@ -122,7 +122,7 @@ private:
     DECL_LINK(OnTypeSelected, OGeneralPage*);
 };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DBWIZ_HXX
 

@@ -299,7 +299,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         bool                                                                 m_bToolbarCreation;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_LAYOUTMANAGER_TOOLBARLAYOUTMANAGER_HXX
 

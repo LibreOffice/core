@@ -68,7 +68,7 @@ namespace pcr
     };
 
 
-}   // namespace pcr
+}
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MASTERDETAILLINKDIALOG_HXX
 

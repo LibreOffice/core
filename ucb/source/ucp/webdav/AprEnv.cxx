@@ -59,6 +59,6 @@ http_dav_ucp::SerfLockStore* AprEnv::getSerfLockStore()
     return mpSerfLockStore;
 }
 
-} // namespace apr_environment
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

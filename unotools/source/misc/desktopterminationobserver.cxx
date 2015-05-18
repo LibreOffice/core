@@ -198,6 +198,6 @@ namespace utl
         }
     }
 
-} // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

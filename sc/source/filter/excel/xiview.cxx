@@ -81,7 +81,7 @@ long lclGetScZoom( sal_uInt16 nXclZoom, sal_uInt16 nDefZoom )
     return static_cast< long >( nXclZoom ? nXclZoom : nDefZoom );
 }
 
-} // namespace
+}
 
 XclImpTabViewSettings::XclImpTabViewSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )

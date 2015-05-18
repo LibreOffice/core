@@ -134,7 +134,7 @@ typedef BaseHash< OUString > OUStringHashMap;
 
 typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString> ListenerHash;
 
-}       // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_STDTYPES_H
 

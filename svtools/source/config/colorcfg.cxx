@@ -614,6 +614,6 @@ void EditableColorConfig::EnableBroadcast()
 }
 
 
-}//namespace svtools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

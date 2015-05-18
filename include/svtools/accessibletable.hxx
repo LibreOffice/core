@@ -195,8 +195,8 @@ protected:
 };
 
 
-} // namespace table
-} // namespace svt
+}
+}
 
 #endif // INCLUDED_SVTOOLS_ACCESSIBLETABLE_HXX
 

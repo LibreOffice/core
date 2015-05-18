@@ -162,8 +162,8 @@ OUString SAL_CALL OOXMLFormulaParser::printFormula(
     throw RuntimeException();
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL

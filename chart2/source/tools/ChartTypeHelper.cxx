@@ -685,6 +685,6 @@ bool ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( const uno::Reference< X
     return bRet;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

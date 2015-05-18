@@ -55,7 +55,7 @@ namespace utl
         UNOTOOLS_DLLPUBLIC void    revokeTerminationListener( ITerminationListener* _pListener );
     }
 
-} // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 

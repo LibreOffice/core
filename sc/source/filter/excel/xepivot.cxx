@@ -87,7 +87,7 @@ static const sal_uInt16 spnPCItemFlags[] =
     EXC_SXFIELD_DATA_DATE_STR   //  x   x   x   x
 };
 
-} // namespace
+}
 
 XclExpPCItem::XclExpPCItem( const OUString& rText ) :
     XclExpRecord( (!rText.isEmpty()) ? EXC_ID_SXSTRING : EXC_ID_SXEMPTY, 0 ),
@@ -896,7 +896,7 @@ OUString lclGetDataFieldCaption( const OUString& rFieldName, GeneralFunction eFu
     return aCaption;
 }
 
-} // namespace
+}
 
 XclExpPTItem::XclExpPTItem( const XclExpPCField& rCacheField, sal_uInt16 nCacheIdx ) :
     XclExpRecord( EXC_ID_SXVI, 8 ),
@@ -1622,7 +1622,7 @@ void XclExpPivotRecWrapper::Save( XclExpStream& rStrm )
         mrPTMgr.WritePivotTables( rStrm, mnScTab );
 }
 
-} // namespace
+}
 
 XclExpPivotTableManager::XclExpPivotTableManager( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),

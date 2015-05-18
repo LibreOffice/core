@@ -106,7 +106,7 @@ private:
     bool m_bStepDownInDiagram;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_OBJECTHIERARCHY_HXX
 #endif

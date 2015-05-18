@@ -249,7 +249,7 @@ void RTFSprms::clear()
         m_pSprms.reset(new RTFSprmsImpl());
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

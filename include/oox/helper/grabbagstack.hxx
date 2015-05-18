@@ -50,7 +50,7 @@ public:
     bool isStackEmpty();
 };
 
-} // namespace oox
+}
 
 #endif
 

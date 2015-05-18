@@ -60,7 +60,7 @@ private:
     double m_fMeanValue;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_MEANVALUEREGRESSIONCURVECALCULATOR_HXX
 #endif

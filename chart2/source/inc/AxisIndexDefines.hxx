@@ -25,7 +25,7 @@ namespace chart
 const sal_Int32 MAIN_AXIS_INDEX = 0;
 const sal_Int32 SECONDARY_AXIS_INDEX = 1;
 
-} //  namespace chart
+}
 
 #endif
 

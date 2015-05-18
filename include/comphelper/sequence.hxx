@@ -370,7 +370,7 @@ namespace comphelper
     }
 
 
-}   // namespace comphelper
+}
 
 
 

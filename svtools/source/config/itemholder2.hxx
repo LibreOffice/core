@@ -61,7 +61,7 @@ class ItemHolder2 : private ItemHolderMutexBase
         static void impl_deleteItem(TItemInfo& rItem);
 };
 
-} // namespace svtools
+}
 
 #endif // INCLUDED_SVTOOLS_ITEMHOLDER2_HXX_
 

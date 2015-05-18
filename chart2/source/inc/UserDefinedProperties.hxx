@@ -50,7 +50,7 @@ namespace UserDefinedProperties
         ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
 }
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_USERDEFINEDPROPERTIES_HXX
 #endif

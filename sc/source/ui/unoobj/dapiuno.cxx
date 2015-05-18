@@ -161,7 +161,7 @@ bool lclCheckMinMaxStep( const DataPilotFieldGroupInfo& rInfo )
         (0.0 <= rInfo.Step);
 }
 
-} // namespace
+}
 
 SC_SIMPLE_SERVICE_INFO( ScDataPilotDescriptor, "ScDataPilotDescriptor", "stardiv::one::sheet::DataPilotDescriptor" )
 SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldObj, "ScDataPilotFieldObj", "com.sun.star.sheet.DataPilotField" )
@@ -2858,7 +2858,7 @@ bool lclExtractGroupMembers( ScFieldGroupMembers& rMembers, const Any& rElement 
     return false;
 }
 
-} // namespace
+}
 
 ScDataPilotFieldGroupsObj::ScDataPilotFieldGroupsObj( const ScFieldGroups& rGroups ) :
     maGroups( rGroups )
@@ -3047,7 +3047,7 @@ OUString lclExtractMember( const Any& rElement )
     return OUString();
 }
 
-} // namespace
+}
 
 ScDataPilotFieldGroupObj::ScDataPilotFieldGroupObj( ScDataPilotFieldGroupsObj& rParent, const OUString& rGroupName ) :
     mrParent( rParent ),

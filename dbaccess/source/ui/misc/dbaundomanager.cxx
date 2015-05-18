@@ -325,6 +325,6 @@ namespace dbaui
         throw NoSupportException( OUString(), m_xImpl->getThis() );
     }
 
-} // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -102,7 +102,7 @@ sal_Int32 lclGetOoxPaneId( sal_Int32 nBiffPaneId, sal_Int32 nDefaultPaneId )
     return STATIC_ARRAY_SELECT( spnPaneIds, nBiffPaneId, nDefaultPaneId );
 }
 
-} // namespace
+}
 
 PaneSelectionModel::PaneSelectionModel() :
     mnActiveCellId( 0 )
@@ -634,7 +634,7 @@ WorkbookViewModel& ViewSettings::createWorkbookView()
     return *xModel;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

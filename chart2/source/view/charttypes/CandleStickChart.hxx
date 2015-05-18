@@ -52,7 +52,7 @@ private: //methods
 private: //member
     BarPositionHelper*                   m_pMainPosHelper;
 };
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

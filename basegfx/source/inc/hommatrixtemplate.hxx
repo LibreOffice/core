@@ -599,8 +599,8 @@ namespace basegfx
             }
         };
 
-    } // namespace internal
-} // namespace basegfx
+    }
+}
 
 #endif // INCLUDED_BASEGFX_SOURCE_INC_HOMMATRIXTEMPLATE_HXX
 

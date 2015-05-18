@@ -295,6 +295,6 @@ namespace dbaui
         return true;
     }
 
-} // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

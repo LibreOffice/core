@@ -396,8 +396,8 @@ private:
     PivotTableVector    maTables;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

@@ -47,7 +47,7 @@ namespace objectpositioning
             */
             const Point& GetRelPos() const { return maRelPos;}
     };
-} // namespace objectpositioning
+}
 
 #endif
 

@@ -120,6 +120,6 @@ SfxItemSet* OTableSubscriptionDialog::getWriteOutputSet()
     return m_pOutSet;
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

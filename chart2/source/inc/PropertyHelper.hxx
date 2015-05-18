@@ -141,7 +141,7 @@ template<>
  */
 OOO_DLLPUBLIC_CHARTTOOLS void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key );
 
-} // namespace PropertyHelper
+}
 
 struct OOO_DLLPUBLIC_CHARTTOOLS PropertyNameLess
 {
@@ -179,7 +179,7 @@ private:
     OUString m_aName;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_PROPERTYHELPER_HXX
 #endif

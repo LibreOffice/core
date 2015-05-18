@@ -4064,7 +4064,7 @@ void SAL_CALL ODatabaseForm::setName(const OUString& aName) throw( RuntimeExcept
     setFastPropertyValue(PROPERTY_ID_NAME, makeAny(aName));
 }
 
-}   // namespace frm
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
 com_sun_star_comp_forms_ODatabaseForm_get_implementation(css::uno::XComponentContext* context,

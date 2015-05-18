@@ -163,7 +163,7 @@ const vEntryInfo[] =
     #undef IDS
 };
 
-} // namespace
+}
 
 
 // ColorConfigWindow_Impl

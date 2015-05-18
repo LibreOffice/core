@@ -47,7 +47,7 @@ namespace svgi
     inline double pt2mm(double fVal) { return fVal*25.4/72.0; }
     inline double pt100thmm(double fVal) { return fVal*2540.0/72.0; }
 
-} // namespace svgi
+}
 
 #endif
 

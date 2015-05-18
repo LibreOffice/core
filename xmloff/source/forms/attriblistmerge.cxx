@@ -143,6 +143,6 @@ namespace xmloff
         return xSubList->getValueByIndex(nLocalIndex);
     }
 
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

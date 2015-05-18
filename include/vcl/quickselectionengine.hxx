@@ -85,7 +85,7 @@ namespace vcl
     };
 
 
-} // namespace vcl
+}
 
 
 #endif // INCLUDED_VCL_QUICKSELECTIONENGINE_HXX

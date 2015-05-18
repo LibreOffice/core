@@ -33,7 +33,7 @@ namespace chart {
 #define CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE "com.sun.star.chart2.BubbleChartType"
 #define CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR "com.sun.star.chart2.GL3DBarChartType"
 
-} //namespace chart
+}
 
 #endif
 

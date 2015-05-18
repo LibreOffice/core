@@ -36,7 +36,7 @@ struct TickmarkProperties
     VLineProperties aLineProperties;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -947,8 +947,8 @@ private:
     mutable DxfStyleMap maDxfStyles;        /// Maps DXF identifiers to Calc style sheet names.
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

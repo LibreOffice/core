@@ -204,6 +204,6 @@ void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefau
     }
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

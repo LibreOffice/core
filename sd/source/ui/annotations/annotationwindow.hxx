@@ -161,7 +161,7 @@ class AnnotationWindow : public FloatingWindow
 TextApiObject* getTextApiObject( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
 
 
-} // namespace sd
+}
 
 #endif
 

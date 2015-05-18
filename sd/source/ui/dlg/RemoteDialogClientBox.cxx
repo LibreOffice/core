@@ -741,6 +741,6 @@ IMPL_LINK_NOARG( ClientBox, DeauthoriseHdl )
     return 1;
 }
 
-} //namespace dp_gui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

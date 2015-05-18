@@ -225,6 +225,6 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
                                         (OWeakObject *)this, 2 );
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -359,6 +359,6 @@ OString WhitespaceToSpace(const OString& rLine, bool bProtect)
     return OString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

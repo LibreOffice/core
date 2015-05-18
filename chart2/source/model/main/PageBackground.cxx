@@ -251,7 +251,7 @@ using impl::PageBackground_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( PageBackground, PageBackground_Base, ::property::OPropertySet )
 
-} //  namespace chart
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_chart2_PageBackground_get_implementation(css::uno::XComponentContext *context,

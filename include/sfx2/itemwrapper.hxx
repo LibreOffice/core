@@ -199,7 +199,7 @@ const ItemT& SingleItemWrapper< ItemT, ValueT >::GetDefaultItem( const SfxItemSe
 
 
 
-} // namespace sfx
+}
 
 #endif
 

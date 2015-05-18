@@ -157,7 +157,7 @@ protected:
     ULONG               m_refCount;
     GUID                m_guid;
 };
-}; // namespace inprocserv
+};
 
 
 
@@ -338,6 +338,6 @@ STDMETHODIMP InprocEmbedProvider_Impl::LockServer( int fLock )
     return S_OK;
 }
 
-}; // namespace inprocserv
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1626,6 +1626,6 @@ void PackageManagerImpl::CmdEnvWrapperImpl::pop() throw (RuntimeException, std::
         m_xUserProgress->pop();
 }
 
-} // namespace dp_manager
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

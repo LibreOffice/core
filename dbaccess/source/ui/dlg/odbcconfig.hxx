@@ -116,7 +116,7 @@ public:
 };
 #endif
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ODBCCONFIG_HXX
 

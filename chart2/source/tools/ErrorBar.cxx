@@ -495,7 +495,7 @@ css::uno::Sequence< OUString > SAL_CALL ErrorBar::getSupportedServiceNames()
 // needed by MSC compiler
 using impl::ErrorBar_Base;
 
-} //  namespace chart
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_chart2_ErrorBar_get_implementation(css::uno::XComponentContext *context,

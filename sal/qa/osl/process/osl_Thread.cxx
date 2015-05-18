@@ -1731,7 +1731,7 @@ namespace osl_Thread
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::waittest, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::yield, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::schedule, "osl_Thread");
-} // namespace osl_Thread
+}
 
 // destroy function when the binding thread terminate
 void SAL_CALL destroyCallback(void * data)
@@ -2031,7 +2031,7 @@ namespace osl_ThreadData
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_ThreadData::ctors);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_ThreadData::setData);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_ThreadData::getData);
-} // namespace osl_ThreadData
+}
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

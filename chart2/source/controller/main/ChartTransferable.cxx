@@ -157,6 +157,6 @@ bool ChartTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
     return bRet;
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

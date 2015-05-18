@@ -326,6 +326,6 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     return aLocaleSeq;
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -606,6 +606,6 @@ namespace dbaui
             InvalidateFeature( ID_BROWSER_SAVEASDOC );
     }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

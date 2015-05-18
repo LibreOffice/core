@@ -52,7 +52,7 @@ AnimationActivitySharedPtr AnimationPathMotionNode::createActivity() const
         true );
 }
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

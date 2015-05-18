@@ -27,7 +27,7 @@ class UnusedVariableCheck
         bool VisitVarDecl( const VarDecl* var );
     };
 
-} // namespace
+}
 
 #endif // UNUSEDVARIABLECHECK_H
 

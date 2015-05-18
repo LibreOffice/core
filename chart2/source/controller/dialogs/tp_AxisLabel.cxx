@@ -318,6 +318,6 @@ IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel)
 
     return 0L;
 }
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

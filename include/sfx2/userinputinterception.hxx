@@ -67,7 +67,7 @@ namespace sfx2
     };
 
 
-} // namespace sfx2
+}
 
 
 #endif // INCLUDED_SFX2_USERINPUTINTERCEPTION_HXX

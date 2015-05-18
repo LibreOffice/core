@@ -114,7 +114,7 @@ typedef sfx::ItemControlConnection< sfx::BoolItemWrapper, OrientStackedWrapper >
 
 
 
-} // namespace
+}
 
 #endif
 

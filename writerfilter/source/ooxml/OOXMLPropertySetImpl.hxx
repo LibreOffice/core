@@ -338,8 +338,8 @@ public:
     bool getValue() const { return mValue; }
 };
 
-}  // namespace ooxml
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSETIMPL_HXX
 

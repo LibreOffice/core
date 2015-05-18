@@ -91,7 +91,7 @@ namespace /* private */
         OUString error_message_;
     };
 
-} // namespace private
+}
 
 MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> mailserver) :
     mailserver_ (mailserver),

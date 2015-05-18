@@ -82,7 +82,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> m_xPackage;
 };
 
-} // namespace dp_gui
+}
 
 #endif
 

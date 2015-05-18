@@ -848,6 +848,6 @@ OUString ObjectNameProvider::getName_ObjectForAllSeries( ObjectType eObjectType 
     return aRet;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

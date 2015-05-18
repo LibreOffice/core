@@ -47,7 +47,7 @@ namespace xmloff
         ) const SAL_OVERRIDE;
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_CONTROLPROPERTYMAP_HXX
 

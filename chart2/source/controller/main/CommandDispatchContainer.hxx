@@ -141,7 +141,7 @@ private:
     ShapeController* m_pShapeController;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_COMMANDDISPATCHCONTAINER_HXX
 #endif

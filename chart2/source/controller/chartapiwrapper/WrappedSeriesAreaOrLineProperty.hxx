@@ -43,8 +43,8 @@ protected:
     OUString m_aInnerLineTypeName;
 };
 
-} //namespace wrapper
-} //namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDSERIESAREAORLINEPROPERTY_HXX
 #endif

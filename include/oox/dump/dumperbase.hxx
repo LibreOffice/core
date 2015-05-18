@@ -1848,8 +1848,8 @@ protected:
 
 
 
-} // namespace dump
-} // namespace oox
+}
+}
 
 #define OOX_DUMP_FILE( DumperClassName )            \
 do {                                                \

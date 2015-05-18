@@ -75,7 +75,7 @@ namespace xmloff
         static const sal_Char* getElementName(ElementType _eType);
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_CONTROLELEMENT_HXX
 

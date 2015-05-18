@@ -168,7 +168,7 @@ void OXMLRowColumn::EndElement()
 {
 }
 
-} // namespace rptxml
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

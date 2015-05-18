@@ -568,7 +568,7 @@ namespace
         return true;
     }
 
-} // namespace
+}
 
 
 CachableContentProperties::CachableContentProperties(

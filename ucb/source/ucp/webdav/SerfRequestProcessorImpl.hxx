@@ -72,7 +72,7 @@ private:
     bool mbUseChunkedEncoding;
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFREQUESTPROCESSORIMPL_HXX
 

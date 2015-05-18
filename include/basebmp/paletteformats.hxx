@@ -132,7 +132,7 @@ typedef PixelFormatTraitsTemplate_Palette<
     PixelIterator< sal_uInt8 >,
     StandardAccessor< sal_uInt8 > >                       PixelFormatTraits_PAL8;
 
-} // namespace basebmp
+}
 
 #endif // INCLUDED_BASEBMP_PALETTEFORMATS_HXX
 

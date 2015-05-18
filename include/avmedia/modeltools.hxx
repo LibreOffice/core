@@ -28,7 +28,7 @@ bool AVMEDIA_DLLPUBLIC Embed3DModel(
 
 bool AVMEDIA_DLLPUBLIC IsModel(const OUString& rMimeType);
 
-} // namespace avemdia
+}
 
 #endif // INCLUDED_AVMEDIA_MODELTOOLS_HXX
 

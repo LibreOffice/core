@@ -43,7 +43,7 @@ enum PanelId
     PID__END = PID_SLIDE_TRANSITION
 };
 
-} } // namespace sd::sidebar
+} }
 
 #endif
 

@@ -323,6 +323,6 @@ throw (uno::RuntimeException, std::exception)
     }
 }
 
-}       //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

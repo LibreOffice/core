@@ -1807,6 +1807,6 @@ void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb)
     o_rData = *SW_MOD()->GetPrtOptions(bWeb);
 }
 
-} // namespace sw
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

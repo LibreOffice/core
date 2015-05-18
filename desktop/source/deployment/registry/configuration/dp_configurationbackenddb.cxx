@@ -161,8 +161,8 @@ ConfigurationBackendDb::getEntry(OUString const & url)
     }
 }
 
-} // namespace configuration
-} // namespace backend
-} // namespace dp_registry
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

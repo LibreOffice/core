@@ -44,7 +44,7 @@ BASEBMP_BYTE_SWAP(sal_uInt32,OSL_SWAPDWORD)
 
 #undef BASEBMP_BYTE_SWAP
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_ENDIAN_HXX */
 

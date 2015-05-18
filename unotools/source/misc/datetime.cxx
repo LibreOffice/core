@@ -477,6 +477,6 @@ bool ISO8601parseTime(const OUString &aTimeStr, css::util::Time& rTime)
     return bSuccess;
 }
 
-}   // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -94,7 +94,7 @@ double uniform_real_distribution(double a, double b)
     return dist(theRandomNumberGenerator::get().global_rng);
 }
 
-} // namespace
-} // namespace
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

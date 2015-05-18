@@ -62,7 +62,7 @@ sal_Int32 ThemeBuffer::getColorByIndex(size_t nIndex) const
     return getClrScheme().getColorByIndex(nIndex, nColor) ? nColor : API_RGB_TRANSPARENT;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -211,7 +211,7 @@ public:
         ::com::sun::star::text::XTextField> > getMetaFields();
 };
 
-} // namespace sw
+}
 
 #endif // INCLUDED_SW_INC_FMTMETA_HXX
 

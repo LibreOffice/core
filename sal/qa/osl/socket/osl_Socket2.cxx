@@ -1382,7 +1382,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::clearError);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::getError);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::getHandle);
 
-} // namespace osl_Socket
+}
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

@@ -151,6 +151,6 @@ void OConnectionURLEdit::ShowPrefix(bool _bShowPrefix)
         m_pForcedPrefix->Show(m_bShowPrefix);
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

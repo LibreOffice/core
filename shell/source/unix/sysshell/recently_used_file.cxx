@@ -42,7 +42,7 @@ inline void ensure_final_slash(/*inout*/ OUString& path)
         path += SLASH;
 }
 
-} // namespace private
+}
 
 
 recently_used_file::recently_used_file() :

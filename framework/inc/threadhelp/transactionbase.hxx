@@ -44,7 +44,7 @@ struct TransactionBase
 
 };      //  struct TransactionBase
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONBASE_HXX
 

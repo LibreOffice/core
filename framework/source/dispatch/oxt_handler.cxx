@@ -174,6 +174,6 @@ OUString SAL_CALL Oxt_Handler::detect( css::uno::Sequence< css::beans::PropertyV
     return sTypeName;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,7 @@ namespace framework{
 #define SPECIALTARGET_MENUBAR         "_menubar"                          // special target for menubars
 #define SPECIALTARGET_HELPTASK        "OFFICE_HELP_TASK"                  // special name for our help task
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_TARGETS_H
 

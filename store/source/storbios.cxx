@@ -221,7 +221,7 @@ struct SuperBlockPage
     storeError verify (OStorePageBIOS & rBIOS);
 };
 
-} // namespace store
+}
 
 /*========================================================================
  *
@@ -452,7 +452,7 @@ protected:
   ~AceCache();
 };
 
-} // namespace store
+}
 
 /*========================================================================
  *

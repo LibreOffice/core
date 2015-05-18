@@ -149,7 +149,7 @@ static const ScDPListBoxWrapper::MapEntryType spShowFromMap[] =
     { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   DataPilotFieldShowItemsMode::FROM_TOP }
 };
 
-} // namespace
+}
 
 ScDPFunctionListBox::ScDPFunctionListBox(vcl::Window* pParent, WinBits nStyle)
     : ListBox(pParent, nStyle)

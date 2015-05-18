@@ -181,7 +181,7 @@ namespace xmloff
     };
 
 
-}   // namespace xmloff
+}
 
 
 #endif // INCLUDED_XMLOFF_FORMLAYEREXPORT_HXX

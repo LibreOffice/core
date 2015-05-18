@@ -1196,7 +1196,7 @@ namespace sfx2
     }
 
 
-}   // namespace sfx2
+}
 
 
 

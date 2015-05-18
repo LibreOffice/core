@@ -60,7 +60,7 @@ namespace svt
     };
 
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_FILEURLBOX_HXX

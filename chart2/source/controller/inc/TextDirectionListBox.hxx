@@ -34,7 +34,7 @@ public:
                             vcl::Window* pWindow1 = 0, vcl::Window* pWindow2 = 0 );
 };
 
-} //namespace chart
+}
 
 #endif
 

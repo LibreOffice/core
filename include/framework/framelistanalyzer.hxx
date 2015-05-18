@@ -188,7 +188,7 @@ class FWE_DLLPUBLIC FrameListAnalyzer
 
 }; // class FrameListAnalyzer
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
 

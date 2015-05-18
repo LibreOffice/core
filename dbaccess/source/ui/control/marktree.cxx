@@ -202,6 +202,6 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
     CheckButtons();
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

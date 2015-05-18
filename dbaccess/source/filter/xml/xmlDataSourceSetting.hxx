@@ -58,7 +58,7 @@ namespace dbaxml
         */
         void addValue(const OUString& _sValue);
     };
-} // namespace dbaxml
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLDATASOURCESETTING_HXX
 

@@ -76,7 +76,7 @@ namespace toolkit
         virtual void Resize() SAL_OVERRIDE;
     };
 
-} // namespacetoolkit
+}
 
 
 #endif // INCLUDED_TOOLKIT_AWT_SCROLLABLEDIALOG_HXX

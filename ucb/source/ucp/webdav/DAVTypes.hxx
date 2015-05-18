@@ -74,7 +74,7 @@ struct ProppatchValue
     : operation( o ), name( n ), value( v ) {}
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVTYPES_HXX
 

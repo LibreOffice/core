@@ -37,7 +37,7 @@ public:
     static Module*& Get () { return mpModule; }
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BASICMOD_HXX
 

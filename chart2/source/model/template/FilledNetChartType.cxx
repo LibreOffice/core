@@ -101,7 +101,7 @@ css::uno::Sequence< OUString > SAL_CALL FilledNetChartType::getSupportedServiceN
     return getSupportedServiceNames_Static();
 }
 
-} //  namespace chart
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_chart_FilledNetChartType_get_implementation(css::uno::XComponentContext *context,

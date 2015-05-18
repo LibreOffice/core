@@ -37,9 +37,9 @@ typedef ComPtr< IFileSaveDialog     , IID_IFileSaveDialog  , CLSID_FileSaveDialo
 typedef ComPtr< IFileDialogEvents   , IID_IFileDialogEvents                       > TFileDialogEvents;
 typedef ComPtr< IFileDialogCustomize, IID_IFileDialogCustomize                    > TFileDialogCustomize;
 
-} // namespace vista
-} // namespace win32
-} // namespace fpicker
+}
+}
+}
 
 #endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTATYPES_H
 

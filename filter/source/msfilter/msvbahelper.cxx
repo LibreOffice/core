@@ -781,7 +781,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
 }
 
 
-} // namespace vba
-} // namespace ooo
+}
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

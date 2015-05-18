@@ -347,8 +347,8 @@ private:
     bool                mbUseRefSheets;     /// True = use maRefSheets list (BIFF12 only).
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

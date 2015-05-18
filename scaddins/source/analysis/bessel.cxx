@@ -452,7 +452,7 @@ double BesselY( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException,
     }
 }
 
-} // namespace analysis
-} // namespace sca
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

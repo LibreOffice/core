@@ -768,6 +768,6 @@ bool RegressionCurveHelper::hasEquation( const Reference< chart2::XRegressionCur
     return bHasEquation;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

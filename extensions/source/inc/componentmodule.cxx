@@ -271,7 +271,7 @@ namespace COMPMOD_NAMESPACE
 
 
 
-}   // namespace COMPMOD_NAMESPACE
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

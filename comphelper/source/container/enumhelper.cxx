@@ -267,7 +267,7 @@ css::uno::Any SAL_CALL OAnyEnumeration::nextElement(  )
 }
 
 
-}   // namespace comphelper
+}
 
 
 

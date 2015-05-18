@@ -763,6 +763,6 @@ ElementType OApplicationController::getElementType(const Reference< XContainer >
     return eRet;
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

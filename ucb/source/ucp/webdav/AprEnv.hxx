@@ -49,7 +49,7 @@ class AprEnv
 
 };
 
-} // namespace apr_environment
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_APRENV_HXX
 

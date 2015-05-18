@@ -557,7 +557,7 @@ namespace dbaui
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPCONTROLLER_HXX
 

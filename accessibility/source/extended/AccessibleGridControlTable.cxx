@@ -392,7 +392,7 @@ Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
 
 
 
-} // namespace accessibility
+}
 
 
 

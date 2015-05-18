@@ -296,6 +296,6 @@ namespace xmloff
         OSL_FAIL( "OGridColumnPropertyTranslator::firePropertiesChangeEvent: not implemented - this should not be needed!" );
     }
 
-} // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

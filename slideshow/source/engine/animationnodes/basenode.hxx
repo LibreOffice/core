@@ -213,8 +213,8 @@ private:
 
 typedef ::boost::shared_ptr< BaseNode > BaseNodeSharedPtr;
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASENODE_HXX
 

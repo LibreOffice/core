@@ -112,6 +112,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL Controller::getPropertySetInfo() t
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

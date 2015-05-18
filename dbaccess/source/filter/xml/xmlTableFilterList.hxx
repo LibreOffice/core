@@ -62,7 +62,7 @@ namespace dbaxml
             m_aTypes.push_back(_sTypeFilter);
         }
     };
-} // namespace dbaxml
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLTABLEFILTERLIST_HXX
 

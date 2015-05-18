@@ -50,6 +50,6 @@ SvTreeListEntry* SeriesListBox::CreateEntry() const
     return new SeriesEntry();
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -129,7 +129,7 @@ Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, 
 }
 
 
-}   // namespace comphelper
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

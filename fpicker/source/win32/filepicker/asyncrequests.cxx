@@ -198,8 +198,8 @@ void SAL_CALL AsyncRequests::run()
         rHandler->after();
 }
 
-} // namespace vista
-} // namespace win32
-} // namespace fpicker
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

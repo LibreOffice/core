@@ -124,7 +124,7 @@ namespace dbaccess
         ::rtl::Reference< DocumentEventNotifier_Impl >   m_pImpl;
     };
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTEVENTNOTIFIER_HXX
 

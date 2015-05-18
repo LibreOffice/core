@@ -99,7 +99,7 @@ private:
     DrawViewWrapper *                       m_pDrawViewWrapper;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ACCESSIBLETEXTHELPER_HXX
 #endif

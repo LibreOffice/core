@@ -336,7 +336,7 @@ namespace comphelper
     }
 
 
-}   // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_ACCESSIBLECONTEXTHELPER_HXX

@@ -16011,7 +16011,7 @@ namespace rtl_OStringBuffer
             static_cast<void const *>(p));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), s.getLength());
     }
-} // namespace rtl_OStringBuffer
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::makeStringAndClear);

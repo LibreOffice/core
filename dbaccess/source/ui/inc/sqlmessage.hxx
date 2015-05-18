@@ -124,7 +124,7 @@ public:
                   const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
 };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_SQLMESSAGE_HXX
 

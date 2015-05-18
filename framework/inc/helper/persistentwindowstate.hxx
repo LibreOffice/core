@@ -168,7 +168,7 @@ class PersistentWindowState :   public  ::cppu::WeakImplHelper2<
 
 }; // class PersistentWindowState
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_PERSISTENTWINDOWSTATE_HXX
 

@@ -63,6 +63,6 @@ void SerfUnlockReqProcImpl::handleEndOfResponseData( serf_bucket_t * )
 {
 }
 
-} // namespace http_dav_ucp
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

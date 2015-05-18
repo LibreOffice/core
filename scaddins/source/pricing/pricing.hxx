@@ -291,8 +291,8 @@ inline ScaFuncData* ScaFuncDataList::Next()
     return static_cast< ScaFuncData* >( ScaList::Next() );
 }
 
-} // namespace pricing
-} // namespace sca
+}
+}
 
 
 

@@ -59,6 +59,6 @@ bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::bea
     return true;
 }
 
-} // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

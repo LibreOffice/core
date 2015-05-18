@@ -58,7 +58,7 @@ namespace LinePropertiesHelper
         ::com::sun::star::beans::XPropertySet >& xLineProperties );
 }
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_LINEPROPERTIESHELPER_HXX
 #endif

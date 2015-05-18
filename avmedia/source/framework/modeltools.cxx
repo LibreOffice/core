@@ -317,6 +317,6 @@ bool IsModel(const OUString& rMimeType)
     return rMimeType == AVMEDIA_MIMETYPE_JSON;
 }
 
-} // namespace avemdia
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

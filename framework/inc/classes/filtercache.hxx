@@ -291,7 +291,7 @@ class FilterCache   :   private TransactionBase
 
 };      //  class FilterCache
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_CLASSES_FILTERCACHE_HXX
 

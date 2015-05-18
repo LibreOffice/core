@@ -34,7 +34,7 @@ void ShellDestroyed (Shell* pShell);
 
 ExtraData* GetExtraData();
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_INC_IDERDLL_HXX
 

@@ -290,7 +290,7 @@ comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( co
     return comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }
 
-} // namespace
+}
 
 Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescriptor& rMediaDescriptor ) const
 {
@@ -426,7 +426,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
     return aFilterName;
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

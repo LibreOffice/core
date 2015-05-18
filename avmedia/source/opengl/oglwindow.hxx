@@ -75,8 +75,8 @@ private:
     bool m_bIsOrbitMode;
 };
 
-} // namespace ogl
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLWINDOW_HXX
 

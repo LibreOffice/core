@@ -805,8 +805,8 @@ public:
                             bool bTrimLeadingSpaces ) const;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

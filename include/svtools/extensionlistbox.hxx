@@ -89,7 +89,7 @@ public:
 };
 
 
-} // namespace svt
+}
 
 
 

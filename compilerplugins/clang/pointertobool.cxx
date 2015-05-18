@@ -162,6 +162,6 @@ bool PointerToBool::ignoreConversion( const Stmt* stmt )
 
 static Plugin::Registration< PointerToBool > X( "pointertobool" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -108,8 +108,8 @@ private:
 
 
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

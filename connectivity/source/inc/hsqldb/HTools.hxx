@@ -44,7 +44,7 @@ namespace connectivity { namespace hsqldb
     };
 
 
-} } // namespace connectivity::hsqldb
+} }
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HTOOLS_HXX

@@ -100,6 +100,6 @@ double DateHelper::RasterizeDateValue( double fValue, const Date& rNullDate, lon
     return aDate - rNullDate;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -367,7 +367,7 @@ OUString SAL_CALL OFormattedField::getShapeType(  ) throw (uno::RuntimeException
 }
 
 
-} // namespace reportdesign
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

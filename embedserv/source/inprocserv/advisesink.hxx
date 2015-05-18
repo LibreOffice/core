@@ -86,7 +86,7 @@ public:
     STDMETHODIMP_(void)  OnClose();
 };
 
-}; // namespace advisesink
+};
 
 #endif // INCLUDED_EMBEDSERV_SOURCE_INPROCSERV_ADVISESINK_HXX
 

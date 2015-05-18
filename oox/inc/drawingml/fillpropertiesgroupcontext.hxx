@@ -245,8 +245,8 @@ protected:
     Color&              mrColor;
 };
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

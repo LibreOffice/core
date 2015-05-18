@@ -95,8 +95,8 @@ public:
 };
 
 typedef std::shared_ptr<TablePositionHandler> TablePositionHandlerPtr;
-} // namespace dmapper
-} // namespace writerfilter
+}
+}
 
 #endif
 

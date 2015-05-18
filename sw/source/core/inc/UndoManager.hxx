@@ -106,7 +106,7 @@ private:
     using SdrUndoManager::Repeat;
 };
 
-} // namespace sw
+}
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOMANAGER_HXX
 

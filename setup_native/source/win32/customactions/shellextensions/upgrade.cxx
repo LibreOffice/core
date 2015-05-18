@@ -165,7 +165,7 @@ namespace
         }
         return false;
     }
-} // namespace
+}
 
 extern "C" UINT __stdcall SetProductInstallMode(MSIHANDLE handle)
 {

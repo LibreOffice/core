@@ -106,7 +106,7 @@ void UnoBinaryInputStream::ensureConnected() const throw (NotConnectedException)
         throw NotConnectedException( "Stream closed" );
 }
 
-} // namespace
+}
 
 TextInputStream::TextInputStream( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, rtl_TextEncoding eTextEnc )
 {
@@ -213,6 +213,6 @@ void TextInputStream::init( const Reference< XComponentContext >& rxContext, con
     mxTextStrm = createXTextInputStream( rxContext, rxInStrm, eTextEnc );
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

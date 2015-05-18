@@ -164,7 +164,7 @@ namespace dbaui
         DECLARE_SERVICE_INFO_STATIC();
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_DBINTERACTION_HXX
 

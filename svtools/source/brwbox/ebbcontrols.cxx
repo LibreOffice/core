@@ -594,7 +594,7 @@ namespace svt
     }
 
 
-}   // namespace svt
+}
 
 
 

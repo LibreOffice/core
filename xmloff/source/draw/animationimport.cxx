@@ -1427,7 +1427,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
     }
 }
 
-} // namespace xmloff
+}
 
 Reference< XInterface > SAL_CALL AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {

@@ -27,7 +27,7 @@ class LclStaticFix
         bool VisitFunctionDecl( const FunctionDecl* declaration );
     };
 
-} // namespace
+}
 
 #endif // POSTFIXINCREMENTFIX_H
 

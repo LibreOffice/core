@@ -794,6 +794,6 @@ OMRCListenerMultiplexerHelper* BaseControl::impl_getMultiplexer()
     return m_pMultiplexer;
 }
 
-} // namespace unocontrols
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

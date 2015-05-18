@@ -36,7 +36,7 @@ class SalLogAreas
         set< string > logAreas;
     };
 
-} // namespace
+}
 
 #endif // SALLOGAREAS_H
 

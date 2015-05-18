@@ -97,7 +97,7 @@ protected:
         m_xContext;
 };
 
-} // namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_DATAINTERPRETER_HXX
 #endif

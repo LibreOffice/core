@@ -33,7 +33,7 @@ public:
     FILTER_DLLPUBLIC bool parseAndConvert();
 };
 
-} // namespace svgi
+}
 
 #endif
 

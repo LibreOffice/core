@@ -46,7 +46,7 @@ namespace dbaccess
         ::std::unique_ptr< StorageTextOutputStream_Data > m_pData;
     };
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_STORAGETEXTSTREAM_HXX
 

@@ -191,7 +191,7 @@ namespace dbaccess
         virtual OUString determineContentType() const = 0;
     };
 
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_CONTENTHELPER_HXX
 

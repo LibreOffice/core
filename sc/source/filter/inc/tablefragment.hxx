@@ -44,8 +44,8 @@ private:
     Table&              mrTable;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

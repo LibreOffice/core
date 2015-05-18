@@ -507,7 +507,7 @@ public:
     { return m_xProvider; }
 };
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_CONTENTHELPER_HXX */
 

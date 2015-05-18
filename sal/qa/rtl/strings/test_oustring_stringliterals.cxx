@@ -212,7 +212,7 @@ void test::oustring::StringLiterals::checkOUStringLiteral1()
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('b'), s2[1]);
 }
 
-}} // namespace
+}}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::StringLiterals);
 

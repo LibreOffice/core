@@ -189,7 +189,7 @@ namespace svt
         DECL_LINK( OnCancelPicker, void* );
     };
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_FPICKER_SOURCE_OFFICE_COMMONPICKER_HXX

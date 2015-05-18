@@ -186,6 +186,6 @@ void ItemHolder2::impl_deleteItem(TItemInfo& rItem)
     }
 }
 
-} // namespace svtools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

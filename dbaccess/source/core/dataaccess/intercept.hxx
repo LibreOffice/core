@@ -152,7 +152,7 @@ private:
     PropertyChangeListenerContainer*    m_pStatCL;
 };
 
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_INTERCEPT_HXX
 

@@ -146,7 +146,7 @@ void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const 
     rSet.Put(aItem);
 }
 
-}//namespace
+}
 
 
 

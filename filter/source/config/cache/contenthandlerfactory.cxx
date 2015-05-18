@@ -168,7 +168,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::impl
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XMultiServiceFactory* >(pNew), css::uno::UNO_QUERY);
 }
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

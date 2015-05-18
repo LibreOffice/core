@@ -46,8 +46,8 @@ private:
                         mxDocument;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

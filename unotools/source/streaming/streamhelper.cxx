@@ -121,6 +121,6 @@ void SAL_CALL OInputStreamHelper::closeInput()
     m_xLockBytes = NULL;
 }
 
-} // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

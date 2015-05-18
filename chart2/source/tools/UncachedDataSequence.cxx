@@ -364,6 +364,6 @@ void UncachedDataSequence::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-}  // namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

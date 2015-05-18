@@ -203,7 +203,7 @@ public:
     virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-}   // namespace linguistic
+}
 
 #endif
 

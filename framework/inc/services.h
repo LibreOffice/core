@@ -63,7 +63,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_POPUPMENUDISPATCHER                  DECLARE_ASCII("com.sun.star.comp.framework.PopupMenuControllerDispatcher" )
 #define IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER      DECLARE_ASCII("com.sun.star.comp.framework.LanguageSelectionMenuController" )
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_SERVICES_H
 

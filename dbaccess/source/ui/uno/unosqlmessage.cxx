@@ -150,6 +150,6 @@ VclPtr<Dialog> OSQLMessageDialog::createDialog(vcl::Window* _pParent)
     return VclPtr<OSQLMessageBox>::Create(_pParent, SQLException());
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

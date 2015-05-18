@@ -1506,6 +1506,6 @@ void DialogWindowLayout::AddPropertyBrowser () {
 }
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

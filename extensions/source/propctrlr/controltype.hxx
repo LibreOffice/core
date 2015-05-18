@@ -35,7 +35,7 @@ namespace pcr
     }
 
 
-} // namespacepcr
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_CONTROLTYPE_HXX

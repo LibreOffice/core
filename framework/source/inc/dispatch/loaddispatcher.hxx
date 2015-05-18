@@ -125,7 +125,7 @@ class LoadDispatcher : public  ::cppu::WeakImplHelper2< css::frame::XNotifyingDi
                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
 }; // class LoadDispatcher
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_LOADDISPATCHER_HXX
 

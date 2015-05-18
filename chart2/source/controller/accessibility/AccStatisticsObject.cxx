@@ -47,6 +47,6 @@ OUString SAL_CALL AccStatisticsObject::getImplementationName()
     return OUString( "StatisticsObject" );
 }
 
-}  // namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

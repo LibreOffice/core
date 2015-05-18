@@ -82,7 +82,7 @@ public:
     }
 };
 
-} // namespace docx
+}
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXFOOTNOTES_HXX
 

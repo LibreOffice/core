@@ -285,7 +285,7 @@ namespace svt
     };
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_DIALOGCONTROLLING_HXX

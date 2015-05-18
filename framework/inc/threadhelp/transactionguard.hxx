@@ -119,7 +119,7 @@ class TransactionGuard : private boost::noncopyable
 
 };      //  class TransactionGuard
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONGUARD_HXX
 

@@ -133,7 +133,7 @@ OReportComponentProperties::~OReportComponentProperties()
     }
 }
 
-} // namespace reportdesign
+}
 
 
 

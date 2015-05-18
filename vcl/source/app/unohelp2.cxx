@@ -98,6 +98,6 @@ namespace vcl { namespace unohelper {
         return ( nT == SotClipboardFormatId::STRING );
     }
 
-}}  // namespace vcl::unohelper
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

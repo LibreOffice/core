@@ -327,7 +327,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
         UCBHELPER_DLLPRIVATE EInterceptionState impl_interceptRequest(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest);
 };
 
-} // namespace ucbhelper
+}
 
 #endif // INCLUDED_UCBHELPER_INTERCEPTEDINTERACTION_HXX
 

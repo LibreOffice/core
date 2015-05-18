@@ -219,7 +219,7 @@ namespace connectivity { namespace hsqldb
         return sCommand;
     }
 
-} } // namespace connectivity::hsqldb
+} }
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,7 +58,7 @@ namespace dbaccess
 
     typedef ::boost::shared_ptr< IContainerApprove >    PContainerApprove;
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_CONTAINERAPPROVE_HXX
 

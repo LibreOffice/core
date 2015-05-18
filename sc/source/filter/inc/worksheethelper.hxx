@@ -317,8 +317,8 @@ private:
     WorksheetGlobals&   mrSheetGlob;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

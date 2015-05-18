@@ -222,6 +222,6 @@ uno::Reference < task::XInteractionRequest > InteractionRequest::CreateRequest(
     return new InteractionRequest_Impl( aRequest, lContinuations );
 }
 
-}       //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

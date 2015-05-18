@@ -76,7 +76,7 @@ bool QueryTokenizer::valid() const
     return m_bValid;
 }
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -381,7 +381,7 @@ private:
 
 };  // class ProgressBar
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_SOURCE_INC_PROGRESSBAR_HXX
 

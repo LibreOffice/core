@@ -86,7 +86,7 @@ namespace accessibility
         bool                            mbEditSourceEmpty;
     };
 
-} // namespace accessibility
+}
 
 #endif
 

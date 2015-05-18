@@ -225,8 +225,8 @@ struct FlatDetectionInfo
 
 typedef ::std::list< FlatDetectionInfo > FlatDetection;
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
 

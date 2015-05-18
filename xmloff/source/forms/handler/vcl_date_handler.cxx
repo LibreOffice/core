@@ -98,6 +98,6 @@ namespace xmloff
         return true;
     }
 
-} // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

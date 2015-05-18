@@ -267,6 +267,6 @@ void SchOptionTabPage::AdaptControlPositionsAndVisibility()
          m_pGrpBar->Show(false);
      }
 }
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

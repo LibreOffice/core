@@ -85,7 +85,7 @@ namespace toolkit
     };
 
 
-} // namespacetoolkit
+}
 
 
 #endif // TOOLKIT_INC_ INCLUDED_TOOLKIT_AWT_VCLXSPINBUTTON_HXX

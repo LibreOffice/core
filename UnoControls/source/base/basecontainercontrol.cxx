@@ -463,6 +463,6 @@ void BaseContainerControl::impl_cleanMemory ()
     maControlInfoList.clear ();
 }
 
-} // namespace unocontrols
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

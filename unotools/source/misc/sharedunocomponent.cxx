@@ -206,6 +206,6 @@ namespace utl
         m_pImpl->nf_closeComponent();
     }
 
-}   // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

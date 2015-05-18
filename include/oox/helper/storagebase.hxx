@@ -184,7 +184,7 @@ private:
 
 
 
-} // namespace oox
+}
 
 #endif
 

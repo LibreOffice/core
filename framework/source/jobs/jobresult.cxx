@@ -202,6 +202,6 @@ css::frame::DispatchResultEvent JobResult::getDispatchResult() const
     return m_aDispatchResult;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

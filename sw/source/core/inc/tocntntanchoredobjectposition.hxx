@@ -82,7 +82,7 @@ namespace objectpositioning
             */
             const SwLayoutFrm& GetVertPosOrientFrm() const { return *mpVertPosOrientFrm;}
     };
-} // namespace objectpositioning
+}
 
 #endif
 

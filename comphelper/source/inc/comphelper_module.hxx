@@ -78,7 +78,7 @@ namespace comphelper { namespace module
     };
 
 
-} } // namespace comphelper::module
+} }
 
 
 #endif // INCLUDED_COMPHELPER_SOURCE_INC_COMPHELPER_MODULE_HXX

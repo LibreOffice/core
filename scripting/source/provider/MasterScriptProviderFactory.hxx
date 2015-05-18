@@ -76,7 +76,7 @@ public:
 };
 
 
-} // namespace func_provider
+}
 
 #endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDERFACTORY_HXX
 

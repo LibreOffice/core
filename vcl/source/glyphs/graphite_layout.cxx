@@ -117,7 +117,7 @@ namespace
         return (a < b)? a : b;
     }
 
-} // namespace
+}
 
 // Impementation of the GraphiteLayout::Glyphs container class.
 //    This is an extended vector class with methods added to enable

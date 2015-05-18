@@ -100,7 +100,7 @@ namespace dbaui
     };
     // end of temp classes
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYCONTAINERWINDOW_HXX
 

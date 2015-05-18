@@ -71,7 +71,7 @@ protected:
 };
 
 
-}   // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_CONTAINER_HXX

@@ -101,7 +101,7 @@ private:
     virtual void deallocate_Impl (void * pPage) SAL_OVERRIDE;
 };
 
-} // namespace store
+}
 
 PageData::Allocator_Impl::Allocator_Impl()
     : m_page_cache(0), m_page_size(0)

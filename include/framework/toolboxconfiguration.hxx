@@ -45,7 +45,7 @@ class FWE_DLLPUBLIC ToolBoxConfiguration
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolbarConfiguration );
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_TOOLBOXCONFIGURATION_HXX
 

@@ -287,7 +287,7 @@ public:
      explicit PolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon);
 };
 
-} /* namespace tools */
+}
 
 typedef std::vector< tools::PolyPolygon > PolyPolyVector;
 

@@ -86,7 +86,7 @@ void RichStringContext::onCharacters( const OUString& rChars )
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

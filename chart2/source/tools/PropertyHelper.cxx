@@ -296,8 +296,8 @@ void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMa
     setPropertyValueDefault( rOutMap, key, uno::Any());
 }
 
-} // namespace PropertyHelper
+}
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

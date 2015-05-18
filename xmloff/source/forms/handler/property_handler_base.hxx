@@ -34,7 +34,7 @@ namespace xmloff
         virtual ~PropertyHandlerBase();
     };
 
-} // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_HANDLER_PROPERTY_HANDLER_BASE_HXX
 

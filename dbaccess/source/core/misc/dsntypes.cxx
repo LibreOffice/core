@@ -593,6 +593,6 @@ bool operator==(const ODsnTypeCollection::TypeIterator& lhs, const ODsnTypeColle
     return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_nPosition == rhs.m_nPosition);
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

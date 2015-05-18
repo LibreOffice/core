@@ -185,6 +185,6 @@ com::sun::star::uno::Reference < com::sun::star::linguistic2::XPossibleHyphens >
 
 
 
-}   // namespace linguistic
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

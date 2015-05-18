@@ -104,7 +104,7 @@ namespace rptui
         ConditionalExpressionFactory& operator=( const ConditionalExpressionFactory& ) SAL_DELETED_FUNCTION;
     };
 
-} // namespace rptui
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_INC_CONDITIONALEXPRESSION_HXX

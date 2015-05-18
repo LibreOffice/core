@@ -341,7 +341,7 @@ namespace connectivity
             env->ThrowNew(env->FindClass("java/io/IOException"), cstr.getStr());
         }
 
-    }   // namespace hsqldb
+    }
 
 
 }

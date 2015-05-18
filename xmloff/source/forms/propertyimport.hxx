@@ -224,7 +224,7 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList ) SAL_OVERRIDE;
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTYIMPORT_HXX
 

@@ -239,7 +239,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         DECL_DLLPRIVATE_LINK(impl_ts_asyncCallback, void*);
 };
 
-} // namespace svt
+}
 
 #endif // INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
 

@@ -1663,6 +1663,6 @@ void PNGReader::SetIgnoreGammaChunk(bool bIgnoreGammaChunk)
     mpImpl->SetIgnoreGammaChunk(bIgnoreGammaChunk);
 }
 
-} // namespace vcl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

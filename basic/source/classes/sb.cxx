@@ -227,7 +227,7 @@ StarBASIC* lclGetDocBasicForModule( SbModule* pModule )
     return pRetBasic;
 }
 
-} // namespace
+}
 
 
 

@@ -91,8 +91,8 @@ private:
     ParserImplRef       mxParserImpl;       /// Implementation of import parser.
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

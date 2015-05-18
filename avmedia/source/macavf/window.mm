@@ -328,7 +328,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Window::getSupportedServiceNames(  )
     return aRet;
 }
 
-} // namespace macavf
-} // namespace avmedia
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

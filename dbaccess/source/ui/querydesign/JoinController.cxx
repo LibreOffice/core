@@ -431,6 +431,6 @@ TTableWindowData::value_type OJoinController::createTableWindowData(const OUStri
     return TTableWindowData::value_type();
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

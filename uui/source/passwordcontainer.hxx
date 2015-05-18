@@ -187,7 +187,7 @@ private:
     PasswordContainerHelper m_aPwContainerHelper;
 };
 
-} // namespace uui
+}
 
 #endif
 

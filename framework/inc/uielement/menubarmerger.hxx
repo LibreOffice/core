@@ -105,7 +105,7 @@ namespace MenuBarMerger
                                          const AddonMenuContainer& rAddonSubMenu );
 }
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_MENUBARMERGER_HXX
 

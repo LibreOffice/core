@@ -77,6 +77,6 @@ void SchLegendPosTabPage::Reset(const SfxItemSet* rInAttrs)
         m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue()) );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

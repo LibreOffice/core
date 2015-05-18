@@ -430,6 +430,6 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const com::sun::st
     m_aStatements[idx] = aStatement;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

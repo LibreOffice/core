@@ -66,7 +66,7 @@ private:
     boost::ptr_vector<ExSoundEntry> maEntries;
 };
 
-} // namespace ppt
+}
 
 #endif
 

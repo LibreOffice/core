@@ -37,8 +37,8 @@ namespace slideshow
             uno::Sequence< animations::TargetProperties > SAL_CALL createInitialTargetProperties( const uno::Reference< animations::XAnimationNode >& rootNode );
         }
 
-    } // namespace internal
-} // namespace slideshow
+    }
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_TARGETPROPERTIESCREATOR_HXX
 

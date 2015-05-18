@@ -49,7 +49,7 @@ private:
     VclPtr<CheckBox>         m_pCB_IncludeHiddenCells;
 };
 
-} //namespace chart
+}
 
 #endif
 

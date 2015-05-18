@@ -1229,7 +1229,7 @@ namespace osl_FileBase
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileBase::searchFileURL, "osl_FileBase" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileBase::getTempDirURL, "osl_FileBase" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileBase::createTempFile, "osl_FileBase" );
-}// namespace osl_FileBase
+}
 
 namespace osl_FileStatus
 {
@@ -2103,7 +2103,7 @@ namespace osl_FileStatus
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::getFileName, "osl_FileStatus" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::getFileURL, "osl_FileStatus" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::getLinkTargetURL, "osl_FileStatus" );
-}// namespace osl_FileStatus
+}
 
 // Beginning of the test cases for File class
 
@@ -3586,7 +3586,7 @@ namespace osl_File
 // FIXME: to enable these tests (when they work cross-platform) we need to add the below:
 //    CPPUNIT_REGISTRY_ADD_TO_DEFAULT( "osl_File" );
 
-}// namespace osl_File
+}
 
 // Beginning of the test cases for DirectoryItem class
 
@@ -3893,7 +3893,7 @@ namespace osl_DirectoryItem
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::is, "osl_DirectoryItem" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::get, "osl_DirectoryItem" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::getFileStatus, "osl_DirectoryItem" );
-}// namespace osl_DirectoryItem
+}
 
 // Beginning of the test cases for Directory class
 
@@ -5029,7 +5029,7 @@ namespace osl_Directory
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::create );
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::remove );
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::createPath );
-}// namespace osl_Directory
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

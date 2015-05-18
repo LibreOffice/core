@@ -84,7 +84,7 @@ namespace sdbtools
         ConnectionTools& operator=( const ConnectionTools& ) SAL_DELETED_FUNCTION;
     };
 
-} // namespace sdbtools
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_CONNECTIONTOOLS_HXX
 

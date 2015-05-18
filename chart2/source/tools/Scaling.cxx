@@ -322,7 +322,7 @@ css::uno::Sequence< OUString > SAL_CALL PowerScaling::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-} //namespace chart
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_chart2_LinearScaling_get_implementation(css::uno::XComponentContext *context,

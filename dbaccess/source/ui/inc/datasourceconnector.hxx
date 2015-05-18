@@ -75,7 +75,7 @@ namespace dbaui
                     ) const;
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DATASOURCECONNECTOR_HXX
 

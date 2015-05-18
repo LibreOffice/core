@@ -388,7 +388,7 @@ public:
     }
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_COMPOSITEITERATOR_HXX */
 

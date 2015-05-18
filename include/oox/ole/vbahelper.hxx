@@ -85,8 +85,8 @@ namespace VbaHelper
 
 
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 #endif
 

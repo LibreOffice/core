@@ -581,7 +581,7 @@ void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,
     }
 }
 
-} /* namespace vcl */
+}
 
 NotifyEvent::NotifyEvent()
 {

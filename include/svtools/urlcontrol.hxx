@@ -45,7 +45,7 @@ namespace svt
     };
 
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_URLCONTROL_HXX

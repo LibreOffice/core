@@ -50,7 +50,7 @@ public:
     virtual void SAL_CALL closeOutput() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-}   // namespace utl
+}
 
 
 #endif // INCLUDED_FILTER_SOURCE_XMLFILTERADAPTOR_STREAMWRAP_HXX

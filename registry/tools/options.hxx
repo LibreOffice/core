@@ -55,8 +55,8 @@ protected:
     virtual void printUsage_Impl() const = 0;
 };
 
-} // namespace tools
-} // namespace registry
+}
+}
 
 #endif /* INCLUDED_REGISTRY_TOOLS_OPTIONS_HXX */
 

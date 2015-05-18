@@ -174,8 +174,8 @@ private:
     HFHelperData        maFooterData;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

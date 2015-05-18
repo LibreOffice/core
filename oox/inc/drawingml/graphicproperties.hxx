@@ -51,8 +51,8 @@ struct GraphicProperties
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

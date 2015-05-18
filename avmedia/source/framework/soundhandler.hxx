@@ -125,7 +125,7 @@ class SoundHandler  :   // interfaces
 
 };      //  class SoundHandler
 
-}       //  namespace avmedia
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_FRAMEWORK_SOUNDHANDLER_HXX
 

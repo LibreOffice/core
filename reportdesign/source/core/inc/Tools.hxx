@@ -167,7 +167,7 @@ namespace reportdesign
         }
     };
 
-} // namespace reportdesign
+}
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_TOOLS_HXX
 

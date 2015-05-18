@@ -144,7 +144,7 @@ namespace dlgprov
 
 
 
-}   // namespace dlgprov
+}
 
 
 #endif // SCRIPTING_DLGEVT_HXX

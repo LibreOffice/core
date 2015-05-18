@@ -183,6 +183,6 @@ IMPL_STATIC_LINK( GenericToolboxController, ExecuteHdl_Impl, ExecuteInfo*, pExec
    return 0;
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

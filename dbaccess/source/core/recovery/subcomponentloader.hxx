@@ -68,7 +68,7 @@ namespace dbaccess
         SubComponentLoader_Data*    m_pData;
     };
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_SUBCOMPONENTLOADER_HXX
 

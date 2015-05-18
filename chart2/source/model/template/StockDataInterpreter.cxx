@@ -321,6 +321,6 @@ InterpretedData SAL_CALL StockDataInterpreter::reinterpretDataSeries(
     return aInterpretedData;
 }
 
-} // namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

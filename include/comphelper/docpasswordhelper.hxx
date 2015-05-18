@@ -300,7 +300,7 @@ private:
 
 
 
-} // namespace comphelper
+}
 
 #endif
 

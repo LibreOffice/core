@@ -82,7 +82,7 @@ public:
     void flush();
 };
 
-} // namespace psp
+}
 
 #endif // INCLUDED_VCL_INC_FONTCACHE_HXX
 

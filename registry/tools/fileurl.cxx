@@ -77,7 +77,7 @@ OUString convertToFileUrl(char const * filename, sal_Int32 length)
     return uFileUrl;
 }
 
-} // namespace tools
-} // namespace registry
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

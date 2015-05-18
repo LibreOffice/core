@@ -109,7 +109,7 @@ public:
 
 };
 
-} // namespace xforms
+}
 
 #endif
 

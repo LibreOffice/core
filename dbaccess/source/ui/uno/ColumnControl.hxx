@@ -44,7 +44,7 @@ namespace dbaui
         // ::com::sun::star::awt::XControl
         virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& _rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNCONTROL_HXX
 

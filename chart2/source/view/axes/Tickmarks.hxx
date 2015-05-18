@@ -154,7 +154,7 @@ private: //member
     double      m_fOffset_LogicToScreen;
 };
 
-} //namespace chart
+}
 
 #endif
 

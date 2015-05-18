@@ -379,7 +379,7 @@ namespace /* private */
         return comspec;
     }
 
-} // namespace private
+}
 
 oslProcessError SAL_CALL osl_executeProcess(
     rtl_uString *strImageName,

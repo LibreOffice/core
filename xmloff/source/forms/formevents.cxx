@@ -65,6 +65,6 @@ namespace xmloff
 
     const XMLEventNameTranslation* g_pFormsEventTranslation = aEventTranslations;
 
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

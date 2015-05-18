@@ -133,8 +133,8 @@ private:
     bool                            mbDrawPressed;
 };
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_REHEARSETIMINGSACTIVITY_HXX
 

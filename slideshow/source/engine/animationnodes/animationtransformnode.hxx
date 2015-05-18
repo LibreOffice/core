@@ -52,8 +52,8 @@ private:
         ::com::sun::star::animations::XAnimateTransform >   mxTransformNode;
 };
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONTRANSFORMNODE_HXX
 

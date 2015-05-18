@@ -72,6 +72,6 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(uno::Sequence< OUString >
     return bModified;
 }
 
-}   // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

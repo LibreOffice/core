@@ -133,6 +133,6 @@ namespace xmloff
         return !m_aMappedEvents.empty();
     }
 
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

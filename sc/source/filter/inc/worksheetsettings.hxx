@@ -110,8 +110,8 @@ private:
     SheetProtectionModel maSheetProt;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

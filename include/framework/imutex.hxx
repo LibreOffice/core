@@ -46,7 +46,7 @@ class SAL_NO_VTABLE IMutex
         ~IMutex() {}
 };      //  class IMutex
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_IMUTEX_HXX
 

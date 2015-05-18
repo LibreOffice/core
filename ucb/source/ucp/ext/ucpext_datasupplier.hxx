@@ -73,7 +73,7 @@ namespace ucb { namespace ucp { namespace ext
     };
 
 
-} } }   // namespace ucp::ext
+} } }
 
 
 #endif // INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_DATASUPPLIER_HXX

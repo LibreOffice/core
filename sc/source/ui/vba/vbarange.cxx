@@ -1357,7 +1357,7 @@ util::TriState lclGetMergedState( const uno::Reference< table::XCellRange >& rxC
     return bHasMerged ? util::TriState_INDETERMINATE : util::TriState_NO;
 }
 
-} // namespace
+}
 
 css::uno::Reference< excel::XRange >
 ScVbaRange::getRangeObjectForName(
@@ -4802,7 +4802,7 @@ inline uno::Any lclGetPrefixVariant( sal_Unicode cPrefixChar )
     return uno::Any( (cPrefixChar == 0) ? OUString() : OUString( cPrefixChar ) );
 }
 
-} // namespace
+}
 
 uno::Any SAL_CALL ScVbaRange::getPrefixCharacter() throw (uno::RuntimeException, std::exception)
 {

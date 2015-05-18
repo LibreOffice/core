@@ -95,7 +95,7 @@ class SerfUri
         { return makeConnectionEndPointString( GetHost(), GetPort() ); }
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFURI_HXX
 

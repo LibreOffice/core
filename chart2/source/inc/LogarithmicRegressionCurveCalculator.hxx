@@ -61,7 +61,7 @@ private:
     double m_fIntercept;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_LOGARITHMICREGRESSIONCURVECALCULATOR_HXX
 #endif

@@ -60,6 +60,6 @@ SfxPoolItem* OStringListItem::Clone(SfxItemPool* /* _pPool */) const
     return new OStringListItem(*this);
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

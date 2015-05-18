@@ -24,6 +24,6 @@ namespace sdbtools
 
     IMPLEMENT_MODULE( SdbtModule, "sdbt" )
 
-} // namespace sdbtools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

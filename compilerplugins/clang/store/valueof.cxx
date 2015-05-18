@@ -146,6 +146,6 @@ void ConvertValueOf::removeCast( const Expr* arg )
 
 static Plugin::Registration< ConvertValueOf > X( "convertvalueof" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

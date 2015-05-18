@@ -69,7 +69,7 @@ public:
 
 struct theDllInstance : public rtl::Static<DllInstance, theDllInstance> { };
 
-} // namespace
+}
 
 void EnsureIde ()
 {
@@ -142,7 +142,7 @@ ExtraData* Dll::GetExtraData ()
     return m_xExtraData.get();
 }
 
-} // namespace
+}
 
 
 // basctl::ExtraData
@@ -212,6 +212,6 @@ IMPL_STATIC_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic)
 }
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

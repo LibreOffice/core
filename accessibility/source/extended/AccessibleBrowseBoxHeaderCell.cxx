@@ -158,7 +158,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
     return nIndex;
 }
 
-} // namespace accessibility
+}
 
 
 

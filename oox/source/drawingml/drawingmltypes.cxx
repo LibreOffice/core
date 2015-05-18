@@ -391,7 +391,7 @@ IndexRange GetIndexRange( const Reference< XFastAttributeList >& xAttributes )
     return range;
 }
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

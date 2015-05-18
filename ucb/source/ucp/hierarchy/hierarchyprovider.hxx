@@ -139,7 +139,7 @@ public:
     getOfficeInstallationDirectories();
 };
 
-} // namespace hierarchy_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYPROVIDER_HXX
 

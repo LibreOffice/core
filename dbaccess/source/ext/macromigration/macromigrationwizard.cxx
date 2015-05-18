@@ -212,6 +212,6 @@ namespace dbmm
         static OAutoRegistration< MacroMigrationDialogService > aAutoRegistration;
     }
 
-} // namespace dbmm
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

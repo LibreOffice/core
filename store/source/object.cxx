@@ -39,6 +39,6 @@ bool OStoreObject::isKindOf (sal_uInt32 nTypeId)
     return (nTypeId == m_nTypeId);
 }
 
-} // namespace store
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

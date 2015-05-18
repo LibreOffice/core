@@ -151,7 +151,7 @@ void ContextStack::popContext()
     }
 }
 
-} // namespace prv
+}
 
 namespace {
 
@@ -199,7 +199,7 @@ bool lclReadNextRecord( sal_Int32& ornRecId, StreamDataSequence& orData, BinaryI
     return bValid;
 }
 
-} // namespace
+}
 
 RecordParser::RecordParser()
 {
@@ -321,7 +321,7 @@ const RecordInfo* RecordParser::getEndRecordInfo( sal_Int32 nRecId ) const
     return (aIt == maEndMap.end()) ? 0 : &aIt->second;
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

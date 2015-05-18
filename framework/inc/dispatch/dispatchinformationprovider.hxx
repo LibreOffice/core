@@ -68,7 +68,7 @@ class DispatchInformationProvider : public  ::cppu::WeakImplHelper1< css::frame:
 
 }; // class DispatchInformationProvider
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHINFORMATIONPROVIDER_HXX
 

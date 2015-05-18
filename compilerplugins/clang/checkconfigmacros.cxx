@@ -158,6 +158,6 @@ void CheckConfigMacros::checkMacro( const Token& macroToken, SourceLocation loca
 
 static Plugin::Registration< CheckConfigMacros > X( "checkconfigmacros" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

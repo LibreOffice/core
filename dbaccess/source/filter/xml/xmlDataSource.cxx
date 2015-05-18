@@ -260,6 +260,6 @@ ODBFilter& OXMLDataSource::GetOwnImport()
     return static_cast<ODBFilter&>(GetImport());
 }
 
-} // namespace dbaxml
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

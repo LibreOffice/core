@@ -236,8 +236,8 @@ private:
     AutoFilterVector    maAutoFilters;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

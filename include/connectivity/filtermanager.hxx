@@ -110,7 +110,7 @@ namespace dbtools
     };
 
 
-} // namespacefrm
+}
 
 
 #endif // CONNECTIVITY_FORMFILTERMANAGER_HXX

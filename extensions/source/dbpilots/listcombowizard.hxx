@@ -191,7 +191,7 @@ namespace dbp
     };
 
 
-}   // namespace dbp
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_LISTCOMBOWIZARD_HXX

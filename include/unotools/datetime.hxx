@@ -47,7 +47,7 @@ namespace utl
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseDate(const ::rtl::OUString &i_rIn, css::util::Date& o_rDate);
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseTime(const ::rtl::OUString &i_rIn, css::util::Time& o_Time);
 
-}   // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_DATETIME_HXX
 

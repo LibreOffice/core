@@ -153,7 +153,7 @@ private:
         ::com::sun::star::chart2::XChartType > >          m_aChartTypes;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_INC_BASECOORDINATESYSTEM_HXX
 #endif

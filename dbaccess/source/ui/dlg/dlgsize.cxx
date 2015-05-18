@@ -96,6 +96,6 @@ IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton )
     return 0;
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

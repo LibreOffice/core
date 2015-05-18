@@ -106,8 +106,8 @@ private:
     FragmentBaseDataRef mxBaseData;         ///< Base data of the fragment.
 };
 
-} // namespace core
-} // namespace oox
+}
+}
 
 #endif
 

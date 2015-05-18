@@ -71,7 +71,7 @@ public:
 
 };
 
-} /* namespace gvfs */
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_GVFS_GVFS_PROVIDER_HXX
 

@@ -56,7 +56,7 @@ namespace reportdesign
         void start(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup);
     };
 
-} // namespace reportdesign
+}
 
 #endif // INCLUDED_REPORTDESIGN_INC_REPORTVISITOR_HXX
 

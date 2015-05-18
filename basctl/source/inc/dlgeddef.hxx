@@ -85,7 +85,7 @@ enum
 #define DLGED_PROP_DECORATION        "Decoration"
 
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_DLGEDDEF_HXX
 

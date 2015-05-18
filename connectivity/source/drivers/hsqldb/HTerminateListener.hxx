@@ -51,7 +51,7 @@ namespace connectivity
         };
     }
 
-}   // namespace connectivity
+}
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_HSQLDB_HTERMINATELISTENER_HXX
 

@@ -286,7 +286,7 @@ private:
 };
 
 
-} // namespace accessibility
+}
 
 
 

@@ -95,7 +95,7 @@ private:
     bool m_bCountColumnHeader;
 };
 
-} // namespace rptxml
+}
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLEXPORTDOCUMENTHANDLER_HXX
 

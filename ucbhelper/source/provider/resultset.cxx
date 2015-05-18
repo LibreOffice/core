@@ -132,7 +132,7 @@ public:
     : PropertyChangeListenerContainer( rMtx ) {}
 };
 
-} // namespace ucbhelper_impl
+}
 
 using namespace ucbhelper_impl;
 
@@ -1541,7 +1541,7 @@ ResultSet::getEnvironment()
     return m_pImpl->m_xEnv;
 }
 
-} // namespace ucbhelper
+}
 
 namespace ucbhelper_impl {
 
@@ -1674,6 +1674,6 @@ bool PropertySetInfo::queryProperty(
     return false;
 }
 
-} // namespace ucbhelper_impl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

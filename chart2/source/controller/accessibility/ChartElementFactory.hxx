@@ -35,7 +35,7 @@ public:
     static AccessibleBase* CreateChartElement( const AccessibleElementInfo& rAccInfo );
 };
 
-}  // namespace chart
+}
 
 #endif
 

@@ -98,8 +98,8 @@ private:
     void                                        ImplLayoutVideoWindow();
 };
 
-} // namespace quicktime
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_QUICKTIME_WINDOW_HXX
 

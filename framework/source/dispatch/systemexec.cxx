@@ -146,6 +146,6 @@ void SystemExec::impl_notifyResultListener(const css::uno::Reference< css::frame
     }
 }
 
-}       //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,7 +33,7 @@ protected:
     ~FormulaExportBase() {}
 };
 
-} // namespace
+}
 
 #endif
 

@@ -35,7 +35,7 @@ namespace dbaxml
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList);
         virtual ~OXMLConnectionResource();
     };
-} // namespace dbaxml
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLCONNECTIONRESOURCE_HXX
 

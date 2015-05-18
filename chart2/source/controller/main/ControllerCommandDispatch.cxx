@@ -456,7 +456,7 @@ bool ModelState::HasAnyTitle() const
     return bHasMainTitle || bHasSubTitle || bHasXAxisTitle || bHasYAxisTitle || bHasZAxisTitle || bHasSecondaryXAxisTitle || bHasSecondaryYAxisTitle;
 }
 
-} // namespace impl
+}
 
 ControllerCommandDispatch::ControllerCommandDispatch(
     const Reference< uno::XComponentContext > & xContext,
@@ -810,6 +810,6 @@ void SAL_CALL ControllerCommandDispatch::selectionChanged( const lang::EventObje
     CommandDispatch::modified( aEvent );
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

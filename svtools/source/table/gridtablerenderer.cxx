@@ -611,7 +611,7 @@ namespace svt { namespace table
     }
 
 
-} } // namespace svt::table
+} }
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

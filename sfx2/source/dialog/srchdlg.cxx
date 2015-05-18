@@ -179,7 +179,7 @@ void SearchDialog::Move()
 
 
 
-} // namespace sfx2
+}
 
 
 

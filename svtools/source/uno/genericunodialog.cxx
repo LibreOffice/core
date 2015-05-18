@@ -326,7 +326,7 @@ IMPL_LINK( OGenericUnoDialog, OnDialogDying, VclWindowEvent*, _pEvent )
 }
 
 
-}   // namespace svt
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -78,7 +78,7 @@ public:
     static OUString collapseWhitespace( const OUString& _rString );
 };
 
-} // namespace xforms
+}
 
 #endif
 

@@ -172,6 +172,6 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnClose()
         m_bClosed = TRUE;
 }
 
-} // namespace inprocserv
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

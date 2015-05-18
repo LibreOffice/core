@@ -73,7 +73,7 @@ private:
     OUString m_aCustomShapeType;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_DRAWCOMMANDDISPATCH_HXX
 #endif

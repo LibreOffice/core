@@ -205,8 +205,8 @@ private:
 
 
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 #endif
 

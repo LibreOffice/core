@@ -241,6 +241,6 @@ namespace xmloff { namespace metadata
         return attribute;
     }
 
-} } // namespace xmloff::metadata
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

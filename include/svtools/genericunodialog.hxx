@@ -178,7 +178,7 @@ namespace svt
     };
 
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_GENERICUNODIALOG_HXX

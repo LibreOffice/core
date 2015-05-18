@@ -558,7 +558,7 @@ public:
     bool CanCodeComplete() const { return bCanComplete;}
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BASIDE2_HXX
 

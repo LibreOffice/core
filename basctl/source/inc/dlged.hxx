@@ -211,7 +211,7 @@ public:
     bool            isInPaint() const { return mnPaintGuard > 0; }
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_DLGED_HXX
 

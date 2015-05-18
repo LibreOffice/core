@@ -227,6 +227,6 @@ void OConnectionPointHelper::impl_UnlockContainer()
     m_xLock.clear();
 }
 
-}   // namespace unocontrols
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

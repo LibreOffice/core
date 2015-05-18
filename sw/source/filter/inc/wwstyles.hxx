@@ -178,7 +178,7 @@ namespace ww
         <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
     */
     bool StandardStiIsCharStyle(sti eSti) throw();
-} // namespace ww
+}
 
 #endif
 

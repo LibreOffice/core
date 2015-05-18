@@ -33,6 +33,6 @@ TrueGuard::~TrueGuard()
     m_rbTrueDuringGuardedTime = false;
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

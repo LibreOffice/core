@@ -90,7 +90,7 @@ private:
     bool                                                  m_bNeedsUpdate;
 };
 
-} // namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_CONFIGCOLORSCHEME_HXX
 #endif

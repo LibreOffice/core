@@ -388,8 +388,8 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
     return aRet;
 }
 
-} // namespace quicktime
-} // namespace avmedia
+}
+}
 
 SAL_WNODEPRECATED_DECLARATIONS_POP
 

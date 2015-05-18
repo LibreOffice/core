@@ -43,7 +43,7 @@ private:
     TrendlineResources   m_aTrendlineResources;
 };
 
-} //namespace chart
+}
 
 #endif
 

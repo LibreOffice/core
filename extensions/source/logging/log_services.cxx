@@ -33,7 +33,7 @@ namespace logging
     }
 
 
-} // namespace logging
+}
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL log_component_getFactory(

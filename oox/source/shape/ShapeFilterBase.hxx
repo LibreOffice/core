@@ -68,8 +68,8 @@ private:
     ::oox::drawingml::ThemePtr mpTheme;
 };
 
-} // namespace shape
-} // namespace oox
+}
+}
 
 #endif
 

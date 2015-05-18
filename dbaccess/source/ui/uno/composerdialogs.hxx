@@ -122,7 +122,7 @@ namespace dbaui
             throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
 

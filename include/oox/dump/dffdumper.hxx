@@ -60,8 +60,8 @@ private:
 
 
 
-} // namespace dump
-} // namespace oox
+}
+}
 
 #endif
 #endif

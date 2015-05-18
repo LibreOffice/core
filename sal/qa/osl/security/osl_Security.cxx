@@ -296,7 +296,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getHandle);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::UserProfile);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::loginUserOnFileServer);
 
-} // namespace osl_Security
+}
 
 /* This defines an own TestPlugIn implementation with an own initialize()
     method that will be called after loading the PlugIn
