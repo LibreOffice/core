@@ -101,7 +101,7 @@ void PDFWriter::DrawStretchText(
 void PDFWriter::DrawText(
                          const Rectangle& rRect,
                          const OUString& rStr,
-                         sal_uInt16 nStyle )
+                         DrawTextFlags nStyle )
 {
     xImplementation->drawText( rRect, rStr, nStyle );
 }

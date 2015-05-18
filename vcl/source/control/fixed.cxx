@@ -157,33 +157,33 @@ FixedText::FixedText( vcl::Window* pParent, const ResId& rResId )
         Show();
 }
 
-sal_uInt16 FixedText::ImplGetTextStyle( WinBits nWinStyle )
+DrawTextFlags FixedText::ImplGetTextStyle( WinBits nWinStyle )
 {
-    sal_uInt16 nTextStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_ENDELLIPSIS;
+    DrawTextFlags nTextStyle = DrawTextFlags::Mnemonic | DrawTextFlags::EndEllipsis;
 
     if( ! (nWinStyle & WB_NOMULTILINE) )
-        nTextStyle |= TEXT_DRAW_MULTILINE;
+        nTextStyle |= DrawTextFlags::MultiLine;
 
     if ( nWinStyle & WB_RIGHT )
-        nTextStyle |= TEXT_DRAW_RIGHT;
+        nTextStyle |= DrawTextFlags::Right;
     else if ( nWinStyle & WB_CENTER )
-        nTextStyle |= TEXT_DRAW_CENTER;
+        nTextStyle |= DrawTextFlags::Center;
     else
-        nTextStyle |= TEXT_DRAW_LEFT;
+        nTextStyle |= DrawTextFlags::Left;
     if ( nWinStyle & WB_BOTTOM )
-        nTextStyle |= TEXT_DRAW_BOTTOM;
+        nTextStyle |= DrawTextFlags::Bottom;
     else if ( nWinStyle & WB_VCENTER )
-        nTextStyle |= TEXT_DRAW_VCENTER;
+        nTextStyle |= DrawTextFlags::VCenter;
     else
-        nTextStyle |= TEXT_DRAW_TOP;
+        nTextStyle |= DrawTextFlags::Top;
     if ( nWinStyle & WB_WORDBREAK )
     {
-        nTextStyle |= TEXT_DRAW_WORDBREAK;
+        nTextStyle |= DrawTextFlags::WordBreak;
         if ( (nWinStyle & WB_HYPHENATION ) == WB_HYPHENATION )
-            nTextStyle |= TEXT_DRAW_WORDBREAK_HYPHENATION;
+            nTextStyle |= DrawTextFlags::WordBreakHyphenation;
     }
     if ( nWinStyle & WB_NOLABEL )
-        nTextStyle &= ~TEXT_DRAW_MNEMONIC;
+        nTextStyle &= ~DrawTextFlags::Mnemonic;
 
     return nTextStyle;
 }
@@ -195,7 +195,7 @@ void FixedText::ImplDraw(OutputDevice* pDev, sal_uLong nDrawFlags,
     const StyleSettings& rStyleSettings = pDev->GetSettings().GetStyleSettings();
     WinBits nWinStyle = GetStyle();
     OUString aText(GetText());
-    sal_uInt16 nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
+    DrawTextFlags nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
     Point aPos = rPos;
 
     if ( nWinStyle & WB_EXTRAOFFSET )
@@ -203,25 +203,25 @@ void FixedText::ImplDraw(OutputDevice* pDev, sal_uLong nDrawFlags,
 
     if ( nWinStyle & WB_PATHELLIPSIS )
     {
-        nTextStyle &= ~(TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK);
-        nTextStyle |= TEXT_DRAW_PATHELLIPSIS;
+        nTextStyle &= ~DrawTextFlags(DrawTextFlags::EndEllipsis | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
+        nTextStyle |= DrawTextFlags::PathEllipsis;
     }
     if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
     {
-        if ( nTextStyle & TEXT_DRAW_MNEMONIC )
+        if ( nTextStyle & DrawTextFlags::Mnemonic )
         {
             aText = GetNonMnemonicString( aText );
-            nTextStyle &= ~TEXT_DRAW_MNEMONIC;
+            nTextStyle &= ~DrawTextFlags::Mnemonic;
         }
     }
     if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
     {
         if ( !IsEnabled() )
-            nTextStyle |= TEXT_DRAW_DISABLE;
+            nTextStyle |= DrawTextFlags::Disable;
     }
     if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
          (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-        nTextStyle |= TEXT_DRAW_MONO;
+        nTextStyle |= DrawTextFlags::Mono;
 
     if( bFillLayout )
         (mpControlData->mpLayoutData->m_aDisplayText).clear();
@@ -336,9 +336,9 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
 
 Size FixedText::getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth)
 {
-    sal_uInt16 nStyle = ImplGetTextStyle( pControl->GetStyle() );
+    DrawTextFlags nStyle = ImplGetTextStyle( pControl->GetStyle() );
     if ( !( pControl->GetStyle() & WB_NOLABEL ) )
-        nStyle |= TEXT_DRAW_MNEMONIC;
+        nStyle |= DrawTextFlags::Mnemonic;
 
     return pControl->GetTextRect(Rectangle( Point(), Size(nMaxWidth, 0x7fffffff)),
                                        rTxt, nStyle).GetSize();
@@ -589,18 +589,18 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
     }
     else
     {
-        sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS;
+        DrawTextFlags nStyle = DrawTextFlags::Mnemonic | DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::EndEllipsis;
         Rectangle aRect(0, 0, aOutSize.Width(), aOutSize.Height());
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
         if (nWinStyle & WB_CENTER)
-            nStyle |= TEXT_DRAW_CENTER;
+            nStyle |= DrawTextFlags::Center;
 
         if (!IsEnabled())
-            nStyle |= TEXT_DRAW_DISABLE;
+            nStyle |= DrawTextFlags::Disable;
         if (GetStyle() & WB_NOLABEL)
-            nStyle &= ~TEXT_DRAW_MNEMONIC;
+            nStyle &= ~DrawTextFlags::Mnemonic;
         if (rStyleSettings.GetOptions() & STYLE_OPTION_MONO)
-            nStyle |= TEXT_DRAW_MONO;
+            nStyle |= DrawTextFlags::Mono;
 
         DrawControlText(*this, aRect, aText, nStyle, pVector, pDisplayText);
 

@@ -179,8 +179,8 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
         SetZoomedPointFont(rRenderContext, aFont);
         Rectangle aTextRect(aOffset + Point(2, 2), Size(maPreviewSize.Width() - 4, maPreviewSize.Height() - 4));
         rRenderContext.DrawText(aTextRect, maReplacementString,
-                                TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER |
-                                TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE);
+                                DrawTextFlags::Center | DrawTextFlags::VCenter |
+                                DrawTextFlags::WordBreak | DrawTextFlags::MultiLine);
         rRenderContext.Pop();
     }
     else

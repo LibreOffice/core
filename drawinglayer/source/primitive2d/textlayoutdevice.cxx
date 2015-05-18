@@ -327,7 +327,7 @@ namespace drawinglayer
         void TextLayouterDevice::addTextRectActions(
             const Rectangle& rRectangle,
             const OUString& rText,
-            sal_uInt16 nStyle,
+            DrawTextFlags nStyle,
             GDIMetaFile& rGDIMetaFile) const
         {
             mrDevice.AddTextRectActions(

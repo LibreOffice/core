@@ -446,7 +446,7 @@ public:
         OString                m_aName;
         OUString               m_aDescription;
         OUString               m_aText;
-        sal_uInt16                      m_nTextStyle;
+        DrawTextFlags          m_nTextStyle;
         OUString               m_aValue;
         OString                m_aDAString;
         OString                m_aDRDict;
@@ -472,7 +472,7 @@ public:
         PDFAppearanceMap            m_aAppearances;
         PDFWidget()
                 : m_eType( PDFWriter::PushButton ),
-                  m_nTextStyle( 0 ),
+                  m_nTextStyle( DrawTextFlags::NONE ),
                   m_nFlags( 0 ),
                   m_nParent( 0 ),
                   m_nTabOrder( 0 ),
@@ -1206,7 +1206,7 @@ public:
     void drawStretchText( const Point& rPos, sal_uLong nWidth, const OUString& rText,
                           sal_Int32 nIndex, sal_Int32 nLen,
                           bool bTextLines = true  );
-    void drawText( const Rectangle& rRect, const OUString& rOrigStr, sal_uInt16 nStyle, bool bTextLines = true  );
+    void drawText( const Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle, bool bTextLines = true  );
     void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove );
     void drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
     void drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );

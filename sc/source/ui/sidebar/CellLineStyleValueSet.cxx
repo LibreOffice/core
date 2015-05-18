@@ -111,7 +111,7 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     pDev->SetFont(aFont);
     Point aStart(aBLPos.X() + nRectWidth * 7 / 9 - 5 , aBLPos.Y() + nRectHeight/6);
-    pDev->DrawText(aStart, maStrUnit[nItemId - 1]); //can't set TEXT_DRAW_ENDELLIPSIS here, or the text will disappear
+    pDev->DrawText(aStart, maStrUnit[nItemId - 1]); //can't set DrawTextFlags::EndEllipsis here, or the text will disappear
 
     //draw line
     if( nSelItem ==  nItemId )

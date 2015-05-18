@@ -355,7 +355,7 @@ namespace svt
         if (nBrowserFlags & EditBrowseBoxFlags::HANDLE_COLUMN_TEXT )
         {
             rDev.DrawText( rRect, GetCellText( nPaintRow, 0 ),
-                           TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_CLIP );
+                           DrawTextFlags::Center | DrawTextFlags::VCenter | DrawTextFlags::Clip );
         }
         // draw an image
         else if (eStatus != CLEAN && rDev.GetOutDevType() == OUTDEV_WINDOW)

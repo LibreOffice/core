@@ -132,7 +132,7 @@ public:
         if (mbEnabled)
             mrRenderContext.DrawText(aPos, aText);
         else
-            mrRenderContext.DrawCtrlText(aPos, aText, 0, aText.getLength(), (TEXT_DRAW_DISABLE | TEXT_DRAW_MNEMONIC));
+            mrRenderContext.DrawCtrlText(aPos, aText, 0, aText.getLength(), (DrawTextFlags::Disable | DrawTextFlags::Mnemonic));
     }
 
     void drawOverTopBorder()
@@ -1251,7 +1251,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
             bool bCustomBgColor = !pItem->IsDefaultTabBgColor() && !rStyleSettings.GetHighContrastMode();
             bool bSpecialTab = (pItem->mnBits & TPB_SPECIAL);
             bool bEnabled = pItem->mbEnable;
-            OUString aText = pItem->mbShort ? rRenderContext.GetEllipsisString(pItem->maText, mnCurMaxWidth, TEXT_DRAW_ENDELLIPSIS) : pItem->maText;
+            OUString aText = pItem->mbShort ? rRenderContext.GetEllipsisString(pItem->maText, mnCurMaxWidth, DrawTextFlags::EndEllipsis) : pItem->maText;
 
             aDrawer.setRect(aRect);
             aDrawer.setSelected(bSelected);

@@ -264,7 +264,7 @@ void PageObjectPainter::PaintPageNumber (
     const OUString sPageNumber(OUString::number(nPageNumber));
     rDevice.SetFont(*mpPageNumberFont);
     rDevice.SetTextColor(aPageNumberColor);
-    rDevice.DrawText(aBox, sPageNumber, TEXT_DRAW_RIGHT | TEXT_DRAW_VCENTER);
+    rDevice.DrawText(aBox, sPageNumber, DrawTextFlags::Right | DrawTextFlags::VCenter);
 }
 
 void PageObjectPainter::PaintTransitionEffect (

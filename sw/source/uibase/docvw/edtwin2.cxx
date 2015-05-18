@@ -98,7 +98,7 @@ OUString SwEditWin::ClipLongToolTip(const OUString& rTxt)
     long nMaxWidth = GetDesktopRectPixel().GetWidth() * 2 / 3;
     nMaxWidth = PixelToLogic(Size(nMaxWidth, 0)).Width();
     if (nTextWidth > nMaxWidth)
-        sDisplayTxt = GetEllipsisString(sDisplayTxt, nMaxWidth, TEXT_DRAW_CENTERELLIPSIS);
+        sDisplayTxt = GetEllipsisString(sDisplayTxt, nMaxWidth, DrawTextFlags::CenterEllipsis);
     return sDisplayTxt;
 }
 

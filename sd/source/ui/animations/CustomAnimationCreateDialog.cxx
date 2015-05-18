@@ -129,7 +129,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
         pDev->DrawPixel( Point(aOutRect.Right(), aOutRect.Bottom()));
 
         // draw the category title
-        pDev->DrawText (aOutRect, GetEntry(nItem), TEXT_DRAW_CENTER );
+        pDev->DrawText (aOutRect, GetEntry(nItem), DrawTextFlags::Center );
     }
     else
     {

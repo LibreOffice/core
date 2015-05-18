@@ -480,7 +480,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
         if (IsEnabled())
             rRenderContext.DrawText(Point(nTxtPos, nTxtPosY), pItem->maOutText);
         else
-            rRenderContext.DrawCtrlText(Point(nTxtPos, nTxtPosY), pItem->maOutText, 0, pItem->maOutText.getLength(), TEXT_DRAW_DISABLE);
+            rRenderContext.DrawCtrlText(Point(nTxtPos, nTxtPosY), pItem->maOutText, 0, pItem->maOutText.getLength(), DrawTextFlags::Disable);
         if (aSelectionTextColor != Color(COL_TRANSPARENT))
             rRenderContext.Pop();
     }

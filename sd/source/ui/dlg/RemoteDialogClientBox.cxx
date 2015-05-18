@@ -342,7 +342,7 @@ void ClientBox::DrawRow(vcl::RenderContext& rRenderContext, const Rectangle& rRe
     if (rEntry->m_bActive)
     {
       OUString sPinText(SD_RESSTR(STR_ENTER_PIN));
-      DrawText(m_sPinTextRect, sPinText, 0);
+      DrawText(m_sPinTextRect, sPinText);
     }
 
     rRenderContext.SetLineColor(Color(COL_LIGHTGRAY));

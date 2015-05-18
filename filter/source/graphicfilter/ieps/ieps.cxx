@@ -509,7 +509,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
             aString += " LanguageLevel:" + OUString::number( nNumber );
         }
     }
-    pVDev->DrawText( aRect, aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE );
+    pVDev->DrawText( aRect, aString, DrawTextFlags::Clip | DrawTextFlags::MultiLine );
     pVDev->Pop();
     aMtf.Stop();
     aMtf.WindStart();

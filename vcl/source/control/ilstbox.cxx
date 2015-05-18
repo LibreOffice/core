@@ -43,7 +43,7 @@
 
 #include <limits>
 
-#define MULTILINE_ENTRY_DRAW_FLAGS ( TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE | TEXT_DRAW_VCENTER )
+#define MULTILINE_ENTRY_DRAW_FLAGS ( DrawTextFlags::WordBreak | DrawTextFlags::MultiLine | DrawTextFlags::VCenter )
 
 using namespace ::com::sun::star;
 
@@ -661,7 +661,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
             // GetTextRect should shrink it to the actual size
             aCurSize.Height() = 0x7fffff;
             Rectangle aTextRect( Point( 0, 0 ), aCurSize );
-            aTextRect = GetTextRect( aTextRect, rEntry.maStr, TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE );
+            aTextRect = GetTextRect( aTextRect, rEntry.maStr, DrawTextFlags::WordBreak | DrawTextFlags::MultiLine );
             aMetrics.nTextWidth = aTextRect.GetWidth();
             if( aMetrics.nTextWidth > mnMaxTxtWidth )
                 mnMaxTxtWidth = aMetrics.nTextWidth;
@@ -1864,11 +1864,11 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
                     aTextRect.Left() -= (aImgSz.Width() + IMG_TXT_DISTANCE);
             }
 
-            sal_uInt16 nDrawStyle = ImplGetTextStyle();
+            DrawTextFlags nDrawStyle = ImplGetTextStyle();
             if ((pEntry->mnFlags & ListBoxEntryFlags::MultiLine))
                 nDrawStyle |= MULTILINE_ENTRY_DRAW_FLAGS;
             if ((pEntry->mnFlags & ListBoxEntryFlags::DrawDisabled))
-                nDrawStyle |= TEXT_DRAW_DISABLE;
+                nDrawStyle |= DrawTextFlags::Disable;
 
             rRenderContext.DrawText(aTextRect, aStr, nDrawStyle, pVector, pDisplayText);
         }
@@ -2137,18 +2137,18 @@ void ImplListBoxWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-sal_uInt16 ImplListBoxWindow::ImplGetTextStyle() const
+DrawTextFlags ImplListBoxWindow::ImplGetTextStyle() const
 {
-    sal_uInt16 nTextStyle = TEXT_DRAW_VCENTER;
+    DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
 
     if (mpEntryList->HasImages())
-        nTextStyle |= TEXT_DRAW_LEFT;
+        nTextStyle |= DrawTextFlags::Left;
     else if (mbCenter)
-        nTextStyle |= TEXT_DRAW_CENTER;
+        nTextStyle |= DrawTextFlags::Center;
     else if (mbRight)
-        nTextStyle |= TEXT_DRAW_RIGHT;
+        nTextStyle |= DrawTextFlags::Right;
     else
-        nTextStyle |= TEXT_DRAW_LEFT;
+        nTextStyle |= DrawTextFlags::Left;
 
     return nTextStyle;
 }
@@ -2884,16 +2884,16 @@ void ImplWin::DrawEntry( bool bDrawImage, bool bDrawText, bool bDrawTextAtImageP
 
     if( bDrawText && !maString.isEmpty() )
     {
-        sal_uInt16 nTextStyle = TEXT_DRAW_VCENTER;
+        DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
 
         if ( bDrawImage && bImage && !bLayout )
-            nTextStyle |= TEXT_DRAW_LEFT;
+            nTextStyle |= DrawTextFlags::Left;
         else if ( GetStyle() & WB_CENTER )
-            nTextStyle |= TEXT_DRAW_CENTER;
+            nTextStyle |= DrawTextFlags::Center;
         else if ( GetStyle() & WB_RIGHT )
-            nTextStyle |= TEXT_DRAW_RIGHT;
+            nTextStyle |= DrawTextFlags::Right;
         else
-            nTextStyle |= TEXT_DRAW_LEFT;
+            nTextStyle |= DrawTextFlags::Left;
 
         Rectangle aTextRect( Point( nBorder, 0 ), Size( aOutSz.Width()-2*nBorder, aOutSz.Height() ) );
 

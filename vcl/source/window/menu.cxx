@@ -1745,7 +1745,7 @@ static OUString getShortenedString( const OUString& i_rLong, vcl::RenderContext&
 {
     sal_Int32 nPos = -1;
     OUString aNonMnem(OutputDevice::GetNonMnemonicString(i_rLong, nPos));
-    aNonMnem = rRenderContext.GetEllipsisString( aNonMnem, i_nMaxWidth, TEXT_DRAW_CENTERELLIPSIS);
+    aNonMnem = rRenderContext.GetEllipsisString( aNonMnem, i_nMaxWidth, DrawTextFlags::CenterEllipsis);
     // re-insert mnemonic
     if (nPos != -1)
     {
@@ -1861,7 +1861,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                 long nTextOffsetY = ((pData->aSz.Height() - nFontHeight) / 2);
                 if (IsMenuBar())
                     nTextOffsetY += (aOutSz.Height()-pData->aSz.Height()) / 2;
-                sal_uInt16  nTextStyle = 0;
+                DrawTextFlags   nTextStyle   = DrawTextFlags::NONE;
                 DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
                 sal_uInt16  nImageStyle = 0;
 
@@ -1871,7 +1871,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                 // asynchronous loading
                 if (!pData->bEnabled)
                 {
-                    nTextStyle   |= TEXT_DRAW_DISABLE;
+                    nTextStyle   |= DrawTextFlags::Disable;
                     nSymbolStyle |= DrawSymbolFlags::Disable;
                     nImageStyle  |= IMAGE_DRAW_DISABLE;
                 }
@@ -2009,9 +2009,9 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                     aTmpPos.X() = aPos.X() + nTextPos;
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
-                    sal_uInt16 nStyle = nTextStyle | TEXT_DRAW_MNEMONIC;
+                    DrawTextFlags nStyle = nTextStyle | DrawTextFlags::Mnemonic;
                     if (pData->bIsTemporary)
-                        nStyle |= TEXT_DRAW_DISABLE;
+                        nStyle |= DrawTextFlags::Disable;
                     MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
                     OUString* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
                     if (bLayout)
@@ -2022,7 +2022,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                     }
                     // #i47946# with NWF painted menus the background is transparent
                     // since DrawCtrlText can depend on the background (e.g. for
-                    // TEXT_DRAW_DISABLE), temporarily set a background which
+                    // DrawTextFlags::Disable), temporarily set a background which
                     // hopefully matches the NWF background since it is read
                     // from the system style settings
                     bool bSetTmpBackground = !rRenderContext.IsBackground()

@@ -93,7 +93,7 @@ namespace vcl
         virtual ~ControlTextRenderer();
 
         Rectangle   DrawText( const Rectangle& _rRect,
-                              const OUString& _rText, sal_uInt16 _nStyle = 0,
+                              const OUString& _rText, DrawTextFlags _nStyle = DrawTextFlags::NONE,
                               MetricVector* _pVector = NULL, OUString* _pDisplayText = NULL );
 
     private:

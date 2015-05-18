@@ -36,7 +36,7 @@ namespace rtl {
 };
 class OutputDevice;
 class GDIMetaFile;
-
+enum class DrawTextFlags;
 namespace drawinglayer { namespace attribute {
     class FontAttribute;
 }}
@@ -102,7 +102,7 @@ namespace drawinglayer
             void addTextRectActions(
                 const Rectangle& rRectangle,
                 const rtl::OUString& rText,
-                sal_uInt16 nStyle,
+                DrawTextFlags nStyle,
                 GDIMetaFile& rGDIMetaFile) const;
 
             ::std::vector< double > getTextArray(

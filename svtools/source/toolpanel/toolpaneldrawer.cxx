@@ -159,16 +159,16 @@ namespace svt
     }
 
 
-    sal_uInt16 ToolPanelDrawer::impl_getTextStyle() const
+    DrawTextFlags ToolPanelDrawer::impl_getTextStyle() const
     {
-        const sal_uInt16 nBasicStyle =  TEXT_DRAW_LEFT
-                                |   TEXT_DRAW_TOP
-                                |   TEXT_DRAW_WORDBREAK;
+        const DrawTextFlags nBasicStyle =  DrawTextFlags::Left
+                                |   DrawTextFlags::Top
+                                |   DrawTextFlags::WordBreak;
 
         if ( IsEnabled() )
             return nBasicStyle;
 
-        return nBasicStyle | TEXT_DRAW_DISABLE;
+        return nBasicStyle | DrawTextFlags::Disable;
     }
 
 

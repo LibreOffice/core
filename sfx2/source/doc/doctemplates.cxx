@@ -127,9 +127,9 @@ namespace {
 
 class WaitWindow_Impl : public WorkWindow
 {
-    Rectangle   maRect;
-    sal_uInt16  mnTextStyle;
-    OUString    maText;
+    Rectangle     maRect;
+    DrawTextFlags mnTextStyle;
+    OUString      maText;
 
 public:
     WaitWindow_Impl();
@@ -2425,7 +2425,7 @@ void SAL_CALL Updater_Impl::onTerminated()
 WaitWindow_Impl::WaitWindow_Impl() : WorkWindow(NULL, WB_BORDER | WB_3DLOOK)
 {
     Rectangle aRect = Rectangle(0, 0, 300, 30000);
-    mnTextStyle = TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE;
+    mnTextStyle = DrawTextFlags::Center | DrawTextFlags::VCenter | DrawTextFlags::WordBreak | DrawTextFlags::MultiLine;
     maText = SfxResId(RID_CNT_STR_WAITING).toString();
     maRect = GetTextRect(aRect, maText, mnTextStyle);
     aRect = maRect;

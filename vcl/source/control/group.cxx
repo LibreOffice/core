@@ -100,27 +100,27 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     OUString                aText( GetText() );
     Rectangle               aRect( rPos, rSize );
-    sal_uInt16                  nTextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_MNEMONIC;
+    DrawTextFlags           nTextStyle = DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::EndEllipsis | DrawTextFlags::Mnemonic;
 
     if ( GetStyle() & WB_NOLABEL )
-        nTextStyle &= ~TEXT_DRAW_MNEMONIC;
+        nTextStyle &= ~DrawTextFlags::Mnemonic;
     if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
     {
-        if ( nTextStyle & TEXT_DRAW_MNEMONIC )
+        if ( nTextStyle & DrawTextFlags::Mnemonic )
         {
             aText = GetNonMnemonicString( aText );
-            nTextStyle &= ~TEXT_DRAW_MNEMONIC;
+            nTextStyle &= ~DrawTextFlags::Mnemonic;
         }
     }
     if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
     {
         if ( !IsEnabled() )
-            nTextStyle |= TEXT_DRAW_DISABLE;
+            nTextStyle |= DrawTextFlags::Disable;
     }
     if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
          (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
     {
-        nTextStyle |= TEXT_DRAW_MONO;
+        nTextStyle |= DrawTextFlags::Mono;
         nDrawFlags |= WINDOW_DRAW_MONO;
     }
 

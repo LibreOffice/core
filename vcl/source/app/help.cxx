@@ -332,10 +332,10 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
         long nWidth = GetTextWidth( aXXX );
         Size aTmpSize( nWidth, 0x7FFFFFFF );
         Rectangle aTry1( aTmpPoint, aTmpSize );
-        sal_uInt16 nDrawFlags = TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK |
-                            TEXT_DRAW_LEFT | TEXT_DRAW_TOP;
+        DrawTextFlags nDrawFlags = DrawTextFlags::MultiLine | DrawTextFlags::WordBreak |
+                            DrawTextFlags::Left | DrawTextFlags::Top;
         if ( mnStyle & QuickHelpFlags::CtrlText )
-            nDrawFlags |= TEXT_DRAW_MNEMONIC;
+            nDrawFlags |= DrawTextFlags::Mnemonic;
         Rectangle aTextRect = GetTextRect( aTry1, maHelpText, nDrawFlags );
 
         // get a better width later...
@@ -380,10 +380,10 @@ void HelpTextWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle&
     }
     else // HELPWINSTYLE_BALLOON
     {
-        sal_uInt16 nDrawFlags = TEXT_DRAW_MULTILINE|TEXT_DRAW_WORDBREAK|
-                                TEXT_DRAW_LEFT|TEXT_DRAW_TOP;
+        DrawTextFlags nDrawFlags = DrawTextFlags::MultiLine|DrawTextFlags::WordBreak|
+                                DrawTextFlags::Left|DrawTextFlags::Top;
         if (mnStyle & QuickHelpFlags::CtrlText)
-            nDrawFlags |= TEXT_DRAW_MNEMONIC;
+            nDrawFlags |= DrawTextFlags::Mnemonic;
         rRenderContext.DrawText(maTextRect, maHelpText, nDrawFlags);
     }
 

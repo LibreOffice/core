@@ -938,9 +938,9 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
     long nYPos = aRect.Top() + ((aTabSize.Height() - nTextHeight) / 2) - nOff3;
     if (!pItem->maFormatText.isEmpty())
     {
-        sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC;
+        DrawTextFlags nStyle = DrawTextFlags::Mnemonic;
         if (!pItem->mbEnabled)
-            nStyle |= TEXT_DRAW_DISABLE;
+            nStyle |= DrawTextFlags::Disable;
 
         Color aColor(rStyleSettings.GetTabTextColor());
         if (nState & ControlState::SELECTED)

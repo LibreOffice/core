@@ -951,7 +951,7 @@ void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const Rectan
         aRect.Bottom() -= aOffset.Y();
 
         rRenderContext.DrawText(aRect, SD_RESSTR(STR_CUSTOMANIMATION_LIST_HELPTEXT),
-                                TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK | TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER );
+                                DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center | DrawTextFlags::VCenter );
 
         rRenderContext.SetTextColor(aOldColor);
     }

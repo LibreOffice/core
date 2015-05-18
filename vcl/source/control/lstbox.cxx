@@ -421,15 +421,15 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
     }
 
     long nOnePixel = GetDrawPixel( pDev, 1 );
-    sal_uInt16 nTextStyle = TEXT_DRAW_VCENTER;
+    DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
     Rectangle aTextRect( aPos, aSize );
 
     if ( GetStyle() & WB_CENTER )
-        nTextStyle |= TEXT_DRAW_CENTER;
+        nTextStyle |= DrawTextFlags::Center;
     else if ( GetStyle() & WB_RIGHT )
-        nTextStyle |= TEXT_DRAW_RIGHT;
+        nTextStyle |= DrawTextFlags::Right;
     else
-        nTextStyle |= TEXT_DRAW_LEFT;
+        nTextStyle |= DrawTextFlags::Left;
 
     aTextRect.Left() += 3*nOnePixel;
     aTextRect.Right() -= 3*nOnePixel;

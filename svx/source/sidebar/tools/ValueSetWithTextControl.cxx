@@ -204,7 +204,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
 
                 aStrRect.Left() += pImage->GetSizePixel().Width() + 12;
                 pDev->SetFont(aFont);
-                pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText, TEXT_DRAW_ENDELLIPSIS);
+                pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText, DrawTextFlags::EndEllipsis);
             }
             break;
         case TEXT_TEXT:
@@ -213,10 +213,10 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
                 aStrRect.Left() += 8;
                 aStrRect.Right() -= (nRectWidth*2)/3;
                 pDev->SetFont(aFont);
-                pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText, TEXT_DRAW_ENDELLIPSIS);
+                pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText, DrawTextFlags::EndEllipsis);
                 aStrRect.Left() += nRectWidth/3;
                 aStrRect.Right() += (nRectWidth*2)/3;
-                pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText2, TEXT_DRAW_ENDELLIPSIS);
+                pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText2, DrawTextFlags::EndEllipsis);
             }
             break;
         }

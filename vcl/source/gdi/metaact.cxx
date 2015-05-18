@@ -1422,14 +1422,14 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
 MetaTextRectAction::MetaTextRectAction() :
     MetaAction  ( MetaActionType::TEXTRECT ),
-    mnStyle     ( 0 )
+    mnStyle     ( DrawTextFlags::NONE )
 {}
 
 MetaTextRectAction::~MetaTextRectAction()
 {}
 
 MetaTextRectAction::MetaTextRectAction( const Rectangle& rRect,
-                                        const OUString& rStr, sal_uInt16 nStyle ) :
+                                        const OUString& rStr, DrawTextFlags nStyle ) :
     MetaAction  ( MetaActionType::TEXTRECT ),
     maRect      ( rRect ),
     maStr       ( rStr ),
@@ -1471,7 +1471,7 @@ void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
     WriteRectangle( rOStm, maRect );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
-    rOStm.WriteUInt16( mnStyle );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(mnStyle) );
 
     write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); // version 2
 }
@@ -1481,7 +1481,9 @@ void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRectangle( rIStm, maRect );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
-    rIStm  .ReadUInt16( mnStyle );
+    sal_uInt16 nTmp;
+    rIStm  .ReadUInt16( nTmp );
+    mnStyle = static_cast<DrawTextFlags>(nTmp);
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);

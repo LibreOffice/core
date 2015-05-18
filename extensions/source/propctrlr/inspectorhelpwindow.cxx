@@ -113,7 +113,7 @@ namespace pcr
 
         Rectangle aTextRect( Point( 0, 0 ), m_aHelpText->GetOutputSizePixel() );
         aTextRect = m_aHelpText->GetTextRect( aTextRect, m_aHelpText->GetText(),
-            TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+            DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
         long nActTextWindowHeight = impl_getHelpTextBorderHeight() + aTextRect.GetHeight();
 
         long nOptTextWindowHeight = ::std::max( nMinTextWindowHeight, ::std::min( nMaxTextWindowHeight, nActTextWindowHeight ) );

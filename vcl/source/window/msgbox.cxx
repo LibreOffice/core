@@ -194,7 +194,7 @@ void MessBox::ImplPosControls()
     long            nMaxLineWidth;
     long            nWidth;
     WinBits         nWinStyle = WB_LEFT | WB_NOLABEL;
-    sal_uInt16          nTextStyle = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP | TEXT_DRAW_LEFT;
+    DrawTextFlags   nTextStyle = DrawTextFlags::MultiLine | DrawTextFlags::Top | DrawTextFlags::Left;
 
     mpVCLMultiLineEdit.disposeAndClear();
     mpFixedImage.disposeAndClear();
@@ -245,7 +245,7 @@ void MessBox::ImplPosControls()
     // Determine maximum line length without wordbreak
     aFormatRect = GetTextRect( aRect, aMessText, nTextStyle, &aTextInfo );
     nMaxLineWidth = aFormatRect.GetWidth();
-    nTextStyle |= TEXT_DRAW_WORDBREAK;
+    nTextStyle |= DrawTextFlags::WordBreak;
 
     // Determine the width for text formatting
     if ( nMaxLineWidth > 450 )

@@ -86,10 +86,10 @@ void ImageControl::ImplDraw(OutputDevice& rDev, sal_uLong nDrawFlags, const Poin
             return;
 
         WinBits nWinStyle = GetStyle();
-        sal_uInt16 nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
+        DrawTextFlags nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
         if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
             if ( !IsEnabled() )
-                nTextStyle |= TEXT_DRAW_DISABLE;
+                nTextStyle |= DrawTextFlags::Disable;
 
         rDev.DrawText( aDrawRect, sText, nTextStyle );
         return;

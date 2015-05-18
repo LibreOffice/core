@@ -112,8 +112,8 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const Re
     else
         rRenderContext.SetTextColor(Application::GetSettings().GetStyleSettings().GetWindowTextColor());
 
-    rRenderContext.DrawText(aSourcePos, aSourceText, TEXT_DRAW_CLIP | TEXT_DRAW_CENTER | TEXT_DRAW_BOTTOM);
-    rRenderContext.DrawText(aDestPos, aDestText, TEXT_DRAW_CLIP | TEXT_DRAW_CENTER | TEXT_DRAW_BOTTOM);
+    rRenderContext.DrawText(aSourcePos, aSourceText, DrawTextFlags::Clip | DrawTextFlags::Center | DrawTextFlags::Bottom);
+    rRenderContext.DrawText(aDestPos, aDestText, DrawTextFlags::Clip | DrawTextFlags::Center | DrawTextFlags::Bottom);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

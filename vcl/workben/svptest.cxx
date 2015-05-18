@@ -269,7 +269,7 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
         rRenderContext.DrawText(Rectangle(Point((aPaperSize.Width() - 4000) / 2, 2000),
                                 Size(aPaperSize.Width() - 2100 - nMaxWidth, aPaperSize.Height() - 4000)),
                                 aPrintText.makeStringAndClear(),
-                                TEXT_DRAW_MULTILINE);
+                                DrawTextFlags::MultiLine);
     }
 
     rRenderContext.SetFillColor();

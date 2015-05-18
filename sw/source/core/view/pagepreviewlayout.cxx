@@ -1082,9 +1082,9 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
                 vcl::Font aOldFont( pOutputDev->GetFont() );
                 pOutputDev->SetFont( rEmptyPgFont );
                 pOutputDev->DrawText( aPageRect, SW_RESSTR( STR_EMPTYPAGE ),
-                                    TEXT_DRAW_VCENTER |
-                                    TEXT_DRAW_CENTER |
-                                    TEXT_DRAW_CLIP );
+                                    DrawTextFlags::VCenter |
+                                    DrawTextFlags::Center |
+                                    DrawTextFlags::Clip );
                 pOutputDev->SetFont( aOldFont );
                 // paint shadow and border for empty page
                 // OD 19.02.2003 #107369# - use new method to paint page border and shadow

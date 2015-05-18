@@ -52,7 +52,7 @@
 #endif
 
 
-#define TEXT_DRAW_ELLIPSIS  (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS | TEXT_DRAW_NEWSELLIPSIS)
+#define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
 
 ImplMultiTextLineInfo::ImplMultiTextLineInfo()
 {
@@ -494,7 +494,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 
 long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                      long nWidth, const OUString& rStr,
-                                     sal_uInt16 nStyle, const vcl::ITextLayout& _rLayout )
+                                     DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout )
 {
     DBG_ASSERTWARNING( nWidth >= 0, "ImplGetTextLines: nWidth <= 0!" );
 
@@ -509,8 +509,8 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
         // get service provider
         css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-        bool bHyphenate = (nStyle & TEXT_DRAW_WORDBREAK_HYPHENATION)
-            == TEXT_DRAW_WORDBREAK_HYPHENATION;
+        bool bHyphenate = (nStyle & DrawTextFlags::WordBreakHyphenation)
+            == DrawTextFlags::WordBreakHyphenation;
         css::uno::Reference< css::linguistic2::XHyphenator > xHyph;
         if ( bHyphenate )
         {
@@ -528,7 +528,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                 nBreakPos++;
 
             long nLineWidth = _rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
-            if ( ( nLineWidth > nWidth ) && ( nStyle & TEXT_DRAW_WORDBREAK ) )
+            if ( ( nLineWidth > nWidth ) && ( nStyle & DrawTextFlags::WordBreak ) )
             {
                 if ( !xBI.is() )
                     xBI = vcl::unohelper::CreateBreakIterator();
@@ -1535,7 +1535,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
 }
 
 void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
-                                 const OUString& rOrigStr, sal_uInt16 nStyle,
+                                 const OUString& rOrigStr, DrawTextFlags nStyle,
                                  MetricVector* pVector, OUString* pDisplayText,
                                  vcl::ITextLayout& _rLayout )
 {
@@ -1543,7 +1543,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
     Color aOldTextColor;
     Color aOldTextFillColor;
     bool  bRestoreFillColor = false;
-    if ( (nStyle & TEXT_DRAW_DISABLE) && ! pVector )
+    if ( (nStyle & DrawTextFlags::Disable) && ! pVector )
     {
         bool  bHighContrastBlack = false;
         bool  bHighContrastWhite = false;
@@ -1584,7 +1584,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
     long        nWidth          = rRect.GetWidth();
     long        nHeight         = rRect.GetHeight();
 
-    if ( ((nWidth <= 0) || (nHeight <= 0)) && (nStyle & TEXT_DRAW_CLIP) )
+    if ( ((nWidth <= 0) || (nHeight <= 0)) && (nStyle & DrawTextFlags::Clip) )
         return;
 
     Point       aPos            = rRect.TopLeft();
@@ -1594,13 +1594,13 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
     sal_Int32   nMnemonicPos    = -1;
 
     OUString aStr = rOrigStr;
-    if ( nStyle & TEXT_DRAW_MNEMONIC )
+    if ( nStyle & DrawTextFlags::Mnemonic )
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
 
     const bool bDrawMnemonics = !(rTargetDevice.GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector;
 
     // We treat multiline text differently
-    if ( nStyle & TEXT_DRAW_MULTILINE )
+    if ( nStyle & DrawTextFlags::MultiLine )
     {
 
         OUString                aLastLine;
@@ -1619,7 +1619,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                 nLines = 1;
             if ( nFormatLines > nLines )
             {
-                if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
+                if ( nStyle & DrawTextFlags::EndEllipsis )
                 {
                     // Create last line and shorten it
                     nFormatLines = nLines-1;
@@ -1636,31 +1636,31 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                     }
                     aLastLine = aLastLineBuffer.makeStringAndClear();
                     aLastLine = ImplGetEllipsisString( rTargetDevice, aLastLine, nWidth, nStyle, _rLayout );
-                    nStyle &= ~(TEXT_DRAW_VCENTER | TEXT_DRAW_BOTTOM);
-                    nStyle |= TEXT_DRAW_TOP;
+                    nStyle &= ~DrawTextFlags(DrawTextFlags::VCenter | DrawTextFlags::Bottom);
+                    nStyle |= DrawTextFlags::Top;
                 }
             }
             else
             {
                 if ( nMaxTextWidth <= nWidth )
-                    nStyle &= ~TEXT_DRAW_CLIP;
+                    nStyle &= ~DrawTextFlags::Clip;
             }
 
             // Do we need to clip the height?
             if ( nFormatLines*nTextHeight > nHeight )
-                nStyle |= TEXT_DRAW_CLIP;
+                nStyle |= DrawTextFlags::Clip;
 
             // Set clipping
-            if ( nStyle & TEXT_DRAW_CLIP )
+            if ( nStyle & DrawTextFlags::Clip )
             {
                 rTargetDevice.Push( PushFlags::CLIPREGION );
                 rTargetDevice.IntersectClipRegion( rRect );
             }
 
             // Vertical alignment
-            if ( nStyle & TEXT_DRAW_BOTTOM )
+            if ( nStyle & DrawTextFlags::Bottom )
                 aPos.Y() += nHeight-(nFormatLines*nTextHeight);
-            else if ( nStyle & TEXT_DRAW_VCENTER )
+            else if ( nStyle & DrawTextFlags::VCenter )
                 aPos.Y() += (nHeight-(nFormatLines*nTextHeight))/2;
 
             // Font alignment
@@ -1673,9 +1673,9 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             for ( i = 0; i < nFormatLines; i++ )
             {
                 pLineInfo = aMultiLineInfo.GetLine( i );
-                if ( nStyle & TEXT_DRAW_RIGHT )
+                if ( nStyle & DrawTextFlags::Right )
                     aPos.X() += nWidth-pLineInfo->GetWidth();
-                else if ( nStyle & TEXT_DRAW_CENTER )
+                else if ( nStyle & DrawTextFlags::Center )
                     aPos.X() += (nWidth-pLineInfo->GetWidth())/2;
                 sal_Int32 nIndex   = pLineInfo->GetIndex();
                 sal_Int32 nLineLen = pLineInfo->GetLen();
@@ -1710,7 +1710,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                 _rLayout.DrawText( aPos, aLastLine, 0, aLastLine.getLength(), pVector, pDisplayText );
 
             // Reset clipping
-            if ( nStyle & TEXT_DRAW_CLIP )
+            if ( nStyle & DrawTextFlags::Clip )
                 rTargetDevice.Pop();
         }
     }
@@ -1724,21 +1724,21 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             if ( nStyle & TEXT_DRAW_ELLIPSIS )
             {
                 aStr = ImplGetEllipsisString( rTargetDevice, aStr, nWidth, nStyle, _rLayout );
-                nStyle &= ~(TEXT_DRAW_CENTER | TEXT_DRAW_RIGHT);
-                nStyle |= TEXT_DRAW_LEFT;
+                nStyle &= ~DrawTextFlags(DrawTextFlags::Center | DrawTextFlags::Right);
+                nStyle |= DrawTextFlags::Left;
                 nTextWidth = _rLayout.GetTextWidth( aStr, 0, aStr.getLength() );
             }
         }
         else
         {
             if ( nTextHeight <= nHeight )
-                nStyle &= ~TEXT_DRAW_CLIP;
+                nStyle &= ~DrawTextFlags::Clip;
         }
 
         // horizontal text alignment
-        if ( nStyle & TEXT_DRAW_RIGHT )
+        if ( nStyle & DrawTextFlags::Right )
             aPos.X() += nWidth-nTextWidth;
-        else if ( nStyle & TEXT_DRAW_CENTER )
+        else if ( nStyle & DrawTextFlags::Center )
             aPos.X() += (nWidth-nTextWidth)/2;
 
         // vertical font alignment
@@ -1747,9 +1747,9 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         else if ( eAlign == ALIGN_BASELINE )
             aPos.Y() += rTargetDevice.GetFontMetric().GetAscent();
 
-        if ( nStyle & TEXT_DRAW_BOTTOM )
+        if ( nStyle & DrawTextFlags::Bottom )
             aPos.Y() += nHeight-nTextHeight;
-        else if ( nStyle & TEXT_DRAW_VCENTER )
+        else if ( nStyle & DrawTextFlags::VCenter )
             aPos.Y() += (nHeight-nTextHeight)/2;
 
         long nMnemonicX = 0;
@@ -1768,7 +1768,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             nMnemonicY = rTargetDevice.GetOutOffYPixel() + aTempPos.Y() + rTargetDevice.ImplLogicWidthToDevicePixel( rTargetDevice.GetFontMetric().GetAscent() );
         }
 
-        if ( nStyle & TEXT_DRAW_CLIP )
+        if ( nStyle & DrawTextFlags::Clip )
         {
             rTargetDevice.Push( PushFlags::CLIPREGION );
             rTargetDevice.IntersectClipRegion( rRect );
@@ -1791,7 +1791,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         }
     }
 
-    if ( nStyle & TEXT_DRAW_DISABLE && !pVector )
+    if ( nStyle & DrawTextFlags::Disable && !pVector )
     {
         rTargetDevice.SetTextColor( aOldTextColor );
         if ( bRestoreFillColor )
@@ -1801,7 +1801,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
 void OutputDevice::AddTextRectActions( const Rectangle& rRect,
                                        const OUString&  rOrigStr,
-                                       sal_uInt16       nStyle,
+                                       DrawTextFlags    nStyle,
                                        GDIMetaFile&     rMtf )
 {
 
@@ -1832,7 +1832,7 @@ void OutputDevice::AddTextRectActions( const Rectangle& rRect,
     mpMetaFile = pMtf;
 }
 
-void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, sal_uInt16 nStyle,
+void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle,
                              MetricVector* pVector, OUString* pDisplayText,
                              vcl::ITextLayout* _pTextLayout )
 {
@@ -1876,7 +1876,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, s
 }
 
 Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
-                                     const OUString& rStr, sal_uInt16 nStyle,
+                                     const OUString& rStr, DrawTextFlags nStyle,
                                      TextRectInfo* pInfo,
                                      const vcl::ITextLayout* _pTextLayout ) const
 {
@@ -1888,10 +1888,10 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
     long                nTextHeight = GetTextHeight();
 
     OUString aStr = rStr;
-    if ( nStyle & TEXT_DRAW_MNEMONIC )
+    if ( nStyle & DrawTextFlags::Mnemonic )
         aStr = GetNonMnemonicString( aStr );
 
-    if ( nStyle & TEXT_DRAW_MULTILINE )
+    if ( nStyle & DrawTextFlags::MultiLine )
     {
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
@@ -1913,7 +1913,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
             nLines = nFormatLines;
         else
         {
-            if ( !(nStyle & TEXT_DRAW_ENDELLIPSIS) )
+            if ( !(nStyle & DrawTextFlags::EndEllipsis) )
                 nLines = nFormatLines;
             else
             {
@@ -1964,9 +1964,9 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
         }
     }
 
-    if ( nStyle & TEXT_DRAW_RIGHT )
+    if ( nStyle & DrawTextFlags::Right )
         aRect.Left() = aRect.Right()-nMaxWidth+1;
-    else if ( nStyle & TEXT_DRAW_CENTER )
+    else if ( nStyle & DrawTextFlags::Center )
     {
         aRect.Left() += (nWidth-nMaxWidth)/2;
         aRect.Right() = aRect.Left()+nMaxWidth-1;
@@ -1974,9 +1974,9 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
     else
         aRect.Right() = aRect.Left()+nMaxWidth-1;
 
-    if ( nStyle & TEXT_DRAW_BOTTOM )
+    if ( nStyle & DrawTextFlags::Bottom )
         aRect.Top() = aRect.Bottom()-(nTextHeight*nLines)+1;
-    else if ( nStyle & TEXT_DRAW_VCENTER )
+    else if ( nStyle & DrawTextFlags::VCenter )
     {
         aRect.Top()   += (aRect.GetHeight()-(nTextHeight*nLines))/2;
         aRect.Bottom() = aRect.Top()+(nTextHeight*nLines)-1;
@@ -1985,7 +1985,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
         aRect.Bottom() = aRect.Top()+(nTextHeight*nLines)-1;
 
     // #99188# get rid of rounding problems when using this rect later
-    if (nStyle & TEXT_DRAW_RIGHT)
+    if (nStyle & DrawTextFlags::Right)
         aRect.Left()--;
     else
         aRect.Right()++;
@@ -2005,21 +2005,21 @@ static bool ImplIsCharIn( sal_Unicode c, const sal_Char* pStr )
 }
 
 OUString OutputDevice::GetEllipsisString( const OUString& rOrigStr, long nMaxWidth,
-                                        sal_uInt16 nStyle ) const
+                                        DrawTextFlags nStyle ) const
 {
     vcl::DefaultTextLayout aTextLayout( *const_cast< OutputDevice* >( this ) );
     return ImplGetEllipsisString( *this, rOrigStr, nMaxWidth, nStyle, aTextLayout );
 }
 
 OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rOrigStr, long nMaxWidth,
-                                               sal_uInt16 nStyle, const vcl::ITextLayout& _rLayout )
+                                               DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout )
 {
     OUString aStr = rOrigStr;
     sal_Int32 nIndex = _rLayout.GetTextBreak( aStr, nMaxWidth, 0, aStr.getLength() );
 
     if ( nIndex != -1 )
     {
-        if( (nStyle & TEXT_DRAW_CENTERELLIPSIS) == TEXT_DRAW_CENTERELLIPSIS )
+        if( (nStyle & DrawTextFlags::CenterEllipsis) == DrawTextFlags::CenterEllipsis )
         {
             OUStringBuffer aTmpStr( aStr );
             // speed it up by removing all but 1.33x as many as the break pos.
@@ -2033,7 +2033,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
             }
             aStr = aTmpStr.makeStringAndClear();
         }
-        else if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
+        else if ( nStyle & DrawTextFlags::EndEllipsis )
         {
             aStr = aStr.copy(0, nIndex);
             if ( nIndex > 1 )
@@ -2047,17 +2047,17 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                 }
             }
 
-            if ( aStr.isEmpty() && (nStyle & TEXT_DRAW_CLIP) )
+            if ( aStr.isEmpty() && (nStyle & DrawTextFlags::Clip) )
                 aStr += OUString(rOrigStr[ 0 ]);
         }
-        else if ( nStyle & TEXT_DRAW_PATHELLIPSIS )
+        else if ( nStyle & DrawTextFlags::PathEllipsis )
         {
             OUString aPath( rOrigStr );
             OUString aAbbreviatedPath;
             osl_abbreviateSystemPath( aPath.pData, &aAbbreviatedPath.pData, nIndex, NULL );
             aStr = aAbbreviatedPath;
         }
-        else if ( nStyle & TEXT_DRAW_NEWSELLIPSIS )
+        else if ( nStyle & DrawTextFlags::NewsEllipsis )
         {
             static sal_Char const   pSepChars[] = ".";
             // Determine last section
@@ -2076,7 +2076,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
             OUString aTempLastStr1( "..." );
             aTempLastStr1 += aLastStr;
             if ( _rLayout.GetTextWidth( aTempLastStr1, 0, aTempLastStr1.getLength() ) > nMaxWidth )
-                aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS, _rLayout );
+                aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
             else
             {
                 sal_Int32 nFirstContent = 0;
@@ -2091,7 +2091,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                     nFirstContent++;
                 // MEM continue here
                 if ( nFirstContent >= nLastContent )
-                    aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS, _rLayout );
+                    aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
                 else
                 {
                     if ( nFirstContent > 4 )
@@ -2100,7 +2100,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                     aFirstStr += "...";
                     OUString aTempStr = aFirstStr + aLastStr;
                     if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
-                        aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS, _rLayout );
+                        aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
                     else
                     {
                         do
@@ -2140,7 +2140,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
 
 void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
                                  sal_Int32 nIndex, sal_Int32 nLen,
-                                 sal_uInt16 nStyle, MetricVector* pVector, OUString* pDisplayText )
+                                 DrawTextFlags nStyle, MetricVector* pVector, OUString* pDisplayText )
 {
 
     if(nLen == 0x0FFFF)
@@ -2178,7 +2178,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     long        nMnemonicX = 0;
     long        nMnemonicY = 0;
     long        nMnemonicWidth = 0;
-    if ( (nStyle & TEXT_DRAW_MNEMONIC) && nLen > 1 )
+    if ( (nStyle & DrawTextFlags::Mnemonic) && nLen > 1 )
     {
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
         if ( nMnemonicPos != -1 )
@@ -2222,7 +2222,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         }
     }
 
-    if ( nStyle & TEXT_DRAW_DISABLE && ! pVector )
+    if ( nStyle & DrawTextFlags::Disable && ! pVector )
     {
         Color aOldTextColor;
         Color aOldTextFillColor;
@@ -2283,7 +2283,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
 
 long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
                                      sal_Int32 nIndex, sal_Int32 nLen,
-                                     sal_uInt16 nStyle ) const
+                                     DrawTextFlags nStyle ) const
 {
     if(nLen == 0x0FFFF)
     {
@@ -2296,7 +2296,7 @@ long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
         nLen = rStr.getLength() - nIndex;
     }
 
-    if ( nStyle & TEXT_DRAW_MNEMONIC )
+    if ( nStyle & DrawTextFlags::Mnemonic )
     {
         sal_Int32  nMnemonicPos;
         OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );

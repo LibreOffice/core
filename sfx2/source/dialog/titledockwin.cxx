@@ -210,7 +210,7 @@ namespace sfx2
         rRenderContext.SetLineColor(rStyleSettings.GetActiveTextColor());
         aTitleBarBox.Left() += 3;
         rRenderContext.DrawText(aTitleBarBox, impl_getTitle(),
-                               TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK);
+                               DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
 
         // Restore original values of the output device.
         rRenderContext.Pop();

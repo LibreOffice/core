@@ -88,7 +88,7 @@ protected:
         directly at the target device, or taking the reference device into account) when returning.
     */
     void        DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect,
-                                 const OUString& _rStr, sal_uInt16 _nStyle,
+                                 const OUString& _rStr, DrawTextFlags _nStyle,
                                  MetricVector* _pVector, OUString* _pDisplayText ) const;
 
     virtual const vcl::Font&

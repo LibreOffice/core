@@ -648,7 +648,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool 
     // So the first text column's width is Tab(2)-Tab(1).
     long nWidthPixel = m_pTbLinks->GetLogicTab( 2 ) - m_pTbLinks->GetLogicTab( 1 );
     nWidthPixel -= SV_TAB_BORDER;
-    OUString aTxt = m_pTbLinks->GetEllipsisString( sFileNm, nWidthPixel, TEXT_DRAW_PATHELLIPSIS );
+    OUString aTxt = m_pTbLinks->GetEllipsisString( sFileNm, nWidthPixel, DrawTextFlags::PathEllipsis );
     INetURLObject aPath( sFileNm, INetProtocol::File );
     OUString aFileName = aPath.getName();
     aFileName = INetURLObject::decode(aFileName, INetURLObject::DECODE_UNAMBIGUOUS);

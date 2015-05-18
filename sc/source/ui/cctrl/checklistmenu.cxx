@@ -362,7 +362,7 @@ void ScMenuFloatingWindow::drawMenuItem(vcl::RenderContext& rRenderContext, size
     long nYOffset = (aSize.Height() - maLabelFont.GetHeight())/2;
     rRenderContext. DrawCtrlText(Point(aPos.X()+nXOffset, aPos.Y() + nYOffset), maMenuItems[nPos].maText, 0,
                                  maMenuItems[nPos].maText.getLength(),
-                                 maMenuItems[nPos].mbEnabled ? TEXT_DRAW_MNEMONIC : TEXT_DRAW_DISABLE);
+                                 maMenuItems[nPos].mbEnabled ? DrawTextFlags::Mnemonic : DrawTextFlags::Disable);
 
     if (maMenuItems[nPos].mpSubMenuWin)
     {

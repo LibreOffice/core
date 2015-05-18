@@ -87,7 +87,7 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
         long nX = static_cast< long >( mnCenterX - fWidth * fCos - fHeight * fSin );
         long nY = static_cast< long >( mnCenterY + fWidth * fSin - fHeight * fCos );
         Rectangle aRect( nX, nY, 2 * mnCenterX - nX, 2 * mnCenterY - nY );
-        DrawText( aRect, rText, mbEnabled ? 0 : TEXT_DRAW_DISABLE );
+        DrawText( aRect, rText, mbEnabled ? DrawTextFlags::NONE : DrawTextFlags::Disable );
     }
     else
     {

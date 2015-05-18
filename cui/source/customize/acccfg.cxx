@@ -649,7 +649,7 @@ void SfxAccCfgLBoxString_Impl::Paint(const Point& aPos, SvTreeListBox& /*rDevice
     if (pUserData->m_bIsConfigurable)
         rRenderContext.DrawText(aPos, GetText());
     else
-        rRenderContext.DrawCtrlText(aPos, GetText(), 0, -1, TEXT_DRAW_DISABLE);
+        rRenderContext.DrawCtrlText(aPos, GetText(), 0, -1, DrawTextFlags::Disable);
 
 }
 

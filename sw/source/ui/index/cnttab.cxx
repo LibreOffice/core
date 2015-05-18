@@ -4009,7 +4009,7 @@ OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
                                 const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
-    const sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
+    const DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::Center;
     rDev.DrawText( rRect, GetCellText( nCurrentRow, nColumnId ), nStyle );
 }
 

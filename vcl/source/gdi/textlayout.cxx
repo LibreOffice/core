@@ -88,7 +88,7 @@ namespace vcl
     public:
         // equivalents to the respective OutputDevice methods, which take the reference device into account
         long        GetTextArray( const OUString& _rText, long* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
-        Rectangle   DrawText( const Rectangle& _rRect, const OUString& _rText, sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText );
+        Rectangle   DrawText( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText );
 
     protected:
         void onBeginDrawText()
@@ -258,7 +258,7 @@ namespace vcl
         return true;
     }
 
-    Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const OUString& _rText, sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText )
+    Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText )
     {
         if ( _rText.isEmpty() )
             return Rectangle();
@@ -317,7 +317,7 @@ namespace vcl
     {
     }
 
-    Rectangle ControlTextRenderer::DrawText( const Rectangle& _rRect, const OUString& _rText, sal_uInt16 _nStyle,
+    Rectangle ControlTextRenderer::DrawText( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle,
         MetricVector* _pVector, OUString* _pDisplayText )
     {
         return m_pImpl->DrawText( _rRect, _rText, _nStyle, _pVector, _pDisplayText );

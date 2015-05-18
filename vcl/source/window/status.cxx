@@ -396,12 +396,12 @@ void StatusBar::ImplDrawText(vcl::RenderContext& rRenderContext, bool bOffScreen
             mpImplData->mpVirDev->SetOutputSizePixel( aVirDevSize );
             Rectangle aTempRect = aTextRect;
             aTempRect.SetPos(Point(0, 0));
-            mpImplData->mpVirDev->DrawText( aTempRect, aStr, TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_CLIP | TEXT_DRAW_ENDELLIPSIS );
+            mpImplData->mpVirDev->DrawText( aTempRect, aStr, DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::Clip | DrawTextFlags::EndEllipsis );
             rRenderContext.DrawOutDev(aTextRect.TopLeft(), aVirDevSize, Point(), aVirDevSize, *mpImplData->mpVirDev);
         }
         else
         {
-            rRenderContext.DrawText(aTextRect, aStr, TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_CLIP | TEXT_DRAW_ENDELLIPSIS);
+            rRenderContext.DrawText(aTextRect, aStr, DrawTextFlags::Left | DrawTextFlags::Top | DrawTextFlags::Clip | DrawTextFlags::EndEllipsis);
         }
     }
 }

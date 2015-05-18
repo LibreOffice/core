@@ -83,7 +83,7 @@ namespace svt
         Rectangle   impl_calcTextBoundingBox() const;
         Rectangle   impl_calcTitleBarBox( const Rectangle& i_rTextBox ) const;
         void        impl_paintBackground( const Rectangle& i_rTitleBarBox );
-        sal_uInt16      impl_getTextStyle() const;
+        DrawTextFlags impl_getTextStyle() const;
         void        impl_paintFocusIndicator( const Rectangle& i_rTextBox );
         Rectangle   impl_paintExpansionIndicator( const Rectangle& i_rTextBox );
         Image       impl_getExpansionIndicator() const;

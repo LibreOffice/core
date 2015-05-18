@@ -48,7 +48,7 @@ private:
     SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize, bool bFillLayout = false ) const;
 public:
-    SAL_DLLPRIVATE static sal_uInt16   ImplGetTextStyle( WinBits nWinBits );
+    SAL_DLLPRIVATE static DrawTextFlags ImplGetTextStyle( WinBits nWinBits );
 protected:
     virtual void    FillLayoutData() const SAL_OVERRIDE;
     virtual const vcl::Font&

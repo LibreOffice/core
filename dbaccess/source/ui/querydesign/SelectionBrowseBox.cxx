@@ -1226,7 +1226,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, 
     if (nRow == BROW_VIS_ROW)
         PaintTristate(rDev, rRect, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE);
     else
-        rDev.DrawText(rRect, GetCellText(nRow, nColumnId),TEXT_DRAW_VCENTER);
+        rDev.DrawText(rRect, GetCellText(nRow, nColumnId),DrawTextFlags::VCenter);
 
     rDev.SetClipRegion( );
 }
@@ -1240,7 +1240,7 @@ void OSelectionBrowseBox::PaintStatusCell(OutputDevice& rDev, const Rectangle& r
    // from BROW_CRIT2_ROW onwards all rows are shown "or"
     sal_Int32 nToken = (m_nSeekRow >= GetBrowseRow(BROW_CRIT2_ROW))
         ?  BROW_CRIT2_ROW : GetRealRow(m_nSeekRow);
-    rDev.DrawText(aRect, aLabel.getToken(nToken, ';'),TEXT_DRAW_VCENTER);
+    rDev.DrawText(aRect, aLabel.getToken(nToken, ';'),DrawTextFlags::VCenter);
 }
 
 void OSelectionBrowseBox::RemoveColumn(sal_uInt16 _nColumnId)

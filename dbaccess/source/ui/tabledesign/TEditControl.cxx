@@ -309,7 +309,7 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
 
     rDev.Push( PushFlags::CLIPREGION );
     rDev.SetClipRegion(vcl::Region(rRect));
-    rDev.DrawText( rRect, aText, TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER );
+    rDev.DrawText( rRect, aText, DrawTextFlags::Left | DrawTextFlags::VCenter );
     rDev.Pop();
 }
 

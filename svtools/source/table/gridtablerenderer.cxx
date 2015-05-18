@@ -143,26 +143,26 @@ namespace svt { namespace table
             return aTextArea;
         }
 
-        static sal_uLong lcl_getAlignmentTextDrawFlags( GridTableRenderer_Impl const & i_impl, ColPos const i_columnPos )
+        static DrawTextFlags lcl_getAlignmentTextDrawFlags( GridTableRenderer_Impl const & i_impl, ColPos const i_columnPos )
         {
-            sal_uLong nVertFlag = TEXT_DRAW_TOP;
+            DrawTextFlags nVertFlag = DrawTextFlags::Top;
             VerticalAlignment const eVertAlign = i_impl.rModel.getVerticalAlign();
             switch ( eVertAlign )
             {
-            case VerticalAlignment_MIDDLE:  nVertFlag = TEXT_DRAW_VCENTER;  break;
-            case VerticalAlignment_BOTTOM:  nVertFlag = TEXT_DRAW_BOTTOM;   break;
+            case VerticalAlignment_MIDDLE:  nVertFlag = DrawTextFlags::VCenter;  break;
+            case VerticalAlignment_BOTTOM:  nVertFlag = DrawTextFlags::Bottom;   break;
             default:
                 break;
             }
 
-            sal_uLong nHorzFlag = TEXT_DRAW_LEFT;
+            DrawTextFlags nHorzFlag = DrawTextFlags::Left;
             HorizontalAlignment const eHorzAlign = i_impl.rModel.getColumnCount() > 0
                                                 ?  i_impl.rModel.getColumnModel( i_columnPos )->getHorizontalAlign()
                                                 :  HorizontalAlignment_CENTER;
             switch ( eHorzAlign )
             {
-            case HorizontalAlignment_CENTER:    nHorzFlag = TEXT_DRAW_CENTER;   break;
-            case HorizontalAlignment_RIGHT:     nHorzFlag = TEXT_DRAW_RIGHT;    break;
+            case HorizontalAlignment_CENTER:    nHorzFlag = DrawTextFlags::Center;   break;
+            case HorizontalAlignment_RIGHT:     nHorzFlag = DrawTextFlags::Right;    break;
             default:
                 break;
             }
@@ -254,9 +254,9 @@ namespace svt { namespace table
         rRenderContext.SetTextColor(textColor);
 
         Rectangle const aTextRect( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, _rArea ) ) );
-        sal_uLong nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, _nCol ) | TEXT_DRAW_CLIP;
+        DrawTextFlags nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, _nCol ) | DrawTextFlags::Clip;
         if (!m_pImpl->rModel.isEnabled())
-            nDrawTextFlags |= TEXT_DRAW_DISABLE;
+            nDrawTextFlags |= DrawTextFlags::Disable;
         rRenderContext.DrawText( aTextRect, sHeaderText, nDrawTextFlags );
 
         boost::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
@@ -279,7 +279,7 @@ namespace svt { namespace table
             long const nSortIndicatorPaddingX = 2;
             long const nSortIndicatorPaddingY = ( nHeaderHeight - aBitmapSize.Height() ) / 2;
 
-            if ( ( nDrawTextFlags & TEXT_DRAW_RIGHT ) != 0 )
+            if ( nDrawTextFlags & DrawTextFlags::Right )
             {
                 // text is right aligned => draw the sort indicator at the left hand side
                 rRenderContext.DrawBitmapEx(Point(_rArea.Left() + nSortIndicatorPaddingX, _rArea.Top() + nSortIndicatorPaddingY),
@@ -388,9 +388,9 @@ namespace svt { namespace table
             rRenderContext.SetTextColor(textColor);
 
             Rectangle const aTextRect(lcl_getTextRenderingArea(lcl_getContentArea(*m_pImpl, _rArea)));
-            sal_uLong nDrawTextFlags = lcl_getAlignmentTextDrawFlags(*m_pImpl, 0) | TEXT_DRAW_CLIP;
+            DrawTextFlags nDrawTextFlags = lcl_getAlignmentTextDrawFlags(*m_pImpl, 0) | DrawTextFlags::Clip;
             if (!m_pImpl->rModel.isEnabled())
-                nDrawTextFlags |= TEXT_DRAW_DISABLE;
+                nDrawTextFlags |= DrawTextFlags::Disable;
                 // TODO: is using the horizontal alignment of the 0'th column a good idea here? This is pretty ... arbitray ..
             rRenderContext.DrawText(aTextRect, rowTitle, nDrawTextFlags);
         }
@@ -538,9 +538,9 @@ namespace svt { namespace table
         }
 
         Rectangle const textRect( lcl_getTextRenderingArea( i_context.aContentArea ) );
-        sal_uLong nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, i_context.nColumn ) | TEXT_DRAW_CLIP;
+        DrawTextFlags nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, i_context.nColumn ) | DrawTextFlags::Clip;
         if ( !m_pImpl->rModel.isEnabled() )
-            nDrawTextFlags |= TEXT_DRAW_DISABLE;
+            nDrawTextFlags |= DrawTextFlags::Disable;
         i_context.rDevice.DrawText( textRect, i_text, nDrawTextFlags );
     }
 

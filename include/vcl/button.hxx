@@ -49,10 +49,10 @@ private:
 public:
     SAL_DLLPRIVATE DrawButtonFlags  ImplGetButtonState() const;
     SAL_DLLPRIVATE DrawButtonFlags& ImplGetButtonState();
-    SAL_DLLPRIVATE sal_uInt16       ImplGetTextStyle( OUString& rText, WinBits nWinStyle, sal_uLong nDrawFlags );
+    SAL_DLLPRIVATE DrawTextFlags    ImplGetTextStyle( OUString& rText, WinBits nWinStyle, sal_uLong nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos, Size& rSize,
                                               bool bLayout, sal_uLong nImageSep, sal_uLong nDrawFlags,
-                                              sal_uInt16 nTextStyle, Rectangle *pSymbolRect=NULL, bool bAddImageSep = false );
+                                              DrawTextFlags nTextStyle, Rectangle *pSymbolRect=NULL, bool bAddImageSep = false );
     SAL_DLLPRIVATE void             ImplSetFocusRect( const Rectangle &rFocusRect );
     SAL_DLLPRIVATE const Rectangle& ImplGetFocusRect() const;
     SAL_DLLPRIVATE void             ImplSetSymbolAlign( SymbolAlign eAlign );
@@ -130,7 +130,7 @@ protected:
                                                              const Rectangle& rRect, bool bLayout, bool bMenuBtnSep);
     SAL_DLLPRIVATE void            ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLayout = false);
     using Button::ImplGetTextStyle;
-    SAL_DLLPRIVATE sal_uInt16      ImplGetTextStyle( sal_uLong nDrawFlags ) const;
+    SAL_DLLPRIVATE DrawTextFlags   ImplGetTextStyle( sal_uLong nDrawFlags ) const;
     SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SymbolType::DONTKNOW) && (meSymbol != SymbolType::IMAGE) ); }
     SAL_DLLPRIVATE bool            IsImage() const { return Button::HasImage(); }
 

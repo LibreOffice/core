@@ -133,7 +133,7 @@ void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::Rende
                  || (xDlgLibContainer.is() && xDlgLibContainer->hasByName(aLibName) && xDlgLibContainer->isLibraryReadOnly(aLibName));
     }
     if (bReadOnly)
-        rRenderContext.DrawCtrlText(rPos, GetText(), 0, -1, TEXT_DRAW_DISABLE);
+        rRenderContext.DrawCtrlText(rPos, GetText(), 0, -1, DrawTextFlags::Disable);
     else
         rRenderContext.DrawText(rPos, GetText());
 }

@@ -3490,9 +3490,9 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
 
                 pSh->GetOut()->SetFont( rEmptyPageFont );
                 pSh->GetOut()->DrawText( aEmptyPageRect.SVRect(), SW_RESSTR( STR_EMPTYPAGE ),
-                                    TEXT_DRAW_VCENTER |
-                                    TEXT_DRAW_CENTER |
-                                    TEXT_DRAW_CLIP );
+                                    DrawTextFlags::VCenter |
+                                    DrawTextFlags::Center |
+                                    DrawTextFlags::Clip );
 
                 pSh->GetOut()->SetFont( aOldFont );
                 // paint shadow and border for empty page

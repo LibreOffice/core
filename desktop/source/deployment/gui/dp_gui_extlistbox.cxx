@@ -390,7 +390,7 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     aText += m_vEntries[ nPos ]->m_sDescription;
 
     Rectangle aRect = GetTextRect( Rectangle( Point(), aSize ), aText,
-                                   TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+                                   DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
     aTextHeight += aRect.GetHeight();
 
     if ( aTextHeight < m_nStdHeight )
@@ -613,7 +613,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const Rectan
             nExtraHeight = m_nExtraHeight;
 
         rRenderContext.DrawText(Rectangle(aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight),
-                                sDescription, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+                                sDescription, DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
     }
     else
     {

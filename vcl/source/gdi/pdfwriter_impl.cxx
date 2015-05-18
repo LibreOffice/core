@@ -209,7 +209,7 @@ void doTestCode()
     aWriter.SetStructureAttribute( PDFWriter::TextDecorationType, PDFWriter::Underline );
     aWriter.DrawText( Rectangle( Point( 4500, 10000 ), Size( 12000, 6000 ) ),
                      "It was the best of PDF, it was the worst of PDF ... or so. This is a pretty nonsensical text to denote a paragraph. I suggest you stop reading it. Because if you read on you might get bored. So continue on your on risk. Hey, you're still here ? Why do you continue to read this as it is of no use at all ? OK, it's your time, but still... . Woah, i even get bored writing this, so let's end this here and now.",
-                      TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
+                      DrawTextFlags::MultiLine | DrawTextFlags::WordBreak
                       );
     aWriter.SetActualText( "It was the best of PDF, it was the worst of PDF ... or so. This is a pretty nonsensical text to denote a paragraph. I suggest you stop reading it. Because if you read on you might get bored. So continue on your on risk. Hey, you're still here ? Why do you continue to read this as it is of no use at all ? OK, it's your time, but still... . Woah, i even get bored writing this, so let's end this here and now." );
     aWriter.SetAlternateText( "This paragraph contains some lengthy nonsense to test structural element emission of PDFWriter." );
@@ -218,7 +218,7 @@ void doTestCode()
     aWriter.SetStructureAttribute( PDFWriter::WritingMode, PDFWriter::LrTb );
     aWriter.DrawText( Rectangle( Point( 4500, 19000 ), Size( 12000, 1000 ) ),
                       "This paragraph is nothing special either but ends on the next page structurewise",
-                      TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
+                      DrawTextFlags::MultiLine | DrawTextFlags::WordBreak
                       );
 
     aWriter.NewPage( 595, 842 );
@@ -231,7 +231,7 @@ void doTestCode()
     aWriter.SetFont( Font( OUString( "Times" ), Size( 0, 500 ) ) );
     aWriter.DrawText( Rectangle( Point( 4500, 1500 ), Size( 12000, 3000 ) ),
                       "Here's where all things come to an end ... well at least the paragraph from the last page.",
-                      TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
+                      DrawTextFlags::MultiLine | DrawTextFlags::WordBreak
                       );
     aWriter.EndStructureElement();
 
@@ -287,7 +287,7 @@ void doTestCode()
     aWriter.SetTextColor( Color( COL_LIGHTBLUE ) );
     aWriter.DrawText( aTranspRect,
                       "Some transparent text",
-                      TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+                      DrawTextFlags::Center | DrawTextFlags::VCenter | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
 
     aWriter.EndTransparencyGroup( aTranspRect, 50 );
 
@@ -311,7 +311,7 @@ void doTestCode()
     aWriter.SetTextColor( Color( COL_LIGHTBLUE ) );
     aWriter.DrawText( aTranspRect,
                       "Some transparent text",
-                      TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+                      DrawTextFlags::Center | DrawTextFlags::VCenter | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
     aTranspRect = Rectangle( Point( 1500, 16500 ), Size( 4800, 3000 ) );
     aWriter.SetFillColor( Color( COL_LIGHTRED ) );
     aWriter.DrawRect( aTranspRect );
@@ -449,7 +449,7 @@ void doTestCode()
     aEditBox.Name = "testEdit";
     aEditBox.Description = "A test edit field";
     aEditBox.Text = "A little test text";
-    aEditBox.TextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER;
+    aEditBox.TextStyle = DrawTextFlags::Left | DrawTextFlags::VCenter;
     aEditBox.Location = Rectangle( Point( 10000, 18000 ), Size( 5000, 1500 ) );
     aEditBox.MaxLen = 100;
     aEditBox.Border = aEditBox.Background = true;
@@ -5586,9 +5586,9 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             aLine.append( "/DA" );
             appendLiteralStringEncrypt( rWidget.m_aDAString, rWidget.m_nObject, aLine );
             aLine.append( "\n" );
-            if( rWidget.m_nTextStyle & TEXT_DRAW_CENTER )
+            if( rWidget.m_nTextStyle & DrawTextFlags::Center )
                 aLine.append( "/Q 1\n" );
-            else if( rWidget.m_nTextStyle & TEXT_DRAW_RIGHT )
+            else if( rWidget.m_nTextStyle & DrawTextFlags::Right )
                 aLine.append( "/Q 2\n" );
         }
         // appearance charactristics for terminal fields
@@ -9343,7 +9343,7 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const 
     }
 }
 
-void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, sal_uInt16 nStyle, bool bTextLines )
+void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle, bool bTextLines )
 {
     long        nWidth          = rRect.GetWidth();
     long        nHeight         = rRect.GetHeight();
@@ -9370,11 +9370,11 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
     sal_Int32   nMnemonicPos    = -1;
 
     OUString aStr = rOrigStr;
-    if ( nStyle & TEXT_DRAW_MNEMONIC )
+    if ( nStyle & DrawTextFlags::Mnemonic )
         aStr = OutputDevice::GetNonMnemonicString( aStr, nMnemonicPos );
 
     // multiline text
-    if ( nStyle & TEXT_DRAW_MULTILINE )
+    if ( nStyle & DrawTextFlags::MultiLine )
     {
         OUString           aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
@@ -9393,7 +9393,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
                 nLines = 1;
             if ( nFormatLines > nLines )
             {
-                if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
+                if ( nStyle & DrawTextFlags::EndEllipsis )
                 {
                     // handle last line
                     nFormatLines = nLines-1;
@@ -9403,24 +9403,24 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
                     // replace line feed by space
                     aLastLine = aLastLine.replace('\n', ' ');
                     aLastLine = m_pReferenceDevice->GetEllipsisString( aLastLine, nWidth, nStyle );
-                    nStyle &= ~(TEXT_DRAW_VCENTER | TEXT_DRAW_BOTTOM);
-                    nStyle |= TEXT_DRAW_TOP;
+                    nStyle &= ~DrawTextFlags(DrawTextFlags::VCenter | DrawTextFlags::Bottom);
+                    nStyle |= DrawTextFlags::Top;
                 }
             }
 
             // vertical alignment
-            if ( nStyle & TEXT_DRAW_BOTTOM )
+            if ( nStyle & DrawTextFlags::Bottom )
                 aPos.Y() += nHeight-(nFormatLines*nTextHeight);
-            else if ( nStyle & TEXT_DRAW_VCENTER )
+            else if ( nStyle & DrawTextFlags::VCenter )
                 aPos.Y() += (nHeight-(nFormatLines*nTextHeight))/2;
 
             // draw all lines excluding the last
             for ( i = 0; i < nFormatLines; i++ )
             {
                 pLineInfo = aMultiLineInfo.GetLine( i );
-                if ( nStyle & TEXT_DRAW_RIGHT )
+                if ( nStyle & DrawTextFlags::Right )
                     aPos.X() += nWidth-pLineInfo->GetWidth();
-                else if ( nStyle & TEXT_DRAW_CENTER )
+                else if ( nStyle & DrawTextFlags::Center )
                     aPos.X() += (nWidth-pLineInfo->GetWidth())/2;
                 sal_Int32 nIndex = pLineInfo->GetIndex();
                 sal_Int32 nLineLen = pLineInfo->GetLen();
@@ -9443,24 +9443,24 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
         // Evt. Text kuerzen
         if ( nTextWidth > nWidth )
         {
-            if ( nStyle & (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS | TEXT_DRAW_NEWSELLIPSIS) )
+            if ( nStyle & (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis) )
             {
                 aStr = m_pReferenceDevice->GetEllipsisString( aStr, nWidth, nStyle );
-                nStyle &= ~(TEXT_DRAW_CENTER | TEXT_DRAW_RIGHT);
-                nStyle |= TEXT_DRAW_LEFT;
+                nStyle &= ~DrawTextFlags(DrawTextFlags::Center | DrawTextFlags::Right);
+                nStyle |= DrawTextFlags::Left;
                 nTextWidth = m_pReferenceDevice->GetTextWidth( aStr );
             }
         }
 
         // vertical alignment
-        if ( nStyle & TEXT_DRAW_RIGHT )
+        if ( nStyle & DrawTextFlags::Right )
             aPos.X() += nWidth-nTextWidth;
-        else if ( nStyle & TEXT_DRAW_CENTER )
+        else if ( nStyle & DrawTextFlags::Center )
             aPos.X() += (nWidth-nTextWidth)/2;
 
-        if ( nStyle & TEXT_DRAW_BOTTOM )
+        if ( nStyle & DrawTextFlags::Bottom )
             aPos.Y() += nHeight-nTextHeight;
-        else if ( nStyle & TEXT_DRAW_VCENTER )
+        else if ( nStyle & DrawTextFlags::VCenter )
             aPos.Y() += (nHeight-nTextHeight)/2;
 
         // mnemonics should be inserted here if the need arises
@@ -13312,9 +13312,9 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     rNewWidget.m_aDescription       = rControl.Description;
     rNewWidget.m_aText              = rControl.Text;
     rNewWidget.m_nTextStyle         = rControl.TextStyle &
-        (  TEXT_DRAW_LEFT | TEXT_DRAW_CENTER | TEXT_DRAW_RIGHT | TEXT_DRAW_TOP |
-           TEXT_DRAW_VCENTER | TEXT_DRAW_BOTTOM |
-           TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK  );
+        (  DrawTextFlags::Left | DrawTextFlags::Center | DrawTextFlags::Right | DrawTextFlags::Top |
+           DrawTextFlags::VCenter | DrawTextFlags::Bottom |
+           DrawTextFlags::MultiLine | DrawTextFlags::WordBreak  );
     rNewWidget.m_nTabOrder          = rControl.TabOrder;
 
     // various properties are set via the flags (/Ff) property of the field dict
@@ -13323,10 +13323,10 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     if( rControl.getType() == PDFWriter::PushButton )
     {
         const PDFWriter::PushButtonWidget& rBtn = static_cast<const PDFWriter::PushButtonWidget&>(rControl);
-        if( rNewWidget.m_nTextStyle == 0 )
+        if( rNewWidget.m_nTextStyle == DrawTextFlags::NONE )
             rNewWidget.m_nTextStyle =
-                TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER |
-                TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
+                DrawTextFlags::Center | DrawTextFlags::VCenter |
+                DrawTextFlags::MultiLine | DrawTextFlags::WordBreak;
 
         rNewWidget.m_nFlags |= 0x00010000;
         if( !rBtn.URL.isEmpty() )
@@ -13339,9 +13339,9 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     else if( rControl.getType() == PDFWriter::RadioButton )
     {
         const PDFWriter::RadioButtonWidget& rBtn = static_cast<const PDFWriter::RadioButtonWidget&>(rControl);
-        if( rNewWidget.m_nTextStyle == 0 )
+        if( rNewWidget.m_nTextStyle == DrawTextFlags::NONE )
             rNewWidget.m_nTextStyle =
-                TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
+                DrawTextFlags::VCenter | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak;
         /*  PDF sees a RadioButton group as one radio button with
          *  children which are in turn check boxes
          *
@@ -13375,9 +13375,9 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     else if( rControl.getType() == PDFWriter::CheckBox )
     {
         const PDFWriter::CheckBoxWidget& rBox = static_cast<const PDFWriter::CheckBoxWidget&>(rControl);
-        if( rNewWidget.m_nTextStyle == 0 )
+        if( rNewWidget.m_nTextStyle == DrawTextFlags::NONE )
             rNewWidget.m_nTextStyle =
-                TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
+                DrawTextFlags::VCenter | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak;
 
         rNewWidget.m_aValue = rBox.Checked ? OUString("Yes") : OUString("Off" );
         // create default appearance before m_aRect gets transformed
@@ -13385,8 +13385,8 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     }
     else if( rControl.getType() == PDFWriter::ListBox )
     {
-        if( rNewWidget.m_nTextStyle == 0 )
-            rNewWidget.m_nTextStyle = TEXT_DRAW_VCENTER;
+        if( rNewWidget.m_nTextStyle == DrawTextFlags::NONE )
+            rNewWidget.m_nTextStyle = DrawTextFlags::VCenter;
 
         const PDFWriter::ListBoxWidget& rLstBox = static_cast<const PDFWriter::ListBoxWidget&>(rControl);
         rNewWidget.m_aListEntries     = rLstBox.Entries;
@@ -13403,8 +13403,8 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     }
     else if( rControl.getType() == PDFWriter::ComboBox )
     {
-        if( rNewWidget.m_nTextStyle == 0 )
-            rNewWidget.m_nTextStyle = TEXT_DRAW_VCENTER;
+        if( rNewWidget.m_nTextStyle == DrawTextFlags::NONE )
+            rNewWidget.m_nTextStyle = DrawTextFlags::VCenter;
 
         const PDFWriter::ComboBoxWidget& rBox = static_cast<const PDFWriter::ComboBoxWidget&>(rControl);
         rNewWidget.m_aValue         = rBox.Text;
@@ -13434,14 +13434,14 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     }
     else if( rControl.getType() == PDFWriter::Edit )
     {
-        if( rNewWidget.m_nTextStyle == 0 )
-            rNewWidget.m_nTextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER;
+        if( rNewWidget.m_nTextStyle == DrawTextFlags::NONE )
+            rNewWidget.m_nTextStyle = DrawTextFlags::Left | DrawTextFlags::VCenter;
 
         const PDFWriter::EditWidget& rEdit = static_cast<const  PDFWriter::EditWidget&>(rControl);
         if( rEdit.MultiLine )
         {
             rNewWidget.m_nFlags |= 0x00001000;
-            rNewWidget.m_nTextStyle |= TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
+            rNewWidget.m_nTextStyle |= DrawTextFlags::MultiLine | DrawTextFlags::WordBreak;
         }
         if( rEdit.Password )
             rNewWidget.m_nFlags |= 0x00002000;

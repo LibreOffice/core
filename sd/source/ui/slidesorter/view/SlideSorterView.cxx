@@ -649,7 +649,7 @@ void SlideSorterView::CompleteRedraw (
     mrSlideSorter.GetContentWindow()->DrawText(
         gFrameTimeBox,
         OUString::number(1 / (gFrameTimeSum / gFrameTimeCount)),
-        TEXT_DRAW_RIGHT | TEXT_DRAW_VCENTER);
+        DrawTextFlags::Right | DrawTextFlags::VCenter);
     //    mrSlideSorter.GetContentWindow()->Invalidate(gFrameTimeBox);
 #endif
 }

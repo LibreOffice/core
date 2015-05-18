@@ -1169,18 +1169,18 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, s
         long        nOnePixel = GetDrawPixel( pDev, 1 );
         long        nTextHeight = pDev->GetTextHeight();
         long        nEditHeight = nTextHeight + 6*nOnePixel;
-        sal_uInt16      nTextStyle = TEXT_DRAW_VCENTER;
+        DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
 
         // First, draw the edit part
         mpSubEdit->Draw( pDev, aPos, Size( aSize.Width(), nEditHeight ), nFlags );
 
         // Second, draw the listbox
         if ( GetStyle() & WB_CENTER )
-            nTextStyle |= TEXT_DRAW_CENTER;
+            nTextStyle |= DrawTextFlags::Center;
         else if ( GetStyle() & WB_RIGHT )
-            nTextStyle |= TEXT_DRAW_RIGHT;
+            nTextStyle |= DrawTextFlags::Right;
         else
-            nTextStyle |= TEXT_DRAW_LEFT;
+            nTextStyle |= DrawTextFlags::Left;
 
         if ( ( nFlags & WINDOW_DRAW_MONO ) || ( eOutDevType == OUTDEV_PRINTER ) )
         {

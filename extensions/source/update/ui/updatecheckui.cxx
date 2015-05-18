@@ -847,12 +847,12 @@ void BubbleWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle
     SetFont( aBoldFont );
     Rectangle aTitleRect = maTitleRect;
     aTitleRect.Move( aImgSize.Width(), 0 );
-    DrawText( aTitleRect, maBubbleTitle, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+    DrawText( aTitleRect, maBubbleTitle, DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
 
     SetFont( aOldFont );
     Rectangle aTextRect = maTextRect;
     aTextRect.Move( aImgSize.Width(), 0 );
-    DrawText( aTextRect, maBubbleText, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+    DrawText( aTextRect, maBubbleText, DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
 }
 
 
@@ -926,12 +926,12 @@ void BubbleWindow::RecalcTextRects()
 
         maTitleRect = GetTextRect( Rectangle( Point( 0, 0 ), maMaxTextSize ),
                                    maBubbleTitle,
-                                   TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+                                   DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
 
         SetFont( aOldFont );
         maTextRect = GetTextRect( Rectangle( Point( 0, 0 ), maMaxTextSize ),
                                   maBubbleText,
-                                  TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+                                  DrawTextFlags::MultiLine | DrawTextFlags::WordBreak );
 
         if ( maTextRect.GetHeight() < 10 )
             maTextRect.setHeight( 10 );

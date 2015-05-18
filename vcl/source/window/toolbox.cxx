@@ -3096,7 +3096,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
             mpData->m_pLayoutData->m_aLineItemIds.push_back( pItem->mnId );
             mpData->m_pLayoutData->m_aLineItemPositions.push_back( nPos );
         }
-        DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength(), TEXT_DRAW_MNEMONIC, pVector, pDisplayText );
+        DrawCtrlText( aPos, pItem->maText, 0, pItem->maText.getLength(), DrawTextFlags::Mnemonic, pVector, pDisplayText );
         if (bClip)
             rRenderContext.SetClipRegion();
         rRenderContext.SetFont(aOldFont);
@@ -3250,9 +3250,9 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
                 ImplDrawButton(rRenderContext, pItem->maRect, nHighlight, pItem->meState == TRISTATE_TRUE, pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow );
         }
 
-        sal_uInt16 nTextStyle = 0;
+        DrawTextFlags nTextStyle = DrawTextFlags::NONE;
         if ( !pItem->mbEnabled )
-            nTextStyle |= TEXT_DRAW_DISABLE;
+            nTextStyle |= DrawTextFlags::Disable;
         if( bLayout )
         {
             mpData->m_pLayoutData->m_aLineIndices.push_back( mpData->m_pLayoutData->m_aDisplayText.getLength() );

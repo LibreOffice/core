@@ -340,11 +340,11 @@ void PreviewRenderer::PaintSubstitutionText (const OUString& rSubstitutionText)
             Point(0,0),
             mpPreviewDevice->PixelToLogic(
                 mpPreviewDevice->GetOutputSizePixel()));
-        sal_uInt16 nTextStyle =
-            TEXT_DRAW_CENTER
-            | TEXT_DRAW_VCENTER
-            | TEXT_DRAW_MULTILINE
-            | TEXT_DRAW_WORDBREAK;
+        DrawTextFlags nTextStyle =
+            DrawTextFlags::Center
+            | DrawTextFlags::VCenter
+            | DrawTextFlags::MultiLine
+            | DrawTextFlags::WordBreak;
         mpPreviewDevice->DrawText (aTextBox, rSubstitutionText, nTextStyle);
 
         // Restore the font.

@@ -198,9 +198,9 @@ void SvLBoxString::Paint(
 {
     if (pEntry)
     {
-        sal_uInt16 nStyle = rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE;
+        DrawTextFlags nStyle = rDev.IsEnabled() ? DrawTextFlags::NONE : DrawTextFlags::Disable;
         if (rDev.IsEntryMnemonicsEnabled())
-            nStyle |= TEXT_DRAW_MNEMONIC;
+            nStyle |= DrawTextFlags::Mnemonic;
         rRenderContext.DrawText(Rectangle(rPos, GetSize(&rDev, pEntry)), maText, nStyle);
     }
     else

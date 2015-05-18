@@ -1606,7 +1606,7 @@ void UnoTreeListItem::Paint(
             aPos.X() += nWidth;
             aSize.Width() -= nWidth;
         }
-        rRenderContext.DrawText(Rectangle(aPos,aSize),maText, rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE);
+        rRenderContext.DrawText(Rectangle(aPos,aSize),maText, rDev.IsEnabled() ? DrawTextFlags::NONE : DrawTextFlags::Disable);
     }
     else
     {

@@ -138,7 +138,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             aFont.SetColor(GetSettings().GetStyleSettings().GetDisableColor());
 
         pDev->SetFont(aFont);
-        pDev->DrawText(aStrRect, strUnit[ nItemId - 1 ], TEXT_DRAW_ENDELLIPSIS);
+        pDev->DrawText(aStrRect, strUnit[ nItemId - 1 ], DrawTextFlags::EndEllipsis);
     }
     else
     {
@@ -164,7 +164,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             aFont.SetColor(GetSettings().GetStyleSettings().GetFieldTextColor());
         pDev->SetFont(aFont);
         Point aStart(aBLPos.X() + nRectWidth * 7 / 9 , aBLPos.Y() + nRectHeight/6);
-        pDev->DrawText(aStart, strUnit[ nItemId - 1 ]);  //can't set TEXT_DRAW_ENDELLIPSIS here ,or the text will disappear
+        pDev->DrawText(aStart, strUnit[ nItemId - 1 ]);  //can't set DrawTextFlags::EndEllipsis here ,or the text will disappear
 
         //draw line
         if( nSelItem ==  nItemId )

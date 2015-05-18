@@ -207,30 +207,30 @@ void Button::ImplSetSeparatorX( long nX )
     mpButtonData->mnSeparatorX = nX;
 }
 
-sal_uInt16 Button::ImplGetTextStyle( OUString& rText, WinBits nWinStyle,
+DrawTextFlags Button::ImplGetTextStyle( OUString& rText, WinBits nWinStyle,
                                  sal_uLong nDrawFlags )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    sal_uInt16 nTextStyle = FixedText::ImplGetTextStyle( nWinStyle & ~WB_DEFBUTTON );
+    DrawTextFlags nTextStyle = FixedText::ImplGetTextStyle( nWinStyle & ~WB_DEFBUTTON );
 
     if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
     {
-        if ( nTextStyle & TEXT_DRAW_MNEMONIC )
+        if ( nTextStyle & DrawTextFlags::Mnemonic )
         {
             rText = GetNonMnemonicString( rText );
-            nTextStyle &= ~TEXT_DRAW_MNEMONIC;
+            nTextStyle &= ~DrawTextFlags::Mnemonic;
         }
     }
 
     if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
     {
         if ( !IsEnabled() )
-            nTextStyle |= TEXT_DRAW_DISABLE;
+            nTextStyle |= DrawTextFlags::Disable;
     }
 
     if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
          (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-        nTextStyle |= TEXT_DRAW_MONO;
+        nTextStyle |= DrawTextFlags::Mono;
 
     return nTextStyle;
 }
@@ -238,7 +238,7 @@ sal_uInt16 Button::ImplGetTextStyle( OUString& rText, WinBits nWinStyle,
 void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
                                    Size& rSize, bool bLayout,
                                    sal_uLong nImageSep, sal_uLong nDrawFlags,
-                                   sal_uInt16 nTextStyle, Rectangle *pSymbolRect,
+                                   DrawTextFlags nTextStyle, Rectangle *pSymbolRect,
                                    bool bAddImageSep )
 {
     OUString        aText( GetText() );
@@ -258,10 +258,10 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
     Size            aImageSize = mpButtonData->maImage.GetSizePixel();
 
     if ( ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC ) &&
-         ( nTextStyle & TEXT_DRAW_MNEMONIC ) )
+         ( nTextStyle & DrawTextFlags::Mnemonic ) )
     {
         aText = GetNonMnemonicString( aText );
-        nTextStyle &= ~TEXT_DRAW_MNEMONIC;
+        nTextStyle &= ~DrawTextFlags::Mnemonic;
     }
 
     aImageSize.Width()  = CalcZoom( aImageSize.Width() );
@@ -736,37 +736,37 @@ bool PushButton::ImplHitTestPushButton( vcl::Window* pDev,
     return aTestRect.IsInside( rPos );
 }
 
-sal_uInt16 PushButton::ImplGetTextStyle( sal_uLong nDrawFlags ) const
+DrawTextFlags PushButton::ImplGetTextStyle( sal_uLong nDrawFlags ) const
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    sal_uInt16 nTextStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_MULTILINE | TEXT_DRAW_ENDELLIPSIS;
+    DrawTextFlags nTextStyle = DrawTextFlags::Mnemonic | DrawTextFlags::MultiLine | DrawTextFlags::EndEllipsis;
 
     if ( ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO ) ||
          ( nDrawFlags & WINDOW_DRAW_MONO ) )
-        nTextStyle |= TEXT_DRAW_MONO;
+        nTextStyle |= DrawTextFlags::Mono;
 
     if ( GetStyle() & WB_WORDBREAK )
-        nTextStyle |= TEXT_DRAW_WORDBREAK;
+        nTextStyle |= DrawTextFlags::WordBreak;
     if ( GetStyle() & WB_NOLABEL )
-        nTextStyle &= ~TEXT_DRAW_MNEMONIC;
+        nTextStyle &= ~DrawTextFlags::Mnemonic;
 
     if ( GetStyle() & WB_LEFT )
-        nTextStyle |= TEXT_DRAW_LEFT;
+        nTextStyle |= DrawTextFlags::Left;
     else if ( GetStyle() & WB_RIGHT )
-        nTextStyle |= TEXT_DRAW_RIGHT;
+        nTextStyle |= DrawTextFlags::Right;
     else
-        nTextStyle |= TEXT_DRAW_CENTER;
+        nTextStyle |= DrawTextFlags::Center;
 
     if ( GetStyle() & WB_TOP )
-        nTextStyle |= TEXT_DRAW_TOP;
+        nTextStyle |= DrawTextFlags::Top;
     else if ( GetStyle() & WB_BOTTOM )
-        nTextStyle |= TEXT_DRAW_BOTTOM;
+        nTextStyle |= DrawTextFlags::Bottom;
     else
-        nTextStyle |= TEXT_DRAW_VCENTER;
+        nTextStyle |= DrawTextFlags::VCenter;
 
     if ( ! ( (nDrawFlags & WINDOW_DRAW_NODISABLE) || IsEnabled() ) )
-        nTextStyle |= TEXT_DRAW_DISABLE;
+        nTextStyle |= DrawTextFlags::Disable;
 
     return nTextStyle;
 }
@@ -804,7 +804,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, sal_uLong nDrawFl
     Rectangle               aInRect = rRect;
     Color                   aColor;
     OUString                aText = PushButton::GetText(); // PushButton:: because of MoreButton
-    sal_uInt16              nTextStyle = ImplGetTextStyle( nDrawFlags );
+    DrawTextFlags           nTextStyle = ImplGetTextStyle( nDrawFlags );
     DrawSymbolFlags         nStyle;
 
     if( aInRect.Right() < aInRect.Left() || aInRect.Bottom() < aInRect.Top() )
@@ -2002,7 +2002,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) ) ||
              ( HasImage() &&  ! (ImplGetButtonState() & DrawButtonFlags::NoImage) ) )
         {
-            sal_uInt16 nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
+            DrawTextFlags nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
 
             const long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
             Size aSize( rSize );
@@ -2015,8 +2015,8 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
             if( (nWinStyle & (WB_TOP|WB_VCENTER|WB_BOTTOM)) == 0 &&
                 (rImageSize.Height() > rSize.Height() || ! (nWinStyle & WB_WORDBREAK)  ) )
             {
-                nTextStyle &= ~(TEXT_DRAW_TOP|TEXT_DRAW_BOTTOM);
-                nTextStyle |= TEXT_DRAW_VCENTER;
+                nTextStyle &= ~DrawTextFlags(DrawTextFlags::Top|DrawTextFlags::Bottom);
+                nTextStyle |= DrawTextFlags::VCenter;
                 aSize.Height() = rImageSize.Height();
             }
 
@@ -2109,7 +2109,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                 aTxtPos.X() += aImageRect.Right()+8;
                 aTxtPos.Y() += (rSize.Height()-nTextHeight)/2;
             }
-            pDev->DrawCtrlText( aTxtPos, aText, 0, aText.getLength(), TEXT_DRAW_MNEMONIC, pVector, pDisplayText );
+            pDev->DrawCtrlText( aTxtPos, aText, 0, aText.getLength(), DrawTextFlags::Mnemonic, pVector, pDisplayText );
         }
 
         rMouseRect = aImageRect;
@@ -3077,7 +3077,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     if ( ( !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText) ) ||
          ( HasImage() && !  (ImplGetButtonState() & DrawButtonFlags::NoImage) ) )
     {
-        sal_uInt16 nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
+        DrawTextFlags nTextStyle = Button::ImplGetTextStyle( aText, nWinStyle, nDrawFlags );
 
         const long nImageSep = GetDrawPixel( pDev, ImplGetImageToTextDistance() );
         Size aSize( rSize );
@@ -3090,8 +3090,8 @@ void CheckBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         if( (nWinStyle & (WB_TOP|WB_VCENTER|WB_BOTTOM)) == 0 &&
             (rImageSize.Height() > rSize.Height() || ! (nWinStyle & WB_WORDBREAK) ) )
         {
-            nTextStyle &= ~(TEXT_DRAW_TOP|TEXT_DRAW_BOTTOM);
-            nTextStyle |= TEXT_DRAW_VCENTER;
+            nTextStyle &= ~DrawTextFlags(DrawTextFlags::Top|DrawTextFlags::Bottom);
+            nTextStyle |= DrawTextFlags::VCenter;
             aSize.Height() = rImageSize.Height();
         }
 

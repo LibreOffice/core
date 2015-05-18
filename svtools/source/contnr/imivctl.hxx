@@ -190,7 +190,7 @@ class SvxIconChoiceCtrl_Impl
     WinBits                 nWinBits;
     long                    nMaxBoundHeight;            // height of highest BoundRects
     sal_uInt16              nFlags;
-    sal_uInt16              nCurTextDrawFlags;
+    DrawTextFlags           nCurTextDrawFlags;
     ImplSVEvent *           nUserEventAdjustScrBars;
     ImplSVEvent *           nUserEventShowCursor;
     SvxIconChoiceCtrlEntry* pCurHighlightFrame;

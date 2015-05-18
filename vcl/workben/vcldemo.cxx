@@ -1545,8 +1545,8 @@ class DemoPopup : public FloatingWindow
         SetTextColor(COL_BLACK);
         SetTextAlign(ALIGN_TOP);
         DrawText(aTextRect, "This is a standalone help text test",
-                 TEXT_DRAW_MULTILINE|TEXT_DRAW_WORDBREAK|
-                 TEXT_DRAW_LEFT|TEXT_DRAW_TOP);
+                 DrawTextFlags::MultiLine|DrawTextFlags::WordBreak|
+                 DrawTextFlags::Left|DrawTextFlags::Top);
 
         SetLineColor(COL_BLACK);
         SetFillColor();

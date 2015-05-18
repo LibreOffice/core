@@ -450,7 +450,7 @@ void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
 }
 
 void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const OUString& _rStr,
-    sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText ) const
+    DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText ) const
 {
     if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
     {

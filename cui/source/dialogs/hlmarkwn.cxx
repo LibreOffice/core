@@ -122,7 +122,7 @@ void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const Rectangl
             break;
         }
 
-        rRenderContext.DrawText(aDrawRect, aStrMessage, TEXT_DRAW_LEFT | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK);
+        rRenderContext.DrawText(aDrawRect, aStrMessage, DrawTextFlags::Left | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
     }
 }
 

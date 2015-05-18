@@ -1329,13 +1329,13 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
             {
                 long nTextOffsetY = ((pEntry->maSize.Height() - nFontHeight) / 2);
 
-                sal_uInt16  nTextStyle   = 0;
+                DrawTextFlags   nTextStyle   = DrawTextFlags::NONE;
                 DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
                 sal_uInt16  nImageStyle  = 0;
 
                 if (!pEntry->mbEnabled)
                 {
-                    nTextStyle   |= TEXT_DRAW_DISABLE;
+                    nTextStyle   |= DrawTextFlags::Disable;
                     nSymbolStyle |= DrawSymbolFlags::Disable;
                     nImageStyle  |= IMAGE_DRAW_DISABLE;
                 }
@@ -1442,7 +1442,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
                     aTmpPos.X() = aPos.X() + (bTitle ? 4 : mpImpl->mnTextPos);
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
-                    sal_uInt16 nStyle = nTextStyle|TEXT_DRAW_MNEMONIC;
+                    DrawTextFlags nStyle = nTextStyle|DrawTextFlags::Mnemonic;
 
                     rRenderContext.DrawCtrlText(aTmpPos, pEntry->maText, 0, pEntry->maText.getLength(), nStyle, NULL, NULL);
                 }

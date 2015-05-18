@@ -500,7 +500,7 @@ void OSQLMessageBox::impl_positionControls()
 
     // determine which space the secondary text would occupy
     if ( bHaveSecondaryText )
-        aSecondaryRect = GetTextRect( aSecondaryRect, sSecondary, TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE | TEXT_DRAW_LEFT );
+        aSecondaryRect = GetTextRect( aSecondaryRect, sSecondary, DrawTextFlags::WordBreak | DrawTextFlags::MultiLine | DrawTextFlags::Left );
     else
         aSecondaryRect.Bottom() = aSecondaryRect.Top() - 1;
 
@@ -511,7 +511,7 @@ void OSQLMessageBox::impl_positionControls()
     // if there's no secondary text ...
     if ( !bHaveSecondaryText )
     {   // then give the primary text as much horizontal space as it needs
-        Rectangle aSuggestedRect( GetTextRect( aPrimaryRect, sPrimary, TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE | TEXT_DRAW_CENTER ) );
+        Rectangle aSuggestedRect( GetTextRect( aPrimaryRect, sPrimary, DrawTextFlags::WordBreak | DrawTextFlags::MultiLine | DrawTextFlags::Center ) );
         aPrimaryRect.Right() = aPrimaryRect.Left() + aSuggestedRect.GetWidth();
         aPrimaryRect.Bottom() = aPrimaryRect.Top() + aSuggestedRect.GetHeight();
         // and center it horizontally

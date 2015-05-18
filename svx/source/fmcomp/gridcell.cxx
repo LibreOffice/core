@@ -467,28 +467,28 @@ void DbGridColumn::Paint(OutputDevice& rDev,
     {
         if (!pRow || !pRow->IsValid())
         {
-            sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
+            DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::Center;
             if ( !bEnabled )
-                nStyle |= TEXT_DRAW_DISABLE;
+                nStyle |= DrawTextFlags::Disable;
 
             rDev.DrawText(rRect, OUString(INVALIDTEXT), nStyle);
         }
         else if (m_bAutoValue && pRow->IsNew())
         {
-            sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_VCENTER;
+            DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::VCenter;
             if ( !bEnabled )
-                nStyle |= TEXT_DRAW_DISABLE;
+                nStyle |= DrawTextFlags::Disable;
 
             switch (GetAlignment())
             {
                 case ::com::sun::star::awt::TextAlign::RIGHT:
-                    nStyle |= TEXT_DRAW_RIGHT;
+                    nStyle |= DrawTextFlags::Right;
                     break;
                 case ::com::sun::star::awt::TextAlign::CENTER:
-                    nStyle |= TEXT_DRAW_CENTER;
+                    nStyle |= DrawTextFlags::Center;
                     break;
                 default:
-                    nStyle |= TEXT_DRAW_LEFT;
+                    nStyle |= DrawTextFlags::Left;
             }
 
             rDev.DrawText(rRect, SVX_RESSTR(RID_STR_AUTOFIELD), nStyle);
@@ -502,17 +502,17 @@ void DbGridColumn::Paint(OutputDevice& rDev,
     {
         if (!pRow || !pRow->IsValid())
         {
-            sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
+            DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::Center;
             if ( !bEnabled )
-                nStyle |= TEXT_DRAW_DISABLE;
+                nStyle |= DrawTextFlags::Disable;
 
             rDev.DrawText(rRect, OUString(INVALIDTEXT), nStyle);
         }
         else if (pRow->HasField(m_nFieldPos) && m_bObject)
         {
-            sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
+            DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::Center;
             if ( !bEnabled )
-                nStyle |= TEXT_DRAW_DISABLE;
+                nStyle |= DrawTextFlags::Disable;
             rDev.DrawText(rRect, OUString(OBJECTTEXT), nStyle);
         }
     }
@@ -2698,7 +2698,7 @@ DbFilterField::~DbFilterField()
 
 void DbFilterField::PaintCell(OutputDevice& rDev, const Rectangle& rRect)
 {
-    static sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_VCENTER | TEXT_DRAW_LEFT;
+    static const DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::VCenter | DrawTextFlags::Left;
     switch (m_nControlClass)
     {
         case FormComponentType::CHECKBOX:
@@ -3538,20 +3538,20 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
         return;
     }
 
-    sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_VCENTER;
+    DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::VCenter;
     if ( ( rDev.GetOutDevType() == OUTDEV_WINDOW ) && !static_cast< vcl::Window& >( rDev ).IsEnabled() )
-        nStyle |= TEXT_DRAW_DISABLE;
+        nStyle |= DrawTextFlags::Disable;
 
     switch (m_pColumn->GetAlignment())
     {
         case ::com::sun::star::awt::TextAlign::RIGHT:
-            nStyle |= TEXT_DRAW_RIGHT;
+            nStyle |= DrawTextFlags::Right;
             break;
         case ::com::sun::star::awt::TextAlign::CENTER:
-            nStyle |= TEXT_DRAW_CENTER;
+            nStyle |= DrawTextFlags::Center;
             break;
         default:
-            nStyle |= TEXT_DRAW_LEFT;
+            nStyle |= DrawTextFlags::Left;
     }
 
     Color* pColor = NULL;

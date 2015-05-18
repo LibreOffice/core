@@ -158,26 +158,33 @@ typedef std::vector< Rectangle > MetricVector;
 // OutputDevice-Types
 
 // Flags for DrawText()
-#define TEXT_DRAW_DISABLE               ((sal_uInt16)0x0001)
-#define TEXT_DRAW_MNEMONIC              ((sal_uInt16)0x0002)
-#define TEXT_DRAW_MONO                  ((sal_uInt16)0x0004)
-#define TEXT_DRAW_CLIP                  ((sal_uInt16)0x0008)
-#define TEXT_DRAW_LEFT                  ((sal_uInt16)0x0010)
-#define TEXT_DRAW_CENTER                ((sal_uInt16)0x0020)
-#define TEXT_DRAW_RIGHT                 ((sal_uInt16)0x0040)
-#define TEXT_DRAW_TOP                   ((sal_uInt16)0x0080)
-#define TEXT_DRAW_VCENTER               ((sal_uInt16)0x0100)
-#define TEXT_DRAW_BOTTOM                ((sal_uInt16)0x0200)
-#define TEXT_DRAW_ENDELLIPSIS           ((sal_uInt16)0x0400)
-#define TEXT_DRAW_PATHELLIPSIS          ((sal_uInt16)0x0800)
-#define TEXT_DRAW_MULTILINE             ((sal_uInt16)0x1000)
-#define TEXT_DRAW_WORDBREAK             ((sal_uInt16)0x2000)
-#define TEXT_DRAW_NEWSELLIPSIS          ((sal_uInt16)0x4000)
-// in the long run we should make text style flags longer
-// but at the moment we can get away with this 2 bit field for ellipsis style
-#define TEXT_DRAW_CENTERELLIPSIS        (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS)
-
-#define TEXT_DRAW_WORDBREAK_HYPHENATION (((sal_uInt16)0x8000) | TEXT_DRAW_WORDBREAK)
+enum class DrawTextFlags
+{
+    NONE                  = 0x0000,
+    Disable               = 0x0001,
+    Mnemonic              = 0x0002,
+    Mono                  = 0x0004,
+    Clip                  = 0x0008,
+    Left                  = 0x0010,
+    Center                = 0x0020,
+    Right                 = 0x0040,
+    Top                   = 0x0080,
+    VCenter               = 0x0100,
+    Bottom                = 0x0200,
+    EndEllipsis           = 0x0400,
+    PathEllipsis          = 0x0800,
+    MultiLine             = 0x1000,
+    WordBreak             = 0x2000,
+    NewsEllipsis          = 0x4000,
+    // in the long run we should make text style flags longer
+    // but at the moment we can get away with this 2 bit field for ellipsis style
+    CenterEllipsis        = EndEllipsis | PathEllipsis,
+    WordBreakHyphenation  = 0x8000 | WordBreak,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DrawTextFlags> : is_typed_flags<DrawTextFlags, 0xffff> {};
+}
 
 // Flags for CopyArea()
 #define COPYAREA_WINDOWINVALIDATE       ((sal_uInt16)0x0001)
@@ -945,12 +952,12 @@ public:
                                           MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
 
     void                        DrawText( const Rectangle& rRect,
-                                          const OUString& rStr, sal_uInt16 nStyle = 0,
+                                          const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::NONE,
                                           MetricVector* pVector = NULL, OUString* pDisplayText = NULL,
                                           vcl::ITextLayout* _pTextLayout = NULL );
 
     static void                 ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
-                                              const OUString& rOrigStr, sal_uInt16 nStyle,
+                                              const OUString& rOrigStr, DrawTextFlags nStyle,
                                               MetricVector* pVector, OUString* pDisplayText, vcl::ITextLayout& _rLayout );
 
     void                        ImplDrawText( SalLayout& );
@@ -959,7 +966,7 @@ public:
 
     void                        DrawCtrlText( const Point& rPos, const OUString& rStr,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                              sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC, MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
+                                              DrawTextFlags nStyle = DrawTextFlags::Mnemonic, MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
 
     void                        DrawTextLine( const Point& rPos, long nWidth,
                                               FontStrikeout eStrikeout,
@@ -979,7 +986,7 @@ public:
     bool                        ImplDrawRotateText( SalLayout& );
 
     Rectangle                   GetTextRect( const Rectangle& rRect,
-                                             const OUString& rStr, sal_uInt16 nStyle = TEXT_DRAW_WORDBREAK,
+                                             const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::WordBreak,
                                              TextRectInfo* pInfo = NULL,
                                              const vcl::ITextLayout* _pTextLayout = NULL ) const;
 
@@ -1055,11 +1062,11 @@ public:
 
 
     OUString                    GetEllipsisString( const OUString& rStr, long nMaxWidth,
-                                                   sal_uInt16 nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
+                                                   DrawTextFlags nStyle = DrawTextFlags::EndEllipsis ) const;
 
     long                        GetCtrlTextWidth( const OUString& rStr, sal_Int32 nIndex = 0,
                                                   sal_Int32 nLen = -1,
-                                                  sal_uInt16 nStyle = TEXT_DRAW_MNEMONIC ) const;
+                                                  DrawTextFlags nStyle = DrawTextFlags::Mnemonic ) const;
 
     static OUString             GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos );
 
@@ -1075,8 +1082,8 @@ public:
         DrawText().
      */
     void                        AddTextRectActions( const Rectangle& rRect,
-                                                    const OUString&    rOrigStr,
-                                                    sal_uInt16           nStyle,
+                                                    const OUString&  rOrigStr,
+                                                    DrawTextFlags    nStyle,
                                                     GDIMetaFile&     rMtf );
 
     void                        SetTextColor( const Color& rColor );
@@ -1164,7 +1171,7 @@ private:
     SAL_DLLPRIVATE static bool  ImplIsUnderlineAbove( const vcl::Font& );
 
     static
-    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, sal_uInt16 nStyle, const vcl::ITextLayout& _rLayout );
+    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
     ///@}
 
 
@@ -1265,7 +1272,7 @@ private:
 
     static
     SAL_DLLPRIVATE OUString     ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rStr,
-                                                       long nMaxWidth, sal_uInt16 nStyle, const vcl::ITextLayout& _rLayout );
+                                                       long nMaxWidth, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
 
     SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMarks( SalLayout& );

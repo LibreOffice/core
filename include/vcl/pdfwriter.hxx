@@ -29,6 +29,7 @@
 #include <vcl/font.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/outdevstate.hxx>
+#include <vcl/outdev.hxx>
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
@@ -225,10 +226,10 @@ public:
     protected:
         WidgetType          Type;       // primitive RTTI
     public:
-        OUString       Name;       // a distinct name to identify the control
-        OUString       Description;// descriptive text for the contro (e.g. for tool tip)
-        OUString       Text;       // user text to appear on the control
-        sal_uInt16              TextStyle;  // style flags
+        OUString            Name;       // a distinct name to identify the control
+        OUString            Description;// descriptive text for the contro (e.g. for tool tip)
+        OUString            Text;       // user text to appear on the control
+        DrawTextFlags       TextStyle;  // style flags
         bool                ReadOnly;
         Rectangle           Location;   // describes the area filled by the control
         bool                Border;     // true: widget should have a border, false: no border
@@ -242,9 +243,9 @@ public:
 
         /* style flags for text are those for OutputDevice::DrawText
            allowed values are:
-           TEXT_DRAW_LEFT, TEXT_DRAW_CENTER, TEXT_DRAW_RIGHT, TEXT_DRAW_TOP,
-           TEXT_DRAW_VCENTER, TEXT_DRAW_BOTTOM,
-           TEXT_DRAW_MULTILINE, TEXT_DRAW_WORDBREAK
+           DrawTextFlags::Left, DrawTextFlags::Center, DrawTextFlags::Right, DrawTextFlags::Top,
+           DrawTextFlags::VCenter, DrawTextFlags::Bottom,
+           DrawTextFlags::MultiLine, DrawTextFlags::WordBreak
 
            if TextStyle is 0, then each control will fill in default values
          */
@@ -257,7 +258,7 @@ public:
 
         AnyWidget( WidgetType eType ) :
                 Type( eType ),
-                TextStyle( 0 ),
+                TextStyle( DrawTextFlags::NONE ),
                 ReadOnly( false ),
                 Border( false ),
                 BorderColor( COL_TRANSPARENT ),
@@ -779,7 +780,7 @@ The following structure describes the permissions used in PDF security
                                          const OUString& rStr,
                                          sal_Int32 nIndex, sal_Int32 nLen );
     void                DrawText( const Rectangle& rRect,
-                                  const OUString& rStr, sal_uInt16 nStyle = 0 );
+                                  const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::NONE );
 
     void                DrawPixel( const Point& rPt, const Color& rColor );
     void                DrawPixel( const Point& rPt )

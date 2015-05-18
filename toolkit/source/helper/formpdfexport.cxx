@@ -346,7 +346,7 @@ namespace toolkitform
 
 
             // text style
-            Descriptor->TextStyle = 0;
+            Descriptor->TextStyle = DrawTextFlags::NONE;
 
             // multi line and word break
             // The MultiLine property of the control is mapped to both the "MULTILINE" and
@@ -357,7 +357,7 @@ namespace toolkitform
                 bool bMultiLine = false;
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_MULTILINE ) >>= bMultiLine );
                 if ( bMultiLine )
-                    Descriptor->TextStyle |= TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
+                    Descriptor->TextStyle |= DrawTextFlags::MultiLine | DrawTextFlags::WordBreak;
             }
 
             // horizontal alignment
@@ -370,9 +370,9 @@ namespace toolkitform
                 // means something else than LEFT?
                 switch ( nAlign )
                 {
-                case awt::TextAlign::LEFT:  Descriptor->TextStyle |= TEXT_DRAW_LEFT; break;
-                case awt::TextAlign::CENTER:  Descriptor->TextStyle |= TEXT_DRAW_CENTER; break;
-                case awt::TextAlign::RIGHT:  Descriptor->TextStyle |= TEXT_DRAW_RIGHT; break;
+                case awt::TextAlign::LEFT:  Descriptor->TextStyle |= DrawTextFlags::Left; break;
+                case awt::TextAlign::CENTER:  Descriptor->TextStyle |= DrawTextFlags::Center; break;
+                case awt::TextAlign::RIGHT:  Descriptor->TextStyle |= DrawTextFlags::Right; break;
                 default:
                     OSL_FAIL( "describePDFControl: invalid text align!" );
                 }
@@ -387,9 +387,9 @@ namespace toolkitform
                     xModelProps->getPropertyValue( sVertAlignPropertyName ) >>= nAlign;
                     switch ( nAlign )
                     {
-                    case VerticalAlignment_TOP:  Descriptor->TextStyle |= TEXT_DRAW_TOP; break;
-                    case VerticalAlignment_MIDDLE:  Descriptor->TextStyle |= TEXT_DRAW_VCENTER; break;
-                    case VerticalAlignment_BOTTOM:  Descriptor->TextStyle |= TEXT_DRAW_BOTTOM; break;
+                    case VerticalAlignment_TOP:  Descriptor->TextStyle |= DrawTextFlags::Top; break;
+                    case VerticalAlignment_MIDDLE:  Descriptor->TextStyle |= DrawTextFlags::VCenter; break;
+                    case VerticalAlignment_BOTTOM:  Descriptor->TextStyle |= DrawTextFlags::Bottom; break;
                     default:
                         OSL_FAIL( "describePDFControl: invalid vertical text align!" );
                     }
@@ -423,7 +423,7 @@ namespace toolkitform
                 vcl::PDFWriter::EditWidget* pEditWidget = static_cast< vcl::PDFWriter::EditWidget* >( Descriptor.get() );
 
                 // multiline (already flagged in the TextStyle)
-                pEditWidget->MultiLine = ( Descriptor->TextStyle & TEXT_DRAW_MULTILINE ) != 0;
+                pEditWidget->MultiLine = bool( Descriptor->TextStyle & DrawTextFlags::MultiLine );
 
                 // password input
                 OUString sEchoCharPropName( "EchoChar" );
@@ -512,8 +512,8 @@ namespace toolkitform
 
                 // the PDF exporter defaults the text style, if 0. To prevent this, we have to transfer the UNO
                 // defaults to the PDF widget
-                if ( !pButtonWidget->TextStyle )
-                    pButtonWidget->TextStyle = TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER;
+                if ( pButtonWidget->TextStyle == DrawTextFlags::NONE )
+                    pButtonWidget->TextStyle = DrawTextFlags::Center | DrawTextFlags::VCenter;
             }
 
 

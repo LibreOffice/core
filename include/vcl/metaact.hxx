@@ -38,6 +38,7 @@
 #include <vcl/outdevstate.hxx>
 
 class SvStream;
+enum class DrawTextFlags;
 
 struct ImplMetaReadData
 {
@@ -546,7 +547,7 @@ private:
 
     Rectangle           maRect;
     OUString            maStr;
-    sal_uInt16          mnStyle;
+    DrawTextFlags       mnStyle;
 
     virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
@@ -561,14 +562,14 @@ public:
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
     MetaTextRectAction( const Rectangle& rRect,
-                        const OUString& rStr, sal_uInt16 nStyle );
+                        const OUString& rStr, DrawTextFlags nStyle );
 
     virtual void        Move( long nHorzMove, long nVertMove ) SAL_OVERRIDE;
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
     const Rectangle&    GetRect() const { return maRect; }
-    const OUString& GetText() const { return maStr; }
-    sal_uInt16              GetStyle() const { return mnStyle; }
+    const OUString&     GetText() const { return maStr; }
+    DrawTextFlags       GetStyle() const { return mnStyle; }
 };
 
 class VCL_DLLPUBLIC MetaTextLineAction : public MetaAction

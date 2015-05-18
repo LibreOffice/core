@@ -43,10 +43,10 @@
 #define IMPICNVIEW_ACC_ESCAPE 2
 
 #define DRAWTEXT_FLAGS_ICON \
-    ( TEXT_DRAW_CENTER | TEXT_DRAW_TOP | TEXT_DRAW_ENDELLIPSIS | \
-      TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MNEMONIC )
+    ( DrawTextFlags::Center | DrawTextFlags::Top | DrawTextFlags::EndEllipsis | \
+      DrawTextFlags::Clip | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Mnemonic )
 
-#define DRAWTEXT_FLAGS_SMALLICON (TEXT_DRAW_LEFT|TEXT_DRAW_ENDELLIPSIS|TEXT_DRAW_CLIP)
+#define DRAWTEXT_FLAGS_SMALLICON (DrawTextFlags::Left|DrawTextFlags::EndEllipsis|DrawTextFlags::Clip)
 
 #define EVENTID_SHOW_CURSOR             (reinterpret_cast<void*>(1))
 #define EVENTID_ADJUST_SCROLLBARS       (reinterpret_cast<void*>(2))
@@ -3489,8 +3489,8 @@ bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
 
     Rectangle aOptTextRect( aTextRect );
     aOptTextRect.Bottom() = LONG_MAX;
-    sal_uInt16 nNewFlags = nCurTextDrawFlags;
-    nNewFlags &= ~( TEXT_DRAW_CLIP | TEXT_DRAW_ENDELLIPSIS );
+    DrawTextFlags nNewFlags = nCurTextDrawFlags;
+    nNewFlags &= ~DrawTextFlags( DrawTextFlags::Clip | DrawTextFlags::EndEllipsis );
     aOptTextRect = pView->GetTextRect( aOptTextRect, aEntryText, nNewFlags );
     if ( aOptTextRect != aTextRect || !sQuickHelpText.isEmpty() )
     {

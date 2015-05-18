@@ -134,7 +134,7 @@ void TitleBar::PaintTitle(vcl::RenderContext& rRenderContext, const Rectangle& r
 
     // Paint title bar text.
     rRenderContext.SetTextColor(rRenderContext.GetTextColor());
-    rRenderContext.DrawText(aTitleBox, msTitle, TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER);
+    rRenderContext.DrawText(aTitleBox, msTitle, DrawTextFlags::Left | DrawTextFlags::VCenter);
     rRenderContext.Pop();
 }
 
@@ -146,7 +146,7 @@ void TitleBar::PaintFocus(vcl::RenderContext& rRenderContext, const Rectangle& r
     aFont.SetWeight(WEIGHT_BOLD);
     rRenderContext.SetFont(aFont);
 
-    const Rectangle aTextBox(rRenderContext.GetTextRect(rFocusBox, msTitle, TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER));
+    const Rectangle aTextBox(rRenderContext.GetTextRect(rFocusBox, msTitle, DrawTextFlags::Left | DrawTextFlags::VCenter));
 
     const Rectangle aLargerTextBox(aTextBox.Left() - 2,
                                    aTextBox.Top() - 2,

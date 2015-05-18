@@ -359,7 +359,7 @@ public:
     void            SetReadOnly( bool bReadOnly )   { mbReadOnly = bReadOnly; }
     bool            IsReadOnly() const              { return mbReadOnly; }
 
-    sal_uInt16      ImplGetTextStyle() const;
+    DrawTextFlags   ImplGetTextStyle() const;
 
     /// pb: #106948# explicit mirroring for calc
     inline void     EnableMirroring()       { mbMirroring = true; }

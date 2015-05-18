@@ -278,14 +278,14 @@ namespace offapp
         {
             rDev.SetClipRegion(vcl::Region(rRect));
 
-            sal_uInt16 nStyle = TEXT_DRAW_CLIP;
+            DrawTextFlags nStyle = DrawTextFlags::Clip;
             if (!IsEnabled())
-                nStyle |= TEXT_DRAW_DISABLE;
+                nStyle |= DrawTextFlags::Disable;
             switch (nColId)
             {
-                case 1: nStyle |= TEXT_DRAW_LEFT; break;
+                case 1: nStyle |= DrawTextFlags::Left; break;
                 case 2:
-                case 3: nStyle |= TEXT_DRAW_CENTER; break;
+                case 3: nStyle |= DrawTextFlags::Center; break;
             }
 
             rDev.DrawText(rRect, implGetCellText(m_aSeekRow, nColId), nStyle);
