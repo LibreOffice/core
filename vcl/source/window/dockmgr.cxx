@@ -639,7 +639,7 @@ void ImplPopupFloatWin::DrawGrip(vcl::RenderContext& rRenderContext)
     if (mbHighlight)
     {
         rRenderContext.Erase(aRect);
-        DrawSelectionBackground(aRect, 2, false, true, false);
+        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, aRect, 2, false, true, false);
     }
     else
     {

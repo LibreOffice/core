@@ -2975,7 +2975,7 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle
     }
 
     if (!bNativeOk)
-        DrawSelectionBackground(rRect, bIsWindow ? 3 : highlight, bChecked, true, bIsWindow, 2, NULL, NULL);
+        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, rRect, bIsWindow ? 3 : highlight, bChecked, true, bIsWindow, NULL, 2, NULL);
 }
 
 void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint, bool bLayout)

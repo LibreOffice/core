@@ -312,7 +312,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
 
     if (rRenderContext.IsNativeControlSupported(CTRL_WINDOW_BACKGROUND, PART_ENTIRE_CONTROL))
     {
-        aCtrlRegion=aRect;
+        aCtrlRegion = aRect;
         rRenderContext.DrawNativeControl(CTRL_WINDOW_BACKGROUND, PART_ENTIRE_CONTROL,
                                          aCtrlRegion, nState, aControlValue, OUString());
 
@@ -358,9 +358,9 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
         // draw ButtonStyle
         // avoid 3D borders
         if (bHigh)
-            DrawSelectionBackground(aRect, 1, true, false, false, &aSelectionTextColor);
+            vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, aRect, 1, true, false, false, &aSelectionTextColor);
         else if (!mbButtonStyle || (nBits & HeaderBarItemBits::FLAT))
-            DrawSelectionBackground(aRect, 0, true, false, false, &aSelectionTextColor);
+            vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, aRect, 0, true, false, false, &aSelectionTextColor);
     }
 
     // do not draw if there is no space

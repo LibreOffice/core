@@ -1914,7 +1914,7 @@ void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const Rectang
     if (rRect.IsInside(GetPointerPosPixel()))
     {
         rRenderContext.DrawWallpaper(rRect, Wallpaper(Color(COL_WHITE)));
-        DrawSelectionBackground(rRect, 2, false, false, false);
+        vcl::RenderTools::DrawSelectionBackground(rRenderContext, *this, rRect, 2, false, false, false);
     }
 
     if (bHorz)
