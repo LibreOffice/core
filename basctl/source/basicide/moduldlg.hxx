@@ -70,7 +70,7 @@ class GotoLineDialog : public ModalDialog
     VclPtr<OKButton>       m_pOKButton;
     DECL_LINK(OkButtonHandler, void *);
 public:
-    GotoLineDialog(vcl::Window * pParent);
+    explicit GotoLineDialog(vcl::Window * pParent);
     virtual ~GotoLineDialog();
     virtual void dispose() SAL_OVERRIDE;
     sal_Int32 GetLineNumber() const;
@@ -87,7 +87,7 @@ private:
     DECL_LINK(OkButtonHandler, void *);
 
 public:
-    ExportDialog( vcl::Window * pParent );
+    explicit ExportDialog( vcl::Window * pParent );
     virtual ~ExportDialog();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -153,7 +153,7 @@ private:
     VclPtr< ::CheckBox>       m_pReplaceBox;
 
 public:
-    LibDialog( vcl::Window* pParent );
+    explicit LibDialog(vcl::Window* pParent);
     virtual ~LibDialog();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -255,7 +255,7 @@ protected:
     VclPtr<TabDialog>          pTabDlg;
 
 public:
-                        LibPage( vcl::Window* pParent );
+    explicit LibPage(vcl::Window* pParent);
     virtual             ~LibPage();
     virtual void        dispose() SAL_OVERRIDE;
 

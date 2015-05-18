@@ -74,7 +74,10 @@ class DummyInteractionHandler  : public HandlerImpl_BASE
 {
     Reference< task::XInteractionHandler2 > m_xHandler;
 public:
-    DummyInteractionHandler( const Reference< task::XInteractionHandler2 >& xHandler ) : m_xHandler( xHandler ){}
+    explicit DummyInteractionHandler(const Reference<task::XInteractionHandler2>& xHandler)
+        : m_xHandler(xHandler)
+    {
+    }
 
     virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& rRequest ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
@@ -94,7 +97,10 @@ private:
     ScriptDocument m_aDocument;
 
 public:
-    LibUserData (ScriptDocument const& rDocument) : m_aDocument(rDocument) { }
+    explicit LibUserData(ScriptDocument const& rDocument)
+        : m_aDocument(rDocument)
+    {
+    }
     virtual ~LibUserData() {};
 
     const ScriptDocument& GetDocument() const { return m_aDocument; }
@@ -1166,7 +1172,7 @@ class OLibCommandEnvironment : public LibCommandEnvironmentHelper
     Reference< task::XInteractionHandler > mxInteraction;
 
 public:
-    OLibCommandEnvironment( Reference< task::XInteractionHandler > xInteraction )
+    explicit OLibCommandEnvironment(const Reference<task::XInteractionHandler>& xInteraction)
         : mxInteraction( xInteraction )
     {}
 

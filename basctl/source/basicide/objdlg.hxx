@@ -35,8 +35,8 @@ namespace basctl
 class ObjectCatalog : public DockingWindow
 {
 public:
-    ObjectCatalog (vcl::Window* pParent);
-    virtual ~ObjectCatalog ();
+    explicit ObjectCatalog(vcl::Window* pParent);
+    virtual ~ObjectCatalog();
     virtual void dispose() SAL_OVERRIDE;
 public:
     void UpdateEntries () { aTree->UpdateEntries(); }

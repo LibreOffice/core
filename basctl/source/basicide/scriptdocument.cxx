@@ -123,7 +123,10 @@ namespace basctl
         class FilterDocuments : public docs::IDocumentDescriptorFilter
         {
         public:
-            FilterDocuments( bool _bFilterInvisible ) : m_bFilterInvisible( _bFilterInvisible ) { }
+            explicit FilterDocuments(bool _bFilterInvisible)
+                : m_bFilterInvisible(_bFilterInvisible)
+            {
+            }
 
             virtual ~FilterDocuments() {}
 
@@ -193,8 +196,8 @@ namespace basctl
 
     public:
         Impl ();
-        Impl (Reference<XModel> const& rxDocument);
-        virtual ~Impl ();
+        explicit Impl(Reference<XModel> const& rxDocument);
+        virtual ~Impl();
 
         /** determines whether the instance refers to a valid "document" with script and
             dialog libraries
@@ -1128,7 +1131,7 @@ namespace basctl
     {
         struct DocumentTitleLess : public ::std::binary_function< ScriptDocument, ScriptDocument, bool >
         {
-            DocumentTitleLess( const CollatorWrapper& _rCollator )
+            explicit DocumentTitleLess( const CollatorWrapper& _rCollator )
                 :m_aCollator( _rCollator )
             {
             }

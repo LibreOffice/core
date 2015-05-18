@@ -46,7 +46,7 @@ template <class PointType> double theta( const PointType& p1, const PointType& p
 template <class PointType> class ThetaCompare : public ::std::binary_function< const PointType&, const PointType&, bool >
 {
 public:
-    ThetaCompare( const PointType& rRefPoint ) : maRefPoint( rRefPoint ) {}
+    explicit ThetaCompare( const PointType& rRefPoint ) : maRefPoint( rRefPoint ) {}
 
     bool operator() ( const PointType& p1, const PointType& p2 )
     {

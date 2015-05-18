@@ -54,7 +54,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 protected:
-    Layout (vcl::Window* pParent);
+    explicit Layout(vcl::Window* pParent);
 
     void AddToLeft   (DockingWindow* pWin, Size const& rSize) { aLeftSide.Add(pWin, rSize); }
     void AddToBottom (DockingWindow* pWin, Size const& rSize) { aBottomSide.Add(pWin, rSize); }

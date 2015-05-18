@@ -46,17 +46,18 @@ class MacroSnippet
         int nLine;
         int nCol;
         ErrorDetail() : nLine(0), nCol(0) {}
-    };
+    }
 
-    MacroSnippet( const OUString& sSource ) : mbError(false)
+    explicit MacroSnippet(const OUString& sSource)
+        : mbError(false)
     {
         InitSnippet();
         MakeModule( sSource );
-    };
+    }
     MacroSnippet() : mbError(false)
     {
         InitSnippet();
-    };
+    }
     void LoadSourceFromFile( const OUString& sMacroFileURL )
     {
         OUString sSource;

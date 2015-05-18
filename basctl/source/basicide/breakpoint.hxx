@@ -38,7 +38,14 @@ struct BreakPoint
     size_t nStopAfter;
     size_t nHitCount;
 
-    BreakPoint(size_t nL) { nLine = nL; nStopAfter = 0; nHitCount = 0; bEnabled = true; bTemp = false; }
+    explicit BreakPoint(size_t nL)
+        : bEnabled(true)
+        , bTemp(false)
+        , nLine(nL)
+        , nStopAfter(0)
+        , nHitCount(0)
+    {
+    }
 };
 
 class BreakPointList

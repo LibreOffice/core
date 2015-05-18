@@ -62,8 +62,12 @@ private:
     EntryType m_eType;
 
 public:
-    Entry (EntryType eType) : m_eType(eType) { }
-    virtual ~Entry ();
+    explicit Entry(EntryType eType)
+        : m_eType(eType)
+    {
+    }
+
+    virtual ~Entry();
 
     EntryType GetType () const { return m_eType; }
 };

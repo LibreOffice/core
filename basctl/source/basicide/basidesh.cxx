@@ -68,11 +68,14 @@ class ContainerListenerImpl : public ContainerListenerBASE
 {
     Shell* mpShell;
 public:
-
-    ContainerListenerImpl (Shell* pShell) : mpShell(pShell) { }
+    explicit ContainerListenerImpl(Shell* pShell)
+        : mpShell(pShell)
+    {
+    }
 
     virtual ~ContainerListenerImpl()
-    { }
+    {
+    }
 
     void addContainerListener( const ScriptDocument& rScriptDocument, const OUString& aLibName )
     {
