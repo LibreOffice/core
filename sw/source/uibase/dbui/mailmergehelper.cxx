@@ -316,51 +316,53 @@ void SwAddressPreview::UpdateScrollBar()
     }
 }
 
-void SwAddressPreview::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle&)
+void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    SetFillColor(rSettings.GetWindowColor());
-    SetLineColor( Color(COL_TRANSPARENT) );
-    DrawRect( Rectangle(Point(0, 0), GetOutputSizePixel()) );
+    const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
+    rRenderContext.SetFillColor(rSettings.GetWindowColor());
+    rRenderContext.SetLineColor(Color(COL_TRANSPARENT));
+    rRenderContext.DrawRect(Rectangle(Point(0, 0), rRenderContext.GetOutputSizePixel()));
     Color aPaintColor(IsEnabled() ? rSettings.GetWindowTextColor() : rSettings.GetDisableColor());
-    SetLineColor(aPaintColor);
-    vcl::Font aFont(GetFont());
+    rRenderContext.SetLineColor(aPaintColor);
+    vcl::Font aFont(rRenderContext.GetFont());
     aFont.SetColor(aPaintColor);
-    SetFont(aFont);
+    rRenderContext.SetFont(aFont);
 
-    Size aSize = GetOutputSizePixel();
+    Size aSize = rRenderContext.GetOutputSizePixel();
     sal_uInt16 nStartRow = 0;
     if(aVScrollBar->IsVisible())
     {
         aSize.Width() -= aVScrollBar->GetSizePixel().Width();
         nStartRow = (sal_uInt16)aVScrollBar->GetThumbPos();
     }
-    Size aPartSize( aSize.Width()/pImpl->nColumns, aSize.Height()/pImpl->nRows );
+    Size aPartSize(aSize.Width() / pImpl->nColumns,
+                   aSize.Height() / pImpl->nRows);
     aPartSize.Width() -= 2;
     aPartSize.Height() -= 2;
 
     sal_uInt16 nAddress = nStartRow * pImpl->nColumns;
-    const sal_uInt16 nNumAddresses = static_cast< sal_uInt16 >(pImpl->aAddresses.size());
-    for(sal_uInt16 nRow = 0; nRow < pImpl->nRows ; ++nRow)
+    const sal_uInt16 nNumAddresses = static_cast<sal_uInt16>(pImpl->aAddresses.size());
+    for (sal_uInt16 nRow = 0; nRow < pImpl->nRows ; ++nRow)
     {
-        for(sal_uInt16 nCol = 0; nCol < pImpl->nColumns; ++nCol)
+        for (sal_uInt16 nCol = 0; nCol < pImpl->nColumns; ++nCol)
         {
-            if(nAddress >= nNumAddresses)
+            if (nAddress >= nNumAddresses)
                 break;
-            Point aPos(nCol * aPartSize.Width(), (nRow) * aPartSize.Height());
-            aPos.Move(1,1);
+            Point aPos(nCol * aPartSize.Width(),
+                       nRow * aPartSize.Height());
+            aPos.Move(1, 1);
             bool bIsSelected = nAddress == pImpl->nSelectedAddress;
-            if((pImpl->nColumns * pImpl->nRows) == 1)
+            if ((pImpl->nColumns * pImpl->nRows) == 1)
                 bIsSelected = false;
             OUString adr(pImpl->aAddresses[nAddress]);
-            DrawText_Impl(adr,aPos,aPartSize,bIsSelected);
+            DrawText_Impl(rRenderContext, adr, aPos, aPartSize, bIsSelected);
             ++nAddress;
         }
     }
-    SetClipRegion();
+    rRenderContext.SetClipRegion();
 }
 
-void  SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
+void SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Window::MouseButtonDown(rMEvt);
     if (rMEvt.IsLeft() && pImpl->nRows && pImpl->nColumns)
@@ -434,30 +436,30 @@ void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
 
 void SwAddressPreview::StateChanged( StateChangedType nStateChange )
 {
-    if(nStateChange == StateChangedType::Enable)
+    if (nStateChange == StateChangedType::Enable)
         Invalidate();
     Window::StateChanged(nStateChange);
 }
 
-void SwAddressPreview::DrawText_Impl(
-        const OUString& rAddress, const Point& rTopLeft, const Size& rSize, bool bIsSelected)
+void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
+                                     const Point& rTopLeft, const Size& rSize, bool bIsSelected)
 {
-    SetClipRegion( vcl::Region( Rectangle(rTopLeft, rSize)) );
-    if(bIsSelected)
+    rRenderContext.SetClipRegion(vcl::Region(Rectangle(rTopLeft, rSize)));
+    if (bIsSelected)
     {
         //selection rectangle
-        SetFillColor(Color(COL_TRANSPARENT));
-        DrawRect(Rectangle(rTopLeft, rSize));
+        rRenderContext.SetFillColor(Color(COL_TRANSPARENT));
+        rRenderContext.DrawRect(Rectangle(rTopLeft, rSize));
     }
     sal_Int32 nHeight = GetTextHeight();
     OUString sAddress(rAddress);
     sal_uInt16 nTokens = comphelper::string::getTokenCount(sAddress, '\n');
     Point aStart = rTopLeft;
     //put it away from the border
-    aStart.Move( 2, 2);
-    for(sal_uInt16 nToken = 0; nToken < nTokens; nToken++)
+    aStart.Move(2, 2);
+    for (sal_uInt16 nToken = 0; nToken < nTokens; nToken++)
     {
-        DrawText( aStart, sAddress.getToken(nToken, '\n') );
+        rRenderContext.DrawText(aStart, sAddress.getToken(nToken, '\n'));
         aStart.Y() += nHeight;
     }
 }

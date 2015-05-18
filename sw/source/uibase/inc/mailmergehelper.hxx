@@ -44,13 +44,13 @@ namespace com { namespace sun { namespace star { namespace mail {
 namespace SwMailMergeHelper
 {
     SW_DLLPUBLIC OUString CallSaveAsDialog(OUString& rFilter);
-    SW_DLLPUBLIC bool    CheckMailAddress( const OUString& rMailAddress );
-    SW_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::mail::XSmtpService >
-                         ConnectToSmtpServer( SwMailMergeConfigItem& rConfigItem,
-                            com::sun::star::uno::Reference< com::sun::star::mail::XMailService >&  xInMailService,
+    SW_DLLPUBLIC bool CheckMailAddress(const OUString& rMailAddress);
+    SW_DLLPUBLIC css::uno::Reference<css::mail::XSmtpService> ConnectToSmtpServer(
+                            SwMailMergeConfigItem& rConfigItem,
+                            css::uno::Reference<css::mail::XMailService>& xInMailService,
                             const OUString& rInMailServerPassword,
                             const OUString& rOutMailServerPassword,
-                            vcl::Window* pDialogParentWindow = 0 );
+                            vcl::Window* pDialogParentWindow = 0);
 }
 
 struct SwAddressPreview_Impl;
@@ -59,18 +59,19 @@ struct SwAddressPreview_Impl;
 // and also the resulting address filled with database data
 class SW_DLLPUBLIC SwAddressPreview : public vcl::Window
 {
-    VclPtr<ScrollBar>       aVScrollBar;
-    SwAddressPreview_Impl*  pImpl;
-    Link<>                  m_aSelectHdl;
+    VclPtr<ScrollBar> aVScrollBar;
+    SwAddressPreview_Impl* pImpl;
+    Link<> m_aSelectHdl;
 
-    void DrawText_Impl( const OUString& rAddress, const Point& rTopLeft, const Size& rSize, bool bIsSelected);
+    void DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
+                       const Point& rTopLeft, const Size& rSize, bool bIsSelected);
 
-    virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    void                UpdateScrollBar();
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    void UpdateScrollBar();
 
     DECL_LINK(ScrollHdl, void*);
 
@@ -88,87 +89,89 @@ public:
      AddAddress appends the new address to the already added ones.
      Initially the first added address will be selected
     */
-    void                    AddAddress(const OUString& rAddress);
+    void AddAddress(const OUString& rAddress);
     //  for preview mode - replaces the currently used address by the given one
-    void                    SetAddress(const OUString& rAddress);
+    void SetAddress(const OUString& rAddress);
     // removes all addresses
-    void                    Clear();
+    void Clear();
 
     // returns the selected address
-    sal_uInt16              GetSelectedAddress() const;
-    void                    SelectAddress(sal_uInt16 nSelect);
-    void                    ReplaceSelectedAddress(const OUString&);
-    void                    RemoveSelectedAddress();
+    sal_uInt16 GetSelectedAddress() const;
+    void SelectAddress(sal_uInt16 nSelect);
+    void ReplaceSelectedAddress(const OUString&);
+    void RemoveSelectedAddress();
 
     // set the number of rows and columns of addresses
-    void                    SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns);
-    void                    EnableScrollBar(bool bEnable = true);
+    void SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns);
+    void EnableScrollBar(bool bEnable = true);
 
     // fill the actual data into a string (address block or greeting)
-    static OUString FillData(
-            const OUString& rAddress,
-            SwMailMergeConfigItem& rConfigItem,
-            const ::com::sun::star::uno::Sequence< OUString>* pAssignments = 0);
+    static OUString FillData(const OUString& rAddress, SwMailMergeConfigItem& rConfigItem,
+                             const css::uno::Sequence<OUString>* pAssignments = 0);
 
-    void    SetSelectHdl (const Link<>& rLink) {m_aSelectHdl = rLink;}
+    void SetSelectHdl (const Link<>& rLink) { m_aSelectHdl = rLink; }
 };
 
 // iterate over an address block or a greeting line the iterator returns the
 // parts either as pure string or as column
 struct SwMergeAddressItem
 {
-    OUString  sText;
-    bool      bIsColumn;
-    bool      bIsReturn;
-    SwMergeAddressItem() :
-        bIsColumn(false),
-        bIsReturn(false) {}
+    OUString sText;
+    bool bIsColumn;
+    bool bIsReturn;
+
+    SwMergeAddressItem()
+        : bIsColumn(false)
+        , bIsReturn(false)
+    {}
 };
 
-class SW_DLLPUBLIC   SwAddressIterator
+class SW_DLLPUBLIC SwAddressIterator
 {
     OUString sAddress;
 public:
     SwAddressIterator(const OUString& rAddress) :
-        sAddress(rAddress){}
+        sAddress(rAddress)
+    {}
 
     SwMergeAddressItem  Next();
-    bool                HasMore() const{return !sAddress.isEmpty();}
+    bool HasMore() const { return !sAddress.isEmpty(); }
 };
 
 class SW_DLLPUBLIC SwAuthenticator :
-    public cppu::WeakImplHelper< ::com::sun::star::mail::XAuthenticator>
+    public cppu::WeakImplHelper<css::mail::XAuthenticator>
 {
     OUString m_aUserName;
     OUString m_aPassword;
-    VclPtr<vcl::Window>         m_pParentWindow;
+    VclPtr<vcl::Window> m_pParentWindow;
 public:
-    SwAuthenticator() : m_pParentWindow(0) {}
-    SwAuthenticator(const OUString& username, const OUString& password, vcl::Window* pParent) :
-        m_aUserName(username),
-        m_aPassword(password),
-        m_pParentWindow( pParent )
+    SwAuthenticator()
+        : m_pParentWindow(0)
+    {}
+    SwAuthenticator(const OUString& username, const OUString& password, vcl::Window* pParent)
+        : m_aUserName(username)
+        , m_aPassword(password)
+        , m_pParentWindow(pParent)
     {}
     virtual ~SwAuthenticator();
 
-    virtual OUString SAL_CALL getUserName( ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getPassword(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getUserName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getPassword() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
-class SW_DLLPUBLIC SwConnectionContext :
-    public cppu::WeakImplHelper< ::com::sun::star::uno::XCurrentContext >
+class SW_DLLPUBLIC SwConnectionContext : public cppu::WeakImplHelper<css::uno::XCurrentContext>
 {
-    OUString     m_sMailServer;
-    sal_Int16           m_nPort;
-    OUString     m_sConnectionType;
+    OUString m_sMailServer;
+    sal_Int16 m_nPort;
+    OUString m_sConnectionType;
 
 public:
     SwConnectionContext(const OUString& rMailServer, sal_Int16 nPort, const OUString& rConnectionType);
     virtual ~SwConnectionContext();
 
-    virtual ::com::sun::star::uno::Any SAL_CALL     getValueByName( const OUString& Name )
-                                                            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getValueByName(const OUString& Name)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class SwMutexBase
@@ -179,118 +182,140 @@ public:
 
 class SW_DLLPUBLIC SwConnectionListener :
         public SwMutexBase,
-        public cppu::WeakComponentImplHelper< ::com::sun::star::mail::XConnectionListener >
+        public cppu::WeakComponentImplHelper<css::mail::XConnectionListener>
 {
     using cppu::WeakComponentImplHelperBase::disposing;
 
 public:
     SwConnectionListener() :
-        cppu::WeakComponentImplHelper< ::com::sun::star::mail::XConnectionListener>(m_aMutex)
+        cppu::WeakComponentImplHelper<css::mail::XConnectionListener>(m_aMutex)
     {}
     virtual ~SwConnectionListener();
 
-    virtual void SAL_CALL connected(const ::com::sun::star::lang::EventObject& aEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL connected(const css::lang::EventObject& aEvent)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL disconnected(const ::com::sun::star::lang::EventObject& aEvent)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disconnected(const css::lang::EventObject& aEvent)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& aEvent)
-        throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class SW_DLLPUBLIC SwMailTransferable :
         public SwMutexBase,
-        public cppu::WeakComponentImplHelper
-        <
-            ::com::sun::star::datatransfer::XTransferable,
-            ::com::sun::star::beans::XPropertySet
-        >
+        public cppu::WeakComponentImplHelper<css::datatransfer::XTransferable, css::beans::XPropertySet>
 {
     OUString  m_aMimeType;
     OUString  m_sBody;
     OUString  m_aURL;
     OUString  m_aName;
-    bool           m_bIsBody;
+    bool m_bIsBody;
 
     public:
     SwMailTransferable(const OUString& rURL, const OUString& rName, const OUString& rMimeType);
     SwMailTransferable(const OUString& rBody, const OUString& rMimeType);
     virtual ~SwMailTransferable();
-    virtual ::com::sun::star::uno::Any SAL_CALL
-                        getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-                            throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL
-                        getTransferDataFlavors(  )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-    virtual sal_Bool SAL_CALL
-                        isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
-                            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& aFlavor)
+                throw (css::datatransfer::UnsupportedFlavorException, css::io::IOException,
+                       css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors()
+                            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor)
+                            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo()
+                throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const css::uno::Any& aValue)
+                throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
+                      css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
+                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName)
+                throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName,
+                                                    const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener)
+                throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName,
+                                                       const css::uno::Reference<css::beans::XPropertyChangeListener >& aListener)
+                throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName,
+                                                    const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener)
+                throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,
+                                                       const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener)
+                throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+                      css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
 class SW_DLLPUBLIC SwMailMessage :
         public SwMutexBase,
-        public cppu::WeakComponentImplHelper< ::com::sun::star::mail::XMailMessage >
+        public cppu::WeakComponentImplHelper<css::mail::XMailMessage>
 {
-    OUString                                                                         m_sSenderName;
-    OUString                                                                         m_sSenderAddress;
-    OUString                                                                         m_sReplyToAddress;
-    OUString                                                                         m_sSubject;
+    OUString m_sSenderName;
+    OUString m_sSenderAddress;
+    OUString m_sReplyToAddress;
+    OUString m_sSubject;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable>        m_xBody;
-//    ::com::sun::star::mail::MailMessageBody                                                 m_aBody;
+    css::uno::Reference<css::datatransfer::XTransferable> m_xBody;
+//  css::mail::MailMessageBody m_aBody;
 
-    ::com::sun::star::uno::Sequence< OUString >                                      m_aRecipients;
-    ::com::sun::star::uno::Sequence< OUString >                                      m_aCcRecipients;
-    ::com::sun::star::uno::Sequence< OUString >                                      m_aBccRecipients;
-//    ::com::sun::star::uno::Sequence< ::com::sun::star::mail::MailAttachmentDescriptor >     m_aAttachments;
-    ::com::sun::star::uno::Sequence<  ::com::sun::star::mail::MailAttachment >              m_aAttachments;
+    css::uno::Sequence<OUString> m_aRecipients;
+    css::uno::Sequence<OUString> m_aCcRecipients;
+    css::uno::Sequence<OUString> m_aBccRecipients;
+//  css::uno::Sequence<css::mail::MailAttachmentDescriptor> m_aAttachments;
+    css::uno::Sequence<css::mail::MailAttachment> m_aAttachments;
 public:
     SwMailMessage();
     virtual ~SwMailMessage();
 
     // attributes
-    virtual OUString SAL_CALL    getSenderName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL    getSenderAddress() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL    getReplyToAddress() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL               setReplyToAddress( const OUString& _replytoaddress ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL    getSubject() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL               setSubject( const OUString& _subject ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getSenderName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getSenderAddress() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getReplyToAddress() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setReplyToAddress( const OUString& _replytoaddress )
+                        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getSubject() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setSubject(const OUString& _subject)
+                        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL
-                                        getBody()
-                                                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL               setBody( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _body )
-                                                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getBody()
+                        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setBody(const css::uno::Reference<css::datatransfer::XTransferable>& _body)
+                        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // methods
-    virtual void SAL_CALL               addRecipient( const OUString& sRecipientAddress ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL               addCcRecipient( const OUString& sRecipientAddress ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL               addBccRecipient( const OUString& sRecipientAddress ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-                                        getRecipients(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-                                        getCcRecipients(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-                                        getBccRecipients(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL               addAttachment( const ::com::sun::star::mail::MailAttachment& aMailAttachment )
-                                            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::mail::MailAttachment > SAL_CALL
-                                        getAttachments(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void                                SetSenderName(const OUString& rSenderName)
-                                                {m_sSenderName = rSenderName;}
-    void                                SetSenderAddress(const OUString& rSenderAddress)
-                                                {m_sSenderAddress = rSenderAddress;}
+    virtual void SAL_CALL addRecipient( const OUString& sRecipientAddress )
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addCcRecipient( const OUString& sRecipientAddress )
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addBccRecipient( const OUString& sRecipientAddress )
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getRecipients()
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getCcRecipients()
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getBccRecipients()
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addAttachment(const css::mail::MailAttachment& aMailAttachment)
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<css::mail::MailAttachment> SAL_CALL getAttachments()
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void SetSenderName(const OUString& rSenderName)
+    {
+        m_sSenderName = rSenderName;
+    }
+    void SetSenderAddress(const OUString& rSenderAddress)
+    {
+        m_sSenderAddress = rSenderAddress;
+    }
 };
 
 #endif
