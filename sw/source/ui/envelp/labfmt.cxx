@@ -115,13 +115,15 @@ SwLabPreview::SwLabPreview(vcl::Window* pParent)
 {
     SetMapMode(MAP_PIXEL);
 
+    // FIXME RenderContext
+
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
     SetBackground(Wallpaper(rWinColor));
 
     vcl::Font aFont = GetFont();
     aFont.SetTransparent(true);
-    aFont.SetWeight  (WEIGHT_NORMAL);
+    aFont.SetWeight(WEIGHT_NORMAL);
     SetFont(aFont);
 
     lHDistWidth  = GetTextWidth(aHDistStr );
