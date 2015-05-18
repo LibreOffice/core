@@ -37,6 +37,7 @@
 #include "worksheetbuffer.hxx"
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
+#include "compiler.hxx"
 
 namespace oox {
 namespace xls {
@@ -380,6 +381,16 @@ DefinedName::getTokens()
     return aTokens;
 }
 
+std::unique_ptr<ScTokenArray> DefinedName::getScTokens()
+{
+    ScTokenArray aTokenArray;
+    ScCompiler aCompiler(&getScDocument(), ScAddress(0, 0, mnCalcSheet));
+    aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
+    std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(maModel.maFormula));
+
+    return pArray;
+}
+
 void DefinedName::convertFormula()
 {
     // macro function or vba procedure
@@ -389,10 +400,8 @@ void DefinedName::convertFormula()
     // convert and set formula of the defined name
     if ( getFilterType() == FILTER_OOXML )
     {
-        ApiTokenSequence aTokens = getTokens();
-        ScTokenArray aTokenArray;
-        (void)ScTokenConversion::ConvertToTokenArray( this->getScDocument(), aTokenArray, aTokens );
-        mpScRangeData->SetCode( aTokenArray );
+        std::unique_ptr<ScTokenArray> pTokenArray = getScTokens();
+        mpScRangeData->SetCode( *pTokenArray );
     }
 
     ScTokenArray* pTokenArray = mpScRangeData->GetCode();

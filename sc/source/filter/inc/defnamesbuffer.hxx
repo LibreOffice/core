@@ -23,6 +23,10 @@
 #include "formulabase.hxx"
 #include "rangenam.hxx"
 
+#include <memory>
+
+class ScTokenArray;
+
 namespace com { namespace sun { namespace star {
     namespace sheet { class XNamedRange; }
 } } }
@@ -111,6 +115,7 @@ public:
     /** Converts the formula string or BIFF token array for this defined name. */
     void                convertFormula();
     ApiTokenSequence    getTokens();
+    std::unique_ptr<ScTokenArray> getScTokens();
     /** Returns true, if this defined name is global in the document. */
     inline bool         isGlobalName() const { return mnCalcSheet < 0; }
     /** Returns true, if this defined name is a special builtin name. */
