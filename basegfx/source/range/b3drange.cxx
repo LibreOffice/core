@@ -18,7 +18,6 @@
  */
 
 #include <basegfx/range/b3drange.hxx>
-#include <basegfx/range/b3irange.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
