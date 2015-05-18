@@ -3597,18 +3597,22 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
     else if ( FRMDIR_HORI_LEFT_TOP == m_rExport.TrueFrameDirection( *pFrmFmt ) )
     {
         // Undo the text direction mangling done by the btLr handler in writerfilter::dmapper::DomainMapperTableManager::sprm()
-        SwPaM aPam(*pTabBox->GetSttNd(), 0);
-        ++aPam.GetPoint()->nNode;
-        if (aPam.GetPoint()->nNode.GetNode().IsTxtNode())
+        const SwStartNode* pSttNd = pTabBox->GetSttNd();
+        if (pSttNd)
         {
-            const SwTxtNode& rTxtNode = static_cast<const SwTxtNode&>(aPam.GetPoint()->nNode.GetNode());
-            if( const SwAttrSet* pAttrSet = rTxtNode.GetpSwAttrSet())
+            SwPaM aPam(*pSttNd, 0);
+            ++aPam.GetPoint()->nNode;
+            if (aPam.GetPoint()->nNode.GetNode().IsTxtNode())
             {
-                const SvxCharRotateItem& rCharRotate = pAttrSet->GetCharRotate();
-                if (rCharRotate.GetValue() == 900)
+                const SwTxtNode& rTxtNode = static_cast<const SwTxtNode&>(aPam.GetPoint()->nNode.GetNode());
+                if( const SwAttrSet* pAttrSet = rTxtNode.GetpSwAttrSet())
                 {
-                    m_pSerializer->singleElementNS( XML_w, XML_textDirection, FSNS( XML_w, XML_val ), "btLr", FSEND );
-                    m_bBtLr = true;
+                    const SvxCharRotateItem& rCharRotate = pAttrSet->GetCharRotate();
+                    if (rCharRotate.GetValue() == 900)
+                    {
+                        m_pSerializer->singleElementNS( XML_w, XML_textDirection, FSNS( XML_w, XML_val ), "btLr", FSEND );
+                        m_bBtLr = true;
+                    }
                 }
             }
         }
