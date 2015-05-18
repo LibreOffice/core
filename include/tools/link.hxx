@@ -113,7 +113,8 @@
 #define LINK(Instance, Class, Member) ::tools::detail::makeLink( \
     static_cast<Class *>(Instance), &Class::LinkStub##Member)
 
-template<typename Arg = void *, typename Ret = sal_IntPtr> class Link {
+template<typename Arg = void *, typename Ret = sal_IntPtr>
+class SAL_WARN_UNUSED Link {
 public:
     typedef Ret Stub(void *, Arg);
 

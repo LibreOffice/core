@@ -1609,7 +1609,6 @@ private:
                                   Size( nRotatedWidth, nRotatedHeight ) );
         }
 
-        Link<> aOldLink;
         Outliner* pOutliner = mrBase.GetDocument()->GetInternalOutliner();
         pOutliner->Init(OUTLINERMODE_OUTLINEVIEW);
         const sal_uInt16 nSavedOutlMode (pOutliner->GetMode());

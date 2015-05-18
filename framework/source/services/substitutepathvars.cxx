@@ -114,7 +114,7 @@ typedef std::vector< SubstituteRule > SubstituteRuleVector;
 class SubstitutePathVariables_Impl : public utl::ConfigItem
 {
     public:
-        SubstitutePathVariables_Impl( const Link<>& aNotifyLink );
+        SubstitutePathVariables_Impl();
         virtual ~SubstitutePathVariables_Impl();
 
         static OperatingSystem GetOperatingSystemFromString( const OUString& );
@@ -153,7 +153,6 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
         bool      m_bHostRetrieved;
         OUString  m_aHost;
 
-        Link<>            m_aListenerNotify;
         const OUString    m_aSharePointsNodeName;
         const OUString    m_aDirPropertyName;
         const OUString    m_aEnvPropertyName;
@@ -261,8 +260,6 @@ public:
         throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    DECL_LINK(implts_ConfigurationNotify, void *);
-
     void            SetPredefinedPathVariables();
     OUString   ConvertOSLtoUCBURL( const OUString& aOSLCompliantURL ) const;
 
@@ -395,13 +392,12 @@ EnvironmentType SubstitutePathVariables_Impl::GetEnvTypeFromString( const OUStri
     return ET_UNKNOWN;
 }
 
-SubstitutePathVariables_Impl::SubstitutePathVariables_Impl( const Link<>& aNotifyLink ) :
+SubstitutePathVariables_Impl::SubstitutePathVariables_Impl() :
     utl::ConfigItem( OUString( "Office.Substitution" )),
     m_bYPDomainRetrieved( false ),
     m_bDNSDomainRetrieved( false ),
     m_bNTDomainRetrieved( false ),
     m_bHostRetrieved( false ),
-    m_aListenerNotify( aNotifyLink ),
     m_aSharePointsNodeName( OUString( "SharePoints" )),
     m_aDirPropertyName( OUString( "/Directory" )),
     m_aEnvPropertyName( OUString( "/Environment" )),
@@ -719,7 +715,6 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
 
 SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentContext >& xContext ) :
     SubstitutePathVariables_BASE(m_aMutex),
-    m_aImpl( LINK( this, SubstitutePathVariables, implts_ConfigurationNotify )),
     m_xContext( xContext )
 {
     int i;
@@ -791,16 +786,6 @@ throw ( NoSuchElementException, RuntimeException, std::exception )
 {
     osl::MutexGuard g(rBHelper.rMutex);
     return impl_getSubstituteVariableValue( aVariable );
-}
-
-//      protected methods
-
-IMPL_LINK_NOARG(SubstitutePathVariables, implts_ConfigurationNotify)
-{
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    osl::MutexGuard g(rBHelper.rMutex);
-
-    return 0;
 }
 
 OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const OUString& aOSLCompliantURL ) const

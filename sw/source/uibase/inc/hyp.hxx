@@ -31,7 +31,6 @@ private:
     SwView* pView;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >  xHyph;
-    Link<>          aOldLnk;
     sal_uInt16          nPageCount;     // page count for progress view
     sal_uInt16          nPageStart;     // 1st checked page
     bool            bInSelection : 1; // separating selected text
