@@ -78,6 +78,7 @@
 #include <utility>
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 using namespace com::sun::star;
 using ::std::vector;
@@ -2588,7 +2589,7 @@ void ScDPObject::ConvertOrientation(
             {
                 //  if set via api, a data column may occur several times
                 //  (if the function hasn't been changed yet) -> also look for duplicate data column
-                bFirst = std::find_if(itrBeg, itr, FindByOriginalDim(nCol)) == itr;
+                bFirst = std::none_of(itrBeg, itr, FindByOriginalDim(nCol));
             }
 
             sheet::GeneralFunction eFunc = ScDataPilotConversion::FirstFunc(rField.nFuncMask);
@@ -3682,20 +3683,17 @@ ScRangeList ScDPCollection::GetAllTableRanges( SCTAB nTab ) const
 
 bool ScDPCollection::IntersectsTableByColumns( SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab ) const
 {
-    return std::find_if(
-        maTables.begin(), maTables.end(), FindIntersetingTableByColumns(nCol1, nCol2, nRow, nTab)) != maTables.end();
+    return std::any_of(maTables.begin(), maTables.end(), FindIntersetingTableByColumns(nCol1, nCol2, nRow, nTab));
 }
 
 bool ScDPCollection::IntersectsTableByRows( SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab ) const
 {
-    return std::find_if(
-        maTables.begin(), maTables.end(), FindIntersectingTableByRows(nCol, nRow1, nRow2, nTab)) != maTables.end();
+    return std::any_of(maTables.begin(), maTables.end(), FindIntersectingTableByRows(nCol, nRow1, nRow2, nTab));
 }
 
 bool ScDPCollection::HasTable( const ScRange& rRange ) const
 {
-    return std::find_if(
-        maTables.begin(), maTables.end(), FindIntersectingTable(rRange)) != maTables.end();
+    return std::any_of(maTables.begin(), maTables.end(), FindIntersectingTable(rRange));
 }
 
 #if DEBUG_PIVOT_TABLE

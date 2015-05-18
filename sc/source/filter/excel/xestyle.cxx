@@ -2986,12 +2986,12 @@ void XclExpXFBuffer::AppendXFIndex( sal_uInt32 nXFId )
 
 void XclExpXFBuffer::AddBorderAndFill( const XclExpXF& rXF )
 {
-    if( std::find_if( maBorders.begin(), maBorders.end(), XclExpBorderPred( rXF.GetBorderData() ) ) == maBorders.end() )
+    if( std::none_of( maBorders.begin(), maBorders.end(), XclExpBorderPred( rXF.GetBorderData() ) ) )
     {
         maBorders.push_back( rXF.GetBorderData() );
     }
 
-    if( std::find_if( maFills.begin(), maFills.end(), XclExpFillPred( rXF.GetAreaData() ) ) == maFills.end() )
+    if( std::none_of( maFills.begin(), maFills.end(), XclExpFillPred( rXF.GetAreaData() ) ) )
     {
         maFills.push_back( rXF.GetAreaData() );
     }

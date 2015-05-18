@@ -28,6 +28,7 @@
 #include "rechead.hxx"
 #include "compiler.hxx"
 #include <boost/checked_delete.hpp>
+#include <algorithm>
 
 using ::std::vector;
 using ::std::advance;
@@ -1054,18 +1055,12 @@ void ScRangeList::Append( const ScRange& rRange )
 
 bool ScRangeList::Intersects( const ScRange& rRange ) const
 {
-    const_iterator itrEnd = maRanges.end();
-    const_iterator itr =
-        find_if(maRanges.begin(), itrEnd, FindIntersectingRange<ScRange>(rRange));
-    return itr != itrEnd;
+    return std::any_of(maRanges.begin(), maRanges.end(), FindIntersectingRange<ScRange>(rRange));
 }
 
 bool ScRangeList::In( const ScRange& rRange ) const
 {
-    const_iterator itrEnd = maRanges.end();
-    const_iterator itr =
-        find_if(maRanges.begin(), itrEnd, FindEnclosingRange<ScRange>(rRange));
-    return itr != itrEnd;
+    return std::any_of(maRanges.begin(), maRanges.end(), FindEnclosingRange<ScRange>(rRange));
 }
 
 size_t ScRangeList::GetCellCount() const
