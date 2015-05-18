@@ -147,7 +147,7 @@ inline void lclFillAddress( XclAddress& rXclPos, SCCOL nScCol, SCROW nScRow )
     rXclPos.mnRow = static_cast< sal_uInt32 >( nScRow );
 }
 
-} // namespace
+}
 
 XclExpAddressConverter::XclExpAddressConverter( const XclExpRoot& rRoot ) :
     XclAddressConverterBase( rRoot.GetTracer(), rRoot.GetXclMaxPos() )
@@ -282,7 +282,7 @@ OUString lclGetUrlRepresentation( const SvxURLField& rUrlField )
     return aRepr.isEmpty() ? rUrlField.GetURL() : aRepr;
 }
 
-} // namespace
+}
 
 XclExpHyperlinkHelper::XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos ) :
     XclExpRoot( rRoot ),
@@ -518,7 +518,7 @@ XclExpStringRef lclCreateFormattedString(
     return xString;
 }
 
-} // namespace
+}
 
 XclExpStringRef XclExpStringHelper::CreateString(
         const XclExpRoot& rRoot, const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
@@ -962,7 +962,7 @@ OUString lclEncodeDosUrl(
     return aBuf.makeStringAndClear();
 }
 
-} // namespace
+}
 
 OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const OUString& rAbsUrl, const OUString* pTableName )
 {

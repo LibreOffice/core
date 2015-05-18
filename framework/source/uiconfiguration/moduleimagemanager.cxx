@@ -200,6 +200,6 @@ sal_Bool SAL_CALL ModuleImageManager::isReadOnly() throw (::com::sun::star::uno:
     return m_pImpl->isReadOnly();
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

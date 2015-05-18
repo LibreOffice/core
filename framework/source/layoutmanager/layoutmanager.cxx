@@ -3198,7 +3198,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySet
     return (*pInfo);
 }
 
-} // namespace framework
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_LayoutManager_get_implementation(

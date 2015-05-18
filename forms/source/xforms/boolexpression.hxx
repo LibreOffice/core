@@ -41,7 +41,7 @@ public:
     void setExpression( const OUString& rExpression );
 };
 
-} // namespace xforms
+}
 
 #endif
 

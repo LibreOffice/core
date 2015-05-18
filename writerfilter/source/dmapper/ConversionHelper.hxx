@@ -50,9 +50,9 @@ namespace ConversionHelper{
     sal_Int16 ConvertNumberingType(sal_Int32 nFmt);
 
     css::util::DateTime ConvertDateStringToDateTime(const OUString& rDateTime);
-} // namespace ConversionHelper
-} //namespace dmapper
-} // namespace writerfilter
+}
+}
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

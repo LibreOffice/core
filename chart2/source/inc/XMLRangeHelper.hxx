@@ -58,8 +58,8 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString );
 
 OUString getXMLStringFromCellRange( const CellRange & rRange );
 
-} //  namespace XMLRangeHelper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_INC_XMLRANGEHELPER_HXX
 #endif

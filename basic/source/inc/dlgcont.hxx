@@ -157,7 +157,7 @@ protected:
     virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const SAL_OVERRIDE;
 };
 
-}   // namespace basic
+}
 
 #endif
 

@@ -3606,6 +3606,6 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
     return xScriptPackage;
 }
 
-}   // namespace basic
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -232,7 +232,7 @@ void lclSetupComponent( const uno::Reference< lang::XComponent >& rxComponent, b
     }
 }
 
-} // namespace
+}
 
 uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException, std::exception)
 {

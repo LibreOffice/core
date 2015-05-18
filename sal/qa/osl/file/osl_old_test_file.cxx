@@ -140,7 +140,7 @@ void oldtestfile::test_file_004()
 #endif
 }
 
-} // namespace osl_test_file
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION( osl_test_file::oldtestfile);
 

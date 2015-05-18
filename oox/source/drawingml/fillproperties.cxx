@@ -161,7 +161,7 @@ const awt::Size lclGetOriginalSize( const GraphicHelper& rGraphicHelper, const R
     return aSizeHmm;
 }
 
-} // namespace
+}
 
 void GradientFillProperties::assignUsed( const GradientFillProperties& rSourceProps )
 {
@@ -966,7 +966,7 @@ sal_Int32 ArtisticEffectProperties::getEffectToken( const OUString& sName )
     return XML_none;
 }
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

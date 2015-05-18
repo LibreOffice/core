@@ -511,7 +511,7 @@ public:
 };
 
 
-} // namespace xforms
+}
 
 #endif
 

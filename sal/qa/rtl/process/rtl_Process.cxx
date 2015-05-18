@@ -274,7 +274,7 @@ public:
 
 }; // class getGlobalProcessId
 
-} // namespace rtl_Process
+}
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getAppCommandArg, "rtl_Process");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getGlobalProcessId, "rtl_Process");

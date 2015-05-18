@@ -222,7 +222,7 @@ RewritePlugin::RewriteOption operator|( RewritePlugin::RewriteOption option1, Re
     return static_cast< RewritePlugin::RewriteOption >( int( option1 ) | int( option2 ));
     }
 
-} // namespace
+}
 
 #endif // COMPILEPLUGIN_H
 

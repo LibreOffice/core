@@ -66,7 +66,7 @@ std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t startFr
     return htmlHeader.str();
 }
 
-} // namespace private
+}
 
 // the office always writes the start and end html tag in upper cases and
 // without spaces both tags don't allow parameters

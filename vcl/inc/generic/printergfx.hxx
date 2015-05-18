@@ -402,7 +402,7 @@ public:
 
 };
 
-} /* namespace psp */
+}
 
 #endif // INCLUDED_VCL_INC_GENERIC_PRINTERGFX_HXX
 

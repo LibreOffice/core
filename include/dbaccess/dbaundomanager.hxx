@@ -88,7 +88,7 @@ namespace dbaui
     };
 
 
-} // namespace dbaui
+}
 
 
 #endif // INCLUDED_DBACCESS_DBAUNDOMANAGER_HXX

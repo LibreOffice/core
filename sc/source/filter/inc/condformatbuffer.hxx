@@ -310,8 +310,8 @@ private:
     boost::ptr_vector<ExtCfCondFormat> maExtCondFormats;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

@@ -141,6 +141,6 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvide
     return lProvider;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

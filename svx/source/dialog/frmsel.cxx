@@ -104,7 +104,7 @@ inline void lclPolyPolyUnion( tools::PolyPolygon& rDest, const tools::PolyPolygo
     aTmp.GetUnion( rSource, rDest );
 }
 
-} // namespace
+}
 
 FrameBorder::FrameBorder( FrameBorderType eType ) :
     meType( eType ),

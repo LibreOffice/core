@@ -56,7 +56,7 @@ public:
     ~SortedAutoCompleteStrings() { DeleteAndDestroyAll(); }
 };
 
-} // namespace editeng
+}
 
 // Class of options for AutoFormat
 struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags

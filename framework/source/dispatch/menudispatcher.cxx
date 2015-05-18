@@ -280,6 +280,6 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource 
     return false;
 }
 
-}       //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

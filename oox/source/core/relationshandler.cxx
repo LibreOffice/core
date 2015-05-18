@@ -47,7 +47,7 @@ OUString lclGetRelationsPath( const OUString& rFragmentPath )
         makeStringAndClear();
 }
 
-} // namespace
+}
 
 RelationsFragment::RelationsFragment( XmlFilterBase& rFilter, RelationsRef xRelations ) :
     FragmentHandler( rFilter, lclGetRelationsPath( xRelations->getFragmentPath() ), xRelations ),
@@ -88,7 +88,7 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
     return xRet;
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -85,6 +85,6 @@ void CategoryPositionHelper::setCategoryWidth( double fCategoryWidth )
     m_fCategoryWidth = fCategoryWidth;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

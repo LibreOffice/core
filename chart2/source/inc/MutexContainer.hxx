@@ -36,7 +36,7 @@ protected:
     ::osl::Mutex & GetMutex() const;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_MUTEXCONTAINER_HXX
 #endif

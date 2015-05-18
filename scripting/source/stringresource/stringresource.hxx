@@ -655,7 +655,7 @@ public:
 };
 
 
-}   // namespace stringtable
+}
 
 
 #endif // INCLUDED_SCRIPTING_SOURCE_STRINGRESOURCE_STRINGRESOURCE_HXX

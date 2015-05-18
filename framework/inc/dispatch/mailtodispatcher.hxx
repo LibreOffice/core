@@ -97,7 +97,7 @@ class MailToDispatcher : public  ::cppu::WeakImplHelper3<
 
 };      //  class MailToDispatcher
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_MAILTODISPATCHER_HXX
 

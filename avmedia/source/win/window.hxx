@@ -107,8 +107,8 @@ private:
     void                                        ImplLayoutVideoWindow();
 };
 
-} // namespace win
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_WIN_WINDOW_HXX
 

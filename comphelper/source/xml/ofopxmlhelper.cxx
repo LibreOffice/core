@@ -427,6 +427,6 @@ void SAL_CALL OFOPXMLHelper::setDocumentLocator( const uno::Reference< xml::sax:
 {
 }
 
-} // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

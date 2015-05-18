@@ -233,6 +233,6 @@ void SAL_CALL OSequenceOutputStream::closeOutput(  ) throw(NotConnectedException
     m_bConnected = false;
 }
 
-} // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

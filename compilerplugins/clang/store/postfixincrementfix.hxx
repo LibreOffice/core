@@ -32,7 +32,7 @@ class PostfixIncrementFix
         bool shouldDoChange( const Expr* op );
     };
 
-} // namespace
+}
 
 #endif // POSTFIXINCREMENTFIX_H
 

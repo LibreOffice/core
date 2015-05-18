@@ -583,7 +583,7 @@ namespace {
         throw DAVException( DAVException::DAV_INVALID_ARG );
     }
 
-} // namespace
+}
 
 
 void DAVResourceAccess::PUT(

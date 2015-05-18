@@ -63,7 +63,7 @@ public:
     SAL_DLLPRIVATE static void addIgnoreFillProperties_only_BitmapProperties( std::vector< WrappedProperty* >& rList );
 };
 
-} //namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_WRAPPEDIGNOREPROPERTY_HXX
 #endif

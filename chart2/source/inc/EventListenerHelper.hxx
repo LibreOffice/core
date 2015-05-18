@@ -111,7 +111,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > m_xListener;
 };
 
-} //  namespace impl
+}
 
 template< class InterfaceRef >
 void addListener(
@@ -205,8 +205,8 @@ void removeListenerFromAllSequenceElements(
                          impl::removeListenerFunctor< T >( xListener ));
 }
 
-} //  namespace EventListenerHelper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_INC_EVENTLISTENERHELPER_HXX
 #endif

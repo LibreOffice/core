@@ -97,8 +97,8 @@ private:
 
 
 
-} // namespace core
-} // namespace oox
+}
+}
 
 #endif
 

@@ -83,6 +83,6 @@ void DocShell::FillClass( SvGlobalName*, SotClipboardFormatId*, OUString*, OUStr
 void DocShell::Draw( OutputDevice *, const JobSetup &, sal_uInt16 )
 {}
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

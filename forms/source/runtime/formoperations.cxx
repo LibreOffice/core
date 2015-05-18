@@ -1744,7 +1744,7 @@ namespace frm
     }
 
 
-} // namespace frm
+}
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL

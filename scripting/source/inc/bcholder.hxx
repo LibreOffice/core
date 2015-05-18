@@ -56,7 +56,7 @@ namespace scripting_helper
     };
 
 
-}   // namespace scripting_helper
+}
 
 
 #endif // INCLUDED_SCRIPTING_SOURCE_INC_BCHOLDER_HXX

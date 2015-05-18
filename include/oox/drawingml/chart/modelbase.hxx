@@ -117,9 +117,9 @@ struct LayoutModel
                         ~LayoutModel();
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 #endif
 

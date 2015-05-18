@@ -56,7 +56,7 @@ inline double lclPointsToHmm( const uno::Any& rPoints ) throw (uno::RuntimeExcep
     return PointsToHmm( ::rtl::math::approxFloor( rPoints.get< double >() / 0.75 ) * 0.75 );
 }
 
-} // namespace
+}
 
 // Base implementations
 

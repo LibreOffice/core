@@ -578,6 +578,6 @@ sal_Bool JobURL::getAliasArgs( /*OUT*/ OUString& sAliasArgs ) const
 
 #endif // ENABLE_COMPONENT_SELF_CHECK
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

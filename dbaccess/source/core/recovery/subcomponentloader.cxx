@@ -166,6 +166,6 @@ namespace dbaccess
         (void)i_rEvent;
     }
 
-} // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

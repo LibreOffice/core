@@ -66,7 +66,7 @@ protected:
 
 typedef ::std::map< sal_Int32, const WrappedProperty* > tWrappedPropertyMap;
 
-} //namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_WRAPPEDPROPERTY_HXX
 #endif

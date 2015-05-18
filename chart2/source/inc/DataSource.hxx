@@ -80,7 +80,7 @@ private:
         m_aDataSeq;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_DATASOURCE_HXX
 #endif

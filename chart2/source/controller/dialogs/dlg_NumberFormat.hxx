@@ -35,7 +35,7 @@ public:
     static SfxItemSet CreateEmptyItemSetForNumberFormatDialog( SfxItemPool& rItemPool );
 };
 
-} //namespace chart
+}
 
 #endif
 

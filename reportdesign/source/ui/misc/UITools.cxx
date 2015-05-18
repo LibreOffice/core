@@ -1056,7 +1056,7 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
     return bSuccess;
 }
 
-} // namespace rptui
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

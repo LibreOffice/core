@@ -964,7 +964,7 @@ bool lclConvertBorderLine( ::editeng::SvxBorderLine& rLine, const XclImpPalette&
     return true;
 }
 
-} // namespace
+}
 
 void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& rPalette, bool bSkipPoolDefs ) const
 {
@@ -1601,7 +1601,7 @@ struct IgnoreCaseCompare
         { return rName1.compareToIgnoreAsciiCase( rName2 ) < 0; }
 };
 
-} // namespace
+}
 
 void XclImpXFBuffer::CreateUserStyles()
 {

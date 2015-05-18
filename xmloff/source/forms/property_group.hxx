@@ -29,7 +29,7 @@ namespace xmloff
         NO_GROUP
     };
 
-} // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTY_GROUP_HXX
 

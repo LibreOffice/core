@@ -485,7 +485,7 @@ namespace toolkit
         s[s.getLength() - 1] = "stardiv.vcl.control.FormattedField";
         return s;
     }
-}   // namespace toolkit
+}
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

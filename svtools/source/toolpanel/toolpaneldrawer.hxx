@@ -98,7 +98,7 @@ namespace svt
         bool m_bFocused : 1;
         bool m_bExpanded : 1;
     };
-} // namespace svt
+}
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELDRAWER_HXX
 

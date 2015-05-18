@@ -92,7 +92,7 @@ inline sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec )
     return lclHashVector( rVec, XclDirectHasher< Type >() );
 }
 
-} // namespace
+}
 
 // constructors ---------------------------------------------------------------
 

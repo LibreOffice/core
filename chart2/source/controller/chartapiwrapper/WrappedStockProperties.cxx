@@ -286,7 +286,7 @@ void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty*
     rList.push_back( new WrappedUpDownProperty( spChart2ModelContact ) );
 }
 
-} //namespace wrapper
-} //namespace chart
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -149,7 +149,7 @@ void BiffInputRecordBuffer::updateDecoded()
     }
 }
 
-} // namespace prv
+}
 
 BiffInputStream::BiffInputStream( BinaryInputStream& rInStream, bool bContLookup ) :
     BinaryStreamBase( true ),
@@ -508,7 +508,7 @@ BiffInputStreamPosGuard::~BiffInputStreamPosGuard()
     restorePosition();
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

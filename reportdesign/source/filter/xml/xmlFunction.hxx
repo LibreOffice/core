@@ -53,7 +53,7 @@ namespace rptxml
         virtual void EndElement() SAL_OVERRIDE;
     };
 
-} // namespace rptxml
+}
 
 
 #endif // RPT_XMLFunction_HXX

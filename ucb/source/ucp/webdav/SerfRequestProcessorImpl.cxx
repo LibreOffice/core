@@ -151,6 +151,6 @@ bool SerfRequestProcessorImpl::processSerfResponseBucket( serf_request_t * /*inS
     return true;
 }
 
-} // namespace http_dav_ucp
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

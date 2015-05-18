@@ -167,7 +167,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
     return xSmtpServer;
 }
 
-} //namespace
+}
 
 struct  SwAddressPreview_Impl
 {

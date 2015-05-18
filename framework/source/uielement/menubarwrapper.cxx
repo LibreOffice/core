@@ -342,6 +342,6 @@ Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface() throw ( Runt
     return Reference< XInterface >( m_xMenuBarManager, UNO_QUERY );
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

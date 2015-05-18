@@ -484,7 +484,7 @@ GridControlAccessibleElement::~GridControlAccessibleElement( )
 
 
 
-} // namespace accessibility
+}
 
 
 

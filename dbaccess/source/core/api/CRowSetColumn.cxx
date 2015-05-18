@@ -92,6 +92,6 @@ void SAL_CALL ORowSetColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
         ORowSetDataColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

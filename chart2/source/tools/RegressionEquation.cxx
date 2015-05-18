@@ -343,7 +343,7 @@ using impl::RegressionEquation_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( RegressionEquation, RegressionEquation_Base, ::property::OPropertySet )
 
-} //  namespace chart
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_chart2_RegressionEquation_get_implementation(css::uno::XComponentContext *context,

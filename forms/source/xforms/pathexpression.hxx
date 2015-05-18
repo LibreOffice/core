@@ -75,7 +75,7 @@ public:
 
 };
 
-} // namespace xforms
+}
 
 #endif
 

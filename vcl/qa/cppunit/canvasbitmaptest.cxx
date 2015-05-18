@@ -820,7 +820,7 @@ void CanvasBitmapTest::runTest()
     }
 }
 
-} // namespace
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CanvasBitmapTest);
 

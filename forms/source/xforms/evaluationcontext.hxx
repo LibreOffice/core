@@ -62,7 +62,7 @@ public:
 };
 
 
-} // namespace xforms
+}
 
 #endif
 

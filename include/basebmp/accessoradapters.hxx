@@ -513,7 +513,7 @@ public:
 
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_ACCESSORADAPTERS_HXX */
 

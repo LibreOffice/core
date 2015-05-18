@@ -57,7 +57,7 @@ void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, const OUS
     }
 }
 
-} // namespace
+}
 
 StorageBase::StorageBase( const Reference< XInputStream >& rxInStream, bool bBaseStreamAccess ) :
     mxInStream( rxInStream ),
@@ -251,6 +251,6 @@ StorageRef StorageBase::getSubStorage( const OUString& rElementName, bool bCreat
     return rxSubStrg;
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

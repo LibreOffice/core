@@ -90,8 +90,8 @@ struct Shape3DProperties
 
 
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

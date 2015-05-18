@@ -109,7 +109,7 @@ private:
     const bool m_bShifted;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

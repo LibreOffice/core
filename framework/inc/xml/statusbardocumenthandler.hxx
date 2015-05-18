@@ -155,7 +155,7 @@ class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler
         OUString                                                                     m_aAttributeURL;
 };
 
-} // namespace framework
+}
 
 #endif
 

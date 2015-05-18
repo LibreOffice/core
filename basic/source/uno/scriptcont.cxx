@@ -1327,7 +1327,7 @@ void SAL_CALL SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
     mModuleInfos.erase( mModuleInfos.find( ModuleName ) );
 }
 
-}   // namespace basic
+}
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL

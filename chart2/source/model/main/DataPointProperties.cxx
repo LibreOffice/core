@@ -468,6 +468,6 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault<sal_Int16>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_TRANS, 0);
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

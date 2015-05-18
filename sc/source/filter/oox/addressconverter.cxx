@@ -66,7 +66,7 @@ const sal_Int32 BIFF8_MAXCOL        = BIFF5_MAXCOL;
 const sal_Int32 BIFF8_MAXROW        = 65535;
 const sal_Int16 BIFF8_MAXTAB        = BIFF5_MAXTAB;
 
-} // namespace
+}
 
 CellAddress ApiCellRangeList::getBaseAddress() const
 {
@@ -535,7 +535,7 @@ void AddressConverter::initializeMaxPos(
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

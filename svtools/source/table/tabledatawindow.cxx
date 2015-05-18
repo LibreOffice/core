@@ -213,7 +213,7 @@ namespace svt { namespace table
         return nDone || Window::Notify( rNEvt );
     }
 
-}} // namespace svt::table
+}}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

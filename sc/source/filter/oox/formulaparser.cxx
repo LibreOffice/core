@@ -51,7 +51,7 @@ sal_uInt16 lclReadFmlaSize( BiffInputStream& rStrm, BiffType eBiff, const sal_uI
     return pnFmlaSize ? *pnFmlaSize : ((eBiff == BIFF2) ? rStrm.readuInt8() : rStrm.readuInt16());
 }
 
-} // namespace
+}
 
 // formula finalizer ==========================================================
 
@@ -1835,7 +1835,7 @@ bool lclIsValidNlrRange( const BiffNlr& rNlr, const BinRange& rRange, bool bRow 
         ((rNlr.mnCol == rRange.maFirst.mnCol) && (rNlr.mnRow + 1 == rRange.maFirst.mnRow) && (rRange.maFirst.mnCol == rRange.maLast.mnCol));
 }
 
-} // namespace
+}
 
 class BiffFormulaParserImpl : public FormulaParserImpl
 {
@@ -2893,7 +2893,7 @@ OUString FormulaParser::importMacroName( const OUString& rFormulaString )
     return OUString();
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

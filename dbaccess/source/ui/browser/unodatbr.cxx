@@ -3811,6 +3811,6 @@ void SAL_CALL SbaTableQueryBrowser::changedDatabaseLocation( const DatabaseRegis
     implAddDatasource( _Event.Name, SharedConnection() );
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

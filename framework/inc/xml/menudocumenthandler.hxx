@@ -272,7 +272,7 @@ class FWE_DLLPUBLIC OWriteMenuDocumentHandler
         OUString m_aAttributeType;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_XML_MENUDOCUMENTHANDLER_HXX
 

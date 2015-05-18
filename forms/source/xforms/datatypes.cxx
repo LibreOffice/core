@@ -948,7 +948,7 @@ namespace xforms
 #undef DATATYPES_INCLUDED_BY_MASTER_HEADER
 
 
-} // namespace xforms
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1127,7 +1127,7 @@ namespace
             mpDamage = rDamage;
         }
     };
-} // namespace
+}
 
 struct ImplBitmapDevice
 {
@@ -2164,7 +2164,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
 #endif
     return result;
 }
-} // namespace
+}
 
 sal_Int32 getBitmapDeviceStrideForWidth(Format nScanlineFormat, sal_Int32 nWidth)
 {
@@ -2278,6 +2278,6 @@ BitmapDeviceSharedPtr BitmapDevice::getGenericRenderer() const
     return mpImpl->mpGenericRenderer;
 }
 
-} // namespace basebmp
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

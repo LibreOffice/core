@@ -54,8 +54,8 @@ private:
     SvStream& m_rStream;
     bool m_bHasTable;
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLOOKAHEAD_HXX
 

@@ -73,7 +73,7 @@ namespace dbmm
         ::std::unique_ptr< MigrationEngine_Impl > m_pImpl;
     };
 
-} // namespace dbmm
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONENGINE_HXX
 

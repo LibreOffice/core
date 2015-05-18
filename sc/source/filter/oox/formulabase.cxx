@@ -940,7 +940,7 @@ const sal_Unicode API_TOKEN_ARRAY_CLOSE     = '}';
 const sal_Unicode API_TOKEN_ARRAY_ROWSEP    = '|';
 const sal_Unicode API_TOKEN_ARRAY_COLSEP    = ';';
 
-} // namespace
+}
 
 // function info parameter class iterator =====================================
 
@@ -1587,7 +1587,7 @@ TokenToRangeListState lclProcessClose( sal_Int32& ornParenLevel )
     return (ornParenLevel >= 0) ? STATE_CLOSE : STATE_ERROR;
 }
 
-} // namespace
+}
 
 FormulaProcessorBase::FormulaProcessorBase( const WorkbookHelper& rHelper ) :
     OpCodeProvider( rHelper.getBaseFilter().getModelFactory(), rHelper.getFilterType(), rHelper.getBiff(), rHelper.getBaseFilter().isImportFilter() ),
@@ -1765,7 +1765,7 @@ void FormulaProcessorBase::convertStringToStringList(
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

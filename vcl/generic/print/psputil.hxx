@@ -63,7 +63,7 @@ private:
 
 ConverterFactory& GetConverterFactory ();
 
-}  /* namespace psp */
+}
 
 #endif // INCLUDED_VCL_GENERIC_PRINT_PSPUTIL_HXX
 

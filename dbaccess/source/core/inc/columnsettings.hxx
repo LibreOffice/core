@@ -92,7 +92,7 @@ namespace dbaccess
         static bool hasDefaultSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn );
     };
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_COLUMNSETTINGS_HXX
 

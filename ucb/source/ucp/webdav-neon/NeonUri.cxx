@@ -70,7 +70,7 @@ const ne_uri g_sUriDefaultsFTP   = { const_cast<char *>("ftp"),
                                      NULL,
                                      NULL,
                                      NULL };
-} // namespace
+}
 
 NeonUri::NeonUri( const ne_uri * inUri )
     throw ( DAVException )

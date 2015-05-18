@@ -366,6 +366,6 @@ OUString OQuery::determineContentType() const
     return OUString( "application/vnd.org.openoffice.DatabaseQuery" );
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

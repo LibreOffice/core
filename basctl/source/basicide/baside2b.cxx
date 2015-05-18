@@ -84,7 +84,7 @@ int const DWBORDER = 3;
 
 char const cSuffixes[] = "%&!#@$";
 
-} // namespace
+}
 
 
 /**
@@ -167,7 +167,7 @@ void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString&
     }
 }
 
-} // namespace
+}
 
 
 
@@ -2398,7 +2398,7 @@ void implEnableChildren( SvTreeListEntry* pEntry, bool bEnable )
     }
 }
 
-} // namespace
+}
 
 void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
 {
@@ -3007,6 +3007,6 @@ bool UnoTypeCodeCompletetor::CheckMethod( const OUString& sMethName )
     return false;
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

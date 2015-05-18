@@ -559,7 +559,7 @@ private:
  *
  *======================================================================*/
 
-} // namespace store
+}
 
 #endif /* ! INCLUDED_STORE_STORE_HXX */
 

@@ -318,7 +318,7 @@ namespace framework
         friend class detail::InfoHelperBuilder;
     };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_SERVICES_LAYOUTMANAGER_HXX
 

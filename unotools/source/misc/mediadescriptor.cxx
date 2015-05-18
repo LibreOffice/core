@@ -752,6 +752,6 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
     return xInputStream.is();
 }
 
-} // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

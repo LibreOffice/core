@@ -81,7 +81,7 @@ namespace xmloff
             );
     };
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_OFFICEFORMS_HXX
 

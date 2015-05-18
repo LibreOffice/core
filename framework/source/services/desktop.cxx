@@ -1770,7 +1770,7 @@ bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::lang::
     return !xListener.is();
 }
 
-}   // namespace framework
+}
 
 namespace {
 

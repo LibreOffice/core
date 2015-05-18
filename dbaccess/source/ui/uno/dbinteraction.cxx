@@ -358,6 +358,6 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new LegacyInteractionHandler(comphelper::getComponentContext(_rxORB)));
     }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

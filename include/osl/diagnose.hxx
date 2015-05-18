@@ -40,8 +40,8 @@ namespace detail {
 
 struct ObjectRegistryData;
 
-} // namespace detail
-} // namespace osl
+}
+}
 
 extern "C" {
 
@@ -142,7 +142,7 @@ private:
     ObjectRegistryData m_data;
 };
 
-} // namespace detail
+}
 
 /** Helper class which indicates leaking object(s) of a particular class in
     non-pro builds; use e.g.
@@ -194,7 +194,7 @@ private:
 #endif
 };
 
-} // namespace osl
+}
 
 /// @endcond
 

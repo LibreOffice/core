@@ -235,7 +235,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
         );
     };
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_DATABASEOBJECTVIEW_HXX
 

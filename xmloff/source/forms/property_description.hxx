@@ -115,7 +115,7 @@ namespace xmloff
     //= PropertyGroups
     typedef ::std::list< PropertyDescriptionList >  PropertyGroups;
 
-} // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTY_DESCRIPTION_HXX
 

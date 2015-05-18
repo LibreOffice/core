@@ -83,7 +83,7 @@ public:
     sal_Int32 getResponse() const;
 };
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_SIMPLEINTERACTIONREQUEST_HXX */
 

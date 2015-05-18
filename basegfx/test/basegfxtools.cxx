@@ -94,6 +94,6 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfxtools::KeyStopLerpTest);
-} // namespace basegfxtools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

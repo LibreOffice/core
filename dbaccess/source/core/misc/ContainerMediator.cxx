@@ -234,6 +234,6 @@ void OContainerMediator::notifyElementCreated( const OUString& _sName, const Ref
     m_aForwardList[ _sName ] = pForward;
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

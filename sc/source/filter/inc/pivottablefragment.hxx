@@ -80,8 +80,8 @@ private:
     PivotTable&         mrPivotTable;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

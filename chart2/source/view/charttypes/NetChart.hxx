@@ -77,7 +77,7 @@ private: //member
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes > m_xRegressionCurveEquationTarget;
 };
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

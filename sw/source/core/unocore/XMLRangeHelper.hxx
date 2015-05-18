@@ -60,7 +60,7 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString );
 
 OUString getXMLStringFromCellRange( const CellRange & rRange );
 
-} //  namespace XMLRangeHelper
+}
 
 // INCLUDED_SW_SOURCE_CORE_UNOCORE_XMLRANGEHELPER_HXX
 #endif

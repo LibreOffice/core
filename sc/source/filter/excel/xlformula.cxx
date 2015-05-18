@@ -888,7 +888,7 @@ inline bool lclGetAddress( ScAddress& rAddress, const FormulaToken& rToken, cons
     return bIsSingleRef;
 }
 
-} // namespace
+}
 
 bool XclTokenArrayHelper::GetMultipleOpRefs(
     XclMultipleOpRefs& rRefs, const ScTokenArray& rScTokArr, const ScAddress& rScPos )

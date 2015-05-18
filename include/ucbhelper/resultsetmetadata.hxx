@@ -473,7 +473,7 @@ public:
                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_RESULTSETMETADATA_HXX */
 

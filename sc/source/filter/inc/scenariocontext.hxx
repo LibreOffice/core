@@ -60,8 +60,8 @@ private:
     SheetScenarios&     mrSheetScenarios;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

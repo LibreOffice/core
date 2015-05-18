@@ -343,6 +343,6 @@ uno::Any Stripe::getTexturePolygon( short nRotatedTexture )
     return uno::Any( &aPP, cppu::UnoType<drawing::PolyPolygonShape3D>::get());
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

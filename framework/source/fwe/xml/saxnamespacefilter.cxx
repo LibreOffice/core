@@ -178,6 +178,6 @@ OUString SaxNamespaceFilter::getErrorLineString()
         return OUString();
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

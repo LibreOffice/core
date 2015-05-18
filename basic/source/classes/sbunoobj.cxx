@@ -4326,7 +4326,7 @@ protected:
     // this mutex is necessary for OInterfaceContainerHelper
     ::osl::Mutex m_aMutex;
 };
-} // namespace
+}
 
 typedef WeakImplHelper2< XInvocation, XComponent > ModuleInvocationProxyHelper;
 

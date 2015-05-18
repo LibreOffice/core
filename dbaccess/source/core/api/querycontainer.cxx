@@ -416,6 +416,6 @@ Sequence< OUString > SAL_CALL OQueryContainer::getElementNames(  ) throw(Runtime
     return m_xCommandDefinitions->getElementNames();
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

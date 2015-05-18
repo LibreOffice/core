@@ -187,6 +187,6 @@ bool ReconnectingFile::reconnect()
     return m_aFile.sync();
 }
 
-} // namespace fileaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

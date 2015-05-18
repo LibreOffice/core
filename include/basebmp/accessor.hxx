@@ -106,7 +106,7 @@ public:
     }
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_ACCESSOR_HXX */
 

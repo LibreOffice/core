@@ -155,7 +155,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
     xInit->initialize( aPropSeq );
 }
 
-} // namespace framework
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_MenuBarFactory_get_implementation(

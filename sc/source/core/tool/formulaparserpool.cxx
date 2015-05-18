@@ -101,7 +101,7 @@ Reference< XFormulaParser > ScParserFactoryMap::createFormulaParser(
 
 struct ScParserFactorySingleton : public ::rtl::Static< ScParserFactoryMap, ScParserFactorySingleton > {};
 
-} // namespace
+}
 
 ScFormulaParserPool::ScFormulaParserPool( const ScDocument& rDoc ) :
     mrDoc( rDoc )

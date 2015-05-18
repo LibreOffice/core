@@ -60,7 +60,7 @@ private:
     void InitButtonData();
 };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_MARKTREE_HXX
 

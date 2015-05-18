@@ -225,7 +225,7 @@ private:
     void    impl_fillTableFilter();
 };
 
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_CONNECTION_HXX
 

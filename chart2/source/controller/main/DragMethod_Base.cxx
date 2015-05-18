@@ -75,6 +75,6 @@ Pointer DragMethod_Base::GetSdrDragPointer() const
     else
         return Pointer(POINTER_MOVE);
 }
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

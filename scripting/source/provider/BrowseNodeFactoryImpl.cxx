@@ -358,7 +358,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
     return locnBNs_Return;
 }
 
-} // namespace
+}
 
 typedef ::std::vector< Reference< browse::XBrowseNode > > vXBrowseNodes;
 
@@ -755,6 +755,6 @@ sal_Bool BrowseNodeFactoryImpl::supportsService(OUString const & serviceName )
     return cppu::supportsService(this, serviceName);
 }
 
-} // namespace browsenodefactory
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

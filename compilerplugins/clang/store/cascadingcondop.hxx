@@ -33,7 +33,7 @@ class CascadingCondOp
         bool VisitStmt( const Stmt* stmt );
     };
 
-} // namespace loplugin
+}
 
 #endif // CASCADINGCONDOP_H
 

@@ -1128,6 +1128,6 @@ bool VDataSeries::hasPropertyMapping(const OUString& rPropName ) const
     return maPropertyMap.find(rPropName) != maPropertyMap.end();
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

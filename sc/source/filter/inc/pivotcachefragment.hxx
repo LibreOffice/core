@@ -128,8 +128,8 @@ private:
     bool                mbInRow;        /// True = a data row has been started.
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

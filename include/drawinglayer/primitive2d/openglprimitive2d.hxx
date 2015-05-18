@@ -33,8 +33,8 @@ private:
     Point m_aPos;
 };
 
-} // namespace primitive2d
-} // namespace drawinglayer
+}
+}
 
 #endif
 

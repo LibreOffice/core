@@ -179,7 +179,7 @@ namespace logging
     }
 
 
-} // namespace logging
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

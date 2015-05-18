@@ -142,7 +142,7 @@ namespace calc
         OCellValueBinding& operator=( const OCellValueBinding& ) SAL_DELETED_FUNCTION;
     };
 
-}   // namespace calc
+}
 
 #endif // INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLVALUEBINDING_HXX
 

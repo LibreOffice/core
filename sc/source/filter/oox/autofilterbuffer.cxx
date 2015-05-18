@@ -139,7 +139,7 @@ bool lclConvertWildcardsToRegExp( OUString& rValue )
     return false;
 }
 
-} // namespace
+}
 
 ApiFilterSettings::ApiFilterSettings()
 {
@@ -727,7 +727,7 @@ AutoFilter* AutoFilterBuffer::getActiveAutoFilter()
     return maAutoFilters.empty() ? 0 : maAutoFilters.back().get();
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

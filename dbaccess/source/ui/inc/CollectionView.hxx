@@ -61,7 +61,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> getSelectedFolder() const { return m_xContent;}
         OUString getName() const;
     };
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_COLLECTIONVIEW_HXX
 

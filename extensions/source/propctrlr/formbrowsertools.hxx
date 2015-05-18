@@ -93,7 +93,7 @@ namespace pcr
     typedef ::std::set< ::com::sun::star::beans::Property, PropertyLessByName > PropertyBag;
 
 
-} // namespace pcr
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMBROWSERTOOLS_HXX

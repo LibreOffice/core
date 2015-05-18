@@ -77,7 +77,7 @@ inline void extract(
     }
 }
 
-} // namespace detail
+}
 
 #define COMPHELPER_UNWRAPARGS_extract(z_, n_, unused_) \
     detail::extract( seq, n_, BOOST_PP_CAT(v, n_), xErrorContext );
@@ -131,7 +131,7 @@ BOOST_PP_REPEAT(COMPHELPER_UNWRAPARGS_MAX_ARGS, COMPHELPER_UNWRAPARGS_make, ~)
 #undef COMPHELPER_UNWRAPARGS_args
 #undef COMPHELPER_UNWRAPARGS_extract
 
-} // namespace comphelper
+}
 
 #endif //  ! defined( INCLUDED_COMPHELPER_UNWRAPARGS_HXX)
 

@@ -74,8 +74,8 @@ public:
                     BinaryXOutputStream& aOutputStream) SAL_OVERRIDE;
 };
 
-} // namespace core
-} // namespace oox
+}
+}
 
 #endif
 

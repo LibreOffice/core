@@ -124,7 +124,7 @@ class FWE_DLLPUBLIC AddonMenuManager
                                         com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rAddonSubMenu );
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_ADDONMENU_HXX
 

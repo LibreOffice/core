@@ -787,6 +787,6 @@ Reference< css::datatransfer::dnd::XDragGestureRecognizer > Window::GetDragGestu
     return Reference< css::datatransfer::dnd::XDragGestureRecognizer > ( GetDropTarget(), UNO_QUERY );
 }
 
-} /* namespace vcl */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

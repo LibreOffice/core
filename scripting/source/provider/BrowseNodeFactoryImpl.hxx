@@ -78,7 +78,7 @@ public:
 };
 
 
-} // namespace browsenodefactory
+}
 
 #endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_BROWSENODEFACTORYIMPL_HXX
 

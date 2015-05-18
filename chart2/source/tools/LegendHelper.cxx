@@ -119,6 +119,6 @@ bool LegendHelper::hasLegend( const uno::Reference< chart2::XDiagram > & xDiagra
     return bReturn;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

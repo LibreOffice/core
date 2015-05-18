@@ -37,8 +37,8 @@ namespace connectivity
                     const ::std::vector< ::rtl::OUString>& rVector);
         };
 
-    } // namespace firebird
-} // namespace connectivity
+    }
+}
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_INDEXES_HXX
 

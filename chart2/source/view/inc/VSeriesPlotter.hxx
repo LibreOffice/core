@@ -452,7 +452,7 @@ private:
     ::com::sun::star::awt::Size      m_aPageReferenceSize;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

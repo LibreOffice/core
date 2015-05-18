@@ -242,6 +242,6 @@ void LegendPositionResources::SetChangeHdl( const Link<>& rLink )
     m_aChangeLink = rLink;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -427,6 +427,6 @@ void ProgressBar::impl_recalcRange ()
     m_aBlockSize.Width  = (sal_Int32)fBlockWidth;
 }
 
-}   // namespace unocontrols
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

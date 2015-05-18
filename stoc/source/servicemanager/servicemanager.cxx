@@ -1645,7 +1645,7 @@ Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
     return OServiceManager::getPropertyValue( PropertyName );
 }
 
-} // namespace
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_stoc_OServiceManager_get_implementation(

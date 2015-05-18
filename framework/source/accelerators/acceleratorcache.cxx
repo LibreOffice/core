@@ -158,6 +158,6 @@ void AcceleratorCache::removeCommand(const OUString& sCommand)
     m_lCommand2Keys.erase(sCommand);
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

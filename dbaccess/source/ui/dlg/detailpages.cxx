@@ -813,6 +813,6 @@ namespace dbaui
         DataSourceMetaData aMetaData( eType );
         return VclPtr<SpecialSettingsPage>::Create( _pParent, *_rAttrSet, aMetaData );
     }
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

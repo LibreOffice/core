@@ -902,7 +902,7 @@ namespace frm
         aNames[ 1 ] = "com.sun.star.awt.UnoControl";
         return aNames;
     }
-}   // namespace frm
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
 com_sun_star_comp_forms_OFilterControl_get_implementation(css::uno::XComponentContext* context,

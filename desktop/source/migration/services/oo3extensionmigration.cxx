@@ -493,6 +493,6 @@ Reference< XInterface > SAL_CALL OO3ExtensionMigration_create(
 
 
 
-}   // namespace migration
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,7 +46,7 @@ const sal_uInt16 BIFF_SHEETPR_SYMBOLSBELOW      = 0x0040;
 const sal_uInt16 BIFF_SHEETPR_SYMBOLSRIGHT      = 0x0080;
 const sal_uInt16 BIFF_SHEETPR_FITTOPAGES        = 0x0100;
 
-} // namespace
+}
 
 SheetSettingsModel::SheetSettingsModel() :
     mbFilterMode( false ),
@@ -289,7 +289,7 @@ void WorksheetSettings::finalizeImport()
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

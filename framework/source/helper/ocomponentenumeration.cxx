@@ -114,6 +114,6 @@ void OComponentEnumeration::impl_resetObject()
     m_nPosition = 0;
 }
 
-}       //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -125,7 +125,7 @@ private: //member
     std::vector< DatePlusIndex >  m_aDateCategories;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_EXPLICITCATEGORIESPROVIDER_HXX
 #endif

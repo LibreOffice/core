@@ -72,7 +72,7 @@ class Wildcard
 
 };      //  class Wildcard
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_CLASSES_WILDCARD_HXX
 

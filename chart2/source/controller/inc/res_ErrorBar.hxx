@@ -133,7 +133,7 @@ private:
     bool isRangeFieldContentValid( Edit & rEdit );
 };
 
-} //namespace chart
+}
 
 #endif
 

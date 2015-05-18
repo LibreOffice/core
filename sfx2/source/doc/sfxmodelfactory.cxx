@@ -212,6 +212,6 @@ namespace sfx2
     {
         return new SfxModelFactory( _rxServiceFactory, _rImplementationName, _pComponentFactoryFunc, _rServiceNames );
     }
-} // namespace sfx2
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

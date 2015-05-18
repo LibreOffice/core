@@ -577,7 +577,7 @@ IMPL_COLUMN(ListBoxColumn,          FRM_SUN_COMPONENT_LISTBOX,          false);
 IMPL_COLUMN(FormattedFieldColumn,   FRM_SUN_COMPONENT_FORMATTEDFIELD,   false);
 
 
-}   // namespace frm
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

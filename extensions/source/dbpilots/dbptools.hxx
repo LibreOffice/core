@@ -32,7 +32,7 @@ namespace dbp
         OUString& _rElementsName);
 
 
-}   // namespace dbp
+}
 
 
 

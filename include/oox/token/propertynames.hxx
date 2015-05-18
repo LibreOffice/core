@@ -36,7 +36,7 @@ struct StaticPropertyNameVector : public ::rtl::Static< PropertyNameVector, Stat
 
 
 
-} // namespace oox
+}
 
 #endif
 

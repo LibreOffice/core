@@ -182,6 +182,6 @@ lang::Locale SAL_CALL AccessibleTextHelper::getLocale()
     return lang::Locale();
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

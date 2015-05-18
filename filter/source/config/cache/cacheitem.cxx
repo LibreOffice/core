@@ -395,7 +395,7 @@ bool CacheItem::dontHaveProps(const CacheItem& lProps) const
 FlatDetectionInfo::FlatDetectionInfo() :
     bMatchByExtension(false), bMatchByPattern(false), bPreselectedByDocumentService(false) {}
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

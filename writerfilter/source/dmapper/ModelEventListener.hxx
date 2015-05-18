@@ -38,8 +38,8 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
-}//namespace writerfilter
-}//namespace dmapper
+}
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

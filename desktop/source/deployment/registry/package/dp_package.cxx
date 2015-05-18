@@ -1680,8 +1680,8 @@ Reference<deployment::XPackageRegistry> create(
     return new BackendImpl( args, xComponentContext, xRootRegistry );
 }
 
-} // namespace bundle
-} // namespace backend
-} // namespace dp_registry
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

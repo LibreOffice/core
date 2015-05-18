@@ -162,7 +162,7 @@ void OleOutputStream::ensureConnected() const throw( NotConnectedException )
         throw NotConnectedException();
 }
 
-} // namespace
+}
 
 OleStorage::OleStorage( const Reference< XComponentContext >& rxContext,
         const Reference< XInputStream >& rxInStream, bool bBaseStreamAccess ) :
@@ -381,7 +381,7 @@ void OleStorage::implCommit() const
     }
 }
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

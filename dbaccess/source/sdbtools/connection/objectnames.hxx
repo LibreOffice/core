@@ -74,7 +74,7 @@ namespace sdbtools
         ObjectNames& operator=( const ObjectNames& ) SAL_DELETED_FUNCTION;
     };
 
-} // namespace sdbtools
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_SDBTOOLS_CONNECTION_OBJECTNAMES_HXX
 

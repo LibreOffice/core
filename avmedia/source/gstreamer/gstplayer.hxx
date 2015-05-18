@@ -103,8 +103,8 @@ protected:
     osl::Condition          maSizeCondition;
 };
 
-} // namespace gstreamer
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTPLAYER_HXX
 

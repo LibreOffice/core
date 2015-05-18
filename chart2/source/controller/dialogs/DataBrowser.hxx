@@ -189,7 +189,7 @@ private:
     DataBrowser( const DataBrowser & ) SAL_DELETED_FUNCTION;
 };
 
-} // namespace chart
+}
 
 #endif // INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSER_HXX
 

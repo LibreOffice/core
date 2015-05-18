@@ -84,7 +84,7 @@ private:
     void stopTicker();
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFLOCKSTORE_HXX
 

@@ -712,6 +712,6 @@ std::vector<vcl::PNGWriter::ChunkData>& PNGWriter::GetChunks()
     return mpImpl->GetChunks();
 }
 
-} // namespace vcl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

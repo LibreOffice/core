@@ -261,6 +261,6 @@ bool LibreOfficeAction::ParseArgs( const CompilerInstance&, const vector< string
 
 static FrontendPluginRegistry::Add< loplugin::LibreOfficeAction > X( "loplugin", "LibreOffice compile check plugin" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

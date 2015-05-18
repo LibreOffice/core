@@ -186,7 +186,7 @@ private:
     std::vector<std::vector<unsigned> > mStyleSheetPositionsByFamily;
 };
 
-} /* namespace svl */
+}
 
 #endif // INCLUDED_SVL_INDEXEDSTYLESHEETS_HXX
 

@@ -119,6 +119,6 @@ OXMLLogin::~OXMLLogin()
 
 }
 
-} // namespace dbaxml
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

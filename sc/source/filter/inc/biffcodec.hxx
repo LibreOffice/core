@@ -146,8 +146,8 @@ private:
     BiffDecoderRef      mxDecoder;          /// The decoder for import filter.
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

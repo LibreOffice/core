@@ -365,6 +365,6 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
 
     return NULL;
 }
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

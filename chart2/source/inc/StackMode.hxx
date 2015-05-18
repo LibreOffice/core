@@ -33,7 +33,7 @@ enum StackMode
     StackMode_AMBIGUOUS
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_STACKMODE_HXX
 #endif

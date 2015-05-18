@@ -221,7 +221,7 @@ sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
     return nValue;
 }
 
-} // namespace
+}
 
 ExcelGraphicHelper::ExcelGraphicHelper( const WorkbookHelper& rHelper ) :
     GraphicHelper( rHelper.getBaseFilter().getComponentContext(), rHelper.getBaseFilter().getTargetFrame(), rHelper.getBaseFilter().getStorage() ),
@@ -390,7 +390,7 @@ static const sal_Int32 spnDefColors8[] =
 #undef PALETTE_EGA_COLORS_LIGHT
 #undef PALETTE_EGA_COLORS_DARK
 
-} // namespace
+}
 
 ColorPalette::ColorPalette( const WorkbookHelper& rHelper )
     : WorkbookHelper(rHelper)
@@ -481,7 +481,7 @@ void lclSetFontName( ApiScriptFontName& rFontName, const FontDescriptor& rFontDe
     }
 }
 
-} // namespace
+}
 
 FontModel::FontModel() :
     mnScheme( XML_none ),
@@ -1485,7 +1485,7 @@ bool operator==( const BorderLine& rLeft, const BorderLine& rRight )
         (rLeft.LineDistance   == rRight.LineDistance);
 }
 
-} // namespace
+}
 
 bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight )
 {
@@ -1510,7 +1510,7 @@ inline void lclSetBorderLineWidth( BorderLine& rBorderLine,
     rBorderLine.InnerLineWidth = nInner;
 }
 
-} // namespace
+}
 
 Border::Border( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
@@ -1827,7 +1827,7 @@ sal_Int32 lclGetMixedColor( sal_Int32 nPattColor, sal_Int32 nFillColor, sal_Int3
         (lclGetMixedColorComp( nPattColor & 0x0000FF, nFillColor & 0x0000FF, nAlpha ) & 0x0000FF);
 }
 
-} // namespace
+}
 
 Fill::Fill( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
@@ -2589,7 +2589,7 @@ OUString lclCreateStyleName( const CellStyleModel& rModel )
     return rModel.mbBuiltin ? lclGetBuiltinStyleName( rModel.mnBuiltinId, rModel.maName, rModel.mnLevel ) : rModel.maName;
 }
 
-} // namespace
+}
 
 CellStyleModel::CellStyleModel() :
     mnXfId( -1 ),
@@ -3234,7 +3234,7 @@ bool StylesBuffer::hasBorder( sal_Int32 nBorderId ) const
     return pBorder && pBorder->hasBorder();
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

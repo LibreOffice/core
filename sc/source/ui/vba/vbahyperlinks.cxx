@@ -96,7 +96,7 @@ bool EqualAnchorFunctor::operator()( const uno::Reference< excel::XHyperlink >& 
     }
 }
 
-} // namespace
+}
 
 namespace detail {
 
@@ -186,7 +186,7 @@ ScVbaHlinkContainerMember::~ScVbaHlinkContainerMember()
 {
 }
 
-} // namespace detail
+}
 
 ScVbaHyperlinks::ScVbaHyperlinks( const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext ) throw (uno::RuntimeException) :

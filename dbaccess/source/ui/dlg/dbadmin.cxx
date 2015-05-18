@@ -469,6 +469,6 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
         // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

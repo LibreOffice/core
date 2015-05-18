@@ -138,6 +138,6 @@ void  SIDEModel::notImplemented() throw ( io::IOException )
     throw io::IOException("Can't store IDE model" );
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

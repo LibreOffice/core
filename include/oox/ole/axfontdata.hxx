@@ -73,8 +73,8 @@ struct OOX_DLLPUBLIC AxFontData
 };
 
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 #endif
 

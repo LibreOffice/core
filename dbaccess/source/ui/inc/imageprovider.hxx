@@ -130,7 +130,7 @@ namespace dbaui
         static Image getDatabaseImage();
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_IMAGEPROVIDER_HXX
 

@@ -52,7 +52,7 @@ namespace dbaccess
         Veto& operator=( const Veto& ) SAL_DELETED_FUNCTION;
     };
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_VETO_HXX
 

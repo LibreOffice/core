@@ -159,7 +159,7 @@ namespace
         return false;
     }
 
-} // namespace
+}
 
 SysCredentialsConfig::SysCredentialsConfig()
 : m_aConfigItem( this ),

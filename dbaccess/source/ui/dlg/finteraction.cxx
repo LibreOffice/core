@@ -56,6 +56,6 @@ namespace dbaui
             m_xMaster->handle( _rxRequest );
     }
 
-}   // namespace svt
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

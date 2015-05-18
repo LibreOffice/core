@@ -1094,6 +1094,6 @@ void DatabaseDataProvider::impl_invalidateParameter_nothrow()
     m_aParameterManager.clearAllParameterInformation();
 }
 
-} // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

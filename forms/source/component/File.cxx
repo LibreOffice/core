@@ -278,7 +278,7 @@ void OFileControlModel::_reset()
     }
 }
 
-}   // namespace frm
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_OFileControlModel_get_implementation(::com::sun::star::uno::XComponentContext* component,

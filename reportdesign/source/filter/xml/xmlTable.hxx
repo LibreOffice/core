@@ -85,7 +85,7 @@ namespace rptxml
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const { return m_xSection; }
     };
 
-} // namespace rptxml
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLTABLE_HXX

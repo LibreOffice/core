@@ -353,7 +353,7 @@ namespace {
         }
         return sPart;
     }
-} // namespace
+}
 
 extern "C" int NeonSession_CertificationNotify( void *userdata,
                                                 int failures,
@@ -1328,7 +1328,7 @@ namespace
         return lastChanceToSendRefreshRequest;
     }
 
-} // namespace
+}
 
 // Set new lock
 void NeonSession::LOCK( const OUString & inPath,
@@ -1584,7 +1584,7 @@ bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
     return false;
 }
 
-} // namespace
+}
 
 bool NeonSession::removeExpiredLocktoken( const OUString & inURL,
                                           const DAVRequestEnvironment & rEnv )
@@ -1806,7 +1806,7 @@ void runResponseHeaderHandler( void * userdata,
     }
 }
 
-} // namespace
+}
 
 int NeonSession::GET( ne_session * sess,
                       const char * uri,

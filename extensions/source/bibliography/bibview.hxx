@@ -83,7 +83,7 @@ namespace bib
     };
 
 
-}   // namespace bib
+}
 
 
 #endif

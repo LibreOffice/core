@@ -74,7 +74,7 @@ inline void DeletionNotifier::notifyDelete()
     m_aListeners.clear();
 }
 
-} // namespace vcl
+}
 
 #endif // INCLUDED_VCL_IMPDEL_HXX
 

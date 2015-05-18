@@ -178,9 +178,9 @@ private:
     bool                mb3dChart;          /// True = type is a 3D chart type.
 };
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 #endif
 

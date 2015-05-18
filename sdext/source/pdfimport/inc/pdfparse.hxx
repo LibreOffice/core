@@ -303,7 +303,7 @@ public:
 #endif
 };
 
-} // namespace
+}
 
 #endif
 

@@ -26,7 +26,7 @@ namespace framework{
 
 #define CMD_UNO_SHOWSTARTMODULE ".uno:ShowStartModule"
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCHCOMMANDS_H
 

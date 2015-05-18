@@ -598,7 +598,7 @@ private:
 
 };  // class BaseControl
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_INC_BASECONTROL_HXX
 

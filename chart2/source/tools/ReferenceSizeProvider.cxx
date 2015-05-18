@@ -350,6 +350,6 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
     m_bUseAutoScale = (getAutoResizeState( m_xChartDoc ) == AUTO_RESIZE_YES);
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

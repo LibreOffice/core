@@ -977,8 +977,8 @@ class FilterCache : public BaseLock
         static css::uno::Sequence< OUString > impl_convertFlagField2FlagNames(sal_Int32 nFlags);
 };
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERCACHE_HXX
 

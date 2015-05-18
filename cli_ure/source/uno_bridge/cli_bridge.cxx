@@ -162,7 +162,7 @@ void SAL_CALL Bridge_free( uno_Mapping * mapping )
 }
 
 } //extern C
-} //namespace
+}
 
 namespace cli_uno
 {
@@ -242,7 +242,7 @@ Bridge::~Bridge()
 
 
 
-} //namespace cli_uno
+}
 
 extern "C"
 {

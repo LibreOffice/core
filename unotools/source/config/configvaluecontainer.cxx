@@ -320,6 +320,6 @@ namespace utl
         lcl_copyData( _rAccessor, m_pImpl->aConfigRoot.getNodeValue( _rAccessor.getPath() ), m_pImpl->rMutex );
     }
 
-}   // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

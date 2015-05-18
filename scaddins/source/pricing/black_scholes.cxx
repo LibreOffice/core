@@ -531,7 +531,7 @@ double vanilla_trunc(double S, double vol, double rd, double rf,
     return val;
 }
 
-} // namespace internal
+}
 
 // path dependent options
 
@@ -820,7 +820,7 @@ double barrier(double S, double vol, double rd, double rf,
     return val;
 }
 
-} // namespace internal
+}
 
 
 // touch/no-touch options (cash/asset or nothing payoff profile)
@@ -937,10 +937,10 @@ double prob_in_money(double S, double vol, double mu,
     return val;
 }
 
-} // namespace bs
+}
 
-} // namespace pricing
-} // namespace sca
+}
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

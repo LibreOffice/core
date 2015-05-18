@@ -258,7 +258,7 @@ struct CreateFunc<ImplT, PostProcessFuncT, with_args<true> > {
     }
 };
 
-} // namespace detail
+}
 
 /** Defines a service implementation class.
 
@@ -374,8 +374,8 @@ BOOST_PP_REPEAT_FROM_TO(1, COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS,
 #undef COMPHELPER_SERVICEDECL_make
 #undef COMPHELPER_SERVICEDECL_getFactory
 
-} // namespace service_decl
-} // namespace comphelper
+}
+}
 
 /** The following preprocessor macro generates the C access functions,
     that are used to initialize and register the components of a

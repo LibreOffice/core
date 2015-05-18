@@ -69,7 +69,7 @@ private: //member
                     , const ::std::vector<VLineProperties>& rLinePropertiesList );
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

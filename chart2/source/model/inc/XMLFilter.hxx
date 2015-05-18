@@ -223,7 +223,7 @@ protected:
     virtual OUString getMediaType(bool _bOasis) SAL_OVERRIDE;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_INC_XMLFILTER_HXX
 #endif

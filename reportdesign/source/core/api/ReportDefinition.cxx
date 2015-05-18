@@ -2730,6 +2730,6 @@ uno::Reference< document::XUndoManager > SAL_CALL OReportDefinition::getUndoMana
     return m_pImpl->m_pUndoManager.get();
 }
 
-}// namespace reportdesign
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

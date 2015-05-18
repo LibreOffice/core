@@ -71,7 +71,7 @@ private: //member
     ::com::sun::star::uno::Sequence< sal_Int32 > m_aOverlapSequence;
     ::com::sun::star::uno::Sequence< sal_Int32 > m_aGapwidthSequence;
 };
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

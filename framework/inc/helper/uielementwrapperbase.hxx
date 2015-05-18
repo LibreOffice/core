@@ -110,7 +110,7 @@ class UIElementWrapperBase : private cppu::BaseMutex,
                                                                             m_bDisposed;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_UIELEMENTWRAPPERBASE_HXX
 

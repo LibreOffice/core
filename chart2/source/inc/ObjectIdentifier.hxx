@@ -279,7 +279,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xAdditionalShape;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

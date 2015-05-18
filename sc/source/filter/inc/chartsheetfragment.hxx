@@ -49,8 +49,8 @@ private:
     void                importDrawing( SequenceInputStream& rStrm );
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

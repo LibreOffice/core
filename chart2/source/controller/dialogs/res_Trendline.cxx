@@ -360,6 +360,6 @@ void TrendlineResources::SetNbPoints( sal_Int32 nNbPoints )
     UpdateControlStates();
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

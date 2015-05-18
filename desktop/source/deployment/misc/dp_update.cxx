@@ -407,6 +407,6 @@ OUString getHighestVersion(
 
     return OUString();
 }
-} //namespace dp_misc
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

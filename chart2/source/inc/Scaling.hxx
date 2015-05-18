@@ -234,7 +234,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -118,7 +118,7 @@ namespace toolkit
 
 
 
-} // namespacetoolkit
+}
 
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX

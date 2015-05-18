@@ -159,7 +159,7 @@ const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css:
 }
 
 
-}   // namespace comphelper
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -227,6 +227,6 @@ void EditToolbarController::executeControlCommand( const ::com::sun::star::frame
     }
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

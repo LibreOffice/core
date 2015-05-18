@@ -247,7 +247,7 @@ Reference< XAccessibleTable > AccessibleBrowseBoxTable::implGetHeaderBar(
 
 
 
-} // namespace accessibility
+}
 
 
 

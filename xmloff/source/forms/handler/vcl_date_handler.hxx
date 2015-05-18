@@ -37,7 +37,7 @@ namespace xmloff
         virtual bool getPropertyValues( const OUString& i_attributeValue, PropertyValues& o_propertyValues ) const SAL_OVERRIDE;
     };
 
-} // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_HANDLER_VCL_DATE_HANDLER_HXX
 

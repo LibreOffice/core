@@ -194,7 +194,7 @@ void Test::testUpcastCompilation()
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
-}   // namespace
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

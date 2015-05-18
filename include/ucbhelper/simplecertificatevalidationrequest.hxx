@@ -56,7 +56,7 @@ public:
         const OUString & hostname );
 };
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_SIMPLECERTIFICATEVALIDATIONREQUEST_HXX */
 

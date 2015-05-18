@@ -355,6 +355,6 @@ void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &r
     }
 }
 
-}   // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

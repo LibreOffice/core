@@ -55,7 +55,7 @@ private:
     StockChartTypeTemplate::StockVariant GetStockVariant() const { return m_eStockVariant;}
 };
 
-} // namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_STOCKDATAINTERPRETER_HXX
 #endif

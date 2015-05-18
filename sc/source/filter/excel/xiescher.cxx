@@ -152,7 +152,7 @@ struct SdrObjectFree {
 
 typedef std::unique_ptr<SdrObject, SdrObjectFree> SdrObjectPtr;
 
-} // namespace
+}
 
 // Drawing objects ============================================================
 
@@ -1360,7 +1360,7 @@ namespace {
         rAnchorRect.Top() + static_cast< sal_Int32 >( ::std::min< double >( rPoint.Y(), 16384.0 ) / 16384.0 * rAnchorRect.GetHeight() + 0.5 ) );
 }
 
-} // namespace
+}
 
 SdrObject* XclImpPolygonObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const
 {
@@ -2014,7 +2014,7 @@ void lclExtractColor( sal_uInt8& rnColorIdx, const DffPropSet& rDffPropSet, sal_
     }
 }
 
-} // namespace
+}
 
 void XclImpTbxObjBase::SetDffProperties( const DffPropSet& rDffPropSet )
 {

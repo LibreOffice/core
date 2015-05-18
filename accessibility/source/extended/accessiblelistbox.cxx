@@ -592,7 +592,7 @@ namespace accessibility
         return GetAs< SvTreeListBox >();
     }
 
-}// namespace accessibility
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

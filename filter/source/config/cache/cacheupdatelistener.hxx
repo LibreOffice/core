@@ -117,8 +117,8 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEUPDATELISTENER_HXX
 

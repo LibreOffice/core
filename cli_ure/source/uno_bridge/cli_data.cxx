@@ -1916,8 +1916,8 @@ void Bridge::map_to_cli(
         //ToDo check this exception. The String is probably crippled
         throw BridgeRuntimeError("[map_to_cli():" + OUString::unacquired( &type->pTypeName ) + "] unsupported type!");
     }
-    } //switch
-} // method
-} // namespace
+    }
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

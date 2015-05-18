@@ -424,6 +424,6 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
         return static_cast< lang::XTypeProvider * >( new XMLOasisBasicExporter( xContext ) );
     }
 
-}   // namespace xmlscript
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

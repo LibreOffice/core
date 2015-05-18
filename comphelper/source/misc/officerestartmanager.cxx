@@ -180,7 +180,7 @@ uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNam
     return getSupportedServiceNames_static();
 }
 
-} // namespace comphelper
+}
 
 void createRegistryInfo_OOfficeRestartManager()
 {

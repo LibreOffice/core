@@ -29,7 +29,7 @@ class RemoveForwardStringDecl
         bool tryRemoveStringForwardDecl( const Decl* decl );
     };
 
-} // namespace
+}
 
 #endif // REMOVEFORWARDSTRINGDECL_H
 

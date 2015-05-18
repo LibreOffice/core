@@ -344,6 +344,6 @@ IMPL_LINK_NOARG(AxisPositionsTabPage, PlaceLabelsSelectHdl)
     return 0;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

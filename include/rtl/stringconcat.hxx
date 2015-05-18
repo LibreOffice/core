@@ -277,7 +277,7 @@ int operator+( const StringConcatInvalid&, const T& )
     }
 #endif
 
-} // namespace
+}
 
 #endif
 

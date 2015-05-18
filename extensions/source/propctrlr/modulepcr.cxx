@@ -30,7 +30,7 @@ namespace pcr
     IMPLEMENT_MODULE( PcrModule, "pcr" )
 
 
-} // namespace pcr
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

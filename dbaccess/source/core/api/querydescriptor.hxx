@@ -140,7 +140,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_API_QUERYDESCRIPTOR_HXX
 

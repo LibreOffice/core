@@ -199,7 +199,7 @@ private:
     std::unique_ptr<DocumentMetadataAccess_Impl> m_pImpl;
 };
 
-} // namespace sfx2
+}
 
 #endif // INCLUDED_SFX2_DOCUMENTMETADATAACCESS_HXX
 

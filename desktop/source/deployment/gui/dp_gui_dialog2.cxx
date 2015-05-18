@@ -1645,6 +1645,6 @@ sal_Int16 UpdateRequiredDialogService::execute() throw ( uno::RuntimeException, 
 
 SelectedPackage::~SelectedPackage() {}
 
-} //namespace dp_gui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

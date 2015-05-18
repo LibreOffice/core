@@ -44,6 +44,6 @@ void DataLabelsDialog::FillItemSet(SfxItemSet& rOutAttrs)
     m_apDataLabelResources->FillItemSet(&rOutAttrs);
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

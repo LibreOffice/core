@@ -27,7 +27,7 @@ public:
         ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode ) SAL_OVERRIDE;
 };
 
-}} // namespace sc::opencl
+}}
 
 #endif // INCLUDED_SC_SOURCE_CORE_INC_FORMULAGROUPCL_HXX
 

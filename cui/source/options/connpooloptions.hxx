@@ -67,7 +67,7 @@ namespace offapp
         void commitTimeoutField();
     };
 
-} // namespace offapp
+}
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLOPTIONS_HXX
 

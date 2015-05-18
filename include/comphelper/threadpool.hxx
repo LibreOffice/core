@@ -72,7 +72,7 @@ private:
     std::vector< ThreadTask * >   maTasks;
 };
 
-} // namespace comphelper
+}
 
 #endif // INCLUDED_COMPHELPER_THREADPOOL_HXX
 

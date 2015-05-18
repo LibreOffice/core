@@ -194,6 +194,6 @@ Reference< chart2::XChartType > SAL_CALL NetChartTypeTemplate::getChartTypeForNe
     return xResult;
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

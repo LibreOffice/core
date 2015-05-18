@@ -207,7 +207,7 @@ void SAL_CALL MediaEventListenersImpl::focusLost( const ::com::sun::star::awt::F
 {
 }
 
-} // namespace priv
-} // namespace avemdia
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

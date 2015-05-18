@@ -69,7 +69,7 @@ class GlobalSettings
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 };
 
-} // namespace framework
+}
 
 #endif // __FRAMEWORK_UIELEMENT_WINDOWSTATECONFIGURATION_HXX_
 

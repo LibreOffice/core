@@ -36,6 +36,6 @@ const OUString JobConst::ANSWER_SEND_DISPATCHRESULT()
     return OUString("SendDispatchResult");
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,7 +44,7 @@ newArray_ex(size_t const n)
     return new T[n];
 }
 
-} // namespace comphelper
+}
 
 #endif // INCLUDED_COMPHELPER_NEWARRAY_HXX
 

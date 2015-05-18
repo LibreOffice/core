@@ -101,7 +101,7 @@ private:
     bool                              m_bAskValue;
 };
 
-} // namespace framework
+}
 #endif // INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

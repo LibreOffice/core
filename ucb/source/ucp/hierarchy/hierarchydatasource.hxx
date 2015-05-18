@@ -112,7 +112,7 @@ private:
     static bool createConfigPath( const OUString & rInPath, OUString & rOutPath );
 };
 
-} // namespace hierarchy_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYDATASOURCE_HXX
 

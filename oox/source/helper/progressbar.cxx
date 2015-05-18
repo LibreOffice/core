@@ -32,7 +32,7 @@ namespace {
 
 const sal_Int32 PROGRESS_RANGE      = 1000000;
 
-} // namespace
+}
 
 IProgressBar::~IProgressBar()
 {
@@ -125,7 +125,7 @@ ISegmentProgressBarRef SubSegment::createSegment( double fLength )
     return xSegment;
 }
 
-} // namespace prv
+}
 
 SegmentProgressBar::SegmentProgressBar( const Reference< XStatusIndicator >& rxIndicator, const OUString& rText ) :
     maProgress( rxIndicator, rText ),
@@ -157,6 +157,6 @@ ISegmentProgressBarRef SegmentProgressBar::createSegment( double fLength )
     return xSegment;
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

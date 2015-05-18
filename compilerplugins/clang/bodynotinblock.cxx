@@ -142,6 +142,6 @@ void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, i
 
 static Plugin::Registration< BodyNotInBlock > X( "bodynotinblock" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

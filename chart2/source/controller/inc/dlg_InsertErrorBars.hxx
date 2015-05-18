@@ -55,7 +55,7 @@ private:
     boost::scoped_ptr< ErrorBarResources >    m_apErrorBarResources;
 };
 
-} //namespace chart
+}
 
 #endif
 

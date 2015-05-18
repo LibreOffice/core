@@ -387,6 +387,6 @@ namespace dbaui
         lcl_updateActive_nothrow( *m_pData, bActive );
     }
 
-} // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

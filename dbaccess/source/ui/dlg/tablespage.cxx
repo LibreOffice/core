@@ -587,6 +587,6 @@ namespace dbaui
     {
         _rControlList.push_back(new ODisableWrapper<VclContainer>(m_pTables));
     }
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

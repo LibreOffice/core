@@ -190,7 +190,7 @@ SingletonClass* SingletonRef< SingletonClass >::m_pInstance = 0;
 template< class SingletonClass >
 sal_Int32 SingletonRef< SingletonClass >::m_nRef = 0;
 
-} // namespace salhelper
+}
 
 #endif // INCLUDED_SALHELPER_SINGLETONREF_HXX
 

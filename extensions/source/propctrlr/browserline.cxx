@@ -504,7 +504,7 @@ namespace pcr
         return 0;
     }
 
-} // namespace pcr
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

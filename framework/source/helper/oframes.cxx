@@ -393,6 +393,6 @@ bool OFrames::impldbg_checkParameter_queryFrames( sal_Int32 nSearchFlags )
     return bOK;
 }
 
-}       //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

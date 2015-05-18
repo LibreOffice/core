@@ -148,6 +148,6 @@ void TitleResources::readFromResources( TitleDialogData& rOutput )
     rOutput.aTextList[6] = m_pEd_SecondaryYAxis->GetText();
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

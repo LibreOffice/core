@@ -32,7 +32,7 @@ namespace ResourceManager
     ::ResMgr &  getResourceManager();
 }
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_RESOURCEMANAGER_HXX
 #endif

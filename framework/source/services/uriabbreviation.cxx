@@ -62,6 +62,6 @@ OUString SAL_CALL UriAbbreviation::abbreviateString(const css::uno::Reference< c
     return aResult;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -602,7 +602,7 @@ void lclWriteChartFont( ScfPropertySet& rPropSet,
     rPropSetHlp.WriteToPropertySet( rPropSet );
 }
 
-} // namespace
+}
 
 XclFontPropSetHelper::XclFontPropSetHelper() :
     maHlpChCommon( sppcPropNamesChCommon ),
@@ -1445,7 +1445,7 @@ static const XclBuiltInFormatTable spBuiltInFormatTables[] =
     {   LANGUAGE_THAI,                  LANGUAGE_DONTKNOW,          spBuiltInFormats_THAI                   }
 };
 
-} // namespace
+}
 
 XclNumFmtBuffer::XclNumFmtBuffer( const XclRoot& rRoot ) :
     meSysLang( rRoot.GetSysLanguage() ),

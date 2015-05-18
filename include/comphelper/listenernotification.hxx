@@ -275,7 +275,7 @@ namespace comphelper
                         ) = 0;
     };
 
-} // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_LISTENERNOTIFICATION_HXX

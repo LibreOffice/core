@@ -580,7 +580,7 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CloseFrameHdl)
     return 0L;
 }
 
-} // namespace
+}
 
 #endif // HAVE_FEATURE_DBCONNECTIVITY
 

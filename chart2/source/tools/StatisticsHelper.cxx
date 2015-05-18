@@ -375,6 +375,6 @@ bool StatisticsHelper::usesErrorBarRanges(
              nStyle == ::com::sun::star::chart::ErrorBarStyle::FROM_DATA );
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

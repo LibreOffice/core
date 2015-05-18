@@ -412,6 +412,6 @@ Reference < XPropertySetInfo > ConstItemContainer::createPropertySetInfo(
     return static_cast< XPropertySetInfo * >( new OPropertySetHelperInfo_Impl( rProperties ) );
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -70,7 +70,7 @@ namespace accessibility
     };
 
 
-}   // namespace accessibility
+}
 
 
 

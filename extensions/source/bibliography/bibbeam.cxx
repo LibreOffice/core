@@ -279,6 +279,6 @@ namespace bib
         return 0L;
     }
 
-}   // namespace bib
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

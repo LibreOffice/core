@@ -108,7 +108,7 @@ namespace connectivity
     }
 
 
-}   // namespace connectivity
+}
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YDRIVER_HXX
 

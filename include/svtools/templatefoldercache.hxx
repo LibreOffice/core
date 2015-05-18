@@ -94,7 +94,7 @@ namespace svt
     };
 
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_TEMPLATEFOLDERCACHE_HXX

@@ -178,7 +178,7 @@ beans::PropertyValue CellMarginHandler::getInteropGrabBag()
     return aRet;
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -628,9 +628,9 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSupportedServiceName
     return VistaFilePicker_getSupportedServiceNames();
 }
 
-} // namespace vista
-} // namespace win32
-} // namespace fpicker
+}
+}
+}
 
 #endif // __IFileDialogCustomize_INTERFACE_DEFINED__
 

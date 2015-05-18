@@ -127,7 +127,7 @@ namespace svt
     };
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_TOOLPANEL_HXX

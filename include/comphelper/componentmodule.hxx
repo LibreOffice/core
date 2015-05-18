@@ -253,7 +253,7 @@ namespace comphelper
     }
 
 
-} // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_COMPONENTMODULE_HXX

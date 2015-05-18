@@ -215,7 +215,7 @@ void BorderHandler::appendGrabBag(const OUString& aKey, const OUString& aValue)
     m_aInteropGrabBag.push_back(aProperty);
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

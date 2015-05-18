@@ -58,7 +58,7 @@ namespace drawinglayer
         ImplPrimitive2DIDBlock(ClippedBorderLinePrimitive2D, PRIMITIVE2D_ID_CLIPPEDBORDERLINEPRIMITIVE2D)
 
 
-    } // namespace primitive2d
-} // namespace drawinglayer
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

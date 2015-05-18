@@ -85,7 +85,7 @@ namespace dbaccess
         ::std::unique_ptr< StorageXMLInputStream_Data >   m_pData;
     };
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_STORAGEXMLSTREAM_HXX
 

@@ -2217,7 +2217,7 @@ void SAL_CALL GeometryHandler::propertyChange(const beans::PropertyChangeEvent& 
     }
 }
 
-} // namespace rptui
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

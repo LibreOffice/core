@@ -76,7 +76,7 @@ bool cmpAllContentTypeParameter(const Reference<XMimeContentType> xLhs,
   return true;
 }
 
-} // namespace private
+}
 
 OSXTransferable::OSXTransferable(const Reference<XMimeContentTypeFactory> rXMimeCntFactory,
                                  DataFlavorMapperPtr_t pDataFlavorMapper,

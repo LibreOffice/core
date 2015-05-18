@@ -49,7 +49,7 @@ namespace dbaui
             GetFullValue() const { return m_aValue; }
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_OPTIONALBOOLITEM_HXX
 

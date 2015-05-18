@@ -39,7 +39,7 @@ namespace dbaxml
 
         virtual void EndElement() SAL_OVERRIDE;
     };
-} // namespace dbaxml
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLDATABASE_HXX
 

@@ -233,7 +233,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
                                                   PreventDuplicateInteraction::InteractionInfo* pReturn     ) const;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_PREVENTDUPLICATEINTERACTION_HXX
 

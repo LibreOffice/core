@@ -79,7 +79,7 @@ public:
     void ShowStaggeringControls( bool bShowStaggeringControls );
     void SetComplexCategories( bool bComplexCategories );
 };
-} //namespace chart
+}
 
 #endif
 

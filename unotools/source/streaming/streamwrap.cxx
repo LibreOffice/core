@@ -318,6 +318,6 @@ void SAL_CALL OStreamWrapper::truncate() throw(css::io::IOException, css::uno::R
     m_pSvStream->SetStreamSize(0);
 }
 
-} // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,7 +68,7 @@ public:
     ~OStreamSection();
 };
 
-}   // namespace comphelper
+}
 
 #endif // INCLUDED_COMPHELPER_STREAMSECTION_HXX
 

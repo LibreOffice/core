@@ -442,7 +442,7 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
     }
 }
 
-} // namespace
+}
 
 struct ScCaptionInitData
 {

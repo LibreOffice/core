@@ -70,7 +70,7 @@ Font2::Font2(const PrinterGfx &rGfx)
                 rMgr.getFontEncoding(mpFont[0]) == RTL_TEXTENCODING_SYMBOL;
 }
 
-} // namespace psp
+}
 
 static int getVerticalDeltaAngle( sal_Unicode nChar )
 {

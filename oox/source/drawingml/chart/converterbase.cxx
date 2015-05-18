@@ -134,7 +134,7 @@ OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 #undef OOX_DEFINEFUNC_GETAXISTITLESHAPE
 #undef OOX_IMPLEMENT_GETTITLESHAPE
 
-} // namespace
+}
 
 struct ConverterData
 {
@@ -333,7 +333,7 @@ double lclCalcRelSize( double fPos, double fSize, sal_Int32 nSizeMode )
     return getLimitedValue< double, double >( fSize, 0.0, 1.0 - fPos );
 }
 
-} // namespace
+}
 
 LayoutConverter::LayoutConverter( const ConverterRoot& rParent, LayoutModel& rModel ) :
     ConverterBase< LayoutModel >( rParent, rModel )
@@ -413,8 +413,8 @@ bool LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
     return false;
 }
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

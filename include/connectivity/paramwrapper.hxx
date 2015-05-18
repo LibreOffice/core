@@ -195,7 +195,7 @@ namespace param
     typedef ::rtl::Reference< ParameterWrapperContainer >   ParametersContainerRef;
 
 
-} } // namespace dbtools::param
+} }
 
 
 #endif // INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX

@@ -85,7 +85,7 @@ sal_Int32 lclGetDays( const util::Date& rDate )
     return nDays;
 }
 
-} // namespace
+}
 
 UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -243,7 +243,7 @@ double UnitConverter::getCoefficient( Unit eUnit ) const
     return maCoeffs[ static_cast< size_t >( eUnit ) ];
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

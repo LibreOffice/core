@@ -173,8 +173,8 @@ public:
 
 
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 #endif
 

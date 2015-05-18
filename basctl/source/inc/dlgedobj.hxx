@@ -185,7 +185,7 @@ private:
     void    ImplInvalidateDeviceInfo();
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_DLGEDOBJ_HXX
 

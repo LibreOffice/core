@@ -46,7 +46,7 @@ private:
     DECL_LINK_TYPED( TimerTimeout, Timer*, void );
 };
 
-} //namespace chart
+}
 
 #endif
 

@@ -104,7 +104,7 @@ protected: //member
     sal_Int32 m_nMaximumTextHeightSoFar;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

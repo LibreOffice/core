@@ -3946,6 +3946,6 @@ void Window::SetDoubleBuffering(bool bDoubleBuffering)
     mpWindowImpl->mbDoubleBuffering = bDoubleBuffering;
 }
 
-} /* namespace vcl */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

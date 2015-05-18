@@ -715,6 +715,6 @@ bool operator!=( const SvxBorderLine& rLeft, const SvxBorderLine& rRight )
     return !(rLeft == rRight);
 }
 
-} // namespace editeng
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

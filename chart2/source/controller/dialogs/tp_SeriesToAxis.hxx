@@ -71,7 +71,7 @@ private: //member
     bool m_bProvidesBarConnectors;
 };
 
-} //namespace chart
+}
 
 #endif
 

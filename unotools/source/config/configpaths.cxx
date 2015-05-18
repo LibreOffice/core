@@ -275,6 +275,6 @@ OUString wrapConfigurationElementName(OUString const& _sElementName,
     return lcl_wrapName(_sElementName, _sTypeName);
 }
 
-} // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

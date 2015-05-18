@@ -168,6 +168,6 @@ void LinePropertiesHelper::SetLineInvisible( const ::com::sun::star::uno::Refere
     }
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

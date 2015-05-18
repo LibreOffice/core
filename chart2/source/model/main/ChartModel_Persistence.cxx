@@ -823,6 +823,6 @@ void SAL_CALL ChartModel::removeStorageChangeListener( const Reference< document
         cppu::UnoType<document::XStorageChangeListener>::get(), xListener );
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

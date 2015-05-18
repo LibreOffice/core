@@ -159,7 +159,7 @@ private:
     VLineProperties      makeLinePropertiesForDepth( sal_Int32 /*nDepth*/ ) const { return m_aLineProperties; }
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

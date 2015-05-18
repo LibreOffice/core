@@ -75,6 +75,6 @@ SdrObject* DlgEdPage::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
     return pObj;
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

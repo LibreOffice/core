@@ -41,7 +41,7 @@ private:
     sal_uInt16 m_nEffectsPageId;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_SHAPEFONT_HXX
 #endif

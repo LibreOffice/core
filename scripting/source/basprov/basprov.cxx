@@ -524,7 +524,7 @@ namespace basprov
 
 
 
-}   // namespace basprov
+}
 
 
 

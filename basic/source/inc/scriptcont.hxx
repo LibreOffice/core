@@ -181,7 +181,7 @@ protected:
 
 
 
-}   // namespace basic
+}
 
 #endif
 

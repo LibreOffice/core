@@ -187,7 +187,7 @@ class StorageHolder
             static OUStringList impl_st_parsePath(const OUString& sPath);
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_STORAGEHOLDER_HXX
 

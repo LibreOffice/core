@@ -150,7 +150,7 @@ private:
     TabPageNotifiable *         m_pTabPageNotifiable;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_DATASOURCE_HXX
 #endif

@@ -69,7 +69,7 @@ namespace dbaxml
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
         virtual void EndElement() SAL_OVERRIDE;
     };
-} // namespace dbaxml
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLTABLE_HXX
 

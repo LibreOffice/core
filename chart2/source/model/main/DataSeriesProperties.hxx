@@ -44,7 +44,7 @@ namespace DataSeriesProperties
     void AddDefaultsToMap( tPropertyValueMap & rOutMap );
 }
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_MAIN_DATASERIESPROPERTIES_HXX
 #endif

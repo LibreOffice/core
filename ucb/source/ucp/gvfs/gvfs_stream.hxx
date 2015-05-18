@@ -153,7 +153,7 @@ public:
                com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 };
 
-} // namespace gvfs
+}
 #endif // INCLUDED_UCB_SOURCE_UCP_GVFS_GVFS_STREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

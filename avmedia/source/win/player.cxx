@@ -482,7 +482,7 @@ uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
     return aRet;
 }
 
-} // namespace win
-} // namespace avmedia
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

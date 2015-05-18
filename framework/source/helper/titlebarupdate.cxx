@@ -334,6 +334,6 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
     // <- VCL SYNCHRONIZED
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

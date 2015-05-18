@@ -342,7 +342,7 @@ public:
     }
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_PIXELITERATOR_HXX */
 

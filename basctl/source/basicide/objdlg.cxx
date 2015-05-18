@@ -141,6 +141,6 @@ void ObjectCatalog::SetCurrentEntry (BaseWindow* pCurWin)
 }
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

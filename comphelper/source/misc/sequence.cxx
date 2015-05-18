@@ -72,6 +72,6 @@ css::uno::Sequence<sal_Int16> findValue(const css::uno::Sequence< OUString >& _r
         return aRetSeq;
     }
 }
-}   // namespace comphelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

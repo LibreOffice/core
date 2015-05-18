@@ -57,7 +57,7 @@ protected:
     DlgEdPage(const DlgEdPage& rSrcPage);
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_DLGEDPAGE_HXX
 

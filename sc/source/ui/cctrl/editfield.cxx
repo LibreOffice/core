@@ -39,7 +39,7 @@ sal_Unicode lclGetGroupSep()
     return ScGlobal::GetpLocaleData()->getNumThousandSep()[0];
 }
 
-} // namespace
+}
 
 ScDoubleField::ScDoubleField( vcl::Window* pParent, WinBits nStyle ) :
     Edit( pParent, nStyle )

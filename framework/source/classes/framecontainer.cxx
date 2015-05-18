@@ -288,6 +288,6 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildren
     return xSearchedFrame;
 }
 
-} //  namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

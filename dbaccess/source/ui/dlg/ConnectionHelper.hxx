@@ -98,7 +98,7 @@ namespace dbaui
         void        implUpdateURLDependentStates() const;
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_CONNECTIONHELPER_HXX
 

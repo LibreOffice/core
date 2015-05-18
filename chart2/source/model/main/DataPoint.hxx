@@ -130,7 +130,7 @@ private:
     bool m_bNoParentPropAllowed;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_MAIN_DATAPOINT_HXX
 #endif

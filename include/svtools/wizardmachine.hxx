@@ -382,7 +382,7 @@ namespace svt
     };
 
 
-}   // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_WIZARDMACHINE_HXX

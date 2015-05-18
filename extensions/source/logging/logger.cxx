@@ -322,6 +322,6 @@ namespace logging
         static OSingletonRegistration< LoggerPool > aAutoRegistration;
     }
 
-} // namespace logging
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

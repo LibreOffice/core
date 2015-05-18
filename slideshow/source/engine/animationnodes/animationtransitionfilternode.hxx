@@ -53,8 +53,8 @@ private:
         ::com::sun::star::animations::XTransitionFilter> mxTransitionFilterNode;
 };
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONTRANSITIONFILTERNODE_HXX
 

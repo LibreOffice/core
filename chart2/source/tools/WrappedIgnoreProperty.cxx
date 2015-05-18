@@ -123,6 +123,6 @@ void WrappedIgnoreProperties::addIgnoreFillProperties_only_BitmapProperties( ::s
     rList.push_back( new WrappedIgnoreProperty( "FillBitmapMode", uno::makeAny( drawing::BitmapMode_REPEAT ) ) );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

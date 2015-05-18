@@ -56,7 +56,7 @@ struct DAVResourceInfo
     DAVResourceInfo( const OUString & inUri ) : uri( inUri ) {}
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVRESOURCE_HXX
 

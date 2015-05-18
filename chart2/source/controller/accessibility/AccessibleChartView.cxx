@@ -380,6 +380,6 @@ void SAL_CALL AccessibleChartView::disposing( const lang::EventObject& /*Source*
 {
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

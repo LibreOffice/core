@@ -42,7 +42,7 @@ class IStorageListener
         ~IStorageListener() {}
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ISTORAGELISTENER_HXX
 

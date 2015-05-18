@@ -621,7 +621,7 @@ private:
     VclPtr<OpenGLWindow> mpOpenGLWindow;
 };
 
-}  // namespace chart
+}
 
 #endif
 

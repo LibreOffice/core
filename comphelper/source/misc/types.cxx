@@ -470,7 +470,7 @@ Type getSequenceElementType(const Type& _rSequenceType)
     return Type();
 }
 
-}   // namespace comphelper
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

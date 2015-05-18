@@ -45,7 +45,7 @@ OUString const aDot(".");
 OUString const aEsc("&");
 OUString const aSemi(";");
 
-} // namespace
+}
 
 LocalizationMgr::LocalizationMgr(
     Shell* pShell,
@@ -1147,6 +1147,6 @@ Reference< XStringResourceManager > LocalizationMgr::getStringResourceFromDialog
     return xStringResourceManager;
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

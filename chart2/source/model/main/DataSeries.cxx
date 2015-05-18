@@ -600,7 +600,7 @@ css::uno::Sequence< OUString > SAL_CALL DataSeries::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-}  // namespace chart
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_chart_DataSeries_get_implementation(css::uno::XComponentContext *context,

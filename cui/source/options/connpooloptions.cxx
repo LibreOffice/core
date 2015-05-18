@@ -478,6 +478,6 @@ namespace offapp
         return 0L;
     }
 
-} // namespace offapp
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

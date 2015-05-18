@@ -119,7 +119,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
     return bRet;
 }
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

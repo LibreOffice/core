@@ -194,7 +194,7 @@ private:
 
 };  // class OConnectionPointContainerHelper
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_SOURCE_INC_OCONNECTIONPOINTCONTAINERHELPER_HXX
 

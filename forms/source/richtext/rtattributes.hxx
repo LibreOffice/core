@@ -137,7 +137,7 @@ namespace frm
         ~IMultiAttributeDispatcher() {}
     };
 
-} // namespace frm
+}
 
 #endif // INCLUDED_FORMS_SOURCE_RICHTEXT_RTATTRIBUTES_HXX
 

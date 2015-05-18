@@ -66,7 +66,7 @@ private:
     ControllerLockGuardUNO m_aControllerLockGuard;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RANGESELECTIONLISTENER_HXX
 #endif

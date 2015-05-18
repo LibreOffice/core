@@ -56,7 +56,7 @@ inline void fillImage( vigra::triple<DestIterator,DestIterator,DestAccessor> con
     fillImage(src.first,src.second,src.third,fillVal);
 }
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_FILLIMAGE_HXX */
 

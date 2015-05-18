@@ -69,7 +69,7 @@ class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper1< ::com::s
         css::uno::WeakReference< css::frame::XFrame >       m_xOwner;   /// weak reference to our frame object!
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_DOCKINGAREADEFAULTACCEPTOR_HXX
 

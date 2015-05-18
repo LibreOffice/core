@@ -171,7 +171,7 @@ void registerNamespaces( FastParser& rParser )
         rParser.registerNamespace(*it);
 }
 
-} // namespace
+}
 
 struct XmlFilterBaseImpl
 {
@@ -508,7 +508,7 @@ OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal
     return sId;
 }
 
-} // namespace
+}
 
 OUString XmlFilterBase::addRelation( const OUString& rType, const OUString& rTarget, bool bExternal )
 {
@@ -914,7 +914,7 @@ bool XmlFilterBase::isMSO2007Document() const
     return mbMSO2007;
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

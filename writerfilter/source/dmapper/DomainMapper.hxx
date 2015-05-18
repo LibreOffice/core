@@ -173,8 +173,8 @@ private:
     boost::scoped_ptr< GraphicZOrderHelper > zOrderHelper;
 };
 
-} // namespace dmapper
-} // namespace writerfilter
+}
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -208,7 +208,7 @@ void DocumentAcceleratorConfiguration::clearCache()
     m_aPresetHandler.forgetCachedStorages();
 }
 
-} // namespace framework
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation(

@@ -1672,7 +1672,7 @@ public:
     }
 };
 
-} // namespace vcl
+}
 
 /**
  A helper class that calls Application::ReleaseSolarMutex() in its constructor

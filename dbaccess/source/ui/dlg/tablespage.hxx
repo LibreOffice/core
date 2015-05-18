@@ -94,7 +94,7 @@ namespace dbaui
         void implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter );
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_TABLESPAGE_HXX
 

@@ -192,7 +192,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         void impl_notifyChangeListener(const css::beans::PropertyChangeEvent& aEvent);
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_CLASSES_PROPERTYSETHELPER_HXX
 

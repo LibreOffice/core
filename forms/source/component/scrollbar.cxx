@@ -301,7 +301,7 @@ namespace frm
         return Sequence< Type >( & cppu::UnoType<double>::get(), 1 );
     }
 
-}   // namespace frm
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_comp_forms_OScrollBarModel_get_implementation(::com::sun::star::uno::XComponentContext* component,

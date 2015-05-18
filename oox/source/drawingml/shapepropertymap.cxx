@@ -48,7 +48,7 @@ static const sal_Int32 spnDefaultShapeIds[ SHAPEPROP_END + 1 ] = // one for the 
     PROP_END_LIST
 };
 
-} // namespace
+}
 
 ShapePropertyInfo ShapePropertyInfo::DEFAULT( spnDefaultShapeIds, true, false, false, false );
 
@@ -211,7 +211,7 @@ bool ShapePropertyMap::setFillBitmapNameFromUrl( sal_Int32 /*nPropId*/, const An
     return false;
 }
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -585,7 +585,7 @@ struct ScDPSaveGroupSourceNameFunc
     inline bool         operator()( const ScDPSaveGroupDimension& rGroupDim ) const { return rGroupDim.GetSourceDimName() == maSrcDimName; }
 };
 
-} // namespace
+}
 
 ScDPDimensionSaveData::ScDPDimensionSaveData()
 {

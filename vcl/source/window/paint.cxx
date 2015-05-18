@@ -420,7 +420,7 @@ void Window::PopPaintHelper(PaintHelper *pHelper)
         mpWindowImpl->mpCursor->ImplResume(pHelper->GetRestoreCursor());
 }
 
-} /* namespace vcl */
+}
 
 PaintHelper::~PaintHelper()
 {
@@ -1611,7 +1611,7 @@ void Window::ImplScroll( const Rectangle& rRect,
         mpWindowImpl->mpCursor->ImplResume();
 }
 
-} /* namespace vcl */
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

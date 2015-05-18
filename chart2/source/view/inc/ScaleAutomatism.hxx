@@ -138,7 +138,7 @@ private:
     Date                m_aNullDate;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

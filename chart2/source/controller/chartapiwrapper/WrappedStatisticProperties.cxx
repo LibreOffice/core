@@ -1093,7 +1093,7 @@ void WrappedStatisticProperties::addWrappedPropertiesForDiagram( std::vector< Wr
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM  );
 }
 
-} //namespace wrapper
-} //namespace chart
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

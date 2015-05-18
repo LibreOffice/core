@@ -513,6 +513,6 @@ void LanguageBox::Update( const SfxStringItem* pItem )
 }
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,7 +40,7 @@ protected:
     ~TabPageNotifiable() {}
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_TABPAGENOTIFIABLE_HXX
 #endif

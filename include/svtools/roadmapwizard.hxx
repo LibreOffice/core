@@ -228,7 +228,7 @@ namespace svt
     };
 
 
-} // namespace svt
+}
 
 
 #endif // OOO_ INCLUDED_SVTOOLS_ROADMAPWIZARD_HXX

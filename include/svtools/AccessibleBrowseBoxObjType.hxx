@@ -43,7 +43,7 @@ enum AccessibleBrowseBoxObjType
 
 
 
-} // namespace svt
+}
 
 
 

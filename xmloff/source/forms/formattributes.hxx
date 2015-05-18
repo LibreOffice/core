@@ -356,7 +356,7 @@ namespace xmloff
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const ::com::sun::star::uno::Type& _rType, const OUString& _rDefaultString);
     };
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_FORMATTRIBUTES_HXX
 

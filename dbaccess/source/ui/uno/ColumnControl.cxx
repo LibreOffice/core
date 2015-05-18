@@ -133,6 +133,6 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
     }
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

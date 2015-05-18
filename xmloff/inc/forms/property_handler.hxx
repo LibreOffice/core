@@ -63,7 +63,7 @@ namespace xmloff
     //= PropertyHandlerFactory
     typedef PPropertyHandler (*PropertyHandlerFactory)( const PropertyId i_propertyId );
 
-} // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_INC_FORMS_PROPERTY_HANDLER_HXX
 

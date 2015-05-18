@@ -141,7 +141,7 @@ public:
     void            Update( const SfxStringItem* pItem );
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BASICBOX_HXX
 

@@ -266,7 +266,7 @@ struct OpCodeMapData
 };
 
 
-} // namespace
+}
 
 
 void FormulaCompiler::OpCodeMap::putExternal( const OUString & rSymbol, const OUString & rAddIn )
@@ -2209,6 +2209,6 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
     pArr          = pa;
 }
 
-} // namespace formula
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

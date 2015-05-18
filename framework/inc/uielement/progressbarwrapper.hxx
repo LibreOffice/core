@@ -78,7 +78,7 @@ class ProgressBarWrapper : public UIElementWrapperBase
         OUString                                                              m_aText;
 };      //  class ProgressBarWrapper
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_PROGRESSBARWRAPPER_HXX
 

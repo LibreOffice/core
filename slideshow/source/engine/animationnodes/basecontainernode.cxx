@@ -195,7 +195,7 @@ void BaseContainerNode::showState() const
 }
 #endif
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

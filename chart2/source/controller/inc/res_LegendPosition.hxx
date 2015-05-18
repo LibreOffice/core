@@ -70,7 +70,7 @@ private:
     Link<>          m_aChangeLink;
 };
 
-} //namespace chart
+}
 
 #endif
 

@@ -129,7 +129,7 @@ private:
     } aLeftSide, aBottomSide;
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_LAYOUT_HXX
 

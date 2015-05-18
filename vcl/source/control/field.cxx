@@ -365,7 +365,7 @@ static void ImplUpdateSeparators( const OUString& rOldDecSep, const OUString& rN
     }
 }
 
-} // namespace
+}
 
 FormatterBase::FormatterBase( Edit* pField )
 {

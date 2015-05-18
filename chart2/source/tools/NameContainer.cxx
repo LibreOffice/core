@@ -153,6 +153,6 @@ uno::Reference< util::XCloneable > SAL_CALL NameContainer::createClone()
     return uno::Reference< util::XCloneable >( new NameContainer( *this ));
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

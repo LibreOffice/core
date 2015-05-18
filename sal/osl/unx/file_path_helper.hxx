@@ -362,7 +362,7 @@ namespace osl
         &ustrPathFound.pData);
  }
 
- } // namespace osl
+ }
 
  #endif /* #ifndef _OSL_PATH_HELPER_HXX_ */
 

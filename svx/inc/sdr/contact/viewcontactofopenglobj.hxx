@@ -29,8 +29,8 @@ protected:
     virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
 };
 
-} // namespace contact
-} // namespace sdr
+}
+}
 
 #endif
 

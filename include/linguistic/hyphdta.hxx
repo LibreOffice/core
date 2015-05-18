@@ -125,7 +125,7 @@ public:
          const OUString &rHyphWord,
          const ::com::sun::star::uno::Sequence< sal_Int16 > &rPositions);
 };
-} // namespace linguistic
+}
 
 #endif
 

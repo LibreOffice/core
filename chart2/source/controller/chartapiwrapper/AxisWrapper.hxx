@@ -140,8 +140,8 @@ private: //member
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xMinorGrid;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_AXISWRAPPER_HXX
 #endif

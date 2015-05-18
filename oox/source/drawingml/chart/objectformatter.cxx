@@ -582,7 +582,7 @@ void lclConvertPictureOptions( FillProperties& orFillProps, const PictureOptions
     orFillProps.maBlipProps.moBitmapMode = bStacked ? XML_tile : XML_stretch;
 }
 
-} // namespace
+}
 
 struct ObjectFormatterData;
 
@@ -906,7 +906,7 @@ const TextCharacterProperties* lclGetTextProperties( const ModelRef< TextBody >&
         &rxTextProp->getParagraphs().front()->getProperties().getTextCharacterProperties() : 0;
 }
 
-} // namespace
+}
 
 TextFormatter::TextFormatter( ObjectFormatterData& rData, const AutoTextEntry* pAutoTextEntry, const ModelRef< TextBody >& rxGlobalTextProp ) :
     DetailFormatterBase( rData, pAutoTextEntry )
@@ -1135,8 +1135,8 @@ bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
     return !rxShapeProp || !rxShapeProp->getFillProperties().moFillType.has();
 }
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

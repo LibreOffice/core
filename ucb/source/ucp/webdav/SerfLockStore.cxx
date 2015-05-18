@@ -44,7 +44,7 @@ protected:
     virtual void SAL_CALL run() SAL_OVERRIDE;
 };
 
-} // namespace http_dav_ucp
+}
 
 
 void TickerThread::run()

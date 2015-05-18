@@ -80,6 +80,6 @@ ControllerLockHelperGuard::~ControllerLockHelperGuard()
     m_rHelper.unlockControllers();
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

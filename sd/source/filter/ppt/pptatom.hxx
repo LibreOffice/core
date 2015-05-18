@@ -128,7 +128,7 @@ inline sal_uInt32 Atom::getLength() const
     return maRecordHeader.nRecLen;
 }
 
-} // namespace ppt
+}
 
 #endif
 

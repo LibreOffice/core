@@ -45,7 +45,7 @@ private:
     VclPtr<ListBox>   m_pLB_Geometry;
 };
 
-} //namespace chart
+}
 
 #endif
 

@@ -126,7 +126,7 @@ namespace toolkit
     };
 
 
-}   // namespace toolkit
+}
 
 
 #endif // INCLUDED_TOOLKIT_HELPER_ACCESSIBLEFACTORY_HXX

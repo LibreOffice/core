@@ -28,7 +28,7 @@ namespace dbaccess
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
         createDataSourceRegistrations( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASEREGISTRATIONS_HXX
 

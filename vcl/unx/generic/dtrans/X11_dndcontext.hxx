@@ -89,7 +89,7 @@ namespace x11 {
         virtual void        SAL_CALL setImage( sal_Int32 imageId ) throw(std::exception) SAL_OVERRIDE;
         virtual void        SAL_CALL transferablesFlavorsChanged() throw(std::exception) SAL_OVERRIDE;
     };
-} // namespace
+}
 
 #endif // INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_DNDCONTEXT_HXX
 

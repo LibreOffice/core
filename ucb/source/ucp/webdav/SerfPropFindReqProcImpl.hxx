@@ -70,7 +70,7 @@ private:
     com::sun::star::uno::Reference< SerfInputStream > xInputStream;
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFPROPFINDREQPROCIMPL_HXX
 

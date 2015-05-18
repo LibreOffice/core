@@ -134,7 +134,7 @@ namespace logging
     };
 
 
-} // namespace logging
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_LOGGING_LOGHANDLER_HXX

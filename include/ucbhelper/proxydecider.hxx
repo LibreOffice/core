@@ -131,7 +131,7 @@ private:
     proxydecider_impl::InternetProxyDecider_Impl * m_pImpl;
 };
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_PROXYDECIDER_HXX */
 

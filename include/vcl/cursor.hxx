@@ -105,7 +105,7 @@ private:
     bool ImplDoHide( bool bStop );
 };
 
-} // namespace vcl
+}
 
 #endif // INCLUDED_VCL_CURSOR_HXX
 

@@ -31,7 +31,7 @@ namespace
 {
 // the thickness of the splitting lines
 static long const nSplitThickness = 3;
-} // namespace
+}
 
 // ctor for derived classes
 // pParent: the parent window (Shell)
@@ -425,6 +425,6 @@ void Layout::SplittedSide::InitSplitter (Splitter& rSplitter)
 }
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -144,7 +144,7 @@ private:
     css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_MAIN_FORMATTEDSTRING_HXX
 #endif

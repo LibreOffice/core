@@ -298,7 +298,7 @@ public:
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter ) SAL_OVERRIDE;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

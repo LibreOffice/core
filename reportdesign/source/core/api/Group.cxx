@@ -314,7 +314,7 @@ uno::Reference< report::XFunctions > SAL_CALL OGroup::getFunctions() throw (uno:
     return m_xFunctions;
 }
 
-} // namespace reportdesign
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

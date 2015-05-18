@@ -85,7 +85,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     return aRet;
 }
 
-} // namespace quicktime
-} // namespace avmedia
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

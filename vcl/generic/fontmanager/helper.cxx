@@ -106,7 +106,7 @@ static OString getEnvironmentPath( const char* pKey )
     return aPath;
 }
 
-} // namespace psp
+}
 
 void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir )
 {

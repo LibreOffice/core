@@ -86,7 +86,7 @@ void process_headers( ne_request * req,
     }
 }
 
-} // namespace
+}
 
 extern osl::Mutex aGlobalNeonMutex;
 

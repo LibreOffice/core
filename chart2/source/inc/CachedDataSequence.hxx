@@ -190,7 +190,7 @@ private:
         m_xModifyEventForwarder;
 };
 
-}  // namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_CACHEDDATASEQUENCE_HXX
 #endif

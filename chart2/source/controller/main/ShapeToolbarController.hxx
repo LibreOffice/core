@@ -87,7 +87,7 @@ public:
     virtual void SAL_CALL updateImage() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-} //  namespace chart
+}
 
 #endif // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_SHAPETOOLBARCONTROLLER_HXX
 

@@ -84,7 +84,7 @@ namespace table {
 class TableProperties;
 typedef std::shared_ptr< TableProperties > TablePropertiesPtr;
 
-} // namespace table
+}
 
 
 
@@ -207,8 +207,8 @@ struct EmuRectangle : public EmuPoint, public EmuSize
 
 
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

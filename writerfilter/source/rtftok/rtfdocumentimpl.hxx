@@ -595,8 +595,8 @@ private:
     /// New document means not pasting into an existing one.
     bool m_bIsNewDoc;
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFDOCUMENTIMPL_HXX
 

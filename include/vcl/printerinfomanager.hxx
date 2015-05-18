@@ -209,7 +209,7 @@ public:
     virtual ~PrinterInfoManager();
 };
 
-} // namespace
+}
 
 #endif // INCLUDED_VCL_PRINTERINFOMANAGER_HXX
 

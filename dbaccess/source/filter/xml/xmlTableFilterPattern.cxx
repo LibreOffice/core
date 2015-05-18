@@ -51,6 +51,6 @@ void OXMLTableFilterPattern::Characters( const OUString& rChars )
         m_rParent.pushTableTypeFilter(rChars);
 }
 
-} // namespace dbaxml
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

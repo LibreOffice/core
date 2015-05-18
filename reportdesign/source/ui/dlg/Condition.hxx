@@ -184,7 +184,7 @@ namespace rptui
     }
 
 
-} // namespace rptui
+}
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_CONDITION_HXX
 

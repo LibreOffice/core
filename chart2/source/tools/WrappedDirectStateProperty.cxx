@@ -44,6 +44,6 @@ beans::PropertyState WrappedDirectStateProperty::getPropertyState(
     return beans::PropertyState_DIRECT_VALUE;
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

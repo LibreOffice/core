@@ -72,7 +72,7 @@ namespace rptxml
         static ::com::sun::star::util::Date implGetDate(double _nValue);
     };
 
-} // namespace rptxml
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLCONTROLPROPERTY_HXX

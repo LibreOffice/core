@@ -372,7 +372,7 @@ namespace accessibility
         return GetAs<SvtIconChoiceCtrl >();
     }
 
-}// namespace accessibility
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

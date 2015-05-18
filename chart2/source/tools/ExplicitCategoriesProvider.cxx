@@ -581,6 +581,6 @@ const std::vector< DatePlusIndex >&  ExplicitCategoriesProvider::getDateCategori
     return m_aDateCategories;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

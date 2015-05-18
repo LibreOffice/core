@@ -85,8 +85,8 @@ private:
     bool m_bIncludeHiddenCells;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_SERIESOPTIONSITEMCONVERTER_HXX
 #endif

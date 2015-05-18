@@ -55,8 +55,8 @@ private:
     bool                                                                                mbInitialized;
 };
 
-} // namespace quicktime
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_QUICKTIME_FRAMEGRABBER_HXX
 

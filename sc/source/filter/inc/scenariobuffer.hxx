@@ -122,8 +122,8 @@ private:
     SheetScenariosMap   maSheetScenarios;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

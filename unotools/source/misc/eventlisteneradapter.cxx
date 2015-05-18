@@ -157,6 +157,6 @@ namespace utl
         m_pImpl->aListeners.push_back(pListenerImpl);
     }
 
-}   // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

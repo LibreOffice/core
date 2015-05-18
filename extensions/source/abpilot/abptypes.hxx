@@ -37,7 +37,7 @@ namespace abp
     typedef std::map<OUString, OUString> MapString2String;
 
 
-}   // namespace abp
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_ABPILOT_ABPTYPES_HXX

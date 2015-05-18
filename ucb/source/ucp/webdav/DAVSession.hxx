@@ -206,7 +206,7 @@ private:
     friend struct std::default_delete< DAVSession >;
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVSESSION_HXX
 

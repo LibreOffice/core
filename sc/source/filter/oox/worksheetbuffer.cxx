@@ -160,7 +160,7 @@ OUString lclQuoteName( const OUString& rName )
     return aBuffer.insert( 0, '\'' ).append( '\'' ).makeStringAndClear();
 }
 
-} // namespace
+}
 
 WorksheetBuffer::SheetInfo::SheetInfo( const SheetInfoModel& rModel, sal_Int16 nCalcSheet, const OUString& rCalcName ) :
     SheetInfoModel( rModel ),
@@ -224,7 +224,7 @@ void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
     maSheetInfosByName[ lclQuoteName( rModel.maName ) ] = xSheetInfo;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

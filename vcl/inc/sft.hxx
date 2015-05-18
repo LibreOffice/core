@@ -594,7 +594,7 @@ namespace vcl
 #define O_CFF  17    /* 'CFF' */
 #define NUM_TAGS 18
 
-} // namespace vcl
+}
 
 #endif // INCLUDED_VCL_INC_SFT_HXX
 

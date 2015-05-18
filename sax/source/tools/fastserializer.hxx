@@ -230,7 +230,7 @@ private:
     void writeBytes( const char* pStr, size_t nLen );
 };
 
-} // namespace sax_fastparser
+}
 
 #endif
 

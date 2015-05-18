@@ -567,6 +567,6 @@ void FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly()
 
 #endif
 
-} // namespace sc
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

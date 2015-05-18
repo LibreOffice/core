@@ -87,8 +87,8 @@ namespace connectivity
 
         };
 
-    } // namespace firebird
-} // namespace connectivity
+    }
+}
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_TABLE_HXX
 

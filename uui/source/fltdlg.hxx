@@ -66,7 +66,7 @@ class FilterDialog : public ModalDialog
 
 };  // class FilterDialog
 
-}   // namespace uui
+}
 
 #endif // INCLUDED_UUI_SOURCE_FLTDLG_HXX
 

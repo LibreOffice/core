@@ -271,7 +271,7 @@ namespace frm
     };
 
 
-}   // namespace frm
+}
 
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_CLICKABLEIMAGE_HXX

@@ -41,7 +41,7 @@ public:
     DECL_LINK( MakeObject, SdrObjFactory * );
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_DLGEDFAC_HXX
 

@@ -224,7 +224,7 @@ uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames()
     return aRet;
 }
 
-} // namespace gstreamer
-} // namespace avmedia
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -171,7 +171,7 @@ namespace // private
     const int SIZE_WINDOWS_FILEOPEN_CTRL_IDS =
         sizeof(WindowsFileOpenCtrlIds)/sizeof(WindowsFileOpenCtrlIds[0]);
 
-}; // end namespace
+};
 
 
 

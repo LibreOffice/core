@@ -180,7 +180,7 @@ void TableBuffer::insertTableToMaps( const TableRef& rxTable )
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

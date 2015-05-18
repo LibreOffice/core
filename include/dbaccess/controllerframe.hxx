@@ -68,7 +68,7 @@ namespace dbaui
     };
 
 
-} // namespace dbaui
+}
 
 
 #endif // INCLUDED_DBACCESS_CONTROLLERFRAME_HXX

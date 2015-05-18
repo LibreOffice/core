@@ -44,8 +44,8 @@ struct vba_service_class_ : public serviceimpl_base< detail::OwnServiceImpl<Impl
     explicit vba_service_class_( PostProcessFuncT const& postProcessFunc ) : baseT( postProcessFunc ) {}
 };
 
-} // namespace service_decl
-} // namespace comphelper
+}
+}
 
 #endif
 

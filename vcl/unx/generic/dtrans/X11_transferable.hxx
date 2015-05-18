@@ -54,7 +54,7 @@ namespace x11 {
             throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
-} // namespace
+}
 
 #endif
 

@@ -42,7 +42,7 @@ namespace dbaui
 
     typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection > SharedConnection;
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_COMMONTYPES_HXX
 

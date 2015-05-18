@@ -1033,6 +1033,6 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
 
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

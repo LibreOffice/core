@@ -140,7 +140,7 @@ class JobURL
     #endif // ENABLE_COMPONENT_SELF_CHECK
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_JOBS_JOBURL_HXX
 

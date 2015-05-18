@@ -55,7 +55,7 @@ namespace xmloff
 
 #endif
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_LOGGING_HXX
 

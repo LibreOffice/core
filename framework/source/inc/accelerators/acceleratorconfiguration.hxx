@@ -417,7 +417,7 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper4<
 
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCONFIGURATION_HXX
 

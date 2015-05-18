@@ -121,7 +121,7 @@ namespace pcr
         DialogController& operator=( const DialogController& ) SAL_DELETED_FUNCTION;
     };
 
-} // namespace pcr
+}
 
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FORMCONTROLLER_HXX

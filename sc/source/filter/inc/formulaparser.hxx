@@ -139,8 +139,8 @@ private:
     ::std::unique_ptr< FormulaParserImpl > mxImpl;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

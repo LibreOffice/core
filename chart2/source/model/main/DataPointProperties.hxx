@@ -90,7 +90,7 @@ namespace DataPointProperties
     void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 }
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_MAIN_DATAPOINTPROPERTIES_HXX
 #endif

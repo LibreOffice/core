@@ -50,7 +50,7 @@ namespace xmloff
     typedef OInterfaceCompare< ::com::sun::star::beans::XPropertySet >  OPropertySetCompare;
     typedef OInterfaceCompare< ::com::sun::star::drawing::XDrawPage >   ODrawPageCompare;
 
-}   // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_SOURCE_FORMS_IFACECOMPARE_HXX
 

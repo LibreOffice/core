@@ -37,8 +37,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xMgr;
 };
 
-} // namespace ogl
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLMANAGER_HXX
 

@@ -59,6 +59,6 @@ void SAL_CALL WeakSelectionChangeListenerAdapter::selectionChanged( const lang::
         xSelChgListener->selectionChanged( aEvent );
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

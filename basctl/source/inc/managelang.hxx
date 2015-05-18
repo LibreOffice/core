@@ -99,7 +99,7 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >   GetLocales() const;
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_MANAGELANG_HXX
 

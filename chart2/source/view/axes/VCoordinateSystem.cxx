@@ -579,6 +579,6 @@ sal_Int32 VCoordinateSystem::getNumberFormatKeyForAxis(
                 xAxis, m_xCooSysModel, xChartDoc);
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -146,7 +146,7 @@ public:
             XStringResourceManager >& xTargetStringResourceManager );
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_LOCALIZATIONMGR_HXX
 

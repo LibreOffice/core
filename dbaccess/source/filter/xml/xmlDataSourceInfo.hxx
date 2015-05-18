@@ -35,7 +35,7 @@ namespace dbaxml
                     ,const sal_uInt16 _nToken);
         virtual ~OXMLDataSourceInfo();
     };
-} // namespace dbaxml
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLDATASOURCEINFO_HXX
 

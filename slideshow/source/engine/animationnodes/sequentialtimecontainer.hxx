@@ -59,8 +59,8 @@ private:
     EventSharedPtr mpCurrentRewindEvent;
 };
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_SEQUENTIALTIMECONTAINER_HXX
 

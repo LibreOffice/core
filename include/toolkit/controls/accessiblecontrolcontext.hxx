@@ -121,7 +121,7 @@ namespace toolkit
     };
 
 
-}   // namespace toolkit
+}
 
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_ACCESSIBLECONTROLCONTEXT_HXX

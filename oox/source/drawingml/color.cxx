@@ -191,7 +191,7 @@ void lclOffValue( sal_Int32& ornValue, sal_Int32 nOff, sal_Int32 nMax = MAX_PERC
     ornValue = getLimitedValue< sal_Int32, sal_Int32 >( ornValue + nOff, 0, nMax );
 }
 
-} // namespace
+}
 
 Color::Color() :
     meMode( COLOR_UNUSED ),
@@ -759,7 +759,7 @@ void Color::toHsl() const
     }
 }
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

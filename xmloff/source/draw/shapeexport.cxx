@@ -1517,7 +1517,7 @@ const sal_Int32 FOUND_CLICKEVENTTYPE    = 0x00000080;
 const sal_Int32 FOUND_MACRO             = 0x00000100;
 const sal_Int32 FOUND_LIBRARY           = 0x00000200;
 
-} // namespace
+}
 
 void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& xShape )
 {

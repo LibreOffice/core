@@ -72,7 +72,7 @@ private:
     std::unique_ptr< PopupWindowControllerImpl >  mxImpl;
 };
 
-} // namespace svt
+}
 
 #endif // INCLUDED_SVTOOLS_POPUPWINDOWCONTROLLER_HXX
 

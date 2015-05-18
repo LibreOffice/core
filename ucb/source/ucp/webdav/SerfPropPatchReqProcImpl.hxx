@@ -51,7 +51,7 @@ private:
     const std::vector< ProppatchValue > * mpProperties;
 };
 
-} // namespace http_dav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFPROPPATCHREQPROCIMPL_HXX
 

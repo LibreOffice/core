@@ -1009,7 +1009,7 @@ OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >&
 }
 
 
-}   // namespace dbtools
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

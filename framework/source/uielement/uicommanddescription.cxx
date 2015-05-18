@@ -743,7 +743,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     return sal_True;
 }
 
-} // namespace framework
+}
 
 namespace {
 

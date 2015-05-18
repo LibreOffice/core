@@ -85,7 +85,7 @@ inline bool operator!=(const psp::JobData& rLeft, const psp::JobData& rRight)
     return !( rLeft == rRight );
 }
 
-} // namespace
+}
 
 
 #endif // PSPRINT_JOBDATA_HXX

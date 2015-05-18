@@ -90,6 +90,6 @@ bool Tutorial2::isReturnFalse( const Stmt* stmt )
 // Register the plugin action with the LO plugin handling.
 static Plugin::Registration< Tutorial2 > X( "tutorial2" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

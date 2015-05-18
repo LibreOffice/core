@@ -126,7 +126,7 @@ private:
     void InitTextEdit();
 };
 
-}  // namespace chart
+}
 
 #endif
 

@@ -193,8 +193,8 @@ private:
     bool                mbValidOleSize;     /// True = imported OLE size is a valid cell range.
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

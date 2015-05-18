@@ -417,6 +417,6 @@ void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& 
     firePropertyChangeEvent();
 }
 
-} //  namespace property
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1407,7 +1407,7 @@ GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, cons
     return GraphicObject(Graphic(aMtf));
 }
 
-} // namespace
+}
 
 
 bool EscherPropertyContainer::CreateEmbeddedHatchProperties( const ::com::sun::star::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground )

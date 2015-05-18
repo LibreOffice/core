@@ -117,7 +117,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_DBFINDEX_HXX
 

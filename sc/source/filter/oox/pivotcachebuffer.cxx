@@ -142,7 +142,7 @@ void lclAdjustBinDateTime( css::util::DateTime& orDateTime )
     }
 }
 
-} // namespace
+}
 
 PivotCacheItem::PivotCacheItem() :
     mnType( XML_m ), mbUnused( false )
@@ -1471,7 +1471,7 @@ PivotCache& PivotCacheBuffer::createPivotCache( sal_Int32 nCacheId )
     return *rxCache;
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

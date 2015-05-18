@@ -50,7 +50,7 @@ namespace toolkit
         void ensureInitialized();
     };
 
-}   // namespace toolkit
+}
 
 #endif // INCLUDED_TOOLKIT_INC_HELPER_ACCESSIBILITYCLIENT_HXX
 

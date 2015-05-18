@@ -142,7 +142,7 @@ class Gate : private boost::noncopyable
 
 };      //  class Gate
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
 

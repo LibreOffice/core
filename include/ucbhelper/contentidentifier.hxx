@@ -77,7 +77,7 @@ private:
     ContentIdentifier_Impl* m_pImpl;
 };
 
-} /* namespace ucbhelper */
+}
 
 #endif /* ! INCLUDED_UCBHELPER_CONTENTIDENTIFIER_HXX */
 

@@ -48,7 +48,7 @@ public:
 typedef ORelease< ::osl::Mutex >    MutexRelease;
 
 
-}   // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_GUARDING_HXX

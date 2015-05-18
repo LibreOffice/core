@@ -58,7 +58,7 @@ public:
     ItemType GetType () const { return m_eType; }
 };
 
-} // namespace basctl
+}
 
 // For baside.sdi, because I don't know how to use nested names in it.
 using basctl::SbxItem;

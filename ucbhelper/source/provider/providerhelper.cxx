@@ -55,7 +55,7 @@ struct ContentProviderImplHelper_Impl
         m_aContents;
 };
 
-} // namespace ucbhelper_impl
+}
 
 namespace ucbhelper {
 
@@ -568,6 +568,6 @@ bool ContentProviderImplHelper::removeAdditionalPropertySet(
     return true;
 }
 
-} // namespace ucbhelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

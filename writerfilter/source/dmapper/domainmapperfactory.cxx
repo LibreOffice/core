@@ -36,7 +36,7 @@ Stream::Pointer_t DomainMapperFactory::createMapper(css::uno::Reference<css::uno
     return Stream::Pointer_t(new DomainMapper(xContext, xInputStream, xModel, bRepairStorage, eDocumentType, xInsertTextRange, rMediaDesc));
 }
 
-} // namespace dmapper
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

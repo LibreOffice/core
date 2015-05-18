@@ -83,8 +83,8 @@ private:
     bool                mbLooping;
 };
 
-} // namespace macavf
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_MACAVF_PLAYER_HXX
 

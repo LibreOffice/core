@@ -2076,7 +2076,7 @@ namespace cppcanvas
                 }
             }
 
-        } // namespace
+        }
 
 
 

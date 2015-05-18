@@ -77,10 +77,10 @@ namespace connectivity
             static void throwJavaException(const ::com::sun::star::uno::Exception& _aException,JNIEnv * env);
         };
 
-    }   // namespace hsqldb
+    }
 
 
-}   // namespace connectivity
+}
 
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HSTORAGEMAP_HXX

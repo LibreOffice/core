@@ -567,7 +567,7 @@ bool RehearseTimingsActivity::MouseHandler::handleMouseMoved(
     return false;
 }
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

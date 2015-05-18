@@ -144,7 +144,7 @@ namespace comphelper
     }
 
 
-}   // namespace comphelper
+}
 
 
 

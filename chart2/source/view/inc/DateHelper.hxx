@@ -39,7 +39,7 @@ public:
     static double RasterizeDateValue( double fValue, const Date& rNullDate, long TimeResolution );
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

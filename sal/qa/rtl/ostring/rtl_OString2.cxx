@@ -535,7 +535,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::toDouble);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::getToken);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::replaceAt);
 
-} // namespace rtl_OString
+}
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

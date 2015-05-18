@@ -846,7 +846,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::resolveHostname);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::gettheServicePort);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::getFamilyOfSocketAddr);
 
-} // namespace osl_SocketAddr
+}
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

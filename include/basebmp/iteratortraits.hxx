@@ -42,7 +42,7 @@ template< class Iterator > struct IteratorTraits
 
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_ITERATORTRAITS_HXX */
 

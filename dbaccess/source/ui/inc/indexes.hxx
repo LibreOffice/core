@@ -80,7 +80,7 @@ namespace dbaui
 
     typedef std::vector<OIndex> Indexes;
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_INDEXES_HXX
 

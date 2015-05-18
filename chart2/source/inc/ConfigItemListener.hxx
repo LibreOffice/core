@@ -34,7 +34,7 @@ protected:
     ~ConfigItemListener() {}
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_CONFIGITEMLISTENER_HXX
 #endif

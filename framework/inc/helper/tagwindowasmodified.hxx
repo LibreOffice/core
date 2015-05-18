@@ -99,7 +99,7 @@ class TagWindowAsModified :   public  ::cppu::WeakImplHelper3<
 
 }; // class TagWindowAsModified
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_TAGWINDOWASMODIFIED_HXX
 

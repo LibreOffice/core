@@ -360,7 +360,7 @@ namespace toolkit
     }
 
 
-}   //namespace toolkit
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

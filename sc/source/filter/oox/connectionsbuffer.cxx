@@ -62,7 +62,7 @@ const sal_uInt8 BIFF12_WEBPR_HAS_POSTMETHOD             = 0x01;
 const sal_uInt8 BIFF12_WEBPR_HAS_EDITPAGE               = 0x02;
 const sal_uInt8 BIFF12_WEBPR_HAS_URL                    = 0x04;
 
-} // namespace
+}
 
 WebPrModel::WebPrModel() :
     mnHtmlFormat( XML_none ),
@@ -308,7 +308,7 @@ void ConnectionsBuffer::insertConnectionToMap( const ConnectionRef& rxConnection
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

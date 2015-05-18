@@ -142,6 +142,6 @@ OUString ModelObjectHelper::getFillBitmapUrl( const OUString &rGraphicName )
     return OUString();
 }
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

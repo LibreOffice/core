@@ -103,8 +103,8 @@ protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 };
 
-} //namespace xls
-} //namespace oox
+}
+}
 
 #endif
 

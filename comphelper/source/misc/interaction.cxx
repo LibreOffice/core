@@ -69,7 +69,7 @@ namespace comphelper
     }
 
 
-}   // namespace comphelper
+}
 
 
 

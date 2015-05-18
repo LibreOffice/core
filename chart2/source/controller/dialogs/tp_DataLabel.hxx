@@ -46,7 +46,7 @@ private:
     DataLabelResources  m_aDataLabelResources;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

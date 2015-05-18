@@ -188,7 +188,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::co
 
 };      //  class OComponentAccess
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTACCESS_HXX
 

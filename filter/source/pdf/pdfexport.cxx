@@ -977,7 +977,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFEr
     return uno::Sequence< uno::Reference< task::XInteractionContinuation > >();
 }
 
-} // namespace
+}
 
 void PDFExport::showErrors( const std::set< vcl::PDFWriter::ErrorCode >& rErrors )
 {

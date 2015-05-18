@@ -29,7 +29,7 @@ void RTFReferenceTable::resolve(Table& rHandler)
         rHandler.entry(i->first, i->second);
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

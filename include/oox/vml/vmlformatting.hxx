@@ -247,8 +247,8 @@ struct OOX_DLLPUBLIC TextpathModel
     void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape) const;
 };
 
-} // namespace vml
-} // namespace oox
+}
+}
 
 #endif
 

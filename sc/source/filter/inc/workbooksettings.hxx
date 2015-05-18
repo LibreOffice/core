@@ -110,8 +110,8 @@ private:
     CalcSettingsModel   maCalcSettings;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

@@ -141,7 +141,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
     return 0;
 }
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

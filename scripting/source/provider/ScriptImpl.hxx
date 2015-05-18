@@ -97,7 +97,7 @@ private:
     /* assignment disabled,  i.e. not defined */
     ScriptImpl& operator = ( const ScriptImpl& );
 };
-} // namespace func_provider
+}
 #endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_SCRIPTIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -166,7 +166,7 @@ bool AnimationAudioNode::handleAnimationEvent(
     return true;
 }
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

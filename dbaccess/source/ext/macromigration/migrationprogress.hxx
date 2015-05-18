@@ -39,7 +39,7 @@ namespace dbmm
         ~IMigrationProgress() {}
     };
 
-} // namespace dbmm
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_EXT_MACROMIGRATION_MIGRATIONPROGRESS_HXX
 

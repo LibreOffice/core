@@ -112,7 +112,7 @@ void lclSetMixedColor( Color& rDest, const Color& rSrc1, const Color& rSrc2 )
     rDest.SetBlue( static_cast< sal_uInt8 >( (static_cast< sal_uInt16 >( rSrc1.GetBlue() ) + rSrc2.GetBlue()) / 2 ) );
 }
 
-} // namespace
+}
 
 // additional classes for color reduction -------------------------------------
 
@@ -221,7 +221,7 @@ struct XclNearest
 typedef ::std::vector< XclRemap >   XclRemapVec;
 typedef ::std::vector< XclNearest > XclNearestVec;
 
-} // namespace
+}
 
 class XclExpPaletteImpl
 {
@@ -833,7 +833,7 @@ sal_Int16 lclCheckFontItems( const SfxItemSet& rItemSet,
     return 0;
 };
 
-} // namespace
+}
 
 sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const SfxItemSet& rItemSet )
 {
@@ -960,7 +960,7 @@ sal_uInt32 lclCalcHash( const XclFontData& rFontData )
     return nHash;
 }
 
-} // namespace
+}
 
 XclExpFont::XclExpFont( const XclExpRoot& rRoot,
         const XclFontData& rFontData, XclExpColorType eColorType ) :
@@ -1744,7 +1744,7 @@ void lclGetBorderLine(
         XclExpPalette::GetColorIdFromIndex( 0 );
 }
 
-} // namespace
+}
 
 XclExpCellBorder::XclExpCellBorder() :
     mnLeftColorId(   XclExpPalette::GetColorIdFromIndex( mnLeftColor ) ),
@@ -2397,7 +2397,7 @@ bool lclIsBuiltInStyle( const OUString& rStyleName )
         XclTools::IsCondFormatStyleName( rStyleName );
 }
 
-} // namespace
+}
 
 XclExpXFBuffer::XclExpBuiltInInfo::XclExpBuiltInInfo() :
     mnStyleId( EXC_STYLE_USERDEF ),

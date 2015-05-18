@@ -307,6 +307,6 @@ ActiveMSPList::createNonDocMSPs()
     m_hMsps[ bundledDirString ] = bundledMsp;
 }
 
-} // namespace func_provider
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

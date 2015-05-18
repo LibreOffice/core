@@ -191,8 +191,8 @@ template< class MapType >
                                             ::o3tl::select2nd< typename MapType::value_type >()));
 }
 
-} //  namespace CommonFunctors
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_INC_COMMONFUNCTORS_HXX
 #endif

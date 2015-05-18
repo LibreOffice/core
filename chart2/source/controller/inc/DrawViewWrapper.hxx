@@ -92,7 +92,7 @@ private:
     MapMode m_aMapModeToRestore;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

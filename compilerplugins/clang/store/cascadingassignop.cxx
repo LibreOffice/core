@@ -89,6 +89,6 @@ bool CascadingAssignOp::VisitStmt( const Stmt* stmt )
 // Register the plugin action with the LO plugin handling.
 static Plugin::Registration< CascadingAssignOp > X( "cascadingassignop" );
 
-} // namespace loplugin
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

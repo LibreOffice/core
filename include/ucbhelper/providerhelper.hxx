@@ -275,7 +275,7 @@ public:
                                           bool bRecursive );
 };
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_PROVIDERHELPER_HXX */
 

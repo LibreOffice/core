@@ -59,7 +59,7 @@ namespace rptui
     };
 
 
-} // namespace rptui
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_CONDITIONUPDATER_HXX

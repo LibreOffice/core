@@ -747,6 +747,6 @@ void VDiagram::reduceToMimimumSize()
     return adjustPosAndSize( aNewPos, aNewSize );
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

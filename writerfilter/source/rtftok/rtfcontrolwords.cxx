@@ -1909,7 +1909,7 @@ bool RTFMathSymbol::operator<(const RTFMathSymbol& rOther) const
     return eKeyword < rOther.eKeyword;
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

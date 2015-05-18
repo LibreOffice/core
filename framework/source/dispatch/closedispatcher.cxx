@@ -604,6 +604,6 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
     }
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

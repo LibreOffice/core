@@ -65,7 +65,7 @@ private:
     sal_uLong                       m_nNumberFormatKey;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

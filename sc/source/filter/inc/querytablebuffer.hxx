@@ -80,8 +80,8 @@ private:
     QueryTableVector    maQueryTables;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

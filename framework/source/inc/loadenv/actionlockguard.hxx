@@ -159,7 +159,7 @@ class ActionLockGuard
         }
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_ACTIONLOCKGUARD_HXX
 

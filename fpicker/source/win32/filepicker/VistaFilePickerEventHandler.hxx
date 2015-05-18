@@ -197,9 +197,9 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
 };
 
-} // namespace vista
-} // namespace win32
-} // namespace fpicker
+}
+}
+}
 
 #endif // __IFileDialogCustomize_INTERFACE_DEFINED__
 

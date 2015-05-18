@@ -180,8 +180,8 @@ public:
 };
 
 
-} // namespace vml
-} // namespace oox
+}
+}
 
 #endif
 

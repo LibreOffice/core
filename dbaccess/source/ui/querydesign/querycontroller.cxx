@@ -2007,6 +2007,6 @@ void SAL_CALL OQueryController::restoreViewData(const Any& /*Data*/) throw( Runt
     // TODO
 }
 
-} // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

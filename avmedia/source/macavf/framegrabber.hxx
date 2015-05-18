@@ -56,8 +56,8 @@ private:
     AVAssetImageGenerator* mpImageGen;
 };
 
-} // namespace macavf
-} // namespace avmedia
+}
+}
 
 #endif // INCLUDED_AVMEDIA_SOURCE_MACAVF_FRAMEGRABBER_HXX
 

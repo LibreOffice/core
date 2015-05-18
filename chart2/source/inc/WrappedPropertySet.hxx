@@ -123,7 +123,7 @@ protected: //member
     //OMultiTypeInterfaceContainerHelperInt32             m_aVetoableListenerContainer;
 };
 
-} //namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_WRAPPEDPROPERTYSET_HXX
 #endif

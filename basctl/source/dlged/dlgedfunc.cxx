@@ -562,6 +562,6 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
     return true;
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

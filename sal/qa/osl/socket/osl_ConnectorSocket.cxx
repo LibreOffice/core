@@ -238,7 +238,7 @@ namespace osl_ConnectorSocket
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ConnectorSocket::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ConnectorSocket::connect);
 
-} // namespace osl_ConnectorSocket
+}
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

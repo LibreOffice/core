@@ -191,6 +191,6 @@ FontList* ViewElementListProvider::getFontList() const
     }
     return m_pFontList;
 }
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

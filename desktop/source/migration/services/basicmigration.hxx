@@ -87,7 +87,7 @@ namespace migration
     };
 
 
-}   // namespace migration
+}
 
 
 #endif // INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_BASICMIGRATION_HXX

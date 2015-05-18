@@ -75,6 +75,6 @@ public:
 
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(UnoViewContainerTest, "UnoViewContainerTest");
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

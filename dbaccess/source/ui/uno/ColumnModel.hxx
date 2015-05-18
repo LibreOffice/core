@@ -95,7 +95,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-}   // namespace dbaui
+}
 #endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

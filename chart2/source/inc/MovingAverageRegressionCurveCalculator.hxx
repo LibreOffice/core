@@ -61,7 +61,7 @@ private:
     std::vector<double> aXList;
 };
 
-} //  namespace chart
+}
 
 #endif // INCLUDED_CHART2_SOURCE_INC_MOVINGAVERAGEREGRESSIONCURVECALCULATOR_HXX
 

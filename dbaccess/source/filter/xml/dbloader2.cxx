@@ -213,7 +213,7 @@ Sequence< OUString > DBTypeDetection::getSupportedServiceNames_Static() throw(  
     return aSNS;
 }
 
-} // namespace dbaxml
+}
 
 extern "C" void SAL_CALL createRegistryInfo_DBTypeDetection()
 {

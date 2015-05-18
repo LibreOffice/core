@@ -141,8 +141,8 @@ struct OOX_DLLPUBLIC FillProperties
                             bool bFlipV = false ) const;
 };
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

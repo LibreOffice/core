@@ -569,7 +569,7 @@ bool getinput_greek(bs::types::Greeks& greek, const uno::Any& anyval) {
     return true;
 }
 
-} // namespace for auxiliary functions
+}
 
 // OPT_BARRIER(...)
 double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,

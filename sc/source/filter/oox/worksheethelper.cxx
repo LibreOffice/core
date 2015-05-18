@@ -100,7 +100,7 @@ void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double f
         rxProgressBar->setPosition( fPosition );
 }
 
-} // namespace
+}
 
 ColumnModel::ColumnModel() :
     maRange( -1 ),
@@ -639,7 +639,7 @@ bool lclUpdateInterval( sal_Int32& rnBegAddr, sal_Int32& rnMidAddr, sal_Int32& r
     return false;
 }
 
-} // namespace
+}
 
 CellAddress WorksheetGlobals::getCellAddressFromPosition( const awt::Point& rPosition ) const
 {
@@ -1620,7 +1620,7 @@ void WorksheetHelper::createSharedFormulaMapEntry(
     getFormulaBuffer().createSharedFormulaMapEntry(rAddress, rRange, nSharedId, rTokens);
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

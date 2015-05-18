@@ -101,7 +101,7 @@ namespace dbaui
         bool        prepareLeave();
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_TEXTCONNECTIONHELPER_HXX
 

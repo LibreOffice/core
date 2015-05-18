@@ -52,7 +52,7 @@ private:
     ::basegfx::B3DHomMatrix         m_aUnitCartesianToScene;
 };
 
-}  // namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_VIEW_INC_VPOLARTRANSFORMATION_HXX
 #endif

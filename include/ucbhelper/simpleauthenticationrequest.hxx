@@ -142,7 +142,7 @@ public:
     getAuthenticationSupplier() const { return m_xAuthSupplier; }
 };
 
-} // namespace ucbhelper
+}
 
 #endif /* ! INCLUDED_UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX */
 

@@ -62,7 +62,7 @@ private:
     double m_fIntercept;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_POTENTIALREGRESSIONCURVECALCULATOR_HXX
 #endif

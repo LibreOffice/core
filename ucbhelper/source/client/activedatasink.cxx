@@ -47,6 +47,6 @@ uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
     return m_xStream;
 }
 
-} // namespace ucbhelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

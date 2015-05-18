@@ -26,8 +26,8 @@ private:
     Items items;
 };
 
-} // namespace dmapper
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_INC_DMAPPER_GRAPHICZORDERHELPER_HXX
 

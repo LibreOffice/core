@@ -73,6 +73,6 @@ bool TargetHelper::isValidNameForFrame(const OUString& sName)
     return (sName.indexOf('_') != 0);
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

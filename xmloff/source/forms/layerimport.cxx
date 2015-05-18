@@ -593,6 +593,6 @@ void OFormLayerXMLImport_Impl::documentDone( )
                    std::bind( bindXFormsSubmission, rImport.GetModel(), std::placeholders::_1 ) );
 }
 
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

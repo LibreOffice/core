@@ -110,7 +110,7 @@ namespace ucb_impl { namespace urihelper {
         return aResult.makeStringAndClear();
     }
 
-} } // namespace
+} }
 
 #endif // INCLUDED_UCB_SOURCE_UCP_INC_URIHELPER_HXX
 

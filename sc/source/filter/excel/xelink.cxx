@@ -1332,7 +1332,7 @@ bool XclExpCrnList::InsertValue( SCCOL nScCol, SCROW nScRow, const Any& rValue )
     return true;
 }
 
-} // namespace
+}
 
 bool XclExpXct::BuildCrnList( XclExpCrnList& rCrnRecs )
 {

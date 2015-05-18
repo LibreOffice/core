@@ -186,7 +186,7 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
     }
 }
 
-} // namespace
+}
 
 View3DConverter::View3DConverter( const ConverterRoot& rParent, View3DModel& rModel ) :
     ConverterBase< View3DModel >( rParent, rModel )
@@ -446,8 +446,8 @@ void PlotAreaConverter::convertPositionFromModel()
     }
 }
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

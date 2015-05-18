@@ -86,7 +86,7 @@ namespace svt
     }
 
 
-} // namespace svt
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

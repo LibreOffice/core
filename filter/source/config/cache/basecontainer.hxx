@@ -293,8 +293,8 @@ class BaseContainer : public BaseLock
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_BASECONTAINER_HXX
 

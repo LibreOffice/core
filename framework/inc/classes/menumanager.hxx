@@ -123,7 +123,7 @@ class MenuManager : public ::cppu::WeakImplHelper1< css::frame::XStatusListener 
         css::uno::Reference< css::util::XURLTransformer >       m_xURLTransformer;
 };
 
-} // namespace
+}
 
 #endif
 

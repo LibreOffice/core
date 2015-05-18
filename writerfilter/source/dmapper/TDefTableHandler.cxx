@@ -478,7 +478,7 @@ void TDefTableHandler::appendGrabBag(const OUString& aKey, const OUString& aValu
     m_aInteropGrabBag.push_back(aProperty);
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

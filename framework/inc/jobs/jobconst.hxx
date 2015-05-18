@@ -44,7 +44,7 @@ class FWI_DLLPUBLIC JobConst
         static const OUString ANSWER_SEND_DISPATCHRESULT();
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_JOBS_JOBCONST_HXX
 

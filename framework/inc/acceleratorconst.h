@@ -48,7 +48,7 @@ namespace framework{
 #define NS_XMLNS_ACCEL                  DECLARE_ASCII("http://openoffice.org/2001/accel")
 #define NS_XMLNS_XLINK                  DECLARE_ASCII("http://www.w3.org/1999/xlink"    )
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_ACCELERATORCONST_H
 

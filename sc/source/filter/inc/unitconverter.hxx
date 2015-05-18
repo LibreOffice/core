@@ -105,8 +105,8 @@ private:
     sal_Int32           mnNullDate;         /// Nulldate of this workbook (number of days since 0000-01-01).
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

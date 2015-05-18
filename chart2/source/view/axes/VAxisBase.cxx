@@ -242,6 +242,6 @@ void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
     }
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

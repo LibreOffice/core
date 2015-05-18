@@ -85,7 +85,7 @@ namespace abp
     };
 
 
-}   // namespace abp
+}
 
 extern "C" void SAL_CALL createRegistryInfo_OABSPilotUno();
 

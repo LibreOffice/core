@@ -959,6 +959,6 @@ bool TreeListBox::OpenCurrent()
     return false;
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -113,6 +113,6 @@ SchGridDlg::SchGridDlg( vcl::Window* pParent, const InsertAxisOrGridDialogData& 
 {
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

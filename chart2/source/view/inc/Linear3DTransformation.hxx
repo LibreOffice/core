@@ -52,7 +52,7 @@ private:
     bool                                        m_bSwapXAndY;
 };
 
-}  // namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_VIEW_INC_LINEAR3DTRANSFORMATION_HXX
 #endif

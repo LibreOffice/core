@@ -151,7 +151,7 @@ class TitleBarUpdate : public  ::cppu::WeakImplHelper3<
         void impl_updateApplicationID(const css::uno::Reference< css::frame::XFrame >& xFrame);
 }; // class TitleBarUpdate
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_TITLEBARUPDATE_HXX
 

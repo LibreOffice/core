@@ -2140,6 +2140,6 @@ void NameChangeNotifier::impl_fireEvent_throw( const bool i_bVetoable )
     m_rClearForNotify.reset();
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -168,7 +168,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > implCreateWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxCommandDesc);
 
     };
-}   // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_INC_QUERYCONTAINER_HXX
 

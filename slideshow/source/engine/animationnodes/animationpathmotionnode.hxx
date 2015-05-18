@@ -51,8 +51,8 @@ private:
         ::com::sun::star::animations::XAnimateMotion >  mxPathMotionNode;
 };
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONPATHMOTIONNODE_HXX
 

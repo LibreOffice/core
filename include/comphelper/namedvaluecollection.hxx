@@ -359,7 +359,7 @@ namespace comphelper
     };
 
 
-} // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_NAMEDVALUECOLLECTION_HXX

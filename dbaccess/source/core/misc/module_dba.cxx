@@ -24,6 +24,6 @@ namespace dba
 
     IMPLEMENT_MODULE( DbaModule, "dba" )
 
-} // namespace sdbtools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

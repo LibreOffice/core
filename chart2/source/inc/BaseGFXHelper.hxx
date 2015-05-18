@@ -85,8 +85,8 @@ void ReduceToRotationMatrix( ::basegfx::B3DHomMatrix & rB3DMatrix );
 OOO_DLLPUBLIC_CHARTTOOLS double Deg2Rad( double fDegrees );
 OOO_DLLPUBLIC_CHARTTOOLS double Rad2Deg( double fRadians );
 
-} //  namespace BaseGFXHelper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_INC_BASEGFXHELPER_HXX
 #endif

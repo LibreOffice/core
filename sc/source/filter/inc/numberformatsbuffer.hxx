@@ -115,8 +115,8 @@ private:
     sal_Int32           mnHighestId;
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

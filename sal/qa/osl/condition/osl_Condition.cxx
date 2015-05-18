@@ -308,7 +308,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::reset);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::wait);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::check);
 
-} // namespace osl_Condition
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

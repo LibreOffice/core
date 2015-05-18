@@ -273,6 +273,6 @@ void HandlerCFGAccess::ImplCommit()
 {
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

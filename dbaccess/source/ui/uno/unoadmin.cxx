@@ -95,6 +95,6 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
         ODatabaseAdministrationDialogBase::implInitialize(_rValue);
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

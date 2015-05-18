@@ -333,7 +333,7 @@ public:
     void changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferenceFrame ) const;
 };
 
-} // namespace
+}
 
 #endif
 

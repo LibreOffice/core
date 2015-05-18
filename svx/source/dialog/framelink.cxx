@@ -1120,7 +1120,7 @@ void lclDrawDiagFrameBorders(
 
 
 
-} // namespace
+}
 
 
 // Classes

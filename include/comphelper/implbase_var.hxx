@@ -113,7 +113,7 @@ struct BOOST_PP_CAT(ImplClassData, COMPHELPER_IMPLBASE_INTERFACE_NUMBER)
     }
 };
 
-} // namespace detail
+}
 
 template < BOOST_PP_ENUM_PARAMS(COMPHELPER_IMPLBASE_INTERFACE_NUMBER,
                                 typename Ifc) >
@@ -161,7 +161,7 @@ public:
 };
 
 
-} // namespace comphelper
+}
 
 // undef for multiple use/inclusion of this header:
 #undef COMPHELPER_IMPLBASE_MAX_CTOR_ARGS

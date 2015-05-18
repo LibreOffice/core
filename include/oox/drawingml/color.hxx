@@ -154,8 +154,8 @@ typedef std::shared_ptr< Color > ColorPtr;
 
 
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 #endif
 

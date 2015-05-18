@@ -731,6 +731,6 @@ OSQLErrorBox::OSQLErrorBox( vcl::Window* _pParent, const OUString& _rMessage, Wi
 {
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

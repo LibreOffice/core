@@ -203,7 +203,7 @@ sal_Bool SAL_CALL ImageManager::isReadOnly() throw (::com::sun::star::uno::Runti
     return m_pImpl->isReadOnly();
 }
 
-} // namespace framework
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_ImageManager_get_implementation(

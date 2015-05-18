@@ -245,7 +245,7 @@ struct find_partialorder_ptrequals
     }
 };
 
-}   // namespace o3tl
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

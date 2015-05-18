@@ -195,7 +195,7 @@ void SAL_CALL ModifyEventForwarder::disposing()
     DisposeAndClear( this );
 }
 
-} //  namespace ModifyListenerHelper
-} //  namespace chart
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

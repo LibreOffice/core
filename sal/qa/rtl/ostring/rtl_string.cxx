@@ -156,7 +156,7 @@ namespace rtl_string
         CPPUNIT_TEST_SUITE_END();
     }; // class convertUStringToString
 
-} // namespace rtl_string
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::getLength);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::newFromString);

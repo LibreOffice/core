@@ -439,6 +439,6 @@ OUString OGroupManager::GetGroupName( ::com::sun::star::uno::Reference< ::com::s
         xComponent->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
     return sGroupName;
 }
-}   // namespace frm
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

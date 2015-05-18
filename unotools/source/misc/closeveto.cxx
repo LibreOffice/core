@@ -151,6 +151,6 @@ namespace utl
         lcl_deinit(*m_xData);
     }
 
-} // namespace utl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

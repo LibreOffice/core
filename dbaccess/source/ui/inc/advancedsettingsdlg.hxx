@@ -72,7 +72,7 @@ namespace dbaui
         virtual void enableConfirmSettings( bool _bEnable ) SAL_OVERRIDE;
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_ADVANCEDSETTINGSDLG_HXX
 

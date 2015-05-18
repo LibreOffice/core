@@ -51,7 +51,7 @@ namespace dbaui
         virtual ~OFilePickerInteractionHandler();
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_FINTERACTION_HXX
 

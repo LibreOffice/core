@@ -87,7 +87,7 @@ private: //member:
     bool    m_bSupportAxisPositioning;
 };
 
-} //namespace chart
+}
 
 #endif
 

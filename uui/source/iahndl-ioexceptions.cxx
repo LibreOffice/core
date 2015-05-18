@@ -87,7 +87,7 @@ getResourceNameRequestArgument(uno::Sequence< uno::Any > const & rArguments,
     return true;
 }
 
-} // namespace
+}
 
 bool
 UUIInteractionHelper::handleInteractiveIOException(

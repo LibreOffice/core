@@ -156,8 +156,8 @@ public:
 private:
     sal_uInt16 nVal;
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFFLY_HXX
 

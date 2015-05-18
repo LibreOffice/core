@@ -386,7 +386,7 @@ public:
     void SetNewValues( const std::vector<double>& rVals );
 };
 
-} // namespace sc
+}
 
 #endif
 

@@ -34,7 +34,7 @@ class Tutorial3
         void modifyReturnFalse( const Stmt* stmt );
     };
 
-} // namespace
+}
 
 #endif // POSTFIXINCREMENTFIX_H
 

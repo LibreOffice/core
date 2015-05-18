@@ -525,7 +525,7 @@ void SlideChangeBase::clearViewEntry( ViewEntry& rEntry )
     rEntry.mpOutSprite.reset();
 }
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

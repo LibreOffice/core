@@ -343,6 +343,6 @@ namespace connectivity { namespace hsqldb
         return xGraphic;
     }
 
-} } // namespace connectivity::hsqldb
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

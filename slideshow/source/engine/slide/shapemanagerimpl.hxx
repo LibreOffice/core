@@ -195,8 +195,8 @@ private:
     bool                                mbEnabled;
 };
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_SHAPEMANAGERIMPL_HXX
 

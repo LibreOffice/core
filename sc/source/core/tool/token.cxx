@@ -114,7 +114,7 @@ namespace
         rRef.SetAbsTab(0);
     }
 
-} // namespace
+}
 
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 

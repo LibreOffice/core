@@ -178,7 +178,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_INC_ERRORBAR_HXX
 #endif

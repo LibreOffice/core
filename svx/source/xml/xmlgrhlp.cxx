@@ -907,7 +907,7 @@ protected:
 };
 MutexContainer::~MutexContainer()
 {}
-} // namespace impl
+}
 
 class SvXMLGraphicImportExportHelper :
     public impl::MutexContainer,

@@ -44,6 +44,6 @@ TextDirectionListBox::TextDirectionListBox( vcl::Window* pParent, vcl::Window* p
 
 VCL_BUILDER_FACTORY(TextDirectionListBox)
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -191,8 +191,8 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
         static css::uno::Reference< css::uno::XInterface > impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 };
 
-    } // namespace config
-} // namespace filter
+    }
+}
 
 #endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERFACTORY_HXX
 

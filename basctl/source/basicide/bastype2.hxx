@@ -250,7 +250,7 @@ private:
     LibraryType     GetLibraryType() const;
 };
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_BASICIDE_BASTYPE2_HXX
 

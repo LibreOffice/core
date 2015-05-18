@@ -52,7 +52,7 @@ private:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel > m_xChartModel;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_DRAGMETHOD_BASE_HXX
 #endif

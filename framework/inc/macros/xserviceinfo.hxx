@@ -192,7 +192,7 @@ namespace framework{
         FUNCTIONBODY                                                                                            \
     }
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_MACROS_XSERVICEINFO_HXX
 

@@ -717,6 +717,6 @@ OUString EditableExtendedColorConfig::GetComponentName(sal_uInt32 _nPos) const
 {
     return m_pImpl->GetComponentName(_nPos);
 }
-}//namespace svtools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

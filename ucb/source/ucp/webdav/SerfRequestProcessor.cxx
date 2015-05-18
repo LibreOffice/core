@@ -591,6 +591,6 @@ apr_status_t SerfRequestProcessor::handleSerfResponse( serf_request_t * inSerfRe
     return status;
 }
 
-} // namespace http_dav_ucp
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -451,7 +451,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-} // namespace
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

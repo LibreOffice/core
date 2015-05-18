@@ -96,7 +96,7 @@ namespace comphelper
     };
 
 
-}   // namespace comphelper
+}
 
 
 #endif // INCLUDED_COMPHELPER_PROPSTATE_HXX

@@ -624,6 +624,6 @@ namespace dbaccess
         return xSubComponent;
     }
 
-} // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

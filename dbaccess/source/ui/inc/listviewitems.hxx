@@ -49,7 +49,7 @@ namespace dbaui
         void        emphasize(bool _bEmphasize) { m_bEmphasized = _bEmphasize; }
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_LISTVIEWITEMS_HXX
 

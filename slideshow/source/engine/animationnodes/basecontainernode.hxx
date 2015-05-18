@@ -94,8 +94,8 @@ private:
 
 typedef ::boost::shared_ptr< BaseContainerNode > BaseContainerNodeSharedPtr;
 
-} // namespace interface
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASECONTAINERNODE_HXX
 

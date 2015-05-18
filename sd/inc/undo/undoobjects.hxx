@@ -171,7 +171,7 @@ protected:
     SdrObjectWeakRef mxSdrObject;
 };
 
-} // namespace sd
+}
 
 #endif // INCLUDED_SD_INC_UNDO_UNDOOBJECTS_HXX
 

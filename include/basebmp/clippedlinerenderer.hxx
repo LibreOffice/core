@@ -431,7 +431,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
     }
 }
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_CLIPPEDLINERENDERER_HXX */
 

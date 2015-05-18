@@ -191,7 +191,7 @@ inline bool AccessibleGridControlHeader::isColumnBar() const
 
 
 
-} // namespace accessibility
+}
 
 
 

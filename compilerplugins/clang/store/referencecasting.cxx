@@ -190,6 +190,6 @@ static const Type* extractTemplateType(Expr* cce)
 
 static Plugin::Registration< ReferenceCasting > X( "referencecasting" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

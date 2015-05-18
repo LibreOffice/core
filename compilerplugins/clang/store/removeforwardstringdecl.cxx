@@ -73,6 +73,6 @@ bool RemoveForwardStringDecl::tryRemoveStringForwardDecl( const Decl* decl )
 
 static Plugin::Registration< RemoveForwardStringDecl > X( "removeforwardstringdecl" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

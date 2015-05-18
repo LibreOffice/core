@@ -412,7 +412,7 @@ css::uno::Sequence< OUString > SAL_CALL DataInterpreter::getSupportedServiceName
     return getSupportedServiceNames_Static();
 }
 
-} // namespace chart
+}
 
 #if OSL_DEBUG_LEVEL > 1
 namespace

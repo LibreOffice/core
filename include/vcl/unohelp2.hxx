@@ -70,7 +70,7 @@ namespace vcl { namespace unohelper {
             ::osl::Mutex& GetMutex() { return maMutex; }
     };
 
-}}  // namespace vcl::unohelper
+}}
 
 #endif // INCLUDED_VCL_UNOHELP2_HXX
 

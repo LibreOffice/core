@@ -167,7 +167,7 @@ namespace rptxml
     };
 
 
-} // namespace rptxml
+}
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLENUMS_HXX
 

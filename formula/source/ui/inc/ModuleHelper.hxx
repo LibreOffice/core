@@ -69,7 +69,7 @@ namespace formula
         ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
 
-}   // namespace formula
+}
 
 
 #endif // INCLUDED_FORMULA_SOURCE_UI_INC_MODULEHELPER_HXX

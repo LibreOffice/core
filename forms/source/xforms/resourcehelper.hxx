@@ -38,7 +38,7 @@ namespace xforms
                                            const OUString&,
                                            const OUString& );
 
-} // namespace
+}
 
 #endif
 

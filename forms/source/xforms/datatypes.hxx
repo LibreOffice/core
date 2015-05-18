@@ -376,7 +376,7 @@ namespace xforms
     };
 
 
-} // namespace xforms
+}
 
 
 #endif // INCLUDED_FORMS_SOURCE_XFORMS_DATATYPES_HXX

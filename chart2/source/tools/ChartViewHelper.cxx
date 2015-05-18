@@ -51,6 +51,6 @@ void ChartViewHelper::setViewToDirtyState( const uno::Reference< frame::XModel >
         ASSERT_EXCEPTION( ex );
     }
 }
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

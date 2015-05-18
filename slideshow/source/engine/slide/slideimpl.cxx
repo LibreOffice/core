@@ -1169,7 +1169,7 @@ basegfx::B2ISize SlideImpl::getSlideSizeImpl() const
     return basegfx::B2ISize( nDocWidth, nDocHeight );
 }
 
-} // namespace
+}
 
 
 SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         xDrawPage,
@@ -1207,7 +1207,7 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
     return pRet;
 }
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

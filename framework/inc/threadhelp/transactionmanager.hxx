@@ -141,7 +141,7 @@ class FWI_DLLPUBLIC TransactionManager: private boost::noncopyable
 
 };      //  class TransactionManager
 
-}       //  namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONMANAGER_HXX
 

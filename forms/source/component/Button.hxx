@@ -194,7 +194,7 @@ private:
 };
 
 
-}   // namespace frm
+}
 
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_BUTTON_HXX

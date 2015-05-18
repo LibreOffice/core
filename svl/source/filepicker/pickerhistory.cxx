@@ -85,6 +85,6 @@ namespace svt
         implPushBackPicker( getFilePickerHistory(), _rxPicker );
     }
 
-}   // namespace svt
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

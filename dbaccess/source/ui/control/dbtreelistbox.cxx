@@ -672,6 +672,6 @@ void DBTreeListBox::StateChanged( StateChangedType nStateChange )
         implStopSelectionTimer();
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

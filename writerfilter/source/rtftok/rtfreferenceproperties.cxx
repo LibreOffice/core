@@ -41,7 +41,7 @@ void RTFReferenceProperties::resolve(Properties& rHandler)
     }
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

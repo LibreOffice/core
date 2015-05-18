@@ -167,6 +167,6 @@ void StartModuleDispatcher::implts_notifyResultListener(const css::uno::Referenc
     xListener->dispatchFinished(aEvent);
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

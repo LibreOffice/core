@@ -198,7 +198,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
         ::cppu::OMultiTypeInterfaceContainerHelper m_aListener;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_TITLEHELPER_HXX
 

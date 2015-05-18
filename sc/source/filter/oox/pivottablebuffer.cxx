@@ -149,7 +149,7 @@ const sal_uInt32 BIFF12_PTDEF_NOCUSTOMLISTSORT      = 0x00004000;
 const sal_uInt8 BIFF12_PTDEF_ROWAXIS                = 1;
 const sal_uInt8 BIFF12_PTDEF_COLAXIS                = 2;
 
-} // namespace
+}
 
 PTFieldItemModel::PTFieldItemModel() :
     mnCacheItem( -1 ),
@@ -1357,7 +1357,7 @@ void PivotTableBuffer::finalizeImport()
     maTables.forEachMem( &PivotTable::finalizeImport );
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

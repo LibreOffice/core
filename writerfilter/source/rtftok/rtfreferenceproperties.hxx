@@ -37,8 +37,8 @@ private:
     RTFSprms m_aAttributes;
     RTFSprms m_aSprms;
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCEPROPERTIES_HXX
 

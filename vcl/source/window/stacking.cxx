@@ -1188,6 +1188,6 @@ void Window::ImplSetFrameParent( const vcl::Window* pParent )
     }
 }
 
-} /* namespace vcl */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

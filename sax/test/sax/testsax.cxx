@@ -718,7 +718,7 @@ void OSaxParserTest::testPerformance( const Reference < XParser > & rParser )
         }
     }
 }
-} // namespace
+}
 
 using namespace sax_test;
 

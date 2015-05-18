@@ -251,7 +251,7 @@ private:
     ::com::sun::star::geometry::IntegerSize2D mTranslationOffset;
 };
 
-} // namespace ::sd
+}
 
 #endif
 

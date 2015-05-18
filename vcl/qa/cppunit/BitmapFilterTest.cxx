@@ -168,7 +168,7 @@ void BitmapFilterTest::testPerformance()
     }
 }
 
-} // namespace
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BitmapFilterTest);
 

@@ -101,7 +101,7 @@ class LoadEnvException
         ~LoadEnvException() {}
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_LOADENVEXCEPTION_HXX
 

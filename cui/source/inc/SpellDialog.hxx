@@ -229,7 +229,7 @@ public:
 
 SpellDialog* SentenceEditWindow_Impl::GetSpellDialog() const {return static_cast<SpellDialog*>(GetParentDialog());}
 
-} //namespace svx
+}
 
 #endif
 

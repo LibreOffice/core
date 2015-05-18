@@ -59,7 +59,7 @@ public:
 
 };
 
-} // namespace comphelper
+}
 
 #endif // INCLUDED_COMPHELPER_ATTRIBUTELIST_HXX
 

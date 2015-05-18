@@ -83,7 +83,7 @@ namespace framework {
         bool                          m_bConfigAccessInitialized;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_UIFACTORY_CONFIGURATIONACCESSFACTORYMANAGER_HXX
 

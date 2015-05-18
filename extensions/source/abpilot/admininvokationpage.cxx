@@ -94,6 +94,6 @@ namespace abp
         return 0L;
     }
 
-}   // namespace abp
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

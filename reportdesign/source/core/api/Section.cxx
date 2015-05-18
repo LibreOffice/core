@@ -633,7 +633,7 @@ void OSection::notifyElementRemoved(const uno::Reference< drawing::XShape >& xSh
     }
 }
 
-} // namespace reportdesign
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -398,7 +398,7 @@ uno::Sequence< uno::Type > SAL_CALL ImportDocumentHandler::getTypes(  ) throw (u
 }
 
 
-} // namespace rptxml
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,7 +32,7 @@ operator <<(
 {
     return stream << info.name();
 }
-} // namespace
+}
 
 namespace test { namespace ostring {
 
@@ -151,7 +151,7 @@ void test::ostring::StringConcat::checkInvalid()
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rus ));
 }
 
-}} // namespace
+}}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::ostring::StringConcat);
 

@@ -96,8 +96,8 @@ private:
     bool                                            mbIsIndependentSubset;
 };
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONBASENODE_HXX
 

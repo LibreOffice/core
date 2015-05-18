@@ -136,7 +136,7 @@ private:
     bool m_bDeleteRepeated; /// has a delete action been repeated?
 };
 
-} // namespace sw
+}
 
 class SwUndoFmtColl : public SwUndo, private SwUndRng
 {

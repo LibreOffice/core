@@ -117,7 +117,7 @@ public:
 };
 
 
-}   // namespace frm
+}
 
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_DATE_HXX

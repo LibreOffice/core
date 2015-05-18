@@ -1556,6 +1556,6 @@ namespace basctl
         return m_pImpl->allowMacros();
     }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

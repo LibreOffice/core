@@ -86,7 +86,7 @@ void OPropertyContainer::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) 
 }
 
 
-}   // namespace comphelper
+}
 
 
 

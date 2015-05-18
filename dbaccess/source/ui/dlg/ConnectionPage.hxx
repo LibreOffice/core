@@ -78,7 +78,7 @@ namespace dbaui
         */
         virtual bool checkTestConnection() SAL_OVERRIDE;
     };
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_CONNECTIONPAGE_HXX
 

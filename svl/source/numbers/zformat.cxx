@@ -56,7 +56,7 @@ char const GREGORIAN[] = "gregorian";
 const sal_uInt16 UPPER_PRECISION = 300; // entirely arbitrary...
 const double EXP_LOWER_BOUND = 1.0E-4; // prefer scientific notation below this value.
 
-} // namespace
+}
 
 const double _D_MAX_U_LONG_ = (double) 0xffffffff;      // 4294967295.0
 const sal_uInt16 _MAX_FRACTION_PREC = 3;
@@ -1192,7 +1192,7 @@ bool IsCombiningSymbol( OUStringBuffer& rStringBuffer, sal_Int32 nPos )
     return bRet;
 }
 
-} // namespace
+}
 
 OUString SvNumberformat::LocaleType::generateCode() const
 {

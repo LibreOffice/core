@@ -82,6 +82,6 @@ Reference< XProgressHandler > SAL_CALL CommandEnvironment::getProgressHandler()
     return m_pImpl->m_xProgressHandler;
 }
 
-} /* namespace ucbhelper */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

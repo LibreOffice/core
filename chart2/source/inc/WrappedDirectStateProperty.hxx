@@ -39,7 +39,7 @@ public:
                ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 };
 
-} //  namespace chart
+}
 
 // CHART2_WRAPPEDPROPERTYNEWDEFAULT_HXX
 #endif

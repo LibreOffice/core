@@ -51,8 +51,8 @@ public:
                     BinaryXOutputStream& aOutputStream) = 0;
 };
 
-} // namespace core
-} // namespace oox
+}
+}
 
 #endif
 

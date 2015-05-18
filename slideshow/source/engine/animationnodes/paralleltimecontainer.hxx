@@ -48,8 +48,8 @@ private:
     virtual void notifyDeactivating( AnimationNodeSharedPtr const& pChildNode ) SAL_OVERRIDE;
 };
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_PARALLELTIMECONTAINER_HXX
 

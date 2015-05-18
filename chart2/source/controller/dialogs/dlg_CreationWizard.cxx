@@ -208,6 +208,6 @@ OUString CreationWizard::getStateDisplayName( WizardState nState ) const
     return SCH_RESSTR(nResId);
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

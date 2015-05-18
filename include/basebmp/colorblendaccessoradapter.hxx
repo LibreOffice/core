@@ -135,7 +135,7 @@ public:
     }
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_COLORBLENDACCESSORADAPTER_HXX */
 

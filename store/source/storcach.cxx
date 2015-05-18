@@ -120,7 +120,7 @@ struct Entry
     ~Entry() {}
 };
 
-} // namespace
+}
 
 // EntryCache interface
 namespace
@@ -142,7 +142,7 @@ protected:
     ~EntryCache();
 };
 
-} // namespace
+}
 
 // EntryCache implementation
 EntryCache & EntryCache::get()
@@ -279,7 +279,7 @@ protected:
     virtual ~PageCache_Impl();
 };
 
-} // namespace store
+}
 
 PageCache_Impl::PageCache_Impl (sal_uInt16 nPageSize)
     : m_hash_table   (m_hash_table_0),
@@ -499,6 +499,6 @@ PageCache_createInstance (
     return store_E_None;
 }
 
-} // namespace store
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

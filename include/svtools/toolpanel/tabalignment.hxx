@@ -34,7 +34,7 @@ namespace svt
     };
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_TOOLPANEL_TABALIGNMENT_HXX

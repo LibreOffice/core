@@ -87,7 +87,7 @@ protected:
 };
 
 
-}   // namespace frm
+}
 
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_FILE_HXX

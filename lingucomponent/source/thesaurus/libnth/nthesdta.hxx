@@ -56,7 +56,7 @@ public:
     void    SetMeaning( const OUString  &rTerm );
 };
 
-}   // namespace linguistic
+}
 
 #endif
 

@@ -39,7 +39,7 @@ namespace sd { namespace toolpanel
 
     PanelId GetStandardPanelId( const OUString& i_rTaskPanelResourceURL );
 
-} } // namespace sd::toolpanel
+} }
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_TASKPANE_PANELID_HXX
 

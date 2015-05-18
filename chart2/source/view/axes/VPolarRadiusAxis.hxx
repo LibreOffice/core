@@ -76,7 +76,7 @@ private: //member
     boost::scoped_ptr<VCartesianAxis>  m_apAxisWithLabels;
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

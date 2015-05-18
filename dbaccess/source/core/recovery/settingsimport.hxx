@@ -159,7 +159,7 @@ namespace dbaccess
         ::comphelper::NamedValueCollection  m_aChildSettings;
     };
 
-} // namespace dbaccess
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_RECOVERY_SETTINGSIMPORT_HXX
 

@@ -73,8 +73,8 @@ private:
 typedef ::boost::shared_ptr< Event > EventSharedPtr;
 typedef ::std::vector< EventSharedPtr > VectorOfEvents;
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_EVENT_HXX
 

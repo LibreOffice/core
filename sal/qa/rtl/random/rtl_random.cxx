@@ -394,7 +394,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::createPool);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::destroyPool);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::addBytes);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_random::getBytes);
-} // namespace rtl_random
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

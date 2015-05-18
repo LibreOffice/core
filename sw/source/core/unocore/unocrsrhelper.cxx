@@ -1422,6 +1422,6 @@ bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, co
     return bRet;
 }
 
-}//namespace SwUnoCursorHelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

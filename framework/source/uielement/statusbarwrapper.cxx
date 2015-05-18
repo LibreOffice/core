@@ -178,6 +178,6 @@ Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface() throw ( Ru
     return Reference< XInterface >();
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

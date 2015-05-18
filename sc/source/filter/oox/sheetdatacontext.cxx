@@ -60,7 +60,7 @@ const sal_uInt16 BIFF12_ROW_CUSTOMHEIGHT    = 0x2000;
 const sal_uInt16 BIFF12_ROW_CUSTOMFORMAT    = 0x4000;
 const sal_uInt8 BIFF12_ROW_SHOWPHONETIC     = 0x01;
 
-} // namespace
+}
 
 SheetDataContextBase::SheetDataContextBase( const WorksheetHelper& rHelper ) :
     mrAddressConv( rHelper.getAddressConverter() ),
@@ -573,7 +573,7 @@ void SheetDataContext::importSharedFmla( SequenceInputStream& rStrm )
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

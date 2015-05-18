@@ -1867,6 +1867,6 @@ namespace dbmm
         return m_pImpl->migrateAll();
     }
 
-} // namespace dbmm
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

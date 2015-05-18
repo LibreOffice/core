@@ -65,7 +65,7 @@ class LibreOfficeAction
         vector< string > _args;
     };
 
-} // namespace
+}
 
 #endif // COMPILEPLUGIN_H
 

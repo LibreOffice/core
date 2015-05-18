@@ -244,7 +244,7 @@ class SequenceAsVector : public ::std::vector< TElementType >
         }
 };
 
-} // namespace comphelper
+}
 
 #endif // INCLUDED_COMPHELPER_SEQUENCEASVECTOR_HXX
 

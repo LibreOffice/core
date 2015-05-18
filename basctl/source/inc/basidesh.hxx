@@ -217,7 +217,7 @@ public:
     void RemoveWindow (BaseWindow* pWindow, bool bDestroy, bool bAllowChangeCurWindow = true);
 };
 
-} // namespace basctl
+}
 
 // This typedef helps baside.sdi,
 // because I don't know how to use nested names in it.

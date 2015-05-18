@@ -221,6 +221,6 @@ namespace dbaui
             m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_pDialog.get() )->GetOrignalOrder() );
     }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

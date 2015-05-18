@@ -61,7 +61,7 @@ class FWE_DLLPUBLIC BmkMenu : public AddonMenu
         BmkMenu_Impl*   _pImp;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_BMKMENU_HXX
 

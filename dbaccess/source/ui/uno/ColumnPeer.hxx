@@ -43,7 +43,7 @@ namespace dbaui
         virtual void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
-}   // namespace dbaui
+}
 #endif // INCLUDED_DBACCESS_SOURCE_UI_UNO_COLUMNPEER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

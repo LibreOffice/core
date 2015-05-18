@@ -116,7 +116,7 @@ struct ToolBoxLayoutData : public ControlLayoutData
     std::vector< sal_uInt16 >               m_aLineItemPositions;
 };
 
-} /* namespace vcl */
+}
 
 struct ImplToolBoxPrivateData
 {

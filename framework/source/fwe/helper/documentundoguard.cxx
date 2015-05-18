@@ -230,6 +230,6 @@ namespace framework
         lcl_restore( *m_xData );
     }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

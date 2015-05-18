@@ -99,7 +99,7 @@ private:
 
 
 
-} // namespace comphelper
+}
 
 #endif
 

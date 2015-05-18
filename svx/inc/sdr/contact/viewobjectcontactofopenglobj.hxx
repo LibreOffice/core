@@ -28,8 +28,8 @@ private:
     vcl::Window* getWindow() const;
 };
 
-} // namespace sdr
-} // namespace contact
+}
+}
 
 #endif
 

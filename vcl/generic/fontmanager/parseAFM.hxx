@@ -317,7 +317,7 @@ typedef struct
 int parseFile( const char* pFilename, FontInfo **fi, FLAGS flags );
 void freeFontInfo(FontInfo *fi);
 
-} // namespace
+}
 
 #endif // INCLUDED_VCL_GENERIC_FONTMANAGER_PARSEAFM_HXX
 

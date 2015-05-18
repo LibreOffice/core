@@ -38,7 +38,7 @@ public:
     ORptPageDialog(vcl::Window* pParent, const SfxItemSet* pAttr, const OUString &rDialog);
 };
 
-} // namespace rptui
+}
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGPAGE_HXX
 

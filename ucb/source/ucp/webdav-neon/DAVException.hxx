@@ -163,7 +163,7 @@ class DAVException : public std::exception
     sal_uInt16 getStatus() const { return mStatusCode; }
 };
 
-} // namespace webdav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVEXCEPTION_HXX
 

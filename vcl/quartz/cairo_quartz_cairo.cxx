@@ -253,7 +253,7 @@ namespace cairo
             VclPtr<VirtualDevice>::Create( &aSystemGraphicsData, Size(1, 1), getDepth() ));
     }
 
-}  // namespace cairo
+}
 
 #endif
 

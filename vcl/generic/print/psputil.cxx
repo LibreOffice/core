@@ -244,6 +244,6 @@ ConverterFactory& GetConverterFactory()
     return theConverterFactory::get();
 }
 
-} /* namespace psp */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

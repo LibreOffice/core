@@ -36,7 +36,7 @@ struct FWE_DLLPUBLIC EventsConfig
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >   aEventsProperties;
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_EVENTSCONFIGURATION_HXX
 

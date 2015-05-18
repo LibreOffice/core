@@ -442,6 +442,6 @@ bool FormCellBindingHelper::doConvertAddressRepresentations( const OUString& _rI
     return bSuccess;
 }
 
-}   // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

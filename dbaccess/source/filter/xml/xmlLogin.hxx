@@ -35,7 +35,7 @@ namespace dbaxml
         virtual ~OXMLLogin();
 
     };
-} // namespace dbaxml
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_FILTER_XML_XMLLOGIN_HXX
 

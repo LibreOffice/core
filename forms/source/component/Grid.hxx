@@ -203,7 +203,7 @@ protected:
 };
 
 
-}   // namespace frm
+}
 
 
 

@@ -514,7 +514,7 @@ Sequence< OUString > FilePolicy::getSupportedServiceNames()
     return aSNS;
 }
 
-} // namespace
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_security_comp_stoc_FilePolicy_get_implementation(

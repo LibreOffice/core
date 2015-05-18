@@ -425,7 +425,7 @@ private:
 
 };  // class ProgressMonitor
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_SOURCE_INC_PROGRESSMONITOR_HXX
 

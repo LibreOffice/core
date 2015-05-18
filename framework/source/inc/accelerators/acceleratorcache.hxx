@@ -144,7 +144,7 @@ class AcceleratorCache
         void removeCommand(const OUString& sCommand);
 };
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCACHE_HXX
 

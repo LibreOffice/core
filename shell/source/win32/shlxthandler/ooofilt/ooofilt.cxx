@@ -1232,7 +1232,7 @@ namespace /* private */
         return S_OK;
     }
 
-} // namespace /* private */
+}
 
 STDAPI DllRegisterServer()
 {

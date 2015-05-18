@@ -980,6 +980,6 @@ void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
         xSizeTransmitter->setDefaultSize( mpImpl->aDefaultSizeForChart_In_100TH_MM );
 }
 
-} // namespace svt
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

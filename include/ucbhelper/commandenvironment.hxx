@@ -68,7 +68,7 @@ public:
                 std::exception ) SAL_OVERRIDE;
 };
 
-} /* namespace ucbhelper */
+}
 
 #endif /* ! INCLUDED_UCBHELPER_COMMANDENVIRONMENT_HXX */
 

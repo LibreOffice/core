@@ -76,6 +76,6 @@ css::uno::Reference< css::office::XAnnotation > SAL_CALL AnnotationEnumeration::
     return (*maIter++);
 }
 
-} // namespace sd
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

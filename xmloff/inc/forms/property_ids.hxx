@@ -38,7 +38,7 @@ namespace xmloff
         PID_INVALID
     };
 
-} // namespace xmloff
+}
 
 #endif // INCLUDED_XMLOFF_INC_FORMS_PROPERTY_IDS_HXX
 

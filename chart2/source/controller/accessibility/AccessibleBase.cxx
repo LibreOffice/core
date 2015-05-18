@@ -941,6 +941,6 @@ void SAL_CALL AccessibleBase::removeAccessibleEventListener( const Reference< XA
     }
 }
 
-} // namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

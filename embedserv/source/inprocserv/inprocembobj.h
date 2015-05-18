@@ -230,7 +230,7 @@ public:
 
 };
 
-} // namespace inprocserv
+}
 
 #endif
 

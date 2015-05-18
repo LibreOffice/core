@@ -92,7 +92,7 @@ private:
     ::std::unique_ptr<SvXMLTokenMap>                                                    m_pReportElemTokenMap;
 };
 
-} // namespace rptxml
+}
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLIMPORTDOCUMENTHANDLER_HXX
 

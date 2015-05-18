@@ -94,7 +94,7 @@ private:
     OUString *                                 m_pUserDir;
 };
 
-} // namespace comphelper
+}
 
 #endif /* ! INCLUDED_COMPHELPER_SOURCE_OFFICEINSTDIR_OFFICEINSTALLATIONDIRECTORIES_HXX */
 

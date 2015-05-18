@@ -301,7 +301,7 @@ void OXMLTable::incrementRowIndex()
     m_aGrid.push_back(::std::vector<TCell>(m_aWidth.size()));
 }
 
-} // namespace rptxml
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

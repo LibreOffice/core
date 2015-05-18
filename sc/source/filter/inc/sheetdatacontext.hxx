@@ -129,8 +129,8 @@ private:
     sal_Int32 mnCol; /// column index (0-based)
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

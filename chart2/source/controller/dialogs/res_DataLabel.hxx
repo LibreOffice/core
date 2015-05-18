@@ -90,7 +90,7 @@ private:
     void EnableControls();
 };
 
-} //namespace chart
+}
 
 #endif
 

@@ -97,6 +97,6 @@ namespace frm
             m_pView->SetSelectionMode( m_bHideInactiveSelection ? EE_SELMODE_HIDDEN : EE_SELMODE_STD );
     }
 
-}   // namespace frm
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

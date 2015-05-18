@@ -30,7 +30,7 @@ extern "C"
 namespace libeot
 {
 #include <libeot/libeot.h>
-} // namespace libeot
+}
 } // extern "C"
 #endif
 

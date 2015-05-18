@@ -136,7 +136,7 @@ private:
 };
 
 
-} // namespace connectivity
+}
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ROWFUNCTIONPARSER_HXX
 

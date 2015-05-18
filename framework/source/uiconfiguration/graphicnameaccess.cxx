@@ -91,6 +91,6 @@ throw( uno::RuntimeException, std::exception )
     return cppu::UnoType<graphic::XGraphic>::get();
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

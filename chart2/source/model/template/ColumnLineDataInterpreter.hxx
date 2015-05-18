@@ -45,7 +45,7 @@ private:
     sal_Int32 m_nNumberOfLines;
 };
 
-} // namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_COLUMNLINEDATAINTERPRETER_HXX
 #endif

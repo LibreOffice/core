@@ -29,6 +29,6 @@ void OSqlEditUndoAct::ToggleText()
     m_strNextText  =strNext;
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

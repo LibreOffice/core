@@ -131,6 +131,6 @@ void SAL_CALL StatusBarCommandDispatch::selectionChanged( const lang::EventObjec
     fireAllStatusEvents( 0 );
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

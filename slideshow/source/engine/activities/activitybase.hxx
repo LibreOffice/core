@@ -137,8 +137,8 @@ private:
     bool                            mbIsActive;
 };
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYBASE_HXX
 

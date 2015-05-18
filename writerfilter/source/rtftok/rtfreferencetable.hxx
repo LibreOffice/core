@@ -30,8 +30,8 @@ public:
 private:
     Entries_t m_aEntries;
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCETABLE_HXX
 

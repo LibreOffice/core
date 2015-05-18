@@ -825,6 +825,6 @@ Reference< XInterface > SAL_CALL OConnection::getTableEditor( const Reference< X
     return xReturn;
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

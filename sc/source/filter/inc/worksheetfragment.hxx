@@ -113,8 +113,8 @@ private:
     void                importEmbeddedOleData( StreamDataSequence& orEmbeddedData, const OUString& rRelId );
 };
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 #endif
 

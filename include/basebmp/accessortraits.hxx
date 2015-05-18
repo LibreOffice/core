@@ -119,7 +119,7 @@ template< class Accessor > struct AccessorTraits
 
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_ACCESSORTRAITS_HXX */
 

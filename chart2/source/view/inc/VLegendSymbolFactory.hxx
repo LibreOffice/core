@@ -53,7 +53,7 @@ namespace VLegendSymbolFactory
             const ::com::sun::star::uno::Any& rExplicitSymbol /*should contain a ::com::sun::star::chart2::Symbol without automatic symbol if the charttype does support symbols else empty*/);
 }
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_VIEW_INC_VLEGENDSYMBOLFACTORY_HXX
 #endif

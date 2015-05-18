@@ -144,6 +144,6 @@ void PropertySet::dump()
 }
 #endif
 
-} // namespace oox
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

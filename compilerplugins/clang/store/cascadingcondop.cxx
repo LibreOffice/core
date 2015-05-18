@@ -81,6 +81,6 @@ bool CascadingCondOp::VisitStmt( const Stmt* stmt )
 // Register the plugin action with the LO plugin handling.
 static Plugin::Registration< CascadingCondOp > X( "cascadingcondop" );
 
-} // namespace loplugin
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

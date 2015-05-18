@@ -123,7 +123,7 @@ class DispatchProvider  :   private TransactionBase                     ,
 
 }; // class DispatchProvider
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHPROVIDER_HXX
 

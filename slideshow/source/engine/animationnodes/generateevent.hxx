@@ -47,8 +47,8 @@ EventSharedPtr generateEvent(
     SlideShowContext const& rContext,
     double nAdditionalDelay );
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_GENERATEEVENT_HXX
 

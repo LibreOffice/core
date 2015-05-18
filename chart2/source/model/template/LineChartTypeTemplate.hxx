@@ -92,7 +92,7 @@ private:
     sal_Int32          m_nDim;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_LINECHARTTYPETEMPLATE_HXX
 #endif

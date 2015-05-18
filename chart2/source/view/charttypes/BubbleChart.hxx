@@ -64,7 +64,7 @@ private: //member
     double m_fMaxLogicBubbleSize;//calculated values
     double m_fBubbleSizeFactorToScreen;//calculated values
 };
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

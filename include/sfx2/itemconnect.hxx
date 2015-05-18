@@ -561,7 +561,7 @@ ValueSetConnection< ItemWrpT >::ValueSetConnection(
 
 
 
-} // namespace sfx
+}
 
 #endif
 

@@ -127,7 +127,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
     }
 }
 
-} // namespace
+}
 
 sal_Int32 TextField::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,

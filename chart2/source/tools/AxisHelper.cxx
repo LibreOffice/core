@@ -1176,6 +1176,6 @@ bool AxisHelper::isAxisPositioningEnabled()
     return nCurrentVersion >= SvtSaveOptions::ODFVER_012;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

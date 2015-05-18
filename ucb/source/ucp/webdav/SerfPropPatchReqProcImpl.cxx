@@ -185,6 +185,6 @@ void SerfPropPatchReqProcImpl::handleEndOfResponseData( serf_bucket_t * /*inSerf
     // nothing to do;
 }
 
-} // namespace http_dav_ucp
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

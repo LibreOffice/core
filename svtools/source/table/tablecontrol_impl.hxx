@@ -487,7 +487,7 @@ namespace svt { namespace table
 
 
 
-} } // namespace svt::table
+} }
 
 
 #endif // INCLUDED_SVTOOLS_SOURCE_TABLE_TABLECONTROL_IMPL_HXX

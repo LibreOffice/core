@@ -143,7 +143,7 @@ void setInstanceData(
     const OUString* pURL,
     const bool* pURLOnce );
 
-} // namespace xforms
+}
 
 #endif
 

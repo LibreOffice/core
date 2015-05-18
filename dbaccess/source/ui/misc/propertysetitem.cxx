@@ -58,6 +58,6 @@ namespace dbaui
         return new OPropertySetItem(*this);
     }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,7 +44,7 @@ public:
     static SfxItemPool* CreateChartItemPool();
 };
 
-} //  namespace chart
+}
 
 #endif
 // INCLUDED_CHART2_SOURCE_VIEW_MAIN_CHARTITEMPOOL_HXX

@@ -53,7 +53,7 @@ namespace svt
     }
 
 
-}   // namespace svt
+}
 
 
 

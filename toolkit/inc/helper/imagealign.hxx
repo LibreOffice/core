@@ -45,7 +45,7 @@ namespace toolkit
     sal_Int16 getExtendedImagePosition( sal_Int16 _nImageAlign );
 
 
-} // namespace toolkit
+}
 
 
 #endif // INCLUDED_TOOLKIT_INC_HELPER_IMAGEALIGN_HXX

@@ -27,7 +27,7 @@ namespace sdbtools
 
     DEFINE_MODULE( SdbtModule, SdbtClient, SdbtRes )
 
-} // namespace sdbtools
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_SDBTOOLS_INC_MODULE_SDBT_HXX
 

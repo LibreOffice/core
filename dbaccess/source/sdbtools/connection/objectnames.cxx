@@ -438,6 +438,6 @@ namespace sdbtools
         pNameCheck->validateName_throw( _Name );
     }
 
-} // namespace sdbtools
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

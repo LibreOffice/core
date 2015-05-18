@@ -254,7 +254,7 @@ private:
         throw ( DAVException );
 };
 
-} // namespace webdav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVRESOURCEACCESS_HXX
 

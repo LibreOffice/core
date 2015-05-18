@@ -402,7 +402,7 @@ struct applyChangesFunctor : public ::std::unary_function< ::boost::shared_ptr< 
     }
 };
 
-} // namespace impl
+}
 
 namespace
 {
@@ -1349,6 +1349,6 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit )
     return 0;
 }
 
-} // namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

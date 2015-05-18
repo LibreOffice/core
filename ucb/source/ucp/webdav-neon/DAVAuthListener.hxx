@@ -49,7 +49,7 @@ class DAVAuthListener : public salhelper::SimpleReferenceObject
             bool bCanUseSystemCredentials ) = 0;
 };
 
-} // namespace webdav_ucp
+}
 
 #endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVAUTHLISTENER_HXX
 

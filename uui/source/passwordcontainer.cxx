@@ -106,7 +106,7 @@ bool fillContinuation(
     return false;
 }
 
-} // namespace
+}
 
 namespace uui {
 
@@ -440,6 +440,6 @@ PasswordContainerInteractionHandler::createServiceFactory(
             PasswordContainerInteractionHandler::getSupportedServiceNames_Static() ) );
 }
 
-} // namespace uui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

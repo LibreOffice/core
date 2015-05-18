@@ -24,7 +24,7 @@ RTFDocument::Pointer_t RTFDocumentFactory::createDocument(css::uno::Reference< c
     return std::make_shared<RTFDocumentImpl>(xContext, xInputStream, xDstDoc, xFrame, xStatusIndicator, bIsNewDoc);
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -229,7 +229,7 @@ protected:
 };
 
 
-} // namespace svt
+}
 
 
 #endif // INCLUDED_SVTOOLS_ACCESSIBLETABLEPROVIDER_HXX

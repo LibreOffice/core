@@ -153,7 +153,7 @@ public:
                 ::com::sun::star::chart2::data::XDataSource > & xSource );
 };
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

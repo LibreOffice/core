@@ -960,7 +960,7 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, size_t nDdePos 
     return NULL;
 }
 
-} // namespace
+}
 
 bool ScDocument::FindDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem,
         sal_uInt8 nMode, size_t& rnDdePos )

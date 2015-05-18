@@ -97,7 +97,7 @@ Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxSto
     return ContainerHelper::vectorToSequence( aResult );
 }
 
-} // namespace
+}
 
 DocumentPropertiesImport::DocumentPropertiesImport( const Reference< XComponentContext >& rxContext ) :
     mxContext( rxContext )
@@ -171,7 +171,7 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
     }
 }
 
-} // namespace docprop
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

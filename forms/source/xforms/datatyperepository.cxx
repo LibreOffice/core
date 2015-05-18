@@ -266,7 +266,7 @@ namespace xforms
         REGISTER_VOID_PROP( XSD_MIN_EXCLUSIVE_INT, m_aMinExclusive, ValueType );
     }
 
-} // namespace xforms
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

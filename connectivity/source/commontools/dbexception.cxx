@@ -512,7 +512,7 @@ OUString getStandardSQLState( StandardSQLState _eState )
 
 
 
-}   // namespace dbtools
+}
 
 
 

@@ -398,7 +398,7 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     }
 }
 
-}//namespace dmapper
-} //namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

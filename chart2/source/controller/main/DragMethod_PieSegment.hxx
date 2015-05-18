@@ -50,7 +50,7 @@ private:
     double                  m_fDragRange;
 };
 
-} //  namespace chart
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_DRAGMETHOD_PIESEGMENT_HXX
 #endif

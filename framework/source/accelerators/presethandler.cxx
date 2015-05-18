@@ -808,6 +808,6 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     return lSubFolders;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

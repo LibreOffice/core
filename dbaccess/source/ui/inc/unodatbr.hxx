@@ -474,7 +474,7 @@ namespace dbaui
         void    impl_sanitizeRowSetClauses_nothrow();
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_UNODATBR_HXX
 

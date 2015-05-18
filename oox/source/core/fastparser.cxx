@@ -61,7 +61,7 @@ InputStreamCloseGuard::~InputStreamCloseGuard()
     if( mxInStream.is() && mbCloseStream ) try { mxInStream->closeInput(); } catch( Exception& ) {}
 }
 
-} // namespace
+}
 
 FastParser::FastParser( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     mrNamespaceMap( StaticNamespaceMap::get() ),
@@ -164,7 +164,7 @@ sal_Int32 FastParser::getNamespaceId( const OUString& rUrl )
     return 0;
 }
 
-} // namespace core
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

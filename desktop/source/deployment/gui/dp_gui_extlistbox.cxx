@@ -1265,6 +1265,6 @@ IMPL_LINK( ExtensionBox_Impl, ScrollHdl, ScrollBar*, pScrBar )
     return 1;
 }
 
-} //namespace dp_gui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

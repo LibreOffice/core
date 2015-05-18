@@ -32,7 +32,7 @@ public:
 
 };
 
-}   // namespace utl
+}
 
 #endif // INCLUDED_UNOTOOLS_DOCINFOHELPER_HXX
 

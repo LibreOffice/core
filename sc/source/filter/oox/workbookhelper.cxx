@@ -1030,7 +1030,7 @@ BiffCodecHelper& WorkbookHelper::getCodecHelper() const
     return mrBookGlob.getCodecHelper();
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

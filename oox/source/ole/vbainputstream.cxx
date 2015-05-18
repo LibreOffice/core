@@ -32,7 +32,7 @@ const sal_uInt16 VBACHUNK_SIG               = 0x3000;
 const sal_uInt16 VBACHUNK_COMPRESSED        = 0x8000;
 const sal_uInt16 VBACHUNK_LENMASK           = 0x0FFF;
 
-} // namespace
+}
 
 VbaInputStream::VbaInputStream( BinaryInputStream& rInStrm ) :
     BinaryStreamBase( false ),
@@ -204,7 +204,7 @@ bool VbaInputStream::updateChunk()
     return !mbEof;
 }
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -840,7 +840,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::toAsciiUpperCase_WithLength);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::trim_WithLength);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::valueOfChar);
 
-} // namespace rtl_str
+}
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

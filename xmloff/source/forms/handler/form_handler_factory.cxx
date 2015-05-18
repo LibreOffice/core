@@ -73,6 +73,6 @@ namespace xmloff
         return pHandler;
     }
 
-} // namespace xmloff
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

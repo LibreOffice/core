@@ -293,7 +293,7 @@ ContextHandlerRef ChartGraphicDataContext::onCreateContext( ::sal_Int32 nElement
     return 0;
 }
 
-} // namespace drawingml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

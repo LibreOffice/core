@@ -91,7 +91,7 @@ namespace toolkit
     };
 
 
-} // namespace toolkit
+}
 
 
 #endif // INCLUDED_TOOLKIT_AWT_ANIMATEDIMAGESPEER_HXX

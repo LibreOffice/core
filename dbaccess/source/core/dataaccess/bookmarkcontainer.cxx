@@ -331,6 +331,6 @@ void SAL_CALL OBookmarkContainer::setParent( const Reference< XInterface >& /*Pa
     throw NoSupportException();
 }
 
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

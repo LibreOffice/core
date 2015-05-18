@@ -176,7 +176,7 @@ class OWriteImagesDocumentHandler
         OUString                                                                     m_aAttributeValueSimple;
 };
 
-} // namespace framework
+}
 
 #endif
 

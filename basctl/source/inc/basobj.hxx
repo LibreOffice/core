@@ -98,7 +98,7 @@ namespace basctl
 
     void            MarkDocumentModified( const ScriptDocument& rDocument );
 
-} // namespace basctl
+}
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_BASOBJ_HXX
 

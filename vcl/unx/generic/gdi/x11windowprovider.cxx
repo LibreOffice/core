@@ -83,6 +83,6 @@ bool IsWindowSystemAvailable()
     return (pDisp != nullptr);
 }
 
-} // namespace vcl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -165,8 +165,8 @@ template< class Map >
     return aResult;
 }
 
-} // namespace ContainerHelper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_INC_CONTAINERHELPER_HXX
 #endif

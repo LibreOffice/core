@@ -689,6 +689,6 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
     return xReturn;
 }
 
-}   // namespace drivermanager
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

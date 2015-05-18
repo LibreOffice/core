@@ -374,6 +374,6 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > RootItemC
     return lPropertyDescriptor;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

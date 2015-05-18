@@ -228,7 +228,7 @@ private:
     bool m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault;
 };
 
-} //  namespace property
+}
 
 // INCLUDED_CHART2_SOURCE_INC_OPROPERTYSET_HXX
 #endif

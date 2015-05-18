@@ -104,6 +104,6 @@ void OModule::ensureImpl()
     s_pImpl = new OModuleImpl();
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

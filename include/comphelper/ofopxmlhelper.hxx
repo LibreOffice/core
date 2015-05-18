@@ -123,7 +123,7 @@ public:
     virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-} // namespace comphelper
+}
 
 #endif
 

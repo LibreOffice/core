@@ -156,7 +156,7 @@ namespace dbtools
     };
 
 
-}   // namespace dbtools
+}
 
 
 #endif // INCLUDED_CONNECTIVITY_DBCHARSET_HXX

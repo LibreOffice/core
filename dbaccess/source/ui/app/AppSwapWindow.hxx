@@ -88,7 +88,7 @@ namespace dbaui
     private:
         bool onContainerSelected( ElementType _eType );
     };
-} // namespace dbaui
+}
 #endif // INCLUDED_DBACCESS_SOURCE_UI_APP_APPSWAPWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

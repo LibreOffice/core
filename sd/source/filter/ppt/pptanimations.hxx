@@ -541,7 +541,7 @@ static const preset_maping gPresetMaping[] =
     { 0,0,0 }
 };
 
-} // namespace ppt
+}
 
 #endif
 

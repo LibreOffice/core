@@ -62,7 +62,7 @@ namespace svgi
     /// Parse given string for the xlink attribute
     bool parseXlinkHref( const char* xlink, std::string& data );
 
-} // namespace svgi
+}
 
 #endif
 

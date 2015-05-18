@@ -337,6 +337,6 @@ sal_Int16 LicenseDialog::solar_execute()
     return dlg->Execute();
 }
 
-} // namespace dp_gui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

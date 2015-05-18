@@ -82,7 +82,7 @@ namespace rptui
         inline ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
 
-}   // namespace rptui
+}
 
 
 #endif // INCLUDED_REPORTDESIGN_INC_MODULEHELPER_HXX

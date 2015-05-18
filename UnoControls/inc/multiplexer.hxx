@@ -357,7 +357,7 @@ private:
 
 };  // class OMRCListenerMultiplexerHelper
 
-}   // namespace unocontrols
+}
 
 #endif // INCLUDED_UNOCONTROLS_INC_MULTIPLEXER_HXX
 

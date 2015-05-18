@@ -78,7 +78,7 @@ public:
     ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
 };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_MODULEDBU_HXX
 

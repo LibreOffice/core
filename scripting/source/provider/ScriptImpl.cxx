@@ -101,6 +101,6 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException,
 #endif
     return result;
 }
-} // namespace func_provider
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

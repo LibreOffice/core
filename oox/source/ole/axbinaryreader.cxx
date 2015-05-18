@@ -31,7 +31,7 @@ namespace {
 const sal_uInt32 AX_STRING_SIZEMASK         = 0x7FFFFFFF;
 const sal_uInt32 AX_STRING_COMPRESSED       = 0x80000000;
 
-} // namespace
+}
 
 AxAlignedInputStream::AxAlignedInputStream( BinaryInputStream& rInStrm ) :
     BinaryStreamBase( false ),
@@ -121,7 +121,7 @@ bool lclReadString( AxAlignedInputStream& rInStrm, OUString& rValue, sal_uInt32 
     return bValidChars;
 }
 
-} // namespace
+}
 
 AxBinaryPropertyReader::ComplexProperty::~ComplexProperty()
 {
@@ -278,7 +278,7 @@ bool AxBinaryPropertyReader::startNextProperty()
     return ensureValid() && bHasProp;
 }
 
-} // namespace ole
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,7 +25,7 @@ namespace chart
 #define CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME "com.sun.star.chart2.CoordinateSystems.CartesianView"
 #define CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME "com.sun.star.chart2.CoordinateSystems.PolarView"
 
-} //namespace chart
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

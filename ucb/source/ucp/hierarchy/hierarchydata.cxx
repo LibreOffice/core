@@ -1180,6 +1180,6 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
     return m_pImpl->entry;
 }
 
-} // namespace hierarchy_ucp
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

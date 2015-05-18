@@ -592,7 +592,7 @@ struct TabBarSortHelper
     }
 };
 
-} // namespace
+}
 
 void TabBar::Sort()
 {
@@ -877,6 +877,6 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
 }
 
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

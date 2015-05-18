@@ -118,7 +118,7 @@ public:
     virtual bool setDefaultPrinter( const OUString& rPrinterName ) SAL_OVERRIDE;
 };
 
-} // namespace psp
+}
 
 #endif
 

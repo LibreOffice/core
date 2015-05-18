@@ -135,7 +135,7 @@ public:
     }
 };
 
-} // namespace comphelper
+}
 
 #endif
 // INCLUDED_COMPHELPER_INLINECONTAINER_HXX

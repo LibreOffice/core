@@ -1783,7 +1783,7 @@ static const BuiltinFormatTable spBuiltinFormatTables[] =
     { "zh-TW",  "*CJK",     spBuiltinFormats_zh_TW  }   // Chinese, Taiwan
 };
 
-} // namespace
+}
 
 NumFmtModel::NumFmtModel() :
     mnPredefId( -1 )
@@ -1873,7 +1873,7 @@ NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
     OSL_ENSURE( mxNumFmts.is(), "NumberFormatFinalizer::NumberFormatFinalizer - cannot get number formats" );
 }
 
-} // namespace
+}
 
 NumberFormat::NumberFormat( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -2063,7 +2063,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
     }
 }
 
-} // namespace xls
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

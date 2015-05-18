@@ -174,7 +174,7 @@ public:
     }
 };
 
-} // namespace basebmp
+}
 
 #endif /* INCLUDED_BASEBMP_ACCESSORFUNCTORS_HXX */
 

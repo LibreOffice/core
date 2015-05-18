@@ -194,7 +194,7 @@ public:
 
 
 
-} // namespace oox
+}
 
 #endif
 

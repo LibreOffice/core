@@ -126,7 +126,7 @@ namespace toolkit
     };
 
 
-}   // namespace toolkit
+}
 
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_FORMATTEDCONTROL_HXX

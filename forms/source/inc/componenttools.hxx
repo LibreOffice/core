@@ -85,7 +85,7 @@ namespace frm
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
 
-} // namespace frm
+}
 
 
 #endif // INCLUDED_FORMS_SOURCE_INC_COMPONENTTOOLS_HXX

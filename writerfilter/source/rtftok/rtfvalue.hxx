@@ -69,8 +69,8 @@ private:
     bool m_bForceString;
     std::shared_ptr<RTFShape> m_pShape;
 };
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFVALUE_HXX
 

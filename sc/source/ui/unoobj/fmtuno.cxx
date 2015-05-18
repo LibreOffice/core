@@ -188,7 +188,7 @@ FormulaGrammar::Grammar lclResolveGrammar( FormulaGrammar::Grammar eExtGrammar, 
     return (eIntGrammar == FormulaGrammar::GRAM_UNSPECIFIED) ? FormulaGrammar::GRAM_PODF_A1 : eIntGrammar;
 }
 
-} // namespace
+}
 
 void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         ScDocument* pDoc, FormulaGrammar::Grammar eGrammar) const

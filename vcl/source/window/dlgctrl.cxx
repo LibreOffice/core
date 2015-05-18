@@ -286,7 +286,7 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
     return pWindow;
 }
 
-} /* namespace vcl */
+}
 
 vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, sal_uInt16& rIndex,
                                sal_uInt16& rFormStart, sal_uInt16& rFormEnd )
@@ -515,7 +515,7 @@ void Window::ImplControlFocus( sal_uInt16 nFlags )
     }
 }
 
-} /* namespace vcl */
+}
 
 namespace
 {
@@ -1117,7 +1117,7 @@ KeyEvent Window::GetActivationKey() const
     return aKeyEvent;
 }
 
-} /* namespace vcl */
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */sal_Unicode getAccel( const OUString& rStr )
 {

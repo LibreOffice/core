@@ -458,7 +458,7 @@ namespace /* private */ {
         recently_used_item_list_t& item_list_;
     };
 
-} // namespace private
+}
 
 /*
    example (see http::www.freedesktop.org):

@@ -38,8 +38,8 @@ public:
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
-} //namespace wrapper
-} //namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDSPLINEPROPERTIES_HXX
 #endif

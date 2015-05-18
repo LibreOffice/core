@@ -57,7 +57,7 @@ bool equals(const DataPilotFieldReference& left, const DataPilotFieldReference& 
         && (left.ReferenceItemName == right.ReferenceItemName);
 }
 
-} // namespace
+}
 
 // ScDPName
 

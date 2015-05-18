@@ -95,7 +95,7 @@ const TypeGroupInfo& lclGetTypeInfoFromTypeId( TypeId eTypeId )
     return saUnknownTypeInfo;
 }
 
-} // namespace
+}
 
 const TypeGroupInfo& GetTypeGroupInfo( TypeId eType )
 {
@@ -571,8 +571,8 @@ void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChar
     }
 }
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+}
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

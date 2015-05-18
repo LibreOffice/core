@@ -236,6 +236,6 @@ bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&      
     return false;
 }
 
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

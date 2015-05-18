@@ -34,7 +34,7 @@ inline SvxFrameDirection lclVoidToEnum( void* pDirection )
     return static_cast< SvxFrameDirection >( reinterpret_cast< sal_IntPtr >( pDirection ) );
 }
 
-} // namespace
+}
 
 FrameDirectionListBox::FrameDirectionListBox( vcl::Window* pParent, WinBits nBits )
     : ListBox(pParent, nBits)

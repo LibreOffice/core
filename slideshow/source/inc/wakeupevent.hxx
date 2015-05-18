@@ -79,8 +79,8 @@ private:
 
 typedef ::boost::shared_ptr< WakeupEvent > WakeupEventSharedPtr;
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_INC_WAKEUPEVENT_HXX
 

@@ -168,6 +168,6 @@ namespace vcl
             lcl_reset( *m_pData );
     }
 
-} // namespace vcl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

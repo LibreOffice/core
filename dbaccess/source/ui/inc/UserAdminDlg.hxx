@@ -77,7 +77,7 @@ namespace dbaui
         virtual void setTitle(const OUString& _sTitle) SAL_OVERRIDE;
         virtual void enableConfirmSettings( bool _bEnable ) SAL_OVERRIDE;
     };
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_USERADMINDLG_HXX
 

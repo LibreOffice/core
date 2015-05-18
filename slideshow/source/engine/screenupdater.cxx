@@ -223,8 +223,8 @@ namespace internal
     }
 
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 namespace {
 

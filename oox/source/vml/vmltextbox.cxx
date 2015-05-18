@@ -151,7 +151,7 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
     }
 }
 
-} // namespace vml
-} // namespace oox
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -198,6 +198,6 @@ Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationCo
 }
 
 
-} // namespace xforms
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

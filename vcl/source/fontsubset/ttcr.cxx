@@ -1486,7 +1486,7 @@ static void ProcessTables(TrueTypeCreator *tt)
     free(met);
 }
 
-} // namespace vcl
+}
 
 extern "C"
 {

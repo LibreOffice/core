@@ -291,6 +291,6 @@ bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any& aEl
 
     return true;
 }
-} // namespace framework
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

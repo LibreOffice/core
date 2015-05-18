@@ -98,6 +98,6 @@ void DBTreeView::GetFocus()
         m_pTreeListBox->GrabFocus();
 }
 
-}   // namespace dbaui
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2751,7 +2751,7 @@ static Bool compressWheelEvents( Display*, XEvent* event, XPointer p )
     return False;
 }
 
-} // namespace
+}
 
 long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
 {

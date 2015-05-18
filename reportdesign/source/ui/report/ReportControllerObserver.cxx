@@ -417,7 +417,7 @@ void SAL_CALL OXReportControllerObserver::elementRemoved(const container::Contai
 }
 
 
-} // namespace rptui
+}
 
 
 

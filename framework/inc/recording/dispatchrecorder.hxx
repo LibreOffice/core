@@ -93,7 +93,7 @@ class DispatchRecorder
 
 }; // class DispatcRecorder
 
-} // namespace framework
+}
 
 #endif // define __FRAMEWORK...
 

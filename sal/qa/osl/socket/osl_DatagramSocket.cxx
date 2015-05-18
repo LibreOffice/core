@@ -291,7 +291,7 @@ public:
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom);
 
-} // namespace osl_DatagramSocket
+}
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

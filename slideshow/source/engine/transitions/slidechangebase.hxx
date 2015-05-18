@@ -205,8 +205,8 @@ private:
     bool                                mbPrefetched;
 };
 
-} // namespace internal
-} // namespace presentation
+}
+}
 
 #endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_SLIDECHANGEBASE_HXX
 

@@ -63,6 +63,6 @@ bool Tutorial1::VisitReturnStmt( const ReturnStmt* returnstmt )
 // Register the plugin action with the LO plugin handling.
 static Plugin::Registration< Tutorial1 > X( "tutorial1" );
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

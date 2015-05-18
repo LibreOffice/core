@@ -198,7 +198,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     return AnimationActivitySharedPtr();
 }
 
-} // namespace internal
-} // namespace slideshow
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

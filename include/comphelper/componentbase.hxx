@@ -146,7 +146,7 @@ namespace comphelper
     };
 
 
-} // namespace ComponentBase
+}
 
 
 #endif // INCLUDED_COMPHELPER_COMPONENTBASE_HXX

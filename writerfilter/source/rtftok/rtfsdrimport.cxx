@@ -944,7 +944,7 @@ void RTFSdrImport::appendGroupProperty(const OUString& aKey, const OUString& aVa
         applyProperty(xShape, aKey, aValue);
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -500,6 +500,6 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
     }
 }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

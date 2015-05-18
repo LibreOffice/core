@@ -208,7 +208,7 @@ handleLockFileIgnoreRequest_(
     }
 }
 
-} // namespace
+}
 
 bool
 UUIInteractionHelper::handleLockedDocumentRequest(

@@ -58,7 +58,7 @@ private:
     exc_handling const m_excHandling;
 };
 
-} // namespace comphelper
+}
 
 #endif // ! defined(INCLUDED_COMPHELPER_SCOPEGUARD_HXX)
 

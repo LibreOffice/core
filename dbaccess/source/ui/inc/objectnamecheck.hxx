@@ -53,7 +53,7 @@ namespace dbaui
         virtual ~IObjectNameCheck() { }
     };
 
-} // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_OBJECTNAMECHECK_HXX
 

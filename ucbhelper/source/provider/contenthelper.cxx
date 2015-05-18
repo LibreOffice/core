@@ -114,7 +114,7 @@ struct ContentImplHelper_Impl
     }
 };
 
-} // namespace ucbhelper_impl
+}
 
 using namespace ucbhelper_impl;
 
@@ -924,6 +924,6 @@ ContentImplHelper::getPropertySetInfo(
                                     m_pImpl->m_xPropSetInfo.get() );
 }
 
-} // namespace ucbhelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

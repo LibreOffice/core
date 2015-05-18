@@ -321,7 +321,7 @@ sdecl::ServiceDecl const updateDecl(
     updateSI,
     "com.sun.star.comp.deployment.ui.UpdateRequiredDialog",
     "com.sun.star.deployment.ui.UpdateRequiredDialog" );
-} // namespace dp_gui
+}
 
 extern "C" {
 

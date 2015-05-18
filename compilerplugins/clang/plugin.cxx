@@ -159,7 +159,7 @@ void ParentBuilder::walk( const Stmt* stmt )
         }
     }
 
-} // namespace
+}
 
 void Plugin::buildParents( CompilerInstance& compiler )
     {
@@ -333,6 +333,6 @@ bool RewritePlugin::reportEditFailure( SourceLocation loc )
     return false;
     }
 
-} // namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

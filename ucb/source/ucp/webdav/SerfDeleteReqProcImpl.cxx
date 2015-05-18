@@ -62,6 +62,6 @@ void SerfDeleteReqProcImpl::handleEndOfResponseData( serf_bucket_t * /*inSerfRes
     // nothing to do;
 }
 
-} // namespace http_dav_ucp
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

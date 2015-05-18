@@ -1290,8 +1290,4 @@ const SvGlobalName& SfxOlePropertySet::GetSectionGuid( SfxOleSectionType eSectio
     return saEmptyGuid;
 }
 
-
-
-//} // namespace
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

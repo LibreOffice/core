@@ -108,7 +108,7 @@ class StatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIndic
 
 }; // class StatusIndicator
 
-} // namespace framework
+}
 
 #endif // INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
 

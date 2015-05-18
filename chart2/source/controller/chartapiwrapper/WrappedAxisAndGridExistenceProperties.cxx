@@ -419,7 +419,7 @@ Any WrappedAxisLabelExistenceProperty::getPropertyDefault( const Reference< bean
     return aRet;
 }
 
-} //namespace wrapper
-} //namespace chart
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

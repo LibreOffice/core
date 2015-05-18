@@ -47,7 +47,7 @@ namespace dbaui
                 getPropertySet() const { return m_xSet; }
     };
 
-}   // namespace dbaui
+}
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_PROPERTYSETITEM_HXX
 

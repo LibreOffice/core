@@ -69,7 +69,7 @@ public:
     SchGridDlg( vcl::Window* pParent, const InsertAxisOrGridDialogData& rInput );
 };
 
-} //namespace chart
+}
 
 #endif
 

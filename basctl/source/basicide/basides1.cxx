@@ -1264,6 +1264,6 @@ void Shell::Deactivate( bool bMDI )
     }
 }
 
-} // namespace basctl
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

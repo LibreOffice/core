@@ -214,6 +214,6 @@ void FillProperties::AddDefaultsToMap(
     lcl_AddDefaultsToMap_only_BitmapProperties( rOutMap );
 }
 
-} //  namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

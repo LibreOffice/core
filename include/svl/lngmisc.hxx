@@ -49,7 +49,7 @@ namespace linguistic
     SVL_DLLPUBLIC bool RemoveControlChars(OUString &rTxt);
     SVL_DLLPUBLIC bool ReplaceControlChars(OUString &rTxt);
     SVL_DLLPUBLIC OUString GetThesaurusReplaceText(const OUString &rText);
-} // namespace linguistic
+}
 
 #endif
 

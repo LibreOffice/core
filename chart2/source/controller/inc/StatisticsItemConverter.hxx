@@ -57,8 +57,8 @@ private:
             ::com::sun::star::frame::XModel >  m_xModel;
 };
 
-} //  namespace wrapper
-} //  namespace chart
+}
+}
 
 // INCLUDED_CHART2_SOURCE_CONTROLLER_INC_STATISTICSITEMCONVERTER_HXX
 #endif

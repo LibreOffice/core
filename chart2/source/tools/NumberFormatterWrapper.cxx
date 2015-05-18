@@ -129,6 +129,6 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
     return aText;
 }
 
-} //namespace chart
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
