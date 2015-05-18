@@ -43,7 +43,6 @@ namespace
 #define TABBAR_MINSIZE          5
 
 const sal_uInt16 ADDNEWPAGE_AREAWIDTH = 10;
-const sal_uInt16 INSERT_TAB_WIDTH = 32;
 const sal_uInt16 BUTTON_MARGIN = 6;
 
 class TabDrawer
