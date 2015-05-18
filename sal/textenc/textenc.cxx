@@ -362,6 +362,7 @@ extern "C" ImplTextEncodingData const * sal_getFullTextEncodingData(
 class FullTextEncodingData: private boost::noncopyable {
 public:
     ImplTextEncodingData const * get(rtl_TextEncoding encoding) {
+        (void) this; // loplugin:staticmethods
         return sal_getFullTextEncodingData(encoding);
     }
 };
