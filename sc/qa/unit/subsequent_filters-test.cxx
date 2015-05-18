@@ -75,6 +75,7 @@
 
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1701,7 +1702,7 @@ public:
 
 bool hasDimension(const std::vector<const ScDPSaveDimension*>& rDims, const OUString& aName)
 {
-    return std::find_if(rDims.begin(), rDims.end(), FindDimByName(aName)) != rDims.end();
+    return std::any_of(rDims.begin(), rDims.end(), FindDimByName(aName));
 }
 
 }

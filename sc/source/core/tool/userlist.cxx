@@ -26,6 +26,7 @@
 #include <unotools/transliterationwrapper.hxx>
 
 #include <boost/bind.hpp>
+#include <algorithm>
 
 namespace {
 
@@ -317,9 +318,7 @@ bool ScUserList::operator!=( const ScUserList& r ) const
 
 bool ScUserList::HasEntry( const OUString& rStr ) const
 {
-    DataType::const_iterator itr = ::std::find_if(
-        maData.begin(), maData.end(), ::boost::bind(&ScUserListData::GetString, _1) == rStr);
-    return itr != maData.end();
+    return ::std::any_of(maData.begin(), maData.end(), ::boost::bind(&ScUserListData::GetString, _1) == rStr);
 }
 
 ScUserList::iterator ScUserList::begin()

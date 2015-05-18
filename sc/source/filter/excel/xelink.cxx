@@ -33,7 +33,6 @@
 #include <memory>
 
 using ::std::unique_ptr;
-using ::std::find_if;
 using ::std::vector;
 using ::com::sun::star::uno::Any;
 
@@ -1884,9 +1883,7 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const OUString& rTabNam
         return;
 
     FindSBIndexEntry f(nSupbookId, nSheetId);
-    XclExpSBIndexVec::iterator itrEnd = maSBIndexVec.end();
-    XclExpSBIndexVec::const_iterator itr = find_if(maSBIndexVec.begin(), itrEnd, f);
-    if (itr == itrEnd)
+    if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
     {
         maSBIndexVec.push_back(XclExpSBIndex());
         XclExpSBIndex& r = maSBIndexVec.back();
@@ -1950,9 +1947,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
     {
         sal_uInt16 nSheetId = nFirstSheetId + static_cast<sal_uInt16>(nTab);
         FindSBIndexEntry f(nSupbookId, nSheetId);
-        XclExpSBIndexVec::iterator itrEnd = maSBIndexVec.end();
-        XclExpSBIndexVec::const_iterator itr = find_if(maSBIndexVec.begin(), itrEnd, f);
-        if (itr == itrEnd)
+        if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
         {
             maSBIndexVec.push_back(XclExpSBIndex());
             XclExpSBIndex& r = maSBIndexVec.back();
@@ -2055,9 +2050,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const OUString& rTabN
             return aXti;
 
         FindSBIndexEntry f(nSupbookId, nSheetId);
-        XclExpSBIndexVec::iterator itrEnd = maSBIndexVec.end();
-        XclExpSBIndexVec::const_iterator itr = find_if(maSBIndexVec.begin(), itrEnd, f);
-        if (itr == itrEnd)
+        if (::std::none_of(maSBIndexVec.begin(), maSBIndexVec.end(), f))
         {
             maSBIndexVec.push_back(XclExpSBIndex());
             XclExpSBIndex& r = maSBIndexVec.back();

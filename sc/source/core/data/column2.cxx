@@ -67,6 +67,7 @@
 #include <formula/vectortoken.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <algorithm>
 
 // factor from font size to optimal cell height (text width)
 #define SC_ROT_BREAK_FACTOR     6
@@ -2481,7 +2482,7 @@ bool hasNonEmpty( const sc::FormulaGroupContext::StrArrayType& rArray, SCROW nRo
     std::advance(it, nRow1);
     sc::FormulaGroupContext::StrArrayType::const_iterator itEnd = it;
     std::advance(itEnd, nRow2-nRow1+1);
-    return std::find_if(it, itEnd, NonNullStringFinder()) != itEnd;
+    return std::any_of(it, itEnd, NonNullStringFinder());
 }
 
 }

@@ -602,7 +602,7 @@ bool ScDPDimensionSaveData::operator==( const ScDPDimensionSaveData& ) const
 
 void ScDPDimensionSaveData::AddGroupDimension( const ScDPSaveGroupDimension& rGroupDim )
 {
-    OSL_ENSURE( ::std::find_if( maGroupDims.begin(), maGroupDims.end(), ScDPSaveGroupDimNameFunc( rGroupDim.GetGroupDimName() ) ) == maGroupDims.end(),
+    OSL_ENSURE( ::std::none_of( maGroupDims.begin(), maGroupDims.end(), ScDPSaveGroupDimNameFunc( rGroupDim.GetGroupDimName() ) ),
         "ScDPDimensionSaveData::AddGroupDimension - group dimension exists already" );
     // ReplaceGroupDimension() adds new or replaces existing
     ReplaceGroupDimension( rGroupDim );

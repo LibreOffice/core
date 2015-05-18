@@ -2591,9 +2591,7 @@ bool ScExternalRefManager::hasExternalFile(sal_uInt16 nFileId) const
 
 bool ScExternalRefManager::hasExternalFile(const OUString& rFile) const
 {
-    vector<SrcFileData>::const_iterator itrBeg = maSrcFiles.begin(), itrEnd = maSrcFiles.end();
-    vector<SrcFileData>::const_iterator itr = find_if(itrBeg, itrEnd, FindSrcFileByName(rFile));
-    return itr != itrEnd;
+    return ::std::any_of(maSrcFiles.begin(), maSrcFiles.end(), FindSrcFileByName(rFile));
 }
 
 const ScExternalRefManager::SrcFileData* ScExternalRefManager::getExternalFileData(sal_uInt16 nFileId) const

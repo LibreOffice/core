@@ -39,6 +39,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
@@ -755,11 +756,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
                         continue;
 
                     // Make sure this group name equals one of the match values.
-                    std::vector<ScDPItemData>::iterator it =
-                        std::find_if(
-                            aMatchValues.begin(), aMatchValues.end(), FindCaseInsensitive(pGrpItem->GetName()));
-
-                    if (it == aMatchValues.end())
+                    if (std::none_of(aMatchValues.begin(), aMatchValues.end(), FindCaseInsensitive(pGrpItem->GetName())))
                         continue;
 
                     pGrpItem->FillGroupFilter(*pGrpFilter);
