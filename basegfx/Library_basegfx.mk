@@ -44,7 +44,6 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/point/b2dpoint \
     basegfx/source/point/b2ipoint \
     basegfx/source/point/b3dpoint \
-    basegfx/source/point/b3ipoint \
     basegfx/source/polygon/b2dlinegeometry \
     basegfx/source/polygon/b2dpolygon \
     basegfx/source/polygon/b2dpolygonclipper \
