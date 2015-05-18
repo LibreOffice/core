@@ -57,7 +57,7 @@ using namespace com::sun::star::util;
 using ::rtl::Uri;
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
     Dialog::InitFlag eFlag)
     : ModelessDialog(pParent, "XMLFilterSettingsDialog", "filter/ui/xmlfiltersettings.ui", eFlag)
     , mxContext( rxContext )
@@ -161,24 +161,17 @@ IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, PushButton *, pButton )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(XMLFilterSettingsDialog, SelectionChangedHdl_Impl)
 {
     updateStates();
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(XMLFilterSettingsDialog, DoubleClickHdl_Impl)
 {
     onEdit();
     return 0;
 }
-
-
-
 
 short XMLFilterSettingsDialog::Execute()
 {
@@ -190,8 +183,6 @@ short XMLFilterSettingsDialog::Execute()
 
     return ModelessDialog::Execute();
 }
-
-
 
 void XMLFilterSettingsDialog::updateStates()
 {
@@ -223,8 +214,6 @@ void XMLFilterSettingsDialog::updateStates()
     m_pPBSave->Enable( bHasSelection );
 }
 
-
-
 /** is called when the user clicks on the "New" button */
 void XMLFilterSettingsDialog::onNew()
 {
@@ -252,8 +241,6 @@ void XMLFilterSettingsDialog::onNew()
     }
 }
 
-
-
 /** is called when the user clicks on the "Edit" Button */
 void XMLFilterSettingsDialog::onEdit()
 {
@@ -278,8 +265,6 @@ void XMLFilterSettingsDialog::onEdit()
         }
     }
 }
-
-
 
 /** helper to create a sequence of strings from an extensions strings
     "ext1;ext2;ext3" will become { "ext1", "ext2", "ext3" } */
@@ -332,8 +317,6 @@ static Sequence< OUString > createExtensionsSequence( const OUString& rExtension
     return aExtensions;
 }
 
-
-
 /** checks if the given name is unique inside the filter factory. If not,
     numbers are added until the returned name is unique */
 OUString XMLFilterSettingsDialog::createUniqueFilterName( const OUString& rFilterName )
@@ -352,8 +335,6 @@ OUString XMLFilterSettingsDialog::createUniqueFilterName( const OUString& rFilte
 
     return aFilterName;
 }
-
-
 
 /** checks if the given name is unique inside the type detection. If not,
     numbers are added until the returned name is unique */
@@ -433,8 +414,6 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
 
     return aInterfaceName;
 }
-
-
 
 /** inserts a new filter into the ui and configuration if pOldInfo is NULL.
     If pOldInfo is not null, the old filter will be replaced with the new settings */
@@ -779,8 +758,6 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
     return bOk;
 }
 
-
-
 /** is called when the user clicks the "Test" button */
 void XMLFilterSettingsDialog::onTest()
 {
@@ -794,8 +771,6 @@ void XMLFilterSettingsDialog::onTest()
         aDlg->test( *pInfo );
     }
 }
-
-
 
 void XMLFilterSettingsDialog::onDelete()
 {
@@ -887,8 +862,6 @@ void XMLFilterSettingsDialog::onDelete()
     updateStates();
 }
 
-
-
 void XMLFilterSettingsDialog::onSave()
 {
     XMLFilterVector aFilters;
@@ -942,8 +915,6 @@ void XMLFilterSettingsDialog::onSave()
         aBox->Execute();
     }
 }
-
-
 
 void XMLFilterSettingsDialog::onOpen()
 {
@@ -1009,8 +980,6 @@ void XMLFilterSettingsDialog::onOpen()
     }
 }
 
-
-
 void XMLFilterSettingsDialog::onClose()
 {
     Close();
@@ -1040,8 +1009,6 @@ bool XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-
-
 void XMLFilterSettingsDialog::disposeFilterList()
 {
     std::vector< filter_info_impl* >::iterator aIter( maFilterVector.begin() );
@@ -1053,8 +1020,6 @@ void XMLFilterSettingsDialog::disposeFilterList()
 
     m_pFilterListBox->Clear();
 }
-
-
 
 void XMLFilterSettingsDialog::initFilterList()
 {
@@ -1236,10 +1201,6 @@ void XMLFilterSettingsDialog::initFilterList()
         m_pFilterListBox->Select( pEntry );
 }
 
-
-
-
-
 application_info_impl::application_info_impl( const sal_Char * pDocumentService, ResId& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter )
 :   maDocumentService( pDocumentService, strlen( pDocumentService ), RTL_TEXTENCODING_ASCII_US ),
     maDocumentUIName( OUString( rUINameRes ) ),
@@ -1247,8 +1208,6 @@ application_info_impl::application_info_impl( const sal_Char * pDocumentService,
     maXMLExporter( mpXMLExporter, strlen( mpXMLExporter ), RTL_TEXTENCODING_ASCII_US )
 {
 }
-
-
 
 std::vector< application_info_impl* >& getApplicationInfos()
 {
@@ -1317,8 +1276,6 @@ std::vector< application_info_impl* >& getApplicationInfos()
     return aInfos;
 }
 
-
-
 const application_info_impl* getApplicationInfo( const OUString& rServiceName )
 {
     std::vector< application_info_impl* >& rInfos = getApplicationInfos();
@@ -1333,8 +1290,6 @@ const application_info_impl* getApplicationInfo( const OUString& rServiceName )
     }
     return NULL;
 }
-
-
 
 OUString getApplicationUIName( const OUString& rServiceName )
 {
@@ -1491,8 +1446,6 @@ IMPL_LINK( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTabListBox*, /* pList */ )
     return 0;
 }
 
-
-
 IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
     if ( pBar && !pBar->GetCurItemId() )
@@ -1522,16 +1475,12 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
     return 1;
 }
 
-
-
 /** adds a new filter info entry to the ui filter list */
 void XMLFilterListBox::addFilterEntry( const filter_info_impl* pInfo )
 {
     const OUString aEntryStr( getEntryString( pInfo ) );
     InsertEntryToColumn( aEntryStr, TREELIST_APPEND, 0xffff, (void*)pInfo );
 }
-
-
 
 void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
 {
@@ -1548,8 +1497,6 @@ void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
         }
     }
 }
-
-
 
 OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo )
 {
@@ -1583,20 +1530,14 @@ OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo )
     return aEntryStr;
 }
 
-
-
-
-
 filter_info_impl::filter_info_impl()
-:   maFlags(0x00080040),
-    maFileFormatVersion(0),
-    mnDocumentIconID(0),
-    mbReadonly(false),
-    mbNeedsXSLT2(false)
+    : maFlags(0x00080040)
+    , maFileFormatVersion(0)
+    , mnDocumentIconID(0)
+    , mbReadonly(false)
+    , mbNeedsXSLT2(false)
 {
 }
-
-
 
 filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
     maFilterName( rInfo.maFilterName ),
@@ -1619,8 +1560,6 @@ filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
     mbNeedsXSLT2( rInfo.mbNeedsXSLT2 )
 {
 }
-
-
 
 bool filter_info_impl::operator==( const filter_info_impl& r ) const
 {
@@ -1659,42 +1598,34 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
     return aUserData;
 }
 
-
-
-
 OUString string_encode( const OUString & rText )
 {
 
-    static sal_Bool const aCharClass[]
-    =  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* UricNoSlash */
-         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-         0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, /* !"#$%&'()*+,-./*/
-         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, /*0123456789:;<=>?*/
-         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*@ABCDEFGHIJKLMNO*/
-         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, /*PQRSTUVWXYZ[\]^_*/
-         0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*`abcdefghijklmno*/
-         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /*pqrstuvwxyz{|}~ */
-       };
+    static sal_Bool const aCharClass[] =
+    {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* UricNoSlash */
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, /* !"#$%&'()*+,-./*/
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, /*0123456789:;<=>?*/
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*@ABCDEFGHIJKLMNO*/
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, /*PQRSTUVWXYZ[\]^_*/
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*`abcdefghijklmno*/
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /*pqrstuvwxyz{|}~ */
+    };
 
 
     return Uri::encode( rText, aCharClass, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8 );
 }
-
-
 
 OUString string_decode( const OUString & rText )
 {
     return Uri::decode( rText, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
 }
 
-
-
 bool isFileURL( const OUString & rURL )
 {
     return rURL.startsWith("file:");
 }
-
-
 
 bool copyStreams( Reference< XInputStream > xIS, Reference< XOutputStream > xOS )
 {
@@ -1732,8 +1663,6 @@ bool copyStreams( Reference< XInputStream > xIS, Reference< XOutputStream > xOS 
 
     return false;
 }
-
-
 
 bool createDirectory( OUString& rURL )
 {
