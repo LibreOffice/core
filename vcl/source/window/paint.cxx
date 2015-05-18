@@ -121,11 +121,12 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
     if (!pWindowImpl->maInvalidateRegion.IsEmpty())
     {
         m_pWindow->BeginPaint();
-        m_pWindow->PushPaintHelper(this);
 
         // double-buffering - so far an experimental feature
         if (officecfg::Office::Common::Misc::ExperimentalMode::get())
         {
+            m_pWindow->PushPaintHelper(this, *m_pWindow);
+
             ScopedVclPtrInstance<VirtualDevice> pDevice;
 
             // transfer various settings
@@ -186,6 +187,8 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         else
         {
             // direct painting
+            m_pWindow->PushPaintHelper(this, *m_pWindow);
+            m_pWindow->ApplySettings(*m_pWindow);
             m_pWindow->Paint(*m_pWindow, m_aPaintRect);
         }
 
@@ -348,7 +351,7 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
     rRenderContext.Pop(); // LINECOLOR | FILLCOLOR
 }
 
-void Window::PushPaintHelper(PaintHelper *pHelper)
+void Window::PushPaintHelper(PaintHelper *pHelper, vcl::RenderContext& rRenderContext)
 {
     pHelper->SetPop();
 
@@ -361,49 +364,48 @@ void Window::PushPaintHelper(PaintHelper *pHelper)
     // restore Paint-Region
     vcl::Region &rPaintRegion = pHelper->GetPaintRegion();
     rPaintRegion = mpWindowImpl->maInvalidateRegion;
-    Rectangle   aPaintRect = rPaintRegion.GetBoundRect();
+    Rectangle aPaintRect = rPaintRegion.GetBoundRect();
 
     // - RTL - re-mirror paint rect and region at this window
-    if( ImplIsAntiparallel() )
+    if (ImplIsAntiparallel())
     {
-        const OutputDevice *pOutDev = GetOutDev();
-        pOutDev->ReMirror( aPaintRect );
-        pOutDev->ReMirror( rPaintRegion );
+        rRenderContext.ReMirror(aPaintRect);
+        rRenderContext.ReMirror(rPaintRegion);
     }
-    aPaintRect = ImplDevicePixelToLogic( aPaintRect);
+    aPaintRect = ImplDevicePixelToLogic(aPaintRect);
     mpWindowImpl->mpPaintRegion = &rPaintRegion;
     mpWindowImpl->maInvalidateRegion.SetEmpty();
 
-    if ( (pHelper->GetPaintFlags() & IMPL_PAINT_ERASE) && IsBackground() )
+    if ((pHelper->GetPaintFlags() & IMPL_PAINT_ERASE) && rRenderContext.IsBackground())
     {
-        if ( IsClipRegion() )
+        if (rRenderContext.IsClipRegion())
         {
-            vcl::Region aOldRegion = GetClipRegion();
-            SetClipRegion();
-            Erase();
-            SetClipRegion( aOldRegion );
+            vcl::Region aOldRegion = rRenderContext.GetClipRegion();
+            rRenderContext.SetClipRegion();
+            Erase(rRenderContext);
+            rRenderContext.SetClipRegion(aOldRegion);
         }
         else
-            Erase();
+            Erase(rRenderContext);
     }
 
     // #98943# trigger drawing of toolbox selection after all childern are painted
-    if( mpWindowImpl->mbDrawSelectionBackground )
+    if (mpWindowImpl->mbDrawSelectionBackground)
         pHelper->SetSelectionRect(aPaintRect);
     pHelper->SetPaintRect(aPaintRect);
 }
 
 void Window::PopPaintHelper(PaintHelper *pHelper)
 {
-    if ( mpWindowImpl->mpWinData )
+    if (mpWindowImpl->mpWinData)
     {
-        if ( mpWindowImpl->mbFocusVisible )
-            ImplInvertFocus( *(mpWindowImpl->mpWinData->mpFocusRect) );
+        if (mpWindowImpl->mbFocusVisible)
+            ImplInvertFocus(*(mpWindowImpl->mpWinData->mpFocusRect));
     }
     mpWindowImpl->mbInPaint = false;
     mbInitClipRegion = true;
     mpWindowImpl->mpPaintRegion = NULL;
-    if ( mpWindowImpl->mpCursor )
+    if (mpWindowImpl->mpCursor)
         mpWindowImpl->mpCursor->ImplResume(pHelper->GetRestoreCursor());
 }
 
@@ -906,7 +908,6 @@ void Window::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRec
 
 void Window::SetPaintTransparent( bool bTransparent )
 {
-
     // transparency is not useful for frames as the background would have to be provided by a different frame
     if( bTransparent && mpWindowImpl->mbFrame )
         return;
@@ -1305,7 +1306,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 
     // background
     if( ! IsPaintTransparent() && IsBackground() && ! (GetParentClipMode() & PARENTCLIPMODE_NOCLIP ) )
-        Erase();
+        Erase(*this);
     // foreground
     Paint(*this, aPaintRect);
     // put a pop action to metafile

@@ -544,8 +544,8 @@ protected:
     SAL_DLLPRIVATE WindowResHeader      ImplLoadResHeader( const ResId& rResId );
     SAL_DLLPRIVATE void                 ImplLoadRes( const ResId& rResId );
 
-    SAL_DLLPRIVATE void                 PushPaintHelper(PaintHelper *pHelper);
-    SAL_DLLPRIVATE void                 PopPaintHelper(PaintHelper *pHelper);
+    SAL_DLLPRIVATE void                 PushPaintHelper(PaintHelper* pHelper, vcl::RenderContext& rRenderContext);
+    SAL_DLLPRIVATE void                 PopPaintHelper(PaintHelper* pHelper);
 
 private:
 
