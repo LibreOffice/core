@@ -255,8 +255,8 @@ class SvXMLStylesContext_Impl
     mutable IndicesType* pIndices;
     bool bAutomaticStyle;
 
-#ifdef DBG_UTIL
-    mutable sal_uInt32 nIndexCreated;
+#if OSL_DEBUG_LEVEL > 0
+    mutable sal_uInt32 m_nIndexCreated;
 #endif
 
     void FlushIndex() { delete pIndices; pIndices = 0; }
@@ -284,8 +284,8 @@ public:
 SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( bool bAuto ) :
     pIndices( 0 ),
     bAutomaticStyle( bAuto )
-#ifdef DBG_UTIL
-,   nIndexCreated( 0 )
+#if OSL_DEBUG_LEVEL > 0
+    , m_nIndexCreated( 0 )
 #endif
 {}
 
@@ -329,14 +329,12 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
 
     if( !pIndices && bCreateIndex && !aStyles.empty() )
     {
-#ifdef DBG_UTIL
-        DBG_ASSERT( 0==nIndexCreated,
-                    "Performance warning: sdbcx::Index created multiple times" );
-#endif
+        SAL_WARN_IF(0 != m_nIndexCreated, "xmloff.style",
+                    "Performance warning: sdbcx::Index created multiple times");
         pIndices = new IndicesType(aStyles.begin(), aStyles.end());
         SAL_WARN_IF(pIndices->size() != aStyles.size(), "xmloff", "Here is a duplicate Style");
-#ifdef DBG_UTIL
-        ++nIndexCreated;
+#if OSL_DEBUG_LEVEL > 0
+        ++m_nIndexCreated;
 #endif
     }
 
