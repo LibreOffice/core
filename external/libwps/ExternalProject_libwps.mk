@@ -41,7 +41,7 @@ $(call gb_ExternalProject_get_state_target,libwps,build) :
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-				$(EXTERNAL_WORKDIR)/src/lib/.libs/libwps-0.3.3.dylib \
+				$(EXTERNAL_WORKDIR)/src/lib/.libs/libwps-0.4.4.dylib \
 		) \
 	)
 

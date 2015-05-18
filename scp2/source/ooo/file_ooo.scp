@@ -290,6 +290,7 @@ UI_FILELIST(tubes, "UIConfig/tubes.filelist")
 #endif
 UI_FILELIST(uui, "UIConfig/uui.filelist")
 UI_FILELIST(vcl, "UIConfig/vcl.filelist")
+UI_FILELIST(writerperfect, "UIConfig/writerperfect.filelist")
 UI_FILELIST(xmlsec, "UIConfig/xmlsec.filelist")
 
 UI_FILELIST_ALL_LANG(basicide, modules/BasicIDE)
