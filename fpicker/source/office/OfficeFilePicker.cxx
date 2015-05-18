@@ -358,7 +358,7 @@ namespace {
             else
                 // a filter group -> search the sub filters
                 bMatch =
-                    _rEntry.endSubFilters() != ::std::find_if(
+                    ::std::any_of(
                         _rEntry.beginSubFilters(),
                         _rEntry.endSubFilters(),
                         *this
@@ -380,7 +380,7 @@ bool SvtFilePicker::FilterNameExists( const OUString& rTitle )
 
     if ( m_pFilterList )
         bRet =
-            m_pFilterList->end() != ::std::find_if(
+            ::std::any_of(
                 m_pFilterList->begin(),
                 m_pFilterList->end(),
                 FilterTitleMatch( rTitle )
@@ -399,7 +399,7 @@ bool SvtFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilters )
         const UnoFilterEntry* pStart = _rGroupedFilters.getConstArray();
         const UnoFilterEntry* pEnd = pStart + _rGroupedFilters.getLength();
         for ( ; pStart != pEnd; ++pStart )
-            if ( m_pFilterList->end() != ::std::find_if( m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch( pStart->First ) ) )
+            if ( ::std::any_of( m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch( pStart->First ) ) )
                 break;
 
         bRet = pStart != pEnd;

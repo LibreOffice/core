@@ -162,11 +162,9 @@ public:
             else
                 // a filter group -> search the sub filters
                 bMatch =
-                    _rEntry.endSubFilters() != ::std::find_if(
-                                                              _rEntry.beginSubFilters(),
-                                                              _rEntry.endSubFilters(),
-                                                              *this
-                                                              );
+                    ::std::any_of(_rEntry.beginSubFilters(),
+                                  _rEntry.endSubFilters(),
+                                  *this);
 
             return bMatch;
         }
@@ -221,11 +219,9 @@ bool FilterHelper::FilterNameExists( const rtl::OUString& rTitle )
 
     if( m_pFilterList )
         bRet =
-            m_pFilterList->end() != ::std::find_if(
-                                                   m_pFilterList->begin(),
-                                                   m_pFilterList->end(),
-                                                   FilterTitleMatch( rTitle )
-                                                   );
+            ::std::any_of(m_pFilterList->begin(),
+                          m_pFilterList->end(),
+                          FilterTitleMatch( rTitle ));
 
     return bRet;
 }
@@ -240,10 +236,9 @@ bool FilterHelper::FilterNameExists( const UnoFilterList& _rGroupedFilters )
         const UnoFilterEntry* pStart = _rGroupedFilters.getConstArray();
         const UnoFilterEntry* pEnd = pStart + _rGroupedFilters.getLength();
         for( ; pStart != pEnd; ++pStart )
-            if( m_pFilterList->end() != ::std::find_if(
-                                                        m_pFilterList->begin(),
-                                                        m_pFilterList->end(),
-                                                        FilterTitleMatch( pStart->First ) ) )
+            if( ::std::any_of(m_pFilterList->begin(),
+                              m_pFilterList->end(),
+                              FilterTitleMatch( pStart->First ) ) )
                 break;
 
         bRet = (pStart != pEnd);
