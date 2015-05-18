@@ -640,18 +640,18 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
     if (mbCalcSize)
         ImplCalc(false);
 
-    vcl::Window *pWin = NULL;
-    if (rRenderContext.GetOutDevType() == OUTDEV_WINDOW)
-        pWin = static_cast<vcl::Window*>(&rRenderContext);
+    //vcl::Window *pWin = NULL;
+    //if (rRenderContext.GetOutDevType() == OUTDEV_WINDOW)
+    //    pWin = static_cast<vcl::Window*>(&rRenderContext);
 
     // Draw the entire control if the native theme engine needs it
-    if (nDrawFlags && pWin && rRenderContext.IsNativeControlSupported(CTRL_SCROLLBAR, PART_DRAW_BACKGROUND_HORZ))
+    if (nDrawFlags && rRenderContext.IsNativeControlSupported(CTRL_SCROLLBAR, PART_DRAW_BACKGROUND_HORZ))
     {
         ImplDrawNative(rRenderContext, SCRBAR_DRAW_BACKGROUND);
         return;
     }
 
-    if ((nDrawFlags & SCRBAR_DRAW_BTN1) && (!pWin || !ImplDrawNative(rRenderContext, SCRBAR_DRAW_BTN1)))
+    if ((nDrawFlags & SCRBAR_DRAW_BTN1) && (!ImplDrawNative(rRenderContext, SCRBAR_DRAW_BTN1)))
     {
         nStyle = DrawButtonFlags::NoLightBorder;
         if (mnStateFlags & SCRBAR_STATE_BTN1_DOWN)
@@ -678,7 +678,7 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
         aDecoView.DrawSymbol(aTempRect, eSymbolType, rStyleSettings.GetButtonTextColor(), nSymbolStyle);
     }
 
-    if ((nDrawFlags & SCRBAR_DRAW_BTN2) && (!pWin || !ImplDrawNative(rRenderContext, SCRBAR_DRAW_BTN2)))
+    if ((nDrawFlags & SCRBAR_DRAW_BTN2) && (!ImplDrawNative(rRenderContext, SCRBAR_DRAW_BTN2)))
     {
         nStyle = DrawButtonFlags::NoLightBorder;
         if (mnStateFlags & SCRBAR_STATE_BTN2_DOWN)
@@ -707,7 +707,7 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
 
     rRenderContext.SetLineColor();
 
-    if ((nDrawFlags & SCRBAR_DRAW_THUMB) && (!pWin || !ImplDrawNative(rRenderContext, SCRBAR_DRAW_THUMB)))
+    if ((nDrawFlags & SCRBAR_DRAW_THUMB) && (!ImplDrawNative(rRenderContext, SCRBAR_DRAW_THUMB)))
     {
         if (!maThumbRect.IsEmpty())
         {
@@ -724,7 +724,7 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
         }
     }
 
-    if ((nDrawFlags & SCRBAR_DRAW_PAGE1) && (!pWin || !ImplDrawNative(rRenderContext, SCRBAR_DRAW_PAGE1)))
+    if ((nDrawFlags & SCRBAR_DRAW_PAGE1) && (!ImplDrawNative(rRenderContext, SCRBAR_DRAW_PAGE1)))
     {
         if (mnStateFlags & SCRBAR_STATE_PAGE1_DOWN)
             rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
@@ -732,7 +732,7 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
             rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
         rRenderContext.DrawRect(maPage1Rect);
     }
-    if ((nDrawFlags & SCRBAR_DRAW_PAGE2) && (!pWin || !ImplDrawNative(rRenderContext, SCRBAR_DRAW_PAGE2)))
+    if ((nDrawFlags & SCRBAR_DRAW_PAGE2) && (!ImplDrawNative(rRenderContext, SCRBAR_DRAW_PAGE2)))
     {
         if (mnStateFlags & SCRBAR_STATE_PAGE2_DOWN)
             rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
@@ -1121,7 +1121,7 @@ void ScrollBar::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-void ScrollBar::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
+void ScrollBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     ImplDraw(rRenderContext, SCRBAR_DRAW_ALL);
 }
