@@ -44,11 +44,11 @@ namespace
     static void lcl_exportDataStyle( SvXMLExport& _rExport, const rtl::Reference< XMLPropertySetMapper >& _rxMapper,
         const XMLPropertyState& _rProperty )
     {
-        DBG_ASSERT( _rxMapper.is(), "xmloff::lcl_exportDataStyle: invalid property mapper!" );
+        assert(_rxMapper.is());
         // obtain the data style name
         OUString sDataStyleName;
         _rProperty.maValue >>= sDataStyleName;
-        DBG_ASSERT( !sDataStyleName.isEmpty(), "xmloff::lcl_exportDataStyle: invalid property value for the data style name!" );
+        assert(!sDataStyleName.isEmpty() && "xmloff::lcl_exportDataStyle: invalid property value for the data style name!");
 
         // add the attribute
         _rExport.AddAttribute(
@@ -88,7 +88,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
     if( (XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily) || (XML_STYLE_FAMILY_SD_PRESENTATION_ID == nFamily) )
     {   // it's a graphics style
         rtl::Reference< XMLPropertySetMapper > aPropertyMapper = rPropExp.getPropertySetMapper();
-        DBG_ASSERT(aPropertyMapper.is(), "SvXMLAutoStylePoolP::exportStyleAttributes: invalid property set mapper!");
+        assert(aPropertyMapper.is());
 
         bool bFoundControlShapeDataStyle = false;
         bool bFoundNumberingRulesName = false;
@@ -322,8 +322,7 @@ void SvXMLAutoStylePoolP::RegisterNames(
     uno::Sequence<sal_Int32>& aFamilies,
     uno::Sequence<OUString>& aNames )
 {
-    DBG_ASSERT( aFamilies.getLength() == aNames.getLength(),
-                "aFamilies != aNames" );
+    assert(aFamilies.getLength() == aNames.getLength());
 
     // iterate over sequence(s) and call RegisterName(..) for each pair
     const sal_Int32* pFamilies = aFamilies.getConstArray();
