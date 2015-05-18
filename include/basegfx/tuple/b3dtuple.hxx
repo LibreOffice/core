@@ -154,14 +154,6 @@ namespace basegfx
                 && ::basegfx::fTools::equalZero(mfZ)));
         }
 
-        bool equalZero(const double& rfSmallValue) const
-        {
-            return (this == &getEmptyTuple() ||
-                (::basegfx::fTools::equalZero(mfX, rfSmallValue)
-                && ::basegfx::fTools::equalZero(mfY, rfSmallValue)
-                && ::basegfx::fTools::equalZero(mfZ, rfSmallValue)));
-        }
-
         bool equal(const B3DTuple& rTup) const
         {
             return (
@@ -169,15 +161,6 @@ namespace basegfx
                 (::basegfx::fTools::equal(mfX, rTup.mfX) &&
                 ::basegfx::fTools::equal(mfY, rTup.mfY) &&
                 ::basegfx::fTools::equal(mfZ, rTup.mfZ)));
-        }
-
-        bool equal(const B3DTuple& rTup, const double& rfSmallValue) const
-        {
-            return (
-                this == &rTup ||
-                (::basegfx::fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
-                ::basegfx::fTools::equal(mfY, rTup.mfY, rfSmallValue) &&
-                ::basegfx::fTools::equal(mfZ, rTup.mfZ, rfSmallValue)));
         }
 
         // operators
