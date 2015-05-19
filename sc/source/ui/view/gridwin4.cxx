@@ -741,6 +741,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     aOutputData.DrawShadow();
     aOutputData.DrawFrame();
+
+    // Show Note Mark
+    if ( rOpts.GetOption( VOPT_NOTES ) )
+        aOutputData.DrawNoteMarks();
+
     if ( !bLogicText )
         aOutputData.DrawStrings(false);     // in pixel MapMode
 
@@ -756,11 +761,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // Autofilter- und Pivot-Buttons
 
     DrawButtons(nX1, nX2, rTableInfo, pContentDev);          // Pixel
-
-        // Notiz-Anzeiger
-
-    if ( rOpts.GetOption( VOPT_NOTES ) )
-        aOutputData.DrawNoteMarks();
 
     aOutputData.DrawClipMarks();
 
