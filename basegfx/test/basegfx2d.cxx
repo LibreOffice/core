@@ -35,7 +35,6 @@
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <basegfx/range/b1drange.hxx>
-#include <basegfx/range/b1irange.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -952,7 +951,6 @@ public:
     void check()
     {
         implCheck<B1DRange>();
-        implCheck<B1IRange>();
     }
 
     // Change the following lines only, if you add, remove or rename
