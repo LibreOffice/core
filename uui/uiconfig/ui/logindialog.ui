@@ -123,7 +123,7 @@
               <object class="GtkLabel" id="accountft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">A_ccount:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">accounted</property>
@@ -137,7 +137,7 @@
               <object class="GtkLabel" id="passwordft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">Pass_word:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">passworded</property>
@@ -176,7 +176,7 @@
               <object class="GtkLabel" id="nameft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">_User name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">nameed</property>
@@ -190,7 +190,7 @@
               <object class="GtkLabel" id="pathft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Path:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">pathed</property>

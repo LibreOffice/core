@@ -28,7 +28,7 @@
 
 namespace svt
 {
-    AsyncPickerAction::AsyncPickerAction( SvtFileDialog* _pDialog, SvtFileView* _pView, const Action _eAction )
+    AsyncPickerAction::AsyncPickerAction( SvtFileDialog_Base* _pDialog, SvtFileView* _pView, const Action _eAction )
         :m_eAction  ( _eAction )
         ,m_pView    ( _pView   )
         ,m_pDialog  ( _pDialog )

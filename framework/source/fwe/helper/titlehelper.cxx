@@ -18,6 +18,8 @@
  */
 
 #include <framework/titlehelper.hxx>
+#include <classes/fwkresid.hxx>
+#include <classes/resource.hrc>
 #include <services.h>
 #include <properties.h>
 
@@ -409,6 +411,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
         nLeasedNumber = xNumbers->leaseNumber (xOwner);
 
     css::uno::Reference< css::frame::XTitle > xModelTitle(xController->getModel (), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XModel > xModel(xController->getModel (), css::uno::UNO_QUERY);
     if (!xModelTitle.is ())
         xModelTitle.set(xController, css::uno::UNO_QUERY);
     if (xModelTitle.is ())
@@ -418,6 +421,16 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
         {
             sTitle.appendAscii (" : ");
             sTitle.append      ((::sal_Int32)nLeasedNumber);
+        }
+        if (xModel.is ())
+        {
+            INetURLObject aURL (xModel->getURL ());
+            if (aURL.GetProtocol () != INetProtocol::File
+                && aURL.GetProtocol () != INetProtocol::NotValid)
+            {
+                OUString sRemoteText (FwkResId (STR_REMOTE_TITLE));
+                sTitle.append (sRemoteText);
+            }
         }
     }
     else

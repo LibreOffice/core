@@ -64,19 +64,17 @@ protected:
     AccessibleChildren      m_aAccessibleChildren;
     Menu*                   m_pMenu;
 
-    bool                m_bEnabled;
-    bool                m_bFocused;
-    bool                m_bVisible;
-    bool                m_bSelected;
-    bool                m_bChecked;
+    bool                    m_bEnabled;
+    bool                    m_bFocused;
+    bool                    m_bVisible;
+    bool                    m_bSelected;
+    bool                    m_bChecked;
 
-    Menu*                   GetMenu() { return m_pMenu; }
-
-    virtual bool        IsEnabled();
-    virtual bool        IsFocused();
-    virtual bool        IsVisible();
-    virtual bool        IsSelected();
-    virtual bool        IsChecked();
+    virtual bool            IsEnabled();
+    virtual bool            IsFocused();
+    virtual bool            IsVisible();
+    virtual bool            IsSelected();
+    virtual bool            IsChecked();
 
     void                    SetEnabled( bool bEnabled );
     void                    SetFocused( bool bFocused );

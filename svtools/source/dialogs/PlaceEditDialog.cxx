@@ -10,13 +10,20 @@
 #include <svtools/PlaceEditDialog.hxx>
 #include <svtools/ServerDetailsControls.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/svtresid.hxx>
+#include <svtools/svtools.hrc>
 #include <vcl/msgbox.hxx>
+
+using namespace com::sun::star::uno;
 
 PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     : ModalDialog(pParent, "PlaceEditDialog", "svt/ui/placeedit.ui")
     , m_xCurrentDetails()
+    , m_nCurrentType( 0 )
+    , bLabelChanged( false )
+    , m_bShowPassword( true )
 {
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
@@ -24,11 +31,15 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     get( m_pBTOk, "ok" );
     get( m_pBTCancel, "cancel" );
     get( m_pBTDelete, "delete" );
+    get( m_pBTRepoRefresh, "repositoriesRefresh" );
+    get( m_pCBPassword, "rememberPassword" );
+    get( m_pEDPassword, "password" );
+    get( m_pFTPasswordLabel, "passwordLabel" );
 
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTOk->Enable( false );
 
-    m_pEDServerName->SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
+    m_pEDServerName->SetModifyHdl( LINK( this, PlaceEditDialog, EditLabelHdl) );
 
     // This constructor is called when user request a place creation, so
     // delete button is hidden.
@@ -36,6 +47,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
 
     m_pLBServerType->SetSelectHdl( LINK( this, PlaceEditDialog, SelectTypeHdl ) );
     m_pEDUsername->SetModifyHdl( LINK( this, PlaceEditDialog, EditUsernameHdl ) );
+    m_pEDPassword->SetModifyHdl( LINK( this, PlaceEditDialog, EditUsernameHdl ) );
 
     InitDetails( );
 }
@@ -43,6 +55,8 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
 PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Place>& rPlace)
     : ModalDialog(pParent, "PlaceEditDialog", "svt/ui/placeedit.ui")
     , m_xCurrentDetails( )
+    , bLabelChanged( true )
+    , m_bShowPassword( false )
 {
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
@@ -50,11 +64,19 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
     get( m_pBTOk, "ok" );
     get( m_pBTCancel, "cancel" );
     get( m_pBTDelete, "delete" );
+    get( m_pTypeGrid, "TypeGrid" );
+    get( m_pCBPassword, "rememberPassword" );
+    get( m_pEDPassword, "password" );
+    get( m_pFTPasswordLabel, "passwordLabel" );
+
+    m_pEDPassword->Hide();
+    m_pFTPasswordLabel->Hide();
+    m_pCBPassword->Hide();
 
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTDelete->SetClickHdl ( LINK( this, PlaceEditDialog, DelHdl) );
 
-    m_pEDServerName->SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
+    m_pEDServerName->SetModifyHdl( LINK( this, PlaceEditDialog, ModifyHdl) );
     m_pLBServerType->SetSelectHdl( LINK( this, PlaceEditDialog, SelectTypeHdl ) );
 
     InitDetails( );
@@ -74,9 +96,13 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
 
             // Fill the Username field
             if ( rUrl.HasUserData( ) )
-                m_pEDUsername->SetText( rUrl.GetUser( ) );
+                m_pEDUsername->SetText( INetURLObject::decode( rUrl.GetUser( ),
+                                                              INetURLObject::DECODE_WITH_CHARSET ) );
         }
     }
+
+    // In edit mode user can't change connection type
+    m_pTypeGrid->Hide();
 }
 
 PlaceEditDialog::~PlaceEditDialog()
@@ -92,6 +118,8 @@ void PlaceEditDialog::dispose()
     m_pBTOk.clear();
     m_pBTCancel.clear();
     m_pBTDelete.clear();
+    m_pEDPassword.clear();
+    m_pFTPasswordLabel.clear();
     ModalDialog::dispose();
 }
 
@@ -118,6 +146,41 @@ std::shared_ptr<Place> PlaceEditDialog::GetPlace()
 
 void PlaceEditDialog::InitDetails( )
 {
+    // Create CMIS controls for each server type
+
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+
+    // Load the ServerType entries
+    bool bSkipGDrive = OUString( GDRIVE_CLIENT_ID ).isEmpty() ||
+                       OUString( GDRIVE_CLIENT_SECRET ).isEmpty();
+    bool bSkipAlfresco = OUString( ALFRESCO_CLOUD_CLIENT_ID ).isEmpty() ||
+                       OUString( ALFRESCO_CLOUD_CLIENT_SECRET ).isEmpty();
+    bool bSkipOneDrive= OUString( ONEDRIVE_CLIENT_ID ).isEmpty() ||
+                       OUString( ONEDRIVE_CLIENT_SECRET ).isEmpty();
+
+    Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
+    Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
+
+    unsigned int nPos = 0;
+    for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
+    {
+        OUString sUrl = aTypesUrlsList[i];
+        nPos = m_pLBServerType->InsertEntry( aTypesNamesList[i], nPos );
+
+        std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this, sUrl));
+        xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+        m_aDetailsContainers.push_back(xCmisDetails);
+
+        if ( ( sUrl == GDRIVE_BASE_URL && bSkipGDrive ) ||
+             ( sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL ) && bSkipAlfresco ) ||
+             ( sUrl == ONEDRIVE_BASE_URL && bSkipOneDrive ) )
+        {
+            xCmisDetails->setActive( false );
+        }
+
+        nPos++;
+    }
+
     // Create WebDAV / FTP / SSH details control
     std::shared_ptr<DetailsContainer> xDavDetails(std::make_shared<DavDetailsContainer>(this));
     xDavDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
@@ -136,19 +199,75 @@ void PlaceEditDialog::InitDetails( )
     xSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xSmbDetails);
 
-    // Create CMIS control
-    std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this));
-    xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back(xCmisDetails);
-
     // Set default to first value
     m_pLBServerType->SelectEntryPos( 0 );
+
+    if ( m_pLBServerType->GetSelectEntry() == "--------------------" )
+        m_pLBServerType->SelectEntryPos( 1 );
+
     SelectTypeHdl( m_pLBServerType );
+}
+
+void PlaceEditDialog::UpdateLabel( )
+{
+    if( !bLabelChanged )
+    {
+        if( !m_pEDUsername->GetText().isEmpty( ) )
+        {
+            OUString sLabel = SvtResId( STR_SVT_DEFAULT_SERVICE_LABEL );
+            OUString sUser = m_pEDUsername->GetText();
+
+            int nLength = sUser.indexOf( '@' );
+            if( nLength < 0 )
+                nLength = sUser.getLength();
+
+            sLabel = sLabel.replaceFirst( "$user$", sUser.copy( 0, nLength ) );
+            sLabel = sLabel.replaceFirst( "$service$", m_pLBServerType->GetSelectEntry() );
+
+            m_pEDServerName->SetText( sLabel );
+            bLabelChanged = false;
+        }
+        else
+        {
+            m_pEDServerName->SetText( m_pLBServerType->GetSelectEntry( ) );
+        }
+    }
 }
 
 IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, )
 {
-    EndDialog( RET_OK );
+    if ( m_xCurrentDetails.get() )
+    {
+        OUString sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DECODE_WITH_CHARSET );
+        OUString sGDriveHost( GDRIVE_BASE_URL );
+        OUString sAlfrescoHost( ALFRESCO_CLOUD_BASE_URL );
+        OUString sOneDriveHost( ONEDRIVE_BASE_URL );
+
+        if ( sUrl.compareTo( sGDriveHost, sGDriveHost.getLength() ) == 0
+           || sUrl.compareTo( sAlfrescoHost, sAlfrescoHost.getLength() ) == 0
+           || sUrl.compareTo( sOneDriveHost, sOneDriveHost.getLength() ) == 0 )
+        {
+            m_pBTRepoRefresh->Click();
+
+            sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DECODE_WITH_CHARSET );
+            INetURLObject aHostUrl( sUrl );
+            OUString sRepoId = aHostUrl.GetMark();
+
+            if ( !sRepoId.isEmpty() )
+            {
+                EndDialog( RET_OK );
+            }
+            else
+            {
+                // TODO: repository id missing. Auth error?
+            }
+        }
+        else
+        {
+            EndDialog( RET_OK );
+        }
+    }
+
     return 1;
 }
 
@@ -159,11 +278,26 @@ IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, )
     return 1;
 }
 
-IMPL_LINK_NOARG( PlaceEditDialog, EditHdl )
+IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditHdl, DetailsContainer*, void )
 {
+    UpdateLabel( );
+
     OUString sUrl = GetServerUrl( );
     OUString sName = OUString( m_pEDServerName->GetText() ).trim( );
     m_pBTOk->Enable( !sName.isEmpty( ) && !sUrl.isEmpty( ) );
+}
+
+IMPL_LINK_NOARG( PlaceEditDialog, ModifyHdl )
+{
+    EditHdl(nullptr);
+    return 1;
+}
+
+IMPL_LINK_NOARG( PlaceEditDialog, EditLabelHdl )
+{
+    bLabelChanged = true;
+    EditHdl(NULL);
+
     return 1;
 }
 
@@ -173,21 +307,43 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl )
             it != m_aDetailsContainers.end( ); ++it )
     {
         ( *it )->setUsername( OUString( m_pEDUsername->GetText() ) );
+        ( *it )->setPassword( m_pEDPassword->GetText() );
     }
+
+    EditHdl(NULL);
+
     return 1;
 }
 
 IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
 {
+    if ( m_pLBServerType->GetSelectEntry() == "--------------------" )
+    {
+        if( !m_pLBServerType->IsTravelSelect() )
+            m_pLBServerType->SelectEntryPos( m_nCurrentType );
+        else
+            m_pLBServerType->SetNoSelection();
+
+        return 0;
+    }
+
     if (m_xCurrentDetails.get())
         m_xCurrentDetails->show(false);
 
     sal_uInt16 nPos = m_pLBServerType->GetSelectEntryPos( );
     m_xCurrentDetails = m_aDetailsContainers[nPos];
+    m_nCurrentType = nPos;
 
-    m_xCurrentDetails->show(true);
+    m_xCurrentDetails->show();
+
+    m_pCBPassword->Show( m_bShowPassword );
+    m_pEDPassword->Show( m_bShowPassword );
+    m_pFTPasswordLabel->Show( m_bShowPassword );
 
     SetSizePixel(GetOptimalSize());
+
+    EditHdl(NULL);
+
     return 0;
 }
 

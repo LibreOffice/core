@@ -12,6 +12,8 @@
 #include <map>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/task/PasswordContainer.hpp>
+#include <com/sun/star/task/XPasswordContainer2.hpp>
 
 #include <tools/urlobj.hxx>
 #include <vcl/builder.hxx>
@@ -20,18 +22,27 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/msgbox.hxx>
 
 class DetailsContainer
 {
-    private:
-        Link<> m_aChangeHdl;
-        VclPtr<VclFrame>       m_pFrame;
+    protected:
+        Link<DetailsContainer*,void> m_aChangeHdl;
+        VclPtr<VclGrid>        m_pDetailsGrid;
+        VclPtr<VclHBox>        m_pHostBox;
+        VclPtr<Edit>           m_pEDHost;
+        VclPtr<FixedText>      m_pFTHost;
+        VclPtr<NumericField>   m_pEDPort;
+        VclPtr<FixedText>      m_pFTPort;
+        VclPtr<Edit>           m_pEDRoot;
+        VclPtr<FixedText>      m_pFTRoot;
+        bool                   m_bIsActive;
 
     public:
-        DetailsContainer( VclBuilderContainer* pBuilder, const OString& rFrame );
+        DetailsContainer( VclBuilderContainer* pBuilder );
         virtual ~DetailsContainer( );
 
-        void setChangeHdl( const Link<>& rLink ) { m_aChangeHdl = rLink; }
+        void setChangeHdl( const Link<DetailsContainer*,void>& rLink ) { m_aChangeHdl = rLink; }
 
         virtual void show( bool bShow = true );
         virtual INetURLObject getUrl( );
@@ -44,6 +55,9 @@ class DetailsContainer
         virtual bool setUrl( const INetURLObject& rUrl );
 
         virtual void setUsername( const OUString& /*rUsername*/ ) { };
+        virtual void setPassword( const OUString& ) { };
+
+        virtual void setActive( bool bActive = true );
 
     protected:
         void notifyChange( );
@@ -55,11 +69,7 @@ class HostDetailsContainer : public DetailsContainer
     private:
         sal_uInt16 m_nDefaultPort;
         OUString m_sScheme;
-
-    protected:
-        VclPtr<Edit>           m_pEDHost;
-        VclPtr<NumericField>   m_pEDPort;
-        VclPtr<Edit>           m_pEDPath;
+        OUString m_sHost;
 
     public:
         HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, const OUString& sScheme );
@@ -99,9 +109,8 @@ class DavDetailsContainer : public HostDetailsContainer
 class SmbDetailsContainer : public DetailsContainer
 {
     private:
-        VclPtr<Edit>           m_pEDHost;
         VclPtr<Edit>           m_pEDShare;
-        VclPtr<Edit>           m_pEDPath;
+        VclPtr<FixedText>      m_pFTShare;
 
     public:
         SmbDetailsContainer( VclBuilderContainer* pBuilder );
@@ -109,34 +118,36 @@ class SmbDetailsContainer : public DetailsContainer
 
         virtual INetURLObject getUrl( ) SAL_OVERRIDE;
         virtual bool setUrl( const INetURLObject& rUrl ) SAL_OVERRIDE;
+        virtual void show( bool bShow = true ) SAL_OVERRIDE;
 };
 
 class CmisDetailsContainer : public DetailsContainer
 {
     private:
         OUString m_sUsername;
+        OUString m_sPassword;
         com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
-        std::vector< OUString > m_aServerTypesURLs;
         std::vector< OUString > m_aRepoIds;
         OUString m_sRepoId;
+        OUString m_sBinding;
 
-        VclPtr<Edit>       m_pEDBinding;
+        VclPtr<VclHBox>    m_pRepositoryBox;
+        VclPtr<FixedText>  m_pFTRepository;
         VclPtr<ListBox>    m_pLBRepository;
         VclPtr<Button>     m_pBTRepoRefresh;
-        VclPtr<ListBox>    m_pLBServerType;
-        VclPtr<Edit>       m_pEDPath;
 
     public:
-        CmisDetailsContainer( VclBuilderContainer* pBuilder );
+        CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString const & sBinding );
         virtual ~CmisDetailsContainer( ) { };
 
+        virtual void show( bool bShow = true );
         virtual INetURLObject getUrl( ) SAL_OVERRIDE;
         virtual bool setUrl( const INetURLObject& rUrl ) SAL_OVERRIDE;
         virtual void setUsername( const OUString& rUsername ) SAL_OVERRIDE;
+        virtual void setPassword( const OUString& rPass ) SAL_OVERRIDE;
 
     private:
         void selectRepository( );
-        DECL_LINK ( SelectServerTypeHdl, void * );
         DECL_LINK ( RefreshReposHdl, void * );
         DECL_LINK ( SelectRepoHdl, void * );
 };

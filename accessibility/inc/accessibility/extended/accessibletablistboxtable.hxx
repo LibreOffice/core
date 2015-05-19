@@ -65,12 +65,8 @@ private:
 
     /** Returns the row index from cell index. */
     inline sal_Int32 implGetRow( sal_Int32 _nIndex ) const { return _nIndex / implGetColumnCount(); }
-    /** Returns the column index from cell index. */
-    inline sal_Int32 implGetColumn( sal_Int32 _nIndex ) const { return _nIndex % implGetColumnCount(); }
     /** Returns the absolute row index of the nSelRow-th selected row. */
     sal_Int32 implGetSelRow( sal_Int32 _nSelRow ) const;
-    /** Returns the child index from cell position. */
-    inline sal_Int32 implGetIndex( sal_Int32 _nRow, sal_Int32 _nColumn ) const { return _nRow * implGetColumnCount() + _nColumn; }
 
 public:
     /** ctor()

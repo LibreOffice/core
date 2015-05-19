@@ -36,6 +36,7 @@ class ViewTabListBox_Impl;
 class SvtFileView_Impl;
 class SvTreeListEntry;
 class HeaderBar;
+struct SvtContentEntry;
 
 /// the result of an action in the FileView
 enum FileViewResult
@@ -74,7 +75,7 @@ protected:
     virtual void GetFocus() SAL_OVERRIDE;
 
 public:
-    SvtFileView( vcl::Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection );
+    SvtFileView( vcl::Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection, bool bShowType = true );
     virtual ~SvtFileView();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -173,6 +174,8 @@ public:
     void                    SetConfigString( const OUString& rCfgStr );
 
     void                    EndInplaceEditing( bool _bCancel );
+
+    ::std::vector< SvtContentEntry > GetContent();
 
 protected:
     virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

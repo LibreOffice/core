@@ -69,7 +69,7 @@ void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< ::com::sun::s
     getDialog()->StartExecuteModal( LINK( this, SvtFolderPicker, DialogClosedHdl ) );
 }
 
-VclPtr<SvtFileDialog> SvtFolderPicker::implCreateDialog( vcl::Window* _pParent )
+VclPtr<SvtFileDialog_Base> SvtFolderPicker::implCreateDialog( vcl::Window* _pParent )
 {
     return VclPtr<SvtFileDialog>::Create( _pParent, SFXWB_PATHDIALOG );
 }

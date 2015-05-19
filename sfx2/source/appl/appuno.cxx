@@ -922,7 +922,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
 
     if ( nSlotId == SID_OPENURL )
         nSlotId = SID_OPENDOC;
-    if ( nSlotId == SID_SAVEASURL )
+    if ( nSlotId == SID_SAVEASURL || nSlotId == SID_SAVEASREMOTE )
         nSlotId = SID_SAVEASDOC;
 
     // find number of properties to avoid permanent reallocations in the sequence

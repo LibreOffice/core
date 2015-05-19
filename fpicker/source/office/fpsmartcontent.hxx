@@ -198,8 +198,6 @@ namespace svt
         }
 
         inline  bool    isFolder( )     { return isFolder( getURL() ); }
-        inline  bool    isDocument( )   { return isDocument( getURL() ); }
-        inline  bool    is( )           { return is( getURL() ); }
     };
 
 

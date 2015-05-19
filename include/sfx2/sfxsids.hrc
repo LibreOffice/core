@@ -96,11 +96,13 @@
 // default-ids for document
 #define SID_NEWDOC                          (SID_SFX_START + 500)
 #define SID_OPENDOC                         (SID_SFX_START + 501)
+#define SID_OPENREMOTE                      (SID_SFX_START + 517)
 #define SID_OPENURL                         (SID_SFX_START + 596)
 #define SID_SAVEASURL                       (SID_SFX_START + 643)
 #define SID_JUMPTOMARK                      (SID_SFX_START + 598)
 #define SID_OPENTEMPLATE                    (SID_SFX_START + 594)
 #define SID_SAVEASDOC                       (SID_SFX_START + 502)
+#define SID_SAVEASREMOTE                    (SID_SFX_START + 516)
 #define SID_SAVEACOPY                       (SID_SFX_START + 999)
 #define SID_SAVEACOPYITEM                   (SID_SFX_START + 998)
 #define SID_CLOSING                         (SID_SFX_START +1539)
@@ -137,6 +139,7 @@
 
 #define SID_FORCERELOAD                     (SID_SFX_START + 1502)
 #define SID_FILE_DIALOG                     (SID_SFX_START + 304)
+#define SID_REMOTE_DIALOG                   (SID_SFX_START + 305)
 #define SID_PATH                            (SID_SFX_START + 308)
 #define SID_SAVEDOCS                        (SID_SFX_START + 309)
 #define SID_STANDARD_DIR                    (SID_SFX_START + 450)

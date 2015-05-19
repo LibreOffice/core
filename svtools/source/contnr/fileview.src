@@ -76,6 +76,12 @@ Image IMG_SVT_FOLDER
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 };
 
+Image IMG_SVT_FOLDER_OPEN
+{
+    ImageBitmap = Bitmap { File = "folderop.png" ; };
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+};
+
 // Menus -----------------------------------------------------------------
 
 Menu RID_FILEVIEW_CONTEXTMENU

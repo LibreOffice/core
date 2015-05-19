@@ -1,8 +1,10 @@
 # Open
 cmd/lc_openfromwriter.png cmd/lc_open.png
 cmd/lc_openfromcalc.png cmd/lc_open.png
+cmd/lc_openremote.png cmd/lc_open.png
 cmd/sc_openfromwriter.png cmd/sc_open.png
 cmd/sc_openfromcalc.png cmd/sc_open.png
+cmd/sc_openremote.png cmd/sc_open.png
 
 # Hyperlink
 cmd/lc_hyperlinkdialog.png cmd/lc_inserthyperlink.png
@@ -118,3 +120,6 @@ cmd/sc_showgraphics.png cmd/sc_graphic.png
 # split cells duplicates
 svx/res/zetlhor2.png /sw/res/zetlhor2.png
 svx/res/zetlver2.png /sw/res/zetlver2.png
+
+# FolderTree expanded icon
+svtools/res/folderop.png formula/res/fapopen.png

@@ -624,6 +624,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pSystemDialogItem )
             nDialog = pSystemDialogItem->GetValue() ? SFX2_IMPL_DIALOG_SYSTEM : SFX2_IMPL_DIALOG_OOO;
 
+        SFX_REQUEST_ARG( rReq, pRemoteDialogItem, SfxBoolItem, SID_REMOTE_DIALOG, false );
+        if ( pRemoteDialogItem && pRemoteDialogItem->GetValue())
+            nDialog = SFX2_IMPL_DIALOG_REMOTE;
+
         OUString sStandardDir;
 
         SFX_REQUEST_ARG( rReq, pStandardDirItem, SfxStringItem, SID_STANDARD_DIR, false );
@@ -1122,6 +1126,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
         delete pLinkItem;
     }
+}
+
+void SfxApplication::OpenRemoteExec_Impl( SfxRequest& rReq )
+{
+    rReq.AppendItem( SfxBoolItem( SID_REMOTE_DIALOG, true ) );
+    GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, *rReq.GetArgs() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

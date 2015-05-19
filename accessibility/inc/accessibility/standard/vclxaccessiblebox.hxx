@@ -137,8 +137,6 @@ public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    bool IsDropDownBox() {return m_bIsDropDownBox;};
-    BoxType GetBoxType() { return m_aBoxType;};
 protected:
     /** Specifies whether the box is a combo box or a list box.  List boxes
         have multi selection.

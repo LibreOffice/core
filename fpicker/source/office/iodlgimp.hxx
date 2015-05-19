@@ -217,7 +217,6 @@ public:
     inline      const SvtFileDialogFilter_Impl*     GetCurFilter( ) const;
     inline      const OUString&                     GetCurFilterDisplayName() const;
                 void                                SetCurFilter( SvtFileDialogFilter_Impl* _pFilter, const OUString& _rDisplayName );
-    inline      void                                SetCurFilter( SvtFileDialogFilter_Impl* _pFilter );
 };
 
 inline void SvtExpFileDlg_Impl::SetFilterListSelectHdl( const Link<>& _rHandler )
@@ -259,11 +258,6 @@ inline const SvtFileDialogFilter_Impl* SvtExpFileDlg_Impl::GetCurFilter( ) const
 inline const OUString& SvtExpFileDlg_Impl::GetCurFilterDisplayName() const
 {
     return m_sCurrentFilterDisplayName;
-}
-
-inline  void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter )
-{
-    SetCurFilter( pFilter, pFilter->GetName() );
 }
 
 #endif // INCLUDED_FPICKER_SOURCE_OFFICE_IODLGIMP_HXX

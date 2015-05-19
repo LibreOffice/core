@@ -144,6 +144,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/popuptoolbarcontroller \
     framework/source/uielement/progressbarwrapper \
     framework/source/uielement/recentfilesmenucontroller \
+    framework/source/uielement/saveasmenucontroller \
     framework/source/uielement/spinfieldtoolbarcontroller \
     framework/source/uielement/statusbar \
     framework/source/uielement/statusbaritem \

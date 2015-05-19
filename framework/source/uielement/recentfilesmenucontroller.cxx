@@ -44,6 +44,7 @@ using namespace framework;
 namespace {
 
 static const char CMD_CLEAR_LIST[]   = ".uno:ClearRecentFileList";
+static const char CMD_OPEN_REMOTE[]  = ".uno:OpenRemote";
 static const char CMD_PREFIX[]       = "vnd.sun.star.popup:RecentFileList?entry=";
 static const char MENU_SHORTCUT[]     = "~N. ";
 
@@ -224,6 +225,12 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                                            OUString( CMD_CLEAR_LIST ) );
             pVCLPopupMenu->SetHelpText( sal_uInt16( nCount + 1 ),
                                         FWK_RESSTR(STR_CLEAR_RECENT_FILES_HELP) );
+
+            // Open remote menu entry
+            pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 2 ),
+                                       FWK_RESSTR(STR_OPEN_REMOTE) );
+            pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 2 ),
+                                           OUString( CMD_OPEN_REMOTE ) );
         }
         else
         {
@@ -232,6 +239,14 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             // Do not disable it, otherwise the Toolbar controller and MenuButton
             // will display SV_RESID_STRING_NOSELECTIONPOSSIBLE instead of STR_NODOCUMENT
             pVCLPopupMenu->SetItemBits( 1, pVCLPopupMenu->GetItemBits( 1 ) | MenuItemBits::NOSELECT );
+
+            pVCLPopupMenu->InsertSeparator();
+
+            // Open remote menu entry
+            pVCLPopupMenu->InsertItem( sal_uInt16( 2 ),
+                                       FWK_RESSTR(STR_OPEN_REMOTE) );
+            pVCLPopupMenu->SetItemCommand( sal_uInt16( 2 ),
+                                           OUString( CMD_OPEN_REMOTE ) );
         }
     }
 }
@@ -330,6 +345,11 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
             dispatchCommand(
                 "vnd.org.libreoffice.recentdocs:ClearRecentFileList",
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >() );
+        }
+        else if ( aCommand == CMD_OPEN_REMOTE )
+        {
+            Sequence< PropertyValue > aArgsList( 0 );
+            dispatchCommand( CMD_OPEN_REMOTE, aArgsList );
         }
         else
             executeEntry( rEvent.MenuId-1 );

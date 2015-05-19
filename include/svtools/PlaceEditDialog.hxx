@@ -21,6 +21,8 @@
 #include <svtools/inettbc.hxx>
 #include <svtools/place.hxx>
 
+#include <config_oauth2.h>
+
 #include <memory>
 #include <vector>
 
@@ -32,10 +34,17 @@ private :
     std::shared_ptr< DetailsContainer > m_xCurrentDetails;
 
     VclPtr<Edit>         m_pEDUsername;
+    VclPtr<CheckBox>     m_pCBPassword;
+    VclPtr<Edit>         m_pEDPassword;
+    VclPtr<FixedText>    m_pFTPasswordLabel;
     VclPtr<OKButton>     m_pBTOk;
     VclPtr<CancelButton> m_pBTCancel;
 
     VclPtr<PushButton>   m_pBTDelete;
+
+    VclPtr<Button>       m_pBTRepoRefresh;
+
+    VclPtr<VclGrid>      m_pTypeGrid;
 
     /** Vector holding the details UI control for each server type.
 
@@ -44,6 +53,11 @@ private :
         in the listbox.
       */
     std::vector< std::shared_ptr< DetailsContainer > > m_aDetailsContainers;
+
+    unsigned int m_nCurrentType;
+
+    bool bLabelChanged;
+    bool m_bShowPassword;
 
 public :
 
@@ -57,15 +71,23 @@ public :
 
      OUString GetServerName() { return m_pEDServerName->GetText(); }
      OUString GetServerUrl();
+     OUString GetPassword() { return m_pEDPassword->GetText(); };
+     OUString GetUser() { return m_pEDUsername->GetText(); };
+     bool     IsRememberChecked() { return m_pCBPassword->IsChecked(); }
+
+     void ShowPasswordControl( bool bShow = true ) { m_bShowPassword = bShow; }
 
 private:
 
     void InitDetails( );
+    void UpdateLabel( );
 
     DECL_LINK ( OKHdl, Button * );
     DECL_LINK ( DelHdl, Button * );
-    DECL_LINK ( EditHdl, void * );
+    DECL_LINK_TYPED ( EditHdl, DetailsContainer*, void );
+    DECL_LINK ( ModifyHdl, void* );
     DECL_LINK ( SelectTypeHdl, void * );
+    DECL_LINK ( EditLabelHdl, void * );
     DECL_LINK ( EditUsernameHdl, void * );
 
 };

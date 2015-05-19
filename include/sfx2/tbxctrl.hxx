@@ -329,6 +329,21 @@ protected:
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
 };
 
+class SfxSaveAsToolBoxControl : public SfxToolBoxControl
+{
+public:
+    // We don't use SFX_DECL_TOOLBOX_CONTROL() here as we need to have this
+    // RegisterControl() marked as SFX2_DLLPUBLIC
+    static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx );
+    static void SFX2_DLLPUBLIC RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL);
+
+    SfxSaveAsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
+    virtual ~SfxSaveAsToolBoxControl();
+
+protected:
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
+};
+
 class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl
 {
     protected:

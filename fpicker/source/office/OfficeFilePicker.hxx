@@ -61,7 +61,7 @@ class SvtFilePicker :public SvtFilePicker_Base
                     ,public ::svt::OCommonPicker
                     ,public ::svt::IFilePickerListener
 {
-private:
+protected:
     FilterList*         m_pFilterList;
     ElementList*        m_pElemList;
 
@@ -205,14 +205,14 @@ protected:
 
     // OCommonPicker overridables
 
-    virtual VclPtr<SvtFileDialog> implCreateDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
+    virtual VclPtr<SvtFileDialog_Base> implCreateDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
     virtual sal_Int16       implExecutePicker( ) SAL_OVERRIDE;
     virtual bool            implHandleInitializationArgument(
                                 const OUString& _rName,
                                 const ::com::sun::star::uno::Any& _rValue
                             ) SAL_OVERRIDE;
 
-private:
+protected:
     WinBits             getWinBits( WinBits& rExtraBits );
     virtual void        notify( sal_Int16 _nEventId, sal_Int16 _nControlId ) SAL_OVERRIDE;
 
@@ -224,6 +224,39 @@ private:
     void                prepareExecute( );
 
     DECL_LINK(          DialogClosedHdl, Dialog* );
+};
+
+// SvtRemoteFilePicker
+
+class SvtRemoteFilePicker : public SvtFilePicker
+{
+public:
+    SvtRemoteFilePicker( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+
+    virtual VclPtr<SvtFileDialog_Base> implCreateDialog( vcl::Window* _pParent ) SAL_OVERRIDE;
+
+    // disambiguate XInterface
+
+    DECLARE_XINTERFACE( )
+
+    // disambiguate XTypeProvider
+
+    DECLARE_XTYPEPROVIDER( )
+
+    /* XServiceInfo */
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+                                    getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    /* Helper for XServiceInfo */
+    static com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
+    static OUString impl_getStaticImplementationName();
+
+    /* Helper for registry */
+    static ::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL impl_createInstance (
+        const ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext )
+        throw( com::sun::star::uno::Exception );
 };
 
 #endif // INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX

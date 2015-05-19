@@ -35,7 +35,7 @@
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 
-class SvtFileDialog;
+class SvtFileDialog_Base;
 namespace vcl { class Window; }
 struct ImplSVEvent;
 
@@ -65,7 +65,7 @@ namespace svt
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xWindow;
         // </properties>
 
-        VclPtr<SvtFileDialog>      m_pDlg;
+        VclPtr<SvtFileDialog_Base>      m_pDlg;
         ImplSVEvent *       m_nCancelEvent;
         bool            m_bExecuting;
 
@@ -79,7 +79,7 @@ namespace svt
         OUString     m_aDisplayDirectory;
 
     protected:
-        inline  SvtFileDialog*  getDialog() { return m_pDlg; }
+        inline  SvtFileDialog_Base*  getDialog() { return m_pDlg; }
 
         inline const    ::cppu::OBroadcastHelper&   GetBroadcastHelper() const  { return OCommonPicker_Base::rBHelper; }
         inline          ::cppu::OBroadcastHelper&   GetBroadcastHelper()        { return OCommonPicker_Base::rBHelper; }
@@ -93,7 +93,7 @@ namespace svt
         // overridables
 
         // will be called with locked SolarMutex
-        virtual VclPtr<SvtFileDialog> implCreateDialog( vcl::Window* _pParent ) = 0;
+        virtual VclPtr<SvtFileDialog_Base> implCreateDialog( vcl::Window* _pParent ) = 0;
         virtual sal_Int16       implExecutePicker( ) = 0;
             // do NOT override XExecutableDialog::execute! We need to do some stuff there ourself ...
 

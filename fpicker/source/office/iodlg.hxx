@@ -39,6 +39,7 @@
 #include "fpsmartcontent.hxx"
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
+#include "fpdialogbase.hxx"
 
 #include <set>
 
@@ -50,36 +51,13 @@ class SvTabListBox;
 class SvtFileView;
 class SvtFileDialogFilter_Impl;
 
-
-
-#define SFXWB_INSERT            ( 0x04000000L | WB_OPEN )
-#define SFXWB_PASSWORD          WB_PASSWORD
-#define SFXWB_READONLY          WB_READONLY
-#define SFXWB_PATHDIALOG        WB_PATH
-#define SFXWB_CLASSPATH         ( 0x08000000L | SFXWB_PATHDIALOG )
-#define SFXWB_MULTISELECTION    0x20000000L     // activate Multiselection
-#define SFXWB_NOREMOTE          0x40000000L
-
-#define SFX_EXTRA_AUTOEXTENSION     0x00000001L
-#define SFX_EXTRA_FILTEROPTIONS     0x00000002L
-#define SFX_EXTRA_SHOWVERSIONS      0x00000004L
-#define SFX_EXTRA_INSERTASLINK      0x00000008L
-#define SFX_EXTRA_SHOWPREVIEW       0x00000010L
-#define SFX_EXTRA_TEMPLATES         0x00000020L
-#define SFX_EXTRA_PLAYBUTTON        0x00000040L
-#define SFX_EXTRA_SELECTION         0x00000080L
-#define SFX_EXTRA_IMAGE_TEMPLATE    0x00000100L
-
-#define FILEDIALOG_FILTER_ALL   "*.*"
-
-
 // SvtFileDialog
 
 
 class SvtExpFileDlg_Impl;
 class CustomContainer;
 
-class SvtFileDialog : public ModalDialog, public ::svt::IFilePickerController
+class SvtFileDialog : public SvtFileDialog_Base
 {
 private:
     VclPtr<CheckBox>                   _pCbReadOnly;
@@ -162,7 +140,6 @@ private:
 
 protected:
     virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    void                        EnableInternet( bool bInternet );
 
     // originally from VclFileDialog
     Link<>                      _aOKHdl;
@@ -201,23 +178,23 @@ public:
     virtual void                StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
 
             void                FileSelect();
-            void                FilterSelect();
+            void                FilterSelect() SAL_OVERRIDE;
 
-    void                        SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList );
-    const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const;
-    void                        SetStandardDir( const OUString& rStdDir );
-    const OUString&             GetStandardDir() const;
-    std::vector<OUString>       GetPathList() const;        // for MultiSelection
+    void                        SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) SAL_OVERRIDE;
+    const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const SAL_OVERRIDE;
+    void                        SetStandardDir( const OUString& rStdDir ) SAL_OVERRIDE;
+    const OUString&             GetStandardDir() const SAL_OVERRIDE;
+    std::vector<OUString>       GetPathList() const SAL_OVERRIDE;        // for MultiSelection
 
             void                AddFilter( const OUString& rFilter,
-                                           const OUString& rType );
+                                           const OUString& rType ) SAL_OVERRIDE;
 
             void                AddFilterGroup(
                                   const OUString& _rFilter,
-                                  const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters );
+                                  const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters ) SAL_OVERRIDE;
 
-            void                SetCurFilter( const OUString& rFilter );
-            OUString            GetCurFilter() const;
+            void                SetCurFilter( const OUString& rFilter ) SAL_OVERRIDE;
+            OUString            GetCurFilter() const SAL_OVERRIDE;
             sal_uInt16          GetFilterCount() const;
             const OUString&     GetFilterName( sal_uInt16 nPos ) const;
 
@@ -227,49 +204,42 @@ public:
     void                        PrevLevel_Impl();
     void                        OpenURL_Impl( const OUString& rURL );
 
-    inline SvtFileView*         GetView() const;
+    SvtFileView*                GetView() SAL_OVERRIDE;
 
-    void                        DisableSaveLastDirectory();
     void                        InitSize();
-    void                        UpdateControls( const OUString& rURL );
-    void                        EnableAutocompletion( bool _bEnable = true );
+    void                        UpdateControls( const OUString& rURL ) SAL_OVERRIDE;
+    void                        EnableAutocompletion( bool _bEnable = true ) SAL_OVERRIDE;
 
-    void                        SetFileCallback( ::svt::IFilePickerListener *pNotifier ) { _pFileNotifier = pNotifier; }
+    void                        SetFileCallback( ::svt::IFilePickerListener *pNotifier ) SAL_OVERRIDE { _pFileNotifier = pNotifier; }
 
-    sal_Int32                   getTargetColorDepth();
-    sal_Int32                   getAvailableWidth();
-    sal_Int32                   getAvailableHeight();
-    void                        setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage );
-    bool                        getShowState();
+    sal_Int32                   getTargetColorDepth() SAL_OVERRIDE;
+    sal_Int32                   getAvailableWidth() SAL_OVERRIDE;
+    sal_Int32                   getAvailableHeight() SAL_OVERRIDE;
+    void                        setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage ) SAL_OVERRIDE;
+    bool                        getShowState() SAL_OVERRIDE;
     bool                        isAutoExtensionEnabled();
 
-    OUString                    getCurrentFileText( ) const;
-    void                        setCurrentFileText( const OUString& _rText, bool _bSelectAll = false );
+    OUString                    getCurrentFileText( ) const SAL_OVERRIDE;
+    void                        setCurrentFileText( const OUString& _rText, bool _bSelectAll = false ) SAL_OVERRIDE;
 
-    void                        onAsyncOperationStarted();
-    void                        onAsyncOperationFinished();
+    void                        onAsyncOperationStarted() SAL_OVERRIDE;
+    void                        onAsyncOperationFinished() SAL_OVERRIDE;
 
     void                        RemovablePlaceSelected(bool enable = true);
 
     static void                 displayIOException( const OUString& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
 
     // inline
-    inline void                 SetPath( const OUString& rNewURL );
-    inline void                 SetHasFilename( bool bHasFilename );
-    inline const OUString&      GetPath() const;
+    inline void                 SetPath( const OUString& rNewURL ) SAL_OVERRIDE;
+    inline void                 SetHasFilename( bool bHasFilename ) SAL_OVERRIDE;
+    inline const OUString&      GetPath() SAL_OVERRIDE;
     inline void                 SetDefaultExt( const OUString& rExt );
     inline void                 EraseDefaultExt( sal_Int32 _nIndex = 0 );
     inline const OUString&      GetDefaultExt() const;
-    inline void                 SetOKHdl( const Link<>& rLink );
-    inline const Link<>&        GetOKHdl() const;
-    inline void                 SetFileSelectHdl( const Link<>& rLink );
-    inline const Link<>&        GetFileSelectHdl() const;
-    inline void                 SetFilterSelectHdl( const Link<>& rLink );
-    inline const Link<>&        GetFilterSelectHdl() const;
 
     inline Image                GetButtonImage( sal_uInt16 _nButtonId ) const { return m_aImages.GetImage( _nButtonId ); }
 
-    bool                        ContentIsFolder( const OUString& rURL ) { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
+    bool                        ContentIsFolder( const OUString& rURL ) SAL_OVERRIDE { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
     bool                        ContentHasParentFolder( const OUString& rURL );
     bool                        ContentCanMakeFolder( const OUString& rURL );
     bool                        ContentGetTitle( const OUString& rURL, OUString& rTitle );
@@ -345,7 +315,7 @@ inline void SvtFileDialog::SetHasFilename( bool bHasFilename )
 
 
 
-inline const OUString& SvtFileDialog::GetPath() const
+inline const OUString& SvtFileDialog::GetPath()
 {
     return _aPath;
 }
@@ -368,72 +338,10 @@ inline const OUString& SvtFileDialog::GetDefaultExt() const
 }
 
 
-
-inline void SvtFileDialog::SetOKHdl
-(
-    const Link<>& rLink
-)
-{
-    _aOKHdl = rLink;
-}
-
-
-
-inline const Link<>& SvtFileDialog::GetOKHdl() const
-{
-    return _aOKHdl;
-}
-
-
-
-inline void SvtFileDialog::SetFileSelectHdl
-(
-    const Link<>& rLink
-)
-{
-    _aFileSelectHdl = rLink;
-}
-
-
-
-inline const Link<>& SvtFileDialog::GetFileSelectHdl() const
-{
-    return _aFileSelectHdl;
-}
-
-
-
-inline void SvtFileDialog::SetFilterSelectHdl
-(
-    const Link<>& rLink
-)
-{
-    _aFilterSelectHdl = rLink;
-}
-
-
-
-inline const Link<>& SvtFileDialog::GetFilterSelectHdl() const
-{
-    return _aFilterSelectHdl;
-}
-
-
-
-inline SvtFileView* SvtFileDialog::GetView() const
+inline SvtFileView* SvtFileDialog::GetView()
 {
     return _pFileView;
 }
-
-
-
-
-
-#define FILE_SELECTION_CHANGED  1
-#define DIRECTORY_CHANGED       2
-#define HELP_REQUESTED          3
-#define CTRL_STATE_CHANGED      4
-#define DIALOG_SIZE_CHANGED     5
 
 
 #endif // INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX

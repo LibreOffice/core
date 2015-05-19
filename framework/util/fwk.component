@@ -117,6 +117,10 @@
       constructor="com_sun_star_comp_framework_RecentFilesMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.framework.SaveAsMenuController"
+      constructor="com_sun_star_comp_framework_SaveAsMenuController_get_implementation">
+    <service name="com.sun.star.frame.PopupMenuController"/>
+  </implementation>
   <implementation name="com.sun.star.comp.framework.StatusBarControllerFactory"
       constructor="com_sun_star_comp_framework_StatusBarControllerFactory_get_implementation">
     <service name="com.sun.star.frame.StatusbarControllerFactory"/>

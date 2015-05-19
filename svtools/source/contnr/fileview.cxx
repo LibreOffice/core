@@ -101,6 +101,7 @@ enum class FileViewFlags
     NONE               = 0x00,
     ONLYFOLDER         = 0x01,
     MULTISELECTION     = 0x02,
+    SHOW_TYPE          = 0x04,
     SHOW_ONLYTITLE     = 0x10,
     SHOW_NONE          = 0x20,
 };
@@ -425,10 +426,10 @@ protected:
     Link<>                      m_aSelectHandler;
 
     ::rtl::Reference< ::svt::FileViewContentEnumerator >
-                                        m_pContentEnumerator;
+                                        m_xContentEnumerator;
     Link<>                              m_aCurrentAsyncActionHandler;
     ::osl::Condition                    m_aAsyncActionFinished;
-    ::rtl::Reference< ::salhelper::Timer > m_pCancelAsyncTimer;
+    ::rtl::Reference< ::salhelper::Timer > m_xCancelAsyncTimer;
     ::svt::EnumerationResult            m_eAsyncActionResult;
     bool                                m_bRunningAsyncAction;
     bool                                m_bAsyncActionCancelled;
@@ -616,7 +617,10 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
         SetTabJustify(2, AdjustRight); // column "Size"
 
         mpHeaderBar->InsertItem(COLUMN_TITLE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HeaderBarItemBits::UPARROW);
-        mpHeaderBar->InsertItem(COLUMN_TYPE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TYPE), 140, nBits);
+        if (nFlags & FileViewFlags::SHOW_TYPE)
+        {
+            mpHeaderBar->InsertItem(COLUMN_TYPE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TYPE), 140, nBits);
+        }
         mpHeaderBar->InsertItem(COLUMN_SIZE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_SIZE), 80, nBits);
         mpHeaderBar->InsertItem(COLUMN_DATE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_DATE), 500, nBits);
     }
@@ -1083,7 +1087,7 @@ bool ViewTabListBox_Impl::Kill( const OUString& rContent )
 
 // class SvtFileView -----------------------------------------------------
 SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
-                          bool bOnlyFolder, bool bMultiSelection ) :
+                          bool bOnlyFolder, bool bMultiSelection, bool bShowType ) :
 
     Control( pParent, nBits )
 {
@@ -1092,6 +1096,8 @@ SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
         nFlags |= FileViewFlags::ONLYFOLDER;
     if ( bMultiSelection )
         nFlags |= FileViewFlags::MULTISELECTION;
+    if ( bShowType )
+        nFlags |= FileViewFlags::SHOW_TYPE;
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
@@ -1472,6 +1478,18 @@ OUString SvtFileView::GetConfigString() const
     return sRet;
 }
 
+::std::vector< SvtContentEntry > SvtFileView::GetContent()
+{
+    ::std::vector< SvtContentEntry > aContent;
+
+    for( ::std::vector< SortingData_Impl* >::size_type i = 0; i < mpImp->maContent.size(); i++ )
+    {
+        SvtContentEntry aEntry( mpImp->maContent[i]->maTargetURL, mpImp->maContent[i]->mbIsFolder );
+        aContent.push_back( aEntry );
+    }
+
+    return aContent;
+}
 
 void SvtFileView::SetConfigString( const OUString& rCfgStr )
 {
@@ -1644,21 +1662,21 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     DBG_TESTSOLARMUTEX();
     ::osl::ClearableMutexGuard aGuard( maMutex );
 
-    OSL_ENSURE( !m_pContentEnumerator.is(), "SvtFileView_Impl::GetFolderContent_Impl: still running another enumeration!" );
-    m_pContentEnumerator = new ::svt::FileViewContentEnumerator(
-        mpView->GetCommandEnvironment(), maContent, maMutex, mbReplaceNames ? mpNameTrans : NULL );
+    OSL_ENSURE( !m_xContentEnumerator.is(), "SvtFileView_Impl::GetFolderContent_Impl: still running another enumeration!" );
+    m_xContentEnumerator.set(new ::svt::FileViewContentEnumerator(
+        mpView->GetCommandEnvironment(), maContent, maMutex, mbReplaceNames ? mpNameTrans : NULL));
         // TODO: should we cache and re-use this thread?
 
     if ( !pAsyncDescriptor )
     {
-        ::svt::EnumerationResult eResult = m_pContentEnumerator->enumerateFolderContentSync( _rFolder, rBlackList );
+        ::svt::EnumerationResult eResult = m_xContentEnumerator->enumerateFolderContentSync( _rFolder, rBlackList );
         if ( ::svt::SUCCESS == eResult )
         {
             implEnumerationSuccess();
-            m_pContentEnumerator.clear();
+            m_xContentEnumerator.clear();
             return eSuccess;
         }
-        m_pContentEnumerator.clear();
+        m_xContentEnumerator.clear();
         return eFailure;
     }
 
@@ -1681,7 +1699,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     pTimeout->Seconds = nMinTimeout / 1000L;
     pTimeout->Nanosec = ( nMinTimeout % 1000L ) * 1000000L;
 
-    m_pContentEnumerator->enumerateFolderContent( _rFolder, this );
+    m_xContentEnumerator->enumerateFolderContent( _rFolder, this );
 
     // wait until the enumeration is finished
     // for this, release our own mutex (which is used by the enumerator thread)
@@ -1702,16 +1720,16 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     if ( ::osl::Condition::result_timeout == eResult )
     {
         // maximum time to wait
-        OSL_ENSURE( !m_pCancelAsyncTimer.get(), "SvtFileView_Impl::GetFolderContent_Impl: there's still a previous timer!" );
-        m_pCancelAsyncTimer = new CallbackTimer( this );
+        OSL_ENSURE( !m_xCancelAsyncTimer.get(), "SvtFileView_Impl::GetFolderContent_Impl: there's still a previous timer!" );
+        m_xCancelAsyncTimer.set(new CallbackTimer(this));
         sal_Int32 nMaxTimeout = pAsyncDescriptor->nMaxTimeout;
         OSL_ENSURE( nMaxTimeout > nMinTimeout,
             "SvtFileView_Impl::GetFolderContent_Impl: invalid maximum timeout!" );
         if ( nMaxTimeout <= nMinTimeout )
             nMaxTimeout = nMinTimeout + 5000;
-        m_pCancelAsyncTimer->setRemainingTime( salhelper::TTimeValue( nMaxTimeout - nMinTimeout ) );
+        m_xCancelAsyncTimer->setRemainingTime( salhelper::TTimeValue( nMaxTimeout - nMinTimeout ) );
             // we already waited for nMinTimeout milliseconds, so take this into account
-        m_pCancelAsyncTimer->start();
+        m_xCancelAsyncTimer->start();
 
         m_aCurrentAsyncActionHandler = pAsyncDescriptor->aFinishHandler;
         DBG_ASSERT( m_aCurrentAsyncActionHandler.IsSet(), "SvtFileView_Impl::GetFolderContent_Impl: nobody interested when it's finished?" );
@@ -1909,17 +1927,17 @@ void SvtFileView_Impl::CancelRunningAsyncAction()
 {
     DBG_TESTSOLARMUTEX();
     ::osl::MutexGuard aGuard( maMutex );
-    if ( !m_pContentEnumerator.is() )
+    if ( !m_xContentEnumerator.is() )
         return;
 
     m_bAsyncActionCancelled = true;
-    m_pContentEnumerator->cancel();
+    m_xContentEnumerator->cancel();
     m_bRunningAsyncAction = false;
 
-    m_pContentEnumerator.clear();
-    if ( m_pCancelAsyncTimer.is() && m_pCancelAsyncTimer->isTicking() )
-        m_pCancelAsyncTimer->stop();
-    m_pCancelAsyncTimer = NULL;
+    m_xContentEnumerator.clear();
+    if ( m_xCancelAsyncTimer.is() && m_xCancelAsyncTimer->isTicking() )
+        m_xCancelAsyncTimer->stop();
+    m_xCancelAsyncTimer.clear();
 }
 
 
@@ -1946,10 +1964,10 @@ void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult eResult )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( maMutex );
 
-    m_pContentEnumerator.clear();
-    if ( m_pCancelAsyncTimer.is() && m_pCancelAsyncTimer->isTicking() )
-        m_pCancelAsyncTimer->stop();
-    m_pCancelAsyncTimer = NULL;
+    m_xContentEnumerator.clear();
+    if ( m_xCancelAsyncTimer.is() && m_xCancelAsyncTimer->isTicking() )
+        m_xCancelAsyncTimer->stop();
+    m_xCancelAsyncTimer.clear();
 
     if ( m_bAsyncActionCancelled )
         // this is to prevent race conditions
@@ -2022,7 +2040,7 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
             const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
             aValue += rLocaleData.getDate( (*aIt)->maModDate );
             aValue += aDateSep;
-            aValue += rLocaleData.getTime( (*aIt)->maModDate );
+            aValue += rLocaleData.getTime( (*aIt)->maModDate, false );
         }
         (*aIt)->maDisplayText = aValue;
 

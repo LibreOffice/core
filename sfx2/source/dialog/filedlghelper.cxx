@@ -863,6 +863,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         pServiceName = FILE_OPEN_SERVICE_NAME_OOO;
     else if ( nDialog == SFX2_IMPL_DIALOG_OOO )
         pServiceName = FILE_OPEN_SERVICE_NAME_OOO;
+    else if ( nDialog == SFX2_IMPL_DIALOG_REMOTE )
+        pServiceName = "com.sun.star.ui.dialogs.RemoteFilePicker";
     else
         pServiceName = "com.sun.star.ui.dialogs.FilePicker";
     OUString aService = OUString::createFromAscii( pServiceName );

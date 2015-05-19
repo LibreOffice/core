@@ -253,6 +253,32 @@ namespace
 
         return property;
     }
+
+    uno::Sequence< uno::Any > generateErrorArguments( const cmis::URL & rURL )
+    {
+        uno::Sequence< uno::Any > aArguments(3);
+
+        size_t i = 0;
+        aArguments[i++] <<= beans::PropertyValue(
+            OUString( "Binding URL" ),
+            - 1,
+            uno::makeAny( rURL.getBindingUrl() ),
+            beans::PropertyState_DIRECT_VALUE );
+
+        aArguments[i++] <<= beans::PropertyValue(
+            OUString( "Username" ),
+            -1,
+            uno::makeAny( rURL.getUsername() ),
+            beans::PropertyState_DIRECT_VALUE );
+
+        aArguments[i++] <<= beans::PropertyValue(
+            OUString( "Repository Id" ),
+            -1,
+            uno::makeAny( rURL.getRepositoryId() ),
+            beans::PropertyState_DIRECT_VALUE );
+
+        return aArguments;
+    }
 }
 
 namespace cmis
@@ -313,7 +339,7 @@ namespace cmis
         // Look for a cached session, key is binding url + repo id
         OUString sSessionId = m_aURL.getBindingUrl( ) + m_aURL.getRepositoryId( );
         if ( NULL == m_pSession )
-            m_pSession = m_pProvider->getSession( sSessionId );
+            m_pSession = m_pProvider->getSession( sSessionId, m_aURL.getUsername( ) );
 
         if ( NULL == m_pSession )
         {
@@ -365,18 +391,37 @@ namespace cmis
                 m_pSession = libcmis::SessionFactory::createSession(
                         OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
                         rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ), false, oauth2Data );
-                if ( m_pSession == NULL )
+                if ( m_pSession == nullptr )
+                {
+                    // Fail: session was not created
                     ucbhelper::cancelCommandExecution(
-                                        ucb::IOErrorCode_INVALID_DEVICE,
-                                        uno::Sequence< uno::Any >( 0 ),
-                                        xEnv,
-                                        OUString( ) );
+                        ucb::IOErrorCode_INVALID_DEVICE,
+                        generateErrorArguments(m_aURL),
+                        xEnv,
+                        OUString());
+                }
+                else if ( m_pSession->getRepository() == nullptr )
+                {
+                    // Fail: no repository or repository is invalid
+                    ucbhelper::cancelCommandExecution(
+                        ucb::IOErrorCode_INVALID_DEVICE,
+                        generateErrorArguments(m_aURL),
+                        xEnv,
+                        OUString("error accessing a repository"));
+                }
                 else
-                    m_pProvider->registerSession( sSessionId, m_pSession );
+                {
+                    m_pProvider->registerSession(sSessionId, m_aURL.getUsername( ), m_pSession);
+                }
             }
             else
             {
                 // Silently fail as the user cancelled the authentication
+                ucbhelper::cancelCommandExecution(
+                                    ucb::IOErrorCode_ABORT,
+                                    uno::Sequence< uno::Any >( 0 ),
+                                    xEnv,
+                                    OUString( ) );
                 throw uno::RuntimeException( );
             }
         }
@@ -1974,14 +2019,20 @@ namespace cmis
                 {
                     // TODO Cache the objects
 
+                    INetURLObject aURL( m_sURL );
+                    OUString sUser = aURL.GetUser( INetURLObject::NO_DECODE );
+
                     URL aUrl( m_sURL );
                     OUString sPath( m_sObjectPath );
                     if ( !sPath.endsWith("/") )
                         sPath += "/";
                     sPath += STD_TO_OUSTR( ( *it )->getName( ) );
                     OUString sId = STD_TO_OUSTR( ( *it )->getId( ) );
+
                     aUrl.setObjectId( sId );
                     aUrl.setObjectPath( sPath );
+                    aUrl.setUsername( sUser );
+
                     uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aUrl.asString( ) );
                     uno::Reference< ucb::XContent > xContent = new Content( m_xContext, m_pProvider, xId, *it );
 

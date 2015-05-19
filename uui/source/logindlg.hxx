@@ -70,23 +70,19 @@ public:
     LoginDialog(vcl::Window* pParent, sal_uInt16 nFlags,
         const OUString& rServer, const OUString &rRealm);
     virtual ~LoginDialog();
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void    dispose() SAL_OVERRIDE;
 
-    OUString        GetPath() const                             { return m_pPathED->GetText(); }
-    void            SetPath( const OUString& rNewPath )           { m_pPathED->SetText( rNewPath ); }
     OUString        GetName() const                             { return m_pNameED->GetText(); }
     void            SetName( const OUString& rNewName )           { m_pNameED->SetText( rNewName ); }
     OUString        GetPassword() const                         { return m_pPasswordED->GetText(); }
     void            SetPassword( const OUString& rNew )           { m_pPasswordED->SetText( rNew ); }
     OUString        GetAccount() const                          { return m_pAccountED->GetText(); }
-    void            SetAccount( const OUString& rNew )            { m_pAccountED->SetText( rNew ); }
     bool            IsSavePassword() const                      { return m_pSavePasswdBtn->IsChecked(); }
     void            SetSavePassword( bool bSave )               { m_pSavePasswdBtn->Check( bSave ); }
     void            SetSavePasswordText( const OUString& rTxt )   { m_pSavePasswdBtn->SetText( rTxt ); }
-    bool        IsUseSystemCredentials() const              { return m_pUseSysCredsCB->IsChecked(); }
+    bool            IsUseSystemCredentials() const              { return m_pUseSysCredsCB->IsChecked(); }
     void            SetUseSystemCredentials( bool bUse );
     void            SetErrorText( const OUString& rTxt )          { m_pErrorInfo->SetText( rTxt ); }
-    void            SetLoginRequestText( const OUString& rTxt )   { m_pRequestInfo->SetText( rTxt ); }
     void            ClearPassword();
     void            ClearAccount();
 };

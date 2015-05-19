@@ -31,18 +31,30 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
-DetailsContainer::DetailsContainer( VclBuilderContainer* pBuilder, const OString& rFrame )
+DetailsContainer::DetailsContainer( VclBuilderContainer* pBuilder ) :
+    m_bIsActive ( true )
 {
-    pBuilder->get( m_pFrame, rFrame );
+    pBuilder->get( m_pDetailsGrid, "Details" );
+    pBuilder->get( m_pHostBox, "HostDetails" );
+    pBuilder->get( m_pEDHost, "host" );
+    pBuilder->get( m_pFTHost, "hostLabel" );
+    pBuilder->get( m_pEDPort, "port-nospin" );
+    pBuilder->get( m_pFTPort, "portLabel" );
+    pBuilder->get( m_pEDRoot, "path" );
+    pBuilder->get( m_pFTRoot, "pathLabel" );
 }
 
 DetailsContainer::~DetailsContainer( )
 {
 }
 
-void DetailsContainer::show( bool bShow )
+void DetailsContainer::show( bool )
 {
-    m_pFrame->Show( bShow );
+    m_pDetailsGrid->Enable( m_bIsActive );
+
+    m_pEDHost->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+    m_pEDPort->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+    m_pEDRoot->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
 }
 
 INetURLObject DetailsContainer::getUrl( )
@@ -63,6 +75,11 @@ void DetailsContainer::notifyChange( )
     m_aChangeHdl.Call( this );
 }
 
+void DetailsContainer::setActive( bool bActive )
+{
+    m_bIsActive = bActive;
+}
+
 IMPL_LINK_NOARG( DetailsContainer, ValueChangeHdl )
 {
     notifyChange( );
@@ -70,34 +87,34 @@ IMPL_LINK_NOARG( DetailsContainer, ValueChangeHdl )
 }
 
 HostDetailsContainer::HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, const OUString& sScheme ) :
-    DetailsContainer( pBuilder, "HostDetails" ),
+    DetailsContainer( pBuilder ),
     m_nDefaultPort( nPort ),
     m_sScheme( sScheme )
 {
-    pBuilder->get( m_pEDHost, "host" );
-    m_pEDHost->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
-
-    pBuilder->get( m_pEDPort, "port" );
-    m_pEDPort->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
-
-    pBuilder->get( m_pEDPath, "path" );
-    m_pEDPath->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
-
     show( false );
 }
 
 void HostDetailsContainer::show( bool bShow )
 {
+    m_pFTHost->Show( bShow );
+    m_pHostBox->Show( bShow );
+    m_pEDRoot->Show( bShow );
+    m_pFTRoot->Show( bShow );
+
     DetailsContainer::show( bShow );
+
     if ( bShow )
+    {
         m_pEDPort->SetValue( m_nDefaultPort );
+        m_pEDHost->SetText( m_sHost );
+    }
 }
 
 INetURLObject HostDetailsContainer::getUrl( )
 {
     OUString sHost = m_pEDHost->GetText().trim( );
     sal_Int64 nPort = m_pEDPort->GetValue();
-    OUString sPath = m_pEDPath->GetText().trim( );
+    OUString sPath = m_pEDRoot->GetText().trim( );
 
     OUString sUrl;
     if ( !sHost.isEmpty( ) )
@@ -122,7 +139,7 @@ bool HostDetailsContainer::setUrl( const INetURLObject& rUrl )
     {
         m_pEDHost->SetText( rUrl.GetHost( ) );
         m_pEDPort->SetValue( rUrl.GetPort( ) );
-        m_pEDPath->SetText( rUrl.GetURLPath() );
+        m_pEDRoot->SetText( rUrl.GetURLPath() );
     }
 
     return bSuccess;
@@ -188,16 +205,12 @@ IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, CheckBox*, pCheckBox )
 }
 
 SmbDetailsContainer::SmbDetailsContainer( VclBuilderContainer* pBuilder ) :
-    DetailsContainer( pBuilder, "SmbDetails" )
+    DetailsContainer( pBuilder )
 {
-    pBuilder->get( m_pEDHost, "smbHost" );
-    m_pEDHost->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+    pBuilder->get( m_pEDShare, "share" );
+    pBuilder->get( m_pFTShare, "shareLabel" );
 
-    pBuilder->get( m_pEDShare, "smbShare" );
     m_pEDShare->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
-
-    pBuilder->get( m_pEDPath, "smbPath" );
-    m_pEDPath->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
 
     show( false );
 }
@@ -206,7 +219,7 @@ INetURLObject SmbDetailsContainer::getUrl( )
 {
     OUString sHost = m_pEDHost->GetText().trim( );
     OUString sShare = m_pEDShare->GetText().trim( );
-    OUString sPath = m_pEDPath->GetText().trim( );
+    OUString sPath = m_pEDRoot->GetText().trim( );
 
     OUString sUrl;
     if ( !sHost.isEmpty( ) )
@@ -242,73 +255,98 @@ bool SmbDetailsContainer::setUrl( const INetURLObject& rUrl )
 
         m_pEDHost->SetText( rUrl.GetHost( ) );
         m_pEDShare->SetText( sShare );
-        m_pEDPath->SetText( sPath );
+        m_pEDRoot->SetText( sPath );
     }
 
     return bSuccess;
 }
 
-CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
-    DetailsContainer( pBuilder, "CmisDetails" ),
+void SmbDetailsContainer::show( bool bShow )
+{
+    m_pEDShare->Show( bShow );
+    m_pFTShare->Show( bShow );
+    m_pEDRoot->Show( bShow );
+    m_pFTRoot->Show( bShow );
+
+    m_pFTHost->Show( bShow );
+    m_pHostBox->Show( bShow );
+    m_pEDPort->Enable( !bShow );
+    m_pFTPort->Enable( !bShow );
+}
+
+CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString const & sBinding ) :
+    DetailsContainer( pBuilder ),
     m_sUsername( ),
     m_xCmdEnv( ),
-    m_aServerTypesURLs( ),
     m_aRepoIds( ),
-    m_sRepoId( )
+    m_sRepoId( ),
+    m_sBinding( sBinding )
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xGlobalInteractionHandler(
         InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 
-    pBuilder->get( m_pLBServerType, "serverType" );
-    m_pLBServerType->SetSelectHdl( LINK( this, CmisDetailsContainer, SelectServerTypeHdl ) );
-
-    pBuilder->get( m_pEDBinding, "binding" );
-    m_pEDBinding->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
-
+    pBuilder->get( m_pFTRepository, "repositoryLabel" );
     pBuilder->get( m_pLBRepository, "repositories" );
-    m_pLBRepository->SetSelectHdl( LINK( this, CmisDetailsContainer, SelectRepoHdl ) );
-
     pBuilder->get( m_pBTRepoRefresh, "repositoriesRefresh" );
-    m_pBTRepoRefresh->SetClickHdl( LINK( this, CmisDetailsContainer, RefreshReposHdl ) );
-
-    pBuilder->get( m_pEDPath, "cmisPath" );
-    m_pEDPath->SetModifyHdl( LINK( this, DetailsContainer, ValueChangeHdl ) );
+    pBuilder->get( m_pRepositoryBox, "RepositoryDetails" );
 
     show( false );
+}
 
-    // Load the ServerType entries
-    bool bSkipGDrive = OUString( GDRIVE_CLIENT_ID ).isEmpty() ||
-                       OUString( GDRIVE_CLIENT_SECRET ).isEmpty();
-    bool bSkipAlfresco = OUString( ALFRESCO_CLOUD_CLIENT_ID ).isEmpty() ||
-                       OUString( ALFRESCO_CLOUD_CLIENT_SECRET ).isEmpty();
-    bool bSkipOneDrive= OUString( ONEDRIVE_CLIENT_ID ).isEmpty() ||
-                       OUString( ONEDRIVE_CLIENT_SECRET ).isEmpty();
+void CmisDetailsContainer::show( bool bShow )
+{
+    m_pLBRepository->SetSelectHdl( LINK( this, CmisDetailsContainer, SelectRepoHdl ) );
+    m_pBTRepoRefresh->SetClickHdl( LINK( this, CmisDetailsContainer, RefreshReposHdl ) );
 
+    m_pEDHost->SetText( m_sBinding );
 
-    Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
-    Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
-    for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
+    if( ( m_sBinding == GDRIVE_BASE_URL )
+            || m_sBinding.startsWith( ALFRESCO_CLOUD_BASE_URL )
+            || ( m_sBinding == ONEDRIVE_BASE_URL ) )
     {
-        OUString sUrl = aTypesUrlsList[i];
-        if ( !( sUrl == GDRIVE_BASE_URL && bSkipGDrive ) &&
-             !( sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL ) && bSkipAlfresco ) &&
-             !( sUrl == ONEDRIVE_BASE_URL && bSkipOneDrive ) )
-        {
-            m_pLBServerType->InsertEntry( aTypesNamesList[i] );
-            m_aServerTypesURLs.push_back( sUrl );
-        }
+        m_pFTHost->Show( false );
+        m_pHostBox->Show( false );
+        m_pFTRepository->Show( false );
+        m_pRepositoryBox->Show( false );
+        m_pEDRoot->Show( false );
+        m_pFTRoot->Show( false );
     }
+    else
+    {
+        m_pFTHost->Show( bShow );
+        m_pHostBox->Show( bShow );
+        m_pFTRepository->Show( bShow );
+        m_pRepositoryBox->Show( bShow );
+        m_pEDRoot->Show( bShow );
+        m_pFTRoot->Show( bShow );
+    }
+
+    DetailsContainer::show( bShow );
+    m_pEDPort->Enable( !bShow );
+    m_pFTPort->Enable( !bShow );
 }
 
 INetURLObject CmisDetailsContainer::getUrl( )
 {
-    OUString sBindingUrl = m_pEDBinding->GetText().trim( );
-    OUString sPath = m_pEDPath->GetText().trim( );
+    OUString sBindingUrl = m_pEDHost->GetText().trim( );
+    OUString sPath = m_pEDRoot->GetText().trim( );
+
+    bool bSkip = true;
+    if( ( m_sBinding == GDRIVE_BASE_URL )
+            || m_sBinding.startsWith( ALFRESCO_CLOUD_BASE_URL )
+            || ( m_sBinding == ONEDRIVE_BASE_URL ) )
+    {
+        bSkip = m_sUsername.isEmpty();
+    }
+    else
+    {
+        bSkip = m_sRepoId.isEmpty();
+    }
 
     OUString sUrl;
-    if ( !sBindingUrl.isEmpty( ) && !m_sRepoId.isEmpty() )
+    if ( !sBindingUrl.isEmpty( ) && !bSkip )
     {
         OUString sEncodedBinding = rtl::Uri::encode(
                 sBindingUrl + "#" + m_sRepoId,
@@ -328,16 +366,13 @@ bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
 
     if ( bSuccess )
     {
-        OUString sBindingUrl;
-        OUString sRepositoryId;
-
         OUString sDecodedHost = rUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET );
         INetURLObject aHostUrl( sDecodedHost );
-        sBindingUrl = aHostUrl.GetURLNoMark( );
-        sRepositoryId = aHostUrl.GetMark( );
+        m_sBinding = aHostUrl.GetURLNoMark( );
+        m_sRepoId = aHostUrl.GetMark( );
 
-        m_pEDBinding->SetText( sBindingUrl );
-        m_pEDPath->SetText( rUrl.GetURLPath() );
+        m_pEDHost->SetText( m_sBinding );
+        m_pEDRoot->SetText( rUrl.GetURLPath() );
     }
     return bSuccess;
 }
@@ -347,26 +382,40 @@ void CmisDetailsContainer::setUsername( const OUString& rUsername )
     m_sUsername = rUsername;
 }
 
+void CmisDetailsContainer::setPassword( const OUString& rPass )
+{
+    m_sPassword = rPass;
+}
+
 void CmisDetailsContainer::selectRepository( )
 {
     // Get the repo ID and call the Change listener
     sal_uInt16 nPos = m_pLBRepository->GetSelectEntryPos( );
-    m_sRepoId = m_aRepoIds[nPos];
-
-    notifyChange( );
-}
-
-IMPL_LINK_NOARG( CmisDetailsContainer, SelectServerTypeHdl  )
-{
-    // Set a sample URL for the server
-    sal_uInt16 nId = m_pLBServerType->GetSelectEntryPos( );
-    m_pEDBinding->SetText( m_aServerTypesURLs[nId] );
-    return 0;
+    if( nPos < m_aRepoIds.size() )
+    {
+        m_sRepoId = m_aRepoIds[nPos];
+        notifyChange( );
+    }
 }
 
 IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl  )
 {
-    OUString sBindingUrl = m_pEDBinding->GetText().trim( );
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference< XPasswordContainer2 > xMasterPasswd = PasswordContainer::create( xContext );
+
+
+    OUString sBindingUrl = m_pEDHost->GetText().trim( );
+
+    OUString sEncodedUsername = "";
+
+    if ( !m_sUsername.isEmpty( ) )
+    {
+        sEncodedUsername = rtl::Uri::encode(m_sUsername,
+                                            rtl_UriCharClassUserinfo,
+                                            rtl_UriEncodeKeepEscapes,
+                                            RTL_TEXTENCODING_UTF8 );
+        sEncodedUsername += "@";
+    }
 
     // Clean the listbox
     m_pLBRepository->Clear( );
@@ -381,8 +430,27 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl  )
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
-        sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
+        sUrl = "vnd.libreoffice.cmis://" + sEncodedUsername + sEncodedBinding;
     }
+
+    // temporary remember the password
+    try
+    {
+        if( !sUrl.isEmpty() && !m_sUsername.isEmpty() && !m_sPassword.isEmpty() )
+        {
+            Reference< XInteractionHandler > xInteractionHandler(
+                InteractionHandler::createWithParent( xContext, 0 ),
+                UNO_QUERY );
+
+            Sequence< OUString > aPasswd( 1 );
+            aPasswd[0] = m_sPassword;
+
+            xMasterPasswd->add(
+                sUrl, m_sUsername, aPasswd, xInteractionHandler );
+        }
+    }
+    catch( const Exception& )
+    {}
 
     // Get the Content
     ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv, comphelper::getProcessComponentContext() );
@@ -415,6 +483,11 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl  )
     {
         m_pLBRepository->SelectEntryPos( 0 );
         selectRepository( );
+    }
+
+    // remove temporary password
+    {
+        xMasterPasswd->remove( sUrl, m_sUsername );
     }
 
     return 0;

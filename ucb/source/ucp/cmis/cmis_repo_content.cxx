@@ -202,6 +202,11 @@ namespace cmis
                 catch (const libcmis::Exception& e)
                 {
                     SAL_INFO( "ucb.ucp.cmis", "Error getting repositories: " << e.what() );
+                    ucbhelper::cancelCommandExecution(
+                                        ucb::IOErrorCode_INVALID_DEVICE,
+                                        uno::Sequence< uno::Any >( 0 ),
+                                        xEnv,
+                                        OUString( ) );
                 }
             }
             else

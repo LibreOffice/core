@@ -8,3 +8,6 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 # text background colour Impress/Draw
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png
+
+# FolderTree expanded icon
+svtools/res/folderop.png formula/res/fapopen.png
