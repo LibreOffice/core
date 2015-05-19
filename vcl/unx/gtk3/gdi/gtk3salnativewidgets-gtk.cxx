@@ -1001,7 +1001,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         context = mpTreeHeaderButtonStyle;
         ButtonValue aButtonValue = rValue.getTristateVal();
         if (aButtonValue == BUTTONVALUE_ON)
-            flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_CHECKED);
+            flags = (GtkStateFlags) (flags | CHECKED);
         renderType = RENDER_EXPANDER;
         styleClass = GTK_STYLE_CLASS_EXPANDER;
         break;
