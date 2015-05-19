@@ -269,7 +269,11 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 aRepresentation = pPage->GetName();
             }
             else
-                aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_PAGETITLE).toString();
+            {
+                aRepresentation = ( ( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+                                    ? SdResId(STR_FIELD_PLACEHOLDER_SLIDENAME).toString()
+                                    : SdResId(STR_FIELD_PLACEHOLDER_PAGENAME).toString() );
+            }
 
             pInfo->SetRepresentation( aRepresentation );
         }

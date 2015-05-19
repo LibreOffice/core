@@ -1076,9 +1076,14 @@ String STR_FIELD_PLACEHOLDER_COUNT
     Text [ en-US ] = "<count>" ;
 };
 
-String STR_FIELD_PLACEHOLDER_PAGETITLE
+String STR_FIELD_PLACEHOLDER_SLIDENAME
 {
-    Text [ en-US ] = "<title>" ;
+    Text [ en-US ] = "<slide-name>" ;
+};
+
+String STR_FIELD_PLACEHOLDER_PAGENAME
+{
+    Text [ en-US ] = "<page-name>" ;
 };
 
 String STR_PLACEHOLDER_DESCRIPTION_NOTES
