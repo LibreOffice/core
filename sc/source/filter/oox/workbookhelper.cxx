@@ -34,6 +34,8 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <osl/thread.h>
 #include "oox/drawingml/theme.hxx"
 #include "oox/helper/progressbar.hxx"
@@ -512,6 +514,18 @@ Reference< XStyle > WorkbookGlobals::createStyleObject( OUString& orStyleName, b
 
 // private --------------------------------------------------------------------
 
+namespace {
+
+formula::FormulaGrammar::AddressConvention getConvention(css::uno::Reference<XDocumentProperties> xDocProps)
+{
+    if (xDocProps->getGenerator().startsWithIgnoreAsciiCase("Microsoft"))
+        return formula::FormulaGrammar::CONV_XL_A1;
+
+    return formula::FormulaGrammar::CONV_OOO;
+}
+
+}
+
 void WorkbookGlobals::initialize( bool bWorkbookFile )
 {
     maCellStyles = "CellStyles";
@@ -526,6 +540,13 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     // the spreadsheet document
     mxDoc.set( mrBaseFilter.getModel(), UNO_QUERY );
     OSL_ENSURE( mxDoc.is(), "WorkbookGlobals::initialize - no spreadsheet document" );
+    ScDocument& rDoc = getScDocument();
+
+    Reference< XDocumentPropertiesSupplier > xPropSupplier( mxDoc, UNO_QUERY);
+    Reference< XDocumentProperties > xDocProps = xPropSupplier->getDocumentProperties();
+    ScCalcConfig aCalcConfig = rDoc.GetCalcConfig();
+    aCalcConfig.meStringRefAddressSyntax = getConvention(xDocProps);
+    rDoc.SetCalcConfig(aCalcConfig);
 
     mxFormulaBuffer.reset( new FormulaBuffer( *this ) );
     mxWorkbookSettings.reset( new WorkbookSettings( *this ) );
@@ -548,7 +569,6 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     mxPageSettConverter.reset( new PageSettingsConverter( *this ) );
 
     // initialise edit engine
-    ScDocument& rDoc = getScDocument();
     mxEditEngine.reset( new ScEditEngineDefaulter( rDoc.GetEnginePool() ) );
     mxEditEngine->SetRefMapMode( MAP_100TH_MM );
     mxEditEngine->SetEditTextObjectPool( rDoc.GetEditPool() );
