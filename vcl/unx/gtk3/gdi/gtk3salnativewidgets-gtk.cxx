@@ -45,6 +45,7 @@ GtkStyleContext* GtkSalGraphics::mpFrameOutStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpFixedHoriLineStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpFixedVertLineStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpTreeHeaderButtonStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpProgressBarStyle = NULL;
 
 bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
@@ -90,7 +91,8 @@ enum {
     RENDER_EXTENSION = 12,
     RENDER_EXPANDER = 13,
     RENDER_ICON = 14,
-    RENDER_FOCUS = 15,
+    RENDER_PROGRESS = 15,
+    RENDER_FOCUS = 16,
 };
 
 static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
@@ -1007,6 +1009,11 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             styleClass = GTK_STYLE_CLASS_ARROW;
         }
         break;
+    case CTRL_PROGRESS:
+        context = mpProgressBarStyle;
+        renderType = RENDER_PROGRESS;
+        styleClass = GTK_STYLE_CLASS_TROUGH;
+        break;
     default:
         return false;
     }
@@ -1124,6 +1131,29 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         }
 
         gtk_render_focus(context, cr, nX, nY, nWidth, nHeight);
+
+        break;
+    }
+    case RENDER_PROGRESS:
+    {
+        gtk_render_background(context, cr, nX, nY, nWidth, nHeight);
+        gtk_render_frame(context, cr, nX, nY, nWidth, nHeight);
+        long nProgressWidth = rValue.getNumericVal();
+        if (nProgressWidth)
+        {
+            GtkBorder padding;
+            gtk_style_context_get_padding(context, GTK_STATE_FLAG_NORMAL, &padding);
+
+            gtk_style_context_remove_class(context, GTK_STYLE_CLASS_TROUGH);
+            gtk_style_context_add_class(context, GTK_STYLE_CLASS_PROGRESSBAR);
+            gtk_style_context_add_class(context, GTK_STYLE_CLASS_PULSE);
+            nX += padding.left;
+            nY += padding.top;
+            nHeight -= (padding.top + padding.bottom);
+            nProgressWidth -= (padding.left + padding.right);
+            gtk_render_background(context, cr, nX, nY, nProgressWidth, nHeight);
+            gtk_render_frame(context, cr, nX, nY, nProgressWidth, nHeight);
+        }
 
         break;
     }
@@ -1726,7 +1756,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         case CTRL_PUSHBUTTON:
         case CTRL_RADIOBUTTON:
         case CTRL_CHECKBOX:
-//        case CTRL_PROGRESS:
+        case CTRL_PROGRESS:
 //        case CTRL_LISTNODE:
 //        case CTRL_LISTNET:
             if (nPart==PART_ENTIRE_CONTROL || nPart == PART_FOCUS)
@@ -2032,6 +2062,9 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     /* Use the middle column's header for our button */
     GtkWidget* pTreeHeaderCellWidget = gtk_tree_view_column_get_button(middleTreeViewColumn);
     mpTreeHeaderButtonStyle = gtk_widget_get_style_context(pTreeHeaderCellWidget);
+
+    /* Progress Bar */
+    getStyleContext(&mpProgressBarStyle, gtk_progress_bar_new());
 
     gtk_widget_show_all(gDumbContainer);
 }
