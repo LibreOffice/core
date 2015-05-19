@@ -47,7 +47,6 @@
 #include "errobject.hxx"
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -60,6 +59,8 @@
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
+
+#include <random>
 
 using namespace comphelper;
 using namespace osl;
@@ -3518,6 +3519,38 @@ RTLFUNC(Format)
     }
 }
 
+namespace {
+
+// note: BASIC does not use comphelper::random, because
+// Randomize(int) must be supported and should not affect non-BASIC random use
+struct RandomNumberGenerator
+{
+    std::mt19937 global_rng;
+
+    RandomNumberGenerator()
+    {
+        try
+        {
+            std::random_device rd;
+            // initialises the state of the global random number generator
+            // should only be called once.
+            // (note, a few std::variate_generator<> (like normal) have their
+            // own state which would need a reset as well to guarantee identical
+            // sequence of numbers, e.g. via myrand.distribution().reset())
+            global_rng.seed(rd() ^ time(nullptr));
+        }
+        catch (std::runtime_error& e)
+        {
+            SAL_WARN("basic", "Using std::random_device failed: " << e.what());
+            global_rng.seed(time(nullptr));
+        }
+    }
+};
+
+class theRandomNumberGenerator : public rtl::Static<RandomNumberGenerator, theRandomNumberGenerator> {};
+
+}
+
 RTLFUNC(Randomize)
 {
     (void)pBasic;
@@ -3531,12 +3564,9 @@ RTLFUNC(Randomize)
     if( rPar.Count() == 2 )
     {
         nSeed = (int)rPar.Get(1)->GetInteger();
+        theRandomNumberGenerator::get().global_rng.seed(nSeed);
     }
-    else
-    {
-        nSeed = (int)time(NULL);
-    }
-    comphelper::rng::reseed(nSeed);
+    // without parameter, no need to do anything - RNG is seeded at first use
 }
 
 RTLFUNC(Rnd)
@@ -3550,7 +3580,9 @@ RTLFUNC(Rnd)
     }
     else
     {
-        rPar.Get(0)->PutDouble(comphelper::rng::uniform_real_distribution());
+        std::uniform_real_distribution<double> dist(0.0, 1.0);
+        double const tmp(dist(theRandomNumberGenerator::get().global_rng));
+        rPar.Get(0)->PutDouble(tmp);
     }
 }
 
