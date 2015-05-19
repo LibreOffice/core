@@ -787,13 +787,14 @@ void GtkSalGraphics::PaintCheckOrRadio(GtkStyleContext *context,
                                        const Rectangle& rControlRectangle,
                                        ControlType nType)
 {
-    gint x, y, indicator_size;
+    gint indicator_size;
     gtk_style_context_get_style(mpCheckButtonStyle,
                                 "indicator-size", &indicator_size,
-                                NULL );
+                                NULL);
 
-    x = (rControlRectangle.GetWidth() - indicator_size) / 2;
-    y = (rControlRectangle.GetHeight() - indicator_size) / 2;
+    gint x = (rControlRectangle.GetWidth() - indicator_size) / 2;
+    gint y = (rControlRectangle.GetHeight() - indicator_size) / 2;
+
     if (nType == CTRL_CHECKBOX)
         gtk_render_check(context, cr, x, y, indicator_size, indicator_size);
     else if (nType == CTRL_RADIOBUTTON)
@@ -1222,16 +1223,27 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     if(((nType == CTRL_CHECKBOX) || (nType == CTRL_RADIOBUTTON)) &&
        nPart == PART_ENTIRE_CONTROL)
     {
+        rNativeBoundingRegion = rControlRegion;
+
         gtk_style_context_get_style( mpCheckButtonStyle,
                                      "indicator-size", &indicator_size,
                                      "indicator-spacing", &indicator_spacing,
                                      (char *)NULL );
 
-        gint size = indicator_size + indicator_spacing*2;
+        GtkBorder border;
+        gtk_style_context_get_border(mpCheckButtonStyle, GTK_STATE_FLAG_NORMAL, &border);
 
-        point = MAX(0, rControlRegion.GetHeight() - size);
-        aEditRect = Rectangle( Point( 0, point / 2),
-                               Size( size, size ) );
+        GtkBorder padding;
+        gtk_style_context_get_padding(mpCheckButtonStyle, GTK_STATE_FLAG_NORMAL, &padding);
+
+
+        indicator_size += 2*indicator_spacing + border.left + padding.left + border.right + padding.right;
+        Rectangle aIndicatorRect( Point( 0,
+                                         (rControlRegion.GetHeight()-indicator_size)/2),
+                                  Size( indicator_size, indicator_size ) );
+        rNativeContentRegion = aIndicatorRect;
+
+        return true;
     }
     else if( nType == CTRL_MENU_POPUP)
     {
