@@ -89,9 +89,10 @@ enum DBManagerOptions
 };
 
 // Administration of (new) logical databases.
-#define SW_DB_SELECT_UNKNOWN    0
-#define SW_DB_SELECT_TABLE      1
-#define SW_DB_SELECT_QUERY      2
+enum class SwDBSelect
+{
+    UNKNOWN, TABLE, QUERY
+};
 
 struct SwDSParam : public SwDBData
 {
@@ -339,7 +340,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>
             GetColumnSupplier(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>,
                                     const OUString& rTableOrQuery,
-                                    sal_uInt8   eTableOrQuery = SW_DB_SELECT_UNKNOWN);
+                                    SwDBSelect eTableOrQuery = SwDBSelect::UNKNOWN);
 
     static ::com::sun::star::uno::Sequence<OUString> GetExistingDatabaseNames();
 
