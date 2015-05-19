@@ -11,7 +11,7 @@ for an archived overview of the new build system.
 
 See
    ./solenv/doc/gbuild
-for a commented class/API heirachy of gbuild written in C++ syntax. It was not
+for a commented class/API hierarchy of gbuild written in C++ syntax. It was not
 intended for any use beyond to generate nicelooking docs with the doxygen
 doxygen documentation generator from it. It likely is quite outdated these
 days.
