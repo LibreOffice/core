@@ -28,18 +28,19 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 		export PKG_CONFIG="" \
 		&& MAKE=$(MAKE) ./configure \
 			--with-pic \
-			--enable-static \
-			--disable-shared \
+			--enable-shared \
+			--disable-static \
 			--without-docs \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			--disable-weffc \
 			--without-tools \
 			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
-			BOOST_CFLAGS="-DBOOST_DETAIL_NO_CONTAINER_FWD $(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost))" \
+			BOOST_CFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost))" \
 			XML_CFLAGS="$(LIBXML_CFLAGS)" \
 			XML_LIBS="$(LIBXML_LIBS)" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) \
 	)
 
