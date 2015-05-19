@@ -1784,6 +1784,8 @@ void SwTabFrm::MakeAll()
     // keep for the first paragraph in the first cell), and this table does
     // not have a next, the last line will be cut. Loop prevention: Only
     // one try.
+    // WHAT IS THIS??? It "magically" hides last line (paragraph) in a table,
+    // if first is set to keep with next???
     bool bLastRowHasToMoveToFollow = false;
     bool bLastRowMoveNoMoreTries = false;
 
@@ -4378,16 +4380,15 @@ bool SwRowFrm::IsRowSplitAllowed() const
 
 bool SwRowFrm::ShouldRowKeepWithNext() const
 {
-    bool bRet = false;
+    // No KeepWithNext if nested in another table
+    if ( GetUpper()->GetUpper()->IsCellFrm() )
+        return false;
 
     const SwCellFrm* pCell = static_cast<const SwCellFrm*>(Lower());
     const SwFrm* pText = pCell->Lower();
 
-    if ( pText && pText->IsTextFrm() )
-    {
-        bRet = static_cast<const SwTextFrm*>(pText)->GetTextNode()->GetSwAttrSet().GetKeep().GetValue();
-    }
-    return bRet;
+    return pText && pText->IsTextFrm() &&
+           static_cast<const SwTextFrm*>(pText)->GetTextNode()->GetSwAttrSet().GetKeep().GetValue();
 }
 
 SwCellFrm::SwCellFrm(const SwTableBox &rBox, SwFrm* pSib, bool bInsertContent)
