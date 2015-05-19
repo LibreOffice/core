@@ -26,7 +26,6 @@
 
 namespace basegfx
 {
-    class B1IRange;
 
     /** A one-dimensional interval over doubles
 

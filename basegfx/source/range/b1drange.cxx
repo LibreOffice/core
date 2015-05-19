@@ -18,7 +18,6 @@
  */
 
 #include <basegfx/range/b1drange.hxx>
-#include <basegfx/range/b1irange.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
 namespace basegfx
