@@ -3046,6 +3046,8 @@ void ScFiltersTest::testEditEngStrikeThroughXLSX()
             }
         }
     }
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testRefStringXLSX()
