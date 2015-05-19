@@ -149,6 +149,7 @@ WPFTEncodingDialog::WPFTEncodingDialog(
 
 WPFTEncodingDialog::~WPFTEncodingDialog()
 {
+    disposeOnce();
 }
 
 OUString WPFTEncodingDialog::GetEncoding() const
@@ -170,6 +171,14 @@ IMPL_LINK(WPFTEncodingDialog, DoubleClickHdl, ListBox *, pLb)
         m_pBtnOk->Click();
     }
     return 0;
+}
+
+void WPFTEncodingDialog::dispose()
+{
+    m_pLbCharset.disposeAndClear();
+    m_pBtnOk.disposeAndClear();
+    m_pBtnCancel.disposeAndClear();
+    ModalDialog::dispose();
 }
 
 }
