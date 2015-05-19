@@ -57,6 +57,7 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <unocrsr.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <view.hrc>
 #include <SwRewriter.hxx>
@@ -213,7 +214,11 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 {
 #if HAVE_FEATURE_DESKTOP
                     if( !bApi )
+                    {
+                        m_pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND,
+                                m_pSrchItem->GetSearchString().toUtf8().getStr());
                         SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+                    }
 #endif
                     m_bFound = false;
                 }
@@ -335,7 +340,11 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     {
 #if HAVE_FEATURE_DESKTOP
                         if( !bApi )
+                        {
+                            m_pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND,
+                                    m_pSrchItem->GetSearchString().toUtf8().getStr());
                             SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+                        }
 #endif
                         m_bFound = false;
                         return;
@@ -511,6 +520,8 @@ bool SwView::SearchAndWrap(bool bApi)
         if( !bApi )
         {
 #if HAVE_FEATURE_DESKTOP
+            m_pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND,
+                    m_pSrchItem->GetSearchString().toUtf8().getStr());
             SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
 #endif
         }
@@ -551,7 +562,11 @@ bool SwView::SearchAndWrap(bool bApi)
             SvxSearchDialogWrapper::SetSearchLabel(SL_Start);
     }
     else if(!bApi)
+    {
+        m_pWrtShell->libreOfficeKitCallback(LOK_CALLBACK_SEARCH_NOT_FOUND,
+                m_pSrchItem->GetSearchString().toUtf8().getStr());
         SvxSearchDialogWrapper::SetSearchLabel(SL_NotFound);
+    }
 #endif
     return m_bFound;
 }

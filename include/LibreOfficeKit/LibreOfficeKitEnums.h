@@ -138,7 +138,12 @@ typedef enum
      *
      * Not necessarily ever emitted.
      */
-    LOK_CALLBACK_STATUS_INDICATOR_FINISH
+    LOK_CALLBACK_STATUS_INDICATOR_FINISH,
+
+    /**
+     * No match was found for the search input
+     */
+    LOK_CALLBACK_SEARCH_NOT_FOUND
 }
 LibreOfficeKitCallbackType;
 

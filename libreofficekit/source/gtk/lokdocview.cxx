@@ -914,6 +914,8 @@ const char* LOKDocView_Impl::callbackTypeToString(int nType)
         return "LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE";
     case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
         return "LOK_CALLBACK_STATUS_INDICATOR_FINISH";
+    case LOK_CALLBACK_SEARCH_NOT_FOUND:
+        return "LOK_CALLBACK_SEARCH_NOT_FOUND";
     }
     return 0;
 }
@@ -1005,6 +1007,8 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     {
         commandChanged(pCallback->m_aPayload);
     }
+    break;
+    case LOK_CALLBACK_SEARCH_NOT_FOUND:
     break;
     default:
         g_assert(false);
