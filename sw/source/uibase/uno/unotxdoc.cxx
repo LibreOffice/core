@@ -3218,6 +3218,9 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount)
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
         rEditWin.LogicMouseButtonUp(aEvent);
         break;
+    case LOK_MOUSEEVENT_MOUSEMOVE:
+        rEditWin.LogicMouseMove(aEvent);
+        break;
     default:
         assert(false);
         break;

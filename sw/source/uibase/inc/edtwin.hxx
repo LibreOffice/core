@@ -303,6 +303,8 @@ public:
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
     /// Same as MouseButtonUp(), but coordinates are in logic unit.
     void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
+    /// Same as MouseMove(), but coordinates are in logic unit.
+    void LogicMouseMove(const MouseEvent& rMouseEvent);
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorTwipPosition(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Allows starting or ending a graphic move or resize action.
