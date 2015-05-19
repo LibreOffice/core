@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_libraries,wpftimpress,\
 $(eval $(call gb_Library_use_externals,wpftimpress,\
 	boost_headers \
 	etonyek \
+	glm \
 	mwaw \
 	odfgen \
 	revenge \
