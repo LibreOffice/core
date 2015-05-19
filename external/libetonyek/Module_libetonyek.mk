@@ -10,8 +10,22 @@
 $(eval $(call gb_Module_Module,libetonyek))
 
 $(eval $(call gb_Module_add_targets,libetonyek,\
-	ExternalProject_libetonyek \
 	UnpackedTarball_libetonyek \
 ))
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Module_add_targets,libetonyek,\
+	Library_etonyek \
+))
+
+else
+
+$(eval $(call gb_Module_add_targets,libetonyek,\
+	ExternalPackage_libetonyek \
+	ExternalProject_libetonyek \
+))
+
+endif
 
 # vim: set noet sw=4 ts=4:
