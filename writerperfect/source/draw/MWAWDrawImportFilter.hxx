@@ -13,7 +13,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "writerperfect/ImportFilter.hxx"
+#include "ImportFilter.hxx"
 
 #include "DocumentHandlerForOdg.hxx"
 

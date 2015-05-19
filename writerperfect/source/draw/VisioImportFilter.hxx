@@ -8,7 +8,7 @@
 #ifndef _VISIOIMPORTFILTER_HXX
 #define _VISIOIMPORTFILTER_HXX
 
-#include "writerperfect/ImportFilter.hxx"
+#include "ImportFilter.hxx"
 
 #include "DocumentHandlerForOdg.hxx"
 

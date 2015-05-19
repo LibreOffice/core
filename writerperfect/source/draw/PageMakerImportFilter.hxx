@@ -8,7 +8,7 @@
 #ifndef _PAGEMAKERIMPORTFILTER_HXX
 #define _PAGEMAKERIMPORTFILTER_HXX
 
-#include "writerperfect/ImportFilter.hxx"
+#include "ImportFilter.hxx"
 
 #include "DocumentHandlerForOdg.hxx"
 

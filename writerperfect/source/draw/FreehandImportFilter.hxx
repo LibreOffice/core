@@ -8,7 +8,7 @@
 #ifndef _FREEHANDIMPORTFILTER_HXX
 #define _FREEHANDIMPORTFILTER_HXX
 
-#include "writerperfect/ImportFilter.hxx"
+#include "ImportFilter.hxx"
 
 #include "DocumentHandlerForOdg.hxx"
 

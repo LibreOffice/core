@@ -38,7 +38,7 @@
 
 #include <xmloff/attrlist.hxx>
 
-#include "writerperfect/DocumentHandlerFor.hxx"
+#include "DocumentHandlerFor.hxx"
 
 namespace writerperfect
 {

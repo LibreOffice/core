@@ -13,7 +13,7 @@
 #ifndef _WPGIMPORTFILTER_HXX
 #define _WPGIMPORTFILTER_HXX
 
-#include "writerperfect/ImportFilter.hxx"
+#include "ImportFilter.hxx"
 
 #include "DocumentHandlerForOdg.hxx"
 

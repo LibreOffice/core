@@ -10,7 +10,7 @@
 
 #include <libodfgen/libodfgen.hxx>
 
-#include "writerperfect/DocumentHandlerFor.hxx"
+#include "DocumentHandlerFor.hxx"
 
 namespace writerperfect
 {

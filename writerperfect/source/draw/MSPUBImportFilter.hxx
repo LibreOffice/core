@@ -8,7 +8,7 @@
 #ifndef _MSPUBIMPORTFILTER_HXX
 #define _MSPUBIMPORTFILTER_HXX
 
-#include "writerperfect/ImportFilter.hxx"
+#include "ImportFilter.hxx"
 
 #include "DocumentHandlerForOdg.hxx"
 

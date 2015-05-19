@@ -11,7 +11,7 @@
 #ifndef _CMXIMPORTFILTER_HXX
 #define _CMXIMPORTFILTER_HXX
 
-#include "writerperfect/ImportFilter.hxx"
+#include "ImportFilter.hxx"
 
 #include "DocumentHandlerForOdg.hxx"
 

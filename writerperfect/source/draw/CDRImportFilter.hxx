@@ -11,7 +11,7 @@
 #ifndef _CDRIMPORTFILTER_HXX
 #define _CDRIMPORTFILTER_HXX
 
-#include "writerperfect/ImportFilter.hxx"
+#include "ImportFilter.hxx"
 
 #include "DocumentHandlerForOdg.hxx"
 
