@@ -20,10 +20,6 @@
 
 #include <sfx2/app.hxx>
 
-#define ITEMID_NAME 1
-#define ITEMID_RANGE 2
-#define ITEMID_SCOPE 3
-
 #define MINSIZE 80
 
 static OUString createEntryString(const ScRangeNameLine& rLine)
@@ -49,9 +45,9 @@ ScRangeManagerTable::ScRangeManagerTable( SvSimpleTableContainer& rParent, boost
     OUString aScopeStr(ScGlobal::GetRscString(STR_HEADER_SCOPE));
 
     HeaderBar& rHeaderBar = GetTheHeaderBar();
-    rHeaderBar.InsertItem( ITEMID_NAME, aNameStr, 0, HeaderBarItemBits::LEFT| HeaderBarItemBits::VCENTER );
-    rHeaderBar.InsertItem( ITEMID_RANGE, aRangeStr, 0, HeaderBarItemBits::LEFT| HeaderBarItemBits::VCENTER );
-    rHeaderBar.InsertItem( ITEMID_SCOPE, aScopeStr, 0, HeaderBarItemBits::LEFT| HeaderBarItemBits::VCENTER );
+    InsertHeaderEntry( aNameStr );
+    InsertHeaderEntry( aRangeStr );
+    InsertHeaderEntry( aScopeStr );
     rHeaderBar.SetEndDragHdl( LINK( this, ScRangeManagerTable, HeaderEndDragHdl ) );
 
     setColWidths();
