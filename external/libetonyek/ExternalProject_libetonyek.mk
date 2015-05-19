@@ -17,7 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,libetonyek,\
 
 $(eval $(call gb_ExternalProject_use_externals,libetonyek,\
 	boost_headers \
-	glm \
+	glm_headers \
 	libxml2 \
 	revenge \
 	zlib \
