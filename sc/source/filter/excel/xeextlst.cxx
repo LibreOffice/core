@@ -259,6 +259,7 @@ void XclExpExtIconSet::SaveXml(XclExpXmlStream& rStrm)
 XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& rFormat, const ScAddress& rPos, const OString& rId, sal_Int32 nPriority ):
     XclExpRoot(rRoot),
     maId(rId),
+    pType(NULL),
     mnPriority(nPriority)
 {
     switch (rFormat.GetType())
