@@ -1197,9 +1197,12 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
 
     const long nTextHeight = GetTextHeight();
     const long nCursorPosY = ImplGetTextYPosition();
-    pCursor->SetPos( Point( nCursorPosX, nCursorPosY ) );
-    pCursor->SetSize( Size( nCursorWidth, nTextHeight ) );
-    pCursor->Show();
+    if (pCursor)
+    {
+        pCursor->SetPos( Point( nCursorPosX, nCursorPosY ) );
+        pCursor->SetSize( Size( nCursorWidth, nTextHeight ) );
+        pCursor->Show();
+    }
 }
 
 void Edit::ImplAlign()
