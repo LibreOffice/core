@@ -117,8 +117,8 @@ void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
         const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
         SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
         SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode()
-            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-            : ViewShell::OUTPUT_DRAWMODE_COLOR );
+            ? sd::OUTPUT_DRAWMODE_CONTRAST
+            : sd::OUTPUT_DRAWMODE_COLOR );
     }
 }
 
@@ -560,8 +560,8 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
             const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
             pVD->SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
             pVD->SetDrawMode( rStyles.GetHighContrastMode()
-                ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-                : ViewShell::OUTPUT_DRAWMODE_COLOR );
+                ? sd::OUTPUT_DRAWMODE_CONTRAST
+                : sd::OUTPUT_DRAWMODE_COLOR );
             pVD->Erase();
             pObject->SingleObjectPainter( *pVD.get() );
             aBmp = BitmapEx( pVD->GetBitmap( aObjRect.TopLeft(), aObjSize ) );

@@ -116,11 +116,11 @@ static void lcl_DrawWin( SdrObject* pObject, vcl::RenderContext* pWindow, const 
     MapMode aOld = pWindow->GetMapMode();
     pWindow->SetMapMode( rMap );
 
-    sal_uLong nOldDrawMode = pWindow->GetDrawMode();
+    DrawModeFlags nOldDrawMode = pWindow->GetDrawMode();
     if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
-        pWindow->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
-                            DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+        pWindow->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill |
+                            DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );
     }
 
     pObject->SingleObjectPainter( *pWindow ); // #110094#-17

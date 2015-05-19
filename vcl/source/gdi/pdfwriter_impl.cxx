@@ -10943,8 +10943,8 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     aDev->SetMapMode( MapMode( MAP_PIXEL ) );
     if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
         aDev->SetDrawMode( aDev->GetDrawMode() |
-                          ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
-                            DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
+                          ( DrawModeFlags::GrayLine | DrawModeFlags::GrayFill | DrawModeFlags::GrayText |
+                            DrawModeFlags::GrayBitmap | DrawModeFlags::GrayGradient ) );
     aDev->DrawGradient( Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
 
     Bitmap aSample = aDev->GetBitmap( Point( 0, 0 ), rObject.m_aSize );

@@ -216,35 +216,42 @@ namespace o3tl
 }
 
 // DrawModes
-#define DRAWMODE_DEFAULT                ((sal_uLong)0x00000000)
-#define DRAWMODE_BLACKLINE              ((sal_uLong)0x00000001)
-#define DRAWMODE_BLACKFILL              ((sal_uLong)0x00000002)
-#define DRAWMODE_BLACKTEXT              ((sal_uLong)0x00000004)
-#define DRAWMODE_BLACKBITMAP            ((sal_uLong)0x00000008)
-#define DRAWMODE_BLACKGRADIENT          ((sal_uLong)0x00000010)
-#define DRAWMODE_GRAYLINE               ((sal_uLong)0x00000020)
-#define DRAWMODE_GRAYFILL               ((sal_uLong)0x00000040)
-#define DRAWMODE_GRAYTEXT               ((sal_uLong)0x00000080)
-#define DRAWMODE_GRAYBITMAP             ((sal_uLong)0x00000100)
-#define DRAWMODE_GRAYGRADIENT           ((sal_uLong)0x00000200)
-#define DRAWMODE_NOFILL                 ((sal_uLong)0x00000400)
-#define DRAWMODE_NOBITMAP               ((sal_uLong)0x00000800)
-#define DRAWMODE_NOGRADIENT             ((sal_uLong)0x00001000)
-#define DRAWMODE_GHOSTEDLINE            ((sal_uLong)0x00002000)
-#define DRAWMODE_GHOSTEDFILL            ((sal_uLong)0x00004000)
-#define DRAWMODE_GHOSTEDTEXT            ((sal_uLong)0x00008000)
-#define DRAWMODE_GHOSTEDBITMAP          ((sal_uLong)0x00010000)
-#define DRAWMODE_GHOSTEDGRADIENT        ((sal_uLong)0x00020000)
-#define DRAWMODE_WHITELINE              ((sal_uLong)0x00100000)
-#define DRAWMODE_WHITEFILL              ((sal_uLong)0x00200000)
-#define DRAWMODE_WHITETEXT              ((sal_uLong)0x00400000)
-#define DRAWMODE_WHITEBITMAP            ((sal_uLong)0x00800000)
-#define DRAWMODE_WHITEGRADIENT          ((sal_uLong)0x01000000)
-#define DRAWMODE_SETTINGSLINE           ((sal_uLong)0x02000000)
-#define DRAWMODE_SETTINGSFILL           ((sal_uLong)0x04000000)
-#define DRAWMODE_SETTINGSTEXT           ((sal_uLong)0x08000000)
-#define DRAWMODE_SETTINGSGRADIENT       ((sal_uLong)0x10000000)
-#define DRAWMODE_NOTRANSPARENCY         ((sal_uLong)0x80000000)
+enum class DrawModeFlags : sal_uLong
+{
+    Default                = 0x00000000,
+    BlackLine              = 0x00000001,
+    BlackFill              = 0x00000002,
+    BlackText              = 0x00000004,
+    BlackBitmap            = 0x00000008,
+    BlackGradient          = 0x00000010,
+    GrayLine               = 0x00000020,
+    GrayFill               = 0x00000040,
+    GrayText               = 0x00000080,
+    GrayBitmap             = 0x00000100,
+    GrayGradient           = 0x00000200,
+    NoFill                 = 0x00000400,
+    NoBitmap               = 0x00000800,
+    NoGradient             = 0x00001000,
+    GhostedLine            = 0x00002000,
+    GhostedFill            = 0x00004000,
+    GhostedText            = 0x00008000,
+    GhostedBitmap          = 0x00010000,
+    GhostedGradient        = 0x00020000,
+    WhiteLine              = 0x00100000,
+    WhiteFill              = 0x00200000,
+    WhiteText              = 0x00400000,
+    WhiteBitmap            = 0x00800000,
+    WhiteGradient          = 0x01000000,
+    SettingsLine           = 0x02000000,
+    SettingsFill           = 0x04000000,
+    SettingsText           = 0x08000000,
+    SettingsGradient       = 0x10000000,
+    NoTransparency         = 0x80000000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DrawModeFlags> : is_typed_flags<DrawModeFlags, 0x9ff3ffff> {};
+}
 
 // Antialiasing
 #define ANTIALIASING_DISABLE_TEXT       ((sal_uInt16)0x0001)
@@ -355,7 +362,7 @@ private:
     mutable long                    mnTextOffY;
     mutable long                    mnEmphasisAscent;
     mutable long                    mnEmphasisDescent;
-    sal_uLong                       mnDrawMode;
+    DrawModeFlags                   mnDrawMode;
     ComplexTextLayoutMode           mnTextLayoutMode;
     ImplMapRes                      maMapRes;
     ImplThresholdRes                maThresRes;
@@ -610,8 +617,8 @@ public:
     void                        SetAntialiasing( sal_uInt16 nMode =  0 );
     sal_uInt16                  GetAntialiasing() const { return mnAntialiasing; }
 
-    void                        SetDrawMode( sal_uLong nDrawMode );
-    sal_uLong                   GetDrawMode() const { return mnDrawMode; }
+    void                        SetDrawMode( DrawModeFlags nDrawMode );
+    DrawModeFlags               GetDrawMode() const { return mnDrawMode; }
 
     void                        SetLayoutMode( ComplexTextLayoutMode nTextLayoutMode );
     ComplexTextLayoutMode       GetLayoutMode() const { return mnTextLayoutMode; }

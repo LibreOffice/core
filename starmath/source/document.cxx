@@ -429,13 +429,13 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     //! the draw mode needs to be set to default, because when imbedding
     //! Math for example in Calc in "a over b" the fraction bar may not
     //! be visible else. More generally: the FillColor may have been changed.
-    sal_uLong nOldDrawMode = DRAWMODE_DEFAULT;
+    DrawModeFlags nOldDrawMode = DrawModeFlags::Default;
     bool bRestoreDrawMode = false;
     if (OUTDEV_WINDOW == rDev.GetOutDevType() &&
         static_cast<vcl::Window &>(rDev).GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         nOldDrawMode = rDev.GetDrawMode();
-        rDev.SetDrawMode( DRAWMODE_DEFAULT );
+        rDev.SetDrawMode( DrawModeFlags::Default );
         bRestoreDrawMode = true;
     }
 

@@ -909,9 +909,9 @@ void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
 
 void AutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    sal_uInt32 nOldDrawMode = aVD->GetDrawMode();
+    DrawModeFlags nOldDrawMode = aVD->GetDrawMode();
     if (rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())
-        aVD->SetDrawMode(DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT);
+        aVD->SetDrawMode(DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient);
 
     Bitmap thePreview;
     Point aCenterPos;

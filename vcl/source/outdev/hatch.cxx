@@ -46,27 +46,27 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
 
     Hatch aHatch( rHatch );
 
-    if ( mnDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE |
-                        DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE |
-                        DRAWMODE_SETTINGSLINE ) )
+    if ( mnDrawMode & ( DrawModeFlags::BlackLine | DrawModeFlags::WhiteLine |
+                        DrawModeFlags::GrayLine | DrawModeFlags::GhostedLine |
+                        DrawModeFlags::SettingsLine ) )
     {
         Color aColor( rHatch.GetColor() );
 
-        if ( mnDrawMode & DRAWMODE_BLACKLINE )
+        if ( mnDrawMode & DrawModeFlags::BlackLine )
             aColor = Color( COL_BLACK );
-        else if ( mnDrawMode & DRAWMODE_WHITELINE )
+        else if ( mnDrawMode & DrawModeFlags::WhiteLine )
             aColor = Color( COL_WHITE );
-        else if ( mnDrawMode & DRAWMODE_GRAYLINE )
+        else if ( mnDrawMode & DrawModeFlags::GrayLine )
         {
             const sal_uInt8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
         }
-        else if( mnDrawMode & DRAWMODE_SETTINGSLINE )
+        else if( mnDrawMode & DrawModeFlags::SettingsLine )
         {
             aColor = GetSettings().GetStyleSettings().GetFontColor();
         }
 
-        if ( mnDrawMode & DRAWMODE_GHOSTEDLINE )
+        if ( mnDrawMode & DrawModeFlags::GhostedLine )
         {
             aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
                             ( aColor.GetGreen() >> 1 ) | 0x80,

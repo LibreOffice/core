@@ -33,8 +33,8 @@ SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit( const SfxItemSet& );
 SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit();
 SVX_DLLPUBLIC bool GetApplyCharUnit( const SfxItemSet& );
 
-static const int OUTPUT_DRAWMODE_COLOR  = (DRAWMODE_DEFAULT);
-static const int OUTPUT_DRAWMODE_CONTRAST = (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT);
+static const DrawModeFlags OUTPUT_DRAWMODE_COLOR  = DrawModeFlags::Default;
+static const DrawModeFlags OUTPUT_DRAWMODE_CONTRAST = DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient;
 
 #endif
 

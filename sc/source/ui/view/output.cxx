@@ -1279,7 +1279,7 @@ size_t lclGetArrayColFromCellInfoX( sal_uInt16 nCellInfoX, sal_uInt16 nCellInfoF
 
 void ScOutputData::DrawFrame()
 {
-    sal_uLong nOldDrawMode = mpDev->GetDrawMode();
+    DrawModeFlags nOldDrawMode = mpDev->GetDrawMode();
 
     Color aSingleColor;
     bool bUseSingleColor = false;
@@ -1291,16 +1291,16 @@ void ScOutputData::DrawFrame()
     //  that are drawn with DrawRect, so if the line/background bits are set, the DrawMode
     //  must be reset and the border colors handled here.
 
-    if ( ( nOldDrawMode & DRAWMODE_WHITEFILL ) && ( nOldDrawMode & DRAWMODE_BLACKLINE ) )
+    if ( ( nOldDrawMode & DrawModeFlags::WhiteFill ) && ( nOldDrawMode & DrawModeFlags::BlackLine ) )
     {
-        mpDev->SetDrawMode( nOldDrawMode & (~DRAWMODE_WHITEFILL) );
+        mpDev->SetDrawMode( nOldDrawMode & (~DrawModeFlags::WhiteFill) );
         aSingleColor.SetColor( COL_BLACK );
         bUseSingleColor = true;
     }
-    else if ( ( nOldDrawMode & DRAWMODE_SETTINGSFILL ) && ( nOldDrawMode & DRAWMODE_SETTINGSLINE ) )
+    else if ( ( nOldDrawMode & DrawModeFlags::SettingsFill ) && ( nOldDrawMode & DrawModeFlags::SettingsLine ) )
     {
-        mpDev->SetDrawMode( nOldDrawMode & (~DRAWMODE_SETTINGSFILL) );
-        aSingleColor = rStyleSettings.GetWindowTextColor();     // same as used in VCL for DRAWMODE_SETTINGSLINE
+        mpDev->SetDrawMode( nOldDrawMode & (~DrawModeFlags::SettingsFill) );
+        aSingleColor = rStyleSettings.GetWindowTextColor();     // same as used in VCL for DrawModeFlags::SettingsLine
         bUseSingleColor = true;
     }
     else if ( bCellContrast )
@@ -2442,12 +2442,12 @@ void ScOutputData::DrawClipMarks()
 
     Color aArrowFillCol( COL_LIGHTRED );
 
-    sal_uLong nOldDrawMode = mpDev->GetDrawMode();
+    DrawModeFlags nOldDrawMode = mpDev->GetDrawMode();
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
     {
         //  use DrawMode to change the arrow's outline color
-        mpDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE );
+        mpDev->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine );
         //  use text color also for the fill color
         aArrowFillCol.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
     }

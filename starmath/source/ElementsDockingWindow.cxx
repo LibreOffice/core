@@ -227,7 +227,7 @@ SmElementsControl::SmElementsControl(vcl::Window *pParent)
     , mxScroll(VclPtr<ScrollBar>::Create(this, WB_VERT))
 {
     SetMapMode( MapMode(MAP_100TH_MM) );
-    SetDrawMode( DRAWMODE_DEFAULT );
+    SetDrawMode( DrawModeFlags::Default );
     SetLayoutMode( TEXT_LAYOUT_DEFAULT );
     SetDigitLanguage( LANGUAGE_ENGLISH );
 

@@ -570,7 +570,7 @@ public:
     SAL_DLLPRIVATE int getPageCountProtected() const;
     SAL_DLLPRIVATE css::uno::Sequence< css::beans::PropertyValue > getPageParametersProtected( int i_nPage ) const;
 
-    SAL_DLLPRIVATE sal_uLong removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
+    SAL_DLLPRIVATE DrawModeFlags removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
     SAL_DLLPRIVATE void resetPrinterOptions( bool i_bFileOutput );
 };
 

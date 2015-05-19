@@ -164,8 +164,8 @@ Image PreviewRenderer::RenderSubstitution (
         const bool bUseContrast (
             Application::GetSettings().GetStyleSettings().GetHighContrastMode());
         mpPreviewDevice->SetDrawMode (bUseContrast
-            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-            : ViewShell::OUTPUT_DRAWMODE_COLOR);
+            ? sd::OUTPUT_DRAWMODE_CONTRAST
+            : sd::OUTPUT_DRAWMODE_COLOR);
 
         // Set a map mode that makes a typical substitution text completely
         // visible.
@@ -234,8 +234,8 @@ bool PreviewRenderer::Initialize (
     bool bUseContrast (bObeyHighContrastMode
         && Application::GetSettings().GetStyleSettings().GetHighContrastMode());
     mpPreviewDevice->SetDrawMode (bUseContrast
-        ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-        : ViewShell::OUTPUT_DRAWMODE_COLOR);
+        ? sd::OUTPUT_DRAWMODE_CONTRAST
+        : sd::OUTPUT_DRAWMODE_COLOR);
     mpPreviewDevice->SetSettings(Application::GetSettings());
 
     // Tell the view to show the given page.
@@ -447,8 +447,8 @@ Image PreviewRenderer::ScaleBitmap (
         bool bUseContrast = Application::GetSettings().GetStyleSettings().
             GetHighContrastMode();
         mpPreviewDevice->SetDrawMode (bUseContrast
-            ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-            : ViewShell::OUTPUT_DRAWMODE_COLOR);
+            ? sd::OUTPUT_DRAWMODE_CONTRAST
+            : sd::OUTPUT_DRAWMODE_COLOR);
 
         // Set output size.
         Size aSize (rBitmapEx.GetSizePixel());

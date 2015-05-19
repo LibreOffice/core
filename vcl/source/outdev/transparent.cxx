@@ -72,33 +72,33 @@ namespace
 Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
 {
     Color aColor( rColor );
-    sal_uLong  nDrawMode = GetDrawMode();
+    DrawModeFlags nDrawMode = GetDrawMode();
 
-    if( nDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE |
-                      DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE |
-                      DRAWMODE_SETTINGSLINE ) )
+    if( nDrawMode & ( DrawModeFlags::BlackLine | DrawModeFlags::WhiteLine |
+                      DrawModeFlags::GrayLine | DrawModeFlags::GhostedLine |
+                      DrawModeFlags::SettingsLine ) )
     {
         if( !ImplIsColorTransparent( aColor ) )
         {
-            if( nDrawMode & DRAWMODE_BLACKLINE )
+            if( nDrawMode & DrawModeFlags::BlackLine )
             {
                 aColor = Color( COL_BLACK );
             }
-            else if( nDrawMode & DRAWMODE_WHITELINE )
+            else if( nDrawMode & DrawModeFlags::WhiteLine )
             {
                 aColor = Color( COL_WHITE );
             }
-            else if( nDrawMode & DRAWMODE_GRAYLINE )
+            else if( nDrawMode & DrawModeFlags::GrayLine )
             {
                 const sal_uInt8 cLum = aColor.GetLuminance();
                 aColor = Color( cLum, cLum, cLum );
             }
-            else if( nDrawMode & DRAWMODE_SETTINGSLINE )
+            else if( nDrawMode & DrawModeFlags::SettingsLine )
             {
                 aColor = GetSettings().GetStyleSettings().GetFontColor();
             }
 
-            if( nDrawMode & DRAWMODE_GHOSTEDLINE )
+            if( nDrawMode & DrawModeFlags::GhostedLine )
             {
                 aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
                                 ( aColor.GetGreen() >> 1 ) | 0x80,
@@ -601,7 +601,7 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
                                     sal_uInt16 nTransparencePercent )
 {
     // short circuit for drawing an opaque polygon
-    if( (nTransparencePercent < 1) || ((mnDrawMode & DRAWMODE_NOTRANSPARENCY) != 0) )
+    if( (nTransparencePercent < 1) || (mnDrawMode & DrawModeFlags::NoTransparency) )
     {
         DrawPolyPolygon( rPolyPoly );
         return;
@@ -663,7 +663,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
         return;
 
     if( ( rTransparenceGradient.GetStartColor() == aBlack && rTransparenceGradient.GetEndColor() == aBlack ) ||
-        ( mnDrawMode & ( DRAWMODE_NOTRANSPARENCY ) ) )
+        ( mnDrawMode & ( DrawModeFlags::NoTransparency ) ) )
     {
         ( (GDIMetaFile&) rMtf ).WindStart();
         ( (GDIMetaFile&) rMtf ).Play( this, rPos, rSize );
@@ -731,9 +731,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     // create alpha mask from gradient and get as Bitmap
                     xVDev->EnableMapMode(bBufferMapModeEnabled);
-                    xVDev->SetDrawMode(DRAWMODE_GRAYGRADIENT);
+                    xVDev->SetDrawMode(DrawModeFlags::GrayGradient);
                     xVDev->DrawGradient(Rectangle(rPos, rSize), rTransparenceGradient);
-                    xVDev->SetDrawMode(DRAWMODE_DEFAULT);
+                    xVDev->SetDrawMode(DrawModeFlags::Default);
                     xVDev->EnableMapMode(false);
 
                     const AlphaMask aAlpha(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
@@ -768,8 +768,8 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->SetLineColor( COL_BLACK );
                     xVDev->SetFillColor( COL_BLACK );
                     xVDev->DrawRect( Rectangle( xVDev->PixelToLogic( Point() ), xVDev->GetOutputSize() ) );
-                    xVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
-                                        DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
+                    xVDev->SetDrawMode( DrawModeFlags::WhiteLine | DrawModeFlags::WhiteFill | DrawModeFlags::WhiteText |
+                                        DrawModeFlags::WhiteBitmap | DrawModeFlags::WhiteGradient );
                     ( (GDIMetaFile&) rMtf ).WindStart();
                     ( (GDIMetaFile&) rMtf ).Play( xVDev.get(), rPos, rSize );
                     ( (GDIMetaFile&) rMtf ).WindStart();
@@ -778,9 +778,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
                     // create alpha mask from gradient
-                    xVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
+                    xVDev->SetDrawMode( DrawModeFlags::GrayGradient );
                     xVDev->DrawGradient( Rectangle( rPos, rSize ), rTransparenceGradient );
-                    xVDev->SetDrawMode( DRAWMODE_DEFAULT );
+                    xVDev->SetDrawMode( DrawModeFlags::Default );
                     xVDev->EnableMapMode( false );
                     xVDev->DrawMask( Point(), xVDev->GetOutputSizePixel(), aMask, Color( COL_WHITE ) );
 

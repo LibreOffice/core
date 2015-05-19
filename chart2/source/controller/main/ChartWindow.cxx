@@ -260,12 +260,12 @@ void ChartWindow::RequestHelp( const HelpEvent& rHEvt )
 
 void ChartWindow::adjustHighContrastMode()
 {
-    static const sal_Int32 nContrastMode =
-        DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
-        DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT;
+    static const DrawModeFlags nContrastMode =
+        DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill |
+        DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient;
 
     bool bUseContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-    SetDrawMode( bUseContrast ? nContrastMode : DRAWMODE_DEFAULT );
+    SetDrawMode( bUseContrast ? nContrastMode : DrawModeFlags::Default );
 }
 
 void ChartWindow::ForceInvalidate()

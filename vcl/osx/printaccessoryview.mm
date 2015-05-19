@@ -301,8 +301,8 @@ class ControllerProperties
             PrinterController::PageSize aPageSize( mpController->getFilteredPageFile( i_nPage, aMtf, false ) );
             auto aDev(VclPtr<VirtualDevice>::Create());
             if( mpController->getPrinter()->GetPrinterOptions().IsConvertToGreyscales() )
-                aDev->SetDrawMode( aDev->GetDrawMode() | ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT | 
-                                                         DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
+                aDev->SetDrawMode( aDev->GetDrawMode() | ( DrawModeFlags::GrayLine | DrawModeFlags::GrayFill | DrawModeFlags::GrayText | 
+                                                         DrawModeFlags::GrayBitmap | DrawModeFlags::GrayGradient ) );
             // see salprn.cxx, currently we pretend to be a 720dpi device on printers
             aDev->SetReferenceDevice( 720, 720 );
             aDev->EnableOutput( TRUE );

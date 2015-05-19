@@ -465,8 +465,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 xVDev->SetLineColor( COL_BLACK );
                                 xVDev->SetFillColor( COL_BLACK );
                                 xVDev->DrawRect( Rectangle( aPoint, aDstSize ) );
-                                xVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
-                                                    DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
+                                xVDev->SetDrawMode( DrawModeFlags::WhiteLine | DrawModeFlags::WhiteFill | DrawModeFlags::WhiteText |
+                                                    DrawModeFlags::WhiteBitmap | DrawModeFlags::WhiteGradient );
                                 aTmpMtf.WindStart();
                                 aTmpMtf.Play( xVDev.get(), aPoint, aDstSize );
                                 aTmpMtf.WindStart();
@@ -475,9 +475,9 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 xVDev->EnableMapMode( true );
 
                                 // create alpha mask from gradient
-                                xVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
+                                xVDev->SetDrawMode( DrawModeFlags::GrayGradient );
                                 xVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
-                                xVDev->SetDrawMode( DRAWMODE_DEFAULT );
+                                xVDev->SetDrawMode( DrawModeFlags::Default );
                                 xVDev->EnableMapMode( false );
                                 xVDev->DrawMask( aPoint, aDstSizePixel, aMask, Color( COL_WHITE ) );
                                 aAlpha = xVDev->GetBitmap( aPoint, aDstSizePixel );

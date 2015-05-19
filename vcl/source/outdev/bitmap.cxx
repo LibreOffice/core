@@ -52,7 +52,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     if( ImplIsRecordLayout() )
         return;
 
-    if ( ( mnDrawMode & DRAWMODE_NOBITMAP ) )
+    if ( ( mnDrawMode & DrawModeFlags::NoBitmap ) )
     {
         return;
     }
@@ -64,15 +64,15 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
 
     Bitmap aBmp( rBitmap );
 
-    if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP |
-                             DRAWMODE_GRAYBITMAP  | DRAWMODE_GHOSTEDBITMAP ) )
+    if ( mnDrawMode & ( DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap |
+                             DrawModeFlags::GrayBitmap  | DrawModeFlags::GhostedBitmap ) )
     {
-        if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP ) )
+        if ( mnDrawMode & ( DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap ) )
         {
             sal_uInt8 cCmpVal;
 
-            if ( mnDrawMode & DRAWMODE_BLACKBITMAP )
-                cCmpVal = ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP ) ? 0x80 : 0;
+            if ( mnDrawMode & DrawModeFlags::BlackBitmap )
+                cCmpVal = ( mnDrawMode & DrawModeFlags::GhostedBitmap ) ? 0x80 : 0;
             else
                 cCmpVal = 255;
 
@@ -86,10 +86,10 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
         }
         else if( !!aBmp )
         {
-            if ( mnDrawMode & DRAWMODE_GRAYBITMAP )
+            if ( mnDrawMode & DrawModeFlags::GrayBitmap )
                 aBmp.Convert( BMP_CONVERSION_8BIT_GREYS );
 
-            if ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP )
+            if ( mnDrawMode & DrawModeFlags::GhostedBitmap )
                 aBmp.Convert( BMP_CONVERSION_GHOSTED );
         }
     }
@@ -274,7 +274,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     }
     else
     {
-        if ( mnDrawMode & DRAWMODE_NOBITMAP )
+        if ( mnDrawMode & DrawModeFlags::NoBitmap )
             return;
 
         if ( ROP_INVERT == meRasterOp )
@@ -285,16 +285,16 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
 
         BitmapEx aBmpEx( rBitmapEx );
 
-        if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP |
-                                 DRAWMODE_GRAYBITMAP | DRAWMODE_GHOSTEDBITMAP ) )
+        if ( mnDrawMode & ( DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap |
+                                 DrawModeFlags::GrayBitmap | DrawModeFlags::GhostedBitmap ) )
         {
-            if ( mnDrawMode & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP ) )
+            if ( mnDrawMode & ( DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap ) )
             {
-                Bitmap  aColorBmp( aBmpEx.GetSizePixel(), ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP ) ? 4 : 1 );
+                Bitmap  aColorBmp( aBmpEx.GetSizePixel(), ( mnDrawMode & DrawModeFlags::GhostedBitmap ) ? 4 : 1 );
                 sal_uInt8   cCmpVal;
 
-                if ( mnDrawMode & DRAWMODE_BLACKBITMAP )
-                    cCmpVal = ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP ) ? 0x80 : 0;
+                if ( mnDrawMode & DrawModeFlags::BlackBitmap )
+                    cCmpVal = ( mnDrawMode & DrawModeFlags::GhostedBitmap ) ? 0x80 : 0;
                 else
                     cCmpVal = 255;
 
@@ -318,10 +318,10 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
             }
             else if( !!aBmpEx )
             {
-                if ( mnDrawMode & DRAWMODE_GRAYBITMAP )
+                if ( mnDrawMode & DrawModeFlags::GrayBitmap )
                     aBmpEx.Convert( BMP_CONVERSION_8BIT_GREYS );
 
-                if ( mnDrawMode & DRAWMODE_GHOSTEDBITMAP )
+                if ( mnDrawMode & DrawModeFlags::GhostedBitmap )
                     aBmpEx.Convert( BMP_CONVERSION_GHOSTED );
             }
         }
@@ -1143,7 +1143,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     if(rBitmapEx.IsEmpty())
         return;
 
-    if ( mnDrawMode & DRAWMODE_NOBITMAP )
+    if ( mnDrawMode & DrawModeFlags::NoBitmap )
         return;
 
     // decompose matrix to check rotation and shear
@@ -1174,7 +1174,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     // we have rotation,shear or mirror, check if some crazy mode needs the
     // created transformed bitmap
     const bool bInvert(ROP_INVERT == meRasterOp);
-    const bool bBitmapChangedColor(mnDrawMode & (DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP | DRAWMODE_GRAYBITMAP | DRAWMODE_GHOSTEDBITMAP));
+    const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap | DrawModeFlags::GhostedBitmap));
     const bool bMetafile(mpMetaFile);
     bool bDone(false);
     const basegfx::B2DHomMatrix aFullTransform(GetViewTransformation() * rTransformation);

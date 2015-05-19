@@ -386,9 +386,9 @@ private:
     BitmapEx*                   mpBmpEx;
     GraphicAttr                 maAttr;
     Size                        maOutSizePix;
-    sal_uLong                       mnCacheSize;
-    sal_uLong                       mnOutDevDrawMode;
-    sal_uInt16                      mnOutDevBitCount;
+    sal_uLong                   mnCacheSize;
+    DrawModeFlags               mnOutDevDrawMode;
+    sal_uInt16                  mnOutDevBitCount;
 
     static bool IsCacheableAsBitmap( const GDIMetaFile& rMtf, OutputDevice* pOut, const Size& rSz );
 
@@ -442,7 +442,7 @@ public:
                                     // bit count. One cannot reuse
                                     // this cache object, if it's
                                     // e.g. generated for
-                                    // DRAWMODE_GRAYBITMAP.
+                                    // DrawModeFlags::GrayBitmap.
                                     return( ( pCacheEntry == mpRefCacheEntry ) &&
                                             ( maAttr == rAttr ) &&
                                             ( ( maOutSizePix == rSzPixel ) || ( !maOutSizePix.Width() && !maOutSizePix.Height() ) ) &&

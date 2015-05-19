@@ -93,13 +93,13 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
     {
         //change the draw mode in high contrast mode
         OutputDevice* pOutDev = GetShell()->GetOut();
-        sal_uLong nOldDrawMode = pOutDev->GetDrawMode();
+        DrawModeFlags nOldDrawMode = pOutDev->GetDrawMode();
         if( GetShell()->GetWin() &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
             (!GetShell()->IsPreview()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
         {
-            pOutDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
-                                DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+            pOutDev->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill |
+                                DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );
         }
 
         // For correct handling of accessibility, high contrast, the

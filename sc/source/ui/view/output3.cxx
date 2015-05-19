@@ -189,11 +189,11 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 
     pModel->UseHyphenator();
 
-    sal_uLong nOldDrawMode = mpDev->GetDrawMode();
+    DrawModeFlags nOldDrawMode = mpDev->GetDrawMode();
     if ( mbUseStyleColor && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
-        mpDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
-                            DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+        mpDev->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill |
+                            DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );
     }
 
     // #109985#

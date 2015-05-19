@@ -280,11 +280,11 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     maPageVDev->Erase();
     maPageVDev->Push();
     maPageVDev->SetMapMode( MAP_100TH_MM );
-    sal_uLong nOldDrawMode = maPageVDev->GetDrawMode();
+    DrawModeFlags nOldDrawMode = maPageVDev->GetDrawMode();
     if( mbGreyscale )
         maPageVDev->SetDrawMode( maPageVDev->GetDrawMode() |
-                                ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
-                                  DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
+                                ( DrawModeFlags::GrayLine | DrawModeFlags::GrayFill | DrawModeFlags::GrayText |
+                                  DrawModeFlags::GrayBitmap | DrawModeFlags::GrayGradient ) );
     aMtf.WindStart();
     aMtf.Scale( fScale, fScale );
     aMtf.WindStart();

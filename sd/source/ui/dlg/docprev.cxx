@@ -158,8 +158,8 @@ void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Recta
         SvtAccessibilityOptions aAccOptions;
         bool bUseContrast = aAccOptions.GetIsForPagePreviews() && Application::GetSettings().GetStyleSettings().GetHighContrastMode();
         SetDrawMode( bUseContrast
-            ? ::sd::ViewShell::OUTPUT_DRAWMODE_CONTRAST
-            : ::sd::ViewShell::OUTPUT_DRAWMODE_COLOR );
+            ? ::sd::OUTPUT_DRAWMODE_CONTRAST
+            : ::sd::OUTPUT_DRAWMODE_COLOR );
 
         ImpPaint( pMetaFile, this );
     }

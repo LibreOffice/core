@@ -581,9 +581,9 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                 cache::PageCacheManager::Instance()->InvalidateAllCaches();
 
                 // Update the draw mode.
-                sal_uLong nDrawMode (Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                    ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-                    : ViewShell::OUTPUT_DRAWMODE_COLOR);
+                DrawModeFlags nDrawMode (Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+                    ? sd::OUTPUT_DRAWMODE_CONTRAST
+                    : sd::OUTPUT_DRAWMODE_COLOR);
                 if (mrSlideSorter.GetViewShell() != NULL)
                     mrSlideSorter.GetViewShell()->GetFrameView()->SetDrawMode(nDrawMode);
                 if (pActiveWindow != nullptr)
@@ -635,23 +635,17 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
     {
         if (mrSlideSorter.GetContentWindow())
         {
-            sal_uLong nMode = mrSlideSorter.GetContentWindow()->GetDrawMode();
+            DrawModeFlags nMode = mrSlideSorter.GetContentWindow()->GetDrawMode();
             sal_uInt16 nQuality = 0;
 
-            switch (nMode)
-            {
-                case ViewShell::OUTPUT_DRAWMODE_COLOR:
-                    nQuality = 0;
-                    break;
-                case ViewShell::OUTPUT_DRAWMODE_GRAYSCALE:
-                    nQuality = 1;
-                    break;
-                case ViewShell::OUTPUT_DRAWMODE_BLACKWHITE:
-                    nQuality = 2;
-                    break;
-                case ViewShell::OUTPUT_DRAWMODE_CONTRAST:
-                    nQuality = 3;
-                    break;
+            if (nMode == sd::OUTPUT_DRAWMODE_COLOR) {
+                nQuality = 0;
+            } else if (nMode == sd::OUTPUT_DRAWMODE_GRAYSCALE) {
+                nQuality = 1;
+            } else if (nMode == sd::OUTPUT_DRAWMODE_BLACKWHITE) {
+                nQuality = 2;
+            } else if (nMode == sd::OUTPUT_DRAWMODE_CONTRAST) {
+                nQuality = 3;
             }
 
             rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_COLOR, nQuality==0));

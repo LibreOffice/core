@@ -130,8 +130,8 @@ Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
 
         pVirtualDevice->SetOutputSizePixel(aSize);
         pVirtualDevice->SetDrawMode(rStyleSettings.GetHighContrastMode()
-            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
-            : DRAWMODE_DEFAULT);
+            ? DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient
+            : DrawModeFlags::Default);
 
         if(rStyleSettings.GetPreviewUsesCheckeredBackground())
         {

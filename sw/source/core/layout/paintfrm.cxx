@@ -1063,10 +1063,10 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties &properties 
                 {
                     pLast = &rLRect.GetColor();
 
-                    sal_uLong nOldDrawMode = pOut->GetDrawMode();
+                    DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
                     if( properties.pSGlobalShell->GetWin() &&
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-                        pOut->SetDrawMode( 0 );
+                        pOut->SetDrawMode( DrawModeFlags::Default );
 
                     pOut->SetLineColor( *pLast );
                     pOut->SetFillColor( *pLast );
@@ -1098,11 +1098,11 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties &properties 
                 {
                     pLast = &rLRect.GetColor();
 
-                    sal_uLong nOldDrawMode = pOut->GetDrawMode();
+                    DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
                     if( properties.pSGlobalShell->GetWin() &&
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                     {
-                        pOut->SetDrawMode( 0 );
+                        pOut->SetDrawMode( DrawModeFlags::Default );
                     }
 
                     pOut->SetFillColor( *pLast );
@@ -1186,11 +1186,11 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
             // Reset draw mode in high contrast mode in order to get fill color
             // set at output device. Recover draw mode after draw of lines.
             // Necessary for the subsidiary lines painted by the fly frames.
-            sal_uLong nOldDrawMode = pOut->GetDrawMode();
+            DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
             if( gProp.pSGlobalShell->GetWin() &&
                 Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
             {
-                pOut->SetDrawMode( 0 );
+                pOut->SetDrawMode( DrawModeFlags::Default );
             }
 
             for (SwSubsRects::iterator it = aLineRects.begin(); it != aLineRects.end();
@@ -2206,11 +2206,11 @@ void DrawGraphic(
         }
 
         // #i75614# reset draw mode in high contrast mode in order to get fill color set
-        const sal_uLong nOldDrawMode = pOutDev->GetDrawMode();
+        const DrawModeFlags nOldDrawMode = pOutDev->GetDrawMode();
         if ( gProp.pSGlobalShell->GetWin() &&
              Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         {
-            pOutDev->SetDrawMode( 0 );
+            pOutDev->SetDrawMode( DrawModeFlags::Default );
         }
 
         // OD 06.08.2002 #99657# - if background region has to be drawn
@@ -2574,12 +2574,12 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
     // high contrast mode:
     // overrides the color of non-subsidiary lines.
     const Color* pHCColor = 0;
-    sal_uLong nOldDrawMode = rDev.GetDrawMode();
+    DrawModeFlags nOldDrawMode = rDev.GetDrawMode();
     if( gProp.pSGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pHCColor = &SwViewOption::GetFontColor();
-        rDev.SetDrawMode( 0 );
+        rDev.SetDrawMode( DrawModeFlags::Default );
     }
 
     const SwFrm* pUpper = mrTabFrm.GetUpper();
@@ -4588,16 +4588,16 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 
     vcl::RenderContext *pOut = properties.pSGlobalShell->GetOut();
 
-    sal_uLong nOldDrawMode = pOut->GetDrawMode();
+    DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
     Color aShadowColor( rShadow.GetColor().GetRGBColor() );
     if( !aRegion.empty() && properties.pSGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         // In high contrast mode, the output device has already set the
-        // DRAWMODE_SETTINGSFILL flag. This causes the SetFillColor function
+        // DrawModeFlags::SettingsFill flag. This causes the SetFillColor function
         // to ignore the setting of a new color. Therefore we have to reset
         // the drawing mode
-        pOut->SetDrawMode( 0 );
+        pOut->SetDrawMode( DrawModeFlags::Default );
         aShadowColor = SwViewOption::GetFontColor();
     }
 

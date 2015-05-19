@@ -1485,55 +1485,55 @@ namespace drawinglayer
 
         void VclProcessor2D::adaptLineToFillDrawMode() const
         {
-            const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+            const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
 
-            if(nOriginalDrawMode & (DRAWMODE_BLACKLINE|DRAWMODE_GRAYLINE|DRAWMODE_GHOSTEDLINE|DRAWMODE_WHITELINE|DRAWMODE_SETTINGSLINE))
+            if(nOriginalDrawMode & (DrawModeFlags::BlackLine|DrawModeFlags::GrayLine|DrawModeFlags::GhostedLine|DrawModeFlags::WhiteLine|DrawModeFlags::SettingsLine))
             {
-                sal_uInt32 nAdaptedDrawMode(nOriginalDrawMode);
+                DrawModeFlags nAdaptedDrawMode(nOriginalDrawMode);
 
-                if(nOriginalDrawMode & DRAWMODE_BLACKLINE)
+                if(nOriginalDrawMode & DrawModeFlags::BlackLine)
                 {
-                    nAdaptedDrawMode |= DRAWMODE_BLACKFILL;
+                    nAdaptedDrawMode |= DrawModeFlags::BlackFill;
                 }
                 else
                 {
-                    nAdaptedDrawMode &= ~DRAWMODE_BLACKFILL;
+                    nAdaptedDrawMode &= ~DrawModeFlags::BlackFill;
                 }
 
-                if(nOriginalDrawMode & DRAWMODE_GRAYLINE)
+                if(nOriginalDrawMode & DrawModeFlags::GrayLine)
                 {
-                    nAdaptedDrawMode |= DRAWMODE_GRAYFILL;
+                    nAdaptedDrawMode |= DrawModeFlags::GrayFill;
                 }
                 else
                 {
-                    nAdaptedDrawMode &= ~DRAWMODE_GRAYFILL;
+                    nAdaptedDrawMode &= ~DrawModeFlags::GrayFill;
                 }
 
-                if(nOriginalDrawMode & DRAWMODE_GHOSTEDLINE)
+                if(nOriginalDrawMode & DrawModeFlags::GhostedLine)
                 {
-                    nAdaptedDrawMode |= DRAWMODE_GHOSTEDFILL;
+                    nAdaptedDrawMode |= DrawModeFlags::GhostedFill;
                 }
                 else
                 {
-                    nAdaptedDrawMode &= ~DRAWMODE_GHOSTEDFILL;
+                    nAdaptedDrawMode &= ~DrawModeFlags::GhostedFill;
                 }
 
-                if(nOriginalDrawMode & DRAWMODE_WHITELINE)
+                if(nOriginalDrawMode & DrawModeFlags::WhiteLine)
                 {
-                    nAdaptedDrawMode |= DRAWMODE_WHITEFILL;
+                    nAdaptedDrawMode |= DrawModeFlags::WhiteFill;
                 }
                 else
                 {
-                    nAdaptedDrawMode &= ~DRAWMODE_WHITEFILL;
+                    nAdaptedDrawMode &= ~DrawModeFlags::WhiteFill;
                 }
 
-                if(nOriginalDrawMode & DRAWMODE_SETTINGSLINE)
+                if(nOriginalDrawMode & DrawModeFlags::SettingsLine)
                 {
-                    nAdaptedDrawMode |= DRAWMODE_SETTINGSFILL;
+                    nAdaptedDrawMode |= DrawModeFlags::SettingsFill;
                 }
                 else
                 {
-                    nAdaptedDrawMode &= ~DRAWMODE_SETTINGSFILL;
+                    nAdaptedDrawMode &= ~DrawModeFlags::SettingsFill;
                 }
 
                 mpOutputDevice->SetDrawMode(nAdaptedDrawMode);
@@ -1542,54 +1542,54 @@ namespace drawinglayer
 
         void VclProcessor2D::adaptTextToFillDrawMode() const
         {
-            const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
-            if(nOriginalDrawMode & (DRAWMODE_BLACKTEXT|DRAWMODE_GRAYTEXT|DRAWMODE_GHOSTEDTEXT|DRAWMODE_WHITETEXT|DRAWMODE_SETTINGSTEXT))
+            const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+            if(nOriginalDrawMode & (DrawModeFlags::BlackText|DrawModeFlags::GrayText|DrawModeFlags::GhostedText|DrawModeFlags::WhiteText|DrawModeFlags::SettingsText))
             {
-                sal_uInt32 nAdaptedDrawMode(nOriginalDrawMode);
+                DrawModeFlags nAdaptedDrawMode(nOriginalDrawMode);
 
-                if(nOriginalDrawMode & DRAWMODE_BLACKTEXT)
+                if(nOriginalDrawMode & DrawModeFlags::BlackText)
                 {
-                    nAdaptedDrawMode |= DRAWMODE_BLACKFILL;
+                    nAdaptedDrawMode |= DrawModeFlags::BlackFill;
                 }
                 else
                 {
-                    nAdaptedDrawMode &= ~DRAWMODE_BLACKFILL;
+                    nAdaptedDrawMode &= ~DrawModeFlags::BlackFill;
                 }
 
-                if(nOriginalDrawMode & DRAWMODE_GRAYTEXT)
+                if(nOriginalDrawMode & DrawModeFlags::GrayText)
                 {
-                    nAdaptedDrawMode |= DRAWMODE_GRAYFILL;
+                    nAdaptedDrawMode |= DrawModeFlags::GrayFill;
                 }
                 else
                 {
-                    nAdaptedDrawMode &= ~DRAWMODE_GRAYFILL;
+                    nAdaptedDrawMode &= ~DrawModeFlags::GrayFill;
                 }
 
-                if(nOriginalDrawMode & DRAWMODE_GHOSTEDTEXT)
+                if(nOriginalDrawMode & DrawModeFlags::GhostedText)
                 {
-                    nAdaptedDrawMode |= DRAWMODE_GHOSTEDFILL;
+                    nAdaptedDrawMode |= DrawModeFlags::GhostedFill;
                 }
                 else
                 {
-                    nAdaptedDrawMode &= ~DRAWMODE_GHOSTEDFILL;
+                    nAdaptedDrawMode &= ~DrawModeFlags::GhostedFill;
                 }
 
-                if(nOriginalDrawMode & DRAWMODE_WHITETEXT)
+                if(nOriginalDrawMode & DrawModeFlags::WhiteText)
                 {
-                    nAdaptedDrawMode |= DRAWMODE_WHITEFILL;
+                    nAdaptedDrawMode |= DrawModeFlags::WhiteFill;
                 }
                 else
                 {
-                    nAdaptedDrawMode &= ~DRAWMODE_WHITEFILL;
+                    nAdaptedDrawMode &= ~DrawModeFlags::WhiteFill;
                 }
 
-                if(nOriginalDrawMode & DRAWMODE_SETTINGSTEXT)
+                if(nOriginalDrawMode & DrawModeFlags::SettingsText)
                 {
-                    nAdaptedDrawMode |= DRAWMODE_SETTINGSFILL;
+                    nAdaptedDrawMode |= DrawModeFlags::SettingsFill;
                 }
                 else
                 {
-                    nAdaptedDrawMode &= ~DRAWMODE_SETTINGSFILL;
+                    nAdaptedDrawMode &= ~DrawModeFlags::SettingsFill;
                 }
 
                 mpOutputDevice->SetDrawMode(nAdaptedDrawMode);

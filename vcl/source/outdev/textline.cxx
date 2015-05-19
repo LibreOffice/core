@@ -837,29 +837,29 @@ void OutputDevice::SetTextLineColor( const Color& rColor )
 
     Color aColor( rColor );
 
-    if ( mnDrawMode & ( DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT |
-                        DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT |
-                        DRAWMODE_SETTINGSTEXT ) )
+    if ( mnDrawMode & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
+                        DrawModeFlags::GrayText | DrawModeFlags::GhostedText |
+                        DrawModeFlags::SettingsText ) )
     {
-        if ( mnDrawMode & DRAWMODE_BLACKTEXT )
+        if ( mnDrawMode & DrawModeFlags::BlackText )
         {
             aColor = Color( COL_BLACK );
         }
-        else if ( mnDrawMode & DRAWMODE_WHITETEXT )
+        else if ( mnDrawMode & DrawModeFlags::WhiteText )
         {
             aColor = Color( COL_WHITE );
         }
-        else if ( mnDrawMode & DRAWMODE_GRAYTEXT )
+        else if ( mnDrawMode & DrawModeFlags::GrayText )
         {
             const sal_uInt8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
         }
-        else if ( mnDrawMode & DRAWMODE_SETTINGSTEXT )
+        else if ( mnDrawMode & DrawModeFlags::SettingsText )
         {
             aColor = GetSettings().GetStyleSettings().GetFontColor();
         }
 
-        if( (mnDrawMode & DRAWMODE_GHOSTEDTEXT) &&
+        if( (mnDrawMode & DrawModeFlags::GhostedText) &&
             (aColor.GetColor() != COL_TRANSPARENT) )
         {
             aColor = Color( (aColor.GetRed() >> 1) | 0x80,
@@ -894,29 +894,29 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
 
     Color aColor( rColor );
 
-    if ( mnDrawMode & ( DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT |
-                        DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT |
-                        DRAWMODE_SETTINGSTEXT ) )
+    if ( mnDrawMode & ( DrawModeFlags::BlackText | DrawModeFlags::WhiteText |
+                        DrawModeFlags::GrayText | DrawModeFlags::GhostedText |
+                        DrawModeFlags::SettingsText ) )
     {
-        if ( mnDrawMode & DRAWMODE_BLACKTEXT )
+        if ( mnDrawMode & DrawModeFlags::BlackText )
         {
             aColor = Color( COL_BLACK );
         }
-        else if ( mnDrawMode & DRAWMODE_WHITETEXT )
+        else if ( mnDrawMode & DrawModeFlags::WhiteText )
         {
             aColor = Color( COL_WHITE );
         }
-        else if ( mnDrawMode & DRAWMODE_GRAYTEXT )
+        else if ( mnDrawMode & DrawModeFlags::GrayText )
         {
             const sal_uInt8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
         }
-        else if ( mnDrawMode & DRAWMODE_SETTINGSTEXT )
+        else if ( mnDrawMode & DrawModeFlags::SettingsText )
         {
             aColor = GetSettings().GetStyleSettings().GetFontColor();
         }
 
-        if( (mnDrawMode & DRAWMODE_GHOSTEDTEXT) &&
+        if( (mnDrawMode & DrawModeFlags::GhostedText) &&
             (aColor.GetColor() != COL_TRANSPARENT) )
         {
             aColor = Color( (aColor.GetRed() >> 1) | 0x80,

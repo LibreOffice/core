@@ -485,7 +485,7 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 
 void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    sal_uInt32 nOldDrawMode = aVD->GetDrawMode();
+    DrawModeFlags nOldDrawMode = aVD->GetDrawMode();
 
     Size aWndSize(GetSizePixel());
     vcl::Font aFont(aVD->GetFont());

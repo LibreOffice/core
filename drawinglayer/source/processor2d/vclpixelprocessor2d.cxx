@@ -646,7 +646,7 @@ namespace drawinglayer
                     static bool bForceSimpleTextDecomposition(false);
 
                     // Adapt evtl. used special DrawMode
-                    const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+                    const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
                     adaptTextToFillDrawMode();
 
                     if(!bForceSimpleTextDecomposition && getOptionsDrawinglayer().IsRenderSimpleTextDirect())
@@ -669,7 +669,7 @@ namespace drawinglayer
                     static bool bForceComplexTextDecomposition(false);
 
                     // Adapt evtl. used special DrawMode
-                    const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+                    const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
                     adaptTextToFillDrawMode();
 
                     if(!bForceComplexTextDecomposition && getOptionsDrawinglayer().IsRenderDecoratedTextDirect())
@@ -1044,10 +1044,10 @@ namespace drawinglayer
                     }
 
                     // the stroke primitive may be decomposed to filled polygons. To keep
-                    // evtl. set DrawModes aka DRAWMODE_BLACKLINE, DRAWMODE_GRAYLINE,
-                    // DRAWMODE_GHOSTEDLINE, DRAWMODE_WHITELINE or DRAWMODE_SETTINGSLINE
+                    // evtl. set DrawModes aka DrawModeFlags::BlackLine, DrawModeFlags::GrayLine,
+                    // DrawModeFlags::GhostedLine, DrawModeFlags::WhiteLine or DrawModeFlags::SettingsLine
                     // working, these need to be copied to the corresponding fill modes
-                    const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+                    const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
                     adaptLineToFillDrawMode();
 
                     // polygon stroke primitive

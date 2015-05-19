@@ -515,7 +515,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     GraphicAttr         aAttr( pAttr ? *pAttr : GetAttr() );
     Point               aPt( rPt );
     Size                aSz( rSz );
-    const sal_uInt32    nOldDrawMode = pOut->GetDrawMode();
+    const DrawModeFlags nOldDrawMode = pOut->GetDrawMode();
     bool                bCropped = aAttr.IsCropped();
     bool                bCached = false;
     bool bRet;
@@ -524,7 +524,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     Rectangle           aCropRect;
 
     if( !( GraphicManagerDrawFlags::USE_DRAWMODE_SETTINGS & nFlags ) )
-        pOut->SetDrawMode( nOldDrawMode & ( ~( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT ) ) );
+        pOut->SetDrawMode( nOldDrawMode & ~DrawModeFlags( DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient ) );
 
     // mirrored horizontically
     if( aSz.Width() < 0L )

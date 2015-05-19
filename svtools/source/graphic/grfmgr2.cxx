@@ -256,7 +256,7 @@ bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
 
             // #i46805# No point in caching a bitmap that is rendered
             // via RectFill on the OutDev
-            if( !(pOut->GetDrawMode() & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP )) &&
+            if( !(pOut->GetDrawMode() & ( DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap )) &&
                 mpCache->IsDisplayCacheable( pOut, rPt, rSz, rObj, rAttr ) )
             {
                 BitmapEx aDstBmpEx;

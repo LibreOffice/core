@@ -284,7 +284,7 @@ void OutputDevice::SetAntialiasing( sal_uInt16 nMode )
         mpAlphaVDev->SetAntialiasing( nMode );
 }
 
-void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
+void OutputDevice::SetDrawMode( DrawModeFlags nDrawMode )
 {
 
     mnDrawMode = nDrawMode;
@@ -357,35 +357,35 @@ void OutputDevice::SetFillColor( const Color& rColor )
 
     Color aColor( rColor );
 
-    if( mnDrawMode & ( DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL |
-                       DRAWMODE_GRAYFILL | DRAWMODE_NOFILL |
-                       DRAWMODE_GHOSTEDFILL | DRAWMODE_SETTINGSFILL ) )
+    if( mnDrawMode & ( DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill |
+                       DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
+                       DrawModeFlags::GhostedFill | DrawModeFlags::SettingsFill ) )
     {
         if( !ImplIsColorTransparent( aColor ) )
         {
-            if( mnDrawMode & DRAWMODE_BLACKFILL )
+            if( mnDrawMode & DrawModeFlags::BlackFill )
             {
                 aColor = Color( COL_BLACK );
             }
-            else if( mnDrawMode & DRAWMODE_WHITEFILL )
+            else if( mnDrawMode & DrawModeFlags::WhiteFill )
             {
                 aColor = Color( COL_WHITE );
             }
-            else if( mnDrawMode & DRAWMODE_GRAYFILL )
+            else if( mnDrawMode & DrawModeFlags::GrayFill )
             {
                 const sal_uInt8 cLum = aColor.GetLuminance();
                 aColor = Color( cLum, cLum, cLum );
             }
-            else if( mnDrawMode & DRAWMODE_NOFILL )
+            else if( mnDrawMode & DrawModeFlags::NoFill )
             {
                 aColor = Color( COL_TRANSPARENT );
             }
-            else if( mnDrawMode & DRAWMODE_SETTINGSFILL )
+            else if( mnDrawMode & DrawModeFlags::SettingsFill )
             {
                 aColor = GetSettings().GetStyleSettings().GetWindowColor();
             }
 
-            if( mnDrawMode & DRAWMODE_GHOSTEDFILL )
+            if( mnDrawMode & DrawModeFlags::GhostedFill )
             {
                 aColor = Color( (aColor.GetRed() >> 1) | 0x80,
                                 (aColor.GetGreen() >> 1) | 0x80,
@@ -497,25 +497,25 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
 
     vcl::Font aFont( rNewFont );
     aFont.SetLanguage(rNewFont.GetLanguage());
-    if ( mnDrawMode & (DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT | DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT | DRAWMODE_SETTINGSTEXT |
-                       DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_GRAYFILL | DRAWMODE_NOFILL |
-                       DRAWMODE_GHOSTEDFILL | DRAWMODE_SETTINGSFILL ) )
+    if ( mnDrawMode & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText | DrawModeFlags::GhostedText | DrawModeFlags::SettingsText |
+                       DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill | DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
+                       DrawModeFlags::GhostedFill | DrawModeFlags::SettingsFill ) )
     {
         Color aTextColor( aFont.GetColor() );
 
-        if ( mnDrawMode & DRAWMODE_BLACKTEXT )
+        if ( mnDrawMode & DrawModeFlags::BlackText )
             aTextColor = Color( COL_BLACK );
-        else if ( mnDrawMode & DRAWMODE_WHITETEXT )
+        else if ( mnDrawMode & DrawModeFlags::WhiteText )
             aTextColor = Color( COL_WHITE );
-        else if ( mnDrawMode & DRAWMODE_GRAYTEXT )
+        else if ( mnDrawMode & DrawModeFlags::GrayText )
         {
             const sal_uInt8 cLum = aTextColor.GetLuminance();
             aTextColor = Color( cLum, cLum, cLum );
         }
-        else if ( mnDrawMode & DRAWMODE_SETTINGSTEXT )
+        else if ( mnDrawMode & DrawModeFlags::SettingsText )
             aTextColor = GetSettings().GetStyleSettings().GetFontColor();
 
-        if ( mnDrawMode & DRAWMODE_GHOSTEDTEXT )
+        if ( mnDrawMode & DrawModeFlags::GhostedText )
         {
             aTextColor = Color( (aTextColor.GetRed() >> 1 ) | 0x80,
                                 (aTextColor.GetGreen() >> 1 ) | 0x80,
@@ -529,24 +529,24 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
         {
             Color aTextFillColor( aFont.GetFillColor() );
 
-            if ( mnDrawMode & DRAWMODE_BLACKFILL )
+            if ( mnDrawMode & DrawModeFlags::BlackFill )
                 aTextFillColor = Color( COL_BLACK );
-            else if ( mnDrawMode & DRAWMODE_WHITEFILL )
+            else if ( mnDrawMode & DrawModeFlags::WhiteFill )
                 aTextFillColor = Color( COL_WHITE );
-            else if ( mnDrawMode & DRAWMODE_GRAYFILL )
+            else if ( mnDrawMode & DrawModeFlags::GrayFill )
             {
                 const sal_uInt8 cLum = aTextFillColor.GetLuminance();
                 aTextFillColor = Color( cLum, cLum, cLum );
             }
-            else if( mnDrawMode & DRAWMODE_SETTINGSFILL )
+            else if( mnDrawMode & DrawModeFlags::SettingsFill )
                 aTextFillColor = GetSettings().GetStyleSettings().GetWindowColor();
-            else if ( mnDrawMode & DRAWMODE_NOFILL )
+            else if ( mnDrawMode & DrawModeFlags::NoFill )
             {
                 aTextFillColor = Color( COL_TRANSPARENT );
                 bTransFill = true;
             }
 
-            if ( !bTransFill && (mnDrawMode & DRAWMODE_GHOSTEDFILL) )
+            if ( !bTransFill && (mnDrawMode & DrawModeFlags::GhostedFill) )
             {
                 aTextFillColor = Color( (aTextFillColor.GetRed() >> 1) | 0x80,
                                         (aTextFillColor.GetGreen() >> 1) | 0x80,

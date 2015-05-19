@@ -259,7 +259,7 @@ namespace {
             Printer* pPrinter,
             const bool bPrintMarkedOnly)
             : mpPrinter(pPrinter),
-              mnDrawMode(DRAWMODE_DEFAULT),
+              mnDrawMode(DrawModeFlags::Default),
               msTimeDate(),
               msPageString(),
               maPrintSize(0,0),
@@ -270,7 +270,7 @@ namespace {
         {}
 
         const VclPtr<Printer> mpPrinter;
-        sal_uLong mnDrawMode;
+        DrawModeFlags mnDrawMode;
         OUString msTimeDate;
         OUString msPageString;
         Size maPrintSize;
@@ -653,7 +653,7 @@ namespace {
             const bool bPrintMarkedOnly,
             const OUString& rsPageString,
             const Point& rPageStringOffset,
-            const sal_uLong nDrawMode,
+            const DrawModeFlags nDrawMode,
             const Orientation eOrientation,
             const sal_uInt16 nPaperTray)
             : mePageKind(ePageKind),
@@ -678,7 +678,7 @@ namespace {
             const SetOfByte& rVisibleLayers,
             const SetOfByte& rPrintableLayers) const = 0;
 
-        sal_uLong GetDrawMode() const { return mnDrawMode; }
+        DrawModeFlags GetDrawMode() const { return mnDrawMode; }
         Orientation GetOrientation() const { return meOrientation; }
         sal_uInt16 GetPaperTray() const { return mnPaperTray; }
 
@@ -688,7 +688,7 @@ namespace {
         const bool mbPrintMarkedOnly;
         const OUString msPageString;
         const Point maPageStringOffset;
-        const sal_uLong mnDrawMode;
+        const DrawModeFlags mnDrawMode;
         const Orientation meOrientation;
         const sal_uInt16 mnPaperTray;
     };
@@ -706,7 +706,7 @@ namespace {
             const bool bPrintMarkedOnly,
             const OUString& rsPageString,
             const Point& rPageStringOffset,
-            const sal_uLong nDrawMode,
+            const DrawModeFlags nDrawMode,
             const Orientation eOrientation,
             const sal_uInt16 nPaperTray)
             : PrinterPage(ePageKind, rMapMode, bPrintMarkedOnly, rsPageString,
@@ -760,7 +760,7 @@ namespace {
             const bool bPrintMarkedOnly,
             const OUString& rsPageString,
             const Point& rPageStringOffset,
-            const sal_uLong nDrawMode,
+            const DrawModeFlags nDrawMode,
             const Orientation eOrientation,
             const sal_uInt16 nPaperTray)
             : PrinterPage(ePageKind, MapMode(), bPrintMarkedOnly, rsPageString,
@@ -843,7 +843,7 @@ namespace {
             const PageKind ePageKind,
             const MapMode& rMapMode,
             const bool bPrintMarkedOnly,
-            const sal_uLong nDrawMode,
+            const DrawModeFlags nDrawMode,
             const Orientation eOrientation,
             const sal_uInt16 nPaperTray)
             : PrinterPage(ePageKind, rMapMode, bPrintMarkedOnly, "",
@@ -917,7 +917,7 @@ namespace {
             const MapMode& rMapMode,
             const OUString& rsPageString,
             const Point& rPageStringOffset,
-            const sal_uLong nDrawMode,
+            const DrawModeFlags nDrawMode,
             const Orientation eOrientation,
             const sal_uInt16 nPaperTray)
             : PrinterPage(PK_HANDOUT, rMapMode, false, rsPageString,
@@ -1059,7 +1059,7 @@ namespace {
             const MapMode& rMapMode,
             const OUString& rsPageString,
             const Point& rPageStringOffset,
-            const sal_uLong nDrawMode,
+            const DrawModeFlags nDrawMode,
             const Orientation eOrientation,
             const sal_uInt16 nPaperTray)
             : PrinterPage(PK_HANDOUT, rMapMode, false, rsPageString,
@@ -1269,7 +1269,7 @@ public:
             return;
 
         const Orientation eSavedOrientation (rPrinter.GetOrientation());
-        const sal_uLong nSavedDrawMode (rPrinter.GetDrawMode());
+        const DrawModeFlags nSavedDrawMode (rPrinter.GetDrawMode());
         const MapMode aSavedMapMode (rPrinter.GetMapMode());
         const sal_uInt16 nSavedPaperBin (rPrinter.GetPaperBin());
 
@@ -1452,19 +1452,19 @@ private:
             switch (mpOptions->GetOutputQuality())
             {
                 case 1: // Grayscale
-                    aInfo.mnDrawMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL
-                        | DRAWMODE_GRAYTEXT | DRAWMODE_GRAYBITMAP
-                        | DRAWMODE_GRAYGRADIENT;
+                    aInfo.mnDrawMode = DrawModeFlags::GrayLine | DrawModeFlags::GrayFill
+                        | DrawModeFlags::GrayText | DrawModeFlags::GrayBitmap
+                        | DrawModeFlags::GrayGradient;
                     break;
 
                 case 2: // Black & White
-                    aInfo.mnDrawMode = DRAWMODE_BLACKLINE | DRAWMODE_WHITEFILL
-                        | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP
-                        | DRAWMODE_WHITEGRADIENT;
+                    aInfo.mnDrawMode = DrawModeFlags::BlackLine | DrawModeFlags::WhiteFill
+                        | DrawModeFlags::BlackText | DrawModeFlags::GrayBitmap
+                        | DrawModeFlags::WhiteGradient;
                     break;
 
                 default:
-                    aInfo.mnDrawMode = DRAWMODE_DEFAULT;
+                    aInfo.mnDrawMode = DrawModeFlags::Default;
             }
 
             if (mpOptions->IsDraw())

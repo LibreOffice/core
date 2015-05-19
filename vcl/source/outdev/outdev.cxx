@@ -117,7 +117,7 @@ OutputDevice::OutputDevice() :
     mnOutOffLogicY                  = 0;
     mnEmphasisAscent                = 0;
     mnEmphasisDescent               = 0;
-    mnDrawMode                      = 0;
+    mnDrawMode                      = DrawModeFlags::Default;
     mnTextLayoutMode                = TEXT_LAYOUT_DEFAULT;
 
     if( AllSettings::GetLayoutRTL() ) //#i84553# tip BiDi preference to RTL

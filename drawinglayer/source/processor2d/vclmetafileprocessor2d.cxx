@@ -1097,7 +1097,7 @@ namespace drawinglayer
                     // const primitive2d::TextDecoratedPortionPrimitive2D* pTextDecoratedCandidate = dynamic_cast< const primitive2d::TextDecoratedPortionPrimitive2D* >(&rCandidate);
 
                     // Adapt evtl. used special DrawMode
-                    const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+                    const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
                     adaptTextToFillDrawMode();
 
                     // directdraw of text simple portion; use default processing
@@ -1324,20 +1324,20 @@ namespace drawinglayer
                         // write LineGeometry start marker
                         impStartSvtGraphicStroke(pSvtGraphicStroke);
 
-                        // #i116162# When B&W is set as DrawMode, DRAWMODE_WHITEFILL is used
-                        // to let all fills be just white; for lines DRAWMODE_BLACKLINE is used
+                        // #i116162# When B&W is set as DrawMode, DrawModeFlags::WhiteFill is used
+                        // to let all fills be just white; for lines DrawModeFlags::BlackLine is used
                         // so all line geometry is supposed to get black. Since in the in-between
                         // stages of line geometry drawing filled polygons are used (e.g. line
                         // start/ends) it is necessary to change these drawmodes to preserve
-                        // that lines shall be black; thus change DRAWMODE_WHITEFILL to
-                        // DRAWMODE_BLACKFILL during line geometry processing to have line geometry
+                        // that lines shall be black; thus change DrawModeFlags::WhiteFill to
+                        // DrawModeFlags::BlackFill during line geometry processing to have line geometry
                         // parts filled black.
-                        const sal_uLong nOldDrawMode(mpOutputDevice->GetDrawMode());
-                        const bool bDrawmodeChange(nOldDrawMode & DRAWMODE_WHITEFILL && mnSvtGraphicStrokeCount);
+                        const DrawModeFlags nOldDrawMode(mpOutputDevice->GetDrawMode());
+                        const bool bDrawmodeChange(nOldDrawMode & DrawModeFlags::WhiteFill && mnSvtGraphicStrokeCount);
 
                         if(bDrawmodeChange)
                         {
-                            mpOutputDevice->SetDrawMode((nOldDrawMode & ~DRAWMODE_WHITEFILL) | DRAWMODE_BLACKFILL);
+                            mpOutputDevice->SetDrawMode((nOldDrawMode & ~DrawModeFlags::WhiteFill) | DrawModeFlags::BlackFill);
                         }
 
                         // process sub-line geometry (evtl. filled PolyPolygons)

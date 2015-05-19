@@ -89,8 +89,8 @@ namespace vclcanvas
         // set mask vdev drawmode, such that everything is painted
         // black. That leaves us with a binary image, white for
         // background, black for painted content
-        pBackBufferMask->getOutDev().SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
-                                                  DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
+        pBackBufferMask->getOutDev().SetDrawMode( DrawModeFlags::BlackLine | DrawModeFlags::BlackFill | DrawModeFlags::BlackText |
+                                                  DrawModeFlags::BlackGradient | DrawModeFlags::BlackBitmap );
 
 
         // setup canvas helper

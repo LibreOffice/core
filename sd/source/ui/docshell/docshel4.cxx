@@ -115,12 +115,12 @@ SfxPrinter* DrawDocShell::GetPrinter(bool bCreate)
         // set output quality
         sal_uInt16 nQuality = aPrintItem.GetOptionsPrint().GetOutputQuality();
 
-        sal_uLong nMode = DRAWMODE_DEFAULT;
+        DrawModeFlags nMode = DrawModeFlags::Default;
         // 1 == Grayscale, 2 == Black & White (with grayscale images)
         if( nQuality == 1 )
-            nMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT;
+            nMode = DrawModeFlags::GrayLine | DrawModeFlags::GrayFill | DrawModeFlags::GrayText | DrawModeFlags::GrayBitmap | DrawModeFlags::GrayGradient;
         else if( nQuality == 2 )
-            nMode = DRAWMODE_BLACKLINE | DRAWMODE_WHITEFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT;
+            nMode = DrawModeFlags::BlackLine | DrawModeFlags::WhiteFill | DrawModeFlags::BlackText | DrawModeFlags::GrayBitmap | DrawModeFlags::WhiteGradient;
 
         mpPrinter->SetDrawMode( nMode );
 

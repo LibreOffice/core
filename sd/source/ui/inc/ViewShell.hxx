@@ -64,6 +64,19 @@ class ZoomList;
 #undef OUTPUT_DRAWMODE_COLOR
 #undef OUTPUT_DRAWMODE_CONTRAST
 
+static const DrawModeFlags OUTPUT_DRAWMODE_COLOR = DrawModeFlags::Default;
+static const DrawModeFlags OUTPUT_DRAWMODE_GRAYSCALE
+        = DrawModeFlags::GrayLine | DrawModeFlags::GrayFill
+        | DrawModeFlags::BlackText | DrawModeFlags::GrayBitmap
+        | DrawModeFlags::GrayGradient;
+static const DrawModeFlags OUTPUT_DRAWMODE_BLACKWHITE
+        = DrawModeFlags::BlackLine | DrawModeFlags::BlackText
+        | DrawModeFlags::WhiteFill | DrawModeFlags::GrayBitmap
+        | DrawModeFlags::WhiteGradient;
+static const DrawModeFlags OUTPUT_DRAWMODE_CONTRAST
+        = DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill
+        | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient;
+
 /** Base class of the stacked shell hierarchy.
 
     <p>Despite its name this class is not a descendant of SfxViewShell
@@ -97,19 +110,6 @@ public:
     static const int MAX_HSPLIT_CNT = 1;
     static const int MAX_VSPLIT_CNT = 1;
     static const int MIN_SCROLLBAR_SIZE = 50;
-
-    static const sal_uLong OUTPUT_DRAWMODE_COLOR = DRAWMODE_DEFAULT;
-    static const sal_uLong OUTPUT_DRAWMODE_GRAYSCALE
-        = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL
-        | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP
-        | DRAWMODE_GRAYGRADIENT;
-    static const int  OUTPUT_DRAWMODE_BLACKWHITE
-        = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT
-        | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP
-        | DRAWMODE_WHITEGRADIENT;
-    static const int OUTPUT_DRAWMODE_CONTRAST
-        = DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL
-        | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT;
 
     TYPEINFO_OVERRIDE();
 

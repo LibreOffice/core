@@ -663,7 +663,7 @@ private:
     void                ForceAutoColor( bool b ) { bForceAutoColor = b; }
     bool                IsForceAutoColor() const { return bForceAutoColor; }
 
-    inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, sal_uLong nDrawMode );
+    inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, DrawModeFlags nDrawMode );
     inline void             EraseVirtualDevice() { pVirtDev.disposeAndClear(); }
 
     DECL_LINK_TYPED(StatusTimerHdl, Timer *, void);
@@ -1066,7 +1066,7 @@ inline EditSelection ImpEditEngine::CreateSel( const ESelection& rSel )
     return aSel;
 }
 
-inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode, sal_uLong nDrawMode )
+inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode, DrawModeFlags nDrawMode )
 {
     if ( !pVirtDev )
         pVirtDev = new VirtualDevice;

@@ -728,7 +728,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 
                 aVDev->SetMapMode( aMap );
                 if( rSettings.mbUseHighContrast )
-                    aVDev->SetDrawMode( aVDev->GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+                    aVDev->SetDrawMode( aVDev->GetDrawMode() | DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );
                 aVDev->EnableOutput( false );
                 aMtf.Record( aVDev );
                 Size aNewSize;
@@ -930,7 +930,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             aOut->EnableOutput( false );
             aOut->SetMapMode( aMap );
             if( rSettings.mbUseHighContrast )
-                aOut->SetDrawMode( aOut->GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+                aOut->SetDrawMode( aOut->GetDrawMode() | DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );
 
             GDIMetaFile aMtf;
             aMtf.Clear();

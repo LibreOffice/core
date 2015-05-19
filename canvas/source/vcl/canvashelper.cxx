@@ -178,7 +178,7 @@ namespace vclcanvas
             {
                 OutputDevice& rOutDev2( mp2ndOutDev->getOutDev() );
 
-                rOutDev2.SetDrawMode( DRAWMODE_DEFAULT );
+                rOutDev2.SetDrawMode( DrawModeFlags::Default );
                 rOutDev2.EnableMapMode( false );
                 rOutDev2.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
                 rOutDev2.SetLineColor( COL_WHITE );
@@ -186,8 +186,8 @@ namespace vclcanvas
                 rOutDev2.SetClipRegion();
                 rOutDev2.DrawRect( Rectangle( Point(),
                                               rOutDev2.GetOutputSizePixel()) );
-                rOutDev2.SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
-                                      DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
+                rOutDev2.SetDrawMode( DrawModeFlags::BlackLine | DrawModeFlags::BlackFill | DrawModeFlags::BlackText |
+                                      DrawModeFlags::BlackGradient | DrawModeFlags::BlackBitmap );
             }
         }
     }

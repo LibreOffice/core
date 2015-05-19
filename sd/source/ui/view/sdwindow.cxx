@@ -81,8 +81,8 @@ Window::Window(vcl::Window* pParent)
     // adjust contrast mode initially
     bool bUseContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     SetDrawMode( bUseContrast
-        ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-        : ViewShell::OUTPUT_DRAWMODE_COLOR );
+        ? sd::OUTPUT_DRAWMODE_CONTRAST
+        : sd::OUTPUT_DRAWMODE_COLOR );
 
     // set Help ID
     // SetHelpId(HID_SD_WIN_DOCUMENT);
@@ -777,13 +777,13 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
             {
                 const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
                 SvtAccessibilityOptions aAccOptions;
-                sal_uLong                   nOutputMode;
-                sal_uInt16                  nPreviewSlot;
+                DrawModeFlags           nOutputMode;
+                sal_uInt16              nPreviewSlot;
 
                 if( rStyleSettings.GetHighContrastMode() )
-                    nOutputMode = ViewShell::OUTPUT_DRAWMODE_CONTRAST;
+                    nOutputMode = sd::OUTPUT_DRAWMODE_CONTRAST;
                 else
-                    nOutputMode = ViewShell::OUTPUT_DRAWMODE_COLOR;
+                    nOutputMode = sd::OUTPUT_DRAWMODE_COLOR;
 
                 if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
                     nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;

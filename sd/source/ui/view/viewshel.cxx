@@ -1300,7 +1300,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
         case SID_OUTPUT_QUALITY_BLACKWHITE:
         case SID_OUTPUT_QUALITY_CONTRAST:
         {
-            sal_uLong nMode = OUTPUT_DRAWMODE_COLOR;
+            DrawModeFlags nMode = OUTPUT_DRAWMODE_COLOR;
 
             switch( nSlot )
             {

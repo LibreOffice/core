@@ -454,22 +454,22 @@ namespace sdr
         // gray display mode
         bool ObjectContactOfPageView::isDrawModeGray() const
         {
-            const sal_uInt32 nDrawMode(mrPageWindow.GetPaintWindow().GetOutputDevice().GetDrawMode());
-            return (nDrawMode == (DRAWMODE_GRAYLINE|DRAWMODE_GRAYFILL|DRAWMODE_BLACKTEXT|DRAWMODE_GRAYBITMAP|DRAWMODE_GRAYGRADIENT));
+            const DrawModeFlags nDrawMode(mrPageWindow.GetPaintWindow().GetOutputDevice().GetDrawMode());
+            return (nDrawMode == (DrawModeFlags::GrayLine|DrawModeFlags::GrayFill|DrawModeFlags::BlackText|DrawModeFlags::GrayBitmap|DrawModeFlags::GrayGradient));
         }
 
         // gray display mode
         bool ObjectContactOfPageView::isDrawModeBlackWhite() const
         {
-            const sal_uInt32 nDrawMode(mrPageWindow.GetPaintWindow().GetOutputDevice().GetDrawMode());
-            return (nDrawMode == (DRAWMODE_BLACKLINE|DRAWMODE_BLACKTEXT|DRAWMODE_WHITEFILL|DRAWMODE_GRAYBITMAP|DRAWMODE_WHITEGRADIENT));
+            const DrawModeFlags nDrawMode(mrPageWindow.GetPaintWindow().GetOutputDevice().GetDrawMode());
+            return (nDrawMode == (DrawModeFlags::BlackLine|DrawModeFlags::BlackText|DrawModeFlags::WhiteFill|DrawModeFlags::GrayBitmap|DrawModeFlags::WhiteGradient));
         }
 
         // high contrast display mode
         bool ObjectContactOfPageView::isDrawModeHighContrast() const
         {
-            const sal_uInt32 nDrawMode(mrPageWindow.GetPaintWindow().GetOutputDevice().GetDrawMode());
-            return (nDrawMode == (DRAWMODE_SETTINGSLINE|DRAWMODE_SETTINGSFILL|DRAWMODE_SETTINGSTEXT|DRAWMODE_SETTINGSGRADIENT));
+            const DrawModeFlags nDrawMode(mrPageWindow.GetPaintWindow().GetOutputDevice().GetDrawMode());
+            return (nDrawMode == (DrawModeFlags::SettingsLine|DrawModeFlags::SettingsFill|DrawModeFlags::SettingsText|DrawModeFlags::SettingsGradient));
         }
 
         // access to SdrPageView

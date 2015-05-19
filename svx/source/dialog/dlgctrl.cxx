@@ -48,8 +48,8 @@
 #include <vcl/bmpacc.hxx>
 #include <svx/xbtmpit.hxx>
 
-#define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
-#define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
+#define OUTPUT_DRAWMODE_COLOR       (DrawModeFlags::Default)
+#define OUTPUT_DRAWMODE_CONTRAST    (DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient)
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

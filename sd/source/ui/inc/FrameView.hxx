@@ -160,8 +160,8 @@ public:
     void SetSlidesPerRow(sal_uInt16 nSlides) { mnSlidesPerRow = nSlides; }
     sal_uInt16 GetSlidesPerRow() const { return mnSlidesPerRow; }
 
-    void SetDrawMode(sal_uLong nNewDrawMode) { mnDrawMode = nNewDrawMode; };
-    sal_uLong GetDrawMode() const { return mnDrawMode; };
+    void SetDrawMode(DrawModeFlags nNewDrawMode) { mnDrawMode = nNewDrawMode; };
+    DrawModeFlags GetDrawMode() const { return mnDrawMode; };
 
     void SetIsNavigatorShowingAllShapes (const bool bIsNavigatorShowingAllShapes);
     bool IsNavigatorShowingAllShapes() const { return mbIsNavigatorShowingAllShapes;}
@@ -171,15 +171,15 @@ public:
 
 private:
     sal_uInt16          mnRefCount;
-    bool            mbRuler;
-    SetOfByte       maVisibleLayers;
-    SetOfByte       maLockedLayers;
-    SetOfByte       maPrintableLayers;
-    SdrHelpLineList maStandardHelpLines;
-    SdrHelpLineList maNotesHelpLines;
-    SdrHelpLineList maHandoutHelpLines;
-    bool            mbNoColors;        ///< structuring mode
-    bool            mbNoAttribs;       ///< structuring mode
+    bool                mbRuler;
+    SetOfByte           maVisibleLayers;
+    SetOfByte           maLockedLayers;
+    SetOfByte           maPrintableLayers;
+    SdrHelpLineList     maStandardHelpLines;
+    SdrHelpLineList     maNotesHelpLines;
+    SdrHelpLineList     maHandoutHelpLines;
+    bool                mbNoColors;        ///< structuring mode
+    bool                mbNoAttribs;       ///< structuring mode
     Rectangle           maVisArea;         ///< visible area
     PageKind            mePageKind;        ///< kind of page (standard, notes, handout)
     sal_uInt16          mnSelectedPage;
@@ -189,14 +189,14 @@ private:
     EditMode            meNotesEditMode;    ///< edit mode in notes mode (Page/MasterPage)
     EditMode            meHandoutEditMode;  ///< edit mode in handout mode (Page/MasterPage)
     EditMode            meEditModeOnLoad;
-    bool            mbLayerMode;        ///< layer on/off
-    bool            mbQuickEdit;        ///< QuickEdit on/off
-    bool            mbDoubleClickTextEdit; ///< text mode after double click
-    bool            mbClickChangeRotation; ///< single click switches between selection/rotation mode
+    bool                mbLayerMode;        ///< layer on/off
+    bool                mbQuickEdit;        ///< QuickEdit on/off
+    bool                mbDoubleClickTextEdit; ///< text mode after double click
+    bool                mbClickChangeRotation; ///< single click switches between selection/rotation mode
     sal_uInt16          mnPresViewShellId;  ///< ViewShell from which the presentation was started
     sal_uInt16          mnSlotId;           ///< SlotId, which was initial mentioned
     sal_uInt16          mnSlidesPerRow;     ///< slides per row on the slide-desk
-    sal_uLong           mnDrawMode;         ///< draw mode for the normal window
+    DrawModeFlags       mnDrawMode;         ///< draw mode for the normal window
     /** Remember whether the navigator shows all shapes (<TRUE/>) or only
         the names ones (<FALSE/>).  Not persistent.
     */

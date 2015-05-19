@@ -1202,9 +1202,9 @@ int PrinterController::getFilteredPageCount()
     return (getPageCountProtected() * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
 }
 
-sal_uLong PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
+DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
 {
-    sal_uLong nRestoreDrawMode = mpImplData->mxPrinter->GetDrawMode();
+    DrawModeFlags nRestoreDrawMode = mpImplData->mxPrinter->GetDrawMode();
     sal_Int32 nMaxBmpDPIX = mpImplData->mxPrinter->GetDPIX();
     sal_Int32 nMaxBmpDPIY = mpImplData->mxPrinter->GetDPIY();
 
@@ -1237,14 +1237,14 @@ sal_uLong PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFi
     if( rPrinterOptions.IsConvertToGreyscales() )
     {
         mpImplData->mxPrinter->SetDrawMode( mpImplData->mxPrinter->GetDrawMode() |
-                                            ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
-                                              DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
+                                            ( DrawModeFlags::GrayLine | DrawModeFlags::GrayFill | DrawModeFlags::GrayText |
+                                              DrawModeFlags::GrayBitmap | DrawModeFlags::GrayGradient ) );
     }
 
     // disable transparency output
     if( rPrinterOptions.IsReduceTransparency() && ( PRINTER_TRANSPARENCY_NONE == rPrinterOptions.GetReducedTransparencyMode() ) )
     {
-        mpImplData->mxPrinter->SetDrawMode( mpImplData->mxPrinter->GetDrawMode() | DRAWMODE_NOTRANSPARENCY );
+        mpImplData->mxPrinter->SetDrawMode( mpImplData->mxPrinter->GetDrawMode() | DrawModeFlags::NoTransparency );
     }
 
     Color aBg( COL_TRANSPARENT ); // default: let RemoveTransparenciesFromMetaFile do its own background logic
@@ -1306,7 +1306,7 @@ void PrinterController::printFilteredPage( int i_nPage )
     }
 
     GDIMetaFile aCleanedFile;
-    sal_uLong nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
+    DrawModeFlags nRestoreDrawMode = removeTransparencies( aPageFile, aCleanedFile );
 
     mpImplData->mxPrinter->EnableOutput( true );
 
