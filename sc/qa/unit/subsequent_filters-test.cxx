@@ -199,6 +199,7 @@ public:
     void testVBAUserFunctionXLSM();
     void testEmbeddedImageXLS();
     void testEditEngStrikeThroughXLSX();
+    void testRefStringXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -291,6 +292,7 @@ public:
     CPPUNIT_TEST(testEmbeddedImageXLS);
     CPPUNIT_TEST(testErrorOnExternalReferences);
     CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
+    CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3043,6 +3045,22 @@ void ScFiltersTest::testEditEngStrikeThroughXLSX()
             }
         }
     }
+}
+
+void ScFiltersTest::testRefStringXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("ref_string.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    double nVal = rDoc.GetValue(2, 2, 0);
+    ASSERT_DOUBLES_EQUAL(3.0, nVal);
+
+    const ScCalcConfig& rCalcConfig = rDoc.GetCalcConfig();
+    CPPUNIT_ASSERT_EQUAL(formula::FormulaGrammar::CONV_XL_A1, rCalcConfig.meStringRefAddressSyntax);
+
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
