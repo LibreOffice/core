@@ -22,6 +22,8 @@
 
 #include <svl/style.hxx>
 
+#include "scdllapi.h"
+
 #define SCSTYLEBIT_STANDARD     0x0001
 
 class ScStyleSheetPool;
@@ -48,6 +50,7 @@ public:
                         ScStyleSheet( const ScStyleSheet& rStyle );
 
     virtual bool        SetParent        ( const OUString& rParentName ) SAL_OVERRIDE;
+    SC_DLLPUBLIC void ResetParent();
     virtual SfxItemSet& GetItemSet       () SAL_OVERRIDE;
     virtual bool        IsUsed           () const SAL_OVERRIDE;
     virtual bool        HasFollowSupport () const SAL_OVERRIDE;

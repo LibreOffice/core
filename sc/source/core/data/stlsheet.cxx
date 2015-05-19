@@ -121,6 +121,11 @@ bool ScStyleSheet::SetParent( const OUString& rParentName )
     return bResult;
 }
 
+void ScStyleSheet::ResetParent()
+{
+    GetItemSet().SetParent(NULL);
+}
+
 SfxItemSet& ScStyleSheet::GetItemSet()
 {
     if ( !pSet )
