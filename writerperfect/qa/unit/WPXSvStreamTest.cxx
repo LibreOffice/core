@@ -26,7 +26,7 @@
 
 #include "test/bootstrapfixture.hxx"
 
-#include <writerperfect/WPXSvInputStream.hxx>
+#include <WPXSvInputStream.hxx>
 
 namespace io = com::sun::star::io;
 namespace ucb = com::sun::star::ucb;

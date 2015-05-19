@@ -18,7 +18,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>
 
-#include <writerperfect/writerperfectdllapi.h>
+#include <writerperfectdllapi.h>
 
 namespace writerperfect {
 

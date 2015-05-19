@@ -7,7 +7,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-#include <writerperfect/DocumentHandler.hxx>
+#include <DocumentHandler.hxx>
 
 #include <string.h>
 

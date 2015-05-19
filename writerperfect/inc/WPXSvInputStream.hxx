@@ -14,7 +14,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 
-#include <writerperfect/writerperfectdllapi.h>
+#include <writerperfectdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;

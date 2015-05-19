@@ -14,7 +14,7 @@
 
 #include <libwps/libwps.h>
 
-#include "writerperfect/WPFTEncodingDialog.hxx"
+#include "WPFTEncodingDialog.hxx"
 #include "MSWorksCalcImportFilter.hxx"
 
 using com::sun::star::uno::Sequence;

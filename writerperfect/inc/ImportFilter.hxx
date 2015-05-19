@@ -33,8 +33,8 @@
 
 #include <unotools/mediadescriptor.hxx>
 
-#include <writerperfect/DocumentHandler.hxx>
-#include <writerperfect/WPXSvInputStream.hxx>
+#include <DocumentHandler.hxx>
+#include <WPXSvInputStream.hxx>
 
 #include <xmloff/attrlist.hxx>
 

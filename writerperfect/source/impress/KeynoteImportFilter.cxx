@@ -25,9 +25,9 @@
 #include <rtl/tencinfo.h>
 #include <ucbhelper/content.hxx>
 
-#include <writerperfect/DirectoryStream.hxx>
-#include <writerperfect/DocumentHandler.hxx>
-#include <writerperfect/WPXSvInputStream.hxx>
+#include <DirectoryStream.hxx>
+#include <DocumentHandler.hxx>
+#include <WPXSvInputStream.hxx>
 
 #include <xmloff/attrlist.hxx>
 

@@ -11,6 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,writerperfect_stream))
 
 $(eval $(call gb_CppunitTest_set_include,writerperfect_stream,\
 	-I$(SRCDIR)/writerperfect/source/common \
+	-I$(SRCDIR)/writerperfect/inc \
 	$$(INCLUDE) \
 ))
 

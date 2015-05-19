@@ -36,8 +36,8 @@
 
 #include <ucbhelper/content.hxx>
 
-#include <writerperfect/DirectoryStream.hxx>
-#include <writerperfect/WPXSvInputStream.hxx>
+#include <DirectoryStream.hxx>
+#include <WPXSvInputStream.hxx>
 
 namespace container = com::sun::star::container;
 namespace io = com::sun::star::io;

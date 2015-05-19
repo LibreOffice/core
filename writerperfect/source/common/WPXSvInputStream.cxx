@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <writerperfect/WPXSvInputStream.hxx>
+#include <WPXSvInputStream.hxx>
 
 #include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
 #include <com/sun/star/uno/Any.hxx>

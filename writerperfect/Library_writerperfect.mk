@@ -23,6 +23,11 @@ $(eval $(call gb_Library_add_defs,writerperfect,\
 	-DWRITERPERFECT_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_set_include,writerperfect, \
+    -I$(SRCDIR)/writerperfect/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_use_externals,writerperfect,\
 	boost_headers \
 	odfgen \

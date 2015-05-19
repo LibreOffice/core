@@ -17,7 +17,7 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <writerperfect/DirectoryStream.hxx>
+#include <DirectoryStream.hxx>
 
 namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;

@@ -21,8 +21,8 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <writerperfect/DocumentHandler.hxx>
-#include <writerperfect/WPXSvInputStream.hxx>
+#include <DocumentHandler.hxx>
+#include <WPXSvInputStream.hxx>
 
 #include <xmloff/attrlist.hxx>
 #include <sfx2/passwd.hxx>
