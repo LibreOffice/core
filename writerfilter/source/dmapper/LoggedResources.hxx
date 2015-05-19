@@ -35,11 +35,11 @@ public:
     virtual ~LoggedResourcesHelper();
 
     void startElement(const std::string & sElement);
-    void endElement(const std::string & sElement);
-    void chars(const OUString & rChars);
-    void chars(const std::string & rChars);
-    void attribute(const std::string & rName, const std::string & rValue);
-    void attribute(const std::string & rName, sal_uInt32 nValue);
+    static void endElement(const std::string & sElement);
+    static void chars(const OUString & rChars);
+    static void chars(const std::string & rChars);
+    static void attribute(const std::string & rName, const std::string & rValue);
+    static void attribute(const std::string & rName, sal_uInt32 nValue);
 
 private:
     std::string msPrefix;
