@@ -63,6 +63,8 @@ public:
 
     virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId ) SAL_OVERRIDE;
 
+    virtual bool Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem) SAL_OVERRIDE;
+
     virtual ~DocumentDrawModelManager() {}
 
 private:

@@ -26,11 +26,15 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
+#include <wrtsh.hxx>
 #include <swtypes.hxx>
+#include <ndtxt.hxx>
 #include <swhints.hxx>
 #include <viewsh.hxx>
+#include <view.hxx>
 #include <drawdoc.hxx>
 #include <rootfrm.hxx>
+#include <fmtanchr.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svx/svdmodel.hxx>
@@ -38,7 +42,9 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdotext.hxx>
 #include <svl/smplhint.hxx>
+#include <svl/srchitem.hxx>
 #include <tools/link.hxx>
 
 class SdrOutliner;
@@ -362,6 +368,59 @@ SdrLayerID DocumentDrawModelManager::GetInvisibleLayerIdByVisibleOne( const SdrL
     }
 
     return nInvisibleLayerId;
+}
+
+bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem)
+{
+    SwPosFlyFrms aFrames = m_rDoc.GetAllFlyFmts(&rPaM, /*bDrawAlso=*/true);
+
+    for (const SwPosFlyFrmPtr& pPosFlyFrm : aFrames)
+    {
+        // Filter for at-paragraph anchored draw frames.
+        const SwFrmFmt& rFrmFmt = pPosFlyFrm->GetFmt();
+        const SwFmtAnchor& rAnchor = rFrmFmt.GetAnchor();
+        if (rAnchor.GetAnchorId() != FLY_AT_PARA || rFrmFmt.Which() != RES_DRAWFRMFMT)
+            continue;
+
+        // Does the shape have matching text?
+        SdrOutliner& rOutliner = GetDrawModel()->GetDrawOutliner();
+        SdrObject* pObject = const_cast<SdrObject*>(rFrmFmt.FindSdrObject());
+        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
+        if (!pTextObj)
+            continue;
+        const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+        if (!pParaObj)
+            continue;
+        rOutliner.SetText(*pParaObj);
+        SwDocShell* pDocShell = m_rDoc.GetDocShell();
+        if (!pDocShell)
+            return false;
+        SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+        if (!pWrtShell)
+            return false;
+        if (!rOutliner.HasText(rSearchItem))
+            continue;
+
+        // If so, then select highlight the search result.
+        pWrtShell->SelectObj(Point(), 0, pObject);
+        SwView* pView = pDocShell->GetView();
+        if (!pView)
+            return false;
+        if (!pView->EnterShapeDrawTextMode(pObject))
+            continue;
+        SdrView* pSdrView = pWrtShell->GetDrawView();
+        if (!pSdrView)
+            return false;
+        OutlinerView* pOutlinerView = pSdrView->GetTextEditOutlinerView();
+        if (!rSearchItem.GetBackward())
+            pOutlinerView->SetSelection(ESelection(0, 0, 0, 0));
+        else
+            pOutlinerView->SetSelection(ESelection(EE_PARA_MAX_COUNT, EE_TEXTPOS_MAX_COUNT, EE_PARA_MAX_COUNT, EE_TEXTPOS_MAX_COUNT));
+        pOutlinerView->StartSearchAndReplace(rSearchItem);
+        return true;
+    }
+
+    return false;
 }
 
 void DocumentDrawModelManager::DrawNotifyUndoHdl()

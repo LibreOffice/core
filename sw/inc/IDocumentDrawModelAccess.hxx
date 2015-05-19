@@ -23,7 +23,9 @@
 #include <svx/svdtypes.hxx>
 
 class SwDrawModel;
+class SwPaM;
 class SdrPageView;
+class SvxSearchItem;
 
 class IDocumentDrawModelAccess
 {
@@ -88,6 +90,9 @@ public:
         @return sal_Int8, invisible layer ID corresponding to given layer ID
     */
     virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId ) = 0;
+
+    /// Searches text in shapes anchored inside rPaM.
+    virtual bool Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem) = 0;
 
 protected:
 
