@@ -25,7 +25,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <boost/bind.hpp>
-#include <boost/tuple/tuple.hpp>
 #include <algorithm>
 #include <vector>
 
@@ -52,8 +51,7 @@ namespace basegfx
 
         B2DPolyRange::ElementType getElement(sal_uInt32 nIndex) const
         {
-            return boost::make_tuple(maRanges[nIndex],
-                                     maOrient[nIndex]);
+            return std::make_tuple(maRanges[nIndex], maOrient[nIndex]);
         }
 
         void appendElement(const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount)

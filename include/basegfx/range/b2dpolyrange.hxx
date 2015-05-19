@@ -21,7 +21,7 @@
 #define INCLUDED_BASEGFX_RANGE_B2DPOLYRANGE_HXX
 
 #include <o3tl/cow_wrapper.hxx>
-#include <boost/tuple/tuple.hpp>
+#include <tuple>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/basegfxdllapi.h>
 
@@ -51,7 +51,7 @@ namespace basegfx
     class BASEGFX_DLLPUBLIC B2DPolyRange
     {
     public:
-        typedef boost::tuple<B2DRange,B2VectorOrientation> ElementType ;
+        typedef std::tuple<B2DRange, B2VectorOrientation> ElementType;
 
         B2DPolyRange();
         ~B2DPolyRange();

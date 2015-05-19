@@ -294,9 +294,9 @@ public:
         CPPUNIT_ASSERT_MESSAGE("simple poly range - count",
                                aRange.count() == 2);
         CPPUNIT_ASSERT_MESSAGE("simple poly range - first element",
-                               aRange.getElement(0).head == B2DRange(0,0,1,1));
+                               std::get<0>(aRange.getElement(0)) == B2DRange(0,0,1,1));
         CPPUNIT_ASSERT_MESSAGE("simple poly range - second element",
-                               aRange.getElement(1).head == B2DRange(2,2,3,3));
+                               std::get<0>(aRange.getElement(1)) == B2DRange(2,2,3,3));
 
         // B2DPolyRange relies on correctly orientated rects
         const B2DRange aRect(0,0,1,1);
