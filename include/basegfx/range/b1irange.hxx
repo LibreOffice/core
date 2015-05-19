@@ -32,8 +32,6 @@ namespace basegfx
         value. All inbetween values are included in the set (see also
         http://en.wikipedia.org/wiki/Interval_%28mathematics%29).
 
-        Probably you rather want B1IBox for integers.
-
         The set is closed, i.e. the upper and the lower bound are
         included (if you're used to the notation - we're talking about
         [a,b] here, compared to half-open [a,b) or open intervals
@@ -41,8 +39,6 @@ namespace basegfx
 
         That means, isInside(val) will return true also for values of
         val=a or val=b.
-
-        @see B1IBox
      */
     class B1IRange
     {
