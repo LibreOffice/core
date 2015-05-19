@@ -18,7 +18,7 @@ import uuid
 import json
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
-
+import traceback
 
 class GbuildParserState:
 
@@ -931,6 +931,508 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         self.write_pretty_xml(proj_node, filters_path)
 
 
+
+
+
+class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
+
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+        self.target_by_location = {}
+        for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
+            if target.location not in self.target_by_location:
+                self.target_by_location[target.location] = set()
+            self.target_by_location[target.location] |= set([target])
+
+        self._do_log = False # set to 'True' to activate log of QtCreatorIntegrationGenerator
+        if self._do_log:
+            qtlog_path = os.path.abspath('../qtlog_.txt')
+            self.qtlog = open(qtlog_path, 'w')
+
+    def _log(self, message):
+        if self._do_log:
+            self.qtlog.write(message)
+
+    def log_close(self):
+        if self._do_log:
+            self.qtlog.close()
+
+    def generate_build_configs(self, lib_folder):
+        module_folder = os.path.join(self.base_folder, lib_folder)
+        xml = ""
+        # In QtCreator UI, build configs are listed alphabetically, 
+        # so it can be different from the creation order.
+        # So we prefix the names with the index.
+        xml += QtCreatorIntegrationGenerator.build_configs_template % {
+            'index' : '0',
+            'base_folder' : module_folder,
+            'arg' : "",
+            'name' : "1-Build %s" % lib_folder,
+            }
+        xml += QtCreatorIntegrationGenerator.build_configs_template % {
+            'index' : '1',
+            'base_folder' : module_folder,
+            'arg' : "unitcheck",
+            'name' : "2-Local tests -- quick tests (unitcheck)",
+            }
+        xml += QtCreatorIntegrationGenerator.build_configs_template % {
+            'index' : '2',
+            'base_folder' : module_folder,
+            'arg' : "unitcheck slowcheck",
+            'name' : "3-Local tests -- slow tests (unitcheck, slowcheck)",
+            }
+        xml += QtCreatorIntegrationGenerator.build_configs_template % {
+            'index' : '3',
+            'base_folder' : module_folder,
+            'arg' : "unitcheck slowcheck subsequentcheck",
+            'name' : "4-Local tests -- integration tests (unitcheck, slowcheck, subsequentcheck)",
+            }
+        xml += QtCreatorIntegrationGenerator.build_configs_template % {
+            'index' : '4',
+            'base_folder' : self.base_folder,
+            'arg' : "unitcheck",
+            'name' : "5-Global tests -- quick tests (unitcheck)",
+            }
+        xml += QtCreatorIntegrationGenerator.build_configs_template % {
+            'index' : '5',
+            'base_folder' : self.base_folder,
+            'arg' : "unitcheck slowcheck",
+            'name' : "6-Global tests -- slow tests (unitcheck, slowcheck)",
+            }
+        xml += QtCreatorIntegrationGenerator.build_configs_template % {
+            'index' : '6',
+            'base_folder' : self.base_folder,
+            'arg' : "unitcheck slowcheck subsequentcheck",
+            'name' : "7-Global tests -- integration tests (unitcheck, slowcheck, subsequentcheck)",
+            }
+        xml += QtCreatorIntegrationGenerator.build_configs_template % {
+            'index' : '7',
+            'base_folder' : self.base_folder,
+            'arg' : "build-nocheck",
+            'name' : "8-Global build -- nocheck",
+            }
+        xml += QtCreatorIntegrationGenerator.build_configs_template % {
+            'index' : '8',
+            'base_folder' : self.base_folder,
+            'arg' : "",
+            'name' : "9-Global build",
+            }
+
+        xml += QtCreatorIntegrationGenerator.build_configs_count_template % {
+            'nb' : '9',
+            }
+        return xml
+    
+    # By default, QtCreator creates 2 BuildStepList : "Build" et "Clean"
+    # but the "clean" can be empty.
+    build_configs_template = """
+    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.%(index)s">
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">%(base_folder)s</value>
+    
+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
+    
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
+      <valuelist type="QVariantList" key="Qt4ProjectManager.MakeStep.AutomaticallyAddedMakeArguments">
+       <value type="QString">-w</value>
+       <value type="QString">-r</value>
+      </valuelist>
+      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">false</value>
+      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">%(arg)s</value>
+      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
+     </valuemap>
+     
+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
+    </valuemap>
+    
+    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">1</value>
+    <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">%(name)s</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
+    <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">%(index)s</value>
+    <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
+   </valuemap>
+   """
+   
+    build_configs_count_template = """
+   <!-- nb build configurations -->
+   <value type="int" key="ProjectExplorer.Target.BuildConfigurationCount">%(nb)s</value>
+   """
+
+    def generate_deploy_configs(self, lib_folder):
+        xml = QtCreatorIntegrationGenerator.deploy_configs_template % {}
+        return xml
+    
+    deploy_configs_template = """
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.DeployConfiguration.0">
+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">0</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Deploy</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Deploy</value>
+    </valuemap>
+    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">1</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Deploy locally</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.DefaultDeployConfiguration</value>
+   </valuemap>
+   <value type="int" key="ProjectExplorer.Target.DeployConfigurationCount">1</value>
+    """
+    
+    def generate_run_configs(self, lib_folder):
+        
+        # If we use 'soffice', it's ok only for "Run", not for "Debug".
+        # So we put "soffice.bin" that is ok for both.
+        loexec = "%s/instdir/program/soffice.bin" % self.base_folder
+        xml = QtCreatorIntegrationGenerator.run_configs_template % {
+                'loexec' : loexec,
+                'workdir' : self.base_folder
+            }
+        return xml
+    
+    run_configs_template = """
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.0">
+    <valuelist type="QVariantList" key="Analyzer.Valgrind.AddedSuppressionFiles"/>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.CollectBusEvents">false</value>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.CollectSystime">false</value>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.EnableBranchSim">false</value>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.EnableCacheSim">false</value>
+    <value type="bool" key="Analyzer.Valgrind.Callgrind.EnableEventToolTips">true</value>
+    <value type="double" key="Analyzer.Valgrind.Callgrind.MinimumCostRatio">0.01</value>
+    <value type="double" key="Analyzer.Valgrind.Callgrind.VisualisationMinimumCostRatio">10</value>
+    <value type="bool" key="Analyzer.Valgrind.FilterExternalIssues">true</value>
+    <value type="int" key="Analyzer.Valgrind.LeakCheckOnFinish">1</value>
+    <value type="int" key="Analyzer.Valgrind.NumCallers">25</value>
+    <valuelist type="QVariantList" key="Analyzer.Valgrind.RemovedSuppressionFiles"/>
+    <value type="int" key="Analyzer.Valgrind.SelfModifyingCodeDetection">1</value>
+    <value type="bool" key="Analyzer.Valgrind.Settings.UseGlobalSettings">true</value>
+    <value type="bool" key="Analyzer.Valgrind.ShowReachable">false</value>
+    <value type="bool" key="Analyzer.Valgrind.TrackOrigins">true</value>
+    <value type="QString" key="Analyzer.Valgrind.ValgrindExecutable">valgrind</value>
+    <valuelist type="QVariantList" key="Analyzer.Valgrind.VisibleErrorKinds">
+     <value type="int">0</value>
+     <value type="int">1</value>
+     <value type="int">2</value>
+     <value type="int">3</value>
+     <value type="int">4</value>
+     <value type="int">5</value>
+     <value type="int">6</value>
+     <value type="int">7</value>
+     <value type="int">8</value>
+     <value type="int">9</value>
+     <value type="int">10</value>
+     <value type="int">11</value>
+     <value type="int">12</value>
+     <value type="int">13</value>
+     <value type="int">14</value>
+    </valuelist>
+    <value type="int" key="PE.EnvironmentAspect.Base">2</value>
+    <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
+    
+    <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Arguments"></value>
+    <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Executable">%(loexec)s</value>
+    <value type="bool" key="ProjectExplorer.CustomExecutableRunConfiguration.UseTerminal">false</value>
+    <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.WorkingDirectory">%(workdir)s</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run libreoffice/instdir/program/soffice</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.CustomExecutableRunConfiguration</value>
+    <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
+    <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
+    <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
+    <value type="bool" key="RunConfiguration.UseMultiProcess">false</value>
+    <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
+    <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+
+   </valuemap>
+   <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
+    """
+
+    def generate_pro_user_content(self, lib_folder):
+
+        build_configs = self.generate_build_configs(lib_folder)
+        deploy_configs = self.generate_deploy_configs(lib_folder)
+        run_configs = self.generate_run_configs(lib_folder)
+
+        xml = QtCreatorIntegrationGenerator.pro_user_template % {
+                'build_configs' : build_configs,
+                'deploy_configs' : deploy_configs,
+                'run_configs' : run_configs,
+            }
+        return xml
+
+    pro_user_template = """<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE QtCreatorProject>
+<!-- Written by QtCreator 3.1.1, 2015-05-14T15:54:34. -->
+<qtcreator>
+ <data>
+  <variable>ProjectExplorer.Project.ActiveTarget</variable>
+  <value type="int">0</value>
+ </data>
+
+ <!-- editor settings -->
+ <data>
+  <variable>ProjectExplorer.Project.EditorSettings</variable>
+  <valuemap type="QVariantMap">
+   <value type="bool" key="EditorConfiguration.AutoIndent">true</value>
+   <value type="bool" key="EditorConfiguration.AutoSpacesForTabs">false</value>
+   <value type="bool" key="EditorConfiguration.CamelCaseNavigation">true</value>
+   <valuemap type="QVariantMap" key="EditorConfiguration.CodeStyle.0">
+    <value type="QString" key="language">Cpp</value>
+    <valuemap type="QVariantMap" key="value">
+     <value type="QByteArray" key="CurrentPreferences">CppGlobal</value>
+    </valuemap>
+   </valuemap>
+   <valuemap type="QVariantMap" key="EditorConfiguration.CodeStyle.1">
+    <value type="QString" key="language">QmlJS</value>
+    <valuemap type="QVariantMap" key="value">
+     <value type="QByteArray" key="CurrentPreferences">QmlJSGlobal</value>
+    </valuemap>
+   </valuemap>
+   <value type="int" key="EditorConfiguration.CodeStyle.Count">2</value>
+   <value type="QByteArray" key="EditorConfiguration.Codec">UTF-8</value>
+   <value type="bool" key="EditorConfiguration.ConstrainTooltips">false</value>
+   <value type="int" key="EditorConfiguration.IndentSize">4</value>
+   <value type="bool" key="EditorConfiguration.KeyboardTooltips">false</value>
+   <value type="int" key="EditorConfiguration.MarginColumn">80</value>
+   <value type="bool" key="EditorConfiguration.MouseHiding">true</value>
+   <value type="bool" key="EditorConfiguration.MouseNavigation">true</value>
+   <value type="int" key="EditorConfiguration.PaddingMode">1</value>
+   <value type="bool" key="EditorConfiguration.ScrollWheelZooming">true</value>
+   <value type="bool" key="EditorConfiguration.ShowMargin">false</value>
+   <value type="int" key="EditorConfiguration.SmartBackspaceBehavior">1</value>
+   <value type="bool" key="EditorConfiguration.SpacesForTabs">true</value>
+   <value type="int" key="EditorConfiguration.TabKeyBehavior">0</value>
+   <value type="int" key="EditorConfiguration.TabSize">8</value>
+   <value type="bool" key="EditorConfiguration.UseGlobal">true</value>
+   <value type="int" key="EditorConfiguration.Utf8BomBehavior">1</value>
+   <value type="bool" key="EditorConfiguration.addFinalNewLine">true</value>
+   <value type="bool" key="EditorConfiguration.cleanIndentation">true</value>
+   <value type="bool" key="EditorConfiguration.cleanWhitespace">true</value>
+   <value type="bool" key="EditorConfiguration.inEntireDocument">false</value>
+  </valuemap>
+ </data>
+ 
+ <data>
+  <variable>ProjectExplorer.Project.PluginSettings</variable>
+  <valuemap type="QVariantMap"/>
+ </data>
+
+ <!-- target -->
+ <data>
+  <variable>ProjectExplorer.Project.Target.0</variable>
+  <valuemap type="QVariantMap">
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{0701de51-c96e-4e4f-85c3-e70b223c5076}</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
+
+   <!-- build configurations -->
+   %(build_configs)s
+
+   <!-- deploy configurations -->
+   %(deploy_configs)s
+
+   <!-- plugin settings -->
+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.PluginSettings"/>
+
+   <!-- run configurations -->
+   %(run_configs)s
+
+  </valuemap>
+ </data>
+ <!-- nb targets : 1 -->
+ <data>
+  <variable>ProjectExplorer.Project.TargetCount</variable>
+  <value type="int">1</value>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.Updater.EnvironmentId</variable>
+  <value type="QByteArray">{5abcafed-86f6-49f6-b1cb-380fadd21211}</value>
+ </data>
+ <data>
+  <variable>ProjectExplorer.Project.Updater.FileVersion</variable>
+  <value type="int">15</value>
+ </data>
+</qtcreator>
+"""
+
+    def remove_qt_files(self):
+        for location in self.target_by_location:
+            for f in os.listdir(location):
+                if f.endswith('.pro') or f.endswith('.pro.user'):
+                    try:
+                        os.remove(os.path.join(location, f))
+                        self._log("removed %s\n" % f)
+                    except OSError:
+                        shutil.rmtree(os.path.join(location, f))
+                        self._log("removed2 %s\n" % f)
+
+    def get_source_extension(self, src_file):
+        path = os.path.join(self.base_folder, src_file)
+        for ext in (".cxx", ".cpp", ".c", ".mm"):
+            if os.path.isfile(path+ext):
+                return ext
+        return ""
+                
+    def get_header_extension(self, src_file):
+        path = os.path.join(self.base_folder, src_file)
+        for ext in (".hxx", ".hpp", ".h"):
+            if os.path.isfile(path+ext):
+                return ext
+        return ""
+        
+    def build_data_libs(self):
+        
+        self.data_libs = {}
+        
+        all_libs = set(self.gbuildparser.libs) | set(self.gbuildparser.exes)
+        for lib in all_libs:
+            self._log("\nlibrary : %s, loc=%s" % (lib.short_name(), lib.location))
+            lib_folder = os.path.basename(lib.location)
+
+            def lopath(path):
+                return os.path.relpath(path, lib.location)
+                
+            sources_list = []
+            headers_list = []
+            includepath_list = []
+            for file_ in lib.cxxobjects:
+                # the file has no extension : search it
+                # self._log("\n    file : %s" % file_)
+                ext = self.get_source_extension(file_)
+                if ext:
+                    sources_list.append(lopath(file_+ext))
+                
+                # few cxxobject files have a header beside
+                ext = self.get_header_extension(file_)
+                if ext:
+                    headers_list.append(lopath(file_+ext))
+            
+            # List all headers
+            for hdir in lib.include:
+                # except from "workdir" folder
+                if "workdir" not in hdir:
+                    for hf in os.listdir(hdir):
+                        if hf.endswith(('.h', '.hxx', '.hpp', '.hrc')):
+                            hf_lopath = lopath(os.path.join(hdir, hf))
+                            headers_list.append(hf_lopath)
+            
+            # We also need to have a list of include paths
+            for header in headers_list:
+                header_path = os.path.dirname(header)
+                if header_path not in includepath_list:
+                    includepath_list.append(header_path)
+            
+            # All datas are prepared, store them for the lib.
+            if lib_folder in self.data_libs:
+                self.data_libs[lib_folder]['sources'] |= set(sources_list)
+                self.data_libs[lib_folder]['headers'] |= set(headers_list)
+                self.data_libs[lib_folder]['includepath'] |= set(includepath_list)
+            else:
+                self.data_libs[lib_folder] = {
+                    'sources' : set(sources_list),
+                    'headers' : set(headers_list),
+                    'includepath' : set(includepath_list),
+                    'loc' : lib.location
+                }
+
+    def emit(self):
+        
+        # we remove existing '.pro' and '.pro.user' files
+        self.remove_qt_files()
+
+        # for .pro files, we must explicitely list all files (.c, .h)
+        # so we can't reuse directly the same method than for kde integration.
+        self.base_folder = self.gbuildparser.builddir
+        self.build_data_libs()
+
+        subdirs_list = self.data_libs.keys()
+        # Now we can create Qt files
+        for lib_folder in subdirs_list:
+            sources_list = sorted(self.data_libs[lib_folder]['sources'])
+            headers_list = sorted(self.data_libs[lib_folder]['headers'])
+            includepath_list = sorted(self.data_libs[lib_folder]['includepath'])
+            lib_loc = self.data_libs[lib_folder]['loc']
+            
+            sources = " \\\n".join(sources_list)
+            headers = " \\\n".join(headers_list)
+            includepath = " \\\n".join(includepath_list)
+            
+            # create .pro file
+            qt_pro_file = '%s/%s.pro' % (lib_loc, lib_folder)
+            try:
+                content = QtCreatorIntegrationGenerator.pro_template % {'sources' : sources, 'headers' : headers, 'includepath' : includepath}
+                mode = 'w+'
+                with open(qt_pro_file, mode) as fpro:
+                    fpro.write(content)
+                self._log("created %s\n" % qt_pro_file)
+                
+            except Exception as e:
+                print("ERROR : creating pro file="+qt_pro_file, file=sys.stderr)
+                print(e, file=sys.stderr)
+                temp = traceback.format_exc() # .decode('utf8')
+                print(temp, file=sys.stderr)
+                print("\n\n", file=sys.stderr)
+            
+            # create .pro.user file
+            qt_pro_user_file = '%s/%s.pro.user' % (lib_loc, lib_folder)
+            try:
+                with open(qt_pro_user_file, mode) as fprouser:
+                    fprouser.write(self.generate_pro_user_content(lib_folder))
+                self._log("created %s\n" % qt_pro_user_file)
+                
+            except Exception as e:
+                print("ERROR : creating pro.user file="+qt_pro_user_file, file=sys.stderr)
+                print(e, file=sys.stderr)
+                temp = traceback.format_exc()
+                print(temp, file=sys.stderr)
+                print("\n\n", file=sys.stderr)
+            
+        # create meta .pro file (lists all sub projects)
+        qt_meta_pro_file = 'lo.pro'
+        try:
+            subdirs = " \\\n".join(subdirs_list)
+            content = QtCreatorIntegrationGenerator.pro_meta_template % {'subdirs' : subdirs}
+            with open(qt_meta_pro_file, 'w+') as fmpro:
+                fmpro.write(content)
+
+        except Exception as e:
+            print("ERROR : creating lo.pro file="+qt_meta_pro_file, file=sys.stderr)
+            print(e, file=sys.stderr)
+            temp = traceback.format_exc()
+            print(temp, file=sys.stderr)
+            print("\n\n", file=sys.stderr)
+        
+        self.log_close()
+        
+    pro_template = """TEMPLATE = app
+CONFIG += console
+CONFIG -= app_bundle
+CONFIG -= qt
+
+INCLUDEPATH += %(includepath)s
+
+SOURCES += %(sources)s
+
+HEADERS += %(headers)s
+
+"""
+    pro_meta_template = """TEMPLATE = subdirs
+    
+SUBDIRS = %(subdirs)s
+"""
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='LibreOffice gbuild IDE project generator')
@@ -941,13 +1443,15 @@ if __name__ == '__main__':
     args = parser.parse_args()
     paths = {}
     generators = {
-	'eclipsecdt': EclipseCDTIntegrationGenerator,
+        'eclipsecdt': EclipseCDTIntegrationGenerator,
         'kdevelop': KdevelopIntegrationGenerator,
         'xcode': XcodeIntegrationGenerator,
         'vs2012': VisualStudioIntegrationGenerator,
         'vs2013': VisualStudioIntegrationGenerator,
         'vim': VimIntegrationGenerator,
-        'debug': DebugIntegrationGenerator}
+        'debug': DebugIntegrationGenerator,
+        'qtcreator': QtCreatorIntegrationGenerator,
+        }
 
     if args.ide not in generators.keys():
         print("Invalid ide. valid values are %s" % ','.join(generators.keys()))
