@@ -305,8 +305,11 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                     aSearchItem.SetBackward(!bSrchForward);
                     sal_uInt16 nResult = pSdrView->GetTextEditOutlinerView()->StartSearchAndReplace(aSearchItem);
                     if (!nResult)
+                    {
                         // If not found, end the text edit.
                         pSdrView->SdrEndTextEdit();
+                        pSdrView->UnmarkAll();
+                    }
                     else
                     {
                         bFound = true;
