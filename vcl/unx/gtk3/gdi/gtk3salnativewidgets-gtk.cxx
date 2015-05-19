@@ -947,6 +947,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             break;
         }
         break;
+    case CTRL_LISTNET:
     case CTRL_TAB_BODY:
         return true;
         break;
@@ -1758,7 +1759,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         case CTRL_CHECKBOX:
         case CTRL_PROGRESS:
 //        case CTRL_LISTNODE:
-//        case CTRL_LISTNET:
+        case CTRL_LISTNET:
             if (nPart==PART_ENTIRE_CONTROL || nPart == PART_FOCUS)
                 return true;
             break;
