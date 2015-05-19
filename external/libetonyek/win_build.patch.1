@@ -1,0 +1,13 @@
+Fix the windows build - fix libtool
+
+--- libetonyek/ltmain.sh.orig	2015-05-20 00:47:55.378800000 +0200
++++ libetonyek/ltmain.sh	2015-05-20 00:47:33.648000000 +0200
+@@ -3722,6 +3722,8 @@
+ 	sleep 2
+       done
+     fi
++    # Cygwin ar.exe does not create directories for the objects!
++    mkdir -p $f_ex_an_ar_dir/contexts
+     func_show_eval "(cd \$f_ex_an_ar_dir && $AR x \"\$f_ex_an_ar_oldlib\")" \
+ 		   'stat=$?; rm -f "$lockfile"; exit $stat'
+     if test "$lock_old_archive_extraction" = yes; then
