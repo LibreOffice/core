@@ -30,7 +30,6 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <config_features.h>
 #include <config_version.h>
@@ -46,6 +45,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/time.h>
+#include <random>
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
