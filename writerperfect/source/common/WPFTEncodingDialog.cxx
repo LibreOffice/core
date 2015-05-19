@@ -126,7 +126,7 @@ WPFTEncodingDialog::WPFTEncodingDialog(
     vcl::Window                 *pParent,
     const OUString         *pStrTitle,
     const OUString *encoding)
-    :   ModalDialog(pParent, "WPFTEncodingDialog", "writerperfect/ui/WPFTEncodingDialog.ui"),
+    :   ModalDialog(pParent, "WPFTEncodingDialog", "writerperfect/ui/wpftencodingdialog.ui"),
         m_pLbCharset(), m_pBtnOk(), m_pBtnCancel(), m_userHasCancelled(false)
 {
     get(m_pLbCharset, "comboboxtext");
