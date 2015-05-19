@@ -178,12 +178,12 @@ void SvtFontSubstConfig::Apply()
 
     for (sal_Int32  i = 0; i < nCount; i++)
     {
-        sal_uInt16 nFlags = 0;
+        AddFontSubstituteFlags nFlags = AddFontSubstituteFlags::NONE;
         const SubstitutionStruct* pSubs = GetSubstitution(i);
         if(pSubs->bReplaceAlways)
-            nFlags |= FONT_SUBSTITUTE_ALWAYS;
+            nFlags |= AddFontSubstituteFlags::ALWAYS;
         if(pSubs->bReplaceOnScreenOnly)
-            nFlags |= FONT_SUBSTITUTE_SCREENONLY;
+            nFlags |= AddFontSubstituteFlags::ScreenOnly;
         OutputDevice::AddFontSubstitute( pSubs->sFont, pSubs->sReplaceBy, nFlags );
     }
 

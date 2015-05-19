@@ -266,9 +266,17 @@ namespace o3tl
     template<> struct typed_flags<AntialiasingFlags> : is_typed_flags<AntialiasingFlags, 0x07> {};
 }
 
-// AddFontSubstitute
-#define FONT_SUBSTITUTE_ALWAYS          ((sal_uInt16)0x0001)
-#define FONT_SUBSTITUTE_SCREENONLY      ((sal_uInt16)0x0002)
+// AddFontSubstitute() flags
+enum class AddFontSubstituteFlags
+{
+    NONE            = 0x00,
+    ALWAYS          = 0x01,
+    ScreenOnly      = 0x02,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<AddFontSubstituteFlags> : is_typed_flags<AddFontSubstituteFlags, 0x03> {};
+}
 
 #define DEFAULTFONT_FLAGS_ONLYONE       ((sal_uLong)0x00000001)
 
@@ -1259,7 +1267,7 @@ public:
     static void                 EndFontSubstitution();
     static void                 AddFontSubstitute( const OUString& rFontName,
                                                    const OUString& rReplaceFontName,
-                                                   sal_uInt16 nFlags = 0 );
+                                                   AddFontSubstituteFlags nFlags = AddFontSubstituteFlags::NONE );
     static void                 RemoveFontSubstitute( sal_uInt16 n );
     static sal_uInt16           GetFontSubstituteCount();
 

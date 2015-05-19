@@ -36,6 +36,8 @@ class VirtualDevice;
 class ImplGetDevFontList;
 class GetDevSizeList;
 class PhysicalFontCollection;
+enum class AddFontSubstituteFlags;
+
 // an ImplGetDevFontList is created by an PhysicalFontCollection
 // it becomes invalid when original PhysicalFontCollection is modified
 class ImplGetDevFontList
@@ -90,9 +92,9 @@ struct ImplFontSubstEntry
     OUString                  maReplaceName;
     OUString                  maSearchName;
     OUString                  maSearchReplaceName;
-    sal_uInt16                mnFlags;
+    AddFontSubstituteFlags    mnFlags;
 
-    ImplFontSubstEntry(  const OUString& rFontName, const OUString& rSubstFontName, sal_uInt16 nSubstFlags );
+    ImplFontSubstEntry(  const OUString& rFontName, const OUString& rSubstFontName, AddFontSubstituteFlags nSubstFlags );
 };
 
 class ImplDirectFontSubstitution
@@ -102,13 +104,13 @@ private:
     typedef std::list<ImplFontSubstEntry> FontSubstList;
     FontSubstList maFontSubstList;
 public:
-    void    AddFontSubstitute( const OUString& rFontName, const OUString& rSubstName, sal_uInt16 nFlags );
+    void    AddFontSubstitute( const OUString& rFontName, const OUString& rSubstName, AddFontSubstituteFlags nFlags );
     void    RemoveFontSubstitute( int nIndex );
     int     GetFontSubstituteCount() const { return maFontSubstList.size(); };
     bool    Empty() const { return maFontSubstList.empty(); }
     void    Clear() { maFontSubstList.clear(); }
 
-    bool    FindFontSubstitute( OUString& rSubstName, const OUString& rFontName, sal_uInt16 nFlags ) const;
+    bool    FindFontSubstitute( OUString& rSubstName, const OUString& rFontName, AddFontSubstituteFlags nFlags ) const;
 };
 
 // PreMatchFontSubstitution

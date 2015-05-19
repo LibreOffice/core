@@ -687,7 +687,7 @@ void OutputDevice::EndFontSubstitution()
 
 void OutputDevice::AddFontSubstitute( const OUString& rFontName,
                                       const OUString& rReplaceFontName,
-                                      sal_uInt16 nFlags )
+                                      AddFontSubstituteFlags nFlags )
 {
     ImplDirectFontSubstitution*& rpSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
     if( !rpSubst )
@@ -697,13 +697,13 @@ void OutputDevice::AddFontSubstitute( const OUString& rFontName,
 }
 
 void ImplDirectFontSubstitution::AddFontSubstitute( const OUString& rFontName,
-    const OUString& rSubstFontName, sal_uInt16 nFlags )
+    const OUString& rSubstFontName, AddFontSubstituteFlags nFlags )
 {
     maFontSubstList.push_back( ImplFontSubstEntry( rFontName, rSubstFontName, nFlags ) );
 }
 
 ImplFontSubstEntry::ImplFontSubstEntry( const OUString& rFontName,
-    const OUString& rSubstFontName, sal_uInt16 nSubstFlags )
+    const OUString& rSubstFontName, AddFontSubstituteFlags nSubstFlags )
 :   maName( rFontName )
 ,   maReplaceName( rSubstFontName )
 ,   mnFlags( nSubstFlags )
@@ -737,14 +737,14 @@ sal_uInt16 OutputDevice::GetFontSubstituteCount()
 }
 
 bool ImplDirectFontSubstitution::FindFontSubstitute( OUString& rSubstName,
-    const OUString& rSearchName, sal_uInt16 nFlags ) const
+    const OUString& rSearchName, AddFontSubstituteFlags nFlags ) const
 {
     // TODO: get rid of O(N) searches
     FontSubstList::const_iterator it = maFontSubstList.begin();
     for(; it != maFontSubstList.end(); ++it )
     {
         const ImplFontSubstEntry& rEntry = *it;
-        if( ((rEntry.mnFlags & nFlags) || !nFlags)
+        if( ((rEntry.mnFlags & nFlags) || nFlags == AddFontSubstituteFlags::NONE)
         &&   (rEntry.maSearchName == rSearchName) )
         {
             rSubstName = rEntry.maSearchReplaceName;
@@ -764,7 +764,7 @@ void ImplFontSubstitute( OUString& rFontName )
 
     // apply user-configurable font replacement (eg, from the list in Tools->Options)
     const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
-    if( pSubst && pSubst->FindFontSubstitute( aSubstFontName, rFontName, FONT_SUBSTITUTE_ALWAYS ) )
+    if( pSubst && pSubst->FindFontSubstitute( aSubstFontName, rFontName, AddFontSubstituteFlags::ALWAYS ) )
     {
         rFontName = aSubstFontName;
         return;
