@@ -98,6 +98,7 @@
 #include <sfx2/event.hxx>
 #include <sfx2/templatedlg.hxx>
 #include "openuriexternally.hxx"
+#include <svtools/RemoteFilesDialog.hxx>
 
 #include <officecfg/Office/ProtocolHandler.hxx>
 
@@ -1122,6 +1123,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
         delete pLinkItem;
     }
+}
+
+void SfxApplication::OpenRemoteExec_Impl( SfxRequest& )
+{
+    ScopedVclPtrInstance< RemoteFilesDialog > aDlg((vcl::Window*)NULL, WB_OPEN);
+    aDlg->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

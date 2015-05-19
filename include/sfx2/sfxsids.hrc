@@ -96,6 +96,7 @@
 // default-ids for document
 #define SID_NEWDOC                          (SID_SFX_START + 500)
 #define SID_OPENDOC                         (SID_SFX_START + 501)
+#define SID_OPENREMOTE                      (SID_SFX_START + 517)
 #define SID_OPENURL                         (SID_SFX_START + 596)
 #define SID_SAVEASURL                       (SID_SFX_START + 643)
 #define SID_JUMPTOMARK                      (SID_SFX_START + 598)

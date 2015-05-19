@@ -61,6 +61,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
 
     VclPtr<PushButton> mpOpenButton;
     VclPtr<PushButton> mpRecentButton;
+    VclPtr<PushButton> mpRemoteButton;
     VclPtr<MenuButton> mpTemplateButton;
 
     VclPtr<FixedText>  mpCreateLabel;

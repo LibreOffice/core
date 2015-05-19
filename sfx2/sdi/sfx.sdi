@@ -3800,6 +3800,30 @@ SfxObjectItem Open SID_OPENDOC
     GroupId = GID_APPLICATION;
 ]
 
+SfxObjectItem OpenRemote SID_OPENREMOTE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
+
 SfxObjectItem WebHtml SID_WEBHTML
 ()
 [

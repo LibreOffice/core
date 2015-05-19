@@ -29,6 +29,10 @@ interface Documents
     [
         ExecMethod = OpenDocExec_Impl ;
     ]
+    SID_OPENREMOTE
+    [
+        ExecMethod = OpenRemoteExec_Impl ;
+    ]
     SID_OPENHYPERLINK // ole(no) api(final/play/rec)
     [
         ExecMethod = OpenDocExec_Impl ;
