@@ -1396,7 +1396,7 @@ OUString SAL_CALL ChartView::getImplementationName()
 
 OUString ChartView::getImplementationName_Static()
 {
-    return CHART_VIEW_SERVICE_IMPLEMENTATION_NAME;
+    return OUString(CHART_VIEW_SERVICE_IMPLEMENTATION_NAME);
 }
 
 sal_Bool SAL_CALL ChartView::supportsService( const OUString& rServiceName )

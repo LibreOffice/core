@@ -809,7 +809,7 @@ void XMLReportFilterHelper::isOasisFormat(const Sequence< beans::PropertyValue >
 }
 OUString XMLReportFilterHelper::getMediaType(bool )
 {
-    return MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART_ASCII;
+    return OUString(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART_ASCII);
 }
 
 } //  namespace chart
