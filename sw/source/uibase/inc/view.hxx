@@ -556,6 +556,8 @@ public:
     inline void     FlipDrawSelMode()   { m_bDrawSelMode = !m_bDrawSelMode; }
     void            NoRotate();     // turn off rotate mode
     bool            EnterDrawTextMode(const Point& aDocPos);
+    /// Same as EnterDrawTextMode(), but takes an SdrObject instead of guessing it by document position.
+    bool EnterShapeDrawTextMode(SdrObject* pObject);
     void            LeaveDrawCreate()   { m_nDrawSfxId = m_nFormSfxId = USHRT_MAX; m_sDrawCustom.clear();}
     bool            IsDrawMode()        { return (m_nDrawSfxId != USHRT_MAX || m_nFormSfxId != USHRT_MAX); }
     bool            IsFormMode() const;

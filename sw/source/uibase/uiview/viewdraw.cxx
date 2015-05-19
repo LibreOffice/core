@@ -504,6 +504,13 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
     return bReturn;
 }
 
+bool SwView::EnterShapeDrawTextMode(SdrObject* pObject)
+{
+    SdrView* pSdrView = GetWrtShell().GetDrawView();
+    SdrPageView* pPageView = pSdrView->GetSdrPageView();
+    return BeginTextEdit(pObject, pPageView, m_pEditWin);
+}
+
 // Enable DrawTextEditMode
 
 bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
