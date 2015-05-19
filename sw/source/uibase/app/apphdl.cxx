@@ -21,17 +21,19 @@
 
 #include <hintids.hxx>
 
+#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <tools/link.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/objitem.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svl/srchitem.hxx>
+#include <svtools/accessibilityoptions.hxx>
 #include <svtools/colorcfg.hxx>
+#include <svtools/restartdialog.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/isethint.hxx>
@@ -92,7 +94,9 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdb/TextConnectionSettings.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <swabstdlg.hxx>
 
 #include <vcl/status.hxx>
@@ -114,6 +118,24 @@ using namespace ::com::sun::star;
 #include <cfgid.h>
 
 #include <shells.hrc>
+
+namespace
+{
+    static bool lcl_hasAllComponentsAvailable()
+    {
+        try
+        {
+            return css::sdb::TextConnectionSettings::create(comphelper::getProcessComponentContext()).is();
+        }
+        catch (css::uno::Exception & e)
+        {
+            SAL_INFO(
+                "sw.core",
+                "assuming Base to be missing; caught " << e.Message);
+            return false;
+        }
+    }
+}
 
 SFX_IMPL_INTERFACE(SwModule, SfxModule)
 
@@ -278,6 +300,27 @@ SwMailMergeWizardExecutor::~SwMailMergeWizardExecutor()
 
 void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs )
 {
+    if(!lcl_hasAllComponentsAvailable())
+    {
+        try
+        {
+            using namespace org::freedesktop::PackageKit;
+            using namespace svtools;
+            css::uno::Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
+            const css::uno::Sequence< OUString > vPackages{ "libreoffice-base" };
+            OUString sInteraction;
+            xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
+            SolarMutexGuard aGuard;
+            executeRestartDialog(comphelper::getProcessComponentContext(), NULL, RESTART_REASON_MAILMERGE_INSTALL);
+        }
+        catch (const css::uno::Exception & e)
+        {
+            SAL_INFO(
+                "sw.core",
+                "trying to install LibreOffice Base, caught " << e.Message);
+        }
+        return;
+    }
     if ( m_pView )
     {
         OSL_FAIL("SwMailMergeWizardExecutor::ExecuteMailMergeWizard: Already executing the wizard!" );
