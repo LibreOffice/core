@@ -46,7 +46,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
-#include <stdio.h>
 
 using namespace ::osl                       ;
 using namespace ::comphelper                ;

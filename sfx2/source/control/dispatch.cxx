@@ -24,7 +24,6 @@
 #include <vector>
 
 #include <stdarg.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

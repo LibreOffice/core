@@ -18,8 +18,6 @@
  */
 
 
-#include <stdio.h>
-
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContent.hpp>

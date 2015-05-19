@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <boost/shared_ptr.hpp>
 
 #include <sfx2/imgmgr.hxx>

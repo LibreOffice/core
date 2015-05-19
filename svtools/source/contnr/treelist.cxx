@@ -22,8 +22,6 @@
 #include <svtools/viewdataentry.hxx>
 #include <osl/diagnose.h>
 
-#include <stdio.h>
-
 SvTreeList::SvTreeList() :
     mbEnableInvalidate(true)
 {

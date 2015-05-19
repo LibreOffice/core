@@ -19,7 +19,6 @@
 
 
 #include <ctype.h>
-#include <stdio.h>
 #include <comphelper/string.hxx>
 #include <o3tl/ptr_container.hxx>
 #include <tools/stream.hxx>

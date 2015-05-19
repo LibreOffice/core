@@ -19,8 +19,6 @@
 
 #include <config_features.h>
 
-#include <stdio.h>
-
 #include <sfx2/infobar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
