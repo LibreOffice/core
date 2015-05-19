@@ -185,7 +185,7 @@ void ScEditWindow::InsertField( const SvxFieldItem& rFld )
     pEdView->InsertField( rFld );
 }
 
-void ScEditWindow::SetCharAttriutes()
+void ScEditWindow::SetCharAttributes()
 {
     SfxObjectShell* pDocSh  = SfxObjectShell::Current();
 

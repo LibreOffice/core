@@ -803,7 +803,7 @@ IMPL_LINK( ScHFEditPage, ClickHdl, PushButton*, pBtn )
 
     if ( pBtn == m_pBtnText )
     {
-        pActiveEdWnd->SetCharAttriutes();
+        pActiveEdWnd->SetCharAttributes();
     }
     else
     {

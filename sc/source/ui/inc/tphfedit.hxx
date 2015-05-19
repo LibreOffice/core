@@ -62,7 +62,7 @@ public:
     using Control::SetText;
     void            SetText( const EditTextObject& rTextObject );
     EditTextObject* CreateTextObject();
-    void            SetCharAttriutes();
+    void            SetCharAttributes();
 
     void            InsertField( const SvxFieldItem& rFld );
 
