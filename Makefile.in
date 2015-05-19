@@ -370,7 +370,8 @@ $(foreach ide,\
 	vs2012 \
 	vs2013 \
 	vim \
-	xcode, \
+	xcode \
+	qtcreator,\
 $(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
 
 endif # MAKE_RESTARTS
