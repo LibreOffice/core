@@ -1,0 +1,32 @@
+--- src/hb-ot-map-private.hh
++++ src/hb-ot-map-private.hh
+@@ -52,8 +52,11 @@
+     unsigned int needs_fallback : 1;
+     unsigned int auto_zwj : 1;
+ 
+-    static int cmp (const feature_map_t *a, const feature_map_t *b)
+-    { return a->tag < b->tag ? -1 : a->tag > b->tag ? 1 : 0; }
++    static int cmp (void const * a_, void const * b_) {
++      feature_map_t const * a = static_cast<feature_map_t const *>(a_);
++      feature_map_t const * b = static_cast<feature_map_t const *>(b_);
++      return a->tag < b->tag ? -1 : a->tag > b->tag ? 1 : 0;
++    }
+   };
+ 
+   struct lookup_map_t {
+--- src/hb-ot-tag.cc
++++ src/hb-ot-tag.cc
+@@ -778,9 +778,11 @@
+ };
+ 
+ static int
+-lang_compare_first_component (const char *a,
+-			      const char *b)
++lang_compare_first_component (void const * a_,
++			      void const * b_)
+ {
++  char const * a = static_cast<char const *>(a_);
++  char const * b = static_cast<char const *>(b_);
+   unsigned int da, db;
+   const char *p;
+ 
