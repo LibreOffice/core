@@ -1755,12 +1755,12 @@ uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rD
 
 uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Reference<sdbc::XConnection> xConnection,
                                     const OUString& rTableOrQuery,
-                                    sal_uInt8   eTableOrQuery)
+                                    SwDBSelect   eTableOrQuery)
 {
     Reference< sdbcx::XColumnsSupplier> xRet;
     try
     {
-        if(eTableOrQuery == SW_DB_SELECT_UNKNOWN)
+        if(eTableOrQuery == SwDBSelect::UNKNOWN)
         {
             //search for a table with the given command name
             Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
@@ -1768,10 +1768,10 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
             {
                 Reference<XNameAccess> xTables = xTSupplier->getTables();
                 eTableOrQuery = xTables->hasByName(rTableOrQuery) ?
-                            SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY;
+                            SwDBSelect::TABLE : SwDBSelect::QUERY;
             }
         }
-        sal_Int32 nCommandType = SW_DB_SELECT_TABLE == eTableOrQuery ?
+        sal_Int32 nCommandType = SwDBSelect::TABLE == eTableOrQuery ?
                 CommandType::TABLE : CommandType::QUERY;
         Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         Reference<XRowSet> xRowSet(xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);

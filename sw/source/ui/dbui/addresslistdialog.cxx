@@ -616,7 +616,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             pUserData->xColumnsSupplier = SwDBManager::GetColumnSupplier(pUserData->xConnection,
                                     m_aDBData.sCommand,
                                     m_aDBData.nCommandType == CommandType::TABLE ?
-                                            SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY );
+                                            SwDBSelect::TABLE : SwDBSelect::QUERY );
             //#i97577#
             if( pUserData->xColumnsSupplier.is() )
                 m_pListLB->SetEntryText(m_aDBData.sCommand, pSelect, ITEMID_TABLE - 1);

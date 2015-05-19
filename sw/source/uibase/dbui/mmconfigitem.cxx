@@ -858,7 +858,7 @@ Reference< XColumnsSupplier> SwMailMergeConfigItem::GetColumnsSupplier()
         m_pImpl->xColumnsSupplier = SwDBManager::GetColumnSupplier(m_pImpl->xConnection,
                                 m_pImpl->aDBData.sCommand,
                                 m_pImpl->aDBData.nCommandType == CommandType::TABLE ?
-                                        SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY );
+                                        SwDBSelect::TABLE : SwDBSelect::QUERY );
     }
     return m_pImpl->xColumnsSupplier;
 }

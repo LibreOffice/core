@@ -256,7 +256,7 @@ IMPL_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
             xColSupp = SwDBManager::GetColumnSupplier(xConnection,
                                     pDBStruct->aDBData.sCommand,
                                     pDBStruct->aDBData.nCommandType == CommandType::QUERY ?
-                                        SW_DB_SELECT_QUERY : SW_DB_SELECT_TABLE);
+                                        SwDBSelect::QUERY : SwDBSelect::TABLE);
 
         if( xColSupp.is() )
         {
