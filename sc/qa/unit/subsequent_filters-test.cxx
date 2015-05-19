@@ -2437,7 +2437,7 @@ void testCustomIconSetsXLSX_Impl(ScDocument& rDoc, SCCOL nCol, SCROW nRow, ScIco
     CPPUNIT_ASSERT(pEntry);
     CPPUNIT_ASSERT_EQUAL(condformat::ICONSET, pEntry->GetType());
     const ScIconSetFormat* pIconSet = static_cast<const ScIconSetFormat*>(pEntry);
-    ScIconSetInfo* pInfo = pIconSet->GetIconSetInfo(ScAddress(nCol, nRow, 1));
+    std::unique_ptr<ScIconSetInfo> pInfo(pIconSet->GetIconSetInfo(ScAddress(nCol, nRow, 1)));
     if (nIndex == -1)
         CPPUNIT_ASSERT(!pInfo);
     else
