@@ -32,6 +32,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <dbdata.hxx>
 #include "validat.hxx"
 #include "formulacell.hxx"
@@ -138,6 +139,7 @@ public:
     void testCondFormatThemeColorXLSX();
     void testCondFormatThemeColor2XLSX(); // negative bar color and axis color
     void testComplexIconSetsXLSX();
+    void testCondFormatParentXLSX();
 
     void testLiteralInFormulaXLS();
 
@@ -247,6 +249,7 @@ public:
     CPPUNIT_TEST(testCondFormatThemeColorXLSX);
     CPPUNIT_TEST(testCondFormatThemeColor2XLSX);
     CPPUNIT_TEST(testComplexIconSetsXLSX);
+    CPPUNIT_TEST(testCondFormatParentXLSX);
     CPPUNIT_TEST(testLiteralInFormulaXLS);
 
     CPPUNIT_TEST(testNumberFormatHTML);
@@ -2467,6 +2470,20 @@ void ScFiltersTest::testComplexIconSetsXLSX()
     testCustomIconSetsXLSX_Impl(rDoc, 3, 1, IconSet_4RedToBlack, 3);
     testCustomIconSetsXLSX_Impl(rDoc, 3, 2, IconSet_3TrafficLights1, 1);
     testCustomIconSetsXLSX_Impl(rDoc, 3, 3, IconSet_3Arrows, 2);
+}
+
+void ScFiltersTest::testCondFormatParentXLSX()
+{
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "cond_parent.", XLSX );
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load cond_parent.xlsx", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    const SfxItemSet* pCondSet = rDoc.GetCondResult(2, 5, 0);
+    const ScPatternAttr* pPattern = rDoc.GetPattern(2, 5, 0);
+    const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_VER_JUSTIFY, pCondSet);
+    const SvxVerJustifyItem& rVerJustify = static_cast<const SvxVerJustifyItem&>(rPoolItem);
+    CPPUNIT_ASSERT_EQUAL(SVX_VER_JUSTIFY_TOP, static_cast<SvxCellVerJustify>(rVerJustify.GetValue()));
 }
 
 void ScFiltersTest::testLiteralInFormulaXLS()
