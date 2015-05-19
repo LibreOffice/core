@@ -25,7 +25,6 @@
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
 
-#include <officecfg/Office/Common.hxx>
 #include <sal/types.h>
 
 #include <window.h>
@@ -44,15 +43,17 @@ class PaintHelper
 {
 private:
     VclPtr<vcl::Window> m_pWindow;
+    VclPtr<VirtualDevice> m_pBuffer; ///< Buffer for the double-buffering
     vcl::Region* m_pChildRegion;
     Rectangle m_aSelectionRect;
     Rectangle m_aPaintRect;
     vcl::Region m_aPaintRegion;
     sal_uInt16 m_nPaintFlags;
-    bool m_bPop;
-    bool m_bRestoreCursor;
+    bool m_bPop : 1;
+    bool m_bRestoreCursor : 1;
+    bool m_bCreatedBuffer : 1; ///< This PaintHelper created the buffer for the double-buffering, and should dispose it when being destructed (if it is still alive by then).
 public:
-    PaintHelper(vcl::Window* pWindow, sal_uInt16 nPaintFlags);
+    PaintHelper(vcl::Window* pWindow, const VclPtr<VirtualDevice>& rBuffer, sal_uInt16 nPaintFlags);
     void SetPop()
     {
         m_bPop = true;
@@ -82,16 +83,75 @@ public:
         return m_aPaintRegion;
     }
     void DoPaint(const vcl::Region* pRegion);
+
+    /// Create m_pBuffer, and set it up to have the same settings as m_pWindow.
+    void SetupBuffer();
+
+    /// Paint the content of the buffer to the current m_pWindow.
+    void PaintBuffer();
+
     ~PaintHelper();
 };
 
-PaintHelper::PaintHelper(vcl::Window *pWindow, sal_uInt16 nPaintFlags)
+PaintHelper::PaintHelper(vcl::Window *pWindow, const VclPtr<VirtualDevice>& rBuffer, sal_uInt16 nPaintFlags)
     : m_pWindow(pWindow)
+    , m_pBuffer(rBuffer)
     , m_pChildRegion(NULL)
     , m_nPaintFlags(nPaintFlags)
     , m_bPop(false)
     , m_bRestoreCursor(false)
+    , m_bCreatedBuffer(false)
 {
+}
+
+void PaintHelper::SetupBuffer()
+{
+    assert(!m_pBuffer);
+
+    m_pBuffer = VclPtrInstance<VirtualDevice>();
+    m_bCreatedBuffer = true;
+
+    // transfer various settings
+    // FIXME: this must disappear as we move to RenderContext only,
+    // the painting must become state-less, so that no actual
+    // vcl::Window setting affects this
+    if (m_pWindow->IsBackground())
+        m_pBuffer->SetBackground(m_pWindow->GetBackground());
+    else
+        SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
+
+    m_pBuffer->SetClipRegion(m_pWindow->GetClipRegion());
+    m_pBuffer->SetFillColor(m_pWindow->GetFillColor());
+    m_pBuffer->SetFont(m_pWindow->GetFont());
+    m_pBuffer->SetLineColor(m_pWindow->GetLineColor());
+    m_pBuffer->SetMapMode(m_pWindow->GetMapMode());
+    m_pBuffer->SetRefPoint(m_pWindow->GetRefPoint());
+    m_pBuffer->SetSettings(m_pWindow->GetSettings());
+    m_pBuffer->SetTextColor(m_pWindow->GetTextColor());
+    m_pBuffer->SetTextLineColor(m_pWindow->GetTextLineColor());
+    m_pBuffer->SetOverlineColor(m_pWindow->GetOverlineColor());
+    m_pBuffer->SetTextFillColor(m_pWindow->GetTextFillColor());
+    m_pBuffer->SetTextAlign(m_pWindow->GetTextAlign());
+    m_pBuffer->SetRasterOp(m_pWindow->GetRasterOp());
+    m_pBuffer->SetRefPoint(m_pWindow->GetRefPoint());
+    m_pBuffer->SetLayoutMode(m_pWindow->GetLayoutMode());
+    m_pBuffer->SetDigitLanguage(m_pWindow->GetDigitLanguage());
+
+    // update the output size now, after all the settings were copied
+    m_pBuffer->SetOutputSize(m_pWindow->GetOutputSize());
+}
+
+void PaintHelper::PaintBuffer()
+{
+    assert(m_pBuffer);
+
+    // copy the buffer content to the actual window
+    // export VCL_DOUBLEBUFFERING_AVOID_PAINT=1 to see where we are
+    // painting directly instead of using Invalidate()
+    // [ie. everything you can see was painted directly to the
+    // window either above or in eg. an event handler]
+    if (!getenv("VCL_DOUBLEBUFFERING_AVOID_PAINT"))
+        m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), *m_pBuffer.get());
 }
 
 void PaintHelper::DoPaint(const vcl::Region* pRegion)
@@ -124,76 +184,22 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
     {
         m_pWindow->BeginPaint();
 
-        // double-buffering: normally just a selected subset
-        if (m_pWindow->SupportsDoubleBuffering() || officecfg::Office::Common::Misc::ExperimentalMode::get())
+        // double-buffering: setup the buffer if it does not exist
+        if (!m_pBuffer && m_pWindow->SupportsDoubleBuffering())
+            SetupBuffer();
+
+        // double-buffering: if this window does not support double-buffering,
+        // but we are in the middle of double-buffered paint, we might be
+        // losing information
+        if (m_pBuffer && !m_pWindow->SupportsDoubleBuffering())
+            SAL_WARN("vcl.doublebuffering", "non-double buffered window in the double-buffered hierarchy, painting directly: " << typeid(m_pWindow).name());
+
+        if (m_pBuffer)
         {
+            // double-buffering
             m_pWindow->PushPaintHelper(this, *m_pWindow);
-
-            ScopedVclPtrInstance<VirtualDevice> pDevice;
-
-            // transfer various settings
-            // FIXME: this must disappear as we move to RenderContext only,
-            // the painting must become state-less, so that no actual
-            // vcl::Window setting affects this
-            pDevice->SetBackground(m_pWindow->GetBackground());
-            pDevice->SetClipRegion(m_pWindow->GetClipRegion());
-            pDevice->SetFillColor(m_pWindow->GetFillColor());
-            pDevice->SetFont(m_pWindow->GetFont());
-            pDevice->SetLineColor(m_pWindow->GetLineColor());
-            pDevice->SetMapMode(m_pWindow->GetMapMode());
-            pDevice->SetRefPoint(m_pWindow->GetRefPoint());
-            pDevice->SetSettings(m_pWindow->GetSettings());
-            pDevice->SetTextColor(m_pWindow->GetTextColor());
-            pDevice->SetTextLineColor(m_pWindow->GetTextLineColor());
-            pDevice->SetOverlineColor(m_pWindow->GetOverlineColor());
-            pDevice->SetTextFillColor(m_pWindow->GetTextFillColor());
-            pDevice->SetTextAlign(m_pWindow->GetTextAlign());
-            pDevice->SetRasterOp(m_pWindow->GetRasterOp());
-            pDevice->SetRefPoint(m_pWindow->GetRefPoint());
-            pDevice->SetLayoutMode(m_pWindow->GetLayoutMode());
-            pDevice->SetDigitLanguage(m_pWindow->GetDigitLanguage());
-
-            // update the output size now, after all the settings were copied
-            pDevice->SetOutputSize(m_pWindow->GetOutputSize());
-
-            // copy the underlying content to be able to handle trasparency
-            pDevice->DrawOutDev(m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), *m_pWindow);
-
-            m_pWindow->ApplySettings(*pDevice.get());
-
-            // paint to the VirtualDevice first
-            m_pWindow->Paint(*pDevice.get(), m_aPaintRect);
-
-            // debugging of the areas - show where we are painting
-            // export VCL_DOUBLEBUFFERING_DEBUG=1 to see where are we
-            // painting
-            if (getenv("VCL_DOUBLEBUFFERING_DEBUG"))
-            {
-                Rectangle aTestRect(m_aPaintRect);
-                aTestRect.Right() -= 1;
-                aTestRect.Bottom() -= 1;
-                pDevice->SetLineColor(Color(COL_LIGHTRED));
-                pDevice->SetFillColor();
-                pDevice->DrawRect(aTestRect);
-
-                pDevice->SetFillColor(Color(COL_LIGHTRED));
-                aTestRect = Rectangle(m_aPaintRect.TopLeft(), Size(10, 10));
-                pDevice->DrawRect(aTestRect);
-                aTestRect = Rectangle(Point(m_aPaintRect.Right() - 10, m_aPaintRect.Top()), Size(10, 10));
-                pDevice->DrawRect(aTestRect);
-                aTestRect = Rectangle(Point(m_aPaintRect.Right() - 10, m_aPaintRect.Bottom() - 10), Size(10, 10));
-                pDevice->DrawRect(aTestRect);
-                aTestRect = Rectangle(Point(m_aPaintRect.Left(), m_aPaintRect.Bottom() - 10), Size(10, 10));
-                pDevice->DrawRect(aTestRect);
-            }
-
-            // and then copy that to the actual window
-            // export VCL_DOUBLEBUFFERING_AVOID_PAINT=1 to see where we are
-            // painting directly instead of using Invalidate()
-            // [ie. everything you can see was painted directly to the
-            // window either above or in eg. an event handler]
-            if (!getenv("VCL_DOUBLEBUFFERING_AVOID_PAINT"))
-                m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), *pDevice.get());
+            m_pWindow->ApplySettings(*m_pBuffer.get());
+            m_pWindow->Paint(*m_pBuffer.get(), m_aPaintRect);
         }
         else
         {
@@ -434,10 +440,10 @@ PaintHelper::~PaintHelper()
     {
         // Paint from the bottom child window and frontward.
         vcl::Window* pTempWindow = pWindowImpl->mpLastChild;
-        while ( pTempWindow )
+        while (pTempWindow)
         {
-            if ( pTempWindow->mpWindowImpl->mbVisible )
-                pTempWindow->ImplCallPaint( m_pChildRegion, m_nPaintFlags );
+            if (pTempWindow->mpWindowImpl->mbVisible)
+                pTempWindow->ImplCallPaint(m_pBuffer, m_pChildRegion, m_nPaintFlags);
             pTempWindow = pTempWindow->mpWindowImpl->mpPrev;
         }
     }
@@ -448,6 +454,14 @@ PaintHelper::~PaintHelper()
         */
         m_pWindow->InvertTracking( *(pWindowImpl->mpWinData->mpTrackRect), pWindowImpl->mpWinData->mnTrackFlags );
 
+    // double-buffering: paint in case we created the buffer, the children are
+    // already painted inside
+    if (m_bCreatedBuffer && m_pBuffer)
+    {
+        PaintBuffer();
+        m_pBuffer.disposeAndClear();
+    }
+
     // #98943# draw toolbox selection
     if( !m_aSelectionRect.IsEmpty() )
         m_pWindow->DrawSelectionBackground( m_aSelectionRect, 3, false, true, false );
@@ -457,7 +471,7 @@ PaintHelper::~PaintHelper()
 
 namespace vcl {
 
-void Window::ImplCallPaint(const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
+void Window::ImplCallPaint(const VclPtr<VirtualDevice>& rBuffer, const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
 {
     // call PrePaint. PrePaint may add to the invalidate region as well as
     // other parameters used below.
@@ -487,7 +501,7 @@ void Window::ImplCallPaint(const vcl::Region* pRegion, sal_uInt16 nPaintFlags)
 
     nPaintFlags = mpWindowImpl->mnPaintFlags & ~(IMPL_PAINT_PAINT);
 
-    PaintHelper aHelper(this, nPaintFlags);
+    PaintHelper aHelper(this, rBuffer, nPaintFlags);
 
     if (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINT)
         aHelper.DoPaint(pRegion);
@@ -515,7 +529,7 @@ void Window::ImplCallOverlapPaint()
         //         because we were called from the Sal layer
         OutputDevice *pOutDev = GetOutDev();
         pOutDev->BeginPaint();
-        ImplCallPaint( NULL, mpWindowImpl->mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
+        ImplCallPaint(NULL, NULL, mpWindowImpl->mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
         pOutDev->EndPaint();
     }
 }
@@ -896,8 +910,8 @@ void Window::ImplUpdateAll( bool bOverlapWindows )
         pWindow->ImplCallOverlapPaint();
     else
     {
-        if ( pWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDREN) )
-            pWindow->ImplCallPaint( NULL, pWindow->mpWindowImpl->mnPaintFlags );
+        if (pWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDREN))
+            pWindow->ImplCallPaint(NULL, NULL, pWindow->mpWindowImpl->mnPaintFlags);
     }
 
     if ( bFlush )
@@ -1172,7 +1186,6 @@ bool Window::HasPaintEvent() const
 
 void Window::Update()
 {
-
     if ( mpWindowImpl->mpBorderWindow )
     {
         mpWindowImpl->mpBorderWindow->Update();
@@ -1231,7 +1244,7 @@ void Window::Update()
              pUpdateOverlapWindow = pUpdateOverlapWindow->mpWindowImpl->mpNext;
          }
 
-        pUpdateWindow->ImplCallPaint( NULL, pUpdateWindow->mpWindowImpl->mnPaintFlags );
+        pUpdateWindow->ImplCallPaint(NULL, NULL, pUpdateWindow->mpWindowImpl->mnPaintFlags);
 
         if (aDogTag.IsDead())
            return;

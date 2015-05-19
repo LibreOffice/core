@@ -609,7 +609,17 @@ private:
     SAL_DLLPRIVATE void                 ImplCalcOverlapRegion( const Rectangle& rSourceRect, vcl::Region& rRegion,
                                                                bool bChildren, bool bParent, bool bSiblings );
 
-    SAL_DLLPRIVATE void                 ImplCallPaint( const vcl::Region* pRegion, sal_uInt16 nPaintFlags );
+    /** Invoke the actual painting.
+
+        This function is kind of recursive - it may be called from the
+        PaintHelper destructor; and on the other hand it creates PaintHelper
+        that (when destructed) calls other ImplCallPaint()'s.
+
+        @param rBuffer VirtualDevice for double-buffering.  It is only passed
+        here, the actual handling happens in the PaintHelper.
+    */
+    SAL_DLLPRIVATE void                 ImplCallPaint(const VclPtr<VirtualDevice>& rBuffer, const vcl::Region* pRegion, sal_uInt16 nPaintFlags);
+
     SAL_DLLPRIVATE void                 ImplCallOverlapPaint();
     SAL_DLLPRIVATE void                 ImplPostPaint();
 
