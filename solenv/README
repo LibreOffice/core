@@ -18,6 +18,7 @@ bin/
 gbuild/
 	the (shiny new) gnumake build makefile fragments we are
 	migrating the codebase to use.
+	See gbuild/README for more info.
 
 gdb/
 	lots of nice python helpers to make debugging -much- easier
