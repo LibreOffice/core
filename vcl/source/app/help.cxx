@@ -250,27 +250,6 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
 //  EnableAlwaysOnTop();
     EnableSaveBackground();
 
-    // FIXME RenderContext
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    SetPointFont(*this, rStyleSettings.GetHelpFont());
-    SetTextColor(rStyleSettings.GetHelpTextColor());
-    SetTextAlign(ALIGN_TOP);
-    if (IsNativeControlSupported(CTRL_TOOLTIP, PART_ENTIRE_CONTROL))
-    {
-        EnableChildTransparentMode(true);
-        SetParentClipMode(PARENTCLIPMODE_NOCLIP);
-        SetPaintTransparent(true);
-        SetBackground();
-    }
-    else
-        SetBackground(Wallpaper(rStyleSettings.GetHelpColor()));
-
-    if( rStyleSettings.GetHelpColor().IsDark() )
-        SetLineColor( COL_WHITE );
-    else
-        SetLineColor( COL_BLACK );
-    SetFillColor();
-
     if( mnStyle & QuickHelpFlags::BiDiRtl )
     {
         ComplexTextLayoutMode nLayoutMode = GetLayoutMode();
