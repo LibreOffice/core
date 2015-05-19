@@ -1677,6 +1677,7 @@ namespace {
     bool AreAllRowsKeepWithNext( const SwRowFrm* pFirstRowFrm )
     {
         bool bRet = pFirstRowFrm != 0 &&
+                    pFirstRowFrm->GetNext() != 0 && // At least one next row
                     pFirstRowFrm->ShouldRowKeepWithNext();
 
         while ( bRet && pFirstRowFrm->GetNext() != 0 )
