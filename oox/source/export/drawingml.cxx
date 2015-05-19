@@ -1786,8 +1786,6 @@ sal_Int32 DrawingML::getBulletMarginIndentation (Reference< XPropertySet > rXPro
 
     const PropertyValue* pPropValue = aPropertySequence.getArray();
 
-    sal_Int16 nNumberingType = SVX_NUM_NUMBER_NONE;
-
     for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
     {
         const void* pValue = pPropValue[ i ].Value.getValue();
@@ -1799,9 +1797,6 @@ sal_Int32 DrawingML::getBulletMarginIndentation (Reference< XPropertySet > rXPro
                 return *( static_cast<sal_Int32 const *>(pValue) );
         }
     }
-
-    if (nNumberingType == SVX_NUM_NUMBER_NONE)
-        return 0;
 
     return 0;
 }
