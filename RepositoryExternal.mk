@@ -157,7 +157,7 @@ else
 define gb_LinkTarget__use_glm_headers
 $(call gb_LinkTarget_use_unpacked,$(1),glm)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,glm) \
+	$(GLM_CFLAGS) \
 	$$(INCLUDE) \
 )
 

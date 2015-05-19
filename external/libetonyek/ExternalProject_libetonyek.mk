@@ -39,7 +39,6 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 			BOOST_CFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost))" \
 			XML_CFLAGS="$(LIBXML_CFLAGS)" \
 			XML_LIBS="$(LIBXML_LIBS)" \
-			$(call gb_Helper_optional,GLM,GLM_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,glm)") \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)

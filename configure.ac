@@ -8633,7 +8633,9 @@ else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE GLM"
     SYSTEM_GLM=
+    GLM_CFLAGS="${ISYSTEM}${WORKDIR}/UnpackedTarball/glm"
 fi
+AC_SUBST([GLM_CFLAGS])
 AC_SUBST([SYSTEM_GLM])
 
 dnl ===================================================================
