@@ -653,9 +653,12 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
     if( nStyle != DrawFrameStyle::NWF &&
         pWin && pWin->IsNativeControlSupported(CTRL_FRAME, PART_BORDER) )
     {
-        ImplControlValue aControlValue( static_cast<long>(nStyle) | static_cast<long>(nFlags) |
-                                        static_cast<long>(pWin->GetType()==WINDOW_BORDERWINDOW ?
-                                                          DrawFrameFlags::BorderWindowBorder : DrawFrameFlags::NONE) );
+        long nControlFlags = static_cast<long>(nStyle);
+        nControlFlags |= static_cast<long>(nFlags);
+        nControlFlags |= static_cast<long>(pWin->GetType()==WINDOW_BORDERWINDOW ?
+                                           DrawFrameFlags::BorderWindowBorder : DrawFrameFlags::NONE);
+        ImplControlValue aControlValue( nControlFlags );
+
         Rectangle aBound, aContent;
         Rectangle aNatRgn( rRect );
         if( pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
