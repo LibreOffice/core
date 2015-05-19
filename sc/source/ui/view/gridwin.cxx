@@ -575,7 +575,7 @@ void ScGridWindow::ClickExtern()
     if (mpDPFieldPopup)
     {
         mpDPFieldPopup->close(false);
-        mpDPFieldPopup.reset();
+        mpDPFieldPopup.disposeAndClear();
     }
 }
 
@@ -705,6 +705,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
 
+    mpAutoFilterPopup.disposeAndClear();
     mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc));
     mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, Normal));
     mpAutoFilterPopup->setPopupEndAction(
