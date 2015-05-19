@@ -1575,7 +1575,7 @@ OUString SAL_CALL ChartDocumentWrapper::getImplementationName()
 
 OUString ChartDocumentWrapper::getImplementationName_Static()
 {
-    return CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME;
+    return OUString(CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME);
 }
 
 sal_Bool SAL_CALL ChartDocumentWrapper::supportsService( const OUString& rServiceName )

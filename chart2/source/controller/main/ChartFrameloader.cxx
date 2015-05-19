@@ -65,7 +65,7 @@ OUString SAL_CALL ChartFrameLoader::getImplementationName()
 
 OUString ChartFrameLoader::getImplementationName_Static()
 {
-    return CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME;
+    return OUString(CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME);
 }
 
 sal_Bool SAL_CALL ChartFrameLoader::supportsService( const OUString& rServiceName )

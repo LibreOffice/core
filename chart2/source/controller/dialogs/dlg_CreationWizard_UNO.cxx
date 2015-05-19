@@ -65,7 +65,7 @@ OUString SAL_CALL CreationWizardUnoDlg::getImplementationName()
 
 OUString CreationWizardUnoDlg::getImplementationName_Static()
 {
-    return CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME;
+    return OUString(CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME);
 }
 
 sal_Bool SAL_CALL CreationWizardUnoDlg::supportsService( const OUString& rServiceName )

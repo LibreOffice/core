@@ -311,7 +311,7 @@ OUString SAL_CALL ChartController::getImplementationName()
 
 OUString ChartController::getImplementationName_Static()
 {
-    return CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME;
+    return OUString(CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME);
 }
 
 sal_Bool SAL_CALL ChartController::supportsService( const OUString& rServiceName )
