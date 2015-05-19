@@ -89,7 +89,7 @@ OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
 
         return OutputDevice::GetDefaultFont(
                         pTable[ nIdent ], nLang,
-                        DEFAULTFONT_FLAGS_ONLYONE ).GetName();
+                        GetDefaultFontFlags::OnlyOne ).GetName();
     }
 }
 

@@ -323,7 +323,7 @@ void ODatabaseImportExport::initialize()
         vcl::Font aApplicationFont = OutputDevice::GetDefaultFont(
             DefaultFontType::SANS_UNICODE,
             Application::GetSettings().GetUILanguageTag().getLanguageType(),
-            DEFAULTFONT_FLAGS_ONLYONE
+            GetDefaultFontFlags::OnlyOne
         );
         m_aFont = VCLUnoHelper::CreateFontDescriptor( aApplicationFont );
     }

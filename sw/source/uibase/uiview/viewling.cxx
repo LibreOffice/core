@@ -165,7 +165,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                                 nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
                             vcl::Font aTargetFont = OutputDevice::GetDefaultFont( DefaultFontType::CJK_TEXT,
-                                                    nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
+                                                    nTargetLang, GetDefaultFontFlags::OnlyOne );
 
                             // disallow formatting, updating the view, ... while
                             // converting the document. (saves time)

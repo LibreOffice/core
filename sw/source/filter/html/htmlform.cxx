@@ -611,7 +611,7 @@ static void lcl_html_setFixedFontProperty(
 {
     vcl::Font aFixedFont( OutputDevice::GetDefaultFont(
                                     DefaultFontType::FIXED, LANGUAGE_ENGLISH_US,
-                                    DEFAULTFONT_FLAGS_ONLYONE )  );
+                                    GetDefaultFontFlags::OnlyOne )  );
     Any aTmp;
     aTmp <<= OUString( aFixedFont.GetName() );
     rPropSet->setPropertyValue("FontName", aTmp );

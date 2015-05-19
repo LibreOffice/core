@@ -1298,9 +1298,9 @@ void SdDrawDocument::getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont
     if (MsLangId::isKorean(eUiLanguage))
         eLatin = eUiLanguage;
 
-    rLatinFont = OutputDevice::GetDefaultFont( DefaultFontType::LATIN_PRESENTATION, eLatin, DEFAULTFONT_FLAGS_ONLYONE );
-    rCJKFont = OutputDevice::GetDefaultFont( DefaultFontType::CJK_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CJK ), DEFAULTFONT_FLAGS_ONLYONE );
-    rCTLFont = OutputDevice::GetDefaultFont( DefaultFontType::CTL_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CTL ), DEFAULTFONT_FLAGS_ONLYONE ) ;
+    rLatinFont = OutputDevice::GetDefaultFont( DefaultFontType::LATIN_PRESENTATION, eLatin, GetDefaultFontFlags::OnlyOne );
+    rCJKFont = OutputDevice::GetDefaultFont( DefaultFontType::CJK_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CJK ), GetDefaultFontFlags::OnlyOne );
+    rCTLFont = OutputDevice::GetDefaultFont( DefaultFontType::CTL_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CTL ), GetDefaultFontFlags::OnlyOne ) ;
 }
 
 /* converts the given western font height to a corresponding ctl font height, depending on the system language */

@@ -153,7 +153,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
     const long nRectHeight = aRect.GetHeight();
     const Point aBLPos = aRect.TopLeft();
 
-    vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
+    vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne));
     {
         Size aSize = aFont.GetSize();
         aSize.Height() = (nRectHeight*4)/9;

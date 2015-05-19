@@ -226,7 +226,7 @@ void ScCsvGrid::InitColors()
 
 void ScCsvGrid::InitFonts()
 {
-    maMonoFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_ENGLISH_US, 0 );
+    maMonoFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_ENGLISH_US, GetDefaultFontFlags::NONE );
     maMonoFont.SetSize( Size( maMonoFont.GetSize().Width(), maHeaderFont.GetSize().Height() ) );
 
     /* *** Set edit engine defaults ***

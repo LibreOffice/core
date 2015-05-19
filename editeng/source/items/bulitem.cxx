@@ -203,7 +203,7 @@ SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) c
 
 void SvxBulletItem::SetDefaultFont_Impl()
 {
-    aFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_SYSTEM, 0 );
+    aFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_SYSTEM, GetDefaultFontFlags::NONE );
     aFont.SetAlign( ALIGN_BOTTOM);
     aFont.SetTransparent( true );
 }

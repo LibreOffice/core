@@ -309,7 +309,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine()
             LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
                 rFntDta.nFallbackLang : rFntDta.nLang;
             vcl::Font aFont = OutputDevice::GetDefaultFont(
-                rFntDta.nFontType, nLang, DEFAULTFONT_FLAGS_ONLYONE);
+                rFntDta.nFontType, nLang, GetDefaultFontFlags::OnlyOne);
             mpEditEngineItemPool->SetPoolDefaultItem(
                 SvxFontItem(
                     aFont.GetFamily(),

@@ -213,7 +213,7 @@ void CertificateViewerDetailsTP::InsertElement( const OUString& _rField, const O
 
 CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, CertificateViewer* _pDlg )
     :CertificateViewerTP    ( _pParent, "CertDetails", "xmlsec/ui/certdetails.ui", _pDlg  )
-    ,m_aFixedWidthFont( OutputDevice::GetDefaultFont( DefaultFontType::UI_FIXED, LANGUAGE_DONTKNOW, DEFAULTFONT_FLAGS_ONLYONE, this ) )
+    ,m_aFixedWidthFont( OutputDevice::GetDefaultFont( DefaultFontType::UI_FIXED, LANGUAGE_DONTKNOW, GetDefaultFontFlags::OnlyOne, this ) )
 {
     get( m_pValueDetails, "valuedetails" );
     get( m_pElementsLBContainer, "tablecontainer" );

@@ -773,7 +773,7 @@ void ImplFontSubstitute( OUString& rFontName )
 
 //hidpi TODO: This routine has hard-coded font-sizes that break places such as DialControl
 vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLang,
-                                        sal_uLong nFlags, const OutputDevice* pOutDev )
+                                        GetDefaultFontFlags nFlags, const OutputDevice* pOutDev )
 {
     if (!pOutDev) // default is NULL
         pOutDev = Application::GetDefaultDevice();
@@ -869,7 +869,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
                 if( pFontFamily )
                 {
                     AddTokenFontName( aName, pFontFamily->GetFamilyName() );
-                    if( nFlags & DEFAULTFONT_FLAGS_ONLYONE )
+                    if( nFlags & GetDefaultFontFlags::OnlyOne )
                         break;
                 }
             }
@@ -880,7 +880,7 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
         // No Name, than set all names
         if ( aFont.GetName().isEmpty() )
         {
-            if ( nFlags & DEFAULTFONT_FLAGS_ONLYONE )
+            if ( nFlags & GetDefaultFontFlags::OnlyOne )
             {
                 if( !pOutDev )
                 {

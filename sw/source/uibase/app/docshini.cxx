@@ -206,7 +206,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 vcl::Font aLangDefFont = OutputDevice::GetDefaultFont(
                     nFontTypes[i],
                     eLanguage,
-                    DEFAULTFONT_FLAGS_ONLYONE );
+                    GetDefaultFontFlags::OnlyOne );
                 pFontItem.reset(new SvxFontItem(aLangDefFont.GetFamily(), aLangDefFont.GetName(),
                                                 aEmptyOUStr, aLangDefFont.GetPitch(), aLangDefFont.GetCharSet(), nFontWhich));
             }

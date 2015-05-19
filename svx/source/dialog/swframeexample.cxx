@@ -168,7 +168,7 @@ void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     {
         vcl::Font aFont = OutputDevice::GetDefaultFont(
                                 DefaultFontType::LATIN_TEXT, Application::GetSettings().GetLanguageTag().getLanguageType(),
-                                DEFAULTFONT_FLAGS_ONLYONE, this );
+                                GetDefaultFontFlags::OnlyOne, this );
         aFont.SetColor( m_aTxtCol );
         aFont.SetFillColor( m_aBgCol );
         aFont.SetWeight(WEIGHT_NORMAL);

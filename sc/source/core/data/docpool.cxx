@@ -197,7 +197,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
 {
     //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
     vcl::Font aStdFont = OutputDevice::GetDefaultFont( DefaultFontType::LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US,
-                                                    DEFAULTFONT_FLAGS_ONLYONE );
+                                                    GetDefaultFontFlags::OnlyOne );
     SvxFontItem* pStdFont = new SvxFontItem( aStdFont.GetFamily(),
                                             aStdFont.GetName(), aStdFont.GetStyleName(),
                                             aStdFont.GetPitch(), aStdFont.GetCharSet(),

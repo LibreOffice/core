@@ -652,7 +652,7 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
     // Choose a proportional Font for Pre
     if ( nHLevel == STYLE_PRE )
     {
-        vcl::Font aFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_SYSTEM, 0 );
+        vcl::Font aFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_SYSTEM, GetDefaultFontFlags::NONE );
         SvxFontItem aFontItem( aFont.GetFamily(), aFont.GetName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO );
         aItems.Put( aFontItem );
 

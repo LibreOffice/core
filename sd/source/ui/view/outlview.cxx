@@ -138,7 +138,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
         | tools::EventMultiplexerEvent::EID_PAGE_ORDER);
 
     LanguageType eLang = mrOutliner.GetDefaultLanguage();
-    maPageNumberFont = OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, 0 );
+    maPageNumberFont = OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, GetDefaultFontFlags::NONE );
     maPageNumberFont.SetHeight( 500 );
 
     maBulletFont.SetColor( COL_AUTO );
@@ -1720,7 +1720,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
             LanguageType eLang = rEditEngine.GetDefaultLanguage();
 
             Point aTextPos( aImagePos.X() - aOffset.Width(), pInfo->mrStartPos.Y() );
-            vcl::Font aNewFont( OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, 0 ) );
+            vcl::Font aNewFont( OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, GetDefaultFontFlags::NONE ) );
             aNewFont.SetSize( aFontSz );
             aNewFont.SetVertical( bVertical );
             aNewFont.SetOrientation( bVertical ? 2700 : 0 );

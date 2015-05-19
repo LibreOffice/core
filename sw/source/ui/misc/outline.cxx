@@ -948,7 +948,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
         const long nYStep = (aSize.Height() - 6)/ MAXLEVEL;
         long nYStart = 4;
         aStdFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, GetAppLanguage(),
-                                                DEFAULTFONT_FLAGS_ONLYONE, &rRenderContext);
+                                                GetDefaultFontFlags::OnlyOne, &rRenderContext);
         // #101524# OJ
         aStdFont.SetColor(SwViewOption::GetFontColor());
 

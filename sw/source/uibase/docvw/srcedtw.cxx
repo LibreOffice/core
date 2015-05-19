@@ -964,11 +964,11 @@ void SwSrcEditWindow::SetFont()
         if(lcl_GetLanguagesForEncoding(eSourceEncoding, aLanguages))
         {
             //TODO: check for multiple languages
-            aFont = OutputDevice::GetDefaultFont(DefaultFontType::FIXED, aLanguages[0], 0, this);
+            aFont = OutputDevice::GetDefaultFont(DefaultFontType::FIXED, aLanguages[0], GetDefaultFontFlags::NONE, this);
         }
         else
             aFont = OutputDevice::GetDefaultFont(DefaultFontType::SANS_UNICODE,
-                        Application::GetSettings().GetLanguageTag().getLanguageType(), 0, this);
+                        Application::GetSettings().GetLanguageTag().getLanguageType(), GetDefaultFontFlags::NONE, this);
         sFontName = aFont.GetName();
     }
     const SvxFontListItem* pFontListItem =

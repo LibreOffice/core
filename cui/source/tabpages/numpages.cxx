@@ -2518,7 +2518,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectan
         // the whole height mustn't be used for a single level
         sal_uInt16 nYStep = sal::static_int_cast<sal_uInt16>((aSize.Height() - 6)/ (pActNum->GetLevelCount() > 1 ? pActNum->GetLevelCount() : 5));
 
-        aStdFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE);
+        aStdFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne);
         aStdFont.SetColor(aTextColor);
         aStdFont.SetFillColor(aBackColor);
 

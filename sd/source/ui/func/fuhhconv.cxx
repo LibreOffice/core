@@ -243,7 +243,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
 
                     vcl::Font aTargetFont = OutputDevice::GetDefaultFont(
                                         DefaultFontType::CJK_PRESENTATION,
-                                        nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
+                                        nTargetLang, GetDefaultFontFlags::OnlyOne );
 
                     StartConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, false );
                     ConvertStyles( nTargetLang, &aTargetFont );

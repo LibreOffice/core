@@ -359,7 +359,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                     if(!bCommonTerms)
                         nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
-                    vcl::Font aTargetFont = OutputDevice::GetDefaultFont(DefaultFontType::CJK_TEXT, nTargetLang, DEFAULTFONT_FLAGS_ONLYONE);
+                    vcl::Font aTargetFont = OutputDevice::GetDefaultFont(DefaultFontType::CJK_TEXT, nTargetLang, GetDefaultFontFlags::OnlyOne);
 
                     pOutlinerView->StartTextConversion(nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false);
                 }

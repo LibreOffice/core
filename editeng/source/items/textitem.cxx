@@ -3521,7 +3521,7 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
     {
         vcl::Font aFont( OutputDevice::GetDefaultFont( aOutTypeArr[ n ].nFontType,
                                                   aOutTypeArr[ n ].nLanguage,
-                                                  DEFAULTFONT_FLAGS_ONLYONE, 0 ) );
+                                                  GetDefaultFontFlags::OnlyOne, 0 ) );
         SvxFontItem* pItem = aItemArr[ n ];
         pItem->SetFamily( aFont.GetFamily() );
         pItem->SetFamilyName( aFont.GetName() );

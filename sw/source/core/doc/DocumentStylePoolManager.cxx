@@ -117,7 +117,7 @@ namespace
             sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
                                 aArr[n].nResLngId )).GetLanguage();
             vcl::Font aFnt( OutputDevice::GetDefaultFont( nFntType,
-                                    nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
+                                    nLng, GetDefaultFontFlags::OnlyOne ) );
 
             rSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
                                 OUString(), aFnt.GetPitch(),
@@ -146,7 +146,7 @@ namespace
             sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
                                 aArr[n].nResLngId )).GetLanguage();
             vcl::Font aFnt( OutputDevice::GetDefaultFont( aArr[n].nFntType,
-                                    nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
+                                    nLng, GetDefaultFontFlags::OnlyOne ) );
 
             rSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
                                 OUString(), aFnt.GetPitch(),
@@ -455,7 +455,7 @@ SwTxtFmtColl* DocumentStylePoolManager::GetTxtCollFromPool( sal_uInt16 nId, bool
                         nLng = aLangs[i];
 
                     vcl::Font aFnt( OutputDevice::GetDefaultFont( nFontTypes[i],
-                                            nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
+                                            nLng, GetDefaultFontFlags::OnlyOne ) );
 
                     aSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
                                             OUString(), aFnt.GetPitch(),

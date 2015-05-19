@@ -278,7 +278,16 @@ namespace o3tl
     template<> struct typed_flags<AddFontSubstituteFlags> : is_typed_flags<AddFontSubstituteFlags, 0x03> {};
 }
 
-#define DEFAULTFONT_FLAGS_ONLYONE       ((sal_uLong)0x00000001)
+// GetDefaultFont() flags
+enum GetDefaultFontFlags
+{
+    NONE          = 0x0000,
+    OnlyOne       = 0x0001,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<GetDefaultFontFlags> : is_typed_flags<GetDefaultFontFlags, 0x01> {};
+}
 
 enum OutDevType { OUTDEV_DONTKNOW, OUTDEV_WINDOW, OUTDEV_PRINTER, OUTDEV_VIRDEV };
 
@@ -1273,7 +1282,7 @@ public:
 
     static vcl::Font            GetDefaultFont( DefaultFontType nType,
                                                 LanguageType eLang,
-                                                sal_uLong nFlags,
+                                                GetDefaultFontFlags nFlags,
                                                 const OutputDevice* pOutDev = NULL );
 
     SAL_DLLPRIVATE void         ImplInitFontList() const;

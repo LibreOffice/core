@@ -1764,7 +1764,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                                 vcl::Font aTargetFont = OutputDevice::GetDefaultFont(
                                                     DefaultFontType::CJK_SPREADSHEET,
-                                                    eTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
+                                                    eTargetLang, GetDefaultFontFlags::OnlyOne );
                                 ScConversionParam aConvParam( SC_CONVERSION_CHINESE_TRANSL,
                                     eSourceLang, eTargetLang, aTargetFont, nOptions, false );
                                 pTabViewShell->DoSheetConversion( aConvParam );

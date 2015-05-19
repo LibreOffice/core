@@ -253,7 +253,7 @@ OUString  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLan
         default:
             nFontId = DefaultFontType::LATIN_TEXT;
     }
-    vcl::Font aFont = OutputDevice::GetDefaultFont(nFontId, eLang, DEFAULTFONT_FLAGS_ONLYONE);
+    vcl::Font aFont = OutputDevice::GetDefaultFont(nFontId, eLang, GetDefaultFontFlags::OnlyOne);
     return  aFont.GetName();
 }
 
