@@ -1301,7 +1301,7 @@
 
 	<template match="text:p/text() | text:h/text() | text:span/text() | text:sequence/text() | text:sequence-ref/text() | text:a/text() | text:bookmark-ref/text() | text:reference-mark/text() | text:date/text() | text:time/text() | text:page-number/text() | text:sender-firstname/text() | text:sender-lastname/text() | text:sender-initials/text() | text:sender-title/text() | text:sender-position/text() | text:sender-email/text() | text:sender-phone-private/text() | text:sender-fax/text() | text:sender-company/text() | text:sender-phone-work/text() | text:sender-street/text() | text:sender-city/text() | text:sender-postal-code/text() | text:sender-country/text() | text:sender-state-or-province/text() | text:author-name/text() | text:author-initials/text() | text:chapter/text() | text:file-name/text() | text:template-name/text() | text:sheet-name/text() | text:variable-get/text() | text:variable-input/text() | text:user-field-get/text() | text:user-field-input/text() | text:expression/text() | text:text-input/text() | text:initial-creator/text() | text:creation-date/text() | text:creation-time/text() | text:description/text() | text:user-defined/text() | text:print-date/text() | text:printed-by/text() | text:title/text() | text:subject/text() | text:keywords/text() | text:editing-cycles/text() | text:editing-duration/text() | text:modification-date/text() | text:creator/text() | text:modification-time/text() | text:page-count/text() | text:paragraph-count/text() | text:word-count/text() | text:character-count/text() | text:table-count/text() | text:image-count/text() | text:object-count/text() | text:database-display/text() | text:database-row-number/text() | text:database-name/text() | text:page-variable-get/text() | text:placeholder/text() | text:conditional-text/text() | text:hidden-text/text() | text:execute-macro/text() | text:dde-connection/text() | text:measure/text() | text:table-formula/text()">
 		<choose>
-			<when test="boolean(./ancestor::table:table-header-rows | ./ancestor::text:h)">
+			<when test="boolean(./ancestor::table:table-header-rows) or boolean(./ancestor::text:h)">
 				<!-- 
 					No explicit styles within table headings or section headings, 
 					because those styles are consistently declared by the Wiki engine. -->
@@ -1311,10 +1311,10 @@
 			<when test="string-length(.) &gt; 0">
 				<variable name="style">
 					<call-template name="mk-style-set">
-						<with-param name="node" select="."/>
+						<with-param name="node" select="./parent::node()"/>
 					</call-template>
 				</variable>
-				
+                                				
 				<variable name="current-paragraph" 
 					select="./ancestor::text:p[1]"/>
 				<variable name="paragraph-id" 
@@ -1608,30 +1608,12 @@
 	<template name="mk-style-set">
 		<param name="node"/>
 		
-		<variable 
-			name="context" 
-			select="$node/ancestor-or-self::*[@text:style-name][1]"
-		/>
-		
 		<choose>
-			<when test="boolean($context)">
-				<variable 
-					name="style" 
-					select="key('style-ref', $context/@text:style-name)"
-				/>
-
-				<!-- Debugging: Print inspected styles. -->				
-				<!-- 
-				<message>
-					<value-of select="'=== '"/>
-					<value-of select="$style/@style:name"/>
-					<value-of select="' ==='"/>
-				</message>
-				 -->
-		
+			<when test="$node/ancestor-or-self::*[@text:style-name]">
+				<variable name="context" select="$node/ancestor-or-self::*[@text:style-name][1]"/>
 				<call-template name="mk-style-set-internal">
 					<with-param name="node" select="$context"/>
-					<with-param name="style" select="$style"/>
+					<with-param name="style" select="key('style-ref', $context/@text:style-name)"/>
 					<with-param name="style-set" select="$NO_STYLE"/>
 					<with-param name="style-mask" select="$NO_STYLE"/>
 				</call-template>
