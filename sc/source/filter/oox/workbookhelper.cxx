@@ -34,6 +34,8 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <osl/thread.h>
 #include <oox/helper/progressbar.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -521,6 +523,18 @@ void WorkbookGlobals::useInternalChartDataTable( bool bInternal )
 
 // private --------------------------------------------------------------------
 
+namespace {
+
+formula::FormulaGrammar::AddressConvention getConvention(css::uno::Reference<XDocumentProperties> xDocProps)
+{
+    if (xDocProps->getGenerator().startsWithIgnoreAsciiCase("Microsoft"))
+        return formula::FormulaGrammar::CONV_XL_A1;
+
+    return formula::FormulaGrammar::CONV_OOO;
+}
+
+}
+
 void WorkbookGlobals::initialize( bool bWorkbookFile )
 {
     maCellStyles = "CellStyles";
@@ -547,6 +561,12 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
 
     if (!mpDoc)
         throw RuntimeException("Workbookhelper::getScDocument(): Failed to access ScDocument from model");
+
+    Reference< XDocumentPropertiesSupplier > xPropSupplier( mxDoc, UNO_QUERY);
+    Reference< XDocumentProperties > xDocProps = xPropSupplier->getDocumentProperties();
+    ScCalcConfig aCalcConfig = mpDoc->GetCalcConfig();
+    aCalcConfig.meStringRefAddressSyntax = getConvention(xDocProps);
+    mpDoc->SetCalcConfig(aCalcConfig);
 
     mxDocImport.reset(new ScDocumentImport(*mpDoc));
 

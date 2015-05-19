@@ -2160,7 +2160,7 @@ public:
     SC_DLLPUBLIC void DumpAreaBroadcasters() const;
 #endif
 
-    void SetCalcConfig( const ScCalcConfig& rConfig );
+    SC_DLLPUBLIC void SetCalcConfig( const ScCalcConfig& rConfig );
     const ScCalcConfig& GetCalcConfig() const { return maCalcConfig; }
 
     void ConvertFormulaToValue( const ScRange& rRange, sc::TableValues* pUndo );
