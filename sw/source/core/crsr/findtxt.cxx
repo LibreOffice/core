@@ -37,6 +37,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <pamtyp.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>
@@ -244,7 +245,8 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
     {
         if( pNode->IsTxtNode() )
         {
-            sal_Int32 nTxtLen = pNode->GetTxtNode()->GetTxt().getLength();
+            SwTxtNode& rTxtNode = *pNode->GetTxtNode();
+            sal_Int32 nTxtLen = rTxtNode.GetTxt().getLength();
             sal_Int32 nEnd;
             if( rNdIdx == pPam->GetMark()->nNode )
                 nEnd = pPam->GetMark()->nContent.GetIndex();
@@ -256,7 +258,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             // if there are SwPostItFields inside our current node text, we
             // split the text into separate pieces and search for text inside
             // the pieces as well as inside the fields
-            const SwpHints *pHts = pNode->GetTxtNode()->GetpSwpHints();
+            const SwpHints *pHts = rTxtNode.GetpSwpHints();
 
             // count PostItFields by looping over all fields
             sal_Int32 aNumberPostits = 0;
@@ -295,14 +297,15 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             SwViewShell *const pWrtShell = (pDocShell) ? pDocShell->GetEditShell() : 0;
             SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : 0;
 
+            SvxSearchItem aSearchItem(SID_SEARCH_ITEM);
+            aSearchItem.SetSearchOptions(rSearchOpt);
+            aSearchItem.SetBackward(!bSrchForward);
+
             // If there is an active text edit, then search there.
             if (SdrView* pSdrView = pWrtShell->GetDrawView())
             {
                 if (pSdrView->GetTextEditObject())
                 {
-                    SvxSearchItem aSearchItem(SID_SEARCH_ITEM);
-                    aSearchItem.SetSearchOptions(rSearchOpt);
-                    aSearchItem.SetBackward(!bSrchForward);
                     sal_uInt16 nResult = pSdrView->GetTextEditOutlinerView()->StartSearchAndReplace(aSearchItem);
                     if (!nResult)
                     {
@@ -316,6 +319,19 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                         break;
                     }
                 }
+            }
+
+            // If there are any shapes anchored to this node, search there.
+            SwPaM aPaM(pNode->GetDoc()->GetNodes().GetEndOfContent());
+            aPaM.GetPoint()->nNode = rTxtNode;
+            aPaM.GetPoint()->nContent.Assign(aPaM.GetPoint()->nNode.GetNode().GetTxtNode(), nStart);
+            aPaM.SetMark();
+            aPaM.GetMark()->nNode = rTxtNode.GetIndex() + 1;
+            aPaM.GetMark()->nContent.Assign(aPaM.GetMark()->nNode.GetNode().GetTxtNode(), 0);
+            if (pNode->GetDoc()->getIDocumentDrawModelAccess().Search(aPaM, aSearchItem))
+            {
+                bFound = true;
+                break;
             }
 
             sal_Int32 aStart = 0;
