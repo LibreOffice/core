@@ -187,7 +187,6 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     pMenu = pMen;
     KillActivePopup();
     nHighlightedItem = ITEMPOS_INVALID;
-    ImplInitMenuWindow(this, true, true);
     if (pMen)
     {
         aCloseBtn->ShowItem(IID_DOCUMENTCLOSE, pMen->HasCloseButton());
@@ -991,7 +990,6 @@ void MenuBarWindow::StateChanged( StateChangedType nType )
     if (nType == StateChangedType::ControlForeground ||
         nType == StateChangedType::ControlBackground)
     {
-        ImplInitMenuWindow(this, false, true);
         Invalidate();
     }
     else if(pMenu)
@@ -1004,8 +1002,6 @@ void MenuBarWindow::LayoutChanged()
 {
     if (!pMenu)
         return;
-
-    ImplInitMenuWindow(this, true, true);
 
     // if the font was changed.
     long nHeight = pMenu->ImplCalcSize(this).Height();

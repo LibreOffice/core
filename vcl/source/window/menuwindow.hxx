@@ -53,9 +53,6 @@ class MenuWindow
 public:
     virtual ~MenuWindow() {}
 
-    /// Sets up some visual properties of the underlying window.
-    static void ImplInitMenuWindow(vcl::Window* pWin, bool bFont, bool bMenuBar);
-
     /// Show the appropriate help tooltip.
     static bool ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_uInt16 nHighlightedItem,
             const HelpEvent& rHEvt, const Rectangle &rHighlightRect);

@@ -26,57 +26,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-void MenuWindow::ImplInitMenuWindow(vcl::Window* pWin, bool bFont, bool bMenuBar)
-{
-    const StyleSettings& rStyleSettings = pWin->GetSettings().GetStyleSettings();
-
-    // FIXME RenderContext
-    if (bFont)
-        pWin->SetPointFont(*pWin, rStyleSettings.GetMenuFont());
-    if( bMenuBar )
-    {
-        const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
-        if ( !rPersonaBitmap.IsEmpty() )
-        {
-            Wallpaper aWallpaper( rPersonaBitmap );
-            aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
-            aWallpaper.SetColor( Application::GetSettings().GetStyleSettings().GetWorkspaceColor() );
-
-            pWin->SetBackground( aWallpaper );
-            pWin->SetPaintTransparent( false );
-            pWin->SetParentClipMode( 0 );
-        }
-        else if ( pWin->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
-        {
-            pWin->SetBackground();  // background will be drawn by NWF
-        }
-        else
-        {
-            Wallpaper aWallpaper;
-            aWallpaper.SetStyle( WALLPAPER_APPLICATIONGRADIENT );
-            pWin->SetBackground( aWallpaper );
-            pWin->SetPaintTransparent( false );
-            pWin->SetParentClipMode( 0 );
-        }
-    }
-    else
-    {
-        if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
-        {
-            pWin->SetBackground();  // background will be drawn by NWF
-        }
-        else
-            pWin->SetBackground( Wallpaper( rStyleSettings.GetMenuColor() ) );
-    }
-
-    if ( bMenuBar )
-        pWin->SetTextColor( rStyleSettings.GetMenuBarTextColor() );
-    else
-        pWin->SetTextColor( rStyleSettings.GetMenuTextColor() );
-    pWin->SetTextFillColor();
-    pWin->SetLineColor();
-}
-
 static sal_uLong ImplChangeTipTimeout( sal_uLong nTimeout, vcl::Window *pWindow )
 {
     AllSettings aAllSettings( pWindow->GetSettings() );

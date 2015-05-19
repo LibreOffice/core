@@ -46,7 +46,6 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
     bKeyInput           = false;
 
     EnableSaveBackground();
-    ImplInitMenuWindow( this, true, false );
 
     SetPopupModeEndHdl( LINK( this, MenuFloatingWindow, PopupEnd ) );
 
@@ -1176,7 +1175,6 @@ void MenuFloatingWindow::StateChanged( StateChangedType nType )
 
     if ( ( nType == StateChangedType::ControlForeground ) || ( nType == StateChangedType::ControlBackground ) )
     {
-        ImplInitMenuWindow( this, false, false );
         Invalidate();
     }
 }
@@ -1190,7 +1188,6 @@ void MenuFloatingWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitMenuWindow( this, false, false );
         Invalidate();
     }
 }
@@ -1202,18 +1199,17 @@ void MenuFloatingWindow::Command( const CommandEvent& rCEvt )
         const CommandWheelData* pData = rCEvt.GetWheelData();
         if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
         {
-//          ImplCursorUpDown( pData->GetDelta() > 0L );
             ImplScroll( pData->GetDelta() > 0L );
             MouseMove( MouseEvent( GetPointerPosPixel(), 0 ) );
         }
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > MenuFloatingWindow::CreateAccessible()
+css::uno::Reference<css::accessibility::XAccessible> MenuFloatingWindow::CreateAccessible()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
+    css::uno::Reference<css::accessibility::XAccessible> xAcc;
 
-    if ( pMenu && !pMenu->pStartedFrom )
+    if (pMenu && !pMenu->pStartedFrom)
         xAcc = pMenu->GetAccessible();
 
     return xAcc;
