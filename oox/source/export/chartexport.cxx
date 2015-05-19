@@ -122,12 +122,8 @@ namespace {
 sal_Int32 translateFromChart2AxisIndexToOox(sal_Int32 nIndex)
 {
     assert(nIndex == 0 || nIndex == 1);
-    if (nIndex == 0)
-        return AXIS_PRIMARY_Y;
-    else if (nIndex == 1)
+    if (nIndex == 1)
         return AXIS_SECONDARY_Y;
-
-    // good default value for release builds
     return AXIS_PRIMARY_Y;
 }
 
