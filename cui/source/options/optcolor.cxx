@@ -199,6 +199,7 @@ private:
         Chapter(FixedText *pText, bool bShow);
         Chapter(vcl::Window *pGrid, unsigned nYPos, const OUString& sDisplayName);
         ~Chapter();
+        void dispose() { m_pText.disposeAndClear(); }
     public:
         void SetBackground(const Wallpaper& W) { m_pText->SetBackground(W); }
         void Show(const Wallpaper& rBackWall);
@@ -231,7 +232,12 @@ private:
     public:
         bool Is (CheckBox* pBox) const { return m_pText == pBox; }
         bool Is (ColorListBox* pBox) const { return m_pColorList == pBox; }
-
+        void dispose()
+        {
+            m_pText.disposeAndClear();
+            m_pColorList.disposeAndClear();
+            m_pPreview.disposeAndClear();
+        }
     private:
         bool m_bOwnsWidgets;
         // checkbox (CheckBox) or simple text (FixedText)
@@ -510,10 +516,14 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(vcl::Window* pParent)
 
 void ColorConfigWindow_Impl::dispose()
 {
-    disposeBuilder();
     m_pGrid.clear();
     m_pVScroll.clear();
     m_pHeaderHB.clear();
+    for (auto i = vChapters.begin(); i != vChapters.end(); ++i)
+        (*i)->dispose();
+    for (auto i = vEntries.begin(); i != vEntries.end(); ++i)
+        (*i)->dispose();
+    disposeBuilder();
     VclContainer::dispose();
 }
 
