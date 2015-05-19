@@ -36,7 +36,6 @@
 #include <basegfx/range/b2ibox.hxx>
 #include <basegfx/range/b1drange.hxx>
 #include <basegfx/range/b1irange.hxx>
-#include <basegfx/range/b1ibox.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -965,64 +964,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b1Xrange
 
-class b1ibox : public CppUnit::TestFixture
-{
-public:
-    void TestBox()
-    {
-        // test axioms - markedly different from proper mathematical
-        // intervals (behaviour modelled after how polygon fill
-        // algorithms fill pixels)
-        B1IBox aBox;
-        CPPUNIT_ASSERT_MESSAGE("default ctor - empty range", aBox.isEmpty());
-
-        // degenerate box
-        aBox.expand(1);
-        CPPUNIT_ASSERT_MESSAGE("degenerate box - still empty!", aBox.isEmpty());
-        CPPUNIT_ASSERT_MESSAGE("degenerate box - size of 0", aBox.getRange() == 0);
-        CPPUNIT_ASSERT_MESSAGE("same value as degenerate box - is outside (since empty)", !aBox.isInside(1));
-        CPPUNIT_ASSERT_MESSAGE("center - get cop-out value since box is empty", aBox.getCenter()==0);
-
-        // proper box
-        aBox.expand(2);
-        CPPUNIT_ASSERT_MESSAGE("proper box - size of 1", aBox.getRange() == 1);
-        CPPUNIT_ASSERT_MESSAGE("smaller value of box", aBox.isInside(1));
-        CPPUNIT_ASSERT_MESSAGE("larger value of box - must be outside", !aBox.isInside(2));
-
-        // center for proper box that works for ints, too
-        aBox.expand(4);
-        CPPUNIT_ASSERT_MESSAGE("center - must be center pixel of the box", aBox.getCenter()==2);
-
-        // check overlap, which is markedly different from Range
-        B1IBox aBox2(0,1);
-        CPPUNIT_ASSERT_MESSAGE("box overlapping *excludes* upper bound", !aBox.overlaps(aBox2));
-
-        B1IBox aBox3(0,2);
-        CPPUNIT_ASSERT_MESSAGE("box overlapping then includes upper bound-1", aBox.overlaps(aBox3));
-
-        // check intersect
-        B1IBox aBox4(4,5);
-        aBox.intersect(aBox4);
-        CPPUNIT_ASSERT_MESSAGE("box intersection is yielding nonempty box!", aBox.isEmpty());
-
-        B1IBox aBox5(2,5);
-        aBox5.intersect(aBox4);
-        CPPUNIT_ASSERT_MESSAGE("box intersection is yielding empty box!", !aBox5.isEmpty());
-
-        // just so that this compiles -
-        B1IBox aBox6( aBox );
-        (void)aBox6;
-    }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    CPPUNIT_TEST_SUITE(b1ibox);
-    CPPUNIT_TEST(TestBox);
-    CPPUNIT_TEST_SUITE_END();
-}; // class b1ibox
-
 class b2Xrange : public CppUnit::TestFixture
 {
 public:
@@ -1286,7 +1227,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolygon);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolygontools);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolypolygon);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b1Xrange);
-CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b1ibox);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2Xrange);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2ibox);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dtuple);
