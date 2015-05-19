@@ -197,9 +197,9 @@ private:
 public:
     using Window::ImplInit;
 private:
-    SAL_DLLPRIVATE void InvalidateItem(sal_uInt16 nPosition, sal_uInt16 nHighlight = 0, bool bPaint = false, bool bLayout = false);
+    SAL_DLLPRIVATE void InvalidateItem(sal_uInt16 nPosition);
     SAL_DLLPRIVATE void InvalidateSpin(bool bUpperIn, bool bLowerIn);
-    SAL_DLLPRIVATE void InvalidateMenuButton(bool bHighlight);
+    SAL_DLLPRIVATE void InvalidateMenuButton();
 
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
     using DockingWindow::ImplInitSettings;

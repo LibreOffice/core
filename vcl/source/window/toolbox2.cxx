@@ -1367,7 +1367,7 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease )
             if ( nPos != mnCurPos )
             {
                 mnCurPos = nPos;
-                InvalidateItem(mnCurPos, 1);
+                InvalidateItem(mnCurPos);
                 Flush();
             }
         }
@@ -1676,7 +1676,7 @@ void ToolBox::ImplFillLayoutData() const
 
         // only draw, if the rectangle is within PaintRectangle
         if (!pItem->maRect.IsEmpty())
-            const_cast<ToolBox*>(this)->InvalidateItem(i, 0, false, true);
+            const_cast<ToolBox*>(this)->InvalidateItem(i);
     }
 }
 

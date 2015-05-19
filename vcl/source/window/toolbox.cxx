@@ -1347,7 +1347,6 @@ IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator*, pAccel )
 
 void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-
     // initialize variables
     ImplGetWindowImpl()->mbToolBox         = true;
     mpData                = new ImplToolBoxPrivateData;
@@ -3342,7 +3341,7 @@ void ToolBox::ImplFloatControl( bool bStart, FloatingWindow* pFloatWindow )
         mpFloatWin = pFloatWindow;
 
         // redraw item, to trigger drawing of a special border
-        InvalidateItem(mnCurPos, 1);
+        InvalidateItem(mnCurPos);
 
         mbDrag = false;
         EndTracking();
@@ -3357,7 +3356,7 @@ void ToolBox::ImplFloatControl( bool bStart, FloatingWindow* pFloatWindow )
         bool bWasKeyboardActivate = mpData->mbDropDownByKeyboard;
 
         if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
-            InvalidateItem(mnCurPos, bWasKeyboardActivate ? 2 : 0);
+            InvalidateItem(mnCurPos);
         Deactivate();
 
         if( !bWasKeyboardActivate )
@@ -3420,7 +3419,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
         {
             if ( !mnCurItemId )
             {
-                InvalidateItem(mnCurPos, 1);
+                InvalidateItem(mnCurPos);
                 mnCurItemId = pItem->mnId;
                 Highlight();
             }
@@ -3549,17 +3548,12 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
                 // Items not destroyed, in Select handler
                 if ( mnCurItemId )
                 {
-                    sal_uInt16 nHighlight;
-                    if ( (mnCurItemId == mnHighItemId) && (mnOutStyle & TOOLBOX_STYLE_FLAT) )
-                        nHighlight = 2;
-                    else
-                        nHighlight = 0;
                     // Get current pos for the case that items are inserted/removed
                     // in the toolBox
                     mnCurPos = GetItemPos( mnCurItemId );
                     if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
                     {
-                        InvalidateItem(mnCurPos, nHighlight);
+                        InvalidateItem(mnCurPos);
                         Flush();
                     }
                 }
@@ -3655,7 +3649,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
             {
                 mnCurItemId = mnHighItemId = it->mnId;
-                InvalidateItem(mnCurPos, 2); // always use shadow effect (2)
+                InvalidateItem(mnCurPos);
             }
             else
                 mnCurItemId = mnHighItemId = 0;
@@ -3750,10 +3744,10 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                                 if ( mpData->mbMenubuttonSelected )
                                 {
                                     // remove highlight from menubutton
-                                    InvalidateMenuButton(false);
+                                    InvalidateMenuButton();
                                 }
                                 mnHighItemId = it->mnId;
-                                InvalidateItem(nTempPos, 2);
+                                InvalidateItem(nTempPos);
                                 ImplShowFocus();
                                 CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
                             }
@@ -3773,7 +3767,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             if ( !bMenuButtonHit && mpData->mbMenubuttonSelected )
             {
                 // remove highlight from menubutton
-                InvalidateMenuButton(false);
+                InvalidateMenuButton();
             }
 
             if( mnHighItemId )
@@ -3781,7 +3775,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                 sal_uInt16 nClearPos = GetItemPos( mnHighItemId );
                 if ( nClearPos != TOOLBOX_ITEM_NOTFOUND )
                 {
-                    InvalidateItem(nClearPos, (nClearPos == mnCurPos) ? 1 : 0);
+                    InvalidateItem(nClearPos);
                     if( nClearPos != mnCurPos )
                         CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nClearPos ) );
                 }
@@ -3791,7 +3785,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
             if( bMenuButtonHit )
             {
-                InvalidateMenuButton(true);
+                InvalidateMenuButton();
             }
         }
     }
@@ -3889,7 +3883,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
             if ( mbSelection )
             {
-                InvalidateItem(mnCurPos, 1);
+                InvalidateItem(mnCurPos);
                 Highlight();
             }
             else
@@ -3905,7 +3899,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
                 if ( mbDrag )
                 {
-                    InvalidateItem(mnCurPos, 1);
+                    InvalidateItem(mnCurPos);
                     Highlight();
                 }
 
@@ -3926,7 +3920,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                         {
                             // no floater was opened
                             Deactivate();
-                            InvalidateItem(mnCurPos, 0);
+                            InvalidateItem(mnCurPos);
 
                             mnCurPos         = TOOLBOX_ITEM_NOTFOUND;
                             mnCurItemId      = 0;
@@ -4059,21 +4053,25 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
     DockingWindow::Tracking( rTEvt );
 }
 
-void ToolBox::InvalidateItem(sal_uInt16 nPosition, sal_uInt16 nHighlight, bool bPaint, bool bLayout)
+void ToolBox::InvalidateItem(sal_uInt16 nPosition)
 {
-    //ImplToolItem* pItem = &mpData->m_aItems[nPosition];
-    //Invalidate(pItem->maRect);
-    ImplDrawItem(*this, nPosition, nHighlight, bPaint, bLayout);
+    ImplToolItem* pItem = &mpData->m_aItems[nPosition];
+    Invalidate(pItem->maRect);
 }
 
-void ToolBox::InvalidateMenuButton(bool bHighlight)
+void ToolBox::InvalidateMenuButton()
 {
-    ImplDrawMenuButton(*this, bHighlight);
+    if (!mpData->maMenubuttonItem.maRect.IsEmpty())
+        Invalidate(mpData->maMenubuttonItem.maRect);
 }
 
 void ToolBox::InvalidateSpin(bool bUpperIn, bool bLowerIn)
 {
-    ImplDrawSpin(*this, bUpperIn, bLowerIn);
+    if (bUpperIn && !maUpperRect.IsEmpty())
+        Invalidate(maUpperRect);
+
+    if (bLowerIn && !maLowerRect.IsEmpty())
+        Invalidate(maLowerRect);
 }
 
 void ToolBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rPaintRect)
@@ -5378,7 +5376,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
         // which will in turn ImplShowFocus again
         // set mnHighItemId to 0 already to prevent this hen/egg problem
         mnHighItemId = 0;
-        InvalidateItem(nPos, 0);
+        InvalidateItem(nPos);
         CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
     }
 
@@ -5413,7 +5411,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
             }
 
             mnHighItemId = pItem->mnId;
-            InvalidateItem(aPos, 2); // always use shadow effect (2)
+            InvalidateItem(aPos);
 
             if( mbSelection )
                 mnCurPos = aPos;
@@ -5467,7 +5465,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                         break;
                     }
                 }
-                InvalidateMenuButton(false);
+                InvalidateMenuButton();
                 ImplChangeHighlight( pItem );
             }
             else
@@ -5482,7 +5480,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                 }
                 if( it != mpData->m_aItems.end() )
                 {
-                    InvalidateMenuButton(false);
+                    InvalidateMenuButton();
                     ImplChangeHighlight( &(*it) );
                 }
             }
@@ -5504,7 +5502,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             if( (it != mpData->m_aItems.end() && &(*it) == ImplGetFirstClippedItem( this )) && IsMenuEnabled() )
             {
                 ImplChangeHighlight( NULL );
-                InvalidateMenuButton(true);
+                InvalidateMenuButton();
             }
             else
                 ImplChangeHighlight( (it != mpData->m_aItems.end()) ? &(*it) : NULL );
@@ -5518,7 +5516,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             if( IsMenuEnabled() && !ImplIsFloatingMode() )
             {
                 ImplChangeHighlight( NULL );
-                InvalidateMenuButton(true);
+                InvalidateMenuButton();
             }
             else
             {
@@ -5558,7 +5556,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                     if( IsMenuEnabled() && !ImplIsFloatingMode() )
                     {
                         ImplChangeHighlight( NULL );
-                        InvalidateMenuButton(true);
+                        InvalidateMenuButton();
                         return true;
                     }
                     else
@@ -5576,7 +5574,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
                     if( IsMenuEnabled() && !ImplIsFloatingMode() )
                     {
                         ImplChangeHighlight( NULL );
-                        InvalidateMenuButton(true);
+                        InvalidateMenuButton();
                         return true;
                     }
                     else
@@ -5595,7 +5593,7 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
         {
             // select the menu button if a clipped item would be selected
             ImplChangeHighlight( NULL );
-            InvalidateMenuButton(true);
+            InvalidateMenuButton();
         }
         else if( i != nCount )
             ImplChangeHighlight( pToolItem );
@@ -5635,7 +5633,7 @@ void ToolBox::ImplHideFocus()
     if ( mpData && mpData->mbMenubuttonSelected )
     {
         // remove highlight from menubutton
-        InvalidateMenuButton(false);
+        InvalidateMenuButton();
     }
 }
 
