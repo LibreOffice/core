@@ -58,8 +58,9 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
                 return false;
         }
     }
-    catch (...)
+    catch (css::uno::Exception & e)
     {
+        SAL_WARN("writerperfect", "ignoring Exception " << e.Message);
     }
     return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator, "", fileEncoding.c_str());
 }
