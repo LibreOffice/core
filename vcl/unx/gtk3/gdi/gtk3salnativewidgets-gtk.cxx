@@ -996,6 +996,16 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         context = nPart == PART_SEPARATOR_HORZ ? mpFixedHoriLineStyle : mpFixedVertLineStyle;
         renderType = RENDER_SEPERATOR;
         break;
+    case CTRL_LISTNODE:
+    {
+        context = mpTreeHeaderButtonStyle;
+        ButtonValue aButtonValue = rValue.getTristateVal();
+        if (aButtonValue == BUTTONVALUE_ON)
+            flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_CHECKED);
+        renderType = RENDER_EXPANDER;
+        styleClass = GTK_STYLE_CLASS_EXPANDER;
+        break;
+    }
     case CTRL_LISTHEADER:
         context = mpTreeHeaderButtonStyle;
         if (nPart == PART_ARROW)
@@ -1102,7 +1112,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                          MIN(rControlRegion.GetWidth(), 1 + rControlRegion.GetHeight()));
         break;
     case RENDER_EXPANDER:
-        gtk_render_expander(context, cr, 0, 0, nWidth, nHeight);
+        gtk_render_expander(context, cr, -2, -2, nWidth+4, nHeight+4);
         break;
     case RENDER_SCROLLBAR:
         PaintScrollbar(context, cr, rControlRegion, nType, nPart, rValue);
@@ -1758,7 +1768,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         case CTRL_RADIOBUTTON:
         case CTRL_CHECKBOX:
         case CTRL_PROGRESS:
-//        case CTRL_LISTNODE:
+        case CTRL_LISTNODE:
         case CTRL_LISTNET:
             if (nPart==PART_ENTIRE_CONTROL || nPart == PART_FOCUS)
                 return true;
