@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libetonyek))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libetonyek,$(ETONYEK_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libetonyek,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
+	external/libetonyek/assert.patch \
+))
+
 # vim: set noet sw=4 ts=4:
