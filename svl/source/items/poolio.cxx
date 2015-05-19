@@ -19,7 +19,6 @@
 
 
 #include <string.h>
-#include <stdio.h>
 
 #include <sal/log.hxx>
 #include <tools/solar.h>

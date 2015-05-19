@@ -19,7 +19,6 @@
 
 
 #include <ctype.h>
-#include <stdio.h>
 #include <comphelper/string.hxx>
 #include <svtools/parhtml.hxx>
 #include <svtools/htmltokn.h>

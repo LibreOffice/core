@@ -47,10 +47,6 @@
 
 #include <rtl/bootstrap.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <cstdio>
-#endif
-
 #include <stdio.h>
 
 #define IMGOUTERTEXTSPACE 5
@@ -978,9 +974,7 @@ void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unico
     aStream.Open( aFontMRUEntriesFile, StreamMode::WRITE | StreamMode::TRUNC );
     if( ! (aStream.IsOpen() && aStream.IsWritable()) )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontNameBox::SaveMRUEntries: opening mru entries file %s failed\n", OUStringToOString(aFontMRUEntriesFile, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
+        SAL_WARN("svtools.control", "FontNameBox::SaveMRUEntries: opening mru entries file " << aFontMRUEntriesFile << " failed\n");
         return;
     }
 
@@ -997,9 +991,7 @@ void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unico
     SvFileStream aStream( aFontMRUEntriesFile, StreamMode::READ );
     if( ! aStream.IsOpen() )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontNameBox::LoadMRUEntries: opening mru entries file %s failed\n", OUStringToOString(aFontMRUEntriesFile, RTL_TEXTENCODING_UTF8).getStr() );
-#endif
+        SAL_WARN("svtools.control", "FontNameBox::LoadMRUEntries: opening mru entries file " << aFontMRUEntriesFile << " failed\n");
         return;
     }
 

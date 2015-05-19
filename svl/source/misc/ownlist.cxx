@@ -18,7 +18,6 @@
  */
 
 #include <ctype.h>
-#include <stdio.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 
 #include <svl/ownlist.hxx>

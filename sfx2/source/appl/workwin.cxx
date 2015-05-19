@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 #include <comphelper/processfactory.hxx>
-#include <stdio.h>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>

@@ -23,7 +23,6 @@
 #include <rtl/textcvt.h>
 #include <rtl/tencinfo.h>
 
-#include <stdio.h>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 // structure to store the actuel data

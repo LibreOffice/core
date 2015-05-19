@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <svtools/addresstemplate.hxx>
 #include "addresstemplate.hrc"
 #include <svtools/svtools.hrc>
