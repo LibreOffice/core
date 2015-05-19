@@ -384,6 +384,12 @@ SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
         rOStream.WriteInt32( 0 );
         rOStream.WriteInt32( -1 );
     } else {
+#if OSL_DEBUG_LEVEL > 0
+        // can only write 32 bits - check that no data is lost!
+        boost::rational<sal_Int64> copy(rFract.mpImpl->value);
+        rational_ReduceInaccurate(copy, 32);
+        assert(copy == rFract.mpImpl->value && "data loss in WriteFraction!");
+#endif
         rOStream.WriteInt32( rFract.mpImpl->value.numerator() );
         rOStream.WriteInt32( rFract.mpImpl->value.denominator() );
     }
