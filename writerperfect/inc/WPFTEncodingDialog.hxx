@@ -20,17 +20,19 @@
 
 #include <writerperfectdllapi.h>
 
-namespace writerperfect {
+namespace writerperfect
+{
 
 class WRITERPERFECT_DLLPUBLIC WPFTEncodingDialog : public ModalDialog
 {
 public:
-    WPFTEncodingDialog( const OUString& title, const OUString& defEncoding);
+    WPFTEncodingDialog(const OUString &title, const OUString &defEncoding);
 
     virtual ~WPFTEncodingDialog();
 
-    OUString GetEncoding( ) const;
-    bool hasUserCalledCancel() const {
+    OUString GetEncoding() const;
+    bool hasUserCalledCancel() const
+    {
         return m_userHasCancelled;
     }
 private:
@@ -40,8 +42,8 @@ private:
 
     bool m_userHasCancelled;
 private:
-    DECL_LINK( DoubleClickHdl, ListBox* );
-    DECL_LINK(CancelHdl, void*);
+    DECL_LINK(DoubleClickHdl, ListBox *);
+    DECL_LINK(CancelHdl, void *);
 
     void dispose() SAL_OVERRIDE;
 

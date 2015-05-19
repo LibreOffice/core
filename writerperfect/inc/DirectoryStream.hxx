@@ -16,9 +16,19 @@
 
 #include <writerperfectdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace ucb {
-    class XContent;
-} } } }
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace ucb
+{
+class XContent;
+}
+}
+}
+}
 
 namespace writerperfect
 {

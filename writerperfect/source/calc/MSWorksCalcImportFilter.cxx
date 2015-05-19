@@ -68,7 +68,7 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInp
             else if (pDlg->hasUserCalledCancel())
                 return false;
         }
-        catch (css::uno::Exception & e)
+        catch (css::uno::Exception &e)
         {
             SAL_WARN("writerperfect", "ignoring Exception " << e.Message);
         }

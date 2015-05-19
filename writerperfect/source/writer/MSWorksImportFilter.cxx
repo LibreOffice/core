@@ -57,7 +57,7 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
                 return false;
         }
     }
-    catch (css::uno::Exception & e)
+    catch (css::uno::Exception &e)
     {
         SAL_WARN("writerperfect", "ignoring Exception " << e.Message);
     }

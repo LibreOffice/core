@@ -16,10 +16,20 @@
 
 #include <writerperfectdllapi.h>
 
-namespace com { namespace sun { namespace star { namespace io {
-    class XInputStream;
-    class XSeekable;
-} } } }
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace io
+{
+class XInputStream;
+class XSeekable;
+}
+}
+}
+}
 
 namespace writerperfect
 {
@@ -29,15 +39,15 @@ class WPXSvInputStreamImpl;
 class WRITERPERFECT_DLLPUBLIC WPXSvInputStream : public librevenge::RVNGInputStream
 {
 public:
-    WPXSvInputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream );
+    WPXSvInputStream(::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream);
     virtual ~WPXSvInputStream();
 
     virtual bool isStructured() SAL_OVERRIDE;
     virtual unsigned subStreamCount() SAL_OVERRIDE;
-    virtual const char * subStreamName(unsigned id) SAL_OVERRIDE;
+    virtual const char *subStreamName(unsigned id) SAL_OVERRIDE;
     virtual bool existsSubStream(const char *name) SAL_OVERRIDE;
-    virtual librevenge::RVNGInputStream * getSubStreamByName(const char *name) SAL_OVERRIDE;
-    virtual librevenge::RVNGInputStream * getSubStreamById(unsigned id) SAL_OVERRIDE;
+    virtual librevenge::RVNGInputStream *getSubStreamByName(const char *name) SAL_OVERRIDE;
+    virtual librevenge::RVNGInputStream *getSubStreamById(unsigned id) SAL_OVERRIDE;
 
     virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead) SAL_OVERRIDE;
     virtual int seek(long offset, librevenge::RVNG_SEEK_TYPE seekType) SAL_OVERRIDE;
