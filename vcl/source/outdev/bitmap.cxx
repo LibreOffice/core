@@ -680,7 +680,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 namespace
 {
 
-struct ScaleContext
+struct LinearScaleContext
 {
     boost::scoped_array<long> mpMapX;
     boost::scoped_array<long> mpMapY;
@@ -688,7 +688,7 @@ struct ScaleContext
     boost::scoped_array<long> mpMapXOffset;
     boost::scoped_array<long> mpMapYOffset;
 
-    ScaleContext(Rectangle& aDstRect, Rectangle& aBitmapRect,
+    LinearScaleContext(Rectangle& aDstRect, Rectangle& aBitmapRect,
                  Size& aOutSize, long nOffX, long nOffY)
 
         : mpMapX(new long[aDstRect.GetWidth()])
@@ -852,6 +852,52 @@ public:
     }
 };
 
+struct TradScaleContext
+{
+    boost::scoped_array<long> mpMapX;
+    boost::scoped_array<long> mpMapY;
+
+    TradScaleContext(Rectangle& aDstRect, Rectangle& aBitmapRect,
+                 Size& aOutSize, long nOffX, long nOffY)
+
+        : mpMapX(new long[aDstRect.GetWidth()])
+        , mpMapY(new long[aDstRect.GetHeight()])
+    {
+        const long nSrcWidth = aBitmapRect.GetWidth();
+        const long nSrcHeight = aBitmapRect.GetHeight();
+
+        const bool bHMirr = aOutSize.Width() < 0;
+        const bool bVMirr = aOutSize.Height() < 0;
+
+        generateSimpleMap(
+            nSrcWidth, aDstRect.GetWidth(), aBitmapRect.Left(),
+            aOutSize.Width(), nOffX, bHMirr, mpMapX.get());
+
+        generateSimpleMap(
+            nSrcHeight, aDstRect.GetHeight(), aBitmapRect.Top(),
+            aOutSize.Height(), nOffY, bVMirr, mpMapY.get());
+    }
+
+private:
+
+    static void generateSimpleMap(long nSrcDimension, long nDstDimension, long nDstLocation,
+                                  long nOutDimention, long nOffset, bool bMirror, long* pMap)
+    {
+        long nMirrorOffset = 0;
+
+        if (bMirror)
+            nMirrorOffset = (nDstLocation << 1) + nSrcDimension - 1L;
+
+        for (long i = 0L; i < nDstDimension; ++i, ++nOffset)
+        {
+            pMap[i] = nDstLocation + nOffset * nSrcDimension / nOutDimention;
+            if (bMirror)
+                pMap[i] = nMirrorOffset - pMap[i];
+        }
+    }
+};
+
+
 } // end anonymous namespace
 
 void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const AlphaMask& rAlpha, Rectangle aDstRect, Rectangle aBmpRect, Size& aOutSize, Point& aOutPoint)
@@ -896,7 +942,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const Al
 
     const long nOffY = aDstRect.Top() - aOutPoint.Y();
 
-    ScaleContext aContext(aDstRect, aBmpRect, aOutSize, nOffX, nOffY);
+    TradScaleContext aTradContext(aDstRect, aBmpRect, aOutSize, nOffX, nOffY);
 
     Bitmap::ScopedReadAccess pBitmapReadAccess(const_cast<Bitmap&>(rBitmap));
     AlphaMask::ScopedReadAccess pAlphaReadAccess(const_cast<AlphaMask&>(rAlpha));
@@ -917,11 +963,12 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const Al
                             aDstRect,
                             nOffY, nDstHeight,
                             nOffX, nDstWidth,
-                            aContext.mpMapX.get(), aContext.mpMapY.get() );
+                            aTradContext.mpMapX.get(), aTradContext.mpMapY.get() );
         }
         else
         {
-            if( aContext.blendBitmap( Bitmap::ScopedWriteAccess(aBmp).get(), pBitmapReadAccess.get(), pAlphaReadAccess.get(),
+            LinearScaleContext aLinearContext(aDstRect, aBmpRect, aOutSize, nOffX, nOffY);
+            if (aLinearContext.blendBitmap( Bitmap::ScopedWriteAccess(aBmp).get(), pBitmapReadAccess.get(), pAlphaReadAccess.get(),
                     nDstWidth, nDstHeight))
             {
                 aNewBitmap = aBmp;
@@ -934,7 +981,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const Al
                             nOffX, nDstWidth,
                             aBmpRect, aOutSize,
                             bHMirr, bVMirr,
-                            aContext.mpMapX.get(), aContext.mpMapY.get() );
+                            aTradContext.mpMapX.get(), aTradContext.mpMapY.get() );
             }
         }
 
