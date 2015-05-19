@@ -83,8 +83,8 @@ namespace vclcanvas
         // antialiasing again, then)
 
         // disable font antialiasing (causes ugly shadows otherwise)
-        pBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
-        pBackBufferMask->getOutDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
+        pBackBuffer->getOutDev().SetAntialiasing( AntialiasingFlags::DisableText );
+        pBackBufferMask->getOutDev().SetAntialiasing( AntialiasingFlags::DisableText );
 
         // set mask vdev drawmode, such that everything is painted
         // black. That leaves us with a binary image, white for

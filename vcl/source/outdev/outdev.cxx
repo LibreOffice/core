@@ -136,7 +136,7 @@ OutputDevice::OutputDevice() :
     maOverlineColor                 = Color( COL_TRANSPARENT );
     meTextAlign                     = maFont.GetAlign();
     meRasterOp                      = ROP_OVERPAINT;
-    mnAntialiasing                  = 0;
+    mnAntialiasing                  = AntialiasingFlags::NONE;
     meTextLanguage                  = 0;  // TODO: get default from configuration?
     mbLineColor                     = true;
     mbFillColor                     = true;

@@ -254,9 +254,17 @@ namespace o3tl
 }
 
 // Antialiasing
-#define ANTIALIASING_DISABLE_TEXT       ((sal_uInt16)0x0001)
-#define ANTIALIASING_ENABLE_B2DDRAW     ((sal_uInt16)0x0002)
-#define ANTIALIASING_PIXELSNAPHAIRLINE  ((sal_uInt16)0x0004)
+enum class AntialiasingFlags
+{
+    NONE                = 0x0000,
+    DisableText         = 0x0001,
+    EnableB2dDraw       = 0x0002,
+    PixelSnapHairline  = 0x0004,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<AntialiasingFlags> : is_typed_flags<AntialiasingFlags, 0x07> {};
+}
 
 // AddFontSubstitute
 #define FONT_SUBSTITUTE_ALWAYS          ((sal_uInt16)0x0001)
@@ -381,7 +389,7 @@ private:
     std::unique_ptr<AllSettings>    mxSettings;
     MapMode                         maMapMode;
     Point                           maRefPoint;
-    sal_uInt16                      mnAntialiasing;
+    AntialiasingFlags               mnAntialiasing;
     LanguageType                    meTextLanguage;
 
     /// bitfield
@@ -614,8 +622,8 @@ public:
     bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
     bool                        IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
 
-    void                        SetAntialiasing( sal_uInt16 nMode =  0 );
-    sal_uInt16                  GetAntialiasing() const { return mnAntialiasing; }
+    void                        SetAntialiasing( AntialiasingFlags nMode = AntialiasingFlags::NONE );
+    AntialiasingFlags           GetAntialiasing() const { return mnAntialiasing; }
 
     void                        SetDrawMode( DrawModeFlags nDrawMode );
     DrawModeFlags               GetDrawMode() const { return mnDrawMode; }

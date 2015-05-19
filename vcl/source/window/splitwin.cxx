@@ -1890,8 +1890,8 @@ void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const Rectang
         aColor = rStyleSettings.GetFaceColor();
     }
 
-    sal_uInt16 nAA = rRenderContext.GetAntialiasing();
-    rRenderContext.SetAntialiasing(nAA | ANTIALIASING_PIXELSNAPHAIRLINE | ANTIALIASING_ENABLE_B2DDRAW);
+    AntialiasingFlags nAA = rRenderContext.GetAntialiasing();
+    rRenderContext.SetAntialiasing(nAA | AntialiasingFlags::PixelSnapHairline | AntialiasingFlags::EnableB2dDraw);
 
     long nWidth = rRect.getWidth();
     long nWidthHalf = nWidth / 2;

@@ -523,12 +523,12 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
             {
                 if(rParameters.getAntiAliase())
                 {
-                    aVDev->SetAntialiasing(aVDev->GetAntialiasing() | ANTIALIASING_ENABLE_B2DDRAW);
+                    aVDev->SetAntialiasing(aVDev->GetAntialiasing() | AntialiasingFlags::EnableB2dDraw);
                 }
 
                 if(rParameters.getSnapHorVerLines())
                 {
-                    aVDev->SetAntialiasing(aVDev->GetAntialiasing() | ANTIALIASING_PIXELSNAPHAIRLINE);
+                    aVDev->SetAntialiasing(aVDev->GetAntialiasing() | AntialiasingFlags::PixelSnapHairline);
                 }
 
                 ImplDraw( aVDev.get(), Point(), aDrawSize );

@@ -94,7 +94,7 @@ namespace drawinglayer
     {
         struct VclPixelProcessor2D::Impl
         {
-            sal_uInt16 m_nOrigAntiAliasing;
+            AntialiasingFlags m_nOrigAntiAliasing;
 
             explicit Impl(OutputDevice const& rOutDev)
                 : m_nOrigAntiAliasing(rOutDev.GetAntialiasing())
@@ -116,19 +116,19 @@ namespace drawinglayer
             if(getOptionsDrawinglayer().IsAntiAliasing())
             {
                 mpOutputDevice->SetAntialiasing(
-                   m_pImpl->m_nOrigAntiAliasing | ANTIALIASING_ENABLE_B2DDRAW);
+                   m_pImpl->m_nOrigAntiAliasing | AntialiasingFlags::EnableB2dDraw);
             }
             else
             {
                 mpOutputDevice->SetAntialiasing(
-                   m_pImpl->m_nOrigAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
+                   m_pImpl->m_nOrigAntiAliasing & ~AntialiasingFlags::EnableB2dDraw);
             }
         }
 
         VclPixelProcessor2D::~VclPixelProcessor2D()
         {
             // restore MapMode
-               mpOutputDevice->Pop();
+            mpOutputDevice->Pop();
 
             // restore AntiAliasing
             mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing);
@@ -794,7 +794,7 @@ namespace drawinglayer
                     // Caution: This is needed in both cases (!)
                     if(mnPolygonStrokePrimitive2D
                         && getOptionsDrawinglayer().IsAntiAliasing()
-                        && (mpOutputDevice->GetAntialiasing() & ANTIALIASING_ENABLE_B2DDRAW))
+                        && (mpOutputDevice->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw))
                     {
                         const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
                         sal_uInt32 nCount(aLocalPolyPolygon.count());
@@ -821,11 +821,11 @@ namespace drawinglayer
                 {
                     // #i98289#
                     const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
-                    const sal_uInt16 nOldAntiAliase(mpOutputDevice->GetAntialiasing());
+                    const AntialiasingFlags nOldAntiAliase(mpOutputDevice->GetAntialiasing());
 
                     if(bForceLineSnap)
                     {
-                        mpOutputDevice->SetAntialiasing(nOldAntiAliase | ANTIALIASING_PIXELSNAPHAIRLINE);
+                        mpOutputDevice->SetAntialiasing(nOldAntiAliase | AntialiasingFlags::PixelSnapHairline);
                     }
 
                     const primitive2d::MetafilePrimitive2D& rMetafilePrimitive( static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate) );
@@ -1154,10 +1154,10 @@ namespace drawinglayer
                 {
                     // #i98404# Handle directly, especially when AA is active
                     const primitive2d::BackgroundColorPrimitive2D& rPrimitive = static_cast< const primitive2d::BackgroundColorPrimitive2D& >(rCandidate);
-                    const sal_uInt16 nOriginalAA(mpOutputDevice->GetAntialiasing());
+                    const AntialiasingFlags nOriginalAA(mpOutputDevice->GetAntialiasing());
 
                     // switch AA off in all cases
-                    mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
+                    mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~AntialiasingFlags::EnableB2dDraw);
 
                     // create color for fill
                     const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
@@ -1192,8 +1192,8 @@ namespace drawinglayer
                     // Set OutDev to XOR and switch AA off (XOR does not work with AA)
                     mpOutputDevice->Push();
                     mpOutputDevice->SetRasterOp( ROP_XOR );
-                    const sal_uInt16 nAntiAliasing(mpOutputDevice->GetAntialiasing());
-                    mpOutputDevice->SetAntialiasing(nAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
+                    const AntialiasingFlags nAntiAliasing(mpOutputDevice->GetAntialiasing());
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing & ~AntialiasingFlags::EnableB2dDraw);
 
                     // process content recursively
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
@@ -1223,8 +1223,8 @@ namespace drawinglayer
                     // process recursively, but turn off anti-aliasing. Border
                     // lines are always rectangular, and look horrible when
                     // the anti-aliasing is enabled.
-                    sal_uInt16 nAntiAliasing = mpOutputDevice->GetAntialiasing();
-                    mpOutputDevice->SetAntialiasing(nAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
+                    AntialiasingFlags nAntiAliasing = mpOutputDevice->GetAntialiasing();
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing & ~AntialiasingFlags::EnableB2dDraw);
 
                     const drawinglayer::primitive2d::BorderLinePrimitive2D& rBorder =
                         static_cast<const drawinglayer::primitive2d::BorderLinePrimitive2D&>(rCandidate);

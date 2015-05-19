@@ -43,7 +43,7 @@ namespace sdr
 
             if(nSize)
             {
-                const sal_uInt16 nOriginalAA(rDestinationDevice.GetAntialiasing());
+                const AntialiasingFlags nOriginalAA(rDestinationDevice.GetAntialiasing());
                 const bool bIsAntiAliasing(getDrawinglayerOpt().IsAntiAliasing());
 
                 // create processor
@@ -68,11 +68,11 @@ namespace sdr
                                 {
                                     if(bIsAntiAliasing && rCandidate.allowsAntiAliase())
                                     {
-                                        rDestinationDevice.SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
+                                        rDestinationDevice.SetAntialiasing(nOriginalAA | AntialiasingFlags::EnableB2dDraw);
                                     }
                                     else
                                     {
-                                        rDestinationDevice.SetAntialiasing(nOriginalAA & ~ANTIALIASING_ENABLE_B2DDRAW);
+                                        rDestinationDevice.SetAntialiasing(nOriginalAA & ~AntialiasingFlags::EnableB2dDraw);
                                     }
 
                                     pProcessor->process(rSequence);

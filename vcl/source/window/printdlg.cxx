@@ -289,8 +289,8 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     aMtf.Scale( fScale, fScale );
     aMtf.WindStart();
 
-    const sal_uInt16 nOriginalAA(maPageVDev->GetAntialiasing());
-    maPageVDev->SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
+    const AntialiasingFlags nOriginalAA(maPageVDev->GetAntialiasing());
+    maPageVDev->SetAntialiasing(nOriginalAA | AntialiasingFlags::EnableB2dDraw);
     aMtf.Play( maPageVDev.get(), Point( 0, 0 ), aLogicSize );
     maPageVDev->SetAntialiasing(nOriginalAA);
 

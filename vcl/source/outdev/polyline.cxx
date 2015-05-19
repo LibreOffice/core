@@ -62,7 +62,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         // transform the polygon
         aB2DPolyLine.transform( aTransform );
 
-        if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+        if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
         {
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
@@ -108,7 +108,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
 
     // #i101491#
     // Try direct Fallback to B2D-Version of DrawPolyLine
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
        LINE_SOLID == rLineInfo.GetStyle())
     {
         DrawPolyLine( rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), rLineInfo.GetLineJoin(), rLineInfo.GetLineCap());
@@ -192,7 +192,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         SetFillColor(aOldFillColor);
         InitFillColor();
 
-        const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+        const bool bTryAA((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
                           mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
                           ROP_OVERPAINT == GetRasterOp() &&
                           IsLineColor());
@@ -289,7 +289,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
         InitLineColor();
 
     const bool bTryAA( bBypassAACheck ||
-                      ((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+                      ((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
                       mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
                       ROP_OVERPAINT == GetRasterOp() &&
                       IsLineColor()));
@@ -309,7 +309,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
         basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
         aB2DPolygon.transform(aTransform);
 
-        if((mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE) &&
+        if((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) &&
            aB2DPolygon.count() < 1000)
         {
             // #i98289#, #i101491#

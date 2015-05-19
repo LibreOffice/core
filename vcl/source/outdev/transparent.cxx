@@ -237,7 +237,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     if( mbInitFillColor )
         InitFillColor();
 
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
        mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
        (ROP_OVERPAINT == GetRasterOp()) )
     {
@@ -690,7 +690,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
             if( xVDev->SetOutputSizePixel( aDstRect.GetSize() ) )
             {
-                if(GetAntialiasing())
+                if(GetAntialiasing() != AntialiasingFlags::NONE)
                 {
                     // #i102109#
                     // For MetaFile replay (see task) it may now be necessary to take

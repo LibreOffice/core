@@ -119,7 +119,7 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     GDIMetaFile aMtf;
 
     OutputDevice* pOutputDev = VCLUnoHelper::GetOutputDevice( xDevice );
-    pOutputDev->SetAntialiasing(pOutputDev->GetAntialiasing() | ANTIALIASING_ENABLE_B2DDRAW);
+    pOutputDev->SetAntialiasing(pOutputDev->GetAntialiasing() | AntialiasingFlags::EnableB2dDraw);
     MapMode mm = pOutputDev->GetMapMode();
     mm.SetScaleX( fScaleX );
     mm.SetScaleY( fScaleY );

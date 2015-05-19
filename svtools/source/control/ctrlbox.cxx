@@ -509,8 +509,8 @@ sal_uInt16 LineListBox::GetSelectEntryStyle( sal_Int32 nSelIndex ) const
 
 void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, sal_uInt16 nDashing )
 {
-    sal_uInt16 nOldAA = rDev.GetAntialiasing();
-    rDev.SetAntialiasing( nOldAA & ~ANTIALIASING_ENABLE_B2DDRAW );
+    AntialiasingFlags nOldAA = rDev.GetAntialiasing();
+    rDev.SetAntialiasing( nOldAA & ~AntialiasingFlags::EnableB2dDraw );
 
     long nPix = rDev.PixelToLogic(Size(1, 1)).Width();
     basegfx::B2DPolyPolygon aPolygons = svtools::ApplyLineDashing(rPolygon, nDashing, nPix);

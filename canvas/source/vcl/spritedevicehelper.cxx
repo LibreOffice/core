@@ -50,12 +50,12 @@ namespace vclcanvas
         // #i95645#
 #if defined( MACOSX )
         // use AA on VCLCanvas for Mac
-        mpBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | mpBackBuffer->getOutDev().GetAntialiasing() );
+        mpBackBuffer->getOutDev().SetAntialiasing( AntialiasingFlags::EnableB2dDraw | mpBackBuffer->getOutDev().GetAntialiasing() );
 #else
         // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
         // is not required to do AA. It would need to be adapted to use it correctly
         // (especially gradient painting). This will need extra work.
-        mpBackBuffer->getOutDev().SetAntialiasing(mpBackBuffer->getOutDev().GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
+        mpBackBuffer->getOutDev().SetAntialiasing(mpBackBuffer->getOutDev().GetAntialiasing() & ~AntialiasingFlags::EnableB2dDraw);
 #endif
     }
 
@@ -119,7 +119,7 @@ namespace vclcanvas
 
             const ::Point aEmptyPoint;
             mpBackBuffer->getOutDev().EnableMapMode( false );
-            mpBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
+            mpBackBuffer->getOutDev().SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
             WriteDIB(mpBackBuffer->getOutDev().GetBitmap(aEmptyPoint, mpBackBuffer->getOutDev().GetOutputSizePixel()), aStream, false, true);
         }
 

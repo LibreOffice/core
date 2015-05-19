@@ -267,7 +267,7 @@ void OutputDevice::EnableOutput( bool bEnable )
         mpAlphaVDev->EnableOutput( bEnable );
 }
 
-void OutputDevice::SetAntialiasing( sal_uInt16 nMode )
+void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
 {
     if ( mnAntialiasing != nMode )
     {
@@ -276,7 +276,7 @@ void OutputDevice::SetAntialiasing( sal_uInt16 nMode )
 
         if(mpGraphics)
         {
-            mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
+            mpGraphics->setAntiAliasB2DDraw(bool(mnAntialiasing & AntialiasingFlags::EnableB2dDraw));
         }
     }
 

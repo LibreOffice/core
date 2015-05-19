@@ -91,7 +91,7 @@ namespace dxcanvas
         // disable font antialiasing - GDI does not handle alpha
         // surfaces properly.
         if( bAlphaSurface )
-            aVirtualDevice.SetAntialiasing(ANTIALIASING_DISABLE_TEXT);
+            aVirtualDevice.SetAntialiasing(AntialiasingFlags::DisableText);
 
         if(rText.Length)
         {

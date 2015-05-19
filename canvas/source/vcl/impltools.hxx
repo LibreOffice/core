@@ -131,7 +131,7 @@ namespace vclcanvas
             explicit OutDevStateKeeper( const OutDevProviderSharedPtr& rOutDev ) :
                 mpOutDev( rOutDev.get() ? &(rOutDev->getOutDev()) : NULL ),
                 mbMappingWasEnabled( mpOutDev && mpOutDev->IsMapModeEnabled() ),
-                mnAntiAliasing( mpOutDev ? mpOutDev->GetAntialiasing() : 0 )
+                mnAntiAliasing( mpOutDev ? mpOutDev->GetAntialiasing() : AntialiasingFlags::NONE )
             {
                 init();
             }
@@ -154,13 +154,13 @@ namespace vclcanvas
                 {
                     mpOutDev->Push();
                     mpOutDev->EnableMapMode(false);
-                    mpOutDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
+                    mpOutDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
                 }
             }
 
-            VclPtr<OutputDevice> mpOutDev;
-            const bool          mbMappingWasEnabled;
-            const sal_uInt16    mnAntiAliasing;
+            VclPtr<OutputDevice>    mpOutDev;
+            const bool              mbMappingWasEnabled;
+            const AntialiasingFlags mnAntiAliasing;
         };
 
         ::Point mapRealPoint2D( const ::com::sun::star::geometry::RealPoint2D&  rPoint,

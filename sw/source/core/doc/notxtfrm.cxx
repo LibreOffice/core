@@ -870,10 +870,10 @@ void SwNoTxtFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea 
     if( pGrfNd )
     {
         // Fix for bug fdo#33781
-        const sal_uInt16 nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
+        const AntialiasingFlags nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
         if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
         {
-            pOut->SetAntialiasing( nFormerAntialiasingAtOutput | ANTIALIASING_ENABLE_B2DDRAW );
+            pOut->SetAntialiasing( nFormerAntialiasingAtOutput | AntialiasingFlags::EnableB2dDraw );
         }
 
         bool bContinue = true;
@@ -978,15 +978,15 @@ void SwNoTxtFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea 
     else // bIsChart || pOLENd
     {
         // Fix for bug fdo#33781
-        const sal_uInt16 nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
+        const AntialiasingFlags nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
         if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
         {
-            sal_uInt16 nNewAntialiasingAtOutput = nFormerAntialiasingAtOutput | ANTIALIASING_ENABLE_B2DDRAW;
+            AntialiasingFlags nNewAntialiasingAtOutput = nFormerAntialiasingAtOutput | AntialiasingFlags::EnableB2dDraw;
 
             // #i99665#
             // Adjust AntiAliasing mode at output device for chart OLE
             if ( pOLENd->IsChart() )
-                nNewAntialiasingAtOutput |= ANTIALIASING_PIXELSNAPHAIRLINE;
+                nNewAntialiasingAtOutput |= AntialiasingFlags::PixelSnapHairline;
 
             pOut->SetAntialiasing( nNewAntialiasingAtOutput );
         }

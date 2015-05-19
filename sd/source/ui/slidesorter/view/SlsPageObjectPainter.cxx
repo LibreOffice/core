@@ -74,8 +74,8 @@ void PageObjectPainter::PaintPageObject (
         PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter().get();
         // Turn off antialiasing to avoid the bitmaps from being
         // shifted by fractions of a pixel and thus show blurry edges.
-        const sal_uInt16 nSavedAntialiasingMode (rDevice.GetAntialiasing());
-        rDevice.SetAntialiasing(nSavedAntialiasingMode & ~ANTIALIASING_ENABLE_B2DDRAW);
+        const AntialiasingFlags nSavedAntialiasingMode (rDevice.GetAntialiasing());
+        rDevice.SetAntialiasing(nSavedAntialiasingMode & ~AntialiasingFlags::EnableB2dDraw);
 
         PaintBackground(pPageObjectLayouter, rDevice, rpDescriptor);
         PaintPreview(pPageObjectLayouter, rDevice, rpDescriptor);

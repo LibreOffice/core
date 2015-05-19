@@ -228,8 +228,8 @@ public:
         {
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
-                sal_uInt16 nOldAA = rDev.GetAntialiasing();
-                rDev.SetAntialiasing(ANTIALIASING_ENABLE_B2DDRAW);
+                AntialiasingFlags nOldAA = rDev.GetAntialiasing();
+                rDev.SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
 
                 std::vector<Rectangle> aRegions(DemoRenderer::partition(rCtx, 4, 4));
                 DemoRenderer::clearRects(rDev, aRegions);

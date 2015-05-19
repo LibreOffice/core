@@ -110,7 +110,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
         InitLineColor();
 
     // #i101598# support AA and snap for lines, too
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && IsLineColor())
@@ -125,7 +125,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
         aB2DPolyLine.append(basegfx::B2DPoint(rEndPt.X(), rEndPt.Y()));
         aB2DPolyLine.transform( aTransform );
 
-        if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+        if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
         {
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
@@ -147,7 +147,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
 void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const LineInfo& rInfo )
 {
-    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+    const bool bTryAA((mnAntialiasing & AntialiasingFlags::EnableB2dDraw)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && IsLineColor());

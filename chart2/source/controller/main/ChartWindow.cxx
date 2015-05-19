@@ -55,7 +55,7 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
     this->SetMapMode( MapMode(MAP_100TH_MM) );
     adjustHighContrastMode();
     // chart does not depend on exact pixel painting => enable antialiased drawing
-    SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | GetAntialiasing() );
+    SetAntialiasing( AntialiasingFlags::EnableB2dDraw | GetAntialiasing() );
     EnableRTL( false );
     if( pParent )
         pParent->EnableRTL( false );// #i96215# necessary for a correct position of the context menu in rtl mode

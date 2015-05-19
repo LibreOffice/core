@@ -59,7 +59,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
         InitFillColor();
 
     // use b2dpolygon drawing if possible
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
        mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
        ROP_OVERPAINT == GetRasterOp() &&
        (IsLineColor() || IsFillColor()))
@@ -81,7 +81,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
         {
             const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
 
-            if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+            if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
             {
                 aB2DPolyPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
             }
@@ -166,7 +166,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         InitFillColor();
 
     // use b2dpolygon drawing if possible
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
        mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
        ROP_OVERPAINT == GetRasterOp() &&
        (IsLineColor() || IsFillColor()))
@@ -188,7 +188,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         {
             const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
 
-            if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+            if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
             {
                 aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
             }
@@ -265,7 +265,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
     if( mbInitFillColor )
         InitFillColor();
 
-    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
        mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
        ROP_OVERPAINT == GetRasterOp() &&
        (IsLineColor() || IsFillColor()))
@@ -287,7 +287,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
         {
             const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
 
-            if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
+            if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
             {
                 aB2DPolyPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
             }

@@ -86,7 +86,7 @@ bool VirtualDevice::AcquireGraphics() const
     if ( mpGraphics )
     {
         mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
-        mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
+        mpGraphics->setAntiAliasB2DDraw(bool(mnAntialiasing & AntialiasingFlags::EnableB2dDraw));
     }
 
     return mpGraphics != nullptr;
@@ -165,7 +165,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mnAlphaDepth    = -1;
 
     if( mnBitCount < 8 )
-        SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
+        SetAntialiasing( AntialiasingFlags::DisableText );
 
     if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
         mbScreenComp = false;

@@ -88,7 +88,7 @@ namespace vclcanvas
             // wouldn't save much render time, and b) will clutter
             // scrolled sprite content outside this area)
             rOutDev.EnableMapMode( false );
-            rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
+            rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
             rOutDev.SetClipRegion(vcl::Region(rRequestedArea));
 
             // repaint affected sprite directly to output device (at
@@ -329,7 +329,7 @@ namespace vclcanvas
 
             // flush to screen
             rOutDev.EnableMapMode( false );
-            rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
+            rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
             rOutDev.SetClipRegion();
             rOutDev.DrawOutDev( aEmptyPoint, aOutDevSize,
                                 aEmptyPoint, aOutDevSize,
@@ -571,7 +571,7 @@ namespace vclcanvas
 
         // paint background
         maVDev->EnableMapMode( false );
-        maVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
+        maVDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
         maVDev->SetClipRegion();
         maVDev->DrawOutDev( aEmptyPoint, aOutputSize,
                             aOutputPosition, aOutputSize,
@@ -589,7 +589,7 @@ namespace vclcanvas
 
         // flush to screen
         rOutDev.EnableMapMode( false );
-        rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
+        rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
         rOutDev.DrawOutDev( aOutputPosition, aOutputSize,
                             aEmptyPoint, aOutputSize,
                             *maVDev );
