@@ -25,9 +25,7 @@ namespace writerperfect {
 class WRITERPERFECT_DLLPUBLIC WPFTEncodingDialog : public ModalDialog
 {
 public:
-    WPFTEncodingDialog( vcl::Window*                 pParent,
-                  const OUString*         pStrTitle = 0,
-                  const OUString*         defEncoding = 0);
+    WPFTEncodingDialog( const OUString& title, const OUString& defEncoding);
 
     virtual ~WPFTEncodingDialog();
 

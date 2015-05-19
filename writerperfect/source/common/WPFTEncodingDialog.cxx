@@ -32,7 +32,7 @@ struct EncodingImplementation
 
     static int numEncodings();
     static void insertEncodings(ListBox *box);
-    static void selectEncoding(ListBox *box, const OUString *encoding);
+    static void selectEncoding(ListBox *box, const OUString &encoding);
     static OUString getEncoding(ListBox *box);
 };
 
@@ -99,14 +99,12 @@ void EncodingImplementation::insertEncodings(ListBox *box)
     }
 }
 
-void EncodingImplementation::selectEncoding(ListBox *box, const OUString *encoding)
+void EncodingImplementation::selectEncoding(ListBox *box, const OUString &encoding)
 {
-    if (!encoding)
-        return;
     sal_IntPtr num=sal_IntPtr(numEncodings());
     for (sal_IntPtr i=0; i<num; ++i)
     {
-        if (*encoding!=s_encodings[2*i]) continue;
+        if (encoding!=s_encodings[2*i]) continue;
         box->SelectEntryPos(i);
         return;
     }
@@ -123,10 +121,8 @@ OUString EncodingImplementation::getEncoding(ListBox *box)
 }
 
 WPFTEncodingDialog::WPFTEncodingDialog(
-    vcl::Window                 *pParent,
-    const OUString         *pStrTitle,
-    const OUString *encoding)
-    :   ModalDialog(pParent, "WPFTEncodingDialog", "writerperfect/ui/wpftencodingdialog.ui"),
+    const OUString &title, const OUString &encoding)
+    :   ModalDialog(nullptr, "WPFTEncodingDialog", "writerperfect/ui/wpftencodingdialog.ui"),
         m_pLbCharset(), m_pBtnOk(), m_pBtnCancel(), m_userHasCancelled(false)
 {
     get(m_pLbCharset, "comboboxtext");
@@ -139,12 +135,10 @@ WPFTEncodingDialog::WPFTEncodingDialog(
     m_pLbCharset->SetStyle(m_pLbCharset->GetStyle() | WB_SORT);
     // m_pLbCharset->set_height_request(6 * m_pLbCharset->GetTextHeight());
     m_pLbCharset->SetDoubleClickHdl(LINK(this, WPFTEncodingDialog, DoubleClickHdl));
-    if (encoding)
-        EncodingImplementation::selectEncoding(m_pLbCharset, encoding);
+    EncodingImplementation::selectEncoding(m_pLbCharset, encoding);
     m_pLbCharset->Show();
 
-    if (pStrTitle)
-        SetText(*pStrTitle);
+    SetText(title);
 }
 
 WPFTEncodingDialog::~WPFTEncodingDialog()

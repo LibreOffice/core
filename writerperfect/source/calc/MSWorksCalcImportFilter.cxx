@@ -58,7 +58,7 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInp
         }
         try
         {
-            const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(nullptr, &title, &encoding);
+            const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(title, encoding);
             if (pDlg->Execute() == RET_OK)
             {
                 if (!pDlg->GetEncoding().isEmpty())

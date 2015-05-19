@@ -45,9 +45,8 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
     {
         if ((kind == libwps::WPS_TEXT) && (confidence == libwps::WPS_CONFIDENCE_EXCELLENT) && needEncoding)
         {
-            OUString title("Import MsWorks files(libwps)");
-            OUString encoding("CP850");
-            const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(nullptr, &title, &encoding);
+            const ScopedVclPtrInstance<writerperfect::WPFTEncodingDialog> pDlg(
+                "Import MsWorks files(libwps)", "CP850");
             if (pDlg->Execute() == RET_OK)
             {
                 if (!pDlg->GetEncoding().isEmpty())
