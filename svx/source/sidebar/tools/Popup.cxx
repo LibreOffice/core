@@ -42,8 +42,8 @@ Popup::Popup (
 
 Popup::~Popup()
 {
-    mxControl.reset();
-    mxContainer.reset();
+    mxControl.disposeAndClear();
+    mxContainer.disposeAndClear();
 }
 
 void Popup::Show (ToolBox& rToolBox)
@@ -103,12 +103,16 @@ void Popup::ProvideContainerAndControl()
 
 void Popup::CreateContainerAndControl()
 {
-    mxContainer.reset(VclPtr<PopupContainer>::Create(mpParent));
+    // Clean previous components, if any
+    mxControl.disposeAndClear();
+    mxContainer.disposeAndClear();
+
+    mxContainer.set(VclPtr<PopupContainer>::Create(mpParent));
     mxContainer->SetAccessibleName(msAccessibleName);
     mxContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
     mxContainer->SetBorderStyle(mxContainer->GetBorderStyle() | WindowBorderStyle::MENU);
 
-    mxControl.reset(maControlCreator(mxContainer.get()));
+    mxControl.set(maControlCreator(mxContainer.get()));
 }
 
 IMPL_LINK_NOARG(Popup, PopupModeEndHandler)
@@ -117,8 +121,8 @@ IMPL_LINK_NOARG(Popup, PopupModeEndHandler)
         maPopupModeEndCallback();
 
     // Popup control is no longer needed and can be destroyed.
-    mxControl.reset();
-    mxContainer.reset();
+    mxControl.disposeAndClear();
+    mxContainer.disposeAndClear();
 
     return 0;
 }
