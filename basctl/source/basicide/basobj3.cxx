@@ -180,7 +180,7 @@ bool RenameDialog (
     if ( !rDocument.renameDialog( rLibName, rOldName, rNewName, xExistingDialog ) )
         return false;
 
-    if ( pWin )
+    if (pWin && pShell)
     {
         // set new name in window
         pWin->SetName( rNewName );
