@@ -145,7 +145,7 @@ void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt3
     Pop();
 }
 
-void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags )
+void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, DrawGridFlags nFlags )
 {
     Rectangle aDstRect( PixelToLogic( Point() ), GetOutputSize() );
     aDstRect.Intersection( rRect );
@@ -178,7 +178,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
     css::uno::Sequence< sal_Int32 > aVertBuf;
     css::uno::Sequence< sal_Int32 > aHorzBuf;
 
-    if( ( nFlags & GRID_DOTS ) || ( nFlags & GRID_HORZLINES ) )
+    if( ( nFlags & DrawGridFlags::Dots ) || ( nFlags & DrawGridFlags::HorzLines ) )
     {
         aVertBuf.realloc( aDstRect.GetHeight() / nDistY + 2L );
         aVertBuf[ nVertCount++ ] = nStartY;
@@ -188,7 +188,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
         }
     }
 
-    if( ( nFlags & GRID_DOTS ) || ( nFlags & GRID_VERTLINES ) )
+    if( ( nFlags & DrawGridFlags::Dots ) || ( nFlags & DrawGridFlags::VertLines ) )
     {
         aHorzBuf.realloc( aDstRect.GetWidth() / nDistX + 2L );
         aHorzBuf[ nHorzCount++ ] = nStartX;
@@ -207,7 +207,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
     const bool bOldMap = mbMap;
     EnableMapMode( false );
 
-    if( nFlags & GRID_DOTS )
+    if( nFlags & DrawGridFlags::Dots )
     {
         for( long i = 0L; i < nVertCount; i++ )
         {
@@ -219,7 +219,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
     }
     else
     {
-        if( nFlags & GRID_HORZLINES )
+        if( nFlags & DrawGridFlags::HorzLines )
         {
             for( long i = 0L; i < nVertCount; i++ )
             {
@@ -228,7 +228,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
             }
         }
 
-        if( nFlags & GRID_VERTLINES )
+        if( nFlags & DrawGridFlags::VertLines )
         {
             for( long i = 0L; i < nHorzCount; i++ )
             {

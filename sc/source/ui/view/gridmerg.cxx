@@ -140,7 +140,7 @@ void ScGridMerger::Flush()
                 }
                 pDev->DrawGrid( Rectangle( nVarStart, nFixStart, nVarEnd, nFixEnd ),
                                 Size( nVarDiff, nFixEnd - nFixStart ),
-                                GRID_VERTLINES );
+                                DrawGridFlags::VertLines );
             }
         }
         else
@@ -152,7 +152,7 @@ void ScGridMerger::Flush()
                 long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
                 pDev->DrawGrid( Rectangle( nFixStart, nVarStart, nFixEnd, nVarEnd ),
                                 Size( nFixEnd - nFixStart, nVarDiff ),
-                                GRID_HORZLINES );
+                                DrawGridFlags::HorzLines );
             }
         }
         nCount = 0;

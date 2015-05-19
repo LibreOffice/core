@@ -1143,7 +1143,7 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
     Rectangle aRect( nX1, nHdrHt, nX2, nY2 );
     mpBackgrDev->DrawRect( aRect );
     mpBackgrDev->SetLineColor( maGridColor );
-    mpBackgrDev->DrawGrid( aRect, Size( 1, GetLineHeight() ), GRID_HORZLINES );
+    mpBackgrDev->DrawGrid( aRect, Size( 1, GetLineHeight() ), DrawGridFlags::HorzLines );
     mpBackgrDev->DrawLine( Point( nX2, nHdrHt ), Point( nX2, nY2 ) );
     ImplDrawFirstLineSep( true );
 
@@ -1207,7 +1207,7 @@ void ScCsvGrid::ImplDrawRowHeaders()
     else
         mpBackgrDev->DrawLine( aRect.TopRight(), aRect.BottomRight() );
     aRect.Top() = GetHdrHeight();
-    mpBackgrDev->DrawGrid( aRect, Size( 1, GetLineHeight() ), GRID_HORZLINES );
+    mpBackgrDev->DrawGrid( aRect, Size( 1, GetLineHeight() ), DrawGridFlags::HorzLines );
 }
 
 void ScCsvGrid::ImplDrawBackgrDev()

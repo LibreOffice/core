@@ -759,7 +759,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             &OutputDevice::DrawGrid,
             _1,
-            aRect,Size(10,20),GRID_HORZLINES|GRID_VERTLINES ));
+            aRect,Size(10,20),DrawGridFlags::HorzLines|DrawGridFlags::VertLines ));
 
     /* void DrawTransparent( const tools::PolyPolygon& rPolyPoly,
                                          sal_uInt16 nTransparencePercent );

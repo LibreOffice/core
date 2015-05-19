@@ -201,11 +201,19 @@ namespace o3tl
     template<> struct typed_flags<DrawImageFlags> : is_typed_flags<DrawImageFlags, 0x001f> {};
 }
 
-// Grid
-#define GRID_DOTS                       ((sal_uLong)0x00000001)
-#define GRID_HORZLINES                  ((sal_uLong)0x00000002)
-#define GRID_VERTLINES                  ((sal_uLong)0x00000004)
-#define GRID_LINES                      (GRID_HORZLINES | GRID_VERTLINES)
+// Flags for DrawGrid()
+enum class DrawGridFlags
+{
+    NONE                 = 0x0000,
+    Dots                 = 0x0001,
+    HorzLines            = 0x0002,
+    VertLines            = 0x0004,
+    Lines                = HorzLines | VertLines,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DrawGridFlags> : is_typed_flags<DrawGridFlags, 0x0007> {};
+}
 
 // DrawModes
 #define DRAWMODE_DEFAULT                ((sal_uLong)0x00000000)
@@ -405,12 +413,12 @@ public:
 
 protected:
     /// release all references to other objects.
-    virtual void                        dispose();
+    virtual void                dispose();
 
 public:
     /// call the dispose() method if we have not already been disposed.
-    void                                disposeOnce();
-    bool                                isDisposed() const { return mbDisposed; }
+    void                        disposeOnce();
+    bool                        isDisposed() const { return mbDisposed; }
 
 public:
 
@@ -719,7 +727,7 @@ public:
                                     Color aStart = Color(COL_WHITE),
                                     Color aEnd = Color(COL_BLACK));
 
-    void                        DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags );
+    void                        DrawGrid( const Rectangle& rRect, const Size& rDist, DrawGridFlags nFlags );
 
     ///@}
 
