@@ -1863,8 +1863,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             break;
     }
 
-    printf( "Unhandled is native supported for Type: %d, Part %d\n",
-            (int)nType, (int)nPart );
+    SAL_INFO("vcl.gtk", "Unhandled is native supported for Type:" << nType << ", Part" << nPart);
 
     return false;
 }
