@@ -22,6 +22,7 @@
 
 #include <tools/solar.h>
 #include <i18nutil/paper.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 
 // - Duplex Mode -
@@ -38,32 +39,39 @@ enum Orientation { ORIENTATION_PORTRAIT, ORIENTATION_LANDSCAPE };
 
 // - QueueInfo-Types -
 
-
-#define QUEUE_STATUS_READY              ((sal_uLong)0x00000001)
-#define QUEUE_STATUS_PAUSED             ((sal_uLong)0x00000002)
-#define QUEUE_STATUS_PENDING_DELETION   ((sal_uLong)0x00000004)
-#define QUEUE_STATUS_BUSY               ((sal_uLong)0x00000008)
-#define QUEUE_STATUS_INITIALIZING       ((sal_uLong)0x00000010)
-#define QUEUE_STATUS_WAITING            ((sal_uLong)0x00000020)
-#define QUEUE_STATUS_WARMING_UP         ((sal_uLong)0x00000040)
-#define QUEUE_STATUS_PROCESSING         ((sal_uLong)0x00000080)
-#define QUEUE_STATUS_PRINTING           ((sal_uLong)0x00000100)
-#define QUEUE_STATUS_OFFLINE            ((sal_uLong)0x00000200)
-#define QUEUE_STATUS_ERROR              ((sal_uLong)0x00000400)
-#define QUEUE_STATUS_SERVER_UNKNOWN     ((sal_uLong)0x00000800)
-#define QUEUE_STATUS_PAPER_JAM          ((sal_uLong)0x00001000)
-#define QUEUE_STATUS_PAPER_OUT          ((sal_uLong)0x00002000)
-#define QUEUE_STATUS_MANUAL_FEED        ((sal_uLong)0x00004000)
-#define QUEUE_STATUS_PAPER_PROBLEM      ((sal_uLong)0x00008000)
-#define QUEUE_STATUS_IO_ACTIVE          ((sal_uLong)0x00010000)
-#define QUEUE_STATUS_OUTPUT_BIN_FULL    ((sal_uLong)0x00020000)
-#define QUEUE_STATUS_TONER_LOW          ((sal_uLong)0x00040000)
-#define QUEUE_STATUS_NO_TONER           ((sal_uLong)0x00080000)
-#define QUEUE_STATUS_PAGE_PUNT          ((sal_uLong)0x00100000)
-#define QUEUE_STATUS_USER_INTERVENTION  ((sal_uLong)0x00200000)
-#define QUEUE_STATUS_OUT_OF_MEMORY      ((sal_uLong)0x00400000)
-#define QUEUE_STATUS_DOOR_OPEN          ((sal_uLong)0x00800000)
-#define QUEUE_STATUS_POWER_SAVE         ((sal_uLong)0x01000000)
+enum class PrintQueueFlags
+{
+    NONE              = 0x00000000,
+    Ready             = 0x00000001,
+    Paused            = 0x00000002,
+    PendingDeletion   = 0x00000004,
+    Busy              = 0x00000008,
+    Initializing      = 0x00000010,
+    Waiting           = 0x00000020,
+    WarmingUp         = 0x00000040,
+    Processing        = 0x00000080,
+    Printing          = 0x00000100,
+    Offline           = 0x00000200,
+    Error             = 0x00000400,
+    StatusUnknown     = 0x00000800,
+    PaperJam          = 0x00001000,
+    PaperOut          = 0x00002000,
+    ManualFeed        = 0x00004000,
+    PaperProblem      = 0x00008000,
+    IOActive          = 0x00010000,
+    OutputBinFull     = 0x00020000,
+    TonerLow          = 0x00040000,
+    NoToner           = 0x00080000,
+    PagePunt          = 0x00100000,
+    UserIntervention  = 0x00200000,
+    OutOfMemory       = 0x00400000,
+    DoorOpen          = 0x00800000,
+    PowerSave         = 0x01000000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<PrintQueueFlags> : is_typed_flags<PrintQueueFlags, 0x01ffffff> {};
+}
 
 #define QUEUE_JOBS_DONTKNOW             ((sal_uLong)0xFFFFFFFF)
 

@@ -87,7 +87,7 @@ private:
     OUString                   maDriver;
     OUString                   maLocation;
     OUString                   maComment;
-    sal_uInt32                 mnStatus;
+    PrintQueueFlags            mnStatus;
     sal_uInt32                 mnJobs;
 
 public:
@@ -99,7 +99,7 @@ public:
     const OUString&            GetDriver() const { return maDriver; }
     const OUString&            GetLocation() const { return maLocation; }
     const OUString&            GetComment() const { return maComment; }
-    sal_uInt32                 GetStatus() const { return mnStatus; }
+    PrintQueueFlags            GetStatus() const { return mnStatus; }
     sal_uInt32                 GetJobs() const { return mnJobs; }
 
     bool operator==( const QueueInfo& rInfo ) const;

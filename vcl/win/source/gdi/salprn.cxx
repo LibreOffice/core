@@ -100,59 +100,59 @@ static LPDEVMODEW SAL_DEVMODE_W( const ImplJobSetup* pSetupData )
     return pRet;
 }
 
-static sal_uLong ImplWinQueueStatusToSal( DWORD nWinStatus )
+static PrintQueueFlags ImplWinQueueStatusToSal( DWORD nWinStatus )
 {
-    sal_uLong nStatus = 0;
+    PrintQueueFlags nStatus = PrintQueueFlags::NONE;
     if ( nWinStatus & PRINTER_STATUS_PAUSED )
-        nStatus |= QUEUE_STATUS_PAUSED;
+        nStatus |= PrintQueueFlags::Paused;
     if ( nWinStatus & PRINTER_STATUS_ERROR )
-        nStatus |= QUEUE_STATUS_ERROR;
+        nStatus |= PrintQueueFlags::Error;
     if ( nWinStatus & PRINTER_STATUS_PENDING_DELETION )
-        nStatus |= QUEUE_STATUS_PENDING_DELETION;
+        nStatus |= PrintQueueFlags::PendingDeletion;
     if ( nWinStatus & PRINTER_STATUS_PAPER_JAM )
-        nStatus |= QUEUE_STATUS_PAPER_JAM;
+        nStatus |= PrintQueueFlags::PaperJam;
     if ( nWinStatus & PRINTER_STATUS_PAPER_OUT )
-        nStatus |= QUEUE_STATUS_PAPER_OUT;
+        nStatus |= PrintQueueFlags::PaperOut;
     if ( nWinStatus & PRINTER_STATUS_MANUAL_FEED )
-        nStatus |= QUEUE_STATUS_MANUAL_FEED;
+        nStatus |= PrintQueueFlags::ManualFeed;
     if ( nWinStatus & PRINTER_STATUS_PAPER_PROBLEM )
-        nStatus |= QUEUE_STATUS_PAPER_PROBLEM;
+        nStatus |= PrintQueueFlags::PaperProblem;
     if ( nWinStatus & PRINTER_STATUS_OFFLINE )
-        nStatus |= QUEUE_STATUS_OFFLINE;
+        nStatus |= PrintQueueFlags::Offline;
     if ( nWinStatus & PRINTER_STATUS_IO_ACTIVE )
-        nStatus |= QUEUE_STATUS_IO_ACTIVE;
+        nStatus |= PrintQueueFlags::IOActive;
     if ( nWinStatus & PRINTER_STATUS_BUSY )
-        nStatus |= QUEUE_STATUS_BUSY;
+        nStatus |= PrintQueueFlags::Busy;
     if ( nWinStatus & PRINTER_STATUS_PRINTING )
-        nStatus |= QUEUE_STATUS_PRINTING;
+        nStatus |= PrintQueueFlags::Printing;
     if ( nWinStatus & PRINTER_STATUS_OUTPUT_BIN_FULL )
-        nStatus |= QUEUE_STATUS_OUTPUT_BIN_FULL;
+        nStatus |= PrintQueueFlags::OutputBinFull;
     if ( nWinStatus & PRINTER_STATUS_WAITING )
-        nStatus |= QUEUE_STATUS_WAITING;
+        nStatus |= PrintQueueFlags::Waiting;
     if ( nWinStatus & PRINTER_STATUS_PROCESSING )
-        nStatus |= QUEUE_STATUS_PROCESSING;
+        nStatus |= PrintQueueFlags::Processing;
     if ( nWinStatus & PRINTER_STATUS_INITIALIZING )
-        nStatus |= QUEUE_STATUS_INITIALIZING;
+        nStatus |= PrintQueueFlags::Initializing;
     if ( nWinStatus & PRINTER_STATUS_WARMING_UP )
-        nStatus |= QUEUE_STATUS_WARMING_UP;
+        nStatus |= PrintQueueFlags::WarmingUp;
     if ( nWinStatus & PRINTER_STATUS_TONER_LOW )
-        nStatus |= QUEUE_STATUS_TONER_LOW;
+        nStatus |= PrintQueueFlags::TonerLow;
     if ( nWinStatus & PRINTER_STATUS_NO_TONER )
-        nStatus |= QUEUE_STATUS_NO_TONER;
+        nStatus |= PrintQueueFlags::NoToner;
     if ( nWinStatus & PRINTER_STATUS_PAGE_PUNT )
-        nStatus |= QUEUE_STATUS_PAGE_PUNT;
+        nStatus |= PrintQueueFlags::PagePunt;
     if ( nWinStatus & PRINTER_STATUS_USER_INTERVENTION )
-        nStatus |= QUEUE_STATUS_USER_INTERVENTION;
+        nStatus |= PrintQueueFlags::UserIntervention;
     if ( nWinStatus & PRINTER_STATUS_OUT_OF_MEMORY )
-        nStatus |= QUEUE_STATUS_OUT_OF_MEMORY;
+        nStatus |= PrintQueueFlags::OutOfMemory;
     if ( nWinStatus & PRINTER_STATUS_DOOR_OPEN )
-        nStatus |= QUEUE_STATUS_DOOR_OPEN;
+        nStatus |= PrintQueueFlags::DoorOpen;
     if ( nWinStatus & PRINTER_STATUS_SERVER_UNKNOWN )
-        nStatus |= QUEUE_STATUS_SERVER_UNKNOWN;
+        nStatus |= PrintQueueFlags::StatusUnknown;
     if ( nWinStatus & PRINTER_STATUS_POWER_SAVE )
-        nStatus |= QUEUE_STATUS_POWER_SAVE;
+        nStatus |= PrintQueueFlags::PowerSave;
     if ( !nStatus && !(nWinStatus & PRINTER_STATUS_NOT_AVAILABLE) )
-        nStatus |= QUEUE_STATUS_READY;
+        nStatus |= PrintQueueFlags::Ready;
     return nStatus;
 }
 

@@ -358,7 +358,7 @@ bool Printer::HasMirroredGraphics() const
 // QueueInfo
 QueueInfo::QueueInfo()
 {
-    mnStatus    = 0;
+    mnStatus    = PrintQueueFlags::NONE;
     mnJobs      = 0;
 }
 
@@ -395,7 +395,7 @@ SvStream& WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo )
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maDriver, RTL_TEXTENCODING_UTF8);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maLocation, RTL_TEXTENCODING_UTF8);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maComment, RTL_TEXTENCODING_UTF8);
-    rOStream.WriteUInt32( rInfo.mnStatus );
+    rOStream.WriteUInt32( static_cast<sal_uInt32>(rInfo.mnStatus) );
     rOStream.WriteUInt32( rInfo.mnJobs );
 
     return rOStream;
@@ -409,7 +409,9 @@ SvStream& ReadQueueInfo( SvStream& rIStream, QueueInfo& rInfo )
     rInfo.maDriver = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
     rInfo.maLocation = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
     rInfo.maComment = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
-    rIStream.ReadUInt32( rInfo.mnStatus );
+    sal_uInt32 nTmp;
+    rIStream.ReadUInt32( nTmp );
+    rInfo.mnStatus = static_cast<PrintQueueFlags>(nTmp);
     rIStream.ReadUInt32( rInfo.mnJobs );
 
     return rIStream;
@@ -417,7 +419,7 @@ SvStream& ReadQueueInfo( SvStream& rIStream, QueueInfo& rInfo )
 
 SalPrinterQueueInfo::SalPrinterQueueInfo()
 {
-    mnStatus    = 0;
+    mnStatus    = PrintQueueFlags::NONE;
     mnJobs      = QUEUE_JOBS_DONTKNOW;
     mpSysData   = NULL;
 }
