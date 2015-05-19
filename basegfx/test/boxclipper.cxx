@@ -352,9 +352,8 @@ public:
         const sal_uInt32 nCount=rRange.count();
         for( sal_uInt32 i=0; i<nCount; ++i )
         {
-            B2DPolygon aRect=tools::createPolygonFromRect(
-                rRange.getElement(i).head);
-            if( rRange.getElement(i).tail.head == ORIENTATION_NEGATIVE )
+            B2DPolygon aRect=tools::createPolygonFromRect(std::get<0>(rRange.getElement(i)));
+            if( std::get<1>(rRange.getElement(i)) == ORIENTATION_NEGATIVE )
                 aRect.flip();
 
             genericClip.append(aRect);
