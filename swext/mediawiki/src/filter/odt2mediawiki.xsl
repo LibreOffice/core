@@ -1311,10 +1311,10 @@
 			<when test="string-length(.) &gt; 0">
 				<variable name="style">
 					<call-template name="mk-style-set">
-						<with-param name="node" select="."/>
+						<with-param name="node" select=".."/>
 					</call-template>
 				</variable>
-				
+                                				
 				<variable name="current-paragraph" 
 					select="./ancestor::text:p[1]"/>
 				<variable name="paragraph-id" 
@@ -1608,30 +1608,12 @@
 	<template name="mk-style-set">
 		<param name="node"/>
 		
-		<variable 
-			name="context" 
-			select="$node/ancestor-or-self::*[@text:style-name][1]"
-		/>
-		
 		<choose>
-			<when test="boolean($context)">
-				<variable 
-					name="style" 
-					select="key('style-ref', $context/@text:style-name)"
-				/>
-
-				<!-- Debugging: Print inspected styles. -->				
-				<!-- 
-				<message>
-					<value-of select="'=== '"/>
-					<value-of select="$style/@style:name"/>
-					<value-of select="' ==='"/>
-				</message>
-				 -->
-		
+			<when test="$node/ancestor-or-self::*[@text:style-name]">
+				<variable name="context" select="$node/ancestor-or-self::*[@text:style-name][1]"/>
 				<call-template name="mk-style-set-internal">
 					<with-param name="node" select="$context"/>
-					<with-param name="style" select="$style"/>
+					<with-param name="style" select="key('style-ref', $context/@text:style-name)"/>
 					<with-param name="style-set" select="$NO_STYLE"/>
 					<with-param name="style-mask" select="$NO_STYLE"/>
 				</call-template>
