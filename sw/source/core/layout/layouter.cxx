@@ -203,8 +203,8 @@ void SwLooping::Control( SwPageFrm* pPage )
 }
 
 SwLayouter::SwLayouter()
-        : pEndnoter( NULL ),
-          pLooping( NULL ),
+        : mpEndnoter( NULL ),
+          mpLooping( NULL ),
           // #i28701#
           mpMovedFwdFrms( 0L ),
           // #i35911#
@@ -214,8 +214,8 @@ SwLayouter::SwLayouter()
 
 SwLayouter::~SwLayouter()
 {
-    delete pEndnoter;
-    delete pLooping;
+    delete mpEndnoter;
+    delete mpLooping;
     // #i28701#
     delete mpMovedFwdFrms;
     mpMovedFwdFrms = 0L;
@@ -226,37 +226,37 @@ SwLayouter::~SwLayouter()
 
 void SwLayouter::_CollectEndnotes( SwSectionFrm* pSect )
 {
-    if( !pEndnoter )
-        pEndnoter = new SwEndnoter( this );
-    pEndnoter->CollectEndnotes( pSect );
+    if( !mpEndnoter )
+        mpEndnoter = new SwEndnoter( this );
+    mpEndnoter->CollectEndnotes( pSect );
 }
 
 bool SwLayouter::HasEndnotes() const
 {
-    return pEndnoter->HasEndnotes();
+    return mpEndnoter->HasEndnotes();
 }
 
 void SwLayouter::CollectEndnote( SwFtnFrm* pFtn )
 {
-    pEndnoter->CollectEndnote( pFtn );
+    mpEndnoter->CollectEndnote( pFtn );
 }
 
 void SwLayouter::InsertEndnotes( SwSectionFrm* pSect )
 {
-    if( !pEndnoter || pEndnoter->GetSect() != pSect )
+    if( !mpEndnoter || mpEndnoter->GetSect() != pSect )
         return;
-    pEndnoter->InsertEndnotes();
+    mpEndnoter->InsertEndnotes();
 }
 
 void SwLayouter::LoopControl( SwPageFrm* pPage, sal_uInt8 )
 {
-    OSL_ENSURE( pLooping, "Looping: Lost control" );
-    pLooping->Control( pPage );
+    OSL_ENSURE( mpLooping, "Looping: Lost control" );
+    mpLooping->Control( pPage );
 }
 
 void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm )
 {
-    if ( pLooping && pLooping->IsLoopingLouieLight() )
+    if ( mpLooping && mpLooping->IsLoopingLouieLight() )
     {
 #if OSL_DEBUG_LEVEL > 1
         OSL_FAIL( "Looping Louie (Light): Fixating fractious frame" );
@@ -267,16 +267,16 @@ void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm )
 
 bool SwLayouter::StartLooping( SwPageFrm* pPage )
 {
-    if( pLooping )
+    if( mpLooping )
         return false;
-    pLooping = new SwLooping( pPage );
+    mpLooping = new SwLooping( pPage );
     return true;
 }
 
 void SwLayouter::EndLoopControl()
 {
-    delete pLooping;
-    pLooping = NULL;
+    delete mpLooping;
+    mpLooping = NULL;
 }
 
 void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )
@@ -292,9 +292,9 @@ bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
     if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
         return false;
     SwLayouter *pLayouter = pDoc->getIDocumentLayoutAccess().GetLayouter();
-    if( pLayouter->pEndnoter && pLayouter->pEndnoter->GetSect() && pSect &&
-        ( pLayouter->pEndnoter->GetSect()->IsAnFollow( pSect ) ||
-          pSect->IsAnFollow( pLayouter->pEndnoter->GetSect() ) ) )
+    if( pLayouter->mpEndnoter && pLayouter->mpEndnoter->GetSect() && pSect &&
+        ( pLayouter->mpEndnoter->GetSect()->IsAnFollow( pSect ) ||
+          pSect->IsAnFollow( pLayouter->mpEndnoter->GetSect() ) ) )
     {
         if( pFtn )
             pLayouter->CollectEndnote( pFtn );
@@ -308,7 +308,7 @@ bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
     OSL_ENSURE( pDoc, "No doc, no fun" );
     if( !pDoc->getIDocumentLayoutAccess().GetLayouter() )
         pDoc->getIDocumentLayoutAccess().SetLayouter( new SwLayouter() );
-    return !pDoc->getIDocumentLayoutAccess().GetLayouter()->pLooping &&
+    return !pDoc->getIDocumentLayoutAccess().GetLayouter()->mpLooping &&
             pDoc->getIDocumentLayoutAccess().GetLayouter()->StartLooping( pPage );
 }
 

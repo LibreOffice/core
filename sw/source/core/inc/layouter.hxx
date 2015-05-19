@@ -41,8 +41,8 @@ class SwLayoutFrm;
 
 class SwLayouter
 {
-    SwEndnoter* pEndnoter;
-    SwLooping* pLooping;
+    SwEndnoter* mpEndnoter;
+    SwLooping* mpLooping;
     void _CollectEndnotes( SwSectionFrm* pSect );
     bool StartLooping( SwPageFrm* pPage );
 
