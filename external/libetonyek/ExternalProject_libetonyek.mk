@@ -28,8 +28,8 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 		export PKG_CONFIG="" \
 		&& MAKE=$(MAKE) ./configure \
 			--with-pic \
-			--enable-static \
-			--disable-shared \
+			--enable-shared \
+			--disable-static \
 			--without-docs \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
@@ -40,6 +40,7 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 			XML_CFLAGS="$(LIBXML_CFLAGS)" \
 			XML_LIBS="$(LIBXML_LIBS)" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) \
 	)
 
