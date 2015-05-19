@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libetonyek,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/assert.patch \
+	external/libetonyek/0001-missing-include.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
