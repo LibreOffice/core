@@ -1610,7 +1610,7 @@
 		
 		<variable 
 			name="context" 
-			select="$node/ancestor-or-self::*[@text:style-name][1]"
+			select="$node/ancestor-or-self::*[@text:style-name][1]/node()"
 		/>
 		
 		<choose>
