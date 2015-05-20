@@ -38,7 +38,7 @@ class BSeqInputStream
     sal_Int32 _nPos;
 
 public:
-    inline BSeqInputStream( ByteSequence const & rSeq )
+    explicit BSeqInputStream( ByteSequence const & rSeq )
         : _seq( rSeq )
         , _nPos( 0 )
         {}
@@ -103,7 +103,7 @@ class BSeqOutputStream
     ByteSequence * _seq;
 
 public:
-    inline BSeqOutputStream( ByteSequence * seq )
+    explicit BSeqOutputStream( ByteSequence * seq )
         : _seq( seq )
         {}
 

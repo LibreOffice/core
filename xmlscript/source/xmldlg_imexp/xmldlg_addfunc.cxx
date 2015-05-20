@@ -41,9 +41,10 @@ class InputStreamProvider
     ByteSequence _bytes;
 
 public:
-    inline InputStreamProvider( ByteSequence const & rBytes )
+    explicit InputStreamProvider( ByteSequence const & rBytes )
         : _bytes( rBytes )
-        {}
+    {
+    }
 
     // XInputStreamProvider
     virtual Reference< io::XInputStream > SAL_CALL createInputStream()

@@ -359,7 +359,7 @@ void MacroSecurityTrustedSourcesTP::FillCertLB()
 class TrustCertLB : public SvSimpleTable
 {
 public:
-    TrustCertLB(SvSimpleTableContainer &rContainer)
+    explicit TrustCertLB(SvSimpleTableContainer &rContainer)
         : SvSimpleTable(rContainer, 0)
     {
     }

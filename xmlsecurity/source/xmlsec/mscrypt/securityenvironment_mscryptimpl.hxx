@@ -84,7 +84,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper3<
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
 
     public :
-        SecurityEnvironment_MSCryptImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
+        explicit SecurityEnvironment_MSCryptImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
         virtual ~SecurityEnvironment_MSCryptImpl() ;
 
         //Methods from XSecurityEnvironment

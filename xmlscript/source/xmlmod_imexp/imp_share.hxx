@@ -53,7 +53,7 @@ struct ModuleImport
     sal_Int32 XMLNS_XLINK_UID;
 
 public:
-    ModuleImport(ModuleDescriptor& rModuleDesc)
+    explicit ModuleImport(ModuleDescriptor& rModuleDesc)
         : mrModuleDesc(rModuleDesc)
         , XMLNS_SCRIPT_UID(0)
         , XMLNS_LIBRARY_UID(0)

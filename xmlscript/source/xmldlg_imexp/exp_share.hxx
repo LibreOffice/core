@@ -56,7 +56,7 @@ struct Style
 
     OUString _id;
 
-    Style( short all_ )
+    explicit Style( short all_ )
         : _backgroundColor(0)
         , _textColor(0)
         , _textLineColor(0)
@@ -94,7 +94,7 @@ class ElementDescriptor
     css::uno::Reference< css::frame::XModel > _xDocument;
 
 public:
-    inline ElementDescriptor(
+    ElementDescriptor(
         css::uno::Reference< css::beans::XPropertySet > const & xProps,
         css::uno::Reference< css::beans::XPropertyState > const & xPropState,
         OUString const & name, css::uno::Reference< css::frame::XModel > const & xDocument )
@@ -103,7 +103,7 @@ public:
         , _xPropState( xPropState )
         , _xDocument( xDocument )
         {}
-    inline ElementDescriptor(
+    explicit ElementDescriptor(
         OUString const & name )
         : XMLElement( name )
         {}

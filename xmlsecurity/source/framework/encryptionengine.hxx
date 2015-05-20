@@ -72,7 +72,7 @@ protected:
     sal_Int32 m_nIdOfBlocker;
 
 protected:
-    EncryptionEngine( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext );
+    explicit EncryptionEngine( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext );
     virtual ~EncryptionEngine(){};
 
     virtual void tryToPerform( )
