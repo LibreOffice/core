@@ -151,7 +151,7 @@ static PrintQueueFlags ImplWinQueueStatusToSal( DWORD nWinStatus )
         nStatus |= PrintQueueFlags::StatusUnknown;
     if ( nWinStatus & PRINTER_STATUS_POWER_SAVE )
         nStatus |= PrintQueueFlags::PowerSave;
-    if ( !nStatus && !(nWinStatus & PRINTER_STATUS_NOT_AVAILABLE) )
+    if ( nStatus == PrintQueueFlags::NONE && !(nWinStatus & PRINTER_STATUS_NOT_AVAILABLE) )
         nStatus |= PrintQueueFlags::Ready;
     return nStatus;
 }
@@ -173,7 +173,7 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
             {
                 SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
                 pInfo->maPrinterName = OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo4[i].pPrinterName) );
-                pInfo->mnStatus      = 0;
+                pInfo->mnStatus      = PrintQueueFlags::NONE;
                 pInfo->mnJobs        = 0;
                 pInfo->mpSysData     = NULL;
                 pList->Add( pInfo );
