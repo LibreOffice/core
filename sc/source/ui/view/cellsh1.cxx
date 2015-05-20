@@ -152,6 +152,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             rReq.Done();
             break;
 
+        case FID_INS_ROWS_AFTER:
+            pTabViewShell->InsertCells(INS_INSROWS_AFTER);
+            rReq.Done();
+            break;
+
+        case FID_INS_COLUMNS_AFTER:
+            pTabViewShell->InsertCells(INS_INSCOLS_AFTER);
+            rReq.Done();
+            break;
+
         case FID_INS_CELLSDOWN:
             pTabViewShell->InsertCells(INS_CELLSDOWN);
             rReq.Done();
