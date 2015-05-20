@@ -3209,34 +3209,77 @@ endef
 
 else # !SYSTEM_LIBORCUS
 
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	orcus \
+	orcus-parser \
+))
+
 define gb_LinkTarget__use_orcus
-$(call gb_LinkTarget_use_external_project,$(1),liborcus)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,liborcus/include) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,liborcus)/src/liborcus/.libs/liborcus-0.8$(gb_StaticLibrary_PLAINEXT) \
-)
 
-$(if $(SYSTEM_BOOST), \
-    $(call gb_LinkTarget_add_ldflags,$(1),$(BOOST_LDFLAGS)) \
-    $(call gb_LinkTarget_add_libs,$(1),$(BOOST_SYSTEM_LIB)) \
+$(call gb_LinkTarget_use_libraries,$(1),\
+	orcus \
 )
 
 endef
 
 define gb_LinkTarget__use_orcus-parser
-$(call gb_LinkTarget_use_external_project,$(1),liborcus)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,liborcus/include) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,liborcus)/src/parser/.libs/liborcus-parser-0.8$(gb_StaticLibrary_PLAINEXT) \
+
+$(call gb_LinkTarget_use_libraries,$(1),\
+	orcus-parser \
 )
 
 endef
+
+else # !MSC
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	liborcus \
+))
+
+define gb_LinkTarget__use_orcus
+$(call gb_LinkTarget_use_package,$(1),liborcus)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,liborcus/include) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,liborcus)/src/liborcus/.libs -lorcus-0.10 \
+)
+
+$(if $(SYSTEM_BOOST), \
+	$(call gb_LinkTarget_add_ldflags,$(1),$(BOOST_LDFLAGS)) \
+	$(call gb_LinkTarget_add_libs,$(1),$(BOOST_SYSTEM_LIB)) \
+)
+
+endef
+
+define gb_LinkTarget__use_orcus-parser
+$(call gb_LinkTarget_use_package,$(1),liborcus)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,liborcus/include) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,liborcus)/src/parser/.libs -lorcus-parser-0.10 \
+)
+
+endef
+
+endif # MSC
 
 endif # SYSTEM_LIBORCUS
 
