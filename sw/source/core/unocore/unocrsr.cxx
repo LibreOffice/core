@@ -64,18 +64,6 @@ SwUnoCrsr::~SwUnoCrsr()
     }
 }
 
-SwUnoCrsr * SwUnoCrsr::Clone() const
-{
-    assert(!m_bSaneOwnership);
-    SwUnoCrsr * pNewCrsr = GetDoc()->CreateUnoCrsr( *GetPoint() );
-    if (HasMark())
-    {
-        pNewCrsr->SetMark();
-        *pNewCrsr->GetMark() = *GetMark();
-    }
-    return pNewCrsr;
-}
-
 SwUnoTableCrsr * SwUnoTableCrsr::Clone() const
 {
     assert(!m_bSaneOwnership);
