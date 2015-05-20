@@ -93,17 +93,18 @@ public:
     virtual         ~ScrollBar();
     virtual void    dispose() SAL_OVERRIDE;
 
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
-    virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    GetFocus() SAL_OVERRIDE;
-    virtual void    LoseFocus() SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void Tracking(const TrackingEvent& rTEvt) SAL_OVERRIDE;
+    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
+    virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
+    virtual void Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual void StateChanged(StateChangedType nType) SAL_OVERRIDE;
+    virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+    virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
+    virtual void GetFocus() SAL_OVERRIDE;
+    virtual void LoseFocus() SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
     using Window::Scroll;
     void            Scroll();
@@ -151,7 +152,8 @@ class VCL_DLLPUBLIC ScrollBarBox : public vcl::Window
 private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void ImplInitSettings();
+
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext);
 
 public:
     explicit        ScrollBarBox( vcl::Window* pParent, WinBits nStyle = 0 );

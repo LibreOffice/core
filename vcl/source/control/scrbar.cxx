@@ -106,7 +106,6 @@ void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     long nScrollSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     SetSizePixel( Size( nScrollSize, nScrollSize ) );
-    SetBackground();
 }
 
 void ScrollBar::ImplInitStyle( WinBits nStyle )
@@ -1121,6 +1120,11 @@ void ScrollBar::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
+void ScrollBar::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    rRenderContext.SetBackground();
+}
+
 void ScrollBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     ImplDraw(rRenderContext, SCRBAR_DRAW_ALL);
@@ -1448,14 +1452,13 @@ Size ScrollBar::getCurrentCalcSize() const
     return aCtrlRegion.GetSize();
 }
 
-void ScrollBarBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void ScrollBarBox::ImplInit(vcl::Window* pParent, WinBits nStyle)
 {
     Window::ImplInit( pParent, nStyle, NULL );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     long nScrollSize = rStyleSettings.GetScrollBarSize();
-    SetSizePixel( Size( nScrollSize, nScrollSize ) );
-    ImplInitSettings();
+    SetSizePixel(Size(nScrollSize, nScrollSize));
 }
 
 ScrollBarBox::ScrollBarBox( vcl::Window* pParent, WinBits nStyle ) :
@@ -1464,18 +1467,12 @@ ScrollBarBox::ScrollBarBox( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-void ScrollBarBox::ImplInitSettings()
+void ScrollBarBox::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    // FIXME: Hack so that we can build DockingWindows even without background
-    // and not everything has been switched over yet
-    if ( IsBackground() )
+    if (rRenderContext.IsBackground())
     {
-        Color aColor;
-        if ( IsControlBackground() )
-            aColor = GetControlBackground();
-        else
-            aColor = GetSettings().GetStyleSettings().GetFaceColor();
-        SetBackground( aColor );
+        Color aColor = rRenderContext.GetSettings().GetStyleSettings().GetFaceColor();
+        ApplyControlBackground(rRenderContext, aColor);
     }
 }
 
@@ -1483,9 +1480,8 @@ void ScrollBarBox::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
 
-    if ( nType == StateChangedType::ControlBackground )
+    if (nType == StateChangedType::ControlBackground)
     {
-        ImplInitSettings();
         Invalidate();
     }
 }
@@ -1494,10 +1490,9 @@ void ScrollBarBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
+    if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
+        (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
     {
-        ImplInitSettings();
         Invalidate();
     }
 }
