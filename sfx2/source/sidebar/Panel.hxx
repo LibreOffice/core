@@ -58,6 +58,7 @@ public:
     virtual void Resize() SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
     virtual void Activate() SAL_OVERRIDE;
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
 private:
     const OUString msPanelId;

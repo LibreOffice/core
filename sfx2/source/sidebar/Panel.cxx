@@ -58,8 +58,6 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , maDeckLayoutTrigger(rDeckLayoutTrigger)
     , maContextAccess(rContextAccess)
 {
-    SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
-
 #ifdef DEBUG
     SetText(OUString("Panel"));
 #endif
@@ -68,6 +66,11 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
 Panel::~Panel()
 {
     disposeOnce();
+}
+
+void Panel::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    rRenderContext.SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
 }
 
 void Panel::dispose()
@@ -155,7 +158,7 @@ void Panel::Activate()
 void Panel::DataChanged (const DataChangedEvent& rEvent)
 {
     (void)rEvent;
-    SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
+    Invalidate();
 }
 
 Reference<awt::XWindow> Panel::GetElementWindow()
