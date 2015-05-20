@@ -19,14 +19,19 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstring>
+#include <map>
 #include <set>
+#include <vector>
 #include <math.h>
 
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/string.hxx>
+#include <salhelper/thread.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
@@ -66,52 +71,215 @@ namespace avmedia { namespace gstreamer {
 
 namespace {
 
-class MissingPluginInstaller {
+class FlagGuard {
 public:
-    void report(GstMessage * message);
+    explicit FlagGuard(bool & flag): flag_(flag) { flag_ = true; }
+
+    ~FlagGuard() { flag_ = false; }
 
 private:
-    DECL_STATIC_LINK(MissingPluginInstaller, install, rtl_String *);
-
-    std::set<OString> reported_;
+    bool & flag_;
 };
 
-void MissingPluginInstaller::report(GstMessage * message) {
+class MissingPluginInstallerThread: public salhelper::Thread {
+public:
+    MissingPluginInstallerThread(): Thread("MissingPluginInstaller") {}
+
+private:
+    void execute() SAL_OVERRIDE;
+};
+
+class MissingPluginInstaller {
+    friend MissingPluginInstallerThread;
+
+public:
+    MissingPluginInstaller(): launchNewThread_(true), inCleanUp_(false) {}
+
+    ~MissingPluginInstaller();
+
+    void report(rtl::Reference<Player> const & source, GstMessage * message);
+
+    // Player::~Player calls Player::disposing calls
+    // MissingPluginInstaller::detach, so do not take Player by rtl::Reference
+    // here (which would bump its refcount back from 0 to 1):
+    void detach(Player const * source);
+
+private:
+    void processQueue();
+
+    DECL_STATIC_LINK(
+        MissingPluginInstaller, launchUi, MissingPluginInstallerThread *);
+
+    osl::Mutex mutex_;
+    std::set<OString> reported_;
+    std::map<OString, std::set<rtl::Reference<Player>>> queued_;
+    rtl::Reference<MissingPluginInstallerThread> currentThread_;
+    std::vector<OString> currentDetails_;
+    std::set<rtl::Reference<Player>> currentSources_;
+    bool launchNewThread_;
+    bool inCleanUp_;
+};
+
+MissingPluginInstaller::~MissingPluginInstaller() {
+    osl::MutexGuard g(mutex_);
+    SAL_WARN_IF(currentThread_.is(), "avmedia.gstreamer", "unjoined thread");
+    inCleanUp_ = true;
+}
+
+void MissingPluginInstaller::report(
+    rtl::Reference<Player> const & source, GstMessage * message)
+{
     // assert(gst_is_missing_plugin_message(message));
     gchar * det = gst_missing_plugin_message_get_installer_detail(message);
-    if (det != nullptr) {
-        std::size_t len = std::strlen(det);
-        if (len <= sal_uInt32(SAL_MAX_INT32)) {
-            OString detStr(det, len);
-            if (reported_.insert(detStr).second) {
-                rtl_string_acquire(detStr.pData);
-                Application::PostUserEvent(
-                    LINK(nullptr, MissingPluginInstaller, install),
-                    detStr.pData);
-            }
-        } else {
-            SAL_WARN(
-            "avmedia.gstreamer", "detail string too long");
-        }
-        g_free(det);
-    } else {
+    if (det == nullptr) {
         SAL_WARN(
             "avmedia.gstreamer",
             "gst_missing_plugin_message_get_installer_detail failed");
+        return;
+    }
+    std::size_t len = std::strlen(det);
+    if (len > sal_uInt32(SAL_MAX_INT32)) {
+        SAL_WARN("avmedia.gstreamer", "detail string too long");
+        g_free(det);
+        return;
+    }
+    OString detStr(det, len);
+    g_free(det);
+    rtl::Reference<MissingPluginInstallerThread> join;
+    rtl::Reference<MissingPluginInstallerThread> launch;
+    {
+        osl::MutexGuard g(mutex_);
+        if (reported_.find(detStr) != reported_.end()) {
+            return;
+        }
+        auto & i = queued_[detStr];
+        bool fresh = i.empty();
+        i.insert(source);
+        if (!(fresh && launchNewThread_)) {
+            return;
+        }
+        join = currentThread_;
+        currentThread_ = new MissingPluginInstallerThread;
+        {
+            FlagGuard f(inCleanUp_);
+            currentSources_.clear();
+        }
+        processQueue();
+        launchNewThread_ = false;
+        launch = currentThread_;
+    }
+    if (join.is()) {
+        join->join();
+    }
+    launch->acquire();
+    Application::PostUserEvent(
+        LINK(this, MissingPluginInstaller, launchUi), launch.get());
+}
+
+void eraseSource(std::set<rtl::Reference<Player>> & set, Player const * source)
+{
+    auto i = std::find_if(
+        set.begin(), set.end(),
+        [source](rtl::Reference<Player> const & el) {
+            return el.get() == source;
+        });
+    if (i != set.end()) {
+        set.erase(i);
     }
 }
 
-IMPL_STATIC_LINK(MissingPluginInstaller, install, rtl_String *, data) {
-    OString res(data, SAL_NO_ACQUIRE);
-    gst_pb_utils_init(); // not thread safe
-    char * args[]{const_cast<char *>(res.getStr()), nullptr};
-    gst_install_plugins_sync(args, nullptr);
+void MissingPluginInstaller::detach(Player const * source) {
+    rtl::Reference<MissingPluginInstallerThread> join;
+    {
+        osl::MutexGuard g(mutex_);
+        if (inCleanUp_) {
+            // Guard against ~MissingPluginInstaller with erroneously un-joined
+            // currentThread_ (thus non-empty currentSources_) calling
+            // destructor of currentSources_, calling ~Player, calling here,
+            // which would use currentSources_ while it is already being
+            // destroyed:
+            return;
+        }
+        for (auto i = queued_.begin(); i != queued_.end();) {
+            eraseSource(i->second, source);
+            if (i->second.empty()) {
+                i = queued_.erase(i);
+            } else {
+                ++i;
+            }
+        }
+        if (currentThread_.is()) {
+            assert(!currentSources_.empty());
+            eraseSource(currentSources_, source);
+            if (currentSources_.empty()) {
+                join = currentThread_;
+                currentThread_.clear();
+                launchNewThread_ = true;
+            }
+        }
+    }
+    if (join.is()) {
+        // missing cancelability of gst_install_plugins_sync
+        join->join();
+    }
+}
+
+void MissingPluginInstaller::processQueue() {
+    assert(!queued_.empty());
+    assert(currentDetails_.empty());
+    for (auto i = queued_.begin(); i != queued_.end(); ++i) {
+        reported_.insert(i->first);
+        currentDetails_.push_back(i->first);
+        currentSources_.insert(i->second.begin(), i->second.end());
+    }
+    queued_.clear();
+}
+
+IMPL_STATIC_LINK(
+    MissingPluginInstaller, launchUi, MissingPluginInstallerThread *, thread)
+{
+    rtl::Reference<MissingPluginInstallerThread> ref(thread, SAL_NO_ACQUIRE);
+    gst_pb_utils_init();
+        // not thread safe; hopefully fine to consistently call from our event
+        // loop (which is the only reason to have this
+        // Application::PostUserEvent diversion, in case
+        // MissingPluginInstaller::report might be called from outside our event
+        // loop), and hopefully fine to call gst_is_missing_plugin_message and
+        // gst_missing_plugin_message_get_installer_detail before calling
+        // gst_pb_utils_init
+    ref->launch();
     return 0;
 }
 
 struct TheMissingPluginInstaller:
     public rtl::Static<MissingPluginInstaller, TheMissingPluginInstaller>
 {};
+
+void MissingPluginInstallerThread::execute() {
+    MissingPluginInstaller & inst = TheMissingPluginInstaller::get();
+    for (;;) {
+        std::vector<OString> details;
+        {
+            osl::MutexGuard g(inst.mutex_);
+            assert(!inst.currentDetails_.empty());
+            details.swap(inst.currentDetails_);
+        }
+        std::vector<char *> args;
+        for (auto const & i: details) {
+            args.push_back(const_cast<char *>(i.getStr()));
+        }
+        args.push_back(nullptr);
+        gst_install_plugins_sync(args.data(), nullptr);
+        {
+            osl::MutexGuard g(inst.mutex_);
+            if (inst.queued_.empty() || inst.launchNewThread_) {
+                inst.launchNewThread_ = true;
+                break;
+            }
+            inst.processQueue();
+        }
+    }
+}
 
 }
 
@@ -166,6 +334,8 @@ Player::~Player()
 
 void SAL_CALL Player::disposing()
 {
+    TheMissingPluginInstaller::get().detach(this);
+
     ::osl::MutexGuard aGuard(m_aMutex);
 
     stop();
@@ -387,7 +557,11 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
         }
 #endif
     } else if (gst_is_missing_plugin_message(message)) {
-        TheMissingPluginInstaller::get().report(message);
+        TheMissingPluginInstaller::get().report(this, message);
+        if( mnWidth == 0 ) {
+            // an error occurred, set condition so that OOo thread doesn't wait for us
+            maSizeCondition.set();
+        }
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
         DBG( "Error !\n" );
         if( mnWidth == 0 ) {

@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_libraries,avmediagst_0_10,\
 	cppu \
 	cppuhelper \
 	sal \
+	salhelper \
 	tl \
 	vcl \
 	$(gb_UWINAPI) \
