@@ -101,7 +101,7 @@ sal_Int32 lclGetTickMark( sal_Int32 nToken )
         case XML_out:   return OUTER;
         case XML_cross: return INNER | OUTER;
     }
-    return NONE;
+    return css::chart2::TickmarkStyle::NONE;
 }
 
 /**
