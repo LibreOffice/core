@@ -142,13 +142,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         //  insert / delete cells / rows / columns
 
-        case FID_INS_ROW:
-            pTabViewShell->InsertCells(INS_INSROWS);
+        case FID_INS_ROWS_BEFORE:
+            pTabViewShell->InsertCells(INS_INSROWS_BEFORE);
             rReq.Done();
             break;
 
-        case FID_INS_COLUMN:
-            pTabViewShell->InsertCells(INS_INSCOLS);
+        case FID_INS_COLUMNS_BEFORE:
+            pTabViewShell->InsertCells(INS_INSCOLS_BEFORE);
             rReq.Done();
             break;
 
@@ -189,17 +189,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             case 'V': eCmd = INS_CELLSDOWN ;break;
                             case '>': eCmd = INS_CELLSRIGHT ;break;
-                            case 'R': eCmd = INS_INSROWS ;break;
-                            case 'C': eCmd = INS_INSCOLS ;break;
+                            case 'R': eCmd = INS_INSROWS_BEFORE ;break;
+                            case 'C': eCmd = INS_INSCOLS_BEFORE ;break;
                         }
                     }
                 }
                 else
                 {
                     if ( GetViewData()->SimpleColMarked() )
-                        eCmd = INS_INSCOLS;
+                        eCmd = INS_INSCOLS_BEFORE;
                     else if ( GetViewData()->SimpleRowMarked() )
-                        eCmd = INS_INSROWS;
+                        eCmd = INS_INSROWS_BEFORE;
                     else
                     {
                         ScDocument* pDoc = GetViewData()->GetDocument();
@@ -227,8 +227,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             case INS_CELLSDOWN: aParam = "V"; break;
                             case INS_CELLSRIGHT: aParam = ">"; break;
-                            case INS_INSROWS: aParam = "R"; break;
-                            case INS_INSCOLS: aParam = "C"; break;
+                            case INS_INSROWS_BEFORE: aParam = "R"; break;
+                            case INS_INSCOLS_BEFORE: aParam = "C"; break;
                             default:
                             {
                                 // added to avoid warnings
