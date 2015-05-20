@@ -86,14 +86,22 @@ namespace o3tl
 }
 
 //! values can be combined via logical or
-#define GOTOOBJ_DRAW_CONTROL    (sal_uInt16)  1
-#define GOTOOBJ_DRAW_SIMPLE     (sal_uInt16)  2
-#define GOTOOBJ_DRAW_ANY        (sal_uInt16)  3
-#define GOTOOBJ_FLY_FRM         (sal_uInt16)  4
-#define GOTOOBJ_FLY_GRF         (sal_uInt16)  8
-#define GOTOOBJ_FLY_OLE         (sal_uInt16) 16
-#define GOTOOBJ_FLY_ANY         (sal_uInt16) 28
-#define GOTOOBJ_GOTO_ANY        (sal_uInt16) 31
+enum class GotoObjFlags
+{
+    NONE           =  0,
+    DrawControl    =  1,
+    DrawSimple     =  2,
+    DrawAny        = DrawControl | DrawSimple,
+    FlyFrm         =  4,
+    FlyGrf         =  8,
+    FlyOLE         = 16,
+    FlyAny         = FlyOLE | FlyGrf | FlyFrm,
+    Any            = FlyAny | DrawAny,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<GotoObjFlags> : is_typed_flags<GotoObjFlags, 31> {};
+}
 
 //! values can be combined via logical or
 #define FLYPROTECT_CONTENT      (sal_uInt16)  1
@@ -381,9 +389,9 @@ public:
     SwFrameFormat* WizzardGetFly();
 
     /// Independent selecting of flys.
-    bool GotoNextFly( sal_uInt16 /*GOTOOBJ_...*/ eType = GOTOOBJ_FLY_ANY )
+    bool GotoNextFly( GotoObjFlags eType = GotoObjFlags::FlyAny )
                                 { return GotoObj( true, eType ); }
-    bool GotoPrevFly( sal_uInt16 /*GOTOOBJ_...*/ eType = GOTOOBJ_FLY_ANY)
+    bool GotoPrevFly( GotoObjFlags eType = GotoObjFlags::FlyAny)
                                 { return GotoObj( false, eType); }
 
    /// Iterate over flys  - for Basic-collections.
@@ -467,8 +475,8 @@ public:
     bool GetObjAttr( SfxItemSet &rSet ) const;
     bool SetObjAttr( const SfxItemSet &rSet );
 
-    const SdrObject* GetBestObject( bool bNext, sal_uInt16 eType = GOTOOBJ_DRAW_ANY, bool bFlat = true, const svx::ISdrObjectFilter* pFilter = NULL );
-    bool GotoObj( bool bNext, sal_uInt16 /*GOTOOBJ_...*/ eType = GOTOOBJ_DRAW_ANY);
+    const SdrObject* GetBestObject( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny, bool bFlat = true, const svx::ISdrObjectFilter* pFilter = NULL );
+    bool GotoObj( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny);
 
     /// Set DragMode (e.g. Rotate), but do nothing when frame is selected.
     void SetDragMode( sal_uInt16 eSdrDragMode );

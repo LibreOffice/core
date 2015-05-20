@@ -335,11 +335,11 @@ IMPL_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         case NID_GRF:
         case NID_OLE:
         {
-            sal_uInt16 eType = GOTOOBJ_FLY_FRM;
+            GotoObjFlags eType = GotoObjFlags::FlyFrm;
             if(m_nMoveType == NID_GRF)
-                eType = GOTOOBJ_FLY_GRF;
+                eType = GotoObjFlags::FlyGrf;
             else if(m_nMoveType == NID_OLE)
-                eType = GOTOOBJ_FLY_OLE;
+                eType = GotoObjFlags::FlyOLE;
             bool bSuccess = bNext ?
                     rSh.GotoNextFly(eType) :
                         rSh.GotoPrevFly(eType);
@@ -354,8 +354,8 @@ IMPL_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         case NID_CTRL:
             rSh.GotoObj(bNext,
                     m_nMoveType == NID_DRW ?
-                        GOTOOBJ_DRAW_SIMPLE :
-                        GOTOOBJ_DRAW_CONTROL);
+                        GotoObjFlags::DrawSimple :
+                        GotoObjFlags::DrawControl);
         break;
         case NID_REG :
             rSh.EnterStdMode();
