@@ -486,6 +486,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 // primitive tools that /bin/sh offers, ignore them here
                 if (
 #if defined UNX
+                    oArg != "record" &&
                     oArg != "backtrace" &&
                     oArg != "strace" &&
                     oArg != "valgrind" &&

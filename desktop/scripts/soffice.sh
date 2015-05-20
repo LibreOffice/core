@@ -64,14 +64,28 @@ fi
 GDBTRACECHECK=
 STRACECHECK=
 VALGRINDCHECK=
+RRCHECK=
 
 # count number of selected checks; only one is allowed
 checks=
+EXTRAOPT=
 # force the --valgrind option if the VALGRIND variable is set
-test -n "$VALGRIND" && VALGRINDOPT="--valgrind" || VALGRINDOPT=
+test -n "$VALGRIND" && EXTRAOPT="--valgrind"
 
-for arg in $@ $VALGRINDOPT ; do
+# force the --record option if the RR variable is set
+test -n "$RR" && EXTRAOPT="--record"
+
+for arg in $@ $EXTRAOPT ; do
     case "$arg" in
+        --record)
+            if which rr >/dev/null 2>&1 ; then
+                RRCHECK="rr record"
+                checks="c$checks"
+            else
+                echo "Error: Can't find the tool \"rr\", --record option will be ignored."
+                exit 1
+            fi
+            ;;
         --backtrace)
             if which gdb >/dev/null 2>&1 ; then
                 GDBTRACECHECK="gdb -nx --command=$sd_prog/gdbtrace --args"
@@ -122,7 +136,7 @@ for arg in $@ $VALGRINDOPT ; do
 done
 
 if echo "$checks" | grep -q "cc" ; then
-    echo "Error: The debug options --backtrace, --strace, and --valgrind cannot be used together."
+    echo "Error: The debug options --record, --backtrace, --strace, and --valgrind cannot be used together."
     echo "       Please, use them one by one."
     exit 1;
 fi
@@ -158,4 +172,4 @@ if [ -n "$VALGRINDCHECK" -a -z "$VALGRIND" ] ; then
 fi
 
 # oosplash does the rest: forcing pages in, javaldx etc. are
-exec $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash" "$@"
+exec $RRCHECK $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash" "$@"
