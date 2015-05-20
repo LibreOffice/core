@@ -78,19 +78,21 @@ namespace o3tl
 
 // - Printer-Types -
 
-
-#define PRINTER_CAPABILITIES_SUPPORTDIALOG      ((sal_uInt16)1)
-#define PRINTER_CAPABILITIES_COPIES             ((sal_uInt16)2)
-#define PRINTER_CAPABILITIES_COLLATECOPIES      ((sal_uInt16)3)
-#define PRINTER_CAPABILITIES_SETORIENTATION     ((sal_uInt16)4)
-#define PRINTER_CAPABILITIES_SETPAPERBIN        ((sal_uInt16)5)
-#define PRINTER_CAPABILITIES_SETPAPERSIZE       ((sal_uInt16)6)
-#define PRINTER_CAPABILITIES_SETPAPER           ((sal_uInt16)7)
-#define PRINTER_CAPABILITIES_FAX                ((sal_uInt16)8)
-#define PRINTER_CAPABILITIES_PDF                ((sal_uInt16)9)
-#define PRINTER_CAPABILITIES_EXTERNALDIALOG     ((sal_uInt16)10)
-#define PRINTER_CAPABILITIES_SETDUPLEX          ((sal_uInt16)11)
-#define PRINTER_CAPABILITIES_USEPULLMODEL       ((sal_uInt16)12)
+enum class PrinterCapType
+{
+    SupportDialog      = 1,
+    Copies             = 2,
+    CollateCopies      = 3,
+    SetOrientation     = 4,
+    SetPaperBin        = 5,
+    SetPaperSize       = 6,
+    SetPaper           = 7,
+    Fax                = 8,
+    PDF                = 9,
+    ExternalDialog     = 10,
+    SetDuplex          = 11,
+    UsePullModel       = 12,
+};
 
 #endif // INCLUDED_VCL_PRNTYPES_HXX
 

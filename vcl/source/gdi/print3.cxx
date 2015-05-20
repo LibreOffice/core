@@ -227,7 +227,7 @@ static OUString queryFile( Printer* pPrinter )
         bool bPS = true, bPDF = true;
         if( pPrinter )
         {
-            if( pPrinter->GetCapabilities( PRINTER_CAPABILITIES_PDF ) )
+            if( pPrinter->GetCapabilities( PrinterCapType::PDF ) )
                 bPS = false;
             else
                 bPDF = false;
@@ -465,7 +465,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
 
     // check if the printer brings up its own dialog
     // in that case leave the work to that dialog
-    if( ! xController->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) &&
+    if( ! xController->getPrinter()->GetCapabilities( PrinterCapType::ExternalDialog ) &&
         ! xController->isDirectPrint() &&
         xController->isShowDialogs()
         )
@@ -549,9 +549,9 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
         sal_uLong nDevCopy;
 
         if ( bCollateCopy )
-            nDevCopy = GetCapabilities( PRINTER_CAPABILITIES_COLLATECOPIES );
+            nDevCopy = GetCapabilities( PrinterCapType::CollateCopies );
         else
-            nDevCopy = GetCapabilities( PRINTER_CAPABILITIES_COPIES );
+            nDevCopy = GetCapabilities( PrinterCapType::Copies );
 
         // need to do copies by hand ?
         if ( nCopies > nDevCopy )
@@ -599,7 +599,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
     mnCurPage               = 1;
     mnCurPrintPage          = 1;
     mbPrinting              = true;
-    if( GetCapabilities( PRINTER_CAPABILITIES_USEPULLMODEL ) )
+    if( GetCapabilities( PrinterCapType::UsePullModel ) )
     {
         mbJobActive             = true;
         // sallayer does all necessary page printing

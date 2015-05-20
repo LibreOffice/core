@@ -75,7 +75,7 @@ public:
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
                                                  long& rPageWidth, long& rPageHeight ) = 0;
-    virtual sal_uLong               GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) = 0;
+    virtual sal_uLong               GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType ) = 0;
     virtual sal_uLong               GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
     virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin ) = 0;
     // fills m_aPaperFormats and sets m_bPapersInit to true
