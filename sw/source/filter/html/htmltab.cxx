@@ -3301,12 +3301,12 @@ void _CellSaveStruct::InsertCell( SwHTMLParser& rParser,
 
     if( rParser.nContextStAttrMin == GetContextStAttrMin() )
     {
-        _HTMLAttr** pTable = reinterpret_cast<_HTMLAttr**>(&rParser.aAttrTab);
+        _HTMLAttr** pHTMLTable = reinterpret_cast<_HTMLAttr**>(&rParser.aAttrTab);
 
         for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
-            nCnt--; ++pTable )
+            nCnt--; ++pHTMLTable )
         {
-            OSL_ENSURE( !*pTable, "Die Attribut-Tabelle ist nicht leer" );
+            OSL_ENSURE( !*pHTMLTable, "Die Attribut-Tabelle ist nicht leer" );
         }
     }
 #endif
