@@ -153,7 +153,7 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext);
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
 public:
     explicit        ScrollBarBox( vcl::Window* pParent, WinBits nStyle = 0 );
