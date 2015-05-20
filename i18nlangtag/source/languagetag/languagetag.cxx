@@ -154,11 +154,11 @@ bool LanguageTag::isOnTheFlyID( LanguageType nLang )
     instance. Currently implemented such that the first "ref" inits and dtor
     (our library deinitialized) tears down.
 */
-class LiblantagDataRef
+class LiblangtagDataRef
 {
 public:
-    LiblantagDataRef();
-    ~LiblantagDataRef();
+    LiblangtagDataRef();
+    ~LiblangtagDataRef();
     inline void incRef()
     {
         if (mnRef != SAL_MAX_UINT32 && !mnRef++)
@@ -179,16 +179,16 @@ private:
 };
 
 namespace {
-struct theDataRef : public rtl::Static< LiblantagDataRef, theDataRef > {};
+struct theDataRef : public rtl::Static< LiblangtagDataRef, theDataRef > {};
 }
 
-LiblantagDataRef::LiblantagDataRef()
+LiblangtagDataRef::LiblangtagDataRef()
     :
         mnRef(0)
 {
 }
 
-LiblantagDataRef::~LiblantagDataRef()
+LiblangtagDataRef::~LiblangtagDataRef()
 {
     // When destructed we're tearing down unconditionally.
     if (mnRef)
@@ -196,9 +196,9 @@ LiblantagDataRef::~LiblantagDataRef()
     decRef();
 }
 
-void LiblantagDataRef::setup()
+void LiblangtagDataRef::setup()
 {
-    SAL_INFO( "i18nlangtag", "LiblantagDataRef::setup: initializing database");
+    SAL_INFO( "i18nlangtag", "LiblangtagDataRef::setup: initializing database");
     if (maDataPath.isEmpty())
         setupDataPath();
     lt_db_initialize();
@@ -206,13 +206,13 @@ void LiblantagDataRef::setup()
     mnRef = SAL_MAX_UINT32;
 }
 
-void LiblantagDataRef::teardown()
+void LiblangtagDataRef::teardown()
 {
-    SAL_INFO( "i18nlangtag", "LiblantagDataRef::teardown: finalizing database");
+    SAL_INFO( "i18nlangtag", "LiblangtagDataRef::teardown: finalizing database");
     lt_db_finalize();
 }
 
-void LiblantagDataRef::setupDataPath()
+void LiblangtagDataRef::setupDataPath()
 {
     // maDataPath is assumed to be empty here.
     OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/liblangtag");
