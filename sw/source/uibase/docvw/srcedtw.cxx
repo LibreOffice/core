@@ -490,7 +490,7 @@ void SwSrcEditWindow::CreateTextEngine()
     const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
     pOutWin = VclPtr<TextViewOutWin>::Create(this, 0);
     pOutWin->SetBackground(Wallpaper(rCol));
-    pOutWin->SetPointer(Pointer(POINTER_TEXT));
+    pOutWin->SetPointer(Pointer(PointerStyle::Text));
     pOutWin->Show();
 
     // create Scrollbars

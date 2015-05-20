@@ -631,17 +631,17 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
 sal_Int32 SAL_CALL
 ScVbaApplication::getCursor() throw (uno::RuntimeException, std::exception)
 {
-    sal_Int32 nPointerStyle =  getPointerStyle(getCurrentDocument());
+    PointerStyle nPointerStyle =  getPointerStyle(getCurrentDocument());
 
     switch( nPointerStyle )
     {
-        case POINTER_ARROW:
+        case PointerStyle::Arrow:
             return excel::XlMousePointer::xlNorthwestArrow;
-        case POINTER_NULL:
+        case PointerStyle::Null:
             return excel::XlMousePointer::xlDefault;
-        case POINTER_WAIT:
+        case PointerStyle::Wait:
             return excel::XlMousePointer::xlWait;
-        case POINTER_TEXT:
+        case PointerStyle::Text:
             return excel::XlMousePointer::xlIBeam;
         default:
             return excel::XlMousePointer::xlDefault;
@@ -658,7 +658,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException, s
         {
             case excel::XlMousePointer::xlNorthwestArrow:
             {
-                const Pointer& rPointer( POINTER_ARROW );
+                const Pointer& rPointer( PointerStyle::Arrow );
                 setCursorHelper( xModel, rPointer, false );
                 break;
             }
@@ -672,7 +672,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException, s
             }
             case excel::XlMousePointer::xlDefault:
             {
-                const Pointer& rPointer( POINTER_NULL );
+                const Pointer& rPointer( PointerStyle::Null );
                 setCursorHelper( xModel, rPointer, false );
                 break;
             }

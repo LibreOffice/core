@@ -39,6 +39,7 @@
 #include <osl/module.h>
 
 #include <tools/debug.hxx>
+#include <o3tl/enumarray.hxx>
 
 #include <vcl/sysdata.hxx>
 #include <vcl/timer.hxx>
@@ -2061,106 +2062,106 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
         UINT            mnOwnId;
     };
 
-    static ImplPtrData aImplPtrTab[POINTER_COUNT] =
+    static o3tl::enumarray<PointerStyle, ImplPtrData> aImplPtrTab =
     {
-    { 0, IDC_ARROW, 0 },                            // POINTER_ARROW
-    { 0, 0, SAL_RESID_POINTER_NULL },               // POINTER_NULL
-    { 0, IDC_WAIT, 0 },                             // POINTER_WAIT
-    { 0, IDC_IBEAM, 0 },                            // POINTER_TEXT
-    { 0, IDC_HELP, 0 },                             // POINTER_HELP
-    { 0, IDC_CROSS, 0 },                            // POINTER_CROSS
-    { 0, IDC_SIZEALL, 0 },                          // POINTER_MOVE
-    { 0, IDC_SIZENS, 0 },                           // POINTER_NSIZE
-    { 0, IDC_SIZENS, 0 },                           // POINTER_SSIZE
-    { 0, IDC_SIZEWE, 0 },                           // POINTER_WSIZE
-    { 0, IDC_SIZEWE, 0 },                           // POINTER_ESIZE
-    { 0, IDC_SIZENWSE, 0 },                         // POINTER_NWSIZE
-    { 0, IDC_SIZENESW, 0 },                         // POINTER_NESIZE
-    { 0, IDC_SIZENESW, 0 },                         // POINTER_SWSIZE
-    { 0, IDC_SIZENWSE, 0 },                         // POINTER_SESIZE
-    { 0, IDC_SIZENS, 0 },                           // POINTER_WINDOW_NSIZE
-    { 0, IDC_SIZENS, 0 },                           // POINTER_WINDOW_SSIZE
-    { 0, IDC_SIZEWE, 0 },                           // POINTER_WINDOW_WSIZE
-    { 0, IDC_SIZEWE, 0 },                           // POINTER_WINDOW_ESIZE
-    { 0, IDC_SIZENWSE, 0 },                         // POINTER_WINDOW_NWSIZE
-    { 0, IDC_SIZENESW, 0 },                         // POINTER_WINDOW_NESIZE
-    { 0, IDC_SIZENESW, 0 },                         // POINTER_WINDOW_SWSIZE
-    { 0, IDC_SIZENWSE, 0 },                         // POINTER_WINDOW_SESIZE
-    { 0, IDC_SIZEWE, 0 },                           // POINTER_HSPLIT
-    { 0, IDC_SIZENS, 0 },                           // POINTER_VSPLIT
-    { 0, IDC_SIZEWE, 0 },                           // POINTER_HSIZEBAR
-    { 0, IDC_SIZENS, 0 },                           // POINTER_VSIZEBAR
-    { 0, IDC_HAND, 0 },                             // POINTER_HAND
-    { 0, IDC_HAND, 0 },                             // POINTER_REFHAND
-    { 0, IDC_PEN, 0 },                              // POINTER_PEN
-    { 0, 0, SAL_RESID_POINTER_MAGNIFY },            // POINTER_MAGNIFY
-    { 0, 0, SAL_RESID_POINTER_FILL },               // POINTER_FILL
-    { 0, 0, SAL_RESID_POINTER_ROTATE },             // POINTER_ROTATE
-    { 0, 0, SAL_RESID_POINTER_HSHEAR },             // POINTER_HSHEAR
-    { 0, 0, SAL_RESID_POINTER_VSHEAR },             // POINTER_VSHEAR
-    { 0, 0, SAL_RESID_POINTER_MIRROR },             // POINTER_MIRROR
-    { 0, 0, SAL_RESID_POINTER_CROOK },              // POINTER_CROOK
-    { 0, 0, SAL_RESID_POINTER_CROP },               // POINTER_CROP
-    { 0, 0, SAL_RESID_POINTER_MOVEPOINT },          // POINTER_MOVEPOINT
-    { 0, 0, SAL_RESID_POINTER_MOVEBEZIERWEIGHT },   // POINTER_MOVEBEZIERWEIGHT
-    { 0, 0, SAL_RESID_POINTER_MOVEDATA },           // POINTER_MOVEDATA
-    { 0, 0, SAL_RESID_POINTER_COPYDATA },           // POINTER_COPYDATA
-    { 0, 0, SAL_RESID_POINTER_LINKDATA },           // POINTER_LINKDATA
-    { 0, 0, SAL_RESID_POINTER_MOVEDATALINK },       // POINTER_MOVEDATALINK
-    { 0, 0, SAL_RESID_POINTER_COPYDATALINK },       // POINTER_COPYDATALINK
-    { 0, 0, SAL_RESID_POINTER_MOVEFILE },           // POINTER_MOVEFILE
-    { 0, 0, SAL_RESID_POINTER_COPYFILE },           // POINTER_COPYFILE
-    { 0, 0, SAL_RESID_POINTER_LINKFILE },           // POINTER_LINKFILE
-    { 0, 0, SAL_RESID_POINTER_MOVEFILELINK },       // POINTER_MOVEFILELINK
-    { 0, 0, SAL_RESID_POINTER_COPYFILELINK },       // POINTER_COPYFILELINK
-    { 0, 0, SAL_RESID_POINTER_MOVEFILES },          // POINTER_MOVEFILES
-    { 0, 0, SAL_RESID_POINTER_COPYFILES },          // POINTER_COPYFILES
-    { 0, IDC_NO, 0 },                               // POINTER_NOTALLOWED
-    { 0, 0, SAL_RESID_POINTER_DRAW_LINE },          // POINTER_DRAW_LINE
-    { 0, 0, SAL_RESID_POINTER_DRAW_RECT },          // POINTER_DRAW_RECT
-    { 0, 0, SAL_RESID_POINTER_DRAW_POLYGON },       // POINTER_DRAW_POLYGON
-    { 0, 0, SAL_RESID_POINTER_DRAW_BEZIER },        // POINTER_DRAW_BEZIER
-    { 0, 0, SAL_RESID_POINTER_DRAW_ARC },           // POINTER_DRAW_ARC
-    { 0, 0, SAL_RESID_POINTER_DRAW_PIE },           // POINTER_DRAW_PIE
-    { 0, 0, SAL_RESID_POINTER_DRAW_CIRCLECUT },     // POINTER_DRAW_CIRCLECUT
-    { 0, 0, SAL_RESID_POINTER_DRAW_ELLIPSE },       // POINTER_DRAW_ELLIPSE
-    { 0, 0, SAL_RESID_POINTER_DRAW_FREEHAND },      // POINTER_DRAW_FREEHAND
-    { 0, 0, SAL_RESID_POINTER_DRAW_CONNECT },       // POINTER_DRAW_CONNECT
-    { 0, 0, SAL_RESID_POINTER_DRAW_TEXT },          // POINTER_DRAW_TEXT
-    { 0, 0, SAL_RESID_POINTER_DRAW_CAPTION },       // POINTER_DRAW_CAPTION
-    { 0, 0, SAL_RESID_POINTER_CHART },              // POINTER_CHART
-    { 0, 0, SAL_RESID_POINTER_DETECTIVE },          // POINTER_DETECTIVE
-    { 0, 0, SAL_RESID_POINTER_PIVOT_COL },          // POINTER_PIVOT_COL
-    { 0, 0, SAL_RESID_POINTER_PIVOT_ROW },          // POINTER_PIVOT_ROW
-    { 0, 0, SAL_RESID_POINTER_PIVOT_FIELD },        // POINTER_PIVOT_FIELD
-    { 0, 0, SAL_RESID_POINTER_CHAIN },              // POINTER_CHAIN
-    { 0, 0, SAL_RESID_POINTER_CHAIN_NOTALLOWED },   // POINTER_CHAIN_NOTALLOWED
-    { 0, 0, SAL_RESID_POINTER_TIMEEVENT_MOVE },     // POINTER_TIMEEVENT_MOVE
-    { 0, 0, SAL_RESID_POINTER_TIMEEVENT_SIZE },     // POINTER_TIMEEVENT_SIZE
-    { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_N },       // POINTER_AUTOSCROLL_N
-    { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_S },       // POINTER_AUTOSCROLL_S
-    { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_W },       // POINTER_AUTOSCROLL_W
-    { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_E },       // POINTER_AUTOSCROLL_E
-    { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_NW },      // POINTER_AUTOSCROLL_NW
-    { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_NE },      // POINTER_AUTOSCROLL_NE
-    { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_SW },      // POINTER_AUTOSCROLL_SW
-    { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_SE },      // POINTER_AUTOSCROLL_SE
-    { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_NS },      // POINTER_AUTOSCROLL_NS
-    { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_WE },      // POINTER_AUTOSCROLL_WE
-    { 0, 0, SAL_RESID_POINTER_AUTOSCROLL_NSWE },    // POINTER_AUTOSCROLL_NSWE
-    { 0, 0, SAL_RESID_POINTER_AIRBRUSH },           // POINTER_AIRBRUSH
-    { 0, 0, SAL_RESID_POINTER_TEXT_VERTICAL },      // POINTER_TEXT_VERTICAL
-    { 0, 0, SAL_RESID_POINTER_PIVOT_DELETE },       // POINTER_PIVOT_DELETE
+    { 0, IDC_ARROW, 0 },                            // PointerStyle::Arrow
+    { 0, 0, SAL_RESID_PointerStyle::Null },               // PointerStyle::Null
+    { 0, IDC_WAIT, 0 },                             // PointerStyle::Wait
+    { 0, IDC_IBEAM, 0 },                            // PointerStyle::Text
+    { 0, IDC_HELP, 0 },                             // PointerStyle::Help
+    { 0, IDC_CROSS, 0 },                            // PointerStyle::Cross
+    { 0, IDC_SIZEALL, 0 },                          // PointerStyle::Move
+    { 0, IDC_SIZENS, 0 },                           // PointerStyle::NSize
+    { 0, IDC_SIZENS, 0 },                           // PointerStyle::SSize
+    { 0, IDC_SIZEWE, 0 },                           // PointerStyle::WSize
+    { 0, IDC_SIZEWE, 0 },                           // PointerStyle::ESize
+    { 0, IDC_SIZENWSE, 0 },                         // PointerStyle::NWSize
+    { 0, IDC_SIZENESW, 0 },                         // PointerStyle::NESize
+    { 0, IDC_SIZENESW, 0 },                         // PointerStyle::SWSize
+    { 0, IDC_SIZENWSE, 0 },                         // PointerStyle::SESize
+    { 0, IDC_SIZENS, 0 },                           // PointerStyle::WindowNSize
+    { 0, IDC_SIZENS, 0 },                           // PointerStyle::WindowSSize
+    { 0, IDC_SIZEWE, 0 },                           // PointerStyle::WindowWSize
+    { 0, IDC_SIZEWE, 0 },                           // PointerStyle::WindowESize
+    { 0, IDC_SIZENWSE, 0 },                         // PointerStyle::WindowNWSize
+    { 0, IDC_SIZENESW, 0 },                         // PointerStyle::WindowNESize
+    { 0, IDC_SIZENESW, 0 },                         // PointerStyle::WindowSWSize
+    { 0, IDC_SIZENWSE, 0 },                         // PointerStyle::WindowSESize
+    { 0, IDC_SIZEWE, 0 },                           // PointerStyle::HSplit
+    { 0, IDC_SIZENS, 0 },                           // PointerStyle::VSplit
+    { 0, IDC_SIZEWE, 0 },                           // PointerStyle::HSizeBar
+    { 0, IDC_SIZENS, 0 },                           // PointerStyle::VSizeBar
+    { 0, IDC_HAND, 0 },                             // PointerStyle::Hand
+    { 0, IDC_HAND, 0 },                             // PointerStyle::RefHand
+    { 0, IDC_PEN, 0 },                              // PointerStyle::Pen
+    { 0, 0, SAL_RESID_PointerStyle::Magnify },            // PointerStyle::Magnify
+    { 0, 0, SAL_RESID_PointerStyle::Fill },               // PointerStyle::Fill
+    { 0, 0, SAL_RESID_PointerStyle::Rotate },             // PointerStyle::Rotate
+    { 0, 0, SAL_RESID_PointerStyle::HShear },             // PointerStyle::HShear
+    { 0, 0, SAL_RESID_PointerStyle::VShear },             // PointerStyle::VShear
+    { 0, 0, SAL_RESID_PointerStyle::Mirror },             // PointerStyle::Mirror
+    { 0, 0, SAL_RESID_PointerStyle::Crook },              // PointerStyle::Crook
+    { 0, 0, SAL_RESID_PointerStyle::Crop },               // PointerStyle::Crop
+    { 0, 0, SAL_RESID_PointerStyle::MovePoint },          // PointerStyle::MovePoint
+    { 0, 0, SAL_RESID_PointerStyle::MoveBezierWeight },   // PointerStyle::MoveBezierWeight
+    { 0, 0, SAL_RESID_PointerStyle::MoveData },           // PointerStyle::MoveData
+    { 0, 0, SAL_RESID_PointerStyle::CopyData },           // PointerStyle::CopyData
+    { 0, 0, SAL_RESID_PointerStyle::LinkData },           // PointerStyle::LinkData
+    { 0, 0, SAL_RESID_PointerStyle::MoveDataLink },       // PointerStyle::MoveDataLink
+    { 0, 0, SAL_RESID_PointerStyle::CopyDataLink },       // PointerStyle::CopyDataLink
+    { 0, 0, SAL_RESID_PointerStyle::MoveFile },           // PointerStyle::MoveFile
+    { 0, 0, SAL_RESID_PointerStyle::CopyFile },           // PointerStyle::CopyFile
+    { 0, 0, SAL_RESID_PointerStyle::LinkFile },           // PointerStyle::LinkFile
+    { 0, 0, SAL_RESID_PointerStyle::MoveFileLink },       // PointerStyle::MoveFileLink
+    { 0, 0, SAL_RESID_PointerStyle::CopyFileLink },       // PointerStyle::CopyFileLink
+    { 0, 0, SAL_RESID_PointerStyle::MoveFiles },          // PointerStyle::MoveFiles
+    { 0, 0, SAL_RESID_PointerStyle::CopyFiles },          // PointerStyle::CopyFiles
+    { 0, IDC_NO, 0 },                               // PointerStyle::NotAllowed
+    { 0, 0, SAL_RESID_PointerStyle::DrawLine },          // PointerStyle::DrawLine
+    { 0, 0, SAL_RESID_PointerStyle::DrawRect },          // PointerStyle::DrawRect
+    { 0, 0, SAL_RESID_PointerStyle::DrawPolygon },       // PointerStyle::DrawPolygon
+    { 0, 0, SAL_RESID_PointerStyle::DrawBezier },        // PointerStyle::DrawBezier
+    { 0, 0, SAL_RESID_PointerStyle::DrawArc },           // PointerStyle::DrawArc
+    { 0, 0, SAL_RESID_PointerStyle::DrawPie },           // PointerStyle::DrawPie
+    { 0, 0, SAL_RESID_PointerStyle::DrawCircleCut },     // PointerStyle::DrawCircleCut
+    { 0, 0, SAL_RESID_PointerStyle::DrawEllipse },       // PointerStyle::DrawEllipse
+    { 0, 0, SAL_RESID_PointerStyle::DrawFreehand },      // PointerStyle::DrawFreehand
+    { 0, 0, SAL_RESID_PointerStyle::DrawConnect },       // PointerStyle::DrawConnect
+    { 0, 0, SAL_RESID_PointerStyle::DrawText },          // PointerStyle::DrawText
+    { 0, 0, SAL_RESID_PointerStyle::DrawCaption },       // PointerStyle::DrawCaption
+    { 0, 0, SAL_RESID_PointerStyle::Chart },              // PointerStyle::Chart
+    { 0, 0, SAL_RESID_PointerStyle::Detective },          // PointerStyle::Detective
+    { 0, 0, SAL_RESID_PointerStyle::PivotCol },          // PointerStyle::PivotCol
+    { 0, 0, SAL_RESID_PointerStyle::PivotRow },          // PointerStyle::PivotRow
+    { 0, 0, SAL_RESID_PointerStyle::PivotField },        // PointerStyle::PivotField
+    { 0, 0, SAL_RESID_PointerStyle::Chain },              // PointerStyle::Chain
+    { 0, 0, SAL_RESID_PointerStyle::ChainNotAllowed },   // PointerStyle::ChainNotAllowed
+    { 0, 0, SAL_RESID_PointerStyle::TimeEventMove },     // PointerStyle::TimeEventMove
+    { 0, 0, SAL_RESID_PointerStyle::TimeEventSize },     // PointerStyle::TimeEventSize
+    { 0, 0, SAL_RESID_PointerStyle::AutoScrollN },       // PointerStyle::AutoScrollN
+    { 0, 0, SAL_RESID_PointerStyle::AutoScrollS },       // PointerStyle::AutoScrollS
+    { 0, 0, SAL_RESID_PointerStyle::AutoScrollW },       // PointerStyle::AutoScrollW
+    { 0, 0, SAL_RESID_PointerStyle::AutoScrollE },       // PointerStyle::AutoScrollE
+    { 0, 0, SAL_RESID_PointerStyle::AutoScrollNW },      // PointerStyle::AutoScrollNW
+    { 0, 0, SAL_RESID_PointerStyle::AutoScrollNE },      // PointerStyle::AutoScrollNE
+    { 0, 0, SAL_RESID_PointerStyle::AutoScrollSW },      // PointerStyle::AutoScrollSW
+    { 0, 0, SAL_RESID_PointerStyle::AutoScrollSE },      // PointerStyle::AutoScrollSE
+    { 0, 0, SAL_RESID_PointerStyle::AutoScrollNS },      // PointerStyle::AutoScrollNS
+    { 0, 0, SAL_RESID_PointerStyle::AutoScrollWE },      // PointerStyle::AutoScrollWE
+    { 0, 0, SAL_RESID_PointerStyle::AutoScrollNSWE },    // PointerStyle::AutoScrollNSWE
+    { 0, 0, SAL_RESID_PointerStyle::Airbrush },           // PointerStyle::Airbrush
+    { 0, 0, SAL_RESID_PointerStyle::TextVertical },      // PointerStyle::TextVertical
+    { 0, 0, SAL_RESID_PointerStyle::PivotDelete },       // PointerStyle::PivotDelete
 
     // #i32329#
-    { 0, 0, SAL_RESID_POINTER_TAB_SELECT_S },       // POINTER_TAB_SELECT_S
-    { 0, 0, SAL_RESID_POINTER_TAB_SELECT_E },       // POINTER_TAB_SELECT_E
-    { 0, 0, SAL_RESID_POINTER_TAB_SELECT_SE },      // POINTER_TAB_SELECT_SE
-    { 0, 0, SAL_RESID_POINTER_TAB_SELECT_W },       // POINTER_TAB_SELECT_W
-    { 0, 0, SAL_RESID_POINTER_TAB_SELECT_SW },      // POINTER_TAB_SELECT_SW
+    { 0, 0, SAL_RESID_PointerStyle::SelectS },       // PointerStyle::SelectS
+    { 0, 0, SAL_RESID_PointerStyle::SelectE },       // PointerStyle::SelectE
+    { 0, 0, SAL_RESID_PointerStyle::SelectSE },      // PointerStyle::SelectSE
+    { 0, 0, SAL_RESID_PointerStyle::SelectW },       // PointerStyle::SelectW
+    { 0, 0, SAL_RESID_PointerStyle::SelectSW },      // PointerStyle::SelectSW
 
     // #i20119#
-    { 0, 0, SAL_RESID_POINTER_PAINTBRUSH }          // POINTER_PAINTBRUSH
+    { 0, 0, SAL_RESID_PointerStyle::Paintbrush }          // PointerStyle::Paintbrush
 
     };
 

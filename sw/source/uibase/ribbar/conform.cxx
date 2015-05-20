@@ -65,7 +65,7 @@ bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
         g_bNoInterrupt = true;
         m_pWin->CaptureMouse();
 
-        m_pWin->SetPointer(Pointer(POINTER_DRAW_RECT));
+        m_pWin->SetPointer(Pointer(PointerStyle::DrawRect));
 
         m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
         bReturn = m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), FmFormInventor, m_aStartPos);
@@ -85,7 +85,7 @@ void ConstFormControl::Activate(const sal_uInt16 nSlotId)
     SwDrawBase::Activate(nSlotId);
     m_pSh->GetDrawView()->SetCurrentObj(nSlotId);
 
-    m_pWin->SetPointer(Pointer(POINTER_DRAW_RECT));
+    m_pWin->SetPointer(Pointer(PointerStyle::DrawRect));
 }
 
 void ConstFormControl::CreateDefaultObject()
