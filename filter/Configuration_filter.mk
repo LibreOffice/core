@@ -369,6 +369,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_Plucker_eBook \
 	writer_TealDoc \
 	writer_zTXT \
+	writer_ApplePages \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
@@ -431,6 +432,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	Plucker_eBook \
 	TealDoc \
 	zTXT \
+	ApplePages \
 ))
 
 # fcfg_web

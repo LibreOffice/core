@@ -1,0 +1,29 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<node oor:name="Apple Pages" oor:op="replace">
+    <prop oor:name="Flags">
+        <value>IMPORT ALIEN USESOPTIONS 3RDPARTYFILTER PREFERRED</value>
+    </prop>
+    <prop oor:name="FilterService">
+        <value>org.libreoffice.comp.Writer.PagesImportFilter</value>
+    </prop>
+    <prop oor:name="UIName">
+        <value xml:lang="en-US">Apple Pages 4</value>
+    </prop>
+    <prop oor:name="FileFormatVersion">
+        <value>0</value>
+    </prop>
+    <prop oor:name="Type">
+        <value>writer_ApplePages</value>
+    </prop>
+    <prop oor:name="DocumentService">
+        <value>com.sun.star.text.TextDocument</value>
+    </prop>
+</node>

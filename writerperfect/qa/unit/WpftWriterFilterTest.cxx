@@ -35,6 +35,7 @@ void WpftWriterFilterTest::test()
     doTest("org.libreoffice.comp.Writer.EBookImportFilter", "/writerperfect/qa/unit/data/writer/libe-book/");
     doTest("com.sun.star.comp.Writer.MSWorksImportFilter", "/writerperfect/qa/unit/data/writer/libwps/");
     doTest("com.sun.star.comp.Writer.MWAWImportFilter", "/writerperfect/qa/unit/data/writer/libmwaw/");
+    doTest("org.libreoffice.comp.Writer.PagesImportFilter", "/writerperfect/qa/unit/data/writer/libetonyek/");
     doTest("com.sun.star.comp.Writer.WordPerfectImportFilter", "/writerperfect/qa/unit/data/writer/libwpd/");
 }
 

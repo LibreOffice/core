@@ -38,4 +38,8 @@
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
     <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
+  <implementation name="org.libreoffice.comp.Writer.PagesImportFilter">
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+    <service name="com.sun.star.document.ImportFilter"/>
+  </implementation>
 </component>
