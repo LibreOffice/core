@@ -2677,6 +2677,7 @@ void SplitWindow::InsertItem( sal_uInt16 nId, vcl::Window* pWindow, long nSize,
     // Create new item
     ImplSplitItem* pItem = new ImplSplitItem();
     pItem->mnSize   = nSize;
+    pItem->mnPixSize = 0;
     pItem->mnId     = nId;
     pItem->mnBits   = nBits;
     pItem->mnMinSize=-1;
