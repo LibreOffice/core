@@ -121,6 +121,8 @@ namespace ww
         eADDRESSBLOCK = 93,
         eGREETINGLINE = 94,
         eSHAPE = 95,
+        // NOTE: values > 95 / 0x5F do not correspond to documented WW8 fields
+        // and thus need special handling in WW8Export::OutputField()!
         eBIBLIOGRPAHY=96,
         eCITATION = 97
     };
