@@ -788,23 +788,23 @@ SwDoc::GetXmlIdRegistry()
 
 void SwDoc::InitTOXTypes()
 {
-   ShellResource* pShellRes = SwViewShell::GetShellRes();
-   SwTOXType * pNew = new SwTOXType(TOX_CONTENT,   pShellRes->aTOXContentName        );
-   mpTOXTypes->push_back( pNew );
-   pNew = new SwTOXType(TOX_INDEX,                 pShellRes->aTOXIndexName  );
-   mpTOXTypes->push_back( pNew );
-   pNew = new SwTOXType(TOX_USER,                  pShellRes->aTOXUserName  );
-   mpTOXTypes->push_back( pNew );
-   pNew = new SwTOXType(TOX_ILLUSTRATIONS,         pShellRes->aTOXIllustrationsName );
-   mpTOXTypes->push_back( pNew );
-   pNew = new SwTOXType(TOX_OBJECTS,               pShellRes->aTOXObjectsName       );
-   mpTOXTypes->push_back( pNew );
-   pNew = new SwTOXType(TOX_TABLES,                pShellRes->aTOXTablesName        );
-   mpTOXTypes->push_back( pNew );
-   pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
-   mpTOXTypes->push_back( pNew );
-   pNew = new SwTOXType(TOX_CITATION,           pShellRes->aTOXCitationName   );
-   mpTOXTypes->push_back( pNew );
+    ShellResource* pShellRes = SwViewShell::GetShellRes();
+    SwTOXType * pNew = new SwTOXType(TOX_CONTENT,   pShellRes->aTOXContentName        );
+    mpTOXTypes->push_back( pNew );
+    pNew = new SwTOXType(TOX_INDEX,                 pShellRes->aTOXIndexName  );
+    mpTOXTypes->push_back( pNew );
+    pNew = new SwTOXType(TOX_USER,                  pShellRes->aTOXUserName  );
+    mpTOXTypes->push_back( pNew );
+    pNew = new SwTOXType(TOX_ILLUSTRATIONS,         pShellRes->aTOXIllustrationsName );
+    mpTOXTypes->push_back( pNew );
+    pNew = new SwTOXType(TOX_OBJECTS,               pShellRes->aTOXObjectsName       );
+    mpTOXTypes->push_back( pNew );
+    pNew = new SwTOXType(TOX_TABLES,                pShellRes->aTOXTablesName        );
+    mpTOXTypes->push_back( pNew );
+    pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
+    mpTOXTypes->push_back( pNew );
+    pNew = new SwTOXType(TOX_CITATION,           pShellRes->aTOXCitationName   );
+    mpTOXTypes->push_back( pNew );
 }
 
 void SwDoc::ReplaceDefaults(const SwDoc& rSource)
