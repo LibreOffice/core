@@ -4,6 +4,8 @@
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkDialog" id="WPFTEncodingDialog">
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
+    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="default_height">-1</property>
     <property name="type_hint">dialog</property>
@@ -11,7 +13,7 @@
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -57,10 +59,10 @@
           <object class="GtkLabel" id="label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Character set:</property>
-            <attributes>
-              <attribute name="weight" value="semibold"/>
-            </attributes>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">_Character set:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">comboboxtext</property>
           </object>
           <packing>
             <property name="expand">False</property>
