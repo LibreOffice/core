@@ -1,0 +1,42 @@
+From a5ebd120ed055176f992e8143c5ae0a11c048bb5 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Wed, 3 Jun 2015 10:33:19 +0200
+Subject: [PATCH] a blind attempt to fix windows build
+
+---
+ include/orcus/pstring.hpp | 2 +-
+ include/orcus/types.hpp   | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/include/orcus/pstring.hpp b/include/orcus/pstring.hpp
+index c72b78b..db32ea2 100644
+--- a/include/orcus/pstring.hpp
++++ b/include/orcus/pstring.hpp
+@@ -1,4 +1,4 @@
+-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
++/* -*- Mode: C++; tab-width: 3; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+ /*
+  * This Source Code Form is subject to the terms of the Mozilla Public
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
+diff --git a/include/orcus/types.hpp b/include/orcus/types.hpp
+index b6e3f83..68cdb0f 100644
+--- a/include/orcus/types.hpp
++++ b/include/orcus/types.hpp
+@@ -21,10 +21,10 @@ namespace orcus {
+ typedef size_t xml_token_t;
+ typedef const char* xmlns_id_t;
+ 
+-ORCUS_PSR_DLLPUBLIC extern const xmlns_id_t XMLNS_UNKNOWN_ID;
+-ORCUS_PSR_DLLPUBLIC extern const xml_token_t XML_UNKNOWN_TOKEN;
+-ORCUS_PSR_DLLPUBLIC extern const size_t index_not_found;
+-ORCUS_PSR_DLLPUBLIC extern const size_t unspecified;
++extern ORCUS_PSR_DLLPUBLIC const xmlns_id_t XMLNS_UNKNOWN_ID;
++extern ORCUS_PSR_DLLPUBLIC const xml_token_t XML_UNKNOWN_TOKEN;
++extern ORCUS_PSR_DLLPUBLIC const size_t index_not_found;
++extern ORCUS_PSR_DLLPUBLIC const size_t unspecified;
+ 
+ struct xml_name_t
+ {
+-- 
+2.4.1
+
