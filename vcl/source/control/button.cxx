@@ -961,7 +961,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext, bool bLa
             if (aCtrlType == CTRL_COMBOBOX)
             {
                 Edit* pEdit = static_cast<Edit*>(GetParent());
-                if (pEdit->ImplUseNativeBorder(pEdit->GetStyle()))
+                if (pEdit->ImplUseNativeBorder(rRenderContext, pEdit->GetStyle()))
                     bNativeOK = true;
             }
             else if (GetParent()->IsNativeControlSupported(aCtrlType, HAS_BACKGROUND_TEXTURE))

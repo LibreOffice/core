@@ -304,7 +304,7 @@ void SpinField::ImplInit( vcl::Window* pParent, WinBits nWinStyle )
         // Some themes want external spin buttons, therefore the main
         // spinfield should not overdraw the border between its encapsulated
         // edit field and the spin buttons
-        if ( (nWinStyle & WB_SPIN) && ImplUseNativeBorder( nWinStyle ) )
+        if ((nWinStyle & WB_SPIN) && ImplUseNativeBorder(*this, nWinStyle))
         {
             SetBackground();
             mpEdit.set( VclPtr<Edit>::Create( this, WB_NOBORDER ) );
@@ -808,21 +808,18 @@ void SpinField::StateChanged( StateChangedType nType )
     {
         if ( mpEdit )
             mpEdit->SetControlFont( GetControlFont() );
-        ImplInitSettings( true, false, false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
         if ( mpEdit )
             mpEdit->SetControlForeground( GetControlForeground() );
-        ImplInitSettings( false, true, false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
         if ( mpEdit )
             mpEdit->SetControlBackground( GetControlBackground() );
-        ImplInitSettings( false, false, true );
         Invalidate();
     }
     else if( nType == StateChangedType::Mirroring )
