@@ -181,8 +181,16 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:InsertCell"/>
-            <menu:menuitem menu:id=".uno:InsertRows"/>
-            <menu:menuitem menu:id=".uno:InsertColumns"/>
+            <menu:menu menu:id=".uno:InsertRowsMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:InsertRowsBefore">
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menu menu:id=".uno:InsertColumnsMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:InsertColumnsBefore">
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuitem menu:id=".uno:Insert"/>
             <menu:menuitem menu:id=".uno:InsertSheetFromFile"/>
             <menu:menuitem menu:id=".uno:InsertExternalDataSource"/>

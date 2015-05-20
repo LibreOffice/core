@@ -1476,7 +1476,7 @@ bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, I
     ScRange aRange(rRange); // local copy
     switch (eCmd)
     {
-        case INS_INSROWS:
+        case INS_INSROWS_BEFORE:
         {
             aRange.aStart.SetCol(0);
             aRange.aEnd.SetCol(MAXCOL);
@@ -1512,7 +1512,7 @@ bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, I
             }
         }
         break;
-        case INS_INSCOLS:
+        case INS_INSCOLS_BEFORE:
         {
             aRange.aStart.SetRow(0);
             aRange.aEnd.SetRow(MAXROW);
@@ -1700,8 +1700,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     SCTAB nSelCount = aMark.GetSelectCount();
 
-    //  zugehoerige Szenarien auch anpassen
-    // Test zusammengefasste
+    // Adjust also related scenarios
 
     SCCOL nMergeTestStartCol = nStartCol;
     SCROW nMergeTestStartRow = nStartRow;
@@ -1720,12 +1719,12 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         nPaintEndRow = nMergeTestEndRow;
     }
 
-    if ( eCmd == INS_INSROWS )
+    if ( eCmd == INS_INSROWS_BEFORE )
     {
         nMergeTestStartCol = 0;
         nMergeTestEndCol = MAXCOL;
     }
-    if ( eCmd == INS_INSCOLS )
+    if ( eCmd == INS_INSCOLS_BEFORE )
     {
         nMergeTestStartRow = 0;
         nMergeTestEndRow = MAXROW;
@@ -1737,8 +1736,8 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     bool bNeedRefresh = false;
 
-    SCCOL nEditTestEndCol = (eCmd==INS_INSCOLS) ? MAXCOL : nMergeTestEndCol;
-    SCROW nEditTestEndRow = (eCmd==INS_INSROWS) ? MAXROW : nMergeTestEndRow;
+    SCCOL nEditTestEndCol = (eCmd==INS_INSCOLS_BEFORE) ? MAXCOL : nMergeTestEndCol;
+    SCROW nEditTestEndRow = (eCmd==INS_INSROWS_BEFORE) ? MAXROW : nMergeTestEndRow;
     ScEditableTester aTester( &rDoc, nMergeTestStartCol, nMergeTestStartRow, nEditTestEndCol, nEditTestEndRow, aMark );
     if (!aTester.IsEditable())
     {
@@ -1854,7 +1853,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
             if( bInsertMerge )
             {
-                if( eCmd == INS_INSROWS || eCmd == INS_CELLSDOWN )
+                if( eCmd == INS_INSROWS_BEFORE || eCmd == INS_CELLSDOWN )
                 {
                     nStartRow = aExtendMergeRange.aStart.Row();
                     nEndRow = aExtendMergeRange.aEnd.Row();
@@ -1867,7 +1866,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                         nEndCol = MAXCOL;
                     }
                 }
-                else if( eCmd == INS_CELLSRIGHT || eCmd == INS_INSCOLS )
+                else if( eCmd == INS_CELLSRIGHT || eCmd == INS_INSCOLS_BEFORE )
                 {
 
                     nStartCol = aExtendMergeRange.aStart.Col();
@@ -1912,7 +1911,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             bSuccess = rDoc.InsertRow( nStartCol, 0, nEndCol, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc, &aFullMark );
             nPaintEndRow = MAXROW;
             break;
-        case INS_INSROWS:
+        case INS_INSROWS_BEFORE:
             bSuccess = rDoc.InsertRow( 0, 0, MAXCOL, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc, &aFullMark );
             nPaintStartCol = 0;
             nPaintEndCol = MAXCOL;
@@ -1923,7 +1922,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             bSuccess = rDoc.InsertCol( nStartRow, 0, nEndRow, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, &aFullMark );
             nPaintEndCol = MAXCOL;
             break;
-        case INS_INSCOLS:
+        case INS_INSCOLS_BEFORE:
             bSuccess = rDoc.InsertCol( 0, 0, MAXROW, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, &aFullMark );
             nPaintStartRow = 0;
             nPaintEndRow = MAXROW;
@@ -1977,11 +1976,11 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 switch (eCmd)
                 {
                     case INS_CELLSDOWN:
-                    case INS_INSROWS:
+                    case INS_INSROWS_BEFORE:
                         aRange.aEnd.IncRow(static_cast<SCsCOL>(nEndRow-nStartRow+1));
                         break;
                     case INS_CELLSRIGHT:
-                    case INS_INSCOLS:
+                    case INS_INSCOLS_BEFORE:
                         aRange.aEnd.IncCol(static_cast<SCsCOL>(nEndCol-nStartCol+1));
                         break;
                     default:
@@ -2010,7 +2009,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             else
                 rDoc.RefreshAutoFilter( nMergeTestStartCol, nMergeTestStartRow, nMergeTestEndCol, nMergeTestEndRow, i );
 
-            if ( eCmd == INS_INSROWS || eCmd == INS_INSCOLS )
+            if ( eCmd == INS_INSROWS_BEFORE ||eCmd == INS_INSCOLS_BEFORE )
                 rDoc.UpdatePageBreaks( i );
 
             sal_uInt16 nExtFlags = 0;
@@ -2021,8 +2020,9 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             for( SCTAB j = i+1; j<nTabCount && rDoc.IsScenario(j); j++ )
                 nScenarioCount ++;
 
-            bool bAdjusted = ( eCmd == INS_INSROWS ) ? AdjustRowHeight(ScRange(0, nStartRow, i, MAXCOL, nEndRow, i+nScenarioCount )) :
-                                                       AdjustRowHeight(ScRange(0, nPaintStartRow, i, MAXCOL, nPaintEndRow, i+nScenarioCount ));
+            bool bAdjusted = ( eCmd == INS_INSROWS_BEFORE ) ?
+                        AdjustRowHeight(ScRange(0, nStartRow, i, MAXCOL, nEndRow, i+nScenarioCount )) :
+                        AdjustRowHeight(ScRange(0, nPaintStartRow, i, MAXCOL, nPaintEndRow, i+nScenarioCount ));
             if (bAdjusted)
             {
                 //  paint only what is not done by AdjustRowHeight

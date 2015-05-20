@@ -3350,7 +3350,7 @@ void SAL_CALL ScTableColumnsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 n
     {
         ScRange aRange( (SCCOL)(nStartCol+nPosition), 0, nTab,
                         (SCCOL)(nStartCol+nPosition+nCount-1), MAXROW, nTab );
-        bDone = pDocShell->GetDocFunc().InsertCells( aRange, NULL, INS_INSCOLS, true, true );
+        bDone = pDocShell->GetDocFunc().InsertCells( aRange, NULL, INS_INSCOLS_BEFORE, true, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
@@ -3607,7 +3607,7 @@ void SAL_CALL ScTableRowsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 nCou
     {
         ScRange aRange( 0, (SCROW)(nStartRow+nPosition), nTab,
                         MAXCOL, (SCROW)(nStartRow+nPosition+nCount-1), nTab );
-        bDone = pDocShell->GetDocFunc().InsertCells( aRange, NULL, INS_INSROWS, true, true );
+        bDone = pDocShell->GetDocFunc().InsertCells( aRange, NULL, INS_INSROWS_BEFORE, true, true );
     }
     if (!bDone)
         throw uno::RuntimeException();      // no other exceptions specified
