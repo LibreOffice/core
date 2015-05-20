@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -103,8 +102,7 @@ sal_uInt16 SvXMLNamespaceMap::Add( const OUString& rPrefix, const OUString& rNam
     if( XML_NAMESPACE_UNKNOWN == nKey )
         nKey = GetKeyByName( rName );
 
-    DBG_ASSERT( XML_NAMESPACE_NONE != nKey,
-                "SvXMLNamespaceMap::Add: invalid namespace key" );
+    assert(XML_NAMESPACE_NONE != nKey);
 
     if( XML_NAMESPACE_NONE == nKey )
         return USHRT_MAX;
@@ -119,8 +117,7 @@ sal_uInt16 SvXMLNamespaceMap::AddIfKnown( const OUString& rPrefix, const OUStrin
 {
     sal_uInt16 nKey = GetKeyByName( rName );
 
-    DBG_ASSERT( XML_NAMESPACE_NONE != nKey,
-                "SvXMLNamespaceMap::AddIfKnown: invalid namespace key" );
+    assert(XML_NAMESPACE_NONE);
 
     if( XML_NAMESPACE_NONE == nKey )
         return XML_NAMESPACE_UNKNOWN;
@@ -197,7 +194,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
     {
         case XML_NAMESPACE_UNKNOWN:
             // ...if it's a completely unknown namespace, assert and return the local name
-            DBG_ASSERT( false, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
+            assert(false);
         case XML_NAMESPACE_NONE:
             // ...if there isn't one, return the local name
             return rLocalName;
@@ -260,7 +257,7 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                 else
                 {
                     // ... if it isn't, this is a Bad Thing, assert and return the local name
-                    DBG_ASSERT( false, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
+                    assert(false);
                     return rLocalName;
                 }
             }
@@ -387,8 +384,7 @@ bool SvXMLNamespaceMap::AddAtIndex( sal_uInt16 /*nIdx*/, const OUString& rPrefix
     if( XML_NAMESPACE_UNKNOWN == nKey )
         nKey = GetKeyByName( rName );
 
-    DBG_ASSERT( XML_NAMESPACE_NONE != nKey,
-                "SvXMLNamespaceMap::AddAtIndex: invalid namespace key" );
+    assert(XML_NAMESPACE_NONE != nKey);
     if( XML_NAMESPACE_NONE != nKey && ! ( aNameHash.count ( rPrefix ) ) )
     {
         _Add( rPrefix, rName, nKey );
