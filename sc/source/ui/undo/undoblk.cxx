@@ -97,13 +97,13 @@ ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
     bPartOfPaste( bNewPartOfPaste ),
     pPasteUndo( NULL )
 {
-    if (eCmd == INS_INSROWS)            // whole row?
+    if (eCmd == INS_INSROWS_BEFORE )            // whole row?
     {
         aEffRange.aStart.SetCol(0);
         aEffRange.aEnd.SetCol(MAXCOL);
     }
 
-    if (eCmd == INS_INSCOLS)            // whole column?
+    if (eCmd == INS_INSCOLS_BEFORE )            // whole column?
     {
         aEffRange.aStart.SetRow(0);
         aEffRange.aEnd.SetRow(MAXROW);
@@ -179,7 +179,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
 
     switch (eCmd)
     {
-        case INS_INSROWS:
+        case INS_INSROWS_BEFORE:
         case INS_CELLSDOWN:
             for( i=0; i<nCount; i++ )
             {
@@ -191,7 +191,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
                     aEffRange.aStart.Row(), static_cast<SCSIZE>(aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
             }
             break;
-        case INS_INSCOLS:
+        case INS_INSCOLS_BEFORE:
         case INS_CELLSRIGHT:
             for( i=0; i<nCount; i++ )
             {
@@ -229,7 +229,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     switch (eCmd)
     {
-        case INS_INSROWS:
+        case INS_INSROWS_BEFORE:
             nPaint |= PAINT_LEFT;
             aWorkRange.aEnd.SetRow(MAXROW);
             break;
@@ -245,7 +245,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
                 }
             }
             break;
-        case INS_INSCOLS:
+        case INS_INSCOLS_BEFORE:
             nPaint |= PAINT_TOP;                // top bar
         case INS_CELLSRIGHT:
             for( i=0; i<nCount; i++ )

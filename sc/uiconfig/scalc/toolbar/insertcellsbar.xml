@@ -20,6 +20,6 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:InsertCellsDown"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertCellsRight"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertRows"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertColumns"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertRowsBefore"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertColumnsBefore"/>
 </toolbar:toolbar>
