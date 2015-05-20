@@ -61,6 +61,9 @@ using namespace css;
                                      WB_TOP | WB_VCENTER | WB_BOTTOM |  \
                                      WB_WORDBREAK | WB_NOLABEL)
 
+#define STYLE_RADIOBUTTON_MONO      ((sal_uInt16)0x0001) // legacy
+#define STYLE_CHECKBOX_MONO         ((sal_uInt16)0x0001) // legacy
+
 class ImplCommonButtonData
 {
 public:
@@ -229,7 +232,7 @@ DrawTextFlags Button::ImplGetTextStyle( OUString& rText, WinBits nWinStyle,
     }
 
     if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
-         (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+         (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
         nTextStyle |= DrawTextFlags::Mono;
 
     return nTextStyle;
@@ -742,7 +745,7 @@ DrawTextFlags PushButton::ImplGetTextStyle( sal_uLong nDrawFlags ) const
 
     DrawTextFlags nTextStyle = DrawTextFlags::Mnemonic | DrawTextFlags::MultiLine | DrawTextFlags::EndEllipsis;
 
-    if ( ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO ) ||
+    if ( ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono ) ||
          ( nDrawFlags & WINDOW_DRAW_MONO ) )
         nTextStyle |= DrawTextFlags::Mono;
 
@@ -2783,7 +2786,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
     const StyleSettings&    rStyleSettings = rSettings.GetStyleSettings();
     sal_uInt16              nStyle = 0;
 
-    if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
+    if ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
         nStyle = STYLE_RADIOBUTTON_MONO;
 
     if ( !pSVData->maCtrlData.mpRadioImgList ||
@@ -3149,13 +3152,13 @@ void CheckBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         rMouseRect.Right()-1-nLineSpace < rPos.X()+rSize.Width() )
     {
         const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-        if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
+        if ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
             SetLineColor( Color( COL_BLACK ) );
         else
             SetLineColor( rStyleSettings.GetShadowColor() );
         long nLineX = rMouseRect.Right()+nLineSpace;
         DrawLine( Point( nLineX, nLineY ), Point( rPos.X() + rSize.Width()-1, nLineY ) );
-        if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+        if ( !(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
         {
             SetLineColor( rStyleSettings.GetLightColor() );
             DrawLine( Point( nLineX, nLineY+1 ), Point( rPos.X() + rSize.Width()-1, nLineY+1 ) );
@@ -3653,7 +3656,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
     const StyleSettings&    rStyleSettings = rSettings.GetStyleSettings();
     sal_uInt16              nStyle = 0;
 
-    if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
+    if ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
         nStyle = STYLE_CHECKBOX_MONO;
 
     if ( !pSVData->maCtrlData.mpCheckImgList ||

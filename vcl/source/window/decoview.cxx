@@ -495,7 +495,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
     const StyleSettings& rStyleSettings = pDev->GetSettings().GetStyleSettings();
 
     if ( (nStyle & DrawButtonFlags::Mono) ||
-         (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+         (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
     {
         const Color aBlackColor( COL_BLACK );
 
@@ -645,7 +645,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
 
     const bool bNoDraw(nFlags & DrawFrameFlags::NoDraw);
 
-    if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
+    if ( (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) ||
          (pDev->GetOutDevType() == OUTDEV_PRINTER) ||
          bFlatBorders )
         nFlags |= DrawFrameFlags::Mono;
@@ -846,7 +846,7 @@ void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
     Color                   nColor(rColor);
     mpOutDev->EnableMapMode( false );
 
-    if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
+    if ( (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) ||
          (mpOutDev->GetOutDevType() == OUTDEV_PRINTER) )
         nStyle |= DrawSymbolFlags::Mono;
 
@@ -898,7 +898,7 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
     Color aLightColor = rStyleSettings.GetLightColor();
     Color aShadowColor = rStyleSettings.GetShadowColor();
 
-    if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
+    if ( (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) ||
          (mpOutDev->GetOutDevType() == OUTDEV_PRINTER) )
     {
         aLightColor = Color( COL_BLACK );
@@ -1068,13 +1068,13 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
     }
 
     mpOutDev->Push( PushFlags::LINECOLOR );
-    if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
+    if ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
         mpOutDev->SetLineColor( Color( COL_BLACK ) );
     else
         mpOutDev->SetLineColor( rStyleSettings.GetShadowColor() );
 
     mpOutDev->DrawLine( aStart, aStop );
-    if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+    if ( !(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
     {
         mpOutDev->SetLineColor( rStyleSettings.GetLightColor() );
         if( bVertical )
