@@ -11,6 +11,7 @@ $(eval $(call gb_Module_Module,liborcus))
 
 $(eval $(call gb_Module_add_targets,liborcus,\
 	ExternalProject_liborcus \
+	ExternalPackage_liborcus \
 	UnpackedTarball_liborcus \
 ))
 
