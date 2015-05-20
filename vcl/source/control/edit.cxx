@@ -315,28 +315,30 @@ void Edit::ImplInitEditData()
     mxDnDListener = pDnDWrapper;
 }
 
-bool Edit::ImplUseNativeBorder( WinBits nStyle )
+bool Edit::ImplUseNativeBorder(vcl::RenderContext& rRenderContext, WinBits nStyle)
 {
-    bool bRet =
-        IsNativeControlSupported(ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE)
-                                 && ((nStyle&WB_BORDER) && !(nStyle&WB_NOBORDER));
-    if( ! bRet && mbIsSubEdit )
+    bool bRet = rRenderContext.IsNativeControlSupported(ImplGetNativeControlType(),
+                                                        HAS_BACKGROUND_TEXTURE)
+                                 && ((nStyle & WB_BORDER) && !(nStyle & WB_NOBORDER));
+    if (!bRet && mbIsSubEdit)
     {
         vcl::Window* pWindow = GetParent();
         nStyle = pWindow->GetStyle();
-        bRet = pWindow->IsNativeControlSupported(ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE)
-               && ((nStyle&WB_BORDER) && !(nStyle&WB_NOBORDER));
+        bRet = pWindow->IsNativeControlSupported(ImplGetNativeControlType(),
+                                                 HAS_BACKGROUND_TEXTURE)
+               && ((nStyle & WB_BORDER) && !(nStyle & WB_NOBORDER));
     }
     return bRet;
 }
 
-void Edit::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
 {
-    nStyle = ImplInitStyle( nStyle );
-    if ( !(nStyle & (WB_CENTER | WB_RIGHT)) )
+    nStyle = ImplInitStyle(nStyle);
+
+    if (!(nStyle & (WB_CENTER | WB_RIGHT)))
         nStyle |= WB_LEFT;
 
-    Control::ImplInit( pParent, nStyle, NULL );
+    Control::ImplInit(pParent, nStyle, NULL);
 
     mbReadOnly = (nStyle & WB_READONLY) != 0;
 
@@ -354,7 +356,6 @@ void Edit::ImplInit( vcl::Window* pParent, WinBits nStyle )
     SetCursor( new vcl::Cursor );
 
     SetPointer( Pointer( POINTER_TEXT ) );
-    ImplInitSettings( true, true, true );
 
     uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
     uno::Reference< datatransfer::dnd::XDragGestureRecognizer > xDGR = GetDragGestureRecognizer();
@@ -396,6 +397,8 @@ void Edit::ImplModified()
 
 void Edit::ApplySettings(vcl::RenderContext& rRenderContext)
 {
+    Control::ApplySettings(rRenderContext);
+
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     vcl::Font aFont = rStyleSettings.GetFieldFont();
@@ -406,7 +409,7 @@ void Edit::ApplySettings(vcl::RenderContext& rRenderContext)
     Color aTextColor = rStyleSettings.GetFieldTextColor();
     ApplyControlForeground(rRenderContext, aTextColor);
 
-    if (ImplUseNativeBorder(GetStyle()) || IsPaintTransparent())
+    if (ImplUseNativeBorder(rRenderContext, GetStyle()) || IsPaintTransparent())
     {
         // Transparent background
         rRenderContext.SetBackground();
@@ -421,44 +424,6 @@ void Edit::ApplySettings(vcl::RenderContext& rRenderContext)
     {
         rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
         rRenderContext.SetFillColor(rStyleSettings.GetFieldColor());
-    }
-}
-
-void Edit::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
-{
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if (bFont)
-    {
-        vcl::Font aFont = rStyleSettings.GetFieldFont();
-        ApplyControlFont(*this, aFont);
-        ImplClearLayoutData();
-    }
-
-    if (bFont || bForeground)
-    {
-        Color aTextColor = rStyleSettings.GetFieldTextColor();
-        ApplyControlForeground(*this, aTextColor);
-    }
-
-    if (bBackground)
-    {
-        if (ImplUseNativeBorder(GetStyle()) || IsPaintTransparent())
-        {
-            // Transparent background
-            SetBackground();
-            SetFillColor();
-        }
-        else if (IsControlBackground())
-        {
-            SetBackground(GetControlBackground());
-            SetFillColor(GetControlBackground());
-        }
-        else
-        {
-            SetBackground(rStyleSettings.GetFieldColor());
-            SetFillColor(rStyleSettings.GetFieldColor());
-        }
     }
 }
 
@@ -572,8 +537,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
     bool bPaintPlaceholderText = aText.isEmpty() && !maPlaceholderText.isEmpty();
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    if (IsEnabled())
-        ImplInitSettings(false, true, false);
+
     if (!IsEnabled() || bPaintPlaceholderText)
         rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
 
@@ -589,7 +553,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
 
         SetTextFillColor(GetControlBackground());
     }
-    else if (IsPaintTransparent() || ImplUseNativeBorder(GetStyle()))
+    else if (IsPaintTransparent() || ImplUseNativeBorder(rRenderContext, GetStyle()))
         rRenderContext.SetTextFillColor();
     else
         rRenderContext.SetTextFillColor(IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor());
@@ -649,7 +613,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, bool bLayout)
         else
         {
             // Set background color when part of the text is selected
-            if (ImplUseNativeBorder(GetStyle()))
+            if (ImplUseNativeBorder(rRenderContext, GetStyle()))
             {
                 if( (GetStyle() & WB_FORCECTRLBACKGROUND) != 0 && IsControlBackground() )
                     rRenderContext.SetTextFillColor(GetControlBackground());
@@ -999,9 +963,9 @@ void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
 int Edit::ImplGetNativeControlType() const
 {
     int nCtrl = 0;
-    const vcl::Window *pControl = mbIsSubEdit ? GetParent() : this;
+    const vcl::Window* pControl = mbIsSubEdit ? GetParent() : this;
 
-    switch( pControl->GetType() )
+    switch (pControl->GetType())
     {
         case WINDOW_COMBOBOX:
         case WINDOW_PATTERNBOX:
@@ -1030,11 +994,11 @@ int Edit::ImplGetNativeControlType() const
         case WINDOW_LONGCURRENCYFIELD:
         case WINDOW_NUMERICFIELD:
         case WINDOW_SPINFIELD:
-            if( pControl->GetStyle() & WB_SPIN )
+            if (pControl->GetStyle() & WB_SPIN)
                 nCtrl = CTRL_SPINBOX;
             else
             {
-                if ( GetWindow( WINDOW_BORDER ) != this )
+                if (GetWindow(WINDOW_BORDER) != this)
                     nCtrl = CTRL_EDITBOX;
                 else
                     nCtrl = CTRL_EDITBOX_NOBORDER;
@@ -1057,7 +1021,7 @@ void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, long nXStart,
     aRect.Left() = nXStart;
     aRect.Right() = nXEnd;
 
-    if( !(ImplUseNativeBorder(GetStyle() ) || IsPaintTransparent()))
+    if( !(ImplUseNativeBorder(rRenderContext, GetStyle()) || IsPaintTransparent()))
         rRenderContext.Erase(aRect);
 }
 
@@ -1068,7 +1032,7 @@ void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, lon
     aRect.Left() = nXStart;
     aRect.Right() = nXEnd;
 
-    if (ImplUseNativeBorder(GetStyle()) || IsPaintTransparent())
+    if (ImplUseNativeBorder(rRenderContext, GetStyle()) || IsPaintTransparent())
     {
         // draw the inner part by painting the whole control using its border window
         vcl::Window* pBorder = GetWindow(WINDOW_BORDER);
@@ -1827,8 +1791,6 @@ void Edit::Resize()
 
 void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
-    ImplInitSettings( true, true, true );
-
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
     vcl::Font aFont = GetDrawPixelFont( pDev );
@@ -2131,12 +2093,10 @@ void Edit::Command( const CommandEvent& rCEvt )
         delete mpIMEInfos;
         mpIMEInfos = NULL;
 
-        // set font without attributes, because it will not be re-initialised in Repaint anymore
-        ImplInitSettings( true, false, false );
-
-        SetInsertMode( bInsertMode );
-
+        SetInsertMode(bInsertMode);
         ImplModified();
+
+        Invalidate();
 
         // #i25161# call auto complete handler for ext text commit also
         if ( autocompleteSignal.empty() )
@@ -2252,33 +2212,32 @@ void Edit::Command( const CommandEvent& rCEvt )
 
 void Edit::StateChanged( StateChangedType nType )
 {
-    if ( nType == StateChangedType::InitShow )
+    if (nType == StateChangedType::InitShow)
     {
-        if ( !mpSubEdit )
+        if (!mpSubEdit)
         {
             mnXOffset = 0;  // if GrabFocus before while size was still wrong
             ImplAlign();
-            if ( !mpSubEdit )
-                ImplShowCursor( false );
+            if (!mpSubEdit)
+                ImplShowCursor(false);
+            Invalidate();
         }
-        // update background (eventual SetPaintTransparent)
-        ImplInitSettings( false, false, true );
     }
-    else if ( nType == StateChangedType::Enable )
+    else if (nType == StateChangedType::Enable)
     {
-        if ( !mpSubEdit )
+        if (!mpSubEdit)
         {
             // change text color only
             ImplInvalidateOrRepaint();
         }
     }
-    else if ( nType == StateChangedType::Style || nType == StateChangedType::Mirroring )
+    else if (nType == StateChangedType::Style || nType == StateChangedType::Mirroring)
     {
         WinBits nStyle = GetStyle();
-        if( nType == StateChangedType::Style )
+        if (nType == StateChangedType::Style)
         {
-            nStyle = ImplInitStyle( GetStyle() );
-            SetStyle( nStyle );
+            nStyle = ImplInitStyle(GetStyle());
+            SetStyle(nStyle);
         }
 
         sal_uInt16 nOldAlign = mnAlign;
@@ -2287,66 +2246,62 @@ void Edit::StateChanged( StateChangedType nType )
         // --- RTL --- hack: right align until keyinput and cursor travelling works
         // edits are always RTL disabled
         // however the parent edits contain the correct setting
-        if( mbIsSubEdit && GetParent()->IsRTLEnabled() )
+        if (mbIsSubEdit && GetParent()->IsRTLEnabled())
         {
-            if( GetParent()->GetStyle() & WB_LEFT )
+            if (GetParent()->GetStyle() & WB_LEFT)
                 mnAlign = EDIT_ALIGN_RIGHT;
-            if ( nType == StateChangedType::Mirroring )
-                SetLayoutMode( TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+            if (nType == StateChangedType::Mirroring)
+                SetLayoutMode(TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT);
         }
-        else if( mbIsSubEdit && !GetParent()->IsRTLEnabled() )
+        else if (mbIsSubEdit && !GetParent()->IsRTLEnabled())
         {
-            if ( nType == StateChangedType::Mirroring )
-                SetLayoutMode( TEXT_LAYOUT_TEXTORIGIN_LEFT );
+            if (nType == StateChangedType::Mirroring)
+                SetLayoutMode(TEXT_LAYOUT_TEXTORIGIN_LEFT);
         }
 
-        if ( nStyle & WB_RIGHT )
+        if (nStyle & WB_RIGHT)
             mnAlign = EDIT_ALIGN_RIGHT;
-        else if ( nStyle & WB_CENTER )
+        else if (nStyle & WB_CENTER)
             mnAlign = EDIT_ALIGN_CENTER;
-        if ( !maText.isEmpty() && ( mnAlign != nOldAlign ) )
+        if (!maText.isEmpty() && (mnAlign != nOldAlign))
         {
             ImplAlign();
             Invalidate();
         }
 
     }
-    else if ( nType == StateChangedType::Zoom )
+    else if (nType == StateChangedType::Zoom)
     {
-        if ( !mpSubEdit )
+        if (!mpSubEdit)
         {
-            ImplInitSettings( true, false, false );
-            ImplShowCursor( true );
+            ImplShowCursor(true);
             Invalidate();
         }
     }
-    else if ( nType == StateChangedType::ControlFont )
+    else if (nType == StateChangedType::ControlFont)
     {
-        if ( !mpSubEdit )
+        if (!mpSubEdit)
         {
-            ImplInitSettings( true, false, false );
             ImplShowCursor();
             Invalidate();
         }
     }
-    else if ( nType == StateChangedType::ControlForeground )
+    else if (nType == StateChangedType::ControlForeground)
     {
-        if ( !mpSubEdit )
+        if (!mpSubEdit)
         {
-            ImplInitSettings( false, true, false );
             Invalidate();
         }
     }
-    else if ( nType == StateChangedType::ControlBackground )
+    else if (nType == StateChangedType::ControlBackground)
     {
-        if ( !mpSubEdit )
+        if (!mpSubEdit)
         {
-            ImplInitSettings( false, false, true );
             Invalidate();
         }
     }
 
-    Control::StateChanged( nType );
+    Control::StateChanged(nType);
 }
 
 void Edit::DataChanged( const DataChangedEvent& rDCEvt )
@@ -2358,7 +2313,6 @@ void Edit::DataChanged( const DataChangedEvent& rDCEvt )
     {
         if ( !mpSubEdit )
         {
-            ImplInitSettings( true, true, true );
             ImplShowCursor( true );
             Invalidate();
         }
@@ -2369,7 +2323,7 @@ void Edit::DataChanged( const DataChangedEvent& rDCEvt )
 
 void Edit::ImplShowDDCursor()
 {
-    if ( !mpDDInfo->bVisCursor )
+    if (!mpDDInfo->bVisCursor)
     {
         long nTextWidth = GetTextWidth( maText.toString(), 0, mpDDInfo->nDropPos );
         long nTextHeight = GetTextHeight();
@@ -2751,17 +2705,18 @@ void Edit::ClearModifyFlag()
         mbModified = false;
 }
 
-void Edit::SetSubEdit( Edit* pEdit )
+void Edit::SetSubEdit(Edit* pEdit)
 {
     mpSubEdit.disposeAndClear();
-    mpSubEdit.set( pEdit );
-    if ( mpSubEdit )
+    mpSubEdit.set(pEdit);
+
+    if (mpSubEdit)
     {
-        SetPointer( POINTER_ARROW );    // Nur das SubEdit hat den BEAM...
+        SetPointer(POINTER_ARROW);    // Nur das SubEdit hat den BEAM...
         mpSubEdit->mbIsSubEdit = true;
 
-        mpSubEdit->SetReadOnly( mbReadOnly );
-        mpSubEdit->autocompleteSignal.connect( autocompleteSignal );
+        mpSubEdit->SetReadOnly(mbReadOnly);
+        mpSubEdit->autocompleteSignal.connect(autocompleteSignal);
     }
 }
 
@@ -2806,11 +2761,10 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
     ImplControlValue aControlValue;
     Rectangle aRect( Point( 0, 0 ), aSize );
     Rectangle aContent, aBound;
-    if( GetNativeControlRegion(
-                   eCtrlType, PART_ENTIRE_CONTROL,
-                   aRect, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
+    if (GetNativeControlRegion(eCtrlType, PART_ENTIRE_CONTROL, aRect, ControlState::NONE,
+                               aControlValue, OUString(), aBound, aContent))
     {
-        if( aBound.GetHeight() > aSize.Height() )
+        if (aBound.GetHeight() > aSize.Height())
             aSize.Height() = aBound.GetHeight();
     }
     return aSize;

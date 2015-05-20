@@ -97,9 +97,9 @@ private:
     Link<>              maModifyHdl;
     Link<>              maUpdateDataHdl;
 
-    css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > mxISC;
+    css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> mxISC;
 
-    DECL_DLLPRIVATE_LINK_TYPED( ImplUpdateDataHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK_TYPED(ImplUpdateDataHdl, Timer*, void);
 
     SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_Int32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();
@@ -122,11 +122,11 @@ private:
     SAL_DLLPRIVATE void        ImplHideDDCursor();
     SAL_DLLPRIVATE bool        ImplHandleKeyEvent( const KeyEvent& rKEvt );
     SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
-    SAL_DLLPRIVATE void        ImplCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
-    SAL_DLLPRIVATE void        ImplPaste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
+    SAL_DLLPRIVATE void        ImplCopy(css::uno::Reference<css::datatransfer::clipboard::XClipboard>& rxClipboard);
+    SAL_DLLPRIVATE void        ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboard>& rxClipboard);
     SAL_DLLPRIVATE long        ImplGetTextYPosition() const;
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker();
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
+    SAL_DLLPRIVATE css::uno::Reference<css::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker();
+    SAL_DLLPRIVATE css::uno::Reference<css::i18n::XBreakIterator > ImplGetBreakIterator() const;
     SAL_DLLPRIVATE void        filterText();
 
 protected:
@@ -134,7 +134,6 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void        ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits     ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void        ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, bool bPaint = true );
     SAL_DLLPRIVATE int         ImplGetNativeControlType() const;
@@ -142,18 +141,24 @@ protected:
     SAL_DLLPRIVATE long        ImplGetExtraYOffset() const;
     static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( vcl::Window* pWin );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;
+    css::uno::Reference<css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
     // DragAndDropClient
     using vcl::unohelper::DragAndDropClient::dragEnter;
     using vcl::unohelper::DragAndDropClient::dragExit;
     using vcl::unohelper::DragAndDropClient::dragOver;
-    virtual void        dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void        dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void        drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void        dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void        dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void        dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void dragGestureRecognized(const css::datatransfer::dnd::DragGestureEvent& dge)
+                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void dragDropEnd(const css::datatransfer::dnd::DragSourceDropEvent& dsde)
+                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
+                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee)
+                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)
+                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde)
+                    throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     Edit(WindowType nType);
@@ -161,12 +166,12 @@ protected:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 public:
     // public because needed in button.cxx
-    SAL_DLLPRIVATE bool        ImplUseNativeBorder( WinBits nStyle );
+    SAL_DLLPRIVATE bool ImplUseNativeBorder(vcl::RenderContext& rRenderContext, WinBits nStyle);
 
-                        Edit( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
-                        Edit( vcl::Window* pParent, const ResId& rResId );
-                        virtual ~Edit();
-                        virtual void dispose() SAL_OVERRIDE;
+    Edit( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
+    Edit( vcl::Window* pParent, const ResId& rResId );
+    virtual ~Edit();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
