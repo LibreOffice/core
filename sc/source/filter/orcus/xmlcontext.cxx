@@ -228,7 +228,7 @@ public:
     {
         orcus::xmlns_id_t nsid = mrNsRepo.get_identifier(index);
         if (nsid == orcus::XMLNS_UNKNOWN_ID)
-            return;
+            return orcus::index_not_found;
 
         std::string alias = mrNsRepo.get_short_name(index);
         mrFilter.set_namespace_alias(alias.c_str(), nsid);

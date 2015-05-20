@@ -10,8 +10,23 @@
 $(eval $(call gb_Module_Module,liborcus))
 
 $(eval $(call gb_Module_add_targets,liborcus,\
-	ExternalProject_liborcus \
 	UnpackedTarball_liborcus \
 ))
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Module_add_targets,liborcus,\
+	Library_orcus \
+	Library_orcus-parser \
+))
+
+else # !MSC
+
+$(eval $(call gb_Module_add_targets,liborcus,\
+	ExternalPackage_liborcus \
+	ExternalProject_liborcus \
+))
+
+endif
 
 # vim: set noet sw=4 ts=4:
