@@ -3995,14 +3995,13 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
     UnoActionContext aAction(pFrameFormat->GetDoc());
-    SwUnoCrsr* pUnoCrsr = pFrameFormat->GetDoc()->CreateUnoCrsr(aPos, true);
+    auto pUnoCrsr(pFrameFormat->GetDoc()->CreateUnoCrsr2(aPos, true));
     pUnoCrsr->Move( fnMoveForward, fnGoNode );
     {
         // remove actions
         UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
     }
     pFrameFormat->GetDoc()->InsertRow(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
-    delete pUnoCrsr;
 }
 
 void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
@@ -4026,7 +4025,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
-    SwUnoCrsr* pUnoCrsr = pFrameFormat->GetDoc()->CreateUnoCrsr(aPos, true);
+    auto pUnoCrsr(pFrameFormat->GetDoc()->CreateUnoCrsr2(aPos, true));
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     pUnoCrsr->SetRemainInSection( false );
     const OUString sBLName = sw_GetCellName(0, nIndex + nCount - 1);
@@ -4036,12 +4035,12 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCrsr->SetMark();
     pUnoCrsr->GetPoint()->nNode = *pBLBox->GetSttNd();
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
-    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
     pCrsr->MakeBoxSels();
     {   // these braces are important
         UnoActionContext aAction(pFrameFormat->GetDoc());
         pFrameFormat->GetDoc()->DeleteRow(*pUnoCrsr);
-        delete pUnoCrsr;
+        pUnoCrsr.reset();
     }
     {
         // invalidate all actions
@@ -4134,7 +4133,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     UnoActionContext aAction(pFrameFormat->GetDoc());
-    SwUnoCrsr* pUnoCrsr = pFrameFormat->GetDoc()->CreateUnoCrsr(aPos, true);
+    auto pUnoCrsr(pFrameFormat->GetDoc()->CreateUnoCrsr2(aPos, true));
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
     {
@@ -4143,7 +4142,6 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     }
 
     pFrameFormat->GetDoc()->InsertCol(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
-    delete pUnoCrsr;
 }
 
 ///@see SwXTableRows::removeByIndex (TODO: seems to be copy and paste programming here)
@@ -4168,7 +4166,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
-    SwUnoCrsr* pUnoCrsr = pFrameFormat->GetDoc()->CreateUnoCrsr(aPos, true);
+    auto pUnoCrsr(pFrameFormat->GetDoc()->CreateUnoCrsr2(aPos, true));
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     pUnoCrsr->SetRemainInSection(false);
     const OUString sTRName = sw_GetCellName(nIndex + nCount - 1, 0);
@@ -4178,12 +4176,12 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCrsr->SetMark();
     pUnoCrsr->GetPoint()->nNode = *pTRBox->GetSttNd();
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
-    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
     pCrsr->MakeBoxSels();
     {   // these braces are important
         UnoActionContext aAction(pFrameFormat->GetDoc());
         pFrameFormat->GetDoc()->DeleteCol(*pUnoCrsr);
-        delete pUnoCrsr;
+        pUnoCrsr.reset();
     }
     {
         // invalidate all actions
