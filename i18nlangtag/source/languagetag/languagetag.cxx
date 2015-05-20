@@ -159,19 +159,14 @@ class LiblangtagDataRef
 public:
     LiblangtagDataRef();
     ~LiblangtagDataRef();
-    inline void incRef()
+    inline void init()
     {
-        if (mnRef != SAL_MAX_UINT32 && !mnRef++)
+        if (!mbInitialized)
             setup();
-    }
-    inline void decRef()
-    {
-        if (mnRef != SAL_MAX_UINT32 && mnRef && !--mnRef)
-            teardown();
     }
 private:
     OString maDataPath;   // path to liblangtag data, "|" if system
-    sal_uInt32   mnRef;
+    bool mbInitialized;
 
     void setupDataPath();
     void setup();
@@ -184,16 +179,14 @@ struct theDataRef : public rtl::Static< LiblangtagDataRef, theDataRef > {};
 
 LiblangtagDataRef::LiblangtagDataRef()
     :
-        mnRef(0)
+        mbInitialized(false)
 {
 }
 
 LiblangtagDataRef::~LiblangtagDataRef()
 {
-    // When destructed we're tearing down unconditionally.
-    if (mnRef)
-        mnRef = 1;
-    decRef();
+    if (mbInitialized)
+        teardown();
 }
 
 void LiblangtagDataRef::setup()
@@ -202,8 +195,7 @@ void LiblangtagDataRef::setup()
     if (maDataPath.isEmpty())
         setupDataPath();
     lt_db_initialize();
-    // Hold ref eternally.
-    mnRef = SAL_MAX_UINT32;
+    mbInitialized = true;
 }
 
 void LiblangtagDataRef::teardown()
@@ -420,7 +412,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl )
         mbCachedVariants( rLanguageTagImpl.mbCachedVariants)
 {
     if (mpImplLangtag)
-        theDataRef::get().incRef();
+        theDataRef::get().init();
 }
 
 
@@ -453,9 +445,7 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
     mbCachedCountry     = rLanguageTagImpl.mbCachedCountry;
     mbCachedVariants    = rLanguageTagImpl.mbCachedVariants;
     if (mpImplLangtag && !oldTag)
-        theDataRef::get().incRef();
-    else if (!mpImplLangtag && oldTag)
-        theDataRef::get().decRef();
+        theDataRef::get().init();
     return *this;
 }
 
@@ -465,7 +455,6 @@ LanguageTagImpl::~LanguageTagImpl()
     if (mpImplLangtag)
     {
         lt_tag_unref( mpImplLangtag);
-        theDataRef::get().decRef();
     }
 }
 
@@ -1203,7 +1192,7 @@ bool LanguageTagImpl::canonicalize()
 
     if (!mpImplLangtag)
     {
-        theDataRef::get().incRef();
+        theDataRef::get().init();
         mpImplLangtag = lt_tag_new();
     }
 
@@ -1491,7 +1480,7 @@ void LanguageTag::convertFromRtlLocale()
          * string. */
 #if 0
         myLtError aError;
-        theDataRef::get().incRef();
+        theDataRef::get().init();
         mpImplLangtag = lt_tag_convert_from_locale( aStr.getStr(), &aError.p);
         maBcp47 = OStringToOUString( lt_tag_get_string( mpImplLangtag), RTL_TEXTENCODING_UTF8);
         mbInitializedBcp47 = true;
@@ -2703,13 +2692,12 @@ bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicali
         lt_tag_t* mpLangtag;
         guard()
         {
-            theDataRef::get().incRef();
+            theDataRef::get().init();
             mpLangtag = lt_tag_new();
         }
         ~guard()
         {
             lt_tag_unref( mpLangtag);
-            theDataRef::get().decRef();
         }
     } aVar;
 
