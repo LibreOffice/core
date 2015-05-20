@@ -349,12 +349,12 @@ namespace pcr
     {
         Edit::MouseMove( rMEvt );
 
-        PointerStyle ePointerStyle( POINTER_TEXT );
+        PointerStyle ePointerStyle( PointerStyle::Text );
 
         if ( !rMEvt.IsLeaveWindow() )
         {
             if ( impl_textHitTest( rMEvt.GetPosPixel() ) )
-                ePointerStyle = POINTER_REFHAND;
+                ePointerStyle = PointerStyle::RefHand;
         }
 
         SetPointer( Pointer( ePointerStyle ) );

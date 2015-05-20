@@ -713,7 +713,7 @@ TextWindow::TextWindow( vcl::Window* pParent ) : Window( pParent )
     mbSelectOnTab = true;
     mbTextSelectable = true;
 
-    SetPointer( Pointer( POINTER_TEXT ) );
+    SetPointer( Pointer( PointerStyle::Text ) );
 
     mpExtTextEngine = new ExtTextEngine;
     mpExtTextEngine->SetMaxTextLen(EDIT_NOLIMIT);

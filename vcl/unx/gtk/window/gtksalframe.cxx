@@ -1037,7 +1037,7 @@ void GtkSalFrame::InitCommon()
     m_nGSMCookie = 0;
     m_nExtStyle         = 0;
     m_pRegion           = NULL;
-    m_ePointerStyle     = 0xffff;
+    m_ePointerStyle     = static_cast<PointerStyle>(0xffff);
     m_bSetFocusOnMap    = false;
     m_pSalMenu          = NULL;
     m_nWatcherId        = 0;

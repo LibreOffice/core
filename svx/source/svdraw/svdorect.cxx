@@ -488,8 +488,8 @@ basegfx::B2DPolyPolygon SdrRectObj::TakeCreatePoly(const SdrDragStat& rDrag) con
 
 Pointer SdrRectObj::GetCreatePointer() const
 {
-    if (IsTextFrame()) return Pointer(POINTER_DRAW_TEXT);
-    return Pointer(POINTER_DRAW_RECT);
+    if (IsTextFrame()) return Pointer(PointerStyle::DrawText);
+    return Pointer(PointerStyle::DrawRect);
 }
 
 void SdrRectObj::NbcMove(const Size& rSiz)

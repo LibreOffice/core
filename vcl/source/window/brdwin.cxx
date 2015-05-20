@@ -296,23 +296,23 @@ bool ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const Mous
 
     Point aMousePos = rMEvt.GetPosPixel();
     sal_uInt16 nHitTest = ImplHitTest( pData, aMousePos );
-    PointerStyle ePtrStyle = POINTER_ARROW;
+    PointerStyle ePtrStyle = PointerStyle::Arrow;
     if ( nHitTest & BORDERWINDOW_HITTEST_LEFT )
-        ePtrStyle = POINTER_WINDOW_WSIZE;
+        ePtrStyle = PointerStyle::WindowWSize;
     else if ( nHitTest & BORDERWINDOW_HITTEST_RIGHT )
-        ePtrStyle = POINTER_WINDOW_ESIZE;
+        ePtrStyle = PointerStyle::WindowESize;
     else if ( nHitTest & BORDERWINDOW_HITTEST_TOP )
-        ePtrStyle = POINTER_WINDOW_NSIZE;
+        ePtrStyle = PointerStyle::WindowNSize;
     else if ( nHitTest & BORDERWINDOW_HITTEST_BOTTOM )
-        ePtrStyle = POINTER_WINDOW_SSIZE;
+        ePtrStyle = PointerStyle::WindowSSize;
     else if ( nHitTest & BORDERWINDOW_HITTEST_TOPLEFT )
-        ePtrStyle = POINTER_WINDOW_NWSIZE;
+        ePtrStyle = PointerStyle::WindowNWSize;
     else if ( nHitTest & BORDERWINDOW_HITTEST_BOTTOMRIGHT )
-        ePtrStyle = POINTER_WINDOW_SESIZE;
+        ePtrStyle = PointerStyle::WindowSESize;
     else if ( nHitTest & BORDERWINDOW_HITTEST_TOPRIGHT )
-        ePtrStyle = POINTER_WINDOW_NESIZE;
+        ePtrStyle = PointerStyle::WindowNESize;
     else if ( nHitTest & BORDERWINDOW_HITTEST_BOTTOMLEFT )
-        ePtrStyle = POINTER_WINDOW_SWSIZE;
+        ePtrStyle = PointerStyle::WindowSWSize;
     else if ( nHitTest & BORDERWINDOW_HITTEST_CLOSE )
         pData->mnCloseState |= DrawButtonFlags::Highlight;
     else if ( nHitTest & BORDERWINDOW_HITTEST_MENU )
@@ -746,7 +746,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
 
             if ( pData->mnHitTest & BORDERWINDOW_HITTEST_TITLE )
             {
-                pData->mpBorderWindow->SetPointer( Pointer( POINTER_MOVE ) );
+                pData->mpBorderWindow->SetPointer( Pointer( PointerStyle::Move ) );
 
                 Point aPos = pBorderWindow->GetPosPixel();
                 aPos.X() += aMousePos.X();
