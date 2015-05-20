@@ -672,4 +672,994 @@
   <block-list:block block-list:abbreviated-name=".*_=.*" block-list:name="₌"/>
   <block-list:block block-list:abbreviated-name=".*_(.*" block-list:name="₍"/>
   <block-list:block block-list:abbreviated-name=".*_).*" block-list:name="₎"/>
+  <block-list:block block-list:abbreviated-name=":cent:" block-list:name="¢"/>
+  <block-list:block block-list:abbreviated-name=":font:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":jen:" block-list:name="¥"/>
+  <block-list:block block-list:abbreviated-name=":paragrafus:" block-list:name="§"/>
+  <block-list:block block-list:abbreviated-name=":copyright:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=".*:jogvédett:" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=".*:+-:.*" block-list:name="±"/>
+  <block-list:block block-list:abbreviated-name=".*:*:.*" block-list:name="·"/>
+  <block-list:block block-list:abbreviated-name=".*:szorzás:.*" block-list:name="×"/>
+  <block-list:block block-list:abbreviated-name=":schwa:" block-list:name="ə"/>
+  <block-list:block block-list:abbreviated-name=".*:Alfa:.*" block-list:name="Α"/>
+  <block-list:block block-list:abbreviated-name=".*:Béta:.*" block-list:name="Β"/>
+  <block-list:block block-list:abbreviated-name=".*:Gamma:.*" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=".*:Delta:.*" block-list:name="Δ"/>
+  <block-list:block block-list:abbreviated-name=".*:Epszilon:.*" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name=".*:Zéta:.*" block-list:name="Ζ"/>
+  <block-list:block block-list:abbreviated-name=".*:Éta:.*" block-list:name="Η"/>
+  <block-list:block block-list:abbreviated-name=".*:Théta:.*" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name=".*:Ióta:.*" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=".*:Kappa:.*" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=".*:Lambda:.*" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=".*:Mű:.*" block-list:name="Μ"/>
+  <block-list:block block-list:abbreviated-name=".*:Nű:.*" block-list:name="Ν"/>
+  <block-list:block block-list:abbreviated-name=".*:Kszi:.*" block-list:name="Ξ"/>
+  <block-list:block block-list:abbreviated-name=".*:Omikron:.*" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=".*:Pi:.*" block-list:name="Π"/>
+  <block-list:block block-list:abbreviated-name=".*:Ró:.*" block-list:name="Ρ"/>
+  <block-list:block block-list:abbreviated-name=".*:Szigma:.*" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=".*:Tau:.*" block-list:name="Τ"/>
+  <block-list:block block-list:abbreviated-name=".*:Üpszilon:.*" block-list:name="Υ"/>
+  <block-list:block block-list:abbreviated-name=".*:Fi:.*" block-list:name="Φ"/>
+  <block-list:block block-list:abbreviated-name=".*:Khi:.*" block-list:name="Χ"/>
+  <block-list:block block-list:abbreviated-name=".*:Pszi:.*" block-list:name="Ψ"/>
+  <block-list:block block-list:abbreviated-name=".*:Ómega:.*" block-list:name="Ω"/>
+  <block-list:block block-list:abbreviated-name=".*:alfa:.*" block-list:name="α"/>
+  <block-list:block block-list:abbreviated-name=".*:béta:.*" block-list:name="β"/>
+  <block-list:block block-list:abbreviated-name=".*:gamma:.*" block-list:name="γ"/>
+  <block-list:block block-list:abbreviated-name=".*:delta:.*" block-list:name="δ"/>
+  <block-list:block block-list:abbreviated-name=".*:epszilon:.*" block-list:name="ε"/>
+  <block-list:block block-list:abbreviated-name=".*:zéta:.*" block-list:name="ζ"/>
+  <block-list:block block-list:abbreviated-name=".*:éta:.*" block-list:name="η"/>
+  <block-list:block block-list:abbreviated-name=".*:théta:.*" block-list:name="θ"/>
+  <block-list:block block-list:abbreviated-name=".*:ióta:.*" block-list:name="ι"/>
+  <block-list:block block-list:abbreviated-name=".*:kappa:.*" block-list:name="κ"/>
+  <block-list:block block-list:abbreviated-name=".*:lambda:.*" block-list:name="λ"/>
+  <block-list:block block-list:abbreviated-name=".*:mű:.*" block-list:name="μ"/>
+  <block-list:block block-list:abbreviated-name=".*:nű:.*" block-list:name="ν"/>
+  <block-list:block block-list:abbreviated-name=".*:kszi:.*" block-list:name="ξ"/>
+  <block-list:block block-list:abbreviated-name=".*:omikron:.*" block-list:name="ο"/>
+  <block-list:block block-list:abbreviated-name=".*:pi:.*" block-list:name="π"/>
+  <block-list:block block-list:abbreviated-name=".*:ró:.*" block-list:name="ρ"/>
+  <block-list:block block-list:abbreviated-name=".*:szigma2:.*" block-list:name="ς"/>
+  <block-list:block block-list:abbreviated-name=".*:szigma:.*" block-list:name="σ"/>
+  <block-list:block block-list:abbreviated-name=".*:tau:.*" block-list:name="τ"/>
+  <block-list:block block-list:abbreviated-name=".*:üpszilon:.*" block-list:name="υ"/>
+  <block-list:block block-list:abbreviated-name=".*:fi:.*" block-list:name="φ"/>
+  <block-list:block block-list:abbreviated-name=".*:khi:.*" block-list:name="χ"/>
+  <block-list:block block-list:abbreviated-name=".*:pszi:.*" block-list:name="ψ"/>
+  <block-list:block block-list:abbreviated-name=".*:ómega:.*" block-list:name="ω"/>
+  <block-list:block block-list:abbreviated-name=":baht:" block-list:name="฿"/>
+  <block-list:block block-list:abbreviated-name=".*:gondolatjel:.*" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name=".*:kvirtmínusz:.*" block-list:name="—"/>
+  <block-list:block block-list:abbreviated-name=".*:kereszt:.*" block-list:name="†"/>
+  <block-list:block block-list:abbreviated-name=".*:kettőskereszt:.*" block-list:name="‡"/>
+  <block-list:block block-list:abbreviated-name=":díszpont:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":díszpont2:" block-list:name="‣"/>
+  <block-list:block block-list:abbreviated-name=".*:hárompont:.*" block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name=".*:ezrelék:.*" block-list:name="‰"/>
+  <block-list:block block-list:abbreviated-name=".*:bázispont:.*" block-list:name="‱"/>
+  <block-list:block block-list:abbreviated-name=".*:!!:.*" block-list:name="‼"/>
+  <block-list:block block-list:abbreviated-name=".*:!?:.*" block-list:name="⁉"/>
+  <block-list:block block-list:abbreviated-name=":olasz líra:" block-list:name="₤"/>
+  <block-list:block block-list:abbreviated-name=":von:" block-list:name="₩"/>
+  <block-list:block block-list:abbreviated-name=":sékel:" block-list:name="₪"/>
+  <block-list:block block-list:abbreviated-name=":euró:" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=":peso:" block-list:name="₱"/>
+  <block-list:block block-list:abbreviated-name=":hrivnya:" block-list:name="₴"/>
+  <block-list:block block-list:abbreviated-name=":rúpia:" block-list:name="₹"/>
+  <block-list:block block-list:abbreviated-name=":török líra:" block-list:name="₺"/>
+  <block-list:block block-list:abbreviated-name=".*:tm:" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=":információ:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=".*:NY:.*" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name=".*:É:.*" block-list:name="↑"/>
+  <block-list:block block-list:abbreviated-name=".*:K:.*" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=".*:D:.*" block-list:name="↓"/>
+  <block-list:block block-list:abbreviated-name=".*:KNY:.*" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name=".*:ÉD:.*" block-list:name="↕"/>
+  <block-list:block block-list:abbreviated-name=".*:ÉNY:.*" block-list:name="↖"/>
+  <block-list:block block-list:abbreviated-name=".*:ÉK:.*" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=".*:DK:.*" block-list:name="↘"/>
+  <block-list:block block-list:abbreviated-name=".*:DNY:.*" block-list:name="↙"/>
+  <block-list:block block-list:abbreviated-name=".*:minden:.*" block-list:name="∀"/>
+  <block-list:block block-list:abbreviated-name=".*:parciális:.*" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name=".*:létezik:.*" block-list:name="∃"/>
+  <block-list:block block-list:abbreviated-name=".*:nem létezik:.*" block-list:name="∄"/>
+  <block-list:block block-list:abbreviated-name=".*:üres halmaz:.*" block-list:name="∅"/>
+  <block-list:block block-list:abbreviated-name=".*:eleme:.*" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=".*:nem eleme:.*" block-list:name="∉"/>
+  <block-list:block block-list:abbreviated-name=".*:kis eleme:.*" block-list:name="∊"/>
+  <block-list:block block-list:abbreviated-name=".*:eleme2:.*" block-list:name="∋"/>
+  <block-list:block block-list:abbreviated-name=".*:nem eleme2:.*" block-list:name="∌"/>
+  <block-list:block block-list:abbreviated-name=".*:kis eleme2:.*" block-list:name="∍"/>
+  <block-list:block block-list:abbreviated-name=":bizonyítás vége:" block-list:name="∎"/>
+  <block-list:block block-list:abbreviated-name=".*:produktum:.*" block-list:name="∏"/>
+  <block-list:block block-list:abbreviated-name=".*:szumma:.*" block-list:name="∑"/>
+  <block-list:block block-list:abbreviated-name=".*:mínusz:.*" block-list:name="−"/>
+  <block-list:block block-list:abbreviated-name=".*:-+:.*" block-list:name="∓"/>
+  <block-list:block block-list:abbreviated-name=".*:/:.*" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=".*:\:.*" block-list:name="∖"/>
+  <block-list:block block-list:abbreviated-name=".*:gyök:.*" block-list:name="√"/>
+  <block-list:block block-list:abbreviated-name=".*:köbgyök:.*" block-list:name="∛"/>
+  <block-list:block block-list:abbreviated-name=".*:negyedik gyök:.*" block-list:name="∜"/>
+  <block-list:block block-list:abbreviated-name=".*:végtelen:.*" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":szög:" block-list:name="∠"/>
+  <block-list:block block-list:abbreviated-name=":mért szög:" block-list:name="∡"/>
+  <block-list:block block-list:abbreviated-name=".*:osztója:.*" block-list:name="∣"/>
+  <block-list:block block-list:abbreviated-name=".*:nem osztója:.*" block-list:name="∤"/>
+  <block-list:block block-list:abbreviated-name=".*:párhuzamos:.*" block-list:name="∥"/>
+  <block-list:block block-list:abbreviated-name=".*:nem párhuzamos:.*" block-list:name="∦"/>
+  <block-list:block block-list:abbreviated-name=".*:és:.*" block-list:name="∧"/>
+  <block-list:block block-list:abbreviated-name=".*:vagy:.*" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=".*:metszet:.*" block-list:name="∩"/>
+  <block-list:block block-list:abbreviated-name=".*:unió:.*" block-list:name="∪"/>
+  <block-list:block block-list:abbreviated-name=".*:integrál:.*" block-list:name="∫"/>
+  <block-list:block block-list:abbreviated-name=".*:kettős integrál:.*" block-list:name="∬"/>
+  <block-list:block block-list:abbreviated-name=".*:hármas integrál:.*" block-list:name="∭"/>
+  <block-list:block block-list:abbreviated-name=".*:~:.*" block-list:name="≈"/>
+  <block-list:block block-list:abbreviated-name=".*:ne:.*" block-list:name="≠"/>
+  <block-list:block block-list:abbreviated-name=".*:&lt;=:.*" block-list:name="≤"/>
+  <block-list:block block-list:abbreviated-name=".*:>=:.*" block-list:name="≥"/>
+  <block-list:block block-list:abbreviated-name=".*:&lt;&lt;:.*" block-list:name="≪"/>
+  <block-list:block block-list:abbreviated-name=".*:>>:.*" block-list:name="≫"/>
+  <block-list:block block-list:abbreviated-name=".*:részhalmaza:.*" block-list:name="⊂"/>
+  <block-list:block block-list:abbreviated-name=".*:részhalmaza2:.*" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=".*:nem részhalmaza:.*" block-list:name="⊄"/>
+  <block-list:block block-list:abbreviated-name=".*:nem részhalmaza2:.*" block-list:name="⊅"/>
+  <block-list:block block-list:abbreviated-name=":derékszögű háromszög:" block-list:name="⊿"/>
+  <block-list:block block-list:abbreviated-name=":óra:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":homokóra:" block-list:name="⌛"/>
+  <block-list:block block-list:abbreviated-name=":billentyűzet:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":ébresztőóra:" block-list:name="⏰"/>
+  <block-list:block block-list:abbreviated-name=":homokóra2:" block-list:name="⏳"/>
+  <block-list:block block-list:abbreviated-name=":négyzet:" block-list:name="■"/>
+  <block-list:block block-list:abbreviated-name=":négyzet2:" block-list:name="□"/>
+  <block-list:block block-list:abbreviated-name=":kis négyzet2:" block-list:name="▪"/>
+  <block-list:block block-list:abbreviated-name=":kis négyzet:" block-list:name="▫"/>
+  <block-list:block block-list:abbreviated-name=":téglalap2:" block-list:name="▬"/>
+  <block-list:block block-list:abbreviated-name=":téglalap:" block-list:name="▭"/>
+  <block-list:block block-list:abbreviated-name=":paralelogramma2:" block-list:name="▰"/>
+  <block-list:block block-list:abbreviated-name=":paralelogramma:" block-list:name="▱"/>
+  <block-list:block block-list:abbreviated-name=":háromszög2:" block-list:name="▲"/>
+  <block-list:block block-list:abbreviated-name=":háromszög:" block-list:name="△"/>
+  <block-list:block block-list:abbreviated-name=":rombusz:" block-list:name="◊"/>
+  <block-list:block block-list:abbreviated-name=":kör:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":kör2:" block-list:name="●"/>
+  <block-list:block block-list:abbreviated-name=":díszpont3:" block-list:name="◦"/>
+  <block-list:block block-list:abbreviated-name=":nagy kör:" block-list:name="◯"/>
+  <block-list:block block-list:abbreviated-name=":közepes négyzet:" block-list:name="◻"/>
+  <block-list:block block-list:abbreviated-name=":közepes négyzet2:" block-list:name="◼"/>
+  <block-list:block block-list:abbreviated-name=":kisebb négyzet:" block-list:name="◽"/>
+  <block-list:block block-list:abbreviated-name=":kisebb négyzet2:" block-list:name="◾"/>
+  <block-list:block block-list:abbreviated-name=":napos:" block-list:name="☀"/>
+  <block-list:block block-list:abbreviated-name=":felhő:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":esernyő:" block-list:name="☂"/>
+  <block-list:block block-list:abbreviated-name=":hóember:" block-list:name="☃"/>
+  <block-list:block block-list:abbreviated-name=":üstökös:" block-list:name="☄"/>
+  <block-list:block block-list:abbreviated-name=":csillag:" block-list:name="★"/>
+  <block-list:block block-list:abbreviated-name=":csillag2:" block-list:name="☆"/>
+  <block-list:block block-list:abbreviated-name=":villám:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":vihar:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":Nap:" block-list:name="☉"/>
+  <block-list:block block-list:abbreviated-name=":telefon:" block-list:name="☎"/>
+  <block-list:block block-list:abbreviated-name=":telefon2:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":jelölőnégyzet:" block-list:name="☐"/>
+  <block-list:block block-list:abbreviated-name=":jelölőnégyzet2:" block-list:name="☑"/>
+  <block-list:block block-list:abbreviated-name=":jelölőnégyzet3:" block-list:name="☒"/>
+  <block-list:block block-list:abbreviated-name=":andráskereszt:" block-list:name="☓"/>
+  <block-list:block block-list:abbreviated-name=":eső:" block-list:name="☔"/>
+  <block-list:block block-list:abbreviated-name=":kávé:" block-list:name="☕"/>
+  <block-list:block block-list:abbreviated-name=":balra3:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":jobbra3:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":balra:" block-list:name="☜"/>
+  <block-list:block block-list:abbreviated-name=":fel:" block-list:name="☝"/>
+  <block-list:block block-list:abbreviated-name=":fel:" block-list:name="☝"/>
+  <block-list:block block-list:abbreviated-name=":jobbra:" block-list:name="☞"/>
+  <block-list:block block-list:abbreviated-name=":le:" block-list:name="☟"/>
+  <block-list:block block-list:abbreviated-name=":mérgező:" block-list:name="☠"/>
+  <block-list:block block-list:abbreviated-name=":kanyar:" block-list:name="☡"/>
+  <block-list:block block-list:abbreviated-name=":radioaktív:" block-list:name="☢"/>
+  <block-list:block block-list:abbreviated-name=":fertőző:" block-list:name="☣"/>
+  <block-list:block block-list:abbreviated-name=":caduceus:" block-list:name="☤"/>
+  <block-list:block block-list:abbreviated-name=":ankh:" block-list:name="☥"/>
+  <block-list:block block-list:abbreviated-name=":ortodox kereszt:" block-list:name="☦"/>
+  <block-list:block block-list:abbreviated-name=":khi-ró:" block-list:name="☧"/>
+  <block-list:block block-list:abbreviated-name=":béke:" block-list:name="☮"/>
+  <block-list:block block-list:abbreviated-name=":jin-jang:" block-list:name="☯"/>
+  <block-list:block block-list:abbreviated-name=":szomorú:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":vidám:" block-list:name="☺"/>
+  <block-list:block block-list:abbreviated-name=":vidám2:" block-list:name="☻"/>
+  <block-list:block block-list:abbreviated-name=":nap2:" block-list:name="☼"/>
+  <block-list:block block-list:abbreviated-name=":Hold:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":Hold2:" block-list:name="☾"/>
+  <block-list:block block-list:abbreviated-name=":Merkur:" block-list:name="☿"/>
+  <block-list:block block-list:abbreviated-name=":Vénusz:" block-list:name="♀"/>
+  <block-list:block block-list:abbreviated-name=":Föld:" block-list:name="♁"/>
+  <block-list:block block-list:abbreviated-name=":Mars:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":Jupiter:" block-list:name="♃"/>
+  <block-list:block block-list:abbreviated-name=":Szaturnusz:" block-list:name="♄"/>
+  <block-list:block block-list:abbreviated-name=":Uránusz:" block-list:name="♅"/>
+  <block-list:block block-list:abbreviated-name=":Neptunusz:" block-list:name="♆"/>
+  <block-list:block block-list:abbreviated-name=":Plútó:" block-list:name="♇"/>
+  <block-list:block block-list:abbreviated-name=":Kos:" block-list:name="♈"/>
+  <block-list:block block-list:abbreviated-name=":Bika:" block-list:name="♉"/>
+  <block-list:block block-list:abbreviated-name=":Ikrek:" block-list:name="♊"/>
+  <block-list:block block-list:abbreviated-name=":Rák:" block-list:name="♋"/>
+  <block-list:block block-list:abbreviated-name=":Oroszlán:" block-list:name="♌"/>
+  <block-list:block block-list:abbreviated-name=":Szűz:" block-list:name="♍"/>
+  <block-list:block block-list:abbreviated-name=":Mérleg:" block-list:name="♎"/>
+  <block-list:block block-list:abbreviated-name=":Skorpió:" block-list:name="♏"/>
+  <block-list:block block-list:abbreviated-name=":Nyilas:" block-list:name="♐"/>
+  <block-list:block block-list:abbreviated-name=":Bak:" block-list:name="♑"/>
+  <block-list:block block-list:abbreviated-name=":Vízöntő:" block-list:name="♒"/>
+  <block-list:block block-list:abbreviated-name=":Halak:" block-list:name="♓"/>
+  <block-list:block block-list:abbreviated-name=":fehér király:" block-list:name="♔"/>
+  <block-list:block block-list:abbreviated-name=":fehér vezér:" block-list:name="♕"/>
+  <block-list:block block-list:abbreviated-name=":fehér bástya:" block-list:name="♖"/>
+  <block-list:block block-list:abbreviated-name=":fehér futó:" block-list:name="♗"/>
+  <block-list:block block-list:abbreviated-name=":fehér huszár:" block-list:name="♘"/>
+  <block-list:block block-list:abbreviated-name=":fehér gyalog:" block-list:name="♙"/>
+  <block-list:block block-list:abbreviated-name=":fekete király:" block-list:name="♚"/>
+  <block-list:block block-list:abbreviated-name=":fekete vezér:" block-list:name="♛"/>
+  <block-list:block block-list:abbreviated-name=":fekete bástya:" block-list:name="♜"/>
+  <block-list:block block-list:abbreviated-name=":fekete futó:" block-list:name="♝"/>
+  <block-list:block block-list:abbreviated-name=":fekete huszár:" block-list:name="♞"/>
+  <block-list:block block-list:abbreviated-name=":fekete gyalog:" block-list:name="♟"/>
+  <block-list:block block-list:abbreviated-name=":pikk:" block-list:name="♠"/>
+  <block-list:block block-list:abbreviated-name=":kőr2:" block-list:name="♡"/>
+  <block-list:block block-list:abbreviated-name=":káró2:" block-list:name="♢"/>
+  <block-list:block block-list:abbreviated-name=":treff:" block-list:name="♣"/>
+  <block-list:block block-list:abbreviated-name=":pikk2:" block-list:name="♤"/>
+  <block-list:block block-list:abbreviated-name=":kőr:" block-list:name="♥"/>
+  <block-list:block block-list:abbreviated-name=":káró:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":treff2:" block-list:name="♧"/>
+  <block-list:block block-list:abbreviated-name=":termálvíz:" block-list:name="♨"/>
+  <block-list:block block-list:abbreviated-name=":negyedhang:" block-list:name="♩"/>
+  <block-list:block block-list:abbreviated-name=":nyolcadhang:" block-list:name="♪"/>
+  <block-list:block block-list:abbreviated-name=":nyolcadpár:" block-list:name="♫"/>
+  <block-list:block block-list:abbreviated-name=":tizenhatod pár:" block-list:name="♬"/>
+  <block-list:block block-list:abbreviated-name=":bé:" block-list:name="♭"/>
+  <block-list:block block-list:abbreviated-name=":feloldójel:" block-list:name="♮"/>
+  <block-list:block block-list:abbreviated-name=":kereszt3:" block-list:name="♯"/>
+  <block-list:block block-list:abbreviated-name=":újrahasznosítás:" block-list:name="♻"/>
+  <block-list:block block-list:abbreviated-name=":kerekes szék:" block-list:name="♿"/>
+  <block-list:block block-list:abbreviated-name=":zászló:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":zászló2:" block-list:name="⚑"/>
+  <block-list:block block-list:abbreviated-name=":ék és kalapács:" block-list:name="⚒"/>
+  <block-list:block block-list:abbreviated-name=":horgony:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":horgony:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":kardok:" block-list:name="⚔"/>
+  <block-list:block block-list:abbreviated-name=":orvosi:" block-list:name="⚕"/>
+  <block-list:block block-list:abbreviated-name=":mérleg:" block-list:name="⚖"/>
+  <block-list:block block-list:abbreviated-name=":lombik:" block-list:name="⚗"/>
+  <block-list:block block-list:abbreviated-name=":virág:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":fogaskerék:" block-list:name="⚙"/>
+  <block-list:block block-list:abbreviated-name=":hírnökbot:" block-list:name="⚚"/>
+  <block-list:block block-list:abbreviated-name=":atom:" block-list:name="⚛"/>
+  <block-list:block block-list:abbreviated-name=":liliom:" block-list:name="⚜"/>
+  <block-list:block block-list:abbreviated-name=":figyelmeztetés:" block-list:name="⚠"/>
+  <block-list:block block-list:abbreviated-name=":magasfeszültség:" block-list:name="⚡"/>
+  <block-list:block block-list:abbreviated-name=":fehér kör:" block-list:name="⚪"/>
+  <block-list:block block-list:abbreviated-name=":fekete kör:" block-list:name="⚫"/>
+  <block-list:block block-list:abbreviated-name=":foci:" block-list:name="⚽"/>
+  <block-list:block block-list:abbreviated-name=":baseball:" block-list:name="⚾"/>
+  <block-list:block block-list:abbreviated-name=":hóember2:" block-list:name="⛄"/>
+  <block-list:block block-list:abbreviated-name=":felhő2:" block-list:name="⛅"/>
+  <block-list:block block-list:abbreviated-name=":felhő3:" block-list:name="⛈"/>
+  <block-list:block block-list:abbreviated-name=":kígyótartó:" block-list:name="⛎"/>
+  <block-list:block block-list:abbreviated-name=":csúszós út:" block-list:name="⛐"/>
+  <block-list:block block-list:abbreviated-name=":behajtani tilos:" block-list:name="⛔"/>
+  <block-list:block block-list:abbreviated-name=":pentagramma:" block-list:name="⛤"/>
+  <block-list:block block-list:abbreviated-name=":templom:" block-list:name="⛪"/>
+  <block-list:block block-list:abbreviated-name=":hegy:" block-list:name="⛰"/>
+  <block-list:block block-list:abbreviated-name=":esernyő3:" block-list:name="⛱"/>
+  <block-list:block block-list:abbreviated-name=":forrás:" block-list:name="⛲"/>
+  <block-list:block block-list:abbreviated-name=":golf:" block-list:name="⛳"/>
+  <block-list:block block-list:abbreviated-name=":csónak:" block-list:name="⛵"/>
+  <block-list:block block-list:abbreviated-name=":sátor:" block-list:name="⛺"/>
+  <block-list:block block-list:abbreviated-name=":benzinkút:" block-list:name="⛽"/>
+  <block-list:block block-list:abbreviated-name=":olló3:" block-list:name="✁"/>
+  <block-list:block block-list:abbreviated-name=":olló:" block-list:name="✂"/>
+  <block-list:block block-list:abbreviated-name=":olló4:" block-list:name="✃"/>
+  <block-list:block block-list:abbreviated-name=":olló2:" block-list:name="✄"/>
+  <block-list:block block-list:abbreviated-name=":pipa3:" block-list:name="✅"/>
+  <block-list:block block-list:abbreviated-name=":repülőgép:" block-list:name="✈"/>
+  <block-list:block block-list:abbreviated-name=":boríték:" block-list:name="✉"/>
+  <block-list:block block-list:abbreviated-name=":ököl:" block-list:name="✊"/>
+  <block-list:block block-list:abbreviated-name=":kéz:" block-list:name="✋"/>
+  <block-list:block block-list:abbreviated-name=":győzelem:" block-list:name="✌"/>
+  <block-list:block block-list:abbreviated-name=":ceruza:" block-list:name="✎"/>
+  <block-list:block block-list:abbreviated-name=":ceruza2:" block-list:name="✏"/>
+  <block-list:block block-list:abbreviated-name=":ceruza3:" block-list:name="✐"/>
+  <block-list:block block-list:abbreviated-name=":toll:" block-list:name="✑"/>
+  <block-list:block block-list:abbreviated-name=":toll2:" block-list:name="✒"/>
+  <block-list:block block-list:abbreviated-name=":pipa:" block-list:name="✓"/>
+  <block-list:block block-list:abbreviated-name=":pipa2:" block-list:name="✔"/>
+  <block-list:block block-list:abbreviated-name=":szorzás2:" block-list:name="✖"/>
+  <block-list:block block-list:abbreviated-name=":görög kereszt2:" block-list:name="✙"/>
+  <block-list:block block-list:abbreviated-name=":görög kereszt:" block-list:name="✚"/>
+  <block-list:block block-list:abbreviated-name=":latin kereszt:" block-list:name="✝"/>
+  <block-list:block block-list:abbreviated-name=":máltai kereszt:" block-list:name="✠"/>
+  <block-list:block block-list:abbreviated-name=":Dávid-csillag:" block-list:name="✡"/>
+  <block-list:block block-list:abbreviated-name=":csillogás:" block-list:name="✨"/>
+  <block-list:block block-list:abbreviated-name=":hópehely:" block-list:name="❄"/>
+  <block-list:block block-list:abbreviated-name=":szikra:" block-list:name="❇"/>
+  <block-list:block block-list:abbreviated-name=":x:" block-list:name="❌"/>
+  <block-list:block block-list:abbreviated-name=":x2:" block-list:name="❎"/>
+  <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
+  <block-list:block block-list:abbreviated-name=":?2:" block-list:name="❔"/>
+  <block-list:block block-list:abbreviated-name=":!:" block-list:name="❕"/>
+  <block-list:block block-list:abbreviated-name=":!2:" block-list:name="❗"/>
+  <block-list:block block-list:abbreviated-name=":szív:" block-list:name="❤"/>
+  <block-list:block block-list:abbreviated-name=":hurok:" block-list:name="➰"/>
+  <block-list:block block-list:abbreviated-name=":hurok2:" block-list:name="➿"/>
+  <block-list:block block-list:abbreviated-name=":nagy négyzet3:" block-list:name="⬛"/>
+  <block-list:block block-list:abbreviated-name=":nagy négyzet:" block-list:name="⬜"/>
+  <block-list:block block-list:abbreviated-name=":ötszög2:" block-list:name="⬟"/>
+  <block-list:block block-list:abbreviated-name=":ötszög:" block-list:name="⬠"/>
+  <block-list:block block-list:abbreviated-name=":hatszög:" block-list:name="⬡"/>
+  <block-list:block block-list:abbreviated-name=":hatszög2:" block-list:name="⬢"/>
+  <block-list:block block-list:abbreviated-name=":nagy kör2:" block-list:name="⬤"/>
+  <block-list:block block-list:abbreviated-name=":ellipszis:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":közepes csillag:" block-list:name="⭐"/>
+  <block-list:block block-list:abbreviated-name=":kis csillag2:" block-list:name="⭑"/>
+  <block-list:block block-list:abbreviated-name=":kis csillag:" block-list:name="⭒"/>
+  <block-list:block block-list:abbreviated-name=":o:" block-list:name="⭕"/>
+  <block-list:block block-list:abbreviated-name=":violinkulcs:" block-list:name="𝄞"/>
+  <block-list:block block-list:abbreviated-name=":kettőskereszt3:" block-list:name="𝄪"/>
+  <block-list:block block-list:abbreviated-name=":bebé:" block-list:name="𝄫"/>
+  <block-list:block block-list:abbreviated-name=":egészhang:" block-list:name="𝅝"/>
+  <block-list:block block-list:abbreviated-name=":félhang:" block-list:name="𝅗𝅥"/>
+  <block-list:block block-list:abbreviated-name=":tizedhatod hang:" block-list:name="𝅘𝅥𝅯"/>
+  <block-list:block block-list:abbreviated-name=":madzsong:" block-list:name="🀄"/>
+  <block-list:block block-list:abbreviated-name=":fekete dzsóker:" block-list:name="🃏"/>
+  <block-list:block block-list:abbreviated-name=":ciklon:" block-list:name="🌀"/>
+  <block-list:block block-list:abbreviated-name=":köd:" block-list:name="🌁"/>
+  <block-list:block block-list:abbreviated-name=":esernyő2:" block-list:name="🌂"/>
+  <block-list:block block-list:abbreviated-name=":éjszaka:" block-list:name="🌃"/>
+  <block-list:block block-list:abbreviated-name=":hajnal:" block-list:name="🌄"/>
+  <block-list:block block-list:abbreviated-name=":naplemente:" block-list:name="🌅"/>
+  <block-list:block block-list:abbreviated-name=":hajnal2:" block-list:name="🌆"/>
+  <block-list:block block-list:abbreviated-name=":naplemente2:" block-list:name="🌇"/>
+  <block-list:block block-list:abbreviated-name=":szivárvány:" block-list:name="🌈"/>
+  <block-list:block block-list:abbreviated-name=":híd:" block-list:name="🌉"/>
+  <block-list:block block-list:abbreviated-name=":óceán:" block-list:name="🌊"/>
+  <block-list:block block-list:abbreviated-name=":vulkán:" block-list:name="🌋"/>
+  <block-list:block block-list:abbreviated-name=":Tejút:" block-list:name="🌌"/>
+  <block-list:block block-list:abbreviated-name=":földgömb:" block-list:name="🌍"/>
+  <block-list:block block-list:abbreviated-name=":földgömb2:" block-list:name="🌎"/>
+  <block-list:block block-list:abbreviated-name=":földgömb3:" block-list:name="🌏"/>
+  <block-list:block block-list:abbreviated-name=":földgömb4:" block-list:name="🌐"/>
+  <block-list:block block-list:abbreviated-name=":újhold:" block-list:name="🌑"/>
+  <block-list:block block-list:abbreviated-name=":növő holdsarló:" block-list:name="🌒"/>
+  <block-list:block block-list:abbreviated-name=":első negyed:" block-list:name="🌓"/>
+  <block-list:block block-list:abbreviated-name=":növő hold:" block-list:name="🌔"/>
+  <block-list:block block-list:abbreviated-name=":telihold:" block-list:name="🌕"/>
+  <block-list:block block-list:abbreviated-name=":fogyó hold:" block-list:name="🌖"/>
+  <block-list:block block-list:abbreviated-name=":utolsó negyed:" block-list:name="🌗"/>
+  <block-list:block block-list:abbreviated-name=":fogyó holdsarló:" block-list:name="🌘"/>
+  <block-list:block block-list:abbreviated-name=":félhold:" block-list:name="🌙"/>
+  <block-list:block block-list:abbreviated-name=":újhold2:" block-list:name="🌚"/>
+  <block-list:block block-list:abbreviated-name=":hold:" block-list:name="🌛"/>
+  <block-list:block block-list:abbreviated-name=":moon2:" block-list:name="🌜"/>
+  <block-list:block block-list:abbreviated-name=":telihold2:" block-list:name="🌝"/>
+  <block-list:block block-list:abbreviated-name=":nap:" block-list:name="🌞"/>
+  <block-list:block block-list:abbreviated-name=":csillag3:" block-list:name="🌟"/>
+  <block-list:block block-list:abbreviated-name=":csillag4:" block-list:name="🌠"/>
+  <block-list:block block-list:abbreviated-name=":gesztenye:" block-list:name="🌰"/>
+  <block-list:block block-list:abbreviated-name=":magonc:" block-list:name="🌱"/>
+  <block-list:block block-list:abbreviated-name=":fenyő:" block-list:name="🌲"/>
+  <block-list:block block-list:abbreviated-name=":fa:" block-list:name="🌳"/>
+  <block-list:block block-list:abbreviated-name=":pálma:" block-list:name="🌴"/>
+  <block-list:block block-list:abbreviated-name=":kaktusz:" block-list:name="🌵"/>
+  <block-list:block block-list:abbreviated-name=":tulipán:" block-list:name="🌷"/>
+  <block-list:block block-list:abbreviated-name=":cseresznyevirág:" block-list:name="🌸"/>
+  <block-list:block block-list:abbreviated-name=":rózsa:" block-list:name="🌹"/>
+  <block-list:block block-list:abbreviated-name=":hibiszkusz:" block-list:name="🌺"/>
+  <block-list:block block-list:abbreviated-name=":napraforgó:" block-list:name="🌻"/>
+  <block-list:block block-list:abbreviated-name=":virág:" block-list:name="🌼"/>
+  <block-list:block block-list:abbreviated-name=":kukorica:" block-list:name="🌽"/>
+  <block-list:block block-list:abbreviated-name=":fű:" block-list:name="🌾"/>
+  <block-list:block block-list:abbreviated-name=":gyógyfű:" block-list:name="🌿"/>
+  <block-list:block block-list:abbreviated-name=":lóhere:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":levél:" block-list:name="🍁"/>
+  <block-list:block block-list:abbreviated-name=":levél2:" block-list:name="🍂"/>
+  <block-list:block block-list:abbreviated-name=":levél3:" block-list:name="🍃"/>
+  <block-list:block block-list:abbreviated-name=":gomba:" block-list:name="🍄"/>
+  <block-list:block block-list:abbreviated-name=":paradicsom:" block-list:name="🍅"/>
+  <block-list:block block-list:abbreviated-name=":padlizsán:" block-list:name="🍆"/>
+  <block-list:block block-list:abbreviated-name=":szőlő:" block-list:name="🍇"/>
+  <block-list:block block-list:abbreviated-name=":sárgadinnye:" block-list:name="🍈"/>
+  <block-list:block block-list:abbreviated-name=":dinnye:" block-list:name="🍉"/>
+  <block-list:block block-list:abbreviated-name=":mandarin:" block-list:name="🍊"/>
+  <block-list:block block-list:abbreviated-name=":citrom:" block-list:name="🍋"/>
+  <block-list:block block-list:abbreviated-name=":banán:" block-list:name="🍌"/>
+  <block-list:block block-list:abbreviated-name=":ananász:" block-list:name="🍍"/>
+  <block-list:block block-list:abbreviated-name=":alma:" block-list:name="🍎"/>
+  <block-list:block block-list:abbreviated-name=":zöldalma:" block-list:name="🍏"/>
+  <block-list:block block-list:abbreviated-name=":körte:" block-list:name="🍐"/>
+  <block-list:block block-list:abbreviated-name=":barack:" block-list:name="🍑"/>
+  <block-list:block block-list:abbreviated-name=":cseresznye:" block-list:name="🍒"/>
+  <block-list:block block-list:abbreviated-name=":szamóca:" block-list:name="🍓"/>
+  <block-list:block block-list:abbreviated-name=":hamburger:" block-list:name="🍔"/>
+  <block-list:block block-list:abbreviated-name=":pizza:" block-list:name="🍕"/>
+  <block-list:block block-list:abbreviated-name=":hús:" block-list:name="🍖"/>
+  <block-list:block block-list:abbreviated-name=":csirkecomb:" block-list:name="🍗"/>
+  <block-list:block block-list:abbreviated-name=":rizskeksz:" block-list:name="🍘"/>
+  <block-list:block block-list:abbreviated-name=":rizsgombóc:" block-list:name="🍙"/>
+  <block-list:block block-list:abbreviated-name=":rizs:" block-list:name="🍚"/>
+  <block-list:block block-list:abbreviated-name=":curry:" block-list:name="🍛"/>
+  <block-list:block block-list:abbreviated-name=":rámen:" block-list:name="🍜"/>
+  <block-list:block block-list:abbreviated-name=":spagetti:" block-list:name="🍝"/>
+  <block-list:block block-list:abbreviated-name=":kenyér:" block-list:name="🍞"/>
+  <block-list:block block-list:abbreviated-name=":krumpli:" block-list:name="🍟"/>
+  <block-list:block block-list:abbreviated-name=":édesburgonya:" block-list:name="🍠"/>
+  <block-list:block block-list:abbreviated-name=":dango:" block-list:name="🍡"/>
+  <block-list:block block-list:abbreviated-name=":oden:" block-list:name="🍢"/>
+  <block-list:block block-list:abbreviated-name=":szusi:" block-list:name="🍣"/>
+  <block-list:block block-list:abbreviated-name=":rántott rák:" block-list:name="🍤"/>
+  <block-list:block block-list:abbreviated-name=":halsüti:" block-list:name="🍥"/>
+  <block-list:block block-list:abbreviated-name=":fagyi:" block-list:name="🍦"/>
+  <block-list:block block-list:abbreviated-name=":jégkrém:" block-list:name="🍧"/>
+  <block-list:block block-list:abbreviated-name=":fagyi2:" block-list:name="🍨"/>
+  <block-list:block block-list:abbreviated-name=":fánk:" block-list:name="🍩"/>
+  <block-list:block block-list:abbreviated-name=":keksz:" block-list:name="🍪"/>
+  <block-list:block block-list:abbreviated-name=":csoki:" block-list:name="🍫"/>
+  <block-list:block block-list:abbreviated-name=":cukor:" block-list:name="🍬"/>
+  <block-list:block block-list:abbreviated-name=":nyalóka:" block-list:name="🍭"/>
+  <block-list:block block-list:abbreviated-name=":sodó:" block-list:name="🍮"/>
+  <block-list:block block-list:abbreviated-name=":méz:" block-list:name="🍯"/>
+  <block-list:block block-list:abbreviated-name=":süti:" block-list:name="🍰"/>
+  <block-list:block block-list:abbreviated-name=":bentó:" block-list:name="🍱"/>
+  <block-list:block block-list:abbreviated-name=":ragu:" block-list:name="🍲"/>
+  <block-list:block block-list:abbreviated-name=":rántotta:" block-list:name="🍳"/>
+  <block-list:block block-list:abbreviated-name=":kés villa:" block-list:name="🍴"/>
+  <block-list:block block-list:abbreviated-name=":tea:" block-list:name="🍵"/>
+  <block-list:block block-list:abbreviated-name=":szaké:" block-list:name="🍶"/>
+  <block-list:block block-list:abbreviated-name=":borospohár:" block-list:name="🍷"/>
+  <block-list:block block-list:abbreviated-name=":koktél:" block-list:name="🍸"/>
+  <block-list:block block-list:abbreviated-name=":koktél2:" block-list:name="🍹"/>
+  <block-list:block block-list:abbreviated-name=":sör:" block-list:name="🍺"/>
+  <block-list:block block-list:abbreviated-name=":sör2:" block-list:name="🍻"/>
+  <block-list:block block-list:abbreviated-name=":cumisüveg:" block-list:name="🍼"/>
+  <block-list:block block-list:abbreviated-name=":szalag:" block-list:name="🎀"/>
+  <block-list:block block-list:abbreviated-name=":ajándék:" block-list:name="🎁"/>
+  <block-list:block block-list:abbreviated-name=":szülinap:" block-list:name="🎂"/>
+  <block-list:block block-list:abbreviated-name=":töklámpás:" block-list:name="🎃"/>
+  <block-list:block block-list:abbreviated-name=":karácsonyfa:" block-list:name="🎄"/>
+  <block-list:block block-list:abbreviated-name=":Mikulás:" block-list:name="🎅"/>
+  <block-list:block block-list:abbreviated-name=":tűzijáték:" block-list:name="🎆"/>
+  <block-list:block block-list:abbreviated-name=":csillagszóró:" block-list:name="🎇"/>
+  <block-list:block block-list:abbreviated-name=":lufi:" block-list:name="🎈"/>
+  <block-list:block block-list:abbreviated-name=":buli:" block-list:name="🎉"/>
+  <block-list:block block-list:abbreviated-name=":konfetti:" block-list:name="🎊"/>
+  <block-list:block block-list:abbreviated-name=":tanabata fa:" block-list:name="🎋"/>
+  <block-list:block block-list:abbreviated-name=":zászlók:" block-list:name="🎌"/>
+  <block-list:block block-list:abbreviated-name=":bambusz:" block-list:name="🎍"/>
+  <block-list:block block-list:abbreviated-name=":babák:" block-list:name="🎎"/>
+  <block-list:block block-list:abbreviated-name=":zászlók2:" block-list:name="🎏"/>
+  <block-list:block block-list:abbreviated-name=":szélcsengő:" block-list:name="🎐"/>
+  <block-list:block block-list:abbreviated-name=":rizs2:" block-list:name="🎑"/>
+  <block-list:block block-list:abbreviated-name=":iskolatáska:" block-list:name="🎒"/>
+  <block-list:block block-list:abbreviated-name=":diploma:" block-list:name="🎓"/>
+  <block-list:block block-list:abbreviated-name=":hintaló:" block-list:name="🎠"/>
+  <block-list:block block-list:abbreviated-name=":óriáskerék:" block-list:name="🎡"/>
+  <block-list:block block-list:abbreviated-name=":hullámvasút:" block-list:name="🎢"/>
+  <block-list:block block-list:abbreviated-name=":horgászat:" block-list:name="🎣"/>
+  <block-list:block block-list:abbreviated-name=":mikrofon:" block-list:name="🎤"/>
+  <block-list:block block-list:abbreviated-name=":kamera:" block-list:name="🎥"/>
+  <block-list:block block-list:abbreviated-name=":mozi:" block-list:name="🎦"/>
+  <block-list:block block-list:abbreviated-name=":fülhallgató:" block-list:name="🎧"/>
+  <block-list:block block-list:abbreviated-name=":művészet:" block-list:name="🎨"/>
+  <block-list:block block-list:abbreviated-name=":cilinder:" block-list:name="🎩"/>
+  <block-list:block block-list:abbreviated-name=":cirkuszsátor:" block-list:name="🎪"/>
+  <block-list:block block-list:abbreviated-name=":jegy:" block-list:name="🎫"/>
+  <block-list:block block-list:abbreviated-name=":csapó:" block-list:name="🎬"/>
+  <block-list:block block-list:abbreviated-name=":színház:" block-list:name="🎭"/>
+  <block-list:block block-list:abbreviated-name=":videojáték:" block-list:name="🎮"/>
+  <block-list:block block-list:abbreviated-name=":találat:" block-list:name="🎯"/>
+  <block-list:block block-list:abbreviated-name=":játékgép:" block-list:name="🎰"/>
+  <block-list:block block-list:abbreviated-name=":biliárd:" block-list:name="🎱"/>
+  <block-list:block block-list:abbreviated-name=":kockajáték:" block-list:name="🎲"/>
+  <block-list:block block-list:abbreviated-name=":bowling:" block-list:name="🎳"/>
+  <block-list:block block-list:abbreviated-name=":kártya:" block-list:name="🎴"/>
+  <block-list:block block-list:abbreviated-name=":hangjegy:" block-list:name="🎵"/>
+  <block-list:block block-list:abbreviated-name=":hangjegy2:" block-list:name="🎶"/>
+  <block-list:block block-list:abbreviated-name=":szaxofon:" block-list:name="🎷"/>
+  <block-list:block block-list:abbreviated-name=":gitár:" block-list:name="🎸"/>
+  <block-list:block block-list:abbreviated-name=":zongora:" block-list:name="🎹"/>
+  <block-list:block block-list:abbreviated-name=":trombita:" block-list:name="🎺"/>
+  <block-list:block block-list:abbreviated-name=":hegedű:" block-list:name="🎻"/>
+  <block-list:block block-list:abbreviated-name=":kotta:" block-list:name="🎼"/>
+  <block-list:block block-list:abbreviated-name=":trikó:" block-list:name="🎽"/>
+  <block-list:block block-list:abbreviated-name=":tenisz:" block-list:name="🎾"/>
+  <block-list:block block-list:abbreviated-name=":sí:" block-list:name="🎿"/>
+  <block-list:block block-list:abbreviated-name=":kosárlabda:" block-list:name="🏀"/>
+  <block-list:block block-list:abbreviated-name=":zászló3:" block-list:name="🏁"/>
+  <block-list:block block-list:abbreviated-name=":hódeszkás:" block-list:name="🏂"/>
+  <block-list:block block-list:abbreviated-name=":futó:" block-list:name="🏃"/>
+  <block-list:block block-list:abbreviated-name=":szörfös:" block-list:name="🏄"/>
+  <block-list:block block-list:abbreviated-name=":kupa:" block-list:name="🏆"/>
+  <block-list:block block-list:abbreviated-name=":lóverseny:" block-list:name="🏇"/>
+  <block-list:block block-list:abbreviated-name=":amerikai foci:" block-list:name="🏈"/>
+  <block-list:block block-list:abbreviated-name=":rögbi:" block-list:name="🏉"/>
+  <block-list:block block-list:abbreviated-name=":úszó:" block-list:name="🏊"/>
+  <block-list:block block-list:abbreviated-name=":ház:" block-list:name="🏠"/>
+  <block-list:block block-list:abbreviated-name=":ház2:" block-list:name="🏡"/>
+  <block-list:block block-list:abbreviated-name=":iroda:" block-list:name="🏢"/>
+  <block-list:block block-list:abbreviated-name=":posta2:" block-list:name="🏣"/>
+  <block-list:block block-list:abbreviated-name=":posta2:" block-list:name="🏤"/>
+  <block-list:block block-list:abbreviated-name=":kórház:" block-list:name="🏥"/>
+  <block-list:block block-list:abbreviated-name=":bank:" block-list:name="🏦"/>
+  <block-list:block block-list:abbreviated-name=":ATM:" block-list:name="🏧"/>
+  <block-list:block block-list:abbreviated-name=":hotel:" block-list:name="🏨"/>
+  <block-list:block block-list:abbreviated-name=":hotel2:" block-list:name="🏩"/>
+  <block-list:block block-list:abbreviated-name=":bolt:" block-list:name="🏪"/>
+  <block-list:block block-list:abbreviated-name=":iskola:" block-list:name="🏫"/>
+  <block-list:block block-list:abbreviated-name=":áruház:" block-list:name="🏬"/>
+  <block-list:block block-list:abbreviated-name=":gyár:" block-list:name="🏭"/>
+  <block-list:block block-list:abbreviated-name=":lampion:" block-list:name="🏮"/>
+  <block-list:block block-list:abbreviated-name=":pagoda:" block-list:name="🏯"/>
+  <block-list:block block-list:abbreviated-name=":kastély:" block-list:name="🏰"/>
+  <block-list:block block-list:abbreviated-name=":bőrszín2:" block-list:name="🏻"/>
+  <block-list:block block-list:abbreviated-name=":bőrszín3:" block-list:name="🏼"/>
+  <block-list:block block-list:abbreviated-name=":bőrszín4:" block-list:name="🏽"/>
+  <block-list:block block-list:abbreviated-name=":bőrszín5:" block-list:name="🏾"/>
+  <block-list:block block-list:abbreviated-name=":bőrszín6:" block-list:name="🏿"/>
+  <block-list:block block-list:abbreviated-name=":patkány:" block-list:name="🐀"/>
+  <block-list:block block-list:abbreviated-name=":egér2:" block-list:name="🐁"/>
+  <block-list:block block-list:abbreviated-name=":ökör:" block-list:name="🐂"/>
+  <block-list:block block-list:abbreviated-name=":bivaly:" block-list:name="🐃"/>
+  <block-list:block block-list:abbreviated-name=":tehén2:" block-list:name="🐄"/>
+  <block-list:block block-list:abbreviated-name=":tigris2:" block-list:name="🐅"/>
+  <block-list:block block-list:abbreviated-name=":leopárd:" block-list:name="🐆"/>
+  <block-list:block block-list:abbreviated-name=":nyúl2:" block-list:name="🐇"/>
+  <block-list:block block-list:abbreviated-name=":macska2:" block-list:name="🐈"/>
+  <block-list:block block-list:abbreviated-name=":sárkány:" block-list:name="🐉"/>
+  <block-list:block block-list:abbreviated-name=":krokodil:" block-list:name="🐊"/>
+  <block-list:block block-list:abbreviated-name=":bálna2:" block-list:name="🐋"/>
+  <block-list:block block-list:abbreviated-name=":csiga:" block-list:name="🐌"/>
+  <block-list:block block-list:abbreviated-name=":kígyó:" block-list:name="🐍"/>
+  <block-list:block block-list:abbreviated-name=":versenyló:" block-list:name="🐎"/>
+  <block-list:block block-list:abbreviated-name=":kos:" block-list:name="🐏"/>
+  <block-list:block block-list:abbreviated-name=":kecske:" block-list:name="🐐"/>
+  <block-list:block block-list:abbreviated-name=":birka:" block-list:name="🐑"/>
+  <block-list:block block-list:abbreviated-name=":majom:" block-list:name="🐒"/>
+  <block-list:block block-list:abbreviated-name=":kakas:" block-list:name="🐓"/>
+  <block-list:block block-list:abbreviated-name=":tyúk:" block-list:name="🐔"/>
+  <block-list:block block-list:abbreviated-name=":kutya2:" block-list:name="🐕"/>
+  <block-list:block block-list:abbreviated-name=":disznó2:" block-list:name="🐖"/>
+  <block-list:block block-list:abbreviated-name=":vadkan:" block-list:name="🐗"/>
+  <block-list:block block-list:abbreviated-name=":elefánt:" block-list:name="🐘"/>
+  <block-list:block block-list:abbreviated-name=":polip:" block-list:name="🐙"/>
+  <block-list:block block-list:abbreviated-name=":csigaház:" block-list:name="🐚"/>
+  <block-list:block block-list:abbreviated-name=":féreg:" block-list:name="🐛"/>
+  <block-list:block block-list:abbreviated-name=":hangya:" block-list:name="🐜"/>
+  <block-list:block block-list:abbreviated-name=":méh:" block-list:name="🐝"/>
+  <block-list:block block-list:abbreviated-name=":katicabogár:" block-list:name="🐞"/>
+  <block-list:block block-list:abbreviated-name=":hal:" block-list:name="🐟"/>
+  <block-list:block block-list:abbreviated-name=":hal2:" block-list:name="🐠"/>
+  <block-list:block block-list:abbreviated-name=":hal3:" block-list:name="🐡"/>
+  <block-list:block block-list:abbreviated-name=":teknős:" block-list:name="🐢"/>
+  <block-list:block block-list:abbreviated-name=":csibe:" block-list:name="🐣"/>
+  <block-list:block block-list:abbreviated-name=":csibe2:" block-list:name="🐤"/>
+  <block-list:block block-list:abbreviated-name=":csibe3:" block-list:name="🐥"/>
+  <block-list:block block-list:abbreviated-name=":madár:" block-list:name="🐦"/>
+  <block-list:block block-list:abbreviated-name=":pingvin:" block-list:name="🐧"/>
+  <block-list:block block-list:abbreviated-name=":koala:" block-list:name="🐨"/>
+  <block-list:block block-list:abbreviated-name=":uszkár:" block-list:name="🐩"/>
+  <block-list:block block-list:abbreviated-name=":teve:" block-list:name="🐪"/>
+  <block-list:block block-list:abbreviated-name=":teve2:" block-list:name="🐫"/>
+  <block-list:block block-list:abbreviated-name=":delfin:" block-list:name="🐬"/>
+  <block-list:block block-list:abbreviated-name=":egér:" block-list:name="🐭"/>
+  <block-list:block block-list:abbreviated-name=":tehén:" block-list:name="🐮"/>
+  <block-list:block block-list:abbreviated-name=":tigris:" block-list:name="🐯"/>
+  <block-list:block block-list:abbreviated-name=":nyúl:" block-list:name="🐰"/>
+  <block-list:block block-list:abbreviated-name=":macska:" block-list:name="🐱"/>
+  <block-list:block block-list:abbreviated-name=":sárkány2:" block-list:name="🐲"/>
+  <block-list:block block-list:abbreviated-name=":bálna:" block-list:name="🐳"/>
+  <block-list:block block-list:abbreviated-name=":ló:" block-list:name="🐴"/>
+  <block-list:block block-list:abbreviated-name=":majom2:" block-list:name="🐵"/>
+  <block-list:block block-list:abbreviated-name=":kutya:" block-list:name="🐶"/>
+  <block-list:block block-list:abbreviated-name=":disznó:" block-list:name="🐷"/>
+  <block-list:block block-list:abbreviated-name=":béka:" block-list:name="🐸"/>
+  <block-list:block block-list:abbreviated-name=":hörcsög:" block-list:name="🐹"/>
+  <block-list:block block-list:abbreviated-name=":farkas:" block-list:name="🐺"/>
+  <block-list:block block-list:abbreviated-name=":medve:" block-list:name="🐻"/>
+  <block-list:block block-list:abbreviated-name=":panda2:" block-list:name="🐼"/>
+  <block-list:block block-list:abbreviated-name=":malacorr:" block-list:name="🐽"/>
+  <block-list:block block-list:abbreviated-name=":nyom:" block-list:name="🐾"/>
+  <block-list:block block-list:abbreviated-name=":szem:" block-list:name="👀"/>
+  <block-list:block block-list:abbreviated-name=":fül:" block-list:name="👂"/>
+  <block-list:block block-list:abbreviated-name=":orr:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":száj:" block-list:name="👄"/>
+  <block-list:block block-list:abbreviated-name=":nyelv:" block-list:name="👅"/>
+  <block-list:block block-list:abbreviated-name=":fel2:" block-list:name="👆"/>
+  <block-list:block block-list:abbreviated-name=":le2:" block-list:name="👇"/>
+  <block-list:block block-list:abbreviated-name=":balra2:" block-list:name="👈"/>
+  <block-list:block block-list:abbreviated-name=":jobbra2:" block-list:name="👉"/>
+  <block-list:block block-list:abbreviated-name=":ököl2:" block-list:name="👊"/>
+  <block-list:block block-list:abbreviated-name=":pá:" block-list:name="👋"/>
+  <block-list:block block-list:abbreviated-name=":oké:" block-list:name="👌"/>
+  <block-list:block block-list:abbreviated-name=":jó:" block-list:name="👍"/>
+  <block-list:block block-list:abbreviated-name=":rossz:" block-list:name="👎"/>
+  <block-list:block block-list:abbreviated-name=":taps:" block-list:name="👏"/>
+  <block-list:block block-list:abbreviated-name=":tenyér:" block-list:name="👐"/>
+  <block-list:block block-list:abbreviated-name=":korona:" block-list:name="👑"/>
+  <block-list:block block-list:abbreviated-name=":női kalap:" block-list:name="👒"/>
+  <block-list:block block-list:abbreviated-name=":szemüveg:" block-list:name="👓"/>
+  <block-list:block block-list:abbreviated-name=":nyakkendő:" block-list:name="👔"/>
+  <block-list:block block-list:abbreviated-name=":póló:" block-list:name="👕"/>
+  <block-list:block block-list:abbreviated-name=":farmer:" block-list:name="👖"/>
+  <block-list:block block-list:abbreviated-name=":ruha:" block-list:name="👗"/>
+  <block-list:block block-list:abbreviated-name=":kimonó:" block-list:name="👘"/>
+  <block-list:block block-list:abbreviated-name=":bikini:" block-list:name="👙"/>
+  <block-list:block block-list:abbreviated-name=":ruha2:" block-list:name="👚"/>
+  <block-list:block block-list:abbreviated-name=":pénztárca:" block-list:name="👛"/>
+  <block-list:block block-list:abbreviated-name=":táska:" block-list:name="👜"/>
+  <block-list:block block-list:abbreviated-name=":táska2:" block-list:name="👝"/>
+  <block-list:block block-list:abbreviated-name=":cipő:" block-list:name="👞"/>
+  <block-list:block block-list:abbreviated-name=":cipő2:" block-list:name="👟"/>
+  <block-list:block block-list:abbreviated-name=":cipő3:" block-list:name="👠"/>
+  <block-list:block block-list:abbreviated-name=":szandál:" block-list:name="👡"/>
+  <block-list:block block-list:abbreviated-name=":csizma:" block-list:name="👢"/>
+  <block-list:block block-list:abbreviated-name=":lábnyom:" block-list:name="👣"/>
+  <block-list:block block-list:abbreviated-name=":személy:" block-list:name="👤"/>
+  <block-list:block block-list:abbreviated-name=":személy2:" block-list:name="👥"/>
+  <block-list:block block-list:abbreviated-name=":fiú:" block-list:name="👦"/>
+  <block-list:block block-list:abbreviated-name=":lány:" block-list:name="👧"/>
+  <block-list:block block-list:abbreviated-name=":férfi:" block-list:name="👨"/>
+  <block-list:block block-list:abbreviated-name=":nő:" block-list:name="👩"/>
+  <block-list:block block-list:abbreviated-name=":család:" block-list:name="👪"/>
+  <block-list:block block-list:abbreviated-name=":pár:" block-list:name="👫"/>
+  <block-list:block block-list:abbreviated-name=":pár2:" block-list:name="👬"/>
+  <block-list:block block-list:abbreviated-name=":pár3:" block-list:name="👭"/>
+  <block-list:block block-list:abbreviated-name=":rendőr:" block-list:name="👮"/>
+  <block-list:block block-list:abbreviated-name=":nyuszifül:" block-list:name="👯"/>
+  <block-list:block block-list:abbreviated-name=":menyasszony:" block-list:name="👰"/>
+  <block-list:block block-list:abbreviated-name=":szőke:" block-list:name="👱"/>
+  <block-list:block block-list:abbreviated-name=":sapka:" block-list:name="👲"/>
+  <block-list:block block-list:abbreviated-name=":turbán:" block-list:name="👳"/>
+  <block-list:block block-list:abbreviated-name=":apó:" block-list:name="👴"/>
+  <block-list:block block-list:abbreviated-name=":anyó:" block-list:name="👵"/>
+  <block-list:block block-list:abbreviated-name=":baba:" block-list:name="👶"/>
+  <block-list:block block-list:abbreviated-name=":munkás:" block-list:name="👷"/>
+  <block-list:block block-list:abbreviated-name=":hercegnő:" block-list:name="👸"/>
+  <block-list:block block-list:abbreviated-name=":szörny:" block-list:name="👹"/>
+  <block-list:block block-list:abbreviated-name=":szörny2:" block-list:name="👺"/>
+  <block-list:block block-list:abbreviated-name=":szellem:" block-list:name="👻"/>
+  <block-list:block block-list:abbreviated-name=":angyal:" block-list:name="👼"/>
+  <block-list:block block-list:abbreviated-name=":idegen:" block-list:name="👽"/>
+  <block-list:block block-list:abbreviated-name=":idegen2:" block-list:name="👾"/>
+  <block-list:block block-list:abbreviated-name=":krampusz:" block-list:name="👿"/>
+  <block-list:block block-list:abbreviated-name=":koponya:" block-list:name="💀"/>
+  <block-list:block block-list:abbreviated-name=":információ2:" block-list:name="💁"/>
+  <block-list:block block-list:abbreviated-name=":őr:" block-list:name="💂"/>
+  <block-list:block block-list:abbreviated-name=":táncos:" block-list:name="💃"/>
+  <block-list:block block-list:abbreviated-name=":rúzs:" block-list:name="💄"/>
+  <block-list:block block-list:abbreviated-name=":körömlakk:" block-list:name="💅"/>
+  <block-list:block block-list:abbreviated-name=":masszázs:" block-list:name="💆"/>
+  <block-list:block block-list:abbreviated-name=":hajvágás:" block-list:name="💇"/>
+  <block-list:block block-list:abbreviated-name=":borbély:" block-list:name="💈"/>
+  <block-list:block block-list:abbreviated-name=":fecskendő:" block-list:name="💉"/>
+  <block-list:block block-list:abbreviated-name=":tabletta:" block-list:name="💊"/>
+  <block-list:block block-list:abbreviated-name=":rúzsnyom:" block-list:name="💋"/>
+  <block-list:block block-list:abbreviated-name=":szerelmeslevél:" block-list:name="💌"/>
+  <block-list:block block-list:abbreviated-name=":gyűrű:" block-list:name="💍"/>
+  <block-list:block block-list:abbreviated-name=":drágakő:" block-list:name="💎"/>
+  <block-list:block block-list:abbreviated-name=":csók:" block-list:name="💏"/>
+  <block-list:block block-list:abbreviated-name=":csokor:" block-list:name="💐"/>
+  <block-list:block block-list:abbreviated-name=":pár4:" block-list:name="💑"/>
+  <block-list:block block-list:abbreviated-name=":esküvő:" block-list:name="💒"/>
+  <block-list:block block-list:abbreviated-name=":szívdobbanás:" block-list:name="💓"/>
+  <block-list:block block-list:abbreviated-name=":meghasadt szív:" block-list:name="💔"/>
+  <block-list:block block-list:abbreviated-name=":két szív:" block-list:name="💕"/>
+  <block-list:block block-list:abbreviated-name=":csillogó szív:" block-list:name="💖"/>
+  <block-list:block block-list:abbreviated-name=":szívverés:" block-list:name="💗"/>
+  <block-list:block block-list:abbreviated-name=":Cupido:" block-list:name="💘"/>
+  <block-list:block block-list:abbreviated-name=":ajándék szív:" block-list:name="💝"/>
+  <block-list:block block-list:abbreviated-name=":keringő szívek:" block-list:name="💞"/>
+  <block-list:block block-list:abbreviated-name=":szívminta:" block-list:name="💟"/>
+  <block-list:block block-list:abbreviated-name=":cukiság:" block-list:name="💠"/>
+  <block-list:block block-list:abbreviated-name=":izzó:" block-list:name="💡"/>
+  <block-list:block block-list:abbreviated-name=":düh:" block-list:name="💢"/>
+  <block-list:block block-list:abbreviated-name=":bomba:" block-list:name="💣"/>
+  <block-list:block block-list:abbreviated-name=":zzz:" block-list:name="💤"/>
+  <block-list:block block-list:abbreviated-name=":bumm:" block-list:name="💥"/>
+  <block-list:block block-list:abbreviated-name=":izzadtság:" block-list:name="💦"/>
+  <block-list:block block-list:abbreviated-name=":csepp:" block-list:name="💧"/>
+  <block-list:block block-list:abbreviated-name=":huss:" block-list:name="💨"/>
+  <block-list:block block-list:abbreviated-name=":kaki:" block-list:name="💩"/>
+  <block-list:block block-list:abbreviated-name=":izom:" block-list:name="💪"/>
+  <block-list:block block-list:abbreviated-name=":szédülés:" block-list:name="💫"/>
+  <block-list:block block-list:abbreviated-name=":szöveg:" block-list:name="💬"/>
+  <block-list:block block-list:abbreviated-name=":szöveg2:" block-list:name="💭"/>
+  <block-list:block block-list:abbreviated-name=":fehér virág:" block-list:name="💮"/>
+  <block-list:block block-list:abbreviated-name=":száz:" block-list:name="💯"/>
+  <block-list:block block-list:abbreviated-name=":pénzeszsák:" block-list:name="💰"/>
+  <block-list:block block-list:abbreviated-name=":pénzváltás:" block-list:name="💱"/>
+  <block-list:block block-list:abbreviated-name=":dollárjel2:" block-list:name="💲"/>
+  <block-list:block block-list:abbreviated-name=":hitelkártya:" block-list:name="💳"/>
+  <block-list:block block-list:abbreviated-name=":jen2:" block-list:name="💴"/>
+  <block-list:block block-list:abbreviated-name=":dollár2:" block-list:name="💵"/>
+  <block-list:block block-list:abbreviated-name=":euró2:" block-list:name="💶"/>
+  <block-list:block block-list:abbreviated-name=":font2:" block-list:name="💷"/>
+  <block-list:block block-list:abbreviated-name=":pénz2:" block-list:name="💸"/>
+  <block-list:block block-list:abbreviated-name=":grafikon:" block-list:name="💹"/>
+  <block-list:block block-list:abbreviated-name=":ülés:" block-list:name="💺"/>
+  <block-list:block block-list:abbreviated-name=":számítógép:" block-list:name="💻"/>
+  <block-list:block block-list:abbreviated-name=":aktatáska:" block-list:name="💼"/>
+  <block-list:block block-list:abbreviated-name=":MD:" block-list:name="💽"/>
+  <block-list:block block-list:abbreviated-name=":floppy:" block-list:name="💾"/>
+  <block-list:block block-list:abbreviated-name=":CD:" block-list:name="💿"/>
+  <block-list:block block-list:abbreviated-name=":DVD:" block-list:name="📀"/>
+  <block-list:block block-list:abbreviated-name=":mappa:" block-list:name="📁"/>
+  <block-list:block block-list:abbreviated-name=":mappa2:" block-list:name="📂"/>
+  <block-list:block block-list:abbreviated-name=":oldal:" block-list:name="📃"/>
+  <block-list:block block-list:abbreviated-name=":oldal2:" block-list:name="📄"/>
+  <block-list:block block-list:abbreviated-name=":naptár:" block-list:name="📅"/>
+  <block-list:block block-list:abbreviated-name=":naptár2:" block-list:name="📆"/>
+  <block-list:block block-list:abbreviated-name=":kartoték:" block-list:name="📇"/>
+  <block-list:block block-list:abbreviated-name=":diagram:" block-list:name="📈"/>
+  <block-list:block block-list:abbreviated-name=":diagram2:" block-list:name="📉"/>
+  <block-list:block block-list:abbreviated-name=":diagram3:" block-list:name="📊"/>
+  <block-list:block block-list:abbreviated-name=":vágólap:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":gombostű2:" block-list:name="📌"/>
+  <block-list:block block-list:abbreviated-name=":gombostű:" block-list:name="📍"/>
+  <block-list:block block-list:abbreviated-name=":gemkapocs:" block-list:name="📎"/>
+  <block-list:block block-list:abbreviated-name=":vonalzó:" block-list:name="📏"/>
+  <block-list:block block-list:abbreviated-name=":vonalzó2:" block-list:name="📐"/>
+  <block-list:block block-list:abbreviated-name=":könyvjelző:" block-list:name="📑"/>
+  <block-list:block block-list:abbreviated-name=":füzet:" block-list:name="📒"/>
+  <block-list:block block-list:abbreviated-name=":füzet2:" block-list:name="📓"/>
+  <block-list:block block-list:abbreviated-name=":füzet3:" block-list:name="📔"/>
+  <block-list:block block-list:abbreviated-name=":könyv:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":könyv2:" block-list:name="📖"/>
+  <block-list:block block-list:abbreviated-name=":könyvek:" block-list:name="📚"/>
+  <block-list:block block-list:abbreviated-name=":névkártya:" block-list:name="📛"/>
+  <block-list:block block-list:abbreviated-name=":szalag:" block-list:name="📜"/>
+  <block-list:block block-list:abbreviated-name=":emlékeztető:" block-list:name="📝"/>
+  <block-list:block block-list:abbreviated-name=":telefonkagyló:" block-list:name="📞"/>
+  <block-list:block block-list:abbreviated-name=":csipogó:" block-list:name="📟"/>
+  <block-list:block block-list:abbreviated-name=":fax:" block-list:name="📠"/>
+  <block-list:block block-list:abbreviated-name=":műholdvevő:" block-list:name="📡"/>
+  <block-list:block block-list:abbreviated-name=":hangosbeszélő:" block-list:name="📢"/>
+  <block-list:block block-list:abbreviated-name=":megafon:" block-list:name="📣"/>
+  <block-list:block block-list:abbreviated-name=":tálca:" block-list:name="📤"/>
+  <block-list:block block-list:abbreviated-name=":tálca2:" block-list:name="📥"/>
+  <block-list:block block-list:abbreviated-name=":csomag:" block-list:name="📦"/>
+  <block-list:block block-list:abbreviated-name=":e-mail:" block-list:name="📧"/>
+  <block-list:block block-list:abbreviated-name=":boríték2:" block-list:name="📨"/>
+  <block-list:block block-list:abbreviated-name=":boríték3:" block-list:name="📩"/>
+  <block-list:block block-list:abbreviated-name=":postaláda2:" block-list:name="📪"/>
+  <block-list:block block-list:abbreviated-name=":postaláda3:" block-list:name="📫"/>
+  <block-list:block block-list:abbreviated-name=":postaláda4:" block-list:name="📬"/>
+  <block-list:block block-list:abbreviated-name=":postaláda5:" block-list:name="📭"/>
+  <block-list:block block-list:abbreviated-name=":postaláda:" block-list:name="📮"/>
+  <block-list:block block-list:abbreviated-name=":posta:" block-list:name="📯"/>
+  <block-list:block block-list:abbreviated-name=":újság:" block-list:name="📰"/>
+  <block-list:block block-list:abbreviated-name=":mobil:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":mobil3:" block-list:name="📲"/>
+  <block-list:block block-list:abbreviated-name=":mobil4:" block-list:name="📳"/>
+  <block-list:block block-list:abbreviated-name=":mobil5:" block-list:name="📴"/>
+  <block-list:block block-list:abbreviated-name=":mobil2:" block-list:name="📵"/>
+  <block-list:block block-list:abbreviated-name=":térerő:" block-list:name="📶"/>
+  <block-list:block block-list:abbreviated-name=":fényképezőgép:" block-list:name="📷"/>
+  <block-list:block block-list:abbreviated-name=":videokamera:" block-list:name="📹"/>
+  <block-list:block block-list:abbreviated-name=":TV:" block-list:name="📺"/>
+  <block-list:block block-list:abbreviated-name=":rádió:" block-list:name="📻"/>
+  <block-list:block block-list:abbreviated-name=":VHS:" block-list:name="📼"/>
+  <block-list:block block-list:abbreviated-name=":alacsony fényerő:" block-list:name="🔅"/>
+  <block-list:block block-list:abbreviated-name=":magas fényerő:" block-list:name="🔆"/>
+  <block-list:block block-list:abbreviated-name=":néma:" block-list:name="🔇"/>
+  <block-list:block block-list:abbreviated-name=":hangszóró:" block-list:name="🔈"/>
+  <block-list:block block-list:abbreviated-name=":hang:" block-list:name="🔉"/>
+  <block-list:block block-list:abbreviated-name=":hangos:" block-list:name="🔊"/>
+  <block-list:block block-list:abbreviated-name=":elem:" block-list:name="🔋"/>
+  <block-list:block block-list:abbreviated-name=":csatlakozó:" block-list:name="🔌"/>
+  <block-list:block block-list:abbreviated-name=":nagyító:" block-list:name="🔍"/>
+  <block-list:block block-list:abbreviated-name=":nagyító2:" block-list:name="🔎"/>
+  <block-list:block block-list:abbreviated-name=":zárt2:" block-list:name="🔏"/>
+  <block-list:block block-list:abbreviated-name=":zárt3:" block-list:name="🔐"/>
+  <block-list:block block-list:abbreviated-name=":kulcs:" block-list:name="🔑"/>
+  <block-list:block block-list:abbreviated-name=":zárt:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":nyitott:" block-list:name="🔓"/>
+  <block-list:block block-list:abbreviated-name=":harang:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":harang2:" block-list:name="🔕"/>
+  <block-list:block block-list:abbreviated-name=":könyvjelző:" block-list:name="🔖"/>
+  <block-list:block block-list:abbreviated-name=":lánc:" block-list:name="🔗"/>
+  <block-list:block block-list:abbreviated-name=":rádiógomb:" block-list:name="🔘"/>
+  <block-list:block block-list:abbreviated-name=":korhatáros:" block-list:name="🔞"/>
+  <block-list:block block-list:abbreviated-name=":ábécé:" block-list:name="🔤"/>
+  <block-list:block block-list:abbreviated-name=":tűz:" block-list:name="🔥"/>
+  <block-list:block block-list:abbreviated-name=":elemlámpa:" block-list:name="🔦"/>
+  <block-list:block block-list:abbreviated-name=":csavarkulcs:" block-list:name="🔧"/>
+  <block-list:block block-list:abbreviated-name=":kalapács:" block-list:name="🔨"/>
+  <block-list:block block-list:abbreviated-name=":csavar:" block-list:name="🔩"/>
+  <block-list:block block-list:abbreviated-name=":kés:" block-list:name="🔪"/>
+  <block-list:block block-list:abbreviated-name=":pisztoly:" block-list:name="🔫"/>
+  <block-list:block block-list:abbreviated-name=":mikroszkóp:" block-list:name="🔬"/>
+  <block-list:block block-list:abbreviated-name=":teleszkóp:" block-list:name="🔭"/>
+  <block-list:block block-list:abbreviated-name=":kristálygömb:" block-list:name="🔮"/>
+  <block-list:block block-list:abbreviated-name=":kezdő:" block-list:name="🔰"/>
+  <block-list:block block-list:abbreviated-name=":szigony:" block-list:name="🔱"/>
+  <block-list:block block-list:abbreviated-name=":gomb2:" block-list:name="🔲"/>
+  <block-list:block block-list:abbreviated-name=":gomb:" block-list:name="🔳"/>
+  <block-list:block block-list:abbreviated-name=":1 óra:" block-list:name="🕐"/>
+  <block-list:block block-list:abbreviated-name=":2 óra:" block-list:name="🕑"/>
+  <block-list:block block-list:abbreviated-name=":3 óra:" block-list:name="🕒"/>
+  <block-list:block block-list:abbreviated-name=":4 óra:" block-list:name="🕓"/>
+  <block-list:block block-list:abbreviated-name=":5 óra:" block-list:name="🕔"/>
+  <block-list:block block-list:abbreviated-name=":6 óra:" block-list:name="🕕"/>
+  <block-list:block block-list:abbreviated-name=":7 óra:" block-list:name="🕖"/>
+  <block-list:block block-list:abbreviated-name=":8 óra:" block-list:name="🕗"/>
+  <block-list:block block-list:abbreviated-name=":9 óra:" block-list:name="🕘"/>
+  <block-list:block block-list:abbreviated-name=":10 óra:" block-list:name="🕙"/>
+  <block-list:block block-list:abbreviated-name=":11 óra:" block-list:name="🕚"/>
+  <block-list:block block-list:abbreviated-name=":12 óra:" block-list:name="🕛"/>
+  <block-list:block block-list:abbreviated-name=":1 óra 30 perc:" block-list:name="🕜"/>
+  <block-list:block block-list:abbreviated-name=":2 óra 30 perc:" block-list:name="🕝"/>
+  <block-list:block block-list:abbreviated-name=":3 óra 30 perc:" block-list:name="🕞"/>
+  <block-list:block block-list:abbreviated-name=":4 óra 30 perc:" block-list:name="🕟"/>
+  <block-list:block block-list:abbreviated-name=":5 óra 30 perc:" block-list:name="🕠"/>
+  <block-list:block block-list:abbreviated-name=":6 óra 30 perc:" block-list:name="🕡"/>
+  <block-list:block block-list:abbreviated-name=":7 óra 30 perc:" block-list:name="🕢"/>
+  <block-list:block block-list:abbreviated-name=":8 óra 30 perc:" block-list:name="🕣"/>
+  <block-list:block block-list:abbreviated-name=":9 óra 30 perc:" block-list:name="🕤"/>
+  <block-list:block block-list:abbreviated-name=":10 óra 30 perc:" block-list:name="🕥"/>
+  <block-list:block block-list:abbreviated-name=":11 óra 30 perc:" block-list:name="🕦"/>
+  <block-list:block block-list:abbreviated-name=":12 óra 30 perc:" block-list:name="🕧"/>
+  <block-list:block block-list:abbreviated-name=":Fuji:" block-list:name="🗻"/>
+  <block-list:block block-list:abbreviated-name=":torony:" block-list:name="🗼"/>
+  <block-list:block block-list:abbreviated-name=":szabadság:" block-list:name="🗽"/>
+  <block-list:block block-list:abbreviated-name=":Japán:" block-list:name="🗾"/>
+  <block-list:block block-list:abbreviated-name=":szobor:" block-list:name="🗿"/>
+  <block-list:block block-list:abbreviated-name=":vigyor2:" block-list:name="😀"/>
+  <block-list:block block-list:abbreviated-name=":vigyor:" block-list:name="😁"/>
+  <block-list:block block-list:abbreviated-name=":boldogság:" block-list:name="😂"/>
+  <block-list:block block-list:abbreviated-name=":mosoly2:" block-list:name="😃"/>
+  <block-list:block block-list:abbreviated-name=":mosoly:" block-list:name="😄"/>
+  <block-list:block block-list:abbreviated-name=":izzadt mosoly:" block-list:name="😅"/>
+  <block-list:block block-list:abbreviated-name=":nevetés:" block-list:name="😆"/>
+  <block-list:block block-list:abbreviated-name=":ártatlan:" block-list:name="😇"/>
+  <block-list:block block-list:abbreviated-name=":kisördög:" block-list:name="😈"/>
+  <block-list:block block-list:abbreviated-name=":kacsintás:" block-list:name="😉"/>
+  <block-list:block block-list:abbreviated-name=":szégyenlős:" block-list:name="😊"/>
+  <block-list:block block-list:abbreviated-name=":nyami:" block-list:name="😋"/>
+  <block-list:block block-list:abbreviated-name=":nyugodt:" block-list:name="😌"/>
+  <block-list:block block-list:abbreviated-name=":szerelmes:" block-list:name="😍"/>
+  <block-list:block block-list:abbreviated-name=":napszemüveg:" block-list:name="😎"/>
+  <block-list:block block-list:abbreviated-name=":önelégült:" block-list:name="😏"/>
+  <block-list:block block-list:abbreviated-name=":közömbös:" block-list:name="😐"/>
+  <block-list:block block-list:abbreviated-name=":kifejezéstelen:" block-list:name="😑"/>
+  <block-list:block block-list:abbreviated-name=":unott:" block-list:name="😒"/>
+  <block-list:block block-list:abbreviated-name=":izzadó:" block-list:name="😓"/>
+  <block-list:block block-list:abbreviated-name=":töprengő:" block-list:name="😔"/>
+  <block-list:block block-list:abbreviated-name=":tanácstalan:" block-list:name="😕"/>
+  <block-list:block block-list:abbreviated-name=":összezavarodott:" block-list:name="😖"/>
+  <block-list:block block-list:abbreviated-name=":csók:" block-list:name="😗"/>
+  <block-list:block block-list:abbreviated-name=":puszi:" block-list:name="😘"/>
+  <block-list:block block-list:abbreviated-name=":mosolygós csók:" block-list:name="😙"/>
+  <block-list:block block-list:abbreviated-name=":csók:" block-list:name="😚"/>
+  <block-list:block block-list:abbreviated-name=":nyelvöltő:" block-list:name="😛"/>
+  <block-list:block block-list:abbreviated-name=":nyelvöltő2:" block-list:name="😜"/>
+  <block-list:block block-list:abbreviated-name=":nyelvöltő3:" block-list:name="😝"/>
+  <block-list:block block-list:abbreviated-name=":csalódott:" block-list:name="😞"/>
+  <block-list:block block-list:abbreviated-name=":aggódó:" block-list:name="😟"/>
+  <block-list:block block-list:abbreviated-name=":mérges:" block-list:name="😠"/>
+  <block-list:block block-list:abbreviated-name=":dühös:" block-list:name="😡"/>
+  <block-list:block block-list:abbreviated-name=":síró:" block-list:name="😢"/>
+  <block-list:block block-list:abbreviated-name=":kitartó:" block-list:name="😣"/>
+  <block-list:block block-list:abbreviated-name=":győztes:" block-list:name="😤"/>
+  <block-list:block block-list:abbreviated-name=":beletörődő:" block-list:name="😥"/>
+  <block-list:block block-list:abbreviated-name=":rosszkedvű:" block-list:name="😦"/>
+  <block-list:block block-list:abbreviated-name=":meggyötört:" block-list:name="😧"/>
+  <block-list:block block-list:abbreviated-name=":rémült:" block-list:name="😨"/>
+  <block-list:block block-list:abbreviated-name=":kimerült:" block-list:name="😩"/>
+  <block-list:block block-list:abbreviated-name=":álmos:" block-list:name="😪"/>
+  <block-list:block block-list:abbreviated-name=":fáradt:" block-list:name="😫"/>
+  <block-list:block block-list:abbreviated-name=":vicsorgó:" block-list:name="😬"/>
+  <block-list:block block-list:abbreviated-name=":zokogó:" block-list:name="😭"/>
+  <block-list:block block-list:abbreviated-name=":tátott szájú:" block-list:name="😮"/>
+  <block-list:block block-list:abbreviated-name=":megnémult:" block-list:name="😯"/>
+  <block-list:block block-list:abbreviated-name=":izzadó:" block-list:name="😰"/>
+  <block-list:block block-list:abbreviated-name=":sikító:" block-list:name="😱"/>
+  <block-list:block block-list:abbreviated-name=":megdöbbent:" block-list:name="😲"/>
+  <block-list:block block-list:abbreviated-name=":piruló:" block-list:name="😳"/>
+  <block-list:block block-list:abbreviated-name=":alvó:" block-list:name="😴"/>
+  <block-list:block block-list:abbreviated-name=":szédült:" block-list:name="😵"/>
+  <block-list:block block-list:abbreviated-name=":száj nélkül:" block-list:name="😶"/>
+  <block-list:block block-list:abbreviated-name=":maszk:" block-list:name="😷"/>
+  <block-list:block block-list:abbreviated-name=":mosolygó macska:" block-list:name="😸"/>
+  <block-list:block block-list:abbreviated-name=":boldog macska:" block-list:name="😹"/>
+  <block-list:block block-list:abbreviated-name=":vidám macska:" block-list:name="😺"/>
+  <block-list:block block-list:abbreviated-name=":szerelmes macska:" block-list:name="😻"/>
+  <block-list:block block-list:abbreviated-name=":önelégült macska:" block-list:name="😼"/>
+  <block-list:block block-list:abbreviated-name=":csókos macska:" block-list:name="😽"/>
+  <block-list:block block-list:abbreviated-name=":mérges macska:" block-list:name="😾"/>
+  <block-list:block block-list:abbreviated-name=":síró macska:" block-list:name="😿"/>
+  <block-list:block block-list:abbreviated-name=":bőgő macska:" block-list:name="🙀"/>
+  <block-list:block block-list:abbreviated-name=":elutasítás:" block-list:name="🙅"/>
+  <block-list:block block-list:abbreviated-name=":helyeslés:" block-list:name="🙆"/>
+  <block-list:block block-list:abbreviated-name=":bocsánatkérés:" block-list:name="🙇"/>
+  <block-list:block block-list:abbreviated-name=":nem lát:" block-list:name="🙈"/>
+  <block-list:block block-list:abbreviated-name=":nem hall:" block-list:name="🙉"/>
+  <block-list:block block-list:abbreviated-name=":nem beszél:" block-list:name="🙊"/>
+  <block-list:block block-list:abbreviated-name=":öröm:" block-list:name="🙋"/>
+  <block-list:block block-list:abbreviated-name=":ünneplés:" block-list:name="🙌"/>
+  <block-list:block block-list:abbreviated-name=":szomorúság:" block-list:name="🙍"/>
+  <block-list:block block-list:abbreviated-name=":rosszkedv:" block-list:name="🙎"/>
+  <block-list:block block-list:abbreviated-name=":könyörgés:" block-list:name="🙏"/>
+  <block-list:block block-list:abbreviated-name=":rakéta:" block-list:name="🚀"/>
+  <block-list:block block-list:abbreviated-name=":helikopter:" block-list:name="🚁"/>
+  <block-list:block block-list:abbreviated-name=":gőzmozdony:" block-list:name="🚂"/>
+  <block-list:block block-list:abbreviated-name=":vasúti kocsi:" block-list:name="🚃"/>
+  <block-list:block block-list:abbreviated-name=":vonat2:" block-list:name="🚄"/>
+  <block-list:block block-list:abbreviated-name=":vonat3:" block-list:name="🚅"/>
+  <block-list:block block-list:abbreviated-name=":vonat:" block-list:name="🚆"/>
+  <block-list:block block-list:abbreviated-name=":metró:" block-list:name="🚇"/>
+  <block-list:block block-list:abbreviated-name=":hév:" block-list:name="🚈"/>
+  <block-list:block block-list:abbreviated-name=":állomás:" block-list:name="🚉"/>
+  <block-list:block block-list:abbreviated-name=":villamos:" block-list:name="🚊"/>
+  <block-list:block block-list:abbreviated-name=":villamos2:" block-list:name="🚋"/>
+  <block-list:block block-list:abbreviated-name=":busz:" block-list:name="🚌"/>
+  <block-list:block block-list:abbreviated-name=":busz2:" block-list:name="🚍"/>
+  <block-list:block block-list:abbreviated-name=":troli:" block-list:name="🚎"/>
+  <block-list:block block-list:abbreviated-name=":buszmegálló:" block-list:name="🚏"/>
+  <block-list:block block-list:abbreviated-name=":mikrobusz:" block-list:name="🚐"/>
+  <block-list:block block-list:abbreviated-name=":mentőautó:" block-list:name="🚑"/>
+  <block-list:block block-list:abbreviated-name=":tűzoltóautó:" block-list:name="🚒"/>
+  <block-list:block block-list:abbreviated-name=":rendőrautó:" block-list:name="🚓"/>
+  <block-list:block block-list:abbreviated-name=":rendőrautó2:" block-list:name="🚔"/>
+  <block-list:block block-list:abbreviated-name=":taxi:" block-list:name="🚕"/>
+  <block-list:block block-list:abbreviated-name=":taxi2:" block-list:name="🚖"/>
+  <block-list:block block-list:abbreviated-name=":autó:" block-list:name="🚗"/>
+  <block-list:block block-list:abbreviated-name=":autó2:" block-list:name="🚘"/>
+  <block-list:block block-list:abbreviated-name=":autó3:" block-list:name="🚙"/>
+  <block-list:block block-list:abbreviated-name=":teherautó:" block-list:name="🚚"/>
+  <block-list:block block-list:abbreviated-name=":teherautó2:" block-list:name="🚛"/>
+  <block-list:block block-list:abbreviated-name=":traktor:" block-list:name="🚜"/>
+  <block-list:block block-list:abbreviated-name=":egysínű:" block-list:name="🚝"/>
+  <block-list:block block-list:abbreviated-name=":hegyi vasút:" block-list:name="🚞"/>
+  <block-list:block block-list:abbreviated-name=":függővasút:" block-list:name="🚟"/>
+  <block-list:block block-list:abbreviated-name=":kábelvasút:" block-list:name="🚠"/>
+  <block-list:block block-list:abbreviated-name=":lanovka:" block-list:name="🚡"/>
+  <block-list:block block-list:abbreviated-name=":hajó:" block-list:name="🚢"/>
+  <block-list:block block-list:abbreviated-name=":csónak:" block-list:name="🚣"/>
+  <block-list:block block-list:abbreviated-name=":motorcsónak:" block-list:name="🚤"/>
+  <block-list:block block-list:abbreviated-name=":közlekedési lámpa:" block-list:name="🚥"/>
+  <block-list:block block-list:abbreviated-name=":közlekedési lámpa2:" block-list:name="🚦"/>
+  <block-list:block block-list:abbreviated-name=":építkezés:" block-list:name="🚧"/>
+  <block-list:block block-list:abbreviated-name=":vészvillogó:" block-list:name="🚨"/>
+  <block-list:block block-list:abbreviated-name=":háromszögű zászló:" block-list:name="🚩"/>
+  <block-list:block block-list:abbreviated-name=":ajtó:" block-list:name="🚪"/>
+  <block-list:block block-list:abbreviated-name=":tilos:" block-list:name="🚫"/>
+  <block-list:block block-list:abbreviated-name=":cigaretta:" block-list:name="🚬"/>
+  <block-list:block block-list:abbreviated-name=":dohányozni tilos:" block-list:name="🚭"/>
+  <block-list:block block-list:abbreviated-name=":szemetes:" block-list:name="🚮"/>
+  <block-list:block block-list:abbreviated-name=":szemetelni tilos:" block-list:name="🚯"/>
+  <block-list:block block-list:abbreviated-name=":ivóvíz:" block-list:name="🚰"/>
+  <block-list:block block-list:abbreviated-name=":nem ivóvíz:" block-list:name="🚱"/>
+  <block-list:block block-list:abbreviated-name=":kerékpár:" block-list:name="🚲"/>
+  <block-list:block block-list:abbreviated-name=":kerékpár2:" block-list:name="🚳"/>
+  <block-list:block block-list:abbreviated-name=":kerékpáros:" block-list:name="🚴"/>
+  <block-list:block block-list:abbreviated-name=":kerékpáros2:" block-list:name="🚵"/>
+  <block-list:block block-list:abbreviated-name=":gyalogos:" block-list:name="🚶"/>
+  <block-list:block block-list:abbreviated-name=":gyalogos2:" block-list:name="🚷"/>
+  <block-list:block block-list:abbreviated-name=":gyalogos3:" block-list:name="🚸"/>
+  <block-list:block block-list:abbreviated-name=":férfiak:" block-list:name="🚹"/>
+  <block-list:block block-list:abbreviated-name=":nők:" block-list:name="🚺"/>
+  <block-list:block block-list:abbreviated-name=":vécé:" block-list:name="🚻"/>
+  <block-list:block block-list:abbreviated-name=":pelenkázó:" block-list:name="🚼"/>
+  <block-list:block block-list:abbreviated-name=":vécé2:" block-list:name="🚽"/>
+  <block-list:block block-list:abbreviated-name=":vécé3:" block-list:name="🚾"/>
+  <block-list:block block-list:abbreviated-name=":tusoló:" block-list:name="🚿"/>
+  <block-list:block block-list:abbreviated-name=":fürdő:" block-list:name="🛀"/>
+  <block-list:block block-list:abbreviated-name=":fürdő2:" block-list:name="🛁"/>
+  <block-list:block block-list:abbreviated-name=":vám:" block-list:name="🛂"/>
+  <block-list:block block-list:abbreviated-name=":vám2:" block-list:name="🛃"/>
+  <block-list:block block-list:abbreviated-name=":poggyászátvétel:" block-list:name="🛄"/>
+  <block-list:block block-list:abbreviated-name=":poggyászmegőrző:" block-list:name="🛅"/>
 </block-list:block-list>
