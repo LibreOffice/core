@@ -898,7 +898,7 @@ void Test::testSharedFormulasInsertRow()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, INS_INSROWS, true, true, false);
+    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, INS_INSROWS_BEFORE, true, true, false);
 
     bool bResult = aCheck.checkContent(m_pDoc);
     CPPUNIT_ASSERT_MESSAGE("Failed on the initial content check.", bResult);
