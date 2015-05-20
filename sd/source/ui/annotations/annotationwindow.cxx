@@ -308,7 +308,7 @@ void AnnotationWindow::InitControls()
 {
     // actual window which holds the user text
     mpTextWindow = VclPtr<AnnotationTextWindow>::Create(this, WB_NODIALOGCONTROL);
-    mpTextWindow->SetPointer(Pointer(POINTER_TEXT));
+    mpTextWindow->SetPointer(Pointer(PointerStyle::Text));
 
     // window control for author and date
     mpMeta = VclPtr<MultiLineEdit>::Create(this,0);

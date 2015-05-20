@@ -34,6 +34,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <osl/conditn.h>
 #include "saltimer.hxx"
+#include <o3tl/enumarray.hxx>
 
 #include <list>
 
@@ -134,7 +135,7 @@ class GtkSalDisplay : public SalDisplay
 {
     GtkSalSystem*                   m_pSys;
     GdkDisplay*                     m_pGdkDisplay;
-    GdkCursor                      *m_aCursors[ POINTER_COUNT ];
+    o3tl::enumarray<PointerStyle, GdkCursor*> m_aCursors;
     bool                            m_bStartupCompleted;
     bool                            m_bX11Display;
 

@@ -71,9 +71,9 @@ void DragMethod_Base::TakeSdrDragComment(OUString& rStr) const
 Pointer DragMethod_Base::GetSdrDragPointer() const
 {
     if( IsDraggingPoints() || IsDraggingGluePoints() )
-        return Pointer(POINTER_MOVEPOINT);
+        return Pointer(PointerStyle::MovePoint);
     else
-        return Pointer(POINTER_MOVE);
+        return Pointer(PointerStyle::Move);
 }
 } //namespace chart
 

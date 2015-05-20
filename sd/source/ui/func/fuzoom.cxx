@@ -91,9 +91,9 @@ bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 bool FuZoom::MouseMove(const MouseEvent& rMEvt)
 {
     if (rMEvt.IsShift())
-        mpWindow->SetPointer(Pointer(POINTER_HAND));
+        mpWindow->SetPointer(Pointer(PointerStyle::Hand));
     else if (nSlotId != SID_ZOOM_PANNING)
-        mpWindow->SetPointer(Pointer(POINTER_MAGNIFY));
+        mpWindow->SetPointer(Pointer(PointerStyle::Magnify));
 
     if (bStartDrag)
     {
@@ -198,11 +198,11 @@ void FuZoom::Activate()
 
     if (nSlotId == SID_ZOOM_PANNING)
     {
-        mpWindow->SetPointer(Pointer(POINTER_HAND));
+        mpWindow->SetPointer(Pointer(PointerStyle::Hand));
     }
     else
     {
-        mpWindow->SetPointer(Pointer(POINTER_MAGNIFY));
+        mpWindow->SetPointer(Pointer(PointerStyle::Magnify));
     }
 }
 

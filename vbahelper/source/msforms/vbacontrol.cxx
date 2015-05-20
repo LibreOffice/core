@@ -449,21 +449,21 @@ struct PointerStyles
 // 1 -> 1 map of styles ( some dubious choices in there though )
 PointerStyles styles[] = {
   /// assuming pointer default is Arrow
-  { msforms::fmMousePointer::fmMousePointerDefault, POINTER_ARROW },
-  { msforms::fmMousePointer::fmMousePointerArrow, POINTER_ARROW },
-  { msforms::fmMousePointer::fmMousePointerCross, POINTER_CROSS },
-  { msforms::fmMousePointer::fmMousePointerIBeam, POINTER_TEXT },
-  { msforms::fmMousePointer::fmMousePointerSizeNESW,  POINTER_AUTOSCROLL_NSWE   }, // #TODO not correct, need to check, need to find the right one
-  { msforms::fmMousePointer::fmMousePointerSizeNS,  POINTER_AUTOSCROLL_NS  },
-  { msforms::fmMousePointer::fmMousePointerSizeNWSE,  POINTER_AUTOSCROLL_NSWE  }, // #TODO not correct, need to check, need to find the right one
-  { msforms::fmMousePointer::fmMousePointerSizeWE,  POINTER_AUTOSCROLL_WE },
-  { msforms::fmMousePointer::fmMousePointerUpArrow, POINTER_WINDOW_NSIZE  },
-  { msforms::fmMousePointer::fmMousePointerHourGlass, POINTER_WAIT  },
-  { msforms::fmMousePointer::fmMousePointerNoDrop, POINTER_NOTALLOWED },
-  { msforms::fmMousePointer::fmMousePointerAppStarting, POINTER_WAIT },
-  { msforms::fmMousePointer::fmMousePointerHelp, POINTER_HELP },
-  { msforms::fmMousePointer::fmMousePointerSizeAll, POINTER_CROSS },
-  { msforms::fmMousePointer::fmMousePointerCustom, POINTER_ARROW }, // not supported I guess
+  { msforms::fmMousePointer::fmMousePointerDefault, PointerStyle::Arrow },
+  { msforms::fmMousePointer::fmMousePointerArrow, PointerStyle::Arrow },
+  { msforms::fmMousePointer::fmMousePointerCross, PointerStyle::Cross },
+  { msforms::fmMousePointer::fmMousePointerIBeam, PointerStyle::Text },
+  { msforms::fmMousePointer::fmMousePointerSizeNESW,  PointerStyle::AutoScrollNSWE   }, // #TODO not correct, need to check, need to find the right one
+  { msforms::fmMousePointer::fmMousePointerSizeNS,  PointerStyle::AutoScrollNS  },
+  { msforms::fmMousePointer::fmMousePointerSizeNWSE,  PointerStyle::AutoScrollNSWE  }, // #TODO not correct, need to check, need to find the right one
+  { msforms::fmMousePointer::fmMousePointerSizeWE,  PointerStyle::AutoScrollWE },
+  { msforms::fmMousePointer::fmMousePointerUpArrow, PointerStyle::WindowNSize  },
+  { msforms::fmMousePointer::fmMousePointerHourGlass, PointerStyle::Wait  },
+  { msforms::fmMousePointer::fmMousePointerNoDrop, PointerStyle::NotAllowed },
+  { msforms::fmMousePointer::fmMousePointerAppStarting, PointerStyle::Wait },
+  { msforms::fmMousePointer::fmMousePointerHelp, PointerStyle::Help },
+  { msforms::fmMousePointer::fmMousePointerSizeAll, PointerStyle::Cross },
+  { msforms::fmMousePointer::fmMousePointerCustom, PointerStyle::Arrow }, // not supported I guess
 
 };
 
@@ -483,7 +483,7 @@ static long lcl_loPointerToMsoPointer( PointerStyle eType )
 
 static Pointer lcl_msoPointerToLOPointer( long msoPointerStyle )
 {
-    Pointer aPointer( POINTER_ARROW );
+    Pointer aPointer( PointerStyle::Arrow );
     for ( int i = 0, nElems = SAL_N_ELEMENTS( styles ); i < nElems; ++i )
     {
         if ( styles[ i ].msoPointerStyle == msoPointerStyle )
@@ -498,7 +498,7 @@ static Pointer lcl_msoPointerToLOPointer( long msoPointerStyle )
 ::sal_Int32 SAL_CALL
 ScVbaControl::getMousePointer() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    PointerStyle eType = POINTER_ARROW; // default ?
+    PointerStyle eType = PointerStyle::Arrow; // default ?
     vcl::Window* pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
     if ( pWindow )
     {
@@ -513,7 +513,7 @@ ScVbaControl::setMousePointer( ::sal_Int32 _mousepointer ) throw (::com::sun::st
     vcl::Window* pWindow = VCLUnoHelper::GetWindow( getWindowPeer() );
     if ( pWindow )
     {
-        Pointer aPointer( POINTER_ARROW );
+        Pointer aPointer( PointerStyle::Arrow );
         aPointer = lcl_msoPointerToLOPointer( _mousepointer );
         pWindow->SetPointer( aPointer );
     }

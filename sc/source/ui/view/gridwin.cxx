@@ -1598,7 +1598,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
                 Point aMousePos = rMEvt.GetPosPixel();
                 if (mpAutoFillRect->IsInside(aMousePos))
                 {
-                    SetPointer( Pointer( POINTER_CROSS ) );     //! dickeres Kreuz ?
+                    SetPointer( Pointer( PointerStyle::Cross ) );     //! dickeres Kreuz ?
                     if (bAction)
                     {
                         SCCOL nX = aMarkRange.aEnd.Col();
@@ -1642,7 +1642,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
                                  aMousePos.Y() >= aEndPos.Y()-3 && aMousePos.Y() <= aEndPos.Y()+1 );
                 if ( bTop || bBottom )
                 {
-                    SetPointer( Pointer( POINTER_CROSS ) );
+                    SetPointer( Pointer( PointerStyle::Cross ) );
                     if (bAction)
                     {
                         sal_uInt8 nMode = bTop ? SC_FILL_EMBED_LT : SC_FILL_EMBED_RB;
@@ -2068,7 +2068,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     if ( !bAlt && rMEvt.IsLeft() &&
             GetEditUrl(rMEvt.GetPosPixel()) )           // Klick auf Link: Cursor nicht bewegen
     {
-        SetPointer( Pointer( POINTER_REFHAND ) );
+        SetPointer( Pointer( PointerStyle::RefHand ) );
         nMouseStatus = SC_GM_URLDOWN;                   // auch nur dann beim ButtonUp ausfuehren
         return;
     }
@@ -2177,7 +2177,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         RFMouseMove( rMEvt, true );     // Range wieder richtigherum
         bRFMouse = false;
-        SetPointer( Pointer( POINTER_ARROW ) );
+        SetPointer( Pointer( PointerStyle::Arrow ) );
         ReleaseMouse();
         return;
     }
@@ -2186,7 +2186,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         PagebreakMove( rMEvt, true );
         nPagebreakMouse = SC_PD_NONE;
-        SetPointer( Pointer( POINTER_ARROW ) );
+        SetPointer( Pointer( PointerStyle::Arrow ) );
         ReleaseMouse();
         return;
     }
@@ -2217,7 +2217,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     rMark.SetMarking(false);
 
-    SetPointer( Pointer( POINTER_ARROW ) );
+    SetPointer( Pointer( PointerStyle::Arrow ) );
 
     if (pViewData->IsFillMode() ||
         ( pViewData->GetFillMode() == SC_FILL_MATRIX && rMEvt.IsMod1() ))
@@ -2615,7 +2615,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 
     if ( pViewData->GetViewShell()->IsAuditShell() )        // Detektiv-Fuell-Modus
     {
-        SetPointer( Pointer( POINTER_FILL ) );
+        SetPointer( Pointer( PointerStyle::Fill ) );
         return;
     }
 
@@ -2687,18 +2687,18 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             //  Field can only be URL field
             bool bAlt = rMEvt.IsMod2();
             if ( !bAlt && !nButtonDown && pEditView && pEditView->GetFieldUnderMousePointer() )
-                SetPointer( Pointer( POINTER_REFHAND ) );
+                SetPointer( Pointer( PointerStyle::RefHand ) );
             else if ( pEditView && pEditView->GetEditEngine()->IsVertical() )
-                SetPointer( Pointer( POINTER_TEXT_VERTICAL ) );
+                SetPointer( Pointer( PointerStyle::TextVertical ) );
             else
-                SetPointer( Pointer( POINTER_TEXT ) );
+                SetPointer( Pointer( PointerStyle::Text ) );
             return;
         }
     }
 
     bool bWater = SC_MOD()->GetIsWaterCan() || pViewData->GetView()->HasPaintBrush();
     if (bWater)
-        SetPointer( Pointer(POINTER_FILL) );
+        SetPointer( Pointer(PointerStyle::Fill) );
 
     if (!bWater)
     {
@@ -2710,9 +2710,9 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         if ( HitRangeFinder( rMEvt.GetPosPixel(), rCorner ) )
         {
             if (rCorner != NONE)
-                SetPointer( Pointer( POINTER_CROSS ) );
+                SetPointer( Pointer( PointerStyle::Cross ) );
             else
-                SetPointer( Pointer( POINTER_HAND ) );
+                SetPointer( Pointer( PointerStyle::Hand ) );
             bCross = true;
         }
 
@@ -2722,26 +2722,26 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         if ( !nButtonDown && pViewData->IsPagebreakMode() &&
                 ( nBreakType = HitPageBreak( rMEvt.GetPosPixel() ) ) != 0 )
         {
-            PointerStyle eNew = POINTER_ARROW;
+            PointerStyle eNew = PointerStyle::Arrow;
             switch ( nBreakType )
             {
                 case SC_PD_RANGE_L:
                 case SC_PD_RANGE_R:
                 case SC_PD_BREAK_H:
-                    eNew = POINTER_ESIZE;
+                    eNew = PointerStyle::ESize;
                     break;
                 case SC_PD_RANGE_T:
                 case SC_PD_RANGE_B:
                 case SC_PD_BREAK_V:
-                    eNew = POINTER_SSIZE;
+                    eNew = PointerStyle::SSize;
                     break;
                 case SC_PD_RANGE_TL:
                 case SC_PD_RANGE_BR:
-                    eNew = POINTER_SESIZE;
+                    eNew = PointerStyle::SESize;
                     break;
                 case SC_PD_RANGE_TR:
                 case SC_PD_RANGE_BL:
-                    eNew = POINTER_NESIZE;
+                    eNew = PointerStyle::NESize;
                     break;
             }
             SetPointer( Pointer( eNew ) );
@@ -2756,7 +2756,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 
         if ( nButtonDown && pViewData->IsAnyFillMode() )
         {
-            SetPointer( Pointer( POINTER_CROSS ) );
+            SetPointer( Pointer( PointerStyle::Cross ) );
             bCross = true;
             nScFillModeMouseModifier = rMEvt.GetModifier(); // ausgewertet bei AutoFill und Matrix
         }
@@ -2766,10 +2766,10 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             bool bAlt = rMEvt.IsMod2();
 
             if (bEditMode)                                  // Edit-Mode muss zuerst kommen!
-                SetPointer( Pointer( POINTER_ARROW ) );
+                SetPointer( Pointer( PointerStyle::Arrow ) );
             else if ( !bAlt && !nButtonDown &&
                         GetEditUrl(rMEvt.GetPosPixel()) )
-                SetPointer( Pointer( POINTER_REFHAND ) );
+                SetPointer( Pointer( PointerStyle::RefHand ) );
             else if ( DrawMouseMove(rMEvt) )                // setzt Pointer um
                 return;
         }
@@ -2889,7 +2889,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
                 nPagebreakMouse = SC_PD_NONE;
             }
 
-            SetPointer( Pointer( POINTER_ARROW ) );
+            SetPointer( Pointer( PointerStyle::Arrow ) );
             StopMarking();
             MouseButtonUp( rMEvt );     // mit Status SC_GM_IGNORE aus StopMarking
 
@@ -5130,9 +5130,9 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
     //  Mauszeiger
 
     if (bRFSize)
-        SetPointer( Pointer( POINTER_CROSS ) );
+        SetPointer( Pointer( PointerStyle::Cross ) );
     else
-        SetPointer( Pointer( POINTER_HAND ) );
+        SetPointer( Pointer( PointerStyle::Hand ) );
 
     //  Scrolling
 

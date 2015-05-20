@@ -1289,7 +1289,7 @@ MultiSelectionModeHandler::MultiSelectionModeHandler (
 void MultiSelectionModeHandler::Initialize(const sal_uInt32 nEventCode)
 {
 #endif
-    const Pointer aSelectionPointer (POINTER_TEXT);
+    const Pointer aSelectionPointer (PointerStyle::Text);
     mrSlideSorter.GetContentWindow()->SetPointer(aSelectionPointer);
     SetSelectionModeFromModifier(nEventCode);
 }

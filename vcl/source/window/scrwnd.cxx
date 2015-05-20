@@ -246,11 +246,11 @@ PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
         if( mnActDist < WHEEL_RADIUS )
         {
             if( bHorz && bVert )
-                eStyle = POINTER_AUTOSCROLL_NSWE;
+                eStyle = PointerStyle::AutoScrollNSWE;
             else if( bHorz )
-                eStyle = POINTER_AUTOSCROLL_WE;
+                eStyle = PointerStyle::AutoScrollWE;
             else
-                eStyle = POINTER_AUTOSCROLL_NS;
+                eStyle = PointerStyle::AutoScrollNS;
         }
         else
         {
@@ -262,40 +262,40 @@ PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
             if( bHorz && bVert )
             {
                 if( fAngle >= 22.5 && fAngle <= 67.5 )
-                    eStyle = POINTER_AUTOSCROLL_NE;
+                    eStyle = PointerStyle::AutoScrollNE;
                 else if( fAngle >= 67.5 && fAngle <= 112.5 )
-                    eStyle = POINTER_AUTOSCROLL_N;
+                    eStyle = PointerStyle::AutoScrollN;
                 else if( fAngle >= 112.5 && fAngle <= 157.5 )
-                    eStyle = POINTER_AUTOSCROLL_NW;
+                    eStyle = PointerStyle::AutoScrollNW;
                 else if( fAngle >= 157.5 && fAngle <= 202.5 )
-                    eStyle = POINTER_AUTOSCROLL_W;
+                    eStyle = PointerStyle::AutoScrollW;
                 else if( fAngle >= 202.5 && fAngle <= 247.5 )
-                    eStyle = POINTER_AUTOSCROLL_SW;
+                    eStyle = PointerStyle::AutoScrollSW;
                 else if( fAngle >= 247.5 && fAngle <= 292.5 )
-                    eStyle = POINTER_AUTOSCROLL_S;
+                    eStyle = PointerStyle::AutoScrollS;
                 else if( fAngle >= 292.5 && fAngle <= 337.5 )
-                    eStyle = POINTER_AUTOSCROLL_SE;
+                    eStyle = PointerStyle::AutoScrollSE;
                 else
-                    eStyle = POINTER_AUTOSCROLL_E;
+                    eStyle = PointerStyle::AutoScrollE;
             }
             else if( bHorz )
             {
                 if( fAngle >= 270. || fAngle <= 90. )
-                    eStyle = POINTER_AUTOSCROLL_E;
+                    eStyle = PointerStyle::AutoScrollE;
                 else
-                    eStyle = POINTER_AUTOSCROLL_W;
+                    eStyle = PointerStyle::AutoScrollW;
             }
             else
             {
                 if( fAngle >= 0. && fAngle <= 180. )
-                    eStyle = POINTER_AUTOSCROLL_N;
+                    eStyle = PointerStyle::AutoScrollN;
                 else
-                    eStyle = POINTER_AUTOSCROLL_S;
+                    eStyle = PointerStyle::AutoScrollS;
             }
         }
     }
     else
-        eStyle = POINTER_ARROW;
+        eStyle = PointerStyle::Arrow;
 
     return eStyle;
 }
@@ -325,14 +325,14 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
     {
         switch( eActStyle )
         {
-            case( POINTER_AUTOSCROLL_N ):   mnActDeltaX = +0L, mnActDeltaY = +1L; break;
-            case( POINTER_AUTOSCROLL_S ):   mnActDeltaX = +0L, mnActDeltaY = -1L; break;
-            case( POINTER_AUTOSCROLL_W ):   mnActDeltaX = +1L, mnActDeltaY = +0L; break;
-            case( POINTER_AUTOSCROLL_E ):   mnActDeltaX = -1L, mnActDeltaY = +0L; break;
-            case( POINTER_AUTOSCROLL_NW ):  mnActDeltaX = +1L, mnActDeltaY = +1L; break;
-            case( POINTER_AUTOSCROLL_NE ):  mnActDeltaX = -1L, mnActDeltaY = +1L; break;
-            case( POINTER_AUTOSCROLL_SW ):  mnActDeltaX = +1L, mnActDeltaY = -1L; break;
-            case( POINTER_AUTOSCROLL_SE ):  mnActDeltaX = -1L, mnActDeltaY = -1L; break;
+            case( PointerStyle::AutoScrollN ):   mnActDeltaX = +0L, mnActDeltaY = +1L; break;
+            case( PointerStyle::AutoScrollS ):   mnActDeltaX = +0L, mnActDeltaY = -1L; break;
+            case( PointerStyle::AutoScrollW ):   mnActDeltaX = +1L, mnActDeltaY = +0L; break;
+            case( PointerStyle::AutoScrollE ):   mnActDeltaX = -1L, mnActDeltaY = +0L; break;
+            case( PointerStyle::AutoScrollNW ):  mnActDeltaX = +1L, mnActDeltaY = +1L; break;
+            case( PointerStyle::AutoScrollNE ):  mnActDeltaX = -1L, mnActDeltaY = +1L; break;
+            case( PointerStyle::AutoScrollSW ):  mnActDeltaX = +1L, mnActDeltaY = -1L; break;
+            case( PointerStyle::AutoScrollSE ):  mnActDeltaX = -1L, mnActDeltaY = -1L; break;
 
             default:
             break;

@@ -206,7 +206,7 @@ void FuConstPolygon::Activate()
 
     FuConstruct::Activate();
 
-    aNewPointer = Pointer( POINTER_DRAW_POLYGON );
+    aNewPointer = Pointer( PointerStyle::DrawPolygon );
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
 }

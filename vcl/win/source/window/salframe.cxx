@@ -39,6 +39,7 @@
 #include <osl/module.h>
 
 #include <tools/debug.hxx>
+#include <o3tl/enumarray.hxx>
 
 #include <vcl/sysdata.hxx>
 #include <vcl/timer.hxx>
@@ -2061,9 +2062,9 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
         UINT            mnOwnId;
     };
 
-    static ImplPtrData aImplPtrTab[POINTER_COUNT] =
+    static o3tl::enumarray<PointerStyle, ImplPtrData> aImplPtrTab =
     {
-    { 0, IDC_ARROW, 0 },                            // POINTER_ARROW
+    ImplPtrData{ 0, IDC_ARROW, 0 },                 // POINTER_ARROW
     { 0, 0, SAL_RESID_POINTER_NULL },               // POINTER_NULL
     { 0, IDC_WAIT, 0 },                             // POINTER_WAIT
     { 0, IDC_IBEAM, 0 },                            // POINTER_TEXT
@@ -2152,21 +2153,17 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, 0, SAL_RESID_POINTER_TEXT_VERTICAL },      // POINTER_TEXT_VERTICAL
     { 0, 0, SAL_RESID_POINTER_PIVOT_DELETE },       // POINTER_PIVOT_DELETE
 
-    // #i32329#
+     // #i32329#
     { 0, 0, SAL_RESID_POINTER_TAB_SELECT_S },       // POINTER_TAB_SELECT_S
     { 0, 0, SAL_RESID_POINTER_TAB_SELECT_E },       // POINTER_TAB_SELECT_E
     { 0, 0, SAL_RESID_POINTER_TAB_SELECT_SE },      // POINTER_TAB_SELECT_SE
     { 0, 0, SAL_RESID_POINTER_TAB_SELECT_W },       // POINTER_TAB_SELECT_W
     { 0, 0, SAL_RESID_POINTER_TAB_SELECT_SW },      // POINTER_TAB_SELECT_SW
 
-    // #i20119#
+     // #i20119#
     { 0, 0, SAL_RESID_POINTER_PAINTBRUSH }          // POINTER_PAINTBRUSH
 
     };
-
-#if POINTER_COUNT != 94
-#error New Pointer must be defined!
-#endif
 
     // Mousepointer loaded ?
     if ( !aImplPtrTab[ePointerStyle].mhCursor )

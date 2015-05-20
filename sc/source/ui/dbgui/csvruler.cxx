@@ -649,7 +649,7 @@ void ScCsvRuler::ImplDrawTrackingRect()
 
 void ScCsvRuler::ImplSetMousePointer( sal_Int32 nPos )
 {
-    SetPointer( Pointer( HasSplit( nPos ) ? POINTER_HSPLIT : POINTER_ARROW ) );
+    SetPointer( Pointer( HasSplit( nPos ) ? PointerStyle::HSplit : PointerStyle::Arrow ) );
 }
 
 // accessibility ==============================================================

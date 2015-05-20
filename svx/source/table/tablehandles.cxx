@@ -84,9 +84,9 @@ void TableEdgeHdl::SetEdge( sal_Int32 nEdge, sal_Int32 nStart, sal_Int32 nEnd, T
 Pointer TableEdgeHdl::GetPointer() const
 {
     if( mbHorizontal )
-        return POINTER_VSPLIT;
+        return PointerStyle::VSplit;
     else
-        return POINTER_HSPLIT;
+        return PointerStyle::HSplit;
 }
 
 sal_Int32 TableEdgeHdl::GetValidDragOffset( const SdrDragStat& rDrag ) const
@@ -257,7 +257,7 @@ TableBorderHdl::TableBorderHdl(
 
 Pointer TableBorderHdl::GetPointer() const
 {
-    return POINTER_MOVE;
+    return PointerStyle::Move;
 }
 
 // create marker for this kind

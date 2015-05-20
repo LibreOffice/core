@@ -774,7 +774,7 @@ void ScAcceptChgDlg::UpdateView()
     const ScChangeAction* pScChangeAction=NULL;
     bAcceptEnableFlag=true;
     bRejectEnableFlag=true;
-    SetPointer(Pointer(POINTER_WAIT));
+    SetPointer(Pointer(PointerStyle::Wait));
     pTheView->SetUpdateMode(false);
     bool bFilterFlag = pTPFilter->IsDate() || pTPFilter->IsRange() ||
         pTPFilter->IsAuthor() || pTPFilter->IsComment();
@@ -859,7 +859,7 @@ void ScAcceptChgDlg::UpdateView()
         pParent->EnableChildrenOnDemand(true);
     }
     pTheView->SetUpdateMode(true);
-    SetPointer(Pointer(POINTER_ARROW));
+    SetPointer(Pointer(PointerStyle::Arrow));
     SvTreeListEntry* pEntry=pTheView->First();
     if(pEntry!=NULL)
         pTheView->Select(pEntry);
@@ -940,7 +940,7 @@ IMPL_LINK( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef )
 
 IMPL_LINK( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef )
 {
-    SetPointer(Pointer(POINTER_WAIT));
+    SetPointer(Pointer(PointerStyle::Wait));
 
     bIgnoreMsg=true;
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
@@ -971,14 +971,14 @@ IMPL_LINK( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef )
         ClearView();
         UpdateView();
     }
-    SetPointer(Pointer(POINTER_ARROW));
+    SetPointer(Pointer(PointerStyle::Arrow));
 
     bIgnoreMsg=false;
     return 0;
 }
 IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef )
 {
-    SetPointer(Pointer(POINTER_WAIT));
+    SetPointer(Pointer(PointerStyle::Wait));
 
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     bIgnoreMsg=true;
@@ -1057,7 +1057,7 @@ void ScAcceptChgDlg::AcceptFiltered()
 
 IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle)
 {
-    SetPointer(Pointer(POINTER_WAIT));
+    SetPointer(Pointer(PointerStyle::Wait));
     bIgnoreMsg=true;
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     if(pChanges!=NULL)
@@ -1077,7 +1077,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle)
         ClearView();
         UpdateView();
     }
-    SetPointer(Pointer(POINTER_ARROW));
+    SetPointer(Pointer(PointerStyle::Arrow));
 
     bIgnoreMsg=false;
 
@@ -1086,7 +1086,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle)
 
 IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle)
 {
-    SetPointer(Pointer(POINTER_WAIT));
+    SetPointer(Pointer(PointerStyle::Wait));
 
     bIgnoreMsg=true;
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
@@ -1105,7 +1105,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle)
         UpdateView();
     }
     bIgnoreMsg=false;
-    SetPointer(Pointer(POINTER_ARROW));
+    SetPointer(Pointer(PointerStyle::Arrow));
 
     return 0;
 }
@@ -1351,7 +1351,7 @@ bool ScAcceptChgDlg::Expand(
 IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
-    SetPointer(Pointer(POINTER_WAIT));
+    SetPointer(Pointer(PointerStyle::Wait));
     if(pTable!=NULL && pChanges!=NULL)
     {
         ScChangeActionMap aActionMap;
@@ -1410,7 +1410,7 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
 
         }
     }
-    SetPointer(Pointer(POINTER_ARROW));
+    SetPointer(Pointer(PointerStyle::Arrow));
     return (sal_uLong) true;
 }
 
@@ -1422,7 +1422,7 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
         SvTreeListEntry* pParent=NULL;
         bAcceptEnableFlag=true;
         bRejectEnableFlag=true;
-        SetPointer(Pointer(POINTER_WAIT));
+        SetPointer(Pointer(PointerStyle::Wait));
         pTheView->SetUpdateMode(false);
 
         bool bTheFlag = false;
@@ -1488,7 +1488,7 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
         pTPView->EnableRejectAll(bTheFlag);
 
         pTheView->SetUpdateMode(true);
-        SetPointer(Pointer(POINTER_ARROW));
+        SetPointer(Pointer(PointerStyle::Arrow));
     }
 }
 

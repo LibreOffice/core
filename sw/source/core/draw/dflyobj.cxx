@@ -962,7 +962,7 @@ void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
 Pointer  SwVirtFlyDrawObj::GetMacroPointer(
     const SdrObjMacroHitRec& ) const
 {
-    return Pointer( POINTER_REFHAND );
+    return Pointer( PointerStyle::RefHand );
 }
 
 bool SwVirtFlyDrawObj::HasMacro() const

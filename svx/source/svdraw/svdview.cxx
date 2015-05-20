@@ -957,11 +957,11 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
     if (mpCurrentSdrDragMethod)
     {
         if ((IsDraggingPoints() || IsDraggingGluePoints()) && IsMouseHideWhileDraggingPoints())
-            return Pointer(POINTER_NULL);
+            return Pointer(PointerStyle::Null);
 
         return mpCurrentSdrDragMethod->GetSdrDragPointer();
     }
-    if (IsMarkObj() || IsMarkPoints() || IsMarkGluePoints() || IsSetPageOrg()) return Pointer(POINTER_ARROW);
+    if (IsMarkObj() || IsMarkPoints() || IsMarkGluePoints() || IsSetPageOrg()) return Pointer(PointerStyle::Arrow);
     if (IsDragHelpLine()) return GetDraggedHelpLinePointer();
     if (IsMacroObj()) {
         SdrObjMacroHitRec aHitRec;
@@ -981,19 +981,19 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
         if(!pOut || IsTextEditInSelectionMode())
         {
             if(pTextEditOutliner->IsVertical())
-                return Pointer(POINTER_TEXT_VERTICAL);
+                return Pointer(PointerStyle::TextVertical);
             else
-                return Pointer(POINTER_TEXT);
+                return Pointer(PointerStyle::Text);
         }
         // Outliner should return something here...
         Point aPos(pOut->LogicToPixel(rMousePos));
         Pointer aPointer(pTextEditOutlinerView->GetPointer(aPos));
-        if (aPointer==POINTER_ARROW)
+        if (aPointer==PointerStyle::Arrow)
         {
             if(pTextEditOutliner->IsVertical())
-                aPointer = POINTER_TEXT_VERTICAL;
+                aPointer = PointerStyle::TextVertical;
             else
-                aPointer = POINTER_TEXT;
+                aPointer = PointerStyle::Text;
         }
         return aPointer;
     }
@@ -1011,17 +1011,17 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
         case SDREVENT_BEGCREATEOBJ:
             return aAktCreatePointer;
         case SDREVENT_MARKOBJ:
-            return Pointer(POINTER_MOVE);
+            return Pointer(PointerStyle::Move);
         case SDREVENT_BEGMARK:
-            return Pointer(POINTER_ARROW);
+            return Pointer(PointerStyle::Arrow);
         case SDREVENT_MARKPOINT:
         case SDREVENT_MARKGLUEPOINT:
-            return Pointer(POINTER_MOVEPOINT);
+            return Pointer(PointerStyle::MovePoint);
         case SDREVENT_BEGINSOBJPOINT:
         case SDREVENT_BEGINSGLUEPOINT:
-            return Pointer(POINTER_CROSS);
+            return Pointer(PointerStyle::Cross);
         case SDREVENT_EXECUTEURL:
-            return Pointer(POINTER_REFHAND);
+            return Pointer(PointerStyle::RefHand);
         case SDREVENT_BEGMACROOBJ:
         {
             SdrObjMacroHitRec aHitRec;
@@ -1039,11 +1039,11 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
     switch(eHit)
     {
         case SDRHIT_CELL:
-            return Pointer(POINTER_ARROW);
+            return Pointer(PointerStyle::Arrow);
         case SDRHIT_HELPLINE :
             return aVEvt.pPV->GetHelpLines()[aVEvt.nHlplIdx].GetPointer();
         case SDRHIT_GLUEPOINT:
-            return Pointer(POINTER_MOVEPOINT);
+            return Pointer(PointerStyle::MovePoint);
         case SDRHIT_TEXTEDIT :
         case SDRHIT_TEXTEDITOBJ:
         {
@@ -1052,9 +1052,9 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
             {
                 OutlinerParaObject* pParaObj = pText->GetOutlinerParaObject();
                 if(pParaObj && pParaObj->IsVertical())
-                    return Pointer(POINTER_TEXT_VERTICAL);
+                    return Pointer(PointerStyle::TextVertical);
             }
-            return Pointer(POINTER_TEXT);
+            return Pointer(PointerStyle::Text);
         }
         default: break;
     }
@@ -1068,13 +1068,13 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
         bool bVertex=pHdl!=NULL && pHdl->IsVertexHdl();
         bool bMov=eHdl==HDL_MOVE;
         if (bMov && (eDragMode==SDRDRAG_MOVE || eDragMode==SDRDRAG_RESIZE || bMarkedHitMovesAlways)) {
-            if (!IsMoveAllowed()) return Pointer(POINTER_ARROW); // because double click or drag & drop is possible
-            return Pointer(POINTER_MOVE);
+            if (!IsMoveAllowed()) return Pointer(PointerStyle::Arrow); // because double click or drag & drop is possible
+            return Pointer(PointerStyle::Move);
         }
         switch (eDragMode) {
             case SDRDRAG_ROTATE: {
                 if ((bCorner || bMov) && !IsRotateAllowed(true))
-                    return Pointer(POINTER_NOTALLOWED);
+                    return Pointer(PointerStyle::NotAllowed);
 
                 // are 3D objects selected?
                 bool b3DObjSelected = false;
@@ -1086,19 +1086,19 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                 // If we have a 3D object, go on despite !IsShearAllowed,
                 // because then we have a rotation instead of a shear.
                 if (bVertex && !IsShearAllowed() && !b3DObjSelected)
-                    return Pointer(POINTER_NOTALLOWED);
+                    return Pointer(PointerStyle::NotAllowed);
                 if (bMov)
-                    return Pointer(POINTER_ROTATE);
+                    return Pointer(PointerStyle::Rotate);
             } break;
             case SDRDRAG_SHEAR: case SDRDRAG_DISTORT: {
                 if (bCorner) {
-                    if (!IsDistortAllowed(true) && !IsDistortAllowed(false)) return Pointer(POINTER_NOTALLOWED);
-                    else return Pointer(POINTER_REFHAND);
+                    if (!IsDistortAllowed(true) && !IsDistortAllowed(false)) return Pointer(PointerStyle::NotAllowed);
+                    else return Pointer(PointerStyle::RefHand);
                 }
-                if (bVertex && !IsShearAllowed()) return Pointer(POINTER_NOTALLOWED);
+                if (bVertex && !IsShearAllowed()) return Pointer(PointerStyle::NotAllowed);
                 if (bMov) {
-                    if (!IsMoveAllowed()) return Pointer(POINTER_ARROW); // because double click or drag & drop is possible
-                    return Pointer(POINTER_MOVE);
+                    if (!IsMoveAllowed()) return Pointer(PointerStyle::Arrow); // because double click or drag & drop is possible
+                    return Pointer(PointerStyle::Move);
                 }
             } break;
             case SDRDRAG_MIRROR: {
@@ -1117,54 +1117,54 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                     if (!IsMirrorAllowed(true,true)) bNo=true; // any mirroring is forbidden
                     if (!IsMirrorAllowed(false,false) && !b45) bNo=true; // mirroring freely is forbidden
                     if (!IsMirrorAllowed(true,false) && !b90) bNo=true;  // mirroring horizontally/vertically is allowed
-                    if (bNo) return Pointer(POINTER_NOTALLOWED);
+                    if (bNo) return Pointer(PointerStyle::NotAllowed);
                     if (b90) {
-                        return Pointer(POINTER_MIRROR);
+                        return Pointer(PointerStyle::Mirror);
                     }
-                    return Pointer(POINTER_MIRROR);
+                    return Pointer(PointerStyle::Mirror);
                 }
             } break;
 
             case SDRDRAG_TRANSPARENCE:
             {
                 if(!IsTransparenceAllowed())
-                    return Pointer(POINTER_NOTALLOWED);
+                    return Pointer(PointerStyle::NotAllowed);
 
-                return Pointer(POINTER_REFHAND);
+                return Pointer(PointerStyle::RefHand);
             }
 
             case SDRDRAG_GRADIENT:
             {
                 if(!IsGradientAllowed())
-                    return Pointer(POINTER_NOTALLOWED);
+                    return Pointer(PointerStyle::NotAllowed);
 
-                return Pointer(POINTER_REFHAND);
+                return Pointer(PointerStyle::RefHand);
             }
 
             case SDRDRAG_CROOK: {
                 if (bCorner || bVertex || bMov) {
-                    if (!IsCrookAllowed(true) && !IsCrookAllowed(false)) return Pointer(POINTER_NOTALLOWED);
-                    return Pointer(POINTER_CROOK);
+                    if (!IsCrookAllowed(true) && !IsCrookAllowed(false)) return Pointer(PointerStyle::NotAllowed);
+                    return Pointer(PointerStyle::Crook);
                 }
             }
 
             case SDRDRAG_CROP:
             {
-                return Pointer(POINTER_CROP);
+                return Pointer(PointerStyle::Crop);
             }
 
             default: {
-                if ((bCorner || bVertex) && !IsResizeAllowed(true)) return Pointer(POINTER_NOTALLOWED);
+                if ((bCorner || bVertex) && !IsResizeAllowed(true)) return Pointer(PointerStyle::NotAllowed);
             }
         }
         if (pHdl!=NULL) return pHdl->GetPointer();
         if (bMov) {
-            if (!IsMoveAllowed()) return Pointer(POINTER_ARROW); // because double click or drag & drop is possible
-            return Pointer(POINTER_MOVE);
+            if (!IsMoveAllowed()) return Pointer(PointerStyle::Arrow); // because double click or drag & drop is possible
+            return Pointer(PointerStyle::Move);
         }
     }
     if (eEditMode==SDREDITMODE_CREATE) return aAktCreatePointer;
-    return Pointer(POINTER_ARROW);
+    return Pointer(PointerStyle::Arrow);
 }
 
 #define STR_NOTHING "nothing"

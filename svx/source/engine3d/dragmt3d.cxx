@@ -425,7 +425,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 
 Pointer E3dDragRotate::GetSdrDragPointer() const
 {
-    return Pointer(POINTER_ROTATE);
+    return Pointer(PointerStyle::Rotate);
 }
 
 // E3dDragMove. This drag method is only required for translations inside
@@ -697,7 +697,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
 
 Pointer E3dDragMove::GetSdrDragPointer() const
 {
-    return Pointer(POINTER_MOVE);
+    return Pointer(PointerStyle::Move);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

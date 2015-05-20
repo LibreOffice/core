@@ -1423,7 +1423,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeCreatePoly(const SdrDragStat& rDrag) cons
 
 Pointer SdrObject::GetCreatePointer() const
 {
-    return Pointer(POINTER_CROSS);
+    return Pointer(PointerStyle::Cross);
 }
 
 // transformations
@@ -1864,7 +1864,7 @@ SdrObject* SdrObject::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
 
 Pointer SdrObject::GetMacroPointer(const SdrObjMacroHitRec&) const
 {
-    return Pointer(POINTER_REFHAND);
+    return Pointer(PointerStyle::RefHand);
 }
 
 void SdrObject::PaintMacro(OutputDevice& rOut, const Rectangle& , const SdrObjMacroHitRec& ) const

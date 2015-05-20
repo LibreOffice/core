@@ -39,6 +39,7 @@
 #include <map>
 #include <unordered_set>
 #include <vector>
+#include <o3tl/enumarray.hxx>
 
 #include <cstdio>
 #include <cstdarg>
@@ -83,7 +84,7 @@ public:
     CGColorSpaceRef                               mxRGBSpace;
     CGColorSpaceRef                               mxGraySpace;
 
-    std::vector< NSCursor* >                      maCursors;
+    o3tl::enumarray< PointerStyle, NSCursor* >    maCursors;
     std::vector< NSMenuItem* >                    maFallbackMenu;
     std::map< NSEvent*, bool >                    maKeyEventAnswer;
 

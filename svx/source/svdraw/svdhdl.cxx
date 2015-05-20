@@ -856,16 +856,16 @@ bool SdrHdl::IsHdlHit(const Point& rPnt) const
 
 Pointer SdrHdl::GetPointer() const
 {
-    PointerStyle ePtr=POINTER_MOVE;
+    PointerStyle ePtr=PointerStyle::Move;
     const bool bSize=eKind>=HDL_UPLFT && eKind<=HDL_LWRGT;
     const bool bRot=pHdlList!=NULL && pHdlList->IsRotateShear();
     const bool bDis=pHdlList!=NULL && pHdlList->IsDistortShear();
     if (bSize && pHdlList!=NULL && (bRot || bDis)) {
         switch (eKind) {
             case HDL_UPLFT: case HDL_UPRGT:
-            case HDL_LWLFT: case HDL_LWRGT: ePtr=bRot ? POINTER_ROTATE : POINTER_REFHAND; break;
-            case HDL_LEFT : case HDL_RIGHT: ePtr=POINTER_VSHEAR; break;
-            case HDL_UPPER: case HDL_LOWER: ePtr=POINTER_HSHEAR; break;
+            case HDL_LWLFT: case HDL_LWRGT: ePtr=bRot ? PointerStyle::Rotate : PointerStyle::RefHand; break;
+            case HDL_LEFT : case HDL_RIGHT: ePtr=PointerStyle::VShear; break;
+            case HDL_UPPER: case HDL_LOWER: ePtr=PointerStyle::HShear; break;
             default:
                 break;
         }
@@ -890,33 +890,33 @@ Pointer SdrHdl::GetPointer() const
             while (nHdlAngle>=36000) nHdlAngle-=36000;
             nHdlAngle/=4500;
             switch ((sal_uInt8)nHdlAngle) {
-                case 0: ePtr=POINTER_ESIZE;  break;
-                case 1: ePtr=POINTER_NESIZE; break;
-                case 2: ePtr=POINTER_NSIZE;  break;
-                case 3: ePtr=POINTER_NWSIZE; break;
-                case 4: ePtr=POINTER_WSIZE;  break;
-                case 5: ePtr=POINTER_SWSIZE; break;
-                case 6: ePtr=POINTER_SSIZE;  break;
-                case 7: ePtr=POINTER_SESIZE; break;
+                case 0: ePtr=PointerStyle::ESize;  break;
+                case 1: ePtr=PointerStyle::NESize; break;
+                case 2: ePtr=PointerStyle::NSize;  break;
+                case 3: ePtr=PointerStyle::NWSize; break;
+                case 4: ePtr=PointerStyle::WSize;  break;
+                case 5: ePtr=PointerStyle::SWSize; break;
+                case 6: ePtr=PointerStyle::SSize;  break;
+                case 7: ePtr=PointerStyle::SESize; break;
             } // switch
         } else {
             switch (eKind) {
-                case HDL_UPLFT: ePtr=POINTER_NWSIZE;  break;
-                case HDL_UPPER: ePtr=POINTER_NSIZE;     break;
-                case HDL_UPRGT: ePtr=POINTER_NESIZE;  break;
-                case HDL_LEFT : ePtr=POINTER_WSIZE;     break;
-                case HDL_RIGHT: ePtr=POINTER_ESIZE;     break;
-                case HDL_LWLFT: ePtr=POINTER_SWSIZE;  break;
-                case HDL_LOWER: ePtr=POINTER_SSIZE;     break;
-                case HDL_LWRGT: ePtr=POINTER_SESIZE;  break;
-                case HDL_POLY : ePtr=POINTER_MOVEPOINT; break;
-                case HDL_CIRC : ePtr=POINTER_HAND;      break;
-                case HDL_REF1 : ePtr=POINTER_REFHAND;   break;
-                case HDL_REF2 : ePtr=POINTER_REFHAND;   break;
-                case HDL_BWGT : ePtr=POINTER_MOVEBEZIERWEIGHT; break;
-                case HDL_GLUE : ePtr=POINTER_MOVEPOINT; break;
-                case HDL_GLUE_DESELECTED : ePtr=POINTER_MOVEPOINT; break;
-                case HDL_CUSTOMSHAPE1 : ePtr=POINTER_HAND; break;
+                case HDL_UPLFT: ePtr=PointerStyle::NWSize;  break;
+                case HDL_UPPER: ePtr=PointerStyle::NSize;     break;
+                case HDL_UPRGT: ePtr=PointerStyle::NESize;  break;
+                case HDL_LEFT : ePtr=PointerStyle::WSize;     break;
+                case HDL_RIGHT: ePtr=PointerStyle::ESize;     break;
+                case HDL_LWLFT: ePtr=PointerStyle::SWSize;  break;
+                case HDL_LOWER: ePtr=PointerStyle::SSize;     break;
+                case HDL_LWRGT: ePtr=PointerStyle::SESize;  break;
+                case HDL_POLY : ePtr=PointerStyle::MovePoint; break;
+                case HDL_CIRC : ePtr=PointerStyle::Hand;      break;
+                case HDL_REF1 : ePtr=PointerStyle::RefHand;   break;
+                case HDL_REF2 : ePtr=PointerStyle::RefHand;   break;
+                case HDL_BWGT : ePtr=PointerStyle::MoveBezierWeight; break;
+                case HDL_GLUE : ePtr=PointerStyle::MovePoint; break;
+                case HDL_GLUE_DESELECTED : ePtr=PointerStyle::MovePoint; break;
+                case HDL_CUSTOMSHAPE1 : ePtr=PointerStyle::Hand; break;
                 default:
                     break;
             }
@@ -1362,7 +1362,7 @@ void SdrHdlLine::CreateB2dIAObject()
 
 Pointer SdrHdlLine::GetPointer() const
 {
-    return Pointer(POINTER_REFHAND);
+    return Pointer(PointerStyle::RefHand);
 }
 
 
@@ -1560,11 +1560,11 @@ Pointer ImpEdgeHdl::GetPointer() const
     if (pEdge==NULL)
         return SdrHdl::GetPointer();
     if (nObjHdlNum<=1)
-        return Pointer(POINTER_MOVEPOINT);
+        return Pointer(PointerStyle::MovePoint);
     if (IsHorzDrag())
-        return Pointer(POINTER_ESIZE);
+        return Pointer(PointerStyle::ESize);
     else
-        return Pointer(POINTER_SSIZE);
+        return Pointer(PointerStyle::SSize);
 }
 
 bool ImpEdgeHdl::IsHorzDrag() const
@@ -1662,11 +1662,11 @@ Pointer ImpMeasureHdl::GetPointer() const
 {
     switch (nObjHdlNum)
     {
-        case 0: case 1: return Pointer(POINTER_HAND);
-        case 2: case 3: return Pointer(POINTER_MOVEPOINT);
+        case 0: case 1: return Pointer(PointerStyle::Hand);
+        case 2: case 3: return Pointer(PointerStyle::MovePoint);
         case 4: case 5: return SdrHdl::GetPointer(); // will then be rotated appropriately
     } // switch
-    return Pointer(POINTER_NOTALLOWED);
+    return Pointer(PointerStyle::NotAllowed);
 }
 
 

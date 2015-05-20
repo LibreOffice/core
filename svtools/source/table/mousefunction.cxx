@@ -40,11 +40,11 @@ namespace svt { namespace table
         if ( m_nResizingColumn == COL_INVALID )
         {
             // if we hit a column divider, change the mosue pointer accordingly
-            Pointer aNewPointer( POINTER_ARROW );
+            Pointer aNewPointer( PointerStyle::Arrow );
             TableCell const tableCell = i_tableControl.hitTest( aPoint );
             if ( ( tableCell.nRow == ROW_COL_HEADERS ) && ( tableCell.eArea == ColumnDivider ) )
             {
-                aNewPointer = Pointer( POINTER_HSPLIT );
+                aNewPointer = Pointer( PointerStyle::HSplit );
             }
             i_tableControl.setPointer( aNewPointer );
 
@@ -54,17 +54,17 @@ namespace svt { namespace table
         ::Size const tableSize = i_tableControl.getTableSizePixel();
 
         // set proper pointer
-        Pointer aNewPointer( POINTER_ARROW );
+        Pointer aNewPointer( PointerStyle::Arrow );
         ColumnMetrics const & columnMetrics( i_tableControl.getColumnMetrics( m_nResizingColumn ) );
         if  (   ( aPoint.X() > tableSize.Width() )
             ||  ( aPoint.X() < columnMetrics.nStartPixel )
             )
         {
-            aNewPointer = Pointer( POINTER_NOTALLOWED );
+            aNewPointer = Pointer( PointerStyle::NotAllowed );
         }
         else
         {
-            aNewPointer = Pointer( POINTER_HSPLIT );
+            aNewPointer = Pointer( PointerStyle::HSplit );
         }
         i_tableControl.setPointer( aNewPointer );
 

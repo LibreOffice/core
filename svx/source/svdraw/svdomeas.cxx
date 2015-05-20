@@ -1024,7 +1024,7 @@ basegfx::B2DPolyPolygon SdrMeasureObj::TakeCreatePoly(const SdrDragStat& /*rDrag
 
 Pointer SdrMeasureObj::GetCreatePointer() const
 {
-    return Pointer(POINTER_CROSS);
+    return Pointer(PointerStyle::Cross);
 }
 
 void SdrMeasureObj::NbcMove(const Size& rSiz)

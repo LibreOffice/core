@@ -155,7 +155,7 @@ void FuConstCustomShape::Activate()
 {
     pView->SetCurrentObj( OBJ_CUSTOMSHAPE, SdrInventor );
 
-    aNewPointer = Pointer( POINTER_DRAW_RECT );
+    aNewPointer = Pointer( PointerStyle::DrawRect );
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
 

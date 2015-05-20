@@ -420,22 +420,22 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
     {
     case SIZING_TOP:
     case SIZING_BOTTOM:
-        aPointer = Pointer( POINTER_SSIZE );
+        aPointer = Pointer( PointerStyle::SSize );
         break;
 
     case SIZING_LEFT:
     case SIZING_RIGHT:
-        aPointer = Pointer( POINTER_ESIZE );
+        aPointer = Pointer( PointerStyle::ESize );
         break;
 
     case SIZING_LEFT+SIZING_TOP:
     case SIZING_RIGHT+SIZING_BOTTOM:
-        aPointer = Pointer( POINTER_SESIZE );
+        aPointer = Pointer( PointerStyle::SESize );
         break;
 
     case SIZING_RIGHT+SIZING_TOP:
     case SIZING_LEFT+SIZING_BOTTOM:
-        aPointer = Pointer( POINTER_NESIZE );
+        aPointer = Pointer( PointerStyle::NESize );
         break;
     }
 

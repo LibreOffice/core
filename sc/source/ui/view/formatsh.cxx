@@ -465,13 +465,13 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 if ( !bWaterCan && pStyleSheet )
                 {
                     pScMod->SetWaterCan( true );
-                    pTabViewShell->SetActivePointer( Pointer(POINTER_FILL) );
+                    pTabViewShell->SetActivePointer( Pointer(PointerStyle::Fill) );
                     rReq.Done();
                 }
                 else
                 {
                     pScMod->SetWaterCan( false );
-                    pTabViewShell->SetActivePointer( Pointer(POINTER_ARROW) );
+                    pTabViewShell->SetActivePointer( Pointer(PointerStyle::Arrow) );
                     rReq.Done();
                 }
             }

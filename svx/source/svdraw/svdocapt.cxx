@@ -597,7 +597,7 @@ basegfx::B2DPolyPolygon SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag
 
 Pointer SdrCaptionObj::GetCreatePointer() const
 {
-    return Pointer(POINTER_DRAW_CAPTION);
+    return Pointer(PointerStyle::DrawCaption);
 }
 
 void SdrCaptionObj::NbcMove(const Size& rSiz)

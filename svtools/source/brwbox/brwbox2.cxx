@@ -1423,7 +1423,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
                 bResizing = true;
                 nResizeCol = nCol;
                 nDragX = nResizeX = rEvtPos.X();
-                SetPointer( Pointer( POINTER_HSPLIT ) );
+                SetPointer( Pointer( PointerStyle::HSplit ) );
                 CaptureMouse();
                 pDataWin->DrawLine( Point( nDragX, 0 ),
                     Point( nDragX, pDataWin->GetSizePixel().Height() ) );
@@ -1472,7 +1472,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
             if ( bResizing || ( pCol->GetId() &&
                  std::abs( ((long) nR ) - rEvt.GetPosPixel().X() ) < MIN_COLUMNWIDTH ) )
             {
-                aNewPointer = Pointer( POINTER_HSPLIT );
+                aNewPointer = Pointer( PointerStyle::HSplit );
                 if ( bResizing )
                 {
                     // delete old auxiliary line

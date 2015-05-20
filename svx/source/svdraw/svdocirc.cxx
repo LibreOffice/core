@@ -795,13 +795,13 @@ basegfx::B2DPolyPolygon SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag) con
 Pointer SdrCircObj::GetCreatePointer() const
 {
     switch (meCircleKind) {
-        case OBJ_CIRC: return Pointer(POINTER_DRAW_ELLIPSE);
-        case OBJ_SECT: return Pointer(POINTER_DRAW_PIE);
-        case OBJ_CARC: return Pointer(POINTER_DRAW_ARC);
-        case OBJ_CCUT: return Pointer(POINTER_DRAW_CIRCLECUT);
+        case OBJ_CIRC: return Pointer(PointerStyle::DrawEllipse);
+        case OBJ_SECT: return Pointer(PointerStyle::DrawPie);
+        case OBJ_CARC: return Pointer(PointerStyle::DrawArc);
+        case OBJ_CCUT: return Pointer(PointerStyle::DrawCircleCut);
         default: break;
     } // switch
-    return Pointer(POINTER_CROSS);
+    return Pointer(PointerStyle::Cross);
 }
 
 void SdrCircObj::NbcMove(const Size& aSiz)

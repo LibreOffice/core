@@ -50,8 +50,8 @@
 FuDraw::FuDraw(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
     FuPoor      (pViewSh, pWin, pViewP, pDoc, rReq),
-    aNewPointer ( POINTER_ARROW ),
-    aOldPointer ( POINTER_ARROW )
+    aNewPointer ( PointerStyle::Arrow ),
+    aOldPointer ( PointerStyle::Arrow )
 {
 }
 
@@ -748,7 +748,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
         if ( pView->IsTextEdit() )
         {
-            pViewShell->SetActivePointer(Pointer(POINTER_TEXT));        // can't be ?
+            pViewShell->SetActivePointer(Pointer(PointerStyle::Text));        // can't be ?
         }
         else if ( pHdl )
         {
@@ -757,13 +757,13 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         }
         else if ( pView->IsMarkedHit(aPnt) )
         {
-            pViewShell->SetActivePointer( Pointer(POINTER_MOVE) );
+            pViewShell->SetActivePointer( Pointer(PointerStyle::Move) );
         }
         else if ( !bAlt && ( !pMEvt || !pMEvt->GetButtons() )
                         && lcl_UrlHit( pView, aPosPixel, pWindow ) )
         {
             //  could be suppressed with ALT
-            pWindow->SetPointer( Pointer( POINTER_REFHAND ) );          // Text-URL / ImageMap
+            pWindow->SetPointer( Pointer( PointerStyle::RefHand ) );          // Text-URL / ImageMap
         }
         else if ( !bAlt && pView->PickObj(aPnt, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKMACRO) )
         {
@@ -772,9 +772,9 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             pViewShell->SetActivePointer( pObj->GetMacroPointer(aHitRec) );
         }
         else if ( !bAlt && pInfo && (!pInfo->GetMacro().isEmpty() || !pInfo->GetHlink().isEmpty()) )
-            pWindow->SetPointer( Pointer( POINTER_REFHAND ) );
+            pWindow->SetPointer( Pointer( PointerStyle::RefHand ) );
         else if ( IsDetectiveHit( aPnt ) )
-            pViewShell->SetActivePointer( Pointer( POINTER_DETECTIVE ) );
+            pViewShell->SetActivePointer( Pointer( PointerStyle::Detective ) );
         else
             pViewShell->SetActivePointer( aNewPointer );            //! in Gridwin?
     }

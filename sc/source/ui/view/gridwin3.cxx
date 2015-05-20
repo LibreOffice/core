@@ -116,7 +116,7 @@ bool ScGridWindow::DrawMouseMove(const MouseEvent& rMEvt)
     }
     else
     {
-        SetPointer( Pointer( POINTER_ARROW ) );
+        SetPointer( Pointer( PointerStyle::Arrow ) );
         return false;
     }
 }

@@ -104,7 +104,7 @@ namespace ooo
         VBAHELPER_DLLPUBLIC double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, bool bVertical);
         VBAHELPER_DLLPUBLIC sal_Int32 PointsToHmm( double fPoints );
         VBAHELPER_DLLPUBLIC double HmmToPoints( sal_Int32 nHmm );
-        VBAHELPER_DLLPUBLIC sal_Int32 getPointerStyle( const css::uno::Reference< css::frame::XModel >& );
+        VBAHELPER_DLLPUBLIC PointerStyle getPointerStyle( const css::uno::Reference< css::frame::XModel >& );
         VBAHELPER_DLLPUBLIC void setCursorHelper( const css::uno::Reference< css::frame::XModel >& xModel, const Pointer& rPointer, bool bOverWrite );
         VBAHELPER_DLLPUBLIC void setDefaultPropByIntrospection( const css::uno::Any& aObj, const css::uno::Any& aValue  ) throw ( css::uno::RuntimeException );
         VBAHELPER_DLLPUBLIC css::uno::Any getPropertyValue( const css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName );

@@ -1630,20 +1630,20 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeDragPolyPolygon(const SdrDr
 Pointer ImpPathForDragAndCreate::GetCreatePointer() const
 {
     switch (meObjectKind) {
-        case OBJ_LINE    : return Pointer(POINTER_DRAW_LINE);
-        case OBJ_POLY    : return Pointer(POINTER_DRAW_POLYGON);
-        case OBJ_PLIN    : return Pointer(POINTER_DRAW_POLYGON);
-        case OBJ_PATHLINE: return Pointer(POINTER_DRAW_BEZIER);
-        case OBJ_PATHFILL: return Pointer(POINTER_DRAW_BEZIER);
-        case OBJ_FREELINE: return Pointer(POINTER_DRAW_FREEHAND);
-        case OBJ_FREEFILL: return Pointer(POINTER_DRAW_FREEHAND);
-        case OBJ_SPLNLINE: return Pointer(POINTER_DRAW_FREEHAND);
-        case OBJ_SPLNFILL: return Pointer(POINTER_DRAW_FREEHAND);
-        case OBJ_PATHPOLY: return Pointer(POINTER_DRAW_POLYGON);
-        case OBJ_PATHPLIN: return Pointer(POINTER_DRAW_POLYGON);
+        case OBJ_LINE    : return Pointer(PointerStyle::DrawLine);
+        case OBJ_POLY    : return Pointer(PointerStyle::DrawPolygon);
+        case OBJ_PLIN    : return Pointer(PointerStyle::DrawPolygon);
+        case OBJ_PATHLINE: return Pointer(PointerStyle::DrawBezier);
+        case OBJ_PATHFILL: return Pointer(PointerStyle::DrawBezier);
+        case OBJ_FREELINE: return Pointer(PointerStyle::DrawFreehand);
+        case OBJ_FREEFILL: return Pointer(PointerStyle::DrawFreehand);
+        case OBJ_SPLNLINE: return Pointer(PointerStyle::DrawFreehand);
+        case OBJ_SPLNFILL: return Pointer(PointerStyle::DrawFreehand);
+        case OBJ_PATHPOLY: return Pointer(PointerStyle::DrawPolygon);
+        case OBJ_PATHPLIN: return Pointer(PointerStyle::DrawPolygon);
         default: break;
     } // switch
-    return Pointer(POINTER_CROSS);
+    return Pointer(PointerStyle::Cross);
 }
 
 SdrPathObjGeoData::SdrPathObjGeoData()

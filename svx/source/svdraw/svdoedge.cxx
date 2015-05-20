@@ -2094,7 +2094,7 @@ basegfx::B2DPolyPolygon SdrEdgeObj::TakeCreatePoly(const SdrDragStat& /*rStatDra
 
 Pointer SdrEdgeObj::GetCreatePointer() const
 {
-    return Pointer(POINTER_DRAW_CONNECT);
+    return Pointer(PointerStyle::DrawConnect);
 }
 
 bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut)

@@ -230,7 +230,7 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     pCodeCompleteWnd(VclPtr<CodeCompleteWindow>::Create(this))
 {
     SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetFieldColor()));
-    SetPointer( Pointer( POINTER_TEXT ) );
+    SetPointer( Pointer( PointerStyle::Text ) );
     SetHelpId( HID_BASICIDE_EDITORWINDOW );
 
     listener_ = new ChangesListener(*this);

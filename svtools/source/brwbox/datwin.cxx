@@ -482,9 +482,9 @@ void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
     GetParent()->MouseMove( aBrowserEvent );
 
     // pointer shape
-    PointerStyle ePointerStyle = POINTER_ARROW;
+    PointerStyle ePointerStyle = PointerStyle::Arrow;
     if ( ImplRowDividerHitTest( aBrowserEvent ) )
-        ePointerStyle = POINTER_VSIZEBAR;
+        ePointerStyle = PointerStyle::VSizeBar;
     SetPointer( Pointer( ePointerStyle ) );
 
     // dragging out of the visible area?

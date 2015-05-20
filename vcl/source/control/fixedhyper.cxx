@@ -68,7 +68,7 @@ void FixedHyperlink::MouseMove( const MouseEvent& rMEvt )
 {
     // changes the pointer if the control is enabled and the mouse is over the text.
     if ( !rMEvt.IsLeaveWindow() && IsEnabled() && ImplIsOverText(GetPointerPosPixel()) )
-        SetPointer( POINTER_REFHAND );
+        SetPointer( PointerStyle::RefHand );
     else
         SetPointer( m_aOldPointer );
 }

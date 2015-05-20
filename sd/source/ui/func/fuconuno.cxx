@@ -131,7 +131,7 @@ void FuConstructUnoControl::Activate()
 {
     mpView->SetCurrentObj( nIdentifier, nInventor );
 
-    aNewPointer = Pointer(POINTER_DRAW_RECT);
+    aNewPointer = Pointer(PointerStyle::DrawRect);
     aOldPointer = mpWindow->GetPointer();
     mpWindow->SetPointer( aNewPointer );
 

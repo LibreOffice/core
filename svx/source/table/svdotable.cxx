@@ -2437,7 +2437,7 @@ basegfx::B2DPolyPolygon SdrTableObj::TakeCreatePoly(const SdrDragStat& rDrag) co
 
 Pointer SdrTableObj::GetCreatePointer() const
 {
-    return Pointer(POINTER_CROSS);
+    return Pointer(PointerStyle::Cross);
 }
 
 

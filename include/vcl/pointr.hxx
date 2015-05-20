@@ -31,7 +31,7 @@ class VCL_DLLPUBLIC Pointer
 
 public:
                     Pointer()
-                        { meStyle = POINTER_ARROW; }
+                        { meStyle = PointerStyle::Arrow; }
                     Pointer( PointerStyle eStyle )
                         { meStyle = eStyle; }
 

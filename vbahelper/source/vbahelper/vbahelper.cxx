@@ -676,10 +676,10 @@ ConcreteXShapeGeometryAttributes::~ConcreteXShapeGeometryAttributes()
 {
 }
 
-sal_Int32 getPointerStyle( const uno::Reference< frame::XModel >& xModel )
+PointerStyle getPointerStyle( const uno::Reference< frame::XModel >& xModel )
 {
 
-    sal_Int32 nPointerStyle( POINTER_ARROW );
+    PointerStyle nPointerStyle( PointerStyle::Arrow );
     try
     {
         const uno::Reference< frame::XController > xController( xModel->getCurrentController(),     uno::UNO_SET_THROW );

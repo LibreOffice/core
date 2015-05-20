@@ -620,11 +620,11 @@ void ScConflictsDlg::KeepHandler( bool bMine )
     {
         return;
     }
-    SetPointer( Pointer( POINTER_WAIT ) );
+    SetPointer( Pointer( PointerStyle::Wait ) );
     ScConflictAction eConflictAction = ( bMine ? SC_CONFLICT_ACTION_KEEP_MINE : SC_CONFLICT_ACTION_KEEP_OTHER );
     SetConflictAction( pRootEntry, eConflictAction );
     m_pLbConflicts->RemoveEntry( pRootEntry );
-    SetPointer( Pointer( POINTER_ARROW ) );
+    SetPointer( Pointer( PointerStyle::Arrow ) );
     if ( m_pLbConflicts->GetEntryCount() == 0 )
     {
         EndDialog( RET_OK );
@@ -639,7 +639,7 @@ void ScConflictsDlg::KeepAllHandler( bool bMine )
     {
         return;
     }
-    SetPointer( Pointer( POINTER_WAIT ) );
+    SetPointer( Pointer( PointerStyle::Wait ) );
     ScConflictAction eConflictAction = ( bMine ? SC_CONFLICT_ACTION_KEEP_MINE : SC_CONFLICT_ACTION_KEEP_OTHER );
     while ( pRootEntry )
     {
@@ -649,7 +649,7 @@ void ScConflictsDlg::KeepAllHandler( bool bMine )
     m_pLbConflicts->SetUpdateMode( false );
     m_pLbConflicts->Clear();
     m_pLbConflicts->SetUpdateMode( true );
-    SetPointer( Pointer( POINTER_ARROW ) );
+    SetPointer( Pointer( PointerStyle::Arrow ) );
     EndDialog( RET_OK );
 }
 

@@ -342,7 +342,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             aDocShTablesRef = pDocShTables;
 
             Pointer aOldPtr( GetPointer() );
-            SetPointer( Pointer( POINTER_WAIT ) );
+            SetPointer( Pointer( PointerStyle::Wait ) );
             pDocShTables->DoLoad( pMed );
             SetPointer( aOldPtr );
 

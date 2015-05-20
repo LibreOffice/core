@@ -734,18 +734,18 @@ Pointer OutlinerView::GetPointer( const Point& rPosPixel )
     MouseTarget eTarget;
     ImpCheckMousePos( rPosPixel, eTarget );
 
-    PointerStyle ePointerStyle = POINTER_ARROW;
+    PointerStyle ePointerStyle = PointerStyle::Arrow;
     if ( eTarget == MouseTarget::Text )
     {
-        ePointerStyle = GetOutliner()->IsVertical() ? POINTER_TEXT_VERTICAL : POINTER_TEXT;
+        ePointerStyle = GetOutliner()->IsVertical() ? PointerStyle::TextVertical : PointerStyle::Text;
     }
     else if ( eTarget == MouseTarget::Hypertext )
     {
-        ePointerStyle = POINTER_REFHAND;
+        ePointerStyle = PointerStyle::RefHand;
     }
     else if ( eTarget == MouseTarget::Bullet )
     {
-        ePointerStyle = POINTER_MOVE;
+        ePointerStyle = PointerStyle::Move;
     }
 
     return Pointer( ePointerStyle );

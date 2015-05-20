@@ -355,7 +355,7 @@ void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
 
     SetCursor( new vcl::Cursor );
 
-    SetPointer( Pointer( POINTER_TEXT ) );
+    SetPointer( Pointer( PointerStyle::Text ) );
 
     uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
     uno::Reference< datatransfer::dnd::XDragGestureRecognizer > xDGR = GetDragGestureRecognizer();
@@ -2712,7 +2712,7 @@ void Edit::SetSubEdit(Edit* pEdit)
 
     if (mpSubEdit)
     {
-        SetPointer(POINTER_ARROW);    // Nur das SubEdit hat den BEAM...
+        SetPointer(PointerStyle::Arrow);    // Nur das SubEdit hat den BEAM...
         mpSubEdit->mbIsSubEdit = true;
 
         mpSubEdit->SetReadOnly(mbReadOnly);

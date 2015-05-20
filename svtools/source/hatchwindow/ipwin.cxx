@@ -498,15 +498,15 @@ void SvResizeWindow::SelectMouse( const Point & rPos )
             SetPointer( m_aOldPointer );
         else
         {
-            PointerStyle aStyle = POINTER_MOVE;
+            PointerStyle aStyle = PointerStyle::Move;
             if( nGrab == 3 )
-                aStyle = POINTER_ESIZE;
+                aStyle = PointerStyle::ESize;
             else if( nGrab == 2 )
-                aStyle = POINTER_NESIZE;
+                aStyle = PointerStyle::NESize;
             else if( nGrab == 1 )
-                aStyle = POINTER_SSIZE;
+                aStyle = PointerStyle::SSize;
             else if( nGrab == 0 )
-                aStyle = POINTER_SESIZE;
+                aStyle = PointerStyle::SESize;
             if( m_nMoveGrab == -1 ) // the first time
             {
                 m_aOldPointer = GetPointer();

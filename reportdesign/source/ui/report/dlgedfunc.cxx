@@ -631,14 +631,14 @@ bool DlgEdFunc::setMovementPointer(const MouseEvent& rMEvt)
 {
     bool bIsSetPoint = isRectangleHit(rMEvt);
     if ( bIsSetPoint )
-        m_pParent->SetPointer( Pointer(POINTER_NOTALLOWED));
+        m_pParent->SetPointer( Pointer(PointerStyle::NotAllowed));
     else
     {
         bool bCtrlKey = rMEvt.IsMod1();
         (void)bCtrlKey;
         if (bCtrlKey)
         {
-            m_pParent->SetPointer( Pointer(POINTER_MOVEDATALINK ));
+            m_pParent->SetPointer( Pointer(PointerStyle::MoveDataLink ));
             bIsSetPoint = true;
         }
     }

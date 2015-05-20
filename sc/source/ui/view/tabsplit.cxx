@@ -47,11 +47,11 @@ void ScTabSplitter::SetFixed(bool bSet)
 {
     bFixed = bSet;
     if (bSet)
-        SetPointer(POINTER_ARROW);
+        SetPointer(PointerStyle::Arrow);
     else if (IsHorizontal())
-        SetPointer(POINTER_HSPLIT);
+        SetPointer(PointerStyle::HSplit);
     else
-        SetPointer(POINTER_VSPLIT);
+        SetPointer(PointerStyle::VSplit);
 }
 
 void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )

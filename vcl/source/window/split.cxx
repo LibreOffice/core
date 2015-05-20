@@ -74,12 +74,12 @@ void Splitter::ImplInitHorVer(bool bNew)
 
     if ( mbHorzSplit )
     {
-        ePointerStyle = POINTER_HSPLIT;
+        ePointerStyle = PointerStyle::HSplit;
         SetSizePixel( Size( rSettings.GetSplitSize(), rSettings.GetScrollBarSize() ) );
     }
     else
     {
-        ePointerStyle = POINTER_VSPLIT;
+        ePointerStyle = PointerStyle::VSplit;
         SetSizePixel( Size( rSettings.GetScrollBarSize(), rSettings.GetSplitSize() ) );
     }
 

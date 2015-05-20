@@ -56,11 +56,11 @@ ScPrivatSplit::ScPrivatSplit(vcl::Window* pParent, const ResId& rResId,
     aMovingFlag=false;
     if(eScSplit==SC_SPLIT_HORZ)
     {
-        aWinPointer=Pointer(POINTER_HSPLIT);
+        aWinPointer=Pointer(PointerStyle::HSplit);
     }
     else
     {
-        aWinPointer=Pointer(POINTER_VSPLIT);
+        aWinPointer=Pointer(PointerStyle::VSplit);
     }
     SetPointer(aWinPointer);
 }

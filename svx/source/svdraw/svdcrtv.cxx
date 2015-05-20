@@ -201,7 +201,7 @@ void SdrCreateView::ImpClearVars()
     pCreatePV=NULL;
     bAutoTextEdit=false;
     b1stPointAsCenter=false;
-    aAktCreatePointer=Pointer(POINTER_CROSS);
+    aAktCreatePointer=Pointer(PointerStyle::Cross);
     bUseIncompatiblePathCreateInterface=false;
     bAutoClosePolys=true;
     nAutoCloseDistPix=5;
@@ -370,7 +370,7 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent)
             {
                 // Here the correct pointer needs to be used
                 // if the default is set to vertical writing
-                aAktCreatePointer = POINTER_TEXT;
+                aAktCreatePointer = PointerStyle::Text;
             }
             else
                 aAktCreatePointer = pObj->GetCreatePointer();
@@ -379,7 +379,7 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent)
         }
         else
         {
-            aAktCreatePointer = Pointer(POINTER_CROSS);
+            aAktCreatePointer = Pointer(PointerStyle::Cross);
         }
     }
 

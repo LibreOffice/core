@@ -831,7 +831,7 @@ void HeaderBar::ImplEndDrag( bool bCancel )
         {
             if ( mbItemDrag )
             {
-                Pointer aPointer( POINTER_ARROW );
+                Pointer aPointer( PointerStyle::Arrow );
                 SetPointer( aPointer );
                 if ( (mnItemDragPos != nPos) &&
                      (mnItemDragPos != HEADERBAR_ITEM_NOTFOUND) )
@@ -900,11 +900,11 @@ void HeaderBar::MouseMove( const MouseEvent& rMEvt )
 {
     long            nTemp1;
     sal_uInt16          nTemp2;
-    PointerStyle    eStyle = POINTER_ARROW;
+    PointerStyle    eStyle = PointerStyle::Arrow;
     sal_uInt16          nHitTest = ImplHitTest( rMEvt.GetPosPixel(), nTemp1, nTemp2 );
 
     if ( nHitTest & HEAD_HITTEST_DIVIDER )
-        eStyle = POINTER_HSIZEBAR;
+        eStyle = PointerStyle::HSizeBar;
     Pointer aPtr( eStyle );
     SetPointer( aPtr );
 }

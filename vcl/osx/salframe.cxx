@@ -73,7 +73,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, sal_uLong salFrameStyle ) :
     mnLastModifierFlags( 0 ),
     mpMenu( NULL ),
     mnExtStyle( 0 ),
-    mePointerStyle( POINTER_ARROW ),
+    mePointerStyle( PointerStyle::Arrow ),
     mnTrackingRectTag( 0 ),
     mrClippingPath( 0 ),
     mnICOptions( InputContextFlags::NONE )
@@ -805,26 +805,26 @@ NSCursor* AquaSalFrame::getCurrentCursor() const
     NSCursor* pCursor = nil;
     switch( mePointerStyle )
     {
-    case POINTER_TEXT:      pCursor = [NSCursor IBeamCursor];           break;
-    case POINTER_CROSS:     pCursor = [NSCursor crosshairCursor];       break;
-    case POINTER_HAND:
-    case POINTER_MOVE:      pCursor = [NSCursor openHandCursor];        break;
-    case POINTER_NSIZE:     pCursor = [NSCursor resizeUpCursor];        break;
-    case POINTER_SSIZE:     pCursor = [NSCursor resizeDownCursor];      break;
-    case POINTER_ESIZE:     pCursor = [NSCursor resizeRightCursor];      break;
-    case POINTER_WSIZE:     pCursor = [NSCursor resizeLeftCursor];     break;
-    case POINTER_ARROW:     pCursor = [NSCursor arrowCursor];           break;
-    case POINTER_VSPLIT:
-    case POINTER_VSIZEBAR:
-    case POINTER_WINDOW_NSIZE:
-    case POINTER_WINDOW_SSIZE:
+    case PointerStyle::Text:      pCursor = [NSCursor IBeamCursor];           break;
+    case PointerStyle::Cross:     pCursor = [NSCursor crosshairCursor];       break;
+    case PointerStyle::Hand:
+    case PointerStyle::Move:      pCursor = [NSCursor openHandCursor];        break;
+    case PointerStyle::NSize:     pCursor = [NSCursor resizeUpCursor];        break;
+    case PointerStyle::SSize:     pCursor = [NSCursor resizeDownCursor];      break;
+    case PointerStyle::ESize:     pCursor = [NSCursor resizeRightCursor];      break;
+    case PointerStyle::WSize:     pCursor = [NSCursor resizeLeftCursor];     break;
+    case PointerStyle::Arrow:     pCursor = [NSCursor arrowCursor];           break;
+    case PointerStyle::VSplit:
+    case PointerStyle::VSizeBar:
+    case PointerStyle::WindowNSize:
+    case PointerStyle::WindowSSize:
                             pCursor = [NSCursor resizeUpDownCursor];    break;
-    case POINTER_HSPLIT:
-    case POINTER_HSIZEBAR:
-    case POINTER_WINDOW_ESIZE:
-    case POINTER_WINDOW_WSIZE:
+    case PointerStyle::HSplit:
+    case PointerStyle::HSizeBar:
+    case PointerStyle::WindowESize:
+    case PointerStyle::WindowWSize:
                             pCursor = [NSCursor resizeLeftRightCursor]; break;
-    case POINTER_REFHAND:   pCursor = [NSCursor pointingHandCursor];    break;
+    case PointerStyle::RefHand:   pCursor = [NSCursor pointingHandCursor];    break;
 
     default:
         pCursor = GetSalData()->getCursor( mePointerStyle );
@@ -846,7 +846,7 @@ void AquaSalFrame::SetPointer( PointerStyle ePointerStyle )
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    if( ePointerStyle >= POINTER_COUNT || ePointerStyle == mePointerStyle )
+    if( ePointerStyle == mePointerStyle )
         return;
     mePointerStyle = ePointerStyle;
 

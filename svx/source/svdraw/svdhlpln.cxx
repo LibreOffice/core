@@ -30,9 +30,9 @@
 Pointer SdrHelpLine::GetPointer() const
 {
     switch (eKind) {
-        case SDRHELPLINE_VERTICAL  : return Pointer(POINTER_ESIZE);
-        case SDRHELPLINE_HORIZONTAL: return Pointer(POINTER_SSIZE);
-        default                    : return Pointer(POINTER_MOVE);
+        case SDRHELPLINE_VERTICAL  : return Pointer(PointerStyle::ESize);
+        case SDRHELPLINE_HORIZONTAL: return Pointer(PointerStyle::SSize);
+        default                    : return Pointer(PointerStyle::Move);
     } // switch
 }
 

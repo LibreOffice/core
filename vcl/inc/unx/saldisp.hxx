@@ -38,6 +38,7 @@ class   SalXLib;
 #include <salwtype.hxx>
 #include <generic/gendata.hxx>
 #include <generic/gendisp.hxx>
+#include <o3tl/enumarray.hxx>
 
 #include <vclpluginapi.h>
 
@@ -243,7 +244,7 @@ protected:
 
     // until x bytes
 
-    Cursor          aPointerCache_[POINTER_COUNT];
+    o3tl::enumarray<PointerStyle, Cursor> aPointerCache_;
 
     // Keyboard
     bool            bNumLockFromXS_;    // Num Lock handled by X Server
@@ -303,7 +304,7 @@ public:
                                Status         *pStatus,
                                XIC = NULL ) const;
 
-    Cursor                GetPointer( int ePointerStyle );
+    Cursor                GetPointer( PointerStyle ePointerStyle );
     virtual int           CaptureMouse( SalFrame *pCapture );
 
     void                  Remove( XEvent   *pEvent );

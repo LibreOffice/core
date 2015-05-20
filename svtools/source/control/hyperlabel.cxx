@@ -115,7 +115,7 @@ namespace svt
     {
         aFont.SetUnderline(UNDERLINE_SINGLE);
         m_pImpl->m_bHyperMode = true;
-        SetPointer( POINTER_REFHAND );
+        SetPointer( PointerStyle::RefHand );
         SetControlFont( aFont);
         SetTextColor( aColor);
 
@@ -125,7 +125,7 @@ namespace svt
     {
         m_pImpl->m_bHyperMode = false;
         aFont.SetUnderline(UNDERLINE_NONE);
-        SetPointer( POINTER_ARROW );
+        SetPointer( PointerStyle::Arrow );
         SetControlFont( aFont);
         SetTextColor( aColor);
     }

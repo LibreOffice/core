@@ -125,7 +125,7 @@ bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 void FuDisplayOrder::Activate()
 {
     maPtr = mpWindow->GetPointer();
-    mpWindow->SetPointer( Pointer( POINTER_REFHAND ) );
+    mpWindow->SetPointer( Pointer( PointerStyle::RefHand ) );
 }
 
 void FuDisplayOrder::Deactivate()

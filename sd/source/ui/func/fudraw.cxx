@@ -511,7 +511,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         {
             // water can mode
             bDefPointer = false;
-            mpWindow->SetPointer(Pointer(POINTER_FILL));
+            mpWindow->SetPointer(Pointer(PointerStyle::Fill));
         }
     }
     else
@@ -522,7 +522,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         {
             // water can mode
             bDefPointer = false;
-            mpWindow->SetPointer(Pointer(POINTER_FILL));
+            mpWindow->SetPointer(Pointer(PointerStyle::Fill));
         }
         else if (!pHdl &&
                  mpViewShell->GetViewFrame()->HasChildWindow(SvxBmpMaskChildWindow::GetChildWindowId()))
@@ -533,7 +533,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             if (pMask && pMask->IsEyedropping())
             {
                 bDefPointer = false;
-                mpWindow->SetPointer(Pointer(POINTER_REFHAND));
+                mpWindow->SetPointer(Pointer(PointerStyle::RefHand));
             }
         }
         else if (!mpView->IsAction())
@@ -559,7 +559,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 SdrObject* pObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 if ((pObject->ISA(E3dObject)) && (rMarkList.GetMarkCount() == 1))
                 {
-                    mpWindow->SetPointer(Pointer(POINTER_ROTATE));
+                    mpWindow->SetPointer(Pointer(PointerStyle::Rotate));
                     bDefPointer = false;     // Otherwise it'll be calles Joes routine and the mousepointer will reconfigurate again
                 }
             }
@@ -584,7 +584,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 {
                     pObj = NULL;
                     bDefPointer = false;
-                    mpWindow->SetPointer(Pointer(POINTER_ARROW));
+                    mpWindow->SetPointer(Pointer(PointerStyle::Arrow));
                 }
             }
 
@@ -680,7 +680,7 @@ bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                     {
                         // Animation object
                         bSet = true;
-                        mpWindow->SetPointer(Pointer(POINTER_REFHAND));
+                        mpWindow->SetPointer(Pointer(PointerStyle::RefHand));
                     }
             }
             else if (bImageMapInfo &&
@@ -690,7 +690,7 @@ bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                 * ImageMap
                 ******************************************************/
                 bSet = true;
-                mpWindow->SetPointer(Pointer(POINTER_REFHAND));
+                mpWindow->SetPointer(Pointer(PointerStyle::RefHand));
             }
         }
     }

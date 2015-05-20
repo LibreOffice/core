@@ -563,16 +563,16 @@ void MediaWindowImpl::setPointer(const Pointer& rPointer)
 
         switch (rPointer.GetStyle())
         {
-            case POINTER_CROSS:
+            case PointerStyle::Cross:
                 nPointer = awt::SystemPointer::CROSS;
                 break;
-            case POINTER_HAND:
+            case PointerStyle::Hand:
                 nPointer = awt::SystemPointer::HAND;
                 break;
-            case POINTER_MOVE:
+            case PointerStyle::Move:
                 nPointer = awt::SystemPointer::MOVE;
                 break;
-            case POINTER_WAIT:
+            case PointerStyle::Wait:
                 nPointer = awt::SystemPointer::WAIT;
                 break;
             default:

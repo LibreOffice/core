@@ -178,17 +178,17 @@ SwVbaSystem::~SwVbaSystem()
 sal_Int32 SAL_CALL
 SwVbaSystem::getCursor() throw (uno::RuntimeException, std::exception)
 {
-    sal_Int32 nPointerStyle =  getPointerStyle( getCurrentWordDoc(mxContext) );
+    PointerStyle nPointerStyle = getPointerStyle( getCurrentWordDoc(mxContext) );
 
     switch( nPointerStyle )
     {
-        case POINTER_ARROW:
+        case PointerStyle::Arrow:
             return word::WdCursorType::wdCursorNorthwestArrow;
-        case POINTER_NULL:
+        case PointerStyle::Null:
             return word::WdCursorType::wdCursorNormal;
-        case POINTER_WAIT:
+        case PointerStyle::Wait:
             return word::WdCursorType::wdCursorWait;
-        case POINTER_TEXT:
+        case PointerStyle::Text:
             return word::WdCursorType::wdCursorIBeam;
         default:
             return word::WdCursorType::wdCursorNormal;
@@ -204,27 +204,27 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException, std::e
         {
             case word::WdCursorType::wdCursorNorthwestArrow:
             {
-                const Pointer& rPointer( POINTER_ARROW );
+                const Pointer& rPointer( PointerStyle::Arrow );
                 setCursorHelper( getCurrentWordDoc(mxContext), rPointer, false );
                 break;
             }
             case word::WdCursorType::wdCursorWait:
             {
-                const Pointer& rPointer( static_cast< PointerStyle >( POINTER_WAIT ) );
+                const Pointer& rPointer( static_cast< PointerStyle >( PointerStyle::Wait ) );
                 //It will set the edit window, toobar and statusbar's mouse pointer.
                 setCursorHelper( getCurrentWordDoc(mxContext), rPointer, true );
                 break;
             }
             case word::WdCursorType::wdCursorIBeam:
             {
-                const Pointer& rPointer( static_cast< PointerStyle >( POINTER_TEXT ) );
+                const Pointer& rPointer( static_cast< PointerStyle >( PointerStyle::Text ) );
                 //It will set the edit window, toobar and statusbar's mouse pointer.
                 setCursorHelper( getCurrentWordDoc( mxContext ), rPointer, true );
                 break;
             }
             case word::WdCursorType::wdCursorNormal:
             {
-                const Pointer& rPointer( POINTER_NULL );
+                const Pointer& rPointer( PointerStyle::Null );
                 setCursorHelper( getCurrentWordDoc( mxContext ), rPointer, false );
                 break;
             }

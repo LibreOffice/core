@@ -132,8 +132,8 @@ public:
 
     bool    GetPageMargins() const { return bPageMargin; }
     void    SetPageMargins( bool bVal )  { bPageMargin = bVal; }
-    void    DrawInvert( long nDragPos, sal_uInt16 nFlags );
-    void    DragMove( long nDragMovePos, sal_uInt16 nFlags );
+    void    DrawInvert( long nDragPos, PointerStyle nFlags );
+    void    DragMove( long nDragMovePos, PointerStyle nFlags );
 
     const ScPreviewLocationData& GetLocationData();
 

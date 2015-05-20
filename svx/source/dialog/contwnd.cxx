@@ -164,7 +164,7 @@ void ContourWindow::MouseMove( const MouseEvent& rMEvt )
 
         if ( aPipetteLink.IsSet() && Rectangle( Point(), GetGraphicSize() ).IsInside( aLogPt ) )
         {
-            SetPointer( POINTER_REFHAND );
+            SetPointer( PointerStyle::RefHand );
             aPipetteLink.Call( this );
         }
     }

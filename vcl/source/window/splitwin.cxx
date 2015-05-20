@@ -2184,11 +2184,11 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
         }
         mnMStartPos = mnMSplitPos;
 
-        PointerStyle eStyle = POINTER_ARROW;
+        PointerStyle eStyle = PointerStyle::Arrow;
         if ( mnSplitTest & SPLIT_HORZ )
-            eStyle = POINTER_HSPLIT;
+            eStyle = PointerStyle::HSplit;
         else if ( mnSplitTest & SPLIT_VERT )
-            eStyle = POINTER_VSPLIT;
+            eStyle = PointerStyle::VSplit;
 
         Pointer aPtr( eStyle );
         SetPointer( aPtr );
@@ -2286,7 +2286,7 @@ void SplitWindow::MouseMove( const MouseEvent& rMEvt )
         ImplSplitSet*   pTempSplitSet;
         sal_uInt16          nTempSplitPos;
         sal_uInt16          nSplitTest = ImplTestSplit( this, aPos, nTemp, &pTempSplitSet, nTempSplitPos );
-        PointerStyle    eStyle = POINTER_ARROW;
+        PointerStyle    eStyle = PointerStyle::Arrow;
         Rectangle       aAutoHideRect;
         Rectangle       aFadeInRect;
         Rectangle       aFadeOutRect;
@@ -2301,9 +2301,9 @@ void SplitWindow::MouseMove( const MouseEvent& rMEvt )
             if ( nSplitTest && !(nSplitTest & SPLIT_NOSPLIT) )
             {
                 if ( nSplitTest & SPLIT_HORZ )
-                    eStyle = POINTER_HSPLIT;
+                    eStyle = PointerStyle::HSplit;
                 else if ( nSplitTest & SPLIT_VERT )
-                    eStyle = POINTER_VSPLIT;
+                    eStyle = PointerStyle::VSplit;
             }
         }
 

@@ -180,7 +180,7 @@ void RecentDocsViewItem::MouseButtonUp(const MouseEvent& rMEvt)
 void RecentDocsViewItem::OpenDocument()
 {
     // show busy mouse pointer
-    mrParent.SetPointer(Pointer(POINTER_WAIT));
+    mrParent.SetPointer(Pointer(PointerStyle::Wait));
 
     Reference<frame::XDispatch> xDispatch;
     Reference<frame::XDispatchProvider> xDispatchProvider;

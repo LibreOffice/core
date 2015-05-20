@@ -136,22 +136,22 @@ void FuConstArc::Activate()
     switch (aSfxRequest.GetSlot() )
     {
         case SID_DRAW_ARC:
-            aNewPointer = Pointer( POINTER_DRAW_ARC );
+            aNewPointer = Pointer( PointerStyle::DrawArc );
             aObjKind = OBJ_CARC;
             break;
 
         case SID_DRAW_PIE:
-            aNewPointer = Pointer( POINTER_DRAW_PIE );
+            aNewPointer = Pointer( PointerStyle::DrawPie );
             aObjKind = OBJ_SECT;
             break;
 
         case SID_DRAW_CIRCLECUT:
-            aNewPointer = Pointer( POINTER_DRAW_CIRCLECUT );
+            aNewPointer = Pointer( PointerStyle::DrawCircleCut );
             aObjKind = OBJ_CCUT;
             break;
 
         default:
-            aNewPointer = Pointer( POINTER_CROSS );
+            aNewPointer = Pointer( PointerStyle::Cross );
             aObjKind = OBJ_CARC;
             break;
     }

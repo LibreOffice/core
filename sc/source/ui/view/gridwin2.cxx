@@ -293,16 +293,16 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
 
     if (bMove)          // set mouse pointer
     {
-        PointerStyle ePointer = POINTER_PIVOT_DELETE;
+        PointerStyle ePointer = PointerStyle::PivotDelete;
         if ( !bAllowed )
-            ePointer = POINTER_NOTALLOWED;
+            ePointer = PointerStyle::NotAllowed;
         else if ( bHasRange )
             switch (nOrient)
             {
-                case DataPilotFieldOrientation_COLUMN: ePointer = POINTER_PIVOT_COL; break;
-                case DataPilotFieldOrientation_ROW:    ePointer = POINTER_PIVOT_ROW; break;
+                case DataPilotFieldOrientation_COLUMN: ePointer = PointerStyle::PivotCol; break;
+                case DataPilotFieldOrientation_ROW:    ePointer = PointerStyle::PivotRow; break;
                 case DataPilotFieldOrientation_PAGE:
-                case DataPilotFieldOrientation_DATA:   ePointer = POINTER_PIVOT_FIELD;   break;
+                case DataPilotFieldOrientation_DATA:   ePointer = PointerStyle::PivotField;   break;
             }
         SetPointer( ePointer );
     }
@@ -640,7 +640,7 @@ void ScGridWindow::DPMouseButtonUp( const MouseEvent& rMEvt )
     ReleaseMouse();
 
     DPTestMouse( rMEvt, false );
-    SetPointer( Pointer( POINTER_ARROW ) );
+    SetPointer( Pointer( PointerStyle::Arrow ) );
 }
 
 void ScGridWindow::UpdateDragRect( bool bShowRange, const Rectangle& rPosRect )

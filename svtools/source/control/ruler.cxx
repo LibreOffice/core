@@ -2088,7 +2088,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
 
 void Ruler::MouseMove( const MouseEvent& rMEvt )
 {
-    PointerStyle ePtrStyle = POINTER_ARROW;
+    PointerStyle ePtrStyle = PointerStyle::Arrow;
 
     mxCurrentHitTest.reset(new RulerSelection);
 
@@ -2103,28 +2103,28 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
             if (mnWinStyle & WB_HORZ)
             {
                 if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_1)
-                    ePtrStyle = POINTER_TAB_SELECT_W;
+                    ePtrStyle = PointerStyle::TabSelectW;
                 else if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_2)
-                    ePtrStyle = POINTER_TAB_SELECT_E;
+                    ePtrStyle = PointerStyle::TabSelectE;
                 else
-                    ePtrStyle = POINTER_ESIZE;
+                    ePtrStyle = PointerStyle::ESize;
             }
             else
             {
                 if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_1)
-                    ePtrStyle = POINTER_WINDOW_NSIZE;
+                    ePtrStyle = PointerStyle::WindowNSize;
                 else if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_2)
-                    ePtrStyle = POINTER_WINDOW_SSIZE;
+                    ePtrStyle = PointerStyle::WindowSSize;
                 else
-                    ePtrStyle = POINTER_SSIZE;
+                    ePtrStyle = PointerStyle::SSize;
             }
         }
         else if (mxCurrentHitTest->bSizeBar)
         {
             if (mnWinStyle & WB_HORZ)
-                ePtrStyle = POINTER_HSIZEBAR;
+                ePtrStyle = PointerStyle::HSizeBar;
             else
-                ePtrStyle = POINTER_VSIZEBAR;
+                ePtrStyle = PointerStyle::VSizeBar;
         }
     }
 
@@ -2379,16 +2379,16 @@ bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
                 if ( aHitTest.bSize )
                 {
                     if ( mnWinStyle & WB_HORZ )
-                        aPtr = Pointer( POINTER_ESIZE );
+                        aPtr = Pointer( PointerStyle::ESize );
                     else
-                        aPtr = Pointer( POINTER_SSIZE );
+                        aPtr = Pointer( PointerStyle::SSize );
                 }
                 else if ( aHitTest.bSizeBar )
                 {
                     if ( mnWinStyle & WB_HORZ )
-                        aPtr = Pointer( POINTER_HSIZEBAR );
+                        aPtr = Pointer( PointerStyle::HSizeBar );
                     else
-                        aPtr = Pointer( POINTER_VSIZEBAR );
+                        aPtr = Pointer( PointerStyle::VSizeBar );
                 }
                 SetPointer( aPtr );
                 return ImplStartDrag( &aHitTest, nMouseModifier );

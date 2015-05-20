@@ -619,7 +619,7 @@ void OJoinTableView::BeginChildMove( OTableWindow* pTabWin, const Point& rMouseP
         return;
 
     m_pDragWin = pTabWin;
-    SetPointer(Pointer(POINTER_MOVE));
+    SetPointer(Pointer(PointerStyle::Move));
     Point aMousePos = ScreenToOutputPixel( rMousePos );
     m_aDragOffset = aMousePos - pTabWin->GetPosPixel();
     m_pDragWin->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
@@ -767,7 +767,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
                 m_pDragWin->GrabFocus();
             }
             m_pDragWin = NULL;
-            SetPointer(Pointer(POINTER_ARROW));
+            SetPointer(Pointer(PointerStyle::Arrow));
         }
         // else we handle the resizing
         else if( m_pSizingWin )

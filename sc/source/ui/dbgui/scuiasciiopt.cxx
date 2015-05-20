@@ -664,12 +664,12 @@ IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, RadioButton*, pButton )
 
     if( (pButton == pRbFixed) || (pButton == pRbSeparated) )
     {
-        SetPointer( Pointer( POINTER_WAIT ) );
+        SetPointer( Pointer( PointerStyle::Wait ) );
         if( pRbFixed->IsChecked() )
             mpTableBox->SetFixedWidthMode();
         else
             mpTableBox->SetSeparatorsMode();
-        SetPointer( Pointer( POINTER_ARROW ) );
+        SetPointer( Pointer( PointerStyle::Arrow ) );
 
         SetupSeparatorCtrls();
     }
@@ -707,7 +707,7 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
 
     if( (pCharSetBox == pLbCharSet) && (pCharSetBox->GetSelectEntryCount() == 1) )
     {
-        SetPointer( Pointer( POINTER_WAIT ) );
+        SetPointer( Pointer( PointerStyle::Wait ) );
         rtl_TextEncoding eOldCharSet = meCharSet;
         SetSelectedCharSet();
         // switching char-set invalidates 8bit -> String conversions
@@ -715,7 +715,7 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
             UpdateVertical();
 
         mpTableBox->Execute( CSVCMD_NEWCELLTEXTS );
-        SetPointer( Pointer( POINTER_ARROW ) );
+        SetPointer( Pointer( PointerStyle::Arrow ) );
     }
     return 0;
 }

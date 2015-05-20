@@ -155,7 +155,7 @@ bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
         if ( mpView->IsTextEdit() )
         {
             bReturn = FuText::MouseMove( rMEvt );
-            mpWindow->SetPointer(Pointer(POINTER_FILL));
+            mpWindow->SetPointer(Pointer(PointerStyle::Fill));
         }
         else
         {
@@ -165,9 +165,9 @@ bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
             bool bOverMarkableObject = mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pObj, pPV, SdrSearchOptions::PICKMARKABLE);
 
             if(bOverMarkableObject && HasContentForThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
-                mpWindow->SetPointer(Pointer(POINTER_FILL));
+                mpWindow->SetPointer(Pointer(PointerStyle::Fill));
             else
-                mpWindow->SetPointer(Pointer(POINTER_ARROW));
+                mpWindow->SetPointer(Pointer(PointerStyle::Arrow));
         }
     }
     return bReturn;
