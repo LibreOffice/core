@@ -180,8 +180,7 @@ DrawModelWrapper::~DrawModelWrapper()
     m_pRefDevice.disposeAndClear();
 }
 
-uno::Reference< uno::XInterface > DrawModelWrapper
-::createUnoModel()
+uno::Reference< uno::XInterface > DrawModelWrapper::createUnoModel()
 {
     uno::Reference< lang::XComponent > xComponent = new SvxUnoDrawingModel( this ); //tell Andreas Schluens if SvxUnoDrawingModel is not needed anymore -> remove export from svx to avoid link problems in writer
     return uno::Reference< uno::XInterface >::query( xComponent );

@@ -1632,8 +1632,8 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
     return sal_False;
 }
 
-        uno::Any SAL_CALL ChartController
-::getSelection() throw(uno::RuntimeException, std::exception)
+uno::Any SAL_CALL ChartController::getSelection()
+    throw(uno::RuntimeException, std::exception)
 {
     uno::Any aReturn;
     if ( m_aSelection.hasSelection() )
@@ -1652,10 +1652,8 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
     return aReturn;
 }
 
-        void SAL_CALL ChartController
-::addSelectionChangeListener( const uno::Reference<
-        view::XSelectionChangeListener > & xListener )
-        throw(uno::RuntimeException, std::exception)
+void SAL_CALL ChartController::addSelectionChangeListener( const uno::Reference<view::XSelectionChangeListener> & xListener )
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
@@ -1665,10 +1663,8 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
     m_aLifeTimeManager.m_aListenerContainer.addInterface( cppu::UnoType<view::XSelectionChangeListener>::get(), xListener );
 }
 
-        void SAL_CALL ChartController
-::removeSelectionChangeListener( const uno::Reference<
-        view::XSelectionChangeListener > & xListener )
-        throw(uno::RuntimeException, std::exception)
+void SAL_CALL ChartController::removeSelectionChangeListener( const uno::Reference<view::XSelectionChangeListener> & xListener )
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() ) //@todo? allow removing of listeners in suspend mode?
@@ -1678,8 +1674,7 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
     m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType<view::XSelectionChangeListener>::get(), xListener );
 }
 
-        void ChartController
-::impl_notifySelectionChangeListeners()
+void ChartController::impl_notifySelectionChangeListeners()
 {
     ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
         .getContainer( cppu::UnoType<view::XSelectionChangeListener>::get() );
