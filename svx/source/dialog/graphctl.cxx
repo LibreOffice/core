@@ -653,7 +653,7 @@ void GraphCtrl::MouseMove(const MouseEvent& rMEvt)
             !pView->PickHandle( aLogPos ) &&
             !pView->IsInsObjPoint() )
         {
-            SetPointer( POINTER_CROSS );
+            SetPointer( PointerStyle::Cross );
         }
         else
             SetPointer( pView->GetPreferredPointer( aLogPos, this ) );

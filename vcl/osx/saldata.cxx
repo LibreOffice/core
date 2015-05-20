@@ -22,6 +22,7 @@
 #include "osx/saldata.hxx"
 #include "osx/salnsmenu.h"
 #include "osx/salinst.h"
+#include "o3tl/enumarray.hxx"
 
 #import "apple_remote/RemoteMainController.h"
 
@@ -44,7 +45,7 @@ SalData::SalData()
     mpStatusItem( nil ),
     mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) ),
     mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) ),
-    maCursors( POINTER_COUNT, INVALID_CURSOR_PTR ),
+    maCursors(),
     mbIsScrollbarDoubleMax( false ),
 #if !HAVE_FEATURE_MACOSX_SANDBOX
     mpAppleRemoteMainController( NULL ),
@@ -53,6 +54,7 @@ SalData::SalData()
     mnDPIX( 0 ),
     mnDPIY( 0 )
 {
+    maCursors.fill( INVALID_CURSOR_PTR );
     if( s_aAutoReleaseKey == 0 )
         s_aAutoReleaseKey = osl_createThreadKey( releasePool );
 }
@@ -61,9 +63,8 @@ SalData::~SalData()
 {
     CGColorSpaceRelease( mxRGBSpace );
     CGColorSpaceRelease( mxGraySpace );
-    for( unsigned int i = 0; i < maCursors.size(); i++ )
+    for( NSCursor* pCurs : maCursors )
     {
-        NSCursor* pCurs = maCursors[i];
         if( pCurs && pCurs != INVALID_CURSOR_PTR )
             [pCurs release];
     }
@@ -105,114 +106,112 @@ void SalData::ensureThreadAutoreleasePool()
     }
 }
 
-struct curs_ent
+typedef struct
 {
     const char*         pBaseName;
     const NSPoint       aHotSpot;
-}
-const aCursorTab[ POINTER_COUNT ] =
+} curs_ent;
+
+const o3tl::enumarray<PointerStyle, curs_ent> aCursorTab =
 {
-{ NULL, { 0, 0 } }, //POINTER_ARROW
-{ "nullptr", { 16, 16 } }, //POINTER_NULL
-{ "hourglass", { 15, 15 } }, //POINTER_WAIT
-{ NULL, { 0, 0 } }, //POINTER_TEXT
-{ "help", { 0, 0 } }, //POINTER_HELP
-{ NULL, { 0, 0 } }, //POINTER_CROSS
-{ NULL, { 0, 0 } }, //POINTER_MOVE
-{ NULL, { 0, 0 } }, //POINTER_NSIZE
-{ NULL, { 0, 0 } }, //POINTER_SSIZE
-{ NULL, { 0, 0 } }, //POINTER_WSIZE
-{ NULL, { 0, 0 } }, //POINTER_ESIZE
-{ "nwsesize", { 15, 15 } }, //POINTER_NWSIZE
-{ "neswsize", { 15, 15 } }, //POINTER_NESIZE
-{ "neswsize", { 15, 15 } }, //POINTER_SWSIZE
-{ "nwsesize", { 15, 15 } }, //POINTER_SESIZE
-{ NULL, { 0, 0 } }, //POINTER_WINDOW_NSIZE
-{ NULL, { 0, 0 } }, //POINTER_WINDOW_SSIZE
-{ NULL, { 0, 0 } }, //POINTER_WINDOW_WSIZE
-{ NULL, { 0, 0 } }, //POINTER_WINDOW_ESIZE
-{ "nwsesize", { 15, 15 } }, //POINTER_WINDOW_NWSIZE
-{ "neswsize", { 15, 15 } }, //POINTER_WINDOW_NESIZE
-{ "neswsize", { 15, 15 } }, //POINTER_WINDOW_SWSIZE
-{ "nwsesize", { 15, 15 } }, //POINTER_WINDOW_SESIZE
-{ NULL, { 0, 0 } }, //POINTER_HSPLIT
-{ NULL, { 0, 0 } }, //POINTER_VSPLIT
-{ NULL, { 0, 0 } }, //POINTER_HSIZEBAR
-{ NULL, { 0, 0 } }, //POINTER_VSIZEBAR
-{ NULL, { 0, 0 } }, //POINTER_HAND
-{ NULL, { 0, 0 } }, //POINTER_REFHAND
-{ "pen", { 3, 27 } }, //POINTER_PEN
-{ "magnify", { 12, 13 } }, //POINTER_MAGNIFY
-{ "fill", { 10, 22 } }, //POINTER_FILL
-{ "rotate", { 15, 15 } }, //POINTER_ROTATE
-{ "hshear", { 15, 15 } }, //POINTER_HSHEAR
-{ "vshear", { 15, 15 } }, //POINTER_VSHEAR
-{ "mirror", { 14, 12 } }, //POINTER_MIRROR
-{ "crook", { 15, 14 } }, //POINTER_CROOK
-{ "crop", { 9, 9 } }, //POINTER_CROP
-{ "movept", { 0, 0 } }, //POINTER_MOVEPOINT
-{ "movebw", { 0, 0 } }, //POINTER_MOVEBEZIERWEIGHT
-{ "movedata", { 0, 0 } }, //POINTER_MOVEDATA
-{ "copydata", { 0, 0 } }, //POINTER_COPYDATA
-{ "linkdata", { 0, 0 } }, //POINTER_LINKDATA
-{ "movedlnk", { 0, 0 } }, //POINTER_MOVEDATALINK
-{ "copydlnk", { 0, 0 } }, //POINTER_COPYDATALINK
-{ "movef", { 8, 8 } }, //POINTER_MOVEFILE
-{ "copyf", { 8, 8 } }, //POINTER_COPYFILE
-{ "linkf", { 8, 8 } }, //POINTER_LINKFILE
-{ "moveflnk", { 8, 8 } }, //POINTER_MOVEFILELINK
-{ "copyflnk", { 8, 8 } }, //POINTER_COPYFILELINK
-{ "movef2", { 7, 8 } }, //POINTER_MOVEFILES
-{ "copyf2", { 7, 8 } }, //POINTER_COPYFILES
-{ "notallow", { 15, 15 } }, //POINTER_NOTALLOWED
-{ "dline", { 8, 8 } }, //POINTER_DRAW_LINE
-{ "drect", { 8, 8 } }, //POINTER_DRAW_RECT
-{ "dpolygon", { 8, 8 } }, //POINTER_DRAW_POLYGON
-{ "dbezier", { 8, 8 } }, //POINTER_DRAW_BEZIER
-{ "darc", { 8, 8 } }, //POINTER_DRAW_ARC
-{ "dpie", { 8, 8 } }, //POINTER_DRAW_PIE
-{ "dcirccut", { 8, 8 } }, //POINTER_DRAW_CIRCLECUT
-{ "dellipse", { 8, 8 } }, //POINTER_DRAW_ELLIPSE
-{ "dfree", { 8, 8 } }, //POINTER_DRAW_FREEHAND
-{ "dconnect", { 8, 8 } }, //POINTER_DRAW_CONNECT
-{ "dtext", { 8, 8 } }, //POINTER_DRAW_TEXT
-{ "dcapt", { 8, 8 } }, //POINTER_DRAW_CAPTION
-{ "chart", { 15, 16 } }, //POINTER_CHART
-{ "detectiv", { 12, 13 } }, //POINTER_DETECTIVE
-{ "pivotcol", { 7, 5 } }, //POINTER_PIVOT_COL
-{ "pivotrow", { 8, 7 } }, //POINTER_PIVOT_ROW
-{ "pivotfld", { 8, 7 } }, //POINTER_PIVOT_FIELD
-{ "chain", { 0, 2 } }, //POINTER_CHAIN
-{ "chainnot", { 2, 2 } }, //POINTER_CHAIN_NOTALLOWED
-{ "timemove", { 16, 16 } }, //POINTER_TIMEEVENT_MOVE
-{ "timesize", { 16, 17 } }, //POINTER_TIMEEVENT_SIZE
-{ "asn", { 16, 12 } }, //POINTER_AUTOSCROLL_N
-{ "ass", { 15, 19 } }, //POINTER_AUTOSCROLL_S
-{ "asw", { 12, 15 } }, //POINTER_AUTOSCROLL_W
-{ "ase", { 19, 16 } }, //POINTER_AUTOSCROLL_E
-{ "asnw", { 10, 10 } }, //POINTER_AUTOSCROLL_NW
-{ "asne", { 21, 10 } }, //POINTER_AUTOSCROLL_NE
-{ "assw", { 21, 21 } }, //POINTER_AUTOSCROLL_SW
-{ "asse", { 21, 21 } }, //POINTER_AUTOSCROLL_SE
-{ "asns", { 15, 15 } }, //POINTER_AUTOSCROLL_NS
-{ "aswe", { 15, 15 } }, //POINTER_AUTOSCROLL_WE
-{ "asnswe", { 15, 15 } }, //POINTER_AUTOSCROLL_NSWE
-{ "airbrush", { 5, 22 } }, //POINTER_AIRBRUSH
-{ "vtext", { 15, 15 } }, //POINTER_TEXT_VERTICAL
-{ "pivotdel", { 18, 15 } }, //POINTER_PIVOT_DELETE
-{ "tblsels", { 15, 30 } }, //POINTER_TAB_SELECT_S
-{ "tblsele", { 30, 16 } }, //POINTER_TAB_SELECT_E
-{ "tblselse", { 30, 30 } }, //POINTER_TAB_SELECT_SE
-{ "tblselw", { 1, 16 } }, //POINTER_TAB_SELECT_W
-{ "tblselsw", { 1, 30 } }, //POINTER_TAB_SELECT_SW
-{ "pntbrsh", { 9, 16 } }  //POINTER_PAINTBRUSH
+curs_ent{ NULL, { 0, 0 } }, //PointerStyle::Arrow
+{ "nullptr", { 16, 16 } }, //PointerStyle::Null
+{ "hourglass", { 15, 15 } }, //PointerStyle::Wait
+{ NULL, { 0, 0 } }, //PointerStyle::Text
+{ "help", { 0, 0 } }, //PointerStyle::Help
+{ NULL, { 0, 0 } }, //PointerStyle::Cross
+{ NULL, { 0, 0 } }, //PointerStyle::Move
+{ NULL, { 0, 0 } }, //PointerStyle::NSize
+{ NULL, { 0, 0 } }, //PointerStyle::SSize
+{ NULL, { 0, 0 } }, //PointerStyle::WSize
+{ NULL, { 0, 0 } }, //PointerStyle::ESize
+{ "nwsesize", { 15, 15 } }, //PointerStyle::NWSize
+{ "neswsize", { 15, 15 } }, //PointerStyle::NESize
+{ "neswsize", { 15, 15 } }, //PointerStyle::SWSize
+{ "nwsesize", { 15, 15 } }, //PointerStyle::SESize
+{ NULL, { 0, 0 } }, //PointerStyle::WindowNSize
+{ NULL, { 0, 0 } }, //PointerStyle::WindowSSize
+{ NULL, { 0, 0 } }, //PointerStyle::WindowWSize
+{ NULL, { 0, 0 } }, //PointerStyle::WindowESize
+{ "nwsesize", { 15, 15 } }, //PointerStyle::WindowNWSize
+{ "neswsize", { 15, 15 } }, //PointerStyle::WindowNESize
+{ "neswsize", { 15, 15 } }, //PointerStyle::WindowSWSize
+{ "nwsesize", { 15, 15 } }, //PointerStyle::WindowSESize
+{ NULL, { 0, 0 } }, //PointerStyle::HSplit
+{ NULL, { 0, 0 } }, //PointerStyle::VSplit
+{ NULL, { 0, 0 } }, //PointerStyle::HSizeBar
+{ NULL, { 0, 0 } }, //PointerStyle::VSizeBar
+{ NULL, { 0, 0 } }, //PointerStyle::Hand
+{ NULL, { 0, 0 } }, //PointerStyle::RefHand
+{ "pen", { 3, 27 } }, //PointerStyle::Pen
+{ "magnify", { 12, 13 } }, //PointerStyle::Magnify
+{ "fill", { 10, 22 } }, //PointerStyle::Fill
+{ "rotate", { 15, 15 } }, //PointerStyle::Rotate
+{ "hshear", { 15, 15 } }, //PointerStyle::HShear
+{ "vshear", { 15, 15 } }, //PointerStyle::VShear
+{ "mirror", { 14, 12 } }, //PointerStyle::Mirror
+{ "crook", { 15, 14 } }, //PointerStyle::Crook
+{ "crop", { 9, 9 } }, //PointerStyle::Crop
+{ "movept", { 0, 0 } }, //PointerStyle::MovePoint
+{ "movebw", { 0, 0 } }, //PointerStyle::MoveBezierWeight
+{ "movedata", { 0, 0 } }, //PointerStyle::MoveData
+{ "copydata", { 0, 0 } }, //PointerStyle::CopyData
+{ "linkdata", { 0, 0 } }, //PointerStyle::LinkData
+{ "movedlnk", { 0, 0 } }, //PointerStyle::MoveDataLink
+{ "copydlnk", { 0, 0 } }, //PointerStyle::CopyDataLink
+{ "movef", { 8, 8 } }, //PointerStyle::MoveFile
+{ "copyf", { 8, 8 } }, //PointerStyle::CopyFile
+{ "linkf", { 8, 8 } }, //PointerStyle::LinkFile
+{ "moveflnk", { 8, 8 } }, //PointerStyle::MoveFileLink
+{ "copyflnk", { 8, 8 } }, //PointerStyle::CopyFileLink
+{ "movef2", { 7, 8 } }, //PointerStyle::MoveFiles
+{ "copyf2", { 7, 8 } }, //PointerStyle::CopyFiles
+{ "notallow", { 15, 15 } }, //PointerStyle::NotAllowed
+{ "dline", { 8, 8 } }, //PointerStyle::DrawLine
+{ "drect", { 8, 8 } }, //PointerStyle::DrawRect
+{ "dpolygon", { 8, 8 } }, //PointerStyle::DrawPolygon
+{ "dbezier", { 8, 8 } }, //PointerStyle::DrawBezier
+{ "darc", { 8, 8 } }, //PointerStyle::DrawArc
+{ "dpie", { 8, 8 } }, //PointerStyle::DrawPie
+{ "dcirccut", { 8, 8 } }, //PointerStyle::DrawCircleCut
+{ "dellipse", { 8, 8 } }, //PointerStyle::DrawEllipse
+{ "dfree", { 8, 8 } }, //PointerStyle::DrawFreehand
+{ "dconnect", { 8, 8 } }, //PointerStyle::DrawConnect
+{ "dtext", { 8, 8 } }, //PointerStyle::DrawText
+{ "dcapt", { 8, 8 } }, //PointerStyle::DrawCaption
+{ "chart", { 15, 16 } }, //PointerStyle::Chart
+{ "detectiv", { 12, 13 } }, //PointerStyle::Detective
+{ "pivotcol", { 7, 5 } }, //PointerStyle::PivotCol
+{ "pivotrow", { 8, 7 } }, //PointerStyle::PivotRow
+{ "pivotfld", { 8, 7 } }, //PointerStyle::PivotField
+{ "chain", { 0, 2 } }, //PointerStyle::Chain
+{ "chainnot", { 2, 2 } }, //PointerStyle::ChainNotAllowed
+{ "timemove", { 16, 16 } }, //PointerStyle::TimeEventMove
+{ "timesize", { 16, 17 } }, //PointerStyle::TimeEventSize
+{ "asn", { 16, 12 } }, //PointerStyle::AutoScrollN
+{ "ass", { 15, 19 } }, //PointerStyle::AutoScrollS
+{ "asw", { 12, 15 } }, //PointerStyle::AutoScrollW
+{ "ase", { 19, 16 } }, //PointerStyle::AutoScrollE
+{ "asnw", { 10, 10 } }, //PointerStyle::AutoScrollNW
+{ "asne", { 21, 10 } }, //PointerStyle::AutoScrollNE
+{ "assw", { 21, 21 } }, //PointerStyle::AutoScrollSW
+{ "asse", { 21, 21 } }, //PointerStyle::AutoScrollSE
+{ "asns", { 15, 15 } }, //PointerStyle::AutoScrollNS
+{ "aswe", { 15, 15 } }, //PointerStyle::AutoScrollWE
+{ "asnswe", { 15, 15 } }, //PointerStyle::AutoScrollNSWE
+{ "airbrush", { 5, 22 } }, //PointerStyle::Airbrush
+{ "vtext", { 15, 15 } }, //PointerStyle::TextVertical
+{ "pivotdel", { 18, 15 } }, //PointerStyle::PivotDelete
+{ "tblsels", { 15, 30 } }, //PointerStyle::TabSelectS
+{ "tblsele", { 30, 16 } }, //PointerStyle::TabSelectE
+{ "tblselse", { 30, 30 } }, //PointerStyle::TabSelectSE
+{ "tblselw", { 1, 16 } }, //PointerStyle::TabSelectW
+{ "tblselsw", { 1, 30 } }, //PointerStyle::TabSelectSW
+{ "pntbrsh", { 9, 16 } }  //PointerStyle::Paintbrush
 };
 
 NSCursor* SalData::getCursor( PointerStyle i_eStyle )
 {
-    if( i_eStyle >= POINTER_COUNT )
-        return nil;
-
     NSCursor* pCurs = maCursors[ i_eStyle ];
     if( pCurs == INVALID_CURSOR_PTR )
     {

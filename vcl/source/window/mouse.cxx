@@ -98,7 +98,7 @@ PointerStyle Window::ImplGetMousePointer() const
     if ( IsEnabled() && IsInputEnabled() && ! IsInModalMode() )
         ePointerStyle = GetPointer().GetStyle();
     else
-        ePointerStyle = POINTER_ARROW;
+        ePointerStyle = PointerStyle::Arrow;
 
     const vcl::Window* pWindow = this;
     do
@@ -106,13 +106,13 @@ PointerStyle Window::ImplGetMousePointer() const
         // when the pointer is not visible stop the search, as
         // this status should not be overwritten
         if ( pWindow->mpWindowImpl->mbNoPtrVisible )
-            return POINTER_NULL;
+            return PointerStyle::Null;
 
         if ( !bWait )
         {
             if ( pWindow->mpWindowImpl->mnWaitCount )
             {
-                ePointerStyle = POINTER_WAIT;
+                ePointerStyle = PointerStyle::Wait;
                 bWait = true;
             }
             else

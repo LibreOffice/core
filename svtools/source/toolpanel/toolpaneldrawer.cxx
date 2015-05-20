@@ -75,7 +75,7 @@ namespace svt
     {
         EnableMapMode( false );
         SetBackground( Wallpaper() );
-        SetPointer( POINTER_REFHAND );
+        SetPointer( PointerStyle::RefHand );
 
         SetAccessibleRole( AccessibleRole::LIST_ITEM );
 

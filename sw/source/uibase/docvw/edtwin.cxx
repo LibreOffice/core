@@ -333,13 +333,13 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     SwWrtShell &rSh = m_rView.GetWrtShell();
     if( m_pApplyTempl )
     {
-        PointerStyle eStyle = POINTER_FILL;
+        PointerStyle eStyle = PointerStyle::Fill;
         if ( rSh.IsOverReadOnlyPos( rLPt ) )
         {
             delete m_pUserMarker;
             m_pUserMarker = 0L;
 
-            eStyle = POINTER_NOTALLOWED;
+            eStyle = PointerStyle::NotAllowed;
         }
         else
         {
@@ -387,7 +387,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
         SwRect aRect;
         SwChainRet nChainable = rSh.Chainable( aRect, *rSh.GetFlyFrameFormat(), rLPt );
         PointerStyle eStyle = nChainable != SwChainRet::OK
-                ? POINTER_CHAIN_NOTALLOWED : POINTER_CHAIN;
+                ? PointerStyle::ChainNotAllowed : PointerStyle::Chain;
         if ( nChainable == SwChainRet::OK )
         {
             Rectangle aTmp( aRect.SVRect() );
@@ -426,7 +426,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
                           rSh.IsCrsrReadonly();
     m_aActHitType = SDRHIT_NONE;
-    PointerStyle eStyle = POINTER_TEXT;
+    PointerStyle eStyle = PointerStyle::Text;
     if ( !pSdrView )
         bCntAtPos = true;
     else if ( (bHitHandle = pSdrView->PickHandle( rLPt ) != 0) )
@@ -441,7 +441,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
         {
             m_aActHitType = SDRHIT_OBJECT;
             if (IsObjectSelect())
-                eStyle = POINTER_ARROW;
+                eStyle = PointerStyle::Arrow;
             else
                 bPrefSdrPointer = true;
         }
@@ -494,7 +494,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                             SdrObject* pSelectableObj = rSh.GetObjAt(rLPt);
                             // Don't update pointer if this is a background image only.
                             if (pSelectableObj->GetLayer() != rSh.GetDoc()->getIDocumentDrawModelAccess().GetHellId())
-                                eStyle = bMovable ? POINTER_MOVE : POINTER_ARROW;
+                                eStyle = bMovable ? PointerStyle::Move : PointerStyle::Arrow;
                             m_aActHitType = SDRHIT_OBJECT;
                         }
                     }
@@ -512,9 +512,9 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                         // rLPt is inside a selected object, then obviously
                         // rLPt is over a selectable object.
                         if (rSh.IsSelObjProtected(FLYPROTECT_SIZE))
-                            eStyle = POINTER_NOTALLOWED;
+                            eStyle = PointerStyle::NotAllowed;
                         else
-                            eStyle = POINTER_MOVE;
+                            eStyle = PointerStyle::Move;
                         m_aActHitType = SDRHIT_OBJECT;
                     }
                     else
@@ -531,11 +531,11 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     if ( bPrefSdrPointer )
     {
         if (bIsDocReadOnly || (rSh.IsObjSelected() && rSh.IsSelObjProtected(FLYPROTECT_CONTENT)))
-            SetPointer( POINTER_NOTALLOWED );
+            SetPointer( PointerStyle::NotAllowed );
         else
         {
             if (m_rView.GetDrawFuncPtr() && m_rView.GetDrawFuncPtr()->IsInsertForm() && !bHitHandle)
-                SetPointer( POINTER_DRAW_RECT );
+                SetPointer( PointerStyle::DrawRect );
             else
                 SetPointer( pSdrView->GetPreferredPointer( rLPt, rSh.GetOut() ) );
         }
@@ -543,7 +543,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     else
     {
         if( !rSh.IsPageAtPos( rLPt ) || m_pAnchorMarker )
-            eStyle = POINTER_ARROW;
+            eStyle = PointerStyle::Arrow;
         else
         {
             // Even if we already have something, prefer URLs if possible.
@@ -566,7 +566,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                         {
                             const SwField *pCrsrField = rSh.CrsrInsideInputField() ? rSh.GetCurField( true ) : NULL;
                             if (!(pCrsrField && pCrsrField == aSwContentAtPos.pFndTextAttr->GetFormatField().GetField()))
-                                eStyle = POINTER_REFHAND;
+                                eStyle = PointerStyle::RefHand;
                         }
                     }
                     else
@@ -576,15 +576,15 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                         if( !bClickToFollow ||
                             (SwContentAtPos::SW_INETATTR == aSwContentAtPos.eContentAtPos && bExecHyperlinks) ||
                             (SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eContentAtPos && bExecSmarttags) )
-                            eStyle = POINTER_REFHAND;
+                            eStyle = PointerStyle::RefHand;
                     }
                 }
             }
         }
 
         // which kind of text pointer have we to show - horz / vert - ?
-        if( POINTER_TEXT == eStyle && rSh.IsInVerticalText( &rLPt ))
-            eStyle = POINTER_TEXT_VERTICAL;
+        if( PointerStyle::Text == eStyle && rSh.IsInVerticalText( &rLPt ))
+            eStyle = PointerStyle::TextVertical;
 
         SetPointer( eStyle );
     }
@@ -3529,7 +3529,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 // don't start a selection when an
                                 // URL field or a graphic is clicked
                                 bool bSttSelect = rSh.HasSelection() ||
-                                                Pointer(POINTER_REFHAND) != GetPointer();
+                                                Pointer(PointerStyle::RefHand) != GetPointer();
 
                                 if( !bSttSelect )
                                 {
@@ -3724,7 +3724,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     if ( !bIsDocReadOnly && pSdrView && pSdrView->MouseMove(rMEvt,this) )
     {
-        SetPointer( POINTER_TEXT );
+        SetPointer( PointerStyle::Text );
         return; // evaluate SdrView's event
     }
 
@@ -3795,44 +3795,44 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         if ( SwTab::COL_NONE != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt ) ) &&
              !rSh.IsObjSelectable( aDocPt ) )
         {
-            sal_uInt16 nPointer = USHRT_MAX;
+            PointerStyle nPointer = PointerStyle::Null;
             bool bChkTableSel = false;
 
             switch ( nMouseTabCol )
             {
                 case SwTab::COL_VERT :
                 case SwTab::ROW_HORI :
-                    nPointer = POINTER_VSIZEBAR;
+                    nPointer = PointerStyle::VSizeBar;
                     bChkTableSel = true;
                     break;
                 case SwTab::ROW_VERT :
                 case SwTab::COL_HORI :
-                    nPointer = POINTER_HSIZEBAR;
+                    nPointer = PointerStyle::HSizeBar;
                     bChkTableSel = true;
                     break;
                 // Enhanced table selection
                 case SwTab::SEL_HORI :
-                    nPointer = POINTER_TAB_SELECT_SE;
+                    nPointer = PointerStyle::TabSelectSE;
                     break;
                 case SwTab::SEL_HORI_RTL :
                 case SwTab::SEL_VERT :
-                    nPointer = POINTER_TAB_SELECT_SW;
+                    nPointer = PointerStyle::TabSelectSW;
                     break;
                 case SwTab::COLSEL_HORI :
                 case SwTab::ROWSEL_VERT :
-                    nPointer = POINTER_TAB_SELECT_S;
+                    nPointer = PointerStyle::TabSelectS;
                     break;
                 case SwTab::ROWSEL_HORI :
-                    nPointer = POINTER_TAB_SELECT_E;
+                    nPointer = PointerStyle::TabSelectE;
                     break;
                 case SwTab::ROWSEL_HORI_RTL :
                 case SwTab::COLSEL_VERT :
-                    nPointer = POINTER_TAB_SELECT_W;
+                    nPointer = PointerStyle::TabSelectW;
                     break;
                 default: break; // prevent compiler warning
             }
 
-            if ( USHRT_MAX != nPointer &&
+            if ( PointerStyle::Null != nPointer &&
                 // i#35543 - Enhanced table selection is explicitly allowed in table mode
                 ( !bChkTableSel || !rSh.IsTableMode() ) )
             {
@@ -3845,10 +3845,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         {
             // i#42921 - consider vertical mode
             SwTextNode* pNodeAtPos = rSh.GetNumRuleNodeAtPos( aDocPt );
-            const sal_uInt16 nPointer =
+            const PointerStyle nPointer =
                     SwFEShell::IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPt )
-                    ? POINTER_VSIZEBAR
-                    : POINTER_HSIZEBAR;
+                    ? PointerStyle::VSizeBar
+                    : PointerStyle::HSizeBar;
             SetPointer( nPointer );
 
             return;
@@ -4848,7 +4848,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     if(rTempl.m_pFormatClipboard)
     {
         m_pApplyTempl = new SwApplyTemplate( rTempl );
-              SetPointer( POINTER_FILL );//@todo #i20119# maybe better a new brush pointer here in future
+              SetPointer( PointerStyle::Fill );//@todo #i20119# maybe better a new brush pointer here in future
               rSh.NoEdit( false );
               bIdle = rSh.GetViewOptions()->IsIdle();
               rSh.GetViewOptions()->SetIdle( false );
@@ -4856,7 +4856,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     else if(rTempl.nColor)
     {
         m_pApplyTempl = new SwApplyTemplate( rTempl );
-        SetPointer( POINTER_FILL );
+        SetPointer( PointerStyle::Fill );
         rSh.NoEdit( false );
         bIdle = rSh.GetViewOptions()->IsIdle();
         rSh.GetViewOptions()->SetIdle( false );
@@ -4864,14 +4864,14 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     else if( rTempl.eType )
     {
         m_pApplyTempl = new SwApplyTemplate( rTempl );
-        SetPointer( POINTER_FILL  );
+        SetPointer( PointerStyle::Fill  );
         rSh.NoEdit( false );
         bIdle = rSh.GetViewOptions()->IsIdle();
         rSh.GetViewOptions()->SetIdle( false );
     }
     else
     {
-        SetPointer( POINTER_TEXT );
+        SetPointer( PointerStyle::Text );
         rSh.UnSetVisCrsr();
 
         rSh.GetViewOptions()->SetIdle( bIdle );
@@ -4946,7 +4946,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
 
     SetMapMode(MapMode(MAP_TWIP));
 
-    SetPointer( POINTER_TEXT );
+    SetPointer( PointerStyle::Text );
     m_aTimer.SetTimeoutHdl(LINK(this, SwEditWin, TimerHandler));
 
     m_bTableInsDelMode = false;
