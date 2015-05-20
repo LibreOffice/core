@@ -36,6 +36,7 @@
 #include "WordPerfectImportFilter.hxx"
 #include "MSWorksImportFilter.hxx"
 #include "MWAWImportFilter.hxx"
+#include "PagesImportFilter.hxx"
 
 namespace
 {
@@ -65,6 +66,11 @@ static cppu::ImplementationEntry const services[] =
     {
         &EBookImportFilter_createInstance, &EBookImportFilter_getImplementationName,
         &EBookImportFilter_getSupportedServiceNames,
+        &cppu::createSingleComponentFactory, 0, 0
+    },
+    {
+        &PagesImportFilter_createInstance, &PagesImportFilter_getImplementationName,
+        &PagesImportFilter_getSupportedServiceNames,
         &cppu::createSingleComponentFactory, 0, 0
     },
     { 0, 0, 0, 0, 0, 0 }

@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_externals,wpftwriter,\
 	abw \
 	boost_headers \
 	ebook \
+	etonyek \
 	icui18n \
 	icuuc \
 	libxml2 \
@@ -67,6 +68,7 @@ $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 	writerperfect/source/writer/EBookImportFilter \
 	writerperfect/source/writer/MSWorksImportFilter \
 	writerperfect/source/writer/MWAWImportFilter \
+	writerperfect/source/writer/PagesImportFilter \
 	writerperfect/source/writer/WordPerfectImportFilter \
 	writerperfect/source/writer/wpftwriter_genericfilter \
 ))
