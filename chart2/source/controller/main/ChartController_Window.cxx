@@ -1869,25 +1869,25 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
 
         switch( aPointer.GetStyle())
         {
-            case POINTER_NSIZE:
-            case POINTER_SSIZE:
-            case POINTER_WSIZE:
-            case POINTER_ESIZE:
-            case POINTER_NWSIZE:
-            case POINTER_NESIZE:
-            case POINTER_SWSIZE:
-            case POINTER_SESIZE:
+            case PointerStyle::NSize:
+            case PointerStyle::SSize:
+            case PointerStyle::WSize:
+            case PointerStyle::ESize:
+            case PointerStyle::NWSize:
+            case PointerStyle::NESize:
+            case PointerStyle::SWSize:
+            case PointerStyle::SESize:
                 if( ! m_aSelection.isResizeableObjectSelected() )
                     bForceArrowPointer = true;
                 break;
-            case POINTER_MOVE:
+            case PointerStyle::Move:
                 if ( !aOID.isDragableObject() )
                     bForceArrowPointer = true;
                 break;
-            case POINTER_MOVEPOINT:
-            case POINTER_MOVEBEZIERWEIGHT:
+            case PointerStyle::MovePoint:
+            case PointerStyle::MoveBezierWeight:
                 // there is no point-editing in a chart
-                // the POINTER_MOVEBEZIERWEIGHT appears in 3d data points
+                // the PointerStyle::MoveBezierWeight appears in 3d data points
                 bForceArrowPointer = true;
                 break;
             default:
@@ -1895,7 +1895,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         }
 
         if( bForceArrowPointer )
-            m_pChartWindow->SetPointer( Pointer( POINTER_ARROW ));
+            m_pChartWindow->SetPointer( Pointer( PointerStyle::Arrow ));
         else
             m_pChartWindow->SetPointer( aPointer );
 
@@ -1906,44 +1906,44 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     if ( m_eDrawMode == CHARTDRAW_INSERT &&
          ( !m_pDrawViewWrapper->IsMarkedHit( aMousePos ) || !m_aSelection.isDragableObjectSelected() ) )
     {
-        PointerStyle ePointerStyle = POINTER_DRAW_RECT;
+        PointerStyle ePointerStyle = PointerStyle::DrawRect;
         SdrObjKind eKind = static_cast< SdrObjKind >( m_pDrawViewWrapper->GetCurrentObjIdentifier() );
         switch ( eKind )
         {
             case OBJ_LINE:
                 {
-                    ePointerStyle = POINTER_DRAW_LINE;
+                    ePointerStyle = PointerStyle::DrawLine;
                 }
                 break;
             case OBJ_RECT:
             case OBJ_CUSTOMSHAPE:
                 {
-                    ePointerStyle = POINTER_DRAW_RECT;
+                    ePointerStyle = PointerStyle::DrawRect;
                 }
                 break;
             case OBJ_CIRC:
                 {
-                    ePointerStyle = POINTER_DRAW_ELLIPSE;
+                    ePointerStyle = PointerStyle::DrawEllipse;
                 }
                 break;
             case OBJ_FREELINE:
                 {
-                    ePointerStyle = POINTER_DRAW_POLYGON;
+                    ePointerStyle = PointerStyle::DrawPolygon;
                 }
                 break;
             case OBJ_TEXT:
                 {
-                    ePointerStyle = POINTER_DRAW_TEXT;
+                    ePointerStyle = PointerStyle::DrawText;
                 }
                 break;
             case OBJ_CAPTION:
                 {
-                    ePointerStyle = POINTER_DRAW_CAPTION;
+                    ePointerStyle = PointerStyle::DrawCaption;
                 }
                 break;
             default:
                 {
-                    ePointerStyle = POINTER_DRAW_RECT;
+                    ePointerStyle = PointerStyle::DrawRect;
                 }
                 break;
         }
@@ -1959,7 +1959,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     {
         if( aHitObjectCID.equals(m_aSelection.getSelectedCID()) )
         {
-            m_pChartWindow->SetPointer( Pointer( POINTER_ARROW ));
+            m_pChartWindow->SetPointer( Pointer( PointerStyle::Arrow ));
             return;
         }
     }
@@ -1967,14 +1967,14 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     if( aHitObjectCID.isEmpty() )
     {
         //additional shape was hit
-        m_pChartWindow->SetPointer( POINTER_MOVE );
+        m_pChartWindow->SetPointer( PointerStyle::Move );
     }
     else if( ObjectIdentifier::isDragableObject( aHitObjectCID ) )
     {
         if( (m_eDragMode == SDRDRAG_ROTATE)
             && SelectionHelper::isRotateableObject( aHitObjectCID
                 , getModel() ) )
-            m_pChartWindow->SetPointer( Pointer( POINTER_ROTATE ) );
+            m_pChartWindow->SetPointer( Pointer( PointerStyle::Rotate ) );
         else
         {
             ObjectType eHitObjectType = ObjectIdentifier::getObjectType( aHitObjectCID );
@@ -1983,15 +1983,15 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                 if( !ObjectIdentifier::areSiblings(aHitObjectCID,m_aSelection.getSelectedCID())
                     && !ObjectIdentifier::areIdenticalObjects(aHitObjectCID,m_aSelection.getSelectedCID()) )
                 {
-                    m_pChartWindow->SetPointer( Pointer( POINTER_ARROW ));
+                    m_pChartWindow->SetPointer( Pointer( PointerStyle::Arrow ));
                     return;
                 }
             }
-            m_pChartWindow->SetPointer( POINTER_MOVE );
+            m_pChartWindow->SetPointer( PointerStyle::Move );
         }
     }
     else
-        m_pChartWindow->SetPointer( Pointer( POINTER_ARROW ));
+        m_pChartWindow->SetPointer( Pointer( PointerStyle::Arrow ));
 }
 
 } //namespace chart

@@ -596,7 +596,7 @@ void FuText::Activate()
         pView->SetCreateMode();
     }
 
-    aNewPointer = Pointer(POINTER_TEXT);
+    aNewPointer = Pointer(PointerStyle::Text);
 
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );

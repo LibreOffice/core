@@ -1189,19 +1189,19 @@ inline const Pointer& ImpEditView::GetPointer()
 {
     if ( !pPointer )
     {
-        pPointer = new Pointer( IsVertical() ? POINTER_TEXT_VERTICAL : POINTER_TEXT );
+        pPointer = new Pointer( IsVertical() ? PointerStyle::TextVertical : PointerStyle::Text );
         return *pPointer;
     }
 
-    if(POINTER_TEXT == pPointer->GetStyle() && IsVertical())
+    if(PointerStyle::Text == pPointer->GetStyle() && IsVertical())
     {
         delete pPointer;
-        pPointer = new Pointer(POINTER_TEXT_VERTICAL);
+        pPointer = new Pointer(PointerStyle::TextVertical);
     }
-    else if(POINTER_TEXT_VERTICAL == pPointer->GetStyle() && !IsVertical())
+    else if(PointerStyle::TextVertical == pPointer->GetStyle() && !IsVertical())
     {
         delete pPointer;
-        pPointer = new Pointer(POINTER_TEXT);
+        pPointer = new Pointer(PointerStyle::Text);
     }
 
     return *pPointer;

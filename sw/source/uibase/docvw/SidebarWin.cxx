@@ -355,7 +355,7 @@ void SwSidebarWin::InitControls()
     mpSidebarTxtControl = VclPtr<SidebarTxtControl>::Create( *this,
                                                  WB_NODIALOGCONTROL,
                                                  mrView, mrMgr );
-    mpSidebarTxtControl->SetPointer(Pointer(POINTER_TEXT));
+    mpSidebarTxtControl->SetPointer(Pointer(PointerStyle::Text));
 
     // window controls for author and date
     mpMetadataAuthor = VclPtr<Edit>::Create( this, 0 );

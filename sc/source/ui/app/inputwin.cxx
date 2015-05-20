@@ -830,9 +830,9 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
         ScInputBarGroup* pGroupBar = dynamic_cast< ScInputBarGroup* > ( pRuntimeWindow.get() );
 
         if ( bInResize || IsPointerAtResizePos() )
-            SetPointer( Pointer( POINTER_WINDOW_SSIZE ) );
+            SetPointer( Pointer( PointerStyle::WindowSSize ) );
         else
-            SetPointer( Pointer( POINTER_ARROW ) );
+            SetPointer( Pointer( PointerStyle::Arrow ) );
 
         if ( bInResize )
         {
@@ -1492,7 +1492,7 @@ ScTextWnd::ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh )
     SetBackground(aBgColor);
     SetLineColor(COL_BLACK);
     SetMapMode(MAP_TWIP);
-    SetPointer(POINTER_TEXT);
+    SetPointer(PointerStyle::Text);
     SetFont(aTextFont);
 }
 

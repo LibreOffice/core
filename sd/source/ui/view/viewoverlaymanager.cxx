@@ -270,7 +270,7 @@ bool ImageButtonHdl::isMarkable() const
 
 Pointer ImageButtonHdl::GetPointer() const
 {
-    return Pointer( POINTER_ARROW );
+    return Pointer( PointerStyle::Arrow );
 }
 
 ChangePlaceholderTag::ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlaceholderObj )
