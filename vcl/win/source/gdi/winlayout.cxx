@@ -264,7 +264,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     // prepare layout
     // TODO: fix case when recyclying old SimpleWinLayout object
-    mbDisableGlyphs |= ((rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing) != 0);
+    mbDisableGlyphs |= bool(rArgs.mnFlags & SalLayoutFlags::DisableGlyphProcessing);
     mnCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
 
     if( !mbDisableGlyphs )
@@ -291,7 +291,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     int i, j;
 
     mnGlyphCount = 0;
-    bool bVertical = (rArgs.mnFlags & SalLayoutFlags::Vertical) != 0;
+    bool bVertical(rArgs.mnFlags & SalLayoutFlags::Vertical);
 
     // count the number of chars to process if no RTL run
     rArgs.ResetPos();
@@ -1071,14 +1071,14 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     // prepare itemization
     // TODO: try to avoid itemization since it costs a lot of performance
     SCRIPT_STATE aScriptState = {0,false,false,false,false,false,false,false,false,0,0};
-    aScriptState.uBidiLevel         = (0 != (rArgs.mnFlags & SalLayoutFlags::BiDiRtl));
-    aScriptState.fOverrideDirection = (0 != (rArgs.mnFlags & SalLayoutFlags::BidiStrong));
-    aScriptState.fDigitSubstitute   = (0 != (rArgs.mnFlags & SalLayoutFlags::SubstituteDigits));
+    aScriptState.uBidiLevel         = bool(rArgs.mnFlags & SalLayoutFlags::BiDiRtl);
+    aScriptState.fOverrideDirection = bool(rArgs.mnFlags & SalLayoutFlags::BidiStrong);
+    aScriptState.fDigitSubstitute   = bool(rArgs.mnFlags & SalLayoutFlags::SubstituteDigits);
     aScriptState.fArabicNumContext  = aScriptState.fDigitSubstitute & aScriptState.uBidiLevel;
     DWORD nLangId = 0;  // TODO: get language from font
     SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,false,false,false,0};
     aScriptControl.fNeutralOverride = aScriptState.fOverrideDirection;
-    aScriptControl.fContextDigits   = (0 != (rArgs.mnFlags & SalLayoutFlags::SubstituteDigits));
+    aScriptControl.fContextDigits   = bool(rArgs.mnFlags & SalLayoutFlags::SubstituteDigits);
 #if HAVE_FMERGENEUTRALITEMS
     aScriptControl.fMergeNeutralItems = true;
 #endif
@@ -1265,7 +1265,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                 rVisualItem.IsRTL() );
 
             // don't bother to do a default layout in a fallback level
-            if( 0 != (rArgs.mnFlags & SalLayoutFlags::ForFallback) )
+            if( rArgs.mnFlags & SalLayoutFlags::ForFallback )
                 continue;
 
             // the primitive layout engine is good enough for the default layout
