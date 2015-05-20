@@ -33,7 +33,7 @@ GraphicConverter::~GraphicConverter()
 {
 }
 
-sal_uLong GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, sal_uLong nFormat )
+sal_uLong GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ConvertDataFormat nFormat )
 {
     GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
     sal_uLong               nRet = ERRCODE_IO_GENERAL;
@@ -54,7 +54,7 @@ sal_uLong GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, sal_uLon
     return nRet;
 }
 
-sal_uLong GraphicConverter::Export( SvStream& rOStm, const Graphic& rGraphic, sal_uLong nFormat )
+sal_uLong GraphicConverter::Export( SvStream& rOStm, const Graphic& rGraphic, ConvertDataFormat nFormat )
 {
     GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
     sal_uLong               nRet = ERRCODE_IO_GENERAL;

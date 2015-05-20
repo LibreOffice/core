@@ -2066,7 +2066,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 {
                     std::shared_ptr<SvMemoryStream> xStream(
                         GraphicHelper::getFormatStrFromGDI_Impl(
-                            xMetaFile.get(), CVT_EMF ) );
+                            xMetaFile.get(), ConvertDataFormat::EMF ) );
                     if (xStream)
                     {
                         xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
@@ -2101,7 +2101,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 {
                     std::shared_ptr<SvMemoryStream> xStream(
                         GraphicHelper::getFormatStrFromGDI_Impl(
-                            xMetaFile.get(), CVT_WMF ) );
+                            xMetaFile.get(), ConvertDataFormat::WMF ) );
 
                     if (xStream)
                     {
@@ -2141,7 +2141,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 {
                     std::shared_ptr<SvMemoryStream> xStream(
                         GraphicHelper::getFormatStrFromGDI_Impl(
-                            xMetaFile.get(), CVT_BMP ) );
+                            xMetaFile.get(), ConvertDataFormat::BMP ) );
 
                     if (xStream)
                     {
@@ -2165,7 +2165,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 {
                     std::shared_ptr<SvMemoryStream> xStream(
                         GraphicHelper::getFormatStrFromGDI_Impl(
-                            xMetaFile.get(), CVT_PNG ) );
+                            xMetaFile.get(), ConvertDataFormat::PNG ) );
 
                     if (xStream)
                     {

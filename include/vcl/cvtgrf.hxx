@@ -43,8 +43,8 @@ public:
                         GraphicConverter();
                         ~GraphicConverter();
 
-    static sal_uLong        Import( SvStream& rIStm, Graphic& rGraphic, sal_uLong nFormat = CVT_UNKNOWN );
-    static sal_uLong        Export( SvStream& rOStm, const Graphic& rGraphic, sal_uLong nFormat );
+    static sal_uLong        Import( SvStream& rIStm, Graphic& rGraphic, ConvertDataFormat nFormat = ConvertDataFormat::Unknown );
+    static sal_uLong        Export( SvStream& rOStm, const Graphic& rGraphic, ConvertDataFormat nFormat );
 
     ConvertData*        GetConvertData() { return mpConvertData; }
 

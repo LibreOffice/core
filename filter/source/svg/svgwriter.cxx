@@ -2634,7 +2634,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         {
             SvMemoryStream aOStm( 65535, 65535 );
 
-            if( GraphicConverter::Export( aOStm, rBmpEx, CVT_PNG ) == ERRCODE_NONE )
+            if( GraphicConverter::Export( aOStm, rBmpEx, ConvertDataFormat::PNG ) == ERRCODE_NONE )
             {
                 Point                    aPt;
                 Size                     aSz;

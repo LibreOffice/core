@@ -55,7 +55,7 @@
 
 using namespace css;
 
-SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, sal_uInt32 nFormat )
+SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, ConvertDataFormat nFormat )
 {
     SvMemoryStream* pResult = NULL;
     if ( pGDIMeta )
@@ -92,7 +92,7 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
         if ( pStream )
         {
             Graphic aGraph( *pGDIMeta );
-            sal_Bool bFailed = (sal_Bool)GraphicConverter::Export( *pStream, aGraph, CVT_EMF );
+            sal_Bool bFailed = (sal_Bool)GraphicConverter::Export( *pStream, aGraph, ConvertDataFormat::EMF );
             pStream->Flush();
             delete pStream;
 
@@ -118,7 +118,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
     {
         SvMemoryStream* pStream = new SvMemoryStream( 65535, 65535 );
         Graphic aGraph( *pGDIMeta );
-        sal_Bool bFailed = (sal_Bool)GraphicConverter::Export( *pStream, aGraph, CVT_WMF );
+        sal_Bool bFailed = (sal_Bool)GraphicConverter::Export( *pStream, aGraph, ConvertDataFormat::WMF );
         pStream->Flush();
         if ( !bFailed )
         {

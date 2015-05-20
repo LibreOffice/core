@@ -332,24 +332,24 @@ sal_uLong XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUStri
     SvMemoryStream aOStm;
     OUString aMimeType;
     GfxLink aLink = rGraphic.GetLink();
-    sal_uLong aCvtType;
+    ConvertDataFormat aCvtType;
     switch(  aLink.GetType() )
     {
         case( GFX_LINK_TYPE_NATIVE_JPG ):
-            aCvtType = CVT_JPG;
+            aCvtType = ConvertDataFormat::JPG;
             aMimeType = "image/jpeg";
             break;
         case( GFX_LINK_TYPE_NATIVE_PNG ):
-            aCvtType = CVT_PNG;
+            aCvtType = ConvertDataFormat::PNG;
             aMimeType = "image/png";
             break;
         case( GFX_LINK_TYPE_NATIVE_SVG ):
-            aCvtType = CVT_SVG;
+            aCvtType = ConvertDataFormat::SVG;
             aMimeType = "image/svg+xml";
             break;
         default:
             // save everything else (including gif) into png
-            aCvtType = CVT_PNG;
+            aCvtType = ConvertDataFormat::PNG;
             aMimeType = "image/png";
             break;
     }

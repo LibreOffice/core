@@ -24,18 +24,21 @@
 
 #include <vcl/graph.hxx>
 
-#define CVT_UNKNOWN (0x00000000UL)
-#define CVT_BMP     (0x00000001UL)
-#define CVT_GIF     (0x00000002UL)
-#define CVT_JPG     (0x00000003UL)
-#define CVT_MET     (0x00000004UL)
-#define CVT_PCT     (0x00000005UL)
-#define CVT_PNG     (0x00000006UL)
-#define CVT_SVM     (0x00000007UL)
-#define CVT_TIF     (0x00000008UL)
-#define CVT_WMF     (0x00000009UL)
-#define CVT_EMF     (0x0000000aUL)
-#define CVT_SVG     (0x0000000bUL)
+enum class ConvertDataFormat
+{
+    Unknown,
+    BMP,
+    GIF,
+    JPG,
+    MET,
+    PCT,
+    PNG,
+    SVM,
+    TIF,
+    WMF,
+    EMF,
+    SVG
+};
 
 class SvStream;
 
@@ -49,16 +52,16 @@ public:
 
     Graphic             maGraphic;
     SvStream&           mrStm;
-    sal_uLong               mnFormat;
+    ConvertDataFormat   mnFormat;
 
-                        ConvertData( const Graphic& rGraphic, SvStream& rStm, sal_uLong nFormat ) :
+                        ConvertData( const Graphic& rGraphic, SvStream& rStm, ConvertDataFormat nFormat ) :
                             maGraphic( rGraphic ), mrStm( rStm ), mnFormat( nFormat ) {}
                         ~ConvertData() {}
 };
 
 typedef sal_uLong (*SALGRFCVTPROC)( void* pInst,
-                                sal_uLong nInFormat, void* pInBuffer, sal_uLong nInBufSize,
-                                sal_uLong nOutFormat, void** ppOutBuffer );
+                                ConvertDataFormat nInFormat, void* pInBuffer, sal_uLong nInBufSize,
+                                ConvertDataFormat nOutFormat, void** ppOutBuffer );
 
 #endif // INCLUDED_VCL_SALCTYPE_HXX
 
