@@ -90,14 +90,14 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window* pW
             vcl::Window* pBorder = pWin->GetWindow(WINDOW_BORDER);
 
             // to not overwrite everything, set the button region as clipregion to the border window
-            Rectangle aClipRect( rSpinbuttonValue.maLowerRect );
-            aClipRect.Union( rSpinbuttonValue.maUpperRect );
+            Rectangle aClipRect(rSpinbuttonValue.maLowerRect);
+            aClipRect.Union(rSpinbuttonValue.maUpperRect);
 
             // convert from screen space to borderwin space
             aClipRect.SetPos(pBorder->ScreenToOutputPixel(pWin->OutputToScreenPixel(aClipRect.TopLeft())));
 
             vcl::Region oldRgn(pBorder->GetClipRegion());
-            pBorder->SetClipRegion( vcl::Region( aClipRect ) );
+            pBorder->SetClipRegion(vcl::Region(aClipRect));
 
             Point aPt;
             Size aSize(pBorder->GetOutputSizePixel());    // the size of the border window, i.e., the whole control
@@ -179,7 +179,7 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
 
     // draw upper/left Button
     DrawButtonFlags nTempStyle = nStyle;
-    if ( bUpperIn )
+    if (bUpperIn)
         nTempStyle |= DrawButtonFlags::Pressed;
 
     bool bNativeOK = false;
@@ -293,11 +293,11 @@ void SpinField::ImplInitSpinFieldData()
     mbInDropDown    = false;
 }
 
-void SpinField::ImplInit( vcl::Window* pParent, WinBits nWinStyle )
+void SpinField::ImplInit(vcl::Window* pParent, WinBits nWinStyle)
 {
     Edit::ImplInit( pParent, nWinStyle );
 
-    if ( nWinStyle & (WB_SPIN|WB_DROPDOWN) )
+    if (nWinStyle & (WB_SPIN | WB_DROPDOWN))
     {
         mbSpin = true;
 
@@ -307,49 +307,50 @@ void SpinField::ImplInit( vcl::Window* pParent, WinBits nWinStyle )
         if ((nWinStyle & WB_SPIN) && ImplUseNativeBorder(*this, nWinStyle))
         {
             SetBackground();
-            mpEdit.set( VclPtr<Edit>::Create( this, WB_NOBORDER ) );
+            mpEdit.set(VclPtr<Edit>::Create(this, WB_NOBORDER));
             mpEdit->SetBackground();
         }
         else
-            mpEdit.set( VclPtr<Edit>::Create( this, WB_NOBORDER ) );
+            mpEdit.set(VclPtr<Edit>::Create(this, WB_NOBORDER));
 
-        mpEdit->EnableRTL( false );
-        mpEdit->SetPosPixel( Point() );
+        mpEdit->EnableRTL(false);
+        mpEdit->SetPosPixel(Point());
         mpEdit->Show();
-        SetSubEdit( mpEdit );
 
-        maRepeatTimer.SetTimeoutHdl( LINK( this, SpinField, ImplTimeout ) );
-        maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
-        if ( nWinStyle & WB_REPEAT )
+        SetSubEdit(mpEdit);
+
+        maRepeatTimer.SetTimeoutHdl(LINK( this, SpinField, ImplTimeout));
+        maRepeatTimer.SetTimeout(GetSettings().GetMouseSettings().GetButtonStartRepeat());
+        if (nWinStyle & WB_REPEAT)
             mbRepeat = true;
 
-        SetCompoundControl( true );
+        SetCompoundControl(true);
     }
 }
 
-SpinField::SpinField( WindowType nTyp ) :
-    Edit( nTyp )
+SpinField::SpinField(WindowType nTyp) :
+    Edit(nTyp)
 {
     ImplInitSpinFieldData();
 }
 
-SpinField::SpinField( vcl::Window* pParent, WinBits nWinStyle ) :
-    Edit( WINDOW_SPINFIELD )
+SpinField::SpinField(vcl::Window* pParent, WinBits nWinStyle) :
+    Edit(WINDOW_SPINFIELD)
 {
     ImplInitSpinFieldData();
-    ImplInit( pParent, nWinStyle );
+    ImplInit(pParent, nWinStyle);
 }
 
-SpinField::SpinField( vcl::Window* pParent, const ResId& rResId ) :
-    Edit( WINDOW_SPINFIELD )
+SpinField::SpinField(vcl::Window* pParent, const ResId& rResId) :
+    Edit(WINDOW_SPINFIELD)
 {
     ImplInitSpinFieldData();
-    rResId.SetRT( RSC_SPINFIELD );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
+    rResId.SetRT(RSC_SPINFIELD);
+    WinBits nStyle = ImplInitRes(rResId);
+    ImplInit(pParent, nStyle);
+    ImplLoadRes(rResId);
 
-    if ( !(nStyle & WB_HIDE) )
+    if (!(nStyle & WB_HIDE))
         Show();
 }
 
@@ -387,130 +388,130 @@ void SpinField::Last()
 
 void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( !HasFocus() && ( !mpEdit || !mpEdit->HasFocus() ) )
+    if (!HasFocus() && (!mpEdit || !mpEdit->HasFocus()))
     {
         mbNoSelect = true;
         GrabFocus();
     }
 
-    if ( !IsReadOnly() )
+    if (!IsReadOnly())
     {
-        if ( maUpperRect.IsInside( rMEvt.GetPosPixel() ) )
+        if (maUpperRect.IsInside(rMEvt.GetPosPixel()))
         {
             mbUpperIn   = true;
             mbInitialUp = true;
-            Invalidate( maUpperRect );
+            Invalidate(maUpperRect);
         }
-        else if ( maLowerRect.IsInside( rMEvt.GetPosPixel() ) )
+        else if (maLowerRect.IsInside(rMEvt.GetPosPixel()))
         {
             mbLowerIn    = true;
             mbInitialDown = true;
-            Invalidate( maLowerRect );
+            Invalidate(maLowerRect);
         }
-        else if ( maDropDownRect.IsInside( rMEvt.GetPosPixel() ) )
+        else if (maDropDownRect.IsInside(rMEvt.GetPosPixel()))
         {
             // put DropDownButton to the right
             mbInDropDown = ShowDropDown( !mbInDropDown );
             Invalidate(Rectangle(Point(), GetOutputSizePixel()));
         }
 
-        if ( mbUpperIn || mbLowerIn )
+        if (mbUpperIn || mbLowerIn)
         {
             Update();
             CaptureMouse();
-            if ( mbRepeat )
+            if (mbRepeat)
                 maRepeatTimer.Start();
             return;
         }
     }
 
-    Edit::MouseButtonDown( rMEvt );
+    Edit::MouseButtonDown(rMEvt);
 }
 
-void SpinField::MouseButtonUp( const MouseEvent& rMEvt )
+void SpinField::MouseButtonUp(const MouseEvent& rMEvt)
 {
     ReleaseMouse();
     mbInitialUp = mbInitialDown = false;
     maRepeatTimer.Stop();
-    maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
+    maRepeatTimer.SetTimeout(GetSettings().GetMouseSettings().GetButtonStartRepeat());
 
-    if ( mbUpperIn )
+    if (mbUpperIn)
     {
         mbUpperIn = false;
-        Invalidate( maUpperRect );
+        Invalidate(maUpperRect);
         Update();
         Up();
     }
-    else if ( mbLowerIn )
+    else if (mbLowerIn)
     {
         mbLowerIn = false;
-        Invalidate( maLowerRect );
+        Invalidate(maLowerRect);
         Update();
         Down();
     }
 
-    Edit::MouseButtonUp( rMEvt );
+    Edit::MouseButtonUp(rMEvt);
 }
 
-void SpinField::MouseMove( const MouseEvent& rMEvt )
+void SpinField::MouseMove(const MouseEvent& rMEvt)
 {
-    if ( rMEvt.IsLeft() )
+    if (rMEvt.IsLeft())
     {
-        if ( mbInitialUp )
+        if (mbInitialUp)
         {
-            bool bNewUpperIn = maUpperRect.IsInside( rMEvt.GetPosPixel() );
-            if ( bNewUpperIn != mbUpperIn )
+            bool bNewUpperIn = maUpperRect.IsInside(rMEvt.GetPosPixel());
+            if (bNewUpperIn != mbUpperIn)
             {
-                if ( bNewUpperIn )
+                if (bNewUpperIn)
                 {
-                    if ( mbRepeat )
+                    if (mbRepeat)
                         maRepeatTimer.Start();
                 }
                 else
                     maRepeatTimer.Stop();
 
                 mbUpperIn = bNewUpperIn;
-                Invalidate( maUpperRect );
+                Invalidate(maUpperRect);
                 Update();
             }
         }
-        else if ( mbInitialDown )
+        else if (mbInitialDown)
         {
-            bool bNewLowerIn = maLowerRect.IsInside( rMEvt.GetPosPixel() );
-            if ( bNewLowerIn != mbLowerIn )
+            bool bNewLowerIn = maLowerRect.IsInside(rMEvt.GetPosPixel());
+            if (bNewLowerIn != mbLowerIn)
             {
-                if ( bNewLowerIn )
+                if (bNewLowerIn)
                 {
-                    if ( mbRepeat )
+                    if (mbRepeat)
                         maRepeatTimer.Start();
                 }
                 else
                     maRepeatTimer.Stop();
 
                 mbLowerIn = bNewLowerIn;
-                Invalidate( maLowerRect );
+                Invalidate(maLowerRect);
                 Update();
             }
         }
     }
 
-    Edit::MouseMove( rMEvt );
+    Edit::MouseMove(rMEvt);
 }
 
-bool SpinField::Notify( NotifyEvent& rNEvt )
+bool SpinField::Notify(NotifyEvent& rNEvt)
 {
     bool nDone = false;
-    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
-        if ( !IsReadOnly() )
+        if (!IsReadOnly())
         {
             sal_uInt16 nMod = rKEvt.GetKeyCode().GetModifier();
-            switch ( rKEvt.GetKeyCode().GetCode() )
+            switch (rKEvt.GetKeyCode().GetCode())
             {
                 case KEY_UP:
                 {
-                    if ( !nMod )
+                    if (!nMod)
                     {
                         Up();
                         nDone = true;
@@ -519,14 +520,14 @@ bool SpinField::Notify( NotifyEvent& rNEvt )
                 break;
                 case KEY_DOWN:
                 {
-                    if ( !nMod )
+                    if (!nMod)
                     {
                         Down();
                         nDone = true;
                     }
-                    else if ( ( nMod == KEY_MOD2 ) && !mbInDropDown && ( GetStyle() & WB_DROPDOWN ) )
+                    else if ((nMod == KEY_MOD2) && !mbInDropDown && (GetStyle() & WB_DROPDOWN))
                     {
-                        mbInDropDown = ShowDropDown( true );
+                        mbInDropDown = ShowDropDown(true);
                         Invalidate(Rectangle(Point(), GetOutputSizePixel()));
                         nDone = true;
                     }
@@ -534,7 +535,7 @@ bool SpinField::Notify( NotifyEvent& rNEvt )
                 break;
                 case KEY_PAGEUP:
                 {
-                    if ( !nMod )
+                    if (!nMod)
                     {
                         Last();
                         nDone = true;
@@ -543,7 +544,7 @@ bool SpinField::Notify( NotifyEvent& rNEvt )
                 break;
                 case KEY_PAGEDOWN:
                 {
-                    if ( !nMod )
+                    if (!nMod)
                     {
                         First();
                         nDone = true;
@@ -554,21 +555,18 @@ bool SpinField::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
+    if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
     {
-        if ( ( rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel ) && !IsReadOnly() )
+        if ((rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel) && !IsReadOnly())
         {
-            sal_uInt16 nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
-            if  (   ( nWheelBehavior == MOUSE_WHEEL_ALWAYS )
-                ||  (   ( nWheelBehavior == MOUSE_WHEEL_FOCUS_ONLY )
-                    &&  HasChildPathFocus()
-                    )
-                )
+            sal_uInt16 nWheelBehavior(GetSettings().GetMouseSettings().GetWheelBehavior());
+            if (nWheelBehavior == MOUSE_WHEEL_ALWAYS
+               || (nWheelBehavior == MOUSE_WHEEL_FOCUS_ONLY && HasChildPathFocus()))
             {
                 const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
-                if ( pData->GetMode() == CommandWheelMode::SCROLL )
+                if (pData->GetMode() == CommandWheelMode::SCROLL)
                 {
-                    if ( pData->GetDelta() < 0L )
+                    if (pData->GetDelta() < 0L)
                         Down();
                     else
                         Up();
@@ -580,27 +578,27 @@ bool SpinField::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone || Edit::Notify( rNEvt );
+    return nDone || Edit::Notify(rNEvt);
 }
 
-void SpinField::Command( const CommandEvent& rCEvt )
+void SpinField::Command(const CommandEvent& rCEvt)
 {
-    Edit::Command( rCEvt );
+    Edit::Command(rCEvt);
 }
 
 void SpinField::FillLayoutData() const
 {
-    if( mbSpin )
+    if (mbSpin)
     {
         mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-        AppendLayoutData( *GetSubEdit() );
-        GetSubEdit()->SetLayoutDataParent( this );
+        AppendLayoutData(*GetSubEdit());
+        GetSubEdit()->SetLayoutDataParent(this);
     }
     else
         Edit::FillLayoutData();
 }
 
-void SpinField::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
+void SpinField::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     if (mbSpin)
     {
@@ -629,14 +627,15 @@ void SpinField::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRec
     Edit::Paint(rRenderContext, rRect);
 }
 
-void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea, Rectangle& rSpinUpArea, Rectangle& rSpinDownArea )
+void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea,
+                                    Rectangle& rSpinUpArea, Rectangle& rSpinDownArea)
 {
     const StyleSettings& rStyleSettings = pDev->GetSettings().GetStyleSettings();
 
     Size aSize = rOutSz;
     Size aDropDownSize;
 
-    if ( GetStyle() & WB_DROPDOWN )
+    if (GetStyle() & WB_DROPDOWN)
     {
         long nW = rStyleSettings.GetScrollBarSize();
         nW = GetDrawPixel( pDev, nW );
@@ -649,7 +648,7 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
         rDDArea.SetEmpty();
 
     // calcuate sizes according to the height
-    if ( GetStyle() & WB_SPIN )
+    if (GetStyle() & WB_SPIN)
     {
         long nBottom1 = aSize.Height()/2;
         long nBottom2 = aSize.Height()-1;
@@ -661,10 +660,10 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
         bool bNativeRegionOK = false;
         Rectangle aContentUp, aContentDown;
 
-        if ( (pDev->GetOutDevType() == OUTDEV_WINDOW) &&
+        if ((pDev->GetOutDevType() == OUTDEV_WINDOW) &&
             // there is just no useful native support for spinfields with dropdown
             ! (GetStyle() & WB_DROPDOWN) &&
-            IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL) )
+            IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL))
         {
             vcl::Window *pWin = static_cast<vcl::Window*>(pDev);
             vcl::Window *pBorder = pWin->GetWindow( WINDOW_BORDER );
@@ -683,7 +682,7 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
                 pWin->GetNativeControlRegion(CTRL_SPINBOX, PART_BUTTON_DOWN,
                     aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContentDown);
 
-            if( bNativeRegionOK )
+            if (bNativeRegionOK)
             {
                 // convert back from border space to local coordinates
                 aPoint = pBorder->ScreenToOutputPixel( pWin->OutputToScreenPixel( aPoint ) );
@@ -692,7 +691,7 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
             }
         }
 
-        if( bNativeRegionOK )
+        if (bNativeRegionOK)
         {
             rSpinUpArea = aContentUp;
             rSpinDownArea = aContentDown;
@@ -714,13 +713,13 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
 
 void SpinField::Resize()
 {
-    if ( mbSpin )
+    if (mbSpin)
     {
         Control::Resize();
         Size aSize = GetOutputSizePixel();
         bool bSubEditPositioned = false;
 
-        if ( GetStyle() & (WB_SPIN|WB_DROPDOWN) )
+        if (GetStyle() & (WB_SPIN | WB_DROPDOWN))
         {
             ImplCalcButtonAreas( this, aSize, maDropDownRect, maUpperRect, maLowerRect );
 
@@ -733,11 +732,11 @@ void SpinField::Resize()
             Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
             // adjust position and size of the edit field
-            if ( GetNativeControlRegion(CTRL_SPINBOX, PART_SUB_EDIT,
-                        aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
+            if (GetNativeControlRegion(CTRL_SPINBOX, PART_SUB_EDIT, aArea, ControlState::NONE,
+                                       aControlValue, OUString(), aBound, aContent))
             {
                 // convert back from border space to local coordinates
-                aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
+                aPoint = pBorder->ScreenToOutputPixel(OutputToScreenPixel(aPoint));
                 aContent.Move(-aPoint.X(), -aPoint.Y());
 
                 // use the themes drop down size
@@ -747,7 +746,7 @@ void SpinField::Resize()
             }
             else
             {
-                if ( maUpperRect.IsEmpty() )
+                if (maUpperRect.IsEmpty())
                 {
                     DBG_ASSERT( !maDropDownRect.IsEmpty(), "SpinField::Resize: SPIN && DROPDOWN, but all empty rects?" );
                     aSize.Width() = maDropDownRect.Left();
@@ -757,108 +756,108 @@ void SpinField::Resize()
             }
         }
 
-        if( ! bSubEditPositioned )
+        if (!bSubEditPositioned)
         {
             // this moves our sub edit if RTL gets switched
-            mpEdit->SetPosPixel( Point() );
+            mpEdit->SetPosPixel(Point());
         }
-        mpEdit->SetSizePixel( aSize );
+        mpEdit->SetSizePixel(aSize);
 
-        if ( GetStyle() & WB_SPIN )
-            Invalidate( Rectangle( maUpperRect.TopLeft(), maLowerRect.BottomRight() ) );
-        if ( GetStyle() & WB_DROPDOWN )
-            Invalidate( maDropDownRect );
+        if (GetStyle() & WB_SPIN)
+            Invalidate(Rectangle(maUpperRect.TopLeft(), maLowerRect.BottomRight()));
+        if (GetStyle() & WB_DROPDOWN)
+            Invalidate(maDropDownRect);
     }
 }
 
-void SpinField::StateChanged( StateChangedType nType )
+void SpinField::StateChanged(StateChangedType nType)
 {
-    Edit::StateChanged( nType );
+    Edit::StateChanged(nType);
 
-    if ( nType == StateChangedType::Enable )
+    if (nType == StateChangedType::Enable)
     {
-        if ( mbSpin || ( GetStyle() & WB_DROPDOWN ) )
+        if (mbSpin || (GetStyle() & WB_DROPDOWN))
         {
-            mpEdit->Enable( IsEnabled() );
+            mpEdit->Enable(IsEnabled());
 
-            if ( mbSpin )
+            if (mbSpin)
             {
-                Invalidate( maLowerRect );
-                Invalidate( maUpperRect );
+                Invalidate(maLowerRect);
+                Invalidate(maUpperRect);
             }
-            if ( GetStyle() & WB_DROPDOWN )
-                Invalidate( maDropDownRect );
+            if (GetStyle() & WB_DROPDOWN)
+                Invalidate(maDropDownRect);
         }
     }
-    else if ( nType == StateChangedType::Style )
+    else if (nType == StateChangedType::Style)
     {
-        if ( GetStyle() & WB_REPEAT )
+        if (GetStyle() & WB_REPEAT)
             mbRepeat = true;
         else
             mbRepeat = false;
     }
-    else if ( nType == StateChangedType::Zoom )
+    else if (nType == StateChangedType::Zoom)
     {
         Resize();
-        if ( mpEdit )
-            mpEdit->SetZoom( GetZoom() );
+        if (mpEdit)
+            mpEdit->SetZoom(GetZoom());
         Invalidate();
     }
-    else if ( nType == StateChangedType::ControlFont )
+    else if (nType == StateChangedType::ControlFont)
     {
-        if ( mpEdit )
-            mpEdit->SetControlFont( GetControlFont() );
+        if (mpEdit)
+            mpEdit->SetControlFont(GetControlFont());
         Invalidate();
     }
-    else if ( nType == StateChangedType::ControlForeground )
+    else if (nType == StateChangedType::ControlForeground)
     {
-        if ( mpEdit )
-            mpEdit->SetControlForeground( GetControlForeground() );
+        if (mpEdit)
+            mpEdit->SetControlForeground(GetControlForeground());
         Invalidate();
     }
-    else if ( nType == StateChangedType::ControlBackground )
+    else if (nType == StateChangedType::ControlBackground)
     {
-        if ( mpEdit )
-            mpEdit->SetControlBackground( GetControlBackground() );
+        if (mpEdit)
+            mpEdit->SetControlBackground(GetControlBackground());
         Invalidate();
     }
     else if( nType == StateChangedType::Mirroring )
     {
-        if( mpEdit )
-            mpEdit->StateChanged( StateChangedType::Mirroring );
+        if (mpEdit)
+            mpEdit->StateChanged(StateChangedType::Mirroring);
         Resize();
     }
 }
 
 void SpinField::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    Edit::DataChanged( rDCEvt );
+    Edit::DataChanged(rDCEvt);
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
+    if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
+        (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
     {
         Resize();
         Invalidate();
     }
 }
 
-Rectangle* SpinField::ImplFindPartRect( const Point& rPt )
+Rectangle* SpinField::ImplFindPartRect(const Point& rPt)
 {
-    if( maUpperRect.IsInside( rPt ) )
+    if (maUpperRect.IsInside(rPt))
         return &maUpperRect;
-    else if( maLowerRect.IsInside( rPt ) )
+    else if (maLowerRect.IsInside(rPt))
         return &maLowerRect;
     else
         return NULL;
 }
 
-bool SpinField::PreNotify( NotifyEvent& rNEvt )
+bool SpinField::PreNotify(NotifyEvent& rNEvt)
 {
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if ((rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL)
     {
-        if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
+        if (!pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged())
         {
             // trigger redraw if mouse over state has changed
             if( IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL) ||
@@ -870,23 +869,22 @@ bool SpinField::PreNotify( NotifyEvent& rNEvt )
                 {
                     // FIXME: this is currently only on OS X
                     // check for other platforms that need similar handling
-                    if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-                        IsNativeWidgetEnabled() &&
-                        IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
+                    if (ImplGetSVData()->maNWFData.mbNoFocusRects && IsNativeWidgetEnabled() &&
+                        IsNativeControlSupported(CTRL_EDITBOX, PART_ENTIRE_CONTROL))
                     {
-                        ImplInvalidateOutermostBorder( this );
+                        ImplInvalidateOutermostBorder(this);
                     }
                     else
                     {
                         // paint directly
                         vcl::Region aRgn( GetActiveClipRegion() );
-                        if( pLastRect )
+                        if (pLastRect)
                         {
                             SetClipRegion(vcl::Region(*pLastRect));
                             Invalidate(*pLastRect);
                             SetClipRegion( aRgn );
                         }
-                        if( pRect )
+                        if (pRect)
                         {
                             SetClipRegion(vcl::Region(*pRect));
                             Invalidate(*pRect);
@@ -979,9 +977,9 @@ IMPL_LINK_TYPED( SpinField, ImplTimeout, Timer*, pTimer, void )
     }
 }
 
-void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags)
 {
-    Edit::Draw( pDev, rPos, rSize, nFlags );
+    Edit::Draw(pDev, rPos, rSize, nFlags);
 
     WinBits nFieldStyle = GetStyle();
     if ( !(nFlags & WINDOW_DRAW_NOCONTROLS ) && ( nFieldStyle & (WB_SPIN|WB_DROPDOWN) ) )
@@ -994,49 +992,49 @@ void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         pDev->Push();
         pDev->SetMapMode();
 
-        if ( eOutDevType == OUTDEV_PRINTER )
+        if (eOutDevType == OUTDEV_PRINTER)
         {
             StyleSettings aStyleSettings = aOldSettings.GetStyleSettings();
-            aStyleSettings.SetFaceColor( COL_LIGHTGRAY );
-            aStyleSettings.SetButtonTextColor( COL_BLACK );
-            AllSettings aSettings( aOldSettings );
-            aSettings.SetStyleSettings( aStyleSettings );
-            pDev->SetSettings( aSettings );
+            aStyleSettings.SetFaceColor(COL_LIGHTGRAY);
+            aStyleSettings.SetButtonTextColor(COL_BLACK);
+            AllSettings aSettings(aOldSettings);
+            aSettings.SetStyleSettings(aStyleSettings);
+            pDev->SetSettings(aSettings);
         }
 
         Rectangle aDD, aUp, aDown;
-        ImplCalcButtonAreas( pDev, aSize, aDD, aUp, aDown );
-        aDD.Move( aPos.X(), aPos.Y() );
-        aUp.Move( aPos.X(), aPos.Y() );
+        ImplCalcButtonAreas(pDev, aSize, aDD, aUp, aDown);
+        aDD.Move(aPos.X(), aPos.Y());
+        aUp.Move(aPos.X(), aPos.Y());
         aUp.Top()++;
-        aDown.Move( aPos.X(), aPos.Y() );
+        aDown.Move(aPos.X(), aPos.Y());
 
         Color aButtonTextColor;
-        if ( ( nFlags & WINDOW_DRAW_MONO ) || ( eOutDevType == OUTDEV_PRINTER ) )
+        if ((nFlags & WINDOW_DRAW_MONO) || (eOutDevType == OUTDEV_PRINTER))
             aButtonTextColor = Color( COL_BLACK );
         else
             aButtonTextColor = GetSettings().GetStyleSettings().GetButtonTextColor();
 
-        if ( GetStyle() & WB_DROPDOWN )
+        if (GetStyle() & WB_DROPDOWN)
         {
             DecorationView aView( pDev );
             DrawButtonFlags nStyle = DrawButtonFlags::NoLightBorder;
             Rectangle aInnerRect = aView.DrawButton( aDD, nStyle );
             SymbolType eSymbol = SymbolType::SPIN_DOWN;
-            if ( GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN )
+            if (GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN)
                 eSymbol = SymbolType::SPIN_UPDOWN;
 
-            DrawSymbolFlags nSymbolStyle = ( IsEnabled() || ( nFlags & WINDOW_DRAW_NODISABLE ) ) ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
-            aView.DrawSymbol( aInnerRect, eSymbol, aButtonTextColor, nSymbolStyle );
+            DrawSymbolFlags nSymbolStyle = (IsEnabled() || (nFlags & WINDOW_DRAW_NODISABLE)) ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
+            aView.DrawSymbol(aInnerRect, eSymbol, aButtonTextColor, nSymbolStyle);
         }
 
-        if ( GetStyle() & WB_SPIN )
+        if (GetStyle() & WB_SPIN)
         {
-            ImplDrawSpinButton(*pDev, this, aUp, aDown, false, false, true, true );
+            ImplDrawSpinButton(*pDev, this, aUp, aDown, false, false, true, true);
         }
 
         pDev->Pop();
-        pDev->SetSettings( aOldSettings );
+        pDev->SetSettings(aOldSettings);
     }
 }
 

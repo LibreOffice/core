@@ -35,12 +35,12 @@ void SpinButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnValue     = 0;
     mnValueStep = 1;
 
-    maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
-    maRepeatTimer.SetTimeoutHdl( LINK( this, SpinButton, ImplTimeout ) );
+    maRepeatTimer.SetTimeout(GetSettings().GetMouseSettings().GetButtonStartRepeat());
+    maRepeatTimer.SetTimeoutHdl(LINK(this, SpinButton, ImplTimeout));
 
-    mbRepeat = 0 != ( nStyle & WB_REPEAT );
+    mbRepeat = 0 != (nStyle & WB_REPEAT);
 
-    if ( nStyle & WB_HSCROLL )
+    if (nStyle & WB_HSCROLL)
         mbHorz = true;
     else
         mbHorz = false;
@@ -49,22 +49,22 @@ void SpinButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 }
 
 SpinButton::SpinButton( vcl::Window* pParent, WinBits nStyle )
-    :Control( WINDOW_SPINBUTTON )
-    ,mbUpperIsFocused( false )
+    : Control(WINDOW_SPINBUTTON)
+    , mbUpperIsFocused(false)
 {
-    ImplInit( pParent, nStyle );
+    ImplInit(pParent, nStyle);
 }
 
-IMPL_LINK_TYPED( SpinButton, ImplTimeout, Timer*, pTimer, void )
+IMPL_LINK_TYPED(SpinButton, ImplTimeout, Timer*, pTimer, void)
 {
-    if ( pTimer->GetTimeout() == GetSettings().GetMouseSettings().GetButtonStartRepeat() )
+    if (pTimer->GetTimeout() == GetSettings().GetMouseSettings().GetButtonStartRepeat())
     {
         pTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonRepeat() );
         pTimer->Start();
     }
     else
     {
-        if ( mbInitialUp )
+        if (mbInitialUp)
             Up();
         else
             Down();
@@ -73,57 +73,57 @@ IMPL_LINK_TYPED( SpinButton, ImplTimeout, Timer*, pTimer, void )
 
 void SpinButton::Up()
 {
-    if ( ImplIsUpperEnabled() )
+    if (ImplIsUpperEnabled())
     {
         mnValue += mnValueStep;
-        StateChanged( StateChangedType::Data );
+        StateChanged(StateChangedType::Data);
 
-        ImplMoveFocus( true );
+        ImplMoveFocus(true);
     }
 
-    ImplCallEventListenersAndHandler( VCLEVENT_SPINBUTTON_UP, maUpHdlLink, this );
+    ImplCallEventListenersAndHandler(VCLEVENT_SPINBUTTON_UP, maUpHdlLink, this);
 }
 
 void SpinButton::Down()
 {
-    if ( ImplIsLowerEnabled() )
+    if (ImplIsLowerEnabled())
     {
         mnValue -= mnValueStep;
-        StateChanged( StateChangedType::Data );
+        StateChanged(StateChangedType::Data);
 
-        ImplMoveFocus( false );
+        ImplMoveFocus(false);
     }
 
-    ImplCallEventListenersAndHandler( VCLEVENT_SPINBUTTON_DOWN, maDownHdlLink, this );
+    ImplCallEventListenersAndHandler(VCLEVENT_SPINBUTTON_DOWN, maDownHdlLink, this);
 }
 
 void SpinButton::Resize()
 {
     Control::Resize();
 
-    Size aSize( GetOutputSizePixel() );
+    Size aSize(GetOutputSizePixel());
     Point aTmpPoint;
-    Rectangle aRect( aTmpPoint, aSize );
-    if ( mbHorz )
+    Rectangle aRect(aTmpPoint, aSize);
+    if (mbHorz)
     {
-        maLowerRect = Rectangle( 0, 0, aSize.Width()/2, aSize.Height()-1 );
-        maUpperRect = Rectangle( maLowerRect.TopRight(), aRect.BottomRight() );
+        maLowerRect = Rectangle(0, 0, aSize.Width() / 2, aSize.Height() - 1);
+        maUpperRect = Rectangle(maLowerRect.TopRight(), aRect.BottomRight());
     }
     else
     {
-        maUpperRect = Rectangle( 0, 0, aSize.Width()-1, aSize.Height()/2 );
-        maLowerRect = Rectangle( maUpperRect.BottomLeft(), aRect.BottomRight() );
+        maUpperRect = Rectangle(0, 0, aSize.Width() - 1, aSize.Height() / 2);
+        maLowerRect = Rectangle(maUpperRect.BottomLeft(), aRect.BottomRight());
     }
 
-    ImplCalcFocusRect( ImplIsUpperEnabled() || !ImplIsLowerEnabled() );
+    ImplCalcFocusRect(ImplIsUpperEnabled() || !ImplIsLowerEnabled());
 
     Invalidate();
 }
 
-void SpinButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags)
 {
-    Point       aPos  = pDev->LogicToPixel( rPos );
-    Size        aSize = pDev->LogicToPixel( rSize );
+    Point aPos  = pDev->LogicToPixel(rPos);
+    Size aSize = pDev->LogicToPixel(rSize);
 
     pDev->Push();
     pDev->SetMapMode();
@@ -440,30 +440,30 @@ bool SpinButton::PreNotify( NotifyEvent& rNEvt )
 {
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if ((rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL)
     {
-        if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
+        if (!pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged())
         {
             // trigger redraw if mouse over state has changed
-            if( IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL) ||
+            if (IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL) ||
                 IsNativeControlSupported(CTRL_SPINBOX, PART_ALL_BUTTONS) )
             {
                 Rectangle* pRect = ImplFindPartRect( GetPointerPosPixel() );
                 Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
-                if( pRect != pLastRect || (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow()) )
+                if (pRect != pLastRect || (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow()))
                 {
-                    vcl::Region aRgn( GetActiveClipRegion() );
-                    if( pLastRect )
+                    vcl::Region aRgn(GetActiveClipRegion());
+                    if (pLastRect)
                     {
                         SetClipRegion(vcl::Region(*pLastRect));
                         Invalidate(*pLastRect);
                         SetClipRegion( aRgn );
                     }
-                    if( pRect )
+                    if (pRect)
                     {
                         SetClipRegion(vcl::Region(*pRect));
                         Invalidate(*pRect);
-                        SetClipRegion( aRgn );
+                        SetClipRegion(aRgn);
                     }
                 }
             }

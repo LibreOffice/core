@@ -207,60 +207,61 @@ void Button::ImplSetSeparatorX( long nX )
     mpButtonData->mnSeparatorX = nX;
 }
 
-DrawTextFlags Button::ImplGetTextStyle( OUString& rText, WinBits nWinStyle,
-                                 sal_uLong nDrawFlags )
+DrawTextFlags Button::ImplGetTextStyle(OUString& rText, WinBits nWinStyle, sal_uLong nDrawFlags )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    DrawTextFlags nTextStyle = FixedText::ImplGetTextStyle( nWinStyle & ~WB_DEFBUTTON );
+    DrawTextFlags nTextStyle = FixedText::ImplGetTextStyle(nWinStyle & ~WB_DEFBUTTON);
 
-    if ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC )
+    if (nDrawFlags & WINDOW_DRAW_NOMNEMONIC)
     {
-        if ( nTextStyle & DrawTextFlags::Mnemonic )
+        if (nTextStyle & DrawTextFlags::Mnemonic)
         {
             rText = GetNonMnemonicString( rText );
             nTextStyle &= ~DrawTextFlags::Mnemonic;
         }
     }
 
-    if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
+    if (!(nDrawFlags & WINDOW_DRAW_NODISABLE))
     {
-        if ( !IsEnabled() )
+        if (!IsEnabled())
             nTextStyle |= DrawTextFlags::Disable;
     }
 
-    if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
-         (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+    if ((nDrawFlags & WINDOW_DRAW_MONO) ||
+        (rStyleSettings.GetOptions() & STYLE_OPTION_MONO))
+    {
         nTextStyle |= DrawTextFlags::Mono;
+    }
 
     return nTextStyle;
 }
 
-void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
-                                   Size& rSize, bool bLayout,
-                                   sal_uLong nImageSep, sal_uLong nDrawFlags,
-                                   DrawTextFlags nTextStyle, Rectangle *pSymbolRect,
-                                   bool bAddImageSep )
+void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
+                                  Size& rSize, bool bLayout,
+                                  sal_uLong nImageSep, sal_uLong nDrawFlags,
+                                  DrawTextFlags nTextStyle, Rectangle *pSymbolRect,
+                                  bool bAddImageSep)
 {
-    OUString        aText( GetText() );
-    bool            bDrawImage = HasImage() && ! ( ImplGetButtonState() & DrawButtonFlags::NoImage );
-    bool            bDrawText  = !aText.isEmpty() && ! ( ImplGetButtonState() & DrawButtonFlags::NoText );
-    bool            bHasSymbol = pSymbolRect != nullptr;
+    OUString aText(GetText());
+    bool bDrawImage = HasImage() && ! (ImplGetButtonState() & DrawButtonFlags::NoImage);
+    bool bDrawText  = !aText.isEmpty() && ! (ImplGetButtonState() & DrawButtonFlags::NoText);
+    bool bHasSymbol = pSymbolRect != nullptr;
 
     // No text and no image => nothing to do => return
-    if ( !bDrawImage && !bDrawText && !bHasSymbol )
+    if (!bDrawImage && !bDrawText && !bHasSymbol)
         return;
 
-    WinBits         nWinStyle = GetStyle();
-    Rectangle       aOutRect( rPos, rSize );
-    MetricVector   *pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
-    OUString       *pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
-    ImageAlign      eImageAlign = mpButtonData->meImageAlign;
-    Size            aImageSize = mpButtonData->maImage.GetSizePixel();
+    WinBits nWinStyle = GetStyle();
+    Rectangle aOutRect( rPos, rSize );
+    MetricVector* pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
+    OUString* pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
+    ImageAlign eImageAlign = mpButtonData->meImageAlign;
+    Size aImageSize = mpButtonData->maImage.GetSizePixel();
 
-    if ( ( nDrawFlags & WINDOW_DRAW_NOMNEMONIC ) &&
-         ( nTextStyle & DrawTextFlags::Mnemonic ) )
+    if ((nDrawFlags & WINDOW_DRAW_NOMNEMONIC) &&
+        (nTextStyle & DrawTextFlags::Mnemonic))
     {
-        aText = GetNonMnemonicString( aText );
+        aText = GetNonMnemonicString(aText);
         nTextStyle &= ~DrawTextFlags::Mnemonic;
     }
 
@@ -268,16 +269,16 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
     aImageSize.Height() = CalcZoom( aImageSize.Height() );
 
     // Drawing text or symbol only is simple, use style and output rectangle
-    if ( bHasSymbol && !bDrawImage && !bDrawText )
+    if (bHasSymbol && !bDrawImage && !bDrawText)
     {
         *pSymbolRect = aOutRect;
         return;
     }
-    else if ( bDrawText && !bDrawImage && !bHasSymbol )
+    else if (bDrawText && !bDrawImage && !bHasSymbol)
     {
-        DrawControlText( *pDev, aOutRect, aText, nTextStyle, pVector, pDisplayText );
+        DrawControlText(*pDev, aOutRect, aText, nTextStyle, pVector, pDisplayText);
 
-        ImplSetFocusRect( aOutRect );
+        ImplSetFocusRect(aOutRect);
         rSize = aOutRect.GetSize();
         rPos = aOutRect.TopLeft();
 
@@ -285,81 +286,81 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
     }
 
     // check for HC mode ( image only! )
-    Image    *pImage    = &(mpButtonData->maImage);
+    Image* pImage = &(mpButtonData->maImage);
 
     Size aTextSize;
     Size aSymbolSize;
     Size aMax;
     Point aImagePos = rPos;
     Point aTextPos = rPos;
-    Rectangle aUnion = Rectangle( aImagePos, aImageSize );
+    Rectangle aUnion = Rectangle(aImagePos, aImageSize);
     Rectangle aSymbol;
     long nSymbolHeight = 0;
 
-    if ( bDrawText || bHasSymbol )
+    if (bDrawText || bHasSymbol)
     {
         // Get the size of the text output area ( the symbol will be drawn in
         // this area as well, so the symbol rectangle will be calculated here, too )
 
-        Rectangle   aRect = Rectangle( Point(), rSize );
-        Size        aTSSize;
+        Rectangle aRect = Rectangle(Point(), rSize);
+        Size aTSSize;
 
-        if ( bHasSymbol )
+        if (bHasSymbol)
         {
-            if ( bDrawText )
+            if (bDrawText)
             {
                 nSymbolHeight = pDev->GetTextHeight();
-                if ( mpButtonData->mbSmallSymbol )
+                if (mpButtonData->mbSmallSymbol)
                     nSymbolHeight = nSymbolHeight * 3 / 4;
 
-                aSymbol = Rectangle( Point(), Size( nSymbolHeight, nSymbolHeight ) );
-                ImplCalcSymbolRect( aSymbol );
+                aSymbol = Rectangle(Point(), Size(nSymbolHeight, nSymbolHeight));
+                ImplCalcSymbolRect(aSymbol);
                 aRect.Left() += 3 * nSymbolHeight / 2;
                 aTSSize.Width() = 3 * nSymbolHeight / 2;
             }
             else
             {
-                aSymbol = Rectangle( Point(), rSize );
-                ImplCalcSymbolRect( aSymbol );
+                aSymbol = Rectangle(Point(), rSize);
+                ImplCalcSymbolRect(aSymbol);
                 aTSSize.Width() = aSymbol.GetWidth();
             }
             aTSSize.Height() = aSymbol.GetHeight();
             aSymbolSize = aSymbol.GetSize();
         }
 
-        if ( bDrawText )
+        if (bDrawText)
         {
-            if ( ( eImageAlign == IMAGEALIGN_LEFT_TOP     ) ||
-                 ( eImageAlign == IMAGEALIGN_LEFT         ) ||
-                 ( eImageAlign == IMAGEALIGN_LEFT_BOTTOM  ) ||
-                 ( eImageAlign == IMAGEALIGN_RIGHT_TOP    ) ||
-                 ( eImageAlign == IMAGEALIGN_RIGHT        ) ||
-                 ( eImageAlign == IMAGEALIGN_RIGHT_BOTTOM ) )
+            if ((eImageAlign == IMAGEALIGN_LEFT_TOP)     ||
+                (eImageAlign == IMAGEALIGN_LEFT )        ||
+                (eImageAlign == IMAGEALIGN_LEFT_BOTTOM)  ||
+                (eImageAlign == IMAGEALIGN_RIGHT_TOP)    ||
+                (eImageAlign == IMAGEALIGN_RIGHT)        ||
+                (eImageAlign == IMAGEALIGN_RIGHT_BOTTOM))
             {
-                aRect.Right() -= ( aImageSize.Width() + nImageSep );
+                aRect.Right() -= (aImageSize.Width() + nImageSep);
             }
-            else if ( ( eImageAlign == IMAGEALIGN_TOP_LEFT     ) ||
-                      ( eImageAlign == IMAGEALIGN_TOP          ) ||
-                      ( eImageAlign == IMAGEALIGN_TOP_RIGHT    ) ||
-                      ( eImageAlign == IMAGEALIGN_BOTTOM_LEFT  ) ||
-                      ( eImageAlign == IMAGEALIGN_BOTTOM       ) ||
-                      ( eImageAlign == IMAGEALIGN_BOTTOM_RIGHT ) )
+            else if ((eImageAlign == IMAGEALIGN_TOP_LEFT)    ||
+                     (eImageAlign == IMAGEALIGN_TOP)         ||
+                     (eImageAlign == IMAGEALIGN_TOP_RIGHT)   ||
+                     (eImageAlign == IMAGEALIGN_BOTTOM_LEFT) ||
+                     (eImageAlign == IMAGEALIGN_BOTTOM)      ||
+                     (eImageAlign == IMAGEALIGN_BOTTOM_RIGHT))
             {
-                aRect.Bottom() -= ( aImageSize.Height() + nImageSep );
+                aRect.Bottom() -= (aImageSize.Height() + nImageSep);
             }
 
-            aRect = pDev->GetTextRect( aRect, aText, nTextStyle );
+            aRect = pDev->GetTextRect(aRect, aText, nTextStyle);
             aTextSize = aRect.GetSize();
 
             aTSSize.Width()  += aTextSize.Width();
 
-            if ( aTSSize.Height() < aTextSize.Height() )
+            if (aTSSize.Height() < aTextSize.Height())
                 aTSSize.Height() = aTextSize.Height();
 
-            if( bAddImageSep && bDrawImage )
+            if (bAddImageSep && bDrawImage)
             {
                 long nDiff = (aImageSize.Height() - aTextSize.Height()) / 3;
-                if( nDiff > 0 )
+                if (nDiff > 0)
                     nImageSep += nDiff;
             }
         }
@@ -369,64 +370,64 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
 
         // Now calculate the output area for the image and the text according to the image align flags
 
-        if ( ( eImageAlign == IMAGEALIGN_LEFT ) ||
-             ( eImageAlign == IMAGEALIGN_RIGHT ) )
+        if ((eImageAlign == IMAGEALIGN_LEFT) ||
+            (eImageAlign == IMAGEALIGN_RIGHT))
         {
-            aImagePos.Y() = rPos.Y() + ( aMax.Height() - aImageSize.Height() ) / 2;
-            aTextPos.Y()  = rPos.Y() + ( aMax.Height() - aTSSize.Height() ) / 2;
+            aImagePos.Y() = rPos.Y() + (aMax.Height() - aImageSize.Height()) / 2;
+            aTextPos.Y()  = rPos.Y() + (aMax.Height() - aTSSize.Height()) / 2;
         }
-        else if ( ( eImageAlign == IMAGEALIGN_LEFT_BOTTOM ) ||
-                  ( eImageAlign == IMAGEALIGN_RIGHT_BOTTOM ) )
+        else if ((eImageAlign == IMAGEALIGN_LEFT_BOTTOM) ||
+                 (eImageAlign == IMAGEALIGN_RIGHT_BOTTOM))
         {
             aImagePos.Y() = rPos.Y() + aMax.Height() - aImageSize.Height();
             aTextPos.Y()  = rPos.Y() + aMax.Height() - aTSSize.Height();
         }
-        else if ( ( eImageAlign == IMAGEALIGN_TOP ) ||
-                  ( eImageAlign == IMAGEALIGN_BOTTOM ) )
+        else if ((eImageAlign == IMAGEALIGN_TOP) ||
+                 (eImageAlign == IMAGEALIGN_BOTTOM))
         {
-            aImagePos.X() = rPos.X() + ( aMax.Width() - aImageSize.Width() ) / 2;
-            aTextPos.X()  = rPos.X() + ( aMax.Width() - aTSSize.Width() ) / 2;
+            aImagePos.X() = rPos.X() + (aMax.Width() - aImageSize.Width()) / 2;
+            aTextPos.X()  = rPos.X() + (aMax.Width() - aTSSize.Width()) / 2;
         }
-        else if ( ( eImageAlign == IMAGEALIGN_TOP_RIGHT ) ||
-                  ( eImageAlign == IMAGEALIGN_BOTTOM_RIGHT ) )
+        else if ((eImageAlign == IMAGEALIGN_TOP_RIGHT) ||
+                 (eImageAlign == IMAGEALIGN_BOTTOM_RIGHT))
         {
             aImagePos.X() = rPos.X() + aMax.Width() - aImageSize.Width();
             aTextPos.X()  = rPos.X() + aMax.Width() - aTSSize.Width();
         }
 
-        if ( ( eImageAlign == IMAGEALIGN_LEFT_TOP ) ||
-             ( eImageAlign == IMAGEALIGN_LEFT ) ||
-             ( eImageAlign == IMAGEALIGN_LEFT_BOTTOM ) )
+        if ((eImageAlign == IMAGEALIGN_LEFT_TOP) ||
+            (eImageAlign == IMAGEALIGN_LEFT)     ||
+            (eImageAlign == IMAGEALIGN_LEFT_BOTTOM))
         {
             aTextPos.X() = rPos.X() + aImageSize.Width() + nImageSep;
         }
-        else if ( ( eImageAlign == IMAGEALIGN_RIGHT_TOP ) ||
-                  ( eImageAlign == IMAGEALIGN_RIGHT ) ||
-                  ( eImageAlign == IMAGEALIGN_RIGHT_BOTTOM ) )
+        else if ((eImageAlign == IMAGEALIGN_RIGHT_TOP) ||
+                 (eImageAlign == IMAGEALIGN_RIGHT)     ||
+                 (eImageAlign == IMAGEALIGN_RIGHT_BOTTOM))
         {
             aImagePos.X() = rPos.X() + aTSSize.Width() + nImageSep;
         }
-        else if ( ( eImageAlign == IMAGEALIGN_TOP_LEFT ) ||
-                  ( eImageAlign == IMAGEALIGN_TOP ) ||
-                  ( eImageAlign == IMAGEALIGN_TOP_RIGHT ) )
+        else if ((eImageAlign == IMAGEALIGN_TOP_LEFT) ||
+                 (eImageAlign == IMAGEALIGN_TOP)      ||
+                 (eImageAlign == IMAGEALIGN_TOP_RIGHT))
         {
             aTextPos.Y() = rPos.Y() + aImageSize.Height() + nImageSep;
         }
-        else if ( ( eImageAlign == IMAGEALIGN_BOTTOM_LEFT ) ||
-                  ( eImageAlign == IMAGEALIGN_BOTTOM ) ||
-                  ( eImageAlign == IMAGEALIGN_BOTTOM_RIGHT ) )
+        else if ((eImageAlign == IMAGEALIGN_BOTTOM_LEFT) ||
+                 (eImageAlign == IMAGEALIGN_BOTTOM)      ||
+                 (eImageAlign == IMAGEALIGN_BOTTOM_RIGHT))
         {
             aImagePos.Y() = rPos.Y() + aTSSize.Height() + nImageSep;
         }
-        else if ( eImageAlign == IMAGEALIGN_CENTER )
+        else if (eImageAlign == IMAGEALIGN_CENTER)
         {
-            aImagePos.X() = rPos.X() + ( aMax.Width()  - aImageSize.Width() ) / 2;
-            aImagePos.Y() = rPos.Y() + ( aMax.Height() - aImageSize.Height() ) / 2;
-            aTextPos.X()  = rPos.X() + ( aMax.Width()  - aTSSize.Width() ) / 2;
-            aTextPos.Y()  = rPos.Y() + ( aMax.Height() - aTSSize.Height() ) / 2;
+            aImagePos.X() = rPos.X() + (aMax.Width()  - aImageSize.Width()) / 2;
+            aImagePos.Y() = rPos.Y() + (aMax.Height() - aImageSize.Height()) / 2;
+            aTextPos.X()  = rPos.X() + (aMax.Width()  - aTSSize.Width()) / 2;
+            aTextPos.Y()  = rPos.Y() + (aMax.Height() - aTSSize.Height()) / 2;
         }
-        aUnion = Rectangle( aImagePos, aImageSize );
-        aUnion.Union( Rectangle( aTextPos, aTSSize ) );
+        aUnion = Rectangle(aImagePos, aImageSize);
+        aUnion.Union(Rectangle(aTextPos, aTSSize));
     }
 
     // Now place the combination of text and image in the output area of the button
@@ -434,27 +435,27 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
     long nXOffset = 0;
     long nYOffset = 0;
 
-    if ( nWinStyle & WB_CENTER )
+    if (nWinStyle & WB_CENTER)
     {
-        nXOffset = ( rSize.Width() - aUnion.GetWidth() ) / 2;
+        nXOffset = (rSize.Width() - aUnion.GetWidth()) / 2;
     }
-    else if ( nWinStyle & WB_RIGHT )
+    else if (nWinStyle & WB_RIGHT)
     {
         nXOffset = rSize.Width() - aUnion.GetWidth();
     }
 
-    if ( nWinStyle & WB_VCENTER )
+    if (nWinStyle & WB_VCENTER)
     {
-        nYOffset = ( rSize.Height() - aUnion.GetHeight() ) / 2;
+        nYOffset = (rSize.Height() - aUnion.GetHeight()) / 2;
     }
-    else if ( nWinStyle & WB_BOTTOM )
+    else if (nWinStyle & WB_BOTTOM)
     {
         nYOffset = rSize.Height() - aUnion.GetHeight();
     }
 
     // the top left corner should always be visible, so we don't allow negative offsets
-    if ( nXOffset < 0 ) nXOffset = 0;
-    if ( nYOffset < 0 ) nYOffset = 0;
+    if (nXOffset < 0) nXOffset = 0;
+    if (nYOffset < 0) nYOffset = 0;
 
     aImagePos.X() += nXOffset;
     aImagePos.Y() += nYOffset;
@@ -466,53 +467,55 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
     rPos.X() += nXOffset;
     rPos.Y() += nYOffset;
 
-    if ( bHasSymbol )
+    if (bHasSymbol)
     {
-        if ( mpButtonData->meSymbolAlign == SymbolAlign::RIGHT )
+        if (mpButtonData->meSymbolAlign == SymbolAlign::RIGHT)
         {
-            Point aRightPos = Point( aTextPos.X() + aTextSize.Width() + aSymbolSize.Width()/2, aTextPos.Y() );
-            *pSymbolRect = Rectangle( aRightPos, aSymbolSize );
+            Point aRightPos = Point(aTextPos.X() + aTextSize.Width() + aSymbolSize.Width() / 2, aTextPos.Y());
+            *pSymbolRect = Rectangle(aRightPos, aSymbolSize);
         }
         else
         {
-            *pSymbolRect = Rectangle( aTextPos, aSymbolSize );
-            aTextPos.X() += ( 3 * nSymbolHeight / 2 );
+            *pSymbolRect = Rectangle(aTextPos, aSymbolSize);
+            aTextPos.X() += 3 * nSymbolHeight / 2;
         }
-        if ( mpButtonData->mbSmallSymbol )
+        if (mpButtonData->mbSmallSymbol)
         {
-            nYOffset = (aUnion.GetHeight() - aSymbolSize.Height())/2;
-            pSymbolRect->setY( aTextPos.Y() + nYOffset );
+            nYOffset = (aUnion.GetHeight() - aSymbolSize.Height()) / 2;
+            pSymbolRect->setY(aTextPos.Y() + nYOffset);
         }
     }
 
     DrawImageFlags nStyle = DrawImageFlags::NONE;
 
-    if ( ! ( nDrawFlags & WINDOW_DRAW_NODISABLE ) &&
-         ! IsEnabled() )
-        nStyle |= DrawImageFlags::Disable;
-
-    if ( IsZoom() )
-        pDev->DrawImage( aImagePos, aImageSize, *pImage, nStyle );
-    else
-        pDev->DrawImage( aImagePos, *pImage, nStyle );
-
-    if ( bDrawText )
+    if (!(nDrawFlags & WINDOW_DRAW_NODISABLE) &&
+        !IsEnabled())
     {
-        ImplSetFocusRect( Rectangle( aTextPos, aTextSize ) );
-        pDev->DrawText( Rectangle( aTextPos, aTextSize ), aText, nTextStyle, pVector, pDisplayText );
+        nStyle |= DrawImageFlags::Disable;
+    }
+
+    if (IsZoom())
+        pDev->DrawImage(aImagePos, aImageSize, *pImage, nStyle);
+    else
+        pDev->DrawImage(aImagePos, *pImage, nStyle);
+
+    if (bDrawText)
+    {
+        ImplSetFocusRect(Rectangle(aTextPos, aTextSize));
+        pDev->DrawText(Rectangle(aTextPos, aTextSize), aText, nTextStyle, pVector, pDisplayText);
     }
     else
     {
-        ImplSetFocusRect( Rectangle( aImagePos, aImageSize ) );
+        ImplSetFocusRect(Rectangle(aImagePos, aImageSize));
     }
 }
 
-void Button::ImplSetFocusRect( const Rectangle &rFocusRect )
+void Button::ImplSetFocusRect(const Rectangle &rFocusRect)
 {
     Rectangle aFocusRect = rFocusRect;
-    Rectangle aOutputRect = Rectangle( Point(), GetOutputSizePixel() );
+    Rectangle aOutputRect = Rectangle(Point(), GetOutputSizePixel());
 
-    if ( ! aFocusRect.IsEmpty() )
+    if (!aFocusRect.IsEmpty())
     {
         aFocusRect.Left()--;
         aFocusRect.Top()--;
@@ -520,10 +523,14 @@ void Button::ImplSetFocusRect( const Rectangle &rFocusRect )
         aFocusRect.Bottom()++;
     }
 
-    if ( aFocusRect.Left()   < aOutputRect.Left()   ) aFocusRect.Left()   = aOutputRect.Left();
-    if ( aFocusRect.Top()    < aOutputRect.Top()    ) aFocusRect.Top()    = aOutputRect.Top();
-    if ( aFocusRect.Right()  > aOutputRect.Right()  ) aFocusRect.Right()  = aOutputRect.Right();
-    if ( aFocusRect.Bottom() > aOutputRect.Bottom() ) aFocusRect.Bottom() = aOutputRect.Bottom();
+    if (aFocusRect.Left()   < aOutputRect.Left())
+        aFocusRect.Left()   = aOutputRect.Left();
+    if (aFocusRect.Top()    < aOutputRect.Top())
+        aFocusRect.Top()    = aOutputRect.Top();
+    if (aFocusRect.Right()  > aOutputRect.Right())
+        aFocusRect.Right()  = aOutputRect.Right();
+    if (aFocusRect.Bottom() > aOutputRect.Bottom())
+        aFocusRect.Bottom() = aOutputRect.Bottom();
 
     mpButtonData->maFocusRect = aFocusRect;
 }
