@@ -492,7 +492,7 @@ void Splitter::StartDrag()
     else
         mnStartSplitPos = maDragPos.Y();
 
-    mbDragFull = (Application::GetSettings().GetStyleSettings().GetDragFullOptions() & DRAGFULL_OPTION_SPLIT) != 0;
+    mbDragFull = bool(Application::GetSettings().GetStyleSettings().GetDragFullOptions() & DragFullOptions::Split);
     if ( !mbDragFull )
         ImplDrawSplitter();
 }

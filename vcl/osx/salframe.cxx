@@ -1154,7 +1154,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     getResolution( nDPIX, nDPIY );
     aAppFont = getFont( [NSFont systemFontOfSize: 0], nDPIY, aAppFont );
 
-    aStyleSettings.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
+    aStyleSettings.SetToolbarIconSize( ToolbarIconSize::Large );
 
     // TODO: better mapping of OS X<->LibreOffice font settings
     aStyleSettings.SetAppFont( aAppFont );
@@ -1204,7 +1204,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetCursorBlinkTime( 500 );
 
     // no mnemonics on OS X
-    aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_NOMNEMONICS );
+    aStyleSettings.SetOptions( aStyleSettings.GetOptions() | StyleSettingsOptions::NoMnemonics );
 
     getAppleScrollBarVariant(aStyleSettings);
 

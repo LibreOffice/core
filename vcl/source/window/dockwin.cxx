@@ -288,7 +288,7 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
         mnTrackHeight   += mnDockTop+mnDockBottom;
     }
 
-    if ( GetSettings().GetStyleSettings().GetDragFullOptions() & DRAGFULL_OPTION_DOCKING &&
+    if ( GetSettings().GetStyleSettings().GetDragFullOptions() & DragFullOptions::Docking &&
         !( mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ) ) // no full drag when migrating to system window
         mbDragFull = true;
     else

@@ -310,13 +310,13 @@ static PushButton* ImplGetCancelButton( Dialog* pDialog )
 
 static void ImplMouseAutoPos( Dialog* pDialog )
 {
-    sal_uLong nMouseOptions = pDialog->GetSettings().GetMouseSettings().GetOptions();
-    if ( nMouseOptions & MOUSE_OPTION_AUTOCENTERPOS )
+    MouseSettingsOptions nMouseOptions = pDialog->GetSettings().GetMouseSettings().GetOptions();
+    if ( nMouseOptions & MouseSettingsOptions::AutoCenterPos )
     {
         Size aSize = pDialog->GetOutputSizePixel();
         pDialog->SetPointerPosPixel( Point( aSize.Width()/2, aSize.Height()/2 ) );
     }
-    else if ( nMouseOptions & MOUSE_OPTION_AUTODEFBTNPOS )
+    else if ( nMouseOptions & MouseSettingsOptions::AutoDefBtnPos )
     {
         vcl::Window* pWindow = ImplGetDefaultButton( pDialog );
         if ( !pWindow )

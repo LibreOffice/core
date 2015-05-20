@@ -220,7 +220,7 @@ void FixedText::ImplDraw(OutputDevice* pDev, sal_uLong nDrawFlags,
             nTextStyle |= DrawTextFlags::Disable;
     }
     if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
-         (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+         (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
         nTextStyle |= DrawTextFlags::Mono;
 
     if( bFillLayout )
@@ -599,7 +599,7 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             nStyle |= DrawTextFlags::Disable;
         if (GetStyle() & WB_NOLABEL)
             nStyle &= ~DrawTextFlags::Mnemonic;
-        if (rStyleSettings.GetOptions() & STYLE_OPTION_MONO)
+        if (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono)
             nStyle |= DrawTextFlags::Mono;
 
         DrawControlText(*this, aRect, aText, nStyle, pVector, pDisplayText);

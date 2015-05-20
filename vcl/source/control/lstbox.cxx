@@ -947,9 +947,9 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
                   (rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel) &&
                   (rNEvt.GetWindow() == mpImplWin) )
         {
-            sal_uInt16 nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
-            if  (   ( nWheelBehavior == MOUSE_WHEEL_ALWAYS )
-                ||  (   ( nWheelBehavior == MOUSE_WHEEL_FOCUS_ONLY )
+            MouseWheelBehaviour nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
+            if  (   ( nWheelBehavior == MouseWheelBehaviour::ALWAYS )
+                ||  (   ( nWheelBehavior == MouseWheelBehaviour::FocusOnly )
                     &&  HasChildPathFocus()
                     )
                 )

@@ -2163,7 +2163,7 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
 
         StartTracking();
 
-        mbDragFull = (GetSettings().GetStyleSettings().GetDragFullOptions() & DRAGFULL_OPTION_SPLIT) != 0;
+        mbDragFull = bool(GetSettings().GetStyleSettings().GetDragFullOptions() & DragFullOptions::Split);
 
         ImplSplitMousePos( aMousePosPixel );
 
