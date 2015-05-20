@@ -454,7 +454,7 @@ void RtfSdrExport::impl_writeGraphic()
 
     // Export it to a stream.
     SvMemoryStream aStream;
-    GraphicConverter::Export(aStream, aGraphic, CVT_PNG);
+    GraphicConverter::Export(aStream, aGraphic, ConvertDataFormat::PNG);
     aStream.Seek(STREAM_SEEK_TO_END);
     sal_uInt32 nSize = aStream.Tell();
     const sal_uInt8* pGraphicAry = static_cast<sal_uInt8 const*>(aStream.GetData());

@@ -240,7 +240,7 @@ INetURLObject GalleryTheme::ImplGetURL( const GalleryObject* pObject ) const
     return aURL;
 }
 
-INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPtr nFormat )
+INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDataFormat nFormat )
 {
     INetURLObject   aDir( GetParent()->GetUserURL() );
     INetURLObject   aInfoFileURL( GetParent()->GetUserURL() );
@@ -266,20 +266,20 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
     }
 
     // create extension
-    if( nFormat )
+    if( nFormat != ConvertDataFormat::Unknown )
     {
         switch( nFormat )
         {
-            case( CVT_BMP ): pExt = ".bmp"; break;
-            case( CVT_GIF ): pExt = ".gif"; break;
-            case( CVT_JPG ): pExt = ".jpg"; break;
-            case( CVT_MET ): pExt = ".met"; break;
-            case( CVT_PCT ): pExt = ".pct"; break;
-            case( CVT_PNG ): pExt = ".png"; break;
-            case( CVT_SVM ): pExt = ".svm"; break;
-            case( CVT_TIF ): pExt = ".tif"; break;
-            case( CVT_WMF ): pExt = ".wmf"; break;
-            case( CVT_EMF ): pExt = ".emf"; break;
+            case( ConvertDataFormat::BMP ): pExt = ".bmp"; break;
+            case( ConvertDataFormat::GIF ): pExt = ".gif"; break;
+            case( ConvertDataFormat::JPG ): pExt = ".jpg"; break;
+            case( ConvertDataFormat::MET ): pExt = ".met"; break;
+            case( ConvertDataFormat::PCT ): pExt = ".pct"; break;
+            case( ConvertDataFormat::PNG ): pExt = ".png"; break;
+            case( ConvertDataFormat::SVM ): pExt = ".svm"; break;
+            case( ConvertDataFormat::TIF ): pExt = ".tif"; break;
+            case( ConvertDataFormat::WMF ): pExt = ".wmf"; break;
+            case( ConvertDataFormat::EMF ): pExt = ".emf"; break;
 
             default:
                 pExt = ".grf";
@@ -853,27 +853,27 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
 
     if( rGraphic.GetType() != GRAPHIC_NONE )
     {
-        sal_uIntPtr           nExportFormat = CVT_UNKNOWN;
-        const GfxLink   aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
+        ConvertDataFormat nExportFormat = ConvertDataFormat::Unknown;
+        const GfxLink     aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
 
         if( aGfxLink.GetDataSize() )
         {
             switch( aGfxLink.GetType() )
             {
-                case( GFX_LINK_TYPE_EPS_BUFFER ): nExportFormat = CVT_SVM; break;
-                case( GFX_LINK_TYPE_NATIVE_GIF ): nExportFormat = CVT_GIF; break;
+                case( GFX_LINK_TYPE_EPS_BUFFER ): nExportFormat = ConvertDataFormat::SVM; break;
+                case( GFX_LINK_TYPE_NATIVE_GIF ): nExportFormat = ConvertDataFormat::GIF; break;
 
                 // #i15508# added BMP type
                 // could not find/trigger a call to this, but should do no harm
-                case( GFX_LINK_TYPE_NATIVE_BMP ): nExportFormat = CVT_BMP; break;
+                case( GFX_LINK_TYPE_NATIVE_BMP ): nExportFormat = ConvertDataFormat::BMP; break;
 
-                case( GFX_LINK_TYPE_NATIVE_JPG ): nExportFormat = CVT_JPG; break;
-                case( GFX_LINK_TYPE_NATIVE_PNG ): nExportFormat = CVT_PNG; break;
-                case( GFX_LINK_TYPE_NATIVE_TIF ): nExportFormat = CVT_TIF; break;
-                case( GFX_LINK_TYPE_NATIVE_WMF ): nExportFormat = CVT_WMF; break;
-                case( GFX_LINK_TYPE_NATIVE_MET ): nExportFormat = CVT_MET; break;
-                case( GFX_LINK_TYPE_NATIVE_PCT ): nExportFormat = CVT_PCT; break;
-                case( GFX_LINK_TYPE_NATIVE_SVG ): nExportFormat = CVT_SVG; break;
+                case( GFX_LINK_TYPE_NATIVE_JPG ): nExportFormat = ConvertDataFormat::JPG; break;
+                case( GFX_LINK_TYPE_NATIVE_PNG ): nExportFormat = ConvertDataFormat::PNG; break;
+                case( GFX_LINK_TYPE_NATIVE_TIF ): nExportFormat = ConvertDataFormat::TIF; break;
+                case( GFX_LINK_TYPE_NATIVE_WMF ): nExportFormat = ConvertDataFormat::WMF; break;
+                case( GFX_LINK_TYPE_NATIVE_MET ): nExportFormat = ConvertDataFormat::MET; break;
+                case( GFX_LINK_TYPE_NATIVE_PCT ): nExportFormat = ConvertDataFormat::PCT; break;
+                case( GFX_LINK_TYPE_NATIVE_SVG ): nExportFormat = ConvertDataFormat::SVG; break;
                 default:
                     break;
             }
@@ -883,12 +883,12 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
             if( rGraphic.GetType() == GRAPHIC_BITMAP )
             {
                 if( rGraphic.IsAnimated() )
-                    nExportFormat = CVT_GIF;
+                    nExportFormat = ConvertDataFormat::GIF;
                 else
-                    nExportFormat = CVT_PNG;
+                    nExportFormat = ConvertDataFormat::PNG;
             }
             else
-                nExportFormat = CVT_SVM;
+                nExportFormat = ConvertDataFormat::SVM;
         }
 
         const INetURLObject aURL( ImplCreateUniqueURL( SGA_OBJ_BMP, nExportFormat ) );
@@ -898,7 +898,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
         {
             pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
 
-            if( CVT_SVM == nExportFormat )
+            if( ConvertDataFormat::SVM == nExportFormat )
             {
                 GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
 
