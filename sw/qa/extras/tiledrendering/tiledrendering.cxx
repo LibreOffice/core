@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/dispatchcommand.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -30,6 +32,7 @@ public:
     void testSetTextSelection();
     void testSetGraphicSelection();
     void testResetSelection();
+    void testSearch();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -38,6 +41,7 @@ public:
     CPPUNIT_TEST(testSetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
+    CPPUNIT_TEST(testSearch);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -219,6 +223,43 @@ void SwTiledRenderingTest::testResetSelection()
     pXTextDocument->resetSelection();
     // We no longer have a graphic selection.
     CPPUNIT_ASSERT(!pWrtShell->IsSelFrmMode());
+}
+
+void lcl_search()
+{
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
+        {"SearchItem.Backward", uno::makeAny(false)}
+    }));
+    comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
+}
+
+void SwTiledRenderingTest::testSearch()
+{
+    SwXTextDocument* pXTextDocument = createDoc("search.odt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    size_t nNode = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
+
+    // First hit, in the second paragraph, before the shape.
+    lcl_search();
+    CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
+    size_t nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(nNode + 1, nActual);
+
+    // Next hit, in the shape.
+    lcl_search();
+    CPPUNIT_ASSERT(pWrtShell->GetDrawView()->GetTextEditObject());
+
+    // Next hit, in the shape, still.
+    lcl_search();
+    CPPUNIT_ASSERT(pWrtShell->GetDrawView()->GetTextEditObject());
+
+    // Last hit, in the last paragraph, after the shape.
+    lcl_search();
+    CPPUNIT_ASSERT(!pWrtShell->GetDrawView()->GetTextEditObject());
+    nActual = pWrtShell->getShellCrsr(false)->Start()->nNode.GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(nNode + 7, nActual);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
