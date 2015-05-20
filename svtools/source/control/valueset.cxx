@@ -980,7 +980,7 @@ void ValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
             Size aWinSize = rRenderContext.GetOutputSizePixel();
             Point aPos1(NAME_LINE_OFF_X, mnTextOffset + NAME_LINE_OFF_Y);
             Point aPos2(aWinSize.Width() - (NAME_LINE_OFF_X * 2), mnTextOffset + NAME_LINE_OFF_Y);
-            if (!(rStyleSettings.GetOptions() & STYLE_OPTION_MONO))
+            if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
             {
                 rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
                 rRenderContext.DrawLine(aPos1, aPos2);

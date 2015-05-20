@@ -85,7 +85,6 @@ using namespace ::dbtools::DBTypeConversion;
 using namespace ::dbtools;
 
 using ::com::sun::star::util::XNumberFormatter;
-namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
 const char INVALIDTEXT[] = "###";
 const char OBJECTTEXT[] = "<OBJECT>";
@@ -890,14 +889,14 @@ void DbCellControl::Init( vcl::Window& rParent, const Reference< XRowSet >& _rxC
 
             if ( xModelPSI->hasPropertyByName( FM_PROP_MOUSE_WHEEL_BEHAVIOR ) )
             {
-                sal_Int16 nWheelBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;
+                sal_Int16 nWheelBehavior = css::awt::MouseWheelBehavior::SCROLL_FOCUS_ONLY;
                 OSL_VERIFY( xModel->getPropertyValue( FM_PROP_MOUSE_WHEEL_BEHAVIOR ) >>= nWheelBehavior );
-                sal_uInt16 nVclSetting = MOUSE_WHEEL_FOCUS_ONLY;
+                MouseWheelBehaviour nVclSetting = MouseWheelBehaviour::FocusOnly;
                 switch ( nWheelBehavior )
                 {
-                case MouseWheelBehavior::SCROLL_DISABLED:   nVclSetting = MOUSE_WHEEL_DISABLE; break;
-                case MouseWheelBehavior::SCROLL_FOCUS_ONLY: nVclSetting = MOUSE_WHEEL_FOCUS_ONLY; break;
-                case MouseWheelBehavior::SCROLL_ALWAYS:     nVclSetting = MOUSE_WHEEL_ALWAYS; break;
+                case css::awt::MouseWheelBehavior::SCROLL_DISABLED:   nVclSetting = MouseWheelBehaviour::Disable; break;
+                case css::awt::MouseWheelBehavior::SCROLL_FOCUS_ONLY: nVclSetting = MouseWheelBehaviour::FocusOnly; break;
+                case css::awt::MouseWheelBehavior::SCROLL_ALWAYS:     nVclSetting = MouseWheelBehaviour::ALWAYS; break;
                 default:
                     OSL_FAIL( "DbCellControl::Init: invalid MouseWheelBehavior!" );
                     break;
@@ -1143,7 +1142,7 @@ void DbTextField::Init( vcl::Window& rParent, const Reference< XRowSet >& xCurso
         AllSettings aSettings = m_pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         aStyleSettings.SetSelectionOptions(
-            aStyleSettings.GetSelectionOptions() | SELECTION_OPTION_SHOWFIRST);
+            aStyleSettings.GetSelectionOptions() | SelectionOptions::ShowFirst);
         aSettings.SetStyleSettings(aStyleSettings);
         m_pWindow->SetSettings(aSettings);
     }
@@ -1271,7 +1270,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
             AllSettings aSettings = m_pWindow->GetSettings();
             StyleSettings aStyleSettings = aSettings.GetStyleSettings();
             aStyleSettings.SetSelectionOptions(
-                aStyleSettings.GetSelectionOptions() | SELECTION_OPTION_SHOWFIRST);
+                aStyleSettings.GetSelectionOptions() | SelectionOptions::ShowFirst);
             aSettings.SetStyleSettings(aStyleSettings);
             m_pWindow->SetSettings(aSettings);
     }
@@ -1622,9 +1621,9 @@ namespace
         AllSettings aSettings = _pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         if( bMono )
-            aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_MONO );
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() | StyleSettingsOptions::Mono );
         else
-            aStyleSettings.SetOptions( aStyleSettings.GetOptions() & (~STYLE_OPTION_MONO) );
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() & (~StyleSettingsOptions::Mono) );
         aSettings.SetStyleSettings( aStyleSettings );
         _pWindow->SetSettings( aSettings );
     }
@@ -2467,7 +2466,7 @@ void DbComboBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor
     AllSettings     aSettings = m_pWindow->GetSettings();
     StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
     aStyleSettings.SetSelectionOptions(
-        aStyleSettings.GetSelectionOptions() | SELECTION_OPTION_SHOWFIRST);
+        aStyleSettings.GetSelectionOptions() | SelectionOptions::ShowFirst);
     aSettings.SetStyleSettings(aStyleSettings);
     m_pWindow->SetSettings(aSettings, true);
 
@@ -2768,7 +2767,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::
             AllSettings     aSettings = m_pWindow->GetSettings();
             StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
             aStyleSettings.SetSelectionOptions(
-                           aStyleSettings.GetSelectionOptions() | SELECTION_OPTION_SHOWFIRST);
+                           aStyleSettings.GetSelectionOptions() | SelectionOptions::ShowFirst);
             aSettings.SetStyleSettings(aStyleSettings);
             m_pWindow->SetSettings(aSettings, true);
 
@@ -2789,7 +2788,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::
             AllSettings     aSettings = m_pWindow->GetSettings();
             StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
             aStyleSettings.SetSelectionOptions(
-                           aStyleSettings.GetSelectionOptions() | SELECTION_OPTION_SHOWFIRST);
+                           aStyleSettings.GetSelectionOptions() | SelectionOptions::ShowFirst);
             aSettings.SetStyleSettings(aStyleSettings);
             m_pWindow->SetSettings(aSettings, true);
         }

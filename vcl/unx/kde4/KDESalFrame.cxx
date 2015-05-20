@@ -166,7 +166,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     // General settings
     QPalette pal = QApplication::palette();
 
-    style.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
+    style.SetToolbarIconSize( ToolbarIconSize::Large );
 
     style.SetActiveColor(toColor(pal.color(QPalette::Active, QPalette::Window)));
     style.SetDeactiveColor(toColor(pal.color(QPalette::Inactive, QPalette::Window)));

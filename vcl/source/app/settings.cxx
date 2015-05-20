@@ -60,23 +60,23 @@ struct ImplMouseData
                                     ImplMouseData();
                                     ImplMouseData( const ImplMouseData& rData );
 
-    sal_uLong                           mnOptions;
-    sal_uInt64                          mnDoubleClkTime;
+    MouseSettingsOptions            mnOptions;
+    sal_uInt64                      mnDoubleClkTime;
     long                            mnDoubleClkWidth;
     long                            mnDoubleClkHeight;
     long                            mnStartDragWidth;
     long                            mnStartDragHeight;
-    sal_uInt16                          mnStartDragCode;
-    sal_uInt16                          mnContextMenuCode;
-    sal_uInt16                          mnContextMenuClicks;
-    sal_uLong                           mnScrollRepeat;
-    sal_uLong                           mnButtonStartRepeat;
-    sal_uLong                           mnButtonRepeat;
-    sal_uLong                           mnActionDelay;
-    sal_uLong                           mnMenuDelay;
-    sal_uLong                           mnFollow;
-    sal_uInt16                          mnMiddleButtonAction;
-    sal_uInt16                          mnWheelBehavior;
+    sal_uInt16                      mnStartDragCode;
+    sal_uInt16                      mnContextMenuCode;
+    sal_uInt16                      mnContextMenuClicks;
+    sal_uLong                       mnScrollRepeat;
+    sal_uLong                       mnButtonStartRepeat;
+    sal_uLong                       mnButtonRepeat;
+    sal_uLong                       mnActionDelay;
+    sal_uLong                       mnMenuDelay;
+    MouseFollowFlags                mnFollow;
+    MouseMiddleButtonAction         mnMiddleButtonAction;
+    MouseWheelBehaviour             mnWheelBehavior;
 };
 
 struct ImplStyleData
@@ -162,12 +162,12 @@ struct ImplStyleData
     long                            mnCursorSize;
     long                            mnAntialiasedMin;
     sal_uInt64                      mnCursorBlinkTime;
-    sal_uLong                       mnDragFullOptions;
-    sal_uLong                       mnSelectionOptions;
-    sal_uLong                       mnDisplayOptions;
-    sal_uLong                       mnToolbarIconSize;
+    DragFullOptions                 mnDragFullOptions;
+    SelectionOptions                mnSelectionOptions;
+    DisplayOptions                  mnDisplayOptions;
+    ToolbarIconSize                 mnToolbarIconSize;
     bool                            mnUseFlatMenus;
-    sal_uLong                       mnOptions;
+    StyleSettingsOptions            mnOptions;
     sal_uInt16                      mnScreenZoom;
     sal_uInt16                      mnScreenFontZoom;
     bool                            mbHighContrast;
@@ -253,7 +253,7 @@ struct ImplAllSettingsData
 
 ImplMouseData::ImplMouseData()
 {
-    mnOptions                   = 0;
+    mnOptions                   = MouseSettingsOptions::NONE;
     mnDoubleClkTime             = 500;
     mnDoubleClkWidth            = 2;
     mnDoubleClkHeight           = 2;
@@ -262,14 +262,14 @@ ImplMouseData::ImplMouseData()
     mnStartDragCode             = MOUSE_LEFT;
     mnContextMenuCode           = MOUSE_RIGHT;
     mnContextMenuClicks         = 1;
-    mnMiddleButtonAction        = MOUSE_MIDDLE_AUTOSCROLL;
+    mnMiddleButtonAction        = MouseMiddleButtonAction::AutoScroll;
     mnScrollRepeat              = 100;
     mnButtonStartRepeat         = 370;
     mnButtonRepeat              = 90;
     mnActionDelay               = 250;
     mnMenuDelay                 = 150;
-    mnFollow                    = MOUSE_FOLLOW_MENU | MOUSE_FOLLOW_DDLIST;
-    mnWheelBehavior             = MOUSE_WHEEL_ALWAYS;
+    mnFollow                    = MouseFollowFlags::Menu | MouseFollowFlags::DDList;
+    mnWheelBehavior             = MouseWheelBehaviour::ALWAYS;
 }
 
 ImplMouseData::ImplMouseData( const ImplMouseData& rData )
@@ -294,13 +294,13 @@ ImplMouseData::ImplMouseData( const ImplMouseData& rData )
 }
 
 void
-MouseSettings::SetOptions(sal_uLong nOptions)
+MouseSettings::SetOptions(MouseSettingsOptions nOptions)
 {
     CopyData();
     mxData->mnOptions = nOptions;
 }
 
-sal_uLong
+MouseSettingsOptions
 MouseSettings::GetOptions() const
 {
     return mxData->mnOptions;
@@ -434,39 +434,39 @@ MouseSettings::GetMenuDelay() const
 }
 
 void
-MouseSettings::SetFollow( sal_uLong nFollow )
+MouseSettings::SetFollow( MouseFollowFlags nFollow )
 {
     CopyData();
     mxData->mnFollow = nFollow;
 }
 
-sal_uLong
+MouseFollowFlags
 MouseSettings::GetFollow() const
 {
     return mxData->mnFollow;
 }
 
 void
-MouseSettings::SetMiddleButtonAction( sal_uInt16 nAction )
+MouseSettings::SetMiddleButtonAction( MouseMiddleButtonAction nAction )
 {
     CopyData();
     mxData->mnMiddleButtonAction = nAction;
 }
 
-sal_uInt16
+MouseMiddleButtonAction
 MouseSettings::GetMiddleButtonAction() const
 {
     return mxData->mnMiddleButtonAction;
 }
 
 void
-MouseSettings::SetWheelBehavior( sal_uInt16 nBehavior )
+MouseSettings::SetWheelBehavior( MouseWheelBehaviour nBehavior )
 {
     CopyData();
     mxData->mnWheelBehavior = nBehavior;
 }
 
-sal_uInt16
+MouseWheelBehaviour
 MouseSettings::GetWheelBehavior() const
 {
     return mxData->mnWheelBehavior;
@@ -539,12 +539,12 @@ ImplStyleData::ImplStyleData() :
     mnCursorBlinkTime           = STYLE_CURSOR_NOBLINKTIME;
     mnScreenZoom                = 100;
     mnScreenFontZoom            = 100;
-    mnDragFullOptions           = DRAGFULL_OPTION_ALL;
-    mnSelectionOptions          = 0;
-    mnDisplayOptions            = 0;
-    mnOptions                   = 0;
+    mnDragFullOptions           = DragFullOptions::All;
+    mnSelectionOptions          = SelectionOptions::NONE;
+    mnDisplayOptions            = DisplayOptions::NONE;
+    mnOptions                   = StyleSettingsOptions::NONE;
     mbAutoMnemonic              = true;
-    mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
+    mnToolbarIconSize           = ToolbarIconSize::Unknown;
     meUseImagesInMenus          = TRISTATE_INDET;
     mpFontOptions              = NULL;
     mnEdgeBlending = 35;
@@ -1877,39 +1877,39 @@ StyleSettings::GetScreenFontZoom() const
 }
 
 void
-StyleSettings::SetDragFullOptions( sal_uLong nOptions )
+StyleSettings::SetDragFullOptions( DragFullOptions nOptions )
 {
     CopyData();
     mxData->mnDragFullOptions = nOptions;
 }
 
-sal_uLong
+DragFullOptions
 StyleSettings::GetDragFullOptions() const
 {
     return mxData->mnDragFullOptions;
 }
 
 void
-StyleSettings::SetSelectionOptions( sal_uLong nOptions )
+StyleSettings::SetSelectionOptions( SelectionOptions nOptions )
 {
     CopyData();
     mxData->mnSelectionOptions = nOptions;
 }
 
-sal_uLong
+SelectionOptions
 StyleSettings::GetSelectionOptions() const
 {
     return mxData->mnSelectionOptions;
 }
 
 void
-StyleSettings::SetDisplayOptions( sal_uLong nOptions )
+StyleSettings::SetDisplayOptions( DisplayOptions nOptions )
 {
     CopyData();
     mxData->mnDisplayOptions = nOptions;
 }
 
-sal_uLong
+DisplayOptions
 StyleSettings::GetDisplayOptions() const
 {
     return mxData->mnDisplayOptions;
@@ -1929,7 +1929,7 @@ StyleSettings::GetAntialiasingMinPixelHeight() const
 }
 
 void
-StyleSettings::SetOptions( sal_uLong nOptions )
+StyleSettings::SetOptions( StyleSettingsOptions nOptions )
 {
     CopyData();
     mxData->mnOptions = nOptions;
@@ -1962,13 +1962,13 @@ StyleSettings::GetFontColor() const
 }
 
 void
-StyleSettings::SetToolbarIconSize( sal_uLong nSize )
+StyleSettings::SetToolbarIconSize( ToolbarIconSize nSize )
 {
     CopyData();
     mxData->mnToolbarIconSize = nSize;
 }
 
-sal_uLong
+ToolbarIconSize
 StyleSettings::GetToolbarIconSize() const
 {
     return mxData->mnToolbarIconSize;
@@ -2993,7 +2993,7 @@ AllSettings::GetStyleSettings() const
     return mxData->maStyleSettings;
 }
 
-sal_uLong
+StyleSettingsOptions
 StyleSettings::GetOptions() const
 {
     return mxData->mnOptions;

@@ -82,7 +82,6 @@ using ::com::sun::star::style::VerticalAlignment_BOTTOM;
 using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
-namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
 
 //= VCLXWindowImpl
@@ -1426,18 +1425,18 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 
         case BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR:
         {
-            sal_uInt16 nWheelBehavior( MouseWheelBehavior::SCROLL_FOCUS_ONLY );
+            sal_uInt16 nWheelBehavior( css::awt::MouseWheelBehavior::SCROLL_FOCUS_ONLY );
             OSL_VERIFY( Value >>= nWheelBehavior );
 
             AllSettings aSettings = pWindow->GetSettings();
             MouseSettings aMouseSettings = aSettings.GetMouseSettings();
 
-            sal_uInt16 nVclBehavior( MOUSE_WHEEL_FOCUS_ONLY );
+            MouseWheelBehaviour nVclBehavior( MouseWheelBehaviour::FocusOnly );
             switch ( nWheelBehavior )
             {
-            case MouseWheelBehavior::SCROLL_DISABLED:   nVclBehavior = MOUSE_WHEEL_DISABLE;     break;
-            case MouseWheelBehavior::SCROLL_FOCUS_ONLY: nVclBehavior = MOUSE_WHEEL_FOCUS_ONLY;  break;
-            case MouseWheelBehavior::SCROLL_ALWAYS:     nVclBehavior = MOUSE_WHEEL_ALWAYS;      break;
+            case css::awt::MouseWheelBehavior::SCROLL_DISABLED:   nVclBehavior = MouseWheelBehaviour::Disable;     break;
+            case css::awt::MouseWheelBehavior::SCROLL_FOCUS_ONLY: nVclBehavior = MouseWheelBehaviour::FocusOnly;  break;
+            case css::awt::MouseWheelBehavior::SCROLL_ALWAYS:     nVclBehavior = MouseWheelBehaviour::ALWAYS;      break;
             default:
                 OSL_FAIL( "VCLXWindow::setProperty( 'MouseWheelBehavior' ): illegal property value!" );
             }
@@ -1943,13 +1942,13 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 
             case BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR:
             {
-                sal_uInt16 nVclBehavior = GetWindow()->GetSettings().GetMouseSettings().GetWheelBehavior();
-                sal_Int16 nBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;
+                MouseWheelBehaviour nVclBehavior = GetWindow()->GetSettings().GetMouseSettings().GetWheelBehavior();
+                sal_uInt16 nBehavior = css::awt::MouseWheelBehavior::SCROLL_FOCUS_ONLY;
                 switch ( nVclBehavior )
                 {
-                case MOUSE_WHEEL_DISABLE:       nBehavior = MouseWheelBehavior::SCROLL_DISABLED;    break;
-                case MOUSE_WHEEL_FOCUS_ONLY:    nBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;  break;
-                case MOUSE_WHEEL_ALWAYS:        nBehavior = MouseWheelBehavior::SCROLL_ALWAYS;      break;
+                case MouseWheelBehaviour::Disable:       nBehavior = css::awt::MouseWheelBehavior::SCROLL_DISABLED;    break;
+                case MouseWheelBehaviour::FocusOnly:     nBehavior = css::awt::MouseWheelBehavior::SCROLL_FOCUS_ONLY;  break;
+                case MouseWheelBehaviour::ALWAYS:        nBehavior = css::awt::MouseWheelBehavior::SCROLL_ALWAYS;      break;
                 default:
                     OSL_FAIL( "VCLXWindow::getProperty( 'MouseWheelBehavior' ): illegal VCL value!" );
                 }
