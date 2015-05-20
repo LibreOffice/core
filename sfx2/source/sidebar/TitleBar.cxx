@@ -39,13 +39,12 @@ namespace sfx2 { namespace sidebar {
 TitleBar::TitleBar(const OUString& rsTitle,
                    vcl::Window* pParentWindow,
                    const sidebar::Paint& rInitialBackgroundPaint)
-    : Window(pParentWindow),
-      maToolBox(VclPtr<SidebarToolBox>::Create(this)),
-      msTitle(rsTitle),
-      maIcon()
+    : Window(pParentWindow)
+    , maToolBox(VclPtr<SidebarToolBox>::Create(this))
+    , msTitle(rsTitle)
+    , maIcon()
+    , maBackgroundPaint(rInitialBackgroundPaint)
 {
-    SetBackground(rInitialBackgroundPaint.GetWallpaper());
-
     maToolBox->SetSelectHdl(LINK(this, TitleBar, SelectionHandler));
 }
 
@@ -72,6 +71,11 @@ void TitleBar::SetIcon(const Image& rIcon)
     Invalidate();
 }
 
+void TitleBar::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    rRenderContext.SetBackground(maBackgroundPaint.GetWallpaper());
+}
+
 void TitleBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rUpdateArea*/)
 {
     // Paint title bar background.
@@ -84,11 +88,10 @@ void TitleBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rUpd
     PaintFocus(rRenderContext, aTitleBox);
 }
 
-void TitleBar::DataChanged (const DataChangedEvent& rEvent)
+void TitleBar::DataChanged (const DataChangedEvent& /*rEvent*/)
 {
-    (void)rEvent;
-
-    SetBackground(GetBackgroundPaint().GetWallpaper());
+    maBackgroundPaint = GetBackgroundPaint();
+    Invalidate();
 }
 
 void TitleBar::setPosSizePixel (long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)

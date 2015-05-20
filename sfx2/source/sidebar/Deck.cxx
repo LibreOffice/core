@@ -50,8 +50,6 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
     , mpFiller(VclPtr<vcl::Window>::Create(this))
     , mpVerticalScrollBar(VclPtr<ScrollBar>::Create(this))
 {
-    SetBackground(Wallpaper());
-
     mpScrollClipWindow->SetBackground(Wallpaper());
     mpScrollClipWindow->Show();
 
@@ -111,10 +109,13 @@ Rectangle Deck::GetContentArea() const
         aWindowSize.Height() - 1 - Theme::GetInteger(Theme::Int_DeckBottomPadding) - nBorderSize);
 }
 
-void Deck::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea)
+void Deck::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    (void) rUpdateArea;
+    rRenderContext.SetBackground(Wallpaper());
+}
 
+void Deck::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rUpdateArea*/)
+{
     const Size aWindowSize (GetSizePixel());
     const SvBorder aPadding(Theme::GetInteger(Theme::Int_DeckLeftPadding),
                             Theme::GetInteger(Theme::Int_DeckTopPadding),

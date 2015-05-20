@@ -64,9 +64,10 @@ public:
     */
     void ShowPanel (const Panel& rPanel);
 
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
-    virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
+    virtual bool Notify(NotifyEvent& rEvent) SAL_OVERRIDE;
 
     static void PrintWindowSubTree (vcl::Window* pRoot, int nIndentation);
 

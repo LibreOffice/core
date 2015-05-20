@@ -38,6 +38,7 @@ public:
     void SetTitle (const ::rtl::OUString& rsTitle);
     void SetIcon (const Image& rIcon);
 
+    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
     virtual void setPosSizePixel (long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL) SAL_OVERRIDE;
@@ -65,6 +66,7 @@ protected:
 
 private:
     Image maIcon;
+    sidebar::Paint maBackgroundPaint;
 
     void PaintTitle(vcl::RenderContext& rRenderContext, const Rectangle& rTitleBox);
     DECL_LINK_TYPED(SelectionHandler, ToolBox*, void);
