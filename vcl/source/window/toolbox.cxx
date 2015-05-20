@@ -2980,7 +2980,7 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle
 void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint, bool bLayout)
 {
 
-    if( nPos >= mpData->m_aItems.size() )
+    if (nPos >= mpData->m_aItems.size())
         return;
 
     // execute pending paint requests
@@ -4055,8 +4055,11 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
 
 void ToolBox::InvalidateItem(sal_uInt16 nPosition)
 {
-    ImplToolItem* pItem = &mpData->m_aItems[nPosition];
-    Invalidate(pItem->maRect);
+    if (nPosition < mpData->m_aItems.size())
+    {
+        ImplToolItem* pItem = &mpData->m_aItems[nPosition];
+        Invalidate(pItem->maRect);
+    }
 }
 
 void ToolBox::InvalidateMenuButton()
