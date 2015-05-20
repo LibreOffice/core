@@ -20,8 +20,6 @@
 
 #include "XMLFootnoteSeparatorExport.hxx"
 
-#include <tools/debug.hxx>
-
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmlexp.hxx>
@@ -51,14 +49,10 @@ XMLFootnoteSeparatorExport::~XMLFootnoteSeparatorExport()
 
 void XMLFootnoteSeparatorExport::exportXML(
     const vector<XMLPropertyState> * pProperties,
-    sal_uInt32
-    #ifdef DBG_UTIL
-    nIdx
-    #endif
-    ,
+    sal_uInt32 const nIdx,
     const rtl::Reference<XMLPropertySetMapper> & rMapper)
 {
-    DBG_ASSERT(NULL != pProperties, "Need property states");
+    assert(pProperties);
 
     // intialize values
     sal_Int16 eLineAdjust = text::HorizontalAdjust_LEFT;
@@ -96,8 +90,8 @@ void XMLFootnoteSeparatorExport::exportXML(
             rState.maValue >>= nLineTextDistance;
             break;
         case CTF_PM_FTN_LINE_WEIGHT:
-            DBG_ASSERT( i == nIdx,
-                        "received wrong property state index" );
+            (void) nIdx;
+            assert(i == nIdx && "received wrong property state index");
             rState.maValue >>= nLineWeight;
             break;
         case CTF_PM_FTN_LINE_STYLE:
