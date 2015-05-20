@@ -90,7 +90,7 @@ private:
 };
 
 class MissingPluginInstaller {
-    friend MissingPluginInstallerThread;
+    friend class MissingPluginInstallerThread;
 
 public:
     MissingPluginInstaller(): launchNewThread_(true), inCleanUp_(false) {}
