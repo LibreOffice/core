@@ -4086,7 +4086,7 @@ void Test::testCopyPasteRepeatOneFormula()
     ScRange aRowOne(0,0,0,MAXCOL,0,0);
     aMark.SetMarkArea(aRowOne);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    rFunc.InsertCells(aRowOne, &aMark, INS_INSROWS, true, true, false);
+    rFunc.InsertCells(aRowOne, &aMark, INS_INSROWS_BEFORE, true, true, false);
 
     CPPUNIT_ASSERT_MESSAGE("C1 should be empty.", m_pDoc->GetCellType(ScAddress(2,0,0)) == CELLTYPE_NONE);
 
@@ -4143,7 +4143,7 @@ void Test::testMergedCells()
     ScRange aRange(0,2,0,MAXCOL,2,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
-    getDocShell().GetDocFunc().InsertCells(aRange, &aMark, INS_INSROWS, true, true);
+    getDocShell().GetDocFunc().InsertCells(aRange, &aMark, INS_INSROWS_BEFORE, true, true);
     m_pDoc->ExtendMerge(1, 1, nEndCol, nEndRow, 0, false);
     CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
     m_pDoc->DeleteTab(0);

@@ -1573,7 +1573,7 @@ void Test::testFormulaRefUpdateInsertRows()
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    rFunc.InsertCells(ScRange(0,0,0,MAXCOL,1,0), &aMark, INS_INSROWS, false, true, false);
+    rFunc.InsertCells(ScRange(0,0,0,MAXCOL,1,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
 
     // The raw data should have shifted to B4:B6.
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,3,0)));
@@ -1597,7 +1597,7 @@ void Test::testFormulaRefUpdateInsertRows()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,2,0)));
 
     // Insert 3 rows over 2:4.  This should push A3:A6 to A6:A9.
-    rFunc.InsertCells(ScRange(0,1,0,MAXCOL,3,0), &aMark, INS_INSROWS, false, true, false);
+    rFunc.InsertCells(ScRange(0,1,0,MAXCOL,3,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,5,0));
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_MESSAGE("This formula cell should not be an error.", pFC->GetErrCode() == 0);
@@ -2485,7 +2485,7 @@ void Test::testFormulaRefUpdateNameExpandRef()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rFunc.InsertCells(ScRange(0,3,0,MAXCOL,3,0), &aMark, INS_INSROWS, false, true, false);
+    rFunc.InsertCells(ScRange(0,3,0,MAXCOL,3,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
     ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pName);
     OUString aSymbol;
@@ -2514,7 +2514,7 @@ void Test::testFormulaRefUpdateNameExpandRef()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(0,0,0));
 
     // Insert rows over 3:5 which should expand the range by 3 rows.
-    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,4,0), &aMark, INS_INSROWS, false, true, false);
+    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,4,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
 
     pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT(pName);
@@ -2557,7 +2557,7 @@ void Test::testFormulaRefUpdateNameExpandRef()
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(4,0,0)));
 
     // Insert a new row at row 3.  This should expand MyData to A1:A4.
-    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, INS_INSROWS, false, true, false);
+    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
 
     // Set new value to A3.
     m_pDoc->SetValue(ScAddress(0,2,0), 4.0);
@@ -3039,7 +3039,7 @@ void Test::testFuncROW()
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    rFunc.InsertCells(ScRange(0,3,0,MAXCOL,3,0), &aMark, INS_INSROWS, false, true, false);
+    rFunc.InsertCells(ScRange(0,3,0,MAXCOL,3,0), &aMark, INS_INSROWS_BEFORE, false, true, false);
     if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "ROW(A6)"))
         CPPUNIT_FAIL("Wrong formula!");
     if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "ROW(B6)"))

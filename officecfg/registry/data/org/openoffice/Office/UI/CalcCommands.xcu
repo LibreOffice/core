@@ -1059,7 +1059,7 @@
           <value xml:lang="en-US">~Cells...</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertRows" oor:op="replace">
+      <node oor:name=".uno:InsertRowsBefore" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert ~Rows Above</value>
         </prop>
@@ -1070,7 +1070,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertColumns" oor:op="replace">
+      <node oor:name=".uno:InsertColumnsBefore" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Co~lumns Left</value>
         </prop>
