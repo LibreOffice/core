@@ -20,6 +20,10 @@
 
 #include <sfx2/app.hxx>
 
+#define ITEMID_NAME 1
+#define ITEMID_RANGE 2
+#define ITEMID_SCOPE 3
+
 #define MINSIZE 80
 
 static OUString createEntryString(const ScRangeNameLine& rLine)
