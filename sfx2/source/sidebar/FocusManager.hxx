@@ -50,7 +50,7 @@ class DeckTitleBar;
 class FocusManager
 {
 public:
-    FocusManager (const ::boost::function<void(const Panel&)>& rShowPanelFunctor);
+    FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor);
     ~FocusManager();
 
     /** Forget all panels and buttons.  Remove all window listeners.
@@ -63,15 +63,15 @@ public:
     */
     void GrabFocus();
 
-    void SetDeckTitle (DeckTitleBar* pDeckTitleBar);
-    void SetPanels (const SharedPanelContainer& rPanels);
-    void SetButtons (const ::std::vector<Button*>& rButtons);
+    void SetDeckTitle(DeckTitleBar* pDeckTitleBar);
+    void SetPanels(const SharedPanelContainer& rPanels);
+    void SetButtons(const ::std::vector<Button*>& rButtons);
 
 private:
     VclPtr<DeckTitleBar> mpDeckTitleBar;
-    ::std::vector<VclPtr<Panel> > maPanels;
-    ::std::vector<VclPtr<Button> > maButtons;
-    const ::boost::function<void(const Panel&)> maShowPanelFunctor;
+    std::vector<VclPtr<Panel> > maPanels;
+    std::vector<VclPtr<Button> > maButtons;
+    const std::function<void(const Panel&)> maShowPanelFunctor;
     bool mbObservingContentControlFocus;
     VclPtr<vcl::Window> mpFirstFocusedContentControl;
     VclPtr<vcl::Window> mpLastFocusedWindow;
@@ -91,7 +91,7 @@ private:
     public:
         PanelComponent meComponent;
         sal_Int32 mnIndex;
-        FocusLocation (const PanelComponent eComponent, const sal_Int32 nIndex);
+        FocusLocation(const PanelComponent eComponent, const sal_Int32 nIndex);
     };
 
     /** Listen for key events for panels and buttons.
@@ -105,16 +105,16 @@ private:
     /** Let the focus manager listen for window events for the given
         window.
     */
-    void RegisterWindow (vcl::Window& rWindow);
-    void UnregisterWindow (vcl::Window& rWindow);
+    void RegisterWindow(vcl::Window& rWindow);
+    void UnregisterWindow(vcl::Window& rWindow);
 
     /** Remove the window from the panel or the button container.
     */
-    void RemoveWindow (vcl::Window& rWindow);
+    void RemoveWindow(vcl::Window& rWindow);
 
     void FocusDeckTitle();
     bool IsDeckTitleVisible() const;
-    bool IsPanelTitleVisible (const sal_Int32 nPanelIndex) const;
+    bool IsPanelTitleVisible(const sal_Int32 nPanelIndex) const;
 
     /** Set the focus to the title bar of the panel or, if the
         title bar is not visible, directly to the panel.
@@ -125,25 +125,21 @@ private:
             bias defines whether to focus the deck (true) or the panel
             content (false) will be focused instead.
     */
-    void FocusPanel (
-        const sal_Int32 nPanelIndex,
-        const bool bFallbackToDeckTitle);
+    void FocusPanel(const sal_Int32 nPanelIndex,
+                    const bool bFallbackToDeckTitle);
 
-    void FocusPanelContent (const sal_Int32 nPanelIndex);
-    void FocusButton (const sal_Int32 nButtonIndex);
-    void ClickButton (const sal_Int32 nButtonIndex);
-    bool MoveFocusInsidePanel (
-        const FocusLocation& rLocation,
-        const sal_Int32 nDirection);
-    bool MoveFocusInsideDeckTitle (
-        const FocusLocation& rLocation,
-        const sal_Int32 nDirection);
+    void FocusPanelContent(const sal_Int32 nPanelIndex);
+    void FocusButton(const sal_Int32 nButtonIndex);
+    void ClickButton(const sal_Int32 nButtonIndex);
+    bool MoveFocusInsidePanel(const FocusLocation& rLocation,
+                              const sal_Int32 nDirection);
+    bool MoveFocusInsideDeckTitle(const FocusLocation& rLocation,
+                                  const sal_Int32 nDirection);
 
-    void HandleKeyEvent (
-        const vcl::KeyCode& rKeyCode,
-        const vcl::Window& rWindow);
+    void HandleKeyEvent(const vcl::KeyCode& rKeyCode,
+                         const vcl::Window& rWindow);
 
-    FocusLocation GetFocusLocation (const vcl::Window& rWindow) const;
+    FocusLocation GetFocusLocation(const vcl::Window& rWindow) const;
 
 };
 

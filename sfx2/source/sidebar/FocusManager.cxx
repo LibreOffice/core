@@ -35,7 +35,7 @@ FocusManager::FocusLocation::FocusLocation (const PanelComponent eComponent, con
 {
 }
 
-FocusManager::FocusManager (const ::boost::function<void(const Panel&)>& rShowPanelFunctor)
+FocusManager::FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor)
     : mpDeckTitleBar(),
       maPanels(),
       maButtons(),
@@ -65,11 +65,9 @@ void FocusManager::Clear()
 
 void FocusManager::ClearPanels()
 {
-    ::std::vector<VclPtr<Panel> > aPanels;
+    std::vector<VclPtr<Panel> > aPanels;
     aPanels.swap(maPanels);
-    for (auto iPanel(aPanels.begin()),iEnd(aPanels.end());
-         iPanel!=iEnd;
-        ++iPanel)
+    for (auto iPanel(aPanels.begin()),iEnd(aPanels.end()); iPanel != iEnd; ++iPanel)
     {
         UnregisterWindow(**iPanel);
         if ((*iPanel)->GetTitleBar() != NULL)
@@ -84,11 +82,9 @@ void FocusManager::ClearPanels()
 
 void FocusManager::ClearButtons()
 {
-    ::std::vector<VclPtr<Button> > aButtons;
+    std::vector<VclPtr<Button> > aButtons;
     aButtons.swap(maButtons);
-    for (auto iButton(aButtons.begin()),iEnd(aButtons.end());
-         iButton!=iEnd;
-        ++iButton)
+    for (auto iButton = aButtons.begin(); iButton != aButtons.end(); ++iButton)
     {
         UnregisterWindow(**iButton);
     }
@@ -113,9 +109,7 @@ void FocusManager::SetDeckTitle (DeckTitleBar* pDeckTitleBar)
 void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
 {
     ClearPanels();
-    for(SharedPanelContainer::const_iterator iPanel(rPanels.begin()),iEnd(rPanels.end());
-        iPanel!=iEnd;
-        ++iPanel)
+    for (auto iPanel = rPanels.begin(); iPanel != rPanels.end(); ++iPanel)
     {
         RegisterWindow(**iPanel);
         if ((*iPanel)->GetTitleBar() != NULL)
@@ -134,9 +128,7 @@ void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
 void FocusManager::SetButtons (const ::std::vector<Button*>& rButtons)
 {
     ClearButtons();
-    for (::std::vector<Button*>::const_iterator iButton(rButtons.begin()),iEnd(rButtons.end());
-         iButton!=iEnd;
-         ++iButton)
+    for (auto iButton = rButtons.begin(); iButton != rButtons.end(); ++iButton)
     {
         RegisterWindow(**iButton);
         maButtons.push_back(*iButton);
@@ -165,7 +157,7 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& r
     }
 
     // Search the panels.
-    for (sal_Int32 nIndex=0,nCount(maPanels.size()); nIndex<nCount; ++nIndex)
+    for (size_t nIndex = 0; nIndex < maPanels.size(); ++nIndex)
     {
         if (maPanels[nIndex] == &rWindow)
             return FocusLocation(PC_PanelContent, nIndex);
@@ -177,10 +169,11 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& r
     }
 
     // Search the buttons.
-    for (sal_Int32 nIndex=0,nCount(maButtons.size()); nIndex<nCount; ++nIndex)
+    for (size_t nIndex=0; nIndex < maButtons.size(); ++nIndex)
+    {
         if (maButtons[nIndex] == &rWindow)
             return FocusLocation(PC_TabBar, nIndex);
-
+    }
     return FocusLocation(PC_None, -1);
 }
 
@@ -558,7 +551,7 @@ IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
     if (pEvent == NULL)
         return 0;
 
-    if ( ! pEvent->ISA(VclWindowEvent))
+    if (!pEvent->ISA(VclWindowEvent))
         return 0;
 
     VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);

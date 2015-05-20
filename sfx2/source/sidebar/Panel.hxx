@@ -25,7 +25,6 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 
-#include <boost/function.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <vector>
@@ -36,16 +35,12 @@ class PanelDescriptor;
 class TitleBar;
 class PanelTitleBar;
 
-class Panel
-    : public vcl::Window
+class Panel : public vcl::Window
 {
 public:
-    Panel (
-        const PanelDescriptor& rPanelDescriptor,
-        vcl::Window* pParentWindow,
-        const bool bIsInitiallyExpanded,
-        const ::boost::function<void()>& rDeckLayoutTrigger,
-        const ::boost::function<Context()>& rContextAccess);
+    Panel(const PanelDescriptor& rPanelDescriptor, vcl::Window* pParentWindow,
+          const bool bIsInitiallyExpanded, const std::function<void()>& rDeckLayoutTrigger,
+          const std::function<Context()>& rContextAccess);
     virtual ~Panel();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -56,8 +51,8 @@ public:
     css::uno::Reference<css::awt::XWindow> GetElementWindow();
     void SetExpanded (const bool bIsExpanded);
     bool IsExpanded() const { return mbIsExpanded;}
-    bool HasIdPredicate (const ::rtl::OUString& rsId) const;
-    const ::rtl::OUString& GetId() const { return msPanelId;}
+    bool HasIdPredicate (const OUString& rsId) const;
+    const OUString& GetId() const { return msPanelId;}
 
     virtual void Paint (vcl::RenderContext& rRenderContext, const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
@@ -65,16 +60,16 @@ public:
     virtual void Activate() SAL_OVERRIDE;
 
 private:
-    const ::rtl::OUString msPanelId;
+    const OUString msPanelId;
     VclPtr<PanelTitleBar> mpTitleBar;
     const bool mbIsTitleBarOptional;
     css::uno::Reference<css::ui::XUIElement> mxElement;
     css::uno::Reference<css::ui::XSidebarPanel> mxPanelComponent;
     bool mbIsExpanded;
-    const ::boost::function<void()> maDeckLayoutTrigger;
-    const ::boost::function<Context()> maContextAccess;
+    const std::function<void()> maDeckLayoutTrigger;
+    const std::function<Context()> maContextAccess;
 };
-typedef ::std::vector< VclPtr< Panel > > SharedPanelContainer;
+typedef std::vector<VclPtr<Panel> > SharedPanelContainer;
 
 } } // end of namespace sfx2::sidebar
 

@@ -46,17 +46,17 @@ namespace sfx2 { namespace sidebar {
 Panel::Panel(const PanelDescriptor& rPanelDescriptor,
              vcl::Window* pParentWindow,
              const bool bIsInitiallyExpanded,
-             const boost::function<void()>& rDeckLayoutTrigger,
-             const boost::function<Context()>& rContextAccess)
-    : Window(pParentWindow),
-      msPanelId(rPanelDescriptor.msId),
-      mpTitleBar(VclPtr<PanelTitleBar>::Create(rPanelDescriptor.msTitle, pParentWindow, this)),
-      mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional),
-      mxElement(),
-      mxPanelComponent(),
-      mbIsExpanded(bIsInitiallyExpanded),
-      maDeckLayoutTrigger(rDeckLayoutTrigger),
-      maContextAccess(rContextAccess)
+             const std::function<void()>& rDeckLayoutTrigger,
+             const std::function<Context()>& rContextAccess)
+    : Window(pParentWindow)
+    , msPanelId(rPanelDescriptor.msId)
+    , mpTitleBar(VclPtr<PanelTitleBar>::Create(rPanelDescriptor.msTitle, pParentWindow, this))
+    , mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional)
+    , mxElement()
+    , mxPanelComponent()
+    , mbIsExpanded(bIsInitiallyExpanded)
+    , maDeckLayoutTrigger(rDeckLayoutTrigger)
+    , maContextAccess(rContextAccess)
 {
     SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
 
@@ -114,14 +114,16 @@ void Panel::SetExpanded (const bool bIsExpanded)
         maDeckLayoutTrigger();
 
         if (maContextAccess)
+        {
             ResourceManager::Instance().StorePanelExpansionState(
                 msPanelId,
                 bIsExpanded,
                 maContextAccess());
+        }
     }
 }
 
-bool Panel::HasIdPredicate (const ::rtl::OUString& rsId) const
+bool Panel::HasIdPredicate (const OUString& rsId) const
 {
     return msPanelId.equals(rsId);
 }
@@ -140,8 +142,8 @@ void Panel::Resize()
     if(xElementWindow.is())
     {
         const Size aSize(GetSizePixel());
-        xElementWindow->setPosSize(
-            0, 0, aSize.Width(), aSize.Height(), awt::PosSize::POSSIZE);
+        xElementWindow->setPosSize(0, 0, aSize.Width(), aSize.Height(),
+                                   awt::PosSize::POSSIZE);
     }
 }
 
