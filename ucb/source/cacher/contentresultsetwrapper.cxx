@@ -149,8 +149,7 @@ void SAL_CALL ContentResultSetWrapper::impl_deinit()
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper
-    ::impl_initPropertySetInfo()
+void SAL_CALL ContentResultSetWrapper::impl_initPropertySetInfo()
 {
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -171,8 +170,7 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-void SAL_CALL ContentResultSetWrapper
-::impl_EnsureNotDisposed()
+void SAL_CALL ContentResultSetWrapper::impl_EnsureNotDisposed()
     throw( DisposedException, RuntimeException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -180,9 +178,7 @@ void SAL_CALL ContentResultSetWrapper
         throw DisposedException();
 }
 
-ContentResultSetWrapper::PropertyChangeListenerContainer_Impl* SAL_CALL
-    ContentResultSetWrapper
-    ::impl_getPropertyChangeListenerContainer()
+ContentResultSetWrapper::PropertyChangeListenerContainer_Impl* SAL_CALL ContentResultSetWrapper::impl_getPropertyChangeListenerContainer()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pPropertyChangeListeners )
@@ -191,9 +187,7 @@ ContentResultSetWrapper::PropertyChangeListenerContainer_Impl* SAL_CALL
     return m_pPropertyChangeListeners;
 }
 
-ContentResultSetWrapper::PropertyChangeListenerContainer_Impl* SAL_CALL
-    ContentResultSetWrapper
-    ::impl_getVetoableChangeListenerContainer()
+ContentResultSetWrapper::PropertyChangeListenerContainer_Impl* SAL_CALL ContentResultSetWrapper::impl_getVetoableChangeListenerContainer()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( !m_pVetoableChangeListeners )
@@ -202,9 +196,7 @@ ContentResultSetWrapper::PropertyChangeListenerContainer_Impl* SAL_CALL
     return m_pVetoableChangeListeners;
 }
 
-void SAL_CALL ContentResultSetWrapper
-    ::impl_notifyPropertyChangeListeners(
-                    const PropertyChangeEvent& rEvt )
+void SAL_CALL ContentResultSetWrapper::impl_notifyPropertyChangeListeners( const PropertyChangeEvent& rEvt )
 {
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -242,8 +234,7 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-void SAL_CALL ContentResultSetWrapper
-    ::impl_notifyVetoableChangeListeners( const PropertyChangeEvent& rEvt )
+void SAL_CALL ContentResultSetWrapper::impl_notifyVetoableChangeListeners( const PropertyChangeEvent& rEvt )
     throw( PropertyVetoException,
            RuntimeException )
 {
@@ -283,8 +274,7 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-bool SAL_CALL ContentResultSetWrapper
-    ::impl_isForwardOnly()
+bool SAL_CALL ContentResultSetWrapper::impl_isForwardOnly()
 {
     //m_nForwardOnly == 2 -> don't know
     //m_nForwardOnly == 1 -> YES
@@ -357,8 +347,8 @@ css::uno::Any SAL_CALL ContentResultSetWrapper::queryInterface( const css::uno::
 // XComponent methods.
 
 // virtual
-void SAL_CALL ContentResultSetWrapper
-    ::dispose() throw( RuntimeException, std::exception )
+void SAL_CALL ContentResultSetWrapper::dispose()
+    throw( RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
 
@@ -431,8 +421,7 @@ void SAL_CALL ContentResultSetWrapper
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper
-    ::addEventListener( const Reference< XEventListener >& Listener )
+void SAL_CALL ContentResultSetWrapper::addEventListener( const Reference< XEventListener >& Listener )
     throw( RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -447,8 +436,7 @@ void SAL_CALL ContentResultSetWrapper
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper
-    ::removeEventListener( const Reference< XEventListener >& Listener )
+void SAL_CALL ContentResultSetWrapper::removeEventListener( const Reference< XEventListener >& Listener )
     throw( RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -462,8 +450,7 @@ void SAL_CALL ContentResultSetWrapper
 //XCloseable methods.
 
 //virtual
-void SAL_CALL ContentResultSetWrapper
-    ::close()
+void SAL_CALL ContentResultSetWrapper::close()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -475,8 +462,7 @@ void SAL_CALL ContentResultSetWrapper
 //XResultSetMetaDataSupplier methods.
 
 //virtual
-Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper
-    ::getMetaData()
+Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper::getMetaData()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -508,8 +494,8 @@ Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper
 // XPropertySet methods.
 
 // virtual
-Reference< XPropertySetInfo > SAL_CALL ContentResultSetWrapper
-    ::getPropertySetInfo() throw( RuntimeException, std::exception )
+Reference< XPropertySetInfo > SAL_CALL ContentResultSetWrapper::getPropertySetInfo()
+    throw( RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
     {
@@ -522,8 +508,7 @@ Reference< XPropertySetInfo > SAL_CALL ContentResultSetWrapper
 }
 
 // virtual
-void SAL_CALL ContentResultSetWrapper
-    ::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
+void SAL_CALL ContentResultSetWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
     throw( UnknownPropertyException,
            PropertyVetoException,
            IllegalArgumentException,
@@ -542,8 +527,7 @@ void SAL_CALL ContentResultSetWrapper
 
 
 // virtual
-Any SAL_CALL ContentResultSetWrapper
-    ::getPropertyValue( const OUString& rPropertyName )
+Any SAL_CALL ContentResultSetWrapper::getPropertyValue( const OUString& rPropertyName )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException, std::exception )
@@ -560,10 +544,7 @@ Any SAL_CALL ContentResultSetWrapper
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper
-    ::addPropertyChangeListener(
-            const OUString& aPropertyName,
-            const Reference< XPropertyChangeListener >& xListener )
+void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException, std::exception )
@@ -612,10 +593,7 @@ void SAL_CALL ContentResultSetWrapper
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper
-    ::addVetoableChangeListener(
-            const OUString& rPropertyName,
-            const Reference< XVetoableChangeListener >& xListener )
+void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& xListener )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException, std::exception )
@@ -663,10 +641,7 @@ void SAL_CALL ContentResultSetWrapper
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper
-    ::removePropertyChangeListener(
-            const OUString& rPropertyName,
-            const Reference< XPropertyChangeListener >& xListener )
+void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUString& rPropertyName, const Reference< XPropertyChangeListener >& xListener )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException, std::exception )
@@ -722,10 +697,7 @@ void SAL_CALL ContentResultSetWrapper
 
 
 // virtual
-void SAL_CALL ContentResultSetWrapper
-    ::removeVetoableChangeListener(
-            const OUString& rPropertyName,
-            const Reference< XVetoableChangeListener >& xListener )
+void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& xListener )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException, std::exception )
@@ -784,8 +756,7 @@ void SAL_CALL ContentResultSetWrapper
 
 
 //virtual
-void SAL_CALL ContentResultSetWrapper
-    ::impl_disposing( const EventObject& )
+void SAL_CALL ContentResultSetWrapper::impl_disposing( const EventObject& )
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
@@ -809,8 +780,7 @@ void SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper
-    ::impl_propertyChange( const PropertyChangeEvent& rEvt )
+void SAL_CALL ContentResultSetWrapper::impl_propertyChange( const PropertyChangeEvent& rEvt )
     throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
@@ -822,8 +792,7 @@ void SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper
-    ::impl_vetoableChange( const PropertyChangeEvent& rEvt )
+void SAL_CALL ContentResultSetWrapper::impl_vetoableChange( const PropertyChangeEvent& rEvt )
     throw( PropertyVetoException,
            RuntimeException )
 {
@@ -841,8 +810,7 @@ void SAL_CALL ContentResultSetWrapper
 
 
 // virtual
-OUString SAL_CALL ContentResultSetWrapper
-    ::queryContentIdentifierString()
+OUString SAL_CALL ContentResultSetWrapper::queryContentIdentifierString()
     throw( RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -857,8 +825,7 @@ OUString SAL_CALL ContentResultSetWrapper
 
 
 // virtual
-Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper
-    ::queryContentIdentifier()
+Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper::queryContentIdentifier()
     throw( RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -873,8 +840,7 @@ Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper
 
 
 // virtual
-Reference< XContent > SAL_CALL ContentResultSetWrapper
-    ::queryContent()
+Reference< XContent > SAL_CALL ContentResultSetWrapper::queryContent()
     throw( RuntimeException, std::exception )
 {
     impl_EnsureNotDisposed();
@@ -892,8 +858,7 @@ Reference< XContent > SAL_CALL ContentResultSetWrapper
 
 //virtual
 
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::next()
+sal_Bool SAL_CALL ContentResultSetWrapper::next()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -908,8 +873,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::previous()
+sal_Bool SAL_CALL ContentResultSetWrapper::previous()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -924,8 +888,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::absolute( sal_Int32 row )
+sal_Bool SAL_CALL ContentResultSetWrapper::absolute( sal_Int32 row )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -940,8 +903,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::relative( sal_Int32 rows )
+sal_Bool SAL_CALL ContentResultSetWrapper::relative( sal_Int32 rows )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -957,8 +919,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::first()
+sal_Bool SAL_CALL ContentResultSetWrapper::first()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -973,8 +934,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::last()
+sal_Bool SAL_CALL ContentResultSetWrapper::last()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -989,8 +949,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper
-    ::beforeFirst()
+void SAL_CALL ContentResultSetWrapper::beforeFirst()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1005,8 +964,7 @@ void SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper
-    ::afterLast()
+void SAL_CALL ContentResultSetWrapper::afterLast()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1021,8 +979,7 @@ void SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::isAfterLast()
+sal_Bool SAL_CALL ContentResultSetWrapper::isAfterLast()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1037,8 +994,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::isBeforeFirst()
+sal_Bool SAL_CALL ContentResultSetWrapper::isBeforeFirst()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1053,8 +1009,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::isFirst()
+sal_Bool SAL_CALL ContentResultSetWrapper::isFirst()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1069,8 +1024,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::isLast()
+sal_Bool SAL_CALL ContentResultSetWrapper::isLast()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1086,8 +1040,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
 
 //virtual
-sal_Int32 SAL_CALL ContentResultSetWrapper
-    ::getRow()
+sal_Int32 SAL_CALL ContentResultSetWrapper::getRow()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1102,8 +1055,7 @@ sal_Int32 SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-void SAL_CALL ContentResultSetWrapper
-    ::refreshRow()
+void SAL_CALL ContentResultSetWrapper::refreshRow()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1118,8 +1070,7 @@ void SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::rowUpdated()
+sal_Bool SAL_CALL ContentResultSetWrapper::rowUpdated()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1132,9 +1083,9 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     }
     return m_xResultSetOrigin->rowUpdated();
 }
+
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::rowInserted()
+sal_Bool SAL_CALL ContentResultSetWrapper::rowInserted()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1149,8 +1100,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::rowDeleted()
+sal_Bool SAL_CALL ContentResultSetWrapper::rowDeleted()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1165,8 +1115,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-Reference< XInterface > SAL_CALL ContentResultSetWrapper
-    ::getStatement()
+Reference< XInterface > SAL_CALL ContentResultSetWrapper::getStatement()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1190,8 +1139,7 @@ if( !m_xRowOrigin.is() )                                        \
 return m_xRowOrigin->getXXX( columnIndex );
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::wasNull()
+sal_Bool SAL_CALL ContentResultSetWrapper::wasNull()
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1206,8 +1154,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-OUString SAL_CALL ContentResultSetWrapper
-    ::getString( sal_Int32 columnIndex )
+OUString SAL_CALL ContentResultSetWrapper::getString( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1215,8 +1162,7 @@ OUString SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Bool SAL_CALL ContentResultSetWrapper
-    ::getBoolean( sal_Int32 columnIndex )
+sal_Bool SAL_CALL ContentResultSetWrapper::getBoolean( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1224,8 +1170,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Int8 SAL_CALL ContentResultSetWrapper
-    ::getByte( sal_Int32 columnIndex )
+sal_Int8 SAL_CALL ContentResultSetWrapper::getByte( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1233,8 +1178,7 @@ sal_Int8 SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Int16 SAL_CALL ContentResultSetWrapper
-    ::getShort( sal_Int32 columnIndex )
+sal_Int16 SAL_CALL ContentResultSetWrapper::getShort( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1242,8 +1186,7 @@ sal_Int16 SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Int32 SAL_CALL ContentResultSetWrapper
-    ::getInt( sal_Int32 columnIndex )
+sal_Int32 SAL_CALL ContentResultSetWrapper::getInt( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1251,8 +1194,7 @@ sal_Int32 SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-sal_Int64 SAL_CALL ContentResultSetWrapper
-    ::getLong( sal_Int32 columnIndex )
+sal_Int64 SAL_CALL ContentResultSetWrapper::getLong( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1260,8 +1202,7 @@ sal_Int64 SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-float SAL_CALL ContentResultSetWrapper
-    ::getFloat( sal_Int32 columnIndex )
+float SAL_CALL ContentResultSetWrapper::getFloat( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1269,8 +1210,7 @@ float SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-double SAL_CALL ContentResultSetWrapper
-    ::getDouble( sal_Int32 columnIndex )
+double SAL_CALL ContentResultSetWrapper::getDouble( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1278,8 +1218,7 @@ double SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-Sequence< sal_Int8 > SAL_CALL ContentResultSetWrapper
-    ::getBytes( sal_Int32 columnIndex )
+Sequence< sal_Int8 > SAL_CALL ContentResultSetWrapper::getBytes( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1287,8 +1226,7 @@ Sequence< sal_Int8 > SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-Date SAL_CALL ContentResultSetWrapper
-    ::getDate( sal_Int32 columnIndex )
+Date SAL_CALL ContentResultSetWrapper::getDate( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1296,8 +1234,7 @@ Date SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-Time SAL_CALL ContentResultSetWrapper
-    ::getTime( sal_Int32 columnIndex )
+Time SAL_CALL ContentResultSetWrapper::getTime( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1305,8 +1242,7 @@ Time SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-DateTime SAL_CALL ContentResultSetWrapper
-    ::getTimestamp( sal_Int32 columnIndex )
+DateTime SAL_CALL ContentResultSetWrapper::getTimestamp( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1314,9 +1250,7 @@ DateTime SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-Reference< com::sun::star::io::XInputStream >
-    SAL_CALL ContentResultSetWrapper
-    ::getBinaryStream( sal_Int32 columnIndex )
+Reference< com::sun::star::io::XInputStream > SAL_CALL ContentResultSetWrapper::getBinaryStream( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1324,9 +1258,7 @@ Reference< com::sun::star::io::XInputStream >
 }
 
 //virtual
-Reference< com::sun::star::io::XInputStream >
-    SAL_CALL ContentResultSetWrapper
-    ::getCharacterStream( sal_Int32 columnIndex )
+Reference< com::sun::star::io::XInputStream > SAL_CALL ContentResultSetWrapper::getCharacterStream( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1334,10 +1266,7 @@ Reference< com::sun::star::io::XInputStream >
 }
 
 //virtual
-Any SAL_CALL ContentResultSetWrapper
-    ::getObject( sal_Int32 columnIndex,
-           const Reference<
-            com::sun::star::container::XNameAccess >& typeMap )
+Any SAL_CALL ContentResultSetWrapper::getObject( sal_Int32 columnIndex, const Reference< com::sun::star::container::XNameAccess >& typeMap )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1355,8 +1284,7 @@ Any SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-Reference< XRef > SAL_CALL ContentResultSetWrapper
-    ::getRef( sal_Int32 columnIndex )
+Reference< XRef > SAL_CALL ContentResultSetWrapper::getRef( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1364,8 +1292,7 @@ Reference< XRef > SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-Reference< XBlob > SAL_CALL ContentResultSetWrapper
-    ::getBlob( sal_Int32 columnIndex )
+Reference< XBlob > SAL_CALL ContentResultSetWrapper::getBlob( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1373,8 +1300,7 @@ Reference< XBlob > SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-Reference< XClob > SAL_CALL ContentResultSetWrapper
-    ::getClob( sal_Int32 columnIndex )
+Reference< XClob > SAL_CALL ContentResultSetWrapper::getClob( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1382,8 +1308,7 @@ Reference< XClob > SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-Reference< XArray > SAL_CALL ContentResultSetWrapper
-    ::getArray( sal_Int32 columnIndex )
+Reference< XArray > SAL_CALL ContentResultSetWrapper::getArray( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException, std::exception )
 {
@@ -1437,8 +1362,7 @@ css::uno::Any SAL_CALL ContentResultSetWrapperListener::queryInterface( const cs
 
 
 //virtual
-void SAL_CALL ContentResultSetWrapperListener
-    ::disposing( const EventObject& rEventObject )
+void SAL_CALL ContentResultSetWrapperListener::disposing( const EventObject& rEventObject )
     throw( RuntimeException, std::exception )
 {
     if( m_pOwner )
@@ -1450,8 +1374,7 @@ void SAL_CALL ContentResultSetWrapperListener
 
 
 //virtual
-void SAL_CALL ContentResultSetWrapperListener
-    ::propertyChange( const PropertyChangeEvent& rEvt )
+void SAL_CALL ContentResultSetWrapperListener::propertyChange( const PropertyChangeEvent& rEvt )
     throw( RuntimeException, std::exception )
 {
     if( m_pOwner )
@@ -1462,8 +1385,7 @@ void SAL_CALL ContentResultSetWrapperListener
 //XVetoableChangeListener methods.
 
 //virtual
-void SAL_CALL ContentResultSetWrapperListener
-    ::vetoableChange( const PropertyChangeEvent& rEvt )
+void SAL_CALL ContentResultSetWrapperListener::vetoableChange( const PropertyChangeEvent& rEvt )
     throw( PropertyVetoException,
            RuntimeException, std::exception )
 {
@@ -1471,8 +1393,7 @@ void SAL_CALL ContentResultSetWrapperListener
         m_pOwner->impl_vetoableChange( rEvt );
 }
 
-void SAL_CALL ContentResultSetWrapperListener
-    ::impl_OwnerDies()
+void SAL_CALL ContentResultSetWrapperListener::impl_OwnerDies()
 {
     m_pOwner = NULL;
 }

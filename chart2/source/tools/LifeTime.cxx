@@ -64,8 +64,8 @@ bool LifeTimeManager::impl_isDisposed( bool bAssert )
     }
     return false;
 }
-            bool LifeTimeManager
-::impl_canStartApiCall()
+
+bool LifeTimeManager::impl_canStartApiCall()
 {
     if( impl_isDisposed() )
         return false; //behave passive if already disposed
@@ -74,8 +74,7 @@ bool LifeTimeManager::impl_isDisposed( bool bAssert )
     return true;
 }
 
-    void LifeTimeManager
-::impl_registerApiCall(bool bLongLastingCall)
+void LifeTimeManager::impl_registerApiCall(bool bLongLastingCall)
 {
     //only allowed if not disposed
     //do not acquire the mutex here because it will be acquired already
@@ -89,8 +88,8 @@ bool LifeTimeManager::impl_isDisposed( bool bAssert )
     if(m_nLongLastingCallCount==1)
         m_aNoLongLastingCallCountCondition.reset();
 }
-    void LifeTimeManager
-::impl_unregisterApiCall(bool bLongLastingCall)
+
+void LifeTimeManager::impl_unregisterApiCall(bool bLongLastingCall)
 {
     //Mutex needs to be acquired exactly ones
     //mutex may be released inbetween in special case of impl_apiCallCountReachedNull()
@@ -111,8 +110,8 @@ bool LifeTimeManager::impl_isDisposed( bool bAssert )
     }
 }
 
-        bool LifeTimeManager
-::dispose() throw(uno::RuntimeException)
+bool LifeTimeManager::dispose()
+    throw(uno::RuntimeException)
 {
     //hold no mutex
     {
@@ -192,8 +191,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     return false;
 }
 
-        bool CloseableLifeTimeManager
-::g_close_startTryClose(bool bDeliverOwnership)
+bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
     throw ( uno::Exception )
 {
     //no mutex is allowed to be acquired
@@ -252,8 +250,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     return true;
 }
 
-    void CloseableLifeTimeManager
-::g_close_endTryClose(bool bDeliverOwnership, bool /* bMyVeto */ )
+void CloseableLifeTimeManager::g_close_endTryClose(bool bDeliverOwnership, bool /* bMyVeto */ )
 {
     //this method is called, if the try to close was not successful
     osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
@@ -267,8 +264,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     impl_unregisterApiCall(false);
 }
 
-    bool CloseableLifeTimeManager
-::g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, util::CloseVetoException& ex )
+bool CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, util::CloseVetoException& ex )
     throw ( util::CloseVetoException )
 {
     //this method is called when no closelistener has had a veto during queryclosing
@@ -296,8 +292,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     throw ex;
 }
 
-    void CloseableLifeTimeManager
-::g_close_endTryClose_doClose()
+void CloseableLifeTimeManager::g_close_endTryClose_doClose()
 {
     //this method is called, if the try to close was successful
     osl::ResettableGuard< osl::Mutex > aGuard( m_aAccessMutex );
@@ -316,8 +311,7 @@ void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool b
     m_bOwnership            = bDeliverOwnership && bMyVeto;
 }
 
-    void CloseableLifeTimeManager
-::impl_apiCallCountReachedNull()
+void CloseableLifeTimeManager::impl_apiCallCountReachedNull()
 {
     //Mutex needs to be acquired exactly ones
     //mutex will be released inbetween in impl_doClose()
@@ -325,8 +319,7 @@ void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool b
         impl_doClose();
 }
 
-    void CloseableLifeTimeManager
-::impl_doClose()
+void CloseableLifeTimeManager::impl_doClose()
 {
     //Mutex needs to be acquired exactly ones before calling impl_doClose()
 
@@ -380,8 +373,7 @@ void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool b
     //mutex will be reacquired in destructor of aNegativeGuard
 }
 
-    bool CloseableLifeTimeManager
-::g_addCloseListener( const uno::Reference< util::XCloseListener > & xListener )
+bool CloseableLifeTimeManager::g_addCloseListener( const uno::Reference< util::XCloseListener > & xListener )
     throw(uno::RuntimeException)
 {
     osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
@@ -395,8 +387,7 @@ void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool b
     return true;
 }
 
-    bool CloseableLifeTimeManager
-::impl_canStartApiCall()
+bool CloseableLifeTimeManager::impl_canStartApiCall()
 {
     //Mutex needs to be acquired exactly ones before calling this method
     //the mutex will be released inbetween and reacquired
@@ -423,8 +414,7 @@ void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool b
     return true;
 }
 
-    bool LifeTimeGuard
-::startApiCall(bool bLongLastingCall)
+bool LifeTimeGuard::startApiCall(bool bLongLastingCall)
 {
     //Mutex needs to be acquired exactly ones; will be released inbetween
     //mutex is requiered due to constructor of LifeTimeGuard
