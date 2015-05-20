@@ -269,32 +269,32 @@ OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLong )
     return OUString();
 }
 
-sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i_nType )
+sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, PrinterCapType i_nType )
 {
     switch( i_nType )
     {
-        case PRINTER_CAPABILITIES_SUPPORTDIALOG:
+        case PrinterCapType::SupportDialog:
             return 0;
-        case PRINTER_CAPABILITIES_COPIES:
+        case PrinterCapType::Copies:
             return 0xffff;
-        case PRINTER_CAPABILITIES_COLLATECOPIES:
+        case PrinterCapType::CollateCopies:
             return 0xffff;
-        case PRINTER_CAPABILITIES_SETORIENTATION:
+        case PrinterCapType::SetOrientation:
             return 1;
-        case PRINTER_CAPABILITIES_SETDUPLEX:
+        case PrinterCapType::SetDuplex:
             return 0;
-        case PRINTER_CAPABILITIES_SETPAPERBIN:
+        case PrinterCapType::SetPaperBin:
             return 0;
-        case PRINTER_CAPABILITIES_SETPAPERSIZE:
+        case PrinterCapType::SetPaperSize:
             return 1;
-        case PRINTER_CAPABILITIES_SETPAPER:
+        case PrinterCapType::SetPaper:
             return 1;
-        case PRINTER_CAPABILITIES_EXTERNALDIALOG:
+        case PrinterCapType::ExternalDialog:
             return officecfg::Office::Common::Misc::UseSystemPrintDialog::get()
                 ? 1 : 0;
-        case PRINTER_CAPABILITIES_PDF:
+        case PrinterCapType::PDF:
             return 1;
-        case PRINTER_CAPABILITIES_USEPULLMODEL:
+        case PrinterCapType::UsePullModel:
             return 1;
         default: break;
     }

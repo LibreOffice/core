@@ -1150,9 +1150,9 @@ const
 sal_uLong
 GtkSalInfoPrinter::GetCapabilities(
         const ImplJobSetup* const i_pSetupData,
-        const sal_uInt16 i_nType)
+        const PrinterCapType i_nType)
 {
-    if (i_nType == PRINTER_CAPABILITIES_EXTERNALDIALOG && lcl_useSystemPrintDialog())
+    if (i_nType == PrinterCapType::ExternalDialog && lcl_useSystemPrintDialog())
         return 1;
     return PspSalInfoPrinter::GetCapabilities(i_pSetupData, i_nType);
 }
