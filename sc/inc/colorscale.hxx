@@ -349,7 +349,8 @@ struct ScIconSetFormatData
     ScIconSetFormatData():
         eIconSetType(IconSet_3Arrows),
         mbShowValue(true),
-        mbReverse(false)
+        mbReverse(false),
+        mbCustom(false)
         {}
 };
 
