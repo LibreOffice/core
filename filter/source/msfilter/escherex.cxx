@@ -140,35 +140,30 @@ EscherExClientAnchor_Base::~EscherExClientAnchor_Base()
 {
 }
 
-void EscherPropertyContainer::ImplInit()
-{
-    nSortCount = 0;
-    nCountCount = 0;
-    nCountSize = 0;
-    nSortBufSize = 64;
-    bHasComplexData = false;
-    pSortStruct = new EscherPropSortStruct[ nSortBufSize ];
-}
+EscherPropertyContainer::EscherPropertyContainer(
+    EscherGraphicProvider * pGraphProv, SvStream * pPiOutStrm,
+    Rectangle * pBoundRect):
+    pGraphicProvider(pGraphProv),
+    pPicOutStrm(pPiOutStrm),
+    pShapeBoundRect(pBoundRect),
+    nSortCount(0),
+    nSortBufSize(64),
+    nCountCount(0),
+    nCountSize(0),
+    pSortStruct(new EscherPropSortStruct[nSortBufSize]),
+    bHasComplexData(false)
+{}
 
 EscherPropertyContainer::EscherPropertyContainer()
-    : pGraphicProvider(NULL)
-    , pPicOutStrm(NULL)
-    , pShapeBoundRect(NULL)
-{
-    ImplInit();
-}
+    : EscherPropertyContainer(nullptr, nullptr, nullptr)
+{}
 
 EscherPropertyContainer::EscherPropertyContainer(
     EscherGraphicProvider& rGraphProv,
             SvStream* pPiOutStrm,
                 Rectangle& rBoundRect ) :
-
-    pGraphicProvider    ( &rGraphProv ),
-    pPicOutStrm         ( pPiOutStrm ),
-    pShapeBoundRect     ( &rBoundRect )
-{
-    ImplInit();
-}
+    EscherPropertyContainer(&rGraphProv, pPiOutStrm, &rBoundRect)
+{}
 
 EscherPropertyContainer::~EscherPropertyContainer()
 {
