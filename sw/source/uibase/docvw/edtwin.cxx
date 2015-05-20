@@ -3729,7 +3729,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     }
 
     const Point aOldPt( rSh.VisArea().Pos() );
-    const bool bInsWin = rSh.VisArea().IsInside( aDocPt );
+    const bool bInsWin = rSh.VisArea().IsInside( aDocPt ) || rSh.isTiledRendering();
 
     if( m_pShadCrsr && !bInsWin )
         delete m_pShadCrsr, m_pShadCrsr = 0;
