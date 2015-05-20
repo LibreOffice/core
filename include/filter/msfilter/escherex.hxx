@@ -772,12 +772,12 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
     SvStream*               pPicOutStrm;
     Rectangle*              pShapeBoundRect;
 
-    EscherPropSortStruct*   pSortStruct;
-
     sal_uInt32              nSortCount;
     sal_uInt32              nSortBufSize;
     sal_uInt32              nCountCount;
     sal_uInt32              nCountSize;
+
+    EscherPropSortStruct*   pSortStruct;
 
     bool                    bHasComplexData;
 
@@ -789,7 +789,10 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
                     bool bCreateCroppingAttributes
                 );
     bool        ImplCreateEmbeddedBmp( const OString& rUniqueId );
-    void        ImplInit();
+
+    SAL_DLLPRIVATE explicit EscherPropertyContainer(
+        EscherGraphicProvider * pGraphProv, SvStream * pPiOutStrm,
+        Rectangle * pBoundRect);
 
 public:
 
