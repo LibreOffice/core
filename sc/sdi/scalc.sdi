@@ -4133,6 +4133,31 @@ SfxVoidItem InsertColumnsBefore FID_INS_COLUMNS_BEFORE
 ]
 
 
+SfxVoidItem InsertColumnsAfter FID_INS_COLUMNS_AFTER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INSERT;
+]
+
+
 SfxVoidItem InsertContents FID_INS_CELL_CONTENTS
 (SfxStringItem Flags FID_INS_CELL_CONTENTS,SfxUInt16Item FormulaCommand FN_PARAM_1,SfxBoolItem SkipEmptyCells FN_PARAM_2,SfxBoolItem Transpose FN_PARAM_3,SfxBoolItem AsLink FN_PARAM_4,SfxInt16Item MoveMode FN_PARAM_5)
 [
@@ -4411,6 +4436,31 @@ SfxVoidItem InsertRowBreak FID_INS_ROWBRK
 
 
 SfxVoidItem InsertRowsBefore FID_INS_ROWS_BEFORE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INSERT;
+]
+
+
+SfxVoidItem InsertRowsAfter FID_INS_ROWS_AFTER
 ()
 [
     /* flags: */
