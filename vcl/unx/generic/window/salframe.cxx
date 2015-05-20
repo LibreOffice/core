@@ -745,7 +745,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
     m_nWorkArea = GetDisplay()->getWMAdaptor()->getCurrentWorkArea();
 
     // Pointer
-    SetPointer( POINTER_ARROW );
+    SetPointer( PointerStyle::Arrow );
 }
 
 X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle,

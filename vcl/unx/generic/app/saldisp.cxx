@@ -335,10 +335,10 @@ void SalDisplay::doDestruct()
             }
         }
 
-        for( size_t i = 0; i < POINTER_COUNT; i++ )
+        for( Cursor & aCsr : aPointerCache_ )
         {
-            if( aPointerCache_[i] )
-                XFreeCursor( pDisp_, aPointerCache_[i] );
+            if( aCsr )
+                XFreeCursor( pDisp_, aCsr );
         }
 
         if( pXLib_ )
@@ -556,8 +556,8 @@ SalDisplay::initScreen( SalX11Screen nXScreen ) const
 
 void SalDisplay::Init()
 {
-    for( size_t i = 0; i < POINTER_COUNT; i++ )
-        aPointerCache_[i] = None;
+    for( Cursor & aCsr : aPointerCache_ )
+        aCsr = None;
 
     mpFactory           = (AttributeProvider*)NULL;
     m_bXinerama         = false;
@@ -1477,11 +1477,8 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
     nXHot = name##curs_x_hot; \
     nYHot = name##curs_y_hot
 
-Cursor SalDisplay::GetPointer( int ePointerStyle )
+Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
 {
-    if( ePointerStyle >= POINTER_COUNT )
-        return 0;
-
     Cursor &aCur = aPointerCache_[ePointerStyle];
 
     if( aCur != None )
@@ -1492,310 +1489,310 @@ Cursor SalDisplay::GetPointer( int ePointerStyle )
 
     switch( ePointerStyle )
     {
-        case POINTER_NULL:
+        case PointerStyle::Null:
             MAKE_CURSOR( null );
             break;
-        case POINTER_ARROW:
+        case PointerStyle::Arrow:
             aCur = XCreateFontCursor( pDisp_, XC_left_ptr );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_WAIT:
+        case PointerStyle::Wait:
             aCur = XCreateFontCursor( pDisp_, XC_watch );
             break;
-        case POINTER_TEXT:          // Mouse Pointer is a "I" Beam
+        case PointerStyle::Text:          // Mouse Pointer is a "I" Beam
             aCur = XCreateFontCursor( pDisp_, XC_xterm );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_HELP:
+        case PointerStyle::Help:
             aCur = XCreateFontCursor( pDisp_, XC_question_arrow );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_CROSS:         // Mouse Pointer is a cross
+        case PointerStyle::Cross:         // Mouse Pointer is a cross
             aCur = XCreateFontCursor( pDisp_, XC_crosshair );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_NSIZE:
+        case PointerStyle::NSize:
             aCur = XCreateFontCursor( pDisp_, XC_sb_v_double_arrow );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_SSIZE:
+        case PointerStyle::SSize:
             aCur = XCreateFontCursor( pDisp_, XC_sb_v_double_arrow );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_WSIZE:
+        case PointerStyle::WSize:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_ESIZE:
+        case PointerStyle::ESize:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_WINDOW_NSIZE:
+        case PointerStyle::WindowNSize:
             aCur = XCreateFontCursor( pDisp_, XC_top_side );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_WINDOW_SSIZE:
+        case PointerStyle::WindowSSize:
             aCur = XCreateFontCursor( pDisp_, XC_bottom_side );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_WINDOW_WSIZE:
+        case PointerStyle::WindowWSize:
             aCur = XCreateFontCursor( pDisp_, XC_left_side );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_WINDOW_ESIZE:
+        case PointerStyle::WindowESize:
             aCur = XCreateFontCursor( pDisp_, XC_right_side );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_NWSIZE:
+        case PointerStyle::NWSize:
             aCur = XCreateFontCursor( pDisp_, XC_top_left_corner );
             break;
-        case POINTER_NESIZE:
+        case PointerStyle::NESize:
             aCur = XCreateFontCursor( pDisp_, XC_top_right_corner );
             break;
-        case POINTER_SWSIZE:
+        case PointerStyle::SWSize:
             aCur = XCreateFontCursor( pDisp_, XC_bottom_left_corner );
             break;
-        case POINTER_SESIZE:
+        case PointerStyle::SESize:
             aCur = XCreateFontCursor( pDisp_, XC_bottom_right_corner );
             break;
-        case POINTER_WINDOW_NWSIZE:
+        case PointerStyle::WindowNWSize:
             aCur = XCreateFontCursor( pDisp_, XC_top_left_corner );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_WINDOW_NESIZE:
+        case PointerStyle::WindowNESize:
             aCur = XCreateFontCursor( pDisp_, XC_top_right_corner );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_WINDOW_SWSIZE:
+        case PointerStyle::WindowSWSize:
             aCur = XCreateFontCursor( pDisp_, XC_bottom_left_corner );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_WINDOW_SESIZE:
+        case PointerStyle::WindowSESize:
             aCur = XCreateFontCursor( pDisp_, XC_bottom_right_corner );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_HSPLIT:
+        case PointerStyle::HSplit:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow );
             break;
-        case POINTER_VSPLIT:
+        case PointerStyle::VSplit:
             aCur = XCreateFontCursor( pDisp_, XC_sb_v_double_arrow );
             break;
-        case POINTER_HSIZEBAR:
+        case PointerStyle::HSizeBar:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow ); // ???
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_VSIZEBAR:
+        case PointerStyle::VSizeBar:
             aCur = XCreateFontCursor( pDisp_, XC_sb_v_double_arrow ); // ???
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_REFHAND:
+        case PointerStyle::RefHand:
             aCur = XCreateFontCursor( pDisp_, XC_hand1 );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_HAND:
+        case PointerStyle::Hand:
             aCur = XCreateFontCursor( pDisp_, XC_hand2 );
             break;
-        case POINTER_MAGNIFY:
+        case PointerStyle::Magnify:
             MAKE_CURSOR( magnify_ );
             break;
-        case POINTER_FILL:
+        case PointerStyle::Fill:
             MAKE_CURSOR( fill_ );
             break;
-        case POINTER_MOVE:
+        case PointerStyle::Move:
             aCur = XCreateFontCursor( pDisp_, XC_fleur );
             break;
-        case POINTER_MOVEDATA:
+        case PointerStyle::MoveData:
             MAKE_CURSOR( movedata_ );
             break;
-        case POINTER_COPYDATA:
+        case PointerStyle::CopyData:
             MAKE_CURSOR( copydata_ );
             break;
-        case POINTER_MOVEFILE:
+        case PointerStyle::MoveFile:
             MAKE_CURSOR( movefile_ );
             break;
-        case POINTER_COPYFILE:
+        case PointerStyle::CopyFile:
             MAKE_CURSOR( copyfile_ );
             break;
-        case POINTER_MOVEFILES:
+        case PointerStyle::MoveFiles:
             MAKE_CURSOR( movefiles_ );
             break;
-        case POINTER_COPYFILES:
+        case PointerStyle::CopyFiles:
             MAKE_CURSOR( copyfiles_ );
             break;
-        case POINTER_NOTALLOWED:
+        case PointerStyle::NotAllowed:
             MAKE_CURSOR( nodrop_ );
             break;
-        case POINTER_ROTATE:
+        case PointerStyle::Rotate:
             MAKE_CURSOR( rotate_ );
             break;
-        case POINTER_HSHEAR:
+        case PointerStyle::HShear:
             MAKE_CURSOR( hshear_ );
             break;
-        case POINTER_VSHEAR:
+        case PointerStyle::VShear:
             MAKE_CURSOR( vshear_ );
             break;
-        case POINTER_DRAW_LINE:
+        case PointerStyle::DrawLine:
             MAKE_CURSOR( drawline_ );
             break;
-        case POINTER_DRAW_RECT:
+        case PointerStyle::DrawRect:
             MAKE_CURSOR( drawrect_ );
             break;
-        case POINTER_DRAW_POLYGON:
+        case PointerStyle::DrawPolygon:
             MAKE_CURSOR( drawpolygon_ );
             break;
-        case POINTER_DRAW_BEZIER:
+        case PointerStyle::DrawBezier:
             MAKE_CURSOR( drawbezier_ );
             break;
-        case POINTER_DRAW_ARC:
+        case PointerStyle::DrawArc:
             MAKE_CURSOR( drawarc_ );
             break;
-        case POINTER_DRAW_PIE:
+        case PointerStyle::DrawPie:
             MAKE_CURSOR( drawpie_ );
             break;
-        case POINTER_DRAW_CIRCLECUT:
+        case PointerStyle::DrawCircleCut:
             MAKE_CURSOR( drawcirclecut_ );
             break;
-        case POINTER_DRAW_ELLIPSE:
+        case PointerStyle::DrawEllipse:
             MAKE_CURSOR( drawellipse_ );
             break;
-        case POINTER_DRAW_CONNECT:
+        case PointerStyle::DrawConnect:
             MAKE_CURSOR( drawconnect_ );
             break;
-        case POINTER_DRAW_TEXT:
+        case PointerStyle::DrawText:
             MAKE_CURSOR( drawtext_ );
             break;
-        case POINTER_MIRROR:
+        case PointerStyle::Mirror:
             MAKE_CURSOR( mirror_ );
             break;
-        case POINTER_CROOK:
+        case PointerStyle::Crook:
             MAKE_CURSOR( crook_ );
             break;
-        case POINTER_CROP:
+        case PointerStyle::Crop:
             MAKE_CURSOR( crop_ );
             break;
-        case POINTER_MOVEPOINT:
+        case PointerStyle::MovePoint:
             MAKE_CURSOR( movepoint_ );
             break;
-        case POINTER_MOVEBEZIERWEIGHT:
+        case PointerStyle::MoveBezierWeight:
             MAKE_CURSOR( movebezierweight_ );
             break;
-        case POINTER_DRAW_FREEHAND:
+        case PointerStyle::DrawFreehand:
             MAKE_CURSOR( drawfreehand_ );
             break;
-        case POINTER_DRAW_CAPTION:
+        case PointerStyle::DrawCaption:
             MAKE_CURSOR( drawcaption_ );
             break;
-        case POINTER_PEN:       // Mouse Pointer is a pencil
+        case PointerStyle::Pen:       // Mouse Pointer is a pencil
             aCur = XCreateFontCursor( pDisp_, XC_pencil );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_LINKDATA:
+        case PointerStyle::LinkData:
             MAKE_CURSOR( linkdata_ );
             break;
-        case POINTER_MOVEDATALINK:
+        case PointerStyle::MoveDataLink:
             MAKE_CURSOR( movedlnk_ );
             break;
-        case POINTER_COPYDATALINK:
+        case PointerStyle::CopyDataLink:
             MAKE_CURSOR( copydlnk_ );
             break;
-        case POINTER_LINKFILE:
+        case PointerStyle::LinkFile:
             MAKE_CURSOR( linkfile_ );
             break;
-        case POINTER_MOVEFILELINK:
+        case PointerStyle::MoveFileLink:
             MAKE_CURSOR( moveflnk_ );
             break;
-        case POINTER_COPYFILELINK:
+        case PointerStyle::CopyFileLink:
             MAKE_CURSOR( copyflnk_ );
             break;
-        case POINTER_CHART:
+        case PointerStyle::Chart:
             MAKE_CURSOR( chart_ );
             break;
-        case POINTER_DETECTIVE:
+        case PointerStyle::Detective:
             MAKE_CURSOR( detective_ );
             break;
-        case POINTER_PIVOT_COL:
+        case PointerStyle::PivotCol:
             MAKE_CURSOR( pivotcol_ );
             break;
-        case POINTER_PIVOT_ROW:
+        case PointerStyle::PivotRow:
             MAKE_CURSOR( pivotrow_ );
             break;
-        case POINTER_PIVOT_FIELD:
+        case PointerStyle::PivotField:
             MAKE_CURSOR( pivotfld_ );
             break;
-        case POINTER_PIVOT_DELETE:
+        case PointerStyle::PivotDelete:
             MAKE_CURSOR( pivotdel_ );
             break;
-        case POINTER_CHAIN:
+        case PointerStyle::Chain:
             MAKE_CURSOR( chain_ );
             break;
-        case POINTER_CHAIN_NOTALLOWED:
+        case PointerStyle::ChainNotAllowed:
             MAKE_CURSOR( chainnot_ );
             break;
-        case POINTER_TIMEEVENT_MOVE:
+        case PointerStyle::TimeEventMove:
             MAKE_CURSOR( timemove_ );
             break;
-        case POINTER_TIMEEVENT_SIZE:
+        case PointerStyle::TimeEventSize:
             MAKE_CURSOR( timesize_ );
             break;
-        case POINTER_AUTOSCROLL_N:
+        case PointerStyle::AutoScrollN:
             MAKE_CURSOR(asn_ );
             break;
-        case POINTER_AUTOSCROLL_S:
+        case PointerStyle::AutoScrollS:
             MAKE_CURSOR( ass_ );
             break;
-        case POINTER_AUTOSCROLL_W:
+        case PointerStyle::AutoScrollW:
             MAKE_CURSOR( asw_ );
             break;
-        case POINTER_AUTOSCROLL_E:
+        case PointerStyle::AutoScrollE:
             MAKE_CURSOR( ase_ );
             break;
-        case POINTER_AUTOSCROLL_NW:
+        case PointerStyle::AutoScrollNW:
             MAKE_CURSOR( asnw_ );
             break;
-        case POINTER_AUTOSCROLL_NE:
+        case PointerStyle::AutoScrollNE:
             MAKE_CURSOR( asne_ );
             break;
-        case POINTER_AUTOSCROLL_SW:
+        case PointerStyle::AutoScrollSW:
             MAKE_CURSOR( assw_ );
             break;
-        case POINTER_AUTOSCROLL_SE:
+        case PointerStyle::AutoScrollSE:
             MAKE_CURSOR( asse_ );
             break;
-        case POINTER_AUTOSCROLL_NS:
+        case PointerStyle::AutoScrollNS:
             MAKE_CURSOR( asns_ );
             break;
-        case POINTER_AUTOSCROLL_WE:
+        case PointerStyle::AutoScrollWE:
             MAKE_CURSOR( aswe_ );
             break;
-        case POINTER_AUTOSCROLL_NSWE:
+        case PointerStyle::AutoScrollNSWE:
             MAKE_CURSOR( asnswe_ );
             break;
-        case POINTER_AIRBRUSH:
+        case PointerStyle::Airbrush:
             MAKE_CURSOR( airbrush_ );
             break;
-        case POINTER_TEXT_VERTICAL:
+        case PointerStyle::TextVertical:
             MAKE_CURSOR( vertcurs_ );
             break;
 
         // #i32329# Enhanced table selection
-        case POINTER_TAB_SELECT_S:
+        case PointerStyle::TabSelectS:
             MAKE_CURSOR( tblsels_ );
             break;
-        case POINTER_TAB_SELECT_E:
+        case PointerStyle::TabSelectE:
             MAKE_CURSOR( tblsele_ );
             break;
-        case POINTER_TAB_SELECT_SE:
+        case PointerStyle::TabSelectSE:
             MAKE_CURSOR( tblselse_ );
             break;
-        case POINTER_TAB_SELECT_W:
+        case PointerStyle::TabSelectW:
             MAKE_CURSOR( tblselw_ );
             break;
-        case POINTER_TAB_SELECT_SW:
+        case PointerStyle::TabSelectSW:
             MAKE_CURSOR( tblselsw_ );
             break;
 
         // #i20119# Paintbrush tool
-        case POINTER_PAINTBRUSH :
+        case PointerStyle::Paintbrush :
             MAKE_CURSOR( paintbrush_ );
             break;
 
