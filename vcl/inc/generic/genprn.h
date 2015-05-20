@@ -47,11 +47,11 @@ public:
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
                                                  long& rPageWidth, long& rPageHeight ) SAL_OVERRIDE;
-    virtual sal_uIntPtr                 GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) SAL_OVERRIDE;
-    virtual sal_uIntPtr                 GetPaperBinCount( const ImplJobSetup* pSetupData ) SAL_OVERRIDE;
-    virtual OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin ) SAL_OVERRIDE;
+    virtual sal_uIntPtr             GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType ) SAL_OVERRIDE;
+    virtual sal_uIntPtr             GetPaperBinCount( const ImplJobSetup* pSetupData ) SAL_OVERRIDE;
+    virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin ) SAL_OVERRIDE;
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) SAL_OVERRIDE;
-    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData ) SAL_OVERRIDE;
+    virtual int                     GetLandscapeAngle( const ImplJobSetup* pSetupData ) SAL_OVERRIDE;
 };
 
 class VCL_DLLPUBLIC PspSalPrinter : public SalPrinter

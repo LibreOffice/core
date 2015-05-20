@@ -780,31 +780,31 @@ OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_
     return aRet;
 }
 
-sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal_uInt16 nType )
+sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, PrinterCapType nType )
 {
     switch( nType )
     {
-        case PRINTER_CAPABILITIES_SUPPORTDIALOG:
+        case PrinterCapType::SupportDialog:
             return 1;
-        case PRINTER_CAPABILITIES_COPIES:
+        case PrinterCapType::Copies:
             return 0xffff;
-        case PRINTER_CAPABILITIES_COLLATECOPIES:
+        case PrinterCapType::CollateCopies:
         {
             // PPDs don't mention the number of possible collated copies.
             // so let's guess as many as we want ?
             return 0xffff;
         }
-        case PRINTER_CAPABILITIES_SETORIENTATION:
+        case PrinterCapType::SetOrientation:
             return 1;
-        case PRINTER_CAPABILITIES_SETDUPLEX:
+        case PrinterCapType::SetDuplex:
             return 1;
-        case PRINTER_CAPABILITIES_SETPAPERBIN:
+        case PrinterCapType::SetPaperBin:
             return 1;
-        case PRINTER_CAPABILITIES_SETPAPERSIZE:
+        case PrinterCapType::SetPaperSize:
             return 1;
-        case PRINTER_CAPABILITIES_SETPAPER:
+        case PrinterCapType::SetPaper:
             return 0;
-        case PRINTER_CAPABILITIES_FAX:
+        case PrinterCapType::Fax:
             {
                 // see if the PPD contains the fax4CUPS "Dial" option and that it's not set
                 // to "manually"
@@ -818,7 +818,7 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
                 return 0;
             }
 
-        case PRINTER_CAPABILITIES_PDF:
+        case PrinterCapType::PDF:
             if( PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "pdf" ) )
                 return 1;
             else
@@ -829,9 +829,9 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
                     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
                 return aData.m_nPDFDevice > 0 ? 1 : 0;
             }
-        case PRINTER_CAPABILITIES_EXTERNALDIALOG:
+        case PrinterCapType::ExternalDialog:
             return PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "external_dialog" ) ? 1 : 0;
-        case PRINTER_CAPABILITIES_USEPULLMODEL:
+        case PrinterCapType::UsePullModel:
         {
             // see if the PPD contains a value to set PDF device
             JobData aData = PrinterInfoManager::get().getPrinterInfo( pJobSetup->maPrinterName );
@@ -1037,7 +1037,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     // reset IsLastPage
     i_rController.setLastPage( false );
     // is this a fax device
-    bool bFax = m_pInfoPrinter->GetCapabilities(i_pSetupData, PRINTER_CAPABILITIES_FAX) == 1;
+    bool bFax = m_pInfoPrinter->GetCapabilities(i_pSetupData, PrinterCapType::Fax) == 1;
 
     // update job data
     if( i_pSetupData )
