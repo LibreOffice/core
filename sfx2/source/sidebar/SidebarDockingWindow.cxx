@@ -29,13 +29,10 @@ using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
 
-SidebarDockingWindow::SidebarDockingWindow(
-    SfxBindings* pSfxBindings,
-    SidebarChildWindow& rChildWindow,
-    vcl::Window* pParentWindow,
-    WinBits nBits)
-    : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits),
-      mpSidebarController()
+SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChildWindow& rChildWindow,
+                                           vcl::Window* pParentWindow, WinBits nBits)
+    : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits)
+    , mpSidebarController()
 {
     // Get the XFrame from the bindings.
     if (pSfxBindings==NULL || pSfxBindings->GetDispatcher()==NULL)

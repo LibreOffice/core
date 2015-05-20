@@ -29,15 +29,11 @@ class SidebarChildWindow;
 
 class SidebarController;
 
-class SidebarDockingWindow
-    : public SfxDockingWindow
+class SidebarDockingWindow : public SfxDockingWindow
 {
 public:
-    SidebarDockingWindow(
-        SfxBindings* pBindings,
-        SidebarChildWindow& rChildWindow,
-        vcl::Window* pParent,
-        WinBits nBits);
+    SidebarDockingWindow(SfxBindings* pBindings, SidebarChildWindow& rChildWindow,
+                         vcl::Window* pParent, WinBits nBits);
     virtual ~SidebarDockingWindow();
     virtual void dispose() SAL_OVERRIDE;
 
