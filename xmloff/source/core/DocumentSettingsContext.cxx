@@ -30,7 +30,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <list>
@@ -70,7 +69,7 @@ XMLMyList::XMLMyList(const uno::Reference<uno::XComponentContext>& rxContext)
 :   nCount(0),
     m_xContext(rxContext)
 {
-    DBG_ASSERT( rxContext.is(), "got no service manager" );
+    assert(m_xContext.is());
 }
 
 uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
@@ -78,7 +77,7 @@ uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
     uno::Sequence<beans::PropertyValue> aSeq;
     if(nCount)
     {
-        DBG_ASSERT(nCount == aProps.size(), "wrong count of PropertyValue");
+        assert(nCount == aProps.size());
         aSeq.realloc(nCount);
         beans::PropertyValue* pProps = aSeq.getArray();
         std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
@@ -612,7 +611,8 @@ void XMLConfigItemContext::EndElement()
             mrAny <<= maDecoded;
         }
         else {
-            OSL_FAIL("wrong type");
+            SAL_INFO("xmloff.core",
+                    "XMLConfigItemContext: unknown type: " << msType);
         }
 
         ManipulateConfigItem();
@@ -620,7 +620,7 @@ void XMLConfigItemContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        OSL_FAIL("no BaseContext");
+        assert(false && "no BaseContext");
     }
 }
 
@@ -696,7 +696,7 @@ void XMLConfigItemMapNamedContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        OSL_FAIL("no BaseContext");
+        assert(false && "no BaseContext");
     }
 }
 
@@ -801,9 +801,10 @@ void XMLConfigItemMapIndexedContext::EndElement()
                             {
                                 xForbChars->setForbiddenCharacters( aLocale, aForbid );
                             }
-                            catch( uno::Exception& )
+                            catch (uno::Exception const& e)
                             {
-                                OSL_FAIL( "Exception while importing forbidden characters" );
+                                SAL_WARN("xmloff.core",
+                                    "Exception while importing forbidden characters: " << e.Message);
                             }
                         }
                     }
@@ -811,7 +812,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
             }
             else
             {
-                OSL_FAIL( "could not get the XForbiddenCharacters from document!" );
+                SAL_WARN("xmloff.core", "could not get the XForbiddenCharacters from document!");
                 mrAny <<= maProps.GetIndexContainer();
             }
         }
@@ -906,7 +907,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        OSL_FAIL("no BaseContext");
+        assert(false && "no BaseContext");
     }
 }
 
