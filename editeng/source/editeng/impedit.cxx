@@ -1531,8 +1531,8 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     EditPaM aPaM = pEditEngine->GetPaM(aDocPos);
     bool bGotoCursor = DoAutoScroll();
 
-    // aTmpNewSel: Diff between old and new, not the new selection
-    EditSelection aTmpNewSel( GetEditSelection().Max(), aPaM );
+    // aTmpNewSel: Diff between old and new, not the new selection, unless tiled rendering
+    EditSelection aTmpNewSel( isTiledRendering() ? GetEditSelection().Min() : GetEditSelection().Max(), aPaM );
 
     // #i27299#
     // work on copy of current selection and set new selection, if it has changed.
