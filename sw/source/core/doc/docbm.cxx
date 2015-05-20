@@ -632,6 +632,11 @@ namespace sw { namespace mark
             if(&pMark->GetMarkPos().nNode.GetNode() == pOldNode)
             {
                 SwPosition aNewPosRel(aNewPos);
+                if (dynamic_cast< ::sw::mark::CrossRefBookmark *>(pMark))
+                {
+                    // ensure that cross ref bookmark always starts at 0
+                    aNewPosRel.nContent = 0; // HACK for WW8 import
+                }
                 aNewPosRel.nContent += pMark->GetMarkPos().nContent.GetIndex();
                 pMark->SetMarkPos(aNewPosRel);
                 bChangedPos = true;
