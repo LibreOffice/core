@@ -257,7 +257,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     if (nCount == nBytesRead && bEMFSupported)
     {
         SvFileStream aFile(output, StreamMode::READ);
-        if (GraphicConverter::Import(aFile, rGraphic, CVT_EMF) == ERRCODE_NONE)
+        if (GraphicConverter::Import(aFile, rGraphic, ConvertDataFormat::EMF) == ERRCODE_NONE)
             bRet = true;
     }
 
@@ -324,7 +324,7 @@ static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
         aMemStm.Seek(0);
         if (
             aMemStm.GetEndOfData() &&
-            GraphicConverter::Import(aMemStm, rGraphic, CVT_BMP) == ERRCODE_NONE
+            GraphicConverter::Import(aMemStm, rGraphic, ConvertDataFormat::BMP) == ERRCODE_NONE
            )
         {
             MakeAsMeta(rGraphic);
@@ -557,7 +557,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
             if ( nPosWMF != 0 )
             {
                 rStream.Seek( nOrigPos + nPosWMF );
-                if ( GraphicConverter::Import( rStream, aGraphic, CVT_WMF ) == ERRCODE_NONE )
+                if ( GraphicConverter::Import( rStream, aGraphic, ConvertDataFormat::WMF ) == ERRCODE_NONE )
                     bHasPreview = bRetValue = true;
             }
         }
@@ -570,7 +570,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
             if ( nPosTIFF && nSizeTIFF )
             {
                 rStream.Seek( nOrigPos + nPosTIFF );
-                if ( GraphicConverter::Import( rStream, aGraphic, CVT_TIF ) == ERRCODE_NONE )
+                if ( GraphicConverter::Import( rStream, aGraphic, ConvertDataFormat::TIF ) == ERRCODE_NONE )
                 {
                     MakeAsMeta(aGraphic);
                     rStream.Seek( nOrigPos + nPosTIFF );

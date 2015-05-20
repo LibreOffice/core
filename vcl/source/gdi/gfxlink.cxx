@@ -171,30 +171,30 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
 
         if( pData )
         {
-            SvMemoryStream  aMemStm;
-            sal_uLong           nCvtType;
+            SvMemoryStream    aMemStm;
+            ConvertDataFormat nCvtType;
 
             aMemStm.SetBuffer( const_cast<sal_uInt8*>(pData), mnBufSize, false, mnBufSize );
 
             switch( meType )
             {
-                case( GFX_LINK_TYPE_NATIVE_GIF ): nCvtType = CVT_GIF; break;
+                case( GFX_LINK_TYPE_NATIVE_GIF ): nCvtType = ConvertDataFormat::GIF; break;
 
                 // #i15508# added BMP type for better exports (reload when swapped - checked, works)
-                case( GFX_LINK_TYPE_NATIVE_BMP ): nCvtType = CVT_BMP; break;
+                case( GFX_LINK_TYPE_NATIVE_BMP ): nCvtType = ConvertDataFormat::BMP; break;
 
-                case( GFX_LINK_TYPE_NATIVE_JPG ): nCvtType = CVT_JPG; break;
-                case( GFX_LINK_TYPE_NATIVE_PNG ): nCvtType = CVT_PNG; break;
-                case( GFX_LINK_TYPE_NATIVE_TIF ): nCvtType = CVT_TIF; break;
-                case( GFX_LINK_TYPE_NATIVE_WMF ): nCvtType = CVT_WMF; break;
-                case( GFX_LINK_TYPE_NATIVE_MET ): nCvtType = CVT_MET; break;
-                case( GFX_LINK_TYPE_NATIVE_PCT ): nCvtType = CVT_PCT; break;
-                case( GFX_LINK_TYPE_NATIVE_SVG ): nCvtType = CVT_SVG; break;
+                case( GFX_LINK_TYPE_NATIVE_JPG ): nCvtType = ConvertDataFormat::JPG; break;
+                case( GFX_LINK_TYPE_NATIVE_PNG ): nCvtType = ConvertDataFormat::PNG; break;
+                case( GFX_LINK_TYPE_NATIVE_TIF ): nCvtType = ConvertDataFormat::TIF; break;
+                case( GFX_LINK_TYPE_NATIVE_WMF ): nCvtType = ConvertDataFormat::WMF; break;
+                case( GFX_LINK_TYPE_NATIVE_MET ): nCvtType = ConvertDataFormat::MET; break;
+                case( GFX_LINK_TYPE_NATIVE_PCT ): nCvtType = ConvertDataFormat::PCT; break;
+                case( GFX_LINK_TYPE_NATIVE_SVG ): nCvtType = ConvertDataFormat::SVG; break;
 
-                default: nCvtType = CVT_UNKNOWN; break;
+                default: nCvtType = ConvertDataFormat::Unknown; break;
             }
 
-            if( nCvtType && ( GraphicConverter::Import( aMemStm, rGraphic, nCvtType ) == ERRCODE_NONE ) )
+            if( nCvtType != ConvertDataFormat::Unknown && ( GraphicConverter::Import( aMemStm, rGraphic, nCvtType ) == ERRCODE_NONE ) )
                 bRet = true;
         }
     }

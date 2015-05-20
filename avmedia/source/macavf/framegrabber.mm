@@ -101,7 +101,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     // convert the image into the return-value type which is a graphic::XGraphic
     SvMemoryStream aMemStm( pBitmapBytes, nBitmapLen, StreamMode::READ | StreamMode::WRITE );
     Graphic aGraphic;
-    if( GraphicConverter::Import( aMemStm, aGraphic, CVT_TIF ) == ERRCODE_NONE )
+    if( GraphicConverter::Import( aMemStm, aGraphic, ConvertDataFormat::TIF ) == ERRCODE_NONE )
         xRet = aGraphic.GetXGraphic();
 
     // clean up resources

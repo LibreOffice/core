@@ -11522,7 +11522,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         // need to convert to grayscale;
         // load stream to bitmap and draw the bitmap instead
         Graphic aGraphic;
-        GraphicConverter::Import( rDCTData, aGraphic, CVT_JPG );
+        GraphicConverter::Import( rDCTData, aGraphic, ConvertDataFormat::JPG );
         Bitmap aBmp( aGraphic.GetBitmap() );
         if( !!rMask && rMask.GetSizePixel() == aBmp.GetSizePixel() )
         {

@@ -2187,17 +2187,17 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
         OString aShortName;
         switch( pData->mnFormat )
         {
-            case( CVT_BMP ): aShortName = BMP_SHORTNAME; break;
-            case( CVT_GIF ): aShortName = GIF_SHORTNAME; break;
-            case( CVT_JPG ): aShortName = JPG_SHORTNAME; break;
-            case( CVT_MET ): aShortName = MET_SHORTNAME; break;
-            case( CVT_PCT ): aShortName = PCT_SHORTNAME; break;
-            case( CVT_PNG ): aShortName = PNG_SHORTNAME; break;
-            case( CVT_SVM ): aShortName = SVM_SHORTNAME; break;
-            case( CVT_TIF ): aShortName = TIF_SHORTNAME; break;
-            case( CVT_WMF ): aShortName = WMF_SHORTNAME; break;
-            case( CVT_EMF ): aShortName = EMF_SHORTNAME; break;
-            case( CVT_SVG ): aShortName = SVG_SHORTNAME; break;
+            case( ConvertDataFormat::BMP ): aShortName = BMP_SHORTNAME; break;
+            case( ConvertDataFormat::GIF ): aShortName = GIF_SHORTNAME; break;
+            case( ConvertDataFormat::JPG ): aShortName = JPG_SHORTNAME; break;
+            case( ConvertDataFormat::MET ): aShortName = MET_SHORTNAME; break;
+            case( ConvertDataFormat::PCT ): aShortName = PCT_SHORTNAME; break;
+            case( ConvertDataFormat::PNG ): aShortName = PNG_SHORTNAME; break;
+            case( ConvertDataFormat::SVM ): aShortName = SVM_SHORTNAME; break;
+            case( ConvertDataFormat::TIF ): aShortName = TIF_SHORTNAME; break;
+            case( ConvertDataFormat::WMF ): aShortName = WMF_SHORTNAME; break;
+            case( ConvertDataFormat::EMF ): aShortName = EMF_SHORTNAME; break;
+            case( ConvertDataFormat::SVG ): aShortName = SVG_SHORTNAME; break;
 
             default:
             break;

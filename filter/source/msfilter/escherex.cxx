@@ -1463,7 +1463,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             {
                 Graphic         aGraphic;
                 SvMemoryStream  aTemp( (void*)pAry, nAryLen, StreamMode::READ );
-                sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, CVT_WMF );
+                sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, ConvertDataFormat::WMF );
                 if ( nErrCode == ERRCODE_NONE )
                 {
                     aGraphicObject = aGraphic;
@@ -4412,7 +4412,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
             {
                 sal_uInt32 nErrCode;
                 if ( !aGraphic.IsAnimated() )
-                    nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_EMF );
+                    nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? ConvertDataFormat::PNG  : ConvertDataFormat::EMF );
                 else
                 {   // to store a animation, a gif has to be included into the msOG chunk of a png  #I5583#
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();

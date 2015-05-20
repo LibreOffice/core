@@ -121,7 +121,7 @@ private:
                                     return size_t(-1);
                                 }
     SAL_DLLPRIVATE INetURLObject ImplGetURL( const GalleryObject* pObject ) const;
-    SAL_DLLPRIVATE INetURLObject ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPtr nFormat = CVT_UNKNOWN );
+    SAL_DLLPRIVATE INetURLObject ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDataFormat nFormat = ConvertDataFormat::Unknown );
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
     SAL_DLLPRIVATE void         ImplBroadcast( sal_uIntPtr nUpdatePos );
 

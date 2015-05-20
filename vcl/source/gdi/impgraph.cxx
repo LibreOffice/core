@@ -1036,18 +1036,18 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
         else if( sal::static_int_cast<sal_uLong>(meType) >= SYS_WINMETAFILE
                  && sal::static_int_cast<sal_uLong>(meType) <= SYS_MACMETAFILE )
         {
-            Graphic aSysGraphic;
-            sal_uLong   nCvtType;
+            Graphic           aSysGraphic;
+            ConvertDataFormat nCvtType;
 
             switch( sal::static_int_cast<sal_uLong>(meType) )
             {
                 case( SYS_WINMETAFILE ):
-                case( SYS_WNTMETAFILE ): nCvtType = CVT_WMF; break;
-                case( SYS_OS2METAFILE ): nCvtType = CVT_MET; break;
-                case( SYS_MACMETAFILE ): nCvtType = CVT_PCT; break;
+                case( SYS_WNTMETAFILE ): nCvtType = ConvertDataFormat::WMF; break;
+                case( SYS_OS2METAFILE ): nCvtType = ConvertDataFormat::MET; break;
+                case( SYS_MACMETAFILE ): nCvtType = ConvertDataFormat::PCT; break;
 
                 default:
-                    nCvtType = CVT_UNKNOWN;
+                    nCvtType = ConvertDataFormat::Unknown;
                 break;
             }
 
