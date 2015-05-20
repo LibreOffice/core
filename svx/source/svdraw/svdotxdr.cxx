@@ -244,8 +244,8 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeCreatePoly(const SdrDragStat& rDrag) con
 
 Pointer SdrTextObj::GetCreatePointer() const
 {
-    if (IsTextFrame()) return Pointer(POINTER_DRAW_TEXT);
-    return Pointer(POINTER_CROSS);
+    if (IsTextFrame()) return Pointer(PointerStyle::DrawText);
+    return Pointer(PointerStyle::Cross);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

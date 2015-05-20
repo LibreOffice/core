@@ -439,7 +439,7 @@ void SwView::ExitDraw()
 
                 GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
             }
-            GetEditWin().SetPointer(Pointer(POINTER_TEXT));
+            GetEditWin().SetPointer(Pointer(PointerStyle::Text));
         }
     }
 }
