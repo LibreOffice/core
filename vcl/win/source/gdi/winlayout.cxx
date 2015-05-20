@@ -1072,7 +1072,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     // TODO: try to avoid itemization since it costs a lot of performance
     SCRIPT_STATE aScriptState = {0,false,false,false,false,false,false,false,false,0,0};
     aScriptState.uBidiLevel         = bool(rArgs.mnFlags & SalLayoutFlags::BiDiRtl);
-    aScriptState.fOverrideDirection = bool(rArgs.mnFlags & SalLayoutFlags::BidiStrong);
+    aScriptState.fOverrideDirection = bool(rArgs.mnFlags & SalLayoutFlags::BiDiStrong);
     aScriptState.fDigitSubstitute   = bool(rArgs.mnFlags & SalLayoutFlags::SubstituteDigits);
     aScriptState.fArabicNumContext  = aScriptState.fDigitSubstitute & aScriptState.uBidiLevel;
     DWORD nLangId = 0;  // TODO: get language from font
@@ -1137,7 +1137,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     }
 
     // reorder visual item order if needed
-    if( rArgs.mnFlags & SalLayoutFlags::BidiStrong )
+    if( rArgs.mnFlags & SalLayoutFlags::BiDiStrong )
     {
         // force RTL item ordering if requested
         if( rArgs.mnFlags & SalLayoutFlags::BiDiRtl )
@@ -1234,7 +1234,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
 
         // override bidi analysis if requested
-        if( rArgs.mnFlags & SalLayoutFlags::BidiStrong )
+        if( rArgs.mnFlags & SalLayoutFlags::BiDiStrong )
         {
             // FIXME: is this intended ?
             rVisualItem.mpScriptItem->a.fRTL                 = (aScriptState.uBidiLevel & 1);
