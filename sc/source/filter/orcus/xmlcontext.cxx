@@ -227,7 +227,7 @@ public:
     void operator() (size_t index)
     {
         orcus::xmlns_id_t nsid = mrNsRepo.get_identifier(index);
-        if (nsid == orcus::XMLNS_UNKNOWN_ID)
+        if (nsid == orcus::unspecified)
             return;
 
         std::string alias = mrNsRepo.get_short_name(index);
