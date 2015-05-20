@@ -445,7 +445,7 @@ void Test::testFdo60915()
     }
 }
 
-// https://issues.apache.org/ooo/show_bug.cgi?id=116701
+// https://bz.apache.org/ooo/show_bug.cgi?id=116701
 void Test::testI116701()
 {
     LanguageType eLang = LANGUAGE_CHINESE_TRADITIONAL;

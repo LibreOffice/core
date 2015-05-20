@@ -113,7 +113,7 @@ void TestBreakIterator::testLineBreaking()
         }
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=17155
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=17155
     {
         OUString aTest("foo /bar/baz");
 
@@ -128,7 +128,7 @@ void TestBreakIterator::testLineBreaking()
         }
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=19716
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=19716
     {
         OUString aTest("aaa]aaa");
 
@@ -153,7 +153,7 @@ void TestBreakIterator::testWordBoundaries()
 
     i18n::Boundary aBounds;
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=11993
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=11993
     {
         OUString aTest("abcd ef  ghi??? KLM");
 
@@ -184,7 +184,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(aBounds.startPos == 16 && aBounds.endPos == 19);
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=21907
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=21907
     {
         OUString aTest("b a?");
 
@@ -201,7 +201,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, 3, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES));
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=14904
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=14904
     {
         const sal_Unicode TEST[] =
         {
@@ -303,7 +303,7 @@ void TestBreakIterator::testWordBoundaries()
         }
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=13494
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=13494
     {
         const OUString aBase("xxAAxxBBxxCCxx");
         const sal_Unicode aTests[] =
@@ -383,7 +383,7 @@ void TestBreakIterator::testWordBoundaries()
         }
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=13451
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=13451
     {
         aLocale.Language = "ca";
         aLocale.Country = "ES";
@@ -404,7 +404,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=85411
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=85411
     for (int j = 0; j < 3; ++j)
     {
         switch (j)
@@ -446,7 +446,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
     }
 
-    //https://issues.apache.org/ooo/show_bug.cgi?id=21290
+    //https://bz.apache.org/ooo/show_bug.cgi?id=21290
     for (int j = 0; j < 2; ++j)
     {
         switch (j)
@@ -487,8 +487,8 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=58513
-    //See https://bugs.freedesktop.org/show_bug.cgi?id=55707
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=58513
+    //See https://bugs.libreoffice.org/show_bug.cgi?id=55707
     {
         aLocale.Language = "fi";
         aLocale.Country = "FI";
@@ -529,7 +529,7 @@ void TestBreakIterator::testWordBoundaries()
         }
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=107843
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=107843
     {
         aLocale.Language = "en";
         aLocale.Country = "US";
@@ -547,7 +547,7 @@ void TestBreakIterator::testWordBoundaries()
         CPPUNIT_ASSERT(aBounds.startPos == 6 && aBounds.endPos == 9);
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=113785
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=113785
     {
         aLocale.Language = "en";
         aLocale.Country = "US";
@@ -570,9 +570,9 @@ void TestBreakIterator::testWordBoundaries()
 }
 
 //See https://bugs.libreoffice.org/show_bug.cgi?id=40292
-//See https://issues.apache.org/ooo/show_bug.cgi?id=80412
-//See https://issues.apache.org/ooo/show_bug.cgi?id=111152
-//See https://issues.apache.org/ooo/show_bug.cgi?id=50172
+//See https://bz.apache.org/ooo/show_bug.cgi?id=80412
+//See https://bz.apache.org/ooo/show_bug.cgi?id=111152
+//See https://bz.apache.org/ooo/show_bug.cgi?id=50172
 void TestBreakIterator::testGraphemeIteration()
 {
     lang::Locale aLocale;
@@ -834,7 +834,7 @@ void TestBreakIterator::testThai()
             aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=29548
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=29548
     //make sure forwards and back are consistent
     {
         const sal_Unicode THAI[] =

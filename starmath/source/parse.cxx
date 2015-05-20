@@ -401,7 +401,7 @@ void SmParser::NextToken()
 
         // Try to parse a number. This should be independent from the locale
         // setting, so temporarily set the language to English.
-        // See https://issues.apache.org/ooo/show_bug.cgi?id=45779
+        // See https://bz.apache.org/ooo/show_bug.cgi?id=45779
         LanguageTag aOldLoc(aCC.getLanguageTag());
         aCC.setLanguageTag(LanguageTag(m_aDotLoc));
         aRes = aCC.parsePredefinedToken(KParseType::ASC_NUMBER,
@@ -1409,8 +1409,8 @@ void SmParser::Term(bool bGroupNumberIdent)
                 // although e.g. LaTeX or AsciiMath interpret that as "x_2 n".
                 // The tokenizer skips whitespaces so we need some additional
                 // work to distinguish from "x_2 n".
-                // See https://issues.apache.org/ooo/show_bug.cgi?id=11752 and
-                // https://www.libreoffice.org/bugzilla/show_bug.cgi?id=55853
+                // See https://bz.apache.org/ooo/show_bug.cgi?id=11752 and
+                // https://bugs.libreoffice.org/show_bug.cgi?id=55853
                 sal_Int32 nBufLen = m_aBufferString.getLength();
                 CharClass aCC(SM_MOD()->GetSysLocale().GetLanguageTag());
                 sal_Int32 nTokens = 1;

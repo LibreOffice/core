@@ -328,7 +328,7 @@ rss_bugzillas = {
     # NOTE: I am leaving it in the list, commented out, just so someone
     # does not add it back immediately .-)
     # 'novell': 'https://bugzilla.novell.com/buglist.cgi',
-    'ooo': 'https://issues.apache.org/ooo/buglist.cgi',
+    'ooo': 'https://bz.apache.org/ooo/buglist.cgi',
     'tdf': 'http://bugs.documentfoundation.org/buglist.cgi',
 }
 

@@ -639,7 +639,7 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_MESSAGE("128 characters", aDocStat.nChar == 128);
     }
 
-    //See https://issues.apache.org/ooo/show_bug.cgi?id=89042
+    //See https://bz.apache.org/ooo/show_bug.cgi?id=89042
     //See https://bugs.libreoffice.org/show_bug.cgi?id=53399
     {
         SwDocStat aDocStat;

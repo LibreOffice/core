@@ -74,7 +74,7 @@ tools if they use system libraries which are linked with the system
 sqlite. Therefore we deliver it into lib/sqlite on unix systems.
 
 See also issue:
-[https://issues.apache.org/ooo/show_bug.cgi?id=106132]
+[https://bz.apache.org/ooo/show_bug.cgi?id=106132]
 
 == system NSS on Linux ==
 

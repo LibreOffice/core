@@ -129,7 +129,7 @@ bool StgCompObjStream::Load()
                 //the actual codepage used doesn't seem to be specified/stored
                 //anywhere :-(. Might as well pick 1252 and be consistent on
                 //all platforms and envs
-                //https://issues.apache.org/ooo/attachment.cgi?id=68668
+                //https://bz.apache.org/ooo/attachment.cgi?id=68668
                 //for a good edge-case example
                 aUserName = nStrLen ? OUString( p.get(), nStrLen, RTL_TEXTENCODING_MS_1252 ) : OUString();
                 nCbFormat = ReadClipboardFormat( *this );

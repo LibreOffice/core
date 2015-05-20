@@ -190,7 +190,7 @@ DECLARE_WW8IMPORT_TEST(testAllGapsWord, "all_gaps_word.doc")
 
 DECLARE_WW8IMPORT_TEST(testI120158, "i120158.doc")
 {
-    // See https://issues.apache.org/ooo/show_bug.cgi?id=120158
+    // See https://bz.apache.org/ooo/show_bug.cgi?id=120158
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
     // list of paragraphs

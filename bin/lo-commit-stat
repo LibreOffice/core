@@ -20,7 +20,7 @@ my %bugzillas = (
     fdo  => "https://bugs.libreoffice.org/show_bug.cgi?id=",
     bnc  => "https://bugzilla.novell.com/show_bug.cgi?id=",
     rhbz => "https://bugzilla.redhat.com/show_bug.cgi?id=",
-    i    => "https://issues.apache.org/ooo/show_bug.cgi?id=",
+    i    => "https://bz.apache.org/ooo/show_bug.cgi?id=",
     fate => "https://features.opensuse.org/",
 );
 

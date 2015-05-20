@@ -39,7 +39,7 @@ private:
 
 //A test to ensure that our Title Case functionality is working
 //http://lists.freedesktop.org/archives/libreoffice/2012-June/032767.html
-//https://issues.apache.org/ooo/show_bug.cgi?id=30863
+//https://bz.apache.org/ooo/show_bug.cgi?id=30863
 void TestCharacterClassification::testTitleCase()
 {
     lang::Locale aLocale;
