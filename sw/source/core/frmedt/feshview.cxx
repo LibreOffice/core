@@ -1258,7 +1258,7 @@ namespace
     };
 }
 
-const SdrObject* SwFEShell::GetBestObject( bool bNext, sal_uInt16 /*GOTOOBJ_...*/ eType, bool bFlat, const svx::ISdrObjectFilter* pFilter )
+const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool bFlat, const svx::ISdrObjectFilter* pFilter )
 {
     if( !Imp()->HasDrawView() )
         return NULL;
@@ -1271,8 +1271,8 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, sal_uInt16 /*GOTOOBJ_...*
     Point aTopPos(  nTmp, nTmp );
     Point aCurPos;
     Point aPos;
-    bool bNoDraw = 0 == (GOTOOBJ_DRAW_ANY & eType);
-    bool bNoFly = 0 == (GOTOOBJ_FLY_ANY & eType);
+    bool bNoDraw(GotoObjFlags::DrawAny & eType);
+    bool bNoFly(GotoObjFlags::FlyAny & eType);
 
     if( !bNoFly && bNoDraw )
     {
@@ -1331,34 +1331,35 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, sal_uInt16 /*GOTOOBJ_...*
             bool bFlyFrm = pObj->ISA(SwVirtFlyDrawObj);
             if( ( bNoFly && bFlyFrm ) ||
                 ( bNoDraw && !bFlyFrm ) ||
-                ( eType == GOTOOBJ_DRAW_SIMPLE && lcl_IsControlGroup( pObj ) ) ||
-                ( eType == GOTOOBJ_DRAW_CONTROL && !lcl_IsControlGroup( pObj ) ) ||
+                ( eType == GotoObjFlags::DrawSimple && lcl_IsControlGroup( pObj ) ) ||
+                ( eType == GotoObjFlags::DrawControl && !lcl_IsControlGroup( pObj ) ) ||
                 ( pFilter && !pFilter->includeObject( *pObj ) ) )
                 continue;
             if( bFlyFrm )
             {
                 SwVirtFlyDrawObj *pO = static_cast<SwVirtFlyDrawObj*>(pObj);
                 SwFlyFrm *pFly = pO->GetFlyFrm();
-                if( GOTOOBJ_FLY_ANY != ( GOTOOBJ_FLY_ANY & eType ) )
+                if( GotoObjFlags::FlyAny != ( GotoObjFlags::FlyAny & eType ) )
                 {
                     switch ( eType )
                     {
-                        case GOTOOBJ_FLY_FRM:
+                        case GotoObjFlags::FlyFrm:
                             if ( pFly->Lower() && pFly->Lower()->IsNoTextFrm() )
                                 continue;
                         break;
-                        case GOTOOBJ_FLY_GRF:
+                        case GotoObjFlags::FlyGrf:
                             if ( pFly->Lower() &&
                                 (pFly->Lower()->IsLayoutFrm() ||
                                 !static_cast<SwContentFrm*>(pFly->Lower())->GetNode()->GetGrfNode()))
                                 continue;
                         break;
-                        case GOTOOBJ_FLY_OLE:
+                        case GotoObjFlags::FlyOLE:
                             if ( pFly->Lower() &&
                                 (pFly->Lower()->IsLayoutFrm() ||
                                 !static_cast<SwContentFrm*>(pFly->Lower())->GetNode()->GetOLENode()))
                                 continue;
                         break;
+                        default: break;
                     }
                 }
                 aCurPos = pFly->Frm().Pos();
@@ -1434,7 +1435,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, sal_uInt16 /*GOTOOBJ_...*
     return pBest;
 }
 
-bool SwFEShell::GotoObj( bool bNext, sal_uInt16 /*GOTOOBJ_...*/ eType )
+bool SwFEShell::GotoObj( bool bNext, GotoObjFlags eType )
 {
     const SdrObject* pBest = GetBestObject( bNext, eType );
 

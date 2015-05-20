@@ -2516,7 +2516,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
             case KS_NextObject:
             case KS_PrevObject:
-                if(rSh.GotoObj( KS_NextObject == eKeyState, GOTOOBJ_GOTO_ANY))
+                if(rSh.GotoObj( KS_NextObject == eKeyState, GotoObjFlags::Any))
                 {
                     if( rSh.IsFrmSelected() &&
                         m_rView.GetDrawFuncPtr() )

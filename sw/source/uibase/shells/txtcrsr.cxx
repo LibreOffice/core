@@ -333,7 +333,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
                 if ( !pFilter.get() )
                     break;
 
-                const SdrObject* pNearestControl = rSh.GetBestObject( true, GOTOOBJ_DRAW_CONTROL, false, pFilter.get() );
+                const SdrObject* pNearestControl = rSh.GetBestObject( true, GotoObjFlags::DrawControl, false, pFilter.get() );
                 if ( !pNearestControl )
                     break;
 
@@ -346,7 +346,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             }
             break;
         case FN_CNTNT_TO_NEXT_FRAME:
-            bRet = rSh.GotoObj(true, GOTOOBJ_GOTO_ANY);
+            bRet = rSh.GotoObj(true, GotoObjFlags::Any);
             if(bRet)
             {
                 rSh.HideCrsr();
