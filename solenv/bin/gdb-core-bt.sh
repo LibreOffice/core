@@ -20,6 +20,10 @@ then
         COREFILE=$(ls "$COREDIR"/core*)
         echo
         echo "It looks like ${EXECUTABLE} generated a core file at ${COREFILE}"
+        if test -n "$RR"; then
+            echo "rr is recording, skipping gdb backtrace generation"
+            exit 0
+        fi
         echo "Backtraces:"
         GDBCOMMANDFILE=$(mktemp)
         echo "thread apply all backtrace full" > "$GDBCOMMANDFILE"
