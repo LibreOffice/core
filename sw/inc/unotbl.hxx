@@ -213,8 +213,6 @@ class SW_DLLPUBLIC SwXTextTableCursor : public SwXTextTableCursor_Base
     SwDepend                aCrsrDepend;
     const SfxItemPropertySet*   m_pPropSet;
 
-protected:
-    virtual ~SwXTextTableCursor();
 public:
     SwXTextTableCursor(SwFrameFormat* pFormat, SwTableBox* pBox);
     SwXTextTableCursor(SwFrameFormat& rTableFormat,
@@ -265,7 +263,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) SAL_OVERRIDE;
 
     // ITextCursorHelper
     virtual const SwPaM*        GetPaM() const SAL_OVERRIDE;
@@ -275,6 +274,7 @@ public:
 
     const SwUnoCrsr*            GetCrsr() const;
     SwUnoCrsr*                  GetCrsr();
+    std::shared_ptr<SwUnoCrsr> m_pUnoCrsr;
     SwFrameFormat*       GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
 };
 
