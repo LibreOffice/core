@@ -184,11 +184,13 @@
             <menu:menu menu:id=".uno:InsertRowsMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertRowsBefore">
+                    <menu:menuitem menu:id=".uno:InsertRowsAfter">
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:InsertColumnsMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertColumnsBefore">
+                    <menu:menuitem menu:id=".uno:InsertColumnsAfter">
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:Insert"/>
