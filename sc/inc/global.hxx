@@ -320,8 +320,10 @@ enum InsCellCmd
     {
         INS_CELLSDOWN,
         INS_CELLSRIGHT,
-        INS_INSROWS,
-        INS_INSCOLS,
+        INS_INSROWS_BEFORE,
+        INS_INSROWS_AFTER,
+        INS_INSCOLS_BEFORE,
+        INS_INSCOLS_AFTER,
         INS_NONE
     };
 
