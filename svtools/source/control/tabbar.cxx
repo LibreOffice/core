@@ -820,7 +820,7 @@ void TabBar::ImplInitControls()
         mpImpl->mpSizer.disposeAndClear();
     }
 
-    if (mbHasInsertTab && !mpImpl->mpAddButton)
+    if ((mnWinStyle & WB_INSERTTAB) && !mpImpl->mpAddButton)
     {
         Link<> aLink = LINK(this, TabBar, ImplAddClickHandler);
         mpImpl->mpAddButton.reset(VclPtr<ImplTabButton>::Create(this, WB_REPEAT));
@@ -878,8 +878,6 @@ void TabBar::ImplInitControls()
         mpImpl->mpFirstButton.disposeAndClear();
         mpImpl->mpLastButton.disposeAndClear();
     }
-
-    mbHasInsertTab = (mnWinStyle & WB_INSERTTAB);
 }
 
 void TabBar::ImplEnableControls()

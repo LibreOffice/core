@@ -347,7 +347,6 @@ private:
     bool            mbSelColor : 1;
     bool            mbSelTextColor : 1;
     bool            mbMirrored : 1;
-    bool            mbHasInsertTab : 1; // if true, the tab bar has an extra tab at the end.
     bool            mbScrollAlwaysEnabled : 1;
 
     Link<>          maSelectHdl;
