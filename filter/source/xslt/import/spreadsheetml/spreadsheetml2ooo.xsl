@@ -479,7 +479,7 @@
 			<xsl:apply-templates select="/ss:Workbook/ss:Styles/ss:Style[not(@ss:Name)]"/>
 			<xsl:apply-templates select="/ss:Workbook/ss:Styles/ss:Style/ss:Font[@ss:VerticalAlign]"/>
 			<!-- applying to ss:Data (but *, as also ss:Data nested in ss:Comments -->
-			<xsl:apply-templates select="/ss:Workbook/ss:Worksheet/ss:Table/ss:Row/ss:Cell/*[descendant-or-self::*[namespace-uri()='http://www.w3.org/TR/REC-html40']]"/>
+			<xsl:apply-templates select="/ss:Workbook/ss:Worksheet/ss:Table/ss:Row/ss:Cell/*[descendant-or-self::*]"/>
 			<xsl:apply-templates select="/ss:Workbook/ss:Worksheet/x:WorksheetOptions/x:PageSetup//@x:Data"/>
 			<!-- if ConditionalFormatting exists,transforing the styles -->
 			<xsl:if test="/ss:Workbook/ss:Worksheet/x:ConditionalFormatting">
@@ -6921,7 +6921,7 @@
 	<xsl:template name="create-data-content">
 		<xsl:param name="style-id" select="@ss:StyleID"/>
 		<!-- collect every HTML 3.2 children, which are not empty -->
-		<xsl:variable name="html-children" select="ss:Data/descendant-or-self::*[namespace-uri()='http://www.w3.org/TR/REC-html40'][string-length(text()) != 0]"/>
+		<xsl:variable name="html-children" select="ss:Data/descendant-or-self::*[string-length(text()) != 0]"/>
 		<xsl:choose>
 			<xsl:when test="$html-children and $html-children != ''">
 				<xsl:for-each select="$html-children">
@@ -7170,7 +7170,7 @@
 		</xsl:if>
 	</xsl:template>
 	<xsl:template match="ss:Data">
-		<xsl:for-each select="descendant-or-self::*[namespace-uri()='http://www.w3.org/TR/REC-html40'][string-length(text()) != 0]">
+		<xsl:for-each select="descendant-or-self::*[string-length(text()) != 0]">
 			<style:style style:name="{concat(ancestor::ss:Cell/@ss:StyleID,'T',count(preceding::ss:Data[child::html:*]), '_', position())}" style:family="text">
 				<xsl:element name="style:text-properties">
 					<xsl:if test="ancestor-or-self::html:Font/@html:Face">
