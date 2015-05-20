@@ -1836,25 +1836,25 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
     StyleSettings hStyleSettings   = rSettings.GetStyleSettings();
     MouseSettings hMouseSettings = rSettings.GetMouseSettings();
 
-    sal_uLong nDragFullOptions = hStyleSettings.GetDragFullOptions();
+    DragFullOptions nDragFullOptions = hStyleSettings.GetDragFullOptions();
 
     SvtTabAppearanceCfg aAppearanceCfg;
     sal_uInt16 nDragMode = aAppearanceCfg.GetDragMode();
     switch ( nDragMode )
     {
     case DragFullWindow:
-        nDragFullOptions |= DRAGFULL_OPTION_ALL;
+        nDragFullOptions |= DragFullOptions::All;
         break;
     case DragFrame:
-        nDragFullOptions &= ~DRAGFULL_OPTION_ALL;
+        nDragFullOptions &= ~DragFullOptions::All;
         break;
     case DragSystemDep:
     default:
         break;
     }
 
-    sal_uInt32 nFollow = hMouseSettings.GetFollow();
-    hMouseSettings.SetFollow( aAppearanceCfg.IsMenuMouseFollow() ? (nFollow|MOUSE_FOLLOW_MENU) : (nFollow&~MOUSE_FOLLOW_MENU));
+    MouseFollowFlags nFollow = hMouseSettings.GetFollow();
+    hMouseSettings.SetFollow( aAppearanceCfg.IsMenuMouseFollow() ? (nFollow|MouseFollowFlags::Menu) : (nFollow&~MouseFollowFlags::Menu));
     rSettings.SetMouseSettings(hMouseSettings);
 
     SvtMenuOptions aMenuOpt;

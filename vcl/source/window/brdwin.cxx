@@ -337,7 +337,7 @@ bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
         pData->mnHitTest = ImplHitTest( pData, pData->maMouseOff );
         if ( pData->mnHitTest )
         {
-            sal_uInt16 nDragFullTest = 0;
+            DragFullOptions nDragFullTest = DragFullOptions::NONE;
             bool bTracking = true;
             bool bHitTest = true;
 
@@ -397,9 +397,9 @@ bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
                         pData->mnTrackHeight = aSize.Height();
 
                         if ( pData->mnHitTest & BORDERWINDOW_HITTEST_TITLE )
-                            nDragFullTest = DRAGFULL_OPTION_WINDOWMOVE;
+                            nDragFullTest = DragFullOptions::WindowMove;
                         else
-                            nDragFullTest = DRAGFULL_OPTION_WINDOWSIZE;
+                            nDragFullTest = DragFullOptions::WindowSize;
                     }
                 }
                 else
@@ -433,7 +433,7 @@ bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
             if ( bTracking )
             {
                 pData->mbDragFull = false;
-                if ( nDragFullTest )
+                if ( nDragFullTest != DragFullOptions::NONE )
                     pData->mbDragFull = true;   // always fulldrag for proper docking, ignore system settings
                 pBorderWindow->StartTracking();
             }

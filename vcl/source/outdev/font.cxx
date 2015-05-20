@@ -1495,7 +1495,7 @@ void OutputDevice::InitFont() const
         // decide if antialiasing is appropriate
         bool bNonAntialiased(GetAntialiasing() & AntialiasingFlags::DisableText);
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        bNonAntialiased |= ((rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0);
+        bNonAntialiased |= bool(rStyleSettings.GetDisplayOptions() & DisplayOptions::AADisable);
         bNonAntialiased |= (int(rStyleSettings.GetAntialiasingMinPixelHeight()) > mpFontEntry->maFontSelData.mnHeight);
         mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
 

@@ -2787,7 +2787,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     ReleaseDC( 0, hDC );
 
-    aStyleSettings.SetToolbarIconSize(STYLE_TOOLBAR_ICONSIZE_LARGE);
+    aStyleSettings.SetToolbarIconSize(ToolbarIconSize::Large);
 
     aStyleSettings.SetMenuFont( aMenuFont );
     aStyleSettings.SetTitleFont( aTitleFont );
@@ -2821,11 +2821,11 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     BOOL bDragFull;
     if ( SystemParametersInfo( SPI_GETDRAGFULLWINDOWS, 0, &bDragFull, 0 ) )
     {
-        sal_uLong nDragFullOptions = aStyleSettings.GetDragFullOptions();
+        DragFullOptions nDragFullOptions = aStyleSettings.GetDragFullOptions();
         if ( bDragFull )
-            nDragFullOptions |=  DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE | DRAGFULL_OPTION_DOCKING | DRAGFULL_OPTION_SPLIT;
+            nDragFullOptions |= DragFullOptions::WindowMove | DragFullOptions::WindowSize | DragFullOptions::Docking | DragFullOptions::Split;
         else
-            nDragFullOptions &= ~(DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE | DRAGFULL_OPTION_DOCKING | DRAGFULL_OPTION_SPLIT);
+            nDragFullOptions &= ~DragFullOptions(DragFullOptions::WindowMove | DragFullOptions::WindowSize | DragFullOptions::Docking | DragFullOptions::Split);
         aStyleSettings.SetDragFullOptions( nDragFullOptions );
     }
 
