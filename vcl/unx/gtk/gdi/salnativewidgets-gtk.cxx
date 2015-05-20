@@ -4214,7 +4214,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetPreferredIconTheme( OUString::createFromAscii( pIconThemeName ) );
     g_free( pIconThemeName );
 
-    aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
+    aStyleSet.SetToolbarIconSize( ToolbarIconSize::Large );
 
     const cairo_font_options_t* pNewOptions = gdk_screen_get_font_options( pScreen );
     aStyleSet.SetCairoFontOptions( pNewOptions );

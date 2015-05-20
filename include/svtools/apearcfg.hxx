@@ -23,6 +23,7 @@
 #include <unotools/configitem.hxx>
 
 class Application;
+enum class MouseMiddleButtonAction;
 
 typedef enum {
     SnapToButton = 0,
@@ -42,7 +43,7 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
     short           nDragMode           ;
     short           nScaleFactor        ;
     short           nSnapMode           ;
-    short           nMiddleMouse;
+    MouseMiddleButtonAction nMiddleMouse;
 #if defined( UNX )
     short           nAAMinPixelHeight   ;
 #endif
@@ -71,8 +72,8 @@ public:
     sal_uInt16      GetSnapMode () const { return nSnapMode; }
     void        SetSnapMode ( sal_uInt16 nSet );
 
-    sal_uInt16      GetMiddleMouseButton () const { return nMiddleMouse; }
-    void        SetMiddleMouseButton ( sal_uInt16 nSet );
+    MouseMiddleButtonAction GetMiddleMouseButton () const { return nMiddleMouse; }
+    void        SetMiddleMouseButton ( MouseMiddleButtonAction nSet );
 
     void        SetApplicationDefaults ( Application* pApp );
 

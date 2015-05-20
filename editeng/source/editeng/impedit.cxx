@@ -1144,7 +1144,7 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     bClickedInSelection = false;
 
     if ( rMouseEvent.IsMiddle() && !bReadOnly &&
-         ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
+         ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
     {
         Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetPrimarySelection());
         Paste( aClipBoard );

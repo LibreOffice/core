@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 
 void ImplInitDropDownButton( PushButton* pButton )
 {
-    if ( pButton->GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN )
+    if ( pButton->GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::SpinUpDown )
         pButton->SetSymbol( SymbolType::SPIN_UPDOWN );
     else
         pButton->SetSymbol( SymbolType::SPIN_DOWN );

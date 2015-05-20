@@ -210,7 +210,7 @@ TextView::TextView( TextEngine* pEng, vcl::Window* pWindow ) :
     pWindow->SetCursor( mpImpl->mpCursor );
     pWindow->SetInputContext( InputContext( pEng->GetFont(), InputContextFlags::Text|InputContextFlags::ExtText ) );
 
-    if ( pWindow->GetSettings().GetStyleSettings().GetSelectionOptions() & SELECTION_OPTION_INVERT )
+    if ( pWindow->GetSettings().GetStyleSettings().GetSelectionOptions() & SelectionOptions::Invert )
         mpImpl->mbHighlightSelection = true;
 
     pWindow->SetLineColor();
@@ -806,7 +806,7 @@ void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
     mpImpl->mnTravelXPos = TRAVEL_X_DONTKNOW;
     mpImpl->mpSelEngine->SelMouseButtonUp( rMouseEvent );
     if ( rMouseEvent.IsMiddle() && !IsReadOnly() &&
-         ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
+         ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
     {
         uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
         Paste( aSelection );

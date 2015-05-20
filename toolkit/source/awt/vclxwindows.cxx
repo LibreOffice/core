@@ -180,11 +180,11 @@ namespace toolkit
         switch ( nStyle )
         {
         case FLAT:
-            aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_MONO );
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() | StyleSettingsOptions::Mono );
             break;
         case LOOK3D:
         default:
-            aStyleSettings.SetOptions( aStyleSettings.GetOptions() & ~STYLE_OPTION_MONO );
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() & ~StyleSettingsOptions::Mono );
         }
         aSettings.SetStyleSettings( aStyleSettings );
         _pWindow->SetSettings( aSettings );
@@ -195,7 +195,7 @@ namespace toolkit
         Any aEffect;
 
         StyleSettings aStyleSettings = _pWindow->GetSettings().GetStyleSettings();
-        if ( (aStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+        if ( (aStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
             aEffect <<= (sal_Int16)FLAT;
         else
             aEffect <<= (sal_Int16)LOOK3D;
@@ -3529,11 +3529,11 @@ void VCLXScrollBar::setProperty( const OUString& PropertyName, const ::com::sun:
                 }
                 AllSettings aSettings( pScrollBar->GetSettings() );
                 StyleSettings aStyle( aSettings.GetStyleSettings() );
-                sal_uLong nDragOptions = aStyle.GetDragFullOptions();
+                DragFullOptions nDragOptions = aStyle.GetDragFullOptions();
                 if ( bDo )
-                    nDragOptions |= DRAGFULL_OPTION_SCROLL;
+                    nDragOptions |= DragFullOptions::Scroll;
                 else
-                    nDragOptions &= ~DRAGFULL_OPTION_SCROLL;
+                    nDragOptions &= ~DragFullOptions::Scroll;
                 aStyle.SetDragFullOptions( nDragOptions );
                 aSettings.SetStyleSettings( aStyle );
                 pScrollBar->SetSettings( aSettings );
@@ -3637,7 +3637,7 @@ void VCLXScrollBar::setProperty( const OUString& PropertyName, const ::com::sun:
         {
             case BASEPROPERTY_LIVE_SCROLL:
             {
-                aProp <<= ( 0 != ( pScrollBar->GetSettings().GetStyleSettings().GetDragFullOptions() & DRAGFULL_OPTION_SCROLL ) );
+                aProp <<= bool( pScrollBar->GetSettings().GetStyleSettings().GetDragFullOptions() & DragFullOptions::Scroll );
             }
             break;
             case BASEPROPERTY_SCROLLVALUE:

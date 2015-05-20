@@ -113,7 +113,7 @@ void ScrollBar::ImplInitStyle( WinBits nStyle )
     if ( nStyle & WB_DRAG )
         mbFullDrag = true;
     else
-        mbFullDrag = (GetSettings().GetStyleSettings().GetDragFullOptions() & DRAGFULL_OPTION_SCROLL) != 0;
+        mbFullDrag = bool(GetSettings().GetStyleSettings().GetDragFullOptions() & DragFullOptions::Scroll);
 }
 
 ScrollBar::ScrollBar( vcl::Window* pParent, WinBits nStyle ) :
@@ -660,7 +660,7 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
         DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
         if ((mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) || !bEnabled)
             nSymbolStyle |= DrawSymbolFlags::Disable;
-        if (rStyleSettings.GetOptions() & STYLE_OPTION_SCROLLARROW)
+        if (rStyleSettings.GetOptions() & StyleSettingsOptions::ScrollArrow)
         {
             if (GetStyle() & WB_HORZ)
                 eSymbolType = SymbolType::ARROW_LEFT;
@@ -687,7 +687,7 @@ void ScrollBar::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFla
         DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
         if ((mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) || !bEnabled)
             nSymbolStyle |= DrawSymbolFlags::Disable;
-        if (rStyleSettings.GetOptions() & STYLE_OPTION_SCROLLARROW)
+        if (rStyleSettings.GetOptions() & StyleSettingsOptions::ScrollArrow)
         {
             if (GetStyle() & WB_HORZ)
                 eSymbolType = SymbolType::ARROW_RIGHT;

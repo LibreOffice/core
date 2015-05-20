@@ -42,7 +42,7 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     ,nDragMode          ( DEFAULT_DRAGMODE )
     ,nScaleFactor       ( DEFAULT_SCALEFACTOR )
     ,nSnapMode          ( DEFAULT_SNAPMODE )
-    ,nMiddleMouse       ( MOUSE_MIDDLE_AUTOSCROLL )
+    ,nMiddleMouse       ( MouseMiddleButtonAction::AutoScroll )
 #if defined( UNX )
     ,nAAMinPixelHeight  ( DEFAULT_AAMINHEIGHT )
 #endif
@@ -68,7 +68,7 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                     case  1: *pValues >>= nDragMode; break;   //"Window/Drag",
                     case  2: bMenuMouseFollow = *static_cast<sal_Bool const *>(pValues->getValue()); break; //"Menu/FollowMouse",
                     case  3: *pValues >>= nSnapMode; break; //"Dialog/MousePositioning",
-                    case  4: *pValues >>= nMiddleMouse; break; //"Dialog/MiddleMouseButton",
+                    case  4: { short nTmp = 0; *pValues >>= nTmp; nMiddleMouse = static_cast<MouseMiddleButtonAction>(nTmp); break; } //"Dialog/MiddleMouseButton",
 #if defined( UNX )
                     case  5: bFontAntialiasing = *static_cast<sal_Bool const *>(pValues->getValue()); break;    // "FontAntialising/Enabled",
                     case  6: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
@@ -126,7 +126,7 @@ void  SvtTabAppearanceCfg::ImplCommit()
             case  1: pValues[nProp] <<= nDragMode; break;               //"Window/Drag",
             case  2: pValues[nProp].setValue(&bMenuMouseFollow, rType); break; //"Menu/FollowMouse",
             case  3: pValues[nProp] <<= nSnapMode; break;               //"Dialog/MousePositioning",
-            case  4: pValues[nProp] <<= nMiddleMouse; break;               //"Dialog/MiddleMouseButton",
+            case  4: pValues[nProp] <<= static_cast<short>(nMiddleMouse); break;               //"Dialog/MiddleMouseButton",
 #if defined( UNX )
             case  5: pValues[nProp].setValue(&bFontAntialiasing, rType); break; // "FontAntialising/Enabled",
             case  6: pValues[nProp] <<= nAAMinPixelHeight; break;               // "FontAntialising/MinPixelHeight",
@@ -152,7 +152,7 @@ void SvtTabAppearanceCfg::SetSnapMode ( sal_uInt16 nSet )
     SetModified();
 }
 
-void SvtTabAppearanceCfg::SetMiddleMouseButton ( sal_uInt16 nSet )
+void SvtTabAppearanceCfg::SetMiddleMouseButton ( MouseMiddleButtonAction nSet )
 {
     nMiddleMouse = nSet;
     SetModified();
@@ -180,23 +180,23 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 #if defined( UNX )
     // font anti aliasing
     hAppStyle.SetAntialiasingMinPixelHeight( nAAMinPixelHeight );
-    hAppStyle.SetDisplayOptions( bFontAntialiasing ? 0 : DISPLAY_OPTION_AA_DISABLE );
+    hAppStyle.SetDisplayOptions( bFontAntialiasing ? DisplayOptions::NONE : DisplayOptions::AADisable );
 #endif
 
     // Mouse Snap
 
     MouseSettings hMouseSettings = hAppSettings.GetMouseSettings();
-    sal_uLong         nMouseOptions  = hMouseSettings.GetOptions();
+    MouseSettingsOptions nMouseOptions  = hMouseSettings.GetOptions();
 
-    nMouseOptions &=  ~ (MOUSE_OPTION_AUTOCENTERPOS | MOUSE_OPTION_AUTODEFBTNPOS);
+    nMouseOptions &=  ~ MouseSettingsOptions(MouseSettingsOptions::AutoCenterPos | MouseSettingsOptions::AutoDefBtnPos);
 
     switch ( nSnapMode )
     {
     case SnapToButton:
-        nMouseOptions |= MOUSE_OPTION_AUTODEFBTNPOS;
+        nMouseOptions |= MouseSettingsOptions::AutoDefBtnPos;
         break;
     case SnapToMiddle:
-        nMouseOptions |= MOUSE_OPTION_AUTOCENTERPOS;
+        nMouseOptions |= MouseSettingsOptions::AutoCenterPos;
         break;
     case NoSnap:
     default:
@@ -207,11 +207,11 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 
     // Merge and Publish Settings
 
-    sal_uLong nFollow = hMouseSettings.GetFollow();
+    MouseFollowFlags nFollow = hMouseSettings.GetFollow();
     if(bMenuMouseFollow)
-        nFollow |= MOUSE_FOLLOW_MENU;
+        nFollow |= MouseFollowFlags::Menu;
     else
-        nFollow &= ~MOUSE_FOLLOW_MENU;
+        nFollow &= ~MouseFollowFlags::Menu;
     hMouseSettings.SetFollow( nFollow );
 
     hAppSettings.SetMouseSettings( hMouseSettings );

@@ -1388,7 +1388,7 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
         mbClickedInSelection = false;
     }
     else if ( rMEvt.IsMiddle() && !mbReadOnly &&
-              ( GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
+              ( GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
     {
         ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetPrimarySelection());
         ImplPaste( aSelection );
@@ -1895,11 +1895,11 @@ void Edit::GetFocus()
     {
         maUndoText = maText.toString();
 
-        sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
+        SelectionOptions nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
         if ( !( GetStyle() & (WB_NOHIDESELECTION|WB_READONLY) )
                 && ( GetGetFocusFlags() & (GETFOCUS_INIT|GETFOCUS_TAB|GETFOCUS_CURSOR|GETFOCUS_MNEMONIC) ) )
         {
-            if ( nSelOptions & SELECTION_OPTION_SHOWFIRST )
+            if ( nSelOptions & SelectionOptions::ShowFirst )
             {
                 maSelection.Min() = maText.getLength();
                 maSelection.Max() = 0;

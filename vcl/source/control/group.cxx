@@ -118,7 +118,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
             nTextStyle |= DrawTextFlags::Disable;
     }
     if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
-         (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+         (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono) )
     {
         nTextStyle |= DrawTextFlags::Mono;
         nDrawFlags |= WINDOW_DRAW_MONO;

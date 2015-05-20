@@ -90,7 +90,7 @@ void OScrollWindowHelper::impl_initScrollBar( ScrollBar& _rScrollBar ) const
 {
     AllSettings aSettings( _rScrollBar.GetSettings() );
     StyleSettings aStyle( aSettings.GetStyleSettings() );
-    aStyle.SetDragFullOptions( aStyle.GetDragFullOptions() | DRAGFULL_OPTION_SCROLL ); // live scrolling
+    aStyle.SetDragFullOptions( aStyle.GetDragFullOptions() | DragFullOptions::Scroll ); // live scrolling
     aSettings.SetStyleSettings( aStyle );
     _rScrollBar.SetSettings( aSettings );
 

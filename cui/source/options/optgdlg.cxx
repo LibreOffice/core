@@ -826,14 +826,14 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     }
 
     // Middle Mouse Button
-    short eOldMiddleMouse = pAppearanceCfg->GetMiddleMouseButton();
+    MouseMiddleButtonAction eOldMiddleMouse = pAppearanceCfg->GetMiddleMouseButton();
     short eNewMiddleMouse = m_pMouseMiddleLB->GetSelectEntryPos();
     if(eNewMiddleMouse > 2)
         eNewMiddleMouse = 2;
 
-    if ( eNewMiddleMouse != eOldMiddleMouse )
+    if ( eNewMiddleMouse != static_cast<short>(eOldMiddleMouse) )
     {
-        pAppearanceCfg->SetMiddleMouseButton( eNewMiddleMouse );
+        pAppearanceCfg->SetMiddleMouseButton( static_cast<MouseMiddleButtonAction>(eNewMiddleMouse) );
         bAppearanceChanged = true;
     }
 
@@ -982,7 +982,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_pMousePosLB->SaveValue();
 
     // Mouse Snap
-    m_pMouseMiddleLB->SelectEntryPos(pAppearanceCfg->GetMiddleMouseButton());
+    m_pMouseMiddleLB->SelectEntryPos(static_cast<short>(pAppearanceCfg->GetMiddleMouseButton()));
     m_pMouseMiddleLB->SaveValue();
 
 #if defined( UNX )

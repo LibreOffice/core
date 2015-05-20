@@ -383,8 +383,8 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
             aNewSel.Max() = nNewLen;
             if (!nCurrentLen)
             {   // there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
-                sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
-                if (nSelOptions & SELECTION_OPTION_SHOWFIRST)
+                SelectionOptions nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
+                if (nSelOptions & SelectionOptions::ShowFirst)
                 {   // selection should be from right to left -> swap min and max
                     aNewSel.Min() = aNewSel.Max();
                     aNewSel.Max() = 0;
@@ -499,8 +499,8 @@ void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
                 aSel.Max() = nNewLen;
                 if (!nCurrentLen)
                 {   // there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
-                    sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
-                    if (nSelOptions & SELECTION_OPTION_SHOWFIRST)
+                    SelectionOptions nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
+                    if (nSelOptions & SelectionOptions::ShowFirst)
                     {   // selection should be from right to left -> swap min and max
                         aSel.Min() = aSel.Max();
                         aSel.Max() = 0;

@@ -697,7 +697,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
             {
                 // Auto-ToTop
                 if ( !pSVData->maWinData.mpCaptureWin &&
-                     (pChild->GetSettings().GetMouseSettings().GetOptions() & MOUSE_OPTION_AUTOFOCUS) )
+                     (pChild->GetSettings().GetMouseSettings().GetOptions() & MouseSettingsOptions::AutoFocus) )
                     pChild->ToTop( TOTOP_NOGRABFOCUS );
 
                 if( aDelData.IsDead() )
@@ -785,10 +785,10 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
             if ( /*!bRet &&*/ (nClicks == 1) && (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) &&
                  (nCode == MOUSE_MIDDLE) )
             {
-                sal_uInt16 nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
-                if ( nMiddleAction == MOUSE_MIDDLE_AUTOSCROLL )
+                MouseMiddleButtonAction nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
+                if ( nMiddleAction == MouseMiddleButtonAction::AutoScroll )
                     bRet = !ImplCallCommand( pChild, CommandEventId::StartAutoScroll, NULL, true, &aChildPos );
-                else if ( nMiddleAction == MOUSE_MIDDLE_PASTESELECTION )
+                else if ( nMiddleAction == MouseMiddleButtonAction::PasteSelection )
                     bRet = !ImplCallCommand( pChild, CommandEventId::PasteSelection, NULL, true, &aChildPos );
             }
             else

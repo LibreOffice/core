@@ -720,7 +720,7 @@ void TabControl::ImplShowFocus()
     long                     nTextWidth  = GetCtrlTextWidth( rItem.maFormatText );
     sal_uInt16                   nOff;
 
-    if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_MONO) )
+    if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::Mono) )
         nOff = 1;
     else
         nOff = 0;
@@ -785,7 +785,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
     sal_uInt16 nOff2 = 0;
     sal_uInt16 nOff3 = 0;
 
-    if (!(rStyleSettings.GetOptions() & STYLE_OPTION_MONO))
+    if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
         nOff = 1;
     else
         nOff = 0;
@@ -866,7 +866,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
 
     if (!bLayout && !bNativeOK)
     {
-        if (!(rStyleSettings.GetOptions() & STYLE_OPTION_MONO))
+        if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
         {
             rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
             rRenderContext.DrawPixel(Point(aRect.Left() + 1 - nOff2, aRect.Top() + 1 - nOff2)); // diagonally indented top-left pixel
@@ -1143,7 +1143,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
     else
     {
         long nTopOff = 1;
-        if (!(rStyleSettings.GetOptions() & STYLE_OPTION_MONO))
+        if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
             rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
         else
             rRenderContext.SetLineColor(Color(COL_BLACK));
@@ -1170,7 +1170,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
         {
             rRenderContext.DrawLine(aRect.TopLeft(), aRect.BottomLeft());
 
-            if (!(rStyleSettings.GetOptions() & STYLE_OPTION_MONO))
+            if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
             {
                 // if we have not tab page the bottom line of the tab page
                 // directly touches the tab items, so choose a color that fits seamlessly

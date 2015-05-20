@@ -1843,7 +1843,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     StyleSettings aStyleSettings( rSettings.GetStyleSettings() );
     bool bSetTitleFont = false;
 
-    aStyleSettings.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
+    aStyleSettings.SetToolbarIconSize( ToolbarIconSize::Large );
 
     // WM settings
     KConfig *pConfig = KGlobal::config();

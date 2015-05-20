@@ -149,7 +149,7 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
     SymbolType eType1, eType2;
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    if ( rStyleSettings.GetOptions() & STYLE_OPTION_SPINARROW )
+    if ( rStyleSettings.GetOptions() & StyleSettingsOptions::SpinArrow )
     {
         // arrows are only use in OS/2 look
         if ( bHorz )
@@ -559,9 +559,9 @@ bool SpinField::Notify(NotifyEvent& rNEvt)
     {
         if ((rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel) && !IsReadOnly())
         {
-            sal_uInt16 nWheelBehavior(GetSettings().GetMouseSettings().GetWheelBehavior());
-            if (nWheelBehavior == MOUSE_WHEEL_ALWAYS
-               || (nWheelBehavior == MOUSE_WHEEL_FOCUS_ONLY && HasChildPathFocus()))
+            MouseWheelBehaviour nWheelBehavior(GetSettings().GetMouseSettings().GetWheelBehavior());
+            if (nWheelBehavior == MouseWheelBehaviour::ALWAYS
+               || (nWheelBehavior == MouseWheelBehaviour::FocusOnly && HasChildPathFocus()))
             {
                 const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
                 if (pData->GetMode() == CommandWheelMode::SCROLL)
@@ -617,7 +617,7 @@ void SpinField::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
         Rectangle aInnerRect = aView.DrawButton(maDropDownRect, nStyle);
 
         SymbolType eSymbol = SymbolType::SPIN_DOWN;
-        if (rRenderContext.GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN)
+        if (rRenderContext.GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::SpinUpDown)
             eSymbol = SymbolType::SPIN_UPDOWN;
 
         DrawSymbolFlags nSymbolStyle = IsEnabled() ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;
@@ -1021,7 +1021,7 @@ void SpinField::Draw(OutputDevice* pDev, const Point& rPos, const Size& rSize, s
             DrawButtonFlags nStyle = DrawButtonFlags::NoLightBorder;
             Rectangle aInnerRect = aView.DrawButton( aDD, nStyle );
             SymbolType eSymbol = SymbolType::SPIN_DOWN;
-            if (GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN)
+            if (GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::SpinUpDown)
                 eSymbol = SymbolType::SPIN_UPDOWN;
 
             DrawSymbolFlags nSymbolStyle = (IsEnabled() || (nFlags & WINDOW_DRAW_NODISABLE)) ? DrawSymbolFlags::NONE : DrawSymbolFlags::Disable;

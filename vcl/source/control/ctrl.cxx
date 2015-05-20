@@ -363,7 +363,7 @@ void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
     // The *only known* clients of the Draw methods of the various VCL-controls are form controls:
     // During print preview, and during printing, Draw is called. Thus, drawing always happens with a
     // mono (colored) border
-    aStyle.SetOptions( aStyle.GetOptions() | STYLE_OPTION_MONO );
+    aStyle.SetOptions( aStyle.GetOptions() | StyleSettingsOptions::Mono );
     aStyle.SetMonoColor( GetSettings().GetStyleSettings().GetMonoColor() );
 
     aNewSettings.SetStyleSettings( aStyle );

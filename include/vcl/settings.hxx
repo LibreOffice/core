@@ -51,20 +51,37 @@ namespace vcl {
 
 // - MouseSettings -
 
-#define MOUSE_OPTION_AUTOFOCUS      ((sal_uLong)0x00000001)
-#define MOUSE_OPTION_AUTOCENTERPOS  ((sal_uLong)0x00000002)
-#define MOUSE_OPTION_AUTODEFBTNPOS  ((sal_uLong)0x00000004)
+enum class MouseSettingsOptions
+{
+    NONE           = 0x00,
+    AutoFocus      = 0x01,
+    AutoCenterPos  = 0x02,
+    AutoDefBtnPos  = 0x04,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<MouseSettingsOptions> : is_typed_flags<MouseSettingsOptions, 0x07> {};
+}
 
-#define MOUSE_FOLLOW_MENU           ((sal_uLong)0x00000001)
-#define MOUSE_FOLLOW_DDLIST         ((sal_uLong)0x00000002)
+enum class MouseFollowFlags
+{
+    Menu           = 0x0001,
+    DDList         = 0x0002,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<MouseFollowFlags> : is_typed_flags<MouseFollowFlags, 0x03> {};
+}
 
-#define MOUSE_MIDDLE_NOTHING        ((sal_uInt16)0)
-#define MOUSE_MIDDLE_AUTOSCROLL     ((sal_uInt16)1)
-#define MOUSE_MIDDLE_PASTESELECTION ((sal_uInt16)2)
+enum class MouseMiddleButtonAction
+{
+    Nothing, AutoScroll, PasteSelection
+};
 
-#define MOUSE_WHEEL_DISABLE         ((sal_uInt16)0)
-#define MOUSE_WHEEL_FOCUS_ONLY      ((sal_uInt16)1)
-#define MOUSE_WHEEL_ALWAYS          ((sal_uInt16)2)
+enum class MouseWheelBehaviour
+{
+    Disable, FocusOnly, ALWAYS
+};
 
 class VCL_DLLPUBLIC MouseSettings
 {
@@ -77,8 +94,8 @@ public:
 
                                     ~MouseSettings();
 
-    void                            SetOptions( sal_uLong nOptions );
-    sal_uLong                       GetOptions() const;
+    void                            SetOptions( MouseSettingsOptions nOptions );
+    MouseSettingsOptions            GetOptions() const;
 
     void                            SetDoubleClickTime( sal_uInt64 nDoubleClkTime );
     sal_uInt64                      GetDoubleClickTime() const;
@@ -113,14 +130,14 @@ public:
     void                            SetMenuDelay( sal_uLong nDelay );
     sal_uLong                       GetMenuDelay() const;
 
-    void                            SetFollow( sal_uLong nFollow );
-    sal_uLong                       GetFollow() const;
+    void                            SetFollow( MouseFollowFlags nFollow );
+    MouseFollowFlags                GetFollow() const;
 
-    void                            SetMiddleButtonAction( sal_uInt16 nAction );
-    sal_uInt16                      GetMiddleButtonAction() const;
+    void                            SetMiddleButtonAction( MouseMiddleButtonAction nAction );
+    MouseMiddleButtonAction         GetMiddleButtonAction() const;
 
-    void                            SetWheelBehavior( sal_uInt16 nBehavior );
-    sal_uInt16                      GetWheelBehavior() const;
+    void                            SetWheelBehavior( MouseWheelBehaviour nBehavior );
+    MouseWheelBehaviour             GetWheelBehavior() const;
 
     bool                            operator ==( const MouseSettings& rSet ) const;
     bool                            operator !=( const MouseSettings& rSet ) const;
@@ -159,40 +176,69 @@ struct FrameStyle
 // - StyleSettings -
 
 
-#define STYLE_OPTION_MONO           ((sal_uLong)0x00000001)
-#define STYLE_OPTION_COLOR          ((sal_uLong)0x00000002)
-#define STYLE_OPTION_FLAT           ((sal_uLong)0x00000004)
-#define STYLE_OPTION_GREAT          ((sal_uLong)0x00000008)
-#define STYLE_OPTION_HIGHLIGHT      ((sal_uLong)0x00000010)
-#define STYLE_OPTION_ADVANCEDUSER   ((sal_uLong)0x00000020)
-#define STYLE_OPTION_SCROLLARROW    ((sal_uLong)0x00000040)
-#define STYLE_OPTION_SPINARROW      ((sal_uLong)0x00000080)
-#define STYLE_OPTION_SPINUPDOWN     ((sal_uLong)0x00000100)
-#define STYLE_OPTION_NOMNEMONICS    ((sal_uLong)0x00000200)
+enum class StyleSettingsOptions
+{
+    NONE           = 0x0000,
+    Mono           = 0x0001,
+    Color          = 0x0002,
+    Flat           = 0x0004,
+    Great          = 0x0008,
+    Highlight      = 0x0010,
+    AdvancedUser   = 0x0020,
+    ScrollArrow    = 0x0040,
+    SpinArrow      = 0x0080,
+    SpinUpDown     = 0x0100,
+    NoMnemonics    = 0x0200,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<StyleSettingsOptions> : is_typed_flags<StyleSettingsOptions, 0x03ff> {};
+}
 
-#define DRAGFULL_OPTION_WINDOWMOVE  ((sal_uLong)0x00000001)
-#define DRAGFULL_OPTION_WINDOWSIZE  ((sal_uLong)0x00000002)
-#define DRAGFULL_OPTION_DOCKING     ((sal_uLong)0x00000010)
-#define DRAGFULL_OPTION_SPLIT       ((sal_uLong)0x00000020)
-#define DRAGFULL_OPTION_SCROLL      ((sal_uLong)0x00000040)
-#define DRAGFULL_OPTION_ALL \
-    ( DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE  \
-    | DRAGFULL_OPTION_DOCKING     | DRAGFULL_OPTION_SPLIT      \
-    | DRAGFULL_OPTION_SCROLL )
+enum class DragFullOptions
+{
+    NONE        = 0x0000,
+    WindowMove  = 0x0001,
+    WindowSize  = 0x0002,
+    Docking     = 0x0010,
+    Split       = 0x0020,
+    Scroll      = 0x0040,
+    All         = WindowMove | WindowSize | Docking | Split | Scroll,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DragFullOptions> : is_typed_flags<DragFullOptions, 0x0073> {};
+}
 
-#define SELECTION_OPTION_WORD       ((sal_uLong)0x00000001)
-#define SELECTION_OPTION_FOCUS      ((sal_uLong)0x00000002)
-#define SELECTION_OPTION_INVERT     ((sal_uLong)0x00000004)
-#define SELECTION_OPTION_SHOWFIRST  ((sal_uLong)0x00000008)
+enum class SelectionOptions
+{
+    NONE       = 0x0000,
+    Word       = 0x0001,
+    Focus      = 0x0002,
+    Invert     = 0x0004,
+    ShowFirst  = 0x0008,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SelectionOptions> : is_typed_flags<SelectionOptions, 0x000f> {};
+}
 
-#define DISPLAY_OPTION_AA_DISABLE   ((sal_uLong)0x00000001)
+enum class DisplayOptions
+{
+    NONE        = 0x0000,
+    AADisable   = 0x0001,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DisplayOptions> : is_typed_flags<DisplayOptions, 0x0001> {};
+}
 
-#define STYLE_RADIOBUTTON_MONO      ((sal_uInt16)0x0001) // legacy
-#define STYLE_CHECKBOX_MONO         ((sal_uInt16)0x0001) // legacy
-
-#define STYLE_TOOLBAR_ICONSIZE_UNKNOWN      ((sal_uLong)0)
-#define STYLE_TOOLBAR_ICONSIZE_SMALL        ((sal_uLong)1)
-#define STYLE_TOOLBAR_ICONSIZE_LARGE        ((sal_uLong)2)
+enum class ToolbarIconSize
+{
+    Unknown      = 0,
+    Small        = 1,
+    Large        = 2,
+};
 
 #define STYLE_CURSOR_NOBLINKTIME    SAL_MAX_UINT64
 
@@ -474,20 +520,20 @@ public:
     void                            SetScreenFontZoom( sal_uInt16 nPercent );
     sal_uInt16                      GetScreenFontZoom() const;
 
-    void                            SetDragFullOptions( sal_uLong nOptions );
-    sal_uLong                       GetDragFullOptions() const;
+    void                            SetDragFullOptions( DragFullOptions nOptions );
+    DragFullOptions                 GetDragFullOptions() const;
 
-    void                            SetSelectionOptions( sal_uLong nOptions );
-    sal_uLong                       GetSelectionOptions() const;
+    void                            SetSelectionOptions( SelectionOptions nOptions );
+    SelectionOptions                GetSelectionOptions() const;
 
-    void                            SetDisplayOptions( sal_uLong nOptions );
-    sal_uLong                       GetDisplayOptions() const;
+    void                            SetDisplayOptions( DisplayOptions nOptions );
+    DisplayOptions                  GetDisplayOptions() const;
 
     void                            SetAntialiasingMinPixelHeight( long nMinPixel );
     sal_uLong                       GetAntialiasingMinPixelHeight() const;
 
-    void                            SetOptions( sal_uLong nOptions );
-    sal_uLong                       GetOptions() const;
+    void                            SetOptions( StyleSettingsOptions nOptions );
+    StyleSettingsOptions            GetOptions() const;
 
     void                            SetAutoMnemonic( bool bAutoMnemonic );
     bool                            GetAutoMnemonic() const;
@@ -495,8 +541,8 @@ public:
     void                            SetFontColor( const Color& rColor );
     const Color&                    GetFontColor() const;
 
-    void                            SetToolbarIconSize( sal_uLong nSize );
-    sal_uLong                       GetToolbarIconSize() const;
+    void                            SetToolbarIconSize( ToolbarIconSize nSize );
+    ToolbarIconSize                 GetToolbarIconSize() const;
 
     /** Set the icon theme to use. */
     void                            SetIconTheme(const OUString&);
