@@ -1,0 +1,11 @@
+diff -ur liborcus.org/configure liborcus/configure
+--- liborcus.org/configure	2015-05-20 04:49:42.122753159 +0200
++++ liborcus/configure	2015-05-20 04:50:45.107301402 +0200
+@@ -17019,6 +17019,7 @@
+   grep -v '#' |
+   tr -d '\r' |
+   tr -s '\n' ' ' |
++  $SED "s/^conftest.$ac_ext //" |
+   $SED -n -e "/^boost-lib-version = /{s///;s/[\" ]//g;p;q;}" >conftest.i 2>&1; then :
+   boost_cv_lib_version=`cat conftest.i`
+ fi
