@@ -317,7 +317,7 @@ struct INetURLObject::PrefixInfo
 inline INetURLObject::SchemeInfo const &
 INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
 {
-    static o3tl::enumarray<INetProtocol, SchemeInfo> const map = {
+    static o3tl::enumarray<INetProtocol, SchemeInfo> const map {{
         SchemeInfo{
             "", "", 0, false, false, false, false, false, false, false, false},
         SchemeInfo{
@@ -402,7 +402,7 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
             true},
         SchemeInfo{
             "vnd.libreoffice.cmis", "vnd.libreoffice.cmis://", 0, true, true,
-            false, false, true, false, true, true} };
+            false, false, true, false, true, true} }};
     return map[eTheScheme];
 };
 

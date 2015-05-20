@@ -45,7 +45,7 @@ static const char ROOTNODE_EVENTS[] = "Office.Events/ApplicationEvents";
 #define SETNODE_BINDINGS "Bindings"
 #define PROPERTYNAME_BINDINGURL "BindingURL"
 
-static o3tl::enumarray<GlobalEventId, const char*> pEventAsciiNames =
+static o3tl::enumarray<GlobalEventId, const char*> pEventAsciiNames {
 {
 "OnStartApp",
 "OnCloseApp",
@@ -75,7 +75,7 @@ static o3tl::enumarray<GlobalEventId, const char*> pEventAsciiNames =
 "OnVisAreaChanged",
 "OnModeChanged",
 "OnStorageChanged"
-};
+}};
 
 typedef std::unordered_map< OUString, OUString, OUStringHash, std::equal_to< OUString > > EventBindingHash;
 typedef std::vector< css::uno::WeakReference< css::frame::XFrame > > FrameVector;

@@ -333,7 +333,7 @@ ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle )
     , mnStartWidth(0)
 {
     sal_Int32 nScaleFactor = GetDPIScaleFactor();
-    SetPointer(Pointer(POINTER_HSIZEBAR));
+    SetPointer(Pointer(PointerStyle::HSizeBar));
     SetSizePixel(Size(7 * nScaleFactor, 0));
 }
 

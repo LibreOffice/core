@@ -48,7 +48,7 @@ using namespace com::sun::star;
 
 // vOptionNames[] -- names of the user option entries
 // The order corresponds to the #define USER_OPT_* list in useroptions.hxx.
-static o3tl::enumarray<UserOptToken, char const *> vOptionNames = {
+static o3tl::enumarray<UserOptToken, char const *> vOptionNames {{
     "l",                         // UserOptToken::City
     "o",                         // UserOptToken::Company
     "c",                         // UserOptToken::Country
@@ -66,7 +66,7 @@ static o3tl::enumarray<UserOptToken, char const *> vOptionNames = {
     "postalcode",                // UserOptToken::Zip
     "fathersname",               // UserOptToken::FathersName
     "apartment"                  // UserOptToken::Apartment
-};
+}};
 
 std::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::xSharedImpl;
 

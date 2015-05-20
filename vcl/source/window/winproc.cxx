@@ -86,7 +86,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
             {
                 if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
                     ImplDestroyHelpWindow( true );
-                pChild->ImplGetFrame()->SetPointer( POINTER_ARROW );
+                pChild->ImplGetFrame()->SetPointer( PointerStyle::Arrow );
                 return true;
             }
         }
@@ -191,7 +191,7 @@ static void ImplSetMousePointer( vcl::Window* pChild )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maHelpData.mbExtHelpMode )
-        pChild->ImplGetFrame()->SetPointer( POINTER_HELP );
+        pChild->ImplGetFrame()->SetPointer( PointerStyle::Help );
     else
         pChild->ImplGetFrame()->SetPointer( pChild->ImplGetMousePointer() );
 }
