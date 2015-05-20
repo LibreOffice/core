@@ -1375,10 +1375,10 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             int y2 = aEditRect.Bottom();
 
             rNativeBoundingRegion = aEditRect;
-            rNativeContentRegion = Rectangle(x1 + padding.left + border.left,
-                                             y1 + padding.top + border.top,
-                                             x2 - padding.right + border.right,
-                                             y2 - padding.bottom + border.bottom);
+            rNativeContentRegion = Rectangle(x1 + (padding.left + border.left),
+                                             y1 + (padding.top + border.top),
+                                             x2 - (padding.right + border.right),
+                                             y2 - (padding.bottom + border.bottom));
 
             gtk_style_context_restore(mpFrameInStyle);
             return true;
