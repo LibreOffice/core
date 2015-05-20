@@ -32,10 +32,10 @@
 
 // - Memory -
 
-typedef sal_uInt8*      HPBYTE;
-typedef HPBYTE      Scanline;
-typedef const sal_uInt8*    ConstHPBYTE;
-typedef ConstHPBYTE ConstScanline;
+typedef sal_uInt8*        HPBYTE;
+typedef HPBYTE            Scanline;
+typedef const sal_uInt8*  ConstHPBYTE;
+typedef ConstHPBYTE       ConstScanline;
 
 
 // - Bitmap formats -
@@ -51,8 +51,6 @@ typedef ConstHPBYTE ConstScanline;
 
 #define BMP_FORMAT_8BIT_PAL                         0x00000010UL
 #define BMP_FORMAT_8BIT_TC_MASK                     0x00000020UL
-
-// #define BMP_FORMAT_16BIT_TC_MASK                 0x00000040UL
 
 #define BMP_FORMAT_24BIT_TC_BGR                     0x00000080UL
 #define BMP_FORMAT_24BIT_TC_RGB                     0x00000100UL
@@ -123,32 +121,32 @@ public:
 
     inline bool         IsIndex() const;
 
-    inline sal_uInt8        GetRed() const;
+    inline sal_uInt8    GetRed() const;
     inline void         SetRed( sal_uInt8 cRed );
 
-    inline sal_uInt8        GetGreen() const;
+    inline sal_uInt8    GetGreen() const;
     inline void         SetGreen( sal_uInt8 cGreen );
 
-    inline sal_uInt8        GetBlue() const;
+    inline sal_uInt8    GetBlue() const;
     inline void         SetBlue( sal_uInt8 cBlue );
 
-    inline sal_uInt8        GetIndex() const;
+    inline sal_uInt8    GetIndex() const;
     inline void         SetIndex( sal_uInt8 cIndex );
 
     operator            Color() const;
 
-    inline sal_uInt8         GetBlueOrIndex() const;
+    inline sal_uInt8    GetBlueOrIndex() const;
 
     inline BitmapColor& Invert();
 
-    inline sal_uInt8        GetLuminance() const;
+    inline sal_uInt8    GetLuminance() const;
     inline BitmapColor& IncreaseLuminance( sal_uInt8 cGreyInc );
     inline BitmapColor& DecreaseLuminance( sal_uInt8 cGreyDec );
 
     inline BitmapColor& Merge( const BitmapColor& rColor, sal_uInt8 cTransparency );
     inline BitmapColor& Merge( sal_uInt8 cR, sal_uInt8 cG, sal_uInt8 cB, sal_uInt8 cTransparency );
 
-    inline sal_uLong        GetColorError( const BitmapColor& rBitmapColor ) const;
+    inline sal_uLong    GetColorError( const BitmapColor& rBitmapColor ) const;
 };
 
 // - BitmapPalette -
@@ -177,9 +175,9 @@ public:
     inline                      ~BitmapPalette();
 
     inline BitmapPalette&       operator=( const BitmapPalette& rBitmapPalette );
-    inline bool             operator==( const BitmapPalette& rBitmapPalette ) const;
-    inline bool             operator!=( const BitmapPalette& rBitmapPalette ) const;
-    inline bool             operator!();
+    inline bool                 operator==( const BitmapPalette& rBitmapPalette ) const;
+    inline bool                 operator!=( const BitmapPalette& rBitmapPalette ) const;
+    inline bool                 operator!();
 
     inline sal_uInt16           GetEntryCount() const;
     inline void                 SetEntryCount( sal_uInt16 nCount );
@@ -197,9 +195,9 @@ class VCL_DLLPUBLIC ColorMask
     sal_uLong               mnRMask;
     sal_uLong               mnGMask;
     sal_uLong               mnBMask;
-    long                mnRShift;
-    long                mnGShift;
-    long                mnBShift;
+    long                    mnRShift;
+    long                    mnGShift;
+    long                    mnBShift;
     sal_uLong               mnROrShift;
     sal_uLong               mnGOrShift;
     sal_uLong               mnBOrShift;
@@ -218,9 +216,9 @@ public:
                                    sal_uLong nAlphaChannel = 0UL );
     inline              ~ColorMask() {}
 
-    inline sal_uLong        GetRedMask() const;
-    inline sal_uLong        GetGreenMask() const;
-    inline sal_uLong        GetBlueMask() const;
+    inline sal_uLong    GetRedMask() const;
+    inline sal_uLong    GetGreenMask() const;
+    inline sal_uLong    GetBlueMask() const;
 
     inline void         GetColorFor8Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const;
     inline void         SetColorFor8Bit( const BitmapColor& rColor, HPBYTE pPixel ) const;
@@ -241,14 +239,14 @@ public:
 // - BitmapBuffer -
 struct VCL_DLLPUBLIC BitmapBuffer
 {
-    sal_uLong           mnFormat;
+    sal_uLong       mnFormat;
     long            mnWidth;
     long            mnHeight;
     long            mnScanlineSize;
-    sal_uInt16          mnBitCount;
+    sal_uInt16      mnBitCount;
     ColorMask       maColorMask;
     BitmapPalette   maPalette;
-    sal_uInt8*          mpBits;
+    sal_uInt8*      mpBits;
 
                     BitmapBuffer(){}
                     ~BitmapBuffer() {}
