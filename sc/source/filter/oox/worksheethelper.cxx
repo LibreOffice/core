@@ -78,6 +78,7 @@
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
+#include <vcl/virdev.hxx>
 
 namespace oox {
 namespace xls {
@@ -1166,11 +1167,31 @@ void WorksheetGlobals::convertColumns()
     convertOutlines( aColLevels, nMaxCol + 1, 0, false, false );
 }
 
+namespace {
+
+sal_Int32 getColumnWidth(UnitConverter& rConverter, double nWidth)
+{
+    double nCoeff = rConverter.getCoefficient(UNIT_DIGIT);
+    VirtualDevice aDev;
+
+    long nPixel = aDev.LogicToPixel(Point(nCoeff, 0), MapMode(MAP_100TH_MM)).getX();
+
+
+    // the 1.047 has been experimentally chosen based on measurements witha  screen ruler
+    // TODO: fix the display of cells so that it no longer requires this hack
+    // algorithm from OOXML spec part1: 18.3.1.13
+    sal_Int32 nColWidthPixel= std::floor(((256*nWidth + std::floor(128.0/nPixel))/256.0)*nPixel) * 1.047;
+
+    return aDev.PixelToLogic(Point(nColWidthPixel, 0), MapMode(MAP_100TH_MM)).getX();
+}
+
+}
+
 void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
         const ValueRange& rColRange, const ColumnModel& rModel )
 {
     // column width: convert 'number of characters' to column width in 1/100 mm
-    sal_Int32 nWidth = getUnitConverter().scaleToMm100( rModel.mfWidth, UNIT_DIGIT );
+    sal_Int32 nWidth = getColumnWidth(getUnitConverter(), rModel.mfWidth);
     // macro sheets have double width
     if( meSheetType == SHEETTYPE_MACROSHEET )
         nWidth *= 2;
