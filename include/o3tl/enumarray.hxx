@@ -21,7 +21,9 @@
 #define INCLUDED_O3TL_ENUMARRAY_HXX
 
 #include <sal/config.h>
+#include <sal/types.h>
 #include <iterator>
+#include <array>
 
 namespace o3tl {
 
@@ -49,7 +51,7 @@ public:
     typedef E             key_type;
     typedef size_t        size_type;
 
-    static const size_type max_index = static_cast<size_type>(E::LAST);
+    static const size_type length = static_cast<size_type>(E::LAST) + 1;
 
     const V& operator[](E index) const
     {
@@ -64,18 +66,21 @@ public:
     }
 
     void fill(V val)
-    { for (size_type i=0; i<=max_index; ++i) detail_values[i] = val; }
+    { for (size_type i=0; i<length; ++i) detail_values[i] = val; }
 
-    static size_type size() { return max_index + 1; }
-    iterator  begin()      { return iterator(*this, 0); }
-    iterator  end()        { return iterator(*this, size()); }
+    static size_type size() { return length; }
+    iterator  begin()       { return iterator(*this, 0); }
+    iterator  end()         { return iterator(*this, size()); }
 
-    V*        data()       { return detail_values; }
+    V*        data()        { return detail_values; }
+
+    enumarray(std::array<V,length> const& init) : detail_values(init) {}
+
+    enumarray() : detail_values() {}
 
 //private:
-    V detail_values[max_index + 1];
+    std::array<V,length> detail_values;
 };
-
 
 template<typename EA>
 class enumarray_iterator {

@@ -1395,7 +1395,7 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbChangingHighlight = false;
     meButtonType      = ButtonType::SYMBOLONLY;
     meAlign           = WINDOWALIGN_TOP;
-    meLastStyle       = POINTER_ARROW;
+    meLastStyle       = PointerStyle::Arrow;
     mnWinStyle        = nStyle;
     meLayoutMode      = TBX_LAYOUT_NORMAL;
     mnLastFocusItemId = 0;
@@ -3666,12 +3666,12 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
-    PointerStyle eStyle = POINTER_ARROW;
+    PointerStyle eStyle = PointerStyle::Arrow;
 
     // change mouse cursor over drag area
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
     if( pWrapper && pWrapper->GetDragArea().IsInside( rMEvt.GetPosPixel() ) )
-        eStyle = POINTER_MOVE;
+        eStyle = PointerStyle::Move;
 
     if ( (mnWinStyle & TB_WBLINESIZING) == TB_WBLINESIZING )
     {
@@ -3681,21 +3681,21 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             if ( nLinePtr & DOCK_LINEHSIZE )
             {
                 if ( meAlign == WINDOWALIGN_LEFT )
-                    eStyle = POINTER_WINDOW_ESIZE;
+                    eStyle = PointerStyle::WindowESize;
                 else
-                    eStyle = POINTER_WINDOW_WSIZE;
+                    eStyle = PointerStyle::WindowWSize;
             }
             else if ( nLinePtr & DOCK_LINEVSIZE )
             {
                 if ( meAlign == WINDOWALIGN_TOP )
-                    eStyle = POINTER_WINDOW_SSIZE;
+                    eStyle = PointerStyle::WindowSSize;
                 else
-                    eStyle = POINTER_WINDOW_NSIZE;
+                    eStyle = PointerStyle::WindowNSize;
             }
         }
     }
 
-    if ( (eStyle == POINTER_ARROW) && mbCustomizeMode )
+    if ( (eStyle == PointerStyle::Arrow) && mbCustomizeMode )
     {
         // search the item which was clicked
         std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
@@ -3707,7 +3707,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                 if ( it->maRect.IsInside( aMousePos ) )
                 {
                     if ( it->maRect.Right()-TB_RESIZE_OFFSET <= aMousePos.X() )
-                        eStyle = POINTER_HSIZEBAR;
+                        eStyle = PointerStyle::HSizeBar;
                     break;
                 }
             }

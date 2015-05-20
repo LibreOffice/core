@@ -169,28 +169,28 @@ void FuConstRectangle::Activate()
     switch (aSfxRequest.GetSlot() )
     {
         case SID_DRAW_LINE:
-            aNewPointer = Pointer( POINTER_DRAW_LINE );
+            aNewPointer = Pointer( PointerStyle::DrawLine );
             aObjKind = OBJ_LINE;
             break;
 
         case SID_DRAW_RECT:
-            aNewPointer = Pointer( POINTER_DRAW_RECT );
+            aNewPointer = Pointer( PointerStyle::DrawRect );
             aObjKind = OBJ_RECT;
             break;
 
         case SID_DRAW_ELLIPSE:
-            aNewPointer = Pointer( POINTER_DRAW_ELLIPSE );
+            aNewPointer = Pointer( PointerStyle::DrawEllipse );
             aObjKind = OBJ_CIRC;
             break;
 
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
-            aNewPointer = Pointer( POINTER_DRAW_CAPTION );
+            aNewPointer = Pointer( PointerStyle::DrawCaption );
             aObjKind = OBJ_CAPTION;
             break;
 
         default:
-            aNewPointer = Pointer( POINTER_CROSS );
+            aNewPointer = Pointer( PointerStyle::Cross );
             aObjKind = OBJ_RECT;
             break;
     }

@@ -544,17 +544,17 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         {
             SetMapMode(aMMMode);
             SetLineColor( COL_BLACK );
-            DrawInvert( (long)( nTopMargin - aOffset.Y() ), POINTER_VSIZEBAR );
-            DrawInvert( (long)(nPageEndY - nBottomMargin ), POINTER_VSIZEBAR );
-            DrawInvert( (long)( nLeftMargin - aOffset.X() ), POINTER_HSIZEBAR );
-            DrawInvert( (long)( nPageEndX - nRightMargin ) , POINTER_HSIZEBAR );
+            DrawInvert( (long)( nTopMargin - aOffset.Y() ), PointerStyle::VSizeBar );
+            DrawInvert( (long)(nPageEndY - nBottomMargin ), PointerStyle::VSizeBar );
+            DrawInvert( (long)( nLeftMargin - aOffset.X() ), PointerStyle::HSizeBar );
+            DrawInvert( (long)( nPageEndX - nRightMargin ) , PointerStyle::HSizeBar );
             if( bHeaderOn )
             {
-                DrawInvert( nHeaderHeight - aOffset.Y(), POINTER_VSIZEBAR );
+                DrawInvert( nHeaderHeight - aOffset.Y(), PointerStyle::VSizeBar );
             }
             if( bFooterOn )
             {
-                DrawInvert( nPageEndY - nFooterHeight, POINTER_VSIZEBAR );
+                DrawInvert( nPageEndY - nFooterHeight, PointerStyle::VSizeBar );
             }
 
             SetMapMode( MapMode( MAP_PIXEL ) );
@@ -974,53 +974,53 @@ void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
 
     CaptureMouse();
 
-    if( rMEvt.IsLeft() && GetPointer() == POINTER_HSIZEBAR )
+    if( rMEvt.IsLeft() && GetPointer() == PointerStyle::HSizeBar )
     {
         SetMapMode( aMMMode );
         if( bLeftRulerChange )
         {
-           DrawInvert( aButtonDownChangePoint.X(), POINTER_HSIZEBAR );
+           DrawInvert( aButtonDownChangePoint.X(), PointerStyle::HSizeBar );
            bLeftRulerMove = true;
            bRightRulerMove = false;
         }
         else if( bRightRulerChange )
         {
-           DrawInvert( aButtonDownChangePoint.X(), POINTER_HSIZEBAR );
+           DrawInvert( aButtonDownChangePoint.X(), PointerStyle::HSizeBar );
            bLeftRulerMove = false;
            bRightRulerMove = true;
         }
     }
 
-    if( rMEvt.IsLeft() && GetPointer() == POINTER_VSIZEBAR )
+    if( rMEvt.IsLeft() && GetPointer() == PointerStyle::VSizeBar )
     {
         SetMapMode( aMMMode );
         if( bTopRulerChange )
         {
-            DrawInvert( aButtonDownChangePoint.Y(), POINTER_VSIZEBAR );
+            DrawInvert( aButtonDownChangePoint.Y(), PointerStyle::VSizeBar );
             bTopRulerMove = true;
             bBottomRulerMove = false;
         }
         else if( bBottomRulerChange )
         {
-            DrawInvert( aButtonDownChangePoint.Y(), POINTER_VSIZEBAR );
+            DrawInvert( aButtonDownChangePoint.Y(), PointerStyle::VSizeBar );
             bTopRulerMove = false;
             bBottomRulerMove = true;
         }
         else if( bHeaderRulerChange )
         {
-            DrawInvert( aButtonDownChangePoint.Y(), POINTER_VSIZEBAR );
+            DrawInvert( aButtonDownChangePoint.Y(), PointerStyle::VSizeBar );
             bHeaderRulerMove = true;
             bFooterRulerMove = false;
         }
         else if( bFooterRulerChange )
         {
-            DrawInvert( aButtonDownChangePoint.Y(), POINTER_VSIZEBAR );
+            DrawInvert( aButtonDownChangePoint.Y(), PointerStyle::VSizeBar );
             bHeaderRulerMove = false;
             bFooterRulerMove = true;
         }
     }
 
-    if( rMEvt.IsLeft() && GetPointer() == POINTER_HSPLIT )
+    if( rMEvt.IsLeft() && GetPointer() == PointerStyle::HSplit )
     {
         Point  aNowPt = rMEvt.GetPosPixel();
         SCCOL i = 0;
@@ -1037,11 +1037,11 @@ void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
 
         SetMapMode( aMMMode );
         if( nColNumberButttonDown == aPageArea.aStart.Col() )
-            DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,POINTER_HSPLIT );
+            DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,PointerStyle::HSplit );
         else
-            DrawInvert( PixelToLogic( Point( nRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,POINTER_HSPLIT );
+            DrawInvert( PixelToLogic( Point( nRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
 
-        DrawInvert( aButtonDownChangePoint.X(), POINTER_HSPLIT );
+        DrawInvert( aButtonDownChangePoint.X(), PointerStyle::HSplit );
         bColRulerMove = true;
     }
 }
@@ -1057,9 +1057,9 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
         long  nWidth = (long) lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Width();
         long  nHeight = (long) lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Height();
 
-        if( rMEvt.IsLeft() && GetPointer() == POINTER_HSIZEBAR )
+        if( rMEvt.IsLeft() && GetPointer() == PointerStyle::HSizeBar )
         {
-            SetPointer( Pointer( POINTER_ARROW ) );
+            SetPointer( Pointer( PointerStyle::Arrow ) );
 
             ScDocument& rDoc = pDocShell->GetDocument();
             OUString aOldName = rDoc.GetPageStyle( nTab );
@@ -1096,7 +1096,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 else if( aButtonDownPt.X() == aButtonUpPt.X() )
                 {
                     bMoveRulerAction = false;
-                    DrawInvert( aButtonUpPt.X(), POINTER_HSIZEBAR );
+                    DrawInvert( aButtonUpPt.X(), PointerStyle::HSizeBar );
                 }
                 if( bMoveRulerAction )
                 {
@@ -1140,9 +1140,9 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
             bRightRulerMove = false;
         }
 
-        if( rMEvt.IsLeft() && GetPointer() == POINTER_VSIZEBAR )
+        if( rMEvt.IsLeft() && GetPointer() == PointerStyle::VSizeBar )
         {
-            SetPointer( POINTER_ARROW );
+            SetPointer( PointerStyle::Arrow );
 
             bool bMoveRulerAction = true;
             if( ( bTopRulerChange || bBottomRulerChange || bHeaderRulerChange || bFooterRulerChange ) && ( aButtonUpPt.Y() <= ( 0 - aOffset.Y() ) || aButtonUpPt.Y() > nHeight * HMM_PER_TWIPS -aOffset.Y() ) )
@@ -1153,7 +1153,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
             else if( aButtonDownPt.Y() == aButtonUpPt.Y() )
             {
                 bMoveRulerAction = false;
-                DrawInvert( aButtonUpPt.Y(), POINTER_VSIZEBAR );
+                DrawInvert( aButtonUpPt.Y(), PointerStyle::VSizeBar );
             }
             if( bMoveRulerAction )
             {
@@ -1245,9 +1245,9 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
               bHeaderRulerMove = false;
               bFooterRulerMove = false;
         }
-        if( rMEvt.IsLeft() && GetPointer() == POINTER_HSPLIT )
+        if( rMEvt.IsLeft() && GetPointer() == PointerStyle::HSplit )
         {
-            SetPointer(POINTER_ARROW);
+            SetPointer(PointerStyle::Arrow);
             ScDocument& rDoc = pDocShell->GetDocument();
             bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
             bool bMoveRulerAction = true;
@@ -1255,10 +1255,10 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
             {
                 bMoveRulerAction = false;
                 if( nColNumberButttonDown == aPageArea.aStart.Col() )
-                    DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,POINTER_HSPLIT );
+                    DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,PointerStyle::HSplit );
                 else
-                    DrawInvert( PixelToLogic( Point( nRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,POINTER_HSPLIT );
-                DrawInvert( aButtonUpPt.X(), POINTER_HSPLIT );
+                    DrawInvert( PixelToLogic( Point( nRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
+                DrawInvert( aButtonUpPt.X(), PointerStyle::HSplit );
             }
             if( bMoveRulerAction )
             {
@@ -1362,7 +1362,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
             && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
         {
             bOnColRulerChange = true;
-            if( !rMEvt.GetButtons() && GetPointer() == POINTER_HSPLIT )
+            if( !rMEvt.GetButtons() && GetPointer() == PointerStyle::HSplit )
                 nColNumberButttonDown = i;
             break;
         }
@@ -1415,31 +1415,31 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
         {
             if( bOnColRulerChange || bColRulerMove )
             {
-                SetPointer( Pointer( POINTER_HSPLIT ) );
+                SetPointer( Pointer( PointerStyle::HSplit ) );
                 if( bColRulerMove )
                 {
                     if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
-                       DragMove( aMouseMovePoint.X(), POINTER_HSPLIT );
+                       DragMove( aMouseMovePoint.X(), PointerStyle::HSplit );
                 }
             }
             else
             {
                 if( bLeftRulerChange && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
                 {
-                    SetPointer( Pointer( POINTER_HSIZEBAR ) );
+                    SetPointer( Pointer( PointerStyle::HSizeBar ) );
                     if( bLeftRulerMove )
                     {
                        if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
-                           DragMove( aMouseMovePoint.X(), POINTER_HSIZEBAR );
+                           DragMove( aMouseMovePoint.X(), PointerStyle::HSizeBar );
                     }
                 }
                 else if( bRightRulerChange && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
                 {
-                    SetPointer( Pointer( POINTER_HSIZEBAR ) );
+                    SetPointer( Pointer( PointerStyle::HSizeBar ) );
                     if( bRightRulerMove )
                     {
                        if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
-                           DragMove( aMouseMovePoint.X(), POINTER_HSIZEBAR );
+                           DragMove( aMouseMovePoint.X(), PointerStyle::HSizeBar );
                     }
                 }
             }
@@ -1454,43 +1454,43 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
             {
                 if( bTopRulerChange )
                 {
-                    SetPointer( Pointer( POINTER_VSIZEBAR ) );
+                    SetPointer( Pointer( PointerStyle::VSizeBar ) );
                     if( bTopRulerMove )
                     {
                         if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
-                            DragMove( aMouseMovePoint.Y(), POINTER_VSIZEBAR );
+                            DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
                     }
                 }
                 else if( bBottomRulerChange )
                 {
-                    SetPointer( Pointer( POINTER_VSIZEBAR ) );
+                    SetPointer( Pointer( PointerStyle::VSizeBar ) );
                     if( bBottomRulerMove )
                     {
                         if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
-                            DragMove( aMouseMovePoint.Y(), POINTER_VSIZEBAR );
+                            DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
                     }
                 }
                 else if( bHeaderRulerChange )
                 {
-                    SetPointer( Pointer( POINTER_VSIZEBAR ) );
+                    SetPointer( Pointer( PointerStyle::VSizeBar ) );
                     if( bHeaderRulerMove )
                     {
                         if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
-                            DragMove( aMouseMovePoint.Y(), POINTER_VSIZEBAR );
+                            DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
                     }
                 }
                 else if( bFooterRulerChange )
                 {
-                    SetPointer( Pointer( POINTER_VSIZEBAR ) );
+                    SetPointer( Pointer( PointerStyle::VSizeBar ) );
                     if( bFooterRulerMove )
                     {
                         if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
-                            DragMove( aMouseMovePoint.Y(), POINTER_VSIZEBAR );
+                            DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
                     }
                 }
             }
             else
-                SetPointer( Pointer( POINTER_ARROW ) );
+                SetPointer( Pointer( PointerStyle::Arrow ) );
         }
     }
 }
@@ -1533,14 +1533,14 @@ com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPre
     return xAcc;
 }
 
-void ScPreview::DragMove( long nDragMovePos, sal_uInt16 nFlags )
+void ScPreview::DragMove( long nDragMovePos, PointerStyle nFlags )
 {
     Fraction aPreviewZoom( nZoom, 100 );
     Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
     MapMode  aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
     SetMapMode( aMMMode );
     long  nPos = nDragMovePos;
-    if( nFlags == POINTER_HSIZEBAR || nFlags == POINTER_HSPLIT )
+    if( nFlags == PointerStyle::HSizeBar || nFlags == PointerStyle::HSplit )
     {
         if( nDragMovePos != aButtonDownChangePoint.X() )
         {
@@ -1549,7 +1549,7 @@ void ScPreview::DragMove( long nDragMovePos, sal_uInt16 nFlags )
             DrawInvert( aButtonDownChangePoint.X(), nFlags );
         }
     }
-    else if( nFlags == POINTER_VSIZEBAR )
+    else if( nFlags == PointerStyle::VSizeBar )
     {
         if( nDragMovePos != aButtonDownChangePoint.Y() )
         {
@@ -1560,16 +1560,16 @@ void ScPreview::DragMove( long nDragMovePos, sal_uInt16 nFlags )
     }
 }
 
-void ScPreview::DrawInvert( long nDragPos, sal_uInt16 nFlags )
+void ScPreview::DrawInvert( long nDragPos, PointerStyle nFlags )
 {
     long  nHeight = (long) lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab ).Height();
     long  nWidth = (long) lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab ).Width();
-    if( nFlags == POINTER_HSIZEBAR || nFlags == POINTER_HSPLIT )
+    if( nFlags == PointerStyle::HSizeBar || nFlags == PointerStyle::HSplit )
     {
         Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1,(long)( ( nHeight * HMM_PER_TWIPS ) - aOffset.Y()));
         Invert( aRect,INVERT_50 );
     }
-    else if( nFlags == POINTER_VSIZEBAR )
+    else if( nFlags == PointerStyle::VSizeBar )
     {
         Rectangle aRect( -aOffset.X(), nDragPos,(long)( ( nWidth * HMM_PER_TWIPS ) - aOffset.X() ), nDragPos + 1 );
         Invert( aRect,INVERT_50 );
