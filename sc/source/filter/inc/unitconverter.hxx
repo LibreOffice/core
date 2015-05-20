@@ -89,11 +89,12 @@ public:
     /** Returns an error string from the passed BIFF error code. */
     OUString            calcErrorString( sal_uInt8 nErrorCode ) const;
 
+    /** Returns the conversion coefficient for the passed unit. */
+    double              getCoefficient( Unit eUnit ) const;
+
 private:
     /** Adds an error code to the internal maps. */
     void                addErrorCode( sal_uInt8 nErrorCode, const OUString& rErrorCode );
-    /** Returns the conversion coefficient for the passed unit. */
-    double              getCoefficient( Unit eUnit ) const;
 
 private:
     typedef ::std::vector< double >                     DoubleVector;
