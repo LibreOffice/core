@@ -27,7 +27,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <editeng/outliner.hxx>
 
-#include <editsh.hxx>
+#include <wrtsh.hxx>
 #include <txatritr.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
@@ -294,7 +294,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             }
 
             SwDocShell *const pDocShell = pNode->GetDoc()->GetDocShell();
-            SwViewShell *const pWrtShell = (pDocShell) ? pDocShell->GetEditShell() : 0;
+            SwWrtShell *const pWrtShell = (pDocShell) ? pDocShell->GetWrtShell() : 0;
             SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : 0;
 
             SvxSearchItem aSearchItem(SID_SEARCH_ITEM);
@@ -311,7 +311,10 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                     {
                         // If not found, end the text edit.
                         pSdrView->SdrEndTextEdit();
+                        const Point aPoint(pSdrView->GetAllMarkedRect().TopLeft());
                         pSdrView->UnmarkAll();
+                        pWrtShell->SetCursor(&aPoint, true);
+                        pWrtShell->Edit();
                     }
                     else
                     {
