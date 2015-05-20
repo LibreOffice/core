@@ -7415,7 +7415,7 @@ else
     SYSTEM_ZLIB=
     BUILD_TYPE="$BUILD_TYPE ZLIB"
     ZLIB_CFLAGS="-I${WORKDIR}/UnpackedTarball/zlib"
-    ZLIB_LIBS="-lzlib"
+    ZLIB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lzlib"
 fi
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
