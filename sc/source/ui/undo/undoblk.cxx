@@ -97,13 +97,13 @@ ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
     bPartOfPaste( bNewPartOfPaste ),
     pPasteUndo( NULL )
 {
-    if (eCmd == INS_INSROWS_BEFORE )            // whole row?
+    if (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER)            // whole row?
     {
         aEffRange.aStart.SetCol(0);
         aEffRange.aEnd.SetCol(MAXCOL);
     }
 
-    if (eCmd == INS_INSCOLS_BEFORE )            // whole column?
+    if (eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER)            // whole column?
     {
         aEffRange.aStart.SetRow(0);
         aEffRange.aEnd.SetRow(MAXROW);
@@ -180,6 +180,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
     switch (eCmd)
     {
         case INS_INSROWS_BEFORE:
+        case INS_INSROWS_AFTER:
         case INS_CELLSDOWN:
             for( i=0; i<nCount; i++ )
             {
@@ -192,6 +193,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
             }
             break;
         case INS_INSCOLS_BEFORE:
+        case INS_INSCOLS_AFTER:
         case INS_CELLSRIGHT:
             for( i=0; i<nCount; i++ )
             {
@@ -230,6 +232,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
     switch (eCmd)
     {
         case INS_INSROWS_BEFORE:
+        case INS_INSROWS_AFTER:
             nPaint |= PAINT_LEFT;
             aWorkRange.aEnd.SetRow(MAXROW);
             break;
@@ -246,6 +249,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
             }
             break;
         case INS_INSCOLS_BEFORE:
+        case INS_INSCOLS_AFTER:
             nPaint |= PAINT_TOP;                // top bar
         case INS_CELLSRIGHT:
             for( i=0; i<nCount; i++ )
