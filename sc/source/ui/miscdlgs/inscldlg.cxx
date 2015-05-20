@@ -89,12 +89,12 @@ InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
     else if ( m_pBtnInsRow->IsChecked()   )
     {
         nInsItemChecked=2;
-        nReturn = INS_INSROWS;
+        nReturn = INS_INSROWS_BEFORE;
     }
     else if ( m_pBtnInsCol->IsChecked()   )
     {
         nInsItemChecked=3;
-        nReturn = INS_INSCOLS;
+        nReturn = INS_INSCOLS_BEFORE;
     }
 
     return nReturn;

@@ -71,8 +71,8 @@ Menu RID_POPUP_ROWHEADER
 
         MenuItem
         {
-            Identifier = FID_INS_ROW ;
-            HelpId = CMD_FID_INS_ROW ;
+            Identifier = FID_INS_ROWS_BEFORE ;
+            HelpId = CMD_FID_INS_ROWS_BEFORE ;
             Text [ en-US ] = "~Insert Rows Above" ;
         };
         MenuItem
@@ -140,8 +140,8 @@ Menu RID_POPUP_COLHEADER
 
         MenuItem
         {
-            Identifier = FID_INS_COLUMN ;
-            HelpId = CMD_FID_INS_COLUMN ;
+            Identifier = FID_INS_COLUMNS_BEFORE ;
+            HelpId = CMD_FID_INS_COLUMNS_BEFORE ;
             Text [ en-US ] = "~Insert Columns Left" ;
         };
         MenuItem

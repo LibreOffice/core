@@ -7211,11 +7211,11 @@ void SAL_CALL ScTableSheetObj::insertCells( const table::CellRangeAddress& rRang
         InsCellCmd eCmd = INS_NONE;
         switch (nMode)
         {
-            case sheet::CellInsertMode_NONE:    bDo = false;            break;
-            case sheet::CellInsertMode_DOWN:    eCmd = INS_CELLSDOWN;   break;
-            case sheet::CellInsertMode_RIGHT:   eCmd = INS_CELLSRIGHT;  break;
-            case sheet::CellInsertMode_ROWS:    eCmd = INS_INSROWS;     break;
-            case sheet::CellInsertMode_COLUMNS: eCmd = INS_INSCOLS;     break;
+            case sheet::CellInsertMode_NONE:    bDo = false;                break;
+            case sheet::CellInsertMode_DOWN:    eCmd = INS_CELLSDOWN;       break;
+            case sheet::CellInsertMode_RIGHT:   eCmd = INS_CELLSRIGHT;      break;
+            case sheet::CellInsertMode_ROWS:    eCmd = INS_INSROWS_BEFORE;  break;
+            case sheet::CellInsertMode_COLUMNS: eCmd = INS_INSCOLS_BEFORE;  break;
             default:
                 OSL_FAIL("insertCells: falscher Mode");
                 bDo = false;
