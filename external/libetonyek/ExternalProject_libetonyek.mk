@@ -28,8 +28,11 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 		export PKG_CONFIG="" \
 		&& MAKE=$(MAKE) ./configure \
 			--with-pic \
-			--enable-shared \
-			--disable-static \
+			$(if $(DISABLE_DYNLOADING), \
+				--enable-static --disable-shared \
+			, \
+				--enable-shared --disable-static \
+			) \
 			--without-docs \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
