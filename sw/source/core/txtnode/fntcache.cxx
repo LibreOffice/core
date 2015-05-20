@@ -1559,7 +1559,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
 #if defined(MACOSX) || defined(IOS)
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                         pKernArray, rInf.GetIdx(), 1, bBullet ? SalLayoutFlags::DrawBullet : 0 );
+                                         pKernArray, rInf.GetIdx(), 1, bBullet ? SalLayoutFlags::DrawBullet : SalLayoutFlags::NONE );
 #else
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                          pKernArray, rInf.GetIdx(), 1 );
